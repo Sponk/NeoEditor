@@ -1,0 +1,5 @@
+This folder contains sources of the Bullet physics library, version 2.81
+
+For the licensing terms and complete explanation of the package please refer to the web site:
+http://www.bulletphysics.com
+

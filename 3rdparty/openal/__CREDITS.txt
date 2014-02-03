@@ -1,0 +1,5 @@
+This folder contains sources of the OpenAL library, version 1.12.854
+
+For the licensing terms and complete explanation of the package please refer to the web site:
+http://connect.creativelabs.com/openal/default.aspx
+

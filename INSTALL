@@ -1,0 +1,46 @@
+Building
+========
+
+Maratis uses CMake to configure and generate build files. Builds must be made 
+outside of the source tree.
+
+
+Mac OS X
+--------
+
+To generate an Xcode project for building Maratis, peform the following	steps
+to create a build directory outside of the source tree:
+
+  mkdir Build
+  cd Build
+  cmake -G Xcode ../Maratis
+
+Assuming the Maratis source directory resides in the same top directory.
+
+
+Windows
+-------
+
+To generate a Microsoft Visual Studio project for building Maratis, perform 
+the following steps to create a build directory outside of the source tree:
+
+  mkdir Build
+  cd Build
+  cmake -G "Visual Studio 10" ../Maratis
+
+Assuming the Maratis source directory resides in the same top directory.
+
+
+Linux
+-----
+
+To generate Makefiles for building Maratis, perform the following steps to 
+create a build directory outside of the source tree:
+
+  mkdir Build
+  cd Build
+  cmake -G "Unix Makefiles" ../Maratis
+  make
+  make install
+
+Assuming the Maratis source directory resides in the same top directory.

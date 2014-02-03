@@ -1,0 +1,5 @@
+This folder contains sources of the libsndfile sound library, version 1.0.23
+
+For the licensing terms and complete explanation of the package please refer to the web site:
+http://www.mega-nerd.com/libsndfile/
+

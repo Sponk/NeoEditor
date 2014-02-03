@@ -1,0 +1,7 @@
+This folder contains sources of the TinyXml library, version 2.5.3
+
+The sources have been modified; see tinyxml.h for a summary of the changes.
+
+For the licensing terms and complete explanation of the package please refer to the web site:
+http://www.grinninglizard.com/tinyxml/
+

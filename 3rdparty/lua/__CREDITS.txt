@@ -1,0 +1,5 @@
+This folder contains sources of the lua language library, version 5.1.4
+
+For the licensing terms and complete explanation of the package please refer to the web site:
+http://www.lua.org/
+

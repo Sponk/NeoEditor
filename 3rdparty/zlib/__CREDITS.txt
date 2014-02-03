@@ -1,0 +1,5 @@
+This folder contains sources of the Zlib library, version 1.2.5
+
+For the licensing terms and complete explanation of the package please refer to the web site:
+http://www.zlib.net/
+

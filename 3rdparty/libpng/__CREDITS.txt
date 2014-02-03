@@ -1,0 +1,5 @@
+This folder contains sources of the libpng image library, version 1.4.5
+
+For the licensing terms and complete explanation of the package please refer to the web site:
+http://www.libpng.org/pub/png/libpng.html
+

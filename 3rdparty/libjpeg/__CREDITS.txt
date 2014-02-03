@@ -1,0 +1,5 @@
+This folder contains sources of the libJpeg library, version 8c
+
+For the licensing terms and complete explanation of the package please refer to the web site:
+http://www.ijg.org/
+

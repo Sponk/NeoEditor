@@ -1,0 +1,5 @@
+This folder contains sources of the Glee opengl library, version 5.4.0
+
+For the licensing terms and complete explanation of the package please refer to the web site:
+http://elf-stone.com/glee.php
+
