@@ -8,7 +8,7 @@ outside of the source tree.
 Mac OS X
 --------
 
-To generate an Xcode project for building Maratis, peform the following	steps
+To generate an Xcode project for building Maratis, peform the following steps
 to create a build directory outside of the source tree:
 
   mkdir Build
