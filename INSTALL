@@ -44,3 +44,18 @@ create a build directory outside of the source tree:
   make install
 
 Assuming the Maratis source directory resides in the same top directory.
+
+
+Installation
+------------
+
+The installation location is dependant on the build platform. E.g. it defaults 
+to /usr/local on Linux and c:/Program Files on Windows.
+
+To override it and install Maratis locally you have to set the install prefix 
+when running CMake to generate the build files:
+
+  cmake -DCMAKE_INSTALL_PREFIX=~/ ../Maratis
+
+This will install the Editor, Player and SDK in a directory called Maratis 
+located in your home directory.
