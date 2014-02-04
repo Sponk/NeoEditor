@@ -31,23 +31,33 @@
 #ifndef _M_SCRIPT_CONTEXT_H
 #define _M_SCRIPT_CONTEXT_H
 
-
+/// Class used to manage script functions virtually.
 class M_CORE_EXPORT MScriptContext
 {
 public :
 
-	// destructor
+	/// Destructor.
 	virtual ~MScriptContext(void){}
 
-	// run script
+	/// Run script.
+	/// \param filename	Script filename
 	virtual void runScript(const char * filename) = 0;
 
-	// call function
+	/// Start call function.
+	/// \param name		Function name
 	virtual bool startCallFunction(const char * name) = 0;
+	
+	/// End call script function.
+	/// \param numArgs	Number of arguments
 	virtual bool endCallFunction(int numArgs = 0) = 0;
+	
+	/// Call script function.
+	/// \param name		Function name
 	virtual void callFunction(const char * name) = 0;
 
-	// add function
+	/// Add script function.
+	/// \param name		Function name
+	/// \param function	Function callback
 	virtual void addFunction(const char * name, int (*function)(void)) = 0;
 
 	// variables
