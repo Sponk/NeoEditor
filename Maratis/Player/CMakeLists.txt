@@ -36,7 +36,7 @@ INCLUDE_DIRECTORIES(
 
 SET(CMAKE_INSTALL_RPATH "@loader_path/.")
 
-ADD_EXECUTABLE(MaratisPlayer ${SOURCES})
+ADD_EXECUTABLE(MaratisPlayer ${SOURCES} ${HEADERS})
 
 TARGET_LINK_LIBRARIES(MaratisPlayer
   ## Maratis libraries
