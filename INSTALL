@@ -26,7 +26,8 @@ steps to create a build directory outside of the source tree:
 
   mkdir Build
   cd Build
-  cmake -G XCode -DMARATIS_BUILD_IOS=ON ../Maratis
+  cmake -G XCode -DCMAKE_TOOLCHAIN_FILE=../Maratis/CMake/Toolchains/iOS.cmake \
+     ../Maratis
 
 Assuming the Maratis source directory resides in the same top directory. The 
 build require that the Xcode generator is used or it will protest with a fatal 
