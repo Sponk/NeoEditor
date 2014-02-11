@@ -35,6 +35,11 @@
 	#include <OpenGLES/ES1/glext.h>
 #endif
 
+#ifdef __ANDROID__
+	#include <GLES/gl.h>
+	#include <GLES/glext.h>
+#endif
+
 #include "MES1Context.h"
 
 

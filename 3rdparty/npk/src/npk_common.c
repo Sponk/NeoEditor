@@ -167,16 +167,16 @@ NPK_RESULT npk_open( int* handle, NPK_CSTR fileName, bool createfile, bool bchec
     {
         if( bcheckexist )
         {
-            *handle = open( fileName, O_CREAT | O_EXCL | O_RDWR | O_BINARY, S_IREAD | S_IWRITE );
+            *handle = open( fileName, O_CREAT | O_EXCL | O_RDWR | O_BINARY, S_IRUSR | S_IWUSR );
         }
         else
         {
-            *handle = creat( fileName, S_IREAD | S_IWRITE );
+            *handle = creat( fileName, S_IRUSR | S_IWUSR );
             if( errno == EACCES )
                 return( npk_error( NPK_ERROR_ReadOnlyFile ) );
             close( *handle );
 
-            *handle = open( fileName, O_CREAT | O_RDWR | O_BINARY, S_IREAD | S_IWRITE );
+            *handle = open( fileName, O_CREAT | O_RDWR | O_BINARY, S_IRUSR | S_IWUSR );
         }
     }
     else
