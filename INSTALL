@@ -62,6 +62,27 @@ create a build directory outside of the source tree:
 Assuming the Maratis source directory resides in the same top directory.
 
 
+Android
+-------
+
+To generate Makefiles for building Maratis, perform the following steps to 
+create a build directory outside of the source tree:
+
+  mkdir Build
+  cd Build
+  cmake -G "Unix Makefiles" \
+     -DCMAKE_TOOLCHAIN_FILE=../Maratis/CMake/Toolchains/android.cmake \
+     -DANDROID_NDK=/path/to/android/ndk
+     ../Maratis
+  make
+
+Assuming the Maratis source directory resides in the same top directory.
+The path to either the Android NDK or a prebuilt Android NDK toolchain need
+to be set by either ANDROID_NDK or ANDROID_STANDALONE_TOOLCHAIN and can only
+be set at the first run of CMake.
+
+
+
 Installation
 ------------
 

@@ -35,6 +35,11 @@
 	#include <OpenGLES/ES2/glext.h>
 #endif
 
+#ifdef __ANDROID__
+	#include <GLES2/gl2.h>
+	#include <GLES2/gl2ext.h>
+#endif
+
 #include "MES2Context.h"
 
 
