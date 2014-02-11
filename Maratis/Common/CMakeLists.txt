@@ -1,6 +1,38 @@
 ## Find source and headers
-FILE(GLOB_RECURSE HEADERS *.h)
-FILE(GLOB_RECURSE SOURCES *.c*)
+FILE(GLOB HEADERS *.h
+  MBehaviors/*.h
+  MFileManager/*.h
+  MInput/*.h
+  MLoaders/*.h
+  MPlugin/*.h
+  MProject/*.h
+  MRenderers/*.h
+  MScript/*.h
+)
+FILE(GLOB SOURCES *.c*
+  MBehaviors/*.c*
+  MFileManager/*.c*
+  MInput/*.c*
+  MLoaders/*.c*
+  MPlugin/*.c*
+  MProject/*.c*
+  MRenderers/*.c*
+  MScript/*.c*
+)
+
+IF(NOT IOS AND NOT ANDROID)
+  FILE(GLOB PLATFORM_SOURCES
+    MContexts/*.h
+    MContexts/*.c*
+  )
+ENDIF(NOT IOS AND NOT ANDROID)
+
+IF(IOS OR ANDROID)
+  FILE(GLOB PLATFORM_SOURCES
+    MContexts/MALContext.*
+    MContexts/MBulletContext.*
+  )
+ENDIF(IOS OR ANDROID)
 
 IF(CMAKE_HAS_SORT)
   LIST(SORT HEADERS)
@@ -29,4 +61,4 @@ INCLUDE_DIRECTORIES(
   ${ZLIB_INCLUDE_DIR}
 )
 
-ADD_LIBRARY(MaratisCommon ${SOURCES} ${HEADERS})
+ADD_LIBRARY(MaratisCommon ${SOURCES} ${HEADERS} ${PLATFORM_SOURCES})
