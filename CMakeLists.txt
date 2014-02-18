@@ -115,7 +115,7 @@ IF(UNIX AND NOT APPLE AND NOT ANDROID)
   SET(CMAKE_C_FLAGS_DEBUG "-g -D__Debug__")
   SET(CMAKE_CXX_FLAGS "${MARATIS_BUILD_FLAGS} -O2 -fPIC -DLINUX -ldl")
   SET(CMAKE_CXX_FLAGS_DEBUG "-g -D__Debug__")
-  SET(CMAKE_SHARED_LINKER_FLAGS "${MARATIS_BUILD_FLAGS} -ldl -Wl,--as-needed -Wl,--allow-multiple-definition")
+  SET(CMAKE_SHARED_LINKER_FLAGS "${MARATIS_BUILD_FLAGS} -ldl -Wl,--as-needed -Wl,--allow-multiple-definition -Wl,--build-id")
 ENDIF(UNIX AND NOT APPLE AND NOT ANDROID)
 
 IF(ANDROID)
