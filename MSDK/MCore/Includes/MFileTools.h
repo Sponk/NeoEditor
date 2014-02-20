@@ -83,6 +83,7 @@ M_CORE_EXPORT size_t M_fwrite(const void * str, size_t size, size_t count, MFile
 /// Produces output according to the standard printf() style format and writes to 
 /// the file. Returns the number of characters written to the file (excluding the 
 /// null byte used to end output strings).
+/// \param stream   File stream
 /// \param format	Format string
 /// \return		Number of characters written
 M_CORE_EXPORT int	 M_fprintf(MFile * stream, const char * format, ...);
@@ -91,16 +92,19 @@ M_CORE_EXPORT int	 M_fprintf(MFile * stream, const char * format, ...);
 /// by adding offset bytes to the position specified by whence. If whence is set to 
 /// SEEK_SET, SEEK_CUR, or SEEK_END, the offset is relative to the start of the file, 
 /// the current position indicator, or end-of-file respectively.
+/// \param stream   File stream
 /// \param offset	Offset position in bytes
 /// \param whence	SEEK_SET, SEEK_CUR, or SEEK_END
 /// \return		The resulting location
 M_CORE_EXPORT int	 M_fseek(MFile * stream, long offset, int whence);
 
 /// Obtains the current value of the file position indicator for the file.
+/// \param stream   File stream
 /// \return		Current file position
 M_CORE_EXPORT long	 M_ftell(MFile * stream);
 
 /// Sets the file position indicator to the beginning of the file.
+/// \param stream   File stream
 M_CORE_EXPORT void	 M_rewind(MFile * stream);
 
 #endif
