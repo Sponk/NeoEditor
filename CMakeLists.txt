@@ -187,9 +187,5 @@ ADD_SUBDIRECTORY(Documentation)
 INSTALL(FILES 
   CREDITS
   LICENSE
-<<<<<<< HEAD
-  README 
-=======
   README.md
->>>>>>> development
   DESTINATION ${MARATIS_INSTALL_DIR})
