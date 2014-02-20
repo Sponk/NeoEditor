@@ -28,7 +28,7 @@
 #include <stdio.h>
 
 #include <MEngine.h>
-#include <MLoaders/MDevILLoader.h>
+#include <MLoaders/MImageLoader.h>
 #include <MLog.h>
 #include "MFilesUpdate/MFilesUpdate.h"
 #include "Maratis/Maratis.h"

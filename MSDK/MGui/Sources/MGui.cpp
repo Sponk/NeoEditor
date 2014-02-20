@@ -28,7 +28,7 @@
 //========================================================================
 
 
-#include <MLoaders/MDevILLoader.h>
+#include <MLoaders/MImageLoader.h>
 #include "../Includes/MGui.h"
 #include <MGui.h>
 

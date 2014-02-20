@@ -31,7 +31,7 @@
 #include <MContexts/MALContext.h>
 #include <MContexts/MBulletContext.h>
 #include <MContexts/MWinContext.h>
-#include <MLoaders/MDevILLoader.h>
+#include <MLoaders/MImageLoader.h>
 #include <MLoaders/MSndFileLoader.h>
 #include <MLoaders/MFreetypeLoader.h>
 #include <MLoaders/MBinFontLoader.h>
