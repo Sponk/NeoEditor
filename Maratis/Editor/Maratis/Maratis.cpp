@@ -42,9 +42,7 @@
 #include <MContexts/MALContext.h>
 #include <MContexts/MBulletContext.h>
 #include <MContexts/MWinContext.h>
-#include <MLoaders/MJpegLoader.h>
-#include <MLoaders/MPngLoader.h>
-#include <MLoaders/MDevILLoader.h>
+#include <MLoaders/MImageLoader.h>
 #include <MLoaders/MSndFileLoader.h>
 #include <MLoaders/MFreetypeLoader.h>
 #include <MLoaders/MBinFontLoader.h>
@@ -443,8 +441,6 @@ void Maratis::start(void)
 		engine->setSystemContext(m_system); // system context
 
 		// loaders
-		engine->getImageLoader()->addLoader(M_loadJpegImage); // jpeg loader
-		engine->getImageLoader()->addLoader(M_loadPngImage); // png loader
 		engine->getImageLoader()->addLoader(M_loadImage); // image loader
 		engine->getSoundLoader()->addLoader(M_loadSound); // sound loader
 		engine->getLevelLoader()->addLoader(xmlLevelLoad); // level loader
