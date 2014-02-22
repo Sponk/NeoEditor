@@ -127,7 +127,7 @@ IF(ANDROID)
 ENDIF(ANDROID)
 
 ## Set up 3rd party dependencies
-SET(ASSIMP_INCLUDE_DIR ${MARATIS_SOURCE_DIR}/3rdparty/asimp/include)
+SET(ASSIMP_INCLUDE_DIR ${MARATIS_SOURCE_DIR}/3rdparty/assimp/include)
 SET(BULLET_INCLUDE_DIR ${MARATIS_SOURCE_DIR}/3rdparty/bullet)
 SET(DIRENT_INCLUDE_DIR ${MARATIS_SOURCE_DIR}/3rdparty/dirent/include)
 SET(FREETYPE_INCLUDE_DIR ${MARATIS_SOURCE_DIR}/3rdparty/freetype/include)
