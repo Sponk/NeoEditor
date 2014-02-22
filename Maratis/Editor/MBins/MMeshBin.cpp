@@ -25,10 +25,10 @@
 #include <MEngine.h>
 #include "MMeshBin.h"
 
-static char M_MESH_HEADER[8] = {'M', 'M', 'E', 'S', 'H', NULL, NULL, NULL}; // mesh
-static char M_AA_HEADER[8] = {'M', 'A', 'A', NULL, NULL, NULL, NULL, NULL}; // armature anim
-static char M_MA_HEADER[8] = {'M', 'M', 'A', NULL, NULL, NULL, NULL, NULL}; // materials anim
-static char M_TA_HEADER[8] = {'M', 'T', 'A', NULL, NULL, NULL, NULL, NULL}; // textures anim
+static char M_MESH_HEADER[8] = {'M', 'M', 'E', 'S', 'H', '\0', '\0', '\0'}; // mesh
+static char M_AA_HEADER[8] = {'M', 'A', 'A', '\0', '\0', '\0', '\0', '\0'}; // armature anim
+static char M_MA_HEADER[8] = {'M', 'M', 'A', '\0', '\0', '\0', '\0', '\0'}; // materials anim
+static char M_TA_HEADER[8] = {'M', 'T', 'A', '\0', '\0', '\0', '\0', '\0'}; // textures anim
 
 
 

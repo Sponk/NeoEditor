@@ -24,7 +24,7 @@
 
 #include "MFontBin.h"
 
-char M_FONT_HEADER[8] = {'M', 'F', 'O', 'N', 'T', NULL, NULL, NULL};
+char M_FONT_HEADER[8] = {'M', 'F', 'O', 'N', 'T', '\0', '\0', '\0'};
 
 
 bool exportFontBin(const char * filename, MFont * font)
