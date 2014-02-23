@@ -43,7 +43,7 @@
 #include <MContexts/MBulletContext.h>
 #include <MContexts/MWinContext.h>
 #include <MLoaders/MImageLoader.h>
-#include <MLoaders/MSndFileLoader.h>
+#include <MLoaders/MSoundLoader.h>
 #include <MLoaders/MFreetypeLoader.h>
 #include <MLoaders/MBinFontLoader.h>
 #include <MLoaders/MBinMeshLoader.h>

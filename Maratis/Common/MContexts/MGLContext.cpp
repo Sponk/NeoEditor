@@ -536,10 +536,10 @@ void CHECK_FRAMEBUFFER_STATUS()
 		case GL_FRAMEBUFFER_COMPLETE:
             break;
           case GL_FRAMEBUFFER_UNSUPPORTED:
-			printf("couldn't find a supported config\n");
+			fprintf(stderr, "couldn't find a supported config\n");
 			break;
           default:
-            printf("error");
+			fprintf(stderr, "error");
 	}
 }
 
@@ -644,10 +644,10 @@ void MGLContext::sendShaderSource(unsigned int shaderId, const char * source)
 	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &compiled);
 	if(!compiled)
 	{
-		printf("ERROR OpenGL : unable to compile shader\n");
+		fprintf(stderr, "ERROR OpenGL : unable to compile shader\n");
 		char shader_link_error[4096];
         glGetInfoLogARB((GLhandleARB)shaderId, sizeof(shader_link_error), NULL, shader_link_error);
-		printf("%s", shader_link_error);
+		fprintf(stderr, "%s", shader_link_error);
 	}
 }
 

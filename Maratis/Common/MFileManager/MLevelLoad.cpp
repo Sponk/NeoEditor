@@ -468,7 +468,7 @@ void readBehaviors(TiXmlElement * node, MObject3d * object)
 		MBehaviorCreator * bCreator = bManager->getBehaviorByName(behaviorName);
 		if(! bCreator)
 		{
-			printf("Warning : unable to load behavior \"%s\"\n", behaviorName);
+			fprintf(stderr, "Warning : unable to load behavior \"%s\"\n", behaviorName);
 			continue;
 		}
 
@@ -674,7 +674,7 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 				getGlobalFilename(soundFilename, rep, file);
 				soundRef = level->loadSound(soundFilename, preload);
 				if(! soundRef)
-					printf("ERROR loading sound : sound %s doesn't exist\n", file);
+					fprintf(stderr, "ERROR loading sound : sound %s doesn't exist\n", file);
 			}
 
 			// create sound
@@ -785,7 +785,7 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 				getGlobalFilename(textFilename, rep, file);
 				fontRef = level->loadFont(textFilename);
 				if(! fontRef)
-					printf("ERROR loading text : font %s doesn't exist\n", file);
+					fprintf(stderr, "ERROR loading text : font %s doesn't exist\n", file);
 			}
 
 			// create text
