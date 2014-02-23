@@ -148,7 +148,7 @@ bool exportMeshBin(const char * filename, MMesh * mesh)
 	MFile * file = M_fopen(filename, "wb");
 	if(! file)
 	{
-		printf("Error : can't create file %s\n", filename);
+		fprintf(stderr, "Error : can't create file %s\n", filename);
 		return false;
 	}
 	
@@ -516,7 +516,7 @@ bool exportArmatureAnimBin(const char * filename, MArmatureAnim * anim)
 	MFile * file = M_fopen(filename, "wb");
 	if(! file)
 	{
-		printf("Error : can't create file %s\n", filename);
+		fprintf(stderr, "Error : can't create file %s\n", filename);
 		return false;
 	}
 	
@@ -566,7 +566,7 @@ bool exportTexturesAnimBin(const char * filename, MTexturesAnim * anim)
 	MFile * file = M_fopen(filename, "wb");
 	if(! file)
 	{
-		printf("Error : can't create file %s\n", filename);
+		fprintf(stderr, "Error : can't create file %s\n", filename);
 		return false;
 	}
 	
@@ -616,7 +616,7 @@ bool exportMaterialsAnimBin(const char * filename, MMaterialsAnim * anim)
 	MFile * file = M_fopen(filename, "wb");
 	if(! file)
 	{
-		printf("Error : can't create file %s\n", filename);
+		fprintf(stderr, "Error : can't create file %s\n", filename);
 		return false;
 	}
 	

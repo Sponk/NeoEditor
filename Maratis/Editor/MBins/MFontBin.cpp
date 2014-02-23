@@ -45,7 +45,7 @@ bool exportFontBin(const char * filename, MFont * font)
 
 	if(width == 0 && height == 0)
 	{
-		printf("Error : unable to create image font for %s\n", filename);
+		fprintf(stderr, "Error : unable to create image font for %s\n", filename);
 		return false;
 	}
 
@@ -53,7 +53,7 @@ bool exportFontBin(const char * filename, MFont * font)
 	FILE * file = fopen(filename, "wb");
 	if(! file)
 	{
-		printf("Error : can't create file %s\n", filename);
+		fprintf(stderr, "Error : can't create file %s\n", filename);
 		return false;
 	}
 	

@@ -56,7 +56,7 @@ MALContext::MALContext(void)
 	m_device = alcOpenDevice(NULL);
     if(! m_device)
 	{
-		printf("ERROR OpenAL : unable to create device\n");
+		fprintf(stderr, "ERROR OpenAL : unable to create device\n");
         return;
 	}
 
@@ -64,7 +64,7 @@ MALContext::MALContext(void)
 	m_context = alcCreateContext(m_device, NULL);
     if(! m_context)
 	{
-		printf("ERROR OpenAL : unable to create context\n");
+		fprintf(stderr, "ERROR OpenAL : unable to create context\n");
         return;
 	}
 
@@ -87,7 +87,7 @@ void MALContext::initContext(void)
 	// make current context
     if(! alcMakeContextCurrent(m_context))
 	{
-		printf("ERROR OpenAL : unable to make current context\n");
+		fprintf(stderr, "ERROR OpenAL : unable to make current context\n");
         return;
 	}
 }
@@ -134,7 +134,7 @@ void MALContext::sendBufferSound(unsigned int bufferId, MSound * sound)
 	ALenum error = alGetError();
     if(error != AL_NO_ERROR)
     {
-       printf("ERROR OpenAL : unable to send sound data\n");
+	   fprintf(stderr, "ERROR OpenAL : unable to send sound data\n");
 	   return;
     }
 }
@@ -150,7 +150,7 @@ void MALContext::sendBufferData(unsigned int bufferId, M_SOUND_FORMAT format, vo
 	ALenum error = alGetError();
     if(error != AL_NO_ERROR)
     {
-       printf("ERROR OpenAL : unable to send sound data\n");
+	   fprintf(stderr, "ERROR OpenAL : unable to send sound data\n");
 	   return;
     }
 }

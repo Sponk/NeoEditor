@@ -79,14 +79,14 @@ bool M_loadTgaImage(const char * filename, void * data)
 	MFile* file = M_fopen(filename, "rb");
 	if (!file)
 	{
-		printf("ERROR Load TGA : unable to open %s\n", filename);
+		fprintf(stderr, "ERROR Load TGA : unable to open %s\n", filename);
 		return false;
 	}
 
 	Header header;
 	if (M_fread(&header, sizeof(Header), 1, file) == 0)
 	{
-		printf("ERROR Load TGA : could not read header\n", filename); //DEBUG
+		fprintf(stderr, "ERROR Load TGA : could not read header\n", filename);
 		return false;
 	}
 
@@ -193,6 +193,5 @@ bool M_loadTgaImage(const char * filename, void * data)
 	if (flip)
 		flipImage(image);
 
-	printf("MSG Load TGA : loaded %s\n", filename); //DEBUG
 	return true;
 }

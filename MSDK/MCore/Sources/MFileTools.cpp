@@ -59,14 +59,14 @@ bool copyFile(const char * inFilename, const char * outFilename)
 	MFile * in = M_fopen(inFilename, "rb");
 	if(! in)
 	{
-		printf("unable to read %s file\n", inFilename);
+		fprintf(stderr, "unable to read %s file\n", inFilename);
 		return false;
 	}
 
 	MFile * out = M_fopen(outFilename, "wb");
 	if(! out)
 	{
-		printf("unable to create %s file\n", outFilename);
+		fprintf(stderr, "unable to create %s file\n", outFilename);
 		M_fclose(in);
 		return false;
 	}
@@ -77,7 +77,7 @@ bool copyFile(const char * inFilename, const char * outFilename)
     while((n = M_fread(buffer, sizeof(char), sizeof(buffer), in)) > 0)
     {
         if(M_fwrite(buffer, sizeof(char), n, out) != n)
-            printf("write failed\n");
+			fprintf(stderr, "write failed\n");
     }
 
 	M_fclose(in);

@@ -50,7 +50,7 @@ MLog::MLog()
 	m_logfstream.open("maratis_log.txt", std::fstream::out|std::fstream::trunc);
 	
 	if(! m_logfstream.good())
-		printf("MLog: file fstream not good\n");
+		fprintf(stderr, "MLog: file fstream not good\n");
 	
 	char * mll = getenv("MARATIS_LOG_LEVEL");
 	if(mll)

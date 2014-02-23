@@ -40,7 +40,7 @@ bool M_loadBinFont(const char * filename, void * data)
 	MFile * file = M_fopen(filename, "rb");
 	if(! file)
 	{
-		printf("Error : can't read file %s\n", filename);
+		fprintf(stderr, "Error : can't read file %s\n", filename);
 		return false;
 	}
 	
