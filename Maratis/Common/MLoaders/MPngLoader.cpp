@@ -55,7 +55,6 @@ bool M_loadPngImage(const char * filename, void * data)
     M_fread(header, sizeof(char), 8, file);
     if (png_sig_cmp(header, 0, 8))
     {
-		fprintf(stderr, "ERROR Load PNG : unable to read %s\n", filename);
         M_fclose(file);
         delete [] header;
         return false;
