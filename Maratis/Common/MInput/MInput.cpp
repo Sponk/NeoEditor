@@ -91,47 +91,109 @@ MInput::MInput(void)
 	createKey("LALT");
 
 	// mouse keys
-	createKey("MOUSE_BUTTON1");
-	createKey("MOUSE_BUTTON2");
-	createKey("MOUSE_BUTTON3");
+	createKey("MOUSE_BUTTON_LEFT");
+	createKey("MOUSE_BUTTON_MIDDLE");
+	createKey("MOUSE_BUTTON_RIGHT");
+	createKey("MOUSE_BUTTON_X1");
+	createKey("MOUSE_BUTTON_X2");
 
 	// joystick keys
-	createKey("JOY1_BUTTON1");
-	createKey("JOY1_BUTTON2");
-	createKey("JOY1_BUTTON3");
-	createKey("JOY1_BUTTON4");
-	createKey("JOY1_BUTTON5");
-	createKey("JOY1_BUTTON6");
-	createKey("JOY1_BUTTON7");
-	createKey("JOY1_BUTTON8");
+	createKey("JOY1_BUTTON_A");
+	createKey("JOY1_BUTTON_B");
+	createKey("JOY1_BUTTON_X");
+	createKey("JOY1_BUTTON_Y");
+	createKey("JOY1_BUTTON_BACK");
+	createKey("JOY1_BUTTON_GUIDE");
+	createKey("JOY1_BUTTON_START");
+	createKey("JOY1_BUTTON_LEFTSTICK");
+	createKey("JOY1_BUTTON_RIGHTSTICK");
+	createKey("JOY1_BUTTON_LEFTSHOULDER");
+	createKey("JOY1_BUTTON_RIGHTSHOULDER");
+	createKey("JOY1_BUTTON_DPADUP");
+	createKey("JOY1_BUTTON_DPADDOWN");
+	createKey("JOY1_BUTTON_DPADLEFT");
+	createKey("JOY1_BUTTON_DPADRIGHT");
 
-	createKey("JOY2_BUTTON1");
-	createKey("JOY2_BUTTON2");
-	createKey("JOY2_BUTTON3");
-	createKey("JOY2_BUTTON4");
-	createKey("JOY2_BUTTON5");
-	createKey("JOY2_BUTTON6");
-	createKey("JOY2_BUTTON7");
-	createKey("JOY2_BUTTON8");
+	createKey("JOY2_BUTTON_A");
+	createKey("JOY2_BUTTON_B");
+	createKey("JOY2_BUTTON_X");
+	createKey("JOY2_BUTTON_Y");
+	createKey("JOY2_BUTTON_BACK");
+	createKey("JOY2_BUTTON_GUIDE");
+	createKey("JOY2_BUTTON_START");
+	createKey("JOY2_BUTTON_LEFTSTICK");
+	createKey("JOY2_BUTTON_RIGHTSTICK");
+	createKey("JOY2_BUTTON_LEFTSHOULDER");
+	createKey("JOY2_BUTTON_RIGHTSHOULDER");
+	createKey("JOY2_BUTTON_DPADUP");
+	createKey("JOY2_BUTTON_DPADDOWN");
+	createKey("JOY2_BUTTON_DPADLEFT");
+	createKey("JOY2_BUTTON_DPADRIGHT");
+
+	createKey("JOY3_BUTTON_A");
+	createKey("JOY3_BUTTON_B");
+	createKey("JOY3_BUTTON_X");
+	createKey("JOY3_BUTTON_Y");
+	createKey("JOY3_BUTTON_BACK");
+	createKey("JOY3_BUTTON_GUIDE");
+	createKey("JOY3_BUTTON_START");
+	createKey("JOY3_BUTTON_LEFTSTICK");
+	createKey("JOY3_BUTTON_RIGHTSTICK");
+	createKey("JOY3_BUTTON_LEFTSHOULDER");
+	createKey("JOY3_BUTTON_RIGHTSHOULDER");
+	createKey("JOY3_BUTTON_DPADUP");
+	createKey("JOY3_BUTTON_DPADDOWN");
+	createKey("JOY3_BUTTON_DPADLEFT");
+	createKey("JOY3_BUTTON_DPADRIGHT");
+
+	createKey("JOY4_BUTTON_A");
+	createKey("JOY4_BUTTON_B");
+	createKey("JOY4_BUTTON_X");
+	createKey("JOY4_BUTTON_Y");
+	createKey("JOY4_BUTTON_BACK");
+	createKey("JOY4_BUTTON_GUIDE");
+	createKey("JOY4_BUTTON_START");
+	createKey("JOY4_BUTTON_LEFTSTICK");
+	createKey("JOY4_BUTTON_RIGHTSTICK");
+	createKey("JOY4_BUTTON_LEFTSHOULDER");
+	createKey("JOY4_BUTTON_RIGHTSHOULDER");
+	createKey("JOY4_BUTTON_DPADUP");
+	createKey("JOY4_BUTTON_DPADDOWN");
+	createKey("JOY4_BUTTON_DPADLEFT");
+	createKey("JOY4_BUTTON_DPADRIGHT");
 
 	// axis
 	createAxis("MOUSE_X");
 	createAxis("MOUSE_Y");
 	createAxis("MOUSE_WHEEL", 1);
 
-	createAxis("JOY1_X");
-	createAxis("JOY1_Y");
-	createAxis("JOY1_Z");
-	createAxis("JOY1_R");
-	createAxis("JOY1_U");
-	createAxis("JOY1_V");
+	createAxis("JOY1_AXIS_LEFTX");
+	createAxis("JOY1_AXIS_LEFTY");
+	createAxis("JOY1_AXIS_RIGHTX");
+	createAxis("JOY1_AXIS_RIGHTY");
+	createAxis("JOY1_AXIS_TRIGGERLEFT");
+	createAxis("JOY1_AXIS_TRIGGERRIGHT");
 
-	createAxis("JOY2_X");
-	createAxis("JOY2_Y");
-	createAxis("JOY2_Z");
-	createAxis("JOY2_R");
-	createAxis("JOY2_U");
-	createAxis("JOY2_V");
+	createAxis("JOY2_AXIS_LEFTX");
+	createAxis("JOY2_AXIS_LEFTY");
+	createAxis("JOY2_AXIS_RIGHTX");
+	createAxis("JOY2_AXIS_RIGHTY");
+	createAxis("JOY2_AXIS_TRIGGERLEFT");
+	createAxis("JOY2_AXIS_TRIGGERRIGHT");
+
+	createAxis("JOY3_AXIS_LEFTX");
+	createAxis("JOY3_AXIS_LEFTY");
+	createAxis("JOY3_AXIS_RIGHTX");
+	createAxis("JOY3_AXIS_RIGHTY");
+	createAxis("JOY3_AXIS_TRIGGERLEFT");
+	createAxis("JOY3_AXIS_TRIGGERRIGHT");
+
+	createAxis("JOY4_AXIS_LEFTX");
+	createAxis("JOY4_AXIS_LEFTY");
+	createAxis("JOY4_AXIS_RIGHTX");
+	createAxis("JOY4_AXIS_RIGHTY");
+	createAxis("JOY4_AXIS_TRIGGERLEFT");
+	createAxis("JOY4_AXIS_TRIGGERRIGHT");
 }
 
 MInput::~MInput(void)

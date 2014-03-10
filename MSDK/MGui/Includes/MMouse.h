@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //========================================================================
-// Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2003-2014 Anael Seghezzi <www.maratis3d.com>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -39,7 +39,7 @@ public:
 	MMouse(void)
 	{
 		m_wheelDirection = 0;
-		m_buttons[0] = m_buttons[1] = m_buttons[2] = false;
+		m_buttons[0] = m_buttons[1] = m_buttons[2] = m_buttons[3] = m_buttons[4] = false;
 		m_position[0] = m_position[1] = 0;
 		m_direction[0] = m_direction[1] = 0;
 		m_lastPosition[0] = m_lastPosition[1] = 0;
@@ -48,7 +48,7 @@ public:
 
 private:
 
-	bool m_buttons[3];
+	bool m_buttons[5];
 	
 	int	m_wheelDirection;
 	float m_position[2];
@@ -75,6 +75,8 @@ public:
 	inline bool isLeftButtonPushed()	{ return m_buttons[0]; }
 	inline bool isMiddleButtonPushed()	{ return m_buttons[1]; }
 	inline bool isRightButtonPushed()	{ return m_buttons[2]; }
+	inline bool isX1ButtonPushed()		{ return m_buttons[3]; }
+	inline bool isX2ButtonPushed()		{ return m_buttons[4]; }
 
 	inline void downButton(const unsigned int id){ 
 		switch(id)
@@ -82,6 +84,8 @@ public:
 		case 0: m_buttons[0] = true; break;
 		case 1: m_buttons[1] = true; break;
 		case 2: m_buttons[2] = true; break;
+		case 3: m_buttons[3] = true; break;
+		case 4: m_buttons[4] = true; break;
 		}
 	}
 	inline void upButton(const unsigned int id){ 
@@ -90,6 +94,8 @@ public:
 		case 0: m_buttons[0] = false; break;
 		case 1: m_buttons[1] = false; break;
 		case 2: m_buttons[2] = false; break;
+		case 3: m_buttons[3] = false; break;
+		case 4: m_buttons[4] = false; break;
 		}
 	}
 

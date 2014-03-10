@@ -35,6 +35,8 @@
 
 #include "MaratisUI.h"
 #include <MGameWinEvents.h>
+#include <MMouse.h>
+#include <MKeyboard.h>
 
 #include <MFileManager/MLevelSave.h>
 #include <MFileManager/MLevelLoad.h>

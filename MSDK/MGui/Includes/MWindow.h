@@ -4,7 +4,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //========================================================================
-// Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2003-2014 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) Anders Dahnielson <anders@dahnielson.com>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -32,16 +33,219 @@
 #define _M_WINDOW_H
 
 #include <MWinEvents.h>
-#include <MMouse.h>
-#include <MKeyboard.h>
-#include <MJoystick.h>
 
-#ifdef WIN32
-	#include "WIN32/MWin32Window.h"
-#elif __APPLE__
-	#include "COCOA/MCocoaWindow.h"
-#elif linux
-	#include "X11/MX11Window.h"
-#endif
+#include <SDL_joystick.h>
+#include <SDL_gamecontroller.h>
+
+#include <vector>
+
+class MWindow
+{
+private:
+
+	// joysticks
+	struct JoystickDevice_t
+	{
+		SDL_JoystickID id;
+		SDL_Joystick * device;
+	};
+
+	std::vector<JoystickDevice_t *> m_joysticks;
+
+	int addJoystick(int index);
+	int removeJoystick(int id);
+
+	// game controllers
+	struct GameControllerDevice_t
+	{
+		SDL_JoystickID id;
+		SDL_GameController * device;
+	};
+
+	std::vector<GameControllerDevice_t *> m_controllers;
+
+	int addGameController(int index);
+	int removeGameController(int id);
+
+private:
+
+	// infos
+	bool m_focus;
+	bool m_active;
+	bool m_fullscreen;
+
+	int	m_position[2];
+	unsigned int m_width;
+	unsigned int m_height;
+	unsigned int m_colorBits;
+
+	char m_workingDirectory[256];
+
+	// events function pointer
+	void (* m_pointerEvent)(MWinEvent * windowEvents);
+
+public:
+
+	MWindow(void);
+	~MWindow(void);
+
+	// instance
+	static MWindow * getInstance(void)
+	{
+		static MWindow m_instance;
+		return &m_instance;
+	}
+
+public:
+
+	// create
+	bool create(const char * title, unsigned int width, unsigned int height, int colorBits, bool fullscreen);
+
+	// events
+	inline void setPointerEvent(void (*pointerEvent)(MWinEvent * windowEvents)){ m_pointerEvent = pointerEvent; }
+	void sendEvents(MWinEvent * event);
+	bool onEvents(void);
+
+	// cursor
+	void setCursorPos(int x, int y);
+	void hideCursor(void);
+	void showCursor(void);
+
+	// properties
+	inline bool getFocus(void){ return m_focus; }
+	inline bool isActive(void){ return m_active; }
+	inline bool isFullscreen(void){ return m_fullscreen; }
+
+	void setTitle(const char * title);
+	void setFullscreen(bool fullscreen);
+	void setFocus(bool focus){ m_focus = focus; }
+	inline void setActive(bool active){ m_active = active; }
+
+	// coords
+	bool isMouseOverWindow(void);
+
+	inline int getXPosition(void){ return m_position[0]; }
+	inline int getYPosition(void){ return m_position[1]; }
+	inline unsigned int getWidth(void){ return m_width; }
+	inline unsigned int getHeight(void){ return m_height; }
+
+	// swap buffer
+	void swapBuffer(void);
+
+	// system tick
+	static unsigned long getSystemTick(void);
+
+	// directories
+	void setCurrentDirectory(const char * directory);
+	void setWorkingDirectory(const char * directory);
+
+	const char * getTempDirectory(void);
+	const char * getCurrentDirectory(void);
+	inline const char * getWorkingDirectory(void){ return m_workingDirectory; }
+
+	// execute
+	void execute(const char * path, const char * args);
+
+	// sleep
+	void sleep(double time);
+
+};
+
+#define MKEY_SPACE		32
+
+#define MKEY_0			48
+#define MKEY_1			49
+#define MKEY_2			50
+#define MKEY_3			51
+#define MKEY_4			52
+#define MKEY_5			53
+#define MKEY_6			54
+#define MKEY_7			55
+#define MKEY_8			56
+#define MKEY_9			57
+
+#define MKEY_A			65
+#define MKEY_B			66
+#define MKEY_C			67
+#define MKEY_D			68
+#define MKEY_E			69
+#define MKEY_F			70
+#define MKEY_G			71
+#define MKEY_H			72
+#define MKEY_I			73
+#define MKEY_J			74
+#define MKEY_K			75
+#define MKEY_L			76
+#define MKEY_M			77
+#define MKEY_N			78
+#define MKEY_O			79
+#define MKEY_P			80
+#define MKEY_Q			81
+#define MKEY_R			82
+#define MKEY_S			83
+#define MKEY_T			84
+#define MKEY_U			85
+#define MKEY_V			86
+#define MKEY_W			87
+#define MKEY_X			88
+#define MKEY_Y			89
+#define MKEY_Z			90
+
+#define MKEY_BACKSPACE	128
+#define MKEY_TAB		129
+#define MKEY_CLEAR		130
+#define MKEY_RETURN		131
+#define MKEY_PAUSE		132
+#define MKEY_ESCAPE		133
+#define MKEY_DELETE		134
+#define MKEY_KP0		135
+#define MKEY_KP1		136
+#define MKEY_KP2		137
+#define MKEY_KP3		138
+#define MKEY_KP4		139
+#define MKEY_KP5		140
+#define MKEY_KP6		141
+#define MKEY_KP7		142
+#define MKEY_KP8		143
+#define MKEY_KP9		144
+#define MKEY_KP_ENTER	145
+#define MKEY_UP			146
+#define MKEY_DOWN		147
+#define MKEY_RIGHT		148
+#define MKEY_LEFT		149
+#define MKEY_INSERT		150
+#define MKEY_HOME		151
+#define MKEY_END		152
+#define MKEY_PAGEUP		153
+#define MKEY_PAGEDOWN	154
+#define MKEY_F1			155
+#define MKEY_F2			156
+#define MKEY_F3			157
+#define MKEY_F4			158
+#define MKEY_F5			159
+#define MKEY_F6			160
+#define MKEY_F7			161
+#define MKEY_F8			162
+#define MKEY_F9			163
+#define MKEY_F10		164
+#define MKEY_F11		165
+#define MKEY_F12		166
+#define MKEY_NUMLOCK	167
+#define MKEY_RSHIFT		168
+#define MKEY_LSHIFT		169
+#define MKEY_SHIFT		169 // deprecated
+#define MKEY_RCONTROL	171
+#define MKEY_LCONTROL	172
+#define MKEY_CONTROL	172 // deprecated
+#define MKEY_RALT		174
+#define MKEY_LALT		175
+#define MKEY_ADD		176
+#define MKEY_SUB		177
+#define MKEY_HELP		178
+#define MKEY_PRINT		179
+#define MKEY_MENU		180
+#define MKEY_RSUPER		181
+#define MKEY_LSUPER		182
+#define MKEY_DUMMY		255
 
 #endif
