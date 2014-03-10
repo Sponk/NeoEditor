@@ -1,5 +1,4 @@
 project(SDL2 C)
-
 include(CheckFunctionExists)
 include(CheckLibraryExists)
 include(CheckIncludeFiles)
@@ -24,18 +23,23 @@ include(SDLChecks)
 # set SDL_BINARY_AGE and SDL_INTERFACE_AGE to 0.
 set(SDL_MAJOR_VERSION 2)
 set(SDL_MINOR_VERSION 0)
-set(SDL_MICRO_VERSION 1)
+set(SDL_MICRO_VERSION 2)
 set(SDL_INTERFACE_AGE 0)
-set(SDL_BINARY_AGE 1)
+set(SDL_BINARY_AGE 2)
 set(SDL_VERSION "${SDL_MAJOR_VERSION}.${SDL_MINOR_VERSION}.${SDL_MICRO_VERSION}")
 
 # Calculate a libtool-like version number
 math(EXPR LT_CURRENT "${SDL_MICRO_VERSION} - ${SDL_INTERFACE_AGE}")
 math(EXPR LT_AGE "${SDL_BINARY_AGE} - ${SDL_INTERFACE_AGE}")
+math(EXPR LT_MAJOR "${LT_CURRENT}- ${LT_AGE}")
 set(LT_REVISION "${SDL_INTERFACE_AGE}")
 set(LT_RELEASE "${SDL_MAJOR_VERSION}.${SDL_MINOR_VERSION}")
-set(LT_VERSION "${LT_CURRENT}.${LT_REVISION}.${LT_AGE}")
+set(LT_VERSION "${LT_MAJOR}.${LT_AGE}.${LT_REVISION}")
 
+message(STATUS "${LT_VERSION} :: ${LT_AGE} :: ${LT_REVISION} :: ${LT_CURRENT} :: ${LT_RELEASE}")
+
+# General settings & flags
+set(LIBRARY_OUTPUT_DIRECTORY "build")
 # Check for 64 or 32 bit
 set(SIZEOF_VOIDP ${CMAKE_SIZEOF_VOID_P})
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -44,17 +48,17 @@ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
 else()
   set(ARCH_64 FALSE)
   set(PROCESSOR_ARCH "x86")
-endif(CMAKE_SIZEOF_VOID_P EQUAL 8)
+endif()
 set(LIBNAME SDL2)
 if(NOT LIBTYPE)
   set(LIBTYPE SHARED)
-endif(NOT LIBTYPE)
+endif()
 
 # Get the platform
 if(WIN32)
   if(NOT WINDOWS)
     set(WINDOWS TRUE)
-  endif(NOT WINDOWS)
+  endif()
 elseif(UNIX AND NOT APPLE)
   if(CMAKE_SYSTEM_NAME MATCHES ".*Linux")
     set(LINUX TRUE)
@@ -88,8 +92,10 @@ elseif(APPLE)
     set(MACOSX TRUE)
   endif()
   # TODO: iOS?
-elseif(CMAKE_SYSTEM_NAME MATCHES "Haiku.*|BeOS.*")
-  set(BEOS TRUE)
+elseif(CMAKE_SYSTEM_NAME MATCHES "BeOS.*")
+  message_error("BeOS support has been removed as of SDL 2.0.2.")
+elseif(CMAKE_SYSTEM_NAME MATCHES "Haiku.*")
+  set(HAIKU TRUE)
 endif()
 
 # Don't mistake osx for unix
@@ -97,13 +103,13 @@ if(UNIX AND NOT APPLE)
   set(UNIX_SYS ON)
 else()
   set(UNIX_SYS OFF)
-endif(UNIX AND NOT APPLE)
+endif()
 
 if(UNIX OR APPLE)
   set(UNIX_OR_MAC_SYS ON)
 else()
   set(UNIX_OR_MAC_SYS OFF)
-endif(UNIX OR APPLE)
+endif()
 
 # Default option knobs
 if(APPLE OR ARCH_64)
@@ -111,7 +117,7 @@ if(APPLE OR ARCH_64)
 endif()
 if(UNIX OR MINGW OR MSYS)
   set(OPT_DEF_LIBC ON)
-endif(UNIX OR MINGW OR MSYS)
+endif()
 
 # Compiler info
 if(CMAKE_COMPILER_IS_GNUCC)
@@ -125,20 +131,38 @@ elseif(MSVC_VERSION GREATER 1400) # VisualStudio 8.0+
   #set(CMAKE_C_FLAGS "/ZI /WX- /
 else()
   set(OPT_DEF_ASM FALSE)
-endif(CMAKE_COMPILER_IS_GNUCC)
+endif()
 
 # Default flags, if not set otherwise
 if("$ENV{CFLAGS}" STREQUAL "")
   if(USE_GCC OR USE_CLANG)
     set(CMAKE_C_FLAGS "-g -O3")
-  endif(USE_GCC OR USE_CLANG)
+  endif()
 else("$ENV{CFLAGS}" STREQUAL "")
   set(CMAKE_C_FLAGS "$ENV{CFLAGS}")
   list(APPEND EXTRA_CFLAGS "$ENV{CFLAGS}")
-endif("$ENV{CFLAGS}" STREQUAL "")
+endif()
 if(NOT ("$ENV{CFLAGS}" STREQUAL "")) # Hackish, but does the trick on Win32
   list(APPEND EXTRA_LDFLAGS "$ENV{LDFLAGS}")
-endif(NOT ("$ENV{CFLAGS}" STREQUAL ""))
+endif()
+
+if(MSVC)
+  option(FORCE_STATIC_VCRT "Force /MT for static VC runtimes" OFF)
+  if(FORCE_STATIC_VCRT)
+    foreach(flag_var
+        CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
+        CMAKE_C_FLAGS_MINSIZEREL CMAKE_C_FLAGS_RELWITHDEBINFO)
+      if(${flag_var} MATCHES "/MD")
+        string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+      endif()
+    endforeach(flag_var)
+  endif()
+endif()
+
+# Those are used for pkg-config and friends, so that the SDL2.pc, sdl2-config,
+# etc. are created correctly.
+set(SDL_LIBS "-lSDL2")
+set(SDL_CFLAGS "")
 
 if(CYGWIN)
   # We build SDL on cygwin without the UNIX emulation layer
@@ -150,30 +174,17 @@ if(CYGWIN)
   if(HAVE_GCC_NO_CYGWIN)
     list(APPEND EXTRA_LDFLAGS "-mno-cygwin")
     list(APPEND SDL_LIBS "-mno-cygwin")
-  endif(HAVE_GCC_NO_CYGWIN)
+  endif()
   set(SDL_CFLAGS "${SDL_CFLAGS} -I/usr/include/mingw")
-endif(CYGWIN)
+endif()
 
 add_definitions(-DUSING_GENERATED_CONFIG_H)
 # General includes
 include_directories(${SDL2_BINARY_DIR}/include ${SDL2_SOURCE_DIR}/include)
 
 set(SDL_SUBSYSTEMS
-  Atomic
-  Audio
-  Video
-  Render
-  Events
-  Joystick
-  Haptic
-  Power
-  Threads
-  Timers
-  File
-  Loadso
-  CPUinfo
-  Filesystem
-)
+    Atomic Audio Video Render Events Joystick Haptic Power Threads Timers
+    File Loadso CPUinfo Filesystem)
 foreach(_SUB ${SDL_SUBSYSTEMS})
   string(TOUPPER ${_SUB} _OPT)
   option(SDL_${_OPT} "Enable the ${_SUB} subsystem" ON)
@@ -190,7 +201,7 @@ set_option(3DNOW               "Use 3Dnow! MMX assembly routines" ${OPT_DEF_ASM}
 set_option(SSE                 "Use SSE assembly routines" ${OPT_DEF_ASM})
 set_option(SSE2                "Use SSE2 assembly routines" ${OPT_DEF_SSEMATH})
 set_option(ALTIVEC             "Use Altivec assembly routines" ${OPT_DEF_ASM})
-set_option(DISKAUDIO           "Support the disk writer audio driver" OFF)
+set_option(DISKAUDIO           "Support the disk writer audio driver" ON)
 set_option(DUMMYAUDIO          "Support the dummy audio driver" ON)
 set_option(VIDEO_DIRECTFB      "Use DirectFB video driver" OFF)
 dep_option(DIRECTFB_SHARED     "Dynamically load directfb support" ON "VIDEO_DIRECTFB" OFF)
@@ -212,11 +223,14 @@ dep_option(PULSEAUDIO_SHARED   "Dynamically load PulseAudio support" ON "PULSEAU
 set_option(ARTS                "Support the Analog Real Time Synthesizer" ${UNIX_SYS})
 dep_option(ARTS_SHARED         "Dynamically load aRts audio support" ON "ARTS" OFF)
 set_option(NAS                 "Support the NAS audio API" ${UNIX_SYS})
+set_option(NAS_SHARED          "Dynamically load NAS audio API" ${UNIX_SYS})
 set_option(SNDIO               "Support the sndio audio API" ${UNIX_SYS})
 set_option(RPATH               "Use an rpath when linking SDL" ${UNIX_SYS})
 set_option(CLOCK_GETTIME       "Use clock_gettime() instead of gettimeofday()" OFF)
 set_option(INPUT_TSLIB         "Use the Touchscreen library for input" ${UNIX_SYS})
 set_option(VIDEO_X11           "Use X11 video driver" ${UNIX_SYS})
+set_option(VIDEO_WAYLAND       "Use Wayland video driver" OFF) #${UNIX_SYS})
+set_option(VIDEO_MIR           "Use Mir video driver" OFF) #${UNIX_SYS})
 dep_option(X11_SHARED          "Dynamically load X11 support" ON "VIDEO_X11" OFF)
 set(SDL_X11_OPTIONS Xcursor Xinerama XInput Xrandr Xscrnsaver XShape Xvm)
 foreach(_SUB ${SDL_X11_OPTIONS})
@@ -238,6 +252,7 @@ file(GLOB SOURCE_FILES
   ${SDL2_SOURCE_DIR}/src/atomic/*.c
   ${SDL2_SOURCE_DIR}/src/audio/*.c
   ${SDL2_SOURCE_DIR}/src/cpuinfo/*.c
+  ${SDL2_SOURCE_DIR}/src/dynapi/*.c
   ${SDL2_SOURCE_DIR}/src/events/*.c
   ${SDL2_SOURCE_DIR}/src/file/*.c
   ${SDL2_SOURCE_DIR}/src/libm/*.c
@@ -261,18 +276,18 @@ elseif(ASSERTIONS STREQUAL "paranoid")
   set(SDL_DEFAULT_ASSERT_LEVEL 3)
 else()
   message_error("unknown assertion level")
-endif(ASSERTIONS STREQUAL "auto")
+endif()
 set(HAVE_ASSERTIONS ${ASSERTIONS})
 
 # Compiler option evaluation
-if(USE_GCC)
+if(USE_GCC OR USE_CLANG)
   if(DEPENDENCY_TRACKING)
     check_c_source_compiles("
         #if !defined(__GNUC__) || __GNUC__ < 3
         #error Dependency tracking requires GCC 3.0 or newer
         #endif
         int main(int argc, char **argv) { }" HAVE_DEPENDENCY_TRACKING)
-  endif(DEPENDENCY_TRACKING)
+  endif()
 
   if(GCC_ATOMICS)
     check_c_source_compiles("int main(int argc, char **argv) {
@@ -288,8 +303,8 @@ if(USE_GCC)
           int a;
           __sync_lock_test_and_set(&a, 1);
           __sync_lock_release(&a); }" HAVE_GCC_SYNC_LOCK_TEST_AND_SET)
-    endif(NOT HAVE_GCC_ATOMICS)
-  endif(GCC_ATOMICS)
+    endif()
+  endif()
 
   set(CMAKE_REQUIRED_FLAGS "-mpreferred-stack-boundary=2")
   check_c_source_compiles("int x = 0; int main(int argc, char **argv) {}"
@@ -304,16 +319,16 @@ if(USE_GCC)
       int main(int argc, char **argv) {}" HAVE_GCC_FVISIBILITY)
   if(HAVE_GCC_FVISIBILITY)
     list(APPEND EXTRA_CFLAGS "-fvisibility=hidden")
-  endif(HAVE_GCC_FVISIBILITY)
+  endif()
   set(CMAKE_REQUIRED_FLAGS)
 
   check_c_compiler_flag(-Wall HAVE_GCC_WALL)
   if(HAVE_GCC_WALL)
-    if(CMAKE_SYSTEM_NAME MATCHES "Haiku|BeOS")
+    if(HAIKU)
       set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-multichar")
-    endif(CMAKE_SYSTEM_NAME MATCHES "Haiku|BeOS")
-  endif(HAVE_GCC_WALL)
-endif(USE_GCC)
+    endif()
+  endif()
+endif()
 
 if(ASSEMBLY)
   if(USE_GCC OR USE_CLANG)
@@ -340,9 +355,9 @@ if(ASSEMBLY)
           int main(int argc, char **argv) { }" HAVE_MMX)
       if(HAVE_MMX)
         list(APPEND EXTRA_CFLAGS "-mmmx")
-      endif(HAVE_MMX)
+      endif()
       set(CMAKE_REQUIRED_FLAGS)
-    endif(MMX)
+    endif()
 
     if(3DNOW)
       set(CMAKE_REQUIRED_FLAGS "-m3dnow")
@@ -357,9 +372,9 @@ if(ASSEMBLY)
           }" HAVE_3DNOW)
       if(HAVE_3DNOW)
         list(APPEND EXTRA_CFLAGS "-m3dnow")
-      endif(HAVE_3DNOW)
+      endif()
       set(CMAKE_REQUIRED_FLAGS)
-    endif(3DNOW)
+    endif()
 
     if(SSE)
       set(CMAKE_REQUIRED_FLAGS "-msse")
@@ -380,9 +395,9 @@ if(ASSEMBLY)
           int main(int argc, char **argv) { }" HAVE_SSE)
       if(HAVE_SSE)
         list(APPEND EXTRA_CFLAGS "-msse")
-      endif(HAVE_SSE)
+      endif()
       set(CMAKE_REQUIRED_FLAGS)
-    endif(SSE)
+    endif()
 
     if(SSE2)
       set(CMAKE_REQUIRED_FLAGS "-msse2")
@@ -403,18 +418,18 @@ if(ASSEMBLY)
           int main(int argc, char **argv) { }" HAVE_SSE2)
       if(HAVE_SSE2)
         list(APPEND EXTRA_CFLAGS "-msse2")
-      endif(HAVE_SSE2)
+      endif()
       set(CMAKE_REQUIRED_FLAGS)
-    endif(SSE2)
+    endif()
 
     if(SSEMATH)
       if(SSE OR SSE2)
         if(USE_GCC)
           list(APPEND EXTRA_CFLAGS "-mfpmath=387")
-        endif(USE_GCC)
+        endif()
         set(HAVE_SSEMATH TRUE)
-      endif(SSE OR SSE2)
-    endif(SSEMATH)
+      endif()
+    endif()
 
     if(ALTIVEC)
       set(CMAKE_REQUIRED_FLAGS "-maltivec")
@@ -436,26 +451,26 @@ if(ASSEMBLY)
         set(SDL_ALTIVEC_BLITTERS 1)
         if(HAVE_ALTIVEC_H_HDR)
           set(HAVE_ALTIVEC_H 1)
-        endif(HAVE_ALTIVEC_H_HDR)
-      endif(HAVE_ALTIVEC OR HAVE_ALTIVEC_H_HDR)
-    endif(ALTIVEC)
+        endif()
+      endif()
+    endif()
   elseif(MSVC_VERSION GREATER 1500)
     # TODO: SDL_cpuinfo.h needs to support the user's configuration wish
     # for MSVC - right now it is always activated
     if(NOT ARCH_64)
       set(HAVE_MMX TRUE)
       set(HAVE_3DNOW TRUE)
-    endif(NOT ARCH_64)
+    endif()
     set(HAVE_SSE TRUE)
     set(HAVE_SSE2 TRUE)
     set(SDL_ASSEMBLY_ROUTINES 1)
-  endif(USE_GCC OR USE_CLANG)
+  endif()
 # TODO:
 #else(ASSEMBLY)
 #  if(USE_GCC OR USE_CLANG)
 #    list(APPEND EXTRA_CFLAGS "-mno-sse" "-mno-sse2" "-mno-mmx")
-#  endif(USE_GCC OR USE_CLANG)
-endif(ASSEMBLY)
+#  endif()
+endif()
 
 # TODO: Can't deactivate on FreeBSD? w/o LIBC, SDL_stdinc.h can't define
 # anything.
@@ -472,14 +487,14 @@ if(LIBC)
             malloc calloc realloc free qsort abs memset memcpy memmove memcmp
             strlen _strrev _strupr _strlwr strchr strrchr strstr itoa _ltoa
             _ultoa strtol strtoul strtoll strtod atoi atof strcmp strncmp
-            _stricmp _strnicmp sscanf atan atan2 ceil copysign cos cosf fabs
-            floor log pow scalbn sin sinf sqrt)
+            _stricmp _strnicmp sscanf atan atan2 acos asin ceil copysign cos
+            cosf fabs floor log pow scalbn sin sinf sqrt)
       string(TOUPPER ${_FN} _UPPER)
       set(HAVE_${_UPPER} 1)
     endforeach()
     if(NOT CYGWIN AND NOT MINGW)
       set(HAVE_ALLOCA 1)
-    endif(NOT CYGWIN AND NOT MINGW)
+    endif()
     set(HAVE_M_PI 1)
     add_definitions(-D_USE_MATH_DEFINES) # needed for M_PI
     set(STDC_HEADERS 1)
@@ -507,7 +522,7 @@ if(LIBC)
             strdup _strrev _strupr _strlwr strchr strrchr strstr itoa _ltoa
             _uitoa _ultoa strtol strtoul _i64toa _ui64toa strtoll strtoull
             atoi atof strcmp strncmp _stricmp strcasecmp _strnicmp strncasecmp
-            sscanf snprintf vsnprintf fseeko fseeko64 sigaction setjmp
+            vsscanf vsnprintf fseeko fseeko64 sigaction setjmp
             nanosleep sysconf sysctlbyname
             )
       string(TOUPPER ${_FN} _UPPER)
@@ -527,21 +542,21 @@ if(LIBC)
       endforeach()
       set(CMAKE_REQUIRED_LIBRARIES)
       list(APPEND EXTRA_LIBS m)
-    endif(HAVE_LIBM)
+    endif()
 
     check_library_exists(iconv iconv_open "" HAVE_LIBICONV)
     if(HAVE_LIBICONV)
       list(APPEND EXTRA_LIBS iconv)
-    endif(HAVE_LIBICONV)
+    endif()
 
     check_struct_has_member("struct sigaction" "sa_sigaction" "signal.h" HAVE_SA_SIGACTION)
-  endif(WINDOWS AND NOT MINGW)
+  endif()
 else(LIBC)
   if(WINDOWS)
     set(HAVE_STDARG_H 1)
     set(HAVE_STDDEF_H 1)
-  endif(WINDOWS)
-endif(LIBC)
+  endif()
+endif()
 
 
 # Enable/disable various subsystems of the SDL library
@@ -549,24 +564,24 @@ foreach(_SUB ${SDL_SUBSYSTEMS})
   string(TOUPPER ${_SUB} _OPT)
   if(NOT SDL_${_OPT})
     set(SDL_${_OPT}_DISABLED 1)
-  endif(NOT SDL_${_OPT})
+  endif()
 endforeach()
 if(SDL_JOYSTICK)
   file(GLOB JOYSTICK_SOURCES ${SDL2_SOURCE_DIR}/src/joystick/*.c)
   set(SOURCE_FILES ${SOURCE_FILES} ${JOYSTICK_SOURCES})
-endif(SDL_JOYSTICK)
+endif()
 if(SDL_HAPTIC)
   if(NOT SDL_JOYSTICK)
     # Haptic requires some private functions from the joystick subsystem.
     message_error("SDL_HAPTIC requires SDL_JOYSTICK, which is not enabled")
-  endif(NOT SDL_JOYSTICK)
+  endif()
   file(GLOB HAPTIC_SOURCES ${SDL2_SOURCE_DIR}/src/haptic/*.c)
   set(SOURCE_FILES ${SOURCE_FILES} ${HAPTIC_SOURCES})
-endif(SDL_HAPTIC)
+endif()
 if(SDL_POWER)
   file(GLOB POWER_SOURCES ${SDL2_SOURCE_DIR}/src/power/*.c)
   set(SOURCE_FILES ${SOURCE_FILES} ${POWER_SOURCES})
-endif(SDL_POWER)
+endif()
 # TODO: in configure.in, the test for LOADSO and SDL_DLOPEN is a bit weird:
 # if LOADSO is not wanted, SDL_LOADSO_DISABLED is set
 # If however on Unix or APPLE dlopen() is detected via CheckDLOPEN(),
@@ -580,21 +595,21 @@ if(SDL_AUDIO)
     file(GLOB DUMMYAUDIO_SOURCES ${SDL2_SOURCE_DIR}/src/audio/dummy/*.c)
     set(SOURCE_FILES ${SOURCE_FILES} ${DUMMYAUDIO_SOURCES})
     set(HAVE_DUMMYAUDIO TRUE)
-  endif(DUMMYAUDIO)
+  endif()
   if(DISKAUDIO)
     set(SDL_AUDIO_DRIVER_DISK 1)
     file(GLOB DISKAUDIO_SOURCES ${SDL2_SOURCE_DIR}/src/audio/disk/*.c)
     set(SOURCE_FILES ${SOURCE_FILES} ${DISKAUDIO_SOURCES})
     set(HAVE_DISKAUDIO TRUE)
-  endif(DISKAUDIO)
-endif(SDL_AUDIO)
+  endif()
+endif()
 
 if(SDL_DLOPEN)
   # Relevant for Unix/Darwin only
   if(UNIX OR APPLE)
     CheckDLOPEN()
-  endif(UNIX OR APPLE)
-endif(SDL_DLOPEN)
+  endif()
+endif()
 
 if(SDL_VIDEO)
   if(VIDEO_DUMMY)
@@ -603,8 +618,8 @@ if(SDL_VIDEO)
     set(SOURCE_FILES ${SOURCE_FILES} ${VIDEO_DUMMY_SOURCES})
     set(HAVE_VIDEO_DUMMY TRUE)
     set(HAVE_SDL_VIDEO TRUE)
-  endif(VIDEO_DUMMY)
-endif(SDL_VIDEO)
+  endif()
+endif()
 
 # Platform-specific options and settings
 if(UNIX AND NOT APPLE)
@@ -633,14 +648,16 @@ if(UNIX AND NOT APPLE)
     CheckNAS()
     CheckSNDIO()
     CheckFusionSound()
-  endif(SDL_AUDIO)
+  endif()
 
   if(SDL_VIDEO)
     CheckX11()
+    CheckMir()
     CheckDirectFB()
     CheckOpenGLX11()
     CheckOpenGLESX11()
-  endif(SDL_VIDEO)
+    CheckWayland()
+  endif()
 
   if(LINUX)
     check_c_source_compiles("
@@ -649,22 +666,45 @@ if(UNIX AND NOT APPLE)
         #error EVIOCGNAME() ioctl not available
         #endif
         int main(int argc, char** argv) {}" HAVE_INPUT_EVENTS)
+
+    check_c_source_compiles("
+        #include <linux/kd.h>
+        #include <linux/keyboard.h>
+
+        int main(int argc, char **argv) 
+        {
+            struct kbentry kbe;
+            kbe.kb_table = KG_CTRL;
+            ioctl(0, KDGKBENT, &kbe);
+        }" HAVE_INPUT_KD)
+
+    file(GLOB CORE_SOURCES ${SDL2_SOURCE_DIR}/src/core/linux/*.c)
+    set(SOURCE_FILES ${SOURCE_FILES} ${CORE_SOURCES})
+
     if(HAVE_INPUT_EVENTS)
       set(SDL_INPUT_LINUXEV 1)
-    endif(HAVE_INPUT_EVENTS)
+    endif()
 
     if(SDL_HAPTIC AND HAVE_INPUT_EVENTS)
       set(SDL_HAPTIC_LINUX 1)
       file(GLOB HAPTIC_SOURCES ${SDL2_SOURCE_DIR}/src/haptic/linux/*.c)
       set(SOURCE_FILES ${SOURCE_FILES} ${HAPTIC_SOURCES})
       set(HAVE_SDL_HAPTIC TRUE)
-    endif(SDL_HAPTIC AND HAVE_INPUT_EVENTS)
+    endif()
+
+    if(HAVE_INPUT_KD)
+      set(SDL_INPUT_LINUXKD 1)
+    endif()
 
     check_include_file("libudev.h" HAVE_LIBUDEV_H)
+	if(HAVE_LIBUDEV_H)
+	  file(GLOB UDEV_SOURCES ${SDL2_SOURCE_DIR}/src/core/linux/*.c)
+	  set(SOURCE_FILES ${SOURCE_FILES} ${UDEV_SOURCES})
+	endif(HAVE_LIBUDEV_H)
 
     # !!! FIXME: this needs pkg-config to find the include path, I think.
     check_include_file("dbus/dbus.h" HAVE_DBUS_DBUS_H)
-  endif(LINUX)
+  endif()
 
   if(INPUT_TSLIB)
     check_c_source_compiles("
@@ -673,8 +713,8 @@ if(UNIX AND NOT APPLE)
     if(HAVE_INPUT_TSLIB)
       set(SDL_INPUT_TSLIB 1)
       list(APPEND EXTRA_LIBS ts)
-    endif(HAVE_INPUT_TSLIB)
-  endif(INPUT_TSLIB)
+    endif()
+  endif()
 
   if(SDL_JOYSTICK)
     CheckUSBHID()   # seems to be BSD specific - limit the test to BSD only?
@@ -683,8 +723,8 @@ if(UNIX AND NOT APPLE)
       file(GLOB JOYSTICK_SOURCES ${SDL2_SOURCE_DIR}/src/joystick/linux/*.c)
       set(SOURCE_FILES ${SOURCE_FILES} ${JOYSTICK_SOURCES})
       set(HAVE_SDL_JOYSTICK TRUE)
-    endif(LINUX)
-  endif(SDL_JOYSTICK)
+    endif()
+  endif()
 
   CheckPTHREAD()
 
@@ -697,14 +737,14 @@ if(UNIX AND NOT APPLE)
       check_library_exists(c clock_gettime "" FOUND_CLOCK_GETTIME)
       if(FOUND_CLOCK_GETTIME)
         set(HAVE_CLOCK_GETTIME 1)
-      endif(FOUND_CLOCK_GETTIME)
-    endif(HAVE_CLOCK_GETTIME)
-  endif(CLOCK_GETTIME)
+      endif()
+    endif()
+  endif()
 
   check_include_file(linux/version.h HAVE_LINUX_VERSION_H)
   if(HAVE_LINUX_VERSION_H)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DHAVE_LINUX_VERSION_H")
-  endif(HAVE_LINUX_VERSION_H)
+  endif()
 
   if(SDL_POWER)
     if(LINUX)
@@ -712,22 +752,22 @@ if(UNIX AND NOT APPLE)
       file(GLOB POWER_SOURCES ${SDL2_SOURCE_DIR}/src/power/linux/*.c)
       set(SOURCE_FILES ${SOURCE_FILES} ${POWER_SOURCES})
       set(HAVE_SDL_POWER TRUE)
-    endif(LINUX)
-  endif(SDL_POWER)
+    endif()
+  endif()
 
   if(SDL_FILESYSTEM)
     set(SDL_FILESYSTEM_UNIX 1)
     file(GLOB FILESYSTEM_SOURCES ${SDL2_SOURCE_DIR}/src/filesystem/unix/*.c)
     set(SOURCE_FILES ${SOURCE_FILES} ${FILESYSTEM_SOURCES})
     set(HAVE_SDL_FILESYSTEM TRUE)
-  endif(SDL_FILESYSTEM)
+  endif()
 
   if(SDL_TIMERS)
     set(SDL_TIMER_UNIX 1)
     file(GLOB TIMER_SOURCES ${SDL2_SOURCE_DIR}/src/timer/unix/*.c)
     set(SOURCE_FILES ${SOURCE_FILES} ${TIMER_SOURCES})
     set(HAVE_SDL_TIMERS TRUE)
-  endif(SDL_TIMERS)
+  endif()
 
   if(RPATH)
     set(SDL_RLD_FLAGS "")
@@ -738,7 +778,7 @@ if(UNIX AND NOT APPLE)
     endif()
     set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
     set(HAVE_RPATH TRUE)
-  endif(RPATH)
+  endif()
 
 elseif(WINDOWS)
   find_program(WINDRES windres)
@@ -747,14 +787,14 @@ elseif(WINDOWS)
     #include <windows.h>
     int main(int argc, char **argv) { }" HAVE_WIN32_CC)
 
-  file(GLOB WIN_SOURCES ${SDL2_SOURCE_DIR}/src/core/windows/*.c)
-  set(SOURCE_FILES ${SOURCE_FILES} ${WIN_SOURCES})
+  file(GLOB CORE_SOURCES ${SDL2_SOURCE_DIR}/src/core/windows/*.c)
+  set(SOURCE_FILES ${SOURCE_FILES} ${CORE_SOURCES})
 
   # Check for DirectX
   if(DIRECTX)
     if("$ENV{DXSDK_DIR}" STREQUAL "")
       message_error("DIRECTX requires the \$DXSDK_DIR environment variable to be set")
-    endif("$ENV{DXSDK_DIR}" STREQUAL "")
+    endif()
     set(CMAKE_REQUIRED_FLAGS "/I\"$ENV{DXSDK_DIR}\\Include\"")
     check_include_file(d3d9.h HAVE_D3D_H)
     check_include_file(ddraw.h HAVE_DDRAW_H)
@@ -768,7 +808,7 @@ elseif(WINDOWS)
       include_directories($ENV{DXSDK_DIR}\\Include)
     endif()
     set(CMAKE_REQUIRED_FLAGS)
-  endif(DIRECTX)
+  endif()
 
   if(SDL_AUDIO)
     set(SDL_AUDIO_DRIVER_WINMM 1)
@@ -780,20 +820,20 @@ elseif(WINDOWS)
       set(SDL_AUDIO_DRIVER_DSOUND 1)
       file(GLOB DSOUND_AUDIO_SOURCES ${SDL2_SOURCE_DIR}/src/audio/directsound/*.c)
       set(SOURCE_FILES ${SOURCE_FILES} ${DSOUND_AUDIO_SOURCES})
-    endif(HAVE_DSOUND_H)
+    endif()
 
     if(HAVE_XAUDIO2_H)
       set(SDL_AUDIO_DRIVER_XAUDIO2 1)
       file(GLOB XAUDIO2_AUDIO_SOURCES ${SDL2_SOURCE_DIR}/src/audio/xaudio2/*.c)
       set(SOURCE_FILES ${SOURCE_FILES} ${XAUDIO2_AUDIO_SOURCES})
-    endif(HAVE_XAUDIO2_H)
-  endif(SDL_AUDIO)
+    endif()
+  endif()
 
   if(SDL_VIDEO)
     # requires SDL_LOADSO on Windows (IME, DX, etc.)
     if(NOT SDL_LOADSO)
       message_error("SDL_VIDEO requires SDL_LOADSO, which is not enabled")
-    endif(NOT SDL_LOADSO)
+    endif()
     set(SDL_VIDEO_DRIVER_WINDOWS 1)
     file(GLOB WIN_VIDEO_SOURCES ${SDL2_SOURCE_DIR}/src/video/windows/*.c)
     set(SOURCE_FILES ${SOURCE_FILES} ${WIN_VIDEO_SOURCES})
@@ -801,9 +841,9 @@ elseif(WINDOWS)
     if(RENDER_D3D AND HAVE_D3D_H)
       set(SDL_VIDEO_RENDER_D3D 1)
       set(HAVE_RENDER_D3D TRUE)
-    endif(RENDER_D3D AND HAVE_D3D_H)
+    endif()
     set(HAVE_SDL_VIDEO TRUE)
-  endif(SDL_VIDEO)
+  endif()
 
   if(SDL_THREADS)
     set(SDL_THREAD_WINDOWS 1)
@@ -814,20 +854,20 @@ elseif(WINDOWS)
       ${SDL2_SOURCE_DIR}/src/thread/windows/SDL_systls.c
       ${SDL2_SOURCE_DIR}/src/thread/generic/SDL_syscond.c)
     set(HAVE_SDL_THREADS TRUE)
-  endif(SDL_THREADS)
+  endif()
 
   if(SDL_POWER)
     set(SDL_POWER_WINDOWS 1)
     set(SOURCE_FILES ${SOURCE_FILES} ${SDL2_SOURCE_DIR}/src/power/windows/SDL_syspower.c)
     set(HAVE_SDL_POWER TRUE)
-  endif(SDL_POWER)
+  endif()
 
   if(SDL_FILESYSTEM)
     set(SDL_FILESYSTEM_WINDOWS 1)
-    file(GLOB FILESYSTEM_SOURCES ${SDL2_SOURCE_DIR}/src/filesytem/windows/*.c)
+    file(GLOB FILESYSTEM_SOURCES ${SDL2_SOURCE_DIR}/src/filesystem/windows/*.c)
     set(SOURCE_FILES ${SOURCE_FILES} ${FILESYSTEM_SOURCES})
     set(HAVE_SDL_FILESYSTEM TRUE)
-  endif(SDL_FILESYSTEM)
+  endif()
 
   # Libraries for Win32 native and MinGW
   list(APPEND EXTRA_LIBS user32 gdi32 winmm imm32 ole32 oleaut32 version uuid)
@@ -839,14 +879,14 @@ elseif(WINDOWS)
     file(GLOB TIMER_SOURCES ${SDL2_SOURCE_DIR}/src/timer/windows/*.c)
     set(SOURCE_FILES ${SOURCE_FILES} ${TIMER_SOURCES})
     set(HAVE_SDL_TIMERS TRUE)
-  endif(SDL_TIMERS)
+  endif()
 
   if(SDL_LOADSO)
     set(SDL_LOADSO_WINDOWS 1)
     file(GLOB LOADSO_SOURCES ${SDL2_SOURCE_DIR}/src/loadso/windows/*.c)
     set(SOURCE_FILES ${SOURCE_FILES} ${LOADSO_SOURCES})
     set(HAVE_SDL_LOADSO TRUE)
-  endif(SDL_LOADSO)
+  endif()
 
   file(GLOB CORE_SOURCES ${SDL2_SOURCE_DIR}/src/core/windows/*.c)
   set(SOURCE_FILES ${SOURCE_FILES} ${CORE_SOURCES})
@@ -857,8 +897,8 @@ elseif(WINDOWS)
       set(SDL_VIDEO_OPENGL_WGL 1)
       set(SDL_VIDEO_RENDER_OGL 1)
       set(HAVE_VIDEO_OPENGL TRUE)
-    endif(VIDEO_OPENGL)
-  endif(SDL_VIDEO)
+    endif()
+  endif()
 
   if(SDL_JOYSTICK)
     if(HAVE_DINPUT_H)
@@ -868,15 +908,15 @@ elseif(WINDOWS)
     else()
       set(SDL_JOYSTICK_WINMM 1)
       set(SOURCE_FILES ${SOURCE_FILES} ${SDL2_SOURCE_DIR}/src/joystick/windows/SDL_mmjoystick.c)
-    endif(HAVE_DINPUT_H)
+    endif()
     set(HAVE_SDL_JOYSTICK TRUE)
-  endif(SDL_JOYSTICK)
+  endif()
 
   if(SDL_HAPTIC AND HAVE_DINPUT_H)
     set(SDL_HAPTIC_DINPUT 1)
     set(SOURCE_FILES ${SOURCE_FILES} ${SDL2_SOURCE_DIR}/src/haptic/windows/SDL_syshaptic.c)
     set(HAVE_SDL_HAPTIC TRUE)
-  endif(SDL_HAPTIC AND HAVE_DINPUT_H)
+  endif()
 
   file(GLOB VERSION_SOURCES ${SDL2_SOURCE_DIR}/src/main/windows/*.rc)
   file(GLOB SDLMAIN_SOURCES ${SDL2_SOURCE_DIR}/src/main/windows/*.c)
@@ -885,7 +925,7 @@ elseif(WINDOWS)
     list(APPEND EXTRA_LDFLAGS "-mwindows")
     set(SDL_CFLAGS "${SDL_CFLAGS} -Dmain=SDL_main")
     list(APPEND SDL_LIBS "-lmingw32" "-lSDL2main" "-mwindows")
-  endif(MINGW OR CYGWIN)
+  endif()
 elseif(APPLE)
   # TODO: rework this for proper MacOS X, iOS and Darwin support
 
@@ -939,9 +979,17 @@ elseif(APPLE)
     set(SDL_FRAMEWORK_IOKIT 1)
   endif()
 
+  if(SDL_TIMERS)
+    set(SDL_TIMER_UNIX 1)
+    file(GLOB TIMER_SOURCES ${SDL2_SOURCE_DIR}/src/timer/unix/*.c)
+    set(SOURCE_FILES ${SOURCE_FILES} ${TIMER_SOURCES})
+    set(HAVE_SDL_TIMERS TRUE)
+  endif(SDL_TIMERS)
+
   if(SDL_FILESYSTEM)
     set(SDL_FILESYSTEM_COCOA 1)
     file(GLOB FILESYSTEM_SOURCES ${SDL2_SOURCE_DIR}/src/filesystem/cocoa/*.m)
+    set_source_files_properties(${FILESYSTEM_SOURCES} PROPERTIES LANGUAGE C)
     set(SOURCE_FILES ${SOURCE_FILES} ${FILESYSTEM_SOURCES})
     set(HAVE_SDL_FILESYSTEM TRUE)
   endif()
@@ -982,23 +1030,30 @@ elseif(APPLE)
       if(DARWIN)
         find_library(OpenGL_LIBRARY OpenGL)
         list(APPEND EXTRA_LIBRARIES ${OpenGL_LIBRARY})
-      endif(DARWIN)
+      endif()
       set(HAVE_VIDEO_OPENGL TRUE)
-    endif(VIDEO_OPENGL)
-  endif(SDL_VIDEO)
+    endif()
+  endif()
 
   CheckPTHREAD()
-elseif(BEOS)
+elseif(HAIKU)
   if(SDL_VIDEO)
-    set(SDL_VIDEO_DRIVER_BWINDOW 1)
-    file(GLOB BWINDOW_SOURCES ${SDL2_SOURCE_DIR}/src/video/bwindow/*.c)
-    set(SOURCE_FILES ${SOURCE_FILES} ${BWINDOW_SOURCES})
+    set(SDL_VIDEO_DRIVER_HAIKU 1)
+    file(GLOB HAIKUVIDEO_SOURCES ${SDL2_SOURCE_DIR}/src/video/haiku/*.c)
+    set(SOURCE_FILES ${SOURCE_FILES} ${HAIKUVIDEO_SOURCES})
     set(HAVE_SDL_VIDEO TRUE)
 
-    set(SDL_FILESYSTEM_BEOS 1)
-    file(GLOB FILESYSTEM_SOURCES ${SDL2_SOURCE_DIR}/src/filesystem/beos/*.cc)
+    set(SDL_FILESYSTEM_HAIKU 1)
+    file(GLOB FILESYSTEM_SOURCES ${SDL2_SOURCE_DIR}/src/filesystem/haiku/*.cc)
     set(SOURCE_FILES ${SOURCE_FILES} ${FILESYSTEM_SOURCES})
     set(HAVE_SDL_FILESYSTEM TRUE)
+
+    if(SDL_TIMERS)
+      set(SDL_TIMER_HAIKU 1)
+      file(GLOB TIMER_SOURCES ${SDL2_SOURCE_DIR}/src/timer/haiku/*.c)
+      set(SOURCE_FILES ${SOURCE_FILES} ${TIMER_SOURCES})
+      set(HAVE_SDL_TIMERS TRUE)
+    endif(SDL_TIMERS)
 
     if(VIDEO_OPENGL)
       # TODO: Use FIND_PACKAGE(OpenGL) instead
@@ -1007,8 +1062,10 @@ elseif(BEOS)
       set(SDL_VIDEO_RENDER_OGL 1)
       list(APPEND EXTRA_LIBS GL)
       set(HAVE_VIDEO_OPENGL TRUE)
-    endif(VIDEO_OPENGL)
-  endif(SDL_VIDEO)
+    endif()
+  endif()
+
+  CheckPTHREAD()
 endif()
 
 # Dummies
@@ -1026,45 +1083,45 @@ if(NOT HAVE_SDL_JOYSTICK)
     file(GLOB JOYSTICK_SOURCES ${SDL2_SOURCE_DIR}/src/joystick/dummy/*.c)
     set(SOURCE_FILES ${SOURCE_FILES} ${JOYSTICK_SOURCES})
   endif()
-endif(NOT HAVE_SDL_JOYSTICK)
+endif()
 if(NOT HAVE_SDL_HAPTIC)
   set(SDL_HAPTIC_DISABLED 1)
   file(GLOB HAPTIC_SOURCES ${SDL2_SOURCE_DIR}/src/haptic/dummy/*.c)
   set(SOURCE_FILES ${SOURCE_FILES} ${HAPTIC_SOURCES})
-endif(NOT HAVE_SDL_HAPTIC)
+endif()
 if(NOT HAVE_SDL_LOADSO)
   set(SDL_LOADSO_DISABLED 1)
   file(GLOB LOADSO_SOURCES ${SDL2_SOURCE_DIR}/src/loadso/dummy/*.c)
   set(SOURCE_FILES ${SOURCE_FILES} ${LOADSO_SOURCES})
-endif(NOT HAVE_SDL_LOADSO)
+endif()
 if(NOT HAVE_SDL_FILESYSTEM)
   set(SDL_FILESYSTEM_DISABLED 1)
   file(GLOB FILESYSTEM_SOURCES ${SDL2_SOURCE_DIR}/src/filesystem/dummy/*.c)
   set(SOURCE_FILES ${SOURCE_FILES} ${FILESYSTEM_SOURCES})
-endif(NOT HAVE_SDL_FILESYSTEM)
+endif()
 
 # We always need to have threads and timers around
 if(NOT HAVE_SDL_THREADS)
   set(SDL_THREADS_DISABLED 1)
   file(GLOB THREADS_SOURCES ${SDL2_SOURCE_DIR}/src/thread/generic/*.c)
   set(SOURCE_FILES ${SOURCE_FILES} ${THREADS_SOURCES})
-endif(NOT HAVE_SDL_THREADS)
+endif()
 if(NOT HAVE_SDL_TIMERS)
   set(SDL_TIMERS_DISABLED 1)
   file(GLOB TIMER_SOURCES ${SDL2_SOURCE_DIR}/src/timer/dummy/*.c)
   set(SOURCE_FILES ${SOURCE_FILES} ${TIMER_SOURCES})
-endif(NOT HAVE_SDL_TIMERS)
+endif()
 
 if(NOT SDLMAIN_SOURCES)
   file(GLOB SDLMAIN_SOURCES ${SDL2_SOURCE_DIR}/src/main/dummy/*.c)
-endif(NOT SDLMAIN_SOURCES)
+endif()
 
 # Append the -MMD -MT flags
 # if(DEPENDENCY_TRACKING)
 #   if(COMPILER_IS_GNUCC)
 #     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -MMD -MT \$@")
-#   endif(COMPILER_IS_GNUCC)
-# endif(DEPENDENCY_TRACKING)
+#   endif()
+# endif()
 
 configure_file("${SDL2_SOURCE_DIR}/include/SDL_config.h.cmake"
   "${SDL2_BINARY_DIR}/include/SDL_config.h")
@@ -1072,15 +1129,54 @@ configure_file("${SDL2_SOURCE_DIR}/include/SDL_config.h.cmake"
 # Prepare the flags and remove duplicates
 if(EXTRA_LDFLAGS)
   list(REMOVE_DUPLICATES EXTRA_LDFLAGS)
-endif(EXTRA_LDFLAGS)
+endif()
 if(EXTRA_LIBS)
   list(REMOVE_DUPLICATES EXTRA_LIBS)
-endif(EXTRA_LIBS)
+endif()
 if(EXTRA_CFLAGS)
   list(REMOVE_DUPLICATES EXTRA_CFLAGS)
-endif(EXTRA_CFLAGS)
+endif()
 listtostr(EXTRA_CFLAGS _EXTRA_CFLAGS)
 set(EXTRA_CFLAGS ${_EXTRA_CFLAGS})
+
+# Compat helpers for the configuration files
+if(NOT WINDOWS OR CYGWIN)
+  # TODO: we need a Windows script, too
+  #execute_process(COMMAND sh ${SDL2_SOURCE_DIR}/build-scripts/updaterev.sh)
+
+  set(prefix ${CMAKE_INSTALL_PREFIX})
+  set(exec_prefix "\${prefix}")
+  set(libdir "\${exec_prefix}/lib${LIB_SUFFIX}")
+  set(bindir "\${exec_prefix}/bin")
+  set(includedir "\${prefix}/include")
+  if(SDL_STATIC)
+    set(ENABLE_STATIC_TRUE "")
+    set(ENABLE_STATIC_FALSE "#")
+  else(SDL_STATIC)
+    set(ENABLE_STATIC_TRUE "#")
+    set(ENABLE_STATIC_FALSE "")
+  endif()
+  if(SDL_SHARED)
+    set(ENABLE_SHARED_TRUE "")
+    set(ENABLE_SHARED_FALSE "#")
+  else(SDL_SHARED)
+    set(ENABLE_SHARED_TRUE "#")
+    set(ENABLE_SHARED_FALSE "")
+  endif()
+
+  # Clean up the different lists
+  listtostr(EXTRA_LIBS _EXTRA_LIBS "-l")
+  set(SDL_STATIC_LIBS ${SDL_LIBS} ${EXTRA_LDFLAGS} ${_EXTRA_LIBS})
+  list(REMOVE_DUPLICATES SDL_STATIC_LIBS)
+  listtostr(SDL_STATIC_LIBS _SDL_STATIC_LIBS)
+  set(SDL_STATIC_LIBS ${_SDL_STATIC_LIBS})
+  listtostr(SDL_LIBS _SDL_LIBS)
+  set(SDL_LIBS ${_SDL_LIBS})
+
+  # MESSAGE(STATUS "SDL_LIBS: ${SDL_LIBS}")
+  # MESSAGE(STATUS "SDL_STATIC_LIBS: ${SDL_STATIC_LIBS}")
+
+endif()
 
 ##### Info output #####
 message(STATUS "")
@@ -1116,11 +1212,11 @@ message(STATUS " Build Shared Library: ${SDL_SHARED}")
 message(STATUS " Build Static Library: ${SDL_STATIC}")
 message(STATUS "")
 if(UNIX)
-  message(STATUS "Something was not detected, although your are sure that it")
-  message(STATUS "has been properly installed? Then make sure, you have set")
-  message(STATUS "the CFLAGS and LDFLAGS environment variables correctly.")
+  message(STATUS "If something was not detected, although the libraries")
+  message(STATUS "were installed, then make sure you have set the")
+  message(STATUS "CFLAGS and LDFLAGS environment variables correctly.")
   message(STATUS "")
-endif(UNIX)
+endif()
 
 # Ensure that the extra cflags are used at compile time
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS}")
@@ -1134,25 +1230,31 @@ if(SDL_SHARED)
   if(UNIX)
     set_target_properties(SDL2 PROPERTIES
       VERSION ${LT_VERSION}
-      SOVERSION ${LT_CURRENT}
+      SOVERSION ${LT_REVISION}
       OUTPUT_NAME "SDL2-${LT_RELEASE}")
   else(UNIX)
     set_target_properties(SDL2 PROPERTIES
       VERSION ${SDL_VERSION}
-      SOVERSION ${LT_CURRENT}
+      SOVERSION ${LT_REVISION}
       OUTPUT_NAME "SDL2")
-  endif(UNIX)
+  endif()
  set(_INSTALL_LIBS "SDL2" ${_INSTALL_LIBS})
  target_link_libraries(SDL2 ${EXTRA_LIBS} ${EXTRA_LDFLAGS})
-endif(SDL_SHARED)
+endif()
 
 if(SDL_STATIC)
+  set (BUILD_SHARED_LIBS FALSE)
   add_library(SDL2-static STATIC ${SOURCE_FILES})
   set_target_properties(SDL2-static PROPERTIES OUTPUT_NAME "SDL2")
+  if(MSVC)
+    set_target_properties(SDL2-static PROPERTIES LINK_FLAGS_RELEASE "/NODEFAULTLIB")
+    set_target_properties(SDL2-static PROPERTIES LINK_FLAGS_DEBUG "/NODEFAULTLIB")
+    set_target_properties(SDL2-static PROPERTIES STATIC_LIBRARY_FLAGS "/NODEFAULTLIB")
+  endif()
   # TODO: Win32 platforms keep the same suffix .lib for import and static
   # libraries - do we need to consider this?
   set(_INSTALL_LIBS "SDL2-static" ${_INSTALL_LIBS})
   target_link_libraries(SDL2-static ${EXTRA_LIBS} ${EXTRA_LDFLAGS})
-endif(SDL_STATIC)
+endif()
 
 INSTALL(TARGETS SDL2 DESTINATION ${MARATIS_INSTALL_DIR})

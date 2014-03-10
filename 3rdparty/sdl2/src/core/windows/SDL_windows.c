@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -18,7 +18,7 @@
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
-#include "SDL_config.h"
+#include "../../SDL_internal.h"
 
 #ifdef __WIN32__
 
@@ -45,7 +45,15 @@ WIN_SetError(const char *prefix)
 HRESULT
 WIN_CoInitialize(void)
 {
-    const HRESULT hr = CoInitialize(NULL);
+    /* SDL handles any threading model, so initialize with the default, which
+       is compatible with OLE and if that doesn't work, try multi-threaded mode.
+
+       If you need multi-threaded mode, call CoInitializeEx() before SDL_Init()
+    */
+    HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
+    if (hr == RPC_E_CHANGED_MODE) {
+        hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+    }
 
     /* S_FALSE means success, but someone else already initialized. */
     /* You still need to call CoUninitialize in this case! */

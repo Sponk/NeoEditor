@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -18,7 +18,10 @@
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
-#include "SDL_config.h"
+#include "../../SDL_internal.h"
+
+#include "SDL_render.h"
+#include "SDL_system.h"
 
 #if SDL_VIDEO_RENDER_D3D && !SDL_RENDER_DISABLED
 
@@ -27,7 +30,6 @@
 #include "SDL_hints.h"
 #include "SDL_loadso.h"
 #include "SDL_syswm.h"
-#include "SDL_system.h"
 #include "../SDL_sysrender.h"
 #include "../../video/windows/SDL_windowsvideo.h"
 
@@ -215,6 +217,7 @@ static int D3D_UpdateTextureYUV(SDL_Renderer * renderer, SDL_Texture * texture,
 static int D3D_LockTexture(SDL_Renderer * renderer, SDL_Texture * texture,
                            const SDL_Rect * rect, void **pixels, int *pitch);
 static void D3D_UnlockTexture(SDL_Renderer * renderer, SDL_Texture * texture);
+static int D3D_SetRenderTargetInternal(SDL_Renderer * renderer, SDL_Texture * texture);
 static int D3D_SetRenderTarget(SDL_Renderer * renderer, SDL_Texture * texture);
 static int D3D_UpdateViewport(SDL_Renderer * renderer);
 static int D3D_UpdateClipRect(SDL_Renderer * renderer);
@@ -472,11 +475,23 @@ D3D_Reset(SDL_Renderer * renderer)
 {
     D3D_RenderData *data = (D3D_RenderData *) renderer->driverdata;
     HRESULT result;
+    SDL_Texture *texture;
 
     /* Release the default render target before reset */
     if (data->defaultRenderTarget) {
         IDirect3DSurface9_Release(data->defaultRenderTarget);
         data->defaultRenderTarget = NULL;
+    }
+    if (data->currentRenderTarget != NULL) {
+        IDirect3DSurface9_Release(data->currentRenderTarget);
+        data->currentRenderTarget = NULL;
+    }
+
+    /* Release application render targets */
+    for (texture = renderer->textures; texture; texture = texture->next) {
+        if (texture->access == SDL_TEXTUREACCESS_TARGET) {
+            D3D_DestroyTexture(renderer, texture);
+        }
     }
 
     result = IDirect3DDevice9_Reset(data->device, &data->pparams);
@@ -489,9 +504,25 @@ D3D_Reset(SDL_Renderer * renderer)
         }
     }
 
+    /* Allocate application render targets */
+    for (texture = renderer->textures; texture; texture = texture->next) {
+        if (texture->access == SDL_TEXTUREACCESS_TARGET) {
+            D3D_CreateTexture(renderer, texture);
+        }
+    }
+
     IDirect3DDevice9_GetRenderTarget(data->device, 0, &data->defaultRenderTarget);
     D3D_InitRenderState(data);
+    D3D_SetRenderTargetInternal(renderer, renderer->target);
     D3D_UpdateViewport(renderer);
+
+    /* Let the application know that render targets were reset */
+    {
+        SDL_Event event;
+        event.type = SDL_RENDER_TARGETS_RESET;
+        SDL_PushEvent(&event);
+    }
+
     return 0;
 }
 
@@ -568,7 +599,7 @@ D3D_CreateRenderer(SDL_Window * window, Uint32 flags)
         return NULL;
     }
 
-    if( D3D_LoadDLL( &data->d3dDLL, &data->d3d ) ) {
+    if (D3D_LoadDLL(&data->d3dDLL, &data->d3d)) {
         for (d3dxVersion=50;d3dxVersion>0;d3dxVersion--) {
             LPTSTR dllName;
             SDL_snprintf(d3dxDLLFile, sizeof(d3dxDLLFile), "D3DX9_%02d.dll", d3dxVersion);
@@ -642,13 +673,12 @@ D3D_CreateRenderer(SDL_Window * window, Uint32 flags)
     pparams.SwapEffect = D3DSWAPEFFECT_DISCARD;
 
     if (window_flags & SDL_WINDOW_FULLSCREEN) {
-        if ( ( window_flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP )  {
+        if ((window_flags & SDL_WINDOW_FULLSCREEN_DESKTOP) == SDL_WINDOW_FULLSCREEN_DESKTOP)  {
             pparams.Windowed = TRUE;
             pparams.FullScreen_RefreshRateInHz = 0;
         } else {
-        pparams.Windowed = FALSE;
-        pparams.FullScreen_RefreshRateInHz =
-            fullscreen_mode.refresh_rate;
+            pparams.Windowed = FALSE;
+            pparams.FullScreen_RefreshRateInHz = fullscreen_mode.refresh_rate;
         }
     } else {
         pparams.Windowed = TRUE;
@@ -661,8 +691,8 @@ D3D_CreateRenderer(SDL_Window * window, Uint32 flags)
     }
 
     /* Get the adapter for the display that the window is on */
-    displayIndex = SDL_GetWindowDisplayIndex( window );
-    data->adapter = SDL_Direct3D9GetAdapterIndex( displayIndex );
+    displayIndex = SDL_GetWindowDisplayIndex(window);
+    data->adapter = SDL_Direct3D9GetAdapterIndex(displayIndex);
 
     IDirect3D9_GetDeviceCaps(data->d3d, data->adapter, D3DDEVTYPE_HAL, &caps);
 
@@ -979,6 +1009,12 @@ D3D_UpdateTextureInternal(IDirect3DTexture9 *texture, Uint32 format, SDL_bool fu
     if (length == pitch && length == locked.Pitch) {
         SDL_memcpy(dst, src, length*h);
     } else {
+        if (length > pitch) {
+            length = pitch;
+        }
+        if (length > locked.Pitch) {
+            length = locked.Pitch;
+        }
         for (row = 0; row < h; ++row) {
             SDL_memcpy(dst, src, length);
             src += pitch;
@@ -1004,6 +1040,11 @@ D3D_UpdateTexture(SDL_Renderer * renderer, SDL_Texture * texture,
         full_texture = SDL_TRUE;
     }
 #endif
+
+    if (!data) {
+        SDL_SetError("Texture is not currently available");
+        return -1;
+    }
 
     if (D3D_UpdateTextureInternal(data->texture, texture->format, full_texture, rect->x, rect->y, rect->w, rect->h, pixels, pitch) < 0) {
         return -1;
@@ -1044,6 +1085,11 @@ D3D_UpdateTextureYUV(SDL_Renderer * renderer, SDL_Texture * texture,
     }
 #endif
 
+    if (!data) {
+        SDL_SetError("Texture is not currently available");
+        return -1;
+    }
+
     if (D3D_UpdateTextureInternal(data->texture, texture->format, full_texture, rect->x, rect->y, rect->w, rect->h, Yplane, Ypitch) < 0) {
         return -1;
     }
@@ -1064,6 +1110,11 @@ D3D_LockTexture(SDL_Renderer * renderer, SDL_Texture * texture,
     RECT d3drect;
     D3DLOCKED_RECT locked;
     HRESULT result;
+
+    if (!data) {
+        SDL_SetError("Texture is not currently available");
+        return -1;
+    }
 
     if (data->yuv) {
         /* It's more efficient to upload directly... */
@@ -1100,6 +1151,10 @@ D3D_UnlockTexture(SDL_Renderer * renderer, SDL_Texture * texture)
 {
     D3D_TextureData *data = (D3D_TextureData *) texture->driverdata;
 
+    if (!data) {
+        return;
+    }
+
     if (data->yuv) {
         const SDL_Rect *rect = &data->locked_rect;
         void *pixels =
@@ -1112,13 +1167,11 @@ D3D_UnlockTexture(SDL_Renderer * renderer, SDL_Texture * texture)
 }
 
 static int
-D3D_SetRenderTarget(SDL_Renderer * renderer, SDL_Texture * texture)
+D3D_SetRenderTargetInternal(SDL_Renderer * renderer, SDL_Texture * texture)
 {
     D3D_RenderData *data = (D3D_RenderData *) renderer->driverdata;
     D3D_TextureData *texturedata;
     HRESULT result;
-
-    D3D_ActivateRenderer(renderer);
 
     /* Release the previous render target if it wasn't the default one */
     if (data->currentRenderTarget != NULL) {
@@ -1131,7 +1184,12 @@ D3D_SetRenderTarget(SDL_Renderer * renderer, SDL_Texture * texture)
         return 0;
     }
 
-    texturedata = (D3D_TextureData *) texture->driverdata;
+    texturedata = (D3D_TextureData *)texture->driverdata;
+    if (!texturedata) {
+        SDL_SetError("Texture is not currently available");
+        return -1;
+    }
+
     result = IDirect3DTexture9_GetSurfaceLevel(texturedata->texture, 0, &data->currentRenderTarget);
     if(FAILED(result)) {
         return D3D_SetError("GetSurfaceLevel()", result);
@@ -1142,6 +1200,14 @@ D3D_SetRenderTarget(SDL_Renderer * renderer, SDL_Texture * texture)
     }
 
     return 0;
+}
+
+static int
+D3D_SetRenderTarget(SDL_Renderer * renderer, SDL_Texture * texture)
+{
+    D3D_ActivateRenderer(renderer);
+
+    return D3D_SetRenderTargetInternal(renderer, texture);
 }
 
 static int
@@ -1507,7 +1573,7 @@ D3D_RenderCopy(SDL_Renderer * renderer, SDL_Texture * texture,
                const SDL_Rect * srcrect, const SDL_FRect * dstrect)
 {
     D3D_RenderData *data = (D3D_RenderData *) renderer->driverdata;
-    D3D_TextureData *texturedata = (D3D_TextureData *) texture->driverdata;
+    D3D_TextureData *texturedata;
     LPDIRECT3DPIXELSHADER9 shader = NULL;
     float minx, miny, maxx, maxy;
     float minu, maxu, minv, maxv;
@@ -1516,6 +1582,12 @@ D3D_RenderCopy(SDL_Renderer * renderer, SDL_Texture * texture,
     HRESULT result;
 
     if (D3D_ActivateRenderer(renderer) < 0) {
+        return -1;
+    }
+
+    texturedata = (D3D_TextureData *)texture->driverdata;
+    if (!texturedata) {
+        SDL_SetError("Texture is not currently available");
         return -1;
     }
 
@@ -1619,7 +1691,7 @@ D3D_RenderCopyEx(SDL_Renderer * renderer, SDL_Texture * texture,
                const double angle, const SDL_FPoint * center, const SDL_RendererFlip flip)
 {
     D3D_RenderData *data = (D3D_RenderData *) renderer->driverdata;
-    D3D_TextureData *texturedata = (D3D_TextureData *) texture->driverdata;
+    D3D_TextureData *texturedata;
     LPDIRECT3DPIXELSHADER9 shader = NULL;
     float minx, miny, maxx, maxy;
     float minu, maxu, minv, maxv;
@@ -1629,6 +1701,12 @@ D3D_RenderCopyEx(SDL_Renderer * renderer, SDL_Texture * texture,
     HRESULT result;
 
     if (D3D_ActivateRenderer(renderer) < 0) {
+        return -1;
+    }
+
+    texturedata = (D3D_TextureData *)texture->driverdata;
+    if (!texturedata) {
+        SDL_SetError("Texture is not currently available");
         return -1;
     }
 
@@ -1890,12 +1968,17 @@ D3D_DestroyRenderer(SDL_Renderer * renderer)
     }
     SDL_free(renderer);
 }
+#endif /* SDL_VIDEO_RENDER_D3D && !SDL_RENDER_DISABLED */
 
+#ifdef __WIN32__
+/* This function needs to always exist on Windows, for the Dynamic API. */
 IDirect3DDevice9 *
 SDL_RenderGetD3D9Device(SDL_Renderer * renderer)
 {
+    IDirect3DDevice9 *device = NULL;
+
+#if SDL_VIDEO_RENDER_D3D && !SDL_RENDER_DISABLED
     D3D_RenderData *data = (D3D_RenderData *) renderer->driverdata;
-    IDirect3DDevice9 *device;
 
     // Make sure that this is a D3D renderer
     if (renderer->DestroyRenderer != D3D_DestroyRenderer) {
@@ -1905,11 +1988,12 @@ SDL_RenderGetD3D9Device(SDL_Renderer * renderer)
 
     device = data->device;
     if (device) {
-        IDirect3DDevice9_AddRef( device );
+        IDirect3DDevice9_AddRef(device);
     }
+#endif /* SDL_VIDEO_RENDER_D3D && !SDL_RENDER_DISABLED */
+
     return device;
 }
-
-#endif /* SDL_VIDEO_RENDER_D3D && !SDL_RENDER_DISABLED */
+#endif /* __WIN32__ */
 
 /* vi: set ts=4 sw=4 expandtab: */
