@@ -369,6 +369,8 @@ bool MWindow::onEvents(void)
 					{
 						mevent.type = MWIN_EVENT_MOUSE_BUTTON_DOWN;
 						mevent.data[0] = MMOUSE_BUTTON_LEFT;
+						mevent.data[1] = event.button.x;
+						mevent.data[2] = event.button.y;
 						sendEvents(&mevent);
 						break;
 					}
@@ -376,6 +378,8 @@ bool MWindow::onEvents(void)
 					{
 						mevent.type = MWIN_EVENT_MOUSE_BUTTON_DOWN;
 						mevent.data[0] = MMOUSE_BUTTON_MIDDLE;
+						mevent.data[1] = event.button.x;
+						mevent.data[2] = event.button.y;
 						sendEvents(&mevent);
 						break;
 					}
@@ -383,6 +387,8 @@ bool MWindow::onEvents(void)
 					{
 						mevent.type = MWIN_EVENT_MOUSE_BUTTON_DOWN;
 						mevent.data[0] = MMOUSE_BUTTON_RIGHT;
+						mevent.data[1] = event.button.x;
+						mevent.data[2] = event.button.y;
 						sendEvents(&mevent);
 						break;
 					}
@@ -390,6 +396,8 @@ bool MWindow::onEvents(void)
 					{
 						mevent.type = MWIN_EVENT_MOUSE_BUTTON_DOWN;
 						mevent.data[0] = MMOUSE_BUTTON_X1;
+						mevent.data[1] = event.button.x;
+						mevent.data[2] = event.button.y;
 						sendEvents(&mevent);
 						break;
 					}
@@ -397,6 +405,8 @@ bool MWindow::onEvents(void)
 					{
 						mevent.type = MWIN_EVENT_MOUSE_BUTTON_DOWN;
 						mevent.data[0] = MMOUSE_BUTTON_X2;
+						mevent.data[1] = event.button.x;
+						mevent.data[2] = event.button.y;
 						sendEvents(&mevent);
 						break;
 					}
@@ -411,6 +421,8 @@ bool MWindow::onEvents(void)
 					{
 						mevent.type = MWIN_EVENT_MOUSE_BUTTON_UP;
 						mevent.data[0] = MMOUSE_BUTTON_LEFT;
+						mevent.data[1] = event.button.x;
+						mevent.data[2] = event.button.y;
 						sendEvents(&mevent);
 						break;
 					}
@@ -418,6 +430,8 @@ bool MWindow::onEvents(void)
 					{
 						mevent.type = MWIN_EVENT_MOUSE_BUTTON_UP;
 						mevent.data[0] = MMOUSE_BUTTON_MIDDLE;
+						mevent.data[1] = event.button.x;
+						mevent.data[2] = event.button.y;
 						sendEvents(&mevent);
 						break;
 					}
@@ -425,6 +439,8 @@ bool MWindow::onEvents(void)
 					{
 						mevent.type = MWIN_EVENT_MOUSE_BUTTON_UP;
 						mevent.data[0] = MMOUSE_BUTTON_RIGHT;
+						mevent.data[1] = event.button.x;
+						mevent.data[2] = event.button.y;
 						sendEvents(&mevent);
 						break;
 					}
@@ -432,6 +448,8 @@ bool MWindow::onEvents(void)
 					{
 						mevent.type = MWIN_EVENT_MOUSE_BUTTON_UP;
 						mevent.data[0] = MMOUSE_BUTTON_X1;
+						mevent.data[1] = event.button.x;
+						mevent.data[2] = event.button.y;
 						sendEvents(&mevent);
 						break;
 					}
@@ -439,6 +457,8 @@ bool MWindow::onEvents(void)
 					{
 						mevent.type = MWIN_EVENT_MOUSE_BUTTON_UP;
 						mevent.data[0] = MMOUSE_BUTTON_X2;
+						mevent.data[1] = event.button.x;
+						mevent.data[2] = event.button.y;
 						sendEvents(&mevent);
 						break;
 					}
