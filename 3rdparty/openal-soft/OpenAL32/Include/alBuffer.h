@@ -22,6 +22,7 @@ enum UserFmtType {
     UserFmtMulaw,
     UserFmtAlaw,
     UserFmtIMA4,
+    UserFmtMSADPCM,
 };
 enum UserFmtChannels {
     UserFmtMono   = AL_MONO_SOFT,
@@ -79,9 +80,13 @@ typedef struct ALbuffer {
     enum UserFmtChannels OriginalChannels;
     enum UserFmtType     OriginalType;
     ALsizei              OriginalSize;
+    ALsizei              OriginalAlign;
 
     ALsizei  LoopStart;
     ALsizei  LoopEnd;
+
+    ALsizei UnpackAlign;
+    ALsizei PackAlign;
 
     /* Number of times buffer was attached to a source (deletion can only occur when 0) */
     RefCount ref;

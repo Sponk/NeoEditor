@@ -39,6 +39,7 @@
 #include <shlobj.h>
 #endif
 
+
 typedef struct ConfigEntry {
     char *key;
     char *value;
@@ -48,10 +49,8 @@ typedef struct ConfigBlock {
     ConfigEntry *entries;
     unsigned int entryCount;
 } ConfigBlock;
-
 static ConfigBlock cfgBlock;
 
-static char buffer[1024];
 
 static char *lstrip(char *line)
 {
@@ -69,12 +68,125 @@ static char *rstrip(char *line)
     return line;
 }
 
+static int readline(FILE *f, char **output, size_t *maxlen)
+{
+    size_t len = 0;
+    int c;
+
+    while((c=fgetc(f)) != EOF && (c == '\r' || c == '\n'))
+        ;
+    if(c == EOF)
+        return 0;
+
+    do {
+        if(len+1 >= *maxlen)
+        {
+            void *temp = NULL;
+            size_t newmax;
+
+            newmax = (*maxlen ? (*maxlen)<<1 : 32);
+            if(newmax > *maxlen)
+                temp = realloc(*output, newmax);
+            if(!temp)
+            {
+                ERR("Failed to realloc %lu bytes from %lu!\n", newmax, *maxlen);
+                return 0;
+            }
+
+            *output = temp;
+            *maxlen = newmax;
+        }
+        (*output)[len++] = c;
+        (*output)[len] = '\0';
+    } while((c=fgetc(f)) != EOF && c != '\r' && c != '\n');
+
+    return 1;
+}
+
+
+static char *expdup(const char *str)
+{
+    char *output = NULL;
+    size_t maxlen = 0;
+    size_t len = 0;
+
+    while(*str != '\0')
+    {
+        const char *addstr;
+        size_t addstrlen;
+        size_t i;
+
+        if(str[0] != '$')
+        {
+            const char *next = strchr(str, '$');
+            addstr = str;
+            addstrlen = next ? (size_t)(next-str) : strlen(str);
+
+            str += addstrlen;
+        }
+        else
+        {
+            str++;
+            if(*str == '$')
+            {
+                const char *next = strchr(str+1, '$');
+                addstr = str;
+                addstrlen = next ? (size_t)(next-str) : strlen(str);
+
+                str += addstrlen;
+            }
+            else
+            {
+                char envname[1024];
+                size_t k = 0;
+
+                while((isalnum(*str) || *str == '_') && k < sizeof(envname)-1)
+                    envname[k++] = *(str++);
+                envname[k++] = '\0';
+
+                if((addstr=getenv(envname)) == NULL)
+                    continue;
+                addstrlen = strlen(addstr);
+            }
+        }
+        if(addstrlen == 0)
+            continue;
+
+        if(addstrlen >= maxlen-len)
+        {
+            void *temp = NULL;
+            size_t newmax;
+
+            newmax = NextPowerOf2(len+addstrlen+1);
+            if(newmax > maxlen)
+                temp = realloc(output, newmax);
+            if(!temp)
+            {
+                ERR("Failed to realloc %lu bytes from %lu!\n", newmax, maxlen);
+                return output;
+            }
+
+            output = temp;
+            maxlen = newmax;
+        }
+
+        for(i = 0;i < addstrlen;i++)
+            output[len++] = addstr[i];
+        output[len] = '\0';
+    }
+
+    return output ? output : calloc(1, 1);
+}
+
+
 static void LoadConfigFromFile(FILE *f)
 {
     char curSection[128] = "";
+    char *buffer = NULL;
+    size_t maxlen = 0;
     ConfigEntry *ent;
 
-    while(fgets(buffer, sizeof(buffer), f))
+    while(readline(f, &buffer, &maxlen))
     {
         char *line, *comment;
         char key[256] = "";
@@ -123,26 +235,26 @@ static void LoadConfigFromFile(FILE *f)
              * manually. */
             if(strcmp(value, "\"\"") == 0 || strcmp(value, "''") == 0)
                 value[0] = 0;
-         }
-         else if(sscanf(line, "%255[^=] %255[=]", key, value) == 2)
-         {
-             /* Special case for 'key =' */
-             value[0] = 0;
-         }
-         else
-         {
-             ERR("config parse error: malformed option line: \"%s\"\n\n", line);
-             continue;
-         }
-         rstrip(key);
+        }
+        else if(sscanf(line, "%255[^=] %255[=]", key, value) == 2)
+        {
+            /* Special case for 'key =' */
+            value[0] = 0;
+        }
+        else
+        {
+            ERR("config parse error: malformed option line: \"%s\"\n\n", line);
+            continue;
+        }
+        rstrip(key);
 
-         if(curSection[0] != 0)
-         {
-             size_t len = strlen(curSection);
-             memmove(&key[len+1], key, sizeof(key)-1-len);
-             key[len] = '/';
-             memcpy(key, curSection, len);
-         }
+        if(curSection[0] != 0)
+        {
+            size_t len = strlen(curSection);
+            memmove(&key[len+1], key, sizeof(key)-1-len);
+            key[len] = '/';
+            memcpy(key, curSection, len);
+        }
 
         /* Check if we already have this option set */
         ent = cfgBlock.entries;
@@ -171,14 +283,17 @@ static void LoadConfigFromFile(FILE *f)
         }
 
         free(ent->value);
-        ent->value = strdup(value);
+        ent->value = expdup(value);
 
         TRACE("found '%s' = '%s'\n", ent->key, ent->value);
     }
+
+    free(buffer);
 }
 
 void ReadALConfig(void)
 {
+    char buffer[PATH_MAX];
     const char *str;
     FILE *f;
 

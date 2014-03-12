@@ -6,6 +6,7 @@
 #include <stdarg.h>
 #include <assert.h>
 #include <math.h>
+#include <limits.h>
 
 #ifdef HAVE_STRINGS_H
 #include <strings.h>
@@ -239,6 +240,18 @@ ALC_API void ALC_APIENTRY alcGetInteger64vSOFT(ALCdevice *device, ALCenum pname,
 #endif
 #endif
 
+#ifndef AL_SOFT_block_alignment
+#define AL_SOFT_block_alignment 1
+#define AL_UNPACK_BLOCK_ALIGNMENT_SOFT           0x200C
+#define AL_PACK_BLOCK_ALIGNMENT_SOFT             0x200D
+#endif
+
+#ifndef AL_SOFT_MSADPCM
+#define AL_SOFT_MSADPCM 1
+#define AL_FORMAT_MONO_MSADPCM_SOFT              0x1302
+#define AL_FORMAT_STEREO_MSADPCM_SOFT            0x1303
+#endif
+
 
 #ifdef IN_IDE_PARSER
 /* KDevelop's parser doesn't recognize the C99-standard restrict keyword, but
@@ -298,6 +311,14 @@ typedef ptrdiff_t ALsizeiptrEXT;
 #define FORCE_ALIGN __attribute__((force_align_arg_pointer))
 #else
 #define FORCE_ALIGN
+#endif
+
+#ifndef PATH_MAX
+#ifdef MAX_PATH
+#define PATH_MAX MAX_PATH
+#else
+#define PATH_MAX 4096
+#endif
 #endif
 
 
@@ -792,20 +813,6 @@ void SetDefaultWFXChannelOrder(ALCdevice *device);
 const ALCchar *DevFmtTypeString(enum DevFmtType type);
 const ALCchar *DevFmtChannelsString(enum DevFmtChannels chans);
 
-#define HRIR_BITS        (7)
-#define HRIR_LENGTH      (1<<HRIR_BITS)
-#define HRIR_MASK        (HRIR_LENGTH-1)
-#define HRTFDELAY_BITS    (20)
-#define HRTFDELAY_FRACONE (1<<HRTFDELAY_BITS)
-#define HRTFDELAY_MASK    (HRTFDELAY_FRACONE-1)
-const struct Hrtf *GetHrtf(ALCdevice *device);
-void FindHrtfFormat(const ALCdevice *device, enum DevFmtChannels *chans, ALCuint *srate);
-void FreeHrtfs(void);
-ALuint GetHrtfIrSize(const struct Hrtf *Hrtf);
-ALfloat CalcHrtfDelta(ALfloat oldGain, ALfloat newGain, const ALfloat olddir[3], const ALfloat newdir[3]);
-void GetLerpedHrtfCoeffs(const struct Hrtf *Hrtf, ALfloat elevation, ALfloat azimuth, ALfloat gain, ALfloat (*coeffs)[2], ALuint *delays);
-ALuint GetMovingHrtfCoeffs(const struct Hrtf *Hrtf, ALfloat elevation, ALfloat azimuth, ALfloat gain, ALfloat delta, ALint counter, ALfloat (*coeffs)[2], ALuint *delays, ALfloat (*coeffStep)[2], ALint *delayStep);
-
 
 extern FILE *LogFile;
 
@@ -858,6 +865,7 @@ enum {
 
 void FillCPUCaps(ALuint capfilter);
 
+FILE *OpenDataFile(const char *fname, const char *subdir);
 
 /* Small hack to use a pointer-to-array type as a normal argument type.
  * Shouldn't be used directly. */

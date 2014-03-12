@@ -445,6 +445,8 @@ static const ALCenums enumeration[] = {
     DECL(AL_FORMAT_STEREO_DOUBLE_EXT),
     DECL(AL_FORMAT_MONO_IMA4),
     DECL(AL_FORMAT_STEREO_IMA4),
+    DECL(AL_FORMAT_MONO_MSADPCM_SOFT),
+    DECL(AL_FORMAT_STEREO_MSADPCM_SOFT),
     DECL(AL_FORMAT_QUAD8_LOKI),
     DECL(AL_FORMAT_QUAD16_LOKI),
     DECL(AL_FORMAT_QUAD8),
@@ -523,6 +525,8 @@ static const ALCenums enumeration[] = {
     DECL(AL_BYTE_LENGTH_SOFT),
     DECL(AL_SAMPLE_LENGTH_SOFT),
     DECL(AL_SEC_LENGTH_SOFT),
+    DECL(AL_UNPACK_BLOCK_ALIGNMENT_SOFT),
+    DECL(AL_PACK_BLOCK_ALIGNMENT_SOFT),
 
     DECL(AL_UNUSED),
     DECL(AL_PENDING),
@@ -706,9 +710,9 @@ static const ALchar alExtList[] =
     "AL_EXT_ALAW AL_EXT_DOUBLE AL_EXT_EXPONENT_DISTANCE AL_EXT_FLOAT32 "
     "AL_EXT_IMA4 AL_EXT_LINEAR_DISTANCE AL_EXT_MCFORMATS AL_EXT_MULAW "
     "AL_EXT_MULAW_MCFORMATS AL_EXT_OFFSET AL_EXT_source_distance_model "
-    "AL_LOKI_quadriphonic AL_SOFT_buffer_samples AL_SOFT_buffer_sub_data "
-    "AL_SOFT_deferred_updates AL_SOFT_direct_channels AL_SOFT_loop_points "
-    "AL_SOFT_source_latency";
+    "AL_LOKI_quadriphonic AL_SOFTX_block_alignment AL_SOFT_buffer_samples "
+    "AL_SOFT_buffer_sub_data AL_SOFT_deferred_updates AL_SOFT_direct_channels "
+    "AL_SOFT_loop_points AL_SOFTX_MSADPCM AL_SOFT_source_latency";
 
 static volatile ALCenum LastNullDeviceError = ALC_NO_ERROR;
 
@@ -1791,16 +1795,25 @@ static ALCenum UpdateDeviceParams(ALCdevice *device, const ALCint *attrList)
           device->Frequency,
           device->UpdateSize, device->NumUpdates);
 
+    if(device->Type != Loopback)
+    {
+        int nohrtf = !(device->Flags&DEVICE_HRTF_REQUEST);
+        if(GetConfigValueBool(NULL, "hrtf", !nohrtf))
+            device->Flags |= DEVICE_HRTF_REQUEST;
+        else
+            device->Flags &= ~DEVICE_HRTF_REQUEST;
+    }
     if((device->Flags&DEVICE_HRTF_REQUEST))
     {
         enum DevFmtChannels chans;
         ALCuint freq;
-
-        FindHrtfFormat(device, &chans, &freq);
-        device->Frequency = freq;
-        device->FmtChans = chans;
-        device->Flags |= DEVICE_CHANNELS_REQUEST |
-                         DEVICE_FREQUENCY_REQUEST;
+        if(FindHrtfFormat(device, &chans, &freq))
+        {
+            device->Frequency = freq;
+            device->FmtChans = chans;
+            device->Flags |= DEVICE_CHANNELS_REQUEST |
+                             DEVICE_FREQUENCY_REQUEST;
+        }
     }
 
     if(V0(device->Backend,reset)() == ALC_FALSE)
@@ -1840,13 +1853,6 @@ static ALCenum UpdateDeviceParams(ALCdevice *device, const ALCint *attrList)
     V(device->Synth,update)(device);
 
     device->Hrtf = NULL;
-    if(device->Type != Loopback && ConfigValueExists(NULL, "hrtf"))
-    {
-        if(GetConfigValueBool(NULL, "hrtf", AL_FALSE))
-            device->Flags |= DEVICE_HRTF_REQUEST;
-        else
-            device->Flags &= ~DEVICE_HRTF_REQUEST;
-    }
     if((device->Flags&DEVICE_HRTF_REQUEST))
     {
         device->Hrtf = GetHrtf(device);
@@ -2181,14 +2187,14 @@ static void ReleaseContext(ALCcontext *context, ALCdevice *device)
         ALCcontext_DecRef(context);
     }
 
-    if(CompExchangePtr((XchgPtr*)&GlobalContext, context, NULL))
+    if(CompExchangePtr((XchgPtr*)&GlobalContext, context, NULL) == context)
         ALCcontext_DecRef(context);
 
     ALCdevice_Lock(device);
     tmp_ctx = &device->ContextList;
     while(*tmp_ctx)
     {
-        if(CompExchangePtr((XchgPtr*)tmp_ctx, context, context->next))
+        if(CompExchangePtr((XchgPtr*)tmp_ctx, context, context->next) == context)
             break;
         tmp_ctx = &(*tmp_ctx)->next;
     }
@@ -2897,7 +2903,7 @@ ALC_API ALCcontext* ALC_APIENTRY alcCreateContext(ALCdevice *device, const ALCin
 
     do {
         ALContext->next = device->ContextList;
-    } while(!CompExchangePtr((XchgPtr*)&device->ContextList, ALContext->next, ALContext));
+    } while(CompExchangePtr((XchgPtr*)&device->ContextList, ALContext->next, ALContext) != ALContext->next);
     UnlockLists();
 
     ALCdevice_DecRef(device);
@@ -3278,7 +3284,7 @@ ALC_API ALCdevice* ALC_APIENTRY alcOpenDevice(const ALCchar *deviceName)
 
     do {
         device->next = DeviceList;
-    } while(!CompExchangePtr((XchgPtr*)&DeviceList, device->next, device));
+    } while(CompExchangePtr((XchgPtr*)&DeviceList, device->next, device) != device->next);
 
     TRACE("Created device %p, \"%s\"\n", device, device->DeviceName);
     return device;
@@ -3409,7 +3415,7 @@ ALC_API ALCdevice* ALC_APIENTRY alcCaptureOpenDevice(const ALCchar *deviceName, 
 
     do {
         device->next = DeviceList;
-    } while(!CompExchangePtr((XchgPtr*)&DeviceList, device->next, device));
+    } while(CompExchangePtr((XchgPtr*)&DeviceList, device->next, device) != device->next);
 
     TRACE("Created device %p, \"%s\"\n", device, device->DeviceName);
     return device;
@@ -3592,7 +3598,7 @@ ALC_API ALCdevice* ALC_APIENTRY alcLoopbackOpenDeviceSOFT(const ALCchar *deviceN
     V(device->Backend,open)("Loopback");
     do {
         device->next = DeviceList;
-    } while(!CompExchangePtr((XchgPtr*)&DeviceList, device->next, device));
+    } while(CompExchangePtr((XchgPtr*)&DeviceList, device->next, device) != device->next);
 
     TRACE("Created device %p\n", device);
     return device;

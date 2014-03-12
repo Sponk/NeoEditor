@@ -18,6 +18,14 @@
  * Or go to http://www.gnu.org/copyleft/lgpl.html
  */
 
+#ifdef _WIN32
+#ifdef __MINGW32__
+#define _WIN32_IE 0x501
+#else
+#define _WIN32_IE 0x400
+#endif
+#endif
+
 #include "config.h"
 
 #include <stdlib.h>
@@ -71,6 +79,10 @@ DEFINE_DEVPROPKEY(DEVPKEY_Device_FriendlyName, 0xa45c254e, 0xdf1c, 0x4efd, 0x80,
 #include <ieeefp.h>
 #endif
 
+#ifdef _WIN32_IE
+#include <shlobj.h>
+#endif
+
 #include "alMain.h"
 #include "atomic.h"
 #include "uintmap.h"
@@ -81,8 +93,8 @@ extern inline RefCount IncrementRef(volatile RefCount *ptr);
 extern inline RefCount DecrementRef(volatile RefCount *ptr);
 extern inline int ExchangeInt(volatile int *ptr, int newval);
 extern inline void *ExchangePtr(XchgPtr *ptr, void *newval);
-extern inline ALboolean CompExchangeInt(volatile int *ptr, int oldval, int newval);
-extern inline ALboolean CompExchangePtr(XchgPtr *ptr, void *oldval, void *newval);
+extern inline int CompExchangeInt(volatile int *ptr, int oldval, int newval);
+extern inline void *CompExchangePtr(XchgPtr *ptr, void *oldval, void *newval);
 
 extern inline void LockUIntMapRead(UIntMap *map);
 extern inline void UnlockUIntMapRead(UIntMap *map);
@@ -498,6 +510,117 @@ void al_print(const char *type, const char *func, const char *fmt, ...)
     va_end(ap);
 
     fflush(LogFile);
+}
+
+
+FILE *OpenDataFile(const char *fname, const char *subdir)
+{
+    char buffer[PATH_MAX] = "";
+    FILE *f;
+
+#ifdef _WIN32
+    static const int ids[2] = { CSIDL_APPDATA, CSIDL_COMMON_APPDATA };
+    int i;
+
+    /* If the path is absolute, open it directly. */
+    if(fname[0] != '\0' && fname[1] == ':' && (fname[2] == '\\' || fname[2] == '/'))
+    {
+        if((f=fopen(fname, "rb")) != NULL)
+        {
+            TRACE("Opened %s\n", fname);
+            return f;
+        }
+        WARN("Could not open %s\n", fname);
+        return NULL;
+    }
+
+    for(i = 0;i < 2;i++)
+    {
+        size_t len;
+
+        if(SHGetSpecialFolderPathA(NULL, buffer, ids[i], FALSE) == FALSE)
+            continue;
+
+        len = strlen(buffer);
+        if(len > 0 && (buffer[len-1] == '\\' || buffer[len-1] == '/'))
+            buffer[--len] = '\0';
+        snprintf(buffer+len, sizeof(buffer)-len, "/%s/%s", subdir, fname);
+        len = strlen(buffer);
+        while(len > 0)
+        {
+            --len;
+            if(buffer[len] == '/')
+                buffer[len] = '\\';
+        }
+
+        if((f=fopen(buffer, "rb")) != NULL)
+        {
+            TRACE("Opened %s\n", buffer);
+            return f;
+        }
+        WARN("Could not open %s\n", buffer);
+    }
+#else
+    const char *str, *next;
+
+    if(fname[0] == '/')
+    {
+        if((f=fopen(fname, "rb")) != NULL)
+        {
+            TRACE("Opened %s\n", fname);
+            return f;
+        }
+        WARN("Could not open %s\n", fname);
+        return NULL;
+    }
+
+    if((str=getenv("XDG_DATA_HOME")) != NULL && str[0] != '\0')
+        snprintf(buffer, sizeof(buffer), "%s/%s/%s", str, subdir, fname);
+    else if((str=getenv("HOME")) != NULL && str[0] != '\0')
+        snprintf(buffer, sizeof(buffer), "%s/.local/share/%s/%s", str, subdir, fname);
+    if(buffer[0])
+    {
+        if((f=fopen(buffer, "rb")) != NULL)
+        {
+            TRACE("Opened %s\n", buffer);
+            return f;
+        }
+        WARN("Could not open %s\n", buffer);
+    }
+
+    if((str=getenv("XDG_DATA_DIRS")) == NULL || str[0] == '\0')
+        str = " /usr/local/share/:/usr/share/";
+
+    next = str;
+    while((str=next) != NULL && str[0] != '\0')
+    {
+        size_t len;
+        next = strchr(str, ':');
+
+        if(!next)
+            len = strlen(str);
+        else
+        {
+            len = next - str;
+            next++;
+        }
+
+        if(len > sizeof(buffer)-1)
+            len = sizeof(buffer)-1;
+        strncpy(buffer, str, len);
+        buffer[len] = '\0';
+        snprintf(buffer+len, sizeof(buffer)-len, "/%s/%s", subdir, fname);
+
+        if((f=fopen(buffer, "rb")) != NULL)
+        {
+            TRACE("Opened %s\n", buffer);
+            return f;
+        }
+        WARN("Could not open %s\n", buffer);
+    }
+#endif
+
+    return NULL;
 }
 
 

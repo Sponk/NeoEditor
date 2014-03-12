@@ -2536,8 +2536,26 @@ static ALvoid GetSourceOffsets(const ALsource *Source, ALenum name, ALdouble *of
         case AL_BYTE_RW_OFFSETS_SOFT:
             if(Buffer->OriginalType == UserFmtIMA4)
             {
-                ALuint BlockSize = 36 * ChannelsFromFmt(Buffer->FmtChannels);
-                ALuint FrameBlockSize = 65;
+                ALsizei align = (Buffer->OriginalAlign-1)/2 + 4;
+                ALuint BlockSize = align * ChannelsFromFmt(Buffer->FmtChannels);
+                ALuint FrameBlockSize = Buffer->OriginalAlign;
+
+                /* Round down to nearest ADPCM block */
+                offset[0] = (ALdouble)(readPos / FrameBlockSize * BlockSize);
+                if(Source->state != AL_PLAYING)
+                    offset[1] = offset[0];
+                else
+                {
+                    /* Round up to nearest ADPCM block */
+                    offset[1] = (ALdouble)((writePos+FrameBlockSize-1) /
+                                           FrameBlockSize * BlockSize);
+                }
+            }
+            else if(Buffer->OriginalType == UserFmtMSADPCM)
+            {
+                ALsizei align = (Buffer->OriginalAlign-2)/2 + 7;
+                ALuint BlockSize = align * ChannelsFromFmt(Buffer->FmtChannels);
+                ALuint FrameBlockSize = Buffer->OriginalAlign;
 
                 /* Round down to nearest ADPCM block */
                 offset[0] = (ALdouble)(readPos / FrameBlockSize * BlockSize);
@@ -2650,8 +2668,15 @@ static ALint GetSampleOffset(ALsource *Source)
         Offset = (ALint)Source->Offset;
         if(Buffer->OriginalType == UserFmtIMA4)
         {
-            Offset /= 36 * ChannelsFromUserFmt(Buffer->OriginalChannels);
-            Offset *= 65;
+            ALsizei align = (Buffer->OriginalAlign-1)/2 + 4;
+            Offset /= align * ChannelsFromUserFmt(Buffer->OriginalChannels);
+            Offset *= Buffer->OriginalAlign;
+        }
+        else if(Buffer->OriginalType == UserFmtMSADPCM)
+        {
+            ALsizei align = (Buffer->OriginalAlign-2)/2 + 7;
+            Offset /= align * ChannelsFromUserFmt(Buffer->OriginalChannels);
+            Offset *= Buffer->OriginalAlign;
         }
         else
             Offset /= FrameSizeFromUserFmt(Buffer->OriginalChannels, Buffer->OriginalType);
