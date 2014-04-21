@@ -86,7 +86,7 @@ bool M_loadTgaImage(const char * filename, void * data)
 	Header header;
 	if (M_fread(&header, sizeof(Header), 1, file) == 0)
 	{
-		fprintf(stderr, "ERROR Load TGA : could not read header\n", filename);
+        fprintf(stderr, "ERROR Load TGA : could not read header from '%s'\n", filename);
 		return false;
 	}
 
