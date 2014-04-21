@@ -281,7 +281,7 @@ bool MWindow::onEvents(void)
 
 	while (SDL_PollEvent(&event))
 	{
-		switch (event.type)
+        switch (event.type)
 		{
 			case SDL_QUIT:
 			{
@@ -292,7 +292,7 @@ bool MWindow::onEvents(void)
 
 			case SDL_WINDOWEVENT:
 			{
-				switch (event.window.type)
+                switch (event.window.event)
 				{
 					case SDL_WINDOWEVENT_RESIZED:
 						mevent.type = MWIN_EVENT_WINDOW_RESIZE;
@@ -323,7 +323,7 @@ bool MWindow::onEvents(void)
 			// Keyboard
 			case SDL_KEYDOWN:
 			{
-				SDL_Log("SDL_KEYDOWN");
+                // SDL_Log("SDL_KEYDOWN");
 				int key = translateKey(event.key.keysym.sym);
 				if(key > 0 && key < 256)
 				{
@@ -658,7 +658,7 @@ bool MWindow::create(const char * title, unsigned int width, unsigned int height
 		return false;
 	}
 
-	Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
+    Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
 
 	if (m_fullscreen)
 		flags = flags | SDL_WINDOW_FULLSCREEN;
