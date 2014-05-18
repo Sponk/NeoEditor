@@ -153,22 +153,39 @@ bool M_loadTgaImage(const char * filename, void * data)
 		unsigned int offset = 0;
 
 		do
-		{
+		{            
 			M_fread(&chunk_header, sizeof(unsigned char), 1, file);
 			if (chunk_header < 128)
 			{
-				chunk_header++;
-				M_fread(chunk_data, sizeof(unsigned char), chunk_header * components, file);
-				memcpy(image_data + offset, chunk_data, chunk_header * components);
-				offset += chunk_header * components;
+                chunk_header++;
+                /*M_fread(chunk_data, sizeof(unsigned char), chunk_header * components, file);
+                memcpy(&image_data[offset], chunk_data, chunk_header * components);*/
+
+                for(int i = 0; i < chunk_header; i++)
+                {
+                    char color_buf[components];
+                    M_fread(color_buf, 1, components, file);
+
+                    image_data[offset] = color_buf[0];
+                    image_data[offset + 1] = color_buf[1];
+                    image_data[offset + 2] = color_buf[2];
+
+                    if(components == 4)
+                        image_data[offset + 3] = color_buf[3];
+
+                    offset += components;
+                }
+
+                //offset += chunk_header * components;
 			}
 			else
 			{
 				chunk_header -= 127;
 				M_fread(chunk_data, sizeof(unsigned char), components, file);
-				for (int i = 0; i < chunk_header; i++)
+
+                for (int i = 0; i < chunk_header; i++)
 				{
-					memcpy(image_data + offset, chunk_data, components);
+                    memcpy(&image_data[offset], chunk_data, components);
 					offset += components;
 				}
 			}

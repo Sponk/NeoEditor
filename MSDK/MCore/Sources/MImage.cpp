@@ -42,7 +42,7 @@ m_components(0)
 
 MImage::~MImage(void)
 {
-	SAFE_FREE(m_data);
+    SAFE_FREE(m_data);
 }
 
 void MImage::clear(void * color)

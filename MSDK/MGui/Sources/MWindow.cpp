@@ -299,7 +299,7 @@ bool MWindow::onEvents(void)
 						mevent.data[0] = event.window.data1;
 						mevent.data[1] = event.window.data2;
 						sendEvents(&mevent);
-						break;
+                        break;
 					case SDL_WINDOWEVENT_MOVED:
 						mevent.type = MWIN_EVENT_WINDOW_MOVE;
 						mevent.data[0] = event.window.data1;
@@ -688,7 +688,7 @@ int MWindow::addJoystick(int index)
 	if (!joystick->device)
 	{
 		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
-		delete joystick;
+        delete joystick;
 		return -1;
 	}
 
@@ -704,7 +704,7 @@ int MWindow::removeJoystick(int id)
 		if (m_joysticks[i]->id == id && SDL_JoystickGetAttached(m_joysticks[i]->device))
 		{
 			SDL_JoystickClose(m_joysticks[i]->device);
-			delete m_joysticks[i];
+            delete m_joysticks[i];
 			m_joysticks.erase(m_joysticks.begin() + i);
 			return id;
 		}
@@ -720,7 +720,7 @@ int MWindow::addGameController(int index)
 	if (!controller->device)
 	{
 		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
-		delete controller;
+        delete controller;
 		return -1;
 	}
 
@@ -736,7 +736,7 @@ int MWindow::removeGameController(int id)
 		if (m_controllers[i]->id == id && SDL_GameControllerGetAttached(m_controllers[i]->device))
 		{
 			SDL_GameControllerClose(m_controllers[i]->device);
-			delete m_controllers[i];
+            delete m_controllers[i];
 			m_controllers.erase(m_controllers.begin() + i);
 			return id;
 		}
