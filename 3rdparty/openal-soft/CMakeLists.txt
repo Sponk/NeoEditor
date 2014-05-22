@@ -39,7 +39,7 @@ OPTION(ALSOFT_BACKEND_MMDEVAPI "Check for MMDevApi backend"           OFF)
 OPTION(ALSOFT_BACKEND_DSOUND   "Check for DirectSound backend"        ON) ## Used on Windows
 OPTION(ALSOFT_BACKEND_WINMM    "Check for Windows Multimedia backend" OFF)
 OPTION(ALSOFT_BACKEND_PORTAUDIO  "Check for PortAudio backend"        OFF)
-OPTION(ALSOFT_BACKEND_PULSEAUDIO "Check for PulseAudio backend"       OFF)
+OPTION(ALSOFT_BACKEND_PULSEAUDIO "Check for PulseAudio backend"       ON) ## Used on Ubuntu Linux
 OPTION(ALSOFT_BACKEND_COREAUDIO  "Check for CoreAudio backend"        ON) ## Used on OSX/iOS
 OPTION(ALSOFT_BACKEND_OPENSL     "Check for OpenSL backend"           ON) ## Used on Android etc.
 OPTION(ALSOFT_BACKEND_WAVE "Enable Wave Writer backend"               OFF)

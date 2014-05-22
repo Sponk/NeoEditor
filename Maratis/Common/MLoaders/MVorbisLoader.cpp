@@ -55,6 +55,10 @@ long M_VorbisTell(void *file)
 	return M_ftell((MFile*)file);
 }
 
+#ifndef __func__
+#define __func__ __FUNCTION__
+#endif
+
 bool M_loadVorbisSound(const char * filename, void * data)
 {
 	if((!data) || (!filename))
@@ -104,18 +108,22 @@ bool M_loadVorbisSound(const char * filename, void * data)
 	int current_section;
 	char pcmout[4096];
 	unsigned int offset = 0;
+    int ret = 0;
 
-	while(true)
+    // TODO: Proper error handling!
+    while(offset < size)
 	{
-		if (ov_read(&vf, pcmout, sizeof(pcmout), 0, 2, 1, &current_section) == 0)
+        if ((ret = ov_read(&vf, pcmout, sizeof(pcmout), 0, 2, 1, &current_section)) == 0)
 			break;
+        else if(ret < 0)
+            fprintf(stderr, "ERROR: Error in sound file!\n");
 
-		memcpy((char*)sound->getData() + offset, pcmout, sizeof(pcmout));
-		offset += sizeof(pcmout);
-	}
+        memcpy((char*)sound->getData() + offset, pcmout, ret);
+        offset += ret;
+    }
 
-	ov_clear(&vf);
-	M_fclose(file);
+    ov_clear(&vf);
+    //M_fclose(file);
 
 	return true;
 }

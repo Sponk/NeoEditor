@@ -3318,7 +3318,7 @@ int centerCursor(lua_State * L)
 	int x = width/2;
 	int y = height/2;
 
-	system->setCursorPosition(x, y);
+    system->setCursorPosition(x, y);
 	input->setAxis("MOUSE_X", (float)(x / (float)width));
 	input->setAxis("MOUSE_Y", (float)(y / (float)height));
 

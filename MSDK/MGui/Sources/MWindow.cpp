@@ -356,8 +356,8 @@ bool MWindow::onEvents(void)
 			case SDL_MOUSEMOTION:
 			{
 				mevent.type = MWIN_EVENT_MOUSE_MOVE;
-				mevent.data[0] = event.motion.x; // relative to window
-				mevent.data[1] = event.motion.y; // relative to window
+                mevent.data[0] = event.motion.x; // relative to window
+                mevent.data[1] = event.motion.y; // relative to window
 				sendEvents(&mevent);
 				break;
 			}
