@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MaratisCommon
-// MSoundLoader.cpp
+// MWAVLoader.h
 //
-// Sound loader
+// WAV Sound loader
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //========================================================================
-// Copyright (c) 2003-2014 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2014 Yannick Pflanzer <yp1995@live.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -29,17 +29,10 @@
 //
 //========================================================================
 
-#include <MCore.h>
-#include "MSoundLoader.h"
-#include "MVorbisLoader.h"
-#include "MWAVLoader.h"
 
-bool M_loadSound(const char * filename, void * data)
-{
-	if (M_loadVorbisSound(filename, data))
-		return true;
-    else if(M_loadWAVSound(filename, data))
-        return true;
+#ifndef MWAVLOADER_H
+#define MWAVLOADER_H
 
-	return false;
-}
+bool M_loadWAVSound(const char * filename, void * data);
+
+#endif // MWAVLOADER_H
