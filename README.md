@@ -12,6 +12,15 @@ Maratis is originally created by Anaël Seghezzi and is Free and Open-Source.
 
 http://maratis3d.org
 
+Compilation
+-----------
+
+This version uses LuaJIT as the standard LUA solution.
+You can compile the engine to use Lua instead of LuaJIT by using
+
+-DSTANDARD_LUA=true
+
+when calling cmake.
 
 Features
 --------
