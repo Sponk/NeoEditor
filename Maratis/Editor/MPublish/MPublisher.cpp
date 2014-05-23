@@ -48,7 +48,7 @@ void MPublisher::addEvent(MPublishEvent* pubEvent)
 	if(!pubEvent)
 		return;
 
-	// make sure we cap at whatever our max is
+    // make sure we cap at whatever our max is
 	int priority = pubEvent->getPriority();
 	if(priority >= m_maxPriorities)
 		priority = m_maxPriorities - 1;

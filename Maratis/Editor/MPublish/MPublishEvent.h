@@ -59,6 +59,6 @@ public: \
 		pub->addEvent(new eventName); \
 	} \
 }; \
-static eventName##AutoAdd s_##eventName;
+static eventName##AutoAdd s_##eventName
 
 #endif /*__M_PUBLISH_EVENT_H__*/

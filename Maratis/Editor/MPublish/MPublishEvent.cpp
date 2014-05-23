@@ -162,7 +162,6 @@ M_PUBLISH_PACKAGE_DIR(fonts)
 M_PUBLISH_PACKAGE_DIR(levels)
 M_PUBLISH_DIR(plugins)
 
-
 // write and pack binary mesh files
 class MPublishEventMeshsPackage : public MPublishEvent
 {
