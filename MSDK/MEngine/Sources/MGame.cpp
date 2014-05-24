@@ -93,9 +93,6 @@ void MGame::update(void)
 
 	// flush input
 	engine->getInputContext()->flush();
-
-	// update postponed requests
-	engine->updateRequests();
 }
 
 void MGame::draw(void)

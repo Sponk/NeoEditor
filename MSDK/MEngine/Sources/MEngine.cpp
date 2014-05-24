@@ -128,7 +128,7 @@ bool MEngine::loadLevel(const char * filename)
 		}
 	}
 
-	if(m_levelLoader.loadData(globalFilename, m_level))
+    if(m_levelLoader.loadData(globalFilename, m_level))
 	{
 		if(m_game){
 			if(m_game->isRunning())

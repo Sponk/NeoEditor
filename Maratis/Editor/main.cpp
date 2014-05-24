@@ -30,10 +30,11 @@
 #include <MEngine.h>
 #include <MLoaders/MImageLoader.h>
 #include <MLog.h>
+#include <MThread.h>
 #include "MFilesUpdate/MFilesUpdate.h"
 #include "Maratis/Maratis.h"
 #include "Maratis/MaratisUI.h"
-
+#include <MSchedule/MSchedule.h>
 
 // logo
 bool logo = true;
@@ -77,6 +78,124 @@ void draw(void)
 	MWindow::getInstance()->swapBuffer();
 }
 
+MSemaphore updateSemaphore;
+MSemaphore inputSemaphore;
+bool updateThreadRunning = true;
+
+int update_thread(void* nothing)
+{
+    MWindow * window = MWindow::getInstance();
+    MEngine * engine = MEngine::getInstance();
+    Maratis * maratis = Maratis::getInstance();
+    MGui * gui = MGui::getInstance();
+    MaratisUI * UI = MaratisUI::getInstance();
+
+    // time
+    unsigned int frequency = 60;
+    unsigned int skipTicks = 1000 / frequency - 5;
+    unsigned long previousFrame = 0;
+    unsigned long startTick = window->getSystemTick();
+
+    int f = 0;
+    int t = 0;
+
+    while(updateThreadRunning)
+    {
+        MSemaphoreWaitAndLock(&updateSemaphore);
+
+        if(! engine->isActive())
+        {
+            UI->endGame();
+            engine->setActive(true);
+        }
+
+            if(window->getFocus())
+            {
+                 MSemaphoreUnlock(&updateSemaphore);
+
+                // compute target tick
+                unsigned long currentTick = window->getSystemTick();
+
+                unsigned long tick = currentTick - startTick;
+                unsigned long frame = (unsigned long)(tick * (frequency * 0.001f));
+
+                // update elapsed time
+                unsigned int i;
+                unsigned int steps = (unsigned int)(frame - previousFrame);
+
+                // don't wait too much
+                if(steps >= (frequency/2))
+                {
+                    MSemaphoreWaitAndLock(&updateSemaphore);
+
+                        update();
+                        unsigned int oldTick = currentTick;
+                        currentTick = window->getSystemTick();
+
+                    MSemaphoreUnlock(&updateSemaphore);
+
+                    previousFrame = frame;
+
+                    MSleep(skipTicks - (currentTick - oldTick));
+                    continue;
+                }
+
+                MSemaphoreWaitAndLock(&updateSemaphore);
+
+                // update
+                for(i=0; i<steps; i++)
+                {
+                    update();
+                    previousFrame++;
+                    t++;
+                    if(t == frequency)
+                    {
+                        MGame * game = engine->getGame();
+                        if(game)
+                        {
+                            if(! game->isRunning())
+                                MFilesUpdate::update();
+                        }
+                        else
+                        {
+                            MFilesUpdate::update();
+                        }
+
+                        //printf("fps:%d\n", f);
+                        t = 0;
+                        f = 0;
+                    }
+                }
+
+            unsigned int oldTick = currentTick;
+            currentTick = window->getSystemTick();
+
+            MSemaphoreUnlock(&updateSemaphore);
+
+            MSleep(skipTicks - (currentTick - oldTick));
+        }
+
+        //window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
+    }
+
+    return 0;
+}
+
+int input_thread(void* nothing)
+{
+    MWindow* window = MWindow::getInstance();
+
+    while(updateThreadRunning)
+    {
+        /*MSemaphoreWaitAndLock(&inputSemaphore);
+        window->onEvents();
+        MSemaphoreUnlock(&inputSemaphore);*/
+
+        MSleep(1600);
+    }
+
+    return 0;
+}
 
 // main
 int main(int argc, char **argv)
@@ -89,7 +208,16 @@ int main(int argc, char **argv)
 	// get window (first time call constructor)
 	MWindow * window = MWindow::getInstance();
 
-	
+    // create the update thread
+    MThread updateThread;
+
+    // create the input thread
+    MThread inputThread;
+
+    // Init semaphore
+    updateSemaphore.Init(1);
+    inputSemaphore.Init(1);
+
 	// create window
 	if(! window->create("Maratis", 1024,768, 32, false))
 	{
@@ -101,7 +229,6 @@ int main(int argc, char **argv)
 	char rep[256];
 	getRepertory(rep, argv[0]);
 	window->setCurrentDirectory(rep);
-
 	
 	// init Maratis (first time call constructor)
 	Maratis * maratis = Maratis::getInstance();
@@ -142,7 +269,6 @@ int main(int argc, char **argv)
 
 		window->swapBuffer();
 	}
-
 	
 	// load project
 	if(argc > 1)
@@ -152,90 +278,43 @@ int main(int argc, char **argv)
 		maratis->loadProject(filename);
 	}
 
-	
-	// time
-	unsigned int frequency = 60;
-	unsigned long previousFrame = 0;
-	unsigned long startTick = window->getSystemTick();
+    MInitSchedule();
+    updateThread.Start(update_thread, "Update", NULL);
+    //inputThread.Start(input_thread, "Input", NULL);
 
-	int f = 0;
-	int t = 0;
-
-	
+    bool isActive = true;
 	// on events
-	while(window->isActive())
+    while(isActive)
 	{
-		if(! engine->isActive())
-		{
-			UI->endGame();
-			engine->setActive(true);
-		}
+        MSemaphoreWaitAndLock(&updateSemaphore);
 
-		// on events
-		if(window->onEvents())
-		{
-			if(window->getFocus())
-			{
-				// compute target tick
-				unsigned long currentTick = window->getSystemTick();
+        window->onEvents();
+        MUpdateScheduledEvents();
 
-				unsigned long tick = currentTick - startTick;
-				unsigned long frame = (unsigned long)(tick * (frequency * 0.001f));
-
-				// update elapsed time
-				unsigned int i;
-				unsigned int steps = (unsigned int)(frame - previousFrame);
+        if(window->getFocus())
+        {
+            draw();
+        }
+        else
+        {
+            MSleep(200);
+        }
 
 
-				// don't wait too much
-				if(steps >= (frequency/2))
-				{
-					update();
-					draw();
-					previousFrame = frame;
-					continue;
-				}
+        // update postponed requests
+        MEngine::getInstance()->updateRequests();
 
-				// update
-				for(i=0; i<steps; i++)
-				{
-					update();
-					previousFrame++;
-					t++;
-					if(t == frequency)
-					{
-						MGame * game = engine->getGame();
-						if(game)
-						{
-							if(! game->isRunning())
-								MFilesUpdate::update();
-						}
-						else
-						{
-							MFilesUpdate::update();
-						}
+        isActive = window->isActive();
+        MSemaphoreUnlock(&updateSemaphore);
 
-						//printf("fps:%d\n", f);
-						t = 0;
-						f = 0;
-					}
-				}
-
-				// draw
-				if(steps > 0)
-				{
-					draw();
-					f++;
-				}
-			}
-			else
-			{
-				window->sleep(0.1);
-			}
-		}
-
+        MSleep(0);
 		//window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
 	}
+
+    updateThreadRunning = false;
+    int ret = updateThread.WaitForReturn();
+
+    printf("Info: Update thread returned with exit code %d\n", ret);
 
 	gui->clear();
 	maratis->clear();

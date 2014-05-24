@@ -29,6 +29,7 @@
 
 
 #include "MScript.h"
+#include "MSchedule/MSchedule.h"
 
 static char g_currentDirectory[256] = "";
 static unsigned long g_startTick = 0;
@@ -2241,14 +2242,12 @@ int getScenesNumber(lua_State * L)
 
 int loadLevel(lua_State * L)
 {
-	MEngine * engine = MEngine::getInstance();
-
 	if(! isFunctionOk(L, "loadLevel", 1))
 		return 0;
 
 	const char * filename = lua_tostring(L, 1);
 	if(filename)
-		engine->requestLoadLevel(filename);
+        MEngine::getInstance()->requestLoadLevel(filename);
 
 	return 0;
 }

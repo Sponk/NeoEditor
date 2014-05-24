@@ -27,9 +27,11 @@
 #include <MEngine.h>
 #include <MLog.h>
 #include <MWindow.h>
+#include <MThread.h>
 
 #include <MGameWinEvents.h>
 #include "Maratis/MaratisPlayer.h"
+#include "MSchedule/MSchedule.h"
 
 // window events
 void windowEvents(MWinEvent * windowEvents)
@@ -65,6 +67,74 @@ void draw(void)
 	MWindow::getInstance()->swapBuffer();
 }
 
+MSemaphore updateSemaphore;
+MSemaphore inputSemaphore;
+bool updateThreadRunning = true;
+
+int update_thread(void* nothing)
+{
+    MWindow * window = MWindow::getInstance();
+
+    // time
+    unsigned int frequency = 60;
+    unsigned int skipTicks = 1000 / frequency - 5;
+    unsigned long previousFrame = 0;
+    unsigned long startTick = window->getSystemTick();
+
+    while(updateThreadRunning)
+    {
+        MSemaphoreWaitAndLock(&updateSemaphore);
+
+        if(window->getFocus() && window->onEvents())
+        {
+            MSemaphoreUnlock(&updateSemaphore);
+
+            // compute target tick
+            unsigned long currentTick = window->getSystemTick();
+
+            unsigned long tick = currentTick - startTick;
+            unsigned long frame = (unsigned long)(tick * (frequency * 0.001f));
+
+            // update elapsed time
+            unsigned int i;
+            unsigned int steps = (unsigned int)(frame - previousFrame);
+
+            // don't wait too much
+            if(steps >= (frequency/2))
+            {
+                MSemaphoreWaitAndLock(&updateSemaphore);
+
+                    update();
+                    unsigned int oldTick = currentTick;
+                    currentTick = window->getSystemTick();
+
+                MSemaphoreUnlock(&updateSemaphore);
+
+                previousFrame = frame;
+
+                MSleep(skipTicks - (currentTick - oldTick));
+                continue;
+            }
+
+            MSemaphoreWaitAndLock(&updateSemaphore);
+
+            // update
+            for(i=0; i<steps; i++)
+            {
+                update();
+                previousFrame++;
+            }
+
+            unsigned int oldTick = currentTick;
+            currentTick = window->getSystemTick();
+
+            MSemaphoreUnlock(&updateSemaphore);
+            MSleep(skipTicks - (currentTick - oldTick));
+        }
+    }
+
+    return 0;
+}
 
 // main
 int main(int argc, char **argv)
@@ -169,67 +239,54 @@ int main(int argc, char **argv)
 		}
 	}
 	
-	
-	// time
-	unsigned int frequency = 60;
-	unsigned long previousFrame = 0;
-	unsigned long startTick = window->getSystemTick();
+    // create the update thread
+    MThread updateThread;
 
-	// on events
-	while(window->isActive())
-	{
-		// quit
-		if(! engine->isActive())
-		{
-			engine->getGame()->end();
-			break;
-		}
+    // Init semaphore
+    updateSemaphore.Init(1);
+    MInitSchedule();
 
-		// on events
-		if(window->onEvents())
-		{
-			if(window->getFocus())
-			{
-				// compute target tick
-				unsigned long currentTick = window->getSystemTick();
+    updateThread.Start(update_thread, "Update", NULL);
+    //inputThread.Start(input_thread, "Input", NULL);
 
-				unsigned long tick = currentTick - startTick;
-				unsigned long frame = (unsigned long)(tick * (frequency * 0.001f));
+    bool isActive = true;
+    // on events
+    while(isActive)
+    {
+        MSemaphoreWaitAndLock(&updateSemaphore);
 
-				// update elapsed time
-				unsigned int i;
-				unsigned int steps = (unsigned int)(frame - previousFrame);
+        MUpdateScheduledEvents();
 
+        if(!isActive)
+        {
+            engine->getGame()->end();
+            break;
+        }
 
-				// don't wait too much
-				if(steps >= (frequency/2))
-				{
-					update();
-					draw();
-					previousFrame += steps;
-					continue;
-				}
+        if(window->getFocus())
+        {
+            draw();
+        }
+        else
+        {
+            MSleep(200);
+        }
 
-				// update
-				for(i=0; i<steps; i++)
-				{
-					update();
-					previousFrame++;
-				}
+        isActive = engine->isActive();
 
-				// draw
-				if(steps > 0){
-					draw();
-				}
-			}
-			else
-			{
-				window->sleep(0.1);
-			}
-		}
+        // update postponed requests
+        MEngine::getInstance()->updateRequests();
 
-		//window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
-	}
+        MSemaphoreUnlock(&updateSemaphore);
+
+        MSleep(0);
+        //window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
+    }
+
+    updateThreadRunning = false;
+    int ret = updateThread.WaitForReturn();
+
+    printf("Info: Update thread returned with exit code %d\n", ret);
 
 	maratis->clear();
 	return 0;
