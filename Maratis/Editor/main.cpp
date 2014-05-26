@@ -183,15 +183,11 @@ int update_thread(void* nothing)
 
 int input_thread(void* nothing)
 {
-    MWindow* window = MWindow::getInstance();
-
     while(updateThreadRunning)
     {
-        /*MSemaphoreWaitAndLock(&inputSemaphore);
-        window->onEvents();
-        MSemaphoreUnlock(&inputSemaphore);*/
-
-        MSleep(1600);
+        // flush input
+        MEngine::getInstance()->getInputContext()->flush();
+        MSleep(10);
     }
 
     return 0;
@@ -280,7 +276,7 @@ int main(int argc, char **argv)
 
     MInitSchedule();
     updateThread.Start(update_thread, "Update", NULL);
-    //inputThread.Start(input_thread, "Input", NULL);
+    // inputThread.Start(input_thread, "Input", NULL);
 
     bool isActive = true;
 	// on events

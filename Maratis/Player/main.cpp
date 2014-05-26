@@ -85,7 +85,7 @@ int update_thread(void* nothing)
     {
         MSemaphoreWaitAndLock(&updateSemaphore);
 
-        if(window->getFocus() && window->onEvents())
+        if(window->getFocus())
         {
             MSemaphoreUnlock(&updateSemaphore);
 
@@ -136,6 +136,21 @@ int update_thread(void* nothing)
     return 0;
 }
 
+int input_thread(void* data)
+{
+    while(updateThreadRunning)
+    {
+        MWindow::getInstance()->onEvents();
+
+        // flush input
+        //MEngine::getInstance()->getInputContext()->flush();
+
+        MSleep(10);
+    }
+
+    return 0;
+}
+
 // main
 int main(int argc, char **argv)
 {
@@ -175,7 +190,6 @@ int main(int argc, char **argv)
 	char rep[256];
 	getRepertory(rep, argv[0]);
 	window->setCurrentDirectory(rep);
-
 	
 	// get Maratis (first time call onstructor)
 	MaratisPlayer * maratis = MaratisPlayer::getInstance();
@@ -241,13 +255,14 @@ int main(int argc, char **argv)
 	
     // create the update thread
     MThread updateThread;
+    MThread inputThread;
 
     // Init semaphore
     updateSemaphore.Init(1);
     MInitSchedule();
 
     updateThread.Start(update_thread, "Update", NULL);
-    //inputThread.Start(input_thread, "Input", NULL);
+    inputThread.Start(input_thread, "Input", NULL);
 
     bool isActive = true;
     // on events
@@ -279,7 +294,7 @@ int main(int argc, char **argv)
 
         MSemaphoreUnlock(&updateSemaphore);
 
-        MSleep(0);
+        //MSleep(0);
         //window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
     }
 

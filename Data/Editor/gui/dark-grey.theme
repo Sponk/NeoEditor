@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<MyTheme>
+	<ImagePath file="dark-grey"></ImagePath>
+	
+	<NormalColor r="1" g="1" b="1" a="1"></NormalColor>
+	<HighlightColor r="0.56" g="0.58" b="0.58" a="1"></HighlightColor>
+	<PressColor r="0.1" g="0.1" b="0.1" a="1"></PressColor>
+	<NormalColorA r="1" g="1" b="1" a="0.2"></NormalColorA>
+	<MenuColor r="0.15" g="0.18" b="0.2" a="1"></MenuColor>
+	<BackgroundColor r="0.16" g="0.18" b="0.18"></BackgroundColor>
+	<ToolbarColor r="0.2" g="0.27" b="0.28" a="1"></ToolbarColor>
+	<TitleColor r="0.27" g="0.27" b="0.27" a="1"></TitleColor>
+</MyTheme>

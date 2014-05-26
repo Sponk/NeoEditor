@@ -91,8 +91,8 @@ void MGame::update(void)
 		}
 	}
 
-	// flush input
-	engine->getInputContext()->flush();
+    // flush input
+    engine->getInputContext()->flush();
 }
 
 void MGame::draw(void)
