@@ -34,7 +34,12 @@
 #include "MFilesUpdate/MFilesUpdate.h"
 #include "Maratis/Maratis.h"
 #include "Maratis/MaratisUI.h"
+#include <MCore.h>
 #include <MSchedule/MSchedule.h>
+
+#ifdef main
+    #undef main
+#endif
 
 // logo
 bool logo = true;

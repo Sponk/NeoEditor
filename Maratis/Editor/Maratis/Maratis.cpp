@@ -22,7 +22,6 @@
 //
 //========================================================================
 
-
 #include <stdio.h>
 
 // GL, TODO : remove opengl call (should use MRenderingContext to be fully virtual)

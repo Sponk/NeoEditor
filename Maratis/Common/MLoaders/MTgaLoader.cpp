@@ -151,6 +151,7 @@ bool M_loadTgaImage(const char * filename, void * data)
 		unsigned char chunk_header;
 		unsigned char* chunk_data = new unsigned char[128];
 		unsigned int offset = 0;
+        char* color_buf = new char[components];
 
 		do
 		{            
@@ -163,7 +164,6 @@ bool M_loadTgaImage(const char * filename, void * data)
 
                 for(int i = 0; i < chunk_header; i++)
                 {
-                    char color_buf[components];
                     M_fread(color_buf, 1, components, file);
 
                     image_data[offset] = color_buf[0];
@@ -191,6 +191,8 @@ bool M_loadTgaImage(const char * filename, void * data)
 			}
 		}
 		while (offset < size);
+
+        delete color_buf;
 	}
 	else
 	{

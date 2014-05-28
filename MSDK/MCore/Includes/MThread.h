@@ -30,9 +30,10 @@
 #ifndef MTHREAD_H
 #define MTHREAD_H
 
-#include <SDL2/SDL.h>
+#include "../../../3rdparty/sdl2/include/SDL.h"
+#include "../../MCore/Includes/MCore.h"
 
-class MThread
+class M_CORE_EXPORT MThread
 {
 private:
         SDL_Thread* m_sdlThread;
@@ -49,7 +50,7 @@ public:
     int GetId();
 };
 
-class MSemaphore
+class M_CORE_EXPORT MSemaphore
 {
     SDL_semaphore* m_sdlSemaphore;
 public:
@@ -59,9 +60,9 @@ public:
     SDL_semaphore* GetHandle() { return m_sdlSemaphore; }
 };
 
-bool MSemaphoreWaitAndLock(MSemaphore* sem);
-void MSemaphoreUnlock(MSemaphore* sem);
+M_CORE_EXPORT bool MSemaphoreWaitAndLock(MSemaphore* sem);
+M_CORE_EXPORT void MSemaphoreUnlock(MSemaphore* sem);
 
-void MSleep(int t);
+M_CORE_EXPORT void MSleep(int t);
 
 #endif // MTHREAD_H

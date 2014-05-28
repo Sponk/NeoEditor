@@ -27,7 +27,10 @@
 //
 //========================================================================
 
+#include "../Includes/MCore.h"
+
 #include <MThread.h>
+#include <cstdio>
 
 MThread::MThread() :
       m_sdlThread(NULL)

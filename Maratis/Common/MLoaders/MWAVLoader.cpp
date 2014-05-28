@@ -1,5 +1,8 @@
 #include <MCore.h>
 #include <cassert>
+
+// Should actually include csdtint but this requires stdc++11 on gcc
+#include <stdint.h>
 #include "MWAVLoader.h"
 
 // "RIFF" in ASCII (0x52494646 as big endian)
@@ -14,19 +17,19 @@
 #pragma pack(push, 1)
 typedef struct
 {
-    u_int32_t chunk_id;
-    u_int32_t chunk_size;
-    u_int32_t format;
-    u_int32_t subchunk_id;
-    u_int32_t subchunk_size;
-    u_int16_t audio_format;
-    u_int16_t num_channels;
-    u_int32_t sample_rate;
-    u_int32_t byte_rate;
-    u_int16_t block_align;
-    u_int16_t bits_per_sample;
-    u_int32_t subchunk2_id;
-    u_int32_t subchunk2_size;
+    uint32_t chunk_id;
+    uint32_t chunk_size;
+    uint32_t format;
+    uint32_t subchunk_id;
+    uint32_t subchunk_size;
+    uint16_t audio_format;
+    uint16_t num_channels;
+    uint32_t sample_rate;
+    uint32_t byte_rate;
+    uint16_t block_align;
+    uint16_t bits_per_sample;
+    uint32_t subchunk2_id;
+    uint32_t subchunk2_size;
 }wave_header_t;
 #pragma pack(pop)
 
@@ -66,7 +69,7 @@ bool M_loadWAVSound(const char * filename, void * data)
         return false;
     }
 
-    u_int32_t chunk_size = header->chunk_size;
+    uint32_t chunk_size = header->chunk_size;
 
     M_SOUND_FORMAT format;
     switch(header->num_channels)

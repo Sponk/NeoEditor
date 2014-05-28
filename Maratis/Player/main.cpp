@@ -33,6 +33,10 @@
 #include "Maratis/MaratisPlayer.h"
 #include "MSchedule/MSchedule.h"
 
+#ifdef main
+    #undef main
+#endif
+
 // window events
 void windowEvents(MWinEvent * windowEvents)
 {
