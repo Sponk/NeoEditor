@@ -104,7 +104,7 @@ SET(VORBIS_INCLUDE_DIR ${MARATIS_SOURCE_DIR}/3rdparty/libvorbis/include)
 if(STANDARD_LUA)
     SET(LUA_INCLUDE_DIR ${MARATIS_SOURCE_DIR}/3rdparty/lua-standard)
 else()
-    SET(LUA_INCLUDE_DIR ${MARATIS_SOURCE_DIR}/3rdparty/lua/src)
+    SET(LUA_INCLUDE_DIR ${MARATIS_SOURCE_DIR}/3rdparty/lua/src ${CMAKE_BINARY_DIR}/3rdparty/lua)
 endif(STANDARD_LUA)
 
 SET(NPK_INCLUDE_DIR ${MARATIS_SOURCE_DIR}/3rdparty/npk/include)
