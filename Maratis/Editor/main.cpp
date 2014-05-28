@@ -108,12 +108,6 @@ int update_thread(void* nothing)
     {
         MSemaphoreWaitAndLock(&updateSemaphore);
 
-        if(! engine->isActive())
-        {
-            UI->endGame();
-            engine->setActive(true);
-        }
-
             if(window->getFocus())
             {
                  MSemaphoreUnlock(&updateSemaphore);
@@ -291,6 +285,12 @@ int main(int argc, char **argv)
 
         window->onEvents();
         MUpdateScheduledEvents();
+
+        if(!engine->isActive())
+        {
+            UI->endGame();
+            engine->setActive(true);
+        }
 
         if(window->getFocus())
         {
