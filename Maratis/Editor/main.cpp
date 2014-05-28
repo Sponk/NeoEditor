@@ -110,7 +110,7 @@ int update_thread(void* nothing)
 
             if(window->getFocus())
             {
-                 MSemaphoreUnlock(&updateSemaphore);
+                MSemaphoreUnlock(&updateSemaphore);
 
                 // compute target tick
                 unsigned long currentTick = window->getSystemTick();
@@ -172,6 +172,11 @@ int update_thread(void* nothing)
             MSemaphoreUnlock(&updateSemaphore);
 
             MSleep(skipTicks - (currentTick - oldTick));
+        }
+        else
+        {
+            MSemaphoreUnlock(&updateSemaphore);
+            MSleep(100);
         }
 
         //window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
@@ -298,9 +303,9 @@ int main(int argc, char **argv)
         }
         else
         {
-            MSleep(200);
+            draw();
+            MSleep(100);
         }
-
 
         // update postponed requests
         MEngine::getInstance()->updateRequests();

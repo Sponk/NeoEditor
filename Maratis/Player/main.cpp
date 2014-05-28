@@ -135,6 +135,11 @@ int update_thread(void* nothing)
             MSemaphoreUnlock(&updateSemaphore);
             MSleep(skipTicks - (currentTick - oldTick));
         }
+        else
+        {
+            MSemaphoreUnlock(&updateSemaphore);
+            MSleep(100);
+        }
     }
 
     return 0;
@@ -288,7 +293,8 @@ int main(int argc, char **argv)
         }
         else
         {
-            MSleep(200);
+            draw();
+            MSleep(100);
         }
 
         isActive = engine->isActive();
