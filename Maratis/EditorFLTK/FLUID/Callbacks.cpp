@@ -135,6 +135,7 @@ void update_scene_tree()
     window.scenes_menu->value(level->getCurrentSceneId());
 
     update_behavior_menu();
+	window.scene_tree->redraw();
 }
 
 void open_level_callback(Fl_Menu_*, void*)
@@ -1165,6 +1166,7 @@ void add_mesh_callback(Fl_Menu_*, void*)
     }
 
     window.glbox->redraw();
+	update_scene_tree();
 }
 
 void add_light_callback(Fl_Menu_*, void*)
@@ -1333,12 +1335,14 @@ void add_text_callback(Fl_Menu_ *, void *)
     maratis->okAddFont(filename);
 
     window.glbox->redraw();
+	update_scene_tree();
 }
 
 void add_camera_callback(Fl_Menu_*,void*)
 {
     Maratis::getInstance()->addCamera();
     window.glbox->redraw();
+	update_scene_tree();
 }
 
 void play_game_callback(Fl_Menu_*, void*)
