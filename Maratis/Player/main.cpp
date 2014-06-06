@@ -304,7 +304,7 @@ int main(int argc, char **argv)
 
         MSemaphoreUnlock(&updateSemaphore);
 
-        //MSleep(0);
+        MSleep(0);
         //window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
     }
 

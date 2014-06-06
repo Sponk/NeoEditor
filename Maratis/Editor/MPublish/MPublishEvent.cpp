@@ -440,7 +440,7 @@ void copySysLinux(const char* projName)
 	MSystemContext* system = engine->getSystemContext();
 
 	char filename[256];
-	getLocalFilename(filename, system->getWorkingDirectory(), projName);
+    getLocalFilename(filename, system->getWorkingDirectory(), projName);
 
 	if(char* ext = strstr(filename, ".mproj"))
 	{
