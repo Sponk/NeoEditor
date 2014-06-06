@@ -1363,7 +1363,13 @@ void play_game_callback(Fl_Menu_*, void*)
     FILE* file = popen(player, "r");
 
 #else
-    fl_alert("This is not yet implemented on Windows!");
+    char player[256];
+    char rep[256];
+
+    getRepertory(rep, current_project.path.c_str());
+    getGlobalFilename(player, rep, "MaratisPlayer");
+
+    FILE* file = _popen(player, "r");
 #endif
 
     update_scene_tree();
