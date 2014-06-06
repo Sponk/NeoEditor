@@ -54,6 +54,7 @@
 #include <MBehavior.h>
 #include <MBehaviors/MBLookAt.h>
 #include <MBehaviors/MBFollow.h>
+#include <MBehaviors/MBLua.h>
 #include <MScript/MScript.h>
 #include <MInput/MInput.h>
 #include <MFileManager/MLevelLoad.h>
@@ -441,6 +442,7 @@ void Maratis::start(void)
         // add behaviors
         engine->getBehaviorManager()->addBehavior(MBLookAt::getStaticName(), M_OBJECT3D, MBLookAt::getNew);
         engine->getBehaviorManager()->addBehavior(MBFollow::getStaticName(), M_OBJECT3D, MBFollow::getNew);
+		engine->getBehaviorManager()->addBehavior(MBLua::getStaticName(), M_OBJECT3D, MBLua::getNew);
 
         // add renderers
         if(GLversion >= 2)
