@@ -70,7 +70,7 @@ MLog::~MLog()
 	m_logfstream.close();
 }
 
-static char severities_strings[][64]={{"Emerg"}, {"Alert"}, {"Critic"}, {"Error"}, {"Warn"}, {"Notice"}, {"Info"}, {"Debug"}};
+static char severities_strings[][64]={{"[ Emerg ]"}, {"[ Alert ]"}, {"[ Critic ]"}, {"[ Error ]"}, {"[ Warn ]"}, {"[ Notice ]"}, {"[ Info ]"}, {"[ Debug ]"}};
 
 void MLog::log(int severity, const char * function, const char * filename, const int & line_no)
 {
@@ -88,10 +88,10 @@ void MLog::log(int severity, const char * function, const char * filename, const
     if(severity >= 0 && severity <= 7)
 		sev = severities_strings[severity];
 
-    std::cout<< sev <<"\t "<< m_string << "\t in " << (function?function:"?")
+    std::cout<< sev <<" "<< m_string << " in " << (function?function:"?")
         //<< " in "<< (filename?filename:"?") // do we add filename in console ?
         << std::endl;
 
 	if(m_logfstream.good())
-		m_logfstream<<sev<<"\t "<<m_string<< "\t in " << (function?function:"?") << "\t in "<< (filename?filename:"?") <<std::endl;
+        m_logfstream<<sev<<" "<<m_string<< " in " << (function?function:"?") << " in "<< (filename?filename:"?") <<std::endl;
 }
