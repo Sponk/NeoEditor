@@ -31,6 +31,7 @@
 #ifndef _MB_LUA_H
 #define _MB_LUA_H
 
+#include <MScript/MScript.h>
 
 class MBLua : public MBehavior
 {
@@ -45,7 +46,9 @@ private:
 
 	// variables
 	MString m_scriptFile;
-	
+    MScript m_script;
+    bool m_init;
+
 public:
 
 	// destroy

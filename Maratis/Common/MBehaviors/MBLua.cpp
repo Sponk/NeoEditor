@@ -29,6 +29,8 @@
 
 
 #include <MEngine.h>
+#include <MScript/MScript.h>
+#include <MLog.h>
 #include "MBLua.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,12 +39,14 @@
 
 MBLua::MBLua(MObject3d * parentObject):
 MBehavior(parentObject),
-m_scriptFile("")
+m_scriptFile(""),
+m_init(false)
 {}
 
 MBLua::MBLua(MBLua & behavior, MObject3d * parentObject):
 MBehavior(parentObject),
-	m_scriptFile(behavior.m_scriptFile)
+m_scriptFile(behavior.m_scriptFile),
+m_init(false)
 {}
 
 MBLua::~MBLua(void)
@@ -68,10 +72,12 @@ MBehavior * MBLua::getCopy(MObject3d * parentObject)
 // Variables
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned int MBLua::getVariablesNumber(void){
-	return 4;
+unsigned int MBLua::getVariablesNumber(void)
+{
+    return 1;
 }
 
+// TODO: Make variable available in the editor!
 MVariable MBLua::getVariable(unsigned int id)
 {
 	// TODO: New variable type for paths!
@@ -93,10 +99,24 @@ void MBLua::update(void)
 {
 	MEngine * engine = MEngine::getInstance();
 	MGame * game = engine->getGame();
-	MLevel * level = engine->getLevel();
-	MScene * scene = level->getCurrentScene();
-
 	MObject3d * parent = getParentObject();
 
-	
+    if(! game->isRunning())
+            return;
+
+    if(!m_init)
+    {
+        char globalFile[256];
+
+        getGlobalFilename(globalFile, engine->getSystemContext()->getWorkingDirectory(), m_scriptFile.getSafeString());
+
+        m_script.runScript(globalFile);
+        m_init = true;
+    }
+
+    if(m_script.startCallFunction("onSceneUpdate"))
+    {
+        m_script.pushPointer(parent);
+        m_script.endCallFunction(1);
+    }
 }

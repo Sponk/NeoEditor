@@ -40,6 +40,7 @@
 #include <MFileManager/MLevelLoad.h>
 #include <MBehaviors/MBLookAt.h>
 #include <MBehaviors/MBFollow.h>
+#include <MBehaviors/MBLua.h>
 #include <MScript/MScript.h>
 #include <MInput/MInput.h>
 #include <MFileManager/MMeshLoad.h>
@@ -131,6 +132,7 @@ void MaratisPlayer::start(void)
 		// add behaviors
 		engine->getBehaviorManager()->addBehavior(MBLookAt::getStaticName(), M_OBJECT3D_CAMERA, MBLookAt::getNew);
 		engine->getBehaviorManager()->addBehavior(MBFollow::getStaticName(), M_OBJECT3D, MBFollow::getNew);
+        engine->getBehaviorManager()->addBehavior(MBLua::getStaticName(), M_OBJECT3D, MBLua::getNew);
 
 		// add renderers
 		engine->getRendererManager()->addRenderer(MStandardRenderer::getStaticName(), MStandardRenderer::getNew);
