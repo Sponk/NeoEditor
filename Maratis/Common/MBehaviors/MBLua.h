@@ -32,6 +32,11 @@
 #define _MB_LUA_H
 
 #include <MScript/MScript.h>
+#include <MVariable.h>
+#include <vector>
+#include <deque>
+#include <string>
+#include <MLog.h>
 
 class MBLua : public MBehavior
 {
@@ -48,6 +53,27 @@ private:
 	MString m_scriptFile;
     MScript m_script;
     bool m_init;
+
+    struct MFloatVariable
+    {
+        MFloatVariable(const char* name)
+        {
+            strcpy(this->name, name);
+            var = new MVariable(this->name, &value, M_VARIABLE_FLOAT);
+        }
+
+        ~MFloatVariable()
+        {
+            SAFE_DELETE(var);
+        }
+
+        MVariable* var;
+        float value;
+        char name[256];
+    };
+
+    std::deque<MFloatVariable*> m_globalFloatVariables;
+    std::deque<MVariable*> m_variables;
 
 public:
 

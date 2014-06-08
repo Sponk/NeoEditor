@@ -400,7 +400,17 @@ void readBehaviorProperties(TiXmlElement * node, MBehavior * behavior)
 
 		switch(variable.getType())
 		{
-		case M_VARIABLE_BOOL:
+        case M_VARIABLE_STRING:
+            {
+                const char * str = node->Attribute(name);
+                if(str)
+                    ((MString*)variable.getPointer())->set(str);
+
+                // FIXME: Hack for the LuaScript behavior!
+                size = behavior->getVariablesNumber();
+            }
+            break;
+        case M_VARIABLE_BOOL:
 			readBool(node, name, (bool*)variable.getPointer());
 			break;
 		case M_VARIABLE_INT:
@@ -409,13 +419,6 @@ void readBehaviorProperties(TiXmlElement * node, MBehavior * behavior)
 			break;
 		case M_VARIABLE_FLOAT:
 			node->QueryFloatAttribute(name, (float*)variable.getPointer());
-			break;
-		case M_VARIABLE_STRING:
-			{
-				const char * str = node->Attribute(name);
-				if(str)
-					((MString*)variable.getPointer())->set(str);
-			}
 			break;
 		case M_VARIABLE_VEC2:
 			readFloatValues(node, name, *((MVector2*)variable.getPointer()), 2);

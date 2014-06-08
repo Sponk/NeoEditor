@@ -256,7 +256,7 @@ void behavior_float_callback(Fl_Value_Input* input, const char* data)
     if(!object || !input || !data)
         return;
 
-    *(float*) get_variable_pointer(data, input->label(), object) = input->value();
+    *((float*) get_variable_pointer(data, input->label(), object)) = input->value();
 }
 
 void behavior_int_callback(Fl_Value_Input* input, const char* data)
