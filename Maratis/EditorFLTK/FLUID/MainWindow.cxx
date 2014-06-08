@@ -21,6 +21,7 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
  {"Edit", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
  {"Undo", 0x4007a,  (Fl_Callback*)undo_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {"Redo", 0x5007a,  (Fl_Callback*)redo_callback, 0, 128, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Duplicate object", 0x40064,  (Fl_Callback*)duplicate_object_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {"Delete object", 0xffff,  (Fl_Callback*)delete_object_callback, 0, 128, FL_NORMAL_LABEL, 0, 14, 0},
  {"Scene setup", 0,  (Fl_Callback*)scene_setup_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {"Delete current scene", 0,  (Fl_Callback*)delete_scene_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
@@ -43,7 +44,7 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
  {0,0,0,0,0,0,0,0,0},
  {0,0,0,0,0,0,0,0,0}
 };
-Fl_Menu_Item* EditorWindow::behavior_menu = EditorWindow::menu_menu_bar + 33;
+Fl_Menu_Item* EditorWindow::behavior_menu = EditorWindow::menu_menu_bar + 34;
 
 Fl_Menu_Item EditorWindow::menu_Shape[] = {
  {"Box", 0,  (Fl_Callback*)edit_shape_callback, (void*)(0), 0, FL_NORMAL_LABEL, 0, 14, 0},

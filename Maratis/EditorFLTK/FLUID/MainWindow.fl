@@ -11,7 +11,7 @@ class EditorWindow {open
   } {
     Fl_Window {} {
       label {Maratis Editor} open
-      xywh {1812 274 918 624} type Double resizable size_range {0 0 2048 2048} visible
+      xywh {1812 302 918 624} type Double resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -88,9 +88,14 @@ class EditorWindow {open
             xywh {0 0 100 20} shortcut 0x5007a labelsize 14 divider
           }
           MenuItem {} {
+            label {Duplicate object}
+            callback duplicate_object_callback selected
+            xywh {0 0 100 20} shortcut 0x40064 labelsize 14
+          }
+          MenuItem {} {
             label {Delete object}
-            callback delete_object_callback selected
-            xywh {0 0 100 20} shortcut 0xffff labelsize 14
+            callback delete_object_callback
+            xywh {0 0 100 20} shortcut 0xffff labelsize 14 divider
           }
           MenuItem {} {
             label {Scene setup}
@@ -767,7 +772,7 @@ class SceneSetupDlg {} {
   } {
     Fl_Window {} {
       label {Scene setup} open
-      xywh {2368 357 405 132} type Double modal visible
+      xywh {1822 381 405 132} type Double hide modal
     } {
       Fl_Input scene_name_edit {
         label {Scene Name:}

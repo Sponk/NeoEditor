@@ -14,6 +14,7 @@ extern void save_level_callback(Fl_Menu_*, long);
 extern void quit_callback(Fl_Menu_*, void*);
 extern void undo_callback(Fl_Menu_*, void*);
 extern void redo_callback(Fl_Menu_*, void*);
+extern void duplicate_object_callback(Fl_Menu_*, void*);
 extern void delete_object_callback(Fl_Menu_*, void*);
 extern void scene_setup_callback(Fl_Menu_*, void*);
 extern void delete_scene_callback(Fl_Menu_*, void*);

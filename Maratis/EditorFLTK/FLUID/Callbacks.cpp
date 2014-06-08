@@ -1574,3 +1574,11 @@ void delete_scene_callback(Fl_Menu_ *, void *)
     update_scene_tree();
     window.glbox->redraw();
 }
+
+void duplicate_object_callback(Fl_Menu_ *, void *)
+{
+    Maratis::getInstance()->duplicateSelectedObjects();
+
+    update_scene_tree();
+    window.glbox->redraw();
+}
