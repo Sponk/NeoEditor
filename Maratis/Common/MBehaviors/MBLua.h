@@ -53,7 +53,13 @@ private:
     MScript m_script;
     bool m_init;
 
-    struct MFloatVariable
+    struct MValueVariable
+    {
+        char name[256];
+        MVariable* var;
+    };
+
+    struct MFloatVariable : public MValueVariable
     {
         MFloatVariable(const char* name)
         {
@@ -66,12 +72,26 @@ private:
             SAFE_DELETE(var);
         }
 
-        MVariable* var;
         float value;
-        char name[256];
     };
 
-    std::vector<MFloatVariable*> m_globalFloatVariables;
+    struct MStringVariable : public MValueVariable
+    {
+        MStringVariable(const char* name)
+        {
+            strcpy(this->name, name);
+            var = new MVariable(this->name, &value, M_VARIABLE_STRING);
+        }
+
+        ~MStringVariable()
+        {
+            SAFE_DELETE(var);
+        }
+
+        MString value;
+    };
+
+    std::vector<MValueVariable*> m_globalVariables;
     std::vector<MVariable*> m_variables;
 
 public:

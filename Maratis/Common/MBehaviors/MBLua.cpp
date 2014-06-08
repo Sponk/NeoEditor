@@ -83,14 +83,14 @@ unsigned int MBLua::getVariablesNumber(void)
 
     if(!m_init)
     {
-        std::vector<MFloatVariable*> floatTmp;
+        std::vector<MValueVariable*> oldVars;
 
-        for(int i = 0; i < m_globalFloatVariables.size(); i++)
+        for(int i = 0; i < m_globalVariables.size(); i++)
         {
-            floatTmp.push_back(m_globalFloatVariables[i]);
+            oldVars.push_back(m_globalVariables[i]);
         }
 
-        m_globalFloatVariables.clear();
+        m_globalVariables.clear();
         m_variables.clear();
 
         char globalFile[256];
@@ -136,13 +136,13 @@ unsigned int MBLua::getVariablesNumber(void)
                     else if(lua_isnumber(L, -1))
                     {
                         MFloatVariable* var = NULL;
-                        for(int j = 0; j < floatTmp.size(); j++)
+                        for(int j = 0; j < oldVars.size(); j++)
                         {
                             // MLOG_INFO("----> " << floatTmp[j]->var->getName());
-                            if(names[i] == floatTmp[j]->var->getName())
+                            if(names[i] == oldVars[j]->var->getName())
                             {
-                                var = floatTmp[j];
-                                floatTmp.erase(floatTmp.begin() + j);
+                                var = (MFloatVariable*) oldVars[j];
+                                oldVars.erase(oldVars.begin() + j);
                             }
                         }
 
@@ -152,21 +152,42 @@ unsigned int MBLua::getVariablesNumber(void)
                             var->value = lua_tonumber(L, -1);
                         }
 
-                        m_globalFloatVariables.push_back(var);
+                        m_globalVariables.push_back(var);
+                    }
+                    else if(lua_isstring(L, -1))
+                    {
+                        MStringVariable* var = NULL;
+                        for(int j = 0; j < oldVars.size(); j++)
+                        {
+                            // MLOG_INFO("----> " << floatTmp[j]->var->getName());
+                            if(names[i] == oldVars[j]->var->getName())
+                            {
+                                var = (MStringVariable*) oldVars[j];
+                                oldVars.erase(oldVars.begin() + j);
+                            }
+                        }
+
+                        if(var == NULL)
+                        {
+                            var = new MStringVariable(names[i].c_str());
+                            var->value.set(lua_tostring(L, -1));
+                        }
+
+                        m_globalVariables.push_back(var);
                     }
                 }
             }
         }
 
         // MLOG_INFO("floatTmp.size == " << floatTmp.size());
-        for(int i = 0; i < floatTmp.size(); i++)
+        for(int i = 0; i < oldVars.size(); i++)
         {
-            SAFE_DELETE(floatTmp[i]);
+            SAFE_DELETE(oldVars[i]);
         }
 
-        for(int i = 0; i < m_globalFloatVariables.size(); i++)
+        for(int i = 0; i < m_globalVariables.size(); i++)
         {
-            m_variables.push_back(m_globalFloatVariables[i]->var);
+            m_variables.push_back(m_globalVariables[i]->var);
         }
     }
 
