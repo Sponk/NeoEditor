@@ -956,7 +956,6 @@ void Maratis::updateTitle(const char * additional)
     else
         sprintf(m_windowTitle, "Maratis - %s - %s", m_currentProject, levelName);
 
-    MLOG_INFO("Changed title to " << m_windowTitle);
     m_titleChanged = true;
 }
 

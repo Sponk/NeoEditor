@@ -34,7 +34,6 @@
 #include <MScript/MScript.h>
 #include <MVariable.h>
 #include <vector>
-#include <deque>
 #include <string>
 #include <MLog.h>
 
@@ -72,8 +71,8 @@ private:
         char name[256];
     };
 
-    std::deque<MFloatVariable*> m_globalFloatVariables;
-    std::deque<MVariable*> m_variables;
+    std::vector<MFloatVariable*> m_globalFloatVariables;
+    std::vector<MVariable*> m_variables;
 
 public:
 

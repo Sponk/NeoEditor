@@ -410,8 +410,6 @@ void create_behavior_ui(MObject3d* object)
 
     // Create behavior UI
     int num_behaviors = object->getBehaviorsNumber();
-    MLOG_INFO("Object has " << num_behaviors << " behaviors!");
-
     window.behaviors_scroll->clear();
 
     int height = 0;
@@ -454,7 +452,6 @@ void create_behavior_ui(MObject3d* object)
                     group->add(input);
 
                     height += 47;
-                    MLOG_INFO("Found float variable!");
                 }
                 break;
 
@@ -471,7 +468,6 @@ void create_behavior_ui(MObject3d* object)
                     group->add(input);
 
                     height += 47;
-                    MLOG_INFO("Found Integer variable!");
                 }
                 break;
 
@@ -486,8 +482,6 @@ void create_behavior_ui(MObject3d* object)
                     group->add(input);
 
                     height += 47;
-
-                    MLOG_INFO("Found string variable");
                 }
                 break;
 
@@ -516,8 +510,6 @@ void create_behavior_ui(MObject3d* object)
                     vec_group->end();
                     group->add(vec_group);
                     height += 57;
-
-                    MLOG_INFO("Found MVector3 variable!");
                 }
                 break;
 
@@ -546,8 +538,6 @@ void create_behavior_ui(MObject3d* object)
                     vec_group->end();
                     group->add(vec_group);
                     height += 57;
-
-                    MLOG_INFO("Found MVector2 variable!");
                 }
                 break;
 
@@ -576,8 +566,6 @@ void create_behavior_ui(MObject3d* object)
                     vec_group->end();
                     group->add(vec_group);
                     height += 57;
-
-                    MLOG_INFO("Found MVector3 variable!");
                 }
                 break;
 
@@ -591,8 +579,6 @@ void create_behavior_ui(MObject3d* object)
                     group->add(button);
 
                     height += 47;
-
-                    MLOG_INFO("Found bool variable");
                 }
 
                 break;
