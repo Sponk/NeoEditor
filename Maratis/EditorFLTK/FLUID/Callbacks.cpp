@@ -403,6 +403,23 @@ void behavior_vector2_callback(Fl_Value_Input* input, const char* data)
     }
 }
 
+void create_behavior_ui(MObject3d* object);
+
+void remove_behavior(Fl_Button*, long behavior)
+{
+    MObject3d* object = MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
+
+    if(!object)
+        return;
+
+    Maratis::getInstance()->autoSave();
+    object->deleteBehavior(behavior);
+
+    update_scene_tree();
+    create_behavior_ui(object);
+    window.behaviors_scroll->redraw();
+}
+
 void create_behavior_ui(MObject3d* object)
 {
     if(object == NULL)
@@ -587,6 +604,12 @@ void create_behavior_ui(MObject3d* object)
                 MLOG_WARNING("Behavior variable type not yet supported!");
             }
         }
+
+        Fl_Button* remove_button = new Fl_Button(x+5, y+height, 205, 22, "Remove");
+        remove_button->callback((Fl_Callback*) remove_behavior, (void*) object->getBehaviorsNumber()-1);
+        group->add(remove_button);
+
+        height += 27;
 
         group->size(218, height);
         height += old_height+20;
@@ -1395,6 +1418,7 @@ void add_behavior_menu_callback(Fl_Menu_* menu, const char* name)
 
     object->addBehavior(behavior->getNewBehavior(object));
     update_scene_tree();
+    create_behavior_ui(object);
 }
 
 void update_behavior_menu()
