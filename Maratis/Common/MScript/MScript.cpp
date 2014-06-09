@@ -30,6 +30,7 @@
 
 #include "MScript.h"
 #include "MSchedule/MSchedule.h"
+#include <MLog.h>
 
 static char g_currentDirectory[256] = "";
 static unsigned long g_startTick = 0;
@@ -64,7 +65,7 @@ static bool isFunctionOk(lua_State * L, const char * name, unsigned int nbArgs)
 	int nbArguments = lua_gettop(L);
 	if(nbArguments < (int)nbArgs)
 	{
-		fprintf(stderr, "ERROR script : \"%s\" need at least %d parameter(s)\n", name, nbArgs);
+        MLOG_ERROR("Script: \"" << name << "\" needs at least " << nbArgs << " parameter(s)!");
 		return false;
 	}
 	return true;
@@ -412,7 +413,7 @@ int getScene(lua_State * L)
 		}
 	}
 	
-	fprintf(stderr, "ERROR script : scene \"%s\" doesn't exit\n", name);
+    MLOG_ERROR("Script: Scene \"" << name << "\" does not exist!");
 	return 0;
 }
 
@@ -466,7 +467,7 @@ int getObject(lua_State * L)
 		}
 	}
 
-	fprintf(stderr, "ERROR script : object \"%s\" doesn't exit\n", name);
+    MLOG_ERROR("Script: Object \"" << name << "\" does not exist!");
 	return 0;
 }
 
@@ -3746,7 +3747,7 @@ void MScript::runScript(const char * filename)
 	char * text = readTextFile(filename);
 	if(! text)
 	{
-		fprintf(stderr, "ERROR lua script : unable to read file %s\n", filename);
+        MLOG_ERROR("Script: Unable to read file " << filename);
 		m_isRunning = false;
 		return;
 	}
@@ -3756,7 +3757,7 @@ void MScript::runScript(const char * filename)
 	// do string
 	if(luaL_dostring(m_state, text) != 0)
 	{
-		fprintf(stderr, "ERROR lua script :\n %s\n", lua_tostring(m_state, -1));
+        MLOG_ERROR("Lua Script: \n" << lua_tostring(m_state, -1) << "\n");
 		m_isRunning = false;
 		SAFE_FREE(text);
 		return;
@@ -3786,7 +3787,7 @@ bool MScript::endCallFunction(int numArgs)
 {
 	if(lua_pcall(m_state, numArgs, 0, 0) != 0)
 	{
-		fprintf(stderr, "ERROR lua script :\n %s\n", lua_tostring(m_state, -1));
+        MLOG_ERROR("Lua Script: \n" << lua_tostring(m_state, -1) << "\n");
 		m_isRunning = false;
 		return false;
 	}
