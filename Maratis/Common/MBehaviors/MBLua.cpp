@@ -79,7 +79,6 @@ unsigned int MBLua::getVariablesNumber(void)
     MEngine* engine = MEngine::getInstance();
     // TODO: New variable type for paths!
     std::vector<std::string> names;
-    MScript script;
 
     if(!m_init)
     {
@@ -96,9 +95,9 @@ unsigned int MBLua::getVariablesNumber(void)
         char globalFile[256];
         getGlobalFilename(globalFile, engine->getSystemContext()->getWorkingDirectory(), m_scriptFile.getSafeString());
 
-        script.runScript(globalFile);
+        m_script.runScript(globalFile);
 
-        lua_State* L = script.getLuaState();
+        lua_State* L = m_script.getLuaState();
 
         if(L)
         {
