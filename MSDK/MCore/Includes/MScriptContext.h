@@ -43,7 +43,8 @@ public :
 	/// \param filename	Script filename
 	virtual void runScript(const char * filename) = 0;
 
-	/// Start call function.
+    /// Start call function. All arguments to the function have to be pushed
+    /// between MScriptContext::startCallFunction and MScriptContext::endCallFunction
 	/// \param name		Function name
 	virtual bool startCallFunction(const char * name) = 0;
 	
