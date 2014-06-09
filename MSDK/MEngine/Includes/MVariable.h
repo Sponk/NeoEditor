@@ -58,6 +58,14 @@ private:
 
 public:
 	
+    /** The MVariable constructor sets up a new MVariable object.
+     *  It will not copy the name to an internal buffer so you have to provide memory for the name.
+     *
+     * @param name The name of the variable. Will not be copied to an internal buffer!
+     * @param pointer The pointer to the data. This one needs to be persistant so it can't point
+     *        to a local variable or an element in a std::vector/std::deque etc.
+     * @param type The type of this variable. This is an element of M_VARIABLE_TYPE.
+     */
 	MVariable(const char * name, void * pointer, M_VARIABLE_TYPE type):
 	m_name(name),
 	m_pointer(pointer),
@@ -66,9 +74,21 @@ public:
 
 public:
 
+    /** @brief getType
+     * @return The variable type.
+     */
 	inline M_VARIABLE_TYPE getType(void){ return m_type; }
-	inline const char * getName(void){ return m_name; }
-	inline void * getPointer(void){ return m_pointer; }
+
+    /** @brief getName
+     * @return The pointer to the name.
+     */
+    inline const char * getName(void){ return m_name; }
+
+    /**
+     * @brief getPointer
+     * @return Returns the pointer with the data.
+     */
+    inline void * getPointer(void){ return m_pointer; }
 };
 
 
