@@ -89,6 +89,7 @@ public:
   Fl_Value_Input *xscale_edit;
   Fl_Value_Input *yscale_edit;
   Fl_Value_Input *zscale_edit;
+  Fl_Input *parent_edit;
   Fl_Tabs *special_tab;
   Fl_Scroll *behaviors_scroll;
   Fl_Double_Window* create_light_window();

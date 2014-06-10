@@ -855,7 +855,16 @@ void scene_tree_callback(Fl_Tree* tree, void*)
     }
 
     if(update_name)
+    {
+        MObject3d* parent = object->getParent();
+
+        if(parent)
+            window.parent_edit->value(parent->getName());
+        else
+            window.parent_edit->value("none");
+
         window.name_edit->value(name);
+    }
 
     window.xpos_edit->value(position.x);
     window.ypos_edit->value(position.y);
@@ -956,7 +965,29 @@ void edit_name_callback(Fl_Input*, void*)
     MObject3d* object = Maratis::getInstance()->getSelectedObjectByIndex(0);
     object->setName(window.name_edit->value());
 
-    MLOG_INFO("Edit name");
+    MObject3d* parent = object->getParent();
+
+    if(parent == NULL && !strcmp(window.parent_edit->value(), "none"))
+    {
+        update_scene_tree();
+        return;
+    }
+    else if(parent == NULL)
+    {
+        parent = MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.parent_edit->value());
+
+        if(!parent)
+        {
+            MLOG_ERROR("Can't set parent: Parent object not found!");
+            fl_alert("Can't set parent: Parent object not found!");
+
+            window.parent_edit->value("none");
+            update_scene_tree();
+            return;
+        }
+
+        Maratis::getInstance()->linkTwoObjects(parent, object);
+    }
 
     update_scene_tree();
 }
@@ -1370,27 +1401,14 @@ void play_game_callback(Fl_Menu_*, void*)
         return;
     }
 
-    MLOG_DEBUG("play_game_callback");
     save_level_callback(NULL, 0);
 
 #ifndef WIN32
 
-    char player[256];
-    char rep[256];
-
-    getRepertory(rep, current_project.path.c_str());
-    getGlobalFilename(player, rep, "MaratisPlayer");
-
-    FILE* file = popen(player, "r");
+    FILE* file = popen((current_project.path + "MaratisPlayer").c_str(), "r");
 
 #else
-    char player[256];
-    char rep[256];
-
-    getRepertory(rep, current_project.path.c_str());
-    getGlobalFilename(player, rep, "MaratisPlayer");
-
-    FILE* file = _popen(player, "r");
+    FILE* file = _popen((current_project.path + "MaratisPlayer.exe").c_str(), "r");
 #endif
 
     update_scene_tree();

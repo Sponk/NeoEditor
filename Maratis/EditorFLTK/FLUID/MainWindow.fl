@@ -11,7 +11,7 @@ class EditorWindow {open
   } {
     Fl_Window {} {
       label {Maratis Editor} open
-      xywh {1812 302 918 624} type Double resizable size_range {0 0 2048 2048} visible
+      xywh {1812 330 918 624} type Double resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -89,7 +89,7 @@ class EditorWindow {open
           }
           MenuItem {} {
             label {Duplicate object}
-            callback duplicate_object_callback selected
+            callback duplicate_object_callback
             xywh {0 0 100 20} shortcut 0x40064 labelsize 14
           }
           MenuItem {} {
@@ -237,81 +237,86 @@ class EditorWindow {open
             }
             Fl_Group {} {
               label {Position:} open
-              xywh {696 147 222 33} box ENGRAVED_FRAME align 5
+              xywh {696 195 222 33} box ENGRAVED_FRAME align 5
             } {
               Fl_Value_Input xpos_edit {
                 label {X:}
                 user_data {'t'} user_data_type long
                 callback edit_object_callback
-                xywh {720 153 51 21} maximum 1000 step 1
+                xywh {720 201 51 21} maximum 1000 step 1
                 code0 {xpos_edit->soft(true);}
               }
               Fl_Value_Input ypos_edit {
                 label {Y:}
                 user_data {'t'} user_data_type long
                 callback edit_object_callback
-                xywh {792 153 48 21} maximum 1000 step 1
+                xywh {792 201 48 21} maximum 1000 step 1
                 code0 {ypos_edit->soft(true);}
               }
               Fl_Value_Input zpos_edit {
                 label {Z:}
                 user_data {'t'} user_data_type long
                 callback edit_object_callback
-                xywh {861 153 51 21} maximum 1000 step 1
+                xywh {861 201 51 21} maximum 1000 step 1
                 code0 {zpos_edit->soft(true);}
               }
             }
             Fl_Group {} {
               label {Rotation:} open
-              xywh {696 207 222 33} box ENGRAVED_FRAME align 5
+              xywh {696 255 222 33} box ENGRAVED_FRAME align 5
             } {
               Fl_Value_Input xrot_edit {
                 label {X:}
                 user_data {'r'} user_data_type long
                 callback edit_object_callback
-                xywh {717 213 48 21} maximum 360 step 5
+                xywh {717 261 48 21} maximum 360 step 5
                 code0 {xrot_edit->soft(true);}
               }
               Fl_Value_Input yrot_edit {
                 label {Y:}
                 user_data {'r'} user_data_type long
                 callback edit_object_callback
-                xywh {786 213 48 21} maximum 360 step 5
+                xywh {786 261 48 21} maximum 360 step 5
                 code0 {yrot_edit->soft(true);}
               }
               Fl_Value_Input zrot_edit {
                 label {Z:}
                 user_data {'r'} user_data_type long
                 callback edit_object_callback
-                xywh {858 213 48 21} maximum 360 step 5
+                xywh {858 261 48 21} maximum 360 step 5
                 code0 {zrot_edit->soft(true);}
               }
             }
             Fl_Group {} {
               label {Scale:} open
-              xywh {696 264 222 33} box ENGRAVED_FRAME align 5
+              xywh {696 312 222 33} box ENGRAVED_FRAME align 5
             } {
               Fl_Value_Input xscale_edit {
                 label {X:}
                 user_data {'s'} user_data_type long
                 callback edit_object_callback
-                xywh {717 270 48 21} maximum 20 step 0.1 value 1
+                xywh {717 318 48 21} maximum 20 step 0.1 value 1
                 code0 {xscale_edit->soft(true);}
               }
               Fl_Value_Input yscale_edit {
                 label {Y:}
                 user_data {'s'} user_data_type long
                 callback edit_object_callback
-                xywh {786 270 48 21} maximum 20 step 0.1 value 1
+                xywh {786 318 48 21} maximum 20 step 0.1 value 1
                 code0 {yscale_edit->soft(true);}
               }
               Fl_Value_Input zscale_edit {
                 label {Z:}
                 user_data {'s'} user_data_type long
                 callback edit_object_callback
-                xywh {858 270 48 21} maximum 20 step 0.1 value 1
+                xywh {858 318 48 21} maximum 20 step 0.1 value 1
                 code0 {zscale_edit->soft(true);}
               }
+            }
+            Fl_Input parent_edit {
+              label {Parent:} user_data_type {void*}
+              callback edit_name_callback selected
+              xywh {699 147 171 21} align 5 when 8
             }
           }
         }

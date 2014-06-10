@@ -138,22 +138,22 @@ Fl_Double_Window* EditorWindow::show_window() {
             name_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
             name_edit->when(FL_WHEN_ENTER_KEY);
           } // Fl_Input* name_edit
-          { Fl_Group* o = new Fl_Group(696, 147, 222, 33, "Position:");
+          { Fl_Group* o = new Fl_Group(696, 195, 222, 33, "Position:");
             o->box(FL_ENGRAVED_FRAME);
             o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-            { xpos_edit = new Fl_Value_Input(720, 153, 51, 21, "X:");
+            { xpos_edit = new Fl_Value_Input(720, 201, 51, 21, "X:");
               xpos_edit->maximum(1000);
               xpos_edit->step(1);
               xpos_edit->callback((Fl_Callback*)edit_object_callback, (void*)('t'));
               xpos_edit->soft(true);
             } // Fl_Value_Input* xpos_edit
-            { ypos_edit = new Fl_Value_Input(792, 153, 48, 21, "Y:");
+            { ypos_edit = new Fl_Value_Input(792, 201, 48, 21, "Y:");
               ypos_edit->maximum(1000);
               ypos_edit->step(1);
               ypos_edit->callback((Fl_Callback*)edit_object_callback, (void*)('t'));
               ypos_edit->soft(true);
             } // Fl_Value_Input* ypos_edit
-            { zpos_edit = new Fl_Value_Input(861, 153, 51, 21, "Z:");
+            { zpos_edit = new Fl_Value_Input(861, 201, 51, 21, "Z:");
               zpos_edit->maximum(1000);
               zpos_edit->step(1);
               zpos_edit->callback((Fl_Callback*)edit_object_callback, (void*)('t'));
@@ -161,22 +161,22 @@ Fl_Double_Window* EditorWindow::show_window() {
             } // Fl_Value_Input* zpos_edit
             o->end();
           } // Fl_Group* o
-          { Fl_Group* o = new Fl_Group(696, 207, 222, 33, "Rotation:");
+          { Fl_Group* o = new Fl_Group(696, 255, 222, 33, "Rotation:");
             o->box(FL_ENGRAVED_FRAME);
             o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-            { xrot_edit = new Fl_Value_Input(717, 213, 48, 21, "X:");
+            { xrot_edit = new Fl_Value_Input(717, 261, 48, 21, "X:");
               xrot_edit->maximum(360);
               xrot_edit->step(5);
               xrot_edit->callback((Fl_Callback*)edit_object_callback, (void*)('r'));
               xrot_edit->soft(true);
             } // Fl_Value_Input* xrot_edit
-            { yrot_edit = new Fl_Value_Input(786, 213, 48, 21, "Y:");
+            { yrot_edit = new Fl_Value_Input(786, 261, 48, 21, "Y:");
               yrot_edit->maximum(360);
               yrot_edit->step(5);
               yrot_edit->callback((Fl_Callback*)edit_object_callback, (void*)('r'));
               yrot_edit->soft(true);
             } // Fl_Value_Input* yrot_edit
-            { zrot_edit = new Fl_Value_Input(858, 213, 48, 21, "Z:");
+            { zrot_edit = new Fl_Value_Input(858, 261, 48, 21, "Z:");
               zrot_edit->maximum(360);
               zrot_edit->step(5);
               zrot_edit->callback((Fl_Callback*)edit_object_callback, (void*)('r'));
@@ -184,24 +184,24 @@ Fl_Double_Window* EditorWindow::show_window() {
             } // Fl_Value_Input* zrot_edit
             o->end();
           } // Fl_Group* o
-          { Fl_Group* o = new Fl_Group(696, 264, 222, 33, "Scale:");
+          { Fl_Group* o = new Fl_Group(696, 312, 222, 33, "Scale:");
             o->box(FL_ENGRAVED_FRAME);
             o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-            { xscale_edit = new Fl_Value_Input(717, 270, 48, 21, "X:");
+            { xscale_edit = new Fl_Value_Input(717, 318, 48, 21, "X:");
               xscale_edit->maximum(20);
               xscale_edit->step(0.1);
               xscale_edit->value(1);
               xscale_edit->callback((Fl_Callback*)edit_object_callback, (void*)('s'));
               xscale_edit->soft(true);
             } // Fl_Value_Input* xscale_edit
-            { yscale_edit = new Fl_Value_Input(786, 270, 48, 21, "Y:");
+            { yscale_edit = new Fl_Value_Input(786, 318, 48, 21, "Y:");
               yscale_edit->maximum(20);
               yscale_edit->step(0.1);
               yscale_edit->value(1);
               yscale_edit->callback((Fl_Callback*)edit_object_callback, (void*)('s'));
               yscale_edit->soft(true);
             } // Fl_Value_Input* yscale_edit
-            { zscale_edit = new Fl_Value_Input(858, 270, 48, 21, "Z:");
+            { zscale_edit = new Fl_Value_Input(858, 318, 48, 21, "Z:");
               zscale_edit->maximum(20);
               zscale_edit->step(0.1);
               zscale_edit->value(1);
@@ -210,6 +210,11 @@ Fl_Double_Window* EditorWindow::show_window() {
             } // Fl_Value_Input* zscale_edit
             o->end();
           } // Fl_Group* o
+          { parent_edit = new Fl_Input(699, 147, 171, 21, "Parent:");
+            parent_edit->callback((Fl_Callback*)edit_name_callback);
+            parent_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+            parent_edit->when(FL_WHEN_ENTER_KEY);
+          } // Fl_Input* parent_edit
           o->end();
         } // Fl_Scroll* o
         o->end();
