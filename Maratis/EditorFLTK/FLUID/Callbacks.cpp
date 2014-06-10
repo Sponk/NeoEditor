@@ -168,6 +168,11 @@ void open_project_callback(Fl_Menu_*, void*)
         current_project.changed = false;
         current_project.path = filename;
 
+#ifndef WIN32
+        current_project.path = current_project.path.erase(current_project.path.find_last_of("/")+1, current_project.path.length());
+#else
+        current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
+#endif
         Maratis::getInstance()->loadProject(filename);
 
         current_project.level = Maratis::getInstance()->getCurrentLevel();
@@ -1059,7 +1064,8 @@ void save_level_callback(Fl_Menu_ *, long mode)
     case 0:
         if(current_project.level.empty())
         {
-            filename = fl_native_file_chooser("Select a file to save", "*.level", NULL, Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
+            filename = fl_native_file_chooser("Select a file to save", "*.level",  (current_project.path + "levels").c_str(),
+                                              Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
 
             if(filename == NULL)
                 return;
@@ -1072,7 +1078,8 @@ void save_level_callback(Fl_Menu_ *, long mode)
         break;
     // Save as
     case 1:
-        filename = fl_native_file_chooser("Select a file to save", "*.level", NULL, Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
+        filename = fl_native_file_chooser("Select a file to save", "*.level", (current_project.path + "levels").c_str(),
+                                          Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
 
         if(filename == NULL)
             return;
@@ -1166,7 +1173,7 @@ void edit_object_properties(Fl_Value_Input*, void*)
 
 void add_mesh_callback(Fl_Menu_*, void*)
 {
-    const char* filename = fl_native_file_chooser("Choose mesh", "*.mesh", NULL, Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser("Choose mesh", "*.mesh", (current_project.path + "meshs").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(filename)
     {
@@ -1248,7 +1255,7 @@ bool text_load_font(const char* name, MOText* text)
 
 void text_find_font_callback(Fl_Button*, void*)
 {
-    const char* filename = fl_native_file_chooser("Choose font", "*.ttf", NULL, Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser("Choose font", "*.ttf", (current_project.path + "fonts").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
     MLevel* level = MEngine::getInstance()->getLevel();
     MOText* text = level->getCurrentScene()->getTextByName(window.name_edit->value());
 
@@ -1334,7 +1341,7 @@ void choose_text_color(Fl_Button*, void*)
 
 void add_text_callback(Fl_Menu_ *, void *)
 {
-    const char* filename = fl_native_file_chooser("Choose font", "*.ttf", NULL, Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser("Choose font", "*.ttf", (current_project.path + "fonts").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(!filename)
         return;
@@ -1440,7 +1447,7 @@ void update_behavior_menu()
 
 void import_mesh_callback(Fl_Menu_*, void*)
 {
-    const char* filename = fl_native_file_chooser("Choose file", "*.obj, *.dae, *.3ds", NULL, Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser("Choose file", "*.obj *.dae *.3ds", current_project.path.c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(!filename)
         return;
@@ -1474,7 +1481,7 @@ void redo_callback(Fl_Menu_*, void*)
 
 void add_sound_callback(Fl_Menu_ *, void *)
 {
-    const char* filename = fl_native_file_chooser("Choose file", "*.wav, *.ogg", NULL, Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser("Choose file", "*.wav, *.ogg", (current_project.path + "sounds").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(!filename)
         return;
