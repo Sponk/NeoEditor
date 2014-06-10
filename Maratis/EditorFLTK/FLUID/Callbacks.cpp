@@ -695,7 +695,6 @@ void scene_tree_callback(Fl_Tree* tree, void*)
 
             if(update_name)
             {
-                MLOG_INFO("Physics!");
                 window.object_ghost_button->value(phys->isGhost());
                 window.object_physics_button->value(1);
             }
