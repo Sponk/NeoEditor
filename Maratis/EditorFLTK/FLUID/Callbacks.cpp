@@ -695,6 +695,7 @@ void scene_tree_callback(Fl_Tree* tree, void*)
 
             if(update_name)
             {
+                MLOG_INFO("Physics!");
                 window.object_ghost_button->value(phys->isGhost());
                 window.object_physics_button->value(1);
             }
@@ -1130,8 +1131,19 @@ void edit_object_chk_btn(Fl_Check_Button*, void*)
 
     MPhysicsProperties* phys = entity->getPhysicsProperties();
 
-    if(phys)
+    if(phys && window.object_physics_button->value())
         phys->setGhost(window.object_ghost_button->value());
+    else if(!phys && window.object_physics_button->value())
+    {
+        entity->createPhysicsProperties();
+        phys = entity->getPhysicsProperties();
+        phys->setGhost(window.object_ghost_button->value());
+    }
+    else if(phys && !window.object_physics_button->value())
+    {
+        entity->deletePhysicsProperties();
+        return;
+    }
 
     window.glbox->redraw();
 }
@@ -1145,17 +1157,7 @@ void edit_object_properties(Fl_Value_Input*, void*)
 
     MPhysicsProperties* phys = entity->getPhysicsProperties();
 
-    if(!phys && window.object_physics_button->value())
-    {
-        entity->createPhysicsProperties();
-        phys = entity->getPhysicsProperties();
-    }
-    else if(phys && !window.object_physics_button->value())
-    {
-        entity->deletePhysicsProperties();
-        return;
-    }
-    else if(!phys)
+    if(!phys)
         return;
 
     phys->setMass(window.object_mass_edit->value());
