@@ -97,6 +97,17 @@ void update_editor(void*)
         Maratis::getInstance()->setTitleChanged(false);
     }
 
+    MGame* game = MEngine::getInstance()->getGame();
+    if(game)
+    {
+        if(!game->isRunning())
+            MFilesUpdate::update();
+    }
+    else
+    {
+        MFilesUpdate::update();
+    }
+
     // MLOG_INFO("Timeout!");
     Fl::add_timeout(0.01, update_editor);
 }
