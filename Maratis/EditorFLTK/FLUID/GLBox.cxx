@@ -108,7 +108,6 @@ void update_editor(void*)
         MFilesUpdate::update();
     }
 
-    // MLOG_INFO("Timeout!");
     Fl::add_timeout(0.01, update_editor);
 }
 
@@ -158,7 +157,7 @@ int GLBox::handle(int event)
     {
     case FL_KEYBOARD:
         {
-            if(this != Fl::focus())
+            if(this != Fl::focus() || Fl::event_ctrl())
                 return 0;
 
             key[0] = toupper(Fl::event_text()[0]);
