@@ -988,6 +988,10 @@ void edit_name_callback(Fl_Input*, void*)
 
         Maratis::getInstance()->linkTwoObjects(parent, object);
     }
+    else if(parent && !strcmp(window.parent_edit->value(), "none") || strlen(window.parent_edit->value()) == 0)
+    {
+        Maratis::getInstance()->unlinkTwoObjects(parent, object);
+    }
 
     update_scene_tree();
 }
