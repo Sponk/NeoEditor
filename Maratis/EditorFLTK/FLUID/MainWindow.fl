@@ -5,12 +5,12 @@ code_name {.cxx}
 decl {\#include "Callbacks.h"} {private local
 } 
 
-class EditorWindow {open
+class EditorWindow {open selected
 } {
   Function {show_window()} {} {
     Fl_Window {} {
       label {Maratis Editor} open
-      xywh {2083 306 918 624} type Double resizable size_range {0 0 2048 2048} visible
+      xywh {1826 268 918 624} type Double resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -163,6 +163,16 @@ class EditorWindow {open
           MenuItem {} {
             label {Add Scene}
             callback add_scene_callback
+            xywh {0 0 100 20} labelsize 14
+          }
+        }
+        Submenu {} {
+          label Help open
+          xywh {0 0 100 20} labelsize 14
+        } {
+          MenuItem {} {
+            label About
+            callback about_menu_callback
             xywh {0 0 100 20} labelsize 14
           }
         }
@@ -437,10 +447,9 @@ class EditorWindow {open
       }
     }
   }
-  Function {create_object_window()} {open
-  } {
-    Fl_Window {} {open selected
-      xywh {1835 249 261 716} type Double visible
+  Function {create_object_window()} {} {
+    Fl_Window {} {open
+      xywh {1698 231 261 716} type Double hide
     } {
       Fl_Group {} {
         label {Settings:} open

@@ -26,6 +26,7 @@ extern void add_text_callback(Fl_Menu_*, void*);
 extern void add_camera_callback(Fl_Menu_*, void*);
 extern void add_sound_callback(Fl_Menu_*, void*);
 extern void add_scene_callback(Fl_Menu_*, void*);
+extern void about_menu_callback(Fl_Menu_*, void*);
 #include "GLBox.h"
 #include <FL/Fl_Tree.H>
 extern void scene_tree_callback(Fl_Tree*, void*);

@@ -42,6 +42,9 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
  {0,0,0,0,0,0,0,0,0},
  {"Add Scene", 0,  (Fl_Callback*)add_scene_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0},
+ {"Help", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
+ {"About", 0,  (Fl_Callback*)about_menu_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {0,0,0,0,0,0,0,0,0},
  {0,0,0,0,0,0,0,0,0}
 };
 Fl_Menu_Item* EditorWindow::behavior_menu = EditorWindow::menu_menu_bar + 34;

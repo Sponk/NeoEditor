@@ -1614,3 +1614,9 @@ void duplicate_object_callback(Fl_Menu_ *, void *)
     update_scene_tree();
     window.glbox->redraw();
 }
+
+// TODO: Real about dialog
+void about_menu_callback(Fl_Menu_*, void*)
+{
+    fl_alert("This program is distributed under the terms of the GNU General Public License.");
+}
