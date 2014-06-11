@@ -648,13 +648,14 @@ void scene_tree_callback(Fl_Tree* tree, void*)
     }
 
     // Translate to object for easier navigation
-    if(Fl::event_clicks())
+    // TODO: Check for real double click!
+    /*if(Fl::event_clicks())
     {
         MOCamera* vue = Maratis::getInstance()->getPerspectiveVue();
         vue->setPosition(object->getPosition() - MVector3(10,0,0));
         vue->updateMatrix();
         window.glbox->redraw();
-    }
+    }*/
 
     // TODO: Multiple selection!
     Maratis::getInstance()->clearSelectedObjects();
@@ -702,6 +703,7 @@ void scene_tree_callback(Fl_Tree* tree, void*)
             {
                 window.object_ghost_button->value(phys->isGhost());
                 window.object_physics_button->value(1);
+                window.object_shape_choice->value(phys->getCollisionShape());
             }
         }
         else if(update_name)

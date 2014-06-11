@@ -7,11 +7,10 @@ decl {\#include "Callbacks.h"} {private local
 
 class EditorWindow {open
 } {
-  Function {show_window()} {open
-  } {
+  Function {show_window()} {} {
     Fl_Window {} {
       label {Maratis Editor} open
-      xywh {1812 330 918 624} type Double resizable size_range {0 0 2048 2048} visible
+      xywh {2083 306 918 624} type Double resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -315,7 +314,7 @@ class EditorWindow {open
             }
             Fl_Input parent_edit {
               label {Parent:} user_data_type {void*}
-              callback edit_name_callback selected
+              callback edit_name_callback
               xywh {699 147 171 21} align 5 when 8
             }
           }
@@ -438,9 +437,10 @@ class EditorWindow {open
       }
     }
   }
-  Function {create_object_window()} {} {
-    Fl_Window {} {open
-      xywh {2081 210 261 716} type Double hide
+  Function {create_object_window()} {open
+  } {
+    Fl_Window {} {open selected
+      xywh {1835 249 261 716} type Double visible
     } {
       Fl_Group {} {
         label {Settings:} open
@@ -460,9 +460,9 @@ class EditorWindow {open
         label {Physics:} open
         xywh {5 132 218 285} box ENGRAVED_FRAME align 5
       } {
-        Fl_Choice {} {
+        Fl_Choice object_shape_choice {
           label {Shape:} open
-          xywh {18 201 195 27} down_box BORDER_BOX align 5
+          xywh {18 189 195 27} down_box BORDER_BOX align 5
         } {
           MenuItem {} {
             label Box
@@ -510,22 +510,22 @@ class EditorWindow {open
         Fl_Check_Button object_ghost_button {
           label Ghost
           callback edit_object_chk_btn
-          xywh {18 237 78 21} down_box DOWN_BOX
+          xywh {18 222 78 21} down_box DOWN_BOX
         }
         Fl_Value_Input object_mass_edit {
           label {Mass:}
           callback edit_object_properties
-          xywh {18 291 195 21} align 5
+          xywh {18 261 195 21} align 5
         }
         Fl_Value_Input object_fric_edit {
           label {Friction:}
           callback edit_object_properties
-          xywh {18 336 195 21} align 5
+          xywh {18 306 195 21} align 5
         }
         Fl_Value_Input object_rest_edit {
           label {Restitution:}
           callback edit_object_properties
-          xywh {18 381 195 21} align 5
+          xywh {18 351 195 21} align 5
         }
         Fl_Check_Button object_physics_button {
           label Physics

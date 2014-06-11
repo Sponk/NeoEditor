@@ -110,7 +110,8 @@ public:
   Fl_Double_Window* create_object_window();
   Fl_Output *object_mesh_edit;
   Fl_Check_Button *object_invisible_button;
-  static Fl_Menu_Item menu_Shape[];
+  Fl_Choice *object_shape_choice;
+  static Fl_Menu_Item menu_object_shape_choice[];
   Fl_Check_Button *object_ghost_button;
   Fl_Value_Input *object_mass_edit;
   Fl_Value_Input *object_fric_edit;

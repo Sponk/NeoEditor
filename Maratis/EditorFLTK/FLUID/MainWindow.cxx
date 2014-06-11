@@ -46,7 +46,7 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
 };
 Fl_Menu_Item* EditorWindow::behavior_menu = EditorWindow::menu_menu_bar + 34;
 
-Fl_Menu_Item EditorWindow::menu_Shape[] = {
+Fl_Menu_Item EditorWindow::menu_object_shape_choice[] = {
  {"Box", 0,  (Fl_Callback*)edit_shape_callback, (void*)(0), 0, FL_NORMAL_LABEL, 0, 14, 0},
  {"Sphere", 0,  (Fl_Callback*)edit_shape_callback, (void*)(1), 0, FL_NORMAL_LABEL, 0, 14, 0},
  {"Cone", 0,  (Fl_Callback*)edit_shape_callback, (void*)(2), 0, FL_NORMAL_LABEL, 0, 14, 0},
@@ -374,24 +374,24 @@ Fl_Double_Window* EditorWindow::create_object_window() {
     { Fl_Group* o = new Fl_Group(5, 132, 218, 285, "Physics:");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      { Fl_Choice* o = new Fl_Choice(18, 201, 195, 27, "Shape:");
-        o->down_box(FL_BORDER_BOX);
-        o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-        o->menu(menu_Shape);
-      } // Fl_Choice* o
-      { object_ghost_button = new Fl_Check_Button(18, 237, 78, 21, "Ghost");
+      { object_shape_choice = new Fl_Choice(18, 189, 195, 27, "Shape:");
+        object_shape_choice->down_box(FL_BORDER_BOX);
+        object_shape_choice->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+        object_shape_choice->menu(menu_object_shape_choice);
+      } // Fl_Choice* object_shape_choice
+      { object_ghost_button = new Fl_Check_Button(18, 222, 78, 21, "Ghost");
         object_ghost_button->down_box(FL_DOWN_BOX);
         object_ghost_button->callback((Fl_Callback*)edit_object_chk_btn);
       } // Fl_Check_Button* object_ghost_button
-      { object_mass_edit = new Fl_Value_Input(18, 291, 195, 21, "Mass:");
+      { object_mass_edit = new Fl_Value_Input(18, 261, 195, 21, "Mass:");
         object_mass_edit->callback((Fl_Callback*)edit_object_properties);
         object_mass_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* object_mass_edit
-      { object_fric_edit = new Fl_Value_Input(18, 336, 195, 21, "Friction:");
+      { object_fric_edit = new Fl_Value_Input(18, 306, 195, 21, "Friction:");
         object_fric_edit->callback((Fl_Callback*)edit_object_properties);
         object_fric_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* object_fric_edit
-      { object_rest_edit = new Fl_Value_Input(18, 381, 195, 21, "Restitution:");
+      { object_rest_edit = new Fl_Value_Input(18, 351, 195, 21, "Restitution:");
         object_rest_edit->callback((Fl_Callback*)edit_object_properties);
         object_rest_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* object_rest_edit
