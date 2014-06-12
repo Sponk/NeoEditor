@@ -699,6 +699,23 @@ void scene_tree_callback(Fl_Tree* tree, void*)
             window.object_fric_edit->value(phys->getFriction());
             window.object_rest_edit->value(phys->getRestitution());
 
+            MPhysicsConstraint* constraint = phys->getConstraint();
+
+            if(constraint)
+            {
+                MVector3 pivot;
+                pivot = constraint->pivot;
+                window.xpivot_edit->value(pivot.x);
+                window.ypivot_edit->value(pivot.y);
+                window.zpivot_edit->value(pivot.z);
+            }
+            else
+            {
+                window.xpivot_edit->deactivate();
+                window.ypivot_edit->deactivate();
+                window.zpivot_edit->deactivate();
+            }
+
             if(update_name)
             {
                 window.object_ghost_button->value(phys->isGhost());
@@ -1206,6 +1223,15 @@ void edit_object_properties(Fl_Value_Input*, void*)
     phys->setMass(window.object_mass_edit->value());
     phys->setFriction(window.object_fric_edit->value());
     phys->setRestitution(window.object_rest_edit->value());
+
+    MPhysicsConstraint* constraint = phys->getConstraint();
+
+    if(constraint)
+    {
+        constraint->pivot.x = window.xpivot_edit->value();
+        constraint->pivot.y = window.ypivot_edit->value();
+        constraint->pivot.z = window.zpivot_edit->value();
+    }
 }
 
 void add_mesh_callback(Fl_Menu_*, void*)

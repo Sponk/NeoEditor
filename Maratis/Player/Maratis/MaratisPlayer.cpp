@@ -66,7 +66,7 @@ m_renderer(NULL)
 		m_game = new MGame();
 		m_packageManager = new MPackageManagerNPK();
 		
-		m_physics->setSimulationQuality(2);
+        m_physics->setSimulationQuality(2);
 	}
 
 	// start

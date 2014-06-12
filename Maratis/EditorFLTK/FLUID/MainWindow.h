@@ -118,6 +118,9 @@ public:
   Fl_Value_Input *object_fric_edit;
   Fl_Value_Input *object_rest_edit;
   Fl_Check_Button *object_physics_button;
+  Fl_Value_Input *xpivot_edit;
+  Fl_Value_Input *ypivot_edit;
+  Fl_Value_Input *zpivot_edit;
   Fl_Double_Window* create_camera_window();
   Fl_Value_Input *camera_color_r_edit;
   Fl_Value_Input *camera_color_g_edit;

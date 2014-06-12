@@ -358,7 +358,7 @@ Fl_Double_Window* EditorWindow::create_publish_window() {
 
 Fl_Double_Window* EditorWindow::create_object_window() {
   Fl_Double_Window* w;
-  { Fl_Double_Window* o = new Fl_Double_Window(261, 716);
+  { Fl_Double_Window* o = new Fl_Double_Window(360, 714);
     w = o;
     o->user_data((void*)(this));
     { Fl_Group* o = new Fl_Group(5, 27, 218, 78, "Settings:");
@@ -374,7 +374,7 @@ Fl_Double_Window* EditorWindow::create_object_window() {
       } // Fl_Check_Button* object_invisible_button
       o->end();
     } // Fl_Group* o
-    { Fl_Group* o = new Fl_Group(5, 132, 218, 285, "Physics:");
+    { Fl_Group* o = new Fl_Group(5, 132, 219, 249, "Physics:");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       { object_shape_choice = new Fl_Choice(18, 189, 195, 27, "Shape:");
@@ -402,6 +402,26 @@ Fl_Double_Window* EditorWindow::create_object_window() {
         object_physics_button->down_box(FL_DOWN_BOX);
         object_physics_button->callback((Fl_Callback*)edit_object_chk_btn);
       } // Fl_Check_Button* object_physics_button
+      o->end();
+    } // Fl_Group* o
+    { Fl_Group* o = new Fl_Group(6, 403, 219, 32, "Pivot:");
+      o->box(FL_ENGRAVED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { xpivot_edit = new Fl_Value_Input(27, 408, 51, 21, "X:");
+        xpivot_edit->maximum(1000);
+        xpivot_edit->step(1);
+        xpivot_edit->callback((Fl_Callback*)edit_object_properties);
+      } // Fl_Value_Input* xpivot_edit
+      { ypivot_edit = new Fl_Value_Input(96, 408, 51, 21, "Y:");
+        ypivot_edit->maximum(1000);
+        ypivot_edit->step(1);
+        ypivot_edit->callback((Fl_Callback*)edit_object_properties);
+      } // Fl_Value_Input* ypivot_edit
+      { zpivot_edit = new Fl_Value_Input(165, 407, 51, 21, "Z:");
+        zpivot_edit->maximum(1000);
+        zpivot_edit->step(1);
+        zpivot_edit->callback((Fl_Callback*)edit_object_properties);
+      } // Fl_Value_Input* zpivot_edit
       o->end();
     } // Fl_Group* o
     o->end();
