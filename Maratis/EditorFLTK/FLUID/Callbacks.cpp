@@ -1503,6 +1503,8 @@ void import_mesh_callback(Fl_Menu_*, void*)
         return;
 
     M_importAssimpMeshes(filename);
+    update_scene_tree();
+    window.glbox->redraw();
 }
 
 void delete_object_callback(Fl_Menu_*, void*)
