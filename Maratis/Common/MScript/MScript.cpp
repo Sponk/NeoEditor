@@ -3491,6 +3491,16 @@ int doFile(lua_State * L)
 	return 0;
 }
 
+int setPhysicsQuality(lua_State* L)
+{
+    if(! isFunctionOk(L, "setPhysicsQuality", 1))
+        return 0;
+
+    int quality = lua_tonumber(L, 1);
+    MEngine::getInstance()->getPhysicsContext()->setSimulationQuality(quality);
+
+    return 1;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Init
@@ -3604,6 +3614,8 @@ void MScript::init(void)
 	lua_register(m_state, "clearForces",		clearForces);
 	lua_register(m_state, "getNumCollisions",	getNumCollisions);
 	lua_register(m_state, "rayHit",				rayHit);
+
+    lua_register(m_state, "setPhysicsQuality",  setPhysicsQuality);
 	
 	// input
 	lua_register(m_state, "isKeyPressed", isKeyPressed);
