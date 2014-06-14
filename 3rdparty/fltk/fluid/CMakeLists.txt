@@ -22,7 +22,7 @@ set(CPPFILES
 )
 
 add_executable(fluid ${CPPFILES})
-target_link_libraries(fluid fltk fltk_images fltk_forms -ldl)
+target_link_libraries(fluid fltk fltk_images fltk_forms -ldl ${ZLIB_LIBRARY})
 
 # link in optional libraries
 if(FLTK_HAVE_CAIRO)
