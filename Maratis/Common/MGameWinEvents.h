@@ -220,27 +220,27 @@ void gameWinEvents(MWinEvent * windowEvents)
 			{
 				case MCONTROLLER_AXIS_LEFTX:
 					sprintf(name, "JOY%d_AXIS_LEFTX", joy+1);
-					input->setAxis(name, windowEvents->data[2] / SHRT_MAX);
+                    input->setAxis(name, (float) windowEvents->data[2] / SHRT_MAX);
 					break;
 				case MCONTROLLER_AXIS_LEFTY:
 					sprintf(name, "JOY%d_AXIS_LEFTY", joy+1);
-					input->setAxis(name, windowEvents->data[2] / SHRT_MAX);
+                    input->setAxis(name, (float) windowEvents->data[2] / SHRT_MAX);
 					break;
 				case MCONTROLLER_AXIS_RIGHTX:
 					sprintf(name, "JOY%d_AXIS_RIGHTX", joy+1);
-					input->setAxis(name, windowEvents->data[2] / SHRT_MAX);
+                    input->setAxis(name, (float) windowEvents->data[2] / SHRT_MAX);
 					break;
 				case MCONTROLLER_AXIS_RIGHTY:
 					sprintf(name, "JOY%d_AXIS_RIGHTY", joy+1);
-					input->setAxis(name, windowEvents->data[2] / SHRT_MAX);
+                    input->setAxis(name, (float) windowEvents->data[2] / SHRT_MAX);
 					break;
 				case MCONTROLLER_AXIS_TRIGGERLEFT:
 					sprintf(name, "JOY%d_AXIS_TRIGGERLEFT", joy+1);
-					input->setAxis(name, windowEvents->data[2] / SHRT_MAX);
+                    input->setAxis(name, (float) windowEvents->data[2] / SHRT_MAX);
 					break;
 				case MCONTROLLER_AXIS_TRIGGERRIGHT:
 					sprintf(name, "JOY%d_AXIS_TRIGGERRIGHT", joy+1);
-					input->setAxis(name, windowEvents->data[2] / SHRT_MAX);
+                    input->setAxis(name, (float) windowEvents->data[2] / SHRT_MAX);
 					break;
 			}
 		}
