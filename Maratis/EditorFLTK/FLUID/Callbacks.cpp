@@ -140,7 +140,7 @@ void update_scene_tree()
 
 void open_level_callback(Fl_Menu_*, void*)
 {
-    const char* filename = fl_native_file_chooser("Open level", "*.level", NULL, Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser("Open level", "*.level", current_project.path.c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(filename)
     {

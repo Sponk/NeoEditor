@@ -440,7 +440,7 @@ else()
    set(FLTK_JPEG_LIBRARIES fltk_jpeg)
    include_directories(${FLTK_SOURCE_DIR}/jpeg)
    set(FLTK_BUILTIN_JPEG_FOUND TRUE)
-endif(OPTION_USE_SYSTEM_LIBJPEG AND JPEG_FOUND)
+endif(OPTION_USE_SYSTEM_LIBJPEG)
 
 if(OPTION_USE_SYSTEM_LIBJPEG AND NOT JPEG_FOUND)
    message(STATUS "\ncannot find system jpeg library - using built-in\n")
@@ -465,7 +465,7 @@ else()
    set(ZLIB_INCLUDE_DIR ${FLTK_SOURCE_DIR}/zlib)
    include_directories(${FLTK_SOURCE_DIR}/zlib)
    set(FLTK_BUILTIN_ZLIB_FOUND TRUE)
-endif(OPTION_USE_SYSTEM_ZLIB AND ZLIB_FOUND)
+endif(OPTION_USE_SYSTEM_ZLIB)
 
 if(OPTION_USE_SYSTEM_ZLIB AND NOT ZLIB_FOUND)
    message(STATUS "\ncannot find system zlib library - using built-in\n")
@@ -493,7 +493,7 @@ else()
    set(HAVE_PNG_SET_TRNS_TO_ALPHA 1)
    include_directories(${FLTK_SOURCE_DIR}/png)
    set(FLTK_BUILTIN_PNG_FOUND TRUE)
-endif(OPTION_USE_SYSTEM_LIBPNG AND PNG_FOUND)
+endif(OPTION_USE_SYSTEM_LIBPNG)
 
 if(OPTION_USE_SYSTEM_LIBPNG AND NOT PNG_FOUND)
    message(STATUS "\ncannot find system png library - using built-in\n")
@@ -615,16 +615,6 @@ if(OPTION_CREATE_LINKS)
       @ONLY
    )
 endif(OPTION_CREATE_LINKS)
-
-# generate uninstall target
-configure_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/CMake/cmake_uninstall.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-  @ONLY
-)
-add_custom_target(uninstall
-  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-)
 
 #######################################################################
 # build examples - these have to be after fluid is built/imported
