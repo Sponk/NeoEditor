@@ -611,7 +611,7 @@ void create_behavior_ui(MObject3d* object)
         }
 
         Fl_Button* remove_button = new Fl_Button(x+5, y+height, 205, 22, "Remove");
-        remove_button->callback((Fl_Callback*) remove_behavior, (void*) object->getBehaviorsNumber()-1);
+        remove_button->callback((Fl_Callback*) remove_behavior, (void*) (object->getBehaviorsNumber()-1));
         group->add(remove_button);
 
         height += 27;
