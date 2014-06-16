@@ -323,7 +323,7 @@ public:
 	void drawMainView(MScene * scene);
 
 	// selection
-	void selectObjectsInMainView(MScene * scene);
+    void selectObjectsInMainView(MScene* scene, bool multipleSelection);
 	void updateSelectionCenter(void);
 	void updateViewCenter(void);
 

@@ -255,7 +255,7 @@ int GLBox::handle(int event)
 
             if(Fl::event_button1())
             {
-                Maratis::getInstance()->selectObjectsInMainView(MEngine::getInstance()->getLevel()->getCurrentScene());
+                Maratis::getInstance()->selectObjectsInMainView(MEngine::getInstance()->getLevel()->getCurrentScene(), Fl::event_shift());
                 ::window.scene_tree->deselect_all();
 
                 Fl_Tree_Item* item = ::window.scene_tree->root();

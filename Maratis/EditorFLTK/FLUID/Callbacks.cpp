@@ -658,8 +658,8 @@ void scene_tree_callback(Fl_Tree* tree, void*)
     }*/
 
     // TODO: Multiple selection!
-    Maratis::getInstance()->clearSelectedObjects();
-    Maratis::getInstance()->addSelectedObject(object);
+    //Maratis::getInstance()->clearSelectedObjects();
+    //Maratis::getInstance()->addSelectedObject(object);
 
     MVector3 position = object->getPosition();
     MVector3 rotation = object->getEulerRotation();

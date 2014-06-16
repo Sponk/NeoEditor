@@ -1905,11 +1905,8 @@ void Maratis::selectSameMesh(void)
     }
 }
 
-void Maratis::selectObjectsInMainView(MScene * scene)
+void Maratis::selectObjectsInMainView(MScene * scene, bool multipleSelection)
 {
-    // TODO: Multiple selection!!!
-    bool multipleSelection = false;
-
     // get window
     MWindow * window = MWindow::getInstance();
 
