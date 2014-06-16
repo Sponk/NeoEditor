@@ -41,6 +41,9 @@ Fl_Window* camera_window;
 
 Fl_Text_Buffer textbuf;
 
+PlayerConsole console;
+Fl_Text_Buffer console_buffer;
+
 char labels[][2] = {{"X"},{"Y"},{"Z"},{"W"}};
 
 extern MSemaphore updateSemaphore;
@@ -1450,6 +1453,10 @@ void play_game_callback(Fl_Menu_*, void*)
     }
 
     save_level_callback(NULL, 0);
+    Fl_Window* window = console.create_window();
+
+    console.output_edit->buffer(&console_buffer);
+    window->show();
 
 #ifndef WIN32
     std::string project_name = current_project.file_path.substr(current_project.file_path.find_last_of("/")+1);
@@ -1471,6 +1478,9 @@ void play_game_callback(Fl_Menu_*, void*)
 
     while(getline(&line, &size, file) > 0)
     {
+        // TODO: Call this more often!
+        Fl::wait();
+
         if(str_starts_with("profiler", line))
         {
             double time;
@@ -1489,12 +1499,27 @@ void play_game_callback(Fl_Menu_*, void*)
             }
         }
         else
+        {
+            console_buffer.append(line);
             printf("%s", line);
+        }
     }
 
     double avFrame = frametime / framecount;
     MLOG_INFO("Number of frames: " << framecount << " Average frametime: " << avFrame << "ms Average framerate: " << 1000/avFrame);
     MLOG_INFO("Max frametime: " << framemax << "ms Min frametime: " << framemin << "ms");
+
+    std::stringstream report;
+    report << "\n******************************************************\n";
+    report << "Profiling report\n";
+    report << "----------------\n";
+
+    report << "Number of frames: " << framecount << "\n";
+    report << "Average frametime: " << avFrame << " ms\n";
+    report << "Average framerate: " << 1000/avFrame << " FPS\n";
+
+    console_buffer.append(report.str().c_str());
+
     fclose(file);
     free(line);
 

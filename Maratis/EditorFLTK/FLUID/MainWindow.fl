@@ -5,13 +5,11 @@ code_name {.cxx}
 decl {\#include "Callbacks.h"} {private local
 } 
 
-class EditorWindow {open
-} {
-  Function {show_window()} {open
-  } {
+class EditorWindow {} {
+  Function {show_window()} {} {
     Fl_Window {} {
-      label {Maratis Editor} open selected
-      xywh {1798 284 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
+      label {Maratis Editor} open
+      xywh {1861 264 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -844,19 +842,16 @@ class SceneSetupDlg {} {
   }
 } 
 
-Function {ok_button_callback(Fl_Button* button, void*)} {open
-} {
+Function {ok_button_callback(Fl_Button* button, void*)} {} {
   code {button->parent()->label("Success");
 button->parent()->hide();} {}
 } 
 
-Function {cancel_button_callback(Fl_Button* button, void*)} {open
-} {
+Function {cancel_button_callback(Fl_Button* button, void*)} {} {
   code {button->parent()->hide();} {}
 } 
 
-Function {find_file_callback(Fl_Button* button, void*)} {open
-} {
+Function {find_file_callback(Fl_Button* button, void*)} {} {
   code {const char* filename = fl_native_file_chooser("Choose file", "*.lua", NULL, Fl_Native_File_Chooser::BROWSE_FILE);
 
 int children = button->parent()->children();
@@ -871,4 +866,18 @@ for(int i = 0; i < children; i++)
 		return;	
 	}
 }} {}
+} 
+
+class PlayerConsole {open selected
+} {
+  Function {create_window()} {open
+  } {
+    Fl_Window {} {open
+      xywh {1856 420 915 210} type Double visible
+    } {
+      Fl_Text_Display output_edit {
+        xywh {0 0 915 210} box UP_BOX
+      }
+    }
+  }
 } 

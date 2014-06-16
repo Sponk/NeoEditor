@@ -173,4 +173,11 @@ public:
 void ok_button_callback(Fl_Button* button, void*);
 void cancel_button_callback(Fl_Button* button, void*);
 void find_file_callback(Fl_Button* button, void*);
+#include <FL/Fl_Text_Display.H>
+
+class PlayerConsole {
+public:
+  Fl_Double_Window* create_window();
+  Fl_Text_Display *output_edit;
+};
 #endif
