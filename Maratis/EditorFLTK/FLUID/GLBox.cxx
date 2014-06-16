@@ -129,7 +129,18 @@ void GLBox::draw()
         gui->setRenderingContext(render);
 
         if(!current_project.file_path.empty())
+        {
+            current_project.changed = false;
+            current_project.path = current_project.file_path;
+
+#ifndef WIN32
+            current_project.path = current_project.path.erase(current_project.path.find_last_of("/")+1, current_project.path.length());
+#else
+            current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
+#endif
             maratis->loadProject(current_project.file_path.c_str());
+            current_project.level = maratis->getCurrentLevel();
+        }
 
         update_scene_tree();
 
