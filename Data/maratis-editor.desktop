@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=0.3.21
+Type=Application
+Terminal=false
+Exec=/usr/Maratis/MaratisEditor %f
+Path=/usr/Maratis
+Name=MaratisEditor
+Icon=/usr/share/icons/maratis.svg
+Name[de_DE]=MaratisEditor

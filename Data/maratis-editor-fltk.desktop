@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=0.3.21
+Type=Application
+Terminal=false
+Exec=/usr/Maratis/MaratisEditorFLTK %f
+Path=/usr/Maratis
+Name=MaratisEditorFLTK
+Icon=/usr/share/icons/maratis.svg
+Name[de_DE]=MaratisEditorFLTK

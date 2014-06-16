@@ -106,7 +106,8 @@ IF(UNIX AND NOT APPLE)
 
   SET( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lm -ldl -Wl,-rpath ." )
 
-  SET(CPACK_GENERATOR "DEB;RPM;STGZ;TGZ")
+  SET(CPACK_PACKAGE_CONTACT Yannick Pflanzer <yannick.pflanzer@scary-squid.de>)
+  SET(CPACK_GENERATOR "STGZ;TGZ;DEB;RPM;")
 ENDIF(UNIX AND NOT APPLE)
 
 # Include cpack after all system specifics
