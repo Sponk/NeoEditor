@@ -1457,6 +1457,7 @@ void play_game_callback(Fl_Menu_*, void*)
 
     console.output_edit->buffer(&console_buffer);
     window->show();
+    Fl::wait();
 
 #ifndef WIN32
     std::string project_name = current_project.file_path.substr(current_project.file_path.find_last_of("/")+1);
