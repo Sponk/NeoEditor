@@ -160,6 +160,7 @@ int input_thread(void* data)
     return 0;
 }
 
+// TODO: Make profiler a compiler option
 // main
 int main(int argc, char **argv)
 {
@@ -167,7 +168,8 @@ int main(int argc, char **argv)
 
 	unsigned int width = 1024;
 	unsigned int height = 768;
-	int fullscreen = false;
+    bool fullscreen = false;
+    bool profiler = false;
 
 	if(argc > 2)
 		sscanf(argv[2], "%d", &width);
@@ -175,11 +177,11 @@ int main(int argc, char **argv)
 		sscanf(argv[3], "%d", &height);
 	if(argc > 4)
 		sscanf(argv[4], "%d", &fullscreen);
-
+    if(argc > 5)
+        sscanf(argv[5], "%d", &profiler);
 	
 	// get engine (first time call onstructor)
 	MEngine * engine = MEngine::getInstance();
-
 	
 	// get window (first time call onstructor)
 	MWindow * window = MWindow::getInstance();
@@ -193,7 +195,6 @@ int main(int argc, char **argv)
 
 	if(fullscreen)
 		window->hideCursor();
-
 	
 	// set current directory
 	char rep[256];
@@ -262,6 +263,9 @@ int main(int argc, char **argv)
 		}
 	}
 	
+    if(profiler)
+        MLOG_INFO("Profiling enabled");
+
     // create the update thread
     MThread updateThread;
     MThread inputThread;
@@ -289,7 +293,14 @@ int main(int argc, char **argv)
 
         if(window->getFocus())
         {
+            int tick = engine->getSystemContext()->getSystemTick();
             draw();
+
+            if(profiler)
+            {
+                printf("profiler frametime %d\n", engine->getSystemContext()->getSystemTick() - tick);
+                fflush(stdout);
+            }
         }
         else
         {

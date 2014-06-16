@@ -1434,6 +1434,13 @@ void add_camera_callback(Fl_Menu_*,void*)
 	update_scene_tree();
 }
 
+bool str_starts_with(const char *pre, const char *str)
+{
+    size_t lenpre = strlen(pre);
+    size_t lenstr = strlen(str);
+    return lenstr < lenpre ? false : strncmp(pre, str, lenpre) == 0;
+}
+
 void play_game_callback(Fl_Menu_*, void*)
 {
     if(current_project.path.empty())
@@ -1445,13 +1452,50 @@ void play_game_callback(Fl_Menu_*, void*)
     save_level_callback(NULL, 0);
 
 #ifndef WIN32
+    std::string project_name = current_project.file_path.substr(current_project.file_path.find_last_of("/")+1);
+    project_name = project_name.erase(project_name.find_last_of("."));
 
-    FILE* file = popen((current_project.path + "MaratisPlayer").c_str(), "r");
-
+    FILE* file = popen((current_project.path + "MaratisPlayer \"" + project_name + "\" 1024 768 0 1").c_str(), "r");
 #else
     FILE* file = _popen((current_project.path + "MaratisPlayer.exe").c_str(), "r");
 #endif
 
+    size_t size = 256;
+    char* line = (char*) malloc(size);
+
+    double frametime;
+    double framecount;
+    int framemax = 0;
+    int framemin = -1;
+    char str[20];
+
+    while(getline(&line, &size, file) > 0)
+    {
+        if(str_starts_with("profiler", line))
+        {
+            double time;
+            sscanf(line, "%*s %s %lf", str, &time);
+
+            if(!strcmp(str, "frametime"))
+            {
+                frametime += time;
+                framecount++;
+
+                if(time > framemax)
+                    framemax = time;
+
+                if(time < framemin || framemin < 0)
+                    framemin = time;
+            }
+        }
+        else
+            printf("%s", line);
+    }
+
+    double avFrame = frametime / framecount;
+    MLOG_INFO("Number of frames: " << framecount << " Average frametime: " << avFrame << "ms Average framerate: " << 1000/avFrame);
+    MLOG_INFO("Max frametime: " << framemax << "ms Min frametime: " << framemin << "ms");
+    fclose(file);
     update_scene_tree();
 }
 
