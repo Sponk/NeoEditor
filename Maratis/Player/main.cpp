@@ -171,12 +171,7 @@ int main(int argc, char **argv)
     int fullscreen = false;
     int profiler = false;
 
-    for(int i = 0; i < argc; i++)
-    {
-        printf("argc = %d, argv[argc] = %s\n", i, argv[i]);
-    }
-
-	if(argc > 2)
+    if(argc > 2)
 		sscanf(argv[2], "%d", &width);
 	if(argc > 3)
 		sscanf(argv[3], "%d", &height);
