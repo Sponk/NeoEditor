@@ -10,6 +10,7 @@ typedef struct
 {
     std::string path;
     std::string level;
+    std::string file_path;
     bool changed;
 }open_project_t;
 

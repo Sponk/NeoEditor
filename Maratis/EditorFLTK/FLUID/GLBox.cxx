@@ -128,6 +128,9 @@ void GLBox::draw()
         MGui * gui = MGui::getInstance();
         gui->setRenderingContext(render);
 
+        if(!current_project.file_path.empty())
+            maratis->loadProject(current_project.file_path.c_str());
+
         update_scene_tree();
 
         maratis_init = true;

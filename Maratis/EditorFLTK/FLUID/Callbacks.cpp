@@ -175,6 +175,7 @@ void open_project_callback(Fl_Menu_*, void*)
     {
         current_project.changed = false;
         current_project.path = filename;
+        current_project.file_path = filename;
 
 #ifndef WIN32
         current_project.path = current_project.path.erase(current_project.path.find_last_of("/")+1, current_project.path.length());

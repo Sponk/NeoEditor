@@ -37,6 +37,7 @@
 #include <MCore.h>
 #include <MSchedule/MSchedule.h>
 #include "FLUID/MainWindow.h"
+#include "FLUID/Callbacks.h"
 #include <FL/Fl.H>
 
 #ifdef main
@@ -74,6 +75,9 @@ int main(int argc, char **argv)
 
     main_window = window.show_window();
     main_window->show();
+
+    if(argc > 1)
+        current_project.file_path = argv[1];
 
     Fl::add_timeout(0.2, update_editor);
     Fl::run();
