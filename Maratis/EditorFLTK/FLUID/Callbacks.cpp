@@ -161,7 +161,15 @@ void open_project_callback(Fl_Menu_*, void*)
     if(!current_project.path.empty() && !fl_ask("You need to close the current project. Do you want to proceed?"))
         return;
 
-    const char* filename = fl_native_file_chooser("Open project", "*.mproj", NULL, Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* home = NULL;
+
+#ifndef WIN32
+    home = getenv("HOME");
+#else
+    home = getenv("USERPROFILE");
+#endif
+
+    const char* filename = fl_native_file_chooser("Open project", "*.mproj", home, Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(filename)
     {
