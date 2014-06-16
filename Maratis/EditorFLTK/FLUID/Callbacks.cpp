@@ -1496,6 +1496,8 @@ void play_game_callback(Fl_Menu_*, void*)
     MLOG_INFO("Number of frames: " << framecount << " Average frametime: " << avFrame << "ms Average framerate: " << 1000/avFrame);
     MLOG_INFO("Max frametime: " << framemax << "ms Min frametime: " << framemin << "ms");
     fclose(file);
+    free(line);
+
     update_scene_tree();
 }
 

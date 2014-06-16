@@ -72,6 +72,7 @@ Fl_Double_Window* EditorWindow::show_window() {
   Fl_Double_Window* w;
   { Fl_Double_Window* o = new Fl_Double_Window(918, 624, "Maratis Editor");
     w = o;
+    o->labelsize(11);
     o->user_data((void*)(this));
     { menu_bar = new Fl_Menu_Bar(0, 0, 920, 25);
       menu_bar->selection_color((Fl_Color)38);

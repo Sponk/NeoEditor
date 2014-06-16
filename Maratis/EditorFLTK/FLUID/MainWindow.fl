@@ -10,8 +10,8 @@ class EditorWindow {open
   Function {show_window()} {open
   } {
     Fl_Window {} {
-      label {Maratis Editor} open
-      xywh {497 250 918 624} type Double resizable size_range {0 0 2048 2048} visible
+      label {Maratis Editor} open selected
+      xywh {1798 284 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -89,7 +89,7 @@ class EditorWindow {open
           }
           MenuItem {} {
             label {Select all}
-            callback select_all_callback selected
+            callback select_all_callback
             xywh {0 0 100 20} shortcut 0x40061 labelsize 14 divider
           }
           MenuItem {} {

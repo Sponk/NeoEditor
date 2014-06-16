@@ -168,8 +168,13 @@ int main(int argc, char **argv)
 
 	unsigned int width = 1024;
 	unsigned int height = 768;
-    bool fullscreen = false;
-    bool profiler = false;
+    int fullscreen = false;
+    int profiler = false;
+
+    for(int i = 0; i < argc; i++)
+    {
+        printf("argc = %d, argv[argc] = %s\n", i, argv[i]);
+    }
 
 	if(argc > 2)
 		sscanf(argv[2], "%d", &width);
@@ -186,7 +191,7 @@ int main(int argc, char **argv)
 	// get window (first time call onstructor)
 	MWindow * window = MWindow::getInstance();
 
-	// create window
+    // create window
 	if(! window->create("Maratis", width, height, 32, fullscreen == 1))
     {
 		MLOG_ERROR("cannot create window");
@@ -288,6 +293,7 @@ int main(int argc, char **argv)
         if(!isActive)
         {
             engine->getGame()->end();
+            MSemaphoreUnlock(&updateSemaphore);
             break;
         }
 
