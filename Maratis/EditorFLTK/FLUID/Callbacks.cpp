@@ -1649,3 +1649,10 @@ void about_menu_callback(Fl_Menu_*, void*)
 {
     fl_alert("This program is distributed under the terms of the GNU General Public License.");
 }
+
+void select_all_callback(Fl_Menu_*, void*)
+{
+    Maratis::getInstance()->selectAll();
+    update_scene_tree();
+    window.glbox->redraw();
+}
