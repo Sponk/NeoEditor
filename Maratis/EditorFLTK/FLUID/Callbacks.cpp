@@ -1456,6 +1456,7 @@ void play_game_callback(Fl_Menu_*, void*)
     Fl_Window* window = console.create_window();
 
     console.output_edit->buffer(&console_buffer);
+    console_buffer.text("");
     window->show();
     Fl::wait();
 
@@ -1476,6 +1477,8 @@ void play_game_callback(Fl_Menu_*, void*)
     int framemax = 0;
     int framemin = -1;
     char str[20];
+
+    Fl::wait();
 
     while(getline(&line, &size, file) > 0)
     {
