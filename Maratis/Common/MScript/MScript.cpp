@@ -2209,6 +2209,46 @@ int stopSound(lua_State * L)
 	return 0;
 }
 
+int setSoundPitch(lua_State * L)
+{
+    if(!isFunctionOk(L, "setSoundPitch", 2))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            sound->setPitch(lua_tonumber(L, 2));
+        }
+    }
+
+    return 0;
+}
+
+int getSoundPitch(lua_State * L)
+{
+    if(!isFunctionOk(L, "getSoundPitch", 1))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            lua_pushnumber(L, sound->getPitch());
+        }
+    }
+
+    return 1;
+}
+
 int changeScene(lua_State * L)
 {
 	MEngine * engine = MEngine::getInstance();
@@ -3635,6 +3675,8 @@ void MScript::init(void)
 	lua_register(m_state, "stopSound",	  stopSound);
 	lua_register(m_state, "getSoundGain", getSoundGain);
 	lua_register(m_state, "setSoundGain", setSoundGain);
+    lua_register(m_state, "setSoundPitch", setSoundPitch);
+    lua_register(m_state, "getSoundPitch", getSoundPitch);
 	
 	// scene/level
 	lua_register(m_state, "changeScene",			changeScene);
