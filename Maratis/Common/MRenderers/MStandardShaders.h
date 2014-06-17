@@ -143,9 +143,9 @@ string functionsShader = string(
 	"vec3 L = normalize(lightDir);"
 
 	"float lambertTerm = max(dot(N, L), 0.0);"
-	"if(lambertTerm > 0.0)"
+    "if(lambertTerm > 0.0 || spotCos == 1.0)"
 	"{"
-		"if(spotCos > 0.0)"
+        "if(spotCos > 0.0 && spotCos < 1.0)"
 		"{"
 			"float spot = dot(spotDir, -L);"
 			
@@ -165,6 +165,26 @@ string functionsShader = string(
 				"specular = specular + (lightSpecular * spec);"
 			"}"
 		"}"
+        "else if(spotCos >= 1.0)"
+        "{"
+            "float spot = 1.0;"
+
+            "if(spot >= spotCos)"
+            "{"
+                "float shadow = computeShadow(shad, shadCoord, shadMap, shadBias, shadBlur);"
+
+                //"spot = clamp(spot, 0.0, 1.0);"
+
+                "float lightDirLength2 = dot(lightDir, lightDir);"
+                "float attenuation = (spot / (constantAttenuation + (lightDirLength2 * quadraticAttenuation)))*shadow;"
+
+                "diffuse = diffuse + (lightDiffuse * lambertTerm * attenuation);"
+
+                "vec3 S = normalize(E + L);"
+                "float spec = pow(max(dot(S, N), 0.0), MaterialShininess) * attenuation;"
+                "specular = specular + (lightSpecular * spec);"
+            "}"
+        "}"
 		"else"
 		"{"
 			"float lightDirLength2 = dot(lightDir, lightDir);"

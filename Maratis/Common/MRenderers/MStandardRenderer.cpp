@@ -1317,11 +1317,15 @@ void MStandardRenderer::prepareSubMesh(MScene * scene, MOCamera * camera, MOEnti
 		MEntityLight * entityLight = &m_entityLights[m_entityLightsList[l]];
 		MOLight * light = entityLight->light;
 
-		// attenuation
-		float quadraticAttenuation = (8.0f / light->getRadius());
-		quadraticAttenuation = (quadraticAttenuation*quadraticAttenuation)*light->getIntensity();
+        float quadraticAttenuation = 0.0;
+		// attenuation	
+        if(light->getSpotAngle() > 0.0f)
+        {
+            quadraticAttenuation = (8.0f / light->getRadius());
+            quadraticAttenuation = (quadraticAttenuation*quadraticAttenuation)*light->getIntensity();
+        }
 
-		// color
+        // color
 		MVector3 color = light->getFinalColor();
 
 		// set light
@@ -1334,11 +1338,13 @@ void MStandardRenderer::prepareSubMesh(MScene * scene, MOCamera * camera, MOEnti
 
 		// spot
 		render->setLightSpotAngle(l, light->getSpotAngle());
-		if(light->getSpotAngle() < 90){
+        if(light->getSpotAngle() < 90)
+        {
 			render->setLightSpotDirection(l, light->getRotatedVector(MVector3(0, 0, -1)).getNormalized());
 			render->setLightSpotExponent(l, light->getSpotExponent());
 		}
-		else {
+        else
+        {
 			render->setLightSpotExponent(l, 0.0f);
 		}
 
@@ -1350,14 +1356,16 @@ void MStandardRenderer::prepareSubMesh(MScene * scene, MOCamera * camera, MOEnti
 			m_lightShadowBias[l] = light->getShadowBias()*shadowLight->biasUnity;
 			m_lightShadowBlur[l] = light->getShadowBlur();
 			m_lightShadowTexture[l] = (int)shadowLight->shadowTexture;
-			m_lightShadowMatrix[l] = shadowLight->shadowMatrix * (*entity->getMatrix());
+            m_lightShadowMatrix[l] = shadowLight->shadowMatrix * (*entity->getMatrix());
 		}
-		else{
+        else
+        {
 			m_lightShadow[l] = 0;
 		}
 	}
 
-	for(l=lightsNumber; l<4; l++){
+    for(l=lightsNumber; l<4; l++)
+    {
 		render->setLightDiffuse(l, MVector4(0, 0, 0, 0));
 		render->disableLight(l);
 		m_lightShadow[l] = 0;
@@ -1455,11 +1463,21 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 			*lightCamera.getMatrix() = *light->getMatrix();
 			lightCamera.setClippingNear(light->getRadius()*0.001f);
 			lightCamera.setClippingFar(light->getRadius());
-			lightCamera.setFov(light->getSpotAngle()*2.0f);
 
+            MVector3 cameraAxis = lightCamera.getRotatedVector(MVector3(0, 0, -1)).getNormalized();
+
+            if(light->getSpotAngle() == 0)
+            {
+                lightCamera.enableOrtho(true);
+                lightCamera.setFov(light->getRadius()*0.01f);
+            }
+            else
+            {
+                lightCamera.enableOrtho(false);
+                lightCamera.setFov(light->getSpotAngle()*2.0f);
+            }
 
 			MVector3 cameraPos = lightCamera.getTransformedPosition();
-			MVector3 cameraAxis = lightCamera.getRotatedVector(MVector3(0, 0, -1)).getNormalized();
 
 			render->disableScissorTest();
 			render->enableDepthTest();
