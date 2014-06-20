@@ -36,8 +36,6 @@ static char g_currentDirectory[256] = "";
 static unsigned long g_startTick = 0;
 const char * LUA_VEC3 = "LUA_VEC3";
 
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Some frequently used macros
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -938,12 +936,12 @@ int getRotatedVector(lua_State * L)
 	MObject3d * object;
 	lua_Integer id = lua_tointeger(L, 1);
 	
-	if((object = getObject3d(id)))
+    if((object = getObject3d(id)))
 	{
 		MVector3 vec;
 		if(getVector3(L, 2, &vec))
-		{
-			pushFloatArray(L, object->getRotatedVector(vec), 3);
+        {
+            pushFloatArray(L, object->getRotatedVector(vec), 3);
 			return 1;
 		}
 	}
