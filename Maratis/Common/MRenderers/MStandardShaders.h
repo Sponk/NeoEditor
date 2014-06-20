@@ -96,6 +96,13 @@ string functionsShader = string(
 		"return step(shadCoord.z, distanceFromLight);"
 "}"			
 
+"vec2 poison[4] = vec2[4]("
+"vec2( -0.94201624, -0.39906216 ),"
+"vec2( 0.94558609, -0.76890725 ),"
+"vec2( -0.094184101, -0.92938870 ),"
+"vec2( 0.34495938, 0.29387760 )"
+");"
+
 "float computeShadow(bool shad, vec4 shadCoord, sampler2D shadMap, float shadBias, float shadBlur)"
 "{"
 	"float shadow = 1.0;"
@@ -122,6 +129,7 @@ string functionsShader = string(
         "if(shadow <= 0.0) return 0.0; else shadow = 1.0;"
 
         "float spread = 0.0005;"
+
         // TODO: Variable!
         "float distance = length(eyepos)*0.0003;"
         "int samples = int(shadBlur);"
@@ -136,7 +144,11 @@ string functionsShader = string(
               "for(int y = 0; y < samples; y++)"
               "{"
                     "vec4 coord;"
+                    "vec4 rand = 0.0001*texture2D(RandTexture, (shadowCoordinateWdivide.xy)*(500.0/(shadBlur+1.0)) * (x/(y+1.0)));"
+
                     "coord.xy = dp * vec2(x*spread, y*spread);"
+                    "coord.xy += rand.xy;"
+
                     "shadow += lookup(shadowCoordinateWdivide, shadMap, coord);"
               "}"
         "}"
