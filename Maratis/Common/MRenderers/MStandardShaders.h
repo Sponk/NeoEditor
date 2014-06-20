@@ -112,14 +112,7 @@ string functionsShader = string(
 		"shadowCoordinateWdivide.z -= shadBias;"
 
 		"shadowCoordinateWdivide /= shadowCoordinateWdivide.w;"	
-		 
-		"float blur = (shadBlur*0.01);"
-		
-        "vec2 d = 0.1;" //rand.xy;"
-		"d = normalize(d)*blur;"
-								
-		"vec2 dp = vec2(d.y, -d.x);"
-		
+
         // Is it reasonable to calculate the samples?
         "shadow += lookup(shadowCoordinateWdivide, shadMap, vec2(-0.0008, 0.0008));"
         "shadow += lookup(shadowCoordinateWdivide, shadMap, vec2(0.0008, 0.0008));"
@@ -128,6 +121,12 @@ string functionsShader = string(
 
         "if(shadow <= 0.0) return 0.0; else shadow = 1.0;"
 
+        "float blur = (shadBlur*0.01);"
+
+        "vec2 d = 0.1;" //rand.xy;"
+        "d = normalize(d)*blur;"
+
+        "vec2 dp = vec2(d.y, -d.x);"
         "float spread = 0.0005;"
 
         // TODO: Variable!
