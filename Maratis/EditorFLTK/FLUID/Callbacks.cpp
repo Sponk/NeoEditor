@@ -669,9 +669,11 @@ void scene_tree_callback(Fl_Tree* tree, void*)
         window.glbox->redraw();
     }*/
 
-    // TODO: Multiple selection!
-    //Maratis::getInstance()->clearSelectedObjects();
-    //Maratis::getInstance()->addSelectedObject(object);
+    if(update_name)
+    {
+        Maratis::getInstance()->clearSelectedObjects();
+        Maratis::getInstance()->addSelectedObject(object);
+    }
 
     MVector3 position = object->getPosition();
     MVector3 rotation = object->getEulerRotation();
