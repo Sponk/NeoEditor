@@ -98,14 +98,18 @@ void update_editor(void*)
     }
 
     MGame* game = MEngine::getInstance()->getGame();
-    if(game)
+
+    if(MWindow::getInstance()->getFocus())
     {
-        if(!game->isRunning())
+        if(game)
+        {
+            if(!game->isRunning())
+                MFilesUpdate::update();
+        }
+        else
+        {
             MFilesUpdate::update();
-    }
-    else
-    {
-        MFilesUpdate::update();
+        }
     }
 
     Fl::add_timeout(0.01, update_editor);
@@ -253,10 +257,12 @@ int GLBox::handle(int event)
 
     case FL_FOCUS:
             //Fl::focus(this);
+            MWindow::getInstance()->setFocus(true);
             return 1;
         break;
 
     case FL_UNFOCUS:
+            MWindow::getInstance()->setFocus(false);
             return 1;
         break;
 
