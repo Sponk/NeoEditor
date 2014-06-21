@@ -322,7 +322,9 @@ Fl_Double_Window* EditorWindow::create_light_window() {
         light_shadow_bias_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* light_shadow_bias_edit
       { light_shadow_blur_edit = new Fl_Value_Input(21, 456, 165, 21, "Shadow Blur:");
-        light_shadow_blur_edit->step(0.01);
+        light_shadow_blur_edit->maximum(64);
+        light_shadow_blur_edit->step(1);
+        light_shadow_blur_edit->value(2);
         light_shadow_blur_edit->callback((Fl_Callback*)edit_light_properties);
         light_shadow_blur_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* light_shadow_blur_edit

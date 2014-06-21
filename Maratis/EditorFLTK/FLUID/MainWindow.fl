@@ -5,11 +5,12 @@ code_name {.cxx}
 decl {\#include "Callbacks.h"} {private local
 } 
 
-class EditorWindow {} {
+class EditorWindow {open
+} {
   Function {show_window()} {} {
     Fl_Window {} {
       label {Maratis Editor} open
-      xywh {1861 264 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
+      xywh {761 292 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -349,11 +350,12 @@ class EditorWindow {} {
       }
     }
   }
-  Function {create_light_window()} {} {
+  Function {create_light_window()} {open
+  } {
     Fl_Window light_window_object {open
-      xywh {735 186 258 716} type Double labelsize 11 hide
+      xywh {735 214 258 716} type Double labelsize 11
       code0 {light_window_object->position(0,0);}
-      code1 {light_window_object->resizable(NULL);} size_range {258 726 258 726}
+      code1 {light_window_object->resizable(NULL);} size_range {258 726 258 726} visible
     } {
       Fl_Group {} {
         label {Settings:} open
@@ -427,8 +429,8 @@ class EditorWindow {} {
         }
         Fl_Value_Input light_shadow_blur_edit {
           label {Shadow Blur:}
-          callback edit_light_properties
-          xywh {21 456 165 21} align 5 step 0.01
+          callback edit_light_properties selected
+          xywh {21 456 165 21} align 5 maximum 64 step 1 value 2
         }
         Fl_Value_Input light_shadow_quality_edit {
           label {Shadow Quality:}
@@ -868,12 +870,12 @@ for(int i = 0; i < children; i++)
 }} {}
 } 
 
-class PlayerConsole {open selected
+class PlayerConsole {open
 } {
   Function {create_window()} {open
   } {
     Fl_Window {} {open
-      xywh {1856 420 915 210} type Double visible
+      xywh {764 448 915 210} type Double visible
     } {
       Fl_Text_Display output_edit {
         xywh {0 0 915 210} box UP_BOX
