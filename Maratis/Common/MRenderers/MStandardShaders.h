@@ -243,6 +243,23 @@ string functionsShader = string(
 				"specular = specular + (lightSpecular * spec);"
 			"}"
 		"}"
+        "else if(spotCos >= 1.0)"
+        "{"
+            "float spot = 1.0;"
+
+            "if(spot >= spotCos)"
+            "{"
+
+                "float lightDirLength2 = dot(lightDir, lightDir);"
+                "float attenuation = (spot / (constantAttenuation + (lightDirLength2 * quadraticAttenuation)));"
+
+                "diffuse = diffuse + (lightDiffuse * lambertTerm * attenuation);"
+
+                "vec3 S = normalize(E + L);"
+                "float spec = pow(max(dot(S, N), 0.0), MaterialShininess) * attenuation;"
+                "specular = specular + (lightSpecular * spec);"
+            "}"
+        "}"
 		"else"
 		"{"
 			"float lightDirLength2 = dot(lightDir, lightDir);"
