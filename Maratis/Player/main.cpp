@@ -115,7 +115,11 @@ int update_thread(void* nothing)
 
                 previousFrame = frame;
 
-                MSleep(skipTicks - (currentTick - oldTick));
+                skipTicks -= (currentTick - oldTick);
+
+                if(skipTicks > 0)
+                    MSleep(skipTicks);
+
                 continue;
             }
 
@@ -132,7 +136,11 @@ int update_thread(void* nothing)
             currentTick = window->getSystemTick();
 
             MSemaphoreUnlock(&updateSemaphore);
-            MSleep(skipTicks - (currentTick - oldTick));
+
+            skipTicks -= (currentTick - oldTick);
+
+            if(skipTicks > 0)
+                MSleep(skipTicks);
         }
         else
         {
