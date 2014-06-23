@@ -149,6 +149,8 @@ public:
 	// sleep
 	void sleep(double time);
 
+    // messagebox
+    void messagebox(const char* content, const char* title);
 };
 
 #endif

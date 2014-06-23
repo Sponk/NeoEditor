@@ -1538,6 +1538,106 @@ int setAngularDamping(lua_State * L)
 	return 0;
 }
 
+int setConstraintParent(lua_State* L)
+{
+    if(! isFunctionOk(L, "setConstraintParent", 2))
+        return 0;
+
+    MObject3d* object;
+    MObject3d* parent;
+    lua_Integer id = lua_tointeger(L, 1);
+    lua_Integer parentId = lua_tointeger(L, 2);
+    if((object = getObject3d(id)) && (parent = getObject3d(parentId)))
+    {
+        if(object->getType() == M_OBJECT3D_ENTITY && parent->getType() == M_OBJECT3D_ENTITY)
+        {
+            MOEntity * entity = (MOEntity*)object;
+            MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+            if(phyProps)
+            {
+                MPhysicsConstraint* constraint = phyProps->getConstraint();
+
+                if(constraint)
+                {
+                    constraint->parentName.set(parent->getName());
+                    MEngine::getInstance()->getLevel()->getCurrentScene()->prepareConstraints(entity);
+                }
+                else
+                {
+                    MLOG_ERROR("script: Can not set constraint parent: No constraint available!");
+                }
+                return 0;
+            }
+        }
+    }
+}
+
+int getConstraintParent(lua_State* L)
+{
+    if(! isFunctionOk(L, "setConstraintParent", 2))
+        return 0;
+
+    MObject3d* object;
+    MObject3d* parent;
+    lua_Integer id = lua_tointeger(L, 1);
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_ENTITY)
+        {
+            MOEntity * entity = (MOEntity*)object;
+            MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+            if(phyProps)
+            {
+                MPhysicsConstraint* constraint = phyProps->getConstraint();
+
+                if(constraint)
+                {
+                    MObject3d* object = MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(constraint->parentName.getSafeString());
+                    lua_pushinteger(L, (lua_Integer) object);
+                }
+                else
+                {
+                    MLOG_ERROR("script: Can not get constraint parent: No constraint available!");
+                }
+                return 0;
+            }
+        }
+    }
+}
+
+int enableParentCollision(lua_State* L)
+{
+    if(! isFunctionOk(L, "enableParentCollision", 2))
+        return 0;
+
+    MObject3d* object;
+    lua_Integer id = lua_tointeger(L, 1);
+    lua_Integer collision = lua_tointeger(L, 2);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_ENTITY)
+        {
+            MOEntity * entity = (MOEntity*)object;
+            MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+            if(phyProps)
+            {
+                MPhysicsConstraint* constraint = phyProps->getConstraint();
+
+                if(constraint)
+                {
+                   constraint->disableParentCollision = !collision;
+                }
+                else
+                {
+                    MLOG_ERROR("script: Can not set constraint parent: No constraint available!");
+                }
+                return 0;
+            }
+        }
+    }
+}
+
 int getCentralForce(lua_State * L)
 {
 	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
@@ -3654,6 +3754,9 @@ void MScript::init(void)
 	lua_register(m_state, "rayHit",				rayHit);
 
     lua_register(m_state, "setPhysicsQuality",  setPhysicsQuality);
+    lua_register(m_state, "setConstraintParent", setConstraintParent);
+    lua_register(m_state, "getConstraintParent", getConstraintParent);
+    lua_register(m_state, "enableParentCollision", enableParentCollision);
 	
 	// input
 	lua_register(m_state, "isKeyPressed", isKeyPressed);

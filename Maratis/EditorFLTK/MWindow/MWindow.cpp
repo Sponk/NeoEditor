@@ -6,6 +6,7 @@
 //========================================================================
 // Copyright (c) 2003-2014 Anael Seghezzi <www.maratis3d.com>
 // Copyright (c) 2014 Anders Dahnielson <anders@dahnielson.com>
+// Copyright (c) 2014 Yannick Pflanzer <www.scary-squid.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -35,6 +36,9 @@
 
 #include <SDL.h>
 #include <SDL_opengl.h>
+
+#include <FL/Fl.H>
+#include <FL/fl_message.H>
 
 #include <stdio.h>
 #include <string.h>
@@ -737,4 +741,10 @@ int MWindow::removeGameController(int id)
 	}
 
 	return -1;
+}
+
+void MWindow::messagebox(const char* content, const char* title)
+{
+    fl_message_title(title);
+    fl_message(content);
 }

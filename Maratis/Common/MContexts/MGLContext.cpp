@@ -42,10 +42,8 @@
 
 #include "MGLContext.h"
 
-
 static int g_GLversion = 0;
 static float maxAnisotropy = 0.0f;
-
 
 GLenum returnGLType(M_TYPES type)
 {
@@ -200,7 +198,7 @@ m_currentFrameBuffer(0)
 
 	// point
 	//glPointSize(2.0);
-	//glEnable(GL_POINT_SMOOTH);
+    //glEnable(GL_POINT_SMOOTH);
 
 	//float coeffs[] = {1.0f, 0, 0};
 	//glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, coeffs);

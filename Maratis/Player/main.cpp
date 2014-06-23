@@ -23,7 +23,6 @@
 //========================================================================
 //jan 2012 - Philipp Geyer <philipp@geyer.co.uk> - embedded project/package manager
 
-
 #include <MEngine.h>
 #include <MLog.h>
 #include <MWindow.h>
@@ -68,7 +67,7 @@ void update(void)
 void draw(void)
 {
 	MaratisPlayer::getInstance()->graphicLoop();
-	MWindow::getInstance()->swapBuffer();
+    MWindow::getInstance()->swapBuffer();
 }
 
 MSemaphore updateSemaphore;
