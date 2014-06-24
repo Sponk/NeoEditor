@@ -121,7 +121,7 @@ string functionsShader = string(
 
         "float blur = (shadBlur*0.01);"
 
-        "vec2 d = 0.1;" //rand.xy;"
+        "vec2 d = vec2(0.1);" //rand.xy;"
         "d = normalize(d)*blur;"
 
         "vec2 dp = vec2(d.y, -d.x);"
@@ -136,7 +136,8 @@ string functionsShader = string(
 
         "if(samples <= 1) samples = 2;"
 
-        "vec4 rand = 0.0001*texture2D(RandTexture, (shadowCoordinateWdivide.xy)*(500.0/(shadBlur+1.0)) * samples);"
+        "vec2 randcoord = shadowCoordinateWdivide.xy * (500.0/(shadBlur+1.0)) * float(samples);"
+        "vec4 rand = 0.0001*texture2D(RandTexture, randcoord);"
 
         "for(int x = 0; x<samples; x++)"
         "{"
@@ -144,13 +145,13 @@ string functionsShader = string(
               "{"
                     "vec4 coord;"
 
-                    "coord.xy = dp * vec2(x*spread, y*spread);"
+                    "coord.xy = dp * vec2(float(x)*spread, float(y)*spread);"
                     "coord.xy += rand.xy;"
 
-                    "shadow += lookup(shadowCoordinateWdivide, shadMap, coord);"
+                    "shadow += lookup(shadowCoordinateWdivide, shadMap, coord.xy);"
               "}"
         "}"
-        "shadow *= 1.0 / (samples * samples);"
+        "shadow *= 1.0 / (float(samples * samples));"
 	"}"					
 	"return shadow;"
 "}"
