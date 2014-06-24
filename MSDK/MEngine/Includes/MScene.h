@@ -235,19 +235,96 @@ public:
 	// current camera
 	inline void setCurrentCameraId(unsigned int id){ m_currentCamera = id; }
 	inline unsigned int getCurrentCameraId(void){ return m_currentCamera; }
-	MOCamera * getCurrentCamera(void);
+
+    /**
+     * @brief Returns the currently active camera from this scene.
+     *
+     * @see MOCamera
+     *
+     * @return The current camera.
+     */
+    MOCamera * getCurrentCamera(void);
 
 	// current frame
 	inline void setCurrentFrame(int currentFrame){ m_currentFrame = currentFrame; }
 	inline int getCurrentFrame(void){ return m_currentFrame; }
 
 	// get objects
+    /**
+     * @brief Returns the object with the given name or NULL if it is not found.
+     *
+     * @see MObject3d
+     *
+     * @param name The objects name.
+     * @return The object or NULL.
+     */
 	MObject3d * getObjectByName(const char * name);
+
+    /**
+     * @brief Returns the light with the given name or NULL if it is not found.
+     *
+     * @see MOLight
+     *
+     * @param name The lights name.
+     * @return The light or NULL.
+     */
 	MOLight * getLightByName(const char * name);
+
+    /**
+     * @brief Returns the camera with the given name or NULL if it is not found.
+     *
+     * @see MOCamera
+     *
+     * @param name The cameras name.
+     * @return The camera or NULL.
+     */
 	MOCamera * getCameraByName(const char * name);
+
+    /**
+     * @brief Returns the entity with the given name or NULL if it is not found.
+     *
+     * @see MOEntity
+     *
+     * @param name The entities name.
+     * @return The entity or NULL.
+     */
 	MOEntity * getEntityByName(const char * name);
+
+    /**
+     * @brief Returns the sound with the given name or NULL if it is not found.
+     *
+     * @see MOSound
+     *
+     * @param name The sounds name.
+     * @return The sound or NULL.
+     */
 	MOSound * getSoundByName(const char * name);
+
+    /**
+     * @brief Returns the text object with the given name or NULL if it is not found.
+     *
+     * @see MOText
+     *
+     * @param name The objects name.
+     * @return The object or NULL.
+     */
 	MOText * getTextByName(const char * name);
+
+    /**
+     * @brief Searches the object with the given name and copies the ID.
+     *
+     * The ID will be copied to the location where the pointer id points to.
+     *
+     * Example:
+     * \code
+     * unsigned int id;
+     * scene->getObjectIndex("object", &id);
+     * \endcode
+     *
+     * @param name The name of the object.
+     * @param id Pointer to an unsigned int to retrieve the data.
+     * @return Returns \b true if the object exists and \b false if it doesn't.
+     */
 	bool getObjectIndex(const char * name, unsigned int * id);
 
 	inline MObject3d * getObjectByIndex(unsigned int index){ return m_objects[index]; }
@@ -269,16 +346,38 @@ public:
 	void updatePhysics(void);
 
 	// update
+    /**
+     * @brief Updates the scene and all objects in it.
+     */
 	void update(void);
 
 	// behaviors
+    /**
+     * @brief Updates all behaviors of objects in this scene.
+     * @see MBehavior
+     */
 	void updateObjectsBehaviors(void);
+
+    /**
+     * @brief Call draw for all behaviors in this scene.
+     * @see MBehavior
+     */
 	void drawObjectsBehaviors(void);
 	
 	// update objects
 	void updateObjectsMatrices(void);
 
 	// draw
+    /**
+     * @brief Renders the scene to the screen.
+     *
+     * This method takes the camera and renders everything from this point of view to the screen/buffer.
+     * This is done by using a subclass of MRenderingContext to render.
+     *
+     * @see MRenderingContext
+     *
+     * @param camera The camera to use.
+     */
 	void draw(MOCamera * camera);
 };
 
