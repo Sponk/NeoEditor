@@ -31,7 +31,9 @@
 #ifndef _M_VARIABLE_H
 #define _M_VARIABLE_H
 
-
+/**
+ * @brief The M_VARIABLE_TYPE enum defines all types that are storable in an MVariable object.
+ */
 enum M_VARIABLE_TYPE
 {
 	M_VARIABLE_NULL = 0,
@@ -47,6 +49,11 @@ enum M_VARIABLE_TYPE
 	M_VARIABLE_TEXTURE_REF
 };
 
+/**
+ * @brief The MVariable class defines a variable that can be of any type available in M_VARIABLE_TYPE.
+ *
+ * This class is used by behaviors and the editor to store and process unknown data.
+ */
 class M_ENGINE_EXPORT MVariable
 {
 private:
@@ -75,7 +82,7 @@ public:
 public:
 
     /** @brief getType
-     * @return The variable type.
+     * @return The variable type. Is element of enumaration \b M_VARIABLE_TYPE
      */
 	inline M_VARIABLE_TYPE getType(void){ return m_type; }
 
@@ -86,7 +93,7 @@ public:
 
     /**
      * @brief getPointer
-     * @return Returns the pointer with the data.
+     * @return Returns the pointer with the data. This pointer complies to the type given by MVariable::getType
      */
     inline void * getPointer(void){ return m_pointer; }
 };
