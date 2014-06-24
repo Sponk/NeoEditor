@@ -143,7 +143,7 @@ string functionsShader = string(
         "{"
               "for(int y = 0; y < samples; y++)"
               "{"
-                    "vec4 coord;"
+                    "vec2 coord;"
 
                     "coord.xy = dp * vec2(float(x)*spread, float(y)*spread);"
                     "coord.xy += rand.xy;"
