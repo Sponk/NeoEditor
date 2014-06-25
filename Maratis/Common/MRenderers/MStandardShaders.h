@@ -136,15 +136,13 @@ string functionsShader = string(
 
         "if(samples <= 1) samples = 2;"
 
-        "vec2 randcoord = shadowCoordinateWdivide.xy * (500.0/(shadBlur+1.0)) * float(samples);"
-        "vec4 rand = 0.0001*texture2D(RandTexture, randcoord);"
+        "vec2 coord = shadowCoordinateWdivide.xy * (500.0/(shadBlur+1.0)) * float(samples);"
+        "vec4 rand = 0.0001*texture2D(RandTexture, coord);"
 
         "for(int x = 0; x<samples; x++)"
         "{"
               "for(int y = 0; y < samples; y++)"
               "{"
-                    "vec2 coord;"
-
                     "coord.xy = dp * vec2(float(x)*spread, float(y)*spread);"
                     "coord.xy += rand.xy;"
 
