@@ -5,12 +5,21 @@ code_name {.cxx}
 decl {\#include "Callbacks.h"} {private local
 } 
 
+decl {\#include <string>} {private local
+} 
+
+decl {\#include <FL/Fl_Color_Chooser.H>} {private local
+} 
+
+decl {\#include <MFileManager/MMeshSave.h>} {selected private local
+} 
+
 class EditorWindow {open
 } {
   Function {show_window()} {} {
     Fl_Window {} {
       label {Maratis Editor} open
-      xywh {761 292 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
+      xywh {360 292 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -353,9 +362,9 @@ class EditorWindow {open
   Function {create_light_window()} {open
   } {
     Fl_Window light_window_object {open
-      xywh {735 214 258 716} type Double labelsize 11
+      xywh {388 224 258 714} type Double labelsize 11 hide
       code0 {light_window_object->position(0,0);}
-      code1 {light_window_object->resizable(NULL);} size_range {258 726 258 726} visible
+      code1 {light_window_object->resizable(NULL);} size_range {258 726 258 726}
     } {
       Fl_Group {} {
         label {Settings:} open
@@ -429,7 +438,7 @@ class EditorWindow {open
         }
         Fl_Value_Input light_shadow_blur_edit {
           label {Shadow Blur:}
-          callback edit_light_properties selected
+          callback edit_light_properties
           xywh {21 456 165 21} align 5 maximum 64 step 1 value 2
         }
         Fl_Value_Input light_shadow_quality_edit {
@@ -453,10 +462,9 @@ class EditorWindow {open
       }
     }
   }
-  Function {create_object_window()} {open
-  } {
-    Fl_Window {} {
-      xywh {1319 251 360 714} type Double hide
+  Function {create_object_window()} {} {
+    Fl_Window {} {open
+      xywh {471 259 360 714} type Double hide
     } {
       Fl_Group {} {
         label {Settings:} open
@@ -470,6 +478,11 @@ class EditorWindow {open
           label Invisible
           callback edit_object_chk_btn
           xywh {15 78 111 24} down_box DOWN_BOX
+        }
+        Fl_Button {} {
+          label {Edit Materials}
+          callback edit_materials_callback
+          xywh {105 78 111 21}
         }
       }
       Fl_Group {} {
@@ -870,16 +883,196 @@ for(int i = 0; i < children; i++)
 }} {}
 } 
 
-class PlayerConsole {open
-} {
+class PlayerConsole {} {
   Function {create_window()} {open
   } {
     Fl_Window {} {open
-      xywh {764 448 915 210} type Double visible
+      xywh {25 507 915 210} type Double hide
     } {
       Fl_Text_Display output_edit {
         xywh {0 0 915 210} box UP_BOX
       }
     }
+  }
+} 
+
+class MaterialEditDlg {open
+} {
+  decl {char object_name[256];} {private local
+  }
+  Function {create_window(const char* name)} {open
+  } {
+    Fl_Window window {
+      label {Edit Materials}
+      user_data this user_data_type {MaterialEditDlg*}
+      callback close_window_callback open
+      xywh {2159 518 312 198} type Double modal visible
+    } {
+      Fl_Button {} {
+        label Save
+        user_data this user_data_type {MaterialEditorDlg*}
+        callback save_callback
+        xywh {207 159 93 27}
+      }
+      Fl_Button {} {
+        label Close
+        user_data this user_data_type {MaterialEditDlg*}
+        callback close_callback
+        xywh {117 159 84 27}
+      }
+      Fl_Choice materials_chooser {
+        user_data this user_data_type {MaterialEditDlg*}
+        callback material_changed open
+        xywh {12 15 162 27} down_box BORDER_BOX
+      } {}
+      Fl_Group {} {
+        label {Emit Color:} open
+        xywh {12 69 165 78} box EMBOSSED_FRAME align 5
+      } {
+        Fl_Value_Input color_r {
+          label {Red:} user_data_type {void*}
+          xywh {18 93 45 21} align 5 step 0.1
+        }
+        Fl_Value_Input color_g {
+          label {Green:} user_data_type {void*}
+          xywh {69 93 45 21} align 5 step 0.1
+        }
+        Fl_Value_Input color_b {
+          label {Blue:} user_data_type {void*}
+          xywh {123 93 45 21} align 5 step 0.1
+        }
+        Fl_Button {} {
+          label {Choose color}
+          user_data this user_data_type {MaterialEditDlg*}
+          callback choose_emit_color
+          xywh {18 117 96 24} labeltype ENGRAVED_LABEL labelsize 11
+        }
+      }
+      Fl_Button {} {
+        label Apply
+        user_data this user_data_type {MaterialEditDlg*}
+        callback apply_callback
+        xywh {15 159 84 27}
+      }
+    }
+    code {MEngine* engine = MEngine::getInstance();
+MLevel* level = engine->getLevel();
+MScene* scene = level->getCurrentScene();
+
+MObject3d* object = scene->getObjectByName(name);
+
+if(!object)
+{
+	MLOG_WARNING("Object with the name " << name << " does not exist!");
+	return NULL;
+}
+
+if(object->getType() != M_OBJECT3D_ENTITY)
+	return NULL;
+	
+MOEntity* entity = (MOEntity*) object;
+MMesh* mesh = entity->getMesh();
+
+unsigned int num = mesh->getMaterialsNumber();
+char buf[6];
+for(int i = 0; i < num; i++)
+{
+	snprintf(buf, sizeof(buf), "%d", i);
+	materials_chooser->add(buf);
+}
+
+materials_chooser->value(0);
+
+strcpy(object_name, object->getName());
+
+material_changed(materials_chooser, this);} {}
+  }
+  Function {close_callback(Fl_Button* button, MaterialEditDlg* dlg)} {open return_type {static void}
+  } {
+    code {button->parent()->hide();
+Fl::delete_widget(button->parent());
+delete dlg;} {}
+  }
+  Function {material_changed(Fl_Choice* choice, MaterialEditDlg* dlg)} {open return_type {static void}
+  } {
+    code {MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
+  MMesh* mesh = entity->getMesh();
+  
+  if(!mesh)
+  {
+      MLOG_ERROR("mesh == NULL! This should not happen!");
+      return;
+  }
+   
+  if(choice->value() >= mesh->getMaterialsNumber())
+      return;
+  
+  MMaterial* material = mesh->getMaterial(choice->value());
+  
+  if(!material)
+      return;
+  
+  MVector3 emitcolor = material->getEmit();
+  
+  dlg->color_r->value(emitcolor.x);
+  dlg->color_g->value(emitcolor.y);
+  dlg->color_b->value(emitcolor.z);} {}
+  }
+  Function {choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg)} {open return_type {static void}
+  } {
+    code {double r = dlg->color_r->value();
+    double g = dlg->color_g->value();
+    double b = dlg->color_b->value();
+
+    fl_color_chooser("Choose a color", r, g, b);
+
+    dlg->color_r->value(r);
+    dlg->color_g->value(g);
+    dlg->color_b->value(b);} {}
+  }
+  Function {close_window_callback(Fl_Window* window, MaterialEditDlg* dlg)} {open return_type {static void}
+  } {
+    code {Fl::delete_widget(window);
+delete dlg;} {}
+  }
+  Function {apply_callback(Fl_Button*, MaterialEditDlg* dlg)} {open return_type {static void}
+  } {
+    code {MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
+      MMesh* mesh = entity->getMesh();
+
+      if(!mesh)
+      {
+          MLOG_ERROR("mesh == NULL! This should not happen!");
+          return;
+      }
+
+      if(dlg->materials_chooser->value() >= mesh->getMaterialsNumber())
+          return;
+
+      MMaterial* material = mesh->getMaterial(dlg->materials_chooser->value());
+
+      if(!material)
+          return;
+
+      MVector3 emitcolor;
+
+      emitcolor.x = dlg->color_r->value();
+      emitcolor.y = dlg->color_g->value();
+      emitcolor.z = dlg->color_b->value();
+
+      material->setEmit(emitcolor);
+
+      ::window.glbox->redraw();} {}
+  }
+  Function {save_callback(Fl_Button*, MaterialEditDlg* dlg)} {open return_type {static void}
+  } {
+    code {MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
+      MMesh* mesh = entity->getMesh();
+
+      if(!mesh)
+      {
+          MLOG_ERROR("mesh == NULL! This should not happen!");
+          return;
+      }} {}
   }
 } 

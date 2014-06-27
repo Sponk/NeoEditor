@@ -52,6 +52,7 @@ extern void edit_light_properties_chk_btn(Fl_Check_Button*, void*);
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Output.H>
 extern void edit_object_chk_btn(Fl_Check_Button*, void*);
+extern void edit_materials_callback(Fl_Button*, void*);
 extern void edit_shape_callback(Fl_Menu_*, long);
 extern void edit_object_properties(Fl_Value_Input*, void*);
 extern void edit_camera_properties(Fl_Value_Input*, void*);
@@ -179,5 +180,22 @@ class PlayerConsole {
 public:
   Fl_Double_Window* create_window();
   Fl_Text_Display *output_edit;
+};
+
+class MaterialEditDlg {
+  char object_name[256]; 
+public:
+  Fl_Double_Window* create_window(const char* name);
+  Fl_Double_Window *window;
+  Fl_Choice *materials_chooser;
+  Fl_Value_Input *color_r;
+  Fl_Value_Input *color_g;
+  Fl_Value_Input *color_b;
+  static void close_callback(Fl_Button* button, MaterialEditDlg* dlg);
+  static void material_changed(Fl_Choice* choice, MaterialEditDlg* dlg);
+  static void choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg);
+  static void close_window_callback(Fl_Window* window, MaterialEditDlg* dlg);
+  static void apply_callback(Fl_Button*, MaterialEditDlg* dlg);
+  static void save_callback(Fl_Button*, MaterialEditDlg* dlg);
 };
 #endif

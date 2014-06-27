@@ -2,6 +2,9 @@
 
 #include "MainWindow.h"
 #include "Callbacks.h"
+#include <string>
+#include <FL/Fl_Color_Chooser.H>
+#include <MFileManager/MMeshSave.h>
 
 Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
  {"File", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
@@ -247,7 +250,7 @@ Fl_Double_Window* EditorWindow::show_window() {
 }
 
 Fl_Double_Window* EditorWindow::create_light_window() {
-  { light_window_object = new Fl_Double_Window(258, 716);
+  { light_window_object = new Fl_Double_Window(258, 714);
     light_window_object->labelsize(11);
     light_window_object->user_data((void*)(this));
     { Fl_Group* o = new Fl_Group(5, 30, 218, 159, "Settings:");
@@ -376,6 +379,9 @@ Fl_Double_Window* EditorWindow::create_object_window() {
         object_invisible_button->down_box(FL_DOWN_BOX);
         object_invisible_button->callback((Fl_Callback*)edit_object_chk_btn);
       } // Fl_Check_Button* object_invisible_button
+      { Fl_Button* o = new Fl_Button(105, 78, 111, 21, "Edit Materials");
+        o->callback((Fl_Callback*)edit_materials_callback);
+      } // Fl_Button* o
       o->end();
     } // Fl_Group* o
     { Fl_Group* o = new Fl_Group(5, 132, 219, 249, "Physics:");
@@ -703,4 +709,169 @@ Fl_Double_Window* PlayerConsole::create_window() {
     o->end();
   } // Fl_Double_Window* o
   return w;
+}
+
+Fl_Double_Window* MaterialEditDlg::create_window(const char* name) {
+  { window = new Fl_Double_Window(312, 198, "Edit Materials");
+    window->callback((Fl_Callback*)close_window_callback, (void*)(this));
+    { Fl_Button* o = new Fl_Button(207, 159, 93, 27, "Save");
+      o->callback((Fl_Callback*)save_callback, (void*)(this));
+    } // Fl_Button* o
+    { Fl_Button* o = new Fl_Button(117, 159, 84, 27, "Close");
+      o->callback((Fl_Callback*)close_callback, (void*)(this));
+    } // Fl_Button* o
+    { materials_chooser = new Fl_Choice(12, 15, 162, 27);
+      materials_chooser->down_box(FL_BORDER_BOX);
+      materials_chooser->callback((Fl_Callback*)material_changed, (void*)(this));
+    } // Fl_Choice* materials_chooser
+    { Fl_Group* o = new Fl_Group(12, 69, 165, 78, "Emit Color:");
+      o->box(FL_EMBOSSED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { color_r = new Fl_Value_Input(18, 93, 45, 21, "Red:");
+        color_r->step(0.1);
+        color_r->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* color_r
+      { color_g = new Fl_Value_Input(69, 93, 45, 21, "Green:");
+        color_g->step(0.1);
+        color_g->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* color_g
+      { color_b = new Fl_Value_Input(123, 93, 45, 21, "Blue:");
+        color_b->step(0.1);
+        color_b->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* color_b
+      { Fl_Button* o = new Fl_Button(18, 117, 96, 24, "Choose color");
+        o->labeltype(FL_ENGRAVED_LABEL);
+        o->labelsize(11);
+        o->callback((Fl_Callback*)choose_emit_color, (void*)(this));
+      } // Fl_Button* o
+      o->end();
+    } // Fl_Group* o
+    { Fl_Button* o = new Fl_Button(15, 159, 84, 27, "Apply");
+      o->callback((Fl_Callback*)apply_callback, (void*)(this));
+    } // Fl_Button* o
+    window->set_modal();
+    window->end();
+  } // Fl_Double_Window* window
+  MEngine* engine = MEngine::getInstance();
+  MLevel* level = engine->getLevel();
+  MScene* scene = level->getCurrentScene();
+  
+  MObject3d* object = scene->getObjectByName(name);
+  
+  if(!object)
+  {
+  	MLOG_WARNING("Object with the name " << name << " does not exist!");
+  	return NULL;
+  }
+  
+  if(object->getType() != M_OBJECT3D_ENTITY)
+  	return NULL;
+  	
+  MOEntity* entity = (MOEntity*) object;
+  MMesh* mesh = entity->getMesh();
+  
+  unsigned int num = mesh->getMaterialsNumber();
+  char buf[6];
+  for(int i = 0; i < num; i++)
+  {
+  	snprintf(buf, sizeof(buf), "%d", i);
+  	materials_chooser->add(buf);
+  }
+  
+  materials_chooser->value(0);
+  
+  strcpy(object_name, object->getName());
+  
+  material_changed(materials_chooser, this);
+  return window;
+}
+
+void MaterialEditDlg::close_callback(Fl_Button* button, MaterialEditDlg* dlg) {
+  button->parent()->hide();
+  Fl::delete_widget(button->parent());
+  delete dlg;
+}
+
+void MaterialEditDlg::material_changed(Fl_Choice* choice, MaterialEditDlg* dlg) {
+  MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
+    MMesh* mesh = entity->getMesh();
+    
+    if(!mesh)
+    {
+        MLOG_ERROR("mesh == NULL! This should not happen!");
+        return;
+    }
+     
+    if(choice->value() >= mesh->getMaterialsNumber())
+        return;
+    
+    MMaterial* material = mesh->getMaterial(choice->value());
+    
+    if(!material)
+        return;
+    
+    MVector3 emitcolor = material->getEmit();
+    
+    dlg->color_r->value(emitcolor.x);
+    dlg->color_g->value(emitcolor.y);
+    dlg->color_b->value(emitcolor.z);
+}
+
+void MaterialEditDlg::choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg) {
+  double r = dlg->color_r->value();
+      double g = dlg->color_g->value();
+      double b = dlg->color_b->value();
+  
+      fl_color_chooser("Choose a color", r, g, b);
+  
+      dlg->color_r->value(r);
+      dlg->color_g->value(g);
+      dlg->color_b->value(b);
+}
+
+void MaterialEditDlg::close_window_callback(Fl_Window* window, MaterialEditDlg* dlg) {
+  Fl::delete_widget(window);
+  delete dlg;
+}
+
+void MaterialEditDlg::apply_callback(Fl_Button*, MaterialEditDlg* dlg) {
+  MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
+        MMesh* mesh = entity->getMesh();
+  
+        if(!mesh)
+        {
+            MLOG_ERROR("mesh == NULL! This should not happen!");
+            return;
+        }
+  
+        if(dlg->materials_chooser->value() >= mesh->getMaterialsNumber())
+            return;
+  
+        MMaterial* material = mesh->getMaterial(dlg->materials_chooser->value());
+  
+        if(!material)
+            return;
+  
+        MVector3 emitcolor;
+  
+        emitcolor.x = dlg->color_r->value();
+        emitcolor.y = dlg->color_g->value();
+        emitcolor.z = dlg->color_b->value();
+  
+        material->setEmit(emitcolor);
+  
+        ::window.glbox->redraw();
+}
+
+void MaterialEditDlg::save_callback(Fl_Button*, MaterialEditDlg* dlg) {
+  MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
+        MMesh* mesh = entity->getMesh();
+  
+        if(!mesh)
+        {
+            MLOG_ERROR("mesh == NULL! This should not happen!");
+            return;
+        }
+
+        xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);
 }

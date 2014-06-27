@@ -1742,3 +1742,9 @@ void select_all_callback(Fl_Menu_*, void*)
     update_scene_tree();
     window.glbox->redraw();
 }
+
+void edit_materials_callback(Fl_Button *, void *)
+{
+    MaterialEditDlg* dlg = new MaterialEditDlg();
+    dlg->create_window(window.name_edit->value())->show();
+}
