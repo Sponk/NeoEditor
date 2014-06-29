@@ -1473,27 +1473,39 @@ void play_game_callback(Fl_Menu_*, void*)
     }
 
     save_level_callback(NULL, 0);
-    Fl_Window* window = console.create_window();
-
-    console.output_edit->buffer(&console_buffer);
-    console_buffer.text("");
-    window->show();
-    Fl::wait();
-
+	    
 #ifndef WIN32
     std::string project_name = current_project.file_path.substr(current_project.file_path.find_last_of("/")+1);
     project_name = project_name.erase(project_name.find_last_of("."));
 
     FILE* file = popen((current_project.path + "MaratisPlayer \"" + project_name + "\" 1024 768 0 1").c_str(), "r");
 #else
-    FILE* file = _popen((current_project.path + "MaratisPlayer.exe").c_str(), "r");
+	// FIXME: Hack!
+	system((current_project.path + "MaratisPlayer").c_str());
 #endif
+
+// TODO: Profiling and output on Windows
+#ifndef WIN32
+	if(file == NULL)
+	{
+		MLOG_ERROR("Could not start player!");
+		fl_alert("Could not start player! Make sure that the executable exists and you have rights to start it.");
+		return;
+	}
+	
+	Fl_Window* window = console.create_window();
+	window->show();
+    
+	console.output_edit->buffer(&console_buffer);
+    console_buffer.text("");
+
+	Fl::wait();
 
     size_t size = 256;
     char* line = (char*) malloc(size);
 
-    double frametime;
-    double framecount;
+    double frametime = 0;
+    double framecount = -1;
     int framemax = 0;
     int framemin = -1;
     char str[20];
@@ -1544,10 +1556,10 @@ void play_game_callback(Fl_Menu_*, void*)
 
     console_buffer.append(report.str().c_str());
 
-    fclose(file);
-    free(line);
-
+    pclose(file);
+	free(line);
     update_scene_tree();
+#endif
 }
 
 void add_behavior_menu_callback(Fl_Menu_* menu, const char* name)

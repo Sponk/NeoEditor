@@ -82,7 +82,7 @@ SET ( ASSIMP_BUILD_STATIC_LIB ON CACHE BOOL
 SET(ASSIMP_DEBUG_POSTFIX "d" CACHE STRING "Debug Postfitx for lib, samples and tools")
 
 # Allow the user to build a static library
-option ( BUILD_SHARED_LIBS "Build a shared version of the library" OFF )
+option ( BUILD_SHARED_LIBS "Build a shared version of the library" ON )
 IF ( ASSIMP_BUILD_STATIC_LIB )
     option ( BUILD_SHARED_LIBS "Build a shared version of the library" OFF )
 ELSE ( ASSIMP_BUILD_STATIC_LIB )

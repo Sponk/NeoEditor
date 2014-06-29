@@ -282,7 +282,6 @@ int main(int argc, char **argv)
     MInitSchedule();
 
     updateThread.Start(update_thread, "Update", NULL);
-    inputThread.Start(input_thread, "Input", NULL);
 
     bool isActive = true;
     // on events
@@ -290,6 +289,8 @@ int main(int argc, char **argv)
     {
         MSemaphoreWaitAndLock(&updateSemaphore);
 
+		// Get input
+		MWindow::getInstance()->onEvents();
         MUpdateScheduledEvents();
 
         if(!isActive)
