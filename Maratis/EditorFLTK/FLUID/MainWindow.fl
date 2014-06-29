@@ -16,10 +16,11 @@ decl {\#include <MFileManager/MMeshSave.h>} {private local
 
 class EditorWindow {open
 } {
-  Function {show_window()} {} {
+  Function {show_window()} {open
+  } {
     Fl_Window {} {
       label {Maratis Editor} open
-      xywh {360 292 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
+      xywh {2019 342 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -193,7 +194,7 @@ class EditorWindow {open
       }
       Fl_Box glbox {
         label {OpenGL box}
-        xywh {201 56 492 569} color 179 resizable
+        xywh {201 56 486 569} color 179 resizable
         code0 {\#include "GLBox.h"}
         class GLBox
       }
@@ -244,11 +245,11 @@ class EditorWindow {open
         }
       }
       Fl_Tabs {} {open
-        xywh {693 54 261 645}
+        xywh {687 54 267 645}
       } {
         Fl_Tabs {} {
           label Object open
-          xywh {693 75 261 624}
+          xywh {693 75 261 624} hide
         } {
           Fl_Scroll {} {open
             xywh {693 75 261 624}
@@ -345,7 +346,7 @@ class EditorWindow {open
         }
         Fl_Tabs special_tab {
           label Special open
-          xywh {696 78 258 621} box NO_BOX hide
+          xywh {687 75 267 624} box NO_BOX
           code0 {special_tab->resizable(NULL);}
         } {}
         Fl_Tabs {} {
@@ -463,164 +464,169 @@ class EditorWindow {open
   }
   Function {create_object_window()} {open
   } {
-    Fl_Window {} {open
-      xywh {1995 225 360 714} type Double visible
+    Fl_Window object_embedded_window {open
+      xywh {1786 183 261 672} type Double resizable
+      code0 {special_tab->resizable(object_embedded_window);} visible
     } {
-      Fl_Group {} {
-        label {Settings:} open
-        xywh {5 27 218 78} box ENGRAVED_FRAME align 5
+      Fl_Scroll {} {open selected
+        xywh {0 6 246 666} resizable
       } {
-        Fl_Output object_mesh_edit {
-          label {Mesh:}
-          xywh {18 51 198 21} color 31 align 5
-        }
-        Fl_Check_Button object_invisible_button {
-          label Invisible
-          callback edit_object_chk_btn
-          xywh {15 78 111 24} down_box DOWN_BOX
-        }
-        Fl_Button {} {
-          label {Edit Materials}
-          callback edit_materials_callback
-          xywh {105 78 111 21}
-        }
-      }
-      Fl_Group {} {
-        label {Physics:} open
-        xywh {5 132 219 249} box ENGRAVED_FRAME align 5
-      } {
-        Fl_Choice object_shape_choice {
-          label {Shape:} open
-          xywh {18 189 195 27} down_box BORDER_BOX align 5
+        Fl_Group {} {
+          label {Settings:} open
+          xywh {3 27 218 78} box ENGRAVED_FRAME align 5
         } {
-          MenuItem {} {
-            label Box
-            user_data 0 user_data_type long
-            callback edit_shape_callback
-            xywh {0 0 100 20} labelsize 14
+          Fl_Output object_mesh_edit {
+            label {Mesh:}
+            xywh {16 51 198 21} color 31 align 5
           }
-          MenuItem {} {
-            label Sphere
-            user_data 1 user_data_type long
-            callback edit_shape_callback
-            xywh {0 0 100 20} labelsize 14
+          Fl_Check_Button object_invisible_button {
+            label Invisible
+            callback edit_object_chk_btn
+            xywh {13 78 111 24} down_box DOWN_BOX
           }
-          MenuItem {} {
-            label Cone
-            user_data 2 user_data_type long
-            callback edit_shape_callback
-            xywh {0 0 100 20} labelsize 14
-          }
-          MenuItem {} {
-            label Capsule
-            user_data 3 user_data_type long
-            callback edit_shape_callback
-            xywh {0 0 100 20} labelsize 14
-          }
-          MenuItem {} {
-            label Cylinder
-            user_data 4 user_data_type long
-            callback edit_shape_callback
-            xywh {0 0 100 20} labelsize 14
-          }
-          MenuItem {} {
-            label {Convex-hull}
-            user_data 5 user_data_type long
-            callback edit_shape_callback
-            xywh {0 0 100 20} labelsize 14
-          }
-          MenuItem {} {
-            label {Triangle-mesh}
-            user_data 6 user_data_type long
-            callback edit_shape_callback
-            xywh {0 0 100 20} labelsize 14
+          Fl_Button {} {
+            label {Edit Materials}
+            callback edit_materials_callback
+            xywh {103 78 111 21}
           }
         }
-        Fl_Check_Button object_ghost_button {
-          label Ghost
-          callback edit_object_chk_btn
-          xywh {18 222 78 21} down_box DOWN_BOX
+        Fl_Group {} {
+          label {Physics:} open
+          xywh {3 132 219 249} box ENGRAVED_FRAME align 5
+        } {
+          Fl_Choice object_shape_choice {
+            label {Shape:} open
+            xywh {16 189 195 27} down_box BORDER_BOX align 5
+          } {
+            MenuItem {} {
+              label Box
+              user_data 0 user_data_type long
+              callback edit_shape_callback
+              xywh {3 3 100 20} labelsize 14
+            }
+            MenuItem {} {
+              label Sphere
+              user_data 1 user_data_type long
+              callback edit_shape_callback
+              xywh {3 3 100 20} labelsize 14
+            }
+            MenuItem {} {
+              label Cone
+              user_data 2 user_data_type long
+              callback edit_shape_callback
+              xywh {3 3 100 20} labelsize 14
+            }
+            MenuItem {} {
+              label Capsule
+              user_data 3 user_data_type long
+              callback edit_shape_callback
+              xywh {3 3 100 20} labelsize 14
+            }
+            MenuItem {} {
+              label Cylinder
+              user_data 4 user_data_type long
+              callback edit_shape_callback
+              xywh {3 3 100 20} labelsize 14
+            }
+            MenuItem {} {
+              label {Convex-hull}
+              user_data 5 user_data_type long
+              callback edit_shape_callback
+              xywh {3 3 100 20} labelsize 14
+            }
+            MenuItem {} {
+              label {Triangle-mesh}
+              user_data 6 user_data_type long
+              callback edit_shape_callback
+              xywh {3 3 100 20} labelsize 14
+            }
+          }
+          Fl_Check_Button object_ghost_button {
+            label Ghost
+            callback edit_object_chk_btn
+            xywh {16 222 78 21} down_box DOWN_BOX
+          }
+          Fl_Value_Input object_mass_edit {
+            label {Mass:}
+            callback edit_object_properties
+            xywh {16 261 195 21} align 5
+          }
+          Fl_Value_Input object_fric_edit {
+            label {Friction:}
+            callback edit_object_properties
+            xywh {16 306 195 21} align 5
+          }
+          Fl_Value_Input object_rest_edit {
+            label {Restitution:}
+            callback edit_object_properties
+            xywh {16 351 195 21} align 5
+          }
+          Fl_Check_Button object_physics_button {
+            label Physics
+            callback edit_object_chk_btn
+            xywh {16 147 204 21} down_box DOWN_BOX
+          }
         }
-        Fl_Value_Input object_mass_edit {
-          label {Mass:}
+        Fl_Group {} {
+          label {Pivot:} open
+          xywh {4 634 219 32} box ENGRAVED_FRAME align 5
+        } {
+          Fl_Value_Input xpivot_edit {
+            label {X:} user_data_type {void*}
+            callback edit_object_properties
+            xywh {25 639 51 21} maximum 1000 step 1
+          }
+          Fl_Value_Input ypivot_edit {
+            label {Y:} user_data_type {void*}
+            callback edit_object_properties
+            xywh {94 639 51 21} maximum 1000 step 1
+          }
+          Fl_Value_Input zpivot_edit {
+            label {Z:} user_data_type {void*}
+            callback edit_object_properties
+            xywh {163 638 51 21} maximum 1000 step 1
+          }
+        }
+        Fl_Group {} {
+          label {Damping:} open
+          xywh {4 406 219 95} box ENGRAVED_FRAME align 5
+        } {
+          Fl_Value_Input object_linear_damping_edit {
+            label {Linear:}
+            callback edit_object_properties
+            xywh {16 429 195 21} align 5
+          }
+          Fl_Value_Input object_angular_damping_edit {
+            label {Angular:}
+            callback edit_object_properties
+            xywh {16 471 195 21} align 5
+          }
+        }
+        Fl_Group {} {
+          label {Linear Factor:} open
+          xywh {4 526 219 32} box ENGRAVED_FRAME align 5
+        } {
+          Fl_Value_Input xlinear_edit {
+            label {X:} user_data_type {void*}
+            callback edit_object_properties
+            xywh {25 531 51 21} maximum 1000 step 1
+          }
+          Fl_Value_Input ylinear_edit {
+            label {Y:} user_data_type {void*}
+            callback edit_object_properties
+            xywh {94 531 51 21} maximum 1000 step 1
+          }
+          Fl_Value_Input zlinear_edit {
+            label {Z:} user_data_type {void*}
+            callback edit_object_properties
+            xywh {163 530 51 21} maximum 1000 step 1
+          }
+        }
+        Fl_Value_Input object_angular_factor_edit {
+          label {Angular Facto:}
           callback edit_object_properties
-          xywh {18 261 195 21} align 5
+          xywh {4 582 216 21} align 5
         }
-        Fl_Value_Input object_fric_edit {
-          label {Friction:}
-          callback edit_object_properties
-          xywh {18 306 195 21} align 5
-        }
-        Fl_Value_Input object_rest_edit {
-          label {Restitution:}
-          callback edit_object_properties
-          xywh {18 351 195 21} align 5
-        }
-        Fl_Check_Button object_physics_button {
-          label Physics
-          callback edit_object_chk_btn
-          xywh {18 147 204 21} down_box DOWN_BOX
-        }
-      }
-      Fl_Group {} {
-        label {Pivot:} open
-        xywh {6 634 219 32} box ENGRAVED_FRAME align 5
-      } {
-        Fl_Value_Input xpivot_edit {
-          label {X:} user_data_type {void*}
-          callback edit_object_properties
-          xywh {27 639 51 21} maximum 1000 step 1
-        }
-        Fl_Value_Input ypivot_edit {
-          label {Y:} user_data_type {void*}
-          callback edit_object_properties
-          xywh {96 639 51 21} maximum 1000 step 1
-        }
-        Fl_Value_Input zpivot_edit {
-          label {Z:} user_data_type {void*}
-          callback edit_object_properties
-          xywh {165 638 51 21} maximum 1000 step 1
-        }
-      }
-      Fl_Group {} {
-        label {Damping:} open
-        xywh {6 406 219 95} box ENGRAVED_FRAME align 5
-      } {
-        Fl_Value_Input object_linear_damping_edit {
-          label {Linear:}
-          callback edit_object_properties
-          xywh {18 429 195 21} align 5
-        }
-        Fl_Value_Input object_angular_damping_edit {
-          label {Angular:}
-          callback edit_object_properties
-          xywh {18 471 195 21} align 5
-        }
-      }
-      Fl_Group {} {
-        label {Linear Factor:} open
-        xywh {6 526 219 32} box ENGRAVED_FRAME align 5
-      } {
-        Fl_Value_Input xlinear_edit {
-          label {X:} user_data_type {void*}
-          callback edit_object_properties
-          xywh {27 531 51 21} maximum 1000 step 0.1
-        }
-        Fl_Value_Input ylinear_edit {
-          label {Y:} user_data_type {void*}
-          callback edit_object_properties
-          xywh {96 531 51 21} maximum 1000 step 0.1
-        }
-        Fl_Value_Input zlinear_edit {
-          label {Z:} user_data_type {void*}
-          callback edit_object_properties selected
-          xywh {165 530 51 21} maximum 1000 step 0.1
-        }
-      }
-      Fl_Value_Input object_angular_factor_edit {
-        label {Angular Factor:}
-        callback edit_object_properties
-        xywh {6 582 216 21} align 5
       }
     }
   }

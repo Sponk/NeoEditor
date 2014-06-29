@@ -111,6 +111,7 @@ public:
   Fl_Value_Input *light_shadow_quality_edit;
   Fl_Double_Window* create_publish_window();
   Fl_Double_Window* create_object_window();
+  Fl_Double_Window *object_embedded_window;
   Fl_Output *object_mesh_edit;
   Fl_Check_Button *object_invisible_button;
   Fl_Choice *object_shape_choice;

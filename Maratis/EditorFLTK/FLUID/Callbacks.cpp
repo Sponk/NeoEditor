@@ -238,7 +238,6 @@ void remove_window(Fl_Window* win)
     if(win)
     {
         win->hide();
-        window.special_tab->remove(win);
         Fl::delete_widget(win);
     }
 }
@@ -682,6 +681,8 @@ void scene_tree_callback(Fl_Tree* tree, void*)
     if(update_name)
         create_behavior_ui(object);
 
+    window.special_tab->begin();
+
     if(object->getType() == M_OBJECT3D_ENTITY)
     {
         DELETE_WINDOW(text_window);
@@ -692,8 +693,8 @@ void scene_tree_callback(Fl_Tree* tree, void*)
         if(object_window == NULL)
         {
             object_window = window.create_object_window();
+            object_window->position(window.special_tab->x()+3, window.special_tab->y()+3);
 
-            object_window->position(window.special_tab->x()-3, window.special_tab->y());
             window.special_tab->add(object_window);
         }
 
@@ -765,7 +766,7 @@ void scene_tree_callback(Fl_Tree* tree, void*)
         {
             light_window = window.create_light_window();
 
-            light_window->position(window.special_tab->x()-3, window.special_tab->y());
+            light_window->position(window.special_tab->x()+3, window.special_tab->y());
             window.special_tab->add(light_window);
         }
 
@@ -808,7 +809,7 @@ void scene_tree_callback(Fl_Tree* tree, void*)
         {
             camera_window = window.create_camera_window();
 
-            camera_window->position(window.special_tab->x()-3, window.special_tab->y());
+            camera_window->position(window.special_tab->x()+3, window.special_tab->y());
             window.special_tab->add(camera_window);
         }
 
@@ -842,7 +843,7 @@ void scene_tree_callback(Fl_Tree* tree, void*)
         {
             text_window = window.create_text_window();
 
-            text_window->position(window.special_tab->x()-3, window.special_tab->y());
+            text_window->position(window.special_tab->x()+3, window.special_tab->y());
             window.special_tab->add(text_window);
         }
 
@@ -878,7 +879,7 @@ void scene_tree_callback(Fl_Tree* tree, void*)
         {
             sound_window = window.create_sound_window();
 
-            sound_window->position(window.special_tab->x()-3, window.special_tab->y());
+            sound_window->position(window.special_tab->x()+3, window.special_tab->y());
             window.special_tab->add(sound_window);
         }
 
@@ -921,6 +922,7 @@ void scene_tree_callback(Fl_Tree* tree, void*)
     window.yscale_edit->value(scale.y);
     window.zscale_edit->value(scale.z);
 
+    window.special_tab->end();
     window.special_tab->redraw();
     window.glbox->redraw();
 }
