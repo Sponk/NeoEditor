@@ -414,26 +414,63 @@ Fl_Double_Window* EditorWindow::create_object_window() {
       } // Fl_Check_Button* object_physics_button
       o->end();
     } // Fl_Group* o
-    { Fl_Group* o = new Fl_Group(6, 403, 219, 32, "Pivot:");
+    { Fl_Group* o = new Fl_Group(6, 634, 219, 32, "Pivot:");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      { xpivot_edit = new Fl_Value_Input(27, 408, 51, 21, "X:");
+      { xpivot_edit = new Fl_Value_Input(27, 639, 51, 21, "X:");
         xpivot_edit->maximum(1000);
         xpivot_edit->step(1);
         xpivot_edit->callback((Fl_Callback*)edit_object_properties);
       } // Fl_Value_Input* xpivot_edit
-      { ypivot_edit = new Fl_Value_Input(96, 408, 51, 21, "Y:");
+      { ypivot_edit = new Fl_Value_Input(96, 639, 51, 21, "Y:");
         ypivot_edit->maximum(1000);
         ypivot_edit->step(1);
         ypivot_edit->callback((Fl_Callback*)edit_object_properties);
       } // Fl_Value_Input* ypivot_edit
-      { zpivot_edit = new Fl_Value_Input(165, 407, 51, 21, "Z:");
+      { zpivot_edit = new Fl_Value_Input(165, 638, 51, 21, "Z:");
         zpivot_edit->maximum(1000);
         zpivot_edit->step(1);
         zpivot_edit->callback((Fl_Callback*)edit_object_properties);
       } // Fl_Value_Input* zpivot_edit
       o->end();
     } // Fl_Group* o
+    { Fl_Group* o = new Fl_Group(6, 406, 219, 95, "Damping:");
+      o->box(FL_ENGRAVED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { object_linear_damping_edit = new Fl_Value_Input(18, 429, 195, 21, "Linear:");
+        object_linear_damping_edit->callback((Fl_Callback*)edit_object_properties);
+        object_linear_damping_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* object_linear_damping_edit
+      { object_angular_damping_edit = new Fl_Value_Input(18, 471, 195, 21, "Angular:");
+        object_angular_damping_edit->callback((Fl_Callback*)edit_object_properties);
+        object_angular_damping_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* object_angular_damping_edit
+      o->end();
+    } // Fl_Group* o
+    { Fl_Group* o = new Fl_Group(6, 526, 219, 32, "Linear Factor:");
+      o->box(FL_ENGRAVED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { xlinear_edit = new Fl_Value_Input(27, 531, 51, 21, "X:");
+        xlinear_edit->maximum(1000);
+        xlinear_edit->step(0.1);
+        xlinear_edit->callback((Fl_Callback*)edit_object_properties);
+      } // Fl_Value_Input* xlinear_edit
+      { ylinear_edit = new Fl_Value_Input(96, 531, 51, 21, "Y:");
+        ylinear_edit->maximum(1000);
+        ylinear_edit->step(0.1);
+        ylinear_edit->callback((Fl_Callback*)edit_object_properties);
+      } // Fl_Value_Input* ylinear_edit
+      { zlinear_edit = new Fl_Value_Input(165, 530, 51, 21, "Z:");
+        zlinear_edit->maximum(1000);
+        zlinear_edit->step(0.1);
+        zlinear_edit->callback((Fl_Callback*)edit_object_properties);
+      } // Fl_Value_Input* zlinear_edit
+      o->end();
+    } // Fl_Group* o
+    { object_angular_factor_edit = new Fl_Value_Input(6, 582, 216, 21, "Angular Factor:");
+      object_angular_factor_edit->callback((Fl_Callback*)edit_object_properties);
+      object_angular_factor_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+    } // Fl_Value_Input* object_angular_factor_edit
     o->end();
   } // Fl_Double_Window* o
   return w;

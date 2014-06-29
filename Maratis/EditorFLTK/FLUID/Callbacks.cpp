@@ -713,6 +713,16 @@ void scene_tree_callback(Fl_Tree* tree, void*)
             window.object_fric_edit->value(phys->getFriction());
             window.object_rest_edit->value(phys->getRestitution());
 
+            window.object_angular_damping_edit->value(phys->getAngularDamping());
+            window.object_linear_damping_edit->value(phys->getLinearDamping());
+
+            MVector3 linear_factor = *phys->getLinearFactor();
+            window.xlinear_edit->value(linear_factor.x);
+            window.ylinear_edit->value(linear_factor.y);
+            window.zlinear_edit->value(linear_factor.z);
+
+            window.object_angular_factor_edit->value(phys->getAngularFactor());
+
             MPhysicsConstraint* constraint = phys->getConstraint();
 
             if(constraint)
@@ -1237,6 +1247,12 @@ void edit_object_properties(Fl_Value_Input*, void*)
     phys->setMass(window.object_mass_edit->value());
     phys->setFriction(window.object_fric_edit->value());
     phys->setRestitution(window.object_rest_edit->value());
+
+    phys->setAngularDamping(window.object_angular_damping_edit->value());
+    phys->setLinearDamping(window.object_linear_damping_edit->value());
+
+    phys->setLinearFactor(MVector3(window.xlinear_edit->value(), window.ylinear_edit->value(), window.zlinear_edit->value()));
+    phys->setAngularFactor(window.object_angular_factor_edit->value());
 
     MPhysicsConstraint* constraint = phys->getConstraint();
 

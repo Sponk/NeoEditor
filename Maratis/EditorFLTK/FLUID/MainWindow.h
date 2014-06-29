@@ -123,6 +123,12 @@ public:
   Fl_Value_Input *xpivot_edit;
   Fl_Value_Input *ypivot_edit;
   Fl_Value_Input *zpivot_edit;
+  Fl_Value_Input *object_linear_damping_edit;
+  Fl_Value_Input *object_angular_damping_edit;
+  Fl_Value_Input *xlinear_edit;
+  Fl_Value_Input *ylinear_edit;
+  Fl_Value_Input *zlinear_edit;
+  Fl_Value_Input *object_angular_factor_edit;
   Fl_Double_Window* create_camera_window();
   Fl_Value_Input *camera_color_r_edit;
   Fl_Value_Input *camera_color_g_edit;

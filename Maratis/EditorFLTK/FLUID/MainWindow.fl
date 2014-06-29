@@ -359,8 +359,7 @@ class EditorWindow {open
       }
     }
   }
-  Function {create_light_window()} {open
-  } {
+  Function {create_light_window()} {} {
     Fl_Window light_window_object {open
       xywh {388 224 258 714} type Double labelsize 11 hide
       code0 {light_window_object->position(0,0);}
@@ -462,9 +461,10 @@ class EditorWindow {open
       }
     }
   }
-  Function {create_object_window()} {} {
+  Function {create_object_window()} {open
+  } {
     Fl_Window {} {open
-      xywh {471 259 360 714} type Double hide
+      xywh {1995 225 360 714} type Double visible
     } {
       Fl_Group {} {
         label {Settings:} open
@@ -564,23 +564,63 @@ class EditorWindow {open
       }
       Fl_Group {} {
         label {Pivot:} open
-        xywh {6 403 219 32} box ENGRAVED_FRAME align 5
+        xywh {6 634 219 32} box ENGRAVED_FRAME align 5
       } {
         Fl_Value_Input xpivot_edit {
           label {X:} user_data_type {void*}
           callback edit_object_properties
-          xywh {27 408 51 21} maximum 1000 step 1
+          xywh {27 639 51 21} maximum 1000 step 1
         }
         Fl_Value_Input ypivot_edit {
           label {Y:} user_data_type {void*}
           callback edit_object_properties
-          xywh {96 408 51 21} maximum 1000 step 1
+          xywh {96 639 51 21} maximum 1000 step 1
         }
         Fl_Value_Input zpivot_edit {
           label {Z:} user_data_type {void*}
           callback edit_object_properties
-          xywh {165 407 51 21} maximum 1000 step 1
+          xywh {165 638 51 21} maximum 1000 step 1
         }
+      }
+      Fl_Group {} {
+        label {Damping:} open
+        xywh {6 406 219 95} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Value_Input object_linear_damping_edit {
+          label {Linear:}
+          callback edit_object_properties
+          xywh {18 429 195 21} align 5
+        }
+        Fl_Value_Input object_angular_damping_edit {
+          label {Angular:}
+          callback edit_object_properties
+          xywh {18 471 195 21} align 5
+        }
+      }
+      Fl_Group {} {
+        label {Linear Factor:} open
+        xywh {6 526 219 32} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Value_Input xlinear_edit {
+          label {X:} user_data_type {void*}
+          callback edit_object_properties
+          xywh {27 531 51 21} maximum 1000 step 0.1
+        }
+        Fl_Value_Input ylinear_edit {
+          label {Y:} user_data_type {void*}
+          callback edit_object_properties
+          xywh {96 531 51 21} maximum 1000 step 0.1
+        }
+        Fl_Value_Input zlinear_edit {
+          label {Z:} user_data_type {void*}
+          callback edit_object_properties selected
+          xywh {165 530 51 21} maximum 1000 step 0.1
+        }
+      }
+      Fl_Value_Input object_angular_factor_edit {
+        label {Angular Factor:}
+        callback edit_object_properties
+        xywh {6 582 216 21} align 5
       }
     }
   }
@@ -896,8 +936,7 @@ class PlayerConsole {} {
   }
 } 
 
-class MaterialEditDlg {open
-} {
+class MaterialEditDlg {} {
   decl {char object_name[256];} {private local
   }
   Function {create_window(const char* name)} {open
@@ -906,7 +945,7 @@ class MaterialEditDlg {open
       label {Edit Materials}
       user_data this user_data_type {MaterialEditDlg*}
       callback close_window_callback open
-      xywh {655 471 306 243} type Double modal visible
+      xywh {2135 534 306 243} type Double hide modal
     } {
       Fl_Button {} {
         label Save
@@ -1069,8 +1108,7 @@ delete dlg;} {}
       material->setEmit(emitcolor);
       material->setShininess(dlg->shininess_edit->value());
 
-      ::window.glbox->redraw();} {selected
-    }
+      ::window.glbox->redraw();} {}
   }
   Function {save_callback(Fl_Button*, MaterialEditDlg* dlg)} {open return_type {static void}
   } {
