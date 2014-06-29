@@ -712,12 +712,12 @@ Fl_Double_Window* PlayerConsole::create_window() {
 }
 
 Fl_Double_Window* MaterialEditDlg::create_window(const char* name) {
-  { window = new Fl_Double_Window(312, 198, "Edit Materials");
+  { window = new Fl_Double_Window(306, 243, "Edit Materials");
     window->callback((Fl_Callback*)close_window_callback, (void*)(this));
-    { Fl_Button* o = new Fl_Button(207, 159, 93, 27, "Save");
+    { Fl_Button* o = new Fl_Button(201, 171, 93, 27, "Save");
       o->callback((Fl_Callback*)save_callback, (void*)(this));
     } // Fl_Button* o
-    { Fl_Button* o = new Fl_Button(117, 159, 84, 27, "Close");
+    { Fl_Button* o = new Fl_Button(201, 204, 93, 27, "Close");
       o->callback((Fl_Callback*)close_callback, (void*)(this));
     } // Fl_Button* o
     { materials_chooser = new Fl_Choice(12, 15, 162, 27);
@@ -746,9 +746,12 @@ Fl_Double_Window* MaterialEditDlg::create_window(const char* name) {
       } // Fl_Button* o
       o->end();
     } // Fl_Group* o
-    { Fl_Button* o = new Fl_Button(15, 159, 84, 27, "Apply");
+    { Fl_Button* o = new Fl_Button(12, 204, 165, 27, "Apply");
       o->callback((Fl_Callback*)apply_callback, (void*)(this));
     } // Fl_Button* o
+    { shininess_edit = new Fl_Value_Input(12, 171, 165, 24, "Shininess:");
+      shininess_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+    } // Fl_Value_Input* shininess_edit
     window->set_modal();
     window->end();
   } // Fl_Double_Window* window
@@ -815,6 +818,8 @@ void MaterialEditDlg::material_changed(Fl_Choice* choice, MaterialEditDlg* dlg) 
     dlg->color_r->value(emitcolor.x);
     dlg->color_g->value(emitcolor.y);
     dlg->color_b->value(emitcolor.z);
+    
+    dlg->shininess_edit->value(material->getShininess());
 }
 
 void MaterialEditDlg::choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg) {
@@ -859,6 +864,7 @@ void MaterialEditDlg::apply_callback(Fl_Button*, MaterialEditDlg* dlg) {
         emitcolor.z = dlg->color_b->value();
   
         material->setEmit(emitcolor);
+        material->setShininess(dlg->shininess_edit->value());
   
         ::window.glbox->redraw();
 }
@@ -872,6 +878,4 @@ void MaterialEditDlg::save_callback(Fl_Button*, MaterialEditDlg* dlg) {
             MLOG_ERROR("mesh == NULL! This should not happen!");
             return;
         }
-
-        xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);
 }

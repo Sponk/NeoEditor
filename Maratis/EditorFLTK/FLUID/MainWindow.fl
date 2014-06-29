@@ -11,7 +11,7 @@ decl {\#include <string>} {private local
 decl {\#include <FL/Fl_Color_Chooser.H>} {private local
 } 
 
-decl {\#include <MFileManager/MMeshSave.h>} {selected private local
+decl {\#include <MFileManager/MMeshSave.h>} {private local
 } 
 
 class EditorWindow {open
@@ -906,19 +906,19 @@ class MaterialEditDlg {open
       label {Edit Materials}
       user_data this user_data_type {MaterialEditDlg*}
       callback close_window_callback open
-      xywh {2159 518 312 198} type Double modal visible
+      xywh {655 471 306 243} type Double modal visible
     } {
       Fl_Button {} {
         label Save
         user_data this user_data_type {MaterialEditorDlg*}
         callback save_callback
-        xywh {207 159 93 27}
+        xywh {201 171 93 27}
       }
       Fl_Button {} {
         label Close
         user_data this user_data_type {MaterialEditDlg*}
         callback close_callback
-        xywh {117 159 84 27}
+        xywh {201 204 93 27}
       }
       Fl_Choice materials_chooser {
         user_data this user_data_type {MaterialEditDlg*}
@@ -952,7 +952,11 @@ class MaterialEditDlg {open
         label Apply
         user_data this user_data_type {MaterialEditDlg*}
         callback apply_callback
-        xywh {15 159 84 27}
+        xywh {12 204 165 27}
+      }
+      Fl_Value_Input shininess_edit {
+        label {Shininess:}
+        xywh {12 171 165 24} align 5
       }
     }
     code {MEngine* engine = MEngine::getInstance();
@@ -1016,7 +1020,9 @@ delete dlg;} {}
   
   dlg->color_r->value(emitcolor.x);
   dlg->color_g->value(emitcolor.y);
-  dlg->color_b->value(emitcolor.z);} {}
+  dlg->color_b->value(emitcolor.z);
+  
+  dlg->shininess_edit->value(material->getShininess());} {}
   }
   Function {choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg)} {open return_type {static void}
   } {
@@ -1061,8 +1067,10 @@ delete dlg;} {}
       emitcolor.z = dlg->color_b->value();
 
       material->setEmit(emitcolor);
+      material->setShininess(dlg->shininess_edit->value());
 
-      ::window.glbox->redraw();} {}
+      ::window.glbox->redraw();} {selected
+    }
   }
   Function {save_callback(Fl_Button*, MaterialEditDlg* dlg)} {open return_type {static void}
   } {

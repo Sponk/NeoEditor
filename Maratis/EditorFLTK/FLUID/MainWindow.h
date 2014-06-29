@@ -191,6 +191,7 @@ public:
   Fl_Value_Input *color_r;
   Fl_Value_Input *color_g;
   Fl_Value_Input *color_b;
+  Fl_Value_Input *shininess_edit;
   static void close_callback(Fl_Button* button, MaterialEditDlg* dlg);
   static void material_changed(Fl_Choice* choice, MaterialEditDlg* dlg);
   static void choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg);
