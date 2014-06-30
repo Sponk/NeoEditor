@@ -92,11 +92,20 @@ string functionsShader = string(
 
 "float lookup(vec4 shadCoord, sampler2D shadMap, vec2 offSet)"
 "{"
-        "if(shadCoord.x > 1.0 || shadCoord.x < 0.0 || shadCoord.y > 1.0 || shadCoord.y < 0.0) return 0.0;"
+        //"if(shadCoord.x > 1.0 || shadCoord.x < 0.0 || shadCoord.y > 1.0 || shadCoord.y < 0.0) return 0.0;"
 
 		"float distanceFromLight = texture2D(shadMap, shadCoord.xy + offSet).z;"
 		"return step(shadCoord.z, distanceFromLight);"
 "}"			
+
+"float gather_lookup(vec4 shadCoord, sampler2D shadMap, vec2 offSet)"
+"{"
+        //"if(shadCoord.x > 1.0 || shadCoord.x < 0.0 || shadCoord.y > 1.0 || shadCoord.y < 0.0) return 0.0;"
+
+		"float distanceFromLight = textureGather(shadMap, shadCoord.xy + offSet).z;"
+		"return step(shadCoord.z, distanceFromLight);"
+"}"			
+
 
 "float computeShadow(bool shad, vec4 shadCoord, sampler2D shadMap, float shadBias, float shadBlur)"
 "{"
@@ -109,15 +118,15 @@ string functionsShader = string(
 		"shadowCoordinateWdivide /= shadowCoordinateWdivide.w;"	
 
         // Are we still in the right range?
-        "if(shadowCoordinateWdivide.x > 1.0 || shadowCoordinateWdivide.x < 0.0 || shadowCoordinateWdivide.y > 1.0 || shadowCoordinateWdivide.y < 0.0) return 0.0;"
+        "if(shadowCoordinateWdivide.x > 1.0 || shadowCoordinateWdivide.x < 0.0 || shadowCoordinateWdivide.y > 1.0 || shadowCoordinateWdivide.y < 0.0) return 1.0;"
 
         // Is it reasonable to calculate the samples?
-        "shadow += lookup(shadowCoordinateWdivide, shadMap, vec2(-0.0008, 0.0008));"
-        "shadow += lookup(shadowCoordinateWdivide, shadMap, vec2(0.0008, 0.0008));"
-        "shadow += lookup(shadowCoordinateWdivide, shadMap, vec2(0.0008, -0.0008));"
-        "shadow += lookup(shadowCoordinateWdivide, shadMap, vec2(-0.0008, -0.0008));"
+        "shadow += gather_lookup(shadowCoordinateWdivide, shadMap, vec2(0.0, 0.0));"
+        /*"shadow += gather_lookup(shadowCoordinateWdivide, shadMap, vec2(0.0001, 0.0001));"
+        "shadow += gather_lookup(shadowCoordinateWdivide, shadMap, vec2(0.0001, -0.0001));"
+        "shadow += gather_lookup(shadowCoordinateWdivide, shadMap, vec2(-0.0001, -0.0001));"*/
 
-        "if(shadow <= 0.0) return 0.0; else shadow = 1.0;"
+		"if(shadow == 0.0) return 1.0; else shadow = 1.0;"
 
         "float blur = (shadBlur*0.01);"
 
@@ -125,19 +134,20 @@ string functionsShader = string(
         "d = normalize(d)*blur;"
 
         "vec2 dp = vec2(d.y, -d.x);"
-        "float spread = 0.0005;"
+		"float spread = 100/textureSize(shadMap, 0) + 0.005;"
 
         // TODO: Variable!
-        "float distance = length(eyepos)*0.0003;"
+        "float distance = length(eyepos)*0.0005;"
+		"float oneByDistance = 1.0/distance;"
         "int samples = int(shadBlur);"
 
         "if(distance >= 1.0)"
-            "samples = int((1.0/distance)*shadBlur);"
+            "samples = int(oneByDistance*shadBlur);"
 
         "if(samples <= 1) samples = 2;"
 
         "vec2 coord = shadowCoordinateWdivide.xy * (500.0/(shadBlur+1.0)) * float(samples);"
-        "vec4 rand = 0.0001*texture2D(RandTexture, coord);"
+        "vec4 rand = spread*0.1*texture2D(RandTexture, coord);"
 
         "for(int x = 0; x<samples; x++)"
         "{"
@@ -146,7 +156,7 @@ string functionsShader = string(
                     "coord.xy = dp * vec2(float(x)*spread, float(y)*spread);"
                     "coord.xy += rand.xy;"
 
-                    "shadow += lookup(shadowCoordinateWdivide, shadMap, coord.xy);"
+                    "shadow += gather_lookup(shadowCoordinateWdivide, shadMap, coord.xy);"
               "}"
         "}"
         "shadow *= 1.0 / (float(samples * samples));"
@@ -184,23 +194,16 @@ string functionsShader = string(
 		"}"
         "else if(spotCos >= 1.0)"
         "{"
-            "float spot = 1.0;"
+	         "float shadow = computeShadow(shad, shadCoord, shadMap, shadBias, shadBlur);"
 
-            "if(spot >= spotCos)"
-            "{"
-                "float shadow = computeShadow(shad, shadCoord, shadMap, shadBias, shadBlur);"
+             "float lightDirLength2 = dot(lightDir, lightDir);"
+             "float attenuation = (1.0 / (constantAttenuation + (lightDirLength2 * quadraticAttenuation)))*shadow;"
 
-                //"spot = clamp(spot, 0.0, 1.0);"
+             "diffuse = diffuse + (lightDiffuse * lambertTerm * attenuation);"
 
-                "float lightDirLength2 = dot(lightDir, lightDir);"
-                "float attenuation = (spot / (constantAttenuation + (lightDirLength2 * quadraticAttenuation)))*shadow;"
-
-                "diffuse = diffuse + (lightDiffuse * lambertTerm * attenuation);"
-
-                "vec3 S = normalize(E + L);"
-                "float spec = pow(max(dot(S, N), 0.0), MaterialShininess) * attenuation;"
-                "specular = specular + (lightSpecular * spec);"
-            "}"
+             "vec3 S = normalize(E + L);"
+             "float spec = pow(max(dot(S, N), 0.0), MaterialShininess) * attenuation;"
+             "specular = specular + (lightSpecular * spec);"
         "}"
 		"else"
 		"{"
@@ -244,20 +247,14 @@ string functionsShader = string(
 		"}"
         "else if(spotCos >= 1.0)"
         "{"
-            "float spot = 1.0;"
+             "float lightDirLength2 = dot(lightDir, lightDir);"
+             "float attenuation = (1.0 / (constantAttenuation + (lightDirLength2 * quadraticAttenuation)));"
 
-            "if(spot >= spotCos)"
-            "{"
+             "diffuse = diffuse + (lightDiffuse * lambertTerm * attenuation);"
 
-                "float lightDirLength2 = dot(lightDir, lightDir);"
-                "float attenuation = (spot / (constantAttenuation + (lightDirLength2 * quadraticAttenuation)));"
-
-                "diffuse = diffuse + (lightDiffuse * lambertTerm * attenuation);"
-
-                "vec3 S = normalize(E + L);"
-                "float spec = pow(max(dot(S, N), 0.0), MaterialShininess) * attenuation;"
-                "specular = specular + (lightSpecular * spec);"
-            "}"
+             "vec3 S = normalize(E + L);"
+             "float spec = pow(max(dot(S, N), 0.0), MaterialShininess) * attenuation;"
+             "specular = specular + (lightSpecular * spec);"
         "}"
 		"else"
 		"{"
