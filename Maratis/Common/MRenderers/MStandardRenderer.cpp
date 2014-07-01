@@ -779,7 +779,7 @@ void MStandardRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVec
 	}
 }
 
-void MStandardRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature)
+void MStandardRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature, bool shadow)
 {
 	// data
 	MVector3 * vertices = subMesh->getVertices();
@@ -817,13 +817,28 @@ void MStandardRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature)
 		if(! display->isVisible())
 			continue;
 
+        M_CULL_MODES cullMode;
+        if(shadow)
+        {
+            cullMode = display->getCullMode();
+            display->setCullMode(M_CULL_FRONT);
+        }
+
 		MMaterial * material = display->getMaterial();
 		if(material)
 		{
 			if(material->getBlendMode() == M_BLENDING_NONE)
 				drawDisplay(subMesh, display, vertices, normals, tangents, colors);
 		}
+
+        if(shadow)
+            display->setCullMode(cullMode);
 	}
+}
+
+void MStandardRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature)
+{
+    drawOpaques(subMesh, armature, false);
 }
 
 void MStandardRenderer::drawTransparents(MSubMesh * subMesh, MArmature * armature)
@@ -1613,7 +1628,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 						m_currModelViewMatrix = (*lightCamera.getCurrentViewMatrix()) * (*entity->getMatrix());
 
 						// draw opaques
-						drawOpaques(subMesh, mesh->getArmature());
+                        drawOpaques(subMesh, mesh->getArmature(), true);
 
 						//render->popMatrix();
 					}

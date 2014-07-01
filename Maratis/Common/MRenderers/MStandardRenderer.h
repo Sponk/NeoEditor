@@ -135,6 +135,7 @@ private:
 	void drawDisplay(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices, MVector3 * normals, MVector3 * tangents, MColor * colors);
 	//void drawDisplayTriangles(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices);
 	void drawOpaques(MSubMesh * subMesh, MArmature * armature);
+    void drawOpaques(MSubMesh *subMesh, MArmature *armature, bool shadow);
 	void drawTransparents(MSubMesh * subMesh, MArmature * armature);
 	void setShadowMatrix(MMatrix4x4 * matrix, MOCamera * camera);
 	void updateVisibility(MScene * scene, MOCamera * camera);
