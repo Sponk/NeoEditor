@@ -187,6 +187,9 @@ class PlayerConsole {
 public:
   Fl_Double_Window* create_window();
   Fl_Text_Display *output_edit;
+  static void window_close_callback(Fl_Window* window, PlayerConsole* dlg);
+  bool closed; 
+  PlayerConsole();
 };
 
 class MaterialEditDlg {

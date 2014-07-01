@@ -1492,10 +1492,13 @@ void play_game_callback(Fl_Menu_*, void*)
 		fl_alert("Could not start player! Make sure that the executable exists and you have rights to start it.");
 		return;
 	}
-	
-	Fl_Window* window = console.create_window();
-	window->show();
-    
+
+    if(console.closed)
+    {
+        Fl_Window* window = console.create_window();
+        window->show();
+    }
+
 	console.output_edit->buffer(&console_buffer);
     console_buffer.text("");
 

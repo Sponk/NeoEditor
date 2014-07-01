@@ -742,13 +742,25 @@ Fl_Double_Window* PlayerConsole::create_window() {
   Fl_Double_Window* w;
   { Fl_Double_Window* o = new Fl_Double_Window(915, 210);
     w = o;
-    o->user_data((void*)(this));
+    o->callback((Fl_Callback*)window_close_callback, (void*)(this));
     { output_edit = new Fl_Text_Display(0, 0, 915, 210);
       output_edit->box(FL_UP_BOX);
     } // Fl_Text_Display* output_edit
     o->end();
+    o->resizable(o);
   } // Fl_Double_Window* o
+  closed = false;
   return w;
+}
+
+void PlayerConsole::window_close_callback(Fl_Window* window, PlayerConsole* dlg) {
+  dlg->closed = true;
+  window->hide();
+  Fl::delete_widget(window);
+}
+
+PlayerConsole::PlayerConsole() {
+  closed = true;
 }
 
 Fl_Double_Window* MaterialEditDlg::create_window(const char* name) {
