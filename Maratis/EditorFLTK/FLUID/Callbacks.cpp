@@ -1480,12 +1480,12 @@ void play_game_callback(Fl_Menu_*, void*)
 
     FILE* file = popen((current_project.path + "MaratisPlayer \"" + project_name + "\" 1024 768 0 1").c_str(), "r");
 #else
-	// FIXME: Hack!
-	system((current_project.path + "MaratisPlayer").c_str());
+	std::string project_name = current_project.file_path.substr(current_project.file_path.find_last_of("\\")+1);
+    project_name = project_name.erase(project_name.find_last_of("."));
+
+    FILE* file = _popen((current_project.path + "MaratisPlayer.exe \"" + project_name + "\" 1024 768 0 1").c_str(), "r");
 #endif
 
-// TODO: Profiling and output on Windows
-#ifndef WIN32
 	if(file == NULL)
 	{
 		MLOG_ERROR("Could not start player!");
@@ -1559,10 +1559,14 @@ void play_game_callback(Fl_Menu_*, void*)
 
     console_buffer.append(report.str().c_str());
 
+#ifndef WIN32
     pclose(file);
+#else
+	_pclose(file);
+#endif
+
 	free(line);
     update_scene_tree();
-#endif
 }
 
 void add_behavior_menu_callback(Fl_Menu_* menu, const char* name)

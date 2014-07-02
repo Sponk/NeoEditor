@@ -106,13 +106,13 @@ inline size_t c99_getline(char** lineptr, size_t* n, FILE* stream)
 	bufptr = *lineptr;
     size = *n;
 
-    c = fgetc(stream);
-
-    if (c == EOF) 
+    if (feof(stream)) 
 	{
     	return -1;
     }
     
+	c = fgetc(stream);
+
 	if (bufptr == NULL) 
 	{
     	bufptr = (char*) malloc(128);
@@ -125,7 +125,7 @@ inline size_t c99_getline(char** lineptr, size_t* n, FILE* stream)
     
 	p = bufptr;
     
-	while(c != EOF) 
+	while(!feof(stream)) 
 	{
     	if ((p - bufptr) > (size - 1)) 
 		{
