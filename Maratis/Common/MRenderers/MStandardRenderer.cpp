@@ -1542,6 +1542,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 
 			render->clear(M_BUFFER_DEPTH);
 			render->setColorMask(0, 0, 0, 0);
+			render->enablePolygonOffset(1.0, 4096.0);
 
 			// entities
 			for(i=0; i<eSize; i++)
@@ -1623,6 +1624,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 				}
 			}
 
+			render->disablePolygonOffset();
 			setShadowMatrix(&shadowLight->shadowMatrix, &lightCamera);
 
 			// biasUnity

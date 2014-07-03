@@ -406,6 +406,8 @@ public:
 	virtual void enableDepthTest(void) = 0;
 	virtual void disableDepthTest(void) = 0;
 	virtual void setDepthMode(M_DEPTH_MODES mode) = 0;
+	virtual void enablePolygonOffset(float x, float y) = 0;
+	virtual void disablePolygonOffset() = 0;
 
 	// stencil
 	virtual void enableStencilTest(void) = 0;

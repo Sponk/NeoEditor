@@ -863,6 +863,17 @@ void MGLContext::setDepthMask(bool depth){
 	glDepthMask(depth);
 }
 
+void MGLContext::enablePolygonOffset(float x, float y)
+{
+	glEnable(GL_POLYGON_OFFSET_FILL);
+	glPolygonOffset(x, y);
+}
+
+void MGLContext::disablePolygonOffset()
+{
+	glDisable(GL_POLYGON_OFFSET_FILL);
+}
+
 void MGLContext::setAlphaTest(float value)
 {
 	if(value > 0.0f)
