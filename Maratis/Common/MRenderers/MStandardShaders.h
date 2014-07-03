@@ -140,7 +140,7 @@ string functionsShader = string(
         "float distance = length(eyepos)*0.0005;"
 		"float oneByDistance = 1.0/distance;"
         "int samples = int(shadBlur);"
-
+	
         "if(distance >= 1.0)"
             "samples = int(oneByDistance*shadBlur);"
 
@@ -159,7 +159,8 @@ string functionsShader = string(
                     "shadow += gather_lookup(shadowCoordinateWdivide, shadMap, coord.xy);"
               "}"
         "}"
-        "shadow *= 1.0 / (float(samples * samples));"
+
+		"shadow *= 1.0 / (float(samples * samples));"
 	"}"					
 	"return shadow;"
 "}"

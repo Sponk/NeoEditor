@@ -779,7 +779,7 @@ void MStandardRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVec
 	}
 }
 
-void MStandardRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature, bool shadow)
+void MStandardRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature)
 {
 	// data
 	MVector3 * vertices = subMesh->getVertices();
@@ -787,11 +787,11 @@ void MStandardRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature, bo
 	MVector3 * tangents = subMesh->getTangents();
 	MColor * colors = subMesh->getColors();
 
-	if(! vertices)
+	if (!vertices)
 		return;
 
 	MSkinData * skinData = subMesh->getSkinData();
-	if(armature && skinData)
+	if (armature && skinData)
 	{
 		unsigned int verticesSize = subMesh->getVerticesSize();
 		unsigned int normalsSize = subMesh->getNormalsSize();
@@ -811,34 +811,19 @@ void MStandardRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature, bo
 
 	unsigned int i;
 	unsigned int displayNumber = subMesh->getDisplaysNumber();
-	for(i=0; i<displayNumber; i++)
+	for (i = 0; i<displayNumber; i++)
 	{
 		MDisplay * display = subMesh->getDisplay(i);
-		if(! display->isVisible())
+		if (!display->isVisible())
 			continue;
 
-        M_CULL_MODES cullMode;
-        if(shadow)
-        {
-            cullMode = display->getCullMode();
-            display->setCullMode(M_CULL_FRONT);
-        }
-
 		MMaterial * material = display->getMaterial();
-		if(material)
+		if (material)
 		{
-			if(material->getBlendMode() == M_BLENDING_NONE)
+			if (material->getBlendMode() == M_BLENDING_NONE)
 				drawDisplay(subMesh, display, vertices, normals, tangents, colors);
 		}
-
-        if(shadow)
-            display->setCullMode(cullMode);
 	}
-}
-
-void MStandardRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature)
-{
-    drawOpaques(subMesh, armature, false);
 }
 
 void MStandardRenderer::drawTransparents(MSubMesh * subMesh, MArmature * armature)
@@ -1628,7 +1613,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 						m_currModelViewMatrix = (*lightCamera.getCurrentViewMatrix()) * (*entity->getMatrix());
 
 						// draw opaques
-                        drawOpaques(subMesh, mesh->getArmature(), true);
+                        drawOpaques(subMesh, mesh->getArmature());
 
 						//render->popMatrix();
 					}
@@ -1675,7 +1660,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 
 
 	// update visibility
-	updateVisibility(scene, camera); // TODO: don't need to test light vis again
+	//updateVisibility(scene, camera); // TODO: don't need to test light vis again
 
 	// get camera frustum
 	MFrustum * frustum = camera->getFrustum();
