@@ -73,6 +73,7 @@ void draw(void)
 MSemaphore updateSemaphore;
 MSemaphore inputSemaphore;
 bool updateThreadRunning = true;
+int profiler = false;
 
 int update_thread(void* nothing)
 {
@@ -117,6 +118,12 @@ int update_thread(void* nothing)
 
                 skipTicks -= (currentTick - oldTick);
 
+				if (profiler)
+				{
+					printf("profiler updatetime %d\n", currentTick - oldTick);
+					fflush(stdout);
+				}
+
                 if(skipTicks > 0)
                     MSleep(skipTicks);
 
@@ -138,6 +145,12 @@ int update_thread(void* nothing)
             MSemaphoreUnlock(&updateSemaphore);
 
             skipTicks -= (currentTick - oldTick);
+
+			if (profiler)
+			{
+				printf("profiler updatetime %d\n", currentTick - oldTick);
+				fflush(stdout);
+			}
 
             if(skipTicks > 0)
                 MSleep(skipTicks);
@@ -176,7 +189,6 @@ int main(int argc, char **argv)
 	unsigned int width = 1024;
 	unsigned int height = 768;
     int fullscreen = false;
-    int profiler = false;
 
     if(argc > 2)
 		sscanf(argv[2], "%d", &width);

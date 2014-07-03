@@ -1511,6 +1511,12 @@ void play_game_callback(Fl_Menu_*, void*)
     double framecount = -1;
     int framemax = 0;
     int framemin = -1;
+
+	double updatetime = 0;
+	double updatecount = -1;
+	int updatemax = 0;
+	int updatemin = -1;
+
     char str[20];
 
     Fl::wait();
@@ -1536,6 +1542,17 @@ void play_game_callback(Fl_Menu_*, void*)
                 if(time < framemin || framemin < 0)
                     framemin = time;
             }
+			else if(!strcmp(str, "updatetime"))
+			{
+				updatetime += time;
+				updatecount++;
+
+				if (time > updatemax)
+					updatemax = time;
+
+				if (time < updatemin || updatemin < 0)
+					updatemin = time;
+			}
         }
         else
         {
@@ -1548,17 +1565,37 @@ void play_game_callback(Fl_Menu_*, void*)
     }
 
     double avFrame = frametime / framecount;
-    MLOG_INFO("Number of frames: " << framecount << " Average frametime: " << avFrame << "ms Average framerate: " << 1000/avFrame);
-    MLOG_INFO("Max frametime: " << framemax << "ms Min frametime: " << framemin << "ms");
+	double avUpdate = updatetime / updatecount;
 
     std::stringstream report;
-    report << "\n******************************************************\n";
-    report << "Profiling report\n";
-    report << "----------------\n";
+	report << "\nProfiling report\n";
+	report << "******************************************************\n";
+
+	report << "Graphics data:\n";
+	report << "----------------\n";
 
     report << "Number of frames: " << framecount << "\n";
     report << "Average frametime: " << avFrame << " ms\n";
     report << "Average framerate: " << 1000/avFrame << " FPS\n";
+	report << "Max: " << framemax << " ms\n";
+	report << "Min: " << framemin << " ms\n";
+
+	report << "\nUpdate data (scripts, physics, etc.):\n";
+	report << "-----------------------------------------\n";
+	report << "Number of frames: " << updatecount << "\n";
+	report << "Average frametime: " << avUpdate << " ms\n";
+	report << "Average framerate: " << 1000 / avUpdate << " FPS\n";
+	report << "Max: " << updatemax << " ms\n";
+	report << "Min: " << updatemin << " ms\n";
+
+	if (avUpdate > avFrame)
+	{
+		report << "\nResult: Your application is CPU capped!\n";
+	}
+	else
+	{
+		report << "\nResult: Your application is GPU capped!\n";
+	}
 
     console_buffer.append(report.str().c_str());
 
