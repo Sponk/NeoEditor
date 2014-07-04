@@ -3,7 +3,6 @@
 #include <MEngine.h>
 #include <MLoaders/MImageLoader.h>
 #include <MLog.h>
-#include <MThread.h>
 
 #include <MMouse.h>
 #include <MGui.h>

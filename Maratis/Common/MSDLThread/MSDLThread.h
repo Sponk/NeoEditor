@@ -32,7 +32,6 @@
 
 #include <MCore.h>
 #include <SDL.h>
-#include <MThread.h>
 
 /**
  * @brief The MThread class implements a multithreading mechanism based on SDL threading functionality.

@@ -25,7 +25,7 @@
 #ifndef MSCHEDULE_H
 #define MSCHEDULE_H
 
-#include <MThread.h>
+#include <MCore.h>
 
 class MScheduleEvent
 {

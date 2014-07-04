@@ -17,8 +17,6 @@
 
 #include <MEngine.h>
 #include <MLoaders/MImageLoader.h>
-#include <MLog.h>
-#include <MThread.h>
 #include "../MFilesUpdate/MFilesUpdate.h"
 #include "../Maratis/Maratis.h"
 #include "../MLoaders/MAssimpMeshLoader.h"

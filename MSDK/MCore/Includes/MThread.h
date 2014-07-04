@@ -30,8 +30,6 @@
 #ifndef MTHREAD_H
 #define MTHREAD_H
 
-#include "../../MCore/Includes/MCore.h"
-
 /**
  * @brief The MThread class implements a multithreading mechanism
  * @bug Should this class be here, in MEngine or somewhere else?
