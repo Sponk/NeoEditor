@@ -46,7 +46,6 @@ Fl_Text_Buffer console_buffer;
 
 char labels[][2] = {{"X"},{"Y"},{"Z"},{"W"}};
 
-extern MSemaphore updateSemaphore;
 extern const char* executable;
 
 bool update_name = true;

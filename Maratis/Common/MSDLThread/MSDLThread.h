@@ -27,29 +27,32 @@
 //
 //========================================================================
 
-#ifndef MTHREAD_H
-#define MTHREAD_H
+#ifndef MSDLTHREAD_H
+#define MSDLTHREAD_H
 
-#include "../../MCore/Includes/MCore.h"
+#include <MCore.h>
+#include <SDL.h>
+#include <MThread.h>
 
 /**
- * @brief The MThread class implements a multithreading mechanism
+ * @brief The MThread class implements a multithreading mechanism based on SDL threading functionality.
  * @bug Should this class be here, in MEngine or somewhere else?
  *
  * @see MSemaphore
  * @see MSleep
  */
-class M_CORE_EXPORT MThread
+class MSDLThread : public MThread
 {
 private:
+        SDL_Thread* m_sdlThread; ///< The SDL thread
         bool m_running; ///< Is the thread running?
 public:
-	MThread() {}
+    MSDLThread();
 
     /**
       * @brief The destructor calls MThread::Stop to clean up.
       */
-	~MThread() {}
+    ~MSDLThread();
 
     /**
      * @brief Start Starts the function given as argument in this thread.
@@ -66,7 +69,7 @@ public:
      * @param data Data that needs to be pushed to the thread function.
      * @return Returns \b true on success, \b false on failure.
      */
-    virtual bool Start(int (*thread_func)(void*), const char* name, void* data) = 0;
+    bool Start(int (*thread_func)(void*), const char* name, void* data);
 
     /**
      * @brief Stop Stops this thread.
@@ -74,13 +77,13 @@ public:
      * This would force quit the thread on older versions of SDL. In this version (2.x) it
      * only calls MThread::WaitForReturn and cleans up all private variables.
      */
-    virtual void Stop() = 0;
+    void Stop();
 
     /**
      * @brief WaitForReturn Waits for thread_func from MThread::Start to return a value.
      * @return The exit value of thread_func.
      */
-    virtual int WaitForReturn() = 0;
+    int WaitForReturn();
 
     /**
      * @brief IsRunning Returns if the thread is currently running.
@@ -92,7 +95,7 @@ public:
      * @brief GetId Gets the thread ID from SDL and returns it.
      * @return The thread ID.
      */
-    virtual int GetId() = 0;
+    int GetId();
 };
 
 /**
@@ -102,27 +105,22 @@ public:
  * @see MSemaphoreWaitAndLock
  * @see MSemaphoreUnlock
  */
-class M_CORE_EXPORT MSemaphore
+class MSDLSemaphore : public MSemaphore
 {
+    SDL_semaphore* m_sdlSemaphore; ///< The SDL semaphore
 public:
-	MSemaphore(){};
-	~MSemaphore(){};
+    MSDLSemaphore();
+    ~MSDLSemaphore();
 
     /**
      * @brief Initializes the SDL semaphore.
      * @param num Number of MSemaphoreWaitAndLock without unlocking will pass until the requesting thread will block. Usually set to 1.
      * @return Returns \b true on success and \b false on failure.
      */
-    virtual bool Init(int num) = 0;
+    bool Init(int num);
 
-	/**
-	* @brief Locks the semaphore given as parameter and waits if it's already locked.
-	*
-	* @param sem The pointer to a MSemaphore which shall be locked/waited for.
-	* @return Returns \b true on success and \b false on failure.
-	*/
-	static bool WaitAndLock(MSemaphore*);
-	static bool Unlock(MSemaphore*);
+	static bool WaitAndLock(MSDLSemaphore* semaphore);
+	static bool Unlock(MSDLSemaphore* semaphore);
 };
 
 #endif // MTHREAD_H

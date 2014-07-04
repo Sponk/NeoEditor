@@ -30,7 +30,7 @@
 #include <MEngine.h>
 #include <MLoaders/MImageLoader.h>
 #include <MLog.h>
-#include <MThread.h>
+#include "MSDLThread/MSDLThread.h"
 #include "MFilesUpdate/MFilesUpdate.h"
 #include "Maratis/Maratis.h"
 #include "Maratis/MaratisUI.h"
@@ -83,8 +83,7 @@ void draw(void)
 	MWindow::getInstance()->swapBuffer();
 }
 
-MSemaphore updateSemaphore;
-MSemaphore inputSemaphore;
+MSDLSemaphore updateSemaphore;
 bool updateThreadRunning = true;
 
 int update_thread(void* nothing)
@@ -106,40 +105,40 @@ int update_thread(void* nothing)
 
     while(updateThreadRunning)
     {
-        MSemaphoreWaitAndLock(&updateSemaphore);
+		MSDLSemaphore::WaitAndLock(&updateSemaphore);
 
             if(window->getFocus())
             {
-                MSemaphoreUnlock(&updateSemaphore);
+				MSDLSemaphore::Unlock(&updateSemaphore);
 
                 // compute target tick
-                unsigned long currentTick = window->getSystemTick();
+                long currentTick = window->getSystemTick();
 
-                unsigned long tick = currentTick - startTick;
-                unsigned long frame = (unsigned long)(tick * (frequency * 0.001f));
+                long tick = currentTick - startTick;
+                long frame = (long)(tick * (frequency * 0.001f));
 
                 // update elapsed time
-                unsigned int i;
-                unsigned int steps = (unsigned int)(frame - previousFrame);
+                int i;
+                int steps = (int)(frame - previousFrame);
 
                 // don't wait too much
                 if(steps >= (frequency/2))
                 {
-                    MSemaphoreWaitAndLock(&updateSemaphore);
+					MSDLSemaphore::WaitAndLock(&updateSemaphore);
 
                         update();
                         unsigned int oldTick = currentTick;
                         currentTick = window->getSystemTick();
 
-                    MSemaphoreUnlock(&updateSemaphore);
+					MSDLSemaphore::Unlock(&updateSemaphore);
 
                     previousFrame = frame;
 
-                    MSleep(skipTicks - (currentTick - oldTick));
+                    window->sleep(skipTicks - (currentTick - oldTick));
                     continue;
                 }
 
-                MSemaphoreWaitAndLock(&updateSemaphore);
+				MSDLSemaphore::WaitAndLock(&updateSemaphore);
 
                 // update
                 for(i=0; i<steps; i++)
@@ -169,29 +168,17 @@ int update_thread(void* nothing)
             unsigned int oldTick = currentTick;
             currentTick = window->getSystemTick();
 
-            MSemaphoreUnlock(&updateSemaphore);
+			MSDLSemaphore::Unlock(&updateSemaphore);
 
-            MSleep(skipTicks - (currentTick - oldTick));
+            window->sleep(skipTicks - (currentTick - oldTick));
         }
         else
         {
-            MSemaphoreUnlock(&updateSemaphore);
-            MSleep(100);
+			MSDLSemaphore::Unlock(&updateSemaphore);
+			window->sleep(100);
         }
 
         //window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
-    }
-
-    return 0;
-}
-
-int input_thread(void* nothing)
-{
-    while(updateThreadRunning)
-    {
-        // flush input
-        MEngine::getInstance()->getInputContext()->flush();
-        MSleep(10);
     }
 
     return 0;
@@ -209,14 +196,10 @@ int main(int argc, char **argv)
 	MWindow * window = MWindow::getInstance();
 
     // create the update thread
-    MThread updateThread;
-
-    // create the input thread
-    MThread inputThread;
+    MSDLThread updateThread;
 
     // Init semaphore
     updateSemaphore.Init(1);
-    inputSemaphore.Init(1);
 
 	// create window
 	if(! window->create("Maratis", 1024,768, 32, false))
@@ -280,14 +263,14 @@ int main(int argc, char **argv)
 
     MInitSchedule();
     updateThread.Start(update_thread, "Update", NULL);
-    // inputThread.Start(input_thread, "Input", NULL);
 
     bool isActive = true;
 	// on events
     while(isActive)
 	{
-        MSemaphoreWaitAndLock(&updateSemaphore);
+		MSDLSemaphore::WaitAndLock(&updateSemaphore);
 
+		MEngine::getInstance()->getInputContext()->flush();
         window->onEvents();
         MUpdateScheduledEvents();
 
@@ -304,23 +287,23 @@ int main(int argc, char **argv)
         else
         {
             draw();
-            MSleep(100);
+            window->sleep(100);
         }
 
         // update postponed requests
         MEngine::getInstance()->updateRequests();
 
         isActive = window->isActive();
-        MSemaphoreUnlock(&updateSemaphore);
+		MSDLSemaphore::Unlock(&updateSemaphore);
 
-        MSleep(0);
+        window->sleep(0);
 		//window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
 	}
 
     updateThreadRunning = false;
     int ret = updateThread.WaitForReturn();
 
-    printf("Info: Update thread returned with exit code %d\n", ret);
+	MLOG_INFO("Update thread returned with exit code " << ret);
 
 	gui->clear();
 	maratis->clear();

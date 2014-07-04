@@ -18,8 +18,6 @@
 #include <FL/Fl_Int_Input.H>
 #include <FL/Fl_Double_Window.H>
 
-extern MSemaphore updateSemaphore;
-
 extern Fl_Double_Window* main_window;
 extern EditorWindow window;
 

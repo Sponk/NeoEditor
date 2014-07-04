@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MCore
-// MThread.cpp
+// MSDLThread.cpp
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //========================================================================
@@ -27,25 +27,23 @@
 //
 //========================================================================
 
-#include "../Includes/MCore.h"
-
-#include <MThread.h>
+#include "MSDLThread.h"
 #include <cstdio>
 
-MThread::MThread() :
+MSDLThread::MSDLThread() :
       m_sdlThread(NULL)
     , m_running(false)
 {
 
 }
 
-MThread::~MThread()
+MSDLThread::~MSDLThread()
 {
     Stop();
 }
 
 // TODO: Save name!
-bool MThread::Start(int (*thread_func)(void*), const char* name, void* data)
+bool MSDLThread::Start(int (*thread_func)(void*), const char* name, void* data)
 {
     if(m_running)
     {
@@ -65,7 +63,7 @@ bool MThread::Start(int (*thread_func)(void*), const char* name, void* data)
 }
 
 // SDL2 does not allow killing threads!
-void MThread::Stop()
+void MSDLThread::Stop()
 {
     if(!m_running)
         return;
@@ -77,7 +75,7 @@ void MThread::Stop()
     m_running = false;
 }
 
-int MThread::WaitForReturn()
+int MSDLThread::WaitForReturn()
 {
     int ret;
 
@@ -90,7 +88,7 @@ int MThread::WaitForReturn()
     return ret;
 }
 
-int MThread::GetId()
+int MSDLThread::GetId()
 {
     if(!m_running)
         return -1;
@@ -99,22 +97,22 @@ int MThread::GetId()
 }
 
 ////////////////////////////////////////////////////////
-// Implementation of MSemaphore
+// Implementation of MSDLSemaphore
 ////////////////////////////////////////////////////////
 
-MSemaphore::MSemaphore() :
+MSDLSemaphore::MSDLSemaphore() :
     m_sdlSemaphore(NULL)
 {
 
 }
 
-MSemaphore::~MSemaphore()
+MSDLSemaphore::~MSDLSemaphore()
 {
     if(m_sdlSemaphore)
         SDL_DestroySemaphore(m_sdlSemaphore);
 }
 
-bool MSemaphore::Init(int num)
+bool MSDLSemaphore::Init(int num)
 {
     if(m_sdlSemaphore)
     {
@@ -133,12 +131,12 @@ bool MSemaphore::Init(int num)
     return true;
 }
 
-bool MSemaphoreWaitAndLock(MSemaphore* sem)
+bool MSDLSemaphore::WaitAndLock(MSDLSemaphore* semaphore)
 {
-    if(sem && sem->GetHandle())
+	if (semaphore->m_sdlSemaphore)
     {
-        if(SDL_SemWait(sem->GetHandle()) == -1)
-            return false;
+		if (SDL_SemWait(semaphore->m_sdlSemaphore) == -1)
+			return false;
 
         return true;
     }
@@ -146,19 +144,10 @@ bool MSemaphoreWaitAndLock(MSemaphore* sem)
     return false;
 }
 
-void MSemaphoreUnlock(MSemaphore* sem)
+bool MSDLSemaphore::Unlock(MSDLSemaphore* semaphore)
 {
-    if(sem && sem->GetHandle())
+	if (semaphore->m_sdlSemaphore)
     {
-        SDL_SemPost(sem->GetHandle());
+		return SDL_SemPost(semaphore->m_sdlSemaphore);
     }
-}
-
-void MSleep(int t)
-{
-    // Don't wait for negative time!
-    if(t < 0)
-        t = 0;
-
-    SDL_Delay(t);
 }

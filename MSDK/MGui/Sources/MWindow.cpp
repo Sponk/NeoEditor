@@ -678,6 +678,9 @@ bool MWindow::create(const char * title, unsigned int width, unsigned int height
 
 void MWindow::sleep(double time)
 {
+	if (time <= 0)
+		return;
+
 	SDL_Delay(time);
 }
 

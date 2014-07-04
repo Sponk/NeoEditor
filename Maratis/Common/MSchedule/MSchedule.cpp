@@ -23,14 +23,15 @@
 //========================================================================
 
 #include "MSchedule.h"
-#include <MThread.h>
+#include "MSDLThread/MSDLThread.h"
 #include <vector>
+#include <MWindow.h>
 
 using namespace std;
 
 vector<MScheduleEvent> events;
 
-MSemaphore scheduleSemaphore;
+MSDLSemaphore scheduleSemaphore;
 
 MScheduleEvent::MScheduleEvent(void (*nevent)(void *, bool*), void *data, bool* success) :
 m_event(nevent),
@@ -69,7 +70,7 @@ void MSchedule(MScheduleEvent event)
     events.push_back(event);
     //MSemaphoreUnlock(&scheduleSemaphore);
 
-    MSleep(2000);
+    MWindow::getInstance()->sleep(200);
 }
 
 void MInitSchedule()
