@@ -36,6 +36,11 @@
     #undef main
 #endif
 
+// Don't show cmd window
+#ifdef _MSC_VER
+#    pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
+#endif
+
 // window events
 void windowEvents(MWinEvent * windowEvents)
 {
