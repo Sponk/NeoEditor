@@ -6,6 +6,8 @@
 #include <FL/Fl_Native_File_Chooser.H>
 #include <string>
 
+#define EDITOR_VERSION_STRING "0.1"
+
 typedef struct
 {
     std::string path;
@@ -58,28 +60,6 @@ inline int c99_snprintf(char* str, size_t size, const char* format, ...)
 }
 
 #define getline c99_getline
-
-// WARNING: Does not allocate memory as it should when n == 0!
-/*inline int c99_getline(char** lineptr, size_t* n, FILE* file)
-{
-	int count = 0;
-	
-	if(lineptr == NULL || *lineptr == NULL || n == 0 || *n == 0 || file == NULL)
-		return 0;
-	
-	char* line = *lineptr;
-	while(count < *n && (line[count] = getc(file)) != '\n'))
-	{
-		if(line[count] == EOF)
-		{
-			line[count] = '\0';
-		}
-		
-		count++;
-	}
-
-	return count;
-}*/
 
 inline size_t c99_getline(char** lineptr, size_t* n, FILE* stream) 
 {

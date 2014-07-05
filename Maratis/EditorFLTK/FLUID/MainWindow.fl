@@ -14,8 +14,7 @@ decl {\#include <FL/Fl_Color_Chooser.H>} {private local
 decl {\#include <MFileManager/MMeshSave.h>} {private local
 } 
 
-class EditorWindow {open
-} {
+class EditorWindow {} {
   Function {show_window()} {open
   } {
     Fl_Window {} {
@@ -128,7 +127,7 @@ class EditorWindow {open
         } {
           MenuItem {} {
             label {Run Game}
-            callback play_game_callback selected
+            callback play_game_callback
             xywh {0 0 100 20} shortcut 0xffc2 divider
           }
           MenuItem {} {
@@ -1145,5 +1144,37 @@ delete dlg;} {}
           MLOG_ERROR("mesh == NULL! This should not happen!");
           return;
       }} {}
+  }
+} 
+
+class AboutDlg {open
+} {
+  Function {create_window()} {open
+  } {
+    Fl_Window {} {
+      label About open
+      xywh {758 254 356 310} type Double visible
+    } {
+      Fl_Box {} {
+        label {The Maratis FLTK editor is distributed under the terms and conditions of the GNU General Public License.}
+        xywh {10 216 335 55} labelsize 12 align 208
+      }
+      Fl_Box {} {
+        image {../../../Data/Installer/maratis-icon-69x69.png} xywh {120 15 110 110}
+      }
+      Fl_Box {} {
+        label {Maratis FLTK Editor} selected
+        xywh {10 129 335 40} labeltype ENGRAVED_LABEL labelsize 18 align 208
+      }
+      Fl_Box {} {
+        label {The Maratis3D Scene Editor Experience}
+        xywh {10 161 335 32} align 208
+      }
+      Fl_Box editor_version_edit {
+        label {$VERSION}
+        xywh {10 193 335 20} labelsize 11 align 208
+        code0 {editor_version_edit->label(EDITOR_VERSION_STRING);}
+      }
+    }
   }
 } 

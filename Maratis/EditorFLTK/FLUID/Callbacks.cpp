@@ -1808,7 +1808,8 @@ void duplicate_object_callback(Fl_Menu_ *, void *)
 // TODO: Real about dialog
 void about_menu_callback(Fl_Menu_*, void*)
 {
-    fl_alert("This program is distributed under the terms of the GNU General Public License.");
+	AboutDlg dlg;
+	dlg.create_window()->show();
 }
 
 void select_all_callback(Fl_Menu_*, void*)

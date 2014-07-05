@@ -210,4 +210,10 @@ public:
   static void apply_callback(Fl_Button*, MaterialEditDlg* dlg);
   static void save_callback(Fl_Button*, MaterialEditDlg* dlg);
 };
+
+class AboutDlg {
+public:
+  Fl_Double_Window* create_window();
+  Fl_Box *editor_version_edit;
+};
 #endif
