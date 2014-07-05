@@ -16,6 +16,7 @@
 #include <FL/Fl_Tree_Prefs.H>
 
 #include <MEngine.h>
+#include <MWindow.h>
 #include <MLoaders/MImageLoader.h>
 #include "../MFilesUpdate/MFilesUpdate.h"
 #include "../Maratis/Maratis.h"
@@ -1486,7 +1487,7 @@ void play_game_callback(Fl_Menu_*, void*)
 	if(file == NULL)
 	{
 		MLOG_ERROR("Could not start player!");
-		fl_alert("Could not start player! Make sure that the executable exists and you have rights to start it.");
+		fl_alert("Could not start player! Make sure that the executable exists and you have rights to start it.\nIf it does not exist, try the 'Update player' option in the project menu.");
 		return;
 	}
 
@@ -1821,4 +1822,43 @@ void edit_materials_callback(Fl_Button *, void *)
 {
     MaterialEditDlg* dlg = new MaterialEditDlg();
     dlg->create_window(window.name_edit->value())->show();
+}
+
+static void copyDirFiles(const char * src, const char * dest, const char * filter)
+{
+	vector<string> files;
+	readDirectory(src, &files);
+	for (int i = 0; i < files.size(); ++i)
+	{
+		if (strstr(files[i].c_str(), filter))
+		{
+			char filename[256];
+			getGlobalFilename(filename, dest, files[i].c_str());
+			copyFile(files[i].c_str(), filename);
+		}
+	}
+}
+
+void update_player_callback(Fl_Menu_*, void*)
+{
+	char src[256];
+	char dir[256];
+	char rep[256];
+
+	if(current_project.path.empty())
+		return;
+
+	MWindow* window = MWindow::getInstance();
+
+#ifndef WIN32
+	getGlobalFilename(src, ".", "MaratisPlayer");
+	getGlobalFilename(dir, current_project.path.c_str(), "MaratisPlayer");
+#else
+	getGlobalFilename(src, ".", "MaratisPlayer.exe");
+	getGlobalFilename(dir, current_project.path.c_str(), "MaratisPlayer.exe");
+
+	copyDirFiles(".", current_project.path.c_str(), ".dll");
+#endif
+
+	copyFile(src, dir);
 }

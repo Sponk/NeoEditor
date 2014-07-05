@@ -16,12 +16,13 @@ decl {\#include <MFileManager/MMeshSave.h>} {private local
 
 class EditorWindow {open
 } {
-  Function {show_window()} {} {
+  Function {show_window()} {open
+  } {
     Fl_Window {} {
       label {Maratis Editor} open
-      xywh {572 162 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
+      xywh {513 239 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
-      Fl_Menu_Bar menu_bar {
+      Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
       } {
         Submenu {} {
@@ -126,14 +127,19 @@ class EditorWindow {open
           xywh {0 0 100 20}
         } {
           MenuItem {} {
+            label {Run Game}
+            callback play_game_callback selected
+            xywh {0 0 100 20} shortcut 0xffc2 divider
+          }
+          MenuItem {} {
+            label {Update player}
+            callback update_player_callback
+            tooltip {Copies the player from the editor directory to the project directory.} xywh {0 0 100 20}
+          }
+          MenuItem {} {
             label Publish
             callback publish_callback
             xywh {0 0 100 20} shortcut 0x40070
-          }
-          MenuItem {} {
-            label {Run Game}
-            callback play_game_callback
-            xywh {0 0 100 20} shortcut 0xffc2
           }
         }
         Submenu {} {
@@ -461,13 +467,12 @@ class EditorWindow {open
       }
     }
   }
-  Function {create_object_window()} {open
-  } {
+  Function {create_object_window()} {} {
     Fl_Window object_embedded_window {open
-      xywh {912 136 261 672} type Double resizable
-      code0 {special_tab->resizable(object_embedded_window);} visible
+      xywh {912 136 261 672} type Double hide resizable
+      code0 {special_tab->resizable(object_embedded_window);}
     } {
-      Fl_Scroll {} {open selected
+      Fl_Scroll {} {open
         xywh {0 6 230 666} type VERTICAL resizable
       } {
         Fl_Group {} {
