@@ -766,46 +766,93 @@ PlayerConsole::PlayerConsole() {
 }
 
 Fl_Double_Window* MaterialEditDlg::create_window(const char* name) {
-  { window = new Fl_Double_Window(306, 243, "Edit Materials");
+  { window = new Fl_Double_Window(370, 303, "Edit Materials");
     window->callback((Fl_Callback*)close_window_callback, (void*)(this));
-    { Fl_Button* o = new Fl_Button(201, 171, 93, 27, "Save");
+    { Fl_Button* o = new Fl_Button(270, 263, 85, 27, "Save");
       o->callback((Fl_Callback*)save_callback, (void*)(this));
     } // Fl_Button* o
-    { Fl_Button* o = new Fl_Button(201, 204, 93, 27, "Close");
+    { Fl_Button* o = new Fl_Button(190, 263, 75, 27, "Close");
       o->callback((Fl_Callback*)close_callback, (void*)(this));
     } // Fl_Button* o
-    { materials_chooser = new Fl_Choice(12, 15, 162, 27);
+    { materials_chooser = new Fl_Choice(15, 15, 162, 27);
       materials_chooser->down_box(FL_BORDER_BOX);
       materials_chooser->callback((Fl_Callback*)material_changed, (void*)(this));
     } // Fl_Choice* materials_chooser
-    { Fl_Group* o = new Fl_Group(12, 69, 165, 78, "Emit Color:");
+    { Fl_Group* o = new Fl_Group(15, 69, 165, 78, "Emit Color:");
       o->box(FL_EMBOSSED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      { color_r = new Fl_Value_Input(18, 93, 45, 21, "Red:");
+      { color_r = new Fl_Value_Input(21, 93, 45, 21, "Red:");
         color_r->step(0.1);
         color_r->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* color_r
-      { color_g = new Fl_Value_Input(69, 93, 45, 21, "Green:");
+      { color_g = new Fl_Value_Input(72, 93, 45, 21, "Green:");
         color_g->step(0.1);
         color_g->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* color_g
-      { color_b = new Fl_Value_Input(123, 93, 45, 21, "Blue:");
+      { color_b = new Fl_Value_Input(126, 93, 45, 21, "Blue:");
         color_b->step(0.1);
         color_b->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* color_b
-      { Fl_Button* o = new Fl_Button(18, 117, 96, 24, "Choose color");
+      { Fl_Button* o = new Fl_Button(21, 117, 96, 24, "Choose color");
         o->labeltype(FL_ENGRAVED_LABEL);
         o->labelsize(11);
         o->callback((Fl_Callback*)choose_emit_color, (void*)(this));
       } // Fl_Button* o
       o->end();
     } // Fl_Group* o
-    { Fl_Button* o = new Fl_Button(12, 204, 165, 27, "Apply");
+    { Fl_Button* o = new Fl_Button(15, 263, 165, 27, "Apply");
       o->callback((Fl_Callback*)apply_callback, (void*)(this));
     } // Fl_Button* o
-    { shininess_edit = new Fl_Value_Input(12, 171, 165, 24, "Shininess:");
+    { shininess_edit = new Fl_Value_Input(190, 221, 165, 24, "Shininess:");
       shininess_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
     } // Fl_Value_Input* shininess_edit
+    { opacity_edit = new Fl_Value_Input(190, 171, 165, 24, "Opacity:");
+      opacity_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+    } // Fl_Value_Input* opacity_edit
+    { Fl_Group* o = new Fl_Group(190, 69, 165, 78, "Diffuse Color:");
+      o->box(FL_EMBOSSED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { diffuse_r = new Fl_Value_Input(196, 96, 45, 21, "Red:");
+        diffuse_r->step(0.1);
+        diffuse_r->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* diffuse_r
+      { diffuse_g = new Fl_Value_Input(247, 96, 45, 21, "Green:");
+        diffuse_g->step(0.1);
+        diffuse_g->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* diffuse_g
+      { diffuse_b = new Fl_Value_Input(301, 96, 45, 21, "Blue:");
+        diffuse_b->step(0.1);
+        diffuse_b->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* diffuse_b
+      { Fl_Button* o = new Fl_Button(196, 120, 96, 24, "Choose color");
+        o->labeltype(FL_ENGRAVED_LABEL);
+        o->labelsize(11);
+        o->callback((Fl_Callback*)choose_diffuse_color, (void*)(this));
+      } // Fl_Button* o
+      o->end();
+    } // Fl_Group* o
+    { Fl_Group* o = new Fl_Group(15, 172, 165, 78, "Specular Color:");
+      o->box(FL_EMBOSSED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { specular_r = new Fl_Value_Input(21, 196, 45, 21, "Red:");
+        specular_r->step(0.1);
+        specular_r->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* specular_r
+      { specular_g = new Fl_Value_Input(72, 196, 45, 21, "Green:");
+        specular_g->step(0.1);
+        specular_g->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* specular_g
+      { specular_b = new Fl_Value_Input(126, 196, 45, 21, "Blue:");
+        specular_b->step(0.1);
+        specular_b->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* specular_b
+      { Fl_Button* o = new Fl_Button(21, 220, 96, 24, "Choose color");
+        o->labeltype(FL_ENGRAVED_LABEL);
+        o->labelsize(11);
+        o->callback((Fl_Callback*)choose_specular_color, (void*)(this));
+      } // Fl_Button* o
+      o->end();
+    } // Fl_Group* o
     window->set_modal();
     window->end();
   } // Fl_Double_Window* window
@@ -867,13 +914,26 @@ void MaterialEditDlg::material_changed(Fl_Choice* choice, MaterialEditDlg* dlg) 
     if(!material)
         return;
     
-    MVector3 emitcolor = material->getEmit();
+    MVector3 color = material->getEmit();
     
-    dlg->color_r->value(emitcolor.x);
-    dlg->color_g->value(emitcolor.y);
-    dlg->color_b->value(emitcolor.z);
+    dlg->color_r->value(color.x);
+    dlg->color_g->value(color.y);
+    dlg->color_b->value(color.z);
+    
+    color = material->getDiffuse();
+    
+    dlg->diffuse_r->value(color.x);
+    dlg->diffuse_g->value(color.y);
+    dlg->diffuse_b->value(color.z);
+    
+    color = material->getSpecular();
+    
+    dlg->specular_r->value(color.x);
+    dlg->specular_g->value(color.y);
+    dlg->specular_b->value(color.z);
     
     dlg->shininess_edit->value(material->getShininess());
+    dlg->opacity_edit->value(material->getOpacity());
 }
 
 void MaterialEditDlg::choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg) {
@@ -911,14 +971,28 @@ void MaterialEditDlg::apply_callback(Fl_Button*, MaterialEditDlg* dlg) {
         if(!material)
             return;
   
-        MVector3 emitcolor;
+        MVector3 color;
   
-        emitcolor.x = dlg->color_r->value();
-        emitcolor.y = dlg->color_g->value();
-        emitcolor.z = dlg->color_b->value();
+        color.x = dlg->color_r->value();
+        color.y = dlg->color_g->value();
+        color.z = dlg->color_b->value();
   
-        material->setEmit(emitcolor);
+        material->setEmit(color);
+        
+        color.x = dlg->diffuse_r->value();
+        color.y = dlg->diffuse_g->value();
+        color.z = dlg->diffuse_b->value();
+        
+        material->setDiffuse(color);
+        
+        color.x = dlg->specular_r->value();
+        color.y = dlg->specular_g->value();
+        color.z = dlg->specular_b->value();
+        
+        material->setSpecular(color);
+        
         material->setShininess(dlg->shininess_edit->value());
+        material->setOpacity(dlg->opacity_edit->value());
   
         ::window.glbox->redraw();
 }
@@ -932,6 +1006,30 @@ void MaterialEditDlg::save_callback(Fl_Button*, MaterialEditDlg* dlg) {
             MLOG_ERROR("mesh == NULL! This should not happen!");
             return;
         }
+}
+
+void MaterialEditDlg::choose_diffuse_color(Fl_Button* button, MaterialEditDlg* dlg) {
+  double r = dlg->color_r->value();
+      double g = dlg->diffuse_g->value();
+      double b = dlg->diffuse_b->value();
+  
+      fl_color_chooser("Choose a color", r, g, b);
+  
+      dlg->diffuse_r->value(r);
+      dlg->diffuse_g->value(g);
+      dlg->diffuse_b->value(b);
+}
+
+void MaterialEditDlg::choose_specular_color(Fl_Button* button, MaterialEditDlg* dlg) {
+  double r = dlg->specular_r->value();
+      double g = dlg->specular_g->value();
+      double b = dlg->specular_b->value();
+  
+      fl_color_chooser("Choose a color", r, g, b);
+  
+      dlg->specular_r->value(r);
+      dlg->specular_g->value(g);
+      dlg->specular_b->value(b);
 }
 
 #include <FL/Fl_Image.H>

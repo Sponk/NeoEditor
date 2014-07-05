@@ -203,12 +203,21 @@ public:
   Fl_Value_Input *color_g;
   Fl_Value_Input *color_b;
   Fl_Value_Input *shininess_edit;
+  Fl_Value_Input *opacity_edit;
+  Fl_Value_Input *diffuse_r;
+  Fl_Value_Input *diffuse_g;
+  Fl_Value_Input *diffuse_b;
+  Fl_Value_Input *specular_r;
+  Fl_Value_Input *specular_g;
+  Fl_Value_Input *specular_b;
   static void close_callback(Fl_Button* button, MaterialEditDlg* dlg);
   static void material_changed(Fl_Choice* choice, MaterialEditDlg* dlg);
   static void choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg);
   static void close_window_callback(Fl_Window* window, MaterialEditDlg* dlg);
   static void apply_callback(Fl_Button*, MaterialEditDlg* dlg);
   static void save_callback(Fl_Button*, MaterialEditDlg* dlg);
+  static void choose_diffuse_color(Fl_Button* button, MaterialEditDlg* dlg);
+  static void choose_specular_color(Fl_Button* button, MaterialEditDlg* dlg);
 };
 
 class AboutDlg {
