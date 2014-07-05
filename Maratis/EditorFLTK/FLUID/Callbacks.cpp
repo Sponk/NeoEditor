@@ -1503,7 +1503,7 @@ void play_game_callback(Fl_Menu_*, void*)
 	Fl::wait();
 
     size_t size = 256;
-    char* line = (char*) malloc(size);
+    char* line = (char*) malloc(size+1);
 
     double frametime = 0;
     double framecount = -1;
@@ -1844,16 +1844,15 @@ void update_player_callback(Fl_Menu_*, void*)
 {
 	char src[256];
 	char dir[256];
-	char rep[256];
 
 	if(current_project.path.empty())
 		return;
 
-	MWindow* window = MWindow::getInstance();
-
 #ifndef WIN32
 	getGlobalFilename(src, ".", "MaratisPlayer");
 	getGlobalFilename(dir, current_project.path.c_str(), "MaratisPlayer");
+
+    copyDirFiles(".", current_project.path.c_str(), ".so");
 #else
 	getGlobalFilename(src, ".", "MaratisPlayer.exe");
 	getGlobalFilename(dir, current_project.path.c_str(), "MaratisPlayer.exe");

@@ -113,7 +113,7 @@ int update_thread(void* nothing)
 
                 previousFrame = frame;
 
-                skipTicks -= (currentTick - oldTick);
+                int sleep = skipTicks - (currentTick - oldTick);
 
 				if (profiler)
 				{
@@ -121,10 +121,8 @@ int update_thread(void* nothing)
 					fflush(stdout);
 				}
 
-				MSDLSemaphore::Unlock(&updateSemaphore);
-
-                if(skipTicks > 0)
-                    window->sleep(skipTicks);
+                MSDLSemaphore::Unlock(&updateSemaphore);
+                window->sleep(sleep);
 
                 continue;
             }
@@ -139,15 +137,16 @@ int update_thread(void* nothing)
             unsigned int oldTick = currentTick;
             currentTick = window->getSystemTick();
 
-            skipTicks -= (currentTick - oldTick);
+            int sleep = skipTicks - (currentTick - oldTick);
 
 			if (profiler)
 			{
 				printf("profiler updatetime %d\n", currentTick - oldTick);
 				fflush(stdout);
-			}
+            }
 
-			MSDLSemaphore::Unlock(&updateSemaphore);
+            MSDLSemaphore::Unlock(&updateSemaphore);
+            window->sleep(sleep);
         }
         else
         {
@@ -318,7 +317,7 @@ int main(int argc, char **argv)
 
 		MSDLSemaphore::Unlock(&updateSemaphore);
 
-        window->sleep(0);
+        window->sleep(1);
         //window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
     }
 
