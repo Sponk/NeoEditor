@@ -79,6 +79,17 @@ MSDLSemaphore updateSemaphore;
 bool updateThreadRunning = true;
 int profiler = false;
 
+// TODO: Abstraction!
+double frametime = 0;
+double framecount = -1;
+int framemax = 0;
+int framemin = -1;
+
+double updatetime = 0;
+double updatecount = -1;
+int updatemax = 0;
+int updatemin = -1;
+
 int update_thread(void* nothing)
 {
     MWindow * window = MWindow::getInstance();
@@ -117,8 +128,18 @@ int update_thread(void* nothing)
 
 				if (profiler)
 				{
-                    printf("p ut %d\n", currentTick - oldTick);
-                    //fflush(stdout);
+					int time = currentTick - oldTick;
+					updatecount++;
+					updatetime += time;
+
+					if (time > updatemax)
+					{
+						updatemax = time;
+					}
+					else if (time < updatemin || updatemin < 0)
+					{
+						updatemin = time;
+					}
 				}
 
                 MSDLSemaphore::Unlock(&updateSemaphore);
@@ -141,8 +162,18 @@ int update_thread(void* nothing)
 
 			if (profiler)
 			{
-                printf("p ut %d\n", currentTick - oldTick);
-                //fflush(stdout);
+				int time = currentTick - oldTick;
+				updatecount++;
+				updatetime += time;
+
+				if (time > updatemax)
+				{
+					updatemax = time;
+				}
+				else if (time < updatemin || updatemin < 0)
+				{
+					updatemin = time;
+				}
             }
 
             MSDLSemaphore::Unlock(&updateSemaphore);
@@ -296,11 +327,21 @@ int main(int argc, char **argv)
             int tick = engine->getSystemContext()->getSystemTick();
             draw();
 
-            if(profiler)
-            {
-                printf("p ft %d\n", engine->getSystemContext()->getSystemTick() - tick);
-                //fflush(stdout);
-            }
+			if (profiler)
+			{
+				int time = engine->getSystemContext()->getSystemTick() - tick;
+				framecount++;
+				frametime += time;
+
+				if (time > framemax)
+				{
+					framemax = time;
+				}
+				else if (time < framemin || framemin < 0)
+				{
+					framemin = time;
+				}
+			}
         }
         else
         {
@@ -324,7 +365,44 @@ int main(int argc, char **argv)
     updateThreadRunning = false;
     int ret = updateThread.WaitForReturn();
 
-    MLOG_INFO("Update thread returned with exit code " << ret);
+	MLOG_INFO("Update thread returned with exit code " << ret);
+
+	if (profiler)
+	{
+		using namespace std;
+
+		float avUpdate = (float)updatetime / (float)updatecount;
+		float avFrame = (float)frametime / (float)framecount;
+
+		cout << "\nProfiling report\n";
+		cout << "******************************************************\n";
+
+		cout << "Graphics data:\n";
+		cout << "----------------\n";
+
+		cout << "Number of frames: " << framecount << "\n";
+		cout << "Average frametime: " << avFrame << " ms\n";
+		cout << "Average framerate: " << 1000 / avFrame << " FPS\n";
+		cout << "Max: " << framemax << " ms\n";
+		cout << "Min: " << framemin << " ms\n";
+
+		cout << "\nUpdate data (scripts, physics, etc.):\n";
+		cout << "-----------------------------------------\n";
+		cout << "Number of frames: " << updatecount << "\n";
+		cout << "Average frametime: " << avUpdate << " ms\n";
+		cout << "Average framerate: " << 1000 / avUpdate << " FPS\n";
+		cout << "Max: " << updatemax << " ms\n";
+		cout << "Min: " << updatemin << " ms\n";
+
+		if (avUpdate > avFrame)
+		{
+			cout << "\nResult: Your application is CPU capped!\n";
+		}
+		else
+		{
+			cout << "\nResult: Your application is GPU capped!\n";
+		}
+	}
 
 	maratis->clear();
 	return 0;

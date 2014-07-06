@@ -1504,100 +1504,18 @@ void play_game_callback(Fl_Menu_*, void*)
 
     size_t size = 256;
     char* line = (char*) malloc(size+1);
-
-    double frametime = 0;
-    double framecount = -1;
-    int framemax = 0;
-    int framemin = -1;
-
-	double updatetime = 0;
-	double updatecount = -1;
-	int updatemax = 0;
-	int updatemin = -1;
-
-    char str[20];
-
     Fl::wait();
 
     // TODO: Do all profiling on the client side!
     while(getline(&line, &size, file) > 0)
     {
-        // TODO: Call this more often!
-        Fl::wait();
+		console_buffer.append(line);
+		console.output_edit->move_down();
+		console.output_edit->show_insert_position();
 
-        if(str_starts_with("p", line))
-        {
-            double time;
-            sscanf(line, "%*s %s %lf", str, &time);
-
-            if(!strcmp(str, "ft"))
-            {
-                frametime += time;
-                framecount++;
-
-                if(time > framemax)
-                    framemax = time;
-
-                if(time < framemin || framemin < 0)
-                    framemin = time;
-            }
-            else if(!strcmp(str, "ut"))
-			{
-				updatetime += time;
-				updatecount++;
-
-				if (time > updatemax)
-					updatemax = time;
-
-				if (time < updatemin || updatemin < 0)
-					updatemin = time;
-			}
-        }
-        else
-        {
-            console_buffer.append(line);
-			console.output_edit->move_down();
-			console.output_edit->show_insert_position();
-
-            printf("%s", line);
-        }
+        printf("%s", line);
     }
-
-    double avFrame = frametime / framecount;
-	double avUpdate = updatetime / updatecount;
-
-    std::stringstream report;
-	report << "\nProfiling report\n";
-	report << "******************************************************\n";
-
-	report << "Graphics data:\n";
-	report << "----------------\n";
-
-    report << "Number of frames: " << framecount << "\n";
-    report << "Average frametime: " << avFrame << " ms\n";
-    report << "Average framerate: " << 1000/avFrame << " FPS\n";
-	report << "Max: " << framemax << " ms\n";
-	report << "Min: " << framemin << " ms\n";
-
-	report << "\nUpdate data (scripts, physics, etc.):\n";
-	report << "-----------------------------------------\n";
-	report << "Number of frames: " << updatecount << "\n";
-	report << "Average frametime: " << avUpdate << " ms\n";
-	report << "Average framerate: " << 1000 / avUpdate << " FPS\n";
-	report << "Max: " << updatemax << " ms\n";
-	report << "Min: " << updatemin << " ms\n";
-
-	if (avUpdate > avFrame)
-	{
-		report << "\nResult: Your application is CPU capped!\n";
-	}
-	else
-	{
-		report << "\nResult: Your application is GPU capped!\n";
-	}
-
-    console_buffer.append(report.str().c_str());
-
+	    
 #ifndef WIN32
     pclose(file);
 #else
