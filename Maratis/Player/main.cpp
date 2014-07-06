@@ -117,8 +117,8 @@ int update_thread(void* nothing)
 
 				if (profiler)
 				{
-					printf("profiler updatetime %d\n", currentTick - oldTick);
-					fflush(stdout);
+                    printf("p ut %d\n", currentTick - oldTick);
+                    //fflush(stdout);
 				}
 
                 MSDLSemaphore::Unlock(&updateSemaphore);
@@ -141,8 +141,8 @@ int update_thread(void* nothing)
 
 			if (profiler)
 			{
-				printf("profiler updatetime %d\n", currentTick - oldTick);
-				fflush(stdout);
+                printf("p ut %d\n", currentTick - oldTick);
+                //fflush(stdout);
             }
 
             MSDLSemaphore::Unlock(&updateSemaphore);
@@ -298,8 +298,8 @@ int main(int argc, char **argv)
 
             if(profiler)
             {
-                printf("profiler frametime %d\n", engine->getSystemContext()->getSystemTick() - tick);
-                fflush(stdout);
+                printf("p ft %d\n", engine->getSystemContext()->getSystemTick() - tick);
+                //fflush(stdout);
             }
         }
         else

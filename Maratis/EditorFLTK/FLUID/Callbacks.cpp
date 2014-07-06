@@ -1519,17 +1519,18 @@ void play_game_callback(Fl_Menu_*, void*)
 
     Fl::wait();
 
+    // TODO: Do all profiling on the client side!
     while(getline(&line, &size, file) > 0)
     {
         // TODO: Call this more often!
         Fl::wait();
 
-        if(str_starts_with("profiler", line))
+        if(str_starts_with("p", line))
         {
             double time;
             sscanf(line, "%*s %s %lf", str, &time);
 
-            if(!strcmp(str, "frametime"))
+            if(!strcmp(str, "ft"))
             {
                 frametime += time;
                 framecount++;
@@ -1540,7 +1541,7 @@ void play_game_callback(Fl_Menu_*, void*)
                 if(time < framemin || framemin < 0)
                     framemin = time;
             }
-			else if(!strcmp(str, "updatetime"))
+            else if(!strcmp(str, "ut"))
 			{
 				updatetime += time;
 				updatecount++;
