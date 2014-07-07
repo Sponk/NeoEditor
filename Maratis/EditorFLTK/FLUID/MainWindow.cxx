@@ -999,13 +999,15 @@ void MaterialEditDlg::apply_callback(Fl_Button*, MaterialEditDlg* dlg) {
 
 void MaterialEditDlg::save_callback(Fl_Button*, MaterialEditDlg* dlg) {
   MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
-        MMesh* mesh = entity->getMesh();
+  MMesh* mesh = entity->getMesh();
   
-        if(!mesh)
-        {
-            MLOG_ERROR("mesh == NULL! This should not happen!");
-            return;
-        }
+  if(!mesh)
+  {
+          MLOG_ERROR("mesh == NULL! This should not happen!");
+  	return;
+  }
+        
+  xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);
 }
 
 void MaterialEditDlg::choose_diffuse_color(Fl_Button* button, MaterialEditDlg* dlg) {

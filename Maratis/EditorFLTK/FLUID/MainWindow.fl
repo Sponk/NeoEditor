@@ -969,7 +969,7 @@ class MaterialEditDlg {open
     Fl_Window window {
       label {Edit Materials}
       user_data this user_data_type {MaterialEditDlg*}
-      callback close_window_callback open selected
+      callback close_window_callback open
       xywh {696 309 370 303} type Double modal visible
     } {
       Fl_Button {} {
@@ -1215,13 +1215,16 @@ delete dlg;} {}
   Function {save_callback(Fl_Button*, MaterialEditDlg* dlg)} {open return_type {static void}
   } {
     code {MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
-      MMesh* mesh = entity->getMesh();
+MMesh* mesh = entity->getMesh();
 
-      if(!mesh)
-      {
-          MLOG_ERROR("mesh == NULL! This should not happen!");
-          return;
-      }} {}
+if(!mesh)
+{
+        MLOG_ERROR("mesh == NULL! This should not happen!");
+	return;
+}
+      
+xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);} {selected
+    }
   }
   Function {choose_diffuse_color(Fl_Button* button, MaterialEditDlg* dlg)} {open return_type {static void}
   } {
