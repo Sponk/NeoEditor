@@ -1728,7 +1728,10 @@ void duplicate_object_callback(Fl_Menu_ *, void *)
 void about_menu_callback(Fl_Menu_*, void*)
 {
 	AboutDlg dlg;
-	dlg.create_window()->show();
+    Fl_Window* window = dlg.create_window();
+
+    window->position(main_window->x()+0.5*main_window->w()-0.5*window->w(), main_window->y()+0.33*main_window->h());
+    window->show();
 }
 
 void select_all_callback(Fl_Menu_*, void*)
