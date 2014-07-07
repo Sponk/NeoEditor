@@ -111,6 +111,8 @@ IF(UNIX AND NOT APPLE)
 
   SET(CPACK_PACKAGE_CONTACT Yannick Pflanzer <yannick.pflanzer@scary-squid.de>)
   SET(CPACK_GENERATOR "STGZ;TGZ;DEB;RPM;")
+  SET(CPACK_STRIP_FILES ON)
+  
 ENDIF(UNIX AND NOT APPLE)
 
 # Include cpack after all system specifics
