@@ -1773,7 +1773,7 @@ void update_player_callback(Fl_Menu_*, void*)
 	getGlobalFilename(src, ".", "MaratisPlayer");
 	getGlobalFilename(dir, current_project.path.c_str(), "MaratisPlayer");
 
-    copyDirFiles(".", current_project.path.c_str(), ".so");
+    copyDirFiles(".", current_project.path.c_str(), ".so");   
 #else
 	getGlobalFilename(src, ".", "MaratisPlayer.exe");
 	getGlobalFilename(dir, current_project.path.c_str(), "MaratisPlayer.exe");
@@ -1782,4 +1782,9 @@ void update_player_callback(Fl_Menu_*, void*)
 #endif
 
 	copyFile(src, dir);
+
+#ifndef WIN32
+    // Make file executable
+    chmod(dir, S_IRWXU);
+#endif
 }
