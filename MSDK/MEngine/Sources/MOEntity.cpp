@@ -111,7 +111,8 @@ m_animationSpeed(1),
 m_currentFrame(0),
 m_currentLoop(0),
 m_animationId(0),
-m_physicsProperties(NULL)
+m_physicsProperties(NULL),
+m_hasShadow(true)
 {
 	setMeshRef(meshRef);
 }
