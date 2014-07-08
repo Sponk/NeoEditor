@@ -47,7 +47,7 @@ bool M_loadPngImage(const char * filename, void * data)
     MFile* file = M_fopen(filename, "rb");
     if (!file)
     {
-		fprintf(stderr, "ERROR Load PNG : unable to open %s\n", filename);
+        //fprintf(stderr, "ERROR Load PNG : unable to open %s\n", filename);
         return false;
     }
 

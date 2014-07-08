@@ -29,7 +29,9 @@
 //
 //========================================================================
 
-#include <MCore.h>
+using namespace std;
+
+#include <MEngine.h>
 #include "MImageLoader.h"
 #include "MJpegLoader.h"
 #include "MPngLoader.h"
@@ -43,5 +45,7 @@ bool M_loadImage(const char * filename, void * data)
 		return true;
 	if (M_loadTgaImage(filename, data))
 		return true;
+
+    MLOG_ERROR("Could not load \"" << filename << "\"");
 	return false;
 }

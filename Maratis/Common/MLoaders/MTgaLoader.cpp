@@ -30,6 +30,7 @@
 //========================================================================
 
 #include <MCore.h>
+#include <MEngine.h>
 #include "MTgaLoader.h"
 
 static void flipImage(MImage * source)
@@ -79,14 +80,15 @@ bool M_loadTgaImage(const char * filename, void * data)
 	MFile* file = M_fopen(filename, "rb");
 	if (!file)
 	{
-		fprintf(stderr, "ERROR Load TGA : unable to open %s\n", filename);
+        //fprintf(stderr, "ERROR Load TGA : unable to open %s\n", filename);
 		return false;
 	}
 
 	Header header;
 	if (M_fread(&header, sizeof(Header), 1, file) == 0)
 	{
-        fprintf(stderr, "ERROR Load TGA : could not read header from '%s'\n", filename);
+        MLOG_ERROR("Load TGA: Could not read header from \"" << filename << "\"");
+        //fprintf(stderr, "ERROR Load TGA : could not read header from '%s'\n", filename);
 		return false;
 	}
 

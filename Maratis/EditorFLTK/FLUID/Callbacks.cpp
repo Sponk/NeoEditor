@@ -1724,7 +1724,6 @@ void duplicate_object_callback(Fl_Menu_ *, void *)
     window.glbox->redraw();
 }
 
-// TODO: Real about dialog
 void about_menu_callback(Fl_Menu_*, void*)
 {
 	AboutDlg dlg;

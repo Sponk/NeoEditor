@@ -36,6 +36,7 @@
 #include <jerror.h>
 
 #include <MCore.h>
+#include <MEngine.h>
 #include "MJpegLoader.h"
 
 struct my_error_mgr
@@ -60,7 +61,7 @@ bool M_loadJpegImage(const char * filename, void * data)
 	MFile* file = M_fopen(filename, "rb");
 	if (!file)
 	{
-		fprintf(stderr, "ERROR Load JPEG : unable to open %s\n", filename);
+        //fprintf(stderr, "ERROR Load JPEG : unable to open %s\n", filename);
 		return false;
 	}
 
@@ -71,7 +72,7 @@ bool M_loadJpegImage(const char * filename, void * data)
     unsigned char* buffer = new unsigned char[filesize];
     if (filesize != M_fread(buffer, sizeof(char), filesize, file))
     {
-        fprintf(stderr, "ERROR Load JPEG : unable to read %s\n", filename);
+        //fprintf(stderr, "ERROR Load JPEG : unable to read %s\n", filename);
         M_fclose(file);
         delete [] buffer;
         return false;
@@ -101,8 +102,9 @@ bool M_loadJpegImage(const char * filename, void * data)
 		case JCS_RGB:
 			break;
 		default:
-			fprintf(stderr, "ERROR Load JPEG : unsupported color space in %s\n", filename);
-			delete [] buffer;
+            //fprintf(stderr, "ERROR Load JPEG : unsupported color space in %s\n", filename);
+            MLOG_ERROR("Load JPEG: Unsupported color space in \"" << filename << "\"");
+            delete [] buffer;
 			return false;
 	}
 
