@@ -1495,7 +1495,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 			for(i=0; i<eSize; i++)
 			{
 				MOEntity * entity = scene->getEntityByIndex(i);
-				if(entity->isActive())
+                if(entity->isActive() && entity->hasShadow())
 				{
 					if(entity->isInvisible()){
 						entity->setVisible(false);
@@ -1531,6 +1531,10 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 						}
 					}
 				}
+                else if(!entity->hasShadow())
+                {
+                    entity->setVisible(false);
+                }
 			}
 
 			// sort Zlist and set clipping
@@ -1662,7 +1666,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 
 
 	// update visibility
-	//updateVisibility(scene, camera); // TODO: don't need to test light vis again
+    updateVisibility(scene, camera); // TODO: don't need to test light vis again
 
 	// get camera frustum
 	MFrustum * frustum = camera->getFrustum();

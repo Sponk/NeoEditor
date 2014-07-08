@@ -37,7 +37,8 @@ MObject3d::MObject3d(void):
 	m_scale(1, 1, 1),
 	m_isVisible(true),
 	m_isActive(true),
-	m_needToUpdate(true)
+    m_needToUpdate(true),
+    m_hasShadow(true)
 {}
 
 // destructor

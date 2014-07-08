@@ -123,7 +123,8 @@ m_physicsProperties(NULL),
 m_animationSpeed(entity.m_animationSpeed),
 m_currentFrame(entity.m_currentFrame),
 m_currentLoop(entity.m_currentLoop),
-m_animationId(entity.m_animationId)
+m_animationId(entity.m_animationId),
+m_hasShadow(entity.m_hasShadow)
 {
 	setMeshRef(entity.m_meshRef);
 	if(entity.m_physicsProperties)

@@ -2555,10 +2555,17 @@ int enableShadow(lua_State * L)
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
 			bool shadow = lua_toboolean(L, 2) == 1;
-			MOLight * light = (MOLight*)object;
+            MOLight* light = (MOLight*) object;
 			light->castShadow(shadow);
 			return 0;
 		}
+        else if(object->getType() == M_OBJECT3D_ENTITY)
+        {
+            bool shadow = lua_toboolean(L, 2) == 1;
+            MOEntity* entity = (MOEntity*) object;
+            entity->enableShadow(shadow);
+            return 0;
+        }
 	}
 	
 	return 0;

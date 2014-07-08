@@ -65,6 +65,7 @@ protected:
 	bool m_isActive;
 	bool m_isVisible;
 	bool m_needToUpdate;
+    bool m_hasShadow;
 
 	// linking
 	MObject3d * m_parent;
@@ -148,6 +149,10 @@ public:
 	inline void setVisible(bool visible){ m_isVisible = visible; }
 	inline bool isVisible(void){ return m_isVisible; }
 	virtual void updateVisibility(MOCamera * camera){}
+
+    // Shadow
+    inline bool hasShadow() { return m_hasShadow; }
+    inline bool enableShadow(bool shadow) { m_hasShadow = shadow; }
 
 	// name
 	void setName(const char * name);
