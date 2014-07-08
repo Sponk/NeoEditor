@@ -206,7 +206,7 @@ public:
 
     // Shadow
     inline bool hasShadow() { return m_hasShadow; }
-    inline bool enableShadow(bool shadow) { m_hasShadow = shadow; }
+    inline void enableShadow(bool shadow) { m_hasShadow = shadow; }
 
 	// update
 	void update(void);
