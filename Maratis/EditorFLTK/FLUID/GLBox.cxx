@@ -270,9 +270,11 @@ int GLBox::handle(int event)
             mouse_x = Fl::event_x();
             mouse_y = Fl::event_y();
 
+            MMouse::getInstance()->setPosition(mouse_x, mouse_y);
+
             if(Fl::event_button1())
             {
-                Maratis::getInstance()->selectObjectsInMainView(MEngine::getInstance()->getLevel()->getCurrentScene(), Fl::event_shift());
+                Maratis::getInstance()->selectObjectsInMainView(MEngine::getInstance()->getLevel()->getCurrentScene(), Fl::event_shift() > 0);
                 ::window.scene_tree->deselect_all();
 
                 Fl_Tree_Item* item = ::window.scene_tree->root();
