@@ -469,6 +469,33 @@ int getObject(lua_State * L)
 	return 0;
 }
 
+int objectExists(lua_State * L)
+{
+    MLevel * level = MEngine::getInstance()->getLevel();
+    MScene * scene = level->getCurrentScene();
+
+
+    if(! isFunctionOk(L, "objectExists", 1))
+        return 0;
+
+    int nbArguments = lua_gettop(L);
+    if(nbArguments == 2)
+    {
+        unsigned int sceneId = lua_tointeger(L, 1);
+        scene = level->getSceneByIndex(sceneId);
+    }
+
+    const char * name = lua_tostring(L, nbArguments);
+    if(name)
+    {
+        MObject3d * object = scene->getObjectByName(name);
+        lua_pushboolean(L, object != NULL);
+        return 1;
+    }
+
+    return 1;
+}
+
 int getClone(lua_State * L)
 {
 	MLevel * level = MEngine::getInstance()->getLevel();
@@ -3685,6 +3712,7 @@ void MScript::init(void)
 	// object/scene init
 	lua_register(m_state, "getScene",	 getScene);
 	lua_register(m_state, "getObject",	 getObject);
+    lua_register(m_state, "objectExists", objectExists);
 	lua_register(m_state, "getClone",	 getClone);
 	lua_register(m_state, "getParent",	 getParent);
 	lua_register(m_state, "getChilds",	 getChilds);
