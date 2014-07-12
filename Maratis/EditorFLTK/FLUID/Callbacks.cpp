@@ -1506,6 +1506,7 @@ void play_game_callback(Fl_Menu_*, void*)
 		console_buffer.append(line);
 		console.output_edit->move_down();
 		console.output_edit->show_insert_position();
+        Fl::wait();
 
         printf("%s", line);
     }
