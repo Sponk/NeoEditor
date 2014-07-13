@@ -66,7 +66,7 @@ MObject3d::MObject3d(const MObject3d & object):
 	m_matrix(object.m_matrix),
 	m_isVisible(object.m_isVisible),
 	m_isActive(object.m_isActive),
-	m_needToUpdate(object.m_needToUpdate)
+    m_needToUpdate(object.m_needToUpdate)
 {
 	if(object.m_parent)
 		linkTo(object.m_parent);
@@ -75,6 +75,11 @@ MObject3d::MObject3d(const MObject3d & object):
 	unsigned int bSize = object.m_behaviors.size();
 	for(i=0; i<bSize; i++)
 		addBehavior(object.m_behaviors[i]->getCopy(this));
+}
+
+void MObject3d::setAttribute(MVariable variable)
+{
+    m_attributes[variable.getName()] = variable;
 }
 
 void MObject3d::setName(const char * name)

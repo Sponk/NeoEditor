@@ -61,6 +61,9 @@ protected:
 	// childs
 	vector <MObject3d *> m_childs;
 
+    // Attributes
+    map <string, MVariable> m_attributes;
+
 	// properties
 	bool m_isActive;
 	bool m_isVisible;
@@ -90,6 +93,10 @@ public:
 	// childs
 	void unlinkChilds(void);
 	void computeChildsMatrices(void);
+
+    // Attributes
+    void setAttribute(MVariable variable);
+    inline MVariable getAttribute(const char* name) { return m_attributes[name]; }
 
 	// transform
 	MVector3 getUniformRotatedVector(const MVector3 & vector);

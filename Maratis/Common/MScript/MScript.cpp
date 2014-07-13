@@ -420,7 +420,6 @@ int getCurrentCamera(lua_State * L)
 	MLevel * level = MEngine::getInstance()->getLevel();
 	MScene * scene = level->getCurrentScene();
 	
-
 	int nbArguments = lua_gettop(L);
 	if(nbArguments == 1)
 	{
@@ -474,7 +473,6 @@ int objectExists(lua_State * L)
     MLevel * level = MEngine::getInstance()->getLevel();
     MScene * scene = level->getCurrentScene();
 
-
     if(! isFunctionOk(L, "objectExists", 1))
         return 0;
 
@@ -491,6 +489,84 @@ int objectExists(lua_State * L)
         MObject3d * object = scene->getObjectByName(name);
         lua_pushboolean(L, object != NULL);
         return 1;
+    }
+
+    return 1;
+}
+
+int setAttribute(lua_State* L)
+{
+    if(! isFunctionOk(L, "setAttribute", 3))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+    const char* name = lua_tostring(L, 2);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getAttribute(name).getType() == M_VARIABLE_NULL)
+        {
+            if(lua_isnumber(L, 3))
+            {
+                MVariable variable(name, new float(lua_tonumber(L, 3)), M_VARIABLE_FLOAT);
+                object->setAttribute(variable);
+            }
+            else if(lua_isstring(L, 3))
+            {
+                MVariable variable(name, new MString(lua_tostring(L, 3)), M_VARIABLE_STRING);
+                object->setAttribute(variable);
+            }
+        }
+        else
+        {
+            MVariable attribute = object->getAttribute(name);
+            if(lua_isnumber(L, 3) && attribute.getType() == M_VARIABLE_FLOAT)
+            {
+                *(float*)attribute.getPointer() = lua_tonumber(L, 3);
+            }
+            else if(lua_isstring(L, 3) && attribute.getType() == M_VARIABLE_STRING)
+            {
+                ((MString*)attribute.getPointer())->set(lua_tostring(L, 3));
+            }
+            else
+            {
+                MLOG_ERROR("setAttribute: Types do not match! Can not set attribute!");
+            }
+        }
+    }
+
+    return 1;
+}
+
+int getAttribute(lua_State* L)
+{
+    if(! isFunctionOk(L, "getAttribute", 2))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+    const char* name = lua_tostring(L, 2);
+
+    if((object = getObject3d(id)))
+    {
+        MVariable variable = object->getAttribute(name);
+        switch(variable.getType())
+        {
+        case M_VARIABLE_FLOAT:
+            lua_pushnumber(L, *(float*)variable.getPointer());
+        break;
+
+        case M_VARIABLE_STRING:
+            lua_pushstring(L, ((MString*)variable.getPointer())->getSafeString());
+        break;
+
+        case M_VARIABLE_NULL:
+            lua_pushnil(L);
+        break;
+
+        default: MLOG_ERROR("getAttribute: Variable of type '" << variable.getType() << "' not supported!");
+        }
     }
 
     return 1;
@@ -3733,7 +3809,9 @@ void MScript::init(void)
 	lua_register(m_state, "isActive",				isActive);
 	lua_register(m_state, "getName",				getName);
 	lua_register(m_state, "setParent",				setParent);
-	
+    lua_register(m_state, "setAttribute",           setAttribute);
+    lua_register(m_state, "getAttribute",           getAttribute);
+
 	lua_register(m_state, "enableShadow",			enableShadow);
 	lua_register(m_state, "isCastingShadow",		isCastingShadow);
 	
