@@ -510,12 +510,12 @@ int setAttribute(lua_State* L)
             if(lua_isnumber(L, 3))
             {
                 MVariable variable(name, new float(lua_tonumber(L, 3)), M_VARIABLE_FLOAT);
-                object->setAttribute(variable);
+                object->setAttribute(name, variable);
             }
             else if(lua_isstring(L, 3))
             {
                 MVariable variable(name, new MString(lua_tostring(L, 3)), M_VARIABLE_STRING);
-                object->setAttribute(variable);
+                object->setAttribute(name, variable);
             }
         }
         else

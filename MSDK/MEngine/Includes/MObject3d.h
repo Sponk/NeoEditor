@@ -95,7 +95,7 @@ public:
 	void computeChildsMatrices(void);
 
     // Attributes
-    void setAttribute(MVariable variable);
+    void setAttribute(const char* name, MVariable variable);
     inline MVariable getAttribute(const char* name) { return m_attributes[name]; }
 
 	// transform
