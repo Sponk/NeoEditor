@@ -285,7 +285,6 @@ int GLBox::handle(int event)
                     if(Maratis::getInstance()->getSelectedObjectsNumber() == 0)
                         break;
 
-                    // TODO: Multiple selection!
                     if(item && !strcmp(item->label(), Maratis::getInstance()->getSelectedObjectByIndex(0)->getName()))
                     {
                         update_name = true;

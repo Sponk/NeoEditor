@@ -406,7 +406,6 @@ void readBehaviorProperties(TiXmlElement * node, MBehavior * behavior)
                 if(str)
                     ((MString*)variable.getPointer())->set(str);
 
-                // FIXME: Hack for the LuaScript behavior!
                 size = behavior->getVariablesNumber();
             }
             break;

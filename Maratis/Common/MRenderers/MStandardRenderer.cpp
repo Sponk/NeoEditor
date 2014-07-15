@@ -1666,7 +1666,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 
 
 	// update visibility
-    updateVisibility(scene, camera); // TODO: don't need to test light vis again
+    updateVisibility(scene, camera);
 
 	// get camera frustum
 	MFrustum * frustum = camera->getFrustum();
