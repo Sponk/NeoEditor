@@ -95,6 +95,10 @@ unsigned int MBLua::getVariablesNumber(void)
         char globalFile[256];
         getGlobalFilename(globalFile, engine->getSystemContext()->getWorkingDirectory(), m_scriptFile.getSafeString());
 
+        // If the script does not exist, show only the static variable
+        if(isFileExist(globalFile))
+            return 1;
+
         m_script.runScript(globalFile);
 
         lua_State* L = m_script.getLuaState();
