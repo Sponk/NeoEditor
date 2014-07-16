@@ -640,6 +640,7 @@ void create_behavior_ui(MObject3d* object)
 void scene_tree_callback(Fl_Tree* tree, void*)
 {
     Fl_Tree_Item* item = tree->first_selected_item();
+
     if(!item)
         return;
 
@@ -656,15 +657,19 @@ void scene_tree_callback(Fl_Tree* tree, void*)
         return;
     }
 
-    // Translate to object for easier navigation
-    // TODO: Check for real double click!
-    /*if(Fl::event_clicks())
+    if(item == tree->find_clicked())
     {
-        MOCamera* vue = Maratis::getInstance()->getPerspectiveVue();
-        vue->setPosition(object->getPosition() - MVector3(10,0,0));
-        vue->updateMatrix();
-        window.glbox->redraw();
-    }*/
+        Maratis::getInstance()->clearSelectedObjects();
+        Maratis::getInstance()->addSelectedObject(object);
+
+        /*if(Fl::event_clicks())
+        {
+            MOCamera* vue = Maratis::getInstance()->getPerspectiveVue();
+            vue->setPosition(object->getPosition() - MVector3(10,0,0));
+            vue->updateMatrix();
+            window.glbox->redraw();
+        }*/
+    }
 
     MVector3 position = object->getPosition();
     MVector3 rotation = object->getEulerRotation();
