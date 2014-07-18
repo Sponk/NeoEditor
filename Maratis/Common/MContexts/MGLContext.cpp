@@ -40,6 +40,7 @@
 	#include <GLee.h>
 #endif
 
+#include <MEngine.h>
 #include "MGLContext.h"
 
 static int g_GLversion = 0;
@@ -642,10 +643,10 @@ void MGLContext::sendShaderSource(unsigned int shaderId, const char * source)
 	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &compiled);
 	if(!compiled)
 	{
-		fprintf(stderr, "ERROR OpenGL : unable to compile shader\n");
+        MLOG_ERROR("OpenGL : Unable to compile shader");
 		char shader_link_error[4096];
         glGetInfoLogARB((GLhandleARB)shaderId, sizeof(shader_link_error), NULL, shader_link_error);
-		fprintf(stderr, "%s", shader_link_error);
+        MLOG_ERROR(shader_link_error);
 	}
 }
 
