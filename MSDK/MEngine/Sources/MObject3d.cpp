@@ -55,6 +55,25 @@ void MObject3d::clearObject3d(void)
 	
 	m_behaviors.clear();
 	m_childs.clear();
+
+    // All MVariables have to have their content on the heap! No static variables allowed!
+    for(std::map<std::string, MVariable>::iterator it = m_attributes.begin(); it != m_attributes.end(); ++it)
+    {
+        // FIXME: Check for NULL first!
+        switch(it->second.getType())
+        {
+        case M_VARIABLE_FLOAT:
+            delete (float*) it->second.getPointer();
+        break;
+
+        case M_VARIABLE_STRING:
+            delete (MString*) it->second.getPointer();
+        break;
+
+        default:
+            MLOG_WARNING("clearObject3d: Deletion of MVariable with this type is not supported!");
+        }
+    }
 }
 
 // copy constructor
