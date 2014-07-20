@@ -505,27 +505,36 @@ int setAttribute(lua_State* L)
 
     if((object = getObject3d(id)))
     {
+		int type = lua_type(L, 3);
+		M_VARIABLE_TYPE varType = object->getAttribute(name).getType();
+
         if(object->getAttribute(name).getType() == M_VARIABLE_NULL)
         {
-            if(lua_isnumber(L, 3))
-            {
-                MVariable variable(name, new float(lua_tonumber(L, 3)), M_VARIABLE_FLOAT);
-                object->setAttribute(name, variable);
-            }
-            else if(lua_isstring(L, 3))
-            {
-                MVariable variable(name, new MString(lua_tostring(L, 3)), M_VARIABLE_STRING);
-                object->setAttribute(name, variable);
-            }
+			switch(type)
+			{
+				case LUA_TNUMBER:
+				{
+					MVariable variable(name, new float(lua_tonumber(L, 3)), M_VARIABLE_FLOAT);
+					object->setAttribute(name, variable);
+				}
+				break;
+
+				case LUA_TSTRING:
+				{
+					MVariable variable(name, new MString(lua_tostring(L, 3)), M_VARIABLE_STRING);
+					object->setAttribute(name, variable);
+				}
+				break;
+			}
         }
         else
         {
             MVariable attribute = object->getAttribute(name);
-            if(lua_isnumber(L, 3) && attribute.getType() == M_VARIABLE_FLOAT)
+            if(type == LUA_TNUMBER && attribute.getType() == M_VARIABLE_FLOAT)
             {
                 *(float*)attribute.getPointer() = lua_tonumber(L, 3);
             }
-            else if(lua_isstring(L, 3) && attribute.getType() == M_VARIABLE_STRING)
+            else if(type == LUA_TSTRING && attribute.getType() == M_VARIABLE_STRING)
             {
                 ((MString*)attribute.getPointer())->set(lua_tostring(L, 3));
             }

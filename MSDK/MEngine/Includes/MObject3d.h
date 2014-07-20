@@ -96,7 +96,7 @@ public:
 
     // Attributes
     void setAttribute(const char* name, MVariable variable);
-    inline MVariable getAttribute(const char* name) { return m_attributes[name]; }
+    MVariable getAttribute(const char* name);
 
 	// transform
 	MVector3 getUniformRotatedVector(const MVector3 & vector);

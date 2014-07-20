@@ -65,7 +65,11 @@ private:
 
 public:
 	
-    MVariable() { MVariable(NULL, NULL, M_VARIABLE_NULL); }
+    MVariable():
+	m_name(NULL),
+	m_pointer(NULL),
+	m_type(M_VARIABLE_NULL)
+	{}
 
     /** The MVariable constructor sets up a new MVariable object.
      *  It will not copy the name to an internal buffer so you have to provide memory for the name.

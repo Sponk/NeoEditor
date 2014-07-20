@@ -82,6 +82,11 @@ void MObject3d::setAttribute(const char* name, MVariable variable)
     m_attributes[name] = variable;
 }
 
+MVariable MObject3d::getAttribute(const char* name)
+{
+	return m_attributes[name];
+}
+
 void MObject3d::setName(const char * name)
 {
 	m_name.set(name);
