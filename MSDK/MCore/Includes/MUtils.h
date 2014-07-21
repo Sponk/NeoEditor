@@ -32,6 +32,7 @@
 #define _M_UTILS_H
 
 #include <map>
+#include <unordered_map>
 #include <vector>
 #include <string>
 using namespace std;

@@ -62,7 +62,7 @@ protected:
 	vector <MObject3d *> m_childs;
 
     // Attributes
-    map <string, MVariable> m_attributes;
+	unordered_map <string, MVariable> m_attributes;
 
 	// properties
 	bool m_isActive;
