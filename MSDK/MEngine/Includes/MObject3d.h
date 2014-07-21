@@ -95,8 +95,8 @@ public:
 	void computeChildsMatrices(void);
 
     // Attributes
-    void setAttribute(const char* name, MVariable variable);
-    MVariable getAttribute(const char* name);
+	inline void setAttribute(const char* name, MVariable variable) { m_attributes[name] = variable; }
+	inline MVariable getAttribute(const char* name) { return m_attributes[name]; };
 
 	// transform
 	MVector3 getUniformRotatedVector(const MVector3 & vector);
