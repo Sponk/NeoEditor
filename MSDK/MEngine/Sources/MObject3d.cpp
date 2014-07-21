@@ -57,7 +57,7 @@ void MObject3d::clearObject3d(void)
 	m_childs.clear();
 
     // All MVariables have to have their content on the heap! No static variables allowed!
-	for (std::unordered_map<std::string, MVariable>::iterator it = m_attributes.begin(); it != m_attributes.end(); ++it)
+	for (AttributeIterator it = m_attributes.begin(); it != m_attributes.end(); ++it)
     {
 		MVariable variable = it->second;
 

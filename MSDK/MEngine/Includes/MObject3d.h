@@ -63,8 +63,10 @@ protected:
 
     // Attributes
 	#if __cplusplus >= 201103L
+		typedef unordered_map<string, MVariable>::iterator AttributeIterator ;
 		unordered_map <string, MVariable> m_attributes;
 	#else
+		typedef map<string, MVariable>::iterator AttributeIterator;
 		map <string, MVariable> m_attributes;
 	#endif
 
