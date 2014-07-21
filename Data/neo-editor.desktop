@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=0.1
+Type=Application
+Terminal=false
+Exec=/usr/Maratis/neo-editor %f
+Path=/usr/Maratis
+Name=Neo Editor
+Icon=/usr/share/icons/neo-icon.png
+Name[de_DE]=Neo Editor

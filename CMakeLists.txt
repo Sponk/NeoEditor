@@ -87,7 +87,7 @@ IF(WIN32)
   SET(MARATIS_BUILD_FLAGS "")
   
   SET(CPACK_PACKAGE_ICON "")
-  SET(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\MaratisEditor.lnk' '\$INSTDIR\\\\Maratis\\\\MaratisEditorFLTK.exe'") 
+  SET(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\NeoEditor.lnk' '\$INSTDIR\\\\Maratis\\\\neo-editor.exe'")
 	
   SET(CPACK_GENERATOR "NSIS;ZIP")
 ENDIF(WIN32)

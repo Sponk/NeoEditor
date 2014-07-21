@@ -1,3 +1,3 @@
 INSTALL(DIRECTORY Editor/font Editor/gui DESTINATION ${MARATIS_INSTALL_DIR})
-INSTALL(FILES maratis-editor-fltk.desktop maratis-editor.desktop DESTINATION ${MARATIS_INSTALL_DIR}/../share/applications/)
-INSTALL(FILES maratis.svg DESTINATION ${MARATIS_INSTALL_DIR}/../share/icons/)
+INSTALL(FILES neo-editor.desktop maratis-editor.desktop DESTINATION ${MARATIS_INSTALL_DIR}/../share/applications/)
+INSTALL(FILES maratis.svg neo-icon.png DESTINATION ${MARATIS_INSTALL_DIR}/../share/icons/)

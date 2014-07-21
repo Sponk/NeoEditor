@@ -185,7 +185,7 @@ m_soundEntity(NULL),
 m_emptyText(NULL),
 m_renderer(NULL)
 {
-    sprintf(m_windowTitle, "Maratis Editor");
+    sprintf(m_windowTitle, "Neo");
     m_titleChanged = false;
 
     // tempDir
@@ -952,9 +952,9 @@ void Maratis::updateTitle(const char * additional)
     getLocalFilename(levelName, levelDir, m_currentLevel);
 
     if(additional)
-        sprintf(m_windowTitle, "Maratis - %s - %s%s", m_currentProject, levelName, additional);
+        sprintf(m_windowTitle, "Neo - %s - %s%s", m_currentProject, levelName, additional);
     else
-        sprintf(m_windowTitle, "Maratis - %s - %s", m_currentProject, levelName);
+        sprintf(m_windowTitle, "Neo - %s - %s", m_currentProject, levelName);
 
     m_titleChanged = true;
 }

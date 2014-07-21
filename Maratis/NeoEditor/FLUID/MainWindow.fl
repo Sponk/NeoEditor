@@ -14,185 +14,186 @@ decl {\#include <FL/Fl_Color_Chooser.H>} {private local
 decl {\#include <MFileManager/MMeshSave.h>} {private local
 } 
 
-class EditorWindow {} {
+class EditorWindow {open
+} {
   Function {show_window()} {open
   } {
     Fl_Window {} {
-      label {Maratis Editor} open
-      xywh {513 239 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
+      label Neo open
+      xywh {360 239 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
       } {
         Submenu {} {
           label File open
-          xywh {0 0 100 20}
+          xywh {0 0 100 20} labelsize 14
         } {
           Submenu {} {
             label New open
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           } {
             MenuItem {} {
               label Project
               callback new_project_callback
-              xywh {0 0 100 20} shortcut 0x5006e
+              xywh {0 0 100 20} shortcut 0x5006e labelsize 14
             }
             MenuItem {} {
               label Level
               callback new_level_callback
-              xywh {0 0 100 20} shortcut 0x4006e
+              xywh {0 0 100 20} shortcut 0x4006e labelsize 14
             }
           }
           Submenu {} {
             label Open open
-            xywh {0 0 100 20} divider
+            xywh {0 0 100 20} labelsize 14 divider
           } {
             MenuItem {} {
               label Project
               callback open_project_callback
-              xywh {0 0 100 20} shortcut 0x5006f
+              xywh {0 0 100 20} shortcut 0x5006f labelsize 14
             }
             MenuItem {} {
               label Level
               callback open_level_callback
-              xywh {0 0 100 20} shortcut 0x4006f
+              xywh {0 0 100 20} shortcut 0x4006f labelsize 14
             }
           }
           MenuItem {} {
             label {Import Mesh}
             callback import_mesh_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label {Save level}
             user_data 0 user_data_type long
             callback save_level_callback
-            xywh {0 0 100 20} shortcut 0x40073
+            xywh {0 0 100 20} shortcut 0x40073 labelsize 14
           }
           MenuItem {} {
             label {Save level as...}
             user_data 1 user_data_type long
             callback save_level_callback
-            xywh {0 0 100 20} shortcut 0x50073 divider
+            xywh {0 0 100 20} shortcut 0x50073 labelsize 14 divider
           }
           MenuItem {} {
             label Quit
             callback quit_callback
-            xywh {0 0 100 20} shortcut 0x40071
+            xywh {0 0 100 20} shortcut 0x40071 labelsize 14
           }
         }
         Submenu {} {
           label Edit open
-          xywh {0 0 100 20}
+          xywh {0 0 100 20} labelsize 14
         } {
           MenuItem {} {
             label Undo
             callback undo_callback
-            xywh {0 0 100 20} shortcut 0x4007a
+            xywh {0 0 100 20} shortcut 0x4007a labelsize 14
           }
           MenuItem {} {
             label Redo
             callback redo_callback
-            xywh {0 0 100 20} shortcut 0x5007a divider
+            xywh {0 0 100 20} shortcut 0x5007a labelsize 14 divider
           }
           MenuItem {} {
             label {Select all}
             callback select_all_callback
-            xywh {0 0 100 20} shortcut 0x40061 divider
+            xywh {0 0 100 20} shortcut 0x40061 labelsize 14 divider
           }
           MenuItem {} {
             label {Duplicate object}
             callback duplicate_object_callback
-            xywh {0 0 100 20} shortcut 0x40064
+            xywh {0 0 100 20} shortcut 0x40064 labelsize 14
           }
           MenuItem {} {
             label {Delete object}
             callback delete_object_callback
-            xywh {0 0 100 20} shortcut 0xffff divider
+            xywh {0 0 100 20} shortcut 0xffff labelsize 14 divider
           }
           MenuItem {} {
             label {Scene setup}
             callback scene_setup_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label {Delete current scene}
             callback delete_scene_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
         }
         Submenu {} {
           label Project open
-          xywh {0 0 100 20}
+          xywh {0 0 100 20} labelsize 14
         } {
           MenuItem {} {
             label {Run Game}
             callback play_game_callback
-            xywh {0 0 100 20} shortcut 0xffc2 divider
+            xywh {0 0 100 20} shortcut 0xffc2 labelsize 14 divider
           }
           MenuItem {} {
             label {Update player}
             callback update_player_callback
-            tooltip {Copies the player from the editor directory to the project directory.} xywh {0 0 100 20}
+            tooltip {Copies the player from the editor directory to the project directory.} xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Publish
             callback publish_callback
-            xywh {0 0 100 20} shortcut 0x40070
+            xywh {0 0 100 20} shortcut 0x40070 labelsize 14
           }
         }
         Submenu {} {
           label Add open
-          xywh {0 0 100 20}
+          xywh {0 0 100 20} labelsize 14
         } {
           Submenu {} {
             label {Add Object} open
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           } {
             MenuItem {} {
               label {Add Mesh}
               callback add_mesh_callback
-              xywh {0 0 100 20} shortcut 0x4006d
+              xywh {0 0 100 20} shortcut 0x4006d labelsize 14
             }
             MenuItem {} {
               label {Add Light}
               callback add_light_callback
-              xywh {0 0 100 20} shortcut 0x4006c
+              xywh {0 0 100 20} shortcut 0x4006c labelsize 14
             }
             MenuItem {} {
               label {Add Text}
               callback add_text_callback
-              xywh {0 0 100 20} shortcut 0x40074
+              xywh {0 0 100 20} shortcut 0x40074 labelsize 14
             }
             MenuItem {} {
               label {Add Camera}
               callback add_camera_callback
-              xywh {0 0 100 20} shortcut 0x40063
+              xywh {0 0 100 20} shortcut 0x40063 labelsize 14
             }
             MenuItem {} {
               label {Add Sound}
               callback add_sound_callback
-              xywh {0 0 100 20}
+              xywh {0 0 100 20} labelsize 14
             }
           }
           Submenu behavior_menu {
             label {Add Behavior} open
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           } {}
           MenuItem {} {
             label {Add Scene}
             callback add_scene_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
         }
         Submenu {} {
           label Help open
-          xywh {0 0 100 20}
+          xywh {0 0 100 20} labelsize 14
         } {
           MenuItem {} {
             label About
             callback about_menu_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
         }
       }
@@ -377,7 +378,7 @@ class EditorWindow {} {
         Fl_Value_Input light_radius_edit {
           label {Radius:}
           callback edit_light_properties
-          xywh {18 51 165 21} align 5 maximum 1e+007 step 2
+          xywh {18 51 165 21} align 5 maximum 1e+07 step 2
         }
         Fl_Value_Input light_color_r {
           label {Red:}
@@ -505,43 +506,43 @@ class EditorWindow {} {
               label Box
               user_data 0 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
             MenuItem {} {
               label Sphere
               user_data 1 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
             MenuItem {} {
               label Cone
               user_data 2 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
             MenuItem {} {
               label Capsule
               user_data 3 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
             MenuItem {} {
               label Cylinder
               user_data 4 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
             MenuItem {} {
               label {Convex-hull}
               user_data 5 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
             MenuItem {} {
               label {Triangle-mesh}
               user_data 6 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
           }
           Fl_Check_Button object_ghost_button {
@@ -735,19 +736,19 @@ class EditorWindow {} {
             label Left
             user_data 0 user_data_type long
             callback text_alignment_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Right
             user_data 1 user_data_type long
             callback text_alignment_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Center
             user_data 2 user_data_type long
             callback text_alignment_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
         }
       }
@@ -960,8 +961,7 @@ Fl::delete_widget(window);} {}
   }
 } 
 
-class MaterialEditDlg {open
-} {
+class MaterialEditDlg {} {
   decl {char object_name[256];} {private local
   }
   Function {create_window(const char* name)} {open
@@ -970,7 +970,7 @@ class MaterialEditDlg {open
       label {Edit Materials}
       user_data this user_data_type {MaterialEditDlg*}
       callback close_window_callback open
-      xywh {696 309 370 303} type Double modal visible
+      xywh {2248 350 369 303} type Double hide modal
     } {
       Fl_Button {} {
         label Save
@@ -1223,8 +1223,7 @@ if(!mesh)
 	return;
 }
       
-xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);} {selected
-    }
+xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);} {}
   }
   Function {choose_diffuse_color(Fl_Button* button, MaterialEditDlg* dlg)} {open return_type {static void}
   } {
@@ -1252,31 +1251,32 @@ xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);} {selected
   }
 } 
 
-class AboutDlg {} {
+class AboutDlg {open
+} {
   Function {create_window()} {open
   } {
     Fl_Window {} {
       label About open
-      xywh {758 254 356 310} type Double hide
+      xywh {1990 333 354 309} type Double visible
     } {
       Fl_Box {} {
-        label {The Maratis FLTK editor is distributed under the terms and conditions of the GNU General Public License.}
-        xywh {10 216 335 55} labelsize 12 align 208
+        label {The Neo Editor is distributed under the terms and conditions of the GNU General Public License.}
+        xywh {10 224 335 55} labelsize 12 align 208
+      }
+      Fl_Box {} {selected
+        image {../../../Data/neo-icon-small.png} xywh {120 15 110 110}
       }
       Fl_Box {} {
-        image {../../../Data/Installer/maratis-icon-69x69.png} xywh {120 15 110 110}
-      }
-      Fl_Box {} {
-        label {Maratis FLTK Editor}
-        xywh {10 129 335 40} labeltype ENGRAVED_LABEL labelsize 18 align 208
+        label {Neo Editor}
+        xywh {10 137 335 40} labeltype ENGRAVED_LABEL labelsize 18 align 208
       }
       Fl_Box {} {
         label {The Maratis3D Scene Editor Experience}
-        xywh {10 161 335 32} align 208
+        xywh {10 169 335 32} align 208
       }
       Fl_Box editor_version_edit {
         label {$VERSION}
-        xywh {10 193 335 20} labelsize 11 align 208
+        xywh {10 201 335 20} labelsize 11 align 208
         code0 {editor_version_edit->label(EDITOR_VERSION_STRING);}
       }
     }
