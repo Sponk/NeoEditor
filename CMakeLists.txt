@@ -12,6 +12,9 @@ SET(CMAKE_MODULE_PATH
 ## Disallow in-source builds
 INCLUDE(OutOfSourceBuild)
 
+## Look for SSE
+INCLUDE(FindSSE)
+
 ## Documentation tool
 FIND_PACKAGE(Doxygen 1.8.3)
 
@@ -61,13 +64,21 @@ IF(WIN32)
   
   elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # using Visual Studio C++
-    SET(flag_var "/MD")
+    
+    IF(SSE2_TRUE)	
+		SET(SSE_FLAG /arch:SSE2)
+	ELSEIF(SSE_TRUE)
+		SET(SSE_FLAG /arch:SSE)
+	ENDIF()
+
+	
+	SET(flag_var "/MD")
     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${MARATIS_BUILD_FLAGS} /EHsc /nologo /GR /FC /DWIN32 /D_MBCS")
     SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /Z7 /W4 /Od /MDd /D_DEBUG /D__Debug__")
-    SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /W1 /O2 /Ot /MD /DNDEBUG /fp:fast")
+    SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /W1 /O2 /Ot /MD /DNDEBUG /fp:fast ${SSE_FLAG}")
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MARATIS_BUILD_FLAGS} /EHsc /nologo /GR /FC /DWIN32 /D_MBCS")
     SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Z7 /W4 /Od /MDd /D_DEBUG /D__Debug__")
-    SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /W1 /O2 /Ot /MD /DNDEBUG /fp:fast")
+    SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /W1 /O2 /Ot /MD /DNDEBUG /fp:fast ${SSE_FLAG}")
   endif()
 
   SET(FREETYPE_LIBRARY "freetype")
