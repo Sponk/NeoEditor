@@ -391,19 +391,19 @@ void gameWinEvents(MWinEvent * windowEvents)
 					input->upKey(name);
 					break;
 				case MCONTROLLER_BUTTON_DPADUP:
-					sprintf(name, "JOY%d_BUTTON_DAPDUP", joy+1);
+                    sprintf(name, "JOY%d_BUTTON_DPADUP", joy+1);
 					input->upKey(name);
 					break;
 				case MCONTROLLER_BUTTON_DPADDOWN:
-					sprintf(name, "JOY%d_BUTTON_DAPDDOWN", joy+1);
+                    sprintf(name, "JOY%d_BUTTON_DPADDOWN", joy+1);
 					input->upKey(name);
 					break;
 				case MCONTROLLER_BUTTON_DPADLEFT:
-					sprintf(name, "JOY%d_BUTTON_DAPDLEFT", joy+1);
+                    sprintf(name, "JOY%d_BUTTON_DPADLEFT", joy+1);
 					input->upKey(name);
 					break;
 				case MCONTROLLER_BUTTON_DPADRIGHT:
-					sprintf(name, "JOY%d_BUTTON_DAPDRIGHT", joy+1);
+                    sprintf(name, "JOY%d_BUTTON_DPADRIGHT", joy+1);
 					input->upKey(name);
 					break;
 			}
