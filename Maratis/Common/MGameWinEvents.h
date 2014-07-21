@@ -309,7 +309,7 @@ void gameWinEvents(MWinEvent * windowEvents)
 					input->downKey(name);
 					break;
 				case MCONTROLLER_BUTTON_DPADUP:
-                    sprintf(name, "JOY%d_BUTTON_DPADDUP", joy+1);
+                    sprintf(name, "JOY%d_BUTTON_DPADUP", joy+1);
 					input->downKey(name);
 					break;
 				case MCONTROLLER_BUTTON_DPADDOWN:
