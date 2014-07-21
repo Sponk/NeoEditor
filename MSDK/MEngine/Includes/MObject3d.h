@@ -62,7 +62,11 @@ protected:
 	vector <MObject3d *> m_childs;
 
     // Attributes
-	unordered_map <string, MVariable> m_attributes;
+	#if __cplusplus >= 201103L
+		unordered_map <string, MVariable> m_attributes;
+	#else
+		map <string, MVariable> m_attributes;
+	#endif
 
 	// properties
 	bool m_isActive;
