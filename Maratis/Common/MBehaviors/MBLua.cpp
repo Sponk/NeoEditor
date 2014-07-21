@@ -96,7 +96,7 @@ unsigned int MBLua::getVariablesNumber(void)
         getGlobalFilename(globalFile, engine->getSystemContext()->getWorkingDirectory(), m_scriptFile.getSafeString());
 
         // If the script does not exist, show only the static variable
-        if(isFileExist(globalFile))
+		if(!isFileExist(globalFile) || isDirectory(globalFile))
             return 1;
 
         m_script.runScript(globalFile);
