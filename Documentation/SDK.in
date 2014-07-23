@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------------
 
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = "Maratis SDK"
+PROJECT_NAME           = "Neo SDK"
 PROJECT_NUMBER         = @MARATIS_VERSION@
 PROJECT_BRIEF          = "Game Engine"
 PROJECT_LOGO           = 
