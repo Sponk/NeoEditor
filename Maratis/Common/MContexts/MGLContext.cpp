@@ -40,12 +40,11 @@
 	#include <GLee.h>
 #endif
 
+#include <MEngine.h>
 #include "MGLContext.h"
-
 
 static int g_GLversion = 0;
 static float maxAnisotropy = 0.0f;
-
 
 GLenum returnGLType(M_TYPES type)
 {
@@ -200,7 +199,7 @@ m_currentFrameBuffer(0)
 
 	// point
 	//glPointSize(2.0);
-	//glEnable(GL_POINT_SMOOTH);
+    //glEnable(GL_POINT_SMOOTH);
 
 	//float coeffs[] = {1.0f, 0, 0};
 	//glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, coeffs);
@@ -536,10 +535,10 @@ void CHECK_FRAMEBUFFER_STATUS()
 		case GL_FRAMEBUFFER_COMPLETE:
             break;
           case GL_FRAMEBUFFER_UNSUPPORTED:
-			printf("couldn't find a supported config\n");
+			fprintf(stderr, "couldn't find a supported config\n");
 			break;
           default:
-            printf("error");
+			fprintf(stderr, "error");
 	}
 }
 
@@ -644,10 +643,10 @@ void MGLContext::sendShaderSource(unsigned int shaderId, const char * source)
 	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &compiled);
 	if(!compiled)
 	{
-		printf("ERROR OpenGL : unable to compile shader\n");
+        MLOG_ERROR("OpenGL : Unable to compile shader");
 		char shader_link_error[4096];
         glGetInfoLogARB((GLhandleARB)shaderId, sizeof(shader_link_error), NULL, shader_link_error);
-		printf("%s", shader_link_error);
+        MLOG_ERROR(shader_link_error);
 	}
 }
 
@@ -863,6 +862,17 @@ void MGLContext::setColorMask(bool r, bool g, bool b, bool a){
 }
 void MGLContext::setDepthMask(bool depth){
 	glDepthMask(depth);
+}
+
+void MGLContext::enablePolygonOffset(float x, float y)
+{
+	glEnable(GL_POLYGON_OFFSET_FILL);
+	glPolygonOffset(x, y);
+}
+
+void MGLContext::disablePolygonOffset()
+{
+	glDisable(GL_POLYGON_OFFSET_FILL);
 }
 
 void MGLContext::setAlphaTest(float value)

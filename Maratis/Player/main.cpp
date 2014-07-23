@@ -23,13 +23,23 @@
 //========================================================================
 //jan 2012 - Philipp Geyer <philipp@geyer.co.uk> - embedded project/package manager
 
-
 #include <MEngine.h>
 #include <MLog.h>
 #include <MWindow.h>
+#include "MSDLThread/MSDLThread.h"
 
 #include <MGameWinEvents.h>
 #include "Maratis/MaratisPlayer.h"
+#include "MSchedule/MSchedule.h"
+
+#ifdef main
+    #undef main
+#endif
+
+// Don't show cmd window
+#ifdef _MSC_VER
+#    pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
+#endif
 
 // window events
 void windowEvents(MWinEvent * windowEvents)
@@ -62,10 +72,124 @@ void update(void)
 void draw(void)
 {
 	MaratisPlayer::getInstance()->graphicLoop();
-	MWindow::getInstance()->swapBuffer();
+    MWindow::getInstance()->swapBuffer();
 }
 
+MSDLSemaphore updateSemaphore;
+bool updateThreadRunning = true;
+int profiler = false;
 
+// TODO: Abstraction!
+double frametime = 0;
+double framecount = -1;
+int framemax = 0;
+int framemin = -1;
+
+double updatetime = 0;
+double updatecount = -1;
+int updatemax = 0;
+int updatemin = -1;
+
+int update_thread(void* nothing)
+{
+    MWindow * window = MWindow::getInstance();
+
+    // time
+    int frequency = 60;
+    int skipTicks = 1000 / frequency - 5;
+    long previousFrame = 0;
+    long startTick = window->getSystemTick();
+
+    while(updateThreadRunning)
+    {
+        MSDLSemaphore::WaitAndLock(&updateSemaphore);
+        if(window->getFocus())
+        {
+            // compute target tick
+            unsigned long currentTick = window->getSystemTick();
+
+            unsigned long tick = currentTick - startTick;
+            unsigned long frame = (long)(tick * (frequency * 0.001f));
+
+            // update elapsed time
+            unsigned int i;
+            unsigned int steps = (int)(frame - previousFrame);
+
+            // don't wait too much
+            if(steps >= (frequency/2))
+            {
+               update();
+               unsigned int oldTick = currentTick;
+               currentTick = window->getSystemTick();
+
+                previousFrame = frame;
+
+                int sleep = skipTicks - (currentTick - oldTick);
+
+				if (profiler)
+				{
+					int time = currentTick - oldTick;
+					updatecount++;
+					updatetime += time;
+
+					if (time > updatemax)
+					{
+						updatemax = time;
+					}
+					else if (time < updatemin || updatemin < 0)
+					{
+						updatemin = time;
+					}
+				}
+
+                MSDLSemaphore::Unlock(&updateSemaphore);
+                window->sleep(sleep);
+
+                continue;
+            }
+
+            // update
+            for(i=0; i<steps; i++)
+            {
+                update();
+                previousFrame++;
+            }
+
+            unsigned int oldTick = currentTick;
+            currentTick = window->getSystemTick();
+
+            int sleep = skipTicks - (currentTick - oldTick);
+
+			if (profiler)
+			{
+				int time = currentTick - oldTick;
+				updatecount++;
+				updatetime += time;
+
+				if (time > updatemax)
+				{
+					updatemax = time;
+				}
+				else if (time < updatemin || updatemin < 0)
+				{
+					updatemin = time;
+				}
+            }
+
+            MSDLSemaphore::Unlock(&updateSemaphore);
+            window->sleep(sleep);
+        }
+        else
+        {
+			MSDLSemaphore::Unlock(&updateSemaphore);
+			window->sleep(100);
+        }
+	}
+
+    return 0;
+}
+
+// TODO: Make profiler a compiler option
 // main
 int main(int argc, char **argv)
 {
@@ -73,24 +197,24 @@ int main(int argc, char **argv)
 
 	unsigned int width = 1024;
 	unsigned int height = 768;
-	int fullscreen = false;
+    int fullscreen = false;
 
-	if(argc > 2)
+    if(argc > 2)
 		sscanf(argv[2], "%d", &width);
 	if(argc > 3)
 		sscanf(argv[3], "%d", &height);
 	if(argc > 4)
 		sscanf(argv[4], "%d", &fullscreen);
-
+    if(argc > 5)
+        sscanf(argv[5], "%d", &profiler);
 	
 	// get engine (first time call onstructor)
 	MEngine * engine = MEngine::getInstance();
-
 	
 	// get window (first time call onstructor)
 	MWindow * window = MWindow::getInstance();
 
-	// create window
+    // create window
 	if(! window->create("Maratis", width, height, 32, fullscreen == 1))
     {
 		MLOG_ERROR("cannot create window");
@@ -99,13 +223,11 @@ int main(int argc, char **argv)
 
 	if(fullscreen)
 		window->hideCursor();
-
 	
 	// set current directory
 	char rep[256];
 	getRepertory(rep, argv[0]);
 	window->setCurrentDirectory(rep);
-
 	
 	// get Maratis (first time call onstructor)
 	MaratisPlayer * maratis = MaratisPlayer::getInstance();
@@ -169,66 +291,117 @@ int main(int argc, char **argv)
 		}
 	}
 	
-	
-	// time
-	unsigned int frequency = 60;
-	unsigned long previousFrame = 0;
-	unsigned long startTick = window->getSystemTick();
+    if(profiler)
+        MLOG_INFO("Profiling enabled");
 
-	// on events
-	while(window->isActive())
-	{
-		// quit
-		if(! engine->isActive())
-		{
-			engine->getGame()->end();
+    // create the update thread
+    MSDLThread updateThread;
+
+    // Init semaphore
+    updateSemaphore.Init(1);
+    
+	MInitSchedule();
+
+    updateThread.Start(update_thread, "Update", NULL);
+
+    bool isActive = true;
+    // on events
+    while(isActive)
+    {
+		MSDLSemaphore::WaitAndLock(&updateSemaphore);
+		//MLOG_INFO("DRAW");
+		// Get input
+		engine->getInputContext()->flush();
+		window->onEvents();
+        MUpdateScheduledEvents();
+
+        if(!isActive)
+        {
+            engine->getGame()->end();
+			MSDLSemaphore::Unlock(&updateSemaphore);
 			break;
-		}
+        }
 
-		// on events
-		if(window->onEvents())
+        if(window->getFocus())
+        {
+            int tick = engine->getSystemContext()->getSystemTick();
+            draw();
+
+			if (profiler)
+			{
+				int time = engine->getSystemContext()->getSystemTick() - tick;
+				framecount++;
+				frametime += time;
+
+				if (time > framemax)
+				{
+					framemax = time;
+				}
+				else if (time < framemin || framemin < 0)
+				{
+					framemin = time;
+				}
+			}
+        }
+        else
+        {
+            draw();
+			MSDLSemaphore::Unlock(&updateSemaphore);
+            window->sleep(100);
+			continue;
+        }
+
+        isActive = engine->isActive();
+
+        // update postponed requests
+        MEngine::getInstance()->updateRequests();
+
+		MSDLSemaphore::Unlock(&updateSemaphore);
+
+        window->sleep(1);
+        //window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
+    }
+
+    updateThreadRunning = false;
+    int ret = updateThread.WaitForReturn();
+
+	MLOG_INFO("Update thread returned with exit code " << ret);
+
+	if (profiler)
+	{
+		using namespace std;
+
+		float avUpdate = (float)updatetime / (float)updatecount;
+		float avFrame = (float)frametime / (float)framecount;
+
+		cout << "\nProfiling report\n";
+		cout << "******************************************************\n";
+
+		cout << "Graphics data:\n";
+		cout << "----------------\n";
+
+		cout << "Number of frames: " << framecount << "\n";
+		cout << "Average frametime: " << avFrame << " ms\n";
+		cout << "Average framerate: " << 1000 / avFrame << " FPS\n";
+		cout << "Max: " << framemax << " ms\n";
+		cout << "Min: " << framemin << " ms\n";
+
+		cout << "\nUpdate data (scripts, physics, etc.):\n";
+		cout << "-----------------------------------------\n";
+		cout << "Number of frames: " << updatecount << "\n";
+		cout << "Average frametime: " << avUpdate << " ms\n";
+		cout << "Average framerate: " << 1000 / avUpdate << " FPS\n";
+		cout << "Max: " << updatemax << " ms\n";
+		cout << "Min: " << updatemin << " ms\n";
+
+		if (avUpdate > avFrame)
 		{
-			if(window->getFocus())
-			{
-				// compute target tick
-				unsigned long currentTick = window->getSystemTick();
-
-				unsigned long tick = currentTick - startTick;
-				unsigned long frame = (unsigned long)(tick * (frequency * 0.001f));
-
-				// update elapsed time
-				unsigned int i;
-				unsigned int steps = (unsigned int)(frame - previousFrame);
-
-
-				// don't wait too much
-				if(steps >= (frequency/2))
-				{
-					update();
-					draw();
-					previousFrame += steps;
-					continue;
-				}
-
-				// update
-				for(i=0; i<steps; i++)
-				{
-					update();
-					previousFrame++;
-				}
-
-				// draw
-				if(steps > 0){
-					draw();
-				}
-			}
-			else
-			{
-				window->sleep(0.1);
-			}
+			cout << "\nResult: Your application is CPU capped!\n";
 		}
-
-		//window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
+		else
+		{
+			cout << "\nResult: Your application is GPU capped!\n";
+		}
 	}
 
 	maratis->clear();

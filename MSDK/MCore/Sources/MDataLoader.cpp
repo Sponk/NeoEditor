@@ -71,9 +71,9 @@ bool MDataLoader::loadData(const char * filename, void * data)
 	for(i=0; i<lSize; i++)
 	{
 		MDataLoadFunction * loader = m_loaders[i];
-		if(loader->m_functionPtr(filename, data))
+        if(loader->m_functionPtr(filename, data))
 			return true;
 	}
 
-	return false;
+    return false;
 }

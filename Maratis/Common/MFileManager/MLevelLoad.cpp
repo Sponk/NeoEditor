@@ -400,7 +400,16 @@ void readBehaviorProperties(TiXmlElement * node, MBehavior * behavior)
 
 		switch(variable.getType())
 		{
-		case M_VARIABLE_BOOL:
+        case M_VARIABLE_STRING:
+            {
+                const char * str = node->Attribute(name);
+                if(str)
+                    ((MString*)variable.getPointer())->set(str);
+
+                size = behavior->getVariablesNumber();
+            }
+            break;
+        case M_VARIABLE_BOOL:
 			readBool(node, name, (bool*)variable.getPointer());
 			break;
 		case M_VARIABLE_INT:
@@ -409,13 +418,6 @@ void readBehaviorProperties(TiXmlElement * node, MBehavior * behavior)
 			break;
 		case M_VARIABLE_FLOAT:
 			node->QueryFloatAttribute(name, (float*)variable.getPointer());
-			break;
-		case M_VARIABLE_STRING:
-			{
-				const char * str = node->Attribute(name);
-				if(str)
-					((MString*)variable.getPointer())->set(str);
-			}
 			break;
 		case M_VARIABLE_VEC2:
 			readFloatValues(node, name, *((MVector2*)variable.getPointer()), 2);
@@ -468,7 +470,7 @@ void readBehaviors(TiXmlElement * node, MObject3d * object)
 		MBehaviorCreator * bCreator = bManager->getBehaviorByName(behaviorName);
 		if(! bCreator)
 		{
-			printf("Warning : unable to load behavior \"%s\"\n", behaviorName);
+			fprintf(stderr, "Warning : unable to load behavior \"%s\"\n", behaviorName);
 			continue;
 		}
 
@@ -674,7 +676,7 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 				getGlobalFilename(soundFilename, rep, file);
 				soundRef = level->loadSound(soundFilename, preload);
 				if(! soundRef)
-					printf("ERROR loading sound : sound %s doesn't exist\n", file);
+					fprintf(stderr, "ERROR loading sound : sound %s doesn't exist\n", file);
 			}
 
 			// create sound
@@ -785,7 +787,7 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 				getGlobalFilename(textFilename, rep, file);
 				fontRef = level->loadFont(textFilename);
 				if(! fontRef)
-					printf("ERROR loading text : font %s doesn't exist\n", file);
+					fprintf(stderr, "ERROR loading text : font %s doesn't exist\n", file);
 			}
 
 			// create text

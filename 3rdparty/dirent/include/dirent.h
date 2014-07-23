@@ -70,6 +70,14 @@
  * May 28 1998, Toni Ronkko
  * First version.
  *****************************************************************************/
+#ifndef WIN32
+	#include <dirent.h>
+	
+	#ifndef DIRENT_H
+	#define DIRENT_H
+	#endif
+#endif
+
 #ifndef DIRENT_H
 #define DIRENT_H
 

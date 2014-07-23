@@ -31,7 +31,10 @@
 #ifndef _M_PHYSICS_CONTEXT_H
 #define _M_PHYSICS_CONTEXT_H
 
-
+/**
+ * @brief The MPhysicsContext class contains abstraction to 3D physics functionality.
+ * Default physics engine is currently Bullet which is implemented in the class MBulletContext for the editor/player.
+ */
 class M_CORE_EXPORT MPhysicsContext
 {
 public:
@@ -46,10 +49,24 @@ public:
 	virtual void clear(void) = 0;
 
 	// update simulation
+
+    /**
+     * @brief Sets the simulation quality
+     *
+     * Default simulation quality is 2 when using Bullet. Any value lower than two will result in worse,
+     * any value higher in better physics quality. Higher values cost more time to
+     * calculate so keep the quality as low as possible!
+     *
+     * @param quality The quality level. Defaults to 2 when using Bullet
+     */
 	virtual void setSimulationQuality(unsigned int quality) = 0;
 	virtual void updateSimulation(void) = 0;
 
 	// world
+    /**
+     * @brief Sets the world gravity.
+     * @param gravity An MVector3 containing the new gravitational pull to be used for example MVector3(0.0f, 0.0f, -9.81)
+     */
 	virtual void setWorldGravity(const MVector3 & gravity) = 0;
 
 	// create object

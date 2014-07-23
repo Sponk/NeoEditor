@@ -84,7 +84,7 @@ bool M_loadFont(const char * filename, void * data)
 	// init
 	FT_Error error = FT_Init_FreeType(&library); 
 	if(error){
-		printf("ERROR Load Font : unable to init FreeType\n");
+		fprintf(stderr, "ERROR Load Font : unable to init FreeType\n");
 		return false;
 	}
 	
@@ -94,7 +94,7 @@ bool M_loadFont(const char * filename, void * data)
 	if(! file)
 	{
 		FT_Done_FreeType(library);
-		printf("ERROR Load Font : can't read file %s\n", filename);
+		fprintf(stderr, "ERROR Load Font : can't read file %s\n", filename);
 		return false;
 	}
 	
@@ -118,7 +118,7 @@ bool M_loadFont(const char * filename, void * data)
 	
 	if(error)
 	{
-		printf("ERROR Load Font : unable to read data %s\n", filename);
+		fprintf(stderr, "ERROR Load Font : unable to read data %s\n", filename);
 		FT_Done_FreeType(library);
 		delete [] file_base;
 		return false;
@@ -128,7 +128,7 @@ bool M_loadFont(const char * filename, void * data)
 	error = FT_Set_Pixel_Sizes(face, 0, size);
 	if(error)
 	{
-		printf("ERROR Load Font : unable to size font\n");
+		fprintf(stderr, "ERROR Load Font : unable to size font\n");
 		FT_Done_FreeType(library);
 		delete [] file_base;
 		return false;
@@ -161,7 +161,7 @@ bool M_loadFont(const char * filename, void * data)
 
 	if(height == 0)
 	{
-		printf("ERROR Load Font : unable to create font texture\n");
+		fprintf(stderr, "ERROR Load Font : unable to create font texture\n");
 		FT_Done_FreeType(library);
 		delete [] file_base;
 		return false;

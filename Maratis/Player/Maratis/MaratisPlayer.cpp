@@ -31,8 +31,8 @@
 #include <MContexts/MALContext.h>
 #include <MContexts/MBulletContext.h>
 #include <MContexts/MWinContext.h>
-#include <MLoaders/MDevILLoader.h>
-#include <MLoaders/MSndFileLoader.h>
+#include <MLoaders/MImageLoader.h>
+#include <MLoaders/MSoundLoader.h>
 #include <MLoaders/MFreetypeLoader.h>
 #include <MLoaders/MBinFontLoader.h>
 #include <MLoaders/MBinMeshLoader.h>
@@ -40,6 +40,7 @@
 #include <MFileManager/MLevelLoad.h>
 #include <MBehaviors/MBLookAt.h>
 #include <MBehaviors/MBFollow.h>
+#include <MBehaviors/MBLua.h>
 #include <MScript/MScript.h>
 #include <MInput/MInput.h>
 #include <MFileManager/MMeshLoad.h>
@@ -65,7 +66,7 @@ m_renderer(NULL)
 		m_game = new MGame();
 		m_packageManager = new MPackageManagerNPK();
 		
-		m_physics->setSimulationQuality(2);
+        m_physics->setSimulationQuality(2);
 	}
 
 	// start
@@ -131,6 +132,7 @@ void MaratisPlayer::start(void)
 		// add behaviors
 		engine->getBehaviorManager()->addBehavior(MBLookAt::getStaticName(), M_OBJECT3D_CAMERA, MBLookAt::getNew);
 		engine->getBehaviorManager()->addBehavior(MBFollow::getStaticName(), M_OBJECT3D, MBFollow::getNew);
+        engine->getBehaviorManager()->addBehavior(MBLua::getStaticName(), M_OBJECT3D, MBLua::getNew);
 
 		// add renderers
 		engine->getRendererManager()->addRenderer(MStandardRenderer::getStaticName(), MStandardRenderer::getNew);

@@ -1,0 +1,344 @@
+Index: src/fl_gleam.cxx
+===================================================================
+--- src/fl_gleam.cxx	(revision 0)
++++ src/fl_gleam.cxx	(revision 0)
+@@ -0,0 +1,160 @@
++//
++// "Gleam" drawing routines for the Fast Light Tool Kit (FLTK).
++//
++// Copyright 1998-2010 by Bill Spitzak and others.
++//
++// This library is free software. Distribution and use rights are outlined in
++// the file "COPYING" which should have been included with this file.  If this
++// file is missing or damaged, see the license at:
++//
++//     http://www.fltk.org/COPYING.php
++//
++// Please report all bugs and problems on the following page:
++//
++//     http://www.fltk.org/str.php
++//
++// These box types provide a sort of Clearlooks Glossy scheme
++// for FLTK.
++//
++// Copyright 2001-2005 by Colin Jones.
++//
++// Modified 2012 by Edmanuel Torres
++// This is a new version of the fl_gleam. The gradients are on the top
++// an the bottom, the text area looks like in the classic FLTK way.
++//
++
++#include <FL/Fl.H>
++#include <FL/fl_draw.H>
++#include <iostream>
++
++using namespace std;
++
++static void gleam_color(Fl_Color c) {
++  if (Fl::draw_box_active()) fl_color(c);
++  else fl_color(fl_inactive(c));
++}
++
++static void shade_rect_top_bottom(int x, int y, int w, int h, Fl_Color fg1, Fl_Color fg2, float th) {
++  // Draws the shiny but use maximum limits
++  int h_top  = min(h/2,20);
++  int h_bottom = min(h/6,20);
++  int h_flat = h-(h_top+h_bottom);
++  int j = 0;
++  float step_size_top = h_top>1?(0.999/(float)(h_top)):1;
++  float step_size_bottom = h_bottom>1?(0.999/(float)(h_bottom)):1;
++  // This loop generates the gradient at the top of the widget
++  for (float k = 1; k >= 0; k -= step_size_top){
++    gleam_color(fl_color_average(fl_color_average(fg1, fg2, th), fg1, k));
++    fl_line(x, y+j, x+w, y+j);
++    j++;
++  }
++  gleam_color(fg1);
++  fl_rectf(x, y+h_top, w+1, h_flat);
++  // This loop generates the gradient at the bottom of the widget
++  for (float k = 1; k >= 0; k -= step_size_bottom){
++    gleam_color(fl_color_average(fg1,fl_color_average(fg1, fg2, th), k));
++    fl_line(x, y+j+h_flat-1, x+w, y+j+h_flat-1);
++    j++;
++  }
++}
++
++static void shade_rect_left_right(int x, int y, int w, int h, Fl_Color fg1, Fl_Color fg2, float th) {
++  // Draws the shiny useing maximum limits
++  int w_left  = min(w/8,10);
++  int w_right = min(w/8,10);
++  int w_flat = w-(w_left+w_right);
++  int j = 0;
++  float step_size_left = w_left>1?(0.999/(float)(w_left)):1;
++  float step_size_right = w_right>1?(0.999/(float)(w_right)):1;
++  // This loop generates the gradient on the left side of the widget
++  for (float k = 1; k >= 0; k -= step_size_left){
++    gleam_color(fl_color_average(fl_color_average(fg1, fg2, th), fg1, k));
++    fl_line(x+j, y, x+j, y+h);
++    j++;
++  }
++  gleam_color(fg1);
++  fl_rectf(x+w_left, y, w_flat, h+1);
++  // This loop generates the gradient on the right side of the widget
++  for (float k = 1; k >= 0; k -= step_size_right){
++    gleam_color(fl_color_average(fg1,fl_color_average(fg1, fg2, th), k));
++    fl_line(x+j+w_flat-1, y, x+j+w_flat-1, y+h);
++    j++;
++  }
++}
++
++static void shade_rect_top_bottom_up(int x, int y, int w, int h, Fl_Color bc, float th) {
++  shade_rect_top_bottom(x,y,w,h,bc,FL_WHITE,th);
++}
++
++static void shade_rect_top_bottom_down(int x, int y, int w, int h, Fl_Color bc, float th) {
++  shade_rect_top_bottom(x,y,w,h,bc,FL_BLACK,th);
++}
++
++static void frame_rect(int x, int y, int w, int h, Fl_Color fg1, Fl_Color fg2) {
++  gleam_color(fg1);
++  fl_line(x, y+h-1, x, y+1);         //Go from bottom to top left side
++  fl_line(x+w, y+h-1, x+w, y+1);     //Go from bottom to top right side
++  fl_line(x+1, y, x+w-1, y);         //Go across the top
++  fl_line(x+1, y+h, x+w-1, y+h);     //Go across the bottom
++  gleam_color(fg2);
++  fl_line(x+1, y+h-2, x+1, y+2);     //Go from bottom to top left side
++  fl_line(x+w-1, y+h-2, x+w-1, y+2); //Go from bottom to top right side
++}
++
++static void frame_rect_up(int x, int y, int w, int h, Fl_Color bc, float th1, float th2) {
++  frame_rect(x,y,w,h,fl_color_average(fl_darker(bc), FL_BLACK, th1),fl_color_average(bc, FL_WHITE, th2));
++}
++
++static void frame_rect_down(int x, int y, int w, int h, Fl_Color bc, float th1, float th2) {
++  frame_rect(x,y,w,h,fl_color_average(bc, FL_WHITE, th2),fl_color_average(FL_BLACK, bc, th1));
++}
++
++static void up_frame(int x, int y, int w, int h, Fl_Color c) {
++  frame_rect_up(x, y, w-1, h-1, c, 0.15f, 0.15f);
++  // frame decoration
++  gleam_color(fl_darker(c));
++  fl_line(x+2, y+1, x+w-3, y+1);     //Go across the top
++  fl_line(x+2, y+h-2, x+w-3, y+h-2); //Go across the bottom
++}
++
++static void up_box(int x, int y, int w, int h, Fl_Color c) {
++  shade_rect_top_bottom_up(x+2, y+1, w-5, h-3, c, 0.15f);
++  frame_rect_up(x, y, w-1, h-1, c, 0.15f, 0.15f);
++}
++
++static void thin_up_box(int x, int y, int w, int h, Fl_Color c) {
++  shade_rect_top_bottom_up(x+2, y+1, w-5, h-3, c, 0.25f);
++  frame_rect_up(x, y, w-1, h-1, c, 0.25f, 0.25f);
++}
++
++static void down_frame(int x, int y, int w, int h, Fl_Color c) {
++  frame_rect_down(x, y, w-1, h-1, c, 0.75f, 0.35f);
++  // frame decoration
++  gleam_color(fl_darker(c));
++  fl_line(x+2, y+1, x+w-3, y+1);     //Go across the top
++  fl_line(x+2, y+h-2, x+w-3, y+h-2); //Go across the bottom
++}
++
++static void down_box(int x, int y, int w, int h, Fl_Color c) {
++  shade_rect_top_bottom_down(x+1, y+1, w-3, h-3, c, 0.35f);
++  frame_rect_down(x, y, w-1, h-1, fl_darker(c), 0.65f, 0.35f);
++}
++
++static void thin_down_box(int x, int y, int w, int h, Fl_Color c) {
++  shade_rect_top_bottom_down(x+1, y+1, w-3, h-3, c, 0.45f);
++  frame_rect_down(x, y, w-1, h-1, fl_darker(c), 0.65f, 0.55f);
++}
++
++extern void fl_internal_boxtype(Fl_Boxtype, Fl_Box_Draw_F*);
++
++Fl_Boxtype fl_define_FL_GLEAM_UP_BOX() {
++  fl_internal_boxtype(_FL_GLEAM_UP_BOX, up_box);
++  fl_internal_boxtype(_FL_GLEAM_DOWN_BOX, down_box);
++  fl_internal_boxtype(_FL_GLEAM_UP_FRAME, up_frame);
++  fl_internal_boxtype(_FL_GLEAM_DOWN_FRAME, down_frame);
++  fl_internal_boxtype(_FL_GLEAM_THIN_UP_BOX, thin_up_box);
++  fl_internal_boxtype(_FL_GLEAM_THIN_DOWN_BOX, thin_down_box);
++  fl_internal_boxtype(_FL_GLEAM_ROUND_UP_BOX, up_box);
++  fl_internal_boxtype(_FL_GLEAM_ROUND_DOWN_BOX, down_box);
++  return _FL_GLEAM_UP_BOX;
++}
+Index: src/Fl_get_system_colors.cxx
+===================================================================
+--- src/Fl_get_system_colors.cxx	(revision 1)
++++ src/Fl_get_system_colors.cxx	(working copy)
+@@ -289,6 +289,7 @@
+     if (!fl_ascii_strcasecmp(s, "none") || !fl_ascii_strcasecmp(s, "base") || !*s) s = 0;
+     else if (!fl_ascii_strcasecmp(s, "gtk+")) s = strdup("gtk+");
+     else if (!fl_ascii_strcasecmp(s, "plastic")) s = strdup("plastic");
++    else if (!fl_ascii_strcasecmp(s, "gleam")) s = strdup("gleam");
+     else s = 0;
+   }
+   if (scheme_) free((void*)scheme_);
+@@ -375,6 +376,27 @@
+ 
+     // Use slightly thinner scrollbars...
+     Fl::scrollbar_size(15);
++  } else if (scheme_ && !fl_ascii_strcasecmp(scheme_, "gleam")) {
++    // Use a GTK+ inspired look-n-feel...
++    if (scheme_bg_) {
++      delete scheme_bg_;
++      scheme_bg_ = (Fl_Image *)0;
++    }
++
++    set_boxtype(FL_UP_FRAME,        FL_GLEAM_UP_FRAME);
++    set_boxtype(FL_DOWN_FRAME,      FL_GLEAM_DOWN_FRAME);
++    set_boxtype(FL_THIN_UP_FRAME,   FL_GLEAM_UP_FRAME);
++    set_boxtype(FL_THIN_DOWN_FRAME, FL_GLEAM_DOWN_FRAME);
++
++    set_boxtype(FL_UP_BOX,          FL_GLEAM_UP_BOX);
++    set_boxtype(FL_DOWN_BOX,        FL_GLEAM_DOWN_BOX);
++    set_boxtype(FL_THIN_UP_BOX,     FL_GLEAM_THIN_UP_BOX);
++    set_boxtype(FL_THIN_DOWN_BOX,   FL_GLEAM_THIN_DOWN_BOX);
++    set_boxtype(_FL_ROUND_UP_BOX,   FL_GLEAM_ROUND_UP_BOX);
++    set_boxtype(_FL_ROUND_DOWN_BOX, FL_GLEAM_ROUND_DOWN_BOX);
++
++    // Use slightly thinner scrollbars...
++    Fl::scrollbar_size(15);
+   } else {
+     // Use the standard FLTK look-n-feel...
+     if (scheme_bg_) {
+Index: src/Makefile
+===================================================================
+--- src/Makefile	(revision 1)
++++ src/Makefile	(working copy)
+@@ -134,6 +134,7 @@
+ 	fl_engraved_label.cxx \
+ 	fl_file_dir.cxx \
+ 	fl_font.cxx \
++	fl_gleam.cxx \
+ 	fl_gtk.cxx \
+ 	fl_labeltype.cxx \
+ 	fl_line_style.cxx \
+Index: src/CMakeLists.txt
+===================================================================
+--- src/CMakeLists.txt	(revision 1)
++++ src/CMakeLists.txt	(working copy)
+@@ -116,6 +116,7 @@
+   fl_engraved_label.cxx
+   fl_file_dir.cxx
+   fl_font.cxx
++  fl_gleam.cxx
+   fl_gtk.cxx
+   fl_labeltype.cxx
+   fl_line_style.cxx
+Index: FL/Enumerations.H
+===================================================================
+--- FL/Enumerations.H	(revision 1)
++++ FL/Enumerations.H	(working copy)
+@@ -516,6 +516,14 @@
+   _FL_GTK_THIN_DOWN_FRAME,	///< gtk+ version of FL_THIN_DOWN_FRAME
+   _FL_GTK_ROUND_UP_BOX,		///< gtk+ version of FL_ROUND_UP_BOX
+   _FL_GTK_ROUND_DOWN_BOX,	///< gtk+ version of FL_ROUND_DOWN_BOX
++  _FL_GLEAM_UP_BOX,		///< gleam version of FL_UP_BOX
++  _FL_GLEAM_DOWN_BOX,		///< gleam version of FL_DOWN_BOX
++  _FL_GLEAM_UP_FRAME,		///< gleam version of FL_UP_FRAME
++  _FL_GLEAM_DOWN_FRAME,		///< gleam version of FL_DOWN_FRAME
++  _FL_GLEAM_THIN_UP_BOX,	///< gleam version of FL_THIN_UP_BOX
++  _FL_GLEAM_THIN_DOWN_BOX,	///< gleam version of FL_THIN_DOWN_BOX
++  _FL_GLEAM_ROUND_UP_BOX,	///< gleam version of FL_ROUND_UP_BOX
++  _FL_GLEAM_ROUND_DOWN_BOX,	///< gleam version of FL_ROUND_DOWN_BOX
+   FL_FREE_BOXTYPE		///< the first free box type for creation of new box types
+ };
+ extern FL_EXPORT Fl_Boxtype fl_define_FL_ROUND_UP_BOX();
+@@ -562,6 +570,16 @@
+ #define FL_GTK_ROUND_UP_BOX (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+8)
+ #define FL_GTK_ROUND_DOWN_BOX (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+9)
+ 
++extern FL_EXPORT Fl_Boxtype fl_define_FL_GLEAM_UP_BOX();
++#define FL_GLEAM_UP_BOX fl_define_FL_GLEAM_UP_BOX()
++#define FL_GLEAM_DOWN_BOX (Fl_Boxtype)(fl_define_FL_GLEAM_UP_BOX()+1)
++#define FL_GLEAM_UP_FRAME (Fl_Boxtype)(fl_define_FL_GLEAM_UP_BOX()+2)
++#define FL_GLEAM_DOWN_FRAME (Fl_Boxtype)(fl_define_FL_GLEAM_UP_BOX()+3)
++#define FL_GLEAM_THIN_UP_BOX (Fl_Boxtype)(fl_define_FL_GLEAM_UP_BOX()+4)
++#define FL_GLEAM_THIN_DOWN_BOX (Fl_Boxtype)(fl_define_FL_GLEAM_UP_BOX()+5)
++#define FL_GLEAM_ROUND_UP_BOX (Fl_Boxtype)(fl_define_FL_GLEAM_UP_BOX()+6)
++#define FL_GLEAM_ROUND_DOWN_BOX (Fl_Boxtype)(fl_define_FL_GLEAM_UP_BOX()+7)
++
+ // conversions of box types to other boxtypes:
+ /**
+   Get the filled version of a frame.
+Index: test/forms.cxx
+===================================================================
+--- test/forms.cxx	(revision 1)
++++ test/forms.cxx	(working copy)
+@@ -58,6 +58,7 @@
+    {FL_PLASTIC_DOWN_BOX,"plastic downbox"},
+    {FL_GTK_UP_BOX,"GTK up box"},
+    {FL_GTK_ROUND_UP_BOX,"GTK round up box"},
++   {FL_GLEAM_UP_BOX,"Gleam up box"},
+    /* sentinel */
+    {-1}
+ };
+Index: fluid/alignment_panel.fl
+===================================================================
+--- fluid/alignment_panel.fl	(revision 1)
++++ fluid/alignment_panel.fl	(working copy)
+@@ -187,6 +187,10 @@
+         label {GTK+}
+         xywh {10 10 35 25}
+       }
++      MenuItem {} {
++        label {Gleam}
++        xywh {20 20 35 25}
++      }
+     }
+     Fl_Group {} {open
+       xywh {116 43 220 126} labelfont 1 align 0
+Index: fluid/alignment_panel.cxx
+===================================================================
+--- fluid/alignment_panel.cxx	(revision 1)
++++ fluid/alignment_panel.cxx	(working copy)
+@@ -153,6 +153,7 @@
+  {"None", 0,  0, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+  {"Plastic", 0,  0, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+  {"GTK+", 0,  0, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
++ {"Gleam", 0,  0, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+  {0,0,0,0,0,0,0,0,0}
+ };
+ 
+Index: fluid/Fl_Widget_Type.cxx
+===================================================================
+--- fluid/Fl_Widget_Type.cxx	(revision 1)
++++ fluid/Fl_Widget_Type.cxx	(working copy)
+@@ -678,6 +678,12 @@
+ {"GTK_THIN_DOWN_BOX",0,0,(void *)FL_GTK_THIN_DOWN_BOX},
+ {"GTK_ROUND_UP_BOX",0,0,(void *)FL_GTK_ROUND_UP_BOX},
+ {"GTK_ROUND_DOWN_BOX",0,0,(void *)FL_GTK_ROUND_DOWN_BOX},
++{"GLEAM_UP_BOX",0,0,(void *)FL_GLEAM_UP_BOX},
++{"GLEAM_DOWN_BOX",0,0,(void *)FL_GLEAM_DOWN_BOX},
++{"GLEAM_THIN_UP_BOX",0,0,(void *)FL_GLEAM_THIN_UP_BOX},
++{"GLEAM_THIN_DOWN_BOX",0,0,(void *)FL_GLEAM_THIN_DOWN_BOX},
++{"GLEAM_ROUND_UP_BOX",0,0,(void *)FL_GLEAM_ROUND_UP_BOX},
++{"GLEAM_ROUND_DOWN_BOX",0,0,(void *)FL_GLEAM_ROUND_DOWN_BOX},
+ {0},
+ {"frames",0,0,0,FL_SUBMENU},
+ {"UP_FRAME",0,0,(void *)FL_UP_FRAME},
+@@ -696,6 +702,8 @@
+ {"GTK_DOWN_FRAME",0,0,(void *)FL_GTK_DOWN_FRAME},
+ {"GTK_THIN_UP_FRAME",0,0,(void *)FL_GTK_THIN_UP_FRAME},
+ {"GTK_THIN_DOWN_FRAME",0,0,(void *)FL_GTK_THIN_DOWN_FRAME},
++{"GLEAM_UP_FRAME",0,0,(void *)FL_GLEAM_UP_FRAME},
++{"GLEAM_DOWN_FRAME",0,0,(void *)FL_GLEAM_DOWN_FRAME},
+ {0},
+ {0}};
+ 
+Index: fluid/fluid.cxx
+===================================================================
+--- fluid/fluid.cxx	(revision 1)
++++ fluid/fluid.cxx	(working copy)
+@@ -1113,6 +1113,9 @@
+     case 3 : // GTK+
+       Fl::scheme("gtk+");
+       break;
++    case 4 : // Gleam
++      Fl::scheme("gleam");
++      break;
+   }
+ 
+   fluid_prefs.set("scheme", scheme_choice->value());

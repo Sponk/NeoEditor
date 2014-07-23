@@ -157,6 +157,7 @@ private:
 
 	// invisible
 	bool m_isInvisible;
+    bool m_hasShadow;
 
 	// animation
 	unsigned int m_animationId;
@@ -202,6 +203,10 @@ public:
 
 	// bounding box
 	inline MBox3d * getBoundingBox(void){ return &m_boundingBox; }
+
+    // Shadow
+    inline bool hasShadow() { return m_hasShadow; }
+    inline void enableShadow(bool shadow) { m_hasShadow = shadow; }
 
 	// update
 	void update(void);

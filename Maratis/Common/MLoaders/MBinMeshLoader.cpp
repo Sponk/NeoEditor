@@ -614,7 +614,7 @@ bool M_loadBinArmatureAnim(const char * filename, void * data)
 	MFile * file = M_fopen(filename, "rb");
 	if(! file)
 	{
-		printf("Error : can't read file %s\n", filename);
+		fprintf(stderr, "Error : can't read file %s\n", filename);
 		return false;
 	}
 
@@ -677,7 +677,7 @@ bool M_loadBinTexturesAnim(const char * filename, void * data)
 	MFile * file = M_fopen(filename, "rb");
 	if(! file)
 	{
-		printf("Error : can't read file %s\n", filename);
+		fprintf(stderr, "Error : can't read file %s\n", filename);
 		return false;
 	}
 
@@ -740,7 +740,7 @@ bool M_loadBinMaterialsAnim(const char * filename, void * data)
 	MFile * file = M_fopen(filename, "rb");
 	if(! file)
 	{
-		printf("Error : can't read file %s\n", filename);
+		fprintf(stderr, "Error : can't read file %s\n", filename);
 		return false;
 	}
 

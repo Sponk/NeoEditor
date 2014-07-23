@@ -74,5 +74,6 @@ class MSound;
 #include "MStringTools.h"
 #include "MDataManager.h"
 #include "MDataLoader.h"
+#include "MThread.h"
 
 #endif

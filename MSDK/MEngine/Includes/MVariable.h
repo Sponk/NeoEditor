@@ -31,7 +31,9 @@
 #ifndef _M_VARIABLE_H
 #define _M_VARIABLE_H
 
-
+/**
+ * @brief The M_VARIABLE_TYPE enum defines all types that are storable in an MVariable object.
+ */
 enum M_VARIABLE_TYPE
 {
 	M_VARIABLE_NULL = 0,
@@ -47,6 +49,11 @@ enum M_VARIABLE_TYPE
 	M_VARIABLE_TEXTURE_REF
 };
 
+/**
+ * @brief The MVariable class defines a variable that can be of any type available in M_VARIABLE_TYPE.
+ *
+ * This class is used by behaviors and the editor to store and process unknown data.
+ */
 class M_ENGINE_EXPORT MVariable
 {
 private:
@@ -58,6 +65,20 @@ private:
 
 public:
 	
+    MVariable():
+	m_name(NULL),
+	m_pointer(NULL),
+	m_type(M_VARIABLE_NULL)
+	{}
+
+    /** The MVariable constructor sets up a new MVariable object.
+     *  It will not copy the name to an internal buffer so you have to provide memory for the name.
+     *
+     * @param name The name of the variable. Will not be copied to an internal buffer!
+     * @param pointer The pointer to the data. This one needs to be persistant so it can't point
+     *        to a local variable or an element in a std::vector/std::deque etc.
+     * @param type The type of this variable. This is an element of M_VARIABLE_TYPE.
+     */
 	MVariable(const char * name, void * pointer, M_VARIABLE_TYPE type):
 	m_name(name),
 	m_pointer(pointer),
@@ -66,9 +87,21 @@ public:
 
 public:
 
+    /** @brief getType
+     * @return The variable type. Is element of enumaration \b M_VARIABLE_TYPE
+     */
 	inline M_VARIABLE_TYPE getType(void){ return m_type; }
-	inline const char * getName(void){ return m_name; }
-	inline void * getPointer(void){ return m_pointer; }
+
+    /** @brief getName
+     * @return The pointer to the name.
+     */
+    inline const char * getName(void){ return m_name; }
+
+    /**
+     * @brief getPointer
+     * @return Returns the pointer with the data. This pointer complies to the type given by MVariable::getType
+     */
+    inline void * getPointer(void){ return m_pointer; }
 };
 
 

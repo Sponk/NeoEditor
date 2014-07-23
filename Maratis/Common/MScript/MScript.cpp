@@ -29,12 +29,12 @@
 
 
 #include "MScript.h"
+#include "MSchedule/MSchedule.h"
+#include <MLog.h>
 
 static char g_currentDirectory[256] = "";
 static unsigned long g_startTick = 0;
 const char * LUA_VEC3 = "LUA_VEC3";
-
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Some frequently used macros
@@ -63,7 +63,7 @@ static bool isFunctionOk(lua_State * L, const char * name, unsigned int nbArgs)
 	int nbArguments = lua_gettop(L);
 	if(nbArguments < (int)nbArgs)
 	{
-		printf("ERROR script : \"%s\" need at least %d parameter(s)\n", name, nbArgs);
+        MLOG_ERROR("Script: \"" << name << "\" needs at least " << nbArgs << " parameter(s)!");
 		return false;
 	}
 	return true;
@@ -411,7 +411,7 @@ int getScene(lua_State * L)
 		}
 	}
 	
-	printf("ERROR script : scene \"%s\" doesn't exit\n", name);
+    MLOG_ERROR("Script: Scene \"" << name << "\" does not exist!");
 	return 0;
 }
 
@@ -420,7 +420,6 @@ int getCurrentCamera(lua_State * L)
 	MLevel * level = MEngine::getInstance()->getLevel();
 	MScene * scene = level->getCurrentScene();
 	
-
 	int nbArguments = lua_gettop(L);
 	if(nbArguments == 1)
 	{
@@ -465,8 +464,121 @@ int getObject(lua_State * L)
 		}
 	}
 
-	printf("ERROR script : object \"%s\" doesn't exit\n", name);
+    MLOG_ERROR("Script: Object \"" << name << "\" does not exist!");
 	return 0;
+}
+
+int objectExists(lua_State * L)
+{
+    MLevel * level = MEngine::getInstance()->getLevel();
+    MScene * scene = level->getCurrentScene();
+
+    if(! isFunctionOk(L, "objectExists", 1))
+        return 0;
+
+    int nbArguments = lua_gettop(L);
+    if(nbArguments == 2)
+    {
+        unsigned int sceneId = lua_tointeger(L, 1);
+        scene = level->getSceneByIndex(sceneId);
+    }
+
+    const char * name = lua_tostring(L, nbArguments);
+    if(name)
+    {
+        MObject3d * object = scene->getObjectByName(name);
+        lua_pushboolean(L, object != NULL);
+        return 1;
+    }
+
+    return 1;
+}
+
+int setAttribute(lua_State* L)
+{
+    if(! isFunctionOk(L, "setAttribute", 3))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+    const char* name = lua_tostring(L, 2);
+
+    if((object = getObject3d(id)))
+    {
+		int type = lua_type(L, 3);
+		M_VARIABLE_TYPE varType = object->getAttribute(name).getType();
+
+        if(object->getAttribute(name).getType() == M_VARIABLE_NULL)
+        {
+			switch(type)
+			{
+				case LUA_TNUMBER:
+				{
+					MVariable variable(name, new float(lua_tonumber(L, 3)), M_VARIABLE_FLOAT);
+					object->setAttribute(name, variable);
+				}
+				break;
+
+				case LUA_TSTRING:
+				{
+					MVariable variable(name, new MString(lua_tostring(L, 3)), M_VARIABLE_STRING);
+					object->setAttribute(name, variable);
+				}
+				break;
+			}
+        }
+        else
+        {
+            MVariable attribute = object->getAttribute(name);
+            if(type == LUA_TNUMBER && attribute.getType() == M_VARIABLE_FLOAT)
+            {
+                *(float*)attribute.getPointer() = lua_tonumber(L, 3);
+            }
+            else if(type == LUA_TSTRING && attribute.getType() == M_VARIABLE_STRING)
+            {
+                ((MString*)attribute.getPointer())->set(lua_tostring(L, 3));
+            }
+            else
+            {
+                MLOG_ERROR("setAttribute: Types do not match! Can not set attribute!");
+            }
+        }
+    }
+
+    return 1;
+}
+
+int getAttribute(lua_State* L)
+{
+    if(! isFunctionOk(L, "getAttribute", 2))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+    const char* name = lua_tostring(L, 2);
+
+    if((object = getObject3d(id)))
+    {
+        MVariable variable = object->getAttribute(name);
+        switch(variable.getType())
+        {
+        case M_VARIABLE_FLOAT:
+            lua_pushnumber(L, *(float*)variable.getPointer());
+        break;
+
+        case M_VARIABLE_STRING:
+            lua_pushstring(L, ((MString*)variable.getPointer())->getSafeString());
+        break;
+
+        case M_VARIABLE_NULL:
+            lua_pushnil(L);
+        break;
+
+        default: MLOG_ERROR("getAttribute: Variable of type '" << variable.getType() << "' not supported!");
+        }
+    }
+
+    return 1;
 }
 
 int getClone(lua_State * L)
@@ -936,12 +1048,12 @@ int getRotatedVector(lua_State * L)
 	MObject3d * object;
 	lua_Integer id = lua_tointeger(L, 1);
 	
-	if((object = getObject3d(id)))
+    if((object = getObject3d(id)))
 	{
 		MVector3 vec;
 		if(getVector3(L, 2, &vec))
-		{
-			pushFloatArray(L, object->getRotatedVector(vec), 3);
+        {
+            pushFloatArray(L, object->getRotatedVector(vec), 3);
 			return 1;
 		}
 	}
@@ -1536,6 +1648,106 @@ int setAngularDamping(lua_State * L)
 	}
 
 	return 0;
+}
+
+int setConstraintParent(lua_State* L)
+{
+    if(! isFunctionOk(L, "setConstraintParent", 2))
+        return 0;
+
+    MObject3d* object;
+    MObject3d* parent;
+    lua_Integer id = lua_tointeger(L, 1);
+    lua_Integer parentId = lua_tointeger(L, 2);
+    if((object = getObject3d(id)) && (parent = getObject3d(parentId)))
+    {
+        if(object->getType() == M_OBJECT3D_ENTITY && parent->getType() == M_OBJECT3D_ENTITY)
+        {
+            MOEntity * entity = (MOEntity*)object;
+            MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+            if(phyProps)
+            {
+                MPhysicsConstraint* constraint = phyProps->getConstraint();
+
+                if(constraint)
+                {
+                    constraint->parentName.set(parent->getName());
+                    MEngine::getInstance()->getLevel()->getCurrentScene()->prepareConstraints(entity);
+                }
+                else
+                {
+                    MLOG_ERROR("script: Can not set constraint parent: No constraint available!");
+                }
+                return 0;
+            }
+        }
+    }
+}
+
+int getConstraintParent(lua_State* L)
+{
+    if(! isFunctionOk(L, "setConstraintParent", 2))
+        return 0;
+
+    MObject3d* object;
+    MObject3d* parent;
+    lua_Integer id = lua_tointeger(L, 1);
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_ENTITY)
+        {
+            MOEntity * entity = (MOEntity*)object;
+            MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+            if(phyProps)
+            {
+                MPhysicsConstraint* constraint = phyProps->getConstraint();
+
+                if(constraint)
+                {
+                    MObject3d* object = MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(constraint->parentName.getSafeString());
+                    lua_pushinteger(L, (lua_Integer) object);
+                }
+                else
+                {
+                    MLOG_ERROR("script: Can not get constraint parent: No constraint available!");
+                }
+                return 0;
+            }
+        }
+    }
+}
+
+int enableParentCollision(lua_State* L)
+{
+    if(! isFunctionOk(L, "enableParentCollision", 2))
+        return 0;
+
+    MObject3d* object;
+    lua_Integer id = lua_tointeger(L, 1);
+    lua_Integer collision = lua_tointeger(L, 2);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_ENTITY)
+        {
+            MOEntity * entity = (MOEntity*)object;
+            MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+            if(phyProps)
+            {
+                MPhysicsConstraint* constraint = phyProps->getConstraint();
+
+                if(constraint)
+                {
+                   constraint->disableParentCollision = !collision;
+                }
+                else
+                {
+                    MLOG_ERROR("script: Can not set constraint parent: No constraint available!");
+                }
+                return 0;
+            }
+        }
+    }
 }
 
 int getCentralForce(lua_State * L)
@@ -2207,6 +2419,46 @@ int stopSound(lua_State * L)
 	return 0;
 }
 
+int setSoundPitch(lua_State * L)
+{
+    if(!isFunctionOk(L, "setSoundPitch", 2))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            sound->setPitch(lua_tonumber(L, 2));
+        }
+    }
+
+    return 0;
+}
+
+int getSoundPitch(lua_State * L)
+{
+    if(!isFunctionOk(L, "getSoundPitch", 1))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            lua_pushnumber(L, sound->getPitch());
+        }
+    }
+
+    return 1;
+}
+
 int changeScene(lua_State * L)
 {
 	MEngine * engine = MEngine::getInstance();
@@ -2241,14 +2493,12 @@ int getScenesNumber(lua_State * L)
 
 int loadLevel(lua_State * L)
 {
-	MEngine * engine = MEngine::getInstance();
-
 	if(! isFunctionOk(L, "loadLevel", 1))
 		return 0;
 
 	const char * filename = lua_tostring(L, 1);
 	if(filename)
-		engine->requestLoadLevel(filename);
+        MEngine::getInstance()->requestLoadLevel(filename);
 
 	return 0;
 }
@@ -2417,10 +2667,17 @@ int enableShadow(lua_State * L)
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
 			bool shadow = lua_toboolean(L, 2) == 1;
-			MOLight * light = (MOLight*)object;
+            MOLight* light = (MOLight*) object;
 			light->castShadow(shadow);
 			return 0;
 		}
+        else if(object->getType() == M_OBJECT3D_ENTITY)
+        {
+            bool shadow = lua_toboolean(L, 2) == 1;
+            MOEntity* entity = (MOEntity*) object;
+            entity->enableShadow(shadow);
+            return 0;
+        }
 	}
 	
 	return 0;
@@ -3318,7 +3575,7 @@ int centerCursor(lua_State * L)
 	int x = width/2;
 	int y = height/2;
 
-	system->setCursorPosition(x, y);
+    system->setCursorPosition(x, y);
 	input->setAxis("MOUSE_X", (float)(x / (float)width));
 	input->setAxis("MOUSE_Y", (float)(y / (float)height));
 
@@ -3491,6 +3748,16 @@ int doFile(lua_State * L)
 	return 0;
 }
 
+int setPhysicsQuality(lua_State* L)
+{
+    if(! isFunctionOk(L, "setPhysicsQuality", 1))
+        return 0;
+
+    int quality = lua_tonumber(L, 1);
+    MEngine::getInstance()->getPhysicsContext()->setSimulationQuality(quality);
+
+    return 1;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Init
@@ -3530,6 +3797,7 @@ void MScript::init(void)
 	// object/scene init
 	lua_register(m_state, "getScene",	 getScene);
 	lua_register(m_state, "getObject",	 getObject);
+    lua_register(m_state, "objectExists", objectExists);
 	lua_register(m_state, "getClone",	 getClone);
 	lua_register(m_state, "getParent",	 getParent);
 	lua_register(m_state, "getChilds",	 getChilds);
@@ -3550,7 +3818,9 @@ void MScript::init(void)
 	lua_register(m_state, "isActive",				isActive);
 	lua_register(m_state, "getName",				getName);
 	lua_register(m_state, "setParent",				setParent);
-	
+    lua_register(m_state, "setAttribute",           setAttribute);
+    lua_register(m_state, "getAttribute",           getAttribute);
+
 	lua_register(m_state, "enableShadow",			enableShadow);
 	lua_register(m_state, "isCastingShadow",		isCastingShadow);
 	
@@ -3604,6 +3874,11 @@ void MScript::init(void)
 	lua_register(m_state, "clearForces",		clearForces);
 	lua_register(m_state, "getNumCollisions",	getNumCollisions);
 	lua_register(m_state, "rayHit",				rayHit);
+
+    lua_register(m_state, "setPhysicsQuality",  setPhysicsQuality);
+    lua_register(m_state, "setConstraintParent", setConstraintParent);
+    lua_register(m_state, "getConstraintParent", getConstraintParent);
+    lua_register(m_state, "enableParentCollision", enableParentCollision);
 	
 	// input
 	lua_register(m_state, "isKeyPressed", isKeyPressed);
@@ -3623,6 +3898,8 @@ void MScript::init(void)
 	lua_register(m_state, "stopSound",	  stopSound);
 	lua_register(m_state, "getSoundGain", getSoundGain);
 	lua_register(m_state, "setSoundGain", setSoundGain);
+    lua_register(m_state, "setSoundPitch", setSoundPitch);
+    lua_register(m_state, "getSoundPitch", getSoundPitch);
 	
 	// scene/level
 	lua_register(m_state, "changeScene",			changeScene);
@@ -3747,7 +4024,7 @@ void MScript::runScript(const char * filename)
 	char * text = readTextFile(filename);
 	if(! text)
 	{
-		printf("ERROR lua script : unable to read file %s\n", filename);
+        MLOG_ERROR("Script: Unable to read file " << filename);
 		m_isRunning = false;
 		return;
 	}
@@ -3757,7 +4034,7 @@ void MScript::runScript(const char * filename)
 	// do string
 	if(luaL_dostring(m_state, text) != 0)
 	{
-		printf("ERROR lua script :\n %s\n", lua_tostring(m_state, -1));
+        MLOG_ERROR("Lua Script: \n" << lua_tostring(m_state, -1) << "\n");
 		m_isRunning = false;
 		SAFE_FREE(text);
 		return;
@@ -3787,7 +4064,7 @@ bool MScript::endCallFunction(int numArgs)
 {
 	if(lua_pcall(m_state, numArgs, 0, 0) != 0)
 	{
-		printf("ERROR lua script :\n %s\n", lua_tostring(m_state, -1));
+        MLOG_ERROR("Lua Script: \n" << lua_tostring(m_state, -1) << "\n");
 		m_isRunning = false;
 		return false;
 	}

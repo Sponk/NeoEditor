@@ -36,7 +36,6 @@
 #include <MCore.h>
 #define MAX_MRCLIGHTS 8
 
-
 class MGLContext : public MRenderingContext
 {
 private:
@@ -194,6 +193,8 @@ public:
 	void enableDepthTest(void);
 	void disableDepthTest(void);
 	void setDepthMode(M_DEPTH_MODES mode);
+	void enablePolygonOffset(float x, float y);
+	void disablePolygonOffset();
 
 	// stencil
 	void enableStencilTest(void);

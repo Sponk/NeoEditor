@@ -37,7 +37,7 @@ MObject3d::MObject3d(void):
 	m_scale(1, 1, 1),
 	m_isVisible(true),
 	m_isActive(true),
-	m_needToUpdate(true)
+    m_needToUpdate(true)
 {}
 
 // destructor
@@ -55,6 +55,31 @@ void MObject3d::clearObject3d(void)
 	
 	m_behaviors.clear();
 	m_childs.clear();
+
+    // All MVariables have to have their content on the heap! No static variables allowed!
+	for (AttributeIterator it = m_attributes.begin(); it != m_attributes.end(); ++it)
+    {
+		MVariable variable = it->second;
+
+		if(variable.getPointer() == NULL)
+			continue;
+
+        switch(it->second.getType())
+        {
+        case M_VARIABLE_FLOAT:
+            delete (float*) it->second.getPointer();
+        break;
+
+        case M_VARIABLE_STRING:
+            delete (MString*) it->second.getPointer();
+        break;
+
+        default:
+            MLOG_WARNING("clearObject3d: Deletion of MVariable with this type is not supported!");
+        }
+    }
+
+	m_attributes.clear();
 }
 
 // copy constructor
@@ -66,7 +91,7 @@ MObject3d::MObject3d(const MObject3d & object):
 	m_matrix(object.m_matrix),
 	m_isVisible(object.m_isVisible),
 	m_isActive(object.m_isActive),
-	m_needToUpdate(object.m_needToUpdate)
+    m_needToUpdate(object.m_needToUpdate)
 {
 	if(object.m_parent)
 		linkTo(object.m_parent);

@@ -32,6 +32,11 @@
 #define _M_UTILS_H
 
 #include <map>
+
+#if __cplusplus >= 201103L
+#include <unordered_map>
+#endif
+
 #include <vector>
 #include <string>
 using namespace std;

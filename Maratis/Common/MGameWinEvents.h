@@ -4,7 +4,8 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //========================================================================
-// Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2003-2014 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2014 Anders Dahnielson <anders@dahnielson.com>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -30,6 +31,12 @@
 
 #ifndef _M_GAME_WIN_EVENTS_H
 #define _M_GAME_WIN_EVENTS_H
+
+#include <MInputContext.h>
+#include <MWindow.h>
+#include <MWinEvents.h>
+
+#include <limits.h>
 
 
 const char * getKeyName(unsigned int key)
@@ -93,10 +100,10 @@ const char * getKeyName(unsigned int key)
 
 void gameWinEvents(MWinEvent * windowEvents)
 {
+	static int joymap[4] = {-1, -1, -1, -1};
+
 	MWindow * window = MWindow::getInstance();
 	MInputContext * input = MEngine::getInstance()->getInputContext();
-	MMouse * mouse = MMouse::getInstance();
-
 	
 	switch(windowEvents->type)
 	{
@@ -104,14 +111,19 @@ void gameWinEvents(MWinEvent * windowEvents)
 		switch(windowEvents->data[0])
 		{
 		case MMOUSE_BUTTON_LEFT:
-			input->downKey("MOUSE_BUTTON1");
+			input->downKey("MOUSE_BUTTON_LEFT");
 			break;
 		case MMOUSE_BUTTON_MIDDLE:
-			input->downKey("MOUSE_BUTTON2");
+			input->downKey("MOUSE_BUTTON_MIDDLE");
 			break;
 		case MMOUSE_BUTTON_RIGHT:
-			input->downKey("MOUSE_BUTTON3");
+			input->downKey("MOUSE_BUTTON_RIGHT");
 			break;
+		case MMOUSE_BUTTON_X1:
+			input->downKey("MOUSE_BUTTON_X1");
+			break;
+		case MMOUSE_BUTTON_X2:
+			input->downKey("MOUSE_BUTTON_X2");
 		}
 		break;
 
@@ -119,24 +131,29 @@ void gameWinEvents(MWinEvent * windowEvents)
 		switch(windowEvents->data[0])
 		{
 		case MMOUSE_BUTTON_LEFT:
-			input->upKey("MOUSE_BUTTON1");
+			input->upKey("MOUSE_BUTTON_LEFT");
 			break;
 		case MMOUSE_BUTTON_MIDDLE:
-			input->upKey("MOUSE_BUTTON2");
+			input->upKey("MOUSE_BUTTON_MIDDLE");
 			break;
 		case MMOUSE_BUTTON_RIGHT:
-			input->upKey("MOUSE_BUTTON3");
+			input->upKey("MOUSE_BUTTON_RIGHT");
 			break;
+		case MMOUSE_BUTTON_X1:
+			input->upKey("MOUSE_BUTTON_X1");
+			break;
+		case MMOUSE_BUTTON_X2:
+			input->upKey("MOUSE_BUTTON_X2");
 		}
 		break;
 
 	case MWIN_EVENT_MOUSE_MOVE:
-		input->setAxis("MOUSE_X", (float)(mouse->getXPosition() / (float)window->getWidth()));
-		input->setAxis("MOUSE_Y", (float)(mouse->getYPosition() / (float)window->getHeight()));
+		input->setAxis("MOUSE_X", (float)(windowEvents->data[0] / (float)window->getWidth()));
+		input->setAxis("MOUSE_Y", (float)(windowEvents->data[1] / (float)window->getHeight()));
 		break;
 
 	case MWIN_EVENT_MOUSE_WHEEL_MOVE:
-		input->setAxis("MOUSE_WHEEL", (float)mouse->getWheelDirection());
+		input->setAxis("MOUSE_WHEEL", (float)windowEvents->data[0]);
 		break;
 			
 	case MWIN_EVENT_KEY_DOWN:
@@ -157,60 +174,261 @@ void gameWinEvents(MWinEvent * windowEvents)
 		}
 		break;
 
-	case MWIN_EVENT_JOYSTICK1_UPDATE:
+	case MWIN_EVENT_CONTROLLER_ADDED:
 		{
-			MJoystick * joystick = window->getJoystick1();
-
-			char name[32];
-			for(int i=0; i<8; i++)
+			for (int i = 0; i < 4; ++i)
 			{
-				if(joystick->onKeyDown(i))
+				if (joymap[i] == -1)
 				{
-					sprintf(name, "JOY1_BUTTON%d", i+1);
-					input->downKey(name);
-				}
-				else if(joystick->onKeyUp(i))
-				{
-					sprintf(name, "JOY1_BUTTON%d", i+1);
-					input->upKey(name);
+					joymap[i] = windowEvents->data[0];
+					break;
 				}
 			}
-
-			input->setAxis("JOY1_X", joystick->getX());
-			input->setAxis("JOY1_Y", joystick->getY());
-			input->setAxis("JOY1_Z", joystick->getZ());
-			input->setAxis("JOY1_R", joystick->getR());
-			input->setAxis("JOY1_U", joystick->getU());
-			input->setAxis("JOY1_V", joystick->getV());
 		}
 		break;
 
-	case MWIN_EVENT_JOYSTICK2_UPDATE:
+	case MWIN_EVENT_CONTROLLER_REMOVED:
 		{
-			MJoystick * joystick = window->getJoystick2();
-
-			char name[32];
-			for(int i=0; i<8; i++)
+			for (int i = 0; i < 4; ++i)
 			{
-				if(joystick->onKeyDown(i))
+				if (joymap[i] == windowEvents->data[0])
 				{
-					sprintf(name, "JOY2_BUTTON%d", i+1);
-					input->downKey(name);
+					joymap[i] = -1;
+					break;
 				}
-				else if(joystick->onKeyUp(i))
+			}
+		}
+		break;
+
+	case MWIN_EVENT_CONTROLLER_MOVE:
+		{
+			int joy = -1;
+			for (int i = 0; i < 4; ++i)
+			{
+				if (joymap[i] == windowEvents->data[0])
 				{
-					sprintf(name, "JOY2_BUTTON%d", i+1);
-					input->upKey(name);
+					joy = i;
+					break;
 				}
 			}
 
-			input->setAxis("JOY2_X", joystick->getX());
-			input->setAxis("JOY2_Y", joystick->getY());
-			input->setAxis("JOY2_Z", joystick->getZ());
-			input->setAxis("JOY2_R", joystick->getR());
-			input->setAxis("JOY2_U", joystick->getU());
-			input->setAxis("JOY2_V", joystick->getV());
+			if (joy == -1)
+				break;
+
+			char name[32];
+			switch (windowEvents->data[1])
+			{
+				case MCONTROLLER_AXIS_LEFTX:
+					sprintf(name, "JOY%d_AXIS_LEFTX", joy+1);
+                    input->setAxis(name, (float) windowEvents->data[2] / SHRT_MAX);
+					break;
+				case MCONTROLLER_AXIS_LEFTY:
+					sprintf(name, "JOY%d_AXIS_LEFTY", joy+1);
+                    input->setAxis(name, (float) windowEvents->data[2] / SHRT_MAX);
+					break;
+				case MCONTROLLER_AXIS_RIGHTX:
+					sprintf(name, "JOY%d_AXIS_RIGHTX", joy+1);
+                    input->setAxis(name, (float) windowEvents->data[2] / SHRT_MAX);
+					break;
+				case MCONTROLLER_AXIS_RIGHTY:
+					sprintf(name, "JOY%d_AXIS_RIGHTY", joy+1);
+                    input->setAxis(name, (float) windowEvents->data[2] / SHRT_MAX);
+					break;
+				case MCONTROLLER_AXIS_TRIGGERLEFT:
+					sprintf(name, "JOY%d_AXIS_TRIGGERLEFT", joy+1);
+                    input->setAxis(name, (float) windowEvents->data[2] / SHRT_MAX);
+					break;
+				case MCONTROLLER_AXIS_TRIGGERRIGHT:
+					sprintf(name, "JOY%d_AXIS_TRIGGERRIGHT", joy+1);
+                    input->setAxis(name, (float) windowEvents->data[2] / SHRT_MAX);
+					break;
+			}
 		}
+		break;
+
+	case MWIN_EVENT_CONTROLLER_BUTTON_DOWN:
+		{
+			int joy = -1;
+			for (int i = 0; i < 4; ++i)
+			{
+				if (joymap[i] == windowEvents->data[0])
+				{
+					joy = i;
+					break;
+				}
+			}
+
+			if (joy == -1)
+				break;
+
+			char name[32];
+			switch (windowEvents->data[1])
+			{
+				case MCONTROLLER_BUTTON_A:
+					sprintf(name, "JOY%d_BUTTON_A", joy+1);
+					input->downKey(name);
+					break;
+				case MCONTROLLER_BUTTON_B:
+					sprintf(name, "JOY%d_BUTTON_B", joy+1);
+					input->downKey(name);
+					break;
+				case MCONTROLLER_BUTTON_X:
+					sprintf(name, "JOY%d_BUTTON_X", joy+1);
+					input->downKey(name);
+					break;
+				case MCONTROLLER_BUTTON_Y:
+					sprintf(name, "JOY%d_BUTTON_Y", joy+1);
+					input->downKey(name);
+					break;
+				case MCONTROLLER_BUTTON_BACK:
+					sprintf(name, "JOY%d_BUTTON_BACK", joy+1);
+					input->downKey(name);
+					break;
+				case MCONTROLLER_BUTTON_GUIDE:
+					sprintf(name, "JOY%d_BUTTON_GUIDE", joy+1);
+					input->downKey(name);
+					break;
+				case MCONTROLLER_BUTTON_START:
+					sprintf(name, "JOY%d_BUTTON_START", joy+1);
+					input->downKey(name);
+					break;
+				case MCONTROLLER_BUTTON_LEFTSTICK:
+					sprintf(name, "JOY%d_BUTTON_LEFTSTICK", joy+1);
+					input->downKey(name);
+					break;
+				case MCONTROLLER_BUTTON_RIGHTSTICK:
+					sprintf(name, "JOY%d_BUTTON_RIGHTSTICK", joy+1);
+					input->downKey(name);
+					break;
+				case MCONTROLLER_BUTTON_LEFTSHOULDER:
+					sprintf(name, "JOY%d_BUTTON_LEFTSHOULDER", joy+1);
+					input->downKey(name);
+					break;
+				case MCONTROLLER_BUTTON_RIGHTSHOULDER:
+					sprintf(name, "JOY%d_BUTTON_RIGHTSHOULDER", joy+1);
+					input->downKey(name);
+					break;
+				case MCONTROLLER_BUTTON_DPADUP:
+                    sprintf(name, "JOY%d_BUTTON_DPADUP", joy+1);
+					input->downKey(name);
+					break;
+				case MCONTROLLER_BUTTON_DPADDOWN:
+                    sprintf(name, "JOY%d_BUTTON_DPADDOWN", joy+1);
+					input->downKey(name);
+					break;
+				case MCONTROLLER_BUTTON_DPADLEFT:
+                    sprintf(name, "JOY%d_BUTTON_DPADLEFT", joy+1);
+					input->downKey(name);
+					break;
+				case MCONTROLLER_BUTTON_DPADRIGHT:
+                    sprintf(name, "JOY%d_BUTTON_DPADRIGHT", joy+1);
+					input->downKey(name);
+					break;
+			}
+		}
+		break;
+
+	case MWIN_EVENT_CONTROLLER_BUTTON_UP:
+		{
+			int joy = -1;
+			for (int i = 0; i < 4; ++i)
+			{
+				if (joymap[i] == windowEvents->data[0])
+				{
+					joy = i;
+					break;
+				}
+			}
+
+			if (joy == -1)
+				break;
+
+			char name[32];
+			switch (windowEvents->data[1])
+			{
+				case MCONTROLLER_BUTTON_A:
+					sprintf(name, "JOY%d_BUTTON_A", joy+1);
+					input->upKey(name);
+					break;
+				case MCONTROLLER_BUTTON_B:
+					sprintf(name, "JOY%d_BUTTON_B", joy+1);
+					input->upKey(name);
+					break;
+				case MCONTROLLER_BUTTON_X:
+					sprintf(name, "JOY%d_BUTTON_X", joy+1);
+					input->upKey(name);
+					break;
+				case MCONTROLLER_BUTTON_Y:
+					sprintf(name, "JOY%d_BUTTON_Y", joy+1);
+					input->upKey(name);
+					break;
+				case MCONTROLLER_BUTTON_BACK:
+					sprintf(name, "JOY%d_BUTTON_BACK", joy+1);
+					input->upKey(name);
+					break;
+				case MCONTROLLER_BUTTON_GUIDE:
+					sprintf(name, "JOY%d_BUTTON_GUIDE", joy+1);
+					input->upKey(name);
+					break;
+				case MCONTROLLER_BUTTON_START:
+					sprintf(name, "JOY%d_BUTTON_START", joy+1);
+					input->upKey(name);
+					break;
+				case MCONTROLLER_BUTTON_LEFTSTICK:
+					sprintf(name, "JOY%d_BUTTON_LEFTSTICK", joy+1);
+					input->upKey(name);
+					break;
+				case MCONTROLLER_BUTTON_RIGHTSTICK:
+					sprintf(name, "JOY%d_BUTTON_RIGHTSTICK", joy+1);
+					input->upKey(name);
+					break;
+				case MCONTROLLER_BUTTON_LEFTSHOULDER:
+					sprintf(name, "JOY%d_BUTTON_LEFTSHOULDER", joy+1);
+					input->upKey(name);
+					break;
+				case MCONTROLLER_BUTTON_RIGHTSHOULDER:
+					sprintf(name, "JOY%d_BUTTON_RIGHTSHOULDER", joy+1);
+					input->upKey(name);
+					break;
+				case MCONTROLLER_BUTTON_DPADUP:
+                    sprintf(name, "JOY%d_BUTTON_DPADUP", joy+1);
+					input->upKey(name);
+					break;
+				case MCONTROLLER_BUTTON_DPADDOWN:
+                    sprintf(name, "JOY%d_BUTTON_DPADDOWN", joy+1);
+					input->upKey(name);
+					break;
+				case MCONTROLLER_BUTTON_DPADLEFT:
+                    sprintf(name, "JOY%d_BUTTON_DPADLEFT", joy+1);
+					input->upKey(name);
+					break;
+				case MCONTROLLER_BUTTON_DPADRIGHT:
+                    sprintf(name, "JOY%d_BUTTON_DPADRIGHT", joy+1);
+					input->upKey(name);
+					break;
+			}
+		}
+		break;
+
+	case MWIN_EVENT_FINGER_DOWN:
+		input->beginTouch(windowEvents->data[0], MVector2(
+					(float) windowEvents->data[1] / INT_MAX,
+					(float) windowEvents->data[2] / INT_MAX
+				));
+		break;
+
+	case MWIN_EVENT_FINGER_UP:
+		input->endTouch(windowEvents->data[0], MVector2(
+					(float) windowEvents->data[1] / INT_MAX,
+					(float) windowEvents->data[2] / INT_MAX
+				));
+		break;
+
+	case MWIN_EVENT_FINGER_MOVE:
+		input->updateTouch(windowEvents->data[0], input->getLastTouchPosition(windowEvents->data[0]) + MVector2(
+					(float) windowEvents->data[1] / INT_MAX,
+					(float) windowEvents->data[2] / INT_MAX
+				));
 		break;
 	}
 }

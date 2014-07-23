@@ -47,7 +47,8 @@ string vertHeader =
 
 "varying vec4 texCoord[2];"
 "varying vec4 shadowCoord[3];"
-"varying vec4 position, normal, tangent;";
+"varying vec4 position, normal, tangent;"
+"varying vec4 eyepos;";
 
 
 // frag header
@@ -82,7 +83,8 @@ string fragHeader =
 
 "varying vec4 texCoord[2];"
 "varying vec4 shadowCoord[3];"
-"varying vec4 position, normal, tangent;";
+"varying vec4 position, normal, tangent;"
+"varying vec4 eyepos;";
 							
 								
 // functions
@@ -90,10 +92,21 @@ string functionsShader = string(
 
 "float lookup(vec4 shadCoord, sampler2D shadMap, vec2 offSet)"
 "{"
+        //"if(shadCoord.x > 1.0 || shadCoord.x < 0.0 || shadCoord.y > 1.0 || shadCoord.y < 0.0) return 0.0;"
+
 		"float distanceFromLight = texture2D(shadMap, shadCoord.xy + offSet).z;"
 		"return step(shadCoord.z, distanceFromLight);"
 "}"			
-								
+
+"float gather_lookup(vec4 shadCoord, sampler2D shadMap, vec2 offSet)"
+"{"
+        //"if(shadCoord.x > 1.0 || shadCoord.x < 0.0 || shadCoord.y > 1.0 || shadCoord.y < 0.0) return 0.0;"
+
+		"float distanceFromLight = textureGather(shadMap, shadCoord.xy + offSet).z;"
+		"return step(shadCoord.z, distanceFromLight);"
+"}"			
+
+
 "float computeShadow(bool shad, vec4 shadCoord, sampler2D shadMap, float shadBias, float shadBlur)"
 "{"
 	"float shadow = 1.0;"
@@ -102,34 +115,52 @@ string functionsShader = string(
 		"vec4 shadowCoordinateWdivide = shadCoord;"
 		"shadowCoordinateWdivide.z -= shadBias;"
 
-		"shadowCoordinateWdivide /= shadowCoordinateWdivide.w;"
-										
-		//"shadow = lookup(shadowCoordinateWdivide, shadMap, vec2(0.0, 0.0));"
-		
-		/*
-		"shadow = lookup(shadowCoordinateWdivide, shadMap, vec2(0.0, 0.0));"
-		"shadow += lookup(shadowCoordinateWdivide, shadMap, vec2(-0.001, 0.001)*shadBlur);"
-		"shadow += lookup(shadowCoordinateWdivide, shadMap, vec2( 0.001, 0.001)*shadBlur);"
-		"shadow += lookup(shadowCoordinateWdivide, shadMap, vec2(-0.001, -0.001)*shadBlur);"
-		"shadow += lookup(shadowCoordinateWdivide, shadMap, vec2( 0.001, -0.001)*shadBlur);"
-		"shadow /= 5.0;"*/
-		
-		 
-		"float blur = (shadBlur*0.01);"
-		"vec4 rand = texture2D(RandTexture, (shadowCoordinateWdivide.xy)*(500.0/(shadBlur+1.0)))*2.0 - 1.0;"
-		
-		"vec2 d = rand.xy;"
-		"d = normalize(d)*blur;"
-								
-		"vec2 dp = vec2(d.y, -d.x);"
-		
-		"shadow = lookup(shadowCoordinateWdivide, shadMap, rand.zw*blur);"
-		"shadow += lookup(shadowCoordinateWdivide, shadMap,  d);"
-		"shadow += lookup(shadowCoordinateWdivide, shadMap, -d);"
-		"shadow += lookup(shadowCoordinateWdivide, shadMap,  dp);"
-		"shadow += lookup(shadowCoordinateWdivide, shadMap, -dp);"
-		"shadow *= 0.2;"
+		"shadowCoordinateWdivide /= shadowCoordinateWdivide.w;"	
 
+        // Are we still in the right range?
+        "if(shadowCoordinateWdivide.x > 1.0 || shadowCoordinateWdivide.x < 0.0 || shadowCoordinateWdivide.y > 1.0 || shadowCoordinateWdivide.y < 0.0) return 1.0;"
+
+        // Is it reasonable to calculate the samples?
+        "shadow += gather_lookup(shadowCoordinateWdivide, shadMap, vec2(0.0, 0.0));"
+        /*"shadow += gather_lookup(shadowCoordinateWdivide, shadMap, vec2(0.0001, 0.0001));"
+        "shadow += gather_lookup(shadowCoordinateWdivide, shadMap, vec2(0.0001, -0.0001));"
+        "shadow += gather_lookup(shadowCoordinateWdivide, shadMap, vec2(-0.0001, -0.0001));"*/
+
+		"if(shadow == 0.0) return 1.0; else shadow = 1.0;"
+
+        "float blur = (shadBlur*0.01);"
+
+        "vec2 d = vec2(0.1);" //rand.xy;"
+        "d = normalize(d)*blur;"
+
+        "vec2 dp = vec2(d.y, -d.x);"
+		"float spread = 100/textureSize(shadMap, 0) + 0.005;"
+
+        // TODO: Variable!
+        "float distance = length(eyepos)*0.0005;"
+		"float oneByDistance = 1.0/distance;"
+        "int samples = int(shadBlur);"
+	
+        "if(distance >= 1.0)"
+            "samples = int(oneByDistance*shadBlur);"
+
+        "if(samples <= 1) samples = 2;"
+
+        "vec2 coord = shadowCoordinateWdivide.xy * (500.0/(shadBlur+1.0)) * float(samples);"
+        "vec4 rand = spread*0.1*texture2D(RandTexture, coord);"
+
+        "for(int x = 0; x<samples; x++)"
+        "{"
+              "for(int y = 0; y < samples; y++)"
+              "{"
+                    "coord.xy = dp * vec2(float(x)*spread, float(y)*spread);"
+                    "coord.xy += rand.xy;"
+
+                    "shadow += gather_lookup(shadowCoordinateWdivide, shadMap, coord.xy);"
+              "}"
+        "}"
+
+		"shadow *= 1.0 / (float(samples * samples));"
 	"}"					
 	"return shadow;"
 "}"
@@ -140,9 +171,9 @@ string functionsShader = string(
 	"vec3 L = normalize(lightDir);"
 
 	"float lambertTerm = max(dot(N, L), 0.0);"
-	"if(lambertTerm > 0.0)"
+    "if(lambertTerm > 0.0 || spotCos == 1.0)"
 	"{"
-		"if(spotCos > 0.0)"
+        "if(spotCos > 0.0 && spotCos < 1.0)"
 		"{"
 			"float spot = dot(spotDir, -L);"
 			
@@ -162,6 +193,19 @@ string functionsShader = string(
 				"specular = specular + (lightSpecular * spec);"
 			"}"
 		"}"
+        "else if(spotCos >= 1.0)"
+        "{"
+	         "float shadow = computeShadow(shad, shadCoord, shadMap, shadBias, shadBlur);"
+
+             "float lightDirLength2 = dot(lightDir, lightDir);"
+             "float attenuation = (1.0 / (constantAttenuation + (lightDirLength2 * quadraticAttenuation)))*shadow;"
+
+             "diffuse = diffuse + (lightDiffuse * lambertTerm * attenuation);"
+
+             "vec3 S = normalize(E + L);"
+             "float spec = pow(max(dot(S, N), 0.0), MaterialShininess) * attenuation;"
+             "specular = specular + (lightSpecular * spec);"
+        "}"
 		"else"
 		"{"
 			"float lightDirLength2 = dot(lightDir, lightDir);"
@@ -202,6 +246,17 @@ string functionsShader = string(
 				"specular = specular + (lightSpecular * spec);"
 			"}"
 		"}"
+        "else if(spotCos >= 1.0)"
+        "{"
+             "float lightDirLength2 = dot(lightDir, lightDir);"
+             "float attenuation = (1.0 / (constantAttenuation + (lightDirLength2 * quadraticAttenuation)));"
+
+             "diffuse = diffuse + (lightDiffuse * lambertTerm * attenuation);"
+
+             "vec3 S = normalize(E + L);"
+             "float spec = pow(max(dot(S, N), 0.0), MaterialShininess) * attenuation;"
+             "specular = specular + (lightSpecular * spec);"
+        "}"
 		"else"
 		"{"
 			"float lightDirLength2 = dot(lightDir, lightDir);"
@@ -396,7 +451,8 @@ vertHeader +
 	"if(LightShadow[2]) shadowCoord[2] = LightShadowMatrix[2] * vec4(Vertex, 1.0);"
 
 	"normal = NormalMatrix * vec4(Normal, 1.0);"
-	"position = ModelViewMatrix * vec4(Vertex, 1.0);"
+    "position = ModelViewMatrix * vec4(Vertex, 1.0);"
+    "eyepos = ProjModelViewMatrix * vec4(Vertex, 1.0);"
 	"gl_Position = ProjModelViewMatrix * vec4(Vertex, 1.0);"
 "}");
 
@@ -434,8 +490,9 @@ vertHeader +
 	"if(LightShadow[2]) shadowCoord[2] = LightShadowMatrix[2] * vec4(Vertex, 1.0);"
 
 	"normal = NormalMatrix * vec4(Normal, 1.0);"
-	"position = ModelViewMatrix * vec4(Vertex, 1.0);"
-	"gl_Position = ProjModelViewMatrix * vec4(Vertex, 1.0);"
+    "position = ModelViewMatrix * vec4(Vertex, 1.0);"
+    "gl_Position = ProjModelViewMatrix * vec4(Vertex, 1.0);"
+    "eyepos = ProjModelViewMatrix * vec4(Vertex, 1.0);"
 	"texCoord[0].xy = (TextureMatrix[0] * vec4(TexCoord0, 1.0, 1.0)).xy;"
 "}");
 
@@ -476,7 +533,8 @@ vertHeader +
 	"if(LightShadow[2]) shadowCoord[2] = LightShadowMatrix[2] * vec4(Vertex, 1.0);"
 
 	"normal = NormalMatrix * vec4(Normal, 1.0);"
-	"position = ModelViewMatrix * vec4(Vertex, 1.0);"
+    "position = ModelViewMatrix * vec4(Vertex, 1.0);"
+    "eyepos = ProjModelViewMatrix * vec4(Vertex, 1.0);"
 	"gl_Position = ProjModelViewMatrix * vec4(Vertex, 1.0);"
 	"texCoord[0].xy = (TextureMatrix[0] * vec4(TexCoord0, 1.0, 1.0)).xy;"
 	"texCoord[0].zw = (TextureMatrix[1] * vec4(TexCoord1, 1.0, 1.0)).xy;"
@@ -521,7 +579,8 @@ vertHeader +
 	"if(LightShadow[2]) shadowCoord[2] = LightShadowMatrix[2] * vec4(Vertex, 1.0);"
 
 	"normal = NormalMatrix * vec4(Normal, 1.0);"
-	"position = ModelViewMatrix * vec4(Vertex, 1.0);"
+    "position = ModelViewMatrix * vec4(Vertex, 1.0);"
+    "eyepos = ProjModelViewMatrix * vec4(Vertex, 1.0);"
 	"gl_Position = ProjModelViewMatrix * vec4(Vertex, 1.0);"
 	"texCoord[0].xy = (TextureMatrix[0] * vec4(TexCoord0, 1.0, 1.0)).xy;"
 	"texCoord[0].zw = (TextureMatrix[1] * vec4(TexCoord1, 1.0, 1.0)).xy;"
@@ -576,7 +635,8 @@ vertHeader +
 	"if(LightShadow[2]) shadowCoord[2] = LightShadowMatrix[2] * vec4(Vertex, 1.0);"
 
 	"normal = NormalMatrix * vec4(Normal, 1.0);"
-	"position = ModelViewMatrix * vec4(Vertex, 1.0);"
+    "position = ModelViewMatrix * vec4(Vertex, 1.0);"
+    "eyepos = ProjModelViewMatrix * vec4(Vertex, 1.0);"
 	"gl_Position = ProjModelViewMatrix * vec4(Vertex, 1.0);"
 	"texCoord[0].xy = (TextureMatrix[0] * vec4(TexCoord0, 1.0, 1.0)).xy;"
 	"texCoord[0].zw = (TextureMatrix[1] * vec4(TexCoord1, 1.0, 1.0)).xy;"
@@ -624,7 +684,8 @@ vertHeader +
 	"if(LightShadow[2]) shadowCoord[2] = LightShadowMatrix[2] * vec4(Vertex, 1.0);"
 
 	"normal = NormalMatrix * vec4(Normal, 1.0);"
-	"position = ModelViewMatrix * vec4(Vertex, 1.0);"
+    "position = ModelViewMatrix * vec4(Vertex, 1.0);"
+    "eyepos = ProjModelViewMatrix * vec4(Vertex, 1.0);"
 	"gl_Position = ProjModelViewMatrix * vec4(Vertex, 1.0);"
 	"texCoord[0].xy = (TextureMatrix[0] * vec4(TexCoord0, 1.0, 1.0)).xy;"
 	"texCoord[0].zw = (TextureMatrix[1] * vec4(TexCoord1, 1.0, 1.0)).xy;"

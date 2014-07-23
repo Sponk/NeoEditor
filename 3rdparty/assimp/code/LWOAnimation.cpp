@@ -46,10 +46,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *  implementation of LightWave envelopes of which I know.
 */
 
-#include <functional>
-
 #include "AssimpPCH.h"
 #if (!defined ASSIMP_BUILD_NO_LWO_IMPORTER) && (!defined ASSIMP_BUILD_NO_LWS_IMPORTER)
+
+#include <functional>
 
 // internal headers
 #include "LWOFileData.h"
@@ -448,8 +448,8 @@ void AnimResolver::GetKeys(std::vector<aiVectorKey>& out,
 
 		if ((*cur_x).time == (*cur_y).time && (*cur_x).time == (*cur_z).time ) {
 
-			// we have a keyframe for all of them defined .. great,
-			// we don't need to fucking interpolate here ...
+			// we have a keyframe for all of them defined .. this means
+			// we don't need to interpolate here.
 			fill.mTime = (*cur_x).time;
 
 			fill.mValue.x = (*cur_x).value;

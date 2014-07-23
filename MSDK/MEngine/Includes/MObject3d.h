@@ -61,6 +61,15 @@ protected:
 	// childs
 	vector <MObject3d *> m_childs;
 
+    // Attributes
+	#if __cplusplus >= 201103L
+		typedef unordered_map<string, MVariable>::iterator AttributeIterator ;
+		unordered_map <string, MVariable> m_attributes;
+	#else
+		typedef map<string, MVariable>::iterator AttributeIterator;
+		map <string, MVariable> m_attributes;
+	#endif
+
 	// properties
 	bool m_isActive;
 	bool m_isVisible;
@@ -90,6 +99,10 @@ public:
 	// childs
 	void unlinkChilds(void);
 	void computeChildsMatrices(void);
+
+    // Attributes
+	inline void setAttribute(const char* name, MVariable variable) { m_attributes[name] = variable; }
+	inline MVariable getAttribute(const char* name) { return m_attributes[name]; };
 
 	// transform
 	MVector3 getUniformRotatedVector(const MVector3 & vector);

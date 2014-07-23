@@ -1,0 +1,1284 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0302 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include "Callbacks.h"} {private local
+} 
+
+decl {\#include <string>} {private local
+} 
+
+decl {\#include <FL/Fl_Color_Chooser.H>} {private local
+} 
+
+decl {\#include <MFileManager/MMeshSave.h>} {private local
+} 
+
+class EditorWindow {open
+} {
+  Function {show_window()} {open
+  } {
+    Fl_Window {} {
+      label Neo open
+      xywh {360 239 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
+    } {
+      Fl_Menu_Bar menu_bar {open
+        xywh {0 0 920 25} selection_color 38
+      } {
+        Submenu {} {
+          label File open
+          xywh {0 0 100 20} labelsize 14
+        } {
+          Submenu {} {
+            label New open
+            xywh {0 0 100 20} labelsize 14
+          } {
+            MenuItem {} {
+              label Project
+              callback new_project_callback
+              xywh {0 0 100 20} shortcut 0x5006e labelsize 14
+            }
+            MenuItem {} {
+              label Level
+              callback new_level_callback
+              xywh {0 0 100 20} shortcut 0x4006e labelsize 14
+            }
+          }
+          Submenu {} {
+            label Open open
+            xywh {0 0 100 20} labelsize 14 divider
+          } {
+            MenuItem {} {
+              label Project
+              callback open_project_callback
+              xywh {0 0 100 20} shortcut 0x5006f labelsize 14
+            }
+            MenuItem {} {
+              label Level
+              callback open_level_callback
+              xywh {0 0 100 20} shortcut 0x4006f labelsize 14
+            }
+          }
+          MenuItem {} {
+            label {Import Mesh}
+            callback import_mesh_callback
+            xywh {0 0 100 20} labelsize 14
+          }
+          MenuItem {} {
+            label {Save level}
+            user_data 0 user_data_type long
+            callback save_level_callback
+            xywh {0 0 100 20} shortcut 0x40073 labelsize 14
+          }
+          MenuItem {} {
+            label {Save level as...}
+            user_data 1 user_data_type long
+            callback save_level_callback
+            xywh {0 0 100 20} shortcut 0x50073 labelsize 14 divider
+          }
+          MenuItem {} {
+            label Quit
+            callback quit_callback
+            xywh {0 0 100 20} shortcut 0x40071 labelsize 14
+          }
+        }
+        Submenu {} {
+          label Edit open
+          xywh {0 0 100 20} labelsize 14
+        } {
+          MenuItem {} {
+            label Undo
+            callback undo_callback
+            xywh {0 0 100 20} shortcut 0x4007a labelsize 14
+          }
+          MenuItem {} {
+            label Redo
+            callback redo_callback
+            xywh {0 0 100 20} shortcut 0x5007a labelsize 14 divider
+          }
+          MenuItem {} {
+            label {Select all}
+            callback select_all_callback
+            xywh {0 0 100 20} shortcut 0x40061 labelsize 14 divider
+          }
+          MenuItem {} {
+            label {Duplicate object}
+            callback duplicate_object_callback
+            xywh {0 0 100 20} shortcut 0x40064 labelsize 14
+          }
+          MenuItem {} {
+            label {Delete object}
+            callback delete_object_callback
+            xywh {0 0 100 20} shortcut 0xffff labelsize 14 divider
+          }
+          MenuItem {} {
+            label {Scene setup}
+            callback scene_setup_callback
+            xywh {0 0 100 20} labelsize 14
+          }
+          MenuItem {} {
+            label {Delete current scene}
+            callback delete_scene_callback
+            xywh {0 0 100 20} labelsize 14
+          }
+        }
+        Submenu {} {
+          label Project open
+          xywh {0 0 100 20} labelsize 14
+        } {
+          MenuItem {} {
+            label {Run Game}
+            callback play_game_callback
+            xywh {0 0 100 20} shortcut 0xffc2 labelsize 14 divider
+          }
+          MenuItem {} {
+            label {Update player}
+            callback update_player_callback
+            tooltip {Copies the player from the editor directory to the project directory.} xywh {0 0 100 20} labelsize 14
+          }
+          MenuItem {} {
+            label Publish
+            callback publish_callback
+            xywh {0 0 100 20} shortcut 0x40070 labelsize 14
+          }
+        }
+        Submenu {} {
+          label Add open
+          xywh {0 0 100 20} labelsize 14
+        } {
+          Submenu {} {
+            label {Add Object} open
+            xywh {0 0 100 20} labelsize 14
+          } {
+            MenuItem {} {
+              label {Add Mesh}
+              callback add_mesh_callback
+              xywh {0 0 100 20} shortcut 0x4006d labelsize 14
+            }
+            MenuItem {} {
+              label {Add Light}
+              callback add_light_callback
+              xywh {0 0 100 20} shortcut 0x4006c labelsize 14
+            }
+            MenuItem {} {
+              label {Add Text}
+              callback add_text_callback
+              xywh {0 0 100 20} shortcut 0x40074 labelsize 14
+            }
+            MenuItem {} {
+              label {Add Camera}
+              callback add_camera_callback
+              xywh {0 0 100 20} shortcut 0x40063 labelsize 14
+            }
+            MenuItem {} {
+              label {Add Sound}
+              callback add_sound_callback
+              xywh {0 0 100 20} labelsize 14
+            }
+          }
+          Submenu behavior_menu {
+            label {Add Behavior} open
+            xywh {0 0 100 20} labelsize 14
+          } {}
+          MenuItem {} {
+            label {Add Scene}
+            callback add_scene_callback
+            xywh {0 0 100 20} labelsize 14
+          }
+        }
+        Submenu {} {
+          label Help open
+          xywh {0 0 100 20} labelsize 14
+        } {
+          MenuItem {} {
+            label About
+            callback about_menu_callback
+            xywh {0 0 100 20} labelsize 14
+          }
+        }
+      }
+      Fl_Box glbox {
+        label {OpenGL box}
+        xywh {201 56 486 569} color 179 resizable
+        code0 {\#include "GLBox.h"}
+        class GLBox
+      }
+      Fl_Tree scene_tree {
+        callback scene_tree_callback
+        xywh {0 55 201 570} when 4
+      }
+      Fl_Group edit_group {open
+        xywh {3 24 708 30}
+        code0 {edit_group->resizable(NULL);}
+      } {
+        Fl_Round_Button {} {
+          label Translate
+          user_data {'t'} user_data_type long
+          callback set_edit_type
+          xywh {258 27 90 24} type Radio down_box ROUND_DOWN_BOX shortcut 0x31 value 1
+        }
+        Fl_Round_Button {} {
+          label Rotate
+          user_data {'r'} user_data_type long
+          callback set_edit_type
+          xywh {345 27 69 24} type Radio down_box ROUND_DOWN_BOX shortcut 0x32
+        }
+        Fl_Round_Button {} {
+          label Scale
+          user_data {'s'} user_data_type long
+          callback set_edit_type
+          xywh {414 27 60 24} type Radio down_box ROUND_DOWN_BOX shortcut 0x33
+        }
+        Fl_Choice scenes_menu {
+          label {Scenes:} open
+          xywh {564 30 147 18} down_box BORDER_BOX
+        } {}
+        Fl_Group speed_group {open
+          xywh {3 27 258 21}
+          code0 {speed_group->resizable(NULL);}
+        } {
+          Fl_Value_Input rotation_speed {
+            label {Rotation:}
+            callback rotation_speed_callback
+            xywh {72 27 45 20} align 68 when 8 value 1
+          }
+          Fl_Value_Input translation_speed {
+            label {Translation:}
+            callback translation_speed_callback
+            xywh {207 28 45 20} when 8 value 1
+          }
+        }
+      }
+      Fl_Tabs {} {open
+        xywh {687 54 267 645}
+      } {
+        Fl_Tabs {} {
+          label Object open
+          xywh {693 75 261 624} hide
+        } {
+          Fl_Scroll {} {open
+            xywh {693 75 261 624}
+          } {
+            Fl_Input name_edit {
+              label {Name:} user_data_type {void*}
+              callback edit_name_callback
+              xywh {699 102 171 21} align 5 when 8
+            }
+            Fl_Group {} {
+              label {Position:} open
+              xywh {696 195 222 33} box ENGRAVED_FRAME align 5
+            } {
+              Fl_Value_Input xpos_edit {
+                label {X:}
+                user_data {'t'} user_data_type long
+                callback edit_object_callback
+                xywh {720 201 51 21} maximum 1000 step 1
+                code0 {xpos_edit->soft(true);}
+              }
+              Fl_Value_Input ypos_edit {
+                label {Y:}
+                user_data {'t'} user_data_type long
+                callback edit_object_callback
+                xywh {792 201 48 21} maximum 1000 step 1
+                code0 {ypos_edit->soft(true);}
+              }
+              Fl_Value_Input zpos_edit {
+                label {Z:}
+                user_data {'t'} user_data_type long
+                callback edit_object_callback
+                xywh {861 201 51 21} maximum 1000 step 1
+                code0 {zpos_edit->soft(true);}
+              }
+            }
+            Fl_Group {} {
+              label {Rotation:} open
+              xywh {696 255 222 33} box ENGRAVED_FRAME align 5
+            } {
+              Fl_Value_Input xrot_edit {
+                label {X:}
+                user_data {'r'} user_data_type long
+                callback edit_object_callback
+                xywh {717 261 48 21} maximum 360 step 5
+                code0 {xrot_edit->soft(true);}
+              }
+              Fl_Value_Input yrot_edit {
+                label {Y:}
+                user_data {'r'} user_data_type long
+                callback edit_object_callback
+                xywh {786 261 48 21} maximum 360 step 5
+                code0 {yrot_edit->soft(true);}
+              }
+              Fl_Value_Input zrot_edit {
+                label {Z:}
+                user_data {'r'} user_data_type long
+                callback edit_object_callback
+                xywh {858 261 48 21} maximum 360 step 5
+                code0 {zrot_edit->soft(true);}
+              }
+            }
+            Fl_Group {} {
+              label {Scale:} open
+              xywh {696 312 222 33} box ENGRAVED_FRAME align 5
+            } {
+              Fl_Value_Input xscale_edit {
+                label {X:}
+                user_data {'s'} user_data_type long
+                callback edit_object_callback
+                xywh {717 318 48 21} maximum 20 step 0.1 value 1
+                code0 {xscale_edit->soft(true);}
+              }
+              Fl_Value_Input yscale_edit {
+                label {Y:}
+                user_data {'s'} user_data_type long
+                callback edit_object_callback
+                xywh {786 318 48 21} maximum 20 step 0.1 value 1
+                code0 {yscale_edit->soft(true);}
+              }
+              Fl_Value_Input zscale_edit {
+                label {Z:}
+                user_data {'s'} user_data_type long
+                callback edit_object_callback
+                xywh {858 318 48 21} maximum 20 step 0.1 value 1
+                code0 {zscale_edit->soft(true);}
+              }
+            }
+            Fl_Input parent_edit {
+              label {Parent:} user_data_type {void*}
+              callback edit_name_callback
+              xywh {699 147 171 21} align 5 when 8
+            }
+          }
+        }
+        Fl_Tabs special_tab {
+          label Special open
+          xywh {687 75 267 624} box NO_BOX
+          code0 {special_tab->resizable(NULL);}
+        } {}
+        Fl_Tabs {} {
+          label Behaviors open
+          xywh {693 75 222 549} hide
+        } {
+          Fl_Scroll behaviors_scroll {open
+            xywh {693 75 222 549} type VERTICAL
+          } {}
+        }
+      }
+    }
+  }
+  Function {create_light_window()} {} {
+    Fl_Window light_window_object {open
+      xywh {388 224 258 714} type Double labelsize 11 hide
+      code0 {light_window_object->position(0,0);}
+      code1 {light_window_object->resizable(NULL);} size_range {258 726 258 726}
+    } {
+      Fl_Group {} {
+        label {Settings:} open
+        xywh {5 30 218 159} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Value_Input light_radius_edit {
+          label {Radius:}
+          callback edit_light_properties
+          xywh {18 51 165 21} align 5 maximum 1e+07 step 2
+        }
+        Fl_Value_Input light_color_r {
+          label {Red:}
+          callback edit_light_properties
+          xywh {18 93 45 21} align 5 step 0.1
+        }
+        Fl_Value_Input light_color_g {
+          label {Green:}
+          callback edit_light_properties
+          xywh {69 93 45 21} align 5 step 0.1
+        }
+        Fl_Value_Input light_color_b {
+          label {Blue:}
+          callback edit_light_properties
+          xywh {123 93 45 21} align 5 step 0.1
+        }
+        Fl_Value_Input light_intensity_edit {
+          label {Intensity:}
+          callback edit_light_properties
+          xywh {18 162 165 21} align 5 step 0.05
+          code0 {light_intensity_edit->soft(true);}
+        }
+        Fl_Button {} {
+          label {Choose color}
+          callback choose_light_color
+          xywh {18 117 96 24} labeltype ENGRAVED_LABEL labelsize 11
+        }
+      }
+      Fl_Group {} {
+        label {Spotlight:} open
+        xywh {5 210 218 126} box ENGRAVED_BOX align 5
+      } {
+        Fl_Check_Button light_spot_button {
+          label Spot
+          callback edit_light_properties_chk_btn
+          xywh {15 222 159 24} down_box DOWN_BOX
+        }
+        Fl_Value_Input spot_angle_edit {
+          label {Spot Angle:}
+          callback edit_light_properties
+          xywh {18 264 165 21} align 5 maximum 90 step 1
+        }
+        Fl_Value_Input light_spot_exponent {
+          label {Spot Exponent:}
+          callback edit_light_properties
+          xywh {18 306 165 21} align 5 maximum 10 step 0.01
+        }
+      }
+      Fl_Group {} {
+        label {Shadow:} open
+        xywh {5 357 218 174} box ENGRAVED_BOX align 5
+      } {
+        Fl_Check_Button light_shadows_button {
+          label Shadows
+          callback edit_light_properties_chk_btn
+          xywh {21 369 132 27} down_box DOWN_BOX
+        }
+        Fl_Value_Input light_shadow_bias_edit {
+          label {Shadow Bias:}
+          callback edit_light_properties
+          xywh {21 414 165 21} align 5 maximum 10 step 0.1
+        }
+        Fl_Value_Input light_shadow_blur_edit {
+          label {Shadow Blur:}
+          callback edit_light_properties
+          xywh {21 456 165 21} align 5 maximum 64 step 1 value 2
+        }
+        Fl_Value_Input light_shadow_quality_edit {
+          label {Shadow Quality:}
+          callback edit_light_properties
+          xywh {21 498 165 21} align 5 maximum 4096 step 5
+        }
+      }
+    }
+  }
+  Function {create_publish_window()} {} {
+    Fl_Window {} {open
+      xywh {1926 303 393 117} type Double hide non_modal
+    } {
+      Fl_Clock {} {
+        xywh {252 -3 126 126} box NO_BOX
+      }
+      Fl_Box {} {
+        label {Publishing project. Please wait...}
+        xywh {15 12 225 27}
+      }
+    }
+  }
+  Function {create_object_window()} {} {
+    Fl_Window object_embedded_window {open
+      xywh {912 136 261 672} type Double hide resizable
+      code0 {special_tab->resizable(object_embedded_window);}
+    } {
+      Fl_Scroll {} {open
+        xywh {0 6 230 666} type VERTICAL resizable
+      } {
+        Fl_Group {} {
+          label {Settings:} open
+          xywh {3 27 217 78} box ENGRAVED_FRAME align 5
+        } {
+          Fl_Output object_mesh_edit {
+            label {Mesh:}
+            xywh {16 51 198 21} color 31 align 5
+          }
+          Fl_Check_Button object_invisible_button {
+            label Invisible
+            callback edit_object_chk_btn
+            xywh {13 78 111 24} down_box DOWN_BOX
+          }
+          Fl_Button {} {
+            label {Edit Materials}
+            callback edit_materials_callback
+            xywh {103 78 111 21}
+          }
+        }
+        Fl_Group {} {
+          label {Physics:} open
+          xywh {3 132 217 249} box ENGRAVED_FRAME align 5
+        } {
+          Fl_Choice object_shape_choice {
+            label {Shape:} open
+            xywh {16 189 195 27} down_box BORDER_BOX align 5
+          } {
+            MenuItem {} {
+              label Box
+              user_data 0 user_data_type long
+              callback edit_shape_callback
+              xywh {3 3 100 20} labelsize 14
+            }
+            MenuItem {} {
+              label Sphere
+              user_data 1 user_data_type long
+              callback edit_shape_callback
+              xywh {3 3 100 20} labelsize 14
+            }
+            MenuItem {} {
+              label Cone
+              user_data 2 user_data_type long
+              callback edit_shape_callback
+              xywh {3 3 100 20} labelsize 14
+            }
+            MenuItem {} {
+              label Capsule
+              user_data 3 user_data_type long
+              callback edit_shape_callback
+              xywh {3 3 100 20} labelsize 14
+            }
+            MenuItem {} {
+              label Cylinder
+              user_data 4 user_data_type long
+              callback edit_shape_callback
+              xywh {3 3 100 20} labelsize 14
+            }
+            MenuItem {} {
+              label {Convex-hull}
+              user_data 5 user_data_type long
+              callback edit_shape_callback
+              xywh {3 3 100 20} labelsize 14
+            }
+            MenuItem {} {
+              label {Triangle-mesh}
+              user_data 6 user_data_type long
+              callback edit_shape_callback
+              xywh {3 3 100 20} labelsize 14
+            }
+          }
+          Fl_Check_Button object_ghost_button {
+            label Ghost
+            callback edit_object_chk_btn
+            xywh {16 222 78 21} down_box DOWN_BOX
+          }
+          Fl_Value_Input object_mass_edit {
+            label {Mass:}
+            callback edit_object_properties
+            xywh {16 261 195 21} align 5
+          }
+          Fl_Value_Input object_fric_edit {
+            label {Friction:}
+            callback edit_object_properties
+            xywh {16 306 195 21} align 5
+          }
+          Fl_Value_Input object_rest_edit {
+            label {Restitution:}
+            callback edit_object_properties
+            xywh {16 351 195 21} align 5
+          }
+          Fl_Check_Button object_physics_button {
+            label Physics
+            callback edit_object_chk_btn
+            xywh {16 147 204 21} down_box DOWN_BOX
+          }
+        }
+        Fl_Group {} {
+          label {Pivot:} open
+          xywh {4 634 216 32} box ENGRAVED_FRAME align 5
+        } {
+          Fl_Value_Input xpivot_edit {
+            label {X:} user_data_type {void*}
+            callback edit_object_properties
+            xywh {25 639 51 21} maximum 1000 step 1
+          }
+          Fl_Value_Input ypivot_edit {
+            label {Y:} user_data_type {void*}
+            callback edit_object_properties
+            xywh {94 639 51 21} maximum 1000 step 1
+          }
+          Fl_Value_Input zpivot_edit {
+            label {Z:} user_data_type {void*}
+            callback edit_object_properties
+            xywh {163 638 51 21} maximum 1000 step 1
+          }
+        }
+        Fl_Group {} {
+          label {Damping:} open
+          xywh {4 406 216 95} box ENGRAVED_FRAME align 5
+        } {
+          Fl_Value_Input object_linear_damping_edit {
+            label {Linear:}
+            callback edit_object_properties
+            xywh {16 429 195 21} align 5
+          }
+          Fl_Value_Input object_angular_damping_edit {
+            label {Angular:}
+            callback edit_object_properties
+            xywh {16 471 195 21} align 5
+          }
+        }
+        Fl_Group {} {
+          label {Linear Factor:} open
+          xywh {4 526 216 32} box ENGRAVED_FRAME align 5
+        } {
+          Fl_Value_Input xlinear_edit {
+            label {X:} user_data_type {void*}
+            callback edit_object_properties
+            xywh {25 531 51 21} maximum 1000 step 1
+          }
+          Fl_Value_Input ylinear_edit {
+            label {Y:} user_data_type {void*}
+            callback edit_object_properties
+            xywh {94 531 51 21} maximum 1000 step 1
+          }
+          Fl_Value_Input zlinear_edit {
+            label {Z:} user_data_type {void*}
+            callback edit_object_properties
+            xywh {163 530 51 21} maximum 1000 step 1
+          }
+        }
+        Fl_Value_Input object_angular_factor_edit {
+          label {Angular Facto:}
+          callback edit_object_properties
+          xywh {4 582 216 21} align 5
+        }
+      }
+    }
+  }
+  Function {create_camera_window()} {} {
+    Fl_Window {} {open
+      xywh {2165 241 258 660} type Double hide
+    } {
+      Fl_Group {} {
+        label {Clear Color:} open
+        xywh {5 27 218 42} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Value_Input camera_color_r_edit {
+          label {R:}
+          callback edit_camera_properties
+          xywh {33 39 36 18} step 0.01
+        }
+        Fl_Value_Input camera_color_g_edit {
+          label {G:}
+          callback edit_camera_properties
+          xywh {93 39 36 18} step 0.01
+        }
+        Fl_Value_Input camera_color_b_edit {
+          label {B:}
+          callback edit_camera_properties
+          xywh {156 39 36 18} step 0.01
+        }
+      }
+      Fl_Group {} {
+        label {Settings:} open
+        xywh {5 96 218 171} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Check_Button camera_ortho_button {
+          label Ortho
+          callback edit_camera_properties_chk_btn
+          xywh {15 237 84 24} down_box DOWN_BOX
+        }
+        Fl_Value_Input camera_fov_edit {
+          label {FOV:}
+          callback edit_camera_properties
+          xywh {15 120 117 21} align 5
+        }
+        Fl_Value_Input camera_clipping_near_edit {
+          label {Clipping Near:}
+          callback edit_camera_properties
+          xywh {15 165 117 21} align 5
+        }
+        Fl_Value_Input camera_clipping_far_edit {
+          label {Clipping Far:}
+          callback edit_camera_properties
+          xywh {15 210 117 21} align 5
+        }
+      }
+      Fl_Group {} {
+        label {Fog:} open
+        xywh {5 321 218 81} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Check_Button camera_fog_button {
+          label Fog
+          callback edit_camera_properties_chk_btn
+          xywh {12 327 87 21} down_box DOWN_BOX
+        }
+        Fl_Value_Input camera_fog_distance_edit {
+          label {Fog Distance:}
+          callback edit_camera_properties
+          xywh {15 372 117 21} align 5
+        }
+      }
+    }
+  }
+  Function {create_text_window()} {} {
+    Fl_Window {} {open
+      xywh {2391 146 261 720} type Double hide
+    } {
+      Fl_Group {} {
+        label {Settings:} open
+        xywh {6 21 210 285} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Text_Editor text_text_edit {
+          label {Text:}
+          callback edit_text_properties
+          xywh {12 42 195 126} box DOWN_BOX align 5 when 1
+        }
+        Fl_Input text_font_edit {
+          label {Font:}
+          callback edit_text_properties
+          xywh {12 195 195 21} align 5 when 8
+        }
+        Fl_Button {} {
+          label {Find Font}
+          callback text_find_font_callback
+          xywh {12 219 195 24}
+        }
+        Fl_Value_Input text_size_edit {
+          label {Size:}
+          callback edit_text_properties
+          xywh {15 273 51 24} align 5 maximum 100 step 1 value 10
+        }
+        Fl_Choice text_alignment_chooser {
+          label {Alignment:} open
+          xywh {84 270 123 27} down_box BORDER_BOX align 5
+        } {
+          MenuItem {} {
+            label Left
+            user_data 0 user_data_type long
+            callback text_alignment_callback
+            xywh {0 0 100 20} labelsize 14
+          }
+          MenuItem {} {
+            label Right
+            user_data 1 user_data_type long
+            callback text_alignment_callback
+            xywh {0 0 100 20} labelsize 14
+          }
+          MenuItem {} {
+            label Center
+            user_data 2 user_data_type long
+            callback text_alignment_callback
+            xywh {0 0 100 20} labelsize 14
+          }
+        }
+      }
+      Fl_Group {} {
+        label {Color:} open
+        xywh {6 336 210 78} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Value_Input text_r {
+          label {R:}
+          callback edit_text_properties
+          xywh {27 345 48 21} step 0.01
+        }
+        Fl_Value_Input text_g {
+          label {G:}
+          callback edit_text_properties
+          xywh {96 345 48 21} step 0.01
+        }
+        Fl_Value_Input text_b {
+          label {A:}
+          callback edit_text_properties
+          xywh {27 372 48 21} step 0.01
+        }
+        Fl_Value_Input text_a {
+          label {B:}
+          callback edit_text_properties
+          xywh {162 345 48 21} step 0.01
+        }
+        Fl_Button {} {
+          label {Choose color}
+          callback choose_text_color
+          xywh {96 372 114 24} labeltype ENGRAVED_LABEL labelsize 11
+        }
+      }
+    }
+  }
+  Function {create_sound_window()} {} {
+    Fl_Window {} {open
+      xywh {418 129 258 720} type Double hide
+    } {
+      Fl_Group {} {
+        label {Settings:} open
+        xywh {5 24 218 279} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Output sound_file_edit {
+          label {Sound file:}
+          xywh {12 51 204 21} align 5
+        }
+        Fl_Check_Button sound_loop_button {
+          label Loop
+          callback edit_sound_chk_btn
+          xywh {12 78 204 21} down_box DOWN_BOX
+        }
+        Fl_Value_Input sound_pitch_edit {
+          label {Pitch:}
+          callback edit_sound_callback
+          xywh {15 120 87 21} align 5 value 1
+        }
+        Fl_Value_Input sound_gain_edit {
+          label {Gain:}
+          callback edit_sound_callback
+          xywh {15 162 87 21} align 5 value 1
+        }
+        Fl_Value_Input sound_radius_edit {
+          label {Radius:}
+          callback edit_sound_callback
+          xywh {15 204 87 21} align 5 value 10
+        }
+        Fl_Value_Input sound_rolloff_edit {
+          label {Rolloff:}
+          callback edit_sound_callback
+          xywh {15 249 87 21} align 5 value 1
+        }
+        Fl_Check_Button sound_relative_button {
+          label Relative
+          callback edit_sound_chk_btn
+          xywh {15 276 204 21} down_box DOWN_BOX
+        }
+      }
+    }
+  }
+  decl {std::string scene_name;} {
+    comment {Scene name to use when creating a new scene} public local
+  }
+  Function {create_scene_window()} {} {
+    Fl_Window {} {
+      label {New Scene} open
+      xywh {1859 389 273 87} type Double hide modal
+    } {
+      Fl_Button {} {
+        label Ok
+        callback new_scene_ok_callback
+        xywh {174 48 87 27}
+      }
+      Fl_Button {} {
+        label Cancel
+        callback new_scene_cancel_callback
+        xywh {9 45 78 27}
+      }
+      Fl_Input scene_name_input {
+        label {Scene Name:}
+        xywh {105 12 156 27}
+      }
+    }
+  }
+} 
+
+decl {extern EditorWindow window;} {private local
+} 
+
+Function {new_scene_ok_callback(Fl_Button* button,void*)} {} {
+  code {::window.scene_name = ::window.scene_name_input->value();
+
+button->parent()->hide();} {}
+} 
+
+Function {new_scene_cancel_callback(Fl_Button* button,void*)} {} {
+  code {Fl_Window* window = (Fl_Window*) button->parent();
+
+::window.scene_name = "";
+window->hide();} {}
+} 
+
+class SceneSetupDlg {} {
+  Function {create_window()} {open
+  } {
+    Fl_Window {} {
+      label {Scene setup} open
+      xywh {1822 381 405 132} type Double hide modal
+    } {
+      Fl_Input scene_name_edit {
+        label {Scene Name:}
+        xywh {3 21 150 21} align 5
+      }
+      Fl_Input lua_script_edit {
+        label {LUA-Script:}
+        xywh {6 66 363 21} align 5
+      }
+      Fl_Button {} {
+        label {...}
+        callback find_file_callback
+        xywh {372 66 24 21}
+      }
+      Fl_Button {} {
+        label Ok
+        callback ok_button_callback
+        xywh {291 96 108 27}
+      }
+      Fl_Button {} {
+        label Cancel
+        callback cancel_button_callback
+        xywh {9 96 108 27}
+      }
+    }
+  }
+  decl {bool success;} {public local
+  }
+} 
+
+Function {ok_button_callback(Fl_Button* button, void*)} {} {
+  code {button->parent()->label("Success");
+button->parent()->hide();} {}
+} 
+
+Function {cancel_button_callback(Fl_Button* button, void*)} {} {
+  code {button->parent()->hide();} {}
+} 
+
+Function {find_file_callback(Fl_Button* button, void*)} {} {
+  code {const char* filename = fl_native_file_chooser("Choose file", "*.lua", NULL, Fl_Native_File_Chooser::BROWSE_FILE);
+
+int children = button->parent()->children();
+Fl_Input* input;
+
+for(int i = 0; i < children; i++)
+{
+	if(!strcmp(button->parent()->child(i)->label(), "LUA-Script:"))
+	{
+		input = (Fl_Input*) button->parent()->child(i);
+		input->value(filename);
+		return;	
+	}
+}} {}
+} 
+
+class PlayerConsole {} {
+  Function {create_window()} {open
+  } {
+    Fl_Window {} {
+      user_data this user_data_type {PlayerConsole*}
+      callback window_close_callback open
+      xywh {547 487 915 210} type Double hide resizable
+    } {
+      Fl_Text_Display output_edit {
+        xywh {0 0 915 210} box UP_BOX
+      }
+    }
+    code {closed = false;} {}
+  }
+  Function {window_close_callback(Fl_Window* window, PlayerConsole* dlg)} {open return_type {static void}
+  } {
+    code {dlg->closed = true;
+window->hide();
+Fl::delete_widget(window);} {}
+  }
+  decl {bool closed;} {public local
+  }
+  Function {PlayerConsole()} {open
+  } {
+    code {closed = true;} {}
+  }
+} 
+
+class MaterialEditDlg {} {
+  decl {char object_name[256];} {private local
+  }
+  Function {create_window(const char* name)} {open
+  } {
+    Fl_Window window {
+      label {Edit Materials}
+      user_data this user_data_type {MaterialEditDlg*}
+      callback close_window_callback open
+      xywh {2248 350 369 303} type Double hide modal
+    } {
+      Fl_Button {} {
+        label Save
+        user_data this user_data_type {MaterialEditorDlg*}
+        callback save_callback
+        xywh {270 263 85 27}
+      }
+      Fl_Button {} {
+        label Close
+        user_data this user_data_type {MaterialEditDlg*}
+        callback close_callback
+        xywh {190 263 75 27}
+      }
+      Fl_Choice materials_chooser {
+        user_data this user_data_type {MaterialEditDlg*}
+        callback material_changed open
+        xywh {15 15 162 27} down_box BORDER_BOX
+      } {}
+      Fl_Group {} {
+        label {Emit Color:} open
+        xywh {15 69 165 78} box EMBOSSED_FRAME align 5
+      } {
+        Fl_Value_Input color_r {
+          label {Red:} user_data_type {void*}
+          xywh {21 93 45 21} align 5 step 0.1
+        }
+        Fl_Value_Input color_g {
+          label {Green:} user_data_type {void*}
+          xywh {72 93 45 21} align 5 step 0.1
+        }
+        Fl_Value_Input color_b {
+          label {Blue:} user_data_type {void*}
+          xywh {126 93 45 21} align 5 step 0.1
+        }
+        Fl_Button {} {
+          label {Choose color}
+          user_data this user_data_type {MaterialEditDlg*}
+          callback choose_emit_color
+          xywh {21 117 96 24} labeltype ENGRAVED_LABEL labelsize 11
+        }
+      }
+      Fl_Button {} {
+        label Apply
+        user_data this user_data_type {MaterialEditDlg*}
+        callback apply_callback
+        xywh {15 263 165 27}
+      }
+      Fl_Value_Input shininess_edit {
+        label {Shininess:}
+        xywh {190 221 165 24} align 5
+      }
+      Fl_Value_Input opacity_edit {
+        label {Opacity:}
+        xywh {190 171 165 24} align 5
+      }
+      Fl_Group {} {
+        label {Diffuse Color:} open
+        xywh {190 69 165 78} box EMBOSSED_FRAME align 5
+      } {
+        Fl_Value_Input diffuse_r {
+          label {Red:} user_data_type {void*}
+          xywh {196 96 45 21} align 5 step 0.1
+        }
+        Fl_Value_Input diffuse_g {
+          label {Green:} user_data_type {void*}
+          xywh {247 96 45 21} align 5 step 0.1
+        }
+        Fl_Value_Input diffuse_b {
+          label {Blue:} user_data_type {void*}
+          xywh {301 96 45 21} align 5 step 0.1
+        }
+        Fl_Button {} {
+          label {Choose color}
+          user_data this user_data_type {MaterialEditDlg*}
+          callback choose_diffuse_color
+          xywh {196 120 96 24} labeltype ENGRAVED_LABEL labelsize 11
+        }
+      }
+      Fl_Group {} {
+        label {Specular Color:} open
+        xywh {15 172 165 78} box EMBOSSED_FRAME align 5
+      } {
+        Fl_Value_Input specular_r {
+          label {Red:} user_data_type {void*}
+          xywh {21 196 45 21} align 5 step 0.1
+        }
+        Fl_Value_Input specular_g {
+          label {Green:} user_data_type {void*}
+          xywh {72 196 45 21} align 5 step 0.1
+        }
+        Fl_Value_Input specular_b {
+          label {Blue:} user_data_type {void*}
+          xywh {126 196 45 21} align 5 step 0.1
+        }
+        Fl_Button {} {
+          label {Choose color}
+          user_data this user_data_type {MaterialEditDlg*}
+          callback choose_specular_color
+          xywh {21 220 96 24} labeltype ENGRAVED_LABEL labelsize 11
+        }
+      }
+    }
+    code {MEngine* engine = MEngine::getInstance();
+MLevel* level = engine->getLevel();
+MScene* scene = level->getCurrentScene();
+
+MObject3d* object = scene->getObjectByName(name);
+
+if(!object)
+{
+	MLOG_WARNING("Object with the name " << name << " does not exist!");
+	return NULL;
+}
+
+if(object->getType() != M_OBJECT3D_ENTITY)
+	return NULL;
+	
+MOEntity* entity = (MOEntity*) object;
+MMesh* mesh = entity->getMesh();
+
+unsigned int num = mesh->getMaterialsNumber();
+char buf[6];
+for(int i = 0; i < num; i++)
+{
+	snprintf(buf, sizeof(buf), "%d", i);
+	materials_chooser->add(buf);
+}
+
+materials_chooser->value(0);
+
+strcpy(object_name, object->getName());
+
+material_changed(materials_chooser, this);} {}
+  }
+  Function {close_callback(Fl_Button* button, MaterialEditDlg* dlg)} {open return_type {static void}
+  } {
+    code {button->parent()->hide();
+Fl::delete_widget(button->parent());
+delete dlg;} {}
+  }
+  Function {material_changed(Fl_Choice* choice, MaterialEditDlg* dlg)} {open return_type {static void}
+  } {
+    code {MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
+  MMesh* mesh = entity->getMesh();
+  
+  if(!mesh)
+  {
+      MLOG_ERROR("mesh == NULL! This should not happen!");
+      return;
+  }
+   
+  if(choice->value() >= mesh->getMaterialsNumber())
+      return;
+  
+  MMaterial* material = mesh->getMaterial(choice->value());
+  
+  if(!material)
+      return;
+  
+  MVector3 color = material->getEmit();
+  
+  dlg->color_r->value(color.x);
+  dlg->color_g->value(color.y);
+  dlg->color_b->value(color.z);
+  
+  color = material->getDiffuse();
+  
+  dlg->diffuse_r->value(color.x);
+  dlg->diffuse_g->value(color.y);
+  dlg->diffuse_b->value(color.z);
+  
+  color = material->getSpecular();
+  
+  dlg->specular_r->value(color.x);
+  dlg->specular_g->value(color.y);
+  dlg->specular_b->value(color.z);
+  
+  dlg->shininess_edit->value(material->getShininess());
+  dlg->opacity_edit->value(material->getOpacity());} {}
+  }
+  Function {choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg)} {open return_type {static void}
+  } {
+    code {double r = dlg->color_r->value();
+    double g = dlg->color_g->value();
+    double b = dlg->color_b->value();
+
+    fl_color_chooser("Choose a color", r, g, b);
+
+    dlg->color_r->value(r);
+    dlg->color_g->value(g);
+    dlg->color_b->value(b);} {}
+  }
+  Function {close_window_callback(Fl_Window* window, MaterialEditDlg* dlg)} {open return_type {static void}
+  } {
+    code {Fl::delete_widget(window);
+delete dlg;} {}
+  }
+  Function {apply_callback(Fl_Button*, MaterialEditDlg* dlg)} {open return_type {static void}
+  } {
+    code {MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
+      MMesh* mesh = entity->getMesh();
+
+      if(!mesh)
+      {
+          MLOG_ERROR("mesh == NULL! This should not happen!");
+          return;
+      }
+
+      if(dlg->materials_chooser->value() >= mesh->getMaterialsNumber())
+          return;
+
+      MMaterial* material = mesh->getMaterial(dlg->materials_chooser->value());
+
+      if(!material)
+          return;
+
+      MVector3 color;
+
+      color.x = dlg->color_r->value();
+      color.y = dlg->color_g->value();
+      color.z = dlg->color_b->value();
+
+      material->setEmit(color);
+      
+      color.x = dlg->diffuse_r->value();
+      color.y = dlg->diffuse_g->value();
+      color.z = dlg->diffuse_b->value();
+      
+      material->setDiffuse(color);
+      
+      color.x = dlg->specular_r->value();
+      color.y = dlg->specular_g->value();
+      color.z = dlg->specular_b->value();
+      
+      material->setSpecular(color);
+      
+      material->setShininess(dlg->shininess_edit->value());
+      material->setOpacity(dlg->opacity_edit->value());
+
+      ::window.glbox->redraw();} {}
+  }
+  Function {save_callback(Fl_Button*, MaterialEditDlg* dlg)} {open return_type {static void}
+  } {
+    code {MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
+MMesh* mesh = entity->getMesh();
+
+if(!mesh)
+{
+        MLOG_ERROR("mesh == NULL! This should not happen!");
+	return;
+}
+      
+xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);} {}
+  }
+  Function {choose_diffuse_color(Fl_Button* button, MaterialEditDlg* dlg)} {open return_type {static void}
+  } {
+    code {double r = dlg->color_r->value();
+    double g = dlg->diffuse_g->value();
+    double b = dlg->diffuse_b->value();
+
+    fl_color_chooser("Choose a color", r, g, b);
+
+    dlg->diffuse_r->value(r);
+    dlg->diffuse_g->value(g);
+    dlg->diffuse_b->value(b);} {}
+  }
+  Function {choose_specular_color(Fl_Button* button, MaterialEditDlg* dlg)} {open return_type {static void}
+  } {
+    code {double r = dlg->specular_r->value();
+    double g = dlg->specular_g->value();
+    double b = dlg->specular_b->value();
+
+    fl_color_chooser("Choose a color", r, g, b);
+
+    dlg->specular_r->value(r);
+    dlg->specular_g->value(g);
+    dlg->specular_b->value(b);} {}
+  }
+} 
+
+class AboutDlg {open
+} {
+  Function {create_window()} {open
+  } {
+    Fl_Window {} {
+      label About open
+      xywh {1990 333 354 309} type Double visible
+    } {
+      Fl_Box {} {
+        label {The Neo Editor is distributed under the terms and conditions of the GNU General Public License.}
+        xywh {10 224 335 55} labelsize 12 align 208
+      }
+      Fl_Box {} {selected
+        image {../../../Data/neo-icon-small.png} xywh {120 15 110 110}
+      }
+      Fl_Box {} {
+        label {Neo Editor}
+        xywh {10 137 335 40} labeltype ENGRAVED_LABEL labelsize 18 align 208
+      }
+      Fl_Box {} {
+        label {The Maratis3D Scene Editor Experience}
+        xywh {10 169 335 32} align 208
+      }
+      Fl_Box editor_version_edit {
+        label {$VERSION}
+        xywh {10 201 335 20} labelsize 11 align 208
+        code0 {editor_version_edit->label(EDITOR_VERSION_STRING);}
+      }
+    }
+  }
+} 

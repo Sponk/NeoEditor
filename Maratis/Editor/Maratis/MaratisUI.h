@@ -32,6 +32,7 @@
 #include <MGui.h>
 
 #include "Maratis.h"
+#include "MEditorTheme.h"
 
 
 class MaratisUI
@@ -142,6 +143,9 @@ public:
     int m_lastInput;
 
 private:
+
+	// Theme context
+	MEditorTheme theme;
 
 	// behaviors
 	unsigned int m_editedBehavior;

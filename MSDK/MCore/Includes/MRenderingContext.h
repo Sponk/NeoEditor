@@ -215,6 +215,9 @@ enum M_VBO_MODES
 
 
 // rendering context
+/**
+ * @brief The MRenderingContext class defines an abstraction for the 3D rendering API like OpenGL
+ */
 class M_CORE_EXPORT MRenderingContext
 {
 public:
@@ -223,17 +226,73 @@ public:
 	virtual ~MRenderingContext(void){}
 
 	//  version
+    /**
+     * @brief getRendererVersion returns the renderer.
+     * @return
+     */
     virtual const char* getRendererVersion() = 0;
 
 	// view
+    /**
+     * @brief setOrthoView Multiplies the current view matrix with the ortho matrix defined by the arguments.
+     *
+     * This method will produce a box like view frustum.
+     * In this process a perspective view turns into an ortho view which can be used for drawing 2D graphics
+     * or isometric graphics.
+     *
+     * @param left Distance to the left plane
+     * @param right Distance to the right plane
+     * @param bottom Distance to the bottom plane
+     * @param top Distance to the top plane
+     * @param zNear Distance to the near plane. Defines how near objects will still be rendered.
+     * @param zFar Distance to the far plane. Defines how far objects will still be rendered
+     */
 	virtual void setOrthoView(float left, float right, float bottom, float top, float zNear, float zFar) = 0;
+
+    /**
+     * @brief setPerspectiveView Multiplies the current view matrix with the matrix defined by the arguments
+     *
+     * This method will produce a pyramid like view frustum.
+     * In this process the the view turns in a perspective view which can be used for all sorts of 3D graphics.
+     *
+     * @param fov The field of view of the new frustum in degrees. On consoles this value often is 60°, on PC it often defaults to 90°
+     * @param ratio The radio between the width and the height of the screen (ratio = width/height). This can be used to adjust the fov in x direction.
+     * @param zNear Distance to the near plane. Defines how near objects will still be rendered.
+     * @param zFar Distance to the far plane. Defines how far objects will still be rendered
+     */
 	virtual void setPerspectiveView(float fov, float ratio, float zNear, float zFar) = 0;
 
 	// viewport
+    /**
+     * @brief setViewport Sets the viewport that is used to render to.
+     *
+     * Sets the current viewport to the area defined by the arguments.
+     * This can be used to display split screen content.
+     * Default is x = 0, y = 0, width = screenWidth, height = screenHeight
+     *
+     * @param x X position on the screen.
+     * @param y Y position on the screen.
+     * @param width Width of the area.
+     * @param height Height of the area.
+     */
 	virtual void setViewport(int x, int y, unsigned int width, unsigned int height) = 0;
 
 	// clear
+    /**
+     * @brief clear Clear the buffer defined by the argument.
+     *
+     * Argument has to be in the enumeration M_BUFFER_TYPES.
+     * They can be combined by using bit wise or: clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
+     * The color to clear the buffer is set by MRenderingContext::setClearColor.
+     *
+     * @param buffer The buffer(s) to clear.
+     */
 	virtual void clear(int buffer) = 0;
+
+    /**
+     * @brief setClearColor Sets the clear color used by MRenderingContext::clear
+     * @param color The rgba color.
+     */
 	virtual void setClearColor(const MVector4 & color) = 0;
 
 	// texture
@@ -347,6 +406,8 @@ public:
 	virtual void enableDepthTest(void) = 0;
 	virtual void disableDepthTest(void) = 0;
 	virtual void setDepthMode(M_DEPTH_MODES mode) = 0;
+	virtual void enablePolygonOffset(float x, float y) = 0;
+	virtual void disablePolygonOffset() = 0;
 
 	// stencil
 	virtual void enableStencilTest(void) = 0;

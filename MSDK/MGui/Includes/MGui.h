@@ -56,6 +56,7 @@ class MGuiWindow;
 #include <string>
 #include <MCore.h>
 
+#include "MMouse.h"
 #include "MWindow.h"
 #include "MGuiEvents.h"
 #include "MGuiTextureFont.h"
