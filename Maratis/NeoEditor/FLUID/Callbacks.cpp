@@ -1190,6 +1190,7 @@ void new_level_callback(Fl_Menu_*, void*)
     current_project.level = "";
 
     Maratis::getInstance()->newLevel();
+    update_scene_tree();
     //main_window->label("Untitled level");
 }
 
