@@ -18,6 +18,6 @@ This project is free software. Free not as in "free beer" but as in "free speech
 See also: https://www.gnu.org/philosophy/free-sw.html
 Neo is free software licensed under the terms and conditions of the GNU GPL license: https://www.gnu.org/copyleft/gpl.html
 The player is also licensed under the terms and conditions of the GNU GPL license.
-The Maratis3D core engine is licensed under the terms and conditions of the MIT license: http://opensource.org/licenses/MIT
+The Maratis3D core engine is licensed under the terms and conditions of the zlib/libpng license: http://opensource.org/licenses/zlib-license.php
 
-Note that the GPL is a copyleft license which means that you can not use sourcecode from Neo or the player to create proprietary software! You are allowed to create proprietary C++ game plugins since it only interacts with the MIT licensed SDK. Lua scripts are also allowed to be proprietary.
+Note that the GPL is a copyleft license which means that you can not use sourcecode from Neo or the player to create proprietary software! You are allowed to create proprietary C++ game plugins since it only interacts with the zlib licensed SDK. Lua scripts are also allowed to be proprietary.
