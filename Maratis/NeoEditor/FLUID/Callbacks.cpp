@@ -19,11 +19,9 @@
 #include <MWindow.h>
 #include <MLoaders/MImageLoader.h>
 #include "../MFilesUpdate/MFilesUpdate.h"
-#include "../Maratis/Maratis.h"
 #include "../MLoaders/MAssimpMeshLoader.h"
 #include <MCore.h>
 #include <MLog.h>
-#include "../MPublish/MPublisher.h"
 #include "MainWindow.h"
 
 open_project_t current_project;
@@ -1126,9 +1124,12 @@ void publish_callback(Fl_Menu_*, void*)
         return;
     }
 
-    Maratis::getInstance()->publish();
+    PublishDlg* dlg = new PublishDlg;
+    dlg->create_window()->show();
 
-    fl_message("Successfully published project!");
+    //Maratis::getInstance()->publish();
+
+    //fl_message("Successfully published project!");
 }
 
 void save_level_callback(Fl_Menu_ *, long mode)

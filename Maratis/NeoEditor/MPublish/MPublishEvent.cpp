@@ -42,8 +42,19 @@
 static string s_pubDir;
 static string s_dataDir;
 
+void setPubDir(const char* dir)
+{
+    // Only set s_pubDir when we can be sure that it exists
+    if(isDirectory(dir))
+        s_pubDir = dir;
+}
+
 const char* getPubDir()
 {
+    // Only set s_pubDir when it does not contain a path
+    if(!s_pubDir.empty())
+        return s_pubDir.c_str();
+
 	MEngine* engine = MEngine::getInstance();
 	MSystemContext* system = engine->getSystemContext();
 

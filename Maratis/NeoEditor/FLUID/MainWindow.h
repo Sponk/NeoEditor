@@ -225,4 +225,14 @@ public:
   Fl_Double_Window* create_window();
   Fl_Box *editor_version_edit;
 };
+
+class PublishDlg {
+  Fl_Window* window; 
+public:
+  Fl_Double_Window* create_window();
+  Fl_Input *output_edit;
+  static void publish_click(Fl_Button*, PublishDlg* dlg);
+  static void cancel_click(Fl_Button*, PublishDlg* dlg);
+  static void find_output_dir(Fl_Button*, PublishDlg* dlg);
+};
 #endif

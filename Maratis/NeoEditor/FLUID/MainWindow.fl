@@ -14,8 +14,7 @@ decl {\#include <FL/Fl_Color_Chooser.H>} {private local
 decl {\#include <MFileManager/MMeshSave.h>} {private local
 } 
 
-class EditorWindow {open
-} {
+class EditorWindow {} {
   Function {show_window()} {open
   } {
     Fl_Window {} {
@@ -1251,19 +1250,18 @@ xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);} {}
   }
 } 
 
-class AboutDlg {open
-} {
+class AboutDlg {} {
   Function {create_window()} {open
   } {
     Fl_Window {} {
       label About open
-      xywh {1990 333 354 309} type Double visible
+      xywh {1990 333 354 309} type Double hide
     } {
       Fl_Box {} {
         label {The Neo Editor is distributed under the terms and conditions of the GNU General Public License.}
         xywh {10 224 335 55} labelsize 12 align 208
       }
-      Fl_Box {} {selected
+      Fl_Box {} {
         image {../../../Data/neo-icon-small.png} xywh {120 15 110 110}
       }
       Fl_Box {} {
@@ -1280,5 +1278,70 @@ class AboutDlg {open
         code0 {editor_version_edit->label(EDITOR_VERSION_STRING);}
       }
     }
+  }
+} 
+
+class PublishDlg {open
+} {
+  decl {Fl_Window* window;} {private local
+  }
+  Function {create_window()} {open
+  } {
+    Fl_Window {} {
+      label Publish open selected
+      xywh {1958 350 510 96} type Double modal visible
+    } {
+      Fl_Button {} {
+        label Publish
+        user_data this user_data_type {PublishDlg*}
+        callback publish_click
+        xywh {378 54 90 27}
+      }
+      Fl_Button {} {
+        label Cancel
+        user_data this user_data_type {PublishDlg*}
+        callback cancel_click
+        xywh {129 54 96 27}
+      }
+      Fl_Input output_edit {
+        label {Output directory:}
+        xywh {129 18 339 24}
+        code0 {char dir[256];}
+        code1 {getGlobalFilename(dir, MEngine::getInstance()->getSystemContext()->getWorkingDirectory(), "published");}
+        code2 {output_edit->value(dir);}
+      }
+      Fl_Button {} {
+        label {...}
+        user_data this user_data_type {PublishDlg*}
+        callback find_output_dir
+        xywh {471 18 26 24}
+      }
+    }
+    code {window = w;} {}
+  }
+  Function {publish_click(Fl_Button*, PublishDlg* dlg)} {open return_type {static void}
+  } {
+    code {setPubDir(dlg->output_edit->value());
+Maratis::getInstance()->publish();
+
+// TODO: Error checking!
+fl_message("Project was successfully published!");
+
+dlg->window->hide();
+delete dlg;} {}
+  }
+  Function {cancel_click(Fl_Button*, PublishDlg* dlg)} {open return_type {static void}
+  } {
+    code {dlg->window->hide();
+delete dlg;} {}
+  }
+  Function {find_output_dir(Fl_Button*, PublishDlg* dlg)} {open return_type {static void}
+  } {
+    code {const char* filename = fl_native_file_chooser("Choose output", NULL, dlg->output_edit->value(), Fl_Native_File_Chooser::BROWSE_DIRECTORY);
+
+if(filename == NULL)
+	return;
+
+dlg->output_edit->value(filename);} {}
   }
 } 

@@ -6,6 +6,10 @@
 #include <FL/Fl_Native_File_Chooser.H>
 #include <string>
 
+// Maratis includes (for MainWindow.cxx)
+#include "../Maratis/Maratis.h"
+#include "../MPublish/MPublisher.h"
+
 #define EDITOR_VERSION_STRING "0.1"
 
 typedef struct

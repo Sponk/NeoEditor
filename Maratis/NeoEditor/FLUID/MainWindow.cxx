@@ -4025,3 +4025,54 @@ al Public License.");
   } // Fl_Double_Window* o
   return w;
 }
+
+Fl_Double_Window* PublishDlg::create_window() {
+  Fl_Double_Window* w;
+  { Fl_Double_Window* o = new Fl_Double_Window(510, 96, "Publish");
+    w = o;
+    o->user_data((void*)(this));
+    { Fl_Button* o = new Fl_Button(378, 54, 90, 27, "Publish");
+      o->callback((Fl_Callback*)publish_click, (void*)(this));
+    } // Fl_Button* o
+    { Fl_Button* o = new Fl_Button(129, 54, 96, 27, "Cancel");
+      o->callback((Fl_Callback*)cancel_click, (void*)(this));
+    } // Fl_Button* o
+    { output_edit = new Fl_Input(129, 18, 339, 24, "Output directory:");
+      char dir[256];
+      getGlobalFilename(dir, MEngine::getInstance()->getSystemContext()->getWorkingDirectory(), "published");
+      output_edit->value(dir);
+    } // Fl_Input* output_edit
+    { Fl_Button* o = new Fl_Button(471, 18, 26, 24, "...");
+      o->callback((Fl_Callback*)find_output_dir, (void*)(this));
+    } // Fl_Button* o
+    o->set_modal();
+    o->end();
+  } // Fl_Double_Window* o
+  window = w;
+  return w;
+}
+
+void PublishDlg::publish_click(Fl_Button*, PublishDlg* dlg) {
+  setPubDir(dlg->output_edit->value());
+  Maratis::getInstance()->publish();
+  
+  // TODO: Error checking!
+  fl_message("Project was successfully published!");
+  
+  dlg->window->hide();
+  delete dlg;
+}
+
+void PublishDlg::cancel_click(Fl_Button*, PublishDlg* dlg) {
+  dlg->window->hide();
+  delete dlg;
+}
+
+void PublishDlg::find_output_dir(Fl_Button*, PublishDlg* dlg) {
+  const char* filename = fl_native_file_chooser("Choose output", NULL, dlg->output_edit->value(), Fl_Native_File_Chooser::BROWSE_DIRECTORY);
+  
+  if(filename == NULL)
+  	return;
+  
+  dlg->output_edit->value(filename);
+}

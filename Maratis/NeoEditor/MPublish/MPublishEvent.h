@@ -61,4 +61,12 @@ public: \
 }; \
 static eventName##AutoAdd s_##eventName
 
+/**
+  * Sets the publish output directory.
+  * Works only with existing directories!
+  *
+  * @param dir The new output directory.
+  */
+void setPubDir(const char* dir);
+
 #endif /*__M_PUBLISH_EVENT_H__*/
