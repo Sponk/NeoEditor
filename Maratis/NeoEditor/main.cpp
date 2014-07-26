@@ -39,15 +39,49 @@
 #include "FLUID/Callbacks.h"
 #include <FL/Fl.H>
 
+#include "MPluginScript/MPluginScript.h"
+
 #ifdef main
     #undef main
 #endif
 
+extern void update_scene_tree();
 extern void update_editor(void*);
 
 Fl_Double_Window* main_window = NULL;
 EditorWindow window;
 const char* executable = NULL;
+
+std::vector<MPluginScript*> editorPlugins;
+
+void loadPluginsFrom(const char* src)
+{
+    std::vector<std::string> files;
+    char dir[256];
+    getGlobalFilename(dir, src, "plugins");
+
+    readDirectory(dir, &files, false, false);
+    MLOG_INFO("Searching for plugins in " << dir);
+
+    std::string currentFile;
+    for(int i = 0; i < files.size(); i++)
+    {
+        currentFile = files[i];
+
+        // Check if file ends with ".lua"
+        if(currentFile.find_last_of(".lua") == currentFile.length()-1)
+        {
+            MPluginScript* script = new MPluginScript;
+
+            currentFile = dir + std::string("/") + currentFile;
+
+            script->runScript(currentFile.c_str());
+            editorPlugins.push_back(script);
+        }
+    }
+
+    files.clear();
+}
 
 // main
 int main(int argc, char **argv)
@@ -81,6 +115,29 @@ int main(int argc, char **argv)
 
     if(argc > 1)
         current_project.file_path = argv[1];
+
+    // Init the engine
+    MEngine * engine = MEngine::getInstance();
+    Maratis * maratis = Maratis::getInstance();
+
+    if(!current_project.file_path.empty())
+    {
+        current_project.changed = false;
+        current_project.path = current_project.file_path;
+
+#ifndef WIN32
+        current_project.path = current_project.path.erase(current_project.path.find_last_of("/")+1, current_project.path.length());
+#else
+        current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
+#endif
+        maratis->loadProject(current_project.file_path.c_str());
+        current_project.level = maratis->getCurrentLevel();
+    }
+
+    update_scene_tree();
+
+    // Load all plugins (TODO: Search in user home too!)
+    loadPluginsFrom(rep);
 
     Fl::add_timeout(0.2, update_editor);
     Fl::run();

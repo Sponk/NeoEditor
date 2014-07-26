@@ -42,14 +42,12 @@ public :
 	MScript(void);
 	~MScript(void);
 
-private:
+protected:
 
 	void init();
 	void clear();
 
 	static int function(lua_State * L);
-
-private :
 
 	bool m_isRunning;
 	lua_State * m_state;

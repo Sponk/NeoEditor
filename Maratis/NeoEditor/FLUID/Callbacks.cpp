@@ -1126,10 +1126,6 @@ void publish_callback(Fl_Menu_*, void*)
 
     PublishDlg* dlg = new PublishDlg;
     dlg->create_window()->show();
-
-    //Maratis::getInstance()->publish();
-
-    //fl_message("Successfully published project!");
 }
 
 void save_level_callback(Fl_Menu_ *, long mode)

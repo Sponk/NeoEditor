@@ -17,6 +17,8 @@
 #include <FL/Fl_Int_Input.H>
 #include <FL/Fl_Double_Window.H>
 
+#include "../MPluginScript/MPluginScript.h"
+
 extern Fl_Double_Window* main_window;
 extern EditorWindow window;
 
@@ -117,33 +119,11 @@ void GLBox::draw()
     MWindow * mwindow = MWindow::getInstance();
     if(!maratis_init)
     {
-        MEngine * engine = MEngine::getInstance();
-        Maratis * maratis = Maratis::getInstance();
-
-        MRenderingContext * render = engine->getRenderingContext();
+        MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
         MLOG_INFO("Render version : " << render->getRendererVersion());
 
         render->setTextureFilterMode(M_TEX_FILTER_NEAREST, M_TEX_FILTER_NEAREST_MIPMAP_NEAREST);
         render->setClearColor(MVector4(0.18, 0.32, 0.45, 1));
-
-        MGui * gui = MGui::getInstance();
-        gui->setRenderingContext(render);
-
-        if(!current_project.file_path.empty())
-        {
-            current_project.changed = false;
-            current_project.path = current_project.file_path;
-
-#ifndef WIN32
-            current_project.path = current_project.path.erase(current_project.path.find_last_of("/")+1, current_project.path.length());
-#else
-            current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
-#endif
-            maratis->loadProject(current_project.file_path.c_str());
-            current_project.level = maratis->getCurrentLevel();
-        }
-
-        update_scene_tree();
 
         maratis_init = true;
         reload_editor = true;
