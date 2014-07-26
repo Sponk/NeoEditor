@@ -38,6 +38,8 @@ class MPluginScript : public MScript
 private:
     void init();
 
+    int id;
+
     std::string m_name;
     std::string m_author;
     std::string m_contact;
@@ -60,6 +62,10 @@ public:
     std::string getContact() { return m_contact; }
     std::string getLicense() { return m_license; }
     std::string getDescription() { return m_description; }
+    std::string getName() { return m_name; }
+
+    void setId(int id) {this->id = id; }
+    int getId() { return id; }
 };
 
 #endif

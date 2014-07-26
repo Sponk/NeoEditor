@@ -27,12 +27,36 @@
 //
 //========================================================================
 
-#include <MScript/MScript.h>
+#include "MPluginScript.h"
 #include <FL/Fl.H>
 #include <FL/fl_message.H>
+#include <FL/Fl_Native_File_Chooser.H>
+
+#include <string>
+#include <vector>
+
+#include "../FLUID/MainWindow.h"
 
 // Declared in Callbacks.h and implemented in Callbacks.cpp
 const char* fl_native_file_chooser(const char* title, const char* files, const char* dir, int type);
+extern EditorWindow window;
+
+typedef struct
+{
+    MPluginScript* plugin;
+    std::string function;
+
+} lua_callback_t;
+
+std::vector<lua_callback_t> callbacks;
+
+// LuaCallback
+void lua_callback(Fl_Widget*, long id)
+{
+    lua_callback_t callback = callbacks[id];
+
+    callback.plugin->callFunction(callback.function.c_str());
+}
 
 int messagebox()
 {
@@ -41,7 +65,66 @@ int messagebox()
     if(script->getArgsNumber() != 1)
         return 0;
 
-    fl_message(script->getString(0));
+    fl_message("%s", script->getString(0));
+    return 1;
+}
+
+// Implemented in Callbacks.cpp. FIXME: Encapsulation!
+extern const char* fl_native_file_chooser(const char* title, const char* files, const char* dir, int type);
+
+int fileChooser(int mode)
+{
+    MScript* script = (MScript*) MEngine::getInstance()->getScriptContext();
+
+    const char* dir = ".";
+    const char* files = "*.*";
+
+    if(script->getArgsNumber() == 2)
+        dir = script->getString(1);
+    else if(script->getArgsNumber() == 3)
+        files = script->getString(2);
+
+    const char* title = script->getString(0);
+
+    script->pushString(fl_native_file_chooser(title, files, dir, Fl_Native_File_Chooser::BROWSE_FILE));
+
+    return 1;
+}
+
+// openFileDlg(title, dir, files)
+int openFileDlg()
+{
+    return fileChooser(Fl_Native_File_Chooser::BROWSE_FILE);
+}
+
+// openFileDlg(title, dir, files)
+int saveFileDlg()
+{
+    return fileChooser(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
+}
+
+// addEditorMenu(name, callbackName)
+int addEditorMenu()
+{
+    MPluginScript* script = (MPluginScript*) MEngine::getInstance()->getScriptContext();
+
+    if(script->getArgsNumber() != 2)
+        return 0;
+
+    const char* path = script->getString(0);
+    const char* function = script->getString(1);
+
+    std::string completePath = "Plugins/" + script->getName() + "/" + path;
+
+    lua_callback_t callback;
+    callback.function = function;
+    callback.plugin = script;
+
+    callbacks.push_back(callback);
+
+    window.menu_bar->add(completePath.c_str(), 0, (Fl_Callback*) lua_callback, (void*) (callbacks.size()-1));
+    window.menu_bar->redraw();
+
     return 1;
 }
 
@@ -51,4 +134,7 @@ void createFltkLuaBindings(MScript* script)
         return;
 
     script->addFunction("messagebox", messagebox);
+    script->addFunction("addEditorMenu", addEditorMenu);
+    script->addFunction("openFileDlg", openFileDlg);
+    script->addFunction("saveFileDlg", saveFileDlg);
 }
