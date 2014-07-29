@@ -36,6 +36,7 @@
 #include <vector>
 
 #include "../FLUID/MainWindow.h"
+#include "../Maratis/Maratis.h"
 
 // Declared in Callbacks.h and implemented in Callbacks.cpp
 const char* fl_native_file_chooser(const char* title, const char* files, const char* dir, int type);
@@ -128,6 +129,26 @@ int addEditorMenu()
     return 1;
 }
 
+int getCurrentSelection()
+{
+    MPluginScript* script = (MPluginScript*) MEngine::getInstance()->getScriptContext();
+    Maratis* maratis = Maratis::getInstance();
+
+    // FIXME: Pointers have 64bit size on 64bit machines! DON'T USE FLOAT
+    int* objects = new int[maratis->getSelectedObjectsNumber()];
+
+    for(int i = 0; i < maratis->getSelectedObjectsNumber(); i++)
+    {
+        MObject3d* object = maratis->getSelectedObjectByIndex(i);
+        objects[i] = (long int) object;
+    }
+
+    script->pushIntArray(objects, maratis->getSelectedObjectsNumber());
+    delete[] objects;
+
+    return 1;
+}
+
 void createFltkLuaBindings(MScript* script)
 {
     if(!script)
@@ -137,4 +158,5 @@ void createFltkLuaBindings(MScript* script)
     script->addFunction("addEditorMenu", addEditorMenu);
     script->addFunction("openFileDlg", openFileDlg);
     script->addFunction("saveFileDlg", saveFileDlg);
+    script->addFunction("getCurrentSelection", getCurrentSelection);
 }

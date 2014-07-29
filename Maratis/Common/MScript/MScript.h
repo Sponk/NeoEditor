@@ -79,11 +79,11 @@ public:
 	float getFloat(unsigned int arg);
 	void* getPointer(unsigned int arg);
 
-	void pushIntArray(const int * values, unsigned int valuesNumber);
+    void pushIntArray(const int * values, unsigned int valuesNumber);
 	void pushFloatArray(const float * values, unsigned int valuesNumber);
 	void pushString(const char * string);
 	void pushBoolean(bool value);
-	void pushInteger(int value);
+    void pushInteger(int value);
 	void pushFloat(float value);
 	void pushPointer(void* value);
 };
