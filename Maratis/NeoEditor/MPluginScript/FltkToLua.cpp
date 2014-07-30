@@ -38,6 +38,9 @@
 #include "../FLUID/MainWindow.h"
 #include "../Maratis/Maratis.h"
 
+// TODO: All globals in own file!
+#include "../FLUID/Callbacks.h"
+
 // Declared in Callbacks.h and implemented in Callbacks.cpp
 const char* fl_native_file_chooser(const char* title, const char* files, const char* dir, int type);
 extern EditorWindow window;
@@ -80,14 +83,14 @@ int fileChooser(int mode)
     const char* dir = ".";
     const char* files = "*.*";
 
-    if(script->getArgsNumber() == 2)
+    if(script->getArgsNumber() >= 2)
         dir = script->getString(1);
-    else if(script->getArgsNumber() == 3)
+
+    if(script->getArgsNumber() >= 3)
         files = script->getString(2);
 
     const char* title = script->getString(0);
-
-    script->pushString(fl_native_file_chooser(title, files, dir, Fl_Native_File_Chooser::BROWSE_FILE));
+    script->pushString(fl_native_file_chooser(title, files, dir, mode));
 
     return 1;
 }
@@ -149,6 +152,20 @@ int getCurrentSelection()
     return 1;
 }
 
+int getSelectionCenter()
+{
+    MScript* script = (MScript*) MEngine::getInstance()->getScriptContext();
+    script->pushFloatArray(*Maratis::getInstance()->getSelectionCenter(), 3);
+
+    return 1;
+}
+
+int getProjectDir()
+{
+    MEngine::getInstance()->getScriptContext()->pushString(current_project.path.c_str());
+    return 1;
+}
+
 void createFltkLuaBindings(MScript* script)
 {
     if(!script)
@@ -159,4 +176,6 @@ void createFltkLuaBindings(MScript* script)
     script->addFunction("openFileDlg", openFileDlg);
     script->addFunction("saveFileDlg", saveFileDlg);
     script->addFunction("getCurrentSelection", getCurrentSelection);
+    script->addFunction("getProjectDir", getProjectDir);
+    script->addFunction("getSelectionCenter", getSelectionCenter);
 }

@@ -437,6 +437,123 @@ int getCurrentCamera(lua_State * L)
 	return 0;
 }
 
+int getMeshFilename(lua_State * L)
+{
+    if(! isFunctionOk(L, "getMeshFilename", 1))
+        return 0;
+
+    int nbArguments = lua_gettop(L);
+
+    long int id = lua_tointeger(L, nbArguments);
+    MObject3d* object;
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_ENTITY)
+        {
+            MOEntity* entity = (MOEntity*) object;
+            lua_pushstring(L, entity->getMeshRef()->getFilename());
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int getObjectType(lua_State * L)
+{
+    if(! isFunctionOk(L, "getObjectType", 1))
+        return 0;
+
+    int nbArguments = lua_gettop(L);
+    long int id = lua_tointeger(L, nbArguments);
+    MObject3d* object;
+
+    if((object = getObject3d(id)))
+    {
+        switch (object->getType())
+        {
+        case M_OBJECT3D_ENTITY:
+                lua_pushstring(L, "Entity");
+            break;
+        case M_OBJECT3D_CAMERA:
+                lua_pushstring(L, "Camera");
+            break;
+
+        case M_OBJECT3D_LIGHT:
+                lua_pushstring(L, "Light");
+            break;
+
+        case M_OBJECT3D_SOUND:
+                lua_pushstring(L, "Sound");
+            break;
+
+        case M_OBJECT3D_TEXT:
+                lua_pushstring(L, "Text");
+            break;
+
+        default:
+            break;
+        }
+
+        return 1;
+    }
+
+    return 0;
+}
+
+int getBoundingMin(lua_State* L)
+{
+    if(! isFunctionOk(L, "getBoundingMin", 1))
+        return 0;
+
+    int nbArguments = lua_gettop(L);
+
+    long int id = lua_tointeger(L, nbArguments);
+    MObject3d* object;
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_ENTITY)
+        {
+            MOEntity* entity = (MOEntity*) object;
+
+            MMesh* mesh = entity->getMesh();
+            pushFloatArray(L, mesh->getBoundingBox()->min, 3);
+
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int getBoundingMax(lua_State* L)
+{
+    if(! isFunctionOk(L, "getBoundingMax", 1))
+        return 0;
+
+    int nbArguments = lua_gettop(L);
+
+    long int id = lua_tointeger(L, nbArguments);
+    MObject3d* object;
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_ENTITY)
+        {
+            MOEntity* entity = (MOEntity*) object;
+
+            MMesh* mesh = entity->getMesh();
+            pushFloatArray(L, mesh->getBoundingBox()->max, 3);
+
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
 int getObject(lua_State * L)
 {
 	MLevel * level = MEngine::getInstance()->getLevel();
@@ -3823,7 +3940,11 @@ void MScript::init(void)
 
 	lua_register(m_state, "enableShadow",			enableShadow);
 	lua_register(m_state, "isCastingShadow",		isCastingShadow);
-	
+    lua_register(m_state, "getMeshFilename",        getMeshFilename);
+    lua_register(m_state, "getObjectType",          getObjectType);
+    lua_register(m_state, "getBoundingMax",         getBoundingMax);
+    lua_register(m_state, "getBoundingMin",         getBoundingMin);
+
 	lua_register(m_state, "getTransformedPosition", getTransformedPosition);
 	lua_register(m_state, "getTransformedRotation", getTransformedRotation);
 	lua_register(m_state, "getTransformedScale",	getTransformedScale);
