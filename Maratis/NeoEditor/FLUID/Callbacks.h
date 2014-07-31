@@ -31,6 +31,7 @@ extern bool update_name;
 void edit_text_properties(Fl_Widget*, void*);
 void update_behavior_menu();
 const char* fl_native_file_chooser(const char* title, const char* files, const char* dir, int type);
+void update_scene_tree();
 
 #ifdef _MSC_VER
 

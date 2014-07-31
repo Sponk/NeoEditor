@@ -460,6 +460,70 @@ int getMeshFilename(lua_State * L)
     return 0;
 }
 
+// TODO: Encapsulasation
+void getNewObjectName(const char * objectName, char * name)
+{
+    MLevel * level = MEngine::getInstance()->getLevel();
+    MScene * scene = level->getCurrentScene();
+
+    unsigned int count = 0;
+    int size = scene->getObjectsNumber();
+    for(int i=0; i<size; i++)
+    {
+        MObject3d * object = scene->getObjectByIndex(i);
+        if(object->getName())
+            if(strcmp(name, object->getName()) == 0)
+            {
+                // name already exist
+                count++;
+                sprintf(name, "%s%d", objectName, count);
+                i = -1;
+            }
+    }
+}
+
+int loadMesh(lua_State * L)
+{
+    if(! isFunctionOk(L, "loadMesh", 1))
+        return 0;
+
+    const char* path = lua_tostring(L, 1);
+
+    // TODO: Get global filename!
+    MMeshRef* meshRef = NULL;
+    MLevel* level = MEngine::getInstance()->getLevel();
+
+    char string[256];
+    getGlobalFilename(string, MEngine::getInstance()->getSystemContext()->getWorkingDirectory(), path);
+
+    meshRef = level->loadMesh(string, true);
+
+    // create entity
+    strcpy(string, "Entity0");
+    MOEntity * entity = level->getCurrentScene()->addNewEntity(meshRef);
+    getNewObjectName("Entity", string);
+
+    entity->setName(string);
+    lua_pushinteger(L, (lua_Integer) entity);
+
+    return 1;
+}
+
+int createGroup(lua_State * L)
+{
+    if(!isFunctionOk(L, "createGroup", 0))
+        return 0;
+
+    MObject3d* group = MEngine::getInstance()->getLevel()->getCurrentScene()->addNewGroup();
+    char string[256] = "Group0";
+    getNewObjectName("Group", string);
+    group->setName(string);
+
+    lua_pushinteger(L, (lua_Integer) group);
+
+    return 1;
+}
+
 int getObjectType(lua_State * L)
 {
     if(! isFunctionOk(L, "getObjectType", 1))
@@ -3941,9 +4005,11 @@ void MScript::init(void)
 	lua_register(m_state, "enableShadow",			enableShadow);
 	lua_register(m_state, "isCastingShadow",		isCastingShadow);
     lua_register(m_state, "getMeshFilename",        getMeshFilename);
+    lua_register(m_state, "loadMesh",               loadMesh);
     lua_register(m_state, "getObjectType",          getObjectType);
     lua_register(m_state, "getBoundingMax",         getBoundingMax);
     lua_register(m_state, "getBoundingMin",         getBoundingMin);
+    lua_register(m_state, "createGroup",            createGroup);
 
 	lua_register(m_state, "getTransformedPosition", getTransformedPosition);
 	lua_register(m_state, "getTransformedRotation", getTransformedRotation);

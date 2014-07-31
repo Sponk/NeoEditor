@@ -55,6 +55,13 @@ MScene::~MScene()
 	m_sounds.clear();
 }
 
+MObject3d * MScene::addNewGroup(void)
+{
+    MObject3d * object = new MObject3d();
+    m_objects.push_back(object);
+    return object;
+}
+
 MOCamera * MScene::addNewCamera(void)
 {
 	MOCamera * newCamera = new MOCamera();

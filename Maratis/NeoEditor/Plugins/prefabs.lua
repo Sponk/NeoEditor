@@ -6,7 +6,6 @@ addEditorMenu("Load Prefab", "load_callback")
 addEditorMenu("Save selection as Prefab", "save_callback")
 
 require("plugins.libs.libxml")
---dofile("plugins/libs/libxml.lua")
         
 -- From penlib
 function split(s,re,plain,n)
@@ -133,23 +132,26 @@ function objectToXml(object, path)
     
         output = output .. "<ObjectProperties invisible=\"" .. bool2str(not isVisible(object)) .. "\"/>\n"
     
-        output = output .. "<physics\n"
+        -- TODO: Test for physics not for mass!
+        if getMass(object) ~= nil then
+            output = output .. "<physics\n"
+            
+            -- TODO: Get real shape!
+            output = output .. "\tshape=\"Box\"\n"
         
-        -- TODO: Get real shape!
-        output = output .. "\tshape=\"Box\"\n"
-    
-        -- TODO: Is it really a ghost?
-        output = output .. "\tghost=\"false\"\n"
-    
-        output = output .. "\tmass=\"" .. getMass(object) .. "\"\n"
-        output = output .. "\tfriction=\"" .. getFriction(object) .. "\"\n"
-        output = output .. "\trestitution=\"" .. getRestitution(object) .. "\"\n"
-        output = output .. "\tlinearDamping=\"" .. getLinearDamping(object) .. "\"\n"
-        output = output .. "\tangularDamping=\"" .. getAngularDamping(object) .. "\"\n"
-        output = output .. "\tangularFactor=\"" .. getAngularFactor(object) .. "\"\n"
-        output = output .. "\tlinearFactor=\"" .. vec2str(getLinearFactor(object)) .. "\"\n"
-    
-        output = output .. "/>\n"
+            -- TODO: Is it really a ghost?
+            output = output .. "\tghost=\"false\"\n"
+        
+            output = output .. "\tmass=\"" .. getMass(object) .. "\"\n"
+            output = output .. "\tfriction=\"" .. getFriction(object) .. "\"\n"
+            output = output .. "\trestitution=\"" .. getRestitution(object) .. "\"\n"
+            output = output .. "\tlinearDamping=\"" .. getLinearDamping(object) .. "\"\n"
+            output = output .. "\tangularDamping=\"" .. getAngularDamping(object) .. "\"\n"
+            output = output .. "\tangularFactor=\"" .. getAngularFactor(object) .. "\"\n"
+            output = output .. "\tlinearFactor=\"" .. vec2str(getLinearFactor(object)) .. "\"\n"
+        
+            output = output .. "/>\n"
+        end
     end
     
     -- Position is relative to the selection center
@@ -189,7 +191,7 @@ function save_callback()
     
     if filename == nil then return end
     
-    local path = getPath(filename)
+    local path = getProjectDir()
     local content = "<prefab>"
        
     for i = 1, #selection, 1 do
@@ -205,8 +207,24 @@ function save_callback()
     output:close()
 end
 
+function str2vec(str)
+    return split(str, " ")
+end
+
 function addEntity(entity)
-    print("Got Entity: " .. entity["@name"])
+    local object = loadMesh(entity["@file"])
+    
+    setPosition(object, str2vec(entity.transform["@position"]))
+    setScale(object, str2vec(entity.transform["@scale"]))
+    setRotation(object, str2vec(entity.transform["@rotation"]))
+    
+    updateMatrix(object)
+    
+    --if entity["@parent"] == nil then
+      --  setParent(object, group)
+    --end
+    
+    print("Loaded: " .. getName(object))
 end
 
 function load_callback()
@@ -221,16 +239,19 @@ function load_callback()
     f:close()
 
     local objects = xml:ParseXmlText(content)
-    local entities = {}
+    --local group = createGroup()
+    
+    --print(getName(group))
     
     if objects.prefab.Entity ~= nil then
         if #objects.prefab.Entity > 0 then  
-            for i = 1, #entities, 1 do
-                addEntity(entities[i])
+            for i = 1, #objects.prefab.Entity, 1 do
+                addEntity(objects.prefab.Entity[i])
             end
         else
             addEntity(objects.prefab.Entity)
         end
     end
     
+    updateEditorView()    
 end

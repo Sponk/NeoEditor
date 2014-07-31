@@ -182,6 +182,8 @@ public:
      */
 	MOLight * addNewLight(void);
 
+    MObject3d * addNewGroup(void);
+
     /**
      * @brief Copies the light and adds the new instance to the scene.
      * @param light The light to copy from.

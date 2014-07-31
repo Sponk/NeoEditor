@@ -166,6 +166,17 @@ int getProjectDir()
     return 1;
 }
 
+int updateEditorView()
+{
+    // FIXME: Somehow needed or else scripts will crash
+    MPluginScript* script = (MPluginScript*) MEngine::getInstance()->getScriptContext();
+    script->pushInteger(0);
+
+    update_scene_tree();
+    window.glbox->redraw();
+    return 1;
+}
+
 void createFltkLuaBindings(MScript* script)
 {
     if(!script)
@@ -178,4 +189,5 @@ void createFltkLuaBindings(MScript* script)
     script->addFunction("getCurrentSelection", getCurrentSelection);
     script->addFunction("getProjectDir", getProjectDir);
     script->addFunction("getSelectionCenter", getSelectionCenter);
+    script->addFunction("updateEditorView", updateEditorView);
 }
