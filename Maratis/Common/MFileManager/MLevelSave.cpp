@@ -484,7 +484,7 @@ bool xmlLevelSave(MLevel * level, const char * filename)
 	// get rep
 	getRepertory(rep, filename);
 
-	openNode(file, "Maratis version=\"3.0\"", 0);
+    openNode(file, "Maratis version=\"3.1\"", 0);
 	M_fprintf(file, "\n\n");
 	openNode(file, "Level", 0);
 	M_fprintf(file, "\n\n");
@@ -523,201 +523,209 @@ bool xmlLevelSave(MLevel * level, const char * filename)
 		writeSceneProperties(file, scene);
 		M_fprintf(file, "\n");
 
-		// lights
-		unsigned int l;
-		unsigned int lSize = scene->getLightsNumber();
-		for(l=0; l<lSize; l++)
-		{
-			MOLight * light = scene->getLightByIndex(l);
+        MObject3d* object;
+        for(int i = 0; i < scene->getObjectsNumber(); i++)
+        {
+            object = scene->getObjectByIndex(i);
 
-			openAttributeNode(file, "Light", 2);
-			writeString(file, "name", light->getName());
-			M_fprintf(file, ">\n");
+            switch(object->getType())
+            {
+            case M_OBJECT3D:
+                    openAttributeNode(file, "Group", 2);
+                    writeString(file, "name", object->getName());
+                    M_fprintf(file, ">\n");
 
-			// transform
-			writeObjectTransform(file, light);
+                    writeObjectTransform(file, object);
+                    closeNode(file, "Group", 2);
+                    M_fprintf(file, "\n");
+                break;
 
-			// properties
-			writeLightProperties(file, light);
+            case M_OBJECT3D_LIGHT: {
 
-			// behaviors
-			writeBehaviors(file, light);
+                MOLight* light = static_cast<MOLight*>(object);
 
-			closeNode(file, "Light", 2);
-			M_fprintf(file, "\n");
-		}
+                openAttributeNode(file, "Light", 2);
+                writeString(file, "name", light->getName());
+                M_fprintf(file, ">\n");
 
-		// cameras
-		unsigned int c;
-		unsigned int cSize = scene->getCamerasNumber();
-		for(c=0; c<cSize; c++)
-		{
-			MOCamera * camera = scene->getCameraByIndex(c);
+                // transform
+                writeObjectTransform(file, light);
 
-			openAttributeNode(file, "Camera", 2);
-			writeString(file, "name", camera->getName());
-			M_fprintf(file, ">\n");
+                // properties
+                writeLightProperties(file, light);
 
-			// transform
-			writeObjectTransform(file, camera);
+                // behaviors
+                writeBehaviors(file, light);
 
-			// properties
-			writeCameraProperties(file, camera);
+                closeNode(file, "Light", 2);
+                M_fprintf(file, "\n");
 
-			// behaviors
-			writeBehaviors(file, camera);
+                }
+                break;
 
-			closeNode(file, "Camera", 2);
-			M_fprintf(file, "\n");
-		}
+            case M_OBJECT3D_CAMERA: {
 
-		// sound
-		unsigned int s;
-		unsigned int sSize = scene->getSoundsNumber();
-		for(s=0; s<sSize; s++)
-		{
-			MOSound * sound = scene->getSoundByIndex(s);
+                MOCamera * camera = static_cast<MOCamera*>(object);
 
-			openAttributeNode(file, "Sound", 2);
+                openAttributeNode(file, "Camera", 2);
+                writeString(file, "name", camera->getName());
+                M_fprintf(file, ">\n");
 
-			// name
-			writeString(file, "name", sound->getName());
+                // transform
+                writeObjectTransform(file, camera);
 
-			// file
-			const char * soundFile = NULL;
+                // properties
+                writeCameraProperties(file, camera);
 
-			// sound ref
-			MSoundRef * ref = sound->getSoundRef();
-			if(ref)
-				soundFile = ref->getFilename();
+                // behaviors
+                writeBehaviors(file, camera);
 
-			if(soundFile)
-			{
-				getLocalFilename(localFile, rep, soundFile);
-				M_fprintf(file, " ");
-				writeString(file, "file", localFile);
-			}
+                closeNode(file, "Camera", 2);
+                M_fprintf(file, "\n");
 
-			M_fprintf(file, ">\n");
+                }
+                break;
 
-			// transform
-			writeObjectTransform(file, sound);
+            case M_OBJECT3D_ENTITY: {
 
-			// properties
-			writeSoundProperties(file, sound);
+                MOEntity * entity = static_cast<MOEntity*>(object);
 
-			// behaviors
-			writeBehaviors(file, sound);
+                openAttributeNode(file, "Entity", 2);
 
-			closeNode(file, "Sound", 2);
-			M_fprintf(file, "\n");
-		}
+                // name
+                writeString(file, "name", entity->getName());
 
-		// entities
-		unsigned int e;
-		unsigned int eSize = scene->getEntitiesNumber();
-		for(e=0; e<eSize; e++)
-		{
-			MOEntity * entity = scene->getEntityByIndex(e);
+                // file
+                MMeshRef * ref = entity->getMeshRef();
+                if(ref)
+                {
+                    const char * meshFile = ref->getFilename();
+                    if(meshFile)
+                    {
+                        getLocalFilename(localFile, rep, meshFile);
+                        M_fprintf(file, " ");
+                        writeString(file, "file", localFile);
+                    }
+                }
 
-			openAttributeNode(file, "Entity", 2);
+                M_fprintf(file, ">\n");
 
-			// name
-			writeString(file, "name", entity->getName());
+                // bounding box
+                openAttributeNode(file, "BoundingBox", 3);
+                writeFloatValues(file, "min", entity->getBoundingBox()->min, 3);
+                M_fprintf(file, " ");
+                writeFloatValues(file, "max", entity->getBoundingBox()->max, 3);
+                closeAttributeNode(file);
+                M_fprintf(file, "\n");
 
-			// file
-			MMeshRef * ref = entity->getMeshRef();
-			if(ref)
-			{
-				const char * meshFile = ref->getFilename();
-				if(meshFile)
-				{
-					getLocalFilename(localFile, rep, meshFile);
-					M_fprintf(file, " ");
-					writeString(file, "file", localFile);
-				}
-			}
+                // anim
+                openAttributeNode(file, "anim", 3);
+                writeInt(file, "id", (int)entity->getAnimationId());
+                closeAttributeNode(file);
+                M_fprintf(file, "\n");
 
-			M_fprintf(file, ">\n");
+                // transform
+                writeObjectTransform(file, entity);
 
-			// bounding box
-			openAttributeNode(file, "BoundingBox", 3);
-			writeFloatValues(file, "min", entity->getBoundingBox()->min, 3);
-			M_fprintf(file, " ");
-			writeFloatValues(file, "max", entity->getBoundingBox()->max, 3);
-			closeAttributeNode(file);
-			M_fprintf(file, "\n");
+                // properties
+                writeEntityProperties(file, entity);
 
-			// anim
-			openAttributeNode(file, "anim", 3);
-			writeInt(file, "id", (int)entity->getAnimationId());
-			closeAttributeNode(file);
-			M_fprintf(file, "\n");
+                // physics
+                MPhysicsProperties * physicsProperties = entity->getPhysicsProperties();
+                if(physicsProperties)
+                    writePhysics(file, physicsProperties);
 
-			// transform
-			writeObjectTransform(file, entity);
+                // behaviors
+                writeBehaviors(file, entity);
 
-			// properties
-			writeEntityProperties(file, entity);
+                closeNode(file, "Entity", 2);
+                M_fprintf(file, "\n");
+            }
+            break;
 
-			// physics
-			MPhysicsProperties * physicsProperties = entity->getPhysicsProperties();
-			if(physicsProperties)
-				writePhysics(file, physicsProperties);
+            case M_OBJECT3D_SOUND: {
+                    MOSound * sound = static_cast<MOSound*>(object);
 
-			// behaviors
-			writeBehaviors(file, entity);
+                    openAttributeNode(file, "Sound", 2);
 
-			closeNode(file, "Entity", 2);
-			M_fprintf(file, "\n");
-		}
+                    // name
+                    writeString(file, "name", sound->getName());
 
-		// text
-		unsigned int t;
-		unsigned int tSize = scene->getTextsNumber();
-		for(t=0; t<tSize; t++)
-		{
-			MOText * text = scene->getTextByIndex(t);
+                    // file
+                    const char * soundFile = NULL;
 
-			openAttributeNode(file, "Text", 2);
+                    // sound ref
+                    MSoundRef * ref = sound->getSoundRef();
+                    if(ref)
+                        soundFile = ref->getFilename();
 
-			// name
-			writeString(file, "name", text->getName());
+                    if(soundFile)
+                    {
+                        getLocalFilename(localFile, rep, soundFile);
+                        M_fprintf(file, " ");
+                        writeString(file, "file", localFile);
+                    }
 
-			// font
-			MFont * font = text->getFont();
-			if(font)
-			{
-				MFontRef * ref = text->getFontRef();
-				const char * fontFile = ref->getFilename();
-				if(fontFile)
-				{
-					getLocalFilename(localFile, rep, fontFile);
-					M_fprintf(file, " ");
-					writeString(file, "file", localFile);
-				}
-			}
+                    M_fprintf(file, ">\n");
 
-			M_fprintf(file, ">\n");
+                    // transform
+                    writeObjectTransform(file, sound);
 
-			// transform
-			writeObjectTransform(file, text);
+                    // properties
+                    writeSoundProperties(file, sound);
 
-			// properties
-			writeTextProperties(file, text);
+                    // behaviors
+                    writeBehaviors(file, sound);
 
-			// behaviors
-			writeBehaviors(file, text);
+                    closeNode(file, "Sound", 2);
+                    M_fprintf(file, "\n");
+                }
+                break;
 
-			closeNode(file, "Text", 2);
-			M_fprintf(file, "\n");
-		}
+            case M_OBJECT3D_TEXT: {
+                    MOText * text = static_cast<MOText*>(object);
+
+                    openAttributeNode(file, "Text", 2);
+
+                    // name
+                    writeString(file, "name", text->getName());
+
+                    // font
+                    MFont * font = text->getFont();
+                    if(font)
+                    {
+                        MFontRef * ref = text->getFontRef();
+                        const char * fontFile = ref->getFilename();
+                        if(fontFile)
+                        {
+                            getLocalFilename(localFile, rep, fontFile);
+                            M_fprintf(file, " ");
+                            writeString(file, "file", localFile);
+                        }
+                    }
+
+                    M_fprintf(file, ">\n");
+
+                    // transform
+                    writeObjectTransform(file, text);
+
+                    // properties
+                    writeTextProperties(file, text);
+
+                    // behaviors
+                    writeBehaviors(file, text);
+
+                    closeNode(file, "Text", 2);
+                    M_fprintf(file, "\n");
+                }
+                break;
+          }
+        }
 
 		M_fprintf(file, "\n");
 		closeNode(file, "Scene", 1);
 		M_fprintf(file, "\n");
 	}
-
 
 	M_fprintf(file, "\n");
 	closeNode(file, "Level", 0);

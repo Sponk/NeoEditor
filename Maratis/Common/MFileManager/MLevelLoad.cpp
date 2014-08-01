@@ -816,6 +816,26 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 			readBehaviors(textNode, text);
 		}
 
+        // entity
+        TiXmlElement * groupNode = sceneNode->FirstChildElement("Group");
+        for(groupNode; groupNode; groupNode=groupNode->NextSiblingElement("Group"))
+        {
+            // name
+            const char * objectName = groupNode->Attribute("name");
+
+            // create entity
+            MObject3d * object = scene->addNewGroup();
+            object->setName(objectName);
+
+            // active
+            readObjectActive(groupNode, object);
+
+            // transform
+            TiXmlElement * transformNode = groupNode->FirstChildElement("transform");
+            if(transformNode)
+                readObjectTransform(transformNode, object);
+        }
+
 		// links
 		unsigned int l;
 		unsigned int lSize = g_links.size();
@@ -826,9 +846,9 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 			if(parent)
 				link->object->linkTo(parent);
 		}
-	}
+    }
 
-	// add default scene
+    // add default scene
 	if(level->getScenesNumber() == 0)
 		level->addNewScene();
 
