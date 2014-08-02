@@ -826,6 +826,21 @@ void Maratis::addLight(void)
     addSelectedObject(light);
 }
 
+void Maratis::addGroup(void)
+{
+	autoSave();
+	char name[256] = "Group0";
+	getNewObjectName("Group", name);
+
+	MScene* scene = MEngine::getInstance()->getLevel()->getCurrentScene();
+
+	MObject3d* object = scene->addNewGroup();
+	object->setName(name);
+
+	clearSelectedObjects();
+	addSelectedObject(object);
+}
+
 void Maratis::okAddEntity(const char * filename)
 {
     if(filename)

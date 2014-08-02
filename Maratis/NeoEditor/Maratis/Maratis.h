@@ -241,6 +241,7 @@ public:
 	void addLight(void);
 	void addSound(void);
 	void addText(void);
+	void addGroup(void);
 
 	// project load/save
 	void newProject(void);

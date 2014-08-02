@@ -1787,3 +1787,11 @@ void update_player_callback(Fl_Menu_*, void*)
     chmod(dir, S_IRWXU);
 #endif
 }
+
+void add_group_callback(Fl_Menu_*, void*)
+{
+	Maratis::getInstance()->addGroup();
+
+	update_scene_tree();
+	window.glbox->redraw();
+}

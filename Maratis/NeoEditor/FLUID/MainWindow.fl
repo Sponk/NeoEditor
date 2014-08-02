@@ -20,7 +20,7 @@ class EditorWindow {open
   } {
     Fl_Window {} {
       label Neo open
-      xywh {360 239 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
+      xywh {547 251 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -185,9 +185,14 @@ class EditorWindow {open
             callback add_scene_callback
             xywh {0 0 100 20}
           }
+          MenuItem {} {
+            label {Add Group}
+            callback add_group_callback selected
+            xywh {0 0 100 20}
+          }
         }
         Submenu {} {
-          label Plugins open selected
+          label Plugins open
           xywh {0 0 100 20}
         } {}
         Submenu {} {
