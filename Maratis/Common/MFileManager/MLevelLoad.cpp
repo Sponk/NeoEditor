@@ -186,9 +186,13 @@ void readSceneProperties(TiXmlElement * node, MScene * scene)
 void readEntityProperties(TiXmlElement * node, MOEntity * entity)
 {
 	// invisible
-	bool invisible;
-	if(readBool(node, "invisible", &invisible))
-		entity->setInvisible(invisible);
+	bool value;
+	if(readBool(node, "invisible", &value))
+		entity->setInvisible(value);
+
+	// shadow
+	if (readBool(node, "shadow", &value))
+		entity->enableShadow(value);
 }
 
 void readSoundProperties(TiXmlElement * node, MOSound * sound)

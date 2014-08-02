@@ -116,6 +116,7 @@ public:
   Fl_Double_Window *object_embedded_window;
   Fl_Output *object_mesh_edit;
   Fl_Check_Button *object_invisible_button;
+  Fl_Check_Button *object_shadow_button;
   Fl_Choice *object_shape_choice;
   static Fl_Menu_Item menu_object_shape_choice[];
   Fl_Check_Button *object_ghost_button;

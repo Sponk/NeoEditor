@@ -368,11 +368,11 @@ Fl_Double_Window* EditorWindow::create_publish_window() {
 }
 
 Fl_Double_Window* EditorWindow::create_object_window() {
-  { object_embedded_window = new Fl_Double_Window(261, 672);
+  { object_embedded_window = new Fl_Double_Window(261, 729);
     object_embedded_window->user_data((void*)(this));
-    { Fl_Scroll* o = new Fl_Scroll(0, 6, 230, 666);
+    { Fl_Scroll* o = new Fl_Scroll(0, 6, 230, 729);
       o->type(2);
-      { Fl_Group* o = new Fl_Group(3, 27, 217, 78, "Settings:");
+      { Fl_Group* o = new Fl_Group(3, 27, 217, 112, "Settings:");
         o->box(FL_ENGRAVED_FRAME);
         o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
         { object_mesh_edit = new Fl_Output(16, 51, 198, 21, "Mesh:");
@@ -386,92 +386,96 @@ Fl_Double_Window* EditorWindow::create_object_window() {
         { Fl_Button* o = new Fl_Button(103, 78, 111, 21, "Edit Materials");
           o->callback((Fl_Callback*)edit_materials_callback);
         } // Fl_Button* o
+        { object_shadow_button = new Fl_Check_Button(15, 106, 111, 24, "Shadow");
+          object_shadow_button->down_box(FL_DOWN_BOX);
+          object_shadow_button->callback((Fl_Callback*)edit_object_chk_btn);
+        } // Fl_Check_Button* object_shadow_button
         o->end();
       } // Fl_Group* o
-      { Fl_Group* o = new Fl_Group(3, 132, 217, 249, "Physics:");
+      { Fl_Group* o = new Fl_Group(3, 166, 217, 249, "Physics:");
         o->box(FL_ENGRAVED_FRAME);
         o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-        { object_shape_choice = new Fl_Choice(16, 189, 195, 27, "Shape:");
+        { object_shape_choice = new Fl_Choice(16, 223, 195, 27, "Shape:");
           object_shape_choice->down_box(FL_BORDER_BOX);
           object_shape_choice->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           object_shape_choice->menu(menu_object_shape_choice);
         } // Fl_Choice* object_shape_choice
-        { object_ghost_button = new Fl_Check_Button(16, 222, 78, 21, "Ghost");
+        { object_ghost_button = new Fl_Check_Button(16, 256, 78, 21, "Ghost");
           object_ghost_button->down_box(FL_DOWN_BOX);
           object_ghost_button->callback((Fl_Callback*)edit_object_chk_btn);
         } // Fl_Check_Button* object_ghost_button
-        { object_mass_edit = new Fl_Value_Input(16, 261, 195, 21, "Mass:");
+        { object_mass_edit = new Fl_Value_Input(16, 295, 195, 21, "Mass:");
           object_mass_edit->callback((Fl_Callback*)edit_object_properties);
           object_mass_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
         } // Fl_Value_Input* object_mass_edit
-        { object_fric_edit = new Fl_Value_Input(16, 306, 195, 21, "Friction:");
+        { object_fric_edit = new Fl_Value_Input(16, 340, 195, 21, "Friction:");
           object_fric_edit->callback((Fl_Callback*)edit_object_properties);
           object_fric_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
         } // Fl_Value_Input* object_fric_edit
-        { object_rest_edit = new Fl_Value_Input(16, 351, 195, 21, "Restitution:");
+        { object_rest_edit = new Fl_Value_Input(16, 385, 195, 21, "Restitution:");
           object_rest_edit->callback((Fl_Callback*)edit_object_properties);
           object_rest_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
         } // Fl_Value_Input* object_rest_edit
-        { object_physics_button = new Fl_Check_Button(16, 147, 204, 21, "Physics");
+        { object_physics_button = new Fl_Check_Button(16, 181, 204, 21, "Physics");
           object_physics_button->down_box(FL_DOWN_BOX);
           object_physics_button->callback((Fl_Callback*)edit_object_chk_btn);
         } // Fl_Check_Button* object_physics_button
         o->end();
       } // Fl_Group* o
-      { Fl_Group* o = new Fl_Group(4, 634, 216, 32, "Pivot:");
+      { Fl_Group* o = new Fl_Group(4, 668, 216, 32, "Pivot:");
         o->box(FL_ENGRAVED_FRAME);
         o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-        { xpivot_edit = new Fl_Value_Input(25, 639, 51, 21, "X:");
+        { xpivot_edit = new Fl_Value_Input(25, 673, 51, 21, "X:");
           xpivot_edit->maximum(1000);
           xpivot_edit->step(1);
           xpivot_edit->callback((Fl_Callback*)edit_object_properties);
         } // Fl_Value_Input* xpivot_edit
-        { ypivot_edit = new Fl_Value_Input(94, 639, 51, 21, "Y:");
+        { ypivot_edit = new Fl_Value_Input(94, 673, 51, 21, "Y:");
           ypivot_edit->maximum(1000);
           ypivot_edit->step(1);
           ypivot_edit->callback((Fl_Callback*)edit_object_properties);
         } // Fl_Value_Input* ypivot_edit
-        { zpivot_edit = new Fl_Value_Input(163, 638, 51, 21, "Z:");
+        { zpivot_edit = new Fl_Value_Input(163, 672, 51, 21, "Z:");
           zpivot_edit->maximum(1000);
           zpivot_edit->step(1);
           zpivot_edit->callback((Fl_Callback*)edit_object_properties);
         } // Fl_Value_Input* zpivot_edit
         o->end();
       } // Fl_Group* o
-      { Fl_Group* o = new Fl_Group(4, 406, 216, 95, "Damping:");
+      { Fl_Group* o = new Fl_Group(4, 440, 216, 95, "Damping:");
         o->box(FL_ENGRAVED_FRAME);
         o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-        { object_linear_damping_edit = new Fl_Value_Input(16, 429, 195, 21, "Linear:");
+        { object_linear_damping_edit = new Fl_Value_Input(16, 463, 195, 21, "Linear:");
           object_linear_damping_edit->callback((Fl_Callback*)edit_object_properties);
           object_linear_damping_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
         } // Fl_Value_Input* object_linear_damping_edit
-        { object_angular_damping_edit = new Fl_Value_Input(16, 471, 195, 21, "Angular:");
+        { object_angular_damping_edit = new Fl_Value_Input(16, 505, 195, 21, "Angular:");
           object_angular_damping_edit->callback((Fl_Callback*)edit_object_properties);
           object_angular_damping_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
         } // Fl_Value_Input* object_angular_damping_edit
         o->end();
       } // Fl_Group* o
-      { Fl_Group* o = new Fl_Group(4, 526, 216, 32, "Linear Factor:");
+      { Fl_Group* o = new Fl_Group(4, 560, 216, 32, "Linear Factor:");
         o->box(FL_ENGRAVED_FRAME);
         o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-        { xlinear_edit = new Fl_Value_Input(25, 531, 51, 21, "X:");
+        { xlinear_edit = new Fl_Value_Input(25, 565, 51, 21, "X:");
           xlinear_edit->maximum(1000);
           xlinear_edit->step(1);
           xlinear_edit->callback((Fl_Callback*)edit_object_properties);
         } // Fl_Value_Input* xlinear_edit
-        { ylinear_edit = new Fl_Value_Input(94, 531, 51, 21, "Y:");
+        { ylinear_edit = new Fl_Value_Input(94, 565, 51, 21, "Y:");
           ylinear_edit->maximum(1000);
           ylinear_edit->step(1);
           ylinear_edit->callback((Fl_Callback*)edit_object_properties);
         } // Fl_Value_Input* ylinear_edit
-        { zlinear_edit = new Fl_Value_Input(163, 530, 51, 21, "Z:");
+        { zlinear_edit = new Fl_Value_Input(163, 564, 51, 21, "Z:");
           zlinear_edit->maximum(1000);
           zlinear_edit->step(1);
           zlinear_edit->callback((Fl_Callback*)edit_object_properties);
         } // Fl_Value_Input* zlinear_edit
         o->end();
       } // Fl_Group* o
-      { object_angular_factor_edit = new Fl_Value_Input(4, 582, 216, 21, "Angular Facto:");
+      { object_angular_factor_edit = new Fl_Value_Input(4, 616, 216, 21, "Angular Facto:");
         object_angular_factor_edit->callback((Fl_Callback*)edit_object_properties);
         object_angular_factor_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* object_angular_factor_edit

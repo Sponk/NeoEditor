@@ -700,6 +700,7 @@ void scene_tree_callback(Fl_Tree* tree, void*)
         if(update_name)
         {
             window.object_invisible_button->value(!entity->isVisible());
+			window.object_shadow_button->value(entity->hasShadow());
         }
 
         MPhysicsProperties* phys = entity->getPhysicsProperties();
@@ -1070,7 +1071,7 @@ void edit_light_properties(Fl_Value_Input *, void *)
     light->setShadowBias(window.light_shadow_bias_edit->value());
     light->setShadowBlur(window.light_shadow_blur_edit->value());
     light->setShadowQuality(window.light_shadow_quality_edit->value());
-
+	
     window.glbox->redraw();
     window.special_tab->redraw();
 }
@@ -1210,6 +1211,7 @@ void edit_object_chk_btn(Fl_Check_Button*, void*)
         return;
 
     entity->setInvisible(window.object_invisible_button->value());
+	entity->enableShadow(window.object_shadow_button->value());
 
     MPhysicsProperties* phys = entity->getPhysicsProperties();
 

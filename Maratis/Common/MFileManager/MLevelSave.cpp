@@ -209,6 +209,10 @@ void writeEntityProperties(MFile * file, MOEntity * entity)
 	M_fprintf(file, "\t\t\t\t");
 	writeBool(file, "invisible", entity->isInvisible());
 
+	// shadow
+	M_fprintf(file, "\t\t\t\t");
+	writeBool(file, "shadow", entity->hasShadow());
+
 	closeAttributeNode(file);
 	M_fprintf(file, "\n");
 }
