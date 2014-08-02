@@ -182,6 +182,7 @@ void open_project_callback(Fl_Menu_*, void*)
         current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
 #endif
         Maratis::getInstance()->loadProject(filename);
+		MWindow::getInstance()->setCurrentDirectory(current_project.path.c_str());
 
         current_project.level = Maratis::getInstance()->getCurrentLevel();
         MLOG_INFO("Loaded level " << current_project.level);

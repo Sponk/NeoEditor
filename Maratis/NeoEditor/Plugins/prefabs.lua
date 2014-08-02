@@ -66,11 +66,7 @@ function currentdir()
     end
 end
 
-if getos() == "Windows" then
-    sep = "\\"
-else
-    sep = "/"
-end
+sep = "/"
 
 -- From penlib
 function relpath(P,start)

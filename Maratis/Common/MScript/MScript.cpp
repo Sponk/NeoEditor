@@ -30,6 +30,7 @@
 
 #include "MScript.h"
 #include "MSchedule/MSchedule.h"
+#include <MWindow.h>
 #include <MLog.h>
 
 static char g_currentDirectory[256] = "";
@@ -494,7 +495,7 @@ int loadMesh(lua_State * L)
     MLevel* level = MEngine::getInstance()->getLevel();
 
     char string[256];
-    getGlobalFilename(string, MEngine::getInstance()->getSystemContext()->getWorkingDirectory(), path);
+    getGlobalFilename(string, MWindow::getInstance()->getWorkingDirectory(), path);
 
     meshRef = level->loadMesh(string, true);
 

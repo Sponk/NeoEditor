@@ -111,6 +111,12 @@ void update_editor(void*)
         }
     }
 
+	MScene* scene = MEngine::getInstance()->getLevel()->getCurrentScene();
+	for (int i = 0; i < scene->getObjectsNumber(); i++)
+	{
+		scene->getObjectByIndex(i)->updateMatrix();
+	}
+
     Fl::add_timeout(0.01, update_editor);
 }
 
@@ -120,7 +126,7 @@ void GLBox::draw()
     if(!maratis_init)
     {
         MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
-        MLOG_INFO("Render version : " << render->getRendererVersion());
+//        MLOG_INFO("Render version : " << render->getRendererVersion());
 
         render->setTextureFilterMode(M_TEX_FILTER_NEAREST, M_TEX_FILTER_NEAREST_MIPMAP_NEAREST);
         render->setClearColor(MVector4(0.18, 0.32, 0.45, 1));
