@@ -4,6 +4,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Value_Input.H>
 #include <FL/Fl_Native_File_Chooser.H>
+#include <FL/fl_message.H>
 #include <string>
 
 // Maratis includes (for MainWindow.cxx)

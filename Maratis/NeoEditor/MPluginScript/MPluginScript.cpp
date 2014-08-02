@@ -160,11 +160,11 @@ void MPluginScript::callFunction(const char* name)
 bool MPluginScript::startCallFunction(const char *name)
 {
     MEngine::getInstance()->setScriptContext(this);
-    MScript::startCallFunction(name);
+    return MScript::startCallFunction(name);
 }
 
 bool MPluginScript::endCallFunction(int numArgs)
 {
     MEngine::getInstance()->setScriptContext(this);
-    MScript::endCallFunction(numArgs);
+    return MScript::endCallFunction(numArgs);
 }
