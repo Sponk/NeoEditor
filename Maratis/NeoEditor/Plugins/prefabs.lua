@@ -211,7 +211,7 @@ function str2vec(str)
     return split(str, " ")
 end
 
-function addEntity(entity)
+function addEntity(entity, group)
     local object = loadMesh(entity["@file"])
     
     setPosition(object, str2vec(entity.transform["@position"]))
@@ -220,9 +220,9 @@ function addEntity(entity)
     
     updateMatrix(object)
     
-    --if entity["@parent"] == nil then
-      --  setParent(object, group)
-    --end
+    if entity["@parent"] == nil then
+        setParent(object, group)
+    end
     
     print("Loaded: " .. getName(object))
 end
@@ -239,17 +239,17 @@ function load_callback()
     f:close()
 
     local objects = xml:ParseXmlText(content)
-    --local group = createGroup()
+    local group = createGroup()
     
     --print(getName(group))
     
     if objects.prefab.Entity ~= nil then
         if #objects.prefab.Entity > 0 then  
             for i = 1, #objects.prefab.Entity, 1 do
-                addEntity(objects.prefab.Entity[i])
+                addEntity(objects.prefab.Entity[i], group)
             end
         else
-            addEntity(objects.prefab.Entity)
+            addEntity(objects.prefab.Entity, group)
         end
     end
     
