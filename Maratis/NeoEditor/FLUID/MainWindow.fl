@@ -14,12 +14,13 @@ decl {\#include <FL/Fl_Color_Chooser.H>} {private local
 decl {\#include <MFileManager/MMeshSave.h>} {private local
 } 
 
-class EditorWindow {} {
+class EditorWindow {open
+} {
   Function {show_window()} {open
   } {
     Fl_Window {} {
       label Neo open
-      xywh {360 239 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
+      xywh {360 239 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -185,6 +186,10 @@ class EditorWindow {} {
             xywh {0 0 100 20}
           }
         }
+        Submenu {} {
+          label Plugins open selected
+          xywh {0 0 100 20}
+        } {}
         Submenu {} {
           label Help open
           xywh {0 0 100 20}
@@ -1289,7 +1294,7 @@ class PublishDlg {open
   } {
     Fl_Window {} {
       label Publish open
-      xywh {543 330 510 132} type Double modal visible
+      xywh {543 330 510 132} type Double hide modal
     } {
       Fl_Button {} {
         label Publish
@@ -1345,8 +1350,7 @@ fl_message("Project was successfully published!");
 
 maratis->loadLevel(oldLevel.c_str());
 dlg->window->hide();
-delete dlg;} {selected
-    }
+delete dlg;} {}
   }
   Function {cancel_click(Fl_Button*, PublishDlg* dlg)} {open return_type {static void}
   } {
