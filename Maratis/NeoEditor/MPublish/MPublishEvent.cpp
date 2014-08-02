@@ -327,6 +327,13 @@ static void embedProject(const char * src, const char * dest, const char * game,
 	}
 
 	fp = fopen(dest, "wb");
+
+	if (!fp)
+	{
+		MLOG_ERROR("Could not write player executable!");
+		return;
+	}
+
 	fwrite(buff, sizeof(char), size, fp);
 	fclose(fp);
 }
