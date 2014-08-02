@@ -26,173 +26,173 @@ class EditorWindow {} {
       } {
         Submenu {} {
           label File open
-          xywh {0 0 100 20} labelsize 14
+          xywh {0 0 100 20}
         } {
           Submenu {} {
             label New open
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           } {
             MenuItem {} {
               label Project
               callback new_project_callback
-              xywh {0 0 100 20} shortcut 0x5006e labelsize 14
+              xywh {0 0 100 20} shortcut 0x5006e
             }
             MenuItem {} {
               label Level
               callback new_level_callback
-              xywh {0 0 100 20} shortcut 0x4006e labelsize 14
+              xywh {0 0 100 20} shortcut 0x4006e
             }
           }
           Submenu {} {
             label Open open
-            xywh {0 0 100 20} labelsize 14 divider
+            xywh {0 0 100 20} divider
           } {
             MenuItem {} {
               label Project
               callback open_project_callback
-              xywh {0 0 100 20} shortcut 0x5006f labelsize 14
+              xywh {0 0 100 20} shortcut 0x5006f
             }
             MenuItem {} {
               label Level
               callback open_level_callback
-              xywh {0 0 100 20} shortcut 0x4006f labelsize 14
+              xywh {0 0 100 20} shortcut 0x4006f
             }
           }
           MenuItem {} {
             label {Import Mesh}
             callback import_mesh_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
           MenuItem {} {
             label {Save level}
             user_data 0 user_data_type long
             callback save_level_callback
-            xywh {0 0 100 20} shortcut 0x40073 labelsize 14
+            xywh {0 0 100 20} shortcut 0x40073
           }
           MenuItem {} {
             label {Save level as...}
             user_data 1 user_data_type long
             callback save_level_callback
-            xywh {0 0 100 20} shortcut 0x50073 labelsize 14 divider
+            xywh {0 0 100 20} shortcut 0x50073 divider
           }
           MenuItem {} {
             label Quit
             callback quit_callback
-            xywh {0 0 100 20} shortcut 0x40071 labelsize 14
+            xywh {0 0 100 20} shortcut 0x40071
           }
         }
         Submenu {} {
           label Edit open
-          xywh {0 0 100 20} labelsize 14
+          xywh {0 0 100 20}
         } {
           MenuItem {} {
             label Undo
             callback undo_callback
-            xywh {0 0 100 20} shortcut 0x4007a labelsize 14
+            xywh {0 0 100 20} shortcut 0x4007a
           }
           MenuItem {} {
             label Redo
             callback redo_callback
-            xywh {0 0 100 20} shortcut 0x5007a labelsize 14 divider
+            xywh {0 0 100 20} shortcut 0x5007a divider
           }
           MenuItem {} {
             label {Select all}
             callback select_all_callback
-            xywh {0 0 100 20} shortcut 0x40061 labelsize 14 divider
+            xywh {0 0 100 20} shortcut 0x40061 divider
           }
           MenuItem {} {
             label {Duplicate object}
             callback duplicate_object_callback
-            xywh {0 0 100 20} shortcut 0x40064 labelsize 14
+            xywh {0 0 100 20} shortcut 0x40064
           }
           MenuItem {} {
             label {Delete object}
             callback delete_object_callback
-            xywh {0 0 100 20} shortcut 0xffff labelsize 14 divider
+            xywh {0 0 100 20} shortcut 0xffff divider
           }
           MenuItem {} {
             label {Scene setup}
             callback scene_setup_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
           MenuItem {} {
             label {Delete current scene}
             callback delete_scene_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
         }
         Submenu {} {
           label Project open
-          xywh {0 0 100 20} labelsize 14
+          xywh {0 0 100 20}
         } {
           MenuItem {} {
             label {Run Game}
             callback play_game_callback
-            xywh {0 0 100 20} shortcut 0xffc2 labelsize 14 divider
+            xywh {0 0 100 20} shortcut 0xffc2 divider
           }
           MenuItem {} {
             label {Update player}
             callback update_player_callback
-            tooltip {Copies the player from the editor directory to the project directory.} xywh {0 0 100 20} labelsize 14
+            tooltip {Copies the player from the editor directory to the project directory.} xywh {0 0 100 20}
           }
           MenuItem {} {
             label Publish
             callback publish_callback
-            xywh {0 0 100 20} shortcut 0x40070 labelsize 14
+            xywh {0 0 100 20} shortcut 0x40070
           }
         }
         Submenu {} {
           label Add open
-          xywh {0 0 100 20} labelsize 14
+          xywh {0 0 100 20}
         } {
           Submenu {} {
             label {Add Object} open
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           } {
             MenuItem {} {
               label {Add Mesh}
               callback add_mesh_callback
-              xywh {0 0 100 20} shortcut 0x4006d labelsize 14
+              xywh {0 0 100 20} shortcut 0x4006d
             }
             MenuItem {} {
               label {Add Light}
               callback add_light_callback
-              xywh {0 0 100 20} shortcut 0x4006c labelsize 14
+              xywh {0 0 100 20} shortcut 0x4006c
             }
             MenuItem {} {
               label {Add Text}
               callback add_text_callback
-              xywh {0 0 100 20} shortcut 0x40074 labelsize 14
+              xywh {0 0 100 20} shortcut 0x40074
             }
             MenuItem {} {
               label {Add Camera}
               callback add_camera_callback
-              xywh {0 0 100 20} shortcut 0x40063 labelsize 14
+              xywh {0 0 100 20} shortcut 0x40063
             }
             MenuItem {} {
               label {Add Sound}
               callback add_sound_callback
-              xywh {0 0 100 20} labelsize 14
+              xywh {0 0 100 20}
             }
           }
           Submenu behavior_menu {
             label {Add Behavior} open
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           } {}
           MenuItem {} {
             label {Add Scene}
             callback add_scene_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
         }
         Submenu {} {
           label Help open
-          xywh {0 0 100 20} labelsize 14
+          xywh {0 0 100 20}
         } {
           MenuItem {} {
             label About
             callback about_menu_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
         }
       }
@@ -377,7 +377,7 @@ class EditorWindow {} {
         Fl_Value_Input light_radius_edit {
           label {Radius:}
           callback edit_light_properties
-          xywh {18 51 165 21} align 5 maximum 1e+07 step 2
+          xywh {18 51 165 21} align 5 maximum 1e+007 step 2
         }
         Fl_Value_Input light_color_r {
           label {Red:}
@@ -505,43 +505,43 @@ class EditorWindow {} {
               label Box
               user_data 0 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20} labelsize 14
+              xywh {3 3 100 20}
             }
             MenuItem {} {
               label Sphere
               user_data 1 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20} labelsize 14
+              xywh {3 3 100 20}
             }
             MenuItem {} {
               label Cone
               user_data 2 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20} labelsize 14
+              xywh {3 3 100 20}
             }
             MenuItem {} {
               label Capsule
               user_data 3 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20} labelsize 14
+              xywh {3 3 100 20}
             }
             MenuItem {} {
               label Cylinder
               user_data 4 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20} labelsize 14
+              xywh {3 3 100 20}
             }
             MenuItem {} {
               label {Convex-hull}
               user_data 5 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20} labelsize 14
+              xywh {3 3 100 20}
             }
             MenuItem {} {
               label {Triangle-mesh}
               user_data 6 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20} labelsize 14
+              xywh {3 3 100 20}
             }
           }
           Fl_Check_Button object_ghost_button {
@@ -735,19 +735,19 @@ class EditorWindow {} {
             label Left
             user_data 0 user_data_type long
             callback text_alignment_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
           MenuItem {} {
             label Right
             user_data 1 user_data_type long
             callback text_alignment_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
           MenuItem {} {
             label Center
             user_data 2 user_data_type long
             callback text_alignment_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
         }
       }
@@ -1288,20 +1288,20 @@ class PublishDlg {open
   Function {create_window()} {open
   } {
     Fl_Window {} {
-      label Publish open selected
-      xywh {1958 350 510 96} type Double modal visible
+      label Publish open
+      xywh {543 330 510 132} type Double modal visible
     } {
       Fl_Button {} {
         label Publish
         user_data this user_data_type {PublishDlg*}
         callback publish_click
-        xywh {378 54 90 27}
+        xywh {378 88 90 27}
       }
       Fl_Button {} {
         label Cancel
         user_data this user_data_type {PublishDlg*}
         callback cancel_click
-        xywh {129 54 96 27}
+        xywh {129 88 96 27}
       }
       Fl_Input output_edit {
         label {Output directory:}
@@ -1316,19 +1316,37 @@ class PublishDlg {open
         callback find_output_dir
         xywh {471 18 26 24}
       }
+      Fl_Input level_edit {
+        label {Default level:}
+        xywh {130 51 339 24}
+        code2 {level_edit->value(Maratis::getInstance()->getCurrentLevel());}
+      }
+      Fl_Button {} {
+        label {...}
+        user_data this user_data_type {PublishDlg*}
+        callback find_main_level
+        xywh {472 51 26 24}
+      }
     }
     code {window = w;} {}
   }
   Function {publish_click(Fl_Button*, PublishDlg* dlg)} {open return_type {static void}
   } {
-    code {setPubDir(dlg->output_edit->value());
-Maratis::getInstance()->publish();
+    code {Maratis* maratis = Maratis::getInstance();
+
+setPubDir(dlg->output_edit->value());
+std::string oldLevel = maratis->getCurrentLevel();
+
+maratis->loadLevel(dlg->level_edit->value());
+maratis->publish();
 
 // TODO: Error checking!
 fl_message("Project was successfully published!");
 
+maratis->loadLevel(oldLevel.c_str());
 dlg->window->hide();
-delete dlg;} {}
+delete dlg;} {selected
+    }
   }
   Function {cancel_click(Fl_Button*, PublishDlg* dlg)} {open return_type {static void}
   } {
@@ -1343,5 +1361,14 @@ if(filename == NULL)
 	return;
 
 dlg->output_edit->value(filename);} {}
+  }
+  Function {find_main_level(Fl_Button*, PublishDlg* dlg)} {open return_type {static void}
+  } {
+    code {const char* filename = fl_native_file_chooser("Choose output", NULL, dlg->output_edit->value(), Fl_Native_File_Chooser::BROWSE_FILE);
+
+if(filename == NULL)
+	return;
+
+dlg->level_edit->value(filename);} {}
   }
 } 

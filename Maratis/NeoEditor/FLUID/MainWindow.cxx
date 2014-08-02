@@ -258,7 +258,7 @@ Fl_Double_Window* EditorWindow::create_light_window() {
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       { light_radius_edit = new Fl_Value_Input(18, 51, 165, 21, "Radius:");
-        light_radius_edit->maximum(1e+07);
+        light_radius_edit->maximum(1e+007);
         light_radius_edit->step(2);
         light_radius_edit->callback((Fl_Callback*)edit_light_properties);
         light_radius_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
@@ -4028,13 +4028,13 @@ al Public License.");
 
 Fl_Double_Window* PublishDlg::create_window() {
   Fl_Double_Window* w;
-  { Fl_Double_Window* o = new Fl_Double_Window(510, 96, "Publish");
+  { Fl_Double_Window* o = new Fl_Double_Window(510, 132, "Publish");
     w = o;
     o->user_data((void*)(this));
-    { Fl_Button* o = new Fl_Button(378, 54, 90, 27, "Publish");
+    { Fl_Button* o = new Fl_Button(378, 88, 90, 27, "Publish");
       o->callback((Fl_Callback*)publish_click, (void*)(this));
     } // Fl_Button* o
-    { Fl_Button* o = new Fl_Button(129, 54, 96, 27, "Cancel");
+    { Fl_Button* o = new Fl_Button(129, 88, 96, 27, "Cancel");
       o->callback((Fl_Callback*)cancel_click, (void*)(this));
     } // Fl_Button* o
     { output_edit = new Fl_Input(129, 18, 339, 24, "Output directory:");
@@ -4045,6 +4045,12 @@ Fl_Double_Window* PublishDlg::create_window() {
     { Fl_Button* o = new Fl_Button(471, 18, 26, 24, "...");
       o->callback((Fl_Callback*)find_output_dir, (void*)(this));
     } // Fl_Button* o
+    { level_edit = new Fl_Input(130, 51, 339, 24, "Default level:");
+      level_edit->value(Maratis::getInstance()->getCurrentLevel());
+    } // Fl_Input* level_edit
+    { Fl_Button* o = new Fl_Button(472, 51, 26, 24, "...");
+      o->callback((Fl_Callback*)find_main_level, (void*)(this));
+    } // Fl_Button* o
     o->set_modal();
     o->end();
   } // Fl_Double_Window* o
@@ -4053,12 +4059,18 @@ Fl_Double_Window* PublishDlg::create_window() {
 }
 
 void PublishDlg::publish_click(Fl_Button*, PublishDlg* dlg) {
+  Maratis* maratis = Maratis::getInstance();
+  
   setPubDir(dlg->output_edit->value());
-  Maratis::getInstance()->publish();
+  std::string oldLevel = maratis->getCurrentLevel();
+  
+  maratis->loadLevel(dlg->level_edit->value());
+  maratis->publish();
   
   // TODO: Error checking!
   fl_message("Project was successfully published!");
   
+  maratis->loadLevel(oldLevel.c_str());
   dlg->window->hide();
   delete dlg;
 }
@@ -4075,4 +4087,13 @@ void PublishDlg::find_output_dir(Fl_Button*, PublishDlg* dlg) {
   	return;
   
   dlg->output_edit->value(filename);
+}
+
+void PublishDlg::find_main_level(Fl_Button*, PublishDlg* dlg) {
+  const char* filename = fl_native_file_chooser("Choose output", NULL, dlg->output_edit->value(), Fl_Native_File_Chooser::BROWSE_FILE);
+  
+  if(filename == NULL)
+  	return;
+  
+  dlg->level_edit->value(filename);
 }

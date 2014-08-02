@@ -231,8 +231,10 @@ class PublishDlg {
 public:
   Fl_Double_Window* create_window();
   Fl_Input *output_edit;
+  Fl_Input *level_edit;
   static void publish_click(Fl_Button*, PublishDlg* dlg);
   static void cancel_click(Fl_Button*, PublishDlg* dlg);
   static void find_output_dir(Fl_Button*, PublishDlg* dlg);
+  static void find_main_level(Fl_Button*, PublishDlg* dlg);
 };
 #endif
