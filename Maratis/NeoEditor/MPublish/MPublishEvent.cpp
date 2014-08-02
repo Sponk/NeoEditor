@@ -288,8 +288,11 @@ static void embedProject(const char * src, const char * dest, const char * game,
 {
 	FILE* fp = 0;
 	fp = fopen(src, "rb");
-	if(! fp)
+	if (!fp)
+	{
+		MLOG_ERROR("Could not embed static data into the player!");
 		return;
+	}
 
 	fseek(fp, 0, SEEK_END);
 	size_t size = ftell(fp);
