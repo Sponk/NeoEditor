@@ -1633,6 +1633,47 @@ int changeCurrentCamera(lua_State * L)
 	return 0;
 }
 
+int isGhost(lua_State* L)
+{
+    if(! isFunctionOk(L, "isGhost", 1))
+        return 0;
+
+    GET_OBJECT_SUBCLASS_BEGIN(MOEntity, entity, M_OBJECT3D_ENTITY)
+            MPhysicsProperties* phys = entity->getPhysicsProperties();
+
+            if(!phys)
+            {
+                lua_pushboolean(L, false);
+                return 1;
+            }
+
+            lua_pushboolean(L, phys->isGhost());
+            return 1;
+    GET_OBJECT_SUBCLASS_END()
+
+    return 0;
+}
+
+int enableGhost(lua_State* L)
+{
+    if(! isFunctionOk(L, "enableGhost", 2))
+        return 0;
+
+    GET_OBJECT_SUBCLASS_BEGIN(MOEntity, entity, M_OBJECT3D_ENTITY)
+            MPhysicsProperties* phys = entity->getPhysicsProperties();
+
+            if(!phys)
+            {
+                return 0;
+            }
+
+            phys->setGhost(lua_toboolean(L, 2));
+            return 1;
+    GET_OBJECT_SUBCLASS_END()
+
+    return 0;
+}
+
 int addCentralForce(lua_State * L)
 {
 	int nbArguments = lua_gettop(L);
@@ -4100,6 +4141,8 @@ void MScript::init(void)
     lua_register(m_state, "setConstraintParent", setConstraintParent);
     lua_register(m_state, "getConstraintParent", getConstraintParent);
     lua_register(m_state, "enableParentCollision", enableParentCollision);
+    lua_register(m_state, "isGhost", isGhost);
+    lua_register(m_state, "enableGhost", enableGhost);
 	
 	// input
 	lua_register(m_state, "isKeyPressed", isKeyPressed);

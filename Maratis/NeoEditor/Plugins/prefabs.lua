@@ -126,7 +126,8 @@ function objectToXml(object, path)
     
         output = output .. "<BoundingBox min=\"" .. vec2str(min) .. "\" max=\"" .. vec2str(max) .. "\"/>\n"    
     
-        output = output .. "<ObjectProperties invisible=\"" .. bool2str(not isVisible(object)) .. "\"/>\n"
+        -- Should be not isVisible!
+        output = output .. "<ObjectProperties invisible=\"" .. bool2str(isVisible(object)) .. "\"/>\n"
     
         -- TODO: Test for physics not for mass!
         if getMass(object) ~= nil then
@@ -136,7 +137,7 @@ function objectToXml(object, path)
             output = output .. "\tshape=\"Box\"\n"
         
             -- TODO: Is it really a ghost?
-            output = output .. "\tghost=\"false\"\n"
+            output = output .. "\tghost=\"" .. bool2str(isGhost(object)) .. "\"\n"
         
             output = output .. "\tmass=\"" .. getMass(object) .. "\"\n"
             output = output .. "\tfriction=\"" .. getFriction(object) .. "\"\n"
@@ -250,11 +251,20 @@ function addEntity(entity, group)
     updateTransform(entity, object)    
     setInvisible(object, entity.ObjectProperties["@invisible"])   
    
+    local physics = entity.physics
+    if physics ~= nil then
+        setMass(object, physics["@mass"])
+        setFriction(object, physics["@friction"])
+        setLinearDamping(object, physics["@linearDamping"])
+        setAngularDamping(object, physics["@angularDamping"])
+        setAngularFactor(object, physics["@angularFactor"])
+        setLinearFactor(object, str2vec(physics["@linearFactor"]))
+        enableGhost(object, str2bool(physics["@ghost"]))
+    end
+   
     if entity["@parent"] == nil then
         setParent(object, group)
-    end
-    
-    print("Loaded: " .. getName(object))
+    end  
 end
 
 function addLight(light, group)
