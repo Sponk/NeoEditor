@@ -2,7 +2,7 @@ setPluginName("Prefabs")
 setPluginAuthor("Yannick Pflanzer")
 setPluginDescription("A plugin that allow you to load and save your object selection as a prefab.")
 
-addEditorMenu("Load Prefab", "load_callback")
+addEditorMenu("Load Prefab from file", "load_callback")
 addEditorMenu("Save selection as Prefab", "save_callback")
 
 require("plugins.libs.libxml")
