@@ -261,7 +261,7 @@ Fl_Double_Window* EditorWindow::create_light_window() {
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       { light_radius_edit = new Fl_Value_Input(18, 51, 165, 21, "Radius:");
-        light_radius_edit->maximum(1e+007);
+        light_radius_edit->maximum(1e+07);
         light_radius_edit->step(2);
         light_radius_edit->callback((Fl_Callback*)edit_light_properties);
         light_radius_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
@@ -4038,10 +4038,10 @@ Fl_Double_Window* PublishDlg::create_window() {
   { Fl_Double_Window* o = new Fl_Double_Window(510, 132, "Publish");
     w = o;
     o->user_data((void*)(this));
-    { Fl_Button* o = new Fl_Button(378, 88, 90, 27, "Publish");
+    { Fl_Button* o = new Fl_Button(363, 88, 105, 27, "Publish");
       o->callback((Fl_Callback*)publish_click, (void*)(this));
     } // Fl_Button* o
-    { Fl_Button* o = new Fl_Button(129, 88, 96, 27, "Cancel");
+    { Fl_Button* o = new Fl_Button(129, 88, 108, 27, "Cancel");
       o->callback((Fl_Callback*)cancel_click, (void*)(this));
     } // Fl_Button* o
     { output_edit = new Fl_Input(129, 18, 339, 24, "Output directory:");
@@ -4071,7 +4071,11 @@ void PublishDlg::publish_click(Fl_Button*, PublishDlg* dlg) {
   setPubDir(dlg->output_edit->value());
   std::string oldLevel = maratis->getCurrentLevel();
   
+  // TODO: Make more efficient!
+  maratis->save();
   maratis->loadLevel(dlg->level_edit->value());
+  maratis->save();
+  
   maratis->publish();
   
   // TODO: Error checking!
