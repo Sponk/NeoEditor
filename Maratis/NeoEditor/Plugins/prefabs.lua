@@ -115,7 +115,7 @@ end
 function objectToXml(object, path)
 
     local objectType = getObjectType(object)
-    local output = "<" .. objectType .. " name=\"" .. getName(object) .. "\""
+    local output = "\n\n<" .. objectType .. " name=\"" .. getName(object) .. "\""
    
     if objectType == "Entity" then
         output = output .. " file=\"" .. relpath(getMeshFilename(object), path)
@@ -148,6 +148,24 @@ function objectToXml(object, path)
         
             output = output .. "/>\n"
         end
+    elseif objectType == "Light" then
+        output = output .. ">\n"
+        
+        output = output .. "<ObjectProperties\n"
+        output = output .. "\tradius=\"" .. getLightRadius(object) .. "\"\n"
+        output = output .. "\tcolor=\"" .. vec2str(getLightColor(object)) .. "\"\n"
+        output = output .. "\tintensity=\"" .. getLightIntensity(object) .. "\"\n"
+        output = output .. "\tspotAngle=\"" .. getLightSpotAngle(object) .. "\"\n"
+        output = output .. "\tspotExponent=\"" .. getLightSpotExponent(object) .. "\"\n"
+        output = output .. "\tshadow=\"" .. bool2str(isCastingShadow(object)) .. "\"\n"
+    
+        if isCastingShadow(object) then
+            output = output .. "\tshadowBias=\"" .. getLightShadowBias(object) .. "\"\n"
+            output = output .. "\tshadowBlur=\"" .. getLightShadowBlur(object) .. "\"\n"
+            output = output .. "\tshadowQuality=\"" .. getLightShadowQuality(object) .. "\"\n"
+        end
+    
+        output = output .. "/>\n"
     end
     
     -- Position is relative to the selection center
@@ -207,12 +225,25 @@ function str2vec(str)
     return split(str, " ")
 end
 
+function str2bool(str)
+    if string.upper(str) == "TRUE" then return true
+    elseif string.upper() == "FALSE" then return false end
+end
+
 function addEntity(entity, group)
     local object = loadMesh(entity["@file"])
     
     setPosition(object, str2vec(entity.transform["@position"]))
     setScale(object, str2vec(entity.transform["@scale"]))
     setRotation(object, str2vec(entity.transform["@rotation"]))
+    
+    if str2bool(entity.active["@value"]) then
+        activate(object)
+    else
+        deactivate(object)
+    end
+    
+    setInvisible(object, entity.ObjectProperties["@invisible"])
     
     updateMatrix(object)
     

@@ -1303,6 +1303,27 @@ int isVisible(lua_State * L)
 	return 0;
 }
 
+int setInvisible(lua_State * L)
+{
+    if(! isFunctionOk(L, "setInvisible", 2))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_ENTITY)
+        {
+            MOEntity* entity = static_cast<MOEntity*>(object);
+            entity->setInvisible(lua_toboolean(L, 2));
+        }
+        return 1;
+    }
+
+    return 0;
+}
+
 int activate(lua_State * L)
 {
 	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
@@ -3995,6 +4016,7 @@ void MScript::init(void)
 	lua_register(m_state, "setRotation",			setRotation);
 	lua_register(m_state, "setScale",				setScale);
 	lua_register(m_state, "isVisible",				isVisible);
+    lua_register(m_state, "setInvisible",           setInvisible);
 	lua_register(m_state, "activate",				activate);
 	lua_register(m_state, "deactivate",				deactivate);
 	lua_register(m_state, "isActive",				isActive);
