@@ -230,28 +230,54 @@ function str2bool(str)
     elseif string.upper() == "FALSE" then return false end
 end
 
-function addEntity(entity, group)
-    local object = loadMesh(entity["@file"])
+function updateTransform(settings, object)  
+    setPosition(object, str2vec(settings.transform["@position"]))
+    setScale(object, str2vec(settings.transform["@scale"]))
+    setRotation(object, str2vec(settings.transform["@rotation"]))
     
-    setPosition(object, str2vec(entity.transform["@position"]))
-    setScale(object, str2vec(entity.transform["@scale"]))
-    setRotation(object, str2vec(entity.transform["@rotation"]))
-    
-    if str2bool(entity.active["@value"]) then
+    if str2bool(settings.active["@value"]) then
         activate(object)
     else
         deactivate(object)
     end
     
-    setInvisible(object, entity.ObjectProperties["@invisible"])
-    
     updateMatrix(object)
+end
+
+function addEntity(entity, group)
+    local object = loadMesh(entity["@file"])
     
+    updateTransform(entity, object)    
+    setInvisible(object, entity.ObjectProperties["@invisible"])   
+   
     if entity["@parent"] == nil then
         setParent(object, group)
     end
     
     print("Loaded: " .. getName(object))
+end
+
+function addLight(light, group)
+    local object = createLight()
+    updateTransform(light, object)
+    
+    local prop = light.ObjectProperties
+    
+    setLightColor(object, str2vec(prop["@color"]))
+    setLightRadius(object, prop["@radius"])
+    setLightIntensity(object, prop["@intensity"])
+    setLightSpotAngle(object, prop["@spotAngle"])
+    
+    if str2bool(prop["@shadow"]) then
+        enableShadow(object, true)
+        setLightShadowBias(object, prop["@shadowBias"])
+        setLightShadowBlur(object, prop["@shadowBlur"])
+        setLightShadowQuality(object, prop["@shadowQuality"])
+    end
+    
+    if light["@parent"] == nil then
+        setParent(object, group)
+    end
 end
 
 function load_callback()
@@ -270,6 +296,7 @@ function load_callback()
     
     --print(getName(group))
     
+    -- Entities
     if objects.prefab.Entity ~= nil then
         if #objects.prefab.Entity > 0 then  
             for i = 1, #objects.prefab.Entity, 1 do
@@ -277,6 +304,17 @@ function load_callback()
             end
         else
             addEntity(objects.prefab.Entity, group)
+        end
+    end
+    
+    -- Lights
+    if objects.prefab.Light ~= nil then
+        if #objects.prefab.Light > 0 then  
+            for i = 1, #objects.prefab.Light, 1 do
+                addLight(objects.prefab.Light[i], group)
+            end
+        else
+            addLight(objects.prefab.Light, group)
         end
     end
     

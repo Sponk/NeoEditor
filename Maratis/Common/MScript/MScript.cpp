@@ -3122,6 +3122,17 @@ int getlightSpotExponent(lua_State * L)
 	return 0;
 }
 
+int createLight(lua_State* L)
+{
+    MOLight* light = MEngine::getInstance()->getLevel()->getCurrentScene()->addNewLight();
+    char name[256] = "Light0";
+    getNewObjectName("Light", name);
+
+    light->setName(name);
+    lua_pushinteger(L, (lua_Integer) light);
+
+    return 1;
+}
 
 int getSoundGain(lua_State * L)
 {
@@ -4119,6 +4130,7 @@ void MScript::init(void)
 	lua_register(m_state, "loadLevel",				loadLevel);
 
 	// light
+    lua_register(m_state, "createLight",       createLight);
 	lua_register(m_state, "getLightColor",	   getLightColor);
 	lua_register(m_state, "getLightRadius",	   getLightRadius);
 	lua_register(m_state, "getLightIntensity", getLightIntensity);
