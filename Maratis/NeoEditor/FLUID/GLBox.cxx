@@ -41,11 +41,10 @@ void update_editor(void*)
         {
             vue->setFov(vue->getFov() + direction*translation_speed);
         }
-        else
-        {
-            vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
-            vue->updateMatrix();
-        }
+
+
+        vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
+        vue->updateMatrix();
 
         window.glbox->redraw();
     }
@@ -58,11 +57,9 @@ void update_editor(void*)
         {
             vue->setFov(vue->getFov() + direction*translation_speed);
         }
-        else
-        {
-            vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
-            vue->updateMatrix();
-        }
+
+        vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
+        vue->updateMatrix();
 
         window.glbox->redraw();
     }
