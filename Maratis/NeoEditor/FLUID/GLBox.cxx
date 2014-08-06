@@ -134,11 +134,28 @@ void update_editor(void*)
 
 void GLBox::draw()
 {
-    MWindow * mwindow = MWindow::getInstance();
     if(!maratis_init)
     {
         MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
-//        MLOG_INFO("Render version : " << render->getRendererVersion());
+        Maratis* maratis = Maratis::getInstance();
+
+        if(!current_project.file_path.empty())
+        {
+            current_project.changed = false;
+            current_project.path = current_project.file_path;
+
+    #ifndef WIN32
+            current_project.path = current_project.path.erase(current_project.path.find_last_of("/")+1, current_project.path.length());
+    #else
+            current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
+    #endif
+            maratis->loadProject(current_project.file_path.c_str());
+            current_project.level = maratis->getCurrentLevel();
+        }
+
+        update_scene_tree();
+
+        // MLOG_INFO("Render version : " << render->getRendererVersion());
 
         render->setTextureFilterMode(M_TEX_FILTER_NEAREST, M_TEX_FILTER_NEAREST_MIPMAP_NEAREST);
         render->setClearColor(MVector4(0.18, 0.32, 0.45, 1));

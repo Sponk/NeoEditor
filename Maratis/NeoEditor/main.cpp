@@ -120,22 +120,6 @@ int main(int argc, char **argv)
     MEngine * engine = MEngine::getInstance();
     Maratis * maratis = Maratis::getInstance();
 
-    if(!current_project.file_path.empty())
-    {
-        current_project.changed = false;
-        current_project.path = current_project.file_path;
-
-#ifndef WIN32
-        current_project.path = current_project.path.erase(current_project.path.find_last_of("/")+1, current_project.path.length());
-#else
-        current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
-#endif
-        maratis->loadProject(current_project.file_path.c_str());
-        current_project.level = maratis->getCurrentLevel();
-    }
-
-    update_scene_tree();
-
     // Load all plugins (TODO: Search in user home too!)
     loadPluginsFrom(rep);
 
