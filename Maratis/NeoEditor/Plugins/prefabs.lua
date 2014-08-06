@@ -1,6 +1,6 @@
 setPluginName("Prefabs")
 setPluginAuthor("Yannick Pflanzer")
-setPluginDescription("A plugin that allow you to load and save your object selection as a prefab.")
+setPluginDescription("A plugin that allows you to load and save your object selection as a prefab.")
 
 addEditorMenu("Load Prefab from file", "load_callback")
 addEditorMenu("Save selection as Prefab", "save_callback")
@@ -112,10 +112,14 @@ function bool2str(bool)
     if bool then return "true" else return "false" end
 end
 
-function objectToXml(object, path)
+function objectToXml(object, path, parent)
 
     local objectType = getObjectType(object)
     local output = "\n\n<" .. objectType .. " name=\"" .. getName(object) .. "\""
+    
+    if parent ~= nil then
+	output = output .. " parent=\"" .. getName(parent) .. "\""
+    end
    
     if objectType == "Entity" then
         output = output .. " file=\"" .. relpath(getMeshFilename(object), path)
@@ -127,7 +131,7 @@ function objectToXml(object, path)
         output = output .. "<BoundingBox min=\"" .. vec2str(min) .. "\" max=\"" .. vec2str(max) .. "\"/>\n"    
     
         -- Should be not isVisible!
-        output = output .. "<ObjectProperties invisible=\"" .. bool2str(isVisible(object)) .. "\"/>\n"
+        output = output .. "<ObjectProperties invisible=\"" .. bool2str(not isVisible(object)) .. "\"/>\n"
     
         -- TODO: Test for physics not for mass!
         if getMass(object) ~= nil then
@@ -136,9 +140,7 @@ function objectToXml(object, path)
             -- TODO: Get real shape!
             output = output .. "\tshape=\"Box\"\n"
         
-            -- TODO: Is it really a ghost?
-            output = output .. "\tghost=\"" .. bool2str(isGhost(object)) .. "\"\n"
-        
+            output = output .. "\tghost=\"" .. bool2str(isGhost(object)) .. "\"\n"        
             output = output .. "\tmass=\"" .. getMass(object) .. "\"\n"
             output = output .. "\tfriction=\"" .. getFriction(object) .. "\"\n"
             output = output .. "\trestitution=\"" .. getRestitution(object) .. "\"\n"
@@ -170,7 +172,7 @@ function objectToXml(object, path)
     end
     
     -- Position is relative to the selection center
-    local position = (getSelectionCenter() - getPosition(object))
+    local position = (getPosition(object) - getSelectionCenter())
     local rotation = getRotation(object)
     local scale = getScale(object)
     
@@ -186,6 +188,17 @@ function objectToXml(object, path)
     output = output .. "</" .. objectType .. ">"
 
     return output
+end
+
+function convertWithChildren(object, path, parent)
+	local ret = objectToXml(object, path, parent)
+	local children = getChilds(object)
+	
+	for i = 1, #children, 1 do
+		ret = ret .. convertWithChildren(children[i], path, object)
+	end
+	
+	return ret
 end
 
 function save_callback()
@@ -210,7 +223,10 @@ function save_callback()
     local content = "<prefab>"
        
     for i = 1, #selection, 1 do
-       content = content .. objectToXml(selection[i], path)
+	-- Only add object when it does not already exist. We are checking for the name here
+	if string.find(content, "name=\"" .. getName(selection[i]) .. "\"") == nil then
+		content = content .. convertWithChildren(selection[i], path)
+	end
     end
     
     content = content .. "</prefab>"
@@ -228,7 +244,7 @@ end
 
 function str2bool(str)
     if string.upper(str) == "TRUE" then return true
-    elseif string.upper() == "FALSE" then return false end
+    elseif string.upper(str) == "FALSE" then return false end
 end
 
 function updateTransform(settings, object)  
@@ -249,7 +265,7 @@ function addEntity(entity, group)
     local object = loadMesh(entity["@file"])
     
     updateTransform(entity, object)    
-    setInvisible(object, entity.ObjectProperties["@invisible"])   
+    setInvisible(object, str2bool(entity.ObjectProperties["@invisible"]))   
    
     local physics = entity.physics
     if physics ~= nil then
@@ -265,6 +281,8 @@ function addEntity(entity, group)
     if entity["@parent"] == nil then
         setParent(object, group)
     end  
+    
+    return object
 end
 
 function addLight(light, group)
@@ -288,6 +306,8 @@ function addLight(light, group)
     if light["@parent"] == nil then
         setParent(object, group)
     end
+    
+    return object
 end
 
 function load_callback()
@@ -303,6 +323,8 @@ function load_callback()
 
     local objects = xml:ParseXmlText(content)
     local group = createGroup()
+    local parents = {}
+    local allObjects = {}
     
     --print(getName(group))
     
@@ -310,10 +332,12 @@ function load_callback()
     if objects.prefab.Entity ~= nil then
         if #objects.prefab.Entity > 0 then  
             for i = 1, #objects.prefab.Entity, 1 do
-                addEntity(objects.prefab.Entity[i], group)
-            end
+		parents[objects.prefab.Entity[i]["@name"]] = addEntity(objects.prefab.Entity[i], group)
+		allObjects[#allObjects + 1] = objects.prefab.Entity[i]
+	    end
         else
-            addEntity(objects.prefab.Entity, group)
+		parents[objects.prefab.Entity["@name"]] = addEntity(objects.prefab.Entity, group)
+		allObjects[#allObjects + 1] = objects.prefab.Entity
         end
     end
     
@@ -321,12 +345,23 @@ function load_callback()
     if objects.prefab.Light ~= nil then
         if #objects.prefab.Light > 0 then  
             for i = 1, #objects.prefab.Light, 1 do
-                addLight(objects.prefab.Light[i], group)
+		parents[objects.prefab.Light[i]["@name"]] = addLight(objects.prefab.Light[i], group)
+		allObjects[#allObjects + 1] = objects.prefab.Light[i]
             end
         else
-            addLight(objects.prefab.Light, group)
+		parents[objects.prefab.Light["@name"]] = addLight(objects.prefab.Light, group)
+		allObjects[#allObjects + 1] = objects.prefab.Light
         end
     end
     
+    -- Set all parent-child relationships
+    for i = 1, #allObjects, 1 do
+	if allObjects[i]["@parent"] ~= nil then
+		setParent(parents[allObjects[i]["@name"]], parents[allObjects[i]["@parent"]])
+	end
+    end
+    
+    allObjects = nil
+    parents = nil
     updateEditorView()    
 end

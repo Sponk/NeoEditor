@@ -1316,7 +1316,7 @@ int setInvisible(lua_State * L)
         if(object->getType() == M_OBJECT3D_ENTITY)
         {
             MOEntity* entity = static_cast<MOEntity*>(object);
-            entity->setInvisible(lua_toboolean(L, 2));
+            entity->setInvisible(lua_toboolean(L, 2) != 0);
         }
         return 1;
     }
