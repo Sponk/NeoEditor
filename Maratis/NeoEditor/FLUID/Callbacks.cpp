@@ -1796,3 +1796,9 @@ void add_group_callback(Fl_Menu_*, void*)
 	update_scene_tree();
 	window.glbox->redraw();
 }
+
+void ortho_callback(Fl_Check_Button*, void*)
+{
+    Maratis::getInstance()->switchCurrentVueMode();
+    window.glbox->redraw();
+}

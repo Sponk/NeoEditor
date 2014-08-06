@@ -40,6 +40,8 @@ extern void set_edit_type(Fl_Round_Button*, long);
 #include <FL/Fl_Value_Input.H>
 extern void rotation_speed_callback(Fl_Value_Input*, void*);
 extern void translation_speed_callback(Fl_Value_Input*, void*);
+#include <FL/Fl_Check_Button.H>
+extern void ortho_callback(Fl_Check_Button*, void*);
 #include <FL/Fl_Tabs.H>
 #include <FL/Fl_Scroll.H>
 #include <FL/Fl_Input.H>
@@ -48,7 +50,6 @@ extern void edit_object_callback(Fl_Value_Input*, long);
 extern void edit_light_properties(Fl_Value_Input*, void*);
 #include <FL/Fl_Button.H>
 extern void choose_light_color(Fl_Button*, void*);
-#include <FL/Fl_Check_Button.H>
 extern void edit_light_properties_chk_btn(Fl_Check_Button*, void*);
 #include <FL/Fl_Clock.H>
 #include <FL/Fl_Box.H>

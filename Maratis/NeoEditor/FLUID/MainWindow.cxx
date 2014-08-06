@@ -101,7 +101,7 @@ Fl_Double_Window* EditorWindow::show_window() {
       scene_tree->callback((Fl_Callback*)scene_tree_callback);
       scene_tree->when(FL_WHEN_RELEASE);
     } // Fl_Tree* scene_tree
-    { edit_group = new Fl_Group(3, 24, 708, 30);
+    { edit_group = new Fl_Group(3, 24, 879, 30);
       { Fl_Round_Button* o = new Fl_Round_Button(258, 27, 90, 24, "Translate");
         o->type(102);
         o->shortcut(0x31);
@@ -121,7 +121,7 @@ Fl_Double_Window* EditorWindow::show_window() {
         o->down_box(FL_ROUND_DOWN_BOX);
         o->callback((Fl_Callback*)set_edit_type, (void*)('s'));
       } // Fl_Round_Button* o
-      { scenes_menu = new Fl_Choice(564, 30, 147, 18, "Scenes:");
+      { scenes_menu = new Fl_Choice(564, 30, 129, 18, "Scenes:");
         scenes_menu->down_box(FL_BORDER_BOX);
       } // Fl_Choice* scenes_menu
       { speed_group = new Fl_Group(3, 27, 258, 21);
@@ -139,6 +139,11 @@ Fl_Double_Window* EditorWindow::show_window() {
         speed_group->resizable(NULL);
         speed_group->end();
       } // Fl_Group* speed_group
+      { Fl_Check_Button* o = new Fl_Check_Button(707, 30, 90, 18, "Ortho");
+        o->shortcut(0x35);
+        o->down_box(FL_DOWN_BOX);
+        o->callback((Fl_Callback*)ortho_callback);
+      } // Fl_Check_Button* o
       edit_group->resizable(NULL);
       edit_group->end();
     } // Fl_Group* edit_group

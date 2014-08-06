@@ -14,12 +14,13 @@ decl {\#include <FL/Fl_Color_Chooser.H>} {private local
 decl {\#include <MFileManager/MMeshSave.h>} {private local
 } 
 
-class EditorWindow {} {
+class EditorWindow {open
+} {
   Function {show_window()} {open
   } {
     Fl_Window {} {
       label Neo open
-      xywh {547 251 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
+      xywh {1857 262 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -216,7 +217,7 @@ class EditorWindow {} {
         xywh {0 55 201 570} when 4
       }
       Fl_Group edit_group {open
-        xywh {3 24 708 30}
+        xywh {3 24 879 30}
         code0 {edit_group->resizable(NULL);}
       } {
         Fl_Round_Button {} {
@@ -239,7 +240,7 @@ class EditorWindow {} {
         }
         Fl_Choice scenes_menu {
           label {Scenes:} open
-          xywh {564 30 147 18} down_box BORDER_BOX
+          xywh {564 30 129 18} down_box BORDER_BOX
         } {}
         Fl_Group speed_group {open
           xywh {3 27 258 21}
@@ -255,6 +256,11 @@ class EditorWindow {} {
             callback translation_speed_callback
             xywh {207 28 45 20} when 8 value 1
           }
+        }
+        Fl_Check_Button {} {
+          label Ortho
+          callback ortho_callback selected
+          xywh {707 30 90 18} down_box DOWN_BOX shortcut 0x35
         }
       }
       Fl_Tabs {} {open
@@ -1296,15 +1302,14 @@ class AboutDlg {} {
   }
 } 
 
-class PublishDlg {open
-} {
+class PublishDlg {} {
   decl {Fl_Window* window;} {private local
   }
   Function {create_window()} {open
   } {
     Fl_Window {} {
       label Publish open
-      xywh {1964 410 510 132} type Double modal visible
+      xywh {1964 410 510 132} type Double hide modal
     } {
       Fl_Button {} {
         label Publish
@@ -1364,8 +1369,7 @@ fl_message("Project was successfully published!");
 
 maratis->loadLevel(oldLevel.c_str());
 dlg->window->hide();
-delete dlg;} {selected
-    }
+delete dlg;} {}
   }
   Function {cancel_click(Fl_Button*, PublishDlg* dlg)} {open return_type {static void}
   } {
