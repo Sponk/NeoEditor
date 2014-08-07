@@ -169,6 +169,19 @@ function objectToXml(object, path, parent)
         end
     
         output = output .. "/>\n"
+    
+    elseif objectType == "Camera" then
+        output = output .. ">\n"
+        output = output .. "<ObjectProperties\n"
+        output = output .. "\tclearColor=\"" .. vec2str(getCameraClearColor(object)) .. "\"\n"
+        output = output .. "\tortho=\"" .. bool2str(isCameraOrtho(object)) .. "\"\n"
+        output = output .. "\tfov=\"" .. getCameraFov(object) .. "\"\n"
+        output = output .. "\tclippingNear=\"" .. getCameraNear(object) .. "\"\n"
+        output = output .. "\tclippingFar=\"" .. getCameraFar(object) .. "\"\n"
+        output = output .. "\tfog=\"" .. bool2str(isCameraFogEnabled(object)) .. "\"\n"
+        output = output .. "\tfogDistance=\"" .. getCameraFogDistance(object) .. "\"\n"
+    
+        output = output .. "/>\n"
     end
     
     -- Position is relative to the selection center
@@ -288,6 +301,8 @@ end
 function addLight(light, group)
     local object = createLight()
     updateTransform(light, object)
+    setScale(object, {1,1,1})
+    updateMatrix(object)
     
     local prop = light.ObjectProperties
     
@@ -304,6 +319,29 @@ function addLight(light, group)
     end
     
     if light["@parent"] == nil then
+        setParent(object, group)
+    end
+    
+    return object
+end
+
+function addCamera(camera, group)
+    local object = createCamera()
+    updateTransform(camera, object)    
+    setScale(object, {1,1,1})
+    updateMatrix(object)
+    
+    local prop = camera.ObjectProperties   
+    
+    setCameraClearColor(object, str2vec(prop["@clearColor"]))
+    enableCameraOrtho(object, str2bool(prop["@ortho"]))
+    enableCameraFog(object, str2bool(prop["@fog"]))
+    setCameraFogDistance(object, prop["@fogDistance"])
+    setCameraFov(object, prop["@fov"])
+    setCameraNear(object, prop["@clippingNear"])
+    setCameraFar(object, prop["@clippingFar"])    
+    
+    if camera["@parent"] == nil then
         setParent(object, group)
     end
     
@@ -351,6 +389,19 @@ function load_callback()
         else
 		parents[objects.prefab.Light["@name"]] = addLight(objects.prefab.Light, group)
 		allObjects[#allObjects + 1] = objects.prefab.Light
+        end
+    end
+    
+    -- Cameras
+    if objects.prefab.Camera ~= nil then
+        if #objects.prefab.Camera > 0 then  
+            for i = 1, #objects.prefab.Camera, 1 do
+		parents[objects.prefab.Camera[i]["@name"]] = addCamera(objects.prefab.Camera[i], group)
+		allObjects[#allObjects + 1] = objects.prefab.Camera[i]
+            end
+        else
+		parents[objects.prefab.Camera["@name"]] = addCamera(objects.prefab.Camera, group)
+		allObjects[#allObjects + 1] = objects.prefab.Camera
         end
     end
     

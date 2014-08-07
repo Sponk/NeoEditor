@@ -3218,6 +3218,17 @@ int setSoundGain(lua_State * L)
 	return 0;
 }
 
+int createCamera(lua_State * L)
+{
+    MOCamera* camera = MEngine::getInstance()->getLevel()->getCurrentScene()->addNewCamera();
+    char name[256] = "Camera0";
+    getNewObjectName("Camera", name);
+
+    camera->setName(name);
+    lua_pushinteger(L, (lua_Integer) camera);
+    return 1;
+}
+
 int setCameraClearColor(lua_State * L)
 {
 	if(! isFunctionOk(L, "setCameraClearColor", 2))
@@ -4192,6 +4203,7 @@ void MScript::init(void)
 	lua_register(m_state, "getLightSpotExponent",	getlightSpotExponent);
 	
 	// camera
+    lua_register(m_state, "createCamera",           createCamera);
 	lua_register(m_state, "changeCurrentCamera",    changeCurrentCamera);
 	lua_register(m_state, "getCameraClearColor",    getCameraClearColor);
 	lua_register(m_state, "getCameraFov",		    getCameraFov);
