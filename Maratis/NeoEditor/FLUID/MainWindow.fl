@@ -14,13 +14,12 @@ decl {\#include <FL/Fl_Color_Chooser.H>} {private local
 decl {\#include <MFileManager/MMeshSave.h>} {private local
 } 
 
-class EditorWindow {open
-} {
+class EditorWindow {} {
   Function {show_window()} {open
   } {
     Fl_Window {} {
       label Neo open
-      xywh {1857 262 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
+      xywh {1785 250 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -259,7 +258,7 @@ class EditorWindow {open
         }
         Fl_Check_Button {} {
           label Ortho
-          callback ortho_callback selected
+          callback ortho_callback
           xywh {707 30 90 18} down_box DOWN_BOX shortcut 0x35
         }
       }
@@ -878,66 +877,28 @@ class EditorWindow {open
 decl {extern EditorWindow window;} {private local
 } 
 
-Function {new_scene_ok_callback(Fl_Button* button,void*)} {} {
-  code {::window.scene_name = ::window.scene_name_input->value();
-
-button->parent()->hide();} {}
-} 
-
-Function {new_scene_cancel_callback(Fl_Button* button,void*)} {} {
-  code {Fl_Window* window = (Fl_Window*) button->parent();
-
-::window.scene_name = "";
-window->hide();} {}
-} 
-
-class SceneSetupDlg {} {
-  Function {create_window()} {open
+class SceneSetupDlg {open
+} {
+  Function {ok_button_callback(Fl_Button* button, SceneSetupDlg* dlg)} {open return_type {static void}
   } {
-    Fl_Window {} {
-      label {Scene setup} open
-      xywh {1822 381 405 132} type Double hide modal
-    } {
-      Fl_Input scene_name_edit {
-        label {Scene Name:}
-        xywh {3 21 150 21} align 5
-      }
-      Fl_Input lua_script_edit {
-        label {LUA-Script:}
-        xywh {6 66 363 21} align 5
-      }
-      Fl_Button {} {
-        label {...}
-        callback find_file_callback
-        xywh {372 66 24 21}
-      }
-      Fl_Button {} {
-        label Ok
-        callback ok_button_callback
-        xywh {291 96 108 27}
-      }
-      Fl_Button {} {
-        label Cancel
-        callback cancel_button_callback
-        xywh {9 96 108 27}
-      }
+    code {MEngine* engine = MEngine::getInstance();
+MVector3 ambientLight(dlg->color_r->value(), dlg->color_g->value(), dlg->color_b->value());
+
+engine->getLevel()->getCurrentScene()->setAmbientLight(ambientLight);
+
+button->parent()->label("Success");
+button->parent()->hide();
+
+window.glbox->redraw();} {selected
     }
   }
-  decl {bool success;} {public local
+  Function {cancel_button_callback(Fl_Button* button, void*)} {return_type {static void}
+  } {
+    code {button->parent()->hide();} {}
   }
-} 
-
-Function {ok_button_callback(Fl_Button* button, void*)} {} {
-  code {button->parent()->label("Success");
-button->parent()->hide();} {}
-} 
-
-Function {cancel_button_callback(Fl_Button* button, void*)} {} {
-  code {button->parent()->hide();} {}
-} 
-
-Function {find_file_callback(Fl_Button* button, void*)} {} {
-  code {const char* filename = fl_native_file_chooser("Choose file", "*.lua", NULL, Fl_Native_File_Chooser::BROWSE_FILE);
+  Function {find_file_callback(Fl_Button* button, void*)} {return_type {static void}
+  } {
+    code {const char* filename = fl_native_file_chooser("Choose file", "*.lua", NULL, Fl_Native_File_Chooser::BROWSE_FILE);
 
 int children = button->parent()->children();
 Fl_Input* input;
@@ -951,6 +912,77 @@ for(int i = 0; i < children; i++)
 		return;	
 	}
 }} {}
+  }
+  Function {create_window()} {} {
+    Fl_Window {} {
+      label {Scene setup} open
+      xywh {1982 349 405 246} type Double modal visible
+    } {
+      Fl_Input scene_name_edit {
+        label {Scene Name:}
+        xywh {6 21 162 21} align 5
+      }
+      Fl_Input lua_script_edit {
+        label {LUA-Script:}
+        xywh {6 174 363 21} align 5
+      }
+      Fl_Button {} {
+        label {...}
+        user_data this user_data_type {SceneSetupDlg*}
+        callback find_file_callback
+        xywh {372 174 24 21}
+      }
+      Fl_Button {} {
+        label Ok
+        user_data this user_data_type {SceneSetupDlg*}
+        callback ok_button_callback
+        xywh {288 210 108 27}
+      }
+      Fl_Button {} {
+        label Cancel
+        user_data this user_data_type {SceneSetupDlg*}
+        callback cancel_button_callback
+        xywh {6 210 108 27}
+      }
+      Fl_Group {} {
+        label {Ambient Light:} open
+        xywh {6 69 165 78} box EMBOSSED_FRAME align 5
+      } {
+        Fl_Value_Input color_r {
+          label {Red:} user_data_type {void*}
+          xywh {12 93 45 21} align 5 step 0.1
+        }
+        Fl_Value_Input color_g {
+          label {Green:} user_data_type {void*}
+          xywh {63 93 45 21} align 5 step 0.1
+        }
+        Fl_Value_Input color_b {
+          label {Blue:} user_data_type {void*}
+          xywh {117 93 45 21} align 5 step 0.1
+        }
+        Fl_Button {} {
+          label {Choose color}
+          user_data this user_data_type {SceneSetupDlg*}
+          callback choose_light_color
+          xywh {12 117 96 24} labeltype ENGRAVED_LABEL labelsize 11
+        }
+      }
+    }
+  }
+  Function {choose_light_color(Fl_Button* button, SceneSetupDlg* dlg)} {return_type {static void}
+  } {
+    code {double r = dlg->color_r->value();
+    double g = dlg->color_g->value();
+    double b = dlg->color_b->value();
+
+    fl_color_chooser("Choose a color", r, g, b);
+
+    dlg->color_r->value(r);
+    dlg->color_g->value(g);
+    dlg->color_b->value(b);} {}
+  }
+  decl {bool success;} {public local
+  }
 } 
 
 class PlayerConsole {} {
@@ -981,11 +1013,11 @@ Fl::delete_widget(window);} {}
   }
 } 
 
-class MaterialEditDlg {} {
+class MaterialEditDlg {open
+} {
   decl {char object_name[256];} {private local
   }
-  Function {create_window(const char* name)} {open
-  } {
+  Function {create_window(const char* name)} {} {
     Fl_Window window {
       label {Edit Materials}
       user_data this user_data_type {MaterialEditDlg*}
@@ -1125,13 +1157,13 @@ strcpy(object_name, object->getName());
 
 material_changed(materials_chooser, this);} {}
   }
-  Function {close_callback(Fl_Button* button, MaterialEditDlg* dlg)} {open return_type {static void}
+  Function {close_callback(Fl_Button* button, MaterialEditDlg* dlg)} {return_type {static void}
   } {
     code {button->parent()->hide();
 Fl::delete_widget(button->parent());
 delete dlg;} {}
   }
-  Function {material_changed(Fl_Choice* choice, MaterialEditDlg* dlg)} {open return_type {static void}
+  Function {material_changed(Fl_Choice* choice, MaterialEditDlg* dlg)} {return_type {static void}
   } {
     code {MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
   MMesh* mesh = entity->getMesh();
@@ -1171,24 +1203,12 @@ delete dlg;} {}
   dlg->shininess_edit->value(material->getShininess());
   dlg->opacity_edit->value(material->getOpacity());} {}
   }
-  Function {choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg)} {open return_type {static void}
-  } {
-    code {double r = dlg->color_r->value();
-    double g = dlg->color_g->value();
-    double b = dlg->color_b->value();
-
-    fl_color_chooser("Choose a color", r, g, b);
-
-    dlg->color_r->value(r);
-    dlg->color_g->value(g);
-    dlg->color_b->value(b);} {}
-  }
-  Function {close_window_callback(Fl_Window* window, MaterialEditDlg* dlg)} {open return_type {static void}
+  Function {close_window_callback(Fl_Window* window, MaterialEditDlg* dlg)} {return_type {static void}
   } {
     code {Fl::delete_widget(window);
 delete dlg;} {}
   }
-  Function {apply_callback(Fl_Button*, MaterialEditDlg* dlg)} {open return_type {static void}
+  Function {apply_callback(Fl_Button*, MaterialEditDlg* dlg)} {return_type {static void}
   } {
     code {MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
       MMesh* mesh = entity->getMesh();
@@ -1232,7 +1252,7 @@ delete dlg;} {}
 
       ::window.glbox->redraw();} {}
   }
-  Function {save_callback(Fl_Button*, MaterialEditDlg* dlg)} {open return_type {static void}
+  Function {save_callback(Fl_Button*, MaterialEditDlg* dlg)} {return_type {static void}
   } {
     code {MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
 MMesh* mesh = entity->getMesh();
@@ -1245,7 +1265,7 @@ if(!mesh)
       
 xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);} {}
   }
-  Function {choose_diffuse_color(Fl_Button* button, MaterialEditDlg* dlg)} {open return_type {static void}
+  Function {choose_diffuse_color(Fl_Button* button, MaterialEditDlg* dlg)} {return_type {static void}
   } {
     code {double r = dlg->color_r->value();
     double g = dlg->diffuse_g->value();
@@ -1257,7 +1277,7 @@ xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);} {}
     dlg->diffuse_g->value(g);
     dlg->diffuse_b->value(b);} {}
   }
-  Function {choose_specular_color(Fl_Button* button, MaterialEditDlg* dlg)} {open return_type {static void}
+  Function {choose_specular_color(Fl_Button* button, MaterialEditDlg* dlg)} {return_type {static void}
   } {
     code {double r = dlg->specular_r->value();
     double g = dlg->specular_g->value();
@@ -1268,6 +1288,18 @@ xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);} {}
     dlg->specular_r->value(r);
     dlg->specular_g->value(g);
     dlg->specular_b->value(b);} {}
+  }
+  Function {choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg)} {return_type {static void}
+  } {
+    code {double r = dlg->color_r->value();
+    double g = dlg->color_g->value();
+    double b = dlg->color_b->value();
+
+    fl_color_chooser("Choose a color", r, g, b);
+
+    dlg->color_r->value(r);
+    dlg->color_g->value(g);
+    dlg->color_b->value(b);} {}
   }
 } 
 
@@ -1394,4 +1426,17 @@ if(filename == NULL)
 
 dlg->level_edit->value(filename);} {}
   }
+} 
+
+Function {new_scene_ok_callback(Fl_Button* button,void*)} {} {
+  code {::window.scene_name = ::window.scene_name_input->value();
+
+button->parent()->hide();} {}
+} 
+
+Function {new_scene_cancel_callback(Fl_Button* button,void*)} {} {
+  code {Fl_Window* window = (Fl_Window*) button->parent();
+
+::window.scene_name = "";
+window->hide();} {}
 } 

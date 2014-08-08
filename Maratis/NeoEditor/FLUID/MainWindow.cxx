@@ -687,55 +687,23 @@ Fl_Double_Window* EditorWindow::create_scene_window() {
 }
 extern EditorWindow window;
 
-void new_scene_ok_callback(Fl_Button* button,void*) {
-  ::window.scene_name = ::window.scene_name_input->value();
+void SceneSetupDlg::ok_button_callback(Fl_Button* button, SceneSetupDlg* dlg) {
+  MEngine* engine = MEngine::getInstance();
+  MVector3 ambientLight(dlg->color_r->value(), dlg->color_g->value(), dlg->color_b->value());
   
-  button->parent()->hide();
-}
-
-void new_scene_cancel_callback(Fl_Button* button,void*) {
-  Fl_Window* window = (Fl_Window*) button->parent();
+  engine->getLevel()->getCurrentScene()->setAmbientLight(ambientLight);
   
-  ::window.scene_name = "";
-  window->hide();
-}
-
-Fl_Double_Window* SceneSetupDlg::create_window() {
-  Fl_Double_Window* w;
-  { Fl_Double_Window* o = new Fl_Double_Window(405, 132, "Scene setup");
-    w = o;
-    o->user_data((void*)(this));
-    { scene_name_edit = new Fl_Input(3, 21, 150, 21, "Scene Name:");
-      scene_name_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-    } // Fl_Input* scene_name_edit
-    { lua_script_edit = new Fl_Input(6, 66, 363, 21, "LUA-Script:");
-      lua_script_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-    } // Fl_Input* lua_script_edit
-    { Fl_Button* o = new Fl_Button(372, 66, 24, 21, "...");
-      o->callback((Fl_Callback*)find_file_callback);
-    } // Fl_Button* o
-    { Fl_Button* o = new Fl_Button(291, 96, 108, 27, "Ok");
-      o->callback((Fl_Callback*)ok_button_callback);
-    } // Fl_Button* o
-    { Fl_Button* o = new Fl_Button(9, 96, 108, 27, "Cancel");
-      o->callback((Fl_Callback*)cancel_button_callback);
-    } // Fl_Button* o
-    o->set_modal();
-    o->end();
-  } // Fl_Double_Window* o
-  return w;
-}
-
-void ok_button_callback(Fl_Button* button, void*) {
   button->parent()->label("Success");
   button->parent()->hide();
+  
+  window.glbox->redraw();
 }
 
-void cancel_button_callback(Fl_Button* button, void*) {
+void SceneSetupDlg::cancel_button_callback(Fl_Button* button, void*) {
   button->parent()->hide();
 }
 
-void find_file_callback(Fl_Button* button, void*) {
+void SceneSetupDlg::find_file_callback(Fl_Button* button, void*) {
   const char* filename = fl_native_file_chooser("Choose file", "*.lua", NULL, Fl_Native_File_Chooser::BROWSE_FILE);
   
   int children = button->parent()->children();
@@ -750,6 +718,66 @@ void find_file_callback(Fl_Button* button, void*) {
   		return;	
   	}
   }
+}
+
+Fl_Double_Window* SceneSetupDlg::create_window() {
+  Fl_Double_Window* w;
+  { Fl_Double_Window* o = new Fl_Double_Window(405, 246, "Scene setup");
+    w = o;
+    o->user_data((void*)(this));
+    { scene_name_edit = new Fl_Input(6, 21, 162, 21, "Scene Name:");
+      scene_name_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+    } // Fl_Input* scene_name_edit
+    { lua_script_edit = new Fl_Input(6, 174, 363, 21, "LUA-Script:");
+      lua_script_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+    } // Fl_Input* lua_script_edit
+    { Fl_Button* o = new Fl_Button(372, 174, 24, 21, "...");
+      o->callback((Fl_Callback*)find_file_callback, (void*)(this));
+    } // Fl_Button* o
+    { Fl_Button* o = new Fl_Button(288, 210, 108, 27, "Ok");
+      o->callback((Fl_Callback*)ok_button_callback, (void*)(this));
+    } // Fl_Button* o
+    { Fl_Button* o = new Fl_Button(6, 210, 108, 27, "Cancel");
+      o->callback((Fl_Callback*)cancel_button_callback, (void*)(this));
+    } // Fl_Button* o
+    { Fl_Group* o = new Fl_Group(6, 69, 165, 78, "Ambient Light:");
+      o->box(FL_EMBOSSED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { color_r = new Fl_Value_Input(12, 93, 45, 21, "Red:");
+        color_r->step(0.1);
+        color_r->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* color_r
+      { color_g = new Fl_Value_Input(63, 93, 45, 21, "Green:");
+        color_g->step(0.1);
+        color_g->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* color_g
+      { color_b = new Fl_Value_Input(117, 93, 45, 21, "Blue:");
+        color_b->step(0.1);
+        color_b->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* color_b
+      { Fl_Button* o = new Fl_Button(12, 117, 96, 24, "Choose color");
+        o->labeltype(FL_ENGRAVED_LABEL);
+        o->labelsize(11);
+        o->callback((Fl_Callback*)choose_light_color, (void*)(this));
+      } // Fl_Button* o
+      o->end();
+    } // Fl_Group* o
+    o->set_modal();
+    o->end();
+  } // Fl_Double_Window* o
+  return w;
+}
+
+void SceneSetupDlg::choose_light_color(Fl_Button* button, SceneSetupDlg* dlg) {
+  double r = dlg->color_r->value();
+      double g = dlg->color_g->value();
+      double b = dlg->color_b->value();
+  
+      fl_color_chooser("Choose a color", r, g, b);
+  
+      dlg->color_r->value(r);
+      dlg->color_g->value(g);
+      dlg->color_b->value(b);
 }
 
 Fl_Double_Window* PlayerConsole::create_window() {
@@ -948,18 +976,6 @@ void MaterialEditDlg::material_changed(Fl_Choice* choice, MaterialEditDlg* dlg) 
     dlg->opacity_edit->value(material->getOpacity());
 }
 
-void MaterialEditDlg::choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg) {
-  double r = dlg->color_r->value();
-      double g = dlg->color_g->value();
-      double b = dlg->color_b->value();
-  
-      fl_color_chooser("Choose a color", r, g, b);
-  
-      dlg->color_r->value(r);
-      dlg->color_g->value(g);
-      dlg->color_b->value(b);
-}
-
 void MaterialEditDlg::close_window_callback(Fl_Window* window, MaterialEditDlg* dlg) {
   Fl::delete_widget(window);
   delete dlg;
@@ -1044,6 +1060,18 @@ void MaterialEditDlg::choose_specular_color(Fl_Button* button, MaterialEditDlg* 
       dlg->specular_r->value(r);
       dlg->specular_g->value(g);
       dlg->specular_b->value(b);
+}
+
+void MaterialEditDlg::choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg) {
+  double r = dlg->color_r->value();
+      double g = dlg->color_g->value();
+      double b = dlg->color_b->value();
+  
+      fl_color_chooser("Choose a color", r, g, b);
+  
+      dlg->color_r->value(r);
+      dlg->color_g->value(g);
+      dlg->color_b->value(b);
 }
 
 #include <FL/Fl_Image.H>
@@ -4112,4 +4140,17 @@ void PublishDlg::find_main_level(Fl_Button*, PublishDlg* dlg) {
   	return;
   
   dlg->level_edit->value(filename);
+}
+
+void new_scene_ok_callback(Fl_Button* button,void*) {
+  ::window.scene_name = ::window.scene_name_input->value();
+  
+  button->parent()->hide();
+}
+
+void new_scene_cancel_callback(Fl_Button* button,void*) {
+  Fl_Window* window = (Fl_Window*) button->parent();
+  
+  ::window.scene_name = "";
+  window->hide();
 }

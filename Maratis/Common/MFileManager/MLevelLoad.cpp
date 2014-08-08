@@ -178,9 +178,12 @@ void readSceneProperties(TiXmlElement * node, MScene * scene)
 	}
 
 	// gravity
-	MVector3 gravity;
-	if(readFloatValues(node, "gravity", gravity, 3))
-		scene->setGravity(gravity);
+    MVector3 vector;
+    if(readFloatValues(node, "gravity", vector, 3))
+        scene->setGravity(vector);
+
+    if(readFloatValues(node, "ambientLight", vector, 3))
+        scene->setAmbientLight(vector);
 }
 
 void readEntityProperties(TiXmlElement * node, MOEntity * entity)

@@ -333,6 +333,10 @@ void writeSceneProperties(MFile * file, MScene * scene)
 	// gravity
 	M_fprintf(file, "\t\t\t");
 	writeFloatValues(file, "gravity", scene->getGravity(), 3);
+    M_fprintf(file, "\n");
+
+    M_fprintf(file, "\t\t\t");
+    writeFloatValues(file, "ambientLight", scene->getAmbientLight(), 3);
 
 	closeAttributeNode(file);
 	M_fprintf(file, "\n");

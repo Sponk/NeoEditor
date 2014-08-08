@@ -169,22 +169,21 @@ public:
   Fl_Double_Window* create_scene_window();
   Fl_Input *scene_name_input;
 };
-void new_scene_ok_callback(Fl_Button* button,void*);
-void new_scene_cancel_callback(Fl_Button* button,void*);
-extern void find_file_callback(Fl_Button*, void*);
-extern void ok_button_callback(Fl_Button*, void*);
-extern void cancel_button_callback(Fl_Button*, void*);
 
 class SceneSetupDlg {
 public:
+  static void ok_button_callback(Fl_Button* button, SceneSetupDlg* dlg);
+  static void cancel_button_callback(Fl_Button* button, void*);
+  static void find_file_callback(Fl_Button* button, void*);
   Fl_Double_Window* create_window();
   Fl_Input *scene_name_edit;
   Fl_Input *lua_script_edit;
+  Fl_Value_Input *color_r;
+  Fl_Value_Input *color_g;
+  Fl_Value_Input *color_b;
+  static void choose_light_color(Fl_Button* button, SceneSetupDlg* dlg);
   bool success; 
 };
-void ok_button_callback(Fl_Button* button, void*);
-void cancel_button_callback(Fl_Button* button, void*);
-void find_file_callback(Fl_Button* button, void*);
 #include <FL/Fl_Text_Display.H>
 
 class PlayerConsole {
@@ -215,12 +214,12 @@ public:
   Fl_Value_Input *specular_b;
   static void close_callback(Fl_Button* button, MaterialEditDlg* dlg);
   static void material_changed(Fl_Choice* choice, MaterialEditDlg* dlg);
-  static void choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg);
   static void close_window_callback(Fl_Window* window, MaterialEditDlg* dlg);
   static void apply_callback(Fl_Button*, MaterialEditDlg* dlg);
   static void save_callback(Fl_Button*, MaterialEditDlg* dlg);
   static void choose_diffuse_color(Fl_Button* button, MaterialEditDlg* dlg);
   static void choose_specular_color(Fl_Button* button, MaterialEditDlg* dlg);
+  static void choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg);
 };
 
 class AboutDlg {
@@ -240,4 +239,6 @@ public:
   static void find_output_dir(Fl_Button*, PublishDlg* dlg);
   static void find_main_level(Fl_Button*, PublishDlg* dlg);
 };
+void new_scene_ok_callback(Fl_Button* button,void*);
+void new_scene_cancel_callback(Fl_Button* button,void*);
 #endif
