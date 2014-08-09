@@ -58,7 +58,6 @@ std::vector<lua_callback_t> callbacks;
 void lua_callback(Fl_Widget*, long id)
 {
     lua_callback_t callback = callbacks[id];
-
     callback.plugin->callFunction(callback.function.c_str());
 }
 
@@ -177,6 +176,123 @@ int updateEditorView()
     return 1;
 }
 
+int Fl_CreateWindow()
+{
+	MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+
+	if (script->getArgsNumber() != 5)
+		return 0;
+
+	int x, y, w, h;
+	const char* title;
+
+	x = script->getInteger(0);
+	y = script->getInteger(1);
+	w = script->getInteger(2);
+	h = script->getInteger(3);
+	title = script->getString(4);
+
+	Fl_Window* window = new Fl_Window(x, y, w, h, title);
+	script->pushPointer(window);
+	
+	return 1;
+}
+
+int Fl_CreateButton()
+{
+	MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+
+	if (script->getArgsNumber() != 5)
+		return 0;
+
+	int x, y, w, h;
+	const char* title;
+
+	x = script->getInteger(0);
+	y = script->getInteger(1);
+	w = script->getInteger(2);
+	h = script->getInteger(3);
+	title = script->getString(4);
+
+	Fl_Button* button = new Fl_Button(x, y, w, h, title);
+	script->pushPointer(button);
+
+	return 1;
+}
+
+int Fl_Add()
+{
+	MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+
+	if (script->getArgsNumber() != 2)
+		return 0;
+
+	// Test if argument is a window
+	Fl_Window* parent = dynamic_cast<Fl_Window*>(static_cast<Fl_Widget*>(script->getPointer(0)));
+	Fl_Widget* child = (Fl_Widget*)script->getPointer(1);
+
+	if (parent == NULL)
+	{
+		MLOG_ERROR("Object is not of type Fl_Window!");
+		return 0;
+	}
+
+	parent->add(child);
+	return 1;
+}
+
+// Fl_Show(widget, shown)
+int Fl_Show()
+{
+	MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+
+	if (script->getArgsNumber() < 1)
+		return 0;
+
+	bool show = true;
+	if(script->getArgsNumber() >= 2)
+		show = script->getInteger(1) != 0;
+
+	Fl_Widget* widget = static_cast<Fl_Widget*>(script->getPointer(0));
+	
+	if(show)
+		widget->show();
+	else
+		widget->hide();
+
+	return 1;
+}
+
+int Fl_SetCallback()
+{
+	MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+
+	if (script->getArgsNumber() != 2)
+		return 0;
+
+	Fl_Widget* widget = (Fl_Widget*) script->getPointer(0);
+
+	lua_callback_t callback;
+	callback.function = script->getString(1);
+	callback.plugin = script;
+
+	callbacks.push_back(callback);
+
+	widget->callback((Fl_Callback*)lua_callback, (void*)(callbacks.size() - 1));
+	return 1;
+}
+
+int Fl_DeleteWidget()
+{
+	MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+
+	if (script->getArgsNumber() != 1)
+		return 0;
+
+	Fl::delete_widget(static_cast<Fl_Widget*>(script->getPointer(0)));
+	return 1;
+}
+
 void createFltkLuaBindings(MScript* script)
 {
     if(!script)
@@ -190,4 +306,11 @@ void createFltkLuaBindings(MScript* script)
     script->addFunction("getProjectDir", getProjectDir);
     script->addFunction("getSelectionCenter", getSelectionCenter);
     script->addFunction("updateEditorView", updateEditorView);
+
+	script->addFunction("Fl_CreateWindow", Fl_CreateWindow);
+	script->addFunction("Fl_Show", Fl_Show);
+	script->addFunction("Fl_SetCallback", Fl_SetCallback);
+	script->addFunction("Fl_CreateButton", Fl_CreateButton);
+	script->addFunction("Fl_Add", Fl_Add);
+	script->addFunction("Fl_DeleteWidget", Fl_DeleteWidget);
 }
