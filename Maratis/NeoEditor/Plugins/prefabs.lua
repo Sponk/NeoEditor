@@ -185,9 +185,9 @@ function objectToXml(object, path, parent)
     end
     
     -- Position is relative to the selection center
-    local position = (getPosition(object) - getSelectionCenter())
-    local rotation = getRotation(object)
-    local scale = getScale(object)
+    local position = (getTransformedPosition(object) - getSelectionCenter())
+    local rotation = getTransformedRotation(object)
+    local scale = getTransformedScale(object)
     
     output = output .. "<transform\n"
     output = output .. "\tposition=\"" .. vec2str(position) .. "\"\n"
