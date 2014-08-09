@@ -220,6 +220,28 @@ int Fl_CreateButton()
 	return 1;
 }
 
+int Fl_CreateInput()
+{
+	MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+
+	if (script->getArgsNumber() != 5)
+		return 0;
+
+	int x, y, w, h;
+	const char* title;
+
+	x = script->getInteger(0);
+	y = script->getInteger(1);
+	w = script->getInteger(2);
+	h = script->getInteger(3);
+	title = script->getString(4);
+
+	Fl_Input* input = new Fl_Input(x, y, w, h, title);
+	script->pushPointer(input);
+
+	return 1;
+}
+
 int Fl_Add()
 {
 	MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
@@ -293,6 +315,26 @@ int Fl_DeleteWidget()
 	return 1;
 }
 
+int Fl_InputValue()
+{
+	MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+
+	if (script->getArgsNumber() < 1)
+		return 0;
+
+	Fl_Input* widget = static_cast<Fl_Input*>(script->getPointer(0));
+
+	if (script->getArgsNumber() >= 2)
+	{
+		widget->value(script->getString(1));
+	}
+	else
+	{
+		script->pushString(widget->value());
+	}
+	return 1;
+}
+
 void createFltkLuaBindings(MScript* script)
 {
     if(!script)
@@ -313,4 +355,8 @@ void createFltkLuaBindings(MScript* script)
 	script->addFunction("Fl_CreateButton", Fl_CreateButton);
 	script->addFunction("Fl_Add", Fl_Add);
 	script->addFunction("Fl_DeleteWidget", Fl_DeleteWidget);
+	script->addFunction("Fl_CreateInput", Fl_CreateInput);
+	
+	// Needs own function for every widget type
+	script->addFunction("Fl_InputValue", Fl_InputValue);
 }
