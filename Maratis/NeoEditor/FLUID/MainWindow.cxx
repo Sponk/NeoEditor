@@ -765,6 +765,13 @@ Fl_Double_Window* SceneSetupDlg::create_window() {
     o->set_modal();
     o->end();
   } // Fl_Double_Window* o
+  MEngine* engine = MEngine::getInstance();
+  MScene* scene = engine->getLevel()->getCurrentScene();
+  
+  MVector3 ambientLight = scene->getAmbientLight();
+  color_r->value(ambientLight.x);
+  color_g->value(ambientLight.y);
+  color_b->value(ambientLight.z);
   return w;
 }
 

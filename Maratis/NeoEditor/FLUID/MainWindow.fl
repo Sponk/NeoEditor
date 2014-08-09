@@ -879,7 +879,7 @@ decl {extern EditorWindow window;} {private local
 
 class SceneSetupDlg {open
 } {
-  Function {ok_button_callback(Fl_Button* button, SceneSetupDlg* dlg)} {open return_type {static void}
+  Function {ok_button_callback(Fl_Button* button, SceneSetupDlg* dlg)} {return_type {static void}
   } {
     code {MEngine* engine = MEngine::getInstance();
 MVector3 ambientLight(dlg->color_r->value(), dlg->color_g->value(), dlg->color_b->value());
@@ -889,8 +889,7 @@ engine->getLevel()->getCurrentScene()->setAmbientLight(ambientLight);
 button->parent()->label("Success");
 button->parent()->hide();
 
-window.glbox->redraw();} {selected
-    }
+window.glbox->redraw();} {}
   }
   Function {cancel_button_callback(Fl_Button* button, void*)} {return_type {static void}
   } {
@@ -913,9 +912,10 @@ for(int i = 0; i < children; i++)
 	}
 }} {}
   }
-  Function {create_window()} {} {
+  Function {create_window()} {open
+  } {
     Fl_Window {} {
-      label {Scene setup} open
+      label {Scene setup}
       xywh {1982 349 405 246} type Double modal visible
     } {
       Fl_Input scene_name_edit {
@@ -967,6 +967,14 @@ for(int i = 0; i < children; i++)
           xywh {12 117 96 24} labeltype ENGRAVED_LABEL labelsize 11
         }
       }
+    }
+    code {MEngine* engine = MEngine::getInstance();
+MScene* scene = engine->getLevel()->getCurrentScene();
+
+MVector3 ambientLight = scene->getAmbientLight();
+color_r->value(ambientLight.x);
+color_g->value(ambientLight.y);
+color_b->value(ambientLight.z);} {selected
     }
   }
   Function {choose_light_color(Fl_Button* button, SceneSetupDlg* dlg)} {return_type {static void}
