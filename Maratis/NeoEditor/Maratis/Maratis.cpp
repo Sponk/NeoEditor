@@ -4007,7 +4007,7 @@ void Maratis::drawMainView(MScene * scene)
 
     // draw grid
     camera->enable();
-    drawGrid(scene);
+    //drawGrid(scene);
 
     render->enableDepthTest();
     scene->draw(camera);
@@ -4324,10 +4324,7 @@ void Maratis::drawMainView(MScene * scene)
 
     if(getSelectedObjectsNumber() > 0)
     {
-        render->enableDepthTest();
-
-        // clear z buffer
-        render->clear(M_BUFFER_DEPTH);
+        render->disableDepthTest();
         camera->enable();
 
         switch(getTransformMode())
@@ -4349,6 +4346,8 @@ void Maratis::drawMainView(MScene * scene)
                 break;
         }
     }
+
+	drawGrid(engine->getLevel()->getCurrentScene());
 }
 
 void Maratis::logicLoop(void)
@@ -4397,7 +4396,7 @@ void Maratis::graphicLoop(void)
     unsigned int w = (unsigned int)window->getWidth();
     unsigned int h = (unsigned int)window->getHeight();
 
-    render->clear(M_BUFFER_COLOR);
+    render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
 
     // game
     MGame * game = MEngine::getInstance()->getGame();
