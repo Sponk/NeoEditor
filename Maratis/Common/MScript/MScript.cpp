@@ -2075,6 +2075,30 @@ int getMass(lua_State * L)
 	return 0;
 }
 
+int enablePhysics(lua_State * L)
+{
+	if (!isFunctionOk(L, "enablePhysics", 2))
+		return 0;
+
+	GET_OBJECT_SUBCLASS_BEGIN(MOEntity, entity, M_OBJECT3D_ENTITY)
+	MPhysicsContext* physics = MEngine::getInstance()->getPhysicsContext();
+	MPhysicsProperties* phyProps = entity->createPhysicsProperties();
+	MScene* scene = MEngine::getInstance()->getLevel()->getCurrentScene();
+	
+	if (lua_toboolean(L, 1) != 0)
+	{
+		entity->deletePhysicsProperties();
+		return 1;
+	}
+
+	scene->prepareCollisionObject(entity);
+
+	return 1;
+	GET_OBJECT_SUBCLASS_END()
+
+	return 0;
+}
+
 int setMass(lua_State * L)
 {
 	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
@@ -4121,6 +4145,7 @@ void MScript::init(void)
 	lua_register(m_state, "setCurrentFrame",		setCurrentFrame);
 
 	// physics
+	lua_register(m_state, "enablePhysics",		enablePhysics);
 	lua_register(m_state, "setGravity",			setGravity);
 	lua_register(m_state, "getGravity",			getGravity);
 	lua_register(m_state, "addCentralForce",	addCentralForce);
