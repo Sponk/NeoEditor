@@ -42,6 +42,7 @@ extern void rotation_speed_callback(Fl_Value_Input*, void*);
 extern void translation_speed_callback(Fl_Value_Input*, void*);
 #include <FL/Fl_Check_Button.H>
 extern void ortho_callback(Fl_Check_Button*, void*);
+extern void change_vue_callback(Fl_Menu_*, long);
 #include <FL/Fl_Tabs.H>
 #include <FL/Fl_Scroll.H>
 #include <FL/Fl_Input.H>
@@ -85,6 +86,8 @@ public:
   Fl_Group *speed_group;
   Fl_Value_Input *rotation_speed;
   Fl_Value_Input *translation_speed;
+  Fl_Check_Button *vue_ortho_button;
+  static Fl_Menu_Item menu_View[];
   Fl_Input *name_edit;
   Fl_Value_Input *xpos_edit;
   Fl_Value_Input *ypos_edit;

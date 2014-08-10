@@ -57,6 +57,15 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
 };
 Fl_Menu_Item* EditorWindow::behavior_menu = EditorWindow::menu_menu_bar + 36;
 
+Fl_Menu_Item EditorWindow::menu_View[] = {
+ {"Other", 0,  (Fl_Callback*)change_vue_callback, (void*)(0), 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Face", 0,  (Fl_Callback*)change_vue_callback, (void*)(1), 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Right", 0,  (Fl_Callback*)change_vue_callback, (void*)(3), 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Top", 0,  (Fl_Callback*)change_vue_callback, (void*)(7), 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Bottom", 0,  (Fl_Callback*)change_vue_callback, (void*)(9), 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {0,0,0,0,0,0,0,0,0}
+};
+
 Fl_Menu_Item EditorWindow::menu_object_shape_choice[] = {
  {"Box", 0,  (Fl_Callback*)edit_shape_callback, (void*)(0), 0, FL_NORMAL_LABEL, 0, 14, 0},
  {"Sphere", 0,  (Fl_Callback*)edit_shape_callback, (void*)(1), 0, FL_NORMAL_LABEL, 0, 14, 0},
@@ -121,7 +130,7 @@ Fl_Double_Window* EditorWindow::show_window() {
         o->down_box(FL_ROUND_DOWN_BOX);
         o->callback((Fl_Callback*)set_edit_type, (void*)('s'));
       } // Fl_Round_Button* o
-      { scenes_menu = new Fl_Choice(564, 30, 129, 18, "Scenes:");
+      { scenes_menu = new Fl_Choice(530, 30, 129, 18, "Scenes:");
         scenes_menu->down_box(FL_BORDER_BOX);
       } // Fl_Choice* scenes_menu
       { speed_group = new Fl_Group(3, 27, 258, 21);
@@ -139,11 +148,15 @@ Fl_Double_Window* EditorWindow::show_window() {
         speed_group->resizable(NULL);
         speed_group->end();
       } // Fl_Group* speed_group
-      { Fl_Check_Button* o = new Fl_Check_Button(707, 30, 90, 18, "Ortho");
-        o->shortcut(0x35);
-        o->down_box(FL_DOWN_BOX);
-        o->callback((Fl_Callback*)ortho_callback);
-      } // Fl_Check_Button* o
+      { vue_ortho_button = new Fl_Check_Button(673, 30, 57, 18, "Ortho");
+        vue_ortho_button->shortcut(0x35);
+        vue_ortho_button->down_box(FL_DOWN_BOX);
+        vue_ortho_button->callback((Fl_Callback*)ortho_callback);
+      } // Fl_Check_Button* vue_ortho_button
+      { Fl_Choice* o = new Fl_Choice(770, 30, 107, 18, "View:");
+        o->down_box(FL_BORDER_BOX);
+        o->menu(menu_View);
+      } // Fl_Choice* o
       edit_group->resizable(NULL);
       edit_group->end();
     } // Fl_Group* edit_group
@@ -266,7 +279,7 @@ Fl_Double_Window* EditorWindow::create_light_window() {
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       { light_radius_edit = new Fl_Value_Input(18, 51, 165, 21, "Radius:");
-        light_radius_edit->maximum(1e+07);
+        light_radius_edit->maximum(1e+007);
         light_radius_edit->step(2);
         light_radius_edit->callback((Fl_Callback*)edit_light_properties);
         light_radius_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));

@@ -1802,3 +1802,12 @@ void ortho_callback(Fl_Check_Button*, void*)
     Maratis::getInstance()->switchCurrentVueMode();
     window.glbox->redraw();
 }
+
+void change_vue_callback(Fl_Menu_*, long mode)
+{
+	if(mode == 0) return;
+	
+	Maratis::getInstance()->changeCurrentVue(mode);
+	window.vue_ortho_button->value(1);
+	window.glbox->redraw();
+}

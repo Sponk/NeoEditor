@@ -1367,31 +1367,24 @@ void Maratis::switchCurrentVueMode(void)
 void Maratis::changeCurrentVue(int vue)
 {
     MOCamera * camera = getPerspectiveVue();
-    MVector3 position = camera->getPosition();
 
     // set to ortho
-    if(! camera->isOrtho())
+    if(!camera->isOrtho())
         switchCurrentVueMode();
-
-    float dist = (m_viewCenter - position).getLength();
 
     // set vue
     switch(vue)
     {
         case 1:
-            camera->setPosition(MVector3(0, -dist, 0));
             camera->setEulerRotation(MVector3(90, 0, 0));
             break;
         case 3:
-            camera->setPosition(MVector3(dist, 0, 0));
             camera->setEulerRotation(MVector3(90, 0, 90));
             break;
         case 7:
-            camera->setPosition(MVector3(0, 0, dist));
             camera->setEulerRotation(MVector3(0, 0, 0));
             break;
         case 9:
-            camera->setPosition(MVector3(0, 0, -dist));
             camera->setEulerRotation(MVector3(180, 0, 0));
             break;
     }
