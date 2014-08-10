@@ -54,6 +54,17 @@ const char* executable = NULL;
 
 std::vector<MPluginScript*> editorPlugins;
 
+bool vectorContains(std::string name)
+{
+	for(int i = 0; i < editorPlugins.size(); i++)
+	{
+		if(editorPlugins[i]->getName() == name)
+			return true;
+	}
+
+	return false;
+}
+
 void loadPluginsFrom(const char* src)
 {
     std::vector<std::string> files;
@@ -69,18 +80,34 @@ void loadPluginsFrom(const char* src)
         currentFile = files[i];
 
         // Check if file ends with ".lua"
-        if(currentFile.find_last_of(".lua") == currentFile.length()-1)
-        {
-            MPluginScript* script = new MPluginScript;
+		if (currentFile.find_last_of(".lua") == currentFile.length() - 1)
+		{
+			MPluginScript* script = new MPluginScript;
 
-            currentFile = dir + std::string("/") + currentFile;
+			currentFile = dir + std::string("/") + currentFile;
 
-            script->runScript(currentFile.c_str());
-            editorPlugins.push_back(script);
-        }
+			script->runScript(currentFile.c_str());
+
+			if (!vectorContains(script->getName()))
+			{
+				editorPlugins.push_back(script);
+			}
+			else
+			{
+				MLOG_ERROR("Multiple plugins with the same name loaded:\n\tName: " << script->getName() << "\n\tFile: " << currentFile);
+
+				fl_message("There are multiple plugins with the same name inside the plugin search path.\n"
+							"Remove all redundant scripts or else the editor will not be able to start anymore.\n\n"
+							"Name: %s\nFile: %s\n ", script->getName().c_str(), currentFile.c_str());
+
+				MLOG_ERROR("Exiting editor due to errors!");
+				exit(-1);
+			}
+		}
     }
 
     files.clear();
+	MLOG_INFO("Successfully loaded " << editorPlugins.size() << " plugins.");
 }
 
 // main
