@@ -511,52 +511,60 @@ Fl_Double_Window* EditorWindow::create_camera_window() {
   { Fl_Double_Window* o = new Fl_Double_Window(258, 660);
     w = o;
     o->user_data((void*)(this));
-    { Fl_Group* o = new Fl_Group(5, 27, 218, 42, "Clear Color:");
+    { Fl_Group* o = new Fl_Group(5, 27, 218, 76, "Clear Color:");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      { camera_color_r_edit = new Fl_Value_Input(33, 39, 36, 18, "R:");
-        camera_color_r_edit->step(0.01);
-        camera_color_r_edit->callback((Fl_Callback*)edit_camera_properties);
-      } // Fl_Value_Input* camera_color_r_edit
-      { camera_color_g_edit = new Fl_Value_Input(93, 39, 36, 18, "G:");
-        camera_color_g_edit->step(0.01);
-        camera_color_g_edit->callback((Fl_Callback*)edit_camera_properties);
-      } // Fl_Value_Input* camera_color_g_edit
-      { camera_color_b_edit = new Fl_Value_Input(156, 39, 36, 18, "B:");
-        camera_color_b_edit->step(0.01);
-        camera_color_b_edit->callback((Fl_Callback*)edit_camera_properties);
-      } // Fl_Value_Input* camera_color_b_edit
+      { camera_color_r = new Fl_Value_Input(10, 47, 45, 21, "Red:");
+        camera_color_r->step(0.1);
+        camera_color_r->callback((Fl_Callback*)edit_camera_properties);
+        camera_color_r->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* camera_color_r
+      { camera_color_g = new Fl_Value_Input(61, 47, 45, 21, "Green:");
+        camera_color_g->step(0.1);
+        camera_color_g->callback((Fl_Callback*)edit_camera_properties);
+        camera_color_g->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* camera_color_g
+      { camera_color_b = new Fl_Value_Input(115, 47, 45, 21, "Blue:");
+        camera_color_b->step(0.1);
+        camera_color_b->callback((Fl_Callback*)edit_camera_properties);
+        camera_color_b->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* camera_color_b
+      { Fl_Button* o = new Fl_Button(10, 71, 96, 26, "Choose color");
+        o->labeltype(FL_ENGRAVED_LABEL);
+        o->labelsize(11);
+        o->callback((Fl_Callback*)choose_camera_color);
+      } // Fl_Button* o
       o->end();
     } // Fl_Group* o
-    { Fl_Group* o = new Fl_Group(5, 96, 218, 171, "Settings:");
+    { Fl_Group* o = new Fl_Group(5, 129, 218, 171, "Settings:");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      { camera_ortho_button = new Fl_Check_Button(15, 237, 84, 24, "Ortho");
+      { camera_ortho_button = new Fl_Check_Button(15, 270, 84, 24, "Ortho");
         camera_ortho_button->down_box(FL_DOWN_BOX);
         camera_ortho_button->callback((Fl_Callback*)edit_camera_properties_chk_btn);
       } // Fl_Check_Button* camera_ortho_button
-      { camera_fov_edit = new Fl_Value_Input(15, 120, 117, 21, "FOV:");
+      { camera_fov_edit = new Fl_Value_Input(15, 153, 117, 21, "FOV:");
         camera_fov_edit->callback((Fl_Callback*)edit_camera_properties);
         camera_fov_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* camera_fov_edit
-      { camera_clipping_near_edit = new Fl_Value_Input(15, 165, 117, 21, "Clipping Near:");
+      { camera_clipping_near_edit = new Fl_Value_Input(15, 198, 117, 21, "Clipping Near:");
         camera_clipping_near_edit->callback((Fl_Callback*)edit_camera_properties);
         camera_clipping_near_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* camera_clipping_near_edit
-      { camera_clipping_far_edit = new Fl_Value_Input(15, 210, 117, 21, "Clipping Far:");
+      { camera_clipping_far_edit = new Fl_Value_Input(15, 243, 117, 21, "Clipping Far:");
         camera_clipping_far_edit->callback((Fl_Callback*)edit_camera_properties);
         camera_clipping_far_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* camera_clipping_far_edit
       o->end();
     } // Fl_Group* o
-    { Fl_Group* o = new Fl_Group(5, 321, 218, 81, "Fog:");
+    { Fl_Group* o = new Fl_Group(5, 324, 218, 81, "Fog:");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      { camera_fog_button = new Fl_Check_Button(12, 327, 87, 21, "Fog");
+      { camera_fog_button = new Fl_Check_Button(12, 330, 87, 21, "Fog");
         camera_fog_button->down_box(FL_DOWN_BOX);
         camera_fog_button->callback((Fl_Callback*)edit_camera_properties_chk_btn);
       } // Fl_Check_Button* camera_fog_button
-      { camera_fog_distance_edit = new Fl_Value_Input(15, 372, 117, 21, "Fog Distance:");
+      { camera_fog_distance_edit = new Fl_Value_Input(15, 375, 117, 21, "Fog Distance:");
         camera_fog_distance_edit->callback((Fl_Callback*)edit_camera_properties);
         camera_fog_distance_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* camera_fog_distance_edit

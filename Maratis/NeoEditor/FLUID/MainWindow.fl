@@ -16,11 +16,10 @@ decl {\#include <MFileManager/MMeshSave.h>} {private local
 
 class EditorWindow {open
 } {
-  Function {show_window()} {open
-  } {
+  Function {show_window()} {} {
     Fl_Window {} {
       label Neo open
-      xywh {536 211 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
+      xywh {620 222 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -269,7 +268,7 @@ class EditorWindow {open
           MenuItem {} {
             label Other
             user_data 0 user_data_type long
-            callback change_vue_callback selected
+            callback change_vue_callback
             xywh {0 0 100 20}
           }
           MenuItem {} {
@@ -414,11 +413,12 @@ class EditorWindow {open
       }
     }
   }
-  Function {create_light_window()} {} {
+  Function {create_light_window()} {open
+  } {
     Fl_Window light_window_object {open
-      xywh {388 224 258 714} type Double labelsize 11 hide
+      xywh {388 224 258 714} type Double labelsize 11
       code0 {light_window_object->position(0,0);}
-      code1 {light_window_object->resizable(NULL);} size_range {258 726 258 726}
+      code1 {light_window_object->resizable(NULL);} size_range {258 726 258 726} visible
     } {
       Fl_Group {} {
         label {Settings:} open
@@ -516,8 +516,7 @@ class EditorWindow {open
       }
     }
   }
-  Function {create_object_window()} {open
-  } {
+  Function {create_object_window()} {} {
     Fl_Window object_embedded_window {open
       xywh {912 136 261 729} type Double hide resizable
       code0 {special_tab->resizable(object_embedded_window);}
@@ -689,68 +688,74 @@ class EditorWindow {open
       }
     }
   }
-  Function {create_camera_window()} {} {
+  Function {create_camera_window()} {open
+  } {
     Fl_Window {} {open
-      xywh {2165 241 258 660} type Double hide
+      xywh {843 164 258 660} type Double visible
     } {
       Fl_Group {} {
         label {Clear Color:} open
-        xywh {5 27 218 42} box ENGRAVED_FRAME align 5
+        xywh {5 27 218 76} box ENGRAVED_FRAME align 5
       } {
-        Fl_Value_Input camera_color_r_edit {
-          label {R:}
+        Fl_Value_Input camera_color_r {
+          label {Red:}
           callback edit_camera_properties
-          xywh {33 39 36 18} step 0.01
+          xywh {10 47 45 21} align 5 step 0.1
         }
-        Fl_Value_Input camera_color_g_edit {
-          label {G:}
+        Fl_Value_Input camera_color_g {
+          label {Green:}
           callback edit_camera_properties
-          xywh {93 39 36 18} step 0.01
+          xywh {61 47 45 21} align 5 step 0.1
         }
-        Fl_Value_Input camera_color_b_edit {
-          label {B:}
+        Fl_Value_Input camera_color_b {
+          label {Blue:}
           callback edit_camera_properties
-          xywh {156 39 36 18} step 0.01
+          xywh {115 47 45 21} align 5 step 0.1
+        }
+        Fl_Button {} {
+          label {Choose color}
+          callback choose_camera_color selected
+          xywh {10 71 96 26} labeltype ENGRAVED_LABEL labelsize 11
         }
       }
       Fl_Group {} {
         label {Settings:} open
-        xywh {5 96 218 171} box ENGRAVED_FRAME align 5
+        xywh {5 129 218 171} box ENGRAVED_FRAME align 5
       } {
         Fl_Check_Button camera_ortho_button {
           label Ortho
           callback edit_camera_properties_chk_btn
-          xywh {15 237 84 24} down_box DOWN_BOX
+          xywh {15 270 84 24} down_box DOWN_BOX
         }
         Fl_Value_Input camera_fov_edit {
           label {FOV:}
           callback edit_camera_properties
-          xywh {15 120 117 21} align 5
+          xywh {15 153 117 21} align 5
         }
         Fl_Value_Input camera_clipping_near_edit {
           label {Clipping Near:}
           callback edit_camera_properties
-          xywh {15 165 117 21} align 5
+          xywh {15 198 117 21} align 5
         }
         Fl_Value_Input camera_clipping_far_edit {
           label {Clipping Far:}
           callback edit_camera_properties
-          xywh {15 210 117 21} align 5
+          xywh {15 243 117 21} align 5
         }
       }
       Fl_Group {} {
         label {Fog:} open
-        xywh {5 321 218 81} box ENGRAVED_FRAME align 5
+        xywh {5 324 218 81} box ENGRAVED_FRAME align 5
       } {
         Fl_Check_Button camera_fog_button {
           label Fog
           callback edit_camera_properties_chk_btn
-          xywh {12 327 87 21} down_box DOWN_BOX
+          xywh {12 330 87 21} down_box DOWN_BOX
         }
         Fl_Value_Input camera_fog_distance_edit {
           label {Fog Distance:}
           callback edit_camera_properties
-          xywh {15 372 117 21} align 5
+          xywh {15 375 117 21} align 5
         }
       }
     }
@@ -1054,8 +1059,7 @@ Fl::delete_widget(window);} {}
   }
 } 
 
-class MaterialEditDlg {open
-} {
+class MaterialEditDlg {} {
   decl {char object_name[256];} {private local
   }
   Function {create_window(const char* name)} {} {

@@ -60,6 +60,7 @@ extern void edit_materials_callback(Fl_Button*, void*);
 extern void edit_shape_callback(Fl_Menu_*, long);
 extern void edit_object_properties(Fl_Value_Input*, void*);
 extern void edit_camera_properties(Fl_Value_Input*, void*);
+extern void choose_camera_color(Fl_Button*, void*);
 extern void edit_camera_properties_chk_btn(Fl_Check_Button*, void*);
 #include <FL/Fl_Text_Editor.H>
 extern void edit_text_properties(Fl_Text_Editor*, void*);
@@ -138,9 +139,9 @@ public:
   Fl_Value_Input *zlinear_edit;
   Fl_Value_Input *object_angular_factor_edit;
   Fl_Double_Window* create_camera_window();
-  Fl_Value_Input *camera_color_r_edit;
-  Fl_Value_Input *camera_color_g_edit;
-  Fl_Value_Input *camera_color_b_edit;
+  Fl_Value_Input *camera_color_r;
+  Fl_Value_Input *camera_color_g;
+  Fl_Value_Input *camera_color_b;
   Fl_Check_Button *camera_ortho_button;
   Fl_Value_Input *camera_fov_edit;
   Fl_Value_Input *camera_clipping_near_edit;

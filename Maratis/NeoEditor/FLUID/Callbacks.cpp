@@ -812,9 +812,9 @@ void scene_tree_callback(Fl_Tree* tree, void*)
         MOCamera* camera = (MOCamera*) object;
         MVector3 clearColor = camera->getClearColor();
 
-        window.camera_color_r_edit->value(clearColor.x);
-        window.camera_color_g_edit->value(clearColor.y);
-        window.camera_color_b_edit->value(clearColor.z);
+        window.camera_color_r->value(clearColor.x);
+        window.camera_color_g->value(clearColor.y);
+        window.camera_color_b->value(clearColor.z);
 
         window.camera_fov_edit->value(camera->getFov());
         window.camera_clipping_near_edit->value(camera->getClippingNear());
@@ -1116,6 +1116,21 @@ void choose_light_color(Fl_Button*, void*)
     edit_light_properties(NULL, NULL);
 }
 
+void choose_camera_color(Fl_Button*, void*)
+{
+	double r = window.camera_color_r->value();
+	double g = window.camera_color_g->value();
+	double b = window.camera_color_b->value();
+
+	fl_color_chooser("Choose a color", r, g, b);
+
+	window.camera_color_r->value(r);
+	window.camera_color_g->value(g);
+	window.camera_color_b->value(b);
+
+	edit_light_properties(NULL, NULL);
+}
+
 void publish_callback(Fl_Menu_*, void*)
 {
     if(current_project.path.empty())
@@ -1297,7 +1312,7 @@ void edit_camera_properties(Fl_Value_Input*, void*)
         return;
     }
 
-    camera->setClearColor(MVector3(window.camera_color_r_edit->value(), window.camera_color_g_edit->value(), window.camera_color_b_edit->value()));
+    camera->setClearColor(MVector3(window.camera_color_r->value(), window.camera_color_g->value(), window.camera_color_b->value()));
     camera->setFov(window.camera_fov_edit->value());
     camera->setClippingNear(window.camera_clipping_near_edit->value());
     camera->setClippingFar(window.camera_clipping_far_edit->value());
