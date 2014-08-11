@@ -16,10 +16,11 @@ decl {\#include <MFileManager/MMeshSave.h>} {private local
 
 class EditorWindow {open
 } {
-  Function {show_window()} {} {
+  Function {show_window()} {open
+  } {
     Fl_Window {} {
       label Neo open
-      xywh {620 222 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
+      xywh {59 212 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -216,7 +217,7 @@ class EditorWindow {open
         xywh {0 55 201 570} when 4
       }
       Fl_Group edit_group {open
-        xywh {3 24 879 30}
+        xywh {3 24 887 30}
         code0 {edit_group->resizable(NULL);}
       } {
         Fl_Round_Button {} {
@@ -238,8 +239,8 @@ class EditorWindow {open
           xywh {414 27 60 24} type Radio down_box ROUND_DOWN_BOX shortcut 0x33
         }
         Fl_Choice scenes_menu {
-          label {Scenes:} open
-          xywh {530 30 129 18} down_box BORDER_BOX
+          label {Scenes:} open selected
+          xywh {537 30 129 18} down_box BORDER_BOX
         } {}
         Fl_Group speed_group {open
           xywh {3 27 258 21}
@@ -263,7 +264,7 @@ class EditorWindow {open
         }
         Fl_Choice {} {
           label {View:} open
-          xywh {770 30 107 18} down_box BORDER_BOX
+          xywh {783 30 107 18} down_box BORDER_BOX
         } {
           MenuItem {} {
             label Other
@@ -1795,7 +1796,6 @@ delete dlg;} {}
   } {
     code {dlg->win->hide();
 Fl::delete_widget(dlg->win);
-delete dlg;} {selected
-    }
+delete dlg;} {}
   }
 } 
