@@ -26,182 +26,182 @@ class EditorWindow {open
       } {
         Submenu {} {
           label File open
-          xywh {0 0 100 20}
+          xywh {0 0 100 20} labelsize 14
         } {
           Submenu {} {
             label New open
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           } {
             MenuItem {} {
               label Project
               callback new_project_callback
-              xywh {0 0 100 20} shortcut 0x5006e
+              xywh {0 0 100 20} shortcut 0x5006e labelsize 14
             }
             MenuItem {} {
               label Level
               callback new_level_callback
-              xywh {0 0 100 20} shortcut 0x4006e
+              xywh {0 0 100 20} shortcut 0x4006e labelsize 14
             }
           }
           Submenu {} {
             label Open open
-            xywh {0 0 100 20} divider
+            xywh {0 0 100 20} labelsize 14 divider
           } {
             MenuItem {} {
               label Project
               callback open_project_callback
-              xywh {0 0 100 20} shortcut 0x5006f
+              xywh {0 0 100 20} shortcut 0x5006f labelsize 14
             }
             MenuItem {} {
               label Level
               callback open_level_callback
-              xywh {0 0 100 20} shortcut 0x4006f
+              xywh {0 0 100 20} shortcut 0x4006f labelsize 14
             }
           }
           MenuItem {} {
             label {Import Mesh}
             callback import_mesh_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label {Save level}
             user_data 0 user_data_type long
             callback save_level_callback
-            xywh {0 0 100 20} shortcut 0x40073
+            xywh {0 0 100 20} shortcut 0x40073 labelsize 14
           }
           MenuItem {} {
             label {Save level as...}
             user_data 1 user_data_type long
             callback save_level_callback
-            xywh {0 0 100 20} shortcut 0x50073 divider
+            xywh {0 0 100 20} shortcut 0x50073 labelsize 14 divider
           }
           MenuItem {} {
             label Quit
             callback quit_callback
-            xywh {0 0 100 20} shortcut 0x40071
+            xywh {0 0 100 20} shortcut 0x40071 labelsize 14
           }
         }
         Submenu {} {
           label Edit open
-          xywh {0 0 100 20}
+          xywh {0 0 100 20} labelsize 14
         } {
           MenuItem {} {
             label Undo
             callback undo_callback
-            xywh {0 0 100 20} shortcut 0x4007a
+            xywh {0 0 100 20} shortcut 0x4007a labelsize 14
           }
           MenuItem {} {
             label Redo
             callback redo_callback
-            xywh {0 0 100 20} shortcut 0x5007a divider
+            xywh {0 0 100 20} shortcut 0x5007a labelsize 14 divider
           }
           MenuItem {} {
             label {Select all}
             callback select_all_callback
-            xywh {0 0 100 20} shortcut 0x40061 divider
+            xywh {0 0 100 20} shortcut 0x40061 labelsize 14 divider
           }
           MenuItem {} {
             label {Duplicate object}
             callback duplicate_object_callback
-            xywh {0 0 100 20} shortcut 0x40064
+            xywh {0 0 100 20} shortcut 0x40064 labelsize 14
           }
           MenuItem {} {
             label {Delete object}
             callback delete_object_callback
-            xywh {0 0 100 20} shortcut 0xffff divider
+            xywh {0 0 100 20} shortcut 0xffff labelsize 14 divider
           }
           MenuItem {} {
             label {Scene setup}
             callback scene_setup_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label {Delete current scene}
             callback delete_scene_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
         }
         Submenu {} {
           label Project open
-          xywh {0 0 100 20}
+          xywh {0 0 100 20} labelsize 14
         } {
           MenuItem {} {
             label {Run Game}
             callback play_game_callback
-            xywh {0 0 100 20} shortcut 0xffc2 divider
+            xywh {0 0 100 20} shortcut 0xffc2 labelsize 14 divider
           }
           MenuItem {} {
             label {Update player}
             callback update_player_callback
-            tooltip {Copies the player from the editor directory to the project directory.} xywh {0 0 100 20}
+            tooltip {Copies the player from the editor directory to the project directory.} xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Publish
             callback publish_callback
-            xywh {0 0 100 20} shortcut 0x40070
+            xywh {0 0 100 20} shortcut 0x40070 labelsize 14
           }
         }
         Submenu {} {
           label Add open
-          xywh {0 0 100 20}
+          xywh {0 0 100 20} labelsize 14
         } {
           Submenu {} {
             label {Add Object} open
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           } {
             MenuItem {} {
               label {Add Mesh}
               callback add_mesh_callback
-              xywh {0 0 100 20} shortcut 0x4006d
+              xywh {0 0 100 20} shortcut 0x4006d labelsize 14
             }
             MenuItem {} {
               label {Add Light}
               callback add_light_callback
-              xywh {0 0 100 20} shortcut 0x4006c
+              xywh {0 0 100 20} shortcut 0x4006c labelsize 14
             }
             MenuItem {} {
               label {Add Text}
               callback add_text_callback
-              xywh {0 0 100 20} shortcut 0x40074
+              xywh {0 0 100 20} shortcut 0x40074 labelsize 14
             }
             MenuItem {} {
               label {Add Camera}
               callback add_camera_callback
-              xywh {0 0 100 20} shortcut 0x40063
+              xywh {0 0 100 20} shortcut 0x40063 labelsize 14
             }
             MenuItem {} {
               label {Add Sound}
               callback add_sound_callback
-              xywh {0 0 100 20}
+              xywh {0 0 100 20} labelsize 14
             }
           }
           Submenu behavior_menu {
             label {Add Behavior} open
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           } {}
           MenuItem {} {
             label {Add Scene}
             callback add_scene_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label {Add Group}
             callback add_group_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
         }
         Submenu {} {
           label Plugins open
-          xywh {0 0 100 20}
+          xywh {0 0 100 20} labelsize 14
         } {}
         Submenu {} {
           label Help open
-          xywh {0 0 100 20}
+          xywh {0 0 100 20} labelsize 14
         } {
           MenuItem {} {
             label About
             callback about_menu_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
         }
       }
@@ -269,31 +269,31 @@ class EditorWindow {open
             label Other
             user_data 0 user_data_type long
             callback change_vue_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Face
             user_data 1 user_data_type long
             callback change_vue_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Right
             user_data 3 user_data_type long
             callback change_vue_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Top
             user_data 7 user_data_type long
             callback change_vue_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Bottom
             user_data 9 user_data_type long
             callback change_vue_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
         }
       }
@@ -416,9 +416,9 @@ class EditorWindow {open
   Function {create_light_window()} {open
   } {
     Fl_Window light_window_object {open
-      xywh {388 224 258 714} type Double labelsize 11
+      xywh {1910 270 258 714} type Double labelsize 11 hide
       code0 {light_window_object->position(0,0);}
-      code1 {light_window_object->resizable(NULL);} size_range {258 726 258 726} visible
+      code1 {light_window_object->resizable(NULL);} size_range {258 726 258 726}
     } {
       Fl_Group {} {
         label {Settings:} open
@@ -427,7 +427,7 @@ class EditorWindow {open
         Fl_Value_Input light_radius_edit {
           label {Radius:}
           callback edit_light_properties
-          xywh {18 51 165 21} align 5 maximum 1e+007 step 2
+          xywh {18 51 165 21} align 5 maximum 1e+07 step 2
         }
         Fl_Value_Input light_color_r {
           label {Red:}
@@ -518,11 +518,11 @@ class EditorWindow {open
   }
   Function {create_object_window()} {} {
     Fl_Window object_embedded_window {open
-      xywh {912 136 261 729} type Double hide resizable
-      code0 {special_tab->resizable(object_embedded_window);}
+      xywh {1885 46 261 933} type Double resizable
+      code0 {special_tab->resizable(object_embedded_window);} visible
     } {
       Fl_Scroll {} {open
-        xywh {0 6 230 729} type VERTICAL resizable
+        xywh {0 6 230 894} type VERTICAL resizable
       } {
         Fl_Group {} {
           label {Settings:} open
@@ -545,7 +545,7 @@ class EditorWindow {open
           Fl_Check_Button object_shadow_button {
             label Shadow
             callback edit_object_chk_btn
-            xywh {15 106 111 24} down_box DOWN_BOX
+            xywh {12 106 111 24} down_box DOWN_BOX
           }
         }
         Fl_Group {} {
@@ -560,43 +560,43 @@ class EditorWindow {open
               label Box
               user_data 0 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
             MenuItem {} {
               label Sphere
               user_data 1 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
             MenuItem {} {
               label Cone
               user_data 2 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
             MenuItem {} {
               label Capsule
               user_data 3 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
             MenuItem {} {
               label Cylinder
               user_data 4 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
             MenuItem {} {
               label {Convex-hull}
               user_data 5 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
             MenuItem {} {
               label {Triangle-mesh}
               user_data 6 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
           }
           Fl_Check_Button object_ghost_button {
@@ -623,26 +623,6 @@ class EditorWindow {open
             label Physics
             callback edit_object_chk_btn
             xywh {16 181 204 21} down_box DOWN_BOX
-          }
-        }
-        Fl_Group {} {
-          label {Pivot:} open
-          xywh {4 668 216 32} box ENGRAVED_FRAME align 5
-        } {
-          Fl_Value_Input xpivot_edit {
-            label {X:} user_data_type {void*}
-            callback edit_object_properties
-            xywh {25 673 51 21} maximum 1000 step 1
-          }
-          Fl_Value_Input ypivot_edit {
-            label {Y:} user_data_type {void*}
-            callback edit_object_properties
-            xywh {94 673 51 21} maximum 1000 step 1
-          }
-          Fl_Value_Input zpivot_edit {
-            label {Z:} user_data_type {void*}
-            callback edit_object_properties
-            xywh {163 672 51 21} maximum 1000 step 1
           }
         }
         Fl_Group {} {
@@ -685,16 +665,20 @@ class EditorWindow {open
           callback edit_object_properties
           xywh {4 616 216 21} align 5
         }
+        Fl_Button {} {
+          label {Constraint properties}
+          callback object_constraint_properties_callback
+          xywh {3 648 213 27}
+        }
       }
     }
   }
-  Function {create_camera_window()} {open
-  } {
+  Function {create_camera_window()} {} {
     Fl_Window {} {open
-      xywh {843 164 258 660} type Double visible
+      xywh {843 164 258 660} type Double hide
     } {
       Fl_Group {} {
-        label {Clear Color:} open
+        label {Clear Color:}
         xywh {5 27 218 76} box ENGRAVED_FRAME align 5
       } {
         Fl_Value_Input camera_color_r {
@@ -714,12 +698,12 @@ class EditorWindow {open
         }
         Fl_Button {} {
           label {Choose color}
-          callback choose_camera_color selected
+          callback choose_camera_color
           xywh {10 71 96 26} labeltype ENGRAVED_LABEL labelsize 11
         }
       }
       Fl_Group {} {
-        label {Settings:} open
+        label {Settings:}
         xywh {5 129 218 171} box ENGRAVED_FRAME align 5
       } {
         Fl_Check_Button camera_ortho_button {
@@ -744,7 +728,7 @@ class EditorWindow {open
         }
       }
       Fl_Group {} {
-        label {Fog:} open
+        label {Fog:}
         xywh {5 324 218 81} box ENGRAVED_FRAME align 5
       } {
         Fl_Check_Button camera_fog_button {
@@ -796,19 +780,19 @@ class EditorWindow {open
             label Left
             user_data 0 user_data_type long
             callback text_alignment_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Right
             user_data 1 user_data_type long
             callback text_alignment_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Center
             user_data 2 user_data_type long
             callback text_alignment_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
         }
       }
@@ -1484,4 +1468,334 @@ Function {new_scene_cancel_callback(Fl_Button* button,void*)} {} {
 
 ::window.scene_name = "";
 window->hide();} {}
+} 
+
+class ConstraintPropertiesDlg {open
+} {
+  decl {Fl_Window* win;} {private local
+  }
+  Function {create_window()} {} {
+    code {MOEntity* entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
+
+if(!entity)
+	return NULL;
+	
+MPhysicsProperties* phys = entity->getPhysicsProperties();
+
+if(!phys)
+{
+	fl_message("Selected object has no physics properties. Can not edit constraints!");
+	return NULL;
+}} {}
+    Fl_Window {} {
+      label Constraints open
+      xywh {2054 357 471 246} type Double modal visible
+    } {
+      Fl_Check_Button enabled_button {
+        label {Constraint Enabled}
+        user_data this user_data_type {ConstraintPropertiesDlg*}
+        callback enable_constraint_callback
+        xywh {15 9 159 27} down_box DOWN_BOX
+      }
+      Fl_Button {} {
+        label {Apply and Close}
+        user_data this user_data_type {ConstraintPropertiesDlg*}
+        callback close_callback
+        xywh {240 204 216 27}
+      }
+      Fl_Group {} {
+        label {Pivot:} open
+        xywh {16 56 216 32} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Value_Input xpivot_edit {
+          label {X:} user_data_type {void*}
+          xywh {37 61 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input ypivot_edit {
+          label {Y:} user_data_type {void*}
+          xywh {106 61 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input zpivot_edit {
+          label {Z:} user_data_type {void*}
+          xywh {175 61 51 21} maximum 1000 step 1
+        }
+      }
+      Fl_Group {} {
+        label {Lower Linear Limit:} open
+        xywh {15 112 216 32} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Value_Input xlinear_lower {
+          label {X:} user_data_type {void*}
+          xywh {36 117 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input ylinear_lower {
+          label {Y:} user_data_type {void*}
+          xywh {105 117 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input zlinear_lower {
+          label {Z:} user_data_type {void*}
+          xywh {174 117 51 21} maximum 1000 step 1
+        }
+      }
+      Fl_Group {} {
+        label {Upper Linear Limit:} open
+        xywh {240 112 216 32} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Value_Input xlinear_upper {
+          label {X:} user_data_type {void*}
+          xywh {261 117 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input ylinear_upper {
+          label {Y:} user_data_type {void*}
+          xywh {330 117 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input zlinear_upper {
+          label {Z:} user_data_type {void*}
+          xywh {399 117 51 21} maximum 1000 step 1
+        }
+      }
+      Fl_Group {} {
+        label {Lower Angular Limit:} open
+        xywh {15 166 216 32} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Value_Input xangular_lower {
+          label {X:} user_data_type {void*}
+          xywh {36 171 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input yangular_lower {
+          label {Y:} user_data_type {void*}
+          xywh {105 171 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input zangular_lower {
+          label {Z:} user_data_type {void*}
+          xywh {174 171 51 21} maximum 1000 step 1
+        }
+      }
+      Fl_Group {} {
+        label {Upper Angular Limit:} open
+        xywh {240 166 216 32} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Value_Input xangular_upper {
+          label {X:} user_data_type {void*}
+          xywh {261 171 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input yangular_upper {
+          label {Y:} user_data_type {void*}
+          xywh {330 171 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input zangular_upper {
+          label {Z:} user_data_type {void*}
+          xywh {399 171 51 21} maximum 1000 step 1
+        }
+      }
+      Fl_Check_Button parent_collision {
+        label {Parent Collision}
+        xywh {237 57 210 27} down_box DOWN_BOX
+      }
+      Fl_Button {} {
+        label Cancel
+        user_data this user_data_type {ConstraintPropertiesDlg*}
+        callback cancel_callback
+        xywh {15 204 216 27}
+      }
+      Fl_Input parent_input {
+        label {Parent:}
+        xywh {237 9 222 27}
+      }
+    }
+    code {MPhysicsConstraint* constraint = phys->getConstraint();
+
+win = w;
+
+if(!constraint)
+{
+	enabled_button->value(0);
+
+	xpivot_edit->deactivate();
+	ypivot_edit->deactivate();
+	zpivot_edit->deactivate();
+
+	xlinear_lower->deactivate();
+	ylinear_lower->deactivate();
+	zlinear_lower->deactivate();
+
+	xlinear_upper->deactivate();
+	ylinear_upper->deactivate();
+	zlinear_upper->deactivate();
+
+	xangular_upper->deactivate();
+	yangular_upper->deactivate();
+	zangular_upper->deactivate();
+
+	xangular_lower->deactivate();
+	yangular_lower->deactivate();
+	zangular_lower->deactivate();
+	
+	parent_collision->deactivate();
+	parent_input->deactivate();
+
+	return w;
+}
+
+enabled_button->value(1);
+
+MVector3 vector;
+
+vector = constraint->pivot;
+xpivot_edit->value(vector.x);
+ypivot_edit->value(vector.y);
+zpivot_edit->value(vector.z);
+
+vector = constraint->lowerLinearLimit;
+xlinear_lower->value(vector.x);
+ylinear_lower->value(vector.y);
+zlinear_lower->value(vector.z);
+
+vector = constraint->upperLinearLimit;
+xlinear_upper->value(vector.x);
+ylinear_upper->value(vector.y);
+zlinear_upper->value(vector.z);
+
+vector = constraint->upperAngularLimit;
+xangular_upper->value(vector.x);
+yangular_upper->value(vector.y);
+zangular_upper->value(vector.z);
+
+vector = constraint->lowerAngularLimit;
+xangular_lower->value(vector.x);
+yangular_lower->value(vector.y);
+zangular_lower->value(vector.z);
+	
+parent_collision->value(!constraint->disableParentCollision);
+parent_input->value(constraint->parentName.getSafeString());} {}
+  }
+  Function {enable_constraint_callback(Fl_Check_Button* button, ConstraintPropertiesDlg* dlg)} {open return_type {static void}
+  } {
+    code {MOEntity* entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
+
+if(!entity)
+	return;
+	
+MPhysicsProperties* phys = entity->getPhysicsProperties();
+
+if(!phys)
+	return;
+
+MPhysicsConstraint* constraint = phys->getConstraint();
+
+if(!constraint && button->value() == 1)
+{
+	phys->createConstraint();
+	
+	dlg->xpivot_edit->activate();
+	dlg->ypivot_edit->activate();
+	dlg->zpivot_edit->activate();
+
+	dlg->xlinear_lower->activate();
+	dlg->ylinear_lower->activate();
+	dlg->zlinear_lower->activate();
+
+	dlg->xlinear_upper->activate();
+	dlg->ylinear_upper->activate();
+	dlg->zlinear_upper->activate();
+
+	dlg->xangular_upper->activate();
+	dlg->yangular_upper->activate();
+	dlg->zangular_upper->activate();
+
+	dlg->xangular_lower->activate();
+	dlg->yangular_lower->activate();
+	dlg->zangular_lower->activate();
+	
+	dlg->parent_collision->activate();
+	dlg->parent_input->activate();
+
+}
+else if(constraint && button->value() == 0)
+{
+	phys->deleteConstraint();
+	
+	dlg->xpivot_edit->deactivate();
+	dlg->ypivot_edit->deactivate();
+	dlg->zpivot_edit->deactivate();
+
+	dlg->xlinear_lower->deactivate();
+	dlg->ylinear_lower->deactivate();
+	dlg->zlinear_lower->deactivate();
+
+	dlg->xlinear_upper->deactivate();
+	dlg->ylinear_upper->deactivate();
+	dlg->zlinear_upper->deactivate();
+
+	dlg->xangular_upper->deactivate();
+	dlg->yangular_upper->deactivate();
+	dlg->zangular_upper->deactivate();
+
+	dlg->xangular_lower->deactivate();
+	dlg->yangular_lower->deactivate();
+	dlg->zangular_lower->deactivate();
+	
+	dlg->parent_collision->deactivate();
+	dlg->parent_input->deactivate();
+
+}} {}
+  }
+  Function {close_callback(Fl_Button*, ConstraintPropertiesDlg* dlg)} {return_type {static void}
+  } {
+    code {MOEntity* entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
+
+if(!entity)
+	return;
+	
+MPhysicsProperties* phys = entity->getPhysicsProperties();
+
+if(!phys)
+{
+	fl_message("Selected object has no physics properties. Can not edit constraints!");
+	return;
+}
+
+MPhysicsConstraint* constraint = phys->getConstraint();
+
+MVector3 vector;
+
+vector.x = dlg->xpivot_edit->value();
+vector.y = dlg->ypivot_edit->value();
+vector.z = dlg->zpivot_edit->value();
+constraint->pivot = vector;
+
+vector.x = dlg->xlinear_lower->value();
+vector.y = dlg->ylinear_lower->value();
+vector.z = dlg->zlinear_lower->value();
+constraint->lowerLinearLimit = vector;
+
+vector.x = dlg->xlinear_upper->value();
+vector.y = dlg->ylinear_upper->value();
+vector.z = dlg->zlinear_upper->value();
+constraint->upperLinearLimit = vector;
+
+vector.x = dlg->xangular_lower->value();
+vector.y = dlg->yangular_lower->value();
+vector.z = dlg->zangular_lower->value();
+constraint->lowerAngularLimit = vector;
+
+vector.x = dlg->xangular_upper->value();
+vector.y = dlg->yangular_upper->value();
+vector.z = dlg->zangular_upper->value();
+constraint->upperAngularLimit = vector;
+
+constraint->disableParentCollision = !dlg->parent_collision->value();
+constraint->parentName.set(dlg->parent_input->value());
+
+dlg->win->hide();
+Fl::delete_widget(dlg->win);
+delete dlg;} {}
+  }
+  Function {cancel_callback(Fl_Button*, ConstraintPropertiesDlg* dlg)} {open return_type {static void}
+  } {
+    code {dlg->win->hide();
+Fl::delete_widget(dlg->win);
+delete dlg;} {selected
+    }
+  }
 } 

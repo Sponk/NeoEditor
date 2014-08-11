@@ -279,7 +279,7 @@ Fl_Double_Window* EditorWindow::create_light_window() {
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       { light_radius_edit = new Fl_Value_Input(18, 51, 165, 21, "Radius:");
-        light_radius_edit->maximum(1e+007);
+        light_radius_edit->maximum(1e+07);
         light_radius_edit->step(2);
         light_radius_edit->callback((Fl_Callback*)edit_light_properties);
         light_radius_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
@@ -386,9 +386,9 @@ Fl_Double_Window* EditorWindow::create_publish_window() {
 }
 
 Fl_Double_Window* EditorWindow::create_object_window() {
-  { object_embedded_window = new Fl_Double_Window(261, 729);
+  { object_embedded_window = new Fl_Double_Window(261, 933);
     object_embedded_window->user_data((void*)(this));
-    { Fl_Scroll* o = new Fl_Scroll(0, 6, 230, 729);
+    { Fl_Scroll* o = new Fl_Scroll(0, 6, 230, 894);
       o->type(2);
       { Fl_Group* o = new Fl_Group(3, 27, 217, 112, "Settings:");
         o->box(FL_ENGRAVED_FRAME);
@@ -404,7 +404,7 @@ Fl_Double_Window* EditorWindow::create_object_window() {
         { Fl_Button* o = new Fl_Button(103, 78, 111, 21, "Edit Materials");
           o->callback((Fl_Callback*)edit_materials_callback);
         } // Fl_Button* o
-        { object_shadow_button = new Fl_Check_Button(15, 106, 111, 24, "Shadow");
+        { object_shadow_button = new Fl_Check_Button(12, 106, 111, 24, "Shadow");
           object_shadow_button->down_box(FL_DOWN_BOX);
           object_shadow_button->callback((Fl_Callback*)edit_object_chk_btn);
         } // Fl_Check_Button* object_shadow_button
@@ -438,26 +438,6 @@ Fl_Double_Window* EditorWindow::create_object_window() {
           object_physics_button->down_box(FL_DOWN_BOX);
           object_physics_button->callback((Fl_Callback*)edit_object_chk_btn);
         } // Fl_Check_Button* object_physics_button
-        o->end();
-      } // Fl_Group* o
-      { Fl_Group* o = new Fl_Group(4, 668, 216, 32, "Pivot:");
-        o->box(FL_ENGRAVED_FRAME);
-        o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-        { xpivot_edit = new Fl_Value_Input(25, 673, 51, 21, "X:");
-          xpivot_edit->maximum(1000);
-          xpivot_edit->step(1);
-          xpivot_edit->callback((Fl_Callback*)edit_object_properties);
-        } // Fl_Value_Input* xpivot_edit
-        { ypivot_edit = new Fl_Value_Input(94, 673, 51, 21, "Y:");
-          ypivot_edit->maximum(1000);
-          ypivot_edit->step(1);
-          ypivot_edit->callback((Fl_Callback*)edit_object_properties);
-        } // Fl_Value_Input* ypivot_edit
-        { zpivot_edit = new Fl_Value_Input(163, 672, 51, 21, "Z:");
-          zpivot_edit->maximum(1000);
-          zpivot_edit->step(1);
-          zpivot_edit->callback((Fl_Callback*)edit_object_properties);
-        } // Fl_Value_Input* zpivot_edit
         o->end();
       } // Fl_Group* o
       { Fl_Group* o = new Fl_Group(4, 440, 216, 95, "Damping:");
@@ -497,6 +477,9 @@ Fl_Double_Window* EditorWindow::create_object_window() {
         object_angular_factor_edit->callback((Fl_Callback*)edit_object_properties);
         object_angular_factor_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* object_angular_factor_edit
+      { Fl_Button* o = new Fl_Button(3, 648, 213, 27, "Constraint properties");
+        o->callback((Fl_Callback*)object_constraint_properties_callback);
+      } // Fl_Button* o
       o->end();
       Fl_Group::current()->resizable(o);
     } // Fl_Scroll* o
@@ -4181,4 +4164,328 @@ void new_scene_cancel_callback(Fl_Button* button,void*) {
   
   ::window.scene_name = "";
   window->hide();
+}
+
+Fl_Double_Window* ConstraintPropertiesDlg::create_window() {
+  Fl_Double_Window* w;
+  MOEntity* entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
+  
+  if(!entity)
+  	return NULL;
+  	
+  MPhysicsProperties* phys = entity->getPhysicsProperties();
+  
+  if(!phys)
+  {
+  	fl_message("Selected object has no physics properties. Can not edit constraints!");
+  	return NULL;
+  }
+  { Fl_Double_Window* o = new Fl_Double_Window(471, 246, "Constraints");
+    w = o;
+    o->user_data((void*)(this));
+    { enabled_button = new Fl_Check_Button(15, 9, 159, 27, "Constraint Enabled");
+      enabled_button->down_box(FL_DOWN_BOX);
+      enabled_button->callback((Fl_Callback*)enable_constraint_callback, (void*)(this));
+    } // Fl_Check_Button* enabled_button
+    { Fl_Button* o = new Fl_Button(240, 204, 216, 27, "Apply and Close");
+      o->callback((Fl_Callback*)close_callback, (void*)(this));
+    } // Fl_Button* o
+    { Fl_Group* o = new Fl_Group(16, 56, 216, 32, "Pivot:");
+      o->box(FL_ENGRAVED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { xpivot_edit = new Fl_Value_Input(37, 61, 51, 21, "X:");
+        xpivot_edit->maximum(1000);
+        xpivot_edit->step(1);
+      } // Fl_Value_Input* xpivot_edit
+      { ypivot_edit = new Fl_Value_Input(106, 61, 51, 21, "Y:");
+        ypivot_edit->maximum(1000);
+        ypivot_edit->step(1);
+      } // Fl_Value_Input* ypivot_edit
+      { zpivot_edit = new Fl_Value_Input(175, 61, 51, 21, "Z:");
+        zpivot_edit->maximum(1000);
+        zpivot_edit->step(1);
+      } // Fl_Value_Input* zpivot_edit
+      o->end();
+    } // Fl_Group* o
+    { Fl_Group* o = new Fl_Group(15, 112, 216, 32, "Lower Linear Limit:");
+      o->box(FL_ENGRAVED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { xlinear_lower = new Fl_Value_Input(36, 117, 51, 21, "X:");
+        xlinear_lower->maximum(1000);
+        xlinear_lower->step(1);
+      } // Fl_Value_Input* xlinear_lower
+      { ylinear_lower = new Fl_Value_Input(105, 117, 51, 21, "Y:");
+        ylinear_lower->maximum(1000);
+        ylinear_lower->step(1);
+      } // Fl_Value_Input* ylinear_lower
+      { zlinear_lower = new Fl_Value_Input(174, 117, 51, 21, "Z:");
+        zlinear_lower->maximum(1000);
+        zlinear_lower->step(1);
+      } // Fl_Value_Input* zlinear_lower
+      o->end();
+    } // Fl_Group* o
+    { Fl_Group* o = new Fl_Group(240, 112, 216, 32, "Upper Linear Limit:");
+      o->box(FL_ENGRAVED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { xlinear_upper = new Fl_Value_Input(261, 117, 51, 21, "X:");
+        xlinear_upper->maximum(1000);
+        xlinear_upper->step(1);
+      } // Fl_Value_Input* xlinear_upper
+      { ylinear_upper = new Fl_Value_Input(330, 117, 51, 21, "Y:");
+        ylinear_upper->maximum(1000);
+        ylinear_upper->step(1);
+      } // Fl_Value_Input* ylinear_upper
+      { zlinear_upper = new Fl_Value_Input(399, 117, 51, 21, "Z:");
+        zlinear_upper->maximum(1000);
+        zlinear_upper->step(1);
+      } // Fl_Value_Input* zlinear_upper
+      o->end();
+    } // Fl_Group* o
+    { Fl_Group* o = new Fl_Group(15, 166, 216, 32, "Lower Angular Limit:");
+      o->box(FL_ENGRAVED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { xangular_lower = new Fl_Value_Input(36, 171, 51, 21, "X:");
+        xangular_lower->maximum(1000);
+        xangular_lower->step(1);
+      } // Fl_Value_Input* xangular_lower
+      { yangular_lower = new Fl_Value_Input(105, 171, 51, 21, "Y:");
+        yangular_lower->maximum(1000);
+        yangular_lower->step(1);
+      } // Fl_Value_Input* yangular_lower
+      { zangular_lower = new Fl_Value_Input(174, 171, 51, 21, "Z:");
+        zangular_lower->maximum(1000);
+        zangular_lower->step(1);
+      } // Fl_Value_Input* zangular_lower
+      o->end();
+    } // Fl_Group* o
+    { Fl_Group* o = new Fl_Group(240, 166, 216, 32, "Upper Angular Limit:");
+      o->box(FL_ENGRAVED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { xangular_upper = new Fl_Value_Input(261, 171, 51, 21, "X:");
+        xangular_upper->maximum(1000);
+        xangular_upper->step(1);
+      } // Fl_Value_Input* xangular_upper
+      { yangular_upper = new Fl_Value_Input(330, 171, 51, 21, "Y:");
+        yangular_upper->maximum(1000);
+        yangular_upper->step(1);
+      } // Fl_Value_Input* yangular_upper
+      { zangular_upper = new Fl_Value_Input(399, 171, 51, 21, "Z:");
+        zangular_upper->maximum(1000);
+        zangular_upper->step(1);
+      } // Fl_Value_Input* zangular_upper
+      o->end();
+    } // Fl_Group* o
+    { parent_collision = new Fl_Check_Button(237, 57, 210, 27, "Parent Collision");
+      parent_collision->down_box(FL_DOWN_BOX);
+    } // Fl_Check_Button* parent_collision
+    { Fl_Button* o = new Fl_Button(15, 204, 216, 27, "Cancel");
+      o->callback((Fl_Callback*)cancel_callback, (void*)(this));
+    } // Fl_Button* o
+    { parent_input = new Fl_Input(237, 9, 222, 27, "Parent:");
+    } // Fl_Input* parent_input
+    o->set_modal();
+    o->end();
+  } // Fl_Double_Window* o
+  MPhysicsConstraint* constraint = phys->getConstraint();
+  
+  win = w;
+  
+  if(!constraint)
+  {
+  	enabled_button->value(0);
+  
+  	xpivot_edit->deactivate();
+  	ypivot_edit->deactivate();
+  	zpivot_edit->deactivate();
+  
+  	xlinear_lower->deactivate();
+  	ylinear_lower->deactivate();
+  	zlinear_lower->deactivate();
+  
+  	xlinear_upper->deactivate();
+  	ylinear_upper->deactivate();
+  	zlinear_upper->deactivate();
+  
+  	xangular_upper->deactivate();
+  	yangular_upper->deactivate();
+  	zangular_upper->deactivate();
+  
+  	xangular_lower->deactivate();
+  	yangular_lower->deactivate();
+  	zangular_lower->deactivate();
+  	
+  	parent_collision->deactivate();
+  	parent_input->deactivate();
+  
+  	return w;
+  }
+  
+  enabled_button->value(1);
+  
+  MVector3 vector;
+  
+  vector = constraint->pivot;
+  xpivot_edit->value(vector.x);
+  ypivot_edit->value(vector.y);
+  zpivot_edit->value(vector.z);
+  
+  vector = constraint->lowerLinearLimit;
+  xlinear_lower->value(vector.x);
+  ylinear_lower->value(vector.y);
+  zlinear_lower->value(vector.z);
+  
+  vector = constraint->upperLinearLimit;
+  xlinear_upper->value(vector.x);
+  ylinear_upper->value(vector.y);
+  zlinear_upper->value(vector.z);
+  
+  vector = constraint->upperAngularLimit;
+  xangular_upper->value(vector.x);
+  yangular_upper->value(vector.y);
+  zangular_upper->value(vector.z);
+  
+  vector = constraint->lowerAngularLimit;
+  xangular_lower->value(vector.x);
+  yangular_lower->value(vector.y);
+  zangular_lower->value(vector.z);
+  	
+  parent_collision->value(!constraint->disableParentCollision);
+  parent_input->value(constraint->parentName.getSafeString());
+  return w;
+}
+
+void ConstraintPropertiesDlg::enable_constraint_callback(Fl_Check_Button* button, ConstraintPropertiesDlg* dlg) {
+  MOEntity* entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
+  
+  if(!entity)
+  	return;
+  	
+  MPhysicsProperties* phys = entity->getPhysicsProperties();
+  
+  if(!phys)
+  	return;
+  
+  MPhysicsConstraint* constraint = phys->getConstraint();
+  
+  if(!constraint && button->value() == 1)
+  {
+  	phys->createConstraint();
+  	
+  	dlg->xpivot_edit->activate();
+  	dlg->ypivot_edit->activate();
+  	dlg->zpivot_edit->activate();
+  
+  	dlg->xlinear_lower->activate();
+  	dlg->ylinear_lower->activate();
+  	dlg->zlinear_lower->activate();
+  
+  	dlg->xlinear_upper->activate();
+  	dlg->ylinear_upper->activate();
+  	dlg->zlinear_upper->activate();
+  
+  	dlg->xangular_upper->activate();
+  	dlg->yangular_upper->activate();
+  	dlg->zangular_upper->activate();
+  
+  	dlg->xangular_lower->activate();
+  	dlg->yangular_lower->activate();
+  	dlg->zangular_lower->activate();
+  	
+  	dlg->parent_collision->activate();
+  	dlg->parent_input->activate();
+  
+  }
+  else if(constraint && button->value() == 0)
+  {
+  	phys->deleteConstraint();
+  	
+  	dlg->xpivot_edit->deactivate();
+  	dlg->ypivot_edit->deactivate();
+  	dlg->zpivot_edit->deactivate();
+  
+  	dlg->xlinear_lower->deactivate();
+  	dlg->ylinear_lower->deactivate();
+  	dlg->zlinear_lower->deactivate();
+  
+  	dlg->xlinear_upper->deactivate();
+  	dlg->ylinear_upper->deactivate();
+  	dlg->zlinear_upper->deactivate();
+  
+  	dlg->xangular_upper->deactivate();
+  	dlg->yangular_upper->deactivate();
+  	dlg->zangular_upper->deactivate();
+  
+  	dlg->xangular_lower->deactivate();
+  	dlg->yangular_lower->deactivate();
+  	dlg->zangular_lower->deactivate();
+  	
+  	dlg->parent_collision->deactivate();
+  	dlg->parent_input->deactivate();
+  
+  }
+}
+
+void ConstraintPropertiesDlg::close_callback(Fl_Button*, ConstraintPropertiesDlg* dlg) {
+  MOEntity* entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
+  
+  if(!entity)
+  	return;
+  	
+  MPhysicsProperties* phys = entity->getPhysicsProperties();
+  
+  if(!phys)
+  {
+  	fl_message("Selected object has no physics properties. Can not edit constraints!");
+  	return;
+  }
+  
+  MPhysicsConstraint* constraint = phys->getConstraint();
+  
+  if(!constraint)
+  {
+      dlg->win->hide();
+      Fl::delete_widget(dlg->win);
+      delete dlg;
+      return;
+  }
+
+  MVector3 vector;
+  
+  vector.x = dlg->xpivot_edit->value();
+  vector.y = dlg->ypivot_edit->value();
+  vector.z = dlg->zpivot_edit->value();
+  constraint->pivot = vector;
+  
+  vector.x = dlg->xlinear_lower->value();
+  vector.y = dlg->ylinear_lower->value();
+  vector.z = dlg->zlinear_lower->value();
+  constraint->lowerLinearLimit = vector;
+  
+  vector.x = dlg->xlinear_upper->value();
+  vector.y = dlg->ylinear_upper->value();
+  vector.z = dlg->zlinear_upper->value();
+  constraint->upperLinearLimit = vector;
+  
+  vector.x = dlg->xangular_lower->value();
+  vector.y = dlg->yangular_lower->value();
+  vector.z = dlg->zangular_lower->value();
+  constraint->lowerAngularLimit = vector;
+  
+  vector.x = dlg->xangular_upper->value();
+  vector.y = dlg->yangular_upper->value();
+  vector.z = dlg->zangular_upper->value();
+  constraint->upperAngularLimit = vector;
+  
+  constraint->disableParentCollision = !dlg->parent_collision->value();
+  constraint->parentName.set(dlg->parent_input->value());
+  
+  dlg->win->hide();
+  Fl::delete_widget(dlg->win);
+  delete dlg;
+}
+
+void ConstraintPropertiesDlg::cancel_callback(Fl_Button*, ConstraintPropertiesDlg* dlg) {
+  dlg->win->hide();
+  Fl::delete_widget(dlg->win);
+  delete dlg;
 }

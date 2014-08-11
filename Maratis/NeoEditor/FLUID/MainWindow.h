@@ -59,6 +59,7 @@ extern void edit_object_chk_btn(Fl_Check_Button*, void*);
 extern void edit_materials_callback(Fl_Button*, void*);
 extern void edit_shape_callback(Fl_Menu_*, long);
 extern void edit_object_properties(Fl_Value_Input*, void*);
+extern void object_constraint_properties_callback(Fl_Button*, void*);
 extern void edit_camera_properties(Fl_Value_Input*, void*);
 extern void choose_camera_color(Fl_Button*, void*);
 extern void edit_camera_properties_chk_btn(Fl_Check_Button*, void*);
@@ -129,9 +130,6 @@ public:
   Fl_Value_Input *object_fric_edit;
   Fl_Value_Input *object_rest_edit;
   Fl_Check_Button *object_physics_button;
-  Fl_Value_Input *xpivot_edit;
-  Fl_Value_Input *ypivot_edit;
-  Fl_Value_Input *zpivot_edit;
   Fl_Value_Input *object_linear_damping_edit;
   Fl_Value_Input *object_angular_damping_edit;
   Fl_Value_Input *xlinear_edit;
@@ -245,4 +243,31 @@ public:
 };
 void new_scene_ok_callback(Fl_Button* button,void*);
 void new_scene_cancel_callback(Fl_Button* button,void*);
+
+class ConstraintPropertiesDlg {
+  Fl_Window* win; 
+public:
+  Fl_Double_Window* create_window();
+  Fl_Check_Button *enabled_button;
+  Fl_Value_Input *xpivot_edit;
+  Fl_Value_Input *ypivot_edit;
+  Fl_Value_Input *zpivot_edit;
+  Fl_Value_Input *xlinear_lower;
+  Fl_Value_Input *ylinear_lower;
+  Fl_Value_Input *zlinear_lower;
+  Fl_Value_Input *xlinear_upper;
+  Fl_Value_Input *ylinear_upper;
+  Fl_Value_Input *zlinear_upper;
+  Fl_Value_Input *xangular_lower;
+  Fl_Value_Input *yangular_lower;
+  Fl_Value_Input *zangular_lower;
+  Fl_Value_Input *xangular_upper;
+  Fl_Value_Input *yangular_upper;
+  Fl_Value_Input *zangular_upper;
+  Fl_Check_Button *parent_collision;
+  Fl_Input *parent_input;
+  static void enable_constraint_callback(Fl_Check_Button* button, ConstraintPropertiesDlg* dlg);
+  static void close_callback(Fl_Button*, ConstraintPropertiesDlg* dlg);
+  static void cancel_callback(Fl_Button*, ConstraintPropertiesDlg* dlg);
+};
 #endif
