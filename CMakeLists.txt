@@ -129,6 +129,9 @@ IF(UNIX AND NOT APPLE)
   SET(CPACK_PACKAGE_CONTACT Yannick Pflanzer <yannick.pflanzer@scary-squid.de>)
   SET(CPACK_GENERATOR "STGZ;TGZ;DEB;RPM;")
   SET(CPACK_STRIP_FILES ON)
+
+  # Don't use -fPIC for executables
+  SET(DISABLE_PIC_EXECUTABLES ON)
   
 ENDIF(UNIX AND NOT APPLE)
 
