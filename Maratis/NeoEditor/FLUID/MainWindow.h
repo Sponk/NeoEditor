@@ -154,8 +154,8 @@ public:
   static Fl_Menu_Item menu_text_alignment_chooser[];
   Fl_Value_Input *text_r;
   Fl_Value_Input *text_g;
-  Fl_Value_Input *text_b;
   Fl_Value_Input *text_a;
+  Fl_Value_Input *text_b;
   Fl_Double_Window* create_sound_window();
   Fl_Output *sound_file_edit;
   Fl_Check_Button *sound_loop_button;

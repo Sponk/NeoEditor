@@ -20,7 +20,7 @@ class EditorWindow {open
   } {
     Fl_Window {} {
       label Neo open
-      xywh {59 212 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
+      xywh {1538 253 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -239,7 +239,7 @@ class EditorWindow {open
           xywh {414 27 60 24} type Radio down_box ROUND_DOWN_BOX shortcut 0x33
         }
         Fl_Choice scenes_menu {
-          label {Scenes:} open selected
+          label {Scenes:} open
           xywh {537 30 129 18} down_box BORDER_BOX
         } {}
         Fl_Group speed_group {open
@@ -414,8 +414,7 @@ class EditorWindow {open
       }
     }
   }
-  Function {create_light_window()} {open
-  } {
+  Function {create_light_window()} {} {
     Fl_Window light_window_object {open
       xywh {1910 270 258 714} type Double labelsize 11 hide
       code0 {light_window_object->position(0,0);}
@@ -519,8 +518,8 @@ class EditorWindow {open
   }
   Function {create_object_window()} {} {
     Fl_Window object_embedded_window {open
-      xywh {1885 46 261 933} type Double resizable
-      code0 {special_tab->resizable(object_embedded_window);} visible
+      xywh {1885 46 261 933} type Double hide resizable
+      code0 {special_tab->resizable(object_embedded_window);}
     } {
       Fl_Scroll {} {open
         xywh {0 6 230 894} type VERTICAL resizable
@@ -745,9 +744,10 @@ class EditorWindow {open
       }
     }
   }
-  Function {create_text_window()} {} {
+  Function {create_text_window()} {open
+  } {
     Fl_Window {} {open
-      xywh {2391 146 261 720} type Double hide
+      xywh {2391 146 261 720} type Double visible
     } {
       Fl_Group {} {
         label {Settings:} open
@@ -798,8 +798,8 @@ class EditorWindow {open
         }
       }
       Fl_Group {} {
-        label {Color:} open
-        xywh {6 336 210 78} box ENGRAVED_FRAME align 5
+        label {Color:} open selected
+        xywh {6 336 210 66} box ENGRAVED_FRAME align 5
       } {
         Fl_Value_Input text_r {
           label {R:}
@@ -811,12 +811,12 @@ class EditorWindow {open
           callback edit_text_properties
           xywh {96 345 48 21} step 0.01
         }
-        Fl_Value_Input text_b {
+        Fl_Value_Input text_a {
           label {A:}
           callback edit_text_properties
           xywh {27 372 48 21} step 0.01
         }
-        Fl_Value_Input text_a {
+        Fl_Value_Input text_b {
           label {B:}
           callback edit_text_properties
           xywh {162 345 48 21} step 0.01
@@ -1490,7 +1490,7 @@ if(!phys)
 }} {}
     Fl_Window {} {
       label Constraints open
-      xywh {2054 357 471 246} type Double modal visible
+      xywh {2054 357 471 246} type Double hide modal
     } {
       Fl_Check_Button enabled_button {
         label {Constraint Enabled}

@@ -594,7 +594,7 @@ Fl_Double_Window* EditorWindow::create_text_window() {
       } // Fl_Choice* text_alignment_chooser
       o->end();
     } // Fl_Group* o
-    { Fl_Group* o = new Fl_Group(6, 336, 210, 78, "Color:");
+    { Fl_Group* o = new Fl_Group(6, 336, 210, 66, "Color:");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       { text_r = new Fl_Value_Input(27, 345, 48, 21, "R:");
@@ -605,14 +605,14 @@ Fl_Double_Window* EditorWindow::create_text_window() {
         text_g->step(0.01);
         text_g->callback((Fl_Callback*)edit_text_properties);
       } // Fl_Value_Input* text_g
-      { text_b = new Fl_Value_Input(27, 372, 48, 21, "A:");
-        text_b->step(0.01);
-        text_b->callback((Fl_Callback*)edit_text_properties);
-      } // Fl_Value_Input* text_b
-      { text_a = new Fl_Value_Input(162, 345, 48, 21, "B:");
+      { text_a = new Fl_Value_Input(27, 372, 48, 21, "A:");
         text_a->step(0.01);
         text_a->callback((Fl_Callback*)edit_text_properties);
       } // Fl_Value_Input* text_a
+      { text_b = new Fl_Value_Input(162, 345, 48, 21, "B:");
+        text_b->step(0.01);
+        text_b->callback((Fl_Callback*)edit_text_properties);
+      } // Fl_Value_Input* text_b
       { Fl_Button* o = new Fl_Button(96, 372, 114, 24, "Choose color");
         o->labeltype(FL_ENGRAVED_LABEL);
         o->labelsize(11);
