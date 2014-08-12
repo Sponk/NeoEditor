@@ -196,6 +196,18 @@ function objectToXml(object, path, parent)
 
     
         output = output .. "/>\n"
+    elseif objectType == "Text" then
+        output = output .. " file=\"" .. relpath(getFontFilename(object), path)
+        output = output .. "\">\n"
+    
+        output = output .. "<ObjectProperties\n"
+        output = output .. "\tsize=\"" .. getTextFontSize(object) .. "\"\n"
+        output = output .. "\talign=\"" .. getTextAlignment(object) .. "\"\n"
+        output = output .. "\tcolor=\"" .. vec2str(getTextColor(object)) .. "\"\n"
+    
+        -- FIXME: Possibly unsafe when using escape sequences!
+        output = output .. "\ttext=\"" .. getText(object) .. "\"\n"
+        output = output .. "/>\n"   
     end
     
     -- Position is relative to the selection center
@@ -384,6 +396,26 @@ function addSound(sound, group)
     return object
 end
 
+function addText(text, group)
+    local object = loadTextFont(text["@file"])
+    updateTransform(text, object)    
+    setScale(object, {1,1,1})
+    updateMatrix(object)
+    
+    local prop = text.ObjectProperties   
+        
+    setTextFontSize(object, prop["@size"])
+    setTextColor(object, str2vec(prop["@color"]))
+    setTextAlignment(object, prop["@align"])
+    setText(object, prop["@text"])
+        
+    if text["@parent"] == nil then
+        setParent(object, group)
+    end
+    
+    return object
+end
+
 function load_callback()
 
     local filename = openFileDlg("Choose a file", getProjectDir(), "*.mp")
@@ -451,6 +483,19 @@ function load_callback()
         else
 		parents[objects.prefab.Sound["@name"]] = addSound(objects.prefab.Sound, group)
 		allObjects[#allObjects + 1] = objects.prefab.Sound
+        end
+    end
+    
+    -- Texts
+    if objects.prefab.Text ~= nil then
+        if #objects.prefab.Text > 0 then  
+            for i = 1, #objects.prefab.Text, 1 do
+		parents[objects.prefab.Text[i]["@name"]] = addText(objects.prefab.Text[i], group)
+		allObjects[#allObjects + 1] = objects.prefab.Text[i]
+            end
+        else
+		parents[objects.prefab.Text["@name"]] = addText(objects.prefab.Text, group)
+		allObjects[#allObjects + 1] = objects.prefab.Text
         end
     end
     

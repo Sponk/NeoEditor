@@ -511,7 +511,7 @@ int loadMesh(lua_State * L)
 
 int loadSound(lua_State * L)
 {
-    if(! isFunctionOk(L, "loadMesh", 1))
+    if(! isFunctionOk(L, "loadSound", 1))
         return 0;
 
     const char* path = lua_tostring(L, 1);
@@ -4103,6 +4103,161 @@ int showCursor(lua_State * L)
 	return 0;
 }
 
+int loadTextFont(lua_State * L)
+{
+    if(! isFunctionOk(L, "loadTextFont", 1))
+        return 0;
+
+    const char* path = lua_tostring(L, 1);
+
+    MLevel* level = MEngine::getInstance()->getLevel();
+    MScene* scene = level->getCurrentScene();
+
+    char string[256];
+    getGlobalFilename(string, MWindow::getInstance()->getWorkingDirectory(), path);
+
+    MFontRef* ref = level->loadFont(string);
+    MOText* text = scene->addNewText(ref);
+
+    if(!ref)
+    {
+        lua_pushnil(L);
+        return 0;
+    }
+
+    strcpy(string, "Text0");
+    getNewObjectName("Text", string);
+
+    text->setName(string);
+    text->setText("Text");
+
+    lua_pushinteger(L, (lua_Integer) text);
+
+    return 1;
+}
+
+int getFontFilename(lua_State * L)
+{
+    if(! isFunctionOk(L, "getFontFilename", 1))
+        return 0;
+
+    int nbArguments = lua_gettop(L);
+
+    long int id = lua_tointeger(L, nbArguments);
+    MObject3d* object;
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_TEXT)
+        {
+            MOText* text = (MOText*) object;
+            lua_pushstring(L, text->getFontRef()->getFilename());
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int getTextAlignment(lua_State * L)
+{
+    if(! isFunctionOk(L, "getTextAlignment", 1))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_TEXT)
+        {
+            switch(((MOText*) object)->getAlign())
+            {
+            case M_ALIGN_CENTER:
+                    lua_pushstring(L, "Center");
+                break;
+            case M_ALIGN_LEFT:
+                    lua_pushstring(L, "Left");
+                break;
+            case M_ALIGN_RIGHT:
+                    lua_pushstring(L, "Right");
+                break;
+            }
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int setTextAlignment(lua_State * L)
+{
+    if(! isFunctionOk(L, "setTextAlignment", 2))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+    const char* alignment = lua_tostring(L, 2);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_TEXT)
+        {
+            if(!strcmp(alignment, "Center"))
+                static_cast<MOText*>(object)->setAlign(M_ALIGN_CENTER);
+            else if(!strcmp(alignment, "Left"))
+                static_cast<MOText*>(object)->setAlign(M_ALIGN_LEFT);
+            else if(!strcmp(alignment, "Right"))
+                static_cast<MOText*>(object)->setAlign(M_ALIGN_RIGHT);
+            else
+                MLOG_WARNING("Unknown alignment: " << alignment);
+
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int getTextFontSize(lua_State * L)
+{
+    if(! isFunctionOk(L, "getTextFontSize", 1))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_TEXT)
+        {
+            lua_pushnumber(L, ((MOText*) object)->getSize());
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int setTextFontSize(lua_State * L)
+{
+    if(! isFunctionOk(L, "setTextFontSize", 2))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_TEXT)
+        {
+            ((MOText *)object)->setSize(lua_tonumber(L, 2));
+        }
+    }
+
+    return 0;
+}
+
 int getText(lua_State * L)
 {
 	if(! isFunctionOk(L, "getText", 1))
@@ -4476,10 +4631,16 @@ void MScript::init(void)
 	lua_register(m_state, "getUnProjectedPoint",	getUnProjectedPoint);
 
 	// text
+    lua_register(m_state, "loadTextFont", loadTextFont);
+    lua_register(m_state, "getFontFilename", getFontFilename);
+    lua_register(m_state, "getTextFontSize", getTextFontSize);
+    lua_register(m_state, "setTextFontSize", setTextFontSize);
 	lua_register(m_state, "getText", getText);
 	lua_register(m_state, "setText", setText);
 	lua_register(m_state, "getTextColor", getTextColor);
 	lua_register(m_state, "setTextColor", setTextColor);
+    lua_register(m_state, "setTextAlignment", setTextAlignment);
+    lua_register(m_state, "getTextAlignment", getTextAlignment);
 
 	// do file
 	lua_register(m_state, "dofile", doFile);
