@@ -490,7 +490,6 @@ int loadMesh(lua_State * L)
 
     const char* path = lua_tostring(L, 1);
 
-    // TODO: Get global filename!
     MMeshRef* meshRef = NULL;
     MLevel* level = MEngine::getInstance()->getLevel();
 
@@ -508,6 +507,218 @@ int loadMesh(lua_State * L)
     lua_pushinteger(L, (lua_Integer) entity);
 
     return 1;
+}
+
+int loadSound(lua_State * L)
+{
+    if(! isFunctionOk(L, "loadMesh", 1))
+        return 0;
+
+    const char* path = lua_tostring(L, 1);
+
+    MLevel* level = MEngine::getInstance()->getLevel();
+    MScene* scene = level->getCurrentScene();
+
+    char string[256];
+    getGlobalFilename(string, MWindow::getInstance()->getWorkingDirectory(), path);
+
+    MSoundRef* ref = level->loadSound(string);
+    MOSound* sound = scene->addNewSound(ref);
+
+    strcpy(string, "Sound0");
+    getNewObjectName("Sound", string);
+
+    sound->setName(string);
+    lua_pushinteger(L, (lua_Integer) sound);
+
+    return 1;
+}
+
+int getSoundFilename(lua_State * L)
+{
+    if(! isFunctionOk(L, "getSoundFilename", 1))
+        return 0;
+
+    int nbArguments = lua_gettop(L);
+
+    long int id = lua_tointeger(L, nbArguments);
+    MObject3d* object;
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound* sound = (MOSound*) object;
+            lua_pushstring(L, sound->getSoundRef()->getFilename());
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int getSoundRolloff(lua_State * L)
+{
+    if(! isFunctionOk(L, "getSoundRolloff", 1))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            lua_pushnumber(L, (lua_Number)sound->getRolloff());
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int setSoundRolloff(lua_State * L)
+{
+    if(!isFunctionOk(L, "setSoundRolloff", 2))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            sound->setRolloff(lua_tonumber(L, 2));
+        }
+    }
+
+    return 0;
+}
+
+int getSoundRadius(lua_State * L)
+{
+    if(! isFunctionOk(L, "getSoundRadius", 1))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            lua_pushnumber(L, (lua_Number)sound->getRadius());
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int setSoundRadius(lua_State * L)
+{
+    if(!isFunctionOk(L, "setSoundRadius", 2))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            sound->setRadius(lua_tonumber(L, 2));
+        }
+    }
+
+    return 0;
+}
+
+int setSoundRelative(lua_State * L)
+{
+    if(!isFunctionOk(L, "setSoundRelative", 2))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            sound->setRelative(lua_toboolean(L, 2));
+        }
+    }
+
+    return 0;
+}
+
+int isSoundRelative(lua_State * L)
+{
+    if(! isFunctionOk(L, "isSoundRelative", 1))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            lua_pushboolean(L, (lua_Number)sound->isRelative());
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int setSoundLooping(lua_State * L)
+{
+    if(!isFunctionOk(L, "setSoundLooping", 2))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            sound->setLooping(lua_toboolean(L, 2));
+        }
+    }
+
+    return 0;
+}
+
+int isSoundLooping(lua_State * L)
+{
+    if(! isFunctionOk(L, "isSoundLooping", 1))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            lua_pushboolean(L, (lua_Number)sound->isLooping());
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
 int createGroup(lua_State * L)
@@ -4193,13 +4404,26 @@ void MScript::init(void)
     lua_register(m_state, "getTouchPhase", getTouchPhase);
 
 	// sound
-	lua_register(m_state, "playSound",	  playSound);
-	lua_register(m_state, "pauseSound",	  pauseSound);
-	lua_register(m_state, "stopSound",	  stopSound);
-	lua_register(m_state, "getSoundGain", getSoundGain);
-	lua_register(m_state, "setSoundGain", setSoundGain);
-    lua_register(m_state, "setSoundPitch", setSoundPitch);
-    lua_register(m_state, "getSoundPitch", getSoundPitch);
+    lua_register(m_state, "loadSound",          loadSound);
+    lua_register(m_state, "getSoundFilename",   getSoundFilename);
+    lua_register(m_state, "playSound",          playSound);
+    lua_register(m_state, "pauseSound",         pauseSound);
+    lua_register(m_state, "stopSound",          stopSound);
+    lua_register(m_state, "getSoundGain",       getSoundGain);
+    lua_register(m_state, "setSoundGain",       setSoundGain);
+    lua_register(m_state, "setSoundPitch",      setSoundPitch);
+    lua_register(m_state, "getSoundPitch",      getSoundPitch);
+
+    lua_register(m_state, "getSoundRolloff",    getSoundRolloff);
+    lua_register(m_state, "getSoundRadius",     getSoundRadius);
+    lua_register(m_state, "isSoundRelative",    isSoundRelative);
+    lua_register(m_state, "isSoundLooping",     isSoundLooping);
+
+    lua_register(m_state, "setSoundLooping",    setSoundLooping);
+    lua_register(m_state, "setSoundRelative",   setSoundRelative);
+    lua_register(m_state, "setSoundRadius",     setSoundRadius);
+    lua_register(m_state, "setSoundRolloff",    setSoundRolloff);
+
 	
 	// scene/level
 	lua_register(m_state, "changeScene",			changeScene);

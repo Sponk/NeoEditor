@@ -182,6 +182,20 @@ function objectToXml(object, path, parent)
         output = output .. "\tfogDistance=\"" .. getCameraFogDistance(object) .. "\"\n"
     
         output = output .. "/>\n"
+    elseif objectType == "Sound" then
+        output = output .. " file=\"" .. relpath(getSoundFilename(object), path)
+        output = output .. "\">\n"
+    
+        output = output .. "<ObjectProperties\n"
+        output = output .. "\tpitch=\"" .. getSoundPitch(object) .. "\"\n"
+        output = output .. "\tgain=\"" .. getSoundGain(object) .. "\"\n"
+        output = output .. "\trolloff=\"" .. getSoundRolloff(object) .. "\"\n"
+        output = output .. "\tradius=\"" .. getSoundRadius(object) .. "\"\n"
+        output = output .. "\trelative=\"" .. bool2str(isSoundRelative(object)) .. "\"\n"
+        output = output .. "\tloop=\"" .. bool2str(isSoundLooping(object)) .. "\"\n"
+
+    
+        output = output .. "/>\n"
     end
     
     -- Position is relative to the selection center
@@ -348,6 +362,28 @@ function addCamera(camera, group)
     return object
 end
 
+function addSound(sound, group)
+    local object = loadSound(sound["@file"])
+    updateTransform(sound, object)    
+    setScale(object, {1,1,1})
+    updateMatrix(object)
+    
+    local prop = sound.ObjectProperties   
+    
+    setSoundLooping(object, prop["@loop"])
+    setSoundRelative(object, prop["@relative"])
+    setSoundPitch(object, prop["@pitch"])
+    setSoundGain(object, prop["@gain"])
+    setSoundRadius(object, prop["@radius"])
+    setSoundRolloff(object, prop["@rolloff"])
+    
+    if sound["@parent"] == nil then
+        setParent(object, group)
+    end
+    
+    return object
+end
+
 function load_callback()
 
     local filename = openFileDlg("Choose a file", getProjectDir(), "*.mp")
@@ -402,6 +438,19 @@ function load_callback()
         else
 		parents[objects.prefab.Camera["@name"]] = addCamera(objects.prefab.Camera, group)
 		allObjects[#allObjects + 1] = objects.prefab.Camera
+        end
+    end
+    
+    -- Sounds
+    if objects.prefab.Sound ~= nil then
+        if #objects.prefab.Sound > 0 then  
+            for i = 1, #objects.prefab.Sound, 1 do
+		parents[objects.prefab.Sound[i]["@name"]] = addSound(objects.prefab.Sound[i], group)
+		allObjects[#allObjects + 1] = objects.prefab.Sound[i]
+            end
+        else
+		parents[objects.prefab.Sound["@name"]] = addSound(objects.prefab.Sound, group)
+		allObjects[#allObjects + 1] = objects.prefab.Sound
         end
     end
     
