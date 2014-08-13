@@ -46,6 +46,9 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
  {"Add Behavior", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0},
  {"Add Scene", 0,  (Fl_Callback*)add_scene_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Add Group", 0,  (Fl_Callback*)add_group_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {0,0,0,0,0,0,0,0,0},
+ {"Plugins", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0},
  {"Help", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
  {"About", 0,  (Fl_Callback*)about_menu_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
@@ -53,6 +56,15 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
  {0,0,0,0,0,0,0,0,0}
 };
 Fl_Menu_Item* EditorWindow::behavior_menu = EditorWindow::menu_menu_bar + 36;
+
+Fl_Menu_Item EditorWindow::menu_View[] = {
+ {"Other", 0,  (Fl_Callback*)change_vue_callback, (void*)(0), 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Face", 0,  (Fl_Callback*)change_vue_callback, (void*)(1), 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Right", 0,  (Fl_Callback*)change_vue_callback, (void*)(3), 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Top", 0,  (Fl_Callback*)change_vue_callback, (void*)(7), 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Bottom", 0,  (Fl_Callback*)change_vue_callback, (void*)(9), 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {0,0,0,0,0,0,0,0,0}
+};
 
 Fl_Menu_Item EditorWindow::menu_object_shape_choice[] = {
  {"Box", 0,  (Fl_Callback*)edit_shape_callback, (void*)(0), 0, FL_NORMAL_LABEL, 0, 14, 0},
@@ -98,7 +110,7 @@ Fl_Double_Window* EditorWindow::show_window() {
       scene_tree->callback((Fl_Callback*)scene_tree_callback);
       scene_tree->when(FL_WHEN_RELEASE);
     } // Fl_Tree* scene_tree
-    { edit_group = new Fl_Group(3, 24, 708, 30);
+    { edit_group = new Fl_Group(3, 24, 887, 30);
       { Fl_Round_Button* o = new Fl_Round_Button(258, 27, 90, 24, "Translate");
         o->type(102);
         o->shortcut(0x31);
@@ -118,7 +130,7 @@ Fl_Double_Window* EditorWindow::show_window() {
         o->down_box(FL_ROUND_DOWN_BOX);
         o->callback((Fl_Callback*)set_edit_type, (void*)('s'));
       } // Fl_Round_Button* o
-      { scenes_menu = new Fl_Choice(564, 30, 147, 18, "Scenes:");
+      { scenes_menu = new Fl_Choice(537, 30, 129, 18, "Scenes:");
         scenes_menu->down_box(FL_BORDER_BOX);
       } // Fl_Choice* scenes_menu
       { speed_group = new Fl_Group(3, 27, 258, 21);
@@ -136,6 +148,15 @@ Fl_Double_Window* EditorWindow::show_window() {
         speed_group->resizable(NULL);
         speed_group->end();
       } // Fl_Group* speed_group
+      { vue_ortho_button = new Fl_Check_Button(673, 30, 57, 18, "Ortho");
+        vue_ortho_button->shortcut(0x35);
+        vue_ortho_button->down_box(FL_DOWN_BOX);
+        vue_ortho_button->callback((Fl_Callback*)ortho_callback);
+      } // Fl_Check_Button* vue_ortho_button
+      { Fl_Choice* o = new Fl_Choice(783, 30, 107, 18, "View:");
+        o->down_box(FL_BORDER_BOX);
+        o->menu(menu_View);
+      } // Fl_Choice* o
       edit_group->resizable(NULL);
       edit_group->end();
     } // Fl_Group* edit_group
@@ -365,11 +386,11 @@ Fl_Double_Window* EditorWindow::create_publish_window() {
 }
 
 Fl_Double_Window* EditorWindow::create_object_window() {
-  { object_embedded_window = new Fl_Double_Window(261, 672);
+  { object_embedded_window = new Fl_Double_Window(261, 933);
     object_embedded_window->user_data((void*)(this));
-    { Fl_Scroll* o = new Fl_Scroll(0, 6, 230, 666);
+    { Fl_Scroll* o = new Fl_Scroll(0, 6, 230, 894);
       o->type(2);
-      { Fl_Group* o = new Fl_Group(3, 27, 217, 78, "Settings:");
+      { Fl_Group* o = new Fl_Group(3, 27, 217, 112, "Settings:");
         o->box(FL_ENGRAVED_FRAME);
         o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
         { object_mesh_edit = new Fl_Output(16, 51, 198, 21, "Mesh:");
@@ -383,95 +404,82 @@ Fl_Double_Window* EditorWindow::create_object_window() {
         { Fl_Button* o = new Fl_Button(103, 78, 111, 21, "Edit Materials");
           o->callback((Fl_Callback*)edit_materials_callback);
         } // Fl_Button* o
+        { object_shadow_button = new Fl_Check_Button(12, 106, 111, 24, "Shadow");
+          object_shadow_button->down_box(FL_DOWN_BOX);
+          object_shadow_button->callback((Fl_Callback*)edit_object_chk_btn);
+        } // Fl_Check_Button* object_shadow_button
         o->end();
       } // Fl_Group* o
-      { Fl_Group* o = new Fl_Group(3, 132, 217, 249, "Physics:");
+      { Fl_Group* o = new Fl_Group(3, 166, 217, 249, "Physics:");
         o->box(FL_ENGRAVED_FRAME);
         o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-        { object_shape_choice = new Fl_Choice(16, 189, 195, 27, "Shape:");
+        { object_shape_choice = new Fl_Choice(16, 223, 195, 27, "Shape:");
           object_shape_choice->down_box(FL_BORDER_BOX);
           object_shape_choice->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           object_shape_choice->menu(menu_object_shape_choice);
         } // Fl_Choice* object_shape_choice
-        { object_ghost_button = new Fl_Check_Button(16, 222, 78, 21, "Ghost");
+        { object_ghost_button = new Fl_Check_Button(16, 256, 78, 21, "Ghost");
           object_ghost_button->down_box(FL_DOWN_BOX);
           object_ghost_button->callback((Fl_Callback*)edit_object_chk_btn);
         } // Fl_Check_Button* object_ghost_button
-        { object_mass_edit = new Fl_Value_Input(16, 261, 195, 21, "Mass:");
+        { object_mass_edit = new Fl_Value_Input(16, 295, 195, 21, "Mass:");
           object_mass_edit->callback((Fl_Callback*)edit_object_properties);
           object_mass_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
         } // Fl_Value_Input* object_mass_edit
-        { object_fric_edit = new Fl_Value_Input(16, 306, 195, 21, "Friction:");
+        { object_fric_edit = new Fl_Value_Input(16, 340, 195, 21, "Friction:");
           object_fric_edit->callback((Fl_Callback*)edit_object_properties);
           object_fric_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
         } // Fl_Value_Input* object_fric_edit
-        { object_rest_edit = new Fl_Value_Input(16, 351, 195, 21, "Restitution:");
+        { object_rest_edit = new Fl_Value_Input(16, 385, 195, 21, "Restitution:");
           object_rest_edit->callback((Fl_Callback*)edit_object_properties);
           object_rest_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
         } // Fl_Value_Input* object_rest_edit
-        { object_physics_button = new Fl_Check_Button(16, 147, 204, 21, "Physics");
+        { object_physics_button = new Fl_Check_Button(16, 181, 204, 21, "Physics");
           object_physics_button->down_box(FL_DOWN_BOX);
           object_physics_button->callback((Fl_Callback*)edit_object_chk_btn);
         } // Fl_Check_Button* object_physics_button
         o->end();
       } // Fl_Group* o
-      { Fl_Group* o = new Fl_Group(4, 634, 216, 32, "Pivot:");
+      { Fl_Group* o = new Fl_Group(4, 440, 216, 95, "Damping:");
         o->box(FL_ENGRAVED_FRAME);
         o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-        { xpivot_edit = new Fl_Value_Input(25, 639, 51, 21, "X:");
-          xpivot_edit->maximum(1000);
-          xpivot_edit->step(1);
-          xpivot_edit->callback((Fl_Callback*)edit_object_properties);
-        } // Fl_Value_Input* xpivot_edit
-        { ypivot_edit = new Fl_Value_Input(94, 639, 51, 21, "Y:");
-          ypivot_edit->maximum(1000);
-          ypivot_edit->step(1);
-          ypivot_edit->callback((Fl_Callback*)edit_object_properties);
-        } // Fl_Value_Input* ypivot_edit
-        { zpivot_edit = new Fl_Value_Input(163, 638, 51, 21, "Z:");
-          zpivot_edit->maximum(1000);
-          zpivot_edit->step(1);
-          zpivot_edit->callback((Fl_Callback*)edit_object_properties);
-        } // Fl_Value_Input* zpivot_edit
-        o->end();
-      } // Fl_Group* o
-      { Fl_Group* o = new Fl_Group(4, 406, 216, 95, "Damping:");
-        o->box(FL_ENGRAVED_FRAME);
-        o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-        { object_linear_damping_edit = new Fl_Value_Input(16, 429, 195, 21, "Linear:");
+        { object_linear_damping_edit = new Fl_Value_Input(16, 463, 195, 21, "Linear:");
           object_linear_damping_edit->callback((Fl_Callback*)edit_object_properties);
           object_linear_damping_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
         } // Fl_Value_Input* object_linear_damping_edit
-        { object_angular_damping_edit = new Fl_Value_Input(16, 471, 195, 21, "Angular:");
+        { object_angular_damping_edit = new Fl_Value_Input(16, 505, 195, 21, "Angular:");
           object_angular_damping_edit->callback((Fl_Callback*)edit_object_properties);
           object_angular_damping_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
         } // Fl_Value_Input* object_angular_damping_edit
         o->end();
       } // Fl_Group* o
-      { Fl_Group* o = new Fl_Group(4, 526, 216, 32, "Linear Factor:");
+      { Fl_Group* o = new Fl_Group(4, 560, 216, 32, "Linear Factor:");
         o->box(FL_ENGRAVED_FRAME);
         o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-        { xlinear_edit = new Fl_Value_Input(25, 531, 51, 21, "X:");
+        { xlinear_edit = new Fl_Value_Input(25, 565, 51, 21, "X:");
           xlinear_edit->maximum(1000);
           xlinear_edit->step(1);
           xlinear_edit->callback((Fl_Callback*)edit_object_properties);
         } // Fl_Value_Input* xlinear_edit
-        { ylinear_edit = new Fl_Value_Input(94, 531, 51, 21, "Y:");
+        { ylinear_edit = new Fl_Value_Input(94, 565, 51, 21, "Y:");
           ylinear_edit->maximum(1000);
           ylinear_edit->step(1);
           ylinear_edit->callback((Fl_Callback*)edit_object_properties);
         } // Fl_Value_Input* ylinear_edit
-        { zlinear_edit = new Fl_Value_Input(163, 530, 51, 21, "Z:");
+        { zlinear_edit = new Fl_Value_Input(163, 564, 51, 21, "Z:");
           zlinear_edit->maximum(1000);
           zlinear_edit->step(1);
           zlinear_edit->callback((Fl_Callback*)edit_object_properties);
         } // Fl_Value_Input* zlinear_edit
         o->end();
       } // Fl_Group* o
-      { object_angular_factor_edit = new Fl_Value_Input(4, 582, 216, 21, "Angular Facto:");
+      { object_angular_factor_edit = new Fl_Value_Input(4, 616, 216, 21, "Angular Facto:");
         object_angular_factor_edit->callback((Fl_Callback*)edit_object_properties);
         object_angular_factor_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* object_angular_factor_edit
+      { Fl_Button* o = new Fl_Button(3, 648, 213, 27, "Constraint properties");
+        o->callback((Fl_Callback*)object_constraint_properties_callback);
+      } // Fl_Button* o
       o->end();
       Fl_Group::current()->resizable(o);
     } // Fl_Scroll* o
@@ -486,52 +494,60 @@ Fl_Double_Window* EditorWindow::create_camera_window() {
   { Fl_Double_Window* o = new Fl_Double_Window(258, 660);
     w = o;
     o->user_data((void*)(this));
-    { Fl_Group* o = new Fl_Group(5, 27, 218, 42, "Clear Color:");
+    { Fl_Group* o = new Fl_Group(5, 27, 218, 76, "Clear Color:");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      { camera_color_r_edit = new Fl_Value_Input(33, 39, 36, 18, "R:");
-        camera_color_r_edit->step(0.01);
-        camera_color_r_edit->callback((Fl_Callback*)edit_camera_properties);
-      } // Fl_Value_Input* camera_color_r_edit
-      { camera_color_g_edit = new Fl_Value_Input(93, 39, 36, 18, "G:");
-        camera_color_g_edit->step(0.01);
-        camera_color_g_edit->callback((Fl_Callback*)edit_camera_properties);
-      } // Fl_Value_Input* camera_color_g_edit
-      { camera_color_b_edit = new Fl_Value_Input(156, 39, 36, 18, "B:");
-        camera_color_b_edit->step(0.01);
-        camera_color_b_edit->callback((Fl_Callback*)edit_camera_properties);
-      } // Fl_Value_Input* camera_color_b_edit
+      { camera_color_r = new Fl_Value_Input(10, 47, 45, 21, "Red:");
+        camera_color_r->step(0.1);
+        camera_color_r->callback((Fl_Callback*)edit_camera_properties);
+        camera_color_r->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* camera_color_r
+      { camera_color_g = new Fl_Value_Input(61, 47, 45, 21, "Green:");
+        camera_color_g->step(0.1);
+        camera_color_g->callback((Fl_Callback*)edit_camera_properties);
+        camera_color_g->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* camera_color_g
+      { camera_color_b = new Fl_Value_Input(115, 47, 45, 21, "Blue:");
+        camera_color_b->step(0.1);
+        camera_color_b->callback((Fl_Callback*)edit_camera_properties);
+        camera_color_b->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* camera_color_b
+      { Fl_Button* o = new Fl_Button(10, 71, 96, 26, "Choose color");
+        o->labeltype(FL_ENGRAVED_LABEL);
+        o->labelsize(11);
+        o->callback((Fl_Callback*)choose_camera_color);
+      } // Fl_Button* o
       o->end();
     } // Fl_Group* o
-    { Fl_Group* o = new Fl_Group(5, 96, 218, 171, "Settings:");
+    { Fl_Group* o = new Fl_Group(5, 129, 218, 171, "Settings:");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      { camera_ortho_button = new Fl_Check_Button(15, 237, 84, 24, "Ortho");
+      { camera_ortho_button = new Fl_Check_Button(15, 270, 84, 24, "Ortho");
         camera_ortho_button->down_box(FL_DOWN_BOX);
         camera_ortho_button->callback((Fl_Callback*)edit_camera_properties_chk_btn);
       } // Fl_Check_Button* camera_ortho_button
-      { camera_fov_edit = new Fl_Value_Input(15, 120, 117, 21, "FOV:");
+      { camera_fov_edit = new Fl_Value_Input(15, 153, 117, 21, "FOV:");
         camera_fov_edit->callback((Fl_Callback*)edit_camera_properties);
         camera_fov_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* camera_fov_edit
-      { camera_clipping_near_edit = new Fl_Value_Input(15, 165, 117, 21, "Clipping Near:");
+      { camera_clipping_near_edit = new Fl_Value_Input(15, 198, 117, 21, "Clipping Near:");
         camera_clipping_near_edit->callback((Fl_Callback*)edit_camera_properties);
         camera_clipping_near_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* camera_clipping_near_edit
-      { camera_clipping_far_edit = new Fl_Value_Input(15, 210, 117, 21, "Clipping Far:");
+      { camera_clipping_far_edit = new Fl_Value_Input(15, 243, 117, 21, "Clipping Far:");
         camera_clipping_far_edit->callback((Fl_Callback*)edit_camera_properties);
         camera_clipping_far_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* camera_clipping_far_edit
       o->end();
     } // Fl_Group* o
-    { Fl_Group* o = new Fl_Group(5, 321, 218, 81, "Fog:");
+    { Fl_Group* o = new Fl_Group(5, 324, 218, 81, "Fog:");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      { camera_fog_button = new Fl_Check_Button(12, 327, 87, 21, "Fog");
+      { camera_fog_button = new Fl_Check_Button(12, 330, 87, 21, "Fog");
         camera_fog_button->down_box(FL_DOWN_BOX);
         camera_fog_button->callback((Fl_Callback*)edit_camera_properties_chk_btn);
       } // Fl_Check_Button* camera_fog_button
-      { camera_fog_distance_edit = new Fl_Value_Input(15, 372, 117, 21, "Fog Distance:");
+      { camera_fog_distance_edit = new Fl_Value_Input(15, 375, 117, 21, "Fog Distance:");
         camera_fog_distance_edit->callback((Fl_Callback*)edit_camera_properties);
         camera_fog_distance_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* camera_fog_distance_edit
@@ -578,7 +594,7 @@ Fl_Double_Window* EditorWindow::create_text_window() {
       } // Fl_Choice* text_alignment_chooser
       o->end();
     } // Fl_Group* o
-    { Fl_Group* o = new Fl_Group(6, 336, 210, 78, "Color:");
+    { Fl_Group* o = new Fl_Group(6, 336, 210, 66, "Color:");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       { text_r = new Fl_Value_Input(27, 345, 48, 21, "R:");
@@ -589,14 +605,14 @@ Fl_Double_Window* EditorWindow::create_text_window() {
         text_g->step(0.01);
         text_g->callback((Fl_Callback*)edit_text_properties);
       } // Fl_Value_Input* text_g
-      { text_b = new Fl_Value_Input(27, 372, 48, 21, "A:");
-        text_b->step(0.01);
-        text_b->callback((Fl_Callback*)edit_text_properties);
-      } // Fl_Value_Input* text_b
-      { text_a = new Fl_Value_Input(162, 345, 48, 21, "B:");
+      { text_a = new Fl_Value_Input(27, 372, 48, 21, "A:");
         text_a->step(0.01);
         text_a->callback((Fl_Callback*)edit_text_properties);
       } // Fl_Value_Input* text_a
+      { text_b = new Fl_Value_Input(162, 345, 48, 21, "B:");
+        text_b->step(0.01);
+        text_b->callback((Fl_Callback*)edit_text_properties);
+      } // Fl_Value_Input* text_b
       { Fl_Button* o = new Fl_Button(96, 372, 114, 24, "Choose color");
         o->labeltype(FL_ENGRAVED_LABEL);
         o->labelsize(11);
@@ -675,55 +691,23 @@ Fl_Double_Window* EditorWindow::create_scene_window() {
 }
 extern EditorWindow window;
 
-void new_scene_ok_callback(Fl_Button* button,void*) {
-  ::window.scene_name = ::window.scene_name_input->value();
+void SceneSetupDlg::ok_button_callback(Fl_Button* button, SceneSetupDlg* dlg) {
+  MEngine* engine = MEngine::getInstance();
+  MVector3 ambientLight(dlg->color_r->value(), dlg->color_g->value(), dlg->color_b->value());
   
-  button->parent()->hide();
-}
-
-void new_scene_cancel_callback(Fl_Button* button,void*) {
-  Fl_Window* window = (Fl_Window*) button->parent();
+  engine->getLevel()->getCurrentScene()->setAmbientLight(ambientLight);
   
-  ::window.scene_name = "";
-  window->hide();
-}
-
-Fl_Double_Window* SceneSetupDlg::create_window() {
-  Fl_Double_Window* w;
-  { Fl_Double_Window* o = new Fl_Double_Window(405, 132, "Scene setup");
-    w = o;
-    o->user_data((void*)(this));
-    { scene_name_edit = new Fl_Input(3, 21, 150, 21, "Scene Name:");
-      scene_name_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-    } // Fl_Input* scene_name_edit
-    { lua_script_edit = new Fl_Input(6, 66, 363, 21, "LUA-Script:");
-      lua_script_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-    } // Fl_Input* lua_script_edit
-    { Fl_Button* o = new Fl_Button(372, 66, 24, 21, "...");
-      o->callback((Fl_Callback*)find_file_callback);
-    } // Fl_Button* o
-    { Fl_Button* o = new Fl_Button(291, 96, 108, 27, "Ok");
-      o->callback((Fl_Callback*)ok_button_callback);
-    } // Fl_Button* o
-    { Fl_Button* o = new Fl_Button(9, 96, 108, 27, "Cancel");
-      o->callback((Fl_Callback*)cancel_button_callback);
-    } // Fl_Button* o
-    o->set_modal();
-    o->end();
-  } // Fl_Double_Window* o
-  return w;
-}
-
-void ok_button_callback(Fl_Button* button, void*) {
   button->parent()->label("Success");
   button->parent()->hide();
+  
+  window.glbox->redraw();
 }
 
-void cancel_button_callback(Fl_Button* button, void*) {
+void SceneSetupDlg::cancel_button_callback(Fl_Button* button, void*) {
   button->parent()->hide();
 }
 
-void find_file_callback(Fl_Button* button, void*) {
+void SceneSetupDlg::find_file_callback(Fl_Button* button, void*) {
   const char* filename = fl_native_file_chooser("Choose file", "*.lua", NULL, Fl_Native_File_Chooser::BROWSE_FILE);
   
   int children = button->parent()->children();
@@ -738,6 +722,73 @@ void find_file_callback(Fl_Button* button, void*) {
   		return;	
   	}
   }
+}
+
+Fl_Double_Window* SceneSetupDlg::create_window() {
+  Fl_Double_Window* w;
+  { Fl_Double_Window* o = new Fl_Double_Window(405, 246, "Scene setup");
+    w = o;
+    o->user_data((void*)(this));
+    { scene_name_edit = new Fl_Input(6, 21, 162, 21, "Scene Name:");
+      scene_name_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+    } // Fl_Input* scene_name_edit
+    { lua_script_edit = new Fl_Input(6, 174, 363, 21, "LUA-Script:");
+      lua_script_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+    } // Fl_Input* lua_script_edit
+    { Fl_Button* o = new Fl_Button(372, 174, 24, 21, "...");
+      o->callback((Fl_Callback*)find_file_callback, (void*)(this));
+    } // Fl_Button* o
+    { Fl_Button* o = new Fl_Button(288, 210, 108, 27, "Ok");
+      o->callback((Fl_Callback*)ok_button_callback, (void*)(this));
+    } // Fl_Button* o
+    { Fl_Button* o = new Fl_Button(6, 210, 108, 27, "Cancel");
+      o->callback((Fl_Callback*)cancel_button_callback, (void*)(this));
+    } // Fl_Button* o
+    { Fl_Group* o = new Fl_Group(6, 69, 165, 78, "Ambient Light:");
+      o->box(FL_EMBOSSED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { color_r = new Fl_Value_Input(12, 93, 45, 21, "Red:");
+        color_r->step(0.1);
+        color_r->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* color_r
+      { color_g = new Fl_Value_Input(63, 93, 45, 21, "Green:");
+        color_g->step(0.1);
+        color_g->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* color_g
+      { color_b = new Fl_Value_Input(117, 93, 45, 21, "Blue:");
+        color_b->step(0.1);
+        color_b->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* color_b
+      { Fl_Button* o = new Fl_Button(12, 117, 96, 24, "Choose color");
+        o->labeltype(FL_ENGRAVED_LABEL);
+        o->labelsize(11);
+        o->callback((Fl_Callback*)choose_light_color, (void*)(this));
+      } // Fl_Button* o
+      o->end();
+    } // Fl_Group* o
+    o->set_modal();
+    o->end();
+  } // Fl_Double_Window* o
+  MEngine* engine = MEngine::getInstance();
+  MScene* scene = engine->getLevel()->getCurrentScene();
+  
+  MVector3 ambientLight = scene->getAmbientLight();
+  color_r->value(ambientLight.x);
+  color_g->value(ambientLight.y);
+  color_b->value(ambientLight.z);
+  return w;
+}
+
+void SceneSetupDlg::choose_light_color(Fl_Button* button, SceneSetupDlg* dlg) {
+  double r = dlg->color_r->value();
+      double g = dlg->color_g->value();
+      double b = dlg->color_b->value();
+  
+      fl_color_chooser("Choose a color", r, g, b);
+  
+      dlg->color_r->value(r);
+      dlg->color_g->value(g);
+      dlg->color_b->value(b);
 }
 
 Fl_Double_Window* PlayerConsole::create_window() {
@@ -936,18 +987,6 @@ void MaterialEditDlg::material_changed(Fl_Choice* choice, MaterialEditDlg* dlg) 
     dlg->opacity_edit->value(material->getOpacity());
 }
 
-void MaterialEditDlg::choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg) {
-  double r = dlg->color_r->value();
-      double g = dlg->color_g->value();
-      double b = dlg->color_b->value();
-  
-      fl_color_chooser("Choose a color", r, g, b);
-  
-      dlg->color_r->value(r);
-      dlg->color_g->value(g);
-      dlg->color_b->value(b);
-}
-
 void MaterialEditDlg::close_window_callback(Fl_Window* window, MaterialEditDlg* dlg) {
   Fl::delete_widget(window);
   delete dlg;
@@ -1032,6 +1071,18 @@ void MaterialEditDlg::choose_specular_color(Fl_Button* button, MaterialEditDlg* 
       dlg->specular_r->value(r);
       dlg->specular_g->value(g);
       dlg->specular_b->value(b);
+}
+
+void MaterialEditDlg::choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg) {
+  double r = dlg->color_r->value();
+      double g = dlg->color_g->value();
+      double b = dlg->color_b->value();
+  
+      fl_color_chooser("Choose a color", r, g, b);
+  
+      dlg->color_r->value(r);
+      dlg->color_g->value(g);
+      dlg->color_b->value(b);
 }
 
 #include <FL/Fl_Image.H>
@@ -4024,4 +4075,409 @@ al Public License.");
     o->end();
   } // Fl_Double_Window* o
   return w;
+}
+
+Fl_Double_Window* PublishDlg::create_window() {
+  Fl_Double_Window* w;
+  { Fl_Double_Window* o = new Fl_Double_Window(510, 132, "Publish");
+    w = o;
+    o->user_data((void*)(this));
+    { Fl_Button* o = new Fl_Button(363, 88, 105, 27, "Publish");
+      o->callback((Fl_Callback*)publish_click, (void*)(this));
+    } // Fl_Button* o
+    { Fl_Button* o = new Fl_Button(129, 88, 108, 27, "Cancel");
+      o->callback((Fl_Callback*)cancel_click, (void*)(this));
+    } // Fl_Button* o
+    { output_edit = new Fl_Input(129, 18, 339, 24, "Output directory:");
+      char dir[256];
+      getGlobalFilename(dir, MEngine::getInstance()->getSystemContext()->getWorkingDirectory(), "published");
+      output_edit->value(dir);
+    } // Fl_Input* output_edit
+    { Fl_Button* o = new Fl_Button(471, 18, 26, 24, "...");
+      o->callback((Fl_Callback*)find_output_dir, (void*)(this));
+    } // Fl_Button* o
+    { level_edit = new Fl_Input(130, 51, 339, 24, "Default level:");
+      level_edit->value(Maratis::getInstance()->getCurrentLevel());
+    } // Fl_Input* level_edit
+    { Fl_Button* o = new Fl_Button(472, 51, 26, 24, "...");
+      o->callback((Fl_Callback*)find_main_level, (void*)(this));
+    } // Fl_Button* o
+    o->set_modal();
+    o->end();
+  } // Fl_Double_Window* o
+  window = w;
+  return w;
+}
+
+void PublishDlg::publish_click(Fl_Button*, PublishDlg* dlg) {
+  Maratis* maratis = Maratis::getInstance();
+  
+  setPubDir(dlg->output_edit->value());
+  std::string oldLevel = maratis->getCurrentLevel();
+  
+  // TODO: Make more efficient!
+  maratis->save();
+  maratis->loadLevel(dlg->level_edit->value());
+  maratis->save();
+  
+  maratis->publish();
+  
+  // TODO: Error checking!
+  fl_message("Project was successfully published!");
+  
+  maratis->loadLevel(oldLevel.c_str());
+  dlg->window->hide();
+  delete dlg;
+}
+
+void PublishDlg::cancel_click(Fl_Button*, PublishDlg* dlg) {
+  dlg->window->hide();
+  delete dlg;
+}
+
+void PublishDlg::find_output_dir(Fl_Button*, PublishDlg* dlg) {
+  const char* filename = fl_native_file_chooser("Choose output", NULL, dlg->output_edit->value(), Fl_Native_File_Chooser::BROWSE_DIRECTORY);
+  
+  if(filename == NULL)
+  	return;
+  
+  dlg->output_edit->value(filename);
+}
+
+void PublishDlg::find_main_level(Fl_Button*, PublishDlg* dlg) {
+  const char* filename = fl_native_file_chooser("Choose output", NULL, dlg->output_edit->value(), Fl_Native_File_Chooser::BROWSE_FILE);
+  
+  if(filename == NULL)
+  	return;
+  
+  dlg->level_edit->value(filename);
+}
+
+void new_scene_ok_callback(Fl_Button* button,void*) {
+  ::window.scene_name = ::window.scene_name_input->value();
+  
+  button->parent()->hide();
+}
+
+void new_scene_cancel_callback(Fl_Button* button,void*) {
+  Fl_Window* window = (Fl_Window*) button->parent();
+  
+  ::window.scene_name = "";
+  window->hide();
+}
+
+Fl_Double_Window* ConstraintPropertiesDlg::create_window() {
+  Fl_Double_Window* w;
+  MOEntity* entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
+  
+  if(!entity)
+  	return NULL;
+  	
+  MPhysicsProperties* phys = entity->getPhysicsProperties();
+  
+  if(!phys)
+  {
+  	fl_message("Selected object has no physics properties. Can not edit constraints!");
+  	return NULL;
+  }
+  { Fl_Double_Window* o = new Fl_Double_Window(471, 246, "Constraints");
+    w = o;
+    o->user_data((void*)(this));
+    { enabled_button = new Fl_Check_Button(15, 9, 159, 27, "Constraint Enabled");
+      enabled_button->down_box(FL_DOWN_BOX);
+      enabled_button->callback((Fl_Callback*)enable_constraint_callback, (void*)(this));
+    } // Fl_Check_Button* enabled_button
+    { Fl_Button* o = new Fl_Button(240, 204, 216, 27, "Apply and Close");
+      o->callback((Fl_Callback*)close_callback, (void*)(this));
+    } // Fl_Button* o
+    { Fl_Group* o = new Fl_Group(16, 56, 216, 32, "Pivot:");
+      o->box(FL_ENGRAVED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { xpivot_edit = new Fl_Value_Input(37, 61, 51, 21, "X:");
+        xpivot_edit->maximum(1000);
+        xpivot_edit->step(1);
+      } // Fl_Value_Input* xpivot_edit
+      { ypivot_edit = new Fl_Value_Input(106, 61, 51, 21, "Y:");
+        ypivot_edit->maximum(1000);
+        ypivot_edit->step(1);
+      } // Fl_Value_Input* ypivot_edit
+      { zpivot_edit = new Fl_Value_Input(175, 61, 51, 21, "Z:");
+        zpivot_edit->maximum(1000);
+        zpivot_edit->step(1);
+      } // Fl_Value_Input* zpivot_edit
+      o->end();
+    } // Fl_Group* o
+    { Fl_Group* o = new Fl_Group(15, 112, 216, 32, "Lower Linear Limit:");
+      o->box(FL_ENGRAVED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { xlinear_lower = new Fl_Value_Input(36, 117, 51, 21, "X:");
+        xlinear_lower->maximum(1000);
+        xlinear_lower->step(1);
+      } // Fl_Value_Input* xlinear_lower
+      { ylinear_lower = new Fl_Value_Input(105, 117, 51, 21, "Y:");
+        ylinear_lower->maximum(1000);
+        ylinear_lower->step(1);
+      } // Fl_Value_Input* ylinear_lower
+      { zlinear_lower = new Fl_Value_Input(174, 117, 51, 21, "Z:");
+        zlinear_lower->maximum(1000);
+        zlinear_lower->step(1);
+      } // Fl_Value_Input* zlinear_lower
+      o->end();
+    } // Fl_Group* o
+    { Fl_Group* o = new Fl_Group(240, 112, 216, 32, "Upper Linear Limit:");
+      o->box(FL_ENGRAVED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { xlinear_upper = new Fl_Value_Input(261, 117, 51, 21, "X:");
+        xlinear_upper->maximum(1000);
+        xlinear_upper->step(1);
+      } // Fl_Value_Input* xlinear_upper
+      { ylinear_upper = new Fl_Value_Input(330, 117, 51, 21, "Y:");
+        ylinear_upper->maximum(1000);
+        ylinear_upper->step(1);
+      } // Fl_Value_Input* ylinear_upper
+      { zlinear_upper = new Fl_Value_Input(399, 117, 51, 21, "Z:");
+        zlinear_upper->maximum(1000);
+        zlinear_upper->step(1);
+      } // Fl_Value_Input* zlinear_upper
+      o->end();
+    } // Fl_Group* o
+    { Fl_Group* o = new Fl_Group(15, 166, 216, 32, "Lower Angular Limit:");
+      o->box(FL_ENGRAVED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { xangular_lower = new Fl_Value_Input(36, 171, 51, 21, "X:");
+        xangular_lower->maximum(1000);
+        xangular_lower->step(1);
+      } // Fl_Value_Input* xangular_lower
+      { yangular_lower = new Fl_Value_Input(105, 171, 51, 21, "Y:");
+        yangular_lower->maximum(1000);
+        yangular_lower->step(1);
+      } // Fl_Value_Input* yangular_lower
+      { zangular_lower = new Fl_Value_Input(174, 171, 51, 21, "Z:");
+        zangular_lower->maximum(1000);
+        zangular_lower->step(1);
+      } // Fl_Value_Input* zangular_lower
+      o->end();
+    } // Fl_Group* o
+    { Fl_Group* o = new Fl_Group(240, 166, 216, 32, "Upper Angular Limit:");
+      o->box(FL_ENGRAVED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { xangular_upper = new Fl_Value_Input(261, 171, 51, 21, "X:");
+        xangular_upper->maximum(1000);
+        xangular_upper->step(1);
+      } // Fl_Value_Input* xangular_upper
+      { yangular_upper = new Fl_Value_Input(330, 171, 51, 21, "Y:");
+        yangular_upper->maximum(1000);
+        yangular_upper->step(1);
+      } // Fl_Value_Input* yangular_upper
+      { zangular_upper = new Fl_Value_Input(399, 171, 51, 21, "Z:");
+        zangular_upper->maximum(1000);
+        zangular_upper->step(1);
+      } // Fl_Value_Input* zangular_upper
+      o->end();
+    } // Fl_Group* o
+    { parent_collision = new Fl_Check_Button(237, 57, 210, 27, "Parent Collision");
+      parent_collision->down_box(FL_DOWN_BOX);
+    } // Fl_Check_Button* parent_collision
+    { Fl_Button* o = new Fl_Button(15, 204, 216, 27, "Cancel");
+      o->callback((Fl_Callback*)cancel_callback, (void*)(this));
+    } // Fl_Button* o
+    { parent_input = new Fl_Input(237, 9, 222, 27, "Parent:");
+    } // Fl_Input* parent_input
+    o->set_modal();
+    o->end();
+  } // Fl_Double_Window* o
+  MPhysicsConstraint* constraint = phys->getConstraint();
+  
+  win = w;
+  
+  if(!constraint)
+  {
+  	enabled_button->value(0);
+  
+  	xpivot_edit->deactivate();
+  	ypivot_edit->deactivate();
+  	zpivot_edit->deactivate();
+  
+  	xlinear_lower->deactivate();
+  	ylinear_lower->deactivate();
+  	zlinear_lower->deactivate();
+  
+  	xlinear_upper->deactivate();
+  	ylinear_upper->deactivate();
+  	zlinear_upper->deactivate();
+  
+  	xangular_upper->deactivate();
+  	yangular_upper->deactivate();
+  	zangular_upper->deactivate();
+  
+  	xangular_lower->deactivate();
+  	yangular_lower->deactivate();
+  	zangular_lower->deactivate();
+  	
+  	parent_collision->deactivate();
+  	parent_input->deactivate();
+  
+  	return w;
+  }
+  
+  enabled_button->value(1);
+  
+  MVector3 vector;
+  
+  vector = constraint->pivot;
+  xpivot_edit->value(vector.x);
+  ypivot_edit->value(vector.y);
+  zpivot_edit->value(vector.z);
+  
+  vector = constraint->lowerLinearLimit;
+  xlinear_lower->value(vector.x);
+  ylinear_lower->value(vector.y);
+  zlinear_lower->value(vector.z);
+  
+  vector = constraint->upperLinearLimit;
+  xlinear_upper->value(vector.x);
+  ylinear_upper->value(vector.y);
+  zlinear_upper->value(vector.z);
+  
+  vector = constraint->upperAngularLimit;
+  xangular_upper->value(vector.x);
+  yangular_upper->value(vector.y);
+  zangular_upper->value(vector.z);
+  
+  vector = constraint->lowerAngularLimit;
+  xangular_lower->value(vector.x);
+  yangular_lower->value(vector.y);
+  zangular_lower->value(vector.z);
+  	
+  parent_collision->value(!constraint->disableParentCollision);
+  parent_input->value(constraint->parentName.getSafeString());
+  return w;
+}
+
+void ConstraintPropertiesDlg::enable_constraint_callback(Fl_Check_Button* button, ConstraintPropertiesDlg* dlg) {
+  MOEntity* entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
+  
+  if(!entity)
+  	return;
+  	
+  MPhysicsProperties* phys = entity->getPhysicsProperties();
+  
+  if(!phys)
+  	return;
+  
+  MPhysicsConstraint* constraint = phys->getConstraint();
+  
+  if(!constraint && button->value() == 1)
+  {
+  	phys->createConstraint();
+  	
+  	dlg->xpivot_edit->activate();
+  	dlg->ypivot_edit->activate();
+  	dlg->zpivot_edit->activate();
+  
+  	dlg->xlinear_lower->activate();
+  	dlg->ylinear_lower->activate();
+  	dlg->zlinear_lower->activate();
+  
+  	dlg->xlinear_upper->activate();
+  	dlg->ylinear_upper->activate();
+  	dlg->zlinear_upper->activate();
+  
+  	dlg->xangular_upper->activate();
+  	dlg->yangular_upper->activate();
+  	dlg->zangular_upper->activate();
+  
+  	dlg->xangular_lower->activate();
+  	dlg->yangular_lower->activate();
+  	dlg->zangular_lower->activate();
+  	
+  	dlg->parent_collision->activate();
+  	dlg->parent_input->activate();
+  
+  }
+  else if(constraint && button->value() == 0)
+  {
+  	phys->deleteConstraint();
+  	
+  	dlg->xpivot_edit->deactivate();
+  	dlg->ypivot_edit->deactivate();
+  	dlg->zpivot_edit->deactivate();
+  
+  	dlg->xlinear_lower->deactivate();
+  	dlg->ylinear_lower->deactivate();
+  	dlg->zlinear_lower->deactivate();
+  
+  	dlg->xlinear_upper->deactivate();
+  	dlg->ylinear_upper->deactivate();
+  	dlg->zlinear_upper->deactivate();
+  
+  	dlg->xangular_upper->deactivate();
+  	dlg->yangular_upper->deactivate();
+  	dlg->zangular_upper->deactivate();
+  
+  	dlg->xangular_lower->deactivate();
+  	dlg->yangular_lower->deactivate();
+  	dlg->zangular_lower->deactivate();
+  	
+  	dlg->parent_collision->deactivate();
+  	dlg->parent_input->deactivate();
+  
+  }
+}
+
+void ConstraintPropertiesDlg::close_callback(Fl_Button*, ConstraintPropertiesDlg* dlg) {
+  MOEntity* entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
+  
+  if(!entity)
+  	return;
+  	
+  MPhysicsProperties* phys = entity->getPhysicsProperties();
+  
+  if(!phys)
+  {
+  	fl_message("Selected object has no physics properties. Can not edit constraints!");
+  	return;
+  }
+  
+  MPhysicsConstraint* constraint = phys->getConstraint();
+  
+  MVector3 vector;
+  
+  vector.x = dlg->xpivot_edit->value();
+  vector.y = dlg->ypivot_edit->value();
+  vector.z = dlg->zpivot_edit->value();
+  constraint->pivot = vector;
+  
+  vector.x = dlg->xlinear_lower->value();
+  vector.y = dlg->ylinear_lower->value();
+  vector.z = dlg->zlinear_lower->value();
+  constraint->lowerLinearLimit = vector;
+  
+  vector.x = dlg->xlinear_upper->value();
+  vector.y = dlg->ylinear_upper->value();
+  vector.z = dlg->zlinear_upper->value();
+  constraint->upperLinearLimit = vector;
+  
+  vector.x = dlg->xangular_lower->value();
+  vector.y = dlg->yangular_lower->value();
+  vector.z = dlg->zangular_lower->value();
+  constraint->lowerAngularLimit = vector;
+  
+  vector.x = dlg->xangular_upper->value();
+  vector.y = dlg->yangular_upper->value();
+  vector.z = dlg->zangular_upper->value();
+  constraint->upperAngularLimit = vector;
+  
+  constraint->disableParentCollision = !dlg->parent_collision->value();
+  constraint->parentName.set(dlg->parent_input->value());
+  
+  dlg->win->hide();
+  Fl::delete_widget(dlg->win);
+  delete dlg;
+}
+
+void ConstraintPropertiesDlg::cancel_callback(Fl_Button*, ConstraintPropertiesDlg* dlg) {
+  dlg->win->hide();
+  Fl::delete_widget(dlg->win);
+  delete dlg;
 }

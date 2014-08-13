@@ -19,11 +19,9 @@
 #include <MWindow.h>
 #include <MLoaders/MImageLoader.h>
 #include "../MFilesUpdate/MFilesUpdate.h"
-#include "../Maratis/Maratis.h"
 #include "../MLoaders/MAssimpMeshLoader.h"
 #include <MCore.h>
 #include <MLog.h>
-#include "../MPublish/MPublisher.h"
 #include "MainWindow.h"
 
 open_project_t current_project;
@@ -701,6 +699,7 @@ void scene_tree_callback(Fl_Tree* tree, void*)
         if(update_name)
         {
             window.object_invisible_button->value(!entity->isVisible());
+			window.object_shadow_button->value(entity->hasShadow());
         }
 
         MPhysicsProperties* phys = entity->getPhysicsProperties();
@@ -719,24 +718,7 @@ void scene_tree_callback(Fl_Tree* tree, void*)
             window.ylinear_edit->value(linear_factor.y);
             window.zlinear_edit->value(linear_factor.z);
 
-            window.object_angular_factor_edit->value(phys->getAngularFactor());
-
-            MPhysicsConstraint* constraint = phys->getConstraint();
-
-            if(constraint)
-            {
-                MVector3 pivot;
-                pivot = constraint->pivot;
-                window.xpivot_edit->value(pivot.x);
-                window.ypivot_edit->value(pivot.y);
-                window.zpivot_edit->value(pivot.z);
-            }
-            else
-            {
-                window.xpivot_edit->deactivate();
-                window.ypivot_edit->deactivate();
-                window.zpivot_edit->deactivate();
-            }
+            window.object_angular_factor_edit->value(phys->getAngularFactor());          
 
             if(update_name)
             {
@@ -813,9 +795,9 @@ void scene_tree_callback(Fl_Tree* tree, void*)
         MOCamera* camera = (MOCamera*) object;
         MVector3 clearColor = camera->getClearColor();
 
-        window.camera_color_r_edit->value(clearColor.x);
-        window.camera_color_g_edit->value(clearColor.y);
-        window.camera_color_b_edit->value(clearColor.z);
+        window.camera_color_r->value(clearColor.x);
+        window.camera_color_g->value(clearColor.y);
+        window.camera_color_b->value(clearColor.z);
 
         window.camera_fov_edit->value(camera->getFov());
         window.camera_clipping_near_edit->value(camera->getClippingNear());
@@ -1071,7 +1053,7 @@ void edit_light_properties(Fl_Value_Input *, void *)
     light->setShadowBias(window.light_shadow_bias_edit->value());
     light->setShadowBlur(window.light_shadow_blur_edit->value());
     light->setShadowQuality(window.light_shadow_quality_edit->value());
-
+	
     window.glbox->redraw();
     window.special_tab->redraw();
 }
@@ -1117,6 +1099,21 @@ void choose_light_color(Fl_Button*, void*)
     edit_light_properties(NULL, NULL);
 }
 
+void choose_camera_color(Fl_Button*, void*)
+{
+	double r = window.camera_color_r->value();
+	double g = window.camera_color_g->value();
+	double b = window.camera_color_b->value();
+
+	fl_color_chooser("Choose a color", r, g, b);
+
+	window.camera_color_r->value(r);
+	window.camera_color_g->value(g);
+	window.camera_color_b->value(b);
+
+	edit_light_properties(NULL, NULL);
+}
+
 void publish_callback(Fl_Menu_*, void*)
 {
     if(current_project.path.empty())
@@ -1126,9 +1123,8 @@ void publish_callback(Fl_Menu_*, void*)
         return;
     }
 
-    Maratis::getInstance()->publish();
-
-    fl_message("Successfully published project!");
+    PublishDlg* dlg = new PublishDlg;
+    dlg->create_window()->show();
 }
 
 void save_level_callback(Fl_Menu_ *, long mode)
@@ -1212,6 +1208,7 @@ void edit_object_chk_btn(Fl_Check_Button*, void*)
         return;
 
     entity->setInvisible(window.object_invisible_button->value());
+	entity->enableShadow(window.object_shadow_button->value());
 
     MPhysicsProperties* phys = entity->getPhysicsProperties();
 
@@ -1253,15 +1250,6 @@ void edit_object_properties(Fl_Value_Input*, void*)
 
     phys->setLinearFactor(MVector3(window.xlinear_edit->value(), window.ylinear_edit->value(), window.zlinear_edit->value()));
     phys->setAngularFactor(window.object_angular_factor_edit->value());
-
-    MPhysicsConstraint* constraint = phys->getConstraint();
-
-    if(constraint)
-    {
-        constraint->pivot.x = window.xpivot_edit->value();
-        constraint->pivot.y = window.ypivot_edit->value();
-        constraint->pivot.z = window.zpivot_edit->value();
-    }
 }
 
 void add_mesh_callback(Fl_Menu_*, void*)
@@ -1298,7 +1286,7 @@ void edit_camera_properties(Fl_Value_Input*, void*)
         return;
     }
 
-    camera->setClearColor(MVector3(window.camera_color_r_edit->value(), window.camera_color_g_edit->value(), window.camera_color_b_edit->value()));
+    camera->setClearColor(MVector3(window.camera_color_r->value(), window.camera_color_g->value(), window.camera_color_b->value()));
     camera->setFov(window.camera_fov_edit->value());
     camera->setClippingNear(window.camera_clipping_near_edit->value());
     camera->setClippingFar(window.camera_clipping_far_edit->value());
@@ -1788,4 +1776,36 @@ void update_player_callback(Fl_Menu_*, void*)
     // Make file executable
     chmod(dir, S_IRWXU);
 #endif
+}
+
+void add_group_callback(Fl_Menu_*, void*)
+{
+	Maratis::getInstance()->addGroup();
+
+	update_scene_tree();
+	window.glbox->redraw();
+}
+
+void ortho_callback(Fl_Check_Button*, void*)
+{
+    Maratis::getInstance()->switchCurrentVueMode();
+    window.glbox->redraw();
+}
+
+void change_vue_callback(Fl_Menu_*, long mode)
+{
+	if(mode == 0) return;
+	
+	Maratis::getInstance()->changeCurrentVue(mode);
+	window.vue_ortho_button->value(1);
+	window.glbox->redraw();
+}
+
+void object_constraint_properties_callback(Fl_Button*, void*)
+{
+    ConstraintPropertiesDlg* dlg = new ConstraintPropertiesDlg;
+
+    Fl_Window* win = dlg->create_window();
+    if(win)
+        win->show();
 }

@@ -20,7 +20,7 @@ class EditorWindow {open
   } {
     Fl_Window {} {
       label Neo open
-      xywh {360 239 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
+      xywh {1538 253 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -185,7 +185,16 @@ class EditorWindow {open
             callback add_scene_callback
             xywh {0 0 100 20} labelsize 14
           }
+          MenuItem {} {
+            label {Add Group}
+            callback add_group_callback
+            xywh {0 0 100 20} labelsize 14
+          }
         }
+        Submenu {} {
+          label Plugins open
+          xywh {0 0 100 20} labelsize 14
+        } {}
         Submenu {} {
           label Help open
           xywh {0 0 100 20} labelsize 14
@@ -208,7 +217,7 @@ class EditorWindow {open
         xywh {0 55 201 570} when 4
       }
       Fl_Group edit_group {open
-        xywh {3 24 708 30}
+        xywh {3 24 887 30}
         code0 {edit_group->resizable(NULL);}
       } {
         Fl_Round_Button {} {
@@ -231,7 +240,7 @@ class EditorWindow {open
         }
         Fl_Choice scenes_menu {
           label {Scenes:} open
-          xywh {564 30 147 18} down_box BORDER_BOX
+          xywh {537 30 129 18} down_box BORDER_BOX
         } {}
         Fl_Group speed_group {open
           xywh {3 27 258 21}
@@ -246,6 +255,46 @@ class EditorWindow {open
             label {Translation:}
             callback translation_speed_callback
             xywh {207 28 45 20} when 8 value 1
+          }
+        }
+        Fl_Check_Button vue_ortho_button {
+          label Ortho
+          callback ortho_callback
+          xywh {673 30 57 18} down_box DOWN_BOX shortcut 0x35
+        }
+        Fl_Choice {} {
+          label {View:} open
+          xywh {783 30 107 18} down_box BORDER_BOX
+        } {
+          MenuItem {} {
+            label Other
+            user_data 0 user_data_type long
+            callback change_vue_callback
+            xywh {0 0 100 20} labelsize 14
+          }
+          MenuItem {} {
+            label Face
+            user_data 1 user_data_type long
+            callback change_vue_callback
+            xywh {0 0 100 20} labelsize 14
+          }
+          MenuItem {} {
+            label Right
+            user_data 3 user_data_type long
+            callback change_vue_callback
+            xywh {0 0 100 20} labelsize 14
+          }
+          MenuItem {} {
+            label Top
+            user_data 7 user_data_type long
+            callback change_vue_callback
+            xywh {0 0 100 20} labelsize 14
+          }
+          MenuItem {} {
+            label Bottom
+            user_data 9 user_data_type long
+            callback change_vue_callback
+            xywh {0 0 100 20} labelsize 14
           }
         }
       }
@@ -367,7 +416,7 @@ class EditorWindow {open
   }
   Function {create_light_window()} {} {
     Fl_Window light_window_object {open
-      xywh {388 224 258 714} type Double labelsize 11 hide
+      xywh {1910 270 258 714} type Double labelsize 11 hide
       code0 {light_window_object->position(0,0);}
       code1 {light_window_object->resizable(NULL);} size_range {258 726 258 726}
     } {
@@ -469,15 +518,15 @@ class EditorWindow {open
   }
   Function {create_object_window()} {} {
     Fl_Window object_embedded_window {open
-      xywh {912 136 261 672} type Double hide resizable
+      xywh {1885 46 261 933} type Double hide resizable
       code0 {special_tab->resizable(object_embedded_window);}
     } {
       Fl_Scroll {} {open
-        xywh {0 6 230 666} type VERTICAL resizable
+        xywh {0 6 230 894} type VERTICAL resizable
       } {
         Fl_Group {} {
           label {Settings:} open
-          xywh {3 27 217 78} box ENGRAVED_FRAME align 5
+          xywh {3 27 217 112} box ENGRAVED_FRAME align 5
         } {
           Fl_Output object_mesh_edit {
             label {Mesh:}
@@ -493,14 +542,19 @@ class EditorWindow {open
             callback edit_materials_callback
             xywh {103 78 111 21}
           }
+          Fl_Check_Button object_shadow_button {
+            label Shadow
+            callback edit_object_chk_btn
+            xywh {12 106 111 24} down_box DOWN_BOX
+          }
         }
         Fl_Group {} {
           label {Physics:} open
-          xywh {3 132 217 249} box ENGRAVED_FRAME align 5
+          xywh {3 166 217 249} box ENGRAVED_FRAME align 5
         } {
           Fl_Choice object_shape_choice {
             label {Shape:} open
-            xywh {16 189 195 27} down_box BORDER_BOX align 5
+            xywh {16 223 195 27} down_box BORDER_BOX align 5
           } {
             MenuItem {} {
               label Box
@@ -548,161 +602,152 @@ class EditorWindow {open
           Fl_Check_Button object_ghost_button {
             label Ghost
             callback edit_object_chk_btn
-            xywh {16 222 78 21} down_box DOWN_BOX
+            xywh {16 256 78 21} down_box DOWN_BOX
           }
           Fl_Value_Input object_mass_edit {
             label {Mass:}
             callback edit_object_properties
-            xywh {16 261 195 21} align 5
+            xywh {16 295 195 21} align 5
           }
           Fl_Value_Input object_fric_edit {
             label {Friction:}
             callback edit_object_properties
-            xywh {16 306 195 21} align 5
+            xywh {16 340 195 21} align 5
           }
           Fl_Value_Input object_rest_edit {
             label {Restitution:}
             callback edit_object_properties
-            xywh {16 351 195 21} align 5
+            xywh {16 385 195 21} align 5
           }
           Fl_Check_Button object_physics_button {
             label Physics
             callback edit_object_chk_btn
-            xywh {16 147 204 21} down_box DOWN_BOX
-          }
-        }
-        Fl_Group {} {
-          label {Pivot:} open
-          xywh {4 634 216 32} box ENGRAVED_FRAME align 5
-        } {
-          Fl_Value_Input xpivot_edit {
-            label {X:} user_data_type {void*}
-            callback edit_object_properties
-            xywh {25 639 51 21} maximum 1000 step 1
-          }
-          Fl_Value_Input ypivot_edit {
-            label {Y:} user_data_type {void*}
-            callback edit_object_properties
-            xywh {94 639 51 21} maximum 1000 step 1
-          }
-          Fl_Value_Input zpivot_edit {
-            label {Z:} user_data_type {void*}
-            callback edit_object_properties
-            xywh {163 638 51 21} maximum 1000 step 1
+            xywh {16 181 204 21} down_box DOWN_BOX
           }
         }
         Fl_Group {} {
           label {Damping:} open
-          xywh {4 406 216 95} box ENGRAVED_FRAME align 5
+          xywh {4 440 216 95} box ENGRAVED_FRAME align 5
         } {
           Fl_Value_Input object_linear_damping_edit {
             label {Linear:}
             callback edit_object_properties
-            xywh {16 429 195 21} align 5
+            xywh {16 463 195 21} align 5
           }
           Fl_Value_Input object_angular_damping_edit {
             label {Angular:}
             callback edit_object_properties
-            xywh {16 471 195 21} align 5
+            xywh {16 505 195 21} align 5
           }
         }
         Fl_Group {} {
           label {Linear Factor:} open
-          xywh {4 526 216 32} box ENGRAVED_FRAME align 5
+          xywh {4 560 216 32} box ENGRAVED_FRAME align 5
         } {
           Fl_Value_Input xlinear_edit {
             label {X:} user_data_type {void*}
             callback edit_object_properties
-            xywh {25 531 51 21} maximum 1000 step 1
+            xywh {25 565 51 21} maximum 1000 step 1
           }
           Fl_Value_Input ylinear_edit {
             label {Y:} user_data_type {void*}
             callback edit_object_properties
-            xywh {94 531 51 21} maximum 1000 step 1
+            xywh {94 565 51 21} maximum 1000 step 1
           }
           Fl_Value_Input zlinear_edit {
             label {Z:} user_data_type {void*}
             callback edit_object_properties
-            xywh {163 530 51 21} maximum 1000 step 1
+            xywh {163 564 51 21} maximum 1000 step 1
           }
         }
         Fl_Value_Input object_angular_factor_edit {
           label {Angular Facto:}
           callback edit_object_properties
-          xywh {4 582 216 21} align 5
+          xywh {4 616 216 21} align 5
+        }
+        Fl_Button {} {
+          label {Constraint properties}
+          callback object_constraint_properties_callback
+          xywh {3 648 213 27}
         }
       }
     }
   }
   Function {create_camera_window()} {} {
     Fl_Window {} {open
-      xywh {2165 241 258 660} type Double hide
+      xywh {843 164 258 660} type Double hide
     } {
       Fl_Group {} {
-        label {Clear Color:} open
-        xywh {5 27 218 42} box ENGRAVED_FRAME align 5
+        label {Clear Color:}
+        xywh {5 27 218 76} box ENGRAVED_FRAME align 5
       } {
-        Fl_Value_Input camera_color_r_edit {
-          label {R:}
+        Fl_Value_Input camera_color_r {
+          label {Red:}
           callback edit_camera_properties
-          xywh {33 39 36 18} step 0.01
+          xywh {10 47 45 21} align 5 step 0.1
         }
-        Fl_Value_Input camera_color_g_edit {
-          label {G:}
+        Fl_Value_Input camera_color_g {
+          label {Green:}
           callback edit_camera_properties
-          xywh {93 39 36 18} step 0.01
+          xywh {61 47 45 21} align 5 step 0.1
         }
-        Fl_Value_Input camera_color_b_edit {
-          label {B:}
+        Fl_Value_Input camera_color_b {
+          label {Blue:}
           callback edit_camera_properties
-          xywh {156 39 36 18} step 0.01
+          xywh {115 47 45 21} align 5 step 0.1
+        }
+        Fl_Button {} {
+          label {Choose color}
+          callback choose_camera_color
+          xywh {10 71 96 26} labeltype ENGRAVED_LABEL labelsize 11
         }
       }
       Fl_Group {} {
-        label {Settings:} open
-        xywh {5 96 218 171} box ENGRAVED_FRAME align 5
+        label {Settings:}
+        xywh {5 129 218 171} box ENGRAVED_FRAME align 5
       } {
         Fl_Check_Button camera_ortho_button {
           label Ortho
           callback edit_camera_properties_chk_btn
-          xywh {15 237 84 24} down_box DOWN_BOX
+          xywh {15 270 84 24} down_box DOWN_BOX
         }
         Fl_Value_Input camera_fov_edit {
           label {FOV:}
           callback edit_camera_properties
-          xywh {15 120 117 21} align 5
+          xywh {15 153 117 21} align 5
         }
         Fl_Value_Input camera_clipping_near_edit {
           label {Clipping Near:}
           callback edit_camera_properties
-          xywh {15 165 117 21} align 5
+          xywh {15 198 117 21} align 5
         }
         Fl_Value_Input camera_clipping_far_edit {
           label {Clipping Far:}
           callback edit_camera_properties
-          xywh {15 210 117 21} align 5
+          xywh {15 243 117 21} align 5
         }
       }
       Fl_Group {} {
-        label {Fog:} open
-        xywh {5 321 218 81} box ENGRAVED_FRAME align 5
+        label {Fog:}
+        xywh {5 324 218 81} box ENGRAVED_FRAME align 5
       } {
         Fl_Check_Button camera_fog_button {
           label Fog
           callback edit_camera_properties_chk_btn
-          xywh {12 327 87 21} down_box DOWN_BOX
+          xywh {12 330 87 21} down_box DOWN_BOX
         }
         Fl_Value_Input camera_fog_distance_edit {
           label {Fog Distance:}
           callback edit_camera_properties
-          xywh {15 372 117 21} align 5
+          xywh {15 375 117 21} align 5
         }
       }
     }
   }
-  Function {create_text_window()} {} {
+  Function {create_text_window()} {open
+  } {
     Fl_Window {} {open
-      xywh {2391 146 261 720} type Double hide
+      xywh {2391 146 261 720} type Double visible
     } {
       Fl_Group {} {
         label {Settings:} open
@@ -753,8 +798,8 @@ class EditorWindow {open
         }
       }
       Fl_Group {} {
-        label {Color:} open
-        xywh {6 336 210 78} box ENGRAVED_FRAME align 5
+        label {Color:} open selected
+        xywh {6 336 210 66} box ENGRAVED_FRAME align 5
       } {
         Fl_Value_Input text_r {
           label {R:}
@@ -766,12 +811,12 @@ class EditorWindow {open
           callback edit_text_properties
           xywh {96 345 48 21} step 0.01
         }
-        Fl_Value_Input text_b {
+        Fl_Value_Input text_a {
           label {A:}
           callback edit_text_properties
           xywh {27 372 48 21} step 0.01
         }
-        Fl_Value_Input text_a {
+        Fl_Value_Input text_b {
           label {B:}
           callback edit_text_properties
           xywh {162 345 48 21} step 0.01
@@ -858,66 +903,26 @@ class EditorWindow {open
 decl {extern EditorWindow window;} {private local
 } 
 
-Function {new_scene_ok_callback(Fl_Button* button,void*)} {} {
-  code {::window.scene_name = ::window.scene_name_input->value();
-
-button->parent()->hide();} {}
-} 
-
-Function {new_scene_cancel_callback(Fl_Button* button,void*)} {} {
-  code {Fl_Window* window = (Fl_Window*) button->parent();
-
-::window.scene_name = "";
-window->hide();} {}
-} 
-
 class SceneSetupDlg {} {
-  Function {create_window()} {open
+  Function {ok_button_callback(Fl_Button* button, SceneSetupDlg* dlg)} {return_type {static void}
   } {
-    Fl_Window {} {
-      label {Scene setup} open
-      xywh {1822 381 405 132} type Double hide modal
-    } {
-      Fl_Input scene_name_edit {
-        label {Scene Name:}
-        xywh {3 21 150 21} align 5
-      }
-      Fl_Input lua_script_edit {
-        label {LUA-Script:}
-        xywh {6 66 363 21} align 5
-      }
-      Fl_Button {} {
-        label {...}
-        callback find_file_callback
-        xywh {372 66 24 21}
-      }
-      Fl_Button {} {
-        label Ok
-        callback ok_button_callback
-        xywh {291 96 108 27}
-      }
-      Fl_Button {} {
-        label Cancel
-        callback cancel_button_callback
-        xywh {9 96 108 27}
-      }
-    }
+    code {MEngine* engine = MEngine::getInstance();
+MVector3 ambientLight(dlg->color_r->value(), dlg->color_g->value(), dlg->color_b->value());
+
+engine->getLevel()->getCurrentScene()->setAmbientLight(ambientLight);
+
+button->parent()->label("Success");
+button->parent()->hide();
+
+window.glbox->redraw();} {}
   }
-  decl {bool success;} {public local
+  Function {cancel_button_callback(Fl_Button* button, void*)} {return_type {static void}
+  } {
+    code {button->parent()->hide();} {}
   }
-} 
-
-Function {ok_button_callback(Fl_Button* button, void*)} {} {
-  code {button->parent()->label("Success");
-button->parent()->hide();} {}
-} 
-
-Function {cancel_button_callback(Fl_Button* button, void*)} {} {
-  code {button->parent()->hide();} {}
-} 
-
-Function {find_file_callback(Fl_Button* button, void*)} {} {
-  code {const char* filename = fl_native_file_chooser("Choose file", "*.lua", NULL, Fl_Native_File_Chooser::BROWSE_FILE);
+  Function {find_file_callback(Fl_Button* button, void*)} {return_type {static void}
+  } {
+    code {const char* filename = fl_native_file_chooser("Choose file", "*.lua", NULL, Fl_Native_File_Chooser::BROWSE_FILE);
 
 int children = button->parent()->children();
 Fl_Input* input;
@@ -931,6 +936,84 @@ for(int i = 0; i < children; i++)
 		return;	
 	}
 }} {}
+  }
+  Function {create_window()} {} {
+    Fl_Window {} {
+      label {Scene setup}
+      xywh {672 297 405 246} type Double hide modal
+    } {
+      Fl_Input scene_name_edit {
+        label {Scene Name:}
+        xywh {6 21 162 21} align 5
+      }
+      Fl_Input lua_script_edit {
+        label {LUA-Script:}
+        xywh {6 174 363 21} align 5
+      }
+      Fl_Button {} {
+        label {...}
+        user_data this user_data_type {SceneSetupDlg*}
+        callback find_file_callback
+        xywh {372 174 24 21}
+      }
+      Fl_Button {} {
+        label Ok
+        user_data this user_data_type {SceneSetupDlg*}
+        callback ok_button_callback
+        xywh {288 210 108 27}
+      }
+      Fl_Button {} {
+        label Cancel
+        user_data this user_data_type {SceneSetupDlg*}
+        callback cancel_button_callback
+        xywh {6 210 108 27}
+      }
+      Fl_Group {} {
+        label {Ambient Light:} open
+        xywh {6 69 165 78} box EMBOSSED_FRAME align 5
+      } {
+        Fl_Value_Input color_r {
+          label {Red:} user_data_type {void*}
+          xywh {12 93 45 21} align 5 step 0.1
+        }
+        Fl_Value_Input color_g {
+          label {Green:} user_data_type {void*}
+          xywh {63 93 45 21} align 5 step 0.1
+        }
+        Fl_Value_Input color_b {
+          label {Blue:} user_data_type {void*}
+          xywh {117 93 45 21} align 5 step 0.1
+        }
+        Fl_Button {} {
+          label {Choose color}
+          user_data this user_data_type {SceneSetupDlg*}
+          callback choose_light_color
+          xywh {12 117 96 24} labeltype ENGRAVED_LABEL labelsize 11
+        }
+      }
+    }
+    code {MEngine* engine = MEngine::getInstance();
+MScene* scene = engine->getLevel()->getCurrentScene();
+
+MVector3 ambientLight = scene->getAmbientLight();
+color_r->value(ambientLight.x);
+color_g->value(ambientLight.y);
+color_b->value(ambientLight.z);} {}
+  }
+  Function {choose_light_color(Fl_Button* button, SceneSetupDlg* dlg)} {return_type {static void}
+  } {
+    code {double r = dlg->color_r->value();
+    double g = dlg->color_g->value();
+    double b = dlg->color_b->value();
+
+    fl_color_chooser("Choose a color", r, g, b);
+
+    dlg->color_r->value(r);
+    dlg->color_g->value(g);
+    dlg->color_b->value(b);} {}
+  }
+  decl {bool success;} {public local
+  }
 } 
 
 class PlayerConsole {} {
@@ -964,8 +1047,7 @@ Fl::delete_widget(window);} {}
 class MaterialEditDlg {} {
   decl {char object_name[256];} {private local
   }
-  Function {create_window(const char* name)} {open
-  } {
+  Function {create_window(const char* name)} {} {
     Fl_Window window {
       label {Edit Materials}
       user_data this user_data_type {MaterialEditDlg*}
@@ -1105,13 +1187,13 @@ strcpy(object_name, object->getName());
 
 material_changed(materials_chooser, this);} {}
   }
-  Function {close_callback(Fl_Button* button, MaterialEditDlg* dlg)} {open return_type {static void}
+  Function {close_callback(Fl_Button* button, MaterialEditDlg* dlg)} {return_type {static void}
   } {
     code {button->parent()->hide();
 Fl::delete_widget(button->parent());
 delete dlg;} {}
   }
-  Function {material_changed(Fl_Choice* choice, MaterialEditDlg* dlg)} {open return_type {static void}
+  Function {material_changed(Fl_Choice* choice, MaterialEditDlg* dlg)} {return_type {static void}
   } {
     code {MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
   MMesh* mesh = entity->getMesh();
@@ -1151,24 +1233,12 @@ delete dlg;} {}
   dlg->shininess_edit->value(material->getShininess());
   dlg->opacity_edit->value(material->getOpacity());} {}
   }
-  Function {choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg)} {open return_type {static void}
-  } {
-    code {double r = dlg->color_r->value();
-    double g = dlg->color_g->value();
-    double b = dlg->color_b->value();
-
-    fl_color_chooser("Choose a color", r, g, b);
-
-    dlg->color_r->value(r);
-    dlg->color_g->value(g);
-    dlg->color_b->value(b);} {}
-  }
-  Function {close_window_callback(Fl_Window* window, MaterialEditDlg* dlg)} {open return_type {static void}
+  Function {close_window_callback(Fl_Window* window, MaterialEditDlg* dlg)} {return_type {static void}
   } {
     code {Fl::delete_widget(window);
 delete dlg;} {}
   }
-  Function {apply_callback(Fl_Button*, MaterialEditDlg* dlg)} {open return_type {static void}
+  Function {apply_callback(Fl_Button*, MaterialEditDlg* dlg)} {return_type {static void}
   } {
     code {MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
       MMesh* mesh = entity->getMesh();
@@ -1212,7 +1282,7 @@ delete dlg;} {}
 
       ::window.glbox->redraw();} {}
   }
-  Function {save_callback(Fl_Button*, MaterialEditDlg* dlg)} {open return_type {static void}
+  Function {save_callback(Fl_Button*, MaterialEditDlg* dlg)} {return_type {static void}
   } {
     code {MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
 MMesh* mesh = entity->getMesh();
@@ -1225,7 +1295,7 @@ if(!mesh)
       
 xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);} {}
   }
-  Function {choose_diffuse_color(Fl_Button* button, MaterialEditDlg* dlg)} {open return_type {static void}
+  Function {choose_diffuse_color(Fl_Button* button, MaterialEditDlg* dlg)} {return_type {static void}
   } {
     code {double r = dlg->color_r->value();
     double g = dlg->diffuse_g->value();
@@ -1237,7 +1307,7 @@ xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);} {}
     dlg->diffuse_g->value(g);
     dlg->diffuse_b->value(b);} {}
   }
-  Function {choose_specular_color(Fl_Button* button, MaterialEditDlg* dlg)} {open return_type {static void}
+  Function {choose_specular_color(Fl_Button* button, MaterialEditDlg* dlg)} {return_type {static void}
   } {
     code {double r = dlg->specular_r->value();
     double g = dlg->specular_g->value();
@@ -1249,21 +1319,32 @@ xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);} {}
     dlg->specular_g->value(g);
     dlg->specular_b->value(b);} {}
   }
+  Function {choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg)} {return_type {static void}
+  } {
+    code {double r = dlg->color_r->value();
+    double g = dlg->color_g->value();
+    double b = dlg->color_b->value();
+
+    fl_color_chooser("Choose a color", r, g, b);
+
+    dlg->color_r->value(r);
+    dlg->color_g->value(g);
+    dlg->color_b->value(b);} {}
+  }
 } 
 
-class AboutDlg {open
-} {
+class AboutDlg {} {
   Function {create_window()} {open
   } {
     Fl_Window {} {
       label About open
-      xywh {1990 333 354 309} type Double visible
+      xywh {1990 333 354 309} type Double hide
     } {
       Fl_Box {} {
         label {The Neo Editor is distributed under the terms and conditions of the GNU General Public License.}
         xywh {10 224 335 55} labelsize 12 align 208
       }
-      Fl_Box {} {selected
+      Fl_Box {} {
         image {../../../Data/neo-icon-small.png} xywh {120 15 110 110}
       }
       Fl_Box {} {
@@ -1280,5 +1361,441 @@ class AboutDlg {open
         code0 {editor_version_edit->label(EDITOR_VERSION_STRING);}
       }
     }
+  }
+} 
+
+class PublishDlg {} {
+  decl {Fl_Window* window;} {private local
+  }
+  Function {create_window()} {open
+  } {
+    Fl_Window {} {
+      label Publish open
+      xywh {1964 410 510 132} type Double hide modal
+    } {
+      Fl_Button {} {
+        label Publish
+        user_data this user_data_type {PublishDlg*}
+        callback publish_click
+        xywh {363 88 105 27}
+      }
+      Fl_Button {} {
+        label Cancel
+        user_data this user_data_type {PublishDlg*}
+        callback cancel_click
+        xywh {129 88 108 27}
+      }
+      Fl_Input output_edit {
+        label {Output directory:}
+        xywh {129 18 339 24}
+        code0 {char dir[256];}
+        code1 {getGlobalFilename(dir, MEngine::getInstance()->getSystemContext()->getWorkingDirectory(), "published");}
+        code2 {output_edit->value(dir);}
+      }
+      Fl_Button {} {
+        label {...}
+        user_data this user_data_type {PublishDlg*}
+        callback find_output_dir
+        xywh {471 18 26 24}
+      }
+      Fl_Input level_edit {
+        label {Default level:}
+        xywh {130 51 339 24}
+        code2 {level_edit->value(Maratis::getInstance()->getCurrentLevel());}
+      }
+      Fl_Button {} {
+        label {...}
+        user_data this user_data_type {PublishDlg*}
+        callback find_main_level
+        xywh {472 51 26 24}
+      }
+    }
+    code {window = w;} {}
+  }
+  Function {publish_click(Fl_Button*, PublishDlg* dlg)} {open return_type {static void}
+  } {
+    code {Maratis* maratis = Maratis::getInstance();
+
+setPubDir(dlg->output_edit->value());
+std::string oldLevel = maratis->getCurrentLevel();
+
+// TODO: Make more efficient!
+maratis->save();
+maratis->loadLevel(dlg->level_edit->value());
+maratis->save();
+
+maratis->publish();
+
+// TODO: Error checking!
+fl_message("Project was successfully published!");
+
+maratis->loadLevel(oldLevel.c_str());
+dlg->window->hide();
+delete dlg;} {}
+  }
+  Function {cancel_click(Fl_Button*, PublishDlg* dlg)} {open return_type {static void}
+  } {
+    code {dlg->window->hide();
+delete dlg;} {}
+  }
+  Function {find_output_dir(Fl_Button*, PublishDlg* dlg)} {open return_type {static void}
+  } {
+    code {const char* filename = fl_native_file_chooser("Choose output", NULL, dlg->output_edit->value(), Fl_Native_File_Chooser::BROWSE_DIRECTORY);
+
+if(filename == NULL)
+	return;
+
+dlg->output_edit->value(filename);} {}
+  }
+  Function {find_main_level(Fl_Button*, PublishDlg* dlg)} {open return_type {static void}
+  } {
+    code {const char* filename = fl_native_file_chooser("Choose output", NULL, dlg->output_edit->value(), Fl_Native_File_Chooser::BROWSE_FILE);
+
+if(filename == NULL)
+	return;
+
+dlg->level_edit->value(filename);} {}
+  }
+} 
+
+Function {new_scene_ok_callback(Fl_Button* button,void*)} {} {
+  code {::window.scene_name = ::window.scene_name_input->value();
+
+button->parent()->hide();} {}
+} 
+
+Function {new_scene_cancel_callback(Fl_Button* button,void*)} {} {
+  code {Fl_Window* window = (Fl_Window*) button->parent();
+
+::window.scene_name = "";
+window->hide();} {}
+} 
+
+class ConstraintPropertiesDlg {open
+} {
+  decl {Fl_Window* win;} {private local
+  }
+  Function {create_window()} {} {
+    code {MOEntity* entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
+
+if(!entity)
+	return NULL;
+	
+MPhysicsProperties* phys = entity->getPhysicsProperties();
+
+if(!phys)
+{
+	fl_message("Selected object has no physics properties. Can not edit constraints!");
+	return NULL;
+}} {}
+    Fl_Window {} {
+      label Constraints open
+      xywh {2054 357 471 246} type Double hide modal
+    } {
+      Fl_Check_Button enabled_button {
+        label {Constraint Enabled}
+        user_data this user_data_type {ConstraintPropertiesDlg*}
+        callback enable_constraint_callback
+        xywh {15 9 159 27} down_box DOWN_BOX
+      }
+      Fl_Button {} {
+        label {Apply and Close}
+        user_data this user_data_type {ConstraintPropertiesDlg*}
+        callback close_callback
+        xywh {240 204 216 27}
+      }
+      Fl_Group {} {
+        label {Pivot:} open
+        xywh {16 56 216 32} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Value_Input xpivot_edit {
+          label {X:} user_data_type {void*}
+          xywh {37 61 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input ypivot_edit {
+          label {Y:} user_data_type {void*}
+          xywh {106 61 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input zpivot_edit {
+          label {Z:} user_data_type {void*}
+          xywh {175 61 51 21} maximum 1000 step 1
+        }
+      }
+      Fl_Group {} {
+        label {Lower Linear Limit:} open
+        xywh {15 112 216 32} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Value_Input xlinear_lower {
+          label {X:} user_data_type {void*}
+          xywh {36 117 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input ylinear_lower {
+          label {Y:} user_data_type {void*}
+          xywh {105 117 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input zlinear_lower {
+          label {Z:} user_data_type {void*}
+          xywh {174 117 51 21} maximum 1000 step 1
+        }
+      }
+      Fl_Group {} {
+        label {Upper Linear Limit:} open
+        xywh {240 112 216 32} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Value_Input xlinear_upper {
+          label {X:} user_data_type {void*}
+          xywh {261 117 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input ylinear_upper {
+          label {Y:} user_data_type {void*}
+          xywh {330 117 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input zlinear_upper {
+          label {Z:} user_data_type {void*}
+          xywh {399 117 51 21} maximum 1000 step 1
+        }
+      }
+      Fl_Group {} {
+        label {Lower Angular Limit:} open
+        xywh {15 166 216 32} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Value_Input xangular_lower {
+          label {X:} user_data_type {void*}
+          xywh {36 171 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input yangular_lower {
+          label {Y:} user_data_type {void*}
+          xywh {105 171 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input zangular_lower {
+          label {Z:} user_data_type {void*}
+          xywh {174 171 51 21} maximum 1000 step 1
+        }
+      }
+      Fl_Group {} {
+        label {Upper Angular Limit:} open
+        xywh {240 166 216 32} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Value_Input xangular_upper {
+          label {X:} user_data_type {void*}
+          xywh {261 171 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input yangular_upper {
+          label {Y:} user_data_type {void*}
+          xywh {330 171 51 21} maximum 1000 step 1
+        }
+        Fl_Value_Input zangular_upper {
+          label {Z:} user_data_type {void*}
+          xywh {399 171 51 21} maximum 1000 step 1
+        }
+      }
+      Fl_Check_Button parent_collision {
+        label {Parent Collision}
+        xywh {237 57 210 27} down_box DOWN_BOX
+      }
+      Fl_Button {} {
+        label Cancel
+        user_data this user_data_type {ConstraintPropertiesDlg*}
+        callback cancel_callback
+        xywh {15 204 216 27}
+      }
+      Fl_Input parent_input {
+        label {Parent:}
+        xywh {237 9 222 27}
+      }
+    }
+    code {MPhysicsConstraint* constraint = phys->getConstraint();
+
+win = w;
+
+if(!constraint)
+{
+	enabled_button->value(0);
+
+	xpivot_edit->deactivate();
+	ypivot_edit->deactivate();
+	zpivot_edit->deactivate();
+
+	xlinear_lower->deactivate();
+	ylinear_lower->deactivate();
+	zlinear_lower->deactivate();
+
+	xlinear_upper->deactivate();
+	ylinear_upper->deactivate();
+	zlinear_upper->deactivate();
+
+	xangular_upper->deactivate();
+	yangular_upper->deactivate();
+	zangular_upper->deactivate();
+
+	xangular_lower->deactivate();
+	yangular_lower->deactivate();
+	zangular_lower->deactivate();
+	
+	parent_collision->deactivate();
+	parent_input->deactivate();
+
+	return w;
+}
+
+enabled_button->value(1);
+
+MVector3 vector;
+
+vector = constraint->pivot;
+xpivot_edit->value(vector.x);
+ypivot_edit->value(vector.y);
+zpivot_edit->value(vector.z);
+
+vector = constraint->lowerLinearLimit;
+xlinear_lower->value(vector.x);
+ylinear_lower->value(vector.y);
+zlinear_lower->value(vector.z);
+
+vector = constraint->upperLinearLimit;
+xlinear_upper->value(vector.x);
+ylinear_upper->value(vector.y);
+zlinear_upper->value(vector.z);
+
+vector = constraint->upperAngularLimit;
+xangular_upper->value(vector.x);
+yangular_upper->value(vector.y);
+zangular_upper->value(vector.z);
+
+vector = constraint->lowerAngularLimit;
+xangular_lower->value(vector.x);
+yangular_lower->value(vector.y);
+zangular_lower->value(vector.z);
+	
+parent_collision->value(!constraint->disableParentCollision);
+parent_input->value(constraint->parentName.getSafeString());} {}
+  }
+  Function {enable_constraint_callback(Fl_Check_Button* button, ConstraintPropertiesDlg* dlg)} {open return_type {static void}
+  } {
+    code {MOEntity* entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
+
+if(!entity)
+	return;
+	
+MPhysicsProperties* phys = entity->getPhysicsProperties();
+
+if(!phys)
+	return;
+
+MPhysicsConstraint* constraint = phys->getConstraint();
+
+if(!constraint && button->value() == 1)
+{
+	phys->createConstraint();
+	
+	dlg->xpivot_edit->activate();
+	dlg->ypivot_edit->activate();
+	dlg->zpivot_edit->activate();
+
+	dlg->xlinear_lower->activate();
+	dlg->ylinear_lower->activate();
+	dlg->zlinear_lower->activate();
+
+	dlg->xlinear_upper->activate();
+	dlg->ylinear_upper->activate();
+	dlg->zlinear_upper->activate();
+
+	dlg->xangular_upper->activate();
+	dlg->yangular_upper->activate();
+	dlg->zangular_upper->activate();
+
+	dlg->xangular_lower->activate();
+	dlg->yangular_lower->activate();
+	dlg->zangular_lower->activate();
+	
+	dlg->parent_collision->activate();
+	dlg->parent_input->activate();
+
+}
+else if(constraint && button->value() == 0)
+{
+	phys->deleteConstraint();
+	
+	dlg->xpivot_edit->deactivate();
+	dlg->ypivot_edit->deactivate();
+	dlg->zpivot_edit->deactivate();
+
+	dlg->xlinear_lower->deactivate();
+	dlg->ylinear_lower->deactivate();
+	dlg->zlinear_lower->deactivate();
+
+	dlg->xlinear_upper->deactivate();
+	dlg->ylinear_upper->deactivate();
+	dlg->zlinear_upper->deactivate();
+
+	dlg->xangular_upper->deactivate();
+	dlg->yangular_upper->deactivate();
+	dlg->zangular_upper->deactivate();
+
+	dlg->xangular_lower->deactivate();
+	dlg->yangular_lower->deactivate();
+	dlg->zangular_lower->deactivate();
+	
+	dlg->parent_collision->deactivate();
+	dlg->parent_input->deactivate();
+
+}} {}
+  }
+  Function {close_callback(Fl_Button*, ConstraintPropertiesDlg* dlg)} {return_type {static void}
+  } {
+    code {MOEntity* entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
+
+if(!entity)
+	return;
+	
+MPhysicsProperties* phys = entity->getPhysicsProperties();
+
+if(!phys)
+{
+	fl_message("Selected object has no physics properties. Can not edit constraints!");
+	return;
+}
+
+MPhysicsConstraint* constraint = phys->getConstraint();
+
+MVector3 vector;
+
+vector.x = dlg->xpivot_edit->value();
+vector.y = dlg->ypivot_edit->value();
+vector.z = dlg->zpivot_edit->value();
+constraint->pivot = vector;
+
+vector.x = dlg->xlinear_lower->value();
+vector.y = dlg->ylinear_lower->value();
+vector.z = dlg->zlinear_lower->value();
+constraint->lowerLinearLimit = vector;
+
+vector.x = dlg->xlinear_upper->value();
+vector.y = dlg->ylinear_upper->value();
+vector.z = dlg->zlinear_upper->value();
+constraint->upperLinearLimit = vector;
+
+vector.x = dlg->xangular_lower->value();
+vector.y = dlg->yangular_lower->value();
+vector.z = dlg->zangular_lower->value();
+constraint->lowerAngularLimit = vector;
+
+vector.x = dlg->xangular_upper->value();
+vector.y = dlg->yangular_upper->value();
+vector.z = dlg->zangular_upper->value();
+constraint->upperAngularLimit = vector;
+
+constraint->disableParentCollision = !dlg->parent_collision->value();
+constraint->parentName.set(dlg->parent_input->value());
+
+dlg->win->hide();
+Fl::delete_widget(dlg->win);
+delete dlg;} {}
+  }
+  Function {cancel_callback(Fl_Button*, ConstraintPropertiesDlg* dlg)} {open return_type {static void}
+  } {
+    code {dlg->win->hide();
+Fl::delete_widget(dlg->win);
+delete dlg;} {}
   }
 } 

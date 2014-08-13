@@ -826,6 +826,21 @@ void Maratis::addLight(void)
     addSelectedObject(light);
 }
 
+void Maratis::addGroup(void)
+{
+	autoSave();
+	char name[256] = "Group0";
+	getNewObjectName("Group", name);
+
+	MScene* scene = MEngine::getInstance()->getLevel()->getCurrentScene();
+
+	MObject3d* object = scene->addNewGroup();
+	object->setName(name);
+
+	clearSelectedObjects();
+	addSelectedObject(object);
+}
+
 void Maratis::okAddEntity(const char * filename)
 {
     if(filename)
@@ -1352,31 +1367,24 @@ void Maratis::switchCurrentVueMode(void)
 void Maratis::changeCurrentVue(int vue)
 {
     MOCamera * camera = getPerspectiveVue();
-    MVector3 position = camera->getPosition();
 
     // set to ortho
-    if(! camera->isOrtho())
+    if(!camera->isOrtho())
         switchCurrentVueMode();
-
-    float dist = (m_viewCenter - position).getLength();
 
     // set vue
     switch(vue)
     {
         case 1:
-            camera->setPosition(MVector3(0, -dist, 0));
             camera->setEulerRotation(MVector3(90, 0, 0));
             break;
         case 3:
-            camera->setPosition(MVector3(dist, 0, 0));
             camera->setEulerRotation(MVector3(90, 0, 90));
             break;
         case 7:
-            camera->setPosition(MVector3(0, 0, dist));
             camera->setEulerRotation(MVector3(0, 0, 0));
             break;
         case 9:
-            camera->setPosition(MVector3(0, 0, -dist));
             camera->setEulerRotation(MVector3(180, 0, 0));
             break;
     }
@@ -3992,7 +4000,7 @@ void Maratis::drawMainView(MScene * scene)
 
     // draw grid
     camera->enable();
-    drawGrid(scene);
+    //drawGrid(scene);
 
     render->enableDepthTest();
     scene->draw(camera);
@@ -4309,10 +4317,7 @@ void Maratis::drawMainView(MScene * scene)
 
     if(getSelectedObjectsNumber() > 0)
     {
-        render->enableDepthTest();
-
-        // clear z buffer
-        render->clear(M_BUFFER_DEPTH);
+        render->disableDepthTest();
         camera->enable();
 
         switch(getTransformMode())
@@ -4334,6 +4339,8 @@ void Maratis::drawMainView(MScene * scene)
                 break;
         }
     }
+
+	drawGrid(engine->getLevel()->getCurrentScene());
 }
 
 void Maratis::logicLoop(void)
@@ -4382,7 +4389,7 @@ void Maratis::graphicLoop(void)
     unsigned int w = (unsigned int)window->getWidth();
     unsigned int h = (unsigned int)window->getHeight();
 
-    render->clear(M_BUFFER_COLOR);
+    render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
 
     // game
     MGame * game = MEngine::getInstance()->getGame();

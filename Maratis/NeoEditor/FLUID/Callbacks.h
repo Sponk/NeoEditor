@@ -4,9 +4,15 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Value_Input.H>
 #include <FL/Fl_Native_File_Chooser.H>
+#include <FL/fl_message.H>
 #include <string>
 
-#define EDITOR_VERSION_STRING "0.1"
+// Maratis includes (for MainWindow.cxx)
+#include "../Maratis/Maratis.h"
+#include "../MPublish/MPublisher.h"
+
+// Is now given via compiler flags
+// #define EDITOR_VERSION_STRING "0.1"
 
 typedef struct
 {
@@ -27,6 +33,7 @@ extern bool update_name;
 void edit_text_properties(Fl_Widget*, void*);
 void update_behavior_menu();
 const char* fl_native_file_chooser(const char* title, const char* files, const char* dir, int type);
+void update_scene_tree();
 
 #ifdef _MSC_VER
 

@@ -42,8 +42,19 @@
 static string s_pubDir;
 static string s_dataDir;
 
+void setPubDir(const char* dir)
+{
+    // Only set s_pubDir when we can be sure that it exists
+    if(isDirectory(dir))
+        s_pubDir = dir;
+}
+
 const char* getPubDir()
 {
+    // Only set s_pubDir when it does not contain a path
+    if(!s_pubDir.empty())
+        return s_pubDir.c_str();
+
 	MEngine* engine = MEngine::getInstance();
 	MSystemContext* system = engine->getSystemContext();
 
@@ -277,8 +288,11 @@ static void embedProject(const char * src, const char * dest, const char * game,
 {
 	FILE* fp = 0;
 	fp = fopen(src, "rb");
-	if(! fp)
+	if (!fp)
+	{
+		MLOG_ERROR("Could not embed static data into the player!");
 		return;
+	}
 
 	fseek(fp, 0, SEEK_END);
 	size_t size = ftell(fp);
@@ -313,6 +327,13 @@ static void embedProject(const char * src, const char * dest, const char * game,
 	}
 
 	fp = fopen(dest, "wb");
+
+	if (!fp)
+	{
+		MLOG_ERROR("Could not write player executable!");
+		return;
+	}
+
 	fwrite(buff, sizeof(char), size, fp);
 	fclose(fp);
 }

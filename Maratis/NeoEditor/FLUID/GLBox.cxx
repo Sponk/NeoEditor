@@ -17,6 +17,8 @@
 #include <FL/Fl_Int_Input.H>
 #include <FL/Fl_Double_Window.H>
 
+#include "../MPluginScript/MPluginScript.h"
+
 extern Fl_Double_Window* main_window;
 extern EditorWindow window;
 
@@ -34,6 +36,13 @@ void update_editor(void*)
         int direction = -1;
 
         MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+
+        if(vue->isOrtho())
+        {
+            vue->setFov(vue->getFov() + direction*translation_speed);
+        }
+
+
         vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
         vue->updateMatrix();
 
@@ -44,6 +53,11 @@ void update_editor(void*)
         int direction = 1;
 
         MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+        if(vue->isOrtho())
+        {
+            vue->setFov(vue->getFov() + direction*translation_speed);
+        }
+
         vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
         vue->updateMatrix();
 
@@ -109,41 +123,42 @@ void update_editor(void*)
         }
     }
 
+	MScene* scene = MEngine::getInstance()->getLevel()->getCurrentScene();
+	for (int i = 0; i < scene->getObjectsNumber(); i++)
+	{
+		scene->getObjectByIndex(i)->updateMatrix();
+	}
+
     Fl::add_timeout(0.01, update_editor);
 }
 
 void GLBox::draw()
 {
-    MWindow * mwindow = MWindow::getInstance();
     if(!maratis_init)
     {
-        MEngine * engine = MEngine::getInstance();
-        Maratis * maratis = Maratis::getInstance();
-
-        MRenderingContext * render = engine->getRenderingContext();
-        MLOG_INFO("Render version : " << render->getRendererVersion());
-
-        render->setTextureFilterMode(M_TEX_FILTER_NEAREST, M_TEX_FILTER_NEAREST_MIPMAP_NEAREST);
-        render->setClearColor(MVector4(0.18, 0.32, 0.45, 1));
-
-        MGui * gui = MGui::getInstance();
-        gui->setRenderingContext(render);
+        MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+        Maratis* maratis = Maratis::getInstance();
 
         if(!current_project.file_path.empty())
         {
             current_project.changed = false;
             current_project.path = current_project.file_path;
 
-#ifndef WIN32
+    #ifndef WIN32
             current_project.path = current_project.path.erase(current_project.path.find_last_of("/")+1, current_project.path.length());
-#else
+    #else
             current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
-#endif
+    #endif
             maratis->loadProject(current_project.file_path.c_str());
             current_project.level = maratis->getCurrentLevel();
         }
 
         update_scene_tree();
+
+        // MLOG_INFO("Render version : " << render->getRendererVersion());
+
+        render->setTextureFilterMode(M_TEX_FILTER_NEAREST, M_TEX_FILTER_NEAREST_MIPMAP_NEAREST);
+        render->setClearColor(MVector4(0.18, 0.32, 0.45, 1));
 
         maratis_init = true;
         reload_editor = true;

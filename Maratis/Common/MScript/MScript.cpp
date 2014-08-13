@@ -30,6 +30,7 @@
 
 #include "MScript.h"
 #include "MSchedule/MSchedule.h"
+#include <MWindow.h>
 #include <MLog.h>
 
 static char g_currentDirectory[256] = "";
@@ -435,6 +436,401 @@ int getCurrentCamera(lua_State * L)
 	}
 
 	return 0;
+}
+
+int getMeshFilename(lua_State * L)
+{
+    if(! isFunctionOk(L, "getMeshFilename", 1))
+        return 0;
+
+    int nbArguments = lua_gettop(L);
+
+    long int id = lua_tointeger(L, nbArguments);
+    MObject3d* object;
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_ENTITY)
+        {
+            MOEntity* entity = (MOEntity*) object;
+            lua_pushstring(L, entity->getMeshRef()->getFilename());
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+// TODO: Encapsulasation
+void getNewObjectName(const char * objectName, char * name)
+{
+    MLevel * level = MEngine::getInstance()->getLevel();
+    MScene * scene = level->getCurrentScene();
+
+    unsigned int count = 0;
+    int size = scene->getObjectsNumber();
+    for(int i=0; i<size; i++)
+    {
+        MObject3d * object = scene->getObjectByIndex(i);
+        if(object->getName())
+            if(strcmp(name, object->getName()) == 0)
+            {
+                // name already exist
+                count++;
+                sprintf(name, "%s%d", objectName, count);
+                i = -1;
+            }
+    }
+}
+
+int loadMesh(lua_State * L)
+{
+    if(! isFunctionOk(L, "loadMesh", 1))
+        return 0;
+
+    const char* path = lua_tostring(L, 1);
+
+    MMeshRef* meshRef = NULL;
+    MLevel* level = MEngine::getInstance()->getLevel();
+
+    char string[256];
+    getGlobalFilename(string, MWindow::getInstance()->getWorkingDirectory(), path);
+
+    meshRef = level->loadMesh(string, true);
+
+    // create entity
+    strcpy(string, "Entity0");
+    MOEntity * entity = level->getCurrentScene()->addNewEntity(meshRef);
+    getNewObjectName("Entity", string);
+
+    entity->setName(string);
+    lua_pushinteger(L, (lua_Integer) entity);
+
+    return 1;
+}
+
+int loadSound(lua_State * L)
+{
+    if(! isFunctionOk(L, "loadSound", 1))
+        return 0;
+
+    const char* path = lua_tostring(L, 1);
+
+    MLevel* level = MEngine::getInstance()->getLevel();
+    MScene* scene = level->getCurrentScene();
+
+    char string[256];
+    getGlobalFilename(string, MWindow::getInstance()->getWorkingDirectory(), path);
+
+    MSoundRef* ref = level->loadSound(string);
+    MOSound* sound = scene->addNewSound(ref);
+
+    strcpy(string, "Sound0");
+    getNewObjectName("Sound", string);
+
+    sound->setName(string);
+    lua_pushinteger(L, (lua_Integer) sound);
+
+    return 1;
+}
+
+int getSoundFilename(lua_State * L)
+{
+    if(! isFunctionOk(L, "getSoundFilename", 1))
+        return 0;
+
+    int nbArguments = lua_gettop(L);
+
+    long int id = lua_tointeger(L, nbArguments);
+    MObject3d* object;
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound* sound = (MOSound*) object;
+            lua_pushstring(L, sound->getSoundRef()->getFilename());
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int getSoundRolloff(lua_State * L)
+{
+    if(! isFunctionOk(L, "getSoundRolloff", 1))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            lua_pushnumber(L, (lua_Number)sound->getRolloff());
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int setSoundRolloff(lua_State * L)
+{
+    if(!isFunctionOk(L, "setSoundRolloff", 2))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            sound->setRolloff(lua_tonumber(L, 2));
+        }
+    }
+
+    return 0;
+}
+
+int getSoundRadius(lua_State * L)
+{
+    if(! isFunctionOk(L, "getSoundRadius", 1))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            lua_pushnumber(L, (lua_Number)sound->getRadius());
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int setSoundRadius(lua_State * L)
+{
+    if(!isFunctionOk(L, "setSoundRadius", 2))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            sound->setRadius(lua_tonumber(L, 2));
+        }
+    }
+
+    return 0;
+}
+
+int setSoundRelative(lua_State * L)
+{
+    if(!isFunctionOk(L, "setSoundRelative", 2))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            sound->setRelative(lua_toboolean(L, 2));
+        }
+    }
+
+    return 0;
+}
+
+int isSoundRelative(lua_State * L)
+{
+    if(! isFunctionOk(L, "isSoundRelative", 1))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            lua_pushboolean(L, (lua_Number)sound->isRelative());
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int setSoundLooping(lua_State * L)
+{
+    if(!isFunctionOk(L, "setSoundLooping", 2))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            sound->setLooping(lua_toboolean(L, 2));
+        }
+    }
+
+    return 0;
+}
+
+int isSoundLooping(lua_State * L)
+{
+    if(! isFunctionOk(L, "isSoundLooping", 1))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_SOUND)
+        {
+            MOSound * sound = (MOSound*)object;
+            lua_pushboolean(L, (lua_Number)sound->isLooping());
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int createGroup(lua_State * L)
+{
+    if(!isFunctionOk(L, "createGroup", 0))
+        return 0;
+
+    MObject3d* group = MEngine::getInstance()->getLevel()->getCurrentScene()->addNewGroup();
+    char string[256] = "Group0";
+    getNewObjectName("Group", string);
+    group->setName(string);
+
+    lua_pushinteger(L, (lua_Integer) group);
+
+    return 1;
+}
+
+int getObjectType(lua_State * L)
+{
+    if(! isFunctionOk(L, "getObjectType", 1))
+        return 0;
+
+    int nbArguments = lua_gettop(L);
+    long int id = lua_tointeger(L, nbArguments);
+    MObject3d* object;
+
+    if((object = getObject3d(id)))
+    {
+        switch (object->getType())
+        {
+        case M_OBJECT3D_ENTITY:
+                lua_pushstring(L, "Entity");
+            break;
+        case M_OBJECT3D_CAMERA:
+                lua_pushstring(L, "Camera");
+            break;
+
+        case M_OBJECT3D_LIGHT:
+                lua_pushstring(L, "Light");
+            break;
+
+        case M_OBJECT3D_SOUND:
+                lua_pushstring(L, "Sound");
+            break;
+
+        case M_OBJECT3D_TEXT:
+                lua_pushstring(L, "Text");
+            break;
+
+        case M_OBJECT3D:
+                lua_pushstring(L, "Object");
+            break;
+        default:
+            break;
+        }
+
+        return 1;
+    }
+
+    return 0;
+}
+
+int getBoundingMin(lua_State* L)
+{
+    if(! isFunctionOk(L, "getBoundingMin", 1))
+        return 0;
+
+    int nbArguments = lua_gettop(L);
+
+    long int id = lua_tointeger(L, nbArguments);
+    MObject3d* object;
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_ENTITY)
+        {
+            MOEntity* entity = (MOEntity*) object;
+
+            MMesh* mesh = entity->getMesh();
+            pushFloatArray(L, mesh->getBoundingBox()->min, 3);
+
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int getBoundingMax(lua_State* L)
+{
+    if(! isFunctionOk(L, "getBoundingMax", 1))
+        return 0;
+
+    int nbArguments = lua_gettop(L);
+
+    long int id = lua_tointeger(L, nbArguments);
+    MObject3d* object;
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_ENTITY)
+        {
+            MOEntity* entity = (MOEntity*) object;
+
+            MMesh* mesh = entity->getMesh();
+            pushFloatArray(L, mesh->getBoundingBox()->max, 3);
+
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
 int getObject(lua_State * L)
@@ -1121,6 +1517,27 @@ int isVisible(lua_State * L)
 	return 0;
 }
 
+int setInvisible(lua_State * L)
+{
+    if(! isFunctionOk(L, "setInvisible", 2))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_ENTITY)
+        {
+            MOEntity* entity = static_cast<MOEntity*>(object);
+            entity->setInvisible(lua_toboolean(L, 2) != 0);
+        }
+        return 1;
+    }
+
+    return 0;
+}
+
 int activate(lua_State * L)
 {
 	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
@@ -1428,6 +1845,47 @@ int changeCurrentCamera(lua_State * L)
 	}
 
 	return 0;
+}
+
+int isGhost(lua_State* L)
+{
+    if(! isFunctionOk(L, "isGhost", 1))
+        return 0;
+
+    GET_OBJECT_SUBCLASS_BEGIN(MOEntity, entity, M_OBJECT3D_ENTITY)
+            MPhysicsProperties* phys = entity->getPhysicsProperties();
+
+            if(!phys)
+            {
+                lua_pushboolean(L, false);
+                return 1;
+            }
+
+            lua_pushboolean(L, phys->isGhost());
+            return 1;
+    GET_OBJECT_SUBCLASS_END()
+
+    return 0;
+}
+
+int enableGhost(lua_State* L)
+{
+    if(! isFunctionOk(L, "enableGhost", 2))
+        return 0;
+
+    GET_OBJECT_SUBCLASS_BEGIN(MOEntity, entity, M_OBJECT3D_ENTITY)
+            MPhysicsProperties* phys = entity->getPhysicsProperties();
+
+            if(!phys)
+            {
+                return 0;
+            }
+
+            phys->setGhost(lua_toboolean(L, 2));
+            return 1;
+    GET_OBJECT_SUBCLASS_END()
+
+    return 0;
 }
 
 int addCentralForce(lua_State * L)
@@ -1828,6 +2286,30 @@ int getMass(lua_State * L)
 		}
 	}
 	
+	return 0;
+}
+
+int enablePhysics(lua_State * L)
+{
+	if (!isFunctionOk(L, "enablePhysics", 2))
+		return 0;
+
+	GET_OBJECT_SUBCLASS_BEGIN(MOEntity, entity, M_OBJECT3D_ENTITY)
+	MPhysicsContext* physics = MEngine::getInstance()->getPhysicsContext();
+	MPhysicsProperties* phyProps = entity->createPhysicsProperties();
+	MScene* scene = MEngine::getInstance()->getLevel()->getCurrentScene();
+	
+	if (lua_toboolean(L, 1) != 0)
+	{
+		entity->deletePhysicsProperties();
+		return 1;
+	}
+
+	scene->prepareCollisionObject(entity);
+
+	return 1;
+	GET_OBJECT_SUBCLASS_END()
+
 	return 0;
 }
 
@@ -2919,6 +3401,17 @@ int getlightSpotExponent(lua_State * L)
 	return 0;
 }
 
+int createLight(lua_State* L)
+{
+    MOLight* light = MEngine::getInstance()->getLevel()->getCurrentScene()->addNewLight();
+    char name[256] = "Light0";
+    getNewObjectName("Light", name);
+
+    light->setName(name);
+    lua_pushinteger(L, (lua_Integer) light);
+
+    return 1;
+}
 
 int getSoundGain(lua_State * L)
 {
@@ -2961,6 +3454,17 @@ int setSoundGain(lua_State * L)
 	}
 
 	return 0;
+}
+
+int createCamera(lua_State * L)
+{
+    MOCamera* camera = MEngine::getInstance()->getLevel()->getCurrentScene()->addNewCamera();
+    char name[256] = "Camera0";
+    getNewObjectName("Camera", name);
+
+    camera->setName(name);
+    lua_pushinteger(L, (lua_Integer) camera);
+    return 1;
 }
 
 int setCameraClearColor(lua_State * L)
@@ -3602,6 +4106,161 @@ int showCursor(lua_State * L)
 	return 0;
 }
 
+int loadTextFont(lua_State * L)
+{
+    if(! isFunctionOk(L, "loadTextFont", 1))
+        return 0;
+
+    const char* path = lua_tostring(L, 1);
+
+    MLevel* level = MEngine::getInstance()->getLevel();
+    MScene* scene = level->getCurrentScene();
+
+    char string[256];
+    getGlobalFilename(string, MWindow::getInstance()->getWorkingDirectory(), path);
+
+    MFontRef* ref = level->loadFont(string);
+    MOText* text = scene->addNewText(ref);
+
+    if(!ref)
+    {
+        lua_pushnil(L);
+        return 0;
+    }
+
+    strcpy(string, "Text0");
+    getNewObjectName("Text", string);
+
+    text->setName(string);
+    text->setText("Text");
+
+    lua_pushinteger(L, (lua_Integer) text);
+
+    return 1;
+}
+
+int getFontFilename(lua_State * L)
+{
+    if(! isFunctionOk(L, "getFontFilename", 1))
+        return 0;
+
+    int nbArguments = lua_gettop(L);
+
+    long int id = lua_tointeger(L, nbArguments);
+    MObject3d* object;
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_TEXT)
+        {
+            MOText* text = (MOText*) object;
+            lua_pushstring(L, text->getFontRef()->getFilename());
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int getTextAlignment(lua_State * L)
+{
+    if(! isFunctionOk(L, "getTextAlignment", 1))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_TEXT)
+        {
+            switch(((MOText*) object)->getAlign())
+            {
+            case M_ALIGN_CENTER:
+                    lua_pushstring(L, "Center");
+                break;
+            case M_ALIGN_LEFT:
+                    lua_pushstring(L, "Left");
+                break;
+            case M_ALIGN_RIGHT:
+                    lua_pushstring(L, "Right");
+                break;
+            }
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int setTextAlignment(lua_State * L)
+{
+    if(! isFunctionOk(L, "setTextAlignment", 2))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+    const char* alignment = lua_tostring(L, 2);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_TEXT)
+        {
+            if(!strcmp(alignment, "Center"))
+                static_cast<MOText*>(object)->setAlign(M_ALIGN_CENTER);
+            else if(!strcmp(alignment, "Left"))
+                static_cast<MOText*>(object)->setAlign(M_ALIGN_LEFT);
+            else if(!strcmp(alignment, "Right"))
+                static_cast<MOText*>(object)->setAlign(M_ALIGN_RIGHT);
+            else
+                MLOG_WARNING("Unknown alignment: " << alignment);
+
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int getTextFontSize(lua_State * L)
+{
+    if(! isFunctionOk(L, "getTextFontSize", 1))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_TEXT)
+        {
+            lua_pushnumber(L, ((MOText*) object)->getSize());
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int setTextFontSize(lua_State * L)
+{
+    if(! isFunctionOk(L, "setTextFontSize", 2))
+        return 0;
+
+    MObject3d * object;
+    lua_Integer id = lua_tointeger(L, 1);
+
+    if((object = getObject3d(id)))
+    {
+        if(object->getType() == M_OBJECT3D_TEXT)
+        {
+            ((MOText *)object)->setSize(lua_tonumber(L, 2));
+        }
+    }
+
+    return 0;
+}
+
 int getText(lua_State * L)
 {
 	if(! isFunctionOk(L, "getText", 1))
@@ -3813,6 +4472,7 @@ void MScript::init(void)
 	lua_register(m_state, "setRotation",			setRotation);
 	lua_register(m_state, "setScale",				setScale);
 	lua_register(m_state, "isVisible",				isVisible);
+    lua_register(m_state, "setInvisible",           setInvisible);
 	lua_register(m_state, "activate",				activate);
 	lua_register(m_state, "deactivate",				deactivate);
 	lua_register(m_state, "isActive",				isActive);
@@ -3823,7 +4483,13 @@ void MScript::init(void)
 
 	lua_register(m_state, "enableShadow",			enableShadow);
 	lua_register(m_state, "isCastingShadow",		isCastingShadow);
-	
+    lua_register(m_state, "getMeshFilename",        getMeshFilename);
+    lua_register(m_state, "loadMesh",               loadMesh);
+    lua_register(m_state, "getObjectType",          getObjectType);
+    lua_register(m_state, "getBoundingMax",         getBoundingMax);
+    lua_register(m_state, "getBoundingMin",         getBoundingMin);
+    lua_register(m_state, "createGroup",            createGroup);
+
 	lua_register(m_state, "getTransformedPosition", getTransformedPosition);
 	lua_register(m_state, "getTransformedRotation", getTransformedRotation);
 	lua_register(m_state, "getTransformedScale",	getTransformedScale);
@@ -3848,6 +4514,7 @@ void MScript::init(void)
 	lua_register(m_state, "setCurrentFrame",		setCurrentFrame);
 
 	// physics
+	lua_register(m_state, "enablePhysics",		enablePhysics);
 	lua_register(m_state, "setGravity",			setGravity);
 	lua_register(m_state, "getGravity",			getGravity);
 	lua_register(m_state, "addCentralForce",	addCentralForce);
@@ -3879,6 +4546,8 @@ void MScript::init(void)
     lua_register(m_state, "setConstraintParent", setConstraintParent);
     lua_register(m_state, "getConstraintParent", getConstraintParent);
     lua_register(m_state, "enableParentCollision", enableParentCollision);
+    lua_register(m_state, "isGhost", isGhost);
+    lua_register(m_state, "enableGhost", enableGhost);
 	
 	// input
 	lua_register(m_state, "isKeyPressed", isKeyPressed);
@@ -3893,13 +4562,26 @@ void MScript::init(void)
     lua_register(m_state, "getTouchPhase", getTouchPhase);
 
 	// sound
-	lua_register(m_state, "playSound",	  playSound);
-	lua_register(m_state, "pauseSound",	  pauseSound);
-	lua_register(m_state, "stopSound",	  stopSound);
-	lua_register(m_state, "getSoundGain", getSoundGain);
-	lua_register(m_state, "setSoundGain", setSoundGain);
-    lua_register(m_state, "setSoundPitch", setSoundPitch);
-    lua_register(m_state, "getSoundPitch", getSoundPitch);
+    lua_register(m_state, "loadSound",          loadSound);
+    lua_register(m_state, "getSoundFilename",   getSoundFilename);
+    lua_register(m_state, "playSound",          playSound);
+    lua_register(m_state, "pauseSound",         pauseSound);
+    lua_register(m_state, "stopSound",          stopSound);
+    lua_register(m_state, "getSoundGain",       getSoundGain);
+    lua_register(m_state, "setSoundGain",       setSoundGain);
+    lua_register(m_state, "setSoundPitch",      setSoundPitch);
+    lua_register(m_state, "getSoundPitch",      getSoundPitch);
+
+    lua_register(m_state, "getSoundRolloff",    getSoundRolloff);
+    lua_register(m_state, "getSoundRadius",     getSoundRadius);
+    lua_register(m_state, "isSoundRelative",    isSoundRelative);
+    lua_register(m_state, "isSoundLooping",     isSoundLooping);
+
+    lua_register(m_state, "setSoundLooping",    setSoundLooping);
+    lua_register(m_state, "setSoundRelative",   setSoundRelative);
+    lua_register(m_state, "setSoundRadius",     setSoundRadius);
+    lua_register(m_state, "setSoundRolloff",    setSoundRolloff);
+
 	
 	// scene/level
 	lua_register(m_state, "changeScene",			changeScene);
@@ -3909,6 +4591,7 @@ void MScript::init(void)
 	lua_register(m_state, "loadLevel",				loadLevel);
 
 	// light
+    lua_register(m_state, "createLight",       createLight);
 	lua_register(m_state, "getLightColor",	   getLightColor);
 	lua_register(m_state, "getLightRadius",	   getLightRadius);
 	lua_register(m_state, "getLightIntensity", getLightIntensity);
@@ -3927,6 +4610,7 @@ void MScript::init(void)
 	lua_register(m_state, "getLightSpotExponent",	getlightSpotExponent);
 	
 	// camera
+    lua_register(m_state, "createCamera",           createCamera);
 	lua_register(m_state, "changeCurrentCamera",    changeCurrentCamera);
 	lua_register(m_state, "getCameraClearColor",    getCameraClearColor);
 	lua_register(m_state, "getCameraFov",		    getCameraFov);
@@ -3950,10 +4634,16 @@ void MScript::init(void)
 	lua_register(m_state, "getUnProjectedPoint",	getUnProjectedPoint);
 
 	// text
+    lua_register(m_state, "loadTextFont", loadTextFont);
+    lua_register(m_state, "getFontFilename", getFontFilename);
+    lua_register(m_state, "getTextFontSize", getTextFontSize);
+    lua_register(m_state, "setTextFontSize", setTextFontSize);
 	lua_register(m_state, "getText", getText);
 	lua_register(m_state, "setText", setText);
 	lua_register(m_state, "getTextColor", getTextColor);
 	lua_register(m_state, "setTextColor", setTextColor);
+    lua_register(m_state, "setTextAlignment", setTextAlignment);
+    lua_register(m_state, "getTextAlignment", getTextAlignment);
 
 	// do file
 	lua_register(m_state, "dofile", doFile);

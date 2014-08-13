@@ -80,6 +80,7 @@ private:
 	unsigned int m_colorBits;
 
 	char m_workingDirectory[256];
+	char m_projectDirectory[256];
 
 	// events function pointer
 	void (* m_pointerEvent)(MWinEvent * windowEvents);

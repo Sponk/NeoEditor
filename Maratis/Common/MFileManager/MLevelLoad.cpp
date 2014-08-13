@@ -178,17 +178,24 @@ void readSceneProperties(TiXmlElement * node, MScene * scene)
 	}
 
 	// gravity
-	MVector3 gravity;
-	if(readFloatValues(node, "gravity", gravity, 3))
-		scene->setGravity(gravity);
+    MVector3 vector;
+    if(readFloatValues(node, "gravity", vector, 3))
+        scene->setGravity(vector);
+
+    if(readFloatValues(node, "ambientLight", vector, 3))
+        scene->setAmbientLight(vector);
 }
 
 void readEntityProperties(TiXmlElement * node, MOEntity * entity)
 {
 	// invisible
-	bool invisible;
-	if(readBool(node, "invisible", &invisible))
-		entity->setInvisible(invisible);
+	bool value;
+	if(readBool(node, "invisible", &value))
+		entity->setInvisible(value);
+
+	// shadow
+	if (readBool(node, "shadow", &value))
+		entity->enableShadow(value);
 }
 
 void readSoundProperties(TiXmlElement * node, MOSound * sound)
@@ -816,6 +823,26 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 			readBehaviors(textNode, text);
 		}
 
+        // entity
+        TiXmlElement * groupNode = sceneNode->FirstChildElement("Group");
+        for(groupNode; groupNode; groupNode=groupNode->NextSiblingElement("Group"))
+        {
+            // name
+            const char * objectName = groupNode->Attribute("name");
+
+            // create entity
+            MObject3d * object = scene->addNewGroup();
+            object->setName(objectName);
+
+            // active
+            readObjectActive(groupNode, object);
+
+            // transform
+            TiXmlElement * transformNode = groupNode->FirstChildElement("transform");
+            if(transformNode)
+                readObjectTransform(transformNode, object);
+        }
+
 		// links
 		unsigned int l;
 		unsigned int lSize = g_links.size();
@@ -826,9 +853,9 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 			if(parent)
 				link->object->linkTo(parent);
 		}
-	}
+    }
 
-	// add default scene
+    // add default scene
 	if(level->getScenesNumber() == 0)
 		level->addNewScene();
 

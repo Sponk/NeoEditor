@@ -84,6 +84,9 @@ private:
 	// gravity
 	MVector3 m_gravity;
 
+    // Ambient light
+    MVector3 m_ambientLight;
+
 public:
 
 	// name
@@ -103,6 +106,9 @@ public:
      * @return The scene name.
      */
 	inline const char * getName(void){ return m_name.getSafeString(); }
+
+    inline MVector3 getAmbientLight() { return m_ambientLight; }
+    inline void setAmbientLight(MVector3 light) { m_ambientLight = light; }
 
 	// data mode
 	inline void setDataMode(M_DATA_MODES dataMode){ m_dataMode = dataMode; }
@@ -181,6 +187,8 @@ public:
      * @return The new light source.
      */
 	MOLight * addNewLight(void);
+
+    MObject3d * addNewGroup(void);
 
     /**
      * @brief Copies the light and adds the new instance to the scene.

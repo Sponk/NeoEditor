@@ -345,7 +345,7 @@ void MStandardRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVec
 		M_CULL_MODES cullMode = display->getCullMode();
 		MVector3 diffuse = material->getDiffuse();
 		MVector3 specular = material->getSpecular();
-		MVector3 emit = material->getEmit();
+        MVector3 emit = material->getEmit() + engine->getLevel()->getCurrentScene()->getAmbientLight();
 		float shininess = material->getShininess();
 
 		// get current fog color

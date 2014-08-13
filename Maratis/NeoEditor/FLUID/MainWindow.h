@@ -28,6 +28,7 @@ extern void add_text_callback(Fl_Menu_*, void*);
 extern void add_camera_callback(Fl_Menu_*, void*);
 extern void add_sound_callback(Fl_Menu_*, void*);
 extern void add_scene_callback(Fl_Menu_*, void*);
+extern void add_group_callback(Fl_Menu_*, void*);
 extern void about_menu_callback(Fl_Menu_*, void*);
 #include "GLBox.h"
 #include <FL/Fl_Tree.H>
@@ -39,6 +40,9 @@ extern void set_edit_type(Fl_Round_Button*, long);
 #include <FL/Fl_Value_Input.H>
 extern void rotation_speed_callback(Fl_Value_Input*, void*);
 extern void translation_speed_callback(Fl_Value_Input*, void*);
+#include <FL/Fl_Check_Button.H>
+extern void ortho_callback(Fl_Check_Button*, void*);
+extern void change_vue_callback(Fl_Menu_*, long);
 #include <FL/Fl_Tabs.H>
 #include <FL/Fl_Scroll.H>
 #include <FL/Fl_Input.H>
@@ -47,7 +51,6 @@ extern void edit_object_callback(Fl_Value_Input*, long);
 extern void edit_light_properties(Fl_Value_Input*, void*);
 #include <FL/Fl_Button.H>
 extern void choose_light_color(Fl_Button*, void*);
-#include <FL/Fl_Check_Button.H>
 extern void edit_light_properties_chk_btn(Fl_Check_Button*, void*);
 #include <FL/Fl_Clock.H>
 #include <FL/Fl_Box.H>
@@ -56,7 +59,9 @@ extern void edit_object_chk_btn(Fl_Check_Button*, void*);
 extern void edit_materials_callback(Fl_Button*, void*);
 extern void edit_shape_callback(Fl_Menu_*, long);
 extern void edit_object_properties(Fl_Value_Input*, void*);
+extern void object_constraint_properties_callback(Fl_Button*, void*);
 extern void edit_camera_properties(Fl_Value_Input*, void*);
+extern void choose_camera_color(Fl_Button*, void*);
 extern void edit_camera_properties_chk_btn(Fl_Check_Button*, void*);
 #include <FL/Fl_Text_Editor.H>
 extern void edit_text_properties(Fl_Text_Editor*, void*);
@@ -83,6 +88,8 @@ public:
   Fl_Group *speed_group;
   Fl_Value_Input *rotation_speed;
   Fl_Value_Input *translation_speed;
+  Fl_Check_Button *vue_ortho_button;
+  static Fl_Menu_Item menu_View[];
   Fl_Input *name_edit;
   Fl_Value_Input *xpos_edit;
   Fl_Value_Input *ypos_edit;
@@ -115,6 +122,7 @@ public:
   Fl_Double_Window *object_embedded_window;
   Fl_Output *object_mesh_edit;
   Fl_Check_Button *object_invisible_button;
+  Fl_Check_Button *object_shadow_button;
   Fl_Choice *object_shape_choice;
   static Fl_Menu_Item menu_object_shape_choice[];
   Fl_Check_Button *object_ghost_button;
@@ -122,9 +130,6 @@ public:
   Fl_Value_Input *object_fric_edit;
   Fl_Value_Input *object_rest_edit;
   Fl_Check_Button *object_physics_button;
-  Fl_Value_Input *xpivot_edit;
-  Fl_Value_Input *ypivot_edit;
-  Fl_Value_Input *zpivot_edit;
   Fl_Value_Input *object_linear_damping_edit;
   Fl_Value_Input *object_angular_damping_edit;
   Fl_Value_Input *xlinear_edit;
@@ -132,9 +137,9 @@ public:
   Fl_Value_Input *zlinear_edit;
   Fl_Value_Input *object_angular_factor_edit;
   Fl_Double_Window* create_camera_window();
-  Fl_Value_Input *camera_color_r_edit;
-  Fl_Value_Input *camera_color_g_edit;
-  Fl_Value_Input *camera_color_b_edit;
+  Fl_Value_Input *camera_color_r;
+  Fl_Value_Input *camera_color_g;
+  Fl_Value_Input *camera_color_b;
   Fl_Check_Button *camera_ortho_button;
   Fl_Value_Input *camera_fov_edit;
   Fl_Value_Input *camera_clipping_near_edit;
@@ -149,8 +154,8 @@ public:
   static Fl_Menu_Item menu_text_alignment_chooser[];
   Fl_Value_Input *text_r;
   Fl_Value_Input *text_g;
-  Fl_Value_Input *text_b;
   Fl_Value_Input *text_a;
+  Fl_Value_Input *text_b;
   Fl_Double_Window* create_sound_window();
   Fl_Output *sound_file_edit;
   Fl_Check_Button *sound_loop_button;
@@ -166,22 +171,21 @@ public:
   Fl_Double_Window* create_scene_window();
   Fl_Input *scene_name_input;
 };
-void new_scene_ok_callback(Fl_Button* button,void*);
-void new_scene_cancel_callback(Fl_Button* button,void*);
-extern void find_file_callback(Fl_Button*, void*);
-extern void ok_button_callback(Fl_Button*, void*);
-extern void cancel_button_callback(Fl_Button*, void*);
 
 class SceneSetupDlg {
 public:
+  static void ok_button_callback(Fl_Button* button, SceneSetupDlg* dlg);
+  static void cancel_button_callback(Fl_Button* button, void*);
+  static void find_file_callback(Fl_Button* button, void*);
   Fl_Double_Window* create_window();
   Fl_Input *scene_name_edit;
   Fl_Input *lua_script_edit;
+  Fl_Value_Input *color_r;
+  Fl_Value_Input *color_g;
+  Fl_Value_Input *color_b;
+  static void choose_light_color(Fl_Button* button, SceneSetupDlg* dlg);
   bool success; 
 };
-void ok_button_callback(Fl_Button* button, void*);
-void cancel_button_callback(Fl_Button* button, void*);
-void find_file_callback(Fl_Button* button, void*);
 #include <FL/Fl_Text_Display.H>
 
 class PlayerConsole {
@@ -212,17 +216,58 @@ public:
   Fl_Value_Input *specular_b;
   static void close_callback(Fl_Button* button, MaterialEditDlg* dlg);
   static void material_changed(Fl_Choice* choice, MaterialEditDlg* dlg);
-  static void choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg);
   static void close_window_callback(Fl_Window* window, MaterialEditDlg* dlg);
   static void apply_callback(Fl_Button*, MaterialEditDlg* dlg);
   static void save_callback(Fl_Button*, MaterialEditDlg* dlg);
   static void choose_diffuse_color(Fl_Button* button, MaterialEditDlg* dlg);
   static void choose_specular_color(Fl_Button* button, MaterialEditDlg* dlg);
+  static void choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg);
 };
 
 class AboutDlg {
 public:
   Fl_Double_Window* create_window();
   Fl_Box *editor_version_edit;
+};
+
+class PublishDlg {
+  Fl_Window* window; 
+public:
+  Fl_Double_Window* create_window();
+  Fl_Input *output_edit;
+  Fl_Input *level_edit;
+  static void publish_click(Fl_Button*, PublishDlg* dlg);
+  static void cancel_click(Fl_Button*, PublishDlg* dlg);
+  static void find_output_dir(Fl_Button*, PublishDlg* dlg);
+  static void find_main_level(Fl_Button*, PublishDlg* dlg);
+};
+void new_scene_ok_callback(Fl_Button* button,void*);
+void new_scene_cancel_callback(Fl_Button* button,void*);
+
+class ConstraintPropertiesDlg {
+  Fl_Window* win; 
+public:
+  Fl_Double_Window* create_window();
+  Fl_Check_Button *enabled_button;
+  Fl_Value_Input *xpivot_edit;
+  Fl_Value_Input *ypivot_edit;
+  Fl_Value_Input *zpivot_edit;
+  Fl_Value_Input *xlinear_lower;
+  Fl_Value_Input *ylinear_lower;
+  Fl_Value_Input *zlinear_lower;
+  Fl_Value_Input *xlinear_upper;
+  Fl_Value_Input *ylinear_upper;
+  Fl_Value_Input *zlinear_upper;
+  Fl_Value_Input *xangular_lower;
+  Fl_Value_Input *yangular_lower;
+  Fl_Value_Input *zangular_lower;
+  Fl_Value_Input *xangular_upper;
+  Fl_Value_Input *yangular_upper;
+  Fl_Value_Input *zangular_upper;
+  Fl_Check_Button *parent_collision;
+  Fl_Input *parent_input;
+  static void enable_constraint_callback(Fl_Check_Button* button, ConstraintPropertiesDlg* dlg);
+  static void close_callback(Fl_Button*, ConstraintPropertiesDlg* dlg);
+  static void cancel_callback(Fl_Button*, ConstraintPropertiesDlg* dlg);
 };
 #endif
