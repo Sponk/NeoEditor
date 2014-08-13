@@ -208,6 +208,12 @@ function objectToXml(object, path, parent)
         -- FIXME: Possibly unsafe when using escape sequences!
         output = output .. "\ttext=\"" .. getText(object) .. "\"\n"
         output = output .. "/>\n"   
+    elseif objectType == "Object" then
+        messagebox("Your selection contains an unsupported object type. Please deselect all groups you want to save.")
+        -- TODO: Stop this process here!
+        return "";
+    else
+            output = output .. "\">\n"
     end
     
     -- Position is relative to the selection center
@@ -416,6 +422,19 @@ function addText(text, group)
     return object
 end
 
+function addGroup(data, group)
+    local object = createGroup()
+    updateTransform(data, object)    
+    setScale(object, {1,1,1})
+    updateMatrix(object)
+        
+    if data["@parent"] == nil then
+        setParent(object, group)
+    end
+    
+    return object
+end
+
 function load_callback()
 
     local filename = openFileDlg("Choose a file", getProjectDir(), "*.mp")
@@ -496,6 +515,19 @@ function load_callback()
         else
 		parents[objects.prefab.Text["@name"]] = addText(objects.prefab.Text, group)
 		allObjects[#allObjects + 1] = objects.prefab.Text
+        end
+    end
+    
+    -- Groups (objects)
+    if objects.prefab.Object ~= nil then
+        if #objects.prefab.Object > 0 then  
+            for i = 1, #objects.prefab.Object, 1 do
+		parents[objects.prefab.Object[i]["@name"]] = addGroup(objects.prefab.Object[i], group)
+		allObjects[#allObjects + 1] = objects.prefab.Text[i]
+            end
+        else
+		parents[objects.prefab.Object["@name"]] = addGroup(objects.prefab.Object, group)
+		allObjects[#allObjects + 1] = objects.prefab.Object
         end
     end
     

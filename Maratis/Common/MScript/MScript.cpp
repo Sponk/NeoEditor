@@ -768,6 +768,9 @@ int getObjectType(lua_State * L)
                 lua_pushstring(L, "Text");
             break;
 
+        case M_OBJECT3D:
+                lua_pushstring(L, "Object");
+            break;
         default:
             break;
         }
