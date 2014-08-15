@@ -29,6 +29,7 @@
 //
 //========================================================================
 
+#ifndef USE_GLES
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
@@ -1229,3 +1230,4 @@ void MGLContext::setBlendingMode(M_BLENDING_MODES mode)
 		break;
 	}
 }
+#endif

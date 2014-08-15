@@ -1,0 +1,10 @@
+<Maratis version="3.0">
+
+<Project>
+
+	<renderer name="StandardRenderer" />
+	<start file="levels/main.level" />
+
+</Project>
+
+</Maratis>

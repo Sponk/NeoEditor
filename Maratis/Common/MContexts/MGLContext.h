@@ -30,7 +30,7 @@
 //========================================================================
 
 
-#ifndef _M_GL_CONTEXT_H
+#if !defined(_M_GL_CONTEXT_H) && !defined(USE_GLES)
 #define _M_GL_CONTEXT_H
 
 #include <MCore.h>

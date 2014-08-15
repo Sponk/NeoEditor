@@ -28,7 +28,12 @@
 //========================================================================
 
 
+#ifndef ANDROID
 #include <MWindow.h>
+#else
+#include "MAndroidWindow.h"
+#endif
+
 #include "MWinContext.h"
 
 
