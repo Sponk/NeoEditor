@@ -44,7 +44,7 @@ void MSkybox::loadSkyboxTextures(const char *path)
 
 }
 
-void MSkybox::loadTexture(const char *path)
+MSkybox::Texture MSkybox::loadTexture(const char *path)
 {
 
 }

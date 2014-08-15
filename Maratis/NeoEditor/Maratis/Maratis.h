@@ -225,6 +225,7 @@ public:
 
 	// init
 	void initVue(void);
+    void initRenderer(void);
 
 	// game plugin
 	void loadGamePlugin(void);

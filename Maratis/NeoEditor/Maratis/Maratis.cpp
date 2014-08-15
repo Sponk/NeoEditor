@@ -206,7 +206,6 @@ m_renderer(NULL)
     // MEngine
     {
         m_soundContext = new MALContext();
-        m_render = new MGLContext();
         m_physics = new MBulletContext();
         m_script = new MScript();
         m_input = new MInput();
@@ -247,6 +246,14 @@ Maratis::~Maratis(void)
     SAFE_DELETE(m_input);
     SAFE_DELETE(m_system);
     SAFE_DELETE(m_packageManager);
+}
+
+void Maratis::initRenderer()
+{
+    if(m_render) return;
+    m_render = new MGLContext();
+
+    MEngine::getInstance()->setRenderingContext(m_render);
 }
 
 void Maratis::publish(void)

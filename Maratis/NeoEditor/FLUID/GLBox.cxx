@@ -136,8 +136,10 @@ void GLBox::draw()
 {
     if(!maratis_init)
     {
-        MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
         Maratis* maratis = Maratis::getInstance();
+        maratis->initRenderer();
+
+        MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
         if(!current_project.file_path.empty())
         {

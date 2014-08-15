@@ -31,6 +31,7 @@
 #include <MEngine.h>
 #include <MLog.h>
 #include "MStandardShaders.h"
+#include "MCompatibleShaders.h"
 #include "MStandardRenderer.h"
 
 
@@ -51,16 +52,33 @@ m_FXsNumber(0)
 {
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
-	// default FXs
-	addFX(vertShader0.c_str(), fragShader0.c_str());
-	addFX(vertShader1.c_str(), fragShader1.c_str());
-	addFX(vertShader2.c_str(), fragShader2.c_str());
-	addFX(vertShader3.c_str(), fragShader3.c_str());
-	addFX(vertShader4.c_str(), fragShader4.c_str());
-	addFX(vertShader5.c_str(), fragShader5.c_str());
-	addFX(vertShader6.c_str(), fragShader6.c_str());
-	addFX(vertShader7.c_str(), fragShader7.c_str());
-	addFX(vertShader8.c_str(), fragShader8.c_str());
+    if(strstr(render->getRendererVersion(), "4.") == NULL)
+    {
+        MLOG_INFO("No GL4 compatible context found. Falling back to compat shaders.");
+        // compat FXs
+        addFX(compat_vertShader0.c_str(), compat_fragShader0.c_str());
+        addFX(compat_vertShader1.c_str(), compat_fragShader1.c_str());
+        addFX(compat_vertShader2.c_str(), compat_fragShader2.c_str());
+        addFX(compat_vertShader3.c_str(), compat_fragShader3.c_str());
+        addFX(compat_vertShader4.c_str(), compat_fragShader4.c_str());
+        addFX(compat_vertShader5.c_str(), compat_fragShader5.c_str());
+        addFX(compat_vertShader6.c_str(), compat_fragShader6.c_str());
+        addFX(compat_vertShader7.c_str(), compat_fragShader7.c_str());
+        addFX(compat_vertShader8.c_str(), compat_fragShader8.c_str());
+    }
+    else
+    {
+        // default FXs
+        addFX(vertShader0.c_str(), fragShader0.c_str());
+        addFX(vertShader1.c_str(), fragShader1.c_str());
+        addFX(vertShader2.c_str(), fragShader2.c_str());
+        addFX(vertShader3.c_str(), fragShader3.c_str());
+        addFX(vertShader4.c_str(), fragShader4.c_str());
+        addFX(vertShader5.c_str(), fragShader5.c_str());
+        addFX(vertShader6.c_str(), fragShader6.c_str());
+        addFX(vertShader7.c_str(), fragShader7.c_str());
+        addFX(vertShader8.c_str(), fragShader8.c_str());
+    }
 
 	// rand texture
 	MImage image;
