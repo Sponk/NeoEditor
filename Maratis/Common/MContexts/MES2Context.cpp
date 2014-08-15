@@ -29,7 +29,7 @@
 //
 //========================================================================
 
-
+#ifdef USE_GLES
 #ifdef __APPLE__
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
@@ -1082,3 +1082,4 @@ void MES2Context::setBlendingMode(M_BLENDING_MODES mode)
 			break;
 	}
 }
+#endif

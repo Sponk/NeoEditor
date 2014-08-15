@@ -1185,9 +1185,6 @@ if(NOT WINDOWS OR CYGWIN)
   listtostr(SDL_LIBS _SDL_LIBS)
   set(SDL_LIBS ${_SDL_LIBS})
 
-  # MESSAGE(STATUS "SDL_LIBS: ${SDL_LIBS}")
-  # MESSAGE(STATUS "SDL_STATIC_LIBS: ${SDL_STATIC_LIBS}")
-
   configure_file("${SDL2_SOURCE_DIR}/sdl2.pc.in"
     "${SDL2_BINARY_DIR}/sdl2.pc" @ONLY)
   configure_file("${SDL2_SOURCE_DIR}/sdl2-config.in"
