@@ -31,7 +31,6 @@
 #ifndef _M_OCAMERA_H
 #define _M_OCAMERA_H
 
-
 class M_ENGINE_EXPORT MOCamera : public MObject3d
 {
 private:
@@ -61,6 +60,8 @@ private:
 	// render to texture
 	MTextureRef * m_renderColorTexture;
 	MTextureRef * m_renderDepthTexture;
+
+    MSkybox m_skybox;
 	
 public:
 
