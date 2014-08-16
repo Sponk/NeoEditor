@@ -172,17 +172,12 @@ IF(ANDROID)
   ADD_DEFINITIONS("-DANDROID")
   ADD_DEFINITIONS("-DUSE_GLES")
   ADD_DEFINITIONS("-D__ANDROID__")
-
+  
   # for libogg
   ADD_DEFINITIONS("-D_ANDROID")
   
   # for openal
   SET(LIBTYPE STATIC)
-
-  #SET(HAVE_SDL_JOYSTICK NO)
-  SET(SDL_JOYSTICK OFF)
-  SET(SDL_HAPTIC OFF)
-
 ENDIF()
 
 # Include cpack after all system specifics

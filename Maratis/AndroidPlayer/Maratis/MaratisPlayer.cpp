@@ -256,7 +256,7 @@ void MaratisPlayer::loadProject(MProject* proj, const char * filename)
 {
 	MWindow * window = MWindow::getInstance();
 	MEngine * engine = MEngine::getInstance();
-	
+	MLOG_INFO("Loading project: " << filename);
 	
 	// working directory
 	char workingDir[256];
@@ -265,21 +265,23 @@ void MaratisPlayer::loadProject(MProject* proj, const char * filename)
 	
 	// restart
 	restart();
-	loadGamePlugin();
+	//loadGamePlugin();
 	
 	// renderer
-	changeRenderer(proj->renderer.c_str());
+	//changeRenderer(proj->renderer.c_str());
 	
 	// if we have a package manager, try to load the package
 	if(MPackageManager* pPackMan = MEngine::getInstance()->getPackageManager())
 	{
 		char projName[256];
 		getLocalFilename(projName, workingDir, filename);
+		MLOG_INFO("Project filepath: " << projName);
 		if(char* ext = strstr(projName, ".mproj"))
 		{
 			sprintf(ext, ".npk");
 			char packageFile[256];
 			getGlobalFilename(packageFile, workingDir, projName);
+			MLOG_INFO("Loading NPK: " << packageFile);
 			pPackMan->loadPackage(packageFile);
 		}
 	}

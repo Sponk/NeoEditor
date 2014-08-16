@@ -28,6 +28,7 @@
 //
 //========================================================================
 
+#ifndef ANDROID
 
 #include <MMouse.h>
 #include <MKeyboard.h>
@@ -760,3 +761,4 @@ int MWindow::removeGameController(int id)
 
 	return -1;
 }
+#endif

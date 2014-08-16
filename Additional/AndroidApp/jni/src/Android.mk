@@ -9,16 +9,6 @@ LOCAL_SRC_FILES := $(NEO_PATH)/libMaratisCommon.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE    := SDL2 
-LOCAL_SRC_FILES := $(NEO_PATH)/libSDL2.a
-include $(PREBUILT_STATIC_LIBRARY)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE    := SDL2main 
-LOCAL_SRC_FILES := $(NEO_PATH)/libSDL2main.a
-include $(PREBUILT_STATIC_LIBRARY)
-
-include $(CLEAR_VARS)
 LOCAL_MODULE    := MCore 
 LOCAL_SRC_FILES := $(NEO_PATH)/libMCore.a
 include $(PREBUILT_STATIC_LIBRARY)
@@ -99,26 +89,10 @@ LOCAL_MODULE := main
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(NEO_INCLUDE)
 
 # Add your application source files here...
-LOCAL_SRC_FILES := glue_main.c \
-		$(NEO_INCLUDE)/../src/main/android/SDL_android_main.c \
-		$(NEO_INCLUDE)/../src/core/android/SDL_android.c \
-		$(NEO_INCLUDE)/../src/video/android/SDL_androidvideo.c \
-		$(NEO_INCLUDE)/../src/video/android/SDL_androidgl.c \
-		$(NEO_INCLUDE)/../src/video/android/SDL_androidclipboard.c \
-		$(NEO_INCLUDE)/../src/video/android/SDL_androidevents.c \
-		$(NEO_INCLUDE)/../src/video/android/SDL_androidkeyboard.c \
-		$(NEO_INCLUDE)/../src/video/android/SDL_androidtouch.c \
-		$(NEO_INCLUDE)/../src/video/android/SDL_androidwindow.c \
-		$(NEO_INCLUDE)/../src/video/SDL_egl.c \
-		$(NEO_INCLUDE)/../src/joystick/SDL_joystick.c \
-		$(NEO_INCLUDE)/../src/joystick/SDL_gamecontroller.c \
-		$(NEO_INCLUDE)/../src/joystick/android/SDL_sysjoystick.c \
-		$(NEO_INCLUDE)/../src/haptic/SDL_haptic.c
-		
-		
+LOCAL_SRC_FILES := glue_main.c		
 		
 LOCAL_SHARED_LIBRARIES := 
-LOCAL_STATIC_LIBRARIES := MAndroidPlayer MaratisCommon MEngine MGui SDL2 SDL2main freetype bullet openal vorbis npk zlib jpeg png ogg MCore tinyxml lua stlport_static
+LOCAL_STATIC_LIBRARIES := MAndroidPlayer MaratisCommon MEngine MGui SDL2 SDL2_static freetype bullet openal vorbis npk zlib jpeg png ogg MCore tinyxml lua stlport_static
 
 LOCAL_LDLIBS := -L$(NEO_PATH) -lGLESv1_CM -lGLESv2 -llog -landroid -lOpenSLES
 

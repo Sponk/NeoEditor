@@ -50,6 +50,7 @@ public class SDLActivity extends Activity {
         //System.loadLibrary("SDL2_mixer");
         //System.loadLibrary("SDL2_net");
         //System.loadLibrary("SDL2_ttf");
+    	System.loadLibrary("SDL2");
         System.loadLibrary("main");
     }
     

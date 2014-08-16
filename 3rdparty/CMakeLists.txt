@@ -3,6 +3,9 @@ IF(NOT ANDROID)
 ADD_SUBDIRECTORY(assimp)
 ADD_SUBDIRECTORY(glee)
 ADD_SUBDIRECTORY(fltk)
+
+# We compile sdl2 differently on Android
+ADD_SUBDIRECTORY(sdl2)
 ENDIF()
 
 ADD_SUBDIRECTORY(bullet)
@@ -21,6 +24,5 @@ endif(STANDARD_LUA)
 
 ADD_SUBDIRECTORY(npk)
 ADD_SUBDIRECTORY(openal-soft)
-ADD_SUBDIRECTORY(sdl2)
 ADD_SUBDIRECTORY(tinyxml)
 

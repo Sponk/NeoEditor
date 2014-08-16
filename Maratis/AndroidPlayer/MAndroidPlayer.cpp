@@ -28,7 +28,7 @@
 
 #include <MEngine.h>
 #include <MLog.h>
-#include <MWindow.h>
+#include <MAndroidWindow.h>
 #include <SDL_log.h>
 
 #include <MGameWinEvents.h>
@@ -95,13 +95,14 @@ extern "C" int player_main(int argc, char* argv[])
 	if(!window->create("Maratis", width, height, 32, fullscreen == 1))
 	{
 		MLOG_ERROR("cannot create window");
+		return -1;
 	}
 	
 	if(fullscreen)
 		window->hideCursor();
 	
 	
-	window->setCurrentDirectory("/storage/sdcard0/NeoGame/assets");	
+	window->setCurrentDirectory("/mnt/sdcard/NeoGame/assets");	
 	
 	// get Maratis (first time call onstructor)
 	MaratisPlayer * maratis = MaratisPlayer::getInstance();
@@ -111,13 +112,12 @@ extern "C" int player_main(int argc, char* argv[])
 
 	// look for an mproj in the current directory
 	std::vector<std::string> files;
-	readDirectory(".", &files);
+	readDirectory("/mnt/sdcard/NeoGame/assets", &files);
 	
 	bool found = false;
 	
 	for(int i = 0; i < files.size(); ++i)
 	{
-		MLOG_INFO("Found: " << files[i]);
 		if(strstr(files[i].c_str(), ".mproj"))
 		{
 			char filename[256];
