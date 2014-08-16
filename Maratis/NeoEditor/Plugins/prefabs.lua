@@ -260,9 +260,20 @@ function save_callback()
        return
     end
 
+    local projectDir = getProjectDir()
     local filename = saveFileDlg("Choose a file", getProjectDir(), "*.mp");
     
     if filename == nil then return end
+    
+    -- Warn for out of project saves
+    if string.sub(filename, 1, string.len(getProjectDir())) ~= projectDir then
+        messagebox("WARNING: You try to save a prefab outside the project directory. This will probably not work!")
+    end
+    
+    -- Ensure file ending
+    if string.sub(filename, -string.len(".mp")) ~= ".mp" then
+        filename = filename .. ".mp"
+    end
     
     local path = getProjectDir()
     local content = "<prefab>"
