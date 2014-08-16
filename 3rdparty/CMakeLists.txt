@@ -6,6 +6,9 @@ ADD_SUBDIRECTORY(fltk)
 
 # We compile sdl2 differently on Android
 ADD_SUBDIRECTORY(sdl2)
+
+# Android has native zlib
+ADD_SUBDIRECTORY(zlib)
 ENDIF()
 
 ADD_SUBDIRECTORY(bullet)
@@ -13,7 +16,6 @@ ADD_SUBDIRECTORY(freetype)
 ADD_SUBDIRECTORY(libogg)
 ADD_SUBDIRECTORY(libjpeg)
 ADD_SUBDIRECTORY(libpng)
-ADD_SUBDIRECTORY(zlib)
 ADD_SUBDIRECTORY(libvorbis)
 
 if(STANDARD_LUA)

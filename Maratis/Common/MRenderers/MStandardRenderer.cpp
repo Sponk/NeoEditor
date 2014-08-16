@@ -30,8 +30,14 @@
 
 #include <MEngine.h>
 #include <MLog.h>
+
+#ifndef USE_GLES
 #include "MStandardShaders.h"
 #include "MCompatibleShaders.h"
+#else
+#include "MGLESShaders.h"
+#endif
+
 #include "MStandardRenderer.h"
 
 
@@ -51,7 +57,8 @@ m_tangents(NULL),
 m_FXsNumber(0)
 {
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
-
+	MLOG_INFO("Renderer: " << render->getRendererVersion());
+#ifndef USE_GLES
     if(strstr(render->getRendererVersion(), "4.") == NULL)
     {
         MLOG_INFO("No GL4 compatible context found. Falling back to compat shaders.");
@@ -79,7 +86,18 @@ m_FXsNumber(0)
         addFX(vertShader7.c_str(), fragShader7.c_str());
         addFX(vertShader8.c_str(), fragShader8.c_str());
     }
-
+#else
+	// default FXs
+	addFX(vertShader0.c_str(), fragShader0.c_str());
+	addFX(vertShader1.c_str(), fragShader1.c_str());
+	addFX(vertShader2.c_str(), fragShader2.c_str());
+	addFX(vertShader3.c_str(), fragShader3.c_str());
+	addFX(vertShader4.c_str(), fragShader4.c_str());
+	addFX(vertShader5.c_str(), fragShader5.c_str());
+	addFX(vertShader6.c_str(), fragShader6.c_str());
+	addFX(vertShader7.c_str(), fragShader7.c_str());
+	addFX(vertShader8.c_str(), fragShader8.c_str());
+#endif
 	// rand texture
 	MImage image;
 	image.create(M_UBYTE, 64, 64, 4);

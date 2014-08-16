@@ -49,6 +49,8 @@
 #endif
 #endif
 
+#include "../../MEngine/Includes/MEngine.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
@@ -561,17 +563,31 @@ bool MAndroidWindow::create(const char * title, unsigned int width, unsigned int
 		return false;
 	}
 
-	Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN;
+	Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN | SDL_WINDOW_OPENGL | SDL_PIXELFORMAT_RGBA8888;
 
-	g_window = SDL_CreateWindow(title, 0, 0, m_width, m_height, flags);
+	SDL_DisplayMode current;
+	SDL_GetCurrentDisplayMode(0, &current);
+	
+	m_width = current.w;
+	m_height = current.h;
+	
+	g_window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_width, m_height, flags);
 
 	if (!g_window)
 	{
-		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
+		MLOG_ERROR("SDL Error : " << SDL_GetError());
 		return false;
 	}
 
 	g_context = SDL_GL_CreateContext(g_window);
+	
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	
 
 	return true;
 }

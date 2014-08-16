@@ -40,6 +40,7 @@
 #include <GLES2/gl2ext.h>
 #endif
 
+#include <MEngine.h>
 #include "MES2Context.h"
 
 
@@ -423,31 +424,31 @@ else*/
 	
 	int glType = GL_TEXTURE_2D;
 
-glEnable(glType);
+	glEnable(glType);
 
-if(filter)
-{
-	glTexParameteri(glType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	if(mipMap)
-		glTexParameteri(glType, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	if(filter)
+	{
+		glTexParameteri(glType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		if(mipMap)
+			glTexParameteri(glType, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		else
+			glTexParameteri(glType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
 	else
-		glTexParameteri(glType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-}
-else
-{
-	glTexParameteri(glType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	if(mipMap)
-		glTexParameteri(glType, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-	else
-		glTexParameteri(glType, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-}
+	{
+		glTexParameteri(glType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		if(mipMap)
+			glTexParameteri(glType, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+		else
+			glTexParameteri(glType, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	}
 
-glTexImage2D(glType, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, image->getData());
-if(mipMap)
-{
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy); // anisotropic filtering
-	glGenerateMipmap(glType);
-}
+	glTexImage2D(glType, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, image->getData());
+	if(mipMap)
+	{
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy); // anisotropic filtering
+		glGenerateMipmap(glType);
+	}
 }
 
 void MES2Context::texImage(unsigned int level, unsigned int width, unsigned int height, M_TYPES type, M_TEX_MODES mode, const void * pixels)
@@ -534,10 +535,10 @@ void MES2Context::sendShaderSource(unsigned int shaderId, const char * source)
 	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &compiled);
 	if(!compiled)
 	{
-		printf("ERROR OpenGL : unable to compile shader\n");
+		MLOG_ERROR("OpenGL : unable to compile shader\n");
 		char shader_link_error[4096];
 		glGetShaderInfoLog(shaderId, sizeof(shader_link_error), NULL, shader_link_error);
-		printf("%s", shader_link_error);
+		MLOG_ERROR(shader_link_error);
 	}
 }
 

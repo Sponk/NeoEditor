@@ -94,7 +94,7 @@ LOCAL_SRC_FILES := glue_main.c
 LOCAL_SHARED_LIBRARIES := 
 LOCAL_STATIC_LIBRARIES := MAndroidPlayer MaratisCommon MEngine MGui SDL2 SDL2_static freetype bullet openal vorbis npk zlib jpeg png ogg MCore tinyxml lua stlport_static
 
-LOCAL_LDLIBS := -L$(NEO_PATH) -lGLESv1_CM -lGLESv2 -llog -landroid -lOpenSLES
+LOCAL_LDLIBS := -L$(NEO_PATH) -lGLESv1_CM -lGLESv2 -llog -landroid -lOpenSLES -lz
 
 LOCAL_CPPFLAGS += -fno-exceptions -fno-rtti
 
