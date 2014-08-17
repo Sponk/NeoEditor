@@ -28,7 +28,7 @@
 //
 //========================================================================
 
-
+#ifdef ANDROID
 #include <MMouse.h>
 #include <MKeyboard.h>
 #include <MAndroidWindow.h>
@@ -599,3 +599,5 @@ void MAndroidWindow::sleep(double time)
 
 	SDL_Delay(time);
 }
+
+#endif

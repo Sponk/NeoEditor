@@ -29,7 +29,7 @@
 //========================================================================
 
 
-#ifndef _M_ANDROID_WINDOW_H
+#if !defined(_M_ANDROID_WINDOW_H) && defined(ANDROID)
 #define _M_ANDROID_WINDOW_H
 
 #include <MWinEvents.h>
