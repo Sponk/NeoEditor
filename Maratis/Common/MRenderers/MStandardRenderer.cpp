@@ -1580,7 +1580,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 
 			m_currentCamera = &lightCamera;
 
-			render->clear(M_BUFFER_DEPTH);
+            render->clear(M_BUFFER_DEPTH);
 			render->setColorMask(0, 0, 0, 0);
 			render->enablePolygonOffset(1.0, 4096.0);
 
@@ -1684,6 +1684,20 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 
 	}
 
+    // TODO: DOES NOT WORK
+    render->disableDepthTest();
+    render->disableCullFace();
+
+    //float tmp = camera->getClippingFar();
+    //camera->setClippingFar(1000000);
+    camera->enable();
+
+    camera->drawSkybox();
+    render->enableDepthTest();
+
+    //camera->setClippingFar(tmp);
+    //camera->enable();
+
 	// restore camera after shadow pass
 	if(restoreCamera)
 	{
@@ -1699,7 +1713,6 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 
 		render->clear(M_BUFFER_DEPTH);
 	}
-
 
 	// update visibility
     updateVisibility(scene, camera);
@@ -1725,13 +1738,6 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 	// entities
 	unsigned int i;
 	unsigned int eSize = scene->getEntitiesNumber();
-
-
-
-
-
-
-
 
 	// make opaque and transp list
 	for(i=0; i<eSize; i++)
@@ -1881,15 +1887,12 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 		}
 	}
 
-
-
-
 	// draw opaques
 	{
 		if(opaqueNumber > 1)
 			sortFloatList(m_opaqueSortList, m_opaqueSortZList, 0, (int)opaqueNumber-1);
 
-		// Z pre-pass
+        // Z pre-pass
 		render->setDepthMode(M_DEPTH_LEQUAL);
 		render->setColorMask(0, 0, 0, 0);
 

@@ -119,6 +119,10 @@ public:
 	inline MTextureRef * getRenderColorTexture(void){ return m_renderColorTexture; }
 	inline MTextureRef * getRenderDepthTexture(void){ return m_renderDepthTexture; }
 	
+    inline void drawSkybox() { m_skybox.drawSkybox(getTransformedPosition(), getTransformedRotation()); }
+    inline void loadSkybox(const char* path) { m_skybox.loadSkyboxTextures(path); }
+    inline MSkybox * getSkybox() { return &m_skybox; }
+
 	// listener
 	void updateListener(void);
 

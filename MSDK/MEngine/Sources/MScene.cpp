@@ -875,6 +875,9 @@ void MScene::draw(MOCamera * camera)
 {
 	MEngine * engine = MEngine::getInstance();
 	MRenderer * renderer = engine->getRenderer();
+
 	if(renderer)
+    {
 		renderer->drawScene(this, camera);
+    }
 }

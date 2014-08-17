@@ -34,14 +34,17 @@
 
 class MSkybox
 {
-    struct Texture
-    {
-        MImage* m_Image;
-        unsigned int m_TexID;
-    };
+    void drawQuad(MVector3 v1, MVector3 v2, MVector3 v3, MVector3 v4, MVector3 position, MVector3 rotation, MVector2* texCoords);
 
-    Texture loadTexture(const char* path);
-    Texture m_SkyboxTexture[6];
+    MTextureRef* m_SkyboxTexture[6];
+
+    bool m_init;
+
+    unsigned int m_fx;
+    unsigned int m_vertShad;
+    unsigned int m_pixShad;
+
+    MString m_path;
 
 public:
     MSkybox();
@@ -50,6 +53,8 @@ public:
 
     void drawSkybox(MVector3 position, MVector3 rotation);
     void loadSkyboxTextures(const char* path);
+
+    inline const char* getPath() { return m_path.getSafeString(); }
 };
 
 #endif

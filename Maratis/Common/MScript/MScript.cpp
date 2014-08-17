@@ -1724,7 +1724,7 @@ int setAnimationSpeed(lua_State * L)
 	if(! isFunctionOk(L, "setAnimationSpeed", 2))
 		return 0;
 
-	GET_OBJECT_SUBCLASS_BEGIN(MOEntity, entity, M_OBJECT3D_ENTITY)
+    GET_OBJECT_SUBCLASS_BEGIN(MOEntity, entity, M_OBJECT3D_ENTITY)
 			entity->setAnimationSpeed((float)lua_tonumber(L, 2));
 			return 0;
 	GET_OBJECT_SUBCLASS_END()
@@ -4418,6 +4418,19 @@ int setPhysicsQuality(lua_State* L)
     return 1;
 }
 
+int loadSkybox(lua_State * L)
+{
+    if(!isFunctionOk(L, "loadSkybox", 2))
+        return 0;
+
+    GET_OBJECT_SUBCLASS_BEGIN(MOCamera, camera, M_OBJECT3D_CAMERA)
+            camera->loadSkybox(lua_tostring(L, 2));
+            return 1;
+    GET_OBJECT_SUBCLASS_END()
+
+    return 0;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Init
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4461,6 +4474,7 @@ void MScript::init(void)
 	lua_register(m_state, "getParent",	 getParent);
 	lua_register(m_state, "getChilds",	 getChilds);
 	lua_register(m_state, "getCurrentCamera",    getCurrentCamera);
+    lua_register(m_state, "loadSkybox", loadSkybox);
 	
 	// object
 	lua_register(m_state, "rotate",					rotate);

@@ -195,6 +195,11 @@ void writeCameraProperties(MFile * file, MOCamera * camera)
 	// fogDistance
 	M_fprintf(file, "\t\t\t\t");
 	writeFloat(file, "fogDistance", camera->getFogDistance());
+    M_fprintf(file, "\n");
+
+    // skyboxTextures
+    M_fprintf(file, "\t\t\t\t");
+    writeString(file, "skyboxTextures", camera->getSkybox()->getPath());
 
 	closeAttributeNode(file);
 	M_fprintf(file, "\n");
