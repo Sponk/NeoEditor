@@ -4418,9 +4418,9 @@ int setPhysicsQuality(lua_State* L)
     return 1;
 }
 
-int loadSkybox(lua_State * L)
+int loadCameraSkybox(lua_State * L)
 {
-    if(!isFunctionOk(L, "loadSkybox", 2))
+    if(!isFunctionOk(L, "loadCameraSkybox", 2))
         return 0;
 
     GET_OBJECT_SUBCLASS_BEGIN(MOCamera, camera, M_OBJECT3D_CAMERA)
@@ -4474,7 +4474,7 @@ void MScript::init(void)
 	lua_register(m_state, "getParent",	 getParent);
 	lua_register(m_state, "getChilds",	 getChilds);
 	lua_register(m_state, "getCurrentCamera",    getCurrentCamera);
-    lua_register(m_state, "loadSkybox", loadSkybox);
+    lua_register(m_state, "loadCameraSkybox", loadCameraSkybox);
 	
 	// object
 	lua_register(m_state, "rotate",					rotate);
