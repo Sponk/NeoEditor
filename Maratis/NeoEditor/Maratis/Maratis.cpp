@@ -271,7 +271,7 @@ void Maratis::changeRenderer(const char * name)
     MRendererManager * rendererManager = engine->getRendererManager();
 
     MRendererCreator * renderer = rendererManager->getRendererByName(name);
-    if(renderer)
+    if(renderer && strcmp(engine->getRenderer()->getName(), name) != 0)
     {
         if(m_renderer)
             m_renderer->destroy();
