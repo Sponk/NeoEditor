@@ -191,8 +191,13 @@ void MSkybox::loadSkyboxTextures(const char *path)
             m_init = false;
             return;
         }
+
+        render->bindTexture(m_SkyboxTexture[i]->getTextureId());
+        render->setTextureUWrapMode(M_WRAP_CLAMP);
+        render->setTextureVWrapMode(M_WRAP_CLAMP);
     }
 
+    render->bindTexture(0);
     m_init = true;
 }
 

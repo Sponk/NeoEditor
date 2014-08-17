@@ -1684,19 +1684,26 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 
 	}
 
-    // TODO: DOES NOT WORK
     render->disableDepthTest();
     render->disableCullFace();
 
-    //float tmp = camera->getClippingFar();
-    //camera->setClippingFar(1000000);
-    camera->enable();
+    /*MMatrix4x4 modelmatrix;
+    render->getModelViewMatrix(&modelmatrix);
+    MMatrix4x4 projmatrix;
+    render->getProjectionMatrix(&projmatrix);*/
 
     camera->drawSkybox();
     render->enableDepthTest();
 
-    //camera->setClippingFar(tmp);
-    //camera->enable();
+    /*render->loadIdentity();
+    render->setMatrixMode(M_MATRIX_PROJECTION);
+    render->loadIdentity();
+    render->multMatrix(&projmatrix);
+
+    render->setMatrixMode(M_MATRIX_MODELVIEW);
+    render->loadIdentity();
+    render->multMatrix(&modelmatrix);*/
+
 
 	// restore camera after shadow pass
 	if(restoreCamera)
