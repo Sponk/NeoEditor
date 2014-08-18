@@ -1,5 +1,10 @@
 package org.libsdl.app;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,6 +14,7 @@ import java.util.List;
 import android.app.*;
 import android.content.*;
 import android.content.pm.ActivityInfo;
+import android.content.res.AssetManager;
 import android.view.*;
 import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
@@ -98,8 +104,56 @@ public class SDLActivity extends Activity {
 
         setContentView(mLayout);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        
+        copyAssets();
     }
 
+    private void copyAssets() {
+        AssetManager assetManager = getAssets();
+        String[] files = null;
+        try {
+            files = assetManager.list("");
+        } catch (IOException e) {
+            Log.e("tag", "Failed to get asset file list.", e);
+        }
+        for(String filename : files) {
+            InputStream in = null;
+            OutputStream out = null;
+            try {
+              in = assetManager.open(filename);
+              
+              // Asset directory
+              File outputDirectory = new File(getString(R.string.asset_directory));
+              if(!outputDirectory.exists())
+              {
+            	  outputDirectory.mkdirs();
+              }
+              else
+              {
+            	  return;
+              }
+            	  
+              File outFile = new File(getString(R.string.asset_directory), filename);
+              out = new FileOutputStream(outFile);
+              copyFile(in, out);
+              in.close();
+              in = null;
+              out.flush();
+              out.close();
+              out = null;
+            } catch(IOException e) {
+                Log.e("tag", "Failed to copy asset file: " + filename, e);
+            }       
+        }
+    }
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while((read = in.read(buffer)) != -1){
+          out.write(buffer, 0, read);
+        }
+    }
+    
     // Events
     @Override
     protected void onPause() {
