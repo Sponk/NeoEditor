@@ -16,8 +16,7 @@ decl {\#include <MFileManager/MMeshSave.h>} {private local
 
 class EditorWindow {open
 } {
-  Function {show_window()} {open
-  } {
+  Function {show_window()} {} {
     Fl_Window {} {
       label Neo open
       xywh {1538 253 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
@@ -673,9 +672,10 @@ class EditorWindow {open
       }
     }
   }
-  Function {create_camera_window()} {} {
-    Fl_Window {} {open
-      xywh {843 164 258 660} type Double hide
+  Function {create_camera_window()} {open
+  } {
+    Fl_Window {} {open selected
+      xywh {1925 203 258 660} type Double visible
     } {
       Fl_Group {} {
         label {Clear Color:}
@@ -742,12 +742,17 @@ class EditorWindow {open
           xywh {15 375 117 21} align 5
         }
       }
+      Fl_Input camera_skybox_edit {
+        label {Skybox Textures:}
+        callback edit_camera_skybox
+        tooltip {Path to textures used by the skybox.} xywh {6 432 213 24} align 5 when 8
+      }
     }
   }
   Function {create_text_window()} {open
   } {
     Fl_Window {} {open
-      xywh {2391 146 261 720} type Double visible
+      xywh {2027 189 261 720} type Double hide
     } {
       Fl_Group {} {
         label {Settings:} open
@@ -798,7 +803,7 @@ class EditorWindow {open
         }
       }
       Fl_Group {} {
-        label {Color:} open selected
+        label {Color:} open
         xywh {6 336 210 66} box ENGRAVED_FRAME align 5
       } {
         Fl_Value_Input text_r {

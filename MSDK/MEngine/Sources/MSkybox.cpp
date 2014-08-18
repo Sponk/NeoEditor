@@ -173,12 +173,6 @@ void MSkybox::loadSkyboxTextures(const char *path)
         return;
     }
 
-    for(int i = 0; i < 6; i++)
-    {
-        if(m_SkyboxTexture[i])
-            SAFE_DELETE(m_SkyboxTexture[i]);
-    }
-
     string basePath = globalFilename;
     const char* names[] = {"negx", "negy", "negz", "posx", "posy", "posz"};
     MLevel* level = engine->getLevel();
@@ -188,6 +182,7 @@ void MSkybox::loadSkyboxTextures(const char *path)
         if((m_SkyboxTexture[i] = level->loadTexture((basePath + "/" + names[i] + ".jpg").c_str())) == NULL)
         {
             MLOG_ERROR("Could not load texture \"" << basePath + "/" + names[i] + ".jpg\"");
+            m_path.clear();
             m_init = false;
             return;
         }

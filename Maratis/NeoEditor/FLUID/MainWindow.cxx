@@ -553,6 +553,12 @@ Fl_Double_Window* EditorWindow::create_camera_window() {
       } // Fl_Value_Input* camera_fog_distance_edit
       o->end();
     } // Fl_Group* o
+    { camera_skybox_edit = new Fl_Input(6, 432, 213, 24, "Skybox Textures:");
+      camera_skybox_edit->tooltip("Path to textures used by the skybox.");
+      camera_skybox_edit->callback((Fl_Callback*)edit_camera_skybox);
+      camera_skybox_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      camera_skybox_edit->when(FL_WHEN_ENTER_KEY);
+    } // Fl_Input* camera_skybox_edit
     o->end();
   } // Fl_Double_Window* o
   return w;

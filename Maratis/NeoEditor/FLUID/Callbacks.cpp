@@ -804,6 +804,7 @@ void scene_tree_callback(Fl_Tree* tree, void*)
         window.camera_clipping_far_edit->value(camera->getClippingFar());
 
         window.camera_fog_distance_edit->value(camera->getFogDistance());
+        window.camera_skybox_edit->value(camera->getSkybox()->getPath());
 
         if(update_name)
         {
@@ -1292,6 +1293,18 @@ void edit_camera_properties(Fl_Value_Input*, void*)
     camera->setClippingFar(window.camera_clipping_far_edit->value());
 
     camera->setFogDistance(window.camera_fog_distance_edit->value());
+}
+
+void edit_camera_skybox(Fl_Input*, void*)
+{
+    MOCamera* camera = MEngine::getInstance()->getLevel()->getCurrentScene()->getCameraByName(window.name_edit->value());
+
+    if(!camera)
+    {
+        MLOG_ERROR("Camera object does not exist!");
+        return;
+    }
+    camera->loadSkybox(window.camera_skybox_edit->value());
 }
 
 void edit_camera_properties_chk_btn(Fl_Check_Button*, void*)

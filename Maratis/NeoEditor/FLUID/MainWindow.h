@@ -63,6 +63,7 @@ extern void object_constraint_properties_callback(Fl_Button*, void*);
 extern void edit_camera_properties(Fl_Value_Input*, void*);
 extern void choose_camera_color(Fl_Button*, void*);
 extern void edit_camera_properties_chk_btn(Fl_Check_Button*, void*);
+extern void edit_camera_skybox(Fl_Input*, void*);
 #include <FL/Fl_Text_Editor.H>
 extern void edit_text_properties(Fl_Text_Editor*, void*);
 extern void edit_text_properties(Fl_Input*, void*);
@@ -146,6 +147,7 @@ public:
   Fl_Value_Input *camera_clipping_far_edit;
   Fl_Check_Button *camera_fog_button;
   Fl_Value_Input *camera_fog_distance_edit;
+  Fl_Input *camera_skybox_edit;
   Fl_Double_Window* create_text_window();
   Fl_Text_Editor *text_text_edit;
   Fl_Input *text_font_edit;
