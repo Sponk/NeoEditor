@@ -674,7 +674,7 @@ class EditorWindow {open
   }
   Function {create_camera_window()} {open
   } {
-    Fl_Window {} {open selected
+    Fl_Window {} {open
       xywh {1925 203 258 660} type Double visible
     } {
       Fl_Group {} {
@@ -1338,12 +1338,13 @@ xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);} {}
   }
 } 
 
-class AboutDlg {} {
+class AboutDlg {open
+} {
   Function {create_window()} {open
   } {
     Fl_Window {} {
-      label About open
-      xywh {1990 333 354 309} type Double hide
+      label About open selected
+      xywh {1990 333 354 309} type Double modal visible
     } {
       Fl_Box {} {
         label {The Neo Editor is distributed under the terms and conditions of the GNU General Public License.}
