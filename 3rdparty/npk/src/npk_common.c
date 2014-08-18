@@ -31,6 +31,14 @@
 #include "../external/xxtea/xxtea.h"
 #include "zlib.h"
 
+// Windows has no real posix
+#ifndef S_IRUSR
+#define S_IRUSR S_IREAD
+#endif
+
+#ifndef S_IWUSR
+#define S_IWUSR S_IWRITE
+#endif
 
 NPK_RESULT npk_error( NPK_RESULT res )
 {
