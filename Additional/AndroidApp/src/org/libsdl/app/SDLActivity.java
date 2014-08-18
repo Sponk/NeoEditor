@@ -8,12 +8,14 @@ import java.util.List;
 
 import android.app.*;
 import android.content.*;
+import android.content.pm.ActivityInfo;
 import android.view.*;
 import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsoluteLayout;
+import android.opengl.GLSurfaceView;
 import android.os.*;
 import android.util.Log;
 import android.graphics.*;
@@ -95,6 +97,7 @@ public class SDLActivity extends Activity {
         mLayout.addView(mSurface);
 
         setContentView(mLayout);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
     // Events
@@ -518,7 +521,7 @@ class SDLMain implements Runnable {
 
     Because of this, that's where we set up the SDL thread
 */
-class SDLSurface extends SurfaceView implements SurfaceHolder.Callback, 
+class SDLSurface extends GLSurfaceView implements SurfaceHolder.Callback, 
     View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 
     // Sensors
@@ -546,6 +549,8 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
             setOnGenericMotionListener(new SDLGenericMotionListener_API12());
         }
 
+        getHolder().setFormat(PixelFormat.RGBA_8888);
+        
         // Some arbitrary defaults to avoid a potential division by zero
         mWidth = 1.0f;
         mHeight = 1.0f;
@@ -559,7 +564,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         Log.v("SDL", "surfaceCreated()");
-        holder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
+        //holder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
     }
 
     // Called when we lose the surface

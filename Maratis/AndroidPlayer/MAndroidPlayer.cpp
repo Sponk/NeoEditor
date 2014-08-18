@@ -146,8 +146,9 @@ extern "C" int player_main(int argc, char* argv[])
 		// quit
 		if(! engine->isActive())
 		{
-			engine->getGame()->end();
-			break;
+			MLOG_INFO("Engine is not active anymore!");
+			//engine->getGame()->end();
+			//break;
 		}
 		
 		// on events
