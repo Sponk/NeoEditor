@@ -28,6 +28,8 @@ import android.graphics.*;
 import android.media.*;
 import android.hardware.*;
 
+// Change this to your actual package
+import org.neo.android_demo.R;
 
 /**
     SDL Activity
@@ -130,7 +132,7 @@ public class SDLActivity extends Activity {
               }
               else
               {
-            	  return;
+            	  //return;
               }
             	  
               File outFile = new File(getString(R.string.asset_directory), filename);
