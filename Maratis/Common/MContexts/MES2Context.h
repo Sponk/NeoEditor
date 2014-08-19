@@ -252,6 +252,9 @@ public:
 	// not yet implemented
 	void enablePolygonOffset(float x, float y) {};
 	void disablePolygonOffset() {};
+
+    // point size
+    void setPointSize(float size);
 };
 
 #endif

@@ -262,6 +262,9 @@ public:
 	void enableBlending(void);
 	void disableBlending(void);
 	void setBlendingMode(M_BLENDING_MODES mode);
+
+    // point size
+    void setPointSize(float size);
 };
 
 #endif

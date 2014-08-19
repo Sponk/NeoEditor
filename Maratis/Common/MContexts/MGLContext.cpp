@@ -107,6 +107,9 @@ GLenum returnPrimitiveType(M_PRIMITIVE_TYPES type)
 
 	case M_PRIMITIVE_TRIANGLE_FAN:
 		return GL_TRIANGLE_FAN;
+
+    case M_PRIMITIVE_POINTS:
+        return GL_POINTS;
 	}
 }
 
@@ -199,14 +202,15 @@ m_currentFrameBuffer(0)
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
 	// point
-	//glPointSize(2.0);
-    //glEnable(GL_POINT_SMOOTH);
+    glPointSize(2.0);
+    glEnable(GL_POINT_SMOOTH);
+    glEnable(GL_POINT_SPRITE);
 
-	//float coeffs[] = {1.0f, 0, 0};
-	//glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, coeffs);
+    float coeffs[] = {1.0f, 0, 0};
+    glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, coeffs);
 
-	//glPointParameterf (GL_POINT_SIZE_MAX, 100.0);
-	//glPointParameterf (GL_POINT_SIZE_MIN, 1.0f);
+    glPointParameterf (GL_POINT_SIZE_MAX, 100.0);
+    glPointParameterf (GL_POINT_SIZE_MIN, 1.0f);
 
 	// stencil
 	glClearStencil(0);
@@ -214,6 +218,8 @@ m_currentFrameBuffer(0)
 	// pixel pack/unpack
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+
+    //glPointSize(50);
 
 	// anisotropic filtering
 	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
@@ -1230,4 +1236,11 @@ void MGLContext::setBlendingMode(M_BLENDING_MODES mode)
 		break;
 	}
 }
+
+// point size
+void MGLContext::setPointSize(float size)
+{
+    glPointSize(size);
+}
+
 #endif
