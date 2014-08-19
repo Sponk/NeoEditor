@@ -68,6 +68,7 @@ void draw(void)
 	MWindow::getInstance()->swapBuffer();
 }
 
+extern const char* asset_directory;
 
 // main
 extern "C" int player_main(int argc, char* argv[])
@@ -102,7 +103,7 @@ extern "C" int player_main(int argc, char* argv[])
 		window->hideCursor();
 	
 	
-	window->setCurrentDirectory("/mnt/sdcard/NeoGame/assets");	
+	window->setCurrentDirectory(asset_directory);	
 	
 	// get Maratis (first time call onstructor)
 	MaratisPlayer * maratis = MaratisPlayer::getInstance();
@@ -112,7 +113,7 @@ extern "C" int player_main(int argc, char* argv[])
 
 	// look for an mproj in the current directory
 	std::vector<std::string> files;
-	readDirectory("/mnt/sdcard/NeoGame/assets", &files);
+	readDirectory(asset_directory, &files);
 	
 	bool found = false;
 	
