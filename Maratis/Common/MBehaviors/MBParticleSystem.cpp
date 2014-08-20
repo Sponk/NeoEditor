@@ -37,19 +37,25 @@ std::string particleVertShader =
 
 //"#version 140\n"
 "attribute vec3 Vertex;"
+"attribute vec4 Color;"
+"varying vec4 Data;"
 
 "void main(void)"
 "{"
     "gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;"
+    "Data = Color;"
+    "gl_PointSize = Color.x;"
 "}\n";
 
 std::string particleFragShader =
 "#version 140\n"
 "uniform sampler2D Texture[5];"
+"varying vec4 Data;"
 
 "void main(void)"
 "{"
     "gl_FragColor = texture2D(Texture[0], gl_PointCoord);"
+    "gl_FragColor.w = min(gl_FragColor.w, Data.y);"
 "}\n";
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,9 +66,13 @@ MBParticleSystem::MBParticleSystem(MObject3d * parentObject):
 MBehavior(parentObject),
 m_lifeTime(2000),
 m_particlePositions(NULL),
+m_particleColors(NULL),
 m_speedDivergence(0.0f),
 m_lifeDivergence(0),
+m_alpha(1.0),
+m_alphaDivergence(0.0),
 m_size(1.0),
+m_sizeDivergence(0.0),
 m_textureFile(""),
 m_texRef(NULL),
 m_fx(0),
@@ -74,8 +84,12 @@ MBehavior(parentObject),
 m_lifeTime(behavior.m_lifeTime),
 m_speedDivergence(behavior.m_speedDivergence),
 m_lifeDivergence(behavior.m_lifeDivergence),
+m_alpha(behavior.m_alpha),
+m_alphaDivergence(behavior.m_alphaDivergence),
 m_size(behavior.m_size),
+m_sizeDivergence(behavior.m_sizeDivergence),
 m_particlePositions(NULL),
+m_particleColors(NULL),
 m_textureFile(""),
 m_texRef(NULL),
 m_fx(0),
@@ -108,7 +122,7 @@ MBehavior * MBParticleSystem::getCopy(MObject3d * parentObject)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 unsigned int MBParticleSystem::getVariablesNumber(void){
-    return 9;
+    return 12;
 }
 
 MVariable MBParticleSystem::getVariable(unsigned int id)
@@ -137,10 +151,19 @@ MVariable MBParticleSystem::getVariable(unsigned int id)
         return MVariable("Size", &m_size, M_VARIABLE_FLOAT);
         break;
     case 7:
-        return MVariable("Texture", &m_textureFile, M_VARIABLE_STRING);
+        return MVariable("SizeDivergence", &m_sizeDivergence, M_VARIABLE_FLOAT);
         break;
     case 8:
+        return MVariable("Texture", &m_textureFile, M_VARIABLE_STRING);
+        break;
+    case 9:
         return MVariable("SpeedMultiplier", &m_speedMultiplier, M_VARIABLE_FLOAT);
+        break;
+    case 10:
+        return MVariable("Alpha", &m_alpha, M_VARIABLE_FLOAT);
+        break;
+    case 11:
+        return MVariable("AlphaDivergence", &m_alphaDivergence, M_VARIABLE_FLOAT);
         break;
 	default:
 		return MVariable("NULL", NULL, M_VARIABLE_NULL);
@@ -218,10 +241,18 @@ void MBParticleSystem::draw()
     render->enableVertexArray();
     render->setVertexPointer(M_FLOAT, 3, m_particlePositions);
 
+    render->enableColorArray();
+    render->setColorPointer(M_FLOAT, 4, m_particleColors);
+
     int vertexAttrib;
     render->getAttribLocation(m_fx, "Vertex", &vertexAttrib);
     render->setAttribPointer(vertexAttrib, M_FLOAT, 3, m_particlePositions);
     render->enableAttribArray(vertexAttrib);
+
+    int colorAttrib;
+    render->getAttribLocation(m_fx, "Color", &colorAttrib);
+    render->setAttribPointer(colorAttrib, M_FLOAT, 4, m_particleColors);
+    render->enableAttribArray(colorAttrib);
 
     //render->enableColorArray();
     //render->setColorPointer(M_BYTE, 4, m_Colours);
@@ -240,6 +271,7 @@ void MBParticleSystem::updateParticles(MVector3 parentPosition)
 
     unsigned long currentTime = system->getSystemTick();
     Particle* particle;
+    bool updateColorData = false;
 
     // Mark dead particles for deletion
     for(int i = 0; i < m_particles.size(); i++)
@@ -255,6 +287,7 @@ void MBParticleSystem::updateParticles(MVector3 parentPosition)
         particle = &m_particles[i];
         if(!particle->alive)
         {
+            updateColorData = true;
             m_particles.erase(m_particles.begin() + i);
         }
     }
@@ -272,6 +305,8 @@ void MBParticleSystem::updateParticles(MVector3 parentPosition)
         newParticle.alive = true;
         newParticle.time = currentTime + m_lifeTime + RANDOM * m_lifeDivergence;
         newParticle.speed = m_initialSpeed + divergence;
+        newParticle.size = m_size + RANDOM * m_sizeDivergence;
+        newParticle.alpha = m_alpha + RANDOM * m_alphaDivergence;
         m_particles.push_back(newParticle);
     }
 
@@ -283,14 +318,34 @@ void MBParticleSystem::updateParticles(MVector3 parentPosition)
         particle->speed += m_gravity;
     }
 
-    // Update vertex buffer
+    // Create vertex buffer
     if(m_particlePositions == NULL)
     {
         m_particlePositions = new MVector3[static_cast<int>(m_particlesNumber)];
     }
 
+    // Create "color" buffer
+    if(m_particleColors == NULL)
+    {
+        m_particleColors = new MVector4[static_cast<int>(m_particlesNumber)];
+        updateColorData = true;
+    }
+
     for(int i = 0; i < m_particles.size(); i++)
     {
         m_particlePositions[i] = m_particles[i].position + parentPosition;
+    }
+
+    if(updateColorData)
+    {
+        MVector4* color;
+        for(int i = 0; i < m_particles.size(); i++)
+        {
+            color = &m_particleColors[i];
+            particle = &m_particles[i];
+            color->x = particle->size;
+            color->y = particle->alpha;
+            color->z = particle->spin;
+        }
     }
 }

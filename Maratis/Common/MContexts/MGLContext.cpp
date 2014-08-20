@@ -205,12 +205,13 @@ m_currentFrameBuffer(0)
     glPointSize(2.0);
     glEnable(GL_POINT_SMOOTH);
     glEnable(GL_POINT_SPRITE);
+    glEnable(GL_PROGRAM_POINT_SIZE_ARB);
 
-    float coeffs[] = {1.0f, 0, 0};
+    float coeffs[] = {2.0f, 1.0f, 0.1f};
     glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, coeffs);
 
     glPointParameterf (GL_POINT_SIZE_MAX, 100.0);
-    glPointParameterf (GL_POINT_SIZE_MIN, 1.0f);
+    glPointParameterf (GL_POINT_SIZE_MIN, 0.1f);
 
 	// stencil
 	glClearStencil(0);

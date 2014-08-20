@@ -46,6 +46,9 @@ private:
     {
         MVector3 position;
         MVector3 speed;
+        float size;
+        float alpha;
+        float spin;
         int time;
         bool alive;
     };
@@ -60,11 +63,20 @@ private:
     float m_size;
     float m_speedMultiplier;
 
+    float m_alpha;
+    float m_alphaDivergence;
+
+    float m_sizeDivergence;
+
     MString m_textureFile;
     MTextureRef* m_texRef;
 
     vector<Particle> m_particles;
     MVector3* m_particlePositions;
+
+    // Attention: Is not used to convey color in any way!
+    // Instead it contains additional data like spin or size
+    MVector4* m_particleColors;
 
     unsigned int m_fx;
     unsigned int m_vertShad;
