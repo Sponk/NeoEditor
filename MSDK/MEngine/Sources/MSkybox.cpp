@@ -220,8 +220,6 @@ void MSkybox::drawQuad(MVector3 v1, MVector3 v2, MVector3 v3, MVector3 v4, MVect
     ModelViewMatrix.loadIdentity();
     ModelViewMatrix.translate(position);
 
-    if(rotation.x > 0)
-        rotation.x *= -1;
     // printf("rotation(%f, %f, %f)\n", rotation.x, rotation.y, rotation.z);
 
     // First, rotate X and Y so Z points up
