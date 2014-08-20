@@ -650,15 +650,17 @@ void Maratis::duplicateSelectedObjects(void)
     MOSound * sound;
     MOText * text;
     MObject3d * object;
+    char name[256];
     for(i=0; i<oSize; i++)
     {
         object = m_selectedObjects[i];
+        strcpy(name, object->getName());
+
         switch(object->getType())
         {
             case M_OBJECT3D_ENTITY:
             {
-                char name[256] = "Entity0";
-                getNewObjectName("Entity", name);
+                getNewObjectName(object->getName(), name);
 
                 entity = scene->addNewEntity(*(MOEntity *)object);
                 entity->setName(name);
@@ -666,8 +668,7 @@ void Maratis::duplicateSelectedObjects(void)
                 break;
             case M_OBJECT3D_LIGHT:
             {
-                char name[256] = "Light0";
-                getNewObjectName("Light", name);
+                getNewObjectName(object->getName(), name);
 
                 light = scene->addNewLight(*(MOLight *)object);
                 light->setName(name);
@@ -675,8 +676,7 @@ void Maratis::duplicateSelectedObjects(void)
                 break;
             case M_OBJECT3D_CAMERA:
             {
-                char name[256] = "Camera0";
-                getNewObjectName("Camera", name);
+                getNewObjectName(object->getName(), name);
 
                 camera = scene->addNewCamera(*(MOCamera *)object);
                 camera->setName(name);
@@ -684,8 +684,7 @@ void Maratis::duplicateSelectedObjects(void)
                 break;
             case M_OBJECT3D_SOUND:
             {
-                char name[256] = "Sound0";
-                getNewObjectName("Sound", name);
+                getNewObjectName(object->getName(), name);
 
                 sound = scene->addNewSound(*(MOSound *)object);
                 sound->setName(name);
@@ -693,9 +692,7 @@ void Maratis::duplicateSelectedObjects(void)
                 break;
             case M_OBJECT3D_TEXT:
             {
-                char name[256] = "Text0";
-                getNewObjectName("Text", name);
-
+                getNewObjectName(object->getName(), name);
                 text = scene->addNewText(*(MOText *)object);
                 text->setName(name);
             }
