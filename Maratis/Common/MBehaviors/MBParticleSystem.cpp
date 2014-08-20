@@ -73,10 +73,12 @@ m_alpha(1.0),
 m_alphaDivergence(0.0),
 m_size(1.0),
 m_sizeDivergence(0.0),
+m_emissionDelay(0.0),
 m_textureFile(""),
 m_texRef(NULL),
 m_fx(0),
-m_speedMultiplier(1.0)
+m_speedMultiplier(1.0),
+m_emissionTimer(0)
 {}
 
 MBParticleSystem::MBParticleSystem(MBParticleSystem & behavior, MObject3d * parentObject):
@@ -88,12 +90,14 @@ m_alpha(behavior.m_alpha),
 m_alphaDivergence(behavior.m_alphaDivergence),
 m_size(behavior.m_size),
 m_sizeDivergence(behavior.m_sizeDivergence),
+m_emissionDelay(behavior.m_emissionDelay),
 m_particlePositions(NULL),
 m_particleColors(NULL),
 m_textureFile(""),
 m_texRef(NULL),
 m_fx(0),
-m_speedMultiplier(behavior.m_speedMultiplier)
+m_speedMultiplier(behavior.m_speedMultiplier),
+m_emissionTimer(0)
 {}
 
 MBParticleSystem::~MBParticleSystem(void)
@@ -122,7 +126,7 @@ MBehavior * MBParticleSystem::getCopy(MObject3d * parentObject)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 unsigned int MBParticleSystem::getVariablesNumber(void){
-    return 12;
+    return 13;
 }
 
 MVariable MBParticleSystem::getVariable(unsigned int id)
@@ -164,6 +168,9 @@ MVariable MBParticleSystem::getVariable(unsigned int id)
         break;
     case 11:
         return MVariable("AlphaDivergence", &m_alphaDivergence, M_VARIABLE_FLOAT);
+        break;
+    case 12:
+        return MVariable("EmissionDelay", &m_emissionDelay, M_VARIABLE_FLOAT);
         break;
 	default:
 		return MVariable("NULL", NULL, M_VARIABLE_NULL);
@@ -257,7 +264,7 @@ void MBParticleSystem::draw()
     //render->enableColorArray();
     //render->setColorPointer(M_BYTE, 4, m_Colours);
 
-    render->drawArray(M_PRIMITIVE_POINTS, 0, m_particlesNumber);
+    render->drawArray(M_PRIMITIVE_POINTS, 0, m_particles.size());
     render->setDepthMask(true);
     render->disableAttribArray(vertexAttrib);
 }
@@ -292,6 +299,15 @@ void MBParticleSystem::updateParticles(MVector3 parentPosition)
         }
     }
 
+    if(currentTime < m_emissionTimer)
+    {
+        applySpeed();
+        updateArrays(updateColorData);
+        return;
+    }
+
+    m_emissionTimer = currentTime + m_emissionDelay;
+
     // Create missing particles
     Particle newParticle;
     MVector3 divergence;
@@ -307,17 +323,17 @@ void MBParticleSystem::updateParticles(MVector3 parentPosition)
         newParticle.speed = m_initialSpeed + divergence;
         newParticle.size = m_size + RANDOM * m_sizeDivergence;
         newParticle.alpha = m_alpha + RANDOM * m_alphaDivergence;
+        newParticle.position = parentPosition;
         m_particles.push_back(newParticle);
     }
 
-    // Update existing positions
-    for(int i = 0; i < m_particles.size(); i++)
-    {
-        particle = &m_particles[i];
-        particle->position += particle->speed * m_speedMultiplier;
-        particle->speed += m_gravity;
-    }
+    applySpeed();
+    updateArrays(updateColorData);
+}
 
+void MBParticleSystem::updateArrays(bool updateColorData)
+{
+    Particle* particle;
     // Create vertex buffer
     if(m_particlePositions == NULL)
     {
@@ -333,7 +349,7 @@ void MBParticleSystem::updateParticles(MVector3 parentPosition)
 
     for(int i = 0; i < m_particles.size(); i++)
     {
-        m_particlePositions[i] = m_particles[i].position + parentPosition;
+        m_particlePositions[i] = m_particles[i].position;
     }
 
     if(updateColorData)
@@ -347,5 +363,17 @@ void MBParticleSystem::updateParticles(MVector3 parentPosition)
             color->y = particle->alpha;
             color->z = particle->spin;
         }
+    }
+}
+
+void MBParticleSystem::applySpeed()
+{
+    // Update existing positions
+    Particle* particle;
+    for(int i = 0; i < m_particles.size(); i++)
+    {
+        particle = &m_particles[i];
+        particle->position += particle->speed * m_speedMultiplier;
+        particle->speed += m_gravity;
     }
 }

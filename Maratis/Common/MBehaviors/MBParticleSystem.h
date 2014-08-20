@@ -67,6 +67,9 @@ private:
     float m_alphaDivergence;
 
     float m_sizeDivergence;
+    float m_emissionDelay;
+
+    float m_emissionTimer;
 
     MString m_textureFile;
     MTextureRef* m_texRef;
@@ -83,6 +86,8 @@ private:
     unsigned int m_pixShad;
 
     void updateParticles(MVector3 parentPosition);
+    void updateArrays(bool updateColorData);
+    inline void applySpeed();
 
 public:
 
