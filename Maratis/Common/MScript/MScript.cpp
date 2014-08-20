@@ -833,6 +833,28 @@ int getBoundingMax(lua_State* L)
     return 0;
 }
 
+int deleteObject(lua_State * L)
+{
+    if(! isFunctionOk(L, "deleteObject", 1))
+        return 0;
+
+    MLevel* level = MEngine::getInstance()->getLevel();
+    MScene* scene;
+    int nbArguments = lua_gettop(L);
+    if(nbArguments == 2)
+    {
+        unsigned int sceneId = lua_tointeger(L, 2);
+        scene = level->getSceneByIndex(sceneId);
+    }
+    else
+    {
+        scene = level->getCurrentScene();
+    }
+
+    scene->deleteObject(getObject3d(lua_tonumber(L, 1)));
+    return 1;
+}
+
 int getObject(lua_State * L)
 {
 	MLevel * level = MEngine::getInstance()->getLevel();
@@ -4475,6 +4497,7 @@ void MScript::init(void)
 	lua_register(m_state, "getChilds",	 getChilds);
 	lua_register(m_state, "getCurrentCamera",    getCurrentCamera);
     lua_register(m_state, "loadCameraSkybox", loadCameraSkybox);
+    lua_register(m_state, "deleteObject", deleteObject);
 	
 	// object
 	lua_register(m_state, "rotate",					rotate);
