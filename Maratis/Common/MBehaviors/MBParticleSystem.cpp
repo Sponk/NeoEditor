@@ -256,10 +256,6 @@ void MBParticleSystem::draw()
     render->sendUniformMatrix(m_fx, "ProjModelViewMatrix", &ProjModelViewMatrix);
 
     render->sendUniformVec3(m_fx, "Camera", engine->getLevel()->getCurrentScene()->getCurrentCamera()->getTransformedPosition());
-
-    static MMatrix4x4 NormalMatrix = (ModelViewMatrix.getInverse()).getTranspose();
-    render->sendUniformMatrix(m_fx, "NormalMatrix", &NormalMatrix);
-
     render->setPointSize(m_size);
     //render->set
     //render->disableDepthTest();
