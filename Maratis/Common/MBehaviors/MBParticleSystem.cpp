@@ -34,15 +34,15 @@
 
 // Shader
 std::string particleVertShader =
-
-//"#version 140\n"
+"#version 140\n"
+"uniform mat4 ProjModelViewMatrix;"
 "attribute vec3 Vertex;"
 "attribute vec4 Color;"
 "varying vec4 Data;"
 
 "void main(void)"
 "{"
-    "gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;"
+    "gl_Position = ProjModelViewMatrix * vec4(Vertex, 1.0);"
     "Data = Color;"
     "gl_PointSize = Color.x;"
 "}\n";
@@ -239,6 +239,17 @@ void MBParticleSystem::draw()
     render->bindFX(m_fx);
     int texIds[4] = { 0, 1, 2, 3 };
     render->sendUniformInt(m_fx, "Textures", texIds, 4);
+
+    // projmodelview matrix
+    static MMatrix4x4 ProjMatrix;
+    static MMatrix4x4 ModelViewMatrix;
+    static MMatrix4x4 ProjModelViewMatrix;
+
+    render->getProjectionMatrix(&ProjMatrix);
+    render->getModelViewMatrix(&ModelViewMatrix);
+    ProjModelViewMatrix = ProjMatrix * ModelViewMatrix;
+    render->sendUniformMatrix(m_fx, "ProjModelViewMatrix", &ProjModelViewMatrix);
+
 
     render->setPointSize(m_size);
     //render->set
