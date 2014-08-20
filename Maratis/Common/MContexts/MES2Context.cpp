@@ -187,7 +187,7 @@ m_currentFrameBuffer(0)
 	
 	// line
 	glLineWidth(1);
-	
+
 	// stencil
 	glClearStencil(0);
 	
