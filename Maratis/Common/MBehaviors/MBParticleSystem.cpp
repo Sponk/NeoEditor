@@ -36,19 +36,22 @@
 std::string particleVertShader =
 "#version 140\n"
 "uniform mat4 ProjModelViewMatrix;"
-"uniform vec3 Camera;"
+"uniform float SizeMultiplier = 100.0f;"
 "uniform mat4 NormalMatrix;"
 "attribute vec3 Vertex;"
 "attribute vec4 Color;"
 "varying vec4 Data;"
 
+"const float constAtten  = 0.9;"
+"const float linearAtten = 0.6;"
+"const float quadAtten   = 0.001;"
+
 "void main(void)"
 "{"
     "gl_Position = ProjModelViewMatrix * vec4(Vertex, 1.0);"
-    "vec3 transformedCamera = (ProjModelViewMatrix * vec4(Camera, 1.0)).xyz;"
     "Data = Color;"
-    "float dist = distance(gl_Position.xyz, transformedCamera);"
-    "float attn = 100.0f * inversesqrt(Color.x + Color.x*dist + Color.x*dist*dist);"
+    "float dist = length(gl_Position.xyz);"
+    "float attn = Color.x*100.0f * inversesqrt(constAtten+linearAtten*dist + quadAtten*dist*dist);"
     "gl_PointSize = attn;"
 "}\n";
 
