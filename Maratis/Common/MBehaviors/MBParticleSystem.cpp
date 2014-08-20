@@ -36,6 +36,8 @@
 std::string particleVertShader =
 "#version 140\n"
 "uniform mat4 ProjModelViewMatrix;"
+"uniform vec3 Camera;"
+"uniform mat4 NormalMatrix;"
 "attribute vec3 Vertex;"
 "attribute vec4 Color;"
 "varying vec4 Data;"
@@ -43,8 +45,11 @@ std::string particleVertShader =
 "void main(void)"
 "{"
     "gl_Position = ProjModelViewMatrix * vec4(Vertex, 1.0);"
+    "vec3 transformedCamera = (ProjModelViewMatrix * vec4(Camera, 1.0)).xyz;"
     "Data = Color;"
-    "gl_PointSize = Color.x;"
+    "float dist = distance(gl_Position.xyz, transformedCamera);"
+    "float attn = 100.0f * inversesqrt(Color.x + Color.x*dist + Color.x*dist*dist);"
+    "gl_PointSize = attn;"
 "}\n";
 
 std::string particleFragShader =
@@ -250,6 +255,10 @@ void MBParticleSystem::draw()
     ProjModelViewMatrix = ProjMatrix * ModelViewMatrix;
     render->sendUniformMatrix(m_fx, "ProjModelViewMatrix", &ProjModelViewMatrix);
 
+    render->sendUniformVec3(m_fx, "Camera", engine->getLevel()->getCurrentScene()->getCurrentCamera()->getTransformedPosition());
+
+    static MMatrix4x4 NormalMatrix = (ModelViewMatrix.getInverse()).getTranspose();
+    render->sendUniformMatrix(m_fx, "NormalMatrix", &NormalMatrix);
 
     render->setPointSize(m_size);
     //render->set
