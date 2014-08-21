@@ -86,6 +86,7 @@ m_textureFile(""),
 m_texRef(NULL),
 m_fx(0),
 m_speedMultiplier(1.0),
+m_oldParticlesNumber(0),
 m_emissionTimer(0)
 {}
 
@@ -105,6 +106,7 @@ m_textureFile(""),
 m_texRef(NULL),
 m_fx(0),
 m_speedMultiplier(behavior.m_speedMultiplier),
+m_oldParticlesNumber(0),
 m_emissionTimer(0)
 {}
 
@@ -207,7 +209,7 @@ void MBParticleSystem::draw()
     MRenderingContext* render = engine->getRenderingContext();
     MGame * game = engine->getGame();
 
-    if(m_particlePositions == NULL || m_particlesNumber == 0)
+    if(m_particlePositions == NULL || m_particlesNumber == 0 || m_oldParticlesNumber != m_particlesNumber)
         return;
 
     if(m_texRef == NULL)
@@ -306,6 +308,11 @@ void MBParticleSystem::updateParticles(MVector3 parentPosition)
     Particle* particle;
     bool updateColorData = false;
 
+    if(m_particlesNumber == 0)
+    {
+        m_particles.clear();
+    }
+
     // Mark dead particles for deletion
     for(int i = 0; i < m_particles.size(); i++)
     {
@@ -364,6 +371,19 @@ void MBParticleSystem::updateArrays(bool updateColorData)
     if(m_particlePositions == NULL)
     {
         m_particlePositions = new MVector3[static_cast<int>(m_particlesNumber)];
+        m_oldParticlesNumber = m_particlesNumber;
+    }
+    else if(m_oldParticlesNumber != m_particlesNumber)
+    {
+        SAFE_DELETE(m_particlePositions);
+        SAFE_DELETE(m_particleColors);
+
+        m_particlePositions = new MVector3[static_cast<int>(m_particlesNumber)];
+
+        m_particleColors = new MVector4[static_cast<int>(m_particlesNumber)];
+        updateColorData = true;
+
+        m_oldParticlesNumber = m_particlesNumber;
     }
 
     // Create "color" buffer

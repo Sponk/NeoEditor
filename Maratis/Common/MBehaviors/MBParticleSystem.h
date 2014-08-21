@@ -71,6 +71,8 @@ private:
 
     float m_emissionTimer;
 
+    float m_oldParticlesNumber;
+
     MString m_textureFile;
     MTextureRef* m_texRef;
 
