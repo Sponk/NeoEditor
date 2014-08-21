@@ -197,11 +197,7 @@ void MBParticleSystem::update(void)
 	MLevel * level = engine->getLevel();
 	MScene * scene = level->getCurrentScene();
 
-    if(!game->isRunning())
-        return;
-
 	MObject3d * parent = getParentObject();
-
     updateParticles(parent->getTransformedPosition());
 }
 
@@ -211,15 +207,25 @@ void MBParticleSystem::draw()
     MRenderingContext* render = engine->getRenderingContext();
     MGame * game = engine->getGame();
 
-    if(!game->isRunning() || m_particlePositions == NULL)
+    if(m_particlePositions == NULL || m_particlesNumber == 0)
         return;
 
     if(m_texRef == NULL)
     {
+        if(strcmp(m_textureFile.getSafeString(), "") == 0)
+            return;
+
         char string[256];
         getGlobalFilename(string, engine->getSystemContext()->getWorkingDirectory(), m_textureFile.getSafeString());
 
         m_texRef = engine->getLevel()->loadTexture(string);
+
+        if(m_texRef == NULL)
+        {
+            MLOG_ERROR("Could not load particle texture! Setting particle count to 0");
+            m_particlesNumber = 0;
+            return;
+        }
     }
 
     if(m_fx == 0)
@@ -260,10 +266,7 @@ void MBParticleSystem::draw()
 
     render->sendUniformVec3(m_fx, "Camera", engine->getLevel()->getCurrentScene()->getCurrentCamera()->getTransformedPosition());
     render->setPointSize(m_size);
-    //render->set
-    //render->disableDepthTest();
-    //render->disableBlending();
-    //render->disableTexture();
+
     render->enableVertexArray();
     render->setVertexPointer(M_FLOAT, 3, m_particlePositions);
 
@@ -280,12 +283,16 @@ void MBParticleSystem::draw()
     render->setAttribPointer(colorAttrib, M_FLOAT, 4, m_particleColors);
     render->enableAttribArray(colorAttrib);
 
-    //render->enableColorArray();
-    //render->setColorPointer(M_BYTE, 4, m_Colours);
-
     render->drawArray(M_PRIMITIVE_POINTS, 0, m_particles.size());
     render->setDepthMask(true);
+
     render->disableAttribArray(vertexAttrib);
+    render->disableAttribArray(colorAttrib);
+
+    render->disableBlending();
+    render->enableDepthTest();
+    render->bindFX(0);
+    render->bindTexture(0);
 }
 
 #define RANDOM 0.5 - 2.0*static_cast<float>(rand()) / static_cast<float>(RAND_MAX)

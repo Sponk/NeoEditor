@@ -3998,7 +3998,7 @@ void Maratis::drawMainView(MScene * scene)
 
     // get camera
     MOCamera * camera = getPerspectiveVue();
-    MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();;
+    MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();
 
     // clear z buffer
     render->enableDepthTest();
@@ -4008,9 +4008,10 @@ void Maratis::drawMainView(MScene * scene)
     camera->enable();
     //drawGrid(scene);
 
-    render->enableDepthTest();
     scene->draw(camera);
     scene->drawObjectsBehaviors();
+
+    camera->enable();
 
     // draw extra (box, triggers...)
     render->disableLighting();
@@ -4275,7 +4276,6 @@ void Maratis::drawMainView(MScene * scene)
     }
     render->enableDepthTest();
 
-
     // draw selected objects
     if((! mouse->isLeftButtonPushed()) || (m_currentAxis == M_AXIS_NONE))
     {
@@ -4398,7 +4398,7 @@ void Maratis::graphicLoop(void)
     render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
 
     // game
-    MGame * game = MEngine::getInstance()->getGame();
+    /*MGame * game = MEngine::getInstance()->getGame();
     if(game)
     {
         if(game->isRunning())
@@ -4408,7 +4408,7 @@ void Maratis::graphicLoop(void)
             game->draw();
             return;
         }
-    }
+    }*/
 
     //int x = (int)window->getPosition().x;
     //int y = window->getHeight() - h - (int)window->getPosition().y;
