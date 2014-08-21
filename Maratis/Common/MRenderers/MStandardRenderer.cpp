@@ -1008,7 +1008,7 @@ void MStandardRenderer::updateVisibility(MScene * scene, MOCamera * camera)
         for(int j = 0; j < oSize; j++)
         {
             MOEntity* object = scene->getEntityByIndex(j);
-            if(object->isOccluder())
+            if(object->isOccluder() || object->isInvisible())
                 continue;
 
             objMin = object->getBoundingBox()->min;
