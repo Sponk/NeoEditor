@@ -88,7 +88,7 @@ private:
 
 public:
 
-	// constyraint
+    // constraint
 	void deleteConstraint(void);
 	MPhysicsConstraint * createConstraint(void);
 	inline MPhysicsConstraint * getConstraint(void){ return m_constraint; }
@@ -170,8 +170,13 @@ private:
 
 	// bounding box
 	MBox3d m_boundingBox;
+    bool m_isOccluder;
 
 public:
+
+    // occluder
+    inline void enableOccluder(bool value) { m_isOccluder = value; }
+    inline bool isOccluder() { return m_isOccluder; }
 
 	// type
 	int getType(void){ return M_OBJECT3D_ENTITY; }

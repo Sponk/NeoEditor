@@ -986,6 +986,58 @@ void MStandardRenderer::updateVisibility(MScene * scene, MOCamera * camera)
 		if(object->isActive())
 			object->updateVisibility(camera);
 	}
+
+    oSize = scene->getEntitiesNumber();
+    MVector3 min, max, occluderPosition;
+    MVector3 cameraPos = camera->getTransformedPosition();
+    MVector3 box[8];
+    MVector3 objMin, objMax;
+    bool intersection = false;
+
+    for(i=0; i < oSize; i++)
+    {
+        MOEntity* occluder = scene->getEntityByIndex(i);
+
+        if(!occluder->isOccluder())
+            continue;
+
+        occluderPosition = occluder->getTransformedPosition();
+        min = *occluder->getMatrix()*occluder->getBoundingBox()->min;
+        max = *occluder->getMatrix()*occluder->getBoundingBox()->max;
+
+        for(int j = 0; j < oSize; j++)
+        {
+            MOEntity* object = scene->getEntityByIndex(j);
+            if(object->isOccluder())
+                continue;
+
+            objMin = object->getBoundingBox()->min;
+            objMax = object->getBoundingBox()->max;
+
+            box[0] = *object->getMatrix()*objMin;
+            box[1] = *object->getMatrix()*MVector3(objMax.x, objMin.y, objMin.z);
+            box[2] = *object->getMatrix()*MVector3(objMin.x, objMin.y, objMax.z);
+            box[3] = *object->getMatrix()*MVector3(objMax.x, objMin.y, objMax.z);
+
+            box[4] = *object->getMatrix()*objMax;
+            box[5] = *object->getMatrix()*MVector3(objMin.x, objMax.y, objMax.z);
+            box[6] = *object->getMatrix()*MVector3(objMin.x, objMax.y, objMin.z);
+            box[7] = *object->getMatrix()*MVector3(objMax.x, objMax.y, objMin.z);
+
+            intersection = true;
+            for(int p = 0; p < 8; p++)
+            {
+                if(isEdgeToBoxCollision(cameraPos, box[p], min, max) == false)
+                {
+                    intersection = false;
+                    break;
+                }
+            }
+
+
+            object->setVisible(!intersection);
+        }
+    }
 }
 
 void MStandardRenderer::enableFog(MOCamera * camera)
@@ -1687,23 +1739,8 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
     render->disableDepthTest();
     render->disableCullFace();
 
-    /*MMatrix4x4 modelmatrix;
-    render->getModelViewMatrix(&modelmatrix);
-    MMatrix4x4 projmatrix;
-    render->getProjectionMatrix(&projmatrix);*/
-
     camera->drawSkybox();
     render->enableDepthTest();
-
-    /*render->loadIdentity();
-    render->setMatrixMode(M_MATRIX_PROJECTION);
-    render->loadIdentity();
-    render->multMatrix(&projmatrix);
-
-    render->setMatrixMode(M_MATRIX_MODELVIEW);
-    render->loadIdentity();
-    render->multMatrix(&modelmatrix);*/
-
 
 	// restore camera after shadow pass
 	if(restoreCamera)

@@ -408,6 +408,10 @@ Fl_Double_Window* EditorWindow::create_object_window() {
           object_shadow_button->down_box(FL_DOWN_BOX);
           object_shadow_button->callback((Fl_Callback*)edit_object_chk_btn);
         } // Fl_Check_Button* object_shadow_button
+        { object_occluder_button = new Fl_Check_Button(102, 105, 111, 24, "Occluder");
+          object_occluder_button->down_box(FL_DOWN_BOX);
+          object_occluder_button->callback((Fl_Callback*)edit_object_chk_btn);
+        } // Fl_Check_Button* object_occluder_button
         o->end();
       } // Fl_Group* o
       { Fl_Group* o = new Fl_Group(3, 166, 217, 249, "Physics:");

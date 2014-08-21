@@ -700,6 +700,7 @@ void scene_tree_callback(Fl_Tree* tree, void*)
         {
             window.object_invisible_button->value(!entity->isVisible());
 			window.object_shadow_button->value(entity->hasShadow());
+            window.object_occluder_button->value(entity->isOccluder());
         }
 
         MPhysicsProperties* phys = entity->getPhysicsProperties();
@@ -1210,6 +1211,7 @@ void edit_object_chk_btn(Fl_Check_Button*, void*)
 
     entity->setInvisible(window.object_invisible_button->value());
 	entity->enableShadow(window.object_shadow_button->value());
+    entity->enableOccluder(window.object_occluder_button->value());
 
     MPhysicsProperties* phys = entity->getPhysicsProperties();
 

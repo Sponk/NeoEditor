@@ -515,10 +515,11 @@ class EditorWindow {open
       }
     }
   }
-  Function {create_object_window()} {} {
+  Function {create_object_window()} {open
+  } {
     Fl_Window object_embedded_window {open
-      xywh {1885 46 261 933} type Double hide resizable
-      code0 {special_tab->resizable(object_embedded_window);}
+      xywh {2301 78 261 933} type Double resizable
+      code0 {special_tab->resizable(object_embedded_window);} visible
     } {
       Fl_Scroll {} {open
         xywh {0 6 230 894} type VERTICAL resizable
@@ -545,6 +546,11 @@ class EditorWindow {open
             label Shadow
             callback edit_object_chk_btn
             xywh {12 106 111 24} down_box DOWN_BOX
+          }
+          Fl_Check_Button object_occluder_button {
+            label Occluder
+            callback edit_object_chk_btn selected
+            xywh {102 105 111 24} down_box DOWN_BOX
           }
         }
         Fl_Group {} {
@@ -672,10 +678,9 @@ class EditorWindow {open
       }
     }
   }
-  Function {create_camera_window()} {open
-  } {
+  Function {create_camera_window()} {} {
     Fl_Window {} {open
-      xywh {1925 203 258 660} type Double visible
+      xywh {1925 203 258 660} type Double hide
     } {
       Fl_Group {} {
         label {Clear Color:}
@@ -1343,8 +1348,8 @@ class AboutDlg {open
   Function {create_window()} {open
   } {
     Fl_Window {} {
-      label About open selected
-      xywh {1990 333 354 309} type Double modal visible
+      label About open
+      xywh {1990 333 354 309} type Double hide modal
     } {
       Fl_Box {} {
         label {The Neo Editor is distributed under the terms and conditions of the GNU General Public License.}

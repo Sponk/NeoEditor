@@ -196,6 +196,10 @@ void readEntityProperties(TiXmlElement * node, MOEntity * entity)
 	// shadow
 	if (readBool(node, "shadow", &value))
 		entity->enableShadow(value);
+
+    // occluder
+    if(readBool(node, "occluder", &value))
+        entity->enableOccluder(value);
 }
 
 void readSoundProperties(TiXmlElement * node, MOSound * sound)
