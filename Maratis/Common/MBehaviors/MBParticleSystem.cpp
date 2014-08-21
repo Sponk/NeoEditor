@@ -87,6 +87,7 @@ m_texRef(NULL),
 m_fx(0),
 m_speedMultiplier(1.0),
 m_oldParticlesNumber(0),
+m_particlesNumber(0),
 m_emissionTimer(0)
 {}
 
@@ -107,6 +108,7 @@ m_texRef(NULL),
 m_fx(0),
 m_speedMultiplier(behavior.m_speedMultiplier),
 m_oldParticlesNumber(0),
+m_particlesNumber(behavior.m_particlesNumber),
 m_emissionTimer(0)
 {}
 
@@ -117,7 +119,7 @@ MBParticleSystem::~MBParticleSystem(void)
 
 void MBParticleSystem::destroy(void)
 {
-	delete this;
+    delete this;
 }
 
 MBehavior * MBParticleSystem::getNew(MObject3d * parentObject)
@@ -141,8 +143,8 @@ unsigned int MBParticleSystem::getVariablesNumber(void){
 
 MVariable MBParticleSystem::getVariable(unsigned int id)
 {
-	switch(id)
-	{
+    switch(id)
+    {
     case 0:
         return MVariable("LifeTime", &m_lifeTime, M_VARIABLE_FLOAT);
         break;
@@ -182,9 +184,9 @@ MVariable MBParticleSystem::getVariable(unsigned int id)
     case 12:
         return MVariable("EmissionDelay", &m_emissionDelay, M_VARIABLE_FLOAT);
         break;
-	default:
-		return MVariable("NULL", NULL, M_VARIABLE_NULL);
-	}
+    default:
+        return MVariable("NULL", NULL, M_VARIABLE_NULL);
+    }
 }
 
 
@@ -194,12 +196,12 @@ MVariable MBParticleSystem::getVariable(unsigned int id)
 
 void MBParticleSystem::update(void)
 {
-	MEngine * engine = MEngine::getInstance();
-	MGame * game = engine->getGame();
-	MLevel * level = engine->getLevel();
-	MScene * scene = level->getCurrentScene();
+    MEngine * engine = MEngine::getInstance();
+    MGame * game = engine->getGame();
+    MLevel * level = engine->getLevel();
+    MScene * scene = level->getCurrentScene();
 
-	MObject3d * parent = getParentObject();
+    MObject3d * parent = getParentObject();
     updateParticles(parent->getTransformedPosition());
 }
 
