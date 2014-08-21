@@ -114,7 +114,7 @@ m_emissionTimer(0)
 
 MBParticleSystem::~MBParticleSystem(void)
 {
-    SAFE_DELETE(m_particlePositions);
+    SAFE_DELETE_ARRAY(m_particlePositions);
 }
 
 void MBParticleSystem::destroy(void)
@@ -310,9 +310,11 @@ void MBParticleSystem::updateParticles(MVector3 parentPosition)
     Particle* particle;
     bool updateColorData = false;
 
-    if(m_particlesNumber == 0)
+    if(m_particlesNumber == 0 || m_oldParticlesNumber != m_particlesNumber)
     {
         m_particles.clear();
+        updateArrays(updateColorData);
+        return;
     }
 
     // Mark dead particles for deletion
@@ -369,22 +371,19 @@ void MBParticleSystem::updateParticles(MVector3 parentPosition)
 void MBParticleSystem::updateArrays(bool updateColorData)
 {
     Particle* particle;
+
+    if(m_oldParticlesNumber != m_particlesNumber)
+    {
+        SAFE_DELETE_ARRAY(m_particlePositions);
+        SAFE_DELETE_ARRAY(m_particleColors);
+
+        m_oldParticlesNumber = m_particlesNumber;
+    }
+
     // Create vertex buffer
     if(m_particlePositions == NULL)
     {
         m_particlePositions = new MVector3[static_cast<int>(m_particlesNumber)];
-        m_oldParticlesNumber = m_particlesNumber;
-    }
-    else if(m_oldParticlesNumber != m_particlesNumber)
-    {
-        SAFE_DELETE(m_particlePositions);
-        SAFE_DELETE(m_particleColors);
-
-        m_particlePositions = new MVector3[static_cast<int>(m_particlesNumber)];
-
-        m_particleColors = new MVector4[static_cast<int>(m_particlesNumber)];
-        updateColorData = true;
-
         m_oldParticlesNumber = m_particlesNumber;
     }
 

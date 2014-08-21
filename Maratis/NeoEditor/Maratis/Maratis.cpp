@@ -4398,7 +4398,7 @@ void Maratis::graphicLoop(void)
     render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
 
     // game
-    /*MGame * game = MEngine::getInstance()->getGame();
+    MGame * game = MEngine::getInstance()->getGame();
     if(game)
     {
         if(game->isRunning())
@@ -4408,7 +4408,7 @@ void Maratis::graphicLoop(void)
             game->draw();
             return;
         }
-    }*/
+    }
 
     //int x = (int)window->getPosition().x;
     //int y = window->getHeight() - h - (int)window->getPosition().y;
