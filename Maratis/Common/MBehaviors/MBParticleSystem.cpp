@@ -199,12 +199,9 @@ MVariable MBParticleSystem::getVariable(unsigned int id)
 void MBParticleSystem::update(void)
 {
     MEngine * engine = MEngine::getInstance();
-    MGame * game = engine->getGame();
     MLevel * level = engine->getLevel();
-    MScene * scene = level->getCurrentScene();
 
-    MObject3d * parent = getParentObject();
-    updateParticles(parent->getTransformedPosition());
+    updateParticles(getParentObject()->getTransformedPosition());
 }
 
 void MBParticleSystem::draw()
@@ -250,7 +247,6 @@ void MBParticleSystem::draw()
     if(m_texRef && m_texRef->getTextureId() > 0)
     {
         render->enableTexture();
-        //render->setBlendingMode(M_BLENDING_ADD);
         render->enableBlending();
         render->setBlendingMode(M_BLENDING_ALPHA);
         m_texRef->update();
