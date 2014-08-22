@@ -103,13 +103,15 @@ m_sizeDivergence(behavior.m_sizeDivergence),
 m_emissionDelay(behavior.m_emissionDelay),
 m_particlePositions(NULL),
 m_particleColors(NULL),
-m_textureFile(""),
+m_textureFile(behavior.m_textureFile),
 m_texRef(NULL),
 m_fx(0),
 m_speedMultiplier(behavior.m_speedMultiplier),
 m_oldParticlesNumber(0),
 m_particlesNumber(behavior.m_particlesNumber),
-m_emissionTimer(0)
+m_emissionTimer(0),
+m_initialSpeed(behavior.m_initialSpeed),
+m_gravity(behavior.m_gravity)
 {}
 
 MBParticleSystem::~MBParticleSystem(void)
