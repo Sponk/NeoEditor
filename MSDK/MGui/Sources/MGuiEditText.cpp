@@ -115,6 +115,8 @@ void MGuiEditText::sendVariable(void)
 				value->set(getText());
 			}
 			break;
+
+        default: break;
 		}
 
 		unsigned int tSize = m_text.size();

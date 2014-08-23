@@ -28,7 +28,7 @@
 
 
 #ifndef _MB_PARTICLE_SYSTEM_H
-#define _MB_PATRICLE_SYSTEM_H
+#define _MB_PARTICLE_SYSTEM_H
 
 #include <MSDLThread/MSDLThread.h>
 

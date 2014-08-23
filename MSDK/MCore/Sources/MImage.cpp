@@ -80,6 +80,8 @@ void MImage::clear(void * color)
 				((float *)m_data)[i+c] = ((float *)color)[c];
 		}
 		break;
+
+    default: break;
 	}
 }
 
@@ -138,6 +140,8 @@ void MImage::writePixel(unsigned int x, unsigned int y, void * color)
 		for(c=0; c<m_components; c++)
 			((float *)m_data)[pixelId+c] = ((float *)color)[c];
 		break;
+
+    default: break;
 	}
 }
 
@@ -164,5 +168,7 @@ void MImage::readPixel(unsigned int x, unsigned int y, void * color)
 		for(c=0; c<m_components; c++)
 			((float *)color)[c] = ((float *)m_data)[pixelId+c];
 		break;
+
+    default: break;
 	}
 }
