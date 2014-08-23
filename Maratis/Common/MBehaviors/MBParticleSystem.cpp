@@ -29,6 +29,7 @@
 
 
 #include <MEngine.h>
+#include <MWindow.h>
 #include "MBParticleSystem.h"
 #include <string>
 
@@ -88,8 +89,11 @@ m_fx(0),
 m_speedMultiplier(1.0),
 m_oldParticlesNumber(0),
 m_particlesNumber(0),
-m_emissionTimer(0)
-{}
+m_emissionTimer(0),
+m_multithreading(false)
+{
+    m_semaphore.Init(1);
+}
 
 MBParticleSystem::MBParticleSystem(MBParticleSystem & behavior, MObject3d * parentObject):
 MBehavior(parentObject),
@@ -111,8 +115,11 @@ m_oldParticlesNumber(0),
 m_particlesNumber(behavior.m_particlesNumber),
 m_emissionTimer(0),
 m_initialSpeed(behavior.m_initialSpeed),
-m_gravity(behavior.m_gravity)
-{}
+m_gravity(behavior.m_gravity),
+m_multithreading(behavior.m_multithreading)
+{
+    m_semaphore.Init(1);
+}
 
 MBParticleSystem::~MBParticleSystem(void)
 {
@@ -140,7 +147,7 @@ MBehavior * MBParticleSystem::getCopy(MObject3d * parentObject)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 unsigned int MBParticleSystem::getVariablesNumber(void){
-    return 13;
+    return 14;
 }
 
 MVariable MBParticleSystem::getVariable(unsigned int id)
@@ -149,43 +156,33 @@ MVariable MBParticleSystem::getVariable(unsigned int id)
     {
     case 0:
         return MVariable("LifeTime", &m_lifeTime, M_VARIABLE_FLOAT);
-        break;
     case 1:
         return MVariable("ParticlesNumber", &m_particlesNumber, M_VARIABLE_FLOAT);
-        break;
     case 2:
         return MVariable("InitialSpeed", &m_initialSpeed, M_VARIABLE_VEC3);
-        break;
     case 3:
         return MVariable("Gravity", &m_gravity, M_VARIABLE_VEC3);
-        break;
     case 4:
         return MVariable("SpeedDivergence", &m_speedDivergence, M_VARIABLE_FLOAT);
-        break;
     case 5:
         return MVariable("LifeDivergence", &m_lifeDivergence, M_VARIABLE_FLOAT);
-        break;
     case 6:
         return MVariable("Size", &m_size, M_VARIABLE_FLOAT);
-        break;
     case 7:
         return MVariable("SizeDivergence", &m_sizeDivergence, M_VARIABLE_FLOAT);
-        break;
     case 8:
         return MVariable("Texture", &m_textureFile, M_VARIABLE_STRING);
-        break;
     case 9:
         return MVariable("SpeedMultiplier", &m_speedMultiplier, M_VARIABLE_FLOAT);
-        break;
     case 10:
         return MVariable("Alpha", &m_alpha, M_VARIABLE_FLOAT);
-        break;
     case 11:
         return MVariable("AlphaDivergence", &m_alphaDivergence, M_VARIABLE_FLOAT);
-        break;
     case 12:
         return MVariable("EmissionDelay", &m_emissionDelay, M_VARIABLE_FLOAT);
-        break;
+    case 13:
+        return MVariable("Multithreading", &m_multithreading, M_VARIABLE_BOOL);
+
     default:
         return MVariable("NULL", NULL, M_VARIABLE_NULL);
     }
@@ -201,7 +198,11 @@ void MBParticleSystem::update(void)
     MEngine * engine = MEngine::getInstance();
     MLevel * level = engine->getLevel();
 
-    updateParticles(getParentObject()->getTransformedPosition());
+    if(m_multithreading && !m_thread.IsRunning())
+        m_thread.Start(&MBParticleSystem::thread_main, "ParticleSystemThread", (void*) this);
+
+    if(!m_multithreading)
+        updateParticles(getParentObject()->getTransformedPosition());
 }
 
 void MBParticleSystem::draw()
@@ -275,6 +276,8 @@ void MBParticleSystem::draw()
     render->enableColorArray();
     render->setColorPointer(M_FLOAT, 4, m_particleColors);
 
+    MSDLSemaphore::WaitAndLock(&m_semaphore);
+
     int vertexAttrib;
     render->getAttribLocation(m_fx, "Vertex", &vertexAttrib);
     render->setAttribPointer(vertexAttrib, M_FLOAT, 3, m_particlePositions);
@@ -286,6 +289,9 @@ void MBParticleSystem::draw()
     render->enableAttribArray(colorAttrib);
 
     render->drawArray(M_PRIMITIVE_POINTS, 0, m_particles.size());
+
+    MSDLSemaphore::Unlock(&m_semaphore);
+
     render->setDepthMask(true);
 
     render->disableAttribArray(vertexAttrib);
@@ -421,4 +427,25 @@ void MBParticleSystem::applySpeed()
         particle->position += particle->speed * m_speedMultiplier;
         particle->speed += m_gravity;
     }
+}
+
+int MBParticleSystem::thread_main(void* particlesystem)
+{
+    MBParticleSystem* self = (MBParticleSystem*) particlesystem;
+    MWindow* window = MWindow::getInstance();
+    MEngine* engine = MEngine::getInstance();
+
+    MLOG_INFO("Start particle system thread with id: " << self->m_thread.GetId());
+
+    while(self->m_multithreading && engine->isActive())
+    {
+        MSDLSemaphore::WaitAndLock(&self->m_semaphore);
+        self->updateParticles(self->getParentObject()->getTransformedPosition());
+        MSDLSemaphore::Unlock(&self->m_semaphore);
+        window->sleep(11);
+    }
+
+    self->m_thread.SetRunning(false);
+    MLOG_INFO("Exiting thread.");
+    return 1;
 }

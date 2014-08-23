@@ -89,7 +89,7 @@ Fl_Double_Window* EditorWindow::show_window() {
   { Fl_Double_Window* o = new Fl_Double_Window(918, 624, "Neo");
     w = o;
     o->labelsize(11);
-    o->user_data((void*)(this));
+    o->callback((Fl_Callback*)window_quit, (void*)(this));
     { menu_bar = new Fl_Menu_Bar(0, 0, 920, 25);
       menu_bar->selection_color((Fl_Color)38);
       menu_bar->menu(menu_menu_bar);

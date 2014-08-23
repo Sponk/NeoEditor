@@ -64,7 +64,15 @@ const char* fl_native_file_chooser(const char* title, const char* files, const c
 void quit_callback(Fl_Menu_*, void*)
 {
     if(fl_ask("Do you really want to exit?"))
+    {
+        MEngine::getInstance()->setActive(false);
         exit(0);
+    }
+}
+
+void window_quit(Fl_Double_Window*, void*)
+{
+    quit_callback(NULL, NULL);
 }
 
 void add_to_tree(MObject3d* entity, std::string path)

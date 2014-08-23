@@ -30,6 +30,7 @@
 #ifndef _MB_PARTICLE_SYSTEM_H
 #define _MB_PATRICLE_SYSTEM_H
 
+#include <MSDLThread/MSDLThread.h>
 
 class MBParticleSystem : public MBehavior
 {
@@ -69,6 +70,8 @@ private:
     float m_sizeDivergence;
     float m_emissionDelay;
 
+    bool m_multithreading;
+
     float m_emissionTimer;
 
     float m_oldParticlesNumber;
@@ -87,9 +90,14 @@ private:
     unsigned int m_vertShad;
     unsigned int m_pixShad;
 
+    MSDLThread m_thread;
+    MSDLSemaphore m_semaphore;
+
     void updateParticles(MVector3 parentPosition);
     void updateArrays(bool updateColorData);
     inline void applySpeed();
+
+    static int thread_main(void* particlesystem);
 
 public:
 

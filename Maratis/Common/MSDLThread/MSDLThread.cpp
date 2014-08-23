@@ -51,7 +51,7 @@ bool MSDLThread::Start(int (*thread_func)(void*), const char* name, void* data)
         return false;
     }
 
-    m_sdlThread = SDL_CreateThread(thread_func, name, data);
+    m_sdlThread = SDL_CreateThread(thread_func, NULL, data);
     if(!m_sdlThread)
     {
         fprintf(stderr, "ERROR: Could not start thread: %s\n", SDL_GetError());
@@ -65,7 +65,7 @@ bool MSDLThread::Start(int (*thread_func)(void*), const char* name, void* data)
 // SDL2 does not allow killing threads!
 void MSDLThread::Stop()
 {
-    if(!m_running)
+    if(!m_running || m_sdlThread == NULL)
         return;
 
     int ret;

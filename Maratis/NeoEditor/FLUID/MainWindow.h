@@ -4,6 +4,7 @@
 #define MainWindow_h
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
+extern void window_quit(Fl_Double_Window*, void*);
 #include <FL/Fl_Menu_Bar.H>
 extern void new_project_callback(Fl_Menu_*, void*);
 extern void new_level_callback(Fl_Menu_*, void*);
