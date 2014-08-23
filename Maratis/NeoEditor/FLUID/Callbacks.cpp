@@ -192,8 +192,6 @@ void open_project_callback(Fl_Menu_*, void*)
         Maratis::getInstance()->loadProject(filename);
 
         current_project.level = Maratis::getInstance()->getCurrentLevel();
-        MLOG_INFO("Loaded level " << current_project.level);
-
         update_scene_tree();
     }
 
@@ -1139,7 +1137,6 @@ void publish_callback(Fl_Menu_*, void*)
 
 void save_level_callback(Fl_Menu_ *, long mode)
 {
-    MLOG_INFO("Saving level");
     const char* filename = NULL;
     switch(mode)
     {
@@ -1182,8 +1179,6 @@ void new_project_callback(Fl_Menu_*, void*)
 
     if(!filename)
         return;
-
-    MLOG_INFO("Creating new project in " << filename);
 
     current_project.level = "";
     current_project.path = filename;
@@ -1540,7 +1535,6 @@ void play_game_callback(Fl_Menu_*, void*)
 
 void add_behavior_menu_callback(Fl_Menu_* menu, const char* name)
 {
-    MLOG_INFO("Adding behavior to object");
     MEngine* engine = MEngine::getInstance();
     MBehaviorManager* manager = engine->getBehaviorManager();
     MObject3d* object = engine->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
@@ -1697,7 +1691,7 @@ void scene_setup_callback(Fl_Menu_ *, void*)
 
     if(strcmp(win->label(), "Success"))
     {
-        MLOG_INFO("Won't change scene.");
+        // MLOG_INFO("Won't change scene.");
         return;
     }
 
