@@ -435,7 +435,7 @@ int MBParticleSystem::thread_main(void* particlesystem)
     MWindow* window = MWindow::getInstance();
     MEngine* engine = MEngine::getInstance();
 
-    MLOG_INFO("Start particle system thread with id: " << self->m_thread.GetId());
+    //MLOG_INFO("Start particle system thread with id: " << self->m_thread.GetId());
 
     while(self->m_multithreading && engine->isActive())
     {
@@ -446,6 +446,6 @@ int MBParticleSystem::thread_main(void* particlesystem)
     }
 
     self->m_thread.SetRunning(false);
-    MLOG_INFO("Exiting thread.");
+    //MLOG_INFO("Exiting thread.");
     return 1;
 }
