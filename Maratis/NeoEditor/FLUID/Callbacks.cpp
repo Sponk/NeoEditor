@@ -139,7 +139,7 @@ void update_scene_tree()
 
 void open_level_callback(Fl_Menu_*, void*)
 {
-    const char* filename = fl_native_file_chooser("Open level", "*.level", current_project.path.c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser("Open level", "*.level", (current_project.path + "/levels").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(filename)
     {
@@ -1581,8 +1581,7 @@ void update_behavior_menu()
 
 void import_mesh_callback(Fl_Menu_*, void*)
 {
-    const char* filename = fl_native_file_chooser("Choose file", "*.obj\n*.dae\n*.3ds\n*.b3d",
-                                                  current_project.path.c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser("Choose file", "*.obj\n*.dae\n*.3ds\n*.b3d", current_project.path.c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(!filename)
         return;

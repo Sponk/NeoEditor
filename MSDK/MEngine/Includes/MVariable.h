@@ -76,7 +76,7 @@ public:
      *
      * @param name The name of the variable. Will not be copied to an internal buffer!
      * @param pointer The pointer to the data. This one needs to be persistant so it can't point
-     *        to a local variable or an element in a std::vector/std::deque etc.
+     *        to a local variable or an element in a vector/deque etc.
      * @param type The type of this variable. This is an element of M_VARIABLE_TYPE.
      */
 	MVariable(const char * name, void * pointer, M_VARIABLE_TYPE type):

@@ -515,11 +515,10 @@ class EditorWindow {open
       }
     }
   }
-  Function {create_object_window()} {open
-  } {
-    Fl_Window object_embedded_window {open
-      xywh {2301 78 261 933} type Double resizable
-      code0 {special_tab->resizable(object_embedded_window);} visible
+  Function {create_object_window()} {} {
+    Fl_Window object_embedded_window {
+      xywh {2301 78 261 933} type Double hide resizable
+      code0 {special_tab->resizable(object_embedded_window);}
     } {
       Fl_Scroll {} {open
         xywh {0 6 230 894} type VERTICAL resizable
@@ -549,7 +548,7 @@ class EditorWindow {open
           }
           Fl_Check_Button object_occluder_button {
             label Occluder
-            callback edit_object_chk_btn selected
+            callback edit_object_chk_btn
             xywh {102 105 111 24} down_box DOWN_BOX
           }
         }
@@ -754,8 +753,7 @@ class EditorWindow {open
       }
     }
   }
-  Function {create_text_window()} {open
-  } {
+  Function {create_text_window()} {} {
     Fl_Window {} {open
       xywh {2027 189 261 720} type Double hide
     } {
@@ -913,7 +911,8 @@ class EditorWindow {open
 decl {extern EditorWindow window;} {private local
 } 
 
-class SceneSetupDlg {} {
+class SceneSetupDlg {open
+} {
   Function {ok_button_callback(Fl_Button* button, SceneSetupDlg* dlg)} {return_type {static void}
   } {
     code {MEngine* engine = MEngine::getInstance();
@@ -930,9 +929,9 @@ window.glbox->redraw();} {}
   } {
     code {button->parent()->hide();} {}
   }
-  Function {find_file_callback(Fl_Button* button, void*)} {return_type {static void}
+  Function {find_file_callback(Fl_Button* button, void*)} {open return_type {static void}
   } {
-    code {const char* filename = fl_native_file_chooser("Choose file", "*.lua", NULL, Fl_Native_File_Chooser::BROWSE_FILE);
+    code {const char* filename = fl_native_file_chooser("Choose file", "*.lua", (current_project.path + "scripts").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
 int children = button->parent()->children();
 Fl_Input* input;
@@ -945,7 +944,8 @@ for(int i = 0; i < children; i++)
 		input->value(filename);
 		return;	
 	}
-}} {}
+}} {selected
+    }
   }
   Function {create_window()} {} {
     Fl_Window {} {
@@ -1343,8 +1343,7 @@ xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);} {}
   }
 } 
 
-class AboutDlg {open
-} {
+class AboutDlg {} {
   Function {create_window()} {open
   } {
     Fl_Window {} {
