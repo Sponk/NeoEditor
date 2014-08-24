@@ -38,6 +38,9 @@ Fl_Window* camera_window;
 
 Fl_Text_Buffer textbuf;
 
+PlayerConsole pluginConsole;
+Fl_Text_Buffer pluginOutput;
+
 PlayerConsole console;
 Fl_Text_Buffer console_buffer;
 
@@ -1824,4 +1827,16 @@ void object_constraint_properties_callback(Fl_Button*, void*)
     Fl_Window* win = dlg->create_window();
     if(win)
         win->show();
+}
+
+void plugin_console_callback(Fl_Menu_*, void*)
+{
+    if(pluginConsole.closed)
+    {
+        Fl_Window* window = pluginConsole.create_window();
+        window->label("Plugin Console");
+        window->show();
+    }
+
+    pluginConsole.output_edit->buffer(&pluginOutput);
 }

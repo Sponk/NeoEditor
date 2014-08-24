@@ -49,6 +49,7 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
  {"Add Group", 0,  (Fl_Callback*)add_group_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0},
  {"Plugins", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Plugin Console", 0,  (Fl_Callback*)plugin_console_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0},
  {"Help", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
  {"About", 0,  (Fl_Callback*)about_menu_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},

@@ -3941,7 +3941,12 @@ int getBehaviorVariable(lua_State * L)
 	if((object = getObject3d(id)))
 	{
 		unsigned int bId = (unsigned int)lua_tointeger(L, 2);
-		const char * varName = lua_tostring(L, 3);
+        const char * varName;
+
+        if(lua_isnumber(L, 3))
+            varName = object->getBehavior(bId)->getVariable(lua_tonumber(L, 3)).getName();
+        else
+            varName = lua_tostring(L, 3);
 
 		if(varName)
 		{
@@ -4015,7 +4020,12 @@ int setBehaviorVariable(lua_State * L)
 	if((object = getObject3d(id)))
 	{
 		unsigned int bId = (unsigned int)lua_tointeger(L, 2);
-		const char * varName = lua_tostring(L, 3);
+        const char * varName;
+
+        if(lua_isnumber(L, 3))
+            varName = object->getBehavior(bId)->getVariable(lua_tonumber(L, 3)).getName();
+        else
+            varName = lua_tostring(L, 3);
 
 		if(varName)
 		{
@@ -4087,6 +4097,137 @@ int setBehaviorVariable(lua_State * L)
 	}
 
 	return 0;
+}
+
+int getBehaviorsNumber(lua_State * L)
+{
+    if(! isFunctionOk(L, "getBehaviorsNumber", 1))
+        return 0;
+
+    MObject3d* object = getObject3d(lua_tonumber(L, 1));
+    if(object)
+    {
+        lua_pushnumber(L, object->getBehaviorsNumber());
+        return 1;
+    }
+
+    lua_pushnumber(L, -1);
+    return 0;
+}
+
+int getBehaviorName(lua_State * L)
+{
+    if(! isFunctionOk(L, "getBehaviorName", 2))
+        return 0;
+
+    MObject3d* object = getObject3d(lua_tonumber(L, 1));
+    int behavior = lua_tonumber(L, 2);
+    if(object && behavior >= 1 && behavior <= object->getBehaviorsNumber())
+    {
+        lua_pushstring(L, object->getBehavior(behavior-1)->getName());
+        return 1;
+    }
+
+    lua_pushnil(L);
+    return 0;
+}
+
+int getBehaviorVariablesNumber(lua_State * L)
+{
+    if(! isFunctionOk(L, "getBehaviorVariablesNumber", 2))
+        return 0;
+
+    MObject3d* object = getObject3d(lua_tonumber(L, 1));
+    int behavior = lua_tonumber(L, 2);
+    if(object && behavior >= 1 && behavior <= object->getBehaviorsNumber())
+    {
+        lua_pushnumber(L, object->getBehavior(behavior-1)->getVariablesNumber());
+        return 1;
+    }
+
+    lua_pushnumber(L, -1);
+    return 0;
+}
+
+int getBehaviorVariableType(lua_State * L)
+{
+    if(! isFunctionOk(L, "getBehaviorVariablesNumber", 3))
+        return 0;
+
+    MObject3d* object = getObject3d(lua_tonumber(L, 1));
+    int behavior = lua_tonumber(L, 2);
+    int variable = lua_tonumber(L, 3);
+
+    if(object && behavior >= 1 && behavior <= object->getBehaviorsNumber())
+    {
+        switch(object->getBehavior(behavior-1)->getVariable(variable-1).getType())
+        {
+        case M_VARIABLE_BOOL:
+            lua_pushstring(L, "bool");
+            break;
+        case M_VARIABLE_VEC2:
+            lua_pushstring(L, "vec2");
+            break;
+        case M_VARIABLE_VEC3:
+            lua_pushstring(L, "vec3");
+            break;
+        case M_VARIABLE_VEC4:
+            lua_pushstring(L, "vec4");
+            break;
+        case M_VARIABLE_FLOAT:
+            lua_pushstring(L, "float");
+            break;
+        case M_VARIABLE_INT:
+            lua_pushstring(L, "int");
+            break;
+        case M_VARIABLE_STRING:
+            lua_pushstring(L, "string");
+            break;
+        case M_VARIABLE_UINT:
+            lua_pushstring(L, "uint");
+            break;
+        }
+
+        return 1;
+    }
+
+    lua_pushnil(L);
+    return 0;
+}
+
+// addBehavior(object, behaviorName)
+int addBehavior(lua_State* L)
+{
+    if(! isFunctionOk(L, "addBehavior", 2))
+        return 0;
+
+    MObject3d* object = getObject3d(lua_tonumber(L, 1));
+    const char* name = lua_tostring(L, 2);
+    if(object)
+    {
+        MBehaviorManager * bManager = MEngine::getInstance()->getBehaviorManager();
+
+        if(!name)
+        {
+            MLOG_ERROR("Unable to load behavior!");
+            return 0;
+        }
+
+        MBehaviorCreator * bCreator = bManager->getBehaviorByName(name);
+
+        if(!bCreator)
+        {
+            MLOG_ERROR("Unable to load behavior \"" << name << "\"");
+            return 0;
+        }
+
+        MBehavior* behavior = bCreator->getNewBehavior(object);
+        object->addBehavior(behavior);
+        return 1;
+    }
+
+    MLOG_ERROR("Unable to load behavior!");
+    return 0;
 }
 
 int centerCursor(lua_State * L)
@@ -4540,6 +4681,11 @@ void MScript::init(void)
 	// behavior
 	lua_register(m_state, "getBehaviorVariable",	getBehaviorVariable);
 	lua_register(m_state, "setBehaviorVariable",	setBehaviorVariable);
+    lua_register(m_state, "getBehaviorsNumber",     getBehaviorsNumber);
+    lua_register(m_state, "getBehaviorName",        getBehaviorName);
+    lua_register(m_state, "getBehaviorVariablesNumber", getBehaviorVariablesNumber);
+    lua_register(m_state, "getBehaviorVariableType",    getBehaviorVariableType);
+    lua_register(m_state, "addBehavior",            addBehavior);
 
 	// animation
 	lua_register(m_state, "getCurrentAnimation",	getCurrentAnimation);
@@ -4618,7 +4764,6 @@ void MScript::init(void)
     lua_register(m_state, "setSoundRelative",   setSoundRelative);
     lua_register(m_state, "setSoundRadius",     setSoundRadius);
     lua_register(m_state, "setSoundRolloff",    setSoundRolloff);
-
 	
 	// scene/level
 	lua_register(m_state, "changeScene",			changeScene);

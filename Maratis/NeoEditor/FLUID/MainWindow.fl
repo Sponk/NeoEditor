@@ -20,7 +20,7 @@ class EditorWindow {open
   } {
     Fl_Window {} {
       label Neo
-      callback window_quit open selected
+      callback window_quit open
       xywh {1863 249 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
@@ -195,7 +195,13 @@ class EditorWindow {open
         Submenu {} {
           label Plugins open
           xywh {0 0 100 20} labelsize 14
-        } {}
+        } {
+          MenuItem {} {
+            label {Plugin Console}
+            callback plugin_console_callback selected
+            xywh {0 0 100 20} labelsize 14
+          }
+        }
         Submenu {} {
           label Help open
           xywh {0 0 100 20} labelsize 14
