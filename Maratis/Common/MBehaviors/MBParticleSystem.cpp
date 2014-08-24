@@ -123,6 +123,9 @@ m_multithreading(behavior.m_multithreading)
 
 MBParticleSystem::~MBParticleSystem(void)
 {
+    m_multithreading = false;
+
+    SAFE_DELETE_ARRAY(m_particleColors);
     SAFE_DELETE_ARRAY(m_particlePositions);
 }
 
