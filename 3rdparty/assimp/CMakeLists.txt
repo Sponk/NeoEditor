@@ -70,8 +70,7 @@ IF ( CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR )
 ENDIF ( CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR )
 
 # Cache these to allow the user to override them manually.
-SET( ASSIMP_LIB_INSTALL_DIR "Maratis" CACHE PATH
-	"Path the built library files are installed to." )
+SET( ASSIMP_LIB_INSTALL_DIR ${MARATIS_INSTALL_DIR})
 SET( ASSIMP_INCLUDE_INSTALL_DIR "include" CACHE PATH
 	"Path the header files are installed to." )
 SET( ASSIMP_BIN_INSTALL_DIR "Maratis" CACHE PATH
