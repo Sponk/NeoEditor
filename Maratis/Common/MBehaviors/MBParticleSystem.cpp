@@ -217,13 +217,16 @@ void MBParticleSystem::draw()
     if(m_particlePositions == NULL || m_particlesNumber == 0 || m_oldParticlesNumber != m_particlesNumber)
         return;
 
-    if(m_texRef == NULL)
+    if(m_texRef == NULL || strcmp(m_currentTextureFile.getSafeString(), m_textureFile.getSafeString()))
     {
         if(strcmp(m_textureFile.getSafeString(), "") == 0)
             return;
 
         char string[256];
         getGlobalFilename(string, engine->getSystemContext()->getWorkingDirectory(), m_textureFile.getSafeString());
+
+        if(!isFileExist(string))
+            return;
 
         m_texRef = engine->getLevel()->loadTexture(string);
 
@@ -233,6 +236,8 @@ void MBParticleSystem::draw()
             m_particlesNumber = 0;
             return;
         }
+
+        m_currentTextureFile = m_textureFile;
     }
 
     if(m_fx == 0)

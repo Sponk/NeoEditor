@@ -77,6 +77,7 @@ private:
     float m_oldParticlesNumber;
 
     MString m_textureFile;
+    MString m_currentTextureFile;
     MTextureRef* m_texRef;
 
     vector<Particle> m_particles;
