@@ -55,6 +55,8 @@ private:
     };
 
 	// variables
+    bool m_looping;
+    bool m_emitting;
     float m_lifeTime;
     float m_particlesNumber;
     MVector3 m_initialSpeed;

@@ -90,7 +90,9 @@ m_speedMultiplier(1.0),
 m_oldParticlesNumber(0),
 m_particlesNumber(0),
 m_emissionTimer(0),
-m_multithreading(false)
+m_multithreading(false),
+m_looping(true),
+m_emitting(true)
 {
     m_semaphore.Init(1);
 }
@@ -116,7 +118,9 @@ m_particlesNumber(behavior.m_particlesNumber),
 m_emissionTimer(0),
 m_initialSpeed(behavior.m_initialSpeed),
 m_gravity(behavior.m_gravity),
-m_multithreading(behavior.m_multithreading)
+m_multithreading(behavior.m_multithreading),
+m_looping(behavior.m_looping),
+m_emitting(true)
 {
     m_semaphore.Init(1);
 }
@@ -150,7 +154,7 @@ MBehavior * MBParticleSystem::getCopy(MObject3d * parentObject)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 unsigned int MBParticleSystem::getVariablesNumber(void){
-    return 14;
+    return 16;
 }
 
 MVariable MBParticleSystem::getVariable(unsigned int id)
@@ -185,6 +189,10 @@ MVariable MBParticleSystem::getVariable(unsigned int id)
         return MVariable("EmissionDelay", &m_emissionDelay, M_VARIABLE_FLOAT);
     case 13:
         return MVariable("Multithreading", &m_multithreading, M_VARIABLE_BOOL);
+    case 14:
+        return MVariable("Looping", &m_looping, M_VARIABLE_BOOL);
+    case 15:
+        return MVariable("Emitting", &m_emitting, M_VARIABLE_BOOL);
 
     default:
         return MVariable("NULL", NULL, M_VARIABLE_NULL);
@@ -348,7 +356,7 @@ void MBParticleSystem::updateParticles(MVector3 parentPosition)
         }
     }
 
-    if(currentTime < m_emissionTimer)
+    if(currentTime < m_emissionTimer || (!m_looping && !m_emitting))
     {
         applySpeed();
         updateArrays(updateColorData);
@@ -378,6 +386,7 @@ void MBParticleSystem::updateParticles(MVector3 parentPosition)
 
     applySpeed();
     updateArrays(updateColorData);
+    m_emitting = false;
 }
 
 void MBParticleSystem::updateArrays(bool updateColorData)
