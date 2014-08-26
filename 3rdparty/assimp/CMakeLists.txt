@@ -73,7 +73,7 @@ ENDIF ( CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR )
 SET( ASSIMP_LIB_INSTALL_DIR ${MARATIS_INSTALL_DIR})
 SET( ASSIMP_INCLUDE_INSTALL_DIR "include" CACHE PATH
 	"Path the header files are installed to." )
-SET( ASSIMP_BIN_INSTALL_DIR "Maratis" CACHE PATH
+SET( ASSIMP_BIN_INSTALL_DIR ${MARATIS_INSTALL_DIR} CACHE PATH
 	"Path the tool executables are installed to." )
 SET ( ASSIMP_BUILD_STATIC_LIB ON CACHE BOOL
     "Build a static (.a) version of the library" )
