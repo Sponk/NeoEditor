@@ -108,6 +108,7 @@ void change_scene_callback(Fl_Menu_*, long index)
     level->setCurrentSceneId(index);
     Maratis::getInstance()->clearSelectedObjects();
 
+    update_scene_tree();
     window.glbox->redraw();
 }
 
