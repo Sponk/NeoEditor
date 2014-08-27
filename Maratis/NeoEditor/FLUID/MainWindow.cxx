@@ -4083,7 +4083,7 @@ al Public License.");
       editor_version_edit->align(Fl_Align(192|FL_ALIGN_INSIDE));
       editor_version_edit->label(EDITOR_VERSION_STRING);
     } // Fl_Box* editor_version_edit
-    o->set_modal();
+    o->set_non_modal();
     o->end();
   } // Fl_Double_Window* o
   return w;

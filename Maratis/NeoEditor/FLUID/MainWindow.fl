@@ -14,14 +14,13 @@ decl {\#include <FL/Fl_Color_Chooser.H>} {private local
 decl {\#include <MFileManager/MMeshSave.h>} {private local
 } 
 
-class EditorWindow {open
-} {
+class EditorWindow {} {
   Function {show_window()} {open
   } {
     Fl_Window {} {
       label Neo
       callback window_quit open
-      xywh {1863 249 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
+      xywh {1828 225 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -198,7 +197,7 @@ class EditorWindow {open
         } {
           MenuItem {} {
             label {Plugin Console}
-            callback plugin_console_callback selected
+            callback plugin_console_callback
             xywh {0 0 100 20} labelsize 14
           }
         }
@@ -1349,12 +1348,13 @@ xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);} {}
   }
 } 
 
-class AboutDlg {} {
+class AboutDlg {open
+} {
   Function {create_window()} {open
   } {
     Fl_Window {} {
-      label About open
-      xywh {1990 333 354 309} type Double hide modal
+      label About open selected
+      xywh {1990 333 354 309} type Double non_modal visible
     } {
       Fl_Box {} {
         label {The Neo Editor is distributed under the terms and conditions of the GNU General Public License.}
