@@ -6,6 +6,7 @@ addEditorMenu("Load Prefab from file", "load_callback")
 addEditorMenu("Save selection as Prefab", "save_callback")
 
 require("plugins.libs.libxml")
+require("plugins.libs.libconv")
         
 -- From penlib
 function split(s,re,plain,n)
@@ -96,20 +97,6 @@ end
 
 function getPath(path)
     return path:match("(.*"..sep..")")
-end
-
-function vec2str(vec)
-    local output = ""
-    
-    for i = 1, #vec, 1 do
-        output = output .. vec[i] .. " "
-    end
-    
-    return output
-end
-
-function bool2str(bool)
-    if bool then return "true" else return "false" end
 end
 
 function objectToXml(object, path, parent)
@@ -229,6 +216,29 @@ function objectToXml(object, path, parent)
 
     output = output .. "<active value=\"" .. bool2str(isActive(object)) .. "\"/>\n"
 
+    -- Output behaviors
+    for i = 1, getBehaviorsNumber(object), 1 do
+        local name = getBehaviorName(object, i)
+        output = output .. "<behavior name=\"" .. name .. "\">\n"
+        
+        for j = 1, getBehaviorVariablesNumber(object, i), 1 do
+            output = output .. "<BehaviorProperty\n"
+            output = output .. "\tid=\"" .. j-1 .. "\"\n"
+            
+            variable = getBehaviorVariable(object,  i-1, j-1)
+            if type(variable) == "table" then
+                output = output .. "\tdata=\"" .. vec2str(variable) .. "\"\n"
+            elseif type(variable) == "boolean" then
+                output = output .. "\tdata=\"" .. bool2str(variable) .. "\"\n"
+            else
+                output = output .. "\tdata=\"" .. variable .. "\"\n"
+            end
+
+            output = output .. "\ttype=\"" .. getBehaviorVariableType(object, i, j) .. "\"\n"
+            output = output .. "/>\n"
+        end
+        output = output .. "</behavior>\n"
+    end
 
     output = output .. "</" .. objectType .. ">"
 
@@ -294,15 +304,6 @@ function save_callback()
     output:close()
 end
 
-function str2vec(str)
-    return split(str, " ")
-end
-
-function str2bool(str)
-    if string.upper(str) == "TRUE" then return true
-    elseif string.upper(str) == "FALSE" then return false end
-end
-
 function updateTransform(settings, object)  
     setPosition(object, str2vec(settings.transform["@position"]))
     setScale(object, str2vec(settings.transform["@scale"]))
@@ -317,9 +318,50 @@ function updateTransform(settings, object)
     updateMatrix(object)
 end
 
+function addProperty(settings, object)
+        addBehavior(object, settings["@name"])
+        local idx = getBehaviorsNumber(object) - 1
+        
+        properties = settings.BehaviorProperty
+        
+        -- Properties
+        if properties ~= nil then
+            if #properties > 0 then  
+                for i = 1, #properties, 1 do
+                    local data
+                    
+                    if string.find(getBehaviorVariableType(object, idx+1, i), "vec") then
+                        data = str2vec(properties[i]["@data"])
+                    else
+                        data = properties[i]["@data"]
+                    end
+            
+                    setBehaviorVariable(object, idx, tonumber(properties[i]["@id"]), data)
+                end
+            else
+                    setBehaviorVariable(object, idx, tonumber(properties["@id"]), properties["@data"])
+            end
+        end
+end
+
+function loadBehaviors(settings, object)
+
+    if settings == nil then return end
+    
+    if #settings == 0 then
+        addProperty(settings, object)
+    else
+        for j = 1, #settings, 1 do
+            addProperty(settings[j], object)
+        end
+    end  
+    
+end
+
 function addEntity(entity, group)
     local object = loadMesh(entity["@file"])
     
+    loadBehaviors(entity.behavior, object)
     updateTransform(entity, object)    
     setInvisible(object, str2bool(entity.ObjectProperties["@invisible"]))   
    
@@ -553,3 +595,5 @@ function load_callback()
     parents = nil
     updateEditorView()    
 end
+
+debugLog("Plugin loaded")

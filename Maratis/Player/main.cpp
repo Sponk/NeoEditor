@@ -193,8 +193,10 @@ int update_thread(void* nothing)
 // main
 int main(int argc, char **argv)
 {
+#ifndef ANDROID
 	setlocale(LC_NUMERIC, "C");
-
+#endif
+	
 	unsigned int width = 1024;
 	unsigned int height = 768;
     int fullscreen = false;

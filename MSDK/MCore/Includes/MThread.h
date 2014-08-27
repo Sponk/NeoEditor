@@ -85,6 +85,7 @@ public:
      * @return Is this thread running?
      */
     bool IsRunning() { return m_running; }
+    void SetRunning(bool value) { m_running = value; }
 
     /**
      * @brief GetId Gets the thread ID from SDL and returns it.

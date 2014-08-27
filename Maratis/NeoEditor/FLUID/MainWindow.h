@@ -4,6 +4,7 @@
 #define MainWindow_h
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
+extern void window_quit(Fl_Double_Window*, void*);
 #include <FL/Fl_Menu_Bar.H>
 extern void new_project_callback(Fl_Menu_*, void*);
 extern void new_level_callback(Fl_Menu_*, void*);
@@ -29,6 +30,7 @@ extern void add_camera_callback(Fl_Menu_*, void*);
 extern void add_sound_callback(Fl_Menu_*, void*);
 extern void add_scene_callback(Fl_Menu_*, void*);
 extern void add_group_callback(Fl_Menu_*, void*);
+extern void plugin_console_callback(Fl_Menu_*, void*);
 extern void about_menu_callback(Fl_Menu_*, void*);
 #include "GLBox.h"
 #include <FL/Fl_Tree.H>
@@ -63,6 +65,7 @@ extern void object_constraint_properties_callback(Fl_Button*, void*);
 extern void edit_camera_properties(Fl_Value_Input*, void*);
 extern void choose_camera_color(Fl_Button*, void*);
 extern void edit_camera_properties_chk_btn(Fl_Check_Button*, void*);
+extern void edit_camera_skybox(Fl_Input*, void*);
 #include <FL/Fl_Text_Editor.H>
 extern void edit_text_properties(Fl_Text_Editor*, void*);
 extern void edit_text_properties(Fl_Input*, void*);
@@ -123,6 +126,7 @@ public:
   Fl_Output *object_mesh_edit;
   Fl_Check_Button *object_invisible_button;
   Fl_Check_Button *object_shadow_button;
+  Fl_Check_Button *object_occluder_button;
   Fl_Choice *object_shape_choice;
   static Fl_Menu_Item menu_object_shape_choice[];
   Fl_Check_Button *object_ghost_button;
@@ -146,6 +150,7 @@ public:
   Fl_Value_Input *camera_clipping_far_edit;
   Fl_Check_Button *camera_fog_button;
   Fl_Value_Input *camera_fog_distance_edit;
+  Fl_Input *camera_skybox_edit;
   Fl_Double_Window* create_text_window();
   Fl_Text_Editor *text_text_edit;
   Fl_Input *text_font_edit;

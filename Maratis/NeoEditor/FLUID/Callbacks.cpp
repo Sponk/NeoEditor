@@ -38,6 +38,9 @@ Fl_Window* camera_window;
 
 Fl_Text_Buffer textbuf;
 
+PlayerConsole pluginConsole;
+Fl_Text_Buffer pluginOutput;
+
 PlayerConsole console;
 Fl_Text_Buffer console_buffer;
 
@@ -64,7 +67,15 @@ const char* fl_native_file_chooser(const char* title, const char* files, const c
 void quit_callback(Fl_Menu_*, void*)
 {
     if(fl_ask("Do you really want to exit?"))
+    {
+        MEngine::getInstance()->setActive(false);
         exit(0);
+    }
+}
+
+void window_quit(Fl_Double_Window*, void*)
+{
+    quit_callback(NULL, NULL);
 }
 
 void add_to_tree(MObject3d* entity, std::string path)
@@ -97,6 +108,7 @@ void change_scene_callback(Fl_Menu_*, long index)
     level->setCurrentSceneId(index);
     Maratis::getInstance()->clearSelectedObjects();
 
+    update_scene_tree();
     window.glbox->redraw();
 }
 
@@ -139,7 +151,7 @@ void update_scene_tree()
 
 void open_level_callback(Fl_Menu_*, void*)
 {
-    const char* filename = fl_native_file_chooser("Open level", "*.level", current_project.path.c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser("Open level", "*.level", (current_project.path + "/levels").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(filename)
     {
@@ -184,8 +196,6 @@ void open_project_callback(Fl_Menu_*, void*)
         Maratis::getInstance()->loadProject(filename);
 
         current_project.level = Maratis::getInstance()->getCurrentLevel();
-        MLOG_INFO("Loaded level " << current_project.level);
-
         update_scene_tree();
     }
 
@@ -700,6 +710,7 @@ void scene_tree_callback(Fl_Tree* tree, void*)
         {
             window.object_invisible_button->value(!entity->isVisible());
 			window.object_shadow_button->value(entity->hasShadow());
+            window.object_occluder_button->value(entity->isOccluder());
         }
 
         MPhysicsProperties* phys = entity->getPhysicsProperties();
@@ -804,6 +815,7 @@ void scene_tree_callback(Fl_Tree* tree, void*)
         window.camera_clipping_far_edit->value(camera->getClippingFar());
 
         window.camera_fog_distance_edit->value(camera->getFogDistance());
+        window.camera_skybox_edit->value(camera->getSkybox()->getPath());
 
         if(update_name)
         {
@@ -1129,7 +1141,6 @@ void publish_callback(Fl_Menu_*, void*)
 
 void save_level_callback(Fl_Menu_ *, long mode)
 {
-    MLOG_INFO("Saving level");
     const char* filename = NULL;
     switch(mode)
     {
@@ -1173,8 +1184,6 @@ void new_project_callback(Fl_Menu_*, void*)
     if(!filename)
         return;
 
-    MLOG_INFO("Creating new project in " << filename);
-
     current_project.level = "";
     current_project.path = filename;
 
@@ -1209,6 +1218,7 @@ void edit_object_chk_btn(Fl_Check_Button*, void*)
 
     entity->setInvisible(window.object_invisible_button->value());
 	entity->enableShadow(window.object_shadow_button->value());
+    entity->enableOccluder(window.object_occluder_button->value());
 
     MPhysicsProperties* phys = entity->getPhysicsProperties();
 
@@ -1292,6 +1302,18 @@ void edit_camera_properties(Fl_Value_Input*, void*)
     camera->setClippingFar(window.camera_clipping_far_edit->value());
 
     camera->setFogDistance(window.camera_fog_distance_edit->value());
+}
+
+void edit_camera_skybox(Fl_Input*, void*)
+{
+    MOCamera* camera = MEngine::getInstance()->getLevel()->getCurrentScene()->getCameraByName(window.name_edit->value());
+
+    if(!camera)
+    {
+        MLOG_ERROR("Camera object does not exist!");
+        return;
+    }
+    camera->loadSkybox(window.camera_skybox_edit->value());
 }
 
 void edit_camera_properties_chk_btn(Fl_Check_Button*, void*)
@@ -1517,7 +1539,6 @@ void play_game_callback(Fl_Menu_*, void*)
 
 void add_behavior_menu_callback(Fl_Menu_* menu, const char* name)
 {
-    MLOG_INFO("Adding behavior to object");
     MEngine* engine = MEngine::getInstance();
     MBehaviorManager* manager = engine->getBehaviorManager();
     MObject3d* object = engine->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
@@ -1566,8 +1587,7 @@ void update_behavior_menu()
 
 void import_mesh_callback(Fl_Menu_*, void*)
 {
-    const char* filename = fl_native_file_chooser("Choose file", "*.obj\n*.dae\n*.3ds\n*.b3d",
-                                                  current_project.path.c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser("Choose file", "*.obj\n*.dae\n*.3ds\n*.b3d", current_project.path.c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(!filename)
         return;
@@ -1675,7 +1695,7 @@ void scene_setup_callback(Fl_Menu_ *, void*)
 
     if(strcmp(win->label(), "Success"))
     {
-        MLOG_INFO("Won't change scene.");
+        // MLOG_INFO("Won't change scene.");
         return;
     }
 
@@ -1808,4 +1828,16 @@ void object_constraint_properties_callback(Fl_Button*, void*)
     Fl_Window* win = dlg->create_window();
     if(win)
         win->show();
+}
+
+void plugin_console_callback(Fl_Menu_*, void*)
+{
+    if(pluginConsole.closed)
+    {
+        Fl_Window* window = pluginConsole.create_window();
+        window->label("Plugin Console");
+        window->show();
+    }
+
+    pluginConsole.output_edit->buffer(&pluginOutput);
 }

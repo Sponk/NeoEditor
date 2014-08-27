@@ -29,7 +29,7 @@
 //========================================================================
 
 
-#ifndef _M_WINDOW_H
+#if !defined(_M_WINDOW_H) && !defined(ANDROID)
 #define _M_WINDOW_H
 
 #include <MWinEvents.h>
@@ -153,4 +153,7 @@ public:
     void messagebox(const char* content, const char* title);
 };
 
+#else
+#include <cctype>
+#include <MAndroidWindow.h>
 #endif

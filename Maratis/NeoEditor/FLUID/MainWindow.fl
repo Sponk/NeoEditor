@@ -14,13 +14,13 @@ decl {\#include <FL/Fl_Color_Chooser.H>} {private local
 decl {\#include <MFileManager/MMeshSave.h>} {private local
 } 
 
-class EditorWindow {open
-} {
+class EditorWindow {} {
   Function {show_window()} {open
   } {
     Fl_Window {} {
-      label Neo open
-      xywh {1538 253 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
+      label Neo
+      callback window_quit open
+      xywh {1828 225 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -194,7 +194,13 @@ class EditorWindow {open
         Submenu {} {
           label Plugins open
           xywh {0 0 100 20} labelsize 14
-        } {}
+        } {
+          MenuItem {} {
+            label {Plugin Console}
+            callback plugin_console_callback
+            xywh {0 0 100 20} labelsize 14
+          }
+        }
         Submenu {} {
           label Help open
           xywh {0 0 100 20} labelsize 14
@@ -517,8 +523,8 @@ class EditorWindow {open
     }
   }
   Function {create_object_window()} {} {
-    Fl_Window object_embedded_window {open
-      xywh {1885 46 261 933} type Double hide resizable
+    Fl_Window object_embedded_window {
+      xywh {2301 78 261 933} type Double hide resizable
       code0 {special_tab->resizable(object_embedded_window);}
     } {
       Fl_Scroll {} {open
@@ -546,6 +552,11 @@ class EditorWindow {open
             label Shadow
             callback edit_object_chk_btn
             xywh {12 106 111 24} down_box DOWN_BOX
+          }
+          Fl_Check_Button object_occluder_button {
+            label Occluder
+            callback edit_object_chk_btn
+            xywh {102 105 111 24} down_box DOWN_BOX
           }
         }
         Fl_Group {} {
@@ -675,7 +686,7 @@ class EditorWindow {open
   }
   Function {create_camera_window()} {} {
     Fl_Window {} {open
-      xywh {843 164 258 660} type Double hide
+      xywh {1925 203 258 660} type Double hide
     } {
       Fl_Group {} {
         label {Clear Color:}
@@ -742,12 +753,16 @@ class EditorWindow {open
           xywh {15 375 117 21} align 5
         }
       }
+      Fl_Input camera_skybox_edit {
+        label {Skybox Textures:}
+        callback edit_camera_skybox
+        tooltip {Path to textures used by the skybox.} xywh {6 432 213 24} align 5 when 8
+      }
     }
   }
-  Function {create_text_window()} {open
-  } {
+  Function {create_text_window()} {} {
     Fl_Window {} {open
-      xywh {2391 146 261 720} type Double visible
+      xywh {2027 189 261 720} type Double hide
     } {
       Fl_Group {} {
         label {Settings:} open
@@ -798,7 +813,7 @@ class EditorWindow {open
         }
       }
       Fl_Group {} {
-        label {Color:} open selected
+        label {Color:} open
         xywh {6 336 210 66} box ENGRAVED_FRAME align 5
       } {
         Fl_Value_Input text_r {
@@ -920,9 +935,9 @@ window.glbox->redraw();} {}
   } {
     code {button->parent()->hide();} {}
   }
-  Function {find_file_callback(Fl_Button* button, void*)} {return_type {static void}
+  Function {find_file_callback(Fl_Button* button, void*)} {open return_type {static void}
   } {
-    code {const char* filename = fl_native_file_chooser("Choose file", "*.lua", NULL, Fl_Native_File_Chooser::BROWSE_FILE);
+    code {const char* filename = fl_native_file_chooser("Choose file", "*.lua", (current_project.path + "scripts").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
 int children = button->parent()->children();
 Fl_Input* input;
@@ -1333,12 +1348,13 @@ xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);} {}
   }
 } 
 
-class AboutDlg {} {
+class AboutDlg {open
+} {
   Function {create_window()} {open
   } {
     Fl_Window {} {
-      label About open
-      xywh {1990 333 354 309} type Double hide
+      label About open selected
+      xywh {1990 333 354 309} type Double non_modal visible
     } {
       Fl_Box {} {
         label {The Neo Editor is distributed under the terms and conditions of the GNU General Public License.}

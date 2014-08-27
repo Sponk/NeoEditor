@@ -27,7 +27,14 @@
 #include <MWindow.h>
 
 // MaratisCore
+
+#ifndef USE_GLES
 #include <MContexts/MGLContext.h>
+#else
+#include <MContexts/MES2Context.h>
+typedef MES2Context MGLContext;
+#endif
+
 #include <MContexts/MALContext.h>
 #include <MContexts/MBulletContext.h>
 #include <MContexts/MWinContext.h>
@@ -41,6 +48,7 @@
 #include <MBehaviors/MBLookAt.h>
 #include <MBehaviors/MBFollow.h>
 #include <MBehaviors/MBLua.h>
+#include <MBehaviors/MBParticleSystem.h>
 #include <MScript/MScript.h>
 #include <MInput/MInput.h>
 #include <MFileManager/MMeshLoad.h>
@@ -95,8 +103,8 @@ void MaratisPlayer::changeRenderer(const char * name)
 	MRendererManager * rendererManager = engine->getRendererManager();
 	
 	MRendererCreator * renderer = rendererManager->getRendererByName(name);
-	if(renderer)
-	{
+    if(renderer && strcmp(engine->getRenderer()->getName(), name) != 0)
+    {
 		if(m_renderer)
 			m_renderer->destroy();
 		m_renderer = renderer->getNewRenderer();
@@ -133,6 +141,7 @@ void MaratisPlayer::start(void)
 		engine->getBehaviorManager()->addBehavior(MBLookAt::getStaticName(), M_OBJECT3D_CAMERA, MBLookAt::getNew);
 		engine->getBehaviorManager()->addBehavior(MBFollow::getStaticName(), M_OBJECT3D, MBFollow::getNew);
         engine->getBehaviorManager()->addBehavior(MBLua::getStaticName(), M_OBJECT3D, MBLua::getNew);
+        engine->getBehaviorManager()->addBehavior(MBParticleSystem::getStaticName(), M_OBJECT3D, MBParticleSystem::getNew);
 
 		// add renderers
 		engine->getRendererManager()->addRenderer(MStandardRenderer::getStaticName(), MStandardRenderer::getNew);

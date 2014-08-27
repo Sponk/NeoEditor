@@ -49,6 +49,7 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
  {"Add Group", 0,  (Fl_Callback*)add_group_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0},
  {"Plugins", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Plugin Console", 0,  (Fl_Callback*)plugin_console_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0},
  {"Help", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
  {"About", 0,  (Fl_Callback*)about_menu_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
@@ -89,7 +90,7 @@ Fl_Double_Window* EditorWindow::show_window() {
   { Fl_Double_Window* o = new Fl_Double_Window(918, 624, "Neo");
     w = o;
     o->labelsize(11);
-    o->user_data((void*)(this));
+    o->callback((Fl_Callback*)window_quit, (void*)(this));
     { menu_bar = new Fl_Menu_Bar(0, 0, 920, 25);
       menu_bar->selection_color((Fl_Color)38);
       menu_bar->menu(menu_menu_bar);
@@ -408,6 +409,10 @@ Fl_Double_Window* EditorWindow::create_object_window() {
           object_shadow_button->down_box(FL_DOWN_BOX);
           object_shadow_button->callback((Fl_Callback*)edit_object_chk_btn);
         } // Fl_Check_Button* object_shadow_button
+        { object_occluder_button = new Fl_Check_Button(102, 105, 111, 24, "Occluder");
+          object_occluder_button->down_box(FL_DOWN_BOX);
+          object_occluder_button->callback((Fl_Callback*)edit_object_chk_btn);
+        } // Fl_Check_Button* object_occluder_button
         o->end();
       } // Fl_Group* o
       { Fl_Group* o = new Fl_Group(3, 166, 217, 249, "Physics:");
@@ -553,6 +558,12 @@ Fl_Double_Window* EditorWindow::create_camera_window() {
       } // Fl_Value_Input* camera_fog_distance_edit
       o->end();
     } // Fl_Group* o
+    { camera_skybox_edit = new Fl_Input(6, 432, 213, 24, "Skybox Textures:");
+      camera_skybox_edit->tooltip("Path to textures used by the skybox.");
+      camera_skybox_edit->callback((Fl_Callback*)edit_camera_skybox);
+      camera_skybox_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      camera_skybox_edit->when(FL_WHEN_ENTER_KEY);
+    } // Fl_Input* camera_skybox_edit
     o->end();
   } // Fl_Double_Window* o
   return w;
@@ -708,7 +719,7 @@ void SceneSetupDlg::cancel_button_callback(Fl_Button* button, void*) {
 }
 
 void SceneSetupDlg::find_file_callback(Fl_Button* button, void*) {
-  const char* filename = fl_native_file_chooser("Choose file", "*.lua", NULL, Fl_Native_File_Chooser::BROWSE_FILE);
+  const char* filename = fl_native_file_chooser("Choose file", "*.lua", (current_project.path + "scripts").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
   
   int children = button->parent()->children();
   Fl_Input* input;
@@ -4072,6 +4083,7 @@ al Public License.");
       editor_version_edit->align(Fl_Align(192|FL_ALIGN_INSIDE));
       editor_version_edit->label(EDITOR_VERSION_STRING);
     } // Fl_Box* editor_version_edit
+    o->set_non_modal();
     o->end();
   } // Fl_Double_Window* o
   return w;

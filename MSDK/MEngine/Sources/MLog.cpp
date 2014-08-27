@@ -33,6 +33,10 @@
 #include <iostream>
 #include <fstream>
 
+#ifdef ANDROID
+#include <SDL_log.h>
+#endif
+
 
 // static vars
 MLog *			MLog::m_instance = NULL;
@@ -91,6 +95,10 @@ void MLog::log(int severity, const char * function, const char * filename, const
     std::cout<< sev <<" "<< m_string << " in " << (function?function:"?")
         //<< " in "<< (filename?filename:"?") // do we add filename in console ?
         << std::endl;
+
+#ifdef ANDROID
+    SDL_Log("%s %s in %s\n", sev.c_str(), m_string.c_str(), (function?function:"?"));
+#endif
 
 	if(m_logfstream.good())
         m_logfstream<<sev<<" "<<m_string<< " in " << (function?function:"?") << " in "<< (filename?filename:"?") <<std::endl;

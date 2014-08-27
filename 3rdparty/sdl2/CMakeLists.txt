@@ -1,3 +1,8 @@
+if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
+  message(FATAL_ERROR "Prevented in-tree built. Please create a build directory outside of the SDL source code and call cmake from there")
+endif()
+
+cmake_minimum_required(VERSION 2.6)
 project(SDL2 C)
 include(CheckFunctionExists)
 include(CheckLibraryExists)
@@ -10,8 +15,9 @@ include(CheckTypeSize)
 include(CheckStructHasMember)
 include(CMakeDependentOption)
 include(FindPkgConfig)
-include(SDLMacros)
-include(SDLChecks)
+set(CMAKE_MODULE_PATH "${SDL2_SOURCE_DIR}/cmake")
+include(${SDL2_SOURCE_DIR}/cmake/macros.cmake)
+include(${SDL2_SOURCE_DIR}/cmake/sdlchecks.cmake)
 
 # General settings
 # Edit include/SDL_version.h and change the version, then:
@@ -23,9 +29,9 @@ include(SDLChecks)
 # set SDL_BINARY_AGE and SDL_INTERFACE_AGE to 0.
 set(SDL_MAJOR_VERSION 2)
 set(SDL_MINOR_VERSION 0)
-set(SDL_MICRO_VERSION 2)
-set(SDL_INTERFACE_AGE 0)
-set(SDL_BINARY_AGE 2)
+set(SDL_MICRO_VERSION 3)
+set(SDL_INTERFACE_AGE 1)
+set(SDL_BINARY_AGE 3)
 set(SDL_VERSION "${SDL_MAJOR_VERSION}.${SDL_MINOR_VERSION}.${SDL_MICRO_VERSION}")
 
 # Calculate a libtool-like version number
@@ -53,6 +59,11 @@ set(LIBNAME SDL2)
 if(NOT LIBTYPE)
   set(LIBTYPE SHARED)
 endif()
+
+IF(ANDROID)
+	set(BUILD_SHARED_LIBS OFF)
+	set(SDL_SHARED OFF)
+ENDIF()
 
 # Get the platform
 if(WIN32)
@@ -238,7 +249,7 @@ foreach(_SUB ${SDL_X11_OPTIONS})
   dep_option(${_OPT}           "Enable ${_SUB} support" ON "VIDEO_X11" OFF)
 endforeach()
 set_option(VIDEO_COCOA         "Use Cocoa video driver" ${APPLE})
-set_option(DIRECTX             "Use DirectX for Windows audio/video"  ${WINDOWS})
+set_option(DIRECTX             "Use DirectX for Windows audio/video" ${WINDOWS})
 set_option(RENDER_D3D          "Enable the Direct3D render driver" ${WINDOWS})
 
 # TODO: We should (should we?) respect cmake's ${BUILD_SHARED_LIBS} flag here
@@ -697,10 +708,6 @@ if(UNIX AND NOT APPLE)
     endif()
 
     check_include_file("libudev.h" HAVE_LIBUDEV_H)
-	if(HAVE_LIBUDEV_H)
-	  file(GLOB UDEV_SOURCES ${SDL2_SOURCE_DIR}/src/core/linux/*.c)
-	  set(SOURCE_FILES ${SOURCE_FILES} ${UDEV_SOURCES})
-	endif(HAVE_LIBUDEV_H)
 
     # !!! FIXME: this needs pkg-config to find the include path, I think.
     check_include_file("dbus/dbus.h" HAVE_DBUS_DBUS_H)
@@ -797,11 +804,12 @@ elseif(WINDOWS)
     endif()
     set(CMAKE_REQUIRED_FLAGS "/I\"$ENV{DXSDK_DIR}\\Include\"")
     check_include_file(d3d9.h HAVE_D3D_H)
+    check_include_file(d3d11_1.h HAVE_D3D11_H)
     check_include_file(ddraw.h HAVE_DDRAW_H)
     check_include_file(dsound.h HAVE_DSOUND_H)
     check_include_file(dinput.h HAVE_DINPUT_H)
     check_include_file(xaudio2.h HAVE_XAUDIO2_H)
-    if(HAVE_D3D_H OR HAVE_DDRAW_H OR HAVE_DSOUND_H OR HAVE_DINPUT_H OR HAVE_XAUDIO2_H)
+    if(HAVE_D3D_H OR HAVE_D3D11_H OR HAVE_DDRAW_H OR HAVE_DSOUND_H OR HAVE_DINPUT_H OR HAVE_XAUDIO2_H)
       set(HAVE_DIRECTX TRUE)
       # TODO: change $ENV{DXSDL_DIR} to get the path from the include checks
       link_directories($ENV{DXSDK_DIR}\\lib\\${PROCESSOR_ARCH})
@@ -840,6 +848,10 @@ elseif(WINDOWS)
 
     if(RENDER_D3D AND HAVE_D3D_H)
       set(SDL_VIDEO_RENDER_D3D 1)
+      set(HAVE_RENDER_D3D TRUE)
+    endif()
+    if(RENDER_D3D AND HAVE_D3D11_H)
+      set(SDL_VIDEO_RENDER_D3D11 1)
       set(HAVE_RENDER_D3D TRUE)
     endif()
     set(HAVE_SDL_VIDEO TRUE)
@@ -1142,7 +1154,7 @@ set(EXTRA_CFLAGS ${_EXTRA_CFLAGS})
 # Compat helpers for the configuration files
 if(NOT WINDOWS OR CYGWIN)
   # TODO: we need a Windows script, too
-  #execute_process(COMMAND sh ${SDL2_SOURCE_DIR}/build-scripts/updaterev.sh)
+  execute_process(COMMAND sh ${SDL2_SOURCE_DIR}/build-scripts/updaterev.sh)
 
   set(prefix ${CMAKE_INSTALL_PREFIX})
   set(exec_prefix "\${prefix}")
@@ -1173,9 +1185,14 @@ if(NOT WINDOWS OR CYGWIN)
   listtostr(SDL_LIBS _SDL_LIBS)
   set(SDL_LIBS ${_SDL_LIBS})
 
-  MESSAGE(STATUS "SDL_LIBS: ${SDL_LIBS}")
-  MESSAGE(STATUS "SDL_STATIC_LIBS: ${SDL_STATIC_LIBS}")
-
+  configure_file("${SDL2_SOURCE_DIR}/sdl2.pc.in"
+    "${SDL2_BINARY_DIR}/sdl2.pc" @ONLY)
+  configure_file("${SDL2_SOURCE_DIR}/sdl2-config.in"
+    "${SDL2_BINARY_DIR}/sdl2-config")
+  configure_file("${SDL2_SOURCE_DIR}/sdl2-config.in"
+    "${SDL2_BINARY_DIR}/sdl2-config" @ONLY)
+  configure_file("${SDL2_SOURCE_DIR}/SDL2.spec.in"
+    "${SDL2_BINARY_DIR}/SDL2.spec" @ONLY)
 endif()
 
 ##### Info output #####
@@ -1257,4 +1274,41 @@ if(SDL_STATIC)
   target_link_libraries(SDL2-static ${EXTRA_LIBS} ${EXTRA_LDFLAGS})
 endif()
 
+##### Installation targets #####
+#install(TARGETS ${_INSTALL_LIBS}
+#  LIBRARY DESTINATION "lib${LIB_SUFFIX}"
+#  ARCHIVE DESTINATION "lib${LIB_SUFFIX}")
+
+#file(GLOB INCLUDE_FILES ${SDL2_SOURCE_DIR}/include/*.h)
+#file(GLOB BIN_INCLUDE_FILES ${SDL2_BINARY_DIR}/include/*.h)
+#foreach(_FNAME ${BIN_INCLUDE_FILES})
+#  get_filename_component(_INCNAME ${_FNAME} NAME)
+#  list(REMOVE_ITEM INCLUDE_FILES ${SDL2_SOURCE_DIR}/include/${_INCNAME})
+#endforeach()
+#list(APPEND INCLUDE_FILES ${BIN_INCLUDE_FILES})
+#install(FILES ${INCLUDE_FILES} DESTINATION include/SDL2)
+
+#if(NOT WINDOWS OR CYGWIN)
+  #if(SDL_SHARED)
+    #install(CODE "
+      #execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
+      #\"libSDL2-2.0.so\" \"libSDL2.so\")")
+    #install(FILES ${SDL2_BINARY_DIR}/libSDL2.so DESTINATION "lib${LIB_SUFFIX}")
+ # endif()
+  #if(FREEBSD)
+    # FreeBSD uses ${PREFIX}/libdata/pkgconfig
+    #install(FILES ${SDL2_BINARY_DIR}/sdl2.pc DESTINATION "libdata/pkgconfig")
+  #else(FREEBSD)
+    #install(FILES ${SDL2_BINARY_DIR}/sdl2.pc
+     # DESTINATION "lib${LIB_SUFFIX}/pkgconfig")
+  #endif()
+  #install(PROGRAMS ${SDL2_BINARY_DIR}/sdl2-config DESTINATION bin)
+  # TODO: what about the .spec file? Is it only needed for RPM creation?
+  #install(FILES "${SDL2_SOURCE_DIR}/sdl2.m4" DESTINATION "share/aclocal")
+#else()
+  #install(TARGETS SDL2 RUNTIME DESTINATION bin)
+#endif()
+
+IF(NOT ANDROID)
 INSTALL(TARGETS SDL2 DESTINATION ${MARATIS_INSTALL_DIR})
+ENDIF()

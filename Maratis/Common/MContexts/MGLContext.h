@@ -30,7 +30,7 @@
 //========================================================================
 
 
-#ifndef _M_GL_CONTEXT_H
+#if !defined(_M_GL_CONTEXT_H) && !defined(USE_GLES)
 #define _M_GL_CONTEXT_H
 
 #include <MCore.h>
@@ -262,6 +262,9 @@ public:
 	void enableBlending(void);
 	void disableBlending(void);
 	void setBlendingMode(M_BLENDING_MODES mode);
+
+    // point size
+    void setPointSize(float size);
 };
 
 #endif

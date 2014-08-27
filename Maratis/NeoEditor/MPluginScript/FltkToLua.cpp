@@ -335,11 +335,29 @@ int Fl_InputValue()
 	return 1;
 }
 
+// FIXME: Global variable!
+extern Fl_Text_Buffer pluginOutput;
+
+int debugLog()
+{
+    MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+
+    if (script->getArgsNumber() < 1)
+        return 0;
+
+    string output = script->getName() + ": " + script->getString(0);
+    pluginOutput.append(("[ Info ] " + output).c_str());
+    MLOG_INFO(output.c_str());
+
+    return 1;
+}
+
 void createFltkLuaBindings(MScript* script)
 {
     if(!script)
         return;
 
+    script->addFunction("debugLog", debugLog);
     script->addFunction("messagebox", messagebox);
     script->addFunction("addEditorMenu", addEditorMenu);
     script->addFunction("openFileDlg", openFileDlg);

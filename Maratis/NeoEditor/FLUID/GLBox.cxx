@@ -46,7 +46,7 @@ void update_editor(void*)
         vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
         vue->updateMatrix();
 
-        window.glbox->redraw();
+        //window.glbox->redraw();
     }
     else if(input->isKeyPressed("S"))
     {
@@ -61,7 +61,7 @@ void update_editor(void*)
         vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
         vue->updateMatrix();
 
-        window.glbox->redraw();
+        //window.glbox->redraw();
     }
 
     if(input->isKeyPressed("A"))
@@ -72,7 +72,7 @@ void update_editor(void*)
         vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(direction*translation_speed,0,0)));
         vue->updateMatrix();
 
-        window.glbox->redraw();
+        //window.glbox->redraw();
     }
     else if(input->isKeyPressed("D"))
     {
@@ -82,7 +82,7 @@ void update_editor(void*)
         vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(direction*translation_speed,0,0)));
         vue->updateMatrix();
 
-        window.glbox->redraw();
+        //window.glbox->redraw();
     }
 
     if(input->isKeyPressed("E"))
@@ -91,7 +91,7 @@ void update_editor(void*)
         vue->setPosition(vue->getPosition()+vue->getRotatedVector(MVector3(0,translation_speed, 0)));
         vue->updateMatrix();
 
-        window.glbox->redraw();
+        //window.glbox->redraw();
     }
     else if(input->isKeyPressed("C"))
     {
@@ -99,7 +99,7 @@ void update_editor(void*)
         vue->setPosition(vue->getPosition()+vue->getRotatedVector(MVector3(0,-translation_speed, 0)));
         vue->updateMatrix();
 
-        window.glbox->redraw();
+        //window.glbox->redraw();
     }
 
     if(Maratis::getInstance()->hasTitleChanged())
@@ -129,6 +129,9 @@ void update_editor(void*)
 		scene->getObjectByIndex(i)->updateMatrix();
 	}
 
+    window.glbox->redraw();
+    Maratis::getInstance()->logicLoop();
+
     Fl::add_timeout(0.01, update_editor);
 }
 
@@ -136,8 +139,10 @@ void GLBox::draw()
 {
     if(!maratis_init)
     {
-        MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
         Maratis* maratis = Maratis::getInstance();
+        maratis->initRenderer();
+
+        MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
         if(!current_project.file_path.empty())
         {

@@ -42,7 +42,7 @@ m_components(0)
 
 MImage::~MImage(void)
 {
-    SAFE_FREE(m_data);
+    SAFE_DELETE(m_data);
 }
 
 void MImage::clear(void * color)
@@ -80,12 +80,14 @@ void MImage::clear(void * color)
 				((float *)m_data)[i+c] = ((float *)color)[c];
 		}
 		break;
+
+    default: break;
 	}
 }
 
 void MImage::create(M_TYPES dataType, unsigned int width, unsigned int height, unsigned int components)
 {
-	SAFE_FREE(m_data);
+    SAFE_DELETE(m_data);
 
     m_width = width;
     m_height = height;
@@ -138,6 +140,8 @@ void MImage::writePixel(unsigned int x, unsigned int y, void * color)
 		for(c=0; c<m_components; c++)
 			((float *)m_data)[pixelId+c] = ((float *)color)[c];
 		break;
+
+    default: break;
 	}
 }
 
@@ -164,5 +168,7 @@ void MImage::readPixel(unsigned int x, unsigned int y, void * color)
 		for(c=0; c<m_components; c++)
 			((float *)color)[c] = ((float *)m_data)[pixelId+c];
 		break;
+
+    default: break;
 	}
 }

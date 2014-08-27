@@ -195,6 +195,11 @@ void writeCameraProperties(MFile * file, MOCamera * camera)
 	// fogDistance
 	M_fprintf(file, "\t\t\t\t");
 	writeFloat(file, "fogDistance", camera->getFogDistance());
+    M_fprintf(file, "\n");
+
+    // skyboxTextures
+    M_fprintf(file, "\t\t\t\t");
+    writeString(file, "skyboxTextures", camera->getSkybox()->getPath());
 
 	closeAttributeNode(file);
 	M_fprintf(file, "\n");
@@ -208,10 +213,15 @@ void writeEntityProperties(MFile * file, MOEntity * entity)
 	// invisible
 	M_fprintf(file, "\t\t\t\t");
 	writeBool(file, "invisible", entity->isInvisible());
+    M_fprintf(file, "\n");
 
 	// shadow
 	M_fprintf(file, "\t\t\t\t");
 	writeBool(file, "shadow", entity->hasShadow());
+    M_fprintf(file, "\n");
+
+    M_fprintf(file, "\t\t\t\t");
+    writeBool(file, "occluder", entity->isOccluder());
 
 	closeAttributeNode(file);
 	M_fprintf(file, "\n");

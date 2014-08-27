@@ -196,6 +196,8 @@ void MOText::updateLinesOffset(void)
 		boxMin->x -= globalOffset*0.5f;
 		boxMax->x -= globalOffset*0.5f;
 		break;
+
+    default: break;
 	}
 }
 

@@ -475,6 +475,9 @@ public:
 	virtual void enableBlending(void) = 0;
 	virtual void disableBlending(void) = 0;
 	virtual void setBlendingMode(M_BLENDING_MODES mode) = 0;
+
+    // point size
+    virtual void setPointSize(float size) = 0;
 };
 
 #endif

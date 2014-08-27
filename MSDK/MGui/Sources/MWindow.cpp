@@ -28,13 +28,27 @@
 //
 //========================================================================
 
+#ifndef ANDROID
 
 #include <MMouse.h>
 #include <MKeyboard.h>
 #include <MWindow.h>
 
 #include <SDL.h>
+
+#ifndef USE_GLES
 #include <SDL_opengl.h>
+#else
+#ifdef __APPLE__
+#include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES2/glext.h>
+#endif
+
+#ifdef __ANDROID__
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
+#endif
+#endif
 
 #include <stdio.h>
 #include <string.h>
@@ -747,3 +761,4 @@ int MWindow::removeGameController(int id)
 
 	return -1;
 }
+#endif

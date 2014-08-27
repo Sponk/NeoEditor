@@ -55,6 +55,7 @@
 #include <MBehaviors/MBLookAt.h>
 #include <MBehaviors/MBFollow.h>
 #include <MBehaviors/MBLua.h>
+#include <MBehaviors/MBParticleSystem.h>
 #include <MScript/MScript.h>
 #include <MInput/MInput.h>
 #include <MFileManager/MLevelLoad.h>
@@ -206,7 +207,6 @@ m_renderer(NULL)
     // MEngine
     {
         m_soundContext = new MALContext();
-        m_render = new MGLContext();
         m_physics = new MBulletContext();
         m_script = new MScript();
         m_input = new MInput();
@@ -249,6 +249,14 @@ Maratis::~Maratis(void)
     SAFE_DELETE(m_packageManager);
 }
 
+void Maratis::initRenderer()
+{
+    if(m_render) return;
+    m_render = new MGLContext();
+
+    MEngine::getInstance()->setRenderingContext(m_render);
+}
+
 void Maratis::publish(void)
 {
     if(strcmp(m_currentProject, "") != 0)
@@ -264,7 +272,7 @@ void Maratis::changeRenderer(const char * name)
     MRendererManager * rendererManager = engine->getRendererManager();
 
     MRendererCreator * renderer = rendererManager->getRendererByName(name);
-    if(renderer)
+    if(renderer && strcmp(engine->getRenderer()->getName(), name) != 0)
     {
         if(m_renderer)
             m_renderer->destroy();
@@ -443,6 +451,7 @@ void Maratis::start(void)
         engine->getBehaviorManager()->addBehavior(MBLookAt::getStaticName(), M_OBJECT3D, MBLookAt::getNew);
         engine->getBehaviorManager()->addBehavior(MBFollow::getStaticName(), M_OBJECT3D, MBFollow::getNew);
 		engine->getBehaviorManager()->addBehavior(MBLua::getStaticName(), M_OBJECT3D, MBLua::getNew);
+        engine->getBehaviorManager()->addBehavior(MBParticleSystem::getStaticName(), M_OBJECT3D, MBParticleSystem::getNew);
 
         // add renderers
         if(GLversion >= 2)
@@ -641,15 +650,17 @@ void Maratis::duplicateSelectedObjects(void)
     MOSound * sound;
     MOText * text;
     MObject3d * object;
+    char name[256];
     for(i=0; i<oSize; i++)
     {
         object = m_selectedObjects[i];
+        strcpy(name, object->getName());
+
         switch(object->getType())
         {
             case M_OBJECT3D_ENTITY:
             {
-                char name[256] = "Entity0";
-                getNewObjectName("Entity", name);
+                getNewObjectName(object->getName(), name);
 
                 entity = scene->addNewEntity(*(MOEntity *)object);
                 entity->setName(name);
@@ -657,8 +668,7 @@ void Maratis::duplicateSelectedObjects(void)
                 break;
             case M_OBJECT3D_LIGHT:
             {
-                char name[256] = "Light0";
-                getNewObjectName("Light", name);
+                getNewObjectName(object->getName(), name);
 
                 light = scene->addNewLight(*(MOLight *)object);
                 light->setName(name);
@@ -666,8 +676,7 @@ void Maratis::duplicateSelectedObjects(void)
                 break;
             case M_OBJECT3D_CAMERA:
             {
-                char name[256] = "Camera0";
-                getNewObjectName("Camera", name);
+                getNewObjectName(object->getName(), name);
 
                 camera = scene->addNewCamera(*(MOCamera *)object);
                 camera->setName(name);
@@ -675,8 +684,7 @@ void Maratis::duplicateSelectedObjects(void)
                 break;
             case M_OBJECT3D_SOUND:
             {
-                char name[256] = "Sound0";
-                getNewObjectName("Sound", name);
+                getNewObjectName(object->getName(), name);
 
                 sound = scene->addNewSound(*(MOSound *)object);
                 sound->setName(name);
@@ -684,9 +692,7 @@ void Maratis::duplicateSelectedObjects(void)
                 break;
             case M_OBJECT3D_TEXT:
             {
-                char name[256] = "Text0";
-                getNewObjectName("Text", name);
-
+                getNewObjectName(object->getName(), name);
                 text = scene->addNewText(*(MOText *)object);
                 text->setName(name);
             }
@@ -3992,7 +3998,7 @@ void Maratis::drawMainView(MScene * scene)
 
     // get camera
     MOCamera * camera = getPerspectiveVue();
-    MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();;
+    MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();
 
     // clear z buffer
     render->enableDepthTest();
@@ -4002,9 +4008,10 @@ void Maratis::drawMainView(MScene * scene)
     camera->enable();
     //drawGrid(scene);
 
-    render->enableDepthTest();
     scene->draw(camera);
     scene->drawObjectsBehaviors();
+
+    camera->enable();
 
     // draw extra (box, triggers...)
     render->disableLighting();
@@ -4268,7 +4275,6 @@ void Maratis::drawMainView(MScene * scene)
         }
     }
     render->enableDepthTest();
-
 
     // draw selected objects
     if((! mouse->isLeftButtonPushed()) || (m_currentAxis == M_AXIS_NONE))

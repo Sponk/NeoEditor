@@ -53,6 +53,10 @@ private:
     static int setDescription();
 
 public:
+
+    MPluginScript() {}
+    ~MPluginScript() {}
+
     void runScript(const char* filename);
     void callFunction(const char* name);
     bool startCallFunction(const char *name);

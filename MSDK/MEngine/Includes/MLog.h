@@ -49,8 +49,15 @@
 */
 
 
+// Only give the filename and not the path
+#define __SFILENAME__ \
+(strrchr(__FILE__,'/') \
+? strrchr(__FILE__,'/')+1 \
+: __FILE__ \
+)
+
 // for the moment let s just simply log if the message has a severity lower than the env variable
-#define MLOG(severity, USERMESSAGE) { MLog::m_stringstream.str(std::string("")); MLog::m_stringstream<<USERMESSAGE; MLog::m_string=MLog::m_stringstream.str(); MLog::log(severity, __FUNCTION__, __FILE__, __LINE__); }
+#define MLOG(severity, USERMESSAGE) { MLog::m_stringstream.str(std::string("")); MLog::m_stringstream<<USERMESSAGE; MLog::m_string=MLog::m_stringstream.str(); MLog::log(severity, __FUNCTION__, __SFILENAME__, __LINE__); }
 
 // common helpers
 #define MLOG_ERROR(USERMESSAGE) MLOG(3, USERMESSAGE)

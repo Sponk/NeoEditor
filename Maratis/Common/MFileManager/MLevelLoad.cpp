@@ -196,6 +196,10 @@ void readEntityProperties(TiXmlElement * node, MOEntity * entity)
 	// shadow
 	if (readBool(node, "shadow", &value))
 		entity->enableShadow(value);
+
+    // occluder
+    if(readBool(node, "occluder", &value))
+        entity->enableOccluder(value);
 }
 
 void readSoundProperties(TiXmlElement * node, MOSound * sound)
@@ -299,6 +303,11 @@ void readCameraProperties(TiXmlElement * node, MOCamera * camera)
 	float fogDistance;
 	if(node->QueryFloatAttribute("fogDistance", &fogDistance) == TIXML_SUCCESS)
 		camera->setFogDistance(fogDistance);
+
+    // skyboxTextures
+    const char* skyboxTextures;
+    if((skyboxTextures = node->Attribute("skyboxTextures")) != NULL && strlen(skyboxTextures) > 0)
+        camera->loadSkybox(skyboxTextures);
 }
 
 void readLightProperties(TiXmlElement * node, MOLight * light)
