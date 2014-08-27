@@ -45,6 +45,11 @@
     #undef main
 #endif
 
+// Don't show cmd window
+#ifdef _MSC_VER
+#    pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
+#endif
+
 extern void update_scene_tree();
 extern void update_editor(void*);
 
