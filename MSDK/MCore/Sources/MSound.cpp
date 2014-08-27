@@ -40,7 +40,7 @@ m_size(0)
 
 MSound::~MSound(void)
 {
-	SAFE_FREE(m_data);
+    SAFE_DELETE(m_data);
 }
 
 void MSound::create(M_SOUND_FORMAT format, unsigned int size, unsigned int sampleRate)
@@ -48,7 +48,7 @@ void MSound::create(M_SOUND_FORMAT format, unsigned int size, unsigned int sampl
 	m_size = size;
 	m_format = format;
 	m_sampleRate = sampleRate;
-	SAFE_FREE(m_data);
+    SAFE_DELETE(m_data);
 
 	m_data = new char[m_size];
 }
