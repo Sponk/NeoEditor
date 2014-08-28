@@ -63,10 +63,64 @@ const char* fl_native_file_chooser(const char* title, const char* files, const c
     return NULL;
 }
 
+MVector3 flColorToVector(int c)
+{
+    char unsigned bytes[4];
+    bytes[0] = (c >> 24) & 0xFF;
+    bytes[1] = (c >> 16) & 0xFF;
+    bytes[2] = (c >> 8) & 0xFF;
+    bytes[3] = c & 0xFF;
+
+    return MVector3(static_cast<float>(bytes[0])/255.0f, static_cast<float>(bytes[1])/255.0f, static_cast<float>(bytes[2])/255.0f);
+}
+
 void quit_callback(Fl_Menu_*, void*)
 {
     if(fl_ask("Do you really want to exit?"))
     {
+        // Save settings
+        #ifndef WIN32
+            std::string fullpath = getenv("HOME");
+            fullpath += "/.neoeditor/";
+        #else
+            std::string fullpath = getenv("APPDATA");
+            fullpath += "\\neoeditor\\";
+        #endif
+
+        char dir[256];
+        getGlobalFilename(dir, fullpath.c_str(), "config.ini");
+
+        if(!isFileExist(fullpath.c_str()))
+            createDirectory(fullpath.c_str());
+
+        MLOG_INFO("Saving settings to: " << dir);
+
+        ofstream out(dir);
+        if(out)
+        {
+            out << "[theme]" << endl;
+
+            out << "scheme=" << Fl::scheme() << endl;
+
+            MVector3 vector = flColorToVector(Fl::get_color(FL_BACKGROUND_COLOR));
+            out << "background_r=" << vector.x << endl;
+            out << "background_g=" << vector.y << endl;
+            out << "background_b=" << vector.z << endl;
+
+            vector = flColorToVector(Fl::get_color(FL_BACKGROUND2_COLOR));
+            out << "background2_r=" << vector.x << endl;
+            out << "background2_g=" << vector.y << endl;
+            out << "background2_b=" << vector.z << endl;
+
+            vector = flColorToVector(Fl::get_color(FL_FOREGROUND_COLOR));
+            out << "foreground_r=" << vector.x << endl;
+            out << "foreground_g=" << vector.y << endl;
+            out << "foreground_b=" << vector.z << endl;
+
+            out.close();
+        }
+
+        // Quitting engine
         MEngine::getInstance()->setActive(false);
         exit(0);
     }

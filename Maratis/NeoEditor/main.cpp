@@ -26,6 +26,7 @@
 #include <vector>
 #include <time.h>
 #include <stdio.h>
+#include <fstream>
 
 #include <MEngine.h>
 #include <MLoaders/MImageLoader.h>
@@ -38,6 +39,7 @@
 #include "FLUID/MainWindow.h"
 #include "FLUID/Callbacks.h"
 #include <FL/Fl.H>
+#include "FLUID/ini.h"
 
 #include "MPluginScript/MPluginScript.h"
 
@@ -115,6 +117,47 @@ void loadPluginsFrom(const char* src)
 	MLOG_INFO("Successfully loaded " << editorPlugins.size() << " plugins.");
 }
 
+#define STR1_TO_FLOAT(x) static_cast<float>(::atof(x.c_str()))
+
+void loadSettings(const char* path)
+{
+    std::string fullpath = path;
+
+#ifndef WIN32
+    fullpath += "/.neoeditor/";
+#else
+    fullpath += "\\neoeditor\\";
+#endif
+
+    char dir[256];
+    getGlobalFilename(dir, fullpath.c_str(), "config.ini");
+
+    if(!isFileExist(dir))
+    {
+        MLOG_INFO("Config does not exist. Using defaults.");
+        return;
+    }
+
+    MLOG_INFO("Loading config: " << dir);
+    INI::Parser parser(dir);
+
+    MVector3 vector(STR1_TO_FLOAT(parser.top()("theme")["background_r"]), STR1_TO_FLOAT(parser.top()("theme")["background_g"]), STR1_TO_FLOAT(parser.top()("theme")["background_b"]));
+    vector *= 255.0f;
+
+    Fl::background(static_cast<unsigned char>(vector.x), static_cast<unsigned char>(vector.y), static_cast<unsigned char>(vector.z));
+
+    vector = MVector3(STR1_TO_FLOAT(parser.top()("theme")["background2_r"]), STR1_TO_FLOAT(parser.top()("theme")["background2_g"]), STR1_TO_FLOAT(parser.top()("theme")["background2_b"]));
+    vector *= 255.0f;
+
+    Fl::background2(static_cast<unsigned char>(vector.x), static_cast<unsigned char>(vector.y), static_cast<unsigned char>(vector.z));
+
+    vector = MVector3(STR1_TO_FLOAT(parser.top()("theme")["foreground_r"]), STR1_TO_FLOAT(parser.top()("theme")["foreground_g"]), STR1_TO_FLOAT(parser.top()("theme")["foreground_b"]));
+    vector *= 255.0f;
+
+    Fl::foreground(static_cast<unsigned char>(vector.x), static_cast<unsigned char>(vector.y), static_cast<unsigned char>(vector.z));
+    Fl::scheme(parser.top()("theme")["scheme"].c_str());
+}
+
 // main
 int main(int argc, char **argv)
 {
@@ -155,6 +198,12 @@ int main(int argc, char **argv)
 
     // Load all plugins (TODO: Search in user home too!)
     loadPluginsFrom(rep);
+
+#ifndef WIN32
+    loadSettings(getenv("HOME"));
+#else
+    loadSettings(getenv("APPDATA"));
+#endif
 
     Fl::add_timeout(0.2, update_editor);
     Fl::run();
