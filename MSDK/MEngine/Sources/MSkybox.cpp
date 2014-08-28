@@ -29,7 +29,7 @@
 #include <MEngine.h>
 #include <string>
 
-#define SKYBOX_SIZE 1000
+#define SKYBOX_SIZE 100
 
 using namespace std;
 
@@ -154,7 +154,7 @@ void MSkybox::loadSkyboxTextures(const char *path)
     if(!strcmp(globalFilename, m_path.getSafeString()))
         return;
 
-    m_path.set(globalFilename);
+    m_path.set(path);
 
     if(!m_init)
     {

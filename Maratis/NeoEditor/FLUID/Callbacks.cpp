@@ -815,10 +815,10 @@ void scene_tree_callback(Fl_Tree* tree, void*)
         window.camera_clipping_far_edit->value(camera->getClippingFar());
 
         window.camera_fog_distance_edit->value(camera->getFogDistance());
-        window.camera_skybox_edit->value(camera->getSkybox()->getPath());
 
         if(update_name)
         {
+            window.camera_skybox_edit->value(camera->getSkybox()->getPath());
             window.camera_ortho_button->value(camera->isOrtho());
             window.camera_fog_button->value(camera->hasFog());
         }
