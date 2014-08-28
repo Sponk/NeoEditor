@@ -98,6 +98,12 @@ void quit_callback(Fl_Menu_*, void*)
         ofstream out(dir);
         if(out)
         {
+            if(window.inputMethod != NULL)
+            {
+                out << "[input]" << endl;
+                out << "inputMethod=" << window.inputMethod->getName() << endl;
+            }
+
             out << "[theme]" << endl;
 
             out << "scheme=" << Fl::scheme() << endl;

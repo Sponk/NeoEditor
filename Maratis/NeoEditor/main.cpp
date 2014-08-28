@@ -156,6 +156,16 @@ void loadSettings(const char* path)
 
     Fl::foreground(static_cast<unsigned char>(vector.x), static_cast<unsigned char>(vector.y), static_cast<unsigned char>(vector.z));
     Fl::scheme(parser.top()("theme")["scheme"].c_str());
+
+    window.inputMethod = NULL;
+    std::string inputMethod = parser.top()("input")["inputMethod"];
+    for(int i = 0; i < editorPlugins.size(); i++)
+    {
+        if(editorPlugins[i]->getName() == inputMethod)
+        {
+            window.inputMethod = editorPlugins[i];
+        }
+    }
 }
 
 // main

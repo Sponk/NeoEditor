@@ -3,6 +3,7 @@
 #ifndef MainWindow_h
 #define MainWindow_h
 #include <FL/Fl.H>
+#include "../MPluginScript/MPluginScript.h"
 #include <FL/Fl_Double_Window.H>
 extern void window_quit(Fl_Double_Window*, void*);
 #include <FL/Fl_Menu_Bar.H>
@@ -176,6 +177,7 @@ public:
   std::string scene_name; 
   Fl_Double_Window* create_scene_window();
   Fl_Input *scene_name_input;
+  MPluginScript* inputMethod; 
 };
 
 class SceneSetupDlg {
@@ -291,9 +293,11 @@ public:
   Fl_Value_Input *foreground_color_r;
   Fl_Value_Input *foreground_color_g;
   Fl_Value_Input *foreground_color_b;
+  Fl_Choice *input_methods_choice;
   static void choose_background_color(Fl_Button*, ConfigurationDlg* dlg);
   static void choose_background2_color(Fl_Button*,ConfigurationDlg* dlg);
   static void choose_foreground_color(Fl_Button*,ConfigurationDlg* dlg);
   static void apply_settings_callback(Fl_Button*,ConfigurationDlg* dlg);
+  static void setInputMethod(Fl_Menu_*, long idx);
 };
 #endif

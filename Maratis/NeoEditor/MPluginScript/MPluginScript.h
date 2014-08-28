@@ -46,11 +46,15 @@ private:
     std::string m_license;
     std::string m_description;
 
+    std::string m_inputUpdate;
+    bool m_hasInputMethod;
+
     static int setName();
     static int setAuthor();
     static int setContact();
     static int setLicense();
     static int setDescription();
+    static int enableInputMethod();
 
 public:
 
@@ -67,6 +71,11 @@ public:
     std::string getLicense() { return m_license; }
     std::string getDescription() { return m_description; }
     std::string getName() { return m_name; }
+
+    bool hasInputMethod() { return m_hasInputMethod; }
+    void enableInputMethod(bool value) { m_hasInputMethod = value; }
+
+    std::string getInputUpdate() { return m_inputUpdate; };
 
     void setId(int id) {this->id = id; }
     int getId() { return id; }

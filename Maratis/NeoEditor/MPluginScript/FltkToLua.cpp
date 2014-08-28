@@ -335,6 +335,30 @@ int Fl_InputValue()
 	return 1;
 }
 
+int getPerspectiveVue()
+{
+    MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+
+    script->pushInteger((long int) Maratis::getInstance()->getPerspectiveVue());
+    return 1;
+}
+
+int getTranslationSpeed()
+{
+    MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+
+    script->pushFloat(translation_speed);
+    return 1;
+}
+
+int getRotationSpeed()
+{
+    MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+
+    script->pushFloat(rotation_speed);
+    return 1;
+}
+
 // FIXME: Global variable!
 extern Fl_Text_Buffer pluginOutput;
 
@@ -366,6 +390,7 @@ void createFltkLuaBindings(MScript* script)
     script->addFunction("getProjectDir", getProjectDir);
     script->addFunction("getSelectionCenter", getSelectionCenter);
     script->addFunction("updateEditorView", updateEditorView);
+    script->addFunction("getPerspectiveVue", getPerspectiveVue);
 
 	script->addFunction("Fl_CreateWindow", Fl_CreateWindow);
 	script->addFunction("Fl_Show", Fl_Show);

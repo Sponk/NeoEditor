@@ -29,77 +29,84 @@ void update_editor(void*)
     if(!window.glbox->maratis_init)
         return;
 
-    MInputContext* input = MEngine::getInstance()->getInputContext();
-
-    if(input->isKeyPressed("W"))
+    if(window.inputMethod == NULL)
     {
-        int direction = -1;
+        MInputContext* input = MEngine::getInstance()->getInputContext();
 
-        MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
-
-        if(vue->isOrtho())
+        if(input->isKeyPressed("W"))
         {
-            vue->setFov(vue->getFov() + direction*translation_speed);
+            int direction = -1;
+
+            MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+
+            if(vue->isOrtho())
+            {
+                vue->setFov(vue->getFov() + direction*translation_speed);
+            }
+
+
+            vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
+            vue->updateMatrix();
+
+            //window.glbox->redraw();
+        }
+        else if(input->isKeyPressed("S"))
+        {
+            int direction = 1;
+
+            MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+            if(vue->isOrtho())
+            {
+                vue->setFov(vue->getFov() + direction*translation_speed);
+            }
+
+            vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
+            vue->updateMatrix();
+
+            //window.glbox->redraw();
         }
 
-
-        vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
-        vue->updateMatrix();
-
-        //window.glbox->redraw();
-    }
-    else if(input->isKeyPressed("S"))
-    {
-        int direction = 1;
-
-        MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
-        if(vue->isOrtho())
+        if(input->isKeyPressed("A"))
         {
-            vue->setFov(vue->getFov() + direction*translation_speed);
+            int direction = -1;
+
+            MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+            vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(direction*translation_speed,0,0)));
+            vue->updateMatrix();
+
+            //window.glbox->redraw();
+        }
+        else if(input->isKeyPressed("D"))
+        {
+            int direction = 1;
+
+            MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+            vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(direction*translation_speed,0,0)));
+            vue->updateMatrix();
+
+            //window.glbox->redraw();
         }
 
-        vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
-        vue->updateMatrix();
+        if(input->isKeyPressed("E"))
+        {
+            MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+            vue->setPosition(vue->getPosition()+vue->getRotatedVector(MVector3(0,translation_speed, 0)));
+            vue->updateMatrix();
 
-        //window.glbox->redraw();
+            //window.glbox->redraw();
+        }
+        else if(input->isKeyPressed("C"))
+        {
+            MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+            vue->setPosition(vue->getPosition()+vue->getRotatedVector(MVector3(0,-translation_speed, 0)));
+            vue->updateMatrix();
+
+            //window.glbox->redraw();
+        }
     }
-
-    if(input->isKeyPressed("A"))
+    else
     {
-        int direction = -1;
-
-        MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
-        vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(direction*translation_speed,0,0)));
-        vue->updateMatrix();
-
-        //window.glbox->redraw();
-    }
-    else if(input->isKeyPressed("D"))
-    {
-        int direction = 1;
-
-        MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
-        vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(direction*translation_speed,0,0)));
-        vue->updateMatrix();
-
-        //window.glbox->redraw();
-    }
-
-    if(input->isKeyPressed("E"))
-    {
-        MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
-        vue->setPosition(vue->getPosition()+vue->getRotatedVector(MVector3(0,translation_speed, 0)));
-        vue->updateMatrix();
-
-        //window.glbox->redraw();
-    }
-    else if(input->isKeyPressed("C"))
-    {
-        MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
-        vue->setPosition(vue->getPosition()+vue->getRotatedVector(MVector3(0,-translation_speed, 0)));
-        vue->updateMatrix();
-
-        //window.glbox->redraw();
+        window.inputMethod->callFunction(window.inputMethod->getInputUpdate().c_str());
     }
 
     if(Maratis::getInstance()->hasTitleChanged())

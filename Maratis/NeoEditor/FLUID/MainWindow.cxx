@@ -4510,6 +4510,7 @@ Fl_Double_Window* ConfigurationDlg::create_window() {
     o->user_data((void*)(this));
     { Fl_Tabs* o = new Fl_Tabs(0, 3, 546, 342);
       { Fl_Group* o = new Fl_Group(3, 27, 543, 318, "Theme");
+        o->hide();
         { theme_chooser = new Fl_Choice(72, 39, 138, 27, "Themes:");
           theme_chooser->down_box(FL_BORDER_BOX);
           theme_chooser->menu(menu_theme_chooser);
@@ -4585,8 +4586,10 @@ Fl_Double_Window* ConfigurationDlg::create_window() {
         } // Fl_Button* o
         o->end();
       } // Fl_Group* o
-      { Fl_Group* o = new Fl_Group(24, 27, 522, 318, "Input");
-        o->hide();
+      { Fl_Group* o = new Fl_Group(0, 27, 546, 318, "Input");
+        { input_methods_choice = new Fl_Choice(117, 36, 147, 27, "Input Methods:");
+          input_methods_choice->down_box(FL_BORDER_BOX);
+        } // Fl_Choice* input_methods_choice
         o->end();
       } // Fl_Group* o
       { Fl_Group* o = new Fl_Group(24, 27, 522, 318, "Plugins");
@@ -4641,6 +4644,22 @@ Fl_Double_Window* ConfigurationDlg::create_window() {
   		break;	
   	}
   }
+  
+  extern std::vector<MPluginScript*> editorPlugins;
+  
+  for(int i = 0; i < editorPlugins.size(); i++)
+  {
+  	input_methods_choice->add("Native", 0, (Fl_Callback*) ConfigurationDlg::setInputMethod, (void*) -1);
+  	input_methods_choice->value(0);	
+  	
+  	if(editorPlugins[i]->hasInputMethod())
+  	{
+  		input_methods_choice->add(editorPlugins[i]->getName().c_str(),0, (Fl_Callback*) ConfigurationDlg::setInputMethod, (void*) i);
+  		
+  		if(window.inputMethod != NULL && editorPlugins[i]->getName() == window.inputMethod->getName())
+  			input_methods_choice->value(i+1);
+  	}
+  }
   return w;
 }
 
@@ -4691,4 +4710,15 @@ void ConfigurationDlg::apply_settings_callback(Fl_Button*,ConfigurationDlg* dlg)
   // FIXME: UGLY!!
   dlg->foreground_color_b->parent()->parent()->parent()->parent()->redraw();
   main_window->redraw();
+}
+
+void ConfigurationDlg::setInputMethod(Fl_Menu_*, long idx) {
+  if(idx == -1)
+  {
+  	window.inputMethod = NULL;
+  	return;
+  }
+  
+  extern std::vector<MPluginScript*> editorPlugins;
+  window.inputMethod = editorPlugins[idx];
 }
