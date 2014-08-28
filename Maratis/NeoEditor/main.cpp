@@ -27,6 +27,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <fstream>
+#include "FLUID/ini.h"
 
 #include <MEngine.h>
 #include <MLoaders/MImageLoader.h>
@@ -39,7 +40,6 @@
 #include "FLUID/MainWindow.h"
 #include "FLUID/Callbacks.h"
 #include <FL/Fl.H>
-#include "FLUID/ini.h"
 
 #include "MPluginScript/MPluginScript.h"
 
