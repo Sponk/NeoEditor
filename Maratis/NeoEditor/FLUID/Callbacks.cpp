@@ -1846,3 +1846,15 @@ void plugin_console_callback(Fl_Menu_*, void*)
 
     pluginConsole.output_edit->buffer(&pluginOutput);
 }
+
+void configuration_callback(Fl_Menu_*, void*)
+{
+    ConfigurationDlg dlg;
+    Fl_Window* win = dlg.create_window();
+
+    win->show();
+    while(win->shown())
+        Fl::wait();
+
+    delete win;
+}

@@ -28,7 +28,8 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
  {"Duplicate object", 0x40064,  (Fl_Callback*)duplicate_object_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {"Delete object", 0xffff,  (Fl_Callback*)delete_object_callback, 0, 128, FL_NORMAL_LABEL, 0, 14, 0},
  {"Scene setup", 0,  (Fl_Callback*)scene_setup_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
- {"Delete current scene", 0,  (Fl_Callback*)delete_scene_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Delete current scene", 0,  (Fl_Callback*)delete_scene_callback, 0, 128, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Configuration", 0,  (Fl_Callback*)configuration_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0},
  {"Project", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
  {"Run Game", 0xffc2,  (Fl_Callback*)play_game_callback, 0, 128, FL_NORMAL_LABEL, 0, 14, 0},
@@ -56,7 +57,7 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
  {0,0,0,0,0,0,0,0,0},
  {0,0,0,0,0,0,0,0,0}
 };
-Fl_Menu_Item* EditorWindow::behavior_menu = EditorWindow::menu_menu_bar + 36;
+Fl_Menu_Item* EditorWindow::behavior_menu = EditorWindow::menu_menu_bar + 37;
 
 Fl_Menu_Item EditorWindow::menu_View[] = {
  {"Other", 0,  (Fl_Callback*)change_vue_callback, (void*)(0), 0, FL_NORMAL_LABEL, 0, 14, 0},
@@ -4492,4 +4493,28 @@ void ConstraintPropertiesDlg::cancel_callback(Fl_Button*, ConstraintPropertiesDl
   dlg->win->hide();
   Fl::delete_widget(dlg->win);
   delete dlg;
+}
+
+Fl_Double_Window* ConfigurationDlg::create_window() {
+  Fl_Double_Window* w;
+  { Fl_Double_Window* o = new Fl_Double_Window(543, 366, "Configuration");
+    w = o;
+    o->user_data((void*)(this));
+    { Fl_Tabs* o = new Fl_Tabs(0, 3, 546, 360);
+      { Fl_Group* o = new Fl_Group(3, 27, 543, 336, "Theme");
+        o->end();
+      } // Fl_Group* o
+      { Fl_Group* o = new Fl_Group(24, 27, 522, 336, "Input");
+        o->hide();
+        o->end();
+      } // Fl_Group* o
+      { Fl_Group* o = new Fl_Group(24, 27, 522, 336, "Plugins");
+        o->hide();
+        o->end();
+      } // Fl_Group* o
+      o->end();
+    } // Fl_Tabs* o
+    o->end();
+  } // Fl_Double_Window* o
+  return w;
 }

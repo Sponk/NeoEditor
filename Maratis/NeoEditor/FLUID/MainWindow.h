@@ -20,6 +20,7 @@ extern void duplicate_object_callback(Fl_Menu_*, void*);
 extern void delete_object_callback(Fl_Menu_*, void*);
 extern void scene_setup_callback(Fl_Menu_*, void*);
 extern void delete_scene_callback(Fl_Menu_*, void*);
+extern void configuration_callback(Fl_Menu_*, void*);
 extern void play_game_callback(Fl_Menu_*, void*);
 extern void update_player_callback(Fl_Menu_*, void*);
 extern void publish_callback(Fl_Menu_*, void*);
@@ -274,5 +275,10 @@ public:
   static void enable_constraint_callback(Fl_Check_Button* button, ConstraintPropertiesDlg* dlg);
   static void close_callback(Fl_Button*, ConstraintPropertiesDlg* dlg);
   static void cancel_callback(Fl_Button*, ConstraintPropertiesDlg* dlg);
+};
+
+class ConfigurationDlg {
+public:
+  Fl_Double_Window* create_window();
 };
 #endif
