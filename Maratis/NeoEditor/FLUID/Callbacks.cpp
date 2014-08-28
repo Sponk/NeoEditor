@@ -1074,9 +1074,14 @@ void edit_light_properties_chk_btn(Fl_Check_Button * button, void *)
 {    
     MOLight* light = MEngine::getInstance()->getLevel()->getCurrentScene()->getLightByName(window.name_edit->value());
 
-    // TODO: HACK!!
     if(window.light_spot_button->value() == 1)
+    {
+        // Should 45 be the default value?
+        if(window.spot_angle_edit->value() > 90)
+            window.spot_angle_edit->value(45);
+
         light->setSpotAngle(window.spot_angle_edit->value());
+    }
     else
     {
         light->setSpotAngle(180);
