@@ -134,8 +134,8 @@ int main(int argc, char **argv)
     Fl::background(44, 43, 39);
     Fl::background2(15, 15, 13);*/
 
-    // gtk+ plastic none
-    Fl::scheme("gleam");
+    // gtk+ plastic none gleam
+    Fl::scheme("gtk+");
 
     MWindow* mwindow = MWindow::getInstance();
     mwindow->setCurrentDirectory(rep);
