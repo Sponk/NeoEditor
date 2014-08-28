@@ -27,7 +27,6 @@
 open_project_t current_project;
 bool reload_editor = false;
 
-extern Fl_Double_Window* main_window;
 extern EditorWindow window;
 
 Fl_Window* object_window;

@@ -689,9 +689,10 @@ class EditorWindow {open
       }
     }
   }
-  Function {create_camera_window()} {} {
+  Function {create_camera_window()} {open
+  } {
     Fl_Window {} {open
-      xywh {1925 203 258 660} type Double hide
+      xywh {1722 209 258 660} type Double hide
     } {
       Fl_Group {} {
         label {Clear Color:}
@@ -1064,7 +1065,8 @@ Fl::delete_widget(window);} {}
   }
 } 
 
-class MaterialEditDlg {} {
+class MaterialEditDlg {open
+} {
   decl {char object_name[256];} {private local
   }
   Function {create_window(const char* name)} {} {
@@ -1825,24 +1827,215 @@ class ConfigurationDlg {open
   } {
     Fl_Window {} {
       label Configuration open
-      xywh {1871 235 543 366} type Double visible
+      xywh {2094 371 543 348} type Double visible
     } {
       Fl_Tabs {} {open
-        xywh {0 3 546 360}
+        xywh {0 3 546 342}
       } {
         Fl_Group {} {
-          label Theme open selected
-          xywh {3 27 543 336}
-        } {}
+          label Theme open
+          xywh {3 27 543 318}
+        } {
+          Fl_Choice theme_chooser {
+            label {Themes:}
+            xywh {72 39 138 27} down_box BORDER_BOX
+          } {
+            MenuItem {} {
+              label {gtk+}
+              xywh {0 0 100 20} labelsize 14
+            }
+            MenuItem {} {
+              label gleam
+              xywh {0 0 100 20} labelsize 14
+            }
+            MenuItem {} {
+              label plastic
+              xywh {0 0 100 20} labelsize 14
+            }
+            MenuItem {} {
+              label none
+              xywh {0 0 100 20} labelsize 14
+            }
+          }
+          Fl_Group {} {
+            label {Background Color:} open
+            xywh {12 98 198 76} box ENGRAVED_FRAME align 5
+          } {
+            Fl_Value_Input background_color_r {
+              label {Red:}
+              xywh {17 118 45 21} align 5 step 0.1
+            }
+            Fl_Value_Input background_color_g {
+              label {Green:}
+              xywh {68 118 45 21} align 5 step 0.1
+            }
+            Fl_Value_Input background_color_b {
+              label {Blue:}
+              xywh {120 118 45 21} align 5 step 0.1
+            }
+            Fl_Button {} {
+              label {Choose color}
+              user_data this user_data_type {ConfigurationDlg*}
+              callback choose_background_color
+              xywh {18 142 96 26} labeltype ENGRAVED_LABEL labelsize 11
+            }
+          }
+          Fl_Group {} {
+            label {Background Color 2:} open
+            xywh {234 98 198 76} box ENGRAVED_FRAME align 5
+          } {
+            Fl_Value_Input background2_color_r {
+              label {Red:}
+              xywh {239 118 45 21} align 5 step 0.1
+            }
+            Fl_Value_Input background2_color_g {
+              label {Green:}
+              xywh {290 118 45 21} align 5 step 0.1
+            }
+            Fl_Value_Input background2_color_b {
+              label {Blue:}
+              xywh {344 118 45 21} align 5 step 0.1
+            }
+            Fl_Button {} {
+              label {Choose color}
+              user_data this user_data_type {ConfigurationDlg*}
+              callback choose_background2_color
+              xywh {239 142 96 26} labeltype ENGRAVED_LABEL labelsize 11
+            }
+          }
+          Fl_Group {} {
+            label {Foreground Color:} open
+            xywh {12 206 198 76} box ENGRAVED_FRAME align 5
+          } {
+            Fl_Value_Input foreground_color_r {
+              label {Red:}
+              xywh {17 226 45 21} align 5 step 0.1
+            }
+            Fl_Value_Input foreground_color_g {
+              label {Green:}
+              xywh {68 226 45 21} align 5 step 0.1
+            }
+            Fl_Value_Input foreground_color_b {
+              label {Blue:}
+              xywh {122 226 45 21} align 5 step 0.1
+            }
+            Fl_Button {} {
+              label {Choose color}
+              user_data this user_data_type {ConfigurationDlg*}
+              callback choose_foreground_color
+              xywh {17 250 96 26} labeltype ENGRAVED_LABEL labelsize 11
+            }
+          }
+          Fl_Button {} {
+            label Apply
+            user_data this user_data_type {ConfigurationDlg*}
+            callback apply_settings_callback
+            xywh {12 303 198 27}
+          }
+        }
         Fl_Group {} {
           label Input open
-          xywh {24 27 522 336} hide
+          xywh {24 27 522 318} hide
         } {}
         Fl_Group {} {
           label Plugins open
-          xywh {24 27 522 336} hide
+          xywh {24 27 522 318} hide
         } {}
       }
+    }
+    code {// Init
+  Fl_Color c = Fl::get_color(FL_BACKGROUND_COLOR);
+
+  char unsigned bytes[4];
+  bytes[0] = (c >> 24) & 0xFF;
+  bytes[1] = (c >> 16) & 0xFF;
+  bytes[2] = (c >> 8) & 0xFF;
+  bytes[3] = c & 0xFF;
+
+  background_color_r->value(static_cast<float>(bytes[0])/255.0f);
+  background_color_g->value(static_cast<float>(bytes[1])/255.0f);
+  background_color_b->value(static_cast<float>(bytes[2])/255.0f);
+
+
+  c = Fl::get_color(FL_BACKGROUND2_COLOR);
+  bytes[0] = (c >> 24) & 0xFF;
+  bytes[1] = (c >> 16) & 0xFF;
+  bytes[2] = (c >> 8) & 0xFF;
+  bytes[3] = c & 0xFF;
+
+  background2_color_r->value(static_cast<float>(bytes[0])/255.0f);
+  background2_color_g->value(static_cast<float>(bytes[1])/255.0f);
+  background2_color_b->value(static_cast<float>(bytes[2])/255.0f);
+
+  c = Fl::get_color(FL_FOREGROUND_COLOR);
+  bytes[0] = (c >> 24) & 0xFF;
+  bytes[1] = (c >> 16) & 0xFF;
+  bytes[2] = (c >> 8) & 0xFF;
+  bytes[3] = c & 0xFF;
+
+  foreground_color_r->value(static_cast<float>(bytes[0])/255.0f);
+  foreground_color_g->value(static_cast<float>(bytes[1])/255.0f);
+  foreground_color_b->value(static_cast<float>(bytes[2])/255.0f);
+  
+const char* themes[] = {"gtk+", "gleam", "plastic", "none"};
+
+for(int i = 0; i < 4; i++)
+{
+	if(!strcmp(themes[i], Fl::scheme()))
+	{
+		theme_chooser->value(i);
+		break;	
+	}
+}} {}
+  }
+  Function {choose_background_color(Fl_Button*, ConfigurationDlg* dlg)} {open return_type {static void}
+  } {
+    code {double r = dlg->background_color_r->value();
+double g = dlg->background_color_g->value();
+double b = dlg->background_color_b->value();
+
+fl_color_chooser("Choose a color", r, g, b);
+
+dlg->background_color_r->value(r);
+dlg->background_color_g->value(g);
+dlg->background_color_b->value(b);} {}
+  }
+  Function {choose_background2_color(Fl_Button*,ConfigurationDlg* dlg)} {open return_type {static void}
+  } {
+    code {double r = dlg->background2_color_r->value();
+double g = dlg->background2_color_g->value();
+double b = dlg->background2_color_b->value();
+
+fl_color_chooser("Choose a color", r, g, b);
+
+dlg->background2_color_r->value(r);
+dlg->background2_color_g->value(g);
+dlg->background2_color_b->value(b);} {}
+  }
+  Function {choose_foreground_color(Fl_Button*,ConfigurationDlg* dlg)} {open return_type {static void}
+  } {
+    code {double r = dlg->foreground_color_r->value();
+double g = dlg->foreground_color_g->value();
+double b = dlg->foreground_color_b->value();
+
+fl_color_chooser("Choose a color", r, g, b);
+
+dlg->foreground_color_r->value(r);
+dlg->foreground_color_g->value(g);
+dlg->foreground_color_b->value(b);} {}
+  }
+  Function {apply_settings_callback(Fl_Button*,ConfigurationDlg* dlg)} {open return_type {static void}
+  } {
+    code {Fl::foreground(255*dlg->foreground_color_r->value(), 255*dlg->foreground_color_g->value(), 255*dlg->foreground_color_b->value());
+Fl::background(255*dlg->background_color_r->value(), 255*dlg->background_color_g->value(), 255*dlg->background_color_b->value());
+Fl::background2(255*dlg->background2_color_r->value(), 255*dlg->background2_color_g->value(), 255*dlg->background2_color_b->value());
+
+const char* themes[] = {"gtk+", "gleam", "plastic", "none"};
+Fl::scheme(themes[dlg->theme_chooser->value()]);
+
+// FIXME: UGLY!!
+dlg->foreground_color_b->parent()->parent()->parent()->parent()->redraw();
+main_window->redraw();} {selected
     }
   }
 } 

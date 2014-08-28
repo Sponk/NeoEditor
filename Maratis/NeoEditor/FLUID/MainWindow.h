@@ -280,5 +280,20 @@ public:
 class ConfigurationDlg {
 public:
   Fl_Double_Window* create_window();
+  Fl_Choice *theme_chooser;
+  static Fl_Menu_Item menu_theme_chooser[];
+  Fl_Value_Input *background_color_r;
+  Fl_Value_Input *background_color_g;
+  Fl_Value_Input *background_color_b;
+  Fl_Value_Input *background2_color_r;
+  Fl_Value_Input *background2_color_g;
+  Fl_Value_Input *background2_color_b;
+  Fl_Value_Input *foreground_color_r;
+  Fl_Value_Input *foreground_color_g;
+  Fl_Value_Input *foreground_color_b;
+  static void choose_background_color(Fl_Button*, ConfigurationDlg* dlg);
+  static void choose_background2_color(Fl_Button*,ConfigurationDlg* dlg);
+  static void choose_foreground_color(Fl_Button*,ConfigurationDlg* dlg);
+  static void apply_settings_callback(Fl_Button*,ConfigurationDlg* dlg);
 };
 #endif

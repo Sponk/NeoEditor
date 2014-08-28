@@ -4,6 +4,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Value_Input.H>
 #include <FL/Fl_Native_File_Chooser.H>
+#include <FL/Fl_Double_Window.H>
 #include <FL/fl_message.H>
 #include <string>
 
@@ -23,6 +24,7 @@ typedef struct
 }open_project_t;
 
 extern open_project_t current_project;
+extern Fl_Double_Window* main_window;
 
 extern float rotation_speed;
 extern float translation_speed;

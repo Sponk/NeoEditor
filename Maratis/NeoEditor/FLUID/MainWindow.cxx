@@ -4495,20 +4495,101 @@ void ConstraintPropertiesDlg::cancel_callback(Fl_Button*, ConstraintPropertiesDl
   delete dlg;
 }
 
+Fl_Menu_Item ConfigurationDlg::menu_theme_chooser[] = {
+ {"gtk+", 0,  0, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"gleam", 0,  0, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"plastic", 0,  0, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"none", 0,  0, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {0,0,0,0,0,0,0,0,0}
+};
+
 Fl_Double_Window* ConfigurationDlg::create_window() {
   Fl_Double_Window* w;
-  { Fl_Double_Window* o = new Fl_Double_Window(543, 366, "Configuration");
+  { Fl_Double_Window* o = new Fl_Double_Window(543, 348, "Configuration");
     w = o;
     o->user_data((void*)(this));
-    { Fl_Tabs* o = new Fl_Tabs(0, 3, 546, 360);
-      { Fl_Group* o = new Fl_Group(3, 27, 543, 336, "Theme");
+    { Fl_Tabs* o = new Fl_Tabs(0, 3, 546, 342);
+      { Fl_Group* o = new Fl_Group(3, 27, 543, 318, "Theme");
+        { theme_chooser = new Fl_Choice(72, 39, 138, 27, "Themes:");
+          theme_chooser->down_box(FL_BORDER_BOX);
+          theme_chooser->menu(menu_theme_chooser);
+        } // Fl_Choice* theme_chooser
+        { Fl_Group* o = new Fl_Group(12, 98, 198, 76, "Background Color:");
+          o->box(FL_ENGRAVED_FRAME);
+          o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+          { background_color_r = new Fl_Value_Input(17, 118, 45, 21, "Red:");
+            background_color_r->step(0.1);
+            background_color_r->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+          } // Fl_Value_Input* background_color_r
+          { background_color_g = new Fl_Value_Input(68, 118, 45, 21, "Green:");
+            background_color_g->step(0.1);
+            background_color_g->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+          } // Fl_Value_Input* background_color_g
+          { background_color_b = new Fl_Value_Input(120, 118, 45, 21, "Blue:");
+            background_color_b->step(0.1);
+            background_color_b->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+          } // Fl_Value_Input* background_color_b
+          { Fl_Button* o = new Fl_Button(18, 142, 96, 26, "Choose color");
+            o->labeltype(FL_ENGRAVED_LABEL);
+            o->labelsize(11);
+            o->callback((Fl_Callback*)choose_background_color, (void*)(this));
+          } // Fl_Button* o
+          o->end();
+        } // Fl_Group* o
+        { Fl_Group* o = new Fl_Group(234, 98, 198, 76, "Background Color 2:");
+          o->box(FL_ENGRAVED_FRAME);
+          o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+          { background2_color_r = new Fl_Value_Input(239, 118, 45, 21, "Red:");
+            background2_color_r->step(0.1);
+            background2_color_r->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+          } // Fl_Value_Input* background2_color_r
+          { background2_color_g = new Fl_Value_Input(290, 118, 45, 21, "Green:");
+            background2_color_g->step(0.1);
+            background2_color_g->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+          } // Fl_Value_Input* background2_color_g
+          { background2_color_b = new Fl_Value_Input(344, 118, 45, 21, "Blue:");
+            background2_color_b->step(0.1);
+            background2_color_b->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+          } // Fl_Value_Input* background2_color_b
+          { Fl_Button* o = new Fl_Button(239, 142, 96, 26, "Choose color");
+            o->labeltype(FL_ENGRAVED_LABEL);
+            o->labelsize(11);
+            o->callback((Fl_Callback*)choose_background2_color, (void*)(this));
+          } // Fl_Button* o
+          o->end();
+        } // Fl_Group* o
+        { Fl_Group* o = new Fl_Group(12, 206, 198, 76, "Foreground Color:");
+          o->box(FL_ENGRAVED_FRAME);
+          o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+          { foreground_color_r = new Fl_Value_Input(17, 226, 45, 21, "Red:");
+            foreground_color_r->step(0.1);
+            foreground_color_r->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+          } // Fl_Value_Input* foreground_color_r
+          { foreground_color_g = new Fl_Value_Input(68, 226, 45, 21, "Green:");
+            foreground_color_g->step(0.1);
+            foreground_color_g->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+          } // Fl_Value_Input* foreground_color_g
+          { foreground_color_b = new Fl_Value_Input(122, 226, 45, 21, "Blue:");
+            foreground_color_b->step(0.1);
+            foreground_color_b->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+          } // Fl_Value_Input* foreground_color_b
+          { Fl_Button* o = new Fl_Button(17, 250, 96, 26, "Choose color");
+            o->labeltype(FL_ENGRAVED_LABEL);
+            o->labelsize(11);
+            o->callback((Fl_Callback*)choose_foreground_color, (void*)(this));
+          } // Fl_Button* o
+          o->end();
+        } // Fl_Group* o
+        { Fl_Button* o = new Fl_Button(12, 303, 198, 27, "Apply");
+          o->callback((Fl_Callback*)apply_settings_callback, (void*)(this));
+        } // Fl_Button* o
         o->end();
       } // Fl_Group* o
-      { Fl_Group* o = new Fl_Group(24, 27, 522, 336, "Input");
+      { Fl_Group* o = new Fl_Group(24, 27, 522, 318, "Input");
         o->hide();
         o->end();
       } // Fl_Group* o
-      { Fl_Group* o = new Fl_Group(24, 27, 522, 336, "Plugins");
+      { Fl_Group* o = new Fl_Group(24, 27, 522, 318, "Plugins");
         o->hide();
         o->end();
       } // Fl_Group* o
@@ -4516,5 +4597,98 @@ Fl_Double_Window* ConfigurationDlg::create_window() {
     } // Fl_Tabs* o
     o->end();
   } // Fl_Double_Window* o
+  // Init
+    Fl_Color c = Fl::get_color(FL_BACKGROUND_COLOR);
+  
+    char unsigned bytes[4];
+    bytes[0] = (c >> 24) & 0xFF;
+    bytes[1] = (c >> 16) & 0xFF;
+    bytes[2] = (c >> 8) & 0xFF;
+    bytes[3] = c & 0xFF;
+  
+    background_color_r->value(static_cast<float>(bytes[0])/255.0f);
+    background_color_g->value(static_cast<float>(bytes[1])/255.0f);
+    background_color_b->value(static_cast<float>(bytes[2])/255.0f);
+  
+  
+    c = Fl::get_color(FL_BACKGROUND2_COLOR);
+    bytes[0] = (c >> 24) & 0xFF;
+    bytes[1] = (c >> 16) & 0xFF;
+    bytes[2] = (c >> 8) & 0xFF;
+    bytes[3] = c & 0xFF;
+  
+    background2_color_r->value(static_cast<float>(bytes[0])/255.0f);
+    background2_color_g->value(static_cast<float>(bytes[1])/255.0f);
+    background2_color_b->value(static_cast<float>(bytes[2])/255.0f);
+  
+    c = Fl::get_color(FL_FOREGROUND_COLOR);
+    bytes[0] = (c >> 24) & 0xFF;
+    bytes[1] = (c >> 16) & 0xFF;
+    bytes[2] = (c >> 8) & 0xFF;
+    bytes[3] = c & 0xFF;
+  
+    foreground_color_r->value(static_cast<float>(bytes[0])/255.0f);
+    foreground_color_g->value(static_cast<float>(bytes[1])/255.0f);
+    foreground_color_b->value(static_cast<float>(bytes[2])/255.0f);
+    
+  const char* themes[] = {"gtk+", "gleam", "plastic", "none"};
+  
+  for(int i = 0; i < 4; i++)
+  {
+  	if(!strcmp(themes[i], Fl::scheme()))
+  	{
+  		theme_chooser->value(i);
+  		break;	
+  	}
+  }
   return w;
+}
+
+void ConfigurationDlg::choose_background_color(Fl_Button*, ConfigurationDlg* dlg) {
+  double r = dlg->background_color_r->value();
+  double g = dlg->background_color_g->value();
+  double b = dlg->background_color_b->value();
+  
+  fl_color_chooser("Choose a color", r, g, b);
+  
+  dlg->background_color_r->value(r);
+  dlg->background_color_g->value(g);
+  dlg->background_color_b->value(b);
+}
+
+void ConfigurationDlg::choose_background2_color(Fl_Button*,ConfigurationDlg* dlg) {
+  double r = dlg->background2_color_r->value();
+  double g = dlg->background2_color_g->value();
+  double b = dlg->background2_color_b->value();
+  
+  fl_color_chooser("Choose a color", r, g, b);
+  
+  dlg->background2_color_r->value(r);
+  dlg->background2_color_g->value(g);
+  dlg->background2_color_b->value(b);
+}
+
+void ConfigurationDlg::choose_foreground_color(Fl_Button*,ConfigurationDlg* dlg) {
+  double r = dlg->foreground_color_r->value();
+  double g = dlg->foreground_color_g->value();
+  double b = dlg->foreground_color_b->value();
+  
+  fl_color_chooser("Choose a color", r, g, b);
+  
+  dlg->foreground_color_r->value(r);
+  dlg->foreground_color_g->value(g);
+  dlg->foreground_color_b->value(b);
+}
+
+void ConfigurationDlg::apply_settings_callback(Fl_Button*,ConfigurationDlg* dlg) {
+  Fl::foreground(255*dlg->foreground_color_r->value(), 255*dlg->foreground_color_g->value(), 255*dlg->foreground_color_b->value());
+  Fl::background(255*dlg->background_color_r->value(), 255*dlg->background_color_g->value(), 255*dlg->background_color_b->value());
+  Fl::background2(255*dlg->background2_color_r->value(), 255*dlg->background2_color_g->value(), 255*dlg->background2_color_b->value());
+  
+  const char* themes[] = {"gtk+", "gleam", "plastic", "none"};
+  Fl::scheme(themes[dlg->theme_chooser->value()]);
+  
+  // FIXME: UGLY!!
+  dlg->foreground_color_b->parent()->parent()->parent()->parent()->redraw();
+  main_window->redraw();
 }
