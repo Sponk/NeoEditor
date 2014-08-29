@@ -35,7 +35,7 @@ using namespace std;
 
 string skyboxVertShader =
 
-"#version 140\n"
+"#version 130\n"
 "attribute vec3 Vertex;"
 "uniform mat4 ProjModelViewMatrix;"
 
@@ -49,7 +49,7 @@ string skyboxVertShader =
 "}\n";
 
 string skyboxFragShader =
-"#version 140\n"
+"#version 130\n"
 "uniform sampler2D Texture[5];"
 "varying vec2 texCoord;"
 

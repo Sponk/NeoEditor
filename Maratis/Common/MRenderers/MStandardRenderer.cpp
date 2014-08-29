@@ -59,7 +59,9 @@ m_FXsNumber(0)
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 	MLOG_INFO("Renderer: " << render->getRendererVersion());
 #ifndef USE_GLES
-    if(strstr(render->getRendererVersion(), "4.") == NULL)
+    float version;
+    sscanf(render->getRendererVersion(), "%d", &version);
+    if(version < 4.0)
     {
         MLOG_INFO("No GL4 compatible context found. Falling back to compat shaders.");
         // compat FXs

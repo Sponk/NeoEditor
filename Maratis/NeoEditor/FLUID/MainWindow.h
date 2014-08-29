@@ -278,8 +278,10 @@ public:
   static void close_callback(Fl_Button*, ConstraintPropertiesDlg* dlg);
   static void cancel_callback(Fl_Button*, ConstraintPropertiesDlg* dlg);
 };
+#include <FL/Fl_Browser.H>
 
 class ConfigurationDlg {
+  Fl_Text_Buffer text_buffer; 
 public:
   Fl_Double_Window* create_window();
   Fl_Choice *theme_chooser;
@@ -294,10 +296,15 @@ public:
   Fl_Value_Input *foreground_color_g;
   Fl_Value_Input *foreground_color_b;
   Fl_Choice *input_methods_choice;
+  Fl_Browser *plugin_browser;
+  Fl_Output *author_edit;
+  Fl_Output *license_edit;
+  Fl_Text_Display *description_edit;
   static void choose_background_color(Fl_Button*, ConfigurationDlg* dlg);
   static void choose_background2_color(Fl_Button*,ConfigurationDlg* dlg);
   static void choose_foreground_color(Fl_Button*,ConfigurationDlg* dlg);
   static void apply_settings_callback(Fl_Button*,ConfigurationDlg* dlg);
   static void setInputMethod(Fl_Menu_*, long idx);
+  static void plugin_changed_callback(Fl_Browser*, ConfigurationDlg* dlg);
 };
 #endif

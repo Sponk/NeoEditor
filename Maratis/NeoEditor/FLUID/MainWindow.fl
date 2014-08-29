@@ -1827,18 +1827,20 @@ delete dlg;} {}
 
 class ConfigurationDlg {open
 } {
+  decl {Fl_Text_Buffer text_buffer;} {private local
+  }
   Function {create_window()} {open
   } {
     Fl_Window {} {
       label Configuration open
-      xywh {2126 504 543 348} type Double visible
+      xywh {2270 185 543 348} type Double visible
     } {
       Fl_Tabs {} {open
         xywh {0 3 546 342}
       } {
         Fl_Group {} {
-          label Theme open
-          xywh {3 27 543 318} hide
+          label Theme open selected
+          xywh {3 27 543 318}
         } {
           Fl_Choice theme_chooser {
             label {Themes:}
@@ -1939,7 +1941,7 @@ class ConfigurationDlg {open
         }
         Fl_Group {} {
           label Input open
-          xywh {0 27 546 318}
+          xywh {0 27 546 318} hide
         } {
           Fl_Choice input_methods_choice {
             label {Input Methods:} open
@@ -1948,8 +1950,26 @@ class ConfigurationDlg {open
         }
         Fl_Group {} {
           label Plugins open
-          xywh {24 27 522 318} hide
-        } {}
+          xywh {0 27 546 318} box DOWN_BOX hide
+        } {
+          Fl_Browser plugin_browser {
+            user_data this user_data_type {ConfigurationDlg*}
+            callback plugin_changed_callback
+            xywh {3 36 189 306} type Select
+          }
+          Fl_Output author_edit {
+            label {Author:}
+            xywh {267 42 231 27}
+          }
+          Fl_Output license_edit {
+            label {License:}
+            xywh {267 75 231 27}
+          }
+          Fl_Text_Display description_edit {
+            label {Description:}
+            xywh {207 129 291 156} box UP_BOX align 5
+          }
+        }
       }
     }
     code {// Init
@@ -2010,8 +2030,11 @@ for(int i = 0; i < editorPlugins.size(); i++)
 		if(window.inputMethod != NULL && editorPlugins[i]->getName() == window.inputMethod->getName())
 			input_methods_choice->value(i+1);
 	}
-}} {selected
-    }
+	
+	plugin_browser->add(editorPlugins[i]->getName().c_str());
+}
+
+description_edit->buffer(&text_buffer);} {}
   }
   Function {choose_background_color(Fl_Button*, ConfigurationDlg* dlg)} {open return_type {static void}
   } {
@@ -2072,5 +2095,18 @@ main_window->redraw();} {}
 
 extern std::vector<MPluginScript*> editorPlugins;
 window.inputMethod = editorPlugins[idx];} {}
+  }
+  Function {plugin_changed_callback(Fl_Browser*, ConfigurationDlg* dlg)} {open return_type {static void}
+  } {
+    code {extern std::vector<MPluginScript*> editorPlugins;
+
+if(editorPlugins.size() < dlg->plugin_browser->value())
+	return;
+
+MPluginScript* plugin = editorPlugins[dlg->plugin_browser->value()-1];
+dlg->author_edit->value(plugin->getAuthor().c_str());
+dlg->license_edit->value(plugin->getLicense().c_str());
+
+dlg->text_buffer.text(plugin->getDescription().c_str());} {}
   }
 } 

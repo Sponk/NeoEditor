@@ -4510,7 +4510,6 @@ Fl_Double_Window* ConfigurationDlg::create_window() {
     o->user_data((void*)(this));
     { Fl_Tabs* o = new Fl_Tabs(0, 3, 546, 342);
       { Fl_Group* o = new Fl_Group(3, 27, 543, 318, "Theme");
-        o->hide();
         { theme_chooser = new Fl_Choice(72, 39, 138, 27, "Themes:");
           theme_chooser->down_box(FL_BORDER_BOX);
           theme_chooser->menu(menu_theme_chooser);
@@ -4587,13 +4586,27 @@ Fl_Double_Window* ConfigurationDlg::create_window() {
         o->end();
       } // Fl_Group* o
       { Fl_Group* o = new Fl_Group(0, 27, 546, 318, "Input");
+        o->hide();
         { input_methods_choice = new Fl_Choice(117, 36, 147, 27, "Input Methods:");
           input_methods_choice->down_box(FL_BORDER_BOX);
         } // Fl_Choice* input_methods_choice
         o->end();
       } // Fl_Group* o
-      { Fl_Group* o = new Fl_Group(24, 27, 522, 318, "Plugins");
+      { Fl_Group* o = new Fl_Group(0, 27, 546, 318, "Plugins");
+        o->box(FL_DOWN_BOX);
         o->hide();
+        { plugin_browser = new Fl_Browser(3, 36, 189, 306);
+          plugin_browser->type(1);
+          plugin_browser->callback((Fl_Callback*)plugin_changed_callback, (void*)(this));
+        } // Fl_Browser* plugin_browser
+        { author_edit = new Fl_Output(267, 42, 231, 27, "Author:");
+        } // Fl_Output* author_edit
+        { license_edit = new Fl_Output(267, 75, 231, 27, "License:");
+        } // Fl_Output* license_edit
+        { description_edit = new Fl_Text_Display(207, 129, 291, 156, "Description:");
+          description_edit->box(FL_UP_BOX);
+          description_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+        } // Fl_Text_Display* description_edit
         o->end();
       } // Fl_Group* o
       o->end();
@@ -4658,7 +4671,11 @@ Fl_Double_Window* ConfigurationDlg::create_window() {
   		if(window.inputMethod != NULL && editorPlugins[i]->getName() == window.inputMethod->getName())
   			input_methods_choice->value(i+1);
   	}
+  	
+  	plugin_browser->add(editorPlugins[i]->getName().c_str());
   }
+  
+  description_edit->buffer(&text_buffer);
   return w;
 }
 
@@ -4720,4 +4737,17 @@ void ConfigurationDlg::setInputMethod(Fl_Menu_*, long idx) {
   
   extern std::vector<MPluginScript*> editorPlugins;
   window.inputMethod = editorPlugins[idx];
+}
+
+void ConfigurationDlg::plugin_changed_callback(Fl_Browser*, ConfigurationDlg* dlg) {
+  extern std::vector<MPluginScript*> editorPlugins;
+  
+  if(editorPlugins.size() < dlg->plugin_browser->value())
+  	return;
+  
+  MPluginScript* plugin = editorPlugins[dlg->plugin_browser->value()-1];
+  dlg->author_edit->value(plugin->getAuthor().c_str());
+  dlg->license_edit->value(plugin->getLicense().c_str());
+  
+  dlg->text_buffer.text(plugin->getDescription().c_str());
 }
