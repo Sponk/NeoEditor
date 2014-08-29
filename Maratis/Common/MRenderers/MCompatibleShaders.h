@@ -115,7 +115,7 @@ string compat_functionsShader = string(
 		"shadow /= 5.0;"*/
 		
 		 
-        "float blur = (shadBlur*0.001);"
+        "float blur = (shadBlur*0.0001);"
 		"vec4 rand = texture2D(RandTexture, (shadowCoordinateWdivide.xy)*(500.0/(shadBlur+1.0)))*2.0 - 1.0;"
 		
 		"vec2 d = rand.xy;"
