@@ -54,7 +54,7 @@ void windowEvents(MWinEvent * windowEvents)
         {
 			gameWinEvents(windowEvents);
 		}
-	}
+    }
 
 	if(windowEvents->type == MWIN_EVENT_WINDOW_CLOSE)
     {

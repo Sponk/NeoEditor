@@ -37,8 +37,11 @@
 #ifdef __APPLE__
 	#include <OpenGL/OpenGL.h>
     #include <OpenGL/gl.h>
-#else
+#elif !defined(EMSCRIPTEN)
 	#include <GLee.h>
+#else
+    #include <GL/GLee.h>
+    #include <GL/gl.h>
 #endif
 
 #include <MEngine.h>
