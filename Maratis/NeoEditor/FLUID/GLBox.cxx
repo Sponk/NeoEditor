@@ -182,11 +182,32 @@ void GLBox::draw()
     }
 
     Maratis* maratis = Maratis::getInstance();
+    MEngine* engine = MEngine::getInstance();
 
     MWindow::getInstance()->setViewport(w(), h());
-    MEngine::getInstance()->updateRequests();
+    engine->updateRequests();
 
     maratis->graphicLoop();
+
+    if(maratis->getSelectedObjectsNumber() > 0)
+    {
+        MObject3d* camera = maratis->getSelectedObjectByIndex(0);
+        if(camera != NULL && camera->getType() == M_OBJECT3D_CAMERA)
+        {
+            MRenderingContext* render = engine->getRenderingContext();
+
+            render->setViewport(0,0, w()/3, h()/3);
+            render->setScissor(0,0, w()/3, h()/3);
+            render->enableScissorTest();
+
+            static_cast<MOCamera*>(camera)->enable();
+
+            render->clear(M_BUFFER_DEPTH | M_BUFFER_COLOR);
+            engine->getLevel()->getCurrentScene()->draw(static_cast<MOCamera*>(camera));
+
+            render->disableScissorTest();
+        }
+    }
 
     swap_buffers();
 }
