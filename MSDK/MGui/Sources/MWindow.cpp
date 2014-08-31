@@ -39,15 +39,20 @@
 #ifndef USE_GLES
 #include <SDL_opengl.h>
 #else
-#ifdef __APPLE__
-#include <OpenGLES/ES2/gl.h>
-#include <OpenGLES/ES2/glext.h>
-#endif
+	#ifdef __APPLE__
+		#include <OpenGLES/ES2/gl.h>
+		#include <OpenGLES/ES2/glext.h>
+	#endif
 
-#ifdef __ANDROID__
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
-#endif
+	#ifdef __ANDROID__
+		#include <GLES2/gl2.h>
+		#include <GLES2/gl2ext.h>
+	#endif
+	
+	#ifdef EMSCRIPTEN
+		#include <GLES2/gl2.h>
+		#include <GLES2/gl2ext.h>
+	#endif
 #endif
 
 #include <stdio.h>
@@ -666,13 +671,21 @@ bool MWindow::create(const char * title, unsigned int width, unsigned int height
 	fprintf(stdout, "Info\t SDL compiled version : %d.%d.%d\n", compiled.major, compiled.minor, compiled.patch);
 	fprintf(stdout, "Info\t SDL linked version : %d.%d.%d\n", linked.major, linked.minor, linked.patch);
 
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+#ifndef EMSCRIPTEN
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
 		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
 		return false;
 	}
+#else
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0)
+	{
+		fprintf(stderr, "SDL Init Error : %s\n", SDL_GetError());
+		return false;
+	}
+#endif
 
-    Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
+	Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
 
 	if (m_fullscreen)
 		flags = flags | SDL_WINDOW_FULLSCREEN;
