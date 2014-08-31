@@ -4744,8 +4744,12 @@ void ConfigurationDlg::plugin_changed_callback(Fl_Browser*, ConfigurationDlg* dl
   
   if(editorPlugins.size() < dlg->plugin_browser->value())
   	return;
+  int idx = dlg->plugin_browser->value()-1;
   
-  MPluginScript* plugin = editorPlugins[dlg->plugin_browser->value()-1];
+  if(idx < 0)
+  	return;
+  
+  MPluginScript* plugin = editorPlugins[idx];
   dlg->author_edit->value(plugin->getAuthor().c_str());
   dlg->license_edit->value(plugin->getLicense().c_str());
   

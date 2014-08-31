@@ -1833,13 +1833,13 @@ class ConfigurationDlg {open
   } {
     Fl_Window {} {
       label Configuration open
-      xywh {2270 185 543 348} type Double visible
+      xywh {1853 257 543 348} type Double visible
     } {
       Fl_Tabs {} {open
         xywh {0 3 546 342}
       } {
         Fl_Group {} {
-          label Theme open selected
+          label Theme open
           xywh {3 27 543 318}
         } {
           Fl_Choice theme_chooser {
@@ -2102,11 +2102,16 @@ window.inputMethod = editorPlugins[idx];} {}
 
 if(editorPlugins.size() < dlg->plugin_browser->value())
 	return;
+int idx = dlg->plugin_browser->value()-1;
 
-MPluginScript* plugin = editorPlugins[dlg->plugin_browser->value()-1];
+if(idx < 0)
+	return;
+
+MPluginScript* plugin = editorPlugins[idx];
 dlg->author_edit->value(plugin->getAuthor().c_str());
 dlg->license_edit->value(plugin->getLicense().c_str());
 
-dlg->text_buffer.text(plugin->getDescription().c_str());} {}
+dlg->text_buffer.text(plugin->getDescription().c_str());} {selected
+    }
   }
 } 
