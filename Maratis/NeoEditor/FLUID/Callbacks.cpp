@@ -728,14 +728,15 @@ void scene_tree_callback(Fl_Tree* tree, void*)
     {
         Maratis::getInstance()->clearSelectedObjects();
         Maratis::getInstance()->addSelectedObject(object);
+    }
 
-        /*if(Fl::event_clicks())
-        {
-            MOCamera* vue = Maratis::getInstance()->getPerspectiveVue();
-            vue->setPosition(object->getPosition() - MVector3(10,0,0));
-            vue->updateMatrix();
-            window.glbox->redraw();
-        }*/
+    // TODO: Testing!
+    if(Fl::event_clicks())
+    {
+        MOCamera* vue = Maratis::getInstance()->getPerspectiveVue();
+        vue->setPosition(object->getPosition() - MVector3(10,0,0));
+        vue->updateMatrix();
+        window.glbox->redraw();
     }
 
     MVector3 position = object->getPosition();
