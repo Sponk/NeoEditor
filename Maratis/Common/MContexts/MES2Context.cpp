@@ -43,6 +43,13 @@
 #include <GLES/gl.h>
 #endif
 
+#ifdef EMSCRIPTEN
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
+// Really?
+#include <GLES/gl.h>
+#endif
+
 #include <MEngine.h>
 #include "MES2Context.h"
 
