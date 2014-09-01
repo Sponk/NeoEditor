@@ -4321,9 +4321,12 @@ void Maratis::drawMainView(MScene * scene)
         }
     }
 
+    drawGrid(engine->getLevel()->getCurrentScene());
+
     if(getSelectedObjectsNumber() > 0)
     {
         render->disableDepthTest();
+        render->clear(M_BUFFER_DEPTH);
         camera->enable();
 
         switch(getTransformMode())
@@ -4345,8 +4348,6 @@ void Maratis::drawMainView(MScene * scene)
                 break;
         }
     }
-
-	drawGrid(engine->getLevel()->getCurrentScene());
 }
 
 void Maratis::logicLoop(void)

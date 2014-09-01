@@ -47,13 +47,14 @@ extern void translation_speed_callback(Fl_Value_Input*, void*);
 #include <FL/Fl_Check_Button.H>
 extern void ortho_callback(Fl_Check_Button*, void*);
 extern void change_vue_callback(Fl_Menu_*, long);
+#include <FL/Fl_Button.H>
+extern void play_game_button_callback(Fl_Button*, void*);
 #include <FL/Fl_Tabs.H>
 #include <FL/Fl_Scroll.H>
 #include <FL/Fl_Input.H>
 extern void edit_name_callback(Fl_Input*, void*);
 extern void edit_object_callback(Fl_Value_Input*, long);
 extern void edit_light_properties(Fl_Value_Input*, void*);
-#include <FL/Fl_Button.H>
 extern void choose_light_color(Fl_Button*, void*);
 extern void edit_light_properties_chk_btn(Fl_Check_Button*, void*);
 #include <FL/Fl_Clock.H>
@@ -94,7 +95,7 @@ public:
   Fl_Value_Input *rotation_speed;
   Fl_Value_Input *translation_speed;
   Fl_Check_Button *vue_ortho_button;
-  static Fl_Menu_Item menu_View[];
+  static Fl_Menu_Item menu_[];
   Fl_Input *name_edit;
   Fl_Value_Input *xpos_edit;
   Fl_Value_Input *ypos_edit;

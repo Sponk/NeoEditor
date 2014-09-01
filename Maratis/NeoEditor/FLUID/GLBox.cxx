@@ -204,6 +204,7 @@ void GLBox::draw()
 
             render->clear(M_BUFFER_DEPTH | M_BUFFER_COLOR);
             engine->getLevel()->getCurrentScene()->draw(static_cast<MOCamera*>(camera));
+            engine->getLevel()->getCurrentScene()->drawObjectsBehaviors();
 
             render->disableScissorTest();
         }

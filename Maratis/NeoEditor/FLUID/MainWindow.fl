@@ -19,11 +19,12 @@ decl {\#include "../MPluginScript/MPluginScript.h"} {public global
 
 class EditorWindow {open
 } {
-  Function {show_window()} {} {
+  Function {show_window()} {open
+  } {
     Fl_Window {} {
       label Neo
       callback window_quit open
-      xywh {1783 189 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
+      xywh {1894 292 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -221,7 +222,7 @@ class EditorWindow {open
         }
       }
       Fl_Box glbox {
-        label {OpenGL box}
+        label {OpenGL box} selected
         xywh {201 56 486 569} color 179 resizable
         code0 {\#include "GLBox.h"}
         class GLBox
@@ -231,54 +232,49 @@ class EditorWindow {open
         xywh {0 55 201 570} when 4
       }
       Fl_Group edit_group {open
-        xywh {3 24 887 30}
+        xywh {3 24 911 33}
         code0 {edit_group->resizable(NULL);}
       } {
         Fl_Round_Button {} {
-          label Translate
           user_data {'t'} user_data_type long
           callback set_edit_type
-          xywh {258 27 90 24} type Radio down_box ROUND_DOWN_BOX shortcut 0x31 value 1
+          image {../../../Data/Editor/translate.png} xywh {198 27 39 24} type Radio box UP_FRAME down_box ROUND_DOWN_BOX shortcut 0x31 value 1 align 276
         }
         Fl_Round_Button {} {
-          label Rotate
           user_data {'r'} user_data_type long
           callback set_edit_type
-          xywh {345 27 69 24} type Radio down_box ROUND_DOWN_BOX shortcut 0x32
+          image {../../../Data/Editor/rotate.png} xywh {240 27 39 24} type Radio box UP_FRAME down_box ROUND_DOWN_BOX shortcut 0x32 align 276
         }
         Fl_Round_Button {} {
-          label Scale
           user_data {'s'} user_data_type long
           callback set_edit_type
-          xywh {414 27 60 24} type Radio down_box ROUND_DOWN_BOX shortcut 0x33
+          image {../../../Data/Editor/scale.png} xywh {282 27 39 24} type Radio box UP_FRAME down_box ROUND_DOWN_BOX shortcut 0x33
         }
-        Fl_Choice scenes_menu {
-          label {Scenes:} open
-          xywh {537 30 129 18} down_box BORDER_BOX
+        Fl_Choice scenes_menu {open
+          xywh {384 27 129 24} down_box BORDER_BOX
         } {}
         Fl_Group speed_group {open
-          xywh {3 27 258 21}
+          xywh {3 25 192 23}
           code0 {speed_group->resizable(NULL);}
         } {
           Fl_Value_Input rotation_speed {
-            label {Rotation:}
+            label {Rot.:}
             callback rotation_speed_callback
-            xywh {72 27 45 20} align 68 when 8 value 1
+            xywh {39 27 45 20} align 68 when 8 value 1
           }
           Fl_Value_Input translation_speed {
-            label {Translation:}
+            label {Trans.:}
             callback translation_speed_callback
-            xywh {207 28 45 20} when 8 value 1
+            xywh {141 28 45 20} when 8 value 1
           }
         }
         Fl_Check_Button vue_ortho_button {
           label Ortho
           callback ortho_callback
-          xywh {673 30 57 18} down_box DOWN_BOX shortcut 0x35
+          xywh {519 27 57 24} down_box DOWN_BOX shortcut 0x35
         }
-        Fl_Choice {} {
-          label {View:} open
-          xywh {783 30 107 18} down_box BORDER_BOX
+        Fl_Choice {} {open
+          xywh {588 27 107 24} down_box BORDER_BOX
         } {
           MenuItem {} {
             label Other
@@ -310,6 +306,10 @@ class EditorWindow {open
             callback change_vue_callback
             xywh {0 0 100 20} labelsize 14
           }
+        }
+        Fl_Button {} {
+          callback play_game_button_callback
+          image {../../../Data/Editor/buttonGame.png} xywh {333 27 39 24}
         }
       }
       Fl_Tabs {} {open
@@ -1833,7 +1833,7 @@ class ConfigurationDlg {open
   } {
     Fl_Window {} {
       label Configuration open
-      xywh {1853 257 543 348} type Double visible
+      xywh {2010 353 543 348} type Double hide
     } {
       Fl_Tabs {} {open
         xywh {0 3 546 342}
@@ -2111,7 +2111,6 @@ MPluginScript* plugin = editorPlugins[idx];
 dlg->author_edit->value(plugin->getAuthor().c_str());
 dlg->license_edit->value(plugin->getLicense().c_str());
 
-dlg->text_buffer.text(plugin->getDescription().c_str());} {selected
-    }
+dlg->text_buffer.text(plugin->getDescription().c_str());} {}
   }
 } 

@@ -1602,6 +1602,11 @@ void play_game_callback(Fl_Menu_*, void*)
     update_scene_tree();
 }
 
+void play_game_button_callback(Fl_Button*, void*)
+{
+    play_game_callback(NULL, NULL);
+}
+
 void add_behavior_menu_callback(Fl_Menu_* menu, const char* name)
 {
     MEngine* engine = MEngine::getInstance();
