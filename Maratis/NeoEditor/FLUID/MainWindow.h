@@ -307,5 +307,6 @@ public:
   static void apply_settings_callback(Fl_Button*,ConfigurationDlg* dlg);
   static void setInputMethod(Fl_Menu_*, long idx);
   static void plugin_changed_callback(Fl_Browser*, ConfigurationDlg* dlg);
+  static void reset_settings_callback(Fl_Button*,ConfigurationDlg* dlg);
 };
 #endif

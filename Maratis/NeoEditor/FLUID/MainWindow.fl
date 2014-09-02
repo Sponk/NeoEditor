@@ -24,7 +24,7 @@ class EditorWindow {open
     Fl_Window {} {
       label Neo
       callback window_quit open
-      xywh {1894 292 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
+      xywh {1894 292 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -156,31 +156,31 @@ class EditorWindow {open
           xywh {0 0 100 20} labelsize 14
         } {
           Submenu {} {
-            label {Add Object} open
+            label Object open
             xywh {0 0 100 20} labelsize 14
           } {
             MenuItem {} {
-              label {Add Mesh}
+              label Mesh
               callback add_mesh_callback
               xywh {0 0 100 20} shortcut 0x4006d labelsize 14
             }
             MenuItem {} {
-              label {Add Light}
+              label Light
               callback add_light_callback
               xywh {0 0 100 20} shortcut 0x4006c labelsize 14
             }
             MenuItem {} {
-              label {Add Text}
+              label Text
               callback add_text_callback
               xywh {0 0 100 20} shortcut 0x40074 labelsize 14
             }
             MenuItem {} {
-              label {Add Camera}
+              label Camera
               callback add_camera_callback
               xywh {0 0 100 20} shortcut 0x40063 labelsize 14
             }
             MenuItem {} {
-              label {Add Sound}
+              label Sound
               callback add_sound_callback
               xywh {0 0 100 20} labelsize 14
             }
@@ -190,13 +190,13 @@ class EditorWindow {open
             xywh {0 0 100 20} labelsize 14
           } {}
           MenuItem {} {
-            label {Add Scene}
+            label Scene
             callback add_scene_callback
             xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
-            label {Add Group}
-            callback add_group_callback
+            label Group
+            callback add_group_callback selected
             xywh {0 0 100 20} labelsize 14
           }
         }
@@ -222,7 +222,7 @@ class EditorWindow {open
         }
       }
       Fl_Box glbox {
-        label {OpenGL box} selected
+        label {OpenGL box}
         xywh {201 56 486 569} color 179 resizable
         code0 {\#include "GLBox.h"}
         class GLBox
@@ -1833,7 +1833,7 @@ class ConfigurationDlg {open
   } {
     Fl_Window {} {
       label Configuration open
-      xywh {2010 353 543 348} type Double hide
+      xywh {1981 372 543 348} type Double visible
     } {
       Fl_Tabs {} {open
         xywh {0 3 546 342}
@@ -1937,6 +1937,12 @@ class ConfigurationDlg {open
             user_data this user_data_type {ConfigurationDlg*}
             callback apply_settings_callback
             xywh {12 303 198 27}
+          }
+          Fl_Button {} {
+            label {Reset to Defaults}
+            user_data this user_data_type {ConfigurationDlg*}
+            callback reset_settings_callback
+            xywh {234 303 198 27}
           }
         }
         Fl_Group {} {
@@ -2112,5 +2118,47 @@ dlg->author_edit->value(plugin->getAuthor().c_str());
 dlg->license_edit->value(plugin->getLicense().c_str());
 
 dlg->text_buffer.text(plugin->getDescription().c_str());} {}
+  }
+  Function {reset_settings_callback(Fl_Button*,ConfigurationDlg* dlg)} {open return_type {static void}
+  } {
+    code {Fl::get_system_colors();
+MLOG_INFO("RESET");
+// FIXME: UGLY!!
+dlg->foreground_color_b->parent()->parent()->parent()->parent()->redraw();
+main_window->redraw();
+
+// Update colors
+Fl_Color c = Fl::get_color(FL_BACKGROUND_COLOR);
+
+char unsigned bytes[4];
+bytes[0] = (c >> 24) & 0xFF;
+bytes[1] = (c >> 16) & 0xFF;
+bytes[2] = (c >> 8) & 0xFF;
+bytes[3] = c & 0xFF;
+
+dlg->background_color_r->value(static_cast<float>(bytes[0])/255.0f);
+dlg->background_color_g->value(static_cast<float>(bytes[1])/255.0f);
+dlg->background_color_b->value(static_cast<float>(bytes[2])/255.0f);
+
+
+c = Fl::get_color(FL_BACKGROUND2_COLOR);
+bytes[0] = (c >> 24) & 0xFF;
+bytes[1] = (c >> 16) & 0xFF;
+bytes[2] = (c >> 8) & 0xFF;
+bytes[3] = c & 0xFF;
+
+dlg->background2_color_r->value(static_cast<float>(bytes[0])/255.0f);
+dlg->background2_color_g->value(static_cast<float>(bytes[1])/255.0f);
+dlg->background2_color_b->value(static_cast<float>(bytes[2])/255.0f);
+
+c = Fl::get_color(FL_FOREGROUND_COLOR);
+bytes[0] = (c >> 24) & 0xFF;
+bytes[1] = (c >> 16) & 0xFF;
+bytes[2] = (c >> 8) & 0xFF;
+bytes[3] = c & 0xFF;
+
+dlg->foreground_color_r->value(static_cast<float>(bytes[0])/255.0f);
+dlg->foreground_color_g->value(static_cast<float>(bytes[1])/255.0f);
+dlg->foreground_color_b->value(static_cast<float>(bytes[2])/255.0f);} {}
   }
 } 

@@ -1657,7 +1657,8 @@ void update_behavior_menu()
 
 void import_mesh_callback(Fl_Menu_*, void*)
 {
-    const char* filename = fl_native_file_chooser("Choose file", "*.obj\n*.dae\n*.3ds\n*.b3d", current_project.path.c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser("Choose file", "*.{obj,dae,3ds,b3d,ase,ifc,xgl,zgl,lwo,stl,x,ms3d,cob,irrmesh,md1,md2,md3,mdc,md5,ter}",
+                                                  current_project.path.c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(!filename)
         return;
@@ -1693,7 +1694,7 @@ void redo_callback(Fl_Menu_*, void*)
 
 void add_sound_callback(Fl_Menu_ *, void *)
 {
-    const char* filename = fl_native_file_chooser("Choose file", "*.wav, *.ogg", (current_project.path + "sounds").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser("Choose file", "*.{wav,ogg}", (current_project.path + "sounds").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(!filename)
         return;

@@ -37,17 +37,17 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
  {"Publish", 0x40070,  (Fl_Callback*)publish_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0},
  {"Add", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
- {"Add Object", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
- {"Add Mesh", 0x4006d,  (Fl_Callback*)add_mesh_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
- {"Add Light", 0x4006c,  (Fl_Callback*)add_light_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
- {"Add Text", 0x40074,  (Fl_Callback*)add_text_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
- {"Add Camera", 0x40063,  (Fl_Callback*)add_camera_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
- {"Add Sound", 0,  (Fl_Callback*)add_sound_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Object", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Mesh", 0x4006d,  (Fl_Callback*)add_mesh_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Light", 0x4006c,  (Fl_Callback*)add_light_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Text", 0x40074,  (Fl_Callback*)add_text_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Camera", 0x40063,  (Fl_Callback*)add_camera_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Sound", 0,  (Fl_Callback*)add_sound_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0},
  {"Add Behavior", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0},
- {"Add Scene", 0,  (Fl_Callback*)add_scene_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
- {"Add Group", 0,  (Fl_Callback*)add_group_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Scene", 0,  (Fl_Callback*)add_scene_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Group", 0,  (Fl_Callback*)add_group_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0},
  {"Plugins", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
  {"Plugin Console", 0,  (Fl_Callback*)plugin_console_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
@@ -4743,6 +4743,9 @@ Fl_Double_Window* ConfigurationDlg::create_window() {
         { Fl_Button* o = new Fl_Button(12, 303, 198, 27, "Apply");
           o->callback((Fl_Callback*)apply_settings_callback, (void*)(this));
         } // Fl_Button* o
+        { Fl_Button* o = new Fl_Button(234, 303, 198, 27, "Reset to Defaults");
+          o->callback((Fl_Callback*)reset_settings_callback, (void*)(this));
+        } // Fl_Button* o
         o->end();
       } // Fl_Group* o
       { Fl_Group* o = new Fl_Group(0, 27, 546, 318, "Input");
@@ -4914,4 +4917,46 @@ void ConfigurationDlg::plugin_changed_callback(Fl_Browser*, ConfigurationDlg* dl
   dlg->license_edit->value(plugin->getLicense().c_str());
   
   dlg->text_buffer.text(plugin->getDescription().c_str());
+}
+
+void ConfigurationDlg::reset_settings_callback(Fl_Button*,ConfigurationDlg* dlg) {
+  Fl::get_system_colors();
+  MLOG_INFO("RESET");
+  // FIXME: UGLY!!
+  dlg->foreground_color_b->parent()->parent()->parent()->parent()->redraw();
+  main_window->redraw();
+  
+  // Update colors
+  Fl_Color c = Fl::get_color(FL_BACKGROUND_COLOR);
+  
+  char unsigned bytes[4];
+  bytes[0] = (c >> 24) & 0xFF;
+  bytes[1] = (c >> 16) & 0xFF;
+  bytes[2] = (c >> 8) & 0xFF;
+  bytes[3] = c & 0xFF;
+  
+  dlg->background_color_r->value(static_cast<float>(bytes[0])/255.0f);
+  dlg->background_color_g->value(static_cast<float>(bytes[1])/255.0f);
+  dlg->background_color_b->value(static_cast<float>(bytes[2])/255.0f);
+  
+  
+  c = Fl::get_color(FL_BACKGROUND2_COLOR);
+  bytes[0] = (c >> 24) & 0xFF;
+  bytes[1] = (c >> 16) & 0xFF;
+  bytes[2] = (c >> 8) & 0xFF;
+  bytes[3] = c & 0xFF;
+  
+  dlg->background2_color_r->value(static_cast<float>(bytes[0])/255.0f);
+  dlg->background2_color_g->value(static_cast<float>(bytes[1])/255.0f);
+  dlg->background2_color_b->value(static_cast<float>(bytes[2])/255.0f);
+  
+  c = Fl::get_color(FL_FOREGROUND_COLOR);
+  bytes[0] = (c >> 24) & 0xFF;
+  bytes[1] = (c >> 16) & 0xFF;
+  bytes[2] = (c >> 8) & 0xFF;
+  bytes[3] = c & 0xFF;
+  
+  dlg->foreground_color_r->value(static_cast<float>(bytes[0])/255.0f);
+  dlg->foreground_color_g->value(static_cast<float>(bytes[1])/255.0f);
+  dlg->foreground_color_b->value(static_cast<float>(bytes[2])/255.0f);
 }
