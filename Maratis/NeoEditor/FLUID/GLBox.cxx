@@ -136,10 +136,10 @@ void update_editor(void*)
 		scene->getObjectByIndex(i)->updateMatrix();
 	}
 
-    if(!game->isRunning())
+    /*if(!game->isRunning())
     {
         Maratis::getInstance()->getPerspectiveVue()->loadSkybox(scene->getCurrentCamera()->getSkybox()->getPath());
-    }
+    }*/
 
     window.glbox->redraw();
     Maratis::getInstance()->logicLoop();
