@@ -164,6 +164,8 @@ void loadSettings(const char* path)
             window.inputMethod = editorPlugins[i];
         }
     }
+
+    main_window->resize(STR1_TO_FLOAT(parser.top()("window")["xpos"]), STR1_TO_FLOAT(parser.top()("window")["ypos"]), STR1_TO_FLOAT(parser.top()("window")["width"]), STR1_TO_FLOAT(parser.top()("window")["height"]));
 }
 
 // main
@@ -195,6 +197,7 @@ int main(int argc, char **argv)
     executable = argv[0];
 
     main_window = window.show_window();
+    main_window->xclass("NeoEditor");
     main_window->show();
 
     if(argc > 1)

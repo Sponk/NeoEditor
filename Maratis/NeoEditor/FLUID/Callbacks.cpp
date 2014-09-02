@@ -123,6 +123,12 @@ void quit_callback(Fl_Menu_*, void*)
             out << "foreground_g=" << vector.y << endl;
             out << "foreground_b=" << vector.z << endl;
 
+            out << "[window]" << endl;
+            out << "xpos=" << main_window->x_root() << endl;
+            out << "ypos=" << main_window->y_root() << endl;
+            out << "width=" << main_window->w() << endl;
+            out << "height=" << main_window->h() << endl;
+
             out.close();
         }
 
