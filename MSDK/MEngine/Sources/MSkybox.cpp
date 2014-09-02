@@ -162,6 +162,13 @@ void MSkybox::drawSkybox(MVector3 position, MVector3 rotation)
 
 void MSkybox::loadSkyboxTextures(const char *path)
 {
+    if(strlen(path) == 0)
+    {
+        m_init = false;
+        m_path.clear();
+        return;
+    }
+
     MRenderingContext* render = MEngine::getInstance()->getRenderingContext();
     MEngine* engine = MEngine::getInstance();
 

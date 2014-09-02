@@ -10,13 +10,13 @@ ypos = getAxis("MOUSE_Y")
 
 function mouse_input(camera)
     local rotationSpeed = getRotationSpeed()
+    local resolution = getWindowScale()
     
     mx = getAxis("MOUSE_X")
-    my = getAxis("MOUSE_Y")
+    my = getAxis("MOUSE_Y")  
     
     if isKeyPressed("MOUSE_BUTTON_RIGHT") then
-        
-        vector = vec3(ypos-my, 0, xpos-mx)      
+        vector = vec3((ypos-my)*resolution[1], 0, (xpos-mx)*resolution[2])      
         setRotation(camera, getRotation(camera) + (vector*rotationSpeed))   
         updateMatrix(camera)
     end
