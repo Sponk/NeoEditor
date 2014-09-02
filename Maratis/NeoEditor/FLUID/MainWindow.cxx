@@ -4843,7 +4843,7 @@ Fl_Double_Window* ConfigurationDlg::create_window() {
   	{
   		input_methods_choice->add(editorPlugins[i]->getName().c_str(),0, (Fl_Callback*) ConfigurationDlg::setInputMethod, (void*) i);
   		if(window.inputMethod != NULL && editorPlugins[i]->getName() == window.inputMethod->getName())
-  			idx = i+1;
+  			idx = input_methods_choice->size()-2;
   	}
   	
   	plugin_browser->add(editorPlugins[i]->getName().c_str());
@@ -4966,5 +4966,7 @@ void ConfigurationDlg::reset_settings_callback(Fl_Button*,ConfigurationDlg* dlg)
   dlg->foreground_color_g->value(static_cast<float>(bytes[1])/255.0f);
   dlg->foreground_color_b->value(static_cast<float>(bytes[2])/255.0f);
   
-  apply_settings_callback(NULL, dlg);
+  // FIXME: UGLY!!
+  dlg->foreground_color_b->parent()->parent()->parent()->parent()->redraw();
+  main_window->redraw();
 }

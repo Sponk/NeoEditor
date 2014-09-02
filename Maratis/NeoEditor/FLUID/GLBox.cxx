@@ -285,11 +285,6 @@ int GLBox::handle(int event)
             mouse_y = Fl::event_y();
 
             mouse->setPosition(mouse_x, mouse_y);
-
-            MInputContext* input = MEngine::getInstance()->getInputContext();
-            input->setAxis("MOUSE_X", mouse_x);
-            input->setAxis("MOUSE_Y", mouse_y);
-
         break;
         }
     case FL_MOUSEWHEEL:
@@ -377,9 +372,6 @@ int GLBox::handle(int event)
 
                         }
                     }
-
-                    input->setAxis("MOUSE_X", mouse_x);
-                    input->setAxis("MOUSE_Y", mouse_y);
             }
             return 1;
         break;
@@ -427,11 +419,6 @@ int GLBox::handle(int event)
             mouse_y = Fl::event_y();
 
             mouse->setPosition(mouse_x, mouse_y);
-
-            MInputContext* input = MEngine::getInstance()->getInputContext();
-            input->setAxis("MOUSE_X", mouse_x);
-            input->setAxis("MOUSE_Y", mouse_y);
-
             if(Fl::event_button1())
             {
                 Maratis::getInstance()->transformSelectedObjects();
@@ -440,6 +427,13 @@ int GLBox::handle(int event)
             redraw();
         }
         break;
+    }
+
+    MInputContext* input = MEngine::getInstance()->getInputContext();
+    if(input)
+    {
+        input->setAxis("MOUSE_X", -0.5+2*static_cast<float>(mouse_x-x())/w());
+        input->setAxis("MOUSE_Y", -0.5+2*static_cast<float>(mouse_y-y())/h());
     }
 
     Fl_Tree_Item* item = ::window.scene_tree->first_selected_item();
