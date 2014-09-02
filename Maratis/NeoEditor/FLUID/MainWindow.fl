@@ -23,7 +23,7 @@ class EditorWindow {open
   } {
     Fl_Window {} {
       label Neo
-      callback window_quit open
+      callback window_quit
       xywh {1894 292 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
     } {
       Fl_Menu_Bar menu_bar {open
@@ -427,6 +427,10 @@ class EditorWindow {open
         }
       }
     }
+    code {// Set system colors
+systemColors[0] = Fl::get_color(FL_BACKGROUND_COLOR);
+systemColors[1] = Fl::get_color(FL_BACKGROUND2_COLOR);
+systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
   }
   Function {create_light_window()} {} {
     Fl_Window light_window_object {open
@@ -922,6 +926,14 @@ class EditorWindow {open
     }
   }
   decl {MPluginScript* inputMethod;} {public local
+  }
+  decl {int systemColors[3];} {private local
+  }
+  Function {getSystemColor(int idx)} {open return_type int
+  } {
+    code {// TODO: Boundary checking!
+return systemColors[idx];} {selected
+    }
   }
 } 
 
@@ -2042,9 +2054,8 @@ for(int i = 0; i < editorPlugins.size(); i++)
 	plugin_browser->add(editorPlugins[i]->getName().c_str());
 }
 
-input_methods_choice->value(idx)
-description_edit->buffer(&text_buffer);} {selected
-    }
+input_methods_choice->value(idx);
+description_edit->buffer(&text_buffer);} {}
   }
   Function {choose_background_color(Fl_Button*, ConfigurationDlg* dlg)} {open return_type {static void}
   } {
@@ -2125,14 +2136,8 @@ dlg->text_buffer.text(plugin->getDescription().c_str());} {}
   }
   Function {reset_settings_callback(Fl_Button*,ConfigurationDlg* dlg)} {open return_type {static void}
   } {
-    code {Fl::get_system_colors();
-MLOG_INFO("RESET");
-// FIXME: UGLY!!
-dlg->foreground_color_b->parent()->parent()->parent()->parent()->redraw();
-main_window->redraw();
-
-// Update colors
-Fl_Color c = Fl::get_color(FL_BACKGROUND_COLOR);
+    code {// Update colors
+Fl_Color c = window.getSystemColor(0);
 
 char unsigned bytes[4];
 bytes[0] = (c >> 24) & 0xFF;
@@ -2145,7 +2150,7 @@ dlg->background_color_g->value(static_cast<float>(bytes[1])/255.0f);
 dlg->background_color_b->value(static_cast<float>(bytes[2])/255.0f);
 
 
-c = Fl::get_color(FL_BACKGROUND2_COLOR);
+c = window.getSystemColor(1);
 bytes[0] = (c >> 24) & 0xFF;
 bytes[1] = (c >> 16) & 0xFF;
 bytes[2] = (c >> 8) & 0xFF;
@@ -2155,7 +2160,7 @@ dlg->background2_color_r->value(static_cast<float>(bytes[0])/255.0f);
 dlg->background2_color_g->value(static_cast<float>(bytes[1])/255.0f);
 dlg->background2_color_b->value(static_cast<float>(bytes[2])/255.0f);
 
-c = Fl::get_color(FL_FOREGROUND_COLOR);
+c = window.getSystemColor(2);
 bytes[0] = (c >> 24) & 0xFF;
 bytes[1] = (c >> 16) & 0xFF;
 bytes[2] = (c >> 8) & 0xFF;
@@ -2163,6 +2168,10 @@ bytes[3] = c & 0xFF;
 
 dlg->foreground_color_r->value(static_cast<float>(bytes[0])/255.0f);
 dlg->foreground_color_g->value(static_cast<float>(bytes[1])/255.0f);
-dlg->foreground_color_b->value(static_cast<float>(bytes[2])/255.0f);} {}
+dlg->foreground_color_b->value(static_cast<float>(bytes[2])/255.0f);
+
+// FIXME: UGLY!!
+dlg->foreground_color_b->parent()->parent()->parent()->parent()->redraw();
+main_window->redraw();} {}
   }
 } 

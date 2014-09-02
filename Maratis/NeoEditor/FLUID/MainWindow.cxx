@@ -431,6 +431,10 @@ Fl_Double_Window* EditorWindow::show_window() {
     o->size_range(0, 0, 2048, 2048);
     o->end();
   } // Fl_Double_Window* o
+  // Set system colors
+  systemColors[0] = Fl::get_color(FL_BACKGROUND_COLOR);
+  systemColors[1] = Fl::get_color(FL_BACKGROUND2_COLOR);
+  systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);
   return w;
 }
 
@@ -861,6 +865,11 @@ Fl_Double_Window* EditorWindow::create_scene_window() {
     o->end();
   } // Fl_Double_Window* o
   return w;
+}
+
+int EditorWindow::getSystemColor(int idx) {
+  // TODO: Boundary checking!
+  return systemColors[idx];
 }
 extern EditorWindow window;
 
@@ -4834,7 +4843,7 @@ Fl_Double_Window* ConfigurationDlg::create_window() {
   	{
   		input_methods_choice->add(editorPlugins[i]->getName().c_str(),0, (Fl_Callback*) ConfigurationDlg::setInputMethod, (void*) i);
   		if(window.inputMethod != NULL && editorPlugins[i]->getName() == window.inputMethod->getName())
-            idx = input_methods_choice->size()-2;
+  			idx = i+1;
   	}
   	
   	plugin_browser->add(editorPlugins[i]->getName().c_str());
@@ -4923,14 +4932,8 @@ void ConfigurationDlg::plugin_changed_callback(Fl_Browser*, ConfigurationDlg* dl
 }
 
 void ConfigurationDlg::reset_settings_callback(Fl_Button*,ConfigurationDlg* dlg) {
-  Fl::get_system_colors();
-  MLOG_INFO("RESET");
-  // FIXME: UGLY!!
-  dlg->foreground_color_b->parent()->parent()->parent()->parent()->redraw();
-  main_window->redraw();
-  
   // Update colors
-  Fl_Color c = Fl::get_color(FL_BACKGROUND_COLOR);
+  Fl_Color c = window.getSystemColor(0);
   
   char unsigned bytes[4];
   bytes[0] = (c >> 24) & 0xFF;
@@ -4943,7 +4946,7 @@ void ConfigurationDlg::reset_settings_callback(Fl_Button*,ConfigurationDlg* dlg)
   dlg->background_color_b->value(static_cast<float>(bytes[2])/255.0f);
   
   
-  c = Fl::get_color(FL_BACKGROUND2_COLOR);
+  c = window.getSystemColor(1);
   bytes[0] = (c >> 24) & 0xFF;
   bytes[1] = (c >> 16) & 0xFF;
   bytes[2] = (c >> 8) & 0xFF;
@@ -4953,7 +4956,7 @@ void ConfigurationDlg::reset_settings_callback(Fl_Button*,ConfigurationDlg* dlg)
   dlg->background2_color_g->value(static_cast<float>(bytes[1])/255.0f);
   dlg->background2_color_b->value(static_cast<float>(bytes[2])/255.0f);
   
-  c = Fl::get_color(FL_FOREGROUND_COLOR);
+  c = window.getSystemColor(2);
   bytes[0] = (c >> 24) & 0xFF;
   bytes[1] = (c >> 16) & 0xFF;
   bytes[2] = (c >> 8) & 0xFF;
@@ -4962,4 +4965,6 @@ void ConfigurationDlg::reset_settings_callback(Fl_Button*,ConfigurationDlg* dlg)
   dlg->foreground_color_r->value(static_cast<float>(bytes[0])/255.0f);
   dlg->foreground_color_g->value(static_cast<float>(bytes[1])/255.0f);
   dlg->foreground_color_b->value(static_cast<float>(bytes[2])/255.0f);
+  
+  apply_settings_callback(NULL, dlg);
 }
