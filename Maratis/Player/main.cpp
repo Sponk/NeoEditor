@@ -184,6 +184,8 @@ int update_thread(void* nothing)
 			MSDLSemaphore::Unlock(&updateSemaphore);
 			window->sleep(100);
         }
+
+        fflush(stdout);
 	}
 
     return 0;

@@ -1569,6 +1569,7 @@ void play_game_callback(Fl_Menu_*, void*)
     if(console.closed)
     {
         Fl_Window* window = console.create_window();
+        window->label("Player Console");
         window->show();
     }
 
