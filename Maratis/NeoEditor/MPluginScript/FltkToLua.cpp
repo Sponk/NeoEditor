@@ -392,6 +392,7 @@ void createFltkLuaBindings(MScript* script)
     script->addFunction("updateEditorView", updateEditorView);
     script->addFunction("getPerspectiveVue", getPerspectiveVue);
     script->addFunction("getTranslationSpeed", getTranslationSpeed);
+    script->addFunction("getRotationSpeed", getRotationSpeed);
 
 	script->addFunction("Fl_CreateWindow", Fl_CreateWindow);
 	script->addFunction("Fl_Show", Fl_Show);

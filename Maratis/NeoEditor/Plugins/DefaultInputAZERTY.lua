@@ -5,6 +5,26 @@ setPluginLicense("")
 setPluginDescription("Default input method using QZSD for french keyboards")
 enableInputMethod("update_input")
 
+xpos = getAxis("MOUSE_X")
+ypos = getAxis("MOUSE_Y")
+
+function mouse_input(camera)
+    local rotationSpeed = getRotationSpeed()
+    
+    mx = getAxis("MOUSE_X")
+    my = getAxis("MOUSE_Y")
+    
+    if isKeyPressed("MOUSE_BUTTON_RIGHT") then
+        
+        vector = vec3(ypos-my, 0, xpos-mx)      
+        setRotation(camera, getRotation(camera) + (vector*rotationSpeed))   
+        updateMatrix(camera)
+    end
+    
+    xpos = mx
+    ypos = my
+end
+
 function update_input()
     camera = getPerspectiveVue()
     translationSpeed = getTranslationSpeed()
@@ -32,4 +52,6 @@ function update_input()
         translate(camera, {0,-1.0*translationSpeed,0}, "local")
         updateMatrix(camera)
     end
+    
+    mouse_input(camera)
 end

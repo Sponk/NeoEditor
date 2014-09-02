@@ -286,15 +286,25 @@ int GLBox::handle(int event)
 
             mouse->setPosition(mouse_x, mouse_y);
 
+            MInputContext* input = MEngine::getInstance()->getInputContext();
+            input->setAxis("MOUSE_X", mouse_x);
+            input->setAxis("MOUSE_Y", mouse_y);
+
         break;
         }
     case FL_MOUSEWHEEL:
         {
             int direction = Fl::event_dy();
 
-            MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
-            vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
-            vue->updateMatrix();
+            MMouse* mouse = MMouse::getInstance();
+            mouse->setWheelDirection(direction);
+
+            if(::window.inputMethod == NULL)
+            {
+                MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+                vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
+                vue->updateMatrix();
+            }
 
             redraw();
             return 1;
@@ -344,12 +354,65 @@ int GLBox::handle(int event)
                 redraw();
                 ::window.special_tab->redraw();
             }
+
+            {
+                    MInputContext* input = MEngine::getInstance()->getInputContext();
+
+                    switch(Fl::event_button())
+                    {
+
+                        case FL_MIDDLE_MOUSE:
+                        {
+                            MMouse::getInstance()->downButton(MMOUSE_BUTTON_MIDDLE);
+                            input->onKeyDown("MOUSE_BUTTON_MIDDLE");
+                            input->downKey("MOUSE_BUTTON_MIDDLE");
+                        }
+                        break;
+
+                        case FL_RIGHT_MOUSE:
+                        {
+                            MMouse::getInstance()->downButton(MMOUSE_BUTTON_RIGHT);
+                            input->onKeyDown("MOUSE_BUTTON_RIGHT");
+                            input->downKey("MOUSE_BUTTON_RIGHT");
+
+                        }
+                    }
+
+                    input->setAxis("MOUSE_X", mouse_x);
+                    input->setAxis("MOUSE_Y", mouse_y);
+            }
             return 1;
+        break;
+
+    case FL_RELEASE:
+    {
+        MInputContext* input = MEngine::getInstance()->getInputContext();
+
+        switch(Fl::event_button())
+        {
+
+            case FL_MIDDLE_MOUSE:
+            {
+                MMouse::getInstance()->upButton(MMOUSE_BUTTON_MIDDLE);
+                input->onKeyUp("MOUSE_BUTTON_MIDDLE");
+                input->upKey("MOUSE_BUTTON_MIDDLE");
+            }
+            break;
+
+            case FL_RIGHT_MOUSE:
+            {
+                MMouse::getInstance()->upButton(MMOUSE_BUTTON_RIGHT);
+                input->onKeyUp("MOUSE_BUTTON_RIGHT");
+                input->upKey("MOUSE_BUTTON_RIGHT");
+            }
+        }
+        return 1;
+    }
         break;
 
     case FL_DRAG:
         {
-            if(Fl::event_button3())
+            if(Fl::event_button3() && ::window.inputMethod == NULL)
             {
                 MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
 
@@ -364,6 +427,10 @@ int GLBox::handle(int event)
             mouse_y = Fl::event_y();
 
             mouse->setPosition(mouse_x, mouse_y);
+
+            MInputContext* input = MEngine::getInstance()->getInputContext();
+            input->setAxis("MOUSE_X", mouse_x);
+            input->setAxis("MOUSE_Y", mouse_y);
 
             if(Fl::event_button1())
             {

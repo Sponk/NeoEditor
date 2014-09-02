@@ -103,6 +103,8 @@ int MPluginScript::enableInputMethod()
 // Overwrite some methods from MScript to update the script context
 void MPluginScript::init()
 {
+    m_hasInputMethod = false;
+
     addFunction("setPluginName", MPluginScript::setName);
     addFunction("setPluginAuthor", MPluginScript::setAuthor);
     addFunction("setPluginLicense", MPluginScript::setLicense);

@@ -4826,18 +4826,21 @@ Fl_Double_Window* ConfigurationDlg::create_window() {
   input_methods_choice->add("Native", 0, (Fl_Callback*) ConfigurationDlg::setInputMethod, (void*) -1);
   input_methods_choice->value(0);	
   
+  int idx = 0;
+  
   for(int i = 0; i < editorPlugins.size(); i++)
   {	
   	if(editorPlugins[i]->hasInputMethod())
   	{
   		input_methods_choice->add(editorPlugins[i]->getName().c_str(),0, (Fl_Callback*) ConfigurationDlg::setInputMethod, (void*) i);
   		if(window.inputMethod != NULL && editorPlugins[i]->getName() == window.inputMethod->getName())
-  			input_methods_choice->value(i+1);
+            idx = input_methods_choice->size()-2;
   	}
   	
   	plugin_browser->add(editorPlugins[i]->getName().c_str());
   }
   
+  input_methods_choice->value(idx);
   description_edit->buffer(&text_buffer);
   return w;
 }
