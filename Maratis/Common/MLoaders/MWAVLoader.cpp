@@ -1,4 +1,5 @@
 #include <MCore.h>
+#include <MEngine.h>
 #include <cassert>
 
 // Should actually include csdtint but this requires stdc++11 on gcc
@@ -65,31 +66,40 @@ bool M_loadWAVSound(const char * filename, void * data)
     if(header->chunk_id != CHUNK_ID || header->format != FORMAT
             || header->subchunk2_id != SUBCHUNK_ID)
     {
-        fprintf(stderr, "ERROR: File is not a valid WAV file!\n");
+        MLOG_ERROR("File is not a valid WAV file!\n");
         return false;
     }
 
     uint32_t chunk_size = header->chunk_size;
 
-    M_SOUND_FORMAT format;
+    M_SOUND_FORMAT format = static_cast<M_SOUND_FORMAT>(-1);
     switch(header->num_channels)
     {
         case 1:
             if(header->bits_per_sample == 16)
                 format = M_SOUND_FORMAT_MONO16;
-            else
+            else if(header->bits_per_sample == 8)
                 format = M_SOUND_FORMAT_MONO8;
+            else
+            {
+                MLOG_ERROR("This RIFF file is not a mono 8 or 16 bit PCM file!")
+            }
         break;
 
         case 2:
             if(header->bits_per_sample == 16)
                 format = M_SOUND_FORMAT_STEREO16;
-            else
+            else if(header->bits_per_sample == 8)
                 format = M_SOUND_FORMAT_STEREO8;
+            else
+            {
+                MLOG_ERROR("This RIFF file is not a stereo 8 or 16 bit PCM file!")
+            }
+
         break;
 
         default:
-            fprintf(stderr, "Could not load WAV file! Unknown format!\n");
+            MLOG_ERROR("Could not load WAV file! Unknown format!\n");
             return false;
     }
 
