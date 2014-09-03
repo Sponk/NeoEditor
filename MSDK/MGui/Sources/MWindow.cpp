@@ -678,7 +678,7 @@ bool MWindow::create(const char * title, unsigned int width, unsigned int height
 		return false;
 	}
 #else
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0)
+	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
 		fprintf(stderr, "SDL Init Error : %s\n", SDL_GetError());
 		return false;

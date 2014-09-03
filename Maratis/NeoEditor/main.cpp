@@ -166,6 +166,19 @@ void loadSettings(const char* path)
     }
 
     main_window->resize(STR1_TO_FLOAT(parser.top()("window")["xpos"]), STR1_TO_FLOAT(parser.top()("window")["ypos"]), STR1_TO_FLOAT(parser.top()("window")["width"]), STR1_TO_FLOAT(parser.top()("window")["height"]));
+
+    translation_speed = STR1_TO_FLOAT(parser.top()("window")["translationSpeed"]);
+    rotation_speed = STR1_TO_FLOAT(parser.top()("window")["rotationSpeed"]);
+
+    // Default values
+    if(rotation_speed == 0.0)
+        rotation_speed = 1.0;
+
+    if(translation_speed == 0.0)
+        translation_speed = 1.0;
+
+    window.translation_speed->value(translation_speed);
+    window.rotation_speed->value(rotation_speed);
 }
 
 // main

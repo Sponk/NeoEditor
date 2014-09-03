@@ -217,6 +217,7 @@ IF(EMSCRIPTEN)
 
   # SET(SDL_VIDEO TRUE)
   add_definitions(-Wno-warn-absolute-paths)
+  SET(SDL_VIDEO_DRIVER_EMSCRIPTEN TRUE)
 
   # Don't use -fPIC for executables
   SET(DISABLE_PIC_EXECUTABLES ON)

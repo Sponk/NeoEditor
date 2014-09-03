@@ -128,6 +128,8 @@ void quit_callback(Fl_Menu_*, void*)
             out << "ypos=" << main_window->y_root() << endl;
             out << "width=" << main_window->w() << endl;
             out << "height=" << main_window->h() << endl;
+            out << "translationSpeed=" << translation_speed << endl;
+            out << "rotationSpeed=" << rotation_speed << endl;
 
             out.close();
         }
