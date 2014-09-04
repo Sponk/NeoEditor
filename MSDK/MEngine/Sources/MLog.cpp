@@ -84,17 +84,23 @@ void MLog::log(int severity, const char * function, const char * filename, const
 	if(! m_instance)
 		m_instance = new MLog();
 
-    // todo ? what is the real diff between cerr and cout
-	//if (severity<=5)
-		//std::cerr<<severity<<" "<<m_string<<std::endl;
-
     string sev="???";
     if(severity >= 0 && severity <= 7)
 		sev = severities_strings[severity];
 
-    std::cout<< sev <<" "<< m_string << " in " << (function?function:"?")
+    // Don't buffer output when it's an error!
+    if(severity <= 5)
+    {
+        std::cerr<< sev <<" "<< m_string << " in " << (function?function:"?")
         //<< " in "<< (filename?filename:"?") // do we add filename in console ?
         << std::endl;
+    }
+    else
+    {
+        std::cout<< sev <<" "<< m_string << " in " << (function?function:"?")
+        //<< " in "<< (filename?filename:"?") // do we add filename in console ?
+        << std::endl;
+    }
 
 #ifdef ANDROID
     SDL_Log("%s %s in %s\n", sev.c_str(), m_string.c_str(), (function?function:"?"));
