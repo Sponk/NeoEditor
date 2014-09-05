@@ -225,8 +225,6 @@ void MInput::downKey(const char * name)
 	map<string, int>::iterator iter = m_keys.find(name);
 	if(iter != m_keys.end())
 		iter->second = 1;
-
-    printf("DownKey: %s\n", name);
 }
 
 void MInput::upKey(const char * name)

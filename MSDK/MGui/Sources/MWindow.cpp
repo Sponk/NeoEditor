@@ -231,8 +231,9 @@ void MWindow::setFullscreen(bool fullscreen)
 
 	if (r < 0)
 		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
-#endif
+#else
 	printf("[ Info ] setFullscreen: STUB\n");
+#endif
 	m_fullscreen = fullscreen;
 }
 
