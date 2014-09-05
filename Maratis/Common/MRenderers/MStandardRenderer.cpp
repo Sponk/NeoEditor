@@ -60,7 +60,7 @@ m_FXsNumber(0)
 	MLOG_INFO("Renderer: " << render->getRendererVersion());
 #ifndef USE_GLES
     float version;
-    sscanf(render->getRendererVersion(), "%d", &version);
+    sscanf(render->getRendererVersion(), "%3d", &version);
     if(version < 4.0)
     {
         MLOG_INFO("No GL4 compatible context found. Falling back to compat shaders.");
