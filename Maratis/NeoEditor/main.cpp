@@ -165,7 +165,17 @@ void loadSettings(const char* path)
         }
     }
 
-    main_window->resize(STR1_TO_FLOAT(parser.top()("window")["xpos"]), STR1_TO_FLOAT(parser.top()("window")["ypos"]), STR1_TO_FLOAT(parser.top()("window")["width"]), STR1_TO_FLOAT(parser.top()("window")["height"]));
+    int width = STR1_TO_FLOAT(parser.top()("window")["width"]);
+    int height = STR1_TO_FLOAT(parser.top()("window")["height"]);
+
+    // Default window size
+    if(width == 0)
+        width = 1024;
+
+    if(height == 0)
+        height = 768;
+
+    main_window->resize(STR1_TO_FLOAT(parser.top()("window")["xpos"]), STR1_TO_FLOAT(parser.top()("window")["ypos"]), width, height);
 
     translation_speed = STR1_TO_FLOAT(parser.top()("window")["translationSpeed"]);
     rotation_speed = STR1_TO_FLOAT(parser.top()("window")["rotationSpeed"]);
