@@ -41,7 +41,7 @@ MInput::MInput(void)
 	for(int i=65; i<=90; i++)
     {
 		name[0] = i;
-		createKey(name);
+        createKey(name);
 	}
     
     // create touch data
@@ -225,6 +225,8 @@ void MInput::downKey(const char * name)
 	map<string, int>::iterator iter = m_keys.find(name);
 	if(iter != m_keys.end())
 		iter->second = 1;
+
+    printf("DownKey: %s\n", name);
 }
 
 void MInput::upKey(const char * name)

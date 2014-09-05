@@ -74,7 +74,7 @@ m_renderer(NULL)
 		m_game = new MGame();
 		m_packageManager = new MPackageManagerNPK();
 		
-        m_physics->setSimulationQuality(2);
+		m_physics->setSimulationQuality(2);
 	}
 
 	// start
@@ -103,8 +103,8 @@ void MaratisPlayer::changeRenderer(const char * name)
 	MRendererManager * rendererManager = engine->getRendererManager();
 	
 	MRendererCreator * renderer = rendererManager->getRendererByName(name);
-    if(renderer && strcmp(engine->getRenderer()->getName(), name) != 0)
-    {
+	if(renderer && strcmp(engine->getRenderer()->getName(), name) != 0)
+	{
 		if(m_renderer)
 			m_renderer->destroy();
 		m_renderer = renderer->getNewRenderer();
@@ -140,8 +140,8 @@ void MaratisPlayer::start(void)
 		// add behaviors
 		engine->getBehaviorManager()->addBehavior(MBLookAt::getStaticName(), M_OBJECT3D_CAMERA, MBLookAt::getNew);
 		engine->getBehaviorManager()->addBehavior(MBFollow::getStaticName(), M_OBJECT3D, MBFollow::getNew);
-        engine->getBehaviorManager()->addBehavior(MBLua::getStaticName(), M_OBJECT3D, MBLua::getNew);
-        engine->getBehaviorManager()->addBehavior(MBParticleSystem::getStaticName(), M_OBJECT3D, MBParticleSystem::getNew);
+		engine->getBehaviorManager()->addBehavior(MBLua::getStaticName(), M_OBJECT3D, MBLua::getNew);
+		engine->getBehaviorManager()->addBehavior(MBParticleSystem::getStaticName(), M_OBJECT3D, MBParticleSystem::getNew);
 
 		// add renderers
 		engine->getRendererManager()->addRenderer(MStandardRenderer::getStaticName(), MStandardRenderer::getNew);
@@ -155,7 +155,7 @@ void MaratisPlayer::start(void)
 		engine->getTexturesAnimLoader()->addLoader(xmlTextureAnimLoad);
 		engine->getTexturesAnimLoader()->addLoader(M_loadBinTexturesAnim);
 		engine->getMaterialsAnimLoader()->addLoader(xmlMaterialAnimLoad);
-        engine->getMaterialsAnimLoader()->addLoader(M_loadBinMaterialsAnim);
+		engine->getMaterialsAnimLoader()->addLoader(M_loadBinMaterialsAnim);
 
 		// level
 		engine->setLevel(m_level);

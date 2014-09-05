@@ -34,7 +34,11 @@
 #include <MKeyboard.h>
 #include <MWindow.h>
 
+#ifndef EMSCRIPTEN
 #include <SDL.h>
+#else
+#include <SDL/SDL.h>
+#endif
 
 #ifndef USE_GLES
 #include <SDL_opengl.h>
@@ -217,6 +221,7 @@ void MWindow::setTitle(const char * title)
 
 void MWindow::setFullscreen(bool fullscreen)
 {
+#ifndef EMSCRIPTEN
 	int r;
 
 	if (fullscreen)
@@ -226,7 +231,8 @@ void MWindow::setFullscreen(bool fullscreen)
 
 	if (r < 0)
 		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
-
+#endif
+	printf("[ Info ] setFullscreen: STUB\n");
 	m_fullscreen = fullscreen;
 }
 
@@ -311,7 +317,7 @@ bool MWindow::onEvents(void)
 
 			case SDL_WINDOWEVENT:
 			{
-                switch (event.window.event)
+				switch (event.window.event)
 				{
 					case SDL_WINDOWEVENT_RESIZED:
 						mevent.type = MWIN_EVENT_WINDOW_RESIZE;
@@ -342,8 +348,7 @@ bool MWindow::onEvents(void)
 			// Keyboard
 			case SDL_KEYDOWN:
 			{
-                // SDL_Log("SDL_KEYDOWN");
-				int key = translateKey(event.key.keysym.sym);
+				int key = translateKey(event.key.keysym.sym);			
 				if(key > 0 && key < 256)
 				{
 					mevent.type = MWIN_EVENT_KEY_DOWN;
@@ -375,8 +380,8 @@ bool MWindow::onEvents(void)
 			case SDL_MOUSEMOTION:
 			{
 				mevent.type = MWIN_EVENT_MOUSE_MOVE;
-                mevent.data[0] = event.motion.x; // relative to window
-                mevent.data[1] = event.motion.y; // relative to window
+				mevent.data[0] = event.motion.x; // relative to window
+				mevent.data[1] = event.motion.y; // relative to window
 				sendEvents(&mevent);
 				break;
 			}
@@ -501,6 +506,7 @@ bool MWindow::onEvents(void)
 				break;
 			}
 
+#ifndef EMSCRIPTEN
 			// Joystick
 			case SDL_JOYDEVICEADDED:
 			{
@@ -608,7 +614,7 @@ bool MWindow::onEvents(void)
 				sendEvents(&mevent);
 				break;
 			}
-
+#endif
 			// Touch
 			case SDL_FINGERDOWN:
 			{
@@ -662,6 +668,7 @@ bool MWindow::create(const char * title, unsigned int width, unsigned int height
 	m_colorBits = colorBits;
 	m_fullscreen = fullscreen;
 
+#ifndef EMSCRIPTEN
 	SDL_version compiled;
 	SDL_version linked;
 
@@ -670,21 +677,15 @@ bool MWindow::create(const char * title, unsigned int width, unsigned int height
 
 	fprintf(stdout, "Info\t SDL compiled version : %d.%d.%d\n", compiled.major, compiled.minor, compiled.patch);
 	fprintf(stdout, "Info\t SDL linked version : %d.%d.%d\n", linked.major, linked.minor, linked.patch);
+#endif
 
-#ifndef EMSCRIPTEN
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
 		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
 		return false;
 	}
-#else
-	if (SDL_Init(SDL_INIT_VIDEO) != 0)
-	{
-		fprintf(stderr, "SDL Init Error : %s\n", SDL_GetError());
-		return false;
-	}
-#endif
 
+#ifndef EMSCRIPTEN
 	Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
 
 	if (m_fullscreen)
@@ -699,6 +700,10 @@ bool MWindow::create(const char * title, unsigned int width, unsigned int height
 	}
 
 	g_context = SDL_GL_CreateContext(g_window);
+#else
+	SDL_Surface* window = SDL_SetVideoMode(width,height,colorBits,SDL_OPENGL | SDL_DOUBLEBUF);
+	
+#endif
 
 	return true;
 }
@@ -713,6 +718,7 @@ void MWindow::sleep(double time)
 
 int MWindow::addJoystick(int index)
 {
+#ifndef EMSCRIPTEN
 	JoystickDevice_t * joystick = new JoystickDevice_t;
 	joystick->device = SDL_JoystickOpen(index);
 	if (!joystick->device)
@@ -725,26 +731,29 @@ int MWindow::addJoystick(int index)
 	joystick->id = SDL_JoystickInstanceID(joystick->device);
 	m_joysticks.push_back(joystick);
 	return joystick->id;
+#endif
 }
 
 int MWindow::removeJoystick(int id)
 {
+#ifndef EMSCRIPTEN
 	for (int i = 0; i < m_joysticks.size(); ++i)
 	{
 		if (m_joysticks[i]->id == id && SDL_JoystickGetAttached(m_joysticks[i]->device))
 		{
 			SDL_JoystickClose(m_joysticks[i]->device);
-            delete m_joysticks[i];
+			delete m_joysticks[i];
 			m_joysticks.erase(m_joysticks.begin() + i);
 			return id;
 		}
 	}
-
+#endif
 	return -1;
 }
 
 int MWindow::addGameController(int index)
 {
+#ifndef EMSCRIPTEN
 	GameControllerDevice_t * controller = new GameControllerDevice_t;
 	controller->device = SDL_GameControllerOpen(index);
 	if (!controller->device)
@@ -757,21 +766,23 @@ int MWindow::addGameController(int index)
 	controller->id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller->device));
 	m_controllers.push_back(controller);
 	return controller->id;
+#endif
 }
 
 int MWindow::removeGameController(int id)
 {
+#ifndef EMSCRIPTEN
 	for (int i = 0; i < m_controllers.size(); ++i)
 	{
 		if (m_controllers[i]->id == id && SDL_GameControllerGetAttached(m_controllers[i]->device))
 		{
 			SDL_GameControllerClose(m_controllers[i]->device);
-            delete m_controllers[i];
+			delete m_controllers[i];
 			m_controllers.erase(m_controllers.begin() + i);
 			return id;
 		}
 	}
-
+#endif
 	return -1;
 }
 #endif

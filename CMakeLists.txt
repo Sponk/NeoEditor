@@ -215,8 +215,8 @@ IF(EMSCRIPTEN)
 
   SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS}" )
 
-  # SET(SDL_VIDEO TRUE)
-  add_definitions(-Wno-warn-absolute-paths)
+  SET(SDL_VIDEO TRUE)
+  add_definitions(-Wno-warn-absolute-paths -s FULL_ES2=1)
   SET(SDL_VIDEO_DRIVER_EMSCRIPTEN TRUE)
 
   # Don't use -fPIC for executables
@@ -243,6 +243,7 @@ else()
 endif(STANDARD_LUA)
 
 SET(NPK_INCLUDE_DIR ${MARATIS_SOURCE_DIR}/3rdparty/npk/include)
+
 SET(SDL_INCLUDE_DIR ${MARATIS_SOURCE_DIR}/3rdparty/sdl2/include)
 SET(OPENAL_INCLUDE_DIR ${MARATIS_SOURCE_DIR}/3rdparty/openal-soft/include)
 SET(TINYXML_INCLUDE_DIR ${MARATIS_SOURCE_DIR}/3rdparty/tinyxml)

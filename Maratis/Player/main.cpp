@@ -59,7 +59,7 @@ void windowEvents(MWinEvent * windowEvents)
 	if(windowEvents->type == MWIN_EVENT_WINDOW_CLOSE)
     {
 		engine->setActive(false);
-	}
+    }
 }
 
 // update

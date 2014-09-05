@@ -31,6 +31,7 @@
 
 #include <MGameWinEvents.h>
 #include "Maratis/MaratisPlayer.h"
+#include <emscripten.h>
 
 // window events
 void windowEvents(MWinEvent * windowEvents)
@@ -66,7 +67,33 @@ void draw(void)
 	MWindow::getInstance()->swapBuffer();
 }
 
-const char* asset_directory = "./assets";
+void complete_update()
+{
+	MEngine * engine = MEngine::getInstance();
+	MWindow * window = MWindow::getInstance();
+	
+	// quit
+	if(! engine->isActive())
+	{
+		MLOG_INFO("Engine is not active anymore!");
+		//engine->getGame()->end();
+		//break;
+	}
+	
+	// on events
+	if(window->onEvents())
+	{
+		update();
+		draw();
+	}
+	
+	if(engine->getInputContext()->isKeyPressed("X"))
+		MLOG_INFO("W pressed");
+	
+	//window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
+}
+
+const char* asset_directory = "./assets/";
 
 // main
 int main(int argc, char* argv[])
@@ -101,7 +128,7 @@ int main(int argc, char* argv[])
 		window->hideCursor();
 	
 	
-	window->setCurrentDirectory(asset_directory);	
+	window->setCurrentDirectory(".");	
 	
 	// get Maratis (first time call onstructor)
 	MaratisPlayer * maratis = MaratisPlayer::getInstance();
@@ -115,87 +142,28 @@ int main(int argc, char* argv[])
 	
 	bool found = false;
 	
+	if(files.size() == 0)
+		MLOG_INFO("Did not find any file!");
+	
 	for(int i = 0; i < files.size(); ++i)
 	{
 		if(strstr(files[i].c_str(), ".mproj"))
 		{
-			char filename[256];
-			getGlobalFilename(filename, window->getCurrentDirectory(), files[i].c_str());
-			
-			if(maratis->loadProject(filename))
+			if(maratis->loadProject((string(asset_directory) + files[i]).c_str()))
 			{
 				engine->getGame()->begin();
 				found = true;
 				break;
 			}
 		}
+		
+		MLOG_INFO("Found " << files[i]);
 	}
 	
 	if(!found)
 		MLOG_INFO("Did not find any project file");	
 	
-	// time
-	unsigned int frequency = 60;
-	unsigned long previousFrame = 0;
-	unsigned long startTick = window->getSystemTick();
-	
-	// on events
-	while(true)
-	{
-		// quit
-		if(! engine->isActive())
-		{
-			MLOG_INFO("Engine is not active anymore!");
-			//engine->getGame()->end();
-			//break;
-		}
-		
-		// on events
-		if(window->onEvents())
-		{
-			if(window->getFocus())
-			{
-				// compute target tick
-				unsigned long currentTick = window->getSystemTick();
-				
-				unsigned long tick = currentTick - startTick;
-				unsigned long frame = (unsigned long)(tick * (frequency * 0.001f));
-				
-				// update elapsed time
-				unsigned int i;
-				unsigned int steps = (unsigned int)(frame - previousFrame);
-				
-				
-				// don't wait too much
-				if(steps >= (frequency/2))
-				{
-					update();
-					draw();
-					previousFrame += steps;
-					continue;
-				}
-				
-				// update
-				for(i=0; i<steps; i++)
-				{
-					update();
-					previousFrame++;
-				}
-				
-				// draw
-				if(steps > 0){
-					draw();
-				}
-			}
-			else
-			{
-				window->sleep(0.1);
-			}
-		}
-		
-		//window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
-	}
-	
-	maratis->clear();
+	emscripten_set_main_loop(complete_update, 60, 1);
+	//maratis->clear();
 	return 0;
 }

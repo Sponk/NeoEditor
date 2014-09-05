@@ -34,15 +34,17 @@
 
 #include <MWinEvents.h>
 
-#include <SDL_joystick.h>
-#include <SDL_gamecontroller.h>
+#ifndef EMSCRIPTEN
+	#include <SDL_joystick.h>
+	#include <SDL_gamecontroller.h>
+#endif
 
 #include <vector>
 
 class MWindow
 {
 private:
-
+#ifndef EMSCRIPTEN
 	// joysticks
 	struct JoystickDevice_t
 	{
@@ -52,9 +54,6 @@ private:
 
 	std::vector<JoystickDevice_t *> m_joysticks;
 
-	int addJoystick(int index);
-	int removeJoystick(int id);
-
 	// game controllers
 	struct GameControllerDevice_t
 	{
@@ -63,9 +62,12 @@ private:
 	};
 
 	std::vector<GameControllerDevice_t *> m_controllers;
-
+#endif
 	int addGameController(int index);
 	int removeGameController(int id);
+	
+	int addJoystick(int index);
+	int removeJoystick(int id);
 
 private:
 
