@@ -649,6 +649,7 @@ void Maratis::duplicateSelectedObjects(void)
     MOCamera * camera;
     MOSound * sound;
     MOText * text;
+    MObject3d * group;
     MObject3d * object;
     char name[256];
     for(i=0; i<oSize; i++)
@@ -695,6 +696,13 @@ void Maratis::duplicateSelectedObjects(void)
                 getNewObjectName(object->getName(), name);
                 text = scene->addNewText(*(MOText *)object);
                 text->setName(name);
+            }
+                break;
+            case M_OBJECT3D:
+            {
+                getNewObjectName(object->getName(), name);
+                group = scene->addNewGroup(*object);
+                group->setName(name);
             }
                 break;
         }

@@ -189,6 +189,7 @@ public:
 	MOLight * addNewLight(void);
 
     MObject3d * addNewGroup(void);
+    MObject3d * addNewGroup(const MObject3d & object);
 
     /**
      * @brief Copies the light and adds the new instance to the scene.

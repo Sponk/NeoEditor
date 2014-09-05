@@ -62,6 +62,19 @@ MObject3d * MScene::addNewGroup(void)
     return object;
 }
 
+MObject3d * MScene::addNewGroup(const MObject3d & object)
+{
+    MObject3d * group = new MObject3d();
+    m_objects.push_back(group);
+
+    group->setPosition(object.getTransformedPosition());
+    group->setRotation(object.getRotation());
+    group->setScale(object.getTransformedScale());
+    group->updateMatrix();
+
+    return group;
+}
+
 MOCamera * MScene::addNewCamera(void)
 {
 	MOCamera * newCamera = new MOCamera();
