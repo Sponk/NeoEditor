@@ -742,10 +742,13 @@ void scene_tree_callback(Fl_Tree* tree, void*)
     // TODO: Testing!
     if(Fl::event_clicks() && (tree == Fl::focus() || window.glbox == Fl::focus()))
     {
-        MOCamera* vue = Maratis::getInstance()->getPerspectiveVue();
+        /*MOCamera* vue = Maratis::getInstance()->getPerspectiveVue();
         vue->setPosition(object->getPosition());
         vue->updateMatrix();
-        window.glbox->redraw();
+        window.glbox->redraw();*/
+
+        Maratis::getInstance()->focusSelection();
+        Maratis::getInstance()->getPerspectiveVue()->updateMatrix();
     }
 
     MVector3 position = object->getPosition();

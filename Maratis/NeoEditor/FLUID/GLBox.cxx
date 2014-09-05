@@ -222,6 +222,7 @@ int GLBox::handle(int event)
 {
     //fprintf(stderr, "Handle %d FL_KEYBOARD is %d\n", event, FL_KEYBOARD);
     char key[2] = {0,0};
+    MInputContext* input = MEngine::getInstance()->getInputContext();
     switch(event)
     {
     case FL_KEYBOARD:
@@ -241,16 +242,27 @@ int GLBox::handle(int event)
 
                 if(Fl::get_key(keys[i]))
                 {
-                    MEngine::getInstance()->getInputContext()->downKey(c);
+                    input->downKey(c);
                 }
                 else
                 {
-                    MEngine::getInstance()->getInputContext()->upKey(c);
+                    input->upKey(c);
                 }
             }
 
+            switch(Fl::event_key())
+            {
+            case FL_Shift_L:
+                    input->downKey("LSHIFT");
+                break;
+
+            case FL_Shift_R:
+                    input->downKey("RSHIFT");
+                break;
+            }
+
             Fl_Gl_Window::handle(event);
-            return isalpha(Fl::event_text()[0]);
+            return 1;
         }
         break;
 
@@ -268,12 +280,23 @@ int GLBox::handle(int event)
 
                 if(Fl::get_key(keys[i]))
                 {
-                    MEngine::getInstance()->getInputContext()->downKey(c);
+                    input->downKey(c);
                 }
                 else
                 {
-                    MEngine::getInstance()->getInputContext()->upKey(c);
+                    input->upKey(c);
                 }
+            }
+
+            switch(Fl::event_key())
+            {
+            case FL_Shift_L:
+                    input->upKey("LSHIFT");
+                break;
+
+            case FL_Shift_R:
+                    input->upKey("RSHIFT");
+                break;
             }
 
             Fl_Gl_Window::handle(event);
@@ -298,6 +321,9 @@ int GLBox::handle(int event)
 
             MMouse* mouse = MMouse::getInstance();
             mouse->setWheelDirection(direction);
+
+            MInputContext* input = MEngine::getInstance()->getInputContext();
+            input->setAxis("MOUSE_WHEEL", input->getAxis("MOUSE_WHEEL") + direction);
 
             if(::window.inputMethod == NULL)
             {
@@ -434,7 +460,6 @@ int GLBox::handle(int event)
         break;
     }
 
-    MInputContext* input = MEngine::getInstance()->getInputContext();
     if(input)
     {
         input->setAxis("MOUSE_X", -0.5+2*static_cast<float>(mouse_x-x())/w());
