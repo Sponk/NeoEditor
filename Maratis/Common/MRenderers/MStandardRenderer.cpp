@@ -58,9 +58,10 @@ m_FXsNumber(0)
 {
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 	MLOG_INFO("Renderer: " << render->getRendererVersion());
+
 #ifndef USE_GLES
     float version;
-    sscanf(render->getRendererVersion(), "%3d", &version);
+    sscanf(render->getRendererVersion(), "%3f", &version);
     if(version < 4.0)
     {
         MLOG_INFO("No GL4 compatible context found. Falling back to compat shaders.");
@@ -106,7 +107,7 @@ m_FXsNumber(0)
 	unsigned char * pixel = (unsigned char *)image.getData();
 	for(unsigned int i=0; i<image.getSize(); i++)
 	{
-		(*pixel) = (unsigned char)(rand()%256);
+        (*pixel) = (unsigned char)(rand()%256);
 		pixel++;
 	}
 
