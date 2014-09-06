@@ -257,10 +257,18 @@ Fl_Double_Window* EditorWindow::show_window() {
       glbox->when(FL_WHEN_RELEASE);
       Fl_Group::current()->resizable(glbox);
     } // GLBox* glbox
-    { scene_tree = new Fl_Tree(0, 55, 201, 570);
-      scene_tree->callback((Fl_Callback*)scene_tree_callback);
+    { scene_tree = new DnDTree(0, 55, 201, 570);
+      scene_tree->box(FL_DOWN_BOX);
+      scene_tree->color(FL_BACKGROUND2_COLOR);
+      scene_tree->selection_color(FL_SELECTION_COLOR);
+      scene_tree->labeltype(FL_NORMAL_LABEL);
+      scene_tree->labelfont(0);
+      scene_tree->labelsize(14);
+      scene_tree->labelcolor(FL_FOREGROUND_COLOR);
+      scene_tree->callback((Fl_Callback*)scene_tree_callback, (void*)(0));
+      scene_tree->align(Fl_Align(FL_ALIGN_TOP));
       scene_tree->when(FL_WHEN_RELEASE);
-    } // Fl_Tree* scene_tree
+    } // DnDTree* scene_tree
     { edit_group = new Fl_Group(3, 24, 911, 33);
       { Fl_Round_Button* o = new Fl_Round_Button(198, 27, 39, 24);
         o->type(102);

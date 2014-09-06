@@ -713,8 +713,14 @@ void create_behavior_ui(MObject3d* object)
 
 #define DELETE_WINDOW(x) remove_window(x); x = NULL
 
-void scene_tree_callback(Fl_Tree* tree, void*)
+void scene_tree_callback(DnDTree* tree, long update_tree)
 {
+    if(update_tree)
+    {
+        update_scene_tree();
+        return;
+    }
+
     Fl_Tree_Item* item = tree->first_selected_item();
 
     if(!item)

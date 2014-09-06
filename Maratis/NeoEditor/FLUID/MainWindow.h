@@ -35,8 +35,8 @@ extern void add_group_callback(Fl_Menu_*, void*);
 extern void plugin_console_callback(Fl_Menu_*, void*);
 extern void about_menu_callback(Fl_Menu_*, void*);
 #include "GLBox.h"
-#include <FL/Fl_Tree.H>
-extern void scene_tree_callback(Fl_Tree*, void*);
+#include "DnDTree.h"
+extern void scene_tree_callback(DnDTree*, long);
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Round_Button.H>
 extern void set_edit_type(Fl_Round_Button*, long);
@@ -88,7 +88,7 @@ public:
   static Fl_Menu_Item menu_menu_bar[];
   static Fl_Menu_Item *behavior_menu;
   GLBox *glbox;
-  Fl_Tree *scene_tree;
+  DnDTree *scene_tree;
   Fl_Group *edit_group;
   Fl_Choice *scenes_menu;
   Fl_Group *speed_group;

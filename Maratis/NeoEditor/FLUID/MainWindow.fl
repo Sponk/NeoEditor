@@ -23,8 +23,8 @@ class EditorWindow {open
   } {
     Fl_Window {} {
       label Neo
-      callback window_quit
-      xywh {1894 292 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
+      callback window_quit open
+      xywh {1894 292 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -228,8 +228,11 @@ class EditorWindow {open
         class GLBox
       }
       Fl_Tree scene_tree {
-        callback scene_tree_callback
+        user_data 0 user_data_type long
+        callback scene_tree_callback selected
         xywh {0 55 201 570} when 4
+        code0 {\#include "DnDTree.h"}
+        class DnDTree
       }
       Fl_Group edit_group {open
         xywh {3 24 911 33}
@@ -1080,8 +1083,7 @@ Fl::delete_widget(window);} {}
   }
 } 
 
-class MaterialEditDlg {open
-} {
+class MaterialEditDlg {} {
   decl {char object_name[256];} {private local
   }
   Function {create_window(const char* name)} {} {
@@ -1836,15 +1838,14 @@ delete dlg;} {}
   }
 } 
 
-class ConfigurationDlg {open
-} {
+class ConfigurationDlg {} {
   decl {Fl_Text_Buffer text_buffer;} {private local
   }
   Function {create_window()} {open
   } {
     Fl_Window {} {
       label Configuration open
-      xywh {1981 372 543 348} type Double visible
+      xywh {1981 372 543 348} type Double hide
     } {
       Fl_Tabs {} {open
         xywh {0 3 546 342}
@@ -2054,8 +2055,7 @@ for(int i = 0; i < editorPlugins.size(); i++)
 }
 
 input_methods_choice->value(idx);
-description_edit->buffer(&text_buffer);} {selected
-    }
+description_edit->buffer(&text_buffer);} {}
   }
   Function {choose_background_color(Fl_Button*, ConfigurationDlg* dlg)} {open return_type {static void}
   } {
