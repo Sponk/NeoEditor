@@ -14,9 +14,15 @@ int DnDTree::handle(int e)
         break;
 
     case FL_DRAG:
-        Fl::copy(first_selected_item()->label(), strlen(first_selected_item()->label()), 0);
-        Fl::dnd();
-        return 1;
+        {
+            Fl_Tree_Item* item = first_selected_item();
+            if(!item)
+                return 1;
+
+            Fl::copy(item->label(), strlen(item->label()), 0);
+            Fl::dnd();
+            return 1;
+        }
         break;
 
     case FL_PASTE:
