@@ -1590,7 +1590,7 @@ void play_game_callback(Fl_Menu_*, void*)
     }
 
     errno = 0;
-    FILE* file = _popen(("\"" + current_project.path + "MaratisPlayer.exe\" \"" + project_name + "\" 1024 768 0 1").c_str(), "r");
+    FILE* file = _popen(("\"" + current_project.path + "MaratisPlayer.exe \"" + project_name + "\" 1024 768 0 1\"").c_str(), "r");
 #endif
 
     if(file == NULL || errno != 0)
