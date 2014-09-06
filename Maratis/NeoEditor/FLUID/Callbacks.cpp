@@ -277,14 +277,14 @@ float rotation_speed = 1.0;
 
 void rotation_speed_callback(Fl_Value_Input* input, void*)
 {
-    rotation_speed = input->value() / 10;
+    rotation_speed = input->value();
 }
 
 float translation_speed = 1.0;
 
 void translation_speed_callback(Fl_Value_Input* input, void*)
 {
-    translation_speed = input->value()/10;
+    translation_speed = input->value();
 }
 
 void set_edit_type(Fl_Round_Button* button, long c)

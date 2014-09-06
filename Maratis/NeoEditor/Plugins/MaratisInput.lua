@@ -29,7 +29,7 @@ function zoom_vue(camera)
     local position = getPosition(camera)
     local axis = getRotatedVector(camera, {0,0,-1})
 
-    local wheel = getAxis("MOUSE_WHEEL") * 40.0
+    local wheel = getAxis("MOUSE_WHEEL") * 30.0
     local factor = length(selection_center() - position) * 0.01
     
     setPosition(camera, position - (axis * (wheel - mwheel) * factor)*getTranslationSpeed())
@@ -45,7 +45,7 @@ function pan_vue(camera)
     local axis = getRotatedVector(camera, {0,0,-1})
     
     local z = dot(selection_center() - position, axis)
-    local fovFactor = getCameraFov(camera) * 0.0292;
+    local fovFactor = getCameraFov(camera) * 0.0192;
     
     mx = getAxis("MOUSE_X")
     my = getAxis("MOUSE_Y")
@@ -63,8 +63,9 @@ function rotate_vue(camera)
     
     setPosition(camera, selection_center())
     
-    rotate(camera, getRotatedVector(camera, {0,1,0}), -(getAxis("MOUSE_X") - xpos)*150*rotationSpeed)
-    rotate(camera, getRotatedVector(camera, {1,0,0}), -(getAxis("MOUSE_Y") - ypos)*150*rotationSpeed)
+    setRotation(camera, getRotation(camera) + {-(getAxis("MOUSE_Y") - ypos)*150*rotationSpeed, 0, -(getAxis("MOUSE_X") - xpos)*150*rotationSpeed})
+    --rotate(camera, getRotatedVector(camera, {0,1,0}), -(getAxis("MOUSE_X") - xpos)*150*rotationSpeed)
+    --rotate(camera, getRotatedVector(camera, {1,0,0}), -(getAxis("MOUSE_Y") - ypos)*150*rotationSpeed)
     
     updateMatrix(camera)
     
