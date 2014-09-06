@@ -262,7 +262,7 @@ int GLBox::handle(int event)
             }
 
             Fl_Gl_Window::handle(event);
-            return 1;
+            return isalpha(Fl::event_text()[0]);
         }
         break;
 
@@ -457,6 +457,43 @@ int GLBox::handle(int event)
 
             redraw();
         }
+        break;
+
+    case FL_DND_ENTER:
+    case FL_DND_DRAG:
+    case FL_DND_RELEASE:
+        return 1;
+        break;
+
+    case FL_PASTE:
+            {
+                std::string filename = Fl::event_text();
+
+                if(filename.find("file://") != 0)
+                    return 1;
+
+                filename = filename.substr(7);
+
+                // Don't try to load anything if path is shorter than the shortest file extension
+                if(filename.length() < 4)
+                    return 1;
+
+                if(filename.compare(filename.length() - strlen(".mesh"), strlen(".mesh"), ".mesh") == 0)
+                {
+                    Maratis::getInstance()->okAddEntity(filename.c_str());
+                }
+                else if(filename.compare(filename.length() - strlen(".ttf"), strlen(".ttf"), ".ttf") == 0)
+                {
+                    Maratis::getInstance()->okAddFont(filename.c_str());
+                }
+                else
+                {
+                    Maratis::getInstance()->okAddSound(filename.c_str());
+                }
+
+                update_scene_tree();
+                return 1;
+            }
         break;
     }
 

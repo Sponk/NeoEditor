@@ -864,7 +864,7 @@ void Maratis::okAddEntity(const char * filename)
         MScene * scene = level->getCurrentScene();
 
         MMeshRef * meshRef = level->loadMesh(filename);
-        if(meshRef)
+        if(meshRef && meshRef->getMesh()->getSubMeshsNumber() > 0)
         {
             char name[256] = "Entity0";
             maratis->getNewObjectName("Entity", name);
