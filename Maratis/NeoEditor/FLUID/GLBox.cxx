@@ -469,11 +469,13 @@ int GLBox::handle(int event)
             {
                 std::string filename = Fl::event_text();
 
+				#ifndef WIN32
                 if(filename.find("file://") != 0)
                     return 1;
 
-                filename = filename.substr(7);
-
+				filename = filename.substr(7);
+				#endif
+  
                 // Don't try to load anything if path is shorter than the shortest file extension
                 if(filename.length() < 4)
                     return 1;
