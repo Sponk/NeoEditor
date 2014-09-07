@@ -107,7 +107,10 @@ void quit_callback(Fl_Menu_*, void*)
 
             out << "[theme]" << endl;
 
-            out << "scheme=" << Fl::scheme() << endl;
+            if(Fl::scheme() != NULL)
+                out << "scheme=" << Fl::scheme() << endl;
+            else
+                out << "scheme=none" << endl;
 
             MVector3 vector = flColorToVector(Fl::get_color(FL_BACKGROUND_COLOR));
             out << "background_r=" << vector.x << endl;

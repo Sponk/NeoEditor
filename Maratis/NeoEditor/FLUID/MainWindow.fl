@@ -229,7 +229,7 @@ class EditorWindow {open
       }
       Fl_Tree scene_tree {
         user_data 0 user_data_type long
-        callback scene_tree_callback selected
+        callback scene_tree_callback
         xywh {0 55 201 570} when 4
         code0 {\#include "DnDTree.h"}
         class DnDTree
@@ -1838,7 +1838,8 @@ delete dlg;} {}
   }
 } 
 
-class ConfigurationDlg {} {
+class ConfigurationDlg {open
+} {
   decl {Fl_Text_Buffer text_buffer;} {private local
   }
   Function {create_window()} {open
@@ -2025,14 +2026,22 @@ class ConfigurationDlg {} {
   foreground_color_b->value(static_cast<float>(bytes[2])/255.0f);
   
 const char* themes[] = {"gtk+", "gleam", "plastic", "none"};
+const char* scheme = Fl::scheme();
 
-for(int i = 0; i < 4; i++)
+if(scheme != NULL)
 {
-	if(!strcmp(themes[i], Fl::scheme()))
-	{
-		theme_chooser->value(i);
-		break;	
-	}
+  for(int i = 0; i < 4; i++)
+  {
+      if(!strcmp(themes[i], scheme))
+      {
+          theme_chooser->value(i);
+          break;
+      }
+  }
+}
+else
+{
+    theme_chooser->value(3);
 }
 
 extern std::vector<MPluginScript*> editorPlugins;
@@ -2055,7 +2064,8 @@ for(int i = 0; i < editorPlugins.size(); i++)
 }
 
 input_methods_choice->value(idx);
-description_edit->buffer(&text_buffer);} {}
+description_edit->buffer(&text_buffer);} {selected
+    }
   }
   Function {choose_background_color(Fl_Button*, ConfigurationDlg* dlg)} {open return_type {static void}
   } {

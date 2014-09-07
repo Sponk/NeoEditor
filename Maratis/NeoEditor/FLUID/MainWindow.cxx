@@ -4828,14 +4828,22 @@ Fl_Double_Window* ConfigurationDlg::create_window() {
     foreground_color_b->value(static_cast<float>(bytes[2])/255.0f);
     
   const char* themes[] = {"gtk+", "gleam", "plastic", "none"};
+  const char* scheme = Fl::scheme();
   
-  for(int i = 0; i < 4; i++)
+  if(scheme != NULL)
   {
-  	if(!strcmp(themes[i], Fl::scheme()))
-  	{
-  		theme_chooser->value(i);
-  		break;	
-  	}
+    for(int i = 0; i < 4; i++)
+    {
+        if(!strcmp(themes[i], scheme))
+        {
+            theme_chooser->value(i);
+            break;
+        }
+    }
+  }
+  else
+  {
+      theme_chooser->value(3);
   }
   
   extern std::vector<MPluginScript*> editorPlugins;
