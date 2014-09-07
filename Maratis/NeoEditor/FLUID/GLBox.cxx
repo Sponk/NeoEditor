@@ -19,6 +19,9 @@
 
 #include "../MPluginScript/MPluginScript.h"
 
+#include <algorithm>
+#include <string>
+
 extern Fl_Double_Window* main_window;
 extern EditorWindow window;
 
@@ -217,6 +220,8 @@ void GLBox::draw()
 
     swap_buffers();
 }
+
+#define ENDS_WITH(s, e) s.compare(s.length() - strlen(e), strlen(e), e) == 0
 
 int GLBox::handle(int event)
 {
@@ -468,7 +473,9 @@ int GLBox::handle(int event)
     case FL_PASTE:
             {
                 std::string filename = Fl::event_text();
+                std::string suffix = filename;
 
+                // Window does not add 'file://' to the path.
 				#ifndef WIN32
                 if(filename.find("file://") != 0)
                     return 1;
@@ -480,17 +487,47 @@ int GLBox::handle(int event)
                 if(filename.length() < 4)
                     return 1;
 
-                if(filename.compare(filename.length() - strlen(".mesh"), strlen(".mesh"), ".mesh") == 0)
+                // Convert path to lowercase
+                std::transform(suffix.begin(), suffix.end(), suffix.begin(), ::tolower);
+
+                if(ENDS_WITH(suffix, ".mproj"))
+                {
+                    if(!current_project.path.empty() && !fl_ask("You need to close the current project. Do you want to proceed?"))
+                        return 1;
+
+                    current_project.path = filename;
+                    current_project.file_path = filename;
+
+                #ifndef WIN32
+                    current_project.path = current_project.path.erase(current_project.path.find_last_of("/")+1, current_project.path.length());
+                #else
+                    current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
+                #endif
+                    Maratis::getInstance()->loadProject(filename.c_str());
+                    current_project.level = Maratis::getInstance()->getCurrentLevel();
+                    reload_editor = true;
+                }
+                else if(ENDS_WITH(suffix, ".level"))
+                {
+                    Maratis::getInstance()->loadLevel(filename.c_str());
+                    current_project.level = filename;
+                }
+                else if(ENDS_WITH(suffix, ".mesh"))
                 {
                     Maratis::getInstance()->okAddEntity(filename.c_str());
                 }
-                else if(filename.compare(filename.length() - strlen(".ttf"), strlen(".ttf"), ".ttf") == 0)
+                else if(ENDS_WITH(suffix, ".ttf"))
                 {
                     Maratis::getInstance()->okAddFont(filename.c_str());
                 }
-                else
+                else if(ENDS_WITH(suffix, ".wav") || ENDS_WITH(suffix, ".ogg") || ENDS_WITH(suffix, ".aiff"))
                 {
                     Maratis::getInstance()->okAddSound(filename.c_str());
+                }
+                else
+                {
+                    MLOG_ERROR("Could not load file on drag'n'drop: " << filename);
+                    fl_message("Could not load the file you dropped. File type is unknown!");
                 }
 
                 update_scene_tree();
