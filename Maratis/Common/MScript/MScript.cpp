@@ -851,7 +851,21 @@ int deleteObject(lua_State * L)
         scene = level->getCurrentScene();
     }
 
-    scene->deleteObject(getObject3d(lua_tonumber(L, 1)));
+    MObject3d* object = getObject3d(lua_tonumber(L, 1));
+    if(object->getType() == M_OBJECT3D_ENTITY)
+    {
+        MPhysicsContext* physics = MEngine::getInstance()->getPhysicsContext();
+        MOEntity * entity = (MOEntity*)object;
+        MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+        if(phyProps)
+        {
+            unsigned int id = phyProps->getCollisionObjectId();
+            physics->deactivateObject(id);
+            physics->deleteObject(&id);
+        }
+    }
+
+    scene->deleteObject(object);
     return 1;
 }
 
