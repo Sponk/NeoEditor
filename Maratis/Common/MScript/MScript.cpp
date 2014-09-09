@@ -852,7 +852,7 @@ int deleteObject(lua_State * L)
     }
 
     MObject3d* object = getObject3d(lua_tonumber(L, 1));
-    if(object->getType() == M_OBJECT3D_ENTITY)
+    if(object != NULL && object->getType() == M_OBJECT3D_ENTITY)
     {
         MPhysicsContext* physics = MEngine::getInstance()->getPhysicsContext();
         MOEntity * entity = (MOEntity*)object;

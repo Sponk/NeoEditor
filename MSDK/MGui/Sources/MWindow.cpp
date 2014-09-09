@@ -765,7 +765,7 @@ int MWindow::addGameController(int index)
 	}
 
 	controller->id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller->device));
-	m_controllers.push_back(controller);
+    m_controllers.push_back(controller);
 	return controller->id;
 #endif
 }
