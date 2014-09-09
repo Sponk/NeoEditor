@@ -1,111 +1,130 @@
-#include <MCore.h>
-#include <MEngine.h>
-#include <cassert>
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MCore Additional
+// MWavSoundLoader.cpp
+//
+// simple wav Sound loader
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Should actually include csdtint but this requires stdc++11 on gcc
-#include <stdint.h>
+//========================================================================
+// Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+//
+// This software is provided 'as-is', without any express or implied
+// warranty. In no event will the authors be held liable for any damages
+// arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented; you must not
+//    claim that you wrote the original software. If you use this software
+//    in a product, an acknowledgment in the product documentation would
+//    be appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such, and must not
+//    be misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source
+//    distribution.
+//
+//========================================================================
+
+
+#include <stdio.h>
+#include <MEngine.h>
 #include "MWAVLoader.h"
 
-// "RIFF" in ASCII (0x52494646 as big endian)
-#define CHUNK_ID 0x46464952
 
-// "WAVE" in ASCII (0x57415645 as big endian)
-#define FORMAT 0x45564157
-
-// "data" in ASCII (0x64617461 as big endian)
-#define SUBCHUNK_ID  0x61746164
-
-#pragma pack(push, 1)
-typedef struct
-{
-    uint32_t chunk_id;
-    uint32_t chunk_size;
-    uint32_t format;
-    uint32_t subchunk_id;
-    uint32_t subchunk_size;
-    uint16_t audio_format;
-    uint16_t num_channels;
-    uint32_t sample_rate;
-    uint32_t byte_rate;
-    uint16_t block_align;
-    uint16_t bits_per_sample;
-    uint32_t subchunk2_id;
-    uint32_t subchunk2_size;
-}wave_header_t;
-#pragma pack(pop)
-
-// TODO: More error checking!
 bool M_loadWAVSound(const char * filename, void * data)
 {
-    MFile* file;
-    char* file_buffer = NULL;
-
-    if((!data) || (!filename))
-        return false;
-
-    MSound* sound = (MSound*) data;
-
-    if(!(file = M_fopen(filename, "rb")))
-    {
-        fprintf(stderr, "ERROR: Could not open WAV sound file!\n");
-    }
-
-    M_fseek(file, 0, SEEK_END);
-    unsigned long filesize = file->tell();
-    file->seek(0, SEEK_SET);
-
-    file_buffer = (char*) malloc(filesize);
-    assert(file_buffer);
-
-    file->read(file_buffer, filesize, 1);
-    file->close();
-
-    wave_header_t* header = (wave_header_t*) file_buffer;
-
-    // Check for sanity
-    if(header->chunk_id != CHUNK_ID || header->format != FORMAT
-            || header->subchunk2_id != SUBCHUNK_ID)
-    {
-        MLOG_ERROR("File is not a valid WAV file!\n");
-        return false;
-    }
-
-    uint32_t chunk_size = header->chunk_size;
-
-    M_SOUND_FORMAT format = static_cast<M_SOUND_FORMAT>(-1);
-    switch(header->num_channels)
-    {
-        case 1:
-            if(header->bits_per_sample == 16)
-                format = M_SOUND_FORMAT_MONO16;
-            else if(header->bits_per_sample == 8)
-                format = M_SOUND_FORMAT_MONO8;
-            else
-            {
-                MLOG_ERROR("This RIFF file is not a mono 8 or 16 bit PCM file!")
-            }
-        break;
-
-        case 2:
-            if(header->bits_per_sample == 16)
-                format = M_SOUND_FORMAT_STEREO16;
-            else if(header->bits_per_sample == 8)
-                format = M_SOUND_FORMAT_STEREO8;
-            else
-            {
-                MLOG_ERROR("This RIFF file is not a stereo 8 or 16 bit PCM file!")
-            }
-
-        break;
-
-        default:
-            MLOG_ERROR("Could not load WAV file! Unknown format!\n");
-            return false;
-    }
-
-    sound->create(format, header->subchunk2_size, header->sample_rate);
-    memcpy((char*)sound->getData(), (char*) (++header), header->subchunk2_size);
-
-    free(file_buffer);
-    return true;
+	MFile * file = M_fopen(filename, "rb");
+	if(! file)
+	{
+		printf("ERROR Load Sound : unable to read %s file\n", filename);
+		return false;
+	}
+	
+	// read header
+	char header[4];
+	M_fread(header, sizeof(char), 4, file);
+	
+	// RIFF - WAV
+	if(strncmp(header, "RIFF", 4) == 0)
+	{
+		unsigned int size;
+		M_fread(&size, sizeof(int), 1, file);
+		M_fread(header, sizeof(char), 4, file);
+		
+		if(strncmp(header, "WAVE", 4) == 0)
+		{
+			short format_tag, channels, block_align, bits_per_sample;
+			unsigned int format_length, sample_rate, avg_bytes_sec, data_size;
+			
+			M_fread(header, sizeof(char), 4, file); // "fmt ";
+			M_fread(&format_length, sizeof(int),1,file);
+			M_fread(&format_tag, sizeof(short), 1, file);
+			M_fread(&channels, sizeof(short),1,file);
+			M_fread(&sample_rate, sizeof(int), 1, file);
+			M_fread(&avg_bytes_sec, sizeof(int), 1, file);
+			M_fread(&block_align, sizeof(short), 1, file);
+			M_fread(&bits_per_sample, sizeof(short), 1, file);
+			M_fread(header, sizeof(char), 4, file); // "data"
+			M_fread(&data_size, sizeof(int), 1, file);
+			
+			if((! (bits_per_sample == 8 || bits_per_sample == 16)) || (! (channels > 0 && channels <= 2)) || (format_tag != 1))
+			{
+				MLOG_ERROR("Load Sound : Unsupported RIFF file");
+				M_fclose(file);
+				return false;
+			}
+			
+			M_SOUND_FORMAT format;
+			switch(bits_per_sample)
+			{
+				case 8:
+				{
+					switch(channels)
+					{
+						case 1:
+							format = M_SOUND_FORMAT_MONO8;
+							break;
+						case 2:
+							format = M_SOUND_FORMAT_STEREO8;
+							break;
+					}
+					break;
+				}
+				case 16:
+				{
+					switch(channels)
+					{
+						case 1:
+							format = M_SOUND_FORMAT_MONO16;
+							break;
+						case 2:
+							format = M_SOUND_FORMAT_STEREO16;
+							break;
+					}
+					break;
+				}
+			}
+			
+			// create sound
+			MSound * sound = (MSound *)data;
+			sound->create(format, data_size, sample_rate);
+			
+			// read sound data
+			M_fread((char *)sound->getData(), sizeof(char), data_size, file);
+			
+			M_fclose(file);
+			return true;
+		}
+		else
+		{
+			MLOG_ERROR("Load Sound : unsupported RIFF file");
+		}
+	}
+	
+	M_fclose(file);
+	return false;
 }
