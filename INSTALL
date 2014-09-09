@@ -1,61 +1,62 @@
 Building
 ========
 
-Maratis uses CMake to configure and generate build files. Builds must be made 
-outside of the source tree.
+NeoEditor uses CMake to configure and generate build files. Builds must be made 
+outside of the source tree. For example if the location of the source directory
+is ~/NeoEditor then you must place the build directory in ~/
 
 
 Mac OS X
 --------
 
-To generate an Xcode project for building Maratis, peform the following steps
+To generate an Xcode project for building NeoEditor, perform the following steps
 to create a build directory outside of the source tree:
 
   mkdir Build
   cd Build
-  cmake -G Xcode ../Maratis
+  cmake -G Xcode ../NeoEditor
 
-Assuming the Maratis source directory resides in the same top directory.
+Assuming the NeoEditor source directory resides in the same top directory.
 
 
 Windows
 -------
 
-To generate a Microsoft Visual Studio project for building Maratis, perform 
+To generate a Microsoft Visual Studio project for building NeoEditor, perform 
 the following steps to create a build directory outside of the source tree:
 
   mkdir Build
   cd Build
-  cmake -G "Visual Studio 10" ../Maratis
+  cmake -G "Visual Studio 10" ../NeoEditor
 
-Assuming the Maratis source directory resides in the same top directory.
+Assuming the NeoEditor source directory resides in the same top directory.
 
 
 Linux
 -----
 
-To generate Makefiles for building Maratis, perform the following steps to 
+To generate Makefiles for building NeoEditor, perform the following steps to 
 create a build directory outside of the source tree:
 
   mkdir Build
   cd Build
-  cmake -G "Unix Makefiles" ../Maratis
+  cmake -G "Unix Makefiles" ../NeoEditor
   make
   make install
 
-Assuming the Maratis source directory resides in the same top directory.
+Assuming the NeoEditor source directory resides in the same top directory.
 
 
 Installation
 ------------
 
-The installation location is dependant on the build platform. E.g. it defaults 
+The installation location is dependent on the build platform. E.g. it defaults 
 to /usr/local on Linux and c:/Program Files on Windows.
 
-To override it and install Maratis locally you have to set the install prefix 
+To override it and install NeoEditor locally you have to set the install prefix 
 when running CMake to generate the build files:
 
-  cmake -DCMAKE_INSTALL_PREFIX=~/ ../Maratis
+  cmake -DCMAKE_INSTALL_PREFIX=~/ ../NeoEditor
 
-This will install the Editor, Player and SDK in a directory called Maratis 
+This will install the Editor, Player and SDK in a directory called NeoEditor 
 located in your home directory.
