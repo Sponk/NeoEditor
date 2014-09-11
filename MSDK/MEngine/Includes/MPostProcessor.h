@@ -25,26 +25,26 @@ class M_ENGINE_EXPORT MPostProcessor
 public:
     MPostProcessor();
 
-    bool Render(MOCamera* camera);
+    bool draw(MOCamera* camera);
 
     bool loadShader(const char* vertShad, const char* fragShad);
 
-    void UpdateResolution();
-    void EraseTextures();
+    void updateResolution();
+    void eraseTextures();
 
-    void AddFloatUniform(const char* name);
-    void AddIntUniform(const char* name);
+    void addFloatUniform(const char* name);
+    void addIntUniform(const char* name);
 
-    void SetIntUniformValue(const char* name, int value);
-    void SetFloatUniformValue(const char* name, float value);
+    void setIntUniformValue(const char* name, int value);
+    void setFloatUniformValue(const char* name, float value);
 
-    void Clear();
+    void clear();
 
 private:
-    void Set2D(unsigned int w, unsigned int h);
-    void DrawQuad(MVector2 scale);
+    void set2D(unsigned int w, unsigned int h);
+    void drawQuad(MVector2 scale);
 
-    void SendUniforms();
+    void sendUniforms();
 
     unsigned int m_BufferID;
     unsigned int m_ColourTexID;

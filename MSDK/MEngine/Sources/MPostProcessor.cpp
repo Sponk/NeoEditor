@@ -38,7 +38,7 @@ inline int Pow2(int x)
     return x+1;
 }
 
-void MPostProcessor::EraseTextures()
+void MPostProcessor::eraseTextures()
 {
     MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
@@ -52,7 +52,7 @@ void MPostProcessor::EraseTextures()
         render->deleteFrameBuffer(&m_BufferID);
 }
 
-void MPostProcessor::UpdateResolution()
+void MPostProcessor::updateResolution()
 {
     MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
     MSystemContext * system = MEngine::getInstance()->getSystemContext();
@@ -94,10 +94,10 @@ MPostProcessor::MPostProcessor()
     , m_fragShad(0)
     , m_vertShad(0)
 {
-    UpdateResolution();
+    updateResolution();
 }
 
-bool MPostProcessor::Render(MOCamera* camera)
+bool MPostProcessor::draw(MOCamera* camera)
 {
     if(m_fx == 0)
         return false;
@@ -155,13 +155,13 @@ bool MPostProcessor::Render(MOCamera* camera)
     render->setClearColor(MVector3(1, 0, 0));
     render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
 
-    Set2D(screenWidth, screenHeight);
+    set2D(screenWidth, screenHeight);
 
     render->bindFX(m_fx);
     render->bindTexture(m_ColourTexID);
     render->bindTexture(m_DepthTexID, 1);
 
-    DrawQuad(MVector2((float)screenWidth, (float)screenHeight));
+    drawQuad(MVector2((float)screenWidth, (float)screenHeight));
     render->bindFX(0);
     return true;
 }
@@ -171,8 +171,8 @@ bool MPostProcessor::loadShader(const char* vertShad, const char* fragShad)
     if(vertShad == NULL || fragShad == NULL)
         return false;
 
-    EraseTextures();
-    UpdateResolution();
+    eraseTextures();
+    updateResolution();
 
     MRenderingContext * render = MEngine::getInstance()->getRenderingContext(); // get the rendering context
     bool success = false;
@@ -200,7 +200,7 @@ bool MPostProcessor::loadShader(const char* vertShad, const char* fragShad)
     return success;
 }
 
-void MPostProcessor::Set2D(unsigned int w, unsigned int h)
+void MPostProcessor::set2D(unsigned int w, unsigned int h)
 {
     MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
     render->setViewport(0, 0, w, h);
@@ -215,7 +215,7 @@ void MPostProcessor::Set2D(unsigned int w, unsigned int h)
     render->loadIdentity();
 }
 
-void MPostProcessor::DrawQuad(MVector2 scale)
+void MPostProcessor::drawQuad(MVector2 scale)
 {
     MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
@@ -235,7 +235,7 @@ void MPostProcessor::DrawQuad(MVector2 scale)
     texCoords[2] = MVector2(1, 1);
 
     // Send settings to shader
-    SendUniforms();
+    sendUniforms();
 
     // projmodelview matrix
     static MMatrix4x4 ProjMatrix;
@@ -273,7 +273,7 @@ void MPostProcessor::DrawQuad(MVector2 scale)
     render->disableAttribArray(texcoordAttrib);
 }
 
-void MPostProcessor::AddFloatUniform(const char* name)
+void MPostProcessor::addFloatUniform(const char* name)
 {
     float_uniform_t uniform;
     strcpy(uniform.name, name);
@@ -284,7 +284,7 @@ void MPostProcessor::AddFloatUniform(const char* name)
     m_FloatUniformList.push_back(uniform);
 }
 
-void MPostProcessor::AddIntUniform(const char* name)
+void MPostProcessor::addIntUniform(const char* name)
 {
     int_uniform_t uniform;
     strcpy(uniform.name, name);
@@ -295,7 +295,7 @@ void MPostProcessor::AddIntUniform(const char* name)
     m_IntUniformList.push_back(uniform);
 }
 
-void MPostProcessor::SetIntUniformValue(const char* name, int value)
+void MPostProcessor::setIntUniformValue(const char* name, int value)
 {
     for(unsigned int i = 0; i < m_IntUniformList.size(); i++)
     {
@@ -307,7 +307,7 @@ void MPostProcessor::SetIntUniformValue(const char* name, int value)
     }
 }
 
-void MPostProcessor::SetFloatUniformValue(const char* name, float value)
+void MPostProcessor::setFloatUniformValue(const char* name, float value)
 {
     for(unsigned int i = 0; i < m_FloatUniformList.size(); i++)
     {
@@ -320,7 +320,7 @@ void MPostProcessor::SetFloatUniformValue(const char* name, float value)
     }
 }
 
-void MPostProcessor::SendUniforms()
+void MPostProcessor::sendUniforms()
 {
     MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
@@ -352,7 +352,7 @@ void MPostProcessor::SendUniforms()
     }
 }
 
-void MPostProcessor::Clear()
+void MPostProcessor::clear()
 {
     m_FloatUniformList.clear();
     m_IntUniformList.clear();

@@ -190,7 +190,7 @@ void MGame::draw(void)
 		MOCamera * camera = scene->getCurrentCamera();
 
 		// draw current scene
-        if(!camera->getRenderColorTexture() && (!m_postEffectsEnabled || !m_postProcessor.Render(camera)))
+        if(!camera->getRenderColorTexture() && (!m_postEffectsEnabled || !m_postProcessor.draw(camera)))
 		{
 			render->setClearColor(camera->getClearColor());
 			render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
@@ -237,8 +237,8 @@ void MGame::onBeginScene(void)
 	// begin scene
 	scene->begin();
 
-    m_postProcessor.EraseTextures();
-    m_postProcessor.UpdateResolution();
+    m_postProcessor.eraseTextures();
+    m_postProcessor.updateResolution();
 }
 
 void MGame::onEndScene(void)
@@ -258,5 +258,5 @@ void MGame::onEndScene(void)
 
 	// end scene
 	scene->end();
-    m_postProcessor.Clear();
+    m_postProcessor.clear();
 }

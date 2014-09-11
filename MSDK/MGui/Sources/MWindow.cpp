@@ -257,8 +257,8 @@ void MWindow::sendEvents(MWinEvent * event)
 			m_width = (unsigned int)event->data[0];
 			m_height = (unsigned int)event->data[1];
 
-            MEngine::getInstance()->getGame()->getPostProcessor()->EraseTextures();
-            MEngine::getInstance()->getGame()->getPostProcessor()->UpdateResolution();
+            MEngine::getInstance()->getGame()->getPostProcessor()->eraseTextures();
+            MEngine::getInstance()->getGame()->getPostProcessor()->updateResolution();
 
 			break;
 
