@@ -221,7 +221,7 @@ void GLBox::draw()
     swap_buffers();
 }
 
-#define ENDS_WITH(s, e) s.compare(s.length() - strlen(e), strlen(e), e) == 0
+#define ENDS_WITH(s, e) (s.compare(s.length() - strlen(e), strlen(e), e) == 0)
 
 int GLBox::handle(int event)
 {
@@ -473,6 +473,11 @@ int GLBox::handle(int event)
     case FL_PASTE:
             {
                 std::string filename = Fl::event_text();
+
+                // Some WMs like to add a '\n' to the path.
+                if(ENDS_WITH(filename, "\n"))
+                    filename.erase(filename.end()-1);
+
                 std::string suffix = filename;
 
                 // Window does not add 'file://' to the path.
@@ -490,7 +495,7 @@ int GLBox::handle(int event)
                 // Convert path to lowercase
                 std::transform(suffix.begin(), suffix.end(), suffix.begin(), ::tolower);
 
-                if(ENDS_WITH(suffix, ".mproj"))
+                if(ENDS_WITH(suffix, ".mproj") != 0)
                 {
                     if(!current_project.path.empty() && !fl_ask("You need to close the current project. Do you want to proceed?"))
                         return 1;
