@@ -190,7 +190,7 @@ void MGame::draw(void)
 		MOCamera * camera = scene->getCurrentCamera();
 
 		// draw current scene
-		if(! camera->getRenderColorTexture())
+        if(!camera->getRenderColorTexture() && (!m_postEffectsEnabled || !m_postProcessor.Render(camera)))
 		{
 			render->setClearColor(camera->getClearColor());
 			render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
@@ -200,7 +200,8 @@ void MGame::draw(void)
 			scene->draw(camera);
 			scene->drawObjectsBehaviors();
 		}
-		
+
+
 		// draw scene layer
 		unsigned int sceneLayerId = camera->getSceneLayer();
 		if(sceneLayerId > 0 && sceneLayerId <= level->getScenesNumber())
@@ -235,6 +236,9 @@ void MGame::onBeginScene(void)
 
 	// begin scene
 	scene->begin();
+
+    m_postProcessor.EraseTextures();
+    m_postProcessor.UpdateResolution();
 }
 
 void MGame::onEndScene(void)
@@ -254,4 +258,5 @@ void MGame::onEndScene(void)
 
 	// end scene
 	scene->end();
+    m_postProcessor.Clear();
 }

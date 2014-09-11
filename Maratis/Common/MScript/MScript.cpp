@@ -4608,6 +4608,50 @@ int loadCameraSkybox(lua_State * L)
     return 0;
 }
 
+// enablePostEffects(vertShadSrc, fragShadSrc)
+int enablePostEffects(lua_State * L)
+{
+    int num_args = lua_gettop(L);
+    MGame* game = MEngine::getInstance()->getGame();
+
+    if(num_args == 0)
+    {
+        game->enablePostEffects();
+    }
+
+    if(num_args == 2)
+    {
+        game->enablePostEffects();
+        game->getPostProcessor()->loadShader(lua_tostring(L, 1), lua_tostring(L, 2));
+    }
+
+    return 0;
+}
+
+// loadPostEffectsShader(vertShadFile, fragShadFile)
+int loadPostEffectsShader(lua_State * L)
+{
+    if(!isFunctionOk(L, "loadPostEffectsShader", 2))
+        return 0;
+
+    char* vertShad = readTextFile(lua_tostring(L, 1));
+    char* fragShad = readTextFile(lua_tostring(L, 2));
+
+    MGame* game = MEngine::getInstance()->getGame();
+    game->getPostProcessor()->loadShader(vertShad, fragShad);
+
+    SAFE_FREE(vertShad);
+    SAFE_FREE(fragShad);
+    return 1;
+}
+
+int disablePostEffects(lua_State * L)
+{
+    MGame* game = MEngine::getInstance()->getGame();
+    game->disablePostEffects();
+    return 1;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Init
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4785,6 +4829,9 @@ void MScript::init(void)
 	lua_register(m_state, "getScenesNumber",		getScenesNumber);
 	lua_register(m_state, "doesLevelExist",			doesLevelExist);
 	lua_register(m_state, "loadLevel",				loadLevel);
+    lua_register(m_state, "enablePostEffects",      enablePostEffects);
+    lua_register(m_state, "disablePostEffects",     disablePostEffects);
+    lua_register(m_state, "loadPostEffectsShader",  loadPostEffectsShader);
 
 	// light
     lua_register(m_state, "createLight",       createLight);

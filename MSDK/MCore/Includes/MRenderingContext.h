@@ -331,7 +331,7 @@ public:
 	virtual void createVertexShader(unsigned int * shaderId) = 0;
 	virtual void createPixelShader(unsigned int * shaderId) = 0;
 	virtual void deleteShader(unsigned int * shaderId) = 0;
-	virtual void sendShaderSource(unsigned int shaderId, const char * source) = 0;
+    virtual bool sendShaderSource(unsigned int shaderId, const char * source) = 0;
 
 	// FX
 	virtual void bindFX(unsigned int fxId) = 0;

@@ -645,7 +645,7 @@ void MGLContext::deleteShader(unsigned int * shaderId){
 	glDeleteObjectARB((GLhandleARB)(*shaderId));
 }
 
-void MGLContext::sendShaderSource(unsigned int shaderId, const char * source)
+bool MGLContext::sendShaderSource(unsigned int shaderId, const char * source)
 {
 	glShaderSourceARB((GLhandleARB)shaderId, 1, &source, NULL);
 	glCompileShaderARB((GLhandleARB)shaderId);
@@ -658,7 +658,10 @@ void MGLContext::sendShaderSource(unsigned int shaderId, const char * source)
 		char shader_link_error[4096];
         glGetInfoLogARB((GLhandleARB)shaderId, sizeof(shader_link_error), NULL, shader_link_error);
         MLOG_ERROR(shader_link_error);
+        return false;
 	}
+
+    return true;
 }
 
 // FX

@@ -30,6 +30,7 @@
 
 #ifndef ANDROID
 
+#include "../../MEngine/Includes/MEngine.h"
 #include <MMouse.h>
 #include <MKeyboard.h>
 #include <MWindow.h>
@@ -255,6 +256,10 @@ void MWindow::sendEvents(MWinEvent * event)
 		case MWIN_EVENT_WINDOW_RESIZE:
 			m_width = (unsigned int)event->data[0];
 			m_height = (unsigned int)event->data[1];
+
+            MEngine::getInstance()->getGame()->getPostProcessor()->EraseTextures();
+            MEngine::getInstance()->getGame()->getPostProcessor()->UpdateResolution();
+
 			break;
 
 		case MWIN_EVENT_WINDOW_MOVE:

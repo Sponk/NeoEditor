@@ -542,7 +542,7 @@ void MES2Context::deleteShader(unsigned int * shaderId){
     glDeleteShader((*shaderId));
 }
 
-void MES2Context::sendShaderSource(unsigned int shaderId, const char * source)
+bool MES2Context::sendShaderSource(unsigned int shaderId, const char * source)
 {
     glShaderSource(shaderId, 1, &source, NULL);
     glCompileShader(shaderId);
@@ -555,7 +555,9 @@ void MES2Context::sendShaderSource(unsigned int shaderId, const char * source)
         char shader_link_error[4096];
         glGetShaderInfoLog(shaderId, sizeof(shader_link_error), NULL, shader_link_error);
         MLOG_ERROR(shader_link_error);
+        return false;
     }
+    return true;
 }
 
 // FX
