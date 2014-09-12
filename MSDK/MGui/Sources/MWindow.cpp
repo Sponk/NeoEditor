@@ -196,7 +196,9 @@ MWindow::~MWindow(void)
 
 void MWindow::setCursorPos(int x, int y)
 {
-	SDL_WarpMouseInWindow(g_window, x, y);
+    SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
+    SDL_WarpMouseInWindow(g_window, x, y);
+    SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
 }
 
 void MWindow::hideCursor(void)
