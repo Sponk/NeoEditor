@@ -1271,9 +1271,19 @@ void new_project_callback(Fl_Menu_*, void*)
         return;
 
     current_project.level = "";
+
+    current_project.changed = false;
     current_project.path = filename;
+    current_project.file_path = filename;
+
+#ifndef WIN32
+    current_project.path = current_project.path.erase(current_project.path.find_last_of("/")+1, current_project.path.length());
+#else
+    current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
+#endif
 
     Maratis::getInstance()->okNewProject(filename);
+    update_scene_tree();
 }
 
 void new_level_callback(Fl_Menu_*, void*)
