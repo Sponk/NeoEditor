@@ -302,9 +302,11 @@ void MBParticleSystem::draw()
     render->getAttribLocation(m_fx, "Color", &colorAttrib);
     render->setAttribPointer(colorAttrib, M_FLOAT, 4, m_particleColors);
     render->enableAttribArray(colorAttrib);
+    render->enableScissorTest();
 
     render->drawArray(M_PRIMITIVE_POINTS, 0, m_particles.size());
 
+    render->disableScissorTest();
     MSDLSemaphore::Unlock(&m_semaphore);
 
     render->setDepthMask(true);

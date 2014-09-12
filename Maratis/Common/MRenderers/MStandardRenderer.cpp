@@ -1741,9 +1741,11 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 
     render->disableDepthTest();
     render->disableCullFace();
+    render->enableScissorTest();
 
     camera->drawSkybox();
     render->enableDepthTest();
+    render->disableScissorTest();
 
 	// restore camera after shadow pass
 	if(restoreCamera)
