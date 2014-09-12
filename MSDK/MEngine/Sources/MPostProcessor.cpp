@@ -140,7 +140,11 @@ bool MPostProcessor::draw(MOCamera* camera)
     render->setViewport(0, 0, m_Resolution, m_Resolution); // change viewport
 
     render->setClearColor(camera->getClearColor());
-    render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
+
+    if(!camera->getSkybox()->isInitialized())
+        render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
+    else
+        render->clear(M_BUFFER_DEPTH);
 
     render->enableDepthTest();
 

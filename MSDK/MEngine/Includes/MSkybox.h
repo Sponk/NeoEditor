@@ -55,6 +55,7 @@ public:
     void loadSkyboxTextures(const char* path);
 
     inline const char* getPath() { return m_path.getSafeString(); }
+    inline bool isInitialized() { return m_init; }
 };
 
 #endif

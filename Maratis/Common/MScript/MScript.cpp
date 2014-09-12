@@ -4652,6 +4652,48 @@ int disablePostEffects(lua_State * L)
     return 1;
 }
 
+int setPostEffectsUniformInt(lua_State * L)
+{
+    if(!isFunctionOk(L, "setPostEffectsUniformInt", 2))
+        return 0;
+
+    MGame* game = MEngine::getInstance()->getGame();
+    game->getPostProcessor()->setIntUniformValue(lua_tostring(L, 1), lua_tointeger(L, 2));
+    return 1;
+}
+
+int setPostEffectsUniformFloat(lua_State * L)
+{
+    if(!isFunctionOk(L, "setPostEffectsUniformFloat", 2))
+        return 0;
+
+    MGame* game = MEngine::getInstance()->getGame();
+    game->getPostProcessor()->setFloatUniformValue(lua_tostring(L, 1), lua_tonumber(L, 2));
+    return 1;
+}
+
+int addPostEffectsUniformInt(lua_State * L)
+{
+    if(!isFunctionOk(L, "setPostEffectsUniformInt", 2))
+        return 0;
+
+    MGame* game = MEngine::getInstance()->getGame();
+    game->getPostProcessor()->addIntUniform(lua_tostring(L, 1));
+    game->getPostProcessor()->setIntUniformValue(lua_tostring(L, 1), lua_tointeger(L, 2));
+    return 1;
+}
+
+int addPostEffectsUniformFloat(lua_State * L)
+{
+    if(!isFunctionOk(L, "setPostEffectsUniformFloat", 2))
+        return 0;
+
+    MGame* game = MEngine::getInstance()->getGame();
+    game->getPostProcessor()->addFloatUniform(lua_tostring(L, 1));
+    game->getPostProcessor()->setFloatUniformValue(lua_tostring(L, 1), lua_tonumber(L, 2));
+    return 1;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Init
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4832,6 +4874,10 @@ void MScript::init(void)
     lua_register(m_state, "enablePostEffects",      enablePostEffects);
     lua_register(m_state, "disablePostEffects",     disablePostEffects);
     lua_register(m_state, "loadPostEffectsShader",  loadPostEffectsShader);
+    lua_register(m_state, "setPostEffectsUniformInt", setPostEffectsUniformInt);
+    lua_register(m_state, "setPostEffectsUniformFloat", setPostEffectsUniformFloat);
+    lua_register(m_state, "addPostEffectsUniformInt", addPostEffectsUniformInt);
+    lua_register(m_state, "addPostEffectsUniformFloat", addPostEffectsUniformFloat);
 
 	// light
     lua_register(m_state, "createLight",       createLight);
