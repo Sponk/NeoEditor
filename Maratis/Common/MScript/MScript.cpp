@@ -496,6 +496,12 @@ int loadMesh(lua_State * L)
     char string[256];
     getGlobalFilename(string, MWindow::getInstance()->getWorkingDirectory(), path);
 
+    if(!isFileExist(string))
+    {
+        lua_pushnil(L);
+        return 0;
+    }
+
     meshRef = level->loadMesh(string, true);
 
     // create entity

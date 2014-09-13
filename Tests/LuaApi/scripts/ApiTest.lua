@@ -2,7 +2,7 @@
 dofile("luaunit.lua") 
 
 function testMeshLoading()
-    local object = loadMesh("mesh/box.mesh")
+    local object = loadMesh("meshs/box.mesh")
     assertEquals(getName(object), "Entity0")
     assertEquals(loadMesh("DoesNotExist"), nil)    
 end
