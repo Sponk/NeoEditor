@@ -38,9 +38,9 @@
 	#include <OpenGL/OpenGL.h>
     #include <OpenGL/gl.h>
 #elif !defined(EMSCRIPTEN)
-	#include <GLee.h>
+    #include <glew.h>
 #else
-    #include <GL/GLee.h>
+    #include <GL/glew.h>
     #include <GL/gl.h>
 #endif
 
@@ -176,6 +176,13 @@ GLenum returnAttachType(M_FRAME_BUFFER_ATTACHMENT type)
 MGLContext::MGLContext(void):
 m_currentFrameBuffer(0)
 {
+    GLenum err = glewInit();
+    if (GLEW_OK != err)
+    {
+        MLOG_ERROR("Can't initialize GLEW: " << glewGetErrorString(err));
+        return;
+    }
+
 	// version
 	const char * version = (const char *)glGetString(GL_VERSION);
 	if(version)

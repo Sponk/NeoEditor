@@ -32,7 +32,7 @@
     #include <OpenGL/gl.h>
     #include <sys/stat.h>
 #elif linux
-    #include <GLee.h>
+    #include <glew.h>
     #include <sys/stat.h>
 #endif
 
