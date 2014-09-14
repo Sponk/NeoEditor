@@ -147,6 +147,8 @@ bool MPostProcessor::draw(MOCamera* camera)
         render->clear(M_BUFFER_DEPTH);
 
     render->enableDepthTest();
+    render->setScissor(0,0,m_Resolution,m_Resolution);
+    render->disableScissorTest();
 
     scene->draw(camera);
     scene->drawObjectsBehaviors();
