@@ -166,6 +166,7 @@ bool MPostProcessor::draw(MOCamera* camera)
     render->bindFX(m_fx);
     render->bindTexture(m_ColourTexID);
     render->bindTexture(m_DepthTexID, 1);
+    render->disableBlending();
 
     drawQuad(MVector2((float)screenWidth, (float)screenHeight));
     render->bindFX(0);
