@@ -102,7 +102,7 @@ string functionsShader = string(
 "{"
         //"if(shadCoord.x > 1.0 || shadCoord.x < 0.0 || shadCoord.y > 1.0 || shadCoord.y < 0.0) return 0.0;"
 
-		"float distanceFromLight = textureGather(shadMap, shadCoord.xy + offSet).z;"
+        "float distanceFromLight = textureGather(shadMap, (shadCoord.xy + offSet)).z;"
 		"return step(shadCoord.z, distanceFromLight);"
 "}"			
 

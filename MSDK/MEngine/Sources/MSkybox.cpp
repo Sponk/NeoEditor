@@ -33,7 +33,7 @@
 
 using namespace std;
 
-string skyboxVertShader =
+string m_skyboxVertShader =
 
 "#version 130\n"
 "attribute vec3 Vertex;"
@@ -48,7 +48,7 @@ string skyboxVertShader =
     "texCoord = TexCoord;"
 "}\n";
 
-string skyboxFragShader =
+string m_skyboxFragShader =
 "#version 130\n"
 "uniform sampler2D Texture[5];"
 "varying vec2 texCoord;"
@@ -183,12 +183,19 @@ void MSkybox::loadSkyboxTextures(const char *path)
     if(!m_init)
     {
         render->createVertexShader(&m_vertShad);
-        render->sendShaderSource(m_vertShad, skyboxVertShader.c_str());
+        bool success = render->sendShaderSource(m_vertShad, m_skyboxVertShader.c_str());
 
         render->createPixelShader(&m_pixShad);
-        render->sendShaderSource(m_pixShad, skyboxFragShader.c_str());
+        success &= render->sendShaderSource(m_pixShad, m_skyboxFragShader.c_str());
 
-        render->createFX(&m_fx, m_vertShad, m_pixShad);
+        if(!success)
+        {
+            m_fx = 0;
+        }
+        else
+        {
+            render->createFX(&m_fx, m_vertShad, m_pixShad);
+        }
     }
 
     if(m_fx == 0)

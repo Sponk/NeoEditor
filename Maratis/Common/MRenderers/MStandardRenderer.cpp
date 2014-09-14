@@ -62,7 +62,7 @@ m_FXsNumber(0)
 #ifndef USE_GLES
     float version;
     sscanf(render->getRendererVersion(), "%3f", &version);
-    if(version < 4.0)
+    if(version < 4.0 || (!GLEW_ARB_texture_gather || !GLEW_ARB_texture_swizzle || !GLEW_ARB_texture_query_levels))
     {
         MLOG_INFO("No GL4 compatible context found. Falling back to compat shaders.");
         // compat FXs
