@@ -214,6 +214,7 @@ void GLBox::draw()
             engine->getLevel()->getCurrentScene()->draw(static_cast<MOCamera*>(camera));
             engine->getLevel()->getCurrentScene()->drawObjectsBehaviors();
 
+            render->setScissor(0,0,w(),h());
             render->disableScissorTest();
         }
     }
