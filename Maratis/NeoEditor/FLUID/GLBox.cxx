@@ -179,6 +179,7 @@ void GLBox::draw()
 
         render->setTextureFilterMode(M_TEX_FILTER_NEAREST, M_TEX_FILTER_NEAREST_MIPMAP_NEAREST);
         render->setClearColor(MVector4(0.18, 0.32, 0.45, 1));
+        render->setScissor(0, 0, w(), h());
 
         maratis_init = true;
         reload_editor = true;
