@@ -17,207 +17,211 @@ decl {\#include <MFileManager/MMeshSave.h>} {private local
 decl {\#include "../MPluginScript/MPluginScript.h"} {public global
 } 
 
-class EditorWindow {open
-} {
+class EditorWindow {} {
   Function {show_window()} {open
   } {
     Fl_Window {} {
       label Neo
       callback window_quit open
-      xywh {718 232 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
+      xywh {1858 253 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
       } {
         Submenu {} {
           label File open
-          xywh {0 0 100 20}
+          xywh {0 0 100 20} labelsize 14
         } {
           Submenu {} {
             label New open
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           } {
             MenuItem {} {
               label Project
               callback new_project_callback
-              xywh {0 0 100 20} shortcut 0x5006e
+              xywh {0 0 100 20} shortcut 0x5006e labelsize 14
             }
             MenuItem {} {
               label Level
               callback new_level_callback
-              xywh {0 0 100 20} shortcut 0x4006e
+              xywh {0 0 100 20} shortcut 0x4006e labelsize 14
             }
           }
           Submenu {} {
             label Open open
-            xywh {0 0 100 20} divider
+            xywh {0 0 100 20} labelsize 14 divider
           } {
             MenuItem {} {
               label Project
               callback open_project_callback
-              xywh {0 0 100 20} shortcut 0x5006f
+              xywh {0 0 100 20} shortcut 0x5006f labelsize 14
             }
             MenuItem {} {
               label Level
               callback open_level_callback
-              xywh {0 0 100 20} shortcut 0x4006f
+              xywh {0 0 100 20} shortcut 0x4006f labelsize 14
             }
           }
           MenuItem {} {
             label {Import Mesh}
             callback import_mesh_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label {Save level}
             user_data 0 user_data_type long
             callback save_level_callback
-            xywh {0 0 100 20} shortcut 0x40073
+            xywh {0 0 100 20} shortcut 0x40073 labelsize 14
           }
           MenuItem {} {
             label {Save level as...}
             user_data 1 user_data_type long
             callback save_level_callback
-            xywh {0 0 100 20} shortcut 0x50073 divider
+            xywh {0 0 100 20} shortcut 0x50073 labelsize 14 divider
           }
           MenuItem {} {
             label Quit
             callback quit_callback
-            xywh {0 0 100 20} shortcut 0x40071
+            xywh {0 0 100 20} shortcut 0x40071 labelsize 14
           }
         }
         Submenu {} {
           label Edit open
-          xywh {0 0 100 20}
+          xywh {0 0 100 20} labelsize 14
         } {
           MenuItem {} {
             label Undo
             callback undo_callback
-            xywh {0 0 100 20} shortcut 0x4007a
+            xywh {0 0 100 20} shortcut 0x4007a labelsize 14
           }
           MenuItem {} {
             label Redo
             callback redo_callback
-            xywh {0 0 100 20} shortcut 0x5007a divider
+            xywh {0 0 100 20} shortcut 0x5007a labelsize 14 divider
           }
           MenuItem {} {
             label {Select all}
             callback select_all_callback
-            xywh {0 0 100 20} shortcut 0x40061 divider
+            xywh {0 0 100 20} shortcut 0x40061 labelsize 14 divider
           }
           MenuItem {} {
             label {Duplicate object}
             callback duplicate_object_callback
-            xywh {0 0 100 20} shortcut 0x40064
+            xywh {0 0 100 20} shortcut 0x40064 labelsize 14
           }
           MenuItem {} {
             label {Delete object}
             callback delete_object_callback
-            xywh {0 0 100 20} shortcut 0xffff divider
+            xywh {0 0 100 20} shortcut 0xffff labelsize 14 divider
+          }
+          MenuItem {} {
+            label {Post Effects setup}
+            callback post_effects_setup_callback
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label {Scene setup}
             callback scene_setup_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label {Delete current scene}
             callback delete_scene_callback
-            xywh {0 0 100 20} divider
+            xywh {0 0 100 20} labelsize 14 divider
           }
           MenuItem {} {
             label Configuration
             callback configuration_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
         }
         Submenu {} {
           label Project open
-          xywh {0 0 100 20}
+          xywh {0 0 100 20} labelsize 14
         } {
           MenuItem {} {
             label {Run Game}
             callback play_game_callback
-            xywh {0 0 100 20} shortcut 0xffc2 divider
+            xywh {0 0 100 20} shortcut 0xffc2 labelsize 14 divider
           }
           MenuItem {} {
             label {Update player}
             callback update_player_callback
-            tooltip {Copies the player from the editor directory to the project directory.} xywh {0 0 100 20}
+            tooltip {Copies the player from the editor directory to the project directory.} xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Publish
             callback publish_callback
-            xywh {0 0 100 20} shortcut 0x40070
+            xywh {0 0 100 20} shortcut 0x40070 labelsize 14
           }
         }
         Submenu {} {
           label Add open
-          xywh {0 0 100 20}
+          xywh {0 0 100 20} labelsize 14
         } {
           Submenu {} {
             label Object open
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           } {
             MenuItem {} {
               label Mesh
               callback add_mesh_callback
-              xywh {0 0 100 20} shortcut 0x4006d
+              xywh {0 0 100 20} shortcut 0x4006d labelsize 14
             }
             MenuItem {} {
               label Light
               callback add_light_callback
-              xywh {0 0 100 20} shortcut 0x4006c
+              xywh {0 0 100 20} shortcut 0x4006c labelsize 14
             }
             MenuItem {} {
               label Text
               callback add_text_callback
-              xywh {0 0 100 20} shortcut 0x40074
+              xywh {0 0 100 20} shortcut 0x40074 labelsize 14
             }
             MenuItem {} {
               label Camera
               callback add_camera_callback
-              xywh {0 0 100 20} shortcut 0x40063
+              xywh {0 0 100 20} shortcut 0x40063 labelsize 14
             }
             MenuItem {} {
               label Sound
               callback add_sound_callback
-              xywh {0 0 100 20}
+              xywh {0 0 100 20} labelsize 14
             }
           }
           Submenu behavior_menu {
             label {Add Behavior} open
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           } {}
           MenuItem {} {
             label Scene
             callback add_scene_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Group
             callback add_group_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
         }
         Submenu {} {
           label Plugins open
-          xywh {0 0 100 20}
+          xywh {0 0 100 20} labelsize 14
         } {
           MenuItem {} {
             label {Plugin Console}
             callback plugin_console_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
         }
         Submenu {} {
           label Help open
-          xywh {0 0 100 20}
+          xywh {0 0 100 20} labelsize 14
         } {
           MenuItem {} {
             label About
             callback about_menu_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
         }
       }
@@ -283,31 +287,31 @@ class EditorWindow {open
             label Other
             user_data 0 user_data_type long
             callback change_vue_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Face
             user_data 1 user_data_type long
             callback change_vue_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Right
             user_data 3 user_data_type long
             callback change_vue_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Top
             user_data 7 user_data_type long
             callback change_vue_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Bottom
             user_data 9 user_data_type long
             callback change_vue_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
         }
         Fl_Button {} {
@@ -448,7 +452,7 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
         Fl_Value_Input light_radius_edit {
           label {Radius:}
           callback edit_light_properties
-          xywh {18 51 165 21} align 5 maximum 1e+007 step 2
+          xywh {18 51 165 21} align 5 maximum 1e+07 step 2
         }
         Fl_Value_Input light_color_r {
           label {Red:}
@@ -586,43 +590,43 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
               label Box
               user_data 0 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
             MenuItem {} {
               label Sphere
               user_data 1 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
             MenuItem {} {
               label Cone
               user_data 2 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
             MenuItem {} {
               label Capsule
               user_data 3 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
             MenuItem {} {
               label Cylinder
               user_data 4 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
             MenuItem {} {
               label {Convex-hull}
               user_data 5 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
             MenuItem {} {
               label {Triangle-mesh}
               user_data 6 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20}
+              xywh {3 3 100 20} labelsize 14
             }
           }
           Fl_Check_Button object_ghost_button {
@@ -811,19 +815,19 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
             label Left
             user_data 0 user_data_type long
             callback text_alignment_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Right
             user_data 1 user_data_type long
             callback text_alignment_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Center
             user_data 2 user_data_type long
             callback text_alignment_callback
-            xywh {0 0 100 20}
+            xywh {0 0 100 20} labelsize 14
           }
         }
       }
@@ -942,7 +946,8 @@ return systemColors[idx];} {}
 decl {extern EditorWindow window;} {private local
 } 
 
-class SceneSetupDlg {} {
+class SceneSetupDlg {open
+} {
   Function {ok_button_callback(Fl_Button* button, SceneSetupDlg* dlg)} {return_type {static void}
   } {
     code {MEngine* engine = MEngine::getInstance();
@@ -959,7 +964,7 @@ window.glbox->redraw();} {}
   } {
     code {button->parent()->hide();} {}
   }
-  Function {find_file_callback(Fl_Button* button, void*)} {open return_type {static void}
+  Function {find_file_callback(Fl_Button* button, void*)} {return_type {static void}
   } {
     code {const char* filename = fl_native_file_chooser("Choose file", "*.lua", (current_project.path + "scripts").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
@@ -976,7 +981,8 @@ for(int i = 0; i < children; i++)
 	}
 }} {}
   }
-  Function {create_window()} {} {
+  Function {create_window()} {open
+  } {
     Fl_Window {} {
       label {Scene setup}
       xywh {672 297 405 246} type Double hide modal
@@ -1403,11 +1409,11 @@ class AboutDlg {} {
   }
 } 
 
-class PublishDlg {} {
+class PublishDlg {open
+} {
   decl {Fl_Window* window;} {private local
   }
-  Function {create_window()} {open
-  } {
+  Function {create_window()} {} {
     Fl_Window {} {
       label Publish open
       xywh {1964 410 510 132} type Double hide modal
@@ -1510,8 +1516,7 @@ Function {new_scene_cancel_callback(Fl_Button* button,void*)} {} {
 window->hide();} {}
 } 
 
-class ConstraintPropertiesDlg {open
-} {
+class ConstraintPropertiesDlg {} {
   decl {Fl_Window* win;} {private local
   }
   Function {create_window()} {} {
@@ -1832,8 +1837,7 @@ if(constraint)
 
 dlg->win->hide();
 Fl::delete_widget(dlg->win);
-delete dlg;} {selected
-    }
+delete dlg;} {}
   }
   Function {cancel_callback(Fl_Button*, ConstraintPropertiesDlg* dlg)} {open return_type {static void}
   } {
@@ -1843,8 +1847,7 @@ delete dlg;} {}
   }
 } 
 
-class ConfigurationDlg {open
-} {
+class ConfigurationDlg {} {
   decl {Fl_Text_Buffer text_buffer;} {private local
   }
   Function {create_window()} {open
@@ -1866,19 +1869,19 @@ class ConfigurationDlg {open
           } {
             MenuItem {} {
               label {gtk+}
-              xywh {0 0 100 20}
+              xywh {0 0 100 20} labelsize 14
             }
             MenuItem {} {
               label gleam
-              xywh {0 0 100 20}
+              xywh {0 0 100 20} labelsize 14
             }
             MenuItem {} {
               label plastic
-              xywh {0 0 100 20}
+              xywh {0 0 100 20} labelsize 14
             }
             MenuItem {} {
               label none
-              xywh {0 0 100 20}
+              xywh {0 0 100 20} labelsize 14
             }
           }
           Fl_Group {} {
@@ -2187,5 +2190,144 @@ dlg->foreground_color_b->value(static_cast<float>(bytes[2])/255.0f);
 // FIXME: UGLY!!
 dlg->foreground_color_b->parent()->parent()->parent()->parent()->redraw();
 main_window->redraw();} {}
+  }
+} 
+
+class PostEffectsDlg {open
+} {
+  Function {create_window()} {open
+  } {
+    Fl_Window {} {
+      label {Post Effects Setup} open
+      xywh {2014 407 591 348} type Double visible
+    } {
+      Fl_Check_Button use_post_effects {
+        label {Use Post Effects}
+        user_data this user_data_type {PostEffectsDlg*}
+        callback use_post_effects_callback
+        xywh {6 315 135 21} down_box DOWN_BOX
+      }
+      Fl_Group {} {
+        label Uniforms open
+        xywh {6 75 582 231} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Value_Input uniform_value {
+          label {Uniform Value:}
+          xywh {183 138 165 24} labelsize 12 align 5
+        }
+        Fl_Browser uniforms_browser {
+          user_data this user_data_type {PostEffectsDlg*}
+          callback uniform_select_callback
+          xywh {9 81 165 222} align 5 when 3
+        }
+        Fl_Button add_uniform {
+          label {Add Uniform}
+          user_data this user_data_type {PostEffectsDlg*}
+          callback add_uniform_callback
+          xywh {183 84 120 27}
+        }
+      }
+      Fl_Input vert_shad_edit {
+        label {Vert. Shader:}
+        xywh {96 6 465 21} labelsize 12
+      }
+      Fl_Input frag_shad_edit {
+        label {Frag. Shader:}
+        xywh {96 30 465 21} labelsize 12
+      }
+      Fl_Button vert_btn {
+        label {...}
+        user_data this user_data_type {PostEffectsDlg*}
+        callback find_vert_file_callback
+        xywh {564 6 24 21}
+      }
+      Fl_Button frag_btn {
+        label {...}
+        user_data this user_data_type {PostEffectsDlg*}
+        callback find_frag_file_callback
+        xywh {564 30 24 21}
+      }
+      Fl_Button preview_btn {
+        label {Preview in scene view}
+        user_data this user_data_type {PostEffectsDlg*}
+        callback preview_callback
+        xywh {417 312 168 27}
+      }
+    }
+    code {if(!::window.glbox->hasPostEffects())
+{
+	use_post_effects->value(0);
+	
+	uniform_value->deactivate();
+	vert_shad_edit->deactivate();
+	frag_shad_edit->deactivate();
+	uniforms_browser->deactivate();
+	vert_btn->deactivate();
+	frag_btn->deactivate();
+	preview_btn->deactivate();
+}
+else
+{
+	use_post_effects->value(1);
+}} {}
+  }
+  Function {uniform_select_callback(Fl_Browser* widget, PostEffectsDlg* dlg)} {open return_type {static void}
+  } {
+    code {printf("Hello, World!\\n");} {}
+  }
+  Function {find_vert_file_callback(Fl_Button* widget, PostEffectsDlg* dlg)} {open return_type {static void}
+  } {
+    code {const char* filename = fl_native_file_chooser("Choose output", NULL, dlg->vert_shad_edit->value(), Fl_Native_File_Chooser::BROWSE_FILE);
+
+if(filename == NULL)
+	return;
+
+dlg->vert_shad_edit->value(filename);} {}
+  }
+  Function {find_frag_file_callback(Fl_Button* widget, PostEffectsDlg* dlg)} {open return_type {static void}
+  } {
+    code {const char* filename = fl_native_file_chooser("Choose output", NULL, dlg->frag_shad_edit->value(), Fl_Native_File_Chooser::BROWSE_FILE);
+
+if(filename == NULL)
+	return;
+
+dlg->frag_shad_edit->value(filename);} {}
+  }
+  Function {preview_callback(Fl_Button* widget, PostEffectsDlg* dlg)} {open return_type {static void}
+  } {
+    code {MEngine* engine = MEngine::getInstance();
+PostProcessor* postProcessor = ::window.glbox->getPostProcessor();
+
+postProcessor->loadShaderFile(dlg->vert_shad_edit->value(), dlg->frag_shad_edit->value());
+
+::window.glbox->enablePostEffects();} {}
+  }
+  Function {use_post_effects_callback(Fl_Check_Button* widget, PostEffectsDlg* dlg)} {open return_type {static void}
+  } {
+    code {if(widget->value() != 0)
+{
+	dlg->uniform_value->activate();
+	dlg->vert_shad_edit->activate();
+	dlg->frag_shad_edit->activate();
+	dlg->uniforms_browser->activate();
+	dlg->vert_btn->activate();
+	dlg->frag_btn->activate();
+	dlg->preview_btn->activate();
+}
+else
+{
+	dlg->uniform_value->deactivate();
+	dlg->vert_shad_edit->deactivate();
+	dlg->frag_shad_edit->deactivate();
+	dlg->uniforms_browser->deactivate();
+	dlg->vert_btn->deactivate();
+	dlg->frag_btn->deactivate();
+	dlg->preview_btn->deactivate();
+}} {}
+  }
+  Function {add_uniform_callback(Fl_Button*, void*)} {open return_type {static void}
+  } {
+    code {printf("Hello, World!\\n");} {selected
+    }
   }
 } 

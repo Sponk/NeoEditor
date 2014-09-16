@@ -264,7 +264,24 @@ void open_project_callback(Fl_Menu_*, void*)
 #else
         current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
 #endif
+        MGame tmpGame;
+
+        MEngine::getInstance()->setGame(&tmpGame);
         Maratis::getInstance()->loadProject(filename);
+        MEngine::getInstance()->setGame(NULL);
+
+        if(tmpGame.hasPostEffects())
+        {
+            ::window.glbox->getPostProcessor()->loadShaderFile(tmpGame.getPostProcessor()->getVertexShader(),
+                                                                tmpGame.getPostProcessor()->getFragmentShader());
+            ::window.glbox->enablePostEffects();
+            ::window.glbox->getPostProcessor()->eraseTextures();
+            ::window.glbox->getPostProcessor()->updateResolution();
+        }
+        else
+        {
+            ::window.glbox->disablePostEffects();
+        }
 
         current_project.level = Maratis::getInstance()->getCurrentLevel();
         update_scene_tree();
@@ -1260,7 +1277,13 @@ void save_level_callback(Fl_Menu_ *, long mode)
         break;
     }
 
+    MGame game;
+    game.getPostProcessor()->setShaderPath(::window.glbox->getPostProcessor()->getVertexShader(), ::window.glbox->getPostProcessor()->getFragmentShader());
+    MEngine::getInstance()->setGame(&game);
+
     Maratis::getInstance()->save();
+
+    MEngine::getInstance()->setGame(NULL);
 }
 
 void new_project_callback(Fl_Menu_*, void*)
@@ -1971,4 +1994,16 @@ void configuration_callback(Fl_Menu_*, void*)
         Fl::wait();
 
     delete win;
+}
+
+void post_effects_setup_callback(Fl_Menu_*, void*)
+{
+    PostEffectsDlg dlg;
+    Fl_Window* window = dlg.create_window();
+
+    window->show();
+    while(window->shown())
+        Fl::wait();
+
+    Fl::delete_widget(window);
 }

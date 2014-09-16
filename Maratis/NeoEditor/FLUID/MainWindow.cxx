@@ -27,6 +27,7 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
  {"Select all", 0x40061,  (Fl_Callback*)select_all_callback, 0, 128, FL_NORMAL_LABEL, 0, 14, 0},
  {"Duplicate object", 0x40064,  (Fl_Callback*)duplicate_object_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {"Delete object", 0xffff,  (Fl_Callback*)delete_object_callback, 0, 128, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Post Effects setup", 0,  (Fl_Callback*)post_effects_setup_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {"Scene setup", 0,  (Fl_Callback*)scene_setup_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {"Delete current scene", 0,  (Fl_Callback*)delete_scene_callback, 0, 128, FL_NORMAL_LABEL, 0, 14, 0},
  {"Configuration", 0,  (Fl_Callback*)configuration_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
@@ -57,7 +58,7 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
  {0,0,0,0,0,0,0,0,0},
  {0,0,0,0,0,0,0,0,0}
 };
-Fl_Menu_Item* EditorWindow::behavior_menu = EditorWindow::menu_menu_bar + 37;
+Fl_Menu_Item* EditorWindow::behavior_menu = EditorWindow::menu_menu_bar + 38;
 
 #include <FL/Fl_Image.H>
 static unsigned char idata_translate[] =
@@ -165,48 +166,56 @@ Fl_Menu_Item EditorWindow::menu_[] = {
 };
 
 static unsigned char idata_buttonGame[] =
-{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,255,255,255,52,255,255,255,128,255,255,255,192,255,255,255,237,255,
-255,255,237,255,255,255,192,255,255,255,128,255,255,255,52,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,255,255,103,255,255,255,213,255,255,
+{255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,
+255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,
+255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,
+255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,52,255,255,255,128,
+255,255,255,192,255,255,255,237,255,255,255,237,255,255,255,192,255,255,255,128,
+255,255,255,52,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,
+255,0,255,255,255,0,255,255,255,0,255,255,255,103,255,255,255,213,255,255,255,
 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-255,255,255,255,255,213,255,255,255,103,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-255,255,255,103,255,255,255,241,255,255,255,255,255,255,255,247,255,255,255,219,
-255,255,255,209,255,255,255,244,255,255,255,254,255,255,255,255,255,255,255,255,
-255,255,255,241,255,255,255,103,0,0,0,0,0,0,0,0,0,0,0,0,255,255,255,52,255,255,
-255,213,255,255,255,255,255,255,255,255,255,255,255,212,255,255,255,29,255,255,
-255,14,255,255,255,198,255,255,255,251,255,255,255,255,255,255,255,255,255,255,
-255,255,255,255,255,113,255,255,255,1,0,0,0,0,0,0,0,0,255,255,255,128,255,255,
-255,255,255,255,255,255,255,255,255,255,255,255,255,206,255,255,255,20,255,255,
-255,10,255,255,255,187,255,255,255,252,255,255,255,255,255,255,255,234,255,255,
-255,69,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,255,255,192,255,255,255,255,255,255,
-255,255,255,255,255,255,255,255,255,243,255,255,255,201,255,255,255,184,255,255,
-255,240,255,255,255,254,255,255,255,189,255,255,255,24,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,255,255,255,237,255,255,255,255,255,255,255,255,255,255,255,
+255,255,255,255,213,255,255,255,103,255,255,255,0,255,255,255,0,255,255,255,0,
+255,255,255,0,255,255,255,0,255,255,255,103,255,255,255,241,255,255,255,255,255,
+255,255,247,255,255,255,219,255,255,255,209,255,255,255,244,255,255,255,254,255,
+255,255,255,255,255,255,255,255,255,255,241,255,255,255,103,255,255,255,0,255,
+255,255,0,255,255,255,0,255,255,255,52,255,255,255,213,255,255,255,255,255,255,
+255,255,255,255,255,212,255,255,255,29,255,255,255,14,255,255,255,198,255,255,
+255,251,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,113,255,255,
+255,1,255,255,255,0,255,255,255,0,255,255,255,128,255,255,255,255,255,255,255,
+255,255,255,255,255,255,255,255,206,255,255,255,20,255,255,255,10,255,255,255,
+187,255,255,255,252,255,255,255,255,255,255,255,234,255,255,255,69,255,255,255,
+0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,192,255,255,255,255,
+255,255,255,255,255,255,255,255,255,255,255,243,255,255,255,201,255,255,255,184,
+255,255,255,240,255,255,255,254,255,255,255,189,255,255,255,24,255,255,255,0,
+255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,237,255,255,
+255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+255,255,255,255,255,252,255,255,255,126,255,255,255,3,255,255,255,85,255,255,
+255,192,255,255,255,192,255,255,255,85,255,255,255,0,255,255,255,0,255,255,255,
+237,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+255,255,255,255,228,255,255,255,63,255,255,255,0,255,255,255,0,255,255,255,192,
+255,255,255,255,255,255,255,255,255,255,255,192,255,255,255,0,255,255,255,0,255,
+255,255,192,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+255,255,255,255,255,255,109,255,255,255,0,255,255,255,0,255,255,255,0,255,255,
+255,192,255,255,255,255,255,255,255,255,255,255,255,192,255,255,255,0,255,255,
+255,0,255,255,255,128,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+255,255,255,255,255,255,255,255,255,252,255,255,255,91,255,255,255,0,255,255,
+255,0,255,255,255,85,255,255,255,192,255,255,255,192,255,255,255,85,255,255,255,
+0,255,255,255,0,255,255,255,52,255,255,255,213,255,255,255,255,255,255,255,
 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,252,255,255,255,
-126,255,255,255,3,255,255,255,85,255,255,255,192,255,255,255,192,255,255,255,85,
-0,0,0,0,0,0,0,0,255,255,255,237,255,255,255,255,255,255,255,255,255,255,255,
-255,255,255,255,255,255,255,255,255,255,255,255,228,255,255,255,63,0,0,0,0,0,0,
-0,0,255,255,255,192,255,255,255,255,255,255,255,255,255,255,255,192,0,0,0,0,0,
-0,0,0,255,255,255,192,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-255,255,255,255,255,255,255,255,255,109,0,0,0,0,0,0,0,0,0,0,0,0,255,255,255,192,
-255,255,255,255,255,255,255,255,255,255,255,192,0,0,0,0,0,0,0,0,255,255,255,128,
+86,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,
+255,255,0,255,255,255,0,255,255,255,0,255,255,255,103,255,255,255,241,255,255,
 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-255,255,255,252,255,255,255,91,0,0,0,0,0,0,0,0,255,255,255,85,255,255,255,192,
-255,255,255,192,255,255,255,85,0,0,0,0,0,0,0,0,255,255,255,52,255,255,255,213,
-255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-255,255,255,252,255,255,255,86,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,255,255,255,103,255,255,255,241,255,255,255,255,255,255,255,
-255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,252,255,255,255,
-84,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,255,255,
-103,255,255,255,213,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-255,255,255,255,255,255,255,255,249,255,255,255,68,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,255,255,52,255,255,255,128,255,255,
-255,192,255,255,255,237,255,255,255,237,255,255,255,192,255,255,255,128,255,255,
-255,51,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0};
+255,252,255,255,255,84,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,
+255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,103,255,255,
+255,213,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+255,255,255,255,255,249,255,255,255,68,255,255,255,0,255,255,255,0,255,255,255,
+0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,
+255,255,52,255,255,255,128,255,255,255,192,255,255,255,237,255,255,255,237,255,
+255,255,192,255,255,255,128,255,255,255,51,255,255,255,0,255,255,255,0,255,255,
+255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,
+255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,
+255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,255,0,255,255,
+255,0};
 static Fl_RGB_Image image_buttonGame(idata_buttonGame, 16, 16, 4, 0);
 
 Fl_Menu_Item EditorWindow::menu_object_shape_choice[] = {
@@ -446,7 +455,7 @@ Fl_Double_Window* EditorWindow::create_light_window() {
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       { light_radius_edit = new Fl_Value_Input(18, 51, 165, 21, "Radius:");
-        light_radius_edit->maximum(1e+007);
+        light_radius_edit->maximum(1e+07);
         light_radius_edit->step(2);
         light_radius_edit->callback((Fl_Callback*)edit_light_properties);
         light_radius_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
@@ -4980,4 +4989,124 @@ void ConfigurationDlg::reset_settings_callback(Fl_Button*,ConfigurationDlg* dlg)
   // FIXME: UGLY!!
   dlg->foreground_color_b->parent()->parent()->parent()->parent()->redraw();
   main_window->redraw();
+}
+
+Fl_Double_Window* PostEffectsDlg::create_window() {
+  Fl_Double_Window* w;
+  { Fl_Double_Window* o = new Fl_Double_Window(591, 348, "Post Effects Setup");
+    w = o;
+    o->user_data((void*)(this));
+    { use_post_effects = new Fl_Check_Button(6, 315, 135, 21, "Use Post Effects");
+      use_post_effects->down_box(FL_DOWN_BOX);
+      use_post_effects->callback((Fl_Callback*)use_post_effects_callback, (void*)(this));
+    } // Fl_Check_Button* use_post_effects
+    { Fl_Group* o = new Fl_Group(6, 75, 582, 231, "Uniforms");
+      o->box(FL_ENGRAVED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { uniform_value = new Fl_Value_Input(183, 138, 165, 24, "Uniform Value:");
+        uniform_value->labelsize(12);
+        uniform_value->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* uniform_value
+      { uniforms_browser = new Fl_Browser(9, 81, 165, 222);
+        uniforms_browser->callback((Fl_Callback*)uniform_select_callback, (void*)(this));
+        uniforms_browser->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+        uniforms_browser->when(3);
+      } // Fl_Browser* uniforms_browser
+      { add_uniform = new Fl_Button(183, 84, 120, 27, "Add Uniform");
+        add_uniform->callback((Fl_Callback*)add_uniform_callback, (void*)(this));
+      } // Fl_Button* add_uniform
+      o->end();
+    } // Fl_Group* o
+    { vert_shad_edit = new Fl_Input(96, 6, 465, 21, "Vert. Shader:");
+      vert_shad_edit->labelsize(12);
+    } // Fl_Input* vert_shad_edit
+    { frag_shad_edit = new Fl_Input(96, 30, 465, 21, "Frag. Shader:");
+      frag_shad_edit->labelsize(12);
+    } // Fl_Input* frag_shad_edit
+    { vert_btn = new Fl_Button(564, 6, 24, 21, "...");
+      vert_btn->callback((Fl_Callback*)find_vert_file_callback, (void*)(this));
+    } // Fl_Button* vert_btn
+    { frag_btn = new Fl_Button(564, 30, 24, 21, "...");
+      frag_btn->callback((Fl_Callback*)find_frag_file_callback, (void*)(this));
+    } // Fl_Button* frag_btn
+    { preview_btn = new Fl_Button(417, 312, 168, 27, "Preview in scene view");
+      preview_btn->callback((Fl_Callback*)preview_callback, (void*)(this));
+    } // Fl_Button* preview_btn
+    o->end();
+  } // Fl_Double_Window* o
+  if(!::window.glbox->hasPostEffects())
+  {
+  	use_post_effects->value(0);
+  	
+  	uniform_value->deactivate();
+  	vert_shad_edit->deactivate();
+  	frag_shad_edit->deactivate();
+  	uniforms_browser->deactivate();
+  	vert_btn->deactivate();
+  	frag_btn->deactivate();
+  	preview_btn->deactivate();
+  }
+  else
+  {
+  	use_post_effects->value(1);
+  }
+  return w;
+}
+
+void PostEffectsDlg::uniform_select_callback(Fl_Browser* widget, PostEffectsDlg* dlg) {
+  printf("Hello, World!\n");
+}
+
+void PostEffectsDlg::find_vert_file_callback(Fl_Button* widget, PostEffectsDlg* dlg) {
+  const char* filename = fl_native_file_chooser("Choose output", NULL, dlg->vert_shad_edit->value(), Fl_Native_File_Chooser::BROWSE_FILE);
+  
+  if(filename == NULL)
+  	return;
+  
+  dlg->vert_shad_edit->value(filename);
+}
+
+void PostEffectsDlg::find_frag_file_callback(Fl_Button* widget, PostEffectsDlg* dlg) {
+  const char* filename = fl_native_file_chooser("Choose output", NULL, dlg->frag_shad_edit->value(), Fl_Native_File_Chooser::BROWSE_FILE);
+  
+  if(filename == NULL)
+  	return;
+  
+  dlg->frag_shad_edit->value(filename);
+}
+
+void PostEffectsDlg::preview_callback(Fl_Button* widget, PostEffectsDlg* dlg) {
+  MEngine* engine = MEngine::getInstance();
+  PostProcessor* postProcessor = ::window.glbox->getPostProcessor();
+  
+  postProcessor->loadShaderFile(dlg->vert_shad_edit->value(), dlg->frag_shad_edit->value());
+  
+  ::window.glbox->enablePostEffects();
+}
+
+void PostEffectsDlg::use_post_effects_callback(Fl_Check_Button* widget, PostEffectsDlg* dlg) {
+  if(widget->value() != 0)
+  {
+  	dlg->uniform_value->activate();
+  	dlg->vert_shad_edit->activate();
+  	dlg->frag_shad_edit->activate();
+  	dlg->uniforms_browser->activate();
+  	dlg->vert_btn->activate();
+  	dlg->frag_btn->activate();
+  	dlg->preview_btn->activate();
+  }
+  else
+  {
+  	dlg->uniform_value->deactivate();
+  	dlg->vert_shad_edit->deactivate();
+  	dlg->frag_shad_edit->deactivate();
+  	dlg->uniforms_browser->deactivate();
+  	dlg->vert_btn->deactivate();
+  	dlg->frag_btn->deactivate();
+  	dlg->preview_btn->deactivate();
+  }
+}
+
+void PostEffectsDlg::add_uniform_callback(Fl_Button*, void*) {
+  printf("Hello, World!\n");
 }

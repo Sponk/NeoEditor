@@ -9,13 +9,22 @@
 #include <MEngine.h>
 #include <vector>
 
+#include "PostProcessor.h"
+
 class GLBox : public Fl_Gl_Window
 {
 public:
   GLBox(int X, int Y, int W, int H, const char *L)
-      : Fl_Gl_Window(X, Y, W, H, L), maratis_init(false) {};
+      : Fl_Gl_Window(X, Y, W, H, L), maratis_init(false), m_postProcessing(false) {};
 
   bool maratis_init;
+  bool hasPostEffects() { return m_postProcessing; }
+  PostProcessor* getPostProcessor() { return &m_postProcessor; }
+
+  void resize(int x, int y, int w, int h);
+
+  void enablePostEffects() { m_postProcessing = true; }
+  void disablePostEffects() { m_postProcessing = false; }
 
 private:
   void draw();
@@ -23,6 +32,9 @@ private:
 
   int mouse_x;
   int mouse_y;
+
+  bool m_postProcessing;
+  PostProcessor m_postProcessor;
 };
 
 bool getNearestRaytracedDistance(MMesh * mesh, MMatrix4x4 * matrix, const MVector3 & origin, const MVector3 & dest, float * distance, MOEntity * entity = NULL);

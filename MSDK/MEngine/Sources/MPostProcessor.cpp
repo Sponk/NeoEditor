@@ -207,6 +207,33 @@ bool MPostProcessor::loadShader(const char* vertShad, const char* fragShad)
     return success;
 }
 
+bool MPostProcessor::loadShaderFile(const char* vertShad, const char* fragShad)
+{
+    char path[255];
+    getGlobalFilename(path, MEngine::getInstance()->getSystemContext()->getWorkingDirectory(), vertShad);
+    char* vert = readTextFile(path);
+
+    getGlobalFilename(path, MEngine::getInstance()->getSystemContext()->getWorkingDirectory(), fragShad);
+    char* frag = readTextFile(path);
+
+    bool ret = loadShader(vert, frag);
+
+    if(ret)
+    {
+        char path[255];
+        getLocalFilename(path, MEngine::getInstance()->getSystemContext()->getWorkingDirectory(), vertShad);
+        m_vertShadPath.set(path);
+
+        getLocalFilename(path, MEngine::getInstance()->getSystemContext()->getWorkingDirectory(), fragShad);
+        m_fragShadPath.set(path);
+    }
+
+    SAFE_FREE(vert);
+    SAFE_FREE(frag);
+
+    return ret;
+}
+
 void MPostProcessor::set2D(unsigned int w, unsigned int h)
 {
     MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
@@ -363,4 +390,14 @@ void MPostProcessor::clear()
 {
     m_FloatUniformList.clear();
     m_IntUniformList.clear();
+}
+
+void MPostProcessor::setShaderPath(const char* vertPath, const char* fragPath)
+{
+    char path[255];
+    getLocalFilename(path, MEngine::getInstance()->getSystemContext()->getWorkingDirectory(), vertPath);
+    m_vertShadPath.set(path);
+
+    getLocalFilename(path, MEngine::getInstance()->getSystemContext()->getWorkingDirectory(), fragPath);
+    m_fragShadPath.set(path);
 }

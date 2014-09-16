@@ -19,6 +19,7 @@ extern void redo_callback(Fl_Menu_*, void*);
 extern void select_all_callback(Fl_Menu_*, void*);
 extern void duplicate_object_callback(Fl_Menu_*, void*);
 extern void delete_object_callback(Fl_Menu_*, void*);
+extern void post_effects_setup_callback(Fl_Menu_*, void*);
 extern void scene_setup_callback(Fl_Menu_*, void*);
 extern void delete_scene_callback(Fl_Menu_*, void*);
 extern void configuration_callback(Fl_Menu_*, void*);
@@ -312,5 +313,25 @@ public:
   static void setInputMethod(Fl_Menu_*, long idx);
   static void plugin_changed_callback(Fl_Browser*, ConfigurationDlg* dlg);
   static void reset_settings_callback(Fl_Button*,ConfigurationDlg* dlg);
+};
+
+class PostEffectsDlg {
+public:
+  Fl_Double_Window* create_window();
+  Fl_Check_Button *use_post_effects;
+  Fl_Value_Input *uniform_value;
+  Fl_Browser *uniforms_browser;
+  Fl_Button *add_uniform;
+  Fl_Input *vert_shad_edit;
+  Fl_Input *frag_shad_edit;
+  Fl_Button *vert_btn;
+  Fl_Button *frag_btn;
+  Fl_Button *preview_btn;
+  static void uniform_select_callback(Fl_Browser* widget, PostEffectsDlg* dlg);
+  static void find_vert_file_callback(Fl_Button* widget, PostEffectsDlg* dlg);
+  static void find_frag_file_callback(Fl_Button* widget, PostEffectsDlg* dlg);
+  static void preview_callback(Fl_Button* widget, PostEffectsDlg* dlg);
+  static void use_post_effects_callback(Fl_Check_Button* widget, PostEffectsDlg* dlg);
+  static void add_uniform_callback(Fl_Button*, void*);
 };
 #endif

@@ -28,6 +28,7 @@ public:
     bool draw(MOCamera* camera);
 
     bool loadShader(const char* vertShad, const char* fragShad);
+    bool loadShaderFile(const char* vertShad, const char* fragShad);
 
     void updateResolution();
     void eraseTextures();
@@ -40,7 +41,13 @@ public:
 
     void clear();
 
-private:
+    const char* getVertexShader() { return m_vertShadPath.getSafeString(); }
+    const char* getFragmentShader() { return m_fragShadPath.getSafeString(); }
+
+    void setShaderPath(const char* vertPath, const char* fragPath);
+    int getFX() { return m_fx; }
+
+protected:
     void set2D(unsigned int w, unsigned int h);
     void drawQuad(MVector2 scale);
 
@@ -55,6 +62,9 @@ private:
     unsigned int m_vertShad;
 
     int m_Resolution;
+
+    MString m_vertShadPath;
+    MString m_fragShadPath;
 
     typedef struct
     {

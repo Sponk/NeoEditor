@@ -239,6 +239,13 @@ void MGame::onBeginScene(void)
 
     m_postProcessor.eraseTextures();
     m_postProcessor.updateResolution();
+
+    if(m_postProcessor.getFX() == 0 && hasPostEffects() &&
+            strlen(m_postProcessor.getFragmentShader()) > 0 &&
+            strlen(m_postProcessor.getVertexShader()) > 0)
+    {
+        m_postProcessor.loadShaderFile(m_postProcessor.getVertexShader(), m_postProcessor.getFragmentShader());
+    }
 }
 
 void MGame::onEndScene(void)

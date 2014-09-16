@@ -156,6 +156,7 @@ void GLBox::draw()
     {
         Maratis* maratis = Maratis::getInstance();
         maratis->initRenderer();
+        MWindow::getInstance()->setViewport(w(), h());
 
         MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
@@ -169,7 +170,26 @@ void GLBox::draw()
     #else
             current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
     #endif
-            maratis->loadProject(current_project.file_path.c_str());
+
+            MGame tmpGame;
+
+            MEngine::getInstance()->setGame(&tmpGame);
+            Maratis::getInstance()->loadProject(current_project.file_path.c_str());
+            MEngine::getInstance()->setGame(NULL);
+
+            if(tmpGame.hasPostEffects())
+            {
+                m_postProcessor.loadShaderFile(tmpGame.getPostProcessor()->getVertexShader(),
+                                                                    tmpGame.getPostProcessor()->getFragmentShader());
+                m_postProcessing = true;
+                m_postProcessor.eraseTextures();
+                m_postProcessor.updateResolution();
+            }
+            else
+            {
+                ::window.glbox->disablePostEffects();
+            }
+
             current_project.level = maratis->getCurrentLevel();
         }
 
@@ -179,7 +199,9 @@ void GLBox::draw()
 
         render->setTextureFilterMode(M_TEX_FILTER_NEAREST, M_TEX_FILTER_NEAREST_MIPMAP_NEAREST);
         render->setClearColor(MVector4(0.18, 0.32, 0.45, 1));
-        render->setScissor(0, 0, w(), h());
+
+        m_postProcessor.eraseTextures();
+        m_postProcessor.updateResolution();
 
         maratis_init = true;
         reload_editor = true;
@@ -192,19 +214,22 @@ void GLBox::draw()
 
     Maratis* maratis = Maratis::getInstance();
     MEngine* engine = MEngine::getInstance();
+    MRenderingContext* render = engine->getRenderingContext();
 
     MWindow::getInstance()->setViewport(w(), h());
+    render->setScissor(0, 0, w(), h());
+
     engine->updateRequests();
 
-    maratis->graphicLoop();
+    render->disableScissorTest();
+    if(!m_postProcessing || !m_postProcessor.draw(maratis->getPerspectiveVue()))
+        maratis->graphicLoop();
 
     if(maratis->getSelectedObjectsNumber() > 0)
     {
         MObject3d* camera = maratis->getSelectedObjectByIndex(0);
         if(camera != NULL && camera->getType() == M_OBJECT3D_CAMERA)
         {
-            MRenderingContext* render = engine->getRenderingContext();
-
             render->setViewport(0,0, w()/3, h()/3);
             render->setScissor(0,0, w()/3, h()/3);
             render->enableScissorTest();
@@ -561,4 +586,16 @@ int GLBox::handle(int event)
     }
 
     return Fl_Gl_Window::handle(event);
+}
+
+void GLBox::resize(int x, int y, int w, int h)
+{
+    Fl_Gl_Window::resize(x,y,w,h);
+
+    if(m_postProcessing)
+    {
+        MWindow::getInstance()->setViewport(w, h);
+        m_postProcessor.eraseTextures();
+        m_postProcessor.updateResolution();
+    }
 }
