@@ -1226,7 +1226,7 @@ void choose_camera_color(Fl_Button*, void*)
 	window.camera_color_g->value(g);
 	window.camera_color_b->value(b);
 
-	edit_light_properties(NULL, NULL);
+    edit_camera_properties(NULL, NULL);
 }
 
 void publish_callback(Fl_Menu_*, void*)
