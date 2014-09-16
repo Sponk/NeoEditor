@@ -198,6 +198,8 @@ void GLBox::draw()
         // MLOG_INFO("Render version : " << render->getRendererVersion());
 
         render->setTextureFilterMode(M_TEX_FILTER_NEAREST, M_TEX_FILTER_NEAREST_MIPMAP_NEAREST);
+
+        // TODO: Don't hardcode this!
         render->setClearColor(MVector4(0.18, 0.32, 0.45, 1));
 
         m_postProcessor.eraseTextures();
@@ -220,6 +222,7 @@ void GLBox::draw()
     render->setScissor(0, 0, w(), h());
 
     engine->updateRequests();
+    render->setClearColor(MVector4(0.18, 0.32, 0.45, 1));
 
     render->disableScissorTest();
     if(!m_postProcessing || !m_postProcessor.draw(maratis->getPerspectiveVue()))
@@ -230,6 +233,7 @@ void GLBox::draw()
         MObject3d* camera = maratis->getSelectedObjectByIndex(0);
         if(camera != NULL && camera->getType() == M_OBJECT3D_CAMERA)
         {
+            render->setClearColor(static_cast<MOCamera*>(camera)->getClearColor());
             render->setViewport(0,0, w()/3, h()/3);
             render->setScissor(0,0, w()/3, h()/3);
             render->enableScissorTest();
