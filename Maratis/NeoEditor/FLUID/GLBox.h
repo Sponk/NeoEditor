@@ -20,6 +20,7 @@ public:
   bool maratis_init;
   bool hasPostEffects() { return m_postProcessing; }
   PostProcessor* getPostProcessor() { return &m_postProcessor; }
+  void loadPostEffectsFromGame(MGame* game);
 
   void resize(int x, int y, int w, int h);
 

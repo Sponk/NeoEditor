@@ -268,24 +268,10 @@ void open_project_callback(Fl_Menu_*, void*)
 #else
         current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
 #endif
-        MGame tmpGame;
-
-        MEngine::getInstance()->setGame(&tmpGame);
+        MGame* game = MEngine::getInstance()->getGame();
         Maratis::getInstance()->loadProject(filename);
-        MEngine::getInstance()->setGame(NULL);
 
-        if(tmpGame.hasPostEffects())
-        {
-            ::window.glbox->getPostProcessor()->loadShaderFile(tmpGame.getPostProcessor()->getVertexShader(),
-                                                                tmpGame.getPostProcessor()->getFragmentShader());
-            ::window.glbox->enablePostEffects();
-            ::window.glbox->getPostProcessor()->eraseTextures();
-            ::window.glbox->getPostProcessor()->updateResolution();
-        }
-        else
-        {
-            ::window.glbox->disablePostEffects();
-        }
+        ::window.glbox->loadPostEffectsFromGame(game);
 
         current_project.level = Maratis::getInstance()->getCurrentLevel();
         update_scene_tree();
@@ -1281,13 +1267,10 @@ void save_level_callback(Fl_Menu_ *, long mode)
         break;
     }
 
-    MGame game;
-    game.getPostProcessor()->setShaderPath(::window.glbox->getPostProcessor()->getVertexShader(), ::window.glbox->getPostProcessor()->getFragmentShader());
-    MEngine::getInstance()->setGame(&game);
+    MGame* game = MEngine::getInstance()->getGame();
+    game->getPostProcessor()->setShaderPath(::window.glbox->getPostProcessor()->getVertexShader(), ::window.glbox->getPostProcessor()->getFragmentShader());
 
     Maratis::getInstance()->save();
-
-    MEngine::getInstance()->setGame(NULL);
 }
 
 void new_project_callback(Fl_Menu_*, void*)
@@ -2017,16 +2000,14 @@ void play_game_in_editor(Fl_Button* button, void *)
     MEngine* engine = MEngine::getInstance();
     MLevel * level = engine->getLevel();
     MScene * scene = level->getCurrentScene();
-    MGame game;
     MScript scriptContext;
 
-    MGame* runningGame = engine->getGame();
+    MGame* game = engine->getGame();
 
     // Quit the game
-    if(runningGame != NULL)
+    if(game->isRunning())
     {
-        runningGame->end();
-        engine->setGame(NULL);
+        game->end();
         return;
     }
 
@@ -2036,7 +2017,6 @@ void play_game_in_editor(Fl_Button* button, void *)
     // Save perspective vue
     MMatrix4x4 matrix = *Maratis::getInstance()->getPerspectiveVue()->getMatrix();
 
-    engine->setGame(&game);
     engine->setScriptContext(&scriptContext);
 
     // Save current state
@@ -2055,11 +2035,10 @@ void play_game_in_editor(Fl_Button* button, void *)
     scene->stopAllSounds();
     scene->playLoopSounds();
 
-    // begin game
-    game.begin();
+    game->begin();
 
     // Remains in here because game is a local variable!
-    while(engine->getGame() != NULL)
+    while(engine->getGame()->isRunning())
     {
         Fl::wait();
     }

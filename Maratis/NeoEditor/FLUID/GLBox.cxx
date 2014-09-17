@@ -34,7 +34,7 @@ void update_editor(void*)
 
     MGame* game = MEngine::getInstance()->getGame();
 
-    if(window.inputMethod == NULL && game == NULL)
+    if(window.inputMethod == NULL && !game->isRunning())
     {
         MInputContext* input = MEngine::getInstance()->getInputContext();
 
@@ -109,7 +109,7 @@ void update_editor(void*)
             //window.glbox->redraw();
         }
     }
-    else if(game == NULL)
+    else if(!game->isRunning())
     {
         window.inputMethod->callFunction(window.inputMethod->getInputUpdate().c_str());
     }
@@ -126,6 +126,8 @@ void update_editor(void*)
         {
             if(!game->isRunning())
                 MFilesUpdate::update();
+            else
+                update_scene_tree();
         }
         else
         {
@@ -142,6 +144,22 @@ void update_editor(void*)
     Maratis::getInstance()->logicLoop();
 
     Fl::add_timeout(0.01, update_editor);
+}
+
+void GLBox::loadPostEffectsFromGame(MGame* game)
+{
+    if(game->hasPostEffects())
+    {
+        m_postProcessor.loadShaderFile(game->getPostProcessor()->getVertexShader(),
+                                                            game->getPostProcessor()->getFragmentShader());
+        m_postProcessing = true;
+        m_postProcessor.eraseTextures();
+        m_postProcessor.updateResolution();
+    }
+    else
+    {
+        disablePostEffects();
+    }
 }
 
 void GLBox::draw()
@@ -165,25 +183,8 @@ void GLBox::draw()
             current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
     #endif
 
-            MGame tmpGame;
-
-            MEngine::getInstance()->setGame(&tmpGame);
             Maratis::getInstance()->loadProject(current_project.file_path.c_str());
-            MEngine::getInstance()->setGame(NULL);
-
-            if(tmpGame.hasPostEffects())
-            {
-                m_postProcessor.loadShaderFile(tmpGame.getPostProcessor()->getVertexShader(),
-                                                                    tmpGame.getPostProcessor()->getFragmentShader());
-                m_postProcessing = true;
-                m_postProcessor.eraseTextures();
-                m_postProcessor.updateResolution();
-            }
-            else
-            {
-                ::window.glbox->disablePostEffects();
-            }
-
+            ::window.glbox->loadPostEffectsFromGame(MEngine::getInstance()->getGame());
             current_project.level = maratis->getCurrentLevel();
         }
 
@@ -216,7 +217,7 @@ void GLBox::draw()
     render->setScissor(0, 0, w(), h());
 
     MGame* game = engine->getGame();
-    if(game == NULL)
+    if(!game->isRunning())
     {
         engine->updateRequests();
         render->setClearColor(MVector4(0.18, 0.32, 0.45, 1));
@@ -395,7 +396,7 @@ int GLBox::handle(int event)
 
             MMouse::getInstance()->setPosition(mouse_x, mouse_y);
 
-            if(Fl::event_button1() && MEngine::getInstance()->getGame() == NULL)
+            if(Fl::event_button1() && !MEngine::getInstance()->getGame()->isRunning())
             {
                 Maratis::getInstance()->selectObjectsInMainView(MEngine::getInstance()->getLevel()->getCurrentScene(), Fl::event_shift() > 0);
                 ::window.scene_tree->deselect_all();
@@ -487,7 +488,7 @@ int GLBox::handle(int event)
     case FL_DRAG:
         {
             MGame* game = MEngine::getInstance()->getGame();
-            if(Fl::event_button3() && ::window.inputMethod == NULL && game == NULL)
+            if(Fl::event_button3() && ::window.inputMethod == NULL && game->isRunning())
             {
                 MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
 
@@ -502,7 +503,7 @@ int GLBox::handle(int event)
             mouse_y = Fl::event_y();
 
             mouse->setPosition(mouse_x, mouse_y);
-            if(Fl::event_button1() && game == NULL)
+            if(Fl::event_button1() && !game->isRunning())
             {
                 Maratis::getInstance()->transformSelectedObjects();
             }
@@ -556,6 +557,7 @@ int GLBox::handle(int event)
                     current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
                 #endif
                     Maratis::getInstance()->loadProject(filename.c_str());
+                    loadPostEffectsFromGame(MEngine::getInstance()->getGame());
                     current_project.level = Maratis::getInstance()->getCurrentLevel();
                     reload_editor = true;
                 }
