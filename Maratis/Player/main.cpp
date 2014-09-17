@@ -315,8 +315,9 @@ int main(int argc, char **argv)
 		MSDLSemaphore::WaitAndLock(&updateSemaphore);
 		//MLOG_INFO("DRAW");
 		// Get input
-        window->onEvents();
+
         engine->getInputContext()->flush();
+        window->onEvents();
         MUpdateScheduledEvents();
 
         if(!isActive)
