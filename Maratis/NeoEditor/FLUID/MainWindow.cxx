@@ -330,6 +330,7 @@ Fl_Double_Window* EditorWindow::show_window() {
         o->callback((Fl_Callback*)play_game_button_callback);
       } // Fl_Button* o
       { Fl_Button* o = new Fl_Button(381, 27, 96, 24, "Play in Editor");
+        o->shortcut(0xffc3);
         o->callback((Fl_Callback*)play_game_in_editor);
       } // Fl_Button* o
       edit_group->resizable(NULL);

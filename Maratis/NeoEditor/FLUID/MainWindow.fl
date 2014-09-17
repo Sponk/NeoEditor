@@ -227,7 +227,7 @@ class EditorWindow {open
         }
       }
       Fl_Box glbox {
-        label {OpenGL box} selected
+        label {OpenGL box}
         xywh {201 56 486 569} color 179 resizable
         code0 {\#include "GLBox.h"}
         class GLBox
@@ -321,8 +321,8 @@ class EditorWindow {open
         }
         Fl_Button {} {
           label {Play in Editor}
-          callback play_game_in_editor
-          xywh {381 27 96 24}
+          callback play_game_in_editor selected
+          xywh {381 27 96 24} shortcut 0xffc3
         }
       }
       Fl_Tabs {} {open
@@ -2205,7 +2205,7 @@ class PostEffectsDlg {open
   } {
     Fl_Window {} {
       label {Post Effects Setup} open
-      xywh {2014 407 591 348} type Double hide
+      xywh {2014 407 591 348} type Double visible
     } {
       Fl_Check_Button use_post_effects {
         label {Use Post Effects}

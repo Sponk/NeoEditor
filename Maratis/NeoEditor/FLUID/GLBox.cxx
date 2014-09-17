@@ -33,11 +33,10 @@ void update_editor(void*)
         return;
 
     MGame* game = MEngine::getInstance()->getGame();
+    MInputContext* input = MEngine::getInstance()->getInputContext();
 
     if(window.inputMethod == NULL && !game->isRunning())
     {
-        MInputContext* input = MEngine::getInstance()->getInputContext();
-
         if(input->isKeyPressed("W"))
         {
             int direction = -1;
