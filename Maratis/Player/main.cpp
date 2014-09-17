@@ -143,7 +143,7 @@ int update_thread(void* nothing)
 				}
 
                 MSDLSemaphore::Unlock(&updateSemaphore);
-                window->sleep(sleep);
+                window->sleep(sleep-3);
 
                 continue;
             }
@@ -315,8 +315,8 @@ int main(int argc, char **argv)
 		MSDLSemaphore::WaitAndLock(&updateSemaphore);
 		//MLOG_INFO("DRAW");
 		// Get input
-		engine->getInputContext()->flush();
-		window->onEvents();
+        window->onEvents();
+        engine->getInputContext()->flush();
         MUpdateScheduledEvents();
 
         if(!isActive)
