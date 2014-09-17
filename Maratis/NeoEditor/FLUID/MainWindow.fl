@@ -17,13 +17,14 @@ decl {\#include <MFileManager/MMeshSave.h>} {private local
 decl {\#include "../MPluginScript/MPluginScript.h"} {public global
 } 
 
-class EditorWindow {} {
+class EditorWindow {open
+} {
   Function {show_window()} {open
   } {
     Fl_Window {} {
       label Neo
       callback window_quit open
-      xywh {1858 253 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
+      xywh {1858 253 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -226,7 +227,7 @@ class EditorWindow {} {
         }
       }
       Fl_Box glbox {
-        label {OpenGL box}
+        label {OpenGL box} selected
         xywh {201 56 486 569} color 179 resizable
         code0 {\#include "GLBox.h"}
         class GLBox
@@ -258,7 +259,7 @@ class EditorWindow {} {
           image {../../../Data/Editor/scale.png} xywh {282 27 39 24} type Radio box UP_FRAME down_box ROUND_DOWN_BOX shortcut 0x33
         }
         Fl_Choice scenes_menu {open
-          xywh {384 27 129 24} down_box BORDER_BOX
+          xywh {498 27 129 24} down_box BORDER_BOX
         } {}
         Fl_Group speed_group {open
           xywh {3 25 192 23}
@@ -278,10 +279,10 @@ class EditorWindow {} {
         Fl_Check_Button vue_ortho_button {
           label Ortho
           callback ortho_callback
-          xywh {519 27 57 24} down_box DOWN_BOX shortcut 0x35
+          xywh {633 27 57 24} down_box DOWN_BOX shortcut 0x35
         }
         Fl_Choice {} {open
-          xywh {588 27 107 24} down_box BORDER_BOX
+          xywh {702 27 107 24} down_box BORDER_BOX
         } {
           MenuItem {} {
             label Other
@@ -317,6 +318,11 @@ class EditorWindow {} {
         Fl_Button {} {
           callback play_game_button_callback
           image {../../../Data/Editor/buttonGame.png} xywh {333 27 39 24}
+        }
+        Fl_Button {} {
+          label {Play in Editor}
+          callback play_game_in_editor
+          xywh {381 27 96 24}
         }
       }
       Fl_Tabs {} {open
@@ -2199,7 +2205,7 @@ class PostEffectsDlg {open
   } {
     Fl_Window {} {
       label {Post Effects Setup} open
-      xywh {2014 407 591 348} type Double visible
+      xywh {2014 407 591 348} type Double hide
     } {
       Fl_Check_Button use_post_effects {
         label {Use Post Effects}
@@ -2327,7 +2333,6 @@ else
   }
   Function {add_uniform_callback(Fl_Button*, void*)} {open return_type {static void}
   } {
-    code {printf("Hello, World!\\n");} {selected
-    }
+    code {printf("Hello, World!\\n");} {}
   }
 } 

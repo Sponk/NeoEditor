@@ -32,7 +32,9 @@ void update_editor(void*)
     if(!window.glbox->maratis_init)
         return;
 
-    if(window.inputMethod == NULL)
+    MGame* game = MEngine::getInstance()->getGame();
+
+    if(window.inputMethod == NULL && game == NULL)
     {
         MInputContext* input = MEngine::getInstance()->getInputContext();
 
@@ -107,7 +109,7 @@ void update_editor(void*)
             //window.glbox->redraw();
         }
     }
-    else
+    else if(game == NULL)
     {
         window.inputMethod->callFunction(window.inputMethod->getInputUpdate().c_str());
     }
@@ -117,8 +119,6 @@ void update_editor(void*)
         main_window->label(Maratis::getInstance()->getWindowTitle());
         Maratis::getInstance()->setTitleChanged(false);
     }
-
-    MGame* game = MEngine::getInstance()->getGame();
 
     if(MWindow::getInstance()->getFocus())
     {
@@ -132,12 +132,6 @@ void update_editor(void*)
             MFilesUpdate::update();
         }
     }
-
-	MScene* scene = MEngine::getInstance()->getLevel()->getCurrentScene();
-	for (int i = 0; i < scene->getObjectsNumber(); i++)
-	{
-		scene->getObjectByIndex(i)->updateMatrix();
-	}
 
     /*if(!game->isRunning())
     {
@@ -221,32 +215,40 @@ void GLBox::draw()
     MWindow::getInstance()->setViewport(w(), h());
     render->setScissor(0, 0, w(), h());
 
-    engine->updateRequests();
-    render->setClearColor(MVector4(0.18, 0.32, 0.45, 1));
-
-    render->disableScissorTest();
-    if(!m_postProcessing || !m_postProcessor.draw(maratis->getPerspectiveVue()))
-        maratis->graphicLoop();
-
-    if(maratis->getSelectedObjectsNumber() > 0)
+    MGame* game = engine->getGame();
+    if(game == NULL)
     {
-        MObject3d* camera = maratis->getSelectedObjectByIndex(0);
-        if(camera != NULL && camera->getType() == M_OBJECT3D_CAMERA)
+        engine->updateRequests();
+        render->setClearColor(MVector4(0.18, 0.32, 0.45, 1));
+
+        render->disableScissorTest();
+        if(!m_postProcessing || !m_postProcessor.draw(maratis->getPerspectiveVue()))
+            maratis->graphicLoop();
+
+        if(maratis->getSelectedObjectsNumber() > 0)
         {
-            render->setClearColor(static_cast<MOCamera*>(camera)->getClearColor());
-            render->setViewport(0,0, w()/3, h()/3);
-            render->setScissor(0,0, w()/3, h()/3);
-            render->enableScissorTest();
+            MObject3d* camera = maratis->getSelectedObjectByIndex(0);
+            if(camera != NULL && camera->getType() == M_OBJECT3D_CAMERA)
+            {
+                render->setClearColor(static_cast<MOCamera*>(camera)->getClearColor());
+                render->setViewport(0,0, w()/3, h()/3);
+                render->setScissor(0,0, w()/3, h()/3);
+                render->enableScissorTest();
 
-            static_cast<MOCamera*>(camera)->enable();
+                static_cast<MOCamera*>(camera)->enable();
 
-            render->clear(M_BUFFER_DEPTH | M_BUFFER_COLOR);
-            engine->getLevel()->getCurrentScene()->draw(static_cast<MOCamera*>(camera));
-            engine->getLevel()->getCurrentScene()->drawObjectsBehaviors();
+                render->clear(M_BUFFER_DEPTH | M_BUFFER_COLOR);
+                engine->getLevel()->getCurrentScene()->draw(static_cast<MOCamera*>(camera));
+                engine->getLevel()->getCurrentScene()->drawObjectsBehaviors();
 
-            render->setScissor(0,0,w(),h());
-            render->disableScissorTest();
+                render->setScissor(0,0,w(),h());
+                render->disableScissorTest();
+            }
         }
+    }
+    else
+    {
+        maratis->graphicLoop();
     }
 
     swap_buffers();
@@ -393,7 +395,7 @@ int GLBox::handle(int event)
 
             MMouse::getInstance()->setPosition(mouse_x, mouse_y);
 
-            if(Fl::event_button1())
+            if(Fl::event_button1() && MEngine::getInstance()->getGame() == NULL)
             {
                 Maratis::getInstance()->selectObjectsInMainView(MEngine::getInstance()->getLevel()->getCurrentScene(), Fl::event_shift() > 0);
                 ::window.scene_tree->deselect_all();
@@ -436,7 +438,13 @@ int GLBox::handle(int event)
                             MMouse::getInstance()->downButton(MMOUSE_BUTTON_RIGHT);
                             input->onKeyDown("MOUSE_BUTTON_RIGHT");
                             input->downKey("MOUSE_BUTTON_RIGHT");
+                        }
 
+                        case FL_LEFT_MOUSE:
+                        {
+                            MMouse::getInstance()->downButton(MMOUSE_BUTTON_LEFT);
+                            input->onKeyDown("MOUSE_BUTTON_LEFT");
+                            input->downKey("MOUSE_BUTTON_LEFT");
                         }
                     }
             }
@@ -464,6 +472,13 @@ int GLBox::handle(int event)
                 input->onKeyUp("MOUSE_BUTTON_RIGHT");
                 input->upKey("MOUSE_BUTTON_RIGHT");
             }
+
+            case FL_LEFT_MOUSE:
+            {
+                MMouse::getInstance()->upButton(MMOUSE_BUTTON_LEFT);
+                input->onKeyUp("MOUSE_BUTTON_LEFT");
+                input->upKey("MOUSE_BUTTON_LEFT");
+            }
         }
         return 1;
     }
@@ -471,7 +486,8 @@ int GLBox::handle(int event)
 
     case FL_DRAG:
         {
-            if(Fl::event_button3() && ::window.inputMethod == NULL)
+            MGame* game = MEngine::getInstance()->getGame();
+            if(Fl::event_button3() && ::window.inputMethod == NULL && game == NULL)
             {
                 MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
 
@@ -486,7 +502,7 @@ int GLBox::handle(int event)
             mouse_y = Fl::event_y();
 
             mouse->setPosition(mouse_x, mouse_y);
-            if(Fl::event_button1())
+            if(Fl::event_button1() && game == NULL)
             {
                 Maratis::getInstance()->transformSelectedObjects();
             }
@@ -574,8 +590,8 @@ int GLBox::handle(int event)
 
     if(input)
     {
-        input->setAxis("MOUSE_X", -0.5+2*static_cast<float>(mouse_x-x())/w());
-        input->setAxis("MOUSE_Y", -0.5+2*static_cast<float>(mouse_y-y())/h());
+        input->setAxis("MOUSE_X", (static_cast<float>(mouse_x)/w()));
+        input->setAxis("MOUSE_Y", (static_cast<float>(mouse_y)/h()));
     }
 
     Fl_Tree_Item* item = ::window.scene_tree->first_selected_item();

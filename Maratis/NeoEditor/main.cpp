@@ -230,6 +230,8 @@ int main(int argc, char **argv)
     MEngine * engine = MEngine::getInstance();
     Maratis * maratis = Maratis::getInstance();
 
+    engine->setGame(NULL);
+
     // Load all plugins (TODO: Search in user home too!)
     loadPluginsFrom(rep);
 

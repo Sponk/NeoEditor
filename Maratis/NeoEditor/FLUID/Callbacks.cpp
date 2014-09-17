@@ -19,6 +19,10 @@
 #include <MEngine.h>
 #include <MWindow.h>
 #include <MLoaders/MImageLoader.h>
+#include <MFileManager/MLevelLoad.h>
+#include <MFileManager/MLevelSave.h>
+#include <MCore.h>
+
 #include "../MFilesUpdate/MFilesUpdate.h"
 #include "../MLoaders/MAssimpMeshLoader.h"
 #include <MCore.h>
@@ -2006,4 +2010,82 @@ void post_effects_setup_callback(Fl_Menu_*, void*)
         Fl::wait();
 
     Fl::delete_widget(window);
+}
+
+void play_game_in_editor(Fl_Button* button, void *)
+{
+    MEngine* engine = MEngine::getInstance();
+    MLevel * level = engine->getLevel();
+    MScene * scene = level->getCurrentScene();
+    MGame game;
+    MScript scriptContext;
+
+    MGame* runningGame = engine->getGame();
+
+    // Quit the game
+    if(runningGame != NULL)
+    {
+        runningGame->end();
+        engine->setGame(NULL);
+        return;
+    }
+
+    const char* text = button->label();
+    button->label("Stop game");
+
+    // Save perspective vue
+    MMatrix4x4 matrix = *Maratis::getInstance()->getPerspectiveVue()->getMatrix();
+
+    engine->setGame(&game);
+    engine->setScriptContext(&scriptContext);
+
+    // Save current state
+    const char * temp = Maratis::getInstance()->getTempDir();
+    if(temp)
+    {
+        string tempFile(temp);
+        tempFile += "/";
+        tempFile += "temp.level";
+
+        // save temp level
+        xmlLevelSave(engine->getLevel(), tempFile.c_str());
+    }
+
+    // play sound
+    scene->stopAllSounds();
+    scene->playLoopSounds();
+
+    // begin game
+    game.begin();
+
+    // Remains in here because game is a local variable!
+    while(engine->getGame() != NULL)
+    {
+        Fl::wait();
+    }
+
+    // Reload old state
+    // stop sound
+    scene->stopAllSounds();
+
+    // show mouse
+    MWindow::getInstance()->showCursor();
+
+    if(temp)
+    {
+        string tempFile(temp);
+        tempFile += "/";
+        tempFile += "temp.level";
+        M_loadLevel(tempFile.c_str(), level, false);
+    }
+
+    scene = level->getCurrentScene();
+    Maratis::getInstance()->clearSelectedObjects();
+
+    // update matrices
+    scene->updateObjectsMatrices();
+    Maratis::getInstance()->getPerspectiveVue()->setPosition(matrix.getTranslationPart());
+    Maratis::getInstance()->getPerspectiveVue()->updateMatrix();
+
+    button->label(text);
 }

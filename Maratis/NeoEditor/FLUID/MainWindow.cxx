@@ -298,7 +298,7 @@ Fl_Double_Window* EditorWindow::show_window() {
         o->image(image_scale);
         o->callback((Fl_Callback*)set_edit_type, (void*)('s'));
       } // Fl_Round_Button* o
-      { scenes_menu = new Fl_Choice(384, 27, 129, 24);
+      { scenes_menu = new Fl_Choice(498, 27, 129, 24);
         scenes_menu->down_box(FL_BORDER_BOX);
       } // Fl_Choice* scenes_menu
       { speed_group = new Fl_Group(3, 25, 192, 23);
@@ -316,18 +316,21 @@ Fl_Double_Window* EditorWindow::show_window() {
         speed_group->resizable(NULL);
         speed_group->end();
       } // Fl_Group* speed_group
-      { vue_ortho_button = new Fl_Check_Button(519, 27, 57, 24, "Ortho");
+      { vue_ortho_button = new Fl_Check_Button(633, 27, 57, 24, "Ortho");
         vue_ortho_button->shortcut(0x35);
         vue_ortho_button->down_box(FL_DOWN_BOX);
         vue_ortho_button->callback((Fl_Callback*)ortho_callback);
       } // Fl_Check_Button* vue_ortho_button
-      { Fl_Choice* o = new Fl_Choice(588, 27, 107, 24);
+      { Fl_Choice* o = new Fl_Choice(702, 27, 107, 24);
         o->down_box(FL_BORDER_BOX);
         o->menu(menu_);
       } // Fl_Choice* o
       { Fl_Button* o = new Fl_Button(333, 27, 39, 24);
         o->image(image_buttonGame);
         o->callback((Fl_Callback*)play_game_button_callback);
+      } // Fl_Button* o
+      { Fl_Button* o = new Fl_Button(381, 27, 96, 24, "Play in Editor");
+        o->callback((Fl_Callback*)play_game_in_editor);
       } // Fl_Button* o
       edit_group->resizable(NULL);
       edit_group->end();
