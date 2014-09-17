@@ -105,6 +105,10 @@ int update_thread(void* nothing)
         MSDLSemaphore::WaitAndLock(&updateSemaphore);
         if(window->getFocus())
         {
+            // Get input
+            //engine->getInputContext()->flush();
+            window->onEvents();
+
             // compute target tick
             unsigned long currentTick = window->getSystemTick();
 
@@ -314,10 +318,6 @@ int main(int argc, char **argv)
     {
 		MSDLSemaphore::WaitAndLock(&updateSemaphore);
 		//MLOG_INFO("DRAW");
-		// Get input
-
-        engine->getInputContext()->flush();
-        window->onEvents();
         MUpdateScheduledEvents();
 
         if(!isActive)
@@ -363,7 +363,7 @@ int main(int argc, char **argv)
 
 		MSDLSemaphore::Unlock(&updateSemaphore);
 
-        window->sleep(5);
+        window->sleep(1);
         //window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
     }
 
