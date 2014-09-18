@@ -106,7 +106,7 @@ int update_thread(void* nothing)
         if(window->getFocus())
         {
             // Get input
-            //engine->getInputContext()->flush();
+            MEngine::getInstance()->getInputContext()->flush();
             window->onEvents();
 
             // compute target tick
@@ -317,6 +317,7 @@ int main(int argc, char **argv)
     while(isActive)
     {
 		MSDLSemaphore::WaitAndLock(&updateSemaphore);
+        window->onWindowEvents();
 		//MLOG_INFO("DRAW");
         MUpdateScheduledEvents();
 

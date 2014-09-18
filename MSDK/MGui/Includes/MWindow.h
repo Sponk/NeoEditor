@@ -107,6 +107,7 @@ public:
 	inline void setPointerEvent(void (*pointerEvent)(MWinEvent * windowEvents)){ m_pointerEvent = pointerEvent; }
 	void sendEvents(MWinEvent * event);
 	bool onEvents(void);
+    bool onWindowEvents(void);
 
 	// cursor
 	void setCursorPos(int x, int y);

@@ -41,7 +41,7 @@ bool PostProcessor::draw(MOCamera *camera)
 
     render->enableDepthTest();
 
-    render->setScissor(0,0,m_Resolution, m_Resolution);
+    render->setScissor(0,0,m_textureWidth, m_textureHeight);
     render->disableScissorTest();
 
     render->clear(M_BUFFER_DEPTH | M_BUFFER_COLOR);

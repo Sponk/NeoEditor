@@ -311,6 +311,7 @@ bool MWindow::onEvents(void)
 {
 	MWinEvent mevent;
 	SDL_Event event;
+    std::vector<SDL_Event> unhandled;
 
 	while (SDL_PollEvent(&event))
 	{
@@ -325,32 +326,7 @@ bool MWindow::onEvents(void)
 
 			case SDL_WINDOWEVENT:
 			{
-				switch (event.window.event)
-				{
-					case SDL_WINDOWEVENT_RESIZED:
-						mevent.type = MWIN_EVENT_WINDOW_RESIZE;
-						mevent.data[0] = event.window.data1;
-						mevent.data[1] = event.window.data2;
-						sendEvents(&mevent);
-                        break;
-					case SDL_WINDOWEVENT_MOVED:
-						mevent.type = MWIN_EVENT_WINDOW_MOVE;
-						mevent.data[0] = event.window.data1;
-						mevent.data[1] = event.window.data2;
-						sendEvents(&mevent);
-						break;
-					case SDL_WINDOWEVENT_CLOSE:
-						mevent.type = MWIN_EVENT_WINDOW_CLOSE;
-						sendEvents(&mevent);
-						break;
-					case SDL_WINDOWEVENT_FOCUS_GAINED:
-						m_focus = true;
-						break;
-					case SDL_WINDOWEVENT_FOCUS_LOST:
-						m_focus = false;
-						break;
-				}
-				break;
+                unhandled.push_back(event);
 			}
 
 			// Keyboard
@@ -661,7 +637,74 @@ bool MWindow::onEvents(void)
 		}
 	}
 
+    for(int i = 0; i < unhandled.size(); i++)
+    {
+        SDL_PushEvent(&unhandled[i]);
+    }
+
 	return true;
+}
+
+bool MWindow::onWindowEvents(void)
+{
+    MWinEvent mevent;
+    SDL_Event event;
+    vector<SDL_Event> unhandled;
+
+    while (SDL_PollEvent(&event))
+    {
+        switch (event.type)
+        {
+            case SDL_QUIT:
+            {
+                mevent.type = MWIN_EVENT_WINDOW_CLOSE;
+                sendEvents(&mevent);
+                break;
+            }
+
+            case SDL_WINDOWEVENT:
+            {
+                switch (event.window.event)
+                {
+                    case SDL_WINDOWEVENT_RESIZED:
+                        mevent.type = MWIN_EVENT_WINDOW_RESIZE;
+                        mevent.data[0] = event.window.data1;
+                        mevent.data[1] = event.window.data2;
+                        sendEvents(&mevent);
+                        break;
+                    case SDL_WINDOWEVENT_MOVED:
+                        mevent.type = MWIN_EVENT_WINDOW_MOVE;
+                        mevent.data[0] = event.window.data1;
+                        mevent.data[1] = event.window.data2;
+                        sendEvents(&mevent);
+                        break;
+                    case SDL_WINDOWEVENT_CLOSE:
+                        mevent.type = MWIN_EVENT_WINDOW_CLOSE;
+                        sendEvents(&mevent);
+                        break;
+                    case SDL_WINDOWEVENT_FOCUS_GAINED:
+                        m_focus = true;
+                        break;
+                    case SDL_WINDOWEVENT_FOCUS_LOST:
+                        m_focus = false;
+                        break;
+                }
+                break;
+            }
+
+            // Default
+            default:
+                unhandled.push_back(event);
+                break;
+        }
+    }
+
+    for(int i = 0; i < unhandled.size(); i++)
+    {
+        SDL_PushEvent(&unhandled[i]);
+    }
+
+    return true;
 }
 
 void MWindow::swapBuffer(void)
