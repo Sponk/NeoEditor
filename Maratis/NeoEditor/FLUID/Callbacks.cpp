@@ -184,7 +184,6 @@ void change_scene_callback(Fl_Menu_*, long index)
     Maratis::getInstance()->clearSelectedObjects();
 
     update_scene_tree();
-    window.glbox->redraw();
 }
 
 void update_scene_tree()
@@ -221,7 +220,6 @@ void update_scene_tree()
     window.scenes_menu->value(level->getCurrentSceneId());
 
     update_behavior_menu();
-	window.scene_tree->redraw();
 }
 
 void open_level_callback(Fl_Menu_*, void*)
@@ -237,8 +235,6 @@ void open_level_callback(Fl_Menu_*, void*)
     }
 
     reload_editor = true;
-
-    window.glbox->redraw();
     window.scene_tree->redraw();
 }
 
@@ -278,8 +274,6 @@ void open_project_callback(Fl_Menu_*, void*)
     }
 
     reload_editor = true;
-
-    window.glbox->redraw();
     window.scene_tree->redraw();
 }
 
@@ -313,8 +307,6 @@ void set_edit_type(Fl_Round_Button* button, long c)
             Maratis::getInstance()->setTransformMode(M_TRANSFORM_SCALE);
         break;
     }
-
-    window.glbox->redraw();
 }
 
 void remove_window(Fl_Window* win)
@@ -1003,7 +995,6 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
 
     window.special_tab->end();
     window.special_tab->redraw();
-    window.glbox->redraw();
 }
 
 void edit_object_callback(Fl_Value_Input* input, long c)
@@ -1077,8 +1068,6 @@ void edit_object_callback(Fl_Value_Input* input, long c)
         }
         break;
     }
-
-    window.glbox->redraw();
 }
 
 void edit_name_callback(Fl_Input*, void*)
@@ -1154,7 +1143,6 @@ void edit_light_properties(Fl_Value_Input *, void *)
     light->setShadowBlur(window.light_shadow_blur_edit->value());
     light->setShadowQuality(window.light_shadow_quality_edit->value());
 	
-    window.glbox->redraw();
     window.special_tab->redraw();
 }
 
@@ -1185,8 +1173,6 @@ void edit_light_properties_chk_btn(Fl_Check_Button * button, void *)
     {
         light->castShadow(false);
     }
-
-    window.glbox->redraw();
 }
 
 void choose_light_color(Fl_Button*, void*)
@@ -1341,8 +1327,6 @@ void edit_object_chk_btn(Fl_Check_Button*, void*)
         entity->deletePhysicsProperties();
         return;
     }
-
-    window.glbox->redraw();
 }
 
 void edit_object_properties(Fl_Value_Input*, void*)
@@ -1379,7 +1363,6 @@ void add_mesh_callback(Fl_Menu_*, void*)
         update_scene_tree();
     }
 
-    window.glbox->redraw();
 	update_scene_tree();
 }
 
@@ -1388,8 +1371,6 @@ void add_light_callback(Fl_Menu_*, void*)
     Maratis::getInstance()->autoSave();
     Maratis::getInstance()->addLight();
     update_scene_tree();
-
-    window.glbox->redraw();
 }
 
 void edit_camera_properties(Fl_Value_Input*, void*)
@@ -1484,7 +1465,6 @@ void text_find_font_callback(Fl_Button*, void*)
     }
 
     window.text_font_edit->value(filename);
-    window.glbox->redraw();
 }
 
 void edit_text_properties(Fl_Widget*, void*)
@@ -1514,8 +1494,6 @@ void edit_text_properties(Fl_Widget*, void*)
         window.text_font_edit->value(text->getFontRef()->getFilename());
         fl_alert("Could not load font!");
     }
-
-    window.glbox->redraw();
 }
 
 void text_alignment_callback(Fl_Menu_*, long value)
@@ -1530,7 +1508,6 @@ void text_alignment_callback(Fl_Menu_*, long value)
     }
 
     text->setAlign((M_ALIGN_MODES) value);
-    window.glbox->redraw();
 }
 
 void choose_text_color(Fl_Button*, void*)
@@ -1559,15 +1536,12 @@ void add_text_callback(Fl_Menu_ *, void *)
     maratis->autoSave();
 
     maratis->okAddFont(filename);
-
-    window.glbox->redraw();
 	update_scene_tree();
 }
 
 void add_camera_callback(Fl_Menu_*,void*)
 {
     Maratis::getInstance()->addCamera();
-    window.glbox->redraw();
 	update_scene_tree();
 }
 
@@ -1723,7 +1697,6 @@ void import_mesh_callback(Fl_Menu_*, void*)
 
     M_importAssimpMeshes(filename);
     update_scene_tree();
-    window.glbox->redraw();
 }
 
 void delete_object_callback(Fl_Menu_*, void*)
@@ -1731,7 +1704,6 @@ void delete_object_callback(Fl_Menu_*, void*)
     Maratis::getInstance()->deleteSelectedObjects();
 
     update_scene_tree();
-    window.glbox->redraw();
 }
 
 void undo_callback(Fl_Menu_*, void*)
@@ -1739,7 +1711,6 @@ void undo_callback(Fl_Menu_*, void*)
     Maratis::getInstance()->undo();
 
     update_scene_tree();
-    window.glbox->redraw();
 }
 
 void redo_callback(Fl_Menu_*, void*)
@@ -1747,7 +1718,6 @@ void redo_callback(Fl_Menu_*, void*)
     Maratis::getInstance()->redo();
 
     update_scene_tree();
-    window.glbox->redraw();
 }
 
 void add_sound_callback(Fl_Menu_ *, void *)
@@ -1760,7 +1730,6 @@ void add_sound_callback(Fl_Menu_ *, void *)
     Maratis::getInstance()->okAddSound(filename);
 
     update_scene_tree();
-    window.glbox->redraw();
 }
 
 void edit_sound_callback(Fl_Value_Input*, void*)
@@ -1851,7 +1820,6 @@ void delete_scene_callback(Fl_Menu_ *, void *)
 
     Maratis::getInstance()->clearSelectedObjects();
     update_scene_tree();
-    window.glbox->redraw();
 }
 
 void duplicate_object_callback(Fl_Menu_ *, void *)
@@ -1859,7 +1827,6 @@ void duplicate_object_callback(Fl_Menu_ *, void *)
     Maratis::getInstance()->duplicateSelectedObjects();
 
     update_scene_tree();
-    window.glbox->redraw();
 }
 
 void about_menu_callback(Fl_Menu_*, void*)
@@ -1875,7 +1842,6 @@ void select_all_callback(Fl_Menu_*, void*)
 {
     Maratis::getInstance()->selectAll();
     update_scene_tree();
-    window.glbox->redraw();
 }
 
 void edit_materials_callback(Fl_Button *, void *)
@@ -1932,13 +1898,11 @@ void add_group_callback(Fl_Menu_*, void*)
 	Maratis::getInstance()->addGroup();
 
 	update_scene_tree();
-	window.glbox->redraw();
 }
 
 void ortho_callback(Fl_Check_Button*, void*)
 {
     Maratis::getInstance()->switchCurrentVueMode();
-    window.glbox->redraw();
 }
 
 void change_vue_callback(Fl_Menu_*, long mode)
@@ -1947,7 +1911,6 @@ void change_vue_callback(Fl_Menu_*, long mode)
 	
 	Maratis::getInstance()->changeCurrentVue(mode);
 	window.vue_ortho_button->value(1);
-	window.glbox->redraw();
 }
 
 void object_constraint_properties_callback(Fl_Button*, void*)

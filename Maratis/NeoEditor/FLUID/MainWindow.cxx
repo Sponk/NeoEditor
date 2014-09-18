@@ -894,8 +894,6 @@ void SceneSetupDlg::ok_button_callback(Fl_Button* button, SceneSetupDlg* dlg) {
   
   button->parent()->label("Success");
   button->parent()->hide();
-  
-  window.glbox->redraw();
 }
 
 void SceneSetupDlg::cancel_button_callback(Fl_Button* button, void*) {

@@ -19,8 +19,7 @@ decl {\#include "../MPluginScript/MPluginScript.h"} {public global
 
 class EditorWindow {open
 } {
-  Function {show_window()} {open
-  } {
+  Function {show_window()} {} {
     Fl_Window {} {
       label Neo
       callback window_quit open
@@ -321,7 +320,7 @@ class EditorWindow {open
         }
         Fl_Button {} {
           label {Play in Editor}
-          callback play_game_in_editor selected
+          callback play_game_in_editor
           xywh {381 27 96 24} shortcut 0xffc3
         }
       }
@@ -945,7 +944,8 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
   Function {getSystemColor(int idx)} {open return_type int
   } {
     code {// TODO: Boundary checking!
-return systemColors[idx];} {}
+return systemColors[idx];} {selected
+    }
   }
 } 
 
@@ -954,7 +954,7 @@ decl {extern EditorWindow window;} {private local
 
 class SceneSetupDlg {open
 } {
-  Function {ok_button_callback(Fl_Button* button, SceneSetupDlg* dlg)} {return_type {static void}
+  Function {ok_button_callback(Fl_Button* button, SceneSetupDlg* dlg)} {open return_type {static void}
   } {
     code {MEngine* engine = MEngine::getInstance();
 MVector3 ambientLight(dlg->color_r->value(), dlg->color_g->value(), dlg->color_b->value());
@@ -962,9 +962,7 @@ MVector3 ambientLight(dlg->color_r->value(), dlg->color_g->value(), dlg->color_b
 engine->getLevel()->getCurrentScene()->setAmbientLight(ambientLight);
 
 button->parent()->label("Success");
-button->parent()->hide();
-
-window.glbox->redraw();} {}
+button->parent()->hide();} {}
   }
   Function {cancel_button_callback(Fl_Button* button, void*)} {return_type {static void}
   } {
