@@ -178,9 +178,6 @@ bool MPostProcessor::loadShader(const char* vertShad, const char* fragShad)
     if(vertShad == NULL || fragShad == NULL)
         return false;
 
-    eraseTextures();
-    updateResolution();
-
     MRenderingContext * render = MEngine::getInstance()->getRenderingContext(); // get the rendering context
     bool success = false;
 
@@ -309,46 +306,60 @@ void MPostProcessor::drawQuad(MVector2 scale)
 
 void MPostProcessor::addFloatUniform(const char* name)
 {
-    float_uniform_t uniform;
-    strcpy(uniform.name, name);
+    float_uniform_t* uniform = (float_uniform_t*) malloc(sizeof(float_uniform_t));
+    uniform->variable = MVariable(uniform->name, (void*) &uniform->value, M_VARIABLE_FLOAT);
 
-    uniform.value = 0;
-    uniform.dirty = true;
+    strcpy(uniform->name, name);
+    uniform->value = 0;
+    uniform->dirty = true;
 
-    m_FloatUniformList.push_back(uniform);
+    m_UniformList.push_back((uintptr_t) uniform);
 }
 
-void MPostProcessor::addIntUniform(const char* name)
+float MPostProcessor::getFloatUniformValue(int idx)
 {
-    int_uniform_t uniform;
-    strcpy(uniform.name, name);
+    if(idx > m_UniformList.size() || idx < 0)
+        return 0.0;
 
-    uniform.value = 0;
-    uniform.dirty = true;
+    uniform_t* uniform = (uniform_t*) m_UniformList[idx];
+    if(uniform && uniform->variable.getType() == M_VARIABLE_FLOAT)
+        return *((float*)uniform->variable.getPointer());
 
-    m_IntUniformList.push_back(uniform);
+    return 0.0;
 }
 
-void MPostProcessor::setIntUniformValue(const char* name, int value)
+const char* MPostProcessor::getUniformName(int idx)
 {
-    for(unsigned int i = 0; i < m_IntUniformList.size(); i++)
-    {
-        if(!strcmp(m_IntUniformList[i].name, name))
-        {
-            m_IntUniformList[i].value = value;
-            return;
-        }
-    }
+    if(idx > m_UniformList.size() -1 || idx < 0)
+        return NULL;
+
+    uniform_t* uniform = (uniform_t*) m_UniformList[idx];
+    if(uniform)
+        return uniform->variable.getName();
+
+    return NULL;
+}
+
+M_VARIABLE_TYPE MPostProcessor::getUniformType(int idx)
+{
+    if(idx > m_UniformList.size() -1 || idx < 0)
+        return M_VARIABLE_NULL;
+
+    uniform_t* uniform = (uniform_t*) m_UniformList[idx];
+    if(uniform)
+        return uniform->variable.getType();
+
+    return M_VARIABLE_NULL;
 }
 
 void MPostProcessor::setFloatUniformValue(const char* name, float value)
 {
-    for(unsigned int i = 0; i < m_FloatUniformList.size(); i++)
+    for(unsigned int i = 0; i < m_UniformList.size(); i++)
     {
-        if(!strcmp(m_FloatUniformList[i].name, name))
+        if(!strcmp(((float_uniform_t*)m_UniformList[i])->name, name))
         {
-            m_FloatUniformList[i].value = value;
-            m_FloatUniformList[i].dirty = true;
+            ((float_uniform_t*)m_UniformList[i])->value = value;
+            ((float_uniform_t*) m_UniformList[i])->dirty = true;
             return;
         }
     }
@@ -359,37 +370,34 @@ void MPostProcessor::sendUniforms()
     MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
     // Set dynamic uniforms
-    float_uniform_t float_uniform;
+    uniform_t* uniform;
 
-    for(unsigned int i = 0; i < m_FloatUniformList.size(); i++)
+    for(unsigned int i = 0; i < m_UniformList.size(); i++)
     {
-        float_uniform = m_FloatUniformList[i];
+        uniform = ((uniform_t*)m_UniformList[i]);
+        if(!uniform->dirty)
+            continue;
 
-        if(float_uniform.dirty)
+        switch(uniform->variable.getType())
         {
-            render->sendUniformFloat(m_fx, float_uniform.name, &float_uniform.value);
-            m_FloatUniformList[i].dirty = false;
-        }
-    }
-
-    int_uniform_t int_uniform;
-
-    for(unsigned int i = 0; i < m_IntUniformList.size(); i++)
-    {
-        int_uniform = m_IntUniformList[i];
-
-        if(int_uniform.dirty)
-        {
-            render->sendUniformInt(m_fx, int_uniform.name, &int_uniform.value);
-            m_FloatUniformList[i].dirty = false;
+            case M_VARIABLE_FLOAT:
+            {
+               render->sendUniformFloat(m_fx, uniform->name, (float*) uniform->variable.getPointer());
+               uniform->dirty = false;
+            }
+            break;
         }
     }
 }
 
 void MPostProcessor::clear()
 {
-    m_FloatUniformList.clear();
-    m_IntUniformList.clear();
+    for(int i = 0; i < m_UniformList.size(); i++)
+    {
+        free((void*) m_UniformList[i]);
+    }
+
+    m_UniformList.clear();
 }
 
 void MPostProcessor::setShaderPath(const char* vertPath, const char* fragPath)

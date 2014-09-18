@@ -5007,9 +5007,13 @@ Fl_Double_Window* PostEffectsDlg::create_window() {
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       { uniform_value = new Fl_Value_Input(183, 138, 165, 24, "Uniform Value:");
         uniform_value->labelsize(12);
+        uniform_value->maximum(20);
+        uniform_value->step(0.01);
+        uniform_value->callback((Fl_Callback*)update_uniform_float, (void*)(this));
         uniform_value->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* uniform_value
       { uniforms_browser = new Fl_Browser(9, 81, 165, 222);
+        uniforms_browser->type(1);
         uniforms_browser->callback((Fl_Callback*)uniform_select_callback, (void*)(this));
         uniforms_browser->align(Fl_Align(FL_ALIGN_TOP_LEFT));
         uniforms_browser->when(3);
@@ -5031,7 +5035,7 @@ Fl_Double_Window* PostEffectsDlg::create_window() {
     { frag_btn = new Fl_Button(564, 30, 24, 21, "...");
       frag_btn->callback((Fl_Callback*)find_frag_file_callback, (void*)(this));
     } // Fl_Button* frag_btn
-    { preview_btn = new Fl_Button(417, 312, 168, 27, "Preview in scene view");
+    { preview_btn = new Fl_Button(417, 312, 168, 27, "Load Shader");
       preview_btn->callback((Fl_Callback*)preview_callback, (void*)(this));
     } // Fl_Button* preview_btn
     o->end();
@@ -5051,12 +5055,26 @@ Fl_Double_Window* PostEffectsDlg::create_window() {
   else
   {
   	use_post_effects->value(1);
+  	vert_shad_edit->value(::window.glbox->getPostProcessor()->getVertexShader());
+  	frag_shad_edit->value(::window.glbox->getPostProcessor()->getFragmentShader());
+  	
+  	update_uniform_list();
   }
   return w;
 }
 
 void PostEffectsDlg::uniform_select_callback(Fl_Browser* widget, PostEffectsDlg* dlg) {
-  printf("Hello, World!\n");
+  PostProcessor* pp = ::window.glbox->getPostProcessor();
+      int idx = widget->value()-1;
+  
+      if(idx < 0) return;
+  
+      switch(pp->getUniformType(idx))
+      {
+      case M_VARIABLE_FLOAT:
+              dlg->uniform_value->value(pp->getFloatUniformValue(idx));
+          break;
+      }
 }
 
 void PostEffectsDlg::find_vert_file_callback(Fl_Button* widget, PostEffectsDlg* dlg) {
@@ -5079,8 +5097,11 @@ void PostEffectsDlg::find_frag_file_callback(Fl_Button* widget, PostEffectsDlg* 
 
 void PostEffectsDlg::preview_callback(Fl_Button* widget, PostEffectsDlg* dlg) {
   MEngine* engine = MEngine::getInstance();
-  PostProcessor* postProcessor = ::window.glbox->getPostProcessor();
   
+  if(!fl_ask("If you load a new shader all uniform settings you created will be lost. Continue?"))
+  	return;
+  
+  PostProcessor* postProcessor = ::window.glbox->getPostProcessor();
   postProcessor->loadShaderFile(dlg->vert_shad_edit->value(), dlg->frag_shad_edit->value());
   
   ::window.glbox->enablePostEffects();
@@ -5096,6 +5117,8 @@ void PostEffectsDlg::use_post_effects_callback(Fl_Check_Button* widget, PostEffe
   	dlg->vert_btn->activate();
   	dlg->frag_btn->activate();
   	dlg->preview_btn->activate();
+  	
+  	::window.glbox->enablePostEffects();
   }
   else
   {
@@ -5106,9 +5129,78 @@ void PostEffectsDlg::use_post_effects_callback(Fl_Check_Button* widget, PostEffe
   	dlg->vert_btn->deactivate();
   	dlg->frag_btn->deactivate();
   	dlg->preview_btn->deactivate();
+  	
+  	::window.glbox->disablePostEffects();
   }
 }
 
-void PostEffectsDlg::add_uniform_callback(Fl_Button*, void*) {
-  printf("Hello, World!\n");
+void PostEffectsDlg::add_uniform_callback(Fl_Button*, PostEffectsDlg* dlg) {
+  Fl_Double_Window* win = dlg->new_uniform_window();
+  win->show();
+  
+  while(win->shown())
+  	Fl::wait();
+  
+  Fl::delete_widget(win);
+}
+
+Fl_Double_Window* PostEffectsDlg::new_uniform_window() {
+  Fl_Double_Window* w;
+  { Fl_Double_Window* o = new Fl_Double_Window(261, 111, "New Uniform");
+    w = o;
+    o->user_data((void*)(this));
+    { uniform_name_edit = new Fl_Input(57, 9, 186, 27, "Name:");
+    } // Fl_Input* uniform_name_edit
+    { uniform_value_edit = new Fl_Value_Input(57, 42, 186, 27, "Value:");
+    } // Fl_Value_Input* uniform_value_edit
+    { Fl_Button* o = new Fl_Button(147, 78, 96, 27, "Ok");
+      o->callback((Fl_Callback*)new_uniform_ok, (void*)(this));
+    } // Fl_Button* o
+    { new Fl_Button(57, 78, 84, 27, "Cancel");
+    } // Fl_Button* o
+    o->set_modal();
+    o->end();
+  } // Fl_Double_Window* o
+  update_uniform_list();
+  return w;
+}
+
+void PostEffectsDlg::new_uniform_ok(Fl_Button* btn, PostEffectsDlg* dlg) {
+  btn->parent()->hide();
+  
+  // TODO: More uniform types!
+  ::window.glbox->getPostProcessor()->addFloatUniform(dlg->uniform_name_edit->value());
+  ::window.glbox->getPostProcessor()->setFloatUniformValue(dlg->uniform_name_edit->value(), dlg->uniform_value_edit->value());
+  
+  dlg->update_uniform_list();
+}
+
+void PostEffectsDlg::new_uniform_cancel(Fl_Button* btn, PostEffectsDlg*) {
+  btn->parent()->hide();
+}
+
+void PostEffectsDlg::update_uniform_list() {
+  uniforms_browser->clear();
+  PostProcessor* pp = ::window.glbox->getPostProcessor();
+    
+  uniforms_browser->begin();
+  for(int i = 0; i < pp->getNumUniforms(); i++)
+  {
+    uniforms_browser->add(pp->getUniformName(i));
+  }
+  uniforms_browser->end();
+}
+
+void PostEffectsDlg::update_uniform_float(Fl_Button* btn, PostEffectsDlg* dlg) {
+  PostProcessor* pp = ::window.glbox->getPostProcessor();
+  int idx = dlg->uniforms_browser->value()-1;
+  
+  if(idx < 0) return;
+  
+  switch(pp->getUniformType(idx))
+  {
+  	case M_VARIABLE_FLOAT:
+          	pp->setFloatUniformValue(pp->getUniformName(idx), dlg->uniform_value->value());
+  	break;
+  }
 }

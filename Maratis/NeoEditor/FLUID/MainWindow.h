@@ -333,6 +333,13 @@ public:
   static void find_frag_file_callback(Fl_Button* widget, PostEffectsDlg* dlg);
   static void preview_callback(Fl_Button* widget, PostEffectsDlg* dlg);
   static void use_post_effects_callback(Fl_Check_Button* widget, PostEffectsDlg* dlg);
-  static void add_uniform_callback(Fl_Button*, void*);
+  static void add_uniform_callback(Fl_Button*, PostEffectsDlg* dlg);
+  Fl_Double_Window* new_uniform_window();
+  Fl_Input *uniform_name_edit;
+  Fl_Value_Input *uniform_value_edit;
+  static void new_uniform_ok(Fl_Button* btn, PostEffectsDlg* dlg);
+  static void new_uniform_cancel(Fl_Button* btn, PostEffectsDlg*);
+  void update_uniform_list();
+  static void update_uniform_float(Fl_Button* btn, PostEffectsDlg* dlg);
 };
 #endif

@@ -23,7 +23,7 @@ class EditorWindow {open
     Fl_Window {} {
       label Neo
       callback window_quit open
-      xywh {1858 253 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
+      xywh {1858 253 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -944,8 +944,7 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
   Function {getSystemColor(int idx)} {open return_type int
   } {
     code {// TODO: Boundary checking!
-return systemColors[idx];} {selected
-    }
+return systemColors[idx];} {}
   }
 } 
 
@@ -2203,7 +2202,7 @@ class PostEffectsDlg {open
   } {
     Fl_Window {} {
       label {Post Effects Setup} open
-      xywh {2014 407 591 348} type Double visible
+      xywh {1883 300 591 348} type Double visible
     } {
       Fl_Check_Button use_post_effects {
         label {Use Post Effects}
@@ -2217,12 +2216,14 @@ class PostEffectsDlg {open
       } {
         Fl_Value_Input uniform_value {
           label {Uniform Value:}
-          xywh {183 138 165 24} labelsize 12 align 5
+          user_data this user_data_type {PostEffectsDlg*}
+          callback update_uniform_float
+          xywh {183 138 165 24} labelsize 12 align 5 maximum 20 step 0.01
         }
         Fl_Browser uniforms_browser {
           user_data this user_data_type {PostEffectsDlg*}
           callback uniform_select_callback
-          xywh {9 81 165 222} align 5 when 3
+          xywh {9 81 165 222} type Select align 5 when 3
         }
         Fl_Button add_uniform {
           label {Add Uniform}
@@ -2252,7 +2253,7 @@ class PostEffectsDlg {open
         xywh {564 30 24 21}
       }
       Fl_Button preview_btn {
-        label {Preview in scene view}
+        label {Load Shader}
         user_data this user_data_type {PostEffectsDlg*}
         callback preview_callback
         xywh {417 312 168 27}
@@ -2273,11 +2274,25 @@ class PostEffectsDlg {open
 else
 {
 	use_post_effects->value(1);
+	vert_shad_edit->value(::window.glbox->getPostProcessor()->getVertexShader());
+	frag_shad_edit->value(::window.glbox->getPostProcessor()->getFragmentShader());
+	
+	update_uniform_list();
 }} {}
   }
   Function {uniform_select_callback(Fl_Browser* widget, PostEffectsDlg* dlg)} {open return_type {static void}
   } {
-    code {printf("Hello, World!\\n");} {}
+    code {PostProcessor* pp = ::window.glbox->getPostProcessor();
+    int idx = widget->value()-1;
+
+    if(idx < 0) return;
+
+    switch(pp->getUniformType(idx))
+    {
+    case M_VARIABLE_FLOAT:
+            dlg->uniform_value->value(pp->getFloatUniformValue(idx));
+        break;
+    }} {}
   }
   Function {find_vert_file_callback(Fl_Button* widget, PostEffectsDlg* dlg)} {open return_type {static void}
   } {
@@ -2300,11 +2315,15 @@ dlg->frag_shad_edit->value(filename);} {}
   Function {preview_callback(Fl_Button* widget, PostEffectsDlg* dlg)} {open return_type {static void}
   } {
     code {MEngine* engine = MEngine::getInstance();
-PostProcessor* postProcessor = ::window.glbox->getPostProcessor();
 
+if(!fl_ask("If you load a new shader all uniform settings you created will be lost. Continue?"))
+	return;
+
+PostProcessor* postProcessor = ::window.glbox->getPostProcessor();
 postProcessor->loadShaderFile(dlg->vert_shad_edit->value(), dlg->frag_shad_edit->value());
 
-::window.glbox->enablePostEffects();} {}
+::window.glbox->enablePostEffects();} {selected
+    }
   }
   Function {use_post_effects_callback(Fl_Check_Button* widget, PostEffectsDlg* dlg)} {open return_type {static void}
   } {
@@ -2317,6 +2336,8 @@ postProcessor->loadShaderFile(dlg->vert_shad_edit->value(), dlg->frag_shad_edit-
 	dlg->vert_btn->activate();
 	dlg->frag_btn->activate();
 	dlg->preview_btn->activate();
+	
+	::window.glbox->enablePostEffects();
 }
 else
 {
@@ -2327,10 +2348,85 @@ else
 	dlg->vert_btn->deactivate();
 	dlg->frag_btn->deactivate();
 	dlg->preview_btn->deactivate();
+	
+	::window.glbox->disablePostEffects();
 }} {}
   }
-  Function {add_uniform_callback(Fl_Button*, void*)} {open return_type {static void}
+  Function {add_uniform_callback(Fl_Button*, PostEffectsDlg* dlg)} {open return_type {static void}
   } {
-    code {printf("Hello, World!\\n");} {}
+    code {Fl_Double_Window* win = dlg->new_uniform_window();
+win->show();
+
+while(win->shown())
+	Fl::wait();
+
+Fl::delete_widget(win);} {}
+  }
+  Function {new_uniform_window()} {open
+  } {
+    Fl_Window {} {
+      label {New Uniform} open
+      xywh {2230 488 261 111} type Double hide modal
+    } {
+      Fl_Input uniform_name_edit {
+        label {Name:}
+        xywh {57 9 186 27}
+      }
+      Fl_Value_Input uniform_value_edit {
+        label {Value:}
+        xywh {57 42 186 27}
+      }
+      Fl_Button {} {
+        label Ok
+        user_data this user_data_type {PostEffectsDlg*}
+        callback new_uniform_ok
+        xywh {147 78 96 27}
+      }
+      Fl_Button {} {
+        label Cancel
+        xywh {57 78 84 27}
+      }
+    }
+    code {update_uniform_list();} {}
+  }
+  Function {new_uniform_ok(Fl_Button* btn, PostEffectsDlg* dlg)} {open return_type {static void}
+  } {
+    code {btn->parent()->hide();
+
+// TODO: More uniform types!
+::window.glbox->getPostProcessor()->addFloatUniform(dlg->uniform_name_edit->value());
+::window.glbox->getPostProcessor()->setFloatUniformValue(dlg->uniform_name_edit->value(), dlg->uniform_value_edit->value());
+
+dlg->update_uniform_list();} {}
+  }
+  Function {new_uniform_cancel(Fl_Button* btn, PostEffectsDlg*)} {open return_type {static void}
+  } {
+    code {btn->parent()->hide();} {}
+  }
+  Function {update_uniform_list()} {open
+  } {
+    code {uniforms_browser->clear();
+PostProcessor* pp = ::window.glbox->getPostProcessor();
+  
+uniforms_browser->begin();
+for(int i = 0; i < pp->getNumUniforms(); i++)
+{
+  uniforms_browser->add(pp->getUniformName(i));
+}
+uniforms_browser->end();} {}
+  }
+  Function {update_uniform_float(Fl_Button* btn, PostEffectsDlg* dlg)} {open return_type {static void}
+  } {
+    code {PostProcessor* pp = ::window.glbox->getPostProcessor();
+int idx = dlg->uniforms_browser->value()-1;
+
+if(idx < 0) return;
+
+switch(pp->getUniformType(idx))
+{
+	case M_VARIABLE_FLOAT:
+        	pp->setFloatUniformValue(pp->getUniformName(idx), dlg->uniform_value->value());
+	break;
+}} {}
   }
 } 

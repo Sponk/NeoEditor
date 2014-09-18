@@ -20,6 +20,9 @@
 #ifndef __MPOST_PROCESSOR_H__
 #define __MPOST_PROCESSOR_H__
 
+#include "MVariable.h"
+#include <stdint.h>
+
 class M_ENGINE_EXPORT MPostProcessor
 {
 public:
@@ -34,10 +37,12 @@ public:
     void eraseTextures();
 
     void addFloatUniform(const char* name);
-    void addIntUniform(const char* name);
-
-    void setIntUniformValue(const char* name, int value);
     void setFloatUniformValue(const char* name, float value);
+
+    int getNumUniforms() { return m_UniformList.size(); }
+    float getFloatUniformValue(int idx);
+    const char* getUniformName(int idx);
+    M_VARIABLE_TYPE getUniformType(int idx);
 
     void clear();
 
@@ -68,20 +73,20 @@ protected:
 
     typedef struct
     {
+        MVariable variable;
         char name[255];
-        float value;
         bool dirty;
-    }float_uniform_t;
+    }uniform_t;
 
     typedef struct
     {
+        MVariable variable;
         char name[255];
-        int value;
         bool dirty;
-    }int_uniform_t;
+        float value;
+    }float_uniform_t;
 
-    vector<float_uniform_t> m_FloatUniformList;
-    vector<int_uniform_t> m_IntUniformList;
+    vector<uintptr_t> m_UniformList;
 };
 
 #endif
