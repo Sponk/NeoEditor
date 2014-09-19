@@ -26,7 +26,7 @@
 
 // GL, TODO : remove opengl call (should use MRenderingContext to be fully virtual)
 #ifdef _WIN32
-    #include <GLee.h>
+    #include <glew.h>
 #elif __APPLE__
     #include <OpenGL/OpenGL.h>
     #include <OpenGL/gl.h>
