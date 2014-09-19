@@ -34,6 +34,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+// For linking Glew
+#define GLEW_STATIC
+
 #ifdef __APPLE__
 	#include <OpenGL/OpenGL.h>
     #include <OpenGL/gl.h>

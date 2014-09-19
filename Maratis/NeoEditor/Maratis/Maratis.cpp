@@ -24,6 +24,9 @@
 
 #include <stdio.h>
 
+// For linking Glew
+#define GLEW_STATIC
+
 // GL, TODO : remove opengl call (should use MRenderingContext to be fully virtual)
 #ifdef _WIN32
     #include <glew.h>
