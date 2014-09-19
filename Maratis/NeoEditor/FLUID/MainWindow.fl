@@ -2202,7 +2202,7 @@ class PostEffectsDlg {open
   } {
     Fl_Window {} {
       label {Post Effects Setup} open
-      xywh {1883 300 591 348} type Double visible
+      xywh {2274 441 591 348} type Double visible
     } {
       Fl_Check_Button use_post_effects {
         label {Use Post Effects}
@@ -2230,6 +2230,18 @@ class PostEffectsDlg {open
           user_data this user_data_type {PostEffectsDlg*}
           callback add_uniform_callback
           xywh {183 84 120 27}
+        }
+        Fl_Button {} {
+          label {Save Profile}
+          user_data this user_data_type {PostEffectsDlg*}
+          callback save_profile_callback
+          xywh {183 270 120 27}
+        }
+        Fl_Button {} {
+          label {Load Profile}
+          user_data this user_data_type {PostEffectsDlg*}
+          callback load_profile_callback
+          xywh {318 270 120 27}
         }
       }
       Fl_Input vert_shad_edit {
@@ -2322,8 +2334,7 @@ if(!fl_ask("If you load a new shader all uniform settings you created will be lo
 PostProcessor* postProcessor = ::window.glbox->getPostProcessor();
 postProcessor->loadShaderFile(dlg->vert_shad_edit->value(), dlg->frag_shad_edit->value());
 
-::window.glbox->enablePostEffects();} {selected
-    }
+::window.glbox->enablePostEffects();} {}
   }
   Function {use_post_effects_callback(Fl_Check_Button* widget, PostEffectsDlg* dlg)} {open return_type {static void}
   } {
@@ -2428,5 +2439,52 @@ switch(pp->getUniformType(idx))
         	pp->setFloatUniformValue(pp->getUniformName(idx), dlg->uniform_value->value());
 	break;
 }} {}
+  }
+  Function {save_profile_callback(Fl_Button* widget, PostEffectsDlg* dlg)} {open return_type {static void}
+  } {
+    code {const char* filename = fl_native_file_chooser("Choose file", "*.ini", (current_project.path + "shaders").c_str(), Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
+
+if(filename == NULL)
+	return;
+
+ofstream out;
+out.open(filename, ios::out);
+if(!out)
+	return;
+
+out << "[Uniforms]" << endl;
+
+PostProcessor* pp = ::window.glbox->getPostProcessor();
+
+// TODO: Allow other variable types!
+for(int i = 0; i < pp->getNumUniforms(); i++)
+{
+	out << pp->getUniformName(i) << "=" << pp->getFloatUniformValue(i) << endl;
+}
+
+out.close();} {}
+  }
+  Function {load_profile_callback(Fl_Button* widget, PostEffectsDlg* dlg)} {open return_type {static void}
+  } {
+    code {const char* filename = fl_native_file_chooser("Choose file", "*.ini", (current_project.path + "shaders").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+  
+if(filename == NULL)
+	return;
+  
+INI::Parser parser(filename);
+PostProcessor* pp = ::window.glbox->getPostProcessor();
+
+// TODO: More types!  
+for(INI::Level::value_map_t::iterator iter = parser.top()("Uniforms").values.begin(); iter != parser.top()("Uniforms").values.end(); iter++)
+{
+	pp->addFloatUniform(iter->first.c_str());
+	float value;
+
+	sscanf(iter->second.c_str(), "%f", &value);
+	pp->setFloatUniformValue(iter->first.c_str(), value);
+}
+
+dlg->update_uniform_list();} {selected
+    }
   }
 } 

@@ -5021,6 +5021,12 @@ Fl_Double_Window* PostEffectsDlg::create_window() {
       { add_uniform = new Fl_Button(183, 84, 120, 27, "Add Uniform");
         add_uniform->callback((Fl_Callback*)add_uniform_callback, (void*)(this));
       } // Fl_Button* add_uniform
+      { Fl_Button* o = new Fl_Button(183, 270, 120, 27, "Save Profile");
+        o->callback((Fl_Callback*)save_profile_callback, (void*)(this));
+      } // Fl_Button* o
+      { Fl_Button* o = new Fl_Button(318, 270, 120, 27, "Load Profile");
+        o->callback((Fl_Callback*)load_profile_callback, (void*)(this));
+      } // Fl_Button* o
       o->end();
     } // Fl_Group* o
     { vert_shad_edit = new Fl_Input(96, 6, 465, 21, "Vert. Shader:");
@@ -5203,4 +5209,50 @@ void PostEffectsDlg::update_uniform_float(Fl_Button* btn, PostEffectsDlg* dlg) {
           	pp->setFloatUniformValue(pp->getUniformName(idx), dlg->uniform_value->value());
   	break;
   }
+}
+
+void PostEffectsDlg::save_profile_callback(Fl_Button* widget, PostEffectsDlg* dlg) {
+  const char* filename = fl_native_file_chooser("Choose file", "*.ini", (current_project.path + "shaders").c_str(), Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
+  
+  if(filename == NULL)
+  	return;
+  
+  ofstream out;
+  out.open(filename, ios::out);
+  if(!out)
+  	return;
+  
+  out << "[Uniforms]" << endl;
+  
+  PostProcessor* pp = ::window.glbox->getPostProcessor();
+  
+  // TODO: Allow other variable types!
+  for(int i = 0; i < pp->getNumUniforms(); i++)
+  {
+  	out << pp->getUniformName(i) << "=" << pp->getFloatUniformValue(i) << endl;
+  }
+  
+  out.close();
+}
+
+void PostEffectsDlg::load_profile_callback(Fl_Button* widget, PostEffectsDlg* dlg) {
+  const char* filename = fl_native_file_chooser("Choose file", "*.ini", (current_project.path + "shaders").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+    
+  if(filename == NULL)
+  	return;
+    
+  INI::Parser parser(filename);
+  PostProcessor* pp = ::window.glbox->getPostProcessor();
+  
+  // TODO: More types!  
+  for(INI::Level::value_map_t::iterator iter = parser.top()("Uniforms").values.begin(); iter != parser.top()("Uniforms").values.end(); iter++)
+  {
+  	pp->addFloatUniform(iter->first.c_str());
+  	float value;
+  
+  	sscanf(iter->second.c_str(), "%f", &value);
+  	pp->setFloatUniformValue(iter->first.c_str(), value);
+  }
+  
+  dlg->update_uniform_list();
 }

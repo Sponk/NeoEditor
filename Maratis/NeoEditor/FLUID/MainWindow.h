@@ -341,5 +341,7 @@ public:
   static void new_uniform_cancel(Fl_Button* btn, PostEffectsDlg*);
   void update_uniform_list();
   static void update_uniform_float(Fl_Button* btn, PostEffectsDlg* dlg);
+  static void save_profile_callback(Fl_Button* widget, PostEffectsDlg* dlg);
+  static void load_profile_callback(Fl_Button* widget, PostEffectsDlg* dlg);
 };
 #endif
