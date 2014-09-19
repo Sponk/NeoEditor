@@ -30,6 +30,7 @@
 //========================================================================
 
 
+#include <MEngine.h>
 #include <MMouse.h>
 #include <MKeyboard.h>
 #include "MWindow.h"
@@ -174,13 +175,13 @@ MWindow::~MWindow(void)
 
 void MWindow::setCursorPos(int x, int y)
 {
-    printf("--> Warning: Can't set cursor position! This has to be done in the FLTK window!\n");
+    MLOG_WARNING("Can't center cursor! This has to be done in the FLTK window!");
     // SDL_WarpMouseInWindow(g_window, x, y);
 }
 
 void MWindow::hideCursor(void)
 {
-    printf("--> Warning: Can't hide cursor! This has to be done in the FLTK window!\n");
+    MLOG_WARNING("Can't hide cursor! This has to be done in the FLTK window!");
 
     //int r = SDL_ShowCursor(SDL_DISABLE);
 
@@ -190,7 +191,7 @@ void MWindow::hideCursor(void)
 
 void MWindow::showCursor(void)
 {
-    printf("--> Warning: Can't show cursor! This has to be done in the FLTK window!\n");
+    MLOG_WARNING("Can't show cursor! This has to be done in the FLTK window!");
 
     // int r = SDL_ShowCursor(SDL_ENABLE);
 
@@ -200,7 +201,7 @@ void MWindow::showCursor(void)
 
 void MWindow::setTitle(const char * title)
 {
-    printf("--> Warning: Can't set window title! This has to be done in the FLTK window!\n");
+    MLOG_WARNING("Can't change window title! This has to be done in the FLTK window!");
 
     //SDL_SetWindowTitle(g_window, title);
 }
@@ -288,7 +289,7 @@ bool MWindow::onEvents(void)
 	MWinEvent mevent;
 	SDL_Event event;
 
-    printf("--> Warning: Won't use SDL for input!\n");
+    MLOG_WARNING("Don't use SDL for keyboard input!");
     //return false;
 
 	while (SDL_PollEvent(&event))
@@ -645,7 +646,7 @@ bool MWindow::onEvents(void)
 
 void MWindow::swapBuffer(void)
 {
-    printf("--> Warning: MWindow: Can not swap buffer! This has to be done in the FLTK window!\n");
+    MLOG_WARNING("Can't swap buffer! This has to be done in the FLTK window!");
 }
 
 bool MWindow::create(const char * title, unsigned int width, unsigned int height, int colorBits, bool fullscreen)
