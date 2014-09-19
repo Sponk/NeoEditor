@@ -1354,6 +1354,12 @@ void edit_object_properties(Fl_Value_Input*, void*)
 
 void add_mesh_callback(Fl_Menu_*, void*)
 {
+    if(current_project.level.empty())
+    {
+        fl_message("You need to save the level before adding meshes!");
+        return;
+    }
+
     const char* filename = fl_native_file_chooser("Choose mesh", "*.mesh", (current_project.path + "meshs").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(filename)
@@ -1527,6 +1533,12 @@ void choose_text_color(Fl_Button*, void*)
 
 void add_text_callback(Fl_Menu_ *, void *)
 {
+    if(current_project.level.empty())
+    {
+        fl_message("You need to save the level before adding objects!");
+        return;
+    }
+
     const char* filename = fl_native_file_chooser("Choose font", "*.ttf", (current_project.path + "fonts").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(!filename)
@@ -1722,6 +1734,12 @@ void redo_callback(Fl_Menu_*, void*)
 
 void add_sound_callback(Fl_Menu_ *, void *)
 {
+    if(current_project.level.empty())
+    {
+        fl_message("You need to save the level before adding objects!");
+        return;
+    }
+
     const char* filename = fl_native_file_chooser("Choose file", "*.{wav,ogg}", (current_project.path + "sounds").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(!filename)
@@ -1780,6 +1798,12 @@ void add_scene_callback(Fl_Menu_ *, void *)
 
 void scene_setup_callback(Fl_Menu_ *, void*)
 {
+    if(current_project.level.empty())
+    {
+        fl_message("You need to save the level before editing scene properties!");
+        return;
+    }
+
     SceneSetupDlg dlg;
     Fl_Window* win = dlg.create_window();
 
