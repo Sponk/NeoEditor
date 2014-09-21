@@ -344,4 +344,11 @@ public:
   static void save_profile_callback(Fl_Button* widget, PostEffectsDlg* dlg);
   static void load_profile_callback(Fl_Button* widget, PostEffectsDlg* dlg);
 };
+extern void close_crash_handler(Fl_Button*, void*);
+
+class CrashHandlerDlg {
+public:
+  Fl_Double_Window* create_window();
+  Fl_Text_Display *stack_output;
+};
 #endif
