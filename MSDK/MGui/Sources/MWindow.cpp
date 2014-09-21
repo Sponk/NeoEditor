@@ -730,7 +730,8 @@ bool MWindow::create(const char * title, unsigned int width, unsigned int height
 	fprintf(stdout, "Info\t SDL linked version : %d.%d.%d\n", linked.major, linked.minor, linked.patch);
 #endif
 
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+    // TODO: Haptic feedback
+    if (SDL_Init(SDL_INIT_EVERYTHING & ~SDL_INIT_HAPTIC) != 0)
 	{
 		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
 		return false;
