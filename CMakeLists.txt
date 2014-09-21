@@ -78,10 +78,17 @@ IF(WIN32)
 
   if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     # using GCC
-    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${MARATIS_BUILD_FLAGS} -O2 -DWIN32 -std=c99")
+    SET(SDL_VIDEO FALSE)
+
+    # LuaJIT does not build with the current MinGW
+    SET(STANDARD_LUA TRUE)
+
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${MARATIS_BUILD_FLAGS} -O2 -DWIN32")
     SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D__Debug__")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MARATIS_BUILD_FLAGS} -O2 -DWIN32 -std=gnu++98")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MARATIS_BUILD_FLAGS} -O2 -DWIN32")
     SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D__Debug__")
+
+    SET(CMAKE_SHARED_LINKER_FLAGS "-lcomctl32 -lkernel32 -Wl,--subsystem,windows,--as-needed,--allow-multiple-definition")
   
   elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # using Visual Studio C++

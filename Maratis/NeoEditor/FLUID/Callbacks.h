@@ -38,7 +38,7 @@ void update_behavior_menu();
 const char* fl_native_file_chooser(const char* title, const char* files, const char* dir, int type);
 void update_scene_tree();
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER)
 
 #include <cstdio>
 #include <cstdlib>
@@ -69,6 +69,7 @@ inline int c99_snprintf(char* str, size_t size, const char* format, ...)
     return count;
 }
 
+#elif defined(_MSC_VER) || defined(_WIN32)
 #define getline c99_getline
 
 inline size_t c99_getline(char** lineptr, size_t* n, FILE* stream) 

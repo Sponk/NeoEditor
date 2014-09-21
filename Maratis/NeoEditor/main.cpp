@@ -28,8 +28,9 @@
 #include <fstream>
 #include "FLUID/ini.h"
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(_WIN32)
     #include <execinfo.h>
+#elif defined(__GNUC__)
     #include <cxxabi.h>
 #endif
 
@@ -204,7 +205,7 @@ std::string stacktrace(unsigned int max_frames = 63)
     std::string output = "Stacktraces are not available for your architecture!";
 
     // Stacktrace for x86/64 GCC versions
-#if !defined(__arm__) &&  !defined(_MSC_VER)
+#if !defined(__arm__) &&  !defined(_MSC_VER) && !defined(_WIN32)
 
     output = "Stacktrace:\n\n";
 
@@ -284,6 +285,8 @@ std::string stacktrace(unsigned int max_frames = 63)
 
     free(funcname);
     free(symbollist);
+#else
+
 #endif
     return output;
 }
@@ -373,6 +376,10 @@ int main(int argc, char **argv)
 #else
     loadSettings(getenv("APPDATA"));
 #endif
+
+	// Provoke crash
+    // int* i = NULL;
+    // *i = 123;
 
     Fl::add_timeout(0.2, update_editor);
     Fl::run();
