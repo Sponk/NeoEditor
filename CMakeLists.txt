@@ -78,8 +78,6 @@ IF(WIN32)
 
   if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     # using GCC
-    SET(SDL_VIDEO FALSE)
-
     # LuaJIT does not build with the current MinGW
     SET(STANDARD_LUA TRUE)
 
