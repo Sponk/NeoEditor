@@ -487,7 +487,7 @@ int GLBox::handle(int event)
     case FL_DRAG:
         {
             MGame* game = MEngine::getInstance()->getGame();
-            if(Fl::event_button3() && ::window.inputMethod == NULL && game->isRunning())
+            if(Fl::event_button3() && ::window.inputMethod == NULL && !game->isRunning())
             {
                 MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
 

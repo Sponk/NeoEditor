@@ -204,7 +204,7 @@ std::string stacktrace(unsigned int max_frames = 63)
     std::string output = "Stacktraces are not available for your architecture!";
 
     // Stacktrace for x86/64 GCC versions
-#if !__arm__ && !MSVC
+#if !defined(__arm__) &&  !defined(_MSC_VER)
 
     output = "Stacktrace:\n\n";
 
