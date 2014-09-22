@@ -17,12 +17,14 @@ decl {\#include <MFileManager/MMeshSave.h>} {private local
 decl {\#include "../MPluginScript/MPluginScript.h"} {public global
 } 
 
-class EditorWindow {} {
-  Function {show_window()} {} {
+class EditorWindow {open
+} {
+  Function {show_window()} {open
+  } {
     Fl_Window {} {
       label Neo
       callback window_quit open
-      xywh {1858 253 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
+      xywh {1858 253 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -328,7 +330,7 @@ class EditorWindow {} {
       } {
         Fl_Tabs {} {
           label Object open
-          xywh {693 75 261 624} hide
+          xywh {693 75 261 624}
         } {
           Fl_Scroll {} {open
             xywh {693 75 261 624}
@@ -346,21 +348,21 @@ class EditorWindow {} {
                 label {X:}
                 user_data {'t'} user_data_type long
                 callback edit_object_callback
-                xywh {720 201 51 21} maximum 1000 step 1
+                xywh {720 201 51 21} maximum 1000 step 0.01
                 code0 {xpos_edit->soft(true);}
               }
               Fl_Value_Input ypos_edit {
                 label {Y:}
                 user_data {'t'} user_data_type long
                 callback edit_object_callback
-                xywh {792 201 48 21} maximum 1000 step 1
+                xywh {792 201 48 21} maximum 1000 step 0.01
                 code0 {ypos_edit->soft(true);}
               }
               Fl_Value_Input zpos_edit {
                 label {Z:}
                 user_data {'t'} user_data_type long
                 callback edit_object_callback
-                xywh {861 201 51 21} maximum 1000 step 1
+                xywh {861 201 51 21} maximum 1000 step 0.01
                 code0 {zpos_edit->soft(true);}
               }
             }
@@ -372,21 +374,21 @@ class EditorWindow {} {
                 label {X:}
                 user_data {'r'} user_data_type long
                 callback edit_object_callback
-                xywh {717 261 48 21} maximum 360 step 5
+                xywh {717 261 48 21} maximum 360 step 1
                 code0 {xrot_edit->soft(true);}
               }
               Fl_Value_Input yrot_edit {
                 label {Y:}
                 user_data {'r'} user_data_type long
                 callback edit_object_callback
-                xywh {786 261 48 21} maximum 360 step 5
+                xywh {786 261 48 21} maximum 360 step 1
                 code0 {yrot_edit->soft(true);}
               }
               Fl_Value_Input zrot_edit {
                 label {Z:}
                 user_data {'r'} user_data_type long
                 callback edit_object_callback
-                xywh {858 261 48 21} maximum 360 step 5
+                xywh {858 261 48 21} maximum 360 step 1
                 code0 {zrot_edit->soft(true);}
               }
             }
@@ -397,7 +399,7 @@ class EditorWindow {} {
               Fl_Value_Input xscale_edit {
                 label {X:}
                 user_data {'s'} user_data_type long
-                callback edit_object_callback
+                callback edit_object_callback selected
                 xywh {717 318 48 21} maximum 20 step 0.1 value 1
                 code0 {xscale_edit->soft(true);}
               }
@@ -425,7 +427,7 @@ class EditorWindow {} {
         }
         Fl_Tabs special_tab {
           label Special open
-          xywh {687 75 267 624} box NO_BOX
+          xywh {687 75 267 624} box NO_BOX hide
           code0 {special_tab->resizable(NULL);}
         } {}
         Fl_Tabs {} {
@@ -2367,8 +2369,7 @@ else
 	dlg->load_button->deactivate();
 	
 	::window.glbox->disablePostEffects();
-}} {selected
-    }
+}} {}
   }
   Function {add_uniform_callback(Fl_Button*, PostEffectsDlg* dlg)} {open return_type {static void}
   } {
@@ -2501,7 +2502,7 @@ class CrashHandlerDlg {open
   } {
     Fl_Window {} {
       label {Crash Handler} open
-      xywh {2176 315 447 459} type Double visible
+      xywh {2176 315 447 459} type Double hide
     } {
       Fl_Box {} {
         label {The Neo Editor crashed! We apologize for all inconveniences.}

@@ -102,13 +102,13 @@ int update_thread(void* nothing)
 
     while(updateThreadRunning)
     {
+        // Get input
+        MEngine::getInstance()->getInputContext()->flush();
+        window->onEvents();
+
         MSDLSemaphore::WaitAndLock(&updateSemaphore);
         if(window->getFocus())
         {
-            // Get input
-            MEngine::getInstance()->getInputContext()->flush();
-            window->onEvents();
-
             // compute target tick
             unsigned long currentTick = window->getSystemTick();
 
