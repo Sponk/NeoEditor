@@ -2193,7 +2193,8 @@ main_window->redraw();} {}
   }
 } 
 
-class PostEffectsDlg {} {
+class PostEffectsDlg {open
+} {
   Function {create_window()} {open
   } {
     Fl_Window {} {
@@ -2227,13 +2228,13 @@ class PostEffectsDlg {} {
           callback add_uniform_callback
           xywh {183 84 120 27}
         }
-        Fl_Button {} {
+        Fl_Button save_button {
           label {Save Profile}
           user_data this user_data_type {PostEffectsDlg*}
           callback save_profile_callback
           xywh {183 270 120 27}
         }
-        Fl_Button {} {
+        Fl_Button load_button {
           label {Load Profile}
           user_data this user_data_type {PostEffectsDlg*}
           callback load_profile_callback
@@ -2278,6 +2279,9 @@ class PostEffectsDlg {} {
 	vert_btn->deactivate();
 	frag_btn->deactivate();
 	preview_btn->deactivate();
+	add_uniform->deactivate();
+	save_button->deactivate();
+	load_button->deactivate();
 }
 else
 {
@@ -2343,6 +2347,9 @@ postProcessor->loadShaderFile(dlg->vert_shad_edit->value(), dlg->frag_shad_edit-
 	dlg->vert_btn->activate();
 	dlg->frag_btn->activate();
 	dlg->preview_btn->activate();
+	dlg->add_uniform->activate();
+	dlg->save_button->activate();
+	dlg->load_button->activate();
 	
 	::window.glbox->enablePostEffects();
 }
@@ -2355,9 +2362,13 @@ else
 	dlg->vert_btn->deactivate();
 	dlg->frag_btn->deactivate();
 	dlg->preview_btn->deactivate();
+	dlg->add_uniform->deactivate();
+	dlg->save_button->deactivate();
+	dlg->load_button->deactivate();
 	
 	::window.glbox->disablePostEffects();
-}} {}
+}} {selected
+    }
   }
   Function {add_uniform_callback(Fl_Button*, PostEffectsDlg* dlg)} {open return_type {static void}
   } {
@@ -2490,7 +2501,7 @@ class CrashHandlerDlg {open
   } {
     Fl_Window {} {
       label {Crash Handler} open
-      xywh {2069 324 447 459} type Double visible
+      xywh {2176 315 447 459} type Double visible
     } {
       Fl_Box {} {
         label {The Neo Editor crashed! We apologize for all inconveniences.}
@@ -2501,7 +2512,7 @@ class CrashHandlerDlg {open
       }
       Fl_Button {} {
         label Close
-        callback close_crash_handler selected
+        callback close_crash_handler
         xywh {288 426 150 24}
       }
       Fl_Box {} {

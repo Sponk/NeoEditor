@@ -5021,12 +5021,12 @@ Fl_Double_Window* PostEffectsDlg::create_window() {
       { add_uniform = new Fl_Button(183, 84, 120, 27, "Add Uniform");
         add_uniform->callback((Fl_Callback*)add_uniform_callback, (void*)(this));
       } // Fl_Button* add_uniform
-      { Fl_Button* o = new Fl_Button(183, 270, 120, 27, "Save Profile");
-        o->callback((Fl_Callback*)save_profile_callback, (void*)(this));
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(318, 270, 120, 27, "Load Profile");
-        o->callback((Fl_Callback*)load_profile_callback, (void*)(this));
-      } // Fl_Button* o
+      { save_button = new Fl_Button(183, 270, 120, 27, "Save Profile");
+        save_button->callback((Fl_Callback*)save_profile_callback, (void*)(this));
+      } // Fl_Button* save_button
+      { load_button = new Fl_Button(318, 270, 120, 27, "Load Profile");
+        load_button->callback((Fl_Callback*)load_profile_callback, (void*)(this));
+      } // Fl_Button* load_button
       o->end();
     } // Fl_Group* o
     { vert_shad_edit = new Fl_Input(96, 6, 465, 21, "Vert. Shader:");
@@ -5057,6 +5057,9 @@ Fl_Double_Window* PostEffectsDlg::create_window() {
   	vert_btn->deactivate();
   	frag_btn->deactivate();
   	preview_btn->deactivate();
+  	add_uniform->deactivate();
+  	save_button->deactivate();
+  	load_button->deactivate();
   }
   else
   {
@@ -5123,6 +5126,9 @@ void PostEffectsDlg::use_post_effects_callback(Fl_Check_Button* widget, PostEffe
   	dlg->vert_btn->activate();
   	dlg->frag_btn->activate();
   	dlg->preview_btn->activate();
+  	dlg->add_uniform->activate();
+  	dlg->save_button->activate();
+  	dlg->load_button->activate();
   	
   	::window.glbox->enablePostEffects();
   }
@@ -5135,6 +5141,9 @@ void PostEffectsDlg::use_post_effects_callback(Fl_Check_Button* widget, PostEffe
   	dlg->vert_btn->deactivate();
   	dlg->frag_btn->deactivate();
   	dlg->preview_btn->deactivate();
+  	dlg->add_uniform->deactivate();
+  	dlg->save_button->deactivate();
+  	dlg->load_button->deactivate();
   	
   	::window.glbox->disablePostEffects();
   }

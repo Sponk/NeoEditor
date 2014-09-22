@@ -323,6 +323,8 @@ public:
   Fl_Value_Input *uniform_value;
   Fl_Browser *uniforms_browser;
   Fl_Button *add_uniform;
+  Fl_Button *save_button;
+  Fl_Button *load_button;
   Fl_Input *vert_shad_edit;
   Fl_Input *frag_shad_edit;
   Fl_Button *vert_btn;

@@ -30,6 +30,7 @@
 
 #if defined(__GNUC__) && !defined(_WIN32)
     #include <execinfo.h>
+    #include <cxxabi.h>
 #elif defined(__GNUC__)
     #include <cxxabi.h>
 #endif
