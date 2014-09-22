@@ -88,7 +88,8 @@ IF(WIN32)
 
     SET(CMAKE_SHARED_LINKER_FLAGS "-lcomctl32 -lkernel32 -Wl,--subsystem,windows,--as-needed,--allow-multiple-definition -static -static-libstdc++ -static-libgcc")
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--allow-multiple-definition -static -static-libstdc++ -static-libgcc")
-    
+    SET(CPACK_STRIP_FILES ON)
+
   elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # using Visual Studio C++
     
