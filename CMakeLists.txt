@@ -86,8 +86,9 @@ IF(WIN32)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MARATIS_BUILD_FLAGS} -O2 -DWIN32 -I\"$ENV{DXSDK_DIR}/Include\"")
     SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D__Debug__ -I\"$ENV{DXSDK_DIR}/Include\"")
 
-    SET(CMAKE_SHARED_LINKER_FLAGS "-lcomctl32 -lkernel32 -Wl,--subsystem,windows,--as-needed,--allow-multiple-definition")
-  
+    SET(CMAKE_SHARED_LINKER_FLAGS "-lcomctl32 -lkernel32 -Wl,--subsystem,windows,--as-needed,--allow-multiple-definition -static -static-libstdc++ -static-libgcc")
+    SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--allow-multiple-definition -static -static-libstdc++ -static-libgcc")
+    
   elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # using Visual Studio C++
     

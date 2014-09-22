@@ -1,2 +1,2 @@
 // Adds an icon to the Windows executable
-IDI_ICON1   ICON  DISCARDABLE  "..\\..\\Data\\neo-icon-small.ico"
+IDI_ICON1   ICON  DISCARDABLE  "../../Data/neo-icon-small.ico"

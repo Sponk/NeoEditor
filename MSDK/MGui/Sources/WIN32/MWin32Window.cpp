@@ -38,7 +38,7 @@
 #endif
 
 #include <windows.h>
-#include <Shlobj.h>
+#include <shlobj.h>
 
 
 const char * MWindow::getTempDirectory(void)
