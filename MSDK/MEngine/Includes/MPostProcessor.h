@@ -38,9 +38,13 @@ public:
 
     void addFloatUniform(const char* name);
     void setFloatUniformValue(const char* name, float value);
+    float getFloatUniformValue(int idx);
+
+    void addIntUniform(const char* name);
+    void setIntUniformValue(const char* name, float value);
+    int getIntUniformValue(int idx);
 
     int getNumUniforms() { return m_UniformList.size(); }
-    float getFloatUniformValue(int idx);
     const char* getUniformName(int idx);
     M_VARIABLE_TYPE getUniformType(int idx);
 
@@ -85,6 +89,14 @@ protected:
         bool dirty;
         float value;
     }float_uniform_t;
+
+    typedef struct
+    {
+        MVariable variable;
+        char name[255];
+        bool dirty;
+        int value;
+    }int_uniform_t;
 
     vector<uintptr_t> m_UniformList;
 };

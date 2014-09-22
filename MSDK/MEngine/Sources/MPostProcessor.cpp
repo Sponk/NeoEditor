@@ -328,6 +328,56 @@ float MPostProcessor::getFloatUniformValue(int idx)
     return 0.0;
 }
 
+void MPostProcessor::setFloatUniformValue(const char* name, float value)
+{
+    for(unsigned int i = 0; i < m_UniformList.size(); i++)
+    {
+        if(!strcmp(((uniform_t*)m_UniformList[i])->name, name) && ((uniform_t*)m_UniformList[i])->variable.getType() == M_VARIABLE_FLOAT)
+        {
+            ((float_uniform_t*)m_UniformList[i])->value = value;
+            ((float_uniform_t*) m_UniformList[i])->dirty = true;
+            return;
+        }
+    }
+}
+
+void MPostProcessor::addIntUniform(const char* name)
+{
+    int_uniform_t* uniform = (int_uniform_t*) malloc(sizeof(int_uniform_t));
+    uniform->variable = MVariable(uniform->name, (void*) &uniform->value, M_VARIABLE_INT);
+
+    strcpy(uniform->name, name);
+    uniform->value = 0;
+    uniform->dirty = true;
+
+    m_UniformList.push_back((uintptr_t) uniform);
+}
+
+int MPostProcessor::getIntUniformValue(int idx)
+{
+    if(idx > m_UniformList.size() || idx < 0)
+        return 0;
+
+    uniform_t* uniform = (uniform_t*) m_UniformList[idx];
+    if(uniform && uniform->variable.getType() == M_VARIABLE_INT)
+        return *((int*)uniform->variable.getPointer());
+
+    return 0;
+}
+
+void MPostProcessor::setIntUniformValue(const char* name, float value)
+{
+    for(unsigned int i = 0; i < m_UniformList.size(); i++)
+    {
+        if(!strcmp(((uniform_t*)m_UniformList[i])->name, name) && ((uniform_t*)m_UniformList[i])->variable.getType() == M_VARIABLE_INT)
+        {
+            ((int_uniform_t*)m_UniformList[i])->value = value;
+            ((int_uniform_t*) m_UniformList[i])->dirty = true;
+            return;
+        }
+    }
+}
+
 const char* MPostProcessor::getUniformName(int idx)
 {
     if(idx > m_UniformList.size() -1 || idx < 0)
@@ -350,19 +400,6 @@ M_VARIABLE_TYPE MPostProcessor::getUniformType(int idx)
         return uniform->variable.getType();
 
     return M_VARIABLE_NULL;
-}
-
-void MPostProcessor::setFloatUniformValue(const char* name, float value)
-{
-    for(unsigned int i = 0; i < m_UniformList.size(); i++)
-    {
-        if(!strcmp(((float_uniform_t*)m_UniformList[i])->name, name))
-        {
-            ((float_uniform_t*)m_UniformList[i])->value = value;
-            ((float_uniform_t*) m_UniformList[i])->dirty = true;
-            return;
-        }
-    }
 }
 
 void MPostProcessor::sendUniforms()
