@@ -1739,14 +1739,6 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 
 	}
 
-    render->disableDepthTest();
-    render->disableCullFace();
-    render->enableScissorTest();
-
-    camera->drawSkybox();
-    render->enableDepthTest();
-    render->disableScissorTest();
-
 	// restore camera after shadow pass
 	if(restoreCamera)
 	{
@@ -1762,6 +1754,14 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 
 		render->clear(M_BUFFER_DEPTH);
 	}
+
+    render->disableDepthTest();
+    render->disableCullFace();
+    render->enableScissorTest();
+
+    camera->drawSkybox();
+    render->enableDepthTest();
+    render->disableScissorTest();
 
 	// update visibility
     updateVisibility(scene, camera);
