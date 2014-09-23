@@ -5087,7 +5087,7 @@ void PostEffectsDlg::uniform_select_callback(Fl_Browser* widget, PostEffectsDlg*
 }
 
 void PostEffectsDlg::find_vert_file_callback(Fl_Button* widget, PostEffectsDlg* dlg) {
-  const char* filename = fl_native_file_chooser("Choose output", NULL, dlg->vert_shad_edit->value(), Fl_Native_File_Chooser::BROWSE_FILE);
+  const char* filename = fl_native_file_chooser("Choose output", NULL, (current_project.path + "shaders").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
   
   if(filename == NULL)
   	return;
@@ -5096,7 +5096,7 @@ void PostEffectsDlg::find_vert_file_callback(Fl_Button* widget, PostEffectsDlg* 
 }
 
 void PostEffectsDlg::find_frag_file_callback(Fl_Button* widget, PostEffectsDlg* dlg) {
-  const char* filename = fl_native_file_chooser("Choose output", NULL, dlg->frag_shad_edit->value(), Fl_Native_File_Chooser::BROWSE_FILE);
+  const char* filename = fl_native_file_chooser("Choose output", NULL, (current_project.path + "shaders").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
   
   if(filename == NULL)
   	return;

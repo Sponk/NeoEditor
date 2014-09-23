@@ -24,7 +24,7 @@ class EditorWindow {open
     Fl_Window {} {
       label Neo
       callback window_quit open
-      xywh {1858 253 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
+      xywh {1894 247 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -399,7 +399,7 @@ class EditorWindow {open
               Fl_Value_Input xscale_edit {
                 label {X:}
                 user_data {'s'} user_data_type long
-                callback edit_object_callback selected
+                callback edit_object_callback
                 xywh {717 318 48 21} maximum 20 step 0.1 value 1
                 code0 {xscale_edit->soft(true);}
               }
@@ -2201,7 +2201,7 @@ class PostEffectsDlg {open
   } {
     Fl_Window {} {
       label {Post Effects Setup} open
-      xywh {2089 371 591 348} type Double hide
+      xywh {2089 371 591 348} type Double visible
     } {
       Fl_Check_Button use_post_effects {
         label {Use Post Effects}
@@ -2310,16 +2310,17 @@ else
   }
   Function {find_vert_file_callback(Fl_Button* widget, PostEffectsDlg* dlg)} {open return_type {static void}
   } {
-    code {const char* filename = fl_native_file_chooser("Choose output", NULL, dlg->vert_shad_edit->value(), Fl_Native_File_Chooser::BROWSE_FILE);
+    code {const char* filename = fl_native_file_chooser("Choose output", NULL, (current_project.path + "shaders").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
 if(filename == NULL)
 	return;
 
-dlg->vert_shad_edit->value(filename);} {}
+dlg->vert_shad_edit->value(filename);} {selected
+    }
   }
   Function {find_frag_file_callback(Fl_Button* widget, PostEffectsDlg* dlg)} {open return_type {static void}
   } {
-    code {const char* filename = fl_native_file_chooser("Choose output", NULL, dlg->frag_shad_edit->value(), Fl_Native_File_Chooser::BROWSE_FILE);
+    code {const char* filename = fl_native_file_chooser("Choose output", NULL, (current_project.path + "shaders").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
 if(filename == NULL)
 	return;
