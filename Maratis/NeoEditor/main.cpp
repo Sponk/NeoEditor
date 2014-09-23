@@ -381,9 +381,6 @@ int main(int argc, char **argv)
     loadSettings(getenv("APPDATA"));
 #endif
 
-    int* i = NULL;
-    *i = 123;
-
     Fl::add_timeout(0.2, update_editor);
     Fl::run();
 	return 0;
