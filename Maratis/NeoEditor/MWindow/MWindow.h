@@ -130,6 +130,8 @@ public:
 	inline unsigned int getWidth(void){ return m_width; }
 	inline unsigned int getHeight(void){ return m_height; }
 
+    inline void setPosition(int x, int y) { m_position[0] = x; m_position[1] = y; }
+
 	// swap buffer
 	void swapBuffer(void);
 

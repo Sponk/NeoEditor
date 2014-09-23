@@ -41,6 +41,10 @@
 #include <FL/Fl.H>
 #include <FL/fl_message.H>
 
+#ifdef LINUX
+#include <FL/x.H>
+#endif
+
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
@@ -173,10 +177,26 @@ MWindow::~MWindow(void)
 	SDL_Quit();
 }
 
+// TODO: Platform specific code!
 void MWindow::setCursorPos(int x, int y)
 {
-    MLOG_WARNING("Can't center cursor! This has to be done in the FLTK window!");
-    // SDL_WarpMouseInWindow(g_window, x, y);
+#if defined WIN32
+      BOOL result = SetCursorPos(x, y);
+      if (result) return 0;
+
+#elif defined __APPLE__
+      CGPoint new_pos;
+      CGEventErr err;
+      new_pos.x = x;
+      new_pos.y = y;
+      err = CGWarpMouseCursorPosition(new_pos);
+      if (!err) return 0;
+
+#else
+      Window rootwindow = DefaultRootWindow(fl_display);
+      XWarpPointer(fl_display, rootwindow, rootwindow, 0, 0, 0, 0,m_position[0]+x, m_position[1]+y);
+
+#endif
 }
 
 void MWindow::hideCursor(void)

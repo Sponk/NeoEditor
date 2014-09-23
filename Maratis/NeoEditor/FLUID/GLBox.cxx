@@ -139,6 +139,7 @@ void update_editor(void*)
         Maratis::getInstance()->getPerspectiveVue()->loadSkybox(scene->getCurrentCamera()->getSkybox()->getPath());
     }*/
 
+    MWindow::getInstance()->setPosition(window.glbox->x_root() , window.glbox->y_root());
     window.glbox->redraw();
     Maratis::getInstance()->logicLoop();
 
