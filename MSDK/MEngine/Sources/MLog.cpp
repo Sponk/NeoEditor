@@ -32,6 +32,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 
 #ifdef ANDROID
 #include <SDL_log.h>
@@ -51,10 +52,27 @@ MLog::MLog()
 	m_instance = this;
 	
 	// open file stream
-	m_logfstream.open("maratis_log.txt", std::fstream::out|std::fstream::trunc);
+    m_logfstream.open("logfile.txt", std::fstream::out|std::fstream::trunc);
 	
 	if(! m_logfstream.good())
-		fprintf(stderr, "MLog: file fstream not good\n");
+    {
+#ifndef _WIN32
+        std::string path = getenv("HOME");
+        path += "/.neoeditor/logfile.txt";
+
+        m_logfstream.open(path.c_str(), std::fstream::out|std::fstream::trunc);
+#else
+        std::string path = getenv("APPDATA");
+        path += "\\neoeditor\\logfile.txt";
+
+        m_logfstream.open(path.c_str(), std::fstream::out|std::fstream::trunc);
+#endif
+        if(! m_logfstream.good())
+        {
+            fprintf(stderr, "MLog: file fstream not good\n");
+            return;
+        }
+    }
 	
 	char * mll = getenv("MARATIS_LOG_LEVEL");
 	if(mll)

@@ -266,27 +266,27 @@ std::string stacktrace(unsigned int max_frames = 63)
     return output;
 }
 
-void close_crash_handler(Fl_Button*, void*)
-{
-    exit(-1);
-}
-
 void crash_handler(int sig)
 {
+    std::string signal;
     switch(sig)
     {
     case SIGFPE:
+        signal = "SIGFPE";
     case SIGILL:
+        if(signal.empty())
+            signal = "SIGFPE";
     case SIGSEGV:
+        if(signal.empty())
+            signal = "SIGSEGV";
+
         {
-            CrashHandlerDlg dlg;
-            Fl_Window* win = dlg.create_window();
-            win->show();
-
+            char signum[3];
+            snprintf(signum, 3, "%d", sig);
             std::string stack = stacktrace();
+            std::string complete_text = "Catched signal " + string(signum) + " (" + signal + ")\n";
 
-            Fl_Text_Buffer buffer;
-            std::string complete_text = "System data:\n";
+            complete_text += "\nSystem data:\n";
 
 #ifndef _WIN32
             FILE* pipe = popen("uname -p -o -r", "r");
@@ -306,15 +306,23 @@ void crash_handler(int sig)
 
             complete_text.append("\n");
             complete_text.append(stack);
-            buffer.text(complete_text.c_str());
-            dlg.stack_output->buffer(&buffer);
 
-            MLOG_ERROR(complete_text);
+            MLOG_ERROR(complete_text << endl);
 
-            while(win->shown())
-                Fl::wait();
+#ifndef WIN32
+            std::string path = getenv("HOME");
+            path += "/.neoeditor/logfile.txt";
 
-            exit(-1);
+            copyFile("logfile.txt", path.c_str());
+            system("./CrashHandler");
+#else
+            std::string path = getenv("APPDATA");
+            path += "\\neoeditor\\logfile.txt";
+
+            copyFile("logfile.txt", path.c_str());
+            system(".\\CrashHandler.exe");
+#endif
+            exit(sig);
             break;
         }
     }
@@ -372,6 +380,9 @@ int main(int argc, char **argv)
 #else
     loadSettings(getenv("APPDATA"));
 #endif
+
+    int* i = NULL;
+    *i = 123;
 
     Fl::add_timeout(0.2, update_editor);
     Fl::run();
