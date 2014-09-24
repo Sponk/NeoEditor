@@ -11,10 +11,10 @@ else(  CMAKE_SIZEOF_VOID_P MATCHES "4")
 endif(  CMAKE_SIZEOF_VOID_P MATCHES "4")
 endif( NOT APPLE )
 
-IF (WIN32 AND NOT UNIX)
-	set (PROGRAMFILESX86 $ENV{PROGRAMFILES})
-	string(REPLACE "\\" "/" PROGRAMFILESX86 ${PROGRAMFILESX86})
-ENDIF(WIN32 AND NOT UNIX)
+#IF (WIN32 AND NOT UNIX)
+#	set (PROGRAMFILESX86 $ENV{PROGRAMFILES})
+#	string(REPLACE "\\" "/" PROGRAMFILESX86 ${PROGRAMFILESX86})
+#ENDIF(WIN32 AND NOT UNIX)
 
 IF (WIN32 AND NOT UNIX)
 	set(RAKNET_LIBRARY_LIBS ws2_32.lib)
@@ -25,7 +25,7 @@ ENDIF(WIN32 AND NOT UNIX)
 
 # Options
 option( RAKNET_ENABLE_SAMPLES 	"Generate RakNet sample projects if true." 		FALSE  )
-option( RAKNET_ENABLE_DLL		"Generate the DLL project if true." 			FALSE )
+option( RAKNET_ENABLE_DLL		"Generate the DLL project if true." 			TRUE )
 option( RAKNET_ENABLE_STATIC	"Generate the static library project if true." 	TRUE )
 option( RAKNET_GENERATE_INCLUDE_ONLY_DIR "Setup a include/RakNet/ directory in which all the headers are copied." FALSE )
 
