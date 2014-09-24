@@ -13,7 +13,7 @@
 #endif
 
 #ifndef REPORT_DOMAIN
-#define REPORT_DOMAIN 127.0.0.1
+#define REPORT_DOMAIN "127.0.0.1"
 #endif
 
 Fl_Text_Buffer buffer;
@@ -21,16 +21,20 @@ Fl_Text_Buffer buffer;
 void send_report(Fl_Button* button, void*)
 {
     RakNet::TCPInterface tcp;
-
     button->deactivate();
 
-    tcp.Start(4000, 1);
     RakNet::HTTPConnection connection;
-
     connection.Init(&tcp, REPORT_DOMAIN, 80);
 
-    std::string stack = buffer.text();
-    connection.Post("/crash.php", stack.c_str(), "text/html");
+    if(!tcp.Start(4000, 1))
+    {
+        fl_message("Could not connect to server!");
+        button->activate();
+        return;
+    }
+
+    connection.Post("/crash.php", buffer.text(), "text/html");
+    //connection.Get("/index.html");
 
     while(1)
     {
@@ -47,7 +51,7 @@ void send_report(Fl_Button* button, void*)
         {
             RakNet::RakString fileContents = connection.Read();
 
-            if(fileContents.Find("Sent crash report."))
+            if(fileContents.Find("Sent crash report.") != -1)
             {
                 fl_message("Successfully sent crash report.");
                 exit(0);

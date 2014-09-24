@@ -189,6 +189,8 @@ void HTTPConnection::Update(void)
 					currentProcessingCommand.remotePath.C_String(),
 					host.C_String(),
 					port);
+
+                    str = request.C_String();
 			}
 			
 		//	printf(request.C_String());
