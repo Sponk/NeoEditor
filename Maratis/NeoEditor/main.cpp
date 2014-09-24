@@ -26,14 +26,8 @@
 #include <signal.h>
 #include <stdio.h>
 #include <fstream>
+#include <iterator>
 #include "FLUID/ini.h"
-
-#if defined(__GNUC__) && !defined(_WIN32)
-    #include <execinfo.h>
-    #include <cxxabi.h>
-#elif defined(__GNUC__)
-    #include <cxxabi.h>
-#endif
 
 #include <MEngine.h>
 #include <MLoaders/MImageLoader.h>
@@ -46,6 +40,16 @@
 #include "FLUID/MainWindow.h"
 #include "FLUID/Callbacks.h"
 #include <FL/Fl.H>
+
+#ifdef _WIN32
+    #include <windows.h>
+    #include <imagehlp.h>
+#endif
+
+#if defined(__GNUC__) && !defined(_WIN32)
+    #include <execinfo.h>
+    #include <cxxabi.h>
+#endif
 
 #include "MPluginScript/MPluginScript.h"
 
@@ -204,7 +208,7 @@ void loadSettings(const char* path)
 std::string stacktrace(unsigned int max_frames = 63)
 {
     std::string output = "Stacktraces are not available for your architecture!";
-
+	
     // Stacktrace for x86/64 GCC versions
 #if !defined(__arm__) &&  !defined(_MSC_VER) && !defined(_WIN32)
 
@@ -259,13 +263,11 @@ std::string stacktrace(unsigned int max_frames = 63)
         output.append(symbol);
         output.push_back('\n');
     }
-
-#else
-
 #endif
     return output;
 }
 
+#ifndef _WIN32
 void crash_handler(int sig)
 {
     std::string signal;
@@ -288,45 +290,189 @@ void crash_handler(int sig)
 
             complete_text += "\nSystem data:\n";
 
-#ifndef _WIN32
             FILE* pipe = popen("uname -p -o -r", "r");
             char c;
             while((c = getc(pipe)) != EOF)
             {
                 complete_text.push_back(c);
             }
-#elif _WIN32
-            const char* env = getenv("OS");
-            complete_text.append(env);
-            complete_text.push_back(' ');
-
-            env = getenv("PROCESSOR_ARCHITECTURE");
-            complete_text.append(env);
-#endif
 
             complete_text.append("\n");
             complete_text.append(stack);
 
             MLOG_ERROR(complete_text << endl);
 
-#ifndef WIN32
             std::string path = getenv("HOME");
             path += "/.neoeditor/logfile.txt";
 
             copyFile("logfile.txt", path.c_str());
             system("./CrashHandler");
-#else
-            std::string path = getenv("APPDATA");
-            path += "\\neoeditor\\logfile.txt";
 
-            copyFile("logfile.txt", path.c_str());         
-			system(".\\CrashHandler.exe");
-#endif
             exit(sig);
             break;
         }
     }
 }
+#endif
+
+#ifdef _WIN32
+
+std::string win32_stacktrace(CONTEXT* context)
+{
+    SymInitialize(GetCurrentProcess(), 0, true);
+    std::string output;
+
+    STACKFRAME frame = { 0 };
+
+    frame.AddrPC.Offset         = context->Eip;
+    frame.AddrPC.Mode           = AddrModeFlat;
+    frame.AddrStack.Offset      = context->Esp;
+    frame.AddrStack.Mode        = AddrModeFlat;
+    frame.AddrFrame.Offset      = context->Ebp;
+    frame.AddrFrame.Mode        = AddrModeFlat;
+
+    char* symbolBuffer = new char[sizeof(IMAGEHLP_SYMBOL) + 255];
+    memset(symbolBuffer, 0, sizeof(IMAGEHLP_SYMBOL) + 255);
+
+    IMAGEHLP_SYMBOL* symbol = (IMAGEHLP_SYMBOL*) symbolBuffer;
+    symbol->SizeOfStruct    = sizeof(IMAGEHLP_SYMBOL) + 255;
+    symbol->MaxNameLength   = 254;
+
+    unsigned int displacement = 0;
+
+    char num[32];
+    while (StackWalk(IMAGE_FILE_MACHINE_I386 ,
+                     GetCurrentProcess(),
+                     GetCurrentThread(),
+                     &frame,
+                     context,
+                     0,
+                     SymFunctionTableAccess,
+                     SymGetModuleBase,
+                     0 ) )
+    {
+        sprintf(num, "0x%x", frame.AddrPC.Offset);
+
+        if(SymGetSymFromAddr(GetCurrentProcess(), frame.AddrPC.Offset, (DWORD*) &displacement, symbol))
+        {
+            output += symbol->Name;
+            output += " [";
+            output += num;
+            output += "]\n";
+        }
+        else
+        {
+            output.append(string(num) + "\n");
+        }
+    }
+
+    delete symbolBuffer;
+    SymCleanup(GetCurrentProcess());
+    return output;
+}
+
+LONG WINAPI windows_exception_handler(EXCEPTION_POINTERS * ExceptionInfo)
+{
+  switch(ExceptionInfo->ExceptionRecord->ExceptionCode)
+  {
+    case EXCEPTION_ACCESS_VIOLATION:
+      MLOG_ERROR("EXCEPTION_ACCESS_VIOLATION");
+      break;
+    case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:
+      MLOG_ERROR("EXCEPTION_ARRAY_BOUNDS_EXCEEDED");
+      break;
+    case EXCEPTION_BREAKPOINT:
+      MLOG_ERROR("EXCEPTION_BREAKPOINT");
+      break;
+    case EXCEPTION_DATATYPE_MISALIGNMENT:
+      MLOG_ERROR("EXCEPTION_DATATYPE_MISALIGNMENT");
+      break;
+    case EXCEPTION_FLT_DENORMAL_OPERAND:
+      MLOG_ERROR("EXCEPTION_FLT_DENORMAL_OPERAND");
+      break;
+    case EXCEPTION_FLT_DIVIDE_BY_ZERO:
+      MLOG_ERROR("EXCEPTION_FLT_DIVIDE_BY_ZERO");
+      break;
+    case EXCEPTION_FLT_INEXACT_RESULT:
+      MLOG_ERROR("EXCEPTION_FLT_INEXACT_RESULT");
+      break;
+    case EXCEPTION_FLT_INVALID_OPERATION:
+      MLOG_ERROR("EXCEPTION_FLT_INVALID_OPERATION");
+      break;
+    case EXCEPTION_FLT_OVERFLOW:
+      MLOG_ERROR("EXCEPTION_FLT_OVERFLOW");
+      break;
+    case EXCEPTION_FLT_STACK_CHECK:
+      MLOG_ERROR("EXCEPTION_FLT_STACK_CHECK");
+      break;
+    case EXCEPTION_FLT_UNDERFLOW:
+      MLOG_ERROR("EXCEPTION_FLT_UNDERFLOW");
+      break;
+    case EXCEPTION_ILLEGAL_INSTRUCTION:
+      MLOG_ERROR("EXCEPTION_ILLEGAL_INSTRUCTION");
+      break;
+    case EXCEPTION_IN_PAGE_ERROR:
+      MLOG_ERROR("EXCEPTION_IN_PAGE_ERROR");
+      break;
+    case EXCEPTION_INT_DIVIDE_BY_ZERO:
+      MLOG_ERROR("EXCEPTION_INT_DIVIDE_BY_ZERO");
+      break;
+    case EXCEPTION_INT_OVERFLOW:
+      MLOG_ERROR("EXCEPTION_INT_OVERFLOW");
+      break;
+    case EXCEPTION_INVALID_DISPOSITION:
+      MLOG_ERROR("EXCEPTION_INVALID_DISPOSITION");
+      break;
+    case EXCEPTION_NONCONTINUABLE_EXCEPTION:
+      MLOG_ERROR("EXCEPTION_NONCONTINUABLE_EXCEPTION");
+      break;
+    case EXCEPTION_PRIV_INSTRUCTION:
+      MLOG_ERROR("EXCEPTION_PRIV_INSTRUCTION");
+      break;
+    case EXCEPTION_SINGLE_STEP:
+      MLOG_ERROR("EXCEPTION_SINGLE_STEP");
+      break;
+    case EXCEPTION_STACK_OVERFLOW:
+      MLOG_ERROR("EXCEPTION_STACK_OVERFLOW");
+      break;
+    default:
+      MLOG_ERROR("Unrecognized Exception");
+      break;
+  }
+
+  std::string stack;
+  if (EXCEPTION_STACK_OVERFLOW != ExceptionInfo->ExceptionRecord->ExceptionCode)
+  {
+      stack = win32_stacktrace(ExceptionInfo->ContextRecord);
+  }
+
+  char signum[3];
+  snprintf(signum, 3, "%d", ExceptionInfo->ExceptionRecord->ExceptionCode);
+  std::string complete_text = "Catched signal " + string(signum) + "\n";
+
+  complete_text += "\nSystem data:\n";
+
+  const char* env = getenv("OS");
+  complete_text.append(env);
+  complete_text.push_back(' ');
+
+  env = getenv("PROCESSOR_ARCHITECTURE");
+  complete_text.append(env);
+
+  complete_text.append("\n\n");
+  complete_text.append(stack);
+
+  MLOG_ERROR(complete_text << endl);
+
+  std::string path = getenv("APPDATA");
+  path += "\\neoeditor\\logfile.txt";
+
+  copyFile("logfile.txt", path.c_str());
+  system(".\\CrashHandler.exe");
+
+  exit(-1);
+}
+#endif
 
 // main
 int main(int argc, char **argv)
@@ -334,9 +480,13 @@ int main(int argc, char **argv)
 	setlocale(LC_NUMERIC, "C");
 
     // Set crash handler
+#ifndef _WIN32
     signal(SIGFPE,  crash_handler);
     signal(SIGILL,  crash_handler);
     signal(SIGSEGV, crash_handler);
+#else
+    SetUnhandledExceptionFilter(windows_exception_handler);
+#endif
 
     // set current directory
     char rep[256];
@@ -380,6 +530,9 @@ int main(int argc, char **argv)
 #else
     loadSettings(getenv("APPDATA"));
 #endif
+
+    int* i = NULL;
+    *i = 123;
 
     Fl::add_timeout(0.2, update_editor);
     Fl::run();
