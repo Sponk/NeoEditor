@@ -8,7 +8,7 @@ class CrashHandlerDlg {open
   } {
     Fl_Window {} {
       label {Crash Handler} open
-      xywh {2179 318 447 459} type Double hide
+      xywh {2179 318 447 459} type Double visible
     } {
       Fl_Box {} {
         label {The Neo Editor crashed! We apologize for all inconveniences.}
@@ -20,17 +20,21 @@ class CrashHandlerDlg {open
       Fl_Button {} {
         label Close
         callback close_crash_handler
-        xywh {288 426 150 24}
+        xywh {12 426 150 24}
       }
       Fl_Box {} {
         label {Please append this stack trace to your bug report.}
         xywh {12 39 450 24} align 20
       }
+      Fl_Button {} {
+        label {Send Report} user_data_type {void*}
+        callback send_report selected
+        xywh {282 426 150 24}
+      }
     }
   }
   Function {close_crash_handler(Fl_Button* button, void*)} {open return_type {static void}
   } {
-    code {button->parent()->hide();} {selected
-    }
+    code {button->parent()->hide();} {}
   }
 } 

@@ -13,12 +13,15 @@ Fl_Double_Window* CrashHandlerDlg::create_window() {
     { stack_output = new Fl_Text_Display(12, 66, 423, 348);
       stack_output->box(FL_DOWN_BOX);
     } // Fl_Text_Display* stack_output
-    { Fl_Button* o = new Fl_Button(288, 426, 150, 24, "Close");
+    { Fl_Button* o = new Fl_Button(12, 426, 150, 24, "Close");
       o->callback((Fl_Callback*)close_crash_handler);
     } // Fl_Button* o
     { Fl_Box* o = new Fl_Box(12, 39, 450, 24, "Please append this stack trace to your bug report.");
       o->align(Fl_Align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE));
     } // Fl_Box* o
+    { Fl_Button* o = new Fl_Button(282, 426, 150, 24, "Send Report");
+      o->callback((Fl_Callback*)send_report);
+    } // Fl_Button* o
     o->end();
   } // Fl_Double_Window* o
   return w;

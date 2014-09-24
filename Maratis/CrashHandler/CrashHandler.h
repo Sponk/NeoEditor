@@ -7,6 +7,7 @@
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Text_Display.H>
 #include <FL/Fl_Button.H>
+extern void send_report(Fl_Button*, void*);
 
 class CrashHandlerDlg {
 public:
