@@ -182,7 +182,7 @@ void MWindow::setCursorPos(int x, int y)
 {
 #if defined WIN32
       BOOL result = SetCursorPos(x, y);
-      if (result) return 0;
+      if (result) return;
 
 #elif defined __APPLE__
       CGPoint new_pos;
@@ -190,12 +190,11 @@ void MWindow::setCursorPos(int x, int y)
       new_pos.x = x;
       new_pos.y = y;
       err = CGWarpMouseCursorPosition(new_pos);
-      if (!err) return 0;
+      if (!err) return;
 
 #else
       Window rootwindow = DefaultRootWindow(fl_display);
       XWarpPointer(fl_display, rootwindow, rootwindow, 0, 0, 0, 0,m_position[0]+x, m_position[1]+y);
-
 #endif
 }
 
