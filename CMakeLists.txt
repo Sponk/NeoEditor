@@ -284,7 +284,7 @@ else()
 endif(STANDARD_LUA)
 
 if(USE_NETWORKING)
-    SET(RAKNET_LIBRARIES RakNetDLL)
+    SET(RAKNET_LIBRARIES RakNetLibStatic)
     SET(RAKNET_INCLUDE_DIR ${MARATIS_SOURCE_DIR}/3rdparty/raknet/Source)
     add_definitions(-DUSE_NETWORKING)
 endif()

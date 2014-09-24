@@ -319,8 +319,8 @@ void crash_handler(int sig)
             std::string path = getenv("APPDATA");
             path += "\\neoeditor\\logfile.txt";
 
-            copyFile("logfile.txt", path.c_str());
-            system(".\\CrashHandler.exe");
+            copyFile("logfile.txt", path.c_str());         
+			system(".\\CrashHandler.exe");
 #endif
             exit(sig);
             break;

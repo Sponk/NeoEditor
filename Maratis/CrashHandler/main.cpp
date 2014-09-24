@@ -1,10 +1,16 @@
-#include <FL/Fl.H>
-#include "CrashHandler.h"
-#include <string>
 #include <HTTPConnection.h>
 #include <PacketizedTCP.h>
 #include <RakSleep.h>
+
+#include <FL/Fl.H>
+#include "CrashHandler.h"
+#include <string>
 #include <FL/fl_message.H>
+
+// Don't show cmd window
+#ifdef _MSC_VER
+#    pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
+#endif
 
 #ifndef REPORT_DOMAIN
 #define REPORT_DOMAIN 127.0.0.1

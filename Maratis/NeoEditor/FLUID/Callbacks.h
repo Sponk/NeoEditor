@@ -68,8 +68,9 @@ inline int c99_snprintf(char* str, size_t size, const char* format, ...)
 
     return count;
 }
+#endif
 
-#elif defined(_MSC_VER) || defined(_WIN32)
+#if defined(_MSC_VER) || defined(_WIN32)
 #define getline c99_getline
 
 inline size_t c99_getline(char** lineptr, size_t* n, FILE* stream) 

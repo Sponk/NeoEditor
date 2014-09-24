@@ -170,12 +170,12 @@ void HTTPConnection::Update(void)
 
                 // Works even for requests > than 400 chars
                 char num[20];
-                snprintf(num, 20, "%d", port);
+                sprintf(num, "%d", port);
 
                 str = std::string("POST ") + currentProcessingCommand.remotePath.C_String() + " HTTP/1.0\r\n";
                 str += std::string("Host: ") + host.C_String() + ":" + num + "\r\n";
 
-                snprintf(num, 20, "%d", currentProcessingCommand.data.GetLength());
+                sprintf(num, "%d", currentProcessingCommand.data.GetLength());
                 str += std::string("Content-Length: ") + num + "\r\n\r\n";
                 str += currentProcessingCommand.data.C_String();
 			}
