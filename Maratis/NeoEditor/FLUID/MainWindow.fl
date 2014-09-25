@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0302 
+version 1.0300 
 header_name {.h} 
 code_name {.cxx}
 decl {\#include "Callbacks.h"} {private local
@@ -22,207 +22,207 @@ class EditorWindow {open
   Function {show_window()} {open
   } {
     Fl_Window {} {
-      label Neo
-      callback window_quit open
-      xywh {1894 247 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
+      label {Neo Editor}
+      callback window_quit open selected
+      xywh {446 88 915 620} type Double labelsize 11 resizable xclass NeoEditor size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
       } {
         Submenu {} {
           label File open
-          xywh {0 0 100 20} labelsize 14
+          xywh {0 0 100 20}
         } {
           Submenu {} {
             label New open
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           } {
             MenuItem {} {
               label Project
               callback new_project_callback
-              xywh {0 0 100 20} shortcut 0x5006e labelsize 14
+              xywh {0 0 100 20} shortcut 0x5006e
             }
             MenuItem {} {
               label Level
               callback new_level_callback
-              xywh {0 0 100 20} shortcut 0x4006e labelsize 14
+              xywh {0 0 100 20} shortcut 0x4006e
             }
           }
           Submenu {} {
             label Open open
-            xywh {0 0 100 20} labelsize 14 divider
+            xywh {0 0 100 20} divider
           } {
             MenuItem {} {
               label Project
               callback open_project_callback
-              xywh {0 0 100 20} shortcut 0x5006f labelsize 14
+              xywh {0 0 100 20} shortcut 0x5006f
             }
             MenuItem {} {
               label Level
               callback open_level_callback
-              xywh {0 0 100 20} shortcut 0x4006f labelsize 14
+              xywh {0 0 100 20} shortcut 0x4006f
             }
           }
           MenuItem {} {
             label {Import Mesh}
             callback import_mesh_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
           MenuItem {} {
             label {Save level}
             user_data 0 user_data_type long
             callback save_level_callback
-            xywh {0 0 100 20} shortcut 0x40073 labelsize 14
+            xywh {0 0 100 20} shortcut 0x40073
           }
           MenuItem {} {
             label {Save level as...}
             user_data 1 user_data_type long
             callback save_level_callback
-            xywh {0 0 100 20} shortcut 0x50073 labelsize 14 divider
+            xywh {0 0 100 20} shortcut 0x50073 divider
           }
           MenuItem {} {
             label Quit
             callback quit_callback
-            xywh {0 0 100 20} shortcut 0x40071 labelsize 14
+            xywh {0 0 100 20} shortcut 0x40071
           }
         }
         Submenu {} {
           label Edit open
-          xywh {0 0 100 20} labelsize 14
+          xywh {0 0 100 20}
         } {
           MenuItem {} {
             label Undo
             callback undo_callback
-            xywh {0 0 100 20} shortcut 0x4007a labelsize 14
+            xywh {0 0 100 20} shortcut 0x4007a
           }
           MenuItem {} {
             label Redo
             callback redo_callback
-            xywh {0 0 100 20} shortcut 0x5007a labelsize 14 divider
+            xywh {0 0 100 20} shortcut 0x5007a divider
           }
           MenuItem {} {
             label {Select all}
             callback select_all_callback
-            xywh {0 0 100 20} shortcut 0x40061 labelsize 14 divider
+            xywh {0 0 100 20} shortcut 0x40061 divider
           }
           MenuItem {} {
             label {Duplicate object}
             callback duplicate_object_callback
-            xywh {0 0 100 20} shortcut 0x40064 labelsize 14
+            xywh {0 0 100 20} shortcut 0x40064
           }
           MenuItem {} {
             label {Delete object}
             callback delete_object_callback
-            xywh {0 0 100 20} shortcut 0xffff labelsize 14 divider
+            xywh {0 0 100 20} shortcut 0xffff divider
           }
           MenuItem {} {
             label {Post Effects setup}
             callback post_effects_setup_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
           MenuItem {} {
             label {Scene setup}
             callback scene_setup_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
           MenuItem {} {
             label {Delete current scene}
             callback delete_scene_callback
-            xywh {0 0 100 20} labelsize 14 divider
+            xywh {0 0 100 20} divider
           }
           MenuItem {} {
             label Configuration
             callback configuration_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
         }
         Submenu {} {
           label Project open
-          xywh {0 0 100 20} labelsize 14
+          xywh {0 0 100 20}
         } {
           MenuItem {} {
             label {Run Game}
             callback play_game_callback
-            xywh {0 0 100 20} shortcut 0xffc2 labelsize 14 divider
+            xywh {0 0 100 20} shortcut 0xffc2 divider
           }
           MenuItem {} {
             label {Update player}
             callback update_player_callback
-            tooltip {Copies the player from the editor directory to the project directory.} xywh {0 0 100 20} labelsize 14
+            tooltip {Copies the player from the editor directory to the project directory.} xywh {0 0 100 20}
           }
           MenuItem {} {
             label Publish
             callback publish_callback
-            xywh {0 0 100 20} shortcut 0x40070 labelsize 14
+            xywh {0 0 100 20} shortcut 0x40070
           }
         }
         Submenu {} {
           label Add open
-          xywh {0 0 100 20} labelsize 14
+          xywh {0 0 100 20}
         } {
           Submenu {} {
             label Object open
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           } {
             MenuItem {} {
               label Mesh
               callback add_mesh_callback
-              xywh {0 0 100 20} shortcut 0x4006d labelsize 14
+              xywh {0 0 100 20} shortcut 0x4006d
             }
             MenuItem {} {
               label Light
               callback add_light_callback
-              xywh {0 0 100 20} shortcut 0x4006c labelsize 14
+              xywh {0 0 100 20} shortcut 0x4006c
             }
             MenuItem {} {
               label Text
               callback add_text_callback
-              xywh {0 0 100 20} shortcut 0x40074 labelsize 14
+              xywh {0 0 100 20} shortcut 0x40074
             }
             MenuItem {} {
               label Camera
               callback add_camera_callback
-              xywh {0 0 100 20} shortcut 0x40063 labelsize 14
+              xywh {0 0 100 20} shortcut 0x40063
             }
             MenuItem {} {
               label Sound
               callback add_sound_callback
-              xywh {0 0 100 20} labelsize 14
+              xywh {0 0 100 20}
             }
           }
           Submenu behavior_menu {
             label {Add Behavior} open
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           } {}
           MenuItem {} {
             label Scene
             callback add_scene_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
           MenuItem {} {
             label Group
             callback add_group_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
         }
         Submenu {} {
           label Plugins open
-          xywh {0 0 100 20} labelsize 14
+          xywh {0 0 100 20}
         } {
           MenuItem {} {
             label {Plugin Console}
             callback plugin_console_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
         }
         Submenu {} {
           label Help open
-          xywh {0 0 100 20} labelsize 14
+          xywh {0 0 100 20}
         } {
           MenuItem {} {
             label About
             callback about_menu_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
         }
       }
@@ -288,31 +288,31 @@ class EditorWindow {open
             label Other
             user_data 0 user_data_type long
             callback change_vue_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
           MenuItem {} {
             label Face
             user_data 1 user_data_type long
             callback change_vue_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
           MenuItem {} {
             label Right
             user_data 3 user_data_type long
             callback change_vue_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
           MenuItem {} {
             label Top
             user_data 7 user_data_type long
             callback change_vue_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
           MenuItem {} {
             label Bottom
             user_data 9 user_data_type long
             callback change_vue_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
         }
         Fl_Button {} {
@@ -596,43 +596,43 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
               label Box
               user_data 0 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20} labelsize 14
+              xywh {3 3 100 20}
             }
             MenuItem {} {
               label Sphere
               user_data 1 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20} labelsize 14
+              xywh {3 3 100 20}
             }
             MenuItem {} {
               label Cone
               user_data 2 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20} labelsize 14
+              xywh {3 3 100 20}
             }
             MenuItem {} {
               label Capsule
               user_data 3 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20} labelsize 14
+              xywh {3 3 100 20}
             }
             MenuItem {} {
               label Cylinder
               user_data 4 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20} labelsize 14
+              xywh {3 3 100 20}
             }
             MenuItem {} {
               label {Convex-hull}
               user_data 5 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20} labelsize 14
+              xywh {3 3 100 20}
             }
             MenuItem {} {
               label {Triangle-mesh}
               user_data 6 user_data_type long
               callback edit_shape_callback
-              xywh {3 3 100 20} labelsize 14
+              xywh {3 3 100 20}
             }
           }
           Fl_Check_Button object_ghost_button {
@@ -821,19 +821,19 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
             label Left
             user_data 0 user_data_type long
             callback text_alignment_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
           MenuItem {} {
             label Right
             user_data 1 user_data_type long
             callback text_alignment_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
           MenuItem {} {
             label Center
             user_data 2 user_data_type long
             callback text_alignment_callback
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
         }
       }
@@ -1871,19 +1871,19 @@ class ConfigurationDlg {} {
           } {
             MenuItem {} {
               label {gtk+}
-              xywh {0 0 100 20} labelsize 14
+              xywh {0 0 100 20}
             }
             MenuItem {} {
               label gleam
-              xywh {0 0 100 20} labelsize 14
+              xywh {0 0 100 20}
             }
             MenuItem {} {
               label plastic
-              xywh {0 0 100 20} labelsize 14
+              xywh {0 0 100 20}
             }
             MenuItem {} {
               label none
-              xywh {0 0 100 20} labelsize 14
+              xywh {0 0 100 20}
             }
           }
           Fl_Group {} {
@@ -2201,7 +2201,7 @@ class PostEffectsDlg {open
   } {
     Fl_Window {} {
       label {Post Effects Setup} open
-      xywh {2089 371 591 348} type Double visible
+      xywh {442 179 590 345} type Double visible
     } {
       Fl_Check_Button use_post_effects {
         label {Use Post Effects}
