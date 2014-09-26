@@ -5285,3 +5285,16 @@ void PostEffectsDlg::load_profile_callback(Fl_Button* widget, PostEffectsDlg* dl
   
   dlg->update_uniform_list();
 }
+
+Fl_Double_Window* WaitDlg::create_window() {
+  Fl_Double_Window* w;
+  { Fl_Double_Window* o = new Fl_Double_Window(300, 69, "Loading...");
+    w = o;
+    o->user_data((void*)(this));
+    { Fl_Box* o = new Fl_Box(9, 12, 279, 27, "The Neo Editor is loading. Please wait...");
+      o->align(Fl_Align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE));
+    } // Fl_Box* o
+    o->end();
+  } // Fl_Double_Window* o
+  return w;
+}

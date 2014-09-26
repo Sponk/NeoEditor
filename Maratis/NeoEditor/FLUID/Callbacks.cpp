@@ -255,6 +255,18 @@ void open_project_callback(Fl_Menu_*, void*)
 
     if(filename)
     {
+        // Show the loading dialog
+        WaitDlg dlg;
+        Fl_Double_Window* win = dlg.create_window();
+        win->show();
+
+        // Somehow needs 4 Fl::wait calls for the window to actually appear
+        Fl::wait();
+        Fl::wait();
+        Fl::wait();
+        Fl::wait();
+
+        // Actually load the project
         current_project.changed = false;
         current_project.path = filename;
         current_project.file_path = filename;
@@ -271,6 +283,9 @@ void open_project_callback(Fl_Menu_*, void*)
 
         current_project.level = Maratis::getInstance()->getCurrentLevel();
         update_scene_tree();
+
+        // Destroy the dialog
+        Fl::delete_widget(win);
     }
 
     reload_editor = true;

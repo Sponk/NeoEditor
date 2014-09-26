@@ -17,14 +17,13 @@ decl {\#include <MFileManager/MMeshSave.h>} {private local
 decl {\#include "../MPluginScript/MPluginScript.h"} {public global
 } 
 
-class EditorWindow {open
-} {
+class EditorWindow {} {
   Function {show_window()} {open
   } {
     Fl_Window {} {
       label {Neo Editor}
-      callback window_quit open selected
-      xywh {2128 438 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
+      callback window_quit open
+      xywh {1501 215 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -712,7 +711,7 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
   Function {create_camera_window()} {open
   } {
     Fl_Window {} {open
-      xywh {2552 223 258 660} type Double visible
+      xywh {2552 223 258 660} type Double hide
     } {
       Fl_Group {} {
         label {Clear Color:} open
@@ -2513,5 +2512,21 @@ for(INI::Level::value_map_t::iterator iter = parser.top()("Uniforms").values.beg
 }
 
 dlg->update_uniform_list();} {}
+  }
+} 
+
+class WaitDlg {open
+} {
+  Function {create_window()} {open
+  } {
+    Fl_Window {} {
+      label {Loading...} open selected
+      xywh {2008 383 300 69} type Double visible
+    } {
+      Fl_Box {} {
+        label {The Neo Editor is loading. Please wait...}
+        xywh {9 12 279 27} align 16
+      }
+    }
   }
 } 

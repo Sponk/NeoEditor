@@ -350,4 +350,9 @@ public:
   static void save_profile_callback(Fl_Button* widget, PostEffectsDlg* dlg);
   static void load_profile_callback(Fl_Button* widget, PostEffectsDlg* dlg);
 };
+
+class WaitDlg {
+public:
+  Fl_Double_Window* create_window();
+};
 #endif
