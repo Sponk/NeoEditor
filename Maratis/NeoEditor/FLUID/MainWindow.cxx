@@ -238,7 +238,7 @@ Fl_Menu_Item EditorWindow::menu_text_alignment_chooser[] = {
 
 Fl_Double_Window* EditorWindow::show_window() {
   Fl_Double_Window* w;
-  { Fl_Double_Window* o = new Fl_Double_Window(918, 624, "Neo");
+  { Fl_Double_Window* o = new Fl_Double_Window(918, 624, "Neo Editor");
     w = o;
     o->labelsize(11);
     o->callback((Fl_Callback*)window_quit, (void*)(this));

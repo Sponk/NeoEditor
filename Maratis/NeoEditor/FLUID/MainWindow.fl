@@ -19,11 +19,12 @@ decl {\#include "../MPluginScript/MPluginScript.h"} {public global
 
 class EditorWindow {open
 } {
-  Function {show_window()} {} {
+  Function {show_window()} {open
+  } {
     Fl_Window {} {
-      label Neo
-      callback window_quit open
-      xywh {1894 247 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
+      label {Neo Editor}
+      callback window_quit open selected
+      xywh {2128 438 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -729,7 +730,7 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
         }
         Fl_Value_Input camera_color_b {
           label {Blue:}
-          callback edit_camera_properties selected
+          callback edit_camera_properties
           xywh {115 47 45 21} align 5 step 0.01
         }
         Fl_Button {} {
