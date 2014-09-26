@@ -93,7 +93,7 @@ void complete_update()
 	//window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
 }
 
-const char* asset_directory = "./assets/";
+const char* asset_directory = "./project/";
 
 // main
 int main(int argc, char* argv[])
@@ -128,7 +128,7 @@ int main(int argc, char* argv[])
 		window->hideCursor();
 	
 	
-	window->setCurrentDirectory(".");	
+    window->setCurrentDirectory(".");
 	
 	// get Maratis (first time call onstructor)
 	MaratisPlayer * maratis = MaratisPlayer::getInstance();
@@ -147,6 +147,8 @@ int main(int argc, char* argv[])
 	
 	for(int i = 0; i < files.size(); ++i)
 	{
+        MLOG_INFO("Found " << files[i]);
+
 		if(strstr(files[i].c_str(), ".mproj"))
 		{
 			if(maratis->loadProject((string(asset_directory) + files[i]).c_str()))
@@ -156,9 +158,7 @@ int main(int argc, char* argv[])
 				break;
 			}
 		}
-		
-		MLOG_INFO("Found " << files[i]);
-	}
+    }
 	
 	if(!found)
 		MLOG_INFO("Did not find any project file");	

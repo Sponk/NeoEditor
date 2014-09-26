@@ -18,6 +18,10 @@
 #  define ZLIB_INTERNAL
 #endif
 
+#ifdef EMSCRIPTEN
+#include <unistd.h>
+#endif
+
 #include <stdio.h>
 #include "zlib.h"
 #ifdef STDC

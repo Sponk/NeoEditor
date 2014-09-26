@@ -22,6 +22,7 @@
 //
 //========================================================================
 
+#ifdef USE_NETWORKING
 #include "MHTTPConnection.h"
 #include <RakSleep.h>
 
@@ -83,3 +84,4 @@ const char* MHTTPConnection::connectionLoop()
         RakSleep(30);
     }
 }
+#endif

@@ -22,7 +22,7 @@
 //
 //========================================================================
 
-#ifndef MHTTP_CONNECTION_H
+#if !defined(MHTTP_CONNECTION_H) && defined(USE_NETWORKING)
 #define MHTTP_CONNECTION_H
 
 #include <TCPInterface.h>
