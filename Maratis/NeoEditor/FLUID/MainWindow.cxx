@@ -682,17 +682,17 @@ Fl_Double_Window* EditorWindow::create_camera_window() {
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       { camera_color_r = new Fl_Value_Input(10, 47, 45, 21, "Red:");
-        camera_color_r->step(0.1);
+        camera_color_r->step(0.01);
         camera_color_r->callback((Fl_Callback*)edit_camera_properties);
         camera_color_r->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* camera_color_r
       { camera_color_g = new Fl_Value_Input(61, 47, 45, 21, "Green:");
-        camera_color_g->step(0.1);
+        camera_color_g->step(0.01);
         camera_color_g->callback((Fl_Callback*)edit_camera_properties);
         camera_color_g->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* camera_color_g
       { camera_color_b = new Fl_Value_Input(115, 47, 45, 21, "Blue:");
-        camera_color_b->step(0.1);
+        camera_color_b->step(0.01);
         camera_color_b->callback((Fl_Callback*)edit_camera_properties);
         camera_color_b->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* camera_color_b
@@ -724,7 +724,7 @@ Fl_Double_Window* EditorWindow::create_camera_window() {
       } // Fl_Value_Input* camera_clipping_far_edit
       o->end();
     } // Fl_Group* o
-    { Fl_Group* o = new Fl_Group(5, 324, 218, 81, "Fog:");
+    { Fl_Group* o = new Fl_Group(5, 324, 218, 159, "Fog:");
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       { camera_fog_button = new Fl_Check_Button(12, 330, 87, 21, "Fog");
@@ -735,9 +735,29 @@ Fl_Double_Window* EditorWindow::create_camera_window() {
         camera_fog_distance_edit->callback((Fl_Callback*)edit_camera_properties);
         camera_fog_distance_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Value_Input* camera_fog_distance_edit
+      { fog_color_r = new Fl_Value_Input(15, 424, 45, 21, "Red:");
+        fog_color_r->step(0.01);
+        fog_color_r->callback((Fl_Callback*)edit_camera_properties);
+        fog_color_r->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* fog_color_r
+      { fog_color_g = new Fl_Value_Input(66, 424, 45, 21, "Green:");
+        fog_color_g->step(0.01);
+        fog_color_g->callback((Fl_Callback*)edit_camera_properties);
+        fog_color_g->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* fog_color_g
+      { fog_color_b = new Fl_Value_Input(120, 424, 45, 21, "Blue:");
+        fog_color_b->step(0.01);
+        fog_color_b->callback((Fl_Callback*)edit_camera_properties);
+        fog_color_b->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      } // Fl_Value_Input* fog_color_b
+      { Fl_Button* o = new Fl_Button(15, 449, 96, 26, "Choose color");
+        o->labeltype(FL_ENGRAVED_LABEL);
+        o->labelsize(11);
+        o->callback((Fl_Callback*)choose_fog_color);
+      } // Fl_Button* o
       o->end();
     } // Fl_Group* o
-    { camera_skybox_edit = new Fl_Input(6, 432, 213, 24, "Skybox Textures:");
+    { camera_skybox_edit = new Fl_Input(6, 504, 213, 24, "Skybox Textures:");
       camera_skybox_edit->tooltip("Path to textures used by the skybox.");
       camera_skybox_edit->callback((Fl_Callback*)edit_camera_skybox);
       camera_skybox_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));

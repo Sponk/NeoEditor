@@ -19,12 +19,11 @@ decl {\#include "../MPluginScript/MPluginScript.h"} {public global
 
 class EditorWindow {open
 } {
-  Function {show_window()} {open
-  } {
+  Function {show_window()} {} {
     Fl_Window {} {
       label Neo
       callback window_quit open
-      xywh {1894 247 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
+      xywh {1894 247 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -709,28 +708,29 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
       }
     }
   }
-  Function {create_camera_window()} {} {
+  Function {create_camera_window()} {open
+  } {
     Fl_Window {} {open
-      xywh {1722 209 258 660} type Double hide
+      xywh {2552 223 258 660} type Double visible
     } {
       Fl_Group {} {
-        label {Clear Color:}
+        label {Clear Color:} open
         xywh {5 27 218 76} box ENGRAVED_FRAME align 5
       } {
         Fl_Value_Input camera_color_r {
           label {Red:}
           callback edit_camera_properties
-          xywh {10 47 45 21} align 5 step 0.1
+          xywh {10 47 45 21} align 5 step 0.01
         }
         Fl_Value_Input camera_color_g {
           label {Green:}
           callback edit_camera_properties
-          xywh {61 47 45 21} align 5 step 0.1
+          xywh {61 47 45 21} align 5 step 0.01
         }
         Fl_Value_Input camera_color_b {
           label {Blue:}
-          callback edit_camera_properties
-          xywh {115 47 45 21} align 5 step 0.1
+          callback edit_camera_properties selected
+          xywh {115 47 45 21} align 5 step 0.01
         }
         Fl_Button {} {
           label {Choose color}
@@ -764,8 +764,8 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
         }
       }
       Fl_Group {} {
-        label {Fog:}
-        xywh {5 324 218 81} box ENGRAVED_FRAME align 5
+        label {Fog:} open
+        xywh {5 324 218 159} box ENGRAVED_FRAME align 5
       } {
         Fl_Check_Button camera_fog_button {
           label Fog
@@ -777,11 +777,31 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
           callback edit_camera_properties
           xywh {15 375 117 21} align 5
         }
+        Fl_Value_Input fog_color_r {
+          label {Red:}
+          callback edit_camera_properties
+          xywh {15 424 45 21} align 5 step 0.01
+        }
+        Fl_Value_Input fog_color_g {
+          label {Green:}
+          callback edit_camera_properties
+          xywh {66 424 45 21} align 5 step 0.01
+        }
+        Fl_Value_Input fog_color_b {
+          label {Blue:}
+          callback edit_camera_properties
+          xywh {120 424 45 21} align 5 step 0.01
+        }
+        Fl_Button {} {
+          label {Choose color}
+          callback choose_fog_color
+          xywh {15 449 96 26} labeltype ENGRAVED_LABEL labelsize 11
+        }
       }
       Fl_Input camera_skybox_edit {
         label {Skybox Textures:}
         callback edit_camera_skybox
-        tooltip {Path to textures used by the skybox.} xywh {6 432 213 24} align 5 when 8
+        tooltip {Path to textures used by the skybox.} xywh {6 504 213 24} align 5 when 8
       }
     }
   }
@@ -2195,13 +2215,12 @@ main_window->redraw();} {}
   }
 } 
 
-class PostEffectsDlg {open
-} {
+class PostEffectsDlg {} {
   Function {create_window()} {open
   } {
     Fl_Window {} {
       label {Post Effects Setup} open
-      xywh {2089 371 591 348} type Double visible
+      xywh {2089 371 591 348} type Double hide
     } {
       Fl_Check_Button use_post_effects {
         label {Use Post Effects}

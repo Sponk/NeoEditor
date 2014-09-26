@@ -1059,7 +1059,7 @@ void MStandardRenderer::enableFog(MOCamera * camera)
 		render->disableFog();
 	}
 
-	render->setFogColor(camera->getClearColor());
+    render->setFogColor(camera->getFogColor());
 	render->setFogDistance(fogMin, camera->getClippingFar());
 }
 

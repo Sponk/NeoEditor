@@ -274,6 +274,11 @@ void readCameraProperties(TiXmlElement * node, MOCamera * camera)
 	if(readFloatValues(node, "clearColor", clearColor, 3))
 		camera->setClearColor(clearColor);
 
+    // fog color
+    MVector3 fogColor;
+    if(readFloatValues(node, "fogColor", fogColor, 3))
+        camera->setFogColor(fogColor);
+
 	// ortho
 	bool ortho;
 	if(readBool(node, "ortho", &ortho))

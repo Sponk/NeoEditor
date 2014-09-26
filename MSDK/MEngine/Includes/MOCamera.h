@@ -37,6 +37,7 @@ private:
 
 	// properties
 	bool m_fog;
+    MVector3 m_fogColor;
 	bool m_ortho;
 	float m_fov;
 	float m_fogDistance;
@@ -81,6 +82,8 @@ public:
 
 	// properties
 	inline void enableFog(const bool fog){ m_fog = fog; }
+    inline MVector3 getFogColor() { return m_fogColor; }
+    inline void setFogColor(MVector3 color) { m_fogColor = color; }
 	inline void enableOrtho(const bool ortho){ m_ortho = ortho; }
 	inline void setFov(const float fov){ m_fov = fov; }
 	inline void setFogDistance(const float fogDistance){ m_fogDistance = fogDistance; }
