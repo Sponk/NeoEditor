@@ -189,6 +189,7 @@ private:
   int systemColors[3]; 
 public:
   int getSystemColor(int idx);
+  bool m_deferredUiUpdate; 
 };
 
 class SceneSetupDlg {

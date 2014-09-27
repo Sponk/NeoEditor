@@ -79,7 +79,6 @@ unsigned int MBLua::getVariablesNumber(void)
     MEngine* engine = MEngine::getInstance();
     // TODO: New variable type for paths!
     std::vector<std::string> names;
-
     if(!m_init)
     {
         std::vector<MValueVariable*> oldVars;
@@ -97,7 +96,10 @@ unsigned int MBLua::getVariablesNumber(void)
 
         // If the script does not exist, show only the static variable
 		if(!isFileExist(globalFile) || isDirectory(globalFile))
+        {
+            //MLOG_ERROR("Script file does not exist (" << globalFile << ")!");
             return 1;
+        }
 
         m_script.runScript(globalFile);
 
@@ -228,11 +230,8 @@ void MBLua::update(void)
     if(!m_init)
     {
         char globalFile[256];
-
         getGlobalFilename(globalFile, engine->getSystemContext()->getWorkingDirectory(), m_scriptFile.getSafeString());
-
         m_script.runScript(globalFile);
-
         m_init = true;
     }
 

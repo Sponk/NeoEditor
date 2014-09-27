@@ -17,9 +17,9 @@ decl {\#include <MFileManager/MMeshSave.h>} {private local
 decl {\#include "../MPluginScript/MPluginScript.h"} {public global
 } 
 
-class EditorWindow {} {
-  Function {show_window()} {open
-  } {
+class EditorWindow {open
+} {
+  Function {show_window()} {} {
     Fl_Window {} {
       label {Neo Editor}
       callback window_quit open
@@ -708,8 +708,7 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
       }
     }
   }
-  Function {create_camera_window()} {open
-  } {
+  Function {create_camera_window()} {} {
     Fl_Window {} {open
       xywh {2552 223 258 660} type Double hide
     } {
@@ -966,6 +965,8 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
   } {
     code {// TODO: Boundary checking!
 return systemColors[idx];} {}
+  }
+  decl {bool m_deferredUiUpdate;} {selected public local
   }
 } 
 
@@ -2515,13 +2516,12 @@ dlg->update_uniform_list();} {}
   }
 } 
 
-class WaitDlg {open
-} {
+class WaitDlg {} {
   Function {create_window()} {open
   } {
     Fl_Window {} {
-      label {Loading...} open selected
-      xywh {2008 383 300 69} type Double visible
+      label {Loading...} open
+      xywh {2008 383 300 69} type Double hide
     } {
       Fl_Box {} {
         label {The Neo Editor is loading. Please wait...}

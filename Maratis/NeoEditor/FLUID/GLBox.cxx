@@ -34,6 +34,7 @@ void update_editor(void*)
 
     MGame* game = MEngine::getInstance()->getGame();
     MInputContext* input = MEngine::getInstance()->getInputContext();
+    Maratis* maratis = Maratis::getInstance();
 
     if(window.inputMethod == NULL && !game->isRunning())
     {
@@ -41,7 +42,7 @@ void update_editor(void*)
         {
             int direction = -1;
 
-            MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+            MOCamera * vue = maratis->getPerspectiveVue();
 
             if(vue->isOrtho())
             {
@@ -58,7 +59,7 @@ void update_editor(void*)
         {
             int direction = 1;
 
-            MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+            MOCamera * vue = maratis->getPerspectiveVue();
             if(vue->isOrtho())
             {
                 vue->setFov(vue->getFov() + direction*translation_speed);
@@ -74,7 +75,7 @@ void update_editor(void*)
         {
             int direction = -1;
 
-            MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+            MOCamera * vue = maratis->getPerspectiveVue();
             vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(direction*translation_speed,0,0)));
             vue->updateMatrix();
 
@@ -84,7 +85,7 @@ void update_editor(void*)
         {
             int direction = 1;
 
-            MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+            MOCamera * vue = maratis->getPerspectiveVue();
             vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(direction*translation_speed,0,0)));
             vue->updateMatrix();
 
@@ -93,7 +94,7 @@ void update_editor(void*)
 
         if(input->isKeyPressed("E"))
         {
-            MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+            MOCamera * vue = maratis->getPerspectiveVue();
             vue->setPosition(vue->getPosition()+vue->getRotatedVector(MVector3(0,translation_speed, 0)));
             vue->updateMatrix();
 
@@ -101,7 +102,7 @@ void update_editor(void*)
         }
         else if(input->isKeyPressed("C"))
         {
-            MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+            MOCamera * vue = maratis->getPerspectiveVue();
             vue->setPosition(vue->getPosition()+vue->getRotatedVector(MVector3(0,-translation_speed, 0)));
             vue->updateMatrix();
 
@@ -113,10 +114,10 @@ void update_editor(void*)
         window.inputMethod->callFunction(window.inputMethod->getInputUpdate().c_str());
     }
 
-    if(Maratis::getInstance()->hasTitleChanged())
+    if(maratis->hasTitleChanged())
     {
-        main_window->label(Maratis::getInstance()->getWindowTitle());
-        Maratis::getInstance()->setTitleChanged(false);
+        main_window->label(maratis->getWindowTitle());
+        maratis->setTitleChanged(false);
     }
 
     if(MWindow::getInstance()->getFocus())
@@ -141,7 +142,13 @@ void update_editor(void*)
 
     MWindow::getInstance()->setPosition(window.glbox->x_root() , window.glbox->y_root());
     window.glbox->redraw();
-    Maratis::getInstance()->logicLoop();
+    maratis->logicLoop();
+
+    if(window.m_deferredUiUpdate)
+    {
+        window.m_deferredUiUpdate = false;
+        create_behavior_ui(maratis->getSelectedObjectByIndex(0));
+    }
 
     Fl::add_timeout(0.01, update_editor);
 }

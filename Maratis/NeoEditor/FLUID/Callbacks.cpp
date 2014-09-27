@@ -397,6 +397,7 @@ void behavior_string_callback(Fl_Input* input, const char* data)
         return;
 
     ((MString*) get_variable_pointer(data, input->label(), object))->set(input->value());
+    window.m_deferredUiUpdate = true;
 }
 
 void behavior_vector4_callback(Fl_Value_Input* input, const char* data)
@@ -509,8 +510,6 @@ void behavior_vector2_callback(Fl_Value_Input* input, const char* data)
         break;
     }
 }
-
-void create_behavior_ui(MObject3d* object);
 
 void remove_behavior(Fl_Button*, long behavior)
 {
