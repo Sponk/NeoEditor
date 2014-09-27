@@ -81,15 +81,15 @@ void complete_update()
 	}
 	
 	// on events
-	if(window->onEvents())
-	{
-		update();
-		draw();
-	}
-	
-	if(engine->getInputContext()->isKeyPressed("X"))
-		MLOG_INFO("W pressed");
-	
+    window->onEvents();
+
+    update();
+    draw();
+    /*MLOG_INFO("Update");*/
+    //MRenderingContext* render = engine->getRenderingContext();
+    //render->setClearColor(MVector4(1.0,1.0,1.0,1.0));
+    //render->clear(M_BUFFER_COLOR);
+
 	//window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
 }
 

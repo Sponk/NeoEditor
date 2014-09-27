@@ -286,6 +286,7 @@ void MaratisPlayer::loadProject(MProject* proj, const char * filename)
 		}
 	}
 	
+    MLOG_INFO("Loading level: " << proj->startLevel);
 	// load start level
 	engine->loadLevel(proj->startLevel.c_str());
 }

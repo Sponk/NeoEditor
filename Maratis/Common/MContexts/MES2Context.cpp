@@ -494,7 +494,11 @@ void MES2Context::createFrameBuffer(unsigned int * frameBufferId){
     glGenFramebuffers(1, frameBufferId);
 }
 void MES2Context::deleteFrameBuffer(unsigned int * frameBufferId){
+#ifndef EMSCRIPTEN
     glDeleteFramebuffers(1, frameBufferId);
+#else
+    MLOG_INFO("Can't delete frame buffer on WebGL");
+#endif
 }
 void MES2Context::bindFrameBuffer(unsigned int frameBufferId){
     glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);

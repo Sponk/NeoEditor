@@ -76,7 +76,8 @@ void MPlugin::load(const char * filename)
 	m_filename = filename;
     function();
 	
-#else
+    // There is no dlopen on Emscripten
+#elif !defined(EMSCRIPTEN)
 	
 	m_library = dlopen(filename, RTLD_LAZY);
 	if(! m_library)
