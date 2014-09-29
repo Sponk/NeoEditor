@@ -4658,6 +4658,28 @@ int disablePostEffects(lua_State * L)
     return 1;
 }
 
+int setPostEffectsResolution(lua_State * L)
+{
+    if(!isFunctionOk(L, "setPostEffectsResolution", 1))
+        return 0;
+
+    float mp = lua_tonumber(L, 1);
+    MGame* game = MEngine::getInstance()->getGame();
+    MPostProcessor* pp = game->getPostProcessor();
+    pp->setResolutionMultiplier(mp);
+    pp->eraseTextures();
+    pp->updateResolution();
+
+    return 1;
+}
+
+int getPostEffectsResolution(lua_State * L)
+{
+    MGame* game = MEngine::getInstance()->getGame();
+    lua_pushnumber(L, game->getPostProcessor()->getResolutionMultiplier());
+    return 1;
+}
+
 int setPostEffectsUniformFloat(lua_State * L)
 {
     if(!isFunctionOk(L, "setPostEffectsUniformFloat", 2))
@@ -4884,6 +4906,8 @@ void MScript::init(void)
     lua_register(m_state, "addPostEffectsUniformFloat", addPostEffectsUniformFloat);
     lua_register(m_state, "setPostEffectsUniformInt", setPostEffectsUniformInt);
     lua_register(m_state, "addPostEffectsUniformInt", addPostEffectsUniformInt);
+    lua_register(m_state, "setPostEffectsResolution", setPostEffectsResolution);
+    lua_register(m_state, "getPostEffectsResolution", getPostEffectsResolution);
 
 	// light
     lua_register(m_state, "createLight",       createLight);

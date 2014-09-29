@@ -25,8 +25,6 @@
 
 using std::string;
 
-#define MULT 1
-
 inline int Pow2(int x)
 {
     --x;
@@ -67,7 +65,9 @@ void MPostProcessor::updateResolution()
 
     m_Resolution = Pow2(max(screenWidth, screenHeight));
 
-    m_Resolution *= MULT;
+    if(m_ResolutionMultiplier == 0) m_ResolutionMultiplier = 1.0f;
+
+    m_Resolution *= m_ResolutionMultiplier;
 
     // create frame buffer
     render->createFrameBuffer(&m_BufferID);
@@ -93,6 +93,7 @@ MPostProcessor::MPostProcessor()
     , m_fx(0)
     , m_fragShad(0)
     , m_vertShad(0)
+    , m_ResolutionMultiplier(1.0f)
 {
     updateResolution();
 }

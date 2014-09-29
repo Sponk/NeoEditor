@@ -56,6 +56,9 @@ public:
     void setShaderPath(const char* vertPath, const char* fragPath);
     int getFX() { return m_fx; }
 
+    float getResolutionMultiplier() { return m_ResolutionMultiplier; }
+    void setResolutionMultiplier(float res) { m_ResolutionMultiplier = res; }
+
 protected:
     void set2D(unsigned int w, unsigned int h);
     void drawQuad(MVector2 scale);
@@ -71,6 +74,7 @@ protected:
     unsigned int m_vertShad;
 
     int m_Resolution;
+    float m_ResolutionMultiplier;
 
     MString m_vertShadPath;
     MString m_fragShadPath;
