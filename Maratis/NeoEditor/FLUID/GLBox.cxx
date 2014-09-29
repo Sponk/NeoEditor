@@ -150,7 +150,7 @@ void update_editor(void*)
         create_behavior_ui(maratis->getSelectedObjectByIndex(0));
     }
 
-    Fl::add_timeout(0.01, update_editor);
+    Fl::add_timeout(0.015, update_editor);
 }
 
 void GLBox::loadPostEffectsFromGame(MGame* game)
