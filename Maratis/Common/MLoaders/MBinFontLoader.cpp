@@ -61,8 +61,7 @@ bool M_loadBinFont(const char * filename, void * data)
 	
 	// init font
 	MFont * font = (MFont *)data;
-	font->setFontSize(fontSize);
-	
+	font->setFontSize(fontSize);	
 	
 	// create image
 	{
@@ -100,8 +99,8 @@ bool M_loadBinFont(const char * filename, void * data)
 		
 		// send texture image
 		render->bindTexture(textureId);
-		render->setTextureUWrapMode(M_WRAP_REPEAT);
-		render->setTextureVWrapMode(M_WRAP_REPEAT);
+        render->setTextureUWrapMode(M_WRAP_CLAMP);
+        render->setTextureVWrapMode(M_WRAP_CLAMP);
 		render->sendTextureImage(&image, 0, 1, 0);
 	}
 	

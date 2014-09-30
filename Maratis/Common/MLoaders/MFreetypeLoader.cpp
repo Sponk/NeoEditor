@@ -68,7 +68,7 @@ bool M_loadFont(const char * filename, void * data)
 	int pen_x, pen_y;
 	unsigned int n;
 	unsigned int space = 2;
-	unsigned int size = 32;
+    unsigned int size = 128;
 	unsigned int width = 512;
 	unsigned int height = 0;
 
@@ -149,14 +149,14 @@ bool M_loadFont(const char * filename, void * data)
 		if(FT_Get_Char_Index(face, n) == 0)
 			continue;
 
-		if((pen_x + slot->bitmap.width) > 512){
+        if((pen_x + slot->bitmap.width) > 512){
 			pen_x = 0;
 			pen_y += size + space;
 			height += size + space;
-		}
+        }
 
 		// increment pen position 
-		pen_x += slot->bitmap.width + space; 
+        pen_x += slot->bitmap.width + space;
 	}
 
 	if(height == 0)
@@ -169,8 +169,8 @@ bool M_loadFont(const char * filename, void * data)
 
 
 	// create image
-	height = getNextPowerOfTwo(height);
-	image.create(M_UBYTE, width, height, 4);
+    height = getNextPowerOfTwo(height);
+    image.create(M_UBYTE, width, height, 4);
 
 	unsigned char color[4] = {255, 255, 255, 0};
 	image.clear(color);
@@ -233,8 +233,9 @@ bool M_loadFont(const char * filename, void * data)
 	
 	// send texture image
 	render->bindTexture(textureId);
-	render->setTextureUWrapMode(M_WRAP_REPEAT);
-	render->setTextureVWrapMode(M_WRAP_REPEAT);
+    render->setTextureUWrapMode(M_WRAP_CLAMP);
+    render->setTextureVWrapMode(M_WRAP_CLAMP);
+    render->setTextureFilterMode(M_TEX_FILTER_NEAREST, M_TEX_FILTER_NEAREST);
 	render->sendTextureImage(&image, 0, 1, 0);
 
 	// finish
