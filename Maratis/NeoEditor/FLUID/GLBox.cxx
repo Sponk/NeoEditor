@@ -305,6 +305,26 @@ int GLBox::handle(int event)
             case FL_Shift_R:
                     input->downKey("RSHIFT");
                 break;
+
+            case FL_Up:
+                    input->downKey("UP");
+                    return 1;
+                break;
+
+            case FL_Down:
+                    input->downKey("DOWN");
+                    return 1;
+                break;
+
+            case FL_Left:
+                    input->downKey("LEFT");
+                    return 1;
+                break;
+
+            case FL_Right:
+                    input->downKey("RIGHT");
+                    return 1;
+                break;
             }
 
             Fl_Gl_Window::handle(event);
@@ -342,6 +362,22 @@ int GLBox::handle(int event)
 
             case FL_Shift_R:
                     input->upKey("RSHIFT");
+                break;
+
+            case FL_Up:
+                    input->upKey("UP");
+                break;
+
+            case FL_Down:
+                input->upKey("DOWN");
+                break;
+
+            case FL_Left:
+                input->upKey("LEFT");
+                break;
+
+            case FL_Right:
+                input->upKey("RIGHT");
                 break;
             }
 
