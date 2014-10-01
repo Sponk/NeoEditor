@@ -19,11 +19,12 @@ decl {\#include "../MPluginScript/MPluginScript.h"} {public global
 
 class EditorWindow {open
 } {
-  Function {show_window()} {} {
+  Function {show_window()} {open
+  } {
     Fl_Window {} {
       label {Neo Editor}
       callback window_quit open
-      xywh {1501 215 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
+      xywh {1924 252 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -239,7 +240,7 @@ class EditorWindow {open
         class DnDTree
       }
       Fl_Group edit_group {open
-        xywh {3 24 911 33}
+        xywh {3 24 911 42}
         code0 {edit_group->resizable(NULL);}
       } {
         Fl_Round_Button {} {
@@ -258,7 +259,7 @@ class EditorWindow {open
           image {../../../Data/Editor/scale.png} xywh {282 27 39 24} type Radio box UP_FRAME down_box ROUND_DOWN_BOX shortcut 0x33
         }
         Fl_Choice scenes_menu {open
-          xywh {498 27 129 24} down_box BORDER_BOX
+          xywh {597 27 129 24} down_box BORDER_BOX
         } {}
         Fl_Group speed_group {open
           xywh {3 25 192 23}
@@ -278,10 +279,10 @@ class EditorWindow {open
         Fl_Check_Button vue_ortho_button {
           label Ortho
           callback ortho_callback
-          xywh {633 27 57 24} down_box DOWN_BOX shortcut 0x35
+          xywh {732 27 57 24} down_box DOWN_BOX shortcut 0x35
         }
         Fl_Choice {} {open
-          xywh {702 27 107 24} down_box BORDER_BOX
+          xywh {801 27 107 24} down_box BORDER_BOX
         } {
           MenuItem {} {
             label Other
@@ -322,6 +323,11 @@ class EditorWindow {open
           label {Play in Editor}
           callback play_game_in_editor
           xywh {381 27 96 24} shortcut 0xffc3
+        }
+        Fl_Button {} {
+          label Console
+          callback show_console_callback selected
+          xywh {486 27 84 24}
         }
       }
       Fl_Tabs {} {open
@@ -966,7 +972,7 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
     code {// TODO: Boundary checking!
 return systemColors[idx];} {}
   }
-  decl {bool m_deferredUiUpdate;} {selected public local
+  decl {bool m_deferredUiUpdate;} {public local
   }
 } 
 

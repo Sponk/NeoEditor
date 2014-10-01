@@ -51,6 +51,7 @@ extern void change_vue_callback(Fl_Menu_*, long);
 #include <FL/Fl_Button.H>
 extern void play_game_button_callback(Fl_Button*, void*);
 extern void play_game_in_editor(Fl_Button*, void*);
+extern void show_console_callback(Fl_Button*, void*);
 #include <FL/Fl_Tabs.H>
 #include <FL/Fl_Scroll.H>
 #include <FL/Fl_Input.H>

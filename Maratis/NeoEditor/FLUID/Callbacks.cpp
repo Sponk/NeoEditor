@@ -2018,12 +2018,32 @@ void post_effects_setup_callback(Fl_Menu_*, void*)
     Fl::delete_widget(window);
 }
 
+int redirect_script_print()
+{
+    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    if(script->getArgsNumber() <= 0)
+        return 0;
+
+    const char* text = script->getString(0);
+    console_buffer.append(text);
+    console_buffer.append("\n");
+
+    if(!console.closed)
+    {
+        console.output_edit->move_down();
+        console.output_edit->show_insert_position();
+    }
+
+    return 1;
+}
+
 void play_game_in_editor(Fl_Button* button, void *)
 {
     MEngine* engine = MEngine::getInstance();
     MLevel * level = engine->getLevel();
     MScene * scene = level->getCurrentScene();
     MScript scriptContext;
+    scriptContext.addFunction("print", redirect_script_print);
 
     MGame* game = engine->getGame();
 
@@ -2036,6 +2056,7 @@ void play_game_in_editor(Fl_Button* button, void *)
 
     const char* text = button->label();
     button->label("Stop game");
+    console_buffer.text("");
 
     // Save perspective vue
     MMatrix4x4 matrix = *Maratis::getInstance()->getPerspectiveVue()->getMatrix();
@@ -2090,4 +2111,16 @@ void play_game_in_editor(Fl_Button* button, void *)
     Maratis::getInstance()->getPerspectiveVue()->updateMatrix();
 
     button->label(text);
+}
+
+void show_console_callback(Fl_Button*, void*)
+{
+    if(console.closed)
+    {
+        Fl_Window* window = console.create_window();
+        window->label("Player Console");
+        window->show();
+    }
+
+    console.output_edit->buffer(&console_buffer);
 }
