@@ -424,6 +424,13 @@ void MPostProcessor::sendUniforms()
                uniform->dirty = false;
             }
             break;
+
+            case M_VARIABLE_INT:
+            {
+               render->sendUniformInt(m_fx, uniform->name, (int*) uniform->variable.getPointer());
+               uniform->dirty = false;
+            }
+            break;
         }
     }
 }
