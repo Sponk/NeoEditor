@@ -101,6 +101,7 @@ public:
 
 	// create
 	bool create(const char * title, unsigned int width, unsigned int height, int colorBits, bool fullscreen);
+    void resize(unsigned int width, unsigned int height) {}
 
 	// events
 	inline void setPointerEvent(void (*pointerEvent)(MWinEvent * windowEvents)){ m_pointerEvent = pointerEvent; }

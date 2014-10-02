@@ -760,6 +760,11 @@ bool MWindow::create(const char * title, unsigned int width, unsigned int height
 	return true;
 }
 
+void MWindow::resize(unsigned int width, unsigned int height)
+{
+    SDL_SetWindowSize(g_window, width, height);
+}
+
 void MWindow::sleep(double time)
 {
 	if (time <= 0)

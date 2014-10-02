@@ -157,7 +157,7 @@ IF(UNIX AND NOT APPLE AND NOT ANDROID AND NOT EMSCRIPTEN)
   SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -Og -D__Debug__")
   SET(CMAKE_SHARED_LINKER_FLAGS "-ldl -Wl,--as-needed,--allow-multiple-definition,--build-id")
 
-  SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lm -ldl -Wl,-rpath ." )
+  SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lm -ldl -Wl,--allow-multiple-definition,-rpath ." )
 
   SET(CPACK_PACKAGE_CONTACT Yannick Pflanzer <yannick.pflanzer@scary-squid.de>)
   SET(CPACK_GENERATOR "STGZ;TGZ;DEB;RPM;")

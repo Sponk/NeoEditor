@@ -4722,6 +4722,15 @@ int addPostEffectsUniformInt(lua_State * L)
     return 1;
 }
 
+int resizeWindow(lua_State * L)
+{
+    if(!isFunctionOk(L, "resizeWindow", 2))
+        return 0;
+
+    MWindow::getInstance()->resize(lua_tointeger(L, 1), lua_tointeger(L, 2));
+    return 1;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Init
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4767,6 +4776,7 @@ void MScript::init(void)
 	lua_register(m_state, "getCurrentCamera",    getCurrentCamera);
     lua_register(m_state, "loadCameraSkybox", loadCameraSkybox);
     lua_register(m_state, "deleteObject", deleteObject);
+    lua_register(m_state, "resizeWindow", resizeWindow);
 	
 	// object
 	lua_register(m_state, "rotate",					rotate);
