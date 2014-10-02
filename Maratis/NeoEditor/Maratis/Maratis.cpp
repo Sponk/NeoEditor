@@ -1077,6 +1077,9 @@ void Maratis::loadProject(const char * filename)
     if(! filename)
         return;
 
+    MEngine::getInstance()->getLevel()->clear();
+    MEngine::getInstance()->getLevel()->clearScenes();
+
     // load project file
     MProject proj;
     if(proj.loadXML(filename))
