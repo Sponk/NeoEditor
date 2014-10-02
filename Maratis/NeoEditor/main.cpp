@@ -40,6 +40,7 @@
 #include "FLUID/MainWindow.h"
 #include "FLUID/Callbacks.h"
 #include <FL/Fl.H>
+#include "FLUID/Translator.h"
 
 #ifdef _WIN32
     #include <windows.h>
@@ -474,10 +475,47 @@ LONG WINAPI windows_exception_handler(EXCEPTION_POINTERS * ExceptionInfo)
 }
 #endif
 
+void load_translation(const char* confdir, const char* rep)
+{
+    std::string fullpath = confdir;
+
+#ifndef WIN32
+    fullpath += "/.neoeditor/";
+#else
+    fullpath += "\\neoeditor\\";
+#endif
+
+    char dir[256];
+    getGlobalFilename(dir, fullpath.c_str(), "language.ini");
+
+    MLOG_INFO("File: " << dir);
+
+    INI::Parser parser(dir);
+    const char* langname = parser.top()("lang")["name"].c_str();
+
+    // Default to english
+    if(strlen(langname) == 0)
+        langname = "english.ini";
+
+    getGlobalFilename(dir, rep, langname);
+    Translator::getInstance()->loadTranslation(dir);
+}
+
 // main
 int main(int argc, char **argv)
 {
-	setlocale(LC_NUMERIC, "C");
+    setlocale(LC_ALL, "");
+    setlocale(LC_NUMERIC, "C");
+
+    // set current directory
+    char rep[256];
+    getRepertory(rep, argv[0]);
+
+#ifndef WIN32
+    load_translation(getenv("HOME"), rep);
+#else
+    load_translation(getenv("APPDATA"), rep);
+#endif
 
     // Set crash handler
 #ifndef _WIN32
@@ -487,10 +525,6 @@ int main(int argc, char **argv)
 #else
     SetUnhandledExceptionFilter(windows_exception_handler);
 #endif
-
-    // set current directory
-    char rep[256];
-    getRepertory(rep, argv[0]);
 
     //Fl::background(46, 82, 115);
 

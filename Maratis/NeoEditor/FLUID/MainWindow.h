@@ -89,6 +89,7 @@ class EditorWindow {
 public:
   Fl_Double_Window* show_window();
   Fl_Menu_Bar *menu_bar;
+  static unsigned char menu_menu_bar_i18n_done;
   static Fl_Menu_Item menu_menu_bar[];
   static Fl_Menu_Item *behavior_menu;
   GLBox *glbox;
@@ -99,6 +100,7 @@ public:
   Fl_Value_Input *rotation_speed;
   Fl_Value_Input *translation_speed;
   Fl_Check_Button *vue_ortho_button;
+  static unsigned char menu__i18n_done;
   static Fl_Menu_Item menu_[];
   Fl_Input *name_edit;
   Fl_Value_Input *xpos_edit;
@@ -135,6 +137,7 @@ public:
   Fl_Check_Button *object_shadow_button;
   Fl_Check_Button *object_occluder_button;
   Fl_Choice *object_shape_choice;
+  static unsigned char menu_object_shape_choice_i18n_done;
   static Fl_Menu_Item menu_object_shape_choice[];
   Fl_Check_Button *object_ghost_button;
   Fl_Value_Input *object_mass_edit;
@@ -166,6 +169,7 @@ public:
   Fl_Input *text_font_edit;
   Fl_Value_Input *text_size_edit;
   Fl_Choice *text_alignment_chooser;
+  static unsigned char menu_text_alignment_chooser_i18n_done;
   static Fl_Menu_Item menu_text_alignment_chooser[];
   Fl_Value_Input *text_r;
   Fl_Value_Input *text_g;
@@ -298,6 +302,7 @@ class ConfigurationDlg {
 public:
   Fl_Double_Window* create_window();
   Fl_Choice *theme_chooser;
+  static unsigned char menu_theme_chooser_i18n_done;
   static Fl_Menu_Item menu_theme_chooser[];
   Fl_Value_Input *background_color_r;
   Fl_Value_Input *background_color_g;
@@ -308,6 +313,7 @@ public:
   Fl_Value_Input *foreground_color_r;
   Fl_Value_Input *foreground_color_g;
   Fl_Value_Input *foreground_color_b;
+  Fl_Choice *lang_chooser;
   Fl_Choice *input_methods_choice;
   Fl_Browser *plugin_browser;
   Fl_Output *author_edit;

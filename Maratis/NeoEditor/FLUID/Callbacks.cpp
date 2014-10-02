@@ -28,6 +28,7 @@
 #include <MCore.h>
 #include <MLog.h>
 #include "MainWindow.h"
+#include "Translator.h"
 
 open_project_t current_project;
 bool reload_editor = false;
@@ -81,7 +82,7 @@ MVector3 flColorToVector(int c)
 
 void quit_callback(Fl_Menu_*, void*)
 {
-    if(fl_ask("Do you really want to exit?"))
+    if(fl_ask(tr("Do you really want to exit?")))
     {
         // Save settings
         #ifndef WIN32
@@ -139,6 +140,17 @@ void quit_callback(Fl_Menu_*, void*)
             out << "translationSpeed=" << translation_speed << endl;
             out << "rotationSpeed=" << rotation_speed << endl;
 
+            out.close();            
+        }
+
+        getGlobalFilename(dir, fullpath.c_str(), "language.ini");
+        out.open(dir, ios::out);
+
+        MLOG_INFO("Writing language settings to: " << dir);
+
+        if(out)
+        {
+            out << "[lang]" << endl << "name=" << Translator::getInstance()->getLanguageFile();
             out.close();
         }
 
@@ -1730,7 +1742,7 @@ void update_behavior_menu()
         MBehaviorCreator* behavior = manager->getBehaviorByIndex(i);
 
         std::string name = behavior->getName();
-        name = "Add/Add Behavior/" + name;
+        name = string(tr("Add")) + "/" + tr("Add Behavior") + "/" + name;
         window.menu_bar->add(name.c_str(), 0, (Fl_Callback*) add_behavior_menu_callback, (void*) behavior->getName(), 0);
     }
 }
@@ -2057,7 +2069,7 @@ void play_game_in_editor(Fl_Button* button, void *)
     }
 
     const char* text = button->label();
-    button->label("Stop game");
+    button->label(tr("Stop game"));
     console_buffer.text("");
 
     // Save perspective vue
