@@ -63,6 +63,12 @@ void MPostProcessor::updateResolution()
     unsigned int screenHeight = 0;
     system->getScreenSize(&screenWidth, &screenHeight);
 
+    // Update vertex cache
+    m_vertices[0] = MVector2(0, 0);
+    m_vertices[1] = MVector2(0, screenHeight);
+    m_vertices[3] = MVector2(screenWidth, screenHeight);
+    m_vertices[2] = MVector2(screenWidth, 0);
+
     m_Resolution = Pow2(max(screenWidth, screenHeight));
 
     if(m_ResolutionMultiplier == 0) m_ResolutionMultiplier = 1.0f;
@@ -96,6 +102,11 @@ MPostProcessor::MPostProcessor()
     , m_ResolutionMultiplier(1.0f)
 {
     updateResolution();
+
+    m_texCoords[0] = MVector2(0, 1);
+    m_texCoords[1] = MVector2(0, 0);
+    m_texCoords[3] = MVector2(1, 0);
+    m_texCoords[2] = MVector2(1, 1);
 }
 
 bool MPostProcessor::draw(MOCamera* camera)
@@ -253,18 +264,6 @@ void MPostProcessor::drawQuad(MVector2 scale)
 
     int vertexAttrib;
     int texcoordAttrib;
-    static MVector2 vertices[4];
-    static MVector2 texCoords[4];
-
-    vertices[0] = MVector2(0, 0);
-    vertices[1] = MVector2(0, scale.y);
-    vertices[3] = MVector2(scale.x, scale.y);
-    vertices[2] = MVector2(scale.x, 0);
-
-    texCoords[0] = MVector2(0, 1);
-    texCoords[1] = MVector2(0, 0);
-    texCoords[3] = MVector2(1, 0);
-    texCoords[2] = MVector2(1, 1);
 
     // Send settings to shader
     sendUniforms();
@@ -285,12 +284,12 @@ void MPostProcessor::drawQuad(MVector2 scale)
 
     // Vertex
     render->getAttribLocation(m_fx, "Vertex", &vertexAttrib);
-    render->setAttribPointer(vertexAttrib, M_FLOAT, 2, vertices);
+    render->setAttribPointer(vertexAttrib, M_FLOAT, 2, m_vertices);
     render->enableAttribArray(vertexAttrib);
 
     // TexCoord
     render->getAttribLocation(m_fx, "TexCoord", &texcoordAttrib);
-    render->setAttribPointer(texcoordAttrib, M_FLOAT, 2, texCoords);
+    render->setAttribPointer(texcoordAttrib, M_FLOAT, 2, m_texCoords);
     render->enableAttribArray(texcoordAttrib);
 
     // Width

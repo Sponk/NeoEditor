@@ -80,6 +80,12 @@ void PostProcessor::updateResolution()
     unsigned int screenHeight = 0;
     system->getScreenSize(&screenWidth, &screenHeight);
 
+    // Update vertex cache
+    m_vertices[0] = MVector2(0, 0);
+    m_vertices[1] = MVector2(0, screenHeight);
+    m_vertices[3] = MVector2(screenWidth, screenHeight);
+    m_vertices[2] = MVector2(screenWidth, 0);
+
     m_textureWidth = screenWidth;
     m_textureHeight = screenHeight;
 

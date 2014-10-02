@@ -103,6 +103,12 @@ protected:
     }int_uniform_t;
 
     vector<uintptr_t> m_UniformList;
+
+    // Cache texture coordinates for faster rendering
+    MVector2 m_texCoords[4];
+
+    // Cache vertices for faster rendering
+    MVector2 m_vertices[4];
 };
 
 #endif
