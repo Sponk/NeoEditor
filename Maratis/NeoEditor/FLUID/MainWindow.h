@@ -336,6 +336,7 @@ public:
   Fl_Button *vert_btn;
   Fl_Button *frag_btn;
   Fl_Button *preview_btn;
+  Fl_Value_Input *resolution_edit;
   static void uniform_select_callback(Fl_Browser* widget, PostEffectsDlg* dlg);
   static void find_vert_file_callback(Fl_Button* widget, PostEffectsDlg* dlg);
   static void find_frag_file_callback(Fl_Button* widget, PostEffectsDlg* dlg);
@@ -351,6 +352,7 @@ public:
   static void update_uniform_float(Fl_Button* btn, PostEffectsDlg* dlg);
   static void save_profile_callback(Fl_Button* widget, PostEffectsDlg* dlg);
   static void load_profile_callback(Fl_Button* widget, PostEffectsDlg* dlg);
+  static void update_resolution(Fl_Value_Input* value, PostEffectsDlg* dlg);
 };
 
 class WaitDlg {

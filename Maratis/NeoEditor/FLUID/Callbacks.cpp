@@ -2008,6 +2008,8 @@ void configuration_callback(Fl_Menu_*, void*)
 
 void post_effects_setup_callback(Fl_Menu_*, void*)
 {
+    Maratis::getInstance()->autoSave();
+
     PostEffectsDlg dlg;
     Fl_Window* window = dlg.create_window();
 

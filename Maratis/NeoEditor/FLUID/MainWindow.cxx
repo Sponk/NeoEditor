@@ -4734,6 +4734,13 @@ Fl_Double_Window* PostEffectsDlg::create_window() {
     { preview_btn = new Fl_Button(417, 312, 168, 27, "Load Shader");
       preview_btn->callback((Fl_Callback*)preview_callback, (void*)(this));
     } // Fl_Button* preview_btn
+    { resolution_edit = new Fl_Value_Input(231, 318, 39, 18, "Resolution:");
+      resolution_edit->tooltip("Modifies the resolution of the post effects texture.\nvalue = 0.5 means half \
+window resolution, value = 1.0 means full window resolution etc.");
+      resolution_edit->step(0.01);
+      resolution_edit->value(1);
+      resolution_edit->callback((Fl_Callback*)update_resolution, (void*)(this));
+    } // Fl_Value_Input* resolution_edit
     o->end();
   } // Fl_Double_Window* o
   if(!::window.glbox->hasPostEffects())
@@ -4750,12 +4757,14 @@ Fl_Double_Window* PostEffectsDlg::create_window() {
   	add_uniform->deactivate();
   	save_button->deactivate();
   	load_button->deactivate();
+  	resolution_edit->deactivate();
   }
   else
   {
   	use_post_effects->value(1);
   	vert_shad_edit->value(::window.glbox->getPostProcessor()->getVertexShader());
   	frag_shad_edit->value(::window.glbox->getPostProcessor()->getFragmentShader());
+  	resolution_edit->value(::window.glbox->getPostProcessor()->getResolutionMultiplier());
   	
   	update_uniform_list();
   }
@@ -4801,7 +4810,12 @@ void PostEffectsDlg::preview_callback(Fl_Button* widget, PostEffectsDlg* dlg) {
   	return;
   
   PostProcessor* postProcessor = ::window.glbox->getPostProcessor();
+  
+  postProcessor->setResolutionMultiplier(dlg->resolution_edit->value());
   postProcessor->loadShaderFile(dlg->vert_shad_edit->value(), dlg->frag_shad_edit->value());
+  
+  // For use when saving the project
+  engine->getGame()->getPostProcessor()->setResolutionMultiplier(dlg->resolution_edit->value());
   
   ::window.glbox->enablePostEffects();
 }
@@ -4819,6 +4833,7 @@ void PostEffectsDlg::use_post_effects_callback(Fl_Check_Button* widget, PostEffe
   	dlg->add_uniform->activate();
   	dlg->save_button->activate();
   	dlg->load_button->activate();
+  	dlg->resolution_edit->activate();
   	
   	::window.glbox->enablePostEffects();
   }
@@ -4834,6 +4849,7 @@ void PostEffectsDlg::use_post_effects_callback(Fl_Check_Button* widget, PostEffe
   	dlg->add_uniform->deactivate();
   	dlg->save_button->deactivate();
   	dlg->load_button->deactivate();
+  	dlg->resolution_edit->deactivate();
   	
   	::window.glbox->disablePostEffects();
   }
@@ -4954,6 +4970,13 @@ void PostEffectsDlg::load_profile_callback(Fl_Button* widget, PostEffectsDlg* dl
   }
   
   dlg->update_uniform_list();
+}
+
+void PostEffectsDlg::update_resolution(Fl_Value_Input* value, PostEffectsDlg* dlg) {
+  PostProcessor* pp = ::window.glbox->getPostProcessor();
+  pp->setResolutionMultiplier(value->value());
+  
+  MEngine::getInstance()->getGame()->getPostProcessor()->setResolutionMultiplier(value->value());
 }
 
 Fl_Double_Window* WaitDlg::create_window() {

@@ -73,10 +73,17 @@ bool MProject::loadXML(const char * filename)
     {
        const char* vertShad = gameNode->Attribute("vertex_shader");
        const char* fragShad = gameNode->Attribute("fragment_shader");
+       const char* resolution_string = gameNode->Attribute("resolution");
+
+       float resolution = 1.0;
+
+       if(resolution_string)
+            sscanf(resolution_string, "%f", &resolution);
 
        if(game)
        {
            game->getPostProcessor()->setShaderPath(vertShad, fragShad);
+           game->getPostProcessor()->setResolutionMultiplier(resolution);
            game->enablePostEffects();
        }
     }
@@ -135,8 +142,9 @@ bool MProject::saveXML(const char * filename)
     MGame* game = MEngine::getInstance()->getGame();
     if(game != NULL && game->hasPostEffects())
     {
-        fprintf(file, "<Game vertex_shader=\"%s\" fragment_shader=\"%s\"/>\n",
-                game->getPostProcessor()->getVertexShader(), game->getPostProcessor()->getFragmentShader());
+        fprintf(file, "<Game vertex_shader=\"%s\" fragment_shader=\"%s\" resolution=\"%f\"/>\n",
+                game->getPostProcessor()->getVertexShader(), game->getPostProcessor()->getFragmentShader(),
+                game->getPostProcessor()->getResolutionMultiplier());
     }
 
     fprintf(file, "<Project>\n\n");
