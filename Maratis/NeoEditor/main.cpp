@@ -488,16 +488,20 @@ void load_translation(const char* confdir, const char* rep)
     char dir[256];
     getGlobalFilename(dir, fullpath.c_str(), "language.ini");
 
-    MLOG_INFO("File: " << dir);
-
     INI::Parser parser(dir);
-    const char* langname = parser.top()("lang")["name"].c_str();
+    string langname = parser.top()("lang")["name"].c_str();
 
     // Default to english
-    if(strlen(langname) == 0)
+    if(langname.empty())
         langname = "english.ini";
 
-    getGlobalFilename(dir, rep, langname);
+#ifndef WIN32
+    langname = string("translations/") + langname;
+#else
+    langname = string("translations\\") + langname;
+#endif
+
+    getGlobalFilename(dir, rep, langname.c_str());
     Translator::getInstance()->loadTranslation(dir);
 }
 
