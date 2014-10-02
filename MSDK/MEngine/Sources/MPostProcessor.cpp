@@ -84,7 +84,7 @@ void MPostProcessor::updateResolution()
     render->setTextureFilterMode(M_TEX_FILTER_LINEAR, M_TEX_FILTER_LINEAR);
     render->setTextureUWrapMode(M_WRAP_CLAMP);
     render->setTextureVWrapMode(M_WRAP_CLAMP);
-    render->texImage(0, m_Resolution, m_Resolution, M_UBYTE, M_RGB, 0);
+    render->texImage(0, m_Resolution, m_Resolution, M_FLOAT, M_RGB, 0);
 
     render->createTexture(&m_DepthTexID);
     render->bindTexture(m_DepthTexID);
