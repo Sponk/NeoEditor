@@ -273,7 +273,7 @@ int GLBox::handle(int event)
     {
     case FL_KEYBOARD:
         {
-            if(this != Fl::focus() || Fl::event_ctrl())
+            if(this != Fl::focus() || (Fl::event_ctrl() && !MEngine::getInstance()->getGame()->isRunning()))
                 return 0;
 
             key[0] = toupper(Fl::event_text()[0]);
@@ -294,6 +294,12 @@ int GLBox::handle(int event)
                 {
                     input->upKey(c);
                 }
+            }
+
+            if(key[0] == ' ')
+            {
+                input->downKey("SPACE");
+                return 1;
             }
 
             switch(Fl::event_key())
@@ -324,7 +330,42 @@ int GLBox::handle(int event)
             case FL_Right:
                     input->downKey("RIGHT");
                     return 1;
-                break;
+            case FL_Control_L:
+                    input->downKey("LCONTROL");
+                    return 1;
+
+            case FL_Control_R:
+                    input->downKey("RCONTROL");
+                    return 1;
+
+            case FL_Alt_L:
+                    input->downKey("LALT");
+                    return 1;
+
+            case FL_Alt_R:
+                    input->downKey("RALT");
+                    return 1;
+
+            case FL_Enter:
+                    input->downKey("ENTER");
+                    return 1;
+
+            case FL_Delete:
+                    input->downKey("DELETE");
+                    break;
+
+            case FL_Escape:
+                    input->downKey("ESCAPE");
+                    return 1;
+
+            case FL_Tab:
+                    input->downKey("TAB");
+                    return 1;
+
+            case FL_BackSpace:
+                    input->downKey("BACKSPACE");
+                    return 1;
+
             }
 
             Fl_Gl_Window::handle(event);
@@ -358,6 +399,11 @@ int GLBox::handle(int event)
                 }
             }
 
+            if(key[0] == ' ')
+            {
+                input->upKey("SPACE");
+            }
+
             switch(Fl::event_key())
             {
             case FL_Shift_L:
@@ -370,19 +416,57 @@ int GLBox::handle(int event)
 
             case FL_Up:
                     input->upKey("UP");
+                    return 1;
                 break;
 
             case FL_Down:
-                input->upKey("DOWN");
+                    input->upKey("DOWN");
+                    return 1;
                 break;
 
             case FL_Left:
-                input->upKey("LEFT");
+                    input->upKey("LEFT");
+                    return 1;
                 break;
 
             case FL_Right:
-                input->upKey("RIGHT");
-                break;
+                    input->upKey("RIGHT");
+                    return 1;
+            case FL_Control_L:
+                    input->upKey("LCONTROL");
+                    return 1;
+
+            case FL_Control_R:
+                    input->upKey("RCONTROL");
+                    return 1;
+
+            case FL_Alt_L:
+                    input->upKey("LALT");
+                    return 1;
+
+            case FL_Alt_R:
+                    input->upKey("RALT");
+                    return 1;
+
+            case FL_Enter:
+                    input->upKey("ENTER");
+                    return 1;
+
+            case FL_Delete:
+                    input->upKey("DELETE");
+                    break;
+
+            case FL_Escape:
+                    input->upKey("ESCAPE");
+                    return 1;
+
+            case FL_Tab:
+                    input->upKey("TAB");
+                    return 1;
+
+            case FL_BackSpace:
+                    input->upKey("BACKSPACE");
+                    return 1;
             }
 
             Fl_Gl_Window::handle(event);
