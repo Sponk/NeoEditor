@@ -16,6 +16,10 @@ void Translator::loadTranslation(const char* file)
 #else
     const char* substr = strrchr(file, '\\');
 #endif
+
+    if(substr == NULL)
+        substr = file;
+
     strcpy(m_langFile, ++substr);
 }
 
