@@ -273,6 +273,7 @@ void open_project_callback(Fl_Menu_*, void*)
         win->show();
 
         // Somehow needs 4 Fl::wait calls for the window to actually appear
+        // TODO: Own thread!
         Fl::wait();
         Fl::wait();
         Fl::wait();

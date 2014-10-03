@@ -279,7 +279,7 @@ int GLBox::handle(int event)
             key[0] = toupper(Fl::event_text()[0]);
             MEngine::getInstance()->getInputContext()->downKey(key);
 
-            char keys[27] = {"ABCDEFGHIJKLMNOPQRSTUVWXYZ"};
+            char keys[] = {"ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789"};
 
             for(int i = 0; i < sizeof(keys); i++)
             {
@@ -328,7 +328,11 @@ int GLBox::handle(int event)
             }
 
             Fl_Gl_Window::handle(event);
-            return isalpha(Fl::event_text()[0]);
+
+            if(MEngine::getInstance()->getGame()->isRunning())
+                return isalnum(Fl::event_text()[0]);
+            else
+                return isalpha(Fl::event_text()[0]);
         }
         break;
 
@@ -337,7 +341,7 @@ int GLBox::handle(int event)
             if(this != Fl::focus())
                 return 0;
 
-            char keys[27] = {"ABCDEFGHIJKLMNOPQRSTUVWXYZ"};
+            char keys[] = {"ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789"};
 
             for(int i = 0; i < sizeof(keys); i++)
             {
