@@ -232,6 +232,7 @@ void update_scene_tree()
     window.scenes_menu->value(level->getCurrentSceneId());
 
     update_behavior_menu();
+    window.scene_tree->redraw();
 }
 
 void open_level_callback(Fl_Menu_*, void*)
