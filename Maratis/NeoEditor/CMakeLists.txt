@@ -1,5 +1,6 @@
 ## Find source and headers
 FILE(GLOB_RECURSE HEADERS *.h)
+# TODO: Need to include *.m* files for MAC!!!
 FILE(GLOB_RECURSE SOURCES *.c*)
 
 IF(CMAKE_HAS_SORT)
@@ -24,7 +25,6 @@ INCLUDE_DIRECTORIES(
   ${MARATIS_COMMON_INCLUDE_DIR}
   ${MCORE_INCLUDE_DIR}
   ${MENGINE_INCLUDE_DIR}
-  ${MGUI_INCLUDE_DIR}
 
   ## 3rdparty include directories
   ${ASSIMP_INCLUDE_DIR}
@@ -51,7 +51,6 @@ TARGET_LINK_LIBRARIES(neo-editor
   ${MARATIS_COMMON_LIBRARIES}
   ${MCORE_LIBRARIES}
   ${MENGINE_LIBRARIES}
-  ${MGUI_LIBRARIES}
 
   ## 3rdparty libraries
   ${ASSIMP_LIBRARIES}

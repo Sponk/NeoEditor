@@ -17,7 +17,7 @@
 #include <FL/Fl_Tree_Prefs.H>
 
 #include <MEngine.h>
-#include <MWindow.h>
+#include "../MWindow/MWindow.h"
 #include <MLoaders/MImageLoader.h>
 #include <MFileManager/MLevelLoad.h>
 #include <MFileManager/MLevelSave.h>

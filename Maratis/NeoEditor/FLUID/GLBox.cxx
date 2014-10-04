@@ -4,8 +4,7 @@
 #include <MLoaders/MImageLoader.h>
 #include <MLog.h>
 
-#include <MMouse.h>
-#include <MGui.h>
+#include "../MWindow/MMouse.h"
 #include "../MFilesUpdate/MFilesUpdate.h"
 #include "../Maratis/Maratis.h"
 #include "Callbacks.h"

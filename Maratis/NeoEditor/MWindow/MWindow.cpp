@@ -31,8 +31,7 @@
 
 
 #include <MEngine.h>
-#include <MMouse.h>
-#include <MKeyboard.h>
+#include "MMouse.h"
 #include "MWindow.h"
 
 #include <SDL.h>
@@ -242,48 +241,7 @@ void MWindow::setFullscreen(bool fullscreen)
 
 void MWindow::sendEvents(MWinEvent * event)
 {
-	MKeyboard * keyboard = MKeyboard::getInstance();
-	MMouse * mouse = MMouse::getInstance();
-
-	switch(event->type)
-	{
-		case MWIN_EVENT_KEY_DOWN:
-			keyboard->onKeyDown(event->data[0]);
-			break;
-
-		case MWIN_EVENT_KEY_UP:
-			keyboard->onKeyUp(event->data[0]);
-			break;
-
-		case MWIN_EVENT_WINDOW_RESIZE:
-			m_width = (unsigned int)event->data[0];
-			m_height = (unsigned int)event->data[1];
-			break;
-
-		case MWIN_EVENT_WINDOW_MOVE:
-			m_position[0] = event->data[0];
-			m_position[1] = event->data[1];
-			break;
-
-		case MWIN_EVENT_MOUSE_BUTTON_DOWN:
-			mouse->downButton(event->data[0]);
-			break;
-
-		case MWIN_EVENT_MOUSE_BUTTON_UP:
-			mouse->upButton(event->data[0]);
-			break;
-
-		case MWIN_EVENT_MOUSE_WHEEL_MOVE:
-			mouse->setWheelDirection(event->data[0]);
-			break;
-
-		case MWIN_EVENT_MOUSE_MOVE:
-			mouse->setPosition(event->data[0], event->data[1]);
-			break;
-	}
-
-	if(m_pointerEvent)
-		m_pointerEvent(event);
+    MLOG_WARNING("Don't use MWindow for events!");
 }
 
 bool MWindow::isMouseOverWindow(void)
@@ -768,3 +726,16 @@ void MWindow::messagebox(const char* content, const char* title)
     fl_message_title(title);
     fl_message(content);
 }
+
+const char * MWindow::getTempDirectory(void)
+{
+    static char tempDirectory[8] = "/tmp";
+    return tempDirectory;
+}
+
+void MWindow::resize(unsigned int width, unsigned int height)
+{
+    m_width = width;
+    m_height = height;
+}
+

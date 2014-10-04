@@ -53,7 +53,7 @@
 #include <MCore.h>
 #include <MEngine.h>
 #include <MVariable.h>
-#include <MMouse.h>
+#include "../MWindow/MMouse.h"
 #include <MBehavior.h>
 #include <MBehaviors/MBLookAt.h>
 #include <MBehaviors/MBFollow.h>

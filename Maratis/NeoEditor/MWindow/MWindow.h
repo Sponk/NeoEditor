@@ -32,7 +32,7 @@
 #ifndef _M_WINDOW_H
 #define _M_WINDOW_H
 
-#include <MWinEvents.h>
+#include "MWinEvents.h"
 
 #include <SDL_joystick.h>
 #include <SDL_gamecontroller.h>
@@ -97,11 +97,9 @@ public:
 		return &m_instance;
 	}
 
-public:
-
 	// create
 	bool create(const char * title, unsigned int width, unsigned int height, int colorBits, bool fullscreen);
-    void resize(unsigned int width, unsigned int height) {}
+    void resize(unsigned int width, unsigned int height);
 
 	// events
 	inline void setPointerEvent(void (*pointerEvent)(MWinEvent * windowEvents)){ m_pointerEvent = pointerEvent; }
