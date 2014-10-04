@@ -792,6 +792,12 @@ Fl_Double_Window* EditorWindow::create_camera_window() {
       camera_skybox_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       camera_skybox_edit->when(FL_WHEN_ENTER_KEY);
     } // Fl_Input* camera_skybox_edit
+    { Fl_Button* o = new Fl_Button(6, 537, 213, 27, tr("Apply editor perspective"));
+      o->callback((Fl_Callback*)apply_editor_perspective);
+    } // Fl_Button* o
+    { Fl_Button* o = new Fl_Button(6, 573, 213, 27, tr("Set perspective to camera"));
+      o->callback((Fl_Callback*)set_editor_perspective);
+    } // Fl_Button* o
     o->end();
   } // Fl_Double_Window* o
   return w;

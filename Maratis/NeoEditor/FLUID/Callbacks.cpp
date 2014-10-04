@@ -2139,3 +2139,30 @@ void show_console_callback(Fl_Button*, void*)
 
     console.output_edit->buffer(&console_buffer);
 }
+
+void apply_editor_perspective(Fl_Button *, void *)
+{
+    MOCamera* vue = Maratis::getInstance()->getPerspectiveVue();
+    MObject3d* selectedObject = Maratis::getInstance()->getSelectedObjectByIndex(0);
+
+    if(selectedObject)
+    {
+        *selectedObject->getMatrix() = *vue->getMatrix();
+    }
+
+    Maratis::getInstance()->clearSelectedObjects();
+}
+
+void set_editor_perspective(Fl_Button *, void *)
+{
+    MOCamera* vue = Maratis::getInstance()->getPerspectiveVue();
+    MObject3d* selectedObject = Maratis::getInstance()->getSelectedObjectByIndex(0);
+
+    if(selectedObject)
+    {
+        vue->setPosition(selectedObject->getTransformedPosition());
+        vue->setRotation(selectedObject->getRotation());
+    }
+
+    Maratis::getInstance()->clearSelectedObjects();
+}

@@ -73,6 +73,8 @@ extern void choose_camera_color(Fl_Button*, void*);
 extern void edit_camera_properties_chk_btn(Fl_Check_Button*, void*);
 extern void choose_fog_color(Fl_Button*, void*);
 extern void edit_camera_skybox(Fl_Input*, void*);
+extern void apply_editor_perspective(Fl_Button*, void*);
+extern void set_editor_perspective(Fl_Button*, void*);
 #include <FL/Fl_Text_Editor.H>
 extern void edit_text_properties(Fl_Text_Editor*, void*);
 extern void edit_text_properties(Fl_Input*, void*);

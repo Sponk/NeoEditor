@@ -26,7 +26,7 @@ class EditorWindow {open
     Fl_Window {} {
       label {Neo Editor}
       callback window_quit open
-      xywh {1878 250 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
+      xywh {1866 280 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -716,9 +716,10 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
       }
     }
   }
-  Function {create_camera_window()} {} {
+  Function {create_camera_window()} {open
+  } {
     Fl_Window {} {open
-      xywh {2552 223 258 660} type Double hide
+      xywh {1848 224 258 660} type Double visible
     } {
       Fl_Group {} {
         label {Clear Color:} open
@@ -809,6 +810,16 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
         label {Skybox Textures:}
         callback edit_camera_skybox
         tooltip {Path to textures used by the skybox.} xywh {6 504 213 24} align 5 when 8
+      }
+      Fl_Button {} {
+        label {Apply editor perspective}
+        callback apply_editor_perspective
+        xywh {6 537 213 27}
+      }
+      Fl_Button {} {
+        label {Set perspective to camera}
+        callback set_editor_perspective selected
+        xywh {6 573 213 27}
       }
     }
   }
@@ -1886,7 +1897,7 @@ class ConfigurationDlg {open
   } {
     Fl_Window {} {
       label Configuration open
-      xywh {1970 367 543 348} type Double visible
+      xywh {1970 395 543 348} type Double hide
     } {
       Fl_Tabs {} {open
         xywh {0 3 546 342}
@@ -2195,8 +2206,7 @@ Fl::scheme(themes[dlg->theme_chooser->value()]);
 
 // FIXME: UGLY!!
 dlg->foreground_color_b->parent()->parent()->parent()->parent()->redraw();
-main_window->redraw();} {selected
-    }
+main_window->redraw();} {}
   }
   Function {setInputMethod(Fl_Menu_*, long idx)} {open return_type {static void}
   } {
