@@ -2123,8 +2123,7 @@ void play_game_in_editor(Fl_Button* button, void *)
 
     // update matrices
     scene->updateObjectsMatrices();
-    Maratis::getInstance()->getPerspectiveVue()->setPosition(matrix.getTranslationPart());
-    Maratis::getInstance()->getPerspectiveVue()->updateMatrix();
+    *Maratis::getInstance()->getPerspectiveVue()->getMatrix() = matrix;
 
     button->label(text);
 }
