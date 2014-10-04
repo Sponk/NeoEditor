@@ -368,10 +368,20 @@ int GLBox::handle(int event)
 
             }
 
+            char fkey[4];
+            for(int i = 1; i <= 12; i++)
+            {
+                if(Fl::event_key() == FL_F + i)
+                {
+                    sprintf(fkey, "F%d", i);
+                    input->downKey(fkey);
+                }
+            }
+
             Fl_Gl_Window::handle(event);
 
             if(MEngine::getInstance()->getGame()->isRunning())
-                return isalnum(Fl::event_text()[0]);
+                return 1;
             else
                 return isalpha(Fl::event_text()[0]);
         }
@@ -467,6 +477,16 @@ int GLBox::handle(int event)
             case FL_BackSpace:
                     input->upKey("BACKSPACE");
                     return 1;
+            }
+
+            char fkey[4];
+            for(int i = 1; i <= 12; i++)
+            {
+                if(Fl::event_key() == FL_F + i)
+                {
+                    sprintf(fkey, "F%d", i);
+                    input->upKey(fkey);
+                }
             }
 
             Fl_Gl_Window::handle(event);
