@@ -727,12 +727,6 @@ void MWindow::messagebox(const char* content, const char* title)
     fl_message(content);
 }
 
-const char * MWindow::getTempDirectory(void)
-{
-    static char tempDirectory[8] = "/tmp";
-    return tempDirectory;
-}
-
 void MWindow::resize(unsigned int width, unsigned int height)
 {
     m_width = width;
