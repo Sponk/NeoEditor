@@ -8,7 +8,7 @@ const char* tr(const char* key)
 
 void Translator::loadTranslation(const char* file)
 {
-	if(isFileExist(file))
+    if(!isFileExist(file))
 		return;
 
     SAFE_DELETE(m_parser);
