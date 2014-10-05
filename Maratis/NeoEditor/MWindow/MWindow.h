@@ -147,6 +147,7 @@ public:
 
 	// execute
 	void execute(const char * path, const char * args);
+    void executeDetached(const char* path, const char* args, bool killParent);
 
 	// sleep
 	void sleep(double time);

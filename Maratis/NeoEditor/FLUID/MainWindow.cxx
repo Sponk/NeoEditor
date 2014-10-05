@@ -4680,24 +4680,26 @@ void ConfigurationDlg::apply_settings_callback(Fl_Button*,ConfigurationDlg* dlg)
   const char* themes[] = {"gtk+", "gleam", "plastic", "none"};
   Fl::scheme(themes[dlg->theme_chooser->value()]);
   
-    if(dlg->lang_chooser->changed())
+    if(dlg->lang_chooser->changed() && fl_ask(tr("Your language selection requires the application to restart. Continue?")))
     {
-    	fl_message(tr("Your language selection will be applied after you restarted the application!"));
-    
     	// Load all languages
     	char dir[256];
     	getGlobalFilename(dir, MWindow::getInstance()->getCurrentDirectory(), "translations");
-    	std::vector<std::string> files;
     
-    	readDirectory(dir, &files, false, false);
+  	std::vector<std::string> files;
+  	readDirectory(dir, &files, false, false); 	
     
     	#ifndef WIN32
       	Translator::getInstance()->loadTranslation((string(dir) + "/" + files[dlg->lang_chooser->value()]).c_str());
     	#else
     	Translator::getInstance()->loadTranslation((string(dir) + "\\" + files[dlg->lang_chooser->value()]).c_str());
-    	#endif
-    
-    }
+    	#endif  
+   
+   	save_settings();	
+   	
+    	getGlobalFilename(dir, MWindow::getInstance()->getCurrentDirectory(), "neo-editor");
+    	MWindow::getInstance()->executeDetached(dir, NULL, true);
+     }
   
   // FIXME: UGLY!!
   dlg->foreground_color_b->parent()->parent()->parent()->parent()->redraw();

@@ -88,4 +88,25 @@ void MWindow::execute(const char * path, const char * args)
 {
 	ShellExecute(NULL, "open", path, args, NULL, SW_SHOWNORMAL);
 }
+
+void MWindow::executeDetached(const char * path, const char * args, bool killParent)
+{
+    PROCESS_INFORMATION ProcessInfo;
+    STARTUPINFO StartupInfo;
+
+    ZeroMemory(&StartupInfo, sizeof(StartupInfo));
+    StartupInfo.cb = sizeof(StartupInfo);
+
+    if(CreateProcess(path, args,
+        NULL,NULL,FALSE,0,NULL,
+        NULL,&StartupInfo,&ProcessInfo))
+    {
+        if(killParent)
+            exit(0);
+    }
+    else
+    {
+        MLOG_ERROR("Could not start process!");
+    }
+}
 #endif

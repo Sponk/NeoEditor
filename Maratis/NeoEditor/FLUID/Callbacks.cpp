@@ -80,80 +80,85 @@ MVector3 flColorToVector(int c)
     return MVector3(static_cast<float>(bytes[0])/255.0f, static_cast<float>(bytes[1])/255.0f, static_cast<float>(bytes[2])/255.0f);
 }
 
+void save_settings()
+{
+    // Save settings
+    #ifndef WIN32
+        std::string fullpath = getenv("HOME");
+        fullpath += "/.neoeditor/";
+    #else
+        std::string fullpath = getenv("APPDATA");
+        fullpath += "\\neoeditor\\";
+    #endif
+
+    char dir[256];
+    getGlobalFilename(dir, fullpath.c_str(), "config.ini");
+
+    if(!isFileExist(fullpath.c_str()))
+        createDirectory(fullpath.c_str());
+
+    MLOG_INFO("Saving settings to: " << dir);
+
+    ofstream out(dir);
+    if(out)
+    {
+        if(window.inputMethod != NULL)
+        {
+            out << "[input]" << endl;
+            out << "inputMethod=" << window.inputMethod->getName() << endl;
+        }
+
+        out << "[theme]" << endl;
+
+        if(Fl::scheme() != NULL)
+            out << "scheme=" << Fl::scheme() << endl;
+        else
+            out << "scheme=none" << endl;
+
+        MVector3 vector = flColorToVector(Fl::get_color(FL_BACKGROUND_COLOR));
+        out << "background_r=" << vector.x << endl;
+        out << "background_g=" << vector.y << endl;
+        out << "background_b=" << vector.z << endl;
+
+        vector = flColorToVector(Fl::get_color(FL_BACKGROUND2_COLOR));
+        out << "background2_r=" << vector.x << endl;
+        out << "background2_g=" << vector.y << endl;
+        out << "background2_b=" << vector.z << endl;
+
+        vector = flColorToVector(Fl::get_color(FL_FOREGROUND_COLOR));
+        out << "foreground_r=" << vector.x << endl;
+        out << "foreground_g=" << vector.y << endl;
+        out << "foreground_b=" << vector.z << endl;
+
+        out << "[window]" << endl;
+        out << "xpos=" << main_window->x_root() << endl;
+        out << "ypos=" << main_window->y_root() << endl;
+        out << "width=" << main_window->w() << endl;
+        out << "height=" << main_window->h() << endl;
+        out << "translationSpeed=" << translation_speed << endl;
+        out << "rotationSpeed=" << rotation_speed << endl;
+
+        out.close();
+    }
+
+    getGlobalFilename(dir, fullpath.c_str(), "language.ini");
+    out.open(dir, ios::out);
+
+    MLOG_INFO("Writing language settings to: " << dir);
+
+    if(out)
+    {
+        out << "[lang]" << endl << "name=" << Translator::getInstance()->getLanguageFile();
+        out.close();
+    }
+}
+
 void quit_callback(Fl_Menu_*, void*)
 {
     if(fl_ask(tr("Do you really want to exit?")))
     {
-        // Save settings
-        #ifndef WIN32
-            std::string fullpath = getenv("HOME");
-            fullpath += "/.neoeditor/";
-        #else
-            std::string fullpath = getenv("APPDATA");
-            fullpath += "\\neoeditor\\";
-        #endif
-
-        char dir[256];
-        getGlobalFilename(dir, fullpath.c_str(), "config.ini");
-
-        if(!isFileExist(fullpath.c_str()))
-            createDirectory(fullpath.c_str());
-
-        MLOG_INFO("Saving settings to: " << dir);
-
-        ofstream out(dir);
-        if(out)
-        {
-            if(window.inputMethod != NULL)
-            {
-                out << "[input]" << endl;
-                out << "inputMethod=" << window.inputMethod->getName() << endl;
-            }
-
-            out << "[theme]" << endl;
-
-            if(Fl::scheme() != NULL)
-                out << "scheme=" << Fl::scheme() << endl;
-            else
-                out << "scheme=none" << endl;
-
-            MVector3 vector = flColorToVector(Fl::get_color(FL_BACKGROUND_COLOR));
-            out << "background_r=" << vector.x << endl;
-            out << "background_g=" << vector.y << endl;
-            out << "background_b=" << vector.z << endl;
-
-            vector = flColorToVector(Fl::get_color(FL_BACKGROUND2_COLOR));
-            out << "background2_r=" << vector.x << endl;
-            out << "background2_g=" << vector.y << endl;
-            out << "background2_b=" << vector.z << endl;
-
-            vector = flColorToVector(Fl::get_color(FL_FOREGROUND_COLOR));
-            out << "foreground_r=" << vector.x << endl;
-            out << "foreground_g=" << vector.y << endl;
-            out << "foreground_b=" << vector.z << endl;
-
-            out << "[window]" << endl;
-            out << "xpos=" << main_window->x_root() << endl;
-            out << "ypos=" << main_window->y_root() << endl;
-            out << "width=" << main_window->w() << endl;
-            out << "height=" << main_window->h() << endl;
-            out << "translationSpeed=" << translation_speed << endl;
-            out << "rotationSpeed=" << rotation_speed << endl;
-
-            out.close();            
-        }
-
-        getGlobalFilename(dir, fullpath.c_str(), "language.ini");
-        out.open(dir, ios::out);
-
-        MLOG_INFO("Writing language settings to: " << dir);
-
-        if(out)
-        {
-            out << "[lang]" << endl << "name=" << Translator::getInstance()->getLanguageFile();
-            out.close();
-        }
-
+        // Saving settings
+        save_settings();
         // Quitting engine
         MEngine::getInstance()->setActive(false);
         exit(0);
