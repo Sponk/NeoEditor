@@ -10,3 +10,4 @@ GenericName=Neo Scene Editor
 Categories=FLTK;Development
 Icon=/usr/share/icons/neo-icon.png
 Name[de_DE]=Neo Editor
+StartupWMClass=NeoEditor
