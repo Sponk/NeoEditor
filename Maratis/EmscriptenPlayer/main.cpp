@@ -84,7 +84,8 @@ void complete_update()
     window->onEvents();
 
     update();
-    draw();
+    engine->getLevel()->getCurrentScene()->draw(engine->getLevel()->getCurrentScene()->getCurrentCamera());
+    //draw();
     /*MLOG_INFO("Update");*/
     //MRenderingContext* render = engine->getRenderingContext();
     //render->setClearColor(MVector4(1.0,1.0,1.0,1.0));

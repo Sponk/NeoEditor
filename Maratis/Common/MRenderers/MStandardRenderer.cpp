@@ -1480,29 +1480,27 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 	unsigned int currentFrameBuffer = 0;
 	render->getCurrentFrameBuffer(&currentFrameBuffer);
 
-	// init
+        // init
 	render->setAlphaTest(0);
 	render->disableVertexArray();
 	render->disableTexCoordArray();
 	render->disableNormalArray();
 	render->disableColorArray();
-
-
+        
 	// destroy unused shadowLights
 	destroyUnusedShadowLights();
 
 	// decrease shadowLights score
 	decreaseShadowLights();
-
-
+       
 	// lights
 	unsigned int l;
 	unsigned int lSize = scene->getLightsNumber();
-
-
+        
 	// make frustum
 	camera->getFrustum()->makeVolume(camera);
-
+        
+#ifndef EMSCRIPTEN
 	// compute lights visibility
 	for(l=0; l<lSize; l++)
 	{
@@ -1510,8 +1508,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 		if(light->isActive())
 			light->updateVisibility(camera);
 	}
-
-
+	
 	// create frame buffer (TODO: only if minimum one shadow light)
 	if(m_fboId == 0)
 	{
@@ -1520,7 +1517,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 		render->setDrawingBuffers(NULL, 0);
 		render->bindFrameBuffer(currentFrameBuffer);
 	}
-
+	
 	render->disableLighting();
 	render->disableBlending();
 	m_forceNoFX = true;
@@ -1754,6 +1751,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 
 		render->clear(M_BUFFER_DEPTH);
 	}
+#endif
 
     render->disableDepthTest();
     render->disableCullFace();
@@ -1762,13 +1760,13 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
     camera->drawSkybox();
     render->enableDepthTest();
     render->disableScissorTest();
-
+    
 	// update visibility
-    updateVisibility(scene, camera);
+        updateVisibility(scene, camera);
 
 	// get camera frustum
 	MFrustum * frustum = camera->getFrustum();
-
+        
 	// fog
 	enableFog(camera);
 

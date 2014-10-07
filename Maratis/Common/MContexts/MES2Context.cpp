@@ -1109,7 +1109,7 @@ void MES2Context::setBlendingMode(M_BLENDING_MODES mode)
 // point size
 void MES2Context::setPointSize(float size)
 {
-    glPointSize(size);
+
 }
 
 #endif
