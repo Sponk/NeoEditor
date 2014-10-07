@@ -168,8 +168,12 @@ void MPluginScript::runScript(const char* filename)
 
 void MPluginScript::callFunction(const char* name)
 {
-    MEngine::getInstance()->setScriptContext(this);
+    MEngine* engine = MEngine::getInstance();
+    MScriptContext* oldContext = engine->getScriptContext();
+
+    engine->setScriptContext(this);
     MScript::callFunction(name);
+    engine->setScriptContext(oldContext);
 }
 
 bool MPluginScript::startCallFunction(const char *name)

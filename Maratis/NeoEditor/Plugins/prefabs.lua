@@ -490,7 +490,7 @@ end
 
 function load_callback()
 
-    local filename = openFileDlg("Choose a file", getProjectDir(), "*.mp")
+    local filename = openFileDlg("Choose a file", getProjectDir(), "*.mp")   
     
     if filename == nil then return end
         
