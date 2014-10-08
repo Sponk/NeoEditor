@@ -35,13 +35,16 @@ int DnDTree::handle(int e)
             if(item == NULL)
                 return 1;
 
+            if(!strcmp(item->label(), "ROOT"))
+                return 0;
+
             MObject3d* newParent = scene->getObjectByName(item->label());
             MObject3d* object = scene->getObjectByName(Fl::event_text());
 
             if(!object || !newParent)
             {
                 fl_message("Object you tried to drag does not exist! This shouldn't happen!");
-                return 1;
+                return 0;
             }
 
             MObject3d* parent = object->getParent();
