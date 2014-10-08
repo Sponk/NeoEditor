@@ -35,11 +35,15 @@ int DnDTree::handle(int e)
             if(item == NULL)
                 return 1;
 
-            if(!strcmp(item->label(), "ROOT"))
-                return 0;
-
             MObject3d* newParent = scene->getObjectByName(item->label());
             MObject3d* object = scene->getObjectByName(Fl::event_text());
+
+            if(newParent == NULL && object)
+            {
+                object->unLink();
+                this->do_callback(this, (long) 1);
+                return 1;
+            }
 
             if(!object || !newParent)
             {
