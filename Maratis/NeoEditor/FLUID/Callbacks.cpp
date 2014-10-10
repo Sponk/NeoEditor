@@ -2079,6 +2079,8 @@ void play_game_in_editor(Fl_Button* button, void *)
     button->label(tr("Stop game"));
     console_buffer.text("");
 
+    Fl::focus(::window.glbox);
+
     // Save perspective vue
     MMatrix4x4 matrix = *Maratis::getInstance()->getPerspectiveVue()->getMatrix();
 
