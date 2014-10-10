@@ -242,7 +242,7 @@ void update_scene_tree()
 
 void open_level_callback(Fl_Menu_*, void*)
 {
-    const char* filename = fl_native_file_chooser("Open level", "*.level", (current_project.path + "/levels").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser(tr("Open level"), "*.level", (current_project.path + "/levels").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(filename)
     {
@@ -258,7 +258,7 @@ void open_level_callback(Fl_Menu_*, void*)
 
 void open_project_callback(Fl_Menu_*, void*)
 {
-    if(!current_project.path.empty() && !fl_ask("You need to close the current project. Do you want to proceed?"))
+    if(!current_project.path.empty() && !fl_ask(tr("You need to close the current project. Do you want to proceed?")))
         return;
 
     const char* home = NULL;
@@ -269,7 +269,7 @@ void open_project_callback(Fl_Menu_*, void*)
     home = getenv("USERPROFILE");
 #endif
 
-    const char* filename = fl_native_file_chooser("Open project", "*.mproj", home, Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser(tr("Open project"), "*.mproj", home, Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(filename)
     {
@@ -1130,7 +1130,7 @@ void edit_name_callback(Fl_Input*, void*)
         if(!parent)
         {
             MLOG_ERROR("Can't set parent: Parent object not found!");
-            fl_alert("Can't set parent: Parent object not found!");
+            fl_alert(tr("Can't set parent: Parent object not found!"));
 
             window.parent_edit->value("none");
             update_scene_tree();
@@ -1219,7 +1219,7 @@ void choose_light_color(Fl_Button*, void*)
     double g = window.light_color_g->value();
     double b = window.light_color_b->value();
 
-    fl_color_chooser("Choose a color", r, g, b);
+    fl_color_chooser(tr("Choose a color"), r, g, b);
 
     window.light_color_r->value(r);
     window.light_color_g->value(g);
@@ -1234,7 +1234,7 @@ void choose_camera_color(Fl_Button*, void*)
 	double g = window.camera_color_g->value();
 	double b = window.camera_color_b->value();
 
-	fl_color_chooser("Choose a color", r, g, b);
+    fl_color_chooser(tr("Choose a color"), r, g, b);
 
 	window.camera_color_r->value(r);
 	window.camera_color_g->value(g);
@@ -1249,7 +1249,7 @@ void choose_fog_color(Fl_Button*, void*)
     double g = window.fog_color_g->value();
     double b = window.fog_color_b->value();
 
-    fl_color_chooser("Choose a color", r, g, b);
+    fl_color_chooser(tr("Choose a color"), r, g, b);
 
     window.fog_color_r->value(r);
     window.fog_color_g->value(g);
@@ -1263,7 +1263,7 @@ void publish_callback(Fl_Menu_*, void*)
     if(current_project.path.empty())
     {
         MLOG_ERROR("No project open!");
-        fl_message("Can't publish: You need to create/open a project first!");
+        fl_message(tr("Can't publish: You need to create/open a project first!"));
         return;
     }
 
@@ -1280,7 +1280,7 @@ void save_level_callback(Fl_Menu_ *, long mode)
     case 0:
         if(current_project.level.empty())
         {
-            filename = fl_native_file_chooser("Select a file to save", "*.level",  (current_project.path + "levels").c_str(),
+            filename = fl_native_file_chooser(tr("Select a file to save"), "*.level",  (current_project.path + "levels").c_str(),
                                               Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
 
             if(filename == NULL)
@@ -1294,7 +1294,7 @@ void save_level_callback(Fl_Menu_ *, long mode)
         break;
     // Save as
     case 1:
-        filename = fl_native_file_chooser("Select a file to save", "*.level", (current_project.path + "levels").c_str(),
+        filename = fl_native_file_chooser(tr("Select a file to save"), "*.level", (current_project.path + "levels").c_str(),
                                           Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
 
         if(filename == NULL)
@@ -1314,7 +1314,7 @@ void save_level_callback(Fl_Menu_ *, long mode)
 
 void new_project_callback(Fl_Menu_*, void*)
 {
-    const char* filename = fl_native_file_chooser("Select project file", "*.mproj", NULL, Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
+    const char* filename = fl_native_file_chooser(tr("Select project file"), "*.mproj", NULL, Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
 
     if(!filename)
         return;
@@ -1409,11 +1409,11 @@ void add_mesh_callback(Fl_Menu_*, void*)
 {
     if(current_project.level.empty())
     {
-        fl_message("You need to save the level before adding meshes!");
+        fl_message(tr("You need to save the level before adding meshes!"));
         return;
     }
 
-    const char* filename = fl_native_file_chooser("Choose mesh", "*.mesh", (current_project.path + "meshs").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser(tr("Choose mesh"), "*.mesh", (current_project.path + "meshs").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(filename)
     {
@@ -1506,7 +1506,7 @@ bool text_load_font(const char* name, MOText* text)
 
 void text_find_font_callback(Fl_Button*, void*)
 {
-    const char* filename = fl_native_file_chooser("Choose font", "*.ttf", (current_project.path + "fonts").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser(tr("Choose font"), "*.ttf", (current_project.path + "fonts").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
     MLevel* level = MEngine::getInstance()->getLevel();
     MOText* text = level->getCurrentScene()->getTextByName(window.name_edit->value());
 
@@ -1521,7 +1521,7 @@ void text_find_font_callback(Fl_Button*, void*)
 
     if(!text_load_font(filename, text))
     {
-        fl_alert("Could not load font!");
+        fl_alert(tr("Could not load font!"));
         return;
     }
 
@@ -1535,7 +1535,7 @@ void edit_text_properties(Fl_Widget*, void*)
 
     if(!text)
     {
-        MLOG_ERROR("Text field does not exist!");
+        MLOG_ERROR(tr("Text field does not exist!"));
         return;
     }
 
@@ -1553,7 +1553,7 @@ void edit_text_properties(Fl_Widget*, void*)
     if(!text_load_font(window.text_font_edit->value(), text))
     {
         window.text_font_edit->value(text->getFontRef()->getFilename());
-        fl_alert("Could not load font!");
+        fl_alert(tr("Could not load font!"));
     }
 }
 
@@ -1577,7 +1577,7 @@ void choose_text_color(Fl_Button*, void*)
     double g = window.text_g->value();
     double b = window.text_b->value();
 
-    fl_color_chooser("Choose a color", r, g, b);
+    fl_color_chooser(tr("Choose a color"), r, g, b);
 
     window.text_r->value(r);
     window.text_g->value(g);
@@ -1590,11 +1590,11 @@ void add_text_callback(Fl_Menu_ *, void *)
 {
     if(current_project.level.empty())
     {
-        fl_message("You need to save the level before adding objects!");
+        fl_message(tr("You need to save the level before adding objects!"));
         return;
     }
 
-    const char* filename = fl_native_file_chooser("Choose font", "*.ttf", (current_project.path + "fonts").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser(tr("Choose font"), "*.ttf", (current_project.path + "fonts").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(!filename)
         return;
@@ -1623,7 +1623,7 @@ void play_game_callback(Fl_Menu_*, void*)
 {
     if(current_project.path.empty())
     {
-        fl_alert("Can't run the game: You first have to open a project!");
+        fl_alert(tr("Can't run the game: You first have to open a project!"));
         return;
     }
 
@@ -1636,7 +1636,7 @@ void play_game_callback(Fl_Menu_*, void*)
     if(!isFileExist((current_project.path + "MaratisPlayer").c_str()))
     {
         MLOG_ERROR("Could not start player! Executable does not exist!");
-        fl_alert("Could not start player! Make sure that the executable exists and you have rights to start it.\nIf it does not exist, try the 'Update player' option in the project menu.");
+        fl_alert(tr("Could not start player! Make sure that the executable exists and you have rights to start it.\nIf it does not exist, try the 'Update player' option in the project menu."));
         return;
     }
 
@@ -1649,7 +1649,7 @@ void play_game_callback(Fl_Menu_*, void*)
     if(!isFileExist((current_project.path + "MaratisPlayer.exe").c_str()))
     {
         MLOG_ERROR("Could not start player! Executable does not exist!");
-        fl_alert("Could not start player! Make sure that the executable exists and you have rights to start it.\nIf it does not exist, try the 'Update player' option in the project menu.");
+        fl_alert(tr("Could not start player! Make sure that the executable exists and you have rights to start it.\nIf it does not exist, try the 'Update player' option in the project menu.");
         return;
     }
 
@@ -1660,14 +1660,14 @@ void play_game_callback(Fl_Menu_*, void*)
     if(file == NULL || errno != 0)
 	{
 		MLOG_ERROR("Could not start player!");
-		fl_alert("Could not start player! Make sure that the executable exists and you have rights to start it.\nIf it does not exist, try the 'Update player' option in the project menu.");
+        fl_alert(tr("Could not start player! Make sure that the executable exists and you have rights to start it.\nIf it does not exist, try the 'Update player' option in the project menu."));
 		return;
 	}
 
     if(console.closed)
     {
         Fl_Window* window = console.create_window();
-        window->label("Player Console");
+        window->label(tr("Player Console"));
         window->show();
     }
 
@@ -1729,7 +1729,7 @@ void add_behavior_menu_callback(Fl_Menu_* menu, const char* name)
     if((behavior->getObjectFilter() != object->getType()) && (behavior->getObjectFilter() != M_OBJECT3D))
     {
         MLOG_ERROR("Can't add behavior: Behavior is from a different type!");
-        fl_alert("Could not add behavior: Behavior is from a different type than the object!");
+        fl_alert(tr("Could not add behavior: Behavior is from a different type than the object!"));
         return;
     }
 
@@ -1756,7 +1756,7 @@ void update_behavior_menu()
 
 void import_mesh_callback(Fl_Menu_*, void*)
 {
-    const char* filename = fl_native_file_chooser("Choose file", "*.{obj,dae,3ds,b3d,ase,ifc,xgl,zgl,lwo,stl,x,ms3d,cob,irrmesh,md1,md2,md3,mdc,md5,ter}",
+    const char* filename = fl_native_file_chooser(tr("Choose file"), "*.{obj,dae,3ds,b3d,ase,ifc,xgl,zgl,lwo,stl,x,ms3d,cob,irrmesh,md1,md2,md3,mdc,md5,ter}",
                                                   current_project.path.c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(!filename)
@@ -1791,11 +1791,11 @@ void add_sound_callback(Fl_Menu_ *, void *)
 {
     if(current_project.level.empty())
     {
-        fl_message("You need to save the level before adding objects!");
+        fl_message(tr("You need to save the level before adding objects!"));
         return;
     }
 
-    const char* filename = fl_native_file_chooser("Choose file", "*.{wav,ogg}", (current_project.path + "sounds").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser(tr("Choose file"), "*.{wav,ogg}", (current_project.path + "sounds").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(!filename)
         return;
@@ -1855,7 +1855,7 @@ void scene_setup_callback(Fl_Menu_ *, void*)
 {
     if(current_project.level.empty())
     {
-        fl_message("You need to save the level before editing scene properties!");
+        fl_message(tr("You need to save the level before editing scene properties!"));
         return;
     }
 
@@ -1890,7 +1890,7 @@ void delete_scene_callback(Fl_Menu_ *, void *)
     if(level->getScenesNumber()-1 <= 0)
     {
         MLOG_INFO("Can not delete scene! The level needs at least one scene!");
-        fl_alert("Can not delete scene! The level needs at least one scene!");
+        fl_alert(tr("Can not delete scene! The level needs at least one scene!"));
         return;
     }
 
@@ -2006,7 +2006,7 @@ void plugin_console_callback(Fl_Menu_*, void*)
     if(pluginConsole.closed)
     {
         Fl_Window* window = pluginConsole.create_window();
-        window->label("Plugin Console");
+        window->label(tr("Plugin Console"));
         window->show();
     }
 
@@ -2140,7 +2140,7 @@ void show_console_callback(Fl_Button*, void*)
     if(console.closed)
     {
         Fl_Window* window = console.create_window();
-        window->label("Player Console");
+        window->label(tr("Player Console"));
         window->show();
     }
 
