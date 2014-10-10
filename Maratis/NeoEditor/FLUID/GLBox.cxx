@@ -379,7 +379,8 @@ int GLBox::handle(int event)
 
             Fl_Gl_Window::handle(event);
 
-            if(MEngine::getInstance()->getGame()->isRunning())
+            // F6 should _always_ work to end the game!
+            if(MEngine::getInstance()->getGame()->isRunning() && Fl::event_key() != FL_F + 6)
                 return 1;
             else
                 return isalpha(Fl::event_text()[0]);
