@@ -1649,7 +1649,7 @@ void play_game_callback(Fl_Menu_*, void*)
     if(!isFileExist((current_project.path + "MaratisPlayer.exe").c_str()))
     {
         MLOG_ERROR("Could not start player! Executable does not exist!");
-        fl_alert(tr("Could not start player! Make sure that the executable exists and you have rights to start it.\nIf it does not exist, try the 'Update player' option in the project menu.");
+        fl_alert(tr("Could not start player! Make sure that the executable exists and you have rights to start it.\nIf it does not exist, try the 'Update player' option in the project menu."));
         return;
     }
 
