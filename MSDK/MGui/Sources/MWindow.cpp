@@ -35,6 +35,10 @@
 #include <MKeyboard.h>
 #include <MWindow.h>
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 #ifndef EMSCRIPTEN
 #include <SDL.h>
 #else
@@ -753,8 +757,12 @@ bool MWindow::create(const char * title, unsigned int width, unsigned int height
 
 	g_context = SDL_GL_CreateContext(g_window);
 #else
-	SDL_Surface* window = SDL_SetVideoMode(width,height,colorBits,SDL_OPENGL | SDL_DOUBLEBUF);
-	
+	SDL_Surface* window = SDL_SetVideoMode(width,height,colorBits,SDL_OPENGL | SDL_DOUBLEBUF);	
+#endif
+
+// Request a higher resolution thread timer on Windows
+#ifdef WIN32
+    timeBeginPeriod(1);
 #endif
 
 	return true;
