@@ -16,7 +16,7 @@ int DnDTree::handle(int e)
     case FL_DRAG:
         {
             Fl_Tree_Item* item = first_selected_item();
-            if(!item)
+            if(!item || !strcmp(item->label(), "ROOT"))
                 return 1;
 
             Fl::copy(item->label(), strlen(item->label()), 0);
