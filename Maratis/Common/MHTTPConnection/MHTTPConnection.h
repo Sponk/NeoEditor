@@ -29,6 +29,10 @@
 #include <HTTPConnection.h>
 #include <MEngine.h>
 
+/**
+ * The MHTTPConnection class allows to very easily send either POST requests
+ * or GET requests to the server it was initialized with.
+ */
 class MHTTPConnection
 {
     RakNet::TCPInterface m_tcp;
@@ -40,9 +44,31 @@ class MHTTPConnection
     const char* connectionLoop();
 
 public:
+    /**
+     * @brief The constructor establishes a connection to host.
+     * @param host The URL or IP of the host
+     * @param port The port to connect to (usually 80)
+     */
     MHTTPConnection(const char* host, int port);
 
+    /**
+     * @brief Sends a post request to the connected server.
+     *
+     * If you want to access your data from PHP using the $_POST array
+     * you will need to give your data the form of "var1=value1?var2=value2"
+     *
+     * @param path The file to request (for example "/login.php"). Needs to be an absolute path!
+     * @param data Your data string you want to send.
+     * @return Returns a pointer to the servers response or NULL if it failed. The string needs to be free'd!
+     */
     const char* sendPostRequest(const char* path, const char* data);
+
+    /**
+     * @brief Sends a get request to the connected server.
+     *
+     * @param path The file to request (for example "/login.php"). Needs to be an absolute path!
+     * @return Returns a pointer to the servers response or NULL if it failed. The string needs to be free'd!
+     */
     const char* sendGetRequest(const char* path);
 };
 

@@ -23,20 +23,63 @@
 #include "MVariable.h"
 #include <stdint.h>
 
+/**
+ * @brief The MPostProcessor class contains functionality used to render
+ * the current scene to a texture to allow applying GLSL post effects when
+ * rendering the final image to the screen.
+ */
 class M_ENGINE_EXPORT MPostProcessor
 {
 public:
     MPostProcessor();
 
+    /**
+     * @brief Renders the current scene to a texture and then to the screen
+     * after applying the post effects shader.
+     * @param camera The camera to use.
+     * @return Returns <strong>true</strong> if it rendered properly, false if it didn't.
+     */
     bool draw(MOCamera* camera);
 
+    /**
+     * @brief Loads, compiles and links a shader pair to the GPU.
+     * @param vertShad The sources of the vertex shader.
+     * @param fragShad The sources of the fragment shader.
+     * @return Returns <strong>true</strong> if both shader loaded properly, false if they didn't.
+     */
     bool loadShader(const char* vertShad, const char* fragShad);
+
+    /**
+     * @brief Loads, compiles and links a shader pair to the GPU.
+     * @param vertShad The path to the file containing the vertex shader sources.
+     * @param fragShad The path to the file containing the fragment shader sources.
+     * @return Returns <strong>true</strong> if both shader loaded properly, false if they didn't.
+     */
     bool loadShaderFile(const char* vertShad, const char* fragShad);
 
+    /**
+     * @brief Updates the color and depth texture to fit the current screen/window resolution.
+     * Needs to be called <strong>after</strong> MPostProcessor::eraseTextures()!
+     */
     void updateResolution();
+
+    /**
+     * @brief Deletes the color and depth texture. That allows them to be recreated for example when
+     * the resolution changes.
+     */
     void eraseTextures();
 
+    /**
+     * @brief Adds a uniform of the type float to the uniform list.
+     * @param name The name of the new uniform variable.
+     */
     void addFloatUniform(const char* name);
+
+    /**
+     * @brief Sets the value of a uniform with the type float.
+     * @param name The name of the uniform. This is the same name given when calling MPostProcessor::addFloatUniform().
+     * @param value The value to apply.
+     */
     void setFloatUniformValue(const char* name, float value);
     float getFloatUniformValue(int idx);
 
