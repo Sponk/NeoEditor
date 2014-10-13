@@ -81,25 +81,98 @@ public:
      * @param value The value to apply.
      */
     void setFloatUniformValue(const char* name, float value);
+
+    /**
+     * @brief Gets the float value of the uniform at the index.
+     * @param idx The index of the uniform.
+     * @return The float value
+     */
     float getFloatUniformValue(int idx);
 
+    /**
+     * @brief Adds a uniform of the type int to the uniform list.
+     * @param name The name of the new uniform variable.
+     */
     void addIntUniform(const char* name);
+
+    /**
+     * @brief Sets the value of a uniform with the type int.
+     * @param name The name of the uniform. This is the same name given when calling MPostProcessor::addIntUniform().
+     * @param value The value to apply.
+     */
     void setIntUniformValue(const char* name, float value);
+
+    /**
+     * @brief Gets the int value of the uniform at the index.
+     * @param idx The index of the uniform.
+     * @return The int value
+     */
     int getIntUniformValue(int idx);
 
+    /**
+     * @brief Returns the number of currently registered uniform variables.
+     * Increases whenever one of the "add*Uniform" gets called.
+     * @return The number of all registered uniforms.
+     */
     int getNumUniforms() { return m_UniformList.size(); }
+
+    /**
+     * @brief Returns the name of the specified uniform variable.
+     * @param idx The index of the uniform variable.
+     * @return The name of the uniform variable.
+     */
     const char* getUniformName(int idx);
+
+    /**
+     * @brief Returns the type of the specified uniform variable.<br>
+     * See also: M_VARIABLE_TYPE
+     * @param idx The index of the uniform variable.
+     * @return The type of the uniform variable.
+     */
     M_VARIABLE_TYPE getUniformType(int idx);
 
+    /**
+     * @brief Deletes all uniform variables currently registered.
+     */
     void clear();
 
+    /**
+     * @return The vertex shaders file path
+     */
     const char* getVertexShader() { return m_vertShadPath.getSafeString(); }
+
+    /**
+     * @return The fragment shaders file path
+     */
     const char* getFragmentShader() { return m_fragShadPath.getSafeString(); }
 
+    /**
+     * @brief Sets the path to the vertex shader and the fragment shader without
+     * loading them.
+     *
+     * @param vertPath The path to the vertex shader.
+     * @param fragPath The path to the fragment shader.
+     */
     void setShaderPath(const char* vertPath, const char* fragPath);
+
+    /**
+     * @return The internal FX ID.
+     */
     int getFX() { return m_fx; }
 
+    /**
+     * @return The resolution multiplier.
+     */
     float getResolutionMultiplier() { return m_ResolutionMultiplier; }
+
+    /**
+     * @brief Sets the current resolution multiplier.
+     *
+     * For this value to apply you need to call MPostProcessor::eraseTextures() and MPostProcessor::updateResolution().<br>
+     * This value is multiplied with the screen resolution, that means that value = 1.0 is the full resolution
+     * and value = 0.5 is the half of the full resolution etc.
+     * @param res The new resolution multiplier.
+     */
     void setResolutionMultiplier(float res) { m_ResolutionMultiplier = res; }
 
 protected:
