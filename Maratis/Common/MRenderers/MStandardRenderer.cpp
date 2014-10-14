@@ -27,7 +27,10 @@
 //
 //========================================================================
 
+#ifndef USE_GLES
 #include <glew.h>
+#endif
+
 #include <MEngine.h>
 #include <MLog.h>
 

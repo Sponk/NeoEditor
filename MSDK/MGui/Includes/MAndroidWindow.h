@@ -121,6 +121,9 @@ public:
 
     // messagebox
     void messagebox(const char* content, const char* title);
+
+    // Can't resize window on Android...
+    void resize(int width, int height) {}
 };
 
 typedef MAndroidWindow MWindow;
