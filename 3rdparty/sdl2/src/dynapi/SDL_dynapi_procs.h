@@ -66,12 +66,12 @@ SDL_DYNAPI_PROC(void,SDL_MemoryBarrierRelease,(void),(),)
 SDL_DYNAPI_PROC(void,SDL_MemoryBarrierAcquire,(void),(),)
 #endif
 
-#ifdef __WIN32__
+/*#ifdef __WIN32__
 SDL_DYNAPI_PROC(int,SDL_RegisterApp,(char *a, Uint32 b, void *c),(a,b,c),return)
 SDL_DYNAPI_PROC(void,SDL_UnregisterApp,(void),(),)
 SDL_DYNAPI_PROC(int,SDL_Direct3D9GetAdapterIndex,(int a),(a),return)
 SDL_DYNAPI_PROC(IDirect3DDevice9*,SDL_RenderGetD3D9Device,(SDL_Renderer *a),(a),return)
-#endif
+#endif*/
 
 #if defined(__IPHONEOS__) && __IPHONEOS__
 SDL_DYNAPI_PROC(int,SDL_iPhoneSetAnimationCallback,(SDL_Window *a, int b, void c, void *d),(a,b,c,d),return)
@@ -604,5 +604,5 @@ SDL_DYNAPI_PROC(SDL_bool,SDL_HasAVX,(void),(),return)
 SDL_DYNAPI_PROC(SDL_AssertionHandler,SDL_GetDefaultAssertionHandler,(void),(),return)
 SDL_DYNAPI_PROC(SDL_AssertionHandler,SDL_GetAssertionHandler,(void **a),(a),return)
 #ifdef __WIN32__
-SDL_DYNAPI_PROC(void,SDL_DXGIGetOutputInfo,(int a,int *b, int *c),(a,b,c),)
+//SDL_DYNAPI_PROC(void,SDL_DXGIGetOutputInfo,(int a,int *b, int *c),(a,b,c),)
 #endif

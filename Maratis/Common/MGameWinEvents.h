@@ -174,6 +174,7 @@ void gameWinEvents(MWinEvent * windowEvents)
 		}
 		break;
 
+    case MWIN_EVENT_JOYSTICK_ADDED:
 	case MWIN_EVENT_CONTROLLER_ADDED:
 		{
 			for (int i = 0; i < 4; ++i)
@@ -187,6 +188,7 @@ void gameWinEvents(MWinEvent * windowEvents)
 		}
 		break;
 
+    case MWIN_EVENT_JOYSTICK_REMOVED:
 	case MWIN_EVENT_CONTROLLER_REMOVED:
 		{
 			for (int i = 0; i < 4; ++i)
@@ -198,8 +200,9 @@ void gameWinEvents(MWinEvent * windowEvents)
 				}
 			}
 		}
-		break;
+		break;       
 
+    case MWIN_EVENT_JOYSTICK_MOVE:
 	case MWIN_EVENT_CONTROLLER_MOVE:
 		{
 			int joy = -1;
@@ -246,6 +249,7 @@ void gameWinEvents(MWinEvent * windowEvents)
 		}
 		break;
 
+    case MWIN_EVENT_JOYSTICK_BUTTON_DOWN:
 	case MWIN_EVENT_CONTROLLER_BUTTON_DOWN:
 		{
 			int joy = -1;
@@ -328,6 +332,7 @@ void gameWinEvents(MWinEvent * windowEvents)
 		}
 		break;
 
+    case MWIN_EVENT_JOYSTICK_BUTTON_UP:
 	case MWIN_EVENT_CONTROLLER_BUTTON_UP:
 		{
 			int joy = -1;

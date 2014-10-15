@@ -41,7 +41,7 @@ MInput::MInput(void)
 	for(int i=65; i<=90; i++)
     {
 		name[0] = i;
-		createKey(name);
+        createKey(name);
 	}
     
     // create touch data

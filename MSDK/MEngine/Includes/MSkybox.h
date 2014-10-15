@@ -32,9 +32,9 @@
 
 #include <MCore.h>
 
-class MSkybox
+class M_ENGINE_EXPORT MSkybox
 {
-    void drawQuad(MVector3 v1, MVector3 v2, MVector3 v3, MVector3 v4, MVector3 position, MVector3 rotation, MVector2* texCoords);
+    void drawQuad(MVector3 v1, MVector3 v2, MVector3 v3, MVector3 v4, MMatrix4x4* matrix, MVector2* texCoords);
 
     MTextureRef* m_SkyboxTexture[6];
 
@@ -55,6 +55,7 @@ public:
     void loadSkyboxTextures(const char* path);
 
     inline const char* getPath() { return m_path.getSafeString(); }
+    inline bool isInitialized() { return m_init; }
 };
 
 #endif

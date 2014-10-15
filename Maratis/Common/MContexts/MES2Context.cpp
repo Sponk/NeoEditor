@@ -43,6 +43,13 @@
 #include <GLES/gl.h>
 #endif
 
+#ifdef EMSCRIPTEN
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
+// Really?
+#include <GLES/gl.h>
+#endif
+
 #include <MEngine.h>
 #include "MES2Context.h"
 
@@ -487,7 +494,11 @@ void MES2Context::createFrameBuffer(unsigned int * frameBufferId){
     glGenFramebuffers(1, frameBufferId);
 }
 void MES2Context::deleteFrameBuffer(unsigned int * frameBufferId){
+#ifndef EMSCRIPTEN
     glDeleteFramebuffers(1, frameBufferId);
+#else
+    MLOG_INFO("Can't delete frame buffer on WebGL");
+#endif
 }
 void MES2Context::bindFrameBuffer(unsigned int frameBufferId){
     glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
@@ -535,7 +546,7 @@ void MES2Context::deleteShader(unsigned int * shaderId){
     glDeleteShader((*shaderId));
 }
 
-void MES2Context::sendShaderSource(unsigned int shaderId, const char * source)
+bool MES2Context::sendShaderSource(unsigned int shaderId, const char * source)
 {
     glShaderSource(shaderId, 1, &source, NULL);
     glCompileShader(shaderId);
@@ -548,7 +559,9 @@ void MES2Context::sendShaderSource(unsigned int shaderId, const char * source)
         char shader_link_error[4096];
         glGetShaderInfoLog(shaderId, sizeof(shader_link_error), NULL, shader_link_error);
         MLOG_ERROR(shader_link_error);
+        return false;
     }
+    return true;
 }
 
 // FX
@@ -1096,7 +1109,7 @@ void MES2Context::setBlendingMode(M_BLENDING_MODES mode)
 // point size
 void MES2Context::setPointSize(float size)
 {
-    glPointSize(size);
+
 }
 
 #endif

@@ -24,15 +24,18 @@
 
 #include <stdio.h>
 
+// For linking Glew
+#define GLEW_STATIC
+
 // GL, TODO : remove opengl call (should use MRenderingContext to be fully virtual)
 #ifdef _WIN32
-    #include <GLee.h>
+    #include <glew.h>
 #elif __APPLE__
     #include <OpenGL/OpenGL.h>
     #include <OpenGL/gl.h>
     #include <sys/stat.h>
 #elif linux
-    #include <GLee.h>
+    #include <glew.h>
     #include <sys/stat.h>
 #endif
 
@@ -50,7 +53,7 @@
 #include <MCore.h>
 #include <MEngine.h>
 #include <MVariable.h>
-#include <MMouse.h>
+#include "../MWindow/MMouse.h"
 #include <MBehavior.h>
 #include <MBehaviors/MBLookAt.h>
 #include <MBehaviors/MBFollow.h>
@@ -649,6 +652,7 @@ void Maratis::duplicateSelectedObjects(void)
     MOCamera * camera;
     MOSound * sound;
     MOText * text;
+    MObject3d * group;
     MObject3d * object;
     char name[256];
     for(i=0; i<oSize; i++)
@@ -695,6 +699,13 @@ void Maratis::duplicateSelectedObjects(void)
                 getNewObjectName(object->getName(), name);
                 text = scene->addNewText(*(MOText *)object);
                 text->setName(name);
+            }
+                break;
+            case M_OBJECT3D:
+            {
+                getNewObjectName(object->getName(), name);
+                group = scene->addNewGroup(*object);
+                group->setName(name);
             }
                 break;
         }
@@ -856,7 +867,7 @@ void Maratis::okAddEntity(const char * filename)
         MScene * scene = level->getCurrentScene();
 
         MMeshRef * meshRef = level->loadMesh(filename);
-        if(meshRef)
+        if(meshRef && meshRef->getMesh()->getSubMeshsNumber() > 0)
         {
             char name[256] = "Entity0";
             maratis->getNewObjectName("Entity", name);
@@ -1065,6 +1076,9 @@ void Maratis::loadProject(const char * filename)
 
     if(! filename)
         return;
+
+    MEngine::getInstance()->getLevel()->clear();
+    MEngine::getInstance()->getLevel()->clearScenes();
 
     // load project file
     MProject proj;
@@ -4321,9 +4335,12 @@ void Maratis::drawMainView(MScene * scene)
         }
     }
 
+    drawGrid(engine->getLevel()->getCurrentScene());
+
     if(getSelectedObjectsNumber() > 0)
     {
         render->disableDepthTest();
+        render->clear(M_BUFFER_DEPTH);
         camera->enable();
 
         switch(getTransformMode())
@@ -4345,8 +4362,6 @@ void Maratis::drawMainView(MScene * scene)
                 break;
         }
     }
-
-	drawGrid(engine->getLevel()->getCurrentScene());
 }
 
 void Maratis::logicLoop(void)

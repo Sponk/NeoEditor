@@ -4,12 +4,15 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Value_Input.H>
 #include <FL/Fl_Native_File_Chooser.H>
+#include <FL/Fl_Double_Window.H>
 #include <FL/fl_message.H>
 #include <string>
 
 // Maratis includes (for MainWindow.cxx)
 #include "../Maratis/Maratis.h"
 #include "../MPublish/MPublisher.h"
+#include "ini.h"
+#include "../MWindow/MWindow.h"
 
 // Is now given via compiler flags
 // #define EDITOR_VERSION_STRING "0.1"
@@ -23,6 +26,7 @@ typedef struct
 }open_project_t;
 
 extern open_project_t current_project;
+extern Fl_Double_Window* main_window;
 
 extern float rotation_speed;
 extern float translation_speed;
@@ -34,8 +38,10 @@ void edit_text_properties(Fl_Widget*, void*);
 void update_behavior_menu();
 const char* fl_native_file_chooser(const char* title, const char* files, const char* dir, int type);
 void update_scene_tree();
+void create_behavior_ui(MObject3d* object);
+void save_settings();
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER)
 
 #include <cstdio>
 #include <cstdlib>
@@ -65,7 +71,9 @@ inline int c99_snprintf(char* str, size_t size, const char* format, ...)
 
     return count;
 }
+#endif
 
+#if defined(_MSC_VER) || defined(_WIN32)
 #define getline c99_getline
 
 inline size_t c99_getline(char** lineptr, size_t* n, FILE* stream) 

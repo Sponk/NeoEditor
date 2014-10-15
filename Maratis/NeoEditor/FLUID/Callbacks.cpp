@@ -1,5 +1,6 @@
 #include "Callbacks.h"
 #include <cstdio>
+#include <cerrno>
 
 #ifndef WIN32
 #include <unistd.h>
@@ -16,18 +17,22 @@
 #include <FL/Fl_Tree_Prefs.H>
 
 #include <MEngine.h>
-#include <MWindow.h>
+#include "../MWindow/MWindow.h"
 #include <MLoaders/MImageLoader.h>
+#include <MFileManager/MLevelLoad.h>
+#include <MFileManager/MLevelSave.h>
+#include <MCore.h>
+
 #include "../MFilesUpdate/MFilesUpdate.h"
 #include "../MLoaders/MAssimpMeshLoader.h"
 #include <MCore.h>
 #include <MLog.h>
 #include "MainWindow.h"
+#include "Translator.h"
 
 open_project_t current_project;
 bool reload_editor = false;
 
-extern Fl_Double_Window* main_window;
 extern EditorWindow window;
 
 Fl_Window* object_window;
@@ -64,10 +69,97 @@ const char* fl_native_file_chooser(const char* title, const char* files, const c
     return NULL;
 }
 
+MVector3 flColorToVector(int c)
+{
+    char unsigned bytes[4];
+    bytes[0] = (c >> 24) & 0xFF;
+    bytes[1] = (c >> 16) & 0xFF;
+    bytes[2] = (c >> 8) & 0xFF;
+    bytes[3] = c & 0xFF;
+
+    return MVector3(static_cast<float>(bytes[0])/255.0f, static_cast<float>(bytes[1])/255.0f, static_cast<float>(bytes[2])/255.0f);
+}
+
+void save_settings()
+{
+    // Save settings
+    #ifndef WIN32
+        std::string fullpath = getenv("HOME");
+        fullpath += "/.neoeditor/";
+    #else
+        std::string fullpath = getenv("APPDATA");
+        fullpath += "\\neoeditor\\";
+    #endif
+
+    char dir[256];
+    getGlobalFilename(dir, fullpath.c_str(), "config.ini");
+
+    if(!isFileExist(fullpath.c_str()))
+        createDirectory(fullpath.c_str());
+
+    MLOG_INFO("Saving settings to: " << dir);
+
+    ofstream out(dir);
+    if(out)
+    {
+        if(window.inputMethod != NULL)
+        {
+            out << "[input]" << endl;
+            out << "inputMethod=" << window.inputMethod->getName() << endl;
+        }
+
+        out << "[theme]" << endl;
+
+        if(Fl::scheme() != NULL)
+            out << "scheme=" << Fl::scheme() << endl;
+        else
+            out << "scheme=none" << endl;
+
+        MVector3 vector = flColorToVector(Fl::get_color(FL_BACKGROUND_COLOR));
+        out << "background_r=" << vector.x << endl;
+        out << "background_g=" << vector.y << endl;
+        out << "background_b=" << vector.z << endl;
+
+        vector = flColorToVector(Fl::get_color(FL_BACKGROUND2_COLOR));
+        out << "background2_r=" << vector.x << endl;
+        out << "background2_g=" << vector.y << endl;
+        out << "background2_b=" << vector.z << endl;
+
+        vector = flColorToVector(Fl::get_color(FL_FOREGROUND_COLOR));
+        out << "foreground_r=" << vector.x << endl;
+        out << "foreground_g=" << vector.y << endl;
+        out << "foreground_b=" << vector.z << endl;
+
+        out << "[window]" << endl;
+        out << "xpos=" << main_window->x_root() << endl;
+        out << "ypos=" << main_window->y_root() << endl;
+        out << "width=" << main_window->w() << endl;
+        out << "height=" << main_window->h() << endl;
+        out << "translationSpeed=" << translation_speed << endl;
+        out << "rotationSpeed=" << rotation_speed << endl;
+
+        out.close();
+    }
+
+    getGlobalFilename(dir, fullpath.c_str(), "language.ini");
+    out.open(dir, ios::out);
+
+    MLOG_INFO("Writing language settings to: " << dir);
+
+    if(out)
+    {
+        out << "[lang]" << endl << "name=" << Translator::getInstance()->getLanguageFile();
+        out.close();
+    }
+}
+
 void quit_callback(Fl_Menu_*, void*)
 {
-    if(fl_ask("Do you really want to exit?"))
+    if(fl_ask(tr("Do you really want to exit?")))
     {
+        // Saving settings
+        save_settings();
+        // Quitting engine
         MEngine::getInstance()->setActive(false);
         exit(0);
     }
@@ -109,7 +201,6 @@ void change_scene_callback(Fl_Menu_*, long index)
     Maratis::getInstance()->clearSelectedObjects();
 
     update_scene_tree();
-    window.glbox->redraw();
 }
 
 void update_scene_tree()
@@ -146,12 +237,12 @@ void update_scene_tree()
     window.scenes_menu->value(level->getCurrentSceneId());
 
     update_behavior_menu();
-	window.scene_tree->redraw();
+    window.scene_tree->redraw();
 }
 
 void open_level_callback(Fl_Menu_*, void*)
 {
-    const char* filename = fl_native_file_chooser("Open level", "*.level", (current_project.path + "/levels").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser(tr("Open level"), "*.level", (current_project.path + "/levels").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(filename)
     {
@@ -162,14 +253,12 @@ void open_level_callback(Fl_Menu_*, void*)
     }
 
     reload_editor = true;
-
-    window.glbox->redraw();
     window.scene_tree->redraw();
 }
 
 void open_project_callback(Fl_Menu_*, void*)
 {
-    if(!current_project.path.empty() && !fl_ask("You need to close the current project. Do you want to proceed?"))
+    if(!current_project.path.empty() && !fl_ask(tr("You need to close the current project. Do you want to proceed?")))
         return;
 
     const char* home = NULL;
@@ -180,10 +269,23 @@ void open_project_callback(Fl_Menu_*, void*)
     home = getenv("USERPROFILE");
 #endif
 
-    const char* filename = fl_native_file_chooser("Open project", "*.mproj", home, Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser(tr("Open project"), "*.mproj", home, Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(filename)
     {
+        // Show the loading dialog
+        WaitDlg dlg;
+        Fl_Double_Window* win = dlg.create_window();
+        win->show();
+
+        // Somehow needs 4 Fl::wait calls for the window to actually appear
+        // TODO: Own thread!
+        Fl::wait();
+        Fl::wait();
+        Fl::wait();
+        Fl::wait();
+
+        // Actually load the project
         current_project.changed = false;
         current_project.path = filename;
         current_project.file_path = filename;
@@ -193,15 +295,19 @@ void open_project_callback(Fl_Menu_*, void*)
 #else
         current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
 #endif
+        MGame* game = MEngine::getInstance()->getGame();
         Maratis::getInstance()->loadProject(filename);
+
+        ::window.glbox->loadPostEffectsFromGame(game);
 
         current_project.level = Maratis::getInstance()->getCurrentLevel();
         update_scene_tree();
+
+        // Destroy the dialog
+        Fl::delete_widget(win);
     }
 
     reload_editor = true;
-
-    window.glbox->redraw();
     window.scene_tree->redraw();
 }
 
@@ -209,14 +315,14 @@ float rotation_speed = 1.0;
 
 void rotation_speed_callback(Fl_Value_Input* input, void*)
 {
-    rotation_speed = input->value() / 10;
+    rotation_speed = input->value();
 }
 
 float translation_speed = 1.0;
 
 void translation_speed_callback(Fl_Value_Input* input, void*)
 {
-    translation_speed = input->value()/10;
+    translation_speed = input->value();
 }
 
 void set_edit_type(Fl_Round_Button* button, long c)
@@ -235,8 +341,6 @@ void set_edit_type(Fl_Round_Button* button, long c)
             Maratis::getInstance()->setTransformMode(M_TRANSFORM_SCALE);
         break;
     }
-
-    window.glbox->redraw();
 }
 
 void remove_window(Fl_Window* win)
@@ -312,6 +416,7 @@ void behavior_string_callback(Fl_Input* input, const char* data)
         return;
 
     ((MString*) get_variable_pointer(data, input->label(), object))->set(input->value());
+    window.m_deferredUiUpdate = true;
 }
 
 void behavior_vector4_callback(Fl_Value_Input* input, const char* data)
@@ -424,8 +529,6 @@ void behavior_vector2_callback(Fl_Value_Input* input, const char* data)
         break;
     }
 }
-
-void create_behavior_ui(MObject3d* object);
 
 void remove_behavior(Fl_Button*, long behavior)
 {
@@ -645,8 +748,14 @@ void create_behavior_ui(MObject3d* object)
 
 #define DELETE_WINDOW(x) remove_window(x); x = NULL
 
-void scene_tree_callback(Fl_Tree* tree, void*)
+void scene_tree_callback(DnDTree* tree, long update_tree)
 {
+    if(update_tree)
+    {
+        update_scene_tree();
+        return;
+    }
+
     Fl_Tree_Item* item = tree->first_selected_item();
 
     if(!item)
@@ -669,14 +778,18 @@ void scene_tree_callback(Fl_Tree* tree, void*)
     {
         Maratis::getInstance()->clearSelectedObjects();
         Maratis::getInstance()->addSelectedObject(object);
+    }
 
-        /*if(Fl::event_clicks())
-        {
-            MOCamera* vue = Maratis::getInstance()->getPerspectiveVue();
-            vue->setPosition(object->getPosition() - MVector3(10,0,0));
-            vue->updateMatrix();
-            window.glbox->redraw();
-        }*/
+    // TODO: Testing!
+    if(Fl::event_clicks() && (tree == Fl::focus() || window.glbox == Fl::focus()))
+    {
+        /*MOCamera* vue = Maratis::getInstance()->getPerspectiveVue();
+        vue->setPosition(object->getPosition());
+        vue->updateMatrix();
+        window.glbox->redraw();*/
+
+        Maratis::getInstance()->focusSelection();
+        Maratis::getInstance()->getPerspectiveVue()->updateMatrix();
     }
 
     MVector3 position = object->getPosition();
@@ -805,20 +918,25 @@ void scene_tree_callback(Fl_Tree* tree, void*)
 
         MOCamera* camera = (MOCamera*) object;
         MVector3 clearColor = camera->getClearColor();
+        MVector3 fogColor = camera->getFogColor();
 
         window.camera_color_r->value(clearColor.x);
         window.camera_color_g->value(clearColor.y);
         window.camera_color_b->value(clearColor.z);
+
+        window.fog_color_r->value(fogColor.x);
+        window.fog_color_g->value(fogColor.y);
+        window.fog_color_b->value(fogColor.z);
 
         window.camera_fov_edit->value(camera->getFov());
         window.camera_clipping_near_edit->value(camera->getClippingNear());
         window.camera_clipping_far_edit->value(camera->getClippingFar());
 
         window.camera_fog_distance_edit->value(camera->getFogDistance());
-        window.camera_skybox_edit->value(camera->getSkybox()->getPath());
 
         if(update_name)
         {
+            window.camera_skybox_edit->value(camera->getSkybox()->getPath());
             window.camera_ortho_button->value(camera->isOrtho());
             window.camera_fog_button->value(camera->hasFog());
         }
@@ -915,7 +1033,6 @@ void scene_tree_callback(Fl_Tree* tree, void*)
 
     window.special_tab->end();
     window.special_tab->redraw();
-    window.glbox->redraw();
 }
 
 void edit_object_callback(Fl_Value_Input* input, long c)
@@ -989,8 +1106,6 @@ void edit_object_callback(Fl_Value_Input* input, long c)
         }
         break;
     }
-
-    window.glbox->redraw();
 }
 
 void edit_name_callback(Fl_Input*, void*)
@@ -1015,7 +1130,7 @@ void edit_name_callback(Fl_Input*, void*)
         if(!parent)
         {
             MLOG_ERROR("Can't set parent: Parent object not found!");
-            fl_alert("Can't set parent: Parent object not found!");
+            fl_alert(tr("Can't set parent: Parent object not found!"));
 
             window.parent_edit->value("none");
             update_scene_tree();
@@ -1066,7 +1181,6 @@ void edit_light_properties(Fl_Value_Input *, void *)
     light->setShadowBlur(window.light_shadow_blur_edit->value());
     light->setShadowQuality(window.light_shadow_quality_edit->value());
 	
-    window.glbox->redraw();
     window.special_tab->redraw();
 }
 
@@ -1074,9 +1188,14 @@ void edit_light_properties_chk_btn(Fl_Check_Button * button, void *)
 {    
     MOLight* light = MEngine::getInstance()->getLevel()->getCurrentScene()->getLightByName(window.name_edit->value());
 
-    // TODO: HACK!!
     if(window.light_spot_button->value() == 1)
+    {
+        // Should 45 be the default value?
+        if(window.spot_angle_edit->value() > 90)
+            window.spot_angle_edit->value(45);
+
         light->setSpotAngle(window.spot_angle_edit->value());
+    }
     else
     {
         light->setSpotAngle(180);
@@ -1092,8 +1211,6 @@ void edit_light_properties_chk_btn(Fl_Check_Button * button, void *)
     {
         light->castShadow(false);
     }
-
-    window.glbox->redraw();
 }
 
 void choose_light_color(Fl_Button*, void*)
@@ -1102,7 +1219,7 @@ void choose_light_color(Fl_Button*, void*)
     double g = window.light_color_g->value();
     double b = window.light_color_b->value();
 
-    fl_color_chooser("Choose a color", r, g, b);
+    fl_color_chooser(tr("Choose a color"), r, g, b);
 
     window.light_color_r->value(r);
     window.light_color_g->value(g);
@@ -1117,13 +1234,28 @@ void choose_camera_color(Fl_Button*, void*)
 	double g = window.camera_color_g->value();
 	double b = window.camera_color_b->value();
 
-	fl_color_chooser("Choose a color", r, g, b);
+    fl_color_chooser(tr("Choose a color"), r, g, b);
 
 	window.camera_color_r->value(r);
 	window.camera_color_g->value(g);
 	window.camera_color_b->value(b);
 
-	edit_light_properties(NULL, NULL);
+    edit_camera_properties(NULL, NULL);
+}
+
+void choose_fog_color(Fl_Button*, void*)
+{
+    double r = window.fog_color_r->value();
+    double g = window.fog_color_g->value();
+    double b = window.fog_color_b->value();
+
+    fl_color_chooser(tr("Choose a color"), r, g, b);
+
+    window.fog_color_r->value(r);
+    window.fog_color_g->value(g);
+    window.fog_color_b->value(b);
+
+    edit_camera_properties(NULL, NULL);
 }
 
 void publish_callback(Fl_Menu_*, void*)
@@ -1131,7 +1263,7 @@ void publish_callback(Fl_Menu_*, void*)
     if(current_project.path.empty())
     {
         MLOG_ERROR("No project open!");
-        fl_message("Can't publish: You need to create/open a project first!");
+        fl_message(tr("Can't publish: You need to create/open a project first!"));
         return;
     }
 
@@ -1148,7 +1280,7 @@ void save_level_callback(Fl_Menu_ *, long mode)
     case 0:
         if(current_project.level.empty())
         {
-            filename = fl_native_file_chooser("Select a file to save", "*.level",  (current_project.path + "levels").c_str(),
+            filename = fl_native_file_chooser(tr("Select a file to save"), "*.level",  (current_project.path + "levels").c_str(),
                                               Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
 
             if(filename == NULL)
@@ -1162,7 +1294,7 @@ void save_level_callback(Fl_Menu_ *, long mode)
         break;
     // Save as
     case 1:
-        filename = fl_native_file_chooser("Select a file to save", "*.level", (current_project.path + "levels").c_str(),
+        filename = fl_native_file_chooser(tr("Select a file to save"), "*.level", (current_project.path + "levels").c_str(),
                                           Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
 
         if(filename == NULL)
@@ -1174,20 +1306,33 @@ void save_level_callback(Fl_Menu_ *, long mode)
         break;
     }
 
+    MGame* game = MEngine::getInstance()->getGame();
+    game->getPostProcessor()->setShaderPath(::window.glbox->getPostProcessor()->getVertexShader(), ::window.glbox->getPostProcessor()->getFragmentShader());
+
     Maratis::getInstance()->save();
 }
 
 void new_project_callback(Fl_Menu_*, void*)
 {
-    const char* filename = fl_native_file_chooser("Select project file", "*.mproj", NULL, Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
+    const char* filename = fl_native_file_chooser(tr("Select project file"), "*.mproj", NULL, Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
 
     if(!filename)
         return;
 
     current_project.level = "";
+
+    current_project.changed = false;
     current_project.path = filename;
+    current_project.file_path = filename;
+
+#ifndef WIN32
+    current_project.path = current_project.path.erase(current_project.path.find_last_of("/")+1, current_project.path.length());
+#else
+    current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
+#endif
 
     Maratis::getInstance()->okNewProject(filename);
+    update_scene_tree();
 }
 
 void new_level_callback(Fl_Menu_*, void*)
@@ -1235,8 +1380,6 @@ void edit_object_chk_btn(Fl_Check_Button*, void*)
         entity->deletePhysicsProperties();
         return;
     }
-
-    window.glbox->redraw();
 }
 
 void edit_object_properties(Fl_Value_Input*, void*)
@@ -1264,7 +1407,13 @@ void edit_object_properties(Fl_Value_Input*, void*)
 
 void add_mesh_callback(Fl_Menu_*, void*)
 {
-    const char* filename = fl_native_file_chooser("Choose mesh", "*.mesh", (current_project.path + "meshs").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+    if(current_project.level.empty())
+    {
+        fl_message(tr("You need to save the level before adding meshes!"));
+        return;
+    }
+
+    const char* filename = fl_native_file_chooser(tr("Choose mesh"), "*.mesh", (current_project.path + "meshs").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(filename)
     {
@@ -1273,7 +1422,6 @@ void add_mesh_callback(Fl_Menu_*, void*)
         update_scene_tree();
     }
 
-    window.glbox->redraw();
 	update_scene_tree();
 }
 
@@ -1282,8 +1430,6 @@ void add_light_callback(Fl_Menu_*, void*)
     Maratis::getInstance()->autoSave();
     Maratis::getInstance()->addLight();
     update_scene_tree();
-
-    window.glbox->redraw();
 }
 
 void edit_camera_properties(Fl_Value_Input*, void*)
@@ -1297,6 +1443,8 @@ void edit_camera_properties(Fl_Value_Input*, void*)
     }
 
     camera->setClearColor(MVector3(window.camera_color_r->value(), window.camera_color_g->value(), window.camera_color_b->value()));
+    camera->setFogColor(MVector3(window.fog_color_r->value(), window.fog_color_g->value(), window.fog_color_b->value()));
+
     camera->setFov(window.camera_fov_edit->value());
     camera->setClippingNear(window.camera_clipping_near_edit->value());
     camera->setClippingFar(window.camera_clipping_far_edit->value());
@@ -1358,7 +1506,7 @@ bool text_load_font(const char* name, MOText* text)
 
 void text_find_font_callback(Fl_Button*, void*)
 {
-    const char* filename = fl_native_file_chooser("Choose font", "*.ttf", (current_project.path + "fonts").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser(tr("Choose font"), "*.ttf", (current_project.path + "fonts").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
     MLevel* level = MEngine::getInstance()->getLevel();
     MOText* text = level->getCurrentScene()->getTextByName(window.name_edit->value());
 
@@ -1373,12 +1521,11 @@ void text_find_font_callback(Fl_Button*, void*)
 
     if(!text_load_font(filename, text))
     {
-        fl_alert("Could not load font!");
+        fl_alert(tr("Could not load font!"));
         return;
     }
 
     window.text_font_edit->value(filename);
-    window.glbox->redraw();
 }
 
 void edit_text_properties(Fl_Widget*, void*)
@@ -1388,7 +1535,7 @@ void edit_text_properties(Fl_Widget*, void*)
 
     if(!text)
     {
-        MLOG_ERROR("Text field does not exist!");
+        MLOG_ERROR(tr("Text field does not exist!"));
         return;
     }
 
@@ -1406,10 +1553,8 @@ void edit_text_properties(Fl_Widget*, void*)
     if(!text_load_font(window.text_font_edit->value(), text))
     {
         window.text_font_edit->value(text->getFontRef()->getFilename());
-        fl_alert("Could not load font!");
+        fl_alert(tr("Could not load font!"));
     }
-
-    window.glbox->redraw();
 }
 
 void text_alignment_callback(Fl_Menu_*, long value)
@@ -1424,7 +1569,6 @@ void text_alignment_callback(Fl_Menu_*, long value)
     }
 
     text->setAlign((M_ALIGN_MODES) value);
-    window.glbox->redraw();
 }
 
 void choose_text_color(Fl_Button*, void*)
@@ -1433,7 +1577,7 @@ void choose_text_color(Fl_Button*, void*)
     double g = window.text_g->value();
     double b = window.text_b->value();
 
-    fl_color_chooser("Choose a color", r, g, b);
+    fl_color_chooser(tr("Choose a color"), r, g, b);
 
     window.text_r->value(r);
     window.text_g->value(g);
@@ -1444,7 +1588,13 @@ void choose_text_color(Fl_Button*, void*)
 
 void add_text_callback(Fl_Menu_ *, void *)
 {
-    const char* filename = fl_native_file_chooser("Choose font", "*.ttf", (current_project.path + "fonts").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+    if(current_project.level.empty())
+    {
+        fl_message(tr("You need to save the level before adding objects!"));
+        return;
+    }
+
+    const char* filename = fl_native_file_chooser(tr("Choose font"), "*.ttf", (current_project.path + "fonts").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(!filename)
         return;
@@ -1453,15 +1603,12 @@ void add_text_callback(Fl_Menu_ *, void *)
     maratis->autoSave();
 
     maratis->okAddFont(filename);
-
-    window.glbox->redraw();
 	update_scene_tree();
 }
 
 void add_camera_callback(Fl_Menu_*,void*)
 {
     Maratis::getInstance()->addCamera();
-    window.glbox->redraw();
 	update_scene_tree();
 }
 
@@ -1476,7 +1623,7 @@ void play_game_callback(Fl_Menu_*, void*)
 {
     if(current_project.path.empty())
     {
-        fl_alert("Can't run the game: You first have to open a project!");
+        fl_alert(tr("Can't run the game: You first have to open a project!"));
         return;
     }
 
@@ -1486,24 +1633,41 @@ void play_game_callback(Fl_Menu_*, void*)
     std::string project_name = current_project.file_path.substr(current_project.file_path.find_last_of("/")+1);
     project_name = project_name.erase(project_name.find_last_of("."));
 
-    FILE* file = popen((current_project.path + "MaratisPlayer \"" + project_name + "\" 1024 768 0 1").c_str(), "r");
+    if(!isFileExist((current_project.path + "MaratisPlayer").c_str()))
+    {
+        MLOG_ERROR("Could not start player! Executable does not exist!");
+        fl_alert(tr("Could not start player! Make sure that the executable exists and you have rights to start it.\nIf it does not exist, try the 'Update player' option in the project menu."));
+        return;
+    }
+
+    errno = 0;
+    FILE* file = popen(("\"" + current_project.path + "MaratisPlayer\" \"" + project_name + "\" 1024 768 0 1 2>&1").c_str(), "r");
 #else
 	std::string project_name = current_project.file_path.substr(current_project.file_path.find_last_of("\\")+1);
     project_name = project_name.erase(project_name.find_last_of("."));
 
-    FILE* file = _popen((current_project.path + "MaratisPlayer.exe \"" + project_name + "\" 1024 768 0 1").c_str(), "r");
+    if(!isFileExist((current_project.path + "MaratisPlayer.exe").c_str()))
+    {
+        MLOG_ERROR("Could not start player! Executable does not exist!");
+        fl_alert(tr("Could not start player! Make sure that the executable exists and you have rights to start it.\nIf it does not exist, try the 'Update player' option in the project menu."));
+        return;
+    }
+
+    errno = 0;
+    FILE* file = _popen(("\"" + current_project.path + "MaratisPlayer.exe '" + project_name + "' 1024 768 0 1\" 2>&1").c_str(), "r");
 #endif
 
-	if(file == NULL)
+    if(file == NULL || errno != 0)
 	{
 		MLOG_ERROR("Could not start player!");
-		fl_alert("Could not start player! Make sure that the executable exists and you have rights to start it.\nIf it does not exist, try the 'Update player' option in the project menu.");
+        fl_alert(tr("Could not start player! Make sure that the executable exists and you have rights to start it.\nIf it does not exist, try the 'Update player' option in the project menu."));
 		return;
 	}
 
     if(console.closed)
     {
         Fl_Window* window = console.create_window();
+        window->label(tr("Player Console"));
         window->show();
     }
 
@@ -1537,6 +1701,11 @@ void play_game_callback(Fl_Menu_*, void*)
     update_scene_tree();
 }
 
+void play_game_button_callback(Fl_Button*, void*)
+{
+    play_game_callback(NULL, NULL);
+}
+
 void add_behavior_menu_callback(Fl_Menu_* menu, const char* name)
 {
     MEngine* engine = MEngine::getInstance();
@@ -1560,7 +1729,7 @@ void add_behavior_menu_callback(Fl_Menu_* menu, const char* name)
     if((behavior->getObjectFilter() != object->getType()) && (behavior->getObjectFilter() != M_OBJECT3D))
     {
         MLOG_ERROR("Can't add behavior: Behavior is from a different type!");
-        fl_alert("Could not add behavior: Behavior is from a different type than the object!");
+        fl_alert(tr("Could not add behavior: Behavior is from a different type than the object!"));
         return;
     }
 
@@ -1580,21 +1749,21 @@ void update_behavior_menu()
         MBehaviorCreator* behavior = manager->getBehaviorByIndex(i);
 
         std::string name = behavior->getName();
-        name = "Add/Add Behavior/" + name;
+        name = string(tr("Add")) + "/" + tr("Add Behavior") + "/" + name;
         window.menu_bar->add(name.c_str(), 0, (Fl_Callback*) add_behavior_menu_callback, (void*) behavior->getName(), 0);
     }
 }
 
 void import_mesh_callback(Fl_Menu_*, void*)
 {
-    const char* filename = fl_native_file_chooser("Choose file", "*.obj\n*.dae\n*.3ds\n*.b3d", current_project.path.c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+    const char* filename = fl_native_file_chooser(tr("Choose file"), "*.{obj,dae,3ds,b3d,ase,ifc,xgl,zgl,lwo,stl,x,ms3d,cob,irrmesh,md1,md2,md3,mdc,md5,ter}",
+                                                  current_project.path.c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(!filename)
         return;
 
     M_importAssimpMeshes(filename);
     update_scene_tree();
-    window.glbox->redraw();
 }
 
 void delete_object_callback(Fl_Menu_*, void*)
@@ -1602,7 +1771,6 @@ void delete_object_callback(Fl_Menu_*, void*)
     Maratis::getInstance()->deleteSelectedObjects();
 
     update_scene_tree();
-    window.glbox->redraw();
 }
 
 void undo_callback(Fl_Menu_*, void*)
@@ -1610,7 +1778,6 @@ void undo_callback(Fl_Menu_*, void*)
     Maratis::getInstance()->undo();
 
     update_scene_tree();
-    window.glbox->redraw();
 }
 
 void redo_callback(Fl_Menu_*, void*)
@@ -1618,12 +1785,17 @@ void redo_callback(Fl_Menu_*, void*)
     Maratis::getInstance()->redo();
 
     update_scene_tree();
-    window.glbox->redraw();
 }
 
 void add_sound_callback(Fl_Menu_ *, void *)
 {
-    const char* filename = fl_native_file_chooser("Choose file", "*.wav, *.ogg", (current_project.path + "sounds").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+    if(current_project.level.empty())
+    {
+        fl_message(tr("You need to save the level before adding objects!"));
+        return;
+    }
+
+    const char* filename = fl_native_file_chooser(tr("Choose file"), "*.{wav,ogg}", (current_project.path + "sounds").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
     if(!filename)
         return;
@@ -1631,7 +1803,6 @@ void add_sound_callback(Fl_Menu_ *, void *)
     Maratis::getInstance()->okAddSound(filename);
 
     update_scene_tree();
-    window.glbox->redraw();
 }
 
 void edit_sound_callback(Fl_Value_Input*, void*)
@@ -1682,6 +1853,12 @@ void add_scene_callback(Fl_Menu_ *, void *)
 
 void scene_setup_callback(Fl_Menu_ *, void*)
 {
+    if(current_project.level.empty())
+    {
+        fl_message(tr("You need to save the level before editing scene properties!"));
+        return;
+    }
+
     SceneSetupDlg dlg;
     Fl_Window* win = dlg.create_window();
 
@@ -1713,7 +1890,7 @@ void delete_scene_callback(Fl_Menu_ *, void *)
     if(level->getScenesNumber()-1 <= 0)
     {
         MLOG_INFO("Can not delete scene! The level needs at least one scene!");
-        fl_alert("Can not delete scene! The level needs at least one scene!");
+        fl_alert(tr("Can not delete scene! The level needs at least one scene!"));
         return;
     }
 
@@ -1722,7 +1899,6 @@ void delete_scene_callback(Fl_Menu_ *, void *)
 
     Maratis::getInstance()->clearSelectedObjects();
     update_scene_tree();
-    window.glbox->redraw();
 }
 
 void duplicate_object_callback(Fl_Menu_ *, void *)
@@ -1730,7 +1906,6 @@ void duplicate_object_callback(Fl_Menu_ *, void *)
     Maratis::getInstance()->duplicateSelectedObjects();
 
     update_scene_tree();
-    window.glbox->redraw();
 }
 
 void about_menu_callback(Fl_Menu_*, void*)
@@ -1746,7 +1921,6 @@ void select_all_callback(Fl_Menu_*, void*)
 {
     Maratis::getInstance()->selectAll();
     update_scene_tree();
-    window.glbox->redraw();
 }
 
 void edit_materials_callback(Fl_Button *, void *)
@@ -1803,13 +1977,11 @@ void add_group_callback(Fl_Menu_*, void*)
 	Maratis::getInstance()->addGroup();
 
 	update_scene_tree();
-	window.glbox->redraw();
 }
 
 void ortho_callback(Fl_Check_Button*, void*)
 {
     Maratis::getInstance()->switchCurrentVueMode();
-    window.glbox->redraw();
 }
 
 void change_vue_callback(Fl_Menu_*, long mode)
@@ -1818,7 +1990,6 @@ void change_vue_callback(Fl_Menu_*, long mode)
 	
 	Maratis::getInstance()->changeCurrentVue(mode);
 	window.vue_ortho_button->value(1);
-	window.glbox->redraw();
 }
 
 void object_constraint_properties_callback(Fl_Button*, void*)
@@ -1835,9 +2006,170 @@ void plugin_console_callback(Fl_Menu_*, void*)
     if(pluginConsole.closed)
     {
         Fl_Window* window = pluginConsole.create_window();
-        window->label("Plugin Console");
+        window->label(tr("Plugin Console"));
         window->show();
     }
 
     pluginConsole.output_edit->buffer(&pluginOutput);
+}
+
+void configuration_callback(Fl_Menu_*, void*)
+{
+    ConfigurationDlg dlg;
+    Fl_Window* win = dlg.create_window();
+
+    win->show();
+    while(win->shown())
+        Fl::wait();
+
+    delete win;
+}
+
+void post_effects_setup_callback(Fl_Menu_*, void*)
+{
+    Maratis::getInstance()->autoSave();
+
+    PostEffectsDlg dlg;
+    Fl_Window* window = dlg.create_window();
+
+    window->show();
+    while(window->shown())
+        Fl::wait();
+
+    Fl::delete_widget(window);
+}
+
+int redirect_script_print()
+{
+    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    if(script->getArgsNumber() <= 0)
+        return 0;
+
+    const char* text = script->getString(0);
+    console_buffer.append(text);
+    console_buffer.append("\n");
+
+    if(!console.closed)
+    {
+        console.output_edit->move_down();
+        console.output_edit->show_insert_position();
+    }
+
+    return 1;
+}
+
+void play_game_in_editor(Fl_Button* button, void *)
+{
+    MEngine* engine = MEngine::getInstance();
+    MLevel * level = engine->getLevel();
+    MScene * scene = level->getCurrentScene();
+    MScript scriptContext;
+    scriptContext.addFunction("print", redirect_script_print);
+
+    MGame* game = engine->getGame();
+
+    // Quit the game
+    if(game->isRunning())
+    {
+        game->end();
+        return;
+    }
+
+    const char* text = button->label();
+    button->label(tr("Stop game"));
+    console_buffer.text("");
+
+    Fl::focus(::window.glbox);
+
+    // Save perspective vue
+    MMatrix4x4 matrix = *Maratis::getInstance()->getPerspectiveVue()->getMatrix();
+
+    engine->setScriptContext(&scriptContext);
+
+    // Save current state
+    const char * temp = Maratis::getInstance()->getTempDir();
+    if(temp)
+    {
+        string tempFile(temp);
+        tempFile += "/";
+        tempFile += "temp.level";
+
+        // save temp level
+        xmlLevelSave(engine->getLevel(), tempFile.c_str());
+    }
+
+    // play sound
+    scene->stopAllSounds();
+    scene->playLoopSounds();
+
+    game->begin();
+
+    // Remains in here because game is a local variable!
+    while(engine->getGame()->isRunning())
+    {
+        Fl::wait();
+    }
+
+    // Reload old state
+    // stop sound
+    scene->stopAllSounds();
+
+    // show mouse
+    MWindow::getInstance()->showCursor();
+
+    if(temp)
+    {
+        string tempFile(temp);
+        tempFile += "/";
+        tempFile += "temp.level";
+        M_loadLevel(tempFile.c_str(), level, false);
+    }
+
+    scene = level->getCurrentScene();
+    Maratis::getInstance()->clearSelectedObjects();
+
+    // update matrices
+    scene->updateObjectsMatrices();
+    *Maratis::getInstance()->getPerspectiveVue()->getMatrix() = matrix;
+
+    button->label(text);
+}
+
+void show_console_callback(Fl_Button*, void*)
+{
+    if(console.closed)
+    {
+        Fl_Window* window = console.create_window();
+        window->label(tr("Player Console"));
+        window->show();
+    }
+
+    console.output_edit->buffer(&console_buffer);
+}
+
+void apply_editor_perspective(Fl_Button *, void *)
+{
+    MOCamera* vue = Maratis::getInstance()->getPerspectiveVue();
+    MObject3d* selectedObject = Maratis::getInstance()->getSelectedObjectByIndex(0);
+
+    if(selectedObject)
+    {
+        *selectedObject->getMatrix() = *vue->getMatrix();
+    }
+
+    Maratis::getInstance()->clearSelectedObjects();
+}
+
+void set_editor_perspective(Fl_Button *, void *)
+{
+    MOCamera* vue = Maratis::getInstance()->getPerspectiveVue();
+    MObject3d* selectedObject = Maratis::getInstance()->getSelectedObjectByIndex(0);
+
+    if(selectedObject)
+    {
+        vue->setPosition(selectedObject->getTransformedPosition());
+        vue->setRotation(selectedObject->getRotation());
+    }
+
+    Maratis::getInstance()->clearSelectedObjects();
 }

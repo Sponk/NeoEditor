@@ -1,0 +1,40 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0302 
+header_name {.h} 
+code_name {.cxx}
+class CrashHandlerDlg {open
+} {
+  Function {create_window()} {open
+  } {
+    Fl_Window {} {
+      label {Crash Handler} open
+      xywh {2179 318 447 459} type Double visible
+    } {
+      Fl_Box {} {
+        label {The Neo Editor crashed! We apologize for all inconveniences.}
+        xywh {12 15 450 30} align 20
+      }
+      Fl_Text_Display stack_output {
+        xywh {12 66 423 348} box DOWN_BOX
+      }
+      Fl_Button {} {
+        label Close
+        callback close_crash_handler
+        xywh {12 426 150 24}
+      }
+      Fl_Box {} {
+        label {Please append this stack trace to your bug report.}
+        xywh {12 39 450 24} align 20
+      }
+      Fl_Button {} {
+        label {Send Report} user_data_type {void*}
+        callback send_report selected
+        xywh {282 426 150 24}
+      }
+    }
+  }
+  Function {close_crash_handler(Fl_Button* button, void*)} {open return_type {static void}
+  } {
+    code {button->parent()->hide();} {}
+  }
+} 

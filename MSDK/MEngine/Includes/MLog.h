@@ -50,11 +50,19 @@
 
 
 // Only give the filename and not the path
+#ifndef WIN32
 #define __SFILENAME__ \
 (strrchr(__FILE__,'/') \
 ? strrchr(__FILE__,'/')+1 \
 : __FILE__ \
 )
+#else
+#define __SFILENAME__ \
+(strrchr(__FILE__,'\\') \
+? strrchr(__FILE__,'\\')+1 \
+: __FILE__ \
+)
+#endif
 
 // for the moment let s just simply log if the message has a severity lower than the env variable
 #define MLOG(severity, USERMESSAGE) { MLog::m_stringstream.str(std::string("")); MLog::m_stringstream<<USERMESSAGE; MLog::m_string=MLog::m_stringstream.str(); MLog::log(severity, __FUNCTION__, __SFILENAME__, __LINE__); }

@@ -29,13 +29,13 @@
 #include <MEngine.h>
 #include <string>
 
-#define SKYBOX_SIZE 1000
+#define SKYBOX_SIZE 100
 
 using namespace std;
 
-string skyboxVertShader =
+string m_skyboxVertShader =
 
-"#version 140\n"
+"#version 130\n"
 "attribute vec3 Vertex;"
 "uniform mat4 ProjModelViewMatrix;"
 
@@ -48,8 +48,8 @@ string skyboxVertShader =
     "texCoord = TexCoord;"
 "}\n";
 
-string skyboxFragShader =
-"#version 140\n"
+string m_skyboxFragShader =
+"#version 130\n"
 "uniform sampler2D Texture[5];"
 "varying vec2 texCoord;"
 
@@ -75,6 +75,23 @@ void MSkybox::drawSkybox(MVector3 position, MVector3 rotation)
         return;
     }
 
+    // projmodelview matrix
+    rotation *= -1;
+    static MMatrix4x4 ProjMatrix;
+    static MMatrix4x4 ModelViewMatrix;
+    static MMatrix4x4 ProjModelViewMatrix;
+
+    render->getProjectionMatrix(&ProjMatrix);
+    render->getModelViewMatrix(&ModelViewMatrix);
+
+    ModelViewMatrix.loadIdentity();
+
+    ModelViewMatrix.rotate(MVector3(1.0,0.0,0.0), rotation.x);
+    ModelViewMatrix.rotate(MVector3(0.0,1.0,0.0), rotation.y);
+    ModelViewMatrix.rotate(MVector3(0.0,0.0,1.0), rotation.z);
+
+    ProjModelViewMatrix = ProjMatrix * ModelViewMatrix;
+
     render->bindFX(m_fx);
     static MVector2 texCoords[4];
 
@@ -87,7 +104,7 @@ void MSkybox::drawSkybox(MVector3 position, MVector3 rotation)
     // unten 1
     render->bindTexture(m_SkyboxTexture[1]->getTextureId());
     drawQuad(MVector3(-SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE), MVector3(SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE),
-                MVector3(SKYBOX_SIZE,-SKYBOX_SIZE, -SKYBOX_SIZE), MVector3(-SKYBOX_SIZE,-SKYBOX_SIZE, -SKYBOX_SIZE), position, -rotation, (MVector2*) &texCoords);
+                MVector3(SKYBOX_SIZE,-SKYBOX_SIZE, -SKYBOX_SIZE), MVector3(-SKYBOX_SIZE,-SKYBOX_SIZE, -SKYBOX_SIZE), &ProjModelViewMatrix, (MVector2*) &texCoords);
 
     texCoords[0] = MVector2(1, 1);
     texCoords[1] = MVector2(0, 1);
@@ -97,7 +114,7 @@ void MSkybox::drawSkybox(MVector3 position, MVector3 rotation)
     // oben 2
     render->bindTexture(m_SkyboxTexture[4]->getTextureId());
     drawQuad(MVector3(-SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE), MVector3(SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE),
-                MVector3(SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), MVector3(-SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), position, -rotation, (MVector2*) &texCoords);
+                MVector3(SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), MVector3(-SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), &ProjModelViewMatrix, (MVector2*) &texCoords);
 
     texCoords[0] = MVector2(0, 1);
     texCoords[1] = MVector2(1, 1);
@@ -107,7 +124,7 @@ void MSkybox::drawSkybox(MVector3 position, MVector3 rotation)
     // vorne 3
     render->bindTexture(m_SkyboxTexture[5]->getTextureId());
     drawQuad(MVector3(SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE), MVector3(-SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE),
-            MVector3(-SKYBOX_SIZE,SKYBOX_SIZE, SKYBOX_SIZE), MVector3(SKYBOX_SIZE,SKYBOX_SIZE, SKYBOX_SIZE), position, -rotation, (MVector2*) &texCoords);
+            MVector3(-SKYBOX_SIZE,SKYBOX_SIZE, SKYBOX_SIZE), MVector3(SKYBOX_SIZE,SKYBOX_SIZE, SKYBOX_SIZE), &ProjModelViewMatrix, (MVector2*) &texCoords);
 
     texCoords[0] = MVector2(1, 1);
     texCoords[1] = MVector2(0, 1);
@@ -117,7 +134,7 @@ void MSkybox::drawSkybox(MVector3 position, MVector3 rotation)
     // hinten 4
     render->bindTexture(m_SkyboxTexture[2]->getTextureId());
     drawQuad(MVector3(SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE), MVector3(-SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE),
-               MVector3(-SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), MVector3(SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), position, -rotation, (MVector2*) &texCoords);
+               MVector3(-SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), MVector3(SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), &ProjModelViewMatrix, (MVector2*) &texCoords);
 
     texCoords[0] = MVector2(0, 0);
     texCoords[1] = MVector2(0, 1);
@@ -127,7 +144,7 @@ void MSkybox::drawSkybox(MVector3 position, MVector3 rotation)
     // links 5
     render->bindTexture(m_SkyboxTexture[3]->getTextureId());
     drawQuad(MVector3(-SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE), MVector3(-SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE),
-                MVector3(-SKYBOX_SIZE,-SKYBOX_SIZE, -SKYBOX_SIZE), MVector3(-SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), position, -rotation, (MVector2*) &texCoords);
+                MVector3(-SKYBOX_SIZE,-SKYBOX_SIZE, -SKYBOX_SIZE), MVector3(-SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), &ProjModelViewMatrix, (MVector2*) &texCoords);
 
 
     texCoords[3] = MVector2(0, 1);
@@ -138,13 +155,20 @@ void MSkybox::drawSkybox(MVector3 position, MVector3 rotation)
     // rechts 6
     render->bindTexture(m_SkyboxTexture[0]->getTextureId());
     drawQuad(MVector3(SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE), MVector3(SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE),
-                MVector3(SKYBOX_SIZE,-SKYBOX_SIZE, -SKYBOX_SIZE), MVector3(SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), position, -rotation, (MVector2*) &texCoords);
+                MVector3(SKYBOX_SIZE,-SKYBOX_SIZE, -SKYBOX_SIZE), MVector3(SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), &ProjModelViewMatrix, (MVector2*) &texCoords);
 
     render->bindFX(0);
 }
 
 void MSkybox::loadSkyboxTextures(const char *path)
 {
+    if(strlen(path) == 0)
+    {
+        m_init = false;
+        m_path.clear();
+        return;
+    }
+
     MRenderingContext* render = MEngine::getInstance()->getRenderingContext();
     MEngine* engine = MEngine::getInstance();
 
@@ -154,17 +178,24 @@ void MSkybox::loadSkyboxTextures(const char *path)
     if(!strcmp(globalFilename, m_path.getSafeString()))
         return;
 
-    m_path.set(globalFilename);
+    m_path.set(path);
 
     if(!m_init)
     {
         render->createVertexShader(&m_vertShad);
-        render->sendShaderSource(m_vertShad, skyboxVertShader.c_str());
+        bool success = render->sendShaderSource(m_vertShad, m_skyboxVertShader.c_str());
 
         render->createPixelShader(&m_pixShad);
-        render->sendShaderSource(m_pixShad, skyboxFragShader.c_str());
+        success &= render->sendShaderSource(m_pixShad, m_skyboxFragShader.c_str());
 
-        render->createFX(&m_fx, m_vertShad, m_pixShad);
+        if(!success)
+        {
+            m_fx = 0;
+        }
+        else
+        {
+            render->createFX(&m_fx, m_vertShad, m_pixShad);
+        }
     }
 
     if(m_fx == 0)
@@ -196,7 +227,7 @@ void MSkybox::loadSkyboxTextures(const char *path)
     m_init = true;
 }
 
-void MSkybox::drawQuad(MVector3 v1, MVector3 v2, MVector3 v3, MVector3 v4, MVector3 position, MVector3 rotation, MVector2* texCoords)
+void MSkybox::drawQuad(MVector3 v1, MVector3 v2, MVector3 v3, MVector3 v4, MMatrix4x4* matrix, MVector2* texCoords)
 {
     MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
@@ -209,27 +240,7 @@ void MSkybox::drawQuad(MVector3 v1, MVector3 v2, MVector3 v3, MVector3 v4, MVect
     vertices[3] = v3;
     vertices[2] = v4;
 
-    // projmodelview matrix
-    static MMatrix4x4 ProjMatrix;
-    static MMatrix4x4 ModelViewMatrix;
-    static MMatrix4x4 ProjModelViewMatrix;
-
-    render->getProjectionMatrix(&ProjMatrix);
-    render->getModelViewMatrix(&ModelViewMatrix);
-
-    ModelViewMatrix.loadIdentity();
-    ModelViewMatrix.translate(position);
-
-    // printf("rotation(%f, %f, %f)\n", rotation.x, rotation.y, rotation.z);
-
-    // First, rotate X and Y so Z points up
-    ModelViewMatrix.setRotationEuler(rotation.x,rotation.y, 0);
-
-    // Rotate around the Z axis
-    ModelViewMatrix.rotate(MVector3(0,0,1), rotation.z);
-
-    ProjModelViewMatrix = ProjMatrix * ModelViewMatrix;
-    render->sendUniformMatrix(m_fx, "ProjModelViewMatrix", &ProjModelViewMatrix);
+    render->sendUniformMatrix(m_fx, "ProjModelViewMatrix", matrix);
 
     // Texture
     int texIds[4] = { 0, 1, 2, 3 };

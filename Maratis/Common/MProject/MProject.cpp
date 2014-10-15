@@ -66,6 +66,32 @@ bool MProject::loadXML(const char * filename)
 
 	hRoot = TiXmlHandle(rootNode);
 
+    // Game config
+    TiXmlElement * gameNode = rootNode->FirstChildElement("Game");
+    MGame* game = MEngine::getInstance()->getGame();
+    if(gameNode)
+    {
+       const char* vertShad = gameNode->Attribute("vertex_shader");
+       const char* fragShad = gameNode->Attribute("fragment_shader");
+       const char* resolution_string = gameNode->Attribute("resolution");
+
+       float resolution = 1.0;
+
+       if(resolution_string)
+            sscanf(resolution_string, "%f", &resolution);
+
+       if(game)
+       {
+           game->getPostProcessor()->setShaderPath(vertShad, fragShad);
+           game->getPostProcessor()->setResolutionMultiplier(resolution);
+           game->enablePostEffects();
+       }
+    }
+    else if(game)
+    {
+        game->disablePostEffects();
+    }
+
 	// Project
 	TiXmlElement * projectNode = rootNode->FirstChildElement("Project");
 	if(! projectNode)
@@ -111,7 +137,17 @@ bool MProject::saveXML(const char * filename)
 
 	char version[] = "3.0";
 	fprintf(file, "<Maratis version=\"%s\">\n\n", version);
-	fprintf(file, "<Project>\n\n");
+
+    // Write game config (post effects etc.)
+    MGame* game = MEngine::getInstance()->getGame();
+    if(game != NULL && game->hasPostEffects())
+    {
+        fprintf(file, "<Game vertex_shader=\"%s\" fragment_shader=\"%s\" resolution=\"%f\"/>\n",
+                game->getPostProcessor()->getVertexShader(), game->getPostProcessor()->getFragmentShader(),
+                game->getPostProcessor()->getResolutionMultiplier());
+    }
+
+    fprintf(file, "<Project>\n\n");
 
 	// renderer
 	if(renderer.size() > 0)

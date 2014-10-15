@@ -19,11 +19,6 @@ LOCAL_SRC_FILES := $(NEO_PATH)/libMEngine.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE    := zlib 
-LOCAL_SRC_FILES := $(NEO_PATH)/libzlib.a
-include $(PREBUILT_STATIC_LIBRARY)
-
-include $(CLEAR_VARS)
 LOCAL_MODULE    := vorbis
 LOCAL_SRC_FILES := $(NEO_PATH)/libvorbis.a
 include $(PREBUILT_STATIC_LIBRARY)

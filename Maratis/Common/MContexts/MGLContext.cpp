@@ -34,11 +34,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+// For linking Glew
+#define GLEW_STATIC
+
 #ifdef __APPLE__
 	#include <OpenGL/OpenGL.h>
     #include <OpenGL/gl.h>
+#elif !defined(EMSCRIPTEN)
+    #include <glew.h>
 #else
-	#include <GLee.h>
+    #include <GL/glew.h>
+    #include <GL/gl.h>
 #endif
 
 #include <MEngine.h>
@@ -173,6 +179,13 @@ GLenum returnAttachType(M_FRAME_BUFFER_ATTACHMENT type)
 MGLContext::MGLContext(void):
 m_currentFrameBuffer(0)
 {
+    GLenum err = glewInit();
+    if (GLEW_OK != err)
+    {
+        MLOG_ERROR("Can't initialize GLEW: " << glewGetErrorString(err));
+        return;
+    }
+
 	// version
 	const char * version = (const char *)glGetString(GL_VERSION);
 	if(version)
@@ -642,7 +655,7 @@ void MGLContext::deleteShader(unsigned int * shaderId){
 	glDeleteObjectARB((GLhandleARB)(*shaderId));
 }
 
-void MGLContext::sendShaderSource(unsigned int shaderId, const char * source)
+bool MGLContext::sendShaderSource(unsigned int shaderId, const char * source)
 {
 	glShaderSourceARB((GLhandleARB)shaderId, 1, &source, NULL);
 	glCompileShaderARB((GLhandleARB)shaderId);
@@ -655,7 +668,10 @@ void MGLContext::sendShaderSource(unsigned int shaderId, const char * source)
 		char shader_link_error[4096];
         glGetInfoLogARB((GLhandleARB)shaderId, sizeof(shader_link_error), NULL, shader_link_error);
         MLOG_ERROR(shader_link_error);
+        return false;
 	}
+
+    return true;
 }
 
 // FX

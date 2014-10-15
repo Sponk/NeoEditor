@@ -115,7 +115,7 @@ string compat_functionsShader = string(
 		"shadow /= 5.0;"*/
 		
 		 
-        "float blur = (shadBlur*0.001);"
+        "float blur = (shadBlur*0.0001);"
 		"vec4 rand = texture2D(RandTexture, (shadowCoordinateWdivide.xy)*(500.0/(shadBlur+1.0)))*2.0 - 1.0;"
 		
 		"vec2 d = rand.xy;"
@@ -142,7 +142,7 @@ string compat_functionsShader = string(
 	"float lambertTerm = max(dot(N, L), 0.0);"
 	"if(lambertTerm > 0.0)"
 	"{"
-		"if(spotCos > 0.0)"
+        "if(spotCos > 0.0 && spotCos < 1.0)"
 		"{"
 			"float spot = dot(spotDir, -L);"
 			
@@ -162,6 +162,19 @@ string compat_functionsShader = string(
 				"specular = specular + (lightSpecular * spec);"
 			"}"
 		"}"
+        "else if(spotCos >= 1.0)"
+        "{"
+                 "float shadow = computeShadow(shad, shadCoord, shadMap, shadBias, shadBlur);"
+
+                 "float lightDirLength2 = dot(lightDir, lightDir);"
+                 "float attenuation = (1.0 / (constantAttenuation + (lightDirLength2 * quadraticAttenuation)))*shadow;"
+
+                 "diffuse = diffuse + (lightDiffuse * lambertTerm * attenuation);"
+
+                 "vec3 S = normalize(E + L);"
+                 "float spec = pow(max(dot(S, N), 0.0), MaterialShininess) * attenuation;"
+                 "specular = specular + (lightSpecular * spec);"
+        "}"
 		"else"
 		"{"
 			"float lightDirLength2 = dot(lightDir, lightDir);"
@@ -184,7 +197,7 @@ string compat_functionsShader = string(
 	"float lambertTerm = max(dot(N, L), 0.0);"
 	"if(lambertTerm > 0.0)"
 	"{"
-		"if(spotCos > 0.0)"
+        "if(spotCos > 0.0 && spotCos < 1.0)"
 		"{"
 			"float spot = dot(spotDir, -L);"
 			
@@ -202,6 +215,17 @@ string compat_functionsShader = string(
 				"specular = specular + (lightSpecular * spec);"
 			"}"
 		"}"
+        "else if(spotCos >= 1.0)"
+        "{"
+             "float lightDirLength2 = dot(lightDir, lightDir);"
+             "float attenuation = (1.0 / (constantAttenuation + (lightDirLength2 * quadraticAttenuation)));"
+
+             "diffuse = diffuse + (lightDiffuse * lambertTerm * attenuation);"
+
+             "vec3 S = normalize(E + L);"
+             "float spec = pow(max(dot(S, N), 0.0), MaterialShininess) * attenuation;"
+             "specular = specular + (lightSpecular * spec);"
+        "}"
 		"else"
 		"{"
 			"float lightDirLength2 = dot(lightDir, lightDir);"
@@ -387,7 +411,7 @@ string compat_fragShader8 = string(
 
 // Standard simple
 string compat_vertShader1 = string(
-vertHeader +
+compat_vertHeader +
 
 "void main(void)"
 "{"
@@ -401,7 +425,7 @@ vertHeader +
 "}");
 
 string compat_fragShader1 = string(
-fragHeader +
+compat_fragHeader +
 
 "vec3 diffuse = MaterialEmit;"
 "vec3 specular = vec3(0.0, 0.0, 0.0);"
@@ -409,11 +433,11 @@ fragHeader +
 "vec3 N = normalize(normal.xyz);"
 "vec3 E = normalize(-position.xyz);"
 
-+ functionsShader +
++ compat_functionsShader +
 
 "void main(void)"
 "{"
-	+ lightShader +
+    + compat_lightShader +
 
 	"vec4 finalColor = vec4(diffuse + specular, MaterialOpacity);"
 	"float fogFactor = clamp((FogEnd + position.z) * FogScale, 0.0, 1.0);"
@@ -423,7 +447,7 @@ fragHeader +
 
 // Standard diffuse
 string compat_vertShader2 = string(
-vertHeader +
+compat_vertHeader +
 
 "attribute vec2 TexCoord0;"
 							
@@ -440,7 +464,7 @@ vertHeader +
 "}");
 
 string compat_fragShader2 = string(
-fragHeader +
+compat_fragHeader +
 							
 "vec4 texture0 = texture2D(Texture[0], texCoord[0].xy);"
 
@@ -450,11 +474,11 @@ fragHeader +
 "vec3 N = normalize(normal.xyz);"
 "vec3 E = normalize(-position.xyz);"
 
-+ functionsShader +
++ compat_functionsShader +
 
 "void main(void)"
 "{"			
-	+ lightShader +
+    + compat_lightShader +
 
 	"vec4 finalColor = vec4(diffuse+specular, MaterialOpacity)*texture0;"
 	"float fogFactor = clamp((FogEnd + position.z) * FogScale, 0.0, 1.0);"
@@ -464,7 +488,7 @@ fragHeader +
 
 // Standard diffuse+specular
 string compat_vertShader3 = string(
-vertHeader +
+compat_vertHeader +
 
 "attribute vec2 TexCoord0;"
 "attribute vec2 TexCoord1;"
@@ -483,7 +507,7 @@ vertHeader +
 "}");
 
 string compat_fragShader3 = string(
-fragHeader +
+compat_fragHeader +
 							
 "vec4 texture0 = texture2D(Texture[0], texCoord[0].xy);"						
 "vec4 texture1 = texture2D(Texture[1], texCoord[0].zw);"
@@ -494,11 +518,11 @@ fragHeader +
 "vec3 N = normalize(normal.xyz);"
 "vec3 E = normalize(-position.xyz);"
 
-+ functionsShader +
++ compat_functionsShader +
 
 "void main(void)"
 "{"				
-	+ lightShader +
+    + compat_lightShader +
 
 	"vec4 finalColor = vec4(diffuse*texture0.xyz + specular*texture1.xyz, MaterialOpacity*texture0.w);"
 	"float fogFactor = clamp((FogEnd + position.z) * FogScale, 0.0, 1.0);"
@@ -508,7 +532,7 @@ fragHeader +
 
 // Standard diffuse+specular+normal
 string compat_vertShader4 = string(
-vertHeader +
+compat_vertHeader +
 		
 "attribute vec2 TexCoord0;"
 "attribute vec2 TexCoord1;"
@@ -531,7 +555,7 @@ vertHeader +
 "}");
 
 string compat_fragShader4 = string(
-fragHeader +
+compat_fragHeader +
 							
 "vec4 texture0 = texture2D(Texture[0], texCoord[0].xy);"						
 "vec4 texture1 = texture2D(Texture[1], texCoord[0].zw);"
@@ -548,11 +572,11 @@ fragHeader +
 "vec3 N = normalize(tan*bump.x + bi*bump.y + nor*bump.z);"
 "vec3 E = normalize(-position.xyz);"
 
-+ functionsShader +
++ compat_functionsShader +
 
 "void main(void)"
 "{"					
-	+ lightShader +
+    + compat_lightShader +
 
 	"vec4 finalColor = vec4(diffuse*texture0.xyz + specular*texture1.xyz, MaterialOpacity*texture0.w);"
 	"float fogFactor = clamp((FogEnd + position.z) * FogScale, 0.0, 1.0);"
@@ -562,7 +586,7 @@ fragHeader +
 
 // Standard diffuse+specular+emit
 string compat_vertShader5 = string(
-vertHeader +
+compat_vertHeader +
 
 "attribute vec2 TexCoord0;"
 "attribute vec2 TexCoord1;"
@@ -584,7 +608,7 @@ vertHeader +
 "}");
 
 string compat_fragShader5 = string(
-fragHeader +
+compat_fragHeader +
 							
 "vec4 texture0 = texture2D(Texture[0], texCoord[0].xy);"						
 "vec4 texture1 = texture2D(Texture[1], texCoord[0].zw);"
@@ -596,11 +620,11 @@ fragHeader +
 "vec3 N = normalize(normal.xyz);"
 "vec3 E = normalize(-position.xyz);"
 
-+ functionsShader +
++ compat_functionsShader +
 
 "void main(void)"
 "{"					
-	+ lightShader +
+    + compat_lightShader +
 
 	"vec4 finalColor = vec4(diffuse*texture0.xyz + specular*texture1.xyz, MaterialOpacity*texture0.w);"
 	"float fogFactor = clamp((FogEnd + position.z) * FogScale, 0.0, 1.0);"
@@ -610,7 +634,7 @@ fragHeader +
 
 // Standard diffuse+specular+normal+emit
 string compat_vertShader6 = string(
-vertHeader +
+compat_vertHeader +
 		
 "attribute vec2 TexCoord0;"
 "attribute vec2 TexCoord1;"
@@ -635,7 +659,7 @@ vertHeader +
 "}");
 
 string compat_fragShader6 = string(
-fragHeader +
+compat_fragHeader +
 							
 "vec4 texture0 = texture2D(Texture[0], texCoord[0].xy);"						
 "vec4 texture1 = texture2D(Texture[1], texCoord[0].zw);"
@@ -653,11 +677,11 @@ fragHeader +
 "vec3 N = normalize(tan*bump.x + bi*bump.y + nor*bump.z);"
 "vec3 E = normalize(-position.xyz);"
 
-+ functionsShader +
++ compat_functionsShader +
 
 "void main(void)"
 "{"
-	+ lightShader +
+    + compat_lightShader +
 
 	"vec4 finalColor = vec4(diffuse*texture0.xyz + specular*texture1.xyz, MaterialOpacity*texture0.w);"
 	"float fogFactor = clamp((FogEnd + position.z) * FogScale, 0.0, 1.0);"

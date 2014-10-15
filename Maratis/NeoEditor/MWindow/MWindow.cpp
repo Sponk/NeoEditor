@@ -30,8 +30,8 @@
 //========================================================================
 
 
-#include <MMouse.h>
-#include <MKeyboard.h>
+#include <MEngine.h>
+#include "MMouse.h"
 #include "MWindow.h"
 
 #include <SDL.h>
@@ -39,6 +39,10 @@
 
 #include <FL/Fl.H>
 #include <FL/fl_message.H>
+
+#ifdef LINUX
+#include <FL/x.H>
+#endif
 
 #include <stdio.h>
 #include <string.h>
@@ -172,15 +176,30 @@ MWindow::~MWindow(void)
 	SDL_Quit();
 }
 
+// TODO: Platform specific code!
 void MWindow::setCursorPos(int x, int y)
 {
-    printf("--> Warning: Can't set cursor position! This has to be done in the FLTK window!\n");
-    // SDL_WarpMouseInWindow(g_window, x, y);
+#if defined WIN32
+      BOOL result = SetCursorPos(x, y);
+      if (result) return;
+
+#elif defined __APPLE__
+      CGPoint new_pos;
+      CGEventErr err;
+      new_pos.x = x;
+      new_pos.y = y;
+      err = CGWarpMouseCursorPosition(new_pos);
+      if (!err) return;
+
+#else
+      Window rootwindow = DefaultRootWindow(fl_display);
+      XWarpPointer(fl_display, rootwindow, rootwindow, 0, 0, 0, 0,m_position[0]+x, m_position[1]+y);
+#endif
 }
 
 void MWindow::hideCursor(void)
 {
-    printf("--> Warning: Can't hide cursor! This has to be done in the FLTK window!\n");
+    MLOG_WARNING("Can't hide cursor! This has to be done in the FLTK window!");
 
     //int r = SDL_ShowCursor(SDL_DISABLE);
 
@@ -190,7 +209,7 @@ void MWindow::hideCursor(void)
 
 void MWindow::showCursor(void)
 {
-    printf("--> Warning: Can't show cursor! This has to be done in the FLTK window!\n");
+    MLOG_WARNING("Can't show cursor! This has to be done in the FLTK window!");
 
     // int r = SDL_ShowCursor(SDL_ENABLE);
 
@@ -200,7 +219,7 @@ void MWindow::showCursor(void)
 
 void MWindow::setTitle(const char * title)
 {
-    printf("--> Warning: Can't set window title! This has to be done in the FLTK window!\n");
+    MLOG_WARNING("Can't change window title! This has to be done in the FLTK window!");
 
     //SDL_SetWindowTitle(g_window, title);
 }
@@ -222,48 +241,7 @@ void MWindow::setFullscreen(bool fullscreen)
 
 void MWindow::sendEvents(MWinEvent * event)
 {
-	MKeyboard * keyboard = MKeyboard::getInstance();
-	MMouse * mouse = MMouse::getInstance();
-
-	switch(event->type)
-	{
-		case MWIN_EVENT_KEY_DOWN:
-			keyboard->onKeyDown(event->data[0]);
-			break;
-
-		case MWIN_EVENT_KEY_UP:
-			keyboard->onKeyUp(event->data[0]);
-			break;
-
-		case MWIN_EVENT_WINDOW_RESIZE:
-			m_width = (unsigned int)event->data[0];
-			m_height = (unsigned int)event->data[1];
-			break;
-
-		case MWIN_EVENT_WINDOW_MOVE:
-			m_position[0] = event->data[0];
-			m_position[1] = event->data[1];
-			break;
-
-		case MWIN_EVENT_MOUSE_BUTTON_DOWN:
-			mouse->downButton(event->data[0]);
-			break;
-
-		case MWIN_EVENT_MOUSE_BUTTON_UP:
-			mouse->upButton(event->data[0]);
-			break;
-
-		case MWIN_EVENT_MOUSE_WHEEL_MOVE:
-			mouse->setWheelDirection(event->data[0]);
-			break;
-
-		case MWIN_EVENT_MOUSE_MOVE:
-			mouse->setPosition(event->data[0], event->data[1]);
-			break;
-	}
-
-	if(m_pointerEvent)
-		m_pointerEvent(event);
+    MLOG_WARNING("Don't use MWindow for events!");
 }
 
 bool MWindow::isMouseOverWindow(void)
@@ -288,7 +266,7 @@ bool MWindow::onEvents(void)
 	MWinEvent mevent;
 	SDL_Event event;
 
-    printf("--> Warning: Won't use SDL for input!\n");
+    MLOG_WARNING("Don't use SDL for keyboard input!");
     //return false;
 
 	while (SDL_PollEvent(&event))
@@ -645,7 +623,7 @@ bool MWindow::onEvents(void)
 
 void MWindow::swapBuffer(void)
 {
-    printf("--> Warning: MWindow: Can not swap buffer! This has to be done in the FLTK window!\n");
+    MLOG_WARNING("Can't swap buffer! This has to be done in the FLTK window!");
 }
 
 bool MWindow::create(const char * title, unsigned int width, unsigned int height, int colorBits, bool fullscreen)
@@ -748,3 +726,10 @@ void MWindow::messagebox(const char* content, const char* title)
     fl_message_title(title);
     fl_message(content);
 }
+
+void MWindow::resize(unsigned int width, unsigned int height)
+{
+    m_width = width;
+    m_height = height;
+}
+

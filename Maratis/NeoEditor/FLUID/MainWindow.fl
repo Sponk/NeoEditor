@@ -1,5 +1,8 @@
 # data file for the Fltk User Interface Designer (fluid)
 version 1.0302 
+i18n_type 1 
+i18n_include "Translator.h" 
+i18n_function tr 
 header_name {.h} 
 code_name {.cxx}
 decl {\#include "Callbacks.h"} {private local
@@ -14,13 +17,15 @@ decl {\#include <FL/Fl_Color_Chooser.H>} {private local
 decl {\#include <MFileManager/MMeshSave.h>} {private local
 } 
 
+decl {\#include "../MPluginScript/MPluginScript.h"} {public global
+} 
+
 class EditorWindow {} {
-  Function {show_window()} {open
-  } {
+  Function {show_window()} {} {
     Fl_Window {} {
-      label Neo
+      label {Neo Editor}
       callback window_quit open
-      xywh {1828 225 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
+      xywh {1345 344 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -112,6 +117,11 @@ class EditorWindow {} {
             xywh {0 0 100 20} shortcut 0xffff labelsize 14 divider
           }
           MenuItem {} {
+            label {Post Effects setup}
+            callback post_effects_setup_callback
+            xywh {0 0 100 20} labelsize 14
+          }
+          MenuItem {} {
             label {Scene setup}
             callback scene_setup_callback
             xywh {0 0 100 20} labelsize 14
@@ -119,6 +129,11 @@ class EditorWindow {} {
           MenuItem {} {
             label {Delete current scene}
             callback delete_scene_callback
+            xywh {0 0 100 20} labelsize 14 divider
+          }
+          MenuItem {} {
+            label Configuration
+            callback configuration_callback
             xywh {0 0 100 20} labelsize 14
           }
         }
@@ -147,31 +162,31 @@ class EditorWindow {} {
           xywh {0 0 100 20} labelsize 14
         } {
           Submenu {} {
-            label {Add Object} open
+            label Object open
             xywh {0 0 100 20} labelsize 14
           } {
             MenuItem {} {
-              label {Add Mesh}
+              label Mesh
               callback add_mesh_callback
               xywh {0 0 100 20} shortcut 0x4006d labelsize 14
             }
             MenuItem {} {
-              label {Add Light}
+              label Light
               callback add_light_callback
               xywh {0 0 100 20} shortcut 0x4006c labelsize 14
             }
             MenuItem {} {
-              label {Add Text}
+              label Text
               callback add_text_callback
               xywh {0 0 100 20} shortcut 0x40074 labelsize 14
             }
             MenuItem {} {
-              label {Add Camera}
+              label Camera
               callback add_camera_callback
               xywh {0 0 100 20} shortcut 0x40063 labelsize 14
             }
             MenuItem {} {
-              label {Add Sound}
+              label Sound
               callback add_sound_callback
               xywh {0 0 100 20} labelsize 14
             }
@@ -181,12 +196,12 @@ class EditorWindow {} {
             xywh {0 0 100 20} labelsize 14
           } {}
           MenuItem {} {
-            label {Add Scene}
+            label Scene
             callback add_scene_callback
             xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
-            label {Add Group}
+            label Group
             callback add_group_callback
             xywh {0 0 100 20} labelsize 14
           }
@@ -219,58 +234,56 @@ class EditorWindow {} {
         class GLBox
       }
       Fl_Tree scene_tree {
+        user_data 0 user_data_type long
         callback scene_tree_callback
         xywh {0 55 201 570} when 4
+        code0 {\#include "DnDTree.h"}
+        class DnDTree
       }
       Fl_Group edit_group {open
-        xywh {3 24 887 30}
+        xywh {3 24 911 42}
         code0 {edit_group->resizable(NULL);}
       } {
         Fl_Round_Button {} {
-          label Translate
           user_data {'t'} user_data_type long
           callback set_edit_type
-          xywh {258 27 90 24} type Radio down_box ROUND_DOWN_BOX shortcut 0x31 value 1
+          image {../../../Data/Editor/translate.png} xywh {198 27 39 24} type Radio box UP_FRAME down_box ROUND_DOWN_BOX shortcut 0x31 value 1 align 276
         }
         Fl_Round_Button {} {
-          label Rotate
           user_data {'r'} user_data_type long
           callback set_edit_type
-          xywh {345 27 69 24} type Radio down_box ROUND_DOWN_BOX shortcut 0x32
+          image {../../../Data/Editor/rotate.png} xywh {240 27 39 24} type Radio box UP_FRAME down_box ROUND_DOWN_BOX shortcut 0x32 align 276
         }
         Fl_Round_Button {} {
-          label Scale
           user_data {'s'} user_data_type long
           callback set_edit_type
-          xywh {414 27 60 24} type Radio down_box ROUND_DOWN_BOX shortcut 0x33
+          image {../../../Data/Editor/scale.png} xywh {282 27 39 24} type Radio box UP_FRAME down_box ROUND_DOWN_BOX shortcut 0x33
         }
-        Fl_Choice scenes_menu {
-          label {Scenes:} open
-          xywh {537 30 129 18} down_box BORDER_BOX
+        Fl_Choice scenes_menu {open
+          xywh {597 27 129 24} down_box BORDER_BOX
         } {}
         Fl_Group speed_group {open
-          xywh {3 27 258 21}
+          xywh {3 25 192 23}
           code0 {speed_group->resizable(NULL);}
         } {
           Fl_Value_Input rotation_speed {
-            label {Rotation:}
+            label {Rot.:}
             callback rotation_speed_callback
-            xywh {72 27 45 20} align 68 when 8 value 1
+            xywh {39 27 45 20} align 68 when 8 value 1
           }
           Fl_Value_Input translation_speed {
-            label {Translation:}
+            label {Trans.:}
             callback translation_speed_callback
-            xywh {207 28 45 20} when 8 value 1
+            xywh {141 28 45 20} when 8 value 1
           }
         }
         Fl_Check_Button vue_ortho_button {
           label Ortho
           callback ortho_callback
-          xywh {673 30 57 18} down_box DOWN_BOX shortcut 0x35
+          xywh {732 27 57 24} down_box DOWN_BOX shortcut 0x35
         }
-        Fl_Choice {} {
-          label {View:} open
-          xywh {783 30 107 18} down_box BORDER_BOX
+        Fl_Choice {} {open
+          xywh {801 27 107 24} down_box BORDER_BOX
         } {
           MenuItem {} {
             label Other
@@ -303,13 +316,27 @@ class EditorWindow {} {
             xywh {0 0 100 20} labelsize 14
           }
         }
+        Fl_Button {} {
+          callback play_game_button_callback
+          image {../../../Data/Editor/buttonGame.png} xywh {333 27 39 24}
+        }
+        Fl_Button {} {
+          label {Play in Editor}
+          callback play_game_in_editor
+          xywh {381 27 96 24} shortcut 0xffc3
+        }
+        Fl_Button {} {
+          label Console
+          callback show_console_callback
+          xywh {486 27 84 24}
+        }
       }
       Fl_Tabs {} {open
         xywh {687 54 267 645}
       } {
         Fl_Tabs {} {
           label Object open
-          xywh {693 75 261 624} hide
+          xywh {693 75 261 624}
         } {
           Fl_Scroll {} {open
             xywh {693 75 261 624}
@@ -327,21 +354,21 @@ class EditorWindow {} {
                 label {X:}
                 user_data {'t'} user_data_type long
                 callback edit_object_callback
-                xywh {720 201 51 21} maximum 1000 step 1
+                xywh {720 201 51 21} maximum 1000 step 0.01
                 code0 {xpos_edit->soft(true);}
               }
               Fl_Value_Input ypos_edit {
                 label {Y:}
                 user_data {'t'} user_data_type long
                 callback edit_object_callback
-                xywh {792 201 48 21} maximum 1000 step 1
+                xywh {792 201 48 21} maximum 1000 step 0.01
                 code0 {ypos_edit->soft(true);}
               }
               Fl_Value_Input zpos_edit {
                 label {Z:}
                 user_data {'t'} user_data_type long
                 callback edit_object_callback
-                xywh {861 201 51 21} maximum 1000 step 1
+                xywh {861 201 51 21} maximum 1000 step 0.01
                 code0 {zpos_edit->soft(true);}
               }
             }
@@ -353,21 +380,21 @@ class EditorWindow {} {
                 label {X:}
                 user_data {'r'} user_data_type long
                 callback edit_object_callback
-                xywh {717 261 48 21} maximum 360 step 5
+                xywh {717 261 48 21} maximum 360 step 1
                 code0 {xrot_edit->soft(true);}
               }
               Fl_Value_Input yrot_edit {
                 label {Y:}
                 user_data {'r'} user_data_type long
                 callback edit_object_callback
-                xywh {786 261 48 21} maximum 360 step 5
+                xywh {786 261 48 21} maximum 360 step 1
                 code0 {yrot_edit->soft(true);}
               }
               Fl_Value_Input zrot_edit {
                 label {Z:}
                 user_data {'r'} user_data_type long
                 callback edit_object_callback
-                xywh {858 261 48 21} maximum 360 step 5
+                xywh {858 261 48 21} maximum 360 step 1
                 code0 {zrot_edit->soft(true);}
               }
             }
@@ -406,7 +433,7 @@ class EditorWindow {} {
         }
         Fl_Tabs special_tab {
           label Special open
-          xywh {687 75 267 624} box NO_BOX
+          xywh {687 75 267 624} box NO_BOX hide
           code0 {special_tab->resizable(NULL);}
         } {}
         Fl_Tabs {} {
@@ -419,6 +446,10 @@ class EditorWindow {} {
         }
       }
     }
+    code {// Set system colors
+systemColors[0] = Fl::get_color(FL_BACKGROUND_COLOR);
+systemColors[1] = Fl::get_color(FL_BACKGROUND2_COLOR);
+systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
   }
   Function {create_light_window()} {} {
     Fl_Window light_window_object {open
@@ -686,26 +717,26 @@ class EditorWindow {} {
   }
   Function {create_camera_window()} {} {
     Fl_Window {} {open
-      xywh {1925 203 258 660} type Double hide
+      xywh {2367 337 258 660} type Double hide
     } {
       Fl_Group {} {
-        label {Clear Color:}
+        label {Clear Color:} open
         xywh {5 27 218 76} box ENGRAVED_FRAME align 5
       } {
         Fl_Value_Input camera_color_r {
           label {Red:}
           callback edit_camera_properties
-          xywh {10 47 45 21} align 5 step 0.1
+          xywh {10 47 45 21} align 5 step 0.01
         }
         Fl_Value_Input camera_color_g {
           label {Green:}
           callback edit_camera_properties
-          xywh {61 47 45 21} align 5 step 0.1
+          xywh {61 47 45 21} align 5 step 0.01
         }
         Fl_Value_Input camera_color_b {
           label {Blue:}
           callback edit_camera_properties
-          xywh {115 47 45 21} align 5 step 0.1
+          xywh {115 47 45 21} align 5 step 0.01
         }
         Fl_Button {} {
           label {Choose color}
@@ -739,8 +770,8 @@ class EditorWindow {} {
         }
       }
       Fl_Group {} {
-        label {Fog:}
-        xywh {5 324 218 81} box ENGRAVED_FRAME align 5
+        label {Fog:} open
+        xywh {5 324 218 159} box ENGRAVED_FRAME align 5
       } {
         Fl_Check_Button camera_fog_button {
           label Fog
@@ -752,11 +783,41 @@ class EditorWindow {} {
           callback edit_camera_properties
           xywh {15 375 117 21} align 5
         }
+        Fl_Value_Input fog_color_r {
+          label {Red:}
+          callback edit_camera_properties
+          xywh {15 424 45 21} align 5 step 0.01
+        }
+        Fl_Value_Input fog_color_g {
+          label {Green:}
+          callback edit_camera_properties
+          xywh {66 424 45 21} align 5 step 0.01
+        }
+        Fl_Value_Input fog_color_b {
+          label {Blue:}
+          callback edit_camera_properties
+          xywh {120 424 45 21} align 5 step 0.01
+        }
+        Fl_Button {} {
+          label {Choose color}
+          callback choose_fog_color
+          xywh {15 449 96 26} labeltype ENGRAVED_LABEL labelsize 11
+        }
       }
       Fl_Input camera_skybox_edit {
         label {Skybox Textures:}
         callback edit_camera_skybox
-        tooltip {Path to textures used by the skybox.} xywh {6 432 213 24} align 5 when 8
+        tooltip {Path to textures used by the skybox.} xywh {6 504 213 24} align 5 when 8
+      }
+      Fl_Button {} {
+        label {Apply editor perspective}
+        callback apply_editor_perspective
+        xywh {6 537 213 27}
+      }
+      Fl_Button {} {
+        label {Set perspective to camera}
+        callback set_editor_perspective
+        xywh {6 573 213 27}
       }
     }
   }
@@ -913,13 +974,24 @@ class EditorWindow {} {
       }
     }
   }
+  decl {MPluginScript* inputMethod;} {public local
+  }
+  decl {int systemColors[3];} {private local
+  }
+  Function {getSystemColor(int idx)} {open return_type int
+  } {
+    code {// TODO: Boundary checking!
+return systemColors[idx];} {}
+  }
+  decl {bool m_deferredUiUpdate;} {public local
+  }
 } 
 
 decl {extern EditorWindow window;} {private local
 } 
 
 class SceneSetupDlg {} {
-  Function {ok_button_callback(Fl_Button* button, SceneSetupDlg* dlg)} {return_type {static void}
+  Function {ok_button_callback(Fl_Button* button, SceneSetupDlg* dlg)} {open return_type {static void}
   } {
     code {MEngine* engine = MEngine::getInstance();
 MVector3 ambientLight(dlg->color_r->value(), dlg->color_g->value(), dlg->color_b->value());
@@ -927,15 +999,13 @@ MVector3 ambientLight(dlg->color_r->value(), dlg->color_g->value(), dlg->color_b
 engine->getLevel()->getCurrentScene()->setAmbientLight(ambientLight);
 
 button->parent()->label("Success");
-button->parent()->hide();
-
-window.glbox->redraw();} {}
+button->parent()->hide();} {}
   }
   Function {cancel_button_callback(Fl_Button* button, void*)} {return_type {static void}
   } {
     code {button->parent()->hide();} {}
   }
-  Function {find_file_callback(Fl_Button* button, void*)} {open return_type {static void}
+  Function {find_file_callback(Fl_Button* button, void*)} {return_type {static void}
   } {
     code {const char* filename = fl_native_file_chooser("Choose file", "*.lua", (current_project.path + "scripts").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
@@ -952,7 +1022,8 @@ for(int i = 0; i < children; i++)
 	}
 }} {}
   }
-  Function {create_window()} {} {
+  Function {create_window()} {open
+  } {
     Fl_Window {} {
       label {Scene setup}
       xywh {672 297 405 246} type Double hide modal
@@ -1348,13 +1419,12 @@ xmlMeshSave(entity->getMeshRef()->getFilename(), mesh);} {}
   }
 } 
 
-class AboutDlg {open
-} {
+class AboutDlg {} {
   Function {create_window()} {open
   } {
     Fl_Window {} {
-      label About open selected
-      xywh {1990 333 354 309} type Double non_modal visible
+      label About open
+      xywh {1990 333 354 309} type Double hide non_modal
     } {
       Fl_Box {} {
         label {The Neo Editor is distributed under the terms and conditions of the GNU General Public License.}
@@ -1383,8 +1453,7 @@ class AboutDlg {open
 class PublishDlg {} {
   decl {Fl_Window* window;} {private local
   }
-  Function {create_window()} {open
-  } {
+  Function {create_window()} {} {
     Fl_Window {} {
       label Publish open
       xywh {1964 410 510 132} type Double hide modal
@@ -1487,8 +1556,7 @@ Function {new_scene_cancel_callback(Fl_Button* button,void*)} {} {
 window->hide();} {}
 } 
 
-class ConstraintPropertiesDlg {open
-} {
+class ConstraintPropertiesDlg {} {
   decl {Fl_Window* win;} {private local
   }
   Function {create_window()} {} {
@@ -1757,7 +1825,7 @@ else if(constraint && button->value() == 0)
 
 }} {}
   }
-  Function {close_callback(Fl_Button*, ConstraintPropertiesDlg* dlg)} {return_type {static void}
+  Function {close_callback(Fl_Button*, ConstraintPropertiesDlg* dlg)} {open return_type {static void}
   } {
     code {MOEntity* entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
 
@@ -1774,35 +1842,38 @@ if(!phys)
 
 MPhysicsConstraint* constraint = phys->getConstraint();
 
-MVector3 vector;
+if(constraint)
+{
+	MVector3 vector;
 
-vector.x = dlg->xpivot_edit->value();
-vector.y = dlg->ypivot_edit->value();
-vector.z = dlg->zpivot_edit->value();
-constraint->pivot = vector;
+	vector.x = dlg->xpivot_edit->value();
+	vector.y = dlg->ypivot_edit->value();
+	vector.z = dlg->zpivot_edit->value();
+	constraint->pivot = vector;
 
-vector.x = dlg->xlinear_lower->value();
-vector.y = dlg->ylinear_lower->value();
-vector.z = dlg->zlinear_lower->value();
-constraint->lowerLinearLimit = vector;
+	vector.x = dlg->xlinear_lower->value();
+	vector.y = dlg->ylinear_lower->value();
+	vector.z = dlg->zlinear_lower->value();
+	constraint->lowerLinearLimit = vector;
 
-vector.x = dlg->xlinear_upper->value();
-vector.y = dlg->ylinear_upper->value();
-vector.z = dlg->zlinear_upper->value();
-constraint->upperLinearLimit = vector;
+	vector.x = dlg->xlinear_upper->value();
+	vector.y = dlg->ylinear_upper->value();
+	vector.z = dlg->zlinear_upper->value();
+	constraint->upperLinearLimit = vector;
 
-vector.x = dlg->xangular_lower->value();
-vector.y = dlg->yangular_lower->value();
-vector.z = dlg->zangular_lower->value();
-constraint->lowerAngularLimit = vector;
+	vector.x = dlg->xangular_lower->value();
+	vector.y = dlg->yangular_lower->value();
+	vector.z = dlg->zangular_lower->value();
+	constraint->lowerAngularLimit = vector;
 
-vector.x = dlg->xangular_upper->value();
-vector.y = dlg->yangular_upper->value();
-vector.z = dlg->zangular_upper->value();
-constraint->upperAngularLimit = vector;
+	vector.x = dlg->xangular_upper->value();
+	vector.y = dlg->yangular_upper->value();
+	vector.z = dlg->zangular_upper->value();
+	constraint->upperAngularLimit = vector;
 
-constraint->disableParentCollision = !dlg->parent_collision->value();
-constraint->parentName.set(dlg->parent_input->value());
+	constraint->disableParentCollision = !dlg->parent_collision->value();
+	constraint->parentName.set(dlg->parent_input->value());
+}
 
 dlg->win->hide();
 Fl::delete_widget(dlg->win);
@@ -1813,5 +1884,739 @@ delete dlg;} {}
     code {dlg->win->hide();
 Fl::delete_widget(dlg->win);
 delete dlg;} {}
+  }
+} 
+
+class ConfigurationDlg {} {
+  decl {Fl_Text_Buffer text_buffer;} {private local
+  }
+  Function {create_window()} {open
+  } {
+    Fl_Window {} {
+      label Configuration open
+      xywh {2026 473 543 348} type Double hide
+    } {
+      Fl_Tabs {} {open
+        xywh {0 3 546 342}
+      } {
+        Fl_Group {} {
+          label Theme open
+          xywh {3 27 543 318}
+        } {
+          Fl_Choice theme_chooser {
+            label {Themes:}
+            xywh {72 39 138 27} down_box BORDER_BOX
+          } {
+            MenuItem {} {
+              label {gtk+}
+              xywh {0 0 100 20} labelsize 14
+            }
+            MenuItem {} {
+              label gleam
+              xywh {0 0 100 20} labelsize 14
+            }
+            MenuItem {} {
+              label plastic
+              xywh {0 0 100 20} labelsize 14
+            }
+            MenuItem {} {
+              label none
+              xywh {0 0 100 20} labelsize 14
+            }
+          }
+          Fl_Group {} {
+            label {Background Color:} open
+            xywh {12 98 198 76} box ENGRAVED_FRAME align 5
+          } {
+            Fl_Value_Input background_color_r {
+              label {Red:}
+              xywh {17 118 45 21} align 5 step 0.1
+            }
+            Fl_Value_Input background_color_g {
+              label {Green:}
+              xywh {68 118 45 21} align 5 step 0.1
+            }
+            Fl_Value_Input background_color_b {
+              label {Blue:}
+              xywh {120 118 45 21} align 5 step 0.1
+            }
+            Fl_Button {} {
+              label {Choose color}
+              user_data this user_data_type {ConfigurationDlg*}
+              callback choose_background_color
+              xywh {18 142 96 26} labeltype ENGRAVED_LABEL labelsize 11
+            }
+          }
+          Fl_Group {} {
+            label {Background Color 2:} open
+            xywh {234 98 198 76} box ENGRAVED_FRAME align 5
+          } {
+            Fl_Value_Input background2_color_r {
+              label {Red:}
+              xywh {239 118 45 21} align 5 step 0.1
+            }
+            Fl_Value_Input background2_color_g {
+              label {Green:}
+              xywh {290 118 45 21} align 5 step 0.1
+            }
+            Fl_Value_Input background2_color_b {
+              label {Blue:}
+              xywh {344 118 45 21} align 5 step 0.1
+            }
+            Fl_Button {} {
+              label {Choose color}
+              user_data this user_data_type {ConfigurationDlg*}
+              callback choose_background2_color
+              xywh {239 142 96 26} labeltype ENGRAVED_LABEL labelsize 11
+            }
+          }
+          Fl_Group {} {
+            label {Foreground Color:} open
+            xywh {12 206 198 76} box ENGRAVED_FRAME align 5
+          } {
+            Fl_Value_Input foreground_color_r {
+              label {Red:}
+              xywh {17 226 45 21} align 5 step 0.1
+            }
+            Fl_Value_Input foreground_color_g {
+              label {Green:}
+              xywh {68 226 45 21} align 5 step 0.1
+            }
+            Fl_Value_Input foreground_color_b {
+              label {Blue:}
+              xywh {122 226 45 21} align 5 step 0.1
+            }
+            Fl_Button {} {
+              label {Choose color}
+              user_data this user_data_type {ConfigurationDlg*}
+              callback choose_foreground_color
+              xywh {17 250 96 26} labeltype ENGRAVED_LABEL labelsize 11
+            }
+          }
+          Fl_Button {} {
+            label Apply
+            user_data this user_data_type {ConfigurationDlg*}
+            callback apply_settings_callback
+            xywh {12 303 198 27}
+          }
+          Fl_Button {} {
+            label {Reset to Defaults}
+            user_data this user_data_type {ConfigurationDlg*}
+            callback reset_settings_callback
+            xywh {234 303 198 27}
+          }
+          Fl_Choice lang_chooser {
+            label {Language:} open
+            xywh {237 222 192 27} down_box BORDER_BOX align 5
+          } {}
+        }
+        Fl_Group {} {
+          label Input open
+          xywh {0 27 546 318} hide
+        } {
+          Fl_Choice input_methods_choice {
+            label {Input Methods:} open
+            xywh {117 36 147 27} down_box BORDER_BOX
+          } {}
+        }
+        Fl_Group {} {
+          label Plugins open
+          xywh {0 27 546 318} box DOWN_BOX hide
+        } {
+          Fl_Browser plugin_browser {
+            user_data this user_data_type {ConfigurationDlg*}
+            callback plugin_changed_callback
+            xywh {3 36 189 306} type Select
+          }
+          Fl_Output author_edit {
+            label {Author:}
+            xywh {267 42 231 27}
+          }
+          Fl_Output license_edit {
+            label {License:}
+            xywh {267 75 231 27}
+          }
+          Fl_Text_Display description_edit {
+            label {Description:}
+            xywh {207 129 291 156} box UP_BOX align 5
+          }
+        }
+      }
+    }
+    code {// Init
+  Fl_Color c = Fl::get_color(FL_BACKGROUND_COLOR);
+
+  char unsigned bytes[4];
+  bytes[0] = (c >> 24) & 0xFF;
+  bytes[1] = (c >> 16) & 0xFF;
+  bytes[2] = (c >> 8) & 0xFF;
+  bytes[3] = c & 0xFF;
+
+  background_color_r->value(static_cast<float>(bytes[0])/255.0f);
+  background_color_g->value(static_cast<float>(bytes[1])/255.0f);
+  background_color_b->value(static_cast<float>(bytes[2])/255.0f);
+
+
+  c = Fl::get_color(FL_BACKGROUND2_COLOR);
+  bytes[0] = (c >> 24) & 0xFF;
+  bytes[1] = (c >> 16) & 0xFF;
+  bytes[2] = (c >> 8) & 0xFF;
+  bytes[3] = c & 0xFF;
+
+  background2_color_r->value(static_cast<float>(bytes[0])/255.0f);
+  background2_color_g->value(static_cast<float>(bytes[1])/255.0f);
+  background2_color_b->value(static_cast<float>(bytes[2])/255.0f);
+
+  c = Fl::get_color(FL_FOREGROUND_COLOR);
+  bytes[0] = (c >> 24) & 0xFF;
+  bytes[1] = (c >> 16) & 0xFF;
+  bytes[2] = (c >> 8) & 0xFF;
+  bytes[3] = c & 0xFF;
+
+  foreground_color_r->value(static_cast<float>(bytes[0])/255.0f);
+  foreground_color_g->value(static_cast<float>(bytes[1])/255.0f);
+  foreground_color_b->value(static_cast<float>(bytes[2])/255.0f);
+  
+const char* themes[] = {"gtk+", "gleam", "plastic", "none"};
+const char* scheme = Fl::scheme();
+
+if(scheme != NULL)
+{
+  for(int i = 0; i < 4; i++)
+  {
+      if(!strcmp(themes[i], scheme))
+      {
+          theme_chooser->value(i);
+          break;
+      }
+  }
+}
+else
+{
+    theme_chooser->value(3);
+}
+
+// Load all languages
+char dir[256];
+getGlobalFilename(dir, MWindow::getInstance()->getCurrentDirectory(), "translations");
+std::vector<std::string> files;
+
+readDirectory(dir, &files, false, false);
+MLOG_INFO("Searching for translations in " << dir);
+
+std::string currentFile;
+const char* currentLang = Translator::getInstance()->getLanguageFile();
+for(int i = 0; i < files.size(); i++)
+{
+        currentFile = files[i];
+	lang_chooser->add(currentFile.c_str());       
+	
+	if(currentFile == currentLang)
+		lang_chooser->value(i);
+}
+
+extern std::vector<MPluginScript*> editorPlugins;
+
+input_methods_choice->add("Native", 0, (Fl_Callback*) ConfigurationDlg::setInputMethod, (void*) -1);
+input_methods_choice->value(0);	
+
+int idx = 0;
+
+for(int i = 0; i < editorPlugins.size(); i++)
+{	
+	if(editorPlugins[i]->hasInputMethod())
+	{
+		input_methods_choice->add(editorPlugins[i]->getName().c_str(),0, (Fl_Callback*) ConfigurationDlg::setInputMethod, (void*) i);
+		if(window.inputMethod != NULL && editorPlugins[i]->getName() == window.inputMethod->getName())
+			idx = input_methods_choice->size()-2;
+	}
+	
+	plugin_browser->add(editorPlugins[i]->getName().c_str());
+}
+
+input_methods_choice->value(idx);
+description_edit->buffer(&text_buffer);} {}
+  }
+  Function {choose_background_color(Fl_Button*, ConfigurationDlg* dlg)} {open return_type {static void}
+  } {
+    code {double r = dlg->background_color_r->value();
+double g = dlg->background_color_g->value();
+double b = dlg->background_color_b->value();
+
+fl_color_chooser("Choose a color", r, g, b);
+
+dlg->background_color_r->value(r);
+dlg->background_color_g->value(g);
+dlg->background_color_b->value(b);} {}
+  }
+  Function {choose_background2_color(Fl_Button*,ConfigurationDlg* dlg)} {open return_type {static void}
+  } {
+    code {double r = dlg->background2_color_r->value();
+double g = dlg->background2_color_g->value();
+double b = dlg->background2_color_b->value();
+
+fl_color_chooser("Choose a color", r, g, b);
+
+dlg->background2_color_r->value(r);
+dlg->background2_color_g->value(g);
+dlg->background2_color_b->value(b);} {}
+  }
+  Function {choose_foreground_color(Fl_Button*,ConfigurationDlg* dlg)} {open return_type {static void}
+  } {
+    code {double r = dlg->foreground_color_r->value();
+double g = dlg->foreground_color_g->value();
+double b = dlg->foreground_color_b->value();
+
+fl_color_chooser("Choose a color", r, g, b);
+
+dlg->foreground_color_r->value(r);
+dlg->foreground_color_g->value(g);
+dlg->foreground_color_b->value(b);} {}
+  }
+  Function {apply_settings_callback(Fl_Button*,ConfigurationDlg* dlg)} {open return_type {static void}
+  } {
+    code {Fl::foreground(255*dlg->foreground_color_r->value(), 255*dlg->foreground_color_g->value(), 255*dlg->foreground_color_b->value());
+Fl::background(255*dlg->background_color_r->value(), 255*dlg->background_color_g->value(), 255*dlg->background_color_b->value());
+Fl::background2(255*dlg->background2_color_r->value(), 255*dlg->background2_color_g->value(), 255*dlg->background2_color_b->value());
+
+const char* themes[] = {"gtk+", "gleam", "plastic", "none"};
+Fl::scheme(themes[dlg->theme_chooser->value()]);
+
+  if(dlg->lang_chooser->changed() && fl_ask(tr("Your language selection requires the application to restart. Continue?")))
+  {
+  	// Load all languages
+  	char dir[256];
+  	getGlobalFilename(dir, MWindow::getInstance()->getCurrentDirectory(), "translations");
+  
+	std::vector<std::string> files;
+	readDirectory(dir, &files, false, false); 	
+  
+  	\#ifndef WIN32
+    	Translator::getInstance()->loadTranslation((string(dir) + "/" + files[dlg->lang_chooser->value()]).c_str());
+  	\#else
+  	Translator::getInstance()->loadTranslation((string(dir) + "\\\\" + files[dlg->lang_chooser->value()]).c_str());
+  	\#endif  
+ 
+ 	save_settings();	
+ 	
+ 	\#ifndef WIN32
+  	getGlobalFilename(dir, MWindow::getInstance()->getCurrentDirectory(), "neo-editor");
+  	\#else
+  	getGlobalFilename(dir, MWindow::getInstance()->getCurrentDirectory(), "neo-editor.exe");
+  	\#endif
+  	MWindow::getInstance()->executeDetached(dir, NULL, true);
+   }
+
+// FIXME: UGLY!!
+dlg->foreground_color_b->parent()->parent()->parent()->parent()->redraw();
+main_window->redraw();} {}
+  }
+  Function {setInputMethod(Fl_Menu_*, long idx)} {open return_type {static void}
+  } {
+    code {if(idx == -1)
+{
+	window.inputMethod = NULL;
+	return;
+}
+
+extern std::vector<MPluginScript*> editorPlugins;
+window.inputMethod = editorPlugins[idx];} {}
+  }
+  Function {plugin_changed_callback(Fl_Browser*, ConfigurationDlg* dlg)} {open return_type {static void}
+  } {
+    code {extern std::vector<MPluginScript*> editorPlugins;
+
+if(editorPlugins.size() < dlg->plugin_browser->value())
+	return;
+int idx = dlg->plugin_browser->value()-1;
+
+if(idx < 0)
+	return;
+
+MPluginScript* plugin = editorPlugins[idx];
+dlg->author_edit->value(plugin->getAuthor().c_str());
+dlg->license_edit->value(plugin->getLicense().c_str());
+
+dlg->text_buffer.text(plugin->getDescription().c_str());} {}
+  }
+  Function {reset_settings_callback(Fl_Button*,ConfigurationDlg* dlg)} {open return_type {static void}
+  } {
+    code {// Update colors
+Fl_Color c = window.getSystemColor(0);
+
+char unsigned bytes[4];
+bytes[0] = (c >> 24) & 0xFF;
+bytes[1] = (c >> 16) & 0xFF;
+bytes[2] = (c >> 8) & 0xFF;
+bytes[3] = c & 0xFF;
+
+dlg->background_color_r->value(static_cast<float>(bytes[0])/255.0f);
+dlg->background_color_g->value(static_cast<float>(bytes[1])/255.0f);
+dlg->background_color_b->value(static_cast<float>(bytes[2])/255.0f);
+
+
+c = window.getSystemColor(1);
+bytes[0] = (c >> 24) & 0xFF;
+bytes[1] = (c >> 16) & 0xFF;
+bytes[2] = (c >> 8) & 0xFF;
+bytes[3] = c & 0xFF;
+
+dlg->background2_color_r->value(static_cast<float>(bytes[0])/255.0f);
+dlg->background2_color_g->value(static_cast<float>(bytes[1])/255.0f);
+dlg->background2_color_b->value(static_cast<float>(bytes[2])/255.0f);
+
+c = window.getSystemColor(2);
+bytes[0] = (c >> 24) & 0xFF;
+bytes[1] = (c >> 16) & 0xFF;
+bytes[2] = (c >> 8) & 0xFF;
+bytes[3] = c & 0xFF;
+
+dlg->foreground_color_r->value(static_cast<float>(bytes[0])/255.0f);
+dlg->foreground_color_g->value(static_cast<float>(bytes[1])/255.0f);
+dlg->foreground_color_b->value(static_cast<float>(bytes[2])/255.0f);
+
+// FIXME: UGLY!!
+dlg->foreground_color_b->parent()->parent()->parent()->parent()->redraw();
+main_window->redraw();} {}
+  }
+} 
+
+class PostEffectsDlg {open
+} {
+  Function {create_window()} {} {
+    Fl_Window {} {
+      label {Post Effects Setup} open
+      xywh {2089 371 591 348} type Double hide
+    } {
+      Fl_Check_Button use_post_effects {
+        label {Use Post Effects}
+        user_data this user_data_type {PostEffectsDlg*}
+        callback use_post_effects_callback
+        xywh {6 315 135 21} down_box DOWN_BOX
+      }
+      Fl_Group {} {
+        label Uniforms open
+        xywh {6 75 582 231} box ENGRAVED_FRAME align 5
+      } {
+        Fl_Value_Input uniform_value {
+          label {Uniform Value:}
+          user_data this user_data_type {PostEffectsDlg*}
+          callback update_uniform_float
+          xywh {183 138 165 24} labelsize 12 align 5 maximum 20 step 0.01
+        }
+        Fl_Browser uniforms_browser {
+          user_data this user_data_type {PostEffectsDlg*}
+          callback uniform_select_callback
+          xywh {9 81 165 222} type Select align 5 when 3
+        }
+        Fl_Button add_uniform {
+          label {Add Uniform}
+          user_data this user_data_type {PostEffectsDlg*}
+          callback add_uniform_callback
+          xywh {183 84 120 27}
+        }
+        Fl_Button save_button {
+          label {Save Profile}
+          user_data this user_data_type {PostEffectsDlg*}
+          callback save_profile_callback
+          xywh {183 270 120 27}
+        }
+        Fl_Button load_button {
+          label {Load Profile}
+          user_data this user_data_type {PostEffectsDlg*}
+          callback load_profile_callback
+          xywh {318 270 120 27}
+        }
+      }
+      Fl_Input vert_shad_edit {
+        label {Vert. Shader:}
+        xywh {96 6 465 21} labelsize 12
+      }
+      Fl_Input frag_shad_edit {
+        label {Frag. Shader:}
+        xywh {96 30 465 21} labelsize 12
+      }
+      Fl_Button vert_btn {
+        label {...}
+        user_data this user_data_type {PostEffectsDlg*}
+        callback find_vert_file_callback
+        xywh {564 6 24 21}
+      }
+      Fl_Button frag_btn {
+        label {...}
+        user_data this user_data_type {PostEffectsDlg*}
+        callback find_frag_file_callback
+        xywh {564 30 24 21}
+      }
+      Fl_Button preview_btn {
+        label {Load Shader}
+        user_data this user_data_type {PostEffectsDlg*}
+        callback preview_callback
+        xywh {417 312 168 27}
+      }
+      Fl_Value_Input resolution_edit {
+        label {Resolution:}
+        user_data this user_data_type {PostEffectsDlg*}
+        callback update_resolution
+        tooltip {Modifies the resolution of the post effects texture.
+value = 0.5 means half window resolution, value = 1.0 means full window resolution etc.} xywh {231 318 39 18} step 0.01 value 1
+      }
+    }
+    code {if(!::window.glbox->hasPostEffects())
+{
+	use_post_effects->value(0);
+	
+	uniform_value->deactivate();
+	vert_shad_edit->deactivate();
+	frag_shad_edit->deactivate();
+	uniforms_browser->deactivate();
+	vert_btn->deactivate();
+	frag_btn->deactivate();
+	preview_btn->deactivate();
+	add_uniform->deactivate();
+	save_button->deactivate();
+	load_button->deactivate();
+	resolution_edit->deactivate();
+}
+else
+{
+	use_post_effects->value(1);
+	vert_shad_edit->value(::window.glbox->getPostProcessor()->getVertexShader());
+	frag_shad_edit->value(::window.glbox->getPostProcessor()->getFragmentShader());
+	resolution_edit->value(::window.glbox->getPostProcessor()->getResolutionMultiplier());
+	
+	update_uniform_list();
+}} {}
+  }
+  Function {uniform_select_callback(Fl_Browser* widget, PostEffectsDlg* dlg)} {return_type {static void}
+  } {
+    code {PostProcessor* pp = ::window.glbox->getPostProcessor();
+    int idx = widget->value()-1;
+
+    if(idx < 0) return;
+
+    switch(pp->getUniformType(idx))
+    {
+    case M_VARIABLE_FLOAT:
+            dlg->uniform_value->value(pp->getFloatUniformValue(idx));
+        break;
+    }} {}
+  }
+  Function {find_vert_file_callback(Fl_Button* widget, PostEffectsDlg* dlg)} {return_type {static void}
+  } {
+    code {const char* filename = fl_native_file_chooser("Choose output", NULL, (current_project.path + "shaders").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+
+if(filename == NULL)
+	return;
+
+dlg->vert_shad_edit->value(filename);} {}
+  }
+  Function {find_frag_file_callback(Fl_Button* widget, PostEffectsDlg* dlg)} {return_type {static void}
+  } {
+    code {const char* filename = fl_native_file_chooser("Choose output", NULL, (current_project.path + "shaders").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+
+if(filename == NULL)
+	return;
+
+dlg->frag_shad_edit->value(filename);} {}
+  }
+  Function {preview_callback(Fl_Button* widget, PostEffectsDlg* dlg)} {return_type {static void}
+  } {
+    code {MEngine* engine = MEngine::getInstance();
+
+if(!fl_ask("If you load a new shader all uniform settings you created will be lost. Continue?"))
+	return;
+
+PostProcessor* postProcessor = ::window.glbox->getPostProcessor();
+
+postProcessor->setResolutionMultiplier(dlg->resolution_edit->value());
+postProcessor->loadShaderFile(dlg->vert_shad_edit->value(), dlg->frag_shad_edit->value());
+
+// For use when saving the project
+engine->getGame()->getPostProcessor()->setResolutionMultiplier(dlg->resolution_edit->value());
+
+::window.glbox->enablePostEffects();} {}
+  }
+  Function {use_post_effects_callback(Fl_Check_Button* widget, PostEffectsDlg* dlg)} {return_type {static void}
+  } {
+    code {if(widget->value() != 0)
+{
+	dlg->uniform_value->activate();
+	dlg->vert_shad_edit->activate();
+	dlg->frag_shad_edit->activate();
+	dlg->uniforms_browser->activate();
+	dlg->vert_btn->activate();
+	dlg->frag_btn->activate();
+	dlg->preview_btn->activate();
+	dlg->add_uniform->activate();
+	dlg->save_button->activate();
+	dlg->load_button->activate();
+	dlg->resolution_edit->activate();
+	
+	::window.glbox->enablePostEffects();
+}
+else
+{
+	dlg->uniform_value->deactivate();
+	dlg->vert_shad_edit->deactivate();
+	dlg->frag_shad_edit->deactivate();
+	dlg->uniforms_browser->deactivate();
+	dlg->vert_btn->deactivate();
+	dlg->frag_btn->deactivate();
+	dlg->preview_btn->deactivate();
+	dlg->add_uniform->deactivate();
+	dlg->save_button->deactivate();
+	dlg->load_button->deactivate();
+	dlg->resolution_edit->deactivate();
+	
+	::window.glbox->disablePostEffects();
+}} {}
+  }
+  Function {add_uniform_callback(Fl_Button*, PostEffectsDlg* dlg)} {open return_type {static void}
+  } {
+    code {Fl_Double_Window* win = dlg->new_uniform_window();
+win->show();
+
+while(win->shown())
+	Fl::wait();
+
+Fl::delete_widget(win);} {}
+  }
+  Function {new_uniform_window()} {open
+  } {
+    Fl_Window {} {
+      label {New Uniform} open
+      xywh {2230 516 261 111} type Double modal visible
+    } {
+      Fl_Input uniform_name_edit {
+        label {Name:}
+        xywh {57 9 186 27}
+      }
+      Fl_Value_Input uniform_value_edit {
+        label {Value:}
+        xywh {57 42 186 27}
+      }
+      Fl_Button {} {
+        label Ok
+        user_data this user_data_type {PostEffectsDlg*}
+        callback new_uniform_ok
+        xywh {147 78 96 27}
+      }
+      Fl_Button {} {
+        label Cancel
+        user_data this user_data_type {PostEffectsDlg*}
+        callback new_uniform_cancel selected
+        xywh {57 78 84 27}
+      }
+    }
+    code {update_uniform_list();} {}
+  }
+  Function {new_uniform_ok(Fl_Button* btn, PostEffectsDlg* dlg)} {open return_type {static void}
+  } {
+    code {btn->parent()->hide();
+
+// TODO: More uniform types!
+::window.glbox->getPostProcessor()->addFloatUniform(dlg->uniform_name_edit->value());
+::window.glbox->getPostProcessor()->setFloatUniformValue(dlg->uniform_name_edit->value(), dlg->uniform_value_edit->value());
+
+dlg->update_uniform_list();} {}
+  }
+  Function {new_uniform_cancel(Fl_Button* btn, PostEffectsDlg*)} {open return_type {static void}
+  } {
+    code {btn->parent()->hide();} {}
+  }
+  Function {update_uniform_list()} {open
+  } {
+    code {uniforms_browser->clear();
+PostProcessor* pp = ::window.glbox->getPostProcessor();
+  
+uniforms_browser->begin();
+for(int i = 0; i < pp->getNumUniforms(); i++)
+{
+  uniforms_browser->add(pp->getUniformName(i));
+}
+uniforms_browser->end();} {}
+  }
+  Function {update_uniform_float(Fl_Button* btn, PostEffectsDlg* dlg)} {open return_type {static void}
+  } {
+    code {PostProcessor* pp = ::window.glbox->getPostProcessor();
+int idx = dlg->uniforms_browser->value()-1;
+
+if(idx < 0) return;
+
+switch(pp->getUniformType(idx))
+{
+	case M_VARIABLE_FLOAT:
+        	pp->setFloatUniformValue(pp->getUniformName(idx), dlg->uniform_value->value());
+	break;
+}} {}
+  }
+  Function {save_profile_callback(Fl_Button* widget, PostEffectsDlg* dlg)} {open return_type {static void}
+  } {
+    code {const char* filename = fl_native_file_chooser("Choose file", "*.ini", (current_project.path + "shaders").c_str(), Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
+
+if(filename == NULL)
+	return;
+
+ofstream out;
+out.open(filename, ios::out);
+if(!out)
+	return;
+
+out << "[Uniforms]" << endl;
+
+PostProcessor* pp = ::window.glbox->getPostProcessor();
+
+// TODO: Allow other variable types!
+for(int i = 0; i < pp->getNumUniforms(); i++)
+{
+	out << pp->getUniformName(i) << "=" << pp->getFloatUniformValue(i) << endl;
+}
+
+out.close();} {}
+  }
+  Function {load_profile_callback(Fl_Button* widget, PostEffectsDlg* dlg)} {open return_type {static void}
+  } {
+    code {const char* filename = fl_native_file_chooser("Choose file", "*.ini", (current_project.path + "shaders").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+  
+if(filename == NULL)
+	return;
+  
+INI::Parser parser(filename);
+PostProcessor* pp = ::window.glbox->getPostProcessor();
+
+// TODO: More types!  
+for(INI::Level::value_map_t::iterator iter = parser.top()("Uniforms").values.begin(); iter != parser.top()("Uniforms").values.end(); iter++)
+{
+	pp->addFloatUniform(iter->first.c_str());
+	float value;
+
+	sscanf(iter->second.c_str(), "%f", &value);
+	pp->setFloatUniformValue(iter->first.c_str(), value);
+}
+
+dlg->update_uniform_list();} {}
+  }
+  Function {update_resolution(Fl_Value_Input* value, PostEffectsDlg* dlg)} {open return_type {static void}
+  } {
+    code {PostProcessor* pp = ::window.glbox->getPostProcessor();
+pp->setResolutionMultiplier(value->value());
+
+MEngine::getInstance()->getGame()->getPostProcessor()->setResolutionMultiplier(value->value());} {}
+  }
+} 
+
+class WaitDlg {} {
+  Function {create_window()} {open
+  } {
+    Fl_Window {} {
+      label {Loading...} open
+      xywh {2008 383 300 69} type Double hide
+    } {
+      Fl_Box {} {
+        label {The Neo Editor is loading. Please wait...}
+        xywh {9 12 279 27} align 16
+      }
+    }
   }
 } 

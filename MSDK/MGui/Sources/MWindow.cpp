@@ -30,24 +30,38 @@
 
 #ifndef ANDROID
 
+#include "../../MEngine/Includes/MEngine.h"
 #include <MMouse.h>
 #include <MKeyboard.h>
 #include <MWindow.h>
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
+#ifndef EMSCRIPTEN
 #include <SDL.h>
+#else
+#include <SDL/SDL.h>
+#endif
 
 #ifndef USE_GLES
 #include <SDL_opengl.h>
 #else
-#ifdef __APPLE__
-#include <OpenGLES/ES2/gl.h>
-#include <OpenGLES/ES2/glext.h>
-#endif
+	#ifdef __APPLE__
+		#include <OpenGLES/ES2/gl.h>
+		#include <OpenGLES/ES2/glext.h>
+	#endif
 
-#ifdef __ANDROID__
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
-#endif
+	#ifdef __ANDROID__
+		#include <GLES2/gl2.h>
+		#include <GLES2/gl2ext.h>
+	#endif
+	
+	#ifdef EMSCRIPTEN
+		#include <GLES2/gl2.h>
+		#include <GLES2/gl2ext.h>
+	#endif
 #endif
 
 #include <stdio.h>
@@ -186,7 +200,9 @@ MWindow::~MWindow(void)
 
 void MWindow::setCursorPos(int x, int y)
 {
-	SDL_WarpMouseInWindow(g_window, x, y);
+    SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
+    SDL_WarpMouseInWindow(g_window, x, y);
+    SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
 }
 
 void MWindow::hideCursor(void)
@@ -212,6 +228,7 @@ void MWindow::setTitle(const char * title)
 
 void MWindow::setFullscreen(bool fullscreen)
 {
+#ifndef EMSCRIPTEN
 	int r;
 
 	if (fullscreen)
@@ -221,7 +238,9 @@ void MWindow::setFullscreen(bool fullscreen)
 
 	if (r < 0)
 		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
-
+#else
+	printf("[ Info ] setFullscreen: STUB\n");
+#endif
 	m_fullscreen = fullscreen;
 }
 
@@ -243,6 +262,10 @@ void MWindow::sendEvents(MWinEvent * event)
 		case MWIN_EVENT_WINDOW_RESIZE:
 			m_width = (unsigned int)event->data[0];
 			m_height = (unsigned int)event->data[1];
+
+            MEngine::getInstance()->getGame()->getPostProcessor()->eraseTextures();
+            MEngine::getInstance()->getGame()->getPostProcessor()->updateResolution();
+
 			break;
 
 		case MWIN_EVENT_WINDOW_MOVE:
@@ -292,6 +315,7 @@ bool MWindow::onEvents(void)
 {
 	MWinEvent mevent;
 	SDL_Event event;
+    std::vector<SDL_Event> unhandled;
 
 	while (SDL_PollEvent(&event))
 	{
@@ -306,39 +330,13 @@ bool MWindow::onEvents(void)
 
 			case SDL_WINDOWEVENT:
 			{
-                switch (event.window.event)
-				{
-					case SDL_WINDOWEVENT_RESIZED:
-						mevent.type = MWIN_EVENT_WINDOW_RESIZE;
-						mevent.data[0] = event.window.data1;
-						mevent.data[1] = event.window.data2;
-						sendEvents(&mevent);
-                        break;
-					case SDL_WINDOWEVENT_MOVED:
-						mevent.type = MWIN_EVENT_WINDOW_MOVE;
-						mevent.data[0] = event.window.data1;
-						mevent.data[1] = event.window.data2;
-						sendEvents(&mevent);
-						break;
-					case SDL_WINDOWEVENT_CLOSE:
-						mevent.type = MWIN_EVENT_WINDOW_CLOSE;
-						sendEvents(&mevent);
-						break;
-					case SDL_WINDOWEVENT_FOCUS_GAINED:
-						m_focus = true;
-						break;
-					case SDL_WINDOWEVENT_FOCUS_LOST:
-						m_focus = false;
-						break;
-				}
-				break;
+                unhandled.push_back(event);
 			}
 
 			// Keyboard
 			case SDL_KEYDOWN:
 			{
-                // SDL_Log("SDL_KEYDOWN");
-				int key = translateKey(event.key.keysym.sym);
+				int key = translateKey(event.key.keysym.sym);			
 				if(key > 0 && key < 256)
 				{
 					mevent.type = MWIN_EVENT_KEY_DOWN;
@@ -370,8 +368,8 @@ bool MWindow::onEvents(void)
 			case SDL_MOUSEMOTION:
 			{
 				mevent.type = MWIN_EVENT_MOUSE_MOVE;
-                mevent.data[0] = event.motion.x; // relative to window
-                mevent.data[1] = event.motion.y; // relative to window
+				mevent.data[0] = event.motion.x; // relative to window
+				mevent.data[1] = event.motion.y; // relative to window
 				sendEvents(&mevent);
 				break;
 			}
@@ -496,6 +494,7 @@ bool MWindow::onEvents(void)
 				break;
 			}
 
+#ifndef EMSCRIPTEN
 			// Joystick
 			case SDL_JOYDEVICEADDED:
 			{
@@ -603,7 +602,7 @@ bool MWindow::onEvents(void)
 				sendEvents(&mevent);
 				break;
 			}
-
+#endif
 			// Touch
 			case SDL_FINGERDOWN:
 			{
@@ -642,7 +641,74 @@ bool MWindow::onEvents(void)
 		}
 	}
 
+    for(int i = 0; i < unhandled.size(); i++)
+    {
+        SDL_PushEvent(&unhandled[i]);
+    }
+
 	return true;
+}
+
+bool MWindow::onWindowEvents(void)
+{
+    MWinEvent mevent;
+    SDL_Event event;
+    vector<SDL_Event> unhandled;
+
+    while (SDL_PollEvent(&event))
+    {
+        switch (event.type)
+        {
+            case SDL_QUIT:
+            {
+                mevent.type = MWIN_EVENT_WINDOW_CLOSE;
+                sendEvents(&mevent);
+                break;
+            }
+
+            case SDL_WINDOWEVENT:
+            {
+                switch (event.window.event)
+                {
+                    case SDL_WINDOWEVENT_RESIZED:
+                        mevent.type = MWIN_EVENT_WINDOW_RESIZE;
+                        mevent.data[0] = event.window.data1;
+                        mevent.data[1] = event.window.data2;
+                        sendEvents(&mevent);
+                        break;
+                    case SDL_WINDOWEVENT_MOVED:
+                        mevent.type = MWIN_EVENT_WINDOW_MOVE;
+                        mevent.data[0] = event.window.data1;
+                        mevent.data[1] = event.window.data2;
+                        sendEvents(&mevent);
+                        break;
+                    case SDL_WINDOWEVENT_CLOSE:
+                        mevent.type = MWIN_EVENT_WINDOW_CLOSE;
+                        sendEvents(&mevent);
+                        break;
+                    case SDL_WINDOWEVENT_FOCUS_GAINED:
+                        m_focus = true;
+                        break;
+                    case SDL_WINDOWEVENT_FOCUS_LOST:
+                        m_focus = false;
+                        break;
+                }
+                break;
+            }
+
+            // Default
+            default:
+                unhandled.push_back(event);
+                break;
+        }
+    }
+
+    for(int i = 0; i < unhandled.size(); i++)
+    {
+        SDL_PushEvent(&unhandled[i]);
+    }
+
+    return true;
 }
 
 void MWindow::swapBuffer(void)
@@ -657,6 +723,7 @@ bool MWindow::create(const char * title, unsigned int width, unsigned int height
 	m_colorBits = colorBits;
 	m_fullscreen = fullscreen;
 
+#ifndef EMSCRIPTEN
 	SDL_version compiled;
 	SDL_version linked;
 
@@ -665,14 +732,17 @@ bool MWindow::create(const char * title, unsigned int width, unsigned int height
 
 	fprintf(stdout, "Info\t SDL compiled version : %d.%d.%d\n", compiled.major, compiled.minor, compiled.patch);
 	fprintf(stdout, "Info\t SDL linked version : %d.%d.%d\n", linked.major, linked.minor, linked.patch);
+#endif
 
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+    // TODO: Haptic feedback
+    if (SDL_Init(SDL_INIT_EVERYTHING & ~SDL_INIT_HAPTIC) != 0)
 	{
 		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
 		return false;
 	}
 
-    Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
+#ifndef EMSCRIPTEN
+	Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
 
 	if (m_fullscreen)
 		flags = flags | SDL_WINDOW_FULLSCREEN;
@@ -686,8 +756,21 @@ bool MWindow::create(const char * title, unsigned int width, unsigned int height
 	}
 
 	g_context = SDL_GL_CreateContext(g_window);
+#else
+	SDL_Surface* window = SDL_SetVideoMode(width,height,colorBits,SDL_OPENGL | SDL_DOUBLEBUF);	
+#endif
+
+// Request a higher resolution thread timer on Windows
+#ifdef WIN32
+    timeBeginPeriod(1);
+#endif
 
 	return true;
+}
+
+void MWindow::resize(unsigned int width, unsigned int height)
+{
+    SDL_SetWindowSize(g_window, width, height);
 }
 
 void MWindow::sleep(double time)
@@ -700,6 +783,7 @@ void MWindow::sleep(double time)
 
 int MWindow::addJoystick(int index)
 {
+#ifndef EMSCRIPTEN
 	JoystickDevice_t * joystick = new JoystickDevice_t;
 	joystick->device = SDL_JoystickOpen(index);
 	if (!joystick->device)
@@ -712,26 +796,29 @@ int MWindow::addJoystick(int index)
 	joystick->id = SDL_JoystickInstanceID(joystick->device);
 	m_joysticks.push_back(joystick);
 	return joystick->id;
+#endif
 }
 
 int MWindow::removeJoystick(int id)
 {
+#ifndef EMSCRIPTEN
 	for (int i = 0; i < m_joysticks.size(); ++i)
 	{
 		if (m_joysticks[i]->id == id && SDL_JoystickGetAttached(m_joysticks[i]->device))
 		{
 			SDL_JoystickClose(m_joysticks[i]->device);
-            delete m_joysticks[i];
+			delete m_joysticks[i];
 			m_joysticks.erase(m_joysticks.begin() + i);
 			return id;
 		}
 	}
-
+#endif
 	return -1;
 }
 
 int MWindow::addGameController(int index)
 {
+#ifndef EMSCRIPTEN
 	GameControllerDevice_t * controller = new GameControllerDevice_t;
 	controller->device = SDL_GameControllerOpen(index);
 	if (!controller->device)
@@ -742,23 +829,25 @@ int MWindow::addGameController(int index)
 	}
 
 	controller->id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller->device));
-	m_controllers.push_back(controller);
+    m_controllers.push_back(controller);
 	return controller->id;
+#endif
 }
 
 int MWindow::removeGameController(int id)
 {
+#ifndef EMSCRIPTEN
 	for (int i = 0; i < m_controllers.size(); ++i)
 	{
 		if (m_controllers[i]->id == id && SDL_GameControllerGetAttached(m_controllers[i]->device))
 		{
 			SDL_GameControllerClose(m_controllers[i]->device);
-            delete m_controllers[i];
+			delete m_controllers[i];
 			m_controllers.erase(m_controllers.begin() + i);
 			return id;
 		}
 	}
-
+#endif
 	return -1;
 }
 #endif

@@ -23,7 +23,7 @@
 //========================================================================
 
 #include <MEngine.h>
-#include <MGui.h>
+//#include <MGui.h>
 #include <MProject/MProject.h>
 
 #include "MPublisher.h"

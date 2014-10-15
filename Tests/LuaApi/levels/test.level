@@ -1,0 +1,20 @@
+<Maratis version="3.1">
+
+<Level>
+
+	<properties currentScene="0" />
+
+	<Scene name="Scene-1">
+
+		<script file="../scripts/ApiTest.lua" />
+		<properties 
+			data="Static"
+			gravity="0.000000 0.000000 -0.981000"
+			ambientLight="0.000000 0.000000 0.000000" />
+
+
+	</Scene>
+
+</Level>
+
+</Maratis>

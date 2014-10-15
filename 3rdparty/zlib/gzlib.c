@@ -2,7 +2,6 @@
  * Copyright (C) 2004, 2010 Mark Adler
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
-
 #include "gzguts.h"
 
 #if defined(_LARGEFILE64_SOURCE) && _LFS64_LARGEFILE-0

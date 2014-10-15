@@ -71,6 +71,15 @@ sep = "/"
 
 -- From penlib
 function relpath(P,start)
+
+    -- If path is not absolute, make it so.
+    if P:sub(1, 1) ~= sep then
+    	P = sep .. P
+    end
+    
+    if start:sub(1, 1) ~= sep then
+    	start = sep .. start
+    end
    
     local split,normcase,min,append = split, normcase, math.min, table.insert
     P = normcase(P)
@@ -490,7 +499,7 @@ end
 
 function load_callback()
 
-    local filename = openFileDlg("Choose a file", getProjectDir(), "*.mp")
+    local filename = openFileDlg("Choose a file", getProjectDir(), "*.mp")   
     
     if filename == nil then return end
         

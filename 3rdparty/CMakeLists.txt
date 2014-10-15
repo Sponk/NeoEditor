@@ -1,22 +1,18 @@
 
-IF(NOT ANDROID)
-ADD_SUBDIRECTORY(assimp)
-ADD_SUBDIRECTORY(glee)
-ADD_SUBDIRECTORY(fltk)
-
-# We compile sdl2 differently on Android
-ADD_SUBDIRECTORY(sdl2)
-
-# Android has native zlib
-ADD_SUBDIRECTORY(zlib)
+IF(USE_NETWORKING)
+    ADD_SUBDIRECTORY(raknet)
 ENDIF()
 
-ADD_SUBDIRECTORY(bullet)
-ADD_SUBDIRECTORY(freetype)
-ADD_SUBDIRECTORY(libogg)
-ADD_SUBDIRECTORY(libjpeg)
-ADD_SUBDIRECTORY(libpng)
-ADD_SUBDIRECTORY(libvorbis)
+IF(NOT ANDROID AND NOT EMSCRIPTEN)
+	ADD_SUBDIRECTORY(assimp)
+	ADD_SUBDIRECTORY(fltk)
+
+	# We compile sdl2 differently on Android
+	ADD_SUBDIRECTORY(sdl2)
+
+	# Android has native zlib
+	ADD_SUBDIRECTORY(zlib)
+ENDIF()
 
 if(STANDARD_LUA)
     ADD_SUBDIRECTORY(lua-standard)
@@ -24,7 +20,24 @@ else()
     ADD_SUBDIRECTORY(lua)
 endif(STANDARD_LUA)
 
-ADD_SUBDIRECTORY(npk)
-ADD_SUBDIRECTORY(openal-soft)
+IF(NOT EMSCRIPTEN)
+	ADD_SUBDIRECTORY(openal-soft)
+ELSE()
+	ADD_SUBDIRECTORY(zlib)
+ENDIF()
+
+IF(NOT USE_GLES)
+    ADD_SUBDIRECTORY(glew)
+ENDIF()
+
 ADD_SUBDIRECTORY(tinyxml)
+ADD_SUBDIRECTORY(bullet)
+ADD_SUBDIRECTORY(freetype)
+ADD_SUBDIRECTORY(libogg)
+ADD_SUBDIRECTORY(libjpeg)
+ADD_SUBDIRECTORY(libpng)
+ADD_SUBDIRECTORY(libvorbis)
+ADD_SUBDIRECTORY(npk)
+
+
 

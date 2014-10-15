@@ -88,13 +88,28 @@ int MPluginScript::setDescription()
     return 1;
 }
 
+int MPluginScript::enableInputMethod()
+{
+    MPluginScript* script = (MPluginScript*) MEngine::getInstance()->getScriptContext();
+
+    if(script->getArgsNumber() != 1)
+        return 0;
+
+    script->m_hasInputMethod = true;
+    script->m_inputUpdate = script->getString(0);
+    return 1;
+}
+
 // Overwrite some methods from MScript to update the script context
 void MPluginScript::init()
 {
+    m_hasInputMethod = false;
+
     addFunction("setPluginName", MPluginScript::setName);
     addFunction("setPluginAuthor", MPluginScript::setAuthor);
     addFunction("setPluginLicense", MPluginScript::setLicense);
     addFunction("setPluginDescription", MPluginScript::setDescription);
+    addFunction("enableInputMethod", MPluginScript::enableInputMethod);
 
     // Add FLTK bindings
     createFltkLuaBindings(this);
@@ -153,8 +168,12 @@ void MPluginScript::runScript(const char* filename)
 
 void MPluginScript::callFunction(const char* name)
 {
-    MEngine::getInstance()->setScriptContext(this);
+    MEngine* engine = MEngine::getInstance();
+    MScriptContext* oldContext = engine->getScriptContext();
+
+    engine->setScriptContext(this);
     MScript::callFunction(name);
+    engine->setScriptContext(oldContext);
 }
 
 bool MPluginScript::startCallFunction(const char *name)

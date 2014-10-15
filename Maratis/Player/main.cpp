@@ -54,12 +54,12 @@ void windowEvents(MWinEvent * windowEvents)
         {
 			gameWinEvents(windowEvents);
 		}
-	}
+    }
 
 	if(windowEvents->type == MWIN_EVENT_WINDOW_CLOSE)
     {
 		engine->setActive(false);
-	}
+    }
 }
 
 // update
@@ -102,6 +102,10 @@ int update_thread(void* nothing)
 
     while(updateThreadRunning)
     {
+        // Get input
+        MEngine::getInstance()->getInputContext()->flush();
+        window->onEvents();
+
         MSDLSemaphore::WaitAndLock(&updateSemaphore);
         if(window->getFocus())
         {
@@ -184,6 +188,8 @@ int update_thread(void* nothing)
 			MSDLSemaphore::Unlock(&updateSemaphore);
 			window->sleep(100);
         }
+
+        fflush(stdout);
 	}
 
     return 0;
@@ -311,10 +317,8 @@ int main(int argc, char **argv)
     while(isActive)
     {
 		MSDLSemaphore::WaitAndLock(&updateSemaphore);
+        window->onWindowEvents();
 		//MLOG_INFO("DRAW");
-		// Get input
-		engine->getInputContext()->flush();
-		window->onEvents();
         MUpdateScheduledEvents();
 
         if(!isActive)
@@ -360,7 +364,7 @@ int main(int argc, char **argv)
 
 		MSDLSemaphore::Unlock(&updateSemaphore);
 
-        window->sleep(1);
+        window->sleep(5);
         //window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
     }
 

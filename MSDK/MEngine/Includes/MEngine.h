@@ -108,6 +108,7 @@ class MMaterialsAnimRef;
 #include "MMaterialsAnim.h"
 
 #include "MFXManager.h"
+#include "MPostProcessor.h"
 
 #include "MVariable.h"
 #include "MBehavior.h"

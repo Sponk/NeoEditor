@@ -496,6 +496,12 @@ int loadMesh(lua_State * L)
     char string[256];
     getGlobalFilename(string, MWindow::getInstance()->getWorkingDirectory(), path);
 
+    if(!isFileExist(string))
+    {
+        lua_pushnil(L);
+        return 0;
+    }
+
     meshRef = level->loadMesh(string, true);
 
     // create entity
@@ -851,7 +857,21 @@ int deleteObject(lua_State * L)
         scene = level->getCurrentScene();
     }
 
-    scene->deleteObject(getObject3d(lua_tonumber(L, 1)));
+    MObject3d* object = getObject3d(lua_tonumber(L, 1));
+    if(object != NULL && object->getType() == M_OBJECT3D_ENTITY)
+    {
+        MPhysicsContext* physics = MEngine::getInstance()->getPhysicsContext();
+        MOEntity * entity = (MOEntity*)object;
+        MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+        if(phyProps)
+        {
+            unsigned int id = phyProps->getCollisionObjectId();
+            physics->deactivateObject(id);
+            physics->deleteObject(&id);
+        }
+    }
+
+    scene->deleteObject(object);
     return 1;
 }
 
@@ -4594,6 +4614,123 @@ int loadCameraSkybox(lua_State * L)
     return 0;
 }
 
+// enablePostEffects(vertShadSrc, fragShadSrc)
+int enablePostEffects(lua_State * L)
+{
+    int num_args = lua_gettop(L);
+    MGame* game = MEngine::getInstance()->getGame();
+
+    if(num_args == 0)
+    {
+        game->enablePostEffects();
+    }
+
+    if(num_args == 2)
+    {
+        game->enablePostEffects();
+        game->getPostProcessor()->loadShader(lua_tostring(L, 1), lua_tostring(L, 2));
+    }
+
+    return 0;
+}
+
+// loadPostEffectsShader(vertShadFile, fragShadFile)
+int loadPostEffectsShader(lua_State * L)
+{
+    if(!isFunctionOk(L, "loadPostEffectsShader", 2))
+        return 0;
+
+    char* vertShad = readTextFile(lua_tostring(L, 1));
+    char* fragShad = readTextFile(lua_tostring(L, 2));
+
+    MGame* game = MEngine::getInstance()->getGame();
+    game->getPostProcessor()->loadShader(vertShad, fragShad);
+
+    SAFE_FREE(vertShad);
+    SAFE_FREE(fragShad);
+    return 1;
+}
+
+int disablePostEffects(lua_State * L)
+{
+    MGame* game = MEngine::getInstance()->getGame();
+    game->disablePostEffects();
+    return 1;
+}
+
+int setPostEffectsResolution(lua_State * L)
+{
+    if(!isFunctionOk(L, "setPostEffectsResolution", 1))
+        return 0;
+
+    float mp = lua_tonumber(L, 1);
+    MGame* game = MEngine::getInstance()->getGame();
+    MPostProcessor* pp = game->getPostProcessor();
+    pp->setResolutionMultiplier(mp);
+    pp->eraseTextures();
+    pp->updateResolution();
+
+    return 1;
+}
+
+int getPostEffectsResolution(lua_State * L)
+{
+    MGame* game = MEngine::getInstance()->getGame();
+    lua_pushnumber(L, game->getPostProcessor()->getResolutionMultiplier());
+    return 1;
+}
+
+int setPostEffectsUniformFloat(lua_State * L)
+{
+    if(!isFunctionOk(L, "setPostEffectsUniformFloat", 2))
+        return 0;
+
+    MGame* game = MEngine::getInstance()->getGame();
+    game->getPostProcessor()->setFloatUniformValue(lua_tostring(L, 1), lua_tonumber(L, 2));
+    return 1;
+}
+
+int addPostEffectsUniformFloat(lua_State * L)
+{
+    if(!isFunctionOk(L, "setPostEffectsUniformFloat", 2))
+        return 0;
+
+    MGame* game = MEngine::getInstance()->getGame();
+    game->getPostProcessor()->addFloatUniform(lua_tostring(L, 1));
+    game->getPostProcessor()->setFloatUniformValue(lua_tostring(L, 1), lua_tonumber(L, 2));
+    return 1;
+}
+
+int setPostEffectsUniformInt(lua_State * L)
+{
+    if(!isFunctionOk(L, "setPostEffectsUniformInt", 2))
+        return 0;
+
+    MGame* game = MEngine::getInstance()->getGame();
+    game->getPostProcessor()->setIntUniformValue(lua_tostring(L, 1), lua_tonumber(L, 2));
+    return 1;
+}
+
+int addPostEffectsUniformInt(lua_State * L)
+{
+    if(!isFunctionOk(L, "setPostEffectsUniformInt", 2))
+        return 0;
+
+    MGame* game = MEngine::getInstance()->getGame();
+    game->getPostProcessor()->addIntUniform(lua_tostring(L, 1));
+    game->getPostProcessor()->setIntUniformValue(lua_tostring(L, 1), lua_tonumber(L, 2));
+    return 1;
+}
+
+int resizeWindow(lua_State * L)
+{
+    if(!isFunctionOk(L, "resizeWindow", 2))
+        return 0;
+
+    MWindow::getInstance()->resize(lua_tointeger(L, 1), lua_tointeger(L, 2));
+    return 1;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Init
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4639,6 +4776,7 @@ void MScript::init(void)
 	lua_register(m_state, "getCurrentCamera",    getCurrentCamera);
     lua_register(m_state, "loadCameraSkybox", loadCameraSkybox);
     lua_register(m_state, "deleteObject", deleteObject);
+    lua_register(m_state, "resizeWindow", resizeWindow);
 	
 	// object
 	lua_register(m_state, "rotate",					rotate);
@@ -4771,6 +4909,15 @@ void MScript::init(void)
 	lua_register(m_state, "getScenesNumber",		getScenesNumber);
 	lua_register(m_state, "doesLevelExist",			doesLevelExist);
 	lua_register(m_state, "loadLevel",				loadLevel);
+    lua_register(m_state, "enablePostEffects",      enablePostEffects);
+    lua_register(m_state, "disablePostEffects",     disablePostEffects);
+    lua_register(m_state, "loadPostEffectsShader",  loadPostEffectsShader);
+    lua_register(m_state, "setPostEffectsUniformFloat", setPostEffectsUniformFloat);
+    lua_register(m_state, "addPostEffectsUniformFloat", addPostEffectsUniformFloat);
+    lua_register(m_state, "setPostEffectsUniformInt", setPostEffectsUniformInt);
+    lua_register(m_state, "addPostEffectsUniformInt", addPostEffectsUniformInt);
+    lua_register(m_state, "setPostEffectsResolution", setPostEffectsResolution);
+    lua_register(m_state, "getPostEffectsResolution", getPostEffectsResolution);
 
 	// light
     lua_register(m_state, "createLight",       createLight);

@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------------
 
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = "Maratis"
+PROJECT_NAME           = "Neo"
 PROJECT_NUMBER         = @MARATIS_VERSION@
 PROJECT_BRIEF          = "Developer Documentation"
 PROJECT_LOGO           = 
@@ -275,7 +275,7 @@ PERLMOD_MAKEVAR_PREFIX =
 # Configuration options related to the preprocessor
 #---------------------------------------------------------------------------
 
-ENABLE_PREPROCESSING   = YES
+ENABLE_PREPROCESSING   = NO
 MACRO_EXPANSION        = NO
 EXPAND_ONLY_PREDEF     = NO
 SEARCH_INCLUDES        = YES
@@ -303,30 +303,27 @@ CLASS_DIAGRAMS         = YES
 MSCGEN_PATH            =
 HIDE_UNDOC_RELATIONS   = NO
 HAVE_DOT               = @DOCUMENTATION_HAVE_DOT@
-DOT_NUM_THREADS        = 0
+DOT_NUM_THREADS        = 1
 DOT_FONTNAME           = Helvetica
 DOT_FONTSIZE           = 10
-DOT_FONTPATH           =
-CLASS_GRAPH            = NO
+CLASS_GRAPH            = YES
 COLLABORATION_GRAPH    = YES
 GROUP_GRAPHS           = YES
-UML_LOOK               = NO
+UML_LOOK               = YES
 UML_LIMIT_NUM_FIELDS   = 10
 TEMPLATE_RELATIONS     = NO
-INCLUDE_GRAPH          = NO
+INCLUDE_GRAPH          = YES
 INCLUDED_BY_GRAPH      = NO
-CALL_GRAPH             = NO
-CALLER_GRAPH           = NO
-GRAPHICAL_HIERARCHY    = NO
+CALL_GRAPH             = YES
+CALLER_GRAPH           = YES
+GRAPHICAL_HIERARCHY    = YES
 DIRECTORY_GRAPH        = NO
 DOT_IMAGE_FORMAT       = png
 INTERACTIVE_SVG        = NO
-DOT_PATH               =
-DOTFILE_DIRS           =
 MSCFILE_DIRS           =
 DOT_GRAPH_MAX_NODES    = 50
-MAX_DOT_GRAPH_DEPTH    = 0
-DOT_TRANSPARENT        = NO
-DOT_MULTI_TARGETS      = NO
-GENERATE_LEGEND        = NO
+MAX_DOT_GRAPH_DEPTH    = 5
+DOT_TRANSPARENT        = YES
+DOT_MULTI_TARGETS      = YES
+GENERATE_LEGEND        = YES
 DOT_CLEANUP            = YES

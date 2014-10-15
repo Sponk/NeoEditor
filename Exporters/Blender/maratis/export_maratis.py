@@ -380,7 +380,7 @@ class Export:
                     faces = mesh.tessfaces
                     for face in faces:
                         mat = face.material_index
-
+			
                         mode = int(mesh.materials[mat].mar_mode)
                         blend = int(mesh.materials[mat].mar_blend_mode)
                             
