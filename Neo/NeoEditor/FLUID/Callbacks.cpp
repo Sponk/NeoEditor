@@ -6,7 +6,7 @@
 #include <unistd.h>
 #endif
 
-#include <FL/fl_ask.H>
+#include <FL/Fl_Choice.H>
 #include <FL/Fl_File_Chooser.H>
 #include <FL/Fl_Native_File_Chooser.H>
 #include <FL/Fl_Value_Input.H>
@@ -67,6 +67,14 @@ const char* fl_native_file_chooser(const char* title, const char* files, const c
         return dlg->filename();
 
     return NULL;
+}
+
+/*
+ * Replacement for fl_ask
+ */
+int ask(const char* text)
+{
+    return fl_choice("%s", "No", "Yes", NULL, text);
 }
 
 MVector3 flColorToVector(int c)
@@ -155,7 +163,7 @@ void save_settings()
 
 void quit_callback(Fl_Menu_*, void*)
 {
-    if(fl_ask(tr("Do you really want to exit?")))
+    if(ask(tr("Do you really want to exit?")))
     {
         // Saving settings
         save_settings();
@@ -258,7 +266,7 @@ void open_level_callback(Fl_Menu_*, void*)
 
 void open_project_callback(Fl_Menu_*, void*)
 {
-    if(!current_project.path.empty() && !fl_ask(tr("You need to close the current project. Do you want to proceed?")))
+    if(!current_project.path.empty() && !ask(tr("You need to close the current project. Do you want to proceed?")))
         return;
 
     const char* home = NULL;
