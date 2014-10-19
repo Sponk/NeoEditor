@@ -2144,6 +2144,8 @@ void play_game_in_editor(Fl_Button* button, void *)
     *Maratis::getInstance()->getPerspectiveVue()->getMatrix() = matrix;
     button->label(text);
 
+    update_scene_tree();
+
     // Save profile
     PROFILE_UPDATE();
     PROFILE_OUTPUT((current_project.path + "/profile.txt").c_str());
