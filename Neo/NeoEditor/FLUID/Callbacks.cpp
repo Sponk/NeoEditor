@@ -29,6 +29,7 @@
 #include <MLog.h>
 #include "MainWindow.h"
 #include "Translator.h"
+#include <Shiny.h>
 
 open_project_t current_project;
 bool reload_editor = false;
@@ -2110,6 +2111,8 @@ void play_game_in_editor(Fl_Button* button, void *)
     scene->stopAllSounds();
     scene->playLoopSounds();
 
+    PROFILE_SET_ENABLED(1);
+    PROFILE_UPDATE();
     game->begin();
 
     // Remains in here because game is a local variable!
@@ -2139,8 +2142,12 @@ void play_game_in_editor(Fl_Button* button, void *)
     // update matrices
     scene->updateObjectsMatrices();
     *Maratis::getInstance()->getPerspectiveVue()->getMatrix() = matrix;
-
     button->label(text);
+
+    // Save profile
+    PROFILE_UPDATE();
+    PROFILE_OUTPUT((current_project.path + "/profile.txt").c_str());
+    PROFILE_SET_ENABLED(0);
 }
 
 void show_console_callback(Fl_Button*, void*)

@@ -12,6 +12,7 @@ IF(NOT ANDROID AND NOT EMSCRIPTEN)
 
 	# Android has native zlib
 	ADD_SUBDIRECTORY(zlib)
+	ADD_SUBDIRECTORY(shinyprofiler/Shiny)
 ENDIF()
 
 if(STANDARD_LUA)

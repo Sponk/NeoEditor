@@ -83,6 +83,8 @@
 // assimp loader
 #include "../MLoaders/MAssimpMeshLoader.h"
 
+// Profiler
+#include <Shiny.h>
 
 // add ext if not
 void fileExtension(char * out, const char * in, const char * ext)
@@ -4364,8 +4366,13 @@ void Maratis::drawMainView(MScene * scene)
     }
 }
 
+PROFILE_SHARED_DEFINE(Render);
+PROFILE_SHARED_DEFINE(Update);
+
 void Maratis::logicLoop(void)
 {
+    PROFILE_SHARED_BLOCK(Update);
+
     Maratis * maratis = Maratis::getInstance();
     MEngine * engine = MEngine::getInstance();
     MLevel * level = MEngine::getInstance()->getLevel();
@@ -4403,6 +4410,7 @@ void Maratis::logicLoop(void)
 
 void Maratis::graphicLoop(void)
 {
+    PROFILE_SHARED_BLOCK(Render);
     MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
     MWindow* window = MWindow::getInstance();

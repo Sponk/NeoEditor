@@ -21,6 +21,8 @@
 #include <algorithm>
 #include <string>
 
+#include <Shiny.h>
+
 extern Fl_Double_Window* main_window;
 extern EditorWindow window;
 
@@ -141,6 +143,7 @@ void update_editor(void*)
 
     MWindow::getInstance()->setPosition(window.glbox->x_root() , window.glbox->y_root());
     window.glbox->redraw();
+
     maratis->logicLoop();
 
     if(window.m_deferredUiUpdate)
