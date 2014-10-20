@@ -1913,7 +1913,6 @@ void delete_scene_callback(Fl_Menu_ *, void *)
 void duplicate_object_callback(Fl_Menu_ *, void *)
 {
     Maratis::getInstance()->duplicateSelectedObjects();
-
     update_scene_tree();
 }
 
