@@ -2111,12 +2111,12 @@ void play_game_in_editor(Fl_Button* button, void *)
     scene->playLoopSounds();
 
     PROFILE_SET_ENABLED(1);
-    PROFILE_UPDATE();
     game->begin();
 
     // Remains in here because game is a local variable!
     while(engine->getGame()->isRunning())
     {
+        PROFILE_UPDATE();
         Fl::wait();
     }
 
@@ -2146,7 +2146,6 @@ void play_game_in_editor(Fl_Button* button, void *)
     update_scene_tree();
 
     // Save profile
-    PROFILE_UPDATE();
     PROFILE_OUTPUT((current_project.path + "/profile.txt").c_str());
     PROFILE_SET_ENABLED(0);
 }
