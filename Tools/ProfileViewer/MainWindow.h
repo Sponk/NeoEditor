@@ -3,10 +3,17 @@
 #ifndef MainWindow_h
 #define MainWindow_h
 #include <FL/Fl.H>
+#include <FL/Fl_Chart.H>
+#include "Table.h"
 #include <FL/Fl_Double_Window.H>
+#include <FL/Fl_Tabs.H>
+#include <FL/Fl_Group.H>
 
 class MainWindow {
 public:
   Fl_Double_Window* create_window();
+  RateTable *table;
+  Fl_Chart *chart;
+  Fl_Chart *time_chart;
 };
 #endif

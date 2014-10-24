@@ -20,12 +20,14 @@ decl {\#include <MFileManager/MMeshSave.h>} {private local
 decl {\#include "../MPluginScript/MPluginScript.h"} {public global
 } 
 
-class EditorWindow {} {
-  Function {show_window()} {} {
+class EditorWindow {open
+} {
+  Function {show_window()} {open
+  } {
     Fl_Window {} {
       label {Neo Editor}
       callback window_quit open
-      xywh {1345 344 918 624} type Double labelsize 11 hide resizable size_range {0 0 2048 2048}
+      xywh {1775 240 918 624} type Double labelsize 11 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -150,6 +152,11 @@ class EditorWindow {} {
             label {Update player}
             callback update_player_callback
             tooltip {Copies the player from the editor directory to the project directory.} xywh {0 0 100 20} labelsize 14
+          }
+          MenuItem {} {
+            label {Open profile viewer}
+            callback open_profile_viewer_callback selected
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label Publish
@@ -2281,8 +2288,7 @@ main_window->redraw();} {}
   }
 } 
 
-class PostEffectsDlg {open
-} {
+class PostEffectsDlg {} {
   Function {create_window()} {} {
     Fl_Window {} {
       label {Post Effects Setup} open
@@ -2486,7 +2492,7 @@ Fl::delete_widget(win);} {}
   } {
     Fl_Window {} {
       label {New Uniform} open
-      xywh {2230 516 261 111} type Double modal visible
+      xywh {2230 516 261 111} type Double hide modal
     } {
       Fl_Input uniform_name_edit {
         label {Name:}
@@ -2505,7 +2511,7 @@ Fl::delete_widget(win);} {}
       Fl_Button {} {
         label Cancel
         user_data this user_data_type {PostEffectsDlg*}
-        callback new_uniform_cancel selected
+        callback new_uniform_cancel
         xywh {57 78 84 27}
       }
     }

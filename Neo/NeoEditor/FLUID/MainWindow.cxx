@@ -37,6 +37,7 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
  {"Project", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
  {"Run Game", 0xffc2,  (Fl_Callback*)play_game_callback, 0, 128, FL_NORMAL_LABEL, 0, 14, 0},
  {"Update player", 0,  (Fl_Callback*)update_player_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Open profile viewer", 0,  (Fl_Callback*)open_profile_viewer_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {"Publish", 0x40070,  (Fl_Callback*)publish_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0},
  {"Add", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
@@ -60,7 +61,7 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
  {0,0,0,0,0,0,0,0,0},
  {0,0,0,0,0,0,0,0,0}
 };
-Fl_Menu_Item* EditorWindow::behavior_menu = EditorWindow::menu_menu_bar + 38;
+Fl_Menu_Item* EditorWindow::behavior_menu = EditorWindow::menu_menu_bar + 39;
 
 #include <FL/Fl_Image.H>
 static unsigned char idata_translate[] =
@@ -251,7 +252,7 @@ Fl_Double_Window* EditorWindow::show_window() {
       menu_bar->selection_color((Fl_Color)38);
       if (!menu_menu_bar_i18n_done) {
         int i=0;
-        for ( ; i<48; i++)
+        for ( ; i<49; i++)
           if (menu_menu_bar[i].label())
             menu_menu_bar[i].label(tr(menu_menu_bar[i].label()));
         menu_menu_bar_i18n_done = 1;

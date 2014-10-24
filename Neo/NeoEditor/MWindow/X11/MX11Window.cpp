@@ -101,7 +101,7 @@ void MWindow::executeDetached(const char *path, const char *args, bool killParen
         vector<const char*> vec;
         vec.push_back(path);
 
-        if(args != NULL)
+        if(args != NULL && strchr(args, ' ') != NULL)
         {
             char* token;
             while((token = strtok((char*) args, " ")) != NULL)
@@ -109,6 +109,11 @@ void MWindow::executeDetached(const char *path, const char *args, bool killParen
                 vec.push_back(token);
             }
         }
+        else if(args != NULL && strchr(args, ' ') == NULL)
+        {
+            vec.push_back(args);
+        }
+
         vec.push_back(NULL);
         char** argv = vector2array(vec);
 

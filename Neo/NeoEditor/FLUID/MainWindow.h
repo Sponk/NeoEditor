@@ -25,6 +25,7 @@ extern void delete_scene_callback(Fl_Menu_*, void*);
 extern void configuration_callback(Fl_Menu_*, void*);
 extern void play_game_callback(Fl_Menu_*, void*);
 extern void update_player_callback(Fl_Menu_*, void*);
+extern void open_profile_viewer_callback(Fl_Menu_*, void*);
 extern void publish_callback(Fl_Menu_*, void*);
 extern void add_mesh_callback(Fl_Menu_*, void*);
 extern void add_light_callback(Fl_Menu_*, void*);

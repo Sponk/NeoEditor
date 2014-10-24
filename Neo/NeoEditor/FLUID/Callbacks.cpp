@@ -2188,3 +2188,14 @@ void set_editor_perspective(Fl_Button *, void *)
 
     Maratis::getInstance()->clearSelectedObjects();
 }
+
+void open_profile_viewer_callback(Fl_Menu_*, void*)
+{
+    char exec[256];
+    char arg[256];
+    getGlobalFilename(exec, ".", "ProfileViewer");
+    getGlobalFilename(arg, current_project.path.c_str(), "profile.txt");
+
+    // TODO: Start detached!
+    MWindow::getInstance()->execute(exec, arg);
+}
