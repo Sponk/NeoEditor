@@ -100,10 +100,10 @@ int main(int argc, char **argv)
         sscanf(value_input->value(), "%f%s", &value, unit);
 
         // Convert all units to us
-        if(!strcmp(unit, "s"))
-            value *= 1000;
+        if(!strcmp(unit, "us"))
+            value *= 0.001;
         else if(!strcmp(unit, "s"))
-            value *= 1000000;
+            value *= 1000;
 
         dlg.time_chart->add(value, input->value(), rand());
     }
