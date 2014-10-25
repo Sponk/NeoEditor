@@ -90,6 +90,7 @@ int main(int argc, char **argv)
         dlg.chart->add(value, input->value(), rand());
     }
 
+    // Enough to save every possible unit
     char unit[5];
     // Set up bar chart
     for(int i = 1; i < x; i++)

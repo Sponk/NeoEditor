@@ -2,7 +2,9 @@
  * @brief Sets the current gravity.
  *
  * Example:<br>
- * setGravity({0,0,-0.5})
+ * @code
+ *  setGravity({0,0,-0.5})
+ * @endcode
  * @param vec3 A vec3 containing the new gravitational pull.
  */
 setGravity(vec3);
