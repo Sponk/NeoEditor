@@ -105,6 +105,8 @@ int main(int argc, char **argv)
             value *= 0.001;
         else if(!strcmp(unit, "s"))
             value *= 1000;
+        else if(!strcmp(unit, "ns"))
+            value *= 0.000001;
 
         dlg.time_chart->add(value, input->value(), rand());
     }
