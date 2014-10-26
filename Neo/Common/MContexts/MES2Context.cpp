@@ -50,6 +50,11 @@
 #include <GLES/gl.h>
 #endif
 
+#ifdef LINUX
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
+#endif
+
 #include <MEngine.h>
 #include "MES2Context.h"
 
@@ -200,9 +205,6 @@ m_currentFrameBuffer(0)
 
     // line
     glLineWidth(1);
-
-    glEnable(GL_POINT_SMOOTH);
-    glEnable(GL_POINT_SPRITE_OES);
 
     // stencil
     glClearStencil(0);

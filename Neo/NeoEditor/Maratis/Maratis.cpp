@@ -34,13 +34,20 @@
     #include <OpenGL/OpenGL.h>
     #include <OpenGL/gl.h>
     #include <sys/stat.h>
-#elif linux
+#elif (defined(linux) && !defined(USE_GLES))
     #include <glew.h>
+    #include <sys/stat.h>
+#else
     #include <sys/stat.h>
 #endif
 
 // Maratis Common
+#ifdef USE_GLES
+#include <MContexts/MES2Context.h>
+#else
 #include <MContexts/MGLContext.h>
+#endif
+
 #include <MContexts/MALContext.h>
 #include <MContexts/MBulletContext.h>
 #include <MContexts/MWinContext.h>
@@ -257,8 +264,11 @@ Maratis::~Maratis(void)
 void Maratis::initRenderer()
 {
     if(m_render) return;
+#ifndef USE_GLES
     m_render = new MGLContext();
-
+#else
+    m_render = new MES2Context();
+#endif
     MEngine::getInstance()->setRenderingContext(m_render);
 }
 
@@ -423,11 +433,15 @@ void Maratis::start(void)
 {
     // gl version
     int GLversion = 0;
+#ifndef USE_GLES
     const char * version = (const char *)glGetString(GL_VERSION);
     if(version)
     {
         sscanf(version, "%d", &GLversion);
     }
+#else
+    GLversion = 2;
+#endif
 
     // MEngine
     {
@@ -3785,7 +3799,9 @@ bool Maratis::isObjectSelected(MObject3d * object)
 void Maratis::drawInvisibleEntity(MOEntity * entity)
 {
     // HACK opengl
+#ifndef USE_GLES
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+#endif
 
     MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
     MMesh * mesh = entity->getMesh();
@@ -3801,7 +3817,9 @@ void Maratis::drawInvisibleEntity(MOEntity * entity)
     }
 
     // HACK opengl
+#ifndef USE_GLES
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+#endif
 }
 
 void Maratis::drawCamera(MScene * scene, MOCamera * camera)
