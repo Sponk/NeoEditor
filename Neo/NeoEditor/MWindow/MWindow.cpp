@@ -1,11 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MGui
-// MSDLWindow.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
-// Copyright (c) 2003-2014 Anael Seghezzi <www.maratis3d.com>
-// Copyright (c) 2014 Anders Dahnielson <anders@dahnielson.com>
 // Copyright (c) 2014 Yannick Pflanzer <www.scary-squid.de>
 //
 // This software is provided 'as-is', without any express or implied
@@ -30,132 +23,8 @@
 //========================================================================
 
 
-#include <MEngine.h>
-#include "MMouse.h"
-#include "MWindow.h"
-
-#include <SDL.h>
-#include <SDL_opengl.h>
-
-#include <FL/Fl.H>
-#include <FL/fl_message.H>
-
-#ifdef LINUX
-#include <FL/x.H>
-#endif
-
-#include <stdio.h>
-#include <string.h>
-#include <limits.h>
-
-static SDL_Window * g_window;
-static SDL_GLContext g_context;
-
-static int translateKey(SDL_Keycode key)
-{
-	switch (key)
-	{
-		case SDLK_0:            return MKEY_0;
-		case SDLK_1:            return MKEY_1;
-		case SDLK_2:            return MKEY_2;
-		case SDLK_3:            return MKEY_3;
-		case SDLK_4:            return MKEY_4;
-		case SDLK_5:            return MKEY_5;
-		case SDLK_6:            return MKEY_6;
-		case SDLK_7:            return MKEY_7;
-		case SDLK_8:            return MKEY_8;
-		case SDLK_9:            return MKEY_9;
-
-		case SDLK_a:            return MKEY_A;
-		case SDLK_b:            return MKEY_B;
-		case SDLK_c:            return MKEY_C;
-		case SDLK_d:            return MKEY_D;
-		case SDLK_e:            return MKEY_E;
-		case SDLK_f:            return MKEY_F;
-		case SDLK_g:            return MKEY_G;
-		case SDLK_h:            return MKEY_H;
-		case SDLK_i:            return MKEY_I;
-		case SDLK_j:            return MKEY_J;
-		case SDLK_k:            return MKEY_K;
-		case SDLK_l:            return MKEY_L;
-		case SDLK_m:            return MKEY_M;
-		case SDLK_n:            return MKEY_N;
-		case SDLK_o:            return MKEY_O;
-		case SDLK_p:            return MKEY_P;
-		case SDLK_q:            return MKEY_Q;
-		case SDLK_r:            return MKEY_R;
-		case SDLK_s:            return MKEY_S;
-		case SDLK_t:            return MKEY_T;
-		case SDLK_u:            return MKEY_U;
-		case SDLK_v:            return MKEY_V;
-		case SDLK_w:            return MKEY_W;
-		case SDLK_x:            return MKEY_X;
-		case SDLK_y:            return MKEY_Y;
-		case SDLK_z:            return MKEY_Z;
-
-		case SDLK_KP_0:         return MKEY_KP0;
-		case SDLK_KP_1:         return MKEY_KP1;
-		case SDLK_KP_2:         return MKEY_KP2;
-		case SDLK_KP_3:         return MKEY_KP3;
-		case SDLK_KP_4:         return MKEY_KP4;
-		case SDLK_KP_5:         return MKEY_KP5;
-		case SDLK_KP_6:         return MKEY_KP6;
-		case SDLK_KP_7:         return MKEY_KP7;
-		case SDLK_KP_8:         return MKEY_KP8;
-		case SDLK_KP_9:         return MKEY_KP9;
-		//case SDLK_KP_MINUS:     return MKEY_KP_MINUS;
-		//case SDLK_KP_PLUS:      return MKEY_KP_PLUS;
-		//case SDLK_KP_DIVIDE:    return MKEY_KP_DIVIDE;
-		//case SDLK_KP_MULTIPLY:  return MKEY_KP_MULTIPLY;
-		case SDLK_KP_ENTER:     return MKEY_KP_ENTER;
-
-		case SDLK_SPACE:        return MKEY_SPACE;
-		case SDLK_ESCAPE:       return MKEY_ESCAPE;
-		case SDLK_TAB:          return MKEY_TAB;
-		case SDLK_LSHIFT:       return MKEY_LSHIFT;
-		case SDLK_RSHIFT:       return MKEY_RSHIFT;
-		case SDLK_LCTRL:        return MKEY_LCONTROL;
-		case SDLK_RCTRL:        return MKEY_RCONTROL;
-		case SDLK_LALT:         return MKEY_LALT;
-		case SDLK_MODE:
-		case SDLK_RALT:         return MKEY_RALT;
-		case SDLK_LGUI:         return MKEY_LSUPER;
-		case SDLK_RGUI:         return MKEY_RSUPER;
-		case SDLK_MENU:         return MKEY_MENU;
-		case SDLK_NUMLOCKCLEAR: return MKEY_NUMLOCK;
-		//case SDLK_CAPSLOCK:     return MKEY_CAPS_LOCK;
-		//case SDLK_SCROLLLOCK:   return MKEY_SCROLL;
-		case SDLK_PAUSE:        return MKEY_PAUSE;
-		case SDLK_DELETE:       return MKEY_DELETE;
-		case SDLK_BACKSPACE:    return MKEY_BACKSPACE;
-		case SDLK_RETURN:       return MKEY_RETURN;
-		case SDLK_HOME:         return MKEY_HOME;
-		case SDLK_END:          return MKEY_END;
-		case SDLK_PAGEUP:       return MKEY_PAGEUP;
-		case SDLK_PAGEDOWN:     return MKEY_PAGEDOWN;
-		case SDLK_INSERT:       return MKEY_INSERT;
-		case SDLK_LEFT:         return MKEY_LEFT;
-		case SDLK_RIGHT:        return MKEY_RIGHT;
-		case SDLK_DOWN:         return MKEY_DOWN;
-		case SDLK_UP:           return MKEY_UP;
-		case SDLK_F1:           return MKEY_F1;
-		case SDLK_F2:           return MKEY_F2;
-		case SDLK_F3:           return MKEY_F3;
-		case SDLK_F4:           return MKEY_F4;
-		case SDLK_F5:           return MKEY_F5;
-		case SDLK_F6:           return MKEY_F6;
-		case SDLK_F7:           return MKEY_F7;
-		case SDLK_F8:           return MKEY_F8;
-		case SDLK_F9:           return MKEY_F9;
-		case SDLK_F10:          return MKEY_F10;
-		case SDLK_F11:          return MKEY_F11;
-		case SDLK_F12:          return MKEY_F12;
-
-		default:                break;
-	}
-
-	return -1;
-}
+#include <MWindow.h>
+#include "NeoWindow.h"
 
 MWindow::MWindow(void) :
 	m_focus(true),
@@ -166,570 +35,101 @@ MWindow::MWindow(void) :
 	m_colorBits(0),
 	m_pointerEvent(NULL)
 {
-	m_position[0] = 0;
-	m_position[1] = 0;
-	strcpy(m_workingDirectory, getCurrentDirectory());
+
 }
 
 MWindow::~MWindow(void)
 {
-	SDL_Quit();
+
 }
 
-// TODO: Platform specific code!
 void MWindow::setCursorPos(int x, int y)
 {
-#if defined WIN32
-      BOOL result = SetCursorPos(x, y);
-      if (result) return;
-
-#elif defined __APPLE__
-      CGPoint new_pos;
-      CGEventErr err;
-      new_pos.x = x;
-      new_pos.y = y;
-      err = CGWarpMouseCursorPosition(new_pos);
-      if (!err) return;
-
-#else
-      Window rootwindow = DefaultRootWindow(fl_display);
-      XWarpPointer(fl_display, rootwindow, rootwindow, 0, 0, 0, 0,m_position[0]+x, m_position[1]+y);
-#endif
+    NeoEditor::MWindow::getInstance()->setCursorPos(x, y);
 }
 
 void MWindow::hideCursor(void)
 {
-    MLOG_WARNING("Can't hide cursor! This has to be done in the FLTK window!");
-
-    //int r = SDL_ShowCursor(SDL_DISABLE);
-
-    //if (r < 0)
-        //fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
+    NeoEditor::MWindow::getInstance()->hideCursor();
 }
 
 void MWindow::showCursor(void)
 {
-    MLOG_WARNING("Can't show cursor! This has to be done in the FLTK window!");
-
-    // int r = SDL_ShowCursor(SDL_ENABLE);
-
-    // if (r < 0)
-        //fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
+    NeoEditor::MWindow::getInstance()->showCursor();
 }
 
 void MWindow::setTitle(const char * title)
 {
-    MLOG_WARNING("Can't change window title! This has to be done in the FLTK window!");
-
-    //SDL_SetWindowTitle(g_window, title);
+    NeoEditor::MWindow::getInstance()->setTitle(title);
 }
 
 void MWindow::setFullscreen(bool fullscreen)
 {
-	int r;
 
-	if (fullscreen)
-		r = SDL_SetWindowFullscreen(g_window, SDL_WINDOW_FULLSCREEN);
-	else
-		r = SDL_SetWindowFullscreen(g_window, SDL_DISABLE);
-
-	if (r < 0)
-		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
-
-	m_fullscreen = fullscreen;
 }
 
 void MWindow::sendEvents(MWinEvent * event)
 {
-    MLOG_WARNING("Don't use MWindow for events!");
+    NeoEditor::MWindow::getInstance()->sendEvents(event);
 }
 
 bool MWindow::isMouseOverWindow(void)
 {
-	MMouse * mouse = MMouse::getInstance();
-	int x = mouse->getXPosition();
-	int y = mouse->getYPosition();
-
-	if(x >= 0 && y >= 0 && x < (int)getWidth() && y < (int)getHeight())
-		return true;
-
-	return false;
+    NeoEditor::MWindow::getInstance()->isMouseOverWindow();
 }
 
 unsigned long MWindow::getSystemTick(void)
 {
-	return SDL_GetTicks();
+    NeoEditor::MWindow::getInstance()->getSystemTick();
 }
 
 bool MWindow::onEvents(void)
 {
-	MWinEvent mevent;
-	SDL_Event event;
-
-    MLOG_WARNING("Don't use SDL for keyboard input!");
-    //return false;
-
-	while (SDL_PollEvent(&event))
-	{
-        switch (event.type)
-		{
-			case SDL_QUIT:
-			{
-				mevent.type = MWIN_EVENT_WINDOW_CLOSE;
-				sendEvents(&mevent);
-				break;
-			}
-
-			case SDL_WINDOWEVENT:
-			{
-                switch (event.window.event)
-				{
-					case SDL_WINDOWEVENT_RESIZED:
-						mevent.type = MWIN_EVENT_WINDOW_RESIZE;
-						mevent.data[0] = event.window.data1;
-						mevent.data[1] = event.window.data2;
-						sendEvents(&mevent);
-                        break;
-					case SDL_WINDOWEVENT_MOVED:
-						mevent.type = MWIN_EVENT_WINDOW_MOVE;
-						mevent.data[0] = event.window.data1;
-						mevent.data[1] = event.window.data2;
-						sendEvents(&mevent);
-						break;
-					case SDL_WINDOWEVENT_CLOSE:
-						mevent.type = MWIN_EVENT_WINDOW_CLOSE;
-						sendEvents(&mevent);
-						break;
-					case SDL_WINDOWEVENT_FOCUS_GAINED:
-						m_focus = true;
-						break;
-					case SDL_WINDOWEVENT_FOCUS_LOST:
-						m_focus = false;
-						break;
-				}
-				break;
-			}
-
-			// Keyboard
-			case SDL_KEYDOWN:
-			{
-                //SDL_Log("SDL_KEYDOWN");
-				int key = translateKey(event.key.keysym.sym);
-				if(key > 0 && key < 256)
-				{
-					mevent.type = MWIN_EVENT_KEY_DOWN;
-					mevent.data[0] = key;
-					sendEvents(&mevent);
-				}
-				break;
-			}
-			case SDL_KEYUP:
-			{
-				int key = translateKey(event.key.keysym.sym);
-				if(key > 0 && key < 256)
-				{
-					mevent.type = MWIN_EVENT_KEY_UP;
-					mevent.data[0] = key;
-					sendEvents(&mevent);
-				}
-				break;
-			}
-			case SDL_TEXTINPUT:
-			{
-				mevent.type = MWIN_EVENT_CHAR;
-				mevent.data[0] = (int) event.text.text[0];
-				sendEvents(&mevent);
-				break;
-			}
-
-			// Mouse
-			case SDL_MOUSEMOTION:
-			{
-				mevent.type = MWIN_EVENT_MOUSE_MOVE;
-                mevent.data[0] = event.motion.x; // relative to window
-                mevent.data[1] = event.motion.y; // relative to window
-				sendEvents(&mevent);
-				break;
-			}
-			case SDL_MOUSEBUTTONDOWN:
-			{
-				switch (event.button.button)
-				{
-					case SDL_BUTTON_LEFT:
-					{
-						mevent.type = MWIN_EVENT_MOUSE_BUTTON_DOWN;
-						mevent.data[0] = MMOUSE_BUTTON_LEFT;
-						mevent.data[1] = event.button.x;
-						mevent.data[2] = event.button.y;
-						sendEvents(&mevent);
-						break;
-					}
-					case SDL_BUTTON_MIDDLE:
-					{
-						mevent.type = MWIN_EVENT_MOUSE_BUTTON_DOWN;
-						mevent.data[0] = MMOUSE_BUTTON_MIDDLE;
-						mevent.data[1] = event.button.x;
-						mevent.data[2] = event.button.y;
-						sendEvents(&mevent);
-						break;
-					}
-					case SDL_BUTTON_RIGHT:
-					{
-						mevent.type = MWIN_EVENT_MOUSE_BUTTON_DOWN;
-						mevent.data[0] = MMOUSE_BUTTON_RIGHT;
-						mevent.data[1] = event.button.x;
-						mevent.data[2] = event.button.y;
-						sendEvents(&mevent);
-						break;
-					}
-					case SDL_BUTTON_X1:
-					{
-						mevent.type = MWIN_EVENT_MOUSE_BUTTON_DOWN;
-						mevent.data[0] = MMOUSE_BUTTON_X1;
-						mevent.data[1] = event.button.x;
-						mevent.data[2] = event.button.y;
-						sendEvents(&mevent);
-						break;
-					}
-					case SDL_BUTTON_X2:
-					{
-						mevent.type = MWIN_EVENT_MOUSE_BUTTON_DOWN;
-						mevent.data[0] = MMOUSE_BUTTON_X2;
-						mevent.data[1] = event.button.x;
-						mevent.data[2] = event.button.y;
-						sendEvents(&mevent);
-						break;
-					}
-				}
-				break;
-			}
-			case SDL_MOUSEBUTTONUP:
-			{
-				switch (event.button.button)
-				{
-					case SDL_BUTTON_LEFT:
-					{
-						mevent.type = MWIN_EVENT_MOUSE_BUTTON_UP;
-						mevent.data[0] = MMOUSE_BUTTON_LEFT;
-						mevent.data[1] = event.button.x;
-						mevent.data[2] = event.button.y;
-						sendEvents(&mevent);
-						break;
-					}
-					case SDL_BUTTON_MIDDLE:
-					{
-						mevent.type = MWIN_EVENT_MOUSE_BUTTON_UP;
-						mevent.data[0] = MMOUSE_BUTTON_MIDDLE;
-						mevent.data[1] = event.button.x;
-						mevent.data[2] = event.button.y;
-						sendEvents(&mevent);
-						break;
-					}
-					case SDL_BUTTON_RIGHT:
-					{
-						mevent.type = MWIN_EVENT_MOUSE_BUTTON_UP;
-						mevent.data[0] = MMOUSE_BUTTON_RIGHT;
-						mevent.data[1] = event.button.x;
-						mevent.data[2] = event.button.y;
-						sendEvents(&mevent);
-						break;
-					}
-					case SDL_BUTTON_X1:
-					{
-						mevent.type = MWIN_EVENT_MOUSE_BUTTON_UP;
-						mevent.data[0] = MMOUSE_BUTTON_X1;
-						mevent.data[1] = event.button.x;
-						mevent.data[2] = event.button.y;
-						sendEvents(&mevent);
-						break;
-					}
-					case SDL_BUTTON_X2:
-					{
-						mevent.type = MWIN_EVENT_MOUSE_BUTTON_UP;
-						mevent.data[0] = MMOUSE_BUTTON_X2;
-						mevent.data[1] = event.button.x;
-						mevent.data[2] = event.button.y;
-						sendEvents(&mevent);
-						break;
-					}
-				}
-				break;
-			}
-			case SDL_MOUSEWHEEL:
-			{
-				if (event.wheel.y > 0)
-				{
-					mevent.type = MWIN_EVENT_MOUSE_WHEEL_MOVE;
-					mevent.data[0] = 1;
-					sendEvents(&mevent);
-				}
-				else if (event.wheel.y < 0)
-				{
-					mevent.type = MWIN_EVENT_MOUSE_WHEEL_MOVE;
-					mevent.data[0] = -1;
-					sendEvents(&mevent);
-				}
-				break;
-			}
-
-			// Joystick
-			case SDL_JOYDEVICEADDED:
-			{
-				mevent.type = MWIN_EVENT_JOYSTICK_ADDED;
-				mevent.data[0] = addJoystick(event.jdevice.which);
-				sendEvents(&mevent);
-				break;
-			}
-			case SDL_JOYDEVICEREMOVED:
-			{
-				mevent.type = MWIN_EVENT_JOYSTICK_REMOVED;
-				mevent.data[0] = removeJoystick(event.jdevice.which);
-				sendEvents(&mevent);
-				break;
-			}
-			case SDL_JOYAXISMOTION:
-			{
-				mevent.type = MWIN_EVENT_JOYSTICK_MOVE;
-				mevent.data[0] = event.jaxis.which;
-				mevent.data[1] = event.jaxis.axis;
-				mevent.data[2] = event.jaxis.value;
-				sendEvents(&mevent);
-				break;
-			}
-			case SDL_JOYBALLMOTION:
-			{
-				mevent.type = MWIN_EVENT_JOYSTICK_BALL_MOVE;
-				mevent.data[0] = event.jball.which;
-				mevent.data[1] = event.jball.ball;
-				mevent.data[2] = event.jball.xrel;
-				mevent.data[3] = event.jball.yrel;
-				sendEvents(&mevent);
-				break;
-			}
-			case SDL_JOYHATMOTION:
-			{
-				mevent.type = MWIN_EVENT_JOYSTICK_HAT_MOVE;
-				mevent.data[0] = event.jhat.which;
-				mevent.data[1] = event.jhat.hat;
-				mevent.data[2] = event.jhat.value;
-				sendEvents(&mevent);
-				break;
-			}
-			case SDL_JOYBUTTONDOWN:
-			{
-				mevent.type = MWIN_EVENT_JOYSTICK_BUTTON_DOWN;
-				mevent.data[0] = event.jbutton.which;
-				mevent.data[1] = event.jbutton.button;
-				sendEvents(&mevent);
-				break;
-			}
-			case SDL_JOYBUTTONUP:
-			{
-				mevent.type = MWIN_EVENT_JOYSTICK_BUTTON_UP;
-				mevent.data[0] = event.jbutton.which;
-				mevent.data[1] = event.jbutton.button;
-				sendEvents(&mevent);
-				break;
-			}
-
-			// Controller
-			case SDL_CONTROLLERDEVICEADDED:
-			{
-				mevent.type = MWIN_EVENT_CONTROLLER_ADDED;
-				mevent.data[0] = addGameController(event.cdevice.which);
-				sendEvents(&mevent);
-				break;
-			}
-			case SDL_CONTROLLERDEVICEREMOVED:
-			{
-				mevent.type = MWIN_EVENT_CONTROLLER_REMOVED;
-				mevent.data[0] = removeGameController(event.cdevice.which);
-				sendEvents(&mevent);
-				break;
-			}
-			case SDL_CONTROLLERDEVICEREMAPPED:
-			{
-				mevent.type = MWIN_EVENT_CONTROLLER_REMAPPED;
-				mevent.data[0] = event.cdevice.which;
-				sendEvents(&mevent);
-				break;
-			}
-			case SDL_CONTROLLERAXISMOTION:
-			{
-				mevent.type = MWIN_EVENT_CONTROLLER_MOVE;
-				mevent.data[0] = event.caxis.which;
-				mevent.data[1] = event.caxis.axis;
-				mevent.data[2] = event.caxis.value;
-				sendEvents(&mevent);
-				break;
-			}
-			case SDL_CONTROLLERBUTTONDOWN:
-			{
-				mevent.type = MWIN_EVENT_CONTROLLER_BUTTON_DOWN;
-				mevent.data[0] = event.cbutton.which;
-				mevent.data[1] = event.cbutton.button;
-				sendEvents(&mevent);
-				break;
-			}
-			case SDL_CONTROLLERBUTTONUP:
-			{
-				mevent.type = MWIN_EVENT_CONTROLLER_BUTTON_UP;
-				mevent.data[0] = event.cbutton.which;
-				mevent.data[1] = event.cbutton.button;
-				sendEvents(&mevent);
-				break;
-			}
-
-			// Touch
-			case SDL_FINGERDOWN:
-			{
-				mevent.type = MWIN_EVENT_FINGER_DOWN;
-				mevent.data[0] = event.tfinger.fingerId;
-				mevent.data[1] = INT_MAX * event.tfinger.x;
-				mevent.data[2] = INT_MAX * event.tfinger.y;
-				mevent.data[3] = INT_MAX * event.tfinger.pressure;
-				sendEvents(&mevent);
-				break;
-			}
-			case SDL_FINGERUP:
-			{
-				mevent.type = MWIN_EVENT_FINGER_UP;
-				mevent.data[0] = event.tfinger.fingerId;
-				mevent.data[1] = INT_MAX * event.tfinger.x;
-				mevent.data[2] = INT_MAX * event.tfinger.y;
-				mevent.data[3] = INT_MAX * event.tfinger.pressure;
-				sendEvents(&mevent);
-				break;
-			}
-			case SDL_FINGERMOTION:
-			{
-				mevent.type = MWIN_EVENT_FINGER_MOVE;
-				mevent.data[0] = event.tfinger.fingerId;
-				mevent.data[1] = INT_MAX * event.tfinger.dx;
-				mevent.data[2] = INT_MAX * event.tfinger.dy;
-				mevent.data[3] = INT_MAX * event.tfinger.pressure;
-				sendEvents(&mevent);
-				break;
-			}
-
-			// Default
-			default:
-				break;
-		}
-	}
-
-	return true;
+    return NeoEditor::MWindow::getInstance()->onEvents();
 }
 
 void MWindow::swapBuffer(void)
 {
-    MLOG_WARNING("Can't swap buffer! This has to be done in the FLTK window!");
+    NeoEditor::MWindow::getInstance()->swapBuffer();
 }
 
 bool MWindow::create(const char * title, unsigned int width, unsigned int height, int colorBits, bool fullscreen)
 {
-	m_width = width;
-	m_height = height;
-	m_colorBits = colorBits;
-	m_fullscreen = fullscreen;
-
-	SDL_version compiled;
-	SDL_version linked;
-
-	SDL_VERSION(&compiled);
-	SDL_GetVersion(&linked);
-
-	fprintf(stdout, "Info\t SDL compiled version : %d.%d.%d\n", compiled.major, compiled.minor, compiled.patch);
-	fprintf(stdout, "Info\t SDL linked version : %d.%d.%d\n", linked.major, linked.minor, linked.patch);
-
-    if (SDL_Init(SDL_INIT_EVENTS | SDL_INIT_TIMER) != 0)
-	{
-		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
-		return false;
-    }
-
-    printf("--> Info: Will not create window using SDL.\n");
-	return true;
+    return NeoEditor::MWindow::getInstance()->create(title, width, height, colorBits, fullscreen);
 }
 
 void MWindow::sleep(double time)
 {
-	SDL_Delay(time);
+    NeoEditor::MWindow::getInstance()->sleep(time);
 }
 
 int MWindow::addJoystick(int index)
 {
-	JoystickDevice_t * joystick = new JoystickDevice_t;
-	joystick->device = SDL_JoystickOpen(index);
-	if (!joystick->device)
-	{
-		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
-        delete joystick;
-		return -1;
-	}
 
-	joystick->id = SDL_JoystickInstanceID(joystick->device);
-	m_joysticks.push_back(joystick);
-	return joystick->id;
 }
 
 int MWindow::removeJoystick(int id)
 {
-	for (int i = 0; i < m_joysticks.size(); ++i)
-	{
-		if (m_joysticks[i]->id == id && SDL_JoystickGetAttached(m_joysticks[i]->device))
-		{
-			SDL_JoystickClose(m_joysticks[i]->device);
-            delete m_joysticks[i];
-			m_joysticks.erase(m_joysticks.begin() + i);
-			return id;
-		}
-	}
 
-	return -1;
 }
 
 int MWindow::addGameController(int index)
 {
-	GameControllerDevice_t * controller = new GameControllerDevice_t;
-	controller->device = SDL_GameControllerOpen(index);
-	if (!controller->device)
-	{
-		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
-        delete controller;
-		return -1;
-	}
 
-	controller->id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller->device));
-	m_controllers.push_back(controller);
-	return controller->id;
 }
 
 int MWindow::removeGameController(int id)
 {
-	for (int i = 0; i < m_controllers.size(); ++i)
-	{
-		if (m_controllers[i]->id == id && SDL_GameControllerGetAttached(m_controllers[i]->device))
-		{
-			SDL_GameControllerClose(m_controllers[i]->device);
-            delete m_controllers[i];
-			m_controllers.erase(m_controllers.begin() + i);
-			return id;
-		}
-	}
 
-	return -1;
 }
 
 void MWindow::messagebox(const char* content, const char* title)
 {
-    fl_message_title(title);
-    fl_message(content);
+    NeoEditor::MWindow::getInstance()->messagebox(content, title);
 }
 
 void MWindow::resize(unsigned int width, unsigned int height)
 {
-    m_width = width;
-    m_height = height;
+    NeoEditor::MWindow::getInstance()->resize(width, height);
 }
 

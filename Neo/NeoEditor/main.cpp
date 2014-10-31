@@ -34,13 +34,15 @@
 #include <MLog.h>
 #include "MFilesUpdate/MFilesUpdate.h"
 #include "Maratis/Maratis.h"
-#include "MWindow/MWindow.h"
+#include "MWindow/NeoWindow.h"
 #include <MCore.h>
 #include <MSchedule/MSchedule.h>
 #include "FLUID/MainWindow.h"
 #include "FLUID/Callbacks.h"
 #include <FL/Fl.H>
 #include "FLUID/Translator.h"
+
+using namespace NeoEditor;
 
 #ifdef _WIN32
     #include <windows.h>

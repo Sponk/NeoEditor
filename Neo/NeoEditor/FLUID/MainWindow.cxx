@@ -6,6 +6,7 @@
 #include <string>
 #include <FL/Fl_Color_Chooser.H>
 #include <MFileManager/MMeshSave.h>
+using namespace NeoEditor;
 
 unsigned char EditorWindow::menu_menu_bar_i18n_done = 0;
 Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
@@ -244,10 +245,11 @@ Fl_Menu_Item EditorWindow::menu_text_alignment_chooser[] = {
 
 Fl_Double_Window* EditorWindow::show_window() {
   Fl_Double_Window* w;
-  { Fl_Double_Window* o = new Fl_Double_Window(918, 624, tr("Neo Editor"));
+  { Fl_Double_Window* o = new Fl_Double_Window(915, 620, tr("Neo Editor"));
     w = o;
     o->labelsize(11);
     o->callback((Fl_Callback*)window_quit, (void*)(this));
+    o->align(Fl_Align(FL_ALIGN_CLIP|FL_ALIGN_INSIDE));
     { menu_bar = new Fl_Menu_Bar(0, 0, 920, 25);
       menu_bar->selection_color((Fl_Color)38);
       if (!menu_menu_bar_i18n_done) {

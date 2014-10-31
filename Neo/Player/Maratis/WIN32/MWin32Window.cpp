@@ -27,6 +27,7 @@
 //
 //========================================================================
 
+#ifdef WIN32
 
 #define _WIN32_WINNT 0x0500
 #include <MWindow.h>
@@ -87,3 +88,4 @@ void MWindow::execute(const char * path, const char * args)
 {
 	ShellExecute(NULL, "open", path, args, NULL, SW_SHOWNORMAL);
 }
+#endif

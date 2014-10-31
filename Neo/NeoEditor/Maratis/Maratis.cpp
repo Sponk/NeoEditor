@@ -78,7 +78,7 @@
 #include <MRenderers/MFixedRenderer.h>
 
 #include "Maratis.h"
-#include "../MWindow/MWindow.h"
+#include "../MWindow/NeoWindow.h"
 
 // Bins
 #include "../MBins/MFontBin.h"
@@ -92,6 +92,8 @@
 
 // Profiler
 #include <Shiny.h>
+
+using namespace NeoEditor;
 
 // add ext if not
 void fileExtension(char * out, const char * in, const char * ext)

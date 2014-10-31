@@ -29,13 +29,15 @@
 
 
 #ifdef LINUX
-#include "../MWindow.h"
+#include "../NeoWindow.h"
 #include <MEngine.h>
 
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+using namespace NeoEditor;
 
 const char * MWindow::getTempDirectory(void)
 {

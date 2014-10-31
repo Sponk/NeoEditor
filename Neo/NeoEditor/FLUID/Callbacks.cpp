@@ -17,7 +17,7 @@
 #include <FL/Fl_Tree_Prefs.H>
 
 #include <MEngine.h>
-#include "../MWindow/MWindow.h"
+#include "../MWindow/NeoWindow.h"
 #include <MLoaders/MImageLoader.h>
 #include <MFileManager/MLevelLoad.h>
 #include <MFileManager/MLevelSave.h>
@@ -30,6 +30,9 @@
 #include "MainWindow.h"
 #include "Translator.h"
 #include <Shiny.h>
+
+// For using MWindow
+using namespace NeoEditor;
 
 open_project_t current_project;
 bool reload_editor = false;

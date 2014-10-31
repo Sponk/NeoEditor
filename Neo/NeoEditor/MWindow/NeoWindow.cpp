@@ -6,6 +6,7 @@
 //========================================================================
 // Copyright (c) 2003-2014 Anael Seghezzi <www.maratis3d.com>
 // Copyright (c) 2014 Anders Dahnielson <anders@dahnielson.com>
+// Copyright (c) 2014 Yannick Pflanzer <www.scary-squid.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -28,32 +29,26 @@
 //
 //========================================================================
 
-#ifdef ANDROID
-#include <MMouse.h>
-#include <MKeyboard.h>
-#include <MAndroidWindow.h>
+
+#include <MEngine.h>
+#include "MMouse.h"
+#include "NeoWindow.h"
 
 #include <SDL.h>
-
-#ifndef USE_GLES
 #include <SDL_opengl.h>
-#else
-#ifdef __APPLE__
-#include <OpenGLES/ES2/gl.h>
-#include <OpenGLES/ES2/glext.h>
-#endif
 
-#ifdef __ANDROID__
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
-#endif
-#endif
+#include <FL/Fl.H>
+#include <FL/fl_message.H>
 
-#include "../../MEngine/Includes/MEngine.h"
+#ifdef LINUX
+#include <FL/x.H>
+#endif
 
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
+
+using namespace NeoEditor;
 
 static SDL_Window * g_window;
 static SDL_GLContext g_context;
@@ -76,7 +71,7 @@ static int translateKey(SDL_Keycode key)
 		case SDLK_a:            return MKEY_A;
 		case SDLK_b:            return MKEY_B;
 		case SDLK_c:            return MKEY_C;
-		case SDLK_d:            return MKEY_D;
+        case SDLK_d:            return MKEY_D;
 		case SDLK_e:            return MKEY_E;
 		case SDLK_f:            return MKEY_F;
 		case SDLK_g:            return MKEY_G;
@@ -164,7 +159,7 @@ static int translateKey(SDL_Keycode key)
 	return -1;
 }
 
-MAndroidWindow::MAndroidWindow(void) :
+MWindow::MWindow(void) :
 	m_focus(true),
 	m_active(true),
 	m_fullscreen(false),
@@ -175,42 +170,63 @@ MAndroidWindow::MAndroidWindow(void) :
 {
 	m_position[0] = 0;
 	m_position[1] = 0;
+	strcpy(m_workingDirectory, getCurrentDirectory());
 }
 
-MAndroidWindow::~MAndroidWindow(void)
+MWindow::~MWindow(void)
 {
-	SDL_GL_DeleteContext(g_context);
-	SDL_DestroyWindow(g_window);
 	SDL_Quit();
 }
 
-void MAndroidWindow::setCursorPos(int x, int y)
+// TODO: Platform specific code!
+void MWindow::setCursorPos(int x, int y)
 {
-	SDL_WarpMouseInWindow(g_window, x, y);
+#if defined WIN32
+      BOOL result = SetCursorPos(x, y);
+      if (result) return;
+
+#elif defined __APPLE__
+      CGPoint new_pos;
+      CGEventErr err;
+      new_pos.x = x;
+      new_pos.y = y;
+      err = CGWarpMouseCursorPosition(new_pos);
+      if (!err) return;
+
+#else
+      Window rootwindow = DefaultRootWindow(fl_display);
+      XWarpPointer(fl_display, rootwindow, rootwindow, 0, 0, 0, 0,m_position[0]+x, m_position[1]+y);
+#endif
 }
 
-void MAndroidWindow::hideCursor(void)
+void MWindow::hideCursor(void)
 {
-	int r = SDL_ShowCursor(SDL_DISABLE);
+    MLOG_WARNING("Can't hide cursor! This has to be done in the FLTK window!");
 
-	if (r < 0)
-		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
+    //int r = SDL_ShowCursor(SDL_DISABLE);
+
+    //if (r < 0)
+        //fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
 }
 
-void MAndroidWindow::showCursor(void)
+void MWindow::showCursor(void)
 {
-	int r = SDL_ShowCursor(SDL_ENABLE);
+    MLOG_WARNING("Can't show cursor! This has to be done in the FLTK window!");
 
-	if (r < 0)
-		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
+    // int r = SDL_ShowCursor(SDL_ENABLE);
+
+    // if (r < 0)
+        //fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
 }
 
-void MAndroidWindow::setTitle(const char * title)
+void MWindow::setTitle(const char * title)
 {
-	SDL_SetWindowTitle(g_window, title);
+    MLOG_WARNING("Can't change window title! This has to be done in the FLTK window!");
+
+    //SDL_SetWindowTitle(g_window, title);
 }
 
-void MAndroidWindow::setFullscreen(bool fullscreen)
+void MWindow::setFullscreen(bool fullscreen)
 {
 	int r;
 
@@ -225,53 +241,12 @@ void MAndroidWindow::setFullscreen(bool fullscreen)
 	m_fullscreen = fullscreen;
 }
 
-void MAndroidWindow::sendEvents(MWinEvent * event)
+void MWindow::sendEvents(MWinEvent * event)
 {
-	MKeyboard * keyboard = MKeyboard::getInstance();
-	MMouse * mouse = MMouse::getInstance();
-
-	switch(event->type)
-	{
-		case MWIN_EVENT_KEY_DOWN:
-			keyboard->onKeyDown(event->data[0]);
-			break;
-
-		case MWIN_EVENT_KEY_UP:
-			keyboard->onKeyUp(event->data[0]);
-			break;
-
-		case MWIN_EVENT_WINDOW_RESIZE:
-			m_width = (unsigned int)event->data[0];
-			m_height = (unsigned int)event->data[1];
-			break;
-
-		case MWIN_EVENT_WINDOW_MOVE:
-			m_position[0] = event->data[0];
-			m_position[1] = event->data[1];
-			break;
-
-		case MWIN_EVENT_MOUSE_BUTTON_DOWN:
-			mouse->downButton(event->data[0]);
-			break;
-
-		case MWIN_EVENT_MOUSE_BUTTON_UP:
-			mouse->upButton(event->data[0]);
-			break;
-
-		case MWIN_EVENT_MOUSE_WHEEL_MOVE:
-			mouse->setWheelDirection(event->data[0]);
-			break;
-
-		case MWIN_EVENT_MOUSE_MOVE:
-			mouse->setPosition(event->data[0], event->data[1]);
-			break;
-	}
-
-	if(m_pointerEvent)
-		m_pointerEvent(event);
+    MLOG_WARNING("Don't use MWindow for events!");
 }
 
-bool MAndroidWindow::isMouseOverWindow(void)
+bool MWindow::isMouseOverWindow(void)
 {
 	MMouse * mouse = MMouse::getInstance();
 	int x = mouse->getXPosition();
@@ -283,15 +258,18 @@ bool MAndroidWindow::isMouseOverWindow(void)
 	return false;
 }
 
-unsigned long MAndroidWindow::getSystemTick(void)
+unsigned long MWindow::getSystemTick(void)
 {
 	return SDL_GetTicks();
 }
 
-bool MAndroidWindow::onEvents(void)
+bool MWindow::onEvents(void)
 {
 	MWinEvent mevent;
 	SDL_Event event;
+
+    MLOG_WARNING("Don't use SDL for keyboard input!");
+    //return false;
 
 	while (SDL_PollEvent(&event))
 	{
@@ -337,7 +315,7 @@ bool MAndroidWindow::onEvents(void)
 			// Keyboard
 			case SDL_KEYDOWN:
 			{
-                // SDL_Log("SDL_KEYDOWN");
+                //SDL_Log("SDL_KEYDOWN");
 				int key = translateKey(event.key.keysym.sym);
 				if(key > 0 && key < 256)
 				{
@@ -495,6 +473,115 @@ bool MAndroidWindow::onEvents(void)
 				}
 				break;
 			}
+
+			// Joystick
+			case SDL_JOYDEVICEADDED:
+			{
+				mevent.type = MWIN_EVENT_JOYSTICK_ADDED;
+				mevent.data[0] = addJoystick(event.jdevice.which);
+				sendEvents(&mevent);
+				break;
+			}
+			case SDL_JOYDEVICEREMOVED:
+			{
+				mevent.type = MWIN_EVENT_JOYSTICK_REMOVED;
+				mevent.data[0] = removeJoystick(event.jdevice.which);
+				sendEvents(&mevent);
+				break;
+			}
+			case SDL_JOYAXISMOTION:
+			{
+				mevent.type = MWIN_EVENT_JOYSTICK_MOVE;
+				mevent.data[0] = event.jaxis.which;
+				mevent.data[1] = event.jaxis.axis;
+				mevent.data[2] = event.jaxis.value;
+				sendEvents(&mevent);
+				break;
+			}
+			case SDL_JOYBALLMOTION:
+			{
+				mevent.type = MWIN_EVENT_JOYSTICK_BALL_MOVE;
+				mevent.data[0] = event.jball.which;
+				mevent.data[1] = event.jball.ball;
+				mevent.data[2] = event.jball.xrel;
+				mevent.data[3] = event.jball.yrel;
+				sendEvents(&mevent);
+				break;
+			}
+			case SDL_JOYHATMOTION:
+			{
+				mevent.type = MWIN_EVENT_JOYSTICK_HAT_MOVE;
+				mevent.data[0] = event.jhat.which;
+				mevent.data[1] = event.jhat.hat;
+				mevent.data[2] = event.jhat.value;
+				sendEvents(&mevent);
+				break;
+			}
+			case SDL_JOYBUTTONDOWN:
+			{
+				mevent.type = MWIN_EVENT_JOYSTICK_BUTTON_DOWN;
+				mevent.data[0] = event.jbutton.which;
+				mevent.data[1] = event.jbutton.button;
+				sendEvents(&mevent);
+				break;
+			}
+			case SDL_JOYBUTTONUP:
+			{
+				mevent.type = MWIN_EVENT_JOYSTICK_BUTTON_UP;
+				mevent.data[0] = event.jbutton.which;
+				mevent.data[1] = event.jbutton.button;
+				sendEvents(&mevent);
+				break;
+			}
+
+			// Controller
+			case SDL_CONTROLLERDEVICEADDED:
+			{
+				mevent.type = MWIN_EVENT_CONTROLLER_ADDED;
+				mevent.data[0] = addGameController(event.cdevice.which);
+				sendEvents(&mevent);
+				break;
+			}
+			case SDL_CONTROLLERDEVICEREMOVED:
+			{
+				mevent.type = MWIN_EVENT_CONTROLLER_REMOVED;
+				mevent.data[0] = removeGameController(event.cdevice.which);
+				sendEvents(&mevent);
+				break;
+			}
+			case SDL_CONTROLLERDEVICEREMAPPED:
+			{
+				mevent.type = MWIN_EVENT_CONTROLLER_REMAPPED;
+				mevent.data[0] = event.cdevice.which;
+				sendEvents(&mevent);
+				break;
+			}
+			case SDL_CONTROLLERAXISMOTION:
+			{
+				mevent.type = MWIN_EVENT_CONTROLLER_MOVE;
+				mevent.data[0] = event.caxis.which;
+				mevent.data[1] = event.caxis.axis;
+				mevent.data[2] = event.caxis.value;
+				sendEvents(&mevent);
+				break;
+			}
+			case SDL_CONTROLLERBUTTONDOWN:
+			{
+				mevent.type = MWIN_EVENT_CONTROLLER_BUTTON_DOWN;
+				mevent.data[0] = event.cbutton.which;
+				mevent.data[1] = event.cbutton.button;
+				sendEvents(&mevent);
+				break;
+			}
+			case SDL_CONTROLLERBUTTONUP:
+			{
+				mevent.type = MWIN_EVENT_CONTROLLER_BUTTON_UP;
+				mevent.data[0] = event.cbutton.which;
+				mevent.data[1] = event.cbutton.button;
+				sendEvents(&mevent);
+				break;
+			}
+
 			// Touch
 			case SDL_FINGERDOWN:
 			{
@@ -536,12 +623,12 @@ bool MAndroidWindow::onEvents(void)
 	return true;
 }
 
-void MAndroidWindow::swapBuffer(void)
+void MWindow::swapBuffer(void)
 {
-	SDL_GL_SwapWindow(g_window);
+    MLOG_WARNING("Can't swap buffer! This has to be done in the FLTK window!");
 }
 
-bool MAndroidWindow::create(const char * title, unsigned int width, unsigned int height, int colorBits, bool fullscreen)
+bool MWindow::create(const char * title, unsigned int width, unsigned int height, int colorBits, bool fullscreen)
 {
 	m_width = width;
 	m_height = height;
@@ -557,47 +644,94 @@ bool MAndroidWindow::create(const char * title, unsigned int width, unsigned int
 	fprintf(stdout, "Info\t SDL compiled version : %d.%d.%d\n", compiled.major, compiled.minor, compiled.patch);
 	fprintf(stdout, "Info\t SDL linked version : %d.%d.%d\n", linked.major, linked.minor, linked.patch);
 
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+    if (SDL_Init(SDL_INIT_EVENTS | SDL_INIT_TIMER) != 0)
 	{
 		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
 		return false;
-	}
+    }
 
-	Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN | SDL_WINDOW_OPENGL | SDL_PIXELFORMAT_RGBA8888;
-
-	SDL_DisplayMode current;
-	SDL_GetCurrentDisplayMode(0, &current);
-	
-	m_width = current.w;
-	m_height = current.h;
-	
-	g_window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_width, m_height, flags);
-
-	if (!g_window)
-	{
-		MLOG_ERROR("SDL Error : " << SDL_GetError());
-		return false;
-	}
-
-	g_context = SDL_GL_CreateContext(g_window);
-	
-	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	
-
+    printf("--> Info: Will not create window using SDL.\n");
 	return true;
 }
 
-void MAndroidWindow::sleep(double time)
+void MWindow::sleep(double time)
 {
-	if (time <= 0)
-		return;
-
 	SDL_Delay(time);
 }
 
-#endif
+int MWindow::addJoystick(int index)
+{
+	JoystickDevice_t * joystick = new JoystickDevice_t;
+	joystick->device = SDL_JoystickOpen(index);
+	if (!joystick->device)
+	{
+		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
+        delete joystick;
+		return -1;
+	}
+
+	joystick->id = SDL_JoystickInstanceID(joystick->device);
+	m_joysticks.push_back(joystick);
+	return joystick->id;
+}
+
+int MWindow::removeJoystick(int id)
+{
+	for (int i = 0; i < m_joysticks.size(); ++i)
+	{
+		if (m_joysticks[i]->id == id && SDL_JoystickGetAttached(m_joysticks[i]->device))
+		{
+			SDL_JoystickClose(m_joysticks[i]->device);
+            delete m_joysticks[i];
+			m_joysticks.erase(m_joysticks.begin() + i);
+			return id;
+		}
+	}
+
+	return -1;
+}
+
+int MWindow::addGameController(int index)
+{
+	GameControllerDevice_t * controller = new GameControllerDevice_t;
+	controller->device = SDL_GameControllerOpen(index);
+	if (!controller->device)
+	{
+		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
+        delete controller;
+		return -1;
+	}
+
+	controller->id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller->device));
+	m_controllers.push_back(controller);
+	return controller->id;
+}
+
+int MWindow::removeGameController(int id)
+{
+	for (int i = 0; i < m_controllers.size(); ++i)
+	{
+		if (m_controllers[i]->id == id && SDL_GameControllerGetAttached(m_controllers[i]->device))
+		{
+			SDL_GameControllerClose(m_controllers[i]->device);
+            delete m_controllers[i];
+			m_controllers.erase(m_controllers.begin() + i);
+			return id;
+		}
+	}
+
+	return -1;
+}
+
+void MWindow::messagebox(const char* content, const char* title)
+{
+    fl_message_title(title);
+    fl_message(content);
+}
+
+void MWindow::resize(unsigned int width, unsigned int height)
+{
+    m_width = width;
+    m_height = height;
+}
+

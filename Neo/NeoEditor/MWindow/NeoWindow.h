@@ -29,8 +29,8 @@
 //========================================================================
 
 
-#ifndef _M_WINDOW_H
-#define _M_WINDOW_H
+#ifndef _NEO_WINDOW_H
+#define _NEO_WINDOW_H
 
 #include "MWinEvents.h"
 
@@ -39,6 +39,8 @@
 
 #include <vector>
 
+namespace NeoEditor
+{
 class MWindow
 {
 private:
@@ -156,5 +158,6 @@ public:
     void messagebox(const char* content, const char* title);
 
 };
+}
 
 #endif

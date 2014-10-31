@@ -12,7 +12,7 @@
 #include "../Maratis/Maratis.h"
 #include "../MPublish/MPublisher.h"
 #include "ini.h"
-#include "../MWindow/MWindow.h"
+#include "../MWindow/NeoWindow.h"
 
 // Is now given via compiler flags
 // #define EDITOR_VERSION_STRING "0.1"
