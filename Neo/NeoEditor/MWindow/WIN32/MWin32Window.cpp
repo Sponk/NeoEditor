@@ -30,7 +30,7 @@
 
 #ifdef WIN32
 #define _WIN32_WINNT 0x0500
-#include "../MWindow.h"
+#include <MWindow.h>
 
 #include <MEngine.h>
 
