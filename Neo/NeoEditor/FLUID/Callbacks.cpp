@@ -2066,6 +2066,44 @@ int redirect_script_print()
     return 1;
 }
 
+void setCursorPos(int x, int y)
+{
+#if defined WIN32
+    BOOL result = SetCursorPos(x, y);
+    if (result) return;
+#elif defined __APPLE__
+    CGPoint new_pos;
+    CGEventErr err;
+    new_pos.x = x;
+    new_pos.y = y;
+    err = CGWarpMouseCursorPosition(new_pos);
+    if (!err) return;
+#else
+    Window rootwindow = DefaultRootWindow(fl_display);
+    XWarpPointer(fl_display, rootwindow, rootwindow, 0, 0, 0, 0,::window.glbox->x_root()+x,::window.glbox->y_root()+y);
+#endif
+}
+
+int centerCursorReplacement()
+{
+    MEngine * engine = MEngine::getInstance();
+    MSystemContext * system = engine->getSystemContext();
+    MInputContext * input = engine->getInputContext();
+
+    unsigned int width = 0;
+    unsigned int height = 0;
+    system->getScreenSize(&width, &height);
+    int x = width/2;
+    int y = height/2;
+
+    system->setCursorPosition(x, y);
+    setCursorPos(x, y);
+    input->setAxis("MOUSE_X", (float)(x / (float)width));
+    input->setAxis("MOUSE_Y", (float)(y / (float)height));
+
+    return 0;
+}
+
 void play_game_in_editor(Fl_Button* button, void *)
 {
     MEngine* engine = MEngine::getInstance();
@@ -2073,6 +2111,7 @@ void play_game_in_editor(Fl_Button* button, void *)
     MScene * scene = level->getCurrentScene();
     MScript scriptContext;
     scriptContext.addFunction("print", redirect_script_print);
+    scriptContext.addFunction("centerCursor", centerCursorReplacement);
 
     MGame* game = engine->getGame();
 
