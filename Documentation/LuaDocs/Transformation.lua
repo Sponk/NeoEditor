@@ -20,8 +20,10 @@ rotate(object, axis, angle, "local");
  * The local parameter is optional.<br>
  * Example:<br><br>
  *
+ * @code
  * -- Translate on X-Axis in the local space<br>
  * rotate(object, {15,0,0}, "local")<br>
+ * @endcode
  *
  * @param object The object to translate.
  * @param axis An vec3 containing the direction to translate to.
