@@ -2,6 +2,7 @@
 #include "MainWindow.h"
 #include <fstream>
 #include <string>
+#include <ctime>
 #include <FL/fl_message.H>
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Chart.H>
