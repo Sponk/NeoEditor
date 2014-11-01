@@ -103,6 +103,8 @@ public:
 	// create
 	bool create(const char * title, unsigned int width, unsigned int height, int colorBits, bool fullscreen);
     void resize(unsigned int width, unsigned int height);
+    void setViewport(unsigned int width, unsigned int height) {m_width = width; m_height = height; }
+    void setPosition(int x, int y) { m_position[0] = x; m_position[1] = y; }
 
 	// events
 	inline void setPointerEvent(void (*pointerEvent)(MWinEvent * windowEvents)){ m_pointerEvent = pointerEvent; }
@@ -130,8 +132,15 @@ public:
 
 	inline int getXPosition(void){ return m_position[0]; }
 	inline int getYPosition(void){ return m_position[1]; }
-	inline unsigned int getWidth(void){ return m_width; }
-	inline unsigned int getHeight(void){ return m_height; }
+
+    // FIXME: Ugly hack!
+#ifndef OVERWRITE_GEOMETRY
+    inline unsigned int getWidth(void){ return m_width; }
+    inline unsigned int getHeight(void){ return m_height; }
+#else
+    inline unsigned int getWidth(void);
+    inline unsigned int getHeight(void);
+#endif
 
 	// swap buffer
 	void swapBuffer(void);
@@ -155,6 +164,7 @@ public:
 
     // messagebox
     void messagebox(const char* content, const char* title);
+    void executeDetached(const char *path, const char *args, bool killParent);
 };
 
 #else

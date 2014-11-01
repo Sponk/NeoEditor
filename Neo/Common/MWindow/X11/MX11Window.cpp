@@ -28,8 +28,11 @@
 //========================================================================
 
 
-#include <MWindow.h>
+#ifdef LINUX
+#include "../MWindow.h"
+#include <MEngine.h>
 
+#include <signal.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -68,3 +71,65 @@ void MWindow::execute(const char * path, const char * args)
 
 	system(dst);
 }
+
+static char** vector2array(vector<const char*> vec)
+{
+    char** arr = new char*[vec.size()];
+    for(size_t i = 0; i < vec.size(); i++)
+    {
+        if(vec[i] == NULL)
+        {
+            arr[i] = NULL;
+            continue;
+        }
+
+        arr[i] = new char[strlen(vec[i]) + 1];
+        strcpy(arr[i], vec[i]);
+    }
+
+    return arr;
+}
+
+void MWindow::executeDetached(const char *path, const char *args, bool killParent)
+{
+    pid_t pid = fork();
+
+    // Child process
+    if(pid == 0)
+    {
+        // Get argument vector
+        vector<const char*> vec;
+        vec.push_back(path);
+
+        if(args != NULL && strchr(args, ' ') != NULL)
+        {
+            char* token;
+            while((token = strtok((char*) args, " ")) != NULL)
+            {
+                vec.push_back(token);
+            }
+        }
+        else if(args != NULL && strchr(args, ' ') == NULL)
+        {
+            vec.push_back(args);
+        }
+
+        vec.push_back(NULL);
+        char** argv = vector2array(vec);
+
+        // Kill parent
+        if(killParent)
+            kill(getppid(), 9);
+
+        // Execute application!
+        execv(path, argv);
+
+        // Should never reach this...
+        exit(-1);
+    }
+    else if(pid < 0)
+    {
+        MLOG_ERROR("Could not fork process!");
+    }
+}
+#endif

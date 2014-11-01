@@ -1,5 +1,5 @@
 #include "GLBox.h"
-#include "../MWindow/NeoWindow.h"
+#include <MWindow.h>
 #include <MEngine.h>
 #include <MLoaders/MImageLoader.h>
 #include <MLog.h>
@@ -22,8 +22,6 @@
 #include <string>
 
 #include <Shiny.h>
-
-using namespace NeoEditor;
 
 extern Fl_Double_Window* main_window;
 extern EditorWindow window;

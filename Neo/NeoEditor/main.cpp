@@ -34,15 +34,14 @@
 #include <MLog.h>
 #include "MFilesUpdate/MFilesUpdate.h"
 #include "Maratis/Maratis.h"
-#include "MWindow/NeoWindow.h"
+#include <MWindow.h>
 #include <MCore.h>
 #include <MSchedule/MSchedule.h>
 #include "FLUID/MainWindow.h"
 #include "FLUID/Callbacks.h"
 #include <FL/Fl.H>
 #include "FLUID/Translator.h"
-
-using namespace NeoEditor;
+#include <SDL.h>
 
 #ifdef _WIN32
     #include <windows.h>
@@ -517,6 +516,22 @@ int main(int argc, char **argv)
     char rep[256];
     getRepertory(rep, argv[0]);
 
+    // Init SDL
+    SDL_version compiled;
+    SDL_version linked;
+
+    SDL_VERSION(&compiled);
+    SDL_GetVersion(&linked);
+
+    MLOG_INFO("SDL compiled version: " << (int) compiled.major << "." << (int) compiled.minor << "." << (int) compiled.patch);
+    MLOG_INFO("SDL linked version: " << (int)linked.major << "." << (int)linked.minor << "." << (int)linked.patch);
+
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+    {
+        MLOG_ERROR("SDL Error: " << SDL_GetError());
+        return -1;
+    }
+
 #ifndef WIN32
     load_translation(getenv("HOME"), rep);
 #else
@@ -572,6 +587,10 @@ int main(int argc, char **argv)
 #endif
 
     Fl::add_timeout(0.2, update_editor);
-    Fl::run();
-	return 0;
+    while(Fl::check())
+    {
+        MWindow::getInstance()->onEvents();
+        MWindow::getInstance()->onWindowEvents();
+    }
+    return 0;
 }
