@@ -8,13 +8,13 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Foobar is distributed in the hope that it will be useful,
+ * NeoGui is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with NeoGui.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Diese Datei ist Teil von NeoGui.
  *
@@ -32,19 +32,38 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-namespace Neo
-{
-/**
- * @brief The Render class contains helper methods for rendering 2D shapes.
- *
- * All elements can be rendered directly to the screen or to a texture.
- */
-class Render
-{
-private:
-    Render m_instance;
+#include <Canvas.h>
+#include <Render.h>
 
-public:
-    Render* getInstance() { return &m_instance; }
-};
+using namespace Neo;
+
+void Canvas::draw()
+{
+    Render* render = Render::getInstance();
+    MSystemContext* system = MEngine::getInstance()->getSystemContext();
+    system->getScreenSize(&m_width, &m_height);
+
+    // Clear the canvas
+    render->drawColoredQuad(0,0, m_width, m_height, m_clearColor);
+
+    // Draw all widgets
+    for(int i = 0; i < m_widgets.size(); i++)
+    {
+        m_widgets[i]->draw();
+    }
+}
+
+void Canvas::update()
+{
+    // Update all widgets
+    for(int i = 0; i < m_widgets.size(); i++)
+    {
+        m_widgets[i]->update();
+    }
+}
+
+void Canvas::addWidget(Widget* w)
+{
+    if(w)
+        m_widgets.push_back(w);
 }

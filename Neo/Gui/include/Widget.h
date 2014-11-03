@@ -8,13 +8,13 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Foobar is distributed in the hope that it will be useful,
+ * NeoGui is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with NeoGui.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Diese Datei ist Teil von NeoGui.
  *
@@ -32,4 +32,34 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include <widget.h>
+#ifndef __WIDGET_H__
+#define __WIDGET_H__
+
+#include <string>
+
+namespace Neo
+{
+/**
+ * @brief The Widget class contains all information that is common
+ * to all GUI widgets.
+ *
+ * Every object that resembles a GUI widget has to derive from this class.
+ */
+class Widget
+{
+protected:
+    unsigned int m_x, m_y;
+    unsigned int m_width, m_height;
+    std::string m_label;
+
+public:
+
+    Widget(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label);
+    Widget();
+
+    virtual void draw() = 0;
+    virtual void update() = 0;
+};
+}
+
+#endif

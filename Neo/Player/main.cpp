@@ -32,6 +32,9 @@
 #include "Maratis/MaratisPlayer.h"
 #include "MSchedule/MSchedule.h"
 
+// NeoGui
+#include <GuiSystem.h>
+
 #ifdef main
     #undef main
 #endif
@@ -66,12 +69,14 @@ void windowEvents(MWinEvent * windowEvents)
 void update(void)
 {
 	MaratisPlayer::getInstance()->logicLoop();
+    Neo::GuiSystem::getInstance()->update();
 }
 
 // draw
 void draw(void)
 {
 	MaratisPlayer::getInstance()->graphicLoop();
+    Neo::GuiSystem::getInstance()->draw();
     MWindow::getInstance()->swapBuffer();
 }
 
@@ -251,6 +256,8 @@ int main(int argc, char **argv)
 		getGlobalFilename(filename, window->getCurrentDirectory(), argv[1]);
 		if(maratis->loadProject(filename))
 		{
+            // Initialize GUI bindings
+            Neo::GuiSystem::getInstance()->setupLuaInterface(MEngine::getInstance()->getScriptContext());
 			engine->getGame()->begin();
 			projectFound = true;
 		}
@@ -290,6 +297,8 @@ int main(int argc, char **argv)
 
 					if(maratis->loadProject(filename))
 					{
+                        // Initialize GUI bindings
+                        Neo::GuiSystem::getInstance()->setupLuaInterface(MEngine::getInstance()->getScriptContext());
 						engine->getGame()->begin();
 						projectFound = true;
 						break;
@@ -304,6 +313,7 @@ int main(int argc, char **argv)
 
     // create the update thread
     MSDLThread updateThread;
+    Neo::GuiSystem* guiSystem = Neo::GuiSystem::getInstance();
 
     // Init semaphore
     updateSemaphore.Init(1);
@@ -352,7 +362,8 @@ int main(int argc, char **argv)
         else
         {
             draw();
-			MSDLSemaphore::Unlock(&updateSemaphore);
+            Neo::GuiSystem::getInstance()->draw();
+            MSDLSemaphore::Unlock(&updateSemaphore);
             window->sleep(100);
 			continue;
         }

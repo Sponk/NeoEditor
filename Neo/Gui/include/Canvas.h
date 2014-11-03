@@ -8,13 +8,13 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Foobar is distributed in the hope that it will be useful,
+ * NeoGui is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with NeoGui.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Diese Datei ist Teil von NeoGui.
  *
@@ -31,6 +31,12 @@
  * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
+#ifndef __CANVAS_H_
+#define __CANVAS_H_
+
+#include <Widget.h>
+#include <vector>
+#include <MEngine.h>
 
 namespace Neo
 {
@@ -43,10 +49,21 @@ namespace Neo
 class Canvas
 {
 private:
-    static Canvas m_instance;
+    std::vector<Widget*> m_widgets;
+    MVector4 m_clearColor;
+
+    unsigned int m_width, m_height;
 
 public:
-    Canvas* getInstance() { return &m_instance; }
+    static Canvas* getInstance() { static Canvas m_instance; return &m_instance; }
 
+    void draw();
+    void update();
+
+    void addWidget(Widget* w);
+    MVector4 getClearColor() { return m_clearColor; }
+    void setClearColor(MVector4 vec) { m_clearColor = vec; }
 };
 }
+
+#endif

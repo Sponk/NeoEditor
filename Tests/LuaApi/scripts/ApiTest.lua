@@ -52,4 +52,16 @@ function testVec()
 end
 
 LuaUnit.run()
-quit()
+
+enableGui(1)
+mainCanvas = getMainCanvas()
+
+button1 = createButton(15,15,200,30,"This is a Button!!!");
+addWidgetToCanvas(mainCanvas, button1)
+
+print("Got button:" .. button1)
+--setCanvasClearColor(mainCanvas, {1,1,1,0.1})
+
+print("Got canvas: " .. mainCanvas)
+
+--quit()

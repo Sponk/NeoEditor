@@ -8,13 +8,13 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Foobar is distributed in the hope that it will be useful,
+ * NeoGui is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with NeoGui.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Diese Datei ist Teil von NeoGui.
  *
@@ -32,18 +32,51 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __GUI_SYSTEM__
+#define __GUI_SYSTEM__
+
+#include <MEngine.h>
+#include <vector>
+#include <Canvas.h>
+#include <string>
+
 namespace Neo
 {
 /**
- * @brief The Widget class contains all information that is common
- * to all GUI widgets.
- *
- * Every object that resembles a GUI widget has to derive from this class.
+ * @brief The GuiSystem class contains all functionality to set up a GUI.
  */
-class Widget
+class GuiSystem
 {
+private:
+    bool m_enabled;
+
+    std::vector<Canvas*> m_canvasVector;
+    std::string m_defaultFont;
+    float m_defaultFontSize;
+
+    MVector4 m_normalBackground;
+    MVector4 m_hoverBackground;
+    MVector4 m_highlightBackground;
+
 public:
 
+    GuiSystem();
+    ~GuiSystem();
+
+    static GuiSystem* getInstance() { static GuiSystem m_instance; return &m_instance; }
+    void setupLuaInterface(MScriptContext* script);
+    void setEnabled(bool enabled) { m_enabled = enabled; }
+
+    void draw();
+    void update();
+
+    const char* getDefaultFont() { return m_defaultFont.c_str(); }
+    float getDefaultFontSize() { return m_defaultFontSize; }
+
+    MVector4 getNormalBackground() { return m_normalBackground; }
+    MVector4 getHoverBackground() { return m_hoverBackground; }
+    MVector4 getHighlightBackground() { return m_highlightBackground; }
 };
 }
 
+#endif

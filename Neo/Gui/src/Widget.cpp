@@ -8,13 +8,13 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Foobar is distributed in the hope that it will be useful,
+ * NeoGui is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with NeoGui.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Diese Datei ist Teil von NeoGui.
  *
@@ -31,3 +31,22 @@
  * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
+
+#include <Widget.h>
+
+using namespace Neo;
+
+Widget::Widget(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label) :
+m_x(x),
+m_y(y),
+m_width(width),
+m_height(height),
+m_label(label)
+{
+
+}
+
+Widget::Widget() : Widget(0,0,50,15,"Widget")
+{
+
+}

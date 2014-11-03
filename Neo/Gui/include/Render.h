@@ -8,13 +8,13 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Foobar is distributed in the hope that it will be useful,
+ * NeoGui is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * along with NeoGui.  If not, see <http://www.gnu.org/licenses/>.
  *
  * Diese Datei ist Teil von NeoGui.
  *
@@ -31,3 +31,34 @@
  * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
+
+#ifndef __RENDER_H__
+#define __RENDER_H__
+
+#include <MEngine.h>
+
+namespace Neo
+{
+/**
+ * @brief The Render class contains helper methods for rendering 2D shapes.
+ *
+ * All elements can be rendered directly to the screen or to a texture.
+ */
+class Render
+{
+private:
+    unsigned int m_colorOnlyFx;
+public:
+    static Render* getInstance() { static Render m_instance; return &m_instance; }
+
+    void drawColoredQuad(float x, float y, float w, float h, MVector4 color);
+    void drawText(MOText* text, float x, float y);
+    void set2D(float w, float h);
+
+    void loadShader(const char* vert, const char* frag, unsigned int* fx);
+
+    Render();
+};
+}
+
+#endif
