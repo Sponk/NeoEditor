@@ -75,6 +75,7 @@ void Render::drawColoredQuad(float x, float y, float w, float h, MVector4 color)
     }
 
     int vertexAttrib;
+    render->pushMatrix();
 
     MVector2 m_vertices[4];
     m_vertices[0] = MVector2(x, y);
@@ -116,6 +117,8 @@ void Render::drawColoredQuad(float x, float y, float w, float h, MVector4 color)
     render->disableAttribArray(vertexAttrib);
     render->bindFX(0);
     render->disableBlending();
+
+    render->popMatrix();
 }
 
 void Render::set2D(float w, float h)
@@ -168,6 +171,7 @@ void Render::drawText(MOText* text, float x, float y)
 
     MEngine::getInstance()->getRenderer()->drawText(text);
     renderContext->disableTexture();
+    renderContext->popMatrix();
 }
 
 /*

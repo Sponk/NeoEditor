@@ -79,8 +79,8 @@ void Button::draw()
         break;
     }
 
-    render->drawColoredQuad(m_x, m_y, m_x+m_width, m_y+m_height, color);
-    render->drawText(m_labelText, m_x + 0.5*m_width, m_y + m_labelText->getSize() + 0.5*m_height);
+    render->drawColoredQuad(m_x, m_y, m_width, m_height, color);
+    render->drawText(m_labelText, m_x + 0.5*m_width, m_y + 0.5*m_labelText->getSize() + 0.5*m_height);
 }
 
 void Button::update()
@@ -92,10 +92,10 @@ void Button::update()
 
     if(m_state == BUTTON_PRESSED_STATE && !mouse->isLeftButtonPushed())
     {
-        MLOG_INFO("CLICK");
+        doCallback();
     }
 
-    if(x >= m_x && x <= m_x+m_width && y >= m_y && y <= 2*m_y + m_height)
+    if(x >= m_x && x <= m_x+m_width && y >= m_y && y <= m_y + m_height)
     {
         m_state = BUTTON_HOVER_STATE;
     }

@@ -39,6 +39,9 @@
 
 namespace Neo
 {
+
+typedef void (*CALLBACK_FUNCTION)(long int);
+
 /**
  * @brief The Widget class contains all information that is common
  * to all GUI widgets.
@@ -52,6 +55,9 @@ protected:
     unsigned int m_width, m_height;
     std::string m_label;
 
+    CALLBACK_FUNCTION m_callback;
+    long int m_userData;
+
 public:
 
     Widget(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label);
@@ -59,6 +65,14 @@ public:
 
     virtual void draw() = 0;
     virtual void update() = 0;
+
+    void setCallback(CALLBACK_FUNCTION func) { m_callback = func; }
+    void setCallback(CALLBACK_FUNCTION func, long int data) { m_callback = func; m_userData = data; }
+
+    long int getUserData() { return m_userData; }
+    void setUserData(long int data) { m_userData = data; }
+
+    void doCallback();
 };
 }
 

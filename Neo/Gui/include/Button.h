@@ -52,6 +52,7 @@ class Button : public Widget
 {
     MOText* m_labelText;
     BUTTON_STATE m_state;
+
 public:
 
     Button(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label);

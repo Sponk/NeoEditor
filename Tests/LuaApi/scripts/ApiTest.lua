@@ -53,15 +53,21 @@ end
 
 LuaUnit.run()
 
+function button1Callback()
+	print("Button1 got clicked!")
+end
+
+function button2Callback()
+	print("Button2 got clicked!")
+end
+
 enableGui(1)
 mainCanvas = getMainCanvas()
 
-button1 = createButton(15,15,200,30,"This is a Button!!!");
+button1 = createButton(15,15,250,30,"This is a Button!!!", "button1Callback");
+button2 = createButton(15,150,250,30,"This is another Button!!!", "button2Callback");
+
 addWidgetToCanvas(mainCanvas, button1)
-
-print("Got button:" .. button1)
---setCanvasClearColor(mainCanvas, {1,1,1,0.1})
-
-print("Got canvas: " .. mainCanvas)
+addWidgetToCanvas(mainCanvas, button2)
 
 --quit()

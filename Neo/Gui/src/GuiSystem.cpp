@@ -57,6 +57,14 @@ GuiSystem::~GuiSystem()
     }
 }
 
+std::vector<std::string> scriptCallbacks;
+
+void scriptCallback(long int id)
+{
+    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    script->callFunction(scriptCallbacks[id].c_str());
+}
+
 /**
  * @brief Enables or disable the GUI system.
  * @return Success
@@ -110,11 +118,16 @@ int createButton()
 {
     MScriptContext* script = MEngine::getInstance()->getScriptContext();
 
-    if(script->getArgsNumber() != 5)
+    if(script->getArgsNumber() != 6)
         return 0;
 
     Button* btn = new Button(script->getInteger(0), script->getInteger(1),
                              script->getInteger(2), script->getInteger(3), script->getString(4));
+
+    btn->setCallback(scriptCallback);
+
+    scriptCallbacks.push_back(script->getString(5));
+    btn->setUserData(scriptCallbacks.size()-1);
     script->pushPointer(btn);
     return 1;
 }

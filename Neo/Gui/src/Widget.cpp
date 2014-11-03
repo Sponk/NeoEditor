@@ -41,7 +41,8 @@ m_x(x),
 m_y(y),
 m_width(width),
 m_height(height),
-m_label(label)
+m_label(label),
+m_callback(NULL)
 {
 
 }
@@ -49,4 +50,9 @@ m_label(label)
 Widget::Widget() : Widget(0,0,50,15,"Widget")
 {
 
+}
+
+void Widget::doCallback()
+{
+    m_callback(m_userData);
 }
