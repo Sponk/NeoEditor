@@ -95,7 +95,7 @@ void Button::update()
         MLOG_INFO("CLICK");
     }
 
-    if(x >= m_x && x <= m_x+m_width && y >= m_y && y <= m_y + m_height)
+    if(x >= m_x && x <= m_x+m_width && y >= m_y && y <= 2*m_y + m_height)
     {
         m_state = BUTTON_HOVER_STATE;
     }
