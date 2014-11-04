@@ -72,6 +72,9 @@ public:
     long int getUserData() { return m_userData; }
     void setUserData(long int data) { m_userData = data; }
 
+    const char* getLabel() { return m_label.c_str(); }
+    void setLabel(const char* l) { m_label = l; }
+
     void doCallback();
 };
 }

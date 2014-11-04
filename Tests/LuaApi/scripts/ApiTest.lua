@@ -68,6 +68,8 @@ end
 function button3Callback()
 	local light = getObject("Light")
 	setLightIntensity(light, getLightIntensity(light) - 0.1)
+	
+	print(getLabel(input1))
 end
 
 enableGui(1)

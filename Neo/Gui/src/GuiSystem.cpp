@@ -175,6 +175,32 @@ int addWidgetToCanvas()
     return 1;
 }
 
+int setLabel()
+{
+    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+
+    if(script->getArgsNumber() != 2)
+        return 0;
+
+    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+    w->setLabel(script->getString(1));
+
+    return 1;
+}
+
+int getLabel()
+{
+    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+
+    if(script->getArgsNumber() != 1)
+        return 0;
+
+    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+    script->pushString(w->getLabel());
+
+    return 1;
+}
+
 void GuiSystem::setupLuaInterface(MScriptContext* script)
 {
     script->addFunction("enableGui", enableGui);
@@ -184,6 +210,9 @@ void GuiSystem::setupLuaInterface(MScriptContext* script)
     script->addFunction("createButton", createButton);
     script->addFunction("createInput", createInput);
     script->addFunction("addWidgetToCanvas", addWidgetToCanvas);
+
+    script->addFunction("setLabel", setLabel);
+    script->addFunction("getLabel", getLabel);
 }
 
 void GuiSystem::draw()
