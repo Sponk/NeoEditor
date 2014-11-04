@@ -22,7 +22,9 @@ end
 function testMeshLoading()
     local object = loadMesh("meshs/box.mesh")
     assertEquals(getName(object), "Entity0")
-    assertEquals(loadMesh("DoesNotExist"), nil)    
+    assertEquals(loadMesh("DoesNotExist"), nil)   
+
+    translate(object, {500,500,500}) -- Move the box out of the way 
 end
 
 function testLight()
@@ -54,20 +56,29 @@ end
 LuaUnit.run()
 
 function button1Callback()
-	print("Button1 got clicked!")
+	local obj = getObject("Cube")
+	rotate(obj, {1,0,0}, 15, "local")
 end
 
 function button2Callback()
-	print("Button2 got clicked!")
+	local light = getObject("Light")
+	setLightIntensity(light, getLightIntensity(light) + 0.1)
+end
+
+function button3Callback()
+	local light = getObject("Light")
+	setLightIntensity(light, getLightIntensity(light) - 0.1)
 end
 
 enableGui(1)
 mainCanvas = getMainCanvas()
 
-button1 = createButton(15,15,250,30,"This is a Button!!!", "button1Callback");
-button2 = createButton(15,150,250,30,"This is another Button!!!", "button2Callback");
+button1 = createButton(15,15,250,30,"Rotate Cube", "button1Callback")
+button2 = createButton(15,50,250,30,"More light", "button2Callback")
+button3 = createButton(15,85,250,30, "Less light", "button3Callback")
 
 addWidgetToCanvas(mainCanvas, button1)
 addWidgetToCanvas(mainCanvas, button2)
+addWidgetToCanvas(mainCanvas, button3)
 
 --quit()

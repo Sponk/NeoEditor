@@ -12,6 +12,50 @@
 			gravity="0.000000 0.000000 -0.981000"
 			ambientLight="0.000000 0.000000 0.000000" />
 
+		<Camera name="Camera0">
+			<active value="true" />
+			<transform 
+				position="0.000000 -72.376923 17.554047"
+				rotation="90.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				clearColor="0.200000 0.300000 0.400000"
+				fogColor="1.000000 1.000000 1.000000"
+				ortho="false"
+				fov="60.000000"
+				clippingNear="1.000000"
+				clippingFar="1000.000000"
+				fog="false"
+				fogDistance="0.000000"
+				skyboxTextures="" />
+		</Camera>
+		<Entity name="Cube" file="../meshs/box.mesh">
+			<BoundingBox min="-5.000000 -5.000000 -5.000000" max="5.000000 5.000000 5.000000" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="0.000000 0.000000 0.000000"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
+		<Light name="Light">
+			<active value="true" />
+			<transform 
+				position="0.000000 -24.968735 39.711044"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="1000.000000"
+				color="1.000000 1.000000 1.000000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
 
 	</Scene>
 
