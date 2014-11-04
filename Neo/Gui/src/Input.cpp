@@ -70,11 +70,11 @@ void Input::draw()
     switch(m_state)
     {
     case INPUT_NORMAL_STATE:
-            color = GuiSystem::getInstance()->getNormalBackground();
+            color = 1.5*GuiSystem::getInstance()->getNormalBackground();
         break;
 
     case INPUT_HOVER_STATE:
-            color = GuiSystem::getInstance()->getHoverBackground();
+            color = 1.2*GuiSystem::getInstance()->getHoverBackground();
         break;
 
     case INPUT_SELECTED_STATE:

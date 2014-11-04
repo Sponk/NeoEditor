@@ -47,7 +47,7 @@ GuiSystem::GuiSystem()
     m_defaultFontSize = 12.0;
     m_normalBackground = MVector4(0.5,0.5,0.5,1.0);
     m_hoverBackground = MVector4(0.7,0.7,0.7,1.0);
-    m_highlightBackground = MVector4(0.8,0.7,0.7,1.0);
+    m_highlightBackground = MVector4(0.6,0.7,0.8,1.0);
 }
 
 GuiSystem::~GuiSystem()
