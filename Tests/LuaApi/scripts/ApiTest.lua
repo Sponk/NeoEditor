@@ -77,8 +77,11 @@ button1 = createButton(15,15,250,30,"Rotate Cube", "button1Callback")
 button2 = createButton(15,50,250,30,"More light", "button2Callback")
 button3 = createButton(15,85,250,30, "Less light", "button3Callback")
 
+input1 = createInput(15,130,250, 30, "This is an input", "")
+
 addWidgetToCanvas(mainCanvas, button1)
 addWidgetToCanvas(mainCanvas, button2)
 addWidgetToCanvas(mainCanvas, button3)
+addWidgetToCanvas(mainCanvas, input1)
 
 --quit()

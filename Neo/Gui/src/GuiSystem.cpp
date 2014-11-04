@@ -35,6 +35,7 @@
 #include <GuiSystem.h>
 #include <Canvas.h>
 #include <Button.h>
+#include <Input.h>
 #include <Render.h>
 
 using namespace Neo;
@@ -128,9 +129,36 @@ int createButton()
 
     scriptCallbacks.push_back(script->getString(5));
     btn->setUserData(scriptCallbacks.size()-1);
-    script->pushPointer(btn);
+
+    GuiSystem* gui = GuiSystem::getInstance();
+    gui->addWidget(btn);
+
+    script->pushInteger(gui->getNumWidgets() - 1);
     return 1;
 }
+
+int createInput()
+{
+    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+
+    if(script->getArgsNumber() != 6)
+        return 0;
+
+    Input* input = new Input(script->getInteger(0), script->getInteger(1),
+                             script->getInteger(2), script->getInteger(3), script->getString(4));
+
+    input->setCallback(scriptCallback);
+
+    scriptCallbacks.push_back(script->getString(5));
+    input->setUserData(scriptCallbacks.size()-1);
+
+    GuiSystem* gui = GuiSystem::getInstance();
+    gui->addWidget(input);
+
+    script->pushInteger(gui->getNumWidgets() - 1);
+    return 1;
+}
+
 
 int addWidgetToCanvas()
 {
@@ -140,7 +168,7 @@ int addWidgetToCanvas()
         return 0;
 
     Canvas* c = (Canvas*) script->getPointer(0);
-    Widget* w = (Widget*) script->getPointer(1);
+    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(1));
 
     c->addWidget(w);
 
@@ -154,6 +182,7 @@ void GuiSystem::setupLuaInterface(MScriptContext* script)
     script->addFunction("getCanvasClearColor", getCanvasClearColor);
     script->addFunction("setCanvasClearColor", setCanvasClearColor);
     script->addFunction("createButton", createButton);
+    script->addFunction("createInput", createInput);
     script->addFunction("addWidgetToCanvas", addWidgetToCanvas);
 }
 

@@ -32,55 +32,35 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GUI_SYSTEM__
-#define __GUI_SYSTEM__
+#ifndef __INPUT_H__
+#define __INPUT_H__
 
+#include <Widget.h>
 #include <MEngine.h>
-#include <vector>
-#include <Canvas.h>
-#include <string>
 
 namespace Neo
 {
-/**
- * @brief The GuiSystem class contains all functionality to set up a GUI.
- */
-class GuiSystem
+
+enum INPUT_STATE
 {
-private:
-    bool m_enabled;
+    INPUT_NORMAL_STATE = 0,
+    INPUT_HOVER_STATE,
+    INPUT_SELECTED_STATE
+};
 
-    std::vector<Canvas*> m_canvasVector;
-    std::vector<Widget*> m_widgets;
-    std::string m_defaultFont;
-    float m_defaultFontSize;
+class Input : public Widget
+{
+    MOText* m_labelText;
+    INPUT_STATE m_state;
 
-    MVector4 m_normalBackground;
-    MVector4 m_hoverBackground;
-    MVector4 m_highlightBackground;
+    void addCharacter(char c);
 
 public:
 
-    GuiSystem();
-    ~GuiSystem();
-
-    static GuiSystem* getInstance() { static GuiSystem m_instance; return &m_instance; }
-    void setupLuaInterface(MScriptContext* script);
-    void setEnabled(bool enabled) { m_enabled = enabled; }
+    Input(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label);
 
     void draw();
     void update();
-
-    const char* getDefaultFont() { return m_defaultFont.c_str(); }
-    float getDefaultFontSize() { return m_defaultFontSize; }
-
-    MVector4 getNormalBackground() { return m_normalBackground; }
-    MVector4 getHoverBackground() { return m_hoverBackground; }
-    MVector4 getHighlightBackground() { return m_highlightBackground; }
-
-    Widget* getWidget(unsigned int idx) { return m_widgets[idx]; }
-    void addWidget(Widget* w) { m_widgets.push_back(w); }
-    size_t getNumWidgets() { return m_widgets.size(); }
 };
 }
 
