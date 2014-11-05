@@ -144,21 +144,36 @@ void Input::update()
 
     if(m_state == INPUT_SELECTED_STATE)
     {
+        bool shift = false;
+
+        if(kbd->isKeyPressed(MKEY_LSHIFT) || kbd->isKeyPressed(MKEY_RSHIFT))
+        {
+            shift = true;
+        }
+
         for(int i = MKEY_A; i < MKEY_Z; i++)
         {
             if(kbd->isKeyPressed(i))
             {
                 kbd->onKeyUp(i);
-                addCharacter(i);
+
+                if(!shift)
+                    addCharacter(tolower(i));
+                else
+                    addCharacter(i);
             }
         }
 
-        for(int i = MKEY_0; i < MKEY_9; i++)
+        for(int i = MKEY_0; i <= MKEY_9; i++)
         {
             if(kbd->isKeyPressed(i))
             {
                 kbd->onKeyUp(i);
-                addCharacter(i);
+
+                if(!shift)
+                    addCharacter(i);
+                else
+                    addCharacter(i-16);
             }
         }
 
