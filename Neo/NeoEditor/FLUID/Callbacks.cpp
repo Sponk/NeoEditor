@@ -23,6 +23,8 @@
 #include <MFileManager/MLevelSave.h>
 #include <MCore.h>
 
+#include <GuiSystem.h>
+
 #include "../MFilesUpdate/MFilesUpdate.h"
 #include "../MLoaders/MAssimpMeshLoader.h"
 #include <MCore.h>
@@ -2112,6 +2114,8 @@ void play_game_in_editor(Fl_Button* button, void *)
     MScript scriptContext;
     scriptContext.addFunction("print", redirect_script_print);
     scriptContext.addFunction("centerCursor", centerCursorReplacement);
+
+    Neo::GuiSystem::getInstance()->setupLuaInterface(&scriptContext);
 
     MGame* game = engine->getGame();
 

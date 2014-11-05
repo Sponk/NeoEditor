@@ -3,6 +3,7 @@
 #include <MEngine.h>
 #include <MLoaders/MImageLoader.h>
 #include <MLog.h>
+#include <MKeyboard.h>
 
 #include "../MWindow/MMouse.h"
 #include "../MFilesUpdate/MFilesUpdate.h"
@@ -11,6 +12,9 @@
 #include <MCore.h>
 #include "../MRenderArray/MRenderArray.h"
 #include "MainWindow.h"
+
+// NeoGui
+#include <GuiSystem.h>
 
 #include <FL/Enumerations.H>
 #include <FL/Fl_Int_Input.H>
@@ -145,6 +149,7 @@ void update_editor(void*)
     window.glbox->redraw();
 
     maratis->logicLoop();
+    Neo::GuiSystem::getInstance()->update();
 
     if(window.m_deferredUiUpdate)
     {
@@ -259,6 +264,7 @@ void GLBox::draw()
     else
     {
         maratis->graphicLoop();
+        Neo::GuiSystem::getInstance()->draw();
     }
 
     swap_buffers();
@@ -280,6 +286,7 @@ int GLBox::handle(int event)
 
             key[0] = toupper(Fl::event_text()[0]);
             MEngine::getInstance()->getInputContext()->downKey(key);
+            MKeyboard* kbd = MKeyboard::getInstance();
 
             char keys[] = {"ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789"};
 
@@ -291,16 +298,19 @@ int GLBox::handle(int event)
                 if(Fl::get_key(keys[i]))
                 {
                     input->downKey(c);
+                    kbd->onKeyDown(c[0]);
                 }
                 else
                 {
                     input->upKey(c);
+                    kbd->onKeyUp(c[0]);
                 }
             }
 
             if(key[0] == ' ')
             {
                 input->downKey("SPACE");
+                kbd->onKeyDown(MKEY_SPACE);
                 return 1;
             }
 
@@ -308,10 +318,12 @@ int GLBox::handle(int event)
             {
             case FL_Shift_L:
                     input->downKey("LSHIFT");
+                    kbd->onKeyDown(MKEY_LSHIFT);
                 break;
 
             case FL_Shift_R:
                     input->downKey("RSHIFT");
+                    kbd->onKeyDown(MKEY_RSHIFT);
                 break;
 
             case FL_Up:
@@ -366,6 +378,7 @@ int GLBox::handle(int event)
 
             case FL_BackSpace:
                     input->downKey("BACKSPACE");
+                    kbd->onKeyDown(MKEY_BACKSPACE);
                     return 1;
 
             }

@@ -83,7 +83,7 @@ void Input::draw()
     }
 
     float size = m_labelText->getFont()->getTextureWith() / m_labelText->getSize();
-    int maxChars = 3*(m_width / size);
+    int maxChars = (int) ceil(3.7*(m_width / size));
     //MLOG_INFO("Max chars: " << maxChars);
 
     if(m_label.length() > maxChars)
