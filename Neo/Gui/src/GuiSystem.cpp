@@ -125,7 +125,7 @@ int createButton()
     Button* btn = new Button(script->getInteger(0), script->getInteger(1),
                              script->getInteger(2), script->getInteger(3), script->getString(4));
 
-    btn->setCallback(scriptCallback);
+    btn->setCallback((CALLBACK_FUNCTION) scriptCallback);
 
     scriptCallbacks.push_back(script->getString(5));
     btn->setUserData(scriptCallbacks.size()-1);
@@ -147,7 +147,7 @@ int createInput()
     Input* input = new Input(script->getInteger(0), script->getInteger(1),
                              script->getInteger(2), script->getInteger(3), script->getString(4));
 
-    input->setCallback(scriptCallback);
+    input->setCallback((CALLBACK_FUNCTION) scriptCallback);
 
     scriptCallbacks.push_back(script->getString(5));
     input->setUserData(scriptCallbacks.size()-1);

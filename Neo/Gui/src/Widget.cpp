@@ -54,5 +54,9 @@ Widget::Widget() : Widget(0,0,50,15,"Widget")
 
 void Widget::doCallback()
 {
+#ifdef __MINGW32__
+    ((void (*)(long int)) m_callback)(m_userData);
+#else
     m_callback(m_userData);
+#endif
 }

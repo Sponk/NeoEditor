@@ -40,7 +40,11 @@
 namespace Neo
 {
 
+#ifndef __MINGW32__
 typedef void (*CALLBACK_FUNCTION)(long int);
+#else
+#define CALLBACK_FUNCTION void*
+#endif
 
 /**
  * @brief The Widget class contains all information that is common
