@@ -59,6 +59,8 @@ private:
     MVector4 m_hoverBackground;
     MVector4 m_highlightBackground;
 
+    bool m_deferredClear;
+
 public:
 
     GuiSystem();
@@ -73,6 +75,7 @@ public:
 
     const char* getDefaultFont() { return m_defaultFont.c_str(); }
     float getDefaultFontSize() { return m_defaultFontSize; }
+    void setDefaultFontSize(float s) { m_defaultFontSize = s; }
 
     MVector4 getNormalBackground() { return m_normalBackground; }
     MVector4 getHoverBackground() { return m_hoverBackground; }
@@ -81,6 +84,9 @@ public:
     Widget* getWidget(unsigned int idx) { return m_widgets[idx]; }
     void addWidget(Widget* w) { m_widgets.push_back(w); }
     size_t getNumWidgets() { return m_widgets.size(); }
+
+    // Deletes all widgets and canvases except the main canvas.
+    void clear();
 };
 }
 

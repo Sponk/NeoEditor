@@ -67,3 +67,8 @@ void Canvas::addWidget(Widget* w)
     if(w)
         m_widgets.push_back(w);
 }
+
+void Canvas::clear()
+{
+    m_widgets.clear();
+}

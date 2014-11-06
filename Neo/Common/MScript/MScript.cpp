@@ -5009,9 +5009,9 @@ int MScript::function(lua_State * L)
 {
 	MScript * script = (MScript *)MEngine::getInstance()->getScriptContext();
 
-	lua_Debug ar;
+    lua_Debug ar;
 	lua_getstack(L, 0, &ar);
-	lua_getinfo(L, "n", &ar);
+    lua_getinfo(L, "n", &ar);
 
 	map<string, int (*)(void)>::iterator iter = script->m_functions.find(ar.name);
 	if(iter != script->m_functions.end())

@@ -60,6 +60,8 @@ public:
     void draw();
     void update();
 
+    void clear();
+
     void addWidget(Widget* w);
     MVector4 getClearColor() { return m_clearColor; }
     void setClearColor(MVector4 vec) { m_clearColor = vec; }
