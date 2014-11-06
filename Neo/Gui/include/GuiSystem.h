@@ -59,8 +59,6 @@ private:
     MVector4 m_hoverBackground;
     MVector4 m_highlightBackground;
 
-    bool m_deferredClear;
-
 public:
 
     GuiSystem();

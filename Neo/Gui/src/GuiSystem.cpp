@@ -48,7 +48,6 @@ GuiSystem::GuiSystem()
     m_normalBackground = MVector4(0.5,0.5,0.5,1.0);
     m_hoverBackground = MVector4(0.7,0.7,0.7,1.0);
     m_highlightBackground = MVector4(0.6,0.7,0.8,1.0);
-    m_deferredClear = false;
 }
 
 GuiSystem::~GuiSystem()
@@ -254,32 +253,6 @@ void GuiSystem::draw()
 
 void GuiSystem::update()
 {
-    // Clearing has to be done here since we
-    // can't delete widgets inside a callback
-    if(m_deferredClear)
-    {
-        for(int i = 1; i < m_canvasVector.size(); i++)
-        {
-            delete m_canvasVector[i];
-        }
-
-        m_canvasVector.clear();
-
-        // Only leave the main canvas in there
-        m_canvasVector.push_back(Canvas::getInstance());
-        Canvas::getInstance()->clear();
-
-        for(int i = 0; i < m_widgets.size(); i++)
-        {
-            delete m_widgets[i];
-        }
-
-        m_widgets.clear();
-        scriptCallbacks.clear();
-
-        m_deferredClear = false;
-    }
-
     if(m_enabled)
     {
         for(int i = 0; i < m_canvasVector.size(); i++)
@@ -291,5 +264,22 @@ void GuiSystem::update()
 
 void GuiSystem::clear()
 {
-    m_deferredClear = true;
+    for(int i = 1; i < m_canvasVector.size(); i++)
+    {
+        delete m_canvasVector[i];
+    }
+
+    m_canvasVector.clear();
+
+    // Only leave the main canvas in there
+    m_canvasVector.push_back(Canvas::getInstance());
+    Canvas::getInstance()->clear();
+
+    for(int i = 0; i < m_widgets.size(); i++)
+    {
+        delete m_widgets[i];
+    }
+
+    m_widgets.clear();
+    scriptCallbacks.clear();
 }
