@@ -2106,16 +2106,24 @@ int centerCursorReplacement()
     return 0;
 }
 
+int quitReplacement()
+{
+    MLOG_WARNING("Quit is not supported in the editor!");
+    return 1;
+}
+
+int loadLevelReplacement()
+{
+    MLOG_WARNING("loadLevel is not supported in the editor!");
+    fl_message("loadLevel is not supported in the editor!");
+    return 1;
+}
+
 void play_game_in_editor(Fl_Button* button, void *)
 {
     MEngine* engine = MEngine::getInstance();
     MLevel * level = engine->getLevel();
     MScene * scene = level->getCurrentScene();
-    MScript scriptContext;
-    scriptContext.addFunction("print", redirect_script_print);
-    scriptContext.addFunction("centerCursor", centerCursorReplacement);
-
-    Neo::GuiSystem::getInstance()->setupLuaInterface(&scriptContext);
 
     MGame* game = engine->getGame();
 
@@ -2125,6 +2133,14 @@ void play_game_in_editor(Fl_Button* button, void *)
         game->end();
         return;
     }
+
+    MScript scriptContext;
+    scriptContext.addFunction("print", redirect_script_print);
+    scriptContext.addFunction("centerCursor", centerCursorReplacement);
+    scriptContext.addFunction("quit", quitReplacement);
+    scriptContext.addFunction("loadLevel", loadLevelReplacement);
+
+    Neo::GuiSystem::getInstance()->setupLuaInterface(&scriptContext);
 
     const char* text = button->label();
     button->label(tr("Stop game"));
