@@ -32,6 +32,24 @@ end
 function testLight()
     local object = createLight()
     assertEquals(getName(object), "Light0")
+    
+    setLightColor(object, {0.5,0.5,0.5})
+    setLightRadius(object, 500)
+    setLightIntensity(object, 0.7)
+    setLightShadowQuality(object, 1024)
+    setLightShadowBias(object, 2)
+    setLightShadowBlur(object, 7)
+    setLightSpotAngle(object, 30)
+    setLightSpotExponent(object, 0.7)
+    
+    compare_vec(getLightColor(object), {0.5,0.5,0.5})
+    assertEquals(getLightRadius(object), 500)
+    assertEquals(compare_float(getLightIntensity(object), 0.7), true)
+    assertEquals(getLightShadowQuality(object), 1024)
+    assertEquals(getLightShadowBias(object), 2)
+    assertEquals(getLightShadowBlur(object), 7)
+    assertEquals(getLightSpotAngle(object), 30)
+    assertEquals(compare_float(getLightSpotExponent(object), 0.7), true)
 end
 
 function testVec()
