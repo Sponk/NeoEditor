@@ -32,35 +32,28 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __RENDER_H__
-#define __RENDER_H__
+#include <Label.h>
+#include <Render.h>
+#include <GuiSystem.h>
 
-#include <MEngine.h>
+using namespace Neo;
 
-namespace Neo
+void Label::update()
 {
-/**
- * @brief The Render class contains helper methods for rendering 2D shapes.
- *
- * All elements can be rendered directly to the screen or to a texture.
- */
-class Render
-{
-private:
-    unsigned int m_colorOnlyFx;
-public:
-    static Render* getInstance() { static Render m_instance; return &m_instance; }
 
-    void drawColoredQuad(float x, float y, float w, float h, MVector4 color);
-    void drawText(MOText* text, float x, float y);
-    void set2D(float w, float h);
-
-    void loadShader(const char* vert, const char* frag, unsigned int* fx);
-
-    MOText* createText(const char* font, float size);
-
-    Render();
-};
 }
 
-#endif
+void Label::draw()
+{
+    Render* render = Render::getInstance();
+    GuiSystem* gui = GuiSystem::getInstance();
+
+    if(m_labelText == NULL)
+    {
+        m_labelText = render->createText(gui->getDefaultFont(), gui->getDefaultFontSize());
+        m_labelText->setAlign(M_ALIGN_LEFT);
+    }
+
+    m_labelText->setText(m_label.c_str());
+    render->drawText(m_labelText, m_x + 0.5*m_width, m_y + 0.5*m_labelText->getSize() + 0.5*m_height);
+}

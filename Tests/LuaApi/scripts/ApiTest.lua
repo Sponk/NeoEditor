@@ -1,6 +1,8 @@
 
 dofile("luaunit.lua") 
 
+strout = ""
+
 -- Not perfect but good enough
 function compare_float(float1, float2)
     return math.abs((float1-float2)/float2) < 0.00001
@@ -53,6 +55,14 @@ function testVec()
     assertEquals(compare_float(dot({2,5,1}, {7,3,4}), 33), true)
 end
 
+print = function(str) 
+		if str == nil then 
+			return 
+		end 
+		
+		strout = strout .. str .. "\n"
+	end
+
 LuaUnit.run()
 
 function button1Callback()
@@ -70,6 +80,10 @@ function button3Callback()
 	setLightIntensity(light, getLightIntensity(light) - 0.1)
 end
 
+function button4Callback()
+	setLabel(label1, getLabel(input1))
+end
+
 enableGui(1)
 mainCanvas = getMainCanvas()
 
@@ -77,11 +91,16 @@ button1 = createButton(15,15,250,30,"Rotate Cube", "button1Callback")
 button2 = createButton(15,50,250,30,"More light", "button2Callback")
 button3 = createButton(15,85,250,30, "Less light", "button3Callback")
 
-input1 = createInput(15,130,250, 30, "This is an input", "")
+label1 = createLabel(150, 15, 250, 30, "Test results:\n\n" .. strout)
 
+input1 = createInput(15,130,250, 30, "This is an input", "")
+--button4 = createButton(15,170,250,30, "Set label to text", "button4Callback")
+
+addWidgetToCanvas(mainCanvas, label1)
 addWidgetToCanvas(mainCanvas, button1)
 addWidgetToCanvas(mainCanvas, button2)
 addWidgetToCanvas(mainCanvas, button3)
 addWidgetToCanvas(mainCanvas, input1)
+--addWidgetToCanvas(mainCanvas, button4)
 
 --quit()

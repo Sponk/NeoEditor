@@ -34,6 +34,7 @@
 
 #include <Render.h>
 #include <MEngine.h>
+#include <GuiSystem.h>
 
 using namespace Neo;
 
@@ -174,49 +175,19 @@ void Render::drawText(MOText* text, float x, float y)
     renderContext->popMatrix();
 }
 
-/*
-void MPostProcessor::drawQuad(MVector2 scale)
+MOText* Render::createText(const char* font, float size)
 {
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+    if(!font)
+        return NULL;
 
-    int vertexAttrib;
-    int texcoordAttrib;
+    MSystemContext* system = MEngine::getInstance()->getSystemContext();
 
-    // Send settings to shader
-    sendUniforms();
+    char file[256];
+    getGlobalFilename(file, system->getWorkingDirectory(), font);
 
-    // projmodelview matrix
-    static MMatrix4x4 ProjMatrix;
-    static MMatrix4x4 ModelViewMatrix;
-    static MMatrix4x4 ProjModelViewMatrix;
+    MOText* text;
+    text = new MOText(MEngine::getInstance()->getLevel()->loadFont(file));
+    text->setSize(size);
 
-    render->getProjectionMatrix(&ProjMatrix);
-    render->getModelViewMatrix(&ModelViewMatrix);
-    ProjModelViewMatrix = ProjMatrix * ModelViewMatrix;
-    render->sendUniformMatrix(m_fx, "ProjModelViewMatrix", &ProjModelViewMatrix);
-
-    // Texture
-    int texIds[4] = { 0, 1, 2, 3 };
-    render->sendUniformInt(m_fx, "Textures", texIds, 4);
-
-    // Vertex
-    render->getAttribLocation(m_fx, "Vertex", &vertexAttrib);
-    render->setAttribPointer(vertexAttrib, M_FLOAT, 2, m_vertices);
-    render->enableAttribArray(vertexAttrib);
-
-    // TexCoord
-    render->getAttribLocation(m_fx, "TexCoord", &texcoordAttrib);
-    render->setAttribPointer(texcoordAttrib, M_FLOAT, 2, m_texCoords);
-    render->enableAttribArray(texcoordAttrib);
-
-    // Width
-    render->sendUniformFloat(m_fx, "Width", &scale.x, 1);
-    // Height
-    render->sendUniformFloat(m_fx, "Height", &scale.y, 1);
-
-    // draw
-    render->drawArray(M_PRIMITIVE_TRIANGLE_STRIP, 0, 4);
-
-    render->disableAttribArray(vertexAttrib);
-    render->disableAttribArray(texcoordAttrib);
-}*/
+    return text;
+}

@@ -50,14 +50,11 @@ Button::Button(unsigned int x, unsigned int y, unsigned int width, unsigned int 
 void Button::draw()
 {
     Render* render = Render::getInstance();
-    MSystemContext* system = MEngine::getInstance()->getSystemContext();
+    GuiSystem* gui = GuiSystem::getInstance();
 
     if(m_labelText == NULL)
     {
-        char file[256];
-        getGlobalFilename(file, system->getWorkingDirectory(), GuiSystem::getInstance()->getDefaultFont());
-        m_labelText = new MOText(MEngine::getInstance()->getLevel()->loadFont(file));
-        m_labelText->setSize(GuiSystem::getInstance()->getDefaultFontSize());
+        m_labelText = render->createText(gui->getDefaultFont(), gui->getDefaultFontSize());
         m_labelText->setAlign(M_ALIGN_CENTER);
     }
 

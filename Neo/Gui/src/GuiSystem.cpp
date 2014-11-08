@@ -37,6 +37,7 @@
 #include <Button.h>
 #include <Input.h>
 #include <Render.h>
+#include <Label.h>
 
 using namespace Neo;
 
@@ -159,6 +160,22 @@ int createInput()
     return 1;
 }
 
+int createLabel()
+{
+    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+
+    if(script->getArgsNumber() != 5)
+        return 0;
+
+    Label* label = new Label(script->getInteger(0), script->getInteger(1),
+                             script->getInteger(2), script->getInteger(3), script->getString(4));
+
+    GuiSystem* gui = GuiSystem::getInstance();
+    gui->addWidget(label);
+
+    script->pushInteger(gui->getNumWidgets() - 1);
+    return 1;
+}
 
 int addWidgetToCanvas()
 {
@@ -226,6 +243,8 @@ void GuiSystem::setupLuaInterface(MScriptContext* script)
     script->addFunction("setCanvasClearColor", setCanvasClearColor);
     script->addFunction("createButton", createButton);
     script->addFunction("createInput", createInput);
+    script->addFunction("createLabel", createLabel);
+
     script->addFunction("addWidgetToCanvas", addWidgetToCanvas);
 
     script->addFunction("setLabel", setLabel);

@@ -32,34 +32,31 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __RENDER_H__
-#define __RENDER_H__
+#ifndef __LABEL_H__
+#define __LABEL_H__
 
+#include <string>
 #include <MEngine.h>
+#include <Widget.h>
 
 namespace Neo
 {
+
 /**
- * @brief The Render class contains helper methods for rendering 2D shapes.
- *
- * All elements can be rendered directly to the screen or to a texture.
+ * @brief The Label class displays a string on the screen.
  */
-class Render
+class Label : public Widget
 {
-private:
-    unsigned int m_colorOnlyFx;
+protected:
+    MOText* m_labelText;
+
 public:
-    static Render* getInstance() { static Render m_instance; return &m_instance; }
 
-    void drawColoredQuad(float x, float y, float w, float h, MVector4 color);
-    void drawText(MOText* text, float x, float y);
-    void set2D(float w, float h);
+    Label(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label) : Widget(x,y,width,height,label),
+        m_labelText(NULL) {}
 
-    void loadShader(const char* vert, const char* frag, unsigned int* fx);
-
-    MOText* createText(const char* font, float size);
-
-    Render();
+    void draw();
+    void update();
 };
 }
 
