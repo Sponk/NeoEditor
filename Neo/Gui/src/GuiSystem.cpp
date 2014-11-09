@@ -38,6 +38,7 @@
 #include <Input.h>
 #include <Render.h>
 #include <Label.h>
+#include <Sprite.h>
 
 using namespace Neo;
 
@@ -177,6 +178,23 @@ int createLabel()
     return 1;
 }
 
+int createSprite()
+{
+    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+
+    if(script->getArgsNumber() != 6)
+        return 0;
+
+    Sprite* sprite = new Sprite(script->getInteger(0), script->getInteger(1),
+                             script->getInteger(2), script->getInteger(3), script->getString(4), script->getString(5));
+
+    GuiSystem* gui = GuiSystem::getInstance();
+    gui->addWidget(sprite);
+
+    script->pushInteger(gui->getNumWidgets() - 1);
+    return 1;
+}
+
 int addWidgetToCanvas()
 {
     MScriptContext* script = MEngine::getInstance()->getScriptContext();
@@ -244,6 +262,7 @@ void GuiSystem::setupLuaInterface(MScriptContext* script)
     script->addFunction("createButton", createButton);
     script->addFunction("createInput", createInput);
     script->addFunction("createLabel", createLabel);
+    script->addFunction("createSprite", createSprite);
 
     script->addFunction("addWidgetToCanvas", addWidgetToCanvas);
 

@@ -32,37 +32,35 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __SPRITE_H__
+#define __SPRITE_H__
+
+#include <string>
+#include <MEngine.h>
 #include <Widget.h>
 
-using namespace Neo;
-
-Widget::Widget(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label) :
-m_x(x),
-m_y(y),
-m_width(width),
-m_height(height),
-m_label(label),
-m_callback(NULL)
+namespace Neo
 {
 
+/**
+ * @brief The Sprite class displays a texture on the screen.
+ */
+class Sprite : public Widget
+{
+protected:
+    MOText* m_labelText;
+    int m_image;
+
+    std::string m_imagePath;
+
+public:
+
+    Sprite(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* texture, const char* label) : Widget(x,y,width,height,label),
+        m_labelText(NULL), m_image(0), m_imagePath(texture) {}
+
+    void draw();
+    void update();
+};
 }
 
-Widget::Widget():
-m_x(0),
-m_y(0),
-m_width(30),
-m_height(30),
-m_label("Widget"),
-m_callback(NULL)
-{
-
-}
-
-void Widget::doCallback()
-{
-#ifdef __MINGW32__
-    ((void (*)(long int)) m_callback)(m_userData);
-#else
-    m_callback(m_userData);
 #endif
-}

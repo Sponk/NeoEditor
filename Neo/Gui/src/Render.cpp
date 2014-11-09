@@ -56,8 +56,35 @@ const char* m_colorOnlyFragShader =
     "gl_FragColor = color;"
 "}\n";
 
+const char* m_texturedVertShader =
+
+"#version 130\n"
+"attribute vec3 Vertex;"
+"uniform mat4 ProjModelViewMatrix;"
+
+"varying vec2 texCoord;"
+"attribute vec2 TexCoord;"
+
+"void main(void)"
+"{"
+    "gl_Position = ProjModelViewMatrix * vec4(Vertex, 1.0);"
+    "texCoord = TexCoord;"
+"}\n";
+
+const char* m_texturedFragShader =
+"#version 130\n"
+"uniform sampler2D Texture[5];"
+"varying vec2 texCoord;"
+
+"void main(void)"
+"{"
+    "gl_FragColor = texture2D(Texture[0], texCoord);"
+"}\n";
+
+
 Render::Render() :
-    m_colorOnlyFx(0)
+    m_colorOnlyFx(0),
+    m_texturedFx(0)
 {
 
 }
@@ -121,6 +148,78 @@ void Render::drawColoredQuad(float x, float y, float w, float h, MVector4 color)
 
     render->popMatrix();
 }
+
+void Render::drawTexturedQuad(float x, float y, float w, float h, int texture)
+{
+    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+
+    if(m_texturedFx == 0)
+    {
+        loadShader(m_texturedVertShader, m_texturedFragShader, &m_texturedFx);
+    }
+
+    int vertexAttrib;
+    int texcoordAttrib;
+
+    render->pushMatrix();
+
+    MVector2 m_vertices[4];
+    m_vertices[0] = MVector2(x, y);
+    m_vertices[1] = MVector2(x, y+h);
+    m_vertices[3] = MVector2(x+w, y+h);
+    m_vertices[2] = MVector2(x+w, y);
+
+    MVector2 m_texcoords[4];
+    m_texcoords[0] = MVector2(0, 0);
+    m_texcoords[1] = MVector2(0, 1);
+    m_texcoords[2] = MVector2(1, 0);
+    m_texcoords[3] = MVector2(1, 1);
+
+    // Set up env
+    render->bindFX(m_texturedFx);
+    render->enableBlending();
+    render->enableTexture();
+    render->bindTexture(texture);
+
+    // projmodelview matrix
+    static MMatrix4x4 ProjMatrix;
+    static MMatrix4x4 ModelViewMatrix;
+    static MMatrix4x4 ProjModelViewMatrix;
+
+    render->getProjectionMatrix(&ProjMatrix);
+    render->getModelViewMatrix(&ModelViewMatrix);
+    ProjModelViewMatrix = ProjMatrix * ModelViewMatrix;
+
+    render->sendUniformMatrix(m_texturedFx, "ProjModelViewMatrix", &ProjModelViewMatrix);
+
+    // Vertex
+    render->getAttribLocation(m_texturedFx, "Vertex", &vertexAttrib);
+    render->setAttribPointer(vertexAttrib, M_FLOAT, 2, m_vertices);
+    render->enableAttribArray(vertexAttrib);
+
+    // Texcoords
+    // TexCoord
+    render->getAttribLocation(m_texturedFx, "TexCoord", &texcoordAttrib);
+    render->setAttribPointer(texcoordAttrib, M_FLOAT, 2, m_texcoords);
+    render->enableAttribArray(texcoordAttrib);
+
+    // Width
+    render->sendUniformFloat(m_texturedFx, "Width", &w, 1);
+    // Height
+    render->sendUniformFloat(m_texturedFx, "Height", &h, 1);
+
+    // draw
+    render->drawArray(M_PRIMITIVE_TRIANGLE_STRIP, 0, 4);
+
+    render->disableAttribArray(vertexAttrib);
+    render->disableAttribArray(texcoordAttrib);
+
+    render->bindFX(0);
+    render->disableBlending();
+
+    render->popMatrix();
+}
+
 
 void Render::set2D(float w, float h)
 {

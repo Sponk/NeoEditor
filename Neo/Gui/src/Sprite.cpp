@@ -32,37 +32,42 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include <Widget.h>
+#include <Sprite.h>
+#include <Render.h>
+#include <GuiSystem.h>
 
 using namespace Neo;
 
-Widget::Widget(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label) :
-m_x(x),
-m_y(y),
-m_width(width),
-m_height(height),
-m_label(label),
-m_callback(NULL)
+void Sprite::update()
 {
 
 }
 
-Widget::Widget():
-m_x(0),
-m_y(0),
-m_width(30),
-m_height(30),
-m_label("Widget"),
-m_callback(NULL)
+void Sprite::draw()
 {
+    Render* render = Render::getInstance();
+    GuiSystem* gui = GuiSystem::getInstance();
+    MSystemContext* system = MEngine::getInstance()->getSystemContext();
+    MLevel* level = MEngine::getInstance()->getLevel();
 
-}
+    if(m_labelText == NULL)
+    {
+        m_labelText = render->createText(gui->getDefaultFont(), gui->getDefaultFontSize());
+        m_labelText->setAlign(M_ALIGN_CENTER);
+    }
 
-void Widget::doCallback()
-{
-#ifdef __MINGW32__
-    ((void (*)(long int)) m_callback)(m_userData);
-#else
-    m_callback(m_userData);
-#endif
+    if(m_image == 0 && m_imagePath.length() > 0)
+    {
+        char buf[256];
+        getGlobalFilename(buf, system->getWorkingDirectory(), m_imagePath.c_str());
+        m_image = level->loadTexture(buf)->getTextureId();
+    }
+
+    render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_image);
+
+    if(m_label.length() > 0)
+    {
+        m_labelText->setText(m_label.c_str());
+        render->drawText(m_labelText, m_x + 0.5*m_width, m_y + m_height);
+    }
 }

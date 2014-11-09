@@ -48,10 +48,14 @@ class Render
 {
 private:
     unsigned int m_colorOnlyFx;
+    unsigned int m_texturedFx;
+
 public:
     static Render* getInstance() { static Render m_instance; return &m_instance; }
 
     void drawColoredQuad(float x, float y, float w, float h, MVector4 color);
+    void drawTexturedQuad(float x, float y, float w, float h, int texture);
+
     void drawText(MOText* text, float x, float y);
     void set2D(float w, float h);
 

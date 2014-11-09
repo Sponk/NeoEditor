@@ -114,11 +114,13 @@ label1 = createLabel(150, 15, 250, 30, "Test results:\n\n" .. strout)
 input1 = createInput(15,130,250, 30, "This is an input", "")
 --button4 = createButton(15,170,250,30, "Set label to text", "button4Callback")
 
+sprite = createSprite(15, 500, 100, 100, "maps/neo-icon.png", "")
+
 addWidgetToCanvas(mainCanvas, label1)
 addWidgetToCanvas(mainCanvas, button1)
 addWidgetToCanvas(mainCanvas, button2)
 addWidgetToCanvas(mainCanvas, button3)
 addWidgetToCanvas(mainCanvas, input1)
---addWidgetToCanvas(mainCanvas, button4)
+addWidgetToCanvas(mainCanvas, sprite)
 
 --quit()
