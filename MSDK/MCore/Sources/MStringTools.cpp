@@ -247,6 +247,13 @@ char * readTextFile(const char * filename)
 			if(count > 0)
 			{
 				content = (char *)malloc(sizeof(char) * (count+1));
+
+                if(!content)
+                {
+                    M_fclose(file);
+                    return NULL;
+                }
+
 				count = M_fread(content, sizeof(char), count, file);
 				content[count] = '\0';
 			}
