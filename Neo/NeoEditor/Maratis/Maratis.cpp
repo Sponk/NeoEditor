@@ -598,7 +598,7 @@ void Maratis::restart(void)
 void Maratis::initVue(void)
 {
     // user vue
-    m_perspectiveVue.setClippingNear(1);
+    m_perspectiveVue.setClippingNear(0.1);
     m_perspectiveVue.setClippingFar(100000);
     m_perspectiveVue.setPosition(MVector3(0, -200, 200));
     m_perspectiveVue.setEulerRotation(MVector3(40, 0, 0));
