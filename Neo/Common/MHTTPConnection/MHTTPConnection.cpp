@@ -28,7 +28,7 @@
 
 MHTTPConnection::MHTTPConnection(const char* host, int port)
 {
-    if(!m_tcp.Start(0, 1))
+    if(!m_tcp.Start(port, 1))
     {
         MLOG_ERROR("Could not start TCP server!");
         m_init = false;
@@ -55,8 +55,18 @@ const char* MHTTPConnection::sendGetRequest(const char* path)
 
 const char* MHTTPConnection::connectionLoop()
 {
+    MSystemContext* system = MEngine::getInstance()->getSystemContext();
+    unsigned long startTime = system->getSystemTick();
+
     while(true)
     {
+        // FIXME: This should be configurable
+        if(system->getSystemTick() - startTime >= 4000)
+        {
+            MLOG_ERROR("HTTP connection timed out!");
+            return NULL;
+        }
+
         RakNet::Packet *packet = m_tcp.Receive();
         if(packet)
         {

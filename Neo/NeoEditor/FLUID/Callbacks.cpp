@@ -22,6 +22,7 @@
 #include <MFileManager/MLevelLoad.h>
 #include <MFileManager/MLevelSave.h>
 #include <MCore.h>
+#include <MHTTPConnection/MHTTPConnection.h>
 
 #include <GuiSystem.h>
 
@@ -2257,4 +2258,47 @@ void open_profile_viewer_callback(Fl_Menu_*, void*)
 
     // TODO: Start detached!
     MWindow::getInstance()->execute(exec, arg);
+}
+
+void check_for_updates_callback(Fl_Menu_*, void*)
+{
+    MHTTPConnection* connection = new MHTTPConnection("neo-engine.de", 4000);
+
+    // FIXME: Don't hardcode this!
+    const char* versiontxt = connection->sendGetRequest("/downloads/neo/daily/version.txt");
+
+    if(!versiontxt)
+    {
+        MLOG_ERROR("Could not retrieve version information from the server!");
+        fl_message(tr("Could not retrieve version information from the server!"));
+        delete connection;
+        return;
+    }
+
+    std::string version(versiontxt);
+
+    int idx = version.find("Version:");
+
+    if(idx == -1)
+    {
+        MLOG_ERROR("Version data is invalid!");
+        fl_message(tr("Version data is invalid! Please try again."));
+        return;
+    }
+
+    version = version.substr(version.find("Version:"));
+    version = version.substr(version.find("v"));
+    version.erase(version.length()-1);
+
+    MLOG_INFO("Official version is " << version << ", current version is " << EDITOR_VERSION_STRING);
+    if(version != EDITOR_VERSION_STRING)
+    {
+        fl_message(tr("A new version of this application is available.\nPlease visit our website to download it!"));
+    }
+    else
+    {
+        fl_message(tr("You already run the latest and greatest version of this application!"));
+    }
+
+    delete connection;
 }

@@ -35,6 +35,7 @@ extern void add_sound_callback(Fl_Menu_*, void*);
 extern void add_scene_callback(Fl_Menu_*, void*);
 extern void add_group_callback(Fl_Menu_*, void*);
 extern void plugin_console_callback(Fl_Menu_*, void*);
+extern void check_for_updates_callback(Fl_Menu_*, void*);
 extern void about_menu_callback(Fl_Menu_*, void*);
 #include "GLBox.h"
 #include "DnDTree.h"

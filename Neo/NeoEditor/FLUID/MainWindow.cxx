@@ -57,6 +57,7 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
  {"Plugin Console", 0,  (Fl_Callback*)plugin_console_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0},
  {"Help", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Check for updates", 0,  (Fl_Callback*)check_for_updates_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {"About", 0,  (Fl_Callback*)about_menu_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0},
  {0,0,0,0,0,0,0,0,0}
@@ -253,7 +254,7 @@ Fl_Double_Window* EditorWindow::show_window() {
       menu_bar->selection_color((Fl_Color)38);
       if (!menu_menu_bar_i18n_done) {
         int i=0;
-        for ( ; i<49; i++)
+        for ( ; i<50; i++)
           if (menu_menu_bar[i].label())
             menu_menu_bar[i].label(tr(menu_menu_bar[i].label()));
         menu_menu_bar_i18n_done = 1;
