@@ -526,7 +526,8 @@ int main(int argc, char **argv)
     MLOG_INFO("SDL compiled version: " << (int) compiled.major << "." << (int) compiled.minor << "." << (int) compiled.patch);
     MLOG_INFO("SDL linked version: " << (int)linked.major << "." << (int)linked.minor << "." << (int)linked.patch);
 
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+    // Don't init audio. We have OpenAL for that!
+    if (SDL_Init(SDL_INIT_EVERYTHING & ~SDL_INIT_HAPTIC & ~SDL_INIT_AUDIO) != 0)
     {
         MLOG_ERROR("SDL Error: " << SDL_GetError());
         return -1;

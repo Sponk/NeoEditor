@@ -760,7 +760,8 @@ bool MWindow::create(const char * title, unsigned int width, unsigned int height
 #endif
 
     // TODO: Haptic feedback
-    if (SDL_Init(SDL_INIT_EVERYTHING & ~SDL_INIT_HAPTIC) != 0)
+    // We don't need SDL sound. We have OpenAL for that!
+    if (SDL_Init(SDL_INIT_EVERYTHING & ~SDL_INIT_HAPTIC & ~SDL_INIT_AUDIO) != 0)
 	{
 		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
 		return false;
