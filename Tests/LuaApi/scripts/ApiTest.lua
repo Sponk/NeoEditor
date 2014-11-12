@@ -115,13 +115,73 @@ label1 = createLabel(150, 15, 250, 30, "Test results:\n\n" .. strout)
 input1 = createInput(15,130,250, 30, "This is an input", "")
 --button4 = createButton(15,170,250,30, "Set label to text", "button4Callback")
 
-sprite = createSprite(15, 500, 100, 100, "maps/neo-icon.png", "")
+resolution = getWindowScale()
+ball = createSprite(resolution[1]/2, resolution[2]/2, 15, 15, "maps/neo-icon.png", "")
+ballpos = getWidgetPosition(ball)
+ballspeed = {2,-1}
+
+paddlewidth = 25
+paddleheight = 100
+
+paddles =
+{
+{createSprite(15, 500, paddlewidth, paddleheight, "maps/paddle.png", ""), position = {resolution[1] - 32, resolution[2]/2}},
+{createSprite(15, 500, paddlewidth, paddleheight, "maps/paddle.png", ""), position = {15, resolution[2]/2}} 
+}
+
+function updatePaddles()
+	for i = 1, #paddles, 1 do
+		setWidgetPosition(paddles[i][1], paddles[i].position)
+	end
+end
+
+for i = 1, #paddles, 1 do
+	addWidgetToCanvas(mainCanvas, paddles[i][1])
+end
 
 addWidgetToCanvas(mainCanvas, label1)
 addWidgetToCanvas(mainCanvas, button1)
 addWidgetToCanvas(mainCanvas, button2)
 addWidgetToCanvas(mainCanvas, button3)
 addWidgetToCanvas(mainCanvas, input1)
-addWidgetToCanvas(mainCanvas, sprite)
+
+addWidgetToCanvas(mainCanvas, ball)
+
+function onSceneUpdate()
+	if isKeyPressed("S") and paddles[2].position[2] + paddleheight <= resolution[2] then
+		paddles[2].position[2] = paddles[2].position[2] + 5
+	end
+
+	if isKeyPressed("W") and paddles[2].position[2] > 5 then
+		paddles[2].position[2] = paddles[2].position[2] - 5
+	end
+
+	if isKeyPressed("UP") and paddles[1].position[2] > 5 then
+		paddles[1].position[2] = paddles[1].position[2] - 5
+	end
+
+	if isKeyPressed("DOWN") and paddles[1].position[2] + paddleheight <= resolution[2] then
+		paddles[1].position[2] = paddles[1].position[2] + 5
+	end
+
+	if ballpos[2] >= resolution[2] or ballpos[2] <= 0 then
+		ballspeed[2] = -1*ballspeed[2]
+	end
+
+	for i = 1, #paddles, 1 do
+		if ballpos[1] >= paddles[i].position[1] and ballpos[1] <= paddles[i].position[1] + paddlewidth 
+			and ballpos[2] >= paddles[i].position[2] and ballpos[2] <= paddles[i].position[2] + paddleheight 
+			then
+
+			ballspeed[1] = -1*ballspeed[1]
+		end
+	end
+
+	ballpos[1] = ballpos[1] + ballspeed[1]
+	ballpos[2] = ballpos[2] + ballspeed[2]
+
+	updatePaddles()	
+	setWidgetPosition(ball, ballpos)
+end
 
 --quit()

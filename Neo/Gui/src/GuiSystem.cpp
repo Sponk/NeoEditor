@@ -247,6 +247,35 @@ int setDefaultFontSize()
     return 1;
 }
 
+int setPosition()
+{
+    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+
+    if(script->getArgsNumber() != 2)
+        return 0;
+
+    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+    MVector2 vec;
+    script->getFloatArray(1, vec, 2);
+    w->setPosition(vec);
+
+    return 1;
+}
+
+int getPosition()
+{
+    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+
+    if(script->getArgsNumber() != 1)
+        return 0;
+
+    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+    script->pushFloatArray(w->getPosition(), 2);
+
+    return 1;
+}
+
 int clearGui()
 {
     GuiSystem::getInstance()->clear();
@@ -271,6 +300,9 @@ void GuiSystem::setupLuaInterface(MScriptContext* script)
 
     script->addFunction("setDefaultFontSize", ::setDefaultFontSize);
     script->addFunction("clearGui", clearGui);
+
+    script->addFunction("getWidgetPosition", getPosition);
+    script->addFunction("setWidgetPosition", setPosition);
 }
 
 void GuiSystem::draw()

@@ -36,6 +36,7 @@
 #define __WIDGET_H__
 
 #include <string>
+#include <MCore.h>
 
 namespace Neo
 {
@@ -78,6 +79,9 @@ public:
 
     const char* getLabel() { return m_label.c_str(); }
     void setLabel(const char* l) { m_label = l; }
+
+    void setPosition(MVector2 pos) { m_x = pos.x; m_y = pos.y; }
+    MVector2 getPosition() { return MVector2(m_x, m_y); }
 
     void doCallback();
 };

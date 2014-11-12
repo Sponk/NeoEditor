@@ -114,6 +114,7 @@ void Render::drawColoredQuad(float x, float y, float w, float h, MVector4 color)
     // Set up env
     render->bindFX(m_colorOnlyFx);
     render->enableBlending();
+    render->disableCullFace();
 
     // projmodelview matrix
     static MMatrix4x4 ProjMatrix;
@@ -145,6 +146,7 @@ void Render::drawColoredQuad(float x, float y, float w, float h, MVector4 color)
     render->disableAttribArray(vertexAttrib);
     render->bindFX(0);
     render->disableBlending();
+    render->enableCullFace();
 
     render->popMatrix();
 }
