@@ -221,7 +221,7 @@ void MBParticleSystem::draw()
     MRenderingContext* render = engine->getRenderingContext();
     MGame * game = engine->getGame();
 
-    if(m_particlePositions == NULL || m_particlesNumber == 0 || m_oldParticlesNumber != m_particlesNumber)
+    if(game == NULL || m_particlePositions == NULL || m_particlesNumber == 0 || m_oldParticlesNumber != m_particlesNumber)
         return;
 
     if(m_texRef == NULL || strcmp(m_currentTextureFile.getSafeString(), m_textureFile.getSafeString()))
