@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the
- *  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- *  Boston, MA  02111-1307, USA.
+ *  Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * Or go to http://www.gnu.org/copyleft/lgpl.html
  */
 
@@ -50,11 +50,11 @@ typedef struct {
     int data_size;
 
     volatile int killNow;
-    althread_t thread;
+    althrd_t thread;
 } solaris_data;
 
 
-static ALuint SolarisProc(ALvoid *ptr)
+static int SolarisProc(void *ptr)
 {
     ALCdevice *Device = (ALCdevice*)ptr;
     solaris_data *data = (solaris_data*)Device->ExtraData;
@@ -62,7 +62,7 @@ static ALuint SolarisProc(ALvoid *ptr)
     int wrote;
 
     SetRTPriority();
-    SetThreadName(MIXER_THREAD_NAME);
+    althrd_setname(althrd_current(), MIXER_THREAD_NAME);
 
     frameSize = FrameSizeFromDevFmt(Device->FmtChans, Device->FmtType);
 
@@ -86,7 +86,7 @@ static ALuint SolarisProc(ALvoid *ptr)
                     break;
                 }
 
-                Sleep(1);
+                al_nssleep(1000000);
                 continue;
             }
 
@@ -119,7 +119,7 @@ static ALCenum solaris_open_playback(ALCdevice *device, const ALCchar *deviceNam
         return ALC_INVALID_VALUE;
     }
 
-    device->DeviceName = strdup(deviceName);
+    al_string_copy_cstr(&device->DeviceName, deviceName);
     device->ExtraData = data;
     return ALC_NO_ERROR;
 }
@@ -211,7 +211,8 @@ static ALCboolean solaris_start_playback(ALCdevice *device)
     data->data_size = device->UpdateSize * FrameSizeFromDevFmt(device->FmtChans, device->FmtType);
     data->mix_data = calloc(1, data->data_size);
 
-    if(!StartThread(&data->thread, SolarisProc, device))
+    data->killNow = 0;
+    if(althrd_create(&data->thread, SolarisProc, device) != althrd_success)
     {
         free(data->mix_data);
         data->mix_data = NULL;
@@ -224,15 +225,14 @@ static ALCboolean solaris_start_playback(ALCdevice *device)
 static void solaris_stop_playback(ALCdevice *device)
 {
     solaris_data *data = (solaris_data*)device->ExtraData;
+    int res;
 
-    if(!data->thread)
+    if(data->killNow)
         return;
 
     data->killNow = 1;
-    StopThread(data->thread);
-    data->thread = NULL;
+    althrd_join(data->thread, &res);
 
-    data->killNow = 0;
     if(ioctl(data->fd, AUDIO_DRAIN) < 0)
         ERR("Error draining device: %s\n", strerror(errno));
 
@@ -252,8 +252,7 @@ static const BackendFuncs solaris_funcs = {
     NULL,
     NULL,
     NULL,
-    NULL,
-    ALCdevice_GetLatencyDefault
+    NULL
 };
 
 ALCboolean alc_solaris_init(BackendFuncs *func_list)

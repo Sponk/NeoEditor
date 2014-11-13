@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the
- *  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- *  Boston, MA  02111-1307, USA.
+ *  Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * Or go to http://www.gnu.org/copyleft/lgpl.html
  */
 
@@ -30,421 +30,370 @@
 #include "AL/al.h"
 #include "AL/alc.h"
 #include "alu.h"
+#include "bool.h"
 
-extern inline void SetGains(const ALCdevice *device, ALfloat ingain, ALfloat gains[MaxChannels]);
 
-static void SetSpeakerArrangement(const char *name, ALfloat SpeakerAngle[MaxChannels],
-                                  enum Channel Speaker2Chan[MaxChannels], ALint chans)
+void ComputeAngleGains(const ALCdevice *device, ALfloat angle, ALfloat elevation, ALfloat ingain, ALfloat gains[MAX_OUTPUT_CHANNELS])
 {
-    char *confkey, *next;
-    char *layout_str;
-    char *sep, *end;
-    enum Channel val;
-    const char *str;
-    int i;
+    ALfloat dir[3] = {
+        sinf(angle) * cosf(elevation),
+        sinf(elevation),
+        -cosf(angle) * cosf(elevation)
+    };
+    ComputeDirectionalGains(device, dir, ingain, gains);
+}
 
-    if(!ConfigValueStr(NULL, name, &str) && !ConfigValueStr(NULL, "layout", &str))
-        return;
+void ComputeDirectionalGains(const ALCdevice *device, const ALfloat dir[3], ALfloat ingain, ALfloat gains[MAX_OUTPUT_CHANNELS])
+{
+    ALfloat coeffs[MAX_AMBI_COEFFS];
+    ALuint i, j;
+    /* Convert from OpenAL coords to Ambisonics. */
+    ALfloat x = -dir[2];
+    ALfloat y = -dir[0];
+    ALfloat z =  dir[1];
 
-    layout_str = strdup(str);
-    next = confkey = layout_str;
-    while(next && *next)
+    coeffs[0] = 0.7071f; /* sqrt(1.0 / 2.0) */
+    coeffs[1] = x; /* X */
+    coeffs[2] = y; /* Y */
+    coeffs[3] = z; /* Z */
+    coeffs[4] = 0.5f * (3.0f*z*z - 1.0f); /* 0.5 * (3*Z*Z - 1) */
+    coeffs[5] = 2.0f * z * x; /* 2*Z*X */
+    coeffs[6] = 2.0f * y * z; /* 2*Y*Z */
+    coeffs[7] = x*x - y*y; /* X*X - Y*Y */
+    coeffs[8] = 2.0f * x * y; /* 2*X*Y */
+    coeffs[9] = 0.5f * z * (5.0f*z*z - 3.0f); /* 0.5 * Z * (5*Z*Z - 3) */
+    coeffs[10] = 0.7262f * x * (5.0f*z*z - 1.0f); /* sqrt(135.0 / 256.0) * X * (5*Z*Z - 1) */
+    coeffs[11] = 0.7262f * y * (5.0f*z*z - 1.0f); /* sqrt(135.0 / 256.0) * Y * (5*Z*Z - 1) */
+    coeffs[12] = 2.5981f * z * (x*x - y*y); /* sqrt(27.0 / 4.0) * Z * (X*X - Y*Y) */
+    coeffs[13] = 5.1962f * x * y * z; /* sqrt(27) * X * Y * Z */
+    coeffs[14] = x * (x*x - 3.0f*y*y); /* X * (X*X - 3*Y*Y) */
+    coeffs[15] = y * (3.0f*x*x - y*y); /* Y * (3*X*X - Y*Y) */
+
+    for(i = 0;i < MAX_OUTPUT_CHANNELS;i++)
+        gains[i] = 0.0f;
+    for(i = 0;i < device->NumChannels;i++)
     {
-        confkey = next;
-        next = strchr(confkey, ',');
-        if(next)
+        for(j = 0;j < MAX_AMBI_COEFFS;j++)
+            gains[i] += device->Channel[i].HOACoeff[j]*coeffs[j];
+        gains[i] = maxf(gains[i], 0.0f) * ingain;
+    }
+}
+
+void ComputeAmbientGains(const ALCdevice *device, ALfloat ingain, ALfloat gains[MAX_OUTPUT_CHANNELS])
+{
+    ALuint i;
+
+    for(i = 0;i < MAX_OUTPUT_CHANNELS;i++)
+        gains[i] = 0.0f;
+    for(i = 0;i < device->NumChannels;i++)
+        gains[i] = device->Channel[i].HOACoeff[0] * ingain;
+}
+
+void ComputeBFormatGains(const ALCdevice *device, const ALfloat mtx[4], ALfloat ingain, ALfloat gains[MAX_OUTPUT_CHANNELS])
+{
+    ALuint i, j;
+
+    for(i = 0;i < MAX_OUTPUT_CHANNELS;i++)
+        gains[i] = 0.0f;
+    for(i = 0;i < device->NumChannels;i++)
+    {
+        for(j = 0;j < 4;j++)
+            gains[i] += device->Channel[i].FOACoeff[j] * mtx[j];
+        gains[i] *= ingain;
+    }
+}
+
+
+typedef struct ChannelMap {
+    enum Channel ChanName;
+    ChannelConfig Config;
+} ChannelMap;
+
+static bool LoadChannelSetup(ALCdevice *device)
+{
+    static const char *mono_names[1] = {
+        "front-center"
+    }, *stereo_names[2] = {
+        "front-left", "front-right"
+    }, *quad_names[4] = {
+        "front-left", "front-right",
+        "back-left", "back-right"
+    }, *surround51_names[6] = {
+        "front-left", "front-right",
+        "front-center", "lfe",
+        "side-left", "side-right"
+    }, *surround51rear_names[6] = {
+        "front-left", "front-right",
+        "front-center", "lfe",
+        "back-left", "back-right"
+    }, *surround61_names[7] = {
+        "front-left", "front-right",
+        "front-center", "lfe", "back-center",
+        "side-left", "side-right"
+    }, *surround71_names[8] = {
+        "front-left", "front-right",
+        "front-center", "lfe",
+        "back-left", "back-right",
+        "side-left", "side-right"
+    };
+    ChannelMap chanmap[MAX_OUTPUT_CHANNELS] = {};
+    const char **channames = NULL;
+    const char *layout = NULL;
+    size_t count = 0;
+    size_t i;
+
+    switch(device->FmtChans)
+    {
+        case DevFmtMono:
+            channames = mono_names;
+            layout = "mono";
+            count = 1;
+            break;
+        case DevFmtStereo:
+            channames = stereo_names;
+            layout = "stereo";
+            count = 2;
+            break;
+        case DevFmtQuad:
+            channames = quad_names;
+            layout = "quad";
+            count = 4;
+            break;
+        case DevFmtX51:
+            channames = surround51_names;
+            layout = "surround51";
+            count = 6;
+            break;
+        case DevFmtX51Rear:
+            channames = surround51rear_names;
+            layout = "surround51rear";
+            count = 6;
+            break;
+        case DevFmtX61:
+            channames = surround61_names;
+            layout = "surround61";
+            count = 7;
+            break;
+        case DevFmtX71:
+            channames = surround71_names;
+            layout = "surround71";
+            count = 8;
+            break;
+    }
+
+    if(!layout)
+        return false;
+    else
+    {
+        char name[32];
+        snprintf(name, sizeof(name), "%s/enable", layout);
+        if(!GetConfigValueBool("layouts", name, 0))
+            return false;
+    }
+
+    for(i = 0;i < count;i++)
+    {
+        const char *channame = channames[i];
+        char chanlayout[32];
+        const char *value;
+        int props;
+        size_t j;
+
+        snprintf(chanlayout, sizeof(chanlayout), "%s/%s", layout, channame);
+        if(!ConfigValueStr("layouts", chanlayout, &value))
         {
-            *next = 0;
-            do {
-                next++;
-            } while(isspace(*next) || *next == ',');
+            ERR("Missing channel %s\n", channame);
+            return false;
+        }
+        props = sscanf(value, " %f %f ; %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f ; %f %f %f %f",
+            &chanmap[i].Config.Angle, &chanmap[i].Config.Elevation,
+            &chanmap[i].Config.HOACoeff[0], &chanmap[i].Config.HOACoeff[1], &chanmap[i].Config.HOACoeff[2],
+            &chanmap[i].Config.HOACoeff[3], &chanmap[i].Config.HOACoeff[4], &chanmap[i].Config.HOACoeff[5],
+            &chanmap[i].Config.HOACoeff[6], &chanmap[i].Config.HOACoeff[7], &chanmap[i].Config.HOACoeff[8],
+            &chanmap[i].Config.HOACoeff[9], &chanmap[i].Config.HOACoeff[10], &chanmap[i].Config.HOACoeff[11],
+            &chanmap[i].Config.HOACoeff[12], &chanmap[i].Config.HOACoeff[13], &chanmap[i].Config.HOACoeff[14],
+            &chanmap[i].Config.HOACoeff[15], &chanmap[i].Config.FOACoeff[0], &chanmap[i].Config.FOACoeff[1],
+            &chanmap[i].Config.FOACoeff[2], &chanmap[i].Config.FOACoeff[3]);
+        if(props == 0)
+        {
+            ERR("Failed to parse channel "SZFMT" properties\n", i);
+            return false;
         }
 
-        sep = strchr(confkey, '=');
-        if(!sep || confkey == sep)
+        if(strcmp(channame, "front-left") == 0)
+            chanmap[i].ChanName = FrontLeft;
+        else if(strcmp(channame, "front-right") == 0)
+            chanmap[i].ChanName = FrontRight;
+        else if(strcmp(channame, "front-center") == 0)
+            chanmap[i].ChanName = FrontCenter;
+        else if(strcmp(channame, "lfe") == 0)
+            chanmap[i].ChanName = LFE;
+        else if(strcmp(channame, "back-left") == 0)
+            chanmap[i].ChanName = BackLeft;
+        else if(strcmp(channame, "back-right") == 0)
+            chanmap[i].ChanName = BackRight;
+        else if(strcmp(channame, "back-center") == 0)
+            chanmap[i].ChanName = BackCenter;
+        else if(strcmp(channame, "side-left") == 0)
+            chanmap[i].ChanName = SideLeft;
+        else if(strcmp(channame, "side-right") == 0)
+            chanmap[i].ChanName = SideRight;
+
+        if(chanmap[i].ChanName == LFE && props < 22)
         {
-            ERR("Malformed speaker key: %s\n", confkey);
-            continue;
+            if(props > 1 || chanmap[i].Config.Angle != 0.0f)
+                WARN("Unexpected elements for LFE channel\n");
+            chanmap[i].Config.Angle = 0.0f;
+            chanmap[i].Config.Elevation = 0.0f;
+            for(j = 0;j < MAX_AMBI_COEFFS;j++)
+                chanmap[i].Config.HOACoeff[j] = 0.0f;
+            for(j = 0;j < 4;j++)
+                chanmap[i].Config.FOACoeff[j] = 0.0f;
         }
-
-        end = sep - 1;
-        while(isspace(*end) && end != confkey)
-            end--;
-        *(++end) = 0;
-
-        if(strcmp(confkey, "fl") == 0 || strcmp(confkey, "front-left") == 0)
-            val = FrontLeft;
-        else if(strcmp(confkey, "fr") == 0 || strcmp(confkey, "front-right") == 0)
-            val = FrontRight;
-        else if(strcmp(confkey, "fc") == 0 || strcmp(confkey, "front-center") == 0)
-            val = FrontCenter;
-        else if(strcmp(confkey, "bl") == 0 || strcmp(confkey, "back-left") == 0)
-            val = BackLeft;
-        else if(strcmp(confkey, "br") == 0 || strcmp(confkey, "back-right") == 0)
-            val = BackRight;
-        else if(strcmp(confkey, "bc") == 0 || strcmp(confkey, "back-center") == 0)
-            val = BackCenter;
-        else if(strcmp(confkey, "sl") == 0 || strcmp(confkey, "side-left") == 0)
-            val = SideLeft;
-        else if(strcmp(confkey, "sr") == 0 || strcmp(confkey, "side-right") == 0)
-            val = SideRight;
+        else if(props < 22)
+        {
+            ERR("Failed to parse channel %s elements (expected 22, got %d\n", channame, props);
+            return false;
+        }
         else
         {
-            ERR("Unknown speaker for %s: \"%s\"\n", name, confkey);
-            continue;
-        }
-
-        *(sep++) = 0;
-        while(isspace(*sep))
-            sep++;
-
-        for(i = 0;i < chans;i++)
-        {
-            if(Speaker2Chan[i] == val)
+            if(!(chanmap[i].Config.Angle >= -180.0f && chanmap[i].Config.Angle <= 180.0f))
             {
-                long angle = strtol(sep, NULL, 10);
-                if(angle >= -180 && angle <= 180)
-                    SpeakerAngle[i] = DEG2RAD(angle);
-                else
-                    ERR("Invalid angle for speaker \"%s\": %ld\n", confkey, angle);
+                ERR("Channel %s angle is out of range (%f not within -180...+180 degrees)\n", channame, chanmap[i].Config.Angle);
+                return false;
+            }
+            chanmap[i].Config.Angle = DEG2RAD(chanmap[i].Config.Angle);
+
+            if(!(chanmap[i].Config.Elevation >= -180.0f && chanmap[i].Config.Elevation <= 180.0f))
+            {
+                ERR("Channel %s elevation is out of range (%f not within -180...+180 degrees)\n", channame, chanmap[i].Config.Angle);
+                return false;
+            }
+            chanmap[i].Config.Elevation = DEG2RAD(chanmap[i].Config.Elevation);
+        }
+    }
+
+    for(i = 0;i < MAX_OUTPUT_CHANNELS && device->ChannelName[i] != InvalidChannel;i++)
+    {
+        size_t j;
+        for(j = 0;j < count;j++)
+        {
+            if(device->ChannelName[i] == chanmap[j].ChanName)
+            {
+                device->Channel[i] = chanmap[j].Config;
                 break;
             }
         }
+        if(j == count)
+            ERR("Failed to match channel "SZFMT" (label %d) in config\n", i, device->ChannelName[i]);
     }
-    free(layout_str);
-    layout_str = NULL;
-
-    for(i = 0;i < chans;i++)
-    {
-        int min = i;
-        int i2;
-
-        for(i2 = i+1;i2 < chans;i2++)
-        {
-            if(SpeakerAngle[i2] < SpeakerAngle[min])
-                min = i2;
-        }
-
-        if(min != i)
-        {
-            ALfloat tmpf;
-            enum Channel tmpc;
-
-            tmpf = SpeakerAngle[i];
-            SpeakerAngle[i] = SpeakerAngle[min];
-            SpeakerAngle[min] = tmpf;
-
-            tmpc = Speaker2Chan[i];
-            Speaker2Chan[i] = Speaker2Chan[min];
-            Speaker2Chan[min] = tmpc;
-        }
-    }
+    device->NumChannels = i;
+    return true;
 }
 
-
-void ComputeAngleGains(const ALCdevice *device, ALfloat angle, ALfloat hwidth, ALfloat ingain, ALfloat gains[MaxChannels])
+ALvoid aluInitPanning(ALCdevice *device)
 {
-    ALfloat tmpgains[MaxChannels] = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-    enum Channel Speaker2Chan[MaxChannels];
-    ALfloat SpeakerAngle[MaxChannels];
-    ALfloat langle, rangle;
-    ALfloat a;
-    ALuint i;
+    static const ChannelMap MonoCfg[1] = {
+        { FrontCenter, { DEG2RAD(0.0f), DEG2RAD(0.0f), { 1.4142f }, { 1.4142f } } },
+    }, StereoCfg[2] = {
+        { FrontLeft,  { DEG2RAD(-90.0f), DEG2RAD(0.0f), { 0.7071f, 0.0f,  0.5f, 0.0f }, { 0.7071f, 0.0f,  0.5f, 0.0f } } },
+        { FrontRight, { DEG2RAD( 90.0f), DEG2RAD(0.0f), { 0.7071f, 0.0f, -0.5f, 0.0f }, { 0.7071f, 0.0f, -0.5f, 0.0f } } },
+    }, QuadCfg[4] = {
+        { FrontLeft,  { DEG2RAD( -45.0f), DEG2RAD(0.0f), { 0.353558f,  0.306181f,  0.306192f, 0.0f, 0.0f, 0.0f, 0.0f, 0.000000f,  0.117183f }, { 0.353553f,  0.250000f,  0.250000f, 0.0f  } } },
+        { FrontRight, { DEG2RAD(  45.0f), DEG2RAD(0.0f), { 0.353543f,  0.306181f, -0.306192f, 0.0f, 0.0f, 0.0f, 0.0f, 0.000000f, -0.117193f }, { 0.353553f,  0.250000f, -0.250000f, 0.0f  } } },
+        { BackLeft,   { DEG2RAD(-135.0f), DEG2RAD(0.0f), { 0.353543f, -0.306192f,  0.306181f, 0.0f, 0.0f, 0.0f, 0.0f, 0.000000f, -0.117193f }, { 0.353553f, -0.250000f,  0.250000f, 0.0f  } } },
+        { BackRight,  { DEG2RAD( 135.0f), DEG2RAD(0.0f), { 0.353558f, -0.306192f, -0.306181f, 0.0f, 0.0f, 0.0f, 0.0f, 0.000000f,  0.117183f }, { 0.353553f, -0.250000f, -0.250000f, 0.0f  } } },
+    }, X51SideCfg[6] = {
+        { FrontLeft,   { DEG2RAD( -30.0f), DEG2RAD(0.0f), { 0.208954f,  0.212846f,  0.238350f, 0.0f, 0.0f, 0.0f, 0.0f, -0.017738f,  0.204014f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.051023f,  0.047490f }, { 0.208954f,  0.162905f,  0.182425f, 0.0f } } },
+        { FrontRight,  { DEG2RAD(  30.0f), DEG2RAD(0.0f), { 0.208954f,  0.212846f, -0.238350f, 0.0f, 0.0f, 0.0f, 0.0f, -0.017738f, -0.204014f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.051023f, -0.047490f }, { 0.208954f,  0.162905f, -0.182425f, 0.0f } } },
+        { FrontCenter, { DEG2RAD(   0.0f), DEG2RAD(0.0f), { 0.109403f,  0.179490f,  0.000000f, 0.0f, 0.0f, 0.0f, 0.0f,  0.142031f, -0.000002f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,  0.072024f, -0.000001f }, { 0.109403f,  0.137375f,  0.000000f, 0.0f } } },
+        { LFE,         { 0.0f, 0.0f, { 0.0f }, { 0.0f } } },
+        { SideLeft,    { DEG2RAD(-110.0f), DEG2RAD(0.0f), { 0.470936f, -0.369626f,  0.349386f, 0.0f, 0.0f, 0.0f, 0.0f, -0.031375f, -0.058144f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.007119f, -0.043968f }, { 0.470934f, -0.282903f,  0.267406f, 0.0f } } },
+        { SideRight,   { DEG2RAD( 110.0f), DEG2RAD(0.0f), { 0.470936f, -0.369626f, -0.349386f, 0.0f, 0.0f, 0.0f, 0.0f, -0.031375f,  0.058144f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.007119f,  0.043968f }, { 0.470934f, -0.282903f, -0.267406f, 0.0f } } },
+    }, X51RearCfg[6] = {
+        { FrontLeft,   { DEG2RAD( -30.0f), DEG2RAD(0.0f), { 0.208954f,  0.212846f,  0.238350f, 0.0f, 0.0f, 0.0f, 0.0f, -0.017738f,  0.204014f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.051023f,  0.047490f }, { 0.208954f,  0.162905f,  0.182425f, 0.0f } } },
+        { FrontRight,  { DEG2RAD(  30.0f), DEG2RAD(0.0f), { 0.208954f,  0.212846f, -0.238350f, 0.0f, 0.0f, 0.0f, 0.0f, -0.017738f, -0.204014f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.051023f, -0.047490f }, { 0.208954f,  0.162905f, -0.182425f, 0.0f } } },
+        { FrontCenter, { DEG2RAD(   0.0f), DEG2RAD(0.0f), { 0.109403f,  0.179490f,  0.000000f, 0.0f, 0.0f, 0.0f, 0.0f,  0.142031f, -0.000002f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,  0.072024f, -0.000001f }, { 0.109403f,  0.137375f,  0.000000f, 0.0f } } },
+        { LFE,         { 0.0f, 0.0f, { 0.0f }, { 0.0f } } },
+        { BackLeft,    { DEG2RAD(-110.0f), DEG2RAD(0.0f), { 0.470936f, -0.369626f,  0.349386f, 0.0f, 0.0f, 0.0f, 0.0f, -0.031375f, -0.058144f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.007119f, -0.043968f }, { 0.470934f, -0.282903f,  0.267406f, 0.0f } } },
+        { BackRight,   { DEG2RAD( 110.0f), DEG2RAD(0.0f), { 0.470936f, -0.369626f, -0.349386f, 0.0f, 0.0f, 0.0f, 0.0f, -0.031375f,  0.058144f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.007119f,  0.043968f }, { 0.470934f, -0.282903f, -0.267406f, 0.0f } } },
+    }, X61Cfg[7] = {
+        { FrontLeft,   { DEG2RAD(-30.0f), DEG2RAD(0.0f), { 0.167065f,  0.200583f,  0.172695f, 0.0f, 0.0f, 0.0f, 0.0f,  0.029855f,  0.186407f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.039241f,  0.068910f }, { 0.167065f,  0.153519f,  0.132175f, 0.0f } } },
+        { FrontRight,  { DEG2RAD( 30.0f), DEG2RAD(0.0f), { 0.167065f,  0.200583f, -0.172695f, 0.0f, 0.0f, 0.0f, 0.0f,  0.029855f, -0.186407f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.039241f, -0.068910f }, { 0.167065f,  0.153519f, -0.132175f, 0.0f } } },
+        { FrontCenter, { DEG2RAD(  0.0f), DEG2RAD(0.0f), { 0.109403f,  0.179490f,  0.000000f, 0.0f, 0.0f, 0.0f, 0.0f,  0.142031f,  0.000000f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,  0.072024f, -0.000001f }, { 0.109403f,  0.137375f,  0.000000f, 0.0f } } },
+        { LFE,         { 0.0f, 0.0f, { 0.0f }, { 0.0f } } },
+        { BackCenter,  { DEG2RAD(180.0f), DEG2RAD(0.0f), { 0.353556f, -0.461940f,  0.000000f, 0.0f, 0.0f, 0.0f, 0.0f,  0.165723f,  0.000000f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,  0.000000f,  0.000005f }, { 0.353556f, -0.353554f,  0.000000f, 0.0f } } },
+        { SideLeft,    { DEG2RAD(-90.0f), DEG2RAD(0.0f), { 0.289151f, -0.081301f,  0.401292f, 0.0f, 0.0f, 0.0f, 0.0f, -0.188208f, -0.071420f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,  0.010099f, -0.032897f }, { 0.289151f, -0.062225f,  0.307136f, 0.0f } } },
+        { SideRight,   { DEG2RAD( 90.0f), DEG2RAD(0.0f), { 0.289151f, -0.081301f, -0.401292f, 0.0f, 0.0f, 0.0f, 0.0f, -0.188208f,  0.071420f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,  0.010099f,  0.032897f }, { 0.289151f, -0.062225f, -0.307136f, 0.0f } } },
+    }, X71Cfg[8] = {
+        { FrontLeft,   { DEG2RAD( -30.0f), DEG2RAD(0.0f), { 0.167065f,  0.200583f,  0.172695f, 0.0f, 0.0f, 0.0f, 0.0f,  0.029855f,  0.186407f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.039241f,  0.068910f }, { 0.167065f,  0.153519f,  0.132175f, 0.0f } } },
+        { FrontRight,  { DEG2RAD(  30.0f), DEG2RAD(0.0f), { 0.167065f,  0.200583f, -0.172695f, 0.0f, 0.0f, 0.0f, 0.0f,  0.029855f, -0.186407f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -0.039241f, -0.068910f }, { 0.167065f,  0.153519f, -0.132175f, 0.0f } } },
+        { FrontCenter, { DEG2RAD(   0.0f), DEG2RAD(0.0f), { 0.109403f,  0.179490f,  0.000000f, 0.0f, 0.0f, 0.0f, 0.0f,  0.142031f,  0.000000f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,  0.072024f,  0.000000f }, { 0.109403f,  0.137375f,  0.000000f, 0.0f } } },
+        { LFE,         { 0.0f, 0.0f, { 0.0f }, { 0.0f } } },
+        { BackLeft,    { DEG2RAD(-150.0f), DEG2RAD(0.0f), { 0.224752f, -0.295009f,  0.170325f, 0.0f, 0.0f, 0.0f, 0.0f,  0.105349f, -0.182473f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,  0.000000f,  0.065799f }, { 0.224752f, -0.225790f,  0.130361f, 0.0f } } },
+        { BackRight,   { DEG2RAD( 150.0f), DEG2RAD(0.0f), { 0.224752f, -0.295009f, -0.170325f, 0.0f, 0.0f, 0.0f, 0.0f,  0.105349f,  0.182473f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,  0.000000f, -0.065799f }, { 0.224752f, -0.225790f, -0.130361f, 0.0f } } },
+        { SideLeft,    { DEG2RAD( -90.0f), DEG2RAD(0.0f), { 0.224739f,  0.000002f,  0.340644f, 0.0f, 0.0f, 0.0f, 0.0f, -0.210697f,  0.000002f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,  0.000000f, -0.065795f }, { 0.224739f,  0.000000f,  0.260717f, 0.0f } } },
+        { SideRight,   { DEG2RAD(  90.0f), DEG2RAD(0.0f), { 0.224739f,  0.000002f, -0.340644f, 0.0f, 0.0f, 0.0f, 0.0f, -0.210697f, -0.000002f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,  0.000000f,  0.065795f }, { 0.224739f,  0.000000f, -0.260717f, 0.0f } } },
+    };
+    const ChannelMap *chanmap = NULL;
+    size_t count = 0;
+    ALuint i, j;
 
-    for(i = 0;i < device->NumChan;i++)
-        Speaker2Chan[i] = device->Speaker2Chan[i];
-    for(i = 0;i < device->NumChan;i++)
-        SpeakerAngle[i] = device->SpeakerAngle[i];
+    memset(device->Channel, 0, sizeof(device->Channel));
+    device->NumChannels = 0;
 
-    /* Some easy special-cases first... */
-    if(device->NumChan <= 1 || hwidth >= F_PI)
-    {
-        /* Full coverage for all speakers. */
-        for(i = 0;i < MaxChannels;i++)
-            gains[i] = 0.0f;
-        for(i = 0;i < device->NumChan;i++)
-        {
-            enum Channel chan = Speaker2Chan[i];
-            gains[chan] = ingain;
-        }
+    if(LoadChannelSetup(device))
         return;
-    }
-    if(hwidth <= 0.0f)
-    {
-        /* Infinitely small sound point. */
-        for(i = 0;i < MaxChannels;i++)
-            gains[i] = 0.0f;
-        for(i = 0;i < device->NumChan-1;i++)
-        {
-            if(angle >= SpeakerAngle[i] && angle < SpeakerAngle[i+1])
-            {
-                /* Sound is between speakers i and i+1 */
-                a =             (angle-SpeakerAngle[i]) /
-                    (SpeakerAngle[i+1]-SpeakerAngle[i]);
-                gains[Speaker2Chan[i]]   = sqrtf(1.0f-a) * ingain;
-                gains[Speaker2Chan[i+1]] = sqrtf(     a) * ingain;
-                return;
-            }
-        }
-        /* Sound is between last and first speakers */
-        if(angle < SpeakerAngle[0])
-            angle += F_2PI;
-        a =                   (angle-SpeakerAngle[i]) /
-            (F_2PI + SpeakerAngle[0]-SpeakerAngle[i]);
-        gains[Speaker2Chan[i]] = sqrtf(1.0f-a) * ingain;
-        gains[Speaker2Chan[0]] = sqrtf(     a) * ingain;
-        return;
-    }
 
-    if(fabsf(angle)+hwidth > F_PI)
-    {
-        /* The coverage area would go outside of -pi...+pi. Instead, rotate the
-         * speaker angles so it would be as if angle=0, and keep them wrapped
-         * within -pi...+pi. */
-        if(angle > 0.0f)
-        {
-            ALuint done;
-            ALuint i = 0;
-            while(i < device->NumChan && device->SpeakerAngle[i]-angle < -F_PI)
-                i++;
-            for(done = 0;i < device->NumChan;done++)
-            {
-                SpeakerAngle[done] = device->SpeakerAngle[i]-angle;
-                Speaker2Chan[done] = device->Speaker2Chan[i];
-                i++;
-            }
-            for(i = 0;done < device->NumChan;i++)
-            {
-                SpeakerAngle[done] = device->SpeakerAngle[i]-angle + F_2PI;
-                Speaker2Chan[done] = device->Speaker2Chan[i];
-                done++;
-            }
-        }
-        else
-        {
-            /* NOTE: '< device->NumChan' on the iterators is correct here since
-             * we need to handle index 0. Because the iterators are unsigned,
-             * they'll underflow and wrap to become 0xFFFFFFFF, which will
-             * break as expected. */
-            ALuint done;
-            ALuint i = device->NumChan-1;
-            while(i < device->NumChan && device->SpeakerAngle[i]-angle > F_PI)
-                i--;
-            for(done = device->NumChan-1;i < device->NumChan;done--)
-            {
-                SpeakerAngle[done] = device->SpeakerAngle[i]-angle;
-                Speaker2Chan[done] = device->Speaker2Chan[i];
-                i--;
-            }
-            for(i = device->NumChan-1;done < device->NumChan;i--)
-            {
-                SpeakerAngle[done] = device->SpeakerAngle[i]-angle - F_2PI;
-                Speaker2Chan[done] = device->Speaker2Chan[i];
-                done--;
-            }
-        }
-        angle = 0.0f;
-    }
-    langle = angle - hwidth;
-    rangle = angle + hwidth;
-
-    /* First speaker */
-    i = 0;
-    do {
-        ALuint last = device->NumChan-1;
-        enum Channel chan = Speaker2Chan[i];
-
-        if(SpeakerAngle[i] >= langle && SpeakerAngle[i] <= rangle)
-        {
-            tmpgains[chan] = 1.0f;
-            continue;
-        }
-
-        if(SpeakerAngle[i] < langle && SpeakerAngle[i+1] > langle)
-        {
-            a =            (langle-SpeakerAngle[i]) /
-                (SpeakerAngle[i+1]-SpeakerAngle[i]);
-            tmpgains[chan] = lerp(tmpgains[chan], 1.0f, 1.0f-a);
-        }
-        if(SpeakerAngle[i] > rangle)
-        {
-            a =          (F_2PI + rangle-SpeakerAngle[last]) /
-                (F_2PI + SpeakerAngle[i]-SpeakerAngle[last]);
-            tmpgains[chan] = lerp(tmpgains[chan], 1.0f, a);
-        }
-        else if(SpeakerAngle[last] < rangle)
-        {
-            a =                  (rangle-SpeakerAngle[last]) /
-                (F_2PI + SpeakerAngle[i]-SpeakerAngle[last]);
-            tmpgains[chan] = lerp(tmpgains[chan], 1.0f, a);
-        }
-    } while(0);
-
-    for(i = 1;i < device->NumChan-1;i++)
-    {
-        enum Channel chan = Speaker2Chan[i];
-        if(SpeakerAngle[i] >= langle && SpeakerAngle[i] <= rangle)
-        {
-            tmpgains[chan] = 1.0f;
-            continue;
-        }
-
-        if(SpeakerAngle[i] < langle && SpeakerAngle[i+1] > langle)
-        {
-            a =            (langle-SpeakerAngle[i]) /
-                (SpeakerAngle[i+1]-SpeakerAngle[i]);
-            tmpgains[chan] = lerp(tmpgains[chan], 1.0f, 1.0f-a);
-        }
-        if(SpeakerAngle[i] > rangle && SpeakerAngle[i-1] < rangle)
-        {
-            a =          (rangle-SpeakerAngle[i-1]) /
-                (SpeakerAngle[i]-SpeakerAngle[i-1]);
-            tmpgains[chan] = lerp(tmpgains[chan], 1.0f, a);
-        }
-    }
-
-    /* Last speaker */
-    i = device->NumChan-1;
-    do {
-        enum Channel chan = Speaker2Chan[i];
-        if(SpeakerAngle[i] >= langle && SpeakerAngle[i] <= rangle)
-        {
-            tmpgains[Speaker2Chan[i]] = 1.0f;
-            continue;
-        }
-        if(SpeakerAngle[i] > rangle && SpeakerAngle[i-1] < rangle)
-        {
-            a =          (rangle-SpeakerAngle[i-1]) /
-                (SpeakerAngle[i]-SpeakerAngle[i-1]);
-            tmpgains[chan] = lerp(tmpgains[chan], 1.0f, a);
-        }
-        if(SpeakerAngle[i] < langle)
-        {
-            a =                  (langle-SpeakerAngle[i]) /
-                (F_2PI + SpeakerAngle[0]-SpeakerAngle[i]);
-            tmpgains[chan] = lerp(tmpgains[chan], 1.0f, 1.0f-a);
-        }
-        else if(SpeakerAngle[0] > langle)
-        {
-            a =          (F_2PI + langle-SpeakerAngle[i]) /
-                (F_2PI + SpeakerAngle[0]-SpeakerAngle[i]);
-            tmpgains[chan] = lerp(tmpgains[chan], 1.0f, 1.0f-a);
-        }
-    } while(0);
-
-    for(i = 0;i < device->NumChan;i++)
-    {
-        enum Channel chan = device->Speaker2Chan[i];
-        gains[chan] = sqrtf(tmpgains[chan]) * ingain;
-    }
-}
-
-
-ALvoid aluInitPanning(ALCdevice *Device)
-{
-    const char *layoutname = NULL;
-    enum Channel *Speaker2Chan;
-    ALfloat *SpeakerAngle;
-
-    Speaker2Chan = Device->Speaker2Chan;
-    SpeakerAngle = Device->SpeakerAngle;
-    switch(Device->FmtChans)
+    switch(device->FmtChans)
     {
         case DevFmtMono:
-            Device->NumChan = 1;
-            Speaker2Chan[0] = FrontCenter;
-            SpeakerAngle[0] = DEG2RAD(0.0f);
-            layoutname = NULL;
+            count = COUNTOF(MonoCfg);
+            chanmap = MonoCfg;
             break;
 
         case DevFmtStereo:
-            Device->NumChan = 2;
-            Speaker2Chan[0] = FrontLeft;
-            Speaker2Chan[1] = FrontRight;
-            SpeakerAngle[0] = DEG2RAD(-90.0f);
-            SpeakerAngle[1] = DEG2RAD( 90.0f);
-            layoutname = "layout_stereo";
+            count = COUNTOF(StereoCfg);
+            chanmap = StereoCfg;
             break;
 
         case DevFmtQuad:
-            Device->NumChan = 4;
-            Speaker2Chan[0] = BackLeft;
-            Speaker2Chan[1] = FrontLeft;
-            Speaker2Chan[2] = FrontRight;
-            Speaker2Chan[3] = BackRight;
-            SpeakerAngle[0] = DEG2RAD(-135.0f);
-            SpeakerAngle[1] = DEG2RAD( -45.0f);
-            SpeakerAngle[2] = DEG2RAD(  45.0f);
-            SpeakerAngle[3] = DEG2RAD( 135.0f);
-            layoutname = "layout_quad";
+            count = COUNTOF(QuadCfg);
+            chanmap = QuadCfg;
             break;
 
         case DevFmtX51:
-            Device->NumChan = 5;
-            Speaker2Chan[0] = BackLeft;
-            Speaker2Chan[1] = FrontLeft;
-            Speaker2Chan[2] = FrontCenter;
-            Speaker2Chan[3] = FrontRight;
-            Speaker2Chan[4] = BackRight;
-            SpeakerAngle[0] = DEG2RAD(-110.0f);
-            SpeakerAngle[1] = DEG2RAD( -30.0f);
-            SpeakerAngle[2] = DEG2RAD(   0.0f);
-            SpeakerAngle[3] = DEG2RAD(  30.0f);
-            SpeakerAngle[4] = DEG2RAD( 110.0f);
-            layoutname = "layout_surround51";
+            count = COUNTOF(X51SideCfg);
+            chanmap = X51SideCfg;
             break;
 
-        case DevFmtX51Side:
-            Device->NumChan = 5;
-            Speaker2Chan[0] = SideLeft;
-            Speaker2Chan[1] = FrontLeft;
-            Speaker2Chan[2] = FrontCenter;
-            Speaker2Chan[3] = FrontRight;
-            Speaker2Chan[4] = SideRight;
-            SpeakerAngle[0] = DEG2RAD(-90.0f);
-            SpeakerAngle[1] = DEG2RAD(-30.0f);
-            SpeakerAngle[2] = DEG2RAD(  0.0f);
-            SpeakerAngle[3] = DEG2RAD( 30.0f);
-            SpeakerAngle[4] = DEG2RAD( 90.0f);
-            layoutname = "layout_side51";
+        case DevFmtX51Rear:
+            count = COUNTOF(X51RearCfg);
+            chanmap = X51RearCfg;
             break;
 
         case DevFmtX61:
-            Device->NumChan = 6;
-            Speaker2Chan[0] = SideLeft;
-            Speaker2Chan[1] = FrontLeft;
-            Speaker2Chan[2] = FrontCenter;
-            Speaker2Chan[3] = FrontRight;
-            Speaker2Chan[4] = SideRight;
-            Speaker2Chan[5] = BackCenter;
-            SpeakerAngle[0] = DEG2RAD(-90.0f);
-            SpeakerAngle[1] = DEG2RAD(-30.0f);
-            SpeakerAngle[2] = DEG2RAD(  0.0f);
-            SpeakerAngle[3] = DEG2RAD( 30.0f);
-            SpeakerAngle[4] = DEG2RAD( 90.0f);
-            SpeakerAngle[5] = DEG2RAD(180.0f);
-            layoutname = "layout_surround61";
+            count = COUNTOF(X61Cfg);
+            chanmap = X61Cfg;
             break;
 
         case DevFmtX71:
-            Device->NumChan = 7;
-            Speaker2Chan[0] = BackLeft;
-            Speaker2Chan[1] = SideLeft;
-            Speaker2Chan[2] = FrontLeft;
-            Speaker2Chan[3] = FrontCenter;
-            Speaker2Chan[4] = FrontRight;
-            Speaker2Chan[5] = SideRight;
-            Speaker2Chan[6] = BackRight;
-            SpeakerAngle[0] = DEG2RAD(-150.0f);
-            SpeakerAngle[1] = DEG2RAD( -90.0f);
-            SpeakerAngle[2] = DEG2RAD( -30.0f);
-            SpeakerAngle[3] = DEG2RAD(   0.0f);
-            SpeakerAngle[4] = DEG2RAD(  30.0f);
-            SpeakerAngle[5] = DEG2RAD(  90.0f);
-            SpeakerAngle[6] = DEG2RAD( 150.0f);
-            layoutname = "layout_surround71";
+            count = COUNTOF(X71Cfg);
+            chanmap = X71Cfg;
             break;
     }
-    if(layoutname && Device->Type != Loopback)
-        SetSpeakerArrangement(layoutname, SpeakerAngle, Speaker2Chan, Device->NumChan);
+    for(i = 0;i < MAX_OUTPUT_CHANNELS && device->ChannelName[i] != InvalidChannel;i++)
+    {
+        for(j = 0;j < count;j++)
+        {
+            if(device->ChannelName[i] == chanmap[j].ChanName)
+            {
+                device->Channel[i] = chanmap[j].Config;
+                break;
+            }
+        }
+        if(j == count)
+            ERR("Failed to match channel %u (label %d) in config\n", i, device->ChannelName[i]);
+    }
+    device->NumChannels = i;
 }

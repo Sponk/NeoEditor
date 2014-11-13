@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the
- *  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- *  Boston, MA  02111-1307, USA.
+ *  Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * Or go to http://www.gnu.org/copyleft/lgpl.html
  */
 
@@ -227,14 +227,27 @@ static ALCboolean alsa_load(void)
 
 
 typedef struct {
-    ALCchar *name;
-    char *device;
+    al_string name;
+    al_string device_name;
 } DevMap;
+TYPEDEF_VECTOR(DevMap, vector_DevMap)
 
-static DevMap *allDevNameMap;
-static ALuint numDevNames;
-static DevMap *allCaptureDevNameMap;
-static ALuint numCaptureDevNames;
+static vector_DevMap PlaybackDevices;
+static vector_DevMap CaptureDevices;
+
+static void clear_devlist(vector_DevMap *devlist)
+{
+    DevMap *iter, *end;
+
+    iter = VECTOR_ITER_BEGIN(*devlist);
+    end = VECTOR_ITER_END(*devlist);
+    for(;iter != end;iter++)
+    {
+        AL_STRING_DEINIT(iter->name);
+        AL_STRING_DEINIT(iter->device_name);
+    }
+    VECTOR_RESIZE(*devlist, 0);
+}
 
 
 static const char *prefix_name(snd_pcm_stream_t stream)
@@ -243,23 +256,26 @@ static const char *prefix_name(snd_pcm_stream_t stream)
     return (stream==SND_PCM_STREAM_PLAYBACK) ? "device-prefix" : "capture-prefix";
 }
 
-static DevMap *probe_devices(snd_pcm_stream_t stream, ALuint *count)
+static void probe_devices(snd_pcm_stream_t stream, vector_DevMap *DeviceList)
 {
     const char *main_prefix = "plughw:";
     snd_ctl_t *handle;
-    int card, err, dev, idx;
     snd_ctl_card_info_t *info;
     snd_pcm_info_t *pcminfo;
-    DevMap *DevList;
+    int card, err, dev;
+    DevMap entry;
+
+    clear_devlist(DeviceList);
 
     snd_ctl_card_info_malloc(&info);
     snd_pcm_info_malloc(&pcminfo);
 
-    DevList = malloc(sizeof(DevMap) * 1);
-    DevList[0].name = strdup(alsaDevice);
-    DevList[0].device = strdup(GetConfigValue("alsa", (stream==SND_PCM_STREAM_PLAYBACK) ?
-                                                      "device" : "capture", "default"));
-    idx = 1;
+    AL_STRING_INIT(entry.name);
+    AL_STRING_INIT(entry.device_name);
+    al_string_copy_cstr(&entry.name, alsaDevice);
+    al_string_copy_cstr(&entry.device_name, GetConfigValue("alsa", (stream==SND_PCM_STREAM_PLAYBACK) ?
+                                                           "device" : "capture", "default"));
+    VECTOR_PUSH_BACK(*DeviceList, entry);
 
     card = -1;
     if((err=snd_card_next(&card)) < 0)
@@ -293,8 +309,9 @@ static DevMap *probe_devices(snd_pcm_stream_t stream, ALuint *count)
         dev = -1;
         while(1)
         {
+            const char *device_prefix = card_prefix;
             const char *devname;
-            void *temp;
+            char device[128];
 
             if(snd_ctl_pcm_next_device(handle, &dev) < 0)
                 ERR("snd_ctl_pcm_next_device failed\n");
@@ -310,28 +327,22 @@ static DevMap *probe_devices(snd_pcm_stream_t stream, ALuint *count)
                 continue;
             }
 
-            temp = realloc(DevList, sizeof(DevMap) * (idx+1));
-            if(temp)
-            {
-                const char *device_prefix = card_prefix;
-                char device[128];
+            devname = snd_pcm_info_get_name(pcminfo);
 
-                DevList = temp;
-                devname = snd_pcm_info_get_name(pcminfo);
+            snprintf(name, sizeof(name), "%s-%s-%d", prefix_name(stream), cardid, dev);
+            ConfigValueStr("alsa", name, &device_prefix);
 
-                snprintf(name, sizeof(name), "%s-%s-%d", prefix_name(stream), cardid, dev);
-                ConfigValueStr("alsa", name, &device_prefix);
+            snprintf(name, sizeof(name), "%s, %s (CARD=%s,DEV=%d)",
+                        cardname, devname, cardid, dev);
+            snprintf(device, sizeof(device), "%sCARD=%s,DEV=%d",
+                        device_prefix, cardid, dev);
 
-                snprintf(name, sizeof(name), "%s, %s (CARD=%s,DEV=%d)",
-                         cardname, devname, cardid, dev);
-                snprintf(device, sizeof(device), "%sCARD=%s,DEV=%d",
-                         device_prefix, cardid, dev);
-
-                TRACE("Got device \"%s\", \"%s\"\n", name, device);
-                DevList[idx].name = strdup(name);
-                DevList[idx].device = strdup(device);
-                idx++;
-            }
+            TRACE("Got device \"%s\", \"%s\"\n", name, device);
+            AL_STRING_INIT(entry.name);
+            AL_STRING_INIT(entry.device_name);
+            al_string_copy_cstr(&entry.name, name);
+            al_string_copy_cstr(&entry.device_name, device);
+            VECTOR_PUSH_BACK(*DeviceList, entry);
         }
         snd_ctl_close(handle);
     next_card:
@@ -343,9 +354,6 @@ static DevMap *probe_devices(snd_pcm_stream_t stream, ALuint *count)
 
     snd_pcm_info_free(pcminfo);
     snd_ctl_card_info_free(info);
-
-    *count = idx;
-    return DevList;
 }
 
 
@@ -390,12 +398,11 @@ typedef struct ALCplaybackAlsa {
     ALsizei size;
 
     volatile int killNow;
-    althread_t thread;
+    althrd_t thread;
 } ALCplaybackAlsa;
-DECLARE_ALCBACKEND_VTABLE(ALCplaybackAlsa);
 
-static ALuint ALCplaybackAlsa_mixerProc(ALvoid *ptr);
-static ALuint ALCplaybackAlsa_mixerNoMMapProc(ALvoid *ptr);
+static int ALCplaybackAlsa_mixerProc(void *ptr);
+static int ALCplaybackAlsa_mixerNoMMapProc(void *ptr);
 
 static void ALCplaybackAlsa_Construct(ALCplaybackAlsa *self, ALCdevice *device);
 static DECLARE_FORWARD(ALCplaybackAlsa, ALCbackend, void, Destruct)
@@ -406,8 +413,12 @@ static ALCboolean ALCplaybackAlsa_start(ALCplaybackAlsa *self);
 static void ALCplaybackAlsa_stop(ALCplaybackAlsa *self);
 static DECLARE_FORWARD2(ALCplaybackAlsa, ALCbackend, ALCenum, captureSamples, void*, ALCuint)
 static DECLARE_FORWARD(ALCplaybackAlsa, ALCbackend, ALCuint, availableSamples)
+static ALint64 ALCplaybackAlsa_getLatency(ALCplaybackAlsa *self);
 static DECLARE_FORWARD(ALCplaybackAlsa, ALCbackend, void, lock)
 static DECLARE_FORWARD(ALCplaybackAlsa, ALCbackend, void, unlock)
+DECLARE_DEFAULT_ALLOCATORS(ALCplaybackAlsa)
+
+DEFINE_ALCBACKEND_VTABLE(ALCplaybackAlsa);
 
 
 static void ALCplaybackAlsa_Construct(ALCplaybackAlsa *self, ALCdevice *device)
@@ -417,7 +428,7 @@ static void ALCplaybackAlsa_Construct(ALCplaybackAlsa *self, ALCdevice *device)
 }
 
 
-static ALuint ALCplaybackAlsa_mixerProc(ALvoid *ptr)
+static int ALCplaybackAlsa_mixerProc(void *ptr)
 {
     ALCplaybackAlsa *self = (ALCplaybackAlsa*)ptr;
     ALCdevice *device = STATIC_CAST(ALCbackend, self)->mDevice;
@@ -429,7 +440,7 @@ static ALuint ALCplaybackAlsa_mixerProc(ALvoid *ptr)
     int err;
 
     SetRTPriority();
-    SetThreadName(MIXER_THREAD_NAME);
+    althrd_setname(althrd_current(), MIXER_THREAD_NAME);
 
     update_size = device->UpdateSize;
     num_updates = device->NumUpdates;
@@ -509,7 +520,7 @@ static ALuint ALCplaybackAlsa_mixerProc(ALvoid *ptr)
     return 0;
 }
 
-static ALuint ALCplaybackAlsa_mixerNoMMapProc(ALvoid *ptr)
+static int ALCplaybackAlsa_mixerNoMMapProc(void *ptr)
 {
     ALCplaybackAlsa *self = (ALCplaybackAlsa*)ptr;
     ALCdevice *device = STATIC_CAST(ALCbackend, self)->mDevice;
@@ -519,7 +530,7 @@ static ALuint ALCplaybackAlsa_mixerNoMMapProc(ALvoid *ptr)
     int err;
 
     SetRTPriority();
-    SetThreadName(MIXER_THREAD_NAME);
+    althrd_setname(althrd_current(), MIXER_THREAD_NAME);
 
     update_size = device->UpdateSize;
     num_updates = device->NumUpdates;
@@ -614,21 +625,17 @@ static ALCenum ALCplaybackAlsa_open(ALCplaybackAlsa *self, const ALCchar *name)
 
     if(name)
     {
-        size_t idx;
+        const DevMap *iter;
 
-        if(!allDevNameMap)
-            allDevNameMap = probe_devices(SND_PCM_STREAM_PLAYBACK, &numDevNames);
+        if(VECTOR_SIZE(PlaybackDevices) == 0)
+            probe_devices(SND_PCM_STREAM_PLAYBACK, &PlaybackDevices);
 
-        for(idx = 0;idx < numDevNames;idx++)
-        {
-            if(strcmp(name, allDevNameMap[idx].name) == 0)
-            {
-                driver = allDevNameMap[idx].device;
-                break;
-            }
-        }
-        if(idx == numDevNames)
+#define MATCH_NAME(i)  (al_string_cmp_cstr((i)->name, name) == 0)
+        VECTOR_FIND_IF(iter, const DevMap, PlaybackDevices, MATCH_NAME);
+#undef MATCH_NAME
+        if(iter == VECTOR_ITER_END(PlaybackDevices))
             return ALC_INVALID_VALUE;
+        driver = al_string_get_cstr(iter->device_name);
     }
     else
     {
@@ -636,6 +643,7 @@ static ALCenum ALCplaybackAlsa_open(ALCplaybackAlsa *self, const ALCchar *name)
         driver = GetConfigValue("alsa", "device", "default");
     }
 
+    TRACE("Opening device \"%s\"\n", driver);
     err = snd_pcm_open(&self->pcmHandle, driver, SND_PCM_STREAM_PLAYBACK, SND_PCM_NONBLOCK);
     if(err < 0)
     {
@@ -646,7 +654,7 @@ static ALCenum ALCplaybackAlsa_open(ALCplaybackAlsa *self, const ALCchar *name)
     /* Free alsa's global config tree. Otherwise valgrind reports a ton of leaks. */
     snd_config_update_free_global();
 
-    device->DeviceName = strdup(name);
+    al_string_copy_cstr(&device->DeviceName, name);
 
     return ALC_NO_ERROR;
 }
@@ -663,15 +671,14 @@ static ALCboolean ALCplaybackAlsa_reset(ALCplaybackAlsa *self)
     unsigned int periodLen, bufferLen;
     snd_pcm_sw_params_t *sp = NULL;
     snd_pcm_hw_params_t *hp = NULL;
+    snd_pcm_format_t format = -1;
     snd_pcm_access_t access;
-    snd_pcm_format_t format;
     unsigned int periods;
     unsigned int rate;
     const char *funcerr;
     int allowmmap;
     int err;
 
-    format = -1;
     switch(device->FmtType)
     {
         case DevFmtByte:
@@ -809,7 +816,7 @@ error:
 static ALCboolean ALCplaybackAlsa_start(ALCplaybackAlsa *self)
 {
     ALCdevice *device = STATIC_CAST(ALCbackend, self)->mDevice;
-    ALuint (*thread_func)(ALvoid*) = NULL;
+    int (*thread_func)(void*) = NULL;
     snd_pcm_hw_params_t *hp = NULL;
     snd_pcm_access_t access;
     const char *funcerr;
@@ -845,7 +852,8 @@ static ALCboolean ALCplaybackAlsa_start(ALCplaybackAlsa *self)
         }
         thread_func = ALCplaybackAlsa_mixerProc;
     }
-    if(!StartThread(&self->thread, thread_func, self))
+    self->killNow = 0;
+    if(althrd_create(&self->thread, thread_func, self) != althrd_success)
     {
         ERR("Could not create playback thread\n");
         free(self->buffer);
@@ -863,13 +871,14 @@ error:
 
 static void ALCplaybackAlsa_stop(ALCplaybackAlsa *self)
 {
-    if(self->thread)
-    {
-        self->killNow = 1;
-        StopThread(self->thread);
-        self->thread = NULL;
-    }
-    self->killNow = 0;
+    int res;
+
+    if(self->killNow)
+        return;
+
+    self->killNow = 1;
+    althrd_join(self->thread, &res);
+
     free(self->buffer);
     self->buffer = NULL;
 }
@@ -889,14 +898,6 @@ static ALint64 ALCplaybackAlsa_getLatency(ALCplaybackAlsa *self)
 }
 
 
-static void ALCplaybackAlsa_Delete(ALCplaybackAlsa *self)
-{
-    free(self);
-}
-
-DEFINE_ALCBACKEND_VTABLE(ALCplaybackAlsa);
-
-
 typedef struct ALCcaptureAlsa {
     DERIVE_FROM_TYPE(ALCbackend);
 
@@ -910,7 +911,6 @@ typedef struct ALCcaptureAlsa {
 
     snd_pcm_sframes_t last_avail;
 } ALCcaptureAlsa;
-DECLARE_ALCBACKEND_VTABLE(ALCcaptureAlsa);
 
 static void ALCcaptureAlsa_Construct(ALCcaptureAlsa *self, ALCdevice *device);
 static DECLARE_FORWARD(ALCcaptureAlsa, ALCbackend, void, Destruct)
@@ -921,8 +921,12 @@ static ALCboolean ALCcaptureAlsa_start(ALCcaptureAlsa *self);
 static void ALCcaptureAlsa_stop(ALCcaptureAlsa *self);
 static ALCenum ALCcaptureAlsa_captureSamples(ALCcaptureAlsa *self, ALCvoid *buffer, ALCuint samples);
 static ALCuint ALCcaptureAlsa_availableSamples(ALCcaptureAlsa *self);
+static ALint64 ALCcaptureAlsa_getLatency(ALCcaptureAlsa *self);
 static DECLARE_FORWARD(ALCcaptureAlsa, ALCbackend, void, lock)
 static DECLARE_FORWARD(ALCcaptureAlsa, ALCbackend, void, unlock)
+DECLARE_DEFAULT_ALLOCATORS(ALCcaptureAlsa)
+
+DEFINE_ALCBACKEND_VTABLE(ALCcaptureAlsa);
 
 
 static void ALCcaptureAlsa_Construct(ALCcaptureAlsa *self, ALCdevice *device)
@@ -940,27 +944,23 @@ static ALCenum ALCcaptureAlsa_open(ALCcaptureAlsa *self, const ALCchar *name)
     snd_pcm_uframes_t bufferSizeInFrames;
     snd_pcm_uframes_t periodSizeInFrames;
     ALboolean needring = AL_FALSE;
-    snd_pcm_format_t format;
+    snd_pcm_format_t format = -1;
     const char *funcerr;
     int err;
 
     if(name)
     {
-        size_t idx;
+        const DevMap *iter;
 
-        if(!allCaptureDevNameMap)
-            allCaptureDevNameMap = probe_devices(SND_PCM_STREAM_CAPTURE, &numCaptureDevNames);
+        if(VECTOR_SIZE(CaptureDevices) == 0)
+            probe_devices(SND_PCM_STREAM_CAPTURE, &CaptureDevices);
 
-        for(idx = 0;idx < numCaptureDevNames;idx++)
-        {
-            if(strcmp(name, allCaptureDevNameMap[idx].name) == 0)
-            {
-                driver = allCaptureDevNameMap[idx].device;
-                break;
-            }
-        }
-        if(idx == numCaptureDevNames)
+#define MATCH_NAME(i)  (al_string_cmp_cstr((i)->name, name) == 0)
+        VECTOR_FIND_IF(iter, const DevMap, CaptureDevices, MATCH_NAME);
+#undef MATCH_NAME
+        if(iter == VECTOR_ITER_END(CaptureDevices))
             return ALC_INVALID_VALUE;
+        driver = al_string_get_cstr(iter->device_name);
     }
     else
     {
@@ -968,6 +968,7 @@ static ALCenum ALCcaptureAlsa_open(ALCcaptureAlsa *self, const ALCchar *name)
         driver = GetConfigValue("alsa", "capture", "default");
     }
 
+    TRACE("Opening device \"%s\"\n", driver);
     err = snd_pcm_open(&self->pcmHandle, driver, SND_PCM_STREAM_CAPTURE, SND_PCM_NONBLOCK);
     if(err < 0)
     {
@@ -978,7 +979,6 @@ static ALCenum ALCcaptureAlsa_open(ALCcaptureAlsa *self, const ALCchar *name)
     /* Free alsa's global config tree. Otherwise valgrind reports a ton of leaks. */
     snd_config_update_free_global();
 
-    format = -1;
     switch(device->FmtType)
     {
         case DevFmtByte:
@@ -1056,7 +1056,7 @@ static ALCenum ALCcaptureAlsa_open(ALCcaptureAlsa *self, const ALCchar *name)
         }
     }
 
-    device->DeviceName = strdup(name);
+    al_string_copy_cstr(&device->DeviceName, name);
 
     return ALC_NO_ERROR;
 
@@ -1114,11 +1114,12 @@ static void ALCcaptureAlsa_stop(ALCcaptureAlsa *self)
         void *ptr;
 
         size = snd_pcm_frames_to_bytes(self->pcmHandle, avail);
-        ptr = realloc(self->buffer, size);
+        ptr = malloc(size);
         if(ptr)
         {
+            ALCcaptureAlsa_captureSamples(self, ptr, avail);
+            free(self->buffer);
             self->buffer = ptr;
-            ALCcaptureAlsa_captureSamples(self, self->buffer, avail);
             self->size = size;
         }
     }
@@ -1150,7 +1151,7 @@ static ALCenum ALCcaptureAlsa_captureSamples(ALCcaptureAlsa *self, ALCvoid *buff
             if((snd_pcm_uframes_t)amt > samples) amt = samples;
 
             amt = snd_pcm_frames_to_bytes(self->pcmHandle, amt);
-            memmove(buffer, self->buffer, amt);
+            memcpy(buffer, self->buffer, amt);
 
             if(self->size > amt)
             {
@@ -1287,14 +1288,11 @@ static ALint64 ALCcaptureAlsa_getLatency(ALCcaptureAlsa *self)
     return maxi64((ALint64)delay*1000000000/device->Frequency, 0);
 }
 
-static void ALCcaptureAlsa_Delete(ALCcaptureAlsa *self)
-{
-    free(self);
-}
 
-DEFINE_ALCBACKEND_VTABLE(ALCcaptureAlsa);
-
-
+static inline void AppendAllDevicesList2(const DevMap *entry)
+{ AppendAllDevicesList(al_string_get_cstr(entry->name)); }
+static inline void AppendCaptureDeviceList2(const DevMap *entry)
+{ AppendCaptureDeviceList(al_string_get_cstr(entry->name)); }
 
 typedef struct ALCalsaBackendFactory {
     DERIVE_FROM_TYPE(ALCbackendFactory);
@@ -1303,6 +1301,9 @@ typedef struct ALCalsaBackendFactory {
 
 static ALCboolean ALCalsaBackendFactory_init(ALCalsaBackendFactory* UNUSED(self))
 {
+    VECTOR_INIT(PlaybackDevices);
+    VECTOR_INIT(CaptureDevices);
+
     if(!alsa_load())
         return ALC_FALSE;
     return ALC_TRUE;
@@ -1310,25 +1311,11 @@ static ALCboolean ALCalsaBackendFactory_init(ALCalsaBackendFactory* UNUSED(self)
 
 static void ALCalsaBackendFactory_deinit(ALCalsaBackendFactory* UNUSED(self))
 {
-    ALuint i;
+    clear_devlist(&PlaybackDevices);
+    VECTOR_DEINIT(PlaybackDevices);
 
-    for(i = 0;i < numDevNames;++i)
-    {
-        free(allDevNameMap[i].name);
-        free(allDevNameMap[i].device);
-    }
-    free(allDevNameMap);
-    allDevNameMap = NULL;
-    numDevNames = 0;
-
-    for(i = 0;i < numCaptureDevNames;++i)
-    {
-        free(allCaptureDevNameMap[i].name);
-        free(allCaptureDevNameMap[i].device);
-    }
-    free(allCaptureDevNameMap);
-    allCaptureDevNameMap = NULL;
-    numCaptureDevNames = 0;
+    clear_devlist(&CaptureDevices);
+    VECTOR_DEINIT(CaptureDevices);
 
 #ifdef HAVE_DYNLOAD
     if(alsa_handle)
@@ -1346,36 +1333,16 @@ static ALCboolean ALCalsaBackendFactory_querySupport(ALCalsaBackendFactory* UNUS
 
 static void ALCalsaBackendFactory_probe(ALCalsaBackendFactory* UNUSED(self), enum DevProbe type)
 {
-    ALuint i;
-
     switch(type)
     {
         case ALL_DEVICE_PROBE:
-            for(i = 0;i < numDevNames;++i)
-            {
-                free(allDevNameMap[i].name);
-                free(allDevNameMap[i].device);
-            }
-
-            free(allDevNameMap);
-            allDevNameMap = probe_devices(SND_PCM_STREAM_PLAYBACK, &numDevNames);
-
-            for(i = 0;i < numDevNames;++i)
-                AppendAllDevicesList(allDevNameMap[i].name);
+            probe_devices(SND_PCM_STREAM_PLAYBACK, &PlaybackDevices);
+            VECTOR_FOR_EACH(const DevMap, PlaybackDevices, AppendAllDevicesList2);
             break;
 
         case CAPTURE_DEVICE_PROBE:
-            for(i = 0;i < numCaptureDevNames;++i)
-            {
-                free(allCaptureDevNameMap[i].name);
-                free(allCaptureDevNameMap[i].device);
-            }
-
-            free(allCaptureDevNameMap);
-            allCaptureDevNameMap = probe_devices(SND_PCM_STREAM_CAPTURE, &numCaptureDevNames);
-
-            for(i = 0;i < numCaptureDevNames;++i)
-                AppendCaptureDeviceList(allCaptureDevNameMap[i].name);
+            probe_devices(SND_PCM_STREAM_CAPTURE, &CaptureDevices);
+            VECTOR_FOR_EACH(const DevMap, CaptureDevices, AppendCaptureDeviceList2);
             break;
     }
 }
@@ -1386,8 +1353,9 @@ static ALCbackend* ALCalsaBackendFactory_createBackend(ALCalsaBackendFactory* UN
     {
         ALCplaybackAlsa *backend;
 
-        backend = calloc(1, sizeof(*backend));
+        backend = ALCplaybackAlsa_New(sizeof(*backend));
         if(!backend) return NULL;
+        memset(backend, 0, sizeof(*backend));
 
         ALCplaybackAlsa_Construct(backend, device);
 
@@ -1397,8 +1365,9 @@ static ALCbackend* ALCalsaBackendFactory_createBackend(ALCalsaBackendFactory* UN
     {
         ALCcaptureAlsa *backend;
 
-        backend = calloc(1, sizeof(*backend));
+        backend = ALCcaptureAlsa_New(sizeof(*backend));
         if(!backend) return NULL;
+        memset(backend, 0, sizeof(*backend));
 
         ALCcaptureAlsa_Construct(backend, device);
 

@@ -15,31 +15,22 @@
 static ALuint read_le32(Reader *stream)
 {
     ALubyte buf[4];
-    if(READ(stream, buf, 4) != 4)
-    {
-        READERR(stream) = 1;
+    if(Reader_read(stream, buf, 4) != 4)
         return 0;
-    }
     return (buf[3]<<24) | (buf[2]<<16) | (buf[1]<<8) | buf[0];
 }
 static ALushort read_le16(Reader *stream)
 {
     ALubyte buf[2];
-    if(READ(stream, buf, 2) != 2)
-    {
-        READERR(stream) = 1;
+    if(Reader_read(stream, buf, 2) != 2)
         return 0;
-    }
     return (buf[1]<<8) | buf[0];
 }
 static ALubyte read_8(Reader *stream)
 {
     ALubyte buf[1];
-    if(READ(stream, buf, 1) != 1)
-    {
-        READERR(stream) = 1;
+    if(Reader_read(stream, buf, 1) != 1)
         return 0;
-    }
     return buf[0];
 }
 static void skip(Reader *stream, ALuint amt)
@@ -47,12 +38,7 @@ static void skip(Reader *stream, ALuint amt)
     while(amt > 0 && !READERR(stream))
     {
         char buf[4096];
-        size_t got;
-
-        got = READ(stream, buf, minu(sizeof(buf), amt));
-        if(got == 0) READERR(stream) = 1;
-
-        amt -= got;
+        amt -= Reader_read(stream, buf, minu(sizeof(buf), amt));
     }
 }
 
@@ -166,8 +152,7 @@ typedef struct PresetHeader {
 } PresetHeader;
 static void PresetHeader_read(PresetHeader *self, Reader *stream)
 {
-    if(READ(stream, self->mName, sizeof(self->mName)) != sizeof(self->mName))
-        READERR(stream) = 1;
+    Reader_read(stream, self->mName, sizeof(self->mName));
     self->mPreset = read_le16(stream);
     self->mBank = read_le16(stream);
     self->mZoneIdx = read_le16(stream);
@@ -182,13 +167,12 @@ typedef struct InstrumentHeader {
 } InstrumentHeader;
 static void InstrumentHeader_read(InstrumentHeader *self, Reader *stream)
 {
-    if(READ(stream, self->mName, sizeof(self->mName)) != sizeof(self->mName))
-        READERR(stream) = 1;
+    Reader_read(stream, self->mName, sizeof(self->mName));
     self->mZoneIdx = read_le16(stream);
 }
 
 typedef struct SampleHeader {
-    ALchar mName[20]; // 20 bytes
+    ALchar mName[20];
     ALuint mStart;
     ALuint mEnd;
     ALuint mStartloop;
@@ -201,8 +185,7 @@ typedef struct SampleHeader {
 } SampleHeader;
 static void SampleHeader_read(SampleHeader *self, Reader *stream)
 {
-    if(READ(stream, self->mName, sizeof(self->mName)) != sizeof(self->mName))
-        READERR(stream) = 1;
+    Reader_read(stream, self->mName, sizeof(self->mName));
     self->mStart = read_le32(stream);
     self->mEnd = read_le32(stream);
     self->mStartloop = read_le32(stream);
@@ -311,7 +294,8 @@ static void Soundfont_Destruct(Soundfont *self)
 }
 
 
-#define FOURCC(a,b,c,d) (((d)<<24) | ((c)<<16) | ((b)<<8) | (a))
+#define FOURCC(a,b,c,d) ((a) | ((b)<<8) | ((c)<<16) | ((d)<<24))
+#define FOURCCFMT     "%c%c%c%c"
 #define FOURCCARGS(x)  (char)((x)&0xff), (char)(((x)>>8)&0xff), (char)(((x)>>16)&0xff), (char)(((x)>>24)&0xff)
 typedef struct RiffHdr {
     ALuint mCode;
@@ -325,68 +309,49 @@ static void RiffHdr_read(RiffHdr *self, Reader *stream)
 
 
 typedef struct GenModList {
-    Generator *gens;
-    ALsizei gens_size;
-    ALsizei gens_max;
-
-    Modulator *mods;
-    ALsizei mods_size;
-    ALsizei mods_max;
+    VECTOR(Generator) gens;
+    VECTOR(Modulator) mods;
 } GenModList;
 
 static void GenModList_Construct(GenModList *self)
 {
-    self->gens = NULL;
-    self->gens_size = 0;
-    self->gens_max = 0;
-
-    self->mods = NULL;
-    self->mods_size = 0;
-    self->mods_max = 0;
+    VECTOR_INIT(self->gens);
+    VECTOR_INIT(self->mods);
 }
 
 static void GenModList_Destruct(GenModList *self)
 {
-    free(self->gens);
-    self->gens = NULL;
-    self->gens_size = 0;
-    self->gens_max = 0;
-
-    free(self->mods);
-    self->mods = NULL;
-    self->mods_size = 0;
-    self->mods_max = 0;
+    VECTOR_DEINIT(self->mods);
+    VECTOR_DEINIT(self->gens);
 }
 
 static GenModList GenModList_clone(const GenModList *self)
 {
     GenModList ret;
 
-    ret.gens = malloc(self->gens_max * sizeof(ret.gens[0]));
-    memcpy(ret.gens, self->gens, self->gens_size * sizeof(ret.gens[0]));
-    ret.gens_size = self->gens_size;
-    ret.gens_max = self->gens_max;
+    GenModList_Construct(&ret);
 
-    ret.mods = malloc(self->mods_max * sizeof(ret.mods[0]));
-    memcpy(ret.mods, self->mods, self->mods_size * sizeof(ret.mods[0]));
-    ret.mods_size = self->mods_size;
-    ret.mods_max = self->mods_max;
+    VECTOR_INSERT(ret.gens, VECTOR_ITER_END(ret.gens),
+        VECTOR_ITER_BEGIN(self->gens), VECTOR_ITER_END(self->gens)
+    );
+    VECTOR_INSERT(ret.mods, VECTOR_ITER_END(ret.mods),
+        VECTOR_ITER_BEGIN(self->mods), VECTOR_ITER_END(self->mods)
+    );
 
     return ret;
 }
 
 static void GenModList_insertGen(GenModList *self, const Generator *gen, ALboolean ispreset)
 {
-    Generator *i = self->gens;
-    Generator *end = i + self->gens_size;
-    for(;i != end;i++)
+    Generator *i;
+#define MATCH_GENERATOR(i) ((i)->mGenerator == gen->mGenerator)
+    VECTOR_FIND_IF(i, Generator, self->gens, MATCH_GENERATOR);
+    if(i != VECTOR_ITER_END(self->gens))
     {
-        if(i->mGenerator == gen->mGenerator)
-        {
-            i->mAmount = gen->mAmount;
-            return;
-        }
+        i->mAmount = gen->mAmount;
+        return;
     }
+#undef MATCH_GENERATOR
 
     if(ispreset &&
        (gen->mGenerator == 0 || gen->mGenerator == 1 || gen->mGenerator == 2 ||
@@ -396,167 +361,101 @@ static void GenModList_insertGen(GenModList *self, const Generator *gen, ALboole
         gen->mGenerator == 58))
         return;
 
-    if(self->gens_size == self->gens_max)
+    if(VECTOR_PUSH_BACK(self->gens, *gen) == AL_FALSE)
     {
-        void *temp = NULL;
-        ALsizei newsize;
-
-        newsize = (self->gens_max ? self->gens_max<<1 : 1);
-        if(newsize > self->gens_max)
-            temp = realloc(self->gens, newsize * sizeof(self->gens[0]));
-        if(!temp)
-        {
-            ERR("Failed to increase generator storage to %d elements (from %d)\n",
-                newsize, self->gens_max);
-            return;
-        }
-
-        self->gens = temp;
-        self->gens_max = newsize;
+        ERR("Failed to insert generator (from "SZFMT" elements)\n", VECTOR_SIZE(self->gens));
+        return;
     }
-
-    self->gens[self->gens_size] = *gen;
-    self->gens_size++;
 }
 static void GenModList_accumGen(GenModList *self, const Generator *gen)
 {
-    Generator *i = self->gens;
-    Generator *end = i + self->gens_size;
-    for(;i != end;i++)
+    Generator *i;
+#define MATCH_GENERATOR(i) ((i)->mGenerator == gen->mGenerator)
+    VECTOR_FIND_IF(i, Generator, self->gens, MATCH_GENERATOR);
+    if(i != VECTOR_ITER_END(self->gens))
     {
-        if(i->mGenerator == gen->mGenerator)
+        if(gen->mGenerator == 43 || gen->mGenerator == 44)
         {
-            if(gen->mGenerator == 43 || gen->mGenerator == 44)
-            {
-                /* Range generators accumulate by taking the intersection of
-                 * the two ranges.
-                 */
-                ALushort low = maxu(i->mAmount&0x00ff, gen->mAmount&0x00ff);
-                ALushort high = minu(i->mAmount&0xff00, gen->mAmount&0xff00);
-                i->mAmount = low | high;
-            }
-            else
-                i->mAmount += gen->mAmount;
-            return;
+            /* Range generators accumulate by taking the intersection of the
+             * two ranges.
+             */
+            ALushort low = maxu(i->mAmount&0x00ff, gen->mAmount&0x00ff);
+            ALushort high = minu(i->mAmount&0xff00, gen->mAmount&0xff00);
+            i->mAmount = low | high;
         }
+        else
+            i->mAmount += gen->mAmount;
+        return;
     }
+#undef MATCH_GENERATOR
 
-    if(self->gens_size == self->gens_max)
+    if(VECTOR_PUSH_BACK(self->gens, *gen) == AL_FALSE)
     {
-        void *temp = NULL;
-        ALsizei newsize;
-
-        newsize = (self->gens_max ? self->gens_max<<1 : 1);
-        if(newsize > self->gens_max)
-            temp = realloc(self->gens, newsize * sizeof(self->gens[0]));
-        if(!temp)
-        {
-            ERR("Failed to increase generator storage to %d elements (from %d)\n",
-                newsize, self->gens_max);
-            return;
-        }
-
-        self->gens = temp;
-        self->gens_max = newsize;
+        ERR("Failed to insert generator (from "SZFMT" elements)\n", VECTOR_SIZE(self->gens));
+        return;
     }
-
-    self->gens[self->gens_size] = *gen;
     if(gen->mGenerator < 60)
-        self->gens[self->gens_size].mAmount += DefaultGenValue[gen->mGenerator];
-    self->gens_size++;
+        VECTOR_BACK(self->gens).mAmount += DefaultGenValue[gen->mGenerator];
 }
 
 static void GenModList_insertMod(GenModList *self, const Modulator *mod)
 {
-    Modulator *i = self->mods;
-    Modulator *end = i + self->mods_size;
-    for(;i != end;i++)
+    Modulator *i;
+#define MATCH_MODULATOR(i) ((i)->mDstOp == mod->mDstOp && (i)->mSrcOp == mod->mSrcOp && \
+                            (i)->mAmtSrcOp == mod->mAmtSrcOp && (i)->mTransOp == mod->mTransOp)
+    VECTOR_FIND_IF(i, Modulator, self->mods, MATCH_MODULATOR);
+    if(i != VECTOR_ITER_END(self->mods))
     {
-        if(i->mDstOp == mod->mDstOp && i->mSrcOp == mod->mSrcOp &&
-           i->mAmtSrcOp == mod->mAmtSrcOp && i->mTransOp == mod->mTransOp)
-        {
-            i->mAmount = mod->mAmount;
-            return;
-        }
+        i->mAmount = mod->mAmount;
+        return;
     }
+#undef MATCH_MODULATOR
 
-    if(self->mods_size == self->mods_max)
+    if(VECTOR_PUSH_BACK(self->mods, *mod) == AL_FALSE)
     {
-        void *temp = NULL;
-        ALsizei newsize;
-
-        newsize = (self->mods_max ? self->mods_max<<1 : 1);
-        if(newsize > self->mods_max)
-            temp = realloc(self->mods, newsize * sizeof(self->mods[0]));
-        if(!temp)
-        {
-            ERR("Failed to increase modulator storage to %d elements (from %d)\n",
-                newsize, self->mods_max);
-            return;
-        }
-
-        self->mods = temp;
-        self->mods_max = newsize;
+        ERR("Failed to insert modulator (from "SZFMT" elements)\n", VECTOR_SIZE(self->mods));
+        return;
     }
-
-    self->mods[self->mods_size] = *mod;
-    self->mods_size++;
 }
 static void GenModList_accumMod(GenModList *self, const Modulator *mod)
 {
-    Modulator *i = self->mods;
-    Modulator *end = i + self->mods_size;
-    for(;i != end;i++)
+    Modulator *i;
+#define MATCH_MODULATOR(i) ((i)->mDstOp == mod->mDstOp && (i)->mSrcOp == mod->mSrcOp && \
+                            (i)->mAmtSrcOp == mod->mAmtSrcOp && (i)->mTransOp == mod->mTransOp)
+    VECTOR_FIND_IF(i, Modulator, self->mods, MATCH_MODULATOR);
+    if(i != VECTOR_ITER_END(self->mods))
     {
-        if(i->mDstOp == mod->mDstOp && i->mSrcOp == mod->mSrcOp &&
-           i->mAmtSrcOp == mod->mAmtSrcOp && i->mTransOp == mod->mTransOp)
-        {
-            i->mAmount += mod->mAmount;
-            return;
-        }
+        i->mAmount += mod->mAmount;
+        return;
+    }
+#undef MATCH_MODULATOR
+
+    if(VECTOR_PUSH_BACK(self->mods, *mod) == AL_FALSE)
+    {
+        ERR("Failed to insert modulator (from "SZFMT" elements)\n", VECTOR_SIZE(self->mods));
+        return;
     }
 
-    if(self->mods_size == self->mods_max)
-    {
-        void *temp = NULL;
-        ALsizei newsize;
-
-        newsize = (self->mods_max ? self->mods_max<<1 : 1);
-        if(newsize > self->mods_max)
-            temp = realloc(self->mods, newsize * sizeof(self->mods[0]));
-        if(!temp)
-        {
-            ERR("Failed to increase modulator storage to %d elements (from %d)\n",
-                newsize, self->mods_max);
-            return;
-        }
-
-        self->mods = temp;
-        self->mods_max = newsize;
-    }
-
-    self->mods[self->mods_size] = *mod;
     if(mod->mSrcOp == 0x0502 && mod->mDstOp == 48 && mod->mAmtSrcOp == 0 && mod->mTransOp == 0)
-        self->mods[self->mods_size].mAmount += 960;
+        VECTOR_BACK(self->mods).mAmount += 960;
     else if(mod->mSrcOp == 0x0102 && mod->mDstOp == 8 && mod->mAmtSrcOp == 0 && mod->mTransOp == 0)
-        self->mods[self->mods_size].mAmount += -2400;
+        VECTOR_BACK(self->mods).mAmount += -2400;
     else if(mod->mSrcOp == 0x000D && mod->mDstOp == 6 && mod->mAmtSrcOp == 0 && mod->mTransOp == 0)
-        self->mods[self->mods_size].mAmount += 50;
+        VECTOR_BACK(self->mods).mAmount += 50;
     else if(mod->mSrcOp == 0x0081 && mod->mDstOp == 6 && mod->mAmtSrcOp == 0 && mod->mTransOp == 0)
-        self->mods[self->mods_size].mAmount += 50;
+        VECTOR_BACK(self->mods).mAmount += 50;
     else if(mod->mSrcOp == 0x0582 && mod->mDstOp == 48 && mod->mAmtSrcOp == 0 && mod->mTransOp == 0)
-        self->mods[self->mods_size].mAmount += 960;
+        VECTOR_BACK(self->mods).mAmount += 960;
     else if(mod->mSrcOp == 0x028A && mod->mDstOp == 17 && mod->mAmtSrcOp == 0 && mod->mTransOp == 0)
-        self->mods[self->mods_size].mAmount += 1000;
+        VECTOR_BACK(self->mods).mAmount += 1000;
     else if(mod->mSrcOp == 0x058B && mod->mDstOp == 48 && mod->mAmtSrcOp == 0 && mod->mTransOp == 0)
-        self->mods[self->mods_size].mAmount += 960;
+        VECTOR_BACK(self->mods).mAmount += 960;
     else if(mod->mSrcOp == 0x00DB && mod->mDstOp == 16 && mod->mAmtSrcOp == 0 && mod->mTransOp == 0)
-        self->mods[self->mods_size].mAmount += 200;
+        VECTOR_BACK(self->mods).mAmount += 200;
     else if(mod->mSrcOp == 0x00DD && mod->mDstOp == 15 && mod->mAmtSrcOp == 0 && mod->mTransOp == 0)
-        self->mods[self->mods_size].mAmount += 200;
+        VECTOR_BACK(self->mods).mAmount += 200;
     /*else if(mod->mSrcOp == 0x020E && mod->mDstOp == ?initialpitch? && mod->mAmtSrcOp == 0x0010 && mod->mTransOp == 0)
-        self->mods[self->mods_size].mAmount += 12700;*/
-    self->mods_size++;
+        VECTOR_BACK(self->mods).mAmount += 12700;*/
 }
 
 
@@ -569,7 +468,7 @@ static ALboolean ensureFontSanity(const Soundfont *sfont)
 {
     ALsizei i;
 
-    for(i = 0;i < sfont->phdr_size-1;i++)
+    for(i = 0;i < sfont->phdr_size;i++)
     {
         if(sfont->phdr[i].mZoneIdx >= sfont->pbag_size)
         {
@@ -577,21 +476,15 @@ static ALboolean ensureFontSanity(const Soundfont *sfont)
                  sfont->phdr[i].mZoneIdx, sfont->pbag_size);
             return AL_FALSE;
         }
-        if(sfont->phdr[i+1].mZoneIdx < sfont->phdr[i].mZoneIdx)
+        if(i+1 < sfont->phdr_size && sfont->phdr[i+1].mZoneIdx < sfont->phdr[i].mZoneIdx)
         {
             WARN("Preset %d has invalid zone index (%d does not follow %d)\n", i+1,
                  sfont->phdr[i+1].mZoneIdx, sfont->phdr[i].mZoneIdx);
             return AL_FALSE;
         }
     }
-    if(sfont->phdr[i].mZoneIdx >= sfont->pbag_size)
-    {
-        WARN("Preset %d has invalid zone index %d (max: %d)\n", i,
-             sfont->phdr[i].mZoneIdx, sfont->pbag_size);
-        return AL_FALSE;
-    }
 
-    for(i = 0;i < sfont->pbag_size-1;i++)
+    for(i = 0;i < sfont->pbag_size;i++)
     {
         if(sfont->pbag[i].mGenIdx >= sfont->pgen_size)
         {
@@ -599,7 +492,7 @@ static ALboolean ensureFontSanity(const Soundfont *sfont)
                  sfont->pbag[i].mGenIdx, sfont->pgen_size);
             return AL_FALSE;
         }
-        if(sfont->pbag[i+1].mGenIdx < sfont->pbag[i].mGenIdx)
+        if(i+1 < sfont->pbag_size && sfont->pbag[i+1].mGenIdx < sfont->pbag[i].mGenIdx)
         {
             WARN("Preset zone %d has invalid generator index (%d does not follow %d)\n", i+1,
                  sfont->pbag[i+1].mGenIdx, sfont->pbag[i].mGenIdx);
@@ -611,28 +504,16 @@ static ALboolean ensureFontSanity(const Soundfont *sfont)
                  sfont->pbag[i].mModIdx, sfont->pmod_size);
             return AL_FALSE;
         }
-        if(sfont->pbag[i+1].mModIdx < sfont->pbag[i].mModIdx)
+        if(i+1 < sfont->pbag_size && sfont->pbag[i+1].mModIdx < sfont->pbag[i].mModIdx)
         {
             WARN("Preset zone %d has invalid modulator index (%d does not follow %d)\n", i+1,
                  sfont->pbag[i+1].mModIdx, sfont->pbag[i].mModIdx);
             return AL_FALSE;
         }
     }
-    if(sfont->pbag[i].mGenIdx >= sfont->pgen_size)
-    {
-        WARN("Preset zone %d has invalid generator index %d (max: %d)\n", i,
-             sfont->pbag[i].mGenIdx, sfont->pgen_size);
-        return AL_FALSE;
-    }
-    if(sfont->pbag[i].mModIdx >= sfont->pmod_size)
-    {
-        WARN("Preset zone %d has invalid modulator index %d (max: %d)\n", i,
-             sfont->pbag[i].mModIdx, sfont->pmod_size);
-        return AL_FALSE;
-    }
 
 
-    for(i = 0;i < sfont->inst_size-1;i++)
+    for(i = 0;i < sfont->inst_size;i++)
     {
         if(sfont->inst[i].mZoneIdx >= sfont->ibag_size)
         {
@@ -640,21 +521,15 @@ static ALboolean ensureFontSanity(const Soundfont *sfont)
                  sfont->inst[i].mZoneIdx, sfont->ibag_size);
             return AL_FALSE;
         }
-        if(sfont->inst[i+1].mZoneIdx < sfont->inst[i].mZoneIdx)
+        if(i+1 < sfont->inst_size && sfont->inst[i+1].mZoneIdx < sfont->inst[i].mZoneIdx)
         {
             WARN("Instrument %d has invalid zone index (%d does not follow %d)\n", i+1,
                  sfont->inst[i+1].mZoneIdx, sfont->inst[i].mZoneIdx);
             return AL_FALSE;
         }
     }
-    if(sfont->inst[i].mZoneIdx >= sfont->ibag_size)
-    {
-        WARN("Instrument %d has invalid zone index %d (max: %d)\n", i,
-             sfont->inst[i].mZoneIdx, sfont->ibag_size);
-        return AL_FALSE;
-    }
 
-    for(i = 0;i < sfont->ibag_size-1;i++)
+    for(i = 0;i < sfont->ibag_size;i++)
     {
         if(sfont->ibag[i].mGenIdx >= sfont->igen_size)
         {
@@ -662,7 +537,7 @@ static ALboolean ensureFontSanity(const Soundfont *sfont)
                  sfont->ibag[i].mGenIdx, sfont->igen_size);
             return AL_FALSE;
         }
-        if(sfont->ibag[i+1].mGenIdx < sfont->ibag[i].mGenIdx)
+        if(i+1 < sfont->ibag_size && sfont->ibag[i+1].mGenIdx < sfont->ibag[i].mGenIdx)
         {
             WARN("Instrument zone %d has invalid generator index (%d does not follow %d)\n", i+1,
                  sfont->ibag[i+1].mGenIdx, sfont->ibag[i].mGenIdx);
@@ -674,24 +549,12 @@ static ALboolean ensureFontSanity(const Soundfont *sfont)
                  sfont->ibag[i].mModIdx, sfont->imod_size);
             return AL_FALSE;
         }
-        if(sfont->ibag[i+1].mModIdx < sfont->ibag[i].mModIdx)
+        if(i+1 < sfont->ibag_size && sfont->ibag[i+1].mModIdx < sfont->ibag[i].mModIdx)
         {
             WARN("Instrument zone %d has invalid modulator index (%d does not follow %d)\n", i+1,
                  sfont->ibag[i+1].mModIdx, sfont->ibag[i].mModIdx);
             return AL_FALSE;
         }
-    }
-    if(sfont->ibag[i].mGenIdx >= sfont->igen_size)
-    {
-        WARN("Instrument zone %d has invalid generator index %d (max: %d)\n", i,
-             sfont->ibag[i].mGenIdx, sfont->igen_size);
-        return AL_FALSE;
-    }
-    if(sfont->ibag[i].mModIdx >= sfont->imod_size)
-    {
-        WARN("Instrument zone %d has invalid modulator index %d (max: %d)\n", i,
-             sfont->ibag[i].mModIdx, sfont->imod_size);
-        return AL_FALSE;
     }
 
 
@@ -710,21 +573,21 @@ static ALboolean ensureFontSanity(const Soundfont *sfont)
 
 static ALboolean checkZone(const GenModList *zone, const PresetHeader *preset, const InstrumentHeader *inst, const SampleHeader *samp)
 {
-    ALsizei i;
-
-    for(i = 0;i < zone->gens_size;i++)
+    Generator *gen = VECTOR_ITER_BEGIN(zone->gens);
+    Generator *gen_end = VECTOR_ITER_END(zone->gens);
+    for(;gen != gen_end;gen++)
     {
-        if(zone->gens[i].mGenerator == 43 || zone->gens[i].mGenerator == 44)
+        if(gen->mGenerator == 43 || gen->mGenerator == 44)
         {
-            int high = zone->gens[i].mAmount>>8;
-            int low = zone->gens[i].mAmount&0xff;
+            int high = gen->mAmount>>8;
+            int low = gen->mAmount&0xff;
 
             if(!(low >= 0 && high <= 127 && high >= low))
             {
                 TRACE("Preset \"%s\", inst \"%s\", sample \"%s\": invalid %s range %d...%d\n",
                       preset->mName, inst->mName, samp->mName,
-                      (zone->gens[i].mGenerator == 43) ? "key" :
-                      (zone->gens[i].mGenerator == 44) ? "velocity" : "(unknown)",
+                      (gen->mGenerator == 43) ? "key" :
+                      (gen->mGenerator == 44) ? "velocity" : "(unknown)",
                       low, high);
                 return AL_FALSE;
             }
@@ -745,11 +608,8 @@ static ALenum getModSrcInput(int input)
     if(input == 16) return AL_PITCHBEND_SENSITIVITY_SOFT;
     if((input&0x80))
     {
-        input ^= 0x80;
-        if(input > 0 && input < 120 && !(input == 6 || (input >= 32 && input <= 63) ||
-                                         (input >= 98 && input <= 101)))
-            return input;
-        input ^= 0x80;
+        if(IsValidCtrlInput(input^0x80))
+            return input^0x80;
     }
     ERR("Unhandled modulator source input: 0x%02x\n", input);
     return AL_INVALID;
@@ -871,43 +731,43 @@ static void fillZone(ALfontsound *sound, ALCcontext *context, const GenModList *
         0, /* 59 -  */
     };
     const Generator *gen, *gen_end;
+    const Modulator *mod, *mod_end;
 
-    if(zone->mods)
+    mod = VECTOR_ITER_BEGIN(zone->mods);
+    mod_end = VECTOR_ITER_END(zone->mods);
+    for(;mod != mod_end;mod++)
     {
-        ALsizei i;
-        for(i = 0;i < zone->mods_size;i++)
+        ALenum src0in = getModSrcInput(mod->mSrcOp&0xFF);
+        ALenum src0type = getModSrcType(mod->mSrcOp&0x0300);
+        ALenum src0form = getModSrcForm(mod->mSrcOp&0xFC00);
+        ALenum src1in = getModSrcInput(mod->mAmtSrcOp&0xFF);
+        ALenum src1type = getModSrcType(mod->mAmtSrcOp&0x0300);
+        ALenum src1form = getModSrcForm(mod->mAmtSrcOp&0xFC00);
+        ALenum trans = getModTransOp(mod->mTransOp);
+        ALenum dst = (mod->mDstOp < 60) ? Gen2Param[mod->mDstOp] : 0;
+        if(!dst || dst == AL_KEY_RANGE_SOFT || dst == AL_VELOCITY_RANGE_SOFT ||
+           dst == AL_LOOP_MODE_SOFT || dst == AL_EXCLUSIVE_CLASS_SOFT ||
+           dst == AL_BASE_KEY_SOFT)
+            ERR("Unhandled modulator destination: %d\n", mod->mDstOp);
+        else if(src0in != AL_INVALID && src0form != AL_INVALID && src0type != AL_INVALID &&
+                src1in != AL_INVALID && src1form != AL_INVALID && src0type != AL_INVALID &&
+                trans != AL_INVALID)
         {
-            ALenum src0in = getModSrcInput(zone->mods[i].mSrcOp&0xFF);
-            ALenum src0type = getModSrcType(zone->mods[i].mSrcOp&0x0300);
-            ALenum src0form = getModSrcForm(zone->mods[i].mSrcOp&0xFC00);
-            ALenum src1in = getModSrcInput(zone->mods[i].mAmtSrcOp&0xFF);
-            ALenum src1type = getModSrcType(zone->mods[i].mAmtSrcOp&0x0300);
-            ALenum src1form = getModSrcForm(zone->mods[i].mAmtSrcOp&0xFC00);
-            ALenum trans = getModTransOp(zone->mods[i].mTransOp);
-            ALenum dst = (zone->mods[i].mDstOp < 60) ? Gen2Param[zone->mods[i].mDstOp] : 0;
-            if(!dst || dst == AL_KEY_RANGE_SOFT || dst == AL_VELOCITY_RANGE_SOFT ||
-               dst == AL_LOOP_MODE_SOFT || dst == AL_EXCLUSIVE_CLASS_SOFT ||
-               dst == AL_BASE_KEY_SOFT)
-                ERR("Unhandled modulator destination: %d\n", zone->mods[i].mDstOp);
-            else if(src0in != AL_INVALID && src0form != AL_INVALID && src0type != AL_INVALID &&
-                    src1in != AL_INVALID && src1form != AL_INVALID && src0type != AL_INVALID &&
-                    trans != AL_INVALID)
-            {
-                ALfontsound_setModStagei(sound, context, i, AL_SOURCE0_INPUT_SOFT, src0in);
-                ALfontsound_setModStagei(sound, context, i, AL_SOURCE0_TYPE_SOFT, src0type);
-                ALfontsound_setModStagei(sound, context, i, AL_SOURCE0_FORM_SOFT, src0form);
-                ALfontsound_setModStagei(sound, context, i, AL_SOURCE1_INPUT_SOFT, src1in);
-                ALfontsound_setModStagei(sound, context, i, AL_SOURCE1_TYPE_SOFT, src1type);
-                ALfontsound_setModStagei(sound, context, i, AL_SOURCE1_FORM_SOFT, src1form);
-                ALfontsound_setModStagei(sound, context, i, AL_AMOUNT_SOFT, zone->mods[i].mAmount);
-                ALfontsound_setModStagei(sound, context, i, AL_TRANSFORM_OP_SOFT, trans);
-                ALfontsound_setModStagei(sound, context, i, AL_DESTINATION_SOFT, dst);
-            }
+            ALsizei idx = (ALsizei)(mod - VECTOR_ITER_BEGIN(zone->mods));
+            ALfontsound_setModStagei(sound, context, idx, AL_SOURCE0_INPUT_SOFT, src0in);
+            ALfontsound_setModStagei(sound, context, idx, AL_SOURCE0_TYPE_SOFT, src0type);
+            ALfontsound_setModStagei(sound, context, idx, AL_SOURCE0_FORM_SOFT, src0form);
+            ALfontsound_setModStagei(sound, context, idx, AL_SOURCE1_INPUT_SOFT, src1in);
+            ALfontsound_setModStagei(sound, context, idx, AL_SOURCE1_TYPE_SOFT, src1type);
+            ALfontsound_setModStagei(sound, context, idx, AL_SOURCE1_FORM_SOFT, src1form);
+            ALfontsound_setModStagei(sound, context, idx, AL_AMOUNT_SOFT, mod->mAmount);
+            ALfontsound_setModStagei(sound, context, idx, AL_TRANSFORM_OP_SOFT, trans);
+            ALfontsound_setModStagei(sound, context, idx, AL_DESTINATION_SOFT, dst);
         }
     }
 
-    gen = zone->gens;
-    gen_end = gen + zone->gens_size;
+    gen = VECTOR_ITER_BEGIN(zone->gens);
+    gen_end = VECTOR_ITER_END(zone->gens);
     for(;gen != gen_end;gen++)
     {
         ALint value = (ALshort)gen->mAmount;
@@ -961,12 +821,12 @@ static void fillZone(ALfontsound *sound, ALCcontext *context, const GenModList *
                     value = getLoopMode(value);
                 ALfontsound_setPropi(sound, context, param, value);
             }
-            else if(gen->mGenerator < 256)
+            else
             {
-                static ALboolean warned[256];
-                if(!warned[gen->mGenerator])
+                static ALuint warned[65536/32];
+                if(!(warned[gen->mGenerator/32]&(1<<(gen->mGenerator&31))))
                 {
-                    warned[gen->mGenerator] = AL_TRUE;
+                    warned[gen->mGenerator/32] |= 1<<(gen->mGenerator&31);
                     ERR("Unhandled generator %d\n", gen->mGenerator);
                 }
             }
@@ -974,7 +834,7 @@ static void fillZone(ALfontsound *sound, ALCcontext *context, const GenModList *
     }
 }
 
-static void processInstrument(ALfontsound ***sounds, ALsizei *sounds_size, ALCcontext *context, InstrumentHeader *inst, const PresetHeader *preset, const Soundfont *sfont, const GenModList *pzone)
+static void processInstrument(ALfontsound ***sounds, ALsizei *sounds_size, ALCcontext *context, ALbuffer *buffer, InstrumentHeader *inst, const PresetHeader *preset, const Soundfont *sfont, const GenModList *pzone)
 {
     const Generator *gen, *gen_end;
     const Modulator *mod, *mod_end;
@@ -1049,13 +909,13 @@ static void processInstrument(ALfontsound ***sounds, ALsizei *sounds_size, ALCco
                 }
                 samp = &sfont->shdr[gen->mAmount];
 
-                gen = pzone->gens;
-                gen_end = gen + pzone->gens_size;
+                gen = VECTOR_ITER_BEGIN(pzone->gens);
+                gen_end = VECTOR_ITER_END(pzone->gens);
                 for(;gen != gen_end;gen++)
                     GenModList_accumGen(&lzone, gen);
 
-                mod = pzone->mods;
-                mod_end = mod + pzone->mods_size;
+                mod = VECTOR_ITER_BEGIN(pzone->mods);
+                mod_end = VECTOR_ITER_END(pzone->mods);
                 for(;mod != mod_end;mod++)
                     GenModList_accumMod(&lzone, mod);
 
@@ -1067,6 +927,7 @@ static void processInstrument(ALfontsound ***sounds, ALsizei *sounds_size, ALCco
 
                 sound = NewFontsound(context);
                 (*sounds)[(*sounds_size)++] = sound;
+                ALfontsound_setPropi(sound, context, AL_BUFFER, buffer->id);
                 ALfontsound_setPropi(sound, context, AL_SAMPLE_START_SOFT, samp->mStart);
                 ALfontsound_setPropi(sound, context, AL_SAMPLE_END_SOFT, samp->mEnd);
                 ALfontsound_setPropi(sound, context, AL_SAMPLE_LOOP_START_SOFT, samp->mStartloop);
@@ -1088,10 +949,27 @@ static void processInstrument(ALfontsound ***sounds, ALsizei *sounds_size, ALCco
     GenModList_Destruct(&gzone);
 }
 
+static ALuint printStringChunk(Reader *stream, const RiffHdr *chnk, const char *title)
+{
+    ALuint len = 0;
+    if(chnk->mSize == 0 || (chnk->mSize&1))
+        ERR("Invalid "FOURCCFMT" size: %d\n", FOURCCARGS(chnk->mCode), chnk->mSize);
+    else
+    {
+        char *str = calloc(1, chnk->mSize+1);
+        len = (ALuint)Reader_read(stream, str, chnk->mSize);
+
+        TRACE("%s: %s\n", title, str);
+        free(str);
+    }
+    return len;
+}
+
 ALboolean loadSf2(Reader *stream, ALsoundfont *soundfont, ALCcontext *context)
 {
     ALsfpreset **presets = NULL;
     ALsizei presets_size = 0;
+    ALbuffer *buffer = NULL;
     ALuint ltype;
     Soundfont sfont;
     RiffHdr riff;
@@ -1102,36 +980,52 @@ ALboolean loadSf2(Reader *stream, ALsoundfont *soundfont, ALCcontext *context)
 
     RiffHdr_read(&riff, stream);
     if(riff.mCode != FOURCC('R','I','F','F'))
-        ERROR_GOTO(error, "Invalid Format, expected RIFF got '%c%c%c%c'\n", FOURCCARGS(riff.mCode));
+        ERROR_GOTO(error, "Invalid Format, expected RIFF got '"FOURCCFMT"'\n", FOURCCARGS(riff.mCode));
     if((ltype=read_le32(stream)) != FOURCC('s','f','b','k'))
-        ERROR_GOTO(error, "Invalid Format, expected sfbk got '%c%c%c%c'\n", FOURCCARGS(ltype));
+        ERROR_GOTO(error, "Invalid Format, expected sfbk got '"FOURCCFMT"'\n", FOURCCARGS(ltype));
 
     if(READERR(stream) != 0)
         ERROR_GOTO(error, "Error reading file header\n");
 
     RiffHdr_read(&list, stream);
     if(list.mCode != FOURCC('L','I','S','T'))
-        ERROR_GOTO(error, "Invalid Format, expected LIST (INFO) got '%c%c%c%c'\n", FOURCCARGS(list.mCode));
+        ERROR_GOTO(error, "Invalid Format, expected LIST (INFO) got '"FOURCCFMT"'\n", FOURCCARGS(list.mCode));
     if((ltype=read_le32(stream)) != FOURCC('I','N','F','O'))
-        ERROR_GOTO(error, "Invalid Format, expected INFO got '%c%c%c%c'\n", FOURCCARGS(ltype));
+        ERROR_GOTO(error, "Invalid Format, expected INFO got '"FOURCCFMT"'\n", FOURCCARGS(ltype));
     list.mSize -= 4;
     while(list.mSize > 0 && !READERR(stream))
     {
-        RiffHdr info;
+        RiffHdr chnk;
 
-        RiffHdr_read(&info, stream);
-        list.mSize -= 8;
-        if(info.mCode == FOURCC('i','f','i','l'))
+        if(list.mSize < 8)
         {
-            if(info.mSize != 4)
-                ERR("Invalid ifil chunk size: %d\n", info.mSize);
+            WARN("Unexpected end of INFO list (%u extra bytes)\n", list.mSize);
+            skip(stream, list.mSize);
+            list.mSize = 0;
+            break;
+        }
+
+        RiffHdr_read(&chnk, stream);
+        list.mSize -= 8;
+        if(list.mSize < chnk.mSize)
+        {
+            WARN("INFO sub-chunk '"FOURCCFMT"' has %u bytes, but only %u bytes remain\n",
+                 FOURCCARGS(chnk.mCode), chnk.mSize, list.mSize);
+            skip(stream, list.mSize);
+            list.mSize = 0;
+            break;
+        }
+        list.mSize -= chnk.mSize;
+
+        if(chnk.mCode == FOURCC('i','f','i','l'))
+        {
+            if(chnk.mSize != 4)
+                ERR("Invalid ifil chunk size: %d\n", chnk.mSize);
             else
             {
                 ALushort major = read_le16(stream);
                 ALushort minor = read_le16(stream);
-
-                list.mSize -= 4;
-                info.mSize -= 4;
+                chnk.mSize -= 4;
 
                 if(major != 2)
                     ERROR_GOTO(error, "Unsupported SF2 format version: %d.%02d\n", major, minor);
@@ -1140,24 +1034,48 @@ ALboolean loadSf2(Reader *stream, ALsoundfont *soundfont, ALCcontext *context)
                 sfont.ifil = (major<<16) | minor;
             }
         }
-        else if(info.mCode == FOURCC('i','r','o','m'))
+        else if(chnk.mCode == FOURCC('i','r','o','m'))
         {
-            if(info.mSize == 0 || (info.mSize&1))
-                ERR("Invalid irom size: %d\n", info.mSize);
+            if(chnk.mSize == 0 || (chnk.mSize&1))
+                ERR("Invalid irom size: %d\n", chnk.mSize);
             else
             {
                 free(sfont.irom);
-                sfont.irom = calloc(1, info.mSize+1);
-                READ(stream, sfont.irom, info.mSize);
-
-                list.mSize -= info.mSize;
-                info.mSize -= info.mSize;
+                sfont.irom = calloc(1, chnk.mSize+1);
+                chnk.mSize -= Reader_read(stream, sfont.irom, chnk.mSize);
 
                 TRACE("SF2 ROM ID: %s\n", sfont.irom);
             }
         }
-        list.mSize -= info.mSize;
-        skip(stream, info.mSize);
+        else
+        {
+            static const struct {
+                ALuint code;
+                char title[16];
+            } listinfos[] = {
+                { FOURCC('i','s','n','g'), "Engine ID" },
+                { FOURCC('I','N','A','M'), "Name" },
+                { FOURCC('I','C','R','D'), "Creation Date" },
+                { FOURCC('I','E','N','G'), "Creator" },
+                { FOURCC('I','P','R','D'), "Product ID" },
+                { FOURCC('I','C','O','P'), "Copyright" },
+                { FOURCC('I','C','M','T'), "Comment" },
+                { FOURCC('I','S','F','T'), "Created With" },
+                { 0, "" },
+            };
+
+            for(i = 0;listinfos[i].code;i++)
+            {
+                if(listinfos[i].code == chnk.mCode)
+                {
+                    chnk.mSize -= printStringChunk(stream, &chnk, listinfos[i].title);
+                    break;
+                }
+            }
+            if(!listinfos[i].code)
+                TRACE("Skipping INFO sub-chunk '"FOURCCFMT"' (%u bytes)\n", FOURCCARGS(chnk.mCode), chnk.mSize);
+        }
+        skip(stream, chnk.mSize);
     }
 
     if(READERR(stream) != 0)
@@ -1167,46 +1085,50 @@ ALboolean loadSf2(Reader *stream, ALsoundfont *soundfont, ALCcontext *context)
 
     RiffHdr_read(&list, stream);
     if(list.mCode != FOURCC('L','I','S','T'))
-        ERROR_GOTO(error, "Invalid Format, expected LIST (sdta) got '%c%c%c%c'\n", FOURCCARGS(list.mCode));
+        ERROR_GOTO(error, "Invalid Format, expected LIST (sdta) got '"FOURCCFMT"'\n", FOURCCARGS(list.mCode));
     if((ltype=read_le32(stream)) != FOURCC('s','d','t','a'))
-        ERROR_GOTO(error, "Invalid Format, expected sdta got '%c%c%c%c'\n", FOURCCARGS(ltype));
+        ERROR_GOTO(error, "Invalid Format, expected sdta got '"FOURCCFMT"'\n", FOURCCARGS(ltype));
     list.mSize -= 4;
     {
         ALbyte *ptr;
         RiffHdr smpl;
+        ALenum err;
 
         RiffHdr_read(&smpl, stream);
         if(smpl.mCode != FOURCC('s','m','p','l'))
-            ERROR_GOTO(error, "Invalid Format, expected smpl got '%c%c%c%c'\n", FOURCCARGS(smpl.mCode));
+            ERROR_GOTO(error, "Invalid Format, expected smpl got '"FOURCCFMT"'\n", FOURCCARGS(smpl.mCode));
         list.mSize -= 8;
 
         if(smpl.mSize > list.mSize)
             ERROR_GOTO(error, "Invalid Format, sample chunk size mismatch\n");
+        list.mSize -= smpl.mSize;
 
-        if(!(ptr=realloc(soundfont->Samples, smpl.mSize)))
+        buffer = NewBuffer(context);
+        if(!buffer)
             SET_ERROR_AND_GOTO(context, AL_OUT_OF_MEMORY, error);
-        soundfont->Samples = (ALshort*)ptr;
-        soundfont->NumSamples = smpl.mSize/2;
+        /* Sample rate is unimportant, the individual fontsounds will specify it. */
+        if((err=LoadData(buffer, 22050, AL_MONO16_SOFT, smpl.mSize/2, UserFmtMono, UserFmtShort, NULL, 1, AL_FALSE)) != AL_NO_ERROR)
+            SET_ERROR_AND_GOTO(context, err, error);
 
+        ptr = buffer->data;
         if(IS_LITTLE_ENDIAN)
-            READ(stream, ptr, smpl.mSize);
+            smpl.mSize -= (ALuint)Reader_read(stream, ptr, smpl.mSize);
         else
         {
             ALuint total = 0;
-            while(total < smpl.mSize)
+            while(total < smpl.mSize && !READERR(stream))
             {
                 ALbyte buf[4096];
                 ALuint todo = minu(smpl.mSize-total, sizeof(buf));
                 ALuint i;
 
-                READ(stream, buf, todo);
+                smpl.mSize -= (ALuint)Reader_read(stream, buf, todo);
                 for(i = 0;i < todo;i++)
                     ptr[total+i] = buf[i^1];
 
                 total += todo;
             }
         }
-        list.mSize -= smpl.mSize;
 
         skip(stream, list.mSize);
     }
@@ -1216,14 +1138,14 @@ ALboolean loadSf2(Reader *stream, ALsoundfont *soundfont, ALCcontext *context)
 
     RiffHdr_read(&list, stream);
     if(list.mCode != FOURCC('L','I','S','T'))
-        ERROR_GOTO(error, "Invalid Format, expected LIST (pdta) got '%c%c%c%c'\n", FOURCCARGS(list.mCode));
+        ERROR_GOTO(error, "Invalid Format, expected LIST (pdta) got '"FOURCCFMT"'\n", FOURCCARGS(list.mCode));
     if((ltype=read_le32(stream)) != FOURCC('p','d','t','a'))
-        ERROR_GOTO(error, "Invalid Format, expected pdta got '%c%c%c%c'\n", FOURCCARGS(ltype));
+        ERROR_GOTO(error, "Invalid Format, expected pdta got '"FOURCCFMT"'\n", FOURCCARGS(ltype));
 
     //
     RiffHdr_read(&list, stream);
     if(list.mCode != FOURCC('p','h','d','r'))
-        ERROR_GOTO(error, "Invalid Format, expected phdr got '%c%c%c%c'\n", FOURCCARGS(list.mCode));
+        ERROR_GOTO(error, "Invalid Format, expected phdr got '"FOURCCFMT"'\n", FOURCCARGS(list.mCode));
     if((list.mSize%38) != 0 || list.mSize == 0)
         ERROR_GOTO(error, "Invalid Format, bad phdr size: %u\n", list.mSize);
     sfont.phdr_size = list.mSize/38;
@@ -1233,7 +1155,7 @@ ALboolean loadSf2(Reader *stream, ALsoundfont *soundfont, ALCcontext *context)
 
     RiffHdr_read(&list, stream);
     if(list.mCode != FOURCC('p','b','a','g'))
-        ERROR_GOTO(error, "Invalid Format, expected pbag got '%c%c%c%c'\n", FOURCCARGS(list.mCode));
+        ERROR_GOTO(error, "Invalid Format, expected pbag got '"FOURCCFMT"'\n", FOURCCARGS(list.mCode));
     if((list.mSize%4) != 0 || list.mSize == 0)
         ERROR_GOTO(error, "Invalid Format, bad pbag size: %u\n", list.mSize);
     sfont.pbag_size = list.mSize/4;
@@ -1243,7 +1165,7 @@ ALboolean loadSf2(Reader *stream, ALsoundfont *soundfont, ALCcontext *context)
 
     RiffHdr_read(&list, stream);
     if(list.mCode != FOURCC('p','m','o','d'))
-        ERROR_GOTO(error, "Invalid Format, expected pmod got '%c%c%c%c'\n", FOURCCARGS(list.mCode));
+        ERROR_GOTO(error, "Invalid Format, expected pmod got '"FOURCCFMT"'\n", FOURCCARGS(list.mCode));
     if((list.mSize%10) != 0 || list.mSize == 0)
         ERROR_GOTO(error, "Invalid Format, bad pmod size: %u\n", list.mSize);
     sfont.pmod_size = list.mSize/10;
@@ -1253,7 +1175,7 @@ ALboolean loadSf2(Reader *stream, ALsoundfont *soundfont, ALCcontext *context)
 
     RiffHdr_read(&list, stream);
     if(list.mCode != FOURCC('p','g','e','n'))
-        ERROR_GOTO(error, "Invalid Format, expected pgen got '%c%c%c%c'\n", FOURCCARGS(list.mCode));
+        ERROR_GOTO(error, "Invalid Format, expected pgen got '"FOURCCFMT"'\n", FOURCCARGS(list.mCode));
     if((list.mSize%4) != 0 || list.mSize == 0)
         ERROR_GOTO(error, "Invalid Format, bad pgen size: %u\n", list.mSize);
     sfont.pgen_size = list.mSize/4;
@@ -1264,7 +1186,7 @@ ALboolean loadSf2(Reader *stream, ALsoundfont *soundfont, ALCcontext *context)
     //
     RiffHdr_read(&list, stream);
     if(list.mCode != FOURCC('i','n','s','t'))
-        ERROR_GOTO(error, "Invalid Format, expected inst got '%c%c%c%c'\n", FOURCCARGS(list.mCode));
+        ERROR_GOTO(error, "Invalid Format, expected inst got '"FOURCCFMT"'\n", FOURCCARGS(list.mCode));
     if((list.mSize%22) != 0 || list.mSize == 0)
         ERROR_GOTO(error, "Invalid Format, bad inst size: %u\n", list.mSize);
     sfont.inst_size = list.mSize/22;
@@ -1274,7 +1196,7 @@ ALboolean loadSf2(Reader *stream, ALsoundfont *soundfont, ALCcontext *context)
 
     RiffHdr_read(&list, stream);
     if(list.mCode != FOURCC('i','b','a','g'))
-        ERROR_GOTO(error, "Invalid Format, expected ibag got '%c%c%c%c'\n", FOURCCARGS(list.mCode));
+        ERROR_GOTO(error, "Invalid Format, expected ibag got '"FOURCCFMT"'\n", FOURCCARGS(list.mCode));
     if((list.mSize%4) != 0 || list.mSize == 0)
         ERROR_GOTO(error, "Invalid Format, bad ibag size: %u\n", list.mSize);
     sfont.ibag_size = list.mSize/4;
@@ -1284,7 +1206,7 @@ ALboolean loadSf2(Reader *stream, ALsoundfont *soundfont, ALCcontext *context)
 
     RiffHdr_read(&list, stream);
     if(list.mCode != FOURCC('i','m','o','d'))
-        ERROR_GOTO(error, "Invalid Format, expected imod got '%c%c%c%c'\n", FOURCCARGS(list.mCode));
+        ERROR_GOTO(error, "Invalid Format, expected imod got '"FOURCCFMT"'\n", FOURCCARGS(list.mCode));
     if((list.mSize%10) != 0 || list.mSize == 0)
         ERROR_GOTO(error, "Invalid Format, bad imod size: %u\n", list.mSize);
     sfont.imod_size = list.mSize/10;
@@ -1294,7 +1216,7 @@ ALboolean loadSf2(Reader *stream, ALsoundfont *soundfont, ALCcontext *context)
 
     RiffHdr_read(&list, stream);
     if(list.mCode != FOURCC('i','g','e','n'))
-        ERROR_GOTO(error, "Invalid Format, expected igen got '%c%c%c%c'\n", FOURCCARGS(list.mCode));
+        ERROR_GOTO(error, "Invalid Format, expected igen got '"FOURCCFMT"'\n", FOURCCARGS(list.mCode));
     if((list.mSize%4) != 0 || list.mSize == 0)
         ERROR_GOTO(error, "Invalid Format, bad igen size: %u\n", list.mSize);
     sfont.igen_size = list.mSize/4;
@@ -1305,7 +1227,7 @@ ALboolean loadSf2(Reader *stream, ALsoundfont *soundfont, ALCcontext *context)
     //
     RiffHdr_read(&list, stream);
     if(list.mCode != FOURCC('s','h','d','r'))
-        ERROR_GOTO(error, "Invalid Format, expected shdr got '%c%c%c%c'\n", FOURCCARGS(list.mCode));
+        ERROR_GOTO(error, "Invalid Format, expected shdr got '"FOURCCFMT"'\n", FOURCCARGS(list.mCode));
     if((list.mSize%46) != 0 || list.mSize == 0)
         ERROR_GOTO(error, "Invalid Format, bad shdr size: %u\n", list.mSize);
     sfont.shdr_size = list.mSize/46;
@@ -1319,9 +1241,11 @@ ALboolean loadSf2(Reader *stream, ALsoundfont *soundfont, ALCcontext *context)
     if(!ensureFontSanity(&sfont))
         goto error;
 
-    presets = calloc(1, (sfont.phdr_size-1)*sizeof(presets[0]));
+    presets = calloc(1, (soundfont->NumPresets+sfont.phdr_size-1)*sizeof(presets[0]));
     if(!presets)
         ERROR_GOTO(error, "Error allocating presets\n");
+    memcpy(presets, soundfont->Presets, soundfont->NumPresets*sizeof(presets[0]));
+    presets_size = soundfont->NumPresets;
 
     for(i = 0;i < sfont.phdr_size-1;i++)
     {
@@ -1385,8 +1309,10 @@ ALboolean loadSf2(Reader *stream, ALsoundfont *soundfont, ALCcontext *context)
                         ERR("Generator %ld has invalid instrument ID (%d of %d)\n",
                             (long)(gen-sfont.pgen), gen->mAmount, sfont.inst_size-1);
                     else
-                        processInstrument(&sounds, &sounds_size, context,
-                                          &sfont.inst[gen->mAmount], &sfont.phdr[i], &sfont, &lzone);
+                        processInstrument(
+                            &sounds, &sounds_size, context, buffer, &sfont.inst[gen->mAmount],
+                            &sfont.phdr[i], &sfont, &lzone
+                        );
                     break;
                 }
                 GenModList_insertGen(&lzone, gen, AL_TRUE);
@@ -1413,7 +1339,7 @@ ALboolean loadSf2(Reader *stream, ALsoundfont *soundfont, ALCcontext *context)
         GenModList_Destruct(&gzone);
     }
 
-    for(i = 0;i < presets_size;i++)
+    for(i = soundfont->NumPresets;i < presets_size;i++)
         IncrementRef(&presets[i]->ref);
     presets = ExchangePtr((XchgPtr*)&soundfont->Presets, presets);
     ExchangeInt(&soundfont->NumPresets, presets_size);
@@ -1421,6 +1347,12 @@ ALboolean loadSf2(Reader *stream, ALsoundfont *soundfont, ALCcontext *context)
     free(presets);
 
     Soundfont_Destruct(&sfont);
+    /* If the buffer ends up unused, delete it. */
+    if(ReadRef(&buffer->ref) == 0)
+    {
+        TRACE("Deleting unused buffer...\n");
+        DeleteBuffer(context->Device, buffer);
+    }
 
     return AL_TRUE;
 
@@ -1428,12 +1360,14 @@ error:
     if(presets)
     {
         ALCdevice *device = context->Device;
-        for(i = 0;i < presets_size;i++)
-            DeletePreset(presets[i], device);
+        for(i = soundfont->NumPresets;i < presets_size;i++)
+            DeletePreset(device, presets[i]);
         free(presets);
     }
 
     Soundfont_Destruct(&sfont);
+    if(buffer)
+        DeleteBuffer(context->Device, buffer);
 
     return AL_FALSE;
 }
