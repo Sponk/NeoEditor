@@ -278,7 +278,11 @@ int main(int argc, char **argv)
 			getGlobalFilename(projName, window->getCurrentDirectory(), s_embedded_game_name);
 
 			embeddedProj.startLevel = levelName;
+			
+			Neo::GuiSystem::getInstance()->setupLuaInterface(MEngine::getInstance()->getScriptContext());
 			maratis->loadProject(&embeddedProj, projName);
+			
+
 			engine->getGame()->begin();
 			projectFound = true;
 		}
