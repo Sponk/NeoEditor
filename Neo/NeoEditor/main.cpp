@@ -512,6 +512,8 @@ int main(int argc, char **argv)
     setlocale(LC_ALL, "");
     setlocale(LC_NUMERIC, "C");
 
+    MLOG_INFO("Neo Editor version:\t" << EDITOR_VERSION_STRING);
+
     // set current directory
     char rep[256];
     getRepertory(rep, argv[0]);
@@ -523,8 +525,8 @@ int main(int argc, char **argv)
     SDL_VERSION(&compiled);
     SDL_GetVersion(&linked);
 
-    MLOG_INFO("SDL compiled version: " << (int) compiled.major << "." << (int) compiled.minor << "." << (int) compiled.patch);
-    MLOG_INFO("SDL linked version: " << (int)linked.major << "." << (int)linked.minor << "." << (int)linked.patch);
+    MLOG_INFO("SDL compiled version:\t" << (int) compiled.major << "." << (int) compiled.minor << "." << (int) compiled.patch);
+    MLOG_INFO("SDL linked version:\t" << (int)linked.major << "." << (int)linked.minor << "." << (int)linked.patch);
 
     // Don't init audio. We have OpenAL for that!
     if (SDL_Init(SDL_INIT_EVERYTHING & ~SDL_INIT_HAPTIC & ~SDL_INIT_AUDIO) != 0)
