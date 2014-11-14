@@ -50,6 +50,7 @@ GuiSystem::GuiSystem()
     m_normalBackground = MVector4(0.5,0.5,0.5,1.0);
     m_hoverBackground = MVector4(0.7,0.7,0.7,1.0);
     m_highlightBackground = MVector4(0.6,0.7,0.8,1.0);
+    m_enabled = false;
 }
 
 GuiSystem::~GuiSystem()
@@ -282,6 +283,42 @@ int clearGui()
     return 1;
 }
 
+int setNormalBackground()
+{
+	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	if(script->getArgsNumber() != 1)
+		return 0;
+
+	MVector4 vec;
+	script->getFloatArray(0, vec, 4);
+	GuiSystem::getInstance()->setNormalBackground(vec);
+	return 1;
+}
+
+int setHoverBackground()
+{
+	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	if(script->getArgsNumber() != 1)
+		return 0;
+
+	MVector4 vec;
+	script->getFloatArray(0, vec, 4);
+	GuiSystem::getInstance()->setHoverBackground(vec);
+	return 1;
+}
+
+int setHighlightBackground()
+{
+	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	if(script->getArgsNumber() != 1)
+		return 0;
+
+	MVector4 vec;
+	script->getFloatArray(0, vec, 4);
+	GuiSystem::getInstance()->setHoverBackground(vec);
+	return 1;
+}
+
 void GuiSystem::setupLuaInterface(MScriptContext* script)
 {
     script->addFunction("enableGui", enableGui);
@@ -303,6 +340,10 @@ void GuiSystem::setupLuaInterface(MScriptContext* script)
 
     script->addFunction("getWidgetPosition", getPosition);
     script->addFunction("setWidgetPosition", setPosition);
+
+    script->addFunction("setHighlightBackground", ::setHighlightBackground);
+    script->addFunction("setNormalBackground", ::setNormalBackground);
+    script->addFunction("setHoverBackground", ::setHoverBackground);
 }
 
 void GuiSystem::draw()

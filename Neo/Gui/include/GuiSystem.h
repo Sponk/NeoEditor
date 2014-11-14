@@ -79,6 +79,10 @@ public:
     MVector4 getHoverBackground() { return m_hoverBackground; }
     MVector4 getHighlightBackground() { return m_highlightBackground; }
 
+    void setNormalBackground(MVector4 color) { m_normalBackground = color; }
+    void setHoverBackground(MVector4 color) { m_hoverBackground = color; }
+    void setHighlightBackground(MVector4 color) { m_highlightBackground = color; }
+
     Widget* getWidget(unsigned int idx) { return m_widgets[idx]; }
     void addWidget(Widget* w) { m_widgets.push_back(w); }
     size_t getNumWidgets() { return m_widgets.size(); }

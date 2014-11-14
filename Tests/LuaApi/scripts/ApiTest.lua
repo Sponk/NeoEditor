@@ -106,6 +106,9 @@ end
 enableGui(1)
 mainCanvas = getMainCanvas()
 
+setNormalBackground({0.5,0.5,0.5,0.3})
+setHoverBackground({0.7,0.7,0.7,0.3})
+
 button1 = createButton(15,15,250,30,"Rotate Cube", "button1Callback")
 button2 = createButton(15,50,250,30,"More light", "button2Callback")
 button3 = createButton(15,85,250,30, "Less light", "button3Callback")
