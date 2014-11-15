@@ -48,12 +48,48 @@ getCameraFar(object);
  * @param object The distance as a number.
  */
 getCameraFogDistance(object);
+
+/**
+ * @brief Checks if the given camera is configured to be orthographic.
+ * @param object The camera.
+ * @return A boolean.
+ */
 isCameraOrtho(object);
+
+/**
+ * @brief Checks if the given camera is configured to render fog.
+ * @param object The camera.
+ * @return A boolean.
+ */
 isCameraFogEnabled(object);
 setCameraClearColor(object, {r, g, b});
+
+/**
+ * @brief Changes the field of view of the given camera.
+ * @param object The camera.
+ * @param fov The new field of view.
+ */
 setCameraFov(object, fov);
+
+/**
+ * @brief Changes the distance to the near plane of the given camera.
+ * @param object The camera.
+ * @param near The new distance.
+ */
 setCameraNear(object, near);
+
+/**
+ * @brief Changes the distance to the far plane of the given camera.
+ * @param object The camera.
+ * @param far The new distance.
+ */
 setCameraFar(object, far);
+
+/**
+ * @brief Changes the distance to the fog rendered by the given camera.
+ * @param object The camera.
+ * @param fogDistance The new distance.
+ */
 setCameraFogDistance(object, fogDistance);
 enableCameraOrtho(object, ortho);
 enableCameraFog(object, fog);
