@@ -220,8 +220,20 @@ void MBParticleSystem::draw()
     MEngine* engine = MEngine::getInstance();
     MRenderingContext* render = engine->getRenderingContext();
     MGame * game = engine->getGame();
+    MLevel* level = engine->getLevel();
 
-    if(game == NULL || m_particlePositions == NULL || m_particlesNumber == 0 || m_oldParticlesNumber != m_particlesNumber)
+    if(!level)
+        return;
+
+    MScene* scene = level->getCurrentScene();
+    if(!scene)
+        return;
+
+    MOCamera* camera = scene->getCurrentCamera();
+    if(!camera)
+        return;
+
+    if(game == NULL || m_particlePositions == NULL || m_particlesNumber == 0 || m_oldParticlesNumber != m_particlesNumber || m_particles.size() == 0)
         return;
 
     if(m_texRef == NULL || strcmp(m_currentTextureFile.getSafeString(), m_textureFile.getSafeString()))
@@ -282,7 +294,7 @@ void MBParticleSystem::draw()
     ProjModelViewMatrix = ProjMatrix * ModelViewMatrix;
     render->sendUniformMatrix(m_fx, "ProjModelViewMatrix", &ProjModelViewMatrix);
 
-    render->sendUniformVec3(m_fx, "Camera", engine->getLevel()->getCurrentScene()->getCurrentCamera()->getTransformedPosition());
+    render->sendUniformVec3(m_fx, "Camera", camera->getTransformedPosition());
     render->setPointSize(m_size);
 
     render->enableVertexArray();
