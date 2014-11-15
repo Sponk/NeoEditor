@@ -22,6 +22,7 @@ extern void delete_object_callback(Fl_Menu_*, void*);
 extern void post_effects_setup_callback(Fl_Menu_*, void*);
 extern void scene_setup_callback(Fl_Menu_*, void*);
 extern void delete_scene_callback(Fl_Menu_*, void*);
+extern void local_transform_mode_callback(Fl_Menu_*, void*);
 extern void configuration_callback(Fl_Menu_*, void*);
 extern void play_game_callback(Fl_Menu_*, void*);
 extern void update_player_callback(Fl_Menu_*, void*);

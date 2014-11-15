@@ -27,7 +27,7 @@ class EditorWindow {open
     Fl_Window {} {
       label {Neo Editor}
       callback window_quit open
-      xywh {546 258 915 620} type Double labelsize 11 align 80 resizable size_range {0 0 2048 2048} visible
+      xywh {546 286 915 620} type Double labelsize 11 align 80 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -132,6 +132,11 @@ class EditorWindow {open
             label {Delete current scene}
             callback delete_scene_callback
             xywh {0 0 100 20} labelsize 14 divider
+          }
+          MenuItem {} {
+            label {Local transform}
+            callback local_transform_mode_callback selected
+            xywh {0 0 100 20} type Toggle shortcut 0x4006c labelsize 14
           }
           MenuItem {} {
             label Configuration

@@ -32,6 +32,7 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
  {"Post Effects setup", 0,  (Fl_Callback*)post_effects_setup_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {"Scene setup", 0,  (Fl_Callback*)scene_setup_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {"Delete current scene", 0,  (Fl_Callback*)delete_scene_callback, 0, 128, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Local transform", 0x4006c,  (Fl_Callback*)local_transform_mode_callback, 0, 2, FL_NORMAL_LABEL, 0, 14, 0},
  {"Configuration", 0,  (Fl_Callback*)configuration_callback, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0},
  {"Project", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
@@ -62,7 +63,7 @@ Fl_Menu_Item EditorWindow::menu_menu_bar[] = {
  {0,0,0,0,0,0,0,0,0},
  {0,0,0,0,0,0,0,0,0}
 };
-Fl_Menu_Item* EditorWindow::behavior_menu = EditorWindow::menu_menu_bar + 39;
+Fl_Menu_Item* EditorWindow::behavior_menu = EditorWindow::menu_menu_bar + 40;
 
 #include <FL/Fl_Image.H>
 static unsigned char idata_translate[] =
@@ -254,7 +255,7 @@ Fl_Double_Window* EditorWindow::show_window() {
       menu_bar->selection_color((Fl_Color)38);
       if (!menu_menu_bar_i18n_done) {
         int i=0;
-        for ( ; i<50; i++)
+        for ( ; i<51; i++)
           if (menu_menu_bar[i].label())
             menu_menu_bar[i].label(tr(menu_menu_bar[i].label()));
         menu_menu_bar_i18n_done = 1;

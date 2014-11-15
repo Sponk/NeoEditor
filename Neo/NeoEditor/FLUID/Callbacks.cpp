@@ -2302,3 +2302,9 @@ void check_for_updates_callback(Fl_Menu_*, void*)
 
     delete connection;
 }
+
+void local_transform_mode_callback(Fl_Menu_* menu, void*)
+{
+	Maratis* maratis = Maratis::getInstance();	
+	maratis->setOrientationMode(menu->value() ? M_ORIENTATION_LOCAL: M_ORIENTATION_WORLD);
+}
