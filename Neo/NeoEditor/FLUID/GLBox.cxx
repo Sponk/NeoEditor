@@ -519,6 +519,8 @@ int GLBox::handle(int event)
             mouse_y = Fl::event_y();
 
             mouse->setPosition(mouse_x, mouse_y);
+            Maratis::getInstance()->updateCurrentAxis();
+
         break;
         }
     case FL_MOUSEWHEEL:

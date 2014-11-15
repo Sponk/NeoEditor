@@ -1949,6 +1949,73 @@ void Maratis::selectSameMesh(void)
     }
 }
 
+void Maratis::updateCurrentAxis()
+{
+    // get window
+    MWindow * window = MWindow::getInstance();
+
+    // get mouse
+    MMouse * mouse = MMouse::getInstance();
+
+    // get camera
+    MOCamera * camera = getPerspectiveVue();
+    MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();;
+
+    // viewport
+    int * viewport = camera->getCurrentViewport();
+
+    // ray (origin and dest)
+    MVector3 rayO = camera->getTransformedPosition();
+    MVector3 rayD = camera->getUnProjectedPoint(MVector3(
+                                                         (float)mouse->getXPosition(),
+                                                         (float)(window->getHeight() - mouse->getYPosition()),
+                                                         1));
+    if(camera->isOrtho())
+    {
+        MVector3 point;
+        isRayPlaneIntersection(rayD, -cameraAxis, rayO + (cameraAxis * camera->getClippingNear()), cameraAxis, &point);
+        rayO = point;
+    }
+
+    rayD = rayO + ((rayD - rayO).getNormalized() * (camera->getClippingFar() - camera->getClippingNear()));
+
+    float radius;
+    MVector3 position;
+
+    if(! camera->isOrtho())
+    {
+        radius = (camera->getFov() * 400) / (float)viewport[3];
+        MVector3 cameraDir = (*getSelectionCenter()) - rayO;
+        cameraDir.normalize();
+        position = rayO + cameraDir*200;
+    }
+    else
+    {
+        radius = (camera->getFov() * 120) / (float)viewport[3];
+        MVector3 point;
+        isRayPlaneIntersection((*getSelectionCenter()), -cameraAxis, rayO, cameraAxis, &point);
+        position = point + cameraAxis*((camera->getClippingFar() - camera->getClippingNear()) * 0.5f);
+    }
+
+    switch(getTransformMode())
+    {
+        case M_TRANSFORM_ROTATION:
+            m_currentAxis = selectEditRotation(camera, rayO, rayD, position, radius);
+            break;
+
+        case M_TRANSFORM_POSITION:
+            m_currentAxis = selectEditPosition(camera, rayO, rayD, position, radius);
+            break;
+
+        case M_TRANSFORM_SCALE:
+            m_currentAxis = selectEditScale(camera, rayO, rayD, position, radius);
+            break;
+
+        default:
+            break;
+    }
+}
+
 void Maratis::selectObjectsInMainView(MScene * scene, bool multipleSelection)
 {
     // get window
@@ -2874,6 +2941,46 @@ void Maratis::drawEditPosition(MOCamera * camera)
         }
     }
 
+    if(m_currentAxis != M_AXIS_NONE)
+    {
+        switch(m_currentAxis)
+        {
+            case M_AXIS_X:
+                render->setColor3(MVector3(1, 1, 0));
+                drawPositionAxis(M_AXIS_X, camera, &matrix, false);
+                render->setColor3(MVector3(0, 1, 0));
+                drawPositionAxis(M_AXIS_Y, camera, &matrix);
+                render->setColor3(MVector3(0, 0, 1));
+                drawPositionAxis(M_AXIS_Z, camera, &matrix);
+                return;
+
+            case M_AXIS_Y:
+                render->setColor3(MVector3(1, 1, 0));
+                drawPositionAxis(M_AXIS_Y, camera, &matrix, false);
+                render->setColor3(MVector3(1, 0, 0));
+                drawPositionAxis(M_AXIS_X, camera, &matrix);
+                render->setColor3(MVector3(0, 0, 1));
+                drawPositionAxis(M_AXIS_Z, camera, &matrix);
+                return;
+
+            case M_AXIS_Z:
+                render->setColor3(MVector3(1, 1, 0));
+                drawPositionAxis(M_AXIS_Z, camera, &matrix, false);
+                render->setColor3(MVector3(1, 0, 0));
+                drawPositionAxis(M_AXIS_X, camera, &matrix);
+                render->setColor3(MVector3(0, 1, 0));
+                drawPositionAxis(M_AXIS_Y, camera, &matrix);
+                return;
+
+            case M_AXIS_VIEW:
+                return;
+
+            default:
+                break;
+        }
+    }
+
+
     // draw axis
     render->setColor3(MVector3(1, 0, 0));
     drawPositionAxis(M_AXIS_X, camera, &matrix);
@@ -2956,6 +3063,45 @@ void Maratis::drawEditScale(MOCamera * camera)
             case M_AXIS_Z:
                 render->setColor3(MVector3(1, 1, 0));
                 drawScaleAxis(M_AXIS_Z, camera, &matrix, false);
+                return;
+
+            case M_AXIS_VIEW:
+                return;
+
+            default:
+                break;
+        }
+    }
+
+    if(m_currentAxis != M_AXIS_NONE)
+    {
+        switch(m_currentAxis)
+        {
+            case M_AXIS_X:
+                render->setColor3(MVector3(1, 1, 0));
+                drawScaleAxis(M_AXIS_X, camera, &matrix, false);
+                render->setColor3(MVector3(0, 1, 0));
+                drawScaleAxis(M_AXIS_Y, camera, &matrix);
+                render->setColor3(MVector3(0, 0, 1));
+                drawScaleAxis(M_AXIS_Z, camera, &matrix);
+                return;
+
+            case M_AXIS_Y:
+                render->setColor3(MVector3(1, 1, 0));
+                drawScaleAxis(M_AXIS_Y, camera, &matrix, false);
+                render->setColor3(MVector3(1, 0, 0));
+                drawScaleAxis(M_AXIS_X, camera, &matrix);
+                render->setColor3(MVector3(0, 0, 1));
+                drawScaleAxis(M_AXIS_Z, camera, &matrix);
+                return;
+
+            case M_AXIS_Z:
+                render->setColor3(MVector3(1, 1, 0));
+                drawScaleAxis(M_AXIS_Z, camera, &matrix, false);
+                render->setColor3(MVector3(1, 0, 0));
+                drawScaleAxis(M_AXIS_X, camera, &matrix);
+                render->setColor3(MVector3(0, 1, 0));
+                drawScaleAxis(M_AXIS_Y, camera, &matrix);
                 return;
 
             case M_AXIS_VIEW:

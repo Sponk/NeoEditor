@@ -199,6 +199,8 @@ public:
 	M_AXIS selectEditPosition(MOCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float radius);
 	M_AXIS selectEditScale(MOCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float radius);
 
+    void updateCurrentAxis();
+
 	// file browser
 	static void okAddEntity(const char * filename);
 	static void okAddSound(const char * filename);
