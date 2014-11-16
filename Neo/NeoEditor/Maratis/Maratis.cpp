@@ -2972,9 +2972,6 @@ void Maratis::drawEditPosition(MOCamera * camera)
                 drawPositionAxis(M_AXIS_Y, camera, &matrix);
                 return;
 
-            case M_AXIS_VIEW:
-                return;
-
             default:
                 break;
         }
@@ -3102,9 +3099,6 @@ void Maratis::drawEditScale(MOCamera * camera)
                 drawScaleAxis(M_AXIS_X, camera, &matrix);
                 render->setColor3(MVector3(0, 1, 0));
                 drawScaleAxis(M_AXIS_Y, camera, &matrix);
-                return;
-
-            case M_AXIS_VIEW:
                 return;
 
             default:
