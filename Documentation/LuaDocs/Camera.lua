@@ -91,11 +91,69 @@ setCameraFar(object, far);
  * @param fogDistance The new distance.
  */
 setCameraFogDistance(object, fogDistance);
+
+/**
+ * @brief Updates the cameras matrix setup to allow orthographic rendering.
+ * @param object The camera.
+ * @param ortho A boolean value representing the new state.
+ */
 enableCameraOrtho(object, ortho);
+
+/**
+ * @brief Enables fog rendering for the given camera.
+ * @param object The camera.
+ * @param fog A boolean value representing the new state.
+ */
 enableCameraFog(object, fog);
+
+/**
+ * @brief Turns the image that the given scene renders into an overlay over the given camera.
+ *
+ * For rendering the scene as an overlay the default camera in that scene is used.
+ *
+ * @param object The camera.
+ * @param scene The scene to overlay.
+ *
+ * @startcode
+ * camera = getObject("MainCamera")
+ * guiScene = getScene("GuiScene")
+ *
+ * enableCameraLayer(camera, guiScene)
+ * @endcode
+ */
 enableCameraLayer(object, scene);
+
+/**
+ * @brief Disables the scene overlay attached to the given camera.
+ * @param object The camera with the scene layer.
+ */
 disableCameraLayer(object);
-enableRenderToTexture(object, "textureName", renderWith, renderHeight);
+
+/**
+ * @brief Enables render to texture for the given camera.
+ *
+ * This function allows you to setup any camera to render to a specific
+ * material. For this you specify the texture path to the texture you want to replace.
+ * <strong>Attention:</strong> This will _not_ modify the texture on disk!
+ * 
+ * All surfaces referencing this texture file will be replaced by the rendered image.
+ *
+ * @param object The camera which is used to render the scene.
+ * @param texturePath The path to the texture file to replace.
+ * @param renderWidth The width of the render target in pixel (does not need to match the actual texture file)
+ * @param renderHeight The width of the render target in pixel (does not need to match the actual texture file)
+ *
+ * @startcode
+ * camera = getObject("MainCamera")
+ * enableRenderToTexture(camera, "maps/white.png", 1024, 1024)
+ * @endcode
+ */
+enableRenderToTexture(object, texturePath, renderWidth, renderHeight);
+
+/**
+ * @brief Disables render to texture for the given camera.
+ * @param object The camera.
+ */
 disableRenderToTexture(object);
 getProjectedPoint(object, point);
 getUnProjectedPoint(object, point);
