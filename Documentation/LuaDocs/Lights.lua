@@ -61,7 +61,7 @@ getLightSpotExponent(object);
  * @param object The light source.
  * @param color A vec3 containing the RGB values.
  *
- * @startcode
+ * @code
  * setLightColor(light, {0.5,0.5,0.5})
  * @endcode
  */

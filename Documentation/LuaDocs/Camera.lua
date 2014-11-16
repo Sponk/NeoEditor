@@ -114,7 +114,7 @@ enableCameraFog(object, fog);
  * @param object The camera.
  * @param scene The scene to overlay.
  *
- * @startcode
+ * @code
  * camera = getObject("MainCamera")
  * guiScene = getScene("GuiScene")
  *
@@ -143,7 +143,7 @@ disableCameraLayer(object);
  * @param renderWidth The width of the render target in pixel (does not need to match the actual texture file)
  * @param renderHeight The width of the render target in pixel (does not need to match the actual texture file)
  *
- * @startcode
+ * @code
  * camera = getObject("MainCamera")
  * enableRenderToTexture(camera, "maps/white.png", 1024, 1024)
  * @endcode

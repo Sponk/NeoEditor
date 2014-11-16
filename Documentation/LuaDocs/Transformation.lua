@@ -3,9 +3,10 @@
  *
  * The local parameter is optional.<br>
  * Example:<br><br>
- *
- * -- Rotate around X-Axis<br>
- * rotate(object, {1,0,0}, 90)<br>
+ * @code
+ * -- Rotate around X-Axis
+ * rotate(object, {1,0,0}, 90)
+ * @endcode
  *
  * @param object The object to rotate.
  * @param axis An vec3 containing the axis to rotate around.
