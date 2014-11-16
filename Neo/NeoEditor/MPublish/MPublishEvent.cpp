@@ -361,9 +361,9 @@ static void copyDirFiles(const char * src, const char * dest, const char * filte
 void copySysWindows(const char* projName)
 {
 #ifdef _DEBUG
-	const char * appName = "MaratisPlayerDebug.exe";
+	const char * appName = "NeoPlayerDebug.exe";
 #else
-	const char * appName = "MaratisPlayer.exe";
+	const char * appName = "NeoPlayer.exe";
 #endif
 
 	MEngine* engine = MEngine::getInstance();
@@ -384,7 +384,7 @@ void copySysWindows(const char* projName)
 			char level[256];
 			getLocalFilename(level, system->getWorkingDirectory(), proj.startLevel.c_str());
 
-			// we need the project "filename" to still be a .mproj for MaratisPlayer to behave
+			// we need the project "filename" to still be a .mproj for NeoPlayer to behave
 			// correctly
 			strcpy(ext, ".mproj");
 			embedProject(appName, destName, filename, level, proj.renderer.c_str());
@@ -400,9 +400,9 @@ void copySysWindows(const char* projName)
 void copySysOSX(const char* projName)
 {
 #ifdef _DEBUG
-	const char * appName = "MaratisPlayerDebug";
+	const char * appName = "NeoPlayerDebug";
 #else
-	const char * appName = "MaratisPlayer";
+	const char * appName = "NeoPlayer";
 #endif
 
 	MWindow * window = MWindow::getInstance();
@@ -452,9 +452,9 @@ void copySysOSX(const char* projName)
 void copySysLinux(const char* projName)
 {
 #ifdef _DEBUG
-	const char * appName = "MaratisPlayerDebug";
+	const char * appName = "NeoPlayerDebug";
 #else
-	const char * appName = "MaratisPlayer";
+	const char * appName = "NeoPlayer";
 #endif
 
 	MEngine* engine = MEngine::getInstance();
@@ -497,7 +497,7 @@ void copySysLinux(const char* projName)
 /*--------------------------------------------------------------------------------
  * MPublishEventCopySys
  * TODO: Check if there's a custom "player" executable and load that, rather than
- * MaratisPlayer
+ * NeoPlayer
  *-------------------------------------------------------------------------------*/
 class MPublishEventCopySys : public MPublishEvent
 {

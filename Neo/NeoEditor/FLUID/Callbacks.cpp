@@ -1646,7 +1646,7 @@ void play_game_callback(Fl_Menu_*, void*)
     std::string project_name = current_project.file_path.substr(current_project.file_path.find_last_of("/")+1);
     project_name = project_name.erase(project_name.find_last_of("."));
 
-    if(!isFileExist((current_project.path + "MaratisPlayer").c_str()))
+    if(!isFileExist((current_project.path + "NeoPlayer").c_str()))
     {
         MLOG_ERROR("Could not start player! Executable does not exist!");
         fl_alert(tr("Could not start player! Make sure that the executable exists and you have rights to start it.\nIf it does not exist, try the 'Update player' option in the project menu."));
@@ -1654,12 +1654,12 @@ void play_game_callback(Fl_Menu_*, void*)
     }
 
     errno = 0;
-    FILE* file = popen(("\"" + current_project.path + "MaratisPlayer\" \"" + project_name + "\" 1024 768 0 1 2>&1").c_str(), "r");
+    FILE* file = popen(("\"" + current_project.path + "NeoPlayer\" \"" + project_name + "\" 1024 768 0 1 2>&1").c_str(), "r");
 #else
 	std::string project_name = current_project.file_path.substr(current_project.file_path.find_last_of("\\")+1);
     project_name = project_name.erase(project_name.find_last_of("."));
 
-    if(!isFileExist((current_project.path + "MaratisPlayer.exe").c_str()))
+    if(!isFileExist((current_project.path + "NeoPlayer.exe").c_str()))
     {
         MLOG_ERROR("Could not start player! Executable does not exist!");
         fl_alert(tr("Could not start player! Make sure that the executable exists and you have rights to start it.\nIf it does not exist, try the 'Update player' option in the project menu."));
@@ -1667,7 +1667,7 @@ void play_game_callback(Fl_Menu_*, void*)
     }
 
     errno = 0;
-    FILE* file = _popen(("\"" + current_project.path + "MaratisPlayer.exe '" + project_name + "' 1024 768 0 1\" 2>&1").c_str(), "r");
+    FILE* file = _popen(("\"" + current_project.path + "NeoPlayer.exe '" + project_name + "' 1024 768 0 1\" 2>&1").c_str(), "r");
 #endif
 
     if(file == NULL || errno != 0)
@@ -1965,13 +1965,13 @@ void update_player_callback(Fl_Menu_*, void*)
 		return;
 
 #ifndef WIN32
-	getGlobalFilename(src, ".", "MaratisPlayer");
-	getGlobalFilename(dir, current_project.path.c_str(), "MaratisPlayer");
+	getGlobalFilename(src, ".", "NeoPlayer");
+	getGlobalFilename(dir, current_project.path.c_str(), "NeoPlayer");
 
     copyDirFiles(".", current_project.path.c_str(), ".so");   
 #else
-	getGlobalFilename(src, ".", "MaratisPlayer.exe");
-	getGlobalFilename(dir, current_project.path.c_str(), "MaratisPlayer.exe");
+	getGlobalFilename(src, ".", "NeoPlayer.exe");
+	getGlobalFilename(dir, current_project.path.c_str(), "NeoPlayer.exe");
 
 	copyDirFiles(".", current_project.path.c_str(), ".dll");
 #endif

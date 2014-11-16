@@ -208,11 +208,13 @@ int main(int argc, char **argv)
 	setlocale(LC_NUMERIC, "C");
 #endif
 	
+	MLOG_INFO("Neo Player version:\t" << PLAYER_VERSION_STRING);
+	
 	unsigned int width = 1024;
 	unsigned int height = 768;
-    int fullscreen = false;
+	int fullscreen = false;
 
-    if(argc > 2)
+	if(argc > 2)
 		sscanf(argv[2], "%d", &width);
 	if(argc > 3)
 		sscanf(argv[3], "%d", &height);
@@ -227,9 +229,9 @@ int main(int argc, char **argv)
 	// get window (first time call onstructor)
 	MWindow * window = MWindow::getInstance();
 
-    // create window
-	if(! window->create("Maratis", width, height, 32, fullscreen == 1))
-    {
+	// create window
+	if(! window->create(std::string("Neo ").append(PLAYER_VERSION_STRING).c_str(), width, height, 32, fullscreen == 1))
+	{
 		MLOG_ERROR("cannot create window");
 		return 0;
 	}
