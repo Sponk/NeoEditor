@@ -364,6 +364,7 @@ Fl_Double_Window* EditorWindow::show_window() {
     } // Fl_Group* edit_group
     { Fl_Tabs* o = new Fl_Tabs(687, 54, 267, 645);
       { Fl_Tabs* o = new Fl_Tabs(693, 75, 261, 624, tr("Object"));
+        o->hide();
         { Fl_Scroll* o = new Fl_Scroll(693, 75, 261, 624);
           { name_edit = new Fl_Input(699, 102, 171, 21, tr("Name:"));
             name_edit->callback((Fl_Callback*)edit_name_callback);
@@ -453,7 +454,6 @@ Fl_Double_Window* EditorWindow::show_window() {
       } // Fl_Tabs* o
       { special_tab = new Fl_Tabs(687, 75, 267, 624, tr("Special"));
         special_tab->box(FL_NO_BOX);
-        special_tab->hide();
         special_tab->resizable(NULL);
         special_tab->end();
       } // Fl_Tabs* special_tab
@@ -478,98 +478,103 @@ Fl_Double_Window* EditorWindow::show_window() {
 }
 
 Fl_Double_Window* EditorWindow::create_light_window() {
-  { light_window_object = new Fl_Double_Window(258, 714);
+  { light_window_object = new Fl_Double_Window(219, 558);
     light_window_object->labelsize(11);
     light_window_object->user_data((void*)(this));
-    { Fl_Group* o = new Fl_Group(5, 30, 218, 159, tr("Settings:"));
-      o->box(FL_ENGRAVED_FRAME);
-      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      { light_radius_edit = new Fl_Value_Input(18, 51, 165, 21, tr("Radius:"));
-        light_radius_edit->maximum(1e+07);
-        light_radius_edit->step(2);
-        light_radius_edit->callback((Fl_Callback*)edit_light_properties);
-        light_radius_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      } // Fl_Value_Input* light_radius_edit
-      { light_color_r = new Fl_Value_Input(18, 93, 45, 21, tr("Red:"));
-        light_color_r->step(0.1);
-        light_color_r->callback((Fl_Callback*)edit_light_properties);
-        light_color_r->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      } // Fl_Value_Input* light_color_r
-      { light_color_g = new Fl_Value_Input(69, 93, 45, 21, tr("Green:"));
-        light_color_g->step(0.1);
-        light_color_g->callback((Fl_Callback*)edit_light_properties);
-        light_color_g->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      } // Fl_Value_Input* light_color_g
-      { light_color_b = new Fl_Value_Input(123, 93, 45, 21, tr("Blue:"));
-        light_color_b->step(0.1);
-        light_color_b->callback((Fl_Callback*)edit_light_properties);
-        light_color_b->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      } // Fl_Value_Input* light_color_b
-      { light_intensity_edit = new Fl_Value_Input(18, 162, 165, 21, tr("Intensity:"));
-        light_intensity_edit->step(0.05);
-        light_intensity_edit->callback((Fl_Callback*)edit_light_properties);
-        light_intensity_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-        light_intensity_edit->soft(true);
-      } // Fl_Value_Input* light_intensity_edit
-      { Fl_Button* o = new Fl_Button(18, 117, 96, 24, tr("Choose color"));
-        o->labeltype(FL_ENGRAVED_LABEL);
-        o->labelsize(11);
-        o->callback((Fl_Callback*)choose_light_color);
-      } // Fl_Button* o
+    { Fl_Scroll* o = new Fl_Scroll(0, 3, 216, 549);
+      o->type(2);
+      { Fl_Group* o = new Fl_Group(8, 33, 205, 159, tr("Settings:"));
+        o->box(FL_ENGRAVED_FRAME);
+        o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+        { light_radius_edit = new Fl_Value_Input(21, 54, 165, 21, tr("Radius:"));
+          light_radius_edit->maximum(1e+07);
+          light_radius_edit->step(2);
+          light_radius_edit->callback((Fl_Callback*)edit_light_properties);
+          light_radius_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+        } // Fl_Value_Input* light_radius_edit
+        { light_color_r = new Fl_Value_Input(21, 96, 45, 21, tr("Red:"));
+          light_color_r->step(0.1);
+          light_color_r->callback((Fl_Callback*)edit_light_properties);
+          light_color_r->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+        } // Fl_Value_Input* light_color_r
+        { light_color_g = new Fl_Value_Input(72, 96, 45, 21, tr("Green:"));
+          light_color_g->step(0.1);
+          light_color_g->callback((Fl_Callback*)edit_light_properties);
+          light_color_g->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+        } // Fl_Value_Input* light_color_g
+        { light_color_b = new Fl_Value_Input(126, 96, 45, 21, tr("Blue:"));
+          light_color_b->step(0.1);
+          light_color_b->callback((Fl_Callback*)edit_light_properties);
+          light_color_b->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+        } // Fl_Value_Input* light_color_b
+        { light_intensity_edit = new Fl_Value_Input(21, 165, 165, 21, tr("Intensity:"));
+          light_intensity_edit->step(0.05);
+          light_intensity_edit->callback((Fl_Callback*)edit_light_properties);
+          light_intensity_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+          light_intensity_edit->soft(true);
+        } // Fl_Value_Input* light_intensity_edit
+        { Fl_Button* o = new Fl_Button(21, 120, 96, 24, tr("Choose color"));
+          o->labeltype(FL_ENGRAVED_LABEL);
+          o->labelsize(11);
+          o->callback((Fl_Callback*)choose_light_color);
+        } // Fl_Button* o
+        o->end();
+      } // Fl_Group* o
+      { Fl_Group* o = new Fl_Group(8, 213, 205, 126, tr("Spotlight:"));
+        o->box(FL_ENGRAVED_BOX);
+        o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+        { light_spot_button = new Fl_Check_Button(18, 225, 159, 24, tr("Spot"));
+          light_spot_button->down_box(FL_DOWN_BOX);
+          light_spot_button->callback((Fl_Callback*)edit_light_properties_chk_btn);
+        } // Fl_Check_Button* light_spot_button
+        { spot_angle_edit = new Fl_Value_Input(21, 267, 165, 21, tr("Spot Angle:"));
+          spot_angle_edit->maximum(90);
+          spot_angle_edit->step(1);
+          spot_angle_edit->callback((Fl_Callback*)edit_light_properties);
+          spot_angle_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+        } // Fl_Value_Input* spot_angle_edit
+        { light_spot_exponent = new Fl_Value_Input(21, 309, 165, 21, tr("Spot Exponent:"));
+          light_spot_exponent->maximum(10);
+          light_spot_exponent->step(0.01);
+          light_spot_exponent->callback((Fl_Callback*)edit_light_properties);
+          light_spot_exponent->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+        } // Fl_Value_Input* light_spot_exponent
+        o->end();
+      } // Fl_Group* o
+      { Fl_Group* o = new Fl_Group(8, 360, 205, 174, tr("Shadow:"));
+        o->box(FL_ENGRAVED_BOX);
+        o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+        { light_shadows_button = new Fl_Check_Button(24, 372, 132, 27, tr("Shadows"));
+          light_shadows_button->down_box(FL_DOWN_BOX);
+          light_shadows_button->callback((Fl_Callback*)edit_light_properties_chk_btn);
+        } // Fl_Check_Button* light_shadows_button
+        { light_shadow_bias_edit = new Fl_Value_Input(24, 417, 165, 21, tr("Shadow Bias:"));
+          light_shadow_bias_edit->maximum(10);
+          light_shadow_bias_edit->step(0.1);
+          light_shadow_bias_edit->callback((Fl_Callback*)edit_light_properties);
+          light_shadow_bias_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+        } // Fl_Value_Input* light_shadow_bias_edit
+        { light_shadow_blur_edit = new Fl_Value_Input(24, 459, 165, 21, tr("Shadow Blur:"));
+          light_shadow_blur_edit->maximum(64);
+          light_shadow_blur_edit->step(1);
+          light_shadow_blur_edit->value(2);
+          light_shadow_blur_edit->callback((Fl_Callback*)edit_light_properties);
+          light_shadow_blur_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+        } // Fl_Value_Input* light_shadow_blur_edit
+        { light_shadow_quality_edit = new Fl_Value_Input(24, 501, 165, 21, tr("Shadow Quality:"));
+          light_shadow_quality_edit->maximum(4096);
+          light_shadow_quality_edit->step(5);
+          light_shadow_quality_edit->callback((Fl_Callback*)edit_light_properties);
+          light_shadow_quality_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+        } // Fl_Value_Input* light_shadow_quality_edit
+        o->end();
+      } // Fl_Group* o
       o->end();
-    } // Fl_Group* o
-    { Fl_Group* o = new Fl_Group(5, 210, 218, 126, tr("Spotlight:"));
-      o->box(FL_ENGRAVED_BOX);
-      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      { light_spot_button = new Fl_Check_Button(15, 222, 159, 24, tr("Spot"));
-        light_spot_button->down_box(FL_DOWN_BOX);
-        light_spot_button->callback((Fl_Callback*)edit_light_properties_chk_btn);
-      } // Fl_Check_Button* light_spot_button
-      { spot_angle_edit = new Fl_Value_Input(18, 264, 165, 21, tr("Spot Angle:"));
-        spot_angle_edit->maximum(90);
-        spot_angle_edit->step(1);
-        spot_angle_edit->callback((Fl_Callback*)edit_light_properties);
-        spot_angle_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      } // Fl_Value_Input* spot_angle_edit
-      { light_spot_exponent = new Fl_Value_Input(18, 306, 165, 21, tr("Spot Exponent:"));
-        light_spot_exponent->maximum(10);
-        light_spot_exponent->step(0.01);
-        light_spot_exponent->callback((Fl_Callback*)edit_light_properties);
-        light_spot_exponent->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      } // Fl_Value_Input* light_spot_exponent
-      o->end();
-    } // Fl_Group* o
-    { Fl_Group* o = new Fl_Group(5, 357, 218, 174, tr("Shadow:"));
-      o->box(FL_ENGRAVED_BOX);
-      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      { light_shadows_button = new Fl_Check_Button(21, 369, 132, 27, tr("Shadows"));
-        light_shadows_button->down_box(FL_DOWN_BOX);
-        light_shadows_button->callback((Fl_Callback*)edit_light_properties_chk_btn);
-      } // Fl_Check_Button* light_shadows_button
-      { light_shadow_bias_edit = new Fl_Value_Input(21, 414, 165, 21, tr("Shadow Bias:"));
-        light_shadow_bias_edit->maximum(10);
-        light_shadow_bias_edit->step(0.1);
-        light_shadow_bias_edit->callback((Fl_Callback*)edit_light_properties);
-        light_shadow_bias_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      } // Fl_Value_Input* light_shadow_bias_edit
-      { light_shadow_blur_edit = new Fl_Value_Input(21, 456, 165, 21, tr("Shadow Blur:"));
-        light_shadow_blur_edit->maximum(64);
-        light_shadow_blur_edit->step(1);
-        light_shadow_blur_edit->value(2);
-        light_shadow_blur_edit->callback((Fl_Callback*)edit_light_properties);
-        light_shadow_blur_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      } // Fl_Value_Input* light_shadow_blur_edit
-      { light_shadow_quality_edit = new Fl_Value_Input(21, 498, 165, 21, tr("Shadow Quality:"));
-        light_shadow_quality_edit->maximum(4096);
-        light_shadow_quality_edit->step(5);
-        light_shadow_quality_edit->callback((Fl_Callback*)edit_light_properties);
-        light_shadow_quality_edit->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-      } // Fl_Value_Input* light_shadow_quality_edit
-      o->end();
-    } // Fl_Group* o
+      Fl_Group::current()->resizable(o);
+    } // Fl_Scroll* o
     light_window_object->position(0,0);
     light_window_object->resizable(NULL);
-    light_window_object->size_range(258, 726, 258, 726);
+    light_window_object->size_range(0, 0, 258, 714);
     light_window_object->end();
   } // Fl_Double_Window* light_window_object
   return light_window_object;

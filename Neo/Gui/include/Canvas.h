@@ -53,6 +53,10 @@ private:
     MVector4 m_clearColor;
 
     unsigned int m_width, m_height;
+    unsigned int m_fbo;
+    bool m_renderToTexture;
+    
+    MTextureRef* m_texture;
 
 public:
     static Canvas* getInstance() { static Canvas m_instance; return &m_instance; }
@@ -65,6 +69,10 @@ public:
     void addWidget(Widget* w);
     MVector4 getClearColor() { return m_clearColor; }
     void setClearColor(MVector4 vec) { m_clearColor = vec; }
+    
+    void enableRenderToTexture(const char* tex);
+    void enableRenderToTexture() { if(m_texture != NULL) m_renderToTexture = true; }
+    void disableRenderToTexture() { m_renderToTexture = false; }
 };
 }
 

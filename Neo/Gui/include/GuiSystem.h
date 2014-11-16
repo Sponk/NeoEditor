@@ -87,6 +87,8 @@ public:
     void addWidget(Widget* w) { m_widgets.push_back(w); }
     size_t getNumWidgets() { return m_widgets.size(); }
 
+    void addCanvas(Canvas* c) { if(c) m_canvasVector.push_back(c); }
+    
     // Deletes all widgets and canvases except the main canvas.
     void clear();
 };

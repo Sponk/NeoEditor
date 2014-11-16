@@ -40,9 +40,29 @@ using namespace Neo;
 void Canvas::draw()
 {
     Render* render = Render::getInstance();
+    MRenderingContext* renderingContext = MEngine::getInstance()->getRenderingContext();
     MSystemContext* system = MEngine::getInstance()->getSystemContext();
     system->getScreenSize(&m_width, &m_height);
 
+    unsigned int currentFrameBuffer = 0;
+    renderingContext->getCurrentFrameBuffer(&currentFrameBuffer);
+    
+    if(m_renderToTexture)
+    {	    
+	    if(m_fbo == 0)
+	    {
+		    renderingContext->createFrameBuffer(&m_fbo);
+	    }
+	    
+	    renderingContext->bindFrameBuffer(m_fbo);
+	    renderingContext->disableDepthTest();
+	    renderingContext->attachFrameBufferTexture(M_ATTACH_COLOR0, m_texture->getTextureId());
+	    
+	    renderingContext->setViewport(0, 0, m_texture->getWidth(), m_texture->getHeight());
+	    renderingContext->setClearColor(m_clearColor);
+	    renderingContext->clear(M_BUFFER_COLOR);
+    }
+    
     // Clear the canvas
     render->drawColoredQuad(0,0, m_width, m_height, m_clearColor);
 
@@ -51,6 +71,8 @@ void Canvas::draw()
     {
         m_widgets[i]->draw();
     }
+    
+    renderingContext->bindFrameBuffer(currentFrameBuffer);
 }
 
 void Canvas::update()
@@ -71,4 +93,37 @@ void Canvas::addWidget(Widget* w)
 void Canvas::clear()
 {
     m_widgets.clear();
+}
+
+void Canvas::enableRenderToTexture(const char* tex)
+{
+	MLevel* level = MEngine::getInstance()->getLevel();
+	MRenderingContext* render = MEngine::getInstance()->getRenderingContext();
+	MSystemContext* system = MEngine::getInstance()->getSystemContext();
+	
+	if(tex)
+	{
+		// TODO: Proper clean up!
+		m_fbo = 0;
+		
+		char globalFilename[256];
+		getGlobalFilename(globalFilename, system->getWorkingDirectory(), tex);
+		
+		m_texture = level->loadTexture(globalFilename, 0, 0);
+	
+		m_texture->clear();
+		
+		unsigned int m_colorTextureId;
+		
+		render->createTexture(&m_colorTextureId);
+		render->bindTexture(m_colorTextureId);
+		render->setTextureFilterMode(M_TEX_FILTER_LINEAR, M_TEX_FILTER_LINEAR);
+		render->setTextureUWrapMode(M_WRAP_CLAMP);
+		render->setTextureVWrapMode(M_WRAP_CLAMP);
+		render->texImage(0, m_texture->getWidth(), m_texture->getHeight(), M_UBYTE, M_RGBA, 0);
+		
+		m_texture->setTextureId(m_colorTextureId);
+	
+		m_renderToTexture = true;
+	}
 }

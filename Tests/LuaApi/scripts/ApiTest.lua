@@ -106,6 +106,11 @@ end
 enableGui(1)
 mainCanvas = getMainCanvas()
 
+secondCanvas = createCanvas()
+enableCanvasRenderToTexture(secondCanvas, "maps/neo-icon.png")
+
+setCanvasClearColor(secondCanvas, {1,0,0,1})
+
 setNormalBackground({0.5,0.5,0.5,0.3})
 setHoverBackground({0.7,0.7,0.7,0.3})
 

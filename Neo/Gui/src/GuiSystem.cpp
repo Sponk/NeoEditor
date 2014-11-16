@@ -39,6 +39,7 @@
 #include <Render.h>
 #include <Label.h>
 #include <Sprite.h>
+#include <DR_SHA1.h>
 
 using namespace Neo;
 
@@ -319,10 +320,43 @@ int setHighlightBackground()
 	return 1;
 }
 
+int enableCanvasRenderToTexture()
+{
+	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	if(script->getArgsNumber() != 2)
+		return 0;
+	
+	Canvas* c = (Canvas*) script->getPointer(0);
+	c->enableRenderToTexture(script->getString(1));
+	return 1;
+}
+
+int disableCanvasRenderToTexture()
+{
+	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	if(script->getArgsNumber() != 1)
+		return 0;
+	
+	Canvas* c = (Canvas*) script->getPointer(0);
+	c->disableRenderToTexture();
+	return 1;
+}
+
+int createCanvas()
+{
+	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	Canvas* c = new Canvas;
+	
+	GuiSystem::getInstance()->addCanvas(c);
+	script->pushPointer(c);
+	return 1;
+}
+
 void GuiSystem::setupLuaInterface(MScriptContext* script)
 {
     script->addFunction("enableGui", enableGui);
     script->addFunction("getMainCanvas", getMainCanvas);
+    script->addFunction("createCanvas", createCanvas);
     script->addFunction("getCanvasClearColor", getCanvasClearColor);
     script->addFunction("setCanvasClearColor", setCanvasClearColor);
     script->addFunction("createButton", createButton);
@@ -344,6 +378,9 @@ void GuiSystem::setupLuaInterface(MScriptContext* script)
     script->addFunction("setHighlightBackground", ::setHighlightBackground);
     script->addFunction("setNormalBackground", ::setNormalBackground);
     script->addFunction("setHoverBackground", ::setHoverBackground);
+    
+    script->addFunction("enableCanvasRenderToTexture", enableCanvasRenderToTexture);
+    script->addFunction("disableCanvasRenderToTexture", disableCanvasRenderToTexture);
 }
 
 void GuiSystem::draw()

@@ -882,6 +882,7 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
             light_window = window.create_light_window();
 
             light_window->position(window.special_tab->x()+3, window.special_tab->y());
+	    light_window->size(window.special_tab->w(), window.special_tab->h());
             window.special_tab->add(light_window);
         }
 

@@ -135,7 +135,7 @@ class EditorWindow {open
           }
           MenuItem {} {
             label {Local transform}
-            callback local_transform_mode_callback selected
+            callback local_transform_mode_callback
             xywh {0 0 100 20} type Toggle shortcut 0x4006c labelsize 14
           }
           MenuItem {} {
@@ -353,7 +353,7 @@ class EditorWindow {open
       } {
         Fl_Tabs {} {
           label Object open
-          xywh {693 75 261 624}
+          xywh {693 75 261 624} hide
         } {
           Fl_Scroll {} {open
             xywh {693 75 261 624}
@@ -450,7 +450,7 @@ class EditorWindow {open
         }
         Fl_Tabs special_tab {
           label Special open
-          xywh {687 75 267 624} box NO_BOX hide
+          xywh {687 75 267 624} box NO_BOX
           code0 {special_tab->resizable(NULL);}
         } {}
         Fl_Tabs {} {
@@ -468,91 +468,96 @@ systemColors[0] = Fl::get_color(FL_BACKGROUND_COLOR);
 systemColors[1] = Fl::get_color(FL_BACKGROUND2_COLOR);
 systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
   }
-  Function {create_light_window()} {} {
+  Function {create_light_window()} {open
+  } {
     Fl_Window light_window_object {open
-      xywh {1910 270 258 714} type Double labelsize 11 hide
+      xywh {987 155 219 558} type Double labelsize 11 resizable
       code0 {light_window_object->position(0,0);}
-      code1 {light_window_object->resizable(NULL);} size_range {258 726 258 726}
+      code1 {light_window_object->resizable(NULL);} size_range {0 0 258 714} visible
     } {
-      Fl_Group {} {
-        label {Settings:} open
-        xywh {5 30 218 159} box ENGRAVED_FRAME align 5
+      Fl_Scroll {} {open selected
+        xywh {0 3 216 549} type VERTICAL resizable
       } {
-        Fl_Value_Input light_radius_edit {
-          label {Radius:}
-          callback edit_light_properties
-          xywh {18 51 165 21} align 5 maximum 1e+07 step 2
+        Fl_Group {} {
+          label {Settings:} open
+          xywh {8 33 205 159} box ENGRAVED_FRAME align 5
+        } {
+          Fl_Value_Input light_radius_edit {
+            label {Radius:}
+            callback edit_light_properties
+            xywh {21 54 165 21} align 5 maximum 1e+07 step 2
+          }
+          Fl_Value_Input light_color_r {
+            label {Red:}
+            callback edit_light_properties
+            xywh {21 96 45 21} align 5 step 0.1
+          }
+          Fl_Value_Input light_color_g {
+            label {Green:}
+            callback edit_light_properties
+            xywh {72 96 45 21} align 5 step 0.1
+          }
+          Fl_Value_Input light_color_b {
+            label {Blue:}
+            callback edit_light_properties
+            xywh {126 96 45 21} align 5 step 0.1
+          }
+          Fl_Value_Input light_intensity_edit {
+            label {Intensity:}
+            callback edit_light_properties
+            xywh {21 165 165 21} align 5 step 0.05
+            code0 {light_intensity_edit->soft(true);}
+          }
+          Fl_Button {} {
+            label {Choose color}
+            callback choose_light_color
+            xywh {21 120 96 24} labeltype ENGRAVED_LABEL labelsize 11
+          }
         }
-        Fl_Value_Input light_color_r {
-          label {Red:}
-          callback edit_light_properties
-          xywh {18 93 45 21} align 5 step 0.1
+        Fl_Group {} {
+          label {Spotlight:} open
+          xywh {8 213 205 126} box ENGRAVED_BOX align 5
+        } {
+          Fl_Check_Button light_spot_button {
+            label Spot
+            callback edit_light_properties_chk_btn
+            xywh {18 225 159 24} down_box DOWN_BOX
+          }
+          Fl_Value_Input spot_angle_edit {
+            label {Spot Angle:}
+            callback edit_light_properties
+            xywh {21 267 165 21} align 5 maximum 90 step 1
+          }
+          Fl_Value_Input light_spot_exponent {
+            label {Spot Exponent:}
+            callback edit_light_properties
+            xywh {21 309 165 21} align 5 maximum 10 step 0.01
+          }
         }
-        Fl_Value_Input light_color_g {
-          label {Green:}
-          callback edit_light_properties
-          xywh {69 93 45 21} align 5 step 0.1
-        }
-        Fl_Value_Input light_color_b {
-          label {Blue:}
-          callback edit_light_properties
-          xywh {123 93 45 21} align 5 step 0.1
-        }
-        Fl_Value_Input light_intensity_edit {
-          label {Intensity:}
-          callback edit_light_properties
-          xywh {18 162 165 21} align 5 step 0.05
-          code0 {light_intensity_edit->soft(true);}
-        }
-        Fl_Button {} {
-          label {Choose color}
-          callback choose_light_color
-          xywh {18 117 96 24} labeltype ENGRAVED_LABEL labelsize 11
-        }
-      }
-      Fl_Group {} {
-        label {Spotlight:} open
-        xywh {5 210 218 126} box ENGRAVED_BOX align 5
-      } {
-        Fl_Check_Button light_spot_button {
-          label Spot
-          callback edit_light_properties_chk_btn
-          xywh {15 222 159 24} down_box DOWN_BOX
-        }
-        Fl_Value_Input spot_angle_edit {
-          label {Spot Angle:}
-          callback edit_light_properties
-          xywh {18 264 165 21} align 5 maximum 90 step 1
-        }
-        Fl_Value_Input light_spot_exponent {
-          label {Spot Exponent:}
-          callback edit_light_properties
-          xywh {18 306 165 21} align 5 maximum 10 step 0.01
-        }
-      }
-      Fl_Group {} {
-        label {Shadow:} open
-        xywh {5 357 218 174} box ENGRAVED_BOX align 5
-      } {
-        Fl_Check_Button light_shadows_button {
-          label Shadows
-          callback edit_light_properties_chk_btn
-          xywh {21 369 132 27} down_box DOWN_BOX
-        }
-        Fl_Value_Input light_shadow_bias_edit {
-          label {Shadow Bias:}
-          callback edit_light_properties
-          xywh {21 414 165 21} align 5 maximum 10 step 0.1
-        }
-        Fl_Value_Input light_shadow_blur_edit {
-          label {Shadow Blur:}
-          callback edit_light_properties
-          xywh {21 456 165 21} align 5 maximum 64 step 1 value 2
-        }
-        Fl_Value_Input light_shadow_quality_edit {
-          label {Shadow Quality:}
-          callback edit_light_properties
-          xywh {21 498 165 21} align 5 maximum 4096 step 5
+        Fl_Group {} {
+          label {Shadow:} open
+          xywh {8 360 205 174} box ENGRAVED_BOX align 5
+        } {
+          Fl_Check_Button light_shadows_button {
+            label Shadows
+            callback edit_light_properties_chk_btn
+            xywh {24 372 132 27} down_box DOWN_BOX
+          }
+          Fl_Value_Input light_shadow_bias_edit {
+            label {Shadow Bias:}
+            callback edit_light_properties
+            xywh {24 417 165 21} align 5 maximum 10 step 0.1
+          }
+          Fl_Value_Input light_shadow_blur_edit {
+            label {Shadow Blur:}
+            callback edit_light_properties
+            xywh {24 459 165 21} align 5 maximum 64 step 1 value 2
+          }
+          Fl_Value_Input light_shadow_quality_edit {
+            label {Shadow Quality:}
+            callback edit_light_properties
+            xywh {24 501 165 21} align 5 maximum 4096 step 5
+          }
         }
       }
     }
