@@ -15,3 +15,5 @@ Additional/AndroidApp/gen
 Additional/AndroidApp/bin
 Additional/AndroidApp/assets/*
 .directory
+profile.txt
+*.kdev4
