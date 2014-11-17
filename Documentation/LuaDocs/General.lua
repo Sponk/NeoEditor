@@ -10,7 +10,7 @@ vec3(float x, float y, float z);
 
 /**
  * @brief Calculates the length of a 3D vector.
- * @param The 3D vector to use.
+ * @param vec3 The 3D vector to use.
  * @return The length of the vector.
  */
 length(vec3);
@@ -21,7 +21,7 @@ length(vec3);
  * This function takes the input vector and transforms it
  * to a new vector with the length 1.0f.
  *
- * @param The vector to normalize.
+ * @param vec3 The vector to normalize.
  * @return The normalized vec3.
  */
 normalize(vec3);

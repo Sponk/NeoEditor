@@ -155,5 +155,35 @@ enableRenderToTexture(object, texturePath, renderWidth, renderHeight);
  * @param object The camera.
  */
 disableRenderToTexture(object);
+
+/**
+ * @brief Converts global vector to a projected vector inside the given camera viewport.
+ *
+ * @param object The camera.
+ * @param point A vec3 containing positional data.
+ * @return A vec3 containing the transformed vector.
+ */
 getProjectedPoint(object, point);
+
+/**
+ * @brief Converts a projected vector to a global vector using the given camera.
+ *
+ * This conversion uses the camera to determine the global coordinates for a
+ * perspectively transformed point. This can be used to generate a ray for use in
+ * raytracing as shown in the example.
+ *
+ * @code
+ * camera = getObject("MainCamera")
+ *
+ * -- Start the ray at the center of the screen
+ * p1 = getUnProjectedPoint(camera, vec3(0.5, 0.5, 0))
+ * p2 = getUnProjectedPoint(camera, vec3(0.5, 0.5, 1))
+ * 
+ * point, object = rayHit(p1, p2)
+ * @endcode
+ *
+ * @param object The camera to use.
+ * @param point A vec3 containing positional data.
+ * @return A vec3 containing the converted data.
+ */
 getUnProjectedPoint(object, point);
