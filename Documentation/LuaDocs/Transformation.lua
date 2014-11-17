@@ -103,10 +103,45 @@ getTransformedRotation(object);
  * @return A vec3 containing the current scale.
  */
 getTransformedScale(object);
-getInverseRotatedVector(object);
-getRotatedVector(object);
-getInverseVector(object);
-getTransformedVector(object);
+
+/**
+ * @brief Calculates the inverse rotated vector according to the matrix of the object.
+ *
+ * @param object The object.
+ * @param vector The vec3 containing positional data.
+ * @return A vec3 with the transformed data.
+ */
+getInverseRotatedVector(object, vector);
+
+/**
+ * @brief Rotates the given vector according to the matrix of the given object.
+ *
+ * @param object The object.
+ * @param vector The vec3 containing positional data.
+ * @return A vec3 with the transformed data.
+ */
+getRotatedVector(object, vector);
+
+/**
+ * @brief Calculates the inverse vector according to the matrix of the object.
+ *
+ * This can be useful for converting global vectors into local vectors.
+ *
+ * @param object The object.
+ * @param vector The vec3 containing positional data.
+ * @return A vec3 with the transformed data.
+ */
+getInverseVector(object, vector);
+
+/**
+ * @brief Multiplies the given with the matrix of the given object.
+ *
+ * This is useful for converting local to global coordinates.
+ * @param object The object.
+ * @param vector The vec3 containing positional data.
+ * @return A vec3 with the transformed data.
+ */
+getTransformedVector(object, vector);
 
 /**
  * @brief Recalculates the matrix of the given object.
