@@ -331,6 +331,10 @@ function addProperty(settings, object)
         addBehavior(object, settings["@name"])
         local idx = getBehaviorsNumber(object) - 1
         
+	if idx < 0 then
+		debugLog("Could not add property to object!")
+	end
+
         properties = settings.BehaviorProperty
         
         -- Properties
