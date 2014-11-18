@@ -4132,7 +4132,7 @@ int getBehaviorsNumber(lua_State * L)
     }
 
     lua_pushnumber(L, -1);
-    return 0;
+    return 1;
 }
 
 int getBehaviorName(lua_State * L)
