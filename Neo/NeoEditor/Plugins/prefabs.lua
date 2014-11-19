@@ -333,6 +333,7 @@ function addProperty(settings, object)
         
 	if idx < 0 then
 		debugLog("Could not add property to object!")
+		return
 	end
 
         properties = settings.BehaviorProperty
