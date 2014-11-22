@@ -33,12 +33,12 @@
 
 
 // Fixed Renderer
-class MFixedRenderer : public MRenderer
+class FixedRenderer : public MRenderer
 {
 public:
 	
-	MFixedRenderer(void);
-	~MFixedRenderer(void);
+	FixedRenderer(void);
+	~FixedRenderer(void);
 	
 private:
 	

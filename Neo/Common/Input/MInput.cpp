@@ -34,7 +34,7 @@
 #include "MVector3.h"
 
 
-MInput::MInput(void)
+Input::Input(void)
 {
 	// ASCII keys
 	char name[2] = {0, 0};
@@ -196,16 +196,16 @@ MInput::MInput(void)
 	createAxis("JOY4_AXIS_TRIGGERRIGHT");
 }
 
-MInput::~MInput(void)
+Input::~Input(void)
 {}
 
-void MInput::createKey(const char * name)
+void Input::createKey(const char * name)
 {
 	if(name)
 		m_keys[name] = 0;
 }
 
-void MInput::createAxis(const char * name, bool flush)
+void Input::createAxis(const char * name, bool flush)
 {
 	if(name)
 	{
@@ -214,41 +214,41 @@ void MInput::createAxis(const char * name, bool flush)
 	}
 }
 
-void MInput::createProperty(const char * name)
+void Input::createProperty(const char * name)
 {
 	if(name)
 		m_props[name] = 0;
 }
 
-void MInput::downKey(const char * name)
+void Input::downKey(const char * name)
 {
 	map<string, int>::iterator iter = m_keys.find(name);
 	if(iter != m_keys.end())
 		iter->second = 1;
 }
 
-void MInput::upKey(const char * name)
+void Input::upKey(const char * name)
 {
 	map<string, int>::iterator iter = m_keys.find(name);
 	if(iter != m_keys.end())
 		iter->second = 3;
 }
 
-void MInput::setAxis(const char * name, float axis)
+void Input::setAxis(const char * name, float axis)
 {
 	map<string, float>::iterator iter = m_axis.find(name);
 	if(iter != m_axis.end())
 		iter->second = axis;
 }
 
-void MInput::setProperty(const char * name, int prop)
+void Input::setProperty(const char * name, int prop)
 {
 	map<string, int>::iterator iter = m_props.find(name);
 	if(iter != m_props.end())
 		iter->second = prop;
 }
 
-bool MInput::isKeyPressed(const char * name)
+bool Input::isKeyPressed(const char * name)
 {
 	map<string, int>::iterator iter = m_keys.find(name);
 	if(iter != m_keys.end())
@@ -257,7 +257,7 @@ bool MInput::isKeyPressed(const char * name)
 	return false;
 }
 
-bool MInput::onKeyDown(const char * name)
+bool Input::onKeyDown(const char * name)
 {
 	map<string, int>::iterator iter = m_keys.find(name);
 	if(iter != m_keys.end())
@@ -266,7 +266,7 @@ bool MInput::onKeyDown(const char * name)
 	return false;
 }
 
-bool MInput::onKeyUp(const char * name)
+bool Input::onKeyUp(const char * name)
 {
 	map<string, int>::iterator iter = m_keys.find(name);
 	if(iter != m_keys.end())
@@ -275,7 +275,7 @@ bool MInput::onKeyUp(const char * name)
 	return false;
 }
 
-float MInput::getAxis(const char * name)
+float Input::getAxis(const char * name)
 {
 	map<string, float>::iterator iter = m_axis.find(name);
 	if(iter != m_axis.end())
@@ -284,7 +284,7 @@ float MInput::getAxis(const char * name)
 	return 0;
 }
 
-int MInput::getProperty(const char * name)
+int Input::getProperty(const char * name)
 {
 	map<string, int>::iterator iter = m_props.find(name);
 	if(iter != m_props.end())
@@ -293,7 +293,7 @@ int MInput::getProperty(const char * name)
 	return 0;
 }
 
-void MInput::beginTouch(int touchID, MVector2 touchPoint)
+void Input::beginTouch(int touchID, MVector2 touchPoint)
 {
     map<int, TouchData>::iterator iter = m_touches.find(touchID);
     
@@ -306,7 +306,7 @@ void MInput::beginTouch(int touchID, MVector2 touchPoint)
     }
 }
 
-void MInput::updateTouch(int touchID, MVector2 touchPoint)
+void Input::updateTouch(int touchID, MVector2 touchPoint)
 {
     map<int, TouchData>::iterator iter = m_touches.find(touchID);
     
@@ -319,7 +319,7 @@ void MInput::updateTouch(int touchID, MVector2 touchPoint)
     }
 }
 
-void MInput::endTouch(int touchID, MVector2 touchPoint)
+void Input::endTouch(int touchID, MVector2 touchPoint)
 {
     map<int, TouchData>::iterator iter = m_touches.find(touchID);
     
@@ -332,7 +332,7 @@ void MInput::endTouch(int touchID, MVector2 touchPoint)
     }
 }
 
-void MInput::cancelTouch(int touchID, MVector2 touchPoint)
+void Input::cancelTouch(int touchID, MVector2 touchPoint)
 {
     map<int, TouchData>::iterator iter = m_touches.find(touchID);
     
@@ -345,7 +345,7 @@ void MInput::cancelTouch(int touchID, MVector2 touchPoint)
     }
 }
 
-MVector2 MInput::getTouchPosition(int touchID)
+MVector2 Input::getTouchPosition(int touchID)
 {
     map<int, TouchData>::iterator iter = m_touches.find(touchID);
     
@@ -362,7 +362,7 @@ MVector2 MInput::getTouchPosition(int touchID)
     return MVector2(0.0f);
 }
 
-MVector2 MInput::getLastTouchPosition(int touchID)
+MVector2 Input::getLastTouchPosition(int touchID)
 {
     map<int, TouchData>::iterator iter = m_touches.find(touchID);
     
@@ -378,7 +378,7 @@ MVector2 MInput::getLastTouchPosition(int touchID)
     return MVector2(0.0f);
 }
 
-M_TOUCH_PHASE MInput::getTouchPhase(int touchID)
+M_TOUCH_PHASE Input::getTouchPhase(int touchID)
 {
     map<int, TouchData>::iterator iter = m_touches.find(touchID);
     
@@ -392,7 +392,7 @@ M_TOUCH_PHASE MInput::getTouchPhase(int touchID)
     return M_TOUCH_NONE;
 }
 
-void MInput::flush(void)
+void Input::flush(void)
 {
 	// keys
 	map<string, int>::iterator

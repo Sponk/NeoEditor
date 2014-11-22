@@ -36,7 +36,7 @@
 #include <MCore.h>
 #define MAX_MRCLIGHTS 8
 
-class MGLContext : public MRenderingContext
+class GLContext : public MRenderingContext
 {
 private:
 
@@ -65,8 +65,8 @@ private:
 
 public:
 
-	MGLContext(void);
-	~MGLContext(void);
+	GLContext(void);
+	~GLContext(void);
 
 	// version
     const char * getRendererVersion(void) { return m_gl_version; }

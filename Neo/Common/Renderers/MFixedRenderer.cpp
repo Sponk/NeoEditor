@@ -36,7 +36,7 @@
 // Init
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-MFixedRenderer::MFixedRenderer(void):
+FixedRenderer::FixedRenderer(void):
 m_verticesNumber(0),
 m_normalsNumber(0),
 m_vertices(NULL),
@@ -44,21 +44,21 @@ m_normals(NULL)
 {
 }
 
-MFixedRenderer::~MFixedRenderer(void)
+FixedRenderer::~FixedRenderer(void)
 {
 	// delete skin cache
 	SAFE_DELETE_ARRAY(m_vertices);
 	SAFE_DELETE_ARRAY(m_normals);
 }
 
-void MFixedRenderer::destroy(void)
+void FixedRenderer::destroy(void)
 {
 	delete this;
 }
 
-MRenderer * MFixedRenderer::getNew(void)
+MRenderer * FixedRenderer::getNew(void)
 {
-	return new MFixedRenderer();
+	return new FixedRenderer();
 }
 
 
@@ -66,7 +66,7 @@ MRenderer * MFixedRenderer::getNew(void)
 // Drawing
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-MVector3 * MFixedRenderer::getVertices(unsigned int size)
+MVector3 * FixedRenderer::getVertices(unsigned int size)
 {
 	if(size == 0)
 		return NULL;
@@ -81,7 +81,7 @@ MVector3 * MFixedRenderer::getVertices(unsigned int size)
 	return m_vertices;
 }
 
-MVector3 * MFixedRenderer::getNormals(unsigned int size)
+MVector3 * FixedRenderer::getNormals(unsigned int size)
 {
 	if(size == 0)
 		return NULL;
@@ -96,7 +96,7 @@ MVector3 * MFixedRenderer::getNormals(unsigned int size)
 	return m_normals;
 }
 
-void MFixedRenderer::updateSkinning(MMesh * mesh, MArmature * armature)
+void FixedRenderer::updateSkinning(MMesh * mesh, MArmature * armature)
 {
 	unsigned int s;
 	unsigned int sSize = mesh->getSubMeshsNumber();
@@ -124,7 +124,7 @@ void MFixedRenderer::updateSkinning(MMesh * mesh, MArmature * armature)
 	mesh->updateBoundingBox();
 }
 
-void MFixedRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices, MVector3 * normals, MColor * colors)
+void FixedRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices, MVector3 * normals, MColor * colors)
 {
 	MEngine * engine = MEngine::getInstance();
 	MRenderingContext * render = engine->getRenderingContext();
@@ -348,7 +348,7 @@ void MFixedRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVector
 	}
 }
 
-void MFixedRenderer::drawDisplayTriangles(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices)
+void FixedRenderer::drawDisplayTriangles(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices)
 {
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
@@ -403,7 +403,7 @@ void MFixedRenderer::drawDisplayTriangles(MSubMesh * subMesh, MDisplay * display
 	render->bindFX(0);
 }
 
-void MFixedRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature)
+void FixedRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature)
 {
 	// data
 	MVector3 * vertices = subMesh->getVertices();
@@ -446,7 +446,7 @@ void MFixedRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature)
 	}
 }
 
-void MFixedRenderer::drawTransparents(MSubMesh * subMesh, MArmature * armature)
+void FixedRenderer::drawTransparents(MSubMesh * subMesh, MArmature * armature)
 {
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
@@ -512,7 +512,7 @@ void MFixedRenderer::drawTransparents(MSubMesh * subMesh, MArmature * armature)
 	//render->setDepthMask(1);
 }
 
-float MFixedRenderer::getDistanceToCam(MOCamera * camera, const MVector3 & pos)
+float FixedRenderer::getDistanceToCam(MOCamera * camera, const MVector3 & pos)
 {
 	if(! camera->isOrtho())
 	{
@@ -524,7 +524,7 @@ float MFixedRenderer::getDistanceToCam(MOCamera * camera, const MVector3 & pos)
 	return dist*dist;
 }
 
-void MFixedRenderer::updateVisibility(MScene * scene, MOCamera * camera)
+void FixedRenderer::updateVisibility(MScene * scene, MOCamera * camera)
 {
 	// make frustum
 	camera->getFrustum()->makeVolume(camera);
@@ -540,7 +540,7 @@ void MFixedRenderer::updateVisibility(MScene * scene, MOCamera * camera)
 	}
 }
 
-void MFixedRenderer::enableFog(MOCamera * camera)
+void FixedRenderer::enableFog(MOCamera * camera)
 {
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
@@ -560,7 +560,7 @@ void MFixedRenderer::enableFog(MOCamera * camera)
 	render->setFogDistance(fogMin, camera->getClippingFar());
 }
 
-void MFixedRenderer::drawText(MOText * textObj)
+void FixedRenderer::drawText(MOText * textObj)
 {
 	MFont * font = textObj->getFont();
 	const char * text = textObj->getText();
@@ -667,7 +667,7 @@ void MFixedRenderer::drawText(MOText * textObj)
 	render->setDepthMask(1);
 }
 
-void MFixedRenderer::drawScene(MScene * scene, MOCamera * camera)
+void FixedRenderer::drawScene(MScene * scene, MOCamera * camera)
 {
 	struct MEntityLight
 	{

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MCore
-// MGLContext.cpp
+// GLContext.cpp
 //
 // OpenGL-Glew Rendering Context
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -176,7 +176,7 @@ GLenum returnAttachType(M_FRAME_BUFFER_ATTACHMENT type)
 		return GL_COLOR_ATTACHMENT0_EXT + ((int)type - 2);
 }
 
-MGLContext::MGLContext(void):
+GLContext::GLContext(void):
 m_currentFrameBuffer(0)
 {
     GLenum err = glewInit();
@@ -239,11 +239,11 @@ m_currentFrameBuffer(0)
 	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
 }
 
-MGLContext::~MGLContext(void)
+GLContext::~GLContext(void)
 {}
 
 // view
-void MGLContext::setPerspectiveView(float fov, float ratio, float zNear, float zFar)
+void GLContext::setPerspectiveView(float fov, float ratio, float zNear, float zFar)
 {
 	MMatrix4x4 matrix;
 
@@ -281,17 +281,17 @@ void MGLContext::setPerspectiveView(float fov, float ratio, float zNear, float z
 	multMatrix(&matrix);
 }
 
-void MGLContext::setOrthoView(float left, float right, float bottom, float top, float zNear, float zFar){
+void GLContext::setOrthoView(float left, float right, float bottom, float top, float zNear, float zFar){
 	glOrtho(left, right, bottom, top, zNear, zFar);
 }
 
 // viewport
-void MGLContext::setViewport(int x, int y, unsigned int width, unsigned int height){
+void GLContext::setViewport(int x, int y, unsigned int width, unsigned int height){
 	glViewport(x, y, width, height);
 }
 
 // clear
-void MGLContext::clear(int buffer)
+void GLContext::clear(int buffer)
 {
 	switch(buffer)
 	{
@@ -325,32 +325,32 @@ void MGLContext::clear(int buffer)
 	}
 }
 
-void MGLContext::setClearColor(const MVector4 & color){
+void GLContext::setClearColor(const MVector4 & color){
 	glClearColor(color.x, color.y, color.z, color.w);
 }
 
 // texture
-void MGLContext::enableTexture(void)
+void GLContext::enableTexture(void)
 {
 	glEnable(GL_TEXTURE_2D);
 }
 
-void MGLContext::disableTexture(void)
+void GLContext::disableTexture(void)
 {
 	glDisable(GL_TEXTURE_2D);
 }
 
-void MGLContext::setTextureGenMode(M_TEX_GEN_MODES mode)
+void GLContext::setTextureGenMode(M_TEX_GEN_MODES mode)
 {
 }
 
-void MGLContext::setTextureFilterMode(M_TEX_FILTER_MODES min, M_TEX_FILTER_MODES mag)
+void GLContext::setTextureFilterMode(M_TEX_FILTER_MODES min, M_TEX_FILTER_MODES mag)
 {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, returnTexFilterMode(min));
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, returnTexFilterMode(mag));
 }
 
-void MGLContext::setTextureUWrapMode(M_WRAP_MODES wrap)
+void GLContext::setTextureUWrapMode(M_WRAP_MODES wrap)
 {
 	int glWrap = GL_REPEAT;
 	if(wrap == M_WRAP_CLAMP)
@@ -359,7 +359,7 @@ void MGLContext::setTextureUWrapMode(M_WRAP_MODES wrap)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, glWrap);
 }
 
-void MGLContext::setTextureVWrapMode(M_WRAP_MODES wrap)
+void GLContext::setTextureVWrapMode(M_WRAP_MODES wrap)
 {
 	int glWrap = GL_REPEAT;
 	if(wrap == M_WRAP_CLAMP)
@@ -368,7 +368,7 @@ void MGLContext::setTextureVWrapMode(M_WRAP_MODES wrap)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, glWrap);
 }
 
-void MGLContext::setTextureCombineMode(M_TEX_COMBINE_MODES combine)
+void GLContext::setTextureCombineMode(M_TEX_COMBINE_MODES combine)
 {
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_ARB);
 
@@ -392,24 +392,24 @@ void MGLContext::setTextureCombineMode(M_TEX_COMBINE_MODES combine)
 	}
 }
 
-void MGLContext::bindTexture(unsigned int textureId, unsigned int multitextureId)
+void GLContext::bindTexture(unsigned int textureId, unsigned int multitextureId)
 {
 	glActiveTexture(GL_TEXTURE0 + multitextureId);
 	glClientActiveTexture(GL_TEXTURE0 + multitextureId);
 	glBindTexture(GL_TEXTURE_2D, textureId);
 }
 
-void MGLContext::createTexture(unsigned int * textureId)
+void GLContext::createTexture(unsigned int * textureId)
 {
 	glGenTextures(1, textureId);
 }
 
-void MGLContext::deleteTexture(unsigned int * textureId)
+void GLContext::deleteTexture(unsigned int * textureId)
 {
 	glDeleteTextures(1, textureId);
 }
 
-void MGLContext::sendTextureImage(MImage * image, bool mipMap, bool filter, bool compress)
+void GLContext::sendTextureImage(MImage * image, bool mipMap, bool filter, bool compress)
 {
 	// get properties
 	unsigned int bytePerPix = image->getComponents();
@@ -479,7 +479,7 @@ void MGLContext::sendTextureImage(MImage * image, bool mipMap, bool filter, bool
 	*/
 }
 
-void MGLContext::texImage(unsigned int level, unsigned int width, unsigned int height, M_TYPES type, M_TEX_MODES mode, const void * pixels)
+void GLContext::texImage(unsigned int level, unsigned int width, unsigned int height, M_TYPES type, M_TEX_MODES mode, const void * pixels)
 {
 	GLenum format = returnTexMode(mode);
 	GLenum intFormat = format;
@@ -491,7 +491,7 @@ void MGLContext::texImage(unsigned int level, unsigned int width, unsigned int h
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy); // anisotropic filtering
 }
 
-void MGLContext::texSubImage(unsigned int level, int xoffset, int yoffset, unsigned int width, unsigned int height, M_TYPES type, M_TEX_MODES mode, const void * pixels)
+void GLContext::texSubImage(unsigned int level, int xoffset, int yoffset, unsigned int width, unsigned int height, M_TYPES type, M_TEX_MODES mode, const void * pixels)
 {
 	GLenum format = returnTexMode(mode);
 	glTexSubImage2D(GL_TEXTURE_2D, level, xoffset, yoffset, width, height, format, returnGLType(type), pixels);
@@ -499,11 +499,11 @@ void MGLContext::texSubImage(unsigned int level, int xoffset, int yoffset, unsig
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy); // anisotropic filtering
 }
 
-void MGLContext::generateMipMap(void){
+void GLContext::generateMipMap(void){
 	glGenerateMipmapEXT(GL_TEXTURE_2D);
 }
 
-void MGLContext::getTexImage(unsigned int level, MImage * image)
+void GLContext::getTexImage(unsigned int level, MImage * image)
 {
 	if(image)
 	{
@@ -564,28 +564,28 @@ void CHECK_FRAMEBUFFER_STATUS()
 }
 
 
-void MGLContext::createFrameBuffer(unsigned int * frameBufferId){
+void GLContext::createFrameBuffer(unsigned int * frameBufferId){
 	glGenFramebuffersEXT(1, frameBufferId);
 }
-void MGLContext::deleteFrameBuffer(unsigned int * frameBufferId){
+void GLContext::deleteFrameBuffer(unsigned int * frameBufferId){
 	glDeleteFramebuffersEXT(1, frameBufferId);
 }
-void MGLContext::bindFrameBuffer(unsigned int frameBufferId){
+void GLContext::bindFrameBuffer(unsigned int frameBufferId){
 	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, frameBufferId);
 	m_currentFrameBuffer = frameBufferId;
 }
-void MGLContext::getCurrentFrameBuffer(unsigned int * frameBufferId){
+void GLContext::getCurrentFrameBuffer(unsigned int * frameBufferId){
 	(*frameBufferId) = m_currentFrameBuffer;
 }
-void MGLContext::attachFrameBufferTexture(M_FRAME_BUFFER_ATTACHMENT attachment, unsigned int textureId){
+void GLContext::attachFrameBufferTexture(M_FRAME_BUFFER_ATTACHMENT attachment, unsigned int textureId){
 	glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, returnAttachType(attachment), GL_TEXTURE_2D, textureId, 0);
 }
-void MGLContext::attachFrameBufferRB(M_FRAME_BUFFER_ATTACHMENT attachment, unsigned int renderBufferId){
+void GLContext::attachFrameBufferRB(M_FRAME_BUFFER_ATTACHMENT attachment, unsigned int renderBufferId){
 	glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, returnAttachType(attachment), GL_RENDERBUFFER_EXT, renderBufferId);
 
 	CHECK_FRAMEBUFFER_STATUS();
 }
-void MGLContext::setDrawingBuffers(M_FRAME_BUFFER_ATTACHMENT * buffers, unsigned int size)
+void GLContext::setDrawingBuffers(M_FRAME_BUFFER_ATTACHMENT * buffers, unsigned int size)
 {
 	if(size == 0)
 	{
@@ -608,19 +608,19 @@ void MGLContext::setDrawingBuffers(M_FRAME_BUFFER_ATTACHMENT * buffers, unsigned
 }
 
 // render buffer
-void MGLContext::createRenderBuffer(unsigned int * renderBufferId){
+void GLContext::createRenderBuffer(unsigned int * renderBufferId){
 	glGenRenderbuffersEXT(1, renderBufferId);
 }
 
-void MGLContext::deleteRenderBuffer(unsigned int * renderBufferId){
+void GLContext::deleteRenderBuffer(unsigned int * renderBufferId){
 	glDeleteRenderbuffersEXT(1, renderBufferId);
 }
 
-void MGLContext::bindRenderBuffer(unsigned int renderBufferId){
+void GLContext::bindRenderBuffer(unsigned int renderBufferId){
 	glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, renderBufferId);
 }
 
-void MGLContext::setRenderBuffer(M_RENDER_BUFFER_MODES mode, unsigned int width, unsigned int height)
+void GLContext::setRenderBuffer(M_RENDER_BUFFER_MODES mode, unsigned int width, unsigned int height)
 {
 	GLenum internalMode;
 
@@ -643,19 +643,19 @@ void MGLContext::setRenderBuffer(M_RENDER_BUFFER_MODES mode, unsigned int width,
 }
 
 // shaders
-void MGLContext::createVertexShader(unsigned int * shaderId){
+void GLContext::createVertexShader(unsigned int * shaderId){
 	*shaderId = (unsigned int)(unsigned long)glCreateShaderObjectARB(GL_VERTEX_SHADER_ARB);
 }
 
-void MGLContext::createPixelShader(unsigned int * shaderId){
+void GLContext::createPixelShader(unsigned int * shaderId){
 	*shaderId = (unsigned int)(unsigned long)glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
 }
 
-void MGLContext::deleteShader(unsigned int * shaderId){
+void GLContext::deleteShader(unsigned int * shaderId){
 	glDeleteObjectARB((GLhandleARB)(*shaderId));
 }
 
-bool MGLContext::sendShaderSource(unsigned int shaderId, const char * source)
+bool GLContext::sendShaderSource(unsigned int shaderId, const char * source)
 {
 	glShaderSourceARB((GLhandleARB)shaderId, 1, &source, NULL);
 	glCompileShaderARB((GLhandleARB)shaderId);
@@ -675,11 +675,11 @@ bool MGLContext::sendShaderSource(unsigned int shaderId, const char * source)
 }
 
 // FX
-void MGLContext::bindFX(unsigned int fxId){
+void GLContext::bindFX(unsigned int fxId){
 	glUseProgramObjectARB((GLhandleARB)fxId);
 }
 
-void MGLContext::createFX(unsigned int * fxId, unsigned int vertexShaderId, unsigned int pixelShaderId)
+void GLContext::createFX(unsigned int * fxId, unsigned int vertexShaderId, unsigned int pixelShaderId)
 {
 	*fxId = (unsigned int)(unsigned long)glCreateProgramObjectARB();
 	glAttachObjectARB((GLhandleARB)*fxId, (GLhandleARB)vertexShaderId);
@@ -687,63 +687,63 @@ void MGLContext::createFX(unsigned int * fxId, unsigned int vertexShaderId, unsi
 	glLinkProgramARB((GLhandleARB)*fxId);
 }
 
-void MGLContext::updateFX(unsigned int fxId)
+void GLContext::updateFX(unsigned int fxId)
 {
 	glLinkProgramARB((GLhandleARB)fxId);
 }
 
-void MGLContext::deleteFX(unsigned int * fxId){
+void GLContext::deleteFX(unsigned int * fxId){
 	glDeleteObjectARB((GLhandleARB)(*fxId));
 }
 
-void MGLContext::sendUniformInt(unsigned int fxId, const char * name, int * values, const int count){
+void GLContext::sendUniformInt(unsigned int fxId, const char * name, int * values, const int count){
 	GLint uValue = glGetUniformLocationARB((GLhandleARB)fxId, name);
 	if(uValue != -1) glUniform1ivARB(uValue, count, values);
 }
 
-void MGLContext::sendUniformFloat(unsigned int fxId, const char * name, float * values, const int count){
+void GLContext::sendUniformFloat(unsigned int fxId, const char * name, float * values, const int count){
 	GLint uValue = glGetUniformLocationARB((GLhandleARB)fxId, name);
 	if(uValue != -1) glUniform1fvARB(uValue, count, values);
 }
 
-void MGLContext::sendUniformVec2(unsigned int fxId, const char * name, float * values, const int count){
+void GLContext::sendUniformVec2(unsigned int fxId, const char * name, float * values, const int count){
 	GLint uValue = glGetUniformLocationARB((GLhandleARB)fxId, name);
 	if(uValue != -1) glUniform2fvARB(uValue, count, values);
 }
 
-void MGLContext::sendUniformVec3(unsigned int fxId, const char * name, float * values, const int count){
+void GLContext::sendUniformVec3(unsigned int fxId, const char * name, float * values, const int count){
 	GLint uValue = glGetUniformLocationARB((GLhandleARB)fxId, name);
 	if(uValue != -1) glUniform3fvARB(uValue, count, values);
 }
 
-void MGLContext::sendUniformVec4(unsigned int fxId, const char * name, float * values, const int count){
+void GLContext::sendUniformVec4(unsigned int fxId, const char * name, float * values, const int count){
 	GLint uValue = glGetUniformLocationARB((GLhandleARB)fxId, name);
 	if(uValue != -1) glUniform4fvARB(uValue, count, values);
 }
 
-void MGLContext::sendUniformMatrix(unsigned int fxId, const char * name, MMatrix4x4 * matrix, const int count, const bool transpose){
+void GLContext::sendUniformMatrix(unsigned int fxId, const char * name, MMatrix4x4 * matrix, const int count, const bool transpose){
 	GLint uValue = glGetUniformLocationARB((GLhandleARB)fxId, name);
 	if(uValue != -1) glUniformMatrix4fvARB(uValue, count, transpose, matrix->entries);
 }
 
-void MGLContext::getAttribLocation(unsigned int fxId, const char * name, int * location)
+void GLContext::getAttribLocation(unsigned int fxId, const char * name, int * location)
 {
 	(*location) = glGetAttribLocationARB((GLhandleARB)fxId, name);
 }
 
 // VBO
-void MGLContext::createVBO(unsigned int * vboId){
+void GLContext::createVBO(unsigned int * vboId){
 	glGenBuffersARB(1, vboId);
 }
-void MGLContext::deleteVBO(unsigned int * vboId){
+void GLContext::deleteVBO(unsigned int * vboId){
 	glDeleteBuffersARB(1, vboId);
 }
-void MGLContext::bindVBO(M_VBO_TYPES type, unsigned int vboId)
+void GLContext::bindVBO(M_VBO_TYPES type, unsigned int vboId)
 {
 	GLenum gltype = type == M_VBO_ARRAY ? GL_ARRAY_BUFFER_ARB : GL_ELEMENT_ARRAY_BUFFER_ARB;
 	glBindBufferARB(gltype, vboId);
 }
-void MGLContext::setVBO(M_VBO_TYPES type, const void * data, unsigned int size, M_VBO_MODES mode)
+void GLContext::setVBO(M_VBO_TYPES type, const void * data, unsigned int size, M_VBO_MODES mode)
 {
 	GLenum gltype = type == M_VBO_ARRAY ? GL_ARRAY_BUFFER_ARB : GL_ELEMENT_ARRAY_BUFFER_ARB;
 	switch(mode)
@@ -759,147 +759,147 @@ void MGLContext::setVBO(M_VBO_TYPES type, const void * data, unsigned int size, 
 			break;
 	}
 }
-void MGLContext::setVBOSubData(M_VBO_TYPES type, unsigned int offset, const void * data, unsigned int size)
+void GLContext::setVBOSubData(M_VBO_TYPES type, unsigned int offset, const void * data, unsigned int size)
 {
 	GLenum gltype = type == M_VBO_ARRAY ? GL_ARRAY_BUFFER_ARB : GL_ELEMENT_ARRAY_BUFFER_ARB;
 	glBufferSubDataARB(gltype, offset, size, data);
 }
 
 // arrays
-void MGLContext::enableVertexArray(void){
+void GLContext::enableVertexArray(void){
 	glEnableClientState(GL_VERTEX_ARRAY);
 }
 
-void MGLContext::enableColorArray(void){
+void GLContext::enableColorArray(void){
 	glEnableClientState(GL_COLOR_ARRAY);
 }
 
-void MGLContext::enableNormalArray(void){
+void GLContext::enableNormalArray(void){
 	glEnableClientState(GL_NORMAL_ARRAY);
 }
 
-void MGLContext::enableTexCoordArray(void){
+void GLContext::enableTexCoordArray(void){
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
-void MGLContext::enableAttribArray(unsigned int location)
+void GLContext::enableAttribArray(unsigned int location)
 {
 	glEnableVertexAttribArray(location);
 }
 
-void MGLContext::disableVertexArray(void){
+void GLContext::disableVertexArray(void){
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void MGLContext::disableColorArray(void){
+void GLContext::disableColorArray(void){
 	glDisableClientState(GL_COLOR_ARRAY);
 }
 
-void MGLContext::disableNormalArray(void){
+void GLContext::disableNormalArray(void){
 	glDisableClientState(GL_NORMAL_ARRAY);
 }
 
-void MGLContext::disableTexCoordArray(void){
+void GLContext::disableTexCoordArray(void){
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
-void MGLContext::disableAttribArray(unsigned int location)
+void GLContext::disableAttribArray(unsigned int location)
 {
 	glDisableVertexAttribArray(location);
 }
 
-void MGLContext::setVertexPointer(M_TYPES type, unsigned int components, const void * pointer){
+void GLContext::setVertexPointer(M_TYPES type, unsigned int components, const void * pointer){
 	glVertexPointer(components, returnGLType(type), 0, pointer);
 }
 
-void MGLContext::setColorPointer(M_TYPES type, unsigned int components, const void * pointer){
+void GLContext::setColorPointer(M_TYPES type, unsigned int components, const void * pointer){
 	glColorPointer(components, returnGLType(type), 0, pointer);
 }
 
-void MGLContext::setNormalPointer(M_TYPES type, const void * pointer){
+void GLContext::setNormalPointer(M_TYPES type, const void * pointer){
 	glNormalPointer(returnGLType(type), 0, pointer);
 }
 
-void MGLContext::setTexCoordPointer(M_TYPES type, unsigned int components, const void * pointer){
+void GLContext::setTexCoordPointer(M_TYPES type, unsigned int components, const void * pointer){
 	glTexCoordPointer(components, returnGLType(type), 0, pointer);
 }
 
-void MGLContext::setAttribPointer(unsigned int location, M_TYPES type, unsigned int components, const void * pointer, const bool normalized)
+void GLContext::setAttribPointer(unsigned int location, M_TYPES type, unsigned int components, const void * pointer, const bool normalized)
 {
 	glVertexAttribPointer(location, components, returnGLType(type), normalized, 0, pointer);
 }
 
 // draw
-void MGLContext::drawArray(M_PRIMITIVE_TYPES type, unsigned int begin, unsigned int size)
+void GLContext::drawArray(M_PRIMITIVE_TYPES type, unsigned int begin, unsigned int size)
 {
 	glDrawArrays(returnPrimitiveType(type), begin, size);
 }
 
-void MGLContext::drawElement(M_PRIMITIVE_TYPES type, unsigned int size, M_TYPES indicesType, const void * indices)
+void GLContext::drawElement(M_PRIMITIVE_TYPES type, unsigned int size, M_TYPES indicesType, const void * indices)
 {
 	glDrawElements(returnPrimitiveType(type), size, returnGLType(indicesType), indices);
 }
 
 // lines
-void MGLContext::enableLineAntialiasing(void)	{ glEnable(GL_LINE_SMOOTH); }
-void MGLContext::disableLineAntialiasing(void)	{ glDisable(GL_LINE_SMOOTH); }
+void GLContext::enableLineAntialiasing(void)	{ glEnable(GL_LINE_SMOOTH); }
+void GLContext::disableLineAntialiasing(void)	{ glDisable(GL_LINE_SMOOTH); }
 
 // material
-void MGLContext::setMaterialDiffuse(const MVector4 & diffuse){
+void GLContext::setMaterialDiffuse(const MVector4 & diffuse){
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
 }
-void MGLContext::setMaterialSpecular(const MVector4 & specular){
+void GLContext::setMaterialSpecular(const MVector4 & specular){
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
 }
-void MGLContext::setMaterialAmbient(const MVector4 & ambient){
+void GLContext::setMaterialAmbient(const MVector4 & ambient){
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
 }
-void MGLContext::setMaterialEmit(const MVector4 & emit){
+void GLContext::setMaterialEmit(const MVector4 & emit){
 	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emit);
 }
-void MGLContext::setMaterialShininess(float shininess){
+void GLContext::setMaterialShininess(float shininess){
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
 }
 
 // scissor
-void MGLContext::enableScissorTest(void) { glEnable(GL_SCISSOR_TEST); }
-void MGLContext::disableScissorTest(void){ glDisable(GL_SCISSOR_TEST); }
-void MGLContext::setScissor(int x, int y, unsigned int width, unsigned int height){
+void GLContext::enableScissorTest(void) { glEnable(GL_SCISSOR_TEST); }
+void GLContext::disableScissorTest(void){ glDisable(GL_SCISSOR_TEST); }
+void GLContext::setScissor(int x, int y, unsigned int width, unsigned int height){
 	glScissor(x, y, width, height);
 }
 
 // color
-void MGLContext::setColor(const MColor & color){
+void GLContext::setColor(const MColor & color){
 	glColor4ub(color.r, color.g, color.b, color.a);
 }
 
-void MGLContext::setColor4(const MVector4 & color){
+void GLContext::setColor4(const MVector4 & color){
 	glColor4f(color.x, color.y, color.z, color.w);
 }
-void MGLContext::setColor3(const MVector3 & color){
+void GLContext::setColor3(const MVector3 & color){
 	glColor4f(color.x, color.y, color.z, 1.0f);
 }
 
 // masks
-void MGLContext::setColorMask(bool r, bool g, bool b, bool a){
+void GLContext::setColorMask(bool r, bool g, bool b, bool a){
 	glColorMask(r, g, b, a);
 }
-void MGLContext::setDepthMask(bool depth){
+void GLContext::setDepthMask(bool depth){
 	glDepthMask(depth);
 }
 
-void MGLContext::enablePolygonOffset(float x, float y)
+void GLContext::enablePolygonOffset(float x, float y)
 {
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glPolygonOffset(x, y);
 }
 
-void MGLContext::disablePolygonOffset()
+void GLContext::disablePolygonOffset()
 {
 	glDisable(GL_POLYGON_OFFSET_FILL);
 }
 
-void MGLContext::setAlphaTest(float value)
+void GLContext::setAlphaTest(float value)
 {
 	if(value > 0.0f)
 		glEnable(GL_ALPHA_TEST);
@@ -911,9 +911,9 @@ void MGLContext::setAlphaTest(float value)
 }
 
 // depth
-void MGLContext::enableDepthTest(void) { glEnable (GL_DEPTH_TEST); }
-void MGLContext::disableDepthTest(void){ glDisable(GL_DEPTH_TEST); }
-void MGLContext::setDepthMode(M_DEPTH_MODES mode)
+void GLContext::enableDepthTest(void) { glEnable (GL_DEPTH_TEST); }
+void GLContext::disableDepthTest(void){ glDisable(GL_DEPTH_TEST); }
+void GLContext::setDepthMode(M_DEPTH_MODES mode)
 {
 	switch(mode)
 	{
@@ -948,9 +948,9 @@ void MGLContext::setDepthMode(M_DEPTH_MODES mode)
 }
 
 // stencil
-void MGLContext::enableStencilTest(void) { glEnable (GL_STENCIL_TEST); }
-void MGLContext::disableStencilTest(void){ glDisable(GL_STENCIL_TEST); }
-void MGLContext::setStencilFunc(M_STENCIL_FUNCS func, int ref)
+void GLContext::enableStencilTest(void) { glEnable (GL_STENCIL_TEST); }
+void GLContext::disableStencilTest(void){ glDisable(GL_STENCIL_TEST); }
+void GLContext::setStencilFunc(M_STENCIL_FUNCS func, int ref)
 {
 	switch(func)
 	{
@@ -981,7 +981,7 @@ void MGLContext::setStencilFunc(M_STENCIL_FUNCS func, int ref)
 			break;
 	}
 }
-void MGLContext::setStencilOp(M_STENCIL_OPS op)
+void GLContext::setStencilOp(M_STENCIL_OPS op)
 {
 	switch(op)
 	{
@@ -1005,9 +1005,9 @@ void MGLContext::setStencilOp(M_STENCIL_OPS op)
 }
 
 // cull face
-void MGLContext::enableCullFace(void) { glEnable (GL_CULL_FACE); }
-void MGLContext::disableCullFace(void){ glDisable(GL_CULL_FACE); }
-void MGLContext::setCullMode(M_CULL_MODES mode)
+void GLContext::enableCullFace(void) { glEnable (GL_CULL_FACE); }
+void GLContext::disableCullFace(void){ glDisable(GL_CULL_FACE); }
+void GLContext::setCullMode(M_CULL_MODES mode)
 {
 	switch(mode)
 	{
@@ -1026,28 +1026,28 @@ void MGLContext::setCullMode(M_CULL_MODES mode)
 }
 
 // occlusion
-void MGLContext::createQuery(unsigned int * queryId){
+void GLContext::createQuery(unsigned int * queryId){
 	glGenQueriesARB(1, queryId);
 }
-void MGLContext::deleteQuery(unsigned int * queryId){
+void GLContext::deleteQuery(unsigned int * queryId){
 	glDeleteQueriesARB(1, queryId);
 }
-void MGLContext::beginQuery(unsigned int queryId){
+void GLContext::beginQuery(unsigned int queryId){
 	glBeginQueryARB(GL_SAMPLES_PASSED_ARB, queryId);
 }
-void MGLContext::endQuery(void){
+void GLContext::endQuery(void){
 	glEndQueryARB(GL_SAMPLES_PASSED_ARB);
 }
-void MGLContext::getQueryResult(unsigned int queryId, unsigned int * result){
+void GLContext::getQueryResult(unsigned int queryId, unsigned int * result){
 	glGetQueryObjectuivARB(queryId, GL_QUERY_RESULT_ARB, result);
 }
 
 // matrix
-void MGLContext::loadIdentity(void){
+void GLContext::loadIdentity(void){
 	glLoadIdentity();
 }
 
-void MGLContext::setMatrixMode(M_MATRIX_MODES matrixMode)
+void GLContext::setMatrixMode(M_MATRIX_MODES matrixMode)
 {
 	switch(matrixMode)
 	{
@@ -1065,58 +1065,58 @@ void MGLContext::setMatrixMode(M_MATRIX_MODES matrixMode)
 	}
 }
 
-void MGLContext::pushMatrix(void)									{ glPushMatrix(); }
-void MGLContext::popMatrix(void)									{ glPopMatrix(); }
-void MGLContext::multMatrix(const MMatrix4x4 * matrix)				{ glMultMatrixf(matrix->entries); }
-void MGLContext::translate(const MVector3 & position)				{ glTranslatef(position.x, position.y, position.z); }
-void MGLContext::rotate(const MVector3 & axis, float angle)			{ glRotatef(angle, axis.x, axis.y, axis.z); }
-void MGLContext::scale(const MVector3 & scale)						{ glScalef(scale.x, scale.y, scale.z); }
-void MGLContext::getViewport(int * viewport)
+void GLContext::pushMatrix(void)									{ glPushMatrix(); }
+void GLContext::popMatrix(void)									{ glPopMatrix(); }
+void GLContext::multMatrix(const MMatrix4x4 * matrix)				{ glMultMatrixf(matrix->entries); }
+void GLContext::translate(const MVector3 & position)				{ glTranslatef(position.x, position.y, position.z); }
+void GLContext::rotate(const MVector3 & axis, float angle)			{ glRotatef(angle, axis.x, axis.y, axis.z); }
+void GLContext::scale(const MVector3 & scale)						{ glScalef(scale.x, scale.y, scale.z); }
+void GLContext::getViewport(int * viewport)
 {
 	glGetIntegerv(GL_VIEWPORT, viewport);
 }
-void MGLContext::getModelViewMatrix(MMatrix4x4 * matrix)
+void GLContext::getModelViewMatrix(MMatrix4x4 * matrix)
 {
 	glGetFloatv(GL_MODELVIEW_MATRIX, matrix->entries);
 }
-void MGLContext::getProjectionMatrix(MMatrix4x4 * matrix)
+void GLContext::getProjectionMatrix(MMatrix4x4 * matrix)
 {
 	glGetFloatv(GL_PROJECTION_MATRIX, matrix->entries);
 }
-void MGLContext::getTextureMatrix(MMatrix4x4 * matrix)
+void GLContext::getTextureMatrix(MMatrix4x4 * matrix)
 {
 	glGetFloatv(GL_TEXTURE_MATRIX, matrix->entries);
 }
 
 // fog
-void MGLContext::enableFog(void)						{ glEnable (GL_FOG); }
-void MGLContext::disableFog(void)						{ glDisable(GL_FOG); }
-void MGLContext::setFogColor(const MVector3 & color)
+void GLContext::enableFog(void)						{ glEnable (GL_FOG); }
+void GLContext::disableFog(void)						{ glDisable(GL_FOG); }
+void GLContext::setFogColor(const MVector3 & color)
 {
 	glFogfv(GL_FOG_COLOR, MVector4(color));
 	m_fogColor = color;
 }
-void MGLContext::setFogDistance(float min, float max)
+void GLContext::setFogDistance(float min, float max)
 {
 	glFogf(GL_FOG_START, min);
 	glFogf(GL_FOG_END,   max);
 	m_fogMin = min;
 	m_fogMax = max;
 }
-void MGLContext::getFogColor(MVector3 * color){
+void GLContext::getFogColor(MVector3 * color){
 	(*color) = m_fogColor;
 }
-void MGLContext::getFogDistance(float * min, float * max){
+void GLContext::getFogDistance(float * min, float * max){
 	(*min) = m_fogMin;
 	(*max) = m_fogMax;
 }
 
 // lighting
-void MGLContext::enableLighting(void)			{ glEnable (GL_LIGHTING); }
-void MGLContext::disableLighting(void)			{ glDisable(GL_LIGHTING); }
-void MGLContext::enableLight(unsigned int id)	{ glEnable (GL_LIGHT0 + id); }
-void MGLContext::disableLight(unsigned int id)	{ glDisable(GL_LIGHT0 + id); }
-void MGLContext::setLightPosition(unsigned int id, const MVector4 & position)
+void GLContext::enableLighting(void)			{ glEnable (GL_LIGHTING); }
+void GLContext::disableLighting(void)			{ glDisable(GL_LIGHTING); }
+void GLContext::enableLight(unsigned int id)	{ glEnable (GL_LIGHT0 + id); }
+void GLContext::disableLight(unsigned int id)	{ glDisable(GL_LIGHT0 + id); }
+void GLContext::setLightPosition(unsigned int id, const MVector4 & position)
 {
 	if(id < MAX_MRCLIGHTS)
 	{
@@ -1124,7 +1124,7 @@ void MGLContext::setLightPosition(unsigned int id, const MVector4 & position)
 		glLightfv(GL_LIGHT0 + id, GL_POSITION, position);
 	}
 }
-void MGLContext::setLightDiffuse(unsigned int id, const MVector4 & diffuse)
+void GLContext::setLightDiffuse(unsigned int id, const MVector4 & diffuse)
 {
 	if(id < MAX_MRCLIGHTS)
 	{
@@ -1132,7 +1132,7 @@ void MGLContext::setLightDiffuse(unsigned int id, const MVector4 & diffuse)
 		glLightfv(GL_LIGHT0 + id, GL_DIFFUSE, diffuse);
 	}
 }
-void MGLContext::setLightSpecular(unsigned int id, const MVector4 & specular)
+void GLContext::setLightSpecular(unsigned int id, const MVector4 & specular)
 {
 	if(id < MAX_MRCLIGHTS)
 	{
@@ -1140,7 +1140,7 @@ void MGLContext::setLightSpecular(unsigned int id, const MVector4 & specular)
 		glLightfv(GL_LIGHT0 + id, GL_SPECULAR, specular);
 	}
 }
-void MGLContext::setLightAmbient(unsigned int id, const MVector4 & ambient)
+void GLContext::setLightAmbient(unsigned int id, const MVector4 & ambient)
 {
 	if(id < MAX_MRCLIGHTS)
 	{
@@ -1148,7 +1148,7 @@ void MGLContext::setLightAmbient(unsigned int id, const MVector4 & ambient)
 		glLightfv(GL_LIGHT0 + id, GL_AMBIENT, ambient);
 	}
 }
-void MGLContext::setLightAttenuation(unsigned int id, float constant, float linear, float quadratic)
+void GLContext::setLightAttenuation(unsigned int id, float constant, float linear, float quadratic)
 {
 	if(id < MAX_MRCLIGHTS)
 	{
@@ -1160,7 +1160,7 @@ void MGLContext::setLightAttenuation(unsigned int id, float constant, float line
 		glLightf(GL_LIGHT0 + id, GL_QUADRATIC_ATTENUATION, quadratic);
 	}
 }
-void MGLContext::setLightSpotDirection(unsigned int id, const MVector3 & direction)
+void GLContext::setLightSpotDirection(unsigned int id, const MVector3 & direction)
 {
 	if(id < MAX_MRCLIGHTS)
 	{
@@ -1168,7 +1168,7 @@ void MGLContext::setLightSpotDirection(unsigned int id, const MVector3 & directi
 		glLightfv(GL_LIGHT0 + id, GL_SPOT_DIRECTION, direction);
 	}
 }
-void MGLContext::setLightSpotAngle(unsigned int id, float angle)
+void GLContext::setLightSpotAngle(unsigned int id, float angle)
 {
 	if(id < MAX_MRCLIGHTS)
 	{
@@ -1176,7 +1176,7 @@ void MGLContext::setLightSpotAngle(unsigned int id, float angle)
 		glLightf(GL_LIGHT0 + id, GL_SPOT_CUTOFF, angle);
 	}
 }
-void MGLContext::setLightSpotExponent(unsigned int id, float exponent)
+void GLContext::setLightSpotExponent(unsigned int id, float exponent)
 {
 	if(id < MAX_MRCLIGHTS)
 	{
@@ -1184,27 +1184,27 @@ void MGLContext::setLightSpotExponent(unsigned int id, float exponent)
 		glLightf(GL_LIGHT0 + id, GL_SPOT_EXPONENT, m_lights[id].exponent);
 	}
 }
-void MGLContext::getLightPosition(unsigned int id, MVector4 * position)
+void GLContext::getLightPosition(unsigned int id, MVector4 * position)
 {
 	if(id < MAX_MRCLIGHTS)
 		(*position) = m_lights[id].position;
 }
-void MGLContext::getLightDiffuse(unsigned int id, MVector4 * diffuse)
+void GLContext::getLightDiffuse(unsigned int id, MVector4 * diffuse)
 {
 	if(id < MAX_MRCLIGHTS)
 		(*diffuse) = m_lights[id].diffuse;
 }
-void MGLContext::getLightSpecular(unsigned int id, MVector4 * specular)
+void GLContext::getLightSpecular(unsigned int id, MVector4 * specular)
 {
 	if(id < MAX_MRCLIGHTS)
 		(*specular) = m_lights[id].specular;
 }
-void MGLContext::getLightAmbient(unsigned int id, MVector4 * ambient)
+void GLContext::getLightAmbient(unsigned int id, MVector4 * ambient)
 {
 	if(id < MAX_MRCLIGHTS)
 		(*ambient) = m_lights[id].ambient;
 }
-void MGLContext::getLightAttenuation(unsigned int id, float * constant, float * linear, float * quadratic)
+void GLContext::getLightAttenuation(unsigned int id, float * constant, float * linear, float * quadratic)
 {
 	if(id < MAX_MRCLIGHTS)
 	{
@@ -1213,26 +1213,26 @@ void MGLContext::getLightAttenuation(unsigned int id, float * constant, float * 
 		(*quadratic) = m_lights[id].quadratic;
 	}
 }
-void MGLContext::getLightSpotDirection(unsigned int id, MVector3 * direction)
+void GLContext::getLightSpotDirection(unsigned int id, MVector3 * direction)
 {
 	if(id < MAX_MRCLIGHTS)
 		(*direction) = m_lights[id].direction;
 }
-void MGLContext::getLightSpotAngle(unsigned int id, float * angle)
+void GLContext::getLightSpotAngle(unsigned int id, float * angle)
 {
 	if(id < MAX_MRCLIGHTS)
 		(*angle) = m_lights[id].angle;
 }
-void MGLContext::getLightSpotExponent(unsigned int id, float * exponent)
+void GLContext::getLightSpotExponent(unsigned int id, float * exponent)
 {
 	if(id < MAX_MRCLIGHTS)
 		(*exponent) = m_lights[id].exponent;
 }
 
 // blending
-void MGLContext::enableBlending(void)	{ glEnable (GL_BLEND); }
-void MGLContext::disableBlending(void)	{ glDisable(GL_BLEND); }
-void MGLContext::setBlendingMode(M_BLENDING_MODES mode)
+void GLContext::enableBlending(void)	{ glEnable (GL_BLEND); }
+void GLContext::disableBlending(void)	{ glDisable(GL_BLEND); }
+void GLContext::setBlendingMode(M_BLENDING_MODES mode)
 {
 	switch(mode)
 	{
@@ -1255,7 +1255,7 @@ void MGLContext::setBlendingMode(M_BLENDING_MODES mode)
 }
 
 // point size
-void MGLContext::setPointSize(float size)
+void GLContext::setPointSize(float size)
 {
     glPointSize(size);
 }

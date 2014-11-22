@@ -221,7 +221,7 @@ m_renderer(NULL)
         m_soundContext = new ALContext();
         m_physics = new BulletContext();
         m_script = new MScript();
-        m_input = new MInput();
+        m_input = new Input();
         m_system = new MWinContext();
         m_level = new MLevel();
         m_game = new MGame();
@@ -265,7 +265,7 @@ void Maratis::initRenderer()
 {
     if(m_render) return;
 #ifndef USE_GLES
-    m_render = new MGLContext();
+    m_render = new GLContext();
 #else
     m_render = new MES2Context();
 #endif
@@ -475,7 +475,7 @@ void Maratis::start(void)
         // add renderers
         if(GLversion >= 2)
             engine->getRendererManager()->addRenderer(MStandardRenderer::getStaticName(), MStandardRenderer::getNew);
-        engine->getRendererManager()->addRenderer(MFixedRenderer::getStaticName(), MFixedRenderer::getNew);
+        engine->getRendererManager()->addRenderer(FixedRenderer::getStaticName(), FixedRenderer::getNew);
 
         // mesh loaders
         engine->getMeshLoader()->addLoader(xmlMeshLoad);
@@ -502,7 +502,7 @@ void Maratis::start(void)
             if(GLversion >= 2)
                 m_renderer = new MStandardRenderer();
             else
-                m_renderer = new MFixedRenderer();
+                m_renderer = new FixedRenderer();
         }
         engine->setRenderer(m_renderer);
     }

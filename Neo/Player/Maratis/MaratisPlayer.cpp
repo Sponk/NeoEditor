@@ -72,10 +72,10 @@ m_renderer(NULL)
 	// MEngine
 	{
 		m_soundContext = new ALContext();
-		m_render = new MGLContext();
+		m_render = new GLContext();
 		m_physics = new BulletContext();
 		m_script = new MScript();
-		m_input = new MInput();
+		m_input = new Input();
 		m_system = new MWinContext();
 		m_level = new MLevel();
 		m_game = new MGame();
@@ -152,7 +152,7 @@ void MaratisPlayer::start(void)
 
 		// add renderers
 		engine->getRendererManager()->addRenderer(MStandardRenderer::getStaticName(), MStandardRenderer::getNew);
-		engine->getRendererManager()->addRenderer(MFixedRenderer::getStaticName(), MFixedRenderer::getNew);
+		engine->getRendererManager()->addRenderer(FixedRenderer::getStaticName(), FixedRenderer::getNew);
 		
 		// mesh loader
 		engine->getMeshLoader()->addLoader(xmlMeshLoad);

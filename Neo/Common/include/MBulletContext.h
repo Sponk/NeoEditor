@@ -30,8 +30,8 @@
 //========================================================================
 
 
-#ifndef _M_BULLET_CONTEXT_H
-#define _M_BULLET_CONTEXT_H
+#ifndef _BULLET_CONTEXT_H
+#define _BULLET_CONTEXT_H
 
 #include <MCore.h>
 #include <btBulletDynamicsCommon.h>

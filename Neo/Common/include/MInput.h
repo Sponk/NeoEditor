@@ -34,12 +34,12 @@
 #include <MCore.h>
 
 
-class MInput : public MInputContext
+class Input : public MInputContext
 {
 public :
 
-	MInput(void);
-	~MInput(void);
+	Input(void);
+	~Input(void);
 
 private :
 
