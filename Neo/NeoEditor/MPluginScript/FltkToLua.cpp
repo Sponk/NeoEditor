@@ -41,6 +41,8 @@
 // TODO: All globals in own file!
 #include "../FLUID/Callbacks.h"
 
+using namespace Neo;
+
 // Declared in Callbacks.h and implemented in Callbacks.cpp
 const char* fl_native_file_chooser(const char* title, const char* files, const char* dir, int type);
 extern EditorWindow window;

@@ -33,6 +33,8 @@
 #include <MEngine.h>
 #include "TgaLoader.h"
 
+namespace Neo
+{
 static void flipImage(MImage * source)
 {
 	unsigned int y;
@@ -215,4 +217,5 @@ bool M_loadTgaImage(const char * filename, void * data)
 		flipImage(image);
 
 	return true;
+}
 }

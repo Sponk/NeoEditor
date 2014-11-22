@@ -33,6 +33,8 @@
 
 #include "MeshLoad.h"
 
+namespace Neo
+{
 
 MVector3 computeTangent(
 	const MVector3 & P1,  const MVector3 & P2,  const MVector3 & P3,
@@ -1433,4 +1435,5 @@ bool xmlMeshLoad(const char * filename, void * data)
     MLOG_DEBUG("xmlMeshLoad success: "<<numSubMeshs<<" submeshs found");
 	
 	return true;
+}
 }

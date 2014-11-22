@@ -24,6 +24,8 @@
 
 #include "MPublisher.h"
 
+using namespace Neo;
+
 MPublisher::MPublisher()
 : m_maxPriorities(10)
 {

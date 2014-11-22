@@ -35,13 +35,14 @@
 #include <GuiSystem.h>
 #include <Canvas.h>
 #include <Button.h>
-#include <Input.h>
+#include <InputField.h>
 #include <Render.h>
 #include <Label.h>
 #include <Sprite.h>
 #include <DR_SHA1.h>
 
 using namespace Neo;
+using namespace Neo::Gui;
 
 GuiSystem::GuiSystem()
 {
@@ -148,7 +149,7 @@ int createInput()
     if(script->getArgsNumber() != 6)
         return 0;
 
-    Input* input = new Input(script->getInteger(0), script->getInteger(1),
+    InputField* input = new InputField(script->getInteger(0), script->getInteger(1),
                              script->getInteger(2), script->getInteger(3), script->getString(4));
 
     input->setCallback((CALLBACK_FUNCTION) scriptCallback);

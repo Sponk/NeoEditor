@@ -33,6 +33,8 @@
 #include <MEngine.h>
 #include "BinFontLoader.h"
 
+namespace Neo
+{
 
 bool M_loadBinFont(const char * filename, void * data)
 {
@@ -132,4 +134,5 @@ bool M_loadBinFont(const char * filename, void * data)
 
 	M_fclose(file);
 	return true;
+}
 }

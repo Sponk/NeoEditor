@@ -33,6 +33,8 @@
 #ifndef _M_PNG_IMAGE_LOADER_H
 #define _M_PNG_IMAGE_LOADER_H
 
+namespace Neo
+{
 bool M_loadPngImage(const char * filename, void * data);
-
+}
 #endif

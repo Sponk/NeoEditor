@@ -31,6 +31,7 @@
 #include <MEngine.h>
 #include "Plugin.h"
 
+using namespace Neo;
 
 typedef void * (*FunctionPtr)();
 

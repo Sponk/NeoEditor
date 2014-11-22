@@ -33,6 +33,9 @@
 #ifndef _M_TGA_IMAGE_LOADER_H
 #define _M_TGA_IMAGE_LOADER_H
 
+namespace Neo
+{
 bool M_loadTgaImage(const char * filename, void * data);
+}
 
 #endif

@@ -37,6 +37,8 @@
 #include <string>
 #include <MLog.h>
 
+namespace Neo
+{
 class LuaBehavior : public MBehavior
 {
 public:
@@ -117,5 +119,6 @@ public:
 	unsigned int getVariablesNumber(void);
 	MVariable getVariable(unsigned int id);
 };
+}
 
 #endif

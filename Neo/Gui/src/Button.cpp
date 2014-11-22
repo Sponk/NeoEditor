@@ -37,7 +37,7 @@
 #include <GuiSystem.h>
 #include <MMouse.h>
 
-using namespace Neo;
+using namespace Neo::Gui;
 
 Button::Button(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label) :
     Widget(x,y,width,height,label),

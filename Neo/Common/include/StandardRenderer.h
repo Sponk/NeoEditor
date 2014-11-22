@@ -38,6 +38,8 @@
 #define MAX_OPAQUE 4096
 #define MAX_TRANSP 2048
 
+namespace Neo
+{
 
 // Entity light
 struct EntityLight
@@ -175,5 +177,5 @@ public:
 	// extra
 	void drawText(MOText * textObj);
 };
-
+}
 #endif

@@ -50,6 +50,8 @@
 #include <MEngine.h>
 #include "GLContext.h"
 
+using namespace Neo;
+
 static int g_GLversion = 0;
 static float maxAnisotropy = 0.0f;
 

@@ -33,7 +33,7 @@
 #include <Script.h>
 #include <string>
 
-class MPluginScript : public MScript
+class MPluginScript : public Neo::MScript
 {
 private:
     void init();

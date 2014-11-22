@@ -149,7 +149,7 @@ void update_editor(void*)
     window.glbox->redraw();
 
     maratis->logicLoop();
-    Neo::GuiSystem::getInstance()->update();
+	Neo::Gui::GuiSystem::getInstance()->update();
 
     if(window.m_deferredUiUpdate)
     {
@@ -264,7 +264,7 @@ void GLBox::draw()
     else
     {
         maratis->graphicLoop();
-        Neo::GuiSystem::getInstance()->draw();
+		Neo::Gui::GuiSystem::getInstance()->draw();
     }
 
     swap_buffers();

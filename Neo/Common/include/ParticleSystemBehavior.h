@@ -32,6 +32,8 @@
 
 #include <SDLThread.h>
 
+namespace Neo
+{
 class ParticleSystemBehavior : public MBehavior
 {
 public:
@@ -126,5 +128,5 @@ public:
 	unsigned int getVariablesNumber(void);
 	MVariable getVariable(unsigned int id);
 };
-
+}
 #endif

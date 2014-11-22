@@ -34,6 +34,8 @@
 #include "VorbisLoader.h"
 #include "WAVLoader.h"
 
+namespace Neo
+{
 bool M_loadSound(const char * filename, void * data)
 {
 	if (M_loadVorbisSound(filename, data))
@@ -42,4 +44,5 @@ bool M_loadSound(const char * filename, void * data)
         return true;
 
 	return false;
+}
 }

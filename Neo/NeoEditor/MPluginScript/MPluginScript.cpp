@@ -29,6 +29,8 @@
 
 #include "MPluginScript.h"
 
+using namespace Neo;
+
 // Implemented in FltkToLua.cpp
 void createFltkLuaBindings(MScript* script);
 

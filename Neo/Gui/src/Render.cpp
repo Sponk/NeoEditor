@@ -36,7 +36,7 @@
 #include <MEngine.h>
 #include <GuiSystem.h>
 
-using namespace Neo;
+using namespace Neo::Gui;
 
 const char* m_colorOnlyVertShader =
 

@@ -37,6 +37,7 @@
 
 #include "MAssimpMeshLoader.h"
 
+using namespace Neo;
 
 static MEngine * engine = MEngine().getInstance();
 static MLevel * level = NULL;

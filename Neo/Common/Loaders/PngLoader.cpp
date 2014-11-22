@@ -34,6 +34,8 @@
 #include <MCore.h>
 #include "PngLoader.h"
 
+namespace Neo
+{
 void user_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
     M_fread(data, 1, length, (MFile *)png_get_io_ptr(png_ptr));
@@ -119,4 +121,5 @@ bool M_loadPngImage(const char * filename, void * data)
     delete [] out;
 
     return true;
+}
 }

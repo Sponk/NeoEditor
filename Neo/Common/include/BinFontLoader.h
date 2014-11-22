@@ -33,6 +33,8 @@
 #ifndef _M_BIN_FONT_LOADER_H
 #define _M_BIN_FONT_LOADER_H
 
+namespace Neo
+{
 bool M_loadBinFont(const char * filename, void * data);
-
+}
 #endif

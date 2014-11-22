@@ -37,6 +37,9 @@ using namespace std;
 #include "PngLoader.h"
 #include "TgaLoader.h"
 
+namespace Neo
+{
+
 bool M_loadImage(const char * filename, void * data)
 {
 	if (M_loadJpegImage(filename, data))
@@ -48,4 +51,5 @@ bool M_loadImage(const char * filename, void * data)
 
     MLOG_ERROR("Could not load \"" << filename << "\"");
 	return false;
+}
 }

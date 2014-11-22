@@ -33,6 +33,8 @@
 #ifndef MWAVLOADER_H
 #define MWAVLOADER_H
 
+namespace Neo
+{
 bool M_loadWAVSound(const char * filename, void * data);
-
+}
 #endif // MWAVLOADER_H

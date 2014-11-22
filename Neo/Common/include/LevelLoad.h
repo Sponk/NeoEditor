@@ -31,7 +31,9 @@
 #ifndef _M_LEVEL_LOAD_H
 #define _M_LEVEL_LOAD_H
 
+namespace Neo
+{
 bool xmlLevelLoad(const char * filename, void * data);
 bool M_loadLevel(const char * filename, void * data, const bool clearData = true);
-
+}
 #endif

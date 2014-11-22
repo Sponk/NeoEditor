@@ -37,7 +37,8 @@
 #define MAX_MRCLIGHTS 8
 #define MAX_MATRIX_STEPS 32
 
-
+namespace Neo
+{
 class MES2Context : public MRenderingContext
 {
 private:
@@ -256,5 +257,6 @@ public:
     // point size
     void setPointSize(float size);
 };
+}
 
 #endif

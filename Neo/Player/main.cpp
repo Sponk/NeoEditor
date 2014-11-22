@@ -34,6 +34,8 @@
 // NeoGui
 #include <GuiSystem.h>
 
+using namespace Neo;
+
 #ifdef main
     #undef main
 #endif
@@ -68,14 +70,14 @@ void windowEvents(MWinEvent * windowEvents)
 void update(void)
 {
 	MaratisPlayer::getInstance()->logicLoop();
-    Neo::GuiSystem::getInstance()->update();
+	Neo::Gui::GuiSystem::getInstance()->update();
 }
 
 // draw
 void draw(void)
 {
 	MaratisPlayer::getInstance()->graphicLoop();
-    Neo::GuiSystem::getInstance()->draw();
+	Neo::Gui::GuiSystem::getInstance()->draw();
     MWindow::getInstance()->swapBuffer();
 }
 
@@ -258,7 +260,7 @@ int main(int argc, char **argv)
 		if(maratis->loadProject(filename))
 		{
             // Initialize GUI bindings
-            Neo::GuiSystem::getInstance()->setupLuaInterface(MEngine::getInstance()->getScriptContext());
+			Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(MEngine::getInstance()->getScriptContext());
 			engine->getGame()->begin();
 			projectFound = true;
 		}
@@ -280,7 +282,7 @@ int main(int argc, char **argv)
 
 			embeddedProj.startLevel = levelName;
 			
-			Neo::GuiSystem::getInstance()->setupLuaInterface(MEngine::getInstance()->getScriptContext());
+			Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(MEngine::getInstance()->getScriptContext());
 			maratis->loadProject(&embeddedProj, projName);
 			
 
@@ -303,7 +305,7 @@ int main(int argc, char **argv)
 					if(maratis->loadProject(filename))
 					{
                         // Initialize GUI bindings
-                        Neo::GuiSystem::getInstance()->setupLuaInterface(MEngine::getInstance()->getScriptContext());
+						Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(MEngine::getInstance()->getScriptContext());
 						engine->getGame()->begin();
 						projectFound = true;
 						break;
@@ -318,7 +320,7 @@ int main(int argc, char **argv)
 
     // create the update thread
     SDLThread updateThread;
-    Neo::GuiSystem* guiSystem = Neo::GuiSystem::getInstance();
+	Neo::Gui::GuiSystem* guiSystem = Neo::Gui::GuiSystem::getInstance();
 
     // Init semaphore
 	updateSemaphore.Init(1);
@@ -363,7 +365,7 @@ int main(int argc, char **argv)
         else
         {
             draw();
-            Neo::GuiSystem::getInstance()->draw();
+			guiSystem->draw();
             SDLSemaphore::Unlock(&updateSemaphore);
             window->sleep(100);
 			continue;

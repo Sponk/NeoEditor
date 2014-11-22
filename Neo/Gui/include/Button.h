@@ -40,7 +40,8 @@
 
 namespace Neo
 {
-
+namespace Gui
+{
 enum BUTTON_STATE
 {
     BUTTON_NORMAL_STATE = 0,
@@ -61,5 +62,5 @@ public:
     void update();
 };
 }
-
+}
 #endif

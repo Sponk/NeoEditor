@@ -42,6 +42,8 @@
 
 namespace Neo
 {
+namespace Gui
+{
 /**
  * @brief The GuiSystem class contains all functionality to set up a GUI.
  */
@@ -92,6 +94,7 @@ public:
     // Deletes all widgets and canvases except the main canvas.
     void clear();
 };
+}
 }
 
 #endif

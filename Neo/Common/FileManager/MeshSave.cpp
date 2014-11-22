@@ -31,6 +31,8 @@
 #include "MeshSave.h"
 #include "XmlCommon.h"
 
+namespace Neo
+{
 // tools
 static void writeKey(MFile * file, MKey * key, M_VARIABLE_TYPE type)
 {
@@ -1075,4 +1077,5 @@ bool xmlMaterialsAnimSave(const char * filename, MMaterialsAnim * anim)
 	
 	M_fclose(file);
 	return true;
+}
 }

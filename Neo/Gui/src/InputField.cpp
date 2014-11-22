@@ -32,16 +32,16 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include <Input.h>
+#include <InputField.h>
 #include <Render.h>
 #include <GuiSystem.h>
 #include <MMouse.h>
 #include <MKeyboard.h>
 #include <MWinEvents.h>
 
-using namespace Neo;
+using namespace Neo::Gui;
 
-Input::Input(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label) :
+InputField::InputField(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label) :
     Widget(x,y,width,height,label),
     m_labelText(NULL),
     m_state(INPUT_NORMAL_STATE)
@@ -49,7 +49,7 @@ Input::Input(unsigned int x, unsigned int y, unsigned int width, unsigned int he
 
 }
 
-void Input::draw()
+void InputField::draw()
 {
     Render* render = Render::getInstance();
     MSystemContext* system = MEngine::getInstance()->getSystemContext();
@@ -104,14 +104,14 @@ void Input::draw()
     renderContext->disableScissorTest();
 }
 
-void Input::addCharacter(char c)
+void InputField::addCharacter(char c)
 {
     m_label.erase(--m_label.end(), m_label.end());
     m_label += c;
     m_label += "|";
 }
 
-void Input::update()
+void InputField::update()
 {
     MMouse* mouse = MMouse::getInstance();
     MKeyboard* kbd = MKeyboard::getInstance();

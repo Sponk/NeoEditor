@@ -31,6 +31,7 @@
 #include "ALContext.h"
 #include <MEngine.h>
 
+using namespace Neo;
 
 ALenum returnALFormat(M_SOUND_FORMAT format)
 {

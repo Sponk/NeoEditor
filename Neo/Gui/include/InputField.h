@@ -40,7 +40,8 @@
 
 namespace Neo
 {
-
+namespace Gui
+{
 enum INPUT_STATE
 {
     INPUT_NORMAL_STATE = 0,
@@ -48,7 +49,7 @@ enum INPUT_STATE
     INPUT_SELECTED_STATE
 };
 
-class Input : public Widget
+class InputField : public Widget
 {
     MOText* m_labelText;
     INPUT_STATE m_state;
@@ -57,11 +58,12 @@ class Input : public Widget
 
 public:
 
-    Input(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label);
+	InputField(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label);
 
     void draw();
     void update();
 };
+}
 }
 
 #endif

@@ -36,6 +36,8 @@
 #include <MEngine.h>
 #include "VorbisLoader.h"
 
+namespace Neo
+{
 size_t M_VorbisRead(void *dest, size_t size, size_t count, void *file)
 {
 	return M_fread(dest, size, count, (MFile*)file);
@@ -127,4 +129,5 @@ bool M_loadVorbisSound(const char * filename, void * data)
     //M_fclose(file);
 
 	return true;
+}
 }

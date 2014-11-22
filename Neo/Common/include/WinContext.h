@@ -33,6 +33,8 @@
 
 #include <MCore.h>
 
+namespace Neo
+{
 class MWinContext : public MSystemContext
 {
 public:
@@ -54,5 +56,5 @@ public:
 	// system tick
 	unsigned long getSystemTick(void);
 };
-
+}
 #endif

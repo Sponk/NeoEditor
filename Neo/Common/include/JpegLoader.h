@@ -33,6 +33,8 @@
 #ifndef _M_JPEG_IMAGE_LOADER_H
 #define _M_JPEG_IMAGE_LOADER_H
 
+namespace Neo
+{
 bool M_loadJpegImage(const char * filename, void * data);
-
+}
 #endif

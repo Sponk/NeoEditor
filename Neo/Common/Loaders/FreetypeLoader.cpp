@@ -37,6 +37,8 @@
 
 #include "FreetypeLoader.h"
 
+namespace Neo
+{
 
 static void drawBitmap(MImage * image, FT_Bitmap * bitmap, int left, int top)
 {
@@ -242,4 +244,5 @@ bool M_loadFont(const char * filename, void * data)
 	FT_Done_FreeType(library);
 	delete [] file_base;
 	return true;
+}
 }

@@ -43,6 +43,8 @@
 
 #include <MCore.h>
 
+namespace Neo
+{
 
 class ALContext : public MSoundContext
 {
@@ -106,5 +108,5 @@ public:
 	// listener
 	void updateListenerPosition(const MVector3 & position, const MVector3 & direction, const MVector3 & up);
 };
-
+}
 #endif

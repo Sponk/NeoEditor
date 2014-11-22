@@ -34,7 +34,8 @@
 #include <MEngine.h>
 #include <lua.hpp>
 
-
+namespace Neo
+{
 class MScript : public MScriptContext
 {
 public :
@@ -87,5 +88,5 @@ public:
 	void pushFloat(float value);
 	void pushPointer(void* value);
 };
-
+}
 #endif

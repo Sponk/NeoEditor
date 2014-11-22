@@ -39,6 +39,8 @@
 
 namespace Neo
 {
+namespace Gui
+{
 /**
  * @brief The Render class contains helper methods for rendering 2D shapes.
  *
@@ -66,5 +68,5 @@ public:
     Render();
 };
 }
-
+}
 #endif

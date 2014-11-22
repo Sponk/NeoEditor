@@ -30,7 +30,8 @@
 #ifndef _M_PACKAGE_MANAGER_NPK_H
 #define _M_PACKAGE_MANAGER_NPK_H
 
-
+namespace Neo
+{
 class MPackageFileOpenHook : public MFileOpenHook
 {
 public:
@@ -74,5 +75,5 @@ public:
 	MPackageEnt addFileToPackage(const char* filename, MPackage package, const char* entityName);
 	MPackage	mountPackage(MPackage package);
 };
-
+}
 #endif

@@ -64,6 +64,7 @@ typedef ES2Context GLContext;
 #include <StandardRenderer.h>
 #include <FixedRenderer.h>
 
+using namespace Neo;
 
 MaratisPlayer::MaratisPlayer(void):
 m_gamePlugin(NULL),

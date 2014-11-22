@@ -61,10 +61,10 @@ private:
 	MPackageManager * m_packageManager;
 
 	// plugins
-	std::vector <Plugin *> m_plugins;
+	std::vector <Neo::Plugin *> m_plugins;
 
 	// game plugin
-	Plugin * m_gamePlugin;
+	Neo::Plugin * m_gamePlugin;
 
 private:
 
@@ -87,7 +87,7 @@ public:
 
 	// project load
 	bool loadProject(const char * filename);
-	void loadProject(Project * proj, const char * filename);
+	void loadProject(Neo::Project * proj, const char * filename);
 	
 	// main loops
 	static void logicLoop(void);

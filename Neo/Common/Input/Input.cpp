@@ -33,6 +33,7 @@
 #include "MVector2.h"
 #include "MVector3.h"
 
+using namespace Neo;
 
 Input::Input(void)
 {

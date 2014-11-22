@@ -31,7 +31,8 @@
 #ifndef _M_FIXED_RENDERER_H
 #define _M_FIXED_RENDERER_H
 
-
+namespace Neo
+{
 // Fixed Renderer
 class FixedRenderer : public MRenderer
 {
@@ -82,5 +83,6 @@ public:
 	// extra
 	void drawText(MOText * textObj);
 };
+}
 
 #endif

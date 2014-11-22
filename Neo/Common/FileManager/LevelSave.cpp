@@ -32,9 +32,10 @@
 #include "LevelSave.h"
 #include "XmlCommon.h"
 
+namespace Neo
+{
 
 static char rep[256];
-
 
 void writePhysics(MFile * file, MPhysicsProperties * physicsProperties)
 {
@@ -757,4 +758,5 @@ bool xmlLevelSave(MLevel * level, const char * filename)
 
 	M_fclose(file);
 	return true;
+}
 }

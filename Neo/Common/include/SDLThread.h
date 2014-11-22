@@ -33,6 +33,8 @@
 #include <MCore.h>
 #include <SDL.h>
 
+namespace Neo
+{
 /**
  * @brief The MThread class implements a multithreading mechanism based on SDL threading functionality.
  * @bug Should this class be here, in MEngine or somewhere else?
@@ -122,5 +124,5 @@ public:
 	static bool WaitAndLock(SDLSemaphore* semaphore);
 	static bool Unlock(SDLSemaphore* semaphore);
 };
-
+}
 #endif

@@ -25,6 +25,9 @@
 #ifndef __M_PUBLISH_EVENT_H__
 #define __M_PUBLISH_EVENT_H__
 
+namespace Neo
+{
+
 /*--------------------------------------------------------------------------------
  * MPublishEvent
  * Base class for publish events
@@ -68,5 +71,5 @@ static eventName##AutoAdd s_##eventName
   * @param dir The new output directory.
   */
 void setPubDir(const char* dir);
-
+}
 #endif /*__M_PUBLISH_EVENT_H__*/

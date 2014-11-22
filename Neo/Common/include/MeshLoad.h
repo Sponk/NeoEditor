@@ -31,9 +31,11 @@
 #ifndef _M_MESH_LOAD_H
 #define _M_MESH_LOAD_H
 
+namespace Neo
+{
 bool xmlArmatureAnimLoad(const char * filename, void * data);
 bool xmlTextureAnimLoad(const char * filename, void * data);
 bool xmlMaterialAnimLoad(const char * filename, void * data);
 bool xmlMeshLoad(const char * filename, void * data);
-
+}
 #endif

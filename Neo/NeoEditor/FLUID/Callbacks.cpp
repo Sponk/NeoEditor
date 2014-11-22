@@ -26,6 +26,8 @@
 
 #include <GuiSystem.h>
 
+using namespace Neo;
+
 #include "../MFilesUpdate/MFilesUpdate.h"
 #include "../MLoaders/MAssimpMeshLoader.h"
 #include <MCore.h>
@@ -2142,7 +2144,7 @@ void play_game_in_editor(Fl_Button* button, void *)
     scriptContext.addFunction("quit", quitReplacement);
     scriptContext.addFunction("loadLevel", loadLevelReplacement);
 
-    Neo::GuiSystem::getInstance()->setupLuaInterface(&scriptContext);
+	Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(&scriptContext);
 
     const char* text = button->label();
     button->label(tr("Stop game"));

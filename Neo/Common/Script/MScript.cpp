@@ -32,6 +32,8 @@
 #include <MWindow.h>
 #include <MLog.h>
 
+using namespace Neo;
+
 static char g_currentDirectory[256] = "";
 static unsigned long g_startTick = 0;
 const char * LUA_VEC3 = "LUA_VEC3";

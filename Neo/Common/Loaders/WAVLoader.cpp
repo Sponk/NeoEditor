@@ -34,6 +34,8 @@
 #include <MEngine.h>
 #include "WAVLoader.h"
 
+namespace Neo
+{
 
 bool M_loadWAVSound(const char * filename, void * data)
 {
@@ -127,4 +129,5 @@ bool M_loadWAVSound(const char * filename, void * data)
 	
 	M_fclose(file);
 	return false;
+}
 }

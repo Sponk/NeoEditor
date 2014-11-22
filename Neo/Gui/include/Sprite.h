@@ -41,7 +41,8 @@
 
 namespace Neo
 {
-
+namespace Gui
+{
 /**
  * @brief The Sprite class displays a texture on the screen.
  */
@@ -62,5 +63,5 @@ public:
     void update();
 };
 }
-
+}
 #endif

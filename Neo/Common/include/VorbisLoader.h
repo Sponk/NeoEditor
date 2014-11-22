@@ -33,6 +33,8 @@
 #ifndef _M_VORBIS_LOADER_H
 #define _M_VORBIS_LOADER_H
 
+namespace Neo
+{
 bool M_loadVorbisSound(const char * filename, void * data);
-
+}
 #endif

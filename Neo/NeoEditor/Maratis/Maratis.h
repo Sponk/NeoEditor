@@ -145,10 +145,10 @@ private:
 	std::vector <MObject3d *> m_selectedObjects;
 
 	// plugins
-	std::vector <Plugin *> m_plugins;
+	std::vector <Neo::Plugin *> m_plugins;
 
 	// game plugin
-	Plugin * m_gamePlugin;
+	Neo::Plugin * m_gamePlugin;
 
 	// empty text
 	MOText m_emptyText;

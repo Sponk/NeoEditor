@@ -31,6 +31,8 @@
 #ifndef _M_LEVEL_SAVE_H
 #define _M_LEVEL_SAVE_H
 
+namespace Neo
+{
 bool xmlLevelSave(MLevel * level, const char * filename);
-
+}
 #endif

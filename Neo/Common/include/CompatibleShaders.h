@@ -27,7 +27,8 @@
 //
 //========================================================================
 
-
+namespace Neo
+{
 // vert header
 string compat_vertHeader =
 
@@ -687,3 +688,4 @@ compat_fragHeader +
 	"float fogFactor = clamp((FogEnd + position.z) * FogScale, 0.0, 1.0);"
 	"gl_FragColor = mix(FogColor, finalColor, fogFactor);"
 "}");
+}

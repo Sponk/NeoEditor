@@ -41,7 +41,8 @@
 
 namespace Neo
 {
-
+namespace Gui
+{
 /**
  * @brief The Label class displays a string on the screen.
  */
@@ -59,5 +60,5 @@ public:
     void update();
 };
 }
-
+}
 #endif

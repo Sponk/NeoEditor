@@ -31,7 +31,8 @@
 #ifndef _FOLLOW_BEHAVIOR_H
 #define _FOLLOW_BEHAVIOR_H
 
-
+namespace Neo
+{
 class FollowBehavior : public MBehavior
 {
 public:
@@ -72,5 +73,5 @@ public:
 	unsigned int getVariablesNumber(void);
 	MVariable getVariable(unsigned int id);
 };
-
+}
 #endif

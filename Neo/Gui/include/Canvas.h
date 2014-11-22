@@ -40,6 +40,8 @@
 
 namespace Neo
 {
+namespace Gui
+{
 /**
  * @brief The Canvas class contains all widgets and renders them.
  *
@@ -78,5 +80,5 @@ public:
     void disableRenderToTexture() { m_renderToTexture = false; }
 };
 }
-
+}
 #endif

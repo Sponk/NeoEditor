@@ -31,6 +31,8 @@
 #ifndef _M_XML_COMMON_H
 #define _M_XML_COMMON_H
 
+namespace Neo
+{
 void openNode(MFile * file, const char * name, unsigned int tab, const char * sep = NULL);
 void closeNode(MFile * file, const char * name, unsigned int tab, const char * sep = NULL);
 void openAttributeNode(MFile * file, const char * name, unsigned int tab);
@@ -43,5 +45,5 @@ void writeFloat(MFile * file, const char * name, float variable, const char * se
 void writeFloatValues(MFile * file, const char * name, float * vector, unsigned int size, const char * sep = NULL);
 void writeFilename(MFile * file, const char * name, const char * filename, const char * workingDirectory = NULL, const char * sep = NULL);
 void writeVariable(MFile * file, MVariable * variable, const char * workingDirectory = NULL, const char * sep = NULL);
-
+}
 #endif

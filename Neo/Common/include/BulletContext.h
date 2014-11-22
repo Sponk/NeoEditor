@@ -37,7 +37,8 @@
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
-
+namespace Neo
+{
 class BulletContext : public MPhysicsContext
 {
 private:
@@ -150,5 +151,5 @@ public:
 	// delete constraint
 	void deleteConstraint(unsigned int * constraintId);
 };
-
+}
 #endif

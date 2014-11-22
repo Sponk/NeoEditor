@@ -26,6 +26,8 @@
 #include "HTTPRequest.h"
 #include <RakSleep.h>
 
+using namespace Neo;
+
 HTTPRequest::HTTPRequest(const char* host, int port)
 {
     if(!m_tcp.Start(port, 1))

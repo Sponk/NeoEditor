@@ -36,6 +36,8 @@
 	#include <sys/types.h>
 #endif
 
+namespace Neo
+{
 
 // some helper functions for repetitive packaging work
 static string s_pubDir;
@@ -553,3 +555,4 @@ class MPublishEventCopyGame : public MPublishEvent
 	int		getPriority() { return 7; }
 };
 M_PUBLISH_EVENT_IMPLEMENT(MPublishEventCopyGame);
+}

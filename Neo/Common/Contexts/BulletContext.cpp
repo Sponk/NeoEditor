@@ -30,6 +30,7 @@
 
 #include "BulletContext.h"
 
+using namespace Neo;
 
 // constructor
 BulletContext::BulletContext(void):

@@ -33,6 +33,8 @@
 #include <MEngine.h>
 #include "BinMeshLoader.h"
 
+namespace Neo
+{
 
 // tools
 static void readKey(MFile * file, MKey * key, M_VARIABLE_TYPE type)
@@ -809,4 +811,5 @@ bool M_loadBinMaterialsAnim(const char * filename, void * data)
 
 	M_fclose(file);
 	return true;
+}
 }

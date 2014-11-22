@@ -36,6 +36,7 @@
 
 #include "WinContext.h"
 
+using namespace Neo;
 
 // screen
 void MWinContext::getScreenSize(unsigned int * width, unsigned int * height)

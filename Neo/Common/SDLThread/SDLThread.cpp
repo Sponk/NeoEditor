@@ -30,6 +30,8 @@
 #include "SDLThread.h"
 #include <cstdio>
 
+using namespace Neo;
+
 SDLThread::SDLThread() :
       m_sdlThread(NULL)
     , m_running(false)

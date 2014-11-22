@@ -33,7 +33,8 @@
 
 #include <MCore.h>
 
-
+namespace Neo
+{
 class Input : public MInputContext
 {
 public :
@@ -92,5 +93,5 @@ public:
 
 	void flush(void);
 };
-
+}
 #endif

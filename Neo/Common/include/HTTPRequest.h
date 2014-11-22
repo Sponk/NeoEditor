@@ -29,6 +29,8 @@
 #include <HTTPConnection.h>
 #include <MEngine.h>
 
+namespace Neo
+{
 /**
  * The HTTPRequest class allows to very easily send either POST requests
  * or GET requests to the server it was initialized with.
@@ -71,5 +73,5 @@ public:
      */
     const char* sendGetRequest(const char* path);
 };
-
+}
 #endif

@@ -33,9 +33,11 @@
 #ifndef _M_BIN_MESH_LOADER_H
 #define _M_BIN_MESH_LOADER_H
 
+namespace Neo
+{
 bool M_loadBinMesh(const char * filename, void * data);
 bool M_loadBinArmatureAnim(const char * filename, void * data);
 bool M_loadBinTexturesAnim(const char * filename, void * data);
 bool M_loadBinMaterialsAnim(const char * filename, void * data);
-
+}
 #endif

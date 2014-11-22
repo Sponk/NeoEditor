@@ -93,6 +93,8 @@
 // Profiler
 #include <Shiny.h>
 
+using namespace Neo;
+
 // add ext if not
 void fileExtension(char * out, const char * in, const char * ext)
 {

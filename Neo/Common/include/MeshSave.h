@@ -31,9 +31,12 @@
 #ifndef _M_MESH_SAVE_H
 #define _M_MESH_SAVE_H
 
+namespace Neo
+{
 bool xmlMeshSave(const char * filename, MMesh * mesh);
 bool xmlArmatureAnimSave(const char * filename, MArmatureAnim * anim);
 bool xmlTexturesAnimSave(const char * filename, MTexturesAnim * anim);
 bool xmlMaterialsAnimSave(const char * filename, MMaterialsAnim * anim);
+}
 
 #endif

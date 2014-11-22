@@ -28,6 +28,9 @@
 #include "MPublishEvent.h"
 #include <vector>
 
+namespace Neo
+{
+
 /*--------------------------------------------------------------------------------
  * MPublisher
  * Editor singleton to handle publishing of a Maratis project
@@ -56,5 +59,5 @@ public:
 	void addEvent(MPublishEvent* pubEvent);
 	void publish(const char* projName);
 };
-
+}
 #endif /*__M_PUBLISHER_H__*/

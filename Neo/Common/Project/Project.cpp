@@ -33,9 +33,14 @@
 
 #include "Project.h"
 
+using namespace Neo;
+
+namespace Neo
+{
 const char* s_embedded_game_name  = "[EMBEDDED MPROJECT GAME NAME HERE]                             ";
 const char* s_embedded_level_name = "[EMBEDDED MPROJECT LEVEL NAME HERE]                            ";
 const char* s_embedded_renderer   = "[EMBEDDED MPROJECT RENDERER]                                   ";
+}
 
 bool Project::loadXML(const char * filename)
 {

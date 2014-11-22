@@ -35,7 +35,7 @@
 #include <Canvas.h>
 #include <Render.h>
 
-using namespace Neo;
+using namespace Neo::Gui;
 
 void Canvas::draw()
 {

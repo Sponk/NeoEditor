@@ -39,6 +39,9 @@
 #include <MEngine.h>
 #include "JpegLoader.h"
 
+namespace Neo
+{
+
 struct my_error_mgr
 {
 	struct jpeg_error_mgr pub;
@@ -129,4 +132,5 @@ bool M_loadJpegImage(const char * filename, void * data)
     delete [] out;
 
 	return true;
+}
 }

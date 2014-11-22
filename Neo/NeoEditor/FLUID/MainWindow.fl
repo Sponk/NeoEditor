@@ -14,10 +14,13 @@ decl {\#include <string>} {private local
 decl {\#include <FL/Fl_Color_Chooser.H>} {private local
 } 
 
-decl {\#include <MeshSave.h>} {selected private local
+decl {\#include <MeshSave.h>} {private local
 } 
 
 decl {\#include "../MPluginScript/MPluginScript.h"} {public global
+} 
+
+decl {using namespace Neo;} {selected private global
 } 
 
 class EditorWindow {open

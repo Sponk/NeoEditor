@@ -6,6 +6,7 @@
 #include <string>
 #include <FL/Fl_Color_Chooser.H>
 #include <MeshSave.h>
+using namespace Neo;
 
 unsigned char EditorWindow::menu_menu_bar_i18n_done = 0;
 Fl_Menu_Item EditorWindow::menu_menu_bar[] = {

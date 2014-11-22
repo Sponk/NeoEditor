@@ -37,6 +37,8 @@
 #include <dlfcn.h>
 #endif
 
+namespace Neo
+{
 class Plugin
 {
 public :
@@ -59,5 +61,5 @@ public:
 	void load(const char * filename);
 	inline const char * getFilename(void){ return m_filename.c_str(); }
 };
-
+}
 #endif

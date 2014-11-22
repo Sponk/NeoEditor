@@ -32,6 +32,8 @@
 #include <tinyxml.h>
 #include "XmlCommon.h"
 
+namespace Neo
+{
 
 void openNode(MFile * file, const char * name, unsigned int tab, const char * sep)
 {
@@ -180,4 +182,4 @@ void writeVariable(MFile * file, MVariable * variable, const char * workingDirec
 	if(sep)
 		M_fprintf(file, sep);
 }
-
+}

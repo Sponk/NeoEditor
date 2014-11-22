@@ -35,7 +35,8 @@
 
 #include <MCore.h>
 #define MAX_MRCLIGHTS 8
-
+namespace Neo
+{
 class GLContext : public MRenderingContext
 {
 private:
@@ -266,5 +267,5 @@ public:
     // point size
     void setPointSize(float size);
 };
-
+}
 #endif

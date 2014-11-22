@@ -31,6 +31,8 @@
 #ifndef _M_PROJECT_H
 #define _M_PROJECT_H
 
+namespace Neo
+{
 /*--------------------------------------------------------------------------------
  * These values will be overridden in MaratisPlayer during export
  *-------------------------------------------------------------------------------*/
@@ -48,5 +50,5 @@ public:
 	bool loadXML(const char * filename);
 	bool saveXML(const char * filename);
 };
-
+}
 #endif

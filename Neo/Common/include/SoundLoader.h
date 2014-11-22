@@ -33,6 +33,8 @@
 #ifndef _M_SOUND_LOADER_H
 #define _M_SOUND_LOADER_H
 
+namespace Neo
+{
 bool M_loadSound(const char * filename, void * data);
-
+}
 #endif

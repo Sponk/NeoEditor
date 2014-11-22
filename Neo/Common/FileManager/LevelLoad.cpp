@@ -33,6 +33,9 @@
 
 #include "LevelLoad.h"
 
+namespace Neo
+{
+
 static char rep[256];
 static MLevel * level;
 
@@ -880,4 +883,5 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 	engine->setLevel(oldLevel);
 
 	return true;
+}
 }

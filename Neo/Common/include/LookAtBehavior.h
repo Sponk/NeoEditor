@@ -31,7 +31,8 @@
 #ifndef _MB_LOOK_AT_H
 #define _MB_LOOK_AT_H
 
-
+namespace Neo
+{
 class LookAtBehavior : public MBehavior
 {
 public:
@@ -69,5 +70,5 @@ public:
 	unsigned int getVariablesNumber(void);
 	MVariable getVariable(unsigned int id);
 };
-
+}
 #endif
