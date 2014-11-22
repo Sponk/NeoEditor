@@ -28,7 +28,7 @@
 //========================================================================
 
 
-#include "MScript.h"
+#include "Script.h"
 #include <MWindow.h>
 #include <MLog.h>
 

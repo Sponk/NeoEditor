@@ -29,20 +29,20 @@
 // MaratisCore
 
 #ifndef USE_GLES
-#include <MGLContext.h>
+#include <GLContext.h>
 #else
-#include <MES2Context.h>
-typedef MES2Context MGLContext;
+#include <ES2Context.h>
+typedef ES2Context GLContext;
 #endif
 
-#include <MALContext.h>
-#include <MBulletContext.h>
-#include <MWinContext.h>
-#include <MImageLoader.h>
-#include <MSoundLoader.h>
-#include <MFreetypeLoader.h>
-#include <MBinFontLoader.h>
-#include <MBinMeshLoader.h>
+#include <ALContext.h>
+#include <BulletContext.h>
+#include <WinContext.h>
+#include <ImageLoader.h>
+#include <SoundLoader.h>
+#include <FreetypeLoader.h>
+#include <BinFontLoader.h>
+#include <BinMeshLoader.h>
 
 #include <MCore.h>
 #include <MEngine.h>
@@ -53,16 +53,16 @@ typedef MES2Context MGLContext;
 #include <FollowBehavior.h>
 #include <LuaBehavior.h>
 #include <ParticleSystemBehavior.h>
-#include <MScript.h>
-#include <MInput.h>
-#include <MLevelLoad.h>
-#include <MLevelSave.h>
-#include <MMeshLoad.h>
-#include <MMeshSave.h>
-#include <MPackageManagerNPK.h>
-#include <MProject.h>
-#include <MStandardRenderer.h>
-#include <MFixedRenderer.h>
+#include <Script.h>
+#include <Input.h>
+#include <LevelLoad.h>
+#include <LevelSave.h>
+#include <MeshLoad.h>
+#include <MeshSave.h>
+#include <PackageManagerNPK.h>
+#include <Project.h>
+#include <StandardRenderer.h>
+#include <FixedRenderer.h>
 
 
 MaratisPlayer::MaratisPlayer(void):

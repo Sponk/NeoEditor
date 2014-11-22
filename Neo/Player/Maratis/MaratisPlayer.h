@@ -27,8 +27,8 @@
 #define _MARATIS_PLAYER_H
 
 #include <MEngine.h>
-#include <MPlugin.h>
-#include <MProject.h>
+#include <Plugin.h>
+#include <Project.h>
 
 
 class MaratisPlayer

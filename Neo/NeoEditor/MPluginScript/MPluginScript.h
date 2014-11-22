@@ -30,7 +30,7 @@
 #ifndef MPLUGIN_SCRIPT_H
 #define MPLUGIN_SCRIPT_H
 
-#include <MScript.h>
+#include <Script.h>
 #include <string>
 
 class MPluginScript : public MScript

@@ -31,7 +31,7 @@
 #ifndef _MB_LUA_H
 #define _MB_LUA_H
 
-#include <MScript.h>
+#include <Script.h>
 #include <MVariable.h>
 #include <vector>
 #include <string>

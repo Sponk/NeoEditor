@@ -29,7 +29,7 @@
 #include "FLUID/ini.h"
 
 #include <MEngine.h>
-#include <MImageLoader.h>
+#include <ImageLoader.h>
 #include <MLog.h>
 #include "MFilesUpdate/MFilesUpdate.h"
 #include "Maratis/Maratis.h"

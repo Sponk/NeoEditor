@@ -29,7 +29,7 @@
 
 
 #include <MEngine.h>
-#include <MScript.h>
+#include <Script.h>
 #include <MLog.h>
 #include <lua.hpp>
 #include <map>

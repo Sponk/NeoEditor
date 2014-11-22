@@ -23,7 +23,7 @@
 //========================================================================
 
 #include <MEngine.h>
-#include <MProject.h>
+#include <Project.h>
 
 #include "MPublisher.h"
 #include "MPublishEvent.h"

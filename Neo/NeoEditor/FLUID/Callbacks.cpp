@@ -18,9 +18,9 @@
 
 #include <MEngine.h>
 #include <MWindow.h>
-#include <MImageLoader.h>
-#include <MLevelLoad.h>
-#include <MLevelSave.h>
+#include <ImageLoader.h>
+#include <LevelLoad.h>
+#include <LevelSave.h>
 #include <MCore.h>
 #include <HTTPRequest.h>
 

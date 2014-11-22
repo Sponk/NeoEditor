@@ -30,9 +30,9 @@
 //========================================================================
 
 #include <MCore.h>
-#include "MSoundLoader.h"
-#include "MVorbisLoader.h"
-#include "MWAVLoader.h"
+#include "SoundLoader.h"
+#include "VorbisLoader.h"
+#include "WAVLoader.h"
 
 bool M_loadSound(const char * filename, void * data)
 {
