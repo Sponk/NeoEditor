@@ -30,10 +30,10 @@
 #ifndef MPLUGIN_SCRIPT_H
 #define MPLUGIN_SCRIPT_H
 
-#include <Script.h>
+#include <LuaScript.h>
 #include <string>
 
-class MPluginScript : public Neo::MScript
+class MPluginScript : public Neo::LuaScript
 {
 private:
     void init();

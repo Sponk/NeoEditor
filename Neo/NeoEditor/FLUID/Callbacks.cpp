@@ -2138,7 +2138,7 @@ void play_game_in_editor(Fl_Button* button, void *)
         return;
     }
 
-    MScript scriptContext;
+    LuaScript scriptContext;
     scriptContext.addFunction("print", redirect_script_print);
     scriptContext.addFunction("centerCursor", centerCursorReplacement);
     scriptContext.addFunction("quit", quitReplacement);

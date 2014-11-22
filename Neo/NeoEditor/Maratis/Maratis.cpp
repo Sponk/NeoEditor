@@ -66,7 +66,7 @@
 #include <FollowBehavior.h>
 #include <LuaBehavior.h>
 #include <ParticleSystemBehavior.h>
-#include <Script.h>
+#include <LuaScript.h>
 #include <Input.h>
 #include <LevelLoad.h>
 #include <LevelSave.h>
@@ -222,7 +222,7 @@ m_renderer(NULL)
     {
         m_soundContext = new ALContext();
         m_physics = new BulletContext();
-        m_script = new MScript();
+        m_script = new LuaScript();
         m_input = new Input();
         m_system = new MWinContext();
         m_level = new MLevel();

@@ -28,7 +28,7 @@
 //========================================================================
 
 
-#include "Script.h"
+#include <LuaScript.h>
 #include <MWindow.h>
 #include <MLog.h>
 
@@ -4490,7 +4490,7 @@ int setText(lua_State * L)
 
 int getTextColor(lua_State * L)
 {
-	MScript * script = (MScript *)MEngine::getInstance()->getScriptContext();
+	LuaScript * script = (LuaScript *)MEngine::getInstance()->getScriptContext();
 
 	if(! isFunctionOk(L, "getTextColor", 1))
 		return 0;
@@ -4513,7 +4513,7 @@ int getTextColor(lua_State * L)
 
 int setTextColor(lua_State * L)
 {
-	MScript * script = (MScript *)MEngine::getInstance()->getScriptContext();
+	LuaScript * script = (LuaScript *)MEngine::getInstance()->getScriptContext();
 
 	if(! isFunctionOk(L, "setTextColor", 2))
 		return 0;
@@ -4538,7 +4538,7 @@ int getWindowScale(lua_State * L)
 {
 	MEngine * engine = MEngine::getInstance();
 	MSystemContext * system = engine->getSystemContext();
-	MScript * script = (MScript *)engine->getScriptContext();
+	LuaScript * script = (LuaScript *)engine->getScriptContext();
 
 	unsigned int width, height;
 	system->getScreenSize(&width, &height);
@@ -4736,17 +4736,17 @@ int resizeWindow(lua_State * L)
 // Init
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-MScript::MScript(void):
+LuaScript::LuaScript(void):
 m_state(NULL),
 m_isRunning(false)
 {}
 
-MScript::~MScript(void)
+LuaScript::~LuaScript(void)
 {
 	clear();
 }
 
-void MScript::init(void)
+void LuaScript::init(void)
 {
 	MEngine * engine = MEngine::getInstance();
 	MSystemContext * system = engine->getSystemContext();
@@ -4996,7 +4996,7 @@ void MScript::init(void)
 		lua_register(m_state, mit->first.c_str(), function);
 }
 
-void MScript::clear(void)
+void LuaScript::clear(void)
 {
 	if(m_state)
 	{
@@ -5006,9 +5006,9 @@ void MScript::clear(void)
 	m_isRunning = false;
 }
 
-int MScript::function(lua_State * L)
+int LuaScript::function(lua_State * L)
 {
-	MScript * script = (MScript *)MEngine::getInstance()->getScriptContext();
+	LuaScript * script = (LuaScript *)MEngine::getInstance()->getScriptContext();
 
     lua_Debug ar;
 	lua_getstack(L, 0, &ar);
@@ -5021,7 +5021,7 @@ int MScript::function(lua_State * L)
 	return 0;
 }
 
-void MScript::runScript(const char * filename)
+void LuaScript::runScript(const char * filename)
 {
 	clear();
 
@@ -5065,7 +5065,7 @@ void MScript::runScript(const char * filename)
 	m_isRunning = true;
 }
 
-bool MScript::startCallFunction(const char* name)
+bool LuaScript::startCallFunction(const char* name)
 {
 	if(m_isRunning)
 	{
@@ -5080,7 +5080,7 @@ bool MScript::startCallFunction(const char* name)
 	return false;
 }
 
-bool MScript::endCallFunction(int numArgs)
+bool LuaScript::endCallFunction(int numArgs)
 {
 	if(lua_pcall(m_state, numArgs, 0, 0) != 0)
 	{
@@ -5091,21 +5091,21 @@ bool MScript::endCallFunction(int numArgs)
 	return true;
 }
 
-void MScript::callFunction(const char * name)
+void LuaScript::callFunction(const char * name)
 {
 	if(startCallFunction(name))
 		endCallFunction();
 }
 
-void MScript::addFunction(const char * name, int (*function)(void)){
+void LuaScript::addFunction(const char * name, int (*function)(void)){
 	m_functions[name] = function;
 }
 
-unsigned int MScript::getArgsNumber(void){
+unsigned int LuaScript::getArgsNumber(void){
 	return lua_gettop(m_state);
 }
 
-void MScript::getIntArray(unsigned int arg, int * values, unsigned int valuesNumber)
+void LuaScript::getIntArray(unsigned int arg, int * values, unsigned int valuesNumber)
 {
 	arg++;
 	if(lua_istable(m_state, arg) && (lua_objlen(m_state, arg) >= valuesNumber))
@@ -5120,7 +5120,7 @@ void MScript::getIntArray(unsigned int arg, int * values, unsigned int valuesNum
 	}
 }
 
-void MScript::getFloatArray(unsigned int arg, float * values, unsigned int valuesNumber)
+void LuaScript::getFloatArray(unsigned int arg, float * values, unsigned int valuesNumber)
 {
 	arg++;
 	if(lua_istable(m_state, arg) && (lua_objlen(m_state, arg) >= valuesNumber))
@@ -5135,23 +5135,23 @@ void MScript::getFloatArray(unsigned int arg, float * values, unsigned int value
 	}
 }
 
-const char * MScript::getString(unsigned int arg){
+const char * LuaScript::getString(unsigned int arg){
 	return lua_tostring(m_state, arg+1);
 }
 
-int MScript::getInteger(unsigned int arg){
+int LuaScript::getInteger(unsigned int arg){
 	return (int)lua_tointeger(m_state, arg+1);
 }
 
-float MScript::getFloat(unsigned int arg){
+float LuaScript::getFloat(unsigned int arg){
 	return (float)lua_tonumber(m_state, arg+1);
 }
 
-void* MScript::getPointer(unsigned int arg){
+void* LuaScript::getPointer(unsigned int arg){
 	return (void*)lua_tointeger(m_state, arg+1);
 }
 
-void MScript::pushIntArray(const int * values, unsigned int valuesNumber)
+void LuaScript::pushIntArray(const int * values, unsigned int valuesNumber)
 {
 	lua_newtable(m_state);
 	for(unsigned int i=0; i<valuesNumber; i++)
@@ -5162,7 +5162,7 @@ void MScript::pushIntArray(const int * values, unsigned int valuesNumber)
 	}
 }
 
-void MScript::pushFloatArray(const float * values, unsigned int valuesNumber)
+void LuaScript::pushFloatArray(const float * values, unsigned int valuesNumber)
 {
 	lua_newtable(m_state);
 	for(unsigned int i=0; i<valuesNumber; i++)
@@ -5173,22 +5173,22 @@ void MScript::pushFloatArray(const float * values, unsigned int valuesNumber)
 	}
 }
 
-void MScript::pushBoolean(bool value){
+void LuaScript::pushBoolean(bool value){
 	lua_pushboolean(m_state, (int)value);
 }
 
-void MScript::pushString(const char * string){
+void LuaScript::pushString(const char * string){
 	lua_pushstring(m_state, string);
 }
 
-void MScript::pushInteger(int value){
+void LuaScript::pushInteger(int value){
 	lua_pushinteger(m_state, (lua_Integer)value);
 }
 
-void MScript::pushFloat(float value){
+void LuaScript::pushFloat(float value){
 	lua_pushnumber(m_state, (lua_Number)value);
 }
 
-void MScript::pushPointer(void* value){
+void LuaScript::pushPointer(void* value){
 	lua_pushinteger(m_state, (lua_Integer)value);
 }

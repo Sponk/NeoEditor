@@ -32,7 +32,7 @@
 using namespace Neo;
 
 // Implemented in FltkToLua.cpp
-void createFltkLuaBindings(MScript* script);
+void createFltkLuaBindings(LuaScript* script);
 
 // Methods to setup plugin data (name, author, license etc.)
 int MPluginScript::setName()
@@ -116,7 +116,7 @@ void MPluginScript::init()
     // Add FLTK bindings
     createFltkLuaBindings(this);
 
-    MScript::init();
+    LuaScript::init();
 }
 
 void MPluginScript::runScript(const char* filename)
@@ -174,18 +174,18 @@ void MPluginScript::callFunction(const char* name)
     MScriptContext* oldContext = engine->getScriptContext();
 
     engine->setScriptContext(this);
-    MScript::callFunction(name);
+    LuaScript::callFunction(name);
     engine->setScriptContext(oldContext);
 }
 
 bool MPluginScript::startCallFunction(const char *name)
 {
     MEngine::getInstance()->setScriptContext(this);
-    return MScript::startCallFunction(name);
+    return LuaScript::startCallFunction(name);
 }
 
 bool MPluginScript::endCallFunction(int numArgs)
 {
     MEngine::getInstance()->setScriptContext(this);
-    return MScript::endCallFunction(numArgs);
+    return LuaScript::endCallFunction(numArgs);
 }

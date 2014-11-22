@@ -31,7 +31,7 @@
 #ifndef _MB_LUA_H
 #define _MB_LUA_H
 
-#include <Script.h>
+#include <LuaScript.h>
 #include <MVariable.h>
 #include <vector>
 #include <string>
@@ -52,7 +52,7 @@ private:
 
 	// variables
 	MString m_scriptFile;
-    MScript m_script;
+    LuaScript m_script;
     bool m_init;
 
     struct MValueVariable

@@ -65,7 +65,7 @@ void lua_callback(Fl_Widget*, long id)
 
 int messagebox()
 {
-    MScript* script = (MScript*) MEngine::getInstance()->getScriptContext();
+    LuaScript* script = (LuaScript*) MEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -79,7 +79,7 @@ extern const char* fl_native_file_chooser(const char* title, const char* files, 
 
 int fileChooser(int mode)
 {
-    MScript* script = (MScript*) MEngine::getInstance()->getScriptContext();
+    LuaScript* script = (LuaScript*) MEngine::getInstance()->getScriptContext();
 
     const char* dir = ".";
     const char* files = "*.*";
@@ -155,7 +155,7 @@ int getCurrentSelection()
 
 int getSelectionCenter()
 {
-    MScript* script = (MScript*) MEngine::getInstance()->getScriptContext();
+    LuaScript* script = (LuaScript*) MEngine::getInstance()->getScriptContext();
     script->pushFloatArray(*Maratis::getInstance()->getSelectionCenter(), 3);
 
     return 1;
@@ -378,7 +378,7 @@ int debugLog()
     return 1;
 }
 
-void createFltkLuaBindings(MScript* script)
+void createFltkLuaBindings(LuaScript* script)
 {
     if(!script)
         return;
