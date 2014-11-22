@@ -35,7 +35,6 @@
 #include "Maratis/Maratis.h"
 #include <MWindow.h>
 #include <MCore.h>
-#include <MSchedule.h>
 #include "FLUID/MainWindow.h"
 #include "FLUID/Callbacks.h"
 #include <FL/Fl.H>

@@ -30,7 +30,6 @@
 
 #include <MGameWinEvents.h>
 #include "Maratis/MaratisPlayer.h"
-#include <MSchedule.h>
 
 // NeoGui
 #include <GuiSystem.h>
