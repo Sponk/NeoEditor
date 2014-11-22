@@ -1,7 +1,7 @@
 #include "GLBox.h"
 #include <MWindow.h>
 #include <MEngine.h>
-#include <MLoaders/MImageLoader.h>
+#include <MImageLoader.h>
 #include <MLog.h>
 #include <MKeyboard.h>
 

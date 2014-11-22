@@ -314,7 +314,7 @@ SET(MENGINE_LIBRARIES MEngine)
 SET(NEOGUI_LIBRARIES NeoGui)
 
 ## Set up Maratis dependencies
-SET(NEO_COMMON_INCLUDE_DIR ${MARATIS_SOURCE_DIR}/Neo/Common ${MARATIS_SOURCE_DIR}/Neo/Common/MWindow)
+SET(NEO_COMMON_INCLUDE_DIR ${MARATIS_SOURCE_DIR}/Neo/Common ${MARATIS_SOURCE_DIR}/Neo/Common/include ${MARATIS_SOURCE_DIR}/Neo/Common/MWindow)
 SET(NEO_COMMON_LIBRARIES NeoCommon)
 
 ## Set up binary output path

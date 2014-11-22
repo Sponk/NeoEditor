@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Maratis
-// MBLookAt.cpp
+// MBFollow.cpp
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //========================================================================
@@ -29,39 +29,43 @@
 
 
 #include <MEngine.h>
-#include "MBLookAt.h"
-
+#include <FollowBehavior.h>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Init
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-MBLookAt::MBLookAt(MObject3d * parentObject):
+FollowBehavior::FollowBehavior(MObject3d * parentObject):
 MBehavior(parentObject),
+m_local(false),
+m_delay(10),
 m_targetName("none")
 {}
 
-MBLookAt::MBLookAt(MBLookAt & behavior, MObject3d * parentObject):
+FollowBehavior::FollowBehavior(FollowBehavior & behavior, MObject3d * parentObject):
 MBehavior(parentObject),
+m_local(behavior.m_local),
+m_delay(behavior.m_delay),
+m_offset(behavior.m_offset),
 m_targetName(behavior.m_targetName)
 {}
 
-MBLookAt::~MBLookAt(void)
+FollowBehavior::~FollowBehavior(void)
 {}
 
-void MBLookAt::destroy(void)
+void FollowBehavior::destroy(void)
 {
 	delete this;
 }
 
-MBehavior * MBLookAt::getNew(MObject3d * parentObject)
+MBehavior * FollowBehavior::getNew(MObject3d * parentObject)
 {
-	return new MBLookAt(parentObject);
+	return new FollowBehavior(parentObject);
 }
 
-MBehavior * MBLookAt::getCopy(MObject3d * parentObject)
+MBehavior * FollowBehavior::getCopy(MObject3d * parentObject)
 {
-	return new MBLookAt(*this, parentObject);
+	return new FollowBehavior(*this, parentObject);
 }
 
 
@@ -69,11 +73,11 @@ MBehavior * MBLookAt::getCopy(MObject3d * parentObject)
 // Variables
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned int MBLookAt::getVariablesNumber(void){
-	return 1;
+unsigned int FollowBehavior::getVariablesNumber(void){
+	return 4;
 }
 
-MVariable MBLookAt::getVariable(unsigned int id)
+MVariable FollowBehavior::getVariable(unsigned int id)
 {
 	switch(id)
 	{
@@ -81,6 +85,12 @@ MVariable MBLookAt::getVariable(unsigned int id)
 		return MVariable("NULL", NULL, M_VARIABLE_NULL);
 	case 0:
 		return MVariable("target", &m_targetName, M_VARIABLE_STRING);
+	case 1:
+		return MVariable("delay", &m_delay, M_VARIABLE_FLOAT);
+	case 2:
+		return MVariable("offset", &m_offset, M_VARIABLE_VEC3);
+	case 3:
+		return MVariable("local", &m_local, M_VARIABLE_BOOL);
 	}
 }
 
@@ -89,9 +99,10 @@ MVariable MBLookAt::getVariable(unsigned int id)
 // Events
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void MBLookAt::update(void)
+void FollowBehavior::update(void)
 {
 	MEngine * engine = MEngine::getInstance();
+	MGame * game = engine->getGame();
 	MLevel * level = engine->getLevel();
 	MScene * scene = level->getCurrentScene();
 
@@ -106,72 +117,33 @@ void MBLookAt::update(void)
 	if(! object)
 		return;
 
-	// direction
-	MVector3 direction = object->getTransformedPosition() - parent->getTransformedPosition();
-	if(direction.x == 0 && direction.y == 0 && direction.z == 0)
-		return;
+	// targetPos
+	MVector3 offset = m_offset;
+	if(m_local)
+		offset = object->getRotatedVector(offset);
 
-	float angle;
-	float roll;
+	float delay = MAX(1, m_delay);
+	MVector3 direction = (object->getTransformedPosition() + offset) - parent->getPosition();
 
-	MVector3 axis;
-
-	// compute initial roll
-	MVector3 ZAxis = parent->getInverseRotatedVector(MVector3(0, 0, 1)).getNormalized();
-	ZAxis.z = 0;
-	ZAxis.normalize();
-
-	if(ZAxis.x == 0 && ZAxis.y == 0)
+	if(parent->getType() == M_OBJECT3D_ENTITY)
 	{
-		MVector3 YAxis = parent->getInverseRotatedVector(MVector3(0, 1, 0)).getNormalized();
-		YAxis.z = 0;
-		YAxis.normalize();
-
-		axis = MVector3(0, 1, 0).crossProduct(YAxis);
-		roll = acosf(MVector3(0, 1, 0).dotProduct(YAxis));
-
-		if(MVector3(0, 0, 1).dotProduct(axis) < 0)
-			roll = -roll;
-	}
-	else
-	{
-		axis = MVector3(0, 1, 0).crossProduct(ZAxis);
-		roll = acosf(MVector3(0, 1, 0).dotProduct(ZAxis));
-
-		if(MVector3(0, 0, 1).dotProduct(axis) < 0)
-			roll = -roll;
+		MOEntity * entity = (MOEntity *)parent;
+		MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+		if(phyProps)
+		{
+			if(! phyProps->isGhost())
+			{
+				if(game->isRunning())
+				{
+					MPhysicsContext * physics = engine->getPhysicsContext();
+					physics->addCentralForce(phyProps->getCollisionObjectId(), (direction/delay)*phyProps->getMass());
+				}
+				return;
+			}
+		}
 	}
 
-	if(roll < 0.001f && roll > -0.001f) roll = 0;
-
-	// look-at
-	MVector3 cameraAxis = MVector3(0, 0, -1);
-
-	axis = cameraAxis.crossProduct(direction);
-	angle = acosf(cameraAxis.dotProduct(direction.getNormalized()));
-
-	parent->setAxisAngleRotation(axis, (float)(angle * RAD_TO_DEG));
+	MVector3 position = parent->getPosition() + (direction / delay);
+	parent->setPosition(position);
 	parent->updateMatrix();
-
-	// set roll
-	ZAxis = parent->getInverseRotatedVector(MVector3(0, 0, 1)).getNormalized();;
-	ZAxis.z = 0;
-	ZAxis.normalize();
-
-	if(ZAxis.x == 0 && ZAxis.y == 0)
-	{
-		parent->addAxisAngleRotation(MVector3(0, 0, 1), (float)(-roll*RAD_TO_DEG));
-	}
-	else
-	{
-		axis = MVector3(0, 1, 0).crossProduct(ZAxis);
-		angle = acosf(MVector3(0, 1, 0).dotProduct(ZAxis));
-		if(angle < 0.001f && angle > -0.001f) angle = 0;
-
-		if(MVector3(0, 0, 1).dotProduct(axis) < 0)
-			angle = -angle;
-
-		parent->addAxisAngleRotation(MVector3(0, 0, 1), (float)((angle-roll)*RAD_TO_DEG));
-	}
-
 }

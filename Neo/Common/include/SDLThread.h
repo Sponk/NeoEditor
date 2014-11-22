@@ -27,8 +27,8 @@
 //
 //========================================================================
 
-#ifndef MSDLTHREAD_H
-#define MSDLTHREAD_H
+#ifndef SDLTHREAD_H
+#define SDLTHREAD_H
 
 #include <MCore.h>
 #include <SDL.h>
@@ -40,18 +40,18 @@
  * @see MSemaphore
  * @see MSleep
  */
-class MSDLThread : public MThread
+class SDLThread : public MThread
 {
 private:
         SDL_Thread* m_sdlThread; ///< The SDL thread
         bool m_running; ///< Is the thread running?
 public:
-    MSDLThread();
+	SDLThread();
 
     /**
       * @brief The destructor calls MThread::Stop to clean up.
       */
-    ~MSDLThread();
+	~SDLThread();
 
     /**
      * @brief Start Starts the function given as argument in this thread.
@@ -105,12 +105,12 @@ public:
  * @see MSemaphoreWaitAndLock
  * @see MSemaphoreUnlock
  */
-class MSDLSemaphore : public MSemaphore
+class SDLSemaphore : public MSemaphore
 {
     SDL_semaphore* m_sdlSemaphore; ///< The SDL semaphore
 public:
-    MSDLSemaphore();
-    ~MSDLSemaphore();
+	SDLSemaphore();
+	~SDLSemaphore();
 
     /**
      * @brief Initializes the SDL semaphore.
@@ -119,8 +119,8 @@ public:
      */
     bool Init(int num);
 
-	static bool WaitAndLock(MSDLSemaphore* semaphore);
-	static bool Unlock(MSDLSemaphore* semaphore);
+	static bool WaitAndLock(SDLSemaphore* semaphore);
+	static bool Unlock(SDLSemaphore* semaphore);
 };
 
-#endif // MTHREAD_H
+#endif

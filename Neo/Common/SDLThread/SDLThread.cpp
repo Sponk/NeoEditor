@@ -27,23 +27,23 @@
 //
 //========================================================================
 
-#include "MSDLThread.h"
+#include "SDLThread.h"
 #include <cstdio>
 
-MSDLThread::MSDLThread() :
+SDLThread::SDLThread() :
       m_sdlThread(NULL)
     , m_running(false)
 {
 
 }
 
-MSDLThread::~MSDLThread()
+SDLThread::~SDLThread()
 {
     Stop();
 }
 
 // TODO: Save name!
-bool MSDLThread::Start(int (*thread_func)(void*), const char* name, void* data)
+bool SDLThread::Start(int (*thread_func)(void*), const char* name, void* data)
 {
     if(m_running)
     {
@@ -63,7 +63,7 @@ bool MSDLThread::Start(int (*thread_func)(void*), const char* name, void* data)
 }
 
 // SDL2 does not allow killing threads!
-void MSDLThread::Stop()
+void SDLThread::Stop()
 {
     if(!m_running || m_sdlThread == NULL)
         return;
@@ -75,7 +75,7 @@ void MSDLThread::Stop()
     m_running = false;
 }
 
-int MSDLThread::WaitForReturn()
+int SDLThread::WaitForReturn()
 {
     int ret;
 
@@ -88,7 +88,7 @@ int MSDLThread::WaitForReturn()
     return ret;
 }
 
-int MSDLThread::GetId()
+int SDLThread::GetId()
 {
     if(!m_running)
         return -1;
@@ -100,19 +100,19 @@ int MSDLThread::GetId()
 // Implementation of MSDLSemaphore
 ////////////////////////////////////////////////////////
 
-MSDLSemaphore::MSDLSemaphore() :
+SDLSemaphore::SDLSemaphore() :
     m_sdlSemaphore(NULL)
 {
 
 }
 
-MSDLSemaphore::~MSDLSemaphore()
+SDLSemaphore::~SDLSemaphore()
 {
     if(m_sdlSemaphore)
         SDL_DestroySemaphore(m_sdlSemaphore);
 }
 
-bool MSDLSemaphore::Init(int num)
+bool SDLSemaphore::Init(int num)
 {
     if(m_sdlSemaphore)
     {
@@ -131,7 +131,7 @@ bool MSDLSemaphore::Init(int num)
     return true;
 }
 
-bool MSDLSemaphore::WaitAndLock(MSDLSemaphore* semaphore)
+bool SDLSemaphore::WaitAndLock(SDLSemaphore* semaphore)
 {
 	if (semaphore->m_sdlSemaphore)
     {
@@ -144,7 +144,7 @@ bool MSDLSemaphore::WaitAndLock(MSDLSemaphore* semaphore)
     return false;
 }
 
-bool MSDLSemaphore::Unlock(MSDLSemaphore* semaphore)
+bool SDLSemaphore::Unlock(SDLSemaphore* semaphore)
 {
 	if (semaphore->m_sdlSemaphore)
     {

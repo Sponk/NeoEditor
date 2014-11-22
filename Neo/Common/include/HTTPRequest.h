@@ -22,18 +22,18 @@
 //
 //========================================================================
 
-#if !defined(MHTTP_CONNECTION_H) && defined(USE_NETWORKING)
-#define MHTTP_CONNECTION_H
+#if !defined(NEO_HTTP_CONNECTION_H) && defined(USE_NETWORKING)
+#define NEO_HTTP_CONNECTION_H
 
 #include <TCPInterface.h>
 #include <HTTPConnection.h>
 #include <MEngine.h>
 
 /**
- * The MHTTPConnection class allows to very easily send either POST requests
+ * The HTTPRequest class allows to very easily send either POST requests
  * or GET requests to the server it was initialized with.
  */
-class MHTTPConnection
+class HTTPRequest
 {
     RakNet::TCPInterface m_tcp;
     RakNet::HTTPConnection m_connection;
@@ -49,7 +49,7 @@ public:
      * @param host The URL or IP of the host
      * @param port The port to connect to (usually 80)
      */
-    MHTTPConnection(const char* host, int port);
+	HTTPRequest(const char* host, int port);
 
     /**
      * @brief Sends a post request to the connected server.

@@ -28,7 +28,7 @@
 
 #include <vector>
 #include <MEngine.h>
-#include <MPlugin/MPlugin.h>
+#include <MPlugin.h>
 #include "../MRenderArray/MRenderArray.h"
 
 

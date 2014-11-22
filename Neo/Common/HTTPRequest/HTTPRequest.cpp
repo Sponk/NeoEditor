@@ -23,10 +23,10 @@
 //========================================================================
 
 #ifdef USE_NETWORKING
-#include "MHTTPConnection.h"
+#include "HTTPRequest.h"
 #include <RakSleep.h>
 
-MHTTPConnection::MHTTPConnection(const char* host, int port)
+HTTPRequest::HTTPRequest(const char* host, int port)
 {
     if(!m_tcp.Start(port, 1))
     {
@@ -41,19 +41,19 @@ MHTTPConnection::MHTTPConnection(const char* host, int port)
     m_host.set(host);
 }
 
-const char* MHTTPConnection::sendPostRequest(const char* path, const char* data)
+const char* HTTPRequest::sendPostRequest(const char* path, const char* data)
 {
     m_connection.Post(path, data, "text/html");
     return connectionLoop();
 }
 
-const char* MHTTPConnection::sendGetRequest(const char* path)
+const char* HTTPRequest::sendGetRequest(const char* path)
 {
     m_connection.Get(path);
     return connectionLoop();
 }
 
-const char* MHTTPConnection::connectionLoop()
+const char* HTTPRequest::connectionLoop()
 {
     MSystemContext* system = MEngine::getInstance()->getSystemContext();
     unsigned long startTime = system->getSystemTick();

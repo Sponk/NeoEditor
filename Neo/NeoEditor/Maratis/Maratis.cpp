@@ -43,39 +43,39 @@
 
 // Maratis Common
 #ifdef USE_GLES
-#include <MContexts/MES2Context.h>
+#include <MES2Context.h>
 #else
-#include <MContexts/MGLContext.h>
+#include <MGLContext.h>
 #endif
 
-#include <MContexts/MALContext.h>
-#include <MContexts/MBulletContext.h>
-#include <MContexts/MWinContext.h>
-#include <MLoaders/MImageLoader.h>
-#include <MLoaders/MSoundLoader.h>
-#include <MLoaders/MFreetypeLoader.h>
-#include <MLoaders/MBinFontLoader.h>
-#include <MLoaders/MBinMeshLoader.h>
+#include <MALContext.h>
+#include <MBulletContext.h>
+#include <MWinContext.h>
+#include <MImageLoader.h>
+#include <MSoundLoader.h>
+#include <MFreetypeLoader.h>
+#include <MBinFontLoader.h>
+#include <MBinMeshLoader.h>
 
 #include <MCore.h>
 #include <MEngine.h>
 #include <MVariable.h>
 #include "../MWindow/MMouse.h"
 #include <MBehavior.h>
-#include <MBehaviors/MBLookAt.h>
-#include <MBehaviors/MBFollow.h>
-#include <MBehaviors/MBLua.h>
-#include <MBehaviors/MBParticleSystem.h>
-#include <MScript/MScript.h>
-#include <MInput/MInput.h>
-#include <MFileManager/MLevelLoad.h>
-#include <MFileManager/MLevelSave.h>
-#include <MFileManager/MMeshLoad.h>
-#include <MFileManager/MMeshSave.h>
-#include <MFileManager/MPackageManagerNPK.h>
-#include <MProject/MProject.h>
-#include <MRenderers/MStandardRenderer.h>
-#include <MRenderers/MFixedRenderer.h>
+#include <LookAtBehavior.h>
+#include <FollowBehavior.h>
+#include <LuaBehavior.h>
+#include <ParticleSystemBehavior.h>
+#include <MScript.h>
+#include <MInput.h>
+#include <MLevelLoad.h>
+#include <MLevelSave.h>
+#include <MMeshLoad.h>
+#include <MMeshSave.h>
+#include <MPackageManagerNPK.h>
+#include <MProject.h>
+#include <MStandardRenderer.h>
+#include <MFixedRenderer.h>
 
 #include "Maratis.h"
 #include <MWindow.h>
@@ -218,8 +218,8 @@ m_renderer(NULL)
 
     // MEngine
     {
-        m_soundContext = new MALContext();
-        m_physics = new MBulletContext();
+        m_soundContext = new ALContext();
+        m_physics = new BulletContext();
         m_script = new MScript();
         m_input = new MInput();
         m_system = new MWinContext();
@@ -467,10 +467,10 @@ void Maratis::start(void)
         engine->getFontLoader()->addLoader(M_loadBinFont); // bin font loader
 
         // add behaviors
-        engine->getBehaviorManager()->addBehavior(MBLookAt::getStaticName(), M_OBJECT3D, MBLookAt::getNew);
-        engine->getBehaviorManager()->addBehavior(MBFollow::getStaticName(), M_OBJECT3D, MBFollow::getNew);
-		engine->getBehaviorManager()->addBehavior(MBLua::getStaticName(), M_OBJECT3D, MBLua::getNew);
-        engine->getBehaviorManager()->addBehavior(MBParticleSystem::getStaticName(), M_OBJECT3D, MBParticleSystem::getNew);
+        engine->getBehaviorManager()->addBehavior(LookAtBehavior::getStaticName(), M_OBJECT3D, LookAtBehavior::getNew);
+        engine->getBehaviorManager()->addBehavior(FollowBehavior::getStaticName(), M_OBJECT3D, FollowBehavior::getNew);
+        engine->getBehaviorManager()->addBehavior(LuaBehavior::getStaticName(), M_OBJECT3D, LuaBehavior::getNew);
+        engine->getBehaviorManager()->addBehavior(ParticleSystemBehavior::getStaticName(), M_OBJECT3D, ParticleSystemBehavior::getNew);
 
         // add renderers
         if(GLversion >= 2)

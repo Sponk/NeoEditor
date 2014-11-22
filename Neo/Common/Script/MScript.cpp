@@ -29,7 +29,7 @@
 
 
 #include "MScript.h"
-#include "MSchedule/MSchedule.h"
+#include <MSchedule.h>
 #include <MWindow.h>
 #include <MLog.h>
 

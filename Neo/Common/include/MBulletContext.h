@@ -38,7 +38,7 @@
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 
-class MBulletContext : public MPhysicsContext
+class BulletContext : public MPhysicsContext
 {
 private:
 
@@ -66,10 +66,10 @@ private:
 public:
 
 	// constructor
-	MBulletContext(void);
+	BulletContext(void);
 
 	// destructor
-	~MBulletContext(void);
+	~BulletContext(void);
 
 	// init
 	void init(const MVector3 & worldMin, const MVector3 & worldMax);

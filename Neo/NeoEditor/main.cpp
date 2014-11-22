@@ -20,7 +20,6 @@
 //
 //========================================================================
 
-
 #include <vector>
 #include <time.h>
 #include <signal.h>
@@ -30,13 +29,13 @@
 #include "FLUID/ini.h"
 
 #include <MEngine.h>
-#include <MLoaders/MImageLoader.h>
+#include <MImageLoader.h>
 #include <MLog.h>
 #include "MFilesUpdate/MFilesUpdate.h"
 #include "Maratis/Maratis.h"
 #include <MWindow.h>
 #include <MCore.h>
-#include <MSchedule/MSchedule.h>
+#include <MSchedule.h>
 #include "FLUID/MainWindow.h"
 #include "FLUID/Callbacks.h"
 #include <FL/Fl.H>

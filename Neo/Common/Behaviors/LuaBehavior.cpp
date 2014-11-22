@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Maratis
-// MBLua.cpp
+// LuaBehavior.cpp
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //========================================================================
@@ -29,44 +29,44 @@
 
 
 #include <MEngine.h>
-#include <MScript/MScript.h>
+#include <MScript.h>
 #include <MLog.h>
 #include <lua.hpp>
 #include <map>
-#include "MBLua.h"
+#include <LuaBehavior.h>
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Init
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-MBLua::MBLua(MObject3d * parentObject):
+LuaBehavior::LuaBehavior(MObject3d * parentObject):
 MBehavior(parentObject),
 m_scriptFile(""),
 m_init(false)
 {}
 
-MBLua::MBLua(MBLua & behavior, MObject3d * parentObject):
+LuaBehavior::LuaBehavior(LuaBehavior & behavior, MObject3d * parentObject):
 MBehavior(parentObject),
 m_scriptFile(behavior.m_scriptFile),
 m_init(false)
 {}
 
-MBLua::~MBLua(void)
+LuaBehavior::~LuaBehavior(void)
 {}
 
-void MBLua::destroy(void)
+void LuaBehavior::destroy(void)
 {
 	delete this;
 }
 
-MBehavior * MBLua::getNew(MObject3d * parentObject)
+MBehavior * LuaBehavior::getNew(MObject3d * parentObject)
 {
-	return new MBLua(parentObject);
+    return new LuaBehavior(parentObject);
 }
 
-MBehavior * MBLua::getCopy(MObject3d * parentObject)
+MBehavior * LuaBehavior::getCopy(MObject3d * parentObject)
 {
-	return new MBLua(*this, parentObject);
+    return new LuaBehavior(*this, parentObject);
 }
 
 
@@ -74,7 +74,7 @@ MBehavior * MBLua::getCopy(MObject3d * parentObject)
 // Variables
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned int MBLua::getVariablesNumber(void)
+unsigned int LuaBehavior::getVariablesNumber(void)
 {
     MEngine* engine = MEngine::getInstance();
     // TODO: New variable type for paths!
@@ -199,7 +199,7 @@ unsigned int MBLua::getVariablesNumber(void)
     return m_variables.size() + 1;
 }
 
-MVariable MBLua::getVariable(unsigned int id)
+MVariable LuaBehavior::getVariable(unsigned int id)
 {
 	switch(id)
 	{
@@ -218,7 +218,7 @@ MVariable MBLua::getVariable(unsigned int id)
 // Events
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void MBLua::update(void)
+void LuaBehavior::update(void)
 {
 	MEngine * engine = MEngine::getInstance();
 	MGame * game = engine->getGame();

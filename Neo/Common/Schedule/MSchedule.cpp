@@ -22,8 +22,8 @@
 //
 //========================================================================
 
-#include "MSchedule.h"
-#include "MSDLThread/MSDLThread.h"
+#include <MSchedule.h>
+#include <SDLThread.h>
 #include <vector>
 #include <MWindow.h>
 
@@ -31,7 +31,7 @@ using namespace std;
 
 vector<MScheduleEvent> events;
 
-MSDLSemaphore scheduleSemaphore;
+SDLSemaphore scheduleSemaphore;
 
 MScheduleEvent::MScheduleEvent(void (*nevent)(void *, bool*), void *data, bool* success) :
 m_event(nevent),

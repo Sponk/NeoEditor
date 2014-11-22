@@ -30,8 +30,8 @@
 //========================================================================
 
 
-#ifndef _M_AL_CONTEXT_H
-#define _M_AL_CONTEXT_H
+#ifndef _AL_CONTEXT_H
+#define _AL_CONTEXT_H
 
 #ifdef __APPLE__
 	#include <OpenAL/al.h>
@@ -44,7 +44,7 @@
 #include <MCore.h>
 
 
-class MALContext : public MSoundContext
+class ALContext : public MSoundContext
 {
 private:
 
@@ -57,8 +57,8 @@ private:
 
 public:
 
-	MALContext(void);
-	~MALContext(void);
+	ALContext(void);
+	~ALContext(void);
 
 	// init context
 	void initContext(void);

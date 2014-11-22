@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Maratis
-// MBParticleSystem.h
+// ParticleSystemBehavior.h
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //========================================================================
@@ -29,7 +29,7 @@
 
 #include <MEngine.h>
 #include <MWindow.h>
-#include "MBParticleSystem.h"
+#include <ParticleSystemBehavior.h>
 #include <string>
 
 // Shader
@@ -70,7 +70,7 @@ std::string particleFragShader =
 // Init
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-MBParticleSystem::MBParticleSystem(MObject3d * parentObject):
+ParticleSystemBehavior::ParticleSystemBehavior(MObject3d * parentObject):
 MBehavior(parentObject),
 m_lifeTime(2000),
 m_particlePositions(NULL),
@@ -96,7 +96,7 @@ m_emitting(true)
     m_semaphore.Init(1);
 }
 
-MBParticleSystem::MBParticleSystem(MBParticleSystem & behavior, MObject3d * parentObject):
+ParticleSystemBehavior::ParticleSystemBehavior(ParticleSystemBehavior & behavior, MObject3d * parentObject):
 MBehavior(parentObject),
 m_lifeTime(behavior.m_lifeTime),
 m_speedDivergence(behavior.m_speedDivergence),
@@ -124,7 +124,7 @@ m_emitting(true)
     m_semaphore.Init(1);
 }
 
-MBParticleSystem::~MBParticleSystem(void)
+ParticleSystemBehavior::~ParticleSystemBehavior(void)
 {
     m_multithreading = false;
 
@@ -132,19 +132,19 @@ MBParticleSystem::~MBParticleSystem(void)
     SAFE_DELETE_ARRAY(m_particlePositions);
 }
 
-void MBParticleSystem::destroy(void)
+void ParticleSystemBehavior::destroy(void)
 {
     delete this;
 }
 
-MBehavior * MBParticleSystem::getNew(MObject3d * parentObject)
+MBehavior * ParticleSystemBehavior::getNew(MObject3d * parentObject)
 {
-    return new MBParticleSystem(parentObject);
+    return new ParticleSystemBehavior(parentObject);
 }
 
-MBehavior * MBParticleSystem::getCopy(MObject3d * parentObject)
+MBehavior * ParticleSystemBehavior::getCopy(MObject3d * parentObject)
 {
-    return new MBParticleSystem(*this, parentObject);
+    return new ParticleSystemBehavior(*this, parentObject);
 }
 
 
@@ -152,11 +152,11 @@ MBehavior * MBParticleSystem::getCopy(MObject3d * parentObject)
 // Variables
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned int MBParticleSystem::getVariablesNumber(void){
+unsigned int ParticleSystemBehavior::getVariablesNumber(void){
     return 16;
 }
 
-MVariable MBParticleSystem::getVariable(unsigned int id)
+MVariable ParticleSystemBehavior::getVariable(unsigned int id)
 {
     switch(id)
     {
@@ -203,19 +203,19 @@ MVariable MBParticleSystem::getVariable(unsigned int id)
 // Events
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void MBParticleSystem::update(void)
+void ParticleSystemBehavior::update(void)
 {
     MEngine * engine = MEngine::getInstance();
     MLevel * level = engine->getLevel();
 
     if(m_multithreading && !m_thread.IsRunning())
-        m_thread.Start(&MBParticleSystem::thread_main, "ParticleSystemThread", (void*) this);
+        m_thread.Start(&ParticleSystemBehavior::thread_main, "ParticleSystemThread", (void*) this);
 
     if(!m_multithreading)
         updateParticles(getParentObject()->getTransformedPosition());
 }
 
-void MBParticleSystem::draw()
+void ParticleSystemBehavior::draw()
 {
     MEngine* engine = MEngine::getInstance();
     MRenderingContext* render = engine->getRenderingContext();
@@ -303,7 +303,7 @@ void MBParticleSystem::draw()
     render->enableColorArray();
     render->setColorPointer(M_FLOAT, 4, m_particleColors);
 
-    MSDLSemaphore::WaitAndLock(&m_semaphore);
+    SDLSemaphore::WaitAndLock(&m_semaphore);
 
     int vertexAttrib;
     render->getAttribLocation(m_fx, "Vertex", &vertexAttrib);
@@ -319,7 +319,7 @@ void MBParticleSystem::draw()
     render->drawArray(M_PRIMITIVE_POINTS, 0, m_particles.size());
 
     render->disableScissorTest();
-    MSDLSemaphore::Unlock(&m_semaphore);
+    SDLSemaphore::Unlock(&m_semaphore);
 
     render->setDepthMask(true);
 
@@ -334,7 +334,7 @@ void MBParticleSystem::draw()
 
 #define RANDOM 0.5 - 2.0*static_cast<float>(rand()) / static_cast<float>(RAND_MAX)
 
-void MBParticleSystem::updateParticles(MVector3 parentPosition)
+void ParticleSystemBehavior::updateParticles(MVector3 parentPosition)
 {
     MEngine* engine = MEngine::getInstance();
     MSystemContext* system = engine->getSystemContext();
@@ -402,7 +402,7 @@ void MBParticleSystem::updateParticles(MVector3 parentPosition)
     m_emitting = false;
 }
 
-void MBParticleSystem::updateArrays(bool updateColorData)
+void ParticleSystemBehavior::updateArrays(bool updateColorData)
 {
     Particle* particle;
 
@@ -447,7 +447,7 @@ void MBParticleSystem::updateArrays(bool updateColorData)
     }
 }
 
-void MBParticleSystem::applySpeed()
+void ParticleSystemBehavior::applySpeed()
 {
     // Update existing positions
     Particle* particle;
@@ -459,9 +459,9 @@ void MBParticleSystem::applySpeed()
     }
 }
 
-int MBParticleSystem::thread_main(void* particlesystem)
+int ParticleSystemBehavior::thread_main(void* particlesystem)
 {
-    MBParticleSystem* self = (MBParticleSystem*) particlesystem;
+    ParticleSystemBehavior* self = (ParticleSystemBehavior*) particlesystem;
     MWindow* window = MWindow::getInstance();
     MEngine* engine = MEngine::getInstance();
 
@@ -469,9 +469,9 @@ int MBParticleSystem::thread_main(void* particlesystem)
 
     while(self->m_multithreading && engine->isActive())
     {
-        MSDLSemaphore::WaitAndLock(&self->m_semaphore);
+        SDLSemaphore::WaitAndLock(&self->m_semaphore);
         self->updateParticles(self->getParentObject()->getTransformedPosition());
-        MSDLSemaphore::Unlock(&self->m_semaphore);
+        SDLSemaphore::Unlock(&self->m_semaphore);
         window->sleep(11);
     }
 

@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Maratis
-// MBLookAt.h
+// MBLua.h
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //========================================================================
-// Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2014 Yannick Pflanzer <www.scary-squid.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -28,23 +28,71 @@
 //========================================================================
 
 
-#ifndef _MB_LOOK_AT_H
-#define _MB_LOOK_AT_H
+#ifndef _MB_LUA_H
+#define _MB_LUA_H
 
+#include <MScript.h>
+#include <MVariable.h>
+#include <vector>
+#include <string>
+#include <MLog.h>
 
-class MBLookAt : public MBehavior
+class LuaBehavior : public MBehavior
 {
 public:
 
 	// constructors / destructors
-	MBLookAt(MObject3d * parentObject);
-	MBLookAt(MBLookAt & behavior, MObject3d * parentObject);
-	~MBLookAt(void);
+    LuaBehavior(MObject3d * parentObject);
+    LuaBehavior(LuaBehavior & behavior, MObject3d * parentObject);
+    ~LuaBehavior(void);
 
 private:
 
 	// variables
-	MString m_targetName;
+	MString m_scriptFile;
+    MScript m_script;
+    bool m_init;
+
+    struct MValueVariable
+    {
+        char name[256];
+        MVariable* var;
+    };
+
+    struct MFloatVariable : public MValueVariable
+    {
+        MFloatVariable(const char* name)
+        {
+            strcpy(this->name, name);
+            var = new MVariable(this->name, &value, M_VARIABLE_FLOAT);
+        }
+
+        ~MFloatVariable()
+        {
+            SAFE_DELETE(var);
+        }
+
+        float value;
+    };
+
+    struct MStringVariable : public MValueVariable
+    {
+        MStringVariable(const char* name)
+        {
+            strcpy(this->name, name);
+            var = new MVariable(this->name, &value, M_VARIABLE_STRING);
+        }
+
+        ~MStringVariable()
+        {
+            SAFE_DELETE(var);
+        }
+
+        MString value;
+    };
+
+    std::vector<MValueVariable*> m_globalVariables;
+    std::vector<MVariable*> m_variables;
 
 public:
 
@@ -58,7 +106,7 @@ public:
 	MBehavior * getCopy(MObject3d * parentObject);
 
 	// name
-	static const char * getStaticName(void){ return "LookAt"; }
+	static const char * getStaticName(void){ return "LuaScript"; }
 	const char * getName(void){ return getStaticName(); }
 
 	// events

@@ -26,11 +26,11 @@
 #include <MEngine.h>
 #include <MLog.h>
 #include <MWindow.h>
-#include "MSDLThread/MSDLThread.h"
+#include <SDLThread.h>
 
 #include <MGameWinEvents.h>
 #include "Maratis/MaratisPlayer.h"
-#include "MSchedule/MSchedule.h"
+#include <MSchedule.h>
 
 // NeoGui
 #include <GuiSystem.h>
@@ -80,7 +80,7 @@ void draw(void)
     MWindow::getInstance()->swapBuffer();
 }
 
-MSDLSemaphore updateSemaphore;
+SDLSemaphore updateSemaphore;
 bool updateThreadRunning = true;
 int profiler = false;
 
@@ -111,7 +111,7 @@ int update_thread(void* nothing)
         MEngine::getInstance()->getInputContext()->flush();
         window->onEvents();
 
-        MSDLSemaphore::WaitAndLock(&updateSemaphore);
+        SDLSemaphore::WaitAndLock(&updateSemaphore);
         if(window->getFocus())
         {
             // compute target tick
@@ -151,7 +151,7 @@ int update_thread(void* nothing)
 					}
 				}
 
-                MSDLSemaphore::Unlock(&updateSemaphore);
+                SDLSemaphore::Unlock(&updateSemaphore);
                 window->sleep(sleep);
 
                 continue;
@@ -185,12 +185,12 @@ int update_thread(void* nothing)
 				}
             }
 
-            MSDLSemaphore::Unlock(&updateSemaphore);
+            SDLSemaphore::Unlock(&updateSemaphore);
             window->sleep(sleep);
         }
         else
         {
-			MSDLSemaphore::Unlock(&updateSemaphore);
+			SDLSemaphore::Unlock(&updateSemaphore);
 			window->sleep(100);
         }
 
@@ -318,7 +318,7 @@ int main(int argc, char **argv)
         MLOG_INFO("Profiling enabled");
 
     // create the update thread
-    MSDLThread updateThread;
+    SDLThread updateThread;
     Neo::GuiSystem* guiSystem = Neo::GuiSystem::getInstance();
 
     // Init semaphore
@@ -332,7 +332,7 @@ int main(int argc, char **argv)
     // on events
     while(isActive)
     {
-		MSDLSemaphore::WaitAndLock(&updateSemaphore);
+		SDLSemaphore::WaitAndLock(&updateSemaphore);
         window->onWindowEvents();
 		//MLOG_INFO("DRAW");
         MUpdateScheduledEvents();
@@ -340,7 +340,7 @@ int main(int argc, char **argv)
         if(!isActive)
         {
             engine->getGame()->end();
-			MSDLSemaphore::Unlock(&updateSemaphore);
+			SDLSemaphore::Unlock(&updateSemaphore);
 			break;
         }
 
@@ -369,7 +369,7 @@ int main(int argc, char **argv)
         {
             draw();
             Neo::GuiSystem::getInstance()->draw();
-            MSDLSemaphore::Unlock(&updateSemaphore);
+            SDLSemaphore::Unlock(&updateSemaphore);
             window->sleep(100);
 			continue;
         }
@@ -379,7 +379,7 @@ int main(int argc, char **argv)
         // update postponed requests
         MEngine::getInstance()->updateRequests();
 
-		MSDLSemaphore::Unlock(&updateSemaphore);
+		SDLSemaphore::Unlock(&updateSemaphore);
 
         window->sleep(5);
         //window->sleep(0.001); // 1 mili sec seems to slow down on some machines...

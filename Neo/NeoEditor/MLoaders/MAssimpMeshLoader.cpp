@@ -33,7 +33,7 @@
 
 #include <MEngine.h>
 
-#include <MFileManager/MMeshSave.h>
+#include <MMeshSave.h>
 
 #include "MAssimpMeshLoader.h"
 

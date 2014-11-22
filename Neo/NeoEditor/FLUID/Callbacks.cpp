@@ -18,11 +18,11 @@
 
 #include <MEngine.h>
 #include <MWindow.h>
-#include <MLoaders/MImageLoader.h>
-#include <MFileManager/MLevelLoad.h>
-#include <MFileManager/MLevelSave.h>
+#include <MImageLoader.h>
+#include <MLevelLoad.h>
+#include <MLevelSave.h>
 #include <MCore.h>
-#include <MHTTPConnection/MHTTPConnection.h>
+#include <HTTPRequest.h>
 
 #include <GuiSystem.h>
 
@@ -2263,7 +2263,7 @@ void open_profile_viewer_callback(Fl_Menu_*, void*)
 
 void check_for_updates_callback(Fl_Menu_*, void*)
 {
-    MHTTPConnection* connection = new MHTTPConnection("neo-engine.de", 4000);
+	HTTPRequest* connection = new HTTPRequest("neo-engine.de", 4000);
 
     // FIXME: Don't hardcode this!
     const char* versiontxt = connection->sendGetRequest("/downloads/neo/daily/version.txt");
