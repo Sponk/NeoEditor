@@ -38,7 +38,7 @@ extern const char* s_embedded_game_name;
 extern const char* s_embedded_level_name;
 extern const char* s_embedded_renderer;
 
-class MProject
+class Project
 {
 public:
 

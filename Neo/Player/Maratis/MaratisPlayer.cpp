@@ -151,7 +151,7 @@ void MaratisPlayer::start(void)
         engine->getBehaviorManager()->addBehavior(ParticleSystemBehavior::getStaticName(), M_OBJECT3D, ParticleSystemBehavior::getNew);
 
 		// add renderers
-		engine->getRendererManager()->addRenderer(MStandardRenderer::getStaticName(), MStandardRenderer::getNew);
+		engine->getRendererManager()->addRenderer(StandardRenderer::getStaticName(), StandardRenderer::getNew);
 		engine->getRendererManager()->addRenderer(FixedRenderer::getStaticName(), FixedRenderer::getNew);
 		
 		// mesh loader
@@ -172,7 +172,7 @@ void MaratisPlayer::start(void)
 		
 		// set default renderer (standard)
 		if(m_renderer == NULL)
-			m_renderer = new MStandardRenderer();
+			m_renderer = new StandardRenderer();
 		engine->setRenderer(m_renderer);
 	}
 }
@@ -241,7 +241,7 @@ void MaratisPlayer::loadGamePlugin(void)
 	#endif
 
 	SAFE_DELETE(m_gamePlugin);
-	m_gamePlugin = new MPlugin();
+	m_gamePlugin = new Plugin();
 	m_gamePlugin->load(gameFile);
 }
 
@@ -251,7 +251,7 @@ bool MaratisPlayer::loadProject(const char * filename)
 		return false;
 	
 	// load project file
-	MProject proj;
+	Project proj;
 	if(proj.loadXML(filename))
 	{
 		loadProject(&proj, filename);
@@ -261,7 +261,7 @@ bool MaratisPlayer::loadProject(const char * filename)
 	return false;
 }
 
-void MaratisPlayer::loadProject(MProject* proj, const char * filename)
+void MaratisPlayer::loadProject(Project* proj, const char * filename)
 {
 	MWindow * window = MWindow::getInstance();
 	MEngine * engine = MEngine::getInstance();

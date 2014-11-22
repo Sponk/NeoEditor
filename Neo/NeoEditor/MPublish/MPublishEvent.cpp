@@ -23,8 +23,7 @@
 //========================================================================
 
 #include <MEngine.h>
-//#include <MGui.h>
-#include <MProject/MProject.h>
+#include <MProject.h>
 
 #include "MPublisher.h"
 #include "MPublishEvent.h"
@@ -467,7 +466,7 @@ void copySysLinux(const char* projName)
 	{
 		*ext = 0;
 
-		MProject proj;
+		Project proj;
         if(proj.loadXML(projName))
 		{
 			char destName[256];

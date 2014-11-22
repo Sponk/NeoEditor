@@ -34,12 +34,12 @@
 
 typedef void * (*FunctionPtr)();
 
-MPlugin::MPlugin(void)
+Plugin::Plugin(void)
 {
 	m_library = NULL;
 }
 
-MPlugin::~MPlugin(void)
+Plugin::~Plugin(void)
 {
 	if(m_library)
 	{	
@@ -61,7 +61,7 @@ MPlugin::~MPlugin(void)
 	}
 }
 
-void MPlugin::load(const char * filename)
+void Plugin::load(const char * filename)
 {
 #ifdef WIN32
 	

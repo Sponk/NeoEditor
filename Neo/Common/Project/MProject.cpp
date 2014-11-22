@@ -37,7 +37,7 @@ const char* s_embedded_game_name  = "[EMBEDDED MPROJECT GAME NAME HERE]         
 const char* s_embedded_level_name = "[EMBEDDED MPROJECT LEVEL NAME HERE]                            ";
 const char* s_embedded_renderer   = "[EMBEDDED MPROJECT RENDERER]                                   ";
 
-bool MProject::loadXML(const char * filename)
+bool Project::loadXML(const char * filename)
 {
 	char rep[256];
 
@@ -125,7 +125,7 @@ bool MProject::loadXML(const char * filename)
 	return true;
 }
 
-bool MProject::saveXML(const char * filename)
+bool Project::saveXML(const char * filename)
 {
 	FILE * file = fopen(filename, "wt");
 	if(! file)

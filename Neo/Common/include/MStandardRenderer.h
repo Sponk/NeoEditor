@@ -40,7 +40,7 @@
 
 
 // Entity light
-struct MEntityLight
+struct EntityLight
 {
 	MBox3d lightBox;
 	MOLight * light;
@@ -48,10 +48,10 @@ struct MEntityLight
 
 
 // SubMesh pass
-class MSubMeshPass
+class SubMeshPass
 {
 public:
-	MSubMeshPass(void):occlusionQuery(0){}
+	SubMeshPass(void):occlusionQuery(0){}
 	
 	unsigned int occlusionQuery;
 	unsigned int subMeshId;
@@ -62,10 +62,10 @@ public:
 
 
 // Shadow Light
-class MShadowLight
+class ShadowLight
 {
 public:
-	MShadowLight(void):shadowTexture(0), score(0){}
+	ShadowLight(void):shadowTexture(0), score(0){}
 	
 	int score;
 	unsigned int shadowTexture;
@@ -76,12 +76,12 @@ public:
 
 
 // Standard Renderer
-class MStandardRenderer : public MRenderer
+class StandardRenderer : public MRenderer
 {
 public:
 	
-	MStandardRenderer(void);
-	~MStandardRenderer(void);
+	StandardRenderer(void);
+	~StandardRenderer(void);
 	
 private:
 	
@@ -99,7 +99,7 @@ private:
 	
 	// shadow lights
 	unsigned int m_randTexture;
-	map<unsigned long, MShadowLight> m_shadowLights;
+	map<unsigned long, ShadowLight> m_shadowLights;
 	
 	// skin cache
 	unsigned int m_verticesNumber;
@@ -120,13 +120,13 @@ private:
 	int m_opaqueSortList[MAX_OPAQUE];
 	float m_transpSortZList[MAX_TRANSP];
 	float m_opaqueSortZList[MAX_OPAQUE];
-	MSubMeshPass m_transpList[MAX_TRANSP];	
-	MSubMeshPass m_opaqueList[MAX_OPAQUE];
+	SubMeshPass m_transpList[MAX_TRANSP];
+	SubMeshPass m_opaqueList[MAX_OPAQUE];
 	
 	// lights list
 	int m_entityLightsList[MAX_ENTITY_LIGHTS];
 	float m_entityLightsZList[MAX_ENTITY_LIGHTS];
-	MEntityLight m_entityLights[MAX_ENTITY_LIGHTS];
+	EntityLight m_entityLights[MAX_ENTITY_LIGHTS];
 	
 private:
 	
@@ -145,7 +145,7 @@ private:
 	float getDistanceToCam(MOCamera * camera, const MVector3 & pos);
 	
 	// shadow lights
-	MShadowLight * createShadowLight(MOLight * light);
+	ShadowLight * createShadowLight(MOLight * light);
 	void destroyUnusedShadowLights(void);
 	void decreaseShadowLights(void);
 	

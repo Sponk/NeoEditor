@@ -474,7 +474,7 @@ void Maratis::start(void)
 
         // add renderers
         if(GLversion >= 2)
-            engine->getRendererManager()->addRenderer(MStandardRenderer::getStaticName(), MStandardRenderer::getNew);
+            engine->getRendererManager()->addRenderer(StandardRenderer::getStaticName(), StandardRenderer::getNew);
         engine->getRendererManager()->addRenderer(FixedRenderer::getStaticName(), FixedRenderer::getNew);
 
         // mesh loaders
@@ -500,7 +500,7 @@ void Maratis::start(void)
         if(m_renderer == NULL)
         {
             if(GLversion >= 2)
-                m_renderer = new MStandardRenderer();
+                m_renderer = new StandardRenderer();
             else
                 m_renderer = new FixedRenderer();
         }
@@ -624,7 +624,7 @@ void Maratis::loadGamePlugin(void)
     #endif
 
     SAFE_DELETE(m_gamePlugin);
-    m_gamePlugin = new MPlugin();
+    m_gamePlugin = new Plugin();
     m_gamePlugin->load(gameFile);
 }
 
@@ -1015,7 +1015,7 @@ void Maratis::okNewProject(const char * filename)
 
     char file[256];
     fileExtension(file, filename, ".mproj");
-    MProject proj;
+    Project proj;
     if(proj.saveXML(file))
     {
         // create empty dir
@@ -1097,7 +1097,7 @@ void Maratis::loadProject(const char * filename)
     MEngine::getInstance()->getLevel()->clearScenes();
 
     // load project file
-    MProject proj;
+    Project proj;
     if(proj.loadXML(filename))
     {
         // update
@@ -1208,7 +1208,7 @@ void Maratis::save()
     //else
     {
         xmlLevelSave(engine->getLevel(), m_currentLevel);
-        MProject proj;
+        Project proj;
         proj.startLevel = m_currentLevel;
         if(m_renderer)
         {
@@ -1237,7 +1237,7 @@ void Maratis::okSaveAs(const char * filename)
     if(xmlLevelSave(engine->getLevel(), file))
     {
         strcpy(maratis->m_currentLevel, file);
-        MProject proj;
+        Project proj;
         proj.startLevel = maratis->m_currentLevel;
         if(maratis->m_renderer)
         {

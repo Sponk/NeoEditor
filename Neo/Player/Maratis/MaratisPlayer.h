@@ -61,10 +61,10 @@ private:
 	MPackageManager * m_packageManager;
 
 	// plugins
-	std::vector <MPlugin *> m_plugins;
+	std::vector <Plugin *> m_plugins;
 
 	// game plugin
-	MPlugin * m_gamePlugin;
+	Plugin * m_gamePlugin;
 
 private:
 
@@ -87,7 +87,7 @@ public:
 
 	// project load
 	bool loadProject(const char * filename);
-	void loadProject(MProject * proj, const char * filename);
+	void loadProject(Project * proj, const char * filename);
 	
 	// main loops
 	static void logicLoop(void);

@@ -37,12 +37,12 @@
 #include <dlfcn.h>
 #endif
 
-class MPlugin
+class Plugin
 {
 public :
 
-	MPlugin(void);
-	~MPlugin(void);
+	Plugin(void);
+	~Plugin(void);
 
 private :
 

@@ -271,7 +271,7 @@ int main(int argc, char **argv)
 		if((strstr(s_embedded_level_name, "[EMBEDDED") != s_embedded_level_name) &&
 		   (strstr(s_embedded_renderer, "[EMBEDDED") != s_embedded_renderer))
 		{
-			MProject embeddedProj;
+			Project embeddedProj;
 			embeddedProj.renderer = s_embedded_renderer;
 
 			char levelName[256];

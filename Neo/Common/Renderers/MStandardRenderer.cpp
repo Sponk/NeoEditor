@@ -48,7 +48,7 @@
 // Init
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-MStandardRenderer::MStandardRenderer(void):
+StandardRenderer::StandardRenderer(void):
 m_fboId(0),
 m_forceNoFX(false),
 m_verticesNumber(0),
@@ -123,7 +123,7 @@ m_FXsNumber(0)
 	render->sendTextureImage(&image, 1, 1, 0);
 }
 
-MStandardRenderer::~MStandardRenderer(void)
+StandardRenderer::~StandardRenderer(void)
 {
 	unsigned int i;
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
@@ -137,7 +137,7 @@ MStandardRenderer::~MStandardRenderer(void)
 	}
 
 	// delete shadowLights
-	map<unsigned long, MShadowLight>::iterator
+	map<unsigned long, ShadowLight>::iterator
 	mit (m_shadowLights.begin()),
 	mend(m_shadowLights.end());
 	for(;mit!=mend;++mit)
@@ -162,17 +162,17 @@ MStandardRenderer::~MStandardRenderer(void)
 	SAFE_DELETE_ARRAY(m_normals);
 }
 
-void MStandardRenderer::destroy(void)
+void StandardRenderer::destroy(void)
 {
 	delete this;
 }
 
-MRenderer * MStandardRenderer::getNew(void)
+MRenderer * StandardRenderer::getNew(void)
 {
-	return new MStandardRenderer();
+	return new StandardRenderer();
 }
 
-void MStandardRenderer::addFX(const char * vert, const char * frag)
+void StandardRenderer::addFX(const char * vert, const char * frag)
 {
 	if(m_FXsNumber < MAX_DEFAULT_FXS)
 	{
@@ -192,7 +192,7 @@ void MStandardRenderer::addFX(const char * vert, const char * frag)
 // Drawing
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-MVector3 * MStandardRenderer::getVertices(unsigned int size)
+MVector3 * StandardRenderer::getVertices(unsigned int size)
 {
 	if(size == 0)
 		return NULL;
@@ -207,7 +207,7 @@ MVector3 * MStandardRenderer::getVertices(unsigned int size)
 	return m_vertices;
 }
 
-MVector3 * MStandardRenderer::getNormals(unsigned int size)
+MVector3 * StandardRenderer::getNormals(unsigned int size)
 {
 	if(size == 0)
 		return NULL;
@@ -222,7 +222,7 @@ MVector3 * MStandardRenderer::getNormals(unsigned int size)
 	return m_normals;
 }
 
-MVector3 * MStandardRenderer::getTangents(unsigned int size)
+MVector3 * StandardRenderer::getTangents(unsigned int size)
 {
 	if(size == 0)
 		return NULL;
@@ -237,7 +237,7 @@ MVector3 * MStandardRenderer::getTangents(unsigned int size)
 	return m_tangents;
 }
 
-void MStandardRenderer::updateSkinning(MMesh * mesh, MArmature * armature)
+void StandardRenderer::updateSkinning(MMesh * mesh, MArmature * armature)
 {
 	unsigned int s;
 	unsigned int sSize = mesh->getSubMeshsNumber();
@@ -265,7 +265,7 @@ void MStandardRenderer::updateSkinning(MMesh * mesh, MArmature * armature)
 	mesh->updateBoundingBox();
 }
 
-void MStandardRenderer::initVBO(MSubMesh * subMesh)
+void StandardRenderer::initVBO(MSubMesh * subMesh)
 {
 	MEngine * engine = MEngine::getInstance();
 	MRenderingContext * render = engine->getRenderingContext();
@@ -352,7 +352,7 @@ void MStandardRenderer::initVBO(MSubMesh * subMesh)
 	}
 }
 
-void MStandardRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices, MVector3 * normals, MVector3 * tangents, MColor * colors)
+void StandardRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices, MVector3 * normals, MVector3 * tangents, MColor * colors)
 {
 	MEngine * engine = MEngine::getInstance();
 	MRenderingContext * render = engine->getRenderingContext();
@@ -821,7 +821,7 @@ void MStandardRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVec
 	}
 }
 
-void MStandardRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature)
+void StandardRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature)
 {
 	// data
 	MVector3 * vertices = subMesh->getVertices();
@@ -868,7 +868,7 @@ void MStandardRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature)
 	}
 }
 
-void MStandardRenderer::drawTransparents(MSubMesh * subMesh, MArmature * armature)
+void StandardRenderer::drawTransparents(MSubMesh * subMesh, MArmature * armature)
 {
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
@@ -946,7 +946,7 @@ void MStandardRenderer::drawTransparents(MSubMesh * subMesh, MArmature * armatur
 	//render->setDepthMode(M_DEPTH_LEQUAL);
 }
 
-float MStandardRenderer::getDistanceToCam(MOCamera * camera, const MVector3 & pos)
+float StandardRenderer::getDistanceToCam(MOCamera * camera, const MVector3 & pos)
 {
 	if(! camera->isOrtho())
 	{
@@ -958,7 +958,7 @@ float MStandardRenderer::getDistanceToCam(MOCamera * camera, const MVector3 & po
 	return dist*dist;
 }
 
-void MStandardRenderer::setShadowMatrix(MMatrix4x4 * matrix, MOCamera * camera)
+void StandardRenderer::setShadowMatrix(MMatrix4x4 * matrix, MOCamera * camera)
 {
 	MEngine * engine = MEngine::getInstance();
 	MRenderingContext * render = engine->getRenderingContext();
@@ -978,7 +978,7 @@ void MStandardRenderer::setShadowMatrix(MMatrix4x4 * matrix, MOCamera * camera)
 	(*matrix) = (*matrix) * (*modelViewMatrix);
 }
 
-void MStandardRenderer::updateVisibility(MScene * scene, MOCamera * camera)
+void StandardRenderer::updateVisibility(MScene * scene, MOCamera * camera)
 {
 	// make frustum
 	camera->getFrustum()->makeVolume(camera);
@@ -1046,7 +1046,7 @@ void MStandardRenderer::updateVisibility(MScene * scene, MOCamera * camera)
     }
 }
 
-void MStandardRenderer::enableFog(MOCamera * camera)
+void StandardRenderer::enableFog(MOCamera * camera)
 {
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
@@ -1066,15 +1066,15 @@ void MStandardRenderer::enableFog(MOCamera * camera)
 	render->setFogDistance(fogMin, camera->getClippingFar());
 }
 
-MShadowLight * MStandardRenderer::createShadowLight(MOLight * light)
+ShadowLight * StandardRenderer::createShadowLight(MOLight * light)
 {
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 	unsigned int shadowQuality = light->getShadowQuality();
 
-	map<unsigned long, MShadowLight>::iterator iter = m_shadowLights.find((unsigned long)light);
+	map<unsigned long, ShadowLight>::iterator iter = m_shadowLights.find((unsigned long)light);
 	if(iter != m_shadowLights.end())
 	{
-		MShadowLight * shadowLight = &iter->second;
+		ShadowLight * shadowLight = &iter->second;
 		shadowLight->score = 1;
 
 		if(shadowLight->shadowQuality != shadowQuality)
@@ -1090,8 +1090,8 @@ MShadowLight * MStandardRenderer::createShadowLight(MOLight * light)
 	}
 	else
 	{
-		m_shadowLights[(unsigned long)(light)] = MShadowLight();
-		MShadowLight * shadowLight = &m_shadowLights[(unsigned long)(light)];
+		m_shadowLights[(unsigned long)(light)] = ShadowLight();
+		ShadowLight * shadowLight = &m_shadowLights[(unsigned long)(light)];
 		shadowLight->score = 1;
 		shadowLight->shadowQuality = shadowQuality;
 
@@ -1107,18 +1107,18 @@ MShadowLight * MStandardRenderer::createShadowLight(MOLight * light)
 	}
 }
 
-void MStandardRenderer::destroyUnusedShadowLights(void)
+void StandardRenderer::destroyUnusedShadowLights(void)
 {
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
 	// keys
-	map<unsigned long, MShadowLight>::iterator
+	map<unsigned long, ShadowLight>::iterator
 	mit (m_shadowLights.begin()),
 	mend(m_shadowLights.end());
 
 	for(;mit!=mend;++mit)
 	{
-		MShadowLight * shadowLight = &mit->second;
+		ShadowLight * shadowLight = &mit->second;
 		if(shadowLight->score < 1)
 		{
 			render->deleteTexture(&shadowLight->shadowTexture);
@@ -1131,21 +1131,21 @@ void MStandardRenderer::destroyUnusedShadowLights(void)
 	}
 }
 
-void MStandardRenderer::decreaseShadowLights(void)
+void StandardRenderer::decreaseShadowLights(void)
 {
 	// keys
-	map<unsigned long, MShadowLight>::iterator
+	map<unsigned long, ShadowLight>::iterator
 	mit (m_shadowLights.begin()),
 	mend(m_shadowLights.end());
 
 	for(;mit!=mend;++mit)
 	{
-		MShadowLight * shadowLight = &mit->second;
+		ShadowLight * shadowLight = &mit->second;
 		shadowLight->score--;
 	}
 }
 
-void MStandardRenderer::drawText(MOText * textObj)
+void StandardRenderer::drawText(MOText * textObj)
 {
 	MRenderingContext * render = MEngine().getInstance()->getRenderingContext();
 
@@ -1307,7 +1307,7 @@ void MStandardRenderer::drawText(MOText * textObj)
 	render->setDepthMask(1);
 }
 
-void MStandardRenderer::prepareSubMesh(MScene * scene, MOCamera * camera, MOEntity * entity, MSubMesh * subMesh)
+void StandardRenderer::prepareSubMesh(MScene * scene, MOCamera * camera, MOEntity * entity, MSubMesh * subMesh)
 {
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
@@ -1356,7 +1356,7 @@ void MStandardRenderer::prepareSubMesh(MScene * scene, MOCamera * camera, MOEnti
 		if(! box->isInCollisionWith(lightBox))
 			continue;
 
-		MEntityLight * entityLight = &m_entityLights[lightsNumber];
+		EntityLight * entityLight = &m_entityLights[lightsNumber];
 		entityLight->lightBox = lightBox;
 		entityLight->light = light;
 
@@ -1408,7 +1408,7 @@ void MStandardRenderer::prepareSubMesh(MScene * scene, MOCamera * camera, MOEnti
 
 	for(l=0; l<lightsNumber; l++)
 	{
-		MEntityLight * entityLight = &m_entityLights[m_entityLightsList[l]];
+		EntityLight * entityLight = &m_entityLights[m_entityLightsList[l]];
 		MOLight * light = entityLight->light;
 
         float quadraticAttenuation = 0.0;
@@ -1445,7 +1445,7 @@ void MStandardRenderer::prepareSubMesh(MScene * scene, MOCamera * camera, MOEnti
 		// shadow
 		if(light->isCastingShadow())
 		{
-			MShadowLight * shadowLight = &m_shadowLights[(unsigned long)(light)];
+			ShadowLight * shadowLight = &m_shadowLights[(unsigned long)(light)];
 			m_lightShadow[l] = 1;
 			m_lightShadowBias[l] = light->getShadowBias()*shadowLight->biasUnity;
 			m_lightShadowBlur[l] = light->getShadowBlur();
@@ -1466,7 +1466,7 @@ void MStandardRenderer::prepareSubMesh(MScene * scene, MOCamera * camera, MOEnti
 	}
 }
 
-void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
+void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 {
 	// get render
 	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
@@ -1539,7 +1539,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 			unsigned int eSize = scene->getEntitiesNumber();
 
 			unsigned int shadowQuality = light->getShadowQuality();
-			MShadowLight * shadowLight = createShadowLight(light);
+			ShadowLight * shadowLight = createShadowLight(light);
 
 			render->bindFrameBuffer(m_fboId);
 			render->attachFrameBufferTexture(M_ATTACH_DEPTH, shadowLight->shadowTexture);
@@ -1875,7 +1875,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 					if(transpNumber < MAX_TRANSP)
 					{
 						// transparent subMesh pass
-						MSubMeshPass * subMeshPass = &m_transpList[transpNumber];
+						SubMeshPass * subMeshPass = &m_transpList[transpNumber];
 
 						// set values
 						m_transpSortList[transpNumber] = transpNumber;
@@ -1893,7 +1893,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 					if(opaqueNumber < MAX_OPAQUE)
 					{
 						// opaque subMesh pass
-						MSubMeshPass * subMeshPass = &m_opaqueList[opaqueNumber];
+						SubMeshPass * subMeshPass = &m_opaqueList[opaqueNumber];
 
 						// set values
 						m_opaqueSortList[opaqueNumber] = opaqueNumber;
@@ -1918,7 +1918,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 		if(text->isActive() && text->isVisible() && transpNumber < MAX_TRANSP)
 		{
 			// transparent pass
-			MSubMeshPass * subMeshPass = &m_transpList[transpNumber];
+			SubMeshPass * subMeshPass = &m_transpList[transpNumber];
 
 			// center
 			MBox3d * box = text->getBoundingBox();
@@ -1948,7 +1948,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 
 		for(int s=(int)opaqueNumber-1; s>=0; s--)
 		{
-			MSubMeshPass * subMeshPass = &m_opaqueList[m_opaqueSortList[s]];
+			SubMeshPass * subMeshPass = &m_opaqueList[m_opaqueSortList[s]];
 			
 			
 			MOEntity * entity = (MOEntity *)subMeshPass->object;
@@ -2008,7 +2008,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 
 		for(int s=(int)opaqueNumber-1; s>=0; s--)
 		{
-			MSubMeshPass * subMeshPass = &m_opaqueList[m_opaqueSortList[s]];
+			SubMeshPass * subMeshPass = &m_opaqueList[m_opaqueSortList[s]];
 			MOEntity * entity = (MOEntity *)subMeshPass->object;
 			MMesh * mesh = entity->getMesh();
 			MSubMesh * subMesh = &mesh->getSubMeshs()[subMeshPass->subMeshId];
@@ -2047,7 +2047,7 @@ void MStandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 
 		for(int s=0; s<transpNumber; s++)
 		{
-			MSubMeshPass * subMeshPass = &m_transpList[m_transpSortList[s]];
+			SubMeshPass * subMeshPass = &m_transpList[m_transpSortList[s]];
 			MObject3d * object = subMeshPass->object;
 
 			// objects
