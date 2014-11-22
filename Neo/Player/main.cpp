@@ -322,10 +322,7 @@ int main(int argc, char **argv)
     Neo::GuiSystem* guiSystem = Neo::GuiSystem::getInstance();
 
     // Init semaphore
-    updateSemaphore.Init(1);
-    
-	MInitSchedule();
-
+	updateSemaphore.Init(1);
     updateThread.Start(update_thread, "Update", NULL);
 
     bool isActive = true;
@@ -335,7 +332,6 @@ int main(int argc, char **argv)
 		SDLSemaphore::WaitAndLock(&updateSemaphore);
         window->onWindowEvents();
 		//MLOG_INFO("DRAW");
-        MUpdateScheduledEvents();
 
         if(!isActive)
         {
