@@ -61,6 +61,8 @@ public :
 	/// \param function	Function callback
 	virtual void addFunction(const char * name, int (*function)(void)) = 0;
 
+	virtual void runString(const char* str) = 0;
+
 	// variables
 	virtual unsigned int getArgsNumber(void) = 0;
 
@@ -70,6 +72,7 @@ public :
 	virtual int getInteger(unsigned int arg) = 0;
 	virtual float getFloat(unsigned int arg) = 0;
 	virtual void * getPointer(unsigned int arg) = 0;
+	virtual bool getBoolean(unsigned int arg) = 0;
 
     virtual void pushIntArray(const int * values, unsigned int valuesNumber) = 0;
 	virtual void pushFloatArray(const float * values, unsigned int valuesNumber) = 0;
@@ -78,6 +81,9 @@ public :
     virtual void pushInteger(int value) = 0;
 	virtual void pushFloat(float value) = 0;
 	virtual void pushPointer(void * value) = 0;
+
+	// Type checking
+	virtual bool isNumber(unsigned int arg) = 0;
 };
 
 #endif

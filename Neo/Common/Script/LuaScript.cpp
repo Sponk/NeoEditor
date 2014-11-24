@@ -29,6 +29,7 @@
 
 
 #include <LuaScript.h>
+#include <ScriptApi.h>
 #include <MWindow.h>
 #include <MLog.h>
 
@@ -4753,239 +4754,14 @@ void LuaScript::init(void)
 	
 	g_startTick = system->getSystemTick();
 	
-	
 	// create context
 	m_state = lua_open();
 	luaL_openlibs(m_state);
 
-	
-	// vec3
-	registerVec3(m_state);
-	lua_register(m_state, "vec3", vec3);
-	lua_register(m_state, "length", length);
-	lua_register(m_state, "normalize", normalize);
-	lua_register(m_state, "dot", dot);
-	lua_register(m_state, "cross", cross);
-	
-	// object/scene init
-	lua_register(m_state, "getScene",	 getScene);
-	lua_register(m_state, "getObject",	 getObject);
-    lua_register(m_state, "objectExists", objectExists);
-	lua_register(m_state, "getClone",	 getClone);
-	lua_register(m_state, "getParent",	 getParent);
-	lua_register(m_state, "getChilds",	 getChilds);
-	lua_register(m_state, "getCurrentCamera",    getCurrentCamera);
-    lua_register(m_state, "loadCameraSkybox", loadCameraSkybox);
-    lua_register(m_state, "deleteObject", deleteObject);
-    lua_register(m_state, "resizeWindow", resizeWindow);
-	
-	// object
-	lua_register(m_state, "rotate",					rotate);
-	lua_register(m_state, "translate",				translate);
-	lua_register(m_state, "getPosition",			getPosition);
-	lua_register(m_state, "getRotation",			getRotation);
-	lua_register(m_state, "getScale",				getScale);
-	lua_register(m_state, "setPosition",			setPosition);
-	lua_register(m_state, "setRotation",			setRotation);
-	lua_register(m_state, "setScale",				setScale);
-	lua_register(m_state, "isVisible",				isVisible);
-    lua_register(m_state, "setInvisible",           setInvisible);
-	lua_register(m_state, "activate",				activate);
-	lua_register(m_state, "deactivate",				deactivate);
-	lua_register(m_state, "isActive",				isActive);
-	lua_register(m_state, "getName",				getName);
-	lua_register(m_state, "setParent",				setParent);
     lua_register(m_state, "setAttribute",           setAttribute);
     lua_register(m_state, "getAttribute",           getAttribute);
 
-	lua_register(m_state, "enableShadow",			enableShadow);
-	lua_register(m_state, "isCastingShadow",		isCastingShadow);
-    lua_register(m_state, "getMeshFilename",        getMeshFilename);
-    lua_register(m_state, "loadMesh",               loadMesh);
-    lua_register(m_state, "getObjectType",          getObjectType);
-    lua_register(m_state, "getBoundingMax",         getBoundingMax);
-    lua_register(m_state, "getBoundingMin",         getBoundingMin);
-    lua_register(m_state, "createGroup",            createGroup);
-
-	lua_register(m_state, "getTransformedPosition", getTransformedPosition);
-	lua_register(m_state, "getTransformedRotation", getTransformedRotation);
-	lua_register(m_state, "getTransformedScale",	getTransformedScale);
-	lua_register(m_state, "getInverseRotatedVector",getInverseRotatedVector);
-	lua_register(m_state, "getRotatedVector",		getRotatedVector);
-	lua_register(m_state, "getInverseVector",		getInverseVector);
-	lua_register(m_state, "getTransformedVector",	getTransformedVector);
-	lua_register(m_state, "updateMatrix",			updateMatrix);
-	lua_register(m_state, "getMatrix",				getMatrix);
-	
-	// behavior
-	lua_register(m_state, "getBehaviorVariable",	getBehaviorVariable);
-	lua_register(m_state, "setBehaviorVariable",	setBehaviorVariable);
-    lua_register(m_state, "getBehaviorsNumber",     getBehaviorsNumber);
-    lua_register(m_state, "getBehaviorName",        getBehaviorName);
-    lua_register(m_state, "getBehaviorVariablesNumber", getBehaviorVariablesNumber);
-    lua_register(m_state, "getBehaviorVariableType",    getBehaviorVariableType);
-    lua_register(m_state, "addBehavior",            addBehavior);
-
-	// animation
-	lua_register(m_state, "getCurrentAnimation",	getCurrentAnimation);
-	lua_register(m_state, "changeAnimation",		changeAnimation);
-	lua_register(m_state, "isAnimationOver",		isAnimationOver);
-	lua_register(m_state, "getAnimationSpeed",		getAnimationSpeed);
-	lua_register(m_state, "setAnimationSpeed",		setAnimationSpeed);
-	lua_register(m_state, "getCurrentFrame",		getCurrentFrame);
-	lua_register(m_state, "setCurrentFrame",		setCurrentFrame);
-
-	// physics
-	lua_register(m_state, "enablePhysics",		enablePhysics);
-	lua_register(m_state, "setGravity",			setGravity);
-	lua_register(m_state, "getGravity",			getGravity);
-	lua_register(m_state, "addCentralForce",	addCentralForce);
-	lua_register(m_state, "addTorque",			addTorque);
-	lua_register(m_state, "getLinearDamping",	getLinearDamping);
-	lua_register(m_state, "setLinearDamping",	setLinearDamping);
-	lua_register(m_state, "getAngularDamping",	getAngularDamping);
-	lua_register(m_state, "setAngularDamping",	setAngularDamping);
-	lua_register(m_state, "getMass",			getMass);
-	lua_register(m_state, "setMass",			setMass);
-	lua_register(m_state, "getFriction",		getFriction);
-	lua_register(m_state, "setFriction",		setFriction);
-	lua_register(m_state, "getRestitution",		getRestitution);
-	lua_register(m_state, "setRestitution",		setRestitution);
-	lua_register(m_state, "getAngularFactor",	getAngularFactor);
-	lua_register(m_state, "setAngularFactor",	setAngularFactor);
-	lua_register(m_state, "getLinearFactor",	getLinearFactor);
-	lua_register(m_state, "setLinearFactor",	setLinearFactor);
-	lua_register(m_state, "getCentralForce",	getCentralForce);
-	lua_register(m_state, "getTorque",			getTorque);
-
-	lua_register(m_state, "isCollisionTest",	isCollisionTest);
-	lua_register(m_state, "isCollisionBetween", isCollisionBetween);
-	lua_register(m_state, "clearForces",		clearForces);
-	lua_register(m_state, "getNumCollisions",	getNumCollisions);
-	lua_register(m_state, "rayHit",				rayHit);
-
-    lua_register(m_state, "setPhysicsQuality",  setPhysicsQuality);
-    lua_register(m_state, "setConstraintParent", setConstraintParent);
-    lua_register(m_state, "getConstraintParent", getConstraintParent);
-    lua_register(m_state, "enableParentCollision", enableParentCollision);
-    lua_register(m_state, "isGhost", isGhost);
-    lua_register(m_state, "enableGhost", enableGhost);
-	
-	// input
-	lua_register(m_state, "isKeyPressed", isKeyPressed);
-	lua_register(m_state, "onKeyDown",	  onKeyDown);
-	lua_register(m_state, "onKeyUp",	  onKeyUp);
-	lua_register(m_state, "getAxis",	  getAxis);
-	lua_register(m_state, "getProperty",  getProperty);
-    
-    // multitouch
-    lua_register(m_state, "getTouchPosition", getTouchPosition);
-    lua_register(m_state, "getLastTouchPosition", getLastTouchPosition);
-    lua_register(m_state, "getTouchPhase", getTouchPhase);
-
-	// sound
-    lua_register(m_state, "loadSound",          loadSound);
-    lua_register(m_state, "getSoundFilename",   getSoundFilename);
-    lua_register(m_state, "playSound",          playSound);
-    lua_register(m_state, "pauseSound",         pauseSound);
-    lua_register(m_state, "stopSound",          stopSound);
-    lua_register(m_state, "getSoundGain",       getSoundGain);
-    lua_register(m_state, "setSoundGain",       setSoundGain);
-    lua_register(m_state, "setSoundPitch",      setSoundPitch);
-    lua_register(m_state, "getSoundPitch",      getSoundPitch);
-
-    lua_register(m_state, "getSoundRolloff",    getSoundRolloff);
-    lua_register(m_state, "getSoundRadius",     getSoundRadius);
-    lua_register(m_state, "isSoundRelative",    isSoundRelative);
-    lua_register(m_state, "isSoundLooping",     isSoundLooping);
-
-    lua_register(m_state, "setSoundLooping",    setSoundLooping);
-    lua_register(m_state, "setSoundRelative",   setSoundRelative);
-    lua_register(m_state, "setSoundRadius",     setSoundRadius);
-    lua_register(m_state, "setSoundRolloff",    setSoundRolloff);
-	
-	// scene/level
-	lua_register(m_state, "changeScene",			changeScene);
-	lua_register(m_state, "getCurrentSceneId",		getCurrentSceneId);
-	lua_register(m_state, "getScenesNumber",		getScenesNumber);
-	lua_register(m_state, "doesLevelExist",			doesLevelExist);
-	lua_register(m_state, "loadLevel",				loadLevel);
-    lua_register(m_state, "enablePostEffects",      enablePostEffects);
-    lua_register(m_state, "disablePostEffects",     disablePostEffects);
-    lua_register(m_state, "loadPostEffectsShader",  loadPostEffectsShader);
-    lua_register(m_state, "setPostEffectsUniformFloat", setPostEffectsUniformFloat);
-    lua_register(m_state, "addPostEffectsUniformFloat", addPostEffectsUniformFloat);
-    lua_register(m_state, "setPostEffectsUniformInt", setPostEffectsUniformInt);
-    lua_register(m_state, "addPostEffectsUniformInt", addPostEffectsUniformInt);
-    lua_register(m_state, "setPostEffectsResolution", setPostEffectsResolution);
-    lua_register(m_state, "getPostEffectsResolution", getPostEffectsResolution);
-
-	// light
-    lua_register(m_state, "createLight",       createLight);
-	lua_register(m_state, "getLightColor",	   getLightColor);
-	lua_register(m_state, "getLightRadius",	   getLightRadius);
-	lua_register(m_state, "getLightIntensity", getLightIntensity);
-	lua_register(m_state, "setLightColor",	   setLightColor);
-	lua_register(m_state, "setLightRadius",	   setLightRadius);
-	lua_register(m_state, "setLightIntensity", setLightIntensity);
-	lua_register(m_state, "setLightShadowQuality",	setlightShadowQuality);
-	lua_register(m_state, "setLightShadowBias",		setlightShadowBias);
-	lua_register(m_state, "setLightShadowBlur",		setlightShadowBlur);
-	lua_register(m_state, "setLightSpotAngle",		setlightSpotAngle);
-	lua_register(m_state, "setLightSpotExponent",	setlightSpotExponent);	
-	lua_register(m_state, "getLightShadowQuality",	getlightShadowQuality);
-	lua_register(m_state, "getLightShadowBias",		getlightShadowBias);
-	lua_register(m_state, "getLightShadowBlur",		getlightShadowBlur);
-	lua_register(m_state, "getLightSpotAngle",		getlightSpotAngle);
-	lua_register(m_state, "getLightSpotExponent",	getlightSpotExponent);
-	
-	// camera
-    lua_register(m_state, "createCamera",           createCamera);
-	lua_register(m_state, "changeCurrentCamera",    changeCurrentCamera);
-	lua_register(m_state, "getCameraClearColor",    getCameraClearColor);
-	lua_register(m_state, "getCameraFov",		    getCameraFov);
-	lua_register(m_state, "getCameraNear",		    getCameraNear);
-	lua_register(m_state, "getCameraFar",		    getCameraFar);
-	lua_register(m_state, "getCameraFogDistance",   getCameraFogDistance);
-	lua_register(m_state, "isCameraOrtho",		    isCameraOrtho);
-	lua_register(m_state, "isCameraFogEnabled",	    isCameraFogEnabled);
-	lua_register(m_state, "setCameraClearColor",    setCameraClearColor);
-	lua_register(m_state, "setCameraFov",		    setCameraFov);
-	lua_register(m_state, "setCameraNear",	        setCameraNear);
-	lua_register(m_state, "setCameraFar",	        setCameraFar);
-	lua_register(m_state, "setCameraFogDistance",   setCameraFogDistance);
-	lua_register(m_state, "enableCameraOrtho",      enableCameraOrtho);
-	lua_register(m_state, "enableCameraFog",	    enableCameraFog);
-	lua_register(m_state, "enableCameraLayer",      enableCameraLayer);
-	lua_register(m_state, "disableCameraLayer",	    disableCameraLayer);
-	lua_register(m_state, "enableRenderToTexture",  enableRenderToTexture);
-	lua_register(m_state, "disableRenderToTexture", disableRenderToTexture);
-	lua_register(m_state, "getProjectedPoint",		getProjectedPoint);
-	lua_register(m_state, "getUnProjectedPoint",	getUnProjectedPoint);
-
-	// text
-    lua_register(m_state, "loadTextFont", loadTextFont);
-    lua_register(m_state, "getFontFilename", getFontFilename);
-    lua_register(m_state, "getTextFontSize", getTextFontSize);
-    lua_register(m_state, "setTextFontSize", setTextFontSize);
-	lua_register(m_state, "getText", getText);
-	lua_register(m_state, "setText", setText);
-	lua_register(m_state, "getTextColor", getTextColor);
-	lua_register(m_state, "setTextColor", setTextColor);
-    lua_register(m_state, "setTextAlignment", setTextAlignment);
-    lua_register(m_state, "getTextAlignment", getTextAlignment);
-
-	// do file
-	lua_register(m_state, "dofile", doFile);
-	
-	// global
-	lua_register(m_state, "centerCursor",	centerCursor);
-	lua_register(m_state, "hideCursor",		hideCursor);
-	lua_register(m_state, "showCursor",		showCursor);
-	lua_register(m_state, "getWindowScale", getWindowScale);
-	lua_register(m_state, "getSystemTick",	getSystemTick);
-	lua_register(m_state, "quit",			quit);
-	
+	bindLuaApi(this);
 
 	// register custom functions
 	map<string, int (*)(void)>::iterator
@@ -5151,6 +4927,11 @@ void* LuaScript::getPointer(unsigned int arg){
 	return (void*)lua_tointeger(m_state, arg+1);
 }
 
+bool LuaScript::getBoolean(unsigned int arg)
+{
+	return lua_toboolean(m_state, arg+1);
+}
+
 void LuaScript::pushIntArray(const int * values, unsigned int valuesNumber)
 {
 	lua_newtable(m_state);
@@ -5191,4 +4972,14 @@ void LuaScript::pushFloat(float value){
 
 void LuaScript::pushPointer(void* value){
 	lua_pushinteger(m_state, (lua_Integer)value);
+}
+
+bool LuaScript::isNumber(unsigned int arg)
+{
+	return lua_isnumber(m_state, arg+1);
+}
+
+void LuaScript::runString(const char* str)
+{
+	luaL_dostring(m_state, str);
 }

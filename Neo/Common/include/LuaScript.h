@@ -70,6 +70,8 @@ public:
 	// add function
 	void addFunction(const char * name, int (*function)(void));
 
+	void runString(const char* str);
+
 	// variables
 	unsigned int getArgsNumber(void);
 
@@ -79,6 +81,7 @@ public:
 	int getInteger(unsigned int arg);
 	float getFloat(unsigned int arg);
 	void* getPointer(unsigned int arg);
+	bool getBoolean(unsigned int arg);
 
     void pushIntArray(const int * values, unsigned int valuesNumber);
 	void pushFloatArray(const float * values, unsigned int valuesNumber);
@@ -87,6 +90,8 @@ public:
     void pushInteger(int value);
 	void pushFloat(float value);
 	void pushPointer(void* value);
+
+	bool isNumber(unsigned int arg);
 };
 }
 #endif

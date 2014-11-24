@@ -42,7 +42,7 @@ m_components(0)
 
 MImage::~MImage(void)
 {
-    SAFE_DELETE(m_data);
+	SAFE_FREE(m_data);
 }
 
 void MImage::clear(void * color)
@@ -87,7 +87,7 @@ void MImage::clear(void * color)
 
 void MImage::create(M_TYPES dataType, unsigned int width, unsigned int height, unsigned int components)
 {
-    SAFE_DELETE(m_data);
+	SAFE_FREE(m_data);
 
     m_width = width;
     m_height = height;
