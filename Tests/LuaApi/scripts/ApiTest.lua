@@ -71,6 +71,12 @@ function testVec()
     assertEquals(length(vector), 1)
     
     assertEquals(compare_float(dot({2,5,1}, {7,3,4}), 33), true)
+
+    local vec1 = vec3(15,15,3)
+    local vec2 = vec3(15,20,2)
+
+    compare_vec(vec1+vec2, vec3(30,35,5))
+    compare_vec(cross(vec1,vec2), vec3(-30,15,75))
 end
 
 print = function(str) 
@@ -82,6 +88,9 @@ print = function(str)
 	end
 
 LuaUnit.run()
+
+-- Only quit here if we do not want the GUI tests!
+-- quit()
 
 function button1Callback()
 	local obj = getObject("Cube")
@@ -106,10 +115,10 @@ end
 enableGui(1)
 mainCanvas = getMainCanvas()
 
-secondCanvas = createCanvas()
-enableCanvasRenderToTexture(secondCanvas, "maps/neo-icon.png")
+--secondCanvas = createCanvas()
+--enableCanvasRenderToTexture(secondCanvas, "maps/neo-icon.png")
 
-setCanvasClearColor(secondCanvas, {1,0,0,1})
+--setCanvasClearColor(secondCanvas, {1,0,0,1})
 
 setNormalBackground({0.5,0.5,0.5,0.3})
 setHoverBackground({0.7,0.7,0.7,0.3})
@@ -122,6 +131,7 @@ label1 = createLabel(150, 15, 250, 30, "Test results:\n\n" .. strout)
 
 input1 = createInput(15,130,250, 30, "This is an input", "")
 --button4 = createButton(15,170,250,30, "Set label to text", "button4Callback")
+--addWidgetToCanvas(secondCanvas, label1)
 
 resolution = getWindowScale()
 ball = createSprite(resolution[1]/2, resolution[2]/2, 15, 15, "maps/neo-icon.png", "")
@@ -154,6 +164,11 @@ addWidgetToCanvas(mainCanvas, button3)
 addWidgetToCanvas(mainCanvas, input1)
 
 addWidgetToCanvas(mainCanvas, ball)
+
+cursor = createSprite(0,0,32,32,"maps/cursor.png", "")
+addWidgetToCanvas(mainCanvas, cursor)
+
+hideCursor()
 
 function onSceneUpdate()
 	if isKeyPressed("S") and paddles[2].position[2] + paddleheight <= resolution[2] then
@@ -190,6 +205,11 @@ function onSceneUpdate()
 
 	updatePaddles()	
 	setWidgetPosition(ball, ballpos)
+
+
+	local mx = getAxis("MOUSE_X") * resolution[1]
+	local my = getAxis("MOUSE_Y") * resolution[2]
+	setWidgetPosition(cursor, {mx, my})
 end
 
 --quit()
