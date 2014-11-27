@@ -39,6 +39,9 @@ using namespace Neo;
 
 void Canvas::draw()
 {
+    if(m_widgets.size() == 0)
+        return;
+
     Render* render = Render::getInstance();
     MRenderingContext* renderingContext = MEngine::getInstance()->getRenderingContext();
     MSystemContext* system = MEngine::getInstance()->getSystemContext();
