@@ -1,4 +1,3 @@
-
 dofile("luaunit.lua") 
 
 strout = ""
@@ -212,4 +211,4 @@ function onSceneUpdate()
 	setWidgetPosition(cursor, {mx, my})
 end
 
---quit()
+--quit()--]]--

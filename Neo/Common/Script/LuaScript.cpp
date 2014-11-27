@@ -35,8 +35,8 @@
 
 using namespace Neo;
 
-static char g_currentDirectory[256] = "";
-static unsigned long g_startTick = 0;
+extern char g_currentDirectory[256];
+extern unsigned long g_startTick;
 const char * LUA_VEC3 = "LUA_VEC3";
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4758,6 +4758,8 @@ void LuaScript::init(void)
 	m_state = lua_open();
 	luaL_openlibs(m_state);
 
+	registerVec3(m_state);
+
     lua_register(m_state, "setAttribute",           setAttribute);
     lua_register(m_state, "getAttribute",           getAttribute);
 
@@ -4941,6 +4943,12 @@ void LuaScript::pushIntArray(const int * values, unsigned int valuesNumber)
 		lua_pushinteger(m_state, (lua_Integer)values[i]);
 		lua_rawset(m_state, -3);
 	}
+
+	if(valuesNumber == 3) // vec3
+	{
+		luaL_getmetatable(m_state, LUA_VEC3);
+		lua_setmetatable(m_state, -2);
+	}
 }
 
 void LuaScript::pushFloatArray(const float * values, unsigned int valuesNumber)
@@ -4951,6 +4959,12 @@ void LuaScript::pushFloatArray(const float * values, unsigned int valuesNumber)
 		lua_pushinteger(m_state, (lua_Integer)i+1);
 		lua_pushnumber(m_state, (lua_Number)values[i]);
 		lua_rawset(m_state, -3);
+	}
+
+	if(valuesNumber == 3) // vec3
+	{
+		luaL_getmetatable(m_state, LUA_VEC3);
+		lua_setmetatable(m_state, -2);
 	}
 }
 

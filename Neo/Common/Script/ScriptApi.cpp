@@ -1,13 +1,12 @@
 #include <ScriptApi.h>
 #include <MWindow.h>
 
-static char g_currentDirectory[256] = "";
-static unsigned long g_startTick = 0;
+char g_currentDirectory[256] = "";
+unsigned long g_startTick = 0;
 
 #define GET_OBJECT_SUBCLASS_BEGIN(type_, var_, type_enum)	\
-	MObject3d * object;	\
-	long int id = script->getInteger(0);	\
-	if((object = (MObject3d*)(id)))	\
+	MObject3d* object = (MObject3d*) (MObject3d*) script->getPointer(0);	\
+	if(object)	\
 	{	\
 		if(object->getType() == type_enum)	\
 		{	\
@@ -43,7 +42,7 @@ bool getVector3(MScriptContext* script, unsigned int idx, MVector3* vec)
 {
 	if(script && vec)
 	{
-		script->getFloatArray(idx-1, reinterpret_cast<float*>(vec), 3);
+		script->getFloatArray(idx-1, (float*) vec, 3);
 		return true;
 	}
 
@@ -208,7 +207,7 @@ int getCurrentCamera()
 	MOCamera * camera = scene->getCurrentCamera();
 	if(camera)
 	{
-		script->pushInteger((long int) camera);
+		script->pushPointer(camera);
 		return 1;
 	}
 
@@ -223,10 +222,9 @@ int getMeshFilename()
 
 	int nbArguments = script->getArgsNumber()-1;
 
-	long int id = script->getInteger(nbArguments);
-	MObject3d* object;
+	MObject3d* object = (MObject3d*) (MObject3d*) script->getPointer(nbArguments);
 
-	if((object = (MObject3d*) id))
+	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
@@ -291,7 +289,7 @@ int loadMesh()
 	getNewObjectName("Entity", string);
 
 	entity->setName(string);
-	script->pushInteger((long int) entity);
+	script->pushPointer(entity);
 
 	return 1;
 }
@@ -317,7 +315,7 @@ int loadSound()
 	getNewObjectName("Sound", string);
 
 	sound->setName(string);
-	script->pushInteger((long int) sound);
+	script->pushPointer(sound);
 
 	return 1;
 }
@@ -330,10 +328,8 @@ int getSoundFilename()
 
 	int nbArguments = script->getArgsNumber();
 
-	long int id = script->getInteger(nbArguments-1);
-	MObject3d* object;
-
-	if((object = (MObject3d*)id))
+	MObject3d * object = (MObject3d*) (MObject3d*) script->getPointer(nbArguments-1);
+	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
@@ -352,10 +348,8 @@ int getSoundRolloff()
 	if(! isFunctionOk(script, "getSoundRolloff", 1))
 		return 0;
 
-	MObject3d * object;
-	long int id = script->getInteger(0);
-
-	if((object = (MObject3d*)id))
+	MObject3d * object = (MObject3d*) (MObject3d*) script->getPointer(0);
+	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
@@ -374,10 +368,8 @@ int setSoundRolloff()
 	if(!isFunctionOk(script, "setSoundRolloff", 2))
 		return 0;
 
-	MObject3d * object;
-	long int id = script->getInteger(0);
-
-	if((object = (MObject3d*)id))
+	MObject3d * object = (MObject3d*) script->getPointer(0);
+	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
@@ -395,10 +387,8 @@ int getSoundRadius()
 	if(! isFunctionOk(script, "getSoundRadius", 1))
 		return 0;
 
-	MObject3d * object;
-	long int id = script->getInteger(0);
-
-	if((object = (MObject3d*)id))
+	MObject3d * object = (MObject3d*) (MObject3d*) script->getPointer(0);
+	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
@@ -417,10 +407,8 @@ int setSoundRadius()
 	if(!isFunctionOk(script, "setSoundRadius", 2))
 		return 0;
 
-	MObject3d * object;
-	long int id = script->getInteger(0);
-
-	if((object = (MObject3d*)id))
+	MObject3d * object = (MObject3d*) script->getPointer(0);
+	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
@@ -438,10 +426,8 @@ int setSoundRelative()
 	if(!isFunctionOk(script, "setSoundRelative", 2))
 		return 0;
 
-	MObject3d * object;
-	long int id = script->getInteger(0);
-
-	if((object = (MObject3d*)id))
+	MObject3d * object = (MObject3d*) script->getPointer(0);
+	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
@@ -459,10 +445,8 @@ int isSoundRelative()
 	if(! isFunctionOk(script, "isSoundRelative", 1))
 		return 0;
 
-	MObject3d * object;
-	long int id = script->getInteger(0);
-
-	if((object = (MObject3d*)id))
+	MObject3d * object = (MObject3d*) script->getPointer(0);
+	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
@@ -481,10 +465,8 @@ int setSoundLooping()
 	if(!isFunctionOk(script, "setSoundLooping", 2))
 		return 0;
 
-	MObject3d * object;
-	long int id = script->getInteger(0);
-
-	if((object = (MObject3d*)id))
+	MObject3d * object = (MObject3d*) script->getPointer(0);
+	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
@@ -502,10 +484,8 @@ int isSoundLooping()
 	if(! isFunctionOk(script, "isSoundLooping", 1))
 		return 0;
 
-	MObject3d * object;
-	long int id = script->getInteger(0);
-
-	if((object = (MObject3d*)id))
+	MObject3d * object = (MObject3d*) script->getPointer(0);
+	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
@@ -529,7 +509,7 @@ int createGroup()
 	getNewObjectName("Group", string);
 	group->setName(string);
 
-	script->pushInteger((long int) group);
+	script->pushPointer(group);
 
 	return 1;
 }
@@ -541,10 +521,9 @@ int getObjectType()
 		return 0;
 
 	int nbArguments = script->getArgsNumber();
-	long int id = script->getInteger(nbArguments-1);
-	MObject3d* object;
+	MObject3d* object = (MObject3d*) (MObject3d*) script->getPointer(nbArguments-1);
 
-	if((object = (MObject3d*)id))
+	if(object)
 	{
 		switch (object->getType())
 		{
@@ -588,10 +567,8 @@ int getBoundingMin()
 
 	int nbArguments = script->getArgsNumber();
 
-	long int id = script->getInteger(nbArguments-1);
-	MObject3d* object;
-
-	if((object = (MObject3d*) id))
+	MObject3d * object = (MObject3d*) script->getPointer(nbArguments-1);
+	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
@@ -615,10 +592,8 @@ int getBoundingMax()
 
 	int nbArguments = script->getArgsNumber();
 
-	long int id = script->getInteger(nbArguments-1);
-	MObject3d* object;
-
-	if((object = (MObject3d*) id))
+	MObject3d * object = (MObject3d*) script->getPointer(nbArguments-1);
+	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
@@ -653,7 +628,7 @@ int deleteObject()
 		scene = level->getCurrentScene();
 	}
 
-	MObject3d* object = (MObject3d*) script->getInteger(0);
+	MObject3d* object = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if(object != NULL && object->getType() == M_OBJECT3D_ENTITY)
 	{
 		MPhysicsContext* physics = MEngine::getInstance()->getPhysicsContext();
@@ -694,7 +669,7 @@ int getObject()
 		MObject3d * object = scene->getObjectByName(name);
 		if(object)
 		{
-			script->pushInteger( (long int)object);
+			script->pushPointer(object);
 			return 1;
 		}
 	}
@@ -747,10 +722,8 @@ int getClone()
 		scene = level->getSceneByIndex(sceneId);
 	}
 
-	MObject3d * object;
-	long int id = script->getInteger(nbArguments-1);
-
-	if((object = (MObject3d*) id))
+	MObject3d * object = (MObject3d*) script->getPointer(nbArguments-1);
+	if(object)
 	{
 		MObject3d * cloneObj = NULL;
 
@@ -781,7 +754,7 @@ int getClone()
 			cloneObj->setName(name);
 		}
 
-		script->pushInteger( (long int)cloneObj);
+		script->pushPointer(cloneObj);
 		return 1;
 	}
 
@@ -794,10 +767,8 @@ int getParent()
 	if(! isFunctionOk(script, "getParent", 1))
 		return 0;
 
-	MObject3d * object;
-	long int id = script->getInteger(0);
-
-	if((object = (MObject3d*) id))
+	MObject3d * object = (MObject3d*) script->getPointer(0);
+	if(object)
 	{
 		script->pushInteger( (long int)object->getParent());
 		return 1;
@@ -813,7 +784,7 @@ int getChilds()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -846,7 +817,7 @@ int getProjectedPoint()
 	system->getScreenSize(&width, &height);
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -882,7 +853,7 @@ int getUnProjectedPoint()
 	system->getScreenSize(&width, &height);
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -911,7 +882,7 @@ int rotate()
 	int nbArguments = script->getArgsNumber();
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -950,7 +921,7 @@ int translate()
 	int nbArguments = script->getArgsNumber();
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -987,7 +958,7 @@ int getPosition()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1005,7 +976,7 @@ int getRotation()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1023,7 +994,7 @@ int getScale()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1041,7 +1012,7 @@ int getTransformedPosition()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1059,7 +1030,7 @@ int getTransformedRotation()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1077,7 +1048,7 @@ int getTransformedScale()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1095,7 +1066,7 @@ int setPosition()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1116,7 +1087,7 @@ int setRotation()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1137,7 +1108,7 @@ int setScale()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1158,7 +1129,7 @@ int updateMatrix()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1175,7 +1146,7 @@ int getMatrix()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1193,7 +1164,7 @@ int getInverseRotatedVector()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1215,7 +1186,7 @@ int getRotatedVector()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1237,7 +1208,7 @@ int getInverseVector()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1259,7 +1230,7 @@ int getTransformedVector()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1281,7 +1252,7 @@ int isVisible()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1300,7 +1271,7 @@ int setInvisible()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1324,7 +1295,7 @@ int activate()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1353,7 +1324,7 @@ int deactivate()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1380,7 +1351,7 @@ int isActive()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1398,7 +1369,7 @@ int getName()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1441,7 +1412,7 @@ int changeAnimation()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1465,7 +1436,7 @@ int isAnimationOver()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1488,7 +1459,7 @@ int getCurrentAnimation()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1690,7 +1661,7 @@ int addCentralForce()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1729,7 +1700,7 @@ int clearForces()
 {
 	MScriptContext* script = MEngine::getInstance()->getScriptContext();
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1756,7 +1727,7 @@ int addTorque()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -1798,7 +1769,7 @@ int getLinearDamping()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -1826,7 +1797,7 @@ int setLinearDamping()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -1857,7 +1828,7 @@ int getAngularDamping()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -1885,7 +1856,7 @@ int setAngularDamping()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -1917,7 +1888,7 @@ int setConstraintParent()
 
 	MObject3d* object;
 	MObject3d* parent;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	long int parentId = script->getInteger(1);
 	if((object = (MObject3d*) id) && (parent = (MObject3d*)(parentId)))
 	{
@@ -1952,7 +1923,7 @@ int getConstraintParent()
 
 	MObject3d* object;
 	MObject3d* parent;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -1985,7 +1956,7 @@ int enableParentCollision()
 		return 0;
 
 	MObject3d* object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	long int collision = script->getInteger(1);
 
 	if((object = (MObject3d*) id))
@@ -2021,7 +1992,7 @@ int getCentralForce()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -2050,7 +2021,7 @@ int getTorque()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -2077,7 +2048,7 @@ int getMass()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -2130,7 +2101,7 @@ int setMass()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -2157,7 +2128,7 @@ int getFriction()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -2185,7 +2156,7 @@ int setFriction()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -2212,7 +2183,7 @@ int getRestitution()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -2240,7 +2211,7 @@ int setRestitution()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -2267,7 +2238,7 @@ int getAngularFactor()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -2295,7 +2266,7 @@ int setAngularFactor()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -2322,7 +2293,7 @@ int getLinearFactor()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -2350,7 +2321,7 @@ int setLinearFactor()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -2380,7 +2351,7 @@ int getNumCollisions()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -2407,7 +2378,7 @@ int isCollisionTest()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	if((object = (MObject3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
@@ -2677,7 +2648,7 @@ int playSound()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -2698,7 +2669,7 @@ int pauseSound()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -2719,7 +2690,7 @@ int stopSound()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -2740,7 +2711,7 @@ int setSoundPitch()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -2761,7 +2732,7 @@ int getSoundPitch()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -2851,7 +2822,7 @@ int getLightColor()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -2873,7 +2844,7 @@ int getLightRadius()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -2895,7 +2866,7 @@ int getLightIntensity()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -2917,7 +2888,7 @@ int setLightColor()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -2940,7 +2911,7 @@ int setLightRadius()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -2964,7 +2935,7 @@ int setLightIntensity()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -2988,7 +2959,7 @@ int enableShadow()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3018,7 +2989,7 @@ int isCastingShadow()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3040,7 +3011,7 @@ int setlightShadowQuality()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3063,7 +3034,7 @@ int setlightShadowBias()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3086,7 +3057,7 @@ int setlightShadowBlur()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3109,7 +3080,7 @@ int getlightShadowQuality()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3131,7 +3102,7 @@ int getlightShadowBias()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3153,7 +3124,7 @@ int getlightShadowBlur()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3175,7 +3146,7 @@ int setlightSpotAngle()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3198,7 +3169,7 @@ int setlightSpotExponent()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3221,7 +3192,7 @@ int getlightSpotAngle()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3243,7 +3214,7 @@ int getlightSpotExponent()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3278,7 +3249,7 @@ int getSoundGain()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3300,7 +3271,7 @@ int setSoundGain()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3335,7 +3306,7 @@ int setCameraClearColor()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3358,7 +3329,7 @@ int getCameraClearColor()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3380,7 +3351,7 @@ int setCameraNear()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3403,7 +3374,7 @@ int getCameraNear()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3425,7 +3396,7 @@ int setCameraFar()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3448,7 +3419,7 @@ int getCameraFar()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3470,7 +3441,7 @@ int setCameraFov()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3493,7 +3464,7 @@ int getCameraFov()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3515,7 +3486,7 @@ int setCameraFogDistance()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3538,7 +3509,7 @@ int getCameraFogDistance()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3560,7 +3531,7 @@ int enableCameraOrtho()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3583,7 +3554,7 @@ int isCameraOrtho()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3605,7 +3576,7 @@ int enableCameraFog()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3628,7 +3599,7 @@ int isCameraFogEnabled()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3650,7 +3621,7 @@ int enableCameraLayer()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3673,7 +3644,7 @@ int disableCameraLayer()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3700,7 +3671,7 @@ int enableRenderToTexture()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3765,7 +3736,7 @@ int disableRenderToTexture()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3794,7 +3765,7 @@ int getBehaviorVariable()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -3874,7 +3845,7 @@ int setBehaviorVariable()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -4194,7 +4165,7 @@ int getTextAlignment()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -4226,7 +4197,7 @@ int setTextAlignment()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 	const char* alignment = script->getString(1);
 
 	if((object = (MObject3d*) id))
@@ -4256,7 +4227,7 @@ int getTextFontSize()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -4277,7 +4248,7 @@ int setTextFontSize()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -4297,7 +4268,7 @@ int getText()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -4321,7 +4292,7 @@ int setText()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -4342,7 +4313,7 @@ int getTextColor()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{
@@ -4364,7 +4335,7 @@ int setTextColor()
 		return 0;
 
 	MObject3d * object;
-	long int id = script->getInteger(0);
+	MObject3d* id = (MObject3d*) (MObject3d*) script->getPointer(0);
 
 	if((object = (MObject3d*) id))
 	{

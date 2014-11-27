@@ -250,7 +250,7 @@ int setDefaultFontSize()
     return 1;
 }
 
-int setPosition()
+int setWidgetPosition()
 {
     MScriptContext* script = MEngine::getInstance()->getScriptContext();
 
@@ -266,7 +266,7 @@ int setPosition()
     return 1;
 }
 
-int getPosition()
+int getWidgetPosition()
 {
     MScriptContext* script = MEngine::getInstance()->getScriptContext();
 
@@ -373,8 +373,8 @@ void GuiSystem::setupLuaInterface(MScriptContext* script)
     script->addFunction("setDefaultFontSize", ::setDefaultFontSize);
     script->addFunction("clearGui", clearGui);
 
-    script->addFunction("getWidgetPosition", getPosition);
-    script->addFunction("setWidgetPosition", setPosition);
+	script->addFunction("getWidgetPosition", getWidgetPosition);
+	script->addFunction("setWidgetPosition", setWidgetPosition);
 
     script->addFunction("setHighlightBackground", ::setHighlightBackground);
     script->addFunction("setNormalBackground", ::setNormalBackground);
