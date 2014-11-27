@@ -378,7 +378,11 @@ int getAttribute(lua_State* L)
 LuaScript::LuaScript(void):
 m_state(NULL),
 m_isRunning(false)
-{}
+{
+	// Do this before doing anything else
+	// to allow overwriting API functions.
+	bindLuaApi(this);
+}
 
 LuaScript::~LuaScript(void)
 {
@@ -400,8 +404,6 @@ void LuaScript::init(void)
 
     lua_register(m_state, "setAttribute",           setAttribute);
     lua_register(m_state, "getAttribute",           getAttribute);
-
-	bindLuaApi(this);
 
 	// register custom functions
 	map<string, int (*)(void)>::iterator
