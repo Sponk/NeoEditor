@@ -114,10 +114,10 @@ end
 enableGui(1)
 mainCanvas = getMainCanvas()
 
---secondCanvas = createCanvas()
---enableCanvasRenderToTexture(secondCanvas, "maps/neo-icon.png")
+secondCanvas = createCanvas()
+enableCanvasRenderToTexture(secondCanvas, "maps/neo-icon.png")
 
---setCanvasClearColor(secondCanvas, {1,0,0,1})
+setCanvasClearColor(secondCanvas, {1,0,0,1})
 
 setNormalBackground({0.5,0.5,0.5,0.3})
 setHoverBackground({0.7,0.7,0.7,0.3})
@@ -128,9 +128,13 @@ button3 = createButton(15,85,250,30, "Less light", "button3Callback")
 
 label1 = createLabel(150, 15, 250, 30, "Test results:\n\n" .. strout)
 
+function clear()
+	clearGui(123)
+end
+
 input1 = createInput(15,130,250, 30, "This is an input", "")
---button4 = createButton(15,170,250,30, "Set label to text", "button4Callback")
---addWidgetToCanvas(secondCanvas, label1)
+button4 = createButton(15,170,250,60, "Clear GUI \n(Will remove all widgets!)", "clear")
+addWidgetToCanvas(mainCanvas, button4)
 
 resolution = getWindowScale()
 ball = createSprite(resolution[1]/2, resolution[2]/2, 15, 15, "maps/neo-icon.png", "")

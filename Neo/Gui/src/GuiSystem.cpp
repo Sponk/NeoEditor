@@ -53,6 +53,7 @@ GuiSystem::GuiSystem()
     m_hoverBackground = MVector4(0.7,0.7,0.7,1.0);
     m_highlightBackground = MVector4(0.6,0.7,0.8,1.0);
     m_enabled = false;
+	m_clearScheduled = false;
 }
 
 GuiSystem::~GuiSystem()
@@ -281,7 +282,7 @@ int getWidgetPosition()
 
 int clearGui()
 {
-    GuiSystem::getInstance()->clear();
+	GuiSystem::getInstance()->scheduleClear();
     return 1;
 }
 
@@ -409,6 +410,13 @@ void GuiSystem::update()
             m_canvasVector[i]->update();
         }
     }
+
+	if(m_clearScheduled)
+	{
+		clear();
+		m_clearScheduled = false;
+		return;
+	}
 }
 
 void GuiSystem::clear()

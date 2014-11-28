@@ -63,6 +63,8 @@ private:
 public:
     static Canvas* getInstance() { static Canvas m_instance; return &m_instance; }
 
+	~Canvas() {clear();}
+
     /**
      * @brief Draws the Canvas and its contents.
      */

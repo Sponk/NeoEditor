@@ -39,10 +39,7 @@ using namespace Neo::Gui;
 
 void Canvas::draw()
 {
-    if(m_widgets.size() == 0)
-        return;
-
-    Render* render = Render::getInstance();
+	Render* render = Render::getInstance();
     MRenderingContext* renderingContext = MEngine::getInstance()->getRenderingContext();
     MSystemContext* system = MEngine::getInstance()->getSystemContext();
     system->getScreenSize(&m_width, &m_height);

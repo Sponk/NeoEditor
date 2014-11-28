@@ -61,6 +61,8 @@ private:
     MVector4 m_hoverBackground;
     MVector4 m_highlightBackground;
 
+	bool m_clearScheduled;
+
 public:
 
     GuiSystem();
@@ -93,6 +95,7 @@ public:
     
     // Deletes all widgets and canvases except the main canvas.
     void clear();
+	void scheduleClear() { m_clearScheduled = true; }
 };
 }
 }
