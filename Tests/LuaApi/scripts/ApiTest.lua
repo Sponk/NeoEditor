@@ -128,8 +128,11 @@ button3 = createButton(15,85,250,30, "Less light", "button3Callback")
 
 label1 = createLabel(150, 15, 250, 30, "Test results:\n\n" .. strout)
 
+isRunning = true
+
 function clear()
-	clearGui(123)
+	clearGui()
+	isRunning = false
 end
 
 input1 = createInput(15,130,250, 30, "This is an input", "")
@@ -174,6 +177,9 @@ addWidgetToCanvas(mainCanvas, cursor)
 hideCursor()
 
 function onSceneUpdate()
+
+	if not isRunning then return end
+
 	if isKeyPressed("S") and paddles[2].position[2] + paddleheight <= resolution[2] then
 		paddles[2].position[2] = paddles[2].position[2] + 5
 	end

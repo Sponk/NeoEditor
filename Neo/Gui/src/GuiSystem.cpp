@@ -432,11 +432,11 @@ void GuiSystem::clear()
     m_canvasVector.push_back(Canvas::getInstance());
     Canvas::getInstance()->clear();
 
-    for(int i = 0; i < m_widgets.size(); i++)
+	for(int i = 0; i < m_widgets.size(); i++)
     {
         delete m_widgets[i];
     }
 
     m_widgets.clear();
-    scriptCallbacks.clear();
+	scriptCallbacks.clear();
 }
