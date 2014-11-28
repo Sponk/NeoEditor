@@ -131,7 +131,7 @@ label1 = createLabel(150, 15, 250, 30, "Test results:\n\n" .. strout)
 isRunning = true
 
 function clear()
-	clearGui()
+	clearGui(123)
 	isRunning = false
 end
 
