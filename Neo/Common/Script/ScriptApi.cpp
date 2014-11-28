@@ -234,6 +234,7 @@ int getMeshFilename()
 		}
 	}
 
+	MLOG_ERROR("Could not return mesh filename!");
 	return 0;
 }
 
@@ -278,6 +279,7 @@ int loadMesh()
 
 	if(!isFileExist(string))
 	{
+		MLOG_ERROR("Could not load mesh file '" << path << "': File does not exist!");
 		return 0;
 	}
 
@@ -307,6 +309,12 @@ int loadSound()
 
 	char string[256];
 	getGlobalFilename(string, MWindow::getInstance()->getWorkingDirectory(), path);
+
+	if(!isFileExist(string))
+	{
+		MLOG_ERROR("Could not load sound file '" << path << "': File does not exist!");
+		return 0;
+	}
 
 	MSoundRef* ref = level->loadSound(string);
 	MOSound* sound = scene->addNewSound(ref);
@@ -339,6 +347,7 @@ int getSoundFilename()
 		}
 	}
 
+	MLOG_ERROR("Could not return sound filename!");
 	return 0;
 }
 
@@ -4115,13 +4124,14 @@ int loadTextFont()
 	char string[256];
 	getGlobalFilename(string, MWindow::getInstance()->getWorkingDirectory(), path);
 
-	MFontRef* ref = level->loadFont(string);
-	MOText* text = scene->addNewText(ref);
-
-	if(!ref)
+	if(!isFileExist(string))
 	{
+		MLOG_ERROR("Could not load font file '" << path << "': File does not exist!");
 		return 0;
 	}
+
+	MFontRef* ref = level->loadFont(string);
+	MOText* text = scene->addNewText(ref);
 
 	strcpy(string, "Text0");
 	getNewObjectName("Text", string);
