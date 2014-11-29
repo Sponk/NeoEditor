@@ -2207,6 +2207,7 @@ void play_game_in_editor(Fl_Button* button, void *)
     button->label(text);
 
     update_scene_tree();
+	Gui::GuiSystem::getInstance()->clear();
 
     // Save profile
     PROFILE_OUTPUT((current_project.path + "/profile.txt").c_str());
