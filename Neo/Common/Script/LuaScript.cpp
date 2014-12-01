@@ -519,7 +519,8 @@ void LuaScript::addFunction(const char * name, int (*function)(void)){
 	m_functions[name] = function;
 }
 
-unsigned int LuaScript::getArgsNumber(void){
+unsigned int LuaScript::getArgsNumber(void)
+{
 	return lua_gettop(m_state);
 }
 

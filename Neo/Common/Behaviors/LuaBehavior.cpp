@@ -99,7 +99,7 @@ unsigned int LuaBehavior::getVariablesNumber(void)
         // If the script does not exist, show only the static variable
 		if(!isFileExist(globalFile) || isDirectory(globalFile))
         {
-            //MLOG_ERROR("Script file does not exist (" << globalFile << ")!");
+			MLOG_ERROR("Script file does not exist (" << globalFile << ")!");
             return 1;
         }
 
@@ -233,7 +233,9 @@ void LuaBehavior::update(void)
     {
         char globalFile[256];
         getGlobalFilename(globalFile, engine->getSystemContext()->getWorkingDirectory(), m_scriptFile.getSafeString());
-        m_script.runScript(globalFile);
+
+		MLOG_INFO("Running script");
+		m_script.runScript(globalFile);
         m_init = true;
     }
 
