@@ -3292,7 +3292,7 @@ int createCamera()
 	getNewObjectName("Camera", name);
 
 	camera->setName(name);
-	script->pushInteger( (long int) camera);
+	script->pushPointer(camera);
 	return 1;
 }
 
@@ -3302,10 +3302,9 @@ int setCameraClearColor()
 	if(! isFunctionOk(script, "setCameraClearColor", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	MObject3d* object = (MObject3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if(object)
 	{
 		MVector3 color;
 		if(object->getType() == M_OBJECT3D_CAMERA && getVector3(script, 2, &color))
@@ -3325,10 +3324,9 @@ int getCameraClearColor()
 	if(! isFunctionOk(script, "getCameraClearColor", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	MObject3d* object = (MObject3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{

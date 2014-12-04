@@ -51,6 +51,23 @@ function testLight()
     assertEquals(compare_float(getLightSpotExponent(object), 0.7), true)
 end
 
+function testCamera()
+    local object = createCamera()
+    
+    -- Camera1 because there already is a camera in the scene
+    assertEquals(getName(object), "Camera1")
+
+    currentCamera = getCurrentCamera()
+    assertEquals(getName(currentCamera), "Camera0")
+    
+    changeCurrentCamera(object)
+    assertEquals(getCurrentCamera(), object)
+
+    setCameraClearColor(object, {1.0,1.0,1.0})
+    compare_vec(getCameraClearColor(object), {1.0,1.0,1.0})
+
+end
+
 function testVec()
     local vector = vec3(15.3,18.5,19)
     compare_vec(vector, {15.3,18.5,19})
@@ -78,18 +95,20 @@ function testVec()
     compare_vec(cross(vec1,vec2), vec3(-30,15,75))
 end
 
+origPrint = print
 print = function(str) 
 		if str == nil then 
 			return 
 		end 
 		
+		origPrint(str)
 		strout = strout .. str .. "\n"
 	end
 
 LuaUnit.run()
 
 -- Only quit here if we do not want the GUI tests!
--- quit()
+quit()
 
 function button1Callback()
 	local obj = getObject("Cube")
