@@ -57,8 +57,6 @@ Fl_Text_Buffer console_buffer;
 
 char labels[][2] = {{"X"},{"Y"},{"Z"},{"W"}};
 
-extern const char* executable;
-
 bool update_name = true;
 
 const char* fl_native_file_chooser(const char* title, const char* files, const char* dir, int type)

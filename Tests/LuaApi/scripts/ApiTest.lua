@@ -63,9 +63,28 @@ function testCamera()
     changeCurrentCamera(object)
     assertEquals(getCurrentCamera(), object)
 
+    changeCurrentCamera(currentCamera)
+
     setCameraClearColor(object, {1.0,1.0,1.0})
     compare_vec(getCameraClearColor(object), {1.0,1.0,1.0})
 
+    setCameraFov(object, 70)
+    assertEquals(getCameraFov(object), 70)
+    
+    setCameraNear(object, 0.1)
+    assertEquals(compare_float(getCameraNear(object), 0.1), true)
+    
+    setCameraFar(object, 10000)
+    assertEquals(compare_float(getCameraFar(object), 10000), true)
+
+    setCameraFogDistance(object, 10000)
+    assertEquals(compare_float(getCameraFogDistance(object), 10000), true)
+    
+    enableCameraOrtho(object, true)
+    assertEquals(isCameraOrtho(object), true)
+    
+    enableCameraFog(object, true)
+    assertEquals(isCameraFogEnabled(object), true)
 end
 
 function testVec()
@@ -93,6 +112,12 @@ function testVec()
 
     compare_vec(vec1+vec2, vec3(30,35,5))
     compare_vec(cross(vec1,vec2), vec3(-30,15,75))
+end
+
+-- Can't test all functions here. loadLevel will leave this script for example.
+function testLevel()
+    assertEquals(getCurrentSceneId(), 0)
+    assertEquals(getScenesNumber(), 1)
 end
 
 origPrint = print

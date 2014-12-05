@@ -20,7 +20,7 @@ bool isFunctionOk(MScriptContext* script, const char* function, int argc)
 {
 	if(script->getArgsNumber() < argc)
 	{
-		MLOG_ERROR("'" << function << "' needs at least " << argc << "parameters!");
+		MLOG_ERROR("'" << function << "' needs at least " << argc << " parameters!");
 		return false;
 	}
 
@@ -3525,10 +3525,9 @@ int enableCameraOrtho()
 	if(! isFunctionOk(script, "enableCameraOrtho", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	MObject3d* object = (MObject3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
