@@ -35,6 +35,16 @@
 
 namespace Neo
 {
+/**
+ * @brief Loads any supported image file and stores the pixel data in the given pointer.
+ *
+ * This function calls all possible image loaders sequentially to figure out the right
+ * format to load. Returns false if all image loader fail.
+ *
+ * @param filename The path to the image to load.
+ * @param data A pointer to allocated memory.
+ * @return Returns the success value.
+ */
 bool M_loadImage(const char * filename, void * data);
 }
 #endif

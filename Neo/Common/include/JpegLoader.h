@@ -35,6 +35,13 @@
 
 namespace Neo
 {
+/**
+ * @brief Loads a JPEG image file and stores the pixel data in the given pointer.
+ *
+ * @param filename The path to the image to load.
+ * @param data A pointer to allocated memory.
+ * @return Returns <b>true</b> on success and <b>false</b> on failure.
+ */
 bool M_loadJpegImage(const char * filename, void * data);
 }
 #endif

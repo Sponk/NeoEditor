@@ -45,7 +45,11 @@
 
 namespace Neo
 {
-
+/**
+ * The ALContext class implements the interface dictated by MSoundContext on top of OpenAL.
+ *
+ * @see MSoundContext
+ */
 class ALContext : public MSoundContext
 {
 private:

@@ -39,6 +39,11 @@
 
 namespace Neo
 {
+/**
+ * The BulletContext class implements the interface dictated by MPhysicsContext on top of Bullet.
+ *
+ * @see MPhysicsContext
+ */
 class BulletContext : public MPhysicsContext
 {
 private:

@@ -39,7 +39,12 @@
 
 namespace Neo
 {
-class MES2Context : public MRenderingContext
+/**
+ * The MES2Context class implements the interface dictated by MRenderingContext on top of OpenGL ES.
+ *
+ * @see MRenderingContext
+ */
+class ES2Context : public MRenderingContext
 {
 private:
 
@@ -78,8 +83,8 @@ private:
 
 public:
 
-	MES2Context(void);
-	~MES2Context(void);
+	ES2Context(void);
+	~ES2Context(void);
 
 	// version
 	const char * getRendererVersion(void) { return m_gl_version; }

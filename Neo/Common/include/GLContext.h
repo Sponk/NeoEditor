@@ -37,6 +37,11 @@
 #define MAX_MRCLIGHTS 8
 namespace Neo
 {
+/**
+ * The GLContext class implements the interface dictated by MRenderingContext on top of OpenGL.
+ *
+ * @see MRenderingContext
+ */
 class GLContext : public MRenderingContext
 {
 private:
