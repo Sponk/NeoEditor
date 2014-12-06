@@ -265,9 +265,11 @@ function onSceneUpdate()
 	local mx = getAxis("MOUSE_X") * resolution[1]
 	local my = getAxis("MOUSE_Y") * resolution[2]
 	setWidgetPosition(cursor, {mx, my})
-	
+
 	ball_rotation = ball_rotation + 3
 	setWidgetRotation(ball, ball_rotation)
+	
+	if onKeyDown("SPACE") then destroyWidget(label1) end
 end
 
 --quit()--]]--

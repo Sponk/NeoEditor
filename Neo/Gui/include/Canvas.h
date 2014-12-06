@@ -51,7 +51,7 @@ namespace Gui
 class Canvas
 {
 private:
-    std::vector<Widget*> m_widgets;
+    std::vector<int> m_widgets;
     MVector4 m_clearColor;
 
     unsigned int m_width, m_height;
@@ -73,7 +73,7 @@ public:
 
     void clear();
 
-    void addWidget(Widget* w);
+    void addWidget(int w);
     MVector4 getClearColor() { return m_clearColor; }
     void setClearColor(MVector4 vec) { m_clearColor = vec; }
     

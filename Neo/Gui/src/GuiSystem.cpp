@@ -54,6 +54,7 @@ GuiSystem::GuiSystem()
     m_highlightBackground = MVector4(0.6,0.7,0.8,1.0);
     m_enabled = false;
 	m_clearScheduled = false;
+	m_ids = 0;
 }
 
 GuiSystem::~GuiSystem()
@@ -137,9 +138,9 @@ int createButton()
     btn->setUserData(scriptCallbacks.size()-1);
 
     GuiSystem* gui = GuiSystem::getInstance();
-    gui->addWidget(btn);
+    int idx = gui->addWidget(btn);
 
-    script->pushInteger(gui->getNumWidgets() - 1);
+    script->pushInteger(idx);
     return 1;
 }
 
@@ -159,9 +160,9 @@ int createInput()
     input->setUserData(scriptCallbacks.size()-1);
 
     GuiSystem* gui = GuiSystem::getInstance();
-    gui->addWidget(input);
+    int idx = gui->addWidget(input);
 
-    script->pushInteger(gui->getNumWidgets() - 1);
+    script->pushInteger(idx);
     return 1;
 }
 
@@ -176,9 +177,9 @@ int createLabel()
                              script->getInteger(2), script->getInteger(3), script->getString(4));
 
     GuiSystem* gui = GuiSystem::getInstance();
-    gui->addWidget(label);
+    int idx = gui->addWidget(label);
 
-    script->pushInteger(gui->getNumWidgets() - 1);
+    script->pushInteger(idx);
     return 1;
 }
 
@@ -193,9 +194,9 @@ int createSprite()
                              script->getInteger(2), script->getInteger(3), script->getString(4), script->getString(5));
 
     GuiSystem* gui = GuiSystem::getInstance();
-    gui->addWidget(sprite);
+    int idx = gui->addWidget(sprite);
 
-    script->pushInteger(gui->getNumWidgets() - 1);
+    script->pushInteger(idx);
     return 1;
 }
 
@@ -207,9 +208,7 @@ int addWidgetToCanvas()
         return 0;
 
     Canvas* c = (Canvas*) script->getPointer(0);
-    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(1));
-
-    c->addWidget(w);
+    c->addWidget(script->getInteger(1));
 
     return 1;
 }
@@ -380,6 +379,18 @@ int createCanvas()
 	return 1;
 }
 
+int detroyWidget()
+{
+    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+
+    if(script->getArgsNumber() != 1)
+        return 0;
+
+    int idx = script->getInteger(0);
+    GuiSystem::getInstance()->destroyWidget(idx);
+    return 1;
+}
+
 void GuiSystem::setupLuaInterface(MScriptContext* script)
 {
     script->addFunction("enableGui", enableGui);
@@ -393,6 +404,7 @@ void GuiSystem::setupLuaInterface(MScriptContext* script)
     script->addFunction("createSprite", createSprite);
 
     script->addFunction("addWidgetToCanvas", addWidgetToCanvas);
+    script->addFunction("destroyWidget", ::detroyWidget);
 
     script->addFunction("setLabel", setLabel);
     script->addFunction("getLabel", getLabel);
@@ -412,6 +424,40 @@ void GuiSystem::setupLuaInterface(MScriptContext* script)
     
     script->addFunction("enableCanvasRenderToTexture", enableCanvasRenderToTexture);
     script->addFunction("disableCanvasRenderToTexture", disableCanvasRenderToTexture);
+}
+
+void GuiSystem::destroyWidget(int idx)
+{
+	bool found = false;
+	WidgetId id;
+	int i;
+	for(i = 0; i < m_widgets.size(); i++)
+	{
+		id = m_widgets[i];
+		if(id.id == idx)
+		{
+			found = true;
+			break;
+		}
+	}
+
+	if(!found)
+		return;
+
+	delete id.w;
+	m_widgets.erase(m_widgets.begin()+i);
+}
+
+Widget* GuiSystem::getWidget(unsigned int idx)
+{
+	WidgetId id;
+	for(int i = 0; i < m_widgets.size(); i++)
+	{
+		id = m_widgets[i];
+		if(id.id == idx)
+			return id.w;
+	}
+	return NULL;
 }
 
 void GuiSystem::draw()
@@ -463,7 +509,7 @@ void GuiSystem::clear()
 
 	for(int i = 0; i < m_widgets.size(); i++)
     {
-        delete m_widgets[i];
+        delete m_widgets[i].w;
     }
 
     m_widgets.clear();

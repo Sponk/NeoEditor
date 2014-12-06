@@ -50,10 +50,18 @@ namespace Gui
 class GuiSystem
 {
 private:
+
+	struct WidgetId
+	{
+		Widget* w;
+		int id;
+	};
+
     bool m_enabled;
+    int m_ids;
 
     std::vector<Canvas*> m_canvasVector;
-    std::vector<Widget*> m_widgets;
+    std::vector<WidgetId> m_widgets;
     std::string m_defaultFont;
     float m_defaultFontSize;
 
@@ -87,12 +95,14 @@ public:
     void setHoverBackground(MVector4 color) { m_hoverBackground = color; }
     void setHighlightBackground(MVector4 color) { m_highlightBackground = color; }
 
-    Widget* getWidget(unsigned int idx) { return m_widgets[idx]; }
-    void addWidget(Widget* w) { m_widgets.push_back(w); }
+    Widget* getWidget(unsigned int idx);
+    int addWidget(Widget* w) { WidgetId id; id.w = w; id.id = ++m_ids; m_widgets.push_back(id); return m_ids;}
     size_t getNumWidgets() { return m_widgets.size(); }
 
     void addCanvas(Canvas* c) { if(c) m_canvasVector.push_back(c); }
     
+    void destroyWidget(int id);
+
     // Deletes all widgets and canvases except the main canvas.
     void clear();
 	void scheduleClear() { m_clearScheduled = true; }

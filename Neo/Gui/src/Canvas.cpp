@@ -34,6 +34,7 @@
 
 #include <Canvas.h>
 #include <Render.h>
+#include <GuiSystem.h>
 
 using namespace Neo::Gui;
 
@@ -67,9 +68,16 @@ void Canvas::draw()
     render->drawColoredQuad(0,0, m_width, m_height, m_clearColor);
 
     // Draw all widgets
+    Widget* w;
+    GuiSystem* gui = GuiSystem::getInstance();
     for(int i = 0; i < m_widgets.size(); i++)
     {
-        m_widgets[i]->draw();
+    	w = gui->getWidget(m_widgets[i]);
+
+    	if(w)
+    		w->draw();
+    	else
+    	    m_widgets.erase(m_widgets.begin()+i);
     }
     
     renderingContext->bindFrameBuffer(currentFrameBuffer);
@@ -78,16 +86,22 @@ void Canvas::draw()
 void Canvas::update()
 {
     // Update all widgets
+    Widget* w;
+    GuiSystem* gui = GuiSystem::getInstance();
     for(int i = 0; i < m_widgets.size(); i++)
     {
-        m_widgets[i]->update();
+    	w = gui->getWidget(m_widgets[i]);
+
+    	if(w)
+    		w->update();
+    	else
+    		m_widgets.erase(m_widgets.begin()+i);
     }
 }
 
-void Canvas::addWidget(Widget* w)
+void Canvas::addWidget(int w)
 {
-    if(w)
-        m_widgets.push_back(w);
+	m_widgets.push_back(w);
 }
 
 void Canvas::clear()
