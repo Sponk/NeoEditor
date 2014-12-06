@@ -101,7 +101,7 @@ unsigned int LuaBehavior::getVariablesNumber(void)
         {
 			MLOG_ERROR("Script file does not exist (" << globalFile << ")!");
             return 1;
-        }
+		}
 
         m_script.runScript(globalFile);
 
