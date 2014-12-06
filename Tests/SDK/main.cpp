@@ -91,7 +91,6 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, LuaBehavior_test);
 
 	LT_ASSERT(compare_float(*((float*)var.getPointer()), 123.123));
 
-
 LT_END_AUTO_TEST(LuaBehavior_test);
 
 LT_BEGIN_TEST_ENV();

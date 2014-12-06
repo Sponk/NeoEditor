@@ -36,6 +36,8 @@ using namespace Neo;
 #include "Translator.h"
 #include <Shiny.h>
 
+#include <SDLThread.h>
+
 open_project_t current_project;
 bool reload_editor = false;
 
@@ -2262,22 +2264,51 @@ void open_profile_viewer_callback(Fl_Menu_*, void*)
     MWindow::getInstance()->execute(exec, arg);
 }
 
-void check_for_updates_callback(Fl_Menu_*, void*)
+// TODO: In own file!
+bool check_updates_finished = false;
+int check_updates_thread(void* data)
 {
+	string* str = (string*) data;
+
 	HTTPRequest* connection = new HTTPRequest("neo-engine.de", 4000);
 
     // FIXME: Don't hardcode this!
     const char* versiontxt = connection->sendGetRequest("/downloads/neo/daily/version.txt");
 
+    check_updates_finished = true;
+
     if(!versiontxt)
     {
-        MLOG_ERROR("Could not retrieve version information from the server!");
-        fl_message(tr("Could not retrieve version information from the server!"));
         delete connection;
-        return;
+        return 1;
     }
 
-    std::string version(versiontxt);
+    str->assign(versiontxt);
+    delete connection;
+	return 0;
+}
+
+void check_for_updates_callback(Fl_Menu_*, void*)
+{
+	SDLThread thread;
+    std::string version;
+    check_updates_finished = false;
+
+	thread.Start(check_updates_thread, "CheckUpdates", (void*) &version);
+
+	while(!check_updates_finished)
+	{
+		Fl::check();
+	}
+
+	int ret = thread.WaitForReturn();
+
+	if(ret == 1)
+	{
+        MLOG_ERROR("Could not retrieve version information from the server!");
+        fl_message(tr("Could not retrieve version information from the server!"));
+        return;
+	}
 
     int idx = version.find("Version:");
 
@@ -2301,8 +2332,6 @@ void check_for_updates_callback(Fl_Menu_*, void*)
     {
         fl_message(tr("You already run the latest and greatest version of this application!"));
     }
-
-    delete connection;
 }
 
 void local_transform_mode_callback(Fl_Menu_* menu, void*)

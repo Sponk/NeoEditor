@@ -2825,8 +2825,8 @@ int getLightColor()
 	{
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
-			MOLight * light = (MOLight*)object;
-			script->pushFloatArray( light->getColor(), 3);
+			MOLight * light = (MOLight*) object;
+			script->pushFloatArray(light->getColor(), 3);
 			return 1;
 		}
 	}
