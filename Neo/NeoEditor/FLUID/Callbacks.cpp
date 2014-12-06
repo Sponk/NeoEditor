@@ -2311,15 +2311,16 @@ void check_for_updates_callback(Fl_Menu_*, void*)
 	}
 
     int idx = version.find("Version:");
+    int vidx = version.find("v");
 
-    if(idx == -1)
+    if(idx == -1 || vidx == -1)
     {
         MLOG_ERROR("Version data is invalid!");
         fl_message(tr("Version data is invalid! Please try again."));
         return;
     }
 
-    version = version.substr(version.find("Version:"));
+    version = version.substr(idx);
     version = version.substr(version.find("v"));
     version.erase(version.length()-1);
 
