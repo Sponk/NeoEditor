@@ -220,6 +220,8 @@ addWidgetToCanvas(mainCanvas, cursor)
 
 hideCursor()
 
+ball_rotation = 0
+
 function onSceneUpdate()
 
 	if not isRunning then return end
@@ -263,6 +265,9 @@ function onSceneUpdate()
 	local mx = getAxis("MOUSE_X") * resolution[1]
 	local my = getAxis("MOUSE_Y") * resolution[2]
 	setWidgetPosition(cursor, {mx, my})
+	
+	ball_rotation = ball_rotation + 3
+	setWidgetRotation(ball, ball_rotation)
 end
 
 --quit()--]]--

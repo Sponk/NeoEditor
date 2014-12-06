@@ -57,6 +57,7 @@ class Widget
 {
 protected:
     float m_x, m_y;
+    float m_rotation;
     unsigned int m_width, m_height;
     std::string m_label;
 
@@ -82,6 +83,9 @@ public:
 
     void setPosition(MVector2 pos) { m_x = pos.x; m_y = pos.y; }
     MVector2 getPosition() { return MVector2(m_x, m_y); }
+
+    void setRotation(float rot) { m_rotation = rot; }
+    float getRotation() { return m_rotation; }
 
     void doCallback();
 };

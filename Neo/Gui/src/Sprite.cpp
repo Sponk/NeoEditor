@@ -63,7 +63,7 @@ void Sprite::draw()
         m_image = level->loadTexture(buf)->getTextureId();
     }
 
-    render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_image);
+    render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_image, m_rotation);
 
     if(m_label.length() > 0)
     {

@@ -89,7 +89,7 @@ Render::Render() :
 
 }
 
-void Render::drawColoredQuad(float x, float y, float w, float h, MVector4 color)
+void Render::drawColoredQuad(float x, float y, float w, float h, MVector4 color, float rotation)
 {
     MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
@@ -123,6 +123,12 @@ void Render::drawColoredQuad(float x, float y, float w, float h, MVector4 color)
 
     render->getProjectionMatrix(&ProjMatrix);
     render->getModelViewMatrix(&ModelViewMatrix);
+
+    MVector3 pivot = MVector3(x+0.5*w, y+0.5*h, 0);
+    ModelViewMatrix.translate(pivot);
+    ModelViewMatrix.rotate(MVector3(0,0,1), rotation);
+    ModelViewMatrix.translate(-pivot);
+
     ProjModelViewMatrix = ProjMatrix * ModelViewMatrix;
 
     render->sendUniformMatrix(m_colorOnlyFx, "ProjModelViewMatrix", &ProjModelViewMatrix);
@@ -151,7 +157,7 @@ void Render::drawColoredQuad(float x, float y, float w, float h, MVector4 color)
     render->popMatrix();
 }
 
-void Render::drawTexturedQuad(float x, float y, float w, float h, int texture)
+void Render::drawTexturedQuad(float x, float y, float w, float h, int texture, float rotation)
 {
     MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
 
@@ -189,6 +195,12 @@ void Render::drawTexturedQuad(float x, float y, float w, float h, int texture)
 
     render->getProjectionMatrix(&ProjMatrix);
     render->getModelViewMatrix(&ModelViewMatrix);
+
+    MVector3 pivot = MVector3(x+0.5*w, y+0.5*h, 0);
+    ModelViewMatrix.translate(pivot);
+    ModelViewMatrix.rotate(MVector3(0,0,1), rotation);
+    ModelViewMatrix.translate(-pivot);
+
     ProjModelViewMatrix = ProjMatrix * ModelViewMatrix;
 
     render->sendUniformMatrix(m_texturedFx, "ProjModelViewMatrix", &ProjModelViewMatrix);

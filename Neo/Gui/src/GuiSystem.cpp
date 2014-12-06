@@ -267,6 +267,32 @@ int setWidgetPosition()
     return 1;
 }
 
+int setWidgetRotation()
+{
+    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+
+    if(script->getArgsNumber() != 2)
+        return 0;
+
+    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+    w->setRotation(script->getFloat(1));
+    return 1;
+}
+
+int getWidgetRotation()
+{
+    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+
+    if(script->getArgsNumber() != 1)
+        return 0;
+
+    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+    script->pushFloat(w->getRotation());
+
+    return 1;
+}
+
 int getWidgetPosition()
 {
     MScriptContext* script = MEngine::getInstance()->getScriptContext();
@@ -376,6 +402,9 @@ void GuiSystem::setupLuaInterface(MScriptContext* script)
 
 	script->addFunction("getWidgetPosition", getWidgetPosition);
 	script->addFunction("setWidgetPosition", setWidgetPosition);
+
+	script->addFunction("getWidgetRotation", getWidgetRotation);
+	script->addFunction("setWidgetRotation", setWidgetRotation);
 
     script->addFunction("setHighlightBackground", ::setHighlightBackground);
     script->addFunction("setNormalBackground", ::setNormalBackground);

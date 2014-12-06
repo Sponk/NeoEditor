@@ -39,6 +39,7 @@ using namespace Neo;
 Widget::Widget(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label) :
 m_x(x),
 m_y(y),
+m_rotation(0.0f),
 m_width(width),
 m_height(height),
 m_label(label),
@@ -50,6 +51,7 @@ m_callback(NULL)
 Widget::Widget():
 m_x(0),
 m_y(0),
+m_rotation(0.0f),
 m_width(30),
 m_height(30),
 m_label("Widget"),

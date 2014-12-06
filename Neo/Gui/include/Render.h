@@ -55,8 +55,8 @@ private:
 public:
     static Render* getInstance() { static Render m_instance; return &m_instance; }
 
-    void drawColoredQuad(float x, float y, float w, float h, MVector4 color);
-    void drawTexturedQuad(float x, float y, float w, float h, int texture);
+    void drawColoredQuad(float x, float y, float w, float h, MVector4 color, float rotation = 0);
+    void drawTexturedQuad(float x, float y, float w, float h, int texture, float rotation = 0);
 
     void drawText(MOText* text, float x, float y);
     void set2D(float w, float h);
