@@ -180,7 +180,6 @@ void Render::drawTexturedQuad(float x, float y, float w, float h, int texture)
     // Set up env
     render->bindFX(m_texturedFx);
     render->enableBlending();
-    render->enableTexture();
     render->bindTexture(texture);
 
     // projmodelview matrix

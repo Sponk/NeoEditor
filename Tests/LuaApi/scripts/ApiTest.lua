@@ -133,7 +133,7 @@ print = function(str)
 LuaUnit.run()
 
 -- Only quit here if we do not want the GUI tests!
-quit()
+--quit()
 
 function button1Callback()
 	local obj = getObject("Cube")
@@ -158,10 +158,10 @@ end
 enableGui(1)
 mainCanvas = getMainCanvas()
 
-secondCanvas = createCanvas()
-enableCanvasRenderToTexture(secondCanvas, "maps/neo-icon.png")
+--secondCanvas = createCanvas()
+--enableCanvasRenderToTexture(secondCanvas, "maps/neo-icon.png")
 
-setCanvasClearColor(secondCanvas, {1,0,0,1})
+--setCanvasClearColor(secondCanvas, {1,0,0,1})
 
 setNormalBackground({0.5,0.5,0.5,0.3})
 setHoverBackground({0.7,0.7,0.7,0.3})

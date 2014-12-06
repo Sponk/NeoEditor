@@ -56,7 +56,7 @@ typedef void (*CALLBACK_FUNCTION)(long int);
 class Widget
 {
 protected:
-    unsigned int m_x, m_y;
+    float m_x, m_y;
     unsigned int m_width, m_height;
     std::string m_label;
 
