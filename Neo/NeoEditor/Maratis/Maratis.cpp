@@ -1041,8 +1041,8 @@ void Maratis::okNewProject(const char * filename)
         getGlobalFilename(dir, rep, "fonts");
         createDirectory(dir);
 
-        getGlobalFilename(src, system->getWorkingDirectory(), "MaratisPlayer");
-        getGlobalFilename(dir, rep, "MaratisPlayer");
+        getGlobalFilename(src, system->getWorkingDirectory(), "NeoPlayer");
+        getGlobalFilename(dir, rep, "NeoPlayer");
 
         copyFile(src, dir);
 
