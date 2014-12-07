@@ -375,7 +375,7 @@ void copySysWindows(const char* projName)
 
 	if(char* ext = strstr(filename, ".mproj"))
 	{
-		MProject proj;
+		Project proj;
 		if(proj.loadXML(projName))
 		{
 			strcpy(ext, ".exe");
@@ -415,7 +415,7 @@ void copySysOSX(const char* projName)
 
 	if(char* ext = strstr(filename, ".mproj"))
 	{
-		MProject proj;
+		Project proj;
 		if(proj.loadXML(projName))
 		{
 			strcpy(ext, ".app");
