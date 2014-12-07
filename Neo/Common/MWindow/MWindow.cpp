@@ -30,7 +30,7 @@
 
 #ifndef ANDROID
 
-#include "../../MEngine/Includes/NeoEngine.h"
+#include <NeoEngine.h>
 #include <MMouse.h>
 #include <MKeyboard.h>
 #include <MWindow.h>
