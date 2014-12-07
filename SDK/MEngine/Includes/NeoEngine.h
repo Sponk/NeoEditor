@@ -43,10 +43,8 @@
 	#endif
 
 #else
-
 	// M_ENGINE_EXPORT
 	#define M_ENGINE_EXPORT
-
 #endif
 
 

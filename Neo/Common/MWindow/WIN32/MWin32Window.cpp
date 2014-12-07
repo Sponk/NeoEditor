@@ -32,7 +32,7 @@
 #define _WIN32_WINNT 0x0500
 #include <MWindow.h>
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 
 #if defined(__MINGW32__) || defined(__CYGWIN__)
 #include <unistd.h>

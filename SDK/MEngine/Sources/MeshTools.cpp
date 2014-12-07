@@ -31,13 +31,13 @@
 
 using namespace Neo;
 
+namespace Neo
+{
 // blend matrices optim
 #ifdef __SSE2__
 #include <mmintrin.h>
 #include <xmmintrin.h>
 
-namespace Neo
-{
 static void blendMatrices(MMatrix4x4 * matrix, const MMatrix4x4 * skinMatrix, const float weight)
 {
 	__m128 w = _mm_set1_ps(weight);
