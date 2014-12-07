@@ -28,9 +28,8 @@
 #include <iterator>
 #include "FLUID/ini.h"
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <ImageLoader.h>
-#include <MLog.h>
 #include "MFilesUpdate/MFilesUpdate.h"
 #include "Maratis/Maratis.h"
 #include <MWindow.h>
@@ -61,6 +60,8 @@
 #ifdef _MSC_VER
 #    pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 #endif
+
+using namespace Neo;
 
 extern void update_scene_tree();
 extern void update_editor(void*);
@@ -575,7 +576,7 @@ int main(int argc, char **argv)
         current_project.file_path = argv[1];
 
     // Init the engine
-    MEngine * engine = MEngine::getInstance();
+    NeoEngine * engine = NeoEngine::getInstance();
     Maratis * maratis = Maratis::getInstance();
 
     // Load all plugins (TODO: Search in user home too!)

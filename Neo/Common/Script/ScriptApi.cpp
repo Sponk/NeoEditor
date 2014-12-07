@@ -1,11 +1,13 @@
 #include <ScriptApi.h>
 #include <MWindow.h>
 
+using namespace Neo;
+
 char g_currentDirectory[256] = "";
 unsigned long g_startTick = 0;
 
 #define GET_OBJECT_SUBCLASS_BEGIN(type_, var_, type_enum)	\
-	MObject3d* object = (MObject3d*) script->getPointer(0);	\
+	Object3d* object = (Object3d*) script->getPointer(0);	\
 	if(object)	\
 	{	\
 		if(object->getType() == type_enum)	\
@@ -60,7 +62,7 @@ bool getVector2(MScriptContext* script, unsigned int idx, MVector2* vec)
 	return false;
 }
 
-static void linkObjects(MObject3d *parent, MObject3d *child)
+static void linkObjects(Object3d *parent, Object3d *child)
 {
 	if(parent == NULL || child == NULL)
 		return;
@@ -80,7 +82,7 @@ static void linkObjects(MObject3d *parent, MObject3d *child)
 	child->setScale(MVector3(xSize, ySize, zSize));
 }
 
-static void unlinkObjects(MObject3d *child)
+static void unlinkObjects(Object3d *child)
 {
 	if(child == NULL)
 		return;
@@ -102,7 +104,7 @@ static void unlinkObjects(MObject3d *child)
 
 static int vec3()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "vec", 3))
 		return 0;
 
@@ -116,7 +118,7 @@ static int vec3()
 
 static int length()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "length", 1))
 		return 0;
 
@@ -128,7 +130,7 @@ static int length()
 
 static int normalize()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "normalize", 1))
 		return 0;
 
@@ -140,7 +142,7 @@ static int normalize()
 
 static int dot()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "dot", 2))
 		return 0;
 
@@ -153,7 +155,7 @@ static int dot()
 
 static int cross()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "cross", 2))
 		return 0;
 
@@ -170,8 +172,8 @@ static int cross()
 
 int getScene()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MLevel * level = MEngine::getInstance()->getLevel();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	Level * level = NeoEngine::getInstance()->getLevel();
 
 	if(! isFunctionOk(script, "getScene", 1))
 		return 0;
@@ -193,9 +195,9 @@ int getScene()
 
 int getCurrentCamera()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MLevel * level = MEngine::getInstance()->getLevel();
-	MScene * scene = level->getCurrentScene();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	Level * level = NeoEngine::getInstance()->getLevel();
+	Scene * scene = level->getCurrentScene();
 
 	int nbArguments = script->getArgsNumber();
 	if(nbArguments == 1)
@@ -204,7 +206,7 @@ int getCurrentCamera()
 		scene = level->getSceneByIndex(sceneId);
 	}
 
-	MOCamera * camera = scene->getCurrentCamera();
+	OCamera * camera = scene->getCurrentCamera();
 	if(camera)
 	{
 		script->pushPointer(camera);
@@ -216,19 +218,19 @@ int getCurrentCamera()
 
 int getMeshFilename()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getMeshFilename", 1))
 		return 0;
 
 	int nbArguments = script->getArgsNumber()-1;
 
-	MObject3d* object = (MObject3d*) script->getPointer(nbArguments-1);
+	Object3d* object = (Object3d*) script->getPointer(nbArguments-1);
 
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity* entity = (MOEntity*) object;
+			OEntity* entity = (OEntity*) object;
 			script->pushString(entity->getMeshRef()->getFilename());
 			return 1;
 		}
@@ -241,15 +243,15 @@ int getMeshFilename()
 // TODO: Encapsulasation
 void getNewObjectName(const char * objectName, char * name)
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MLevel * level = MEngine::getInstance()->getLevel();
-	MScene * scene = level->getCurrentScene();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	Level * level = NeoEngine::getInstance()->getLevel();
+	Scene * scene = level->getCurrentScene();
 
 	unsigned int count = 0;
 	int size = scene->getObjectsNumber();
 	for(int i=0; i<size; i++)
 	{
-		MObject3d * object = scene->getObjectByIndex(i);
+		Object3d * object = scene->getObjectByIndex(i);
 		if(object->getName())
 		{
 			if(strcmp(name, object->getName()) == 0)
@@ -265,14 +267,14 @@ void getNewObjectName(const char * objectName, char * name)
 
 int loadMesh()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "loadMesh", 1))
 		return 0;
 
 	const char* path = script->getString(0);
 
-	MMeshRef* meshRef = NULL;
-	MLevel* level = MEngine::getInstance()->getLevel();
+	MeshRef* meshRef = NULL;
+	Level* level = NeoEngine::getInstance()->getLevel();
 
 	char string[256];
 	getGlobalFilename(string, MWindow::getInstance()->getWorkingDirectory(), path);
@@ -287,7 +289,7 @@ int loadMesh()
 
 	// create entity
 	strcpy(string, "Entity0");
-	MOEntity * entity = level->getCurrentScene()->addNewEntity(meshRef);
+	OEntity * entity = level->getCurrentScene()->addNewEntity(meshRef);
 	getNewObjectName("Entity", string);
 
 	entity->setName(string);
@@ -298,14 +300,14 @@ int loadMesh()
 
 int loadSound()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "loadSound", 1))
 		return 0;
 
 	const char* path = script->getString(0);
 
-	MLevel* level = MEngine::getInstance()->getLevel();
-	MScene* scene = level->getCurrentScene();
+	Level* level = NeoEngine::getInstance()->getLevel();
+	Scene* scene = level->getCurrentScene();
 
 	char string[256];
 	getGlobalFilename(string, MWindow::getInstance()->getWorkingDirectory(), path);
@@ -316,8 +318,8 @@ int loadSound()
 		return 0;
 	}
 
-	MSoundRef* ref = level->loadSound(string);
-	MOSound* sound = scene->addNewSound(ref);
+	SoundRef* ref = level->loadSound(string);
+	OSound* sound = scene->addNewSound(ref);
 
 	strcpy(string, "Sound0");
 	getNewObjectName("Sound", string);
@@ -330,18 +332,18 @@ int loadSound()
 
 int getSoundFilename()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getSoundFilename", 1))
 		return 0;
 
 	int nbArguments = script->getArgsNumber();
 
-	MObject3d * object = (MObject3d*) script->getPointer(nbArguments-1);
+	Object3d * object = (Object3d*) script->getPointer(nbArguments-1);
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
-			MOSound* sound = (MOSound*) object;
+			OSound* sound = (OSound*) object;
 			script->pushString(sound->getSoundRef()->getFilename());
 			return 1;
 		}
@@ -353,16 +355,16 @@ int getSoundFilename()
 
 int getSoundRolloff()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getSoundRolloff", 1))
 		return 0;
 
-	MObject3d * object = (MObject3d*) script->getPointer(0);
+	Object3d * object = (Object3d*) script->getPointer(0);
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
-			MOSound * sound = (MOSound*)object;
+			OSound * sound = (OSound*)object;
 			script->pushInteger((long int)sound->getRolloff());
 			return 1;
 		}
@@ -373,16 +375,16 @@ int getSoundRolloff()
 
 int setSoundRolloff()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setSoundRolloff", 2))
 		return 0;
 
-	MObject3d * object = (MObject3d*) script->getPointer(0);
+	Object3d * object = (Object3d*) script->getPointer(0);
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
-			MOSound * sound = (MOSound*)object;
+			OSound * sound = (OSound*)object;
 			sound->setRolloff(script->getFloat(1));
 		}
 	}
@@ -392,16 +394,16 @@ int setSoundRolloff()
 
 int getSoundRadius()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getSoundRadius", 1))
 		return 0;
 
-	MObject3d * object = (MObject3d*) script->getPointer(0);
+	Object3d * object = (Object3d*) script->getPointer(0);
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
-			MOSound * sound = (MOSound*)object;
+			OSound * sound = (OSound*)object;
 			script->pushFloat(sound->getRadius());
 			return 1;
 		}
@@ -412,16 +414,16 @@ int getSoundRadius()
 
 int setSoundRadius()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setSoundRadius", 2))
 		return 0;
 
-	MObject3d * object = (MObject3d*) script->getPointer(0);
+	Object3d * object = (Object3d*) script->getPointer(0);
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
-			MOSound * sound = (MOSound*)object;
+			OSound * sound = (OSound*)object;
 			sound->setRadius(script->getFloat(1));
 		}
 	}
@@ -431,16 +433,16 @@ int setSoundRadius()
 
 int setSoundRelative()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setSoundRelative", 2))
 		return 0;
 
-	MObject3d * object = (MObject3d*) script->getPointer(0);
+	Object3d * object = (Object3d*) script->getPointer(0);
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
-			MOSound * sound = (MOSound*)object;
+			OSound * sound = (OSound*)object;
 			sound->setRelative(script->getBoolean(1));
 		}
 	}
@@ -450,16 +452,16 @@ int setSoundRelative()
 
 int isSoundRelative()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isSoundRelative", 1))
 		return 0;
 
-	MObject3d * object = (MObject3d*) script->getPointer(0);
+	Object3d * object = (Object3d*) script->getPointer(0);
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
-			MOSound * sound = (MOSound*)object;
+			OSound * sound = (OSound*)object;
 			script->pushBoolean(sound->isRelative());
 			return 1;
 		}
@@ -470,16 +472,16 @@ int isSoundRelative()
 
 int setSoundLooping()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setSoundLooping", 2))
 		return 0;
 
-	MObject3d * object = (MObject3d*) script->getPointer(0);
+	Object3d * object = (Object3d*) script->getPointer(0);
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
-			MOSound * sound = (MOSound*)object;
+			OSound * sound = (OSound*)object;
 			sound->setLooping(script->getBoolean(1));
 		}
 	}
@@ -489,16 +491,16 @@ int setSoundLooping()
 
 int isSoundLooping()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isSoundLooping", 1))
 		return 0;
 
-	MObject3d * object = (MObject3d*) script->getPointer(0);
+	Object3d * object = (Object3d*) script->getPointer(0);
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
-			MOSound * sound = (MOSound*)object;
+			OSound * sound = (OSound*)object;
 			script->pushBoolean(sound->isLooping());
 			return 1;
 		}
@@ -509,11 +511,11 @@ int isSoundLooping()
 
 int createGroup()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "createGroup", 0))
 		return 0;
 
-	MObject3d* group = MEngine::getInstance()->getLevel()->getCurrentScene()->addNewGroup();
+	Object3d* group = NeoEngine::getInstance()->getLevel()->getCurrentScene()->addNewGroup();
 	char string[256] = "Group0";
 	getNewObjectName("Group", string);
 	group->setName(string);
@@ -525,12 +527,12 @@ int createGroup()
 
 int getObjectType()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getObjectType", 1))
 		return 0;
 
 	int nbArguments = script->getArgsNumber();
-	MObject3d* object = (MObject3d*) script->getPointer(nbArguments-1);
+	Object3d* object = (Object3d*) script->getPointer(nbArguments-1);
 
 	if(object)
 	{
@@ -570,20 +572,20 @@ int getObjectType()
 
 int getBoundingMin()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getBoundingMin", 1))
 		return 0;
 
 	int nbArguments = script->getArgsNumber();
 
-	MObject3d * object = (MObject3d*) script->getPointer(nbArguments-1);
+	Object3d * object = (Object3d*) script->getPointer(nbArguments-1);
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity* entity = (MOEntity*) object;
+			OEntity* entity = (OEntity*) object;
 
-			MMesh* mesh = entity->getMesh();
+			Mesh* mesh = entity->getMesh();
 			script->pushFloatArray(mesh->getBoundingBox()->min, 3);
 
 			return 1;
@@ -595,20 +597,20 @@ int getBoundingMin()
 
 int getBoundingMax()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getBoundingMax", 1))
 		return 0;
 
 	int nbArguments = script->getArgsNumber();
 
-	MObject3d * object = (MObject3d*) script->getPointer(nbArguments-1);
+	Object3d * object = (Object3d*) script->getPointer(nbArguments-1);
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity* entity = (MOEntity*) object;
+			OEntity* entity = (OEntity*) object;
 
-			MMesh* mesh = entity->getMesh();
+			Mesh* mesh = entity->getMesh();
 			script->pushFloatArray(mesh->getBoundingBox()->max, 3);
 
 			return 1;
@@ -620,12 +622,12 @@ int getBoundingMax()
 
 int deleteObject()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "deleteObject", 1))
 		return 0;
 
-	MLevel* level = MEngine::getInstance()->getLevel();
-	MScene* scene;
+	Level* level = NeoEngine::getInstance()->getLevel();
+	Scene* scene;
 	int nbArguments = script->getArgsNumber();
 	if(nbArguments == 2)
 	{
@@ -637,11 +639,11 @@ int deleteObject()
 		scene = level->getCurrentScene();
 	}
 
-	MObject3d* object = (MObject3d*) script->getPointer(0);
+	Object3d* object = (Object3d*) script->getPointer(0);
 	if(object != NULL && object->getType() == M_OBJECT3D_ENTITY)
 	{
-		MPhysicsContext* physics = MEngine::getInstance()->getPhysicsContext();
-		MOEntity * entity = (MOEntity*)object;
+		MPhysicsContext* physics = NeoEngine::getInstance()->getPhysicsContext();
+		OEntity * entity = (OEntity*)object;
 		MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 		if(phyProps)
 		{
@@ -657,9 +659,9 @@ int deleteObject()
 
 int getObject()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MLevel * level = MEngine::getInstance()->getLevel();
-	MScene * scene = level->getCurrentScene();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	Level * level = NeoEngine::getInstance()->getLevel();
+	Scene * scene = level->getCurrentScene();
 
 
 	if(! isFunctionOk(script, "getObject", 1))
@@ -675,7 +677,7 @@ int getObject()
 	const char * name = script->getString(nbArguments-1);
 	if(name)
 	{
-		MObject3d * object = scene->getObjectByName(name);
+		Object3d * object = scene->getObjectByName(name);
 		if(object)
 		{
 			script->pushPointer(object);
@@ -689,9 +691,9 @@ int getObject()
 
 int objectExists()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MLevel * level = MEngine::getInstance()->getLevel();
-	MScene * scene = level->getCurrentScene();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	Level * level = NeoEngine::getInstance()->getLevel();
+	Scene * scene = level->getCurrentScene();
 
 	if(! isFunctionOk(script, "objectExists", 1))
 		return 0;
@@ -706,7 +708,7 @@ int objectExists()
 	const char * name = script->getString(nbArguments-1);
 	if(name)
 	{
-		MObject3d * object = scene->getObjectByName(name);
+		Object3d * object = scene->getObjectByName(name);
 		script->pushBoolean( object != NULL);
 		return 1;
 	}
@@ -716,9 +718,9 @@ int objectExists()
 
 int getClone()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MLevel * level = MEngine::getInstance()->getLevel();
-	MScene * scene = level->getCurrentScene();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	Level * level = NeoEngine::getInstance()->getLevel();
+	Scene * scene = level->getCurrentScene();
 
 
 	if(! isFunctionOk(script, "getClone", 1))
@@ -731,28 +733,28 @@ int getClone()
 		scene = level->getSceneByIndex(sceneId);
 	}
 
-	MObject3d * object = (MObject3d*) script->getPointer(nbArguments-1);
+	Object3d * object = (Object3d*) script->getPointer(nbArguments-1);
 	if(object)
 	{
-		MObject3d * cloneObj = NULL;
+		Object3d * cloneObj = NULL;
 
 		switch(object->getType())
 		{
 			case M_OBJECT3D_CAMERA:
-				cloneObj = scene->addNewCamera(*(MOCamera*)object);
+				cloneObj = scene->addNewCamera(*(OCamera*)object);
 				break;
 			case M_OBJECT3D_LIGHT:
-				cloneObj = scene->addNewLight(*(MOLight*)object);
+				cloneObj = scene->addNewLight(*(OLight*)object);
 				break;
 			case M_OBJECT3D_ENTITY:
-				cloneObj = scene->addNewEntity(*(MOEntity*)object);
-				scene->prepareCollisionObject((MOEntity*)cloneObj);
+				cloneObj = scene->addNewEntity(*(OEntity*)object);
+				scene->prepareCollisionObject((OEntity*)cloneObj);
 				break;
 			case M_OBJECT3D_SOUND:
-				cloneObj = scene->addNewSound(*(MOSound*)object);
+				cloneObj = scene->addNewSound(*(OSound*)object);
 				break;
 			case M_OBJECT3D_TEXT:
-				cloneObj = scene->addNewText(*(MOText*)object);
+				cloneObj = scene->addNewText(*(OText*)object);
 				break;
 		}
 
@@ -772,11 +774,11 @@ int getClone()
 
 int getParent()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getParent", 1))
 		return 0;
 
-	MObject3d * object = (MObject3d*) script->getPointer(0);
+	Object3d * object = (Object3d*) script->getPointer(0);
 	if(object)
 	{
 		script->pushPointer(object->getParent());
@@ -788,11 +790,11 @@ int getParent()
 
 int getChilds()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getChilds", 1))
 		return 0;
 
-	MObject3d* object = (MObject3d*) script->getPointer(0);
+	Object3d* object = (Object3d*) script->getPointer(0);
 
 	if(object)
 	{
@@ -813,28 +815,28 @@ int getChilds()
 
 int getProjectedPoint()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getProjectedPoint", 2))
 		return 0;
 
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	MSystemContext * system = engine->getSystemContext();
 
 	unsigned int width = 0;
 	unsigned int height = 0;
 	system->getScreenSize(&width, &height);
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
 			MVector3 vec;
 			if(getVector3(script, 2, &vec))
 			{
-				MOCamera * camera = (MOCamera *)object;
+				OCamera * camera = (OCamera *)object;
 				MVector3 result = camera->getProjectedPoint(vec);
 				result.x = result.x/(float)width;
 				result.y = 1.0f - (result.y/(float)height);
@@ -849,28 +851,28 @@ int getProjectedPoint()
 
 int getUnProjectedPoint()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getUnProjectedPoint", 2))
 		return 0;
 
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	MSystemContext * system = engine->getSystemContext();
 
 	unsigned int width = 0;
 	unsigned int height = 0;
 	system->getScreenSize(&width, &height);
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
 			MVector3 vec;
 			if(getVector3(script, 2, &vec))
 			{
-				MOCamera * camera = (MOCamera *)object;
+				OCamera * camera = (OCamera *)object;
 				MVector3 result = camera->getUnProjectedPoint(MVector3(vec.x*width, (1-vec.y)*height, vec.z));
 				script->pushFloatArray( result, 3);
 				return 1;
@@ -883,16 +885,16 @@ int getUnProjectedPoint()
 
 int rotate()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "rotate", 3))
 		return 0;
 
 	int nbArguments = script->getArgsNumber();
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		MVector3 axis;
 		if(getVector3(script, 2, &axis))
@@ -922,16 +924,16 @@ int rotate()
 
 int translate()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "translate", 2))
 		return 0;
 
 	int nbArguments = script->getArgsNumber();
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		MVector3 axis;
 		if(getVector3(script, 2, &axis))
@@ -961,14 +963,14 @@ int translate()
 
 int getPosition()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getPosition", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		script->pushFloatArray(object->getPosition(), 3);
 		return 1;
@@ -979,14 +981,14 @@ int getPosition()
 
 int getRotation()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getRotation", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		script->pushFloatArray( object->getEulerRotation(), 3);
 		return 1;
@@ -997,14 +999,14 @@ int getRotation()
 
 int getScale()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getScale", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		script->pushFloatArray( object->getScale(), 3);
 		return 1;
@@ -1015,14 +1017,14 @@ int getScale()
 
 int getTransformedPosition()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getTransformedPosition", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		script->pushFloatArray( object->getTransformedPosition(), 3);
 		return 1;
@@ -1033,14 +1035,14 @@ int getTransformedPosition()
 
 int getTransformedRotation()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getTransformedRotation", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		script->pushFloatArray( object->getTransformedRotation(), 3);
 		return 1;
@@ -1051,14 +1053,14 @@ int getTransformedRotation()
 
 int getTransformedScale()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getTransformedScale", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		script->pushFloatArray( object->getTransformedScale(), 3);
 		return 1;
@@ -1069,14 +1071,14 @@ int getTransformedScale()
 
 int setPosition()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setPosition", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		MVector3 position;
 		if(getVector3(script, 2, &position))
@@ -1090,14 +1092,14 @@ int setPosition()
 
 int setRotation()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setRotation", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		MVector3 rotation;
 		if(getVector3(script, 2, &rotation))
@@ -1111,14 +1113,14 @@ int setRotation()
 
 int setScale()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setScale", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		MVector3 scale;
 		if(getVector3(script, 2, &scale))
@@ -1132,14 +1134,14 @@ int setScale()
 
 int updateMatrix()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "updateMatrix", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		object->updateMatrix();
 	}
@@ -1149,14 +1151,14 @@ int updateMatrix()
 
 int getMatrix()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getMatrix", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		script->pushFloatArray( object->getMatrix()->entries, 16);
 		return 1;
@@ -1167,14 +1169,14 @@ int getMatrix()
 
 int getInverseRotatedVector()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getInverseRotatedVector", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		MVector3 vec;
 		if(getVector3(script, 2, &vec))
@@ -1189,14 +1191,14 @@ int getInverseRotatedVector()
 
 int getRotatedVector()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getRotatedVector", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		MVector3 vec;
 		if(getVector3(script, 2, &vec))
@@ -1211,14 +1213,14 @@ int getRotatedVector()
 
 int getInverseVector()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getInverseVector", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		MVector3 vec;
 		if(getVector3(script, 2, &vec))
@@ -1233,14 +1235,14 @@ int getInverseVector()
 
 int getTransformedVector()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getTransformedVector", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		MVector3 vec;
 		if(getVector3(script, 2, &vec))
@@ -1255,14 +1257,14 @@ int getTransformedVector()
 
 int isVisible()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isVisible", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		int vis = object->isVisible();
 		script->pushBoolean( vis);
@@ -1274,18 +1276,18 @@ int isVisible()
 
 int setInvisible()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setInvisible", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity* entity = static_cast<MOEntity*>(object);
+			OEntity* entity = static_cast<OEntity*>(object);
 			entity->setInvisible(script->getBoolean(1) != 0);
 		}
 		return 1;
@@ -1296,23 +1298,23 @@ int setInvisible()
 
 int activate()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "activate", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(! object->isActive())
 		{
 			object->setActive(true);
 			if(object->getType() == M_OBJECT3D_ENTITY)
 			{
-				MOEntity * entity = (MOEntity*)object;
+				OEntity * entity = (OEntity*)object;
 				MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 				if(phyProps)
 					physics->activateObject(phyProps->getCollisionObjectId());
@@ -1325,23 +1327,23 @@ int activate()
 
 int deactivate()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "deactivate", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->isActive())
 		{
 			object->setActive(false);
 			if(object->getType() == M_OBJECT3D_ENTITY)
 			{
-				MOEntity * entity = (MOEntity*)object;
+				OEntity * entity = (OEntity*)object;
 				MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 				if(phyProps)
 					physics->deactivateObject(phyProps->getCollisionObjectId());
@@ -1354,14 +1356,14 @@ int deactivate()
 
 int isActive()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isActive", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		script->pushBoolean( object->isActive());
 		return 1;
@@ -1372,11 +1374,11 @@ int isActive()
 
 int getName()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getName", 1))
 		return 0;
 
-	MObject3d* object = (MObject3d*) script->getPointer(0);
+	Object3d* object = (Object3d*) script->getPointer(0);
 	if(object)
 	{
 		script->pushString(object->getName());
@@ -1388,14 +1390,14 @@ int getName()
 
 int setParent()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setParent", 2))
 		return 0;
 
-	MObject3d * object  = (MObject3d*) script->getPointer(0);
+	Object3d * object  = (Object3d*) script->getPointer(0);
 	if(object)
 	{
-		MObject3d * parent = (MObject3d*) script->getPointer(1);
+		Object3d * parent = (Object3d*) script->getPointer(1);
 		if(parent)
 			linkObjects(parent, object);
 		else
@@ -1410,17 +1412,17 @@ int setParent()
 
 int changeAnimation()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "changeAnimation", 2))
 		return 0;
 
-	MObject3d* object = (MObject3d*) script->getPointer(0);
+	Object3d* object = (Object3d*) script->getPointer(0);
 
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 
 			unsigned int anim = (unsigned int)script->getInteger(1);
 			entity->changeAnimation(anim);
@@ -1433,18 +1435,18 @@ int changeAnimation()
 
 int isAnimationOver()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isAnimationOver", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			int isAnimOver = entity->isAnimationOver();
 			script->pushBoolean( isAnimOver);
 			return 1;
@@ -1456,18 +1458,18 @@ int isAnimationOver()
 
 int getCurrentAnimation()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getCurrentAnimation", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			int anim = (int)entity->getAnimationId();
 			script->pushInteger( anim);
 			return 1;
@@ -1479,11 +1481,11 @@ int getCurrentAnimation()
 
 int setAnimationSpeed()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setAnimationSpeed", 2))
 		return 0;
 
-	GET_OBJECT_SUBCLASS_BEGIN(MOEntity, entity, M_OBJECT3D_ENTITY)
+	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, M_OBJECT3D_ENTITY)
 			entity->setAnimationSpeed((float)script->getFloat(1));
 			return 0;
 	GET_OBJECT_SUBCLASS_END()
@@ -1493,11 +1495,11 @@ int setAnimationSpeed()
 
 int getAnimationSpeed()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getAnimationSpeed", 1))
 		return 0;
 
-	GET_OBJECT_SUBCLASS_BEGIN(MOEntity, entity, M_OBJECT3D_ENTITY)
+	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, M_OBJECT3D_ENTITY)
 			script->pushFloat( (float)entity->getAnimationSpeed());
 			return 1;
 	GET_OBJECT_SUBCLASS_END()
@@ -1507,11 +1509,11 @@ int getAnimationSpeed()
 
 int setCurrentFrame()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setCurrentFrame", 2))
 		return 0;
 
-	GET_OBJECT_SUBCLASS_BEGIN(MOEntity, entity, M_OBJECT3D_ENTITY)
+	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, M_OBJECT3D_ENTITY)
 			entity->setCurrentFrame((float)script->getFloat(1));
 			return 0;
 	GET_OBJECT_SUBCLASS_END()
@@ -1521,11 +1523,11 @@ int setCurrentFrame()
 
 int getCurrentFrame()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getCurrentFrame", 1))
 		return 0;
 
-	GET_OBJECT_SUBCLASS_BEGIN(MOEntity, entity, M_OBJECT3D_ENTITY)
+	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, M_OBJECT3D_ENTITY)
 			script->pushFloat( (float)entity->getCurrentFrame());
 			return 1;
 	GET_OBJECT_SUBCLASS_END()
@@ -1535,9 +1537,9 @@ int getCurrentFrame()
 
 int getGravity()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MLevel * level = MEngine::getInstance()->getLevel();
-	MScene * scene = level->getCurrentScene();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	Level * level = NeoEngine::getInstance()->getLevel();
+	Scene * scene = level->getCurrentScene();
 
 	int nbArguments = script->getArgsNumber();
 	if(nbArguments == 1)
@@ -1553,9 +1555,9 @@ int getGravity()
 
 int setGravity()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MLevel * level = MEngine::getInstance()->getLevel();
-	MScene * scene = level->getCurrentScene();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	Level * level = NeoEngine::getInstance()->getLevel();
+	Scene * scene = level->getCurrentScene();
 
 	if(! isFunctionOk(script, "setGravity", 1))
 		return 0;
@@ -1576,9 +1578,9 @@ int setGravity()
 
 int changeCurrentCamera()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MLevel * level = MEngine::getInstance()->getLevel();
-	MScene * scene = level->getCurrentScene();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	Level * level = NeoEngine::getInstance()->getLevel();
+	Scene * scene = level->getCurrentScene();
 
 	if(! isFunctionOk(script, "changeCurrentCamera", 1))
 		return 0;
@@ -1590,7 +1592,7 @@ int changeCurrentCamera()
 		scene = level->getSceneByIndex(sceneId);
 	}
 
-	MObject3d * object = (MObject3d*) script->getPointer(nbArguments-1);
+	Object3d * object = (Object3d*) script->getPointer(nbArguments-1);
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
@@ -1599,7 +1601,7 @@ int changeCurrentCamera()
 			unsigned int size = scene->getCamerasNumber();
 			for(i=0; i<size; i++)
 			{
-				if(object == (MObject3d *)scene->getCameraByIndex(i))
+				if(object == (Object3d *)scene->getCameraByIndex(i))
 				{
 					scene->setCurrentCameraId(i);
 					break;
@@ -1613,11 +1615,11 @@ int changeCurrentCamera()
 
 int isGhost()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isGhost", 1))
 		return 0;
 
-	GET_OBJECT_SUBCLASS_BEGIN(MOEntity, entity, M_OBJECT3D_ENTITY)
+	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, M_OBJECT3D_ENTITY)
 			MPhysicsProperties* phys = entity->getPhysicsProperties();
 
 			if(!phys)
@@ -1635,11 +1637,11 @@ int isGhost()
 
 int enableGhost()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "enableGhost", 2))
 		return 0;
 
-	GET_OBJECT_SUBCLASS_BEGIN(MOEntity, entity, M_OBJECT3D_ENTITY)
+	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, M_OBJECT3D_ENTITY)
 			MPhysicsProperties* phys = entity->getPhysicsProperties();
 
 			if(!phys)
@@ -1656,15 +1658,15 @@ int enableGhost()
 
 int addCentralForce()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	int nbArguments = script->getArgsNumber();
 	if(! isFunctionOk(script, "addCentralForce", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
@@ -1680,14 +1682,14 @@ int addCentralForce()
 						local = true;
 				}
 
-				MOEntity * entity = (MOEntity*)object;
+				OEntity * entity = (OEntity*)object;
 				MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 				if(phyProps)
 				{
 					if(local)
 						force = object->getRotatedVector(force);
 
-					MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+					MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 					physics->addCentralForce(phyProps->getCollisionObjectId(), force);
 				}
 			}
@@ -1699,19 +1701,19 @@ int addCentralForce()
 
 int clearForces()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
-				MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+				MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 				physics->clearForces(phyProps->getCollisionObjectId());
 			}
 		}
@@ -1722,15 +1724,15 @@ int clearForces()
 
 int addTorque()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	int nbArguments = script->getArgsNumber();
 	if(! isFunctionOk(script, "addTorque", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
@@ -1746,14 +1748,14 @@ int addTorque()
 						local = true;
 				}
 
-				MOEntity * entity = (MOEntity*)object;
+				OEntity * entity = (OEntity*)object;
 				MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 				if(phyProps)
 				{
 					if(local)
 						torque = object->getRotatedVector(torque);
 
-					MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+					MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 					physics->addTorque(phyProps->getCollisionObjectId(), torque);
 				}
 			}
@@ -1765,17 +1767,17 @@ int addTorque()
 
 int getLinearDamping()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getLinearDamping", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -1791,19 +1793,19 @@ int getLinearDamping()
 
 int setLinearDamping()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "setLinearDamping", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -1824,17 +1826,17 @@ int setLinearDamping()
 
 int getAngularDamping()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getAngularDamping", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -1850,19 +1852,19 @@ int getAngularDamping()
 
 int setAngularDamping()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "setAngularDamping", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -1883,17 +1885,17 @@ int setAngularDamping()
 
 int setConstraintParent()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setConstraintParent", 2))
 		return 0;
 
-	MObject3d* object = (MObject3d*) script->getPointer(0);
-	MObject3d* parent = (MObject3d*) script->getPointer(1);
+	Object3d* object = (Object3d*) script->getPointer(0);
+	Object3d* parent = (Object3d*) script->getPointer(1);
 	if(object && parent)
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY && parent->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -1902,7 +1904,7 @@ int setConstraintParent()
 				if(constraint)
 				{
 					constraint->parentName.set(parent->getName());
-					MEngine::getInstance()->getLevel()->getCurrentScene()->prepareConstraints(entity);
+					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareConstraints(entity);
 				}
 				else
 				{
@@ -1916,18 +1918,18 @@ int setConstraintParent()
 
 int getConstraintParent()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setConstraintParent", 2))
 		return 0;
 
-	MObject3d* object;
-	MObject3d* parent;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d* object;
+	Object3d* parent;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -1935,7 +1937,7 @@ int getConstraintParent()
 
 				if(constraint)
 				{
-					MObject3d* object = MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(constraint->parentName.getSafeString());
+					Object3d* object = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(constraint->parentName.getSafeString());
 					script->pushInteger( (long int) object);
 				}
 				else
@@ -1950,18 +1952,18 @@ int getConstraintParent()
 
 int enableParentCollision()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "enableParentCollision", 2))
 		return 0;
 
-	MObject3d* object = (MObject3d*) script->getPointer(0);
+	Object3d* object = (Object3d*) script->getPointer(0);
 	bool collision = script->getBoolean(1);
 
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -1983,19 +1985,19 @@ int enableParentCollision()
 
 int getCentralForce()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "getCentralForce", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -2012,19 +2014,19 @@ int getCentralForce()
 
 int getTorque()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "getTorque", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -2041,17 +2043,17 @@ int getTorque()
 
 int getMass()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getMass", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -2067,14 +2069,14 @@ int getMass()
 
 int enablePhysics()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if (!isFunctionOk(script, "enablePhysics", 2))
 		return 0;
 
-	GET_OBJECT_SUBCLASS_BEGIN(MOEntity, entity, M_OBJECT3D_ENTITY)
-	MPhysicsContext* physics = MEngine::getInstance()->getPhysicsContext();
+	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, M_OBJECT3D_ENTITY)
+	MPhysicsContext* physics = NeoEngine::getInstance()->getPhysicsContext();
 	MPhysicsProperties* phyProps = entity->createPhysicsProperties();
-	MScene* scene = MEngine::getInstance()->getLevel()->getCurrentScene();
+	Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
 
 	if (script->getBoolean(0) != 0)
 	{
@@ -2092,19 +2094,19 @@ int enablePhysics()
 
 int setMass()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "setMass", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -2121,17 +2123,17 @@ int setMass()
 
 int getFriction()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getFriction", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -2147,19 +2149,19 @@ int getFriction()
 
 int setFriction()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "setFriction", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -2176,17 +2178,17 @@ int setFriction()
 
 int getRestitution()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getRestitution", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -2202,19 +2204,19 @@ int getRestitution()
 
 int setRestitution()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "setRestitution", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -2231,17 +2233,17 @@ int setRestitution()
 
 int getAngularFactor()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getAngularFactor", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -2257,19 +2259,19 @@ int getAngularFactor()
 
 int setAngularFactor()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "setAngularFactor", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -2286,17 +2288,17 @@ int setAngularFactor()
 
 int getLinearFactor()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getLinearFactor", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -2312,19 +2314,19 @@ int getLinearFactor()
 
 int setLinearFactor()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "setLinearFactor", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
@@ -2344,21 +2346,21 @@ int setLinearFactor()
 
 int getNumCollisions()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getNumCollisions", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
-				MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+				MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 				int collision = physics->isObjectInCollision(phyProps->getCollisionObjectId());
 				script->pushInteger( collision);
 				return 1;
@@ -2371,21 +2373,21 @@ int getNumCollisions()
 
 int isCollisionTest()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isCollisionTest", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
-	if((object = (MObject3d*) id))
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MOEntity * entity = (MOEntity*)object;
+			OEntity * entity = (OEntity*)object;
 			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
-				MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+				MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 				int collision = MIN(1, physics->isObjectInCollision(phyProps->getCollisionObjectId()));
 				script->pushBoolean( collision);
 				return 1;
@@ -2398,27 +2400,27 @@ int isCollisionTest()
 
 int isCollisionBetween()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isCollisionBetween", 2))
 		return 0;
 
-	MObject3d * object1;
-	MObject3d * object2;
+	Object3d * object1;
+	Object3d * object2;
 
-	object1 = (MObject3d*) script->getPointer(0);
-	object2 = (MObject3d*) script->getPointer(1);
+	object1 = (Object3d*) script->getPointer(0);
+	object2 = (Object3d*) script->getPointer(1);
 	if(object1 && object2)
 	{
 		if((object1->getType() == M_OBJECT3D_ENTITY) && (object2->getType() == M_OBJECT3D_ENTITY))
 		{
-			MOEntity * entity1 = (MOEntity*)object1;
-			MOEntity * entity2 = (MOEntity*)object2;
+			OEntity * entity1 = (OEntity*)object1;
+			OEntity * entity2 = (OEntity*)object2;
 
 			MPhysicsProperties * phyProps1 = entity1->getPhysicsProperties();
 			MPhysicsProperties * phyProps2 = entity2->getPhysicsProperties();
 			if(phyProps1 && phyProps2)
 			{
-				MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+				MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 				int collision = physics->isObjectsCollision(
 					phyProps1->getCollisionObjectId(),
 					phyProps2->getCollisionObjectId()
@@ -2434,9 +2436,9 @@ int isCollisionBetween()
 
 int rayHit()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MLevel * level = MEngine::getInstance()->getLevel();
-	MScene * scene = level->getCurrentScene();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	Level * level = NeoEngine::getInstance()->getLevel();
+	Scene * scene = level->getCurrentScene();
 
 	if(! isFunctionOk(script, "rayHit", 2))
 		return 0;
@@ -2446,7 +2448,7 @@ int rayHit()
 	MVector3 start, end;
 	if(getVector3(script, 1, &start) && getVector3(script, 2, &end))
 	{
-		MPhysicsContext * physics = MEngine::getInstance()->getPhysicsContext();
+		MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 		unsigned int collisionObjId;
 		MVector3 point;
@@ -2456,12 +2458,12 @@ int rayHit()
 		{
 			if(nbArguments == 3)
 			{
-				MObject3d * object = (MObject3d*) script->getPointer(2);
+				Object3d * object = (Object3d*) script->getPointer(2);
 				if(object)
 				{
 					if(object->getType() == M_OBJECT3D_ENTITY)
 					{
-						MOEntity * entity = (MOEntity*)object;
+						OEntity * entity = (OEntity*)object;
 						MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 						if(phyProps)
 						{
@@ -2481,7 +2483,7 @@ int rayHit()
 				unsigned int e, eSize = scene->getEntitiesNumber();
 				for(e=0; e<eSize; e++)
 				{
-					MOEntity * entity = scene->getEntityByIndex(e);
+					OEntity * entity = scene->getEntityByIndex(e);
 					MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 					if(phyProps)
 					{
@@ -2503,8 +2505,8 @@ int rayHit()
 
 int isKeyPressed()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MInputContext * input = MEngine::getInstance()->getInputContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MInputContext * input = NeoEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(script, "isKeyPressed", 1))
 		return 0;
@@ -2522,8 +2524,8 @@ int isKeyPressed()
 
 int onKeyDown()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MInputContext * input = MEngine::getInstance()->getInputContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MInputContext * input = NeoEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(script, "onKeyDown", 1))
 		return 0;
@@ -2541,8 +2543,8 @@ int onKeyDown()
 
 int onKeyUp()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MInputContext * input = MEngine::getInstance()->getInputContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MInputContext * input = NeoEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(script, "onKeyUp", 1))
 		return 0;
@@ -2560,8 +2562,8 @@ int onKeyUp()
 
 int getAxis()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MInputContext * input = MEngine::getInstance()->getInputContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MInputContext * input = NeoEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(script, "getAxis", 1))
 		return 0;
@@ -2579,8 +2581,8 @@ int getAxis()
 
 int getProperty()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MInputContext * input = MEngine::getInstance()->getInputContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MInputContext * input = NeoEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(script, "getProperty", 1))
 		return 0;
@@ -2598,8 +2600,8 @@ int getProperty()
 
 int getTouchPosition()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MInputContext * input = MEngine::getInstance()->getInputContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MInputContext * input = NeoEngine::getInstance()->getInputContext();
 
 	if (!isFunctionOk(script, "getTouchPosition", 1))
 		return 0;
@@ -2612,8 +2614,8 @@ int getTouchPosition()
 
 int getLastTouchPosition()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MInputContext * input = MEngine::getInstance()->getInputContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MInputContext * input = NeoEngine::getInstance()->getInputContext();
 
 	if (!isFunctionOk(script, "getLastTouchPosition", 1))
 		return 0;
@@ -2626,8 +2628,8 @@ int getLastTouchPosition()
 
 int getTouchPhase()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MInputContext * input = MEngine::getInstance()->getInputContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MInputContext * input = NeoEngine::getInstance()->getInputContext();
 
 	if (!isFunctionOk(script, "getTouchPhase", 1))
 		return 0;
@@ -2640,18 +2642,18 @@ int getTouchPhase()
 
 int playSound()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "playSound", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
-			MOSound * sound = (MOSound*)object;
+			OSound * sound = (OSound*)object;
 			sound->play();
 		}
 	}
@@ -2661,18 +2663,18 @@ int playSound()
 
 int pauseSound()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "pauseSound", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
-			MOSound * sound = (MOSound*)object;
+			OSound * sound = (OSound*)object;
 			sound->pause();
 		}
 	}
@@ -2682,18 +2684,18 @@ int pauseSound()
 
 int stopSound()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "stopSound", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
-			MOSound * sound = (MOSound*)object;
+			OSound * sound = (OSound*)object;
 			sound->stop();
 		}
 	}
@@ -2703,18 +2705,18 @@ int stopSound()
 
 int setSoundPitch()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setSoundPitch", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
-			MOSound * sound = (MOSound*)object;
+			OSound * sound = (OSound*)object;
 			sound->setPitch(script->getFloat(1));
 		}
 	}
@@ -2724,18 +2726,18 @@ int setSoundPitch()
 
 int getSoundPitch()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "getSoundPitch", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
-			MOSound * sound = (MOSound*)object;
+			OSound * sound = (OSound*)object;
 			script->pushFloat( sound->getPitch());
 		}
 	}
@@ -2745,9 +2747,9 @@ int getSoundPitch()
 
 int changeScene()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MEngine * engine = MEngine::getInstance();
-	MLevel * level = engine->getLevel();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	NeoEngine * engine = NeoEngine::getInstance();
+	Level * level = engine->getLevel();
 
 	if(! isFunctionOk(script, "changeScene", 1))
 		return 0;
@@ -2760,9 +2762,9 @@ int changeScene()
 
 int getCurrentSceneId()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MEngine * engine = MEngine::getInstance();
-	MLevel * level = engine->getLevel();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	NeoEngine * engine = NeoEngine::getInstance();
+	Level * level = engine->getLevel();
 
 	script->pushInteger( (int)level->getCurrentSceneId());
 	return 1;
@@ -2770,9 +2772,9 @@ int getCurrentSceneId()
 
 int getScenesNumber()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MEngine * engine = MEngine::getInstance();
-	MLevel * level = engine->getLevel();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	NeoEngine * engine = NeoEngine::getInstance();
+	Level * level = engine->getLevel();
 
 	script->pushInteger( level->getScenesNumber());
 	return 1;
@@ -2780,28 +2782,28 @@ int getScenesNumber()
 
 int loadLevel()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "loadLevel", 1))
 		return 0;
 
 	const char * filename = script->getString(0);
 	if(filename)
-		MEngine::getInstance()->requestLoadLevel(filename);
+		NeoEngine::getInstance()->requestLoadLevel(filename);
 
 	return 0;
 }
 
 int quit()
 {
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	engine->setActive(false);
 	return 0;
 }
 
 int doesLevelExist()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MEngine * engine = MEngine::getInstance();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	NeoEngine * engine = NeoEngine::getInstance();
 
 	if(! isFunctionOk(script, "doesLevelExist", 1))
 		return 0;
@@ -2814,18 +2816,18 @@ int doesLevelExist()
 
 int getLightColor()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getLightColor", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
-			MOLight * light = (MOLight*) object;
+			OLight * light = (OLight*) object;
 			script->pushFloatArray(light->getColor(), 3);
 			return 1;
 		}
@@ -2836,18 +2838,18 @@ int getLightColor()
 
 int getLightRadius()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getLightRadius", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
-			MOLight * light = (MOLight*)object;
+			OLight * light = (OLight*)object;
 			script->pushFloat( (float)light->getRadius());
 			return 1;
 		}
@@ -2858,18 +2860,18 @@ int getLightRadius()
 
 int getLightIntensity()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getLightIntensity", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
-			MOLight * light = (MOLight*)object;
+			OLight * light = (OLight*)object;
 			script->pushFloat( (float)light->getIntensity());
 			return 1;
 		}
@@ -2880,19 +2882,19 @@ int getLightIntensity()
 
 int setLightColor()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setLightColor", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		MVector3 color;
 		if(object->getType() == M_OBJECT3D_LIGHT && getVector3(script, 2, &color))
 		{
-			MOLight * light = (MOLight*)object;
+			OLight * light = (OLight*)object;
 			light->setColor(color);
 			return 0;
 		}
@@ -2903,20 +2905,20 @@ int setLightColor()
 
 int setLightRadius()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setLightRadius", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
 			float radius = (float)script->getFloat(1);
 
-			MOLight * light = (MOLight*)object;
+			OLight * light = (OLight*)object;
 			light->setRadius(radius);
 			return 0;
 		}
@@ -2927,20 +2929,20 @@ int setLightRadius()
 
 int setLightIntensity()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setLightIntensity", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
 			float intensity = (float)script->getFloat(1);
 
-			MOLight * light = (MOLight*)object;
+			OLight * light = (OLight*)object;
 			light->setIntensity(intensity);
 			return 0;
 		}
@@ -2951,26 +2953,26 @@ int setLightIntensity()
 
 int enableShadow()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "enableShadow", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
 			bool shadow = script->getBoolean(1) == 1;
-			MOLight* light = (MOLight*) object;
+			OLight* light = (OLight*) object;
 			light->castShadow(shadow);
 			return 0;
 		}
 		else if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			bool shadow = script->getBoolean(1) == 1;
-			MOEntity* entity = (MOEntity*) object;
+			OEntity* entity = (OEntity*) object;
 			entity->enableShadow(shadow);
 			return 0;
 		}
@@ -2981,18 +2983,18 @@ int enableShadow()
 
 int isCastingShadow()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isCastingShadow", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
-			MOLight * light = (MOLight*)object;
+			OLight * light = (OLight*)object;
 			script->pushBoolean( light->isCastingShadow());
 			return 1;
 		}
@@ -3003,19 +3005,19 @@ int isCastingShadow()
 
 int setlightShadowQuality()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setlightShadowQuality", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
 			int quality = script->getInteger(1);
-			MOLight * light = (MOLight*)object;
+			OLight * light = (OLight*)object;
 			light->setShadowQuality(quality);
 			return 0;
 		}
@@ -3026,19 +3028,19 @@ int setlightShadowQuality()
 
 int setlightShadowBias()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setlightShadowBias", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
 			float bias = script->getFloat(1);
-			MOLight * light = (MOLight*)object;
+			OLight * light = (OLight*)object;
 			light->setShadowBias(bias);
 			return 0;
 		}
@@ -3049,19 +3051,19 @@ int setlightShadowBias()
 
 int setlightShadowBlur()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setlightShadowBlur", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
 			float blur = script->getFloat(1);
-			MOLight * light = (MOLight*)object;
+			OLight * light = (OLight*)object;
 			light->setShadowBlur(blur);
 			return 0;
 		}
@@ -3072,18 +3074,18 @@ int setlightShadowBlur()
 
 int getlightShadowQuality()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getlightShadowQuality", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
-			MOLight * light = (MOLight*)object;
+			OLight * light = (OLight*)object;
 			script->pushInteger( light->getShadowQuality());
 			return 1;
 		}
@@ -3094,18 +3096,18 @@ int getlightShadowQuality()
 
 int getlightShadowBias()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getlightShadowBias", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
-			MOLight * light = (MOLight*)object;
+			OLight * light = (OLight*)object;
 			script->pushFloat( light->getShadowBias());
 			return 1;
 		}
@@ -3116,18 +3118,18 @@ int getlightShadowBias()
 
 int getlightShadowBlur()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getlightShadowBlur", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
-			MOLight * light = (MOLight*)object;
+			OLight * light = (OLight*)object;
 			script->pushFloat( light->getShadowBlur());
 			return 1;
 		}
@@ -3138,19 +3140,19 @@ int getlightShadowBlur()
 
 int setlightSpotAngle()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setlightSpotAngle", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
 			float angle = script->getFloat(1);
-			MOLight * light = (MOLight*)object;
+			OLight * light = (OLight*)object;
 			light->setSpotAngle(angle);
 			return 0;
 		}
@@ -3161,19 +3163,19 @@ int setlightSpotAngle()
 
 int setlightSpotExponent()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setlightSpotExponent", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
 			float exponent = script->getFloat(1);
-			MOLight * light = (MOLight*)object;
+			OLight * light = (OLight*)object;
 			light->setSpotExponent(exponent);
 			return 0;
 		}
@@ -3184,18 +3186,18 @@ int setlightSpotExponent()
 
 int getlightSpotAngle()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getlightSpotAngle", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
-			MOLight * light = (MOLight*)object;
+			OLight * light = (OLight*)object;
 			script->pushFloat( light->getSpotAngle());
 			return 1;
 		}
@@ -3206,18 +3208,18 @@ int getlightSpotAngle()
 
 int getlightSpotExponent()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getlightSpotExponent", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_LIGHT)
 		{
-			MOLight * light = (MOLight*)object;
+			OLight * light = (OLight*)object;
 			script->pushFloat( light->getSpotExponent());
 			return 1;
 		}
@@ -3228,8 +3230,8 @@ int getlightSpotExponent()
 
 int createLight()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MOLight* light = MEngine::getInstance()->getLevel()->getCurrentScene()->addNewLight();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	OLight* light = NeoEngine::getInstance()->getLevel()->getCurrentScene()->addNewLight();
 	char name[256] = "Light0";
 	getNewObjectName("Light", name);
 
@@ -3241,18 +3243,18 @@ int createLight()
 
 int getSoundGain()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getSoundGain", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
-			MOSound * sound = (MOSound*)object;
+			OSound * sound = (OSound*)object;
 			script->pushFloat( (float)sound->getGain());
 			return 1;
 		}
@@ -3263,19 +3265,19 @@ int getSoundGain()
 
 int setSoundGain()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setSoundGain", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_SOUND)
 		{
 			float gain = (float)script->getFloat(1);
-			MOSound * sound = (MOSound*)object;
+			OSound * sound = (OSound*)object;
 			sound->setGain(gain);
 			return 0;
 		}
@@ -3286,8 +3288,8 @@ int setSoundGain()
 
 int createCamera()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MOCamera* camera = MEngine::getInstance()->getLevel()->getCurrentScene()->addNewCamera();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	OCamera* camera = NeoEngine::getInstance()->getLevel()->getCurrentScene()->addNewCamera();
 	char name[256] = "Camera0";
 	getNewObjectName("Camera", name);
 
@@ -3298,18 +3300,18 @@ int createCamera()
 
 int setCameraClearColor()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setCameraClearColor", 2))
 		return 0;
 
-	MObject3d* object = (MObject3d*) script->getPointer(0);
+	Object3d* object = (Object3d*) script->getPointer(0);
 
 	if(object)
 	{
 		MVector3 color;
 		if(object->getType() == M_OBJECT3D_CAMERA && getVector3(script, 2, &color))
 		{
-			MOCamera * camera = (MOCamera*)object;
+			OCamera * camera = (OCamera*)object;
 			camera->setClearColor(color);
 			return 0;
 		}
@@ -3320,17 +3322,17 @@ int setCameraClearColor()
 
 int getCameraClearColor()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getCameraClearColor", 1))
 		return 0;
 
-	MObject3d* object = (MObject3d*) script->getPointer(0);
+	Object3d* object = (Object3d*) script->getPointer(0);
 
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
-			MOCamera * camera = (MOCamera*)object;
+			OCamera * camera = (OCamera*)object;
 			script->pushFloatArray( camera->getClearColor(), 3);
 			return 1;
 		}
@@ -3341,19 +3343,19 @@ int getCameraClearColor()
 
 int setCameraNear()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setCameraNear", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
 			float clipNear = (float)script->getFloat(1);
-			MOCamera * camera = (MOCamera*)object;
+			OCamera * camera = (OCamera*)object;
 			camera->setClippingNear(clipNear);
 			return 0;
 		}
@@ -3364,18 +3366,18 @@ int setCameraNear()
 
 int getCameraNear()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getCameraNear", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
-			MOCamera * camera = (MOCamera*)object;
+			OCamera * camera = (OCamera*)object;
 			script->pushFloat( (float)camera->getClippingNear());
 			return 1;
 		}
@@ -3386,19 +3388,19 @@ int getCameraNear()
 
 int setCameraFar()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setCameraFar", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
 			float clipFar = (float)script->getFloat(1);
-			MOCamera * camera = (MOCamera*)object;
+			OCamera * camera = (OCamera*)object;
 			camera->setClippingFar(clipFar);
 			return 0;
 		}
@@ -3409,18 +3411,18 @@ int setCameraFar()
 
 int getCameraFar()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getCameraFar", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
-			MOCamera * camera = (MOCamera*)object;
+			OCamera * camera = (OCamera*)object;
 			script->pushFloat( (float)camera->getClippingFar());
 			return 1;
 		}
@@ -3431,19 +3433,19 @@ int getCameraFar()
 
 int setCameraFov()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setCameraFov", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
 			float fov = (float)script->getFloat(1);
-			MOCamera * camera = (MOCamera*)object;
+			OCamera * camera = (OCamera*)object;
 			camera->setFov(fov);
 			return 0;
 		}
@@ -3454,18 +3456,18 @@ int setCameraFov()
 
 int getCameraFov()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getCameraFov", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
-			MOCamera * camera = (MOCamera*)object;
+			OCamera * camera = (OCamera*)object;
 			script->pushFloat( (float)camera->getFov());
 			return 1;
 		}
@@ -3476,19 +3478,19 @@ int getCameraFov()
 
 int setCameraFogDistance()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setCameraFogDistance", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
 			float fogDist = (float)script->getFloat(1);
-			MOCamera * camera = (MOCamera*)object;
+			OCamera * camera = (OCamera*)object;
 			camera->setFogDistance(fogDist);
 			return 0;
 		}
@@ -3499,18 +3501,18 @@ int setCameraFogDistance()
 
 int getCameraFogDistance()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getCameraFogDistance", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
-			MOCamera * camera = (MOCamera*)object;
+			OCamera * camera = (OCamera*)object;
 			script->pushFloat( (float)camera->getFogDistance());
 			return 1;
 		}
@@ -3521,18 +3523,18 @@ int getCameraFogDistance()
 
 int enableCameraOrtho()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "enableCameraOrtho", 2))
 		return 0;
 
-	MObject3d* object = (MObject3d*) script->getPointer(0);
+	Object3d* object = (Object3d*) script->getPointer(0);
 
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
 			bool ortho = script->getBoolean(1) == 1;
-			MOCamera * camera = (MOCamera*)object;
+			OCamera * camera = (OCamera*)object;
 			camera->enableOrtho(ortho);
 			return 0;
 		}
@@ -3543,18 +3545,18 @@ int enableCameraOrtho()
 
 int isCameraOrtho()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isCameraOrtho", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
-			MOCamera * camera = (MOCamera*)object;
+			OCamera * camera = (OCamera*)object;
 			script->pushBoolean( camera->isOrtho());
 			return 1;
 		}
@@ -3565,19 +3567,19 @@ int isCameraOrtho()
 
 int enableCameraFog()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "enableCameraFog", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
 			bool fog = script->getBoolean(1) == 1;
-			MOCamera * camera = (MOCamera*)object;
+			OCamera * camera = (OCamera*)object;
 			camera->enableFog(fog);
 			return 0;
 		}
@@ -3588,18 +3590,18 @@ int enableCameraFog()
 
 int isCameraFogEnabled()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isCameraFogEnabled", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
-			MOCamera * camera = (MOCamera*)object;
+			OCamera * camera = (OCamera*)object;
 			script->pushBoolean( camera->hasFog());
 			return 1;
 		}
@@ -3610,19 +3612,19 @@ int isCameraFogEnabled()
 
 int enableCameraLayer()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "enableCameraLayer", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
 			unsigned int sceneId = (unsigned int)script->getInteger(1);
-			MOCamera * camera = (MOCamera*)object;
+			OCamera * camera = (OCamera*)object;
 			camera->setSceneLayer(sceneId+1);
 			return 0;
 		}
@@ -3633,18 +3635,18 @@ int enableCameraLayer()
 
 int disableCameraLayer()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "disableCameraLayer", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
-			MOCamera * camera = (MOCamera*)object;
+			OCamera * camera = (OCamera*)object;
 			camera->setSceneLayer(0);
 			return 0;
 		}
@@ -3655,16 +3657,16 @@ int disableCameraLayer()
 
 int enableRenderToTexture()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MEngine * engine = MEngine::getInstance();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	NeoEngine * engine = NeoEngine::getInstance();
 	MSystemContext * system = engine->getSystemContext();
 	MRenderingContext * render = engine->getRenderingContext();
-	MLevel * level = engine->getLevel();
+	Level * level = engine->getLevel();
 
 	if(! isFunctionOk(script, "enableRenderToTexture", 4))
 		return 0;
 
-	MObject3d* object = (MObject3d*) script->getPointer(0);
+	Object3d* object = (Object3d*) script->getPointer(0);
 
 	if(object)
 	{
@@ -3673,7 +3675,7 @@ int enableRenderToTexture()
 			const char * name = script->getString(1);
 			if(name)
 			{
-				MOCamera * camera = (MOCamera *)object;
+				OCamera * camera = (OCamera *)object;
 
 				unsigned int width = (unsigned int)script->getInteger(2);
 				unsigned int height = (unsigned int)script->getInteger(3);
@@ -3681,8 +3683,8 @@ int enableRenderToTexture()
 				char globalFilename[256];
 				getGlobalFilename(globalFilename, system->getWorkingDirectory(), name);
 
-				MTextureRef * colorTexture = level->loadTexture(globalFilename, 0, 0);
-				MTextureRef * depthTexture = level->loadTexture(object->getName(), 0, 0);
+				TextureRef * colorTexture = level->loadTexture(globalFilename, 0, 0);
+				TextureRef * depthTexture = level->loadTexture(object->getName(), 0, 0);
 
 				colorTexture->clear();
 				depthTexture->clear();
@@ -3724,20 +3726,20 @@ int enableRenderToTexture()
 
 int disableRenderToTexture()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "disableRenderToTexture", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
-			MOCamera * camera = (MOCamera *)object;
+			OCamera * camera = (OCamera *)object;
 
-			MTextureRef * depthTexture = camera->getRenderDepthTexture();
+			TextureRef * depthTexture = camera->getRenderDepthTexture();
 			if(depthTexture)
 				depthTexture->clear();
 
@@ -3753,14 +3755,14 @@ int disableRenderToTexture()
 
 int getBehaviorVariable()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getBehaviorVariable", 3))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		unsigned int bId = (unsigned int)script->getInteger(1);
 		const char * varName;
@@ -3775,12 +3777,12 @@ int getBehaviorVariable()
 			unsigned bSize = object->getBehaviorsNumber();
 			if(bId < bSize)
 			{
-				MBehavior * behavior = object->getBehavior(bId);
+				Behavior * behavior = object->getBehavior(bId);
 				unsigned int v;
 				unsigned int vSize = behavior->getVariablesNumber();
 				for(v=0; v<vSize; v++)
 				{
-					MVariable variable = behavior->getVariable(v);
+					NeoVariable variable = behavior->getVariable(v);
 					if(strcmp(variable.getName(), varName) == 0)
 					{
 						switch(variable.getType())
@@ -3833,14 +3835,14 @@ int getBehaviorVariable()
 
 int setBehaviorVariable()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setBehaviorVariable", 4))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		unsigned int bId = (unsigned int)script->getInteger(1);
 		const char * varName;
@@ -3855,12 +3857,12 @@ int setBehaviorVariable()
 			unsigned bSize = object->getBehaviorsNumber();
 			if(bId < bSize)
 			{
-				MBehavior * behavior = object->getBehavior(bId);
+				Behavior * behavior = object->getBehavior(bId);
 				unsigned int v;
 				unsigned int vSize = behavior->getVariablesNumber();
 				for(v=0; v<vSize; v++)
 				{
-					MVariable variable = behavior->getVariable(v);
+					NeoVariable variable = behavior->getVariable(v);
 					if(strcmp(variable.getName(), varName) == 0)
 					{
 						switch(variable.getType())
@@ -3924,11 +3926,11 @@ int setBehaviorVariable()
 
 int getBehaviorsNumber()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getBehaviorsNumber", 1))
 		return 0;
 
-	MObject3d* object = (MObject3d*)(script->getPointer(0));
+	Object3d* object = (Object3d*)(script->getPointer(0));
 	if(object)
 	{
 		script->pushFloat( object->getBehaviorsNumber());
@@ -3941,11 +3943,11 @@ int getBehaviorsNumber()
 
 int getBehaviorName()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getBehaviorName", 2))
 		return 0;
 
-	MObject3d* object = (MObject3d*)(script->getPointer(0));
+	Object3d* object = (Object3d*)(script->getPointer(0));
 	int behavior = script->getFloat(1);
 	if(object && behavior >= 1 && behavior <= object->getBehaviorsNumber())
 	{
@@ -3957,11 +3959,11 @@ int getBehaviorName()
 
 int getBehaviorVariablesNumber()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getBehaviorVariablesNumber", 2))
 		return 0;
 
-	MObject3d* object = (MObject3d*)(script->getPointer(0));
+	Object3d* object = (Object3d*)(script->getPointer(0));
 	int behavior = script->getFloat(1);
 	if(object && behavior >= 1 && behavior <= object->getBehaviorsNumber())
 	{
@@ -3975,11 +3977,11 @@ int getBehaviorVariablesNumber()
 
 int getBehaviorVariableType()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getBehaviorVariablesNumber", 3))
 		return 0;
 
-	MObject3d* object = (MObject3d*)(script->getPointer(0));
+	Object3d* object = (Object3d*)(script->getPointer(0));
 	int behavior = script->getFloat(1);
 	int variable = script->getFloat(2);
 
@@ -4022,15 +4024,15 @@ int getBehaviorVariableType()
 // addBehavior(object, behaviorName)
 int addBehavior()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "addBehavior", 2))
 		return 0;
 
-	MObject3d* object = (MObject3d*)(script->getPointer(0));
+	Object3d* object = (Object3d*)(script->getPointer(0));
 	const char* name = script->getString(1);
 	if(object)
 	{
-		MBehaviorManager * bManager = MEngine::getInstance()->getBehaviorManager();
+		BehaviorManager * bManager = NeoEngine::getInstance()->getBehaviorManager();
 
 		if(!name)
 		{
@@ -4038,7 +4040,7 @@ int addBehavior()
 			return 0;
 		}
 
-		MBehaviorCreator * bCreator = bManager->getBehaviorByName(name);
+		BehaviorCreator * bCreator = bManager->getBehaviorByName(name);
 
 		if(!bCreator)
 		{
@@ -4046,7 +4048,7 @@ int addBehavior()
 			return 0;
 		}
 
-		MBehavior* behavior = bCreator->getNewBehavior(object);
+		Behavior* behavior = bCreator->getNewBehavior(object);
 		object->addBehavior(behavior);
 		return 1;
 	}
@@ -4057,7 +4059,7 @@ int addBehavior()
 
 int centerCursor()
 {
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	MSystemContext * system = engine->getSystemContext();
 	MInputContext * input = engine->getInputContext();
 
@@ -4076,7 +4078,7 @@ int centerCursor()
 
 int hideCursor()
 {
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	MSystemContext * system = engine->getSystemContext();
 
 	system->hideCursor();
@@ -4086,7 +4088,7 @@ int hideCursor()
 
 int showCursor()
 {
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	MSystemContext * system = engine->getSystemContext();
 
 	system->showCursor();
@@ -4096,14 +4098,14 @@ int showCursor()
 
 int loadTextFont()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "loadTextFont", 1))
 		return 0;
 
 	const char* path = script->getString(0);
 
-	MLevel* level = MEngine::getInstance()->getLevel();
-	MScene* scene = level->getCurrentScene();
+	Level* level = NeoEngine::getInstance()->getLevel();
+	Scene* scene = level->getCurrentScene();
 
 	char string[256];
 	getGlobalFilename(string, MWindow::getInstance()->getWorkingDirectory(), path);
@@ -4114,8 +4116,8 @@ int loadTextFont()
 		return 0;
 	}
 
-	MFontRef* ref = level->loadFont(string);
-	MOText* text = scene->addNewText(ref);
+	FontRef* ref = level->loadFont(string);
+	OText* text = scene->addNewText(ref);
 
 	strcpy(string, "Text0");
 	getNewObjectName("Text", string);
@@ -4130,19 +4132,19 @@ int loadTextFont()
 
 int getFontFilename()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getFontFilename", 1))
 		return 0;
 
 	int nbArguments = script->getArgsNumber();
 
-	MObject3d* object = (MObject3d*) script->getPointer(nbArguments-1);
+	Object3d* object = (Object3d*) script->getPointer(nbArguments-1);
 
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_TEXT)
 		{
-			MOText* text = (MOText*) object;
+			OText* text = (OText*) object;
 			script->pushString( text->getFontRef()->getFilename());
 			return 1;
 		}
@@ -4153,17 +4155,17 @@ int getFontFilename()
 
 int getTextAlignment()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getTextAlignment", 1))
 		return 0;
 
-	MObject3d* object = (MObject3d*) script->getPointer(0);
+	Object3d* object = (Object3d*) script->getPointer(0);
 
 	if(object)
 	{
 		if(object->getType() == M_OBJECT3D_TEXT)
 		{
-			switch(((MOText*) object)->getAlign())
+			switch(((OText*) object)->getAlign())
 			{
 			case M_ALIGN_CENTER:
 					script->pushString( "Center");
@@ -4184,24 +4186,24 @@ int getTextAlignment()
 
 int setTextAlignment()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setTextAlignment", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 	const char* alignment = script->getString(1);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_TEXT)
 		{
 			if(!strcmp(alignment, "Center"))
-				static_cast<MOText*>(object)->setAlign(M_ALIGN_CENTER);
+				static_cast<OText*>(object)->setAlign(M_ALIGN_CENTER);
 			else if(!strcmp(alignment, "Left"))
-				static_cast<MOText*>(object)->setAlign(M_ALIGN_LEFT);
+				static_cast<OText*>(object)->setAlign(M_ALIGN_LEFT);
 			else if(!strcmp(alignment, "Right"))
-				static_cast<MOText*>(object)->setAlign(M_ALIGN_RIGHT);
+				static_cast<OText*>(object)->setAlign(M_ALIGN_RIGHT);
 			else
 				MLOG_WARNING("Unknown alignment: " << alignment);
 
@@ -4214,18 +4216,18 @@ int setTextAlignment()
 
 int getTextFontSize()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getTextFontSize", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_TEXT)
 		{
-			script->pushFloat( ((MOText*) object)->getSize());
+			script->pushFloat( ((OText*) object)->getSize());
 			return 1;
 		}
 	}
@@ -4235,18 +4237,18 @@ int getTextFontSize()
 
 int setTextFontSize()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setTextFontSize", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_TEXT)
 		{
-			((MOText *)object)->setSize(script->getFloat(1));
+			((OText *)object)->setSize(script->getFloat(1));
 		}
 	}
 
@@ -4255,18 +4257,18 @@ int setTextFontSize()
 
 int getText()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getText", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_TEXT)
 		{
-			const char * text = ((MOText *)object)->getText();
+			const char * text = ((OText *)object)->getText();
 			if(text){
 				script->pushString( text);
 				return 1;
@@ -4279,19 +4281,19 @@ int getText()
 
 int setText()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setText", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		const char * text = script->getString(1);
 		if((text) && (object->getType() == M_OBJECT3D_TEXT))
 		{
-			((MOText *)object)->setText(text);
+			((OText *)object)->setText(text);
 		}
 	}
 
@@ -4300,18 +4302,18 @@ int setText()
 
 int getTextColor()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getTextColor", 1))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_TEXT)
 		{
-			MVector4 color = ((MOText *)object)->getColor();
+			MVector4 color = ((OText *)object)->getColor();
 			script->pushFloatArray(color, 4);
 			return 1;
 		}
@@ -4322,20 +4324,20 @@ int getTextColor()
 
 int setTextColor()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setTextColor", 2))
 		return 0;
 
-	MObject3d * object;
-	MObject3d* id = (MObject3d*) script->getPointer(0);
+	Object3d * object;
+	Object3d* id = (Object3d*) script->getPointer(0);
 
-	if((object = (MObject3d*) id))
+	if((object = (Object3d*) id))
 	{
 		if(object->getType() == M_OBJECT3D_TEXT)
 		{
 			MVector4 color;
 			script->getFloatArray(1, color, 4);
-			((MOText *)object)->setColor(color);
+			((OText *)object)->setColor(color);
 		}
 	}
 
@@ -4344,8 +4346,8 @@ int setTextColor()
 
 int getWindowScale()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MEngine * engine = MEngine::getInstance();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	NeoEngine * engine = NeoEngine::getInstance();
 	MSystemContext * system = engine->getSystemContext();
 
 	unsigned int width, height;
@@ -4359,8 +4361,8 @@ int getWindowScale()
 
 int getSystemTick()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MEngine * engine = MEngine::getInstance();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	NeoEngine * engine = NeoEngine::getInstance();
 	MSystemContext * system = engine->getSystemContext();
 
 	script->pushInteger( (long int)(system->getSystemTick() - g_startTick));
@@ -4369,7 +4371,7 @@ int getSystemTick()
 
 int doFile()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "doFile", 1))
 		return 0;
 
@@ -4403,23 +4405,23 @@ int doFile()
 
 int setPhysicsQuality()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setPhysicsQuality", 1))
 		return 0;
 
 	int quality = script->getInteger(0);
-	MEngine::getInstance()->getPhysicsContext()->setSimulationQuality(quality);
+	NeoEngine::getInstance()->getPhysicsContext()->setSimulationQuality(quality);
 
 	return 1;
 }
 
 int loadCameraSkybox()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "loadCameraSkybox", 2))
 		return 0;
 
-	GET_OBJECT_SUBCLASS_BEGIN(MOCamera, camera, M_OBJECT3D_CAMERA)
+	GET_OBJECT_SUBCLASS_BEGIN(OCamera, camera, M_OBJECT3D_CAMERA)
 			camera->loadSkybox(script->getString(1));
 			return 1;
 	GET_OBJECT_SUBCLASS_END()
@@ -4430,9 +4432,9 @@ int loadCameraSkybox()
 // enablePostEffects(vertShadSrc, fragShadSrc)
 int enablePostEffects()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	int num_args = script->getArgsNumber();
-	MGame* game = MEngine::getInstance()->getGame();
+	NeoGame* game = NeoEngine::getInstance()->getGame();
 
 	if(num_args == 0)
 	{
@@ -4451,14 +4453,14 @@ int enablePostEffects()
 // loadPostEffectsShader(vertShadFile, fragShadFile)
 int loadPostEffectsShader()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "loadPostEffectsShader", 2))
 		return 0;
 
 	char* vertShad = readTextFile(script->getString(0));
 	char* fragShad = readTextFile(script->getString(1));
 
-	MGame* game = MEngine::getInstance()->getGame();
+	NeoGame* game = NeoEngine::getInstance()->getGame();
 	game->getPostProcessor()->loadShader(vertShad, fragShad);
 
 	SAFE_FREE(vertShad);
@@ -4468,19 +4470,19 @@ int loadPostEffectsShader()
 
 int disablePostEffects()
 {
-	MGame* game = MEngine::getInstance()->getGame();
+	NeoGame* game = NeoEngine::getInstance()->getGame();
 	game->disablePostEffects();
 	return 1;
 }
 
 int setPostEffectsResolution()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setPostEffectsResolution", 1))
 		return 0;
 
 	float mp = script->getFloat(0);
-	MGame* game = MEngine::getInstance()->getGame();
+	NeoGame* game = NeoEngine::getInstance()->getGame();
 	MPostProcessor* pp = game->getPostProcessor();
 	pp->setResolutionMultiplier(mp);
 	pp->eraseTextures();
@@ -4491,30 +4493,30 @@ int setPostEffectsResolution()
 
 int getPostEffectsResolution()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
-	MGame* game = MEngine::getInstance()->getGame();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	NeoGame* game = NeoEngine::getInstance()->getGame();
 	script->pushFloat( game->getPostProcessor()->getResolutionMultiplier());
 	return 1;
 }
 
 int setPostEffectsUniformFloat()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setPostEffectsUniformFloat", 2))
 		return 0;
 
-	MGame* game = MEngine::getInstance()->getGame();
+	NeoGame* game = NeoEngine::getInstance()->getGame();
 	game->getPostProcessor()->setFloatUniformValue(script->getString(0), script->getFloat(1));
 	return 1;
 }
 
 int addPostEffectsUniformFloat()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setPostEffectsUniformFloat", 2))
 		return 0;
 
-	MGame* game = MEngine::getInstance()->getGame();
+	NeoGame* game = NeoEngine::getInstance()->getGame();
 	game->getPostProcessor()->addFloatUniform(script->getString(0));
 	game->getPostProcessor()->setFloatUniformValue(script->getString(0), script->getFloat(1));
 	return 1;
@@ -4522,22 +4524,22 @@ int addPostEffectsUniformFloat()
 
 int setPostEffectsUniformInt()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setPostEffectsUniformInt", 2))
 		return 0;
 
-	MGame* game = MEngine::getInstance()->getGame();
+	NeoGame* game = NeoEngine::getInstance()->getGame();
 	game->getPostProcessor()->setIntUniformValue(script->getString(0), script->getFloat(1));
 	return 1;
 }
 
 int addPostEffectsUniformInt()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setPostEffectsUniformInt", 2))
 		return 0;
 
-	MGame* game = MEngine::getInstance()->getGame();
+	NeoGame* game = NeoEngine::getInstance()->getGame();
 	game->getPostProcessor()->addIntUniform(script->getString(0));
 	game->getPostProcessor()->setIntUniformValue(script->getString(0), script->getFloat(1));
 	return 1;
@@ -4545,7 +4547,7 @@ int addPostEffectsUniformInt()
 
 int resizeWindow()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "resizeWindow", 2))
 		return 0;
 

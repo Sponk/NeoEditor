@@ -36,7 +36,7 @@
 #define __SPRITE_H__
 
 #include <string>
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <Widget.h>
 
 namespace Neo
@@ -49,7 +49,7 @@ namespace Gui
 class Sprite : public Widget
 {
 protected:
-    MOText* m_labelText;
+    OText* m_labelText;
     int m_image;
 
     std::string m_imagePath;

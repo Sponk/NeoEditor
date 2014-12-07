@@ -32,20 +32,19 @@
 #define _MB_LUA_H
 
 #include <LuaScript.h>
-#include <MVariable.h>
+#include <NeoEngine.h>
 #include <vector>
 #include <string>
-#include <MLog.h>
 
 namespace Neo
 {
-class LuaBehavior : public MBehavior
+class LuaBehavior : public Behavior
 {
 public:
 
 	// constructors / destructors
-    LuaBehavior(MObject3d * parentObject);
-    LuaBehavior(LuaBehavior & behavior, MObject3d * parentObject);
+    LuaBehavior(Object3d * parentObject);
+    LuaBehavior(LuaBehavior & behavior, Object3d * parentObject);
     ~LuaBehavior(void);
 
 private:
@@ -58,7 +57,7 @@ private:
     struct MValueVariable
     {
         char name[256];
-        MVariable* var;
+        NeoVariable* var;
     };
 
     struct MFloatVariable : public MValueVariable
@@ -66,7 +65,7 @@ private:
         MFloatVariable(const char* name)
         {
             strcpy(this->name, name);
-            var = new MVariable(this->name, &value, M_VARIABLE_FLOAT);
+            var = new NeoVariable(this->name, &value, M_VARIABLE_FLOAT);
         }
 
         ~MFloatVariable()
@@ -82,7 +81,7 @@ private:
         MStringVariable(const char* name)
         {
             strcpy(this->name, name);
-            var = new MVariable(this->name, &value, M_VARIABLE_STRING);
+            var = new NeoVariable(this->name, &value, M_VARIABLE_STRING);
         }
 
         ~MStringVariable()
@@ -94,7 +93,7 @@ private:
     };
 
     std::vector<MValueVariable*> m_globalVariables;
-    std::vector<MVariable*> m_variables;
+    std::vector<NeoVariable*> m_variables;
 
 public:
 
@@ -102,10 +101,10 @@ public:
 	void destroy(void);
 
 	// get new
-	static MBehavior * getNew(MObject3d * parentObject);
+	static Behavior * getNew(Object3d * parentObject);
 
 	// get copy
-	MBehavior * getCopy(MObject3d * parentObject);
+	Behavior * getCopy(Object3d * parentObject);
 
 	// name
 	static const char * getStaticName(void){ return "LuaScript"; }
@@ -117,7 +116,7 @@ public:
 
 	// variables
 	unsigned int getVariablesNumber(void);
-	MVariable getVariable(unsigned int id);
+	NeoVariable getVariable(unsigned int id);
 };
 }
 

@@ -1,7 +1,9 @@
 #include "DnDTree.h"
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include "../Maratis/Maratis.h"
 #include <FL/fl_message.H>
+
+using namespace Neo;
 
 int DnDTree::handle(int e)
 {
@@ -27,7 +29,7 @@ int DnDTree::handle(int e)
 
     case FL_PASTE:
         {
-            MScene* scene = MEngine::getInstance()->getLevel()->getCurrentScene();
+            Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
             Fl_Tree::handle(FL_PUSH);
 
             Fl_Tree_Item* item = first_selected_item();
@@ -35,8 +37,8 @@ int DnDTree::handle(int e)
             if(item == NULL)
                 return 1;
 
-            MObject3d* newParent = scene->getObjectByName(item->label());
-            MObject3d* object = scene->getObjectByName(Fl::event_text());
+            Object3d* newParent = scene->getObjectByName(item->label());
+            Object3d* object = scene->getObjectByName(Fl::event_text());
 
             if(newParent == NULL && object)
             {
@@ -51,7 +53,7 @@ int DnDTree::handle(int e)
                 return 0;
             }
 
-            MObject3d* parent = object->getParent();
+            Object3d* parent = object->getParent();
 
             if(object == newParent)
                 return 1;

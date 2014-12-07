@@ -16,7 +16,7 @@
 #include <FL/Fl_Tree_Item.H>
 #include <FL/Fl_Tree_Prefs.H>
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <MWindow.h>
 #include <ImageLoader.h>
 #include <LevelLoad.h>
@@ -31,7 +31,6 @@ using namespace Neo;
 #include "../MFilesUpdate/MFilesUpdate.h"
 #include "../MLoaders/MAssimpMeshLoader.h"
 #include <MCore.h>
-#include <MLog.h>
 #include "MainWindow.h"
 #include "Translator.h"
 #include <Shiny.h>
@@ -174,7 +173,7 @@ void quit_callback(Fl_Menu_*, void*)
         // Saving settings
         save_settings();
         // Quitting engine
-        MEngine::getInstance()->setActive(false);
+        NeoEngine::getInstance()->setActive(false);
         exit(0);
     }
 }
@@ -184,9 +183,9 @@ void window_quit(Fl_Double_Window*, void*)
     quit_callback(NULL, NULL);
 }
 
-void add_to_tree(MObject3d* entity, std::string path)
+void add_to_tree(Object3d* entity, std::string path)
 {
-    MScene* scene = MEngine::getInstance()->getLevel()->getCurrentScene();
+    Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
 
     if(entity)
     {
@@ -209,7 +208,7 @@ void change_scene_callback(Fl_Menu_*, long index)
 {
     // MLOG_INFO("Changing to scene " << index);
 
-    MLevel* level = MEngine::getInstance()->getLevel();
+    Level* level = NeoEngine::getInstance()->getLevel();
     Maratis::getInstance()->autoSave();
     level->setCurrentSceneId(index);
     Maratis::getInstance()->clearSelectedObjects();
@@ -221,15 +220,15 @@ void update_scene_tree()
 {
     window.scene_tree->clear();
 
-    MLevel* level = MEngine::getInstance()->getLevel();
-    MScene* scene = level->getCurrentScene();
+    Level* level = NeoEngine::getInstance()->getLevel();
+    Scene* scene = level->getCurrentScene();
 
     unsigned int index = 0;
 
     window.scene_tree->begin();
     for(int i = 0; i < scene->getObjectsNumber(); i++)
     {
-        MObject3d* entity = scene->getObjectByIndex(i);
+        Object3d* entity = scene->getObjectByIndex(i);
         if(entity && entity->getParent() == NULL)
         {
             add_to_tree(entity, "");
@@ -309,7 +308,7 @@ void open_project_callback(Fl_Menu_*, void*)
 #else
         current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
 #endif
-        MGame* game = MEngine::getInstance()->getGame();
+        NeoGame* game = NeoEngine::getInstance()->getGame();
         Maratis::getInstance()->loadProject(filename);
 
         ::window.glbox->loadPostEffectsFromGame(game);
@@ -366,12 +365,12 @@ void remove_window(Fl_Window* win)
     }
 }
 
-void* get_variable_pointer(const char* bname, const char* vname, MObject3d* object)
+void* get_variable_pointer(const char* bname, const char* vname, Object3d* object)
 {
     if(!vname || !bname || !object)
         return NULL;
 
-    MBehavior* behavior;
+    Behavior* behavior;
     for(int i = 0; i < object->getBehaviorsNumber(); i++)
     {
         behavior = object->getBehavior(i);
@@ -391,7 +390,7 @@ void* get_variable_pointer(const char* bname, const char* vname, MObject3d* obje
 void behavior_float_callback(Fl_Value_Input* input, const char* data)
 {
     //MLOG_INFO("Changed " << input->label() << " " << data);
-    MObject3d* object = MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
+    Object3d* object = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
 
     if(!object || !input || !data)
         return;
@@ -402,7 +401,7 @@ void behavior_float_callback(Fl_Value_Input* input, const char* data)
 void behavior_int_callback(Fl_Value_Input* input, const char* data)
 {
     //MLOG_INFO("Changed " << input->label() << " " << data);
-    MObject3d* object = MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
+    Object3d* object = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
 
     if(!object || !input || !data)
         return;
@@ -413,7 +412,7 @@ void behavior_int_callback(Fl_Value_Input* input, const char* data)
 void behavior_bool_callback(Fl_Check_Button* input, const char* data)
 {
     //MLOG_INFO("Changed " << input->label() << " " << data);
-    MObject3d* object = MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
+    Object3d* object = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
 
     if(!object || !input || !data)
         return;
@@ -424,7 +423,7 @@ void behavior_bool_callback(Fl_Check_Button* input, const char* data)
 void behavior_string_callback(Fl_Input* input, const char* data)
 {
     //MLOG_INFO("Changed " << input->label() << " " << data);
-    MObject3d* object = MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
+    Object3d* object = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
 
     if(!object || !input || !data)
         return;
@@ -436,7 +435,7 @@ void behavior_string_callback(Fl_Input* input, const char* data)
 void behavior_vector4_callback(Fl_Value_Input* input, const char* data)
 {
     //MLOG_INFO("Changed " << input->label() << " " << data);
-    MObject3d* object = MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
+    Object3d* object = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
 
     if(!object || !input || !data)
         return;
@@ -476,7 +475,7 @@ void behavior_vector4_callback(Fl_Value_Input* input, const char* data)
 void behavior_vector3_callback(Fl_Value_Input* input, const char* data)
 {
     //MLOG_INFO("Changed " << input->label() << " " << data);
-    MObject3d* object = MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
+    Object3d* object = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
 
     if(!object || !input || !data)
         return;
@@ -513,7 +512,7 @@ void behavior_vector3_callback(Fl_Value_Input* input, const char* data)
 void behavior_vector2_callback(Fl_Value_Input* input, const char* data)
 {
     //MLOG_INFO("Changed " << input->label() << " " << data);
-    MObject3d* object = MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
+    Object3d* object = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
 
     if(!object || !input || !data)
         return;
@@ -546,7 +545,7 @@ void behavior_vector2_callback(Fl_Value_Input* input, const char* data)
 
 void remove_behavior(Fl_Button*, long behavior)
 {
-    MObject3d* object = MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
+    Object3d* object = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
 
     if(!object)
         return;
@@ -559,7 +558,7 @@ void remove_behavior(Fl_Button*, long behavior)
     window.behaviors_scroll->redraw();
 }
 
-void create_behavior_ui(MObject3d* object)
+void create_behavior_ui(Object3d* object)
 {
     if(object == NULL)
         return;
@@ -574,7 +573,7 @@ void create_behavior_ui(MObject3d* object)
     {
         window.behaviors_scroll->begin();
 
-        MBehavior* behavior = object->getBehavior(b);
+        Behavior* behavior = object->getBehavior(b);
         int num_variables = behavior->getVariablesNumber();
 
         Fl_Group* group = new Fl_Group(window.behaviors_scroll->x()+4,window.behaviors_scroll->y()+height+20, 218, 0);
@@ -593,7 +592,7 @@ void create_behavior_ui(MObject3d* object)
 
         for(int i = 0; i < num_variables; i++)
         {
-            MVariable var = behavior->getVariable(i);
+            NeoVariable var = behavior->getVariable(i);
 
             switch(var.getType())
             {
@@ -780,7 +779,7 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
     if(!name || !strcmp(name, "ROOT"))
         return;
 
-    MObject3d* object = MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(name);
+    Object3d* object = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(name);
 
     if(!object)
     {
@@ -830,7 +829,7 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
             window.special_tab->add(object_window);
         }
 
-        MOEntity* entity = (MOEntity*) object;
+        OEntity* entity = (OEntity*) object;
         window.object_mesh_edit->value(entity->getMeshRef()->getFilename());
 
         if(update_name)
@@ -872,7 +871,7 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
     }
     else if(object->getType() == M_OBJECT3D_LIGHT)
     {
-        MOLight* light = (MOLight*) object;
+        OLight* light = (OLight*) object;
 
         DELETE_WINDOW(text_window);
         DELETE_WINDOW(sound_window);
@@ -931,7 +930,7 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
             window.special_tab->add(camera_window);
         }
 
-        MOCamera* camera = (MOCamera*) object;
+        OCamera* camera = (OCamera*) object;
         MVector3 clearColor = camera->getClearColor();
         MVector3 fogColor = camera->getFogColor();
 
@@ -971,7 +970,7 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
             window.special_tab->add(text_window);
         }
 
-        MOText* text = (MOText*) object;
+        OText* text = (OText*) object;
 
         window.text_text_edit->buffer(&textbuf);
 
@@ -1007,7 +1006,7 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
             window.special_tab->add(sound_window);
         }
 
-        MOSound* sound = (MOSound*) object;
+        OSound* sound = (OSound*) object;
 
         window.sound_file_edit->value(sound->getSoundRef()->getFilename());
         window.sound_pitch_edit->value(sound->getPitch());
@@ -1024,7 +1023,7 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
 
     if(update_name)
     {
-        MObject3d* parent = object->getParent();
+        Object3d* parent = object->getParent();
 
         if(parent)
             window.parent_edit->value(parent->getName());
@@ -1064,8 +1063,8 @@ void edit_object_callback(Fl_Value_Input* input, long c)
     {
     case 't':
             {
-                MScene* scene = MEngine::getInstance()->getLevel()->getCurrentScene();
-                MObject3d* entity = scene->getObjectByName(name);
+                Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
+                Object3d* entity = scene->getObjectByName(name);
                 MVector3 position(window.xpos_edit->value(), window.ypos_edit->value(), window.zpos_edit->value());
 
                 if(!entity)
@@ -1081,8 +1080,8 @@ void edit_object_callback(Fl_Value_Input* input, long c)
         break;
 
     case 'r': {
-                MScene* scene = MEngine::getInstance()->getLevel()->getCurrentScene();
-                MObject3d* entity = scene->getObjectByName(name);
+                Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
+                Object3d* entity = scene->getObjectByName(name);
 
                 MVector3 rotation(window.xrot_edit->value(), window.yrot_edit->value(), window.zrot_edit->value());
 
@@ -1099,8 +1098,8 @@ void edit_object_callback(Fl_Value_Input* input, long c)
 
     case 's':
             {
-                    MScene* scene = MEngine::getInstance()->getLevel()->getCurrentScene();
-                    MObject3d* entity = scene->getObjectByName(name);
+                    Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
+                    Object3d* entity = scene->getObjectByName(name);
 
                     MVector3 scale(window.xscale_edit->value(), window.yscale_edit->value(), window.zscale_edit->value());
 
@@ -1128,10 +1127,10 @@ void edit_name_callback(Fl_Input*, void*)
     if(Maratis::getInstance()->getSelectedObjectsNumber() == 0)
         return;
 
-    MObject3d* object = Maratis::getInstance()->getSelectedObjectByIndex(0);
+    Object3d* object = Maratis::getInstance()->getSelectedObjectByIndex(0);
     object->setName(window.name_edit->value());
 
-    MObject3d* parent = object->getParent();
+    Object3d* parent = object->getParent();
 
     if(parent == NULL && !strcmp(window.parent_edit->value(), "none"))
     {
@@ -1140,7 +1139,7 @@ void edit_name_callback(Fl_Input*, void*)
     }
     else if(parent == NULL)
     {
-        parent = MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.parent_edit->value());
+        parent = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(window.parent_edit->value());
 
         if(!parent)
         {
@@ -1164,7 +1163,7 @@ void edit_name_callback(Fl_Input*, void*)
 
 void edit_light_properties(Fl_Value_Input *, void *)
 {
-    MOLight* light = MEngine::getInstance()->getLevel()->getCurrentScene()->getLightByName(window.name_edit->value());
+    OLight* light = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getLightByName(window.name_edit->value());
 
     if(!light)
     {
@@ -1201,7 +1200,7 @@ void edit_light_properties(Fl_Value_Input *, void *)
 
 void edit_light_properties_chk_btn(Fl_Check_Button * button, void *)
 {    
-    MOLight* light = MEngine::getInstance()->getLevel()->getCurrentScene()->getLightByName(window.name_edit->value());
+    OLight* light = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getLightByName(window.name_edit->value());
 
     if(window.light_spot_button->value() == 1)
     {
@@ -1321,7 +1320,7 @@ void save_level_callback(Fl_Menu_ *, long mode)
         break;
     }
 
-    MGame* game = MEngine::getInstance()->getGame();
+    NeoGame* game = NeoEngine::getInstance()->getGame();
     game->getPostProcessor()->setShaderPath(::window.glbox->getPostProcessor()->getVertexShader(), ::window.glbox->getPostProcessor()->getFragmentShader());
 
     Maratis::getInstance()->save();
@@ -1361,7 +1360,7 @@ void new_level_callback(Fl_Menu_*, void*)
 
 void edit_shape_callback(Fl_Menu_* menu, long type)
 {
-    MOEntity * entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
+    OEntity * entity = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
 
     if(!entity || !entity->getPhysicsProperties())
         return;
@@ -1371,7 +1370,7 @@ void edit_shape_callback(Fl_Menu_* menu, long type)
 
 void edit_object_chk_btn(Fl_Check_Button*, void*)
 {
-    MOEntity * entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
+    OEntity * entity = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
 
     if(!entity)
         return;
@@ -1399,7 +1398,7 @@ void edit_object_chk_btn(Fl_Check_Button*, void*)
 
 void edit_object_properties(Fl_Value_Input*, void*)
 {
-    MOEntity * entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
+    OEntity * entity = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
 
     if(!entity)
         return;
@@ -1449,7 +1448,7 @@ void add_light_callback(Fl_Menu_*, void*)
 
 void edit_camera_properties(Fl_Value_Input*, void*)
 {
-    MOCamera* camera = MEngine::getInstance()->getLevel()->getCurrentScene()->getCameraByName(window.name_edit->value());
+    OCamera* camera = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getCameraByName(window.name_edit->value());
 
     if(!camera)
     {
@@ -1469,7 +1468,7 @@ void edit_camera_properties(Fl_Value_Input*, void*)
 
 void edit_camera_skybox(Fl_Input*, void*)
 {
-    MOCamera* camera = MEngine::getInstance()->getLevel()->getCurrentScene()->getCameraByName(window.name_edit->value());
+    OCamera* camera = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getCameraByName(window.name_edit->value());
 
     if(!camera)
     {
@@ -1481,7 +1480,7 @@ void edit_camera_skybox(Fl_Input*, void*)
 
 void edit_camera_properties_chk_btn(Fl_Check_Button*, void*)
 {
-    MOCamera* camera = MEngine::getInstance()->getLevel()->getCurrentScene()->getCameraByName(window.name_edit->value());
+    OCamera* camera = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getCameraByName(window.name_edit->value());
 
     if(!camera)
     {
@@ -1493,18 +1492,18 @@ void edit_camera_properties_chk_btn(Fl_Check_Button*, void*)
     camera->enableFog(window.camera_fog_button->value());
 }
 
-bool text_load_font(const char* name, MOText* text)
+bool text_load_font(const char* name, OText* text)
 {
     if(!name || !text)
         return false;
 
-    MLevel* level = MEngine::getInstance()->getLevel();
-    MFontRef* ref = text->getFontRef();
+    Level* level = NeoEngine::getInstance()->getLevel();
+    FontRef* ref = text->getFontRef();
 
     if(!strcmp(name, ref->getFilename()))
         return true;
 
-    MFontRef* fontRef = level->loadFont(name);
+    FontRef* fontRef = level->loadFont(name);
 
     if(fontRef)
     {
@@ -1522,8 +1521,8 @@ bool text_load_font(const char* name, MOText* text)
 void text_find_font_callback(Fl_Button*, void*)
 {
     const char* filename = fl_native_file_chooser(tr("Choose font"), "*.ttf", (current_project.path + "fonts").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
-    MLevel* level = MEngine::getInstance()->getLevel();
-    MOText* text = level->getCurrentScene()->getTextByName(window.name_edit->value());
+    Level* level = NeoEngine::getInstance()->getLevel();
+    OText* text = level->getCurrentScene()->getTextByName(window.name_edit->value());
 
     if(!text)
     {
@@ -1545,8 +1544,8 @@ void text_find_font_callback(Fl_Button*, void*)
 
 void edit_text_properties(Fl_Widget*, void*)
 {
-    MLevel* level = MEngine::getInstance()->getLevel();
-    MOText* text = level->getCurrentScene()->getTextByName(window.name_edit->value());
+    Level* level = NeoEngine::getInstance()->getLevel();
+    OText* text = level->getCurrentScene()->getTextByName(window.name_edit->value());
 
     if(!text)
     {
@@ -1574,8 +1573,8 @@ void edit_text_properties(Fl_Widget*, void*)
 
 void text_alignment_callback(Fl_Menu_*, long value)
 {
-    MLevel* level = MEngine::getInstance()->getLevel();
-    MOText* text = level->getCurrentScene()->getTextByName(window.name_edit->value());
+    Level* level = NeoEngine::getInstance()->getLevel();
+    OText* text = level->getCurrentScene()->getTextByName(window.name_edit->value());
 
     if(!text)
     {
@@ -1723,9 +1722,9 @@ void play_game_button_callback(Fl_Button*, void*)
 
 void add_behavior_menu_callback(Fl_Menu_* menu, const char* name)
 {
-    MEngine* engine = MEngine::getInstance();
-    MBehaviorManager* manager = engine->getBehaviorManager();
-    MObject3d* object = engine->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
+    NeoEngine* engine = NeoEngine::getInstance();
+    BehaviorManager* manager = engine->getBehaviorManager();
+    Object3d* object = engine->getLevel()->getCurrentScene()->getObjectByName(window.name_edit->value());
 
     if(!object)
     {
@@ -1733,7 +1732,7 @@ void add_behavior_menu_callback(Fl_Menu_* menu, const char* name)
         return;
     }
 
-    MBehaviorCreator* behavior = manager->getBehaviorByName(name);
+    BehaviorCreator* behavior = manager->getBehaviorByName(name);
 
     if(!behavior)
     {
@@ -1756,12 +1755,12 @@ void add_behavior_menu_callback(Fl_Menu_* menu, const char* name)
 void update_behavior_menu()
 {
     window.behavior_menu->clear();
-    MEngine* engine = MEngine::getInstance();
-    MBehaviorManager* manager = engine->getBehaviorManager();
+    NeoEngine* engine = NeoEngine::getInstance();
+    BehaviorManager* manager = engine->getBehaviorManager();
 
     for(int i = 0; i < manager->getBehaviorsNumber(); i++)
     {
-        MBehaviorCreator* behavior = manager->getBehaviorByIndex(i);
+        BehaviorCreator* behavior = manager->getBehaviorByIndex(i);
 
         std::string name = behavior->getName();
         name = string(tr("Add")) + "/" + tr("Add Behavior") + "/" + name;
@@ -1822,7 +1821,7 @@ void add_sound_callback(Fl_Menu_ *, void *)
 
 void edit_sound_callback(Fl_Value_Input*, void*)
 {
-    MOSound* sound = MEngine::getInstance()->getLevel()->getCurrentScene()->getSoundByName(window.name_edit->value());
+    OSound* sound = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getSoundByName(window.name_edit->value());
 
     if(!sound)
         return;
@@ -1835,7 +1834,7 @@ void edit_sound_callback(Fl_Value_Input*, void*)
 
 void edit_sound_chk_btn(Fl_Check_Button*, void*)
 {
-    MOSound* sound = MEngine::getInstance()->getLevel()->getCurrentScene()->getSoundByName(window.name_edit->value());
+    OSound* sound = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getSoundByName(window.name_edit->value());
 
     if(!sound)
         return;
@@ -1856,8 +1855,8 @@ void add_scene_callback(Fl_Menu_ *, void *)
         return;
 
     Maratis::getInstance()->autoSave();
-    MLevel* level = MEngine::getInstance()->getLevel();
-    MScene* scene = level->addNewScene();
+    Level* level = NeoEngine::getInstance()->getLevel();
+    Scene* scene = level->addNewScene();
     scene->setName(window.scene_name.c_str());
 
     unsigned int index = level->getScenesNumber()-1;
@@ -1877,7 +1876,7 @@ void scene_setup_callback(Fl_Menu_ *, void*)
     SceneSetupDlg dlg;
     Fl_Window* win = dlg.create_window();
 
-    MScene* scene = MEngine::getInstance()->getLevel()->getCurrentScene();
+    Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
     dlg.lua_script_edit->value(scene->getScriptFilename());
     dlg.scene_name_edit->value(scene->getName());
 
@@ -1900,7 +1899,7 @@ void scene_setup_callback(Fl_Menu_ *, void*)
 
 void delete_scene_callback(Fl_Menu_ *, void *)
 {
-    MLevel* level = MEngine::getInstance()->getLevel();
+    Level* level = NeoEngine::getInstance()->getLevel();
 
     if(level->getScenesNumber()-1 <= 0)
     {
@@ -2055,7 +2054,7 @@ void post_effects_setup_callback(Fl_Menu_*, void*)
 
 int redirect_script_print()
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
     if(script->getArgsNumber() <= 0)
         return 0;
 
@@ -2092,7 +2091,7 @@ void setCursorPos(int x, int y)
 
 int centerCursorReplacement()
 {
-    MEngine * engine = MEngine::getInstance();
+    NeoEngine * engine = NeoEngine::getInstance();
     MSystemContext * system = engine->getSystemContext();
     MInputContext * input = engine->getInputContext();
 
@@ -2125,11 +2124,11 @@ int loadLevelReplacement()
 
 void play_game_in_editor(Fl_Button* button, void *)
 {
-    MEngine* engine = MEngine::getInstance();
-    MLevel * level = engine->getLevel();
-    MScene * scene = level->getCurrentScene();
+    NeoEngine* engine = NeoEngine::getInstance();
+    Level * level = engine->getLevel();
+    Scene * scene = level->getCurrentScene();
 
-    MGame* game = engine->getGame();
+    NeoGame* game = engine->getGame();
 
     // Quit the game
     if(game->isRunning())
@@ -2228,8 +2227,8 @@ void show_console_callback(Fl_Button*, void*)
 
 void apply_editor_perspective(Fl_Button *, void *)
 {
-    MOCamera* vue = Maratis::getInstance()->getPerspectiveVue();
-    MObject3d* selectedObject = Maratis::getInstance()->getSelectedObjectByIndex(0);
+    OCamera* vue = Maratis::getInstance()->getPerspectiveVue();
+    Object3d* selectedObject = Maratis::getInstance()->getSelectedObjectByIndex(0);
 
     if(selectedObject)
     {
@@ -2241,8 +2240,8 @@ void apply_editor_perspective(Fl_Button *, void *)
 
 void set_editor_perspective(Fl_Button *, void *)
 {
-    MOCamera* vue = Maratis::getInstance()->getPerspectiveVue();
-    MObject3d* selectedObject = Maratis::getInstance()->getSelectedObjectByIndex(0);
+    OCamera* vue = Maratis::getInstance()->getPerspectiveVue();
+    Object3d* selectedObject = Maratis::getInstance()->getSelectedObjectByIndex(0);
 
     if(selectedObject)
     {

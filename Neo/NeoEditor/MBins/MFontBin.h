@@ -26,8 +26,8 @@
 #ifndef _M_FONT_BIN_H
 #define _M_FONT_BIN_H
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 
-bool exportFontBin(const char * filename, MFont * font);
+bool exportFontBin(const char * filename, Neo::Font * font);
 
 #endif

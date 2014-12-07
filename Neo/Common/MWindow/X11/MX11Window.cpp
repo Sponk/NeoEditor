@@ -30,7 +30,7 @@
 
 #ifdef LINUX
 #include "../MWindow.h"
-#include <MEngine.h>
+#include <NeoEngine.h>
 
 #include <signal.h>
 #include <stdlib.h>

@@ -27,7 +27,7 @@
 
 #include <TCPInterface.h>
 #include <HTTPConnection.h>
-#include <MEngine.h>
+#include <NeoEngine.h>
 
 namespace Neo
 {

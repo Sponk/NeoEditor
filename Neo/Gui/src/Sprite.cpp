@@ -47,8 +47,8 @@ void Sprite::draw()
 {
     Render* render = Render::getInstance();
     GuiSystem* gui = GuiSystem::getInstance();
-    MSystemContext* system = MEngine::getInstance()->getSystemContext();
-    MLevel* level = MEngine::getInstance()->getLevel();
+    MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
+    Level* level = NeoEngine::getInstance()->getLevel();
 
     if(m_labelText == NULL)
     {

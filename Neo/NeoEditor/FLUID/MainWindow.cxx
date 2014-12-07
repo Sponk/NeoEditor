@@ -959,7 +959,7 @@ int EditorWindow::getSystemColor(int idx) {
 extern EditorWindow window;
 
 void SceneSetupDlg::ok_button_callback(Fl_Button* button, SceneSetupDlg* dlg) {
-  MEngine* engine = MEngine::getInstance();
+  NeoEngine* engine = NeoEngine::getInstance();
   MVector3 ambientLight(dlg->color_r->value(), dlg->color_g->value(), dlg->color_b->value());
   
   engine->getLevel()->getCurrentScene()->setAmbientLight(ambientLight);
@@ -1034,8 +1034,8 @@ Fl_Double_Window* SceneSetupDlg::create_window() {
     o->set_modal();
     o->end();
   } // Fl_Double_Window* o
-  MEngine* engine = MEngine::getInstance();
-  MScene* scene = engine->getLevel()->getCurrentScene();
+  NeoEngine* engine = NeoEngine::getInstance();
+  Scene* scene = engine->getLevel()->getCurrentScene();
   
   MVector3 ambientLight = scene->getAmbientLight();
   color_r->value(ambientLight.x);
@@ -1172,11 +1172,11 @@ Fl_Double_Window* MaterialEditDlg::create_window(const char* name) {
     window->set_modal();
     window->end();
   } // Fl_Double_Window* window
-  MEngine* engine = MEngine::getInstance();
-  MLevel* level = engine->getLevel();
-  MScene* scene = level->getCurrentScene();
+  NeoEngine* engine = NeoEngine::getInstance();
+  Level* level = engine->getLevel();
+  Scene* scene = level->getCurrentScene();
   
-  MObject3d* object = scene->getObjectByName(name);
+  Object3d* object = scene->getObjectByName(name);
   
   if(!object)
   {
@@ -1187,8 +1187,8 @@ Fl_Double_Window* MaterialEditDlg::create_window(const char* name) {
   if(object->getType() != M_OBJECT3D_ENTITY)
   	return NULL;
   	
-  MOEntity* entity = (MOEntity*) object;
-  MMesh* mesh = entity->getMesh();
+  OEntity* entity = (OEntity*) object;
+  Mesh* mesh = entity->getMesh();
   
   unsigned int num = mesh->getMaterialsNumber();
   char buf[6];
@@ -1213,8 +1213,8 @@ void MaterialEditDlg::close_callback(Fl_Button* button, MaterialEditDlg* dlg) {
 }
 
 void MaterialEditDlg::material_changed(Fl_Choice* choice, MaterialEditDlg* dlg) {
-  MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
-    MMesh* mesh = entity->getMesh();
+  OEntity* entity = (OEntity*) NeoEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
+    Mesh* mesh = entity->getMesh();
     
     if(!mesh)
     {
@@ -1225,7 +1225,7 @@ void MaterialEditDlg::material_changed(Fl_Choice* choice, MaterialEditDlg* dlg) 
     if(choice->value() >= mesh->getMaterialsNumber())
         return;
     
-    MMaterial* material = mesh->getMaterial(choice->value());
+    Material* material = mesh->getMaterial(choice->value());
     
     if(!material)
         return;
@@ -1258,8 +1258,8 @@ void MaterialEditDlg::close_window_callback(Fl_Window* window, MaterialEditDlg* 
 }
 
 void MaterialEditDlg::apply_callback(Fl_Button*, MaterialEditDlg* dlg) {
-  MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
-        MMesh* mesh = entity->getMesh();
+  OEntity* entity = (OEntity*) NeoEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
+        Mesh* mesh = entity->getMesh();
   
         if(!mesh)
         {
@@ -1270,7 +1270,7 @@ void MaterialEditDlg::apply_callback(Fl_Button*, MaterialEditDlg* dlg) {
         if(dlg->materials_chooser->value() >= mesh->getMaterialsNumber())
             return;
   
-        MMaterial* material = mesh->getMaterial(dlg->materials_chooser->value());
+        Material* material = mesh->getMaterial(dlg->materials_chooser->value());
   
         if(!material)
             return;
@@ -1302,8 +1302,8 @@ void MaterialEditDlg::apply_callback(Fl_Button*, MaterialEditDlg* dlg) {
 }
 
 void MaterialEditDlg::save_callback(Fl_Button*, MaterialEditDlg* dlg) {
-  MOEntity* entity = (MOEntity*) MEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
-  MMesh* mesh = entity->getMesh();
+  OEntity* entity = (OEntity*) NeoEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(dlg->object_name);
+  Mesh* mesh = entity->getMesh();
   
   if(!mesh)
   {
@@ -4022,7 +4022,7 @@ Fl_Double_Window* PublishDlg::create_window() {
     } // Fl_Button* o
     { output_edit = new Fl_Input(129, 18, 339, 24, tr("Output directory:"));
       char dir[256];
-      getGlobalFilename(dir, MEngine::getInstance()->getSystemContext()->getWorkingDirectory(), "published");
+      getGlobalFilename(dir, NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(), "published");
       output_edit->value(dir);
     } // Fl_Input* output_edit
     { Fl_Button* o = new Fl_Button(471, 18, 26, 24, tr("..."));
@@ -4100,7 +4100,7 @@ void new_scene_cancel_callback(Fl_Button* button,void*) {
 
 Fl_Double_Window* ConstraintPropertiesDlg::create_window() {
   Fl_Double_Window* w;
-  MOEntity* entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
+  OEntity* entity = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
   
   if(!entity)
   	return NULL;
@@ -4287,7 +4287,7 @@ Fl_Double_Window* ConstraintPropertiesDlg::create_window() {
 }
 
 void ConstraintPropertiesDlg::enable_constraint_callback(Fl_Check_Button* button, ConstraintPropertiesDlg* dlg) {
-  MOEntity* entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
+  OEntity* entity = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
   
   if(!entity)
   	return;
@@ -4358,7 +4358,7 @@ void ConstraintPropertiesDlg::enable_constraint_callback(Fl_Check_Button* button
 }
 
 void ConstraintPropertiesDlg::close_callback(Fl_Button*, ConstraintPropertiesDlg* dlg) {
-  MOEntity* entity = MEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
+  OEntity* entity = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getEntityByName(window.name_edit->value());
   
   if(!entity)
   	return;
@@ -4909,7 +4909,7 @@ void PostEffectsDlg::find_frag_file_callback(Fl_Button* widget, PostEffectsDlg* 
 }
 
 void PostEffectsDlg::preview_callback(Fl_Button* widget, PostEffectsDlg* dlg) {
-  MEngine* engine = MEngine::getInstance();
+  NeoEngine* engine = NeoEngine::getInstance();
   
   if(!fl_ask("If you load a new shader all uniform settings you created will be lost. Continue?"))
   	return;
@@ -5082,7 +5082,7 @@ void PostEffectsDlg::update_resolution(Fl_Value_Input* value, PostEffectsDlg* dl
   PostProcessor* pp = ::window.glbox->getPostProcessor();
   pp->setResolutionMultiplier(value->value());
   
-  MEngine::getInstance()->getGame()->getPostProcessor()->setResolutionMultiplier(value->value());
+  NeoEngine::getInstance()->getGame()->getPostProcessor()->setResolutionMultiplier(value->value());
 }
 
 Fl_Double_Window* WaitDlg::create_window() {

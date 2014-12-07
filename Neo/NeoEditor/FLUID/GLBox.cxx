@@ -1,8 +1,7 @@
 #include "GLBox.h"
 #include <MWindow.h>
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <ImageLoader.h>
-#include <MLog.h>
 #include <MKeyboard.h>
 
 #include "../MWindow/MMouse.h"
@@ -27,6 +26,8 @@
 
 #include <Shiny.h>
 
+using namespace Neo;
+
 extern Fl_Double_Window* main_window;
 extern EditorWindow window;
 
@@ -37,8 +38,8 @@ void update_editor(void*)
     if(!window.glbox->maratis_init)
         return;
 
-    MGame* game = MEngine::getInstance()->getGame();
-    MInputContext* input = MEngine::getInstance()->getInputContext();
+    NeoGame* game = NeoEngine::getInstance()->getGame();
+    MInputContext* input = NeoEngine::getInstance()->getInputContext();
     Maratis* maratis = Maratis::getInstance();
 
     if(window.inputMethod == NULL && !game->isRunning())
@@ -47,7 +48,7 @@ void update_editor(void*)
         {
             int direction = -1;
 
-            MOCamera * vue = maratis->getPerspectiveVue();
+            OCamera * vue = maratis->getPerspectiveVue();
 
             if(vue->isOrtho())
             {
@@ -64,7 +65,7 @@ void update_editor(void*)
         {
             int direction = 1;
 
-            MOCamera * vue = maratis->getPerspectiveVue();
+            OCamera * vue = maratis->getPerspectiveVue();
             if(vue->isOrtho())
             {
                 vue->setFov(vue->getFov() + direction*translation_speed);
@@ -80,7 +81,7 @@ void update_editor(void*)
         {
             int direction = -1;
 
-            MOCamera * vue = maratis->getPerspectiveVue();
+            OCamera * vue = maratis->getPerspectiveVue();
             vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(direction*translation_speed,0,0)));
             vue->updateMatrix();
 
@@ -90,7 +91,7 @@ void update_editor(void*)
         {
             int direction = 1;
 
-            MOCamera * vue = maratis->getPerspectiveVue();
+            OCamera * vue = maratis->getPerspectiveVue();
             vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(direction*translation_speed,0,0)));
             vue->updateMatrix();
 
@@ -99,7 +100,7 @@ void update_editor(void*)
 
         if(input->isKeyPressed("E"))
         {
-            MOCamera * vue = maratis->getPerspectiveVue();
+            OCamera * vue = maratis->getPerspectiveVue();
             vue->setPosition(vue->getPosition()+vue->getRotatedVector(MVector3(0,translation_speed, 0)));
             vue->updateMatrix();
 
@@ -107,7 +108,7 @@ void update_editor(void*)
         }
         else if(input->isKeyPressed("C"))
         {
-            MOCamera * vue = maratis->getPerspectiveVue();
+            OCamera * vue = maratis->getPerspectiveVue();
             vue->setPosition(vue->getPosition()+vue->getRotatedVector(MVector3(0,-translation_speed, 0)));
             vue->updateMatrix();
 
@@ -160,7 +161,7 @@ void update_editor(void*)
     Fl::add_timeout(0.015, update_editor);
 }
 
-void GLBox::loadPostEffectsFromGame(MGame* game)
+void GLBox::loadPostEffectsFromGame(NeoGame* game)
 {
     if(game->hasPostEffects())
     {
@@ -184,7 +185,7 @@ void GLBox::draw()
         maratis->initRenderer();
         MWindow::getInstance()->setViewport(w(), h());
 
-        MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+        MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
         if(!current_project.file_path.empty())
         {
@@ -198,7 +199,7 @@ void GLBox::draw()
     #endif
 
             Maratis::getInstance()->loadProject(current_project.file_path.c_str());
-            ::window.glbox->loadPostEffectsFromGame(MEngine::getInstance()->getGame());
+            ::window.glbox->loadPostEffectsFromGame(NeoEngine::getInstance()->getGame());
             current_project.level = maratis->getCurrentLevel();
         }
 
@@ -224,13 +225,13 @@ void GLBox::draw()
     }
 
     Maratis* maratis = Maratis::getInstance();
-    MEngine* engine = MEngine::getInstance();
+    NeoEngine* engine = NeoEngine::getInstance();
     MRenderingContext* render = engine->getRenderingContext();
 
     MWindow::getInstance()->setViewport(w(), h());
     render->setScissor(0, 0, w(), h());
 
-    MGame* game = engine->getGame();
+    NeoGame* game = engine->getGame();
     if(!game->isRunning())
     {
         engine->updateRequests();
@@ -242,18 +243,18 @@ void GLBox::draw()
 
         if(maratis->getSelectedObjectsNumber() > 0)
         {
-            MObject3d* camera = maratis->getSelectedObjectByIndex(0);
+            Object3d* camera = maratis->getSelectedObjectByIndex(0);
             if(camera != NULL && camera->getType() == M_OBJECT3D_CAMERA)
             {
-                render->setClearColor(static_cast<MOCamera*>(camera)->getClearColor());
+                render->setClearColor(static_cast<OCamera*>(camera)->getClearColor());
                 render->setViewport(0,0, w()/3, h()/3);
                 render->setScissor(0,0, w()/3, h()/3);
                 render->enableScissorTest();
 
-                static_cast<MOCamera*>(camera)->enable();
+                static_cast<OCamera*>(camera)->enable();
 
                 render->clear(M_BUFFER_DEPTH | M_BUFFER_COLOR);
-                engine->getLevel()->getCurrentScene()->draw(static_cast<MOCamera*>(camera));
+                engine->getLevel()->getCurrentScene()->draw(static_cast<OCamera*>(camera));
                 engine->getLevel()->getCurrentScene()->drawObjectsBehaviors();
 
                 render->setScissor(0,0,w(),h());
@@ -276,16 +277,16 @@ int GLBox::handle(int event)
 {
     //fprintf(stderr, "Handle %d FL_KEYBOARD is %d\n", event, FL_KEYBOARD);
     char key[2] = {0,0};
-    MInputContext* input = MEngine::getInstance()->getInputContext();
+    MInputContext* input = NeoEngine::getInstance()->getInputContext();
     switch(event)
     {
     case FL_KEYBOARD:
         {
-            if(this != Fl::focus() || (Fl::event_ctrl() && !MEngine::getInstance()->getGame()->isRunning()))
+            if(this != Fl::focus() || (Fl::event_ctrl() && !NeoEngine::getInstance()->getGame()->isRunning()))
                 return 0;
 
             key[0] = toupper(Fl::event_text()[0]);
-            MEngine::getInstance()->getInputContext()->downKey(key);
+            NeoEngine::getInstance()->getInputContext()->downKey(key);
             MKeyboard* kbd = MKeyboard::getInstance();
 
             char keys[] = {"ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789"};
@@ -396,7 +397,7 @@ int GLBox::handle(int event)
             Fl_Gl_Window::handle(event);
 
             // F6 should _always_ work to end the game!
-            if(MEngine::getInstance()->getGame()->isRunning() && Fl::event_key() != FL_F + 6)
+            if(NeoEngine::getInstance()->getGame()->isRunning() && Fl::event_key() != FL_F + 6)
                 return 1;
             else
                 return isalpha(Fl::event_text()[0]);
@@ -530,12 +531,12 @@ int GLBox::handle(int event)
             MMouse* mouse = MMouse::getInstance();
             mouse->setWheelDirection(direction);
 
-            MInputContext* input = MEngine::getInstance()->getInputContext();
+            MInputContext* input = NeoEngine::getInstance()->getInputContext();
             input->setAxis("MOUSE_WHEEL", input->getAxis("MOUSE_WHEEL") + direction);
 
             if(::window.inputMethod == NULL)
             {
-                MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+                OCamera * vue = Maratis::getInstance()->getPerspectiveVue();
                 vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
                 vue->updateMatrix();
             }
@@ -565,9 +566,9 @@ int GLBox::handle(int event)
 
             MMouse::getInstance()->setPosition(mouse_x, mouse_y);
 
-            if(Fl::event_button1() && !MEngine::getInstance()->getGame()->isRunning())
+            if(Fl::event_button1() && !NeoEngine::getInstance()->getGame()->isRunning())
             {
-                Maratis::getInstance()->selectObjectsInMainView(MEngine::getInstance()->getLevel()->getCurrentScene(), Fl::event_shift() > 0);
+                Maratis::getInstance()->selectObjectsInMainView(NeoEngine::getInstance()->getLevel()->getCurrentScene(), Fl::event_shift() > 0);
                 ::window.scene_tree->deselect_all();
 
                 Fl_Tree_Item* item = ::window.scene_tree->root();
@@ -590,7 +591,7 @@ int GLBox::handle(int event)
             }
 
             {
-                    MInputContext* input = MEngine::getInstance()->getInputContext();
+                    MInputContext* input = NeoEngine::getInstance()->getInputContext();
 
                     switch(Fl::event_button())
                     {
@@ -623,7 +624,7 @@ int GLBox::handle(int event)
 
     case FL_RELEASE:
     {
-        MInputContext* input = MEngine::getInstance()->getInputContext();
+        MInputContext* input = NeoEngine::getInstance()->getInputContext();
 
         switch(Fl::event_button())
         {
@@ -656,10 +657,10 @@ int GLBox::handle(int event)
 
     case FL_DRAG:
         {
-            MGame* game = MEngine::getInstance()->getGame();
+            NeoGame* game = NeoEngine::getInstance()->getGame();
             if(Fl::event_button3() && ::window.inputMethod == NULL && !game->isRunning())
             {
-                MOCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+                OCamera * vue = Maratis::getInstance()->getPerspectiveVue();
 
                 vue->setEulerRotation(vue->getEulerRotation() + MVector3(mouse_y - Fl::event_y(), 0, mouse_x-Fl::event_x())*0.5*rotation_speed);
                 vue->updateMatrix();
@@ -726,7 +727,7 @@ int GLBox::handle(int event)
                     current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
                 #endif
                     Maratis::getInstance()->loadProject(filename.c_str());
-                    loadPostEffectsFromGame(MEngine::getInstance()->getGame());
+                    loadPostEffectsFromGame(NeoEngine::getInstance()->getGame());
                     current_project.level = Maratis::getInstance()->getCurrentLevel();
                     reload_editor = true;
                 }

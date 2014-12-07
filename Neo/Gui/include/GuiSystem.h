@@ -35,7 +35,7 @@
 #ifndef __GUI_SYSTEM__
 #define __GUI_SYSTEM__
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <vector>
 #include <Canvas.h>
 #include <string>

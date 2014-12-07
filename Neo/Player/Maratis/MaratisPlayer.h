@@ -26,11 +26,12 @@
 #ifndef _MARATIS_PLAYER_H
 #define _MARATIS_PLAYER_H
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <Plugin.h>
 #include <Project.h>
 
-
+namespace Neo
+{
 class MaratisPlayer
 {
 public:
@@ -55,9 +56,9 @@ private:
 	MScriptContext * m_script;
 	MInputContext * m_input;
 	MSystemContext * m_system;
-	MGame * m_game;
-	MLevel * m_level;
-	MRenderer * m_renderer;
+	NeoGame * m_game;
+	Level * m_level;
+	Renderer * m_renderer;
 	MPackageManager * m_packageManager;
 
 	// plugins
@@ -93,5 +94,5 @@ public:
 	static void logicLoop(void);
 	static void graphicLoop(void);
 };
-
+}
 #endif

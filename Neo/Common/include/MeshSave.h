@@ -33,10 +33,10 @@
 
 namespace Neo
 {
-bool xmlMeshSave(const char * filename, MMesh * mesh);
-bool xmlArmatureAnimSave(const char * filename, MArmatureAnim * anim);
-bool xmlTexturesAnimSave(const char * filename, MTexturesAnim * anim);
-bool xmlMaterialsAnimSave(const char * filename, MMaterialsAnim * anim);
+bool xmlMeshSave(const char * filename, Mesh * mesh);
+bool xmlArmatureAnimSave(const char * filename, ArmatureAnim * anim);
+bool xmlTexturesAnimSave(const char * filename, TexturesAnim * anim);
+bool xmlMaterialsAnimSave(const char * filename, MaterialsAnim * anim);
 }
 
 #endif

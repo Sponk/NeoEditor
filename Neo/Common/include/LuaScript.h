@@ -31,7 +31,7 @@
 #ifndef _M_SCRIPT_H
 #define _M_SCRIPT_H
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <lua.hpp>
 
 namespace Neo

@@ -37,7 +37,7 @@ void createFltkLuaBindings(LuaScript* script);
 // Methods to setup plugin data (name, author, license etc.)
 int MPluginScript::setName()
 {
-    MPluginScript* script = (MPluginScript*) MEngine::getInstance()->getScriptContext();
+    MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -48,7 +48,7 @@ int MPluginScript::setName()
 
 int MPluginScript::setAuthor()
 {
-    MPluginScript* script = (MPluginScript*) MEngine::getInstance()->getScriptContext();
+    MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -59,7 +59,7 @@ int MPluginScript::setAuthor()
 
 int MPluginScript::setContact()
 {
-    MPluginScript* script = (MPluginScript*) MEngine::getInstance()->getScriptContext();
+    MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -70,7 +70,7 @@ int MPluginScript::setContact()
 
 int MPluginScript::setLicense()
 {
-    MPluginScript* script = (MPluginScript*) MEngine::getInstance()->getScriptContext();
+    MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -81,7 +81,7 @@ int MPluginScript::setLicense()
 
 int MPluginScript::setDescription()
 {
-    MPluginScript* script = (MPluginScript*) MEngine::getInstance()->getScriptContext();
+    MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -92,7 +92,7 @@ int MPluginScript::setDescription()
 
 int MPluginScript::enableInputMethod()
 {
-    MPluginScript* script = (MPluginScript*) MEngine::getInstance()->getScriptContext();
+    MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -121,7 +121,7 @@ void MPluginScript::init()
 
 void MPluginScript::runScript(const char* filename)
 {
-    MEngine::getInstance()->setScriptContext(this);
+    NeoEngine::getInstance()->setScriptContext(this);
     char g_currentDirectory[256];
 
     clear();
@@ -170,7 +170,7 @@ void MPluginScript::runScript(const char* filename)
 
 void MPluginScript::callFunction(const char* name)
 {
-    MEngine* engine = MEngine::getInstance();
+    NeoEngine* engine = NeoEngine::getInstance();
     MScriptContext* oldContext = engine->getScriptContext();
 
     engine->setScriptContext(this);
@@ -180,12 +180,12 @@ void MPluginScript::callFunction(const char* name)
 
 bool MPluginScript::startCallFunction(const char *name)
 {
-    MEngine::getInstance()->setScriptContext(this);
+    NeoEngine::getInstance()->setScriptContext(this);
     return LuaScript::startCallFunction(name);
 }
 
 bool MPluginScript::endCallFunction(int numArgs)
 {
-    MEngine::getInstance()->setScriptContext(this);
+    NeoEngine::getInstance()->setScriptContext(this);
     return LuaScript::endCallFunction(numArgs);
 }

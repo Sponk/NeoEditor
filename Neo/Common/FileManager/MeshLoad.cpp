@@ -28,7 +28,7 @@
 //========================================================================
 
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <tinyxml.h>
 
 #include "MeshLoad.h"
@@ -58,7 +58,7 @@ MVector3 computeTangent(
 	return MVector3(0.0f, 0.0f, 0.0f);
 }
 
-void generateTangents(MSubMesh * subMesh)
+void generateTangents(SubMesh * subMesh)
 {
 	MVector3 * vertices = subMesh->getVertices();
 	MVector3 * normals = subMesh->getNormals();
@@ -76,15 +76,15 @@ void generateTangents(MSubMesh * subMesh)
 	unsigned int dSize = subMesh->getDisplaysNumber();
 	for(d=0; d<dSize; d++)
 	{
-		MDisplay * display = subMesh->getDisplay(d);
-		MMaterial * material = display->getMaterial();
+		MaterialDisplay * display = subMesh->getDisplay(d);
+		Material * material = display->getMaterial();
 		if(material)
 		{
 			if(material->getType() == 1) // standard
 			{
 				if(material->getTexturesPassNumber() > 2)
 				{
-					MTexturePass * texturePass = material->getTexturePass(2); // Normal map pass
+					TexturePass * texturePass = material->getTexturePass(2); // Normal map pass
 					if(texturePass)
 					{
 						mapChannel = texturePass->getMapChannel();
@@ -98,7 +98,7 @@ void generateTangents(MSubMesh * subMesh)
 				unsigned int t;
 				for(t=0; t<tSize; t++)
 				{
-					MTexturePass * texturePass = material->getTexturePass(t);
+					TexturePass * texturePass = material->getTexturePass(t);
 					if(texturePass)
 					{
 						if(texturePass->getCombineMode() == M_TEX_COMBINE_DOT)
@@ -129,7 +129,7 @@ void generateTangents(MSubMesh * subMesh)
 		// scan triangles to generate tangents from vertices and texCoords
 		for(d=0; d<dSize; d++)
 		{
-			MDisplay * display = subMesh->getDisplay(d);
+			MaterialDisplay * display = subMesh->getDisplay(d);
 
 			if(display->getPrimitiveType() == M_PRIMITIVE_TRIANGLES)
 			{
@@ -220,7 +220,7 @@ void generateTangents(MSubMesh * subMesh)
 	}
 }
 
-void readFloatKeys(TiXmlElement * node, MKey * keys)
+void readFloatKeys(TiXmlElement * node, Key * keys)
 {
 	TiXmlElement * kNode = node->FirstChildElement("k");
 	for(kNode; kNode; kNode=kNode->NextSiblingElement("k"))
@@ -236,7 +236,7 @@ void readFloatKeys(TiXmlElement * node, MKey * keys)
 	}
 }
 
-void readVector2Keys(TiXmlElement * node, MKey * keys)
+void readVector2Keys(TiXmlElement * node, Key * keys)
 {
 	TiXmlElement * kNode = node->FirstChildElement("k");
 	for(kNode; kNode; kNode=kNode->NextSiblingElement("k"))
@@ -253,7 +253,7 @@ void readVector2Keys(TiXmlElement * node, MKey * keys)
 	}
 }
 
-void readVector3Keys(TiXmlElement * node, MKey * keys)
+void readVector3Keys(TiXmlElement * node, Key * keys)
 {
 	TiXmlElement * kNode = node->FirstChildElement("k");
 	for(kNode; kNode; kNode=kNode->NextSiblingElement("k"))
@@ -302,8 +302,8 @@ bool xmlArmatureAnimLoad(const char * filename, void * data)
 		return false;
 
 	// create armature anim
-	MArmatureAnim * armatureAnim = (MArmatureAnim *)data;
-	MObject3dAnim * objAnims = armatureAnim->allocBonesAnim(bonesAnimNumber);
+	ArmatureAnim * armatureAnim = (ArmatureAnim *)data;
+	Object3dAnim * objAnims = armatureAnim->allocBonesAnim(bonesAnimNumber);
 
 	// Bone
 	TiXmlElement * boneNode = armatureAnimNode->FirstChildElement("Bone");
@@ -315,7 +315,7 @@ bool xmlArmatureAnimLoad(const char * filename, void * data)
 		{
 			unsigned int kSize = 0;
 			positionNode->QueryUIntAttribute("num", &kSize);
-			MKey * keys = objAnims->allocPositionKeys(kSize);
+			Key * keys = objAnims->allocPositionKeys(kSize);
 			readVector3Keys(positionNode, keys);
 		}
 
@@ -325,7 +325,7 @@ bool xmlArmatureAnimLoad(const char * filename, void * data)
 		{
 			unsigned int kSize = 0;
 			rotationNode->QueryUIntAttribute("num", &kSize);
-			MKey * keys = objAnims->allocRotationKeys(kSize);
+			Key * keys = objAnims->allocRotationKeys(kSize);
 
 			// k
 			TiXmlElement * kNode = rotationNode->FirstChildElement("k");
@@ -353,7 +353,7 @@ bool xmlArmatureAnimLoad(const char * filename, void * data)
 		{
 			unsigned int kSize = 0;
 			scaleNode->QueryUIntAttribute("num", &kSize);
-			MKey * keys = objAnims->allocScaleKeys(kSize);
+			Key * keys = objAnims->allocScaleKeys(kSize);
 			readVector3Keys(scaleNode, keys);
 		}
 
@@ -394,8 +394,8 @@ bool xmlTextureAnimLoad(const char * filename, void * data)
 		return false;
 
 	// create textures anim
-	MTexturesAnim * texturesAnim = (MTexturesAnim *)data;
-	MTextureAnim * texAnims = texturesAnim->allocTexturesAnim(texturesAnimNumber);
+	TexturesAnim * texturesAnim = (TexturesAnim *)data;
+	TextureAnim * texAnims = texturesAnim->allocTexturesAnim(texturesAnimNumber);
 
 	// Texture
 	TiXmlElement * textureNode = textureAnimNode->FirstChildElement("Texture");
@@ -407,7 +407,7 @@ bool xmlTextureAnimLoad(const char * filename, void * data)
 		{
 			unsigned int kSize = 0;
 			translateNode->QueryUIntAttribute("num", &kSize);
-			MKey * keys = texAnims->allocTranslateKeys(kSize);
+			Key * keys = texAnims->allocTranslateKeys(kSize);
 			readVector2Keys(translateNode, keys);
 		}
 
@@ -417,7 +417,7 @@ bool xmlTextureAnimLoad(const char * filename, void * data)
 		{
 			unsigned int kSize = 0;
 			scaleNode->QueryUIntAttribute("num", &kSize);
-			MKey * keys = texAnims->allocScaleKeys(kSize);
+			Key * keys = texAnims->allocScaleKeys(kSize);
 			readVector2Keys(scaleNode, keys);
 		}
 
@@ -427,7 +427,7 @@ bool xmlTextureAnimLoad(const char * filename, void * data)
 		{
 			unsigned int kSize = 0;
 			rotateNode->QueryUIntAttribute("num", &kSize);
-			MKey * keys = texAnims->allocRotationKeys(kSize);
+			Key * keys = texAnims->allocRotationKeys(kSize);
 			readFloatKeys(rotateNode, keys);
 		}
 
@@ -468,8 +468,8 @@ bool xmlMaterialAnimLoad(const char * filename, void * data)
 		return false;
 
 	// create materials anim
-	MMaterialsAnim * materialsAnim = (MMaterialsAnim *)data;
-	MMaterialAnim * matAnims = materialsAnim->allocMaterialsAnim(materialsAnimNumber);
+	MaterialsAnim * materialsAnim = (MaterialsAnim *)data;
+	MaterialAnim * matAnims = materialsAnim->allocMaterialsAnim(materialsAnimNumber);
 
 	// Material
 	TiXmlElement * materialNode = materialAnimNode->FirstChildElement("Material");
@@ -481,7 +481,7 @@ bool xmlMaterialAnimLoad(const char * filename, void * data)
 		{
 			unsigned int kSize = 0;
 			opacityNode->QueryUIntAttribute("num", &kSize);
-			MKey * keys = matAnims->allocOpacityKeys(kSize);
+			Key * keys = matAnims->allocOpacityKeys(kSize);
 			readFloatKeys(opacityNode, keys);
 		}
 
@@ -491,7 +491,7 @@ bool xmlMaterialAnimLoad(const char * filename, void * data)
 		{
 			unsigned int kSize = 0;
 			shininessNode->QueryUIntAttribute("num", &kSize);
-			MKey * keys = matAnims->allocShininessKeys(kSize);
+			Key * keys = matAnims->allocShininessKeys(kSize);
 			readFloatKeys(shininessNode, keys);
 		}
 
@@ -501,7 +501,7 @@ bool xmlMaterialAnimLoad(const char * filename, void * data)
 		{
 			unsigned int kSize = 0;
 			customValueNode->QueryUIntAttribute("num", &kSize);
-			MKey * keys = matAnims->allocCustomValueKeys(kSize);
+			Key * keys = matAnims->allocCustomValueKeys(kSize);
 			readFloatKeys(customValueNode, keys);
 		}
 
@@ -511,7 +511,7 @@ bool xmlMaterialAnimLoad(const char * filename, void * data)
 		{
 			unsigned int kSize = 0;
 			diffuseColorNode->QueryUIntAttribute("num", &kSize);
-			MKey * keys = matAnims->allocDiffuseKeys(kSize);
+			Key * keys = matAnims->allocDiffuseKeys(kSize);
 			readVector3Keys(diffuseColorNode, keys);
 		}
 
@@ -521,7 +521,7 @@ bool xmlMaterialAnimLoad(const char * filename, void * data)
 		{
 			unsigned int kSize = 0;
 			specularColorNode->QueryUIntAttribute("num", &kSize);
-			MKey * keys = matAnims->allocSpecularKeys(kSize);
+			Key * keys = matAnims->allocSpecularKeys(kSize);
 			readVector3Keys(specularColorNode, keys);
 		}
 
@@ -531,7 +531,7 @@ bool xmlMaterialAnimLoad(const char * filename, void * data)
 		{
 			unsigned int kSize = 0;
 			emitColorNode->QueryUIntAttribute("num", &kSize);
-			MKey * keys = matAnims->allocEmitKeys(kSize);
+			Key * keys = matAnims->allocEmitKeys(kSize);
 			readVector3Keys(emitColorNode, keys);
 		}
 
@@ -541,7 +541,7 @@ bool xmlMaterialAnimLoad(const char * filename, void * data)
 		{
 			unsigned int kSize = 0;
 			customColorNode->QueryUIntAttribute("num", &kSize);
-			MKey * keys = matAnims->allocCustomColorKeys(kSize);
+			Key * keys = matAnims->allocCustomColorKeys(kSize);
 			readVector3Keys(customColorNode, keys);
 		}
 
@@ -551,9 +551,9 @@ bool xmlMaterialAnimLoad(const char * filename, void * data)
 	return true;
 }
 
-bool loadAnim(TiXmlElement * rootNode, const char * repertory, MMesh * mesh)
+bool loadAnim(TiXmlElement * rootNode, const char * repertory, Mesh * mesh)
 {
-	MLevel * level = MEngine::getInstance()->getLevel();
+	Level * level = NeoEngine::getInstance()->getLevel();
 
 
 	// Animation
@@ -573,7 +573,7 @@ bool loadAnim(TiXmlElement * rootNode, const char * repertory, MMesh * mesh)
 			getGlobalFilename(path, repertory, file);
 
 			// load textures anim
-			MTexturesAnimRef * texturesAnim = level->loadTexturesAnim(path);
+			TexturesAnimRef * texturesAnim = level->loadTexturesAnim(path);
 			mesh->setTexturesAnimRef(texturesAnim);
 		}
 	}
@@ -590,7 +590,7 @@ bool loadAnim(TiXmlElement * rootNode, const char * repertory, MMesh * mesh)
 			getGlobalFilename(path, repertory, file);
 
 			// load materials anim
-			MMaterialsAnimRef * materialsAnim = level->loadMaterialsAnim(path);
+			MaterialsAnimRef * materialsAnim = level->loadMaterialsAnim(path);
 			mesh->setMaterialsAnimRef(materialsAnim);
 		}
 	}
@@ -607,7 +607,7 @@ bool loadAnim(TiXmlElement * rootNode, const char * repertory, MMesh * mesh)
 			getGlobalFilename(path, repertory, file);
 
 			// load armature anim
-			MArmatureAnimRef * armatureAnim = level->loadArmatureAnim(path);
+			ArmatureAnimRef * armatureAnim = level->loadArmatureAnim(path);
 			mesh->setArmatureAnimRef(armatureAnim);
 		}
 	}
@@ -620,7 +620,7 @@ bool loadAnim(TiXmlElement * rootNode, const char * repertory, MMesh * mesh)
 		animsNode->QueryUIntAttribute("num", &animsNumber);
 		if(animsNumber > 0)
 		{
-			MAnimRange * animsRanges = mesh->allocAnimsRanges(animsNumber);
+			AnimRange * animsRanges = mesh->allocAnimsRanges(animsNumber);
 
 			TiXmlElement * animNode = animsNode->FirstChildElement("anim");
 			for(animNode; animNode; animNode=animNode->NextSiblingElement("anim"))
@@ -637,7 +637,7 @@ bool loadAnim(TiXmlElement * rootNode, const char * repertory, MMesh * mesh)
 	return true;
 }
 
-bool loadAnimFile(MMesh * mesh, const char * filename, const char * repertory)
+bool loadAnimFile(Mesh * mesh, const char * filename, const char * repertory)
 {
 	TiXmlDocument doc(filename);
 	if(! doc.LoadFile())
@@ -664,7 +664,7 @@ bool xmlMeshLoad(const char * filename, void * data)
 {
     MLOG_DEBUG("xmlMeshLoad " << filename?filename:"NULL");
 	
-	MLevel * level = MEngine::getInstance()->getLevel();
+	Level * level = NeoEngine::getInstance()->getLevel();
 
 	// read document
 	TiXmlDocument doc(filename);
@@ -704,7 +704,7 @@ bool xmlMeshLoad(const char * filename, void * data)
 	}
 
 	// create new mesh
-	MMesh * mesh = (MMesh *)data;
+	Mesh * mesh = (Mesh *)data;
 	mesh->clear();
 
 	char path[256];
@@ -761,8 +761,8 @@ bool xmlMeshLoad(const char * filename, void * data)
 			// load texture
 			getGlobalFilename(path, meshRep, file);
 
-			MTextureRef * texRef = level->loadTexture(path, mipmap);
-			MTexture * texture = mesh->addNewTexture(texRef);
+			TextureRef * texRef = level->loadTexture(path, mipmap);
+			Texture * texture = mesh->addNewTexture(texRef);
 
 			// tile
 			TiXmlElement * tileNode = textureNode->FirstChildElement("tile");
@@ -830,7 +830,7 @@ bool xmlMeshLoad(const char * filename, void * data)
 		TiXmlElement * materialNode = materialsNode->FirstChildElement("Material");
 		for(materialNode; materialNode; materialNode=materialNode->NextSiblingElement("Material"))
 		{
-			MMaterial * material = mesh->addNewMaterial();
+			Material * material = mesh->addNewMaterial();
 
 			int type = 0;
 			materialNode->QueryIntAttribute("type", &type);
@@ -985,11 +985,11 @@ bool xmlMeshLoad(const char * filename, void * data)
 					getGlobalFilename(vertShadPath, meshRep, vertShadFile);
 					getGlobalFilename(fragShadPath, meshRep, fragShadFile);
 
-					MShaderRef * vertShad = level->loadShader(vertShadPath, M_SHADER_VERTEX);
-					MShaderRef * pixShad = level->loadShader(fragShadPath, M_SHADER_PIXEL);
+					ShaderRef * vertShad = level->loadShader(vertShadPath, M_SHADER_VERTEX);
+					ShaderRef * pixShad = level->loadShader(fragShadPath, M_SHADER_PIXEL);
 					if(vertShad && pixShad)
 					{
-						MFXRef * FXRef = level->createFX(vertShad, pixShad);
+						FXRef * FXRef = level->createFX(vertShad, pixShad);
 						material->setFXRef(FXRef);
 					}
 				}
@@ -1017,11 +1017,11 @@ bool xmlMeshLoad(const char * filename, void * data)
 					getGlobalFilename(vertShadPath, meshRep, vertShadFile);
 					getGlobalFilename(fragShadPath, meshRep, fragShadFile);
 
-					MShaderRef * vertShad = level->loadShader(vertShadPath, M_SHADER_VERTEX);
-					MShaderRef * pixShad = level->loadShader(fragShadPath, M_SHADER_PIXEL);
+					ShaderRef * vertShad = level->loadShader(vertShadPath, M_SHADER_VERTEX);
+					ShaderRef * pixShad = level->loadShader(fragShadPath, M_SHADER_PIXEL);
 					if(vertShad && pixShad)
 					{
-						MFXRef * ZFXRef = level->createFX(vertShad, pixShad);
+						FXRef * ZFXRef = level->createFX(vertShad, pixShad);
 						material->setZFXRef(ZFXRef);
 					}
 				}
@@ -1036,7 +1036,7 @@ bool xmlMeshLoad(const char * filename, void * data)
 	{
 	    MLOG_DEBUG("entering Bones node");
 		
-		MArmature * armature = mesh->createArmature();
+		Armature * armature = mesh->createArmature();
 
 		unsigned int b, numBones = 0;
 		bonesNode->QueryUIntAttribute("num", &numBones);
@@ -1054,7 +1054,7 @@ bool xmlMeshLoad(const char * filename, void * data)
 			if(b >= armature->getBonesNumber())
 				break;
 
-			MOBone * bone = armature->getBone(b);
+			OBone * bone = armature->getBone(b);
 
 			const char * name = boneNode->Attribute("name");
 			if(name)
@@ -1118,7 +1118,7 @@ bool xmlMeshLoad(const char * filename, void * data)
 		return true;
 
 	// alloc subMeshs
-	MSubMesh * subMeshs = mesh->allocSubMeshs(numSubMeshs);
+	SubMesh * subMeshs = mesh->allocSubMeshs(numSubMeshs);
 
 	// BoundingBox
 	TiXmlElement * boundingBoxNode = pMeshNode->FirstChildElement("BoundingBox");
@@ -1140,7 +1140,7 @@ bool xmlMeshLoad(const char * filename, void * data)
 	TiXmlElement * SubMeshNode = subMeshsNode->FirstChildElement("SubMesh");
 	for(SubMeshNode; SubMeshNode; SubMeshNode=SubMeshNode->NextSiblingElement("SubMesh"))
 	{
-		MSubMesh * subMesh = subMeshs;
+		SubMesh * subMesh = subMeshs;
 
 		// BoundingBox
 		boundingBoxNode = SubMeshNode->FirstChildElement("BoundingBox");
@@ -1408,7 +1408,7 @@ bool xmlMeshLoad(const char * filename, void * data)
 				displayNode->QueryUIntAttribute("cullFace", &cullFace);
 
 				// create display
-				MDisplay * display = subMesh->addNewDisplay(M_PRIMITIVE_TRIANGLES, begin, size);
+				MaterialDisplay * display = subMesh->addNewDisplay(M_PRIMITIVE_TRIANGLES, begin, size);
 
 				// set material
 				if(material < mesh->getMaterialsNumber())

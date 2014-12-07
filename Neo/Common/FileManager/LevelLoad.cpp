@@ -28,7 +28,7 @@
 //========================================================================
 
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <tinyxml.h>
 
 #include "LevelLoad.h"
@@ -37,11 +37,11 @@ namespace Neo
 {
 
 static char rep[256];
-static MLevel * level;
+static Level * level;
 
 struct LinkTo
 {
-	MObject3d * object;
+	Object3d * object;
 	string parentName;
 };
 
@@ -166,7 +166,7 @@ void readConstraint(TiXmlElement * node, MPhysicsConstraint * constraint)
 	readBool(node, "disableParentCollision", &constraint->disableParentCollision);
 }
 
-void readSceneProperties(TiXmlElement * node, MScene * scene)
+void readSceneProperties(TiXmlElement * node, Scene * scene)
 {
 	// data mode
 	const char * data = node->Attribute("data");
@@ -189,7 +189,7 @@ void readSceneProperties(TiXmlElement * node, MScene * scene)
         scene->setAmbientLight(vector);
 }
 
-void readEntityProperties(TiXmlElement * node, MOEntity * entity)
+void readEntityProperties(TiXmlElement * node, OEntity * entity)
 {
 	// invisible
 	bool value;
@@ -205,7 +205,7 @@ void readEntityProperties(TiXmlElement * node, MOEntity * entity)
         entity->enableOccluder(value);
 }
 
-void readSoundProperties(TiXmlElement * node, MOSound * sound)
+void readSoundProperties(TiXmlElement * node, OSound * sound)
 {
 	// loop
 	bool loop;
@@ -238,7 +238,7 @@ void readSoundProperties(TiXmlElement * node, MOSound * sound)
 		sound->setRelative(relative);
 }
 
-void readTextProperties(TiXmlElement * node, MOText * text)
+void readTextProperties(TiXmlElement * node, OText * text)
 {
 	// size 
 	float size;
@@ -263,14 +263,14 @@ void readTextProperties(TiXmlElement * node, MOText * text)
 		text->setColor(color);
 }
 
-void readTextData(TiXmlElement * node, MOText * text)
+void readTextData(TiXmlElement * node, OText * text)
 {
 	const char * textData = node->GetText();
 	if(textData)
 		text->setText(textData);
 }
 
-void readCameraProperties(TiXmlElement * node, MOCamera * camera)
+void readCameraProperties(TiXmlElement * node, OCamera * camera)
 {
 	// clear color
 	MVector3 clearColor;
@@ -318,7 +318,7 @@ void readCameraProperties(TiXmlElement * node, MOCamera * camera)
         camera->loadSkybox(skyboxTextures);
 }
 
-void readLightProperties(TiXmlElement * node, MOLight * light)
+void readLightProperties(TiXmlElement * node, OLight * light)
 {
 	// radius
 	float radius;
@@ -369,7 +369,7 @@ void readLightProperties(TiXmlElement * node, MOLight * light)
 	}
 }
 
-void readObjectActive(TiXmlElement * node, MObject3d * object)
+void readObjectActive(TiXmlElement * node, Object3d * object)
 {
 	TiXmlElement * activeNode = node->FirstChildElement("active");
 	if(activeNode)
@@ -380,7 +380,7 @@ void readObjectActive(TiXmlElement * node, MObject3d * object)
 	}
 }
 
-void readObjectTransform(TiXmlElement * node, MObject3d * object)
+void readObjectTransform(TiXmlElement * node, Object3d * object)
 {
 	// parent
 	const char * parentName = node->Attribute("parent");
@@ -408,13 +408,13 @@ void readObjectTransform(TiXmlElement * node, MObject3d * object)
 		object->setScale(scale);
 }
 
-void readBehaviorProperties(TiXmlElement * node, MBehavior * behavior)
+void readBehaviorProperties(TiXmlElement * node, Behavior * behavior)
 {
 	unsigned int i;
 	unsigned int size = behavior->getVariablesNumber();
 	for(i=0; i<size; i++)
 	{
-		MVariable variable = behavior->getVariable(i);
+		NeoVariable variable = behavior->getVariable(i);
 
 		M_VARIABLE_TYPE varType = variable.getType();
 		if(varType == M_VARIABLE_NULL)
@@ -454,7 +454,7 @@ void readBehaviorProperties(TiXmlElement * node, MBehavior * behavior)
 			break;
 		case M_VARIABLE_TEXTURE_REF:
 			{
-				MTextureRef** textureRef = (MTextureRef**)variable.getPointer();
+				TextureRef** textureRef = (TextureRef**)variable.getPointer();
 				
 				const char * str = node->Attribute(name);
 				if(str)
@@ -470,7 +470,7 @@ void readBehaviorProperties(TiXmlElement * node, MBehavior * behavior)
 	}
 }
 
-void readBehaviors(TiXmlElement * node, MObject3d * object)
+void readBehaviors(TiXmlElement * node, Object3d * object)
 {
 	if(! node)
 		return;
@@ -478,7 +478,7 @@ void readBehaviors(TiXmlElement * node, MObject3d * object)
 	if(! object)
 		return;
 
-	MBehaviorManager * bManager = MEngine::getInstance()->getBehaviorManager();
+	BehaviorManager * bManager = NeoEngine::getInstance()->getBehaviorManager();
 
 	// check first behavior
 	TiXmlElement * behaviorNode = node->FirstChildElement("Behavior");
@@ -491,14 +491,14 @@ void readBehaviors(TiXmlElement * node, MObject3d * object)
 		// name
 		const char * behaviorName = behaviorNode->Attribute("name");
 
-		MBehaviorCreator * bCreator = bManager->getBehaviorByName(behaviorName);
+		BehaviorCreator * bCreator = bManager->getBehaviorByName(behaviorName);
 		if(! bCreator)
 		{
 			fprintf(stderr, "Warning : unable to load behavior \"%s\"\n", behaviorName);
 			continue;
 		}
 
-		MBehavior * behavior = bCreator->getNewBehavior(object);
+		Behavior * behavior = bCreator->getNewBehavior(object);
 		object->addBehavior(behavior);
 
 		// properties
@@ -568,11 +568,11 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 		return false;
 
 	// get current level
-	MEngine * engine = MEngine::getInstance();
-	MLevel * oldLevel = engine->getLevel();
+	NeoEngine * engine = NeoEngine::getInstance();
+	Level * oldLevel = engine->getLevel();
 
 	// create new level
-	level = (MLevel *)data;
+	level = (Level *)data;
 	if(clearData)
 		level->clear();
 	else
@@ -592,7 +592,7 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 	// scene
 	for(sceneNode; sceneNode; sceneNode=sceneNode->NextSiblingElement())
 	{
-		MScene * scene = level->addNewScene();
+		Scene * scene = level->addNewScene();
 
 		// clear links
 		g_links.clear();
@@ -634,7 +634,7 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 		TiXmlElement * lightNode = sceneNode->FirstChildElement("Light");
 		for(lightNode; lightNode; lightNode=lightNode->NextSiblingElement("Light"))
 		{
-			MOLight * light = scene->addNewLight();
+			OLight * light = scene->addNewLight();
 
 			// name
 			const char * lightName = lightNode->Attribute("name");
@@ -661,7 +661,7 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 		TiXmlElement * cameraNode = sceneNode->FirstChildElement("Camera");
 		for(cameraNode; cameraNode; cameraNode=cameraNode->NextSiblingElement("Camera"))
 		{
-			MOCamera * camera = scene->addNewCamera();
+			OCamera * camera = scene->addNewCamera();
 
 			// name
 			const char * cameraName = cameraNode->Attribute("name");
@@ -694,7 +694,7 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 			// file
 			const char * file = soundNode->Attribute("file");
 			
-			MSoundRef * soundRef = NULL;
+			SoundRef * soundRef = NULL;
 			if(file)
 			{
 				getGlobalFilename(soundFilename, rep, file);
@@ -704,7 +704,7 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 			}
 
 			// create sound
-			MOSound * sound = scene->addNewSound(soundRef);
+			OSound * sound = scene->addNewSound(soundRef);
 			sound->setName(soundName);
 
 			// active
@@ -734,7 +734,7 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 			// file
 			const char * file = entityNode->Attribute("file");
 			
-			MMeshRef * meshRef = NULL;
+			MeshRef * meshRef = NULL;
 			if(file)
 			{
 				getGlobalFilename(meshFilename, rep, file);
@@ -742,7 +742,7 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 			}
 
 			// create entity
-			MOEntity * entity = scene->addNewEntity(meshRef);
+			OEntity * entity = scene->addNewEntity(meshRef);
 			entity->setName(entityName);
 
 			// active
@@ -805,7 +805,7 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 			// file
 			const char * file = textNode->Attribute("file");
 			
-			MFontRef * fontRef = NULL;
+			FontRef * fontRef = NULL;
 			if(file)
 			{
 				getGlobalFilename(textFilename, rep, file);
@@ -815,7 +815,7 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 			}
 
 			// create text
-			MOText * text = scene->addNewText(fontRef);
+			OText * text = scene->addNewText(fontRef);
 			text->setName(textName);
 
 			// active
@@ -848,7 +848,7 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
             const char * objectName = groupNode->Attribute("name");
 
             // create entity
-            MObject3d * object = scene->addNewGroup();
+            Object3d * object = scene->addNewGroup();
             object->setName(objectName);
 
             // active
@@ -866,7 +866,7 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 		for(l=0; l<lSize; l++)
 		{
 			LinkTo * link = &g_links[l];
-			MObject3d * parent = scene->getObjectByName(link->parentName.c_str());
+			Object3d * parent = scene->getObjectByName(link->parentName.c_str());
 			if(parent)
 				link->object->linkTo(parent);
 		}

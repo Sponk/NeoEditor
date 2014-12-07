@@ -28,7 +28,7 @@
 //========================================================================
 
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include "LevelSave.h"
 #include "XmlCommon.h"
 
@@ -158,7 +158,7 @@ void writePhysics(MFile * file, MPhysicsProperties * physicsProperties)
 	}
 }
 
-void writeCameraProperties(MFile * file, MOCamera * camera)
+void writeCameraProperties(MFile * file, OCamera * camera)
 {
 	openAttributeNode(file, "properties", 3);
 	M_fprintf(file, "\n");
@@ -211,7 +211,7 @@ void writeCameraProperties(MFile * file, MOCamera * camera)
 	M_fprintf(file, "\n");
 }
 
-void writeEntityProperties(MFile * file, MOEntity * entity)
+void writeEntityProperties(MFile * file, OEntity * entity)
 {
 	openAttributeNode(file, "properties", 3);
 	M_fprintf(file, "\n");
@@ -233,7 +233,7 @@ void writeEntityProperties(MFile * file, MOEntity * entity)
 	M_fprintf(file, "\n");
 }
 
-void writeSoundProperties(MFile * file, MOSound * sound)
+void writeSoundProperties(MFile * file, OSound * sound)
 {
 	openAttributeNode(file, "properties", 3);
 	M_fprintf(file, "\n");
@@ -271,7 +271,7 @@ void writeSoundProperties(MFile * file, MOSound * sound)
 	M_fprintf(file, "\n");
 }
 
-void writeTextProperties(MFile * file, MOText * text)
+void writeTextProperties(MFile * file, OText * text)
 {
 	openAttributeNode(file, "properties", 3);
 	M_fprintf(file, "\n");
@@ -320,7 +320,7 @@ void writeTextProperties(MFile * file, MOText * text)
 	}
 }
 
-void writeSceneProperties(MFile * file, MScene * scene)
+void writeSceneProperties(MFile * file, Scene * scene)
 {
 	openAttributeNode(file, "properties", 2);
 	M_fprintf(file, "\n");
@@ -358,7 +358,7 @@ void writeSceneProperties(MFile * file, MScene * scene)
 	M_fprintf(file, "\n");
 }
 
-void writeLightProperties(MFile * file, MOLight * light)
+void writeLightProperties(MFile * file, OLight * light)
 {
 	openAttributeNode(file, "properties", 3);
 	M_fprintf(file, "\n");
@@ -415,7 +415,7 @@ void writeLightProperties(MFile * file, MOLight * light)
 	M_fprintf(file, "\n");
 }
 
-void writeObjectTransform(MFile * file, MObject3d * object)
+void writeObjectTransform(MFile * file, Object3d * object)
 {
 	openAttributeNode(file, "active", 3);
 	writeBool(file, "value", object->isActive());
@@ -426,7 +426,7 @@ void writeObjectTransform(MFile * file, MObject3d * object)
 	M_fprintf(file, "\n");
 
 	// parent
-	MObject3d * parent = object->getParent();
+	Object3d * parent = object->getParent();
 	if(parent)
 	{
 		M_fprintf(file, "\t\t\t\t");
@@ -453,7 +453,7 @@ void writeObjectTransform(MFile * file, MObject3d * object)
 	M_fprintf(file, "\n");
 }
 
-void writeBehavior(MFile * file, MBehavior * behavior)
+void writeBehavior(MFile * file, Behavior * behavior)
 {
 	openAttributeNode(file, "Behavior", 3);
 	writeString(file, "name", behavior->getName());
@@ -466,7 +466,7 @@ void writeBehavior(MFile * file, MBehavior * behavior)
 	unsigned int size = behavior->getVariablesNumber();
 	for(i=0; i<size; i++)
 	{
-		MVariable variable = behavior->getVariable(i);
+		NeoVariable variable = behavior->getVariable(i);
 
 		M_VARIABLE_TYPE varType = variable.getType();
 		if(varType == M_VARIABLE_NULL)
@@ -486,18 +486,18 @@ void writeBehavior(MFile * file, MBehavior * behavior)
 	M_fprintf(file, "\n");
 }
 
-void writeBehaviors(MFile * file, MObject3d * object)
+void writeBehaviors(MFile * file, Object3d * object)
 {
 	unsigned int i;
 	unsigned int size = object->getBehaviorsNumber();
 	for(i=0; i<size; i++)
 	{
-		MBehavior * behavior = object->getBehavior(i);
+		Behavior * behavior = object->getBehavior(i);
 		writeBehavior(file, behavior);
 	}
 }
 
-bool xmlLevelSave(MLevel * level, const char * filename)
+bool xmlLevelSave(Level * level, const char * filename)
 {
 	MFile * file = M_fopen(filename, "wt");
 	if(! file)
@@ -523,7 +523,7 @@ bool xmlLevelSave(MLevel * level, const char * filename)
 	unsigned int scnSize = level->getScenesNumber();
 	for(i=0; i<scnSize; i++)
 	{
-		MScene * scene = level->getSceneByIndex(i);
+		Scene * scene = level->getSceneByIndex(i);
 
 		openAttributeNode(file, "Scene", 1);
 		writeString(file, "name", scene->getName());
@@ -547,7 +547,7 @@ bool xmlLevelSave(MLevel * level, const char * filename)
 		writeSceneProperties(file, scene);
 		M_fprintf(file, "\n");
 
-        MObject3d* object;
+        Object3d* object;
         for(int i = 0; i < scene->getObjectsNumber(); i++)
         {
             object = scene->getObjectByIndex(i);
@@ -566,7 +566,7 @@ bool xmlLevelSave(MLevel * level, const char * filename)
 
             case M_OBJECT3D_LIGHT: {
 
-                MOLight* light = static_cast<MOLight*>(object);
+                OLight* light = static_cast<OLight*>(object);
 
                 openAttributeNode(file, "Light", 2);
                 writeString(file, "name", light->getName());
@@ -589,7 +589,7 @@ bool xmlLevelSave(MLevel * level, const char * filename)
 
             case M_OBJECT3D_CAMERA: {
 
-                MOCamera * camera = static_cast<MOCamera*>(object);
+                OCamera * camera = static_cast<OCamera*>(object);
 
                 openAttributeNode(file, "Camera", 2);
                 writeString(file, "name", camera->getName());
@@ -612,7 +612,7 @@ bool xmlLevelSave(MLevel * level, const char * filename)
 
             case M_OBJECT3D_ENTITY: {
 
-                MOEntity * entity = static_cast<MOEntity*>(object);
+                OEntity * entity = static_cast<OEntity*>(object);
 
                 openAttributeNode(file, "Entity", 2);
 
@@ -620,7 +620,7 @@ bool xmlLevelSave(MLevel * level, const char * filename)
                 writeString(file, "name", entity->getName());
 
                 // file
-                MMeshRef * ref = entity->getMeshRef();
+                MeshRef * ref = entity->getMeshRef();
                 if(ref)
                 {
                     const char * meshFile = ref->getFilename();
@@ -668,7 +668,7 @@ bool xmlLevelSave(MLevel * level, const char * filename)
             break;
 
             case M_OBJECT3D_SOUND: {
-                    MOSound * sound = static_cast<MOSound*>(object);
+                    OSound * sound = static_cast<OSound*>(object);
 
                     openAttributeNode(file, "Sound", 2);
 
@@ -679,7 +679,7 @@ bool xmlLevelSave(MLevel * level, const char * filename)
                     const char * soundFile = NULL;
 
                     // sound ref
-                    MSoundRef * ref = sound->getSoundRef();
+                    SoundRef * ref = sound->getSoundRef();
                     if(ref)
                         soundFile = ref->getFilename();
 
@@ -707,7 +707,7 @@ bool xmlLevelSave(MLevel * level, const char * filename)
                 break;
 
             case M_OBJECT3D_TEXT: {
-                    MOText * text = static_cast<MOText*>(object);
+                    OText * text = static_cast<OText*>(object);
 
                     openAttributeNode(file, "Text", 2);
 
@@ -715,10 +715,10 @@ bool xmlLevelSave(MLevel * level, const char * filename)
                     writeString(file, "name", text->getName());
 
                     // font
-                    MFont * font = text->getFont();
+                    Font * font = text->getFont();
                     if(font)
                     {
-                        MFontRef * ref = text->getFontRef();
+                        FontRef * ref = text->getFontRef();
                         const char * fontFile = ref->getFilename();
                         if(fontFile)
                         {

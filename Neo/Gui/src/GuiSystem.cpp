@@ -69,7 +69,7 @@ std::vector<std::string> scriptCallbacks;
 
 void scriptCallback(long int id)
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
     script->callFunction(scriptCallbacks[id].c_str());
 }
 
@@ -79,7 +79,7 @@ void scriptCallback(long int id)
  */
 int enableGui()
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
     if(script->getArgsNumber() == 1)
         GuiSystem::getInstance()->setEnabled(script->getInteger(0) != 0);
 
@@ -88,14 +88,14 @@ int enableGui()
 
 int getMainCanvas()
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
     script->pushPointer(Canvas::getInstance());
     return 1;
 }
 
 int getCanvasClearColor()
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -108,7 +108,7 @@ int getCanvasClearColor()
 
 int setCanvasClearColor()
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 2)
         return 0;
@@ -124,7 +124,7 @@ int setCanvasClearColor()
 
 int createButton()
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 6)
         return 0;
@@ -146,7 +146,7 @@ int createButton()
 
 int createInput()
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 6)
         return 0;
@@ -168,7 +168,7 @@ int createInput()
 
 int createLabel()
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 5)
         return 0;
@@ -185,7 +185,7 @@ int createLabel()
 
 int createSprite()
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 6)
         return 0;
@@ -202,7 +202,7 @@ int createSprite()
 
 int addWidgetToCanvas()
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 2)
         return 0;
@@ -215,7 +215,7 @@ int addWidgetToCanvas()
 
 int setLabel()
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 2)
         return 0;
@@ -228,7 +228,7 @@ int setLabel()
 
 int getLabel()
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -241,7 +241,7 @@ int getLabel()
 
 int setDefaultFontSize()
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -252,7 +252,7 @@ int setDefaultFontSize()
 
 int setWidgetPosition()
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 2)
         return 0;
@@ -268,7 +268,7 @@ int setWidgetPosition()
 
 int setWidgetRotation()
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 2)
         return 0;
@@ -281,7 +281,7 @@ int setWidgetRotation()
 
 int getWidgetRotation()
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -294,7 +294,7 @@ int getWidgetRotation()
 
 int getWidgetPosition()
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -313,7 +313,7 @@ int clearGui()
 
 int setNormalBackground()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(script->getArgsNumber() != 1)
 		return 0;
 
@@ -325,7 +325,7 @@ int setNormalBackground()
 
 int setHoverBackground()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(script->getArgsNumber() != 1)
 		return 0;
 
@@ -337,7 +337,7 @@ int setHoverBackground()
 
 int setHighlightBackground()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(script->getArgsNumber() != 1)
 		return 0;
 
@@ -349,7 +349,7 @@ int setHighlightBackground()
 
 int enableCanvasRenderToTexture()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(script->getArgsNumber() != 2)
 		return 0;
 	
@@ -360,7 +360,7 @@ int enableCanvasRenderToTexture()
 
 int disableCanvasRenderToTexture()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(script->getArgsNumber() != 1)
 		return 0;
 	
@@ -371,7 +371,7 @@ int disableCanvasRenderToTexture()
 
 int createCanvas()
 {
-	MScriptContext* script = MEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	Canvas* c = new Canvas;
 	
 	GuiSystem::getInstance()->addCanvas(c);
@@ -381,7 +381,7 @@ int createCanvas()
 
 int detroyWidget()
 {
-    MScriptContext* script = MEngine::getInstance()->getScriptContext();
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -464,7 +464,7 @@ void GuiSystem::draw()
 {
     unsigned int width, height;
 
-    MEngine::getInstance()->getSystemContext()->getScreenSize(&width, &height);
+    NeoEngine::getInstance()->getSystemContext()->getScreenSize(&width, &height);
     Render::getInstance()->set2D(width, height);
 
     if(m_enabled)

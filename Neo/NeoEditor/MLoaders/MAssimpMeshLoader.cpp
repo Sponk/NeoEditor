@@ -31,7 +31,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 
 #include <MeshSave.h>
 
@@ -39,8 +39,8 @@
 
 using namespace Neo;
 
-static MEngine * engine = MEngine().getInstance();
-static MLevel * level = NULL;
+static NeoEngine * engine = NeoEngine().getInstance();
+static Level * level = NULL;
 
 struct BoneData
 {
@@ -84,7 +84,7 @@ static void countNodes(const aiScene * scene, const aiNode * nd, unsigned int * 
 }
 
 
-static void createArmature(const aiScene * scene, const aiNode * nd, MArmature * armature, MOBone * parent, const MMatrix4x4 & parentMatrix)
+static void createArmature(const aiScene * scene, const aiNode * nd, Armature * armature, OBone * parent, const MMatrix4x4 & parentMatrix)
 {	
 	aiMatrix4x4 nodeMat = nd->mTransformation;
 	aiTransposeMatrix4(&nodeMat);
@@ -95,7 +95,7 @@ static void createArmature(const aiScene * scene, const aiNode * nd, MArmature *
 	if(parent == NULL)
 		matrix = globalMatrix;
 
-	MOBone * bone = armature->addNewBone();
+	OBone * bone = armature->addNewBone();
 	bone->setName(nd->mName.data);
 	bone->linkTo(parent);
 	
@@ -112,9 +112,9 @@ static void createArmature(const aiScene * scene, const aiNode * nd, MArmature *
 		createArmature(scene, nd->mChildren[n], armature, bone, globalMatrix);
 }
 
-static void initBones(const aiScene * scene, const aiMesh * nodeMesh, MMesh * mesh, MSubMesh * subMesh)
+static void initBones(const aiScene * scene, const aiMesh * nodeMesh, Mesh * mesh, SubMesh * subMesh)
 {
-	MArmature * armature = mesh->getArmature();
+	Armature * armature = mesh->getArmature();
 	
 	BoneData bdata;
 	map<unsigned int, SkinData> skinDatas;
@@ -129,7 +129,7 @@ static void initBones(const aiScene * scene, const aiMesh * nodeMesh, MMesh * me
 		if(! armature->getBoneId(nodeBone->mName.data, &boneId))
 			continue;
 		
-		MOBone * bone = armature->getBone(boneId);
+		OBone * bone = armature->getBone(boneId);
 		
 		aiMatrix4x4 offsetMat = nodeBone->mOffsetMatrix;
 		aiTransposeMatrix4(&offsetMat);
@@ -209,7 +209,7 @@ static void initBones(const aiScene * scene, const aiMesh * nodeMesh, MMesh * me
 }
 
 
-static void createSubMesh(const aiScene * scene, const aiNode * nd, MMesh * mesh, MSubMesh * subMeshs, unsigned int * count, const MMatrix4x4 & parentMatrix)
+static void createSubMesh(const aiScene * scene, const aiNode * nd, Mesh * mesh, SubMesh * subMeshs, unsigned int * count, const MMatrix4x4 & parentMatrix)
 {
 	aiMatrix4x4 nodeMat = nd->mTransformation;
 	aiTransposeMatrix4(&nodeMat);
@@ -227,7 +227,7 @@ static void createSubMesh(const aiScene * scene, const aiNode * nd, MMesh * mesh
 		
 		
 		// current sub mesh
-		MSubMesh * subMesh = &(subMeshs[*count]);
+		SubMesh * subMesh = &(subMeshs[*count]);
 	
 		
 		// vertices
@@ -322,7 +322,7 @@ static void createSubMesh(const aiScene * scene, const aiNode * nd, MMesh * mesh
 		
 		// display
 		subMesh->allocDisplays(1);
-		MDisplay * display = subMesh->addNewDisplay(M_PRIMITIVE_TRIANGLES, 0, subMesh->getIndicesSize());
+		MaterialDisplay * display = subMesh->addNewDisplay(M_PRIMITIVE_TRIANGLES, 0, subMesh->getIndicesSize());
 		display->setMaterial(mesh->getMaterial(nodeMesh->mMaterialIndex));
 		
 		// cull mode
@@ -355,7 +355,7 @@ static int getMaratisTick(double tick, double tickPerSec)
 }
 
 
-void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode * node, MMesh * mesh, const char * meshRep, bool rotate90)
+void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode * node, Mesh * mesh, const char * meshRep, bool rotate90)
 {
 	unsigned int i;
 	char globalPath[256];
@@ -394,7 +394,7 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 	for(i=0; i<scene->mNumMaterials; i++)
 	{
 		aiMaterial * mtl = scene->mMaterials[i];
-		MMaterial * material = mesh->addNewMaterial();
+		Material * material = mesh->addNewMaterial();
 		
 		float value;
 		aiColor4D color;
@@ -449,8 +449,8 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 				material->allocTexturesPass(4);
 				
 				getGlobalFilename(globalPath, meshRep, path.C_Str());
-				MTextureRef * texRef = level->loadTexture(globalPath, true);
-				MTexture * texture = mesh->addNewTexture(texRef);
+				TextureRef * texRef = level->loadTexture(globalPath, true);
+				Texture * texture = mesh->addNewTexture(texRef);
 				if(mapmode == aiTextureMapMode_Clamp){
 					texture->setUWrapMode(M_WRAP_CLAMP);
 					texture->setVWrapMode(M_WRAP_CLAMP);
@@ -462,8 +462,8 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 			if(AI_SUCCESS == mtl->GetTexture(aiTextureType_SPECULAR, 0, &path, &mapping, &uvindex, &blend, &op, &mapmode))
 			{
 				getGlobalFilename(globalPath, meshRep, path.C_Str());
-				MTextureRef * texRef = level->loadTexture(globalPath, true);
-				MTexture * texture = mesh->addNewTexture(texRef);
+				TextureRef * texRef = level->loadTexture(globalPath, true);
+				Texture * texture = mesh->addNewTexture(texRef);
 				if(mapmode == aiTextureMapMode_Clamp){
 					texture->setUWrapMode(M_WRAP_CLAMP);
 					texture->setVWrapMode(M_WRAP_CLAMP);
@@ -478,8 +478,8 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 			if(AI_SUCCESS == mtl->GetTexture(aiTextureType_NORMALS, 0, &path, &mapping, &uvindex, &blend, &op, &mapmode))
 			{
 				getGlobalFilename(globalPath, meshRep, path.C_Str());
-				MTextureRef * texRef = level->loadTexture(globalPath, true);
-				MTexture * texture = mesh->addNewTexture(texRef);
+				TextureRef * texRef = level->loadTexture(globalPath, true);
+				Texture * texture = mesh->addNewTexture(texRef);
 				if(mapmode == aiTextureMapMode_Clamp){
 					texture->setUWrapMode(M_WRAP_CLAMP);
 					texture->setVWrapMode(M_WRAP_CLAMP);
@@ -494,8 +494,8 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 			if(AI_SUCCESS == mtl->GetTexture(aiTextureType_EMISSIVE, 0, &path, &mapping, &uvindex, &blend, &op, &mapmode))
 			{
 				getGlobalFilename(globalPath, meshRep, path.C_Str());
-				MTextureRef * texRef = level->loadTexture(globalPath, true);
-				MTexture * texture = mesh->addNewTexture(texRef);
+				TextureRef * texRef = level->loadTexture(globalPath, true);
+				Texture * texture = mesh->addNewTexture(texRef);
 				if(mapmode == aiTextureMapMode_Clamp){
 					texture->setUWrapMode(M_WRAP_CLAMP);
 					texture->setVWrapMode(M_WRAP_CLAMP);
@@ -524,7 +524,7 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 		// create armature
 		if(nb_bones > 0)
 		{
-			MArmature * armature = mesh->createArmature();
+			Armature * armature = mesh->createArmature();
 			
 			armature->allocBones(nb_bones);
 			createArmature(scene, scene->mRootNode, armature, NULL, rootMatrix);
@@ -532,7 +532,7 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 		}
 		
 		// create subMeshs
-		MSubMesh * subMeshs = mesh->allocSubMeshs(nb_subMeshs);
+		SubMesh * subMeshs = mesh->allocSubMeshs(nb_subMeshs);
 		
 		unsigned int count = 0;
 		createSubMesh(scene, node, mesh, subMeshs, &count, rootMatrix);
@@ -560,20 +560,20 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 	// animation
 	if(mesh->getArmature() && scene->mNumAnimations > 0)
 	{
-		MArmature * armature = mesh->getArmature();
+		Armature * armature = mesh->getArmature();
 		
 		
 		char maaName[256];
 		sprintf(maaName, "%s.maa", filename);
 		
 		
-		MArmatureAnim * armatureAnim = MArmatureAnim::getNew();
+		ArmatureAnim * armatureAnim = ArmatureAnim::getNew();
 		
-		MArmatureAnimRef * armatureAnimRef = MArmatureAnimRef::getNew(armatureAnim, maaName);
+		ArmatureAnimRef * armatureAnimRef = ArmatureAnimRef::getNew(armatureAnim, maaName);
 		level->getArmatureAnimManager()->addRef(armatureAnimRef);
 		mesh->setArmatureAnimRef(armatureAnimRef);
 		
-		MAnimRange * animRanges = mesh->allocAnimsRanges(scene->mNumAnimations);
+		AnimRange * animRanges = mesh->allocAnimsRanges(scene->mNumAnimations);
 		
 		
 		// armature anim
@@ -581,7 +581,7 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 		{
 			unsigned int a, aSize = scene->mNumAnimations;
 		
-			MObject3dAnim * bonesAnim = armatureAnim->allocBonesAnim(armature->getBonesNumber());
+			Object3dAnim * bonesAnim = armatureAnim->allocBonesAnim(armature->getBonesNumber());
 		
 			
 			// node infos (for multiple anims merging)
@@ -614,7 +614,7 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 					unsigned int boneId;
 					if(armature->getBoneId(mit->first.c_str(), &boneId))
 					{
-						MObject3dAnim * boneAnim = &(bonesAnim[boneId]);
+						Object3dAnim * boneAnim = &(bonesAnim[boneId]);
 					
 						if(mit->second.nbKeyPos > 0)
 							boneAnim->allocPositionKeys(mit->second.nbKeyPos);
@@ -655,11 +655,11 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 					{
 						unsigned int k;
 						
-						MObject3dAnim * boneAnim = &(bonesAnim[boneId]);
+						Object3dAnim * boneAnim = &(bonesAnim[boneId]);
 						
-						MKey * posKeys = boneAnim->getPositionKeys();
-						MKey * rotKeys = boneAnim->getRotationKeys();
-						MKey * scaleKeys = boneAnim->getScaleKeys();
+						Key * posKeys = boneAnim->getPositionKeys();
+						Key * rotKeys = boneAnim->getRotationKeys();
+						Key * scaleKeys = boneAnim->getScaleKeys();
 						
 						
 						// pos
@@ -746,7 +746,7 @@ bool M_loadAssimpMesh(const char * filename, void * data)
 	level = engine->getLevel();
 	
 	// get mesh
-	MMesh * mesh = (MMesh *)data;
+	Mesh * mesh = (Mesh *)data;
 	
 	// mesh rep
 	char meshRep[256];
@@ -800,7 +800,7 @@ bool M_importAssimpMeshes(const char * filename)
 	
 	// level
 	level = engine->getLevel();
-	MScene * curScene = level->getCurrentScene();
+	Scene * curScene = level->getCurrentScene();
 	
 	// mesh rep
 	char meshRep[256];
@@ -841,8 +841,8 @@ bool M_importAssimpMeshes(const char * filename)
 	
 	
 	// mesh
-	MMeshRef * meshRef = level->loadMesh(meshName);
-	MMesh * mesh = meshRef->getMesh();
+	MeshRef * meshRef = level->loadMesh(meshName);
+	Mesh * mesh = meshRef->getMesh();
 
 	// read assimp root node
 	readAssimpMesh("root", scene, scene->mRootNode, mesh, meshRep, rotate90);
@@ -851,11 +851,11 @@ bool M_importAssimpMeshes(const char * filename)
 	// add to scene and save xml mesh
 	if(mesh->getSubMeshsNumber() > 0)
 	{
-		MOEntity * entity = curScene->addNewEntity(meshRef);
+		OEntity * entity = curScene->addNewEntity(meshRef);
 		entity->setName(nodeName);
 		
 		// save
-		MArmatureAnimRef * maaRef = mesh->getArmatureAnimRef();
+		ArmatureAnimRef * maaRef = mesh->getArmatureAnimRef();
 		//MMaterialsAnimRef * mmaRef = mesh->getMaterialsAnimRef();
 		//MTexturesAnimRef * mtaRef = mesh->getTexturesAnimRef();
 		

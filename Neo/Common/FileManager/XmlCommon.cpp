@@ -28,7 +28,7 @@
 //========================================================================
 
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <tinyxml.h>
 #include "XmlCommon.h"
 
@@ -142,7 +142,7 @@ void writeFilename(MFile * file, const char * name, const char * filename, const
 		M_fprintf(file, sep);
 }
 
-void writeVariable(MFile * file, MVariable * variable, const char * workingDirectory, const char * sep)
+void writeVariable(MFile * file, NeoVariable * variable, const char * workingDirectory, const char * sep)
 {
     const char * name = variable->getName();
     
@@ -172,7 +172,7 @@ void writeVariable(MFile * file, MVariable * variable, const char * workingDirec
 			break;
 		case M_VARIABLE_TEXTURE_REF:
         {
-            MTextureRef * textureRef = *(MTextureRef **)variable->getPointer();
+            TextureRef * textureRef = *(TextureRef **)variable->getPointer();
             if(textureRef)
 				writeFilename(file, name, textureRef->getFilename(), workingDirectory);
             break;

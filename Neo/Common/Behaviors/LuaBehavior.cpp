@@ -28,9 +28,8 @@
 //========================================================================
 
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <LuaScript.h>
-#include <MLog.h>
 #include <lua.hpp>
 #include <map>
 #include <LuaBehavior.h>
@@ -41,14 +40,14 @@ using namespace Neo;
 // Init
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-LuaBehavior::LuaBehavior(MObject3d * parentObject):
-MBehavior(parentObject),
+LuaBehavior::LuaBehavior(Object3d * parentObject):
+Behavior(parentObject),
 m_scriptFile(""),
 m_init(false)
 {}
 
-LuaBehavior::LuaBehavior(LuaBehavior & behavior, MObject3d * parentObject):
-MBehavior(parentObject),
+LuaBehavior::LuaBehavior(LuaBehavior & behavior, Object3d * parentObject):
+Behavior(parentObject),
 m_scriptFile(behavior.m_scriptFile),
 m_init(false)
 {}
@@ -61,12 +60,12 @@ void LuaBehavior::destroy(void)
 	delete this;
 }
 
-MBehavior * LuaBehavior::getNew(MObject3d * parentObject)
+Behavior * LuaBehavior::getNew(Object3d * parentObject)
 {
     return new LuaBehavior(parentObject);
 }
 
-MBehavior * LuaBehavior::getCopy(MObject3d * parentObject)
+Behavior * LuaBehavior::getCopy(Object3d * parentObject)
 {
     return new LuaBehavior(*this, parentObject);
 }
@@ -78,7 +77,7 @@ MBehavior * LuaBehavior::getCopy(MObject3d * parentObject)
 
 unsigned int LuaBehavior::getVariablesNumber(void)
 {
-    MEngine* engine = MEngine::getInstance();
+    NeoEngine* engine = NeoEngine::getInstance();
     // TODO: New variable type for paths!
     std::vector<std::string> names;
     if(!m_init)
@@ -201,15 +200,15 @@ unsigned int LuaBehavior::getVariablesNumber(void)
     return m_variables.size() + 1;
 }
 
-MVariable LuaBehavior::getVariable(unsigned int id)
+NeoVariable LuaBehavior::getVariable(unsigned int id)
 {
 	switch(id)
 	{
 	case 0:
-		return MVariable("scriptFile", &m_scriptFile, M_VARIABLE_STRING);
+		return NeoVariable("scriptFile", &m_scriptFile, M_VARIABLE_STRING);
     default:
         if(id - 1 > m_variables.size())
-            return MVariable("NULL", NULL, M_VARIABLE_NULL);
+            return NeoVariable("NULL", NULL, M_VARIABLE_NULL);
 
         return *m_variables[id-1];
     }
@@ -222,9 +221,9 @@ MVariable LuaBehavior::getVariable(unsigned int id)
 
 void LuaBehavior::update(void)
 {
-	MEngine * engine = MEngine::getInstance();
-	MGame * game = engine->getGame();
-	MObject3d * parent = getParentObject();
+	NeoEngine * engine = NeoEngine::getInstance();
+	NeoGame * game = engine->getGame();
+	Object3d * parent = getParentObject();
 
     if(! game->isRunning())
             return;

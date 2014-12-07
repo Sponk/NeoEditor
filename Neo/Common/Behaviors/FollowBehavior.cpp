@@ -28,7 +28,7 @@
 //========================================================================
 
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <FollowBehavior.h>
 
 using namespace Neo;
@@ -37,15 +37,15 @@ using namespace Neo;
 // Init
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-FollowBehavior::FollowBehavior(MObject3d * parentObject):
-MBehavior(parentObject),
+FollowBehavior::FollowBehavior(Object3d * parentObject):
+Behavior(parentObject),
 m_local(false),
 m_delay(10),
 m_targetName("none")
 {}
 
-FollowBehavior::FollowBehavior(FollowBehavior & behavior, MObject3d * parentObject):
-MBehavior(parentObject),
+FollowBehavior::FollowBehavior(FollowBehavior & behavior, Object3d * parentObject):
+Behavior(parentObject),
 m_local(behavior.m_local),
 m_delay(behavior.m_delay),
 m_offset(behavior.m_offset),
@@ -60,12 +60,12 @@ void FollowBehavior::destroy(void)
 	delete this;
 }
 
-MBehavior * FollowBehavior::getNew(MObject3d * parentObject)
+Behavior * FollowBehavior::getNew(Object3d * parentObject)
 {
 	return new FollowBehavior(parentObject);
 }
 
-MBehavior * FollowBehavior::getCopy(MObject3d * parentObject)
+Behavior * FollowBehavior::getCopy(Object3d * parentObject)
 {
 	return new FollowBehavior(*this, parentObject);
 }
@@ -79,20 +79,20 @@ unsigned int FollowBehavior::getVariablesNumber(void){
 	return 4;
 }
 
-MVariable FollowBehavior::getVariable(unsigned int id)
+NeoVariable FollowBehavior::getVariable(unsigned int id)
 {
 	switch(id)
 	{
 	default:
-		return MVariable("NULL", NULL, M_VARIABLE_NULL);
+		return NeoVariable("NULL", NULL, M_VARIABLE_NULL);
 	case 0:
-		return MVariable("target", &m_targetName, M_VARIABLE_STRING);
+		return NeoVariable("target", &m_targetName, M_VARIABLE_STRING);
 	case 1:
-		return MVariable("delay", &m_delay, M_VARIABLE_FLOAT);
+		return NeoVariable("delay", &m_delay, M_VARIABLE_FLOAT);
 	case 2:
-		return MVariable("offset", &m_offset, M_VARIABLE_VEC3);
+		return NeoVariable("offset", &m_offset, M_VARIABLE_VEC3);
 	case 3:
-		return MVariable("local", &m_local, M_VARIABLE_BOOL);
+		return NeoVariable("local", &m_local, M_VARIABLE_BOOL);
 	}
 }
 
@@ -103,19 +103,19 @@ MVariable FollowBehavior::getVariable(unsigned int id)
 
 void FollowBehavior::update(void)
 {
-	MEngine * engine = MEngine::getInstance();
-	MGame * game = engine->getGame();
-	MLevel * level = engine->getLevel();
-	MScene * scene = level->getCurrentScene();
+	NeoEngine * engine = NeoEngine::getInstance();
+	NeoGame * game = engine->getGame();
+	Level * level = engine->getLevel();
+	Scene * scene = level->getCurrentScene();
 
-	MObject3d * parent = getParentObject();
+	Object3d * parent = getParentObject();
 
 	const char * targetName = m_targetName.getSafeString();
 	if(strcmp(targetName, "none") == 0)
 		return;
 
 	// target object
-	MObject3d * object = scene->getObjectByName(targetName);
+	Object3d * object = scene->getObjectByName(targetName);
 	if(! object)
 		return;
 
@@ -129,7 +129,7 @@ void FollowBehavior::update(void)
 
 	if(parent->getType() == M_OBJECT3D_ENTITY)
 	{
-		MOEntity * entity = (MOEntity *)parent;
+		OEntity * entity = (OEntity *)parent;
 		MPhysicsProperties * phyProps = entity->getPhysicsProperties();
 		if(phyProps)
 		{

@@ -33,10 +33,11 @@
  */
 
 #include <Render.h>
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <GuiSystem.h>
 
 using namespace Neo::Gui;
+using namespace Neo;
 
 const char* m_colorOnlyVertShader =
 
@@ -91,7 +92,7 @@ Render::Render() :
 
 void Render::drawColoredQuad(float x, float y, float w, float h, MVector4 color, float rotation)
 {
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     // Don't render anything if there is nothing to render
     if(color.z == 0)
@@ -159,7 +160,7 @@ void Render::drawColoredQuad(float x, float y, float w, float h, MVector4 color,
 
 void Render::drawTexturedQuad(float x, float y, float w, float h, int texture, float rotation)
 {
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     if(m_texturedFx == 0)
     {
@@ -237,7 +238,7 @@ void Render::drawTexturedQuad(float x, float y, float w, float h, int texture, f
 
 void Render::set2D(float w, float h)
 {
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
     render->setViewport(0, 0, w, h);
 
     // set ortho projection
@@ -252,7 +253,7 @@ void Render::set2D(float w, float h)
 
 void Render::loadShader(const char* vert, const char* frag, unsigned int* fx)
 {
-    MRenderingContext* render = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
 
     unsigned int m_vertShad, m_pixShad;
     render->createVertexShader(&m_vertShad);
@@ -271,9 +272,9 @@ void Render::loadShader(const char* vert, const char* frag, unsigned int* fx)
     }
 }
 
-void Render::drawText(MOText* text, float x, float y)
+void Render::drawText(OText* text, float x, float y)
 {
-    MRenderingContext* renderContext = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext* renderContext = NeoEngine::getInstance()->getRenderingContext();
 
     text->setPosition(MVector3(x, y, 0));
     text->updateMatrix();
@@ -283,23 +284,23 @@ void Render::drawText(MOText* text, float x, float y)
 
     renderContext->enableTexture();
 
-    MEngine::getInstance()->getRenderer()->drawText(text);
+    NeoEngine::getInstance()->getRenderer()->drawText(text);
     renderContext->disableTexture();
     renderContext->popMatrix();
 }
 
-MOText* Render::createText(const char* font, float size)
+OText* Render::createText(const char* font, float size)
 {
     if(!font)
         return NULL;
 
-    MSystemContext* system = MEngine::getInstance()->getSystemContext();
+    MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
 
     char file[256];
     getGlobalFilename(file, system->getWorkingDirectory(), font);
 
-    MOText* text;
-    text = new MOText(MEngine::getInstance()->getLevel()->loadFont(file));
+    OText* text;
+    text = new OText(NeoEngine::getInstance()->getLevel()->loadFont(file));
     text->setSize(size);
 
     return text;

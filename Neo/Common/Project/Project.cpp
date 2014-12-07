@@ -28,7 +28,7 @@
 //========================================================================
 
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <tinyxml.h>
 
 #include "Project.h"
@@ -73,7 +73,7 @@ bool Project::loadXML(const char * filename)
 
     // Game config
     TiXmlElement * gameNode = rootNode->FirstChildElement("Game");
-    MGame* game = MEngine::getInstance()->getGame();
+    NeoGame* game = NeoEngine::getInstance()->getGame();
     if(gameNode)
     {
        const char* vertShad = gameNode->Attribute("vertex_shader");
@@ -144,7 +144,7 @@ bool Project::saveXML(const char * filename)
 	fprintf(file, "<Maratis version=\"%s\">\n\n", version);
 
     // Write game config (post effects etc.)
-    MGame* game = MEngine::getInstance()->getGame();
+    NeoGame* game = NeoEngine::getInstance()->getGame();
     if(game != NULL && game->hasPostEffects())
     {
         fprintf(file, "<Game vertex_shader=\"%s\" fragment_shader=\"%s\" resolution=\"%f\"/>\n",

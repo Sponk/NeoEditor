@@ -6,7 +6,7 @@
 #include <FL/gl.h>
 #include <FL/Fl_Gl_Window.H>
 #include <MCore.h>
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <vector>
 
 #include "PostProcessor.h"
@@ -20,7 +20,7 @@ public:
   bool maratis_init;
   bool hasPostEffects() { return m_postProcessing; }
   PostProcessor* getPostProcessor() { return &m_postProcessor; }
-  void loadPostEffectsFromGame(MGame* game);
+  void loadPostEffectsFromGame(Neo::NeoGame* game);
 
   void resize(int x, int y, int w, int h);
 
@@ -38,6 +38,6 @@ private:
   PostProcessor m_postProcessor;
 };
 
-bool getNearestRaytracedDistance(MMesh * mesh, MMatrix4x4 * matrix, const MVector3 & origin, const MVector3 & dest, float * distance, MOEntity * entity = NULL);
+bool getNearestRaytracedDistance(Neo::Mesh * mesh, MMatrix4x4 * matrix, const MVector3 & origin, const MVector3 & dest, float * distance, Neo::OEntity * entity = NULL);
 
 #endif

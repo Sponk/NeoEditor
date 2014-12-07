@@ -22,7 +22,7 @@
 //
 //========================================================================
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <Project.h>
 
 #include "MPublisher.h"
@@ -56,7 +56,7 @@ const char* getPubDir()
     if(!s_pubDir.empty())
         return s_pubDir.c_str();
 
-	MEngine* engine = MEngine::getInstance();
+	NeoEngine* engine = NeoEngine::getInstance();
 	MSystemContext* system = engine->getSystemContext();
 
 	char dir[256];
@@ -76,7 +76,7 @@ const char* getDataDir()
 
 MPackage openProjectPackage(const char* projName)
 {
-	MEngine* engine = MEngine::getInstance();
+	NeoEngine* engine = NeoEngine::getInstance();
 	MSystemContext* system = engine->getSystemContext();
 
 	char projFile[256];
@@ -125,7 +125,7 @@ class MPublishEvent##dir##Package : public MPublishEvent \
 { \
 	void	execute(const char* projName) \
 	{ \
-		MEngine* engine = MEngine::getInstance(); \
+		NeoEngine* engine = NeoEngine::getInstance(); \
 		MSystemContext* system = engine->getSystemContext(); \
 		char directory[256], localFilename[256]; \
 		getGlobalFilename(directory, system->getWorkingDirectory(), #dir); \
@@ -154,7 +154,7 @@ class MPublishEvent##dir : public MPublishEvent \
 { \
 	void	execute(const char* projName) \
 	{ \
-		MEngine* engine = MEngine::getInstance(); \
+		NeoEngine* engine = NeoEngine::getInstance(); \
 		MSystemContext* system = engine->getSystemContext(); \
 		char directory[256]; \
 		getGlobalFilename(directory, system->getWorkingDirectory(), #dir); \
@@ -179,7 +179,7 @@ class MPublishEventMeshsPackage : public MPublishEvent
 {
 	void execute(const char* projName)
 	{
-		MEngine* engine = MEngine::getInstance();
+		NeoEngine* engine = NeoEngine::getInstance();
 		MSystemContext* system = engine->getSystemContext();
 		MPackageManager* packageManager = engine->getPackageManager();
 
@@ -188,14 +188,14 @@ class MPublishEventMeshsPackage : public MPublishEvent
 		vector<string> files;
 		readDirectory(directory, &files, 1, 1);
 
-		MLevel* currentLevel = engine->getLevel();
-		MLevel* tempLevel = new MLevel();
+		Level* currentLevel = engine->getLevel();
+		Level* tempLevel = new Level();
 		engine->setLevel(tempLevel);
 
-		MMesh* mesh = MMesh::getNew();
-		MArmatureAnim* armAnim = MArmatureAnim::getNew();
-		MTexturesAnim* texAnim = MTexturesAnim::getNew();
-		MMaterialsAnim* matAnim = MMaterialsAnim::getNew();
+		Mesh* mesh = Mesh::getNew();
+		ArmatureAnim* armAnim = ArmatureAnim::getNew();
+		TexturesAnim* texAnim = TexturesAnim::getNew();
+		MaterialsAnim* matAnim = MaterialsAnim::getNew();
 
 		// open package and scan meshes
 		MPackage package = openProjectPackage(projName);
@@ -235,7 +235,7 @@ class MPublishEventMeshsPackage : public MPublishEvent
 					binarized = exportMeshBin((files[i] + "._bin").c_str(), mesh);
 					
 					// try to export animation
-					MArmatureAnimRef * maaRef = mesh->getArmatureAnimRef();
+					ArmatureAnimRef * maaRef = mesh->getArmatureAnimRef();
 					if(maaRef)
 					{
 						exportArmatureAnimBin((files[i] + ".maa._bin").c_str(), maaRef->getArmatureAnim());
@@ -367,7 +367,7 @@ void copySysWindows(const char* projName)
 	const char * appName = "NeoPlayer.exe";
 #endif
 
-	MEngine* engine = MEngine::getInstance();
+	NeoEngine* engine = NeoEngine::getInstance();
 	MSystemContext* system = engine->getSystemContext();
 
 	char filename[256];
@@ -407,7 +407,7 @@ void copySysOSX(const char* projName)
 #endif
 
 	MWindow * window = MWindow::getInstance();
-	MEngine* engine = MEngine::getInstance();
+	NeoEngine* engine = NeoEngine::getInstance();
 	MSystemContext* system = engine->getSystemContext();
 
 	char filename[256];
@@ -458,7 +458,7 @@ void copySysLinux(const char* projName)
 	const char * appName = "NeoPlayer";
 #endif
 
-	MEngine* engine = MEngine::getInstance();
+	NeoEngine* engine = NeoEngine::getInstance();
 	MSystemContext* system = engine->getSystemContext();
 
 	char filename[256];
@@ -529,7 +529,7 @@ class MPublishEventCopyGame : public MPublishEvent
 {
 	void	execute(const char* projName)
 	{
-		MEngine* engine = MEngine::getInstance();
+		NeoEngine* engine = NeoEngine::getInstance();
 		MSystemContext* system = engine->getSystemContext();
 
 		char filename[256];

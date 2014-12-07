@@ -27,8 +27,10 @@
 //
 //========================================================================
 
-#include "../Includes/MEngine.h"
+#include "../Includes/NeoEngine.h"
 #include <Shiny.h>
+
+using namespace Neo;
 
 static unsigned int s_renderBufferId = 0;
 
@@ -42,23 +44,23 @@ PROFILE_SHARED_DEFINE(SceneLayers);
 // RENDER
 PROFILE_SHARED_DEFINE(GameRender);
 
-MGame::MGame(void):
+NeoGame::NeoGame(void):
 m_isRunning(false)
 {}
 
-MGame::~MGame(void)
+NeoGame::~NeoGame(void)
 {
-	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 	// delete frame buffer
 	if(s_renderBufferId != 0)
 		render->deleteFrameBuffer(&s_renderBufferId);
 }
 
-void MGame::update(void)
+void NeoGame::update(void)
 {
     PROFILE_SHARED_BLOCK(GameUpdate);
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	MScriptContext * scriptContext = engine->getScriptContext();
 
     PROFILE_SHARED_BEGIN(Scripts);
@@ -68,12 +70,12 @@ void MGame::update(void)
     PROFILE_END();
 
 	// get level
-	MLevel * level = MEngine::getInstance()->getLevel();
+	Level * level = NeoEngine::getInstance()->getLevel();
 	if(! level)
 		return;
 
 	// get current scene
-	MScene * scene = level->getCurrentScene();
+	Scene * scene = level->getCurrentScene();
 	if(! scene)
 		return;
 
@@ -95,13 +97,13 @@ void MGame::update(void)
 
     PROFILE_SHARED_BEGIN(SceneLayers);
 	// update scene layer
-	MOCamera * camera = scene->getCurrentCamera();
+	OCamera * camera = scene->getCurrentCamera();
 	if(camera)
 	{
 		unsigned int sceneLayerId = camera->getSceneLayer();
 		if(sceneLayerId > 0 && sceneLayerId <= level->getScenesNumber())
 		{
-			MScene * sceneLayer = level->getSceneByIndex(sceneLayerId-1);
+			Scene * sceneLayer = level->getSceneByIndex(sceneLayerId-1);
 
 			sceneLayer->updateObjectsBehaviors();
 			sceneLayer->update();
@@ -114,18 +116,18 @@ void MGame::update(void)
 	engine->getInputContext()->flush();
 }
 
-void MGame::draw(void)
+void NeoGame::draw(void)
 {
     PROFILE_SHARED_BLOCK(GameRender);
-	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 	// get level
-	MLevel * level = MEngine::getInstance()->getLevel();
+	Level * level = NeoEngine::getInstance()->getLevel();
 	if(! level)
 		return;
 
 	// get current scene
-	MScene * scene = level->getCurrentScene();
+	Scene * scene = level->getCurrentScene();
 	if(! scene)
 		return;
 
@@ -141,7 +143,7 @@ void MGame::draw(void)
 		unsigned int c, cSize = scene->getCamerasNumber();
 		for(c=0; c<cSize; c++)
 		{
-			MOCamera * camera = scene->getCameraByIndex(c);
+			OCamera * camera = scene->getCameraByIndex(c);
 			
 			if(camera->isActive() && camera->getRenderColorTexture())
 			{
@@ -151,8 +153,8 @@ void MGame::draw(void)
 					recoverViewport = true;
 				}
 
-				MTextureRef * colorTexture = camera->getRenderColorTexture();
-				MTextureRef * depthTexture = camera->getRenderDepthTexture();
+				TextureRef * colorTexture = camera->getRenderColorTexture();
+				TextureRef * depthTexture = camera->getRenderDepthTexture();
 
 				unsigned int width = colorTexture->getWidth();
 				unsigned int height = colorTexture->getHeight();
@@ -195,7 +197,7 @@ void MGame::draw(void)
 	if(scene->getCamerasNumber() == 0)
 	{
 		// draw scene with default camera
-		MOCamera camera;
+		OCamera camera;
 
 		render->setClearColor(camera.getClearColor());
 		render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
@@ -207,7 +209,7 @@ void MGame::draw(void)
 	}
 	else
 	{
-		MOCamera * camera = scene->getCurrentCamera();
+		OCamera * camera = scene->getCurrentCamera();
 
 		// draw current scene
         if(!camera->getRenderColorTexture() && (!m_postEffectsEnabled || !m_postProcessor.draw(camera)))
@@ -226,8 +228,8 @@ void MGame::draw(void)
 		unsigned int sceneLayerId = camera->getSceneLayer();
 		if(sceneLayerId > 0 && sceneLayerId <= level->getScenesNumber())
 		{
-			MScene * sceneLayer = level->getSceneByIndex(sceneLayerId-1);
-			MOCamera * layerCamera = sceneLayer->getCurrentCamera();
+			Scene * sceneLayer = level->getSceneByIndex(sceneLayerId-1);
+			OCamera * layerCamera = sceneLayer->getCurrentCamera();
 			if(layerCamera)
 			{
 				layerCamera->enable();
@@ -242,15 +244,15 @@ void MGame::draw(void)
 	}
 }
 
-void MGame::onBeginScene(void)
+void NeoGame::onBeginScene(void)
 {
 	// get level
-	MLevel * level = MEngine::getInstance()->getLevel();
+	Level * level = NeoEngine::getInstance()->getLevel();
 	if(! level)
 		return;
 
 	// get current scene
-	MScene * scene = level->getCurrentScene();
+	Scene * scene = level->getCurrentScene();
 	if(! scene)
 		return;
 
@@ -268,18 +270,18 @@ void MGame::onBeginScene(void)
     }
 }
 
-void MGame::onEndScene(void)
+void NeoGame::onEndScene(void)
 {
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	engine->getPhysicsContext()->clear();
 
 	// get level
-	MLevel * level = MEngine::getInstance()->getLevel();
+	Level * level = NeoEngine::getInstance()->getLevel();
 	if(! level)
 		return;
 
 	// get current scene
-	MScene * scene = level->getCurrentScene();
+	Scene * scene = level->getCurrentScene();
 	if(! scene)
 		return;
 

@@ -33,6 +33,6 @@
 
 namespace Neo
 {
-bool xmlLevelSave(MLevel * level, const char * filename);
+bool xmlLevelSave(Level * level, const char * filename);
 }
 #endif

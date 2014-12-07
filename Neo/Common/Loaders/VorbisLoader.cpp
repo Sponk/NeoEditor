@@ -33,7 +33,7 @@
 #include "vorbis/vorbisfile.h"
 
 #include <MCore.h>
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include "VorbisLoader.h"
 
 namespace Neo

@@ -33,13 +33,13 @@
 
 namespace Neo
 {
-class LookAtBehavior : public MBehavior
+class LookAtBehavior : public Behavior
 {
 public:
 
 	// constructors / destructors
-    LookAtBehavior(MObject3d * parentObject);
-    LookAtBehavior(LookAtBehavior & behavior, MObject3d * parentObject);
+    LookAtBehavior(Object3d * parentObject);
+    LookAtBehavior(LookAtBehavior & behavior, Object3d * parentObject);
     ~LookAtBehavior(void);
 
 private:
@@ -53,10 +53,10 @@ public:
 	void destroy(void);
 
 	// get new
-	static MBehavior * getNew(MObject3d * parentObject);
+	static Behavior * getNew(Object3d * parentObject);
 
 	// get copy
-	MBehavior * getCopy(MObject3d * parentObject);
+	Behavior * getCopy(Object3d * parentObject);
 
 	// name
 	static const char * getStaticName(void){ return "LookAt"; }
@@ -68,7 +68,7 @@ public:
 
 	// variables
 	unsigned int getVariablesNumber(void);
-	MVariable getVariable(unsigned int id);
+	NeoVariable getVariable(unsigned int id);
 };
 }
 #endif

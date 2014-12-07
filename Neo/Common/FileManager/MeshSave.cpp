@@ -27,14 +27,14 @@
 //
 //========================================================================
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include "MeshSave.h"
 #include "XmlCommon.h"
 
 namespace Neo
 {
 // tools
-static void writeKey(MFile * file, MKey * key, M_VARIABLE_TYPE type)
+static void writeKey(MFile * file, Key * key, M_VARIABLE_TYPE type)
 {
 	openAttributeNode(file, "k", 3);
 
@@ -87,7 +87,7 @@ static void writeKey(MFile * file, MKey * key, M_VARIABLE_TYPE type)
 	closeAttributeNode(file, "\n");
 }
 
-static void writeKeys(MFile * file, const char * name, MKey * keys, M_VARIABLE_TYPE type, unsigned int keysNumber)
+static void writeKeys(MFile * file, const char * name, Key * keys, M_VARIABLE_TYPE type, unsigned int keysNumber)
 {
 	if(keysNumber > 0)
 	{
@@ -104,7 +104,7 @@ static void writeKeys(MFile * file, const char * name, MKey * keys, M_VARIABLE_T
 }
 
 
-static int getTextureId(MMesh * mesh, MTexture * texture)
+static int getTextureId(Mesh * mesh, Texture * texture)
 {
 	unsigned int t, texturesNumber = mesh->getTexturesNumber();
 	for(t=0; t<texturesNumber; t++)
@@ -116,7 +116,7 @@ static int getTextureId(MMesh * mesh, MTexture * texture)
 	return -1;
 }
 
-static int getMaterialId(MMesh * mesh, MMaterial * material)
+static int getMaterialId(Mesh * mesh, Material * material)
 {
 	unsigned int m, materialsNumber = mesh->getMaterialsNumber();
 	for(m=0; m<materialsNumber; m++)
@@ -130,7 +130,7 @@ static int getMaterialId(MMesh * mesh, MMaterial * material)
 
 
 // Mesh export
-bool xmlMeshSave(const char * filename, MMesh * mesh)
+bool xmlMeshSave(const char * filename, Mesh * mesh)
 {
 	char rep[256];
 	
@@ -158,9 +158,9 @@ bool xmlMeshSave(const char * filename, MMesh * mesh)
 	// Animation
 	{
 		// anim refs
-		MArmatureAnimRef * armatureAnimRef = mesh->getArmatureAnimRef();
-		MTexturesAnimRef * texturesAnimRef = mesh->getTexturesAnimRef();
-		MMaterialsAnimRef * materialsAnimRef = mesh->getMaterialsAnimRef();
+		ArmatureAnimRef * armatureAnimRef = mesh->getArmatureAnimRef();
+		TexturesAnimRef * texturesAnimRef = mesh->getTexturesAnimRef();
+		MaterialsAnimRef * materialsAnimRef = mesh->getMaterialsAnimRef();
 		
 		if(armatureAnimRef || texturesAnimRef || materialsAnimRef)
 		{
@@ -194,7 +194,7 @@ bool xmlMeshSave(const char * filename, MMesh * mesh)
 			
 			// anims ranges
 			unsigned int a, animsRangesNumber = mesh->getAnimsRangesNumber();
-			MAnimRange * animsRanges = mesh->getAnimsRanges();
+			AnimRange * animsRanges = mesh->getAnimsRanges();
 			
 			if(animsRangesNumber > 0)
 			{
@@ -235,9 +235,9 @@ bool xmlMeshSave(const char * filename, MMesh * mesh)
 			
 			for(t=0; t<texturesNumber; t++)
 			{
-				MTexture * texture = mesh->getTexture(t);
+				Texture * texture = mesh->getTexture(t);
 				
-				MTextureRef * textureRef = texture->getTextureRef();
+				TextureRef * textureRef = texture->getTextureRef();
 				M_TEX_GEN_MODES genMode = texture->getGenMode();
 				M_WRAP_MODES UWrapMode = texture->getUWrapMode();
 				M_WRAP_MODES VWrapMode = texture->getVWrapMode();
@@ -309,7 +309,7 @@ bool xmlMeshSave(const char * filename, MMesh * mesh)
 			
 			for(m=0; m<materialsNumber; m++)
 			{
-				MMaterial * material = mesh->getMaterial(m);
+				Material * material = mesh->getMaterial(m);
 				
 				int type = material->getType();
 				float opacity = material->getOpacity();
@@ -320,8 +320,8 @@ bool xmlMeshSave(const char * filename, MMesh * mesh)
 				MVector3 diffuse = material->getDiffuse();
 				MVector3 specular = material->getSpecular();
 				MVector3 customColor = material->getCustomColor();
-				MFXRef * FXRef = material->getFXRef();
-				MFXRef * ZFXRef = material->getZFXRef();
+				FXRef * fx_ref = material->getFXRef();
+				FXRef * zfx_ref = material->getZFXRef();
 				
 				
 				openAttributeNode(file, "Material", 1);
@@ -387,10 +387,10 @@ bool xmlMeshSave(const char * filename, MMesh * mesh)
 				
 				
 				// FX ref
-				if(FXRef)
+				if(fx_ref)
 				{
-					MShaderRef * vertShadRef = FXRef->getVertexShaderRef();
-					MShaderRef * pixShadRef = FXRef->getPixelShaderRef();
+					ShaderRef * vertShadRef = fx_ref->getVertexShaderRef();
+					ShaderRef * pixShadRef = fx_ref->getPixelShaderRef();
 					
 					openAttributeNode(file, "vertexShader", 2);
 					writeFilename(file, "file", vertShadRef->getFilename(), rep);
@@ -402,10 +402,10 @@ bool xmlMeshSave(const char * filename, MMesh * mesh)
 				}
 				
 				// Z FX ref
-				if(ZFXRef)
+				if(zfx_ref)
 				{
-					MShaderRef * vertShadRef = ZFXRef->getVertexShaderRef();
-					MShaderRef * pixShadRef = ZFXRef->getPixelShaderRef();
+					ShaderRef * vertShadRef = zfx_ref->getVertexShaderRef();
+					ShaderRef * pixShadRef = zfx_ref->getPixelShaderRef();
 					
 					openAttributeNode(file, "ZVertexShader", 2);
 					writeFilename(file, "file", vertShadRef->getFilename(), rep);
@@ -428,9 +428,9 @@ bool xmlMeshSave(const char * filename, MMesh * mesh)
 					
 					for(t=0; t<texturesPassNumber; t++)
 					{
-						MTexturePass * texturePass = material->getTexturePass(t);
+						TexturePass * texturePass = material->getTexturePass(t);
 						
-						MTexture * texture = texturePass->getTexture();
+						Texture * texture = texturePass->getTexture();
 						unsigned int mapChannel = texturePass->getMapChannel();
 						M_TEX_COMBINE_MODES combineMode = texturePass->getCombineMode();
 						
@@ -487,7 +487,7 @@ bool xmlMeshSave(const char * filename, MMesh * mesh)
 	
 	// Bones
 	{
-		MArmature * armature = mesh->getArmature();
+		Armature * armature = mesh->getArmature();
 		if(armature)
 		{
 			unsigned int b, bonesNumber = armature->getBonesNumber();
@@ -501,8 +501,8 @@ bool xmlMeshSave(const char * filename, MMesh * mesh)
 			
 				for(b=0; b<bonesNumber; b++)
 				{
-					MOBone * bone = armature->getBone(b);
-					MObject3d * parent = bone->getParent();
+					OBone * bone = armature->getBone(b);
+					Object3d * parent = bone->getParent();
 					
 					MVector3 position = bone->getPosition();
 					MVector3 scale = bone->getScale();
@@ -556,7 +556,7 @@ bool xmlMeshSave(const char * filename, MMesh * mesh)
 	
 	// BoundingBox
 	{
-		MBox3d * box = mesh->getBoundingBox();
+		Box3d * box = mesh->getBoundingBox();
 		
 		openAttributeNode(file, "BoundingBox", 0);
 		writeFloat(file, "minx", box->min.x, " ");
@@ -573,7 +573,7 @@ bool xmlMeshSave(const char * filename, MMesh * mesh)
 	if(mesh->getSubMeshsNumber() > 0)
 	{
 		unsigned int s, subMeshsNumber = mesh->getSubMeshsNumber();
-		MSubMesh * subMeshs = mesh->getSubMeshs();
+		SubMesh * subMeshs = mesh->getSubMeshs();
 		
 		
 		// open SubMeshs node
@@ -584,7 +584,7 @@ bool xmlMeshSave(const char * filename, MMesh * mesh)
 		
 		for(s=0; s<subMeshsNumber; s++)
 		{
-			MSubMesh * subMesh = &(subMeshs[s]);
+			SubMesh * subMesh = &(subMeshs[s]);
 
 			unsigned int i;
 			unsigned int indicesSize = subMesh->getIndicesSize();
@@ -603,7 +603,7 @@ bool xmlMeshSave(const char * filename, MMesh * mesh)
 			MVector3 * tangents = subMesh->getTangents();
 			MVector2 * texCoords = subMesh->getTexCoords();
 			
-			MBox3d * box = subMesh->getBoundingBox();
+			Box3d * box = subMesh->getBoundingBox();
 			MSkinData * skin = subMesh->getSkinData();
 			map<unsigned int, unsigned int> * mapChannelOffsets = subMesh->getMapChannelOffsets();
 			
@@ -817,12 +817,12 @@ bool xmlMeshSave(const char * filename, MMesh * mesh)
 				
 				for(d=0; d<displaysNumber; d++)
 				{
-					MDisplay * display = subMesh->getDisplay(d);
+					MaterialDisplay * display = subMesh->getDisplay(d);
 				
 					M_PRIMITIVE_TYPES primitiveType = display->getPrimitiveType();
 					unsigned int begin = display->getBegin();
 					unsigned int size = display->getSize();
-					MMaterial * material = display->getMaterial();
+					Material * material = display->getMaterial();
 					M_CULL_MODES cullMode = display->getCullMode();
 				
 					int materialId = getMaterialId(mesh, material);
@@ -877,7 +877,7 @@ bool xmlMeshSave(const char * filename, MMesh * mesh)
 
 
 // Armature anim export
-bool xmlArmatureAnimSave(const char * filename, MArmatureAnim * anim)
+bool xmlArmatureAnimSave(const char * filename, ArmatureAnim * anim)
 {
 	// create file
 	MFile * file = M_fopen(filename, "wt");
@@ -890,7 +890,7 @@ bool xmlArmatureAnimSave(const char * filename, MArmatureAnim * anim)
 	
 	// bones
 	unsigned int b, bonesAnimNumber = anim->getBonesAnimNumber();
-	MObject3dAnim * bonesAnim = anim->getBonesAnim();
+	Object3dAnim * bonesAnim = anim->getBonesAnim();
 	
 	
 	// Maratis node
@@ -909,15 +909,15 @@ bool xmlArmatureAnimSave(const char * filename, MArmatureAnim * anim)
 		closeNodeAttributes(file, "\n");
 	
 	
-		MObject3dAnim * objAnim = &(bonesAnim[b]);
+		Object3dAnim * objAnim = &(bonesAnim[b]);
 	
 		unsigned int positionKeysNumber = objAnim->getPositionKeysNumber();
 		unsigned int scaleKeysNumber = objAnim->getScaleKeysNumber();
 		unsigned int rotationKeysNumber = objAnim->getRotationKeysNumber();
 		
-		MKey * positionKeys = objAnim->getPositionKeys();
-		MKey * scaleKeys = objAnim->getScaleKeys();
-		MKey * rotationKeys = objAnim->getRotationKeys();
+		Key * positionKeys = objAnim->getPositionKeys();
+		Key * scaleKeys = objAnim->getScaleKeys();
+		Key * rotationKeys = objAnim->getRotationKeys();
 	
 		writeKeys(file, "position", positionKeys, M_VARIABLE_VEC3, positionKeysNumber);
 		writeKeys(file, "rotation", rotationKeys, M_VARIABLE_QUAT, rotationKeysNumber);
@@ -941,7 +941,7 @@ bool xmlArmatureAnimSave(const char * filename, MArmatureAnim * anim)
 
 
 // Textures anim export
-bool xmlTexturesAnimSave(const char * filename, MTexturesAnim * anim)
+bool xmlTexturesAnimSave(const char * filename, TexturesAnim * anim)
 {
 	// create file
 	MFile * file = M_fopen(filename, "wt");
@@ -954,7 +954,7 @@ bool xmlTexturesAnimSave(const char * filename, MTexturesAnim * anim)
 	
 	// textures
 	unsigned int t, texturesAnimNumber = anim->getTexturesAnimNumber();
-	MTextureAnim * texturesAnim = anim->getTexturesAnim();
+	TextureAnim * texturesAnim = anim->getTexturesAnim();
 	
 	
 	// Maratis node
@@ -973,15 +973,15 @@ bool xmlTexturesAnimSave(const char * filename, MTexturesAnim * anim)
 		closeNodeAttributes(file, "\n");
 	
 	
-		MTextureAnim * texAnim = &(texturesAnim[t]);
+		TextureAnim * texAnim = &(texturesAnim[t]);
 		
 		unsigned int translateKeysNumber = texAnim->getTranslateKeysNumber();
 		unsigned int scaleKeysNumber = texAnim->getScaleKeysNumber();
 		unsigned int rotationKeysNumber = texAnim->getRotationKeysNumber();
 		
-		MKey * translateKeys = texAnim->getTranslateKeys();
-		MKey * scaleKeys = texAnim->getScaleKeys();
-		MKey * rotationKeys = texAnim->getRotationKeys();
+		Key * translateKeys = texAnim->getTranslateKeys();
+		Key * scaleKeys = texAnim->getScaleKeys();
+		Key * rotationKeys = texAnim->getRotationKeys();
 		
 		writeKeys(file, "translate", translateKeys, M_VARIABLE_VEC2, translateKeysNumber);
 		writeKeys(file, "scale", scaleKeys, M_VARIABLE_VEC2, scaleKeysNumber);
@@ -1005,7 +1005,7 @@ bool xmlTexturesAnimSave(const char * filename, MTexturesAnim * anim)
 
 
 // Materials anim export
-bool xmlMaterialsAnimSave(const char * filename, MMaterialsAnim * anim)
+bool xmlMaterialsAnimSave(const char * filename, MaterialsAnim * anim)
 {
 	// create file
 	MFile * file = M_fopen(filename, "wt");
@@ -1018,7 +1018,7 @@ bool xmlMaterialsAnimSave(const char * filename, MMaterialsAnim * anim)
 	
 	// materials
 	unsigned int m, materialsAnimNumber = anim->getMaterialsAnimNumber();
-	MMaterialAnim * materialsAnim = anim->getMaterialsAnim();
+	MaterialAnim * materialsAnim = anim->getMaterialsAnim();
 	
 	
 	// Maratis node
@@ -1037,7 +1037,7 @@ bool xmlMaterialsAnimSave(const char * filename, MMaterialsAnim * anim)
 		closeNodeAttributes(file, "\n");
 	
 	
-		MMaterialAnim * matAnim = &(materialsAnim[m]);
+		MaterialAnim * matAnim = &(materialsAnim[m]);
 		
 		unsigned int opacityKeysNumber = matAnim->getOpacityKeysNumber();
 		unsigned int shininessKeysNumber = matAnim->getShininessKeysNumber();
@@ -1047,13 +1047,13 @@ bool xmlMaterialsAnimSave(const char * filename, MMaterialsAnim * anim)
 		unsigned int emitKeysNumber = matAnim->getEmitKeysNumber();
 		unsigned int customColorKeysNumber = matAnim->getCustomColorKeysNumber();
 		
-		MKey * opacityKeys = matAnim->getOpacityKeys();
-		MKey * shininessKeys = matAnim->getShininessKeys();
-		MKey * customValueKeys = matAnim->getCustomValueKeys();
-		MKey * diffuseKeys = matAnim->getDiffuseKeys();
-		MKey * specularKeys = matAnim->getSpecularKeys();
-		MKey * emitKeys = matAnim->getEmitKeys();
-		MKey * customColorKeys = matAnim->getCustomColorKeys();
+		Key * opacityKeys = matAnim->getOpacityKeys();
+		Key * shininessKeys = matAnim->getShininessKeys();
+		Key * customValueKeys = matAnim->getCustomValueKeys();
+		Key * diffuseKeys = matAnim->getDiffuseKeys();
+		Key * specularKeys = matAnim->getSpecularKeys();
+		Key * emitKeys = matAnim->getEmitKeys();
+		Key * customColorKeys = matAnim->getCustomColorKeys();
 		
 		writeKeys(file, "opacity", opacityKeys, M_VARIABLE_FLOAT, opacityKeysNumber);
 		writeKeys(file, "shininess", shininessKeys, M_VARIABLE_FLOAT, shininessKeysNumber);

@@ -30,7 +30,7 @@
 //========================================================================
 //12.01.2012 - Philipp Geyer <philipp@geyer.co.uk> - Changed font loading to use MFile
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include "BinFontLoader.h"
 
 namespace Neo
@@ -62,7 +62,7 @@ bool M_loadBinFont(const char * filename, void * data)
 	M_fread(&fontSize, sizeof(int), 1, file);
 	
 	// init font
-	MFont * font = (MFont *)data;
+	Font * font = (Font *)data;
 	font->setFontSize(fontSize);	
 	
 	// create image
@@ -88,7 +88,7 @@ bool M_loadBinFont(const char * filename, void * data)
 			}
 		}
 		
-		MEngine * engine = MEngine().getInstance();
+		NeoEngine * engine = NeoEngine().getInstance();
 		MRenderingContext * render = engine->getRenderingContext();
 		
 		// gen texture id
@@ -128,7 +128,7 @@ bool M_loadBinFont(const char * filename, void * data)
 			M_fread(&scale, sizeof(float), 2, file);
 			M_fread(&xadvance, sizeof(float), 1, file);
 			
-			font->setCharacter(charCode, MCharacter(xadvance, offset, pos, scale));
+			font->setCharacter(charCode, Character(xadvance, offset, pos, scale));
 		}
 	}
 

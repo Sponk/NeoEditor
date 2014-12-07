@@ -1,12 +1,14 @@
 #include "PostProcessor.h"
 #include "../Maratis/Maratis.h"
 
-bool PostProcessor::draw(MOCamera *camera)
+using namespace Neo;
+
+bool PostProcessor::draw(OCamera *camera)
 {
     if(m_fx == 0)
         return false;
 
-    MEngine * engine = MEngine::getInstance(); // get the engine instance
+    NeoEngine * engine = NeoEngine::getInstance(); // get the engine instance
     MRenderingContext * render = engine->getRenderingContext(); // get the rendering context
     MSystemContext * system = engine->getSystemContext();
 
@@ -17,12 +19,12 @@ bool PostProcessor::draw(MOCamera *camera)
         return false;
 
     // get level
-    MLevel * level = MEngine::getInstance()->getLevel();
+    Level * level = NeoEngine::getInstance()->getLevel();
     if(! level)
         return false;
 
     // get current scene
-    MScene * scene = level->getCurrentScene();
+    Scene * scene = level->getCurrentScene();
     if(! scene)
         return false;
 
@@ -46,7 +48,7 @@ bool PostProcessor::draw(MOCamera *camera)
 
     render->clear(M_BUFFER_DEPTH | M_BUFFER_COLOR);
 
-    Maratis::getInstance()->drawMainView(MEngine::getInstance()->getLevel()->getCurrentScene());
+    Maratis::getInstance()->drawMainView(NeoEngine::getInstance()->getLevel()->getCurrentScene());
 
     // finish render to texture
     render->bindFrameBuffer(currentFrameBuffer);
@@ -69,8 +71,8 @@ bool PostProcessor::draw(MOCamera *camera)
 
 void PostProcessor::updateResolution()
 {
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
-    MSystemContext * system = MEngine::getInstance()->getSystemContext();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    MSystemContext * system = NeoEngine::getInstance()->getSystemContext();
 
     if(system == NULL || render == NULL)
         return;

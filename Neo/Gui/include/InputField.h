@@ -36,7 +36,7 @@
 #define __INPUT_H__
 
 #include <Widget.h>
-#include <MEngine.h>
+#include <NeoEngine.h>
 
 namespace Neo
 {
@@ -51,7 +51,7 @@ enum INPUT_STATE
 
 class InputField : public Widget
 {
-    MOText* m_labelText;
+    OText* m_labelText;
     INPUT_STATE m_state;
 
     void addCharacter(char c);

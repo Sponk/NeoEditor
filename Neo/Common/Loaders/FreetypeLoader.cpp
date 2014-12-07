@@ -33,7 +33,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H 
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 
 #include "FreetypeLoader.h"
 
@@ -179,7 +179,7 @@ bool M_loadFont(const char * filename, void * data)
 
 
 	// init font
-	MFont * font = (MFont *)data;
+	Font * font = (Font *)data;
 	font->setFontSize(size);
 	font->setTextureWidth(width);
 	font->setTextureHeight(height);
@@ -211,7 +211,7 @@ bool M_loadFont(const char * filename, void * data)
 		MVector2 scale = MVector2((float)(slot->bitmap.width+2) / (float)width, (float)(slot->bitmap.rows+2) / (float)height);
 
 		// set character
-		font->setCharacter(n, MCharacter(xAdvance, offset, pos, scale));
+		font->setCharacter(n, Character(xAdvance, offset, pos, scale));
 
 		// draw to image
 		drawBitmap(&image, &slot->bitmap, pen_x, pen_y);
@@ -222,7 +222,7 @@ bool M_loadFont(const char * filename, void * data)
 
 
 	// send texture
-	MEngine * engine = MEngine().getInstance();
+	NeoEngine * engine = NeoEngine().getInstance();
 	MRenderingContext * render = engine->getRenderingContext();
 	
 	// gen texture id

@@ -31,7 +31,7 @@
 
 using namespace std;
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include "ImageLoader.h"
 #include "JpegLoader.h"
 #include "PngLoader.h"

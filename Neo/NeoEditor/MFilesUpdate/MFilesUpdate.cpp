@@ -29,6 +29,7 @@
 
 #include "MFilesUpdate.h"
 
+using namespace Neo;
 
 void updateRefs(MDataManager * dataManager)
 {
@@ -56,8 +57,8 @@ void updateRefs(MDataManager * dataManager)
 
 void MFilesUpdate::update(void)
 {
-	MEngine * engine = MEngine::getInstance();
-	MLevel * level = engine->getLevel();
+	NeoEngine * engine = NeoEngine::getInstance();
+	Level * level = engine->getLevel();
 
 	MDataManager * textureManager = level->getTextureManager();
 	MDataManager * shaderManager = level->getShaderManager();

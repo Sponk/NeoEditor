@@ -58,10 +58,8 @@
 #include <BinMeshLoader.h>
 
 #include <MCore.h>
-#include <MEngine.h>
-#include <MVariable.h>
+#include <NeoEngine.h>
 #include "../MWindow/MMouse.h"
-#include <MBehavior.h>
 #include <LookAtBehavior.h>
 #include <FollowBehavior.h>
 #include <LuaBehavior.h>
@@ -225,8 +223,8 @@ m_renderer(NULL)
         m_script = new LuaScript();
         m_input = new Input();
         m_system = new MWinContext();
-        m_level = new MLevel();
-        m_game = new MGame();
+        m_level = new Level();
+        m_game = new NeoGame();
         m_packageManager = new MPackageManagerNPK();
 
         m_physics->setSimulationQuality(2);
@@ -271,24 +269,24 @@ void Maratis::initRenderer()
 #else
     m_render = new MES2Context();
 #endif
-    MEngine::getInstance()->setRenderingContext(m_render);
+    NeoEngine::getInstance()->setRenderingContext(m_render);
 }
 
 void Maratis::publish(void)
 {
     if(strcmp(m_currentProject, "") != 0)
     {
-        MPublisher * publisher = MPublisher::getInstance();
+        Publisher * publisher = Publisher::getInstance();
         publisher->publish(m_currentProject);
     }
 }
 
 void Maratis::changeRenderer(const char * name)
 {
-    MEngine * engine = MEngine::getInstance();
-    MRendererManager * rendererManager = engine->getRendererManager();
+    NeoEngine * engine = NeoEngine::getInstance();
+    RendererManager * rendererManager = engine->getRendererManager();
 
-    MRendererCreator * renderer = rendererManager->getRendererByName(name);
+    RendererCreator * renderer = rendererManager->getRendererByName(name);
     if(renderer && strcmp(engine->getRenderer()->getName(), name) != 0)
     {
         if(m_renderer)
@@ -300,7 +298,7 @@ void Maratis::changeRenderer(const char * name)
 
 void Maratis::autoSave(void)
 {
-    MEngine * engine = MEngine::getInstance();
+    NeoEngine * engine = NeoEngine::getInstance();
 
 
     // autosave name
@@ -340,8 +338,8 @@ void Maratis::undo(void)
     if((m_undoNumber == 0) || (m_undo == 0))
         return;
 
-    MEngine * engine = MEngine::getInstance();
-    MLevel * level = engine->getLevel();
+    NeoEngine * engine = NeoEngine::getInstance();
+    Level * level = engine->getLevel();
 
     // auto save if first undo
     if(m_firstUndo)
@@ -385,8 +383,8 @@ void Maratis::redo(void)
     if((m_undo+1) >= m_undoNumber)
         return;
 
-    MEngine * engine = MEngine::getInstance();
-    MLevel * level = engine->getLevel();
+    NeoEngine * engine = NeoEngine::getInstance();
+    Level * level = engine->getLevel();
 
     // increment undo
     m_undoLevel++;
@@ -417,12 +415,12 @@ void Maratis::clearUndo(void)
     m_undoNumber = 0;
 }
 
-MMeshRef * Maratis::loadEditorMesh(const char * filename)
+MeshRef * Maratis::loadEditorMesh(const char * filename)
 {
-    MMesh * mesh = MMesh::getNew();
+    Mesh * mesh = Mesh::getNew();
     if(xmlMeshLoad(filename, mesh))
     {
-        MMeshRef * ref = MMeshRef::getNew(mesh, filename);
+        MeshRef * ref = MeshRef::getNew(mesh, filename);
         m_meshManager.addRef(ref);
         return ref;
     }
@@ -447,7 +445,7 @@ void Maratis::start(void)
 
     // MEngine
     {
-        MEngine * engine = MEngine::getInstance();
+        NeoEngine * engine = NeoEngine::getInstance();
 
         // package manager
         engine->setPackageManager(m_packageManager);
@@ -492,7 +490,7 @@ void Maratis::start(void)
 
         // level
         engine->setLevel(m_level);
-        MScene * scene = m_level->addNewScene();
+        Scene * scene = m_level->addNewScene();
         scene->setName("Scene-1");
 
         // game
@@ -510,24 +508,24 @@ void Maratis::start(void)
     }
 
     // view entities
-    m_sphereEntity = new MOEntity	(loadEditorMesh("gui/meshs/sphere.mesh"));
-    m_coneEntity = new MOEntity		(loadEditorMesh("gui/meshs/cone.mesh"));
-    m_cubeEntity = new MOEntity		(loadEditorMesh("gui/meshs/box.mesh"));
-    m_planeEntity = new MOEntity	(loadEditorMesh("gui/meshs/plane.mesh"));
-    m_xEntity = new MOEntity		(loadEditorMesh("gui/meshs/x.mesh"));
-    m_yEntity = new MOEntity		(loadEditorMesh("gui/meshs/y.mesh"));
-    m_zEntity = new MOEntity		(loadEditorMesh("gui/meshs/z.mesh"));
-    m_xcircleEntity = new MOEntity	(loadEditorMesh("gui/meshs/xcircle.mesh"));
-    m_ycircleEntity = new MOEntity	(loadEditorMesh("gui/meshs/ycircle.mesh"));
-    m_zcircleEntity = new MOEntity	(loadEditorMesh("gui/meshs/zcircle.mesh"));
-    m_lightEntity = new MOEntity	(loadEditorMesh("gui/meshs/light.mesh"));
-    m_cameraEntity = new MOEntity	(loadEditorMesh("gui/meshs/camera.mesh"));
-    m_soundEntity = new MOEntity	(loadEditorMesh("gui/meshs/sound.mesh"));
+    m_sphereEntity = new OEntity	(loadEditorMesh("gui/meshs/sphere.mesh"));
+    m_coneEntity = new OEntity		(loadEditorMesh("gui/meshs/cone.mesh"));
+    m_cubeEntity = new OEntity		(loadEditorMesh("gui/meshs/box.mesh"));
+    m_planeEntity = new OEntity	(loadEditorMesh("gui/meshs/plane.mesh"));
+    m_xEntity = new OEntity		(loadEditorMesh("gui/meshs/x.mesh"));
+    m_yEntity = new OEntity		(loadEditorMesh("gui/meshs/y.mesh"));
+    m_zEntity = new OEntity		(loadEditorMesh("gui/meshs/z.mesh"));
+    m_xcircleEntity = new OEntity	(loadEditorMesh("gui/meshs/xcircle.mesh"));
+    m_ycircleEntity = new OEntity	(loadEditorMesh("gui/meshs/ycircle.mesh"));
+    m_zcircleEntity = new OEntity	(loadEditorMesh("gui/meshs/zcircle.mesh"));
+    m_lightEntity = new OEntity	(loadEditorMesh("gui/meshs/light.mesh"));
+    m_cameraEntity = new OEntity	(loadEditorMesh("gui/meshs/camera.mesh"));
+    m_soundEntity = new OEntity	(loadEditorMesh("gui/meshs/sound.mesh"));
 }
 
 void Maratis::clear(void)
 {
-    MEngine * engine = MEngine::getInstance();
+    NeoEngine * engine = NeoEngine::getInstance();
 
     // view entities
     SAFE_DELETE(m_sphereEntity);
@@ -632,14 +630,14 @@ void Maratis::loadGamePlugin(void)
 
 void Maratis::getNewObjectName(const char * objectName, char * name)
 {
-    MLevel * level = MEngine::getInstance()->getLevel();
-    MScene * scene = level->getCurrentScene();
+    Level * level = NeoEngine::getInstance()->getLevel();
+    Scene * scene = level->getCurrentScene();
 
     unsigned int count = 0;
     int size = scene->getObjectsNumber();
     for(int i=0; i<size; i++)
     {
-        MObject3d * object = scene->getObjectByIndex(i);
+        Object3d * object = scene->getObjectByIndex(i);
         if(object->getName())
             if(strcmp(name, object->getName()) == 0)
             {
@@ -655,7 +653,7 @@ void Maratis::duplicateSelectedObjects(void)
 {
     autoSave();
 
-    MScene * scene = MEngine::getInstance()->getLevel()->getCurrentScene();
+    Scene * scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
 
     // get current objects number
     unsigned int objStart = scene->getObjectsNumber();
@@ -665,13 +663,13 @@ void Maratis::duplicateSelectedObjects(void)
         return;
 
     // duplicate
-    MOLight * light;
-    MOEntity * entity;
-    MOCamera * camera;
-    MOSound * sound;
-    MOText * text;
-    MObject3d * group;
-    MObject3d * object;
+    OLight * light;
+    OEntity * entity;
+    OCamera * camera;
+    OSound * sound;
+    OText * text;
+    Object3d * group;
+    Object3d * object;
     char name[256];
     for(i=0; i<oSize; i++)
     {
@@ -684,7 +682,7 @@ void Maratis::duplicateSelectedObjects(void)
             {
                 getNewObjectName(object->getName(), name);
 
-                entity = scene->addNewEntity(*(MOEntity *)object);
+                entity = scene->addNewEntity(*(OEntity *)object);
                 entity->setName(name);
             }
                 break;
@@ -692,7 +690,7 @@ void Maratis::duplicateSelectedObjects(void)
             {
                 getNewObjectName(object->getName(), name);
 
-                light = scene->addNewLight(*(MOLight *)object);
+                light = scene->addNewLight(*(OLight *)object);
                 light->setName(name);
             }
                 break;
@@ -700,7 +698,7 @@ void Maratis::duplicateSelectedObjects(void)
             {
                 getNewObjectName(object->getName(), name);
 
-                camera = scene->addNewCamera(*(MOCamera *)object);
+                camera = scene->addNewCamera(*(OCamera *)object);
                 camera->setName(name);
             }
                 break;
@@ -708,14 +706,14 @@ void Maratis::duplicateSelectedObjects(void)
             {
                 getNewObjectName(object->getName(), name);
 
-                sound = scene->addNewSound(*(MOSound *)object);
+                sound = scene->addNewSound(*(OSound *)object);
                 sound->setName(name);
             }
                 break;
             case M_OBJECT3D_TEXT:
             {
                 getNewObjectName(object->getName(), name);
-                text = scene->addNewText(*(MOText *)object);
+                text = scene->addNewText(*(OText *)object);
                 text->setName(name);
             }
                 break;
@@ -748,7 +746,7 @@ void Maratis::linkSelectedObjects(void)
     if(oSize < 2)
         return;
 
-    MObject3d * parent = m_selectedObjects[0];
+    Object3d * parent = m_selectedObjects[0];
     for(i=1; i<oSize; i++)
         linkTwoObjects(parent, m_selectedObjects[i]);
 }
@@ -761,12 +759,12 @@ void Maratis::unlinkSelectedObjects(void)
     unsigned int oSize = m_selectedObjects.size();
     for(i=0; i<oSize; i++)
     {
-        MObject3d * object = m_selectedObjects[i];
+        Object3d * object = m_selectedObjects[i];
         unlinkTwoObjects(object->getParent(), object);
     }
 }
 
-void Maratis::linkTwoObjects(MObject3d *parent, MObject3d *child)
+void Maratis::linkTwoObjects(Object3d *parent, Object3d *child)
 {
     if(parent == NULL || child == NULL)
         return;
@@ -786,7 +784,7 @@ void Maratis::linkTwoObjects(MObject3d *parent, MObject3d *child)
     child->setScale(MVector3(xSize, ySize, zSize));
 }
 
-void Maratis::unlinkTwoObjects(MObject3d *parent, MObject3d *child)
+void Maratis::unlinkTwoObjects(Object3d *parent, Object3d *child)
 {
     if(parent == NULL || child == NULL)
         return;
@@ -810,8 +808,8 @@ void Maratis::deleteSelectedObjects(void)
 {
     autoSave();
 
-    MLevel * level = MEngine::getInstance()->getLevel();
-    MScene * scene = level->getCurrentScene();
+    Level * level = NeoEngine::getInstance()->getLevel();
+    Scene * scene = level->getCurrentScene();
 
     unsigned int i;
     unsigned int oSize = m_selectedObjects.size();
@@ -828,9 +826,9 @@ void Maratis::addCamera(void)
     char name[256] = "Camera0";
     getNewObjectName("Camera", name);
 
-    MScene * scene = MEngine::getInstance()->getLevel()->getCurrentScene();
+    Scene * scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
 
-    MOCamera * camera = scene->addNewCamera();
+    OCamera * camera = scene->addNewCamera();
     camera->setName(name);
 
     camera->setPosition(*getSelectionCenter());
@@ -848,9 +846,9 @@ void Maratis::addLight(void)
     char name[256] = "Light0";
     getNewObjectName("Light", name);
 
-    MScene * scene = MEngine::getInstance()->getLevel()->getCurrentScene();
+    Scene * scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
 
-    MOLight * light = scene->addNewLight();
+    OLight * light = scene->addNewLight();
     light->setName(name);
 
     light->setRadius(1000);
@@ -867,9 +865,9 @@ void Maratis::addGroup(void)
 	char name[256] = "Group0";
 	getNewObjectName("Group", name);
 
-	MScene* scene = MEngine::getInstance()->getLevel()->getCurrentScene();
+	Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
 
-	MObject3d* object = scene->addNewGroup();
+	Object3d* object = scene->addNewGroup();
 	object->setName(name);
 
 	clearSelectedObjects();
@@ -881,17 +879,17 @@ void Maratis::okAddEntity(const char * filename)
     if(filename)
     {
         Maratis * maratis = Maratis::getInstance();
-        MLevel * level = MEngine::getInstance()->getLevel();
-        MScene * scene = level->getCurrentScene();
+        Level * level = NeoEngine::getInstance()->getLevel();
+        Scene * scene = level->getCurrentScene();
 
-        MMeshRef * meshRef = level->loadMesh(filename);
+        MeshRef * meshRef = level->loadMesh(filename);
         if(meshRef && meshRef->getMesh()->getSubMeshsNumber() > 0)
         {
             char name[256] = "Entity0";
             maratis->getNewObjectName("Entity", name);
 
             // add entity
-            MOEntity * entity = scene->addNewEntity(meshRef);
+            OEntity * entity = scene->addNewEntity(meshRef);
             entity->setName(name);
 
             // set entity position
@@ -909,17 +907,17 @@ void Maratis::okAddSound(const char * filename)
     if(filename)
     {
         Maratis * maratis = Maratis::getInstance();
-        MLevel * level = MEngine::getInstance()->getLevel();
-        MScene * scene = level->getCurrentScene();
+        Level * level = NeoEngine::getInstance()->getLevel();
+        Scene * scene = level->getCurrentScene();
 
-        MSoundRef * soundRef = level->loadSound(filename);
+        SoundRef * soundRef = level->loadSound(filename);
         if(soundRef)
         {
             char name[256] = "Sound0";
             maratis->getNewObjectName("Sound", name);
 
             // add sound
-            MOSound * sound = scene->addNewSound(soundRef);
+            OSound * sound = scene->addNewSound(soundRef);
             sound->setName(name);
 
             // set position
@@ -937,14 +935,14 @@ void Maratis::okAddFont(const char * filename)
     if(filename)
     {
         Maratis * maratis = Maratis::getInstance();
-        MLevel * level = MEngine::getInstance()->getLevel();
-        MScene * scene = level->getCurrentScene();
+        Level * level = NeoEngine::getInstance()->getLevel();
+        Scene * scene = level->getCurrentScene();
 
         // font test
-        MFontRef * fontRef = level->loadFont(filename);
+        FontRef * fontRef = level->loadFont(filename);
         if(fontRef)
         {
-            MOText * text = scene->addNewText(fontRef);
+            OText * text = scene->addNewText(fontRef);
 
             char name[256] = "Text0";
             maratis->getNewObjectName("Text", name);
@@ -1013,7 +1011,7 @@ void Maratis::okNewProject(const char * filename)
 {
     MWindow * window = MWindow::getInstance();
     Maratis * maratis = Maratis::getInstance();
-    MSystemContext* system = MEngine::getInstance()->getSystemContext();
+    MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
 
     char file[256];
     fileExtension(file, filename, ".mproj");
@@ -1095,8 +1093,8 @@ void Maratis::loadProject(const char * filename)
     if(! filename)
         return;
 
-    MEngine::getInstance()->getLevel()->clear();
-    MEngine::getInstance()->getLevel()->clearScenes();
+    NeoEngine::getInstance()->getLevel()->clear();
+    NeoEngine::getInstance()->getLevel()->clearScenes();
 
     // load project file
     Project proj;
@@ -1118,7 +1116,7 @@ void Maratis::loadProject(const char * filename)
 
         // test pack
         // if we have a package manager, try to load the package
-        if(MPackageManager* pPackMan = MEngine::getInstance()->getPackageManager())
+        if(MPackageManager* pPackMan = NeoEngine::getInstance()->getPackageManager())
         {
             char projName[256];
             getLocalFilename(projName, workingDir, filename);
@@ -1141,17 +1139,17 @@ void Maratis::loadProject(const char * filename)
 
 void Maratis::newLevel(void)
 {
-    MEngine * engine = MEngine::getInstance();
+    NeoEngine * engine = NeoEngine::getInstance();
 
     // init maratis
     initVue();
 
     // clear level
-    MLevel * level = engine->getLevel();
+    Level * level = engine->getLevel();
     level->clear();
 
     // add first scene
-    MScene * scene = level->addNewScene();
+    Scene * scene = level->addNewScene();
     scene->setName("Scene-1");
 
     strcpy(m_currentLevel, "");
@@ -1160,13 +1158,13 @@ void Maratis::newLevel(void)
 
 bool Maratis::loadLevel(const char * filename)
 {
-    MEngine * engine = MEngine::getInstance();
+    NeoEngine * engine = NeoEngine::getInstance();
 
     if(! filename)
         return false;
 
     // load level
-    MLevel * level = engine->getLevel();
+    Level * level = engine->getLevel();
     if(engine->getLevelLoader()->loadData(filename, level))
     {
         strcpy(m_currentLevel, filename);
@@ -1201,7 +1199,7 @@ void Maratis::loadLevel(void)
 
 void Maratis::save()
 {
-    MEngine * engine = MEngine::getInstance();
+    NeoEngine * engine = NeoEngine::getInstance();
 
     //if(m_currentLevel[0] == '\0')
     //{
@@ -1231,7 +1229,7 @@ void Maratis::okSaveAs(const char * filename)
         return;
 
     Maratis * maratis = Maratis::getInstance();
-    MEngine * engine = MEngine::getInstance();
+    NeoEngine * engine = NeoEngine::getInstance();
 
     // save level
     char file[256];
@@ -1260,7 +1258,7 @@ void Maratis::saveAs(void)
     getGlobalFilename(startPath, window->getWorkingDirectory(), "levels");
 }
 
-void Maratis::addSelectedObject(MObject3d * object)
+void Maratis::addSelectedObject(Object3d * object)
 {
     unsigned int i;
     unsigned int oSize = m_selectedObjects.size();
@@ -1306,7 +1304,7 @@ void Maratis::rotateCurrentVue(void)
 void Maratis::panCurrentVue(void)
 {
     MMouse * mouse = MMouse::getInstance();
-    MOCamera * camera = getPerspectiveVue();
+    OCamera * camera = getPerspectiveVue();
 
     int * viewport = camera->getCurrentViewport();
 
@@ -1344,7 +1342,7 @@ void Maratis::panCurrentVue(void)
 void Maratis::zoomCurrentVue(void)
 {
     MMouse * mouse = MMouse::getInstance();
-    MOCamera * camera = getPerspectiveVue();
+    OCamera * camera = getPerspectiveVue();
     MVector3 position = camera->getPosition();
 
     if(camera->isOrtho())
@@ -1376,7 +1374,7 @@ void Maratis::zoomCurrentVue(void)
 
 void Maratis::switchCurrentVueMode(void)
 {
-    MOCamera * camera = getPerspectiveVue();
+    OCamera * camera = getPerspectiveVue();
     MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();;
     MVector3 position = camera->getPosition();
 
@@ -1404,7 +1402,7 @@ void Maratis::switchCurrentVueMode(void)
 
 void Maratis::changeCurrentVue(int vue)
 {
-    MOCamera * camera = getPerspectiveVue();
+    OCamera * camera = getPerspectiveVue();
 
     // set to ortho
     if(!camera->isOrtho())
@@ -1430,9 +1428,9 @@ void Maratis::changeCurrentVue(int vue)
     camera->updateMatrix();
 }
 
-void Maratis::drawBoundingBox(MBox3d * box)
+void Maratis::drawBoundingBox(Box3d * box)
 {
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     MVector3 * min = &box->min;
     MVector3 * max = &box->max;
@@ -1478,12 +1476,12 @@ void Maratis::drawBoundingBox(MBox3d * box)
     endDraw(render);
 }
 
-bool getNearestRaytracedDistance(MMesh * mesh, MMatrix4x4 * matrix, const MVector3 & origin, const MVector3 & dest, float * distance, MOEntity * entity = NULL)
+bool getNearestRaytracedDistance(Mesh * mesh, MMatrix4x4 * matrix, const MVector3 & origin, const MVector3 & dest, float * distance, OEntity * entity = NULL)
 {
     // animate armature
     if(entity && mesh->getArmature())
     {
-        MArmature * armature = mesh->getArmature();
+        Armature * armature = mesh->getArmature();
         if(mesh->getArmatureAnim())
         {
             animateArmature(
@@ -1504,7 +1502,7 @@ bool getNearestRaytracedDistance(MMesh * mesh, MMatrix4x4 * matrix, const MVecto
     MVector3 localOrigin = iMatrix * origin;
     MVector3 localDest = iMatrix * dest;
 
-    MBox3d * box = mesh->getBoundingBox();
+    Box3d * box = mesh->getBoundingBox();
     if(! isEdgeToBoxCollision(localOrigin, localDest, box->min, box->max))
         return false;
 
@@ -1522,7 +1520,7 @@ bool getNearestRaytracedDistance(MMesh * mesh, MMatrix4x4 * matrix, const MVecto
     unsigned int sSize = mesh->getSubMeshsNumber();
     for(s=0; s<sSize; s++)
     {
-        MSubMesh * subMesh = &mesh->getSubMeshs()[s];
+        SubMesh * subMesh = &mesh->getSubMeshs()[s];
         box = subMesh->getBoundingBox();
 
         // skinning
@@ -1541,7 +1539,7 @@ bool getNearestRaytracedDistance(MMesh * mesh, MMatrix4x4 * matrix, const MVecto
             unsigned int dSize = subMesh->getDisplaysNumber();
             for(d=0; d<dSize; d++)
             {
-                MDisplay * display = subMesh->getDisplay(d);
+                MaterialDisplay * display = subMesh->getDisplay(d);
 
                 // indices
                 void * indices = subMesh->getIndices();
@@ -1616,17 +1614,17 @@ bool getNearestRaytracedDistance(MMesh * mesh, MMatrix4x4 * matrix, const MVecto
     return raytraced;
 }
 
-MObject3d * Maratis::getNearestMesh(MScene * scene, const MVector3 & rayO, const MVector3 & rayD, MVector3 * intersectPoint)
+Object3d * Maratis::getNearestMesh(Scene * scene, const MVector3 & rayO, const MVector3 & rayD, MVector3 * intersectPoint)
 {
     float distance = 0;
-    MObject3d * nearestObject = NULL;
+    Object3d * nearestObject = NULL;
 
 
     unsigned int i;
     unsigned int oSize = scene->getEntitiesNumber();
     for(i=0; i<oSize; i++)
     {
-        MOEntity * entity = scene->getEntityByIndex(i);
+        OEntity * entity = scene->getEntityByIndex(i);
 
         if(! entity->isActive())
             continue;
@@ -1638,7 +1636,7 @@ MObject3d * Maratis::getNearestMesh(MScene * scene, const MVector3 & rayO, const
 
         MMatrix4x4 * matrix = entity->getMatrix();
 
-        MMesh * mesh = entity->getMesh();
+        Mesh * mesh = entity->getMesh();
         if(mesh)
         {
             if(! getNearestRaytracedDistance(mesh, matrix, rayO, rayD, &dist, entity))
@@ -1670,23 +1668,23 @@ MObject3d * Maratis::getNearestMesh(MScene * scene, const MVector3 & rayO, const
     return nearestObject;
 }
 
-MObject3d * Maratis::getNearestObject(MScene * scene, const MVector3 & rayO, const MVector3 & rayD, MVector3 * intersectPoint)
+Object3d * Maratis::getNearestObject(Scene * scene, const MVector3 & rayO, const MVector3 & rayD, MVector3 * intersectPoint)
 {
     // get camera
-    MOCamera * camera = getPerspectiveVue();
+    OCamera * camera = getPerspectiveVue();
 
     int * viewport = camera->getCurrentViewport();
     float editObjectSize = 10.0f / (float)viewport[3];
 
     // scan objects
     float distance = 0;
-    MObject3d * nearestObject = NULL;
+    Object3d * nearestObject = NULL;
 
     unsigned int i;
     unsigned int oSize = scene->getObjectsNumber();
     for(i=0; i<oSize; i++)
     {
-        MObject3d * object = scene->getObjectByIndex(i);
+        Object3d * object = scene->getObjectByIndex(i);
 
         //if(! object->isActive())
         //	continue;
@@ -1696,10 +1694,10 @@ MObject3d * Maratis::getNearestObject(MScene * scene, const MVector3 & rayO, con
         {
             case M_OBJECT3D_ENTITY:
             {
-                MOEntity * entity = (MOEntity *)object;
+                OEntity * entity = (OEntity *)object;
                 MMatrix4x4 * matrix = entity->getMatrix();
 
-                MMesh * mesh = entity->getMesh();
+                Mesh * mesh = entity->getMesh();
                 if(mesh)
                 {
                     if(! getNearestRaytracedDistance(mesh, matrix, rayO, rayD, &dist, entity))
@@ -1726,7 +1724,7 @@ MObject3d * Maratis::getNearestObject(MScene * scene, const MVector3 & rayO, con
                 scaleMatrix.setScale(MVector3(scale, scale, scale));
                 MMatrix4x4 matrix = ((*object->getMatrix()) * scaleMatrix);
 
-                MMesh * mesh = m_cameraEntity->getMesh();
+                Mesh * mesh = m_cameraEntity->getMesh();
                 if(! getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &dist))
                     continue;
             }
@@ -1747,7 +1745,7 @@ MObject3d * Maratis::getNearestObject(MScene * scene, const MVector3 & rayO, con
                 scaleMatrix.setScale(MVector3(scale, scale, scale));
                 MMatrix4x4 matrix = ((*object->getMatrix()) * scaleMatrix);
 
-                MMesh * mesh = m_sphereEntity->getMesh();
+                Mesh * mesh = m_sphereEntity->getMesh();
                 if(! getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &dist))
                     continue;
             }
@@ -1768,14 +1766,14 @@ MObject3d * Maratis::getNearestObject(MScene * scene, const MVector3 & rayO, con
                 scaleMatrix.setScale(MVector3(scale, scale, scale)*1.75f);
                 MMatrix4x4 matrix = ((*object->getMatrix()) * scaleMatrix);
 
-                MMesh * mesh = m_sphereEntity->getMesh();
+                Mesh * mesh = m_sphereEntity->getMesh();
                 if(! getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &dist))
                     continue;
             }
                 break;
             case M_OBJECT3D_TEXT:
             {
-                MOText * text = (MOText*)object;
+                OText * text = (OText*)object;
                 MVector3 min = text->getBoundingBox()->min;
                 MVector3 max = text->getBoundingBox()->max;
 
@@ -1792,7 +1790,7 @@ MObject3d * Maratis::getNearestObject(MScene * scene, const MVector3 & rayO, con
 
                 MMatrix4x4 matrix = (*object->getMatrix()) * scaleMatrix;
 
-                MMesh * mesh = m_planeEntity->getMesh();
+                Mesh * mesh = m_planeEntity->getMesh();
                 if(! getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &dist))
                     continue;
             }
@@ -1828,8 +1826,8 @@ void Maratis::selectAll(void)
 {
     autoSave();
 
-    MLevel * level = MEngine::getInstance()->getLevel();
-    MScene * scene = level->getCurrentScene();
+    Level * level = NeoEngine::getInstance()->getLevel();
+    Scene * scene = level->getCurrentScene();
 
     bool allSelect = (m_selectedObjects.size() == scene->getObjectsNumber());
 
@@ -1851,9 +1849,9 @@ void Maratis::focusSelection(void)
 
     float distance = 0.0f;
     MVector3 center(0, 0, 0);
-    for(std::vector <MObject3d *>::iterator itObj = m_selectedObjects.begin(); itObj != m_selectedObjects.end(); ++itObj)
+    for(std::vector <Object3d *>::iterator itObj = m_selectedObjects.begin(); itObj != m_selectedObjects.end(); ++itObj)
     {
-        MObject3d *pobj = *itObj;
+        Object3d *pobj = *itObj;
         center += pobj->getTransformedPosition();
         switch(pobj->getType())
         {
@@ -1868,8 +1866,8 @@ void Maratis::focusSelection(void)
 
             case M_OBJECT3D_ENTITY:
                 {
-                    MOEntity *pentity = (MOEntity*)pobj;
-                    MBox3d *pbox = pentity->getBoundingBox();
+                    OEntity *pentity = (OEntity*)pobj;
+                    Box3d *pbox = pentity->getBoundingBox();
 
                     MVector3 scale = pentity->getTransformedScale();
                     float maxScale = scale.x;
@@ -1886,7 +1884,7 @@ void Maratis::focusSelection(void)
 
     center /= (float)m_selectedObjects.size();
 
-    MOCamera * camera = getPerspectiveVue();
+    OCamera * camera = getPerspectiveVue();
     MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();
     camera->setPosition(center - cameraAxis * distance);
     camera->updateMatrix();
@@ -1902,7 +1900,7 @@ void Maratis::activeSelection(void)
     unsigned int selSize = getSelectedObjectsNumber();
     for(i=0; i<selSize; i++)
     {
-        MObject3d * object = getSelectedObjectByIndex(i);
+        Object3d * object = getSelectedObjectByIndex(i);
         object->setActive(! object->isActive());
     }
 }
@@ -1911,20 +1909,20 @@ void Maratis::selectSameMesh(void)
 {
     autoSave();
 
-    MLevel * level = MEngine::getInstance()->getLevel();
-    MScene * scene = level->getCurrentScene();
+    Level * level = NeoEngine::getInstance()->getLevel();
+    Scene * scene = level->getCurrentScene();
 
-    std::vector <MMesh *> meshs;
+    std::vector <Mesh *> meshs;
 
     unsigned int i;
     unsigned int selSize = getSelectedObjectsNumber();
     for(i=0; i<selSize; i++)
     {
-        MObject3d * object = getSelectedObjectByIndex(i);
+        Object3d * object = getSelectedObjectByIndex(i);
         if(object->getType() == M_OBJECT3D_ENTITY)
         {
-            MOEntity * entity = (MOEntity *)object;
-            MMesh * mesh = entity->getMesh();
+            OEntity * entity = (OEntity *)object;
+            Mesh * mesh = entity->getMesh();
             if(mesh)
                 meshs.push_back(mesh);
         }
@@ -1940,8 +1938,8 @@ void Maratis::selectSameMesh(void)
     unsigned int size = scene->getEntitiesNumber();
     for(i=0; i<size; i++)
     {
-        MOEntity * entity = scene->getEntityByIndex(i);
-        MMesh * mesh = entity->getMesh();
+        OEntity * entity = scene->getEntityByIndex(i);
+        Mesh * mesh = entity->getMesh();
         for(j=0; j<meshsSize; j++){
             if(meshs[j] == mesh){
                 addSelectedObject(entity);
@@ -1960,7 +1958,7 @@ void Maratis::updateCurrentAxis()
     MMouse * mouse = MMouse::getInstance();
 
     // get camera
-    MOCamera * camera = getPerspectiveVue();
+    OCamera * camera = getPerspectiveVue();
     MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();;
 
     // viewport
@@ -2018,7 +2016,7 @@ void Maratis::updateCurrentAxis()
     }
 }
 
-void Maratis::selectObjectsInMainView(MScene * scene, bool multipleSelection)
+void Maratis::selectObjectsInMainView(Scene * scene, bool multipleSelection)
 {
     // get window
     MWindow * window = MWindow::getInstance();
@@ -2027,7 +2025,7 @@ void Maratis::selectObjectsInMainView(MScene * scene, bool multipleSelection)
     MMouse * mouse = MMouse::getInstance();
 
     // get camera
-    MOCamera * camera = getPerspectiveVue();
+    OCamera * camera = getPerspectiveVue();
     MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();;
 
     // viewport
@@ -2096,7 +2094,7 @@ void Maratis::selectObjectsInMainView(MScene * scene, bool multipleSelection)
     if(!multipleSelection)
         clearSelectedObjects();
 
-    MObject3d * nearestObject = getNearestObject(scene, rayO, rayD);
+    Object3d * nearestObject = getNearestObject(scene, rayO, rayD);
 
     if(nearestObject)
     {
@@ -2108,8 +2106,8 @@ void Maratis::selectObjectsInMainView(MScene * scene, bool multipleSelection)
 void Maratis::updateViewCenter(void)
 {
     // view center
-    MLevel * level = MEngine::getInstance()->getLevel();
-    MScene * scene = level->getCurrentScene();
+    Level * level = NeoEngine::getInstance()->getLevel();
+    Scene * scene = level->getCurrentScene();
 
     MVector3 rayO = m_perspectiveVue.getTransformedPosition();
     MVector3 rayD = m_perspectiveVue.getTransformedVector(MVector3(0, 0, -m_perspectiveVue.getClippingFar()));
@@ -2125,7 +2123,7 @@ void Maratis::updateSelectionCenter(void)
     unsigned int oSize = getSelectedObjectsNumber();
     for(i=0; i<oSize; i++)
     {
-        MObject3d * object = getSelectedObjectByIndex(i);
+        Object3d * object = getSelectedObjectByIndex(i);
         position += object->getTransformedPosition();
     }
 
@@ -2133,10 +2131,10 @@ void Maratis::updateSelectionCenter(void)
         m_selectionCenter = position / (float)oSize;
 }
 
-void Maratis::drawGrid(MScene * scene)
+void Maratis::drawGrid(Scene * scene)
 {
     // get render
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     render->disableFog();
     render->enableDepthTest();
@@ -2214,16 +2212,16 @@ void Maratis::drawGrid(MScene * scene)
     endDraw(render);
 }
 
-void Maratis::drawScaleAxis(M_AXIS axis, MOCamera * camera, MMatrix4x4 * matrix, const bool viewTest)
+void Maratis::drawScaleAxis(M_AXIS axis, OCamera * camera, MMatrix4x4 * matrix, const bool viewTest)
 {
     // get render
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     MVector3 position = matrix->getTranslationPart();
 
     // normal
     MVector3 normal;
-    MObject3d * object = NULL;
+    Object3d * object = NULL;
 
     switch(axis)
     {
@@ -2304,17 +2302,17 @@ void Maratis::drawScaleAxis(M_AXIS axis, MOCamera * camera, MMatrix4x4 * matrix,
     render->popMatrix();
 }
 
-void Maratis::drawPositionAxis(M_AXIS axis, MOCamera * camera, MMatrix4x4 * matrix, const bool viewTest)
+void Maratis::drawPositionAxis(M_AXIS axis, OCamera * camera, MMatrix4x4 * matrix, const bool viewTest)
 {
     // get render
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     // get position from matrix
     MVector3 position = matrix->getTranslationPart();
 
     // normal
     MVector3 normal;
-    MObject3d * object = NULL;
+    Object3d * object = NULL;
 
     switch(axis)
     {
@@ -2396,10 +2394,10 @@ void Maratis::drawPositionAxis(M_AXIS axis, MOCamera * camera, MMatrix4x4 * matr
     render->popMatrix();
 }
 
-void Maratis::drawRotationCircle(M_AXIS axis, MOCamera * camera, MMatrix4x4 * matrix, const bool zTest)
+void Maratis::drawRotationCircle(M_AXIS axis, OCamera * camera, MMatrix4x4 * matrix, const bool zTest)
 {
     // get render
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     // normal
     MVector3 normal;
@@ -2477,7 +2475,7 @@ void Maratis::drawRotationCircle(M_AXIS axis, MOCamera * camera, MMatrix4x4 * ma
     render->popMatrix();
 }
 
-void Maratis::computeTransformDirection(MOCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, const float distance, const MVector3 & axis)
+void Maratis::computeTransformDirection(OCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, const float distance, const MVector3 & axis)
 {
     // get window
     MWindow * window = MWindow::getInstance();
@@ -2501,7 +2499,7 @@ void Maratis::computeTransformDirection(MOCamera * camera, const MVector3 & rayO
     m_tVectorDirection = (MVector2(pPoint.x, pPoint.y) - m_tMousePosition).getNormalized();
 }
 
-void Maratis::computeTransformPlane(MOCamera * camera, const MVector3 & position, const MVector3 & axis)
+void Maratis::computeTransformPlane(OCamera * camera, const MVector3 & position, const MVector3 & axis)
 {
     // get window
     MWindow * window = MWindow::getInstance();
@@ -2533,7 +2531,7 @@ void Maratis::computeTransformPlane(MOCamera * camera, const MVector3 & position
     m_tOffsetDirection = m_tMousePosition - m_tCenterPosition;
 }
 
-M_AXIS Maratis::selectEditScale(MOCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float radius)
+M_AXIS Maratis::selectEditScale(OCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float radius)
 {
     // axis
     MVector3 radiusScale = MVector3(radius, radius, radius);
@@ -2548,7 +2546,7 @@ M_AXIS Maratis::selectEditScale(MOCamera * camera, const MVector3 & rayO, const 
     MVector3 rotation(0, 0, 0);
     if(oSize == 1)
     {
-        MObject3d * object = getSelectedObjectByIndex(0);
+        Object3d * object = getSelectedObjectByIndex(0);
         MVector3 worldScale = object->getTransformedScale();
 
         MMatrix4x4 iScaleMatrix;
@@ -2577,7 +2575,7 @@ M_AXIS Maratis::selectEditScale(MOCamera * camera, const MVector3 & rayO, const 
     // z
     if(m_zEntity->isVisible())
     {
-        MMesh * mesh = m_zEntity->getMesh();
+        Mesh * mesh = m_zEntity->getMesh();
         if(getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &dist))
         {
             axis = M_AXIS_Z;
@@ -2589,7 +2587,7 @@ M_AXIS Maratis::selectEditScale(MOCamera * camera, const MVector3 & rayO, const 
     // y
     if(m_yEntity->isVisible())
     {
-        MMesh * mesh = m_yEntity->getMesh();
+        Mesh * mesh = m_yEntity->getMesh();
         if(getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &dist))
         {
             if(axis == M_AXIS_NONE)
@@ -2609,7 +2607,7 @@ M_AXIS Maratis::selectEditScale(MOCamera * camera, const MVector3 & rayO, const 
     // x
     if(m_xEntity->isVisible())
     {
-        MMesh * mesh = m_xEntity->getMesh();
+        Mesh * mesh = m_xEntity->getMesh();
         if(getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &dist))
         {
             if(axis == M_AXIS_NONE)
@@ -2629,12 +2627,12 @@ M_AXIS Maratis::selectEditScale(MOCamera * camera, const MVector3 & rayO, const 
     // view axis
     if(axis == M_AXIS_NONE)
     {
-        MScene * scene = MEngine::getInstance()->getLevel()->getCurrentScene();
+        Scene * scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
 
         unsigned int i;
         for(i=0; i<oSize; i++)
         {
-            MObject3d * object = getSelectedObjectByIndex(i);
+            Object3d * object = getSelectedObjectByIndex(i);
             if(getNearestObject(scene, rayO, rayD) == object)
             {
                 computeTransformPlane(camera, position, MVector3(0, 0, 0));
@@ -2650,7 +2648,7 @@ M_AXIS Maratis::selectEditScale(MOCamera * camera, const MVector3 & rayO, const 
     return axis;
 }
 
-M_AXIS Maratis::selectEditPosition(MOCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float radius)
+M_AXIS Maratis::selectEditPosition(OCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float radius)
 {
     // axis
     MVector3 radiusScale = MVector3(radius, radius, radius);
@@ -2665,7 +2663,7 @@ M_AXIS Maratis::selectEditPosition(MOCamera * camera, const MVector3 & rayO, con
     MVector3 rotation(0, 0, 0);
     if((oSize == 1) && (getOrientationMode() == M_ORIENTATION_LOCAL))
     {
-        MObject3d * object = getSelectedObjectByIndex(0);
+        Object3d * object = getSelectedObjectByIndex(0);
         MVector3 worldScale = object->getTransformedScale();
 
         MMatrix4x4 iScaleMatrix;
@@ -2694,7 +2692,7 @@ M_AXIS Maratis::selectEditPosition(MOCamera * camera, const MVector3 & rayO, con
     // z
     if(m_zEntity->isVisible())
     {
-        MMesh * mesh = m_zEntity->getMesh();
+        Mesh * mesh = m_zEntity->getMesh();
         if(getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &dist))
         {
             axis = M_AXIS_Z;
@@ -2706,7 +2704,7 @@ M_AXIS Maratis::selectEditPosition(MOCamera * camera, const MVector3 & rayO, con
     // y
     if(m_yEntity->isVisible())
     {
-        MMesh * mesh = m_yEntity->getMesh();
+        Mesh * mesh = m_yEntity->getMesh();
         if(getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &dist))
         {
             if(axis == M_AXIS_NONE)
@@ -2726,7 +2724,7 @@ M_AXIS Maratis::selectEditPosition(MOCamera * camera, const MVector3 & rayO, con
     // x
     if(m_xEntity->isVisible())
     {
-        MMesh * mesh = m_xEntity->getMesh();
+        Mesh * mesh = m_xEntity->getMesh();
         if(getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &dist))
         {
             if(axis == M_AXIS_NONE)
@@ -2746,13 +2744,13 @@ M_AXIS Maratis::selectEditPosition(MOCamera * camera, const MVector3 & rayO, con
     // view axis
     if(axis == M_AXIS_NONE)
     {
-        MScene * scene = MEngine::getInstance()->getLevel()->getCurrentScene();
-        MObject3d * nearestObj = getNearestObject(scene, rayO, rayD);
+        Scene * scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
+        Object3d * nearestObj = getNearestObject(scene, rayO, rayD);
 
         unsigned int i;
         for(i=0; i<oSize; i++)
         {
-            MObject3d * object = getSelectedObjectByIndex(i);
+            Object3d * object = getSelectedObjectByIndex(i);
             if(object == nearestObj)
             {
                 computeTransformPlane(camera, position, MVector3(0, 0, 0));
@@ -2768,7 +2766,7 @@ M_AXIS Maratis::selectEditPosition(MOCamera * camera, const MVector3 & rayO, con
     return axis;
 }
 
-M_AXIS Maratis::selectEditRotation(MOCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, const float radius)
+M_AXIS Maratis::selectEditRotation(OCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, const float radius)
 {
     // objects
     unsigned int oSize = getSelectedObjectsNumber();
@@ -2782,7 +2780,7 @@ M_AXIS Maratis::selectEditRotation(MOCamera * camera, const MVector3 & rayO, con
     MVector3 rotation(0, 0, 0);
     if((oSize == 1) && (getOrientationMode() == M_ORIENTATION_LOCAL))
     {
-        MObject3d * object = getSelectedObjectByIndex(0);
+        Object3d * object = getSelectedObjectByIndex(0);
         MVector3 worldScale = object->getTransformedScale();
 
         MMatrix4x4 iScaleMatrix;
@@ -2808,7 +2806,7 @@ M_AXIS Maratis::selectEditRotation(MOCamera * camera, const MVector3 & rayO, con
 
     // z
     {
-        MMesh * mesh = m_zcircleEntity->getMesh();
+        Mesh * mesh = m_zcircleEntity->getMesh();
         if(getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &distance))
             if(distance < cDist)
             {
@@ -2820,7 +2818,7 @@ M_AXIS Maratis::selectEditRotation(MOCamera * camera, const MVector3 & rayO, con
 
     // y
     {
-        MMesh * mesh = m_ycircleEntity->getMesh();
+        Mesh * mesh = m_ycircleEntity->getMesh();
         if(getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &distance))
             if(distance < cDist)
             {
@@ -2832,7 +2830,7 @@ M_AXIS Maratis::selectEditRotation(MOCamera * camera, const MVector3 & rayO, con
 
     // x
     {
-        MMesh * mesh = m_xcircleEntity->getMesh();
+        Mesh * mesh = m_xcircleEntity->getMesh();
         if(getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &distance))
             if(distance < cDist)
             {
@@ -2843,12 +2841,12 @@ M_AXIS Maratis::selectEditRotation(MOCamera * camera, const MVector3 & rayO, con
     }
 
     // view axis
-    MScene * scene = MEngine::getInstance()->getLevel()->getCurrentScene();
+    Scene * scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
 
     unsigned int i;
     for(i=0; i<oSize; i++)
     {
-        MObject3d * object = getSelectedObjectByIndex(i);
+        Object3d * object = getSelectedObjectByIndex(i);
         if(getNearestObject(scene, rayO, rayD) == object)
         {
             computeTransformPlane(camera, position, MVector3(0, 0, 0));
@@ -2860,7 +2858,7 @@ M_AXIS Maratis::selectEditRotation(MOCamera * camera, const MVector3 & rayO, con
     return M_AXIS_NONE;
 }
 
-void Maratis::drawEditPosition(MOCamera * camera)
+void Maratis::drawEditPosition(OCamera * camera)
 {
     // viewport
     int * viewport = camera->getCurrentViewport();
@@ -2869,7 +2867,7 @@ void Maratis::drawEditPosition(MOCamera * camera)
     unsigned int oSize = getSelectedObjectsNumber();
 
     // get render
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     // get mouse
     MMouse * mouse = MMouse::getInstance();
@@ -2900,7 +2898,7 @@ void Maratis::drawEditPosition(MOCamera * camera)
     MVector3 rotation(0, 0, 0);
     if((oSize == 1) && (getOrientationMode() == M_ORIENTATION_LOCAL))
     {
-        MObject3d * object = getSelectedObjectByIndex(0);
+        Object3d * object = getSelectedObjectByIndex(0);
         MVector3 worldScale = object->getTransformedScale();
 
         MMatrix4x4 iScaleMatrix;
@@ -2989,7 +2987,7 @@ void Maratis::drawEditPosition(MOCamera * camera)
     drawPositionAxis(M_AXIS_Z, camera, &matrix);
 }
 
-void Maratis::drawEditScale(MOCamera * camera)
+void Maratis::drawEditScale(OCamera * camera)
 {
     // viewport
     int * viewport = camera->getCurrentViewport();
@@ -2998,7 +2996,7 @@ void Maratis::drawEditScale(MOCamera * camera)
     unsigned int oSize = getSelectedObjectsNumber();
 
     // get render
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     // get mouse
     MMouse * mouse = MMouse::getInstance();
@@ -3029,7 +3027,7 @@ void Maratis::drawEditScale(MOCamera * camera)
     MVector3 rotation(0, 0, 0);
     if(oSize == 1)
     {
-        MObject3d * object = getSelectedObjectByIndex(0);
+        Object3d * object = getSelectedObjectByIndex(0);
         MVector3 worldScale = object->getTransformedScale();
 
         MMatrix4x4 iScaleMatrix;
@@ -3117,7 +3115,7 @@ void Maratis::drawEditScale(MOCamera * camera)
     drawScaleAxis(M_AXIS_Z, camera, &matrix);
 }
 
-void Maratis::drawEditRotation(MOCamera * camera)
+void Maratis::drawEditRotation(OCamera * camera)
 {
     // viewport
     int * viewport = camera->getCurrentViewport();
@@ -3126,7 +3124,7 @@ void Maratis::drawEditRotation(MOCamera * camera)
     unsigned int oSize = getSelectedObjectsNumber();
 
     // get engine
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     // get mouse
     MMouse * mouse = MMouse::getInstance();
@@ -3157,7 +3155,7 @@ void Maratis::drawEditRotation(MOCamera * camera)
     MVector3 rotation(0, 0, 0);
     if((oSize == 1) && (getOrientationMode() == M_ORIENTATION_LOCAL))
     {
-        MObject3d * object = getSelectedObjectByIndex(0);
+        Object3d * object = getSelectedObjectByIndex(0);
         MVector3 worldScale = object->getTransformedScale();
 
         MMatrix4x4 iScaleMatrix;
@@ -3277,7 +3275,7 @@ void Maratis::transformRotation(void)
     }
 
     // get camera
-    MOCamera * camera = getPerspectiveVue();
+    OCamera * camera = getPerspectiveVue();
 
     // rotate
     if(getOrientationMode() == M_ORIENTATION_WORLD)
@@ -3315,11 +3313,11 @@ void Maratis::transformRotation(void)
         unsigned int i;
         for(i=0; i<oSize; i++)
         {
-            MObject3d * object = getSelectedObjectByIndex(i);
+            Object3d * object = getSelectedObjectByIndex(i);
 
             if(object->hasParent())
             {
-                MObject3d * parent = object->getParent();
+                Object3d * parent = object->getParent();
                 if(isObjectSelected(parent))
                     continue;
 
@@ -3383,7 +3381,7 @@ void Maratis::transformRotation(void)
         unsigned int i;
         for(i=0; i<oSize; i++)
         {
-            MObject3d * object = getSelectedObjectByIndex(i);
+            Object3d * object = getSelectedObjectByIndex(i);
 
             if(m_currentAxis == M_AXIS_VIEW)
             {
@@ -3426,13 +3424,13 @@ void Maratis::transformScale(void)
         unsigned int i;
         for(i=0; i<oSize; i++)
         {
-            MObject3d * object = getSelectedObjectByIndex(i);
+            Object3d * object = getSelectedObjectByIndex(i);
 
             if(getOrientationMode() == M_ORIENTATION_WORLD)
             {
                 if(object->hasParent())
                 {
-                    MObject3d * parent = object->getParent();
+                    Object3d * parent = object->getParent();
                     if(isObjectSelected(parent))
                         continue;
 
@@ -3480,7 +3478,7 @@ void Maratis::transformScale(void)
     }
     else
     {
-        MObject3d * object = getSelectedObjectByIndex(0);
+        Object3d * object = getSelectedObjectByIndex(0);
 
         // matrix
         MVector3 scale = object->getTransformedScale();
@@ -3513,7 +3511,7 @@ void Maratis::transformScale(void)
     unsigned int i;
     for(i=0; i<oSize; i++)
     {
-        MObject3d * object = getSelectedObjectByIndex(i);
+        Object3d * object = getSelectedObjectByIndex(i);
         MVector3 worldPos = object->getTransformedPosition();
 
         MVector3 scale = object->getScale();
@@ -3550,7 +3548,7 @@ void Maratis::transformPosition(MVector2 delta)
     MMouse * mouse = MMouse::getInstance();
 
     // get camera
-    MOCamera * camera = getPerspectiveVue();
+    OCamera * camera = getPerspectiveVue();
 
     // position
     updateSelectionCenter();
@@ -3590,12 +3588,12 @@ void Maratis::transformPosition(MVector2 delta)
         unsigned int i;
         for(i=0; i<oSize; i++)
         {
-            MObject3d * object = getSelectedObjectByIndex(i);
+            Object3d * object = getSelectedObjectByIndex(i);
             MVector3 worldPos = object->getTransformedPosition();
 
             if(object->hasParent())
             {
-                MObject3d * parent = object->getParent();
+                Object3d * parent = object->getParent();
                 if(! isObjectSelected(parent))
                 {
                     MVector3 localPos = parent->getInversePosition(point + (worldPos - (*position)));
@@ -3636,7 +3634,7 @@ void Maratis::transformPosition(MVector2 delta)
     }
     else
     {
-        MObject3d * object = getSelectedObjectByIndex(0);
+        Object3d * object = getSelectedObjectByIndex(0);
 
         // matrix
         MVector3 scale = object->getTransformedScale();
@@ -3697,12 +3695,12 @@ void Maratis::transformPosition(MVector2 delta)
     unsigned int i;
     for(i=0; i<oSize; i++)
     {
-        MObject3d * object = getSelectedObjectByIndex(i);
+        Object3d * object = getSelectedObjectByIndex(i);
         MVector3 worldPos = object->getTransformedPosition();
 
         if(object->hasParent())
         {
-            MObject3d * parent = object->getParent();
+            Object3d * parent = object->getParent();
             if(! isObjectSelected(parent))
             {
                 MVector3 localPos = parent->getInversePosition(worldPos + (axis * distance));
@@ -3730,7 +3728,7 @@ void Maratis::transformPosition(void)
     MMouse * mouse = MMouse::getInstance();
 
     // get camera
-    MOCamera * camera = getPerspectiveVue();
+    OCamera * camera = getPerspectiveVue();
 
     // position
     updateSelectionCenter();
@@ -3770,12 +3768,12 @@ void Maratis::transformPosition(void)
         unsigned int i;
         for(i=0; i<oSize; i++)
         {
-            MObject3d * object = getSelectedObjectByIndex(i);
+            Object3d * object = getSelectedObjectByIndex(i);
             MVector3 worldPos = object->getTransformedPosition();
 
             if(object->hasParent())
             {
-                MObject3d * parent = object->getParent();
+                Object3d * parent = object->getParent();
                 if(! isObjectSelected(parent))
                 {
                     MVector3 localPos = parent->getInversePosition(point + (worldPos - (*position)));
@@ -3816,7 +3814,7 @@ void Maratis::transformPosition(void)
     }
     else
     {
-        MObject3d * object = getSelectedObjectByIndex(0);
+        Object3d * object = getSelectedObjectByIndex(0);
 
         // matrix
         MVector3 scale = object->getTransformedScale();
@@ -3877,12 +3875,12 @@ void Maratis::transformPosition(void)
     unsigned int i;
     for(i=0; i<oSize; i++)
     {
-        MObject3d * object = getSelectedObjectByIndex(i);
+        Object3d * object = getSelectedObjectByIndex(i);
         MVector3 worldPos = object->getTransformedPosition();
 
         if(object->hasParent())
         {
-            MObject3d * parent = object->getParent();
+            Object3d * parent = object->getParent();
             if(! isObjectSelected(parent))
             {
                 MVector3 localPos = parent->getInversePosition(worldPos + (axis * distance));
@@ -3925,7 +3923,7 @@ void Maratis::transformSelectedObjects(void)
     }
 }
 
-bool Maratis::isObjectSelected(MObject3d * object)
+bool Maratis::isObjectSelected(Object3d * object)
 {
     unsigned int i;
     unsigned int oSize = getSelectedObjectsNumber();
@@ -3938,15 +3936,15 @@ bool Maratis::isObjectSelected(MObject3d * object)
     return false;
 }
 
-void Maratis::drawInvisibleEntity(MOEntity * entity)
+void Maratis::drawInvisibleEntity(OEntity * entity)
 {
     // HACK opengl
 #ifndef USE_GLES
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #endif
 
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
-    MMesh * mesh = entity->getMesh();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    Mesh * mesh = entity->getMesh();
     if(mesh)
     {
         render->pushMatrix();
@@ -3964,10 +3962,10 @@ void Maratis::drawInvisibleEntity(MOEntity * entity)
 #endif
 }
 
-void Maratis::drawCamera(MScene * scene, MOCamera * camera)
+void Maratis::drawCamera(Scene * scene, OCamera * camera)
 {
     // get render
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     // clear z buffer
     render->enableDepthTest();
@@ -3979,17 +3977,17 @@ void Maratis::drawCamera(MScene * scene, MOCamera * camera)
     scene->drawObjectsBehaviors();
 }
 
-void Maratis::drawTriangles(MMesh * mesh)
+void Maratis::drawTriangles(Mesh * mesh)
 {
     // get render
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     // subMeshs
     unsigned int s;
     unsigned sSize = mesh->getSubMeshsNumber();
     for(s=0; s<sSize; s++)
     {
-        MSubMesh * subMesh = &mesh->getSubMeshs()[s];
+        SubMesh * subMesh = &mesh->getSubMeshs()[s];
 
         render->disableLighting();
         render->disableNormalArray();
@@ -4004,7 +4002,7 @@ void Maratis::drawTriangles(MMesh * mesh)
         unsigned int displayNumber = subMesh->getDisplaysNumber();
         for(i=0; i<displayNumber; i++)
         {
-            MDisplay * display = subMesh->getDisplay(i);
+            MaterialDisplay * display = subMesh->getDisplay(i);
             if(! display->isVisible())
                 continue;
 
@@ -4047,9 +4045,9 @@ void Maratis::drawTriangles(MMesh * mesh)
 
 void Maratis::drawLight(void)
 {
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
-    MMesh * mesh = m_lightEntity->getMesh();
+    Mesh * mesh = m_lightEntity->getMesh();
     unsigned short * indices = (unsigned short *)mesh->getSubMeshs()[0].getIndices();
     MVector3 * vertices = mesh->getSubMeshs()[0].getVertices();
 
@@ -4069,9 +4067,9 @@ void Maratis::drawLight(void)
 
 void Maratis::drawCamera(void)
 {
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
-    MMesh * mesh = m_cameraEntity->getMesh();
+    Mesh * mesh = m_cameraEntity->getMesh();
     unsigned short * indices = (unsigned short *)mesh->getSubMeshs()[0].getIndices();
     MVector3 * vertices = mesh->getSubMeshs()[0].getVertices();
 
@@ -4091,9 +4089,9 @@ void Maratis::drawCamera(void)
 
 void Maratis::drawSound(void)
 {
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
-    MMesh * mesh = m_soundEntity->getMesh();
+    Mesh * mesh = m_soundEntity->getMesh();
     unsigned short * indices = (unsigned short *)mesh->getSubMeshs()[0].getIndices();
     MVector3 * vertices = mesh->getSubMeshs()[0].getVertices();
 
@@ -4111,15 +4109,15 @@ void Maratis::drawSound(void)
     }
 }
 
-void Maratis::drawArmature(MOEntity * entity)
+void Maratis::drawArmature(OEntity * entity)
 {
-    MEngine * engine = MEngine::getInstance();
+    NeoEngine * engine = NeoEngine::getInstance();
     MRenderingContext * render = engine->getRenderingContext();
 
-    MMesh * mesh = entity->getMesh();
+    Mesh * mesh = entity->getMesh();
     if(mesh)
     {
-        MArmature * armature = mesh->getArmature();
+        Armature * armature = mesh->getArmature();
         if(armature)
         {
             if(mesh->getArmatureAnim())
@@ -4143,7 +4141,7 @@ void Maratis::drawArmature(MOEntity * entity)
             unsigned int b, bSize = armature->getBonesNumber();
             for(b=0; b<bSize; b++)
             {
-                MOBone * bone = armature->getBone(b);
+                OBone * bone = armature->getBone(b);
 
                 MVector3 pos = entity->getTransformedVector(bone->getTransformedPosition());
                 float size = (pos - iVue).getLength() * 0.01f;
@@ -4161,19 +4159,19 @@ void Maratis::drawArmature(MOEntity * entity)
     }
 }
 
-void Maratis::drawMainView(MScene * scene)
+void Maratis::drawMainView(Scene * scene)
 {
     // get mouse
     MMouse * mouse = MMouse::getInstance();
 
-    MEngine * engine = MEngine::getInstance();
+    NeoEngine * engine = NeoEngine::getInstance();
 
     // get render
     MRenderingContext * render = engine->getRenderingContext();
-    MRenderer * renderer = engine->getRenderer();
+    Renderer * renderer = engine->getRenderer();
 
     // get camera
-    MOCamera * camera = getPerspectiveVue();
+    OCamera * camera = getPerspectiveVue();
     MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();
 
     // clear z buffer
@@ -4203,7 +4201,7 @@ void Maratis::drawMainView(MScene * scene)
     unsigned int eSize = scene->getEntitiesNumber();
     for(i=0; i<eSize; i++)
     {
-        MOEntity * entity = scene->getEntityByIndex(i);
+        OEntity * entity = scene->getEntityByIndex(i);
         if(! entity->isActive())
         {
             if(isObjectSelected(entity))
@@ -4229,7 +4227,7 @@ void Maratis::drawMainView(MScene * scene)
     unsigned int sSize = scene->getSoundsNumber();
     for(i=0; i<sSize; i++)
     {
-        MOSound * sound = scene->getSoundByIndex(i);
+        OSound * sound = scene->getSoundByIndex(i);
         if(! sound->isActive())
             sound->updateMatrix();
 
@@ -4270,7 +4268,7 @@ void Maratis::drawMainView(MScene * scene)
     unsigned int lSize = scene->getLightsNumber();
     for(i=0; i<lSize; i++)
     {
-        MOLight * light = scene->getLightByIndex(i);
+        OLight * light = scene->getLightByIndex(i);
         if(! light->isActive())
             light->updateMatrix();
 
@@ -4370,7 +4368,7 @@ void Maratis::drawMainView(MScene * scene)
     unsigned int cSize = scene->getCamerasNumber();
     for(i=0; i<cSize; i++)
     {
-        MOCamera * oCamera = scene->getCameraByIndex(i);
+        OCamera * oCamera = scene->getCameraByIndex(i);
         if(! oCamera->isActive())
             oCamera->updateMatrix();
 
@@ -4411,7 +4409,7 @@ void Maratis::drawMainView(MScene * scene)
     unsigned int tSize = scene->getTextsNumber();
     for(i=0; i<tSize; i++)
     {
-        MOText * text = scene->getTextByIndex(i);
+        OText * text = scene->getTextByIndex(i);
         if(! text->isActive())
             text->updateMatrix();
 
@@ -4443,7 +4441,7 @@ void Maratis::drawMainView(MScene * scene)
     render->disableDepthTest();
     for(i=0; i<eSize; i++)
     {
-        MOEntity * entity = scene->getEntityByIndex(i);
+        OEntity * entity = scene->getEntityByIndex(i);
         if(entity->isActive() && !entity->isInvisible() && isObjectSelected(entity))
         {
             render->setColor3(MVector3(0.75f));
@@ -4458,9 +4456,9 @@ void Maratis::drawMainView(MScene * scene)
         render->enableBlending();
         render->setBlendingMode(M_BLENDING_ALPHA);
 
-        MObject3d * object;
-        MOEntity * entity;
-        MOText * text;
+        Object3d * object;
+        OEntity * entity;
+        OText * text;
 
         unsigned int oSize = getSelectedObjectsNumber();
         for(i=0; i<oSize; i++)
@@ -4474,7 +4472,7 @@ void Maratis::drawMainView(MScene * scene)
             {
                 case M_OBJECT3D_ENTITY:
                 {
-                    entity = (MOEntity *)object;
+                    entity = (OEntity *)object;
 
                     render->setColor4(MVector4(1, 1, 0, 0.2f));
                     render->pushMatrix();
@@ -4485,7 +4483,7 @@ void Maratis::drawMainView(MScene * scene)
                     break;
                 case M_OBJECT3D_TEXT:
                 {
-                    text = (MOText *)object;
+                    text = (OText *)object;
 
                     render->setColor4(MVector4(1, 1, 0, 0.2f));
                     render->pushMatrix();
@@ -4534,12 +4532,12 @@ void Maratis::logicLoop(void)
     PROFILE_SHARED_BLOCK(Update);
 
     Maratis * maratis = Maratis::getInstance();
-    MEngine * engine = MEngine::getInstance();
-    MLevel * level = MEngine::getInstance()->getLevel();
-    MScene * scene = level->getCurrentScene();
+    NeoEngine * engine = NeoEngine::getInstance();
+    Level * level = NeoEngine::getInstance()->getLevel();
+    Scene * scene = level->getCurrentScene();
 
     // game
-    MGame * game = engine->getGame();
+    NeoGame * game = engine->getGame();
     if(game)
     {
         if(game->isRunning())
@@ -4557,7 +4555,7 @@ void Maratis::logicLoop(void)
     unsigned int oSize = scene->getObjectsNumber();
     for(i=0; i<oSize; i++)
     {
-        MObject3d * object = scene->getObjectByIndex(i);
+        Object3d * object = scene->getObjectByIndex(i);
         if(! object->isActive())
             continue;
 
@@ -4571,7 +4569,7 @@ void Maratis::logicLoop(void)
 void Maratis::graphicLoop(void)
 {
     PROFILE_SHARED_BLOCK(Render);
-    MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     MWindow* window = MWindow::getInstance();
     // viewport
@@ -4581,7 +4579,7 @@ void Maratis::graphicLoop(void)
     render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
 
     // game
-    MGame * game = MEngine::getInstance()->getGame();
+    NeoGame * game = NeoEngine::getInstance()->getGame();
     if(game)
     {
         if(game->isRunning())
@@ -4598,7 +4596,7 @@ void Maratis::graphicLoop(void)
     render->setViewport(0, 0, w, h);
 
     // draw
-    Maratis::getInstance()->drawMainView(MEngine::getInstance()->getLevel()->getCurrentScene());
+    Maratis::getInstance()->drawMainView(NeoEngine::getInstance()->getLevel()->getCurrentScene());
 
     // setup render
     render->disableScissorTest();

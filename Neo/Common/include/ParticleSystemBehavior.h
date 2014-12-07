@@ -34,13 +34,13 @@
 
 namespace Neo
 {
-class ParticleSystemBehavior : public MBehavior
+class ParticleSystemBehavior : public Behavior
 {
 public:
 
 	// constructors / destructors
-    ParticleSystemBehavior(MObject3d * parentObject);
-    ParticleSystemBehavior(ParticleSystemBehavior & behavior, MObject3d * parentObject);
+    ParticleSystemBehavior(Object3d * parentObject);
+    ParticleSystemBehavior(ParticleSystemBehavior & behavior, Object3d * parentObject);
     ~ParticleSystemBehavior(void);
 
 private:
@@ -82,7 +82,7 @@ private:
 
     MString m_textureFile;
     MString m_currentTextureFile;
-    MTextureRef* m_texRef;
+    TextureRef* m_texRef;
 
     vector<Particle> m_particles;
     MVector3* m_particlePositions;
@@ -110,10 +110,10 @@ public:
 	void destroy(void);
 
 	// get new
-	static MBehavior * getNew(MObject3d * parentObject);
+	static Behavior * getNew(Object3d * parentObject);
 
 	// get copy
-	MBehavior * getCopy(MObject3d * parentObject);
+	Behavior * getCopy(Object3d * parentObject);
 
 	// name
     static const char * getStaticName(void){ return "ParticleSystem"; }
@@ -126,7 +126,7 @@ public:
 
 	// variables
 	unsigned int getVariablesNumber(void);
-	MVariable getVariable(unsigned int id);
+	NeoVariable getVariable(unsigned int id);
 };
 }
 #endif

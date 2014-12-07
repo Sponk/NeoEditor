@@ -27,7 +27,7 @@
 //========================================================================
 
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <MWindow.h>
 #include <ParticleSystemBehavior.h>
 #include <string>
@@ -72,8 +72,8 @@ using namespace Neo;
 // Init
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-ParticleSystemBehavior::ParticleSystemBehavior(MObject3d * parentObject):
-MBehavior(parentObject),
+ParticleSystemBehavior::ParticleSystemBehavior(Object3d * parentObject):
+Behavior(parentObject),
 m_lifeTime(2000),
 m_particlePositions(NULL),
 m_particleColors(NULL),
@@ -98,8 +98,8 @@ m_emitting(true)
     m_semaphore.Init(1);
 }
 
-ParticleSystemBehavior::ParticleSystemBehavior(ParticleSystemBehavior & behavior, MObject3d * parentObject):
-MBehavior(parentObject),
+ParticleSystemBehavior::ParticleSystemBehavior(ParticleSystemBehavior & behavior, Object3d * parentObject):
+Behavior(parentObject),
 m_lifeTime(behavior.m_lifeTime),
 m_speedDivergence(behavior.m_speedDivergence),
 m_lifeDivergence(behavior.m_lifeDivergence),
@@ -139,12 +139,12 @@ void ParticleSystemBehavior::destroy(void)
     delete this;
 }
 
-MBehavior * ParticleSystemBehavior::getNew(MObject3d * parentObject)
+Behavior * ParticleSystemBehavior::getNew(Object3d * parentObject)
 {
     return new ParticleSystemBehavior(parentObject);
 }
 
-MBehavior * ParticleSystemBehavior::getCopy(MObject3d * parentObject)
+Behavior * ParticleSystemBehavior::getCopy(Object3d * parentObject)
 {
     return new ParticleSystemBehavior(*this, parentObject);
 }
@@ -158,45 +158,45 @@ unsigned int ParticleSystemBehavior::getVariablesNumber(void){
     return 16;
 }
 
-MVariable ParticleSystemBehavior::getVariable(unsigned int id)
+NeoVariable ParticleSystemBehavior::getVariable(unsigned int id)
 {
     switch(id)
     {
     case 0:
-        return MVariable("LifeTime", &m_lifeTime, M_VARIABLE_FLOAT);
+        return NeoVariable("LifeTime", &m_lifeTime, M_VARIABLE_FLOAT);
     case 1:
-        return MVariable("ParticlesNumber", &m_particlesNumber, M_VARIABLE_FLOAT);
+        return NeoVariable("ParticlesNumber", &m_particlesNumber, M_VARIABLE_FLOAT);
     case 2:
-        return MVariable("InitialSpeed", &m_initialSpeed, M_VARIABLE_VEC3);
+        return NeoVariable("InitialSpeed", &m_initialSpeed, M_VARIABLE_VEC3);
     case 3:
-        return MVariable("Gravity", &m_gravity, M_VARIABLE_VEC3);
+        return NeoVariable("Gravity", &m_gravity, M_VARIABLE_VEC3);
     case 4:
-        return MVariable("SpeedDivergence", &m_speedDivergence, M_VARIABLE_FLOAT);
+        return NeoVariable("SpeedDivergence", &m_speedDivergence, M_VARIABLE_FLOAT);
     case 5:
-        return MVariable("LifeDivergence", &m_lifeDivergence, M_VARIABLE_FLOAT);
+        return NeoVariable("LifeDivergence", &m_lifeDivergence, M_VARIABLE_FLOAT);
     case 6:
-        return MVariable("Size", &m_size, M_VARIABLE_FLOAT);
+        return NeoVariable("Size", &m_size, M_VARIABLE_FLOAT);
     case 7:
-        return MVariable("SizeDivergence", &m_sizeDivergence, M_VARIABLE_FLOAT);
+        return NeoVariable("SizeDivergence", &m_sizeDivergence, M_VARIABLE_FLOAT);
     case 8:
-        return MVariable("Texture", &m_textureFile, M_VARIABLE_STRING);
+        return NeoVariable("Texture", &m_textureFile, M_VARIABLE_STRING);
     case 9:
-        return MVariable("SpeedMultiplier", &m_speedMultiplier, M_VARIABLE_FLOAT);
+        return NeoVariable("SpeedMultiplier", &m_speedMultiplier, M_VARIABLE_FLOAT);
     case 10:
-        return MVariable("Alpha", &m_alpha, M_VARIABLE_FLOAT);
+        return NeoVariable("Alpha", &m_alpha, M_VARIABLE_FLOAT);
     case 11:
-        return MVariable("AlphaDivergence", &m_alphaDivergence, M_VARIABLE_FLOAT);
+        return NeoVariable("AlphaDivergence", &m_alphaDivergence, M_VARIABLE_FLOAT);
     case 12:
-        return MVariable("EmissionDelay", &m_emissionDelay, M_VARIABLE_FLOAT);
+        return NeoVariable("EmissionDelay", &m_emissionDelay, M_VARIABLE_FLOAT);
     case 13:
-        return MVariable("Multithreading", &m_multithreading, M_VARIABLE_BOOL);
+        return NeoVariable("Multithreading", &m_multithreading, M_VARIABLE_BOOL);
     case 14:
-        return MVariable("Looping", &m_looping, M_VARIABLE_BOOL);
+        return NeoVariable("Looping", &m_looping, M_VARIABLE_BOOL);
     case 15:
-        return MVariable("Emitting", &m_emitting, M_VARIABLE_BOOL);
+        return NeoVariable("Emitting", &m_emitting, M_VARIABLE_BOOL);
 
     default:
-        return MVariable("NULL", NULL, M_VARIABLE_NULL);
+        return NeoVariable("NULL", NULL, M_VARIABLE_NULL);
     }
 }
 
@@ -207,8 +207,8 @@ MVariable ParticleSystemBehavior::getVariable(unsigned int id)
 
 void ParticleSystemBehavior::update(void)
 {
-    MEngine * engine = MEngine::getInstance();
-    MLevel * level = engine->getLevel();
+    NeoEngine * engine = NeoEngine::getInstance();
+    Level * level = engine->getLevel();
 
     if(m_multithreading && !m_thread.IsRunning())
         m_thread.Start(&ParticleSystemBehavior::thread_main, "ParticleSystemThread", (void*) this);
@@ -219,19 +219,19 @@ void ParticleSystemBehavior::update(void)
 
 void ParticleSystemBehavior::draw()
 {
-    MEngine* engine = MEngine::getInstance();
+    NeoEngine* engine = NeoEngine::getInstance();
     MRenderingContext* render = engine->getRenderingContext();
-    MGame * game = engine->getGame();
-    MLevel* level = engine->getLevel();
+    NeoGame * game = engine->getGame();
+    Level* level = engine->getLevel();
 
     if(!level)
         return;
 
-    MScene* scene = level->getCurrentScene();
+    Scene* scene = level->getCurrentScene();
     if(!scene)
         return;
 
-    MOCamera* camera = scene->getCurrentCamera();
+    OCamera* camera = scene->getCurrentCamera();
     if(!camera)
         return;
 
@@ -338,7 +338,7 @@ void ParticleSystemBehavior::draw()
 
 void ParticleSystemBehavior::updateParticles(MVector3 parentPosition)
 {
-    MEngine* engine = MEngine::getInstance();
+    NeoEngine* engine = NeoEngine::getInstance();
     MSystemContext* system = engine->getSystemContext();
 
     unsigned long currentTime = system->getSystemTick();
@@ -465,7 +465,7 @@ int ParticleSystemBehavior::thread_main(void* particlesystem)
 {
     ParticleSystemBehavior* self = (ParticleSystemBehavior*) particlesystem;
     MWindow* window = MWindow::getInstance();
-    MEngine* engine = MEngine::getInstance();
+    NeoEngine* engine = NeoEngine::getInstance();
 
     //MLOG_INFO("Start particle system thread with id: " << self->m_thread.GetId());
 

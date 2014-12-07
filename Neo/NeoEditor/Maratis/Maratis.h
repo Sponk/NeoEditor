@@ -27,11 +27,12 @@
 #define _MARATIS_H
 
 #include <vector>
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <Plugin.h>
 #include "../MRenderArray/MRenderArray.h"
 
-
+namespace Neo
+{
 enum M_AXIS
 {
 	M_AXIS_NONE = 0,
@@ -80,9 +81,9 @@ private:
 	MScriptContext * m_script;
 	MInputContext * m_input;
 	MSystemContext * m_system;
-	MGame * m_game;
-	MLevel * m_level;
-	MRenderer * m_renderer;
+	NeoGame * m_game;
+	Level * m_level;
+	Renderer * m_renderer;
 	MPackageManager * m_packageManager;
 	
 	// temp dir
@@ -121,28 +122,28 @@ private:
 	MVector3 m_selectionCenter;
 	MVector3 m_viewCenter;
 
-	MOEntity * m_sphereEntity;
-	MOEntity * m_coneEntity;
-	MOEntity * m_cubeEntity;
-	MOEntity * m_planeEntity;
-	MOEntity * m_xEntity;
-	MOEntity * m_yEntity;
-	MOEntity * m_zEntity;
-	MOEntity * m_xcircleEntity;
-	MOEntity * m_ycircleEntity;
-	MOEntity * m_zcircleEntity;
-	MOEntity * m_lightEntity;
-	MOEntity * m_cameraEntity;
-	MOEntity * m_soundEntity;
+	OEntity * m_sphereEntity;
+	OEntity * m_coneEntity;
+	OEntity * m_cubeEntity;
+	OEntity * m_planeEntity;
+	OEntity * m_xEntity;
+	OEntity * m_yEntity;
+	OEntity * m_zEntity;
+	OEntity * m_xcircleEntity;
+	OEntity * m_ycircleEntity;
+	OEntity * m_zcircleEntity;
+	OEntity * m_lightEntity;
+	OEntity * m_cameraEntity;
+	OEntity * m_soundEntity;
 
 	// mesh manager
 	MDataManager m_meshManager;
 
 	// user vues
-	MOCamera m_perspectiveVue;
+	OCamera m_perspectiveVue;
 
 	// selected objects
-	std::vector <MObject3d *> m_selectedObjects;
+	std::vector <Object3d *> m_selectedObjects;
 
 	// plugins
 	std::vector <Neo::Plugin *> m_plugins;
@@ -151,7 +152,7 @@ private:
 	Neo::Plugin * m_gamePlugin;
 
 	// empty text
-	MOText m_emptyText;
+	OText m_emptyText;
 
 public:
 
@@ -162,7 +163,7 @@ public:
 	void getNewObjectName(const char * objectName, char * name);
 
 	// editor meshs
-	MMeshRef * loadEditorMesh(const char * filename);
+	MeshRef * loadEditorMesh(const char * filename);
 
 	// start
 	void start(void);
@@ -171,33 +172,33 @@ public:
     bool hasTitleChanged() { return m_titleChanged; }
     void setTitleChanged(bool changed) { m_titleChanged = changed; }
 
-	void drawInvisibleEntity(MOEntity * entity);
-	void drawTriangles(MMesh * mesh);
+	void drawInvisibleEntity(OEntity * entity);
+	void drawTriangles(Mesh * mesh);
 	void drawLight(void);
 	void drawCamera(void);
 	void drawSound(void);
-	void drawArmature(MOEntity * entity);
-	void drawBoundingBox(MBox3d * box);
-	void drawGrid(MScene * scene);
-	void drawPositionAxis(M_AXIS axis, MOCamera * camera, MMatrix4x4 * matrix, const bool viewTest = true);
-	void drawScaleAxis(M_AXIS axis, MOCamera * camera, MMatrix4x4 * matrix, const bool viewTest = true);
-	void drawRotationCircle(M_AXIS axis, MOCamera * camera, MMatrix4x4 * matrix, const bool zTest = true);
-	void drawEditRotation(MOCamera * camera);
-	void drawEditPosition(MOCamera * camera);
-	void drawEditScale(MOCamera * camera);
-	void computeTransformDirection(MOCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float distance, const MVector3 & axis);
-	void computeTransformPlane(MOCamera * camera, const MVector3 & position, const MVector3 & axis);
+	void drawArmature(OEntity * entity);
+	void drawBoundingBox(Box3d * box);
+	void drawGrid(Scene * scene);
+	void drawPositionAxis(M_AXIS axis, OCamera * camera, MMatrix4x4 * matrix, const bool viewTest = true);
+	void drawScaleAxis(M_AXIS axis, OCamera * camera, MMatrix4x4 * matrix, const bool viewTest = true);
+	void drawRotationCircle(M_AXIS axis, OCamera * camera, MMatrix4x4 * matrix, const bool zTest = true);
+	void drawEditRotation(OCamera * camera);
+	void drawEditPosition(OCamera * camera);
+	void drawEditScale(OCamera * camera);
+	void computeTransformDirection(OCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float distance, const MVector3 & axis);
+	void computeTransformPlane(OCamera * camera, const MVector3 & position, const MVector3 & axis);
 	void transformRotation(void);
 	void transformPosition(void);
     void transformPosition(MVector2 delta);
 
 	void transformScale(void);
 
-    MObject3d * getNearestMesh(MScene * scene, const MVector3 & rayO, const MVector3 & rayD, MVector3 * intersectPoint);
-	MObject3d * getNearestObject(MScene * scene, const MVector3 & rayO, const MVector3 & rayD, MVector3 * intersectPoint = NULL);
-	M_AXIS selectEditRotation(MOCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float radius);
-	M_AXIS selectEditPosition(MOCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float radius);
-	M_AXIS selectEditScale(MOCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float radius);
+    Object3d * getNearestMesh(Scene * scene, const MVector3 & rayO, const MVector3 & rayD, MVector3 * intersectPoint);
+	Object3d * getNearestObject(Scene * scene, const MVector3 & rayO, const MVector3 & rayD, MVector3 * intersectPoint = NULL);
+	M_AXIS selectEditRotation(OCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float radius);
+	M_AXIS selectEditPosition(OCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float radius);
+	M_AXIS selectEditScale(OCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float radius);
 
     void updateCurrentAxis();
 
@@ -268,19 +269,19 @@ public:
 	// link
 	void linkSelectedObjects(void);
 	void unlinkSelectedObjects(void);
-	void linkTwoObjects(MObject3d *parent, MObject3d *child);
-	void unlinkTwoObjects(MObject3d *parent, MObject3d *child);
+	void linkTwoObjects(Object3d *parent, Object3d *child);
+	void unlinkTwoObjects(Object3d *parent, Object3d *child);
 
 	// selected objects
 	void activeSelection(void);
 	void selectAll(void);
 	void focusSelection(void);
 	void selectSameMesh(void);
-	void addSelectedObject(MObject3d * object);
-	bool isObjectSelected(MObject3d * object);
+	void addSelectedObject(Object3d * object);
+	bool isObjectSelected(Object3d * object);
 	inline void clearSelectedObjects(void){ m_selectedObjects.clear(); }
 	inline unsigned int getSelectedObjectsNumber(void){ return m_selectedObjects.size(); }
-	inline MObject3d * getSelectedObjectByIndex(unsigned int id){ return m_selectedObjects[id]; }
+	inline Object3d * getSelectedObjectByIndex(unsigned int id){ return m_selectedObjects[id]; }
 
     // Level
     const char* getCurrentLevel() { return m_currentLevel; }
@@ -320,14 +321,14 @@ public:
 	void zoomCurrentVue(void);
 	void switchCurrentVueMode(void);
 	void changeCurrentVue(int vue);
-	inline MOCamera * getPerspectiveVue(void){ return &m_perspectiveVue; }
+	inline OCamera * getPerspectiveVue(void){ return &m_perspectiveVue; }
 
 	// drawing
-	void drawCamera(MScene * scene, MOCamera * camera);
-	void drawMainView(MScene * scene);
+	void drawCamera(Scene * scene, OCamera * camera);
+	void drawMainView(Scene * scene);
 
 	// selection
-    void selectObjectsInMainView(MScene* scene, bool multipleSelection);
+    void selectObjectsInMainView(Scene* scene, bool multipleSelection);
 	void updateSelectionCenter(void);
 	void updateViewCenter(void);
 
@@ -338,5 +339,5 @@ public:
 	static void logicLoop(void);
 	static void graphicLoop(void);
 };
-
+}
 #endif

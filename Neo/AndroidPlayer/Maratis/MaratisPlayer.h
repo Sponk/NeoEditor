@@ -55,9 +55,9 @@ private:
 	MScriptContext * m_script;
 	MInputContext * m_input;
 	MSystemContext * m_system;
-	MGame * m_game;
-	MLevel * m_level;
-	MRenderer * m_renderer;
+	NeoGame * m_game;
+	Level * m_level;
+	Renderer * m_renderer;
 	MPackageManager * m_packageManager;
 
 	// plugins

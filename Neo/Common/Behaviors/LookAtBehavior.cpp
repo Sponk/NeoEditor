@@ -28,7 +28,7 @@
 //========================================================================
 
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <LookAtBehavior.h>
 
 using namespace Neo;
@@ -37,13 +37,13 @@ using namespace Neo;
 // Init
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-LookAtBehavior::LookAtBehavior(MObject3d * parentObject):
-MBehavior(parentObject),
+LookAtBehavior::LookAtBehavior(Object3d * parentObject):
+Behavior(parentObject),
 m_targetName("none")
 {}
 
-LookAtBehavior::LookAtBehavior(LookAtBehavior & behavior, MObject3d * parentObject):
-MBehavior(parentObject),
+LookAtBehavior::LookAtBehavior(LookAtBehavior & behavior, Object3d * parentObject):
+Behavior(parentObject),
 m_targetName(behavior.m_targetName)
 {}
 
@@ -55,12 +55,12 @@ void LookAtBehavior::destroy(void)
 	delete this;
 }
 
-MBehavior * LookAtBehavior::getNew(MObject3d * parentObject)
+Behavior * LookAtBehavior::getNew(Object3d * parentObject)
 {
     return new LookAtBehavior(parentObject);
 }
 
-MBehavior * LookAtBehavior::getCopy(MObject3d * parentObject)
+Behavior * LookAtBehavior::getCopy(Object3d * parentObject)
 {
     return new LookAtBehavior(*this, parentObject);
 }
@@ -74,14 +74,14 @@ unsigned int LookAtBehavior::getVariablesNumber(void){
 	return 1;
 }
 
-MVariable LookAtBehavior::getVariable(unsigned int id)
+NeoVariable LookAtBehavior::getVariable(unsigned int id)
 {
 	switch(id)
 	{
 	default:
-		return MVariable("NULL", NULL, M_VARIABLE_NULL);
+		return NeoVariable("NULL", NULL, M_VARIABLE_NULL);
 	case 0:
-		return MVariable("target", &m_targetName, M_VARIABLE_STRING);
+		return NeoVariable("target", &m_targetName, M_VARIABLE_STRING);
 	}
 }
 
@@ -92,18 +92,18 @@ MVariable LookAtBehavior::getVariable(unsigned int id)
 
 void LookAtBehavior::update(void)
 {
-	MEngine * engine = MEngine::getInstance();
-	MLevel * level = engine->getLevel();
-	MScene * scene = level->getCurrentScene();
+	NeoEngine * engine = NeoEngine::getInstance();
+	Level * level = engine->getLevel();
+	Scene * scene = level->getCurrentScene();
 
-	MObject3d * parent = getParentObject();
+	Object3d * parent = getParentObject();
 
 	const char * targetName = m_targetName.getSafeString();
 	if(strcmp(targetName, "none") == 0)
 		return;
 
 	// target object
-	MObject3d * object = scene->getObjectByName(targetName);
+	Object3d * object = scene->getObjectByName(targetName);
 	if(! object)
 		return;
 

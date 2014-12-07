@@ -58,7 +58,7 @@ class eventName##AutoAdd \
 public: \
 	eventName##AutoAdd() \
 	{ \
-		MPublisher* pub = MPublisher::getInstance(); \
+		Publisher* pub = Publisher::getInstance(); \
 		pub->addEvent(new eventName); \
 	} \
 }; \

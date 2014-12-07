@@ -31,7 +31,7 @@
 #include <LuaScript.h>
 #include <ScriptApi.h>
 #include <MWindow.h>
-#include <MLog.h>
+#include <NeoEngine.h>
 
 using namespace Neo;
 
@@ -102,12 +102,12 @@ static void pushIntArray(lua_State * L, lua_Integer * values, unsigned int nbVal
 	}
 }
 
-static MObject3d * getObject3d(LUA_INTEGER object)
+static Object3d * getObject3d(LUA_INTEGER object)
 {
 	if(object == 0)
 		return NULL;
 	
-	return (MObject3d*)object;
+	return (Object3d*)object;
 }
 
 static bool getVector2(lua_State * L, int index, MVector2 * vector)
@@ -299,7 +299,7 @@ int setAttribute(lua_State* L)
 {
 	if(! isFunctionOk(L, "setAttribute", 3))
 		return 0;
-	MObject3d * object;
+	Object3d * object;
 	lua_Integer id = lua_tointeger(L, 1);
 	const char* name = lua_tostring(L, 2);
 	if((object = getObject3d(id)))
@@ -312,13 +312,13 @@ int setAttribute(lua_State* L)
 			{
 				case LUA_TNUMBER:
 					{
-						MVariable variable(name, new float(lua_tonumber(L, 3)), M_VARIABLE_FLOAT);
+						NeoVariable variable(name, new float(lua_tonumber(L, 3)), M_VARIABLE_FLOAT);
 						object->setAttribute(name, variable);
 					}
 					break;
 				case LUA_TSTRING:
 					{
-						MVariable variable(name, new MString(lua_tostring(L, 3)), M_VARIABLE_STRING);
+						NeoVariable variable(name, new MString(lua_tostring(L, 3)), M_VARIABLE_STRING);
 						object->setAttribute(name, variable);
 					}
 					break;
@@ -326,7 +326,7 @@ int setAttribute(lua_State* L)
 		}
 		else
 		{
-			MVariable attribute = object->getAttribute(name);
+			NeoVariable attribute = object->getAttribute(name);
 			if(type == LUA_TNUMBER && attribute.getType() == M_VARIABLE_FLOAT)
 			{
 				*(float*)attribute.getPointer() = lua_tonumber(L, 3);
@@ -348,12 +348,12 @@ int getAttribute(lua_State* L)
 {
 	if(! isFunctionOk(L, "getAttribute", 2))
 		return 0;
-	MObject3d * object;
+	Object3d * object;
 	lua_Integer id = lua_tointeger(L, 1);
 	const char* name = lua_tostring(L, 2);
 	if((object = getObject3d(id)))
 	{
-		MVariable variable = object->getAttribute(name);
+		NeoVariable variable = object->getAttribute(name);
 		switch(variable.getType())
 		{
 			case M_VARIABLE_FLOAT:
@@ -391,7 +391,7 @@ LuaScript::~LuaScript(void)
 
 void LuaScript::init(void)
 {
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	MSystemContext * system = engine->getSystemContext();
 	
 	g_startTick = system->getSystemTick();
@@ -426,7 +426,7 @@ void LuaScript::clear(void)
 
 int LuaScript::function(lua_State * L)
 {
-	LuaScript * script = (LuaScript *)MEngine::getInstance()->getScriptContext();
+	LuaScript * script = (LuaScript *)NeoEngine::getInstance()->getScriptContext();
 
     lua_Debug ar;
 	lua_getstack(L, 0, &ar);

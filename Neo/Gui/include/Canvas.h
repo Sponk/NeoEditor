@@ -36,7 +36,7 @@
 
 #include <Widget.h>
 #include <vector>
-#include <MEngine.h>
+#include <NeoEngine.h>
 
 namespace Neo
 {
@@ -58,7 +58,7 @@ private:
     unsigned int m_fbo;
     bool m_renderToTexture;
     
-    MTextureRef* m_texture;
+    TextureRef* m_texture;
 
 public:
     static Canvas* getInstance() { static Canvas m_instance; return &m_instance; }

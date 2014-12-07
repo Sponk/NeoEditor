@@ -47,7 +47,7 @@
     #include <GL/gl.h>
 #endif
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include "GLContext.h"
 
 using namespace Neo;

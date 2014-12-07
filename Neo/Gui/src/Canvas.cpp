@@ -41,8 +41,8 @@ using namespace Neo::Gui;
 void Canvas::draw()
 {
 	Render* render = Render::getInstance();
-    MRenderingContext* renderingContext = MEngine::getInstance()->getRenderingContext();
-    MSystemContext* system = MEngine::getInstance()->getSystemContext();
+    MRenderingContext* renderingContext = NeoEngine::getInstance()->getRenderingContext();
+    MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
     system->getScreenSize(&m_width, &m_height);
 
     unsigned int currentFrameBuffer = 0;
@@ -111,9 +111,9 @@ void Canvas::clear()
 
 void Canvas::enableRenderToTexture(const char* tex)
 {
-	MLevel* level = MEngine::getInstance()->getLevel();
-	MRenderingContext* render = MEngine::getInstance()->getRenderingContext();
-	MSystemContext* system = MEngine::getInstance()->getSystemContext();
+	Level* level = NeoEngine::getInstance()->getLevel();
+	MRenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+	MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	
 	if(tex)
 	{

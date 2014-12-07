@@ -44,6 +44,6 @@ void writeInt(MFile * file, const char * name, int variable, const char * sep = 
 void writeFloat(MFile * file, const char * name, float variable, const char * sep = NULL);
 void writeFloatValues(MFile * file, const char * name, float * vector, unsigned int size, const char * sep = NULL);
 void writeFilename(MFile * file, const char * name, const char * filename, const char * workingDirectory = NULL, const char * sep = NULL);
-void writeVariable(MFile * file, MVariable * variable, const char * workingDirectory = NULL, const char * sep = NULL);
+void writeVariable(MFile * file, NeoVariable * variable, const char * workingDirectory = NULL, const char * sep = NULL);
 }
 #endif

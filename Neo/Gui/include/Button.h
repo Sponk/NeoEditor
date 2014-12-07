@@ -36,7 +36,7 @@
 #define __BUTTON_H__
 
 #include <Widget.h>
-#include <MEngine.h>
+#include <NeoEngine.h>
 
 namespace Neo
 {
@@ -51,7 +51,7 @@ enum BUTTON_STATE
 
 class Button : public Widget
 {
-    MOText* m_labelText;
+    OText* m_labelText;
     BUTTON_STATE m_state;
 
 public:

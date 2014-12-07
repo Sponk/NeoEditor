@@ -30,7 +30,7 @@
 //========================================================================
 
 #include <MCore.h>
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include "TgaLoader.h"
 
 namespace Neo

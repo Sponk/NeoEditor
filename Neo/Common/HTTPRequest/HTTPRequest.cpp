@@ -57,7 +57,7 @@ const char* HTTPRequest::sendGetRequest(const char* path)
 
 const char* HTTPRequest::connectionLoop()
 {
-    MSystemContext* system = MEngine::getInstance()->getSystemContext();
+    MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
     unsigned long startTime = system->getSystemTick();
 
     while(true)

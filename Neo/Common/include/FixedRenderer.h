@@ -34,7 +34,7 @@
 namespace Neo
 {
 // Fixed Renderer
-class FixedRenderer : public MRenderer
+class FixedRenderer : public Renderer
 {
 public:
 	
@@ -51,15 +51,15 @@ private:
 	
 private:
 	
-	void updateSkinning(MMesh * mesh, MArmature * armature);
-	void drawDisplay(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices, MVector3 * normals, MColor * colors);
-	void drawDisplayTriangles(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices);
-	void drawOpaques(MSubMesh * subMesh, MArmature * armature);
-	void drawTransparents(MSubMesh * subMesh, MArmature * armature);
-	void updateVisibility(MScene * scene, MOCamera * camera);
-	void enableFog(MOCamera * camera);
+	void updateSkinning(Mesh * mesh, Armature * armature);
+	void drawDisplay(SubMesh * subMesh, MaterialDisplay * display, MVector3 * vertices, MVector3 * normals, MColor * colors);
+	void drawDisplayTriangles(SubMesh * subMesh, MaterialDisplay * display, MVector3 * vertices);
+	void drawOpaques(SubMesh * subMesh, Armature * armature);
+	void drawTransparents(SubMesh * subMesh, Armature * armature);
+	void updateVisibility(Scene * scene, OCamera * camera);
+	void enableFog(OCamera * camera);
 	
-	float getDistanceToCam(MOCamera * camera, const MVector3 & pos);
+	float getDistanceToCam(OCamera * camera, const MVector3 & pos);
 	
 	// skin cache
 	MVector3 * getVertices(unsigned int size);
@@ -71,17 +71,17 @@ public:
 	void destroy(void);
 	
 	// get new
-	static MRenderer * getNew(void);
+	static Renderer * getNew(void);
 
 	// name
 	static const char * getStaticName(void){ return "FixedRenderer"; }
 	const char * getName(void){ return getStaticName(); }
 	
 	// draw
-	void drawScene(MScene * scene, MOCamera * camera);
+	void drawScene(Scene * scene, OCamera * camera);
 	
 	// extra
-	void drawText(MOText * textObj);
+	void drawText(OText * textObj);
 };
 }
 

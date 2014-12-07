@@ -22,15 +22,15 @@
 //
 //========================================================================
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include "MMeshBin.h"
+
+using namespace Neo;
 
 static char M_MESH_HEADER[8] = {'M', 'M', 'E', 'S', 'H', '\0', '\0', '\0'}; // mesh
 static char M_AA_HEADER[8] = {'M', 'A', 'A', '\0', '\0', '\0', '\0', '\0'}; // armature anim
 static char M_MA_HEADER[8] = {'M', 'M', 'A', '\0', '\0', '\0', '\0', '\0'}; // materials anim
 static char M_TA_HEADER[8] = {'M', 'T', 'A', '\0', '\0', '\0', '\0', '\0'}; // textures anim
-
-
 
 // tools
 static void writeString(MFile * file, const char * str)
@@ -42,7 +42,7 @@ static void writeString(MFile * file, const char * str)
 		M_fwrite(str, sizeof(char), l, file);
 }
 
-static void writeKey(MFile * file, MKey * key, M_VARIABLE_TYPE type)
+static void writeKey(MFile * file, Key * key, M_VARIABLE_TYPE type)
 {
 	int t = key->getT();
 	M_fwrite(&t, sizeof(int), 1, file);
@@ -82,7 +82,7 @@ static void writeKey(MFile * file, MKey * key, M_VARIABLE_TYPE type)
 	}
 }
 
-static void writeKeys(MFile * file, MKey * keys, M_VARIABLE_TYPE type, unsigned int keysNumber)
+static void writeKeys(MFile * file, Key * keys, M_VARIABLE_TYPE type, unsigned int keysNumber)
 {
 	unsigned int k;
 	
@@ -111,7 +111,7 @@ static void writeDataRef(MFile * file, MDataRef * dataRef, const char * rep)
 	}
 }
 
-static int getTextureId(MMesh * mesh, MTexture * texture)
+static int getTextureId(Mesh * mesh, Texture * texture)
 {
 	unsigned int t, texturesNumber = mesh->getTexturesNumber();
 	for(t=0; t<texturesNumber; t++)
@@ -123,7 +123,7 @@ static int getTextureId(MMesh * mesh, MTexture * texture)
 	return -1;
 }
 
-static int getMaterialId(MMesh * mesh, MMaterial * material)
+static int getMaterialId(Mesh * mesh, Material * material)
 {
 	unsigned int m, materialsNumber = mesh->getMaterialsNumber();
 	for(m=0; m<materialsNumber; m++)
@@ -137,7 +137,7 @@ static int getMaterialId(MMesh * mesh, MMaterial * material)
 
 
 // Mesh bin export
-bool exportMeshBin(const char * filename, MMesh * mesh)
+bool exportMeshBin(const char * filename, Mesh * mesh)
 {
 	int version = 2;
 	char rep[256];
@@ -167,9 +167,9 @@ bool exportMeshBin(const char * filename, MMesh * mesh)
 	// Animation
 	{
 		// anim refs
-		MArmatureAnimRef * armatureAnimRef = mesh->getArmatureAnimRef();
-		MTexturesAnimRef * texturesAnimRef = mesh->getTexturesAnimRef();
-		MMaterialsAnimRef * materialsAnimRef = mesh->getMaterialsAnimRef();
+		ArmatureAnimRef * armatureAnimRef = mesh->getArmatureAnimRef();
+		TexturesAnimRef * texturesAnimRef = mesh->getTexturesAnimRef();
+		MaterialsAnimRef * materialsAnimRef = mesh->getMaterialsAnimRef();
 		
 		// armature anim ref
 		writeDataRef(file, armatureAnimRef, rep);
@@ -182,11 +182,11 @@ bool exportMeshBin(const char * filename, MMesh * mesh)
 		
 		// anims ranges
 		unsigned int animsRangesNumber = mesh->getAnimsRangesNumber();
-		MAnimRange * animsRanges = mesh->getAnimsRanges();
+		AnimRange * animsRanges = mesh->getAnimsRanges();
 		
 		M_fwrite(&animsRangesNumber, sizeof(int), 1, file);
 		if(animsRangesNumber > 0)
-			M_fwrite(animsRanges, sizeof(MAnimRange), animsRangesNumber, file);
+			M_fwrite(animsRanges, sizeof(AnimRange), animsRangesNumber, file);
 	}
 	
 	
@@ -196,9 +196,9 @@ bool exportMeshBin(const char * filename, MMesh * mesh)
 		M_fwrite(&texturesNumber, sizeof(int), 1, file);
 		for(t=0; t<texturesNumber; t++)
 		{
-			MTexture * texture = mesh->getTexture(t);
+			Texture * texture = mesh->getTexture(t);
 			
-			MTextureRef * textureRef = texture->getTextureRef();
+			TextureRef * textureRef = texture->getTextureRef();
 			M_TEX_GEN_MODES genMode = texture->getGenMode();
 			M_WRAP_MODES UWrapMode = texture->getUWrapMode();
 			M_WRAP_MODES VWrapMode = texture->getVWrapMode();
@@ -231,7 +231,7 @@ bool exportMeshBin(const char * filename, MMesh * mesh)
 		M_fwrite(&materialsNumber, sizeof(int), 1, file);
 		for(m=0; m<materialsNumber; m++)
 		{
-			MMaterial * material = mesh->getMaterial(m);
+			Material * material = mesh->getMaterial(m);
 			
 			int type = material->getType();
 			float opacity = material->getOpacity();
@@ -242,28 +242,28 @@ bool exportMeshBin(const char * filename, MMesh * mesh)
 			MVector3 diffuse = material->getDiffuse();
 			MVector3 specular = material->getSpecular();
 			MVector3 customColor = material->getCustomColor();
-			MFXRef * FXRef = material->getFXRef();
-			MFXRef * ZFXRef = material->getZFXRef();
+			FXRef * fx_ref = material->getFXRef();
+			FXRef * zfx_ref = material->getZFXRef();
 			
 			// FX ref
-			state = FXRef != NULL;
+			state = fx_ref != NULL;
 			M_fwrite(&state, sizeof(bool), 1, file);
-			if(FXRef)
+			if(fx_ref)
 			{
-				MShaderRef * vertShadRef = FXRef->getVertexShaderRef();
-				MShaderRef * pixShadRef = FXRef->getPixelShaderRef();
+				ShaderRef * vertShadRef = fx_ref->getVertexShaderRef();
+				ShaderRef * pixShadRef = fx_ref->getPixelShaderRef();
 				
 				writeDataRef(file, vertShadRef, rep);
 				writeDataRef(file, pixShadRef, rep);
 			}
 			
 			// Z FX ref
-			state = ZFXRef != NULL;
+			state = zfx_ref != NULL;
 			M_fwrite(&state, sizeof(bool), 1, file);
-			if(ZFXRef)
+			if(zfx_ref)
 			{
-				MShaderRef * vertShadRef = ZFXRef->getVertexShaderRef();
-				MShaderRef * pixShadRef = ZFXRef->getPixelShaderRef();
+				ShaderRef * vertShadRef = zfx_ref->getVertexShaderRef();
+				ShaderRef * pixShadRef = zfx_ref->getPixelShaderRef();
 				
 				writeDataRef(file, vertShadRef, rep);
 				writeDataRef(file, pixShadRef, rep);
@@ -286,9 +286,9 @@ bool exportMeshBin(const char * filename, MMesh * mesh)
 			M_fwrite(&texturesPassNumber, sizeof(int), 1, file);
 			for(t=0; t<texturesPassNumber; t++)
 			{
-				MTexturePass * texturePass = material->getTexturePass(t);
+				TexturePass * texturePass = material->getTexturePass(t);
 				
-				MTexture * texture = texturePass->getTexture();
+				Texture * texture = texturePass->getTexture();
 				unsigned int mapChannel = texturePass->getMapChannel();
 				M_TEX_COMBINE_MODES combineMode = texturePass->getCombineMode();
 				
@@ -306,7 +306,7 @@ bool exportMeshBin(const char * filename, MMesh * mesh)
 	
 	// Bones
 	{
-		MArmature * armature = mesh->getArmature();
+		Armature * armature = mesh->getArmature();
 		
 		state = armature != NULL;
 		M_fwrite(&state, sizeof(bool), 1, file);
@@ -316,8 +316,8 @@ bool exportMeshBin(const char * filename, MMesh * mesh)
 			M_fwrite(&bonesNumber, sizeof(int), 1, file);
 			for(b=0; b<bonesNumber; b++)
 			{
-				MOBone * bone = armature->getBone(b);
-				MObject3d * parent = bone->getParent();
+				OBone * bone = armature->getBone(b);
+				Object3d * parent = bone->getParent();
 				
 				MVector3 position = bone->getPosition();
 				MVector3 scale = bone->getScale();
@@ -348,20 +348,20 @@ bool exportMeshBin(const char * filename, MMesh * mesh)
 	
 	// BoundingBox
 	{
-		MBox3d * box = mesh->getBoundingBox();
-		M_fwrite(box, sizeof(MBox3d), 1, file);
+		Box3d * box = mesh->getBoundingBox();
+		M_fwrite(box, sizeof(Box3d), 1, file);
 	}
 	
 	
 	// SubMeshs
 	{
 		unsigned int s, subMeshsNumber = mesh->getSubMeshsNumber();
-		MSubMesh * subMeshs = mesh->getSubMeshs();
+		SubMesh * subMeshs = mesh->getSubMeshs();
 		
 		M_fwrite(&subMeshsNumber, sizeof(int), 1, file);
 		for(s=0; s<subMeshsNumber; s++)
 		{
-			MSubMesh * subMesh = &(subMeshs[s]);
+			SubMesh * subMesh = &(subMeshs[s]);
 
 			unsigned int indicesSize = subMesh->getIndicesSize();
 			unsigned int verticesSize = subMesh->getVerticesSize();
@@ -379,13 +379,13 @@ bool exportMeshBin(const char * filename, MMesh * mesh)
 			MVector3 * tangents = subMesh->getTangents();
 			MVector2 * texCoords = subMesh->getTexCoords();
 			
-			MBox3d * box = subMesh->getBoundingBox();
+			Box3d * box = subMesh->getBoundingBox();
 			MSkinData * skin = subMesh->getSkinData();
 			map<unsigned int, unsigned int> * mapChannelOffsets = subMesh->getMapChannelOffsets();
 			
 			
 			// BoundingBox
-			M_fwrite(box, sizeof(MBox3d), 1, file);
+			M_fwrite(box, sizeof(Box3d), 1, file);
 			
 			// indices
 			M_fwrite(&indicesSize, sizeof(int), 1, file);
@@ -480,12 +480,12 @@ bool exportMeshBin(const char * filename, MMesh * mesh)
 			M_fwrite(&displaysNumber, sizeof(int), 1, file);
 			for(d=0; d<displaysNumber; d++)
 			{
-				MDisplay * display = subMesh->getDisplay(d);
+				MaterialDisplay * display = subMesh->getDisplay(d);
 				
 				M_PRIMITIVE_TYPES primitiveType = display->getPrimitiveType();
 				unsigned int begin = display->getBegin();
 				unsigned int size = display->getSize();
-				MMaterial * material = display->getMaterial();
+				Material * material = display->getMaterial();
 				M_CULL_MODES cullMode = display->getCullMode();
 				
 				int materialId = getMaterialId(mesh, material);
@@ -507,7 +507,7 @@ bool exportMeshBin(const char * filename, MMesh * mesh)
 
 
 // Armature anim bin export
-bool exportArmatureAnimBin(const char * filename, MArmatureAnim * anim)
+bool exportArmatureAnimBin(const char * filename, ArmatureAnim * anim)
 {
 	int version = 1;
 	
@@ -530,20 +530,20 @@ bool exportArmatureAnimBin(const char * filename, MArmatureAnim * anim)
 	
 	// bones
 	unsigned int b, bonesAnimNumber = anim->getBonesAnimNumber();
-	MObject3dAnim * bonesAnim = anim->getBonesAnim();
+	Object3dAnim * bonesAnim = anim->getBonesAnim();
 	
 	M_fwrite(&bonesAnimNumber, sizeof(int), 1, file);
 	for(b=0; b<bonesAnimNumber; b++)
 	{
-		MObject3dAnim * objAnim = &(bonesAnim[b]);
+		Object3dAnim * objAnim = &(bonesAnim[b]);
 	
 		unsigned int positionKeysNumber = objAnim->getPositionKeysNumber();
 		unsigned int scaleKeysNumber = objAnim->getScaleKeysNumber();
 		unsigned int rotationKeysNumber = objAnim->getRotationKeysNumber();
 		
-		MKey * positionKeys = objAnim->getPositionKeys();
-		MKey * scaleKeys = objAnim->getScaleKeys();
-		MKey * rotationKeys = objAnim->getRotationKeys();
+		Key * positionKeys = objAnim->getPositionKeys();
+		Key * scaleKeys = objAnim->getScaleKeys();
+		Key * rotationKeys = objAnim->getRotationKeys();
 	
 		writeKeys(file, positionKeys, M_VARIABLE_VEC3, positionKeysNumber);
 		writeKeys(file, scaleKeys, M_VARIABLE_VEC3, scaleKeysNumber);
@@ -557,7 +557,7 @@ bool exportArmatureAnimBin(const char * filename, MArmatureAnim * anim)
 
 
 // Textures anim bin export
-bool exportTexturesAnimBin(const char * filename, MTexturesAnim * anim)
+bool exportTexturesAnimBin(const char * filename, TexturesAnim * anim)
 {
 	int version = 1;
 	
@@ -580,20 +580,20 @@ bool exportTexturesAnimBin(const char * filename, MTexturesAnim * anim)
 	
 	// textures
 	unsigned int t, texturesAnimNumber = anim->getTexturesAnimNumber();
-	MTextureAnim * texturesAnim = anim->getTexturesAnim();
+	TextureAnim * texturesAnim = anim->getTexturesAnim();
 	
 	M_fwrite(&texturesAnimNumber, sizeof(int), 1, file);
 	for(t=0; t<texturesAnimNumber; t++)
 	{
-		MTextureAnim * texAnim = &(texturesAnim[t]);
+		TextureAnim * texAnim = &(texturesAnim[t]);
 		
 		unsigned int translateKeysNumber = texAnim->getTranslateKeysNumber();
 		unsigned int scaleKeysNumber = texAnim->getScaleKeysNumber();
 		unsigned int rotationKeysNumber = texAnim->getRotationKeysNumber();
 		
-		MKey * translateKeys = texAnim->getTranslateKeys();
-		MKey * scaleKeys = texAnim->getScaleKeys();
-		MKey * rotationKeys = texAnim->getRotationKeys();
+		Key * translateKeys = texAnim->getTranslateKeys();
+		Key * scaleKeys = texAnim->getScaleKeys();
+		Key * rotationKeys = texAnim->getRotationKeys();
 		
 		writeKeys(file, translateKeys, M_VARIABLE_VEC2, translateKeysNumber);
 		writeKeys(file, scaleKeys, M_VARIABLE_VEC2, scaleKeysNumber);
@@ -607,7 +607,7 @@ bool exportTexturesAnimBin(const char * filename, MTexturesAnim * anim)
 
 
 // Materials anim bin export
-bool exportMaterialsAnimBin(const char * filename, MMaterialsAnim * anim)
+bool exportMaterialsAnimBin(const char * filename, MaterialsAnim * anim)
 {
 	int version = 1;
 	
@@ -630,12 +630,12 @@ bool exportMaterialsAnimBin(const char * filename, MMaterialsAnim * anim)
 	
 	// materials
 	unsigned int m, materialsAnimNumber = anim->getMaterialsAnimNumber();
-	MMaterialAnim * materialsAnim = anim->getMaterialsAnim();
+	MaterialAnim * materialsAnim = anim->getMaterialsAnim();
 	
 	M_fwrite(&materialsAnimNumber, sizeof(int), 1, file);
 	for(m=0; m<materialsAnimNumber; m++)
 	{
-		MMaterialAnim * matAnim = &(materialsAnim[m]);
+		MaterialAnim * matAnim = &(materialsAnim[m]);
 		
 		unsigned int opacityKeysNumber = matAnim->getOpacityKeysNumber();
 		unsigned int shininessKeysNumber = matAnim->getShininessKeysNumber();
@@ -645,13 +645,13 @@ bool exportMaterialsAnimBin(const char * filename, MMaterialsAnim * anim)
 		unsigned int emitKeysNumber = matAnim->getEmitKeysNumber();
 		unsigned int customColorKeysNumber = matAnim->getCustomColorKeysNumber();
 		
-		MKey * opacityKeys = matAnim->getOpacityKeys();
-		MKey * shininessKeys = matAnim->getShininessKeys();
-		MKey * customValueKeys = matAnim->getCustomValueKeys();
-		MKey * diffuseKeys = matAnim->getDiffuseKeys();
-		MKey * specularKeys = matAnim->getSpecularKeys();
-		MKey * emitKeys = matAnim->getEmitKeys();
-		MKey * customColorKeys = matAnim->getCustomColorKeys();
+		Key * opacityKeys = matAnim->getOpacityKeys();
+		Key * shininessKeys = matAnim->getShininessKeys();
+		Key * customValueKeys = matAnim->getCustomValueKeys();
+		Key * diffuseKeys = matAnim->getDiffuseKeys();
+		Key * specularKeys = matAnim->getSpecularKeys();
+		Key * emitKeys = matAnim->getEmitKeys();
+		Key * customColorKeys = matAnim->getCustomColorKeys();
 		
 		writeKeys(file, opacityKeys, M_VARIABLE_FLOAT, opacityKeysNumber);
 		writeKeys(file, shininessKeys, M_VARIABLE_FLOAT, shininessKeysNumber);

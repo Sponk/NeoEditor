@@ -44,8 +44,8 @@ namespace Neo
 // Entity light
 struct EntityLight
 {
-	MBox3d lightBox;
-	MOLight * light;
+	Box3d lightBox;
+	OLight * light;
 };
 
 
@@ -58,8 +58,8 @@ public:
 	unsigned int occlusionQuery;
 	unsigned int subMeshId;
 	unsigned int lightsNumber;
-	MObject3d * object;
-	MOLight * lights[4];
+	Object3d * object;
+	OLight * lights[4];
 };
 
 
@@ -78,7 +78,7 @@ public:
 
 
 // Standard Renderer
-class StandardRenderer : public MRenderer
+class StandardRenderer : public Renderer
 {
 public:
 	
@@ -97,7 +97,7 @@ private:
 	
 	MMatrix4x4 m_currModelViewMatrix;
 	MMatrix4x4 m_lightShadowMatrix[4];
-	MOCamera * m_currentCamera;
+	OCamera * m_currentCamera;
 	
 	// shadow lights
 	unsigned int m_randTexture;
@@ -133,21 +133,21 @@ private:
 private:
 	
 	void addFX(const char * vert, const char * frag);
-	void updateSkinning(MMesh * mesh, MArmature * armature);
-	void drawDisplay(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices, MVector3 * normals, MVector3 * tangents, MColor * colors);
+	void updateSkinning(Mesh * mesh, Armature * armature);
+	void drawDisplay(SubMesh * subMesh, MaterialDisplay * display, MVector3 * vertices, MVector3 * normals, MVector3 * tangents, MColor * colors);
 	//void drawDisplayTriangles(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices);
-	void drawOpaques(MSubMesh * subMesh, MArmature * armature);
-	void drawTransparents(MSubMesh * subMesh, MArmature * armature);
-	void setShadowMatrix(MMatrix4x4 * matrix, MOCamera * camera);
-	void updateVisibility(MScene * scene, MOCamera * camera);
-	void enableFog(MOCamera * camera);
+	void drawOpaques(SubMesh * subMesh, Armature * armature);
+	void drawTransparents(SubMesh * subMesh, Armature * armature);
+	void setShadowMatrix(MMatrix4x4 * matrix, OCamera * camera);
+	void updateVisibility(Scene * scene, OCamera * camera);
+	void enableFog(OCamera * camera);
 	
-	void initVBO(MSubMesh * subMesh);
+	void initVBO(SubMesh * subMesh);
 	
-	float getDistanceToCam(MOCamera * camera, const MVector3 & pos);
+	float getDistanceToCam(OCamera * camera, const MVector3 & pos);
 	
 	// shadow lights
-	ShadowLight * createShadowLight(MOLight * light);
+	ShadowLight * createShadowLight(OLight * light);
 	void destroyUnusedShadowLights(void);
 	void decreaseShadowLights(void);
 	
@@ -157,7 +157,7 @@ private:
 	MVector3 * getTangents(unsigned int size);
 	
 	// subMesh
-	void prepareSubMesh(MScene * scene, MOCamera * camera, MOEntity * entity, MSubMesh * subMesh);
+	void prepareSubMesh(Scene * scene, OCamera * camera, OEntity * entity, SubMesh * subMesh);
 	
 public:
 	
@@ -165,17 +165,17 @@ public:
 	void destroy(void);
 	
 	// get new
-	static MRenderer * getNew(void);
+	static Renderer * getNew(void);
 
 	// name
 	static const char * getStaticName(void){ return "StandardRenderer"; }
 	const char * getName(void){ return getStaticName(); }
 	
 	// draw
-	void drawScene(MScene * scene, MOCamera * camera);
+	void drawScene(Scene * scene, OCamera * camera);
 	
 	// extra
-	void drawText(MOText * textObj);
+	void drawText(OText * textObj);
 };
 }
 #endif

@@ -45,10 +45,8 @@ typedef ES2Context GLContext;
 #include <BinMeshLoader.h>
 
 #include <MCore.h>
-#include <MEngine.h>
-#include <MVariable.h>
+#include <NeoEngine.h>
 #include "../MWindow/MMouse.h"
-#include <MBehavior.h>
 #include <LookAtBehavior.h>
 #include <FollowBehavior.h>
 #include <LuaBehavior.h>
@@ -78,8 +76,8 @@ m_renderer(NULL)
 		m_script = new LuaScript();
 		m_input = new Input();
 		m_system = new MWinContext();
-		m_level = new MLevel();
-		m_game = new MGame();
+		m_level = new Level();
+		m_game = new NeoGame();
 		m_packageManager = new MPackageManagerNPK();
 		
         m_physics->setSimulationQuality(2);
@@ -107,10 +105,10 @@ MaratisPlayer::~MaratisPlayer(void)
 
 void MaratisPlayer::changeRenderer(const char * name)
 {
-	MEngine * engine = MEngine::getInstance();
-	MRendererManager * rendererManager = engine->getRendererManager();
+	NeoEngine * engine = NeoEngine::getInstance();
+	RendererManager * rendererManager = engine->getRendererManager();
 	
-	MRendererCreator * renderer = rendererManager->getRendererByName(name);
+	RendererCreator * renderer = rendererManager->getRendererByName(name);
     if(renderer && strcmp(engine->getRenderer()->getName(), name) != 0)
     {
 		if(m_renderer)
@@ -124,7 +122,7 @@ void MaratisPlayer::start(void)
 {
 	// MEngine
 	{
-		MEngine * engine = MEngine::getInstance();
+		NeoEngine * engine = NeoEngine::getInstance();
 
 		// package manager
 		engine->setPackageManager(m_packageManager);
@@ -180,7 +178,7 @@ void MaratisPlayer::start(void)
 
 void MaratisPlayer::clear(void)
 {
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	
 	// level
 	m_level->clear();
@@ -265,7 +263,7 @@ bool MaratisPlayer::loadProject(const char * filename)
 void MaratisPlayer::loadProject(Project* proj, const char * filename)
 {
 	MWindow * window = MWindow::getInstance();
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	
 	
 	// working directory
@@ -281,7 +279,7 @@ void MaratisPlayer::loadProject(Project* proj, const char * filename)
 	changeRenderer(proj->renderer.c_str());
 	
 	// if we have a package manager, try to load the package
-	if(MPackageManager* pPackMan = MEngine::getInstance()->getPackageManager())
+	if(MPackageManager* pPackMan = NeoEngine::getInstance()->getPackageManager())
 	{
 		char projName[256];
 		getLocalFilename(projName, workingDir, filename);
@@ -300,10 +298,10 @@ void MaratisPlayer::loadProject(Project* proj, const char * filename)
 
 void MaratisPlayer::logicLoop(void)
 {
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 
 	// game
-	MGame * game = engine->getGame();
+	NeoGame * game = engine->getGame();
 	if(game)
 	{
 		if(game->isRunning()){
@@ -315,11 +313,11 @@ void MaratisPlayer::logicLoop(void)
 void MaratisPlayer::graphicLoop(void)
 {
 	MWindow * window = MWindow::getInstance();
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	MRenderingContext * render = engine->getRenderingContext();
 
 	// game
-	MGame * game = engine->getGame();
+	NeoGame * game = engine->getGame();
 	if(game)
 	{
 		if(game->isRunning())

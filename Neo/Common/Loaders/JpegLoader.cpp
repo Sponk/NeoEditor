@@ -36,7 +36,7 @@
 #include <jerror.h>
 
 #include <MCore.h>
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include "JpegLoader.h"
 
 namespace Neo

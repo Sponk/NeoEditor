@@ -30,7 +30,7 @@
 
 #ifndef ANDROID
 
-#include "../../MEngine/Includes/MEngine.h"
+#include "../../MEngine/Includes/NeoEngine.h"
 #include <MMouse.h>
 #include <MKeyboard.h>
 #include <MWindow.h>
@@ -71,6 +71,8 @@
 #ifdef linux
 #include <X11/Xlib.h>
 #endif
+
+using namespace Neo;
 
 static SDL_Window * g_window;
 static SDL_GLContext g_context;
@@ -288,8 +290,8 @@ void MWindow::sendEvents(MWinEvent * event)
 			m_width = (unsigned int)event->data[0];
 			m_height = (unsigned int)event->data[1];
 
-            MEngine::getInstance()->getGame()->getPostProcessor()->eraseTextures();
-            MEngine::getInstance()->getGame()->getPostProcessor()->updateResolution();
+            NeoEngine::getInstance()->getGame()->getPostProcessor()->eraseTextures();
+            NeoEngine::getInstance()->getGame()->getPostProcessor()->updateResolution();
 
 			break;
 

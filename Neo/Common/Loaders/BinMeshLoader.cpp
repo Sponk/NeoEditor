@@ -30,14 +30,14 @@
 //========================================================================
 
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include "BinMeshLoader.h"
 
 namespace Neo
 {
 
 // tools
-static void readKey(MFile * file, MKey * key, M_VARIABLE_TYPE type)
+static void readKey(MFile * file, Key * key, M_VARIABLE_TYPE type)
 {
 	int t;
 	M_fread(&t, sizeof(int), 1, file);
@@ -85,7 +85,7 @@ static unsigned int readKeysNumber(MFile * file)
 	return keysNumber;
 }
 
-static void readKeys(MFile * file, MKey * keys, M_VARIABLE_TYPE type, unsigned int keysNumber)
+static void readKeys(MFile * file, Key * keys, M_VARIABLE_TYPE type, unsigned int keysNumber)
 {
 	unsigned int k;
 	for(k=0; k<keysNumber; k++)
@@ -131,9 +131,9 @@ bool M_loadBinMesh(const char * filename, void * data)
 	}
 
 	// get engine, level, mesh
-	MEngine * engine = MEngine().getInstance();
-	MLevel * level = engine->getLevel();
-	MMesh * mesh = (MMesh *)data;
+	NeoEngine * engine = NeoEngine().getInstance();
+	Level * level = engine->getLevel();
+	Mesh * mesh = (Mesh *)data;
 	
 	mesh->clear();
 	
@@ -158,33 +158,33 @@ bool M_loadBinMesh(const char * filename, void * data)
 		// armature anim ref
 		if(readDataRef(file, path, rep))
 		{
-			MArmatureAnimRef * armatureAnim = level->loadArmatureAnim(path);
+			ArmatureAnimRef * armatureAnim = level->loadArmatureAnim(path);
 			mesh->setArmatureAnimRef(armatureAnim);
 		}
 
 		// textures anim ref
 		if(readDataRef(file, path, rep))
 		{
-			MTexturesAnimRef * texturesAnim = level->loadTexturesAnim(path);
+			TexturesAnimRef * texturesAnim = level->loadTexturesAnim(path);
 			mesh->setTexturesAnimRef(texturesAnim);
 		}
 
 		// materials anim ref
 		if(readDataRef(file, path, rep))
 		{
-			MMaterialsAnimRef * materialsAnim = level->loadMaterialsAnim(path);
+			MaterialsAnimRef * materialsAnim = level->loadMaterialsAnim(path);
 			mesh->setMaterialsAnimRef(materialsAnim);
 		}
 
 		// anims ranges
 		unsigned int animsRangesNumber;
-		MAnimRange * animsRanges;
+		AnimRange * animsRanges;
 
 		M_fread(&animsRangesNumber, sizeof(int), 1, file);
 		if(animsRangesNumber > 0)
 		{
 			animsRanges = mesh->allocAnimsRanges(animsRangesNumber);
-			M_fread(animsRanges, sizeof(MAnimRange), animsRangesNumber, file);
+			M_fread(animsRanges, sizeof(AnimRange), animsRangesNumber, file);
 		}
 	}
 
@@ -199,7 +199,7 @@ bool M_loadBinMesh(const char * filename, void * data)
 			mesh->allocTextures(texturesNumber);
 			for(t=0; t<texturesNumber; t++)
 			{
-				MTexture * texture = mesh->addNewTexture(NULL);
+				Texture * texture = mesh->addNewTexture(NULL);
 
 				M_TEX_GEN_MODES genMode;
 				M_WRAP_MODES UWrapMode;
@@ -215,7 +215,7 @@ bool M_loadBinMesh(const char * filename, void * data)
 					if(version >= 2)
 						M_fread(&mipmap, sizeof(bool), 1, file);
 					
-					MTextureRef * textureRef = level->loadTexture(path, mipmap);
+					TextureRef * textureRef = level->loadTexture(path, mipmap);
 					texture->setTextureRef(textureRef);
 				}
 
@@ -248,7 +248,7 @@ bool M_loadBinMesh(const char * filename, void * data)
 
 			for(m=0; m<materialsNumber; m++)
 			{
-				MMaterial * material = 	mesh->addNewMaterial();
+				Material * material = 	mesh->addNewMaterial();
 
 				int type;
 				float opacity;
@@ -262,8 +262,8 @@ bool M_loadBinMesh(const char * filename, void * data)
 				M_fread(&state, sizeof(bool), 1, file);
 				if(state)
 				{
-					MShaderRef * vertShadRef = NULL;
-					MShaderRef * pixShadRef = NULL;
+					ShaderRef * vertShadRef = NULL;
+					ShaderRef * pixShadRef = NULL;
 
 					if(readDataRef(file, path, rep))
 						vertShadRef = level->loadShader(path, M_SHADER_VERTEX);
@@ -272,7 +272,7 @@ bool M_loadBinMesh(const char * filename, void * data)
 
 					if(vertShadRef && pixShadRef)
 					{
-						MFXRef * FXRef = level->createFX(vertShadRef, pixShadRef);
+						FXRef * FXRef = level->createFX(vertShadRef, pixShadRef);
 						material->setFXRef(FXRef);
 					}
 				}
@@ -281,8 +281,8 @@ bool M_loadBinMesh(const char * filename, void * data)
 				M_fread(&state, sizeof(bool), 1, file);
 				if(state)
 				{
-					MShaderRef * vertShadRef = NULL;
-					MShaderRef * pixShadRef = NULL;
+					ShaderRef * vertShadRef = NULL;
+					ShaderRef * pixShadRef = NULL;
 
 					if(readDataRef(file, path, rep))
 						vertShadRef = level->loadShader(path, M_SHADER_VERTEX);
@@ -291,7 +291,7 @@ bool M_loadBinMesh(const char * filename, void * data)
 
 					if(vertShadRef && pixShadRef)
 					{
-						MFXRef * ZFXRef = level->createFX(vertShadRef, pixShadRef);
+						FXRef * ZFXRef = level->createFX(vertShadRef, pixShadRef);
 						material->setZFXRef(ZFXRef);
 					}
 				}
@@ -337,7 +337,7 @@ bool M_loadBinMesh(const char * filename, void * data)
 						M_fread(&mapChannel, sizeof(int), 1, file);
 						M_fread(&combineMode, sizeof(M_TEX_COMBINE_MODES), 1, file);
 
-						MTexture * texture = NULL;
+						Texture * texture = NULL;
 						if(textureId >= 0)
 							texture = mesh->getTexture(textureId);
 
@@ -354,7 +354,7 @@ bool M_loadBinMesh(const char * filename, void * data)
 		M_fread(&state, sizeof(bool), 1, file);
 		if(state)
 		{
-			MArmature * armature = mesh->createArmature();
+			Armature * armature = mesh->createArmature();
 
 			unsigned int b, bonesNumber = armature->getBonesNumber();
 			M_fread(&bonesNumber, sizeof(int), 1, file);
@@ -372,7 +372,7 @@ bool M_loadBinMesh(const char * filename, void * data)
 				// read bones
 				for(b=0; b<bonesNumber; b++)
 				{
-					MOBone * bone = armature->getBone(b);
+					OBone * bone = armature->getBone(b);
 
 					int parentId;
 					MVector3 position;
@@ -407,8 +407,8 @@ bool M_loadBinMesh(const char * filename, void * data)
 
 	// BoundingBox
 	{
-		MBox3d * box = mesh->getBoundingBox();
-		M_fread(box, sizeof(MBox3d), 1, file);
+		Box3d * box = mesh->getBoundingBox();
+		M_fread(box, sizeof(Box3d), 1, file);
 	}
 
 
@@ -421,10 +421,10 @@ bool M_loadBinMesh(const char * filename, void * data)
 		{
 			mesh->allocSubMeshs(subMeshsNumber);
 
-			MSubMesh * subMeshs = mesh->getSubMeshs();
+			SubMesh * subMeshs = mesh->getSubMeshs();
 			for(s=0; s<subMeshsNumber; s++)
 			{
-				MSubMesh * subMesh = &(subMeshs[s]);
+				SubMesh * subMesh = &(subMeshs[s]);
 
 				unsigned int indicesSize;
 				unsigned int verticesSize;
@@ -442,12 +442,12 @@ bool M_loadBinMesh(const char * filename, void * data)
 				MVector3 * tangents;
 				MVector2 * texCoords;
 
-				MBox3d * box = subMesh->getBoundingBox();
+				Box3d * box = subMesh->getBoundingBox();
 				MSkinData * skin;
 
 
 				// BoundingBox
-				M_fread(box, sizeof(MBox3d), 1, file);
+				M_fread(box, sizeof(Box3d), 1, file);
 
 				// indices
 				M_fread(&indicesSize, sizeof(int), 1, file);
@@ -588,7 +588,7 @@ bool M_loadBinMesh(const char * filename, void * data)
 						M_fread(&cullMode, sizeof(M_CULL_MODES), 1, file);
 
 						// display
-						MDisplay * display = subMesh->addNewDisplay(primitiveType, begin, size);
+						MaterialDisplay * display = subMesh->addNewDisplay(primitiveType, begin, size);
 						display->setCullMode(cullMode);
 
 						if(materialId >= 0)
@@ -621,7 +621,7 @@ bool M_loadBinArmatureAnim(const char * filename, void * data)
 	}
 
 	// data
-	MArmatureAnim * anim = (MArmatureAnim *)data;
+	ArmatureAnim * anim = (ArmatureAnim *)data;
 
 
 	// header
@@ -637,13 +637,13 @@ bool M_loadBinArmatureAnim(const char * filename, void * data)
 	unsigned int b, bonesAnimNumber;
 	M_fread(&bonesAnimNumber, sizeof(int), 1, file);
 	{
-		MObject3dAnim * bonesAnim = anim->allocBonesAnim(bonesAnimNumber);
+		Object3dAnim * bonesAnim = anim->allocBonesAnim(bonesAnimNumber);
 
 		for(b=0; b<bonesAnimNumber; b++)
 		{
-			MObject3dAnim * objAnim = &(bonesAnim[b]);
+			Object3dAnim * objAnim = &(bonesAnim[b]);
 			unsigned int keysNumber;
-			MKey * keys;
+			Key * keys;
 
 			// position keys
 			keysNumber = readKeysNumber(file);
@@ -684,7 +684,7 @@ bool M_loadBinTexturesAnim(const char * filename, void * data)
 	}
 
 	// data
-	MTexturesAnim * anim = (MTexturesAnim *)data;
+	TexturesAnim * anim = (TexturesAnim *)data;
 
 
 	// header
@@ -700,13 +700,13 @@ bool M_loadBinTexturesAnim(const char * filename, void * data)
 	unsigned int t, texturesAnimNumber;
 	M_fread(&texturesAnimNumber, sizeof(int), 1, file);
 	{
-		MTextureAnim * texturesAnim = anim->allocTexturesAnim(texturesAnimNumber);
+		TextureAnim * texturesAnim = anim->allocTexturesAnim(texturesAnimNumber);
 
 		for(t=0; t<texturesAnimNumber; t++)
 		{
-			MTextureAnim * texAnim = &(texturesAnim[t]);
+			TextureAnim * texAnim = &(texturesAnim[t]);
 			unsigned int keysNumber;
-			MKey * keys;
+			Key * keys;
 
 			// translate keys
 			keysNumber = readKeysNumber(file);
@@ -747,7 +747,7 @@ bool M_loadBinMaterialsAnim(const char * filename, void * data)
 	}
 
 	// data
-	MMaterialsAnim * anim = (MMaterialsAnim *)data;
+	MaterialsAnim * anim = (MaterialsAnim *)data;
 
 
 	// header
@@ -763,13 +763,13 @@ bool M_loadBinMaterialsAnim(const char * filename, void * data)
 	unsigned int m, materialsAnimNumber;
 	M_fread(&materialsAnimNumber, sizeof(int), 1, file);
 	{
-		MMaterialAnim * materialsAnim = anim->allocMaterialsAnim(materialsAnimNumber);
+		MaterialAnim * materialsAnim = anim->allocMaterialsAnim(materialsAnimNumber);
 
 		for(m=0; m<materialsAnimNumber; m++)
 		{
-			MMaterialAnim * matAnim = &(materialsAnim[m]);
+			MaterialAnim * matAnim = &(materialsAnim[m]);
 			unsigned int keysNumber;
-			MKey * keys;
+			Key * keys;
 
 			// opacity keys
 			keysNumber = readKeysNumber(file);

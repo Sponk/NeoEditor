@@ -24,15 +24,17 @@
 
 #include "MFontBin.h"
 
+using namespace Neo;
+
 char M_FONT_HEADER[8] = {'M', 'F', 'O', 'N', 'T', '\0', '\0', '\0'};
 
 
-bool exportFontBin(const char * filename, MFont * font)
+bool exportFontBin(const char * filename, Font * font)
 {
 	if(! font)
 		return false;
 
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	MRenderingContext * render = engine->getRenderingContext();
 
 	// read image
@@ -87,21 +89,21 @@ bool exportFontBin(const char * filename, MFont * font)
 
 	// write characters infos
 	{
-		map <unsigned int, MCharacter> * characters = font->getCharacters();
+		map <unsigned int, Character> * characters = font->getCharacters();
 
 		// size
 		unsigned int size = font->getCharactersNumber();
 		fwrite(&size, sizeof(int), 1, file);
 
 		// characters
-		map <unsigned int, MCharacter>::iterator
+		map <unsigned int, Character>::iterator
 			mit (characters->begin()),
 			mend(characters->end());
 
 		for(;mit!=mend;++mit)
 		{
 			unsigned int charCode = mit->first;
-			MCharacter * character = &mit->second;
+			Character * character = &mit->second;
 
 			MVector2 pos = character->getPos();
 			MVector2 offset = character->getOffset();

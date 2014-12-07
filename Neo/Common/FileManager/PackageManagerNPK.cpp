@@ -27,7 +27,7 @@
 //
 //========================================================================
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include "PackageManagerNPK.h"
 
 #include <stdio.h>
@@ -136,9 +136,9 @@ public:
  * MPackageFileOpenHook::open
  * File open callback
  *-------------------------------------------------------------------------------*/
-MFile* MPackageFileOpenHook::open(const char* path, const char* mode)
+MFile* PackageFileOpenHook::open(const char* path, const char* mode)
 {
-	MEngine* engine = MEngine::getInstance();
+	NeoEngine* engine = NeoEngine::getInstance();
 	MSystemContext * system = engine->getSystemContext();
 	
 	char localFilename[256];
@@ -184,7 +184,7 @@ void MPackageManagerNPK::init()
 {
 	if(! m_fileOpenHook)
 	{
-		m_fileOpenHook = new MPackageFileOpenHook;
+		m_fileOpenHook = new PackageFileOpenHook;
 		
 		MPackageNPK** packages = new MPackageNPK*[M_MAX_PACKAGES];
 		m_packages = (MPackage*)packages;

@@ -65,7 +65,7 @@ void lua_callback(Fl_Widget*, long id)
 
 int messagebox()
 {
-    LuaScript* script = (LuaScript*) MEngine::getInstance()->getScriptContext();
+    LuaScript* script = (LuaScript*) NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -79,7 +79,7 @@ extern const char* fl_native_file_chooser(const char* title, const char* files, 
 
 int fileChooser(int mode)
 {
-    LuaScript* script = (LuaScript*) MEngine::getInstance()->getScriptContext();
+    LuaScript* script = (LuaScript*) NeoEngine::getInstance()->getScriptContext();
 
     const char* dir = ".";
     const char* files = "*.*";
@@ -111,7 +111,7 @@ int saveFileDlg()
 // addEditorMenu(name, callbackName)
 int addEditorMenu()
 {
-    MPluginScript* script = (MPluginScript*) MEngine::getInstance()->getScriptContext();
+    MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 2)
         return 0;
@@ -135,7 +135,7 @@ int addEditorMenu()
 
 int getCurrentSelection()
 {
-    MPluginScript* script = (MPluginScript*) MEngine::getInstance()->getScriptContext();
+    MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
     Maratis* maratis = Maratis::getInstance();
 
     // FIXME: Pointers have 64bit size on 64bit machines! DON'T USE FLOAT
@@ -143,7 +143,7 @@ int getCurrentSelection()
 
     for(int i = 0; i < maratis->getSelectedObjectsNumber(); i++)
     {
-        MObject3d* object = maratis->getSelectedObjectByIndex(i);
+        Object3d* object = maratis->getSelectedObjectByIndex(i);
         objects[i] = (long int) object;
     }
 
@@ -155,7 +155,7 @@ int getCurrentSelection()
 
 int getSelectionCenter()
 {
-    LuaScript* script = (LuaScript*) MEngine::getInstance()->getScriptContext();
+    LuaScript* script = (LuaScript*) NeoEngine::getInstance()->getScriptContext();
     script->pushFloatArray(*Maratis::getInstance()->getSelectionCenter(), 3);
 
     return 1;
@@ -163,14 +163,14 @@ int getSelectionCenter()
 
 int getProjectDir()
 {
-    MEngine::getInstance()->getScriptContext()->pushString(current_project.path.c_str());
+    NeoEngine::getInstance()->getScriptContext()->pushString(current_project.path.c_str());
     return 1;
 }
 
 int updateEditorView()
 {
     // FIXME: Somehow needed or else scripts will crash
-    MPluginScript* script = (MPluginScript*) MEngine::getInstance()->getScriptContext();
+    MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
     script->pushInteger(0);
 
     update_scene_tree();
@@ -180,7 +180,7 @@ int updateEditorView()
 
 int Fl_CreateWindow()
 {
-	MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+	MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
 
 	if (script->getArgsNumber() != 5)
 		return 0;
@@ -202,7 +202,7 @@ int Fl_CreateWindow()
 
 int Fl_CreateButton()
 {
-	MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+	MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
 
 	if (script->getArgsNumber() != 5)
 		return 0;
@@ -224,7 +224,7 @@ int Fl_CreateButton()
 
 int Fl_CreateInput()
 {
-	MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+	MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
 
 	if (script->getArgsNumber() != 5)
 		return 0;
@@ -246,7 +246,7 @@ int Fl_CreateInput()
 
 int Fl_Add()
 {
-	MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+	MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
 
 	if (script->getArgsNumber() != 2)
 		return 0;
@@ -268,7 +268,7 @@ int Fl_Add()
 // Fl_Show(widget, shown)
 int Fl_Show()
 {
-	MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+	MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
 
 	if (script->getArgsNumber() < 1)
 		return 0;
@@ -289,7 +289,7 @@ int Fl_Show()
 
 int Fl_SetCallback()
 {
-	MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+	MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
 
 	if (script->getArgsNumber() != 2)
 		return 0;
@@ -308,7 +308,7 @@ int Fl_SetCallback()
 
 int Fl_DeleteWidget()
 {
-	MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+	MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
 
 	if (script->getArgsNumber() != 1)
 		return 0;
@@ -319,7 +319,7 @@ int Fl_DeleteWidget()
 
 int Fl_InputValue()
 {
-	MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+	MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
 
 	if (script->getArgsNumber() < 1)
 		return 0;
@@ -339,7 +339,7 @@ int Fl_InputValue()
 
 int getPerspectiveVue()
 {
-    MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+    MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
 
     script->pushInteger((long int) Maratis::getInstance()->getPerspectiveVue());
     return 1;
@@ -347,7 +347,7 @@ int getPerspectiveVue()
 
 int getTranslationSpeed()
 {
-    MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+    MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
 
     script->pushFloat(translation_speed);
     return 1;
@@ -355,7 +355,7 @@ int getTranslationSpeed()
 
 int getRotationSpeed()
 {
-    MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+    MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
 
     script->pushFloat(rotation_speed);
     return 1;
@@ -366,7 +366,7 @@ extern Fl_Text_Buffer pluginOutput;
 
 int debugLog()
 {
-    MPluginScript* script = (MPluginScript*)MEngine::getInstance()->getScriptContext();
+    MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
 
     if (script->getArgsNumber() < 1)
         return 0;

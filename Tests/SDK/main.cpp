@@ -1,10 +1,12 @@
-#include <MEngine.h>
+#include <NeoEngine.h>
 #include <MCore.h>
 #include <LuaBehavior.h>
 #include <MWindow.h>
 #include <WinContext.h>
 #include <PackageManagerNPK.h>
 #include "liblittletest.hpp"
+
+using namespace Neo;
 
 bool compare_float(float a, float b)
 {
@@ -16,11 +18,11 @@ LT_BEGIN_SUITE(NeoTestSdk);
 void set_up()
 {
 	//MLOG_INFO("Setting up engine");
-	MEngine* engine = MEngine::getInstance();
+	NeoEngine* engine = NeoEngine::getInstance();
 
-	MGame* game = new MGame();
+	NeoGame* game = new NeoGame();
 	Neo::LuaScript* script = new Neo::LuaScript();
-	MLevel* level = new MLevel();
+	Level* level = new Level();
 	MSystemContext* context = (MSystemContext*) new Neo::MWinContext();
 	MPackageManager* pmanager = new Neo::MPackageManagerNPK;
 
@@ -43,7 +45,7 @@ void set_up()
 void tear_down()
 {
 	//MLOG_INFO("Clearing engine");
-	MEngine* engine = MEngine::getInstance();
+	NeoEngine* engine = NeoEngine::getInstance();
 
 	delete engine->getSystemContext();
 	delete engine->getGame();
@@ -70,11 +72,11 @@ LT_END_AUTO_TEST(MVector3_test);
 
 LT_BEGIN_AUTO_TEST(NeoTestSdk, LuaBehavior_test);
 
-	MEngine* engine = MEngine::getInstance();
+	NeoEngine* engine = NeoEngine::getInstance();
 
-	MObject3d* object = engine->getLevel()->getCurrentScene()->addNewLight();
+	Object3d* object = engine->getLevel()->getCurrentScene()->addNewLight();
 	Neo::LuaBehavior* b = (Neo::LuaBehavior*) engine->getBehaviorManager()->getBehaviorByName("LuaScript")->getNewBehavior(object);
-	MVariable var = b->getVariable(0);
+	NeoVariable var = b->getVariable(0);
 
 	LT_ASSERT(var.getType() == M_VARIABLE_STRING);
 

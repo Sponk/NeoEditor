@@ -23,8 +23,7 @@
 //========================================================================
 //jan 2012 - Philipp Geyer <philipp@geyer.co.uk> - embedded project/package manager
 
-#include <MEngine.h>
-#include <MLog.h>
+#include <NeoEngine.h>
 #include <MWindow.h>
 #include <SDLThread.h>
 
@@ -48,10 +47,10 @@ using namespace Neo;
 // window events
 void windowEvents(MWinEvent * windowEvents)
 {
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 
 	// game
-	MGame * game = engine->getGame();
+	NeoGame * game = engine->getGame();
 	if(game)
 	{
 		if(game->isRunning())
@@ -109,7 +108,7 @@ int update_thread(void* nothing)
     while(updateThreadRunning)
     {
         // Get input
-        MEngine::getInstance()->getInputContext()->flush();
+        NeoEngine::getInstance()->getInputContext()->flush();
         window->onEvents();
 
         SDLSemaphore::WaitAndLock(&updateSemaphore);
@@ -225,7 +224,7 @@ int main(int argc, char **argv)
         sscanf(argv[5], "%d", &profiler);
 	
 	// get engine (first time call onstructor)
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	
 	// get window (first time call onstructor)
 	MWindow * window = MWindow::getInstance();
@@ -260,7 +259,7 @@ int main(int argc, char **argv)
 		if(maratis->loadProject(filename))
 		{
             // Initialize GUI bindings
-			Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(MEngine::getInstance()->getScriptContext());
+			Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
 			engine->getGame()->begin();
 			projectFound = true;
 		}
@@ -282,7 +281,7 @@ int main(int argc, char **argv)
 
 			embeddedProj.startLevel = levelName;
 			
-			Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(MEngine::getInstance()->getScriptContext());
+			Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
 			maratis->loadProject(&embeddedProj, projName);
 			
 
@@ -305,7 +304,7 @@ int main(int argc, char **argv)
 					if(maratis->loadProject(filename))
 					{
                         // Initialize GUI bindings
-						Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(MEngine::getInstance()->getScriptContext());
+						Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
 						engine->getGame()->begin();
 						projectFound = true;
 						break;
@@ -374,7 +373,7 @@ int main(int argc, char **argv)
         isActive = engine->isActive();
 
         // update postponed requests
-        MEngine::getInstance()->updateRequests();
+        NeoEngine::getInstance()->updateRequests();
 
 		SDLSemaphore::Unlock(&updateSemaphore);
 

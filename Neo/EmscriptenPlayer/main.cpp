@@ -36,10 +36,10 @@
 // window events
 void windowEvents(MWinEvent * windowEvents)
 {
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	
 	// game
-	MGame * game = engine->getGame();
+	NeoGame * game = engine->getGame();
 	if(game)
 	{
 		if(game->isRunning())
@@ -69,7 +69,7 @@ void draw(void)
 
 void complete_update()
 {
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	MWindow * window = MWindow::getInstance();
 	
 	// quit
@@ -112,7 +112,7 @@ int main(int argc, char* argv[])
 	
 	
 	// get engine (first time call onstructor)
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	
 	
 	// get window (first time call onstructor)

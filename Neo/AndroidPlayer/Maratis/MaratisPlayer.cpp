@@ -69,8 +69,8 @@ m_renderer(NULL)
 		m_script = new MScript();
 		m_input = new MInput();
 		m_system = new MWinContext();
-		m_level = new MLevel();
-		m_game = new MGame();
+		m_level = new Level();
+		m_game = new NeoGame();
 		m_packageManager = new MPackageManagerNPK();
 		
         m_physics->setSimulationQuality(2);
@@ -98,10 +98,10 @@ MaratisPlayer::~MaratisPlayer(void)
 
 void MaratisPlayer::changeRenderer(const char * name)
 {
-	MEngine * engine = MEngine::getInstance();
-	MRendererManager * rendererManager = engine->getRendererManager();
+	NeoEngine * engine = NeoEngine::getInstance();
+	RendererManager * rendererManager = engine->getRendererManager();
 	
-	MRendererCreator * renderer = rendererManager->getRendererByName(name);
+	RendererCreator * renderer = rendererManager->getRendererByName(name);
 	if(renderer)
 	{
 		if(m_renderer)
@@ -115,7 +115,7 @@ void MaratisPlayer::start(void)
 {
 	// MEngine
 	{
-		MEngine * engine = MEngine::getInstance();
+		NeoEngine * engine = NeoEngine::getInstance();
 
 		// package manager
 		engine->setPackageManager(m_packageManager);
@@ -170,7 +170,7 @@ void MaratisPlayer::start(void)
 
 void MaratisPlayer::clear(void)
 {
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	
 	// level
 	m_level->clear();
@@ -255,7 +255,7 @@ bool MaratisPlayer::loadProject(const char * filename)
 void MaratisPlayer::loadProject(MProject* proj, const char * filename)
 {
 	MWindow * window = MWindow::getInstance();
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	MLOG_INFO("Loading project: " << filename);
 	
 	// working directory
@@ -271,7 +271,7 @@ void MaratisPlayer::loadProject(MProject* proj, const char * filename)
 	//changeRenderer(proj->renderer.c_str());
 	
 	// if we have a package manager, try to load the package
-	if(MPackageManager* pPackMan = MEngine::getInstance()->getPackageManager())
+	if(MPackageManager* pPackMan = NeoEngine::getInstance()->getPackageManager())
 	{
 		char projName[256];
 		getLocalFilename(projName, workingDir, filename);
@@ -292,10 +292,10 @@ void MaratisPlayer::loadProject(MProject* proj, const char * filename)
 
 void MaratisPlayer::logicLoop(void)
 {
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 
 	// game
-	MGame * game = engine->getGame();
+	NeoGame * game = engine->getGame();
 	if(game)
 	{
 		if(game->isRunning()){
@@ -307,11 +307,11 @@ void MaratisPlayer::logicLoop(void)
 void MaratisPlayer::graphicLoop(void)
 {
 	MWindow * window = MWindow::getInstance();
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	MRenderingContext * render = engine->getRenderingContext();
 
 	// game
-	MGame * game = engine->getGame();
+	NeoGame * game = engine->getGame();
 	if(game)
 	{
 		if(game->isRunning())

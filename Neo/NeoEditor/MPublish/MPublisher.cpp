@@ -26,13 +26,13 @@
 
 using namespace Neo;
 
-MPublisher::MPublisher()
+Publisher::Publisher()
 : m_maxPriorities(10)
 {
 	m_events = new eventVec[m_maxPriorities];
 }
 
-MPublisher::~MPublisher()
+Publisher::~Publisher()
 {
 	for(int i = 0; i < m_maxPriorities; ++i)
 	{
@@ -45,7 +45,7 @@ MPublisher::~MPublisher()
 	delete [] m_events;
 }
 
-void MPublisher::addEvent(MPublishEvent* pubEvent)
+void Publisher::addEvent(MPublishEvent* pubEvent)
 {
 	if(!pubEvent)
 		return;
@@ -59,7 +59,7 @@ void MPublisher::addEvent(MPublishEvent* pubEvent)
 
 }
 
-void MPublisher::publish(const char* projName)
+void Publisher::publish(const char* projName)
 {
 	for(int prio = 0; prio < m_maxPriorities; ++prio)
 	{

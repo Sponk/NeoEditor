@@ -33,13 +33,21 @@
 
 namespace Neo
 {
-class FollowBehavior : public MBehavior
+/**
+ * The FollowBehavior class implements a behavior that forces the parent object
+ * to follow the target object.
+ *
+ * The method used is either physics based if the
+ * parent is a physically active object or translation based if it is not.
+ * @see Neo::Behavior
+ */
+class FollowBehavior : public Behavior
 {
 public:
 
 	// constructors / destructors
-    FollowBehavior(MObject3d * parentObject);
-    FollowBehavior(FollowBehavior & behavior, MObject3d * parentObject);
+    FollowBehavior(Object3d * parentObject);
+    FollowBehavior(FollowBehavior & behavior, Object3d * parentObject);
     ~FollowBehavior(void);
 
 private:
@@ -56,10 +64,10 @@ public:
 	void destroy(void);
 
 	// get new
-	static MBehavior * getNew(MObject3d * parentObject);
+	static Behavior * getNew(Object3d * parentObject);
 
 	// get copy
-	MBehavior * getCopy(MObject3d * parentObject);
+	Behavior * getCopy(Object3d * parentObject);
 
 	// name
 	static const char * getStaticName(void){ return "Follow"; }
@@ -71,7 +79,7 @@ public:
 
 	// variables
 	unsigned int getVariablesNumber(void);
-	MVariable getVariable(unsigned int id);
+	NeoVariable getVariable(unsigned int id);
 };
 }
 #endif

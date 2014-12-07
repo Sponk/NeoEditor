@@ -103,7 +103,7 @@ void gameWinEvents(MWinEvent * windowEvents)
 	static int joymap[4] = {-1, -1, -1, -1};
 
 	MWindow * window = MWindow::getInstance();
-	MInputContext * input = MEngine::getInstance()->getInputContext();
+	MInputContext * input = Neo::NeoEngine::getInstance()->getInputContext();
 	
 	switch(windowEvents->type)
 	{

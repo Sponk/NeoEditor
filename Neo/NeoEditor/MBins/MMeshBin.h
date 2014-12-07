@@ -26,9 +26,9 @@
 #ifndef _M_MESH_BIN_H
 #define _M_MESH_BIN_H
 
-bool exportMeshBin(const char * filename, MMesh * mesh);
-bool exportArmatureAnimBin(const char * filename, MArmatureAnim * anim);
-bool exportTexturesAnimBin(const char * filename, MTexturesAnim * anim);
-bool exportMaterialsAnimBin(const char * filename, MMaterialsAnim * anim);
+bool exportMeshBin(const char * filename, Neo::Mesh * mesh);
+bool exportArmatureAnimBin(const char * filename, Neo::ArmatureAnim * anim);
+bool exportTexturesAnimBin(const char * filename, Neo::TexturesAnim * anim);
+bool exportMaterialsAnimBin(const char * filename, Neo::MaterialsAnim * anim);
 
 #endif

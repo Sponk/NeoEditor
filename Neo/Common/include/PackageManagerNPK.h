@@ -32,7 +32,7 @@
 
 namespace Neo
 {
-class MPackageFileOpenHook : public MFileOpenHook
+class PackageFileOpenHook : public MFileOpenHook
 {
 public:
 	MFile* open(const char* path, const char* mode);
@@ -48,7 +48,7 @@ class MPackageManagerNPK : public MPackageManager
 private:
 	
 	MPackage* m_packages;
-	MPackageFileOpenHook* m_fileOpenHook;
+	PackageFileOpenHook* m_fileOpenHook;
 
 	MPackage m_writable;
 	

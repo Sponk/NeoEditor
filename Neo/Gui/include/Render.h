@@ -35,7 +35,7 @@
 #ifndef __RENDER_H__
 #define __RENDER_H__
 
-#include <MEngine.h>
+#include <NeoEngine.h>
 
 namespace Neo
 {
@@ -58,12 +58,12 @@ public:
     void drawColoredQuad(float x, float y, float w, float h, MVector4 color, float rotation = 0);
     void drawTexturedQuad(float x, float y, float w, float h, int texture, float rotation = 0);
 
-    void drawText(MOText* text, float x, float y);
+    void drawText(OText* text, float x, float y);
     void set2D(float w, float h);
 
     void loadShader(const char* vert, const char* frag, unsigned int* fx);
 
-    MOText* createText(const char* font, float size);
+    OText* createText(const char* font, float size);
 
     Render();
 };

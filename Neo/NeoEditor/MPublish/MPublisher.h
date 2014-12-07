@@ -36,7 +36,7 @@ namespace Neo
  * Editor singleton to handle publishing of a Maratis project
  * By default the publisher has 10 different priority levels
  *-------------------------------------------------------------------------------*/
-class MPublisher
+class Publisher
 {
 private:
 	typedef std::vector<MPublishEvent*> eventVec;
@@ -46,13 +46,13 @@ private:
 	
 public:
 	
-	MPublisher();
-	~MPublisher();
+	Publisher();
+	~Publisher();
 
 	// instance
-	static MPublisher * getInstance(void)
+	static Publisher * getInstance(void)
 	{
-		static MPublisher m_instance;
+		static Publisher m_instance;
 		return &m_instance;
 	}
 	

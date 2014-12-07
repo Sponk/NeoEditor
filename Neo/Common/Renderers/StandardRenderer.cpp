@@ -31,8 +31,7 @@
 #include <glew.h>
 #endif
 
-#include <MEngine.h>
-#include <MLog.h>
+#include <NeoEngine.h>
 
 #ifndef USE_GLES
 #include "StandardShaders.h"
@@ -60,7 +59,7 @@ m_normals(NULL),
 m_tangents(NULL),
 m_FXsNumber(0)
 {
-	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 	MLOG_INFO("Renderer: " << render->getRendererVersion());
 
 #ifndef USE_GLES
@@ -127,7 +126,7 @@ m_FXsNumber(0)
 StandardRenderer::~StandardRenderer(void)
 {
 	unsigned int i;
-	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 	// delete default FXs
 	for(i=0; i<m_FXsNumber; i++)
@@ -168,7 +167,7 @@ void StandardRenderer::destroy(void)
 	delete this;
 }
 
-MRenderer * StandardRenderer::getNew(void)
+Renderer * StandardRenderer::getNew(void)
 {
 	return new StandardRenderer();
 }
@@ -177,7 +176,7 @@ void StandardRenderer::addFX(const char * vert, const char * frag)
 {
 	if(m_FXsNumber < MAX_DEFAULT_FXS)
 	{
-		MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+		MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 		render->createVertexShader(&m_vertShaders[m_FXsNumber]);
 		render->sendShaderSource(m_vertShaders[m_FXsNumber], vert);
@@ -238,13 +237,13 @@ MVector3 * StandardRenderer::getTangents(unsigned int size)
 	return m_tangents;
 }
 
-void StandardRenderer::updateSkinning(MMesh * mesh, MArmature * armature)
+void StandardRenderer::updateSkinning(Mesh * mesh, Armature * armature)
 {
 	unsigned int s;
 	unsigned int sSize = mesh->getSubMeshsNumber();
 	for(s=0; s<sSize; s++)
 	{
-		MSubMesh * subMesh = &mesh->getSubMeshs()[s];
+		SubMesh * subMesh = &mesh->getSubMeshs()[s];
 
 		// data
 		MVector3 * vertices = subMesh->getVertices();
@@ -266,9 +265,9 @@ void StandardRenderer::updateSkinning(MMesh * mesh, MArmature * armature)
 	mesh->updateBoundingBox();
 }
 
-void StandardRenderer::initVBO(MSubMesh * subMesh)
+void StandardRenderer::initVBO(SubMesh * subMesh)
 {
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	MRenderingContext * render = engine->getRenderingContext();
 	
 	unsigned int * vboId1 = subMesh->getVBOid1();
@@ -353,9 +352,9 @@ void StandardRenderer::initVBO(MSubMesh * subMesh)
 	}
 }
 
-void StandardRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices, MVector3 * normals, MVector3 * tangents, MColor * colors)
+void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display, MVector3 * vertices, MVector3 * normals, MVector3 * tangents, MColor * colors)
 {
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	MRenderingContext * render = engine->getRenderingContext();
 
 
@@ -367,7 +366,7 @@ void StandardRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVect
 	
 	
 	// get material
-	MMaterial * material = display->getMaterial();
+	Material * material = display->getMaterial();
 	{
 		float opacity = material->getOpacity();
 		if(opacity <= 0.0f)
@@ -429,11 +428,11 @@ void StandardRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVect
 
 		// FX
 		unsigned int fxId = 0;
-		MFXRef * FXRef = material->getFXRef();
-		MFXRef * ZFXRef = material->getZFXRef();
+		FXRef * fx_ref = material->getFXRef();
+		FXRef * zfx_ref = material->getZFXRef();
 
-		if(FXRef)
-			fxId = FXRef->getFXId();
+		if(fx_ref)
+			fxId = fx_ref->getFXId();
 
 		bool basicFX = false;
 
@@ -449,7 +448,7 @@ void StandardRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVect
 				// alpha test
 				if(material->getTexturesPassNumber() > 0)
 				{
-					MTexture * texture = material->getTexturePass(0)->getTexture();
+					Texture * texture = material->getTexturePass(0)->getTexture();
 					if(texture)
 					{
 						if(texture->getTextureRef())
@@ -465,9 +464,9 @@ void StandardRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVect
 
 				basicFX = true;
 			}
-			else if(ZFXRef) // if custom shader, use the Z FX is any
+			else if(zfx_ref) // if custom shader, use the Z FX is any
 			{
-				fxId = ZFXRef->getFXId();
+				fxId = zfx_ref->getFXId();
 			}
 		}
 
@@ -649,9 +648,9 @@ void StandardRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVect
 			int id = texturesPassNumber;
 			for(unsigned int t=0; t<texturesPassNumber; t++)
 			{
-				MTexturePass * texturePass = material->getTexturePass(t);
+				TexturePass * texturePass = material->getTexturePass(t);
 
-				MTexture * texture = texturePass->getTexture();
+				Neo::Texture * texture = texturePass->getTexture();
 				if((! texture) || (! texCoords))
 				{
 					render->bindTexture(0, t);
@@ -665,7 +664,7 @@ void StandardRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVect
 
 				// texture id
 				unsigned int textureId = 0;
-				MTextureRef * texRef = texture->getTextureRef();
+				TextureRef * texRef = texture->getTextureRef();
 				if(texRef)
 					textureId = texRef->getTextureId();
 
@@ -822,7 +821,7 @@ void StandardRenderer::drawDisplay(MSubMesh * subMesh, MDisplay * display, MVect
 	}
 }
 
-void StandardRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature)
+void StandardRenderer::drawOpaques(SubMesh * subMesh, Armature * armature)
 {
 	// data
 	MVector3 * vertices = subMesh->getVertices();
@@ -856,11 +855,11 @@ void StandardRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature)
 	unsigned int displayNumber = subMesh->getDisplaysNumber();
 	for (i = 0; i<displayNumber; i++)
 	{
-		MDisplay * display = subMesh->getDisplay(i);
+		MaterialDisplay * display = subMesh->getDisplay(i);
 		if (!display->isVisible())
 			continue;
 
-		MMaterial * material = display->getMaterial();
+		Material * material = display->getMaterial();
 		if (material)
 		{
 			if (material->getBlendMode() == M_BLENDING_NONE)
@@ -869,9 +868,9 @@ void StandardRenderer::drawOpaques(MSubMesh * subMesh, MArmature * armature)
 	}
 }
 
-void StandardRenderer::drawTransparents(MSubMesh * subMesh, MArmature * armature)
+void StandardRenderer::drawTransparents(SubMesh * subMesh, Armature * armature)
 {
-	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 	// data
 	MVector3 * vertices = subMesh->getVertices();
@@ -931,11 +930,11 @@ void StandardRenderer::drawTransparents(MSubMesh * subMesh, MArmature * armature
 
 	for(i=0; i<displayNumber; i++)
 	{
-		MDisplay * display = subMesh->getDisplay(i);
+		MaterialDisplay * display = subMesh->getDisplay(i);
 		if(! display->isVisible())
 			continue;
 
-		MMaterial * material = display->getMaterial();
+		Material * material = display->getMaterial();
 		if(material)
 		{
 			if(material->getBlendMode() != M_BLENDING_NONE)
@@ -947,7 +946,7 @@ void StandardRenderer::drawTransparents(MSubMesh * subMesh, MArmature * armature
 	//render->setDepthMode(M_DEPTH_LEQUAL);
 }
 
-float StandardRenderer::getDistanceToCam(MOCamera * camera, const MVector3 & pos)
+float StandardRenderer::getDistanceToCam(OCamera * camera, const MVector3 & pos)
 {
 	if(! camera->isOrtho())
 	{
@@ -959,9 +958,9 @@ float StandardRenderer::getDistanceToCam(MOCamera * camera, const MVector3 & pos
 	return dist*dist;
 }
 
-void StandardRenderer::setShadowMatrix(MMatrix4x4 * matrix, MOCamera * camera)
+void StandardRenderer::setShadowMatrix(MMatrix4x4 * matrix, OCamera * camera)
 {
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	MRenderingContext * render = engine->getRenderingContext();
 
 	const MMatrix4x4 biasMatrix(
@@ -979,7 +978,7 @@ void StandardRenderer::setShadowMatrix(MMatrix4x4 * matrix, MOCamera * camera)
 	(*matrix) = (*matrix) * (*modelViewMatrix);
 }
 
-void StandardRenderer::updateVisibility(MScene * scene, MOCamera * camera)
+void StandardRenderer::updateVisibility(Scene * scene, OCamera * camera)
 {
 	// make frustum
 	camera->getFrustum()->makeVolume(camera);
@@ -989,7 +988,7 @@ void StandardRenderer::updateVisibility(MScene * scene, MOCamera * camera)
 	unsigned int oSize = scene->getObjectsNumber();
 	for(i=0; i<oSize; i++)
 	{
-		MObject3d * object = scene->getObjectByIndex(i);
+		Object3d * object = scene->getObjectByIndex(i);
 		if(object->isActive())
 			object->updateVisibility(camera);
 	}
@@ -1003,7 +1002,7 @@ void StandardRenderer::updateVisibility(MScene * scene, MOCamera * camera)
 
     for(i=0; i < oSize; i++)
     {
-        MOEntity* occluder = scene->getEntityByIndex(i);
+        OEntity* occluder = scene->getEntityByIndex(i);
 
         if(!occluder->isOccluder())
             continue;
@@ -1014,7 +1013,7 @@ void StandardRenderer::updateVisibility(MScene * scene, MOCamera * camera)
 
         for(int j = 0; j < oSize; j++)
         {
-            MOEntity* object = scene->getEntityByIndex(j);
+            OEntity* object = scene->getEntityByIndex(j);
             if(object->isOccluder() || object->isInvisible())
                 continue;
 
@@ -1047,9 +1046,9 @@ void StandardRenderer::updateVisibility(MScene * scene, MOCamera * camera)
     }
 }
 
-void StandardRenderer::enableFog(MOCamera * camera)
+void StandardRenderer::enableFog(OCamera * camera)
 {
-	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 	float fogMin = camera->getClippingFar()*0.9999f;
 	if(camera->hasFog())
@@ -1067,9 +1066,9 @@ void StandardRenderer::enableFog(MOCamera * camera)
 	render->setFogDistance(fogMin, camera->getClippingFar());
 }
 
-ShadowLight * StandardRenderer::createShadowLight(MOLight * light)
+ShadowLight * StandardRenderer::createShadowLight(OLight * light)
 {
-	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 	unsigned int shadowQuality = light->getShadowQuality();
 
 	map<unsigned long, ShadowLight>::iterator iter = m_shadowLights.find((unsigned long)light);
@@ -1110,7 +1109,7 @@ ShadowLight * StandardRenderer::createShadowLight(MOLight * light)
 
 void StandardRenderer::destroyUnusedShadowLights(void)
 {
-	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 	// keys
 	map<unsigned long, ShadowLight>::iterator
@@ -1146,12 +1145,12 @@ void StandardRenderer::decreaseShadowLights(void)
 	}
 }
 
-void StandardRenderer::drawText(MOText * textObj)
+void StandardRenderer::drawText(OText * textObj)
 {
-	MRenderingContext * render = MEngine().getInstance()->getRenderingContext();
+	MRenderingContext * render = NeoEngine().getInstance()->getRenderingContext();
 
 
-	MFont * font = textObj->getFont();
+	Font * font = textObj->getFont();
 	const char * text = textObj->getText();
 	vector <float> * linesOffset = textObj->getLinesOffset();
 
@@ -1266,7 +1265,7 @@ void StandardRenderer::drawText(MOText * textObj)
 
 		// get character
 		unsigned int charCode = (unsigned int)((unsigned char)text[i]);
-		MCharacter * character = font->getCharacter(charCode);
+		Character * character = font->getCharacter(charCode);
 		if(! character)
 			continue;
 
@@ -1308,13 +1307,13 @@ void StandardRenderer::drawText(MOText * textObj)
 	render->setDepthMask(1);
 }
 
-void StandardRenderer::prepareSubMesh(MScene * scene, MOCamera * camera, MOEntity * entity, MSubMesh * subMesh)
+void StandardRenderer::prepareSubMesh(Scene * scene, OCamera * camera, OEntity * entity, SubMesh * subMesh)
 {
-	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
-	MMesh * mesh = entity->getMesh();
+	Mesh * mesh = entity->getMesh();
 	MVector3 scale = entity->getTransformedScale();
-	MBox3d * box = subMesh->getBoundingBox();
+	Box3d * box = subMesh->getBoundingBox();
 
 	// subMesh center
 	MVector3 center = box->min + (box->max - box->min)*0.5f;
@@ -1332,7 +1331,7 @@ void StandardRenderer::prepareSubMesh(MScene * scene, MOCamera * camera, MOEntit
 	unsigned int lightsNumber = 0;
 	for(l=0; l<lSize; l++)
 	{
-		MOLight * light = scene->getLightByIndex(l);
+		OLight * light = scene->getLightByIndex(l);
 
 		if(! light->isActive())
 			continue;
@@ -1349,7 +1348,7 @@ void StandardRenderer::prepareSubMesh(MScene * scene, MOCamera * camera, MOEntit
 
 		float localRadius = light->getRadius() * minScale;
 
-		MBox3d lightBox(
+		Box3d lightBox(
 			MVector3(localPos - localRadius),
 			MVector3(localPos + localRadius)
 		);
@@ -1378,7 +1377,7 @@ void StandardRenderer::prepareSubMesh(MScene * scene, MOCamera * camera, MOEntit
 	// animate armature
 	if(mesh->getArmature())
 	{
-		MArmature * armature = mesh->getArmature();
+		Armature * armature = mesh->getArmature();
 		if(mesh->getArmatureAnim())
 		{
 			animateArmature(
@@ -1410,7 +1409,7 @@ void StandardRenderer::prepareSubMesh(MScene * scene, MOCamera * camera, MOEntit
 	for(l=0; l<lightsNumber; l++)
 	{
 		EntityLight * entityLight = &m_entityLights[m_entityLightsList[l]];
-		MOLight * light = entityLight->light;
+		OLight * light = entityLight->light;
 
         float quadraticAttenuation = 0.0;
 		// attenuation	
@@ -1467,10 +1466,10 @@ void StandardRenderer::prepareSubMesh(MScene * scene, MOCamera * camera, MOEntit
 	}
 }
 
-void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
+void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
 {
 	// get render
-	MRenderingContext * render = MEngine::getInstance()->getRenderingContext();
+	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 	// current view
 	int currentViewport[4];
@@ -1508,7 +1507,7 @@ void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 	// compute lights visibility
 	for(l=0; l<lSize; l++)
 	{
-		MOLight * light = scene->getLightByIndex(l);
+		OLight * light = scene->getLightByIndex(l);
 		if(light->isActive())
 			light->updateVisibility(camera);
 	}
@@ -1530,7 +1529,7 @@ void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 
 	for(l=0; l<lSize; l++)
 	{
-		MOLight * light = scene->getLightByIndex(l);
+		OLight * light = scene->getLightByIndex(l);
 		if(! (light->isActive() && light->isVisible()))
 			continue;
 
@@ -1551,7 +1550,7 @@ void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 				m_lightShadow[i] = 0;
 			}
 
-			MOCamera lightCamera;
+			OCamera lightCamera;
 			*lightCamera.getMatrix() = *light->getMatrix();
 			lightCamera.setClippingNear(light->getRadius()*0.001f);
 			lightCamera.setClippingFar(light->getRadius());
@@ -1578,7 +1577,7 @@ void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 			lightCamera.enable();
 
 			// frustum
-			MFrustum * frustum = lightCamera.getFrustum();
+			Frustum * frustum = lightCamera.getFrustum();
 			frustum->makeVolume(&lightCamera);
 
 			float distMin = lightCamera.getClippingFar();
@@ -1586,7 +1585,7 @@ void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 
 			for(i=0; i<eSize; i++)
 			{
-				MOEntity * entity = scene->getEntityByIndex(i);
+				OEntity * entity = scene->getEntityByIndex(i);
                 if(entity->isActive() && entity->hasShadow())
 				{
 					if(entity->isInvisible()){
@@ -1595,7 +1594,7 @@ void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 					}
 
 					// compute entities visibility
-					MBox3d * box = entity->getBoundingBox();
+					Box3d * box = entity->getBoundingBox();
 					MVector3 * min = &box->min;
 					MVector3 * max = &box->max;
 
@@ -1644,8 +1643,8 @@ void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 			for(i=0; i<eSize; i++)
 			{
 				// get entity
-				MOEntity * entity = scene->getEntityByIndex(i);
-				MMesh * mesh = entity->getMesh();
+				OEntity * entity = scene->getEntityByIndex(i);
+				Mesh * mesh = entity->getMesh();
 
 				// draw mesh
 				if(mesh && entity->isActive() && entity->isVisible())
@@ -1653,7 +1652,7 @@ void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 					// animate armature
 					if(mesh->getArmature())
 					{
-						MArmature * armature = mesh->getArmature();
+						Armature * armature = mesh->getArmature();
 						if(mesh->getArmatureAnim())
 						{
 							animateArmature(
@@ -1681,8 +1680,8 @@ void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 					unsigned int sSize = mesh->getSubMeshsNumber();
 					for(s=0; s<sSize; s++)
 					{
-						MSubMesh * subMesh = &mesh->getSubMeshs()[s];
-						MBox3d * box = subMesh->getBoundingBox();
+						SubMesh * subMesh = &mesh->getSubMeshs()[s];
+						Box3d * box = subMesh->getBoundingBox();
 
 						// check if submesh visible
 						if(sSize > 1)
@@ -1769,7 +1768,7 @@ void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
         updateVisibility(scene, camera);
 
 	// get camera frustum
-	MFrustum * frustum = camera->getFrustum();
+	Frustum * frustum = camera->getFrustum();
         
 	// fog
 	enableFog(camera);
@@ -1794,8 +1793,8 @@ void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 	for(i=0; i<eSize; i++)
 	{
 		// get entity
-		MOEntity * entity = scene->getEntityByIndex(i);
-		MMesh * mesh = entity->getMesh();
+		OEntity * entity = scene->getEntityByIndex(i);
+		Mesh * mesh = entity->getMesh();
 
 		if(! entity->isActive())
 			continue;
@@ -1839,8 +1838,8 @@ void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 			unsigned int sSize = mesh->getSubMeshsNumber();
 			for(s=0; s<sSize; s++)
 			{
-				MSubMesh * subMesh = &mesh->getSubMeshs()[s];
-				MBox3d * box = subMesh->getBoundingBox();
+				SubMesh * subMesh = &mesh->getSubMeshs()[s];
+				Box3d * box = subMesh->getBoundingBox();
 
 				// check if submesh visible
 				if(sSize > 1)
@@ -1915,14 +1914,14 @@ void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 	unsigned int tSize = scene->getTextsNumber();
 	for(i=0; i<tSize; i++)
 	{
-		MOText * text = scene->getTextByIndex(i);
+		OText * text = scene->getTextByIndex(i);
 		if(text->isActive() && text->isVisible() && transpNumber < MAX_TRANSP)
 		{
 			// transparent pass
 			SubMeshPass * subMeshPass = &m_transpList[transpNumber];
 
 			// center
-			MBox3d * box = text->getBoundingBox();
+			Box3d * box = text->getBoundingBox();
 			MVector3 center = box->min + (box->max - box->min)*0.5f;
 			center = text->getTransformedVector(center);
 
@@ -1952,14 +1951,14 @@ void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 			SubMeshPass * subMeshPass = &m_opaqueList[m_opaqueSortList[s]];
 			
 			
-			MOEntity * entity = (MOEntity *)subMeshPass->object;
-			MMesh * mesh = entity->getMesh();
-			MSubMesh * subMesh = &mesh->getSubMeshs()[subMeshPass->subMeshId];
+			OEntity * entity = (OEntity *)subMeshPass->object;
+			Mesh * mesh = entity->getMesh();
+			SubMesh * subMesh = &mesh->getSubMeshs()[subMeshPass->subMeshId];
 
 			// animate armature
 			if(mesh->getArmature())
 			{
-				MArmature * armature = mesh->getArmature();
+				Armature * armature = mesh->getArmature();
 				if(mesh->getArmatureAnim())
 				{
 					animateArmature(
@@ -2010,9 +2009,9 @@ void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 		for(int s=(int)opaqueNumber-1; s>=0; s--)
 		{
 			SubMeshPass * subMeshPass = &m_opaqueList[m_opaqueSortList[s]];
-			MOEntity * entity = (MOEntity *)subMeshPass->object;
-			MMesh * mesh = entity->getMesh();
-			MSubMesh * subMesh = &mesh->getSubMeshs()[subMeshPass->subMeshId];
+			OEntity * entity = (OEntity *)subMeshPass->object;
+			Mesh * mesh = entity->getMesh();
+			SubMesh * subMesh = &mesh->getSubMeshs()[subMeshPass->subMeshId];
 
 
 			// read occlusion result
@@ -2049,16 +2048,16 @@ void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 		for(int s=0; s<transpNumber; s++)
 		{
 			SubMeshPass * subMeshPass = &m_transpList[m_transpSortList[s]];
-			MObject3d * object = subMeshPass->object;
+			Object3d * object = subMeshPass->object;
 
 			// objects
 			switch(object->getType())
 			{
 				case M_OBJECT3D_ENTITY:
 				{
-					MOEntity * entity = (MOEntity *)object;
-					MMesh * mesh = entity->getMesh();
-					MSubMesh * subMesh = &mesh->getSubMeshs()[subMeshPass->subMeshId];
+					OEntity * entity = (OEntity *)object;
+					Mesh * mesh = entity->getMesh();
+					SubMesh * subMesh = &mesh->getSubMeshs()[subMeshPass->subMeshId];
 
 					prepareSubMesh(scene, camera, entity, subMesh);
 
@@ -2079,7 +2078,7 @@ void StandardRenderer::drawScene(MScene * scene, MOCamera * camera)
 
 				case M_OBJECT3D_TEXT:
 				{
-					MOText * text = (MOText *)object;
+					OText * text = (OText *)object;
 
 					//render->pushMatrix();
 					//render->multMatrix(text->getMatrix());

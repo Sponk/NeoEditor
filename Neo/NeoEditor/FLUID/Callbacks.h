@@ -38,7 +38,7 @@ void edit_text_properties(Fl_Widget*, void*);
 void update_behavior_menu();
 const char* fl_native_file_chooser(const char* title, const char* files, const char* dir, int type);
 void update_scene_tree();
-void create_behavior_ui(MObject3d* object);
+void create_behavior_ui(Neo::Object3d* object);
 void save_settings();
 
 #if defined(_MSC_VER)
