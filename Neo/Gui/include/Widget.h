@@ -40,6 +40,8 @@
 
 namespace Neo
 {
+namespace Gui
+{
 
 #ifndef __MINGW32__
 typedef void (*CALLBACK_FUNCTION)(long int);
@@ -90,5 +92,5 @@ public:
     void doCallback();
 };
 }
-
+}
 #endif

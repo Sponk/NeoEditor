@@ -34,7 +34,7 @@
 
 #include <Widget.h>
 
-using namespace Neo;
+using namespace Neo::Gui;
 
 Widget::Widget(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label) :
 m_x(x),
