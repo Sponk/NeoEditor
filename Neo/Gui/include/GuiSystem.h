@@ -36,7 +36,7 @@
 #define __GUI_SYSTEM__
 
 #include <NeoEngine.h>
-#include <vector>
+#include <map>
 #include <Canvas.h>
 #include <string>
 
@@ -61,7 +61,7 @@ private:
     int m_ids;
 
     std::vector<Canvas*> m_canvasVector;
-    std::vector<WidgetId> m_widgets;
+    std::map<int,WidgetId> m_widgets;
     std::string m_defaultFont;
     float m_defaultFontSize;
 
@@ -96,7 +96,7 @@ public:
     void setHighlightBackground(MVector4 color) { m_highlightBackground = color; }
 
     Widget* getWidget(unsigned int idx);
-    int addWidget(Widget* w) { WidgetId id; id.w = w; id.id = ++m_ids; m_widgets.push_back(id); return m_ids;}
+    int addWidget(Widget* w) { WidgetId id; id.w = w; id.id = ++m_ids; m_widgets[id.id] = id; return m_ids;}
     size_t getNumWidgets() { return m_widgets.size(); }
 
     void addCanvas(Canvas* c) { if(c) m_canvasVector.push_back(c); }

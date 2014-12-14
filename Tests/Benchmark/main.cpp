@@ -60,5 +60,5 @@ int main(int argc, char* argv[])
 
     MLOG_INFO("Starting Neo benchmarks");
 
-    guiSystemGetWidget(100, 1000000000);
+    guiSystemGetWidget(100000, 100000);
 }

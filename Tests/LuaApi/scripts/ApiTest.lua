@@ -224,6 +224,7 @@ addWidgetToCanvas(mainCanvas, cursor)
 hideCursor()
 
 ball_rotation = 0
+camera = getObject("Camera0")
 
 function onSceneUpdate()
 
@@ -273,6 +274,14 @@ function onSceneUpdate()
 	setWidgetRotation(ball, ball_rotation)
 	
 	if onKeyDown("SPACE") then destroyWidget(label1) end
+
+	if isKeyPressed("LEFT") then
+		rotate(camera, {0,0,1}, 2)
+	end
+
+	if isKeyPressed("RIGHT") then
+		rotate(camera, {0,0,1}, -2)
+	end
 end
 
 --quit()--]]--

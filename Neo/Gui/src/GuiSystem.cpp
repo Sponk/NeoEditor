@@ -431,9 +431,12 @@ void GuiSystem::destroyWidget(int idx)
 	bool found = false;
 	WidgetId id;
 	int i;
-	for(i = 0; i < m_widgets.size(); i++)
+
+    map<int,WidgetId>::iterator iter = m_widgets.begin();
+
+    for(; iter != m_widgets.end(); iter++)
 	{
-		id = m_widgets[i];
+        id = iter->second;
 		if(id.id == idx)
 		{
 			found = true;
@@ -445,19 +448,12 @@ void GuiSystem::destroyWidget(int idx)
 		return;
 
 	delete id.w;
-	m_widgets.erase(m_widgets.begin()+i);
+    m_widgets.erase(iter);
 }
 
 Widget* GuiSystem::getWidget(unsigned int idx)
 {
-	WidgetId id;
-	for(int i = 0; i < m_widgets.size(); i++)
-	{
-		id = m_widgets[i];
-		if(id.id == idx)
-			return id.w;
-	}
-	return NULL;
+    return m_widgets[idx].w;
 }
 
 void GuiSystem::draw()
