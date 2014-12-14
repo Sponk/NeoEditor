@@ -474,6 +474,8 @@ void GuiSystem::draw()
             m_canvasVector[i]->draw();
         }
     }
+
+    NeoEngine::getInstance()->getRenderingContext()->setScissor(0,0,width,height);
 }
 
 void GuiSystem::update()

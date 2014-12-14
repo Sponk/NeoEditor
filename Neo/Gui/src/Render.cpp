@@ -104,7 +104,7 @@ void Render::drawColoredQuad(float x, float y, float w, float h, MVector4 color,
     }
 
     int vertexAttrib;
-    render->pushMatrix();
+    //render->pushMatrix();
 
     MVector2 m_vertices[4];
     m_vertices[0] = MVector2(x, y);
@@ -155,7 +155,7 @@ void Render::drawColoredQuad(float x, float y, float w, float h, MVector4 color,
     render->disableBlending();
     render->enableCullFace();
 
-    render->popMatrix();
+    //render->popMatrix();
 }
 
 void Render::drawTexturedQuad(float x, float y, float w, float h, int texture, float rotation)
@@ -170,7 +170,7 @@ void Render::drawTexturedQuad(float x, float y, float w, float h, int texture, f
     int vertexAttrib;
     int texcoordAttrib;
 
-    render->pushMatrix();
+    //render->pushMatrix();
 
     MVector2 m_vertices[4];
     m_vertices[0] = MVector2(x, y);
@@ -230,9 +230,10 @@ void Render::drawTexturedQuad(float x, float y, float w, float h, int texture, f
     render->disableAttribArray(texcoordAttrib);
 
     render->bindFX(0);
+    render->bindTexture(0);
     render->disableBlending();
 
-    render->popMatrix();
+    //render->popMatrix();
 }
 
 

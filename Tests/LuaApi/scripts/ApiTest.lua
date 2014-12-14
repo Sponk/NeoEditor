@@ -155,6 +155,9 @@ function button4Callback()
 	setLabel(label1, getLabel(input1))
 end
 
+--enableCameraSkybox(1)
+--loadCameraSkybox(getCurrentCamera(), "maps/skybox")
+
 enableGui(1)
 mainCanvas = getMainCanvas()
 

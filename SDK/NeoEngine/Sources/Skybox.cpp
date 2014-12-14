@@ -94,6 +94,7 @@ void Skybox::drawSkybox(MVector3 position, MVector3 rotation)
 
     ProjModelViewMatrix = ProjMatrix * ModelViewMatrix;
 
+    render->disableDepthTest();
     render->bindFX(m_fx);
     static MVector2 texCoords[4];
 

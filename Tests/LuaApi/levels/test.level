@@ -12,6 +12,20 @@
 			gravity="0.000000 0.000000 -0.981000"
 			ambientLight="0.000000 0.000000 0.000000" />
 
+		<Light name="Light">
+			<active value="true" />
+			<transform 
+				position="0.000000 -24.968735 39.711044"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="1000.000000"
+				color="1.000000 1.000000 1.000000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
 		<Camera name="Camera0">
 			<active value="true" />
 			<transform 
@@ -27,10 +41,10 @@
 				clippingFar="1000.000000"
 				fog="false"
 				fogDistance="0.000000"
-				skyboxTextures="" />
+				skyboxTextures="maps/skybox" />
 		</Camera>
 		<Entity name="Cube" file="../meshs/box.mesh">
-			<BoundingBox min="-5.000000 -5.000000 -5.000000" max="5.000000 5.000000 5.000000" />
+			<BoundingBox min="-5.677568 -5.677569 -5.677566" max="5.677569 5.677568 5.677566" />
 			<anim id="0" />
 			<active value="true" />
 			<transform 
@@ -42,20 +56,6 @@
 				shadow="true"
 				occluder="false" />
 		</Entity>
-		<Light name="Light">
-			<active value="true" />
-			<transform 
-				position="0.000000 -24.968735 39.711044"
-				rotation="0.000000 -0.000000 0.000000"
-				scale="1.000000 1.000000 1.000000" />
-			<properties 
-				radius="1000.000000"
-				color="1.000000 1.000000 1.000000"
-				intensity="1.000000"
-				spotAngle="180.000000"
-				spotExponent="0.000000"
-				shadow="false" />
-		</Light>
 
 	</Scene>
 
