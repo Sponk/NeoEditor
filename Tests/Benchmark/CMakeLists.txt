@@ -59,4 +59,4 @@ TARGET_LINK_LIBRARIES(NeoBenchmark
 )
 
 INCLUDE(CopyFiles)
-copy_files("*.lua" "${MARATIS_BINARY_OUTPUT}" "copy-benchmark")
+copy_files("*.lua" "${NEO_BINARY_OUTPUT}" "copy-benchmark")

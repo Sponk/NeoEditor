@@ -59,4 +59,4 @@ TARGET_LINK_LIBRARIES(TestSDK
 )
 
 INCLUDE(CopyFiles)
-copy_files("*.lua" "${MARATIS_BINARY_OUTPUT}" "copy-sdk-test")
+copy_files("*.lua" "${NEO_BINARY_OUTPUT}" "copy-sdk-test")
