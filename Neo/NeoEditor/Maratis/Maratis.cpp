@@ -267,7 +267,7 @@ void Maratis::initRenderer()
 #ifndef USE_GLES
     m_render = new GLContext();
 #else
-    m_render = new MES2Context();
+	m_render = new ES2Context();
 #endif
     NeoEngine::getInstance()->setRenderingContext(m_render);
 }

@@ -32,7 +32,7 @@
 #include <GLContext.h>
 #else
 #include <ES2Context.h>
-typedef ES2Context GLContext;
+typedef Neo::ES2Context GLContext;
 #endif
 
 #include <ALContext.h>

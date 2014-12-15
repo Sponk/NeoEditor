@@ -31,17 +31,17 @@
 // vert header
 string vertHeader =
 
-"#ifdef GL_ES\n"
-"precision mediump float;\n"
-"#endif\n"
+//"#ifdef GL_ES\n"
+//"precision mediump float;\n"
+//"#endif\n"
 
 "attribute vec3 Vertex;"
 "attribute vec3 Normal;"
 "attribute vec3 Tangent;"
 "attribute vec3 Color;"
 
-"uniform bool LightShadow[1];"
-"uniform mat4 LightShadowMatrix[1];"
+"uniform bool LightShadow[4];"
+"uniform mat4 LightShadowMatrix[4];"
 
 "uniform mat4 TextureMatrix[4];"
 "uniform mat4 ModelViewMatrix;"
@@ -50,14 +50,14 @@ string vertHeader =
 "uniform mat4 ProjModelViewMatrix;"
 
 "varying vec4 texCoord[2];"
-"varying vec4 shadowCoord[1];"
+"varying vec4 shadowCoord[4];"
 "varying vec4 position, normal, tangent;";
 
 
 // frag header
 string fragHeader =
 
-"precision mediump float;"
+//"precision mediump float;"
 
 "uniform bool AlphaTest;"
 "uniform vec4 FogColor;"
@@ -68,26 +68,26 @@ string fragHeader =
 "uniform float MaterialShininess;"
 "uniform float MaterialOpacity;"
 
-"uniform vec4 LightPosition[1];"
-"uniform vec3 LightDiffuseProduct[1];"
-"uniform vec3 LightSpecularProduct[1];"
-"uniform vec3 LightSpotDirection[1];"
-"uniform float LightConstantAttenuation[1];"
-"uniform float LightQuadraticAttenuation[1];"
-"uniform float LightSpotCosCutoff[1];"
-"uniform float LightSpotExponent[1];"
-"uniform bool LightActive[1];"
+"uniform vec4 LightPosition[4];"
+"uniform vec3 LightDiffuseProduct[4];"
+"uniform vec3 LightSpecularProduct[4];"
+"uniform vec3 LightSpotDirection[4];"
+"uniform float LightConstantAttenuation[4];"
+"uniform float LightQuadraticAttenuation[4];"
+"uniform float LightSpotCosCutoff[4];"
+"uniform float LightSpotExponent[4];"
+"uniform bool LightActive[4];"
 
-"uniform sampler2D LightShadowMap[1];"
-"uniform bool LightShadow[1];"
-"uniform float LightShadowBias[1];"
-"uniform float LightShadowBlur[1];"
+"uniform sampler2D LightShadowMap[4];"
+"uniform bool LightShadow[4];"
+"uniform float LightShadowBias[4];"
+"uniform float LightShadowBlur[4];"
 
 "uniform sampler2D Texture[4];"
 "uniform sampler2D RandTexture;"
 
 "varying vec4 texCoord[2];"
-"varying vec4 shadowCoord[1];"
+"varying vec4 shadowCoord[4];"
 "varying vec4 position, normal, tangent;";
 							
 								
@@ -121,16 +121,16 @@ string functionsShader = string(
 	"vec3 L = normalize(lightDir);"
 
 	"float lambertTerm = max(dot(N, L), 0.0);"
-	//"if(lambertTerm > 0.0)"
+	"if(lambertTerm > 0.0)"
 	"{"
 		"float spot = dot(spotDir, -L);"
-			
+
 		"if(spot >= spotCos)"
 		"{"
 			"float shadow = computeShadow(shad, shadCoord, shadMap, shadBias, shadBlur);"
-								
+
 			"spot = clamp(pow(spot, spotExp), 0.0, 1.0);"
-								
+
 			"float lightDirLength2 = dot(lightDir, lightDir);"
 			"float attenuation = (spot / (constantAttenuation + (lightDirLength2 * quadraticAttenuation)))*shadow;"
 
@@ -173,15 +173,10 @@ string functionsShader = string(
  
  );
 
-
-
-
-
-
 // lights
 string lightShader = string(
 						
-//"if(LightActive[0])"
+"if(LightActive[0])"
 "{"
 	"computeLight("
 		"LightPosition[0].xyz,"
@@ -199,7 +194,7 @@ string lightShader = string(
 		"LightShadowBlur[0]"
 	");"
 
-	/*						
+
 	"if(LightActive[1])"
 	"{"
 		"computeLight("
@@ -238,29 +233,29 @@ string lightShader = string(
 
 			"if(LightActive[3])"
 			"{"
-				"computeLightNoShadow("
+				"computeLight("
 					"LightPosition[3].xyz,"
-					"LightConstantAttenuation[2],"
+					"LightConstantAttenuation[3],"
 					"LightQuadraticAttenuation[3],"
 					"LightDiffuseProduct[3],"
 					"LightSpecularProduct[3],"
 					"LightSpotDirection[3],"
 					"LightSpotCosCutoff[3],"
-					"LightSpotExponent[3]"
+					"LightSpotExponent[3],"
+					"LightShadow[3],"
+					"shadowCoord[3],"
+					"LightShadowMap[3],"
+					"LightShadowBias[3],"
+					"LightShadowBlur[3]"
 				");"
 			"}"
 		"}"
-	"}"*/
+	"}"
 "}");
-
-
-
-
-
 
 // Basic
 string vertShader0 = string(
-"precision mediump float;"							
+//"precision mediump float;"
 "attribute vec3 Vertex;"
 "uniform mat4 ProjModelViewMatrix;"
 							
@@ -270,7 +265,7 @@ string vertShader0 = string(
 "}");
 
 string fragShader0 = string(
-"precision mediump float;"
+//"precision mediump float;"
 "void main(void)"
 "{"
 	"gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);"
@@ -279,7 +274,7 @@ string fragShader0 = string(
 
 // Basic with texture
 string vertShader7 = string(
-"precision mediump float;"
+//"precision mediump float;"
 "attribute vec3 Vertex;"
 "attribute vec2 TexCoord0;"
 "uniform mat4 TextureMatrix[8];"
@@ -293,7 +288,7 @@ string vertShader7 = string(
 "}");
 
 string fragShader7 = string(
-"precision mediump float;"
+//"precision mediump float;"
 "uniform bool AlphaTest;"
 "uniform float MaterialOpacity;"
 "uniform sampler2D Texture[8];"
@@ -311,7 +306,7 @@ string fragShader7 = string(
 
 // Text FX
 string vertShader8 = string(
-"precision mediump float;"
+//"precision mediump float;"
 "attribute vec3 Vertex;"
 "attribute vec2 TexCoord;"
 "uniform mat4 ProjModelViewMatrix;"
@@ -326,7 +321,7 @@ string vertShader8 = string(
 "}");
 
 string fragShader8 = string(
-"precision mediump float;"
+//"precision mediump float;"
 "uniform sampler2D Texture0;"
 "uniform vec4 Color;"
 "varying vec4 position;"
@@ -422,6 +417,7 @@ fragHeader +
 	"vec4 finalColor = vec4(diffuse+specular, MaterialOpacity)*texture0;"
 	"float fogFactor = clamp((FogEnd + position.z) * FogScale, 0.0, 1.0);"
 	"gl_FragColor = mix(FogColor, finalColor, fogFactor);"
+	//"gl_FragColor = vec4(texture0);"
 "}");
 
 
