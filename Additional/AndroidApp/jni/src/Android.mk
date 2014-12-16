@@ -4,8 +4,8 @@ NEO_PATH := ../../../../libs/armeabi-v7a
 NEO_INCLUDE := ../../../../3rdparty/sdl2/include
 
 include $(CLEAR_VARS)
-LOCAL_MODULE    := MaratisCommon
-LOCAL_SRC_FILES := $(NEO_PATH)/libMaratisCommon.a
+LOCAL_MODULE    := NeoCommon
+LOCAL_SRC_FILES := $(NEO_PATH)/libNeoCommon.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
@@ -14,8 +14,8 @@ LOCAL_SRC_FILES := $(NEO_PATH)/libMCore.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE    := MEngine 
-LOCAL_SRC_FILES := $(NEO_PATH)/libMEngine.a
+LOCAL_MODULE    := NeoEngine 
+LOCAL_SRC_FILES := $(NEO_PATH)/libNeoEngine.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
@@ -69,14 +69,15 @@ LOCAL_SRC_FILES := $(NEO_PATH)/libbullet.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE    := MGui
-LOCAL_SRC_FILES := $(NEO_PATH)/libMGui.a
+LOCAL_MODULE    := AndroidPlayer
+LOCAL_SRC_FILES := $(NEO_PATH)/libAndroidPlayer.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE    := MAndroidPlayer
-LOCAL_SRC_FILES := $(NEO_PATH)/libMAndroidPlayer.a
+LOCAL_MODULE    := NeoGui
+LOCAL_SRC_FILES := $(NEO_PATH)/libNeoGui.a
 include $(PREBUILT_STATIC_LIBRARY)
+
 
 
 include $(CLEAR_VARS)
@@ -87,7 +88,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(NEO_INCLUDE)
 LOCAL_SRC_FILES := glue_main.c		
 		
 LOCAL_SHARED_LIBRARIES := 
-LOCAL_STATIC_LIBRARIES := MAndroidPlayer MaratisCommon MEngine MGui SDL2 SDL2_static freetype bullet openal vorbis npk zlib jpeg png ogg MCore tinyxml lua stlport_static
+LOCAL_STATIC_LIBRARIES := AndroidPlayer NeoCommon NeoEngine NeoGui SDL2 SDL2_static freetype bullet openal vorbis npk zlib jpeg png ogg MCore tinyxml lua stlport_static
 
 LOCAL_LDLIBS := -L$(NEO_PATH) -lGLESv1_CM -lGLESv2 -llog -landroid -lOpenSLES -lz
 

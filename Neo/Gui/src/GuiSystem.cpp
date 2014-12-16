@@ -39,7 +39,6 @@
 #include <Render.h>
 #include <Label.h>
 #include <Sprite.h>
-#include <DR_SHA1.h>
 
 using namespace Neo;
 using namespace Neo::Gui;

@@ -328,10 +328,20 @@ ADD_SUBDIRECTORY(SDK)
 ADD_SUBDIRECTORY(Neo)
 ADD_SUBDIRECTORY(Data)
 ADD_SUBDIRECTORY(Documentation)
+
+## Build only for PC
+IF(NOT ANDROID)
 ADD_SUBDIRECTORY(Tests/LuaApi)
 ADD_SUBDIRECTORY(Tests/SDK)
 ADD_SUBDIRECTORY(Tests/Benchmark)
 ADD_SUBDIRECTORY(Tools)
+ENDIF()
+
+IF(ANDROID)
+    ## Copy Android app to build dir
+    INCLUDE(CopyFiles)
+    copy_files("Additional/AndroidApp/*" "${CMAKE_BINARY_DIR}" "copy-android-sources")
+ENDIF()
 
 ## Install files
 INSTALL(FILES 

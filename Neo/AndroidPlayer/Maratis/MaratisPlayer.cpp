@@ -24,38 +24,45 @@
 
 
 #include "MaratisPlayer.h"
-#include <MWindow.h>
+#include <MAndroidWindow.h>
 
 // MaratisCore
 
 #ifndef USE_GLES
-#include <MContexts/MGLContext.h>
+#include <GLContext.h>
 #else
-#include <MContexts/MES2Context.h>
-typedef MES2Context MGLContext;
+#include <ES2Context.h>
+typedef Neo::ES2Context GLContext;
 #endif
 
-#include <MContexts/MALContext.h>
-#include <MContexts/MBulletContext.h>
-#include <MContexts/MWinContext.h>
-#include <MLoaders/MImageLoader.h>
-#include <MLoaders/MSoundLoader.h>
-#include <MLoaders/MFreetypeLoader.h>
-#include <MLoaders/MBinFontLoader.h>
-#include <MLoaders/MBinMeshLoader.h>
+#include <ALContext.h>
+#include <BulletContext.h>
+#include <WinContext.h>
+#include <ImageLoader.h>
+#include <SoundLoader.h>
+#include <FreetypeLoader.h>
+#include <BinFontLoader.h>
+#include <BinMeshLoader.h>
 
-#include <MFileManager/MLevelLoad.h>
-#include <MBehaviors/MBLookAt.h>
-#include <MBehaviors/MBFollow.h>
-#include <MBehaviors/MBLua.h>
-#include <MScript/MScript.h>
-#include <MInput/MInput.h>
-#include <MFileManager/MMeshLoad.h>
-#include <MFileManager/MLevelLoad.h>
-#include <MFileManager/MPackageManagerNPK.h>
-#include <MRenderers/MStandardRenderer.h>
-#include <MRenderers/MFixedRenderer.h>
+#include <MCore.h>
+#include <NeoEngine.h>
+#include "../MWindow/MMouse.h"
+#include <LookAtBehavior.h>
+#include <FollowBehavior.h>
+#include <LuaBehavior.h>
+#include <ParticleSystemBehavior.h>
+#include <LuaScript.h>
+#include <Input.h>
+#include <LevelLoad.h>
+#include <LevelSave.h>
+#include <MeshLoad.h>
+#include <MeshSave.h>
+#include <PackageManagerNPK.h>
+#include <Project.h>
+#include <StandardRenderer.h>
+#include <FixedRenderer.h>
 
+using namespace Neo;
 
 MaratisPlayer::MaratisPlayer(void):
 m_gamePlugin(NULL),
@@ -63,11 +70,11 @@ m_renderer(NULL)
 {
 	// MEngine
 	{
-		m_soundContext = new MALContext();
-		m_render = new MGLContext();
-		m_physics = new MBulletContext();
-		m_script = new MScript();
-		m_input = new MInput();
+		m_soundContext = new ALContext();
+		m_render = new GLContext();
+		m_physics = new BulletContext();
+		m_script = new LuaScript();
+		m_input = new Input();
 		m_system = new MWinContext();
 		m_level = new Level();
 		m_game = new NeoGame();
@@ -102,8 +109,8 @@ void MaratisPlayer::changeRenderer(const char * name)
 	RendererManager * rendererManager = engine->getRendererManager();
 	
 	RendererCreator * renderer = rendererManager->getRendererByName(name);
-	if(renderer)
-	{
+    if(renderer && strcmp(engine->getRenderer()->getName(), name) != 0)
+    {
 		if(m_renderer)
 			m_renderer->destroy();
 		m_renderer = renderer->getNewRenderer();
@@ -137,13 +144,12 @@ void MaratisPlayer::start(void)
 		engine->getFontLoader()->addLoader(M_loadBinFont); // bin font loader
 
 		// add behaviors
-		engine->getBehaviorManager()->addBehavior(MBLookAt::getStaticName(), M_OBJECT3D_CAMERA, MBLookAt::getNew);
-		engine->getBehaviorManager()->addBehavior(MBFollow::getStaticName(), M_OBJECT3D, MBFollow::getNew);
-        engine->getBehaviorManager()->addBehavior(MBLua::getStaticName(), M_OBJECT3D, MBLua::getNew);
+        engine->getBehaviorManager()->addBehavior(LookAtBehavior::getStaticName(), M_OBJECT3D_CAMERA, LookAtBehavior::getNew);
+		engine->getBehaviorManager()->addBehavior(FollowBehavior::getStaticName(), M_OBJECT3D, FollowBehavior::getNew);
+        engine->getBehaviorManager()->addBehavior(LuaBehavior::getStaticName(), M_OBJECT3D, LuaBehavior::getNew);
 
 		// add renderers
-		engine->getRendererManager()->addRenderer(MStandardRenderer::getStaticName(), MStandardRenderer::getNew);
-		engine->getRendererManager()->addRenderer(MFixedRenderer::getStaticName(), MFixedRenderer::getNew);
+		engine->getRendererManager()->addRenderer(StandardRenderer::getStaticName(), StandardRenderer::getNew);
 		
 		// mesh loader
 		engine->getMeshLoader()->addLoader(xmlMeshLoad);
@@ -163,7 +169,7 @@ void MaratisPlayer::start(void)
 		
 		// set default renderer (standard)
 		if(m_renderer == NULL)
-			m_renderer = new MStandardRenderer();
+			m_renderer = new StandardRenderer();
 		engine->setRenderer(m_renderer);
 	}
 }
@@ -232,7 +238,7 @@ void MaratisPlayer::loadGamePlugin(void)
 	#endif
 
 	SAFE_DELETE(m_gamePlugin);
-	m_gamePlugin = new MPlugin();
+	m_gamePlugin = new Plugin();
 	m_gamePlugin->load(gameFile);
 }
 
@@ -242,7 +248,7 @@ bool MaratisPlayer::loadProject(const char * filename)
 		return false;
 	
 	// load project file
-	MProject proj;
+	Project proj;
 	if(proj.loadXML(filename))
 	{
 		loadProject(&proj, filename);
@@ -252,11 +258,11 @@ bool MaratisPlayer::loadProject(const char * filename)
 	return false;
 }
 
-void MaratisPlayer::loadProject(MProject* proj, const char * filename)
+void MaratisPlayer::loadProject(Project* proj, const char * filename)
 {
 	MWindow * window = MWindow::getInstance();
 	NeoEngine * engine = NeoEngine::getInstance();
-	MLOG_INFO("Loading project: " << filename);
+	
 	
 	// working directory
 	char workingDir[256];
@@ -265,23 +271,21 @@ void MaratisPlayer::loadProject(MProject* proj, const char * filename)
 	
 	// restart
 	restart();
-	//loadGamePlugin();
+	loadGamePlugin();
 	
 	// renderer
-	//changeRenderer(proj->renderer.c_str());
+	changeRenderer(proj->renderer.c_str());
 	
 	// if we have a package manager, try to load the package
 	if(MPackageManager* pPackMan = NeoEngine::getInstance()->getPackageManager())
 	{
 		char projName[256];
 		getLocalFilename(projName, workingDir, filename);
-		MLOG_INFO("Project filepath: " << projName);
 		if(char* ext = strstr(projName, ".mproj"))
 		{
 			sprintf(ext, ".npk");
 			char packageFile[256];
 			getGlobalFilename(packageFile, workingDir, projName);
-			MLOG_INFO("Loading NPK: " << packageFile);
 			pPackMan->loadPackage(packageFile);
 		}
 	}

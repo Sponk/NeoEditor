@@ -38,6 +38,7 @@
 
 #include <limits.h>
 
+using namespace Neo;
 
 const char * getKeyName(unsigned int key)
 {

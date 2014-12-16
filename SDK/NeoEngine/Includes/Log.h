@@ -36,6 +36,8 @@
 #include <sstream>
 #include <fstream>
 
+namespace Neo
+{
 
 /* Log function compatible with the syslog standard, usefull for filtering logs, and logging networkly (todo).
 	0	Emergency	emerg (panic)	System is unusable.	A "panic" condition usually affecting multiple apps/servers/sites. At this level it would usually notify all tech staff on call.
@@ -65,7 +67,7 @@
 #endif
 
 // for the moment let s just simply log if the message has a severity lower than the env variable
-#define MLOG(severity, USERMESSAGE) { Log::m_stringstream.str(std::string("")); Log::m_stringstream<<USERMESSAGE; Log::m_string=Log::m_stringstream.str(); Log::log(severity, __FUNCTION__, __SFILENAME__, __LINE__); }
+#define MLOG(severity, USERMESSAGE) { Neo::Log::m_stringstream.str(std::string("")); Neo::Log::m_stringstream<<USERMESSAGE; Neo::Log::m_string=Neo::Log::m_stringstream.str(); Neo::Log::log(severity, __FUNCTION__, __SFILENAME__, __LINE__); }
 
 // common helpers
 #define MLOG_ERROR(USERMESSAGE) MLOG(3, USERMESSAGE)
@@ -92,5 +94,5 @@ public:
 	static string m_string;
 	static void log(int severity, const char * func, const char * fil, const int & line_no);
 };
-
+}
 #endif

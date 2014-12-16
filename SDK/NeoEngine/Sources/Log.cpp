@@ -38,6 +38,7 @@
 #include <SDL_log.h>
 #endif
 
+using namespace Neo;
 
 // static vars
 Log *			Log::m_instance = NULL;

@@ -106,13 +106,16 @@ void InputField::draw()
 
 void InputField::addCharacter(char c)
 {
+#ifndef ANDROID
     m_label.erase(--m_label.end(), m_label.end());
     m_label += c;
     m_label += "|";
+#endif
 }
 
 void InputField::update()
 {
+#ifndef ANDROID
     MMouse* mouse = MMouse::getInstance();
     MKeyboard* kbd = MKeyboard::getInstance();
 
@@ -188,4 +191,5 @@ void InputField::update()
             m_label.erase(m_label.end() - 2, --m_label.end());
         }
     }
+#endif
 }

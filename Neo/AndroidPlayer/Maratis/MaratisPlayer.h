@@ -26,11 +26,12 @@
 #ifndef _MARATIS_PLAYER_H
 #define _MARATIS_PLAYER_H
 
-#include <MEngine.h>
-#include <MPlugin/MPlugin.h>
-#include <MProject/MProject.h>
+#include <NeoEngine.h>
+#include <Plugin.h>
+#include <Project.h>
 
-
+namespace Neo
+{
 class MaratisPlayer
 {
 public:
@@ -61,10 +62,10 @@ private:
 	MPackageManager * m_packageManager;
 
 	// plugins
-	std::vector <MPlugin *> m_plugins;
+	std::vector <Neo::Plugin *> m_plugins;
 
 	// game plugin
-	MPlugin * m_gamePlugin;
+	Neo::Plugin * m_gamePlugin;
 
 private:
 
@@ -87,11 +88,11 @@ public:
 
 	// project load
 	bool loadProject(const char * filename);
-	void loadProject(MProject * proj, const char * filename);
+	void loadProject(Neo::Project * proj, const char * filename);
 	
 	// main loops
 	static void logicLoop(void);
 	static void graphicLoop(void);
 };
-
+}
 #endif

@@ -26,21 +26,24 @@
 //jan 2012 - Philipp Geyer <philipp@geyer.co.uk> - embedded project/package manager
 
 
-#include <MEngine.h>
-#include <MLog.h>
+#include <NeoEngine.h>
 #include <MAndroidWindow.h>
 #include <SDL_log.h>
+#include <GuiSystem.h>
 
 #include <MGameWinEvents.h>
 #include "Maratis/MaratisPlayer.h"
+#include <SDL_log.h>
+
+using namespace Neo;
 
 // window events
 void windowEvents(MWinEvent * windowEvents)
 {
-	MEngine * engine = MEngine::getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	
 	// game
-	MGame * game = engine->getGame();
+	NeoGame * game = engine->getGame();
 	if(game)
 	{
 		if(game->isRunning())
@@ -59,12 +62,14 @@ void windowEvents(MWinEvent * windowEvents)
 void update(void)
 {
 	MaratisPlayer::getInstance()->logicLoop();
+	Neo::Gui::GuiSystem::getInstance()->update();
 }
 
 // draw
 void draw(void)
 {
 	MaratisPlayer::getInstance()->graphicLoop();
+	Neo::Gui::GuiSystem::getInstance()->draw();
 	MWindow::getInstance()->swapBuffer();
 }
 
@@ -77,35 +82,24 @@ extern "C" int player_main(int argc, char* argv[])
 	unsigned int height = 768;
 	int fullscreen = false;
 	
-	if(argc > 2)
-		sscanf(argv[2], "%d", &width);
-	if(argc > 3)
-		sscanf(argv[3], "%d", &height);
-	if(argc > 4)
-		sscanf(argv[4], "%d", &fullscreen);
-	
-	
 	// get engine (first time call onstructor)
-	MEngine * engine = MEngine::getInstance();
-	
+	NeoEngine * engine = NeoEngine::getInstance();
 	
 	// get window (first time call onstructor)
 	MWindow * window = MWindow::getInstance();
-	
+
 	// create window
-	if(!window->create("Maratis", width, height, 32, fullscreen == 1))
+	if(!window->create("Neo", width, height, 32, fullscreen == 1))
 	{
 		MLOG_ERROR("cannot create window");
 		return -1;
 	}
-	
+
 	if(fullscreen)
 		window->hideCursor();
 	
 	
 	window->setCurrentDirectory(asset_directory);	
-	
-	// get Maratis (first time call onstructor)
 	MaratisPlayer * maratis = MaratisPlayer::getInstance();
 	
 	// window pointer event
@@ -126,6 +120,7 @@ extern "C" int player_main(int argc, char* argv[])
 			
 			if(maratis->loadProject(filename))
 			{
+				Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
 				engine->getGame()->begin();
 				found = true;
 				break;
