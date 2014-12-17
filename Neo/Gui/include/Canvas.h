@@ -59,11 +59,13 @@ private:
     bool m_renderToTexture;
     
     TextureRef* m_texture;
+    int m_layer;
 
 public:
     static Canvas* getInstance() { static Canvas m_instance; return &m_instance; }
 
 	~Canvas() {clear();}
+    Canvas(): m_layer(0) {}
 
     /**
      * @brief Draws the Canvas and its contents.
@@ -72,6 +74,9 @@ public:
     void update();
 
     void clear();
+
+    int getLayer() {return m_layer; }
+    void setLayer(int nl) { m_layer = nl; }
 
     void addWidget(int w);
     MVector4 getClearColor() { return m_clearColor; }

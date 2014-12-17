@@ -4,9 +4,11 @@
 #include <MWindow.h>
 #include <WinContext.h>
 #include <PackageManagerNPK.h>
+#include <GuiSystem.h>
 #include "liblittletest.hpp"
 
 using namespace Neo;
+using namespace Gui;
 
 bool compare_float(float a, float b)
 {
@@ -94,6 +96,29 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, LuaBehavior_test);
 	LT_ASSERT(compare_float(*((float*)var.getPointer()), 123.123));
 
 LT_END_AUTO_TEST(LuaBehavior_test);
+
+#define CANVAS_TEST_SIZE 4
+LT_BEGIN_AUTO_TEST(NeoTestSdk, GuiSystem_test);
+
+    GuiSystem* gui = GuiSystem::getInstance();
+
+    Canvas* canvases[CANVAS_TEST_SIZE];
+    for(int i = 0; i < CANVAS_TEST_SIZE; i++)
+    {
+        Canvas* testc = new Canvas;
+
+        canvases[i] = testc;
+        testc->setLayer(i);
+
+        gui->addCanvas(testc);
+    }
+
+    for(int i = 1; i < CANVAS_TEST_SIZE; i++)
+    {
+        LT_CHECK(gui->getCanvas(i)->getLayer() == i-1);
+    }
+
+LT_END_AUTO_TEST(GuiSystem_test);
 
 LT_BEGIN_TEST_ENV();
 	AUTORUN_TESTS();

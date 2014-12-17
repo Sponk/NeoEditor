@@ -99,7 +99,9 @@ public:
     int addWidget(Widget* w) { WidgetId id; id.w = w; id.id = ++m_ids; m_widgets[id.id] = id; return m_ids;}
     size_t getNumWidgets() { return m_widgets.size(); }
 
-    void addCanvas(Canvas* c) { if(c) m_canvasVector.push_back(c); }
+    void addCanvas(Canvas* c);
+    Canvas* getCanvas(unsigned int i) { return m_canvasVector[i]; }
+    void updateLayers();
     
     void destroyWidget(int id);
 

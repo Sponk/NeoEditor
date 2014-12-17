@@ -218,6 +218,12 @@ addWidgetToCanvas(mainCanvas, input1)
 
 addWidgetToCanvas(mainCanvas, ball)
 
+c = createCanvas()
+test = createSprite(500, 500, paddlewidth, paddleheight, "maps/neo-icon.png", "") 
+addWidgetToCanvas(c, test)
+
+setCanvasLayer(c, 1)
+
 cursor = createSprite(0,0,32,32,"maps/cursor.png", "")
 addWidgetToCanvas(mainCanvas, cursor)
 

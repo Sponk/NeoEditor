@@ -39,6 +39,7 @@
 #include <Render.h>
 #include <Label.h>
 #include <Sprite.h>
+#include <algorithm>
 
 using namespace Neo;
 using namespace Neo::Gui;
@@ -58,9 +59,12 @@ GuiSystem::GuiSystem()
 
 GuiSystem::~GuiSystem()
 {
-    for(int i = 1; i < m_canvasVector.size(); i++)
+    Canvas* c;
+    for(int i = 0; i < m_canvasVector.size(); i++)
     {
-        delete m_canvasVector[i];
+        c = m_canvasVector[i];
+        if(c && c != Canvas::getInstance())
+            delete c;
     }
 }
 
@@ -390,6 +394,24 @@ int detroyWidget()
     return 1;
 }
 
+int setCanvasLayer()
+{
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+    if(script->getArgsNumber() != 2)
+        return 0;
+
+    Canvas* c = (Canvas*) script->getPointer(0);
+    int layer = script->getInteger(1);
+
+    if(c)
+        c->setLayer(layer);
+
+    GuiSystem::getInstance()->updateLayers();
+
+    return 1;
+}
+
 void GuiSystem::setupLuaInterface(MScriptContext* script)
 {
     script->addFunction("enableGui", enableGui);
@@ -423,6 +445,8 @@ void GuiSystem::setupLuaInterface(MScriptContext* script)
     
     script->addFunction("enableCanvasRenderToTexture", enableCanvasRenderToTexture);
     script->addFunction("disableCanvasRenderToTexture", disableCanvasRenderToTexture);
+
+    script->addFunction("setCanvasLayer", setCanvasLayer);
 }
 
 void GuiSystem::destroyWidget(int idx)
@@ -511,4 +535,20 @@ void GuiSystem::clear()
 
     m_widgets.clear();
 	scriptCallbacks.clear();
+}
+
+static bool compareCanvasLayer(Canvas* a, Canvas* b)
+{
+    return (a->getLayer() > b->getLayer());
+}
+
+void GuiSystem::addCanvas(Canvas* c)
+{
+    if(c)
+        m_canvasVector.push_back(c);
+}
+
+void GuiSystem::updateLayers()
+{
+    std::sort(m_canvasVector.begin(), m_canvasVector.end(), compareCanvasLayer);
 }
