@@ -218,11 +218,36 @@ addWidgetToCanvas(mainCanvas, input1)
 
 addWidgetToCanvas(mainCanvas, ball)
 
+-- TEST
 c = createCanvas()
 test = createSprite(500, 500, paddlewidth, paddleheight, "maps/neo-icon.png", "") 
 addWidgetToCanvas(c, test)
 
 setCanvasLayer(c, 1)
+
+p1 = createTile(15,600,72,79,"",1,0)
+tilesheet = loadSpriteSheet("maps/tiles_spritesheet.png",70,70,2)
+
+player1_sheet = loadSpriteSheet("maps/p1_spritesheet.png", 72, 97, 1)
+player1_currentFrame = 0
+
+setTileSpriteSheet(p1, player1_sheet)
+addWidgetToCanvas(mainCanvas, p1)
+
+lastTimer = getSystemTick()
+
+function testAnimation()
+
+	if getSystemTick() < lastTimer + 70 then
+		return 
+	end
+
+	lastTimer = getSystemTick()
+	setTileOffset(p1, {player1_currentFrame,0})	
+	player1_currentFrame = (player1_currentFrame + 1)%4
+end
+
+-- TEST
 
 cursor = createSprite(0,0,32,32,"maps/cursor.png", "")
 addWidgetToCanvas(mainCanvas, cursor)
@@ -233,6 +258,8 @@ ball_rotation = 0
 camera = getObject("Camera0")
 
 function onSceneUpdate()
+
+	testAnimation()
 
 	if not isRunning then return end
 

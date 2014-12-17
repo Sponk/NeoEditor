@@ -57,6 +57,7 @@ public:
 
     void drawColoredQuad(float x, float y, float w, float h, MVector4 color, float rotation = 0);
     void drawTexturedQuad(float x, float y, float w, float h, int texture, float rotation = 0);
+	void drawTexturedQuad(float x, float y, float w, float h, int texture, float rotation, MVector4 texcoords);
 
     void drawText(OText* text, float x, float y);
     void set2D(float w, float h);

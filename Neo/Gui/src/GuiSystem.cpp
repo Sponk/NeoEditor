@@ -39,6 +39,7 @@
 #include <Render.h>
 #include <Label.h>
 #include <Sprite.h>
+#include <Tile.h>
 #include <algorithm>
 
 using namespace Neo;
@@ -412,6 +413,90 @@ int setCanvasLayer()
     return 1;
 }
 
+int loadSpriteSheet()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if(script->getArgsNumber() != 4)
+		return 0;
+
+	const char* path = script->getString(0);
+	unsigned int tile_width = script->getInteger(1);
+	unsigned int tile_height = script->getInteger(2);
+	unsigned int tile_distance = script->getInteger(3);
+
+	TileSheet* sheet = new TileSheet();
+	sheet->loadImage(path, tile_width, tile_height, tile_distance);
+
+	script->pushPointer(sheet);
+
+	return 1;
+}
+
+int deleteSpriteSheet()
+{
+
+}
+
+int createTile()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if(script->getArgsNumber() != 7)
+		return 0;
+
+	Tile* tile = new Tile(script->getInteger(0), script->getInteger(1),
+							 script->getInteger(2), script->getInteger(3), script->getString(4), script->getInteger(5), script->getInteger(6));
+
+	GuiSystem* gui = GuiSystem::getInstance();
+	int idx = gui->addWidget(tile);
+
+	script->pushInteger(idx);
+	return 1;
+}
+
+int setTileSpriteSheet()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if(script->getArgsNumber() != 2)
+		return 0;
+
+	Tile* w = (Tile*) GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	if(w && !strcmp(w->getStaticName(), "Tile"))
+	{
+		w->setTileSheet((TileSheet*) script->getPointer(1));
+	}
+	else
+	{
+		MLOG_ERROR("Given object is not of type Tile!");
+	}
+	return 1;
+}
+
+int setTileOffset()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if(script->getArgsNumber() != 2)
+		return 0;
+
+	Tile* w = (Tile*) GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	if(!strcmp(w->getStaticName(), "Tile"))
+	{
+		MVector2 vec;
+		script->getFloatArray(1, vec, 2);
+		w->setOffset(vec);
+	}
+	else
+	{
+		MLOG_ERROR("Given object is not of type Tile!");
+	}
+	return 1;
+}
+
 void GuiSystem::setupLuaInterface(MScriptContext* script)
 {
     script->addFunction("enableGui", enableGui);
@@ -447,6 +532,11 @@ void GuiSystem::setupLuaInterface(MScriptContext* script)
     script->addFunction("disableCanvasRenderToTexture", disableCanvasRenderToTexture);
 
     script->addFunction("setCanvasLayer", setCanvasLayer);
+
+	script->addFunction("createTile", createTile);
+	script->addFunction("loadSpriteSheet", loadSpriteSheet);
+	script->addFunction("setTileSpriteSheet", setTileSpriteSheet);
+	script->addFunction("setTileOffset", setTileOffset);
 }
 
 void GuiSystem::destroyWidget(int idx)

@@ -32,67 +32,65 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __WIDGET_H__
-#define __WIDGET_H__
+#ifndef __TILE_H__
+#define __TILE_H__
 
 #include <string>
-#include <MCore.h>
+#include <NeoEngine.h>
+#include <Widget.h>
 
 namespace Neo
 {
 namespace Gui
 {
 
-#ifndef __MINGW32__
-typedef void (*CALLBACK_FUNCTION)(long int);
-#else
-#define CALLBACK_FUNCTION void*
-#endif
-
-/**
- * @brief The Widget class contains all information that is common
- * to all GUI widgets.
- *
- * Every object that resembles a GUI widget has to derive from this class.
- */
-class Widget
+class TileSheet
 {
-protected:
-    float m_x, m_y;
-    float m_rotation;
-    unsigned int m_width, m_height;
-    std::string m_label;
+private:
+	int m_image;
 
-    CALLBACK_FUNCTION m_callback;
-    long int m_userData;
+	unsigned int m_tileWidth;
+	unsigned int m_tileHeight;
+	unsigned int m_tileDistance;
+
+	unsigned int m_imageWidth, m_imageHeight;
 
 public:
 
-    Widget(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label);
-    Widget();
+	TileSheet() : m_image(0) {}
 
-    virtual void draw() = 0;
-    virtual void update() = 0;
+	void loadImage(const char* path, unsigned int width, unsigned int height, unsigned int dist);
+	MVector4 getTexCoords(unsigned int x, unsigned int y);
+	int getImage() { return m_image; }
+};
 
-    void setCallback(CALLBACK_FUNCTION func) { m_callback = func; }
-    void setCallback(CALLBACK_FUNCTION func, long int data) { m_callback = func; m_userData = data; }
+/**
+ * @brief The Sprite class displays a texture on the screen.
+ */
+class Tile : public Widget
+{
+protected:
+    OText* m_labelText;
+	TileSheet* m_parentSheet;
 
-    long int getUserData() { return m_userData; }
-    void setUserData(long int data) { m_userData = data; }
+	unsigned int m_tilex, m_tiley;
 
-    const char* getLabel() { return m_label.c_str(); }
-    void setLabel(const char* l) { m_label = l; }
+public:
 
-    void setPosition(MVector2 pos) { m_x = pos.x; m_y = pos.y; }
-    MVector2 getPosition() { return MVector2(m_x, m_y); }
+	Tile(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label, unsigned int tilex, unsigned int tiley)
+		:
+		Widget(x,y,width,height,label),
+		m_labelText(NULL),
+		m_tilex(tilex),
+		m_tiley(tiley){}
 
-    void setRotation(float rot) { m_rotation = rot; }
-    float getRotation() { return m_rotation; }
+	const char* getStaticName() { return "Tile"; }
 
-    void doCallback();
+	void setTileSheet(TileSheet* sheet) { m_parentSheet = sheet; }
+	void setOffset(MVector2 vec) { m_tilex = vec.x; m_tiley = vec.y; }
 
-	// For runtime identification
-	const char* getStaticName() { return "Widget"; }
+    void draw();
+    void update();
 };
 }
 }

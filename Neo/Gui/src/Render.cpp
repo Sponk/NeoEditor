@@ -160,6 +160,11 @@ void Render::drawColoredQuad(float x, float y, float w, float h, MVector4 color,
 
 void Render::drawTexturedQuad(float x, float y, float w, float h, int texture, float rotation)
 {
+	drawTexturedQuad(x,y,w,h,texture,rotation,MVector4(0.0,0.0,1.0,1.0));
+}
+
+void Render::drawTexturedQuad(float x, float y, float w, float h, int texture, float rotation, MVector4 texcoords)
+{
     MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     if(m_texturedFx == 0)
@@ -179,10 +184,15 @@ void Render::drawTexturedQuad(float x, float y, float w, float h, int texture, f
     m_vertices[2] = MVector2(x+w, y);
 
     MVector2 m_texcoords[4];
-    m_texcoords[0] = MVector2(0, 0);
+	/*m_texcoords[0] = MVector2(0, 0);
     m_texcoords[1] = MVector2(0, 1);
     m_texcoords[2] = MVector2(1, 0);
-    m_texcoords[3] = MVector2(1, 1);
+	m_texcoords[3] = MVector2(1, 1);*/
+
+	m_texcoords[0] = MVector2(texcoords.x, texcoords.y);
+	m_texcoords[1] = MVector2(texcoords.x, texcoords.y+texcoords.w);
+	m_texcoords[2] = MVector2(texcoords.x+texcoords.z, texcoords.y);
+	m_texcoords[3] = MVector2(texcoords.x+texcoords.z, texcoords.y+texcoords.w);
 
     // Set up env
     render->bindFX(m_texturedFx);
