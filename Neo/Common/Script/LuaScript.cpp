@@ -398,6 +398,13 @@ void LuaScript::init(void)
 	
 	// create context
 	m_state = lua_open();
+
+	if(!m_state)
+	{
+		MLOG_ERROR("Could not open Lua state!");
+		return;
+	}
+
 	luaL_openlibs(m_state);
 
 	registerVec3(m_state);

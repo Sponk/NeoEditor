@@ -51,6 +51,13 @@ function testLight()
     assertEquals(compare_float(getLightSpotExponent(object), 0.7), true)
 end
 
+function testObjectDeletion()
+	local newObject = loadMesh("meshs/box.mesh")
+	
+	enablePhysics(newObject, 1)
+	deleteObject(newObject)
+end
+
 function testCamera()
     local object = createCamera()
     

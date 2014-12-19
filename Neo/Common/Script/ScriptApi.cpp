@@ -663,7 +663,6 @@ int getObject()
 	Level * level = NeoEngine::getInstance()->getLevel();
 	Scene * scene = level->getCurrentScene();
 
-
 	if(! isFunctionOk(script, "getObject", 1))
 		return 0;
 

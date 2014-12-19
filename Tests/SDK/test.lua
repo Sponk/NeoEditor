@@ -5,6 +5,7 @@ public =
 	othervar = "alsdkfj"
 }
 
-function onSceneUpdate(object)
 
+function onSceneUpdate(object)
+	something = getObject("Object")
 end
