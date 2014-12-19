@@ -4386,8 +4386,11 @@ int doFile()
 
 	// read text
 	char * text = readTextFile(globalFilename);
-	if(! text)
+	if(!text)
+	{
+		MLOG_ERROR("Could not load script file: " << filename);
 		return 0;
+	}
 
 	// update current directory
 	getRepertory(g_currentDirectory, globalFilename);
