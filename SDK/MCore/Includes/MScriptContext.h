@@ -34,6 +34,8 @@
 /// Class used to manage script functions virtually.
 class M_CORE_EXPORT MScriptContext
 {
+protected:
+	bool m_isRunning;
 public :
 
 	/// Destructor.
@@ -84,6 +86,8 @@ public :
 
 	// Type checking
 	virtual bool isNumber(unsigned int arg) = 0;
+
+	bool isRunning() { return m_isRunning; }
 };
 
 #endif

@@ -97,6 +97,20 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, LuaBehavior_test);
 
 LT_END_AUTO_TEST(LuaBehavior_test);
 
+LT_BEGIN_AUTO_TEST(NeoTestSdk, LuaBehaviorNonExistantScript_test);
+
+	NeoEngine* engine = NeoEngine::getInstance();
+
+	Object3d* object = engine->getLevel()->getCurrentScene()->addNewLight();
+	Neo::LuaBehavior* b = (Neo::LuaBehavior*) engine->getBehaviorManager()->getBehaviorByName("LuaScript")->getNewBehavior(object);
+	NeoVariable var = b->getVariable(0);
+	LT_ASSERT(var.getType() == M_VARIABLE_STRING);
+
+	((MString*) var.getPointer())->set("does-not-exist.lua");
+	b->update();
+
+LT_END_AUTO_TEST(LuaBehaviorNonExistantScript_test);
+
 #define CANVAS_TEST_SIZE 4
 LT_BEGIN_AUTO_TEST(NeoTestSdk, GuiSystem_test);
 

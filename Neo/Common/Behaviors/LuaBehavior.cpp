@@ -238,6 +238,9 @@ void LuaBehavior::update(void)
         m_init = true;
     }
 
+	if(!m_script.isRunning())
+		return;
+
     lua_State* L = m_script.getLuaState();
 
     lua_getglobal(L, "public");
