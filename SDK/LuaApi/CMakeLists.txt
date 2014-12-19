@@ -8,7 +8,7 @@ copy_files("*.lua" "${NEO_BINARY_OUTPUT}/scripts/SDK" "copy-lua-api")
 IF(NOT ${LUADOC_EXECUTABLE} STREQUAL "")
 ## TODO: Document behavior!
 ADD_CUSTOM_TARGET(luadoc ALL
-  COMMAND ${LUADOC_EXECUTABLE} -d ${DOCUMENTATION_BINARY_DIR}/LuaDoc ${SOURCES}}
+  COMMAND ${LUADOC_EXECUTABLE} -nofiles -d ${DOCUMENTATION_BINARY_DIR}/LuaDoc ${SOURCES}
 )
 ELSE()
     message("-- Will NOT generate LuaDoc documentation. No executable specified!\n--")
