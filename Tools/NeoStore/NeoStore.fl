@@ -13,8 +13,8 @@ class NeoStore {open
   Function {create_window()} {open
   } {
     Fl_Window {} {
-      label {Neo Store} open
-      xywh {1861 259 861 576} type Double resizable visible
+      label {Neo Store} open selected
+      xywh {1861 259 729 576} type Double resizable visible
     } {
       Fl_Browser available_packages {
         label {Packages:}
@@ -24,22 +24,22 @@ class NeoStore {open
       }
       Fl_Help_View package_description {
         label {Description:}
-        xywh {222 24 387 417}
+        xywh {222 24 501 417}
       }
       Fl_Help_View package_detail {
-        xywh {222 444 387 90}
+        xywh {222 444 501 90}
       }
       Fl_Button install_button {
         label Install
         user_data this user_data_type {NeoStore*}
         callback install_package
-        xywh {510 540 99 27}
+        xywh {624 540 99 27}
       }
       Fl_Button remove_button {
         label Remove
         user_data this user_data_type {NeoStore*}
         callback remove_package
-        xywh {225 537 99 27}
+        xywh {222 540 99 27}
       }
     }
   }
@@ -112,7 +112,6 @@ if(RepositoryManager::getInstance()->removePackage(p))
 else
 {
 	fl_message("Could not remove package!");
-}} {selected
-    }
+}} {}
   }
 } 

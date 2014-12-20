@@ -6,7 +6,7 @@
 
 Fl_Double_Window* NeoStore::create_window() {
   Fl_Double_Window* w;
-  { Fl_Double_Window* o = new Fl_Double_Window(861, 576, "Neo Store");
+  { Fl_Double_Window* o = new Fl_Double_Window(729, 576, "Neo Store");
     w = o;
     o->user_data((void*)(this));
     { available_packages = new Fl_Browser(6, 24, 213, 546, "Packages:");
@@ -15,14 +15,14 @@ Fl_Double_Window* NeoStore::create_window() {
       available_packages->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       available_packages->when(3);
     } // Fl_Browser* available_packages
-    { package_description = new Fl_Help_View(222, 24, 387, 417, "Description:");
+    { package_description = new Fl_Help_View(222, 24, 501, 417, "Description:");
     } // Fl_Help_View* package_description
-    { package_detail = new Fl_Help_View(222, 444, 387, 90);
+    { package_detail = new Fl_Help_View(222, 444, 501, 90);
     } // Fl_Help_View* package_detail
-    { install_button = new Fl_Button(510, 540, 99, 27, "Install");
+    { install_button = new Fl_Button(624, 540, 99, 27, "Install");
       install_button->callback((Fl_Callback*)install_package, (void*)(this));
     } // Fl_Button* install_button
-    { remove_button = new Fl_Button(225, 537, 99, 27, "Remove");
+    { remove_button = new Fl_Button(222, 540, 99, 27, "Remove");
       remove_button->callback((Fl_Callback*)remove_package, (void*)(this));
     } // Fl_Button* remove_button
     o->end();
