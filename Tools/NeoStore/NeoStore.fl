@@ -1,0 +1,118 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0302 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include "RepositoryManager.h"} {private local
+} 
+
+decl {\#include <FL/fl_message.H>} {private local
+} 
+
+class NeoStore {open
+} {
+  Function {create_window()} {open
+  } {
+    Fl_Window {} {
+      label {Neo Store} open
+      xywh {1861 259 861 576} type Double resizable visible
+    } {
+      Fl_Browser available_packages {
+        label {Packages:}
+        user_data this user_data_type {NeoStore*}
+        callback package_selected
+        xywh {6 24 213 546} type Hold align 5 when 3
+      }
+      Fl_Help_View package_description {
+        label {Description:}
+        xywh {222 24 387 417}
+      }
+      Fl_Help_View package_detail {
+        xywh {222 444 387 90}
+      }
+      Fl_Button install_button {
+        label Install
+        user_data this user_data_type {NeoStore*}
+        callback install_package
+        xywh {510 540 99 27}
+      }
+      Fl_Button remove_button {
+        label Remove
+        user_data this user_data_type {NeoStore*}
+        callback remove_package
+        xywh {225 537 99 27}
+      }
+    }
+  }
+  Function {package_selected(Fl_Browser* browser, NeoStore* self)} {open return_type {static void}
+  } {
+    code {int current = browser->value();
+
+if(browser->data(current) == NULL)
+	return;
+
+Repository::Package p = *(Repository::Package*) browser->data(current);
+
+std::string detail;
+
+detail += "<br><br><table>";
+detail += "<tr><td>Author:<td>"+p.author+"</td></tr>";
+detail += "<tr><td>Version:<td>"+p.version+"</td></tr>";
+detail += "<tr><td>License:<td>"+p.license+"</td></tr>";
+detail += "</table>";
+
+self->package_description->value(p.description.c_str());
+self->package_detail->value(detail.c_str());
+
+if(RepositoryManager::getInstance()->isInstalled(p.name.c_str()))
+{
+	self->install_button->deactivate();
+	self->remove_button->activate();
+}
+else
+{
+	self->install_button->activate();
+	self->remove_button->deactivate();
+}} {}
+  }
+  Function {install_package(Fl_Button* btn, NeoStore* self)} {open return_type {static void}
+  } {
+    code {int current = self->available_packages->value();
+
+if(self->available_packages->data(current) == NULL)
+	return;
+
+Repository::Package p = *(Repository::Package*) self->available_packages->data(current);
+
+if(RepositoryManager::getInstance()->installPackage(p))
+{
+	fl_message("Package was successfully installed!");
+	self->install_button->deactivate();
+	self->remove_button->activate();
+}
+else
+{
+	fl_message("Could not install package!");
+}} {}
+  }
+  Function {remove_package(Fl_Button* btn, NeoStore* self)} {open return_type {static void}
+  } {
+    code {int current = self->available_packages->value();
+
+if(self->available_packages->data(current) == NULL)
+	return;
+
+Repository::Package p = *(Repository::Package*) self->available_packages->data(current);
+
+if(RepositoryManager::getInstance()->removePackage(p))
+{
+	fl_message("Package was successfully removed!");
+	self->install_button->activate();
+	self->remove_button->deactivate();
+}
+else
+{
+	fl_message("Could not remove package!");
+}} {selected
+    }
+  }
+} 
