@@ -36,7 +36,7 @@
 	#include <errno.h>
 	#include <unistd.h>
 #else
-	#include <WinSock2.h>
+	#include <winsock2.h>
 	#define vsnprintf _vsnprintf
 #endif
 
