@@ -34,9 +34,6 @@
 #include <vector>
 #include <deque>
 
-
-
-
 // forward decl
 struct in_addr;
 
