@@ -641,7 +641,14 @@ bool LuaScript::isNumber(unsigned int arg)
 	return lua_isnumber(m_state, arg+1);
 }
 
-void LuaScript::runString(const char* str)
+bool LuaScript::runString(const char* str)
 {
-	luaL_dostring(m_state, str);
+	// do string
+	if(luaL_dostring(m_state, str) != 0)
+	{
+		MLOG_ERROR("Lua Script: \n" << lua_tostring(m_state, -1) << "\n");
+		return false;
+	}
+
+	return true;
 }

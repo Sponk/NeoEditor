@@ -63,7 +63,7 @@ public :
 	/// \param function	Function callback
 	virtual void addFunction(const char * name, int (*function)(void)) = 0;
 
-	virtual void runString(const char* str) = 0;
+	virtual bool runString(const char* str) = 0;
 
 	// variables
 	virtual unsigned int getArgsNumber(void) = 0;

@@ -4396,7 +4396,10 @@ int doFile()
 	getRepertory(g_currentDirectory, globalFilename);
 
 	// do string
-	script->runString(text);
+	if(!script->runString(text))
+	{
+		MLOG_ERROR("Could not execute " << filename);
+	}
 
 	// set back to current
 	strcpy(g_currentDirectory, current);

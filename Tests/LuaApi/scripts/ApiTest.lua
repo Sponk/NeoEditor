@@ -1,4 +1,4 @@
 
--- dofile("LuaApiPongTest.lua")
+--dofile("LuaApiPongTest.lua")
 dofile("LuaApiSDKTest.lua")
 

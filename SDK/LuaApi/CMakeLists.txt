@@ -5,11 +5,11 @@ INSTALL(FILES ${SOURCES} DESTINATION ${NEO_INSTALL_DIR}/LuaApi)
 INCLUDE(CopyFiles)
 copy_files("*.lua" "${NEO_BINARY_OUTPUT}/scripts/SDK" "copy-lua-api")
 
-IF(NOT ${LUADOC_EXECUTABLE} STREQUAL "")
+IF(LUA51_FOUND)
 ## TODO: Document behavior!
-ADD_CUSTOM_TARGET(luadoc ALL
-  COMMAND ${LUADOC_EXECUTABLE} -nofiles -d ${DOCUMENTATION_BINARY_DIR}/LuaDoc ${SOURCES}
+ADD_CUSTOM_TARGET(docl ALL
+  COMMAND lua ${NEO_SOURCE_DIR}/Tools/docl/docl -o ${DOCUMENTATION_BINARY_DIR}/LuaDoc ${SOURCES}
 )
 ELSE()
-    message("-- Will NOT generate LuaDoc documentation. No executable specified!\n--")
+    message("-- Will NOT generate Lua documentation. No Lua executable specified!\n--")
 ENDIF()

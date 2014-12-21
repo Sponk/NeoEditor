@@ -70,7 +70,7 @@ public:
 	// add function
 	void addFunction(const char * name, int (*function)(void));
 
-	void runString(const char* str);
+	bool runString(const char* str);
 
 	// variables
 	unsigned int getArgsNumber(void);

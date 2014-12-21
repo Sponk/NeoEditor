@@ -1,0 +1,31 @@
+<!doctype html><html><head>
+  <meta charset=utf-8>
+  <title>Reference</title>
+  <link href="style.css" rel="stylesheet" type="text/css"></meta>
+
+</head><body>
+  <div id=content>
+<h1> docl</h1><p> Document and test your Lua scripts with <code>docl</code>!
+<p><dl></dl><h2> Usage</h2><p> <code>docl&nbsp;<span class=operator>[</span>-h<span class=operator>]</span>&nbsp;<span class=operator>[</span>-o&nbsp;OUTPUTDIR<span class=operator>]</span>&nbsp;<span class=operator>[</span><span class=comment>--lift LIFTFILE] [--common-prefix COMMONPREFIX] FILES</span></code></p><p> This will create the dir OUTPUTDIR (default is <code>docs<span class=operator>/</span></code>), an <code>index.html</code> file
+ and for every supplied file a file <code><span class=operator>/</span>path.to.file.html</code> .</p><p> For example the documentation of <code>src<span class=operator>/</span>plugins<span class=operator>/</span>vector.lua</code> would be placed
+ at <code><span class=operator>/</span>src.plugins.vector.lua.html</code>.
+<p><dl></dl><h2> Options</h2><p><p><dl><dt id=><a href=#> -h</a></dt>
+<dd><p>    show this help
+</p></dd><dt id=><a href=#> --lift LIFTFILE</a></dt>
+<dd><p>    "lift" a specific file. eg. show its documentation on the index page.
+</p></dd><dt id=><a href=#> -o OUTPUTDIR</a></dt>
+<dd><p>    specify a directory for the html documentation files.
+    default is <code>docs<span class=operator>/</span></code>
+</p></dd><dt id=><a href=#> -common-prefix COMMONPREFIX</a></dt>
+<dd><p>    normally docl names lua files relative to the pwd, but
+    if all lua files to be documented are inside another directory
+    you can pass a COMMONPREFIX to be stripped of from those files.</p><p>    For example if you are at ~/ and you call</p><p>      <code>docl&nbsp;<span class=operator>/</span>my-programs<span class=operator>/</span>my-app<span class=operator>/</span>*.lua</code></p><p>    then docl will name the output files my-programs.lua.my-app.*.lua.html
+    if you want them to be called only *.lua.html supply a common prefix</p><p>      <code>docl&nbsp;<span class=comment>--common-prefix /my-programs/my-app /my-programs/lua/my-app/*.lua</span></code>
+</p></dd></dl><h2> Examples</h2><p> Here are some usage examples:</p><p> <code>.<span class=operator>/</span>docl&nbsp;*.lua</code></p><p> document all .lua files in this directory</p><p> <code>.<span class=operator>/</span>docl&nbsp;*.lua&nbsp;*<span class=operator>/</span>*.lua</code></p><p> document all .lua files in this directory and all subdirectories
+ (but not recursive!)</p><p> <code>.<span class=operator>/</span>docl&nbsp;-o&nbsp;doc&nbsp;$<a href=3.lua.html#>3</a>;<span class=operator>(</span>find&nbsp;-name&nbsp;<span class=string>"*.lua"</span><span class=operator>)</span><span class=operator>)</span></code></p><p> recursively document all files ending in .lua and put output into doc/</p><p> <code>.<span class=operator>/</span>docl&nbsp;<span class=comment>--common-prefix /my-programs/my-app/src -o /my-programs/my-app/doc $((find /my-programs/my-app/src/ -name "*.lua"))</span></code></p><p> recursively document all files inside /my-programs/my-app/src
+ ending in .lua and put output into /my-programs/my-app/doc/<p><dl></dl>
+  </div><div id=navigation>
+<a href=index.html>> Index</a><h2> docl</h2><h3> Usage</h3><h3> Options</h3><li><a href=#> -h</a></li><li><a href=#> --lift LIFTFILE</a></li><li><a href=#> -o OUTPUTDIR</a></li><li><a href=#> -common-prefix COMMONPREFIX</a></li><h3> Examples</h3>
+  </div><footer style=margin-right>
+    generated with docl
+  </footer></body></html>
