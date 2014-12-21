@@ -87,10 +87,10 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, LuaBehavior_test);
 
 	LT_ASSERT(num == 3);
 
-	var = b->getVariable(1);
+	var = b->getVariable(0);
 	LT_ASSERT(var.getType() == M_VARIABLE_STRING);
 
-	var = b->getVariable(2);
+	var = b->getVariable(1);
 	LT_ASSERT(var.getType() == M_VARIABLE_FLOAT);
 
 	LT_ASSERT(compare_float(*((float*)var.getPointer()), 123.123));

@@ -78,6 +78,13 @@ Behavior * LuaBehavior::getCopy(Object3d * parentObject)
 unsigned int LuaBehavior::getVariablesNumber(void)
 {
     NeoEngine* engine = NeoEngine::getInstance();
+
+	// Save current context
+	MScriptContext* original = engine->getScriptContext();
+
+	// Set new context
+	engine->setScriptContext(&m_script);
+
     // TODO: New variable type for paths!
     std::vector<std::string> names;
     if(!m_init)
@@ -99,6 +106,9 @@ unsigned int LuaBehavior::getVariablesNumber(void)
 		if(!isFileExist(globalFile) || isDirectory(globalFile))
         {
 			MLOG_ERROR("Script file does not exist (" << globalFile << ")!");
+
+			// Restore the original context
+			engine->setScriptContext(original);
             return 1;
 		}
 
@@ -197,6 +207,8 @@ unsigned int LuaBehavior::getVariablesNumber(void)
         }
     }
 
+	// Restore the original context
+	engine->setScriptContext(original);
     return m_variables.size() + 1;
 }
 
@@ -228,12 +240,27 @@ void LuaBehavior::update(void)
     if(! game->isRunning())
             return;
 
+	// Save current context
+	MScriptContext* original = engine->getScriptContext();
+
+	// Set new context
+	engine->setScriptContext(&m_script);
+
     if(!m_init)
     {
         char globalFile[256];
         getGlobalFilename(globalFile, engine->getSystemContext()->getWorkingDirectory(), m_scriptFile.getSafeString());
 
-		MLOG_INFO("Running script");
+		// If the script does not exist, show only the static variable
+		if(!isFileExist(globalFile) || isDirectory(globalFile))
+		{
+			MLOG_ERROR("Script file does not exist (" << globalFile << ")!");
+
+			// Restore the original context
+			engine->setScriptContext(original);
+			return;
+		}
+
 		m_script.runScript(globalFile);
         m_init = true;
     }
@@ -265,4 +292,7 @@ void LuaBehavior::update(void)
         m_script.pushPointer(parent);
         m_script.endCallFunction(1);
     }
+
+	// Restore the original context
+	engine->setScriptContext(original);
 }
