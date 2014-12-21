@@ -7,5 +7,7 @@ dofile("class.lua")
 dofile("Canvas.lua")
 dofile("Sprite.lua")
 dofile("Tile.lua")
+dofile("SpriteSheet.lua")
+dofile("SpriteAnimation.lua")
 
 enableGui(1)
