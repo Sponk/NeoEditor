@@ -1044,6 +1044,11 @@ void Maratis::okNewProject(const char * filename)
 
         copyFile(src, dir);
 
+		getGlobalFilename(src, system->getWorkingDirectory(), "LuaApi");
+		getGlobalFilename(dir, rep, "scripts/SDK");
+
+		copyDirectory(src, dir);
+
 #ifndef WIN32
         chmod(dir, S_IRWXU);
 #endif

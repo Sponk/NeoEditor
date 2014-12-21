@@ -25,11 +25,12 @@ decl {using namespace Neo;} {private global
 
 class EditorWindow {open
 } {
-  Function {show_window()} {} {
+  Function {show_window()} {open
+  } {
     Fl_Window {} {
       label {Neo Editor}
       callback window_quit open
-      xywh {364 370 915 620} type Double labelsize 11 align 80 resizable size_range {0 0 2048 2048} visible
+      xywh {1724 205 915 620} type Double labelsize 11 align 80 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -159,6 +160,11 @@ class EditorWindow {open
             label {Update player}
             callback update_player_callback
             tooltip {Copies the player from the editor directory to the project directory.} xywh {0 0 100 20} labelsize 14
+          }
+          MenuItem {} {
+            label {Import Lua SDK}
+            callback import_lua_sdk_callback selected
+            xywh {0 0 100 20} labelsize 14
           }
           MenuItem {} {
             label {Open profile viewer}
@@ -472,7 +478,7 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
   }
   Function {create_light_window()} {} {
     Fl_Window light_window_object {open
-      xywh {987 239 219 558} type Double labelsize 11 resizable
+      xywh {987 267 219 558} type Double labelsize 11 resizable
       code0 {light_window_object->position(0,0);}
       code1 {light_window_object->resizable(NULL);} size_range {0 0 258 714} visible
     } {
@@ -1298,8 +1304,7 @@ materials_chooser->value(0);
 
 strcpy(object_name, object->getName());
 
-material_changed(materials_chooser, this);} {selected
-    }
+material_changed(materials_chooser, this);} {}
   }
   Function {close_callback(Fl_Button* button, MaterialEditDlg* dlg)} {return_type {static void}
   } {

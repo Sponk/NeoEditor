@@ -2339,3 +2339,15 @@ void local_transform_mode_callback(Fl_Menu_* menu, void*)
 	Maratis* maratis = Maratis::getInstance();	
 	maratis->setOrientationMode(menu->value() ? M_ORIENTATION_LOCAL: M_ORIENTATION_WORLD);
 }
+
+void import_lua_sdk_callback(Fl_Menu_ *, void *)
+{
+	char src[255];
+	char dir[255];
+	getGlobalFilename(src, ".", "LuaApi");
+	getGlobalFilename(dir, current_project.path.c_str(), "scripts/SDK");
+
+	MLOG_INFO("Copying " << src << " to " << dir);
+
+	copyDirectory(src, dir);
+}
