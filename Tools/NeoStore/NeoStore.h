@@ -7,6 +7,7 @@
 #include <FL/Fl_Browser.H>
 #include <FL/Fl_Help_View.H>
 #include <FL/Fl_Button.H>
+#include <FL/Fl_Menu_Bar.H>
 
 class NeoStore {
 public:
@@ -16,8 +17,11 @@ public:
   Fl_Help_View *package_detail;
   Fl_Button *install_button;
   Fl_Button *remove_button;
+  Fl_Menu_Bar *menu_bar;
+  static Fl_Menu_Item menu_menu_bar[];
   static void package_selected(Fl_Browser* browser, NeoStore* self);
   static void install_package(Fl_Button* btn, NeoStore* self);
   static void remove_package(Fl_Button* btn, NeoStore* self);
+  static void reload_repositories(Fl_Menu* menu, NeoStore* self);
 };
 #endif

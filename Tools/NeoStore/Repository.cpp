@@ -9,7 +9,14 @@ using namespace std;
 bool Repository::getPackageList(const char* server)
 {
 	m_server = server;
-	string packageList = downloadFileToString(server, "/repo.txt", DEFAULT_PORT);
+	int error;
+	string packageList = downloadFileToString(server, "/repo.txt", &error, DEFAULT_PORT);
+
+	if(error >= 400)
+	{
+		cout << "Given repository is not valid!" << endl;
+		return false;
+	}
 
 	stringstream ss(packageList);
 	string line;
@@ -40,7 +47,7 @@ bool Repository::getPackageList()
 Repository::Package Repository::getPackageInfo(const char* path)
 {
 	Package p;
-	string packageIni = downloadFileToString(m_server.c_str(), path, DEFAULT_PORT);
+	string packageIni = downloadFileToString(m_server.c_str(), path, NULL, DEFAULT_PORT);
 
 	// This is no valid package description! (TODO: Better check!)
 	if(packageIni.find("[package]") == -1)
@@ -52,7 +59,7 @@ Repository::Package Repository::getPackageInfo(const char* path)
 		INI::Parser parser(ss);
 
 		p.name = parser.top()("package")["name"];
-		p.description = downloadFileToString(m_server.c_str(), parser.top()("package")["description"].c_str(), DEFAULT_PORT);
+		p.description = downloadFileToString(m_server.c_str(), parser.top()("package")["description"].c_str(), NULL, DEFAULT_PORT);
 		p.path = parser.top()("package")["path"];
 		p.destination = parser.top()("package")["install-destination"];
 		p.author = parser.top()("package")["author"];

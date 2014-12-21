@@ -5,7 +5,7 @@
 #include <string>
 
 // Change this to 80
-#define DEFAULT_PORT 8000
+#define DEFAULT_PORT 80
 
 class Repository
 {
@@ -38,6 +38,8 @@ public:
 
 	Package getPackage(int idx) { return m_packages[idx]; }
 	int getPackageCount() { return m_packages.size(); }
+
+	void clear() { m_packages.clear(); }
 };
 
 #endif

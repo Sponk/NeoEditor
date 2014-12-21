@@ -8,38 +8,64 @@ decl {\#include "RepositoryManager.h"} {private local
 decl {\#include <FL/fl_message.H>} {private local
 } 
 
+decl {\#include <vector>} {private local
+} 
+
 class NeoStore {open
 } {
   Function {create_window()} {open
   } {
+    code {menu_menu_bar[1].user_data((void*)this);} {}
     Fl_Window {} {
-      label {Neo Store} open selected
-      xywh {1861 259 729 576} type Double resizable visible
+      label {Neo Store} open
+      xywh {1907 315 732 600} type Double resizable size_range {0 0 5000 5000} visible
     } {
       Fl_Browser available_packages {
         label {Packages:}
         user_data this user_data_type {NeoStore*}
         callback package_selected
-        xywh {6 24 213 546} type Hold align 5 when 3
+        xywh {6 45 213 546} type Hold align 5 when 3
       }
       Fl_Help_View package_description {
         label {Description:}
-        xywh {222 24 501 417}
+        xywh {222 45 501 417} resizable
       }
       Fl_Help_View package_detail {
-        xywh {222 444 501 90}
+        xywh {222 465 501 90}
       }
       Fl_Button install_button {
         label Install
         user_data this user_data_type {NeoStore*}
         callback install_package
-        xywh {624 540 99 27}
+        xywh {624 561 99 27}
       }
       Fl_Button remove_button {
         label Remove
         user_data this user_data_type {NeoStore*}
         callback remove_package
-        xywh {222 540 99 27}
+        xywh {222 561 99 27}
+      }
+      Fl_Menu_Bar menu_bar {open
+        xywh {0 0 783 25}
+      } {
+        Submenu {} {
+          label Repositories open
+          xywh {0 0 100 20} labelsize 14
+        } {
+          MenuItem {} {
+            label Reload user_data_type {void*}
+            callback reload_repositories
+            xywh {0 0 100 20} labelsize 14
+          }
+          MenuItem {} {
+            label {Add Repo}
+            xywh {0 0 100 20} labelsize 14
+          }
+          MenuItem {} {
+            label {Remove Repo}
+            xywh {0 0 100 20} labelsize 14
+          }
+        }
       }
     }
   }
@@ -113,5 +139,34 @@ else
 {
 	fl_message("Could not remove package!");
 }} {}
+  }
+  Function {reload_repositories(Fl_Menu* menu, NeoStore* self)} {open return_type {static void}
+  } {
+    code {RepositoryManager* mgr = RepositoryManager::getInstance();
+mgr->clearPackageInformation();
+mgr->updatePackageInformation();
+
+std::vector<Repository::Package> packages;
+mgr->getPackageList(&packages);
+
+for(int i = 0; i < self->available_packages->size(); i++)
+{
+	// FIXME: Call the destructor?
+	free(self->available_packages->data(i));
+}
+
+self->available_packages->begin();
+self->available_packages->clear();
+for(int i = 0; i < packages.size(); i++)
+{
+	Repository::Package* p = (Repository::Package*) malloc(sizeof(Repository::Package));
+	new(p) Repository::Package();	
+	
+	*p = packages[i];	
+	
+	self->available_packages->add(packages[i].name.c_str(), (void*) p);
+}
+self->available_packages->end();} {selected
+    }
   }
 } 

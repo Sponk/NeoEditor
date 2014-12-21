@@ -19,7 +19,7 @@ using namespace std;
 #    pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 #endif
 
-#define DEFAULT_HOST "127.0.0.1"
+//#define DEFAULT_HOST "127.0.0.1"
 
 int main(int argc, char **argv)
 {
@@ -41,7 +41,11 @@ int main(int argc, char **argv)
 
 	for(int i = 0; i < packages.size(); i++)
 	{
-		dlg.available_packages->add(packages[i].name.c_str(), (void*) &packages[i]);
+		Repository::Package* p = (Repository::Package*) malloc(sizeof(Repository::Package));
+		new(p) Repository::Package();
+
+		*p = packages[i];
+		dlg.available_packages->add(packages[i].name.c_str(), (void*) p);
 		cout << "Got package: " << packages[i].name << endl;
 	}
 

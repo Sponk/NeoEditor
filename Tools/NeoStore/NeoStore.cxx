@@ -3,30 +3,45 @@
 #include "NeoStore.h"
 #include "RepositoryManager.h"
 #include <FL/fl_message.H>
+#include <vector>
+
+Fl_Menu_Item NeoStore::menu_menu_bar[] = {
+ {"Repositories", 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Reload", 0,  (Fl_Callback*)reload_repositories, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Add Repo", 0,  0, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {"Remove Repo", 0,  0, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {0,0,0,0,0,0,0,0,0},
+ {0,0,0,0,0,0,0,0,0}
+};
 
 Fl_Double_Window* NeoStore::create_window() {
   Fl_Double_Window* w;
-  { Fl_Double_Window* o = new Fl_Double_Window(729, 576, "Neo Store");
+  menu_menu_bar[1].user_data((void*)this);
+  { Fl_Double_Window* o = new Fl_Double_Window(732, 600, "Neo Store");
     w = o;
     o->user_data((void*)(this));
-    { available_packages = new Fl_Browser(6, 24, 213, 546, "Packages:");
+    { available_packages = new Fl_Browser(6, 45, 213, 546, "Packages:");
       available_packages->type(2);
       available_packages->callback((Fl_Callback*)package_selected, (void*)(this));
       available_packages->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       available_packages->when(3);
     } // Fl_Browser* available_packages
-    { package_description = new Fl_Help_View(222, 24, 501, 417, "Description:");
+    { package_description = new Fl_Help_View(222, 45, 501, 417, "Description:");
+      Fl_Group::current()->resizable(package_description);
     } // Fl_Help_View* package_description
-    { package_detail = new Fl_Help_View(222, 444, 501, 90);
+    { package_detail = new Fl_Help_View(222, 465, 501, 90);
     } // Fl_Help_View* package_detail
-    { install_button = new Fl_Button(624, 540, 99, 27, "Install");
+    { install_button = new Fl_Button(624, 561, 99, 27, "Install");
       install_button->callback((Fl_Callback*)install_package, (void*)(this));
     } // Fl_Button* install_button
-    { remove_button = new Fl_Button(222, 540, 99, 27, "Remove");
+    { remove_button = new Fl_Button(222, 561, 99, 27, "Remove");
       remove_button->callback((Fl_Callback*)remove_package, (void*)(this));
     } // Fl_Button* remove_button
+    { menu_bar = new Fl_Menu_Bar(0, 0, 783, 25);
+      menu_bar->menu(menu_menu_bar);
+    } // Fl_Menu_Bar* menu_bar
+    o->size_range(0, 0, 5000, 5000);
     o->end();
-    o->resizable(o);
   } // Fl_Double_Window* o
   return w;
 }
@@ -100,4 +115,32 @@ void NeoStore::remove_package(Fl_Button* btn, NeoStore* self) {
   {
   	fl_message("Could not remove package!");
   }
+}
+
+void NeoStore::reload_repositories(Fl_Menu* menu, NeoStore* self) {
+  RepositoryManager* mgr = RepositoryManager::getInstance();
+  mgr->clearPackageInformation();
+  mgr->updatePackageInformation();
+  
+  std::vector<Repository::Package> packages;
+  mgr->getPackageList(&packages);
+  
+  for(int i = 0; i < self->available_packages->size(); i++)
+  {
+  	// FIXME: Call the destructor?
+  	free(self->available_packages->data(i));
+  }
+  
+  self->available_packages->begin();
+  self->available_packages->clear();
+  for(int i = 0; i < packages.size(); i++)
+  {
+  	Repository::Package* p = (Repository::Package*) malloc(sizeof(Repository::Package));
+  	new(p) Repository::Package();	
+  	
+  	*p = packages[i];	
+  	
+  	self->available_packages->add(packages[i].name.c_str(), (void*) p);
+  }
+  self->available_packages->end();
 }

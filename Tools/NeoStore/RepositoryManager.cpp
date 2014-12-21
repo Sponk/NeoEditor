@@ -122,7 +122,7 @@ bool RepositoryManager::installPackage(Repository::Package p)
 	cout << "Installing to " << fullDest << endl;
 	cout << "From " << p.server << p.path << endl;
 
-	bool success = downloadFileToFile(p.server.c_str(), p.path.c_str(), (fullDest + filename).c_str(), DEFAULT_PORT);
+	bool success = downloadFileToFile(p.server.c_str(), p.path.c_str(), (fullDest + filename).c_str(), NULL, DEFAULT_PORT);
 
 	if(!success)
 	{
@@ -292,4 +292,14 @@ void RepositoryManager::saveInstalledPackagesList()
 	}
 
 	fclose(file);
+}
+
+void RepositoryManager::clearPackageInformation()
+{
+	for(int i = 0; i < m_repositories.size(); i++)
+	{
+		m_repositories[i].clear();
+	}
+
+	m_installed.clear();
 }

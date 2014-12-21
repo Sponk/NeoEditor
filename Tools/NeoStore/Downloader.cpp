@@ -11,10 +11,12 @@ class FileDownloader
 {
 public:
 	static int count;
+	static int status;
 	static void OnBegin( const happyhttp::Response* r, void* userdata )
 	{
 		printf("BEGIN (%d %s)\n", r->getstatus(), r->getreason());
 		count = 0;
+		status = r->getstatus();
 	}
 
 	static void OnData(const happyhttp::Response* r, void* userdata, const unsigned char* data, int n )
@@ -30,8 +32,9 @@ public:
 };
 
 int FileDownloader::count = 0;
+int FileDownloader::status = 0;
 
-bool downloadFileToFile(const char* host, const char* file, const char* target, int port)
+bool downloadFileToFile(const char* host, const char* file, const char* target, int* error, int port)
 {
 	try
 	{
@@ -49,11 +52,17 @@ bool downloadFileToFile(const char* host, const char* file, const char* target, 
 			conn.pump();
 
 		fclose(f);
+
+		if(error)
+			*error = FileDownloader::status;
+
 		return true;
 	}
 	catch(happyhttp::Wobbly w)
 	{
 		fprintf(stderr, "Could not connect to %s: %s\n", host, w.what());
+		if(error)
+			*error = FileDownloader::status;
 		return false;
 	}
 }
@@ -62,10 +71,12 @@ class StringDownloader
 {
 public:
 	static int count;
+	static int status;
 	static void OnBegin( const happyhttp::Response* r, void* userdata )
 	{
 		printf("BEGIN (%d %s)\n", r->getstatus(), r->getreason());
 		count = 0;
+		status = r->getstatus();
 	}
 
 	static void OnData(const happyhttp::Response* r, void* userdata, const unsigned char* data, int n )
@@ -82,8 +93,9 @@ public:
 };
 
 int StringDownloader::count = 0;
+int StringDownloader::status = 0;
 
-std::string downloadFileToString(const char* host, const char* file, int port)
+std::string downloadFileToString(const char* host, const char* file, int* error, int port)
 {
 	try
 	{
@@ -97,11 +109,19 @@ std::string downloadFileToString(const char* host, const char* file, int port)
 			conn.pump();
 
 		output.erase(StringDownloader::count);
+
+		if(error)
+			*error = StringDownloader::status;
+
 		return output;
 	}
 	catch(happyhttp::Wobbly w)
 	{
 		fprintf(stderr, "Could not connect to %s: %s\n", host, w.what());
+
+		if(error)
+			*error = StringDownloader::status;
+
 		return "";
 	}
 }

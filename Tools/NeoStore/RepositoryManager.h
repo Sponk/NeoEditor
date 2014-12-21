@@ -25,6 +25,7 @@ public:
 
 	void addRepository(Repository r);
 	void updatePackageInformation();
+	void clearPackageInformation();
 
 	Repository::Package findPackage(const char* name);
 	bool hasPackage(const char* name);
