@@ -2342,12 +2342,13 @@ void local_transform_mode_callback(Fl_Menu_* menu, void*)
 
 void import_lua_sdk_callback(Fl_Menu_ *, void *)
 {
+	if(current_project.path.empty())
+		return;
+
 	char src[255];
 	char dir[255];
 	getGlobalFilename(src, ".", "LuaApi");
 	getGlobalFilename(dir, current_project.path.c_str(), "scripts/SDK");
-
-	MLOG_INFO("Copying " << src << " to " << dir);
 
 	copyDirectory(src, dir);
 }
