@@ -21,6 +21,14 @@ end
 local button = Button(20,500,150,25,"Hello World","btnCallback")
 mainCanvas:addWidget(button)
 
+local input = InputField(20, 550, 150, 25, "Hello World")
+mainCanvas:addWidget(input)
+
+local label = Label(20, 600, 150, 25, "This is nothing")
+mainCanvas:addWidget(label)
+
+label:setLabel("This is a label!")
+
 function onSceneUpdate()
     sprite:rotate(2)
     button:rotate(2)

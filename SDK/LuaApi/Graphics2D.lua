@@ -10,5 +10,7 @@ dofile("Tile.lua")
 dofile("SpriteSheet.lua")
 dofile("SpriteAnimation.lua")
 dofile("Button.lua")
+dofile("InputField.lua")
+dofile("Label.lua")
 
 enableGui(1)

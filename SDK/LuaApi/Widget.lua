@@ -63,3 +63,15 @@ end
 function Widget:translate(x,y)
     self:setPosition(self.position[1] + x, self.position[2] + y)
 end
+
+--- Retrieves the current label of the widget.
+function Widget:getLabel()
+    return getLabel(self.widget)
+end
+
+--- Changes the current label of the widget.
+--
+-- label: The new label.
+function Widget:setLabel(label)
+    setLabel(self.widget, label)
+end
