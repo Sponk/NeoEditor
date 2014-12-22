@@ -71,24 +71,94 @@ public:
     Widget(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label);
     Widget();
 
+	/**
+	 * @brief Virtual function used to draw the widget.
+	 */
     virtual void draw() = 0;
+
+	/**
+	 * @brief Virtual function used to update the widget.
+	 */
     virtual void update() = 0;
 
+	/**
+	 * @brief Sets the callback.
+	 *
+	 * A callback is a function pointer of the type (*CALLBACK_FUNCTION)(long int) and
+	 * points to a procedure of the form:
+	 *
+	 * /code
+	 * void someCallback(long int) {}
+	 * /endcode
+	 *
+	 * @param func The function pointer
+	 */
     void setCallback(CALLBACK_FUNCTION func) { m_callback = func; }
-    void setCallback(CALLBACK_FUNCTION func, long int data) { m_callback = func; m_userData = data; }
 
+	/**
+	 * @brief Sets the callback and appends user data to it.
+	 *
+	 * The userdata will be the parameter of your custom callback procedure
+	 * when it gets called.
+	 *
+	 * @see Widget::setCallback
+	 *
+	 * @param func The function pointer
+	 * @param data The user data
+	 */
+	void setCallback(CALLBACK_FUNCTION func, long int data) { m_callback = func; m_userData = data; }
+
+	/**
+	 * @brief Retrieves the user data that will be given to every callback call.
+	 * @return The user data.
+	 */
     long int getUserData() { return m_userData; }
+
+	/**
+	 * @brief Changes the user data that will be given to every callback call.
+	 * @param data The new user data.
+	 */
     void setUserData(long int data) { m_userData = data; }
 
+	/**
+	 * @brief Gets the currently displayed label a C string.
+	 * @return The current label.
+	 */
     const char* getLabel() { return m_label.c_str(); }
-    void setLabel(const char* l) { m_label = l; }
 
+	/**
+	 * @brief Changes the current label of the widget.
+	 * @param l The new label.
+	 */
+	void setLabel(const char* l) { m_label = l; }
+
+	/**
+	 * @brief Changes the widget position.
+	 * @param pos The new position.
+	 */
     void setPosition(MVector2 pos) { m_x = pos.x; m_y = pos.y; }
+
+	/**
+	 * @brief Retrieves the current position.
+	 * @return The current position.
+	 */
     MVector2 getPosition() { return MVector2(m_x, m_y); }
 
+	/**
+	 * @brief Changes the widget rotation.
+	 * @param pos The new rotation.
+	 */
     void setRotation(float rot) { m_rotation = rot; }
+
+	/**
+	 * @brief Retrieves the current rotation.
+	 * @return The current rotation.
+	 */
     float getRotation() { return m_rotation; }
 
+	/**
+	 * @brief Calls the callback with the user data as an argument.
+	 */
     void doCallback();
 
 	// For runtime identification
