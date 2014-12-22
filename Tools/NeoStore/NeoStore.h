@@ -24,4 +24,20 @@ public:
   static void remove_package(Fl_Button* btn, NeoStore* self);
   static void reload_repositories(Fl_Menu* menu, NeoStore* self);
 };
+#include <FL/Fl_Progress.H>
+#include <FL/Fl_Box.H>
+
+class InstallationDlg {
+  Fl_Window* fl_win; 
+  unsigned int max_size; 
+  char informationLabel[100]; 
+  char progressLabel[100]; 
+public:
+  Fl_Double_Window* create_window();
+  Fl_Progress *progress_bar;
+  Fl_Box *information_label;
+  void close();
+  void setMaxSize(unsigned int sz);
+  void update(unsigned int curSz);
+};
 #endif

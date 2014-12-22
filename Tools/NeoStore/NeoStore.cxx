@@ -144,3 +144,48 @@ void NeoStore::reload_repositories(Fl_Menu* menu, NeoStore* self) {
   }
   self->available_packages->end();
 }
+
+Fl_Double_Window* InstallationDlg::create_window() {
+  Fl_Double_Window* w;
+  { Fl_Double_Window* o = new Fl_Double_Window(399, 93, "Installing...");
+    w = o;
+    o->user_data((void*)(this));
+    { progress_bar = new Fl_Progress(9, 15, 378, 27);
+      progress_bar->selection_color(FL_SELECTION_COLOR);
+      progress_bar->labelcolor((Fl_Color)40);
+    } // Fl_Progress* progress_bar
+    { information_label = new Fl_Box(9, 42, 378, 27, "Downloading...");
+    } // Fl_Box* information_label
+    o->set_modal();
+    o->end();
+  } // Fl_Double_Window* o
+  fl_win = w;
+  return w;
+}
+
+void InstallationDlg::close() {
+  Fl::delete_widget(fl_win);
+}
+
+void InstallationDlg::setMaxSize(unsigned int sz) {
+  max_size = sz;
+  
+  if(max_size == 0)
+  	max_size = 1;
+  	
+  update(0);
+}
+
+void InstallationDlg::update(unsigned int curSz) {
+  float percentage = (float) curSz / max_size;
+  percentage *= 100.0f;
+  
+  progress_bar->value(percentage);
+  
+  sprintf(progressLabel, "%f%%", percentage);
+  
+  progress_bar->label(progressLabel);
+  
+  sprintf(informationLabel, "%dkb/%dkb", curSz/1024, max_size/1024);
+  information_label->label(informationLabel);
+}

@@ -3,19 +3,37 @@
 #include <cstring>
 #include <cstdlib>
 #include <cstdio>
+#include <cstring>
 #include "HappyHTTP.h"
+
+// TODO: Keep this interface UI agnostic!
+#include "NeoStore.h"
 
 using namespace std;
 
 class FileDownloader
 {
 public:
-	static int count;
+	static unsigned int count;
 	static int status;
+	static InstallationDlg dlg;
 	static void OnBegin( const happyhttp::Response* r, void* userdata )
 	{
 		printf("BEGIN (%d %s)\n", r->getstatus(), r->getreason());
 		count = 0;
+
+		const char* sizeStr = r->getheader("Content-Length");
+
+		unsigned int size = 0;
+		if(sizeStr)
+			sscanf(sizeStr, "%d", &size);
+
+		printf("EXPECTED SIZE %d\n", size);
+
+		Fl_Window* win = dlg.create_window();
+		win->show();
+
+		dlg.setMaxSize(size);
 		status = r->getstatus();
 	}
 
@@ -23,16 +41,21 @@ public:
 	{
 		fwrite(data,1,n, (FILE*) userdata);
 		count += n;
+
+		dlg.update(count);
+		Fl::check();
 	}
 
 	static void OnComplete( const happyhttp::Response* r, void* userdata )
 	{
 		printf("COMPLETE (%d bytes)\n", count);
+		dlg.close();
 	}
 };
 
-int FileDownloader::count = 0;
+unsigned int FileDownloader::count = 0;
 int FileDownloader::status = 0;
+InstallationDlg FileDownloader::dlg;
 
 bool downloadFileToFile(const char* host, const char* file, const char* target, int* error, int port)
 {

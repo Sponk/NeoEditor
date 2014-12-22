@@ -11,14 +11,13 @@ decl {\#include <FL/fl_message.H>} {private local
 decl {\#include <vector>} {private local
 } 
 
-class NeoStore {open
-} {
+class NeoStore {} {
   Function {create_window()} {open
   } {
     code {menu_menu_bar[1].user_data((void*)this);} {}
     Fl_Window {} {
       label {Neo Store} open
-      xywh {1907 315 732 600} type Double resizable size_range {0 0 5000 5000} visible
+      xywh {1907 343 732 600} type Double hide resizable size_range {0 0 5000 5000}
     } {
       Fl_Browser available_packages {
         label {Packages:}
@@ -166,7 +165,62 @@ for(int i = 0; i < packages.size(); i++)
 	
 	self->available_packages->add(packages[i].name.c_str(), (void*) p);
 }
-self->available_packages->end();} {selected
+self->available_packages->end();} {}
+  }
+} 
+
+class InstallationDlg {open
+} {
+  decl {Fl_Window* fl_win;} {private local
+  }
+  decl {unsigned int max_size;} {private local
+  }
+  decl {char informationLabel[100];} {private local
+  }
+  decl {char progressLabel[100];} {private local
+  }
+  Function {create_window()} {open
+  } {
+    Fl_Window {} {
+      label {Installing...} open
+      xywh {1903 465 399 93} type Double modal visible
+    } {
+      Fl_Progress progress_bar {
+        xywh {9 15 378 27} selection_color 15 labelcolor 40
+      }
+      Fl_Box information_label {
+        label {Downloading...}
+        xywh {9 42 378 27}
+      }
+    }
+    code {fl_win = w;} {}
+  }
+  Function {close()} {open
+  } {
+    code {Fl::delete_widget(fl_win);} {}
+  }
+  Function {setMaxSize(unsigned int sz)} {open
+  } {
+    code {max_size = sz;
+
+if(max_size == 0)
+	max_size = 1;
+	
+update(0);} {}
+  }
+  Function {update(unsigned int curSz)} {open
+  } {
+    code {float percentage = (float) curSz / max_size;
+percentage *= 100.0f;
+
+progress_bar->value(percentage);
+
+sprintf(progressLabel, "%f%%", percentage);
+
+progress_bar->label(progressLabel);
+
+sprintf(informationLabel, "%dkb/%dkb", curSz/1024, max_size/1024);
+information_label->label(informationLabel);} {selected
     }
   }
 } 

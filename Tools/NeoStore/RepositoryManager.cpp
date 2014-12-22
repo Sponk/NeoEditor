@@ -233,16 +233,13 @@ bool RepositoryManager::removePackage(Repository::Package p)
 	fullDest += p.name;
 	bool success = removeDirectory(fullDest.c_str());
 
-	if(success)
+	for(int i = 0; i < m_installed.size(); i++)
 	{
-		for(int i = 0; i < m_installed.size(); i++)
-		{
-			if(m_installed[i].find(p.name) == 0)
-				m_installed.erase(m_installed.begin()+i);
-		}
-
-		saveInstalledPackagesList();
+		if(m_installed[i].find(p.name) == 0)
+			m_installed.erase(m_installed.begin()+i);
 	}
+
+	saveInstalledPackagesList();
 
 	return success;
 }

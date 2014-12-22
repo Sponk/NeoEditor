@@ -1,2 +1,3 @@
 /neo-icon-pkg/info.ini
 /zip-sample/info.ini
+/NeoEclipseLDT/info.ini
