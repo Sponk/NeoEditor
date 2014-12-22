@@ -146,7 +146,7 @@ public:
 
 	/**
 	 * @brief Changes the widget rotation.
-	 * @param pos The new rotation.
+	 * @param rot The new rotation.
 	 */
     void setRotation(float rot) { m_rotation = rot; }
 

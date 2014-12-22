@@ -39,6 +39,6 @@ function Tile:update()
     if self.animation ~= nil then
 	-- TODO: Transform to right coordinate in sprite sheet!
 	local frame = self.animation:nextFrame()
-	setTileOffset(self.widget, {frame, 0})
+	setTileOffset(self.widget, {frame, self.ty})
     end
 end
