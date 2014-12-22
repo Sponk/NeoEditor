@@ -1,0 +1,65 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0302 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/fl_message.H>} {private local
+} 
+
+decl {\#include <string>} {private local
+} 
+
+decl {\#include <FL/Fl_Chart.H>} {public global
+} 
+
+class MainWindow {open
+} {
+  Function {create_window()} {open
+  } {
+    Fl_Window {} {
+      label {Project Manager} open
+      xywh {349 170 515 455} type Double resizable visible
+    } {
+      Fl_Browser {} {
+        label {Projects:}
+        xywh {0 25 195 430} align 5
+      }
+      Fl_Group {} {
+        label {Packages:} open
+        xywh {200 25 310 270} box ENGRAVED_FRAME resizable
+      } {
+        Fl_Browser {} {
+          label {Packages:}
+          xywh {205 45 155 245} align 5
+        }
+        Fl_Button {} {
+          label {Install Package}
+          xywh {370 260 130 25}
+        }
+        Fl_Button {} {
+          label {Open Neo Store}
+          xywh {370 230 130 25}
+        }
+        Fl_Group {} {open
+          xywh {365 35 135 185} resizable
+        } {}
+      }
+      Fl_Group {} {
+        label {Projects:} open
+        xywh {200 315 310 135} box ENGRAVED_FRAME
+      } {
+        Fl_Button {} {
+          label {Import Project}
+          xywh {205 360 150 25}
+        }
+        Fl_Button {} {
+          label {Create Project}
+          xywh {205 330 150 25}
+        }
+        Fl_Button {} {
+          label {Copy Lua SDK} selected
+          xywh {205 415 150 25}
+        }
+      }
+    }
+  }
+} 

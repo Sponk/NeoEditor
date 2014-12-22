@@ -90,10 +90,10 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, LuaBehavior_test);
 	var = b->getVariable(0);
 	LT_ASSERT(var.getType() == M_VARIABLE_STRING);
 
-	var = b->getVariable(1);
-	LT_ASSERT(var.getType() == M_VARIABLE_FLOAT);
+    var = b->getVariable(1);
+    LT_ASSERT(var.getType() == M_VARIABLE_FLOAT);
 
-	LT_ASSERT(compare_float(*((float*)var.getPointer()), 123.123));
+    LT_ASSERT(compare_float(*((float*)var.getPointer()), 123.123));
 
 LT_END_AUTO_TEST(LuaBehavior_test);
 
