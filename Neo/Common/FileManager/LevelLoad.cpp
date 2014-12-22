@@ -430,7 +430,7 @@ void readBehaviorProperties(TiXmlElement * node, Behavior * behavior)
                 if(str)
                     ((MString*)variable.getPointer())->set(str);
 
-                size = behavior->getVariablesNumber();
+				size = behavior->getVariablesNumber();
             }
             break;
         case M_VARIABLE_BOOL:

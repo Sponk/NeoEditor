@@ -105,7 +105,10 @@ unsigned int LuaBehavior::getVariablesNumber(void)
         // If the script does not exist, show only the static variable
 		if(!isFileExist(globalFile) || isDirectory(globalFile))
         {
-			MLOG_ERROR("Script file does not exist (" << globalFile << ")!");
+			// Only throw an error if the file is invalid. If there is no file specified
+			// simply ignore it.
+			if(strlen(m_scriptFile.getSafeString()) > 0)
+				MLOG_ERROR("Script file does not exist (" << globalFile << ")!");
 
 			// Restore the original context
 			engine->setScriptContext(original);
@@ -272,16 +275,26 @@ void LuaBehavior::update(void)
 
     lua_getglobal(L, "public");
     int top = lua_gettop(L);
+	const char* name;
 
     for(int i = 0; i < m_variables.size(); i++)
     {
-        lua_pushstring(L, m_variables[i]->getName());
+		name = m_variables[i]->getName();
+
+		if(!name)
+			continue;
+
+		lua_pushstring(L, name);
 
         switch(m_variables[i]->getType())
         {
         case M_VARIABLE_FLOAT:
                 lua_pushnumber(L, *(float*) m_variables[i]->getPointer());
             break;
+
+		case M_VARIABLE_STRING:
+				lua_pushstring(L, (char*) m_variables[i]->getPointer());
+			break;
         }
 
         lua_settable(L, top);
