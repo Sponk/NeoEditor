@@ -283,11 +283,12 @@ void Render::loadShader(const char* vert, const char* frag, unsigned int* fx)
     }
 }
 
-void Render::drawText(OText* text, float x, float y)
+void Render::drawText(OText* text, float x, float y, float rotation)
 {
     MRenderingContext* renderContext = NeoEngine::getInstance()->getRenderingContext();
 
     text->setPosition(MVector3(x, y, 0));
+	text->setRotation(MQuaternion(0,0,rotation));
     text->updateMatrix();
 
     renderContext->pushMatrix();

@@ -14,8 +14,16 @@ mainCanvas:addWidget(tile)
 local walkAnimation = SpriteAnimation(0,3,70,true)
 local idleAnimation = SpriteAnimation(0,0,70,false)
 
+function btnCallback()
+    print("Button!")
+end
+
+local button = Button(20,500,150,25,"Hello World","btnCallback")
+mainCanvas:addWidget(button)
+
 function onSceneUpdate()
     sprite:rotate(2)
+    button:rotate(2)
 
     if isKeyPressed("RIGHT") then
 	tile:attachAnimation(walkAnimation)

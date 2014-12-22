@@ -59,7 +59,7 @@ public:
     void drawTexturedQuad(float x, float y, float w, float h, int texture, float rotation = 0);
 	void drawTexturedQuad(float x, float y, float w, float h, int texture, float rotation, MVector4 texcoords);
 
-    void drawText(OText* text, float x, float y);
+	void drawText(OText* text, float x, float y, float rotation = 0);
     void set2D(float w, float h);
 
     void loadShader(const char* vert, const char* frag, unsigned int* fx);
