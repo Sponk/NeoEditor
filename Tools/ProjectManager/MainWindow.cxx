@@ -14,7 +14,7 @@ extern const char* fl_native_file_chooser(const char* title, const char* files, 
 
 Fl_Double_Window* MainWindow::create_window() {
   Fl_Double_Window* w;
-  { Fl_Double_Window* o = new Fl_Double_Window(507, 447, "Project Manager");
+  { Fl_Double_Window* o = new Fl_Double_Window(515, 459, "Project Manager");
     w = o;
     o->user_data((void*)(this));
     { project_browser = new Fl_Browser(0, 25, 195, 430, "Projects:");
@@ -88,8 +88,11 @@ void MainWindow::update_package_list() {
   	std::string line;
   	while(!in.eof())
   	{
+  		line = "";
   		in >> line;
-  		package_browser->add(line.c_str());
+  		
+  		if(!line.empty())
+  			package_browser->add(line.c_str());
   	}
   
   	in.close();
@@ -102,23 +105,8 @@ void MainWindow::import_project(Fl_Button* btn, MainWindow* dlg) {
   if(projectFile == NULL)
   	return;
   
-  std::string path = projectFile;
-  
-  int idx;
-  #ifndef WIN32
-  	idx = path.find_last_of("/");
-  #else
-  	idx = path.find_last_of("\\");
-  #endif
-  
-  if(idx == -1)
-  	return;
-  
-  std::string name = path.substr(idx+1);	
-  path = path.erase(idx);
-  
-  dlg->project_browser->add(name.c_str());
-  dlg->addProject(name.c_str(), path.c_str());
+  dlg->addProject(projectFile);
+  dlg->saveProjectList();
 }
 
 void MainWindow::install_package(Fl_Button* btn, MainWindow* dlg) {
@@ -187,4 +175,93 @@ const char* MainWindow::getProjectPath(const char* name) {
 
 void MainWindow::addProject(const char* name, const char* path) {
   m_projects[std::string(name)] = path;
+}
+
+void MainWindow::loadProjectList() {
+  std::string path;
+  #ifndef WIN32
+  	path = getenv("HOME");
+  	path += "/.neo-project-manager/";
+  #else
+  	path = getenv("APPDATA");
+  	path += "\\.neo-project-manager\\";
+  #endif 
+  
+  if(!isFileExist(path.c_str()))
+  	createDirectory(path.c_str(), true);
+  	
+  path += "projects.txt";
+  
+  std::ifstream in(path.c_str());
+  
+  if(!in)
+  	return;
+  
+  std::string line;
+  while(!in.eof())
+  {
+  	line = "";
+  	in >> line;
+  	
+  	if(!line.empty())
+  		addProject(line.c_str());
+  }
+  
+  in.close();
+}
+
+void MainWindow::saveProjectList() {
+  std::string path;
+  #ifndef WIN32
+  	path = getenv("HOME");
+  	path += "/.neo-project-manager/";
+  #else
+  	path = getenv("APPDATA");
+  	path += "\\.neo-project-manager\\";
+  #endif 
+  
+  if(!isFileExist(path.c_str()))
+  	createDirectory(path.c_str(), true);
+  	
+  path += "projects.txt";
+  
+  std::ofstream out(path.c_str());
+  
+  if(!out)
+  	return;
+  
+  char sep;
+  
+  #ifndef WIN32
+  	sep = '/';
+  #else
+  	sep = '\\';
+  #endif
+  
+  for(std::map<std::string,std::string>::iterator iter = m_projects.begin(); iter != m_projects.end(); ++iter)
+  {
+  	out << iter->second << sep << iter->first << endl;
+  }
+  
+  out.close();
+}
+
+void MainWindow::addProject(const char* filepath) {
+  std::string path = filepath;
+  
+  int idx;
+  #ifndef WIN32
+  	idx = path.find_last_of("/");
+  #else
+  	idx = path.find_last_of("\\");
+  #endif
+  
+  if(idx == -1)
+  	return;
+  
+  std::string name = path.substr(idx+1);	
+  path = path.erase(idx);
+  
+  project_browser->add(name.c_str());
+  addProject(name.c_str(), path.c_str());
 }

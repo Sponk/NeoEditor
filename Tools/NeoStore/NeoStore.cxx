@@ -31,7 +31,7 @@ Fl_Double_Window* NeoStore::create_window() {
     } // Fl_Help_View* package_description
     { package_detail = new Fl_Help_View(222, 465, 501, 90);
     } // Fl_Help_View* package_detail
-    { install_button = new Fl_Button(624, 561, 99, 27, "Install");
+    { install_button = new Fl_Button(620, 561, 99, 27, "Install");
       install_button->callback((Fl_Callback*)install_package, (void*)(this));
     } // Fl_Button* install_button
     { remove_button = new Fl_Button(222, 561, 99, 27, "Remove");

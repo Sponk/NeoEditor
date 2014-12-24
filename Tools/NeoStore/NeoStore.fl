@@ -36,8 +36,8 @@ class NeoStore {open
       Fl_Button install_button {
         label Install
         user_data this user_data_type {NeoStore*}
-        callback install_package
-        xywh {624 561 99 27}
+        callback install_package selected
+        xywh {620 561 99 27}
       }
       Fl_Button remove_button {
         label Remove
@@ -69,7 +69,7 @@ class NeoStore {open
       }
     }
   }
-  Function {package_selected(Fl_Browser* browser, NeoStore* self)} {open selected return_type {static void}
+  Function {package_selected(Fl_Browser* browser, NeoStore* self)} {open return_type {static void}
   } {
     code {int current = browser->value();
 

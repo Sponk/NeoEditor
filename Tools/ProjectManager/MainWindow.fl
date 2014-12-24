@@ -42,11 +42,10 @@ class MainWindow {open
 } {
   decl {std::map<std::string,std::string> m_projects;} {private local
   }
-  Function {create_window()} {open
-  } {
+  Function {create_window()} {} {
     Fl_Window {} {
       label {Project Manager} open
-      xywh {708 313 507 447} type Double resizable visible
+      xywh {712 317 515 459} type Double resizable visible
     } {
       Fl_Browser project_browser {
         label {Projects:}
@@ -96,7 +95,7 @@ class MainWindow {open
       }
     }
   }
-  Function {open_neo_store()} {open return_type {static void}
+  Function {open_neo_store()} {return_type {static void}
   } {
     code {// FIXME: Don't use system!!!
 \#ifndef WIN32
@@ -129,8 +128,11 @@ class MainWindow {open
 	std::string line;
 	while(!in.eof())
 	{
+		line = "";
 		in >> line;
-		package_browser->add(line.c_str());
+		
+		if(!line.empty())
+			package_browser->add(line.c_str());
 	}
 
 	in.close();} {}
@@ -143,25 +145,10 @@ class MainWindow {open
 if(projectFile == NULL)
 	return;
 
-std::string path = projectFile;
-
-int idx;
-\#ifndef WIN32
-	idx = path.find_last_of("/");
-\#else
-	idx = path.find_last_of("\\\\");
-\#endif
-
-if(idx == -1)
-	return;
-
-std::string name = path.substr(idx+1);	
-path = path.erase(idx);
-
-dlg->project_browser->add(name.c_str());
-dlg->addProject(name.c_str(), path.c_str());} {}
+dlg->addProject(projectFile);
+dlg->saveProjectList();} {}
   }
-  Function {install_package(Fl_Button* btn, MainWindow* dlg)} {open return_type {static void}
+  Function {install_package(Fl_Button* btn, MainWindow* dlg)} {return_type {static void}
   } {
     code {int value = dlg->project_browser->value();
 
@@ -219,15 +206,104 @@ if(!copyDirectory(package.c_str(), path.c_str()))
 else
 {
 	fl_message("Package installation was successful.");
-}} {selected
-    }
+}} {}
   }
-  Function {getProjectPath(const char* name)} {open return_type {const char*}
+  Function {getProjectPath(const char* name)} {return_type {const char*}
   } {
     code {return m_projects[std::string(name)].c_str();} {}
   }
   Function {addProject(const char* name, const char* path)} {open
   } {
     code {m_projects[std::string(name)] = path;} {}
+  }
+  Function {loadProjectList()} {open
+  } {
+    code {std::string path;
+\#ifndef WIN32
+	path = getenv("HOME");
+	path += "/.neo-project-manager/";
+\#else
+	path = getenv("APPDATA");
+	path += "\\\\.neo-project-manager\\\\";
+\#endif 
+
+if(!isFileExist(path.c_str()))
+	createDirectory(path.c_str(), true);
+	
+path += "projects.txt";
+
+std::ifstream in(path.c_str());
+
+if(!in)
+	return;
+
+std::string line;
+while(!in.eof())
+{
+	line = "";
+	in >> line;
+	
+	if(!line.empty())
+		addProject(line.c_str());
+}
+
+in.close();} {selected
+    }
+  }
+  Function {saveProjectList()} {open
+  } {
+    code {std::string path;
+\#ifndef WIN32
+	path = getenv("HOME");
+	path += "/.neo-project-manager/";
+\#else
+	path = getenv("APPDATA");
+	path += "\\\\.neo-project-manager\\\\";
+\#endif 
+
+if(!isFileExist(path.c_str()))
+	createDirectory(path.c_str(), true);
+	
+path += "projects.txt";
+
+std::ofstream out(path.c_str());
+
+if(!out)
+	return;
+
+char sep;
+
+\#ifndef WIN32
+	sep = '/';
+\#else
+	sep = '\\\\';
+\#endif
+
+for(std::map<std::string,std::string>::iterator iter = m_projects.begin(); iter != m_projects.end(); ++iter)
+{
+	out << iter->second << sep << iter->first << endl;
+}
+
+out.close();} {}
+  }
+  Function {addProject(const char* filepath)} {open
+  } {
+    code {std::string path = filepath;
+
+int idx;
+\#ifndef WIN32
+	idx = path.find_last_of("/");
+\#else
+	idx = path.find_last_of("\\\\");
+\#endif
+
+if(idx == -1)
+	return;
+
+std::string name = path.substr(idx+1);	
+path = path.erase(idx);
+
+project_browser->add(name.c_str());
+addProject(name.c_str(), path.c_str());} {}
   }
 } 

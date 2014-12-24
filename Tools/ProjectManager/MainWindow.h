@@ -23,5 +23,8 @@ public:
   static void install_package(Fl_Button* btn, MainWindow* dlg);
   const char* getProjectPath(const char* name);
   void addProject(const char* name, const char* path);
+  void loadProjectList();
+  void saveProjectList();
+  void addProject(const char* filepath);
 };
 #endif

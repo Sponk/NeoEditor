@@ -44,6 +44,7 @@ int main(int argc, char **argv)
     MainWindow dlg;
     Fl_Double_Window* window = dlg.create_window();
 
+	dlg.loadProjectList();
 	dlg.update_package_list();
 
     window->show();
