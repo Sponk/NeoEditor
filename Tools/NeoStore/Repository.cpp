@@ -41,7 +41,7 @@ bool Repository::getPackageList(const char* server)
 
 bool Repository::getPackageList()
 {
-	getPackageList(m_server.c_str());
+	return getPackageList(m_server.c_str());
 }
 
 Repository::Package Repository::getPackageInfo(const char* path)

@@ -43,7 +43,7 @@ namespace Neo
 namespace Gui
 {
 
-#ifndef __MINGW32__
+#ifndef WIN32
 typedef void (*CALLBACK_FUNCTION)(long int);
 #else
 #define CALLBACK_FUNCTION void*

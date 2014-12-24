@@ -62,7 +62,7 @@ m_callback(NULL)
 
 void Widget::doCallback()
 {
-#ifdef __MINGW32__
+#ifdef WIN32
     ((void (*)(long int)) m_callback)(m_userData);
 #else
     m_callback(m_userData);

@@ -435,7 +435,7 @@ int loadSpriteSheet()
 
 int deleteSpriteSheet()
 {
-
+	return 0;
 }
 
 int createTile()
