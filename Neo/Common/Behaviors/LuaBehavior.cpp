@@ -178,7 +178,7 @@ unsigned int LuaBehavior::getVariablesNumber(void)
                         MStringVariable* var = NULL;
                         for(int j = 0; j < oldVars.size(); j++)
                         {
-                            // MLOG_INFO("----> " << floatTmp[j]->var->getName());
+                            //MLOG_INFO("----> " << floatTmp[j]->var->getName());
                             if(names[i] == oldVars[j]->var->getName())
                             {
                                 var = (MStringVariable*) oldVars[j];
@@ -293,7 +293,7 @@ void LuaBehavior::update(void)
             break;
 
 		case M_VARIABLE_STRING:
-				lua_pushstring(L, (char*) m_variables[i]->getPointer());
+				lua_pushstring(L, ((MString*) m_variables[i]->getPointer())->getSafeString());
 			break;
         }
 
