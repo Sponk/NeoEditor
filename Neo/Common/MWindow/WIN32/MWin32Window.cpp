@@ -88,6 +88,7 @@ void MWindow::setWorkingDirectory(const char * directory)
 
 void MWindow::execute(const char * path, const char * args)
 {
+	MLOG_INFO("Executing: " << path);
 	ShellExecute(NULL, "open", path, args, NULL, SW_SHOWNORMAL);
 }
 

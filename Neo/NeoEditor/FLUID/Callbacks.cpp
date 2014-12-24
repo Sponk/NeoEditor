@@ -2255,13 +2255,15 @@ void set_editor_perspective(Fl_Button *, void *)
 
 void open_profile_viewer_callback(Fl_Menu_*, void*)
 {
-    char exec[256];
     char arg[256];
-    getGlobalFilename(exec, ".", "ProfileViewer");
     getGlobalFilename(arg, current_project.path.c_str(), "profile.txt");
 
     // TODO: Start detached!
-    MWindow::getInstance()->execute(exec, arg);
+#ifndef WIN32
+    MWindow::getInstance()->execute("./ProfileViewer", arg);
+#else
+	MWindow::getInstance()->execute(".\\ProfileViewer.exe", arg);
+#endif
 }
 
 // TODO: In own file!
