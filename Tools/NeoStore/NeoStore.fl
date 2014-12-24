@@ -11,13 +11,14 @@ decl {\#include <FL/fl_message.H>} {private local
 decl {\#include <vector>} {private local
 } 
 
-class NeoStore {} {
+class NeoStore {open
+} {
   Function {create_window()} {open
   } {
     code {menu_menu_bar[1].user_data((void*)this);} {}
     Fl_Window {} {
-      label {Neo Store} open
-      xywh {1907 343 732 600} type Double hide resizable size_range {0 0 5000 5000}
+      label {Neo Store}
+      xywh {617 194 724 592} type Double resizable size_range {0 0 5000 5000} visible
     } {
       Fl_Browser available_packages {
         label {Packages:}
@@ -49,26 +50,26 @@ class NeoStore {} {
       } {
         Submenu {} {
           label Repositories open
-          xywh {0 0 100 20} labelsize 14
+          xywh {0 0 100 20}
         } {
           MenuItem {} {
             label Reload user_data_type {void*}
             callback reload_repositories
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
           MenuItem {} {
             label {Add Repo}
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
           MenuItem {} {
             label {Remove Repo}
-            xywh {0 0 100 20} labelsize 14
+            xywh {0 0 100 20}
           }
         }
       }
     }
   }
-  Function {package_selected(Fl_Browser* browser, NeoStore* self)} {open return_type {static void}
+  Function {package_selected(Fl_Browser* browser, NeoStore* self)} {open selected return_type {static void}
   } {
     code {int current = browser->value();
 
@@ -171,7 +172,7 @@ self->available_packages->end();} {}
 
 class InstallationDlg {open
 } {
-  decl {Fl_Window* fl_win;} {private local
+  decl {Fl_Window* fl_win;} {public local
   }
   decl {unsigned int max_size;} {private local
   }
@@ -183,7 +184,7 @@ class InstallationDlg {open
   } {
     Fl_Window {} {
       label {Installing...} open
-      xywh {1903 465 399 93} type Double modal visible
+      xywh {958 406 391 85} type Double hide modal
     } {
       Fl_Progress progress_bar {
         xywh {9 15 378 27} selection_color 15 labelcolor 40
@@ -220,7 +221,6 @@ sprintf(progressLabel, "%f%%", percentage);
 progress_bar->label(progressLabel);
 
 sprintf(informationLabel, "%dkb/%dkb", curSz/1024, max_size/1024);
-information_label->label(informationLabel);} {selected
-    }
+information_label->label(informationLabel);} {}
   }
 } 

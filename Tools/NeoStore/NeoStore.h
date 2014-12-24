@@ -28,7 +28,9 @@ public:
 #include <FL/Fl_Box.H>
 
 class InstallationDlg {
+public:
   Fl_Window* fl_win; 
+private:
   unsigned int max_size; 
   char informationLabel[100]; 
   char progressLabel[100]; 

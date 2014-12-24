@@ -105,7 +105,6 @@ bool RepositoryManager::installPackage(Repository::Package p)
 
 	int idx = p.destination.find("$HOME");
 
-	// %APPDATA% has apparently no write access in Win8+
 	if(idx != -1)
 		fullDest = p.destination.replace(idx, strlen("$HOME"), getenv("APPDATA"))+"\\";
 #endif
@@ -240,7 +239,7 @@ bool RepositoryManager::removePackage(Repository::Package p)
 	if(idx != -1)
 		fullDest = p.destination.replace(idx, strlen("$HOME"), getenv("APPDATA"))+"\\";
 
-	filename = p.path.substr(fullDest.find_last_of('\\'));
+	filename = p.path.substr(p.path.find_last_of('/'));
 #endif
 
 	fullDest += p.name;
@@ -248,7 +247,8 @@ bool RepositoryManager::removePackage(Repository::Package p)
 
 	for(int i = 0; i < m_installed.size(); i++)
 	{
-		if(m_installed[i].find(p.name) == 0)
+		// FIXME: Not good enough!
+		if(m_installed[i].find(p.name) != -1)
 			m_installed.erase(m_installed.begin()+i);
 	}
 

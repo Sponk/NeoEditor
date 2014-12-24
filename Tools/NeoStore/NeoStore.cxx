@@ -17,7 +17,7 @@ Fl_Menu_Item NeoStore::menu_menu_bar[] = {
 Fl_Double_Window* NeoStore::create_window() {
   Fl_Double_Window* w;
   menu_menu_bar[1].user_data((void*)this);
-  { Fl_Double_Window* o = new Fl_Double_Window(732, 600, "Neo Store");
+  { Fl_Double_Window* o = new Fl_Double_Window(724, 592, "Neo Store");
     w = o;
     o->user_data((void*)(this));
     { available_packages = new Fl_Browser(6, 45, 213, 546, "Packages:");
@@ -147,7 +147,7 @@ void NeoStore::reload_repositories(Fl_Menu* menu, NeoStore* self) {
 
 Fl_Double_Window* InstallationDlg::create_window() {
   Fl_Double_Window* w;
-  { Fl_Double_Window* o = new Fl_Double_Window(399, 93, "Installing...");
+  { Fl_Double_Window* o = new Fl_Double_Window(391, 85, "Installing...");
     w = o;
     o->user_data((void*)(this));
     { progress_bar = new Fl_Progress(9, 15, 378, 27);

@@ -30,8 +30,12 @@ public:
 
 		printf("EXPECTED SIZE %d\n", size);
 
-		Fl_Window* win = dlg.create_window();
-		win->show();
+		if (dlg.fl_win == NULL)
+		{
+			dlg.create_window();
+		}
+		
+		dlg.fl_win->show();
 
 		dlg.setMaxSize(size);
 		status = r->getstatus();
@@ -46,10 +50,10 @@ public:
 		Fl::check();
 	}
 
-	static void OnComplete( const happyhttp::Response* r, void* userdata )
+	static void OnComplete( const happyhttp::Response* r, void* userdata)
 	{
 		printf("COMPLETE (%d bytes)\n", count);
-		dlg.close();
+		dlg.fl_win->hide();
 	}
 };
 
@@ -62,7 +66,7 @@ bool downloadFileToFile(const char* host, const char* file, const char* target, 
 	try
 	{
 		happyhttp::Connection conn(host, port);
-		FILE* f = fopen(target, "w");
+		FILE* f = fopen(target, "wb");
 
 		if (!f)
 		{
