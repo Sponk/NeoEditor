@@ -42,7 +42,7 @@ if(HAVE_XINERAMA)
    target_link_libraries(fluid ${X11_Xinerama_LIB})
 endif(HAVE_XINERAMA)
 
-install(TARGETS fluid
-   EXPORT fltk-install
-   DESTINATION ${PREFIX_BIN}
-)
+#install(TARGETS fluid
+#   EXPORT fltk-install
+#   DESTINATION ${PREFIX_BIN}
+#)
