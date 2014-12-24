@@ -136,7 +136,7 @@ static bool LoadChannelSetup(ALCdevice *device)
         "back-left", "back-right",
         "side-left", "side-right"
     };
-    ChannelMap chanmap[MAX_OUTPUT_CHANNELS] = {};
+    ChannelMap chanmap[MAX_OUTPUT_CHANNELS];
     const char **channames = NULL;
     const char *layout = NULL;
     size_t count = 0;

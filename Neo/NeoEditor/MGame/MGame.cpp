@@ -44,19 +44,6 @@ PROFILE_SHARED_DEFINE(SceneLayers);
 // RENDER
 PROFILE_SHARED_DEFINE(GameRender);
 
-NeoGame::NeoGame(void):
-m_isRunning(false)
-{}
-
-NeoGame::~NeoGame(void)
-{
-	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
-
-	// delete frame buffer
-	if(s_renderBufferId != 0)
-		render->deleteFrameBuffer(&s_renderBufferId);
-}
-
 void NeoGame::update(void)
 {
     PROFILE_SHARED_BLOCK(GameUpdate);

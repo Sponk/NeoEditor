@@ -16,7 +16,7 @@ using namespace std;
 
 // Don't show cmd window
 #ifdef _MSC_VER
-#    pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
+//#    pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 #endif
 
 //#define DEFAULT_HOST "127.0.0.1"
@@ -25,6 +25,15 @@ int main(int argc, char **argv)
 {
     Fl::get_system_colors();
     Fl::scheme("gtk+");
+
+#ifdef WIN32
+	WSADATA wsa;
+	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
+	{
+		cout << "WSAStartup failed: " << WSAGetLastError() << endl;
+		return 1;
+	}
+#endif
 
 	NeoStore dlg;
     Fl_Double_Window* window = dlg.create_window();

@@ -28,7 +28,7 @@ std::string RepositoryManager::getInstalledPackagesListDir()
 	confPath += "/.neo-store/";
 #else
 	confPath = getenv("APPDATA");
-	confPath += "\\neo-store\\";
+	confPath += "\\.neo-store\\";
 #endif
 
 	return confPath;
@@ -96,27 +96,39 @@ bool RepositoryManager::installPackage(Repository::Package p)
 	string fullDest;
 	string filename;
 #ifndef WIN32
-
 	int idx = p.destination.find("$HOME");
 	if(idx != -1)
 		fullDest = p.destination.replace(idx, strlen("$HOME"), getenv("HOME"))+"/";
-
-	filename = p.path.substr(p.path.find_last_of('/'));
 #else
 	replace(p.destination.begin(), p.destination.end(), '/', '\\');
 
 	int idx = p.destination.find("$HOME");
+
+	// %APPDATA% has apparently no write access in Win8+
 	if(idx != -1)
 		fullDest = p.destination.replace(idx, strlen("$HOME"), getenv("APPDATA"))+"\\";
+#endif
 
-	filename = p.path.substr(fullDest.find_last_of('\\'));
+	filename = p.path.substr(p.path.find_last_of('/'));
+
+#ifdef WIN32
+	filename.replace(filename.begin(), filename.begin()+1, "\\");
 #endif
 
 	fullDest += p.name;
 
+	string unixDest = fullDest;
+#ifdef WIN32
+	replace(unixDest.begin(), unixDest.end(), '\\', '/');
+#endif
+
 	if(!isFileExist(fullDest.c_str()))
 	{
-		createDirectory(fullDest.c_str(), true);
+		if (!createDirectory(unixDest.c_str(), true))
+		{
+			cout << "Could not create installation directory! (" << fullDest << ")" << endl;
+			return false;
+		}
 	}
 
 	cout << "Installing to " << fullDest << endl;

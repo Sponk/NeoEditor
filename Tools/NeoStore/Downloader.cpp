@@ -64,8 +64,11 @@ bool downloadFileToFile(const char* host, const char* file, const char* target, 
 		happyhttp::Connection conn(host, port);
 		FILE* f = fopen(target, "w");
 
-		if(!f)
+		if (!f)
+		{
+			printf("Could not open file: %s\n", target);
 			return false;
+		}
 
 		conn.setcallbacks(FileDownloader::OnBegin, FileDownloader::OnData, FileDownloader::OnComplete, f);
 		conn.request("GET", file,0,0,0);

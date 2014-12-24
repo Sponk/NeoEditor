@@ -36,7 +36,13 @@
 	#include <errno.h>
 	#include <unistd.h>
 #else
+	#define WIN32_LEAN_AND_MEAN
+	#include <windows.h>
+	#undef WIN32_LEAN_AND_MEAN
+
 	#include <winsock2.h>
+	#include <ws2tcpip.h>
+	
 	#define vsnprintf _vsnprintf
 #endif
 
@@ -173,7 +179,7 @@ bool datawaiting( int sock )
 
 // Try to work out address from string
 // returns 0 if bad
-struct in_addr *atoaddr( const char* address)
+struct in_addr *atoaddr(const char* address)
 {
 	struct hostent *host;
 	static struct in_addr saddr;

@@ -1,3 +1,5 @@
+#include <HTTPRequest.h>
+
 #include "Callbacks.h"
 #include <cstdio>
 #include <cerrno>
@@ -22,7 +24,6 @@
 #include <LevelLoad.h>
 #include <LevelSave.h>
 #include <MCore.h>
-#include <HTTPRequest.h>
 
 #include <GuiSystem.h>
 
