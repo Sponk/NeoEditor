@@ -5,38 +5,70 @@ code_name {.cxx}
 decl {\#include <FL/fl_message.H>} {private local
 } 
 
-decl {\#include <string>} {private local
+decl {\#include <FL/Fl_Native_File_Chooser.H>} {private local
+} 
+
+decl {\#include <MCore.h>} {private local
+} 
+
+decl {\#include <string>} {public global
+} 
+
+decl {\#include <fstream>} {private local
+} 
+
+decl {\#include <map>} {public global
+} 
+
+decl {\#include <algorithm>} {private local
+} 
+
+decl {extern std::string currentDirectory;} {private local
 } 
 
 decl {\#include <FL/Fl_Chart.H>} {public global
 } 
 
+decl {extern const char* fl_native_file_chooser(const char* title, const char* files, const char* dir, int type);} {private local
+} 
+
+declblock {\#if WIN32} {open after {\#endif}
+} {
+  decl {\#include <windows.h>} {private local
+  }
+} 
+
 class MainWindow {open
 } {
+  decl {std::map<std::string,std::string> m_projects;} {private local
+  }
   Function {create_window()} {open
   } {
     Fl_Window {} {
       label {Project Manager} open
-      xywh {349 170 515 455} type Double resizable visible
+      xywh {708 313 507 447} type Double resizable visible
     } {
-      Fl_Browser {} {
+      Fl_Browser project_browser {
         label {Projects:}
-        xywh {0 25 195 430} align 5
+        xywh {0 25 195 430} type Hold align 5
       }
       Fl_Group {} {
         label {Packages:} open
         xywh {200 25 310 270} box ENGRAVED_FRAME resizable
       } {
-        Fl_Browser {} {
+        Fl_Browser package_browser {
           label {Packages:}
-          xywh {205 45 155 245} align 5
+          xywh {205 45 155 245} type Hold align 5
         }
         Fl_Button {} {
           label {Install Package}
+          user_data this user_data_type {MainWindow*}
+          callback install_package
           xywh {370 260 130 25}
         }
         Fl_Button {} {
           label {Open Neo Store}
+          callback open_neo_store
           xywh {370 230 130 25}
         }
         Fl_Group {} {open
@@ -49,6 +81,8 @@ class MainWindow {open
       } {
         Fl_Button {} {
           label {Import Project}
+          user_data this user_data_type {MainWindow*}
+          callback import_project
           xywh {205 360 150 25}
         }
         Fl_Button {} {
@@ -56,10 +90,144 @@ class MainWindow {open
           xywh {205 330 150 25}
         }
         Fl_Button {} {
-          label {Copy Lua SDK} selected
+          label {Copy Lua SDK}
           xywh {205 415 150 25}
         }
       }
     }
+  }
+  Function {open_neo_store()} {open return_type {static void}
+  } {
+    code {// FIXME: Don't use system!!!
+\#ifndef WIN32
+	system("./NeoStore");
+\#else
+	ShellExecute(NULL, "open",
+			(currentDirectory + "\\\\NeoStore.exe").c_str(),
+			NULL,NULL, 1);
+\#endif} {}
+  }
+  Function {update_package_list()} {open
+  } {
+    code {// This file needs to be the same as in the NeoStore!
+	std::string confPath;
+\#ifndef WIN32
+	confPath = getenv("HOME");
+	confPath += "/.neo-store/";
+\#else
+	confPath = getenv("APPDATA");
+	confPath += "\\\\.neo-store\\\\";
+\#endif
+
+	confPath += "installed.txt";
+
+	std::ifstream in(confPath.c_str());
+
+	if(!in)
+		return;
+
+	std::string line;
+	while(!in.eof())
+	{
+		in >> line;
+		package_browser->add(line.c_str());
+	}
+
+	in.close();} {}
+  }
+  Function {import_project(Fl_Button* btn, MainWindow* dlg)} {open return_type {static void}
+  } {
+    code {const char* projectFile = fl_native_file_chooser("Choose a project", "*.mproj", 
+						NULL, Fl_Native_File_Chooser::BROWSE_FILE);
+
+if(projectFile == NULL)
+	return;
+
+std::string path = projectFile;
+
+int idx;
+\#ifndef WIN32
+	idx = path.find_last_of("/");
+\#else
+	idx = path.find_last_of("\\\\");
+\#endif
+
+if(idx == -1)
+	return;
+
+std::string name = path.substr(idx+1);	
+path = path.erase(idx);
+
+dlg->project_browser->add(name.c_str());
+dlg->addProject(name.c_str(), path.c_str());} {}
+  }
+  Function {install_package(Fl_Button* btn, MainWindow* dlg)} {open return_type {static void}
+  } {
+    code {int value = dlg->project_browser->value();
+
+if(value <= 0)
+{
+	fl_message("You need to select a project!");
+	return;
+}
+
+std::string name = dlg->project_browser->text(value);
+
+if(name.empty())
+{
+	fl_message("You need to select a project!");
+	return;
+}
+
+std::string path = dlg->getProjectPath(name.c_str());
+
+if(path.empty())
+	return;
+
+// ATTENTION: Needs to be the same as in NeoStore!
+std::string package;
+
+\#ifndef WIN32
+	package = getenv("HOME");
+	package += "/.neo-store/";
+\#else
+	package = getenv("APPDATA");
+	package += "\\\\.neo-store\\\\";
+\#endif
+
+value = dlg->package_browser->value();
+
+if(value <= 0)
+{
+	fl_message("You need to select a package!");
+	return;
+}
+
+std::string pkgName = dlg->package_browser->text(value);
+package += pkgName.erase(pkgName.find_last_of("-"));
+
+\#ifdef WIN32
+	std::replace(package.begin(), package.end(), '\\\\', '/');
+	std::replace(path.begin(), path.end(), '\\\\', '/');
+\#endif
+
+//fl_message("Copying %s to %s", package.c_str(), path.c_str());
+if(!copyDirectory(package.c_str(), path.c_str()))
+{
+	fl_message("Could not install package!");
+}
+else
+{
+	fl_message("Package installation was successful.");
+}} {selected
+    }
+  }
+  Function {getProjectPath(const char* name)} {open return_type {const char*}
+  } {
+    code {return m_projects[std::string(name)].c_str();} {}
+  }
+  Function {addProject(const char* name, const char* path)} {open
+  } {
+    code {m_projects[std::string(name)] = path;} {}
   }
 } 

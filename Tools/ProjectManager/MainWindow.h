@@ -3,6 +3,8 @@
 #ifndef MainWindow_h
 #define MainWindow_h
 #include <FL/Fl.H>
+#include <string>
+#include <map>
 #include <FL/Fl_Chart.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Browser.H>
@@ -10,7 +12,16 @@
 #include <FL/Fl_Button.H>
 
 class MainWindow {
+  std::map<std::string,std::string> m_projects; 
 public:
   Fl_Double_Window* create_window();
+  Fl_Browser *project_browser;
+  Fl_Browser *package_browser;
+  static void open_neo_store();
+  void update_package_list();
+  static void import_project(Fl_Button* btn, MainWindow* dlg);
+  static void install_package(Fl_Button* btn, MainWindow* dlg);
+  const char* getProjectPath(const char* name);
+  void addProject(const char* name, const char* path);
 };
 #endif

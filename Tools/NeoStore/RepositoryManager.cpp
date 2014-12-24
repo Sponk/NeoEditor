@@ -42,6 +42,7 @@ void RepositoryManager::updatePackageInformation()
 		m_repositories[i].getPackageList();
 	}
 
+	// This file needs to be the same as in the ProjectManager!
 	ifstream in(getInstalledPackagesListFile().c_str());
 
 	if(!in)
@@ -182,7 +183,7 @@ bool RepositoryManager::installPackage(Repository::Package p)
 			zip_fread(f, data, st.size);
 			zip_fclose(f);
 
-			FILE* file = fopen((fullDest+st.name).c_str(), "w");
+			FILE* file = fopen((fullDest+st.name).c_str(), "wb");
 			if(file)
 			{
 				fwrite(data, st.size, 1, file);
