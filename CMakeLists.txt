@@ -119,7 +119,9 @@ IF(WIN32)
   SET(NEO_BUILD_FLAGS "")
   
   SET(CPACK_PACKAGE_ICON "")
-  SET(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\NeoEditor.lnk' '\$INSTDIR\\\\Neo\\\\neo-editor.exe'")
+  SET(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\NeoEditor.lnk' '\$INSTDIR\\\\Neo\\\\neo-editor.exe'
+								CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\ProjectManager.lnk' '\$INSTDIR\\\\Neo\\\\ProjectManager.exe'
+								CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\NeoStore.lnk' '\$INSTDIR\\\\Neo\\\\NeoStore.exe'")
 	
   SET(CPACK_GENERATOR "NSIS;ZIP")
 ENDIF(WIN32)
