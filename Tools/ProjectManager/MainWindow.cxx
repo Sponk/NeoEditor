@@ -14,7 +14,7 @@ extern const char* fl_native_file_chooser(const char* title, const char* files, 
 
 Fl_Double_Window* MainWindow::create_window() {
   Fl_Double_Window* w;
-  { Fl_Double_Window* o = new Fl_Double_Window(507, 451, "Project Manager");
+  { Fl_Double_Window* o = new Fl_Double_Window(513, 450, "Project Manager");
     w = o;
     o->user_data((void*)(this));
     { project_browser = new Fl_Browser(0, 25, 195, 430, "Projects:");
@@ -40,14 +40,17 @@ Fl_Double_Window* MainWindow::create_window() {
       o->end();
       Fl_Group::current()->resizable(o);
     } // Fl_Group* o
-    { Fl_Group* o = new Fl_Group(200, 315, 310, 135, "Projects:");
+    { Fl_Group* o = new Fl_Group(200, 315, 313, 135, "Projects:");
       o->box(FL_ENGRAVED_FRAME);
       { Fl_Button* o = new Fl_Button(205, 360, 150, 25, "Import Project");
         o->callback((Fl_Callback*)import_project, (void*)(this));
       } // Fl_Button* o
       { new Fl_Button(205, 330, 150, 25, "Create Project");
       } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(205, 415, 150, 25, "Copy Lua SDK");
+      { Fl_Button* o = new Fl_Button(357, 359, 150, 25, "Copy C++ SDK");
+        o->callback((Fl_Callback*)copy_cpp_sdk, (void*)(this));
+      } // Fl_Button* o
+      { Fl_Button* o = new Fl_Button(357, 329, 150, 25, "Copy Lua SDK");
         o->callback((Fl_Callback*)copy_lua_sdk, (void*)(this));
       } // Fl_Button* o
       o->end();
@@ -318,5 +321,40 @@ void MainWindow::copy_lua_sdk(Fl_Button*, MainWindow* dlg) {
   if(!copyDirectory(src, dir))
   {
   	fl_message("Could not copy the Lua SDK!");
+  }
+}
+
+void MainWindow::copy_cpp_sdk(Fl_Button*, MainWindow* dlg) {
+  int value = dlg->project_browser->value();
+  
+  if(value <= 0)
+  {
+  	fl_message("You need to select a project!");
+  	return;
+  }
+  
+  std::string name = dlg->project_browser->text(value);
+  
+  if(name.empty())
+  {
+  	fl_message("You need to select a project!");
+  	return;
+  }
+  
+  std::string path = dlg->getProjectPath(name.c_str());
+  
+  if(path.empty())
+  	return;
+  
+  char src[255];
+  char dir[255];
+  getGlobalFilename(src, currentDirectory.c_str(), "SDK");
+  getGlobalFilename(dir, path.c_str(), "SDK");
+  
+  // fl_message("Copy %s to %s", src, dir);
+  
+  if(!copyDirectory(src, dir))
+  {
+  	fl_message("Could not copy the C++ SDK!");
   }
 }

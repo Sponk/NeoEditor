@@ -46,7 +46,7 @@ class MainWindow {open
   } {
     Fl_Window {} {
       label {Project Manager} open
-      xywh {610 295 507 451} type Double resizable visible
+      xywh {1866 299 513 450} type Double resizable visible
     } {
       Fl_Browser project_browser {
         label {Projects:}
@@ -78,7 +78,7 @@ class MainWindow {open
       }
       Fl_Group {} {
         label {Projects:} open
-        xywh {200 315 310 135} box ENGRAVED_FRAME
+        xywh {200 315 313 135} box ENGRAVED_FRAME
       } {
         Fl_Button {} {
           label {Import Project}
@@ -91,10 +91,16 @@ class MainWindow {open
           xywh {205 330 150 25}
         }
         Fl_Button {} {
+          label {Copy C++ SDK}
+          user_data this user_data_type {MainWindow*}
+          callback copy_cpp_sdk
+          xywh {357 359 150 25}
+        }
+        Fl_Button {} {
           label {Copy Lua SDK}
           user_data this user_data_type {MainWindow*}
           callback copy_lua_sdk
-          xywh {205 415 150 25}
+          xywh {357 329 150 25}
         }
       }
     }
@@ -361,6 +367,41 @@ getGlobalFilename(dir, path.c_str(), "scripts/SDK");
 if(!copyDirectory(src, dir))
 {
 	fl_message("Could not copy the Lua SDK!");
+}} {}
+  }
+  Function {copy_cpp_sdk(Fl_Button*, MainWindow* dlg)} {open return_type {static void}
+  } {
+    code {int value = dlg->project_browser->value();
+
+if(value <= 0)
+{
+	fl_message("You need to select a project!");
+	return;
+}
+
+std::string name = dlg->project_browser->text(value);
+
+if(name.empty())
+{
+	fl_message("You need to select a project!");
+	return;
+}
+
+std::string path = dlg->getProjectPath(name.c_str());
+
+if(path.empty())
+	return;
+
+char src[255];
+char dir[255];
+getGlobalFilename(src, currentDirectory.c_str(), "SDK");
+getGlobalFilename(dir, path.c_str(), "SDK");
+
+// fl_message("Copy %s to %s", src, dir);
+
+if(!copyDirectory(src, dir))
+{
+	fl_message("Could not copy the C++ SDK!");
 }} {selected
     }
   }

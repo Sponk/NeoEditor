@@ -27,5 +27,6 @@ public:
   void saveProjectList();
   void addProject(const char* filepath);
   static void copy_lua_sdk(Fl_Button*, MainWindow* dlg);
+  static void copy_cpp_sdk(Fl_Button*, MainWindow* dlg);
 };
 #endif
