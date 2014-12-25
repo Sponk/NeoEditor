@@ -47,7 +47,8 @@ Fl_Double_Window* MainWindow::create_window() {
       } // Fl_Button* o
       { new Fl_Button(205, 330, 150, 25, "Create Project");
       } // Fl_Button* o
-      { new Fl_Button(205, 415, 150, 25, "Copy Lua SDK");
+      { Fl_Button* o = new Fl_Button(205, 415, 150, 25, "Copy Lua SDK");
+        o->callback((Fl_Callback*)copy_lua_sdk, (void*)(this));
       } // Fl_Button* o
       o->end();
     } // Fl_Group* o
@@ -283,4 +284,39 @@ void MainWindow::addProject(const char* filepath) {
   
   project_browser->add(name.c_str());
   addProject(name.c_str(), path.c_str());
+}
+
+void MainWindow::copy_lua_sdk(Fl_Button*, MainWindow* dlg) {
+  int value = dlg->project_browser->value();
+  
+  if(value <= 0)
+  {
+  	fl_message("You need to select a project!");
+  	return;
+  }
+  
+  std::string name = dlg->project_browser->text(value);
+  
+  if(name.empty())
+  {
+  	fl_message("You need to select a project!");
+  	return;
+  }
+  
+  std::string path = dlg->getProjectPath(name.c_str());
+  
+  if(path.empty())
+  	return;
+  
+  char src[255];
+  char dir[255];
+  getGlobalFilename(src, currentDirectory.c_str(), "LuaApi");
+  getGlobalFilename(dir, path.c_str(), "scripts/SDK");
+  
+  // fl_message("Copy %s to %s", src, dir);
+  
+  if(!copyDirectory(src, dir))
+  {
+  	fl_message("Could not copy the Lua SDK!");
+  }
 }

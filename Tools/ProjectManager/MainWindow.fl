@@ -92,6 +92,8 @@ class MainWindow {open
         }
         Fl_Button {} {
           label {Copy Lua SDK}
+          user_data this user_data_type {MainWindow*}
+          callback copy_lua_sdk
           xywh {205 415 150 25}
         }
       }
@@ -123,8 +125,7 @@ class MainWindow {open
 	WaitForSingleObject(ShExecInfo.hProcess,INFINITE);
 \#endif
 	
-	dlg->update_package_list();} {selected
-    }
+	dlg->update_package_list();} {}
   }
   Function {update_package_list()} {open
   } {
@@ -170,7 +171,7 @@ if(projectFile == NULL)
 dlg->addProject(projectFile);
 dlg->saveProjectList();} {}
   }
-  Function {install_package(Fl_Button* btn, MainWindow* dlg)} {return_type {static void}
+  Function {install_package(Fl_Button* btn, MainWindow* dlg)} {open return_type {static void}
   } {
     code {int value = dlg->project_browser->value();
 
@@ -326,5 +327,41 @@ path = path.erase(idx);
 
 project_browser->add(name.c_str());
 addProject(name.c_str(), path.c_str());} {}
+  }
+  Function {copy_lua_sdk(Fl_Button*, MainWindow* dlg)} {open return_type {static void}
+  } {
+    code {int value = dlg->project_browser->value();
+
+if(value <= 0)
+{
+	fl_message("You need to select a project!");
+	return;
+}
+
+std::string name = dlg->project_browser->text(value);
+
+if(name.empty())
+{
+	fl_message("You need to select a project!");
+	return;
+}
+
+std::string path = dlg->getProjectPath(name.c_str());
+
+if(path.empty())
+	return;
+
+char src[255];
+char dir[255];
+getGlobalFilename(src, currentDirectory.c_str(), "LuaApi");
+getGlobalFilename(dir, path.c_str(), "scripts/SDK");
+
+// fl_message("Copy %s to %s", src, dir);
+
+if(!copyDirectory(src, dir))
+{
+	fl_message("Could not copy the Lua SDK!");
+}} {selected
+    }
   }
 } 
