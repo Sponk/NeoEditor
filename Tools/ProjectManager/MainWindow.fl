@@ -42,7 +42,8 @@ class MainWindow {open
 } {
   decl {std::map<std::string,std::string> m_projects;} {private local
   }
-  Function {create_window()} {} {
+  Function {create_window()} {open
+  } {
     Fl_Window {} {
       label {Project Manager} open
       xywh {712 317 515 459} type Double resizable visible
@@ -70,7 +71,7 @@ class MainWindow {open
           callback open_neo_store
           xywh {370 230 130 25}
         }
-        Fl_Group {} {open
+        Fl_Group {} {open selected
           xywh {365 35 135 185} resizable
         } {}
       }
@@ -247,8 +248,7 @@ while(!in.eof())
 		addProject(line.c_str());
 }
 
-in.close();} {selected
-    }
+in.close();} {}
   }
   Function {saveProjectList()} {open
   } {
