@@ -1,11 +1,11 @@
 
 language: cpp
 before_install: 
-	- sudo apt-get update -qq
-	- sudo apt-get install -qq -y libx11-dev libogg-dev libxft-dev
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq -y libx11-dev libogg-dev libxft-dev
 
 branches:
-	only:
-		- development
-		
+  only:
+    - development
+
 script: mkdir ../build && cd ../build && cmake ../NeoEditor && make
