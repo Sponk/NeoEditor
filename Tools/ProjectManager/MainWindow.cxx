@@ -14,7 +14,7 @@ extern const char* fl_native_file_chooser(const char* title, const char* files, 
 
 Fl_Double_Window* MainWindow::create_window() {
   Fl_Double_Window* w;
-  { Fl_Double_Window* o = new Fl_Double_Window(515, 459, "Project Manager");
+  { Fl_Double_Window* o = new Fl_Double_Window(507, 451, "Project Manager");
     w = o;
     o->user_data((void*)(this));
     { project_browser = new Fl_Browser(0, 25, 195, 430, "Projects:");
@@ -31,7 +31,7 @@ Fl_Double_Window* MainWindow::create_window() {
         o->callback((Fl_Callback*)install_package, (void*)(this));
       } // Fl_Button* o
       { Fl_Button* o = new Fl_Button(370, 230, 130, 25, "Open Neo Store");
-        o->callback((Fl_Callback*)open_neo_store);
+        o->callback((Fl_Callback*)open_neo_store, (void*)(this));
       } // Fl_Button* o
       { Fl_Group* o = new Fl_Group(365, 35, 135, 185);
         o->end();
@@ -56,15 +56,32 @@ Fl_Double_Window* MainWindow::create_window() {
   return w;
 }
 
-void MainWindow::open_neo_store() {
+void MainWindow::open_neo_store(Fl_Button*, MainWindow* dlg) {
   // FIXME: Don't use system!!!
   #ifndef WIN32
   	system("./NeoStore");
   #else
-  	ShellExecute(NULL, "open",
-  			(currentDirectory + "\\NeoStore.exe").c_str(),
-  			NULL,NULL, 1);
+  	//ShellExecute(NULL, "open",
+  //			(currentDirectory + "\\NeoStore.exe").c_str(),
+  //			NULL,NULL, 1);
+  
+  	std::string path = currentDirectory + "\\NeoStore.exe";
+  	SHELLEXECUTEINFO ShExecInfo = {0};
+  	ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
+  	ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
+  	ShExecInfo.hwnd = NULL;
+  	ShExecInfo.lpVerb = NULL;
+  	ShExecInfo.lpFile = path.c_str();		
+  	ShExecInfo.lpParameters = "";	
+  	ShExecInfo.lpDirectory = NULL;
+  	ShExecInfo.nShow = SW_SHOW;
+  	ShExecInfo.hInstApp = NULL;
+  		
+  	ShellExecuteEx(&ShExecInfo);
+  	WaitForSingleObject(ShExecInfo.hProcess,INFINITE);
   #endif
+  	
+  	dlg->update_package_list();
 }
 
 void MainWindow::update_package_list() {
@@ -84,6 +101,8 @@ void MainWindow::update_package_list() {
   
   	if(!in)
   		return;
+  
+  	package_browser->clear();
   
   	std::string line;
   	while(!in.eof())

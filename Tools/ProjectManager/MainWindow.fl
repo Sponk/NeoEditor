@@ -46,7 +46,7 @@ class MainWindow {open
   } {
     Fl_Window {} {
       label {Project Manager} open
-      xywh {712 317 515 459} type Double resizable visible
+      xywh {610 295 507 451} type Double resizable visible
     } {
       Fl_Browser project_browser {
         label {Projects:}
@@ -68,10 +68,11 @@ class MainWindow {open
         }
         Fl_Button {} {
           label {Open Neo Store}
+          user_data this user_data_type {MainWindow*}
           callback open_neo_store
           xywh {370 230 130 25}
         }
-        Fl_Group {} {open selected
+        Fl_Group {} {open
           xywh {365 35 135 185} resizable
         } {}
       }
@@ -96,16 +97,34 @@ class MainWindow {open
       }
     }
   }
-  Function {open_neo_store()} {return_type {static void}
+  Function {open_neo_store(Fl_Button*, MainWindow* dlg)} {open return_type {static void}
   } {
     code {// FIXME: Don't use system!!!
 \#ifndef WIN32
 	system("./NeoStore");
 \#else
-	ShellExecute(NULL, "open",
-			(currentDirectory + "\\\\NeoStore.exe").c_str(),
-			NULL,NULL, 1);
-\#endif} {}
+	//ShellExecute(NULL, "open",
+//			(currentDirectory + "\\\\NeoStore.exe").c_str(),
+//			NULL,NULL, 1);
+
+	std::string path = currentDirectory + "\\\\NeoStore.exe";
+	SHELLEXECUTEINFO ShExecInfo = {0};
+	ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
+	ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
+	ShExecInfo.hwnd = NULL;
+	ShExecInfo.lpVerb = NULL;
+	ShExecInfo.lpFile = path.c_str();		
+	ShExecInfo.lpParameters = "";	
+	ShExecInfo.lpDirectory = NULL;
+	ShExecInfo.nShow = SW_SHOW;
+	ShExecInfo.hInstApp = NULL;
+		
+	ShellExecuteEx(&ShExecInfo);
+	WaitForSingleObject(ShExecInfo.hProcess,INFINITE);
+\#endif
+	
+	dlg->update_package_list();} {selected
+    }
   }
   Function {update_package_list()} {open
   } {
@@ -125,6 +144,8 @@ class MainWindow {open
 
 	if(!in)
 		return;
+
+	package_browser->clear();
 
 	std::string line;
 	while(!in.eof())

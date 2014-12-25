@@ -17,7 +17,7 @@ public:
   Fl_Double_Window* create_window();
   Fl_Browser *project_browser;
   Fl_Browser *package_browser;
-  static void open_neo_store();
+  static void open_neo_store(Fl_Button*, MainWindow* dlg);
   void update_package_list();
   static void import_project(Fl_Button* btn, MainWindow* dlg);
   static void install_package(Fl_Button* btn, MainWindow* dlg);
