@@ -60,3 +60,5 @@ TARGET_LINK_LIBRARIES(TestSDK
 
 INCLUDE(CopyFiles)
 copy_files("*.lua" "${NEO_BINARY_OUTPUT}" "copy-sdk-test")
+
+add_custom_target(test "${NEO_BINARY_OUTPUT}/TestSDK" WORKING_DIRECTORY ${NEO_BINARY_OUTPUT})
