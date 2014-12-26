@@ -544,23 +544,23 @@ endif(OPTION_USE_XDBE AND HAVE_XDBE_H)
 # final setup and config
 #######################################################################
 # Set the fluid executable path
-if(CMAKE_CROSSCOMPILING)
-   find_file(FLUID_PATH
-      NAMES fluid fluid.exe
-      PATHS ENV PATH
-      NO_CMAKE_FIND_ROOT_PATH
-   )
-   add_executable(fluid IMPORTED)
-   set(FLTK_FLUID_EXECUTABLE ${FLUID_PATH})
-   set(FLTK_FLUID_PATH ${FLUID_PATH})
-   set_target_properties(fluid
-      PROPERTIES IMPORTED_LOCATION ${FLUID_PATH}
-   )
-else()
-   add_subdirectory(fluid)
+#if(CMAKE_CROSSCOMPILING)
+#   find_file(FLUID_PATH
+#      NAMES fluid fluid.exe
+#      PATHS ENV PATH
+#      NO_CMAKE_FIND_ROOT_PATH
+#   )
+#   add_executable(fluid IMPORTED)
+#   set(FLTK_FLUID_EXECUTABLE ${FLUID_PATH})
+#   set(FLTK_FLUID_PATH ${FLUID_PATH})
+#   set_target_properties(fluid
+#      PROPERTIES IMPORTED_LOCATION ${FLUID_PATH}
+#   )
+#else()
+#   add_subdirectory(fluid)
    #set(FLTK_FLUID_EXECUTABLE fluid)
    #set(FLTK_FLUID_PATH ${PREFIX_BIN}/fluid)
-endif(CMAKE_CROSSCOMPILING)
+#endif(CMAKE_CROSSCOMPILING)
 
 add_subdirectory(src)
 
