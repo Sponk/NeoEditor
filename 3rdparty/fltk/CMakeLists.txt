@@ -52,9 +52,9 @@ include(CMake/export.cmake)
 #######################################################################
 # build examples - these have to be after fluid is built/imported
 #######################################################################
-if(OPTION_BUILD_EXAMPLES)
-   add_subdirectory(test)
-endif(OPTION_BUILD_EXAMPLES)
+#if(OPTION_BUILD_EXAMPLES)
+#   add_subdirectory(test)
+#endif(OPTION_BUILD_EXAMPLES)
 
 #######################################################################
 # installation
