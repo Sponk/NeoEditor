@@ -30,6 +30,8 @@
 #ifndef _M_SCENE_H
 #define _M_SCENE_H
 
+#include <map>
+
 namespace Neo
 {
 
@@ -80,6 +82,9 @@ private:
 
 	// current frame
 	int m_currentFrame;
+
+	map<int,Object3d*> m_handles;
+	unsigned long int m_ids;
 
 	// current camera
 	unsigned int m_currentCamera;
@@ -271,6 +276,16 @@ public:
      * @return The object or NULL.
      */
 	Object3d * getObjectByName(const char * name);
+
+	/**
+	 * @brief Returns the object with the given ID or NULL if it is not found.
+	 *
+	 * @see Neo::Object3d::getId()
+	 *
+	 * @param handle The object handle.
+	 * @return The object.
+	 */
+	Object3d * getObjectByHandle(unsigned long handle) { return m_handles[handle]; }
 
     /**
      * @brief Returns the light with the given name or NULL if it is not found.

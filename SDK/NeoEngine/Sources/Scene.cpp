@@ -68,6 +68,10 @@ Object3d * Scene::addNewGroup(const Object3d & object)
     Object3d * group = new Object3d();
     m_objects.push_back(group);
 
+	group->setId(++m_ids);
+
+	m_handles[group->getId()] = group;
+
     group->setPosition(object.getTransformedPosition());
     group->setRotation(object.getRotation());
     group->setScale(object.getTransformedScale());
@@ -79,6 +83,9 @@ Object3d * Scene::addNewGroup(const Object3d & object)
 OCamera * Scene::addNewCamera(void)
 {
 	OCamera * newCamera = new OCamera();
+	newCamera->setId(++m_ids);
+	m_handles[newCamera->getId()] = newCamera;
+
 	m_cameras.push_back(newCamera);
 	m_objects.push_back(newCamera);
 	return newCamera;
@@ -87,6 +94,10 @@ OCamera * Scene::addNewCamera(void)
 OCamera * Scene::addNewCamera(const OCamera & camera)
 {
 	OCamera * newCamera = new OCamera(camera);
+	newCamera->setId(++m_ids);
+
+	m_handles[newCamera->getId()] = newCamera;
+
 	m_cameras.push_back(newCamera);
 	m_objects.push_back(newCamera);
 	return newCamera;
@@ -95,6 +106,10 @@ OCamera * Scene::addNewCamera(const OCamera & camera)
 OLight * Scene::addNewLight(void)
 {
 	OLight * newLight = new OLight();
+
+	newLight->setId(++m_ids);
+	m_handles[newLight->getId()] = newLight;
+
 	m_lights.push_back(newLight);
 	m_objects.push_back(newLight);
 	return newLight;
@@ -103,6 +118,10 @@ OLight * Scene::addNewLight(void)
 OLight * Scene::addNewLight(const OLight & light)
 {
 	OLight * newLight = new OLight(light);
+
+	newLight->setId(++m_ids);
+	m_handles[newLight->getId()] = newLight;
+
 	m_lights.push_back(newLight);
 	m_objects.push_back(newLight);
 	return newLight;
@@ -111,6 +130,10 @@ OLight * Scene::addNewLight(const OLight & light)
 OEntity * Scene::addNewEntity(MeshRef * meshRef)
 {
 	OEntity * newEntity = new OEntity(meshRef);
+
+	newEntity->setId(++m_ids);
+	m_handles[newEntity->getId()] = newEntity;
+
 	m_entities.push_back(newEntity);
 	m_objects.push_back(newEntity);
 	return newEntity;
@@ -119,6 +142,10 @@ OEntity * Scene::addNewEntity(MeshRef * meshRef)
 OEntity * Scene::addNewEntity(const OEntity & entity)
 {
 	OEntity * newEntity = new OEntity(entity);
+
+	newEntity->setId(++m_ids);
+	m_handles[newEntity->getId()] = newEntity;
+
 	m_entities.push_back(newEntity);
 	m_objects.push_back(newEntity);
 	return newEntity;
@@ -127,6 +154,10 @@ OEntity * Scene::addNewEntity(const OEntity & entity)
 OSound * Scene::addNewSound(SoundRef * soundRef)
 {
 	OSound * newSoundSource = new OSound(soundRef);
+
+	newSoundSource->setId(++m_ids);
+	m_handles[newSoundSource->getId()] = newSoundSource;
+
 	m_sounds.push_back(newSoundSource);
 	m_objects.push_back(newSoundSource);
 	return newSoundSource;
@@ -135,6 +166,10 @@ OSound * Scene::addNewSound(SoundRef * soundRef)
 OSound * Scene::addNewSound(const OSound & sound)
 {
 	OSound * newSoundSource = new OSound(sound);
+
+	newSoundSource->setId(++m_ids);
+	m_handles[newSoundSource->getId()] = newSoundSource;
+
 	m_sounds.push_back(newSoundSource);
 	m_objects.push_back(newSoundSource);
 	return newSoundSource;
@@ -143,6 +178,10 @@ OSound * Scene::addNewSound(const OSound & sound)
 OText * Scene::addNewText(FontRef * fontRef)
 {
 	OText * newText = new OText(fontRef);
+
+	newText->setId(++m_ids);
+	m_handles[newText->getId()] = newText;
+
 	m_texts.push_back(newText);
 	m_objects.push_back(newText);
 	return newText;
@@ -151,6 +190,10 @@ OText * Scene::addNewText(FontRef * fontRef)
 OText * Scene::addNewText(const OText & text)
 {
 	OText * newText = new OText(text);
+
+	newText->setId(++m_ids);
+	m_handles[newText->getId()] = newText;
+
 	m_texts.push_back(newText);
 	m_objects.push_back(newText);
 	return newText;
@@ -531,6 +574,9 @@ void Scene::deleteObject(Object3d * object)
 
 	unsigned int i;
 	unsigned int oSize;
+
+	// TODO: Remove entries that contain NULL somewhere!
+	m_handles[object->getId()] = NULL;
 
 	// objects
 	switch(object->getType())

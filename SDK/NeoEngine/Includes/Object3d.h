@@ -77,6 +77,8 @@ protected:
 	bool m_isVisible;
 	bool m_needToUpdate;
 
+	unsigned long m_id;
+
 	// linking
 	Object3d * m_parent;
 
@@ -141,6 +143,9 @@ public:
 	inline unsigned int getChildsNumber(void){ return m_childs.size(); }
 	inline Object3d * getParent(void){ return m_parent; }
 	inline Object3d * getChild(unsigned int id){ return m_childs[id]; }
+
+	unsigned long getId() { return m_id; }
+	void setId(unsigned long id) { m_id = id; }
 
 	// behaviors
 	void updateBehaviors(void);
