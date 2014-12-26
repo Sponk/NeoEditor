@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.h 8864 2011-07-19 04:49:30Z greg.ercolano $"
+// "$Id: Fl_Type.h 10093 2014-02-04 00:34:41Z AlbrechtS $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@ void set_modflag(int mf);
 class Fl_Type {
 
   friend class Widget_Browser;
-  friend Fl_Widget *make_type_browser(int,int,int,int,const char *l=0);
+  friend Fl_Widget *make_type_browser(int,int,int,int,const char *);
   friend class Fl_Window_Type;
   virtual void setlabel(const char *); // virtual part of label(char*)
 
@@ -861,5 +861,5 @@ public:
 
 
 //
-// End of "$Id: Fl_Type.h 8864 2011-07-19 04:49:30Z greg.ercolano $".
+// End of "$Id: Fl_Type.h 10093 2014-02-04 00:34:41Z AlbrechtS $".
 //

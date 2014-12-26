@@ -1,5 +1,5 @@
 //
-// "$Id: threads.h 8864 2011-07-19 04:49:30Z greg.ercolano $"
+// "$Id: threads.h 9980 2013-09-21 16:41:23Z greg.ercolano $"
 //
 // Simple threading API for the Fast Light Tool Kit (FLTK).
 //
@@ -40,8 +40,11 @@
 #    include <pthread.h>
 
 typedef pthread_t Fl_Thread;
+extern "C" {
+  typedef void *(Fl_Thread_Func)(void *);
+}
 
-static int fl_create_thread(Fl_Thread& t, void *(*f) (void *), void* p) {
+static int fl_create_thread(Fl_Thread& t, Fl_Thread_Func* f, void* p) {
   return pthread_create((pthread_t*)&t, 0, f, p);
 }
 
@@ -51,8 +54,11 @@ static int fl_create_thread(Fl_Thread& t, void *(*f) (void *), void* p) {
 #    include <process.h>
 
 typedef unsigned long Fl_Thread;
+extern "C" {
+  typedef void *(__cdecl Fl_Thread_Func)(void *);
+}
 
-static int fl_create_thread(Fl_Thread& t, void *(*f) (void *), void* p) {
+static int fl_create_thread(Fl_Thread& t, Fl_Thread_Func* f, void* p) {
   return t = (Fl_Thread)_beginthread((void( __cdecl * )( void * ))f, 0, p);
 }
 
@@ -60,13 +66,16 @@ static int fl_create_thread(Fl_Thread& t, void *(*f) (void *), void* p) {
 #    include <process.h>
 
 typedef unsigned long Fl_Thread;
+extern "C" {
+  typedef void *(__cdecl Fl_Thread_Func)(void *);
+}
 
-static int fl_create_thread(Fl_Thread& t, void *(*f) (void *), void* p) {
+static int fl_create_thread(Fl_Thread& t, Fl_Thread_Func* f, void* p) {
   return t = (Fl_Thread)_beginthread((void(* )( void * ))f, 32000, p);
 }
 #  endif // !HAVE_PTHREAD_H
 #endif // !Threads_h
 
 //
-// End of "$Id: threads.h 8864 2011-07-19 04:49:30Z greg.ercolano $".
+// End of "$Id: threads.h 9980 2013-09-21 16:41:23Z greg.ercolano $".
 //

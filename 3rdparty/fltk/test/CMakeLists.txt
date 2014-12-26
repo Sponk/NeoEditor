@@ -11,46 +11,6 @@ elseif(HAVE_ALSA_ASOUNDLIB_H)
 endif(WIN32)
 
 #######################################################################
-macro(CREATE_EXAMPLE NAME SOURCES LIBRARIES)
-	set(srcs)
-	set(flsrcs)
-	foreach(src ${SOURCES})
-		if("${src}" MATCHES ".fl$")
-         list(APPEND flsrcs ${src})
-		else()
-			list(APPEND srcs ${src})
-		endif("${src}" MATCHES ".fl$")
-	endforeach(src)
-
-   if(flsrcs)
-      fltk_wrap_ui(${NAME} ${flsrcs})
-   endif(flsrcs)
-
-	add_executable(${NAME} WIN32 ${srcs} ${${NAME}_FLTK_UI_SRCS})
-   if(flsrcs)
-      add_dependencies(${NAME} ${FLTK_FLUID_EXECUTABLE})
-   endif(flsrcs)
-	target_link_libraries(${NAME} ${LIBRARIES})
-
-   # link in optional libraries
-   if(FLTK_HAVE_CAIRO)
-      target_link_libraries(${NAME} fltk_cairo)
-   endif(FLTK_HAVE_CAIRO)
-
-   if(USE_XFT)
-      target_link_libraries(${NAME} ${X11_Xft_LIB})
-   endif(USE_XFT)
-
-   if(HAVE_XINERAMA)
-      target_link_libraries(${NAME} ${X11_Xinerama_LIB})
-   endif(HAVE_XINERAMA)
-
-   install(TARGETS ${NAME}
-      DESTINATION ${PREFIX_DOC}/examples
-      )
-endmacro(CREATE_EXAMPLE NAME SOURCES LIBRARIES)
-
-#######################################################################
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
@@ -82,6 +42,7 @@ CREATE_EXAMPLE(fonts fonts.cxx fltk)
 CREATE_EXAMPLE(forms forms.cxx "fltk;fltk_forms")
 CREATE_EXAMPLE(hello hello.cxx fltk)
 CREATE_EXAMPLE(help help.cxx "fltk;fltk_images")
+CREATE_EXAMPLE(icon icon.cxx fltk)
 CREATE_EXAMPLE(iconize iconize.cxx fltk)
 CREATE_EXAMPLE(image image.cxx fltk)
 CREATE_EXAMPLE(inactive inactive.fl fltk)
@@ -117,9 +78,11 @@ CREATE_EXAMPLE(threads threads.cxx fltk)
 CREATE_EXAMPLE(tile tile.cxx fltk)
 CREATE_EXAMPLE(tiled_image tiled_image.cxx fltk)
 CREATE_EXAMPLE(tree tree.fl fltk)
+CREATE_EXAMPLE(twowin twowin.cxx fltk)
 CREATE_EXAMPLE(utf8 utf8.cxx fltk)
 CREATE_EXAMPLE(valuators valuators.fl fltk)
 CREATE_EXAMPLE(unittests unittests.cxx fltk)
+CREATE_EXAMPLE(windowfocus windowfocus.cxx fltk)
 
 # OpenGL demos...
 if(OPENGL_FOUND)
@@ -134,5 +97,5 @@ endif(OPENGL_FOUND)
 
 # Cairo demo
 if(FLTK_HAVE_CAIRO)
-   CREATE_EXAMPLE(cairo_test cairo_test.cxx fltk)
+   CREATE_EXAMPLE(cairo_test cairo_test.cxx "fltk;fltk_cairo")
 endif(FLTK_HAVE_CAIRO)

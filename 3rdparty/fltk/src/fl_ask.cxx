@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx 9373 2012-04-22 02:45:09Z fabien $"
+// "$Id: fl_ask.cxx 10232 2014-08-21 12:13:47Z cand $"
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
@@ -15,6 +15,11 @@
 //
 //     http://www.fltk.org/str.php
 //
+
+/**
+ \file fl_ask.cxx
+ \brief Utility functions for common dialogs.
+ */
 
 // Implementation of fl_message, fl_ask, fl_choice, fl_input
 // The three-message fl_show_x functions are for forms compatibility
@@ -61,8 +66,8 @@ static char avoidRecursion = 0;
 // The first argument (Fl_Widget *) can either be an Fl_Button*
 // pointer to one of the buttons or an Fl_Window* pointer to the
 // message window (message_form).
-static void button_cb(Fl_Widget *, void *val) {
-  ret_val = (int) (fl_intptr_t)val;
+static void button_cb(Fl_Widget *, long val) {
+  ret_val = (int) val;
   message_form->hide();
 }
 
@@ -77,7 +82,7 @@ static Fl_Window *makeform() {
  Fl_Group::current(0);
  // create a new top level window
  Fl_Window *w = message_form = new Fl_Window(410,103);
- message_form->callback(button_cb,(void *)0);
+  message_form->callback(button_cb);
  // w->clear_border();
  // w->box(FL_UP_BOX);
  (message = new Fl_Box(60, 25, 340, 20))
@@ -99,11 +104,7 @@ static Fl_Window *makeform() {
      else
        button[b] = new Fl_Button(x, 70, 90, 23);
      button[b]->align(FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
-#if defined (__LP64__)
-     button[b]->callback(button_cb,(void *)(long long) b);
-#else
-     button[b]->callback(button_cb,(void *)b);
-#endif
+     button[b]->callback(button_cb, b);
    }
  }
  button[0]->shortcut(FL_Escape);
@@ -125,7 +126,7 @@ static Fl_Window *makeform() {
  *                  that is asked of them...
  */
 
-void resizeform() {
+static void resizeform() {
   int	i;
   int	message_w, message_h;
   int	text_height;
@@ -272,6 +273,7 @@ const char* fl_close= "Close";   ///< string pointer used in common dialogs, you
 // fltk functions:
 /**
    Emits a system beep message.
+ \param[in] type   The beep type from the \ref Fl_Beep enumeration.
    \note \#include <FL/fl_ask.H>
  */
 void fl_beep(int type) {
@@ -566,5 +568,5 @@ void fl_message_title_default(const char *title) {
 /** @} */
 
 //
-// End of "$Id: fl_ask.cxx 9373 2012-04-22 02:45:09Z fabien $".
+// End of "$Id: fl_ask.cxx 10232 2014-08-21 12:13:47Z cand $".
 //

@@ -1,6 +1,4 @@
 
-include_regular_expression("[.][cxx|c|h]$")
-
 set(CPPFILES
   Fl.cxx
   Fl_Adjuster.cxx
@@ -16,9 +14,11 @@ set(CPPFILES
   Fl_Choice.cxx
   Fl_Clock.cxx
   Fl_Color_Chooser.cxx
+  Fl_Copy_Surface.cxx
   Fl_Counter.cxx
   Fl_Device.cxx
   Fl_Dial.cxx
+  Fl_Help_Dialog_Dox.cxx
   Fl_Double_Window.cxx
   Fl_File_Browser.cxx
   Fl_File_Chooser.cxx
@@ -28,13 +28,13 @@ set(CPPFILES
   Fl_Group.cxx
   Fl_Help_View.cxx
   Fl_Image.cxx
+  Fl_Image_Surface.cxx
   Fl_Input.cxx
   Fl_Input_.cxx
   Fl_Light_Button.cxx
   Fl_Menu.cxx
   Fl_Menu_.cxx
   Fl_Menu_Bar.cxx
-  Fl_Sys_Menu_Bar.cxx
   Fl_Menu_Button.cxx
   Fl_Menu_Window.cxx
   Fl_Menu_add.cxx
@@ -46,6 +46,7 @@ set(CPPFILES
   Fl_Paged_Device.cxx
   Fl_Pixmap.cxx
   Fl_Positioner.cxx
+  Fl_PostScript.cxx
   Fl_Printer.cxx
   Fl_Preferences.cxx
   Fl_Progress.cxx
@@ -80,6 +81,7 @@ set(CPPFILES
   Fl_Window_fullscreen.cxx
   Fl_Window_hotspot.cxx
   Fl_Window_iconize.cxx
+  Fl_Window_shape.cxx
   Fl_Wizard.cxx
   Fl_XBM_Image.cxx
   Fl_XPM_Image.cxx
@@ -195,37 +197,24 @@ set(CFILES
   fl_utf.c
 )
 
-FILE(GLOB FL_INCLUDEFILES ${CMAKE_CURRENT_SOURCE_DIR}/../FL/*.H)
-
 add_definitions(-DFL_LIBRARY)
 if(APPLE)
-	set(MMFILES
-		Fl_cocoa.mm
-		Fl_Quartz_Printer.mm
-		Fl_Native_File_Chooser_MAC.mm
-		)
+    set(MMFILES
+        Fl_cocoa.mm
+        Fl_Quartz_Printer.mm
+        Fl_Native_File_Chooser_MAC.mm
+        Fl_Sys_Menu_Bar.mm
+        )
 else()
    set(MMFILES
       )
 endif(APPLE)
 
 #######################################################################
-add_library(fltk STATIC ${CPPFILES} ${MMFILES} ${CFILES} fl_call_main.c)
-set_target_properties(fltk PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-
-if(MSVC)
-   if(OPTION_LARGE_FILE)
-      set_target_properties(fltk PROPERTIES LINK_FLAGS /LARGEADDRESSAWARE)
-   endif()
-   set_target_properties(fltk
-      PROPERTIES
-         OUTPUT_NAME fltk
-         DEBUG_OUTPUT_NAME fltkd
-   )
-endif(MSVC)
+FL_ADD_LIBRARY(fltk STATIC "${CPPFILES};${MMFILES};${CFILES};fl_call_main.c")
 
 if(USE_THREADS)
-   target_link_libraries(fltk ${CMAKE_THREAD_LIBS_INIT})
+   target_link_libraries(fltk ${CMAKE_THREAD_LIBS_INIT} ${LIB_dl})
 endif(USE_THREADS)
 
 if(USE_X11)
@@ -244,73 +233,52 @@ if(HAVE_XINERAMA)
    target_link_libraries(fltk ${X11_Xinerama_LIB})
 endif(HAVE_XINERAMA)
 
+if(HAVE_XFIXES)
+   target_link_libraries(fltk ${X11_Xfixes_LIB})
+endif(HAVE_XFIXES)
+
+if(HAVE_XCURSOR)
+   target_link_libraries(fltk ${X11_Xcursor_LIB})
+endif(HAVE_XCURSOR)
+
 if(USE_XFT)
    target_link_libraries(fltk ${X11_Xft_LIB})
+   if(LIB_fontconfig)
+      target_link_libraries(fltk ${LIB_fontconfig})
+   endif(LIB_fontconfig)
 endif(USE_XFT)
 
-if(LIB_fontconfig)
-   target_link_libraries(fltk ${LIB_fontconfig})
-endif(LIB_fontconfig)
-
 #######################################################################
-add_library(fltk_forms STATIC ${FLCPPFILES} ${FL_INCLUDEFILES})
+FL_ADD_LIBRARY(fltk_forms STATIC "${FLCPPFILES}")
 target_link_libraries(fltk_forms fltk)
-set_target_properties(fltk_forms
-   PROPERTIES CLEAN_DIRECT_OUTPUT 1
-)
-if(MSVC)
-   if(OPTION_LARGE_FILE)
-      set_target_properties(fltk_forms PROPERTIES LINK_FLAGS /LARGEADDRESSAWARE)
-   endif()
-   set_target_properties(fltk_forms
-      PROPERTIES
-         OUTPUT_NAME fltkforms
-         DEBUG_OUTPUT_NAME fltkformsd
-   )
-endif(MSVC)
 
 #######################################################################
-add_library(fltk_images STATIC ${IMGCPPFILES} ${FL_INCLUDEFILES})
+FL_ADD_LIBRARY(fltk_images STATIC "${IMGCPPFILES}")
 target_link_libraries(fltk_images fltk ${FLTK_PNG_LIBRARIES}
      ${FLTK_JPEG_LIBRARIES} ${FLTK_ZLIB_LIBRARIES})
-set_target_properties(fltk_images PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-if(MSVC)
-   if(OPTION_LARGE_FILE)
-      set_target_properties(fltk_images PROPERTIES LINK_FLAGS /LARGEADDRESSAWARE)
-   endif()
-   set_target_properties(fltk_images
-      PROPERTIES
-         OUTPUT_NAME fltkimages
-         DEBUG_OUTPUT_NAME fltkimagesd
-   )
-endif(MSVC)
 
-#######################################################################
-#install(TARGETS fltk fltk_forms fltk_images
-#   EXPORT fltk-install
-#   DESTINATION ${PREFIX_LIB}
-#)
+if(OPTION_USE_SYSTEM_LIBJPEG)
+    target_link_libraries(fltk_images ${FLTK_JPEG_LIBRARIES})
+else()
+    target_link_libraries(fltk_images fltk_jpeg)
+endif(OPTION_USE_SYSTEM_LIBJPEG)
+
+if(OPTION_USE_SYSTEM_ZLIB)
+    target_link_libraries(fltk_images ${FLTK_ZLIB_LIBRARIES})
+else()
+    target_link_libraries(fltk_images fltk_z)
+endif(OPTION_USE_SYSTEM_ZLIB)
+
+if(OPTION_USE_SYSTEM_LIBPNG)
+    target_link_libraries(fltk_images ${FLTK_PNG_LIBRARIES})
+else()
+    target_link_libraries(fltk_images fltk_png)
+endif(OPTION_USE_SYSTEM_LIBPNG)
 
 #######################################################################
 if(OPENGL_FOUND)
-   add_library(fltk_gl STATIC ${GLCPPFILES} ${FL_INCLUDEFILES})
+   FL_ADD_LIBRARY(fltk_gl STATIC "${GLCPPFILES}")
    target_link_libraries(fltk_gl fltk ${OPENGL_LIBRARIES})
-   set_target_properties(fltk_gl PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-   if(MSVC)
-      if(OPTION_LARGE_FILE)
-         set_target_properties(fltk_gl PROPERTIES LINK_FLAGS /LARGEADDRESSAWARE)
-      endif()
-      set_target_properties(fltk_gl
-         PROPERTIES
-            OUTPUT_NAME fltkgl
-            DEBUG_OUTPUT_NAME fltkgld
-      )
-   endif(MSVC)
-
-   #install(TARGETS fltk_gl
-   #  EXPORT fltk-install
-   #  DESTINATION ${PREFIX_LIB}
-   #)
 endif(OPENGL_FOUND)
 
 #######################################################################
@@ -318,28 +286,10 @@ endif(OPENGL_FOUND)
 if(OPTION_BUILD_SHARED_LIBS)
 
 #######################################################################
-add_library(fltk_SHARED SHARED ${CPPFILES} ${MMFILES} ${CFILES} ${FL_INCLUDEFILES})
-set_target_properties(fltk_SHARED
-   PROPERTIES CLEAN_DIRECT_OUTPUT 1
-   VERSION ${FLTK_VERSION_MAJOR}.${FLTK_VERSION_MINOR}
-   SOVERSION ${FLTK_VERSION_PATCH}
-)
-if(MSVC)
-   set_target_properties(fltk_SHARED
-      PROPERTIES
-         OUTPUT_NAME fltkdll
-         DEBUG_OUTPUT_NAME fltkdlld
-         COMPILE_DEFINITIONS "FL_DLL;FL_LIBRARY"
-   )
-   if(OPTION_LARGE_FILE)
-      set_target_properties(fltk_SHARED PROPERTIES LINK_FLAGS /LARGEADDRESSAWARE)
-   endif(OPTION_LARGE_FILE)
-else()
-   set_target_properties(fltk_SHARED PROPERTIES OUTPUT_NAME fltk)
-endif(MSVC)
+FL_ADD_LIBRARY(fltk SHARED "${CPPFILES};${MMFILES};${CFILES}")
 
 if(USE_THREADS)
-   target_link_libraries(fltk_SHARED ${CMAKE_THREAD_LIBS_INIT})
+   target_link_libraries(fltk_SHARED ${CMAKE_THREAD_LIBS_INIT} ${LIB_dl})
 endif(USE_THREADS)
 
 if(USE_X11)
@@ -351,7 +301,7 @@ if(WIN32)
 endif(WIN32)
 
 if(FLTK_HAVE_CAIRO)
-   target_link_libraries(fltk_SHARED fltk_cairo ${PKG_CAIRO_LIBRARIES})
+   target_link_libraries(fltk_SHARED fltk_cairo_SHARED ${PKG_CAIRO_LIBRARIES})
 ENDif(FLTK_HAVE_CAIRO)
 
 if(HAVE_XINERAMA)
@@ -360,99 +310,51 @@ endif(HAVE_XINERAMA)
 
 if(USE_XFT)
    target_link_libraries(fltk_SHARED ${X11_Xft_LIB})
+   if(LIB_fontconfig)
+      target_link_libraries(fltk_SHARED ${LIB_fontconfig})
+   endif(LIB_fontconfig)
 endif(USE_XFT)
 
-if(LIB_fontconfig)
-   target_link_libraries(fltk_SHARED ${LIB_fontconfig})
-endif(LIB_fontconfig)
-
 #######################################################################
-add_library(fltk_forms_SHARED SHARED ${FLCPPFILES})
-target_link_libraries(fltk_forms_SHARED fltk)
-set_target_properties(fltk_forms_SHARED
-   PROPERTIES CLEAN_DIRECT_OUTPUT 1
-   VERSION ${FLTK_VERSION_MAJOR}.${FLTK_VERSION_MINOR}
-   SOVERSION ${FLTK_VERSION_PATCH}
-)
-if(MSVC)
-   set_target_properties(fltk_forms_SHARED
-      PROPERTIES
-         OUTPUT_NAME fltkformsdll
-         DEBUG_OUTPUT_NAME fltkformsdlld
-         COMPILE_DEFINITIONS "FL_DLL;FL_LIBRARY"
-   )
-   if(OPTION_LARGE_FILE)
-      set_target_properties(fltk_forms_SHARED PROPERTIES LINK_FLAGS /LARGEADDRESSAWARE)
-   endif(OPTION_LARGE_FILE)
-else()
-   set_target_properties(fltk_forms_SHARED PROPERTIES OUTPUT_NAME fltk_forms)
-endif(MSVC)
+FL_ADD_LIBRARY(fltk_forms SHARED "${FLCPPFILES}")
+target_link_libraries(fltk_forms_SHARED fltk_SHARED)
 
 if(USE_THREADS)
-   target_link_libraries(fltk_SHARED ${CMAKE_THREAD_LIBS_INIT})
+   target_link_libraries(fltk_forms_SHARED ${CMAKE_THREAD_LIBS_INIT} ${LIB_dl})
 endif(USE_THREADS)
 
 if(USE_X11)
-   target_link_libraries(fltk_SHARED ${X11_LIBRARIES})
+   target_link_libraries(fltk_forms_SHARED ${X11_LIBRARIES})
 endif(USE_X11)
 
 #######################################################################
-add_library(fltk_images_SHARED SHARED ${IMGCPPFILES})
-target_link_libraries(fltk_images_SHARED fltk
-   ${FLTK_PNG_LIBRARIES} ${FLTK_JPEG_LIBRARIES} ${FLTK_ZLIB_LIBRARIES}
-)
-set_target_properties(fltk_images_SHARED
-   PROPERTIES CLEAN_DIRECT_OUTPUT 1
-   VERSION ${FLTK_VERSION_MAJOR}.${FLTK_VERSION_MINOR}
-   SOVERSION ${FLTK_VERSION_PATCH}
-)
-if(MSVC)
-   set_target_properties(fltk_images_SHARED
-      PROPERTIES
-         OUTPUT_NAME fltkimagesdll
-         DEBUG_OUTPUT_NAME fltkimagesdlld
-         COMPILE_DEFINITIONS "FL_DLL;FL_LIBRARY"
-   )
-   if(OPTION_LARGE_FILE)
-      set_target_properties(fltk_images_SHARED PROPERTIES LINK_FLAGS /LARGEADDRESSAWARE)
-   endif(OPTION_LARGE_FILE)
-else()
-   set_target_properties(fltk_images_SHARED PROPERTIES OUTPUT_NAME fltk_images)
-endif(MSVC)
+FL_ADD_LIBRARY(fltk_images SHARED "${IMGCPPFILES}")
+target_link_libraries(fltk_images_SHARED fltk_SHARED)
 
-#######################################################################
-install(TARGETS fltk_SHARED fltk_forms_SHARED fltk_images_SHARED
-   EXPORT fltk-install
-   DESTINATION ${PREFIX_LIB}
-)
+if(OPTION_USE_SYSTEM_LIBJPEG)
+    target_link_libraries(fltk_images_SHARED ${FLTK_JPEG_LIBRARIES})
+else()
+    target_link_libraries(fltk_images_SHARED fltk_jpeg_SHARED)
+endif(OPTION_USE_SYSTEM_LIBJPEG)
+
+if(OPTION_USE_SYSTEM_ZLIB)
+    target_link_libraries(fltk_images_SHARED ${FLTK_ZLIB_LIBRARIES})
+else()
+    target_link_libraries(fltk_images_SHARED fltk_z_SHARED)
+endif(OPTION_USE_SYSTEM_ZLIB)
+
+if(OPTION_USE_SYSTEM_LIBPNG)
+    target_link_libraries(fltk_images_SHARED ${FLTK_PNG_LIBRARIES})
+else()
+    target_link_libraries(fltk_images_SHARED fltk_png_SHARED)
+endif(OPTION_USE_SYSTEM_LIBPNG)
 
 #######################################################################
 if(OPENGL_FOUND)
-   add_library(fltk_gl_SHARED SHARED ${GLCPPFILES})
-   target_link_libraries(fltk_gl_SHARED fltk ${OPENGL_LIBRARIES})
-   set_target_properties(fltk_gl_SHARED
-      PROPERTIES CLEAN_DIRECT_OUTPUT 1
-      VERSION ${FLTK_VERSION_MAJOR}.${FLTK_VERSION_MINOR}
-      SOVERSION ${FLTK_VERSION_PATCH}
-   )
-   if(MSVC)
-      set_target_properties(fltk_gl_SHARED
-         PROPERTIES
-            OUTPUT_NAME fltkgldll
-            DEBUG_OUTPUT_NAME fltkgldlld
-            COMPILE_DEFINITIONS "FL_DLL;FL_LIBRARY"
-      )
-      if(OPTION_LARGE_FILE)
-         set_target_properties(fltk_gl_SHARED PROPERTIES LINK_FLAGS /LARGEADDRESSAWARE)
-      endif(OPTION_LARGE_FILE)
-   else()
-      set_target_properties(fltk_gl_SHARED PROPERTIES OUTPUT_NAME fltk_gl)
-   endif(MSVC)
-
-   install(TARGETS fltk_gl_SHARED
-      EXPORT fltk-install
-      DESTINATION ${PREFIX_LIB}
-   )
+   FL_ADD_LIBRARY(fltk_gl SHARED "${GLCPPFILES}")
+   target_link_libraries(fltk_gl_SHARED fltk_SHARED ${OPENGL_LIBRARIES})
 endif(OPENGL_FOUND)
 
+#######################################################################
 endif(OPTION_BUILD_SHARED_LIBS)
+#######################################################################

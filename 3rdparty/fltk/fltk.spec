@@ -26,7 +26,7 @@ Version: %{version}
 Release: %{release}
 License: LGPL
 Group: System Environment/Libraries
-Source: ftp://ftp.easysw.com/pub/fltk/1.3.2/fltk-1.3.2-source.tar.bz2
+Source: http://fltk.org/pub/fltk/1.3.3/fltk-1.3.3-source.tar.gz
 URL: http://www.fltk.org/
 Packager: FLTK Developer <fltk@fltk.org>
 # use BuildRoot so as not to disturb the version already installed

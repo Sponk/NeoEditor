@@ -1,4 +1,4 @@
-/* "$Id: utf8Wrap.c 9549 2012-05-26 22:51:07Z greg.ercolano $"
+/* "$Id: utf8Wrap.c 10248 2014-08-23 08:41:58Z cand $"
  *
  * Author: Jean-Marc Lienher ( http://oksid.ch )
  * Copyright 2000-2003 by O'ksi'D.
@@ -19,7 +19,7 @@
  */
 #if !defined(WIN32) && !defined(__APPLE__)
 
-#include "../../FL/Xutf8.h"
+#include "../Xutf8.h"
 #include <X11/Xlib.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -79,7 +79,7 @@ get_font_list(
   while (*ptr) {
     int l = 0, i = 0;
 
-    while(isspace(*ptr)) ptr++;
+    while(isspace((int)(unsigned char)*ptr)) ptr++;
     p = ptr;
     while (*ptr && *ptr != ',') { ptr++; l++; }
     if (l > 2) {
@@ -203,7 +203,7 @@ get_encodings(char	**font_name_list,
 /*********************************************************************/
 /** find the first font which matches the name and load it.	    **/
 /*********************************************************************/
-XFontStruct *
+static XFontStruct *
 find_best_font(Display  *dpy,
 	       char     **name) {
 
@@ -1039,5 +1039,5 @@ XFreeUtf8FontStruct(Display 	    *dpy,
 #endif /* X11 only */
 
 /*
- *  End of "$Id: utf8Wrap.c 9549 2012-05-26 22:51:07Z greg.ercolano $".
+ *  End of "$Id: utf8Wrap.c 10248 2014-08-23 08:41:58Z cand $".
  */

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H 9388 2012-04-23 20:12:06Z matt $"
+// "$Id: Fl_Widget.H 10289 2014-09-08 08:55:49Z cand $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
   \todo	typedef's fl_intptr_t and fl_uintptr_t should be documented.
 */
 #ifdef _WIN64
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__clang__)
 #include <stdint.h>
 #else
 #include <stddef.h>  // M$VC
@@ -171,6 +171,7 @@ protected:
         GROUP_RELATIVE  = 1<<16,  ///< position this widget relative to the parent group, not to the window
         COPIED_TOOLTIP  = 1<<17,  ///< the widget tooltip is internally copied, its destruction is handled by the widget
         FULLSCREEN      = 1<<18,  ///< a fullscreen window (Fl_Window)
+        MAC_USE_ACCENTS_MENU = 1<<19, ///< On the Mac OS platform, pressing and holding a key on the keyboard opens an accented-character menu window (Fl_Input_, Fl_Text_Editor)
         // (space for more flags)
         USERFLAG3       = 1<<29,  ///< reserved for 3rd party extensions
         USERFLAG2       = 1<<30,  ///< reserved for 3rd party extensions
@@ -776,6 +777,18 @@ public:
    */
   void clear_changed() {flags_ &= ~CHANGED;}
 
+  /** Marks the widget as inactive without sending events or changing focus.
+      This is mainly for specialized use, for normal cases you want deactivate().
+      \see deactivate()
+   */
+  void clear_active() {flags_ |= INACTIVE;}
+
+  /** Marks the widget as active without sending events or changing focus.
+      This is mainly for specialized use, for normal cases you want activate().
+      \see activate()
+   */
+  void set_active() {flags_ &= ~INACTIVE;}
+
   /** Gives the widget the keyboard focus.
       Tries to make this widget be the Fl::focus() widget, by first sending 
       it an FL_FOCUS event, and if it returns non-zero, setting 
@@ -915,15 +928,16 @@ public:
 
   /** Sets width ww and height hh accordingly with the label size.
       Labels with images will return w() and h() of the image.
+      
+      This calls fl_measure() internally. For more information about
+      the arguments \p ww and \p hh and word wrapping
+      \see fl_measure(const char*, int&, int&, int)
    */
   void measure_label(int& ww, int& hh) const {label_.measure(ww, hh);}
 
-  /** Returns a pointer to the primary Fl_Window widget.
-      \retval  NULL if no window is associated with this widget.  
-      \note for an Fl_Window widget, this returns its <I>parent</I> window 
-            (if any), not <I>this</I> window.
-   */
   Fl_Window* window() const ;
+  Fl_Window* top_window() const;
+  Fl_Window* top_window_offset(int& xoff, int& yoff) const;
 
   /** Returns an Fl_Group pointer if this widget is an Fl_Group.
 
@@ -976,6 +990,10 @@ public:
    */
   virtual class Fl_Gl_Window* as_gl_window() {return 0;}
   
+  /** Returns non zero if MAC_USE_ACCENTS_MENU flag is set, 0 otherwise. 
+   */
+  int use_accents_menu() { return flags() & MAC_USE_ACCENTS_MENU; }
+  
   /** For back compatibility only.
       \deprecated Use selection_color() instead.
   */
@@ -997,5 +1015,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H 9388 2012-04-23 20:12:06Z matt $".
+// End of "$Id: Fl_Widget.H 10289 2014-09-08 08:55:49Z cand $".
 //

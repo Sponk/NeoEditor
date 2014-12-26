@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $"
+// "$Id: fl_boxtype.cxx 10253 2014-08-23 09:27:30Z cand $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -32,14 +32,14 @@
 
 ////////////////////////////////////////////////////////////////
 
-static uchar active_ramp[24] = {
+static const uchar active_ramp[24] = {
   FL_GRAY_RAMP+0, FL_GRAY_RAMP+1, FL_GRAY_RAMP+2, FL_GRAY_RAMP+3,
   FL_GRAY_RAMP+4, FL_GRAY_RAMP+5, FL_GRAY_RAMP+6, FL_GRAY_RAMP+7,
   FL_GRAY_RAMP+8, FL_GRAY_RAMP+9, FL_GRAY_RAMP+10,FL_GRAY_RAMP+11,
   FL_GRAY_RAMP+12,FL_GRAY_RAMP+13,FL_GRAY_RAMP+14,FL_GRAY_RAMP+15,
   FL_GRAY_RAMP+16,FL_GRAY_RAMP+17,FL_GRAY_RAMP+18,FL_GRAY_RAMP+19,
   FL_GRAY_RAMP+20,FL_GRAY_RAMP+21,FL_GRAY_RAMP+22,FL_GRAY_RAMP+23};
-static uchar inactive_ramp[24] = {
+static const uchar inactive_ramp[24] = {
   43, 43, 44, 44,
   44, 45, 45, 46,
   46, 46, 47, 47,
@@ -54,7 +54,7 @@ static int draw_it_active = 1;
 */
 int Fl::draw_box_active() { return draw_it_active; }
 
-uchar *fl_gray_ramp() {return (draw_it_active?active_ramp:inactive_ramp)-'A';}
+const uchar *fl_gray_ramp() {return (draw_it_active?active_ramp:inactive_ramp)-'A';}
 
 /**
   Draws a series of line segments around the given box.
@@ -69,7 +69,7 @@ uchar *fl_gray_ramp() {return (draw_it_active?active_ramp:inactive_ramp)-'A';}
   \param[in] x, y, w, h position and size
 */
 void fl_frame(const char* s, int x, int y, int w, int h) {
-  uchar *g = fl_gray_ramp();
+  const uchar *g = fl_gray_ramp();
   if (h > 0 && w > 0) for (;*s;) {
     // draw top line:
     fl_color(g[(int)*s++]);
@@ -103,7 +103,7 @@ void fl_frame(const char* s, int x, int y, int w, int h) {
   \param[in] x, y, w, h position and size
 */
 void fl_frame2(const char* s, int x, int y, int w, int h) {
-  uchar *g = fl_gray_ramp();
+  const uchar *g = fl_gray_ramp();
   if (h > 0 && w > 0) for (;*s;) {
     // draw bottom line:
     fl_color(g[(int)*s++]);
@@ -416,5 +416,5 @@ void Fl_Widget::draw_box(Fl_Boxtype t, int X, int Y, int W, int H, Fl_Color c) c
 }
 
 //
-// End of "$Id: fl_boxtype.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $".
+// End of "$Id: fl_boxtype.cxx 10253 2014-08-23 09:27:30Z cand $".
 //

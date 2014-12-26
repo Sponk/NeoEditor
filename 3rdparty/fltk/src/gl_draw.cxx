@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $"
+// "$Id: gl_draw.cxx 10414 2014-10-30 09:18:45Z cand $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -24,6 +24,7 @@
 
 #include <FL/Fl.H>
 #include <FL/gl.h>
+#include <FL/gl_draw.H>
 #include <FL/x.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl_Device.H>
@@ -32,7 +33,7 @@
 #include <FL/fl_utf8.h>
 
 #if !defined(WIN32) && !defined(__APPLE__)
-#include <FL/Xutf8.h>
+#include "Xutf8.h"
 #endif
 
 #if USE_XFT
@@ -101,8 +102,9 @@ void  gl_font(int fontid, int size) {
 //http://developer.apple.com/mac/library/documentation/Carbon/Conceptual/Carbon64BitGuide/OtherAPIChanges/OtherAPIChanges.html
     short font, face, size;
     uchar fn[256];
-    fn[0]=strlen(fl_fontsize->q_name);
-    strcpy((char*)(fn+1), fl_fontsize->q_name);
+    const char *pname = Fl::get_font_name(fontid, NULL);
+    fn[0]=strlen(pname);
+    strcpy((char*)(fn+1), pname);
     GetFNum(fn, &font);
     face = 0;
     size = fl_fontsize->size;
@@ -472,6 +474,7 @@ int gl_texture_fifo::compute_texture(const char* str, int n)
   CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
   void *base = calloc(4*fifo[current].width, fifo[current].height);
   if (base == NULL) return -1;
+  CGContextRef save_gc = fl_gc;
   fl_gc = CGBitmapContextCreate(base, fifo[current].width, fifo[current].height, 8, fifo[current].width*4, lut, kCGImageAlphaPremultipliedLast);
   CGColorSpaceRelease(lut);
   fl_graphics_driver->font_descriptor(gl_fontsize);
@@ -487,7 +490,7 @@ int gl_texture_fifo::compute_texture(const char* str, int n)
   glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, fifo[current].width, fifo[current].height, 0,  GL_RGBA, GL_UNSIGNED_BYTE, base);
   glPopAttrib();
   CGContextRelease(fl_gc);
-  fl_gc = NULL;
+  fl_gc = save_gc;
   free(base);
   fifo[current].fdesc = gl_fontsize;
   return current;
@@ -567,5 +570,5 @@ void gl_texture_reset()
 #endif // HAVE_GL
 
 //
-// End of "$Id: gl_draw.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $".
+// End of "$Id: gl_draw.cxx 10414 2014-10-30 09:18:45Z cand $".
 //

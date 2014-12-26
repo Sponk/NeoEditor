@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.cmake.in 8864 2011-07-19 04:49:30Z greg.ercolano $"
+ * "$Id: configh.cmake.in 10196 2014-06-16 11:17:57Z ossman $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -106,6 +106,22 @@
  */
 
 #define USE_XDBE HAVE_XDBE
+
+/*
+ * HAVE_XFIXES:
+ *
+ * Do we have the X fixes extension?
+ */
+
+#cmakedefine01 HAVE_XFIXES
+
+/*
+ * HAVE_XCURSOR:
+ *
+ * Do we have the X cursor library?
+ */
+
+#cmakedefine01 HAVE_XCURSOR
 
 /*
  * __APPLE_QUARTZ__:
@@ -293,16 +309,6 @@
 #endif /* HAVE_LONG_LONG */
 
 /*
- * Do we have the strtoll() function?
- */
-
-#cmakedefine HAVE_STRTOLL @HAVE_STRTOLL@
-
-#ifndef HAVE_STRTOLL
-#  define strtoll(nptr,endptr,base) strtol((nptr), (endptr), (base))
-#endif /* !HAVE_STRTOLL */
-
-/*
  * Do we have the dlsym() function and header?
  */
 
@@ -310,5 +316,5 @@
 #cmakedefine HAVE_DLSYM @HAVE_DLSYM@
 
 /*
- * End of "$Id: configh.cmake.in 8864 2011-07-19 04:49:30Z greg.ercolano $".
+ * End of "$Id: configh.cmake.in 10196 2014-06-16 11:17:57Z ossman $".
  */
