@@ -98,6 +98,7 @@ int updatemin = -1;
 int update_thread(void* nothing)
 {
     MWindow * window = MWindow::getInstance();
+	NeoEngine::getInstance()->getGame()->begin();
 
     // time
     int frequency = 60;
@@ -197,6 +198,8 @@ int update_thread(void* nothing)
         fflush(stdout);
 	}
 
+	NeoEngine::getInstance()->getGame()->begin();
+
     return 0;
 }
 
@@ -284,8 +287,8 @@ int main(int argc, char **argv)
 			Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
 			maratis->loadProject(&embeddedProj, projName);
 			
-
-			engine->getGame()->begin();
+			// This needs to be done in the update thread
+			// engine->getGame()->begin();
 			projectFound = true;
 		}
 		else
@@ -305,7 +308,9 @@ int main(int argc, char **argv)
 					{
                         // Initialize GUI bindings
 						Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
-						engine->getGame()->begin();
+
+						// This needs to be done in the update thread
+						// engine->getGame()->begin();
 						projectFound = true;
 						break;
 					}

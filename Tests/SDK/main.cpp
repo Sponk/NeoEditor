@@ -134,6 +134,21 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, GuiSystem_test);
 
 LT_END_AUTO_TEST(GuiSystem_test);
 
+LT_BEGIN_AUTO_TEST(NeoTestSdk, Messaging_test);
+
+	Messenger* messenger = Messenger::getInstance();
+
+	messenger->addInbox("TestThread", 0);
+	LT_CHECK(messenger->getMessagesCount("TestThread") == 0);
+
+	messenger->sendMessage("TestMessage", 0, "TestThread", 0);
+	LT_ASSERT(messenger->getMessagesCount("TestThread") == 1);
+
+	Message msg = messenger->getNextMessage("TestThread");
+	LT_CHECK(msg.message == "TestMessage");
+
+LT_END_AUTO_TEST(Messaging_test);
+
 LT_BEGIN_TEST_ENV();
 	AUTORUN_TESTS();
 LT_END_TEST_ENV();

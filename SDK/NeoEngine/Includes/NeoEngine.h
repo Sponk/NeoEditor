@@ -150,6 +150,7 @@ class MaterialsAnimRef;
 #include "Scene.h"
 #include "Level.h"
 #include "NeoGame.h"
+#include "Messenger.h"
 
 namespace Neo
 {
