@@ -32,12 +32,18 @@ void Messenger::addInbox(const char* name, unsigned int id)
 	box.name = name;
 	box.id = id;
 
-	m_boxes[std::string(name)] = box;
+	waitForAccess();
+	m_boxes[name] = box;
+	finishAccess();
 }
 
 unsigned int Messenger::getMessagesCount(const char* name)
 {
-	return m_boxes[std::string(name)].messages.size();
+	waitForAccess();
+	unsigned int sz = m_boxes[name].messages.size();
+	finishAccess();
+
+	return sz;
 }
 
 void Messenger::sendMessage(const char* message, unsigned int messageId, const char* dest, unsigned int from)
@@ -47,13 +53,39 @@ void Messenger::sendMessage(const char* message, unsigned int messageId, const c
 	msg.messageId = messageId;
 	msg.sender = from;
 
+	waitForAccess();
 	m_boxes[dest].messages.push_back(msg);
+	finishAccess();
 }
 
 Message Messenger::getNextMessage(const char* threadName)
 {
+	waitForAccess();
 	Message msg = m_boxes[threadName].messages.front();
 	m_boxes[threadName].messages.pop_front();
+	finishAccess();
 
 	return msg;
+}
+
+void Messenger::waitForAccess()
+{
+	if(m_semaphore == NULL)
+	{
+		m_semaphore = MThreadManager::getInstance()->getNewSemaphore();
+		m_semaphore->Init(1);
+	}
+
+	m_semaphore->WaitAndLock();
+}
+
+void Messenger::finishAccess()
+{
+	if(m_semaphore == NULL)
+	{
+		m_semaphore = MThreadManager::getInstance()->getNewSemaphore();
+		m_semaphore->Init(1);
+	}
+
+	m_semaphore->Unlock();
 }

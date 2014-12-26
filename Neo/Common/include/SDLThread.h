@@ -98,6 +98,8 @@ public:
      * @return The thread ID.
      */
     int GetId();
+
+	MThread* getNew() { return new SDLThread(); }
 };
 
 /**
@@ -123,6 +125,11 @@ public:
 
 	static bool WaitAndLock(SDLSemaphore* semaphore);
 	static bool Unlock(SDLSemaphore* semaphore);
-};
+
+	bool WaitAndLock();
+	bool Unlock();
+
+	MSemaphore* getNew() { return new SDLSemaphore(); }
+ };
 }
 #endif

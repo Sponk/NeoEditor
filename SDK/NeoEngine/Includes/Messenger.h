@@ -26,6 +26,8 @@
 #include <map>
 #include <deque>
 
+#include <MCore.h>
+
 namespace Neo
 {
 
@@ -60,6 +62,10 @@ private:
 	};
 
 	std::map<std::string, Inbox> m_boxes;
+	MSemaphore* m_semaphore;
+
+	void waitForAccess();
+	void finishAccess();
 
 public:
 	static Messenger* getInstance() { static Messenger msg; return &msg; }

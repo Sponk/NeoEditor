@@ -5,6 +5,7 @@
 #include <WinContext.h>
 #include <PackageManagerNPK.h>
 #include <GuiSystem.h>
+#include <SDLThread.h>
 #include "liblittletest.hpp"
 
 using namespace Neo;
@@ -41,6 +42,11 @@ void set_up()
 
 	engine->getBehaviorManager()->addBehavior(Neo::LuaBehavior::getStaticName(), M_OBJECT3D, Neo::LuaBehavior::getNew);
 
+	// Init default thread
+	MThreadManager* mgr = MThreadManager::getInstance();
+	mgr->setTemplateSemaphore(new SDLSemaphore());
+	mgr->setTemplateThread(new SDLThread());
+
 	game->begin();
 }
 
@@ -54,6 +60,8 @@ void tear_down()
 	delete engine->getLevel();
 	delete engine->getScriptContext();
 	delete engine->getPackageManager();
+
+	MThreadManager::getInstance()->clear();
 
 	engine->setLevel(NULL);
 	engine->setScriptContext(NULL);

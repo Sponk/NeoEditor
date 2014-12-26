@@ -92,6 +92,12 @@ public:
      * @return The thread ID.
      */
     virtual int GetId() = 0;
+
+	/**
+	 * @brief Creates a new thread object. Should be overwritten by child classes.
+	 * @return
+	 */
+	virtual MThread* getNew() = 0;
 };
 
 /**
@@ -108,7 +114,7 @@ public:
 	~MSemaphore(){};
 
     /**
-     * @brief Initializes the SDL semaphore.
+	 * @brief Initializes the semaphore.
      * @param num Number of MSemaphoreWaitAndLock without unlocking will pass until the requesting thread will block. Usually set to 1.
      * @return Returns \b true on success and \b false on failure.
      */
@@ -122,6 +128,58 @@ public:
 	*/
 	static bool WaitAndLock(MSemaphore*);
 	static bool Unlock(MSemaphore*);
+
+	virtual bool WaitAndLock() = 0;
+	virtual bool Unlock() = 0;
+
+	/**
+	 * @brief Creates a new semaphore object.
+	 * @return The new object.
+	 */
+	virtual MSemaphore* getNew() = 0;
+
+};
+
+/**
+ * @brief The MThreadManager class allows you to register any subclass of MThread and MSemaphore to provide
+ * the implementation of all newly created thread objects.
+ */
+class MThreadManager
+{
+	MThread* m_templateThread;
+	MSemaphore* m_templateSemaphore;
+public:
+
+	static MThreadManager* getInstance() { static MThreadManager mgr; return &mgr; }
+
+	/**
+	 * @brief Deletes all templates.
+	 */
+	void clear() { SAFE_DELETE(m_templateThread); SAFE_DELETE(m_templateSemaphore); }
+
+	/**
+	 * @brief Sets the thread template object with the overwritten getNew method
+	 * @param thr The template.
+	 */
+	void setTemplateThread(MThread* thr) { m_templateThread = thr; }
+
+	/**
+	 * @brief Sets the semaphore template object with the overwritten getNew method
+	 * @param sem The template.
+	 */
+	void setTemplateSemaphore(MSemaphore* sem) { m_templateSemaphore = sem; }
+
+	/**
+	 * @brief Creates a new thread.
+	 * @return The new thread.
+	 */
+	MThread* getNewThread() { if(m_templateThread) return m_templateThread->getNew(); else return NULL; }
+
+	/**
+	 * @brief Creates a new semaphore.
+	 * @return The new semaphore.
+	 */
+	MSemaphore* getNewSemaphore() { if(m_templateSemaphore) return m_templateSemaphore->getNew(); else return NULL; }
 };
 
 #endif // MTHREAD_H

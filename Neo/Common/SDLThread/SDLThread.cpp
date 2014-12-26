@@ -135,21 +135,31 @@ bool SDLSemaphore::Init(int num)
 
 bool SDLSemaphore::WaitAndLock(SDLSemaphore* semaphore)
 {
-	if (semaphore->m_sdlSemaphore)
-    {
-		if (SDL_SemWait(semaphore->m_sdlSemaphore) == -1)
-			return false;
-
-        return true;
-    }
-
-    return false;
+	semaphore->WaitAndLock();
 }
 
 bool SDLSemaphore::Unlock(SDLSemaphore* semaphore)
 {
-	if (semaphore->m_sdlSemaphore)
-    {
-		return SDL_SemPost(semaphore->m_sdlSemaphore);
-    }
+	semaphore->Unlock();
+}
+
+bool SDLSemaphore::WaitAndLock()
+{
+	if (m_sdlSemaphore)
+	{
+		if (SDL_SemWait(m_sdlSemaphore) == -1)
+			return false;
+
+		return true;
+	}
+
+	return false;
+}
+
+bool SDLSemaphore::Unlock()
+{
+	if (m_sdlSemaphore)
+	{
+		return SDL_SemPost(m_sdlSemaphore);
+	}
 }

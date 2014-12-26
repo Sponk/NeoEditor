@@ -322,6 +322,11 @@ int main(int argc, char **argv)
     if(profiler)
         MLOG_INFO("Profiling enabled");
 
+	// Init default thread
+	MThreadManager* mgr = MThreadManager::getInstance();
+	mgr->setTemplateSemaphore(new SDLSemaphore());
+	mgr->setTemplateThread(new SDLThread());
+
     // create the update thread
     SDLThread updateThread;
 	Neo::Gui::GuiSystem* guiSystem = Neo::Gui::GuiSystem::getInstance();
