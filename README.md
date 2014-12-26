@@ -16,6 +16,10 @@ Terms and conditions
 This project is free software. Free not as in "free beer" but as in "free speech". That means that the four fundamental freedoms are granted to you as the user.
 
 See also: https://www.gnu.org/philosophy/free-sw.html
+
+You are allowed, free of charge, to use Neo to create commercial applications and games as you wish.
+No fees or hidden costs!
+
 Neo is free software licensed under the terms and conditions of the GNU GPL license: https://www.gnu.org/copyleft/gpl.html
 The player is also licensed under the terms and conditions of the GNU GPL license.
 The Neo engine is licensed under the terms and conditions of the zlib/libpng license: http://opensource.org/licenses/zlib-license.php
