@@ -59,6 +59,10 @@ Scene::~Scene()
 Object3d * Scene::addNewGroup(void)
 {
     Object3d * object = new Object3d();
+
+	object->setId(++m_ids);
+	m_handles[object->getId()] = object;
+
     m_objects.push_back(object);
     return object;
 }
@@ -69,7 +73,6 @@ Object3d * Scene::addNewGroup(const Object3d & object)
     m_objects.push_back(group);
 
 	group->setId(++m_ids);
-
 	m_handles[group->getId()] = group;
 
     group->setPosition(object.getTransformedPosition());

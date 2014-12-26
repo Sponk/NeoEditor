@@ -159,6 +159,18 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, Messaging_test);
 
 LT_END_AUTO_TEST(Messaging_test);
 
+LT_BEGIN_AUTO_TEST(NeoTestSdk, Object3dHandle_test);
+
+	Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
+	Object3d* obj = scene->addNewGroup();
+
+	LT_ASSERT(obj != NULL);
+
+	unsigned long handle = obj->getId();
+	LT_ASSERT(scene->getObjectByHandle(handle) == obj);
+
+LT_END_AUTO_TEST(Object3dHandle_test);
+
 LT_BEGIN_TEST_ENV();
 	AUTORUN_TESTS();
 LT_END_TEST_ENV();
