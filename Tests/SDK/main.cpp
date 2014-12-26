@@ -47,6 +47,8 @@ void set_up()
 	mgr->setTemplateSemaphore(new SDLSemaphore());
 	mgr->setTemplateThread(new SDLThread());
 
+	MWindow::getInstance()->createSemaphores();
+
 	game->begin();
 }
 
@@ -149,7 +151,7 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, Messaging_test);
 	messenger->addInbox("TestThread", 0);
 	LT_CHECK(messenger->getMessagesCount("TestThread") == 0);
 
-	messenger->sendMessage("TestMessage", 0, "TestThread", 0);
+	messenger->sendMessage("TestMessage", NULL, 0, "TestThread", "TestThread");
 	LT_ASSERT(messenger->getMessagesCount("TestThread") == 1);
 
 	Message msg = messenger->getNextMessage("TestThread");

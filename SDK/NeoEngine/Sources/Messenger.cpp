@@ -46,12 +46,13 @@ unsigned int Messenger::getMessagesCount(const char* name)
 	return sz;
 }
 
-void Messenger::sendMessage(const char* message, unsigned int messageId, const char* dest, unsigned int from)
+void Messenger::sendMessage(const char* message, unsigned int messageId, void* data, const char* dest, const char* from)
 {
 	Message msg;
 	msg.message = message;
 	msg.messageId = messageId;
 	msg.sender = from;
+	msg.data = data;
 
 	waitForAccess();
 	m_boxes[dest].messages.push_back(msg);
@@ -65,6 +66,27 @@ Message Messenger::getNextMessage(const char* threadName)
 	m_boxes[threadName].messages.pop_front();
 	finishAccess();
 
+	return msg;
+}
+
+Message Messenger::getNextMessage(const char* threadName, const char* sender)
+{
+	waitForAccess();
+	Inbox* box = &m_boxes[threadName];
+	Message msg;
+	msg.messageId = -1;
+
+	for(int i = 0; i < box->messages.size(); i++)
+	{
+		if((msg = box->messages[i]).sender == sender)
+		{
+			finishAccess();
+			box->messages.erase(box->messages.begin()+i);
+			return msg;
+		}
+	}
+
+	finishAccess();
 	return msg;
 }
 

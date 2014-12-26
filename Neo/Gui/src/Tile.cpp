@@ -35,8 +35,13 @@
 #include <Tile.h>
 #include <Render.h>
 #include <GuiSystem.h>
+#include <Messenger.h>
+#include <MWindow.h>
+#include <SDLThread.h>
 
 using namespace Neo::Gui;
+
+extern Neo::SDLSemaphore updateSemaphore;
 
 void TileSheet::loadImage(const char* path, unsigned int width, unsigned int height, unsigned int dist)
 {
@@ -44,13 +49,33 @@ void TileSheet::loadImage(const char* path, unsigned int width, unsigned int hei
 	GuiSystem* gui = GuiSystem::getInstance();
 	MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	Level* level = NeoEngine::getInstance()->getLevel();
+	MWindow* window = MWindow::getInstance();
 
 	MLOG_INFO("Loading image");
 	if(path != NULL)
 	{
 		char buf[256];
 		getGlobalFilename(buf, system->getWorkingDirectory(), path);
-		Neo::TextureRef* tex = level->loadTexture(buf);
+
+		window->getUpdateSemaphore()->Unlock();
+		Messenger* messenger = Messenger::getInstance();
+		messenger->sendMessage("loadTexture", 0, buf, "MainThread", "UpdateThread");
+
+		Message msg;
+
+		while(msg.messageId != 1)
+		{
+			while(messenger->getMessagesCount("UpdateThread") == 0)
+			{
+				MWindow::getInstance()->sleep(10);
+			}
+
+			msg = messenger->getNextMessage("UpdateThread", "MainThread");
+		}
+
+		window->getUpdateSemaphore()->WaitAndLock();
+
+		Neo::TextureRef* tex = (Neo::TextureRef*) msg.data;
 		m_image = tex->getTextureId();
 
 		m_tileWidth = width;

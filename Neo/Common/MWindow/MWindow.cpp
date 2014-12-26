@@ -743,6 +743,16 @@ void MWindow::swapBuffer(void)
 	SDL_GL_SwapWindow(g_window);
 }
 
+void MWindow::createSemaphores()
+{
+	MThreadManager* mgr = MThreadManager::getInstance();
+	updateSemaphore = mgr->getNewSemaphore();
+	graphicsSemaphore = mgr->getNewSemaphore();
+
+	updateSemaphore->Init(1);
+	graphicsSemaphore->Init(1);
+}
+
 bool MWindow::create(const char * title, unsigned int width, unsigned int height, int colorBits, bool fullscreen)
 {
 	m_width = width;

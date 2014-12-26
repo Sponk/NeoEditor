@@ -98,7 +98,13 @@ int updatemin = -1;
 int update_thread(void* nothing)
 {
     MWindow * window = MWindow::getInstance();
+
+	Messenger* messenger = Messenger::getInstance();
+	messenger->addInbox("MainThread", 0);
+
+	window->getUpdateSemaphore()->WaitAndLock();
 	NeoEngine::getInstance()->getGame()->begin();
+	window->getUpdateSemaphore()->Unlock();
 
     // time
     int frequency = 60;
@@ -112,7 +118,7 @@ int update_thread(void* nothing)
         NeoEngine::getInstance()->getInputContext()->flush();
         window->onEvents();
 
-        SDLSemaphore::WaitAndLock(&updateSemaphore);
+		window->getUpdateSemaphore()->WaitAndLock();
         if(window->getFocus())
         {
             // compute target tick
@@ -152,7 +158,7 @@ int update_thread(void* nothing)
 					}
 				}
 
-                SDLSemaphore::Unlock(&updateSemaphore);
+				window->getUpdateSemaphore()->Unlock();
                 window->sleep(sleep);
 
                 continue;
@@ -186,19 +192,19 @@ int update_thread(void* nothing)
 				}
             }
 
-            SDLSemaphore::Unlock(&updateSemaphore);
+			window->getUpdateSemaphore()->Unlock();
             window->sleep(sleep);
         }
         else
         {
-			SDLSemaphore::Unlock(&updateSemaphore);
+			window->getUpdateSemaphore()->Unlock();
 			window->sleep(100);
         }
 
         fflush(stdout);
 	}
 
-	NeoEngine::getInstance()->getGame()->begin();
+	NeoEngine::getInstance()->getGame()->end();
 
     return 0;
 }
@@ -327,26 +333,44 @@ int main(int argc, char **argv)
 	mgr->setTemplateSemaphore(new SDLSemaphore());
 	mgr->setTemplateThread(new SDLThread());
 
+	window->createSemaphores();
+
+	Messenger* messenger = Messenger::getInstance();
+	messenger->addInbox("MainThread", 0);
+
     // create the update thread
     SDLThread updateThread;
 	Neo::Gui::GuiSystem* guiSystem = Neo::Gui::GuiSystem::getInstance();
 
-    // Init semaphore
-	updateSemaphore.Init(1);
-    updateThread.Start(update_thread, "Update", NULL);
+	// Init thread
+	updateThread.Start(update_thread, "Update", NULL);
 
     bool isActive = true;
     // on events
     while(isActive)
     {
-		SDLSemaphore::WaitAndLock(&updateSemaphore);
+		window->getUpdateSemaphore()->WaitAndLock();
         window->onWindowEvents();
+
+		// Handle all messages
+		while(messenger->getMessagesCount("MainThread") != 0)
+		{
+			Message msg = messenger->getNextMessage("MainThread");
+
+			// loadTexture has ID 1
+			if(msg.message == "loadTexture")
+			{
+				TextureRef* tex = engine->getLevel()->loadTexture((const char*) msg.data);
+				messenger->sendMessage("Done.", 1, (void*) tex, msg.sender.c_str(), "MainThread");
+			}
+		}
+
 		//MLOG_INFO("DRAW");
 
         if(!isActive)
         {
             engine->getGame()->end();
-			SDLSemaphore::Unlock(&updateSemaphore);
+			window->getUpdateSemaphore()->Unlock();
 			break;
         }
 
@@ -375,7 +399,7 @@ int main(int argc, char **argv)
         {
             draw();
 			guiSystem->draw();
-            SDLSemaphore::Unlock(&updateSemaphore);
+			window->getUpdateSemaphore()->Unlock();
             window->sleep(100);
 			continue;
         }
@@ -384,8 +408,7 @@ int main(int argc, char **argv)
 
         // update postponed requests
         NeoEngine::getInstance()->updateRequests();
-
-		SDLSemaphore::Unlock(&updateSemaphore);
+		window->getUpdateSemaphore()->Unlock();
 
         window->sleep(5);
         //window->sleep(0.001); // 1 mili sec seems to slow down on some machines...

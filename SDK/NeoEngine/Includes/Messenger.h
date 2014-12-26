@@ -22,6 +22,9 @@
 //
 //========================================================================
 
+#ifndef __MESSENGER_H__
+#define __MESSENGER_H__
+
 #include <string>
 #include <map>
 #include <deque>
@@ -40,8 +43,9 @@ namespace Neo
 struct Message
 {
 	std::string message;
-	unsigned int sender;
+	std::string sender;
 	unsigned int messageId;
+	void* data;
 };
 
 /**
@@ -91,10 +95,11 @@ public:
 	 *
 	 * @param message A string containing the message.
 	 * @param messageId The messageId (can be used to send simple signals)
+	 * @param data A pointer to some sort of data.
 	 * @param dest The name of the receiver.
 	 * @param from The ID of the sender.
 	 */
-	void sendMessage(const char* message, unsigned int messageId, const char* dest, unsigned int from);
+	void sendMessage(const char* message, unsigned int messageId, void* data, const char* dest, const char* from);
 
 	/**
 	 * @brief Returns the next message in the message queue.
@@ -103,5 +108,16 @@ public:
 	 * @return The next message.
 	 */
 	Message getNextMessage(const char* threadName);
+
+	/**
+	 * @brief Returns the next message from the given sender in the message queue.
+	 *
+	 * @param threadName The thread name to retrieve the message for.
+	 * @param sender The sender to retrieve the message from.
+	 * @return The next message.
+	 */
+	Message getNextMessage(const char* threadName, const char* sender);
 };
 }
+
+#endif

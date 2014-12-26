@@ -33,6 +33,7 @@
 #define _M_WINDOW_H
 
 #include <MWinEvents.h>
+#include <MCore.h>
 
 #ifndef EMSCRIPTEN
 	#include <SDL_joystick.h>
@@ -165,6 +166,15 @@ public:
     // messagebox
     void messagebox(const char* content, const char* title);
     void executeDetached(const char *path, const char *args, bool killParent);
+
+	MSemaphore* getUpdateSemaphore() { return updateSemaphore; }
+	MSemaphore* getGraphicsSemaphore() { return graphicsSemaphore; }
+
+	void createSemaphores();
+
+private:
+	MSemaphore* updateSemaphore;
+	MSemaphore* graphicsSemaphore;
 };
 
 #else

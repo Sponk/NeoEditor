@@ -39,6 +39,7 @@
 #include <FL/Fl.H>
 #include "FLUID/Translator.h"
 #include <SDL.h>
+#include <SDLThread.h>
 
 #ifdef _WIN32
     #include <windows.h>
@@ -578,6 +579,13 @@ int main(int argc, char **argv)
     // Init the engine
     NeoEngine * engine = NeoEngine::getInstance();
     Maratis * maratis = Maratis::getInstance();
+
+	// Init default thread
+	MThreadManager* mgr = MThreadManager::getInstance();
+	mgr->setTemplateSemaphore(new SDLSemaphore());
+	mgr->setTemplateThread(new SDLThread());
+
+	mwindow->createSemaphores();
 
     // Load all plugins (TODO: Search in user home too!)
     loadPluginsFrom(rep);
