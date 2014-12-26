@@ -95,15 +95,15 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, LuaBehavior_test);
 	((MString*) var.getPointer())->set("test.lua");
 	int num = b->getVariablesNumber();
 
-	LT_ASSERT(num == 3);
+	LT_ASSERT_EQ(num, 3);
 
 	var = b->getVariable(0);
-	LT_ASSERT(var.getType() == M_VARIABLE_STRING);
+	LT_ASSERT_EQ(var.getType(), M_VARIABLE_STRING);
 
     var = b->getVariable(1);
-    LT_ASSERT(var.getType() == M_VARIABLE_FLOAT);
+	LT_ASSERT_EQ(var.getType(), M_VARIABLE_FLOAT);
 
-    LT_ASSERT(compare_float(*((float*)var.getPointer()), 123.123));
+	LT_ASSERT(compare_float(*((float*)var.getPointer()), 123.123));
 
 LT_END_AUTO_TEST(LuaBehavior_test);
 
@@ -114,7 +114,7 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, LuaBehaviorNonExistantScript_test);
 	Object3d* object = engine->getLevel()->getCurrentScene()->addNewLight();
 	Neo::LuaBehavior* b = (Neo::LuaBehavior*) engine->getBehaviorManager()->getBehaviorByName("LuaScript")->getNewBehavior(object);
 	NeoVariable var = b->getVariable(0);
-	LT_ASSERT(var.getType() == M_VARIABLE_STRING);
+	LT_ASSERT_EQ(var.getType(), M_VARIABLE_STRING);
 
 	((MString*) var.getPointer())->set("does-not-exist.lua");
 	b->update();
@@ -139,7 +139,7 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, GuiSystem_test);
 
     for(int i = 1; i < CANVAS_TEST_SIZE; i++)
     {
-        LT_CHECK(gui->getCanvas(i)->getLayer() == i-1);
+		LT_CHECK_EQ(gui->getCanvas(i)->getLayer(), i-1);
     }
 
 LT_END_AUTO_TEST(GuiSystem_test);
@@ -149,13 +149,13 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, Messaging_test);
 	Messenger* messenger = Messenger::getInstance();
 
 	messenger->addInbox("TestThread", 0);
-	LT_CHECK(messenger->getMessagesCount("TestThread") == 0);
+	LT_CHECK_EQ(messenger->getMessagesCount("TestThread"), 0);
 
 	messenger->sendMessage("TestMessage", NULL, 0, "TestThread", "TestThread");
-	LT_ASSERT(messenger->getMessagesCount("TestThread") == 1);
+	LT_ASSERT_EQ(messenger->getMessagesCount("TestThread"), 1);
 
 	Message msg = messenger->getNextMessage("TestThread");
-	LT_CHECK(msg.message == "TestMessage");
+	LT_CHECK_EQ(msg.message, "TestMessage");
 
 LT_END_AUTO_TEST(Messaging_test);
 
@@ -167,7 +167,7 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, Object3dHandle_test);
 	LT_ASSERT(obj != NULL);
 
 	unsigned long handle = obj->getId();
-	LT_ASSERT(scene->getObjectByHandle(handle) == obj);
+	LT_ASSERT_EQ(scene->getObjectByHandle(handle), obj);
 
 LT_END_AUTO_TEST(Object3dHandle_test);
 
