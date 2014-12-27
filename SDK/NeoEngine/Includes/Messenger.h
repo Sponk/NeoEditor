@@ -29,8 +29,6 @@
 #include <map>
 #include <deque>
 
-#include <MCore.h>
-
 namespace Neo
 {
 
@@ -54,7 +52,7 @@ struct Message
  * You can create a new inbox for your thread and request messages from it.
  * This class also handles sending messages to other threads as well.
  */
-class Messenger
+class M_ENGINE_EXPORT Messenger
 {
 private:
 	struct Inbox

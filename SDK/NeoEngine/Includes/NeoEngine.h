@@ -90,6 +90,7 @@ class TextureRef;
 class ArmatureAnimRef;
 class TexturesAnimRef;
 class MaterialsAnimRef;
+class Messenger;
 }
 
 #include <MCore.h>
