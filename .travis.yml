@@ -8,6 +8,4 @@ branches:
   only:
     - development
 
-script: mkdir ../build && cd ../build && cmake ../NeoEditor && make
-  - make package
-  - make test
+script: mkdir ../build && cd ../build && cmake ../NeoEditor && make && make package && make test
