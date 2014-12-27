@@ -33,9 +33,9 @@ if(HAVE_XINERAMA)
    target_link_libraries(fluid ${X11_Xinerama_LIB})
 endif(HAVE_XINERAMA)
 
-install(TARGETS fluid
-    EXPORT FLTK-Targets
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    )
+#install(TARGETS fluid
+#    EXPORT FLTK-Targets
+#    RUNTIME DESTINATION bin
+#    LIBRARY DESTINATION lib
+#    ARCHIVE DESTINATION lib
+#    )
