@@ -40,6 +40,7 @@
 #include <SDLThread.h>
 
 using namespace Neo::Gui;
+using namespace Neo;
 
 extern Neo::SDLSemaphore updateSemaphore;
 

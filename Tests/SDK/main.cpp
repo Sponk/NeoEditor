@@ -8,6 +8,10 @@
 #include <SDLThread.h>
 #include "liblittletest.hpp"
 
+#ifdef main
+#undef main
+#endif
+
 using namespace Neo;
 using namespace Gui;
 

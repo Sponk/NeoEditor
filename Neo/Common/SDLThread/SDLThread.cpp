@@ -135,12 +135,12 @@ bool SDLSemaphore::Init(int num)
 
 bool SDLSemaphore::WaitAndLock(SDLSemaphore* semaphore)
 {
-	semaphore->WaitAndLock();
+	return semaphore->WaitAndLock();
 }
 
 bool SDLSemaphore::Unlock(SDLSemaphore* semaphore)
 {
-	semaphore->Unlock();
+	return semaphore->Unlock();
 }
 
 bool SDLSemaphore::WaitAndLock()
