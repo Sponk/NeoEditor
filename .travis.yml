@@ -9,3 +9,6 @@ branches:
     - development
 
 script: mkdir ../build && cd ../build && cmake ../NeoEditor && make && make package && make test
+
+notifications:
+  irc: "chat.freenode.net#neo3d"
