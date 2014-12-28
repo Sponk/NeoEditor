@@ -52,7 +52,16 @@ int Client::client_thread(void *data)
 
 				BitStream out;
 				out.Write((MessageID) msg.messageId);
-				out.Write(msg.message.c_str());
+				writeString(&out, msg.message.c_str());
+
+				std::vector<NeoVariable>* variables = (std::vector<NeoVariable>*) msg.data;
+				if(variables)
+				{
+					for(int i = 0; i < variables->size(); i++)
+					{
+						writeVariable(&out, variables->at(i));
+					}
+				}
 
 				peer->Send(&out, HIGH_PRIORITY, RELIABLE_ORDERED, 0, serverAddress, false);
 			}

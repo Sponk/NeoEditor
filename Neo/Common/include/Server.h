@@ -16,7 +16,7 @@ class Server
 {
 private:
 	std::vector<Client> m_clients;
-	std::map<std::string, void (*)()> m_rpcFunctions;
+	std::map<std::string, void (*)(RakNet::BitStream*)> m_rpcFunctions;
 	MThread* m_serverThread;
 
 protected:
@@ -31,7 +31,7 @@ public:
 	Server() : m_serverThread(NULL) {}
 	void start(unsigned int maxClients, unsigned int port);
 
-	void addRPCFunction(const char* name, void (*func)()) {m_rpcFunctions[name] = func; }
+	void addRPCFunction(const char* name, void (*func)(RakNet::BitStream*)) {m_rpcFunctions[name] = func; }
 };
 }
 

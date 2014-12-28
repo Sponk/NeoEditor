@@ -8,6 +8,7 @@
 #include <SDLThread.h>
 #include <Server.h>
 #include <Client.h>
+#include <NetworkUtils.h>
 #include <BulletContext.h>
 #include "liblittletest.hpp"
 
@@ -180,9 +181,15 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, Object3dHandle_test);
 
 LT_END_AUTO_TEST(Object3dHandle_test);
 
-void testFunction()
+void testFunction(RakNet::BitStream* in)
 {
 	MLOG_INFO("RPC call!!");
+	NeoVariable arg1 = readNextArgument(in);
+
+	if(arg1.getPointer() && arg1.getType() == M_VARIABLE_STRING)
+	{
+		MLOG_INFO("Got argument: " << ((MString*)arg1.getPointer())->getSafeString());
+	}
 }
 
 LT_BEGIN_AUTO_TEST(NeoTestSdk, Networking_test);
@@ -202,9 +209,12 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, Networking_test);
 
 	window->sleep(200);
 
-	Messenger::getInstance()->sendMessage("testFunction", ID_RPC_MESSAGE, NULL, "ClientThread", "MainThread");
+	std::vector<NeoVariable> variables;
+	variables.push_back(NeoVariable("Test", new MString("Hello World!"), M_VARIABLE_STRING));
 
-	window->sleep(5000);
+	Messenger::getInstance()->sendMessage("testFunction", ID_RPC_MESSAGE, &variables, "ClientThread", "MainThread");
+
+	window->sleep(1000);
 	game->end();
 
 LT_END_AUTO_TEST(Networking_test);

@@ -1,6 +1,7 @@
 #include <Server.h>
 #include <MessageIdentifiers.h>
 #include <BitStream.h>
+#include <NetworkUtils.h>
 
 using namespace Neo;
 using namespace RakNet;
@@ -40,14 +41,24 @@ int Server::server_thread(void *data)
 
 						BitStream in(packet->data, packet->length, false);
 						in.IgnoreBytes(sizeof(MessageID));
-						in.Read(messageStr);
+
+						switch(in.GetData()[in.GetReadOffset()/8])
+						{
+							case ID_STRING:
+									in.IgnoreBytes(sizeof(ARGUMENT_TYPE));
+									in.Read(messageStr);
+								break;
+						}
+
+						if(messageStr.IsEmpty())
+							break;
 
 						MLOG_INFO("RPC-Request from " << packet->systemAddress.ToString(true, ':'));
 
-						void (*func)() = server->m_rpcFunctions[messageStr.C_String()];
+						void (*func)(RakNet::BitStream*) = server->m_rpcFunctions[messageStr.C_String()];
 
 						if(func)
-							((void (*)()) func)();
+							func(&in);
 						else
 							MLOG_ERROR("Requested call does not exitst!");
 
