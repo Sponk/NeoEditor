@@ -144,7 +144,7 @@ public:
  * @brief The MThreadManager class allows you to register any subclass of MThread and MSemaphore to provide
  * the implementation of all newly created thread objects.
  */
-class MThreadManager
+class M_CORE_EXPORT MThreadManager
 {
 	MThread* m_templateThread;
 	MSemaphore* m_templateSemaphore;
