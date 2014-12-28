@@ -6,6 +6,9 @@
 #include <PackageManagerNPK.h>
 #include <GuiSystem.h>
 #include <SDLThread.h>
+#include <Server.h>
+#include <Client.h>
+#include <BulletContext.h>
 #include "liblittletest.hpp"
 
 #ifdef main
@@ -32,6 +35,7 @@ void set_up()
 	Level* level = new Level();
 	MSystemContext* context = (MSystemContext*) new Neo::MWinContext();
 	MPackageManager* pmanager = new Neo::MPackageManagerNPK;
+	Neo::BulletContext* physcontext = new Neo::BulletContext();
 
 	pmanager->init();
 
@@ -43,6 +47,7 @@ void set_up()
 	engine->setSystemContext(context);
 	engine->setGame(game);
 	engine->setPackageManager(pmanager);
+	engine->setPhysicsContext(physcontext);
 
 	engine->getBehaviorManager()->addBehavior(Neo::LuaBehavior::getStaticName(), M_OBJECT3D, Neo::LuaBehavior::getNew);
 
@@ -174,6 +179,35 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, Object3dHandle_test);
 	LT_ASSERT_EQ(scene->getObjectByHandle(handle), obj);
 
 LT_END_AUTO_TEST(Object3dHandle_test);
+
+void testFunction()
+{
+	MLOG_INFO("RPC call!!");
+}
+
+LT_BEGIN_AUTO_TEST(NeoTestSdk, Networking_test);
+
+	NeoGame* game = NeoEngine::getInstance()->getGame();
+	MWindow* window = MWindow::getInstance();
+
+	game->begin();
+
+	Server server;
+	Client client;
+
+	server.addRPCFunction("testFunction", testFunction);
+
+	server.start(10, 60001);
+	client.start("127.0.0.1", 60001);
+
+	window->sleep(200);
+
+	Messenger::getInstance()->sendMessage("testFunction", ID_RPC_MESSAGE, NULL, "ClientThread", "MainThread");
+
+	window->sleep(5000);
+	game->end();
+
+LT_END_AUTO_TEST(Networking_test);
 
 LT_BEGIN_TEST_ENV();
 	AUTORUN_TESTS();
