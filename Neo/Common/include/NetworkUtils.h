@@ -24,4 +24,6 @@ void writeVariable(RakNet::BitStream* bs, Neo::NeoVariable var);
 
 Neo::NeoVariable readNextArgument(RakNet::BitStream* bs);
 
+void registerNetworkingScriptAPI(MScriptContext* script);
+
 #endif

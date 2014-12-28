@@ -1,6 +1,10 @@
 #include <ScriptApi.h>
 #include <MWindow.h>
 
+#ifdef USE_NETWORKING
+#include <NetworkUtils.h>
+#endif
+
 using namespace Neo;
 
 char g_currentDirectory[256] = "";
@@ -4784,4 +4788,7 @@ void Neo::bindLuaApi(MScriptContext* context)
 	context->addFunction( "getWindowScale", getWindowScale);
 	context->addFunction( "getSystemTick",	getSystemTick);
 	context->addFunction( "quit",			quit);
+
+	// Register networking functionality
+	registerNetworkingScriptAPI(context);
 }

@@ -88,7 +88,7 @@ int Client::client_thread(void *data)
 					break;
 
 				// RPC result
-				case ID_RPC_MESSAGE:
+				case 1001:
 						MLOG_INFO("RPC-Result!");
 					break;
 			}

@@ -200,12 +200,12 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, Networking_test);
 	game->begin();
 
 	Server server;
-	Client client;
+	Server client;
 
 	server.addRPCFunction("testFunction", testFunction);
 
-	server.start(10, 60001);
-	client.start("127.0.0.1", 60001);
+	server.startServer(10, 60001);
+	client.startClient("127.0.0.1", 60001);
 
 	window->sleep(200);
 

@@ -11,11 +11,6 @@
 namespace Neo
 {
 
-enum NetworkMessages
-{
-	ID_RPC_MESSAGE = ID_USER_PACKET_ENUM+1
-};
-
 class Client
 {
 private:

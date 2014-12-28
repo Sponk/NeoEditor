@@ -44,3 +44,8 @@ void writeVariable(RakNet::BitStream* bs, Neo::NeoVariable var)
 			break;
 	}
 }
+
+void registerNetworkingScriptAPI(MScriptContext* script)
+{
+
+}
