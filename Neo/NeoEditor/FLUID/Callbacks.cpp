@@ -840,7 +840,7 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
             window.object_occluder_button->value(entity->isOccluder());
         }
 
-        MPhysicsProperties* phys = entity->getPhysicsProperties();
+        PhysicsProperties* phys = entity->getPhysicsProperties();
 
         if(phys)
         {
@@ -1366,7 +1366,7 @@ void edit_shape_callback(Fl_Menu_* menu, long type)
     if(!entity || !entity->getPhysicsProperties())
         return;
 
-    entity->getPhysicsProperties()->setCollisionShape((M_COLLISION_SHAPE_TYPE)type);
+    entity->getPhysicsProperties()->setCollisionShape((COLLISION_SHAPE_TYPE)type);
 }
 
 void edit_object_chk_btn(Fl_Check_Button*, void*)
@@ -1380,7 +1380,7 @@ void edit_object_chk_btn(Fl_Check_Button*, void*)
 	entity->enableShadow(window.object_shadow_button->value());
     entity->enableOccluder(window.object_occluder_button->value());
 
-    MPhysicsProperties* phys = entity->getPhysicsProperties();
+    PhysicsProperties* phys = entity->getPhysicsProperties();
 
     if(phys && window.object_physics_button->value())
         phys->setGhost(window.object_ghost_button->value());
@@ -1404,7 +1404,7 @@ void edit_object_properties(Fl_Value_Input*, void*)
     if(!entity)
         return;
 
-    MPhysicsProperties* phys = entity->getPhysicsProperties();
+    PhysicsProperties* phys = entity->getPhysicsProperties();
 
     if(!phys)
         return;
@@ -1583,7 +1583,7 @@ void text_alignment_callback(Fl_Menu_*, long value)
         return;
     }
 
-    text->setAlign((M_ALIGN_MODES) value);
+    text->setAlign((TEXT_ALIGN_MODES) value);
 }
 
 void choose_text_color(Fl_Button*, void*)

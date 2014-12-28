@@ -87,26 +87,26 @@ bool readFloatValues(TiXmlElement * node, const char * name, float * vector, uns
 	return false;
 }
 
-void readPhysics(TiXmlElement * node, MPhysicsProperties * physicsProperties)
+void readPhysics(TiXmlElement * node, PhysicsProperties * physicsProperties)
 {
 	// shape
 	const char * str = node->Attribute("shape");
 	if(str)
 	{
 		if(strcmp(str, "Box") == 0)
-			physicsProperties->setCollisionShape(M_COLLISION_SHAPE_BOX);
+			physicsProperties->setCollisionShape(COLLISION_SHAPE_BOX);
 		if(strcmp(str, "Sphere") == 0)
-			physicsProperties->setCollisionShape(M_COLLISION_SHAPE_SPHERE);
+			physicsProperties->setCollisionShape(COLLISION_SHAPE_SPHERE);
 		if(strcmp(str, "Cone") == 0)
-			physicsProperties->setCollisionShape(M_COLLISION_SHAPE_CONE);
+			physicsProperties->setCollisionShape(COLLISION_SHAPE_CONE);
 		if(strcmp(str, "Capsule") == 0)
-			physicsProperties->setCollisionShape(M_COLLISION_SHAPE_CAPSULE);
+			physicsProperties->setCollisionShape(COLLISION_SHAPE_CAPSULE);
 		if(strcmp(str, "Cylinder") == 0)
-			physicsProperties->setCollisionShape(M_COLLISION_SHAPE_CYLINDER);
+			physicsProperties->setCollisionShape(COLLISION_SHAPE_CYLINDER);
 		if(strcmp(str, "ConvexHull") == 0)
-			physicsProperties->setCollisionShape(M_COLLISION_SHAPE_CONVEX_HULL);
+			physicsProperties->setCollisionShape(COLLISION_SHAPE_CONVEX_HULL);
 		if(strcmp(str, "TriangleMesh") == 0)
-			physicsProperties->setCollisionShape(M_COLLISION_SHAPE_TRIANGLE_MESH);
+			physicsProperties->setCollisionShape(COLLISION_SHAPE_TRIANGLE_MESH);
 	}
 
 	// ghost
@@ -150,7 +150,7 @@ void readPhysics(TiXmlElement * node, MPhysicsProperties * physicsProperties)
 		physicsProperties->setLinearFactor(linearFactor);
 }
 
-void readConstraint(TiXmlElement * node, MPhysicsConstraint * constraint)
+void readConstraint(TiXmlElement * node, PhysicsConstraint * constraint)
 {
 	// parent
 	const char * str = node->Attribute("parent");
@@ -250,11 +250,11 @@ void readTextProperties(TiXmlElement * node, OText * text)
 	if(align)
 	{
 		if(strcmp(align, "Left") == 0)
-			text->setAlign(M_ALIGN_LEFT);
+			text->setAlign(TEXT_ALIGN_LEFT);
 		else if(strcmp(align, "Right") == 0)
-			text->setAlign(M_ALIGN_RIGHT);
+			text->setAlign(TEXT_ALIGN_RIGHT);
 		else if(strcmp(align, "Center") == 0)
-			text->setAlign(M_ALIGN_CENTER);
+			text->setAlign(TEXT_ALIGN_CENTER);
 	}
 
 	// color 
@@ -779,14 +779,14 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 			TiXmlElement * physicsNode = entityNode->FirstChildElement("physics");
 			if(physicsNode)
 			{
-				MPhysicsProperties * physicsProperties = entity->createPhysicsProperties();
+				PhysicsProperties * physicsProperties = entity->createPhysicsProperties();
 				readPhysics(physicsNode, physicsProperties);
 				
 				// constraint
 				TiXmlElement * constraintNode = entityNode->FirstChildElement("constraint");
 				if(constraintNode)
 				{
-					MPhysicsConstraint * constraint = physicsProperties->createConstraint();
+					PhysicsConstraint * constraint = physicsProperties->createConstraint();
 					readConstraint(constraintNode, constraint);
 				}
 			}

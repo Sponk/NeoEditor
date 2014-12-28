@@ -34,11 +34,11 @@
 namespace Neo
 {
 // align modes
-enum M_ALIGN_MODES
+enum TEXT_ALIGN_MODES
 {
-	M_ALIGN_LEFT = 0,
-	M_ALIGN_RIGHT,
-	M_ALIGN_CENTER
+	TEXT_ALIGN_LEFT = 0,
+	TEXT_ALIGN_RIGHT,
+	TEXT_ALIGN_CENTER
 };
 
 // MOText
@@ -62,7 +62,7 @@ private:
 	MString m_text;
 
 	// align
-	M_ALIGN_MODES m_align;
+	TEXT_ALIGN_MODES m_align;
 	vector <float> m_linesOffset;
 
 	// size
@@ -97,8 +97,8 @@ public:
 	inline vector <float> * getLinesOffset(void){ return &m_linesOffset; }
 	
 	// align
-	void setAlign(M_ALIGN_MODES align);
-	inline M_ALIGN_MODES getAlign(void){ return m_align; }
+	void setAlign(TEXT_ALIGN_MODES align);
+	inline TEXT_ALIGN_MODES getAlign(void){ return m_align; }
 
 	// size
 	void setSize(float size);

@@ -51,7 +51,7 @@ void Label::draw()
     if(m_labelText == NULL)
     {
         m_labelText = render->createText(gui->getDefaultFont(), gui->getDefaultFontSize());
-        m_labelText->setAlign(M_ALIGN_LEFT);
+        m_labelText->setAlign(TEXT_ALIGN_LEFT);
     }
 
     m_labelText->setText(m_label.c_str());

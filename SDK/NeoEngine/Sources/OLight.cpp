@@ -34,7 +34,7 @@ using namespace Neo;
 
 OLight::OLight(void):
 Object3d(),
-m_lightType(M_LIGHT_POINT),
+m_lightType(LIGHT_POINT),
 m_radius(200),
 m_intensity(1),
 m_color(1, 1, 1),

@@ -226,7 +226,7 @@ void Scene::setScriptFilename(const char * scriptFilename)
 	m_scriptFilename.set(scriptFilename);
 }
 
-bool createShape(OEntity * entity, MPhysicsProperties * phyProps, unsigned int * shapeId)
+bool createShape(OEntity * entity, PhysicsProperties * phyProps, unsigned int * shapeId)
 {
 	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
@@ -239,11 +239,11 @@ bool createShape(OEntity * entity, MPhysicsProperties * phyProps, unsigned int *
 	switch(phyProps->getCollisionShape())
 	{
 	default:
-	case M_COLLISION_SHAPE_BOX:
+	case COLLISION_SHAPE_BOX:
 		physics->createBoxShape(shapeId, (box->max - box->min)*scale*0.5f);
 		break;
 
-	case M_COLLISION_SHAPE_SPHERE:
+	case COLLISION_SHAPE_SPHERE:
 		{
 			MVector3 vec = (box->max - box->min)*scale*0.5f;
 			float radius = vec.x;
@@ -253,7 +253,7 @@ bool createShape(OEntity * entity, MPhysicsProperties * phyProps, unsigned int *
 		}
 		break;
 
-	case M_COLLISION_SHAPE_CONE:
+	case COLLISION_SHAPE_CONE:
 		{
 			MVector3 vec = (box->max - box->min)*scale;
 			float height = vec.y;
@@ -263,7 +263,7 @@ bool createShape(OEntity * entity, MPhysicsProperties * phyProps, unsigned int *
 		}
 		break;
 
-	case M_COLLISION_SHAPE_CAPSULE:
+	case COLLISION_SHAPE_CAPSULE:
 		{
 			MVector3 vec = (box->max - box->min)*scale;
 			float height = vec.y;
@@ -273,7 +273,7 @@ bool createShape(OEntity * entity, MPhysicsProperties * phyProps, unsigned int *
 		}
 		break;
 
-	case M_COLLISION_SHAPE_CYLINDER:
+	case COLLISION_SHAPE_CYLINDER:
 		{
 			MVector3 vec = (box->max - box->min)*scale;
 			float height = vec.y;
@@ -283,7 +283,7 @@ bool createShape(OEntity * entity, MPhysicsProperties * phyProps, unsigned int *
 		}
 		break;
 
-	case M_COLLISION_SHAPE_CONVEX_HULL:
+	case COLLISION_SHAPE_CONVEX_HULL:
 		{
 			Mesh * mesh = entity->getMesh();
 			if(mesh)
@@ -321,7 +321,7 @@ bool createShape(OEntity * entity, MPhysicsProperties * phyProps, unsigned int *
 		}
 		break;
 
-	case M_COLLISION_SHAPE_TRIANGLE_MESH:
+	case COLLISION_SHAPE_TRIANGLE_MESH:
 		{
 			Mesh * mesh = entity->getMesh();
 			if(mesh)
@@ -374,7 +374,7 @@ bool createShape(OEntity * entity, MPhysicsProperties * phyProps, unsigned int *
 void Scene::prepareCollisionShape(OEntity * entity)
 {
 	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
-	MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+	PhysicsProperties * phyProps = entity->getPhysicsProperties();
 
 	if(! phyProps)
 		return;
@@ -392,7 +392,7 @@ void Scene::prepareCollisionShape(OEntity * entity)
 			if(childObject->getType() == M_OBJECT3D_ENTITY)
 			{
 				OEntity * childEntity = (OEntity*)childObject;
-				MPhysicsProperties * childPhyProps = childEntity->getPhysicsProperties();
+				PhysicsProperties * childPhyProps = childEntity->getPhysicsProperties();
 				if(childPhyProps)
 				{
 					if(! childPhyProps->isGhost())
@@ -419,7 +419,7 @@ void Scene::prepareCollisionShape(OEntity * entity)
 void Scene::prepareCollisionObject(OEntity * entity)
 {
 	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
-	MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+	PhysicsProperties * phyProps = entity->getPhysicsProperties();
 	if(! phyProps)
 		return;
 
@@ -428,7 +428,7 @@ void Scene::prepareCollisionObject(OEntity * entity)
 		return;
 
 	// has physics parent
-	MPhysicsProperties * parentPhyProps = NULL;
+	PhysicsProperties * parentPhyProps = NULL;
 	OEntity * parentEntity = NULL;
 	if(! phyProps->isGhost())
 	{
@@ -498,13 +498,13 @@ void Scene::prepareCollisionObject(OEntity * entity)
 void Scene::prepareConstraints(OEntity * entity)
 {
 	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
-	MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+	PhysicsProperties * phyProps = entity->getPhysicsProperties();
 
 	if(! phyProps)
 		return;
 
 	unsigned int objectId = phyProps->getCollisionObjectId();
-	MPhysicsConstraint * constraint = phyProps->getConstraint();
+	PhysicsConstraint * constraint = phyProps->getConstraint();
 
 	if((! constraint) || (objectId == 0) || phyProps->isGhost())
 		return;
@@ -514,7 +514,7 @@ void Scene::prepareConstraints(OEntity * entity)
 		OEntity * constraintParent = getEntityByName(constraint->parentName.getSafeString());
 		if(constraintParent)
 		{
-			MPhysicsProperties * parentPhyProps = constraintParent->getPhysicsProperties();
+			PhysicsProperties * parentPhyProps = constraintParent->getPhysicsProperties();
 			if(parentPhyProps)
 			{
 				unsigned int parentObjectId = parentPhyProps->getCollisionObjectId();
@@ -795,7 +795,7 @@ void Scene::updatePhysics(void)
 		if(! entity->isActive())
 			continue;
 
-		MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+		PhysicsProperties * phyProps = entity->getPhysicsProperties();
 		if(! phyProps)
 			continue;
 
@@ -831,7 +831,7 @@ void Scene::updatePhysics(void)
 		if(! entity->isActive())
 			continue;
 
-		MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+		PhysicsProperties * phyProps = entity->getPhysicsProperties();
 		if(phyProps)
 		{
 			if((phyProps->getCollisionObjectId() > 0) && (! phyProps->isGhost()))

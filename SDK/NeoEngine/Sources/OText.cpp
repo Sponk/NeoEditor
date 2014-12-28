@@ -35,7 +35,7 @@ using namespace Neo;
 // constructor
 OText::OText(FontRef * fontRef):
 Object3d(),
-m_align(M_ALIGN_LEFT),
+m_align(TEXT_ALIGN_LEFT),
 m_size(16),
 m_color(1, 1, 1, 1)
 {
@@ -81,7 +81,7 @@ void OText::setText(const char * text)
 	prepare();
 }
 
-void OText::setAlign(M_ALIGN_MODES align)
+void OText::setAlign(TEXT_ALIGN_MODES align)
 {
 	m_align = align;
 	prepare();
@@ -122,13 +122,13 @@ void OText::updateLinesOffset(void)
 			{
 				switch(m_align)
 				{
-					case M_ALIGN_LEFT:
+					case TEXT_ALIGN_LEFT:
 						m_linesOffset.push_back(0);
 						break;
-					case M_ALIGN_RIGHT:
+					case TEXT_ALIGN_RIGHT:
 						m_linesOffset.push_back(-(max - min));
 						break;
-					case M_ALIGN_CENTER:
+					case TEXT_ALIGN_CENTER:
 						m_linesOffset.push_back(-(max - min)*0.5f);
 						break;
 				}
@@ -174,13 +174,13 @@ void OText::updateLinesOffset(void)
 	// last char (always should be executed!)
 	switch(m_align)
 	{
-	case M_ALIGN_LEFT:
+	case TEXT_ALIGN_LEFT:
 		m_linesOffset.push_back(0);
 		break;
-	case M_ALIGN_RIGHT:
+	case TEXT_ALIGN_RIGHT:
 		m_linesOffset.push_back(-(max - min));
 		break;
-	case M_ALIGN_CENTER:
+	case TEXT_ALIGN_CENTER:
 		m_linesOffset.push_back(-(max - min)*0.5f);
 		break;
 	}
@@ -189,11 +189,11 @@ void OText::updateLinesOffset(void)
 
 	switch(m_align)
 	{
-	case M_ALIGN_RIGHT:
+	case TEXT_ALIGN_RIGHT:
 		boxMin->x -= globalOffset;
 		boxMax->x -= globalOffset;
 		break;
-	case M_ALIGN_CENTER:
+	case TEXT_ALIGN_CENTER:
 		boxMin->x -= globalOffset*0.5f;
 		boxMax->x -= globalOffset*0.5f;
 		break;

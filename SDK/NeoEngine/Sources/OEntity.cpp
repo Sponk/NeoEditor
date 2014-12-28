@@ -32,7 +32,7 @@
 
 using namespace Neo;
 
-MPhysicsConstraint::MPhysicsConstraint(void):
+PhysicsConstraint::PhysicsConstraint(void):
 constraintId(0),
 parentObjectId(0),
 lowerAngularLimit(-180),
@@ -41,7 +41,7 @@ disableParentCollision(false),
 parentName("...")
 {}
 
-MPhysicsConstraint::MPhysicsConstraint(const MPhysicsConstraint & constraint):
+PhysicsConstraint::PhysicsConstraint(const PhysicsConstraint & constraint):
 constraintId(0),
 parentObjectId(0),
 parentName(constraint.parentName),
@@ -54,12 +54,12 @@ disableParentCollision(constraint.disableParentCollision)
 {}
 
 
-MPhysicsProperties::MPhysicsProperties(void):
+PhysicsProperties::PhysicsProperties(void):
 	m_constraint(NULL),
 	m_ghost(false),
 	m_shapeId(0),
 	m_collisionObjectId(0),
-	m_collisionShape(M_COLLISION_SHAPE_BOX),
+	m_collisionShape(COLLISION_SHAPE_BOX),
 	m_friction(0.5f),
 	m_mass(0),
 	m_restitution(0.0f),
@@ -69,7 +69,7 @@ MPhysicsProperties::MPhysicsProperties(void):
 	m_linearFactor(1, 1, 1)
 {}
 
-MPhysicsProperties::MPhysicsProperties(const MPhysicsProperties & physicsProperties):
+PhysicsProperties::PhysicsProperties(const PhysicsProperties & physicsProperties):
 	m_constraint(NULL),
 	m_ghost(physicsProperties.m_ghost),
 	m_shapeId(physicsProperties.m_shapeId),
@@ -84,23 +84,23 @@ MPhysicsProperties::MPhysicsProperties(const MPhysicsProperties & physicsPropert
 	m_linearFactor(physicsProperties.m_linearFactor)
 {
 	if(physicsProperties.m_constraint)
-		m_constraint = new MPhysicsConstraint(*physicsProperties.m_constraint);
+		m_constraint = new PhysicsConstraint(*physicsProperties.m_constraint);
 }
 
-MPhysicsProperties::~MPhysicsProperties(void)
+PhysicsProperties::~PhysicsProperties(void)
 {
 	deleteConstraint();
 }
 
-void MPhysicsProperties::deleteConstraint(void)
+void PhysicsProperties::deleteConstraint(void)
 {
 	SAFE_DELETE(m_constraint);
 }
 
-MPhysicsConstraint * MPhysicsProperties::createConstraint(void)
+PhysicsConstraint * PhysicsProperties::createConstraint(void)
 {
 	deleteConstraint();
-	m_constraint = new MPhysicsConstraint();
+	m_constraint = new PhysicsConstraint();
 	return m_constraint;
 }
 
@@ -132,7 +132,7 @@ m_isOccluder(entity.m_isOccluder)
 {
 	setMeshRef(entity.m_meshRef);
 	if(entity.m_physicsProperties)
-		m_physicsProperties = new MPhysicsProperties(*entity.m_physicsProperties);
+		m_physicsProperties = new PhysicsProperties(*entity.m_physicsProperties);
 }
 
 OEntity::~OEntity(void)
@@ -187,10 +187,10 @@ void OEntity::deletePhysicsProperties(void)
 	SAFE_DELETE(m_physicsProperties);
 }
 
-MPhysicsProperties * OEntity::createPhysicsProperties(void)
+PhysicsProperties * OEntity::createPhysicsProperties(void)
 {
 	deletePhysicsProperties();
-	MPhysicsProperties * physicsProperties = new MPhysicsProperties();
+	PhysicsProperties * physicsProperties = new PhysicsProperties();
 	m_physicsProperties = physicsProperties;
 	return physicsProperties;
 }

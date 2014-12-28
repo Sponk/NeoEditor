@@ -130,7 +130,7 @@ void FollowBehavior::update(void)
 	if(parent->getType() == M_OBJECT3D_ENTITY)
 	{
 		OEntity * entity = (OEntity *)parent;
-		MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+		PhysicsProperties * phyProps = entity->getPhysicsProperties();
 		if(phyProps)
 		{
 			if(! phyProps->isGhost())

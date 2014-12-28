@@ -31,23 +31,25 @@
 #ifndef _M_OENTITY_H
 #define _M_OENTITY_H
 
+namespace Neo
+{
 
 // collision shape types
-enum M_COLLISION_SHAPE_TYPE
+enum COLLISION_SHAPE_TYPE
 {
-	M_COLLISION_SHAPE_BOX = 0,
-	M_COLLISION_SHAPE_SPHERE,
-	M_COLLISION_SHAPE_CONE,
-	M_COLLISION_SHAPE_CAPSULE,
-	M_COLLISION_SHAPE_CYLINDER,
-	M_COLLISION_SHAPE_CONVEX_HULL,
-	M_COLLISION_SHAPE_TRIANGLE_MESH
+	COLLISION_SHAPE_BOX = 0,
+	COLLISION_SHAPE_SPHERE,
+	COLLISION_SHAPE_CONE,
+	COLLISION_SHAPE_CAPSULE,
+	COLLISION_SHAPE_CYLINDER,
+	COLLISION_SHAPE_CONVEX_HULL,
+	COLLISION_SHAPE_TRIANGLE_MESH
 };
 
-struct MPhysicsConstraint
+struct PhysicsConstraint
 {
-	MPhysicsConstraint(void);
-	MPhysicsConstraint(const MPhysicsConstraint & constraint);
+	PhysicsConstraint(void);
+	PhysicsConstraint(const PhysicsConstraint & constraint);
 	
 	unsigned int constraintId;
 	unsigned int parentObjectId;
@@ -61,21 +63,21 @@ struct MPhysicsConstraint
 	bool disableParentCollision;
 };
 
-class M_ENGINE_EXPORT MPhysicsProperties
+class M_ENGINE_EXPORT PhysicsProperties
 {
 public:
 
-	MPhysicsProperties(void);
-	MPhysicsProperties(const MPhysicsProperties & physicsProperties);
-	~MPhysicsProperties(void);
+	PhysicsProperties(void);
+	PhysicsProperties(const PhysicsProperties & physicsProperties);
+	~PhysicsProperties(void);
 
 private:
 
-	MPhysicsConstraint * m_constraint;
+	PhysicsConstraint * m_constraint;
 	
 	unsigned int m_shapeId;
 	unsigned int m_collisionObjectId;
-	M_COLLISION_SHAPE_TYPE m_collisionShape;
+	COLLISION_SHAPE_TYPE m_collisionShape;
 
 	bool m_ghost;
 	float m_mass;
@@ -90,8 +92,8 @@ public:
 
     // constraint
 	void deleteConstraint(void);
-	MPhysicsConstraint * createConstraint(void);
-	inline MPhysicsConstraint * getConstraint(void){ return m_constraint; }
+	PhysicsConstraint * createConstraint(void);
+	inline PhysicsConstraint * getConstraint(void){ return m_constraint; }
 
 	// shape id
 	inline void setShapeId(unsigned int shapeId){ m_shapeId = shapeId; }
@@ -102,8 +104,8 @@ public:
 	inline unsigned int getCollisionObjectId(void){ return m_collisionObjectId; }
 
 	// collision shape
-	inline void setCollisionShape(M_COLLISION_SHAPE_TYPE collisionShape){ m_collisionShape = collisionShape; }
-	inline M_COLLISION_SHAPE_TYPE getCollisionShape(void){ return m_collisionShape; }
+	inline void setCollisionShape(COLLISION_SHAPE_TYPE collisionShape){ m_collisionShape = collisionShape; }
+	inline COLLISION_SHAPE_TYPE getCollisionShape(void){ return m_collisionShape; }
 
 	// ghost
 	inline void setGhost(bool ghost){ m_ghost = ghost; }
@@ -138,9 +140,6 @@ public:
 	inline MVector3 * getLinearFactor(void){ return &m_linearFactor; }
 };
 
-namespace Neo
-{
-
 class M_ENGINE_EXPORT OEntity : public Object3d
 {
 public:
@@ -168,7 +167,7 @@ private:
 	float m_currentFrame;
 
 	// collision
-	MPhysicsProperties * m_physicsProperties;
+	PhysicsProperties * m_physicsProperties;
 
 	// bounding box
 	Box3d m_boundingBox;
@@ -205,8 +204,8 @@ public:
 
 	// physics
 	void deletePhysicsProperties(void);
-	MPhysicsProperties * createPhysicsProperties(void);
-	inline MPhysicsProperties * getPhysicsProperties(void){ return m_physicsProperties; }
+	PhysicsProperties * createPhysicsProperties(void);
+	inline PhysicsProperties * getPhysicsProperties(void){ return m_physicsProperties; }
 
 	// bounding box
 	inline Box3d * getBoundingBox(void){ return &m_boundingBox; }

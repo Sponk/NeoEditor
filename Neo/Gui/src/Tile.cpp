@@ -127,7 +127,7 @@ void Tile::draw()
     if(m_labelText == NULL)
     {
         m_labelText = render->createText(gui->getDefaultFont(), gui->getDefaultFontSize());
-        m_labelText->setAlign(M_ALIGN_CENTER);
+        m_labelText->setAlign(TEXT_ALIGN_CENTER);
     }
 
 	render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_parentSheet->getImage(), m_rotation, m_parentSheet->getTexCoords(m_tilex, m_tiley));

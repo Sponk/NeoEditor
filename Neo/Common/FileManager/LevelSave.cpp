@@ -37,7 +37,7 @@ namespace Neo
 
 static char rep[256];
 
-void writePhysics(MFile * file, MPhysicsProperties * physicsProperties)
+void writePhysics(MFile * file, PhysicsProperties * physicsProperties)
 {
 	openAttributeNode(file, "physics", 3);
 	M_fprintf(file, "\n");
@@ -46,25 +46,25 @@ void writePhysics(MFile * file, MPhysicsProperties * physicsProperties)
 	M_fprintf(file, "\t\t\t\t");
 	switch(physicsProperties->getCollisionShape())
 	{
-	case M_COLLISION_SHAPE_BOX:
+	case COLLISION_SHAPE_BOX:
 		writeString(file, "shape", "Box");
 		break;
-	case M_COLLISION_SHAPE_SPHERE:
+	case COLLISION_SHAPE_SPHERE:
 		writeString(file, "shape", "Sphere");
 		break;
-	case M_COLLISION_SHAPE_CONE:
+	case COLLISION_SHAPE_CONE:
 		writeString(file, "shape", "Cone");
 		break;
-	case M_COLLISION_SHAPE_CAPSULE:
+	case COLLISION_SHAPE_CAPSULE:
 		writeString(file, "shape", "Capsule");
 		break;
-	case M_COLLISION_SHAPE_CYLINDER:
+	case COLLISION_SHAPE_CYLINDER:
 		writeString(file, "shape", "Cylinder");
 		break;
-	case M_COLLISION_SHAPE_CONVEX_HULL:
+	case COLLISION_SHAPE_CONVEX_HULL:
 		writeString(file, "shape", "ConvexHull");
 		break;
-	case M_COLLISION_SHAPE_TRIANGLE_MESH:
+	case COLLISION_SHAPE_TRIANGLE_MESH:
 		writeString(file, "shape", "TriangleMesh");
 		break;
 	}
@@ -113,7 +113,7 @@ void writePhysics(MFile * file, MPhysicsProperties * physicsProperties)
 	M_fprintf(file, "\n");
 	
 	// constraint
-	MPhysicsConstraint * constraint = physicsProperties->getConstraint();
+	PhysicsConstraint * constraint = physicsProperties->getConstraint();
 	if(constraint)
 	{
 		openAttributeNode(file, "constraint", 3);
@@ -285,13 +285,13 @@ void writeTextProperties(MFile * file, OText * text)
 	M_fprintf(file, "\t\t\t\t");
 	switch(text->getAlign())
 	{
-	case M_ALIGN_LEFT:
+	case TEXT_ALIGN_LEFT:
 		writeString(file, "align", "Left");
 		break;
-	case M_ALIGN_RIGHT:
+	case TEXT_ALIGN_RIGHT:
 		writeString(file, "align", "Right");
 		break;
-	case M_ALIGN_CENTER:
+	case TEXT_ALIGN_CENTER:
 		writeString(file, "align", "Center");
 		break;
 	}
@@ -655,7 +655,7 @@ bool xmlLevelSave(Level * level, const char * filename)
                 writeEntityProperties(file, entity);
 
                 // physics
-                MPhysicsProperties * physicsProperties = entity->getPhysicsProperties();
+                PhysicsProperties * physicsProperties = entity->getPhysicsProperties();
                 if(physicsProperties)
                     writePhysics(file, physicsProperties);
 

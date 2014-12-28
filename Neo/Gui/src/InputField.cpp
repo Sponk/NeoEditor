@@ -61,7 +61,7 @@ void InputField::draw()
     if(m_labelText == NULL)
     {
         m_labelText = render->createText(gui->getDefaultFont(), gui->getDefaultFontSize());
-        m_labelText->setAlign(M_ALIGN_LEFT);
+        m_labelText->setAlign(TEXT_ALIGN_LEFT);
     }
 
     MVector4 color;

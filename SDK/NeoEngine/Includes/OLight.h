@@ -35,11 +35,11 @@ namespace Neo
 {
 
 // light types
-enum M_LIGHT_TYPES
+enum LIGHT_TYPES
 {
-	M_LIGHT_POINT = 0,
-	M_LIGHT_SPOT,
-	M_LIGHT_DIRECTIONAL
+	LIGHT_POINT = 0,
+	LIGHT_SPOT,
+	LIGHT_DIRECTIONAL
 };
 
 class M_ENGINE_EXPORT OLight : public Object3d
@@ -56,7 +56,7 @@ public:
 private:
 
 	// lightType
-	M_LIGHT_TYPES m_lightType;
+	LIGHT_TYPES m_lightType;
 	
 	// radius
 	float m_radius;
@@ -81,8 +81,8 @@ public:
 	int getType(void){ return M_OBJECT3D_LIGHT; }
 
 	// lightType
-	inline void setLightType(M_LIGHT_TYPES lightType){ m_lightType = lightType; }
-	inline M_LIGHT_TYPES getLightType(void){ return m_lightType; }
+	inline void setLightType(LIGHT_TYPES lightType){ m_lightType = lightType; }
+	inline LIGHT_TYPES getLightType(void){ return m_lightType; }
 	
 	// shadow
 	inline void castShadow(bool shadow){ m_shadow = shadow; }

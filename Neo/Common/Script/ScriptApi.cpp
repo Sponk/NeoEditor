@@ -644,7 +644,7 @@ int deleteObject()
 	{
 		MPhysicsContext* physics = NeoEngine::getInstance()->getPhysicsContext();
 		OEntity * entity = (OEntity*)object;
-		MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+		PhysicsProperties * phyProps = entity->getPhysicsProperties();
 		if(phyProps)
 		{
 			unsigned int id = phyProps->getCollisionObjectId();
@@ -1314,7 +1314,7 @@ int activate()
 			if(object->getType() == M_OBJECT3D_ENTITY)
 			{
 				OEntity * entity = (OEntity*)object;
-				MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+				PhysicsProperties * phyProps = entity->getPhysicsProperties();
 				if(phyProps)
 					physics->activateObject(phyProps->getCollisionObjectId());
 			}
@@ -1343,7 +1343,7 @@ int deactivate()
 			if(object->getType() == M_OBJECT3D_ENTITY)
 			{
 				OEntity * entity = (OEntity*)object;
-				MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+				PhysicsProperties * phyProps = entity->getPhysicsProperties();
 				if(phyProps)
 					physics->deactivateObject(phyProps->getCollisionObjectId());
 			}
@@ -1619,7 +1619,7 @@ int isGhost()
 		return 0;
 
 	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, M_OBJECT3D_ENTITY)
-			MPhysicsProperties* phys = entity->getPhysicsProperties();
+			PhysicsProperties* phys = entity->getPhysicsProperties();
 
 			if(!phys)
 			{
@@ -1641,7 +1641,7 @@ int enableGhost()
 		return 0;
 
 	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, M_OBJECT3D_ENTITY)
-			MPhysicsProperties* phys = entity->getPhysicsProperties();
+			PhysicsProperties* phys = entity->getPhysicsProperties();
 
 			if(!phys)
 			{
@@ -1682,7 +1682,7 @@ int addCentralForce()
 				}
 
 				OEntity * entity = (OEntity*)object;
-				MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+				PhysicsProperties * phyProps = entity->getPhysicsProperties();
 				if(phyProps)
 				{
 					if(local)
@@ -1709,7 +1709,7 @@ int clearForces()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
@@ -1748,7 +1748,7 @@ int addTorque()
 				}
 
 				OEntity * entity = (OEntity*)object;
-				MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+				PhysicsProperties * phyProps = entity->getPhysicsProperties();
 				if(phyProps)
 				{
 					if(local)
@@ -1777,7 +1777,7 @@ int getLinearDamping()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				float linearDamping = phyProps->getLinearDamping();
@@ -1805,7 +1805,7 @@ int setLinearDamping()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				float linearDamping = (float)script->getFloat(1);
@@ -1836,7 +1836,7 @@ int getAngularDamping()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				float angularDamping = phyProps->getAngularDamping();
@@ -1864,7 +1864,7 @@ int setAngularDamping()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				float angularDamping = (float)script->getFloat(1);
@@ -1895,10 +1895,10 @@ int setConstraintParent()
 		if(object->getType() == M_OBJECT3D_ENTITY && parent->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
-				MPhysicsConstraint* constraint = phyProps->getConstraint();
+				PhysicsConstraint* constraint = phyProps->getConstraint();
 
 				if(constraint)
 				{
@@ -1929,10 +1929,10 @@ int getConstraintParent()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
-				MPhysicsConstraint* constraint = phyProps->getConstraint();
+				PhysicsConstraint* constraint = phyProps->getConstraint();
 
 				if(constraint)
 				{
@@ -1963,10 +1963,10 @@ int enableParentCollision()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
-				MPhysicsConstraint* constraint = phyProps->getConstraint();
+				PhysicsConstraint* constraint = phyProps->getConstraint();
 
 				if(constraint)
 				{
@@ -1997,7 +1997,7 @@ int getCentralForce()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				MVector3 force;
@@ -2026,7 +2026,7 @@ int getTorque()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				MVector3 force;
@@ -2053,7 +2053,7 @@ int getMass()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				float mass = phyProps->getMass();
@@ -2074,7 +2074,7 @@ int enablePhysics()
 
 	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, M_OBJECT3D_ENTITY)
 	MPhysicsContext* physics = NeoEngine::getInstance()->getPhysicsContext();
-	MPhysicsProperties* phyProps = entity->createPhysicsProperties();
+	PhysicsProperties* phyProps = entity->createPhysicsProperties();
 	Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
 
 	if (script->getBoolean(0) != 0)
@@ -2106,7 +2106,7 @@ int setMass()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				float mass = (float)script->getFloat(1);
@@ -2133,7 +2133,7 @@ int getFriction()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				float friction = phyProps->getFriction();
@@ -2161,7 +2161,7 @@ int setFriction()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				float friction = (float)script->getFloat(1);
@@ -2188,7 +2188,7 @@ int getRestitution()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				float restitution = phyProps->getRestitution();
@@ -2216,7 +2216,7 @@ int setRestitution()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				float restitution = (float)script->getFloat(1);
@@ -2243,7 +2243,7 @@ int getAngularFactor()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				float aFactor = phyProps->getAngularFactor();
@@ -2271,7 +2271,7 @@ int setAngularFactor()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				float aFactor = (float)script->getFloat(1);
@@ -2298,7 +2298,7 @@ int getLinearFactor()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				MVector3 * linFactor = phyProps->getLinearFactor();
@@ -2326,7 +2326,7 @@ int setLinearFactor()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				MVector3 linFactor;
@@ -2356,7 +2356,7 @@ int getNumCollisions()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
@@ -2383,7 +2383,7 @@ int isCollisionTest()
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
-			MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
 				MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
@@ -2415,8 +2415,8 @@ int isCollisionBetween()
 			OEntity * entity1 = (OEntity*)object1;
 			OEntity * entity2 = (OEntity*)object2;
 
-			MPhysicsProperties * phyProps1 = entity1->getPhysicsProperties();
-			MPhysicsProperties * phyProps2 = entity2->getPhysicsProperties();
+			PhysicsProperties * phyProps1 = entity1->getPhysicsProperties();
+			PhysicsProperties * phyProps2 = entity2->getPhysicsProperties();
 			if(phyProps1 && phyProps2)
 			{
 				MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
@@ -2463,7 +2463,7 @@ int rayHit()
 					if(object->getType() == M_OBJECT3D_ENTITY)
 					{
 						OEntity * entity = (OEntity*)object;
-						MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+						PhysicsProperties * phyProps = entity->getPhysicsProperties();
 						if(phyProps)
 						{
 							if(phyProps->getCollisionObjectId() == collisionObjId)
@@ -2483,7 +2483,7 @@ int rayHit()
 				for(e=0; e<eSize; e++)
 				{
 					OEntity * entity = scene->getEntityByIndex(e);
-					MPhysicsProperties * phyProps = entity->getPhysicsProperties();
+					PhysicsProperties * phyProps = entity->getPhysicsProperties();
 					if(phyProps)
 					{
 						if(phyProps->getCollisionObjectId() == collisionObjId)
@@ -4166,13 +4166,13 @@ int getTextAlignment()
 		{
 			switch(((OText*) object)->getAlign())
 			{
-			case M_ALIGN_CENTER:
+			case TEXT_ALIGN_CENTER:
 					script->pushString( "Center");
 				break;
-			case M_ALIGN_LEFT:
+			case TEXT_ALIGN_LEFT:
 					script->pushString( "Left");
 				break;
-			case M_ALIGN_RIGHT:
+			case TEXT_ALIGN_RIGHT:
 					script->pushString( "Right");
 				break;
 			}
@@ -4198,11 +4198,11 @@ int setTextAlignment()
 		if(object->getType() == M_OBJECT3D_TEXT)
 		{
 			if(!strcmp(alignment, "Center"))
-				static_cast<OText*>(object)->setAlign(M_ALIGN_CENTER);
+				static_cast<OText*>(object)->setAlign(TEXT_ALIGN_CENTER);
 			else if(!strcmp(alignment, "Left"))
-				static_cast<OText*>(object)->setAlign(M_ALIGN_LEFT);
+				static_cast<OText*>(object)->setAlign(TEXT_ALIGN_LEFT);
 			else if(!strcmp(alignment, "Right"))
-				static_cast<OText*>(object)->setAlign(M_ALIGN_RIGHT);
+				static_cast<OText*>(object)->setAlign(TEXT_ALIGN_RIGHT);
 			else
 				MLOG_WARNING("Unknown alignment: " << alignment);
 

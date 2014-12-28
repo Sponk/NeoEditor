@@ -4106,7 +4106,7 @@ Fl_Double_Window* ConstraintPropertiesDlg::create_window() {
   if(!entity)
   	return NULL;
   	
-  MPhysicsProperties* phys = entity->getPhysicsProperties();
+  PhysicsProperties* phys = entity->getPhysicsProperties();
   
   if(!phys)
   {
@@ -4219,7 +4219,7 @@ Fl_Double_Window* ConstraintPropertiesDlg::create_window() {
     o->set_modal();
     o->end();
   } // Fl_Double_Window* o
-  MPhysicsConstraint* constraint = phys->getConstraint();
+  PhysicsConstraint* constraint = phys->getConstraint();
   
   win = w;
   
@@ -4293,12 +4293,12 @@ void ConstraintPropertiesDlg::enable_constraint_callback(Fl_Check_Button* button
   if(!entity)
   	return;
   	
-  MPhysicsProperties* phys = entity->getPhysicsProperties();
+  PhysicsProperties* phys = entity->getPhysicsProperties();
   
   if(!phys)
   	return;
   
-  MPhysicsConstraint* constraint = phys->getConstraint();
+  PhysicsConstraint* constraint = phys->getConstraint();
   
   if(!constraint && button->value() == 1)
   {
@@ -4364,7 +4364,7 @@ void ConstraintPropertiesDlg::close_callback(Fl_Button*, ConstraintPropertiesDlg
   if(!entity)
   	return;
   	
-  MPhysicsProperties* phys = entity->getPhysicsProperties();
+  PhysicsProperties* phys = entity->getPhysicsProperties();
   
   if(!phys)
   {
@@ -4372,7 +4372,7 @@ void ConstraintPropertiesDlg::close_callback(Fl_Button*, ConstraintPropertiesDlg
   	return;
   }
   
-  MPhysicsConstraint* constraint = phys->getConstraint();
+  PhysicsConstraint* constraint = phys->getConstraint();
   
   if(constraint)
   {

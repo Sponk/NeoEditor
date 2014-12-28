@@ -55,7 +55,7 @@ void Button::draw()
     if(m_labelText == NULL)
     {
         m_labelText = render->createText(gui->getDefaultFont(), gui->getDefaultFontSize());
-        m_labelText->setAlign(M_ALIGN_CENTER);
+        m_labelText->setAlign(TEXT_ALIGN_CENTER);
     }
 
     m_labelText->setText(m_label.c_str());
