@@ -5,7 +5,7 @@ using namespace RakNet;
 
 void writeString(RakNet::BitStream* bs, const char* str)
 {
-	bs->Write((int) M_VARIABLE_STRING);
+	bs->Write(M_VARIABLE_STRING);
 	bs->Write(str);
 }
 
@@ -16,7 +16,9 @@ void writeVector3(RakNet::BitStream* bs, MVector3 vec)
 
 NeoVariable readNextArgument(RakNet::BitStream* bs)
 {
-	switch(bs->GetData()[bs->GetReadOffset()/8])
+	int type;
+	bs->Read(type);
+	switch(type)
 	{
 		case M_VARIABLE_STRING:
 			{
@@ -33,7 +35,7 @@ NeoVariable readNextArgument(RakNet::BitStream* bs)
 			break;
 
 		default:
-			MLOG_WARNING("Found unknown variable type: " << (int) bs->GetData()[bs->GetReadOffset() / 8]);
+			MLOG_WARNING("Found unknown variable type: " << type);
 	}
 }
 
@@ -42,7 +44,6 @@ void writeVariable(RakNet::BitStream* bs, Neo::NeoVariable var)
 	switch(var.getType())
 	{
 		case M_VARIABLE_STRING:
-				MLOG_INFO("Found string");
 				writeString(bs, ((MString*) var.getPointer())->getSafeString());
 			break;
 	}

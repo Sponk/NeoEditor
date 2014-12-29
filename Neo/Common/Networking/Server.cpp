@@ -91,15 +91,17 @@ int Server::server_thread(void *data)
 						BitStream in(packet->data, packet->length, false);
 						in.IgnoreBytes(sizeof(MessageID));
 
-						switch(in.GetData()[in.GetReadOffset()/8])
+						int type;
+						in.Read(type);
+
+						switch(type)
 						{
 							case M_VARIABLE_STRING:
-									in.IgnoreBytes(sizeof(M_VARIABLE_TYPE));
 									in.Read(messageStr);
 								break;
 
 							default:
-								MLOG_WARNING("Found unknown variable type: " << (int) in.GetData()[in.GetReadOffset() / 8]);
+								MLOG_WARNING("Found unknown variable type: " << type);
 						}
 
 						if(messageStr.IsEmpty())
