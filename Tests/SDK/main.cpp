@@ -204,8 +204,8 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, Networking_test);
 
 	server.addRPCFunction("testFunction", testFunction);
 
-	server.startServer(10, 60001);
-	client.startClient("127.0.0.1", 60001);
+	server.startServer(10, 60000);
+	client.startClient("127.0.0.1", 60000);
 
 	window->sleep(200);
 

@@ -58,7 +58,7 @@ void TileSheet::loadImage(const char* path, unsigned int width, unsigned int hei
 		char buf[256];
 		getGlobalFilename(buf, system->getWorkingDirectory(), path);
 
-		window->getUpdateSemaphore()->Unlock();
+		/*window->getUpdateSemaphore()->Unlock();
 		Messenger* messenger = Messenger::getInstance();
 		messenger->sendMessage("loadTexture", 0, buf, "MainThread", "UpdateThread");
 
@@ -76,7 +76,9 @@ void TileSheet::loadImage(const char* path, unsigned int width, unsigned int hei
 
 		window->getUpdateSemaphore()->WaitAndLock();
 
-		Neo::TextureRef* tex = (Neo::TextureRef*) msg.data;
+		Neo::TextureRef* tex = (Neo::TextureRef*) msg.data;*/
+
+		Neo::TextureRef* tex = level->loadTexture(buf);
 		m_image = tex->getTextureId();
 
 		m_tileWidth = width;

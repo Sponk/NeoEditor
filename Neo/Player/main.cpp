@@ -102,9 +102,9 @@ int update_thread(void* nothing)
 	Messenger* messenger = Messenger::getInstance();
 	messenger->addInbox("MainThread", 0);
 
-	window->getUpdateSemaphore()->WaitAndLock();
-	NeoEngine::getInstance()->getGame()->begin();
-	window->getUpdateSemaphore()->Unlock();
+	//window->getUpdateSemaphore()->WaitAndLock();
+	//NeoEngine::getInstance()->getGame()->begin();
+	//window->getUpdateSemaphore()->Unlock();
 
     // time
     int frequency = 60;
@@ -341,6 +341,10 @@ int main(int argc, char **argv)
     // create the update thread
     SDLThread updateThread;
 	Neo::Gui::GuiSystem* guiSystem = Neo::Gui::GuiSystem::getInstance();
+
+	//window->getUpdateSemaphore()->WaitAndLock();
+	NeoEngine::getInstance()->getGame()->begin();
+	//window->getUpdateSemaphore()->Unlock();
 
 	// Init thread
 	updateThread.Start(update_thread, "Update", NULL);

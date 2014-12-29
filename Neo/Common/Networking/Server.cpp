@@ -93,10 +93,13 @@ int Server::server_thread(void *data)
 
 						switch(in.GetData()[in.GetReadOffset()/8])
 						{
-							case ID_STRING:
-									in.IgnoreBytes(sizeof(ARGUMENT_TYPE));
+							case M_VARIABLE_STRING:
+									in.IgnoreBytes(sizeof(M_VARIABLE_TYPE));
 									in.Read(messageStr);
 								break;
+
+							default:
+								MLOG_WARNING("Found unknown variable type: " << (int) in.GetData()[in.GetReadOffset() / 8]);
 						}
 
 						if(messageStr.IsEmpty())
