@@ -11,7 +11,10 @@ void writeString(RakNet::BitStream* bs, const char* str)
 
 void writeVector3(RakNet::BitStream* bs, MVector3 vec)
 {
-	bs->WriteVector(vec.x, vec.y, vec.z);
+    bs->Write(M_VARIABLE_VEC3);
+    bs->Write(vec.x);
+    bs->Write(vec.y);
+    bs->Write(vec.z);
 }
 
 NeoVariable readNextArgument(RakNet::BitStream* bs)
@@ -33,6 +36,18 @@ NeoVariable readNextArgument(RakNet::BitStream* bs)
 			}
 			break;
 
+    case M_VARIABLE_VEC3:
+        {
+            MVector3* vec = new MVector3;
+            bs->Read(vec->x);
+            bs->Read(vec->y);
+            bs->Read(vec->z);
+
+            NeoVariable variable("", vec, M_VARIABLE_VEC3);
+            return variable;
+        }
+        break;
+
 		default:
 			MLOG_WARNING("Found unknown variable type: " << type);
 	}
@@ -45,6 +60,10 @@ void writeVariable(RakNet::BitStream* bs, Neo::NeoVariable var)
 		case M_VARIABLE_STRING:
 				writeString(bs, ((MString*) var.getPointer())->getSafeString());
 			break;
+
+        case M_VARIABLE_VEC3:
+                writeVector3(bs, *((MVector3*) var.getPointer()));
+             break;
 	}
 }
 

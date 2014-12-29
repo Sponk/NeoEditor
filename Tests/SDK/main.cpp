@@ -228,6 +228,42 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, Networking_test);
 
 LT_END_AUTO_TEST(Networking_test);
 
+LT_BEGIN_AUTO_TEST(NeoTestSdk, BitStreamArgumentString_test);
+
+    RakNet::BitStream bs;
+    writeString(&bs, "Hello String!");
+
+    NeoVariable var = readNextArgument(&bs);
+
+    LT_CHECK_EQ(var.getType(), M_VARIABLE_STRING);
+    LT_ASSERT(var.getPointer() != NULL);
+
+    MString* str = (MString*) var.getPointer();
+
+    LT_CHECK_EQ(strcmp(str->getSafeString(), "Hello String!"), 0);
+
+    delete str;
+
+LT_END_AUTO_TEST(BitStreamArgumentString_test);
+
+LT_BEGIN_AUTO_TEST(NeoTestSdk, BitStreamArgumentVector3_test);
+
+    RakNet::BitStream bs;
+    writeVector3(&bs, MVector3(1,2,3));
+
+    NeoVariable var = readNextArgument(&bs);
+
+    LT_CHECK_EQ(var.getType(), M_VARIABLE_VEC3);
+    LT_ASSERT(var.getPointer() != NULL);
+
+    MVector3* vec = (MVector3*) var.getPointer();
+
+    LT_CHECK(*vec == MVector3(1,2,3));
+
+    delete vec;
+
+LT_END_AUTO_TEST(BitStreamArgumentVector3_test);
+
 LT_BEGIN_TEST_ENV();
 	AUTORUN_TESTS();
 LT_END_TEST_ENV();
