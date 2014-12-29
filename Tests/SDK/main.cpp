@@ -181,15 +181,18 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, Object3dHandle_test);
 
 LT_END_AUTO_TEST(Object3dHandle_test);
 
+bool testFunctionSuccess = false;
 void testFunction(RakNet::BitStream* in)
 {
-	MLOG_INFO("RPC call!!");
-	NeoVariable arg1 = readNextArgument(in);
+    NeoVariable arg1 = readNextArgument(in);
 
-	if(arg1.getPointer() && arg1.getType() == M_VARIABLE_STRING)
-	{
-		MLOG_INFO("Got argument: " << ((MString*)arg1.getPointer())->getSafeString());
-	}
+    if(arg1.getPointer() && arg1.getType() == M_VARIABLE_STRING)
+    {
+        MLOG_INFO("Got argument: " << ((MString*)arg1.getPointer())->getSafeString());
+
+        if(!strcmp(((MString*)arg1.getPointer())->getSafeString(), "Hello World!"))
+           testFunctionSuccess = true;
+    }
 }
 
 LT_BEGIN_AUTO_TEST(NeoTestSdk, Networking_test);
@@ -210,11 +213,17 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, Networking_test);
 	window->sleep(200);
 
 	std::vector<NeoVariable> variables;
-	variables.push_back(NeoVariable("Test", new MString("Hello World!"), M_VARIABLE_STRING));
+    variables.push_back(NeoVariable("Test", new MString("Hello World!"), M_VARIABLE_STRING));
 
 	Messenger::getInstance()->sendMessage("testFunction", ID_RPC_MESSAGE, &variables, "ClientThread", "MainThread");
 
 	window->sleep(1000);
+
+    delete (MString*) variables[0].getPointer();
+    variables.clear();
+
+    LT_CHECK(testFunctionSuccess);
+
 	game->end();
 
 LT_END_AUTO_TEST(Networking_test);

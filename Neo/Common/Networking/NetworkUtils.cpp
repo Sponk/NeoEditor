@@ -23,7 +23,6 @@ NeoVariable readNextArgument(RakNet::BitStream* bs)
 		case M_VARIABLE_STRING:
 			{
 				RakString str;
-				bs->IgnoreBytes(sizeof(M_VARIABLE_TYPE));
 				bs->Read(str);
 
 				MString* variableString = new MString;
