@@ -150,12 +150,12 @@ class M_CORE_EXPORT MThreadManager
 	MSemaphore* m_templateSemaphore;
 public:
 
-	static MThreadManager* getInstance() { static MThreadManager mgr; return &mgr; }
+    static MThreadManager* getInstance();
 
 	/**
 	 * @brief Deletes all templates.
 	 */
-	void clear() { SAFE_DELETE(m_templateThread); SAFE_DELETE(m_templateSemaphore); }
+    void clear() { SAFE_DELETE(m_templateThread); SAFE_DELETE(m_templateSemaphore); }
 
 	/**
 	 * @brief Sets the thread template object with the overwritten getNew method

@@ -23,6 +23,7 @@
 //========================================================================
 
 #include <NeoEngine.h>
+#include <MCore.h>
 
 using namespace Neo;
 
@@ -32,16 +33,16 @@ void Messenger::addInbox(const char* name, unsigned int id)
 	box.name = name;
 	box.id = id;
 
-	waitForAccess();
+    waitForAccess();
 	m_boxes[name] = box;
-	finishAccess();
+    finishAccess();
 }
 
 unsigned int Messenger::getMessagesCount(const char* name)
 {
-	waitForAccess();
+    waitForAccess();
 	unsigned int sz = m_boxes[name].messages.size();
-	finishAccess();
+    finishAccess();
 
 	return sz;
 }
@@ -92,22 +93,22 @@ Message Messenger::getNextMessage(const char* threadName, const char* sender)
 
 void Messenger::waitForAccess()
 {
-	if(m_semaphore == NULL)
+    if(m_semaphore == NULL)
 	{
 		m_semaphore = MThreadManager::getInstance()->getNewSemaphore();
-		m_semaphore->Init(1);
-	}
+        m_semaphore->Init(1);
+    }
 
-	m_semaphore->WaitAndLock();
+    m_semaphore->WaitAndLock();
 }
 
 void Messenger::finishAccess()
 {
-	if(m_semaphore == NULL)
+    if(m_semaphore == NULL)
 	{
 		m_semaphore = MThreadManager::getInstance()->getNewSemaphore();
-		m_semaphore->Init(1);
+        m_semaphore->Init(1);
 	}
 
-	m_semaphore->Unlock();
+    m_semaphore->Unlock();
 }

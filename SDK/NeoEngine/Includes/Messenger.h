@@ -69,8 +69,16 @@ private:
 	void waitForAccess();
 	void finishAccess();
 
+    bool m_locked;
+
 public:
-	static Messenger* getInstance() { static Messenger msg; return &msg; }
+    static Messenger* getInstance()
+    {
+        static Messenger m_instance;
+        return &m_instance;
+    }
+
+    Messenger() : m_semaphore(NULL), m_locked(false) {}
 
 	/**
 	 * @brief Creates a new inbox with the given name for the current thread.

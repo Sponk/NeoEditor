@@ -335,19 +335,19 @@ int main(int argc, char **argv)
 
 	window->createSemaphores();
 
-	Messenger* messenger = Messenger::getInstance();
-	messenger->addInbox("MainThread", 0);
-
     // create the update thread
     SDLThread updateThread;
 	Neo::Gui::GuiSystem* guiSystem = Neo::Gui::GuiSystem::getInstance();
 
 	//window->getUpdateSemaphore()->WaitAndLock();
 	NeoEngine::getInstance()->getGame()->begin();
-	//window->getUpdateSemaphore()->Unlock();
+    //window->getUpdateSemaphore()->Unlock();
 
 	// Init thread
-	updateThread.Start(update_thread, "Update", NULL);
+    updateThread.Start(update_thread, "Update", NULL);
+
+    Messenger* messenger = Messenger::getInstance();
+    messenger->addInbox("MainThread", 0);
 
     bool isActive = true;
     // on events

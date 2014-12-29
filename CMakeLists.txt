@@ -80,7 +80,7 @@ IF(WIN32)
   
   SET(DIRENT_INCLUDE_DIR ${NEO_SOURCE_DIR}/3rdparty/dirent/include)
 
-  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     # using GCC
     # LuaJIT does not build with the current MinGW
     SET(STANDARD_LUA TRUE)
