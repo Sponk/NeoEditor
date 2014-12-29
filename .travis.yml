@@ -6,7 +6,7 @@ branches:
   only:
   - development
 
-before_script: "cd Sponk/NeoEditor && export VERSION=$(git describe --tags) && echo Building version: $(VERSION)"
+before_script: "pwd && ls && export VERSION=$(git describe --tags) && echo Building version: $(VERSION)"
 script: mkdir ../build && cd ../build && cmake ../NeoEditor -DNEO_VERSION_STRING="\"$VERSION\"" && make && make package
   && make test
 notifications:
