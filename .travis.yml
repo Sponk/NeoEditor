@@ -5,7 +5,9 @@ before_install:
 branches:
   only:
   - development
-script: mkdir ../build && cd ../build && cmake ../NeoEditor && make && make package
+
+before: export VERSION=$(git describe --tags) && echo Building version: $(VERSION)
+script: mkdir ../build && cd ../build && cmake ../NeoEditor -DNEO_VERSION_STRING="\"$VERSION\"" && make && make package
   && make test
 notifications:
   irc: chat.freenode.net#neo3d
