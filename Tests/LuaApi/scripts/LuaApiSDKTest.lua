@@ -1,4 +1,5 @@
 dofile("SDK/Graphics2D.lua")
+dofile("SDK/Neo3D.lua")
 dofile("luaunit.lua")
 
 loadCameraSkybox(getCurrentCamera(), "")
@@ -29,9 +30,13 @@ mainCanvas:addWidget(label)
 
 label:setLabel("This is a label!")
 
+cube = Object3d.getObject("Cube");
+
 function onSceneUpdate()
     sprite:rotate(2)
     button:rotate(2)
+
+    cube:rotate({0,1,0}, 2)
 
     if isKeyPressed("RIGHT") then
 	tile:attachAnimation(walkAnimation)

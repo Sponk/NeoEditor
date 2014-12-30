@@ -934,7 +934,7 @@ int rotate()
 			if(nbArguments > 3)
 			{
 				const char * mode = script->getString(3);
-				if(strcmp(mode, "local") == 0)
+				if(mode && strcmp(mode, "local") == 0)
 					local = true;
 			}
 
@@ -970,7 +970,7 @@ int translate()
 			if(nbArguments > 2)
 			{
 				const char * mode = script->getString(2);
-				if(strcmp(mode, "local") == 0)
+				if(mode && strcmp(mode, "local") == 0)
 					local = true;
 			}
 
@@ -1705,7 +1705,7 @@ int addCentralForce()
 				if(nbArguments > 2)
 				{
 					const char * mode = script->getString(2);
-					if(strcmp(mode, "local") == 0)
+					if(mode && strcmp(mode, "local") == 0)
 						local = true;
 				}
 
@@ -1771,7 +1771,7 @@ int addTorque()
 				if(nbArguments > 2)
 				{
 					const char * mode = script->getString(2);
-					if(strcmp(mode, "local") == 0)
+					if(mode && strcmp(mode, "local") == 0)
 						local = true;
 				}
 
