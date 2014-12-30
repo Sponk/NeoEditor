@@ -3996,7 +3996,7 @@ al Public License."));
       o->labelsize(18);
       o->align(Fl_Align(192|FL_ALIGN_INSIDE));
     } // Fl_Box* o
-    { Fl_Box* o = new Fl_Box(10, 169, 335, 32, tr("The Maratis3D Scene Editor Experience"));
+    { Fl_Box* o = new Fl_Box(10, 169, 335, 32, tr("The Neo Scene Editor Experience"));
       o->align(Fl_Align(192|FL_ALIGN_INSIDE));
     } // Fl_Box* o
     { editor_version_edit = new Fl_Box(10, 201, 335, 20, tr("$VERSION"));
