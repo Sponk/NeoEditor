@@ -2,7 +2,25 @@ dofile("Widget.lua")
 
 --- The Sprite class
 -- The sprite class contains primitives to load, display and
--- manipulate sprites. Extends the Widget class.
+-- manipulate sprites.
+--
+-- See also: <a href="Widget.lua.html">Widget</a>
+--
+-- Example:
+--[[
+  dofile("SDK/Graphics2D.lua")
+
+  -- Load a sprite without caption
+  sprite = Sprite(20,20,90,90,"maps/sprite.png", "")
+
+  -- Add sprite to the main canvas
+  mainCanvas:addWidget(sprite)
+
+  function onSceneUpdate()
+    -- Rotate sprite by 2° every frame
+    sprite:rotate(2)
+  end
+]]
 
 --- Sprite(x,y,w,h,file,text)
 -- Loads a texture into memory and creates a Sprite object with it.

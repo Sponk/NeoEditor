@@ -4,7 +4,17 @@ dofile("Widget.lua")
 -- The Label class contains primitives to display and configure
 -- UI based text labels. You can retrieve and change the current text data by
 -- using the "setLabel" and "getLabel" functions.
--- Extends the Widget class.
+--
+-- See also: <a href="Widget.lua.html">Widget</a>
+--
+-- Example:
+--[[
+-- Create a label
+label = Label(10, 10, 100, 20, "This is an input field!")
+
+-- Add it to the main canvas
+mainCanvas:addWidget(label)
+]]
 
 --- Label(x,y,w,h,text)
 -- Creates a new button.
