@@ -1,7 +1,7 @@
 language: cpp
 before_install:
 - sudo apt-get update -qq
-- sudo aptitude install -y libx11-dev libogg-dev libxft-dev libpulse-dev rpm debhelper mingw-w64
+- sudo apt-get install -qq -y libx11-dev libogg-dev libxft-dev libpulse-dev rpm debhelper mingw-w64-i686-dev
 branches:
   only:
   - development
