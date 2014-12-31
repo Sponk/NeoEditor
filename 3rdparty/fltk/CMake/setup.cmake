@@ -62,8 +62,8 @@ else()
    set(FLTK_EXAMPLES_PATH share/fltk-examples)
 endif(WIN32 AND NOT CYGWIN)
 
-include(TestBigEndian)
-TEST_BIG_ENDIAN(WORDS_BIGENDIAN)
+# include(TestBigEndian)
+# TEST_BIG_ENDIAN(WORDS_BIGENDIAN)
 
 if(APPLE)
    set(__APPLE_QUARTZ__ 1)
