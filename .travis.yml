@@ -1,14 +1,18 @@
 language: cpp
 before_install:
 - sudo apt-get update -qq
-- sudo apt-get install -qq -y libx11-dev libogg-dev libxft-dev libpulse-dev rpm debhelper
+- sudo apt-get install -qq -y libx11-dev libogg-dev libxft-dev libpulse-dev rpm debhelper mingw-w64
 branches:
   only:
   - development
 
 before_script: "git fetch --tags && export VERSION=$(git describe --tags --always) && echo Building version: $VERSION"
-script: mkdir ../build && cd ../build && cmake ../NeoEditor -DNEO_VERSION_STRING="\"$VERSION\"" && make && make package
-  && make test
+
+script: 
+  - mkdir ../build && cd ../build && cmake ../NeoEditor -DNEO_VERSION_STRING="\"$VERSION\"" && make -j2 && make package && make test
+  
+  - mkdir ../build-windows && cd ../build-windows && export PROCESSOR_ARCHITECTURE=x86  && export DXSDK_DIR=~/ && cmake -DCMAKE_TOOLCHAIN_FILE=../NeoEditor/CMake/Toolchains/CrossWindowsMingw.cmake ../NeoEditor && make -j2 && make package
+  
 notifications:
   irc: chat.freenode.net#neo3d
 env:
@@ -17,6 +21,11 @@ env:
   - secure: gjuBvU55Hnf+J/t3f4xyFlNVq51DcTQvslKQHXwvV4GQg1pZYS2dRtGCkpASja+2MnnJ5MFBUcUctQQMVRC17VQzoccLodFnKfMcOuFLeJwayp943MinUad4KsoOzLQECW06B2hzc90hfkV29TqaQcQM+s6uEOn21gPG4zrIM/k=
   
 after_success:
+  - curl --ftp-create-dirs -T *.exe -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
+  - curl --ftp-create-dirs -T *.zip -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
+
+  - cd ../build
+
   - curl --ftp-create-dirs -T *.deb -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
   - curl --ftp-create-dirs -T *.tar.gz -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
   - curl --ftp-create-dirs -T *.rpm -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
