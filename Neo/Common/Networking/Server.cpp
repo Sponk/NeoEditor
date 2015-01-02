@@ -84,6 +84,14 @@ int Server::server_thread(void *data)
 						MLOG_INFO("New client connected: " << packet->systemAddress.ToString(true, ':'));
 					break;
 
+				case ID_DISCONNECTION_NOTIFICATION:
+						MLOG_INFO("Disconnected from " << packet->systemAddress.ToString(true, ':'));
+					break;
+
+				case ID_CONNECTION_LOST:
+						MLOG_INFO("Lost connection to " << packet->systemAddress.ToString(true, ':'));
+					break;
+
 				case ID_RPC_MESSAGE:
 					{
 						RakString messageStr;
