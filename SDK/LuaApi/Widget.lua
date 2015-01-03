@@ -4,6 +4,23 @@ dofile("class.lua")
 -- The widget class represents the base class for every widget.
 -- It contains the most basic functionality shared by every widget type like
 -- translating the position or changing the rotation.
+--
+--
+---- Class members
+-- 
+-- <b>Do not write to these directly! Use the suitable methods for that!</b>
+-- 
+-- widget: The native widget handle used by the C++ backend.
+-- 
+-- position.x: The X position of the widget
+-- 
+-- position.y : The Y position of the widget
+-- 
+-- height: The height of the widget
+-- 
+-- width: The width of the widget
+-- 
+-- rotation: The current rotation of the widget.
 
 --- Widget(x,y,w,h,text)
 -- Creates a new Widget object.<br><br>
@@ -21,7 +38,7 @@ Widget = class(
 	function(object, x, y, w, h, text)
 		if text == nil then text = "" end
 		object.widget = createSprite(x,y,w,h,file,text)
-		object.position = {x,y}
+		object.position = {x=x,y=y}
 		object.width = w
 		object.height = h
 		object.rotation = 0

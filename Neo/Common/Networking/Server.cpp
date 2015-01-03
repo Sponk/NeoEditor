@@ -88,6 +88,10 @@ int Server::server_thread(void *data)
 						MLOG_INFO("Disconnected from " << packet->systemAddress.ToString(true, ':'));
 					break;
 
+				case ID_CONNECTION_ATTEMPT_FAILED:
+						MLOG_INFO("Could not connect to server!");
+					break;
+
 				case ID_CONNECTION_LOST:
 						MLOG_INFO("Lost connection to " << packet->systemAddress.ToString(true, ':'));
 					break;

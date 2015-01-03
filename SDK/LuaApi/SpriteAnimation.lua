@@ -2,6 +2,20 @@ dofile("class.lua")
 
 --- The SpriteAnimation class
 -- Contains the primitives to play animations using a sprite sheet.
+--
+---- Class members
+-- start: First frame of the animation
+-- 
+-- length: The length of the animation. The last frame shown is (start + length)
+-- 
+-- delay: The delay between frames in milliseconds
+-- 
+-- looping: A boolean which contains whether or not too loop the animation.
+-- 
+-- currentFrame: the current frame
+-- 
+-- lastTime: The last time the frame got switched. DO NOT MODIFY!
+
 
 --- SpriteAnimation(start,length,delay,looping)
 -- Create a SpriteAnimation object.

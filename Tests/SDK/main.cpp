@@ -184,7 +184,7 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, Messaging_test);
 	messenger->addInbox("TestThread", 0);
 	LT_CHECK_EQ(messenger->getMessagesCount("TestThread"), 0);
 
-	messenger->sendMessage("TestMessage", NULL, 0, "TestThread", "TestThread");
+	messenger->sendMessage("TestMessage", 0, NULL, "TestThread", "TestThread");
 	LT_ASSERT_EQ(messenger->getMessagesCount("TestThread"), 1);
 
 	Message msg = messenger->getNextMessage("TestThread");
