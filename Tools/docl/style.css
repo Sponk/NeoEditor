@@ -84,7 +84,7 @@ dt:target + * {
 code {
     padding: .2em;
     font-family: monospace;
-    background-color: #eed;
+    background-color: #eee;
     color:#555;
 }
 
@@ -98,7 +98,7 @@ pre {
     overflow: auto;
 
     font-family: monospace;
-    background-color: #eed;
+    background-color: #eee;
     color:#555;
     white-space: normal;
 }
@@ -118,7 +118,7 @@ pre.error { width: calc(100% - 3em); }
 pre.error::before {content:"Oops, there was an error"; color:red;}
 
 .comment { color: blue; }
-.keyword { color: orange; font-weight: bold; }
+.keyword { color: purple; font-weight: bold; }
 .operator { color: black; font-weight: bold; }
 .string { color: green; font-weight: bold; }
 .escape { color: blue; font-weight: normal; }
