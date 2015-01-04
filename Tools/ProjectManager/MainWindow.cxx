@@ -14,16 +14,16 @@ extern const char* fl_native_file_chooser(const char* title, const char* files, 
 
 Fl_Double_Window* MainWindow::create_window() {
   Fl_Double_Window* w;
-  { Fl_Double_Window* o = new Fl_Double_Window(513, 450, "Project Manager");
+  { Fl_Double_Window* o = new Fl_Double_Window(510, 450, "Project Manager");
     w = o;
     o->user_data((void*)(this));
-    { project_browser = new Fl_Browser(0, 25, 195, 430, "Projects:");
+    { project_browser = new Fl_Browser(5, 20, 190, 425, "Projects:");
       project_browser->type(2);
       project_browser->align(Fl_Align(FL_ALIGN_TOP_LEFT));
     } // Fl_Browser* project_browser
-    { Fl_Group* o = new Fl_Group(200, 25, 310, 270, "Packages:");
+    { Fl_Group* o = new Fl_Group(200, 20, 305, 275, "Packages:");
       o->box(FL_ENGRAVED_FRAME);
-      { package_browser = new Fl_Browser(205, 45, 155, 245, "Packages:");
+      { package_browser = new Fl_Browser(205, 45, 155, 245, "Available:");
         package_browser->type(2);
         package_browser->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       } // Fl_Browser* package_browser
@@ -40,17 +40,18 @@ Fl_Double_Window* MainWindow::create_window() {
       o->end();
       Fl_Group::current()->resizable(o);
     } // Fl_Group* o
-    { Fl_Group* o = new Fl_Group(200, 315, 313, 135, "Projects:");
+    { Fl_Group* o = new Fl_Group(200, 315, 305, 130, "Projects:");
       o->box(FL_ENGRAVED_FRAME);
       { Fl_Button* o = new Fl_Button(205, 360, 150, 25, "Import Project");
         o->callback((Fl_Callback*)import_project, (void*)(this));
       } // Fl_Button* o
-      { new Fl_Button(205, 330, 150, 25, "Create Project");
+      { Fl_Button* o = new Fl_Button(205, 330, 150, 25, "Create Project");
+        o->callback((Fl_Callback*)create_project, (void*)(this));
       } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(357, 359, 150, 25, "Copy C++ SDK");
+      { Fl_Button* o = new Fl_Button(357, 359, 143, 25, "Copy C++ SDK");
         o->callback((Fl_Callback*)copy_cpp_sdk, (void*)(this));
       } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(357, 329, 150, 25, "Copy Lua SDK");
+      { Fl_Button* o = new Fl_Button(357, 329, 143, 25, "Copy Lua SDK");
         o->callback((Fl_Callback*)copy_lua_sdk, (void*)(this));
       } // Fl_Button* o
       o->end();
@@ -181,7 +182,7 @@ void MainWindow::install_package(Fl_Button* btn, MainWindow* dlg) {
   	std::replace(path.begin(), path.end(), '\\', '/');
   #endif
   
-  //fl_message("Copying %s to %s", package.c_str(), path.c_str());
+  fl_message("Copying %s to %s", package.c_str(), path.c_str());
   if(!copyDirectory(package.c_str(), path.c_str()))
   {
   	fl_message("Could not install package!");
@@ -357,4 +358,179 @@ void MainWindow::copy_cpp_sdk(Fl_Button*, MainWindow* dlg) {
   {
   	fl_message("Could not copy the C++ SDK!");
   }
+}
+
+void MainWindow::create_project(Fl_Button*, MainWindow* dlg) {
+  Fl_Window* win = dlg->createNewProjectDlg();
+  win->show();
+  
+  while(win->shown())
+  {
+  	Fl::check();
+  }
+}
+
+Fl_Double_Window* MainWindow::createNewProjectDlg() {
+  Fl_Double_Window* w;
+  { Fl_Double_Window* o = new Fl_Double_Window(555, 185, "New Project");
+    w = o;
+    o->user_data((void*)(this));
+    { project_name_edit = new Fl_Input(140, 15, 145, 25, "Project Name:");
+    } // Fl_Input* project_name_edit
+    { project_directory_edit = new Fl_Input(140, 45, 365, 25, "Project Directory:");
+      project_directory_edit->tooltip("Will create a directory with the same name as the project in here.");
+    } // Fl_Input* project_directory_edit
+    { Fl_Button* o = new Fl_Button(510, 45, 30, 25, "...");
+      o->callback((Fl_Callback*)find_project_directory, (void*)(this));
+    } // Fl_Button* o
+    { install_lua_check = new Fl_Check_Button(140, 85, 145, 25, "Install Lua SDK");
+      install_lua_check->down_box(FL_DOWN_BOX);
+    } // Fl_Check_Button* install_lua_check
+    { create_initial_scene_check = new Fl_Check_Button(140, 110, 165, 25, "Create initial scene");
+      create_initial_scene_check->down_box(FL_DOWN_BOX);
+    } // Fl_Check_Button* create_initial_scene_check
+    { Fl_Button* o = new Fl_Button(370, 145, 135, 25, "Create Project");
+      o->callback((Fl_Callback*)generate_project, (void*)(this));
+    } // Fl_Button* o
+    { Fl_Button* o = new Fl_Button(140, 145, 135, 25, "Cancel");
+      o->callback((Fl_Callback*)cancel_np_dialog);
+    } // Fl_Button* o
+    o->set_modal();
+    o->end();
+  } // Fl_Double_Window* o
+  return w;
+}
+
+void MainWindow::find_project_directory(Fl_Button*, MainWindow* dlg) {
+  const char* homedir = NULL;
+  
+  #ifndef WIN32
+  	homedir = getenv("HOME");
+  #endif
+  
+  
+  const char* projectFile = fl_native_file_chooser("Choose a project directory", NULL, 
+  						homedir, Fl_Native_File_Chooser::BROWSE_DIRECTORY);
+  
+  
+  if(projectFile)
+  	dlg->project_directory_edit->value(projectFile);
+}
+
+void MainWindow::cancel_np_dialog(Fl_Button* btn, void* dlg) {
+  btn->parent()->hide();
+}
+
+const char* MainWindow::generateProjectStructure(const char* path, const char* name, bool lua, bool scene) {
+  std::string p = path;
+    if(!createDirectory(path, true) ||
+    		!createDirectory((p + "/fonts").c_str(), true) ||
+    		!createDirectory((p + "/levels").c_str(), true) ||
+    		!createDirectory((p + "/maps").c_str(), true) ||
+    		!createDirectory((p + "/meshs").c_str(), true) ||
+    		!createDirectory((p + "/scripts").c_str(), true) ||
+    		!createDirectory((p + "/shaders").c_str(), true) ||
+    		!createDirectory((p + "/sounds").c_str(), true))
+    {
+    	fl_message("Could not create project directory!");
+    	removeDirectory(path);
+    	return NULL;
+    }
+    
+    if(lua)
+    {
+  	  char src[255];
+  	  char dir[255];
+  	  getGlobalFilename(src, currentDirectory.c_str(), "LuaApi");
+  	  getGlobalFilename(dir, path, "scripts/SDK");
+  
+  	  if(!copyDirectory(src, dir))
+  	  {
+  	  	fl_message("Could not copy the Lua SDK!");
+  	  	//removeDirectory(path);
+  	  	//return;
+  	  }
+    }
+    
+    std::string levelFile;
+    if(scene)
+    {
+  	levelFile = std::string("levels/") + name + ".level";
+  	string levelSystemPath = levelFile;
+  
+  #ifdef WIN32
+  	replace(levelSystemPath.begin(), levelSystemPath.end(), '/', '\\');
+  #endif
+  
+  	FILE* file = fopen(levelSystemPath.c_str(), "w");
+  	if(!file)
+  	{
+  	  	fl_message("Could not create level!");
+  	  	removeDirectory(path);
+  	  	return NULL;
+  	}
+  
+  	fprintf(file, "<Maratis version=\"3.1\">\n");
+  	fprintf(file, "<Level><properties currentScene=\"0\"/>");
+  	fprintf(file, "<Scene name=\"Scene-1\">");
+  	fprintf(file, "<script file=\"\"");
+  	fprintf(file, "<properties data=\"Static\" gravity=\"0.000000 0.000000 -0.981000\" "
+  			"ambientLight=\"0.0 0.0 0.0\"/></Scene></Level></Maratis>");
+  
+  	fclose(file);
+    }
+  
+    std::string project_path = p+"/"+name+".mproj";
+  
+  #ifdef WIN32
+    replace(project_path.begin(), project_path.end(), '/', '\\');
+  #endif
+  
+  	FILE* file = fopen(project_path.c_str(), "w");
+  	if(!file)
+  	{
+  	  	fl_message("Could not create project file!");
+  	  	removeDirectory(path);
+  	  	return NULL;
+  	}
+  
+  	fprintf(file, "<Maratis version=\"3.1\">\n");
+  	fprintf(file, "<Project><renderer name=\"StandardRenderer\"/>"
+  			"<start file=\"%s\"/></Project></Maratis>", levelFile.c_str());
+  
+  	fclose(file);
+  	
+  	return project_path.c_str();
+}
+
+void MainWindow::generate_project(Fl_Button* btn, MainWindow* dlg) {
+  std::string path = dlg->project_directory_edit->value();
+    
+    if(path.empty())
+    {
+    	fl_message("You need to select a project directory!");
+    	return;
+    }
+    
+    const char* name = dlg->project_name_edit->value();
+    if(strcmp(name, "") == 0)
+    {
+    	fl_message("You need to specify a project name!");
+    	return;
+    }
+    
+    path += "/";
+    path += name;
+    
+    fl_message("Creating project in %s", path.c_str());
+    replace(path.begin(), path.end(), '\\', '/');
+    
+    const char* proj = dlg->generateProjectStructure(path.c_str(), name, dlg->install_lua_check->value() != 0, dlg->create_initial_scene_check->value() != 0);
+    if(proj)
+    {
+    	dlg->addProject(proj);
+    	dlg->saveProjectList();
+    }
+    
+    btn->parent()->hide();
 }

@@ -45,19 +45,19 @@ class MainWindow {open
   Function {create_window()} {open
   } {
     Fl_Window {} {
-      label {Project Manager} open
-      xywh {1866 299 513 450} type Double resizable visible
+      label {Project Manager}
+      xywh {1306 371 510 450} type Double resizable visible
     } {
       Fl_Browser project_browser {
         label {Projects:}
-        xywh {0 25 195 430} type Hold align 5
+        xywh {5 20 190 425} type Hold align 5
       }
       Fl_Group {} {
         label {Packages:} open
-        xywh {200 25 310 270} box ENGRAVED_FRAME resizable
+        xywh {200 20 305 275} box ENGRAVED_FRAME resizable
       } {
         Fl_Browser package_browser {
-          label {Packages:}
+          label {Available:}
           xywh {205 45 155 245} type Hold align 5
         }
         Fl_Button {} {
@@ -78,7 +78,7 @@ class MainWindow {open
       }
       Fl_Group {} {
         label {Projects:} open
-        xywh {200 315 313 135} box ENGRAVED_FRAME
+        xywh {200 315 305 130} box ENGRAVED_FRAME
       } {
         Fl_Button {} {
           label {Import Project}
@@ -88,24 +88,26 @@ class MainWindow {open
         }
         Fl_Button {} {
           label {Create Project}
+          user_data this user_data_type {MainWindow*}
+          callback create_project
           xywh {205 330 150 25}
         }
         Fl_Button {} {
           label {Copy C++ SDK}
           user_data this user_data_type {MainWindow*}
-          callback copy_cpp_sdk
-          xywh {357 359 150 25}
+          callback copy_cpp_sdk selected
+          xywh {357 359 143 25}
         }
         Fl_Button {} {
           label {Copy Lua SDK}
           user_data this user_data_type {MainWindow*}
           callback copy_lua_sdk
-          xywh {357 329 150 25}
+          xywh {357 329 143 25}
         }
       }
     }
   }
-  Function {open_neo_store(Fl_Button*, MainWindow* dlg)} {open return_type {static void}
+  Function {open_neo_store(Fl_Button*, MainWindow* dlg)} {return_type {static void}
   } {
     code {// FIXME: Don't use system!!!
 \#ifndef WIN32
@@ -133,8 +135,7 @@ class MainWindow {open
 	
 	dlg->update_package_list();} {}
   }
-  Function {update_package_list()} {open
-  } {
+  Function {update_package_list()} {} {
     code {// This file needs to be the same as in the NeoStore!
 	std::string confPath;
 \#ifndef WIN32
@@ -166,7 +167,7 @@ class MainWindow {open
 
 	in.close();} {}
   }
-  Function {import_project(Fl_Button* btn, MainWindow* dlg)} {open return_type {static void}
+  Function {import_project(Fl_Button* btn, MainWindow* dlg)} {return_type {static void}
   } {
     code {const char* projectFile = fl_native_file_chooser("Choose a project", "*.mproj", 
 						NULL, Fl_Native_File_Chooser::BROWSE_FILE);
@@ -227,7 +228,7 @@ package += pkgName.erase(pkgName.find_last_of("-"));
 	std::replace(path.begin(), path.end(), '\\\\', '/');
 \#endif
 
-//fl_message("Copying %s to %s", package.c_str(), path.c_str());
+fl_message("Copying %s to %s", package.c_str(), path.c_str());
 if(!copyDirectory(package.c_str(), path.c_str()))
 {
 	fl_message("Could not install package!");
@@ -241,12 +242,10 @@ else
   } {
     code {return m_projects[std::string(name)].c_str();} {}
   }
-  Function {addProject(const char* name, const char* path)} {open
-  } {
+  Function {addProject(const char* name, const char* path)} {} {
     code {m_projects[std::string(name)] = path;} {}
   }
-  Function {loadProjectList()} {open
-  } {
+  Function {loadProjectList()} {} {
     code {std::string path;
 \#ifndef WIN32
 	path = getenv("HOME");
@@ -278,8 +277,7 @@ while(!in.eof())
 
 in.close();} {}
   }
-  Function {saveProjectList()} {open
-  } {
+  Function {saveProjectList()} {} {
     code {std::string path;
 \#ifndef WIN32
 	path = getenv("HOME");
@@ -314,8 +312,7 @@ for(std::map<std::string,std::string>::iterator iter = m_projects.begin(); iter 
 
 out.close();} {}
   }
-  Function {addProject(const char* filepath)} {open
-  } {
+  Function {addProject(const char* filepath)} {} {
     code {std::string path = filepath;
 
 int idx;
@@ -334,7 +331,7 @@ path = path.erase(idx);
 project_browser->add(name.c_str());
 addProject(name.c_str(), path.c_str());} {}
   }
-  Function {copy_lua_sdk(Fl_Button*, MainWindow* dlg)} {open return_type {static void}
+  Function {copy_lua_sdk(Fl_Button*, MainWindow* dlg)} {return_type {static void}
   } {
     code {int value = dlg->project_browser->value();
 
@@ -369,7 +366,7 @@ if(!copyDirectory(src, dir))
 	fl_message("Could not copy the Lua SDK!");
 }} {}
   }
-  Function {copy_cpp_sdk(Fl_Button*, MainWindow* dlg)} {open return_type {static void}
+  Function {copy_cpp_sdk(Fl_Button*, MainWindow* dlg)} {return_type {static void}
   } {
     code {int value = dlg->project_browser->value();
 
@@ -402,7 +399,191 @@ getGlobalFilename(dir, path.c_str(), "SDK");
 if(!copyDirectory(src, dir))
 {
 	fl_message("Could not copy the C++ SDK!");
-}} {selected
+}} {}
+  }
+  Function {create_project(Fl_Button*, MainWindow* dlg)} {return_type {static void}
+  } {
+    code {Fl_Window* win = dlg->createNewProjectDlg();
+win->show();
+
+while(win->shown())
+{
+	Fl::check();
+}} {}
+  }
+  Function {createNewProjectDlg()} {open
+  } {
+    Fl_Window {} {
+      label {New Project} open
+      xywh {796 285 555 185} type Double modal visible
+    } {
+      Fl_Input project_name_edit {
+        label {Project Name:}
+        xywh {140 15 145 25}
+      }
+      Fl_Input project_directory_edit {
+        label {Project Directory:}
+        tooltip {Will create a directory with the same name as the project in here.} xywh {140 45 365 25}
+      }
+      Fl_Button {} {
+        label {...}
+        user_data this user_data_type {MainWindow*}
+        callback find_project_directory
+        xywh {510 45 30 25}
+      }
+      Fl_Check_Button install_lua_check {
+        label {Install Lua SDK}
+        xywh {140 85 145 25} down_box DOWN_BOX
+      }
+      Fl_Check_Button create_initial_scene_check {
+        label {Create initial scene}
+        xywh {140 110 165 25} down_box DOWN_BOX
+      }
+      Fl_Button {} {
+        label {Create Project}
+        user_data this user_data_type {MainWindow*}
+        callback generate_project
+        xywh {370 145 135 25}
+      }
+      Fl_Button {} {
+        label Cancel
+        callback cancel_np_dialog
+        xywh {140 145 135 25}
+      }
     }
+  }
+  Function {find_project_directory(Fl_Button*, MainWindow* dlg)} {open return_type {static void}
+  } {
+    code {const char* homedir = NULL;
+
+\#ifndef WIN32
+	homedir = getenv("HOME");
+\#endif
+
+
+const char* projectFile = fl_native_file_chooser("Choose a project directory", NULL, 
+						homedir, Fl_Native_File_Chooser::BROWSE_DIRECTORY);
+
+
+if(projectFile)
+	dlg->project_directory_edit->value(projectFile);} {}
+  }
+  Function {cancel_np_dialog(Fl_Button* btn, void* dlg)} {open return_type {static void}
+  } {
+    code {btn->parent()->hide();} {}
+  }
+  Function {generateProjectStructure(const char* path, const char* name, bool lua, bool scene)} {open return_type {const char*}
+  } {
+    code {std::string p = path;
+  if(!createDirectory(path, true) ||
+  		!createDirectory((p + "/fonts").c_str(), true) ||
+  		!createDirectory((p + "/levels").c_str(), true) ||
+  		!createDirectory((p + "/maps").c_str(), true) ||
+  		!createDirectory((p + "/meshs").c_str(), true) ||
+  		!createDirectory((p + "/scripts").c_str(), true) ||
+  		!createDirectory((p + "/shaders").c_str(), true) ||
+  		!createDirectory((p + "/sounds").c_str(), true))
+  {
+  	fl_message("Could not create project directory!");
+  	removeDirectory(path);
+  	return NULL;
+  }
+  
+  if(lua)
+  {
+	  char src[255];
+	  char dir[255];
+	  getGlobalFilename(src, currentDirectory.c_str(), "LuaApi");
+	  getGlobalFilename(dir, path, "scripts/SDK");
+
+	  if(!copyDirectory(src, dir))
+	  {
+	  	fl_message("Could not copy the Lua SDK!");
+	  	//removeDirectory(path);
+	  	//return;
+	  }
+  }
+  
+  std::string levelFile;
+  if(scene)
+  {
+	levelFile = std::string("levels/") + name + ".level";
+	string levelSystemPath = levelFile;
+
+\#ifdef WIN32
+	replace(levelSystemPath.begin(), levelSystemPath.end(), '/', '\\\\');
+\#endif
+
+	FILE* file = fopen(levelSystemPath.c_str(), "w");
+	if(!file)
+	{
+	  	fl_message("Could not create level!");
+	  	removeDirectory(path);
+	  	return NULL;
+	}
+
+	fprintf(file, "<Maratis version=\\"3.1\\">\\n");
+	fprintf(file, "<Level><properties currentScene=\\"0\\"/>");
+	fprintf(file, "<Scene name=\\"Scene-1\\">");
+	fprintf(file, "<script file=\\"\\"");
+	fprintf(file, "<properties data=\\"Static\\" gravity=\\"0.000000 0.000000 -0.981000\\" "
+			"ambientLight=\\"0.0 0.0 0.0\\"/></Scene></Level></Maratis>");
+
+	fclose(file);
+  }
+
+  std::string project_path = p+"/"+name+".mproj";
+
+\#ifdef WIN32
+  replace(project_path.begin(), project_path.end(), '/', '\\\\');
+\#endif
+
+	FILE* file = fopen(project_path.c_str(), "w");
+	if(!file)
+	{
+	  	fl_message("Could not create project file!");
+	  	removeDirectory(path);
+	  	return NULL;
+	}
+
+	fprintf(file, "<Maratis version=\\"3.1\\">\\n");
+	fprintf(file, "<Project><renderer name=\\"StandardRenderer\\"/>"
+			"<start file=\\"%s\\"/></Project></Maratis>", levelFile.c_str());
+
+	fclose(file);
+	
+	return project_path.c_str();} {}
+  }
+  Function {generate_project(Fl_Button* btn, MainWindow* dlg)} {open return_type {static void}
+  } {
+    code {std::string path = dlg->project_directory_edit->value();
+  
+  if(path.empty())
+  {
+  	fl_message("You need to select a project directory!");
+  	return;
+  }
+  
+  const char* name = dlg->project_name_edit->value();
+  if(strcmp(name, "") == 0)
+  {
+  	fl_message("You need to specify a project name!");
+  	return;
+  }
+  
+  path += "/";
+  path += name;
+  
+  fl_message("Creating project in %s", path.c_str());
+  replace(path.begin(), path.end(), '\\\\', '/');
+  
+  const char* proj = dlg->generateProjectStructure(path.c_str(), name, dlg->install_lua_check->value() != 0, dlg->create_initial_scene_check->value() != 0);
+  if(proj)
+  {
+  	dlg->addProject(proj);
+  	dlg->saveProjectList();
+  }
+  
+  btn->parent()->hide();} {}
   }
 } 

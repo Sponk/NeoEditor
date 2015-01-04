@@ -10,6 +10,8 @@
 #include <FL/Fl_Browser.H>
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Button.H>
+#include <FL/Fl_Input.H>
+#include <FL/Fl_Check_Button.H>
 
 class MainWindow {
   std::map<std::string,std::string> m_projects; 
@@ -28,5 +30,15 @@ public:
   void addProject(const char* filepath);
   static void copy_lua_sdk(Fl_Button*, MainWindow* dlg);
   static void copy_cpp_sdk(Fl_Button*, MainWindow* dlg);
+  static void create_project(Fl_Button*, MainWindow* dlg);
+  Fl_Double_Window* createNewProjectDlg();
+  Fl_Input *project_name_edit;
+  Fl_Input *project_directory_edit;
+  Fl_Check_Button *install_lua_check;
+  Fl_Check_Button *create_initial_scene_check;
+  static void find_project_directory(Fl_Button*, MainWindow* dlg);
+  static void cancel_np_dialog(Fl_Button* btn, void* dlg);
+  const char* generateProjectStructure(const char* path, const char* name, bool lua, bool scene);
+  static void generate_project(Fl_Button* btn, MainWindow* dlg);
 };
 #endif
