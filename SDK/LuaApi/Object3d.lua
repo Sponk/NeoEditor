@@ -8,8 +8,17 @@ dofile("class.lua")
 
 Object3d = class(
     function(object, nativeObject)
+
+	if nativeObject == nil then
+	    print("Error: Native object is nil! Can not construct Object3d object!")
+	    return nil
+	end
+
 	object.type = getObjectType(nativeObject)
 	object.nativeObject = nativeObject
+	object.position = getPosition(nativeObject)
+	object.rotation = getRotation(nativeObject)
+	object.scale = getScale(nativeObject)
     end
 )
 
@@ -59,6 +68,7 @@ end
 --
 -- pos: The new position as a vec3
 function Object3d:setPosition(pos)
+    self.position = pos
     setPosition(self.nativeObject, pos)
 end
 
@@ -66,6 +76,7 @@ end
 --
 -- pos: The new rotation as a vec3
 function Object3d:setRotation(rot)
+    self.rotation = rot
     setRotation(self.nativeObject, rot)
 end
 
@@ -73,6 +84,7 @@ end
 --
 -- pos: The new scale as a vec3
 function Object3d:setScale(scale)
+    self.scale = scale
     setScale(self.nativeObject, scale)
 end
 
@@ -98,6 +110,7 @@ end
 -- mode: The mode of the translation. Either nil or "local"
 function Object3d:translate(vec, mode)
     translate(self.nativeObject, vec, mode)
+    self.position = getPosition(self.nativeObject)
 end
 
 --- Rotates the object by the given amount around the given axis.
@@ -124,6 +137,7 @@ end
 -- mode: The mode of the rotation. Either nil or "local"
 function Object3d:rotate(axis, amount, mode)
     rotate(self.nativeObject, axis, amount, mode)
+    self.rotation = getRotation(self.nativeObject)
 end
 
 --- Returns the parent of the object or 'nil' if there isn't any.

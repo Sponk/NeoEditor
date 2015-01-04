@@ -45,3 +45,4 @@
 
 dofile("class.lua")
 dofile("Object3d.lua")
+dofile("OLight.lua")

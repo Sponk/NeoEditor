@@ -31,6 +31,11 @@ mainCanvas:addWidget(label)
 label:setLabel("This is a label!")
 
 cube = Object3d.getObject("Cube");
+light = Object3d.getObject("Light")
+
+light = OLight(light)
+light.maxBrightness = 2.0
+light.speed = 0.01
 
 function onSceneUpdate()
     sprite:rotate(2)
@@ -48,5 +53,11 @@ function onSceneUpdate()
 	tile:attachAnimation(idleAnimation)
     end
 
+    local intensity = light:getIntensity()
+    if intensity >= light.maxBrightness or intensity <= 0 then
+	light.speed = light.speed * -1
+    end
+
+    light:setIntensity(light:getIntensity() + light.speed)
     tile:update()
 end
