@@ -14,21 +14,6 @@ using namespace std;
 
 string currentDirectory;
 
-// FLTK helper
-const char* fl_native_file_chooser(const char* title, const char* files, const char* dir, int type)
-{
-	Fl_Native_File_Chooser* dlg = new Fl_Native_File_Chooser();
-	dlg->title(title);
-	dlg->filter(files);
-	dlg->type(type);
-	dlg->directory(dir);
-
-	if (dlg->show() == 0)
-		return dlg->filename();
-
-	return NULL;
-}
-
 int main(int argc, char **argv)
 {
 	Fl::background(0xEE,0xEE,0xEE);
