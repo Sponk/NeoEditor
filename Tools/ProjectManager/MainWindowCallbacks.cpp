@@ -1,7 +1,7 @@
 #include "MainWindow.h"
 
-#include <Fl/fl_message.H>
-#include <Fl/Fl_Native_File_Chooser.H>
+#include <FL/Fl.H>
+#include <FL/Fl_Native_File_Chooser.H>
 
 #include <iostream>
 #include <fstream>
