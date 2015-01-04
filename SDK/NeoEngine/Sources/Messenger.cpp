@@ -29,11 +29,12 @@ using namespace Neo;
 
 void Messenger::addInbox(const char* name, unsigned int id)
 {
+    waitForAccess();
+
 	Inbox box;
 	box.name = name;
 	box.id = id;
 
-    waitForAccess();
 	m_boxes[name] = box;
     finishAccess();
 }
@@ -49,13 +50,14 @@ unsigned int Messenger::getMessagesCount(const char* name)
 
 void Messenger::sendMessage(const char* message, unsigned int messageId, void* data, const char* dest, const char* from)
 {
+    waitForAccess();
+
 	Message msg;
 	msg.message = message;
 	msg.messageId = messageId;
 	msg.sender = from;
 	msg.data = data;
 
-	waitForAccess();
 	m_boxes[dest].messages.push_back(msg);
 	finishAccess();
 }

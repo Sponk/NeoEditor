@@ -36,7 +36,7 @@ int Server::server_thread(void *data)
 	}
 	else
 	{
-		peer->Startup(1, &sd, 1);
+        peer->Startup(server->m_maxClients, &sd, 1);
 		peer->Connect(server->m_host.getSafeString(), server->m_port, 0, 0);
 		messenger->addInbox("ClientThread", 15);
 		thread_name = "ClientThread";
@@ -88,7 +88,7 @@ int Server::server_thread(void *data)
 						MLOG_INFO("Disconnected from " << packet->systemAddress.ToString(true, ':'));
 					break;
 
-				case ID_CONNECTION_ATTEMPT_FAILED:
+                case ID_CONNECTION_ATTEMPT_FAILED:
 						MLOG_INFO("Could not connect to server!");
 					break;
 
@@ -137,6 +137,21 @@ int Server::server_thread(void *data)
 					connected = true;
 					break;
 
+            case ID_NO_FREE_INCOMING_CONNECTIONS:
+
+                if(server->m_isServer)
+                {
+                    MLOG_INFO("Got connection request but had to decline. Server is full.");
+                }
+                else
+                {
+                    MLOG_ERROR("Can't connect to server! Server is full!");
+                    RakPeerInterface::DestroyInstance(peer);
+                    return ID_NO_FREE_INCOMING_CONNECTIONS;
+                }
+
+                break;
+
 				default:
 						MLOG_INFO("Message with identifier " << (int) packet->data[0] << " has arrived.");
 			}
@@ -167,6 +182,7 @@ void Server::startClient(const char* host, unsigned int port)
 		m_isServer = false;
 		m_port = port;
 		m_host.set(host);
+        m_maxClients = 1;
 
 		m_serverThread = MThreadManager::getInstance()->getNewThread();
 		m_serverThread->Start(Server::server_thread, "ClientThread", (void*) this);

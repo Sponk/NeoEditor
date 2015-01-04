@@ -230,22 +230,27 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, Networking_test);
 
 	server.addRPCFunction("testFunction", testFunction);
 
-	server.startServer(10, 60000);
-	client.startClient("127.0.0.1", 60000);
+    server.startServer(10, 60001);
+    client.startClient("127.0.0.1", 60001);
 
-	window->sleep(200);
+    window->sleep(1000);
 
 	std::vector<NeoVariable> variables;
     variables.push_back(NeoVariable("Test", new MString("Hello World!"), M_VARIABLE_STRING));
 
 	Messenger::getInstance()->sendMessage("testFunction", ID_RPC_MESSAGE, &variables, "ClientThread", "MainThread");
 
-	window->sleep(1000);
+    window->sleep(100);
+    LT_CHECK(testFunctionSuccess);
+
+    Messenger::getInstance()->sendMessage("testFunction", ID_RPC_MESSAGE, &variables, "ClientThread", "MainThread");
+
+    window->sleep(100);
+
+    LT_CHECK(testFunctionSuccess);
 
     delete (MString*) variables[0].getPointer();
     variables.clear();
-
-    LT_CHECK(testFunctionSuccess);
 
 	game->end();
 
