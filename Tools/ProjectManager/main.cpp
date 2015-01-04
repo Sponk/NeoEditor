@@ -31,7 +31,10 @@ const char* fl_native_file_chooser(const char* title, const char* files, const c
 
 int main(int argc, char **argv)
 {
-    Fl::get_system_colors();
+	Fl::background(0xEE,0xEE,0xEE);
+	Fl::background2(0xFF,0xFF,0xFF);
+
+	//Fl::get_system_colors();
     Fl::scheme("gtk+");
 
 	currentDirectory = argv[0];

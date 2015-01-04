@@ -71,8 +71,12 @@ void send_report(Fl_Button* button, void*)
 
 int main(int argc, char **argv)
 {
-    Fl::get_system_colors();
-    Fl::scheme("gtk+");
+    //Fl::get_system_colors();
+
+	Fl::background(0xEE,0xEE,0xEE);
+	Fl::background2(0xFF,0xFF,0xFF);
+
+	Fl::scheme("gtk+");
 
     CrashHandlerDlg dlg;
     Fl_Double_Window* window = dlg.create_window();

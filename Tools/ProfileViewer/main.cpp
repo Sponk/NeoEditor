@@ -22,7 +22,11 @@ int main(int argc, char **argv)
     if(argc > 1)
         profile_path = argv[1];
 
-    Fl::get_system_colors();
+    //Fl::get_system_colors();
+
+	Fl::background(0xEE,0xEE,0xEE);
+	Fl::background2(0xFF,0xFF,0xFF);
+
     Fl::scheme("gtk+");
 
     MainWindow dlg;
