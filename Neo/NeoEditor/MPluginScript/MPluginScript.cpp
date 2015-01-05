@@ -119,7 +119,7 @@ void MPluginScript::init()
     LuaScript::init();
 }
 
-void MPluginScript::runScript(const char* filename)
+bool MPluginScript::runScript(const char* filename)
 {
     NeoEngine::getInstance()->setScriptContext(this);
     char g_currentDirectory[256];
@@ -129,13 +129,13 @@ void MPluginScript::runScript(const char* filename)
     if(! filename)
     {
         m_isRunning = false;
-        return;
+        return false;
     }
 
     if(strlen(filename) == 0)
     {
         m_isRunning = false;
-        return;
+        return false;
     }
 
     // current directory
@@ -147,7 +147,7 @@ void MPluginScript::runScript(const char* filename)
     {
         MLOG_ERROR("Script: Unable to read file " << filename);
         m_isRunning = false;
-        return;
+        return false;
     }
 
     init();
@@ -158,7 +158,7 @@ void MPluginScript::runScript(const char* filename)
         MLOG_ERROR("Lua Script: \n" << lua_tostring(m_state, -1) << "\n");
         m_isRunning = false;
         SAFE_FREE(text);
-        return;
+        return false;
     }
 
     // finish
@@ -166,6 +166,7 @@ void MPluginScript::runScript(const char* filename)
     m_isRunning = true;
 
     MLOG_INFO("Loaded plugin: \n\tName: " << m_name << "\n\tAuthor: " << m_author << "\n\tDescription: " << m_description << "\n\tLicense: " << m_license);
+    return true;
 }
 
 void MPluginScript::callFunction(const char* name)

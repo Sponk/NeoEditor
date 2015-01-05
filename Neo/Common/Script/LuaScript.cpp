@@ -446,20 +446,20 @@ int LuaScript::function(lua_State * L)
 	return 0;
 }
 
-void LuaScript::runScript(const char * filename)
+bool LuaScript::runScript(const char * filename)
 {
 	clear();
 
 	if(! filename)
 	{
 		m_isRunning = false;
-		return;
+        return false;
 	}
 
 	if(strlen(filename) == 0)
 	{
 		m_isRunning = false;
-		return;
+        return false;
 	}
 
 	// current directory
@@ -471,7 +471,7 @@ void LuaScript::runScript(const char * filename)
 	{
         MLOG_ERROR("Script: Unable to read file " << filename);
 		m_isRunning = false;
-		return;
+        return false;
 	}
 	
 	init();
@@ -482,12 +482,13 @@ void LuaScript::runScript(const char * filename)
         MLOG_ERROR("Lua Script: \n" << lua_tostring(m_state, -1) << "\n");
 		m_isRunning = false;
 		SAFE_FREE(text);
-		return;
+        return false;
 	}
 	
 	// finish
 	SAFE_FREE(text);
 	m_isRunning = true;
+    return true;
 }
 
 bool LuaScript::startCallFunction(const char* name)
@@ -643,6 +644,9 @@ bool LuaScript::isNumber(unsigned int arg)
 
 bool LuaScript::runString(const char* str)
 {
+    if(!m_state)
+        init();
+
 	// do string
 	if(luaL_dostring(m_state, str) != 0)
 	{

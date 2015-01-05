@@ -93,5 +93,5 @@ void writeVariable(RakNet::BitStream* bs, Neo::NeoVariable var)
 
 void registerNetworkingScriptAPI(MScriptContext* script)
 {
-	MLOG_INFO("Registering networking API...");
+    // MLOG_INFO("Registering networking API...");
 }

@@ -60,7 +60,7 @@ public:
     lua_State* getLuaState() { return m_state; }
 
 	// run script
-	void runScript(const char * filename);
+    bool runScript(const char * filename);
 
 	// call function
 	bool startCallFunction(const char* name);

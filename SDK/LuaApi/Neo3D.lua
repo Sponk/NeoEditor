@@ -42,7 +42,21 @@
   end
 ]]
 
-
 dofile("class.lua")
 dofile("Object3d.lua")
 dofile("OLight.lua")
+
+if enableNeo3DTests then
+    dofile("Testing/Tests.lua")
+    dofile("Testing/LuaUnit.lua")
+    --dofile("Graphics2D.lua")
+    Neo3D = {
+		runTests = function()
+		    local lu = LuaUnit.new()
+		    lu:runSuite()
+		    --lu:setOutputType("junit")
+		    --lu:runSuite("-o",  "junit", "-n", "test.xml")
+		end
+	}
+end
+
