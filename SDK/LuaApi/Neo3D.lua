@@ -53,8 +53,8 @@ if enableNeo3DTests then
     Neo3D = {
 		runTests = function()
 		    local lu = LuaUnit.new()
+		    lu:setOutputType("google")
 		    lu:runSuite()
-		    --lu:setOutputType("junit")
 		    --lu:runSuite("-o",  "junit", "-n", "test.xml")
 		end
 	}

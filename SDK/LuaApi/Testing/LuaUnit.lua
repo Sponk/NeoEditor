@@ -801,6 +801,89 @@ assert_not_is = assertNotIs
 ----------------------------------------------------------------
 
 ----------------------------------------------------------------
+--                     class GoogleOutput
+----------------------------------------------------------------
+
+GoogleOutput = { -- class
+    __class__ = 'GoogleOutput',
+    runner = nil,
+    result = nil,
+}
+GoogleOutput_MT = { __index = GoogleOutput }
+
+    function GoogleOutput:new()
+        local t = {}
+        t.verbosity = VERBOSITY_LOW
+        setmetatable( t, GoogleOutput_MT )
+                
+        return t
+    end
+    function GoogleOutput:startSuite() 
+        print("[==========] Running ".. self.result.testCount .. " tests from 1 test case.")
+        print("[----------] Global test environment set-up.")
+        print("[----------] ".. self.result.testCount .. " tests from LuaUnit")
+        
+    end
+    function GoogleOutput:startClass(className) 
+        if className ~= '[TestFunctions]' then
+            --print("[----------] " .. self.result.testCount .. " tests from "..className)
+        end
+    end
+    function GoogleOutput:startTest(testName) 
+            print("[ RUN      ] LuaUnit." .. testName)
+    end
+
+    function GoogleOutput:addFailure( errorMsg, stackTrace )
+        --print(string.format("not ok %d\t%s", self.result.currentTestNumber, self.result.currentTestName ))
+        
+        print(self.result.currentTestName .. ": Failure")
+        if self.verbosity > VERBOSITY_LOW then
+           print( prefixString( '    ', errorMsg ) )
+        end
+        if self.verbosity > VERBOSITY_DEFAULT then
+           print( prefixString( '    ', stackTrace ) )
+        end
+        
+        print("[  FAILED  ] LuaUnit." .. self.result.currentTestName .. " (1 ms)")
+        
+    end
+
+    function GoogleOutput:endTest(testHasFailure)
+        if not self.result.currentTestHasFailure then
+            print("[       OK ] LuaUnit." .. self.result.currentTestName .. " (1 ms)")
+            -- print(string.format("ok     %d\t%s", self.result.currentTestNumber, self.result.currentTestName ))
+        end
+    end
+
+    function GoogleOutput:endClass() 
+    
+    end
+
+    function GoogleOutput:endSuite()
+        t = {}
+        table.insert(t, string.format('# Ran %d tests in %0.3f seconds, %d successes, %d failures',
+            self.result.testCount, self.result.duration, self.result.testCount-self.result.failureCount, self.result.failureCount ) )
+        if self.result.nonSelectedCount > 0 then
+            table.insert(t, string.format(", %d non selected tests", self.result.nonSelectedCount ) )
+        end
+        
+        print("[----------] " ..  self.result.testCount .. " tests from LuaUnit (" .. math.floor(self.result.duration) .. " ms total)")
+        
+        print("")
+        
+        print("[----------] Global test environment tear-down")
+        
+        print("[==========] 1 tests from 1 test case ran. (" .. math.floor(self.result.duration) .. " ms total)")
+        print("[  PASSED  ] 1 tests.")
+        
+        -- print( table.concat(t) )
+        return self.result.failureCount
+    end
+
+
+-- class Google output end
+
+----------------------------------------------------------------
 --                     class TapOutput
 ----------------------------------------------------------------
 
@@ -1393,6 +1476,10 @@ LuaUnit_MT = { __index = LuaUnit }
         end 
         if outputType:upper() == "JUNIT" then
             self.outputType = JUnitOutput
+            return
+        end
+        if outputType:upper() == "GOOGLE" then
+            self.outputType = GoogleOutput
             return
         end 
         if outputType:upper() == "TEXT" then
