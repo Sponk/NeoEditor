@@ -12,9 +12,9 @@ before_script: "git fetch --tags && export VERSION=$(git describe --tags --alway
 
 script: 
 
- # - mkdir ../build-windows && cd ../build-windows && export DXSDK_DIR=~/ && cmake -DCMAKE_TOOLCHAIN_FILE=../NeoEditor/CMake/Toolchains/CrossWindowsMingw.cmake ../NeoEditor && make -j2 && make package
+ # - mkdir ../build-windows && cd ../build-windows && export DXSDK_DIR=~/ && cmake -DCMAKE_TOOLCHAIN_FILE=../NeoEditor/CMake/Toolchains/CrossWindowsMingw.cmake ../NeoEditor && make -j2 package 
 
-  - mkdir ../build && cd ../build && cmake ../NeoEditor -DNEO_VERSION_STRING="\"$VERSION\"" && make -j2 && make package && make test
+  - mkdir ../build && cd ../build && cmake ../NeoEditor -DNEO_VERSION_STRING="\"$VERSION\"" && make -j2 package && make test && make lua-test
  
   
 notifications:
