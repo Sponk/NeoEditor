@@ -9,16 +9,16 @@ dofile("class.lua")
 Object3d = class(
     function(object, nativeObject)
 
-	if nativeObject == nil then
-	    print("Error: Native object is nil! Can not construct Object3d object!")
-	    return nil
-	end
+    	if nativeObject == nil then
+    	    print("Error: Native object is nil! Can not construct Object3d object!")
+    	    return nil
+    	end
 
-	object.type = getObjectType(nativeObject)
-	object.nativeObject = nativeObject
-	object.position = getPosition(nativeObject)
-	object.rotation = getRotation(nativeObject)
-	object.scale = getScale(nativeObject)
+    	object.type = getObjectType(nativeObject)
+    	object.nativeObject = nativeObject
+    	object.position = getPosition(nativeObject)
+    	object.rotation = getRotation(nativeObject)
+    	object.scale = getScale(nativeObject)
     end
 )
 
@@ -47,28 +47,28 @@ end
 --
 -- returns: A vec3 containing the position.
 function Object3d:getPosition()
-    return getPosition(self.nativeObject)
+    return self.position
 end
 
 --- Returns the rotation of the object.
 --
 -- returns: A vec3 containing the rotation.
 function Object3d:getRotation()
-    return getRotation(self.nativeObject)
+    return self.rotation
 end
 
 --- Returns the scale of the object.
 --
 -- returns: A vec3 containing the scale.
 function Object3d:getScale()
-    return getScale(self.nativeObject)
+    return self.scale
 end
 
 --- Sets the position of the object
 --
 -- pos: The new position as a vec3
 function Object3d:setPosition(pos)
-    self.position = pos
+    self.position = vec3(pos[1], pos[2], pos[3])
     setPosition(self.nativeObject, pos)
 end
 
@@ -76,16 +76,18 @@ end
 --
 -- pos: The new rotation as a vec3
 function Object3d:setRotation(rot)
-    self.rotation = rot
+    self.rotation = vec3(rot[1], rot[2], rot[3])
     setRotation(self.nativeObject, rot)
+    updateMatrix(self.nativeObject)
 end
 
 --- Sets the scale of the object
 --
 -- pos: The new scale as a vec3
 function Object3d:setScale(scale)
-    self.scale = scale
+    self.scale = vec3(scale[1], scale[2], scale[3])
     setScale(self.nativeObject, scale)
+    updateMatrix(self.nativeObject)
 end
 
 --- Translates the object by the given vec3
@@ -110,6 +112,7 @@ end
 -- mode: The mode of the translation. Either nil or "local"
 function Object3d:translate(vec, mode)
     translate(self.nativeObject, vec, mode)
+    updateMatrix(self.nativeObject)
     self.position = getPosition(self.nativeObject)
 end
 
@@ -138,6 +141,7 @@ end
 function Object3d:rotate(axis, amount, mode)
     rotate(self.nativeObject, axis, amount, mode)
     self.rotation = getRotation(self.nativeObject)
+    updateMatrix(self.nativeObject)
 end
 
 --- Returns the parent of the object or 'nil' if there isn't any.
@@ -147,7 +151,7 @@ function Object3d:getParent()
     local nativeParent = getParent(self.nativeObject)
 
     if nativeParent == nil then
-	return nil
+	   return nil
     end
 
     return Object3d(nativeParent)
@@ -173,8 +177,8 @@ end
 -- object: An Object3d instance that will be the new parent.
 function Object3d:setParent(object)
     if object == nil then
-	setParent(self.nativeObject, nil)
-	return
+    	setParent(self.nativeObject, nil)
+    	return
     end
 
     setParent(self.nativeObject, object.nativeObject)
