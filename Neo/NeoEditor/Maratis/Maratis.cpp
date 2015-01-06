@@ -34,7 +34,7 @@
     #include <OpenGL/OpenGL.h>
     #include <OpenGL/gl.h>
     #include <sys/stat.h>
-#elif (defined(linux) && !defined(USE_GLES))
+#elif (defined(LINUX) && !defined(USE_GLES))
     #include <glew.h>
     #include <sys/stat.h>
 #else

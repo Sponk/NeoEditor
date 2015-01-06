@@ -28,11 +28,11 @@
 #include "SDL_systhread.h"
 #include "../SDL_error_c.h"
 
+static SDL_atomic_t SDL_tls_id;
 
 SDL_TLSID
 SDL_TLSCreate()
 {
-    static SDL_atomic_t SDL_tls_id;
     return SDL_AtomicIncRef(&SDL_tls_id)+1;
 }
 
