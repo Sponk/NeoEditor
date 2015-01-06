@@ -26,7 +26,7 @@ decl {\#include <algorithm>} {private local
 decl {extern std::string currentDirectory;} {private local
 } 
 
-decl {\#include <FL/Fl_Chart.H>} {selected public global
+decl {\#include <FL/Fl_Chart.H>} {public global
 } 
 
 decl {extern const char* fl_native_file_chooser(const char* title, const char* files, const char* dir, int type);} {private local
@@ -46,7 +46,7 @@ class MainWindow {open
   } {
     Fl_Window {} {
       label {Project Manager}
-      xywh {1306 371 510 450} type Double resizable visible
+      xywh {1345 399 510 450} type Double resizable visible
     } {
       Fl_Browser project_browser {
         label {Projects:}
@@ -107,34 +107,8 @@ class MainWindow {open
       }
     }
   }
-  Function {open_neo_store(Fl_Button*, MainWindow* dlg)} {return_type {static void}
-  } {
-    code {// FIXME: Don't use system!!!
-\#ifndef WIN32
-	system("./NeoStore");
-\#else
-	//ShellExecute(NULL, "open",
-//			(currentDirectory + "\\\\NeoStore.exe").c_str(),
-//			NULL,NULL, 1);
-
-	std::string path = currentDirectory + "\\\\NeoStore.exe";
-	SHELLEXECUTEINFO ShExecInfo = {0};
-	ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
-	ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
-	ShExecInfo.hwnd = NULL;
-	ShExecInfo.lpVerb = NULL;
-	ShExecInfo.lpFile = path.c_str();		
-	ShExecInfo.lpParameters = "";	
-	ShExecInfo.lpDirectory = NULL;
-	ShExecInfo.nShow = SW_SHOW;
-	ShExecInfo.hInstApp = NULL;
-		
-	ShellExecuteEx(&ShExecInfo);
-	WaitForSingleObject(ShExecInfo.hProcess,INFINITE);
-\#endif
-	
-	dlg->update_package_list();} {}
-  }
+  Function {open_neo_store(Fl_Button*, MainWindow* dlg)} {open selected return_type {static void}
+  } {}
   Function {update_package_list()} {open
   } {}
   Function {import_project(Fl_Button* btn, MainWindow* dlg)} {open return_type {static void}
@@ -157,11 +131,10 @@ class MainWindow {open
   } {}
   Function {create_project(Fl_Button*, MainWindow* dlg)} {open return_type {static void}
   } {}
-  Function {createNewProjectDlg()} {open
-  } {
+  Function {createNewProjectDlg()} {} {
     Fl_Window {} {
       label {New Project} open
-      xywh {796 285 555 185} type Double modal visible
+      xywh {2097 514 555 185} type Double modal visible
     } {
       Fl_Input project_name_edit {
         label {Project Name:}

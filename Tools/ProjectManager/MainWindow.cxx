@@ -61,34 +61,6 @@ Fl_Double_Window* MainWindow::create_window() {
   return w;
 }
 
-void MainWindow::open_neo_store(Fl_Button*, MainWindow* dlg) {
-  // FIXME: Don't use system!!!
-  #ifndef WIN32
-  	system("./NeoStore");
-  #else
-  	//ShellExecute(NULL, "open",
-  //			(currentDirectory + "\\NeoStore.exe").c_str(),
-  //			NULL,NULL, 1);
-  
-  	std::string path = currentDirectory + "\\NeoStore.exe";
-  	SHELLEXECUTEINFO ShExecInfo = {0};
-  	ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
-  	ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
-  	ShExecInfo.hwnd = NULL;
-  	ShExecInfo.lpVerb = NULL;
-  	ShExecInfo.lpFile = path.c_str();		
-  	ShExecInfo.lpParameters = "";	
-  	ShExecInfo.lpDirectory = NULL;
-  	ShExecInfo.nShow = SW_SHOW;
-  	ShExecInfo.hInstApp = NULL;
-  		
-  	ShellExecuteEx(&ShExecInfo);
-  	WaitForSingleObject(ShExecInfo.hProcess,INFINITE);
-  #endif
-  	
-  	dlg->update_package_list();
-}
-
 Fl_Double_Window* MainWindow::createNewProjectDlg() {
   Fl_Double_Window* w;
   { Fl_Double_Window* o = new Fl_Double_Window(555, 185, "New Project");

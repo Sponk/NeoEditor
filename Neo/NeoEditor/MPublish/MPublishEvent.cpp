@@ -539,7 +539,7 @@ class MPublishEventCopyGame : public MPublishEvent
 		const char* pluginName = "Game.dll";
 #elif __APPLE__
 		const char* pluginName = "Game.dylib";
-#elif linux
+#elif LINUX
 		const char* pluginName = "Game.so";
 #endif
 
