@@ -268,7 +268,10 @@ void GLBox::draw()
 		Neo::Gui::GuiSystem::getInstance()->draw();
     }
 
+    // Workaround for a Bug in Gnome. Should not make a difference though.
+#ifndef LINUX
     swap_buffers();
+#endif
 }
 
 #define ENDS_WITH(s, e) (s.compare(s.length() - strlen(e), strlen(e), e) == 0)
