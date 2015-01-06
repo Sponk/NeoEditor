@@ -562,7 +562,10 @@ int main(int argc, char **argv)
 
     // gtk+ plastic none gleam
     Fl::scheme("gtk+");
-    Fl::get_system_colors();
+    //Fl::get_system_colors();
+
+	Fl::background(0xEE,0xEE,0xEE);
+	Fl::background2(0xFF,0xFF,0xFF);
 
     MWindow* mwindow = MWindow::getInstance();
     mwindow->setCurrentDirectory(rep);
