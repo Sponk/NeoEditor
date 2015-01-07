@@ -78,7 +78,6 @@ end
 function Object3d:setRotation(rot)
     self.rotation = vec3(rot[1], rot[2], rot[3])
     setRotation(self.nativeObject, rot)
-    updateMatrix(self.nativeObject)
 end
 
 --- Sets the scale of the object
@@ -87,7 +86,6 @@ end
 function Object3d:setScale(scale)
     self.scale = vec3(scale[1], scale[2], scale[3])
     setScale(self.nativeObject, scale)
-    updateMatrix(self.nativeObject)
 end
 
 --- Translates the object by the given vec3
@@ -112,7 +110,6 @@ end
 -- mode: The mode of the translation. Either nil or "local"
 function Object3d:translate(vec, mode)
     translate(self.nativeObject, vec, mode)
-    updateMatrix(self.nativeObject)
     self.position = getPosition(self.nativeObject)
 end
 
@@ -254,7 +251,7 @@ function Object3d:getChildren()
     local objects = {}
 
     for i = 1, #nativeList, 1 do
-	objects[i] = Object3d(nativeList[i])
+	     objects[i] = Object3d(nativeList[i])
     end
 
     return objects

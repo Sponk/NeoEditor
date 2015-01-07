@@ -252,7 +252,7 @@ int getMeshFilename()
 
 	int nbArguments = script->getArgsNumber()-1;
 
-	Object3d* object = (Object3d*) script->getPointer(nbArguments-1);
+	Object3d* object = (Object3d*) script->getPointer(nbArguments);
 
 	if(object)
 	{
@@ -4588,6 +4588,13 @@ int resizeWindow()
 	return 1;
 }
 
+int getWorkingDirectory()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	script->pushString(MWindow::getInstance()->getWorkingDirectory());
+	return 1;
+}
+
 void Neo::bindLuaApi(MScriptContext* context)
 {
 	context->addFunction( "vec3", vec3);
@@ -4812,6 +4819,7 @@ void Neo::bindLuaApi(MScriptContext* context)
 	context->addFunction( "getWindowScale", getWindowScale);
 	context->addFunction( "getSystemTick",	getSystemTick);
 	context->addFunction( "quit",			quit);
+	context->addFunction( "getWorkingDirectory", getWorkingDirectory);
 
 	// Register networking functionality
 	registerNetworkingScriptAPI(context);

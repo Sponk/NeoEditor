@@ -30,3 +30,15 @@ function TestLight()
   assertVectorEquals(light:getPosition(), {0,0,-1}, 0.00001)
 
 end
+
+function TestEntity()
+  
+  local entity = OEntity("meshs/box.mesh")
+  
+  -- Check if constructor works
+  assertNotNil(entity)
+  assertEquals(entity:getPosition(), {0,0,0})  
+  
+  assertEquals(entity:getPath(), getWorkingDirectory() .. "/meshs/box.mesh")
+  
+end

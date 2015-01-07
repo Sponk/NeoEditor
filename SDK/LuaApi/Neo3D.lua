@@ -45,6 +45,7 @@
 dofile("class.lua")
 dofile("Object3d.lua")
 dofile("OLight.lua")
+dofile("OEntity.lua")
 
 if enableNeo3DTests then
     dofile("Testing/Tests.lua")
