@@ -45,7 +45,7 @@ function SpriteAnimation:nextFrame()
 
     -- Only update if the delay is over
     if getSystemTick() < self.lastTime + self.delay then
-	return self.currentFrame
+	     return self.start + self.currentFrame
     end
 
     self.lastTime = getSystemTick()
@@ -54,11 +54,11 @@ function SpriteAnimation:nextFrame()
     local nframe = self.currentFrame + 1
 
     if nframe > self.length then
-	if self.looping then
-	    self.currentFrame = nframe % self.length
-	end
+    	if self.looping then
+    	    self.currentFrame = nframe % self.length    	    
+    	end
     else
-	self.currentFrame = nframe
+	     self.currentFrame = nframe
     end
 
     -- Add the start offset to the current frame
