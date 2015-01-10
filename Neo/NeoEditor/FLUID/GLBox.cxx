@@ -572,23 +572,27 @@ int GLBox::handle(int event)
             if(Fl::event_button1() && !NeoEngine::getInstance()->getGame()->isRunning())
             {
                 Maratis::getInstance()->selectObjectsInMainView(NeoEngine::getInstance()->getLevel()->getCurrentScene(), Fl::event_shift() > 0);
+
+                Maratis::getInstance()->lockSelection();
                 ::window.scene_tree->deselect_all();
 
                 Fl_Tree_Item* item = ::window.scene_tree->root();
+                if(Maratis::getInstance()->getSelectedObjectsNumber() > 0)
+                {
+                	while((item = ::window.scene_tree->next(item)) != NULL)
+					{
+                		for(int i = 0; i < Maratis::getInstance()->getSelectedObjectsNumber(); i++)
+                		{
+							if(item && !strcmp(item->label(), Maratis::getInstance()->getSelectedObjectByIndex(i)->getName()))
+							{
+								::window.scene_tree->select(item);
+							}
+                		}
+					}
+                }
+                Maratis::getInstance()->unlockSelection();
 
                 update_name = true;
-                while((item = ::window.scene_tree->next(item)) != NULL)
-                {
-                    if(Maratis::getInstance()->getSelectedObjectsNumber() == 0)
-                        break;
-
-                    if(item && !strcmp(item->label(), Maratis::getInstance()->getSelectedObjectByIndex(0)->getName()))
-                    {
-                        update_name = true;
-                        ::window.scene_tree->select(item);
-                    }
-                }
-
                 redraw();
                 ::window.special_tab->redraw();
             }

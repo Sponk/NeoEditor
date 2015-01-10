@@ -7,7 +7,7 @@ class DnDTree : public Fl_Tree
 {
 public:
     DnDTree(int X, int Y, int W, int H, const char *L = 0)
-        : Fl_Tree(X, Y, W, H, L) {};
+        : Fl_Tree(X, Y, W, H, L) { this->selectmode(FL_TREE_SELECT_MULTI); };
     int handle(int e);
 };
 

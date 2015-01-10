@@ -788,11 +788,30 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
         return;
     }
 
-    if(item == tree->find_clicked())
-    {
-        Maratis::getInstance()->clearSelectedObjects();
-        Maratis::getInstance()->addSelectedObject(object);
-    }
+    Maratis* maratis = Maratis::getInstance();
+
+    //if(item == tree->find_clicked())
+    //{
+    	maratis->clearSelectedObjects();
+    	maratis->addSelectedObject(object);
+
+    	Fl_Tree_Item* t = item;
+    	while((t = t->next()) != NULL)
+    	{
+    		if(t->is_selected() == 0)
+    			continue;
+
+    	    const char* name = t->label();
+
+    	    if(!name || !strcmp(name, "ROOT"))
+    	        continue;
+
+    	    Object3d* object = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(name);
+
+    	    if(object)
+    	    	maratis->addSelectedObject(object);
+    	}
+    //}
 
     // TODO: Testing!
     if(Fl::event_clicks() && (tree == Fl::focus() || window.glbox == Fl::focus()))

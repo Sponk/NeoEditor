@@ -121,6 +121,7 @@ private:
 	// selection
 	MVector3 m_selectionCenter;
 	MVector3 m_viewCenter;
+	bool m_selectionLock;
 
 	OEntity * m_sphereEntity;
 	OEntity * m_coneEntity;
@@ -279,9 +280,11 @@ public:
 	void selectSameMesh(void);
 	void addSelectedObject(Object3d * object);
 	bool isObjectSelected(Object3d * object);
-	inline void clearSelectedObjects(void){ m_selectedObjects.clear(); }
+	inline void clearSelectedObjects(void){ if(!m_selectionLock) m_selectedObjects.clear(); }
 	inline unsigned int getSelectedObjectsNumber(void){ return m_selectedObjects.size(); }
 	inline Object3d * getSelectedObjectByIndex(unsigned int id){ return m_selectedObjects[id]; }
+	void lockSelection() { m_selectionLock = true; }
+	void unlockSelection() { m_selectionLock = false; }
 
     // Level
     const char* getCurrentLevel() { return m_currentLevel; }

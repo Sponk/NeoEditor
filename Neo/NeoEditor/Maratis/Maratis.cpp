@@ -196,7 +196,8 @@ m_lightEntity(NULL),
 m_cameraEntity(NULL),
 m_soundEntity(NULL),
 m_emptyText(NULL),
-m_renderer(NULL)
+m_renderer(NULL),
+m_selectionLock(false)
 {
     sprintf(m_windowTitle, "Neo");
     m_titleChanged = false;
@@ -1265,6 +1266,8 @@ void Maratis::saveAs(void)
 
 void Maratis::addSelectedObject(Object3d * object)
 {
+	if(m_selectionLock) return;
+
     unsigned int i;
     unsigned int oSize = m_selectedObjects.size();
 
