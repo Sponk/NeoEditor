@@ -205,9 +205,12 @@ set(HAVE_LIBJPEG 1)
 #######################################################################
 option(OPTION_USE_SYSTEM_LIBPNG "Use's system libpng" ON)
 
-if(OPTION_USE_SYSTEM_LIBPNG AND LIB_png)
-   include(FindPNG)
-endif(OPTION_USE_SYSTEM_LIBPNG AND LIB_png)
+#if(OPTION_USE_SYSTEM_LIBPNG AND LIB_png)
+#   include(FindPNG)
+#endif(OPTION_USE_SYSTEM_LIBPNG AND LIB_png)
+
+# We ship our own
+SET(PNG_FOUND TRUE)
 
 if(OPTION_USE_SYSTEM_LIBPNG AND PNG_FOUND)
    set(FLTK_PNG_LIBRARIES ${PNG_LIBRARIES})

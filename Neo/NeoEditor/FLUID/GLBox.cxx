@@ -179,6 +179,9 @@ void GLBox::loadPostEffectsFromGame(NeoGame* game)
 
 void GLBox::draw()
 {
+	if(!main_window->active() != 0)
+		return;
+
     if(!maratis_init)
     {
         Maratis* maratis = Maratis::getInstance();

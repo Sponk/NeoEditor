@@ -17,6 +17,7 @@
 #include <FL/Fl_Color_Chooser.H>
 #include <FL/Fl_Tree_Item.H>
 #include <FL/Fl_Tree_Prefs.H>
+#include <FL/Fl_PNG_Image.H>
 
 #include <NeoEngine.h>
 #include <MWindow.h>
@@ -48,6 +49,13 @@ Fl_Window* light_window;
 Fl_Window* text_window;
 Fl_Window* sound_window;
 Fl_Window* camera_window;
+
+// TODO: Configurable!
+Fl_PNG_Image camera_icon("gui/icons/camera.png");
+Fl_PNG_Image entity_icon("gui/icons/entity.png");
+Fl_PNG_Image light_icon("gui/icons/light.png");
+Fl_PNG_Image text_icon("gui/icons/text.png");
+Fl_PNG_Image sound_icon("gui/icons/sound.png");
 
 Fl_Text_Buffer textbuf;
 
@@ -193,14 +201,59 @@ void add_to_tree(Object3d* entity, std::string path)
         path += "/" + std::string(entity->getName());
 
         if(!window.scene_tree->find_item(path.c_str()))
-            window.scene_tree->add(path.c_str());
+        {
+            Fl_Tree_Item* item = window.scene_tree->add(path.c_str());
+
+            // Assign icons
+            switch(entity->getType())
+            {
+            case M_OBJECT3D_CAMERA:
+            		item->usericon(&camera_icon);
+            	break;
+            case M_OBJECT3D_LIGHT:
+            		item->usericon(&light_icon);
+            	break;
+            case M_OBJECT3D_ENTITY:
+            		item->usericon(&entity_icon);
+            	break;
+            case M_OBJECT3D_TEXT:
+            		item->usericon(&text_icon);
+            	break;
+            case M_OBJECT3D_SOUND:
+            		item->usericon(&sound_icon);
+            	break;
+            }
+        }
 
         for(int i = 0; i < entity->getChildsNumber(); i++)
         {
-            if(!window.scene_tree->find_item((path + "/" + std::string(entity->getChild(i)->getName())).c_str()))
-                window.scene_tree->add((path + "/" + std::string(entity->getChild(i)->getName())).c_str());
+        	Object3d* object = entity->getChild(i);
+            if(!window.scene_tree->find_item((path + "/" + std::string(object->getName())).c_str()))
+            {
+            	Fl_Tree_Item* item = window.scene_tree->add((path + "/" + std::string(object->getName())).c_str());
 
-            add_to_tree(scene->getEntityByName(entity->getChild(i)->getName()), path.c_str());
+                // Assign icons
+                switch(entity->getType())
+                {
+                case M_OBJECT3D_CAMERA:
+                		item->usericon(&camera_icon);
+                	break;
+                case M_OBJECT3D_LIGHT:
+                		item->usericon(&light_icon);
+                	break;
+                case M_OBJECT3D_ENTITY:
+                		item->usericon(&entity_icon);
+                	break;
+                case M_OBJECT3D_TEXT:
+                		item->usericon(&text_icon);
+                	break;
+                case M_OBJECT3D_SOUND:
+                		item->usericon(&sound_icon);
+                	break;
+                }
+            }
+
+            add_to_tree(scene->getObjectByName(entity->getChild(i)->getName()), path.c_str());
         }
     }
 }
