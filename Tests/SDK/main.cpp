@@ -108,7 +108,6 @@ public:
 	}
 };
 
-
 // This is not really a unit test since it tests the whole networking
 // system at once.
 /*bool testFunctionSuccess = false;
@@ -162,20 +161,6 @@ LT_BEGIN_AUTO_TEST(NeoTestSdk, Networking_test);
 	game->end();
 
 LT_END_AUTO_TEST(Networking_test);*/
-
-// Run LuaUnit based tests.
-// FIXME: Should be in another executable!
-/*const char* lua_code =  "enableNeo3DTests = true\n"
-                        "dofile(\"scripts/SDK/Neo3D.lua\")\n"
-                        "Neo3D.runTests()";
-
-LT_BEGIN_AUTO_TEST(NeoTestSdk, LuaSDK_test);
-
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-    LT_CHECK(script->runString(lua_code));
-
-LT_END_AUTO_TEST(LuaSDK_test);
-*/
 
 TEST_F(TestNeoSDK, Vector3_test)
 {
