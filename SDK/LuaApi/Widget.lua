@@ -72,6 +72,18 @@ function Widget:rotate(angle)
     self:setRotation(self.rotation + angle)
 end
 
+--- Gets the current position of the widget.
+--
+-- x: The X cordonat
+--
+-- y: The Y cordonat
+function Widget:getPosition()
+    local pos = {}
+    pos.x = self.position[1]
+    pos.y = self.position[2]
+    return pos
+end
+
 --- Translates the widget by the given coordinates relative to the current position.
 --
 -- x: The X offset
