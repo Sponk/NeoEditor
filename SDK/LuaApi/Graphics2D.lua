@@ -36,5 +36,9 @@ dofile("SpriteAnimation.lua")
 dofile("Button.lua")
 dofile("InputField.lua")
 dofile("Label.lua")
+dofile("Utils.lua")
+
+--global instance for Utils class
+util = Utils.create()
 
 enableGui(1)
