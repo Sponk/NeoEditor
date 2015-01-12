@@ -58,6 +58,14 @@ function Utils:random(min,max)
 	return randomNum;
 end
 
+--Round towards zero
+function Utils:round(value) 
+     if value >= 0 then 
+     	return math.floor(value+.5) 
+      else 
+      	return math.ceil(value-.5) end
+end
+
 --Clamps a number between two values
 function Utils:bound(value,min,max)
 	if value < min then 
