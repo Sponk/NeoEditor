@@ -204,24 +204,31 @@ void add_to_tree(Object3d* entity, std::string path)
         {
             Fl_Tree_Item* item = window.scene_tree->add(path.c_str());
 
-            // Assign icons
-            switch(entity->getType())
+            if(!item)
             {
-            case M_OBJECT3D_CAMERA:
-            		item->usericon(&camera_icon);
-            	break;
-            case M_OBJECT3D_LIGHT:
-            		item->usericon(&light_icon);
-            	break;
-            case M_OBJECT3D_ENTITY:
-            		item->usericon(&entity_icon);
-            	break;
-            case M_OBJECT3D_TEXT:
-            		item->usericon(&text_icon);
-            	break;
-            case M_OBJECT3D_SOUND:
-            		item->usericon(&sound_icon);
-            	break;
+            	MLOG_WARNING("item == NULL!");
+            }
+            else
+            {
+				// Assign icons
+				switch(entity->getType())
+				{
+				case M_OBJECT3D_CAMERA:
+						item->usericon(&camera_icon);
+					break;
+				case M_OBJECT3D_LIGHT:
+						item->usericon(&light_icon);
+					break;
+				case M_OBJECT3D_ENTITY:
+						item->usericon(&entity_icon);
+					break;
+				case M_OBJECT3D_TEXT:
+						item->usericon(&text_icon);
+					break;
+				case M_OBJECT3D_SOUND:
+						item->usericon(&sound_icon);
+					break;
+				}
             }
         }
 
