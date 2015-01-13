@@ -197,7 +197,9 @@ m_cameraEntity(NULL),
 m_soundEntity(NULL),
 m_emptyText(NULL),
 m_renderer(NULL),
-m_selectionLock(false)
+m_selectionLock(false),
+m_snapToGrid(false),
+m_snapDistance(0.0)
 {
     sprintf(m_windowTitle, "Neo");
     m_titleChanged = false;
@@ -3879,6 +3881,21 @@ void Maratis::transformPosition(void)
     isRayPlaneIntersection(rayO, rayD, (*position), m_tPlane, &point);
 
     float distance = axis.dotProduct((point) - (*position));
+
+    // When snap to grid is enabled.
+    if(m_snapToGrid && abs(distance) < m_snapDistance)
+    {
+    	return;
+    }
+
+    if(m_snapToGrid)
+    {
+    	if(distance < 0)
+    		distance = -m_snapDistance;
+    	else
+    		distance = m_snapDistance;
+
+    }
 
     unsigned int i;
     for(i=0; i<oSize; i++)

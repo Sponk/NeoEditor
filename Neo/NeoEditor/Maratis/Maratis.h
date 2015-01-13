@@ -155,7 +155,19 @@ private:
 	// empty text
 	OText m_emptyText;
 
+	// Snap to grid
+	bool m_snapToGrid;
+	float m_snapDistance;
+
 public:
+
+	void enableSnapToGrid() { m_snapToGrid = true; }
+	void disableSnapToGrid() { m_snapToGrid = false; }
+
+	bool isSnapToGridEnabled() { return m_snapToGrid; }
+
+	void setSnapDistance(float d) { m_snapDistance = d; }
+	float getSnapDistance() { return m_snapDistance; }
 
 	// title
 	void updateTitle(const char * additional = NULL);

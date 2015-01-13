@@ -2434,3 +2434,15 @@ void import_lua_sdk_callback(Fl_Menu_ *, void *)
 
 	copyDirectory(src, dir);
 }
+
+void enable_snap_to_grid_callback(Fl_Menu_* menu, void*)
+{
+	Maratis* maratis = Maratis::getInstance();
+
+	if(maratis->isSnapToGridEnabled())
+		maratis->disableSnapToGrid();
+	else
+		maratis->enableSnapToGrid();
+
+	maratis->setSnapDistance(10);
+}
