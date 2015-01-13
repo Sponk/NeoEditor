@@ -39,10 +39,8 @@ function Utils:asRadians(degrees)
 	return radians * self.DEGTORAD;
 end
 
---[[
-* Find the angle (in radians) between an table and an table. The source sprite takes its x/y and origin into account.
-* The angle is calculated in clockwise positive direction (down = 90 degrees positive, right = 0 degrees positive, up = 90 degrees negative)
--]]
+--- * Find the angle (in radians) between an table and an table. The source sprite takes its x/y and origin into account.
+-- * The angle is calculated in clockwise positive direction (down = 90 degrees positive, right = 0 degrees positive, up = 90 degrees negative)
 function Utils:angleBetweenPoint(a,target,asDegrees)
 		local dx = (target.x) - a.x;
 		local dy= (target.y) - a.y;
@@ -58,7 +56,7 @@ function Utils:random(min,max)
 	return randomNum;
 end
 
---Round towards zero
+--- Round towards zero
 function Utils:round(value) 
      if value >= 0 then 
      	return math.floor(value+.5) 
@@ -66,7 +64,7 @@ function Utils:round(value)
       	return math.ceil(value-.5) end
 end
 
---Clamps a number between two values
+--- Clamps a number between two values
 function Utils:bound(value,min,max)
 	if value < min then 
 		value = min
