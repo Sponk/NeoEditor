@@ -29,7 +29,7 @@ function Quad.create()
 
 	return self
 end
--- creates new cell
+--- Creates new cell
 function Quad:createCell(p, r, x, y, s)
   local c
   -- are there any unused cells in the pool?
@@ -52,7 +52,7 @@ function Quad:createCell(p, r, x, y, s)
   return c
 end
 
--- destroys existing cell
+--- Destroys existing cell
 function Quad:destroyCell(c)
   -- delete reference from parent to child
   if c.parent then
@@ -67,7 +67,7 @@ function Quad:destroyCell(c)
   end
 end
 
--- returns number of child cells
+--- Returns number of child cells
 function Quad:getChildCount(c)
   local n = 0
   for _, v in self.ipairs(self.dirs) do
@@ -78,12 +78,12 @@ function Quad:getChildCount(c)
   return n
 end
 
--- returns true if cell has child cells
+--- Returns true if cell has child cells
 function Quad:hasChildren(c)
   return c.nw ~= nil or c.sw ~= nil or c.ne ~= nil or c.se ~= nil
 end
 
--- returns true if object fits entirely inside cell
+--- Returns true if object fits entirely inside cell
 function Quad:fitsInCell(c, x, y, s)
   local dx = self.abs(c.x - x)
   local dy = self.abs(c.y - y)
@@ -91,7 +91,7 @@ function Quad:fitsInCell(c, x, y, s)
   return s < e and dx < e and dy < e
 end
 
--- returns child cell direction and offset
+--- Returns child cell direction and offset
 function Quad:getDirection(c, x, y)
   local d, ox, oy
   if x < c.x then
@@ -110,7 +110,7 @@ function Quad:getDirection(c, x, y)
   return d, ox, oy
 end
 
--- return cell which fits an object of given size
+--- Returns cell which fits an object of given size
 -- creates the cell if necessary
 function Quad:getCell(c, x, y, s)
   -- object fits inside this cell?
@@ -131,7 +131,7 @@ function Quad:getCell(c, x, y, s)
   return self:getCell(c[d], x, y, s)
 end
 
--- select all objects in a cell
+--- Select all objects in a cell
 function Quad:selectCellAll(root, dest)
   -- insert all objects in this cell
   for i, v in self.ipairs(root) do
@@ -145,7 +145,7 @@ function Quad:selectCellAll(root, dest)
   end
 end
 
--- select objects in range
+--- Select objects in range
 function Quad:selectCell(root, dest, x, y, hw, hh)
   -- insert all objects in this cell
   for _, v in self.ipairs(root) do
@@ -171,7 +171,7 @@ function Quad:selectCell(root, dest, x, y, hw, hh)
   end
 end
 
--- trim empty cells from bottom up
+--- Trim empty cells from bottom up
 function Quad:trimBottom(c)
   while c and #c == 0 and not self:hasChildren(c) do
     local p = c.parent
@@ -181,7 +181,7 @@ function Quad:trimBottom(c)
 end
 
 
--- trim the top of the quadtree deleting
+--- Trim the top of the quadtree deleting
 -- root nodes if they only have a single child
 function Quad:trimTop()
   while self.root and #self.root == 0 do
@@ -209,7 +209,7 @@ function Quad:trimTop()
 end
 
 
--- insert new object
+--- Insert new object
 function Quad:insert(object, x, y, hw, hh)
   local s = math.max(hw, hh)
   --assert(s > 0)
@@ -253,7 +253,7 @@ function Quad:insert(object, x, y, hw, hh)
   end
 end
 
--- remove object
+--- Remove object
 function Quad:remove(object)
   local c = self.handles[object]
   -- removing a non-existing object?
@@ -272,14 +272,14 @@ function Quad:remove(object)
   self:trimBottom(c)
 end
 
--- select objects in range
+--- Select objects in range
 function Quad:select(dest, x, y, hw, hh)
   if self.root then
     self:selectCell(self.root, dest, x, y, hw, hh);
   end
 end
 
--- select objects in range
+--- Select objects in range
 function Quad:selectAABB(dest, l, t, r, b)
   -- realign aabb if necessary
   if l > r then
@@ -294,7 +294,7 @@ function Quad:selectAABB(dest, l, t, r, b)
   self:select(dest, x, y, hw, hh)
 end
 
--- selects all objects
+--- Selects all objects
 function Quad:selectAll(dest, x, y, hw, hh)
   if self.root then
     self:selectCellAll(self.root, dest)

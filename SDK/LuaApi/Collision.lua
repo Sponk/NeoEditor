@@ -40,7 +40,7 @@ function Collision:clearBuffer(b)
   end
 end
 
--- clamps number between two values
+--- clamps number between two values
 function Collision:clamp(n, low, high)
   if n < low then
     return low
@@ -50,7 +50,7 @@ function Collision:clamp(n, low, high)
   return n
 end
 
--- clamps vector size if above a given length
+--- clamps vector size if above a given length
 function Collision:clampVec(x, y, len)
   local d = sqrt(x*x + y*y)
   if d > len then
@@ -60,7 +60,7 @@ function Collision:clampVec(x, y, len)
   return x, y
 end
 
--- returns shape index and its list
+--- returns shape index and its list
 function Collision:findShape(s)
   local t = s.list
   for i, v in ipairs(t) do
@@ -70,7 +70,7 @@ function Collision:findShape(s)
   end
 end
 
--- removes shape from its list
+--- removes shape from its list
 function Collision:removeShape(s)
   local i, t = self:findShape(s)
   if i then
@@ -80,7 +80,7 @@ function Collision:removeShape(s)
   end
 end
 
--- returns center position and half width/height extents for any shape
+--- returns center position and half width/height extents for any shape
 function Collision:getBounds(s)
   local x, y = s.x, s.y
   local hw, hh
@@ -107,7 +107,7 @@ function Collision:getBounds(s)
   end
   return x, y, hw, hh
 end
--- returns center position and half width/height extents for any shape
+--- returns center position and half width/height extents for any shape
 function Collision.getBounds(s)
   local x, y = s.x, s.y
   local hw, hh
@@ -135,7 +135,7 @@ function Collision.getBounds(s)
   return x, y, hw, hh
 end
 
--- repartition moved or modified shapes
+--- repartition moved or modified shapes
 function Collision.repartition(s)
   if partition == "quad" then
     -- reinsert in the quadtree
@@ -144,7 +144,7 @@ function Collision.repartition(s)
   end
 end
 
--- tests a point versus any shape
+--- tests a point versus any shape
 function Collision:testPoint(s, x, y, line)
   line = line or 1
   if s.shape == 'rect' then
@@ -175,7 +175,7 @@ function Collision:testPoint(s, x, y, line)
   end
 end
 
--- test a point versus all shapes
+--- test a point versus all shapes
 function Collision:queryPoint(result, x, y)
   if partition == 'quad' then
     -- query using the quadtree
@@ -207,7 +207,7 @@ function Collision:queryPoint(result, x, y)
   end
 end
 
--- test a shape versus all shapes
+--- test a shape versus all shapes
 function Collision:queryShape(result, a, dt)
   dt = dt or 0
   if partition == 'quad' then
@@ -241,7 +241,7 @@ function Collision:queryShape(result, a, dt)
   end
 end
 
--- rects have a center position and half-width/height extents
+--- rects have a center position and half-width/height extents
 function Collision.addRectShape(list, x, y, w, h)
   local s = { list = list, shape = "rect", x = x, y = y, hw = w*.5, hh = h*.5}
   insert(list, s)
@@ -249,7 +249,7 @@ function Collision.addRectShape(list, x, y, w, h)
   return s
 end
 
--- circles have a center position and radius
+--- circles have a center position and radius
 function Collision.addCircleShape(list, x, y, r)
   local s = { list = list, shape = "circle", x = x, y = y, r = r }
   insert(list, s)
@@ -257,7 +257,7 @@ function Collision.addCircleShape(list, x, y, r)
   return s
 end
 
--- line shapes have a starting and an ending point
+--- line shapes have a starting and an ending point
 function Collision.addLineShape(list, x, y, x2, y2)
   local s = { list = list, shape = "line", x = x, y = y, x2 = x2, y2 = y2 }
   insert(list, s)
@@ -275,12 +275,12 @@ function Collision:init()
 end
 
 
--- static shapes do not move or respond to collisions
+--- static shapes do not move or respond to collisions
 function Collision:addStatic(shape, ...)
   return self.shapeCtors[shape](statics, ...)
 end
 
--- dynamic shapes are affected by gravity and collisions
+--- dynamic shapes are affected by gravity and collisions
 function Collision:addDynamic(shape, ...)
   local s = self.shapeCtors[shape](dynamics, ...)
  s.friction = 1
@@ -290,14 +290,14 @@ function Collision:addDynamic(shape, ...)
   return s
 end
 
--- kinematic shapes move only when assigned a velocity
+--- kinematic shapes move only when assigned a velocity
 function Collision:addKinematic(shape, ...)
   local s = self.shapeCtors[shape](kinematics, ...)
   s.xv, s.yv = 0, 0
   return s
 end
 
--- tests two rectangles for intersection
+--- tests two rectangles for intersection
 function testRectRect(a, b, dt)
   -- vector between the centers of the rects
   local dx, dy = a.x - b.x, a.y - b.y
@@ -358,7 +358,7 @@ function testRectRect(a, b, dt)
   end
 end
 
--- tests rectangle versus circle
+--- tests rectangle versus circle
 function testRectCircle(a, b, dt)
   -- vector between the centers of the two shapes
   local dx, dy = a.x - b.x, a.y - b.y
@@ -423,7 +423,7 @@ function testRectCircle(a, b, dt)
   return sx/pen, sy/pen, pen
 end
 
--- tests rectangle versus line segment
+--- tests rectangle versus line segment
 local function testRectLine(a, b, dt)
   -- fast bounding box elimination
   local minx, maxx = b.x, b.x2
@@ -507,7 +507,7 @@ local function testRectLine(a, b, dt)
   return nx, ny, pen
 end
 
--- tests two circles
+--- tests two circles
 function testCircleCircle(a, b, dt)
   -- vector between the centers of the circles
   local dx, dy = a.x - b.x, a.y - b.y
@@ -532,7 +532,7 @@ function testCircleCircle(a, b, dt)
   end
 end
 
--- tests circle versus a line segment
+--- tests circle versus a line segment
 function testCircleLine(a, b, dt)
   -- normalize segment
   local dx, dy = b.x2 - b.x, b.y2 - b.y
@@ -589,7 +589,7 @@ shapeTests =
   line = { line = testLineLine }
 }
 
--- returns normalized separation vector and penetration
+--- returns normalized separation vector and penetration
 function Collision:testShapes(a, b, dt)
   -- find collision function
   local test = shapeTests[a.shape][b.shape]
@@ -608,7 +608,7 @@ function Collision:testShapes(a, b, dt)
   return x, y, p
 end
 
--- moves shape by given amount without checking for collisions
+--- moves shape by given amount without checking for collisions
 function Collision:moveShape(a, dx, dy)
   if a.shape == 'circle' or a.shape == 'rect' then
     a.x = a.x + dx
@@ -622,7 +622,7 @@ function Collision:moveShape(a, dx, dy)
   Collision.repartition(a)
 end
 
--- repositions the shape to given coordinates
+--- repositions the shape to given coordinates
 function Collision:positionShape(a, x, y)
   if a.shape == 'circle' or a.shape == 'rect' then
     a.x = x
@@ -637,18 +637,18 @@ function Collision:positionShape(a, x, y)
   Collision.repartition(a)
 end
 
--- returns the velocity of shape
+--- returns the velocity of shape
 function Collision:getVelocity(a)
   return a.xv, a.yv
 end
 
--- assigns velocity to shape
+--- assigns velocity to shape
 function Collision:setVelocity(a, xv, yv)
   a.xv = xv
   a.yv = yv
 end
 
--- updates the simulation
+--- updates the simulation
 function Collision:update()
   -- track some stats
   mshapes = 0
@@ -715,7 +715,7 @@ function Collision:update()
   end
 end
 
--- check and report collisions
+--- check and report collisions
 function Collision:collision(a, b)
   local nx, ny, pen = self:testShapes(a, b)
   if pen == nil then
@@ -736,7 +736,7 @@ function Collision:collision(a, b)
   end
 end
 
--- resolves collisions
+--- resolves collisions
 function Collision:solveCollision(a, b, nx, ny, pen)
   -- shape a must be dynamic
   assert(a.list == dynamics)

@@ -21,12 +21,12 @@ function Utils.create()
 	return self
 end
 
--- Finds the length of the given vector
+--- Finds the length of the given vector
 function Utils:vectorLength(dx,dy)
 	return math.sqrt(dx * dx + dy * dy);
 end
 
---Finds the distance between two tables
+--- Finds the distance between two tables
 function Utils:distanceBetween(a,b)
 	local dx = a.x - b.x;
 	local dy =  a.y - b.y;
