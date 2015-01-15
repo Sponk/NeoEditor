@@ -29,9 +29,9 @@
 
 
 #ifndef ANDROID
-#include <MWindow.h>
+#include <Window/Window.h>
 #else
-#include "MAndroidWindow.h"
+#include <Window/MAndroidWindow.h>
 #endif
 
 #include "WinContext.h"
@@ -41,7 +41,7 @@ using namespace Neo;
 // screen
 void MWinContext::getScreenSize(unsigned int * width, unsigned int * height)
 {
-	MWindow * window = MWindow::getInstance();
+	NeoWindow * window = NeoWindow::getInstance();
 	*width = window->getWidth();
 	*height = window->getHeight();
 }
@@ -49,32 +49,32 @@ void MWinContext::getScreenSize(unsigned int * width, unsigned int * height)
 // cursor
 void MWinContext::setCursorPosition(int x, int y)
 {
-	MWindow * window = MWindow::getInstance();
+	NeoWindow * window = NeoWindow::getInstance();
     window->setCursorPos(x, y);
 }
 
 void MWinContext::hideCursor(void)
 {
-	MWindow * window = MWindow::getInstance();
+	NeoWindow * window = NeoWindow::getInstance();
 	window->hideCursor();
 }
 
 void MWinContext::showCursor(void)
 {
-	MWindow * window = MWindow::getInstance();
+	NeoWindow * window = NeoWindow::getInstance();
 	window->showCursor();
 }
 
 // working directory
 const char * MWinContext::getWorkingDirectory(void)
 {
-	MWindow * window = MWindow::getInstance();
+	NeoWindow * window = NeoWindow::getInstance();
 	return window->getWorkingDirectory();
 }
 
 // system tick
 unsigned long MWinContext::getSystemTick(void)
 {
-	MWindow * window = MWindow::getInstance();
+	NeoWindow * window = NeoWindow::getInstance();
 	return window->getSystemTick();
 }

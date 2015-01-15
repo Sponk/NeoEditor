@@ -59,7 +59,7 @@
 
 #include <MCore.h>
 #include <NeoEngine.h>
-#include "../MWindow/MMouse.h"
+#include <Window/Mouse.h>
 #include <LookAtBehavior.h>
 #include <FollowBehavior.h>
 #include <LuaBehavior.h>
@@ -76,7 +76,7 @@
 #include <FixedRenderer.h>
 
 #include "Maratis.h"
-#include <MWindow.h>
+#include <Window/Window.h>
 
 // Bins
 #include "../Bins/FontBin.h"
@@ -206,7 +206,7 @@ m_snapDistance(0.0)
 
     // tempDir
     {
-        MWindow * window = MWindow::getInstance();
+        NeoWindow * window = NeoWindow::getInstance();
 
         unsigned int i = 1;
         sprintf(m_tempDir, "%s/mtemp%d", window->getTempDirectory(), i);
@@ -614,7 +614,7 @@ void Maratis::initVue(void)
 
 void Maratis::loadGamePlugin(void)
 {
-    MWindow * window = MWindow::getInstance();
+    NeoWindow * window = NeoWindow::getInstance();
 
     char gameFile[256];
 
@@ -968,7 +968,7 @@ void Maratis::addEntity(void)
 {
     autoSave();
 
-    MWindow * window = MWindow::getInstance();
+    NeoWindow * window = NeoWindow::getInstance();
 
     char startPath[256];
     getGlobalFilename(startPath, window->getWorkingDirectory(), "meshs");
@@ -978,7 +978,7 @@ void Maratis::addSound(void)
 {
     autoSave();
 
-    MWindow * window = MWindow::getInstance();
+    NeoWindow * window = NeoWindow::getInstance();
 
     char startPath[256];
     getGlobalFilename(startPath, window->getWorkingDirectory(), "sounds");
@@ -988,7 +988,7 @@ void Maratis::addText(void)
 {
     autoSave();
 
-    MWindow * window = MWindow::getInstance();
+    NeoWindow * window = NeoWindow::getInstance();
 
     char startPath[256];
     getGlobalFilename(startPath, window->getWorkingDirectory(), "fonts");
@@ -1012,7 +1012,7 @@ void Maratis::updateTitle(const char * additional)
 
 void Maratis::okNewProject(const char * filename)
 {
-    MWindow * window = MWindow::getInstance();
+    NeoWindow * window = NeoWindow::getInstance();
     Maratis * maratis = Maratis::getInstance();
     MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
 
@@ -1096,7 +1096,7 @@ void Maratis::loadProject(void)
 
 void Maratis::loadProject(const char * filename)
 {
-    MWindow * window = MWindow::getInstance();
+    NeoWindow * window = NeoWindow::getInstance();
 
     if(! filename)
         return;
@@ -1199,7 +1199,7 @@ void Maratis::okLoadLevel(const char * filename)
 
 void Maratis::loadLevel(void)
 {
-    MWindow * window = MWindow::getInstance();
+    NeoWindow * window = NeoWindow::getInstance();
 
     char startPath[256];
     getGlobalFilename(startPath, window->getWorkingDirectory(), "levels");
@@ -1260,7 +1260,7 @@ void Maratis::okSaveAs(const char * filename)
 
 void Maratis::saveAs(void)
 {
-    MWindow * window = MWindow::getInstance();
+    NeoWindow * window = NeoWindow::getInstance();
 
     char startPath[256];
     getGlobalFilename(startPath, window->getWorkingDirectory(), "levels");
@@ -1962,7 +1962,7 @@ void Maratis::selectSameMesh(void)
 void Maratis::updateCurrentAxis()
 {
     // get window
-    MWindow * window = MWindow::getInstance();
+    NeoWindow * window = NeoWindow::getInstance();
 
     // get mouse
     MMouse * mouse = MMouse::getInstance();
@@ -2029,7 +2029,7 @@ void Maratis::updateCurrentAxis()
 void Maratis::selectObjectsInMainView(Scene * scene, bool multipleSelection)
 {
     // get window
-    MWindow * window = MWindow::getInstance();
+    NeoWindow * window = NeoWindow::getInstance();
 
     // get mouse
     MMouse * mouse = MMouse::getInstance();
@@ -2488,7 +2488,7 @@ void Maratis::drawRotationCircle(M_AXIS axis, OCamera * camera, MMatrix4x4 * mat
 void Maratis::computeTransformDirection(OCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, const float distance, const MVector3 & axis)
 {
     // get window
-    MWindow * window = MWindow::getInstance();
+    NeoWindow * window = NeoWindow::getInstance();
 
     // get mouse
     MMouse * mouse = MMouse::getInstance();
@@ -2512,7 +2512,7 @@ void Maratis::computeTransformDirection(OCamera * camera, const MVector3 & rayO,
 void Maratis::computeTransformPlane(OCamera * camera, const MVector3 & position, const MVector3 & axis)
 {
     // get window
-    MWindow * window = MWindow::getInstance();
+    NeoWindow * window = NeoWindow::getInstance();
 
     // get mouse
     MMouse * mouse = MMouse::getInstance();
@@ -3552,7 +3552,7 @@ void Maratis::transformPosition(MVector2 delta)
     unsigned int oSize = getSelectedObjectsNumber();
 
     // get window
-    MWindow * window = MWindow::getInstance();
+    NeoWindow * window = NeoWindow::getInstance();
 
     // get mouse
     MMouse * mouse = MMouse::getInstance();
@@ -3732,7 +3732,7 @@ void Maratis::transformPosition(void)
     unsigned int oSize = getSelectedObjectsNumber();
 
     // get window
-    MWindow * window = MWindow::getInstance();
+    NeoWindow * window = NeoWindow::getInstance();
 
     // get mouse
     MMouse * mouse = MMouse::getInstance();
@@ -4596,7 +4596,7 @@ void Maratis::graphicLoop(void)
     PROFILE_SHARED_BLOCK(Render);
     MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
-    MWindow* window = MWindow::getInstance();
+    NeoWindow* window = NeoWindow::getInstance();
     // viewport
     unsigned int w = (unsigned int)window->getWidth();
     unsigned int h = (unsigned int)window->getHeight();

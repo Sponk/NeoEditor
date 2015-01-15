@@ -24,7 +24,8 @@
 
 
 #include "MaratisPlayer.h"
-#include <MWindow.h>
+
+#include <Window/Window.h>
 
 // MaratisCore
 
@@ -223,7 +224,7 @@ void MaratisPlayer::restart(void)
 void MaratisPlayer::loadGamePlugin(void)
 {
 	char gameFile[256];
-	MWindow * window = MWindow::getInstance();
+	NeoWindow * window = NeoWindow::getInstance();
 
 	#ifdef WIN32
 		getGlobalFilename(gameFile, window->getWorkingDirectory(), "Game.dll");
@@ -256,7 +257,7 @@ bool MaratisPlayer::loadProject(const char * filename)
 
 void MaratisPlayer::loadProject(MProject* proj, const char * filename)
 {
-	MWindow * window = MWindow::getInstance();
+	NeoWindow * window = NeoWindow::getInstance();
 	NeoEngine * engine = NeoEngine::getInstance();
 	
 	
@@ -307,7 +308,7 @@ void MaratisPlayer::logicLoop(void)
 
 void MaratisPlayer::graphicLoop(void)
 {
-	MWindow * window = MWindow::getInstance();
+	NeoWindow * window = NeoWindow::getInstance();
 	NeoEngine * engine = NeoEngine::getInstance();
 	MRenderingContext * render = engine->getRenderingContext();
 

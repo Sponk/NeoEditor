@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MGui
-// MWin32Window.cpp
+// MWin32NeoWindow.cpp
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //========================================================================
@@ -30,7 +30,7 @@
 
 #ifdef WIN32
 #define _WIN32_WINNT 0x0500
-#include <MWindow.h>
+#include <NeoWindow.h>
 
 #include <NeoEngine.h>
 
@@ -40,11 +40,12 @@
 #include <direct.h>
 #endif
 
-#include <windows.h>
+#include <NeoWindows.h>
 #include <shlobj.h>
 
+using namespace Neo;
 
-const char * MWindow::getTempDirectory(void)
+const char * NeoWindow::getTempDirectory(void)
 {
 	static char tempDirectory[256];
 	TCHAR shortPath[MAX_PATH];
@@ -69,30 +70,30 @@ const char * MWindow::getTempDirectory(void)
 	return tempDirectory;
 }
 
-const char * MWindow::getCurrentDirectory(void)
+const char * NeoWindow::getCurrentDirectory(void)
 {
 	static char currentDirectory[256];
 	getcwd(currentDirectory, 256);
 	return currentDirectory;
 }
 
-void MWindow::setCurrentDirectory(const char * directory)
+void NeoWindow::setCurrentDirectory(const char * directory)
 {
 	SetCurrentDirectory(directory);
 }
 
-void MWindow::setWorkingDirectory(const char * directory)
+void NeoWindow::setWorkingDirectory(const char * directory)
 {
 	strcpy(m_workingDirectory, directory);
 }
 
-void MWindow::execute(const char * path, const char * args)
+void NeoWindow::execute(const char * path, const char * args)
 {
 	MLOG_INFO("Executing: " << path);
 	ShellExecute(NULL, "open", path, args, NULL, SW_SHOWNORMAL);
 }
 
-void MWindow::executeDetached(const char * path, const char * args, bool killParent)
+void NeoWindow::executeDetached(const char * path, const char * args, bool killParent)
 {
     PROCESS_INFORMATION ProcessInfo;
     STARTUPINFO StartupInfo;

@@ -30,8 +30,8 @@
 
 #include <LuaScript.h>
 #include <ScriptApi.h>
-#include <MWindow.h>
 #include <NeoEngine.h>
+#include <Window/Window.h>
 
 using namespace Neo;
 

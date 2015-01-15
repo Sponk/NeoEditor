@@ -28,8 +28,8 @@
 
 
 #include <NeoEngine.h>
-#include <MWindow.h>
 #include <ParticleSystemBehavior.h>
+#include <Window/Window.h>
 #include <string>
 
 // Shader
@@ -464,7 +464,7 @@ void ParticleSystemBehavior::applySpeed()
 int ParticleSystemBehavior::thread_main(void* particlesystem)
 {
     ParticleSystemBehavior* self = (ParticleSystemBehavior*) particlesystem;
-    MWindow* window = MWindow::getInstance();
+    NeoWindow* window = NeoWindow::getInstance();
     NeoEngine* engine = NeoEngine::getInstance();
 
     //MLOG_INFO("Start particle system thread with id: " << self->m_thread.GetId());

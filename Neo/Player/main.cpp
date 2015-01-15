@@ -24,7 +24,6 @@
 //jan 2012 - Philipp Geyer <philipp@geyer.co.uk> - embedded project/package manager
 
 #include <NeoEngine.h>
-#include <MWindow.h>
 #include <SDLThread.h>
 
 #include <MGameWinEvents.h>
@@ -32,6 +31,7 @@
 
 // NeoGui
 #include <GuiSystem.h>
+#include <Window/Window.h>
 
 using namespace Neo;
 
@@ -77,7 +77,7 @@ void draw(void)
 {
 	MaratisPlayer::getInstance()->graphicLoop();
 	Neo::Gui::GuiSystem::getInstance()->draw();
-    MWindow::getInstance()->swapBuffer();
+    NeoWindow::getInstance()->swapBuffer();
 }
 
 SDLSemaphore updateSemaphore;
@@ -97,7 +97,7 @@ int updatemin = -1;
 
 int update_thread(void* nothing)
 {
-    MWindow * window = MWindow::getInstance();
+    NeoWindow * window = NeoWindow::getInstance();
 
 	Messenger* messenger = Messenger::getInstance();
 	messenger->addInbox("MainThread", 0);
@@ -236,7 +236,7 @@ int main(int argc, char **argv)
 	NeoEngine * engine = NeoEngine::getInstance();
 	
 	// get window (first time call onstructor)
-	MWindow * window = MWindow::getInstance();
+	NeoWindow * window = NeoWindow::getInstance();
 
 	// create window
 	if(! window->create(std::string("Neo ").append(PLAYER_VERSION_STRING).c_str(), width, height, 32, fullscreen == 1))

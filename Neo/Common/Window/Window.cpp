@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MGui
-// MSDLWindow.cpp
+// MSDLNeoWindow.cpp
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //========================================================================
@@ -31,9 +31,9 @@
 #ifndef ANDROID
 
 #include <NeoEngine.h>
-#include <MMouse.h>
-#include <MKeyboard.h>
-#include <MWindow.h>
+#include <Window/Mouse.h>
+#include <Window/Keyboard.h>
+#include <Window/Window.h>
 
 #ifdef WIN32
 #include <windows.h>
@@ -74,7 +74,7 @@
 
 using namespace Neo;
 
-static SDL_Window * g_window;
+static SDL_Window * g_NeoWindow;
 static SDL_GLContext g_context;
 
 static int translateKey(SDL_Keycode key)
@@ -183,7 +183,7 @@ static int translateKey(SDL_Keycode key)
 	return -1;
 }
 
-MWindow::MWindow(void) :
+NeoWindow::NeoWindow(void) :
 	m_focus(true),
 	m_active(true),
 	m_fullscreen(false),
@@ -197,19 +197,19 @@ MWindow::MWindow(void) :
 	strcpy(m_workingDirectory, getCurrentDirectory());
 }
 
-MWindow::~MWindow(void)
+NeoWindow::~NeoWindow(void)
 {
 	SDL_GL_DeleteContext(g_context);
-	SDL_DestroyWindow(g_window);
+	SDL_DestroyWindow(g_NeoWindow);
 	SDL_Quit();
 }
 
-void MWindow::setCursorPos(int x, int y)
+void NeoWindow::setCursorPos(int x, int y)
 {
     SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-    if(g_window)
+    if(g_NeoWindow)
     {
-        SDL_WarpMouseInWindow(g_window, x, y);
+        SDL_WarpMouseInWindow(g_NeoWindow, x, y);
     }
     else // Fall back to native handler
     {
@@ -232,7 +232,7 @@ void MWindow::setCursorPos(int x, int y)
     SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
 }
 
-void MWindow::hideCursor(void)
+void NeoWindow::hideCursor(void)
 {
 	int r = SDL_ShowCursor(SDL_DISABLE);
 
@@ -240,7 +240,7 @@ void MWindow::hideCursor(void)
 		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
 }
 
-void MWindow::showCursor(void)
+void NeoWindow::showCursor(void)
 {
 	int r = SDL_ShowCursor(SDL_ENABLE);
 
@@ -248,20 +248,20 @@ void MWindow::showCursor(void)
 		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
 }
 
-void MWindow::setTitle(const char * title)
+void NeoWindow::setTitle(const char * title)
 {
-	SDL_SetWindowTitle(g_window, title);
+	SDL_SetWindowTitle(g_NeoWindow, title);
 }
 
-void MWindow::setFullscreen(bool fullscreen)
+void NeoWindow::setFullscreen(bool fullscreen)
 {
 #ifndef EMSCRIPTEN
 	int r;
 
 	if (fullscreen)
-		r = SDL_SetWindowFullscreen(g_window, SDL_WINDOW_FULLSCREEN);
+		r = SDL_SetWindowFullscreen(g_NeoWindow, SDL_WINDOW_FULLSCREEN);
 	else
-		r = SDL_SetWindowFullscreen(g_window, SDL_DISABLE);
+		r = SDL_SetWindowFullscreen(g_NeoWindow, SDL_DISABLE);
 
 	if (r < 0)
 		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
@@ -271,7 +271,7 @@ void MWindow::setFullscreen(bool fullscreen)
 	m_fullscreen = fullscreen;
 }
 
-void MWindow::sendEvents(MWinEvent * event)
+void NeoWindow::sendEvents(MWinEvent * event)
 {
 	MKeyboard * keyboard = MKeyboard::getInstance();
 	MMouse * mouse = MMouse::getInstance();
@@ -321,7 +321,7 @@ void MWindow::sendEvents(MWinEvent * event)
 		m_pointerEvent(event);
 }
 
-bool MWindow::isMouseOverWindow(void)
+bool NeoWindow::isMouseOverWindow(void)
 {
 	MMouse * mouse = MMouse::getInstance();
 	int x = mouse->getXPosition();
@@ -333,12 +333,12 @@ bool MWindow::isMouseOverWindow(void)
 	return false;
 }
 
-unsigned long MWindow::getSystemTick(void)
+unsigned long NeoWindow::getSystemTick(void)
 {
 	return SDL_GetTicks();
 }
 
-bool MWindow::onEvents(void)
+bool NeoWindow::onEvents(void)
 {
 	MWinEvent mevent;
 	SDL_Event event;
@@ -395,8 +395,8 @@ bool MWindow::onEvents(void)
 			case SDL_MOUSEMOTION:
 			{
 				mevent.type = MWIN_EVENT_MOUSE_MOVE;
-				mevent.data[0] = event.motion.x; // relative to window
-				mevent.data[1] = event.motion.y; // relative to window
+				mevent.data[0] = event.motion.x; // relative to NeoWindow
+				mevent.data[1] = event.motion.y; // relative to NeoWindow
 				sendEvents(&mevent);
 				break;
 			}
@@ -676,7 +676,7 @@ bool MWindow::onEvents(void)
 	return true;
 }
 
-bool MWindow::onWindowEvents(void)
+bool NeoWindow::onWindowEvents(void)
 {
     MWinEvent mevent;
     SDL_Event event;
@@ -738,12 +738,12 @@ bool MWindow::onWindowEvents(void)
     return true;
 }
 
-void MWindow::swapBuffer(void)
+void NeoWindow::swapBuffer(void)
 {
-	SDL_GL_SwapWindow(g_window);
+	SDL_GL_SwapWindow(g_NeoWindow);
 }
 
-void MWindow::createSemaphores()
+void NeoWindow::createSemaphores()
 {
 	MThreadManager* mgr = MThreadManager::getInstance();
 	updateSemaphore = mgr->getNewSemaphore();
@@ -753,7 +753,7 @@ void MWindow::createSemaphores()
 	graphicsSemaphore->Init(1);
 }
 
-bool MWindow::create(const char * title, unsigned int width, unsigned int height, int colorBits, bool fullscreen)
+bool NeoWindow::create(const char * title, unsigned int width, unsigned int height, int colorBits, bool fullscreen)
 {
 	m_width = width;
 	m_height = height;
@@ -785,20 +785,20 @@ bool MWindow::create(const char * title, unsigned int width, unsigned int height
 	if (m_fullscreen)
 		flags = flags | SDL_WINDOW_FULLSCREEN;
 
-	g_window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_width, m_height, flags);
+	g_NeoWindow = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_width, m_height, flags);
 
-	if (!g_window)
+	if (!g_NeoWindow)
 	{
 		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
 		return false;
 	}
 
-	g_context = SDL_GL_CreateContext(g_window);
+	g_context = SDL_GL_CreateContext(g_NeoWindow);
 #else
-	SDL_Surface* window = SDL_SetVideoMode(width,height,colorBits,SDL_OPENGL | SDL_DOUBLEBUF);	
+	SDL_Surface* NeoWindow = SDL_SetVideoMode(width,height,colorBits,SDL_OPENGL | SDL_DOUBLEBUF);
 #endif
 
-// Request a higher resolution thread timer on Windows
+// Request a higher resolution thread timer on NeoWindows
 #ifdef WIN32
     timeBeginPeriod(1);
 #endif
@@ -806,12 +806,12 @@ bool MWindow::create(const char * title, unsigned int width, unsigned int height
 	return true;
 }
 
-void MWindow::resize(unsigned int width, unsigned int height)
+void NeoWindow::resize(unsigned int width, unsigned int height)
 {
-    SDL_SetWindowSize(g_window, width, height);
+    SDL_SetWindowSize(g_NeoWindow, width, height);
 }
 
-void MWindow::sleep(double time)
+void NeoWindow::sleep(double time)
 {
 	if (time <= 0)
 		return;
@@ -819,7 +819,7 @@ void MWindow::sleep(double time)
 	SDL_Delay(time);
 }
 
-int MWindow::addJoystick(int index)
+int NeoWindow::addJoystick(int index)
 {
 #ifndef EMSCRIPTEN
 	JoystickDevice_t * joystick = new JoystickDevice_t;
@@ -837,7 +837,7 @@ int MWindow::addJoystick(int index)
 #endif
 }
 
-int MWindow::removeJoystick(int id)
+int NeoWindow::removeJoystick(int id)
 {
 #ifndef EMSCRIPTEN
 	for (int i = 0; i < m_joysticks.size(); ++i)
@@ -854,7 +854,7 @@ int MWindow::removeJoystick(int id)
 	return -1;
 }
 
-int MWindow::addGameController(int index)
+int NeoWindow::addGameController(int index)
 {
 #ifndef EMSCRIPTEN
 	GameControllerDevice_t * controller = new GameControllerDevice_t;
@@ -872,7 +872,7 @@ int MWindow::addGameController(int index)
 #endif
 }
 
-int MWindow::removeGameController(int id)
+int NeoWindow::removeGameController(int id)
 {
 #ifndef EMSCRIPTEN
 	for (int i = 0; i < m_controllers.size(); ++i)

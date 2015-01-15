@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MGui
-// MMouse.cpp
+// MCocoaNeoWindow.cpp
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //========================================================================
-// Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2010-2014 Anael Seghezzi <www.maratis3d.com>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -28,16 +28,52 @@
 //========================================================================
 
 
-#include "MMouse.h"
+#ifdef __APPLE__
+#include "../NeoWindow.h"
 
+#import <Cocoa/Cocoa.h>
+#import <Carbon/Carbon.h>
 
-void MMouse::setPosition(float x, float y)
+using namespace Neo;
+
+const char * NeoWindow::getTempDirectory(void)
 {
-	float dx = x - m_position[0];
-	float dy = y - m_position[1];
-
-	setDirection(dx, dy);
-
-	m_position[0] = x;
-	m_position[1] = y;
+	static char tempDirectory[256];
+	NSString * temp = NSTemporaryDirectory();
+	strcpy(tempDirectory, [temp cStringUsingEncoding:NSUTF8StringEncoding]);
+	return tempDirectory;
+	
+	//return "/tmp"; // linux style
 }
+
+const char * NeoWindow::getCurrentDirectory(void)
+{
+	static char currentDirectory[256];
+	getcwd(currentDirectory, 256);
+	return currentDirectory;
+}
+
+void NeoWindow::setCurrentDirectory(const char * directory)
+{
+	//chdir(directory);
+}
+
+void NeoWindow::setWorkingDirectory(const char * directory)
+{
+	strcpy(m_workingDirectory, directory);
+}
+
+void NeoWindow::execute(const char * path, const char * args)
+{
+	NSString * _path = [NSString stringWithCString:path encoding:NSISOLatin1StringEncoding];
+	NSString * _args = [NSString stringWithCString:args encoding:NSISOLatin1StringEncoding];
+	
+	NSArray * arguments = [NSArray arrayWithObjects: _args, nil, nil];
+	
+	NSTask *task;
+	task = [[NSTask alloc] init];
+	[task setLaunchPath:_path];
+	[task setArguments:arguments];
+	[task launch];
+}
+#endif

@@ -1,11 +1,11 @@
 #include <NeoEngine.h>
 #include <MCore.h>
 #include <LuaBehavior.h>
-#include <MWindow.h>
 #include <WinContext.h>
 #include <PackageManagerNPK.h>
 #include <GuiSystem.h>
 #include <Widget.h>
+#include <Window/Window.h>
 
 using namespace Neo;
 

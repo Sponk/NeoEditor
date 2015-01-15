@@ -23,7 +23,7 @@
 //========================================================================
 
 #include <ScriptApi.h>
-#include <MWindow.h>
+#include <Window/Window.h>
 
 #ifdef USE_NETWORKING
 #include <NetworkUtils.h>
@@ -305,7 +305,7 @@ int loadMesh()
 	Level* level = NeoEngine::getInstance()->getLevel();
 
 	char string[256];
-	getGlobalFilename(string, MWindow::getInstance()->getWorkingDirectory(), path);
+	getGlobalFilename(string, NeoWindow::getInstance()->getWorkingDirectory(), path);
 
 	if(!isFileExist(string))
 	{
@@ -338,7 +338,7 @@ int loadSound()
 	Scene* scene = level->getCurrentScene();
 
 	char string[256];
-	getGlobalFilename(string, MWindow::getInstance()->getWorkingDirectory(), path);
+	getGlobalFilename(string, NeoWindow::getInstance()->getWorkingDirectory(), path);
 
 	if(!isFileExist(string))
 	{
@@ -4135,7 +4135,7 @@ int loadTextFont()
 	Scene* scene = level->getCurrentScene();
 
 	char string[256];
-	getGlobalFilename(string, MWindow::getInstance()->getWorkingDirectory(), path);
+	getGlobalFilename(string, NeoWindow::getInstance()->getWorkingDirectory(), path);
 
 	if(!isFileExist(string))
 	{
@@ -4584,14 +4584,14 @@ int resizeWindow()
 	if(!isFunctionOk(script, "resizeWindow", 2))
 		return 0;
 
-	MWindow::getInstance()->resize(script->getInteger(0), script->getInteger(1));
+	NeoWindow::getInstance()->resize(script->getInteger(0), script->getInteger(1));
 	return 1;
 }
 
 int getWorkingDirectory()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	script->pushString(MWindow::getInstance()->getWorkingDirectory());
+	script->pushString(NeoWindow::getInstance()->getWorkingDirectory());
 	return 1;
 }
 

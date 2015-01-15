@@ -26,12 +26,11 @@
 #include <NeoEngine.h>
 #include <ImageLoader.h>
 #include "Maratis/Maratis.h"
-#include <MWindow.h>
 #include <MCore.h>
 #include <FL/Fl.H>
 #include <SDL.h>
 #include <SDLThread.h>
-
+#include <Window/Window.h>
 #include "FilesUpdate/FilesUpdate.h"
 #include "MainWindow/Callbacks.h"
 #include "MainWindow/ini.h"
@@ -564,7 +563,7 @@ int main(int argc, char **argv)
 	Fl::background(0xEE,0xEE,0xEE);
 	Fl::background2(0xFF,0xFF,0xFF);
 
-    MWindow* mwindow = MWindow::getInstance();
+    NeoWindow* mwindow = NeoWindow::getInstance();
     mwindow->setCurrentDirectory(rep);
 
     executable = argv[0];
@@ -599,8 +598,8 @@ int main(int argc, char **argv)
     Fl::add_timeout(0.2, update_editor);
     while(Fl::check())
     {
-        MWindow::getInstance()->onEvents();
-        MWindow::getInstance()->onWindowEvents();
+        mwindow->onEvents();
+        mwindow->onWindowEvents();
     }
     return 0;
 }

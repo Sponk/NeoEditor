@@ -33,10 +33,9 @@
 #define _M_GAME_WIN_EVENTS_H
 
 #include <MInputContext.h>
-#include <MWindow.h>
-#include <MWinEvents.h>
-
 #include <limits.h>
+#include <Window/Window.h>
+#include <Window/WinEvents.h>
 
 using namespace Neo;
 
@@ -103,7 +102,7 @@ void gameWinEvents(MWinEvent * windowEvents)
 {
 	static int joymap[4] = {-1, -1, -1, -1};
 
-	MWindow * window = MWindow::getInstance();
+	NeoWindow * window = NeoWindow::getInstance();
 	MInputContext * input = Neo::NeoEngine::getInstance()->getInputContext();
 	
 	switch(windowEvents->type)

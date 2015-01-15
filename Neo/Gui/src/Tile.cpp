@@ -36,8 +36,8 @@
 #include <Render.h>
 #include <GuiSystem.h>
 #include <Messenger.h>
-#include <MWindow.h>
 #include <SDLThread.h>
+#include <Window/Window.h>
 
 using namespace Neo::Gui;
 using namespace Neo;
@@ -50,7 +50,7 @@ void TileSheet::loadImage(const char* path, unsigned int width, unsigned int hei
 	GuiSystem* gui = GuiSystem::getInstance();
 	MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	Level* level = NeoEngine::getInstance()->getLevel();
-	MWindow* window = MWindow::getInstance();
+	NeoWindow* window = NeoWindow::getInstance();
 
 	MLOG_INFO("Loading image");
 	if(path != NULL)

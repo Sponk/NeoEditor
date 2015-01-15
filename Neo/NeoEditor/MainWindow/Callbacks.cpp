@@ -37,7 +37,7 @@
 #include <FL/Fl_PNG_Image.H>
 
 #include <NeoEngine.h>
-#include <MWindow.h>
+#include <Window/Window.h>
 #include <ImageLoader.h>
 #include <LevelLoad.h>
 #include <LevelSave.h>
@@ -2251,7 +2251,7 @@ void play_game_in_editor(Fl_Button* button, void *)
     scene->stopAllSounds();
 
     // show mouse
-    MWindow::getInstance()->showCursor();
+    NeoWindow::getInstance()->showCursor();
 
     if(temp)
     {
@@ -2323,9 +2323,9 @@ void open_profile_viewer_callback(Fl_Menu_*, void*)
 
     // TODO: Start detached!
 #ifndef WIN32
-    MWindow::getInstance()->execute("./ProfileViewer", arg);
+    NeoWindow::getInstance()->execute("./ProfileViewer", arg);
 #else
-	MWindow::getInstance()->execute(".\\ProfileViewer.exe", arg);
+	NeoWindow::getInstance()->execute(".\\ProfileViewer.exe", arg);
 #endif
 }
 

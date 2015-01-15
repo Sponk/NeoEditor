@@ -32,7 +32,7 @@
 #if !defined(_M_WINDOW_H) && !defined(ANDROID)
 #define _M_WINDOW_H
 
-#include <MWinEvents.h>
+#include <Window/WinEvents.h>
 #include <MCore.h>
 
 #ifndef EMSCRIPTEN
@@ -42,7 +42,7 @@
 
 #include <vector>
 
-class MWindow
+class NeoWindow
 {
 private:
 #ifndef EMSCRIPTEN
@@ -89,13 +89,13 @@ private:
 
 public:
 
-	MWindow(void);
-	~MWindow(void);
+	NeoWindow(void);
+	~NeoWindow(void);
 
 	// instance
-	static MWindow * getInstance(void)
+	static NeoWindow * getInstance(void)
 	{
-		static MWindow m_instance;
+		static NeoWindow m_instance;
 		return &m_instance;
 	}
 
@@ -179,5 +179,5 @@ private:
 
 #else
 #include <cctype>
-#include <MAndroidWindow.h>
+#include <Window/AndroidWindow.h>
 #endif

@@ -25,7 +25,6 @@
 #include <NeoEngine.h>
 #include <MCore.h>
 #include <LuaBehavior.h>
-#include <MWindow.h>
 #include <WinContext.h>
 #include <PackageManagerNPK.h>
 #include <GuiSystem.h>
@@ -35,6 +34,7 @@
 #include <BulletContext.h>
 
 #include <gtest/gtest.h>
+#include <Window/Window.h>
 
 #ifdef main
 #undef main
@@ -82,7 +82,7 @@ public:
 		mgr->setTemplateSemaphore(new SDLSemaphore());
 		mgr->setTemplateThread(new SDLThread());
 
-		MWindow::getInstance()->createSemaphores();
+		NeoWindow::getInstance()->createSemaphores();
 
 		game->begin();
 	}

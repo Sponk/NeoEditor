@@ -3,9 +3,8 @@
 #ifndef MainWindow_h
 #define MainWindow_h
 #include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-
 #include "../PluginScript/PluginScript.h"
+#include <FL/Fl_Double_Window.H>
 extern void window_quit(Fl_Double_Window*, void*);
 #include <FL/Fl_Menu_Bar.H>
 extern void new_project_callback(Fl_Menu_*, void*);
@@ -41,8 +40,8 @@ extern void add_group_callback(Fl_Menu_*, void*);
 extern void plugin_console_callback(Fl_Menu_*, void*);
 extern void check_for_updates_callback(Fl_Menu_*, void*);
 extern void about_menu_callback(Fl_Menu_*, void*);
-#include "../MainWindow/GLBox.h"
-#include "../MainWindow/DnDTree.h"
+#include "GLBox.h"
+#include "DnDTree.h"
 extern void scene_tree_callback(DnDTree*, long);
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Round_Button.H>

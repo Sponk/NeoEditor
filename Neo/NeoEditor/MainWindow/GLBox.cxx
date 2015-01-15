@@ -19,16 +19,12 @@
 
 #include "../MainWindow/GLBox.h"
 
-#include <MWindow.h>
 #include <NeoEngine.h>
 #include <ImageLoader.h>
-#include <MKeyboard.h>
-
-#include "../MWindow/MMouse.h"
-#include "../Maratis/Maratis.h"
-#include <MCore.h>
-#include "../RenderArray/RenderArray.h"
 #include <GuiSystem.h>
+
+#include "../Maratis/Maratis.h"
+#include "../RenderArray/RenderArray.h"
 
 #include <FL/Enumerations.H>
 #include <FL/Fl_Int_Input.H>
@@ -40,6 +36,9 @@
 #include <string>
 
 #include <Shiny.h>
+#include <Window/Keyboard.h>
+#include <Window/Mouse.h>
+#include <Window/Window.h>
 #include "../FilesUpdate/FilesUpdate.h"
 #include "../MainWindow/Callbacks.h"
 #include "../MainWindow/MainWindow.h"
@@ -146,7 +145,7 @@ void update_editor(void*)
         maratis->setTitleChanged(false);
     }
 
-    if(MWindow::getInstance()->getFocus())
+    if(NeoWindow::getInstance()->getFocus())
     {
         if(game)
         {
@@ -166,7 +165,7 @@ void update_editor(void*)
         maratis->getPerspectiveVue()->loadSkybox(scene->getCurrentCamera()->getSkybox()->getPath());
     }*/
 
-    MWindow::getInstance()->setPosition(window.glbox->x_root() , window.glbox->y_root());
+    NeoWindow::getInstance()->setPosition(window.glbox->x_root() , window.glbox->y_root());
     window.glbox->redraw();
 
     maratis->logicLoop();
@@ -201,7 +200,7 @@ void GLBox::draw()
 {
     Maratis* maratis = Maratis::getInstance();
     NeoEngine* engine = NeoEngine::getInstance();
-    MWindow* window = MWindow::getInstance();
+    NeoWindow* window = NeoWindow::getInstance();
     MRenderingContext* render = engine->getRenderingContext();
 
     if(!maratis_init)
@@ -310,7 +309,7 @@ int GLBox::handle(int event)
     //fprintf(stderr, "Handle %d FL_KEYBOARD is %d\n", event, FL_KEYBOARD);
     char key[2] = {0,0};
     MInputContext* input = NeoEngine::getInstance()->getInputContext();
-    MWindow* window = MWindow::getInstance();
+    NeoWindow* window = NeoWindow::getInstance();
     Maratis* maratis = Maratis::getInstance();
 
     switch(event)
@@ -578,12 +577,12 @@ int GLBox::handle(int event)
 
     case FL_FOCUS:
             //Fl::focus(this);
-            MWindow::getInstance()->setFocus(true);
+            NeoWindow::getInstance()->setFocus(true);
             return 1;
         break;
 
     case FL_UNFOCUS:
-            MWindow::getInstance()->setFocus(false);
+            NeoWindow::getInstance()->setFocus(false);
             return 1;
         break;
 
@@ -820,7 +819,7 @@ void GLBox::resize(int x, int y, int w, int h)
 
     if(m_postProcessing)
     {
-        MWindow::getInstance()->setViewport(w, h);
+        NeoWindow::getInstance()->setViewport(w, h);
         m_postProcessor.eraseTextures();
         m_postProcessor.updateResolution();
     }

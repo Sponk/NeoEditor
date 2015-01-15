@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MGui
-// MX11Window.cpp
+// MX11NeoWindow.cpp
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //========================================================================
@@ -29,7 +29,7 @@
 
 
 #ifdef LINUX
-#include "../MWindow.h"
+#include "../Window.h"
 #include <NeoEngine.h>
 
 #include <signal.h>
@@ -37,30 +37,32 @@
 #include <string.h>
 #include <unistd.h>
 
-const char * MWindow::getTempDirectory(void)
+using namespace Neo;
+
+const char * NeoWindow::getTempDirectory(void)
 {
 	static char tempDirectory[8] = "/tmp";
 	return tempDirectory;
 }
 
-const char * MWindow::getCurrentDirectory(void)
+const char * NeoWindow::getCurrentDirectory(void)
 {
 	static char currentDirectory[256];
 	getcwd(currentDirectory, 256);
 	return currentDirectory;
 }
 
-void MWindow::setCurrentDirectory(const char * directory)
+void NeoWindow::setCurrentDirectory(const char * directory)
 {
 	chdir(directory);
 }
 
-void MWindow::setWorkingDirectory(const char * directory)
+void NeoWindow::setWorkingDirectory(const char * directory)
 {
 	strcpy(m_workingDirectory, directory);
 }
 
-void MWindow::execute(const char * path, const char * args)
+void NeoWindow::execute(const char * path, const char * args)
 {
 	char dst[512];
 	memset(dst, 0, 512);
@@ -90,7 +92,7 @@ static char** vector2array(vector<const char*> vec)
     return arr;
 }
 
-void MWindow::executeDetached(const char *path, const char *args, bool killParent)
+void NeoWindow::executeDetached(const char *path, const char *args, bool killParent)
 {
     pid_t pid = fork();
 

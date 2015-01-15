@@ -35,7 +35,7 @@
 #include <Button.h>
 #include <Render.h>
 #include <GuiSystem.h>
-#include <MMouse.h>
+#include <Window/Mouse.h>
 
 using namespace Neo::Gui;
 

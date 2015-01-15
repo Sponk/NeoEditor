@@ -25,12 +25,11 @@
 #include <FL/Fl_Native_File_Chooser.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/fl_message.H>
+#include <Window/Window.h>
 #include <string>
 
 // Maratis includes (for MainWindow.cxx)
 #include "../Maratis/Maratis.h"
-#include <MWindow.h>
-
 #include "../MainWindow/ini.h"
 #include "../Publish/Publisher.h"
 

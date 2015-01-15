@@ -26,12 +26,12 @@
 
 #include <MEngine.h>
 #include <MLog.h>
-#include <MWindow.h>
 #include <SDL_log.h>
 
 #include <MGameWinEvents.h>
 #include "Maratis/MaratisPlayer.h"
 #include <emscripten.h>
+#include <Window/Window.h>
 
 // window events
 void windowEvents(MWinEvent * windowEvents)
@@ -64,13 +64,13 @@ void update(void)
 void draw(void)
 {
 	MaratisPlayer::getInstance()->graphicLoop();
-	MWindow::getInstance()->swapBuffer();
+	NeoWindow::getInstance()->swapBuffer();
 }
 
 void complete_update()
 {
 	NeoEngine * engine = NeoEngine::getInstance();
-	MWindow * window = MWindow::getInstance();
+	NeoWindow * window = NeoWindow::getInstance();
 	
 	// quit
 	if(! engine->isActive())
@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
 	
 	
 	// get window (first time call onstructor)
-	MWindow * window = MWindow::getInstance();
+	NeoWindow * window = NeoWindow::getInstance();
 	
 	// create window
 	if(!window->create("Maratis", width, height, 32, fullscreen == 1))
