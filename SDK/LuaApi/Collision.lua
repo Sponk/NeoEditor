@@ -1,3 +1,5 @@
+--- Author: Murii
+
 Collision = {}
 Collision.__index = Collision
 

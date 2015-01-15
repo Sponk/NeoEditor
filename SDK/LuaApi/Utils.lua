@@ -1,3 +1,5 @@
+--- Author: Murii
+
 Utils = {}
 Utils.__index = Utils
 

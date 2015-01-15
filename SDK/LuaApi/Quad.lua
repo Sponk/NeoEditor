@@ -1,3 +1,5 @@
+--- Author: Murii
+
 Quad = {}
 Quad.__index = Quad
 
