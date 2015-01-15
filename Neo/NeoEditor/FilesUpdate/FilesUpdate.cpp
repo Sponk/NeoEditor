@@ -55,7 +55,7 @@ void updateRefs(MDataManager * dataManager)
 	}
 }
 
-void MFilesUpdate::update(void)
+void FilesUpdate::update(void)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
 	Level * level = engine->getLevel();

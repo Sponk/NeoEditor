@@ -1,10 +1,6 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MGame.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -28,23 +24,23 @@
 //========================================================================
 
 
-#ifndef _M_GAME_H
-#define _M_GAME_H
+#ifndef _EDITOR_GAME_H
+#define _EDITOR_GAME_H
 
 
-class M_ENGINE_EXPORT MGame
+class M_ENGINE_EXPORT EditorGame
 {
 private:
 
 	bool m_isRunning;
 
     bool m_postEffectsEnabled;
-    MPostProcessor m_postProcessor;
+    PostProcessor m_postProcessor;
 
 public:
 
-	MGame(void);
-	virtual ~MGame(void);
+	EditorGame(void);
+	virtual ~EditorGame(void);
 
 public:
 
@@ -56,7 +52,7 @@ public:
     inline void enablePostEffects() { m_postEffectsEnabled = true; }
     inline void disablePostEffects() { m_postEffectsEnabled = false; }
 
-    inline MPostProcessor* getPostProcessor() { return &m_postProcessor; }
+    inline PostProcessor* getPostProcessor() { return &m_postProcessor; }
 
 	// begin / end
 	void begin(void) { onBegin(); onBeginLevel(); onBeginScene(); m_isRunning = true; }

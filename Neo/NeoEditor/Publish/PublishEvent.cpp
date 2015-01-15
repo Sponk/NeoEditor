@@ -1,10 +1,6 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// MPublishEvent.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2012 Philipp Geyer <nistur.com>
+// Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -98,10 +94,10 @@ MPackage openProjectPackage(const char* projName)
 }
 
 /*--------------------------------------------------------------------------------
- * MPublishEventClearDirectory
+ * PublishEventClearDirectory
  * Will clear the directory before publishing to it.
  *-------------------------------------------------------------------------------*/
-class MPublishEventClearDirectory : public MPublishEvent
+class PublishEventClearDirectory : public PublishEvent
 {
 	void	execute(const char* projName)
 	{
@@ -112,7 +108,7 @@ class MPublishEventClearDirectory : public MPublishEvent
 	int		getPriority() { return 0; }
 };
 
-M_PUBLISH_EVENT_IMPLEMENT(MPublishEventClearDirectory);
+M_PUBLISH_EVENT_IMPLEMENT(PublishEventClearDirectory);
 
 /*--------------------------------------------------------------------------------
  * M_PUBLISH_PACKAGE_DIR
@@ -120,7 +116,7 @@ M_PUBLISH_EVENT_IMPLEMENT(MPublishEventClearDirectory);
  * Package manager
  *-------------------------------------------------------------------------------*/
 #define M_PUBLISH_PACKAGE_DIR(dir) \
-class MPublishEvent##dir##Package : public MPublishEvent \
+class PublishEvent##dir##Package : public PublishEvent \
 { \
 	void	execute(const char* projName) \
 	{ \
@@ -141,7 +137,7 @@ class MPublishEvent##dir##Package : public MPublishEvent \
 	} \
 	int		getPriority() { return 5; } \
 }; \
-M_PUBLISH_EVENT_IMPLEMENT(MPublishEvent##dir##Package);
+M_PUBLISH_EVENT_IMPLEMENT(PublishEvent##dir##Package);
 
 /*--------------------------------------------------------------------------------
  * M_PUBLISH_DIR
@@ -149,7 +145,7 @@ M_PUBLISH_EVENT_IMPLEMENT(MPublishEvent##dir##Package);
  * the published directory
  *-------------------------------------------------------------------------------*/
 #define M_PUBLISH_DIR(dir) \
-class MPublishEvent##dir : public MPublishEvent \
+class PublishEvent##dir : public PublishEvent \
 { \
 	void	execute(const char* projName) \
 	{ \
@@ -163,7 +159,7 @@ class MPublishEvent##dir : public MPublishEvent \
 	} \
 	int		getPriority() { return 5; } \
 }; \
-M_PUBLISH_EVENT_IMPLEMENT(MPublishEvent##dir); \
+M_PUBLISH_EVENT_IMPLEMENT(PublishEvent##dir); \
 
 M_PUBLISH_PACKAGE_DIR(maps)
 M_PUBLISH_PACKAGE_DIR(scripts)
@@ -174,7 +170,7 @@ M_PUBLISH_PACKAGE_DIR(levels)
 M_PUBLISH_DIR(plugins)
 
 // write and pack binary mesh files
-class MPublishEventMeshsPackage : public MPublishEvent
+class PublishEventMeshsPackage : public PublishEvent
 {
 	void execute(const char* projName)
 	{
@@ -276,7 +272,7 @@ class MPublishEventMeshsPackage : public MPublishEvent
 	}
 	int getPriority() { return 5; }
 };
-M_PUBLISH_EVENT_IMPLEMENT(MPublishEventMeshsPackage);
+M_PUBLISH_EVENT_IMPLEMENT(PublishEventMeshsPackage);
 
 
 /*--------------------------------------------------------------------------------
@@ -495,11 +491,11 @@ void copySysLinux(const char* projName)
 
 
 /*--------------------------------------------------------------------------------
- * MPublishEventCopySys
+ * PublishEventCopySys
  * TODO: Check if there's a custom "player" executable and load that, rather than
  * NeoPlayer
  *-------------------------------------------------------------------------------*/
-class MPublishEventCopySys : public MPublishEvent
+class PublishEventCopySys : public PublishEvent
 {
 	void	execute(const char* projName)
 	{
@@ -518,13 +514,13 @@ class MPublishEventCopySys : public MPublishEvent
 
 	int		getPriority() { return 1; }
 };
-M_PUBLISH_EVENT_IMPLEMENT(MPublishEventCopySys);
+M_PUBLISH_EVENT_IMPLEMENT(PublishEventCopySys);
 
 /*--------------------------------------------------------------------------------
- * MPublishEventCopyGame
+ * PublishEventCopyGame
  * copy Game plugin, if one exists
  *-------------------------------------------------------------------------------*/
-class MPublishEventCopyGame : public MPublishEvent
+class PublishEventCopyGame : public PublishEvent
 {
 	void	execute(const char* projName)
 	{
@@ -553,5 +549,5 @@ class MPublishEventCopyGame : public MPublishEvent
 
 	int		getPriority() { return 7; }
 };
-M_PUBLISH_EVENT_IMPLEMENT(MPublishEventCopyGame);
+M_PUBLISH_EVENT_IMPLEMENT(PublishEventCopyGame);
 }

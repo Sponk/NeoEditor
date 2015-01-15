@@ -1,10 +1,5 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Neo
-// FltkToLua.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
-// Copyright (c) 2014 Yannick Pflanzer <www.scary-squid.de>
+// Copyright (c) 2014-2015 Yannick Pflanzer <www.scary-squid.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages

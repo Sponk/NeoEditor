@@ -150,13 +150,13 @@ void update_editor(void*)
         if(game)
         {
             if(!game->isRunning())
-                MFilesUpdate::update();
+                FilesUpdate::update();
             else
                 update_scene_tree();
         }
         else
         {
-            MFilesUpdate::update();
+            FilesUpdate::update();
         }
     }
 

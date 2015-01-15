@@ -1,10 +1,6 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// MFilesUpdate.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
-//  Maratis, Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+//  Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+//	Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -23,13 +19,13 @@
 //========================================================================
 
 
-#ifndef _M_FILES_UPDATE_H
-#define _M_FILES_UPDATE_H
+#ifndef _FILES_UPDATE_H
+#define _FILES_UPDATE_H
 
 #include <NeoEngine.h>
 
 
-class MFilesUpdate
+class FilesUpdate
 {
 public:
 

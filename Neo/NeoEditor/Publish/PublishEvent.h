@@ -1,10 +1,6 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// MPublishEvent.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2012 Philipp Geyer <nistur.com>
+// Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -22,20 +18,20 @@
 //
 //========================================================================
 
-#ifndef __M_PUBLISH_EVENT_H__
-#define __M_PUBLISH_EVENT_H__
+#ifndef __PUBLISH_EVENT_H__
+#define __PUBLISH_EVENT_H__
 
 namespace Neo
 {
 
 /*--------------------------------------------------------------------------------
- * MPublishEvent
+ * PublishEvent
  * Base class for publish events
  * Can be ordered in priority, but no guarantee as to order within
  * each priority.
  *-------------------------------------------------------------------------------*/
 // base command class for publish events.
-class MPublishEvent
+class PublishEvent
 {
 public:
 	/* execute

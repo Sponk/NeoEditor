@@ -45,7 +45,7 @@ Publisher::~Publisher()
 	delete [] m_events;
 }
 
-void Publisher::addEvent(MPublishEvent* pubEvent)
+void Publisher::addEvent(PublishEvent* pubEvent)
 {
 	if(!pubEvent)
 		return;

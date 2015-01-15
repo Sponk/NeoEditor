@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// MPublisher.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2012 Philipp Geyer <nistur.com>
 //
@@ -22,8 +17,8 @@
 //
 //========================================================================
 
-#ifndef __M_PUBLISHER_H__
-#define __M_PUBLISHER_H__
+#ifndef __PUBLISHER_H__
+#define __PUBLISHER_H__
 
 #include <vector>
 
@@ -40,7 +35,7 @@ namespace Neo
 class Publisher
 {
 private:
-	typedef std::vector<MPublishEvent*> eventVec;
+	typedef std::vector<PublishEvent*> eventVec;
 	eventVec*							m_events;
 	
 	int									m_maxPriorities;
@@ -57,8 +52,8 @@ public:
 		return &m_instance;
 	}
 	
-	void addEvent(MPublishEvent* pubEvent);
+	void addEvent(PublishEvent* pubEvent);
 	void publish(const char* projName);
 };
 }
-#endif /*__M_PUBLISHER_H__*/
+#endif /*__PUBLISHER_H__*/
