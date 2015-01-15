@@ -37,8 +37,15 @@ dofile("Button.lua")
 dofile("InputField.lua")
 dofile("Label.lua")
 dofile("Utils.lua")
+dofile("Quad.lua")
+dofile("Collision.lua")
 
 --global instance for Utils class
 util = Utils.create()
+
+--collision memebers
+quad = Quad.create()
+collision = Collision.create()
+collision:init()
 
 enableGui(1)
