@@ -17,48 +17,49 @@
 //
 //========================================================================
 
-#ifndef CALLBACKS_H
-#define CALLBACKS_H
+#ifndef NEO_NEOEDITOR_MAINWINDOW_UTILS_H_
+#define NEO_NEOEDITOR_MAINWINDOW_UTILS_H_
 
-#include <FL/Fl.H>
-#include <FL/Fl_Value_Input.H>
-#include <FL/Fl_Native_File_Chooser.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/fl_message.H>
-#include <string>
+#include <MCore.h>
 
-// Maratis includes (for MainWindow.cxx)
-#include "../Maratis/Maratis.h"
-#include <MWindow.h>
-
-#include "../MainWindow/ini.h"
-#include "../Publish/Publisher.h"
-
-// Is now given via compiler flags
-// #define EDITOR_VERSION_STRING "0.1"
-
-typedef struct
-{
-    std::string path;
-    std::string level;
-    std::string file_path;
-    bool changed;
-}open_project_t;
-
-extern open_project_t current_project;
-extern Fl_Double_Window* main_window;
-
-extern float rotation_speed;
-extern float translation_speed;
-
-extern bool reload_editor;
-extern bool update_name;
-
-void edit_text_properties(Fl_Widget*, void*);
-void update_behavior_menu();
+/**
+ * @brief Calls the native file chooser.
+ *
+ * This function is compatible with the 'fl_file_chooser' function included in FLTK.
+ *
+ * @param title The window title.
+ * @param files The file types to include.
+ * @param dir The directory to start in.
+ * @param type The selection type.
+ */
 const char* fl_native_file_chooser(const char* title, const char* files, const char* dir, int type);
-void update_scene_tree();
-void create_behavior_ui(Neo::Object3d* object);
-void save_settings();
 
+/**
+ * @brief Puts a "Yes No" question dialog on the screen with the given text.
+ *
+ * Replaces "fl_ask".
+ * @param text The question text.
+ * @return The answer that was given
+ */
+int ask(const char* text);
+
+/**
+ * @brief Turns a FLTK color to a vector3.
+ *
+ * @param c The color.
+ * @return The color as a vector3.
+ */
+MVector3 flColorToVector(int c);
+
+/*
+ * Windows helper for POSIX functionality.
+ */
+#if defined(_MSC_VER)
+#define snprintf c99_snprintf
 #endif
+
+#if defined(_MSC_VER) || defined(_WIN32)
+#define getline c99_getline
+#endif
+
+#endif /* NEO_NEOEDITOR_MAINWINDOW_UTILS_H_ */

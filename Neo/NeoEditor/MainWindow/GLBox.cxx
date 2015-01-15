@@ -44,6 +44,8 @@
 #include "../MainWindow/Callbacks.h"
 #include "../MainWindow/MainWindow.h"
 
+#include "Utils.h"
+
 using namespace Neo;
 
 extern Fl_Double_Window* main_window;
@@ -161,7 +163,7 @@ void update_editor(void*)
 
     /*if(!game->isRunning())
     {
-        Maratis::getInstance()->getPerspectiveVue()->loadSkybox(scene->getCurrentCamera()->getSkybox()->getPath());
+        maratis->getPerspectiveVue()->loadSkybox(scene->getCurrentCamera()->getSkybox()->getPath());
     }*/
 
     MWindow::getInstance()->setPosition(window.glbox->x_root() , window.glbox->y_root());
@@ -197,16 +199,19 @@ void GLBox::loadPostEffectsFromGame(NeoGame* game)
 
 void GLBox::draw()
 {
-	if(!main_window->active() != 0)
-		return;
+    Maratis* maratis = Maratis::getInstance();
+    NeoEngine* engine = NeoEngine::getInstance();
+    MWindow* window = MWindow::getInstance();
+    MRenderingContext* render = engine->getRenderingContext();
 
     if(!maratis_init)
     {
-        Maratis* maratis = Maratis::getInstance();
-        maratis->initRenderer();
-        MWindow::getInstance()->setViewport(w(), h());
+    	maratis->initRenderer();
 
-        MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    	// Get newly created renderer
+    	render = engine->getRenderingContext();
+
+        window->setViewport(w(), h());
 
         if(!current_project.file_path.empty())
         {
@@ -219,7 +224,8 @@ void GLBox::draw()
             current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
     #endif
 
-            Maratis::getInstance()->loadProject(current_project.file_path.c_str());
+            maratis->loadProject(current_project.file_path.c_str());
+
             ::window.glbox->loadPostEffectsFromGame(NeoEngine::getInstance()->getGame());
             current_project.level = maratis->getCurrentLevel();
         }
@@ -245,17 +251,15 @@ void GLBox::draw()
         reload_editor = false;
     }
 
-    Maratis* maratis = Maratis::getInstance();
-    NeoEngine* engine = NeoEngine::getInstance();
-    MRenderingContext* render = engine->getRenderingContext();
-
-    MWindow::getInstance()->setViewport(w(), h());
+    window->setViewport(w(), h());
     render->setScissor(0, 0, w(), h());
 
     NeoGame* game = engine->getGame();
     if(!game->isRunning())
     {
         engine->updateRequests();
+
+        // TODO: Don't hardcode this!
         render->setClearColor(MVector4(0.18, 0.32, 0.45, 1));
 
         render->disableScissorTest();
@@ -274,9 +278,12 @@ void GLBox::draw()
 
                 static_cast<OCamera*>(camera)->enable();
 
+                Scene* scene = engine->getLevel()->getCurrentScene();
+
+                // Render everything
                 render->clear(M_BUFFER_DEPTH | M_BUFFER_COLOR);
-                engine->getLevel()->getCurrentScene()->draw(static_cast<OCamera*>(camera));
-                engine->getLevel()->getCurrentScene()->drawObjectsBehaviors();
+                scene->draw(static_cast<OCamera*>(camera));
+                scene->drawObjectsBehaviors();
 
                 render->setScissor(0,0,w(),h());
                 render->disableScissorTest();
@@ -295,6 +302,7 @@ void GLBox::draw()
 #endif
 }
 
+// TODO: Make this a function!
 #define ENDS_WITH(s, e) (s.compare(s.length() - strlen(e), strlen(e), e) == 0)
 
 int GLBox::handle(int event)
@@ -302,6 +310,9 @@ int GLBox::handle(int event)
     //fprintf(stderr, "Handle %d FL_KEYBOARD is %d\n", event, FL_KEYBOARD);
     char key[2] = {0,0};
     MInputContext* input = NeoEngine::getInstance()->getInputContext();
+    MWindow* window = MWindow::getInstance();
+    Maratis* maratis = Maratis::getInstance();
+
     switch(event)
     {
     case FL_KEYBOARD:
@@ -539,7 +550,7 @@ int GLBox::handle(int event)
             mouse_y = Fl::event_y();
 
             mouse->setPosition(mouse_x, mouse_y);
-            Maratis::getInstance()->updateCurrentAxis();
+            maratis->updateCurrentAxis();
 
         break;
         }
@@ -555,7 +566,7 @@ int GLBox::handle(int event)
 
             if(::window.inputMethod == NULL)
             {
-                OCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+                OCamera * vue = maratis->getPerspectiveVue();
                 vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
                 vue->updateMatrix();
             }
@@ -587,26 +598,26 @@ int GLBox::handle(int event)
 
             if(Fl::event_button1() && !NeoEngine::getInstance()->getGame()->isRunning())
             {
-                Maratis::getInstance()->selectObjectsInMainView(NeoEngine::getInstance()->getLevel()->getCurrentScene(), Fl::event_shift() > 0);
+                maratis->selectObjectsInMainView(NeoEngine::getInstance()->getLevel()->getCurrentScene(), Fl::event_shift() > 0);
 
-                Maratis::getInstance()->lockSelection();
+                maratis->lockSelection();
                 ::window.scene_tree->deselect_all();
 
                 Fl_Tree_Item* item = ::window.scene_tree->root();
-                if(Maratis::getInstance()->getSelectedObjectsNumber() > 0)
+                if(maratis->getSelectedObjectsNumber() > 0)
                 {
                 	while((item = ::window.scene_tree->next(item)) != NULL)
 					{
-                		for(int i = 0; i < Maratis::getInstance()->getSelectedObjectsNumber(); i++)
+                		for(int i = 0; i < maratis->getSelectedObjectsNumber(); i++)
                 		{
-							if(item && !strcmp(item->label(), Maratis::getInstance()->getSelectedObjectByIndex(i)->getName()))
+							if(item && !strcmp(item->label(), maratis->getSelectedObjectByIndex(i)->getName()))
 							{
 								::window.scene_tree->select(item);
 							}
                 		}
 					}
                 }
-                Maratis::getInstance()->unlockSelection();
+                maratis->unlockSelection();
 
                 update_name = true;
                 redraw();
@@ -683,7 +694,7 @@ int GLBox::handle(int event)
             NeoGame* game = NeoEngine::getInstance()->getGame();
             if(Fl::event_button3() && ::window.inputMethod == NULL && !game->isRunning())
             {
-                OCamera * vue = Maratis::getInstance()->getPerspectiveVue();
+                OCamera * vue = maratis->getPerspectiveVue();
 
                 vue->setEulerRotation(vue->getEulerRotation() + MVector3(mouse_y - Fl::event_y(), 0, mouse_x-Fl::event_x())*0.5*rotation_speed);
                 vue->updateMatrix();
@@ -698,7 +709,7 @@ int GLBox::handle(int event)
             mouse->setPosition(mouse_x, mouse_y);
             if(Fl::event_button1() && !game->isRunning())
             {
-                Maratis::getInstance()->transformSelectedObjects();
+                maratis->transformSelectedObjects();
             }
 
             redraw();
@@ -738,7 +749,7 @@ int GLBox::handle(int event)
 
                 if(ENDS_WITH(suffix, ".mproj") != 0)
                 {
-                    if(!current_project.path.empty() && !fl_ask("You need to close the current project. Do you want to proceed?"))
+                    if(!current_project.path.empty() && !ask("You need to close the current project. Do you want to proceed?"))
                         return 1;
 
                     current_project.path = filename;
@@ -749,27 +760,27 @@ int GLBox::handle(int event)
                 #else
                     current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
                 #endif
-                    Maratis::getInstance()->loadProject(filename.c_str());
+                    maratis->loadProject(filename.c_str());
                     loadPostEffectsFromGame(NeoEngine::getInstance()->getGame());
-                    current_project.level = Maratis::getInstance()->getCurrentLevel();
+                    current_project.level = maratis->getCurrentLevel();
                     reload_editor = true;
                 }
                 else if(ENDS_WITH(suffix, ".level"))
                 {
-                    Maratis::getInstance()->loadLevel(filename.c_str());
+                    maratis->loadLevel(filename.c_str());
                     current_project.level = filename;
                 }
                 else if(ENDS_WITH(suffix, ".mesh"))
                 {
-                    Maratis::getInstance()->okAddEntity(filename.c_str());
+                    maratis->okAddEntity(filename.c_str());
                 }
                 else if(ENDS_WITH(suffix, ".ttf"))
                 {
-                    Maratis::getInstance()->okAddFont(filename.c_str());
+                    maratis->okAddFont(filename.c_str());
                 }
                 else if(ENDS_WITH(suffix, ".wav") || ENDS_WITH(suffix, ".ogg") || ENDS_WITH(suffix, ".aiff"))
                 {
-                    Maratis::getInstance()->okAddSound(filename.c_str());
+                    maratis->okAddSound(filename.c_str());
                 }
                 else
                 {

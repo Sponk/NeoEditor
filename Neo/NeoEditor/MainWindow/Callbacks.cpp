@@ -28,9 +28,6 @@
 #include <unistd.h>
 #endif
 
-#include <FL/Fl_Choice.H>
-#include <FL/Fl_File_Chooser.H>
-#include <FL/Fl_Native_File_Chooser.H>
 #include <FL/Fl_Value_Input.H>
 #include <FL/Fl_Int_Input.H>
 #include <FL/Fl_Round_Button.H>
@@ -46,6 +43,8 @@
 #include <LevelSave.h>
 #include <MCore.h>
 
+#include "Utils.h"
+
 #include <GuiSystem.h>
 
 using namespace Neo;
@@ -56,8 +55,6 @@ using namespace Neo;
 #include "../MainWindow/MainWindow.h"
 #include "../MainWindow/Translator.h"
 #include <Shiny.h>
-
-#include <SDLThread.h>
 
 open_project_t current_project;
 bool reload_editor = false;
@@ -88,39 +85,6 @@ Fl_Text_Buffer console_buffer;
 char labels[][2] = {{"X"},{"Y"},{"Z"},{"W"}};
 
 bool update_name = true;
-
-const char* fl_native_file_chooser(const char* title, const char* files, const char* dir, int type)
-{
-    Fl_Native_File_Chooser* dlg = new Fl_Native_File_Chooser();
-    dlg->title(title);
-    dlg->filter(files);
-    dlg->type(type);
-    dlg->directory(dir);
-
-    if(dlg->show() == 0)
-        return dlg->filename();
-
-    return NULL;
-}
-
-/*
- * Replacement for fl_ask
- */
-int ask(const char* text)
-{
-    return fl_choice("%s", "No", "Yes", NULL, text);
-}
-
-MVector3 flColorToVector(int c)
-{
-    char unsigned bytes[4];
-    bytes[0] = (c >> 24) & 0xFF;
-    bytes[1] = (c >> 16) & 0xFF;
-    bytes[2] = (c >> 8) & 0xFF;
-    bytes[3] = c & 0xFF;
-
-    return MVector3(static_cast<float>(bytes[0])/255.0f, static_cast<float>(bytes[1])/255.0f, static_cast<float>(bytes[2])/255.0f);
-}
 
 void save_settings()
 {
@@ -2391,18 +2355,19 @@ int check_updates_thread(void* data)
 
 void check_for_updates_callback(Fl_Menu_*, void*)
 {
-	SDLThread thread;
+	MThread* thread = MThreadManager::getInstance()->getNewThread();
+
     std::string version;
     check_updates_finished = false;
 
-	thread.Start(check_updates_thread, "CheckUpdates", (void*) &version);
+	thread->Start(check_updates_thread, "CheckUpdates", (void*) &version);
 
 	while(!check_updates_finished)
 	{
 		Fl::check();
 	}
 
-	int ret = thread.WaitForReturn();
+	int ret = thread->WaitForReturn();
 
 	if(ret == 1)
 	{
@@ -2434,6 +2399,9 @@ void check_for_updates_callback(Fl_Menu_*, void*)
     {
         fl_message(tr("You already run the latest and greatest version of this application!"));
     }
+
+    // Delete the thread
+    delete thread;
 }
 
 void local_transform_mode_callback(Fl_Menu_* menu, void*)
