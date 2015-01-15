@@ -17,7 +17,8 @@
 //
 //========================================================================
 
-#include "PostProcessor.h"
+#include "../MainWindow/PostProcessor.h"
+
 #include "../Maratis/Maratis.h"
 
 using namespace Neo;

@@ -17,42 +17,25 @@
 //
 //========================================================================
 
-#include "Translator.h"
-#include <NeoEngine.h>
+#ifndef TRANSLATOR_H
+#define TRANSLATOR_H
 
-const char* tr(const char* key)
+#include "../MainWindow/ini.h"
+
+const char* tr(const char* key);
+
+class Translator
 {
-    return Translator::getInstance()->translate(key);
-}
+    INI::Parser* m_parser;
+    char m_langFile[255];
 
-void Translator::loadTranslation(const char* file)
-{
-    if(!isFileExist(file))
-		return;
+public:
+    static Translator* getInstance() { static Translator m_tr; return &m_tr; }
 
-    SAFE_DELETE(m_parser);
-    m_parser = new INI::Parser(file);
+    Translator(): m_parser(NULL) {}
+    void loadTranslation(const char* file);
+    const char* translate(const char* key);
+    const char* getLanguageFile() { return m_langFile; }
+};
 
-#ifndef WIN32
-    const char* substr = strrchr(file, '/');
-#else
-    const char* substr = strrchr(file, '\\');
 #endif
-
-    if(substr == NULL)
-        substr = file;
-
-    strcpy(m_langFile, ++substr);
-}
-
-const char* Translator::translate(const char* key)
-{
-    if(!m_parser)
-        return key;
-
-    std::string value = m_parser->top()("Keys")[key];
-    if(value.empty())
-        return key;
-
-    return value.c_str();
-}

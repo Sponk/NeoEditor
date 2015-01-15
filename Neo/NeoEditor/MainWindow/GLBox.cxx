@@ -17,7 +17,8 @@
 //
 //========================================================================
 
-#include "GLBox.h"
+#include "../MainWindow/GLBox.h"
+
 #include <MWindow.h>
 #include <NeoEngine.h>
 #include <ImageLoader.h>
@@ -25,12 +26,8 @@
 
 #include "../MWindow/MMouse.h"
 #include "../Maratis/Maratis.h"
-#include "Callbacks.h"
 #include <MCore.h>
 #include "../RenderArray/RenderArray.h"
-#include "MainWindow.h"
-
-// NeoGui
 #include <GuiSystem.h>
 
 #include <FL/Enumerations.H>
@@ -44,6 +41,8 @@
 
 #include <Shiny.h>
 #include "../FilesUpdate/FilesUpdate.h"
+#include "../MainWindow/Callbacks.h"
+#include "../MainWindow/MainWindow.h"
 
 using namespace Neo;
 
@@ -336,7 +335,6 @@ int GLBox::handle(int event)
             if(key[0] == ' ')
             {
                 input->downKey("SPACE");
-                kbd->onKeyDown(MKEY_SPACE);
                 return 1;
             }
 
@@ -434,6 +432,7 @@ int GLBox::handle(int event)
             if(this != Fl::focus())
                 return 0;
 
+            key[0] = toupper(Fl::event_text()[0]);
             char keys[] = {"ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789"};
 
             for(int i = 0; i < sizeof(keys); i++)
@@ -454,6 +453,7 @@ int GLBox::handle(int event)
             if(key[0] == ' ')
             {
                 input->upKey("SPACE");
+                return 1;
             }
 
             switch(Fl::event_key())

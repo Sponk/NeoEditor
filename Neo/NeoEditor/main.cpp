@@ -23,21 +23,20 @@
 #include <stdio.h>
 #include <fstream>
 #include <iterator>
-#include "FLUID/ini.h"
-
 #include <NeoEngine.h>
 #include <ImageLoader.h>
 #include "Maratis/Maratis.h"
 #include <MWindow.h>
 #include <MCore.h>
-#include "FLUID/MainWindow.h"
-#include "FLUID/Callbacks.h"
 #include <FL/Fl.H>
-#include "FLUID/Translator.h"
 #include <SDL.h>
 #include <SDLThread.h>
 
 #include "FilesUpdate/FilesUpdate.h"
+#include "MainWindow/Callbacks.h"
+#include "MainWindow/ini.h"
+#include "MainWindow/MainWindow.h"
+#include "MainWindow/Translator.h"
 
 #ifdef _WIN32
     #include <windows.h>

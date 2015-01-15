@@ -29,9 +29,9 @@
 
 // Maratis includes (for MainWindow.cxx)
 #include "../Maratis/Maratis.h"
-#include "ini.h"
 #include <MWindow.h>
 
+#include "../MainWindow/ini.h"
 #include "../Publish/Publisher.h"
 
 // Is now given via compiler flags

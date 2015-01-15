@@ -17,9 +17,10 @@
 //
 //========================================================================
 
+#include "../MainWindow/Callbacks.h"
+
 #include <HTTPRequest.h>
 
-#include "Callbacks.h"
 #include <cstdio>
 #include <cerrno>
 
@@ -52,8 +53,8 @@ using namespace Neo;
 #include "../FilesUpdate/FilesUpdate.h"
 #include "../Loaders/AssimpMeshLoader.h"
 #include <MCore.h>
-#include "MainWindow.h"
-#include "Translator.h"
+#include "../MainWindow/MainWindow.h"
+#include "../MainWindow/Translator.h"
 #include <Shiny.h>
 
 #include <SDLThread.h>

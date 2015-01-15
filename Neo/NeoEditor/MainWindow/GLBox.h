@@ -29,7 +29,7 @@
 #include <NeoEngine.h>
 #include <vector>
 
-#include "PostProcessor.h"
+#include "../MainWindow/PostProcessor.h"
 
 class GLBox : public Fl_Gl_Window
 {

@@ -29,11 +29,11 @@
 #include <string>
 #include <vector>
 
-#include "../FLUID/MainWindow.h"
+#include "../MainWindow/Callbacks.h"
+#include "../MainWindow/MainWindow.h"
 #include "../Maratis/Maratis.h"
 
 // TODO: All globals in own file!
-#include "../FLUID/Callbacks.h"
 #include "../PluginScript/PluginScript.h"
 
 using namespace Neo;
