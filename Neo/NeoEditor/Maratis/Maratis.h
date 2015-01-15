@@ -29,7 +29,8 @@
 #include <vector>
 #include <NeoEngine.h>
 #include <Plugin.h>
-#include "../MRenderArray/MRenderArray.h"
+
+#include "../RenderArray/RenderArray.h"
 
 namespace Neo
 {

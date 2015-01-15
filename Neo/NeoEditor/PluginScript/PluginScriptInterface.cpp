@@ -27,7 +27,6 @@
 //
 //========================================================================
 
-#include "MPluginScript.h"
 #include <FL/Fl.H>
 #include <FL/fl_message.H>
 #include <FL/Fl_Native_File_Chooser.H>
@@ -40,6 +39,7 @@
 
 // TODO: All globals in own file!
 #include "../FLUID/Callbacks.h"
+#include "../PluginScript/PluginScript.h"
 
 using namespace Neo;
 

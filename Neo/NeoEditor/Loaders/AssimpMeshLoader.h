@@ -1,10 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// MPublisher.h
+// MaratisCommon
+// MAssimpMeshLoader.h
+//
+// Assimp mesh loader
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //========================================================================
-// Copyright (c) 2012 Philipp Geyer <nistur.com>
+//  Maratis, Copyright (c) 2013 Anael Seghezzi <www.maratis3d.com>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -22,42 +24,11 @@
 //
 //========================================================================
 
-#ifndef __M_PUBLISHER_H__
-#define __M_PUBLISHER_H__
 
-#include "MPublishEvent.h"
-#include <vector>
+#ifndef _ASSIMP_MESH_LOADER_H
+#define _ASSIMP_MESH_LOADER_H
 
-namespace Neo
-{
+bool M_loadAssimpMesh(const char * filename, void * data);
+bool M_importAssimpMeshes(const char * filename);
 
-/*--------------------------------------------------------------------------------
- * MPublisher
- * Editor singleton to handle publishing of a Maratis project
- * By default the publisher has 10 different priority levels
- *-------------------------------------------------------------------------------*/
-class Publisher
-{
-private:
-	typedef std::vector<MPublishEvent*> eventVec;
-	eventVec*							m_events;
-	
-	int									m_maxPriorities;
-	
-public:
-	
-	Publisher();
-	~Publisher();
-
-	// instance
-	static Publisher * getInstance(void)
-	{
-		static Publisher m_instance;
-		return &m_instance;
-	}
-	
-	void addEvent(MPublishEvent* pubEvent);
-	void publish(const char* projName);
-};
-}
-#endif /*__M_PUBLISHER_H__*/
+#endif

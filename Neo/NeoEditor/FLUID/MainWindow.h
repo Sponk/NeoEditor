@@ -3,8 +3,9 @@
 #ifndef MainWindow_h
 #define MainWindow_h
 #include <FL/Fl.H>
-#include "../MPluginScript/MPluginScript.h"
 #include <FL/Fl_Double_Window.H>
+
+#include "../PluginScript/PluginScript.h"
 extern void window_quit(Fl_Double_Window*, void*);
 #include <FL/Fl_Menu_Bar.H>
 extern void new_project_callback(Fl_Menu_*, void*);

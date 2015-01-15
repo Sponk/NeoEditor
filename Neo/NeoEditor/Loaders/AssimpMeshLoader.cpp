@@ -27,6 +27,7 @@
 // done using code from assimp samples : http://assimp.sourceforge.net/
 
 
+#include "AssimpMeshLoader.h"
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -35,7 +36,6 @@
 
 #include <MeshSave.h>
 
-#include "MAssimpMeshLoader.h"
 
 using namespace Neo;
 

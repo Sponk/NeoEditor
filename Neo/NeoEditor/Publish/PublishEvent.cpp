@@ -22,15 +22,14 @@
 //
 //========================================================================
 
+#include "PublishEvent.h"
 #include <NeoEngine.h>
 #include <Project.h>
 
-#include "MPublisher.h"
-#include "MPublishEvent.h"
-
-#include "../MBins/MMeshBin.h"
-
 #include <sys/stat.h>
+
+#include "../Bins/MeshBin.h"
+#include "Publisher.h"
 
 #ifdef linux
 	#include <sys/types.h>

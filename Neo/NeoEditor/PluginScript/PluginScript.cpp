@@ -27,7 +27,7 @@
 //
 //========================================================================
 
-#include "MPluginScript.h"
+#include "../PluginScript/PluginScript.h"
 
 using namespace Neo;
 

@@ -22,7 +22,7 @@
 //
 //========================================================================
 
-#include "MFontBin.h"
+#include "FontBin.h"
 
 using namespace Neo;
 

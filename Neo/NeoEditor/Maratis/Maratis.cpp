@@ -79,14 +79,14 @@
 #include <MWindow.h>
 
 // Bins
-#include "../MBins/MFontBin.h"
-#include "../MBins/MMeshBin.h"
+#include "../Bins/FontBin.h"
+#include "../Bins/MeshBin.h"
 
 // publisher
-#include "../MPublish/MPublisher.h"
+#include "../Publish/Publisher.h"
 
 // assimp loader
-#include "../MLoaders/MAssimpMeshLoader.h"
+#include "../Loaders/AssimpMeshLoader.h"
 
 // Profiler
 #include <Shiny.h>

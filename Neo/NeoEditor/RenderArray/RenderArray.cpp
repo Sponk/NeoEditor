@@ -23,7 +23,7 @@
 //========================================================================
 
 
-#include "MRenderArray.h"
+#include "RenderArray.h"
 
 
 #define M_MAX_ARRAY 100000

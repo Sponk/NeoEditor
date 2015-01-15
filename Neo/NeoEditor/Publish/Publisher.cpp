@@ -22,7 +22,7 @@
 //
 //========================================================================
 
-#include "MPublisher.h"
+#include "Publisher.h"
 
 using namespace Neo;
 

@@ -1,10 +1,6 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// MMeshBin.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
-//  Maratis, Copyright (c) 2003-2012 Anael Seghezzi <www.maratis3d.com>
+//  Copyright (c) 2003-2012 Anael Seghezzi <www.maratis3d.com>
+//	Copyright (c) 2015 Yannick Pflanzer <www.neo-engine.de>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -23,8 +19,8 @@
 //========================================================================
 
 
-#ifndef _M_MESH_BIN_H
-#define _M_MESH_BIN_H
+#ifndef _MESH_BIN_H
+#define _MESH_BIN_H
 
 bool exportMeshBin(const char * filename, Neo::Mesh * mesh);
 bool exportArmatureAnimBin(const char * filename, Neo::ArmatureAnim * anim);

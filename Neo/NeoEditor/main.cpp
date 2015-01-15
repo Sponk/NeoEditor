@@ -30,7 +30,6 @@
 
 #include <NeoEngine.h>
 #include <ImageLoader.h>
-#include "MFilesUpdate/MFilesUpdate.h"
 #include "Maratis/Maratis.h"
 #include <MWindow.h>
 #include <MCore.h>
@@ -40,6 +39,8 @@
 #include "FLUID/Translator.h"
 #include <SDL.h>
 #include <SDLThread.h>
+
+#include "FilesUpdate/FilesUpdate.h"
 
 #ifdef _WIN32
     #include <windows.h>
@@ -51,7 +52,7 @@
     #include <cxxabi.h>
 #endif
 
-#include "MPluginScript/MPluginScript.h"
+#include "PluginScript/PluginScript.h"
 
 #ifdef main
     #undef main
