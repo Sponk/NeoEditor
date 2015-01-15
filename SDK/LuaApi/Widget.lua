@@ -42,8 +42,19 @@ Widget = class(
 		object.width = w
 		object.height = h
 		object.rotation = 0
-	end
+    end
 )
+
+function Widget:setPositionX(value)
+    self.position[1] = value
+end
+
+function Widget:setPostionY(value)
+    self.position[2] = value
+end
+
+--global table for all collision objects
+--collidable_objects = {}
 
 --- Sets the current position of the widget
 --
@@ -72,6 +83,16 @@ function Widget:rotate(angle)
     self:setRotation(self.rotation + angle)
 end
 
+--- Translates the widget by the given coordinates relative to the current position.
+--
+-- x: The X offset
+--
+-- y: The Y offset
+function Widget:translate(x,y)
+    self:setPosition(self.position[1] + x, self.position[2] + y)
+end
+
+
 --- Gets the current position of the widget.
 --
 -- x: The X cordonat
@@ -84,13 +105,23 @@ function Widget:getPosition()
     return pos
 end
 
---- Translates the widget by the given coordinates relative to the current position.
---
--- x: The X offset
---
--- y: The Y offset
-function Widget:translate(x,y)
-    self:setPosition(self.position[1] + x, self.position[2] + y)
+--Whether or not this object can collide with anathors
+--call this in a load function !
+function Widget:setCollidable(value,tag)
+    self.collidable = value
+    self.tag = tag
+    if value  then 
+        table.insert(collidable_objects,self)
+    elseif not value then
+        table.remove(collidable_objects,self)
+    end
+end
+--Returns the Width/Height of this object
+function Widget:getSize()
+    local size = {}
+    size.width = self.width
+    size.height = self.height
+    return size
 end
 
 --- Retrieves the current label of the widget.
