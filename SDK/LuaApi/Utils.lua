@@ -76,3 +76,39 @@ function Utils:bound(value,min,max)
 	end
 	return value
 end
+
+--[[
+	Find the angle (in radians) between the two Sprites, taking their x/y and origin into account.
+	The angle is calculated in clockwise positive direction (down = 90 degrees positive, right = 0 degrees positive, up = 90 degrees negative)
+	* @param	a			The Sprites to test from
+	* @param	b			The Sprites to test to
+	* @param	asDegrees	If you need the value in degrees instead of radians, set to true
+	* 
+	* @return	Number The angle (in radians unless asDegrees is true)
+---]]
+function Utils:angleBetween(a,b,asDegrees)
+		local dx = (b.x) - (a.x);
+		local dy= (b.y) - (a.y);
+		
+		if asDegrees then 
+			return self:asDegrees(math.atan2(dy, dx));
+		else
+			return math.atan2(dy, dx);
+		end
+end
+
+--[[
+	 * Sets the source Sprites x/y velocity so it will move directly towards the destination Sprites at the speed given (in pixels per second)<br>
+	 * The source object doesn't stop moving automatically should it ever reach the destination coordinates.<br>
+	 * Note: Doesn't take into account acceleration, maxVelocity or drag (if you set drag or acceleration too high this object may not move at all)
+	 * 
+	 * @param	source		The Sprites on which the velocity will be set
+	 * @param	dest		The Sprites where the source object will move to
+	 * @param	speed		The speed it will move, in pixels per second
+	 ---]]
+function Utils:moveTowardsObject(source,dest,speed)
+		local a = self:angleBetween(source, dest,false);
+		
+		source.xv = math.cos(a) * speed
+		source.yv = math.sin(a) * speed
+end
