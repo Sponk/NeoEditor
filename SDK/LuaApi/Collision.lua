@@ -26,13 +26,29 @@ local atan2 = math.atan2
 statics = {}
 dynamics = {}
 kinematics = {}
+---DO NOT call this
 gravity = 0
-maxVelocity = 1000
+---DO NOT call this
+maxVelocity = 60
+
 buffer = {}
 cchecks = 0
 mshapes = 0
 partition = "quad"
 
+---set the gravity for the hole world
+function Collision:setGravity(value)
+  gravity = value
+end
+
+function Collision:getGravity()
+  return gravity
+end
+
+---set the max velocity an object can reach
+function Collision:setMaxVelocity(value)
+  maxVelocity = value
+end
 -- remove all elements from a numerically indexed table
 function Collision:clearBuffer(b)
   for i = 1, #b do
