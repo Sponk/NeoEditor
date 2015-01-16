@@ -275,27 +275,32 @@ function Collision:init()
 end
 
 
---- static shapes do not move or respond to collisions
-function Collision:addStatic(shape, ...)
-  return self.shapeCtors[shape](statics, ...)
+-- static shapes do not move or respond to collisions
+function Collision:addStatic(shape,tag, ...)
+  local s = self.shapeCtors[shape](statics, ...)
+  s.tag = tag
+  return s
 end
 
---- dynamic shapes are affected by gravity and collisions
-function Collision:addDynamic(shape, ...)
+-- dynamic shapes are affected by gravity and collisions
+function Collision:addDynamic(shape,tag, ...)
   local s = self.shapeCtors[shape](dynamics, ...)
- s.friction = 1
+  s.friction = 1
   s.bounce = 0
   s.damping = 0
   s.xv, s.yv = 0, 0
+  s.tag = tag
   return s
 end
 
---- kinematic shapes move only when assigned a velocity
-function Collision:addKinematic(shape, ...)
+-- kinematic shapes move only when assigned a velocity
+function Collision:addKinematic(shape,tag, ...)
   local s = self.shapeCtors[shape](kinematics, ...)
   s.xv, s.yv = 0, 0
+  s.tag = tag
   return s
 end
+
 
 --- tests two rectangles for intersection
 function testRectRect(a, b, dt)
