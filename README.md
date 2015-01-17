@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/Sponk/NeoEditor.png?label=ready&title=Ready)](https://waffle.io/Sponk/NeoEditor)
 The Neo Editor
 ==============
 
