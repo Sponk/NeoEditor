@@ -1,10 +1,6 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// MScript.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -651,6 +647,17 @@ bool LuaScript::runString(const char* str)
 	if(luaL_dostring(m_state, str) != 0)
 	{
 		MLOG_ERROR("Lua Script: \n" << lua_tostring(m_state, -1) << "\n");
+		return false;
+	}
+
+	return true;
+}
+
+bool LuaScript::isFunctionOk(const char* function, unsigned int argc)
+{
+	if(getArgsNumber() < argc)
+	{
+		MLOG_ERROR("'" << function << "' needs at least " << argc << " parameters!");
 		return false;
 	}
 

@@ -1,10 +1,6 @@
-﻿/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// MScript.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//========================================================================
+﻿//========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -28,8 +24,8 @@
 //========================================================================
 
 
-#ifndef _M_SCRIPT_H
-#define _M_SCRIPT_H
+#ifndef __LUA_SCRIPT_H
+#define __LUA_SCRIPT_H
 
 #include <NeoEngine.h>
 #include <lua.hpp>
@@ -90,6 +86,8 @@ public:
     void pushInteger(int value);
 	void pushFloat(float value);
 	void pushPointer(void* value);
+
+	bool isFunctionOk(const char* function, unsigned int argc);
 
 	bool isNumber(unsigned int arg);
 };

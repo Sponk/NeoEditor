@@ -86,6 +86,7 @@ public :
 
 	// Type checking
 	virtual bool isNumber(unsigned int arg) = 0;
+	virtual bool isFunctionOk(const char* name, unsigned int args) = 0;
 
 	bool isRunning() { return m_isRunning; }
 };
