@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MGui
-// MWin32NeoWindow.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2014 Anael Seghezzi <www.maratis3d.com>
 //
@@ -30,7 +25,7 @@
 
 #ifdef WIN32
 #define _WIN32_WINNT 0x0500
-#include <NeoWindow.h>
+#include <Window.h>
 
 #include <NeoEngine.h>
 
@@ -40,7 +35,7 @@
 #include <direct.h>
 #endif
 
-#include <NeoWindows.h>
+#include <windows.h>
 #include <shlobj.h>
 
 using namespace Neo;
