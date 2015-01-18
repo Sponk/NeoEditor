@@ -92,11 +92,6 @@ void PlayerConsole::window_close_callback(Fl_Window* window, PlayerConsole* dlg)
 	Fl::delete_widget(window);
 }
 
-PlayerConsole::PlayerConsole()
-{
-	closed = true;
-}
-
 void MaterialEditDlg::close_callback(Fl_Button* button, MaterialEditDlg* dlg)
 {
 	button->parent()->hide();
