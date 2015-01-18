@@ -497,6 +497,18 @@ int setTileOffset()
 	return 1;
 }
 
+int setWidgetVisible()
+{
+	MLOG_INFO("Stub");
+	return 1;
+}
+
+int isWidgetVisible()
+{
+	MLOG_INFO("Stub");
+	return 1;
+}
+
 void GuiSystem::setupLuaInterface(MScriptContext* script)
 {
     script->addFunction("enableGui", enableGui);
@@ -537,6 +549,9 @@ void GuiSystem::setupLuaInterface(MScriptContext* script)
 	script->addFunction("loadSpriteSheet", loadSpriteSheet);
 	script->addFunction("setTileSpriteSheet", setTileSpriteSheet);
 	script->addFunction("setTileOffset", setTileOffset);
+
+	script->addFunction("setWidgetVisible", setWidgetVisible);
+	script->addFunction("isWidgetVisible", isWidgetVisible);
 }
 
 void GuiSystem::destroyWidget(int idx)

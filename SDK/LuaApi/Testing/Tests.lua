@@ -5,7 +5,10 @@ function assertVectorEquals(vec1, vec2, margin)
   end
 end
 
-function TestLight()
+Test3DSDK = {}
+Test2DSDK = {}
+
+function Test3DSDK:TestLight()
 
   local light = OLight()
   
@@ -63,7 +66,7 @@ function TestLight()
   assertEquals(light:getSpotAngle(), 180)
 end
 
-function TestEntity()
+function Test3DSDK:TestEntity()
   
   local entity = OEntity("meshs/box.mesh")
   
@@ -73,4 +76,16 @@ function TestEntity()
   
   assertEquals(entity:getPath(), getWorkingDirectory() .. "/meshs/box.mesh")
   
+end
+
+function Test2DSDK:TestWidget()
+  
+  local widget = Widget(0,0,10,10, "Text")
+  
+  -- Add a real widget since the Widget class is purely abstract
+  widget.widget = Button(0,0,10,10,"Nothing", "")
+  
+  widget:setVisible(true)
+  assertEquals(widget:isVisible(), true)
+    
 end

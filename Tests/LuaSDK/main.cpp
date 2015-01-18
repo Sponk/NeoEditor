@@ -56,7 +56,11 @@ public:
 		NeoEngine* engine = NeoEngine::getInstance();
 
 		NeoGame* game = new NeoGame();
+
+		// Setup script context
 		Neo::LuaScript* script = new Neo::LuaScript();
+		Gui::GuiSystem::getInstance()->setupLuaInterface(script);
+
 		Level* level = new Level();
 		MSystemContext* context = (MSystemContext*) new Neo::MWinContext();
 		MPackageManager* pmanager = new Neo::MPackageManagerNPK;
@@ -107,63 +111,7 @@ public:
 	}
 };
 
-
-// This is not really a unit test since it tests the whole networking
-// system at once.
-/*bool testFunctionSuccess = false;
-void testFunction(RakNet::BitStream* in)
-{
-    NeoVariable arg1 = readNextArgument(in);
-
-    if(arg1.getPointer() && arg1.getType() == M_VARIABLE_STRING)
-    {
-        MLOG_INFO("Got argument: " << ((MString*)arg1.getPointer())->getSafeString());
-
-        if(!strcmp(((MString*)arg1.getPointer())->getSafeString(), "Hello World!"))
-           testFunctionSuccess = true;
-    }
-}
-
-LT_BEGIN_AUTO_TEST(NeoTestSdk, Networking_test);
-
-	NeoGame* game = NeoEngine::getInstance()->getGame();
-	MWindow* window = MWindow::getInstance();
-
-	game->begin();
-
-	Server server;
-	Server client;
-
-	server.addRPCFunction("testFunction", testFunction);
-
-    server.startServer(10, 60001);
-    client.startClient("127.0.0.1", 60001);
-
-    window->sleep(1000);
-
-	std::vector<NeoVariable> variables;
-    variables.push_back(NeoVariable("Test", new MString("Hello World!"), M_VARIABLE_STRING));
-
-	Messenger::getInstance()->sendMessage("testFunction", ID_RPC_MESSAGE, &variables, "ClientThread", "MainThread");
-
-    window->sleep(100);
-    LT_CHECK(testFunctionSuccess);
-
-    Messenger::getInstance()->sendMessage("testFunction", ID_RPC_MESSAGE, &variables, "ClientThread", "MainThread");
-
-    window->sleep(100);
-
-    LT_CHECK(testFunctionSuccess);
-
-    delete (MString*) variables[0].getPointer();
-    variables.clear();
-
-	game->end();
-
-LT_END_AUTO_TEST(Networking_test);*/
-
 // Run LuaUnit based tests.
-// FIXME: Should be in another executable!
 const char* lua_code =  "enableNeo3DTests = true\n"
                         "dofile(\"scripts/SDK/Neo3D.lua\")\n"
                         "Neo3D.runTests()";
