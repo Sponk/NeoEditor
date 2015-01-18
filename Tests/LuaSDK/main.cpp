@@ -30,7 +30,6 @@
 #include <GuiSystem.h>
 #include <SDLThread.h>
 #include <Server.h>
-#include <NetworkUtils.h>
 #include <BulletContext.h>
 
 #include <gtest/gtest.h>

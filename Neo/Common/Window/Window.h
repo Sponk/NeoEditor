@@ -1,11 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MGui
-// MWindow.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2014 Anael Seghezzi <www.maratis3d.com>
 // Copyright (c) Anders Dahnielson <anders@dahnielson.com>
+// Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages

@@ -25,10 +25,6 @@
 #include <ScriptApi.h>
 #include <Window/Window.h>
 
-#ifdef USE_NETWORKING
-#include <NetworkUtils.h>
-#endif
-
 using namespace Neo;
 
 char g_currentDirectory[256] = "";
@@ -4820,7 +4816,4 @@ void Neo::bindLuaApi(MScriptContext* context)
 	context->addFunction( "getSystemTick",	getSystemTick);
 	context->addFunction( "quit",			quit);
 	context->addFunction( "getWorkingDirectory", getWorkingDirectory);
-
-	// Register networking functionality
-	registerNetworkingScriptAPI(context);
 }

@@ -267,7 +267,7 @@ Fl_Double_Window* EditorWindow::show_window() {
       }
       menu_bar->menu(menu_menu_bar);
     } // Fl_Menu_Bar* menu_bar
-    { glbox = new GLBox(201, 56, 486, 569, tr("OpenGL box"));
+    { glbox = new GLBox(201, 86, 486, 539, tr("OpenGL box"));
       glbox->box(FL_NO_BOX);
       glbox->color((Fl_Color)179);
       glbox->selection_color(FL_BACKGROUND_COLOR);
@@ -291,7 +291,7 @@ Fl_Double_Window* EditorWindow::show_window() {
       scene_tree->align(Fl_Align(FL_ALIGN_TOP));
       scene_tree->when(FL_WHEN_RELEASE);
     } // DnDTree* scene_tree
-    { edit_group = new Fl_Group(3, 24, 911, 42);
+    { edit_group = new Fl_Group(3, 24, 911, 28);
       { Fl_Round_Button* o = new Fl_Round_Button(198, 27, 39, 24);
         o->type(102);
         o->box(FL_UP_FRAME);
@@ -472,6 +472,9 @@ Fl_Double_Window* EditorWindow::show_window() {
       } // Fl_Tabs* o
       o->end();
     } // Fl_Tabs* o
+    { Fl_Group* o = new Fl_Group(200, 55, 485, 30);
+      o->end();
+    } // Fl_Group* o
     o->size_range(0, 0, 2048, 2048);
     o->end();
   } // Fl_Double_Window* o

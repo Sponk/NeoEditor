@@ -22,78 +22,24 @@
 //
 //========================================================================
 
-#ifdef USE_NETWORKING
 #include "HTTPRequest.h"
-#include <RakSleep.h>
+#include "Downloader.h"
 
 using namespace Neo;
 
 HTTPRequest::HTTPRequest(const char* host, int port)
 {
-    if(!m_tcp.Start(port, 1))
-    {
-        MLOG_ERROR("Could not start TCP server!");
-        m_init = false;
-        return;
-    }
-
-    m_connection.Init(&m_tcp, host, 80);
-
-    m_init = true;
-    m_host.set(host);
+   m_host.set(host);
+   m_port = port;
 }
 
 const char* HTTPRequest::sendPostRequest(const char* path, const char* data)
 {
-    m_connection.Post(path, data, "text/html");
-    return connectionLoop();
+	return postRequestToString(m_host.getSafeString(), path, data, NULL, m_port).c_str();
 }
 
 const char* HTTPRequest::sendGetRequest(const char* path)
 {
-    m_connection.Get(path);
-    return connectionLoop();
+	return downloadFileToString(m_host.getSafeString(), path, NULL, m_port).c_str();
 }
 
-const char* HTTPRequest::connectionLoop()
-{
-    MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
-    unsigned long startTime = system->getSystemTick();
-
-    while(true)
-    {
-        // FIXME: This should be configurable
-        if(system->getSystemTick() - startTime >= 4000)
-        {
-            MLOG_ERROR("HTTP connection timed out!");
-            return NULL;
-        }
-
-        RakNet::Packet *packet = m_tcp.Receive();
-        if(packet)
-        {
-            m_connection.ProcessTCPPacket(packet);
-            m_tcp.DeallocatePacket(packet);
-        }
-
-        m_connection.Update();
-
-        if (m_connection.IsBusy() == false)
-        {
-            RakNet::RakString content = m_connection.Read();
-            if(content.GetLength() > 0)
-            {
-                char* ret = new char[content.GetLength()];
-                strcpy(ret, content.C_String());
-                return ret;
-            }
-            else
-            {
-                return NULL;
-            }
-        }
-
-        RakSleep(30);
-    }
-}
-#endif

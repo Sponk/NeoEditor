@@ -75,7 +75,7 @@ inline int c99_vsnprintf(char* str, size_t size, const char* format, va_list ap)
     return count;
 }
 
-inline int c99_snprintf(char* str, size_t size, const char* format, ...)
+int c99_snprintf(char* str, size_t size, const char* format, ...)
 {
     int count;
     va_list ap;
@@ -89,9 +89,7 @@ inline int c99_snprintf(char* str, size_t size, const char* format, ...)
 #endif
 
 #if defined(_MSC_VER) || defined(_WIN32)
-#define getline c99_getline
-
-inline size_t c99_getline(char** lineptr, size_t* n, FILE* stream)
+size_t c99_getline(char** lineptr, size_t* n, FILE* stream)
 {
     char* bufptr = NULL;
     char* p = bufptr;

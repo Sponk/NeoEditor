@@ -19,8 +19,6 @@
 
 #include "../MainWindow/Callbacks.h"
 
-#include <HTTPRequest.h>
-
 #include <cstdio>
 #include <cerrno>
 
@@ -44,6 +42,7 @@
 #include <MCore.h>
 
 #include "Utils.h"
+#include <HTTPRequest.h>
 
 #include <GuiSystem.h>
 
@@ -2335,7 +2334,7 @@ int check_updates_thread(void* data)
 {
 	string* str = (string*) data;
 
-	HTTPRequest* connection = new HTTPRequest("neo-engine.de", 4000);
+	HTTPRequest* connection = new HTTPRequest("neo-engine.de", 80);
 
     // FIXME: Don't hardcode this!
     const char* versiontxt = connection->sendGetRequest("/downloads/neo/daily/version.txt");

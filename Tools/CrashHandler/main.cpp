@@ -1,7 +1,3 @@
-#include <HTTPConnection.h>
-#include <PacketizedTCP.h>
-#include <RakSleep.h>
-
 #include <FL/Fl.H>
 #include "CrashHandler.h"
 #include <string>
@@ -20,7 +16,7 @@ Fl_Text_Buffer buffer;
 
 void send_report(Fl_Button* button, void*)
 {
-    RakNet::TCPInterface tcp;
+    /*RakNet::TCPInterface tcp;
     button->deactivate();
 
     RakNet::HTTPConnection connection;
@@ -66,7 +62,7 @@ void send_report(Fl_Button* button, void*)
 
         // Prevent 100% cpu usage
         RakSleep(30);
-    }
+    }*/
 }
 
 int main(int argc, char **argv)

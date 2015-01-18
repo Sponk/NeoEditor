@@ -22,11 +22,9 @@
 //
 //========================================================================
 
-#if !defined(NEO_HTTP_CONNECTION_H) && defined(USE_NETWORKING)
+#ifndef NEO_HTTP_CONNECTION_H
 #define NEO_HTTP_CONNECTION_H
 
-#include <TCPInterface.h>
-#include <HTTPConnection.h>
 #include <NeoEngine.h>
 
 namespace Neo
@@ -37,10 +35,7 @@ namespace Neo
  */
 class HTTPRequest
 {
-    RakNet::TCPInterface m_tcp;
-    RakNet::HTTPConnection m_connection;
-
-    bool m_init;
+    int m_port;
     MString m_host;
 
     const char* connectionLoop();

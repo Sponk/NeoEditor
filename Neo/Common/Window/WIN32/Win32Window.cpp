@@ -25,7 +25,7 @@
 
 #ifdef WIN32
 #define _WIN32_WINNT 0x0500
-#include <Window.h>
+#include <windows.h>
 
 #include <NeoEngine.h>
 
@@ -35,7 +35,7 @@
 #include <direct.h>
 #endif
 
-#include <windows.h>
+#include "../Window.h"
 #include <shlobj.h>
 
 using namespace Neo;

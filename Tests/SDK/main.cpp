@@ -30,7 +30,6 @@
 #include <GuiSystem.h>
 #include <SDLThread.h>
 #include <Server.h>
-#include <NetworkUtils.h>
 #include <BulletContext.h>
 
 #include <gtest/gtest.h>
@@ -107,60 +106,6 @@ public:
 		engine->setPackageManager(NULL);
 	}
 };
-
-// This is not really a unit test since it tests the whole networking
-// system at once.
-/*bool testFunctionSuccess = false;
-void testFunction(RakNet::BitStream* in)
-{
-    NeoVariable arg1 = readNextArgument(in);
-
-    if(arg1.getPointer() && arg1.getType() == M_VARIABLE_STRING)
-    {
-        MLOG_INFO("Got argument: " << ((MString*)arg1.getPointer())->getSafeString());
-
-        if(!strcmp(((MString*)arg1.getPointer())->getSafeString(), "Hello World!"))
-           testFunctionSuccess = true;
-    }
-}
-
-LT_BEGIN_AUTO_TEST(NeoTestSdk, Networking_test);
-
-	NeoGame* game = NeoEngine::getInstance()->getGame();
-	MWindow* window = MWindow::getInstance();
-
-	game->begin();
-
-	Server server;
-	Server client;
-
-	server.addRPCFunction("testFunction", testFunction);
-
-    server.startServer(10, 60001);
-    client.startClient("127.0.0.1", 60001);
-
-    window->sleep(1000);
-
-	std::vector<NeoVariable> variables;
-    variables.push_back(NeoVariable("Test", new MString("Hello World!"), M_VARIABLE_STRING));
-
-	Messenger::getInstance()->sendMessage("testFunction", ID_RPC_MESSAGE, &variables, "ClientThread", "MainThread");
-
-    window->sleep(100);
-    LT_CHECK(testFunctionSuccess);
-
-    Messenger::getInstance()->sendMessage("testFunction", ID_RPC_MESSAGE, &variables, "ClientThread", "MainThread");
-
-    window->sleep(100);
-
-    LT_CHECK(testFunctionSuccess);
-
-    delete (MString*) variables[0].getPointer();
-    variables.clear();
-
-	game->end();
-
-LT_END_AUTO_TEST(Networking_test);*/
 
 TEST_F(TestNeoSDK, Vector3_test)
 {
@@ -253,40 +198,6 @@ TEST_F(TestNeoSDK, Object3dHandle_test)
 
 	unsigned long handle = obj->getId();
 	ASSERT_EQ(obj, scene->getObjectByHandle(handle));
-}
-
-TEST_F(TestNeoSDK, BitStreamArgumentString_test)
-{
-    RakNet::BitStream bs;
-    writeString(&bs, "Hello String!");
-
-    NeoVariable var = readNextArgument(&bs);
-
-    EXPECT_EQ(M_VARIABLE_STRING, var.getType());
-    ASSERT_NE((void*) NULL, var.getPointer());
-
-    MString* str = (MString*) var.getPointer();
-
-    EXPECT_EQ(0, strcmp(str->getSafeString(), "Hello String!"));
-
-    delete str;
-}
-
-TEST_F(TestNeoSDK, BitStreamArgumentVector3_test)
-{
-    RakNet::BitStream bs;
-    writeVector3(&bs, MVector3(1,2,3));
-
-    NeoVariable var = readNextArgument(&bs);
-
-    EXPECT_EQ(M_VARIABLE_VEC3, var.getType());
-    ASSERT_NE((void*) NULL, var.getPointer());
-
-    MVector3* vec = (MVector3*) var.getPointer();
-
-    EXPECT_EQ(MVector3(1,2,3), *vec);
-
-    delete vec;
 }
 
 int main(int argc, char* argv[])
