@@ -4,13 +4,13 @@
 
 Fl_Double_Window* CrashHandlerDlg::create_window() {
   Fl_Double_Window* w;
-  { Fl_Double_Window* o = new Fl_Double_Window(447, 459, "Crash Handler");
+  { Fl_Double_Window* o = new Fl_Double_Window(460, 460, "Crash Handler");
     w = o;
     o->user_data((void*)(this));
     { Fl_Box* o = new Fl_Box(12, 15, 450, 30, "The Neo Editor crashed! We apologize for all inconveniences.");
       o->align(Fl_Align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE));
     } // Fl_Box* o
-    { stack_output = new Fl_Text_Display(12, 66, 423, 348);
+    { stack_output = new Fl_Text_Display(12, 66, 433, 348);
       stack_output->box(FL_DOWN_BOX);
     } // Fl_Text_Display* stack_output
     { Fl_Button* o = new Fl_Button(12, 426, 150, 24, "Close");
@@ -19,7 +19,7 @@ Fl_Double_Window* CrashHandlerDlg::create_window() {
     { Fl_Box* o = new Fl_Box(12, 39, 450, 24, "Please append this stack trace to your bug report.");
       o->align(Fl_Align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE));
     } // Fl_Box* o
-    { Fl_Button* o = new Fl_Button(282, 426, 150, 24, "Send Report");
+    { Fl_Button* o = new Fl_Button(295, 426, 150, 24, "Send Report");
       o->callback((Fl_Callback*)send_report);
     } // Fl_Button* o
     o->end();

@@ -3,6 +3,8 @@
 #include <string>
 #include <FL/fl_message.H>
 
+#include <HTTPRequest.h>
+
 // Don't show cmd window
 #ifdef _MSC_VER
 #    pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
@@ -16,53 +18,9 @@ Fl_Text_Buffer buffer;
 
 void send_report(Fl_Button* button, void*)
 {
-    /*RakNet::TCPInterface tcp;
-    button->deactivate();
+	Neo::HTTPRequest connection(REPORT_DOMAIN, 80);
 
-    RakNet::HTTPConnection connection;
-    connection.Init(&tcp, REPORT_DOMAIN, 80);
-
-    if(!tcp.Start(4000, 1))
-    {
-        fl_message("Could not connect to server!");
-        button->activate();
-        return;
-    }
-
-    connection.Post("/crash.php", buffer.text(), "text/html");
-    //connection.Get("/index.html");
-
-    while(1)
-    {
-        RakNet::Packet *packet = tcp.Receive();
-        if(packet)
-        {
-            connection.ProcessTCPPacket(packet);
-            tcp.DeallocatePacket(packet);
-        }
-
-        connection.Update();
-
-        if (connection.IsBusy() == false)
-        {
-            RakNet::RakString fileContents = connection.Read();
-
-            if(fileContents.Find("Sent crash report.") != -1)
-            {
-                fl_message("Successfully sent crash report.");
-                exit(0);
-            }
-            else
-            {
-                fl_message("Could not send crash report!");
-                button->activate();
-                return;
-            }
-        }
-
-        // Prevent 100% cpu usage
-        RakSleep(30);
-    }*/
+	const char* response = connection.sendPostRequest("/crash.php", buffer.text());
 }
 
 int main(int argc, char **argv)

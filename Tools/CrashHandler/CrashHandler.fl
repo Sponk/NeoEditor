@@ -7,15 +7,15 @@ class CrashHandlerDlg {open
   Function {create_window()} {open
   } {
     Fl_Window {} {
-      label {Crash Handler} open
-      xywh {2179 318 447 459} type Double visible
+      label {Crash Handler} open selected
+      xywh {926 305 460 460} type Double visible
     } {
       Fl_Box {} {
         label {The Neo Editor crashed! We apologize for all inconveniences.}
         xywh {12 15 450 30} align 20
       }
       Fl_Text_Display stack_output {
-        xywh {12 66 423 348} box DOWN_BOX
+        xywh {12 66 433 348} box DOWN_BOX
       }
       Fl_Button {} {
         label Close
@@ -28,8 +28,8 @@ class CrashHandlerDlg {open
       }
       Fl_Button {} {
         label {Send Report} user_data_type {void*}
-        callback send_report selected
-        xywh {282 426 150 24}
+        callback send_report
+        xywh {295 426 150 24}
       }
     }
   }
