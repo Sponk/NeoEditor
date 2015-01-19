@@ -14,7 +14,7 @@ before_script: "git fetch --tags && export VERSION=$(git describe --tags --alway
 
 script: 
 
-  - mkdir ../build-windows && cd ../build-windows && export DXSDK_DIR=~/ && cmake -DCMAKE_TOOLCHAIN_FILE=../NeoEditor/CMake/Toolchains/CrossWindowsMingw.cmake ../NeoEditor && make -j2 package 
+  # - mkdir ../build-windows && cd ../build-windows && export DXSDK_DIR=~/ && cmake -DCMAKE_TOOLCHAIN_FILE=../NeoEditor/CMake/Toolchains/CrossWindowsMingw.cmake ../NeoEditor && make -j2 package 
 
   - mkdir ../build && cd ../build && cmake ../NeoEditor -DNEO_VERSION_STRING="\"$VERSION\"" && make -j2 package && make test && make lua-test
  
@@ -32,9 +32,9 @@ after_success:
   - curl --ftp-create-dirs -T *.rpm -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
   - curl --ftp-create-dirs -T *.sh -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
 
-  - cd ../build-windows
+ # - cd ../build-windows
   
-  - curl --ftp-create-dirs -T *.exe -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
-  - curl --ftp-create-dirs -T *.zip -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
+ # - curl --ftp-create-dirs -T *.exe -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
+ # - curl --ftp-create-dirs -T *.zip -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
 
 
