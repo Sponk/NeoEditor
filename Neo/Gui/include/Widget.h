@@ -62,6 +62,9 @@ protected:
     float m_rotation;
     unsigned int m_width, m_height;
     std::string m_label;
+    bool _isVisible = true;
+    MVector2 _scale = MVector2(1, 1);
+    MVector2 _flip = MVector2(1, 1);
 
     CALLBACK_FUNCTION m_callback;
     long int m_userData;
@@ -80,7 +83,18 @@ public:
 	 * @brief Virtual function used to update the widget.
 	 */
     virtual void update() = 0;
-
+/*
+	*Should this Widget be visible?
+	*/
+	void setVisible(bool value) { _isVisible = value; }
+	/*
+	*Scale the Widget
+	*/
+	void setScale(MVector2 scale){ _scale = scale; }
+	/*
+	*Flip the Widget
+	*/
+	void setFlip(MVector2 flip){ _flip = flip; }
 	/**
 	 * @brief Sets the callback.
 	 *
