@@ -1,4 +1,4 @@
-// "$Id: Fl_Native_File_Chooser_WIN32.cxx 9629 2012-06-26 07:03:46Z greg.ercolano $"
+// "$Id: Fl_Native_File_Chooser_WIN32.cxx 10312 2014-09-15 09:35:05Z ossman $"
 //
 // FLTK native OS file chooser widget
 //
@@ -34,14 +34,12 @@ LPCWSTR utf8towchar(const char *in); //MG
 char *wchartoutf8(LPCWSTR in);  //MG
 
 #include <FL/Fl_Native_File_Chooser.H>
+#include <FL/x.H>
 
 #define LCURLY_CHR	'{'
 #define RCURLY_CHR	'}'
 #define LBRACKET_CHR	'['
 #define RBRACKET_CHR	']'
-#define MAXFILTERS	80
-
-void fl_OleInitialize();	// in Fl.cxx (Windows only)
 
 // STATIC: PRINT WINDOWS 'DOUBLE NULL' STRING (DEBUG)
 #ifdef DEBUG
@@ -54,7 +52,7 @@ static void dnullprint(char *wp) {
       return;
     } else if ( wp[t] == '\0' ) {
       printf("\\0");
-    } else { 
+    } else {
       printf("%c",wp[t]);
     }
   }
@@ -96,7 +94,7 @@ static void dnullcat(char*&wp, const char *string, int n = -1 ) {
     // Make copy of wp into larger buffer
     char *tmp = new char[wplen + inlen + 4];
     memcpy(tmp, wp, wplen+2);	// copy of wp plus doublenull
-    delete [] wp;			// delete old wp
+    delete[] wp;		// delete old wp
     wp = tmp;			// use new copy
     //DEBUG printf("DEBUG: dnullcat COPY: <"); dnullprint(wp); printf("> (wplen=%d)\n", wplen);
   }
@@ -191,7 +189,7 @@ void Fl_Native_File_Chooser::clear_pathnames() {
     while ( --_tpathnames >= 0 ) {
       _pathnames[_tpathnames] = strfree(_pathnames[_tpathnames]);
     }
-    delete [] _pathnames;
+    delete[] _pathnames;
     _pathnames = NULL;
   }
   _tpathnames = 0;
@@ -214,9 +212,9 @@ void Fl_Native_File_Chooser::add_pathname(const char *s) {
   } else {
     // Grow array by 1
     char **tmp = new char*[_tpathnames+1];		// create new buffer
-    memcpy((void*)tmp, (void*)_pathnames, 
+    memcpy((void*)tmp, (void*)_pathnames,
 		       sizeof(char*)*_tpathnames);	// copy old
-    delete [] _pathnames;				// delete old
+    delete[] _pathnames;				// delete old
     _pathnames = tmp;					// use new
     ++_tpathnames;
   }
@@ -237,11 +235,11 @@ void Fl_Native_File_Chooser::FreePIDL(LPITEMIDLIST pidl) {
 void Fl_Native_File_Chooser::ClearOFN() {
   // Free any previously allocated lpstrFile before zeroing out _ofn
   if ( _ofn.lpstrFile ) {
-    delete [] _ofn.lpstrFile;
+    delete[] _ofn.lpstrFile;
     _ofn.lpstrFile = NULL;
   }
   if ( _ofn.lpstrInitialDir ) {
-    delete [] (TCHAR*) _ofn.lpstrInitialDir; //msvc6 compilation fix
+    delete[] (TCHAR*) _ofn.lpstrInitialDir; //msvc6 compilation fix
     _ofn.lpstrInitialDir = NULL;
   }
   _ofn.lpstrFilter = NULL;		// (deleted elsewhere)
@@ -364,7 +362,7 @@ int Fl_Native_File_Chooser::showfile() {
   char *oldcwd = 0;
   DWORD oldcwdsz = GetCurrentDirectory(0,0);
   if ( oldcwdsz > 0 ) {
-    oldcwd = (char*)malloc(oldcwdsz); 
+    oldcwd = (char*)malloc(oldcwdsz);
     if (GetCurrentDirectory(oldcwdsz, oldcwd) == 0 ) {
       free(oldcwd); oldcwd = 0;
     }
@@ -376,30 +374,25 @@ int Fl_Native_File_Chooser::showfile() {
   } else {
     err = GetOpenFileNameW(&_ofn);
   }
-  if ( err == 0 ) {
-    // EXTENDED ERROR CHECK
-    int err = CommDlgExtendedError();
-    // CANCEL?
-    if ( err == 0 ) return(1);	// user hit 'cancel'
-    // AN ERROR OCCURRED
-    char msg[80];
-    sprintf(msg, "CommDlgExtendedError() code=%d", err);
-    errmsg(msg);
-    // XXX: RESTORE CWD
-    if ( oldcwd ) {
-      SetCurrentDirectory(oldcwd);
-      free(oldcwd); oldcwd = 0;
-    }
-    return(-1);
-  }
+  // GET EXTENDED ERROR
+  int exterr = CommDlgExtendedError();
   // XXX: RESTORE CWD
   if ( oldcwd ) {
     SetCurrentDirectory(oldcwd);
     free(oldcwd); oldcwd = 0;
   }
+  // ERROR OR CANCEL?
+  if ( err == 0 ) {
+    if ( exterr == 0 ) return(1);	// user hit cancel
+    // Otherwise, an error occurred..
+    char msg[80];
+    sprintf(msg, "CommDlgExtendedError() code=%d", err);
+    errmsg(msg);
+    return(-1);
+  }
   // PREPARE PATHNAMES FOR RETURN
   switch ( _btype ) {
-    case BROWSE_FILE: 
+    case BROWSE_FILE:
     case BROWSE_SAVE_FILE:
       set_single_pathname(wchartoutf8(_ofn.lpstrFile));
       // Win2Unix(_pathnames[_tpathnames-1]);
@@ -412,8 +405,8 @@ int Fl_Native_File_Chooser::showfile() {
 	// WALK STRING SEARCHING FOR 'DOUBLE-NULL'
 	//     eg. "/dir/name\0foo1\0foo2\0foo3\0\0"
 	//
-	char pathname[FNFC_MAX_PATH]; 
-	for ( const WCHAR *s = dirname + dirlen + 1; 
+	char pathname[FNFC_MAX_PATH];
+	for ( const WCHAR *s = dirname + dirlen + 1;
 		 *s; s+= (wcslen(s)+1)) {
 		strcpy(pathname, wchartoutf8(dirname));
 		strcat(pathname, "\\");
@@ -427,7 +420,7 @@ int Fl_Native_File_Chooser::showfile() {
       //    not to grok forward slashes, passing back as a 'filename'..!
       //
       if ( _tpathnames == 0 ) {
-	add_pathname(wchartoutf8(dirname)); 
+	add_pathname(wchartoutf8(dirname));
 	// Win2Unix(_pathnames[_tpathnames-1]);
       }
       break;
@@ -447,7 +440,7 @@ int Fl_Native_File_Chooser::showfile() {
 int CALLBACK Fl_Native_File_Chooser::Dir_CB(HWND win, UINT msg, LPARAM param, LPARAM data) {
   switch (msg) {
     case BFFM_INITIALIZED:
-      if (data) ::SendMessage(win, BFFM_SETSELECTION, TRUE, data);
+      if (data) ::SendMessageW(win, BFFM_SETSELECTIONW, TRUE, data);
       break;
     case BFFM_SELCHANGED:
       TCHAR path[FNFC_MAX_PATH];
@@ -459,7 +452,7 @@ int CALLBACK Fl_Native_File_Chooser::Dir_CB(HWND win, UINT msg, LPARAM param, LP
       }
       break;
     case BFFM_VALIDATEFAILED:
-      // we could pop up an annoying message here. 
+      // we could pop up an annoying message here.
       // also needs set ulFlags |= BIF_VALIDATE
       break;
     default:
@@ -471,13 +464,22 @@ int CALLBACK Fl_Native_File_Chooser::Dir_CB(HWND win, UINT msg, LPARAM param, LP
 // SHOW DIRECTORY BROWSER
 int Fl_Native_File_Chooser::showdir() {
   // initialize OLE only once
-  fl_OleInitialize();		// init needed by BIF_USENEWUI
+  fl_open_display();		// init needed by BIF_USENEWUI
   ClearBINF();
   clear_pathnames();
   // PARENT WINDOW
   _binf.hwndOwner = GetForegroundWindow();
   // DIALOG TITLE
-  _binf.lpszTitle = _title ? _title : NULL;
+  //_binf.lpszTitle = _title ? _title : NULL;
+  if (_title) {
+    static WCHAR wtitle[256];
+    wcsncpy(wtitle, utf8towchar(_title), 256);
+    wtitle[255] = 0;
+    _binf.lpszTitle =  wtitle;
+  } else {
+    _binf.lpszTitle = NULL;
+  }
+
   // FLAGS
   _binf.ulFlags = 0; 		// initialize
 
@@ -510,19 +512,22 @@ int Fl_Native_File_Chooser::showdir() {
 #endif
 
   // BUFFER
-  char displayname[FNFC_MAX_PATH];
+  //char displayname[FNFC_MAX_PATH];
+  WCHAR displayname[FNFC_MAX_PATH];
   _binf.pszDisplayName = displayname;
+
   // PRESET DIR
-  char presetname[FNFC_MAX_PATH];
+  WCHAR presetname[FNFC_MAX_PATH];
   if ( _directory ) {
-    strcpy(presetname, _directory);
     // Unix2Win(presetname);
+    wcsncpy(presetname, utf8towchar(_directory), FNFC_MAX_PATH);
+    presetname[FNFC_MAX_PATH-1] = 0;
     _binf.lParam = (LPARAM)presetname;
   }
   else _binf.lParam = 0;
   _binf.lpfn = Dir_CB;
   // OPEN BROWSER
-  LPITEMIDLIST pidl = SHBrowseForFolder(&_binf);
+  LPITEMIDLIST pidl = SHBrowseForFolderW(&_binf);
   // CANCEL?
   if ( pidl == NULL ) return(1);
 
@@ -530,13 +535,14 @@ int Fl_Native_File_Chooser::showdir() {
   // TBD: expand NetHood shortcuts from this PIDL??
   // http://msdn.microsoft.com/library/default.asp?url=/library/en-us/shellcc/platform/shell/reference/functions/shbrowseforfolder.asp
 
-  TCHAR path[FNFC_MAX_PATH];
-  if ( SHGetPathFromIDList(pidl, path) ) {
+  WCHAR path[FNFC_MAX_PATH];
+  if ( SHGetPathFromIDListW(pidl, path) ) {
     // Win2Unix(path);
-    add_pathname(path);
+    //add_pathname(path);
+    add_pathname(wchartoutf8(path));
   }
   FreePIDL(pidl);
-  if ( !strlen(path) ) return(1);             // don't return empty pathnames
+  if ( !wcslen(path) ) return(1);             // don't return empty pathnames
   return(0);
 }
 
@@ -546,8 +552,8 @@ int Fl_Native_File_Chooser::showdir() {
 //   -1 - failed; errmsg() has reason
 //
 int Fl_Native_File_Chooser::show() {
-  if ( _btype == BROWSE_DIRECTORY || 
-       _btype == BROWSE_MULTI_DIRECTORY || 
+  if ( _btype == BROWSE_DIRECTORY ||
+       _btype == BROWSE_MULTI_DIRECTORY ||
        _btype == BROWSE_SAVE_DIRECTORY ) {
     return(showdir());
   } else {
@@ -620,7 +626,7 @@ void Fl_Native_File_Chooser::filter(const char *val) {
   add_filter("All Files", "*.*");	// always include 'all files' option
 
 #ifdef DEBUG
-  nullprint(_parsedfilt);
+  dnullprint(_parsedfilt);
 #endif /*DEBUG*/
 }
 
@@ -657,7 +663,55 @@ void Fl_Native_File_Chooser::add_filter(const char *name_in,	// name of filter (
   //DEBUG printf("DEBUG: ADD FILTER name=<%s> winfilter=<%s>\n", name, winfilter);
 }
 
+// RETURN HOW MANY DIFFERENT FILTERS WERE SPECIFIED
+//   In: "foo.[CH]" or "foo.{C,H}"
+//   Out: 2
+//
+static int count_filters(const char *filter) {
+  int count = 0;
+  char mode = 0;
+  const char *in = filter;
+  while (*in) {
+    switch(*in) {
+      case '\\':			// escape next character
+        ++in; if ( *in == 0 ) continue;	// skip escape. EOL? done
+	++in;				// skip escaped char
+	continue;
+      case LCURLY_CHR:			// start "{aaa,bbb}"
+	mode = *in;			// set mode, parse over curly
+        ++count;			// at least +1 wildcard
+	break;
+      case RCURLY_CHR:			// end "{aaa,bbb}"
+	if ( mode == LCURLY_CHR )	// disable curly mode (if on)
+	  mode = 0;
+	break;
+      case LBRACKET_CHR:		// start "[xyz]"
+        mode = *in;			// set mode, parse over bracket
+	break;
+      case RBRACKET_CHR:		// end "[xyz]"
+	if ( mode == LBRACKET_CHR )	// disable bracket mode (if on)
+	  mode = 0;
+	break;
+      default:				// any other char
+        switch (mode) {			// handle {} or [] modes
+	  case LCURLY_CHR:		// handle "{aaa,bbb}"
+	    if (*in==',' || *in=='|')	// ',' and '|' adds filters
+	      ++count;
+	    break;
+	  case LBRACKET_CHR:		// handle "[xyz]"
+	    ++count;			// all chars in []'s add new filter
+	    break;
+	}
+	break;
+    }
+    ++in;				// parse past char
+  }
+  return count > 0 ? count : 1;		// return at least 1
+}
+
 // CONVERT FLTK STYLE PATTERN MATCHES TO WINDOWS 'DOUBLENULL' PATTERN
+// Returns with the parsed double-null result in '_parsedfilt'.
+//
 //    Handles:
 //        IN              OUT
 //        -----------     -----------------------------
@@ -685,16 +739,22 @@ void Fl_Native_File_Chooser::parse_filter(const char *in) {
   if ( ! in ) return;
 
   int has_name = strchr(in, '\t') ? 1 : 0;
+  char mode = has_name ? 'n' : 'w';		// parse mode: n=name, w=wildcard
 
-  char mode = has_name ? 'n' : 'w';	// parse mode: n=name, w=wildcard
-  int nwildcards = 0;
-  char wildcards[MAXFILTERS][1024];	// parsed wildcards (can be several)
-  char wildprefix[512] = "";
-  char name[512] = "";
+  // whatever input string is, our output won't be much longer in length..
+  // use double length just for safety.
+  size_t slen = strlen(in);
+  char *wildprefix = new char[slen*2]; wildprefix[0] = 0;
+  char *comp       = new char[slen*2]; comp[0] = 0;
+  char *name       = new char[slen*2]; name[0] = 0;
 
   // Init
+  int nwildcards = 0;
+  int maxfilters = count_filters(in) + 1;	// count wildcard seps
+  char **wildcards = new char*[maxfilters];	// parsed wildcards (can be several)
   int t;
-  for ( t=0; t<MAXFILTERS; t++ ) {
+  for ( t=0; t<maxfilters; t++ ) {
+    wildcards[t] = new char[slen];
     wildcards[t][0] = '\0';
   }
 
@@ -739,7 +799,7 @@ void Fl_Native_File_Chooser::parse_filter(const char *in) {
 	    strcpy(wildcards[nwildcards++], wildprefix);
 	  }
 	  // Append wildcards in Microsoft's "*.one;*.two" format
-	  char comp[4096] = "";
+	  comp[0] = 0;
 	  for ( t=0; t<nwildcards; t++ ) {
 	    if ( t != 0 ) strcat(comp, ";");
 	    strcat(comp, wildcards[t]);
@@ -750,14 +810,22 @@ void Fl_Native_File_Chooser::parse_filter(const char *in) {
 	  }
 	}
 	// RESET
-	for ( t=0; t<MAXFILTERS; t++ ) {
+	for ( t=0; t<maxfilters; t++ ) {
 	  wildcards[t][0] = '\0';
 	}
 	nwildcards = 0;
 	wildprefix[0] = name[0] = '\0';
 	mode = strchr(in,'\t') ? 'n' : 'w';
 	// DONE?
-	if ( *in == '\0' ) return;	// done
+	if ( *in == '\0' ) {		// done
+	  // Free everything
+	  delete[] wildprefix;
+	  delete[] comp;
+	  delete[] name;
+	  for ( t=0; t<maxfilters; t++ ) delete[] wildcards[t];
+	  delete[] wildcards;
+	  return;
+	}
 	continue;			// not done yet, more filters
       }
 
@@ -781,7 +849,7 @@ void Fl_Native_File_Chooser::parse_filter(const char *in) {
       default:
       regchar:		// handle regular char
 	switch ( mode ) {
-	  case LBRACKET_CHR: 
+	  case LBRACKET_CHR:
 	    // create new wildcard
 	    ++nwildcards;
 	    // copy in prefix
@@ -868,5 +936,5 @@ LPCWSTR utf8towchar(const char *in)
 #endif /*!FL_DOXYGEN*/
 
 //
-// End of "$Id: Fl_Native_File_Chooser_WIN32.cxx 9629 2012-06-26 07:03:46Z greg.ercolano $".
+// End of "$Id: Fl_Native_File_Chooser_WIN32.cxx 10312 2014-09-15 09:35:05Z ossman $".
 //

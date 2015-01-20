@@ -16,7 +16,7 @@ extern inline struct ALsfpreset *LookupPreset(ALCdevice *device, ALuint id);
 extern inline struct ALsfpreset *RemovePreset(ALCdevice *device, ALuint id);
 
 static void ALsfpreset_Construct(ALsfpreset *self);
-void ALsfpreset_Destruct(ALsfpreset *self);
+static void ALsfpreset_Destruct(ALsfpreset *self);
 
 
 AL_API void AL_APIENTRY alGenPresetsSOFT(ALsizei n, ALuint *ids)
@@ -65,15 +65,14 @@ AL_API ALvoid AL_APIENTRY alDeletePresetsSOFT(ALsizei n, const ALuint *ids)
         /* Check for valid ID */
         if((preset=LookupPreset(device, ids[i])) == NULL)
             SET_ERROR_AND_GOTO(context, AL_INVALID_NAME, done);
-        if(preset->ref != 0)
+        if(ReadRef(&preset->ref) != 0)
             SET_ERROR_AND_GOTO(context, AL_INVALID_OPERATION, done);
     }
 
     for(i = 0;i < n;i++)
     {
-        if((preset=LookupPreset(device, ids[i])) == NULL)
-            continue;
-        DeletePreset(preset, device);
+        if((preset=LookupPreset(device, ids[i])) != NULL)
+            DeletePreset(device, preset);
     }
 
 done:
@@ -107,7 +106,7 @@ AL_API void AL_APIENTRY alPresetiSOFT(ALuint id, ALenum param, ALint value)
     device = context->Device;
     if((preset=LookupPreset(device, id)) == NULL)
         SET_ERROR_AND_GOTO(context, AL_INVALID_NAME, done);
-    if(preset->ref != 0)
+    if(ReadRef(&preset->ref) != 0)
         SET_ERROR_AND_GOTO(context, AL_INVALID_OPERATION, done);
     switch(param)
     {
@@ -151,7 +150,7 @@ AL_API void AL_APIENTRY alPresetivSOFT(ALuint id, ALenum param, const ALint *val
     device = context->Device;
     if((preset=LookupPreset(device, id)) == NULL)
         SET_ERROR_AND_GOTO(context, AL_INVALID_NAME, done);
-    if(preset->ref != 0)
+    if(ReadRef(&preset->ref) != 0)
         SET_ERROR_AND_GOTO(context, AL_INVALID_OPERATION, done);
     switch(param)
     {
@@ -220,7 +219,7 @@ AL_API void AL_APIENTRY alPresetFontsoundsSOFT(ALuint id, ALsizei count, const A
     if(count < 0)
         SET_ERROR_AND_GOTO(context, AL_INVALID_VALUE, done);
 
-    if(preset->ref != 0)
+    if(ReadRef(&preset->ref) != 0)
         SET_ERROR_AND_GOTO(context, AL_INVALID_OPERATION, done);
 
     if(count == 0)
@@ -282,7 +281,7 @@ ALsfpreset *NewPreset(ALCcontext *context)
     return preset;
 }
 
-void DeletePreset(ALsfpreset *preset, ALCdevice *device)
+void DeletePreset(ALCdevice *device, ALsfpreset *preset)
 {
     RemovePreset(device, preset->id);
 
@@ -294,7 +293,7 @@ void DeletePreset(ALsfpreset *preset, ALCdevice *device)
 
 static void ALsfpreset_Construct(ALsfpreset *self)
 {
-    self->ref = 0;
+    InitRef(&self->ref, 0);
 
     self->Preset = 0;
     self->Bank = 0;
@@ -305,7 +304,7 @@ static void ALsfpreset_Construct(ALsfpreset *self)
     self->id = 0;
 }
 
-void ALsfpreset_Destruct(ALsfpreset *self)
+static void ALsfpreset_Destruct(ALsfpreset *self)
 {
     ALsizei i;
 

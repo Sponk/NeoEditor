@@ -177,11 +177,11 @@ typedef ALubyte ALmsadpcm;
 typedef struct {
     ALbyte b[3];
 } ALbyte3;
-extern ALbyte ALbyte3_size_is_not_3[(sizeof(ALbyte3)==sizeof(ALbyte[3]))?1:-1];
+static_assert(sizeof(ALbyte3)==sizeof(ALbyte[3]), "ALbyte3 size is not 3");
 typedef struct {
     ALubyte b[3];
 } ALubyte3;
-extern ALbyte ALubyte3_size_is_not_3[(sizeof(ALubyte3)==sizeof(ALubyte[3]))?1:-1];
+static_assert(sizeof(ALubyte3)==sizeof(ALubyte[3]), "ALubyte3 size is not 3");
 
 static inline ALshort DecodeMuLaw(ALmulaw val)
 { return muLawDecompressionTable[val]; }
@@ -917,10 +917,10 @@ static void Convert_##T##_ALima4(T *dst, const ALima4 *src, ALuint numchans,  \
                                  ALuint len, ALuint align)                    \
 {                                                                             \
     ALsizei byte_align = ((align-1)/2 + 4) * numchans;                        \
+    DECL_VLA(ALshort, tmp, align*numchans);                                   \
     ALuint i, j, k;                                                           \
-    ALshort *tmp;                                                             \
                                                                               \
-    tmp = alloca(align*numchans*sizeof(*tmp));                                \
+    assert(align > 0 && (len%align) == 0);                                    \
     for(i = 0;i < len;i += align)                                             \
     {                                                                         \
         DecodeIMA4Block(tmp, src, numchans, align);                           \
@@ -942,6 +942,7 @@ static void Convert_ALshort_ALima4(ALshort *dst, const ALima4 *src, ALuint numch
     ALsizei byte_align = ((align-1)/2 + 4) * numchans;
     ALuint i;
 
+    assert(align > 0 && (len%align) == 0);
     for(i = 0;i < len;i += align)
     {
         DecodeIMA4Block(dst, src, numchans, align);
@@ -968,10 +969,10 @@ static void Convert_ALima4_##T(ALima4 *dst, const T *src, ALuint numchans,    \
     ALint sample[MAX_INPUT_CHANNELS] = {0,0,0,0,0,0,0,0};                     \
     ALint index[MAX_INPUT_CHANNELS] = {0,0,0,0,0,0,0,0};                      \
     ALsizei byte_align = ((align-1)/2 + 4) * numchans;                        \
+    DECL_VLA(ALshort, tmp, align*numchans);                                   \
     ALuint i, j, k;                                                           \
-    ALshort *tmp;                                                             \
                                                                               \
-    tmp = alloca(align*numchans*sizeof(*tmp));                                \
+    assert(align > 0 && (len%align) == 0);                                    \
     for(i = 0;i < len;i += align)                                             \
     {                                                                         \
         for(j = 0;j < align;j++)                                              \
@@ -994,6 +995,7 @@ static void Convert_ALima4_ALshort(ALima4 *dst, const ALshort *src,
     ALsizei byte_align = ((align-1)/2 + 4) * numchans;
     ALuint i;
 
+    assert(align > 0 && (len%align) == 0);
     for(i = 0;i < len;i += align)
     {
         EncodeIMA4Block(dst, src, sample, index, numchans, align);
@@ -1020,10 +1022,10 @@ static void Convert_##T##_ALmsadpcm(T *dst, const ALmsadpcm *src,             \
                                     ALuint align)                             \
 {                                                                             \
     ALsizei byte_align = ((align-2)/2 + 7) * numchans;                        \
+    DECL_VLA(ALshort, tmp, align*numchans);                                   \
     ALuint i, j, k;                                                           \
-    ALshort *tmp;                                                             \
                                                                               \
-    tmp = alloca(align*numchans*sizeof(*tmp));                                \
+    assert(align > 1 && (len%align) == 0);                                    \
     for(i = 0;i < len;i += align)                                             \
     {                                                                         \
         DecodeMSADPCMBlock(tmp, src, numchans, align);                        \
@@ -1046,6 +1048,7 @@ static void Convert_ALshort_ALmsadpcm(ALshort *dst, const ALmsadpcm *src,
     ALsizei byte_align = ((align-2)/2 + 7) * numchans;
     ALuint i;
 
+    assert(align > 1 && (len%align) == 0);
     for(i = 0;i < len;i += align)
     {
         DecodeMSADPCMBlock(dst, src, numchans, align);
@@ -1071,10 +1074,10 @@ static void Convert_ALmsadpcm_##T(ALmsadpcm *dst, const T *src,               \
 {                                                                             \
     ALint sample[MAX_INPUT_CHANNELS] = {0,0,0,0,0,0,0,0};                     \
     ALsizei byte_align = ((align-2)/2 + 7) * numchans;                        \
+    DECL_VLA(ALshort, tmp, align*numchans);                                   \
     ALuint i, j, k;                                                           \
-    ALshort *tmp;                                                             \
                                                                               \
-    tmp = alloca(align*numchans*sizeof(*tmp));                                \
+    assert(align > 1 && (len%align) == 0);                                    \
     for(i = 0;i < len;i += align)                                             \
     {                                                                         \
         for(j = 0;j < align;j++)                                              \
@@ -1096,6 +1099,7 @@ static void Convert_ALmsadpcm_ALshort(ALmsadpcm *dst, const ALshort *src,
     ALsizei byte_align = ((align-2)/2 + 7) * numchans;
     ALuint i;
 
+    assert(align > 1 && (len%align) == 0);
     for(i = 0;i < len;i += align)
     {
         EncodeMSADPCMBlock(dst, src, sample, numchans, align);

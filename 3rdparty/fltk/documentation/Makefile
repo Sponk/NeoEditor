@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile 9146 2011-10-25 02:17:29Z greg.ercolano $"
+# "$Id: Makefile 10361 2014-10-05 22:39:31Z AlbrechtS $"
 #
 # Documentation makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -64,7 +64,7 @@ dist:	all html pdf
 alldocs: dist
 
 clean:
-	$(RM) fltk.pdf refman.pdf
+	$(RM) fltk.pdf refman.pdf src/fltk-book.tex
 	$(RMDIR) html latex
 	$(RM) *~ *.bck *.bak *.log
 	$(RM) $(MANPAGES) $(SRC_DOCDIR)/*.0
@@ -128,7 +128,7 @@ uninstall-linux uninstall-osx:
 # is not made by default.
 # Use `make html' or `make dist' to create the html docs
 
-html:	$(HTMLFILES) Doxyfile
+html:	$(HTMLFILES) Doxyfile src/fltk-book.tex
 	echo "Generating HTML documentation..."
 	-$(RMDIR) html
 	-$(INSTALL_DIR) html
@@ -148,7 +148,7 @@ html-online: html
 pdf:	refman.pdf
 	cp -f latex/refman.pdf fltk.pdf
 
-refman.pdf: $(HTMLFILES) Doxybook
+refman.pdf: $(HTMLFILES) Doxybook src/fltk-book.tex
 	-$(RMDIR) latex
 	echo "Generating PDF documentation ..."
 	$(DOXYDOC) Doxybook ;\
@@ -166,6 +166,13 @@ refman.pdf: $(HTMLFILES) Doxybook
 	    done ; \
 	cd ..) > pdfall.log 2>&1
 
+src/fltk-book.tex: src/fltk-book.tex.in
+	DOXY_VERSION=`$(DOXYDOC) --version`; \
+	YEAR=`date +%Y`; \
+	FLTK_VERSION=`cat ../VERSION`; \
+	sed -e"s/@YEAR@/$$YEAR/g" -e"s/@VERSION@/$$FLTK_VERSION/g" \
+	    -e"s/@DOXY_VERSION@/$$DOXY_VERSION/g" < $< > $@
+
 #
-# End of "$Id: Makefile 9146 2011-10-25 02:17:29Z greg.ercolano $".
+# End of "$Id: Makefile 10361 2014-10-05 22:39:31Z AlbrechtS $".
 #

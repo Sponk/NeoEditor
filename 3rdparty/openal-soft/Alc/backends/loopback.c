@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the
- *  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- *  Boston, MA  02111-1307, USA.
+ *  Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * Or go to http://www.gnu.org/copyleft/lgpl.html
  */
 
@@ -44,7 +44,7 @@ static DECLARE_FORWARD(ALCloopback, ALCbackend, ALCuint, availableSamples)
 static DECLARE_FORWARD(ALCloopback, ALCbackend, ALint64, getLatency)
 static DECLARE_FORWARD(ALCloopback, ALCbackend, void, lock)
 static DECLARE_FORWARD(ALCloopback, ALCbackend, void, unlock)
-static void ALCloopback_Delete(ALCloopback *self);
+DECLARE_DEFAULT_ALLOCATORS(ALCloopback)
 DEFINE_ALCBACKEND_VTABLE(ALCloopback);
 
 
@@ -59,7 +59,7 @@ static ALCenum ALCloopback_open(ALCloopback *self, const ALCchar *name)
 {
     ALCdevice *device = STATIC_CAST(ALCbackend, self)->mDevice;
 
-    device->DeviceName = strdup(name);
+    al_string_copy_cstr(&device->DeviceName, name);
     return ALC_NO_ERROR;
 }
 
@@ -80,12 +80,6 @@ static ALCboolean ALCloopback_start(ALCloopback* UNUSED(self))
 
 static void ALCloopback_stop(ALCloopback* UNUSED(self))
 {
-}
-
-
-static void ALCloopback_Delete(ALCloopback *self)
-{
-    free(self);
 }
 
 
@@ -127,14 +121,18 @@ static void ALCloopbackFactory_probe(ALCloopbackFactory* UNUSED(self), enum DevP
 
 static ALCbackend* ALCloopbackFactory_createBackend(ALCloopbackFactory* UNUSED(self), ALCdevice *device, ALCbackend_Type type)
 {
-    ALCloopback *backend;
+    if(type == ALCbackend_Loopback)
+    {
+        ALCloopback *backend;
 
-    assert(type == ALCbackend_Loopback);
+        backend = ALCloopback_New(sizeof(*backend));
+        if(!backend) return NULL;
+        memset(backend, 0, sizeof(*backend));
 
-    backend = calloc(1, sizeof(*backend));
-    if(!backend) return NULL;
+        ALCloopback_Construct(backend, device);
 
-    ALCloopback_Construct(backend, device);
+        return STATIC_CAST(ALCbackend, backend);
+    }
 
-    return STATIC_CAST(ALCbackend, backend);
+    return NULL;
 }

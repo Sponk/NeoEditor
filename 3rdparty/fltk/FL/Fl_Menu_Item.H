@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H 8864 2011-07-19 04:49:30Z greg.ercolano $"
+// "$Id: Fl_Menu_Item.H 10282 2014-09-06 19:03:43Z AlbrechtS $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -305,7 +305,13 @@ struct FL_EXPORT Fl_Menu_Item {
     radio() false, or by an item with FL_MENU_DIVIDER turned on.
   */
   int radio() const {return flags&FL_MENU_RADIO;}
-  /** Returns the current value of the check or radio item. */
+  /** Returns the current value of the check or radio item.
+      This is zero (0) if the menu item is not checked and
+      non-zero otherwise. You should not rely on a particular value,
+      only zero or non-zero.
+      \note The returned value for a checked menu item as of FLTK 1.3.2
+      is FL_MENU_VALUE (4), but may be 1 in a future version.
+  */
   int value() const {return flags&FL_MENU_VALUE;}
   /**
     Turns the check or radio item "on" for the menu item. Note that this
@@ -430,5 +436,5 @@ enum {	// back-compatibility enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H 8864 2011-07-19 04:49:30Z greg.ercolano $".
+// End of "$Id: Fl_Menu_Item.H 10282 2014-09-06 19:03:43Z AlbrechtS $".
 //

@@ -8,6 +8,7 @@
 #include "alMidi.h"
 #include "alError.h"
 #include "alThunk.h"
+#include "alBuffer.h"
 
 #include "midi/base.h"
 
@@ -15,12 +16,20 @@
 extern inline struct ALfontsound *LookupFontsound(ALCdevice *device, ALuint id);
 extern inline struct ALfontsound *RemoveFontsound(ALCdevice *device, ALuint id);
 
+
 static void ALfontsound_Construct(ALfontsound *self);
-void ALfontsound_Destruct(ALfontsound *self);
+static void ALfontsound_Destruct(ALfontsound *self);
 void ALfontsound_setPropi(ALfontsound *self, ALCcontext *context, ALenum param, ALint value);
 static ALsfmodulator *ALfontsound_getModStage(ALfontsound *self, ALsizei stage);
 void ALfontsound_setModStagei(ALfontsound *self, ALCcontext *context, ALsizei stage, ALenum param, ALint value);
 static void ALfontsound_getModStagei(ALfontsound *self, ALCcontext *context, ALsizei stage, ALenum param, ALint *values);
+
+static inline struct ALsfmodulator *LookupModulator(ALfontsound *sound, ALuint id)
+{
+    ALsfmodulator *mod = LookupUIntMapKey(&sound->ModulatorMap, id>>2);
+    if(mod) mod += id&3;
+    return mod;
+}
 
 
 AL_API void AL_APIENTRY alGenFontsoundsSOFT(ALsizei n, ALuint *ids)
@@ -69,19 +78,14 @@ AL_API ALvoid AL_APIENTRY alDeleteFontsoundsSOFT(ALsizei n, const ALuint *ids)
         /* Check for valid ID */
         if((inst=LookupFontsound(device, ids[i])) == NULL)
             SET_ERROR_AND_GOTO(context, AL_INVALID_NAME, done);
-        if(inst->ref != 0)
+        if(ReadRef(&inst->ref) != 0)
             SET_ERROR_AND_GOTO(context, AL_INVALID_OPERATION, done);
     }
 
     for(i = 0;i < n;i++)
     {
-        if((inst=RemoveFontsound(device, ids[i])) == NULL)
-            continue;
-
-        ALfontsound_Destruct(inst);
-
-        memset(inst, 0, sizeof(*inst));
-        free(inst);
+        if((inst=LookupFontsound(device, ids[i])) != NULL)
+            DeleteFontsound(device, inst);
     }
 
 done:
@@ -115,7 +119,7 @@ AL_API void AL_APIENTRY alFontsoundiSOFT(ALuint id, ALenum param, ALint value)
     device = context->Device;
     if(!(sound=LookupFontsound(device, id)))
         SET_ERROR_AND_GOTO(context, AL_INVALID_NAME, done);
-    if(sound->ref != 0)
+    if(ReadRef(&sound->ref) != 0)
         SET_ERROR_AND_GOTO(context, AL_INVALID_OPERATION, done);
 
     ALfontsound_setPropi(sound, context, param, value);
@@ -136,7 +140,7 @@ AL_API void AL_APIENTRY alFontsound2iSOFT(ALuint id, ALenum param, ALint value1,
     device = context->Device;
     if(!(sound=LookupFontsound(device, id)))
         SET_ERROR_AND_GOTO(context, AL_INVALID_NAME, done);
-    if(sound->ref != 0)
+    if(ReadRef(&sound->ref) != 0)
         SET_ERROR_AND_GOTO(context, AL_INVALID_OPERATION, done);
     switch(param)
     {
@@ -231,7 +235,7 @@ AL_API void AL_APIENTRY alFontsoundivSOFT(ALuint id, ALenum param, const ALint *
     device = context->Device;
     if(!(sound=LookupFontsound(device, id)))
         SET_ERROR_AND_GOTO(context, AL_INVALID_NAME, done);
-    if(sound->ref != 0)
+    if(ReadRef(&sound->ref) != 0)
         SET_ERROR_AND_GOTO(context, AL_INVALID_OPERATION, done);
     switch(param)
     {
@@ -248,6 +252,8 @@ AL_API void AL_APIENTRY alGetFontsoundivSOFT(ALuint id, ALenum param, ALint *val
     ALCdevice *device;
     ALCcontext *context;
     const ALfontsound *sound;
+    ALfontsound *link;
+    ALbuffer *buffer;
 
     context = GetContextRef();
     if(!context) return;
@@ -257,6 +263,11 @@ AL_API void AL_APIENTRY alGetFontsoundivSOFT(ALuint id, ALenum param, ALint *val
         SET_ERROR_AND_GOTO(context, AL_INVALID_NAME, done);
     switch(param)
     {
+        case AL_BUFFER:
+            buffer = ATOMIC_LOAD(&sound->Buffer);
+            values[0] = (buffer ? buffer->id : 0);
+            break;
+
         case AL_MOD_LFO_TO_PITCH_SOFT:
             values[0] = sound->ModLfoToPitch;
             break;
@@ -431,7 +442,8 @@ AL_API void AL_APIENTRY alGetFontsoundivSOFT(ALuint id, ALenum param, ALint *val
             break;
 
         case AL_FONTSOUND_LINK_SOFT:
-            values[0] = (sound->Link ? sound->Link->id : 0);
+            link = ATOMIC_LOAD(&sound->Link);
+            values[0] = (link ? link->id : 0);
             break;
 
         default:
@@ -505,10 +517,22 @@ ALfontsound *NewFontsound(ALCcontext *context)
     return sound;
 }
 
+void DeleteFontsound(ALCdevice *device, ALfontsound *sound)
+{
+    RemoveFontsound(device, sound->id);
+
+    ALfontsound_Destruct(sound);
+
+    memset(sound, 0, sizeof(*sound));
+    free(sound);
+}
+
 
 static void ALfontsound_Construct(ALfontsound *self)
 {
-    self->ref = 0;
+    InitRef(&self->ref, 0);
+
+    ATOMIC_INIT(&self->Buffer, NULL);
 
     self->MinKey = 0;
     self->MaxKey = 127;
@@ -573,23 +597,28 @@ static void ALfontsound_Construct(ALfontsound *self)
     self->PitchKey = 0;
     self->PitchCorrection = 0;
     self->SampleType = AL_MONO_SOFT;
-    self->Link = NULL;
+
+    ATOMIC_INIT(&self->Link, NULL);
 
     InitUIntMap(&self->ModulatorMap, ~0);
 
     self->id = 0;
 }
 
-void ALfontsound_Destruct(ALfontsound *self)
+static void ALfontsound_Destruct(ALfontsound *self)
 {
+    ALfontsound *link;
+    ALbuffer *buffer;
     ALsizei i;
 
     FreeThunkEntry(self->id);
     self->id = 0;
 
-    if(self->Link)
-        DecrementRef(&self->Link->ref);
-    self->Link = NULL;
+    if((buffer=ATOMIC_EXCHANGE(ALbuffer*, &self->Buffer, NULL)) != NULL)
+        DecrementRef(&buffer->ref);
+
+    if((link=ATOMIC_EXCHANGE(ALfontsound*, &self->Link, NULL)) != NULL)
+        DecrementRef(&link->ref);
 
     for(i = 0;i < self->ModulatorMap.size;i++)
     {
@@ -602,9 +631,26 @@ void ALfontsound_Destruct(ALfontsound *self)
 void ALfontsound_setPropi(ALfontsound *self, ALCcontext *context, ALenum param, ALint value)
 {
     ALfontsound *link;
+    ALbuffer *buffer;
 
     switch(param)
     {
+        case AL_BUFFER:
+            buffer = value ? LookupBuffer(context->Device, value) : NULL;
+            if(value && !buffer)
+                SET_ERROR_AND_RETURN(context, AL_INVALID_VALUE);
+            else if(buffer)
+            {
+                /* Buffer must have a non-0 length, and must be mono. */
+                if(buffer->SampleLen <= 0 || buffer->FmtChannels != FmtMono)
+                    SET_ERROR_AND_RETURN(context, AL_INVALID_VALUE);
+            }
+
+            if(buffer) IncrementRef(&buffer->ref);
+            if((buffer=ATOMIC_EXCHANGE(ALbuffer*, &self->Buffer, buffer)) != NULL)
+                DecrementRef(&buffer->ref);
+            break;
+
         case AL_MOD_LFO_TO_PITCH_SOFT:
             self->ModLfoToPitch = value;
             break;
@@ -787,17 +833,13 @@ void ALfontsound_setPropi(ALfontsound *self, ALCcontext *context, ALenum param, 
             break;
 
         case AL_FONTSOUND_LINK_SOFT:
-            if(!value)
-                link = NULL;
-            else
-            {
-                link = LookupFontsound(context->Device, value);
-                if(!link)
-                    SET_ERROR_AND_RETURN(context, AL_INVALID_VALUE);
-            }
+            link = value ? LookupFontsound(context->Device, value) : NULL;
+            if(value && !link)
+                SET_ERROR_AND_RETURN(context, AL_INVALID_VALUE);
+
             if(link) IncrementRef(&link->ref);
-            link = ExchangePtr((XchgPtr*)&self->Link, link);
-            if(link) DecrementRef(&link->ref);
+            if((link=ATOMIC_EXCHANGE(ALfontsound*, &self->Link, link)) != NULL)
+                DecrementRef(&link->ref);
             break;
 
         default:
@@ -812,15 +854,18 @@ static ALsfmodulator *ALfontsound_getModStage(ALfontsound *self, ALsizei stage)
     {
         static const ALsfmodulator moddef = {
             { { AL_ONE_SOFT, AL_UNORM_SOFT, AL_LINEAR_SOFT },
-              { AL_ONE_SOFT, AL_UNORM_SOFT, AL_LINEAR_SOFT }
-            },
+              { AL_ONE_SOFT, AL_UNORM_SOFT, AL_LINEAR_SOFT } },
             0,
             AL_LINEAR_SOFT,
             AL_NONE
         };
-        ret = malloc(sizeof(*ret));
-        *ret = moddef;
-        InsertUIntMapEntry(&self->ModulatorMap, stage, ret);
+        ret = malloc(sizeof(ALsfmodulator[4]));
+        ret[0] = moddef;
+        ret[1] = moddef;
+        ret[2] = moddef;
+        ret[3] = moddef;
+        InsertUIntMapEntry(&self->ModulatorMap, stage>>2, ret);
+        ret += stage&3;
     }
     return ret;
 }
@@ -829,7 +874,7 @@ void ALfontsound_setModStagei(ALfontsound *self, ALCcontext *context, ALsizei st
 {
     ALint srcidx = 0;
 
-    if(self->ref != 0)
+    if(ReadRef(&self->ref) != 0)
         SET_ERROR_AND_RETURN(context, AL_INVALID_OPERATION);
     switch(param)
     {
@@ -841,10 +886,7 @@ void ALfontsound_setModStagei(ALfontsound *self, ALCcontext *context, ALsizei st
                  value == AL_NOTEON_KEY_SOFT || value == AL_KEYPRESSURE_SOFT ||
                  value == AL_CHANNELPRESSURE_SOFT || value == AL_PITCHBEND_SOFT ||
                  value == AL_PITCHBEND_SENSITIVITY_SOFT ||
-                 (value > 0 && value < 120 && !(value == 6 || (value >= 32 && value <= 63) ||
-                                                (value >= 98 && value <= 101))
-                 )
-              ))
+                 IsValidCtrlInput(value)))
                 SET_ERROR_AND_RETURN(context, AL_INVALID_VALUE);
             ALfontsound_getModStage(self, stage)->Source[srcidx].Input = value;
             break;

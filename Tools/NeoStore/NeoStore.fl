@@ -1,0 +1,226 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0302 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include "RepositoryManager.h"} {private local
+} 
+
+decl {\#include <FL/fl_message.H>} {private local
+} 
+
+decl {\#include <vector>} {private local
+} 
+
+class NeoStore {open
+} {
+  Function {create_window()} {open
+  } {
+    code {menu_menu_bar[1].user_data((void*)this);} {}
+    Fl_Window {} {
+      label {Neo Store}
+      xywh {617 194 724 592} type Double resizable size_range {0 0 5000 5000} visible
+    } {
+      Fl_Browser available_packages {
+        label {Packages:}
+        user_data this user_data_type {NeoStore*}
+        callback package_selected
+        xywh {6 45 213 546} type Hold align 5 when 3
+      }
+      Fl_Help_View package_description {
+        label {Description:}
+        xywh {222 45 501 417} resizable
+      }
+      Fl_Help_View package_detail {
+        xywh {222 465 501 90}
+      }
+      Fl_Button install_button {
+        label Install
+        user_data this user_data_type {NeoStore*}
+        callback install_package selected
+        xywh {620 561 99 27}
+      }
+      Fl_Button remove_button {
+        label Remove
+        user_data this user_data_type {NeoStore*}
+        callback remove_package
+        xywh {222 561 99 27}
+      }
+      Fl_Menu_Bar menu_bar {open
+        xywh {0 0 783 25}
+      } {
+        Submenu {} {
+          label Repositories open
+          xywh {0 0 100 20}
+        } {
+          MenuItem {} {
+            label Reload user_data_type {void*}
+            callback reload_repositories
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label {Add Repo}
+            xywh {0 0 100 20}
+          }
+          MenuItem {} {
+            label {Remove Repo}
+            xywh {0 0 100 20}
+          }
+        }
+      }
+    }
+  }
+  Function {package_selected(Fl_Browser* browser, NeoStore* self)} {open return_type {static void}
+  } {
+    code {int current = browser->value();
+
+if(browser->data(current) == NULL)
+	return;
+
+Repository::Package p = *(Repository::Package*) browser->data(current);
+
+std::string detail;
+
+detail += "<br><br><table>";
+detail += "<tr><td>Author:<td>"+p.author+"</td></tr>";
+detail += "<tr><td>Version:<td>"+p.version+"</td></tr>";
+detail += "<tr><td>License:<td>"+p.license+"</td></tr>";
+detail += "</table>";
+
+self->package_description->value(p.description.c_str());
+self->package_detail->value(detail.c_str());
+
+if(RepositoryManager::getInstance()->isInstalled(p.name.c_str()))
+{
+	self->install_button->deactivate();
+	self->remove_button->activate();
+}
+else
+{
+	self->install_button->activate();
+	self->remove_button->deactivate();
+}} {}
+  }
+  Function {install_package(Fl_Button* btn, NeoStore* self)} {open return_type {static void}
+  } {
+    code {int current = self->available_packages->value();
+
+if(self->available_packages->data(current) == NULL)
+	return;
+
+Repository::Package p = *(Repository::Package*) self->available_packages->data(current);
+
+if(RepositoryManager::getInstance()->installPackage(p))
+{
+	fl_message("Package was successfully installed!");
+	self->install_button->deactivate();
+	self->remove_button->activate();
+}
+else
+{
+	fl_message("Could not install package!");
+}} {}
+  }
+  Function {remove_package(Fl_Button* btn, NeoStore* self)} {open return_type {static void}
+  } {
+    code {int current = self->available_packages->value();
+
+if(self->available_packages->data(current) == NULL)
+	return;
+
+Repository::Package p = *(Repository::Package*) self->available_packages->data(current);
+
+if(RepositoryManager::getInstance()->removePackage(p))
+{
+	fl_message("Package was successfully removed!");
+	self->install_button->activate();
+	self->remove_button->deactivate();
+}
+else
+{
+	fl_message("Could not remove package!");
+}} {}
+  }
+  Function {reload_repositories(Fl_Menu* menu, NeoStore* self)} {open return_type {static void}
+  } {
+    code {RepositoryManager* mgr = RepositoryManager::getInstance();
+mgr->clearPackageInformation();
+mgr->updatePackageInformation();
+
+std::vector<Repository::Package> packages;
+mgr->getPackageList(&packages);
+
+for(int i = 0; i < self->available_packages->size(); i++)
+{
+	// FIXME: Call the destructor?
+	free(self->available_packages->data(i));
+}
+
+self->available_packages->begin();
+self->available_packages->clear();
+for(int i = 0; i < packages.size(); i++)
+{
+	Repository::Package* p = (Repository::Package*) malloc(sizeof(Repository::Package));
+	new(p) Repository::Package();	
+	
+	*p = packages[i];	
+	
+	self->available_packages->add(packages[i].name.c_str(), (void*) p);
+}
+self->available_packages->end();} {}
+  }
+} 
+
+class InstallationDlg {open
+} {
+  decl {Fl_Window* fl_win;} {public local
+  }
+  decl {unsigned int max_size;} {private local
+  }
+  decl {char informationLabel[100];} {private local
+  }
+  decl {char progressLabel[100];} {private local
+  }
+  Function {create_window()} {open
+  } {
+    Fl_Window {} {
+      label {Installing...} open
+      xywh {958 406 391 85} type Double hide modal
+    } {
+      Fl_Progress progress_bar {
+        xywh {9 15 378 27} selection_color 15 labelcolor 40
+      }
+      Fl_Box information_label {
+        label {Downloading...}
+        xywh {9 42 378 27}
+      }
+    }
+    code {fl_win = w;} {}
+  }
+  Function {close()} {open
+  } {
+    code {Fl::delete_widget(fl_win);} {}
+  }
+  Function {setMaxSize(unsigned int sz)} {open
+  } {
+    code {max_size = sz;
+
+if(max_size == 0)
+	max_size = 1;
+	
+update(0);} {}
+  }
+  Function {update(unsigned int curSz)} {open
+  } {
+    code {float percentage = (float) curSz / max_size;
+percentage *= 100.0f;
+
+progress_bar->value(percentage);
+
+sprintf(progressLabel, "%f%%", percentage);
+
+progress_bar->label(progressLabel);
+
+sprintf(informationLabel, "%dkb/%dkb", curSz/1024, max_size/1024);
+information_label->label(informationLabel);} {}
+  }
+} 

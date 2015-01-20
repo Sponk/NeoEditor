@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the
- *  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- *  Boston, MA  02111-1307, USA.
+ *  Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * Or go to http://www.gnu.org/copyleft/lgpl.html
  */
 
@@ -78,10 +78,10 @@ typedef struct ALCplaybackOSS {
     int data_size;
 
     volatile int killNow;
-    althread_t thread;
+    althrd_t thread;
 } ALCplaybackOSS;
 
-static ALuint ALCplaybackOSS_mixerProc(ALvoid *ptr);
+static int ALCplaybackOSS_mixerProc(void *ptr);
 
 static void ALCplaybackOSS_Construct(ALCplaybackOSS *self, ALCdevice *device);
 static DECLARE_FORWARD(ALCplaybackOSS, ALCbackend, void, Destruct)
@@ -95,11 +95,11 @@ static DECLARE_FORWARD(ALCplaybackOSS, ALCbackend, ALCuint, availableSamples)
 static DECLARE_FORWARD(ALCplaybackOSS, ALCbackend, ALint64, getLatency)
 static DECLARE_FORWARD(ALCplaybackOSS, ALCbackend, void, lock)
 static DECLARE_FORWARD(ALCplaybackOSS, ALCbackend, void, unlock)
-static void ALCplaybackOSS_Delete(ALCplaybackOSS *self);
+DECLARE_DEFAULT_ALLOCATORS(ALCplaybackOSS)
 DEFINE_ALCBACKEND_VTABLE(ALCplaybackOSS);
 
 
-static ALuint ALCplaybackOSS_mixerProc(ALvoid *ptr)
+static int ALCplaybackOSS_mixerProc(void *ptr)
 {
     ALCplaybackOSS *self = (ALCplaybackOSS*)ptr;
     ALCdevice *device = STATIC_CAST(ALCbackend, self)->mDevice;
@@ -107,7 +107,7 @@ static ALuint ALCplaybackOSS_mixerProc(ALvoid *ptr)
     ssize_t wrote;
 
     SetRTPriority();
-    SetThreadName(MIXER_THREAD_NAME);
+    althrd_setname(althrd_current(), MIXER_THREAD_NAME);
 
     frameSize = FrameSizeFromDevFmt(device->FmtChans, device->FmtType);
 
@@ -131,7 +131,7 @@ static ALuint ALCplaybackOSS_mixerProc(ALvoid *ptr)
                     break;
                 }
 
-                Sleep(1);
+                al_nssleep(1000000);
                 continue;
             }
 
@@ -168,7 +168,7 @@ static ALCenum ALCplaybackOSS_open(ALCplaybackOSS *self, const ALCchar *name)
         return ALC_INVALID_VALUE;
     }
 
-    device->DeviceName = strdup(name);
+    al_string_copy_cstr(&device->DeviceName, name);
 
     return ALC_NO_ERROR;
 }
@@ -275,7 +275,8 @@ static ALCboolean ALCplaybackOSS_start(ALCplaybackOSS *self)
     self->data_size = device->UpdateSize * FrameSizeFromDevFmt(device->FmtChans, device->FmtType);
     self->mix_data = calloc(1, self->data_size);
 
-    if(!StartThread(&self->thread, ALCplaybackOSS_mixerProc, self))
+    self->killNow = 0;
+    if(althrd_create(&self->thread, ALCplaybackOSS_mixerProc, self) != althrd_success)
     {
         free(self->mix_data);
         self->mix_data = NULL;
@@ -287,24 +288,19 @@ static ALCboolean ALCplaybackOSS_start(ALCplaybackOSS *self)
 
 static void ALCplaybackOSS_stop(ALCplaybackOSS *self)
 {
-    if(!self->thread)
+    int res;
+
+    if(self->killNow)
         return;
 
     self->killNow = 1;
-    StopThread(self->thread);
-    self->thread = NULL;
+    althrd_join(self->thread, &res);
 
-    self->killNow = 0;
     if(ioctl(self->fd, SNDCTL_DSP_RESET) != 0)
         ERR("Error resetting device: %s\n", strerror(errno));
 
     free(self->mix_data);
     self->mix_data = NULL;
-}
-
-static void ALCplaybackOSS_Delete(ALCplaybackOSS *self)
-{
-    free(self);
 }
 
 
@@ -320,10 +316,10 @@ typedef struct ALCcaptureOSS {
     int doCapture;
 
     volatile int killNow;
-    althread_t thread;
+    althrd_t thread;
 } ALCcaptureOSS;
 
-static ALuint ALCcaptureOSS_recordProc(ALvoid *ptr);
+static int ALCcaptureOSS_recordProc(void *ptr);
 
 static void ALCcaptureOSS_Construct(ALCcaptureOSS *self, ALCdevice *device);
 static DECLARE_FORWARD(ALCcaptureOSS, ALCbackend, void, Destruct)
@@ -337,11 +333,11 @@ static ALCuint ALCcaptureOSS_availableSamples(ALCcaptureOSS *self);
 static DECLARE_FORWARD(ALCcaptureOSS, ALCbackend, ALint64, getLatency)
 static DECLARE_FORWARD(ALCcaptureOSS, ALCbackend, void, lock)
 static DECLARE_FORWARD(ALCcaptureOSS, ALCbackend, void, unlock)
-static void ALCcaptureOSS_Delete(ALCcaptureOSS *self);
+DECLARE_DEFAULT_ALLOCATORS(ALCcaptureOSS)
 DEFINE_ALCBACKEND_VTABLE(ALCcaptureOSS);
 
 
-static ALuint ALCcaptureOSS_recordProc(ALvoid *ptr)
+static int ALCcaptureOSS_recordProc(void *ptr)
 {
     ALCcaptureOSS *self = (ALCcaptureOSS*)ptr;
     ALCdevice *device = STATIC_CAST(ALCbackend, self)->mDevice;
@@ -349,7 +345,7 @@ static ALuint ALCcaptureOSS_recordProc(ALvoid *ptr)
     int amt;
 
     SetRTPriority();
-    SetThreadName("alsoft-record");
+    althrd_setname(althrd_current(), "alsoft-record");
 
     frameSize = FrameSizeFromDevFmt(device->FmtChans, device->FmtType);
 
@@ -366,7 +362,7 @@ static ALuint ALCcaptureOSS_recordProc(ALvoid *ptr)
         }
         if(amt == 0)
         {
-            Sleep(1);
+            al_nssleep(1000000);
             continue;
         }
         if(self->doCapture)
@@ -488,7 +484,8 @@ static ALCenum ALCcaptureOSS_open(ALCcaptureOSS *self, const ALCchar *name)
     self->data_size = info.fragsize;
     self->read_data = calloc(1, self->data_size);
 
-    if(!StartThread(&self->thread, ALCcaptureOSS_recordProc, self))
+    self->killNow = 0;
+    if(althrd_create(&self->thread, ALCcaptureOSS_recordProc, self) != althrd_success)
     {
         device->ExtraData = NULL;
         close(self->fd);
@@ -496,16 +493,17 @@ static ALCenum ALCcaptureOSS_open(ALCcaptureOSS *self, const ALCchar *name)
         return ALC_OUT_OF_MEMORY;
     }
 
-    device->DeviceName = strdup(name);
+    al_string_copy_cstr(&device->DeviceName, name);
 
     return ALC_NO_ERROR;
 }
 
 static void ALCcaptureOSS_close(ALCcaptureOSS *self)
 {
+    int res;
+
     self->killNow = 1;
-    StopThread(self->thread);
-    self->killNow = 0;
+    althrd_join(self->thread, &res);
 
     close(self->fd);
     self->fd = -1;
@@ -538,12 +536,6 @@ static ALCuint ALCcaptureOSS_availableSamples(ALCcaptureOSS *self)
 {
     return RingBufferSize(self->ring);
 }
-
-void ALCcaptureOSS_Delete(ALCcaptureOSS *self)
-{
-    free(self);
-}
-
 
 
 typedef struct ALCossBackendFactory {
@@ -615,8 +607,9 @@ ALCbackend* ALCossBackendFactory_createBackend(ALCossBackendFactory* UNUSED(self
     {
         ALCplaybackOSS *backend;
 
-        backend = calloc(1, sizeof(*backend));
+        backend = ALCplaybackOSS_New(sizeof(*backend));
         if(!backend) return NULL;
+        memset(backend, 0, sizeof(*backend));
 
         ALCplaybackOSS_Construct(backend, device);
 
@@ -626,8 +619,9 @@ ALCbackend* ALCossBackendFactory_createBackend(ALCossBackendFactory* UNUSED(self
     {
         ALCcaptureOSS *backend;
 
-        backend = calloc(1, sizeof(*backend));
+        backend = ALCcaptureOSS_New(sizeof(*backend));
         if(!backend) return NULL;
+        memset(backend, 0, sizeof(*backend));
 
         ALCcaptureOSS_Construct(backend, device);
 

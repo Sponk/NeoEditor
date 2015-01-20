@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the
- *  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- *  Boston, MA  02111-1307, USA.
+ *  Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * Or go to http://www.gnu.org/copyleft/lgpl.html
  */
 
@@ -34,7 +34,7 @@ typedef struct ALdistortionState {
     DERIVE_FROM_TYPE(ALeffectState);
 
     /* Effect gains for each channel */
-    ALfloat Gain[MaxChannels];
+    ALfloat Gain[MAX_OUTPUT_CHANNELS];
 
     /* Effect parameters */
     ALfilterState lowpass;
@@ -58,7 +58,6 @@ static ALvoid ALdistortionState_update(ALdistortionState *state, ALCdevice *Devi
     ALfloat bandwidth;
     ALfloat cutoff;
     ALfloat edge;
-    ALfloat gain;
 
     /* Store distorted signal attenuation settings */
     state->attenuation = Slot->EffectProps.Distortion.Gain;
@@ -82,11 +81,10 @@ static ALvoid ALdistortionState_update(ALdistortionState *state, ALCdevice *Devi
     ALfilterState_setParams(&state->bandpass, ALfilterType_BandPass, 1.0f,
                             cutoff / (frequency*4.0f), bandwidth);
 
-    gain = sqrtf(1.0f / Device->NumChan) * Slot->Gain;
-    SetGains(Device, gain, state->Gain);
+    ComputeAmbientGains(Device, Slot->Gain, state->Gain);
 }
 
-static ALvoid ALdistortionState_process(ALdistortionState *state, ALuint SamplesToDo, const ALfloat *restrict SamplesIn, ALfloat (*restrict SamplesOut)[BUFFERSIZE])
+static ALvoid ALdistortionState_process(ALdistortionState *state, ALuint SamplesToDo, const ALfloat *restrict SamplesIn, ALfloat (*restrict SamplesOut)[BUFFERSIZE], ALuint NumChannels)
 {
     const ALfloat fc = state->edge_coeff;
     float oversample_buffer[64][4];
@@ -156,10 +154,10 @@ static ALvoid ALdistortionState_process(ALdistortionState *state, ALuint Samples
             temps[it] = oversample_buffer[it][0] * state->attenuation;
         }
 
-        for(kt = 0;kt < MaxChannels;kt++)
+        for(kt = 0;kt < NumChannels;kt++)
         {
             ALfloat gain = state->Gain[kt];
-            if(!(gain > GAIN_SILENCE_THRESHOLD))
+            if(!(fabsf(gain) > GAIN_SILENCE_THRESHOLD))
                 continue;
 
             for(it = 0;it < td;it++)
@@ -170,10 +168,7 @@ static ALvoid ALdistortionState_process(ALdistortionState *state, ALuint Samples
     }
 }
 
-static void ALdistortionState_Delete(ALdistortionState *state)
-{
-    free(state);
-}
+DECLARE_DEFAULT_ALLOCATORS(ALdistortionState)
 
 DEFINE_ALEFFECTSTATE_VTABLE(ALdistortionState);
 
@@ -186,7 +181,7 @@ static ALeffectState *ALdistortionStateFactory_create(ALdistortionStateFactory *
 {
     ALdistortionState *state;
 
-    state = malloc(sizeof(*state));
+    state = ALdistortionState_New(sizeof(*state));
     if(!state) return NULL;
     SET_VTABLE2(ALdistortionState, ALeffectState, state);
 

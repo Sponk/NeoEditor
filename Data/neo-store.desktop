@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=0.1
+Type=Application
+Terminal=false
+Exec=/usr/Neo/NeoStore
+Path=/usr/Neo
+Name=Neo Store
+GenericName=Neo Store
+Categories=FLTK;Development
+Icon=/usr/share/icons/neo-icon.png
+StartupWMClass=NeoStore

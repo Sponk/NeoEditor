@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Preferences.cxx 9334 2012-04-09 12:36:23Z AlbrechtS $"
+// "$Id: Fl_Preferences.cxx 10378 2014-10-14 12:10:18Z ianmacarthur $"
 //
 // Preferences methods for the Fast Light Tool Kit (FLTK).
 //
@@ -40,10 +40,14 @@
 #elif defined (__APPLE__)
 #  include <ApplicationServices/ApplicationServices.h>
 #  include <unistd.h>
+#  include <config.h>
 #  include <dlfcn.h>
 #else
 #  include <unistd.h>
-#  include <dlfcn.h>
+#  include <config.h>
+#  if HAVE_DLFCN_H
+#    include <dlfcn.h>
+#  endif
 #endif
 
 #ifdef WIN32
@@ -1212,7 +1216,7 @@ int Fl_Preferences::RootNode::write() {
 // get the path to the preferences directory
 char Fl_Preferences::RootNode::getPath( char *path, int pathlen ) {
   if (!filename_)   // RUNTIME preferences
-    return -1; 
+    return 1; // return 1 (not -1) to be consistent with fl_make_path()
   strlcpy( path, filename_, pathlen); 
 
   char *s;
@@ -1766,7 +1770,10 @@ int Fl_Plugin_Manager::load(const char *filename) {
 #if defined(WIN32) && !defined(__CYGWIN__)
   HMODULE dl = LoadLibrary(filename);
 #else
-  void * dl = dlopen(filename, RTLD_LAZY);
+  void * dl = NULL;
+# if HAVE_DLSYM
+    dl = dlopen(filename, RTLD_LAZY);
+# endif
 #endif
   // There is no way of unloading a plugin!
   return (dl!=0) ? 0 : -1;
@@ -1790,5 +1797,5 @@ int Fl_Plugin_Manager::loadAll(const char *filepath, const char *pattern) {
 }
 
 //
-// End of "$Id: Fl_Preferences.cxx 9334 2012-04-09 12:36:23Z AlbrechtS $".
+// End of "$Id: Fl_Preferences.cxx 10378 2014-10-14 12:10:18Z ianmacarthur $".
 //

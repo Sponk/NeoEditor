@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_GDI_Printer.cxx 9325 2012-04-05 05:12:30Z fabien $"
+// "$Id: Fl_GDI_Printer.cxx 10391 2014-10-23 11:33:43Z AlbrechtS $"
 //
 // Support for WIN32 printing for the Fast Light Tool Kit (FLTK).
 //
@@ -132,8 +132,11 @@ void Fl_System_Printer::absolute_printable_rect(int *x, int *y, int *w, int *h)
 {
   POINT         physPageSize;
   POINT         pixelsPerInch;
+  XFORM		transform;
     
   if (hPr == NULL) return;
+  GetWorldTransform(fl_gc, &transform);
+  ModifyWorldTransform(fl_gc, NULL, MWT_IDENTITY);
   SetWindowOrgEx(fl_gc, 0, 0, NULL);
   
   physPageSize.x = GetDeviceCaps(hPr, HORZRES);
@@ -152,11 +155,12 @@ void Fl_System_Printer::absolute_printable_rect(int *x, int *y, int *w, int *h)
   *x = left_margin;
   *y = top_margin;
   origin(x_offset, y_offset);
+  SetWorldTransform(fl_gc, &transform);
 }
 
 void Fl_System_Printer::margins(int *left, int *top, int *right, int *bottom)
 {
-  int x, y, w, h;
+  int x = 0, y = 0, w = 0, h = 0;
   absolute_printable_rect(&x, &y, &w, &h);
   if (left) *left = x;
   if (top) *top = y;
@@ -273,5 +277,5 @@ void Fl_System_Printer::untranslate (void)
 #endif // WIN32
 
 //
-// End of "$Id: Fl_GDI_Printer.cxx 9325 2012-04-05 05:12:30Z fabien $".
+// End of "$Id: Fl_GDI_Printer.cxx 10391 2014-10-23 11:33:43Z AlbrechtS $".
 //

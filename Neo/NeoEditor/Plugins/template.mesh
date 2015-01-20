@@ -1,0 +1,71 @@
+<Maratis>
+
+<Mesh>
+
+<Textures num="1">
+	<Texture id="0">
+		<image filename="$IMAGE_FILENAME" mipmap="1" />
+		<mapMode value="1" />
+		<tile u="repeat" v="repeat" />
+		<translate x="0.000000" y="0.000000" />
+		<scale x="1.000000" y="1.000000" />
+		<rotate angle="0.000000" />
+	</Texture>
+</Textures>
+
+<Materials num="1">
+	<Material id="0" type="1">
+		<blend type="0" />
+		<opacity value="1.000000" />
+		<shininess value="50.000000" />
+		<customValue value="0.000000" />
+		<diffuseColor r="0.800000" g="0.800000" b="0.800000" />
+		<specularColor r="0.000000" g="0.000000" b="0.000000" />
+		<emitColor r="0.800000" g="0.800000" b="0.800000" />
+		<customColor r="0.000000" g="0.000000" b="0.000000" />
+		<TexturesPass num="1">
+			<texturePass id="0" texture="0" mode="modulate" mapChannel="0" />
+		</TexturesPass>
+	</Material>
+</Materials>
+
+<BoundingBox minx="-1.0000" miny="-1.00000" minz="0.000000" maxx="1.0000" maxy="1.00000" maxz="0.000000" />
+
+<SubMeshs num="1">
+	<SubMesh id="0">
+		<BoundingBox minx="-1.0000" miny="-1.00000" minz="0.000000" maxx="1.0000" maxy="1.00000" maxz="0.000000" />
+		<Vertices num="4">
+			<vertex x="-1.0000" y="-1.00000" z="0.000000" />
+			<vertex x="1.0000" y="-1.00000" z="0.000000" />
+			<vertex x="1.0000" y="1.00000" z="0.000000" />
+			<vertex x="-1.0000" y="1.00000" z="0.000000" />
+		</Vertices>
+		<Normals num="4">
+			<normal x="0.000000" y="0.000000" z="1.000000" />
+			<normal x="0.000000" y="0.000000" z="1.000000" />
+			<normal x="0.000000" y="0.000000" z="1.000000" />
+			<normal x="0.000000" y="0.000000" z="1.000000" />
+		</Normals>
+		<TexCoords num="4" mapChannels="0">
+			<texCoord x="0.000000" y="1.000000" />
+			<texCoord x="1.000000" y="1.000000" />
+			<texCoord x="1.000000" y="0.000000" />
+			<texCoord x="0.000000" y="0.000000" />
+		</TexCoords>
+		<Indices num="6">
+			<index value="0" />
+			<index value="1" />
+			<index value="2" />
+			<index value="2" />
+			<index value="3" />
+			<index value="0" />
+		</Indices>
+		<Displays num="1">
+			<display primType="triangles" begin="0" size="6" material="0" cullFace="2" />
+		</Displays>
+	</SubMesh>
+</SubMeshs>
+
+</Mesh>
+
+</Maratis>

@@ -174,6 +174,9 @@ SDL_Delay(Uint32 ms)
 {
     int was_error;
 
+	if(ms == 0)
+		return;
+
 #if HAVE_NANOSLEEP
     struct timespec elapsed, tv;
 #else
@@ -194,7 +197,8 @@ SDL_Delay(Uint32 ms)
 #if HAVE_NANOSLEEP
         tv.tv_sec = elapsed.tv_sec;
         tv.tv_nsec = elapsed.tv_nsec;
-        was_error = nanosleep(&tv, &elapsed);
+
+		was_error = nanosleep(&tv, &elapsed);
 #else
         /* Calculate the time interval left (in case of interrupt) */
         now = SDL_GetTicks();

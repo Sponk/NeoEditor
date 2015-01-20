@@ -1,9 +1,9 @@
 #
-# "$Id: Makefile 9707 2012-11-06 21:13:54Z matt $"
+# "$Id: Makefile 10419 2014-10-30 16:05:22Z AlbrechtS $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
-# Copyright 1998-2010 by Bill Spitzak and others.
+# Copyright 1998-2014 by Bill Spitzak and others.
 #
 # This library is free software. Distribution and use rights are outlined in
 # the file "COPYING" which should have been included with this file.  If this
@@ -31,6 +31,7 @@ CPPFILES = \
 	Fl_Choice.cxx \
 	Fl_Clock.cxx \
 	Fl_Color_Chooser.cxx \
+	Fl_Copy_Surface.cxx \
 	Fl_Counter.cxx \
 	Fl_Dial.cxx \
 	Fl_Device.cxx \
@@ -43,13 +44,13 @@ CPPFILES = \
 	Fl_Group.cxx \
 	Fl_Help_View.cxx \
 	Fl_Image.cxx \
+	Fl_Image_Surface.cxx \
 	Fl_Input.cxx \
 	Fl_Input_.cxx \
 	Fl_Light_Button.cxx \
 	Fl_Menu.cxx \
 	Fl_Menu_.cxx \
 	Fl_Menu_Bar.cxx \
-	Fl_Sys_Menu_Bar.cxx \
 	Fl_Menu_Button.cxx \
 	Fl_Menu_Window.cxx \
 	Fl_Menu_add.cxx \
@@ -60,6 +61,7 @@ CPPFILES = \
 	Fl_Pack.cxx \
 	Fl_Paged_Device.cxx \
 	Fl_Pixmap.cxx \
+	Fl_PostScript.cxx \
 	Fl_Positioner.cxx \
 	Fl_Preferences.cxx \
 	Fl_Printer.cxx \
@@ -95,6 +97,7 @@ CPPFILES = \
 	Fl_Window_fullscreen.cxx \
 	Fl_Window_hotspot.cxx \
 	Fl_Window_iconize.cxx \
+	Fl_Window_shape.cxx \
 	Fl_Wizard.cxx \
 	Fl_XBM_Image.cxx \
 	Fl_XPM_Image.cxx \
@@ -158,12 +161,13 @@ CPPFILES = \
 	screen_xywh.cxx \
 	fl_utf8.cxx \
 	ps_image.cxx
-	
+
 OBJCPPFILES = \
     Fl_cocoa.mm \
     Fl_Quartz_Printer.mm \
-    Fl_Native_File_Chooser_MAC.mm
-	
+    Fl_Native_File_Chooser_MAC.mm \
+    Fl_Sys_Menu_Bar.mm
+
 FLCPPFILES = \
 	forms_compatability.cxx \
 	forms_bitmap.cxx \
@@ -232,7 +236,7 @@ $(LIBNAME): $(OBJECTS)
 
 libfltk.so.1.3: $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(OBJECTS)
+	$(DSOCOMMAND) $@ $(OBJECTS) $(LDLIBS)
 	$(RM) libfltk.so
 	$(LN) libfltk.so.1.3 libfltk.so
 
@@ -246,7 +250,7 @@ libfltk.1.3.dylib: $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ \
 		-install_name $(libdir)/$@ \
-		-current_version 1.3.1 \
+		-current_version 1.3.3 \
 		-compatibility_version 1.3.0 \
 		$(OBJECTS) $(LDLIBS)
 	$(RM) libfltk.dylib
@@ -268,7 +272,7 @@ $(FLLIBNAME): $(FLOBJECTS)
 
 libfltk_forms.so.1.3: $(FLOBJECTS) libfltk.so.1.3
 	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(FLOBJECTS) -L. -lfltk
+	$(DSOCOMMAND) $@ $(FLOBJECTS) -L. -lfltk $(LDLIBS)
 	$(RM) libfltk_forms.so
 	$(LN) libfltk_forms.so.1.3 libfltk_forms.so
 
@@ -282,7 +286,7 @@ libfltk_forms.1.3.dylib: $(FLOBJECTS) libfltk.1.3.dylib
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ \
 		-install_name $(libdir)/$@ \
-		-current_version 1.3.1 \
+		-current_version 1.3.3 \
 		-compatibility_version 1.3.0 \
 		$(FLOBJECTS) -L. $(LDLIBS) -lfltk
 	$(RM) libfltk_forms.dylib
@@ -304,7 +308,7 @@ $(GLLIBNAME): $(GLOBJECTS)
 
 libfltk_gl.so.1.3: $(GLOBJECTS) libfltk.so.1.3
 	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(GLOBJECTS) -L. -lfltk
+	$(DSOCOMMAND) $@ $(GLOBJECTS) -L. -lfltk $(LDLIBS) $(GLDLIBS)
 	$(RM) libfltk_gl.so
 	$(LN) libfltk_gl.so.1.3 libfltk_gl.so
 
@@ -318,7 +322,7 @@ libfltk_gl.1.3.dylib: $(GLOBJECTS) libfltk.1.3.dylib
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ \
 		-install_name $(libdir)/$@ \
-		-current_version 1.3.1 \
+		-current_version 1.3.3 \
 		-compatibility_version 1.3.0 \
 		$(GLOBJECTS) -L. $(GLDLIBS) -lfltk
 	$(RM) libfltk_gl.dylib
@@ -340,7 +344,7 @@ $(IMGLIBNAME): $(IMGOBJECTS)
 
 libfltk_images.so.1.3: $(IMGOBJECTS) libfltk.so.1.3
 	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(IMGOBJECTS) -L. $(IMAGELIBS) -lfltk
+	$(DSOCOMMAND) $@ $(IMGOBJECTS) -L. $(IMAGELIBS) -lfltk $(LDLIBS)
 	$(RM) libfltk_images.so
 	$(LN) libfltk_images.so.1.3 libfltk_images.so
 
@@ -354,7 +358,7 @@ libfltk_images.1.3.dylib: $(IMGOBJECTS) libfltk.1.3.dylib
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ \
 		-install_name $(libdir)/$@ \
-		-current_version 1.3.1 \
+		-current_version 1.3.3 \
 		-compatibility_version 1.3.0 \
 		$(IMGOBJECTS)  -L. $(LDLIBS) $(IMAGELIBS) -lfltk
 	$(RM) libfltk_images.dylib
@@ -798,5 +802,5 @@ uninstall:
 	fi
 
 #
-# End of "$Id: Makefile 9707 2012-11-06 21:13:54Z matt $".
+# End of "$Id: Makefile 10419 2014-10-30 16:05:22Z AlbrechtS $".
 #

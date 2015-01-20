@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the
- *  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- *  Boston, MA  02111-1307, USA.
+ *  Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * Or go to http://www.gnu.org/copyleft/lgpl.html
  */
 
@@ -45,6 +45,7 @@ MAKE_FUNC(Pa_StopStream);
 MAKE_FUNC(Pa_OpenStream);
 MAKE_FUNC(Pa_CloseStream);
 MAKE_FUNC(Pa_GetDefaultOutputDevice);
+MAKE_FUNC(Pa_GetDefaultInputDevice);
 MAKE_FUNC(Pa_GetStreamInfo);
 #undef MAKE_FUNC
 
@@ -56,6 +57,7 @@ MAKE_FUNC(Pa_GetStreamInfo);
 #define Pa_OpenStream                  pPa_OpenStream
 #define Pa_CloseStream                 pPa_CloseStream
 #define Pa_GetDefaultOutputDevice      pPa_GetDefaultOutputDevice
+#define Pa_GetDefaultInputDevice       pPa_GetDefaultInputDevice
 #define Pa_GetStreamInfo               pPa_GetStreamInfo
 #endif
 
@@ -97,6 +99,7 @@ static ALCboolean pa_load(void)
         LOAD_FUNC(Pa_OpenStream);
         LOAD_FUNC(Pa_CloseStream);
         LOAD_FUNC(Pa_GetDefaultOutputDevice);
+        LOAD_FUNC(Pa_GetDefaultInputDevice);
         LOAD_FUNC(Pa_GetStreamInfo);
 #undef LOAD_FUNC
 
@@ -212,7 +215,7 @@ retry_open:
     }
 
     device->ExtraData = data;
-    device->DeviceName = strdup(deviceName);
+    al_string_copy_cstr(&device->DeviceName, deviceName);
 
     return ALC_NO_ERROR;
 }
@@ -318,7 +321,7 @@ static ALCenum pa_open_capture(ALCdevice *device, const ALCchar *deviceName)
     data->params.device = -1;
     if(!ConfigValueInt("port", "capture", &data->params.device) ||
        data->params.device < 0)
-        data->params.device = Pa_GetDefaultOutputDevice();
+        data->params.device = Pa_GetDefaultInputDevice();
     data->params.suggestedLatency = 0.0f;
     data->params.hostApiSpecificStreamInfo = NULL;
 
@@ -354,7 +357,7 @@ static ALCenum pa_open_capture(ALCdevice *device, const ALCchar *deviceName)
         goto error;
     }
 
-    device->DeviceName = strdup(deviceName);
+    al_string_copy_cstr(&device->DeviceName, deviceName);
 
     device->ExtraData = data;
     return ALC_NO_ERROR;
@@ -426,8 +429,7 @@ static const BackendFuncs pa_funcs = {
     pa_start_capture,
     pa_stop_capture,
     pa_capture_samples,
-    pa_available_samples,
-    ALCdevice_GetLatencyDefault
+    pa_available_samples
 };
 
 ALCboolean alc_pa_init(BackendFuncs *func_list)

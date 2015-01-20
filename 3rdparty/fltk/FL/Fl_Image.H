@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Image.H 9709 2012-11-09 16:02:08Z manolo $"
+// "$Id: Fl_Image.H 10379 2014-10-14 13:32:59Z AlbrechtS $"
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2011 by Bill Spitzak and others.
+// Copyright 1998-2014 by Bill Spitzak and others.
 //
 // This library is free software. Distribution and use rights are outlined in
 // the file "COPYING" which should have been included with this file.  If this
@@ -16,8 +16,8 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Image, Fl_RGB_Image classes . */
+/** \file
+   Fl_Image, Fl_RGB_Image classes. */
 
 #ifndef Fl_Image_H
 #  define Fl_Image_H
@@ -26,25 +26,35 @@
 #include <stdlib.h>
 
 class Fl_Widget;
+class Fl_Pixmap;
 struct Fl_Menu_Item;
 struct Fl_Label;
+
+/** \enum Fl_RGB_Scaling
+    The scaling algorithm to use for RGB images.
+*/
+enum Fl_RGB_Scaling {
+	FL_RGB_SCALING_NEAREST = 0, ///< default RGB image scaling algorithm
+	FL_RGB_SCALING_BILINEAR ///< more accurate, but slower RGB image scaling algorithm
+};
 
 /**
   Fl_Image is the base class used for caching and
   drawing all kinds of images in FLTK. This class keeps track of
   common image data such as the pixels, colormap, width, height,
   and depth. Virtual methods are used to provide type-specific
-  image handling.</P>
+  image handling.
   
-  <P>Since the Fl_Image class does not support image
+  Since the Fl_Image class does not support image
   drawing by itself, calling the draw() method results in
   a box with an X in it being drawn instead.
 */
 class FL_EXPORT Fl_Image {
   int w_, h_, d_, ld_, count_;
   const char * const *data_;
+  static Fl_RGB_Scaling RGB_scaling_;
 
-  // Forbid use of copy contructor and assign operator
+  // Forbid use of copy constructor and assign operator
   Fl_Image & operator=(const Fl_Image &);
   Fl_Image(const Fl_Image &);
 
@@ -151,6 +161,12 @@ class FL_EXPORT Fl_Image {
   */
   void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);} // platform dependent
   virtual void uncache();
+
+  // set RGB image scaling method
+  static void RGB_scaling(Fl_RGB_Scaling);
+
+  // get RGB image scaling method
+  static Fl_RGB_Scaling RGB_scaling();
 };
 
 /**
@@ -158,9 +174,9 @@ class FL_EXPORT Fl_Image {
   of full-color images with 1 to 4 channels of color information.
   Images with an even number of channels are assumed to contain
   alpha information, which is used to blend the image with the
-  contents of the screen.</P>
-  
-  <P>Fl_RGB_Image is defined in
+  contents of the screen.
+
+  Fl_RGB_Image is defined in
   &lt;FL/Fl_Image.H&gt;, however for compatibility reasons
   &lt;FL/Fl_RGB_Image.H&gt; should be included.
 */
@@ -203,6 +219,7 @@ public:
   */
   Fl_RGB_Image(const uchar *bits, int W, int H, int D=3, int LD=0) :
     Fl_Image(W,H,D), array(bits), alloc_array(0), id_(0), mask_(0) {data((const char **)&array, 1); ld(LD);}
+  Fl_RGB_Image(const Fl_Pixmap *pxm, Fl_Color bg=FL_GRAY);
   virtual ~Fl_RGB_Image();
   virtual Fl_Image *copy(int W, int H);
   Fl_Image *copy() { return copy(w(), h()); }
@@ -233,5 +250,5 @@ public:
 #endif // !Fl_Image_H
 
 //
-// End of "$Id: Fl_Image.H 9709 2012-11-09 16:02:08Z manolo $".
+// End of "$Id: Fl_Image.H 10379 2014-10-14 13:32:59Z AlbrechtS $".
 //

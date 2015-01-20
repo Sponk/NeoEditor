@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx 9293 2012-03-18 18:48:29Z manolo $"
+// "$Id: fl_rect.cxx 10401 2014-10-28 13:44:09Z manolo $"
 //
 // Rectangle drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -188,7 +188,7 @@ void Fl_Graphics_Driver::rectf(int x, int y, int w, int h) {
   rect.right = x + w; rect.bottom = y + h;
   FillRect(fl_gc, &rect, fl_brush());
 #elif defined(__APPLE_QUARTZ__)
-  CGRect  rect = CGRectMake(x, y, w - 0.9 , h - 0.9);
+  CGRect  rect = CGRectMake(x - 0.5, y - 0.5, w , h);
   CGContextFillRect(fl_gc, rect);
 #else
 # error unsupported platform
@@ -708,5 +708,5 @@ int Fl_Graphics_Driver::clip_box(int x, int y, int w, int h, int& X, int& Y, int
 }
 
 //
-// End of "$Id: fl_rect.cxx 9293 2012-03-18 18:48:29Z manolo $".
+// End of "$Id: fl_rect.cxx 10401 2014-10-28 13:44:09Z manolo $".
 //

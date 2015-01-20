@@ -1,5 +1,5 @@
 //
-// "$Id: threads.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $"
+// "$Id: threads.cxx 9980 2013-09-21 16:41:23Z greg.ercolano $"
 //
 // Threading example program for the Fast Light Tool Kit (FLTK).
 //
@@ -41,7 +41,7 @@ void magic_number_cb(void *p)
   w->redraw_label();
 }
 
-void* prime_func(void* p)
+extern "C" void* prime_func(void* p)
 {
   Fl_Browser* browser = (Fl_Browser*) p;
   Fl_Value_Output *value;
@@ -160,5 +160,5 @@ int main() {
 
 
 //
-// End of "$Id: threads.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $".
+// End of "$Id: threads.cxx 9980 2013-09-21 16:41:23Z greg.ercolano $".
 //

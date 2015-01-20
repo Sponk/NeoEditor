@@ -211,6 +211,10 @@ SOURCE=..\..\src\Fl_Color_Chooser.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\Fl_Copy_Surface.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\Fl_compose.cxx
 # End Source File
 # Begin Source File
@@ -323,11 +327,19 @@ SOURCE=..\..\src\fl_gtk.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\fl_gleam.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\Fl_Help_View.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\Fl_Image.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Fl_Image_Surface.cxx
 # End Source File
 # Begin Source File
 
@@ -435,6 +447,10 @@ SOURCE=..\..\src\Fl_Positioner.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\Fl_PostScript.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\Fl_Preferences.cxx
 # End Source File
 # Begin Source File
@@ -524,10 +540,6 @@ SOURCE=..\..\src\Fl_Slider.cxx
 # Begin Source File
 
 SOURCE=..\..\src\fl_symbols.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Sys_Menu_Bar.cxx
 # End Source File
 # Begin Source File
 
@@ -632,6 +644,10 @@ SOURCE=..\..\src\Fl_Window_hotspot.cxx
 # Begin Source File
 
 SOURCE=..\..\src\Fl_Window_iconize.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Fl_Window_shape.cxx
 # End Source File
 # Begin Source File
 

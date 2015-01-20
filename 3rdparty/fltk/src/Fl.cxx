@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx 9666 2012-08-16 20:59:36Z matt $"
+// "$Id: Fl.cxx 10364 2014-10-08 12:47:20Z ossman $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -67,20 +67,20 @@ void fl_cleanup_pens(void);
 void fl_release_dc(HWND,HDC);
 void fl_cleanup_dc_list(void);
 #elif defined(__APPLE__)
-extern double fl_mac_flush_and_wait(double time_to_wait, char in_idle);
+extern double fl_mac_flush_and_wait(double time_to_wait);
 #endif // WIN32
 
 //
 // Globals...
 //
 #if defined(__APPLE__) || defined(FL_DOXYGEN)
-const char *Fl_Mac_App_Menu::about = "About ";
+const char *Fl_Mac_App_Menu::about = "About %@";
 const char *Fl_Mac_App_Menu::print = "Print Front Window";
 const char *Fl_Mac_App_Menu::services = "Services";
-const char *Fl_Mac_App_Menu::hide = "Hide ";
+const char *Fl_Mac_App_Menu::hide = "Hide %@";
 const char *Fl_Mac_App_Menu::hide_others = "Hide Others";
 const char *Fl_Mac_App_Menu::show = "Show All";
-const char *Fl_Mac_App_Menu::quit = "Quit ";
+const char *Fl_Mac_App_Menu::quit = "Quit %@";
 #endif // __APPLE__
 #ifndef FL_DOXYGEN
 Fl_Widget	*Fl::belowmouse_,
@@ -104,6 +104,8 @@ int		Fl::damage_,
 
 char		*Fl::e_text = (char *)"";
 int		Fl::e_length;
+const char*	Fl::e_clipboard_type = "";
+void *		Fl::e_clipboard_data = NULL;
 
 Fl_Event_Dispatch Fl::e_dispatch = 0;
 
@@ -111,12 +113,15 @@ unsigned char   Fl::options_[] = { 0, 0 };
 unsigned char   Fl::options_read_ = 0;
 
 
-Fl_Window *fl_xfocus;	// which window X thinks has focus
+Fl_Window *fl_xfocus = NULL;	// which window X thinks has focus
 Fl_Window *fl_xmousewin;// which window X thinks has FL_ENTER
 Fl_Window *Fl::grab_;	// most recent Fl::grab()
 Fl_Window *Fl::modal_;	// topmost modal() window
 
 #endif // FL_DOXYGEN
+
+char const * const Fl::clipboard_plain_text = "text/plain";
+char const * const Fl::clipboard_image = "image";
 
 //
 // 'Fl::version()' - Return the API version number...
@@ -220,7 +225,7 @@ int Fl::event_inside(const Fl_Widget *o) /*const*/ {
 
 #elif defined(__APPLE__)
 
-// implementation in Fl_mac.cxx
+// implementation in Fl_cocoa.mm (was Fl_mac.cxx)
 
 #else
 
@@ -430,9 +435,73 @@ static void run_checks()
   }
 }
 
-#ifndef WIN32
+#if !defined(WIN32) && !defined(__APPLE__)
 static char in_idle;
 #endif
+
+////////////////////////////////////////////////////////////////
+// Clipboard notifications
+
+struct Clipboard_Notify {
+  Fl_Clipboard_Notify_Handler handler;
+  void *data;
+  struct Clipboard_Notify *next;
+};
+
+static struct Clipboard_Notify *clip_notify_list = NULL;
+
+extern void fl_clipboard_notify_change(); // in Fl_<platform>.cxx
+
+void Fl::add_clipboard_notify(Fl_Clipboard_Notify_Handler h, void *data) {
+  struct Clipboard_Notify *node;
+
+  remove_clipboard_notify(h);
+
+  node = new Clipboard_Notify;
+
+  node->handler = h;
+  node->data = data;
+  node->next = clip_notify_list;
+
+  clip_notify_list = node;
+
+  fl_clipboard_notify_change();
+}
+
+void Fl::remove_clipboard_notify(Fl_Clipboard_Notify_Handler h) {
+  struct Clipboard_Notify *node, **prev;
+
+  node = clip_notify_list;
+  prev = &clip_notify_list;
+  while (node != NULL) {
+    if (node->handler == h) {
+      *prev = node->next;
+      delete node;
+
+      fl_clipboard_notify_change();
+
+      return;
+    }
+
+    prev = &node->next;
+    node = node->next;
+  }
+}
+
+bool fl_clipboard_notify_empty(void) {
+  return clip_notify_list == NULL;
+}
+
+void fl_trigger_clipboard_notify(int source) {
+  struct Clipboard_Notify *node, *next;
+
+  node = clip_notify_list;
+  while (node != NULL) {
+    next = node->next;
+    node->handler(source, node->data);
+    node = next;
+  }
+}
 
 ////////////////////////////////////////////////////////////////
 // wait/run/check/ready:
@@ -456,16 +525,7 @@ double Fl::wait(double time_to_wait) {
 #elif defined(__APPLE__)
 
   run_checks();
-  if (idle) {
-    if (!in_idle) {
-      in_idle = 1;
-      idle();
-      in_idle = 0;
-    }
-    // the idle function may turn off idle, we can then wait:
-    if (idle) time_to_wait = 0.0;
-  }
-  return fl_mac_flush_and_wait(time_to_wait, in_idle);
+  return fl_mac_flush_and_wait(time_to_wait);
 
 #else
 
@@ -529,45 +589,6 @@ int Fl::run() {
   while (Fl_X::first) wait(FOREVER);
   return 0;
 }
-
-#ifdef WIN32
-
-// Function to initialize COM/OLE for usage. This must be done only once.
-// We define a flag to register whether we called it:
-static char oleInitialized = 0;
-
-// This calls the Windows function OleInitialize() exactly once.
-void fl_OleInitialize() {
-  if (!oleInitialized) {
-    OleInitialize(0L);
-    oleInitialized = 1;
-  }
-}
-
-// This calls the Windows function OleUninitialize() only, if
-// OleInitialize has been called before.
-void fl_OleUninitialize() {
-  if (oleInitialized) {
-    OleUninitialize();
-    oleInitialized = 0;
-  }
-}
-
-class Fl_Win32_At_Exit {
-public:
-  Fl_Win32_At_Exit() { }
-  ~Fl_Win32_At_Exit() {
-    fl_free_fonts();        // do some WIN32 cleanup
-    fl_cleanup_pens();
-    fl_OleUninitialize();
-    fl_brush_action(1);
-    fl_cleanup_dc_list();
-  }
-};
-static Fl_Win32_At_Exit win32_at_exit;
-#endif
-
-
 
 /**
   Waits until "something happens" and then returns.  Call this
@@ -828,6 +849,83 @@ static int send_handlers(int e) {
   return 0;
 }
 
+
+////////////////////////////////////////////////////////////////
+// System event handlers:
+
+
+struct system_handler_link {
+  Fl_System_Handler handle;
+  void *data;
+  system_handler_link *next;
+};
+
+
+static system_handler_link *sys_handlers = 0;
+
+
+/**
+ \brief Install a function to intercept system events.
+
+ FLTK calls each of these functions as soon as a new system event is
+ received. The processing will stop at the first function to return
+ non-zero. If all functions return zero then the event is passed on
+ for normal handling by FLTK.
+
+ Each function will be called with a pointer to the system event as
+ the first argument and \p data as the second argument. The system
+ event pointer will always be void *, but will point to different
+ objects depending on the platform:
+   - X11: XEvent
+   - Windows: MSG
+   - OS X: NSEvent
+
+ \param ha The event handler function to register
+ \param data User data to include on each call
+
+ \see Fl::remove_system_handler(Fl_System_Handler)
+*/
+void Fl::add_system_handler(Fl_System_Handler ha, void *data) {
+  system_handler_link *l = new system_handler_link;
+  l->handle = ha;
+  l->data = data;
+  l->next = sys_handlers;
+  sys_handlers = l;
+}
+
+
+/**
+ Removes a previously added system event handler.
+
+ \param ha The event handler function to remove
+
+ \see Fl::add_system_handler(Fl_System_Handler)
+*/
+void Fl::remove_system_handler(Fl_System_Handler ha) {
+  system_handler_link *l, *p;
+
+  // Search for the handler in the list...
+  for (l = sys_handlers, p = 0; l && l->handle != ha; p = l, l = l->next);
+
+  if (l) {
+    // Found it, so remove it from the list...
+    if (p) p->next = l->next;
+    else sys_handlers = l->next;
+
+    // And free the record...
+    delete l;
+  }
+}
+
+int fl_send_system_handlers(void *e) {
+  for (const system_handler_link *hl = sys_handlers; hl; hl = hl->next) {
+    if (hl->handle(e, hl->data))
+      return 1;
+  }
+  return 0;
+}
+
+
 ////////////////////////////////////////////////////////////////
 
 Fl_Widget* fl_oldfocus; // kludge for Fl_Group...
@@ -862,10 +960,18 @@ void Fl::focus(Fl_Widget *o) {
 	if (fl_xfocus != win) {
 	  Fl_X *x = Fl_X::i(win);
 	  if (x) x->set_key_window();
-	  }
+	}
+#elif defined(USE_X11)
+	if (fl_xfocus != win) {
+	  Fl_X *x = Fl_X::i(win);
+	  if (!Fl_X::ewmh_supported())
+	    win->show(); // Old WMs, XMapRaised
+	  else if (x) // New WMs use the NETWM attribute:
+	    Fl_X::activate_window(x->xid);
+	}
 #endif
 	fl_xfocus = win;
-	}
+      }
     }
     // take focus from the old focused window
     fl_oldfocus = 0;
@@ -1357,11 +1463,38 @@ int Fl::handle_(int e, Fl_Window* window)
 ////////////////////////////////////////////////////////////////
 // hide() destroys the X window, it does not do unmap!
 
-#if !defined(WIN32) && USE_XFT
+#if defined(WIN32)
+extern void fl_clipboard_notify_retarget(HWND wnd);
+extern void fl_update_clipboard(void);
+#elif USE_XFT
 extern void fl_destroy_xft_draw(Window);
 #endif
 
 void Fl_Window::hide() {
+#ifdef WIN32
+  // STR#3079: if there remains a window and a non-modal window, and the window is deleted,
+  // the app remains running without any apparent window.
+  // Bug mechanism: hiding an owner window unmaps the owned (non-modal) window(s)
+  // but does not delete it(them) in FLTK.
+  // Fix for it: 
+  // when hiding a window, build list of windows it owns, and do hide/show on them.
+  int count = 0;
+  Fl_Window *win, **doit = NULL;
+  for (win = Fl::first_window(); win && i; win = Fl::next_window(win)) {
+    if (win->non_modal() && GetWindow(fl_xid(win), GW_OWNER) == i->xid) {
+      count++;
+    }
+  }
+  if (count) {
+    doit = new Fl_Window*[count];
+    count = 0;
+    for (win = Fl::first_window(); win && i; win = Fl::next_window(win)) {
+      if (win->non_modal() && GetWindow(fl_xid(win), GW_OWNER) == i->xid) {
+	doit[count++] = win;
+      }
+    }
+  }
+#endif
   clear_visible();
 
   if (!shown()) return;
@@ -1402,16 +1535,14 @@ void Fl_Window::hide() {
   handle(FL_HIDE);
 
 #if defined(WIN32)
+  // make sure any custom icons get freed
+  icons(NULL, 0);
   // this little trick keeps the current clipboard alive, even if we are about
   // to destroy the window that owns the selection.
-  if (GetClipboardOwner()==ip->xid) {
-    Fl_Window *w1 = Fl::first_window();
-    if (w1 && OpenClipboard(fl_xid(w1))) {
-      EmptyClipboard();
-      SetClipboardData(CF_TEXT, NULL);
-      CloseClipboard();
-    }
-  }
+  if (GetClipboardOwner()==ip->xid)
+    fl_update_clipboard();
+  // Make sure we unlink this window from the clipboard chain
+  fl_clipboard_notify_retarget(ip->xid);
   // Send a message to myself so that I'll get out of the event loop...
   PostMessage(ip->xid, WM_APP, 0, 0);
   if (ip->private_dc) fl_release_dc(ip->xid, ip->private_dc);
@@ -1445,6 +1576,12 @@ void Fl_Window::hide() {
     ShowWindow(p, SW_SHOWNA);
   }
   XDestroyWindow(fl_display, ip->xid);
+  // end of fix for STR#3079
+  for (int ii = 0; ii < count; ii++) {
+    doit[ii]->hide();
+    doit[ii]->show();
+  }
+  if (count) delete[] doit;
 #elif defined(__APPLE_QUARTZ__)
   ip->destroy();
 #else
@@ -1459,12 +1596,6 @@ void Fl_Window::hide() {
   delete ip;
 }
 
-Fl_Window::~Fl_Window() {
-  hide();
-  if (xclass_) {
-    free(xclass_);
-  }
-}
 
 // FL_SHOW and FL_HIDE are called whenever the visibility of this widget
 // or any parent changes.  We must correctly map/unmap the system's window.
@@ -1551,12 +1682,23 @@ void Fl::selection(Fl_Widget &owner, const char* text, int len) {
 
 /** Backward compatibility only.
   This calls Fl::paste(receiver, 0);
-  \see Fl::paste(Fl_Widget &receiver, int clipboard)
+  \see Fl::paste(Fl_Widget &receiver, int clipboard, const char* type)
 */
 void Fl::paste(Fl_Widget &receiver) {
   Fl::paste(receiver, 0);
 }
+#if FLTK_ABI_VERSION >= 10303
+#elif !defined(FL_DOXYGEN)
+void Fl::paste(Fl_Widget &receiver, int source)
+{
+  Fl::paste(receiver, source, Fl::clipboard_plain_text);
+}
 
+void Fl::copy(const char* stuff, int len, int destination) {
+  Fl::copy(stuff, len, destination, Fl::clipboard_plain_text);
+}
+
+#endif
 ////////////////////////////////////////////////////////////////
 
 #include <FL/fl_draw.H>
@@ -1696,6 +1838,7 @@ void Fl_Widget::damage(uchar fl, int X, int Y, int W, int H) {
   Fl::damage(FL_DAMAGE_CHILD);
 }
 void Fl_Window::flush() {
+  if (!shown()) return;
   make_current();
 //if (damage() == FL_DAMAGE_EXPOSE && can_boxcheat(box())) fl_boxcheat = this;
   fl_clip_region(i->region); i->region = 0;
@@ -1931,6 +2074,14 @@ void Fl::clear_widget_pointer(Fl_Widget const *w)
  There should be an application that manages options system wide, per user, and
  per application.
 
+ Example:
+ \code
+     if ( Fl::option(Fl::OPTION_ARROW_FOCUS) )
+         { ..on..  }
+     else
+         { ..off..  }
+ \endcode
+
  \note As of FLTK 1.3.0, options can be managed within fluid, using the menu
  <i>Edit/Global FLTK Settings</i>.
 
@@ -1960,6 +2111,8 @@ bool Fl::option(Fl_Option opt)
       options_[OPTION_DND_TEXT] = tmp;
       opt_prefs.get("ShowTooltips", tmp, 1);                    // default: on
       options_[OPTION_SHOW_TOOLTIPS] = tmp;
+      opt_prefs.get("FNFCUsesGTK", tmp, 1);                    // default: on
+      options_[OPTION_FNFC_USES_GTK] = tmp;
     }
     { // next, check the user preferences
       // override system options only, if the option is set ( >= 0 )
@@ -1977,6 +2130,8 @@ bool Fl::option(Fl_Option opt)
       if (tmp >= 0) options_[OPTION_DND_TEXT] = tmp;
       opt_prefs.get("ShowTooltips", tmp, -1);
       if (tmp >= 0) options_[OPTION_SHOW_TOOLTIPS] = tmp;
+      opt_prefs.get("FNFCUsesGTK", tmp, -1);
+      if (tmp >= 0) options_[OPTION_FNFC_USES_GTK] = tmp;
     }
     { // now, if the developer has registered this app, we could as for per-application preferences
     }
@@ -1991,6 +2146,12 @@ bool Fl::option(Fl_Option opt)
  \brief Override an option while the application is running.
 
  This function does not change any system or user settings.
+
+ Example:
+ \code
+     Fl::option(Fl::OPTION_ARROW_FOCUS, true);     // on
+     Fl::option(Fl::OPTION_ARROW_FOCUS, false);    // off
+ \endcode
 
  \param opt which option
  \param val set to true or false
@@ -2030,5 +2191,5 @@ Fl_Widget_Tracker::~Fl_Widget_Tracker()
 
 
 //
-// End of "$Id: Fl.cxx 9666 2012-08-16 20:59:36Z matt $".
+// End of "$Id: Fl.cxx 10364 2014-10-08 12:47:20Z ossman $".
 //

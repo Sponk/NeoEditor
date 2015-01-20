@@ -1,4 +1,4 @@
-/* "$Id: fl_utf8.h 8864 2011-07-19 04:49:30Z greg.ercolano $"
+/* "$Id: fl_utf8.h 10259 2014-08-28 09:34:07Z ianmacarthur $"
  *
  * Author: Jean-Marc Lienher ( http://oksid.ch )
  * Copyright 2000-2010 by O'ksi'D.
@@ -49,8 +49,6 @@
 #    define stricmp _stricmp
 #    undef strnicmp
 #    define strnicmp _strnicmp
-#    undef hypot
-#    define hypot _hypot
 #    undef chdir
 #    define chdir _chdir
 #  endif
@@ -61,7 +59,6 @@
 #else /* X11 */
 #  include <sys/types.h>
 #  include <sys/stat.h>
-#  include "Xutf8.h"
 #  include <X11/Xlocale.h>
 #  include <X11/Xlib.h>
 #  include <locale.h>
@@ -250,5 +247,5 @@ FL_EXPORT char fl_make_path( const char *path );
 #endif /* _HAVE_FL_UTF8_HDR_ */
 
 /*
- * End of "$Id: fl_utf8.h 8864 2011-07-19 04:49:30Z greg.ercolano $".
+ * End of "$Id: fl_utf8.h 10259 2014-08-28 09:34:07Z ianmacarthur $".
  */
