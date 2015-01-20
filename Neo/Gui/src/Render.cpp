@@ -158,93 +158,136 @@ void Render::drawColoredQuad(float x, float y, float w, float h, MVector4 color,
     //render->popMatrix();
 }
 
+
+
 void Render::drawTexturedQuad(float x, float y, float w, float h, int texture, float rotation)
 {
-	drawTexturedQuad(x,y,w,h,texture,rotation,MVector4(0.0,0.0,1.0,1.0));
+	drawTexturedQuad(x, y, w, h, texture, rotation, MVector2(1, 1), MVector2(1, 1), MVector4(0.0, 0.0, 1.0, 1.0));
 }
-
-void Render::drawTexturedQuad(float x, float y, float w, float h, int texture, float rotation, MVector4 texcoords)
+void Render::drawTexturedQuad(float x, float y, float w, float h, int texture, float rotation, MVector2 scale)
 {
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
-
-    if(m_texturedFx == 0)
-    {
-        loadShader(m_texturedVertShader, m_texturedFragShader, &m_texturedFx);
-    }
-
-    int vertexAttrib;
-    int texcoordAttrib;
-
-    //render->pushMatrix();
-
-    MVector2 m_vertices[4];
-    m_vertices[0] = MVector2(x, y);
-    m_vertices[1] = MVector2(x, y+h);
-    m_vertices[3] = MVector2(x+w, y+h);
-    m_vertices[2] = MVector2(x+w, y);
-
-    MVector2 m_texcoords[4];
-	/*m_texcoords[0] = MVector2(0, 0);
-    m_texcoords[1] = MVector2(0, 1);
-    m_texcoords[2] = MVector2(1, 0);
-	m_texcoords[3] = MVector2(1, 1);*/
-
-	m_texcoords[0] = MVector2(texcoords.x, texcoords.y);
-	m_texcoords[1] = MVector2(texcoords.x, texcoords.y+texcoords.w);
-	m_texcoords[2] = MVector2(texcoords.x+texcoords.z, texcoords.y);
-	m_texcoords[3] = MVector2(texcoords.x+texcoords.z, texcoords.y+texcoords.w);
-
-    // Set up env
-    render->bindFX(m_texturedFx);
-    render->enableBlending();
-    render->setBlendingMode(M_BLENDING_ALPHA);
-    render->bindTexture(texture);
-
-    // projmodelview matrix
-    static MMatrix4x4 ProjMatrix;
-    static MMatrix4x4 ModelViewMatrix;
-    static MMatrix4x4 ProjModelViewMatrix;
-
-    render->getProjectionMatrix(&ProjMatrix);
-    render->getModelViewMatrix(&ModelViewMatrix);
-
-    MVector3 pivot = MVector3(x+0.5*w, y+0.5*h, 0);
-    ModelViewMatrix.translate(pivot);
-    ModelViewMatrix.rotate(MVector3(0,0,1), rotation);
-    ModelViewMatrix.translate(-pivot);
-
-    ProjModelViewMatrix = ProjMatrix * ModelViewMatrix;
-
-    render->sendUniformMatrix(m_texturedFx, "ProjModelViewMatrix", &ProjModelViewMatrix);
-
-    // Vertex
-    render->getAttribLocation(m_texturedFx, "Vertex", &vertexAttrib);
-    render->setAttribPointer(vertexAttrib, M_FLOAT, 2, m_vertices);
-    render->enableAttribArray(vertexAttrib);
-
-    // Texcoords
-    // TexCoord
-    render->getAttribLocation(m_texturedFx, "TexCoord", &texcoordAttrib);
-    render->setAttribPointer(texcoordAttrib, M_FLOAT, 2, m_texcoords);
-    render->enableAttribArray(texcoordAttrib);
-
-    // Width
-    render->sendUniformFloat(m_texturedFx, "Width", &w, 1);
-    // Height
-    render->sendUniformFloat(m_texturedFx, "Height", &h, 1);
-
-    // draw
-    render->drawArray(M_PRIMITIVE_TRIANGLE_STRIP, 0, 4);
-
-    render->disableAttribArray(vertexAttrib);
-    render->disableAttribArray(texcoordAttrib);
-
-    render->bindFX(0);
-    render->bindTexture(0);
-    render->disableBlending();
-
-    //render->popMatrix();
+	drawTexturedQuad(x, y, w, h, texture, rotation, scale, MVector2(1, 1), MVector4(0.0, 0.0, 1.0, 1.0));
 }
+void Render::drawTexturedQuad(float x, float y, float w, float h, int texture, float rotation, MVector2 scale, MVector2 flip)
+{
+	drawTexturedQuad(x, y, w, h, texture, rotation, scale, flip, MVector4(0.0, 0.0, 1.0, 1.0));
+}
+
+void Render::drawTexturedQuad(float x, float y, float w, float h, int texture, float rotation, MVector2 scale, MVector2 flip, MVector4 texcoords)
+{
+	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+
+	if (m_texturedFx == 0)
+	{
+		loadShader(m_texturedVertShader, m_texturedFragShader, &m_texturedFx);
+	}
+
+	int vertexAttrib;
+	int texcoordAttrib;
+
+	//render->pushMatrix();
+
+	MVector2 m_vertices[4];
+	m_vertices[0] = MVector2(x, y);
+	m_vertices[1] = MVector2(x, y + h);
+	m_vertices[2] = MVector2(x + w, y);
+	m_vertices[3] = MVector2(x + w, y + h);
+	
+	MVector2 m_texcoords[4];
+	/*m_texcoords[0] = MVector2(0, 0);
+	m_texcoords[1] = MVector2(0, 1);
+	m_texcoords[2] = MVector2(1, 0);
+	m_texcoords[3] = MVector2(1, 1);*/
+	if (flip.x != 0 || flip.y != 0){
+		if (flip.x > 0)
+		{
+			// normal way around
+			left = texcoords.x;
+			right = texcoords.x + (texcoords.z * flip.x);
+		}
+		else
+		{
+			right = texcoords.x;
+			left = texcoords.x + (texcoords.z * -flip.x);
+		}
+
+		if (flip.y > 0)
+		{
+			top = texcoords.y;
+			bottom = texcoords.y + (texcoords.w * flip.y);
+		}
+		else
+		{
+			bottom = texcoords.y;
+			top = texcoords.y + (texcoords.w * -flip.y);
+		}
+		m_texcoords[0] = MVector2(left, top);
+		m_texcoords[1] = MVector2(left, bottom);
+		m_texcoords[2] = MVector2(right, top);
+		m_texcoords[3] = MVector2(right, bottom);
+
+	}
+	else
+	{
+		m_texcoords[0] = MVector2(texcoords.x, texcoords.y);
+		m_texcoords[1] = MVector2(texcoords.x, texcoords.y + texcoords.w);
+		m_texcoords[2] = MVector2(texcoords.x + texcoords.z, texcoords.y);
+		m_texcoords[3] = MVector2(texcoords.x + texcoords.z, texcoords.y + texcoords.w);
+	}
+	
+
+	// Set up env
+	render->bindFX(m_texturedFx);
+	render->enableBlending();
+	render->setBlendingMode(M_BLENDING_ALPHA);
+	render->bindTexture(texture);
+
+	// projmodelview matrix
+	static MMatrix4x4 ProjMatrix;
+	static MMatrix4x4 ModelViewMatrix;
+	static MMatrix4x4 ProjModelViewMatrix;
+
+	render->getProjectionMatrix(&ProjMatrix);
+	render->getModelViewMatrix(&ModelViewMatrix);
+
+	MVector3 pivot = MVector3(x + 0.5*w, y + 0.5*h, 0);
+	ModelViewMatrix.translate(pivot);
+	ModelViewMatrix.rotate(MVector3(0, 0, 1), rotation);
+	ModelViewMatrix.translate(-pivot);
+
+	ProjModelViewMatrix = ProjMatrix * ModelViewMatrix;
+
+	render->sendUniformMatrix(m_texturedFx, "ProjModelViewMatrix", &ProjModelViewMatrix);
+
+	// Vertex
+	render->getAttribLocation(m_texturedFx, "Vertex", &vertexAttrib);
+	render->setAttribPointer(vertexAttrib, M_FLOAT, 2, m_vertices);
+	render->enableAttribArray(vertexAttrib);
+
+	// Texcoords
+	// TexCoord
+	render->getAttribLocation(m_texturedFx, "TexCoord", &texcoordAttrib);
+	render->setAttribPointer(texcoordAttrib, M_FLOAT, 2, m_texcoords);
+	render->enableAttribArray(texcoordAttrib);
+
+	// Width
+	render->sendUniformFloat(m_texturedFx, "Width", &w, 1);
+	// Height
+	render->sendUniformFloat(m_texturedFx, "Height", &h, 1);
+
+	// draw
+	render->drawArray(M_PRIMITIVE_TRIANGLE_STRIP, 0, 4);
+
+	render->disableAttribArray(vertexAttrib);
+	render->disableAttribArray(texcoordAttrib);
+
+	render->bindFX(0);
+	render->bindTexture(0);
+	render->disableBlending();
+
+	//render->popMatrix();
+}
+
 
 
 void Render::set2D(float w, float h)
