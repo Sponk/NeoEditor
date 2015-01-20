@@ -135,3 +135,33 @@ end
 function Widget:setLabel(label)
     setLabel(self.widget, label)
 end
+-- value: A boolean indicating if the widget should be visible or not.
+function Widget:setVisible(value)
+    self.visible = value
+    setWidgetVisible(self.widget, value)
+end
+
+--- Returns if the widget is turned visible.
+--
+-- return: A boolean value.
+function Widget:isVisible()
+    return self.visible
+end
+
+function Widget:setScale(x,y)
+    self.scale = {}
+    self.scale.x = x 
+    self.scale.y = y
+    setWidgetScale(self.widget,{x,y})
+end
+
+function Widget:getScale()
+    return self.scale
+end
+
+function Widget:setFlip(x,y)
+    self.flip = {}
+    self.flip.x = x
+    self.flip.y = y
+    setWidgetFlip(self.widget,{x,y})
+end
