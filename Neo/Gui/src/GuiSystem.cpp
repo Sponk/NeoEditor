@@ -508,9 +508,45 @@ int isWidgetVisible()
 	MLOG_INFO("Stub");
 	return 1;
 }
+int setWidgetScale()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setWidgetScale", 2))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	MVector2 vec;
+	script->getFloatArray(1, vec, 2);
+	w->setScale(vec);
+
+	return 1;
+}
+
+int setWidgetFlip()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setWidgetFlip", 2))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	MVector2 vec;
+	script->getFloatArray(1, vec, 2);
+	w->setFlip(vec);
+
+	return 1;
+}
 
 void GuiSystem::setupLuaInterface(MScriptContext* script)
 {
+	script->addFunction("setWidgetVisible", setWidgetVisible);
+	
+	script->addFunction("setWidgetScale", setWidgetScale);
+	script->addFunction("setWidgetFlip", setWidgetFlip);
+
     script->addFunction("enableGui", enableGui);
     script->addFunction("getMainCanvas", getMainCanvas);
     script->addFunction("createCanvas", createCanvas);
