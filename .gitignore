@@ -8,10 +8,12 @@ desktop.ini
 Thumbs.db
 CMakeLists.txt.user
 *.log
-libs
+/libs/
 Additional/AndroidApp/obj
 Additional/AndroidApp/libs
 Additional/AndroidApp/gen
 Additional/AndroidApp/bin
 Additional/AndroidApp/assets/*
 .directory
+profile.txt
+*.kdev4

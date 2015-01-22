@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Help_View.cxx 9325 2012-04-05 05:12:30Z fabien $"
+// "$Id: Fl_Help_View.cxx 10234 2014-08-21 12:18:32Z cand $"
 //
 // Fl_Help_View widget routines.
 //
@@ -97,7 +97,7 @@ static char initial_load = 0;
 // Broken image...
 //
 
-static const char *broken_xpm[] =
+static const char * const broken_xpm[] =
 		{
 		  "16 24 4 1",
 		  "@ c #000000",
@@ -3362,7 +3362,7 @@ Fl_Help_View::value(const char *val)	// I - Text to view
 static int			// O - Code or -1 on error
 quote_char(const char *p) {	// I - Quoted string
   int	i;			// Looping var
-  static struct {
+  static const struct {
     const char	*name;
     int		namelen;
     int		code;
@@ -3505,5 +3505,5 @@ hscrollbar_callback(Fl_Widget *s, void *)
 
 
 //
-// End of "$Id: Fl_Help_View.cxx 9325 2012-04-05 05:12:30Z fabien $".
+// End of "$Id: Fl_Help_View.cxx 10234 2014-08-21 12:18:32Z cand $".
 //

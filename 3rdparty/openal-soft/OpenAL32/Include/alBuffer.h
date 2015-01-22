@@ -32,10 +32,12 @@ enum UserFmtChannels {
     UserFmtX51    = AL_5POINT1_SOFT, /* (WFX order) */
     UserFmtX61    = AL_6POINT1_SOFT, /* (WFX order) */
     UserFmtX71    = AL_7POINT1_SOFT, /* (WFX order) */
+    UserFmtBFormat2D = 0x10000000, /* WXY */
+    UserFmtBFormat3D, /* WXYZ */
 };
 
-ALuint BytesFromUserFmt(enum UserFmtType type);
-ALuint ChannelsFromUserFmt(enum UserFmtChannels chans);
+ALuint BytesFromUserFmt(enum UserFmtType type) DECL_CONST;
+ALuint ChannelsFromUserFmt(enum UserFmtChannels chans) DECL_CONST;
 inline ALuint FrameSizeFromUserFmt(enum UserFmtChannels chans, enum UserFmtType type)
 {
     return ChannelsFromUserFmt(chans) * BytesFromUserFmt(type);
@@ -56,11 +58,13 @@ enum FmtChannels {
     FmtX51    = UserFmtX51,
     FmtX61    = UserFmtX61,
     FmtX71    = UserFmtX71,
+    FmtBFormat2D = UserFmtBFormat2D,
+    FmtBFormat3D = UserFmtBFormat3D,
 };
 #define MAX_INPUT_CHANNELS  (8)
 
-ALuint BytesFromFmt(enum FmtType type);
-ALuint ChannelsFromFmt(enum FmtChannels chans);
+ALuint BytesFromFmt(enum FmtType type) DECL_CONST;
+ALuint ChannelsFromFmt(enum FmtChannels chans) DECL_CONST;
 inline ALuint FrameSizeFromFmt(enum FmtChannels chans, enum FmtType type)
 {
     return ChannelsFromFmt(chans) * BytesFromFmt(type);
@@ -85,8 +89,8 @@ typedef struct ALbuffer {
     ALsizei  LoopStart;
     ALsizei  LoopEnd;
 
-    ALsizei UnpackAlign;
-    ALsizei PackAlign;
+    ATOMIC(ALsizei) UnpackAlign;
+    ATOMIC(ALsizei) PackAlign;
 
     /* Number of times buffer was attached to a source (deletion can only occur when 0) */
     RefCount ref;
@@ -96,6 +100,11 @@ typedef struct ALbuffer {
     /* Self ID */
     ALuint id;
 } ALbuffer;
+
+ALbuffer *NewBuffer(ALCcontext *context);
+void DeleteBuffer(ALCdevice *device, ALbuffer *buffer);
+
+ALenum LoadData(ALbuffer *buffer, ALuint freq, ALenum NewFormat, ALsizei frames, enum UserFmtChannels SrcChannels, enum UserFmtType SrcType, const ALvoid *data, ALsizei align, ALboolean storesrc);
 
 inline struct ALbuffer *LookupBuffer(ALCdevice *device, ALuint id)
 { return (struct ALbuffer*)LookupUIntMapKey(&device->BufferMap, id); }

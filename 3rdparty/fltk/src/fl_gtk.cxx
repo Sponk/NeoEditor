@@ -1,5 +1,5 @@
 //
-// "$Id: fl_gtk.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $"
+// "$Id: fl_gtk.cxx 10232 2014-08-21 12:13:47Z cand $"
 //
 // "GTK" drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -203,7 +203,7 @@ static void draw(int which, int x,int y,int w,int h, int inset)
   }
 }
 
-void gtk_round_up_box(int x, int y, int w, int h, Fl_Color c) {
+static void gtk_round_up_box(int x, int y, int w, int h, Fl_Color c) {
   fl_color(c);
   draw(FILL,	    x,   y, w,   h, 2);
 
@@ -234,7 +234,7 @@ void gtk_round_up_box(int x, int y, int w, int h, Fl_Color c) {
   draw(CLOSED,	    x,   y, w,   h, 0);
 }
 
-void gtk_round_down_box(int x, int y, int w, int h, Fl_Color c) {
+static void gtk_round_down_box(int x, int y, int w, int h, Fl_Color c) {
   fl_color(c);
   draw(FILL,	    x,   y, w,   h, 2);
 
@@ -291,5 +291,5 @@ Fl_Boxtype fl_define_FL_GTK_UP_BOX() {
 
 
 //
-// End of "$Id: fl_gtk.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $".
+// End of "$Id: fl_gtk.cxx 10232 2014-08-21 12:13:47Z cand $".
 //

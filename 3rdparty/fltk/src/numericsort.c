@@ -1,5 +1,5 @@
 /*
- * "$Id: numericsort.c 8864 2011-07-19 04:49:30Z greg.ercolano $"
+ * "$Id: numericsort.c 10236 2014-08-21 12:29:48Z cand $"
  *
  * Numeric sorting routine for the Fast Light Tool Kit (FLTK).
  *
@@ -39,9 +39,9 @@
 #      include <ndir.h>
 #    endif /* HAVE_NDIR_H */
 #  endif /* HAVE_DIRENT_H */
-#else /* For WIN32 variants */
-#  include <FL/filename.H>
 #endif /* !WIN32 || __CYGWIN__ */
+
+#include <FL/filename.H>
 
 /*
  * 'numericsort()' - Compare two directory entries, possibly with
@@ -98,5 +98,5 @@ int fl_numericsort(struct dirent **A, struct dirent **B) {
 }
 
 /*
- * End of "$Id: numericsort.c 8864 2011-07-19 04:49:30Z greg.ercolano $".
+ * End of "$Id: numericsort.c 10236 2014-08-21 12:29:48Z cand $".
  */

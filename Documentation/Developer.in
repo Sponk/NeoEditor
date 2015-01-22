@@ -104,7 +104,7 @@ WARN_LOGFILE           =
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 
-INPUT                  = @MARATIS_SOURCE_DIR@/Maratis \
+INPUT                  = @MARATIS_SOURCE_DIR@/Neo \
                          @MARATIS_SOURCE_DIR@/MSDK \
                          @MARATIS_SOURCE_DIR@/Documentation \
                          @MARATIS_SOURCE_DIR@/README.md

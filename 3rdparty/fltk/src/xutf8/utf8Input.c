@@ -17,7 +17,7 @@
 #if !defined(WIN32) && !defined(__APPLE__)
 
 #include <config.h>
-#include "../../FL/Xutf8.h"
+#include "../Xutf8.h"
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -43,6 +43,7 @@ typedef struct {
   unsigned short used;
 } Summary16;
 
+#ifndef X_HAVE_UTF8_STRING
 #define NEED_TOWC /* indicates what part of these include files is needed here (avoid compilation warnings) */
 #include "lcUniConv/big5.h"
 #include "lcUniConv/gb2312.h"
@@ -52,7 +53,7 @@ typedef struct {
 #include "lcUniConv/jisx0212.h"
 #include "lcUniConv/ksc5601.h"
 
-int 
+static int
 XConvertEucTwToUtf8(char* buffer_return, int len) {
   /* FIXME */
 #if HAVE_LIBC_ICONV
@@ -119,7 +120,7 @@ XConvertEucTwToUtf8(char* buffer_return, int len) {
   return l;
 }
 
-int 
+static int
 XConvertEucKrToUtf8(char* buffer_return, int len) {
   int i = 0, l = 0;
   char *buf;
@@ -159,7 +160,7 @@ XConvertEucKrToUtf8(char* buffer_return, int len) {
   return l;
 }
 
-int 
+static int
 XConvertBig5ToUtf8(char* buffer_return, int len) {
   int i = 0, l = 0;
   char *buf;
@@ -188,7 +189,7 @@ XConvertBig5ToUtf8(char* buffer_return, int len) {
   return l;
 }
 
-int 
+static int
 XConvertCp936extToUtf8(char* buffer_return, int len)
 {
   int i = 0, l = 0;
@@ -225,7 +226,7 @@ XConvertCp936extToUtf8(char* buffer_return, int len)
   return l;
 }
 
-int 
+static int
 XConvertGb2312ToUtf8(char* buffer_return, int len) {
   int i = 0, l = 0;
   char *buf;
@@ -260,7 +261,7 @@ XConvertGb2312ToUtf8(char* buffer_return, int len) {
   return l;
 }
 
-int 
+static int
 XConvertEucCnToUtf8(char* buffer_return, int len) {
   int i = 0, l = 0;
   char *buf;
@@ -299,7 +300,7 @@ XConvertEucCnToUtf8(char* buffer_return, int len) {
   return l;
 }
 
-int 
+static int
 XConvertEucJpToUtf8(char* buffer_return, int len) {
   int i = 0, l = 0;
   char *buf;
@@ -372,7 +373,7 @@ XConvertEucJpToUtf8(char* buffer_return, int len) {
   return l;
 }
 
-int
+static int
 XConvertEucToUtf8(const char*	locale,
 		  char*		buffer_return, 
 		  int		len, 
@@ -447,6 +448,7 @@ XUtf8LookupString(XIC                 ic,
   }
   return len;
 }
+#endif /* X11 has utf-8 */
 
 #endif /* X11 only */
 

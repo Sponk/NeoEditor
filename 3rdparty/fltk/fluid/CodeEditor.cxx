@@ -1,5 +1,5 @@
 //
-// "$Id: CodeEditor.cxx 9341 2012-04-13 14:45:18Z ianmacarthur $"
+// "$Id: CodeEditor.cxx 9980 2013-09-21 16:41:23Z greg.ercolano $"
 //
 // Code editor widget for the Fast Light Tool Kit (FLTK).
 //
@@ -126,8 +126,10 @@ void CodeEditor::textsize(Fl_Fontsize s) {
 
 
 // 'compare_keywords()' - Compare two keywords...
-int CodeEditor::compare_keywords(const void *a, const void *b) {
-  return (strcmp(*((const char **)a), *((const char **)b)));
+extern "C" {
+  static int compare_keywords(const void *a, const void *b) {
+    return strcmp(*((const char **)a), *((const char **)b));
+  }
 }
 
 // 'style_parse()' - Parse text and produce style data.
@@ -416,5 +418,5 @@ CodeViewer::CodeViewer(int X, int Y, int W, int H, const char *L)
 }
 
 //
-// End of "$Id: CodeEditor.cxx 9341 2012-04-13 14:45:18Z ianmacarthur $".
+// End of "$Id: CodeEditor.cxx 9980 2013-09-21 16:41:23Z greg.ercolano $".
 //

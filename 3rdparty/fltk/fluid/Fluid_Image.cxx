@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Image.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $"
+// "$Id: Fluid_Image.cxx 10358 2014-10-05 11:56:06Z AlbrechtS $"
 //
 // Pixmap label support for the Fast Light Tool Kit (FLTK).
 //
@@ -84,7 +84,7 @@ void Fluid_Image::write_static() {
       write_c("#include <FL/Fl_Bitmap.H>\n");
       bitmap_header_written = write_number;
     }
-    write_c("static unsigned char %s[] =\n",
+    write_c("static const unsigned char %s[] =\n",
 	    unique_id(this, "idata", fl_filename_name(name()), 0));
     write_cdata(img->data()[0], ((img->w() + 7) / 8) * img->h());
     write_c(";\n");
@@ -99,9 +99,9 @@ void Fluid_Image::write_static() {
       write_c("#include <FL/Fl_JPEG_Image.H>\n");
       jpeg_header_written = write_number;
     }
-    write_c("static unsigned char %s[] =\n",
+    write_c("static const unsigned char %s[] =\n",
 	    unique_id(this, "idata", fl_filename_name(name()), 0));
-        
+
     FILE *f = fl_fopen(name(), "rb");
     if (!f) {
       // message = "Can't include binary file. Can't open";
@@ -130,7 +130,7 @@ void Fluid_Image::write_static() {
       write_c("#include <FL/Fl_Image.H>\n");
       image_header_written = write_number;
     }
-    write_c("static unsigned char %s[] =\n",
+    write_c("static const unsigned char %s[] =\n",
 	    unique_id(this, "idata", fl_filename_name(name()), 0));
     write_cdata(img->data()[0], (img->w() * img->d() + img->ld()) * img->h());
     write_c(";\n");
@@ -248,5 +248,5 @@ Fluid_Image *ui_find_image(const char *oldname) {
 
 
 //
-// End of "$Id: Fluid_Image.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $".
+// End of "$Id: Fluid_Image.cxx 10358 2014-10-05 11:56:06Z AlbrechtS $".
 //

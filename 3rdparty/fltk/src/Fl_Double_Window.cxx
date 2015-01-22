@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.cxx 9719 2012-11-13 14:45:42Z manolo $"
+// "$Id: Fl_Double_Window.cxx 10335 2014-09-23 10:48:36Z manolo $"
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
@@ -214,12 +214,10 @@ void Fl_GDI_Graphics_Driver::copy_offscreen_with_alpha(int x,int y,int w,int h,H
   HDC new_gc = CreateCompatibleDC(fl_gc);
   int save = SaveDC(new_gc);
   SelectObject(new_gc, bitmap);
-  fl_can_do_alpha_blending(); // make sure this is called
   BOOL alpha_ok = 0;
   // first try to alpha blend
-  // if to printer, always try alpha_blend
-  if ( Fl_Surface_Device::surface() != Fl_Display_Device::display_device() || fl_can_do_alpha_blending() ) {
-    if (fl_alpha_blend) alpha_ok = fl_alpha_blend(fl_gc, x, y, w, h, new_gc, srcx, srcy, w, h, blendfunc);
+  if ( fl_can_do_alpha_blending() ) {
+    alpha_ok = fl_alpha_blend(fl_gc, x, y, w, h, new_gc, srcx, srcy, w, h, blendfunc);
   }
   // if that failed (it shouldn't), still copy the bitmap over, but now alpha is 1
   if (!alpha_ok) {
@@ -229,7 +227,6 @@ void Fl_GDI_Graphics_Driver::copy_offscreen_with_alpha(int x,int y,int w,int h,H
   DeleteDC(new_gc);
 }
 
-extern void fl_restore_clip();
 
 #elif defined(__APPLE_QUARTZ__) || defined(FL_DOXYGEN)
 
@@ -349,7 +346,6 @@ void fl_end_offscreen() {
 
 /** @} */
 
-extern void fl_restore_clip();
 
 #else
 # error unsupported platform
@@ -369,6 +365,7 @@ void Fl_Double_Window::flush() {flush(0);}
   and leaving the clip region set to the entire window.
 */
 void Fl_Double_Window::flush(int eraseoverlay) {
+  if (!shown()) return;
   make_current(); // make sure fl_gc is non-zero
   Fl_X *myi = Fl_X::i(this);
   if (!myi) return; // window not yet created
@@ -514,5 +511,5 @@ Fl_Overlay_Window::Fl_Overlay_Window(int X, int Y, int W, int H, const char *l)
 
   
 //
-// End of "$Id: Fl_Double_Window.cxx 9719 2012-11-13 14:45:42Z manolo $".
+// End of "$Id: Fl_Double_Window.cxx 10335 2014-09-23 10:48:36Z manolo $".
 //

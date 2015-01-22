@@ -1,9 +1,9 @@
 //
-// "$Id: Enumerations.H 9742 2012-12-09 18:45:57Z manolo $"
+// "$Id: Enumerations.H 10382 2014-10-15 21:00:20Z ianmacarthur $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2012 by Bill Spitzak and others.
+// Copyright 1998-2014 by Bill Spitzak and others.
 //
 // This library is free software. Distribution and use rights are outlined in
 // the file "COPYING" which should have been included with this file.  If this
@@ -59,7 +59,7 @@
 
    FLTK remains binary compatible between patches.
  */
-#define FL_PATCH_VERSION	2
+#define FL_PATCH_VERSION	3
 
 /**
     The FLTK version number as a \em double.
@@ -342,6 +342,10 @@ enum Fl_When { // Fl_Widget::when():
 #define FL_Pause	0xff13	///< The pause key.
 #define FL_Scroll_Lock	0xff14	///< The scroll lock key.
 #define FL_Escape	0xff1b	///< The escape key.
+#define FL_Kana         0xff2e  ///< The Kana key of JIS keyboards.
+#define FL_Eisu         0xff2f  ///< The Eisu key of JIS keyboards.
+#define FL_Yen          0xff30  ///< The Yen key of JIS keyboards.
+#define FL_JIS_Underscore 0xff31 ///< The underscore key of JIS keyboards.
 #define FL_Home		0xff50	///< The home key.
 #define FL_Left		0xff51	///< The left arrow key.
 #define FL_Up		0xff52	///< The up arrow key.
@@ -355,7 +359,7 @@ enum Fl_When { // Fl_Widget::when():
 #define FL_Menu		0xff67	///< The menu key.
 #define FL_Help		0xff68	///< The 'help' key on Mac keyboards
 #define FL_Num_Lock	0xff7f	///< The num lock key.
-#define FL_KP		0xff80	///< One of the keypad numbers; use FL_KP + n for number n.
+#define FL_KP		0xff80	///< One of the keypad numbers; use FL_KP + 'n' for digit n.
 #define FL_KP_Enter	0xff8d	///< The enter key on the keypad, same as Fl_KP+'\\r'.
 #define FL_KP_Last	0xffbd	///< The last keypad key; use to range-check keypad.
 #define FL_F		0xffbd	///< One of the function keys; use FL_F + n for function key n.
@@ -516,14 +520,14 @@ enum Fl_Boxtype { // boxtypes (if you change these you must fix fl_boxtype.C):
   _FL_GTK_THIN_DOWN_FRAME,	///< gtk+ version of FL_THIN_DOWN_FRAME
   _FL_GTK_ROUND_UP_BOX,		///< gtk+ version of FL_ROUND_UP_BOX
   _FL_GTK_ROUND_DOWN_BOX,	///< gtk+ version of FL_ROUND_DOWN_BOX
-  _FL_GLEAM_UP_BOX,		///< gleam version of FL_UP_BOX
-  _FL_GLEAM_DOWN_BOX,		///< gleam version of FL_DOWN_BOX
-  _FL_GLEAM_UP_FRAME,		///< gleam version of FL_UP_FRAME
-  _FL_GLEAM_DOWN_FRAME,		///< gleam version of FL_DOWN_FRAME
-  _FL_GLEAM_THIN_UP_BOX,	///< gleam version of FL_THIN_UP_BOX
-  _FL_GLEAM_THIN_DOWN_BOX,	///< gleam version of FL_THIN_DOWN_BOX
-  _FL_GLEAM_ROUND_UP_BOX,	///< gleam version of FL_ROUND_UP_BOX
-  _FL_GLEAM_ROUND_DOWN_BOX,	///< gleam version of FL_ROUND_DOWN_BOX
+  _FL_GLEAM_UP_BOX,		///< gleam version of FL_GLEAM_UP_BOX
+  _FL_GLEAM_DOWN_BOX,		///< gleam version of FL_GLEAM_DOWN_BOX
+  _FL_GLEAM_UP_FRAME, 		///< gleam version of FL_GLEAM_UP_FRAME
+  _FL_GLEAM_DOWN_FRAME,		///< gleam version of FL_GLEAM_DOWN_FRAME
+  _FL_GLEAM_THIN_UP_BOX,    	///< gleam version of FL_GLEAM_THIN_UP_BOX
+  _FL_GLEAM_THIN_DOWN_BOX,	///< gleam version of FL_GLEAM_THIN_DOWN_BOX
+  _FL_GLEAM_ROUND_UP_BOX,   	///< gleam version of FL_GLEAM_ROUND_UP_BOX
+  _FL_GLEAM_ROUND_DOWN_BOX,	///< gleam version of FL_GLEAM_ROUND_DOWN_BOX
   FL_FREE_BOXTYPE		///< the first free box type for creation of new box types
 };
 extern FL_EXPORT Fl_Boxtype fl_define_FL_ROUND_UP_BOX();
@@ -769,7 +773,7 @@ extern FL_EXPORT Fl_Fontsize FL_NORMAL_SIZE;	///< normal font size
     The Fl_Color type holds an FLTK color value.
 
     Colors are either 8-bit indexes into a virtual colormap
-    or 24-bit RGB color values.
+    or 24-bit RGB color values. (See \ref drawing_colors for the default FLTK colormap)
 
     Color indices occupy the lower 8 bits of the value, while
     RGB colors occupy the upper 24 bits, for a byte organization of RGBI.
@@ -777,7 +781,7 @@ extern FL_EXPORT Fl_Fontsize FL_NORMAL_SIZE;	///< normal font size
 <pre>
  Fl_Color => 0xrrggbbii
                 | | | |
-                | | | +--- index between 0 and 255
+                | | | +--- \ref drawing_colors "index" between 0 and 255
                 | | +----- blue color component (8 bit)
                 | +------- green component (8 bit)
                 +--------- red component (8 bit)
@@ -788,7 +792,7 @@ extern FL_EXPORT Fl_Fontsize FL_NORMAL_SIZE;	///< normal font size
 
  */
 /*@{*/
-/** an FLTK color value */
+/** An FLTK color value; see also \ref drawing_colors  */
 typedef unsigned int Fl_Color;
 
 // Standard colors. These are used as default colors in widgets and altered as necessary
@@ -897,35 +901,37 @@ inline Fl_Color fl_color_cube(int r, int g, int b) {
 
 /** The following constants define the mouse cursors that are available in FLTK.
 
-    The double-headed arrows are bitmaps provided by FLTK on X, the others
-    are provided by system-defined cursors.
+    Cursors are provided by the system when available, or bitmaps built into
+    FLTK as a fallback.
 
     \todo enum Fl_Cursor needs maybe an image.
 */
+/* FIXME: We should renumber these, but that will break the ABI */
 enum Fl_Cursor {
-  FL_CURSOR_DEFAULT	=  0, /**< the default cursor, usually an arrow. */
-  FL_CURSOR_ARROW	= 35, /**< an arrow pointer. */
-  FL_CURSOR_CROSS	= 66, /**< crosshair. */
-  FL_CURSOR_WAIT	= 76, /**< watch or hourglass. */
-  FL_CURSOR_INSERT	= 77, /**< I-beam. */
-  FL_CURSOR_HAND	= 31, /**< hand (uparrow on MSWindows). */
-  FL_CURSOR_HELP	= 47, /**< question mark. */
-  FL_CURSOR_MOVE	= 27, /**< 4-pointed arrow. */
-  // fltk provides bitmaps for these:
-  FL_CURSOR_NS		= 78, /**< up/down arrow. */
-  FL_CURSOR_WE		= 79, /**< left/right arrow. */
-  FL_CURSOR_NWSE	= 80, /**< diagonal arrow. */
-  FL_CURSOR_NESW	= 81, /**< diagonal arrow. */
-  FL_CURSOR_NONE	=255, /**< invisible. */
-  // for back compatibility (non MSWindows ones):
-  FL_CURSOR_N		= 70, /**< for back compatibility. */
-  FL_CURSOR_NE		= 69, /**< for back compatibility. */
-  FL_CURSOR_E		= 49, /**< for back compatibility. */
-  FL_CURSOR_SE		=  8, /**< for back compatibility. */
-  FL_CURSOR_S		=  9, /**< for back compatibility. */
-  FL_CURSOR_SW		=  7, /**< for back compatibility. */
-  FL_CURSOR_W		= 36, /**< for back compatibility. */
-  FL_CURSOR_NW		= 68 /**< for back compatibility. */
+  FL_CURSOR_DEFAULT    =  0, /**< the default cursor, usually an arrow. */
+  FL_CURSOR_ARROW      = 35, /**< an arrow pointer. */
+  FL_CURSOR_CROSS      = 66, /**< crosshair. */
+  FL_CURSOR_WAIT       = 76, /**< busy indicator (e.g. hourglass). */
+  FL_CURSOR_INSERT     = 77, /**< I-beam. */
+  FL_CURSOR_HAND       = 31, /**< pointing hand. */
+  FL_CURSOR_HELP       = 47, /**< question mark pointer. */
+  FL_CURSOR_MOVE       = 27, /**< 4-pointed arrow or hand. */
+
+  /* Resize indicators */
+  FL_CURSOR_NS         = 78, /**< up/down resize. */
+  FL_CURSOR_WE         = 79, /**< left/right resize. */
+  FL_CURSOR_NWSE       = 80, /**< diagonal resize. */
+  FL_CURSOR_NESW       = 81, /**< diagonal resize. */
+  FL_CURSOR_N          = 70, /**< upwards resize. */
+  FL_CURSOR_NE         = 69, /**< upwards, right resize. */
+  FL_CURSOR_E          = 49, /**< rightwards resize. */
+  FL_CURSOR_SE         =  8, /**< downwards, right resize. */
+  FL_CURSOR_S          =  9, /**< downwards resize. */
+  FL_CURSOR_SW         =  7, /**< downwards, left resize. */
+  FL_CURSOR_W          = 36, /**< leftwards resize. */
+  FL_CURSOR_NW         = 68, /**< upwards, left resize. */
+
+  FL_CURSOR_NONE       =255  /**< invisible. */
 };
 /*@}*/		// group: Cursors  
 
@@ -978,5 +984,5 @@ enum Fl_Damage {
 #endif
 
 //
-// End of "$Id: Enumerations.H 9742 2012-12-09 18:45:57Z manolo $".
+// End of "$Id: Enumerations.H 10382 2014-10-15 21:00:20Z ianmacarthur $".
 //

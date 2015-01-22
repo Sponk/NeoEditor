@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Image.cxx 9709 2012-11-09 16:02:08Z manolo $"
+// "$Id: Fl_Image.cxx 10377 2014-10-14 11:53:51Z AlbrechtS $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2012 by Bill Spitzak and others.
+// Copyright 1998-2014 by Bill Spitzak and others.
 //
 // This library is free software. Distribution and use rights are outlined in
 // the file "COPYING" which should have been included with this file.  If this
@@ -33,6 +33,8 @@ void fl_restore_clip(); // from fl_rect.cxx
 //
 // Base image class...
 //
+
+Fl_RGB_Scaling Fl_Image::RGB_scaling_ = FL_RGB_SCALING_NEAREST;
 
 /**
   The destructor is a virtual method that frees all memory used
@@ -159,13 +161,40 @@ Fl_Image::measure(const Fl_Label *lo,		// I - Label
   lh = img->h();
 }
 
+/** Sets the RGB image scaling method used for copy(int, int).
+    Applies to all RGB images, defaults to FL_RGB_SCALING_NEAREST.
+*/
+void Fl_Image::RGB_scaling(Fl_RGB_Scaling method) {
+  RGB_scaling_ = method;
+}
+
+/** Returns the currently used RGB image scaling method. */
+Fl_RGB_Scaling Fl_Image::RGB_scaling() {
+  return RGB_scaling_;
+}
+
 
 //
 // RGB image class...
 //
 size_t Fl_RGB_Image::max_size_ = ~((size_t)0);
 
-/**  The destructor free all memory and server resources that are used by  the image. */
+int fl_convert_pixmap(const char*const* cdata, uchar* out, Fl_Color bg);
+
+/** The constructor creates a new RGBA image from the specified Fl_Pixmap. 
+ 
+ The RGBA image is built fully opaque except for the transparent area
+ of the pixmap that is assigned the \par bg color with full transparency */
+Fl_RGB_Image::Fl_RGB_Image(const Fl_Pixmap *pxm, Fl_Color bg):
+  Fl_Image(pxm->w(), pxm->h(), 4), id_(0), mask_(0)
+{
+  array = new uchar[w() * h() * d()];
+  alloc_array = 1;
+  fl_convert_pixmap(pxm->data(), (uchar*)array, bg);
+  data((const char **)&array, 1);
+}
+
+/**  The destructor frees all memory and server resources that are used by the image. */
 Fl_RGB_Image::~Fl_RGB_Image() {
   uncache();
   if (alloc_array) delete[] (uchar *)array;
@@ -245,25 +274,89 @@ Fl_Image *Fl_RGB_Image::copy(int W, int H) {
   new_image = new Fl_RGB_Image(new_array, W, H, d());
   new_image->alloc_array = 1;
 
-  // Scale the image using a nearest-neighbor algorithm...
-  for (dy = H, sy = 0, yerr = H, new_ptr = new_array; dy > 0; dy --) {
-    for (dx = W, xerr = W, old_ptr = array + sy * line_d; dx > 0; dx --) {
-      for (c = 0; c < d(); c ++) *new_ptr++ = old_ptr[c];
+  if (Fl_Image::RGB_scaling() == FL_RGB_SCALING_NEAREST) {
+    // Scale the image using a nearest-neighbor algorithm...
+    for (dy = H, sy = 0, yerr = H, new_ptr = new_array; dy > 0; dy --) {
+      for (dx = W, xerr = W, old_ptr = array + sy * line_d; dx > 0; dx --) {
+        for (c = 0; c < d(); c ++) *new_ptr++ = old_ptr[c];
 
-      old_ptr += xstep;
-      xerr    -= xmod;
+        old_ptr += xstep;
+        xerr    -= xmod;
 
-      if (xerr <= 0) {
-	xerr    += W;
-	old_ptr += d();
+        if (xerr <= 0) {
+          xerr    += W;
+	  old_ptr += d();
+        }
+      }
+
+      sy   += ystep;
+      yerr -= ymod;
+      if (yerr <= 0) {
+        yerr += H;
+        sy ++;
       }
     }
+  } else {
+    // Bilinear scaling (FL_RGB_SCALING_BILINEAR)
+    const float xscale = (w() - 1) / (float) W;
+    const float yscale = (h() - 1) / (float) H;
+    for (dy = 0; dy < H; dy++) {
+      float oldy = dy * yscale;
+      if (oldy >= h())
+        oldy = h() - 1;
+      const float yfract = oldy - (unsigned) oldy;
 
-    sy   += ystep;
-    yerr -= ymod;
-    if (yerr <= 0) {
-      yerr += H;
-      sy ++;
+      for (dx = 0; dx < W; dx++) {
+        new_ptr = new_array + dy * W * d() + dx * d();
+
+        float oldx = dx * xscale;
+        if (oldx >= w())
+          oldx = w() - 1;
+        const float xfract = oldx - (unsigned) oldx;
+
+        const unsigned leftx = oldx;
+        const unsigned lefty = oldy;
+        const unsigned rightx = oldx + 1 >= w() ? oldx : oldx + 1;
+        const unsigned righty = oldy;
+        const unsigned dleftx = oldx;
+        const unsigned dlefty = oldy + 1 >= h() ? oldy : oldy + 1;
+        const unsigned drightx = rightx;
+        const unsigned drighty = dlefty;
+
+        uchar left[4], right[4], downleft[4], downright[4];
+        memcpy(left, array + lefty * line_d + leftx * d(), d());
+        memcpy(right, array + righty * line_d + rightx * d(), d());
+        memcpy(downleft, array + dlefty * line_d + dleftx * d(), d());
+        memcpy(downright, array + drighty * line_d + drightx * d(), d());
+
+        int i;
+        if (d() == 4) {
+          for (i = 0; i < 3; i++) {
+            left[i] *= left[3] / 255.0f;
+            right[i] *= right[3] / 255.0f;
+            downleft[i] *= downleft[3] / 255.0f;
+            downright[i] *= downright[3] / 255.0f;
+          }
+        }
+
+	const float leftf = 1 - xfract;
+	const float rightf = xfract;
+	const float upf = 1 - yfract;
+	const float downf = yfract;
+
+        for (i = 0; i < d(); i++) {
+          new_ptr[i] = (left[i] * leftf +
+                   right[i] * rightf) * upf +
+                   (downleft[i] * leftf +
+                   downright[i] * rightf) * downf;
+        }
+
+        if (d() == 4 && new_ptr[3]) {
+          for (i = 0; i < 3; i++) {
+            new_ptr[i] /= new_ptr[3] / 255.0f;
+          }
+        }
+      }
     }
   }
 
@@ -453,6 +546,10 @@ static void imgProviderReleaseData (void *info, const void *data, size_t size)
   delete[] (unsigned char *)data;
 }
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_5
+typedef void (*CGDataProviderReleaseDataCallback)(void *info, const void *data, size_t size);
+#endif
+
 void Fl_Quartz_Graphics_Driver::draw(Fl_RGB_Image *img, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
   // Don't draw an empty image...
@@ -595,7 +692,6 @@ void Fl_RGB_Image::label(Fl_Menu_Item* m) {
   m->label(_FL_IMAGE_LABEL, (const char*)this);
 }
 
-
 //
-// End of "$Id: Fl_Image.cxx 9709 2012-11-09 16:02:08Z manolo $".
+// End of "$Id: Fl_Image.cxx 10377 2014-10-14 11:53:51Z AlbrechtS $".
 //

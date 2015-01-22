@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Printer.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $"
+// "$Id: Fl_Printer.cxx 10291 2014-09-08 16:03:52Z manolo $"
 //
 // Encompasses platform-specific printing-support code and 
 // PostScript output code for the Fast Light Tool Kit (FLTK).
@@ -19,13 +19,9 @@
 
 #include <FL/Fl_Printer.H>
 
-#ifdef __APPLE__
-//#include "Fl_Quartz_Printer.mm"
-#elif defined(WIN32)
+#if defined(WIN32)
 #include "Fl_GDI_Printer.cxx"
 #endif
-
-#include "Fl_PostScript.cxx"
 
 // print dialog customization strings
 /** [this text may be customized at run-time] */
@@ -189,5 +185,5 @@ Fl_Printer::~Fl_Printer(void)
 
 
 //
-// End of "$Id: Fl_Printer.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $".
+// End of "$Id: Fl_Printer.cxx 10291 2014-09-08 16:03:52Z manolo $".
 //

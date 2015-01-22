@@ -16,6 +16,7 @@
 
 
 #include "NativeFeatureIncludes.h"
+
 #if _RAKNET_SUPPORT_TwoWayAuthentication==1
 
 #ifndef __TWO_WAY_AUTHENTICATION_H

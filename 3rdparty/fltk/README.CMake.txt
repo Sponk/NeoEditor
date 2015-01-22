@@ -1,4 +1,4 @@
-README.CMake.txt - 2010-12-20 - Building and using FLTK with CMake
+README.CMake.txt - 2014-09-27 - Building and using FLTK with CMake
 ------------------------------------------------------------------
 
 
@@ -69,50 +69,51 @@ toolchain.  Other platforms are just as easy to use.
 
  OPTIONS
 ---------
+Options can be specified to cmake with the -D flag:
+
+    cmake -D <OPTION_NAME>=<OPTION_VALUE>
+
+Example:
+
+    cmake -D CMAKE_BUILD_TYPE=Debug
 
 All options have sensible defaults so you won't usually need to touch these.
-There are only two CMake options that you may want to specify.
+There are only two CMake options that you may want to specify:
 
 CMAKE_BUILD_TYPE
-   This specifies what kind of build this is i.e. Release, Debug...
-Platform specific compile/link flags/options are automatically selected
-by CMake depending on this value.
+    This specifies what kind of build this is i.e. Release, Debug...
+    Platform specific compile/link flags/options are automatically selected
+    by CMake depending on this value.
 
 CMAKE_INSTALL_PREFIX
-   Where everything will go on install.  Defaults are /usr/local for unix
-and C:\Program Files\FLTK for Windows.
+    Where everything will go on install.  Defaults are /usr/local for unix
+    and C:\Program Files\FLTK for Windows.
 
-These are the FLTK specific options.  Platform specific options are ignored
-on other platforms.
+The following are the FLTK specific options.  Platform specific options
+are ignored on other platforms.
 
 OPTION_OPTIM
    Extra optimization flags.
+
 OPTION_ARCHFLAGS
    Extra architecture flags.
 
-   The OPTION_PREFIX_* flags are for fine-tuning where everything goes
-on the install.
-OPTION_PREFIX_BIN
-OPTION_PREFIX_LIB
-OPTION_PREFIX_INCLUDE
-OPTION_PREFIX_DATA
-OPTION_PREFIX_DOC
-OPTION_PREFIX_CONFIG
-OPTION_PREFIX_MAN
-
 OPTION_APPLE_X11 - default OFF
    In case you want to use X11 on OSX.  Not currently supported.
+
 OPTION_USE_POLL - default OFF
    Don't use this one either.
 
 OPTION_BUILD_SHARED_LIBS - default OFF
    Normally FLTK is built as static libraries which makes more portable
-binaries.  If you want to use shared libraries, this will build them too.
+   binaries.  If you want to use shared libraries, this will build them too.
+
 OPTION_BUILD_EXAMPLES - default ON
    Builds the many fine example programs.
 
 OPTION_CAIRO - default OFF
    Enables libcairo support
+
 OPTION_CAIROEXT - default OFF
    Enables extended libcairo support
 
@@ -125,17 +126,16 @@ OPTION_USE_THREADS - default ON
 OPTION_LARGE_FILE - default ON
    Enables large file (>2G) support
 
-   FLTK has built in jpeg zlib and png libraries.  These let you use
-system libraries instead, unless CMake can't find them.
 OPTION_USE_SYSTEM_LIBJPEG - default ON
 OPTION_USE_SYSTEM_ZLIB - default ON
 OPTION_USE_SYSTEM_LIBPNG - default ON
+   FLTK has built in jpeg zlib and png libraries.  These let you use
+   system libraries instead, unless CMake can't find them.
 
-   X11 extended libraries.
 OPTION_USE_XINERAMA - default ON
 OPTION_USE_XFT - default ON
 OPTION_USE_XDBE - default ON
-
+   These are X11 extended libraries.
 
  BUILDING UNDER LINUX WITH UNIX MAKEFILES
 ------------------------------------------
@@ -143,24 +143,30 @@ OPTION_USE_XDBE - default ON
 After untaring the FLTK source, go to the root of the FLTK tree and type
 the following.
 
-mkdir build
-cd build
-cmake ..
-make
-sudo make install
+    mkdir build
+    cd build
+    cmake ..
+    make
+    sudo make install
 
 This will build and install a default configuration FLTK.
+
+Some flags can be changed during the 'make' command, such as:
+
+    make VERBOSE=on
+
+..which builds in verbose mode, so you can see all the compile/link commands.
 
 
  CROSSCOMPILING
 ----------------
 
-Once you have a crosscompiler going, to use CMAke to build FLTK you need
+Once you have a crosscompiler going, to use CMake to build FLTK you need
 two more things.  You need a toolchain file which tells CMake where your
 build tools are.  The CMake website is a good source of information on
 this file.  Here's mine for MinGW under Linux.
-----
 
+----
 # the name of the target operating system
 set(CMAKE_SYSTEM_NAME Windows)
 
@@ -180,7 +186,6 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
 set(CMAKE_INSTALL_PREFIX ${CMAKE_FIND_ROOT_PATH}/usr CACHE FILEPATH
    "install path prefix")
-
 ----
 
 Not too tough.  The other thing you need is a native installation of FLTK
@@ -189,11 +194,11 @@ compile the *.fl into C++ source and header files.
 
 So, again from the FLTK tree root.
 
-mkdir mingw
-cd mingw
-cmake -DCMAKE_TOOLCHAIN_FILE=~/projects/toolchain/Toolchain-mingw32.cmake ..
-make
-sudo make install
+    mkdir mingw
+    cd mingw
+    cmake -DCMAKE_TOOLCHAIN_FILE=~/projects/toolchain/Toolchain-mingw32.cmake ..
+    make
+    sudo make install
 
 This will create a default configuration FLTK suitable for mingw/msys and
 install it in the /usr/i486-mingw32/usr tree.
@@ -202,6 +207,11 @@ install it in the /usr/i486-mingw32/usr tree.
 
  USING CMAKE WITH FLTK
 =======================
+
+The CMake Export/Import facility can be thought of as an automated
+fltk-config.  For example, if you link your program to the fltk
+library, it will automatically link in all of its dependencies.  This
+includes any special flags.  ie on Linux it includes the -lpthread flag.
 
 This howto assumes that you have FLTK libraries which were built using
 CMake, installed.  Building them with CMake generates some CMake helper
@@ -216,6 +226,12 @@ cmake_minimum_required(VERSION 2.6)
 
 project(hello)
 
+# the following line is required only if you don't install FLTK
+# or if find_package can't find your installation directory
+# it points to the build directory or the base folder,
+# not the library folder.
+set(FLTK_DIR /path/to/fltk)
+
 find_package(FLTK REQUIRED NO_MODULE)
 include(${FLTK_USE_FILE})
 
@@ -225,20 +241,19 @@ target_link_libraries(hello fltk)
 
 ------
 
+The set(FLTK_DIR ...) command is a superhint to the find_package command.
+This is very useful if you don't install or have a non-standard install.
 The find_package command tells CMake to find the package FLTK, REQUIRED
 means that it is an error if it's not found.  NO_MODULE tells it to search
 only for the FLTKConfig file, not using the FindFLTK.cmake supplied with
 CMake, which doesn't work with this version of FLTK.
 
 Once the package is found we include the ${FLTK_USE_FILE} which adds the
-FLTK include directories and library link information to its knowledge
-base.  After that your programs will be able to find FLTK headers and
-when you link the fltk library, it automatically links the libraries
-fltk depends on.
+FLTK include directories to its knowledge base.  After that your programs
+will be able to find FLTK headers.
 
 The WIN32 in the add_executable tells your Windows compiler that this is
 a gui app.  It is ignored on other platforms.
-
 
  LIBRARY NAMES
 ---------------
@@ -246,15 +261,15 @@ a gui app.  It is ignored on other platforms.
 When you use the target_link_libraries command, CMake uses it's own
 internal names for libraries.  The fltk library names are:
 
-fltk     fltk_forms     fltk_images    fltk_gl
+    fltk     fltk_forms     fltk_images    fltk_gl
 
 and for the shared libraries (if built):
 
-fltk_SHARED     fltk_forms_SHARED     fltk_images_SHARED    fltk_gl_SHARED
+    fltk_SHARED     fltk_forms_SHARED     fltk_images_SHARED    fltk_gl_SHARED
 
 The built-in libraries (if built):
 
-fltk_jpeg      fltk_png    fltk_z
+    fltk_jpeg      fltk_png    fltk_z
 
 
  USING FLUID FILES
@@ -285,3 +300,5 @@ when find_package(FLTK REQUIRED NO_MODULE) succeeds.
 ==================
 
 Dec 20 2010 - matt: merged and restructures
+May 15 2013 - erco: small formatting tweaks, added some examples
+Feb 23 2014 - msurette: updated to reflect changes to the CMake files

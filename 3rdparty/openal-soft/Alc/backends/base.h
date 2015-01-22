@@ -2,7 +2,7 @@
 #define AL_BACKENDS_BASE_H
 
 #include "alMain.h"
-#include "compat.h"
+#include "threads.h"
 
 
 struct ALCbackendVtable;
@@ -12,7 +12,7 @@ typedef struct ALCbackend {
 
     ALCdevice *mDevice;
 
-    CRITICAL_SECTION mMutex;
+    almtx_t mMutex;
 } ALCbackend;
 
 void ALCbackend_Construct(ALCbackend *self, ALCdevice *device);
@@ -42,11 +42,8 @@ struct ALCbackendVtable {
     void (*const lock)(ALCbackend*);
     void (*const unlock)(ALCbackend*);
 
-    void (*const Delete)(ALCbackend*);
+    void (*const Delete)(void*);
 };
-
-#define DECLARE_ALCBACKEND_VTABLE(T)                                          \
-static const struct ALCbackendVtable T##_ALCbackend_vtable
 
 #define DEFINE_ALCBACKEND_VTABLE(T)                                           \
 DECLARE_THUNK(T, ALCbackend, void, Destruct)                                  \
@@ -60,9 +57,10 @@ DECLARE_THUNK(T, ALCbackend, ALCuint, availableSamples)                       \
 DECLARE_THUNK(T, ALCbackend, ALint64, getLatency)                             \
 DECLARE_THUNK(T, ALCbackend, void, lock)                                      \
 DECLARE_THUNK(T, ALCbackend, void, unlock)                                    \
-DECLARE_THUNK(T, ALCbackend, void, Delete)                                    \
+static void T##_ALCbackend_Delete(void *ptr)                                  \
+{ T##_Delete(STATIC_UPCAST(T, ALCbackend, (ALCbackend*)ptr)); }               \
                                                                               \
-DECLARE_ALCBACKEND_VTABLE(T) = {                                              \
+static const struct ALCbackendVtable T##_ALCbackend_vtable = {                \
     T##_ALCbackend_Destruct,                                                  \
                                                                               \
     T##_ALCbackend_open,                                                      \
@@ -125,9 +123,13 @@ static const struct ALCbackendFactoryVtable T##_ALCbackendFactory_vtable = {  \
 ALCbackendFactory *ALCpulseBackendFactory_getFactory(void);
 ALCbackendFactory *ALCalsaBackendFactory_getFactory(void);
 ALCbackendFactory *ALCossBackendFactory_getFactory(void);
+ALCbackendFactory *ALCmmdevBackendFactory_getFactory(void);
+ALCbackendFactory *ALCdsoundBackendFactory_getFactory(void);
+ALCbackendFactory *ALCwinmmBackendFactory_getFactory(void);
 ALCbackendFactory *ALCnullBackendFactory_getFactory(void);
+ALCbackendFactory *ALCwaveBackendFactory_getFactory(void);
 ALCbackendFactory *ALCloopbackFactory_getFactory(void);
 
-ALCbackend *create_backend_wrapper(ALCdevice *device, ALCbackend_Type type);
+ALCbackend *create_backend_wrapper(ALCdevice *device, const BackendFuncs *funcs, ALCbackend_Type type);
 
 #endif /* AL_BACKENDS_BASE_H */

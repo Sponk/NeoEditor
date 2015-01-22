@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $"
+// "$Id: file.cxx 10381 2014-10-15 20:51:39Z ianmacarthur $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -379,7 +379,7 @@ static void read_children(Fl_Type *p, int paste) {
     if (!strcmp(c,"version")) {
       c = read_word();
       read_version = strtod(c,0);
-      if (read_version<=0 || read_version>FL_VERSION)
+      if (read_version<=0 || read_version>double(FL_VERSION+0.00001))
         read_error("unknown version '%s'",c);
       continue;
     }
@@ -637,5 +637,5 @@ void read_fdesign() {
 }
 
 //
-// End of "$Id: file.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $".
+// End of "$Id: file.cxx 10381 2014-10-15 20:51:39Z ianmacarthur $".
 //

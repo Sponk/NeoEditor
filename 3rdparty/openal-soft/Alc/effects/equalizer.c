@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the
- *  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- *  Boston, MA  02111-1307, USA.
+ *  Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * Or go to http://www.gnu.org/copyleft/lgpl.html
  */
 
@@ -75,7 +75,7 @@ typedef struct ALequalizerState {
     DERIVE_FROM_TYPE(ALeffectState);
 
     /* Effect gains for each channel */
-    ALfloat Gain[MaxChannels];
+    ALfloat Gain[MAX_OUTPUT_CHANNELS];
 
     /* Effect parameters */
     ALfilterState filter[4];
@@ -93,9 +93,8 @@ static ALboolean ALequalizerState_deviceUpdate(ALequalizerState *UNUSED(state), 
 static ALvoid ALequalizerState_update(ALequalizerState *state, ALCdevice *device, const ALeffectslot *slot)
 {
     ALfloat frequency = (ALfloat)device->Frequency;
-    ALfloat gain = sqrtf(1.0f / device->NumChan) * slot->Gain;
 
-    SetGains(device, gain, state->Gain);
+    ComputeAmbientGains(device, slot->Gain, state->Gain);
 
     /* Calculate coefficients for the each type of filter */
     ALfilterState_setParams(&state->filter[0], ALfilterType_LowShelf,
@@ -119,7 +118,7 @@ static ALvoid ALequalizerState_update(ALequalizerState *state, ALCdevice *device
                             0.0f);
 }
 
-static ALvoid ALequalizerState_process(ALequalizerState *state, ALuint SamplesToDo, const ALfloat *restrict SamplesIn, ALfloat (*restrict SamplesOut)[BUFFERSIZE])
+static ALvoid ALequalizerState_process(ALequalizerState *state, ALuint SamplesToDo, const ALfloat *restrict SamplesIn, ALfloat (*restrict SamplesOut)[BUFFERSIZE], ALuint NumChannels)
 {
     ALuint base;
     ALuint it;
@@ -141,10 +140,10 @@ static ALvoid ALequalizerState_process(ALequalizerState *state, ALuint SamplesTo
             temps[it] = smp;
         }
 
-        for(kt = 0;kt < MaxChannels;kt++)
+        for(kt = 0;kt < NumChannels;kt++)
         {
             ALfloat gain = state->Gain[kt];
-            if(!(gain > GAIN_SILENCE_THRESHOLD))
+            if(!(fabsf(gain) > GAIN_SILENCE_THRESHOLD))
                 continue;
 
             for(it = 0;it < td;it++)
@@ -155,10 +154,7 @@ static ALvoid ALequalizerState_process(ALequalizerState *state, ALuint SamplesTo
     }
 }
 
-static void ALequalizerState_Delete(ALequalizerState *state)
-{
-    free(state);
-}
+DECLARE_DEFAULT_ALLOCATORS(ALequalizerState)
 
 DEFINE_ALEFFECTSTATE_VTABLE(ALequalizerState);
 
@@ -172,7 +168,7 @@ ALeffectState *ALequalizerStateFactory_create(ALequalizerStateFactory *UNUSED(fa
     ALequalizerState *state;
     int it;
 
-    state = malloc(sizeof(*state));
+    state = ALequalizerState_New(sizeof(*state));
     if(!state) return NULL;
     SET_VTABLE2(ALequalizerState, ALeffectState, state);
 

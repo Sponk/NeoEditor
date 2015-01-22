@@ -1,5 +1,5 @@
 //
-// "$Id: gl_start.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $"
+// "$Id: gl_start.cxx 10414 2014-10-30 09:18:45Z cand $"
 //
 // OpenGL context routines for the Fast Light Tool Kit (FLTK).
 //
@@ -35,6 +35,7 @@
 #include <FL/Fl_Window.H>
 #include <FL/x.H>
 #include <FL/fl_draw.H>
+#include <FL/gl.h>
 #include "Fl_Gl_Choice.H"
 
 static GLContext context;
@@ -119,5 +120,5 @@ int Fl::gl_visual(int mode, int *alist) {
 #endif
 
 //
-// End of "$Id: gl_start.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $".
+// End of "$Id: gl_start.cxx 10414 2014-10-30 09:18:45Z cand $".
 //
