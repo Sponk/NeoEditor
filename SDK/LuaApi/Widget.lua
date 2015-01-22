@@ -4,20 +4,17 @@ dofile("class.lua")
 -- The widget class represents the base class for every widget.
 -- It contains the most basic functionality shared by every widget type like
 -- translating the position or changing the rotation.
--- 
--- Keep in mind that a Widget object does not refer to an existing C++ widget and is just used
--- to provide common methods for other Widget based classes!
 --
 --
 ---- Class members
---
--- widget: The native widget handle used by the C++ backend.
 -- 
 -- <b>Do not write to these directly! Use the suitable methods for that!</b>
 -- 
--- position[1]: The X position of the widget
+-- widget: The native widget handle used by the C++ backend.
 -- 
--- position[2] : The Y position of the widget
+-- position.x: The X position of the widget
+-- 
+-- position.y : The Y position of the widget
 -- 
 -- height: The height of the widget
 -- 
@@ -40,15 +37,16 @@ dofile("class.lua")
 Widget = class(
 	function(object, x, y, w, h, text)
 		if text == nil then text = "" end
-		
-		-- A widget is purely abstract and does not correlate with a C++ object.
-		-- object.widget = createWidget(x,y,w,h,file,text)
-		
-		object.position = {[1]=x,[2]=y}
+		object.widget = createSprite(x,y,w,h,file,text)
+		object.position = {x=x,y=y}
 		object.width = w
 		object.height = h
-		object.rotation = 0
-		object.visible = true
+        object.rotation = 0
+        object.scale = {}
+        object.flip = {}
+        object.scale.x = 1
+        object.scale.y = 1
+        object.visible = true
     end
 )
 
@@ -75,6 +73,18 @@ function Widget:setPosition(x,y)
     setWidgetPosition(self.widget, self.position)
 end
 
+--- Gets the current position of the widget.
+--
+-- x: The X cordonat
+--
+-- y: The Y cordonat
+function Widget:getPosition()
+    local pos = {}
+    pos.x = self.position[1]
+    pos.y = self.position[2]
+    return pos
+end
+
 --- Sets the current rotation of the widget
 --
 -- r: The new rotation
@@ -99,30 +109,6 @@ function Widget:translate(x,y)
     self:setPosition(self.position[1] + x, self.position[2] + y)
 end
 
-
---- Gets the current position of the widget.
---
--- x: The X cordonat
---
--- y: The Y cordonat
-function Widget:getPosition()
-    local pos = {}
-    pos.x = self.position[1]
-    pos.y = self.position[2]
-    return pos
-end
-
---- Whether or not this object can collide with other objects
--- call this in a load function!
-function Widget:setCollidable(value,tag)
-    self.collidable = value
-    self.tag = tag
-    if value  then 
-        table.insert(collidable_objects,self)
-    elseif not value then
-        table.remove(collidable_objects,self)
-    end
-end
 --Returns the Width/Height of this object
 function Widget:getSize()
     local size = {}
@@ -135,14 +121,15 @@ end
 function Widget:getLabel()
     return getLabel(self.widget)
 end
-
+function Widget:setVisible(value)
+    setWidgetVisible(self.widget,true)
+end
 --- Changes the current label of the widget.
 --
 -- label: The new label.
 function Widget:setLabel(label)
     setLabel(self.widget, label)
 end
-
 --- Changes the widget visibility
 -- 
 -- value: A boolean indicating if the widget should be visible or not.
@@ -156,4 +143,26 @@ end
 -- return: A boolean value.
 function Widget:isVisible()
     return self.visible
+end
+
+function Widget:setScale(x,y)
+    self.scale = {}
+    self.scale.x = x 
+    self.scale.y = y
+    setWidgetScale(self.widget,{x,y})
+end
+
+function Widget:getScale()
+    return self.scale
+end
+
+function Widget:setFlip(x,y)
+    self.flip = {}
+    self.flip.x = x
+    self.flip.y = y
+    setWidgetFlip(self.widget,{x,y})
+end
+
+function Widget:setWidgetIgnorCameraOffset(value)
+    setWidgetIgnorCameraOffset(self.widget,value)
 end

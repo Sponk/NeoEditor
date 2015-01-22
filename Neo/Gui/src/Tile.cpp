@@ -124,16 +124,26 @@ void Tile::draw()
     Render* render = Render::getInstance();
     GuiSystem* gui = GuiSystem::getInstance();
     MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
-    Level* level = NeoEngine::getInstance()->getLevel();
-
+	Level* level = NeoEngine::getInstance()->getLevel();
+	OCamera * camera = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getCurrentCamera();
+	MRenderingContext *renderingContext = NeoEngine::getInstance()->getRenderingContext();
     if(m_labelText == NULL)
     {
         m_labelText = render->createText(gui->getDefaultFont(), gui->getDefaultFontSize());
         m_labelText->setAlign(TEXT_ALIGN_CENTER);
     }
-
-	render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_parentSheet->getImage(), m_rotation, m_parentSheet->getTexCoords(m_tilex, m_tiley));
-
+	
+	if (_isVisible){
+		if (!_ignor_camera_offset){ //ONLY Sprites should be able to offset the camera.Because reasons :)
+			MVector3 m = camera->getPosition();
+			//camera->setPosition(MVector3(120, 20, 20)); // DE TESTAT MAI MULT 
+			float x = -m.x; //This should not be like this but we keep the same as :translate() from LUA code.
+			float y = m.y;
+			render->drawTexturedQuad(m_x + x, m_y + y, m_width, m_height, m_parentSheet->getImage(), m_rotation, _scale, _flip, m_parentSheet->getTexCoords(m_tilex, m_tiley));
+		}
+		else	
+			render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_parentSheet->getImage(), m_rotation, _scale, _flip, m_parentSheet->getTexCoords(m_tilex, m_tiley));
+	}
     if(m_label.length() > 0)
     {
         m_labelText->setText(m_label.c_str());

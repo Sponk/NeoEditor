@@ -49,6 +49,7 @@ void Sprite::draw()
     GuiSystem* gui = GuiSystem::getInstance();
     MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
     Level* level = NeoEngine::getInstance()->getLevel();
+	OCamera * camera = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getCurrentCamera();
 
     if(m_labelText == NULL)
     {
@@ -62,12 +63,26 @@ void Sprite::draw()
         getGlobalFilename(buf, system->getWorkingDirectory(), m_imagePath.c_str());
         m_image = level->loadTexture(buf)->getTextureId();
     }
+	if (_isVisible){
+		if (!_ignor_camera_offset){ //ONLY Sprites should be able to offset the camera.Because reasons :)
+			MVector3 m = camera->getPosition();
+			//camera->setPosition(MVector3(120, 20, 20)); // DE TESTAT MAI MULT 
+			float x = -m.x; //This should not be like this but we keep the same as :translate() from LUA code.
+			float y = m.y;
+			render->drawTexturedQuad(m_x + x, m_y + y, m_width, m_height, m_image, m_rotation, _scale, _flip);
 
-    render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_image, m_rotation);
-
-    if(m_label.length() > 0)
-    {
-        m_labelText->setText(m_label.c_str());
-        render->drawText(m_labelText, m_x + 0.5*m_width, m_y + m_height);
-    }
+			if (m_label.length() > 0)
+			{
+				m_labelText->setText(m_label.c_str());
+				render->drawText(m_labelText, x + m_x + 0.5*m_width, y + m_y + m_height);
+			}
+		}else{
+			render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_image, m_rotation, _scale, _flip);
+			if (m_label.length() > 0)
+			{
+				m_labelText->setText(m_label.c_str());
+				render->drawText(m_labelText, m_x + 0.5*m_width, m_y + m_height);
+			}
+		}
+	}
 }
