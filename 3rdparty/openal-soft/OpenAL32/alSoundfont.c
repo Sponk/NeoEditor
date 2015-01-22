@@ -4,11 +4,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "alMain.h"
 #include "alMidi.h"
 #include "alThunk.h"
 #include "alError.h"
+#include <alBuffer.h>
 
 #include "midi/base.h"
 
@@ -16,8 +18,8 @@
 extern inline struct ALsoundfont *LookupSfont(ALCdevice *device, ALuint id);
 extern inline struct ALsoundfont *RemoveSfont(ALCdevice *device, ALuint id);
 
-void ALsoundfont_Construct(ALsoundfont *self);
-void ALsoundfont_Destruct(ALsoundfont *self);
+static void ALsoundfont_Construct(ALsoundfont *self);
+static void ALsoundfont_Destruct(ALsoundfont *self);
 void ALsoundfont_deleteSoundfont(ALsoundfont *self, ALCdevice *device);
 ALsoundfont *ALsoundfont_getDefSoundfont(ALCcontext *context);
 static size_t ALsoundfont_read(ALvoid *buf, size_t bytes, ALvoid *ptr);
@@ -91,7 +93,7 @@ AL_API ALvoid AL_APIENTRY alDeleteSoundfontsSOFT(ALsizei n, const ALuint *ids)
         }
         else if((sfont=LookupSfont(device, ids[i])) == NULL)
             SET_ERROR_AND_GOTO(context, AL_INVALID_NAME, done);
-        if(sfont->Mapped != AL_FALSE || sfont->ref != 0)
+        if(ReadRef(&sfont->ref) != 0)
             SET_ERROR_AND_GOTO(context, AL_INVALID_OPERATION, done);
     }
 
@@ -136,137 +138,6 @@ AL_API ALboolean AL_APIENTRY alIsSoundfontSOFT(ALuint id)
     return ret;
 }
 
-AL_API ALvoid AL_APIENTRY alSoundfontSamplesSOFT(ALuint id, ALenum type, ALsizei count, const ALvoid *samples)
-{
-    ALCdevice *device;
-    ALCcontext *context;
-    ALsoundfont *sfont;
-    void *ptr;
-
-    context = GetContextRef();
-    if(!context) return;
-
-    device = context->Device;
-    if(id == 0)
-        SET_ERROR_AND_GOTO(context, AL_INVALID_OPERATION, done);
-    if(!(sfont=LookupSfont(device, id)))
-        SET_ERROR_AND_GOTO(context, AL_INVALID_NAME, done);
-    if(type != AL_SHORT_SOFT)
-        SET_ERROR_AND_GOTO(context, AL_INVALID_VALUE, done);
-    if(count <= 0)
-        SET_ERROR_AND_GOTO(context, AL_INVALID_VALUE, done);
-
-    WriteLock(&sfont->Lock);
-    if(sfont->ref != 0)
-        alSetError(context, AL_INVALID_OPERATION);
-    else if(sfont->Mapped)
-        alSetError(context, AL_INVALID_OPERATION);
-    else if(!(ptr=realloc(sfont->Samples, count * sizeof(ALshort))))
-        alSetError(context, AL_OUT_OF_MEMORY);
-    else
-    {
-        sfont->Samples = ptr;
-        sfont->NumSamples = count;
-        if(samples != NULL)
-            memcpy(sfont->Samples, samples, count * sizeof(ALshort));
-    }
-    WriteUnlock(&sfont->Lock);
-
-done:
-    ALCcontext_DecRef(context);
-}
-
-AL_API void AL_APIENTRY alGetSoundfontSamplesSOFT(ALuint id, ALsizei offset, ALsizei count, ALenum type, ALvoid *samples)
-{
-    ALCdevice *device;
-    ALCcontext *context;
-    ALsoundfont *sfont;
-
-    context = GetContextRef();
-    if(!context) return;
-
-    device = context->Device;
-    if(id == 0)
-        sfont = ALsoundfont_getDefSoundfont(context);
-    else if(!(sfont=LookupSfont(device, id)))
-        SET_ERROR_AND_GOTO(context, AL_INVALID_NAME, done);
-    if(type != AL_SHORT_SOFT)
-        SET_ERROR_AND_GOTO(context, AL_INVALID_VALUE, done);
-    if(offset < 0 || count <= 0)
-        SET_ERROR_AND_GOTO(context, AL_INVALID_VALUE, done);
-
-    ReadLock(&sfont->Lock);
-    if(offset >= sfont->NumSamples || count > (sfont->NumSamples-offset))
-        alSetError(context, AL_INVALID_VALUE);
-    else if(sfont->Mapped)
-        alSetError(context, AL_INVALID_OPERATION);
-    else
-    {
-        /* TODO: Allow conversion. */
-        memcpy(samples, sfont->Samples + offset*sizeof(ALshort), count * sizeof(ALshort));
-    }
-    ReadUnlock(&sfont->Lock);
-
-done:
-    ALCcontext_DecRef(context);
-}
-
-AL_API ALvoid* AL_APIENTRY alSoundfontMapSamplesSOFT(ALuint id, ALsizei offset, ALsizei length)
-{
-    ALCdevice *device;
-    ALCcontext *context;
-    ALsoundfont *sfont;
-    ALvoid *ptr = NULL;
-
-    context = GetContextRef();
-    if(!context) return NULL;
-
-    device = context->Device;
-    if(id == 0)
-        SET_ERROR_AND_GOTO(context, AL_INVALID_OPERATION, done);
-    if(!(sfont=LookupSfont(device, id)))
-        SET_ERROR_AND_GOTO(context, AL_INVALID_NAME, done);
-    if(offset < 0 || (ALuint)offset > sfont->NumSamples*sizeof(ALshort))
-        SET_ERROR_AND_GOTO(context, AL_INVALID_VALUE, done);
-    if(length <= 0 || (ALuint)length > (sfont->NumSamples*sizeof(ALshort) - offset))
-        SET_ERROR_AND_GOTO(context, AL_INVALID_VALUE, done);
-
-    ReadLock(&sfont->Lock);
-    if(sfont->ref != 0)
-        alSetError(context, AL_INVALID_OPERATION);
-    else if(ExchangeInt(&sfont->Mapped, AL_TRUE) == AL_TRUE)
-        alSetError(context, AL_INVALID_OPERATION);
-    else
-        ptr = (ALbyte*)sfont->Samples + offset;
-    ReadUnlock(&sfont->Lock);
-
-done:
-    ALCcontext_DecRef(context);
-
-    return ptr;
-}
-
-AL_API ALvoid AL_APIENTRY alSoundfontUnmapSamplesSOFT(ALuint id)
-{
-    ALCdevice *device;
-    ALCcontext *context;
-    ALsoundfont *sfont;
-
-    context = GetContextRef();
-    if(!context) return;
-
-    device = context->Device;
-    if(id == 0)
-        SET_ERROR_AND_GOTO(context, AL_INVALID_OPERATION, done);
-    if(!(sfont=LookupSfont(device, id)))
-        SET_ERROR_AND_GOTO(context, AL_INVALID_NAME, done);
-    if(ExchangeInt(&sfont->Mapped, AL_FALSE) == AL_FALSE)
-        SET_ERROR_AND_GOTO(context, AL_INVALID_OPERATION, done);
-
-done:
-    ALCcontext_DecRef(context);
-}
-
 AL_API void AL_APIENTRY alGetSoundfontivSOFT(ALuint id, ALenum param, ALint *values)
 {
     ALCdevice *device;
@@ -291,14 +162,6 @@ AL_API void AL_APIENTRY alGetSoundfontivSOFT(ALuint id, ALenum param, ALint *val
         case AL_PRESETS_SOFT:
             for(i = 0;i < sfont->NumPresets;i++)
                 values[i] = sfont->Presets[i]->id;
-            break;
-
-        case AL_SAMPLE_LENGTH_SOFT:
-            values[0] = sfont->NumSamples;
-            break;
-
-        case AL_FORMAT_TYPE_SOFT:
-            values[0] = AL_SHORT_SOFT;
             break;
 
         default:
@@ -329,7 +192,7 @@ AL_API void AL_APIENTRY alSoundfontPresetsSOFT(ALuint id, ALsizei count, const A
         SET_ERROR_AND_GOTO(context, AL_INVALID_VALUE, done);
 
     WriteLock(&sfont->Lock);
-    if(sfont->ref != 0)
+    if(ReadRef(&sfont->ref) != 0)
     {
         WriteUnlock(&sfont->Lock);
         SET_ERROR_AND_GOTO(context, AL_INVALID_OPERATION, done);
@@ -350,6 +213,7 @@ AL_API void AL_APIENTRY alSoundfontPresetsSOFT(ALuint id, ALsizei count, const A
         {
             if(!(presets[i]=LookupPreset(device, pids[i])))
             {
+                free(presets);
                 WriteUnlock(&sfont->Lock);
                 SET_ERROR_AND_GOTO(context, AL_INVALID_VALUE, done);
             }
@@ -389,12 +253,7 @@ AL_API void AL_APIENTRY alLoadSoundfontSOFT(ALuint id, size_t(*cb)(ALvoid*,size_
         SET_ERROR_AND_GOTO(context, AL_INVALID_NAME, done);
 
     WriteLock(&sfont->Lock);
-    if(sfont->ref != 0)
-    {
-        WriteUnlock(&sfont->Lock);
-        SET_ERROR_AND_GOTO(context, AL_INVALID_OPERATION, done);
-    }
-    if(sfont->Mapped)
+    if(ReadRef(&sfont->ref) != 0)
     {
         WriteUnlock(&sfont->Lock);
         SET_ERROR_AND_GOTO(context, AL_INVALID_OPERATION, done);
@@ -416,23 +275,19 @@ done:
 }
 
 
-void ALsoundfont_Construct(ALsoundfont *self)
+static void ALsoundfont_Construct(ALsoundfont *self)
 {
-    self->ref = 0;
+    InitRef(&self->ref, 0);
 
     self->Presets = NULL;
     self->NumPresets = 0;
 
-    self->Samples = NULL;
-    self->NumSamples = 0;
-
     RWLockInit(&self->Lock);
-    self->Mapped = AL_FALSE;
 
     self->id = 0;
 }
 
-void ALsoundfont_Destruct(ALsoundfont *self)
+static void ALsoundfont_Destruct(ALsoundfont *self)
 {
     ALsizei i;
 
@@ -447,16 +302,13 @@ void ALsoundfont_Destruct(ALsoundfont *self)
     free(self->Presets);
     self->Presets = NULL;
     self->NumPresets = 0;
-
-    free(self->Samples);
-    self->Samples = NULL;
-    self->NumSamples = 0;
 }
 
 ALsoundfont *ALsoundfont_getDefSoundfont(ALCcontext *context)
 {
     ALCdevice *device = context->Device;
-    const char *fname;
+    al_string fname = AL_STRING_INIT_STATIC();
+    const char *namelist;
 
     if(device->DefaultSfont)
         return device->DefaultSfont;
@@ -464,25 +316,44 @@ ALsoundfont *ALsoundfont_getDefSoundfont(ALCcontext *context)
     device->DefaultSfont = calloc(1, sizeof(device->DefaultSfont[0]));
     ALsoundfont_Construct(device->DefaultSfont);
 
-    fname = getenv("ALSOFT_SOUNDFONT");
-    if((fname && fname[0]) || ConfigValueStr("midi", "soundfont", &fname))
+    namelist = getenv("ALSOFT_SOUNDFONT");
+    if(!namelist || !namelist[0])
+        ConfigValueStr("midi", "soundfont", &namelist);
+    while(namelist && namelist[0])
     {
+        const char *next, *end;
         FILE *f;
 
-        f = OpenDataFile(fname, "openal/soundfonts");
+        while(*namelist && (isspace(*namelist) || *namelist == ','))
+            namelist++;
+        if(!*namelist)
+            break;
+        next = strchr(namelist, ',');
+        end = next ? next++ : (namelist+strlen(namelist));
+        while(--end != namelist && isspace(*end)) {
+        }
+        if(end == namelist)
+            continue;
+        al_string_append_range(&fname, namelist, end+1);
+        namelist = next;
+
+        f = OpenDataFile(al_string_get_cstr(fname), "openal/soundfonts");
         if(f == NULL)
-            ERR("Failed to open %s\n", fname);
+            ERR("Failed to open %s\n", al_string_get_cstr(fname));
         else
         {
             Reader reader;
             reader.cb = ALsoundfont_read;
             reader.ptr = f;
             reader.error = 0;
-            TRACE("Loading %s\n", fname);
+            TRACE("Loading %s\n", al_string_get_cstr(fname));
             loadSf2(&reader, device->DefaultSfont, context);
             fclose(f);
         }
+
+        al_string_clear(&fname);
     }
+    AL_STRING_DEINIT(fname);
 
     return device->DefaultSfont;
 }
@@ -491,8 +362,10 @@ void ALsoundfont_deleteSoundfont(ALsoundfont *self, ALCdevice *device)
 {
     ALsfpreset **presets;
     ALsizei num_presets;
+    VECTOR(ALbuffer*) buffers;
     ALsizei i;
 
+    VECTOR_INIT(buffers);
     presets = ExchangePtr((XchgPtr*)&self->Presets, NULL);
     num_presets = ExchangeInt(&self->NumPresets, 0);
 
@@ -506,7 +379,8 @@ void ALsoundfont_deleteSoundfont(ALsoundfont *self, ALCdevice *device)
 
         sounds = ExchangePtr((XchgPtr*)&preset->Sounds, NULL);
         num_sounds = ExchangeInt(&preset->NumSounds, 0);
-        DeletePreset(preset, device);
+
+        DeletePreset(device, preset);
         preset = NULL;
 
         for(j = 0;j < num_sounds;j++)
@@ -519,12 +393,22 @@ void ALsoundfont_deleteSoundfont(ALsoundfont *self, ALCdevice *device)
             deleting = AL_FALSE;
             for(j = 0;j < num_sounds;j++)
             {
-                if(sounds[j] && sounds[j]->ref == 0)
+                if(sounds[j] && ReadRef(&sounds[j]->ref) == 0)
                 {
+                    ALbuffer *buffer;
+
                     deleting = AL_TRUE;
-                    RemoveFontsound(device, sounds[j]->id);
-                    ALfontsound_Destruct(sounds[j]);
-                    free(sounds[j]);
+                    if((buffer=ATOMIC_LOAD(&sounds[j]->Buffer)) != NULL)
+                    {
+                        ALbuffer **iter;
+
+#define MATCH_BUFFER(_i) (buffer == *(_i))
+                        VECTOR_FIND_IF(iter, ALbuffer*, buffers, MATCH_BUFFER);
+                        if(iter == VECTOR_ITER_END(buffers))
+                            VECTOR_PUSH_BACK(buffers, buffer);
+#undef MATCH_BUFFER
+                    }
+                    DeleteFontsound(device, sounds[j]);
                     sounds[j] = NULL;
                 }
             }
@@ -534,6 +418,14 @@ void ALsoundfont_deleteSoundfont(ALsoundfont *self, ALCdevice *device)
 
     ALsoundfont_Destruct(self);
     free(self);
+
+#define DELETE_BUFFER(iter) do {           \
+    assert(ReadRef(&(*(iter))->ref) == 0); \
+    DeleteBuffer(device, *(iter));         \
+} while(0)
+    VECTOR_FOR_EACH(ALbuffer*, buffers, DELETE_BUFFER);
+#undef DELETE_BUFFER
+    VECTOR_DEINIT(buffers);
 }
 
 

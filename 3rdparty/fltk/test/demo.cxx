@@ -1,5 +1,5 @@
 //
-// "$Id: demo.cxx 9736 2012-12-05 14:53:03Z manolo $"
+// "$Id: demo.cxx 10115 2014-02-26 21:21:14Z ianmacarthur $"
 //
 // Main demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -72,12 +72,15 @@ void create_the_forms() {
   choice->labelfont(FL_HELVETICA_BOLD);
   choice->add("none");
   choice->add("gtk+");
+  choice->add("gleam");
   choice->add("plastic");
   choice->callback((Fl_Callback *)doscheme);
   Fl::scheme(NULL);
   if (!Fl::scheme()) choice->value(0);
   else if (!strcmp(Fl::scheme(), "gtk+")) choice->value(1);
-  else choice->value(2);
+  else if (!strcmp(Fl::scheme(), "gleam")) choice->value(2);
+  else if (!strcmp(Fl::scheme(), "plastic")) choice->value(3);
+  else choice->value(0);
   obj = new Fl_Button(10,15,330,380); obj->type(FL_HIDDEN_BUTTON);
   obj->callback(doback);
   obj = but[0] = new Fl_Button( 30, 85,90,90);
@@ -296,6 +299,11 @@ void dobut(Fl_Widget *, long arg)
       }
     }
     
+    char *name = new char[strlen(cmd) + 5];
+    strcpy(name, cmd);
+    strcat(name, ".app");
+    // check whether app bundle exists
+    if ( ! fl_filename_isdir(name) ) strcpy(name, cmd);
     if (arg) {
       const char *fluidpath;
       *arg = 0;
@@ -305,15 +313,18 @@ void dobut(Fl_Widget *, long arg)
 #else
       strcpy(path, app_path); strcat(path, "/");
       fluidpath = "../fluid/fluid.app";
+      // check whether fluid bundle exists
+      if ( ! fl_filename_isdir(fluidpath) ) fluidpath = "../fluid";
 #endif
       if (strcmp(cmd, "../fluid/fluid")==0) {
 	sprintf(command, "open %s --args %s%s", fluidpath, path, arg+1);
       } else {
-	sprintf(command, "open %s.app --args %s%s", cmd, path, arg+1);
+	sprintf(command, "open %s --args %s%s", name, path, arg+1);
       }
     } else {
-      sprintf(command, "open %s.app", cmd);
+      sprintf(command, "open %s", name);
     }
+    delete[] name;
 //    puts(command);    
     system(command);
     
@@ -429,6 +440,6 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: demo.cxx 9736 2012-12-05 14:53:03Z manolo $".
+// End of "$Id: demo.cxx 10115 2014-02-26 21:21:14Z ianmacarthur $".
 //
 

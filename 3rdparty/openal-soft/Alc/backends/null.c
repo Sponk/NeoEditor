@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the
- *  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- *  Boston, MA  02111-1307, USA.
+ *  Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * Or go to http://www.gnu.org/copyleft/lgpl.html
  */
 
@@ -37,11 +37,10 @@ typedef struct ALCnullBackend {
     DERIVE_FROM_TYPE(ALCbackend);
 
     volatile int killNow;
-    althread_t thread;
+    althrd_t thread;
 } ALCnullBackend;
-DECLARE_ALCBACKEND_VTABLE(ALCnullBackend);
 
-static ALuint ALCnullBackend_mixerProc(ALvoid *ptr);
+static int ALCnullBackend_mixerProc(void *ptr);
 
 static void ALCnullBackend_Construct(ALCnullBackend *self, ALCdevice *device);
 static DECLARE_FORWARD(ALCnullBackend, ALCbackend, void, Destruct)
@@ -55,6 +54,10 @@ static DECLARE_FORWARD(ALCnullBackend, ALCbackend, ALCuint, availableSamples)
 static DECLARE_FORWARD(ALCnullBackend, ALCbackend, ALint64, getLatency)
 static DECLARE_FORWARD(ALCnullBackend, ALCbackend, void, lock)
 static DECLARE_FORWARD(ALCnullBackend, ALCbackend, void, unlock)
+DECLARE_DEFAULT_ALLOCATORS(ALCnullBackend)
+
+DEFINE_ALCBACKEND_VTABLE(ALCnullBackend);
+
 
 static const ALCchar nullDevice[] = "No Output";
 
@@ -66,42 +69,49 @@ static void ALCnullBackend_Construct(ALCnullBackend *self, ALCdevice *device)
 }
 
 
-static ALuint ALCnullBackend_mixerProc(ALvoid *ptr)
+static int ALCnullBackend_mixerProc(void *ptr)
 {
     ALCnullBackend *self = (ALCnullBackend*)ptr;
     ALCdevice *device = STATIC_CAST(ALCbackend, self)->mDevice;
-    ALuint now, start;
+    struct timespec now, start;
     ALuint64 avail, done;
+    const long restTime = (long)((ALuint64)device->UpdateSize * 1000000000 /
+                                 device->Frequency / 2);
 
     SetRTPriority();
-    SetThreadName(MIXER_THREAD_NAME);
+    althrd_setname(althrd_current(), MIXER_THREAD_NAME);
 
     done = 0;
-    start = timeGetTime();
+    if(altimespec_get(&start, AL_TIME_UTC) != AL_TIME_UTC)
+    {
+        ERR("Failed to get starting time\n");
+        return 1;
+    }
     while(!self->killNow && device->Connected)
     {
-        now = timeGetTime();
+        if(altimespec_get(&now, AL_TIME_UTC) != AL_TIME_UTC)
+        {
+            ERR("Failed to get current time\n");
+            return 1;
+        }
 
-        avail = (ALuint64)(now-start) * device->Frequency / 1000;
+        avail  = (now.tv_sec - start.tv_sec) * device->Frequency;
+        avail += (ALint64)(now.tv_nsec - start.tv_nsec) * device->Frequency / 1000000000;
         if(avail < done)
         {
-            /* Timer wrapped (50 days???). Add the remainder of the cycle to
-             * the available count and reset the number of samples done */
-            avail += (U64(1)<<32)*device->Frequency/1000 - done;
-            done = 0;
-        }
-        if(avail-done < device->UpdateSize)
-        {
-            ALuint restTime = (ALuint)((device->UpdateSize - (avail-done)) * 1000 /
-                                       device->Frequency);
-            Sleep(restTime);
-            continue;
+            /* Oops, time skipped backwards. Reset the number of samples done
+             * with one update available since we (likely) just came back from
+             * sleeping. */
+            done = avail - device->UpdateSize;
         }
 
-        do {
+        if(avail-done < device->UpdateSize)
+            al_nssleep(restTime);
+        else while(avail-done >= device->UpdateSize)
+        {
             aluMixData(device, NULL, device->UpdateSize);
             done += device->UpdateSize;
-        } while(avail-done >= device->UpdateSize);
+        }
     }
 
     return 0;
@@ -118,7 +128,7 @@ static ALCenum ALCnullBackend_open(ALCnullBackend *self, const ALCchar *name)
         return ALC_INVALID_VALUE;
 
     device = STATIC_CAST(ALCbackend, self)->mDevice;
-    device->DeviceName = strdup(name);
+    al_string_copy_cstr(&device->DeviceName, name);
 
     return ALC_NO_ERROR;
 }
@@ -135,30 +145,22 @@ static ALCboolean ALCnullBackend_reset(ALCnullBackend *self)
 
 static ALCboolean ALCnullBackend_start(ALCnullBackend *self)
 {
-    if(!StartThread(&self->thread, ALCnullBackend_mixerProc, self))
+    self->killNow = 0;
+    if(althrd_create(&self->thread, ALCnullBackend_mixerProc, self) != althrd_success)
         return ALC_FALSE;
     return ALC_TRUE;
 }
 
 static void ALCnullBackend_stop(ALCnullBackend *self)
 {
-    if(!self->thread)
+    int res;
+
+    if(self->killNow)
         return;
 
     self->killNow = 1;
-    StopThread(self->thread);
-    self->thread = NULL;
-
-    self->killNow = 0;
+    althrd_join(self->thread, &res);
 }
-
-
-static void ALCnullBackend_Delete(ALCnullBackend *self)
-{
-    free(self);
-}
-
-DEFINE_ALCBACKEND_VTABLE(ALCnullBackend);
 
 
 typedef struct ALCnullBackendFactory {
@@ -209,14 +211,18 @@ static void ALCnullBackendFactory_probe(ALCnullBackendFactory* UNUSED(self), enu
 
 static ALCbackend* ALCnullBackendFactory_createBackend(ALCnullBackendFactory* UNUSED(self), ALCdevice *device, ALCbackend_Type type)
 {
-    ALCnullBackend *backend;
+    if(type == ALCbackend_Playback)
+    {
+        ALCnullBackend *backend;
 
-    assert(type == ALCbackend_Playback);
+        backend = ALCnullBackend_New(sizeof(*backend));
+        if(!backend) return NULL;
+        memset(backend, 0, sizeof(*backend));
 
-    backend = calloc(1, sizeof(*backend));
-    if(!backend) return NULL;
+        ALCnullBackend_Construct(backend, device);
 
-    ALCnullBackend_Construct(backend, device);
+        return STATIC_CAST(ALCbackend, backend);
+    }
 
-    return STATIC_CAST(ALCbackend, backend);
+    return NULL;
 }

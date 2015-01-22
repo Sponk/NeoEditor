@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_mac.cxx 9120 2011-10-03 09:22:57Z manolo $"
+// "$Id: fl_font_mac.cxx 10193 2014-06-14 11:06:42Z manolo $"
 //
 // MacOS font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,8 @@ static CGAffineTransform font_mx = { 1, 0, 0, -1, 0, 0 };
 static CFMutableDictionaryRef attributes = NULL;
 #endif
 
+const int Fl_X::CoreText_threshold = 100500; // this represents Mac OS 10.5
+
 Fl_Font_Descriptor::Fl_Font_Descriptor(const char* name, Fl_Fontsize Size) {
   next = 0;
 #  if HAVE_GL
@@ -34,10 +36,9 @@ Fl_Font_Descriptor::Fl_Font_Descriptor(const char* name, Fl_Fontsize Size) {
 
 //  knowWidths = 0;
     // OpenGL needs those for its font handling
-  q_name = strdup(name);
   size = Size;
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-if (fl_mac_os_version >= 100500) {//unfortunately, CTFontCreateWithName != NULL on 10.4 also!
+if (fl_mac_os_version >= Fl_X::CoreText_threshold) {
   CFStringRef str = CFStringCreateWithCString(NULL, name, kCFStringEncodingUTF8);
   fontref = CTFontCreateWithName(str, size, NULL);
   CGGlyph glyph[2];
@@ -88,22 +89,9 @@ else {
 #if ! __LP64__
   OSStatus err;
     // fill our structure with a few default values
-  ascent = Size*3/4;
+  ascent = Size*3/4.;
   descent = Size-ascent;
-  q_width = Size*2/3;
-	// now use ATS to get the actual Glyph size information
-	// say that our passed-in name is encoded as UTF-8, since this works for plain ASCII names too...
-  CFStringRef cfname = CFStringCreateWithCString(0L, name, kCFStringEncodingUTF8);
-  ATSFontRef font = ATSFontFindFromName(cfname, kATSOptionFlagsDefault);
-  if (font) {
-    ATSFontMetrics m = { 0 };
-    ATSFontGetHorizontalMetrics(font, kATSOptionFlagsDefault, &m);
-    if (m.avgAdvanceWidth) q_width = int(m.avgAdvanceWidth*Size);
-      // playing with the offsets a little to make standard sizes fit
-    if (m.ascent) ascent  = int(m.ascent*Size-0.5f);
-    if (m.descent) descent = -int(m.descent*Size-1.5f);
-  }
-  CFRelease(cfname);
+  q_width = Size*2/3.;
     // now we allocate everything needed to render text in this font later
     // get us the default layout and style
   err = ATSUCreateTextLayout(&layout);
@@ -115,15 +103,15 @@ else {
     // render our font up-side-down, so when rendered through our inverted CGContext,
     // text will appear normal again.
   Fixed fsize = IntToFixed(Size);
-//  ATSUFontID fontID = FMGetFontFromATSFontRef(font);
   ATSUFontID fontID;
-  ATSUFindFontFromName(name, strlen(name), kFontFullName, kFontMacintoshPlatform, kFontRomanScript, kFontEnglishLanguage, &fontID);
+  ATSUFindFontFromName(name, strlen(name), kFontFullName, kFontMacintoshPlatform, kFontNoScriptCode, kFontEnglishLanguage, &fontID);
 
   // draw the font upside-down... Compensate for fltk/OSX origin differences
   ATSUAttributeTag sTag[] = { kATSUFontTag, kATSUSizeTag, kATSUFontMatrixTag };
   ByteCount sBytes[] = { sizeof(ATSUFontID), sizeof(Fixed), sizeof(CGAffineTransform) };
   ATSUAttributeValuePtr sAttr[] = { &fontID, &fsize, &font_mx };
-  err = ATSUSetAttributes(style, 3, sTag, sBytes, sAttr);
+  if (fontID != kATSUInvalidFontID) err = ATSUSetAttributes(style, 1, sTag, sBytes, sAttr); // set the font attribute
+  err = ATSUSetAttributes(style, 2, sTag + 1, sBytes + 1, sAttr + 1); // then the size and matrix attributes
     // next, make sure that Quartz will only render at integer coordinates
   ATSLineLayoutOptions llo = kATSLineUseDeviceMetrics | kATSLineDisableAllLayoutOperations;
   ATSUAttributeTag aTag[] = { kATSULineLayoutOptionsTag };
@@ -176,7 +164,7 @@ Fl_Font_Descriptor::~Fl_Font_Descriptor() {
   */
   if (this == fl_graphics_driver->font_descriptor()) fl_graphics_driver->font_descriptor(NULL);
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-  if (fl_mac_os_version >= 100500)  {
+  if (fl_mac_os_version >= Fl_X::CoreText_threshold)  {
     CFRelease(fontref);
     for (unsigned i = 0; i < sizeof(width)/sizeof(float*); i++) {
       if (width[i]) free(width[i]);
@@ -187,23 +175,44 @@ Fl_Font_Descriptor::~Fl_Font_Descriptor() {
 
 ////////////////////////////////////////////////////////////////
 
-static Fl_Fontdesc built_in_table[] = {
-{"Arial"},
-{"Arial Bold"},
-{"Arial Italic"},
-{"Arial Bold Italic"},
-{"Courier New"},
-{"Courier New Bold"},
-{"Courier New Italic"},
-{"Courier New Bold Italic"},
-{"Times New Roman"},
-{"Times New Roman Bold"},
-{"Times New Roman Italic"},
-{"Times New Roman Bold Italic"},
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+static Fl_Fontdesc built_in_table_PS[] = { // PostScript font names preferred when Mac OS ≥ 10.5
+{"ArialMT"},
+{"Arial-BoldMT"},
+{"Arial-ItalicMT"},
+{"Arial-BoldItalicMT"},
+{"CourierNewPSMT"},
+{"CourierNewPS-BoldMT"},
+{"CourierNewPS-ItalicMT"},
+{"CourierNewPS-BoldItalicMT"},
+{"TimesNewRomanPSMT"},
+{"TimesNewRomanPS-BoldMT"},
+{"TimesNewRomanPS-ItalicMT"},
+{"TimesNewRomanPS-BoldItalicMT"},
 {"Symbol"},
 {"Monaco"},
-{"Andale Mono"}, // there is no bold Monaco font on standard Mac
-{"Webdings"},
+{"AndaleMono"}, // there is no bold Monaco font on standard Mac
+{"ZapfDingbatsITC"}
+};
+#endif
+
+static Fl_Fontdesc built_in_table_full[] = { // full font names used before 10.5
+  {"Arial"},
+  {"Arial Bold"},
+  {"Arial Italic"},
+  {"Arial Bold Italic"},
+  {"Courier New"},
+  {"Courier New Bold"},
+  {"Courier New Italic"},
+  {"Courier New Bold Italic"},
+  {"Times New Roman"},
+  {"Times New Roman Bold"},
+  {"Times New Roman Italic"},
+  {"Times New Roman Bold Italic"},
+  {"Symbol"},
+  {"Monaco"},
+  {"Andale Mono"}, // there is no bold Monaco font on standard Mac
+  {"Webdings"}
 };
 
 static UniChar *utfWbuf = 0;
@@ -223,7 +232,14 @@ static UniChar *mac_Utf8_to_Utf16(const char *txt, int len, int *new_len)
   return utfWbuf;
 } // mac_Utf8_to_Utf16
 
-Fl_Fontdesc* fl_fonts = built_in_table;
+Fl_Fontdesc* Fl_X::calc_fl_fonts(void)
+{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+  return (fl_mac_os_version >= Fl_X::CoreText_threshold ? built_in_table_PS : built_in_table_full);
+#else
+  return built_in_table_full;
+#endif
+}
 
 static Fl_Font_Descriptor* find(Fl_Font fnum, Fl_Fontsize size) {
   Fl_Fontdesc* s = fl_fonts+fnum;
@@ -287,7 +303,7 @@ static CGFloat surrogate_width(const UniChar *txt, Fl_Font_Descriptor *fl_fontsi
 
 static double fl_mac_width(const UniChar* txt, int n, Fl_Font_Descriptor *fl_fontsize) {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-if (fl_mac_os_version >= 100500) {
+if (fl_mac_os_version >= Fl_X::CoreText_threshold) {
   double retval = 0;
   UniChar uni;
   int i;
@@ -302,7 +318,7 @@ if (fl_mac_os_version >= 100500) {
     // r: index of the character block containing uni
     unsigned int r = uni >> 7; // change 7 if sizeof(width) is changed
     if (!fl_fontsize->width[r]) { // this character block has not been hit yet
-      //fprintf(stderr,"r=%d size=%d name=%s\n",r,fl_fontsize->size, fl_fontsize->q_name);
+      //fprintf(stderr,"r=%d size=%d name=%s\n",r,fl_fontsize->size,fl_fonts[fl_font()].name);
       // allocate memory to hold width of each character in the block
       fl_fontsize->width[r] = (float*) malloc(sizeof(float) * block);
       UniChar ii = r * block;
@@ -406,7 +422,7 @@ void Fl_Quartz_Graphics_Driver::text_extents(const char *str8, int n, int &dx, i
   Fl_Font_Descriptor *fl_fontsize = font_descriptor();
   UniChar *txt = mac_Utf8_to_Utf16(str8, n, &n);
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-if (fl_mac_os_version >= 100500) {
+if (fl_mac_os_version >= Fl_X::CoreText_threshold) {
   CFStringRef str16 = CFStringCreateWithCharactersNoCopy(NULL, txt, n,  kCFAllocatorNull);
   CFDictionarySetValue (attributes, kCTFontAttributeName, fl_fontsize->fontref);
   CFAttributedStringRef mastr = CFAttributedStringCreate(kCFAllocatorDefault, str16, attributes);
@@ -474,7 +490,7 @@ static void fl_mac_draw(const char *str, int n, float x, float y, Fl_Graphics_Dr
   // convert to UTF-16 first
   UniChar *uniStr = mac_Utf8_to_Utf16(str, n, &n);
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-  if (fl_mac_os_version >= 100500) {
+  if (fl_mac_os_version >= Fl_X::CoreText_threshold) {
     CFStringRef str16 = CFStringCreateWithCharactersNoCopy(NULL, uniStr, n,  kCFAllocatorNull);
     if (str16 == NULL) return; // shd not happen
     CGColorRef color = flcolortocgcolor(driver->color());
@@ -540,5 +556,5 @@ void Fl_Quartz_Graphics_Driver::rtl_draw(const char* c, int n, int x, int y) {
 }
 
 //
-// End of "$Id: fl_font_mac.cxx 9120 2011-10-03 09:22:57Z manolo $".
+// End of "$Id: fl_font_mac.cxx 10193 2014-06-14 11:06:42Z manolo $".
 //

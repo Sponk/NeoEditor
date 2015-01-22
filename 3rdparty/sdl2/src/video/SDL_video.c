@@ -487,8 +487,8 @@ SDL_VideoInit(const char *driver_name)
     _this->gl_config.dll_handle = NULL;
     SDL_GL_ResetAttributes();
 
-    _this->current_glwin_tls = SDL_TLSCreate();
-    _this->current_glctx_tls = SDL_TLSCreate();
+	_this->current_glwin_tls = SDL_TLSCreate();
+	_this->current_glctx_tls = SDL_TLSCreate();
 
     /* Initialize the video subsystem */
     if (_this->VideoInit(_this) < 0) {

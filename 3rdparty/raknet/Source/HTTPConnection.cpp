@@ -219,7 +219,7 @@ RakString HTTPConnection::Read(void)
 
 	RakNet::RakString resultStr = results.Pop();
     // const char *start_of_body = strstr(resultStr.C_String(), "\r\n\r\n");
-	const char *start_of_body = strpbrk(resultStr.C_String(), "\001\002\003%");
+	const char *start_of_body = NULL; //strpbrk(resultStr.C_String(), "\001\002\003%");
     
     if(start_of_body)
 		return RakNet::RakString::NonVariadic(start_of_body);

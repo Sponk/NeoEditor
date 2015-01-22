@@ -1,11 +1,11 @@
 //
-// "$Id: editor.cxx 9718 2012-11-13 13:03:20Z manolo $"
+// "$Id: editor.cxx 10360 2014-10-05 19:49:19Z AlbrechtS $"
 //
 // A simple text editor program for the Fast Light Tool Kit (FLTK).
 //
 // This program is described in Chapter 4 of the FLTK Programmer's Guide.
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2014 by Bill Spitzak and others.
 //
 // This library is free software. Distribution and use rights are outlined in
 // the file "COPYING" which should have been included with this file.  If this
@@ -33,6 +33,7 @@
 #endif
 
 #include <FL/Fl.H>
+#include <FL/x.H> // for fl_open_callback
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/fl_ask.H>
@@ -515,6 +516,30 @@ void delete_cb(Fl_Widget*, void*) {
   textbuf->remove_selection();
 }
 
+void linenumbers_cb(Fl_Widget *w, void* v) {
+  EditorWindow* e = (EditorWindow*)v;
+  Fl_Menu_Bar* m = (Fl_Menu_Bar*)w;
+  const Fl_Menu_Item* i = m->mvalue();
+  if ( i->value() ) {
+    e->editor->linenumber_width(50);	// enable
+    e->editor->linenumber_size(e->editor->textsize());
+  } else {
+    e->editor->linenumber_width(0);	// disable
+  }
+  e->redraw();
+}
+
+void wordwrap_cb(Fl_Widget *w, void* v) {
+  EditorWindow* e = (EditorWindow*)v;
+  Fl_Menu_Bar* m = (Fl_Menu_Bar*)w;
+  const Fl_Menu_Item* i = m->mvalue();
+  if ( i->value() )
+    e->editor->wrap_mode(Fl_Text_Display::WRAP_AT_BOUNDS, 0);
+  else
+    e->editor->wrap_mode(Fl_Text_Display::WRAP_NONE, 0);
+  e->redraw();
+}
+
 void find_cb(Fl_Widget* w, void* v) {
   EditorWindow* e = (EditorWindow*)v;
   const char *val;
@@ -751,6 +776,10 @@ Fl_Menu_Item menuitems[] = {
     { "&Copy",            FL_COMMAND + 'c', (Fl_Callback *)copy_cb },
     { "&Paste",           FL_COMMAND + 'v', (Fl_Callback *)paste_cb },
     { "&Delete",          0, (Fl_Callback *)delete_cb },
+    { "Preferences",      0, 0, 0, FL_SUBMENU },
+      { "Line Numbers",   FL_COMMAND + 'l', (Fl_Callback *)linenumbers_cb, 0, FL_MENU_TOGGLE },
+      { "Word Wrap",      0,                (Fl_Callback *)wordwrap_cb, 0, FL_MENU_TOGGLE },
+      { 0 },
     { 0 },
 
   { "&Search", 0, 0, 0, FL_SUBMENU },
@@ -776,8 +805,6 @@ Fl_Window* new_view() {
     w->editor->highlight_data(stylebuf, styletable,
                               sizeof(styletable) / sizeof(styletable[0]),
 			      'A', style_unfinished_cb, 0);
-  textbuf->text();
-  style_init();
   w->end();
   w->resizable(w->editor);
   w->callback((Fl_Callback *)close_cb, w);
@@ -810,5 +837,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: editor.cxx 9718 2012-11-13 13:03:20Z manolo $".
+// End of "$Id: editor.cxx 10360 2014-10-05 19:49:19Z AlbrechtS $".
 //

@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the
- *  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- *  Boston, MA  02111-1307, USA.
+ *  Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * Or go to http://www.gnu.org/copyleft/lgpl.html
  */
 
@@ -32,12 +32,13 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
-
-#include "alMain.h"
-
 #ifdef _WIN32_IE
 #include <shlobj.h>
 #endif
+
+#include "alMain.h"
+#include "compat.h"
+#include "bool.h"
 
 
 typedef struct ConfigEntry {
@@ -89,7 +90,7 @@ static int readline(FILE *f, char **output, size_t *maxlen)
                 temp = realloc(*output, newmax);
             if(!temp)
             {
-                ERR("Failed to realloc %lu bytes from %lu!\n", newmax, *maxlen);
+                ERR("Failed to realloc "SZFMT" bytes from "SZFMT"!\n", newmax, *maxlen);
                 return 0;
             }
 
@@ -137,13 +138,21 @@ static char *expdup(const char *str)
             }
             else
             {
+                bool hasbraces;
                 char envname[1024];
                 size_t k = 0;
+
+                hasbraces = (*str == '{');
+                if(hasbraces) str++;
 
                 while((isalnum(*str) || *str == '_') && k < sizeof(envname)-1)
                     envname[k++] = *(str++);
                 envname[k++] = '\0';
 
+                if(hasbraces && *str != '}')
+                    continue;
+
+                if(hasbraces) str++;
                 if((addstr=getenv(envname)) == NULL)
                     continue;
                 addstrlen = strlen(addstr);
@@ -157,12 +166,12 @@ static char *expdup(const char *str)
             void *temp = NULL;
             size_t newmax;
 
-            newmax = NextPowerOf2(len+addstrlen+1);
+            newmax = len+addstrlen+1;
             if(newmax > maxlen)
                 temp = realloc(output, newmax);
             if(!temp)
             {
-                ERR("Failed to realloc %lu bytes from %lu!\n", newmax, maxlen);
+                ERR("Failed to realloc "SZFMT" bytes from "SZFMT"!\n", newmax, maxlen);
                 return output;
             }
 
@@ -193,11 +202,7 @@ static void LoadConfigFromFile(FILE *f)
         char value[256] = "";
 
         comment = strchr(buffer, '#');
-        if(comment)
-        {
-            *(comment++) = 0;
-            comment = rstrip(lstrip(comment));
-        }
+        if(comment) *(comment++) = 0;
 
         line = rstrip(lstrip(buffer));
         if(!line[0])
@@ -291,31 +296,49 @@ static void LoadConfigFromFile(FILE *f)
     free(buffer);
 }
 
+#ifdef _WIN32
 void ReadALConfig(void)
 {
-    char buffer[PATH_MAX];
-    const char *str;
+    WCHAR buffer[PATH_MAX];
+    const WCHAR *str;
     FILE *f;
 
-#ifdef _WIN32
-    if(SHGetSpecialFolderPathA(NULL, buffer, CSIDL_APPDATA, FALSE) != FALSE)
+    if(SHGetSpecialFolderPathW(NULL, buffer, CSIDL_APPDATA, FALSE) != FALSE)
     {
-        size_t p = strlen(buffer);
-        snprintf(buffer+p, sizeof(buffer)-p, "\\alsoft.ini");
+        size_t p = lstrlenW(buffer);
+        _snwprintf(buffer+p, PATH_MAX-p, L"\\alsoft.ini");
 
-        TRACE("Loading config %s...\n", buffer);
-        f = fopen(buffer, "rt");
+        TRACE("Loading config %ls...\n", buffer);
+        f = _wfopen(buffer, L"rt");
         if(f)
         {
             LoadConfigFromFile(f);
             fclose(f);
         }
     }
+
+    if((str=_wgetenv(L"ALSOFT_CONF")) != NULL && *str)
+    {
+        TRACE("Loading config %ls...\n", str);
+        f = _wfopen(str, L"rt");
+        if(f)
+        {
+            LoadConfigFromFile(f);
+            fclose(f);
+        }
+    }
+}
 #else
+void ReadALConfig(void)
+{
+    char buffer[PATH_MAX];
+    const char *str;
+    FILE *f;
+
     str = "/etc/openal/alsoft.conf";
 
     TRACE("Loading config %s...\n", str);
-    f = fopen(str, "r");
+    f = al_fopen(str, "r");
     if(f)
     {
         LoadConfigFromFile(f);
@@ -346,7 +369,7 @@ void ReadALConfig(void)
             buffer[sizeof(buffer)-1] = 0;
 
             TRACE("Loading config %s...\n", next);
-            f = fopen(next, "r");
+            f = al_fopen(next, "r");
             if(f)
             {
                 LoadConfigFromFile(f);
@@ -362,7 +385,7 @@ void ReadALConfig(void)
         snprintf(buffer, sizeof(buffer), "%s/.alsoftrc", str);
 
         TRACE("Loading config %s...\n", buffer);
-        f = fopen(buffer, "r");
+        f = al_fopen(buffer, "r");
         if(f)
         {
             LoadConfigFromFile(f);
@@ -381,19 +404,18 @@ void ReadALConfig(void)
     if(buffer[0] != 0)
     {
         TRACE("Loading config %s...\n", buffer);
-        f = fopen(buffer, "r");
+        f = al_fopen(buffer, "r");
         if(f)
         {
             LoadConfigFromFile(f);
             fclose(f);
         }
     }
-#endif
 
     if((str=getenv("ALSOFT_CONF")) != NULL && *str)
     {
         TRACE("Loading config %s...\n", str);
-        f = fopen(str, "r");
+        f = al_fopen(str, "r");
         if(f)
         {
             LoadConfigFromFile(f);
@@ -401,6 +423,7 @@ void ReadALConfig(void)
         }
     }
 }
+#endif
 
 void FreeALConfig(void)
 {

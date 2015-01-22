@@ -1,5 +1,5 @@
 //
-// "$Id: help.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $"
+// "$Id: help.cxx 10097 2014-02-08 20:44:09Z greg.ercolano $"
 //
 // Fl_Help_Dialog test program.
 //
@@ -68,14 +68,14 @@ main(int  argc,			// I - Number of command-line arguments
   set_app_dir();
   
   if (argc <= argn)
-    help->load("../../../../documentation/html/intro.html");
+    help->load("../../../../test/help-test.html");
   else
     help->load(argv[argn]);
   
 #else
   
   if (argc <= argn)
-    help->load("../documentation/html/intro.html");
+    help->load("help-test.html");
   else
     help->load(argv[1]);
   
@@ -92,5 +92,5 @@ main(int  argc,			// I - Number of command-line arguments
 
 
 //
-// End of "$Id: help.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $".
+// End of "$Id: help.cxx 10097 2014-02-08 20:44:09Z greg.ercolano $".
 //

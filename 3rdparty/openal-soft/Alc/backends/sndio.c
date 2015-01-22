@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the
- *  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- *  Boston, MA  02111-1307, USA.
+ *  Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * Or go to http://www.gnu.org/copyleft/lgpl.html
  */
 
@@ -47,11 +47,11 @@ typedef struct {
     ALsizei data_size;
 
     volatile int killNow;
-    althread_t thread;
+    althrd_t thread;
 } sndio_data;
 
 
-static ALuint sndio_proc(ALvoid *ptr)
+static int sndio_proc(void *ptr)
 {
     ALCdevice *device = ptr;
     sndio_data *data = device->ExtraData;
@@ -59,7 +59,7 @@ static ALuint sndio_proc(ALvoid *ptr)
     size_t wrote;
 
     SetRTPriority();
-    SetThreadName(MIXER_THREAD_NAME);
+    althrd_setname(althrd_current(), MIXER_THREAD_NAME);
 
     frameSize = FrameSizeFromDevFmt(device->FmtChans, device->FmtType);
 
@@ -111,7 +111,7 @@ static ALCenum sndio_open_playback(ALCdevice *device, const ALCchar *deviceName)
         return ALC_INVALID_VALUE;
     }
 
-    device->DeviceName = strdup(deviceName);
+    al_string_copy_cstr(&device->DeviceName, deviceName);
     device->ExtraData = data;
 
     return ALC_NO_ERROR;
@@ -224,7 +224,8 @@ static ALCboolean sndio_start_playback(ALCdevice *device)
     data->data_size = device->UpdateSize * FrameSizeFromDevFmt(device->FmtChans, device->FmtType);
     data->mix_data = calloc(1, data->data_size);
 
-    if(!StartThread(&data->thread, sndio_proc, device))
+    data->killNow = 0;
+    if(althrd_create(&data->thread, sndio_proc, device) != althrd_success)
     {
         sio_stop(data->sndHandle);
         free(data->mix_data);
@@ -238,15 +239,14 @@ static ALCboolean sndio_start_playback(ALCdevice *device)
 static void sndio_stop_playback(ALCdevice *device)
 {
     sndio_data *data = device->ExtraData;
+    int res;
 
-    if(!data->thread)
+    if(data->killNow)
         return;
 
     data->killNow = 1;
-    StopThread(data->thread);
-    data->thread = NULL;
+    althrd_join(data->thread, &res);
 
-    data->killNow = 0;
     if(!sio_stop(data->sndHandle))
         ERR("Error stopping device\n");
 
@@ -266,8 +266,7 @@ static const BackendFuncs sndio_funcs = {
     NULL,
     NULL,
     NULL,
-    NULL,
-    ALCdevice_GetLatencyDefault
+    NULL
 };
 
 ALCboolean alc_sndio_init(BackendFuncs *func_list)

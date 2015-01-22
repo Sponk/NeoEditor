@@ -41,17 +41,24 @@ static ALvoid ALnullState_update(ALnullState* UNUSED(state), ALCdevice* UNUSED(d
  * input to the output buffer. The result should be added to the output buffer,
  * not replace it.
  */
-static ALvoid ALnullState_process(ALnullState* UNUSED(state), ALuint UNUSED(samplesToDo), const ALfloat *restrict UNUSED(samplesIn), ALfloat (*restrict samplesOut)[BUFFERSIZE])
+static ALvoid ALnullState_process(ALnullState* UNUSED(state), ALuint UNUSED(samplesToDo), const ALfloat *restrict UNUSED(samplesIn), ALfloatBUFFERSIZE*restrict UNUSED(samplesOut), ALuint UNUSED(NumChannels))
 {
-    /* NOTE: Couldn't use the UNUSED macro on samplesOut due to the way GCC's
-     * __attribute__ declaration interacts with the parenthesis. */
-    (void)samplesOut;
 }
 
-/* This frees the memory used by the object, after it has been destructed. */
-static void ALnullState_Delete(ALnullState *state)
+/* This allocates memory to store the object, before it gets constructed.
+ * DECLARE_DEFAULT_ALLOCATORS can be used to declate a default method.
+ */
+static void *ALnullState_New(size_t size)
 {
-    free(state);
+    return malloc(size);
+}
+
+/* This frees the memory used by the object, after it has been destructed.
+ * DECLARE_DEFAULT_ALLOCATORS can be used to declate a default method.
+ */
+static void ALnullState_Delete(void *ptr)
+{
+    free(ptr);
 }
 
 /* Define the forwards and the ALeffectState vtable for this type. */
@@ -67,7 +74,7 @@ ALeffectState *ALnullStateFactory_create(ALnullStateFactory *UNUSED(factory))
 {
     ALnullState *state;
 
-    state = calloc(1, sizeof(*state));
+    state = ALnullState_New(sizeof(*state));
     if(!state) return NULL;
     /* Set vtables for inherited types. */
     SET_VTABLE2(ALnullState, ALeffectState, state);

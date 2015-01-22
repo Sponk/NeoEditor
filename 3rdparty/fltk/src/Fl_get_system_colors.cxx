@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_system_colors.cxx 9740 2012-12-09 17:45:24Z manolo $"
+// "$Id: Fl_get_system_colors.cxx 10126 2014-04-19 14:55:15Z greg.ercolano $"
 //
 // System color support for the Fast Light Tool Kit (FLTK).
 //
@@ -258,19 +258,28 @@ Fl_Image	*Fl::scheme_bg_ = (Fl_Image *)0;    // current background image for the
 static Fl_Pixmap	tile(tile_xpm);
 
 /**
-    Gets or sets the current widget scheme. NULL will use
-    the scheme defined in the FLTK_SCHEME environment
-    variable or the scheme resource under X11. Otherwise,
-    any of the following schemes can be used:
-      
-    	- "none" - This is the default look-n-feel which resembles old
-    	Windows (95/98/Me/NT/2000) and old GTK/KDE
-    
-    	- "plastic" - This scheme is inspired by the Aqua user interface
-    	on Mac OS X
-    
-    	- "gtk+" - This scheme is inspired by the Red Hat Bluecurve
-    	theme
+    Sets the current widget scheme. NULL will use the scheme defined
+    in the FLTK_SCHEME environment variable or the scheme resource
+    under X11. Otherwise, any of the following schemes can be used:
+
+        - "none" - This is the default look-n-feel which resembles old
+                   Windows (95/98/Me/NT/2000) and old GTK/KDE
+
+        - "base" - This is an alias for "none"
+
+        - "plastic" - This scheme is inspired by the Aqua user interface
+                      on Mac OS X
+
+        - "gtk+" - This scheme is inspired by the Red Hat Bluecurve theme
+
+        - "gleam" - This scheme is inspired by the Clearlooks Glossy scheme.
+                    (Colin Jones and Edmanuel Torres).
+
+    Uppercase scheme names are equivalent, but the stored scheme name will
+    always be lowercase and Fl::scheme() will return this lowercase name.
+
+    If the resulting scheme name is not defined, the default scheme will
+    be used and Fl::scheme() will return NULL.
 */
 int Fl::scheme(const char *s) {
   if (!s) {
@@ -433,5 +442,5 @@ int Fl::reload_scheme() {
 
 
 //
-// End of "$Id: Fl_get_system_colors.cxx 9740 2012-12-09 17:45:24Z manolo $".
+// End of "$Id: Fl_get_system_colors.cxx 10126 2014-04-19 14:55:15Z greg.ercolano $".
 //

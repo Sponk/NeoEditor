@@ -10,13 +10,113 @@
 #include "alMain.h"
 #include "alError.h"
 #include "alMidi.h"
+#include "alu.h"
+#include "compat.h"
 #include "evtqueue.h"
 #include "rwlock.h"
-#include "alu.h"
 
 #ifdef HAVE_FLUIDSYNTH
 
 #include <fluidsynth.h>
+
+
+#ifdef HAVE_DYNLOAD
+#define FLUID_FUNCS(MAGIC)                                                    \
+    MAGIC(new_fluid_synth);                                                   \
+    MAGIC(delete_fluid_synth);                                                \
+    MAGIC(new_fluid_settings);                                                \
+    MAGIC(delete_fluid_settings);                                             \
+    MAGIC(fluid_settings_setint);                                             \
+    MAGIC(fluid_settings_setnum);                                             \
+    MAGIC(fluid_synth_noteon);                                                \
+    MAGIC(fluid_synth_noteoff);                                               \
+    MAGIC(fluid_synth_program_change);                                        \
+    MAGIC(fluid_synth_pitch_bend);                                            \
+    MAGIC(fluid_synth_channel_pressure);                                      \
+    MAGIC(fluid_synth_cc);                                                    \
+    MAGIC(fluid_synth_sysex);                                                 \
+    MAGIC(fluid_synth_bank_select);                                           \
+    MAGIC(fluid_synth_set_channel_type);                                      \
+    MAGIC(fluid_synth_all_sounds_off);                                        \
+    MAGIC(fluid_synth_system_reset);                                          \
+    MAGIC(fluid_synth_set_gain);                                              \
+    MAGIC(fluid_synth_set_sample_rate);                                       \
+    MAGIC(fluid_synth_write_float);                                           \
+    MAGIC(fluid_synth_add_sfloader);                                          \
+    MAGIC(fluid_synth_sfload);                                                \
+    MAGIC(fluid_synth_sfunload);                                              \
+    MAGIC(fluid_synth_alloc_voice);                                           \
+    MAGIC(fluid_synth_start_voice);                                           \
+    MAGIC(fluid_voice_gen_set);                                               \
+    MAGIC(fluid_voice_add_mod);                                               \
+    MAGIC(fluid_mod_set_source1);                                             \
+    MAGIC(fluid_mod_set_source2);                                             \
+    MAGIC(fluid_mod_set_amount);                                              \
+    MAGIC(fluid_mod_set_dest);
+
+void *fsynth_handle = NULL;
+#define DECL_FUNC(x) __typeof(x) *p##x
+FLUID_FUNCS(DECL_FUNC)
+#undef DECL_FUNC
+
+#define new_fluid_synth pnew_fluid_synth
+#define delete_fluid_synth pdelete_fluid_synth
+#define new_fluid_settings pnew_fluid_settings
+#define delete_fluid_settings pdelete_fluid_settings
+#define fluid_settings_setint pfluid_settings_setint
+#define fluid_settings_setnum pfluid_settings_setnum
+#define fluid_synth_noteon pfluid_synth_noteon
+#define fluid_synth_noteoff pfluid_synth_noteoff
+#define fluid_synth_program_change pfluid_synth_program_change
+#define fluid_synth_pitch_bend pfluid_synth_pitch_bend
+#define fluid_synth_channel_pressure pfluid_synth_channel_pressure
+#define fluid_synth_cc pfluid_synth_cc
+#define fluid_synth_sysex pfluid_synth_sysex
+#define fluid_synth_bank_select pfluid_synth_bank_select
+#define fluid_synth_set_channel_type pfluid_synth_set_channel_type
+#define fluid_synth_all_sounds_off pfluid_synth_all_sounds_off
+#define fluid_synth_system_reset pfluid_synth_system_reset
+#define fluid_synth_set_gain pfluid_synth_set_gain
+#define fluid_synth_set_sample_rate pfluid_synth_set_sample_rate
+#define fluid_synth_write_float pfluid_synth_write_float
+#define fluid_synth_add_sfloader pfluid_synth_add_sfloader
+#define fluid_synth_sfload pfluid_synth_sfload
+#define fluid_synth_sfunload pfluid_synth_sfunload
+#define fluid_synth_alloc_voice pfluid_synth_alloc_voice
+#define fluid_synth_start_voice pfluid_synth_start_voice
+#define fluid_voice_gen_set pfluid_voice_gen_set
+#define fluid_voice_add_mod pfluid_voice_add_mod
+#define fluid_mod_set_source1 pfluid_mod_set_source1
+#define fluid_mod_set_source2 pfluid_mod_set_source2
+#define fluid_mod_set_amount pfluid_mod_set_amount
+#define fluid_mod_set_dest pfluid_mod_set_dest
+
+static ALboolean LoadFSynth(void)
+{
+    ALboolean ret = AL_TRUE;
+    if(!fsynth_handle)
+    {
+        fsynth_handle = LoadLib("libfluidsynth.so.1");
+        if(!fsynth_handle) return AL_FALSE;
+
+#define LOAD_FUNC(x) do {                                                     \
+     p##x = GetSymbol(fsynth_handle, #x);                                     \
+     if(!p##x) ret = AL_FALSE;                                                \
+} while(0)
+        FLUID_FUNCS(LOAD_FUNC)
+#undef LOAD_FUNC
+
+        if(ret == AL_FALSE)
+        {
+            CloseLib(fsynth_handle);
+            fsynth_handle = NULL;
+        }
+    }
+    return ret;
+}
+#else
+static inline ALboolean LoadFSynth(void) { return AL_TRUE; }
+#endif
 
 
 /* MIDI events */
@@ -28,7 +128,7 @@
 #define CTRL_ALLNOTESOFF     (123)
 
 
-static int getGenInput(ALenum input)
+static int getModInput(ALenum input)
 {
     switch(input)
     {
@@ -43,7 +143,7 @@ static int getGenInput(ALenum input)
     return input&0x7F;
 }
 
-static int getGenFlags(ALenum input, ALenum type, ALenum form)
+static int getModFlags(ALenum input, ALenum type, ALenum form)
 {
     int ret = 0;
 
@@ -69,7 +169,7 @@ static int getGenFlags(ALenum input, ALenum type, ALenum form)
     return ret;
 }
 
-static enum fluid_gen_type getSf2Gen(ALenum gen)
+static enum fluid_gen_type getModDest(ALenum gen)
 {
     switch(gen)
     {
@@ -144,9 +244,11 @@ typedef struct FSample {
     ALsizei NumMods;
 } FSample;
 
-static void FSample_Construct(FSample *self, ALfontsound *sound, ALsoundfont *sfont)
+static void FSample_Construct(FSample *self, ALfontsound *sound)
 {
     fluid_sample_t *sample = STATIC_CAST(fluid_sample_t, self);
+    ALbuffer *buffer = ATOMIC_LOAD(&sound->Buffer);
+
     memset(sample->name, 0, sizeof(sample->name));
     sample->start = sound->Start;
     sample->end = sound->End;
@@ -156,8 +258,8 @@ static void FSample_Construct(FSample *self, ALfontsound *sound, ALsoundfont *sf
     sample->origpitch = sound->PitchKey;
     sample->pitchadj = sound->PitchCorrection;
     sample->sampletype = getSampleType(sound->SampleType);
-    sample->valid = 1;
-    sample->data = sfont->Samples;
+    sample->valid = !!buffer;
+    sample->data = buffer ? buffer->data : NULL;
 
     sample->amplitude_that_reaches_noise_floor_is_valid = 0;
     sample->amplitude_that_reaches_noise_floor = 0.0;
@@ -171,25 +273,30 @@ static void FSample_Construct(FSample *self, ALfontsound *sound, ALsoundfont *sf
     self->Sound = sound;
 
     self->NumMods = 0;
-    self->Mods = calloc(sound->ModulatorMap.size, sizeof(self->Mods[0]));
+    self->Mods = calloc(sound->ModulatorMap.size*4, sizeof(fluid_mod_t[4]));
     if(self->Mods)
     {
-        ALsizei i;
+        ALsizei i, j, k;
 
-        self->NumMods = sound->ModulatorMap.size;
-        for(i = 0;i < self->NumMods;i++)
+        for(i = j = 0;i < sound->ModulatorMap.size;i++)
         {
             ALsfmodulator *mod = sound->ModulatorMap.array[i].value;
-            fluid_mod_set_source1(&self->Mods[i], getGenInput(mod->Source[0].Input),
-                                  getGenFlags(mod->Source[0].Input, mod->Source[0].Type,
-                                              mod->Source[0].Form));
-            fluid_mod_set_source2(&self->Mods[i], getGenInput(mod->Source[1].Input),
-                                  getGenFlags(mod->Source[1].Input, mod->Source[1].Type,
-                                              mod->Source[1].Form));
-            fluid_mod_set_amount(&self->Mods[i], mod->Amount);
-            fluid_mod_set_dest(&self->Mods[i], getSf2Gen(mod->Dest));
-            self->Mods[i].next = NULL;
+            for(k = 0;k < 4;k++,mod++)
+            {
+                if(mod->Dest == AL_NONE)
+                    continue;
+                fluid_mod_set_source1(&self->Mods[j], getModInput(mod->Source[0].Input),
+                                      getModFlags(mod->Source[0].Input, mod->Source[0].Type,
+                                                  mod->Source[0].Form));
+                fluid_mod_set_source2(&self->Mods[j], getModInput(mod->Source[1].Input),
+                                      getModFlags(mod->Source[1].Input, mod->Source[1].Type,
+                                                  mod->Source[1].Form));
+                fluid_mod_set_amount(&self->Mods[j], mod->Amount);
+                fluid_mod_set_dest(&self->Mods[j], getModDest(mod->Dest));
+                self->Mods[j++].next = NULL;
+            }
         }
+        self->NumMods = j;
     }
 }
 
@@ -218,7 +325,7 @@ static int FPreset_getPreset(fluid_preset_t *preset);
 static int FPreset_getBank(fluid_preset_t *preset);
 static int FPreset_noteOn(fluid_preset_t *preset, fluid_synth_t *synth, int channel, int key, int velocity);
 
-static void FPreset_Construct(FPreset *self, ALsfpreset *preset, fluid_sfont_t *parent, ALsoundfont *sfont)
+static void FPreset_Construct(FPreset *self, ALsfpreset *preset, fluid_sfont_t *parent)
 {
     STATIC_CAST(fluid_preset_t, self)->data = self;
     STATIC_CAST(fluid_preset_t, self)->sfont = parent;
@@ -240,7 +347,7 @@ static void FPreset_Construct(FPreset *self, ALsfpreset *preset, fluid_sfont_t *
         ALsizei i;
         self->NumSamples = preset->NumSounds;
         for(i = 0;i < self->NumSamples;i++)
-            FSample_Construct(&self->Samples[i], preset->Sounds[i], sfont);
+            FSample_Construct(&self->Samples[i], preset->Sounds[i]);
     }
 }
 
@@ -258,7 +365,6 @@ static void FPreset_Destruct(FPreset *self)
 static ALboolean FPreset_canDelete(FPreset *self)
 {
     ALsizei i;
-
     for(i = 0;i < self->NumSamples;i++)
     {
         if(fluid_sample_refcount(STATIC_CAST(fluid_sample_t, &self->Samples[i])) != 0)
@@ -298,8 +404,7 @@ static int FPreset_noteOn(fluid_preset_t *preset, fluid_synth_t *synth, int chan
             continue;
 
         voice = fluid_synth_alloc_voice(synth, STATIC_CAST(fluid_sample_t, sample), channel, key, vel);
-        if(voice == NULL)
-            return FLUID_FAILED;
+        if(voice == NULL) return FLUID_FAILED;
 
         fluid_voice_gen_set(voice, GEN_MODLFOTOPITCH, sound->ModLfoToPitch);
         fluid_voice_gen_set(voice, GEN_VIBLFOTOPITCH, sound->VibratoLfoToPitch);
@@ -384,7 +489,7 @@ static void FSfont_Construct(FSfont *self, ALsoundfont *sfont)
         ALsizei i;
         self->NumPresets = sfont->NumPresets;
         for(i = 0;i < self->NumPresets;i++)
-            FPreset_Construct(&self->Presets[i], sfont->Presets[i], STATIC_CAST(fluid_sfont_t, self), sfont);
+            FPreset_Construct(&self->Presets[i], sfont->Presets[i], STATIC_CAST(fluid_sfont_t, self));
     }
 }
 
@@ -470,13 +575,12 @@ static void FSynth_Destruct(FSynth *self);
 static ALboolean FSynth_init(FSynth *self, ALCdevice *device);
 static ALenum FSynth_selectSoundfonts(FSynth *self, ALCcontext *context, ALsizei count, const ALuint *ids);
 static void FSynth_setGain(FSynth *self, ALfloat gain);
-static void FSynth_setState(FSynth *self, ALenum state);
 static void FSynth_stop(FSynth *self);
 static void FSynth_reset(FSynth *self);
 static void FSynth_update(FSynth *self, ALCdevice *device);
 static void FSynth_processQueue(FSynth *self, ALuint64 time);
 static void FSynth_process(FSynth *self, ALuint SamplesToDo, ALfloat (*restrict DryBuffer)[BUFFERSIZE]);
-static void FSynth_Delete(FSynth *self);
+DECLARE_DEFAULT_ALLOCATORS(FSynth)
 DEFINE_MIDISYNTH_VTABLE(FSynth);
 
 static fluid_sfont_t *FSynth_loadSfont(fluid_sfloader_t *loader, const char *filename);
@@ -632,11 +736,6 @@ static void FSynth_setGain(FSynth *self, ALfloat gain)
 }
 
 
-static void FSynth_setState(FSynth *self, ALenum state)
-{
-    MidiSynth_setState(STATIC_CAST(MidiSynth, self), state);
-}
-
 static void FSynth_stop(FSynth *self)
 {
     MidiSynth *synth = STATIC_CAST(MidiSynth, self);
@@ -782,13 +881,13 @@ static void FSynth_process(FSynth *self, ALuint SamplesToDo, ALfloat (*restrict 
 
         if(tonext > 0)
         {
-            ALuint todo = mini(tonext, SamplesToDo-total);
+            ALuint todo = minu(tonext, SamplesToDo-total);
             fluid_synth_write_float(self->Synth, todo, DryBuffer[FrontLeft], total, 1,
                                                        DryBuffer[FrontRight], total, 1);
             total += todo;
             tonext -= todo;
         }
-        if(total < SamplesToDo && tonext == 0)
+        if(total < SamplesToDo && tonext <= 0)
             FSynth_processQueue(self, time);
     }
 
@@ -798,20 +897,20 @@ static void FSynth_process(FSynth *self, ALuint SamplesToDo, ALfloat (*restrict 
 }
 
 
-static void FSynth_Delete(FSynth *self)
-{
-    free(self);
-}
-
-
 MidiSynth *FSynth_create(ALCdevice *device)
 {
-    FSynth *synth = calloc(1, sizeof(*synth));
+    FSynth *synth;
+
+    if(!LoadFSynth())
+        return NULL;
+
+    synth = FSynth_New(sizeof(*synth));
     if(!synth)
     {
         ERR("Failed to allocate FSynth\n");
         return NULL;
     }
+    memset(synth, 0, sizeof(*synth));
     FSynth_Construct(synth, device);
 
     if(FSynth_init(synth, device) == AL_FALSE)

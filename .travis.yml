@@ -1,0 +1,38 @@
+language: cpp
+before_install:
+- apt-cache search mingw
+- sudo apt-get update -qq
+- sudo apt-get install -y libx11-dev libogg-dev libxft-dev libpulse-dev rpm debhelper mingw-w64-dev binutils-mingw-w64-i686 g++-mingw-w64-i686 gcc-mingw-w64-i686
+
+branches:
+  only:
+  - development
+
+before_script: "git fetch --tags && export VERSION=$(git describe --tags --always) && echo Building version: $VERSION"
+
+script: 
+
+  #- mkdir ../build-windows && cd ../build-windows && export DXSDK_DIR=~/ && cmake -DCMAKE_TOOLCHAIN_FILE=../NeoEditor/CMake/Toolchains/CrossWindowsMingw.cmake ../NeoEditor && make -j2 package 
+
+  - mkdir ../build && cd ../build && cmake ../NeoEditor -DNEO_VERSION_STRING="\"$VERSION\"" && make -j2 package && make test && make lua-test
+ 
+  
+notifications:
+  irc: chat.freenode.net#neo3d
+env:
+  global:
+  - secure: gRfErdM33brK8kCNMdWXNqRogtUIHgzRDYAbnxxr5Ux3UjEwSFHaLJKaDGd4lJimZ1HUJEr6Z//pRAuYx497msZ/zdwgzsy1zKXSOEOywA50NMLS7da7feMujZ65Cqwxzmwq6ge6woOClLQmNZo/w6jI89DSXU/JMa5N8/VcMvA=
+  - secure: gjuBvU55Hnf+J/t3f4xyFlNVq51DcTQvslKQHXwvV4GQg1pZYS2dRtGCkpASja+2MnnJ5MFBUcUctQQMVRC17VQzoccLodFnKfMcOuFLeJwayp943MinUad4KsoOzLQECW06B2hzc90hfkV29TqaQcQM+s6uEOn21gPG4zrIM/k=
+  
+after_success:
+  - curl --ftp-create-dirs -T *.deb -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
+  - curl --ftp-create-dirs -T *.tar.gz -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
+  - curl --ftp-create-dirs -T *.rpm -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
+  - curl --ftp-create-dirs -T *.sh -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
+
+  #- cd ../build-windows
+  
+  #- curl --ftp-create-dirs -T *.exe -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
+  #- curl --ftp-create-dirs -T *.zip -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
+
+

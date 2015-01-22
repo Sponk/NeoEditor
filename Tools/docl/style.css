@@ -1,0 +1,135 @@
+body {
+    font: 1em/1.25 sans;
+    font-weight: lighter;
+    color: #f2f2f2;
+    background: #545558;
+    max-width: 1000px;
+    margin: auto;
+}
+
+p {margin: .6em 0;}
+
+a:link { font-weight: normal; color: #0ad; text-decoration: none; }
+/*a:visited { color: #a0d; text-decoration: none; }*/
+a:link:hover { text-decoration: none; color: #0da; }
+
+blockquote { margin-left: 3em; }
+
+ul { list-style-type: none; margin: 0; padding: 0; }
+
+#navigation {
+    position: fixed;
+    top: 1em; bottom: 1em;
+    overflow-y: auto;
+    padding-top: 1em;
+    width: 16em;
+    /*border: 1px dotted silver;*/
+}
+
+#navigation h2, #navigation h3 {
+    margin: 0 .8em;
+    margin-top: 1em;
+}
+#navigation h2 { margin-bottom: 1em; font-size: 1em; }
+#navigation h3 { border-bottom: 1px solid #ddd; font-size: .9em; }
+
+#navigation a {
+    display: block;
+    padding: .2em 1em;
+    font-family: monospace;
+    font-size: 1em;
+}
+#navigation a:hover {
+    background-color: #00bcff;
+    color: #ffffff;
+}
+
+#content {
+    margin-left: 18em;
+    padding: 1em;
+}
+
+#content h1 { font-size: 1.3em; }
+#content h2 { font-size: 1.2em; padding-top: 1em; border-top: 2px #ddd none; }
+
+footer {
+    margin-left: 18em;
+    padding: 1em;
+}
+
+#about {
+    border-left: 16em solid #123;
+    padding-right: 1em;
+    text-align: right;
+}
+
+dt {
+    border-bottom: 1px dotted #ddd;
+    font-family: monospace;
+    font-size: 1.3em;
+    margin-left: 10px;
+}
+dt:target {
+    background-color: yellow;
+}
+dd {
+    padding-left: 20px;
+    margin-left: 20px;
+    margin-bottom: 1.5em;
+}
+dt:target + * {
+    border-left: yellow 5px solid;
+    margin-left: 15px;
+}
+
+code {
+    padding: .2em;
+    font-family: monospace;
+    background-color: #343538;
+    color:#e2e2e2;
+}
+
+pre br {margin-bottom:.2em}
+pre {
+    display: inline-block;
+    padding: 1em;
+    margin: 0 1em 1em 0;
+    vertical-align: top;
+    width: 100%;
+    overflow: auto;
+
+    font-family: console, monospace;
+    background-color: #343538;
+    color:#e2e2e2;
+    white-space: normal;
+}
+pre::before {
+    content: "Code";
+    display: block;
+    position: relative;
+    top: -.25em;
+    font-family: sans-serif;
+    color: white;
+}
+pre.success { width: calc(40% - 3em); }
+pre.success::before {content:"Result"}
+pre.fail { width: calc(100% - 3em); }
+pre.fail::before {content:"This was returned instead"; color:red;}
+
+/* We don't want to see failures since default Lua can't execute Neo scripts. */
+pre.error { width: calc(100% - 3em); visibility: hidden; display: none; }
+pre.error::before {content:"Oops, there was an error"; color:red;}
+
+.comment { color: #666; }
+.keyword { color: #00bcff; font-weight: bold; }
+.operator { color: white ; font-weight: bold; }
+.string { color: #00bcff; font-weight: normal; }
+.escape { color: blue; font-weight: normal; }
+.number { color: red; font-weight: bold; }
+
+@media print {
+    a { font-weight: bold; color: #048; text-decoration: underline; }
+    body { background-color: #ffffff; }
+    #content { margin-left: 0; }
+    #navigation { display: none; }
+}

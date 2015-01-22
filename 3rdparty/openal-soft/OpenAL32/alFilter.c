@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the
- *  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- *  Boston, MA  02111-1307, USA.
+ *  Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * Or go to http://www.gnu.org/copyleft/lgpl.html
  */
 
@@ -32,7 +32,6 @@
 extern inline struct ALfilter *LookupFilter(ALCdevice *device, ALuint id);
 extern inline struct ALfilter *RemoveFilter(ALCdevice *device, ALuint id);
 extern inline ALfloat ALfilterState_processSingle(ALfilterState *filter, ALfloat sample);
-extern inline ALfloat ALfilterState_processSingleC(const ALfilterState *filter, ALfloat sample);
 
 static void InitFilterParams(ALfilter *filter, ALenum type);
 
@@ -146,7 +145,8 @@ AL_API ALvoid AL_APIENTRY alFilteri(ALuint filter, ALenum param, ALint value)
     {
         if(param == AL_FILTER_TYPE)
         {
-            if(value == AL_FILTER_NULL || value == AL_FILTER_LOWPASS)
+            if(value == AL_FILTER_NULL || value == AL_FILTER_LOWPASS ||
+               value == AL_FILTER_HIGHPASS || value == AL_FILTER_BANDPASS)
                 InitFilterParams(ALFilter, value);
             else
                 alSetError(Context, AL_INVALID_VALUE);
@@ -336,7 +336,7 @@ void ALfilterState_clear(ALfilterState *filter)
     filter->y[1] = 0.0f;
 }
 
-void ALfilterState_setParams(ALfilterState *filter, ALfilterType type, ALfloat gain, ALfloat freq_scale, ALfloat bandwidth)
+void ALfilterState_setParams(ALfilterState *filter, ALfilterType type, ALfloat gain, ALfloat freq_mult, ALfloat bandwidth)
 {
     ALfloat alpha;
     ALfloat w0;
@@ -344,50 +344,28 @@ void ALfilterState_setParams(ALfilterState *filter, ALfilterType type, ALfloat g
     // Limit gain to -100dB
     gain = maxf(gain, 0.00001f);
 
-    w0 = F_2PI * freq_scale;
+    w0 = F_2PI * freq_mult;
 
     /* Calculate filter coefficients depending on filter type */
     switch(type)
     {
         case ALfilterType_HighShelf:
-            alpha = sinf(w0) / 2.0f * sqrtf((gain + 1.0f/gain) *
-                                            (1.0f/0.75f - 1.0f) + 2.0f);
-            filter->b[0] = gain * ((gain + 1.0f) +
-                                   (gain - 1.0f) * cosf(w0) +
-                                   2.0f * sqrtf(gain) * alpha);
-            filter->b[1] = -2.0f * gain * ((gain - 1.0f) +
-                                           (gain + 1.0f) * cosf(w0));
-            filter->b[2] = gain * ((gain + 1.0f) +
-                                   (gain - 1.0f) * cosf(w0) -
-                                   2.0f * sqrtf(gain) * alpha);
-            filter->a[0] = (gain + 1.0f) -
-                           (gain - 1.0f) * cosf(w0) +
-                           2.0f * sqrtf(gain) * alpha;
-            filter->a[1] = 2.0f * ((gain - 1.0f) -
-                           (gain + 1.0f) * cosf(w0));
-            filter->a[2] = (gain + 1.0f) -
-                           (gain - 1.0f) * cosf(w0) -
-                           2.0f * sqrtf(gain) * alpha;
+            alpha = sinf(w0)/2.0f*sqrtf((gain + 1.0f/gain)*(1.0f/0.75f - 1.0f) + 2.0f);
+            filter->b[0] =       gain*((gain+1.0f) + (gain-1.0f)*cosf(w0) + 2.0f*sqrtf(gain)*alpha);
+            filter->b[1] = -2.0f*gain*((gain-1.0f) + (gain+1.0f)*cosf(w0)                         );
+            filter->b[2] =       gain*((gain+1.0f) + (gain-1.0f)*cosf(w0) - 2.0f*sqrtf(gain)*alpha);
+            filter->a[0] =             (gain+1.0f) - (gain-1.0f)*cosf(w0) + 2.0f*sqrtf(gain)*alpha;
+            filter->a[1] =  2.0f*     ((gain-1.0f) - (gain+1.0f)*cosf(w0)                         );
+            filter->a[2] =             (gain+1.0f) - (gain-1.0f)*cosf(w0) - 2.0f*sqrtf(gain)*alpha;
             break;
         case ALfilterType_LowShelf:
-            alpha = sinf(w0) / 2.0f * sqrtf((gain + 1.0f / gain) *
-                                            (1.0f / 0.75f - 1.0f) + 2.0f);
-            filter->b[0] = gain * ((gain + 1.0f) -
-                                   (gain - 1.0f) * cosf(w0) +
-                                   2.0f * sqrtf(gain) * alpha);
-            filter->b[1] = 2.0f * gain * ((gain - 1.0f) -
-                                          (gain + 1.0f) * cosf(w0));
-            filter->b[2] = gain * ((gain + 1.0f) -
-                                   (gain - 1.0f) * cosf(w0) -
-                                   2.0f * sqrtf(gain) * alpha);
-            filter->a[0] = (gain + 1.0f) +
-                           (gain - 1.0f) * cosf(w0) +
-                           2.0f * sqrtf(gain) * alpha;
-            filter->a[1] = -2.0f * ((gain - 1.0f) +
-                           (gain + 1.0f) * cosf(w0));
-            filter->a[2] = (gain + 1.0f) +
-                           (gain - 1.0f) * cosf(w0) -
-                           2.0f * sqrtf(gain) * alpha;
+            alpha = sinf(w0)/2.0f*sqrtf((gain + 1.0f/gain)*(1.0f/0.75f - 1.0f) + 2.0f);
+            filter->b[0] =       gain*((gain+1.0f) - (gain-1.0f)*cosf(w0) + 2.0f*sqrtf(gain)*alpha);
+            filter->b[1] =  2.0f*gain*((gain-1.0f) - (gain+1.0f)*cosf(w0)                         );
+            filter->b[2] =       gain*((gain+1.0f) - (gain-1.0f)*cosf(w0) - 2.0f*sqrtf(gain)*alpha);
+            filter->a[0] =             (gain+1.0f) + (gain-1.0f)*cosf(w0) + 2.0f*sqrtf(gain)*alpha;
+            filter->a[1] = -2.0f*     ((gain-1.0f) + (gain+1.0f)*cosf(w0)                         );
+            filter->a[2] =             (gain+1.0f) + (gain-1.0f)*cosf(w0) - 2.0f*sqrtf(gain)*alpha;
             break;
         case ALfilterType_Peaking:
             alpha = sinf(w0) * sinhf(logf(2.0f) / 2.0f * bandwidth * w0 / sinf(w0));
@@ -434,6 +412,8 @@ void ALfilterState_setParams(ALfilterState *filter, ALfilterType type, ALfloat g
     filter->a[2] /= filter->a[0];
     filter->a[1] /= filter->a[0];
     filter->a[0] /= filter->a[0];
+
+    filter->process = ALfilterState_processC;
 }
 
 
@@ -492,6 +472,126 @@ static void lp_GetParamfv(ALfilter *filter, ALCcontext *context, ALenum param, A
 }
 
 
+static void hp_SetParami(ALfilter *UNUSED(filter), ALCcontext *context, ALenum UNUSED(param), ALint UNUSED(val))
+{ SET_ERROR_AND_RETURN(context, AL_INVALID_ENUM); }
+static void hp_SetParamiv(ALfilter *UNUSED(filter), ALCcontext *context, ALenum UNUSED(param), const ALint *UNUSED(vals))
+{ SET_ERROR_AND_RETURN(context, AL_INVALID_ENUM); }
+static void hp_SetParamf(ALfilter *filter, ALCcontext *context, ALenum param, ALfloat val)
+{
+    switch(param)
+    {
+        case AL_HIGHPASS_GAIN:
+            if(!(val >= AL_HIGHPASS_MIN_GAIN && val <= AL_HIGHPASS_MAX_GAIN))
+                SET_ERROR_AND_RETURN(context, AL_INVALID_VALUE);
+            filter->Gain = val;
+            break;
+
+        case AL_HIGHPASS_GAINLF:
+            if(!(val >= AL_HIGHPASS_MIN_GAINLF && val <= AL_HIGHPASS_MAX_GAINLF))
+                SET_ERROR_AND_RETURN(context, AL_INVALID_VALUE);
+            filter->GainLF = val;
+            break;
+
+        default:
+            SET_ERROR_AND_RETURN(context, AL_INVALID_ENUM);
+    }
+}
+static void hp_SetParamfv(ALfilter *filter, ALCcontext *context, ALenum param, const ALfloat *vals)
+{
+    hp_SetParamf(filter, context, param, vals[0]);
+}
+
+static void hp_GetParami(ALfilter *UNUSED(filter), ALCcontext *context, ALenum UNUSED(param), ALint *UNUSED(val))
+{ SET_ERROR_AND_RETURN(context, AL_INVALID_ENUM); }
+static void hp_GetParamiv(ALfilter *UNUSED(filter), ALCcontext *context, ALenum UNUSED(param), ALint *UNUSED(vals))
+{ SET_ERROR_AND_RETURN(context, AL_INVALID_ENUM); }
+static void hp_GetParamf(ALfilter *filter, ALCcontext *context, ALenum param, ALfloat *val)
+{
+    switch(param)
+    {
+        case AL_HIGHPASS_GAIN:
+            *val = filter->Gain;
+            break;
+
+        case AL_HIGHPASS_GAINLF:
+            *val = filter->GainLF;
+            break;
+
+        default:
+            SET_ERROR_AND_RETURN(context, AL_INVALID_ENUM);
+    }
+}
+static void hp_GetParamfv(ALfilter *filter, ALCcontext *context, ALenum param, ALfloat *vals)
+{
+    hp_GetParamf(filter, context, param, vals);
+}
+
+
+static void bp_SetParami(ALfilter *UNUSED(filter), ALCcontext *context, ALenum UNUSED(param), ALint UNUSED(val))
+{ SET_ERROR_AND_RETURN(context, AL_INVALID_ENUM); }
+static void bp_SetParamiv(ALfilter *UNUSED(filter), ALCcontext *context, ALenum UNUSED(param), const ALint *UNUSED(vals))
+{ SET_ERROR_AND_RETURN(context, AL_INVALID_ENUM); }
+static void bp_SetParamf(ALfilter *filter, ALCcontext *context, ALenum param, ALfloat val)
+{
+    switch(param)
+    {
+        case AL_BANDPASS_GAIN:
+            if(!(val >= AL_BANDPASS_MIN_GAIN && val <= AL_BANDPASS_MAX_GAIN))
+                SET_ERROR_AND_RETURN(context, AL_INVALID_VALUE);
+            filter->Gain = val;
+            break;
+
+        case AL_BANDPASS_GAINHF:
+            if(!(val >= AL_BANDPASS_MIN_GAINHF && val <= AL_BANDPASS_MAX_GAINHF))
+                SET_ERROR_AND_RETURN(context, AL_INVALID_VALUE);
+            filter->GainHF = val;
+            break;
+
+        case AL_BANDPASS_GAINLF:
+            if(!(val >= AL_BANDPASS_MIN_GAINLF && val <= AL_BANDPASS_MAX_GAINLF))
+                SET_ERROR_AND_RETURN(context, AL_INVALID_VALUE);
+            filter->GainLF = val;
+            break;
+
+        default:
+            SET_ERROR_AND_RETURN(context, AL_INVALID_ENUM);
+    }
+}
+static void bp_SetParamfv(ALfilter *filter, ALCcontext *context, ALenum param, const ALfloat *vals)
+{
+    bp_SetParamf(filter, context, param, vals[0]);
+}
+
+static void bp_GetParami(ALfilter *UNUSED(filter), ALCcontext *context, ALenum UNUSED(param), ALint *UNUSED(val))
+{ SET_ERROR_AND_RETURN(context, AL_INVALID_ENUM); }
+static void bp_GetParamiv(ALfilter *UNUSED(filter), ALCcontext *context, ALenum UNUSED(param), ALint *UNUSED(vals))
+{ SET_ERROR_AND_RETURN(context, AL_INVALID_ENUM); }
+static void bp_GetParamf(ALfilter *filter, ALCcontext *context, ALenum param, ALfloat *val)
+{
+    switch(param)
+    {
+        case AL_BANDPASS_GAIN:
+            *val = filter->Gain;
+            break;
+
+        case AL_BANDPASS_GAINHF:
+            *val = filter->GainHF;
+            break;
+
+        case AL_BANDPASS_GAINLF:
+            *val = filter->GainLF;
+            break;
+
+        default:
+            SET_ERROR_AND_RETURN(context, AL_INVALID_ENUM);
+    }
+}
+static void bp_GetParamfv(ALfilter *filter, ALCcontext *context, ALenum param, ALfloat *vals)
+{
+    bp_GetParamf(filter, context, param, vals);
+}
+
+
 static void null_SetParami(ALfilter *UNUSED(filter), ALCcontext *context, ALenum UNUSED(param), ALint UNUSED(val))
 { SET_ERROR_AND_RETURN(context, AL_INVALID_ENUM); }
 static void null_SetParamiv(ALfilter *UNUSED(filter), ALCcontext *context, ALenum UNUSED(param), const ALint *UNUSED(vals))
@@ -533,6 +633,9 @@ static void InitFilterParams(ALfilter *filter, ALenum type)
     {
         filter->Gain = AL_LOWPASS_DEFAULT_GAIN;
         filter->GainHF = AL_LOWPASS_DEFAULT_GAINHF;
+        filter->HFReference = LOWPASSFREQREF;
+        filter->GainLF = 1.0f;
+        filter->LFReference = HIGHPASSFREQREF;
 
         filter->SetParami  = lp_SetParami;
         filter->SetParamiv = lp_SetParamiv;
@@ -543,8 +646,48 @@ static void InitFilterParams(ALfilter *filter, ALenum type)
         filter->GetParamf  = lp_GetParamf;
         filter->GetParamfv = lp_GetParamfv;
     }
+    else if(type == AL_FILTER_HIGHPASS)
+    {
+        filter->Gain = AL_HIGHPASS_DEFAULT_GAIN;
+        filter->GainHF = 1.0f;
+        filter->HFReference = LOWPASSFREQREF;
+        filter->GainLF = AL_HIGHPASS_DEFAULT_GAINLF;
+        filter->LFReference = HIGHPASSFREQREF;
+
+        filter->SetParami  = hp_SetParami;
+        filter->SetParamiv = hp_SetParamiv;
+        filter->SetParamf  = hp_SetParamf;
+        filter->SetParamfv = hp_SetParamfv;
+        filter->GetParami  = hp_GetParami;
+        filter->GetParamiv = hp_GetParamiv;
+        filter->GetParamf  = hp_GetParamf;
+        filter->GetParamfv = hp_GetParamfv;
+    }
+    else if(type == AL_FILTER_BANDPASS)
+    {
+        filter->Gain = AL_BANDPASS_DEFAULT_GAIN;
+        filter->GainHF = AL_BANDPASS_DEFAULT_GAINHF;
+        filter->HFReference = LOWPASSFREQREF;
+        filter->GainLF = AL_BANDPASS_DEFAULT_GAINLF;
+        filter->LFReference = HIGHPASSFREQREF;
+
+        filter->SetParami  = bp_SetParami;
+        filter->SetParamiv = bp_SetParamiv;
+        filter->SetParamf  = bp_SetParamf;
+        filter->SetParamfv = bp_SetParamfv;
+        filter->GetParami  = bp_GetParami;
+        filter->GetParamiv = bp_GetParamiv;
+        filter->GetParamf  = bp_GetParamf;
+        filter->GetParamfv = bp_GetParamfv;
+    }
     else
     {
+        filter->Gain = 1.0f;
+        filter->GainHF = 1.0f;
+        filter->HFReference = LOWPASSFREQREF;
+        filter->GainLF = 1.0f;
+        filter->LFReference = HIGHPASSFREQREF;
+
         filter->SetParami  = null_SetParami;
         filter->SetParamiv = null_SetParamiv;
         filter->SetParamf  = null_SetParamf;

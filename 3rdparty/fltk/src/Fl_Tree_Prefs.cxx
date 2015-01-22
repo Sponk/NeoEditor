@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tree_Prefs.cxx 9706 2012-11-06 20:46:14Z matt $"
+// "$Id: Fl_Tree_Prefs.cxx 10233 2014-08-21 12:16:40Z cand $"
 //
 
 #include <FL/Fl.H>
@@ -28,7 +28,7 @@
 // INTERNAL: BUILT IN OPEN/STOW XPMS
 //    These can be replaced via prefs.openicon()/closeicon()
 //
-static const char *L_open_xpm[] = {
+static const char * const L_open_xpm[] = {
 #ifdef __APPLE__
   "11 11 2 1",
   ".  c None",
@@ -64,7 +64,7 @@ static const char *L_open_xpm[] = {
 };
 static Fl_Pixmap L_openpixmap(L_open_xpm);
 
-static const char *L_close_xpm[] = {
+static const char * const L_close_xpm[] = {
 #ifdef __APPLE__
   "11 11 2 1",
   ".  c None",
@@ -156,6 +156,10 @@ Fl_Tree_Prefs::Fl_Tree_Prefs() {
   _itemreselectmode       = FL_TREE_SELECTABLE_ONCE;
   _itemdrawmode           = FL_TREE_ITEM_DRAW_DEFAULT;
 #endif
+#if FLTK_ABI_VERSION >= 10303
+  _itemdrawcallback       = 0;
+  _itemdrawuserdata       = 0;
+#endif
   // Let fltk's current 'scheme' affect defaults
   if ( Fl::scheme() ) {
     if ( strcmp(Fl::scheme(), "gtk+") == 0 ) {
@@ -167,5 +171,5 @@ Fl_Tree_Prefs::Fl_Tree_Prefs() {
 }
 
 //
-// End of "$Id: Fl_Tree_Prefs.cxx 9706 2012-11-06 20:46:14Z matt $".
+// End of "$Id: Fl_Tree_Prefs.cxx 10233 2014-08-21 12:16:40Z cand $".
 //

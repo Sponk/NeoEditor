@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Device.H 9706 2012-11-06 20:46:14Z matt $"
+// "$Id: Fl_Device.H 10409 2014-10-29 20:11:02Z cand $"
 //
 // Definition of classes Fl_Device, Fl_Graphics_Driver, Fl_Surface_Device, Fl_Display_Device
 // for the Fast Light Tool Kit (FLTK).
@@ -482,6 +482,7 @@ public:
   static const char *class_id;
   const char *class_name() {return class_id;};
   void draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
+  void draw(Fl_Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy);
 };
 #endif
 #if !(defined(__APPLE__) || defined(WIN32))
@@ -490,7 +491,7 @@ public:
  *
  This class is implemented only on the Xlib platform.
  */
-class Fl_Xlib_Graphics_Driver : public Fl_Graphics_Driver {
+class FL_EXPORT Fl_Xlib_Graphics_Driver : public Fl_Graphics_Driver {
 public:
   static const char *class_id;
   const char *class_name() {return class_id;};
@@ -579,5 +580,5 @@ public:
 #endif // Fl_Device_H
 
 //
-// End of "$Id: Fl_Device.H 9706 2012-11-06 20:46:14Z matt $".
+// End of "$Id: Fl_Device.H 10409 2014-10-29 20:11:02Z cand $".
 //

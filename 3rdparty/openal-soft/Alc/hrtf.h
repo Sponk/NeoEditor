@@ -15,14 +15,14 @@ struct Hrtf;
 #define HRTFDELAY_FRACONE (1<<HRTFDELAY_BITS)
 #define HRTFDELAY_MASK    (HRTFDELAY_FRACONE-1)
 
-const struct Hrtf *GetHrtf(ALCdevice *device);
-ALCboolean FindHrtfFormat(const ALCdevice *device, enum DevFmtChannels *chans, ALCuint *srate);
+const struct Hrtf *GetHrtf(enum DevFmtChannels chans, ALCuint srate);
+ALCboolean FindHrtfFormat(enum DevFmtChannels *chans, ALCuint *srate);
 
 void FreeHrtfs(void);
 
 ALuint GetHrtfIrSize(const struct Hrtf *Hrtf);
 ALfloat CalcHrtfDelta(ALfloat oldGain, ALfloat newGain, const ALfloat olddir[3], const ALfloat newdir[3]);
-void GetLerpedHrtfCoeffs(const struct Hrtf *Hrtf, ALfloat elevation, ALfloat azimuth, ALfloat gain, ALfloat (*coeffs)[2], ALuint *delays);
-ALuint GetMovingHrtfCoeffs(const struct Hrtf *Hrtf, ALfloat elevation, ALfloat azimuth, ALfloat gain, ALfloat delta, ALint counter, ALfloat (*coeffs)[2], ALuint *delays, ALfloat (*coeffStep)[2], ALint *delayStep);
+void GetLerpedHrtfCoeffs(const struct Hrtf *Hrtf, ALfloat elevation, ALfloat azimuth, ALfloat dirfact, ALfloat gain, ALfloat (*coeffs)[2], ALuint *delays);
+ALuint GetMovingHrtfCoeffs(const struct Hrtf *Hrtf, ALfloat elevation, ALfloat azimuth, ALfloat dirfact, ALfloat gain, ALfloat delta, ALint counter, ALfloat (*coeffs)[2], ALuint *delays, ALfloat (*coeffStep)[2], ALint *delayStep);
 
 #endif /* ALC_HRTF_H */

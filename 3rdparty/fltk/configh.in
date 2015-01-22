@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in 9123 2011-10-04 09:21:47Z manolo $"
+ * "$Id: configh.in 10196 2014-06-16 11:17:57Z ossman $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -106,6 +106,22 @@
  */
 
 #define USE_XDBE HAVE_XDBE
+
+/*
+ * HAVE_XFIXES:
+ *
+ * Do we have the X fixes extension?
+ */
+
+#define HAVE_XFIXES 0
+
+/*
+ * HAVE_XCURSOR:
+ *
+ * Do we have the X cursor library?
+ */
+
+#define HAVE_XCURSOR 0
 
 /*
  * __APPLE_QUARTZ__:
@@ -298,16 +314,6 @@
 #endif /* HAVE_LONG_LONG */
 
 /*
- * Do we have the strtoll() function?
- */
-
-#undef HAVE_STRTOLL
-
-#ifndef HAVE_STRTOLL
-#  define strtoll(nptr,endptr,base) strtol((nptr), (endptr), (base))
-#endif /* !HAVE_STRTOLL */
-
-/*
  * Do we have the dlsym() function and header?
  */
 
@@ -315,5 +321,5 @@
 #undef HAVE_DLSYM
 
 /*
- * End of "$Id: configh.in 9123 2011-10-04 09:21:47Z manolo $".
+ * End of "$Id: configh.in 10196 2014-06-16 11:17:57Z ossman $".
  */

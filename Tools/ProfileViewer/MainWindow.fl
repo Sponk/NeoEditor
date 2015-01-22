@@ -1,0 +1,55 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0302 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <FL/fl_message.H>} {private local
+} 
+
+decl {\#include <string>} {private local
+} 
+
+decl {\#include <FL/Fl_Chart.H>} {public global
+} 
+
+decl {\#include "Table.h"} {public global
+} 
+
+class MainWindow {open
+} {
+  Function {create_window()} {open
+  } {
+    Fl_Window {} {
+      label {Profile Viewer} open
+      xywh {1780 216 822 474} type Double visible
+    } {
+      Fl_Tabs {} {open
+        xywh {0 6 825 471}
+      } {
+        Fl_Group {} {
+          label Profile open
+          xywh {0 27 822 447}
+        } {
+          Fl_Box table {selected
+            xywh {0 30 822 444}
+            class RateTable
+          }
+        }
+        Fl_Group {} {
+          label Graphs open
+          xywh {0 27 822 444} hide
+        } {
+          Fl_Box chart {
+            label Percentage
+            xywh {6 48 297 249} box ENGRAVED_FRAME align 5
+            class Fl_Chart
+          }
+          Fl_Box time_chart {
+            label Time
+            xywh {318 51 498 249} box ENGRAVED_FRAME align 5
+            class Fl_Chart
+          }
+        }
+      }
+    }
+  }
+} 

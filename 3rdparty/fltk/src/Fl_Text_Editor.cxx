@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.cxx 9325 2012-04-05 05:12:30Z fabien $"
+// "$Id: Fl_Text_Editor.cxx 10031 2013-12-13 16:28:38Z manolo $"
 //
 // Copyright 2001-2010 by Bill Spitzak and others.
 // Original code Copyright Mark Edel.  Permission to distribute under
@@ -73,6 +73,7 @@ Fl_Text_Editor::Fl_Text_Editor(int X, int Y, int W, int H,  const char* l)
   mCursorOn = 1;
   insert_mode_ = 1;
   key_bindings = 0;
+  set_flag(MAC_USE_ACCENTS_MENU);
 
   // handle the default key bindings
   add_default_key_bindings(&key_bindings);
@@ -514,8 +515,9 @@ int Fl_Text_Editor::handle_key() {
   int del = 0;
   if (Fl::compose(del)) {
     if (del) {
-      int dp = insert_position(), di = del;
-      while (di--) dp = buffer()->prev_char_clipped(dp);
+      // del is a number of bytes
+      int dp = insert_position() - del;
+      if ( dp < 0 ) dp = 0;
       buffer()->select(dp, insert_position());
     }
     kill_selection(this);
@@ -523,6 +525,12 @@ int Fl_Text_Editor::handle_key() {
       if (insert_mode()) insert(Fl::event_text());
       else overstrike(Fl::event_text());
     }
+#ifdef __APPLE__
+    if (Fl::compose_state) {
+      int pos = this->insert_position();
+      this->buffer()->select(pos - Fl::compose_state, pos);
+      }
+#endif
     show_insert_position();
     set_changed();
     if (when()&FL_WHEN_CHANGED) do_callback();
@@ -560,6 +568,13 @@ int Fl_Text_Editor::handle(int event) {
 
     case FL_UNFOCUS:
       show_cursor(mCursorOn); // redraws the cursor
+#ifdef __APPLE__
+      if (buffer()->selected() && Fl::compose_state) {
+	int pos = insert_position();
+	buffer()->select(pos, pos);
+	Fl::reset_marked_text();
+      }
+#endif
       if (buffer()->selected()) redraw(); // Redraw selections...
     case FL_HIDE:
       if (when() & FL_WHEN_RELEASE) maybe_do_callback();
@@ -631,7 +646,7 @@ int Fl_Text_Editor::handle(int event) {
       insert_position(dndCursorPos);
       return 1;      
     case FL_DND_RELEASE: // keep insertion cursor and wait for the FL_PASTE event
-      buffer()->unselect(); // FL_PASTE must not destroy current selection!
+      if (!dragging) buffer()->unselect(); // FL_PASTE must not destroy current selection if drag comes from outside
       return 1;
   }
 
@@ -639,5 +654,5 @@ int Fl_Text_Editor::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Text_Editor.cxx 9325 2012-04-05 05:12:30Z fabien $".
+// End of "$Id: Fl_Text_Editor.cxx 10031 2013-12-13 16:28:38Z manolo $".
 //

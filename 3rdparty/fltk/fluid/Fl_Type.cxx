@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx 9635 2012-07-14 18:31:43Z AlbrechtS $"
+// "$Id: Fl_Type.cxx 9992 2013-09-24 19:58:24Z greg.ercolano $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -237,10 +237,8 @@ int Widget_Browser::item_height(void *l) const {
       return textsize()*2+1;
     else
       return textsize()+2;
-  } else {
-    return 0;
   }
-  return ((Fl_Type *)l)->visible ? textsize()+2 : 0;
+  return 0;
 }
 
 int Widget_Browser::incr_height() const {return textsize()+2;}
@@ -1022,5 +1020,5 @@ int Fl_Type::user_defined(const char* cbname) const {
 
 
 //
-// End of "$Id: Fl_Type.cxx 9635 2012-07-14 18:31:43Z AlbrechtS $".
+// End of "$Id: Fl_Type.cxx 9992 2013-09-24 19:58:24Z greg.ercolano $".
 //

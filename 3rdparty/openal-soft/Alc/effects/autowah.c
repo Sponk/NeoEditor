@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the
- *  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- *  Boston, MA  02111-1307, USA.
+ *  Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * Or go to http://www.gnu.org/copyleft/lgpl.html
  */
 
@@ -31,15 +31,15 @@
 /* Auto-wah is simply a low-pass filter with a cutoff frequency that shifts up
  * or down depending on the input signal, and a resonant peak at the cutoff.
  *
- * Currently, we assume a cutoff frequency range of 500hz (no amplitude) to
- * 3khz (peak gain). Peak gain is assumed to be in normalized scale.
+ * Currently, we assume a cutoff frequency range of 20hz (no amplitude) to
+ * 20khz (peak gain). Peak gain is assumed to be in normalized scale.
  */
 
 typedef struct ALautowahState {
     DERIVE_FROM_TYPE(ALeffectState);
 
     /* Effect gains for each channel */
-    ALfloat Gain[MaxChannels];
+    ALfloat Gain[MAX_OUTPUT_CHANNELS];
 
     /* Effect parameters */
     ALfloat AttackRate;
@@ -66,21 +66,19 @@ static ALboolean ALautowahState_deviceUpdate(ALautowahState *state, ALCdevice *d
 static ALvoid ALautowahState_update(ALautowahState *state, ALCdevice *device, const ALeffectslot *slot)
 {
     ALfloat attackTime, releaseTime;
-    ALfloat gain;
 
     attackTime = slot->EffectProps.Autowah.AttackTime * state->Frequency;
     releaseTime = slot->EffectProps.Autowah.ReleaseTime * state->Frequency;
 
-    state->AttackRate = 1.0f / attackTime;
-    state->ReleaseRate = 1.0f / releaseTime;
+    state->AttackRate = powf(1.0f/GAIN_SILENCE_THRESHOLD, 1.0f/attackTime);
+    state->ReleaseRate = powf(GAIN_SILENCE_THRESHOLD/1.0f, 1.0f/releaseTime);
     state->PeakGain = slot->EffectProps.Autowah.PeakGain;
     state->Resonance = slot->EffectProps.Autowah.Resonance;
 
-    gain = sqrtf(1.0f / device->NumChan) * slot->Gain;
-    SetGains(device, gain, state->Gain);
+    ComputeAmbientGains(device, slot->Gain, state->Gain);
 }
 
-static ALvoid ALautowahState_process(ALautowahState *state, ALuint SamplesToDo, const ALfloat *SamplesIn, ALfloat (*SamplesOut)[BUFFERSIZE])
+static ALvoid ALautowahState_process(ALautowahState *state, ALuint SamplesToDo, const ALfloat *SamplesIn, ALfloat (*SamplesOut)[BUFFERSIZE], ALuint NumChannels)
 {
     ALuint it, kt;
     ALuint base;
@@ -102,9 +100,9 @@ static ALvoid ALautowahState_process(ALautowahState *state, ALuint SamplesToDo, 
              * incoming signal, and attack or release to reach it. */
             amplitude = fabsf(smp);
             if(amplitude > gain)
-                gain = minf(gain+state->AttackRate, amplitude);
+                gain = minf(gain*state->AttackRate, amplitude);
             else if(amplitude < gain)
-                gain = maxf(gain-state->ReleaseRate, amplitude);
+                gain = maxf(gain*state->ReleaseRate, amplitude);
             gain = maxf(gain, GAIN_SILENCE_THRESHOLD);
 
             /* FIXME: What range does the filter cover? */
@@ -137,10 +135,10 @@ static ALvoid ALautowahState_process(ALautowahState *state, ALuint SamplesToDo, 
         }
         state->GainCtrl = gain;
 
-        for(kt = 0;kt < MaxChannels;kt++)
+        for(kt = 0;kt < NumChannels;kt++)
         {
             ALfloat gain = state->Gain[kt];
-            if(!(gain > GAIN_SILENCE_THRESHOLD))
+            if(!(fabsf(gain) > GAIN_SILENCE_THRESHOLD))
                 continue;
 
             for(it = 0;it < td;it++)
@@ -151,10 +149,7 @@ static ALvoid ALautowahState_process(ALautowahState *state, ALuint SamplesToDo, 
     }
 }
 
-static void ALautowahState_Delete(ALautowahState *state)
-{
-    free(state);
-}
+DECLARE_DEFAULT_ALLOCATORS(ALautowahState)
 
 DEFINE_ALEFFECTSTATE_VTABLE(ALautowahState);
 
@@ -167,13 +162,13 @@ static ALeffectState *ALautowahStateFactory_create(ALautowahStateFactory *UNUSED
 {
     ALautowahState *state;
 
-    state = malloc(sizeof(*state));
+    state = ALautowahState_New(sizeof(*state));
     if(!state) return NULL;
     SET_VTABLE2(ALautowahState, ALeffectState, state);
 
-    state->AttackRate = 0.0f;
-    state->ReleaseRate = 0.0f;
-    state->Resonance = 0.0f;
+    state->AttackRate = 1.0f;
+    state->ReleaseRate = 1.0f;
+    state->Resonance = 2.0f;
     state->PeakGain = 1.0f;
     state->GainCtrl = 1.0f;
 

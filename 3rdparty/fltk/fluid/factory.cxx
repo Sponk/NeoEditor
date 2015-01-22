@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $"
+// "$Id: factory.cxx 10336 2014-09-25 10:37:35Z AlbrechtS $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -36,32 +36,6 @@
 #include "Fl_Widget_Type.h"
 
 extern Fl_Pixmap *pixmap[];
-
-#if !HAVE_STRCASECMP
-//
-// 'strcasecmp()' - Do a case-insensitive compare...
-//
-
-static int
-strcasecmp(const char *s, const char *t) {
-  while (*s != '\0' && *t != '\0') {
-    if (tolower(*s) < tolower(*t))
-      return (-1);
-    else if (tolower(*s) > tolower(*t))
-      return (1);
-
-    s ++;
-    t ++;
-  }
-
-  if (*s == '\0' && *t == '\0')
-    return (0);
-  else if (*s != '\0')
-    return (1);
-  else
-    return (-1);
-}
-#endif // !HAVE_STRCASECMP
 
 ////////////////////////////////////////////////////////////////
 
@@ -1118,8 +1092,8 @@ Fl_Type *Fl_Type_make(const char *tn) {
     Fl_Menu_Item *m = New_Menu+i;
     if (!m->user_data()) continue;
     Fl_Type *t = (Fl_Type*)(m->user_data());
-    if (!strcasecmp(tn,t->type_name())) {r = t->make(); break;}
-    if (!strcasecmp(tn,t->alt_type_name())) {r = t->make(); break;}
+    if (!fl_ascii_strcasecmp(tn,t->type_name())) {r = t->make(); break;}
+    if (!fl_ascii_strcasecmp(tn,t->alt_type_name())) {r = t->make(); break;}
   }
   reading_file = 0;
   return r;
@@ -1259,11 +1233,11 @@ static symbol table[] = {
 int lookup_symbol(const char *name, int &v, int numberok) {
   if (name[0]=='F' && name[1]=='L' && name[2]=='_') name += 3;
   for (int i=0; i < int(sizeof(table)/sizeof(*table)); i++)
-    if (!strcasecmp(name,table[i].name)) {v = table[i].value; return 1;}
+    if (!fl_ascii_strcasecmp(name,table[i].name)) {v = table[i].value; return 1;}
   if (numberok && ((v = atoi(name)) || !strcmp(name,"0"))) return 1;
   return 0;
 }
 
 //
-// End of "$Id: factory.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $".
+// End of "$Id: factory.cxx 10336 2014-09-25 10:37:35Z AlbrechtS $".
 //

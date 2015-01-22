@@ -1,5 +1,5 @@
 //
-// "$Id: fl_read_image.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $"
+// "$Id: fl_read_image.cxx 10388 2014-10-22 16:27:20Z manolo $"
 //
 // X11 image reading routines for the Fast Light Tool Kit (FLTK).
 //
@@ -70,8 +70,10 @@ fl_subimage_offsets(int a, int aw, int b, int bw, int &obw)
 
 // this handler will catch and ignore exceptions during XGetImage
 // to avoid an application crash
-static int xgetimageerrhandler(Display *display, XErrorEvent *error) {
-  return 0;
+extern "C" {
+  static int xgetimageerrhandler(Display *display, XErrorEvent *error) {
+    return 0;
+  }
 }
 
 //
@@ -135,7 +137,7 @@ fl_read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
       // screen dimensions
       Fl::screen_xywh(sx, sy, sw, sh, fl_screen);
     }
-    if (!win || (dx >= sx && dy >= sy && dx + w <= sw && dy + h <= sh)) {
+    if (!win || (dx >= sx && dy >= sy && dx + w <= sx+sw && dy + h <= sy+sh)) {
       // the image is fully contained, we can use the traditional method
       // however, if the window is obscured etc. the function will still fail. Make sure we
       // catch the error and continue, otherwise an exception will be thrown.
@@ -496,5 +498,5 @@ fl_read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
 #endif
 
 //
-// End of "$Id: fl_read_image.cxx 8864 2011-07-19 04:49:30Z greg.ercolano $".
+// End of "$Id: fl_read_image.cxx 10388 2014-10-22 16:27:20Z manolo $".
 //

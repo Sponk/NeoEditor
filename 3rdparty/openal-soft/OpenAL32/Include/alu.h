@@ -1,8 +1,6 @@
 #ifndef _ALU_H_
 #define _ALU_H_
 
-#include "alMain.h"
-
 #include <limits.h>
 #include <math.h>
 #ifdef HAVE_FLOAT_H
@@ -11,6 +9,13 @@
 #ifdef HAVE_IEEEFP_H
 #include <ieeefp.h>
 #endif
+
+#include "alMain.h"
+#include "alBuffer.h"
+#include "alFilter.h"
+
+#include "hrtf.h"
+#include "align.h"
 
 
 #define F_PI    (3.14159265358979323846f)
@@ -25,29 +30,107 @@
 #define RAD2DEG(x)  ((ALfloat)(x) * (180.0f/F_PI))
 
 
+#define SRC_HISTORY_BITS   (6)
+#define SRC_HISTORY_LENGTH (1<<SRC_HISTORY_BITS)
+#define SRC_HISTORY_MASK   (SRC_HISTORY_LENGTH-1)
+
+#define MAX_PITCH  (10)
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 struct ALsource;
-struct ALbuffer;
-struct DirectParams;
-struct SendParams;
-
-typedef void (*ResamplerFunc)(const ALfloat *src, ALuint frac, ALuint increment,
-                              ALfloat *restrict dst, ALuint dstlen);
-
-typedef ALvoid (*DryMixerFunc)(const struct DirectParams *params,
-                               const ALfloat *restrict data, ALuint srcchan,
-                               ALuint OutPos, ALuint SamplesToDo,
-                               ALuint BufferSize);
-typedef ALvoid (*WetMixerFunc)(const struct SendParams *params,
-                               const ALfloat *restrict data,
-                               ALuint OutPos, ALuint SamplesToDo,
-                               ALuint BufferSize);
+struct ALvoice;
 
 
-#define GAIN_SILENCE_THRESHOLD  (0.00001f)
+enum ActiveFilters {
+    AF_None = 0,
+    AF_LowPass = 1,
+    AF_HighPass = 2,
+    AF_BandPass = AF_LowPass | AF_HighPass
+};
+
+
+typedef struct HrtfState {
+    alignas(16) ALfloat History[SRC_HISTORY_LENGTH];
+    alignas(16) ALfloat Values[HRIR_LENGTH][2];
+} HrtfState;
+
+typedef struct HrtfParams {
+    alignas(16) ALfloat Coeffs[HRIR_LENGTH][2];
+    alignas(16) ALfloat CoeffStep[HRIR_LENGTH][2];
+    ALuint Delay[2];
+    ALint DelayStep[2];
+} HrtfParams;
+
+
+typedef struct MixGains {
+    ALfloat Current;
+    ALfloat Step;
+    ALfloat Target;
+} MixGains;
+
+
+typedef struct DirectParams {
+    ALfloat (*OutBuffer)[BUFFERSIZE];
+
+    /* If not 'moving', gain/coefficients are set directly without fading. */
+    ALboolean Moving;
+    /* Stepping counter for gain/coefficient fading. */
+    ALuint Counter;
+
+    struct {
+        enum ActiveFilters ActiveType;
+        ALfilterState LowPass;
+        ALfilterState HighPass;
+    } Filters[MAX_INPUT_CHANNELS];
+
+    union {
+        struct {
+            HrtfParams Params[MAX_INPUT_CHANNELS];
+            HrtfState State[MAX_INPUT_CHANNELS];
+            ALuint IrSize;
+            ALfloat Gain;
+            ALfloat Dir[3];
+        } Hrtf;
+
+        MixGains Gains[MAX_INPUT_CHANNELS][MAX_OUTPUT_CHANNELS];
+    } Mix;
+} DirectParams;
+
+typedef struct SendParams {
+    ALfloat (*OutBuffer)[BUFFERSIZE];
+
+    ALboolean Moving;
+    ALuint Counter;
+
+    struct {
+        enum ActiveFilters ActiveType;
+        ALfilterState LowPass;
+        ALfilterState HighPass;
+    } Filters[MAX_INPUT_CHANNELS];
+
+    /* Gain control, which applies to all input channels to a single (mono)
+     * output buffer. */
+    MixGains Gain;
+} SendParams;
+
+
+typedef const ALfloat* (*ResamplerFunc)(const ALfloat *src, ALuint frac, ALuint increment,
+                                        ALfloat *restrict dst, ALuint dstlen);
+
+typedef void (*MixerFunc)(const ALfloat *data, ALuint OutChans,
+                          ALfloat (*restrict OutBuffer)[BUFFERSIZE], struct MixGains *Gains,
+                          ALuint Counter, ALuint OutPos, ALuint BufferSize);
+typedef void (*HrtfMixerFunc)(ALfloat (*restrict OutBuffer)[BUFFERSIZE], const ALfloat *data,
+                              ALuint Counter, ALuint Offset, ALuint OutPos,
+                              const ALuint IrSize, const HrtfParams *hrtfparams,
+                              HrtfState *hrtfstate, ALuint BufferSize);
+
+
+#define GAIN_SILENCE_THRESHOLD  (0.00001f) /* -100dB */
 
 #define SPEEDOFSOUNDMETRESPERSEC  (343.3f)
 #define AIRABSORBGAINHF           (0.99426f) /* -0.05dB */
@@ -119,28 +202,42 @@ inline ALfloat cubic(ALfloat val0, ALfloat val1, ALfloat val2, ALfloat val3, ALf
 ALvoid aluInitPanning(ALCdevice *Device);
 
 /**
- * ComputeAngleGains
+ * ComputeDirectionalGains
  *
- * Sets channel gains based on a given source's angle and its half-width. The
- * angle and hwidth parameters are in radians.
+ * Sets channel gains based on a direction. The direction must be a 3-component
+ * vector no longer than 1 unit.
  */
-void ComputeAngleGains(const ALCdevice *device, ALfloat angle, ALfloat hwidth, ALfloat ingain, ALfloat gains[MaxChannels]);
+void ComputeDirectionalGains(const ALCdevice *device, const ALfloat dir[3], ALfloat ingain, ALfloat gains[MAX_OUTPUT_CHANNELS]);
 
 /**
- * SetGains
+ * ComputeAngleGains
  *
- * Helper to set the appropriate channels to the specified gain.
+ * Sets channel gains based on angle and elevation. The angle and elevation
+ * parameters are in radians, going right and up respectively.
  */
-inline void SetGains(const ALCdevice *device, ALfloat ingain, ALfloat gains[MaxChannels])
-{
-    ComputeAngleGains(device, 0.0f, F_PI, ingain, gains);
-}
+void ComputeAngleGains(const ALCdevice *device, ALfloat angle, ALfloat elevation, ALfloat ingain, ALfloat gains[MAX_OUTPUT_CHANNELS]);
+
+/**
+ * ComputeAmbientGains
+ *
+ * Sets channel gains for ambient, omni-directional sounds.
+ */
+void ComputeAmbientGains(const ALCdevice *device, ALfloat ingain, ALfloat gains[MAX_OUTPUT_CHANNELS]);
+
+/**
+ * ComputeBFormatGains
+ *
+ * Sets channel gains for a given (first-order) B-Format channel. The matrix is
+ * a 1x4 'slice' of the rotation matrix for a given channel used to orient the
+ * coefficients.
+ */
+void ComputeBFormatGains(const ALCdevice *device, const ALfloat mtx[4], ALfloat ingain, ALfloat gains[MAX_OUTPUT_CHANNELS]);
 
 
-ALvoid CalcSourceParams(struct ALsource *ALSource, const ALCcontext *ALContext);
-ALvoid CalcNonAttnSourceParams(struct ALsource *ALSource, const ALCcontext *ALContext);
+ALvoid CalcSourceParams(struct ALvoice *voice, const struct ALsource *source, const ALCcontext *ALContext);
+ALvoid CalcNonAttnSourceParams(struct ALvoice *voice, const struct ALsource *source, const ALCcontext *ALContext);
 
-ALvoid MixSource(struct ALsource *Source, ALCdevice *Device, ALuint SamplesToDo);
+ALvoid MixSource(struct ALvoice *voice, struct ALsource *source, ALCdevice *Device, ALuint SamplesToDo);
 
 ALvoid aluMixData(ALCdevice *device, ALvoid *buffer, ALsizei size);
 /* Caller must lock the device. */
