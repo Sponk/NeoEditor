@@ -55,13 +55,13 @@ MVector3 flColorToVector(int c);
  * Windows helper for POSIX functionality.
  */
 #if defined(_MSC_VER)
+int c99_snprintf(char* str, size_t size, const char* format, ...);
 #define snprintf c99_snprintf
-int c99_vsnprintf(char* str, size_t size, const char* format, va_list ap);
 #endif
 
 #if defined(_MSC_VER) || defined(_WIN32)
-#define getline c99_getline
 size_t c99_getline(char** lineptr, size_t* n, FILE* stream);
+#define getline c99_getline
 #endif
 
 #endif /* NEO_NEOEDITOR_MAINWINDOW_UTILS_H_ */

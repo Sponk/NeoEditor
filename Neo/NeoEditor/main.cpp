@@ -36,6 +36,7 @@
 #include "MainWindow/ini.h"
 #include "MainWindow/MainWindow.h"
 #include "MainWindow/Translator.h"
+#include "MainWindow/Utils.h"
 
 #ifdef _WIN32
     #include <windows.h>

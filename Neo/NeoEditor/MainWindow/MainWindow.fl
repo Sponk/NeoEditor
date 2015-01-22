@@ -1,10 +1,13 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0302 
+version 1.0303 
 i18n_type 1 
 i18n_include "Translator.h" 
 i18n_function tr 
 header_name {.h} 
 code_name {.cxx}
+decl {\#include "Utils.h"} {selected private local
+} 
+
 decl {\#include "Callbacks.h"} {private local
 } 
 
@@ -30,7 +33,7 @@ class EditorWindow {open
     Fl_Window {} {
       label {Neo Editor}
       callback window_quit open
-      xywh {706 231 915 620} type Double labelsize 11 align 80 resizable size_range {0 0 2048 2048} visible
+      xywh {488 277 907 612} type Double labelsize 11 align 80 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -492,7 +495,7 @@ class EditorWindow {open
           xywh {0 70 200 565}
         } {
           Fl_File_Browser project_directory_browser {
-            callback project_directory_callback selected
+            callback project_directory_callback
             xywh {0 70 200 550} type Hold
             code0 {\#include "FileTree.h"}
             class FileTree
@@ -521,7 +524,7 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
           Fl_Value_Input light_radius_edit {
             label {Radius:}
             callback edit_light_properties
-            xywh {21 54 165 21} align 5 maximum 1e+07 step 2
+            xywh {21 54 165 21} align 5 maximum 1e+007 step 2
           }
           Fl_Value_Input light_color_r {
             label {Red:}
