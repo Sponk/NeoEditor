@@ -30,7 +30,7 @@ class EditorWindow {open
     Fl_Window {} {
       label {Neo Editor}
       callback window_quit open
-      xywh {721 229 915 620} type Double labelsize 11 align 80 resizable size_range {0 0 2048 2048} visible
+      xywh {706 231 915 620} type Double labelsize 11 align 80 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {open
         xywh {0 0 920 25} selection_color 38
@@ -268,13 +268,6 @@ class EditorWindow {open
         code0 {\#include "GLBox.h"}
         class GLBox
       }
-      Fl_Tree scene_tree {
-        user_data 0 user_data_type long
-        callback scene_tree_callback
-        xywh {0 55 201 570} when 4
-        code0 {\#include "DnDTree.h"}
-        class DnDTree
-      }
       Fl_Group edit_group {open
         xywh {3 24 911 28}
         code0 {edit_group->resizable(NULL);}
@@ -480,9 +473,32 @@ class EditorWindow {open
           } {}
         }
       }
-      Fl_Group {} {open selected
+      Fl_Group {} {open
         xywh {200 55 485 30}
       } {}
+      Fl_Tabs left_panel_tabs {open
+        xywh {-5 50 205 595}
+      } {
+        Fl_Tree scene_tree {
+          label Scene
+          user_data 0 user_data_type long
+          callback scene_tree_callback
+          xywh {0 70 200 565} selection_color 52 when 4 hide
+          code0 {\#include "DnDTree.h"}
+          class DnDTree
+        }
+        Fl_Group {} {
+          label {Project Directory} open
+          xywh {0 70 200 565}
+        } {
+          Fl_File_Browser project_directory_browser {
+            callback project_directory_callback selected
+            xywh {0 70 200 550} type Hold
+            code0 {\#include "FileTree.h"}
+            class FileTree
+          }
+        }
+      }
     }
     code {// Set system colors
 systemColors[0] = Fl::get_color(FL_BACKGROUND_COLOR);

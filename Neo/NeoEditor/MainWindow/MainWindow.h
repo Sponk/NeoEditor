@@ -41,8 +41,6 @@ extern void plugin_console_callback(Fl_Menu_*, void*);
 extern void check_for_updates_callback(Fl_Menu_*, void*);
 extern void about_menu_callback(Fl_Menu_*, void*);
 #include "GLBox.h"
-#include "DnDTree.h"
-extern void scene_tree_callback(DnDTree*, long);
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Round_Button.H>
 extern void set_edit_type(Fl_Round_Button*, long);
@@ -62,6 +60,10 @@ extern void show_console_callback(Fl_Button*, void*);
 #include <FL/Fl_Input.H>
 extern void edit_name_callback(Fl_Input*, void*);
 extern void edit_object_callback(Fl_Value_Input*, long);
+#include "DnDTree.h"
+extern void scene_tree_callback(DnDTree*, long);
+#include "FileTree.h"
+extern void project_directory_callback(FileTree*, void*);
 extern void edit_light_properties(Fl_Value_Input*, void*);
 extern void choose_light_color(Fl_Button*, void*);
 extern void edit_light_properties_chk_btn(Fl_Check_Button*, void*);
@@ -100,7 +102,6 @@ public:
   static Fl_Menu_Item menu_menu_bar[];
   static Fl_Menu_Item *behavior_menu;
   GLBox *glbox;
-  DnDTree *scene_tree;
   Fl_Group *edit_group;
   Fl_Choice *scenes_menu;
   Fl_Group *speed_group;
@@ -122,6 +123,9 @@ public:
   Fl_Input *parent_edit;
   Fl_Tabs *special_tab;
   Fl_Scroll *behaviors_scroll;
+  Fl_Tabs *left_panel_tabs;
+  DnDTree *scene_tree;
+  FileTree *project_directory_browser;
   Fl_Double_Window* create_light_window();
   Fl_Double_Window *light_window_object;
   Fl_Value_Input *light_radius_edit;

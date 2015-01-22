@@ -19,7 +19,6 @@ Fl_Text_Buffer buffer;
 void send_report(Fl_Button* button, void*)
 {
 	Neo::HTTPRequest connection(REPORT_DOMAIN, 80);
-
 	const char* response = connection.sendPostRequest("/crash.php", buffer.text());
 }
 

@@ -279,18 +279,6 @@ Fl_Double_Window* EditorWindow::show_window() {
       glbox->when(FL_WHEN_RELEASE);
       Fl_Group::current()->resizable(glbox);
     } // GLBox* glbox
-    { scene_tree = new DnDTree(0, 55, 201, 570);
-      scene_tree->box(FL_DOWN_BOX);
-      scene_tree->color(FL_BACKGROUND2_COLOR);
-      scene_tree->selection_color(FL_SELECTION_COLOR);
-      scene_tree->labeltype(FL_NORMAL_LABEL);
-      scene_tree->labelfont(0);
-      scene_tree->labelsize(14);
-      scene_tree->labelcolor(FL_FOREGROUND_COLOR);
-      scene_tree->callback((Fl_Callback*)scene_tree_callback, (void*)(0));
-      scene_tree->align(Fl_Align(FL_ALIGN_TOP));
-      scene_tree->when(FL_WHEN_RELEASE);
-    } // DnDTree* scene_tree
     { edit_group = new Fl_Group(3, 24, 911, 28);
       { Fl_Round_Button* o = new Fl_Round_Button(198, 27, 39, 24);
         o->type(102);
@@ -475,6 +463,38 @@ Fl_Double_Window* EditorWindow::show_window() {
     { Fl_Group* o = new Fl_Group(200, 55, 485, 30);
       o->end();
     } // Fl_Group* o
+    { left_panel_tabs = new Fl_Tabs(-5, 50, 205, 595);
+      { scene_tree = new DnDTree(0, 70, 200, 565, tr("Scene"));
+        scene_tree->box(FL_DOWN_BOX);
+        scene_tree->color(FL_BACKGROUND2_COLOR);
+        scene_tree->selection_color(FL_LIGHT2);
+        scene_tree->labeltype(FL_NORMAL_LABEL);
+        scene_tree->labelfont(0);
+        scene_tree->labelsize(14);
+        scene_tree->labelcolor(FL_FOREGROUND_COLOR);
+        scene_tree->callback((Fl_Callback*)scene_tree_callback, (void*)(0));
+        scene_tree->align(Fl_Align(FL_ALIGN_TOP));
+        scene_tree->when(FL_WHEN_RELEASE);
+        scene_tree->hide();
+      } // DnDTree* scene_tree
+      { Fl_Group* o = new Fl_Group(0, 70, 200, 565, tr("Project Directory"));
+        { project_directory_browser = new FileTree(0, 70, 200, 550);
+          project_directory_browser->type(2);
+          project_directory_browser->box(FL_NO_BOX);
+          project_directory_browser->color(FL_BACKGROUND2_COLOR);
+          project_directory_browser->selection_color(FL_SELECTION_COLOR);
+          project_directory_browser->labeltype(FL_NORMAL_LABEL);
+          project_directory_browser->labelfont(0);
+          project_directory_browser->labelsize(14);
+          project_directory_browser->labelcolor(FL_FOREGROUND_COLOR);
+          project_directory_browser->callback((Fl_Callback*)project_directory_callback);
+          project_directory_browser->align(Fl_Align(FL_ALIGN_BOTTOM));
+          project_directory_browser->when(FL_WHEN_RELEASE_ALWAYS);
+        } // FileTree* project_directory_browser
+        o->end();
+      } // Fl_Group* o
+      left_panel_tabs->end();
+    } // Fl_Tabs* left_panel_tabs
     o->size_range(0, 0, 2048, 2048);
     o->end();
   } // Fl_Double_Window* o

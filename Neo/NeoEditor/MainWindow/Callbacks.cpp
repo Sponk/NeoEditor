@@ -189,7 +189,7 @@ void add_to_tree(Object3d* entity, std::string path)
 
             if(!item)
             {
-            	MLOG_WARNING("item == NULL!");
+            	//MLOG_WARNING("item == NULL!");
             }
             else
             {
@@ -315,6 +315,7 @@ void open_level_callback(Fl_Menu_*, void*)
 
 void open_project_callback(Fl_Menu_*, void*)
 {
+	// TODO: Put this in utility method!
     if(!current_project.path.empty() && !ask(tr("You need to close the current project. Do you want to proceed?")))
         return;
 
@@ -355,6 +356,7 @@ void open_project_callback(Fl_Menu_*, void*)
         NeoGame* game = NeoEngine::getInstance()->getGame();
         Maratis::getInstance()->loadProject(filename);
 
+        ::window.project_directory_browser->load(current_project.path.c_str());
         ::window.glbox->loadPostEffectsFromGame(game);
 
         current_project.level = Maratis::getInstance()->getCurrentLevel();
@@ -2432,4 +2434,28 @@ void enable_snap_to_grid_callback(Fl_Menu_* menu, void*)
 		maratis->enableSnapToGrid();
 
 	maratis->setSnapDistance(10);
+}
+
+void project_directory_callback(FileTree* browser, void*)
+{
+	if(Fl::event_clicks())
+	{
+		std::string path = browser->currentPath();
+
+#ifndef WIN32
+		path += "/";
+#else
+		path += "\\";
+#endif
+
+		const char* text = browser->text(browser->value());
+
+		if(!text)
+			return;
+
+		path += text;
+
+		if(isDirectory(path.c_str()))
+			browser->load(path.c_str());
+	}
 }

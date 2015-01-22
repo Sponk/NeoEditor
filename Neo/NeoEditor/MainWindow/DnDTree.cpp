@@ -17,7 +17,7 @@
 //
 //========================================================================
 
-#include "../MainWindow/DnDTree.h"
+#include "DnDTree.h"
 
 #include <NeoEngine.h>
 #include "../Maratis/Maratis.h"

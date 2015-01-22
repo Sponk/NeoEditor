@@ -225,6 +225,7 @@ void GLBox::draw()
 
             maratis->loadProject(current_project.file_path.c_str());
 
+            ::window.project_directory_browser->load(current_project.path.c_str());
             ::window.glbox->loadPostEffectsFromGame(NeoEngine::getInstance()->getGame());
             current_project.level = maratis->getCurrentLevel();
         }
@@ -759,8 +760,14 @@ int GLBox::handle(int event)
                 #else
                     current_project.path = current_project.path.erase(current_project.path.find_last_of("\\")+1, current_project.path.length());
                 #endif
+
                     maratis->loadProject(filename.c_str());
+
+                    NeoGame* game = NeoEngine::getInstance()->getGame();
+
+                    ::window.project_directory_browser->load(current_project.path.c_str());
                     loadPostEffectsFromGame(NeoEngine::getInstance()->getGame());
+
                     current_project.level = maratis->getCurrentLevel();
                     reload_editor = true;
                 }
