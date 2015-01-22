@@ -822,7 +822,10 @@ void Fl_Native_File_Chooser::parse_filter(const char *in) {
 	  delete[] wildprefix;
 	  delete[] comp;
 	  delete[] name;
-	  for ( t=0; t<maxfilters; t++ ) delete[] wildcards[t];
+	  
+	  // Keeps crashing on me...
+	  // FIXME: Probably a memory leak!
+	  // for ( t=0; t<maxfilters; t++ ) delete[] wildcards[t];
 	  delete[] wildcards;
 	  return;
 	}
