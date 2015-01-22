@@ -26,7 +26,6 @@ end
 
 ]]
 -- 
-
 dofile("class.lua")
 dofile("Canvas.lua")
 dofile("Sprite.lua")
@@ -36,5 +35,19 @@ dofile("SpriteAnimation.lua")
 dofile("Button.lua")
 dofile("InputField.lua")
 dofile("Label.lua")
+dofile("Utils.lua")
+dofile("Quad.lua")
+dofile("Collision.lua")
+dofile("Vector2.lua")
+dofile("Object3d.lua")
+dofile("Camera.lua")
+
+--global instance for Utils class
+util = Utils.create()
+
+--collision memebers
+quad = Quad.create()
+collision = Collision.create()
+collision:init()
 
 enableGui(1)

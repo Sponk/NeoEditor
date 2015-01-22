@@ -43,13 +43,6 @@ function Object3d.getObject(name)
     return object
 end
 
---- Returns the position of the object.
---
--- returns: A vec3 containing the position.
-function Object3d:getPosition()
-    return self.position
-end
-
 --- Returns the rotation of the object.
 --
 -- returns: A vec3 containing the rotation.
@@ -71,6 +64,14 @@ function Object3d:setPosition(pos)
     self.position = vec3(pos[1], pos[2], pos[3])
     setPosition(self.nativeObject, pos)
 end
+
+--- Returns the position of the object.
+--
+-- returns: A vec3 containing the position.
+function Object3d:getPosition()
+    return self.position
+end
+
 
 --- Sets the rotation of the object
 --

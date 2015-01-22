@@ -41,9 +41,25 @@ Widget = class(
 		object.position = {x=x,y=y}
 		object.width = w
 		object.height = h
-		object.rotation = 0
-	end
+        object.rotation = 0
+        object.scale = {}
+        object.flip = {}
+        object.scale.x = 1
+        object.scale.y = 1
+        object.visible = true
+    end
 )
+
+function Widget:setPositionX(value)
+    self.position[1] = value
+end
+
+function Widget:setPostionY(value)
+    self.position[2] = value
+end
+
+--global table for all collision objects
+--collidable_objects = {}
 
 --- Sets the current position of the widget
 --
@@ -55,6 +71,18 @@ function Widget:setPosition(x,y)
     self.position[2] = y
 
     setWidgetPosition(self.widget, self.position)
+end
+
+--- Gets the current position of the widget.
+--
+-- x: The X cordonat
+--
+-- y: The Y cordonat
+function Widget:getPosition()
+    local pos = {}
+    pos.x = self.position[1]
+    pos.y = self.position[2]
+    return pos
 end
 
 --- Sets the current rotation of the widget
@@ -81,14 +109,60 @@ function Widget:translate(x,y)
     self:setPosition(self.position[1] + x, self.position[2] + y)
 end
 
+--Returns the Width/Height of this object
+function Widget:getSize()
+    local size = {}
+    size.width = self.width
+    size.height = self.height
+    return size
+end
+
 --- Retrieves the current label of the widget.
 function Widget:getLabel()
     return getLabel(self.widget)
 end
-
+function Widget:setVisible(value)
+    setWidgetVisible(self.widget,true)
+end
 --- Changes the current label of the widget.
 --
 -- label: The new label.
 function Widget:setLabel(label)
     setLabel(self.widget, label)
+end
+--- Changes the widget visibility
+-- 
+-- value: A boolean indicating if the widget should be visible or not.
+function Widget:setVisible(value)
+    self.visible = value
+    setWidgetVisible(self.widget, value)
+end
+
+--- Returns if the widget is turned visible.
+--
+-- return: A boolean value.
+function Widget:isVisible()
+    return self.visible
+end
+
+function Widget:setScale(x,y)
+    self.scale = {}
+    self.scale.x = x 
+    self.scale.y = y
+    setWidgetScale(self.widget,{x,y})
+end
+
+function Widget:getScale()
+    return self.scale
+end
+
+function Widget:setFlip(x,y)
+    self.flip = {}
+    self.flip.x = x
+    self.flip.y = y
+    setWidgetFlip(self.widget,{x,y})
+end
+
+function Widget:setWidgetIgnorCameraOffset(value)
+    setWidgetIgnorCameraOffset(self.widget,value)
 end

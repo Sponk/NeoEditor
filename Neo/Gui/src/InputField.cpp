@@ -35,9 +35,9 @@
 #include <InputField.h>
 #include <Render.h>
 #include <GuiSystem.h>
-#include <MMouse.h>
-#include <MKeyboard.h>
-#include <MWinEvents.h>
+#include <Window/Keyboard.h>
+#include <Window/Mouse.h>
+#include <Window/WinEvents.h>
 
 using namespace Neo::Gui;
 

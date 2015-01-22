@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 (C) Yannick Pflanzer <neo-engine.de>
+ * Copyright 2014-2015 (C) Yannick Pflanzer <neo-engine.de>
  *
  * This file is part of NeoGui.
  *
@@ -84,7 +84,7 @@ void scriptCallback(long int id)
 int enableGui()
 {
     MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-    if(script->getArgsNumber() == 1)
+    if(script->isFunctionOk("enableGui", 1))
         GuiSystem::getInstance()->setEnabled(script->getInteger(0) != 0);
 
     return 1;
@@ -101,7 +101,7 @@ int getCanvasClearColor()
 {
     MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(script->getArgsNumber() != 1)
+    if(!script->isFunctionOk("getCanvasClearColor", 1))
         return 0;
 
     Canvas* c = (Canvas*) script->getPointer(0);
@@ -114,7 +114,7 @@ int setCanvasClearColor()
 {
     MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(script->getArgsNumber() != 2)
+    if(!script->isFunctionOk("setCanvasClearColor", 2))
         return 0;
 
     Canvas* c = (Canvas*) script->getPointer(0);
@@ -130,7 +130,7 @@ int createButton()
 {
     MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(script->getArgsNumber() != 6)
+    if(!script->isFunctionOk("createButton", 6))
         return 0;
 
     Button* btn = new Button(script->getInteger(0), script->getInteger(1),
@@ -152,7 +152,7 @@ int createInput()
 {
     MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(script->getArgsNumber() != 6)
+    if(!script->isFunctionOk("createInput", 6))
         return 0;
 
     InputField* input = new InputField(script->getInteger(0), script->getInteger(1),
@@ -174,7 +174,7 @@ int createLabel()
 {
     MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(script->getArgsNumber() != 5)
+    if(!script->isFunctionOk("createLabel", 5))
         return 0;
 
     Label* label = new Label(script->getInteger(0), script->getInteger(1),
@@ -191,7 +191,7 @@ int createSprite()
 {
     MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(script->getArgsNumber() != 6)
+    if(!script->isFunctionOk("createSprite", 6))
         return 0;
 
     Sprite* sprite = new Sprite(script->getInteger(0), script->getInteger(1),
@@ -208,7 +208,7 @@ int addWidgetToCanvas()
 {
     MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(script->getArgsNumber() != 2)
+    if(!script->isFunctionOk("addWidgetToCanvas", 2))
         return 0;
 
     Canvas* c = (Canvas*) script->getPointer(0);
@@ -234,7 +234,7 @@ int getLabel()
 {
     MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(script->getArgsNumber() != 1)
+    if(!script->isFunctionOk("getLabel", 1))
         return 0;
 
     Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
@@ -247,65 +247,10 @@ int setDefaultFontSize()
 {
     MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(script->getArgsNumber() != 1)
+    if(!script->isFunctionOk("setDefaultFontSize", 1))
         return 0;
 
     GuiSystem::getInstance()->setDefaultFontSize(script->getFloat(0));
-    return 1;
-}
-
-int setWidgetPosition()
-{
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-
-    if(script->getArgsNumber() != 2)
-        return 0;
-
-    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
-
-    MVector2 vec;
-    script->getFloatArray(1, vec, 2);
-    w->setPosition(vec);
-
-    return 1;
-}
-
-int setWidgetRotation()
-{
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-
-    if(script->getArgsNumber() != 2)
-        return 0;
-
-    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
-
-    w->setRotation(script->getFloat(1));
-    return 1;
-}
-
-int getWidgetRotation()
-{
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-
-    if(script->getArgsNumber() != 1)
-        return 0;
-
-    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
-    script->pushFloat(w->getRotation());
-
-    return 1;
-}
-
-int getWidgetPosition()
-{
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-
-    if(script->getArgsNumber() != 1)
-        return 0;
-
-    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
-    script->pushFloatArray(w->getPosition(), 2);
-
     return 1;
 }
 
@@ -318,7 +263,7 @@ int clearGui()
 int setNormalBackground()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	if(script->getArgsNumber() != 1)
+	if(!script->isFunctionOk("setNormalBackground", 1))
 		return 0;
 
 	MVector4 vec;
@@ -330,7 +275,7 @@ int setNormalBackground()
 int setHoverBackground()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	if(script->getArgsNumber() != 1)
+	if(!script->isFunctionOk("setHoverBackground", 1))
 		return 0;
 
 	MVector4 vec;
@@ -342,7 +287,7 @@ int setHoverBackground()
 int setHighlightBackground()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	if(script->getArgsNumber() != 1)
+	if(!script->isFunctionOk("setHighlightBackground", 1))
 		return 0;
 
 	MVector4 vec;
@@ -354,7 +299,7 @@ int setHighlightBackground()
 int enableCanvasRenderToTexture()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	if(script->getArgsNumber() != 2)
+	if(!script->isFunctionOk("enableCanvasRenderToTexture", 2))
 		return 0;
 	
 	Canvas* c = (Canvas*) script->getPointer(0);
@@ -365,7 +310,7 @@ int enableCanvasRenderToTexture()
 int disableCanvasRenderToTexture()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	if(script->getArgsNumber() != 1)
+	if(!script->isFunctionOk("disableCanvasRenderToTexture", 1))
 		return 0;
 	
 	Canvas* c = (Canvas*) script->getPointer(0);
@@ -387,7 +332,7 @@ int detroyWidget()
 {
     MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(script->getArgsNumber() != 1)
+    if(!script->isFunctionOk("destroyWidget", 1))
         return 0;
 
     int idx = script->getInteger(0);
@@ -399,7 +344,7 @@ int setCanvasLayer()
 {
     MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(script->getArgsNumber() != 2)
+    if(!script->isFunctionOk("setCanvasLayer", 2))
         return 0;
 
     Canvas* c = (Canvas*) script->getPointer(0);
@@ -417,7 +362,7 @@ int loadSpriteSheet()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-	if(script->getArgsNumber() != 4)
+	if(!script->isFunctionOk("loadSpriteSheet", 4))
 		return 0;
 
 	const char* path = script->getString(0);
@@ -442,7 +387,7 @@ int createTile()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-	if(script->getArgsNumber() != 7)
+	if(!script->isFunctionOk("createTile", 7))
 		return 0;
 
 	Tile* tile = new Tile(script->getInteger(0), script->getInteger(1),
@@ -459,7 +404,7 @@ int setTileSpriteSheet()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-	if(script->getArgsNumber() != 2)
+	if(!script->isFunctionOk("setTileSpriteSheet", 2))
 		return 0;
 
 	Tile* w = (Tile*) GuiSystem::getInstance()->getWidget(script->getInteger(0));
@@ -479,7 +424,7 @@ int setTileOffset()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-	if(script->getArgsNumber() != 2)
+	if(!script->isFunctionOk("setTileOffset", 2))
 		return 0;
 
 	Tile* w = (Tile*) GuiSystem::getInstance()->getWidget(script->getInteger(0));
@@ -497,8 +442,142 @@ int setTileOffset()
 	return 1;
 }
 
+int setWidgetRotation()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setWidgetRotation", 2))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	w->setRotation(script->getFloat(1));
+	return 1;
+}
+
+int getWidgetRotation()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("getWidgetRotation", 1))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	script->pushFloat(w->getRotation());
+
+	return 1;
+}
+
+
+int setWidgetVisible()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setWidgetVisible", 2))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	w->setVisible(script->getBoolean(1));
+
+	return 1;
+}
+
+int isWidgetVisible()
+ {
+	 MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	 if (!script->isFunctionOk("isWidgetVisible", 1))
+		 return 0;
+
+	 Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	 script->pushBoolean(w->getVisible());
+	return 1;
+}
+
+
+int setWidgetPosition()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setWidgetPosition", 2))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	MVector2 vec;
+	script->getFloatArray(1, vec, 2);
+	w->setPosition(vec);
+
+	return 1;
+}
+
+int getWidgetPosition()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("getWidgetPosition", 1))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	script->pushFloatArray(w->getPosition(), 2);
+
+	return 1;
+}
+
+int setWidgetScale()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setWidgetScale", 2))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	MVector2 vec;
+	script->getFloatArray(1, vec, 2);
+	w->setScale(vec);
+
+	return 1;
+}
+
+int setWidgetFlip()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setWidgetFlip", 2))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	MVector2 vec;
+	script->getFloatArray(1, vec, 2);
+	w->setFlip(vec);
+
+	return 1;
+}
+
+int setWidgetIgnorCameraOffset()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setWidgetIgnorCameraOffset", 2))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	w->setIgnorCameraOffset(script->getBoolean(1));
+	return 1;
+}
+
 void GuiSystem::setupLuaInterface(MScriptContext* script)
 {
+	script->addFunction("setWidgetIgnorCameraOffset", setWidgetIgnorCameraOffset);
+	script->addFunction("setWidgetVisible", setWidgetVisible);
+	
+	script->addFunction("setWidgetScale", setWidgetScale);
+	script->addFunction("setWidgetFlip", setWidgetFlip);
+
     script->addFunction("enableGui", enableGui);
     script->addFunction("getMainCanvas", getMainCanvas);
     script->addFunction("createCanvas", createCanvas);

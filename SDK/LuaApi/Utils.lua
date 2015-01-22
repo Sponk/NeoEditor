@@ -1,3 +1,5 @@
+--- Author: Murii
+
 Utils = {}
 Utils.__index = Utils
 
@@ -19,12 +21,12 @@ function Utils.create()
 	return self
 end
 
--- Finds the length of the given vector
+--- Finds the length of the given vector
 function Utils:vectorLength(dx,dy)
 	return math.sqrt(dx * dx + dy * dy);
 end
 
---Finds the distance between two tables
+--- Finds the distance between two tables
 function Utils:distanceBetween(a,b)
 	local dx = a.x - b.x;
 	local dy =  a.y - b.y;
@@ -39,10 +41,8 @@ function Utils:asRadians(degrees)
 	return radians * self.DEGTORAD;
 end
 
---[[
-* Find the angle (in radians) between an table and an table. The source sprite takes its x/y and origin into account.
-* The angle is calculated in clockwise positive direction (down = 90 degrees positive, right = 0 degrees positive, up = 90 degrees negative)
--]]
+--- * Find the angle (in radians) between an table and an table. The source sprite takes its x/y and origin into account.
+-- * The angle is calculated in clockwise positive direction (down = 90 degrees positive, right = 0 degrees positive, up = 90 degrees negative)
 function Utils:angleBetweenPoint(a,target,asDegrees)
 		local dx = (target.x) - a.x;
 		local dy= (target.y) - a.y;
@@ -58,7 +58,7 @@ function Utils:random(min,max)
 	return randomNum;
 end
 
---Round towards zero
+--- Round towards zero
 function Utils:round(value) 
      if value >= 0 then 
      	return math.floor(value+.5) 
@@ -66,7 +66,7 @@ function Utils:round(value)
       	return math.ceil(value-.5) end
 end
 
---Clamps a number between two values
+--- Clamps a number between two values
 function Utils:bound(value,min,max)
 	if value < min then 
 		value = min
@@ -75,4 +75,40 @@ function Utils:bound(value,min,max)
 		value = max
 	end
 	return value
+end
+
+--[[
+	Find the angle (in radians) between the two Sprites, taking their x/y and origin into account.
+	The angle is calculated in clockwise positive direction (down = 90 degrees positive, right = 0 degrees positive, up = 90 degrees negative)
+	* @param	a			The Sprites to test from
+	* @param	b			The Sprites to test to
+	* @param	asDegrees	If you need the value in degrees instead of radians, set to true
+	* 
+	* @return	Number The angle (in radians unless asDegrees is true)
+---]]
+function Utils:angleBetween(a,b,asDegrees)
+		local dx = (b.x) - (a.x);
+		local dy= (b.y) - (a.y);
+		
+		if asDegrees then 
+			return self:asDegrees(math.atan2(dy, dx));
+		else
+			return math.atan2(dy, dx);
+		end
+end
+
+--[[
+	 * Sets the source Sprites x/y velocity so it will move directly towards the destination Sprites at the speed given (in pixels per second)<br>
+	 * The source object doesn't stop moving automatically should it ever reach the destination coordinates.<br>
+	 * Note: Doesn't take into account acceleration, maxVelocity or drag (if you set drag or acceleration too high this object may not move at all)
+	 * 
+	 * @param	source		The Sprites on which the velocity will be set
+	 * @param	dest		The Sprites where the source object will move to
+	 * @param	speed		The speed it will move, in pixels per second
+	 ---]]
+function Utils:moveTowardsObject(source,dest,speed)
+		local a = self:angleBetween(source, dest,false);
+		
+		source.xv = math.cos(a) * speed
+		source.yv = math.sin(a) * speed
 end
