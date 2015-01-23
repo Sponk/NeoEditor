@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MGame.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -92,6 +87,12 @@ void NeoGame::update(void)
 		}
 	}
 
+	// Update subgames
+	for(int i = 0; i < m_subGames.size(); i++)
+	{
+		m_subGames[i]->update();
+	}
+
 	// flush input
 	engine->getInputContext()->flush();
 }
@@ -161,6 +162,12 @@ void NeoGame::draw(void)
 				// finish render to texture
 				render->bindFrameBuffer(currentFrameBuffer);
 			}
+		}
+
+		// Draw subgames
+		for(int i = 0; i < m_subGames.size(); i++)
+		{
+			m_subGames[i]->draw();
 		}
 
 		// recover viewport
@@ -267,4 +274,20 @@ void NeoGame::onEndScene(void)
 	// end scene
 	scene->end();
     m_postProcessor.clear();
+}
+
+void NeoGame::onBegin()
+{
+	for(int i = 0; i < m_subGames.size(); i++)
+	{
+		m_subGames[i]->onBegin();
+	}
+}
+
+void NeoGame::onEnd(void)
+{
+	for(int i = 0; i < m_subGames.size(); i++)
+	{
+		m_subGames[i]->onEnd();
+	}
 }

@@ -1,10 +1,6 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MGame.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 20014-2015 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -28,11 +24,28 @@
 //========================================================================
 
 
-#ifndef _M_GAME_H
-#define _M_GAME_H
+#ifndef _NEO_GAME_H
+#define _NEO_GAME_H
 
 namespace Neo
 {
+
+/**
+ * This class represents a "sub-game" that contains overwritten
+ * onBegin, update, draw and onEnd methods. This should be used by
+ * plugins that do not want to replace the global NeoGame but just want to
+ * install callbacks for those methods.
+ */
+class M_ENGINE_EXPORT SubGame
+{
+public:
+	virtual void update(void) = 0;
+	virtual void draw(void) = 0;
+
+	virtual void onBegin(void) = 0;
+	virtual void onEnd(void) = 0;
+};
+
 class M_ENGINE_EXPORT NeoGame
 {
 private:
@@ -41,6 +54,8 @@ private:
 
     bool m_postEffectsEnabled;
     MPostProcessor m_postProcessor;
+
+    std::vector<SubGame*> m_subGames;
 
 public:
 
@@ -67,14 +82,33 @@ public:
 	virtual void update(void);
 	virtual void draw(void);
 
-	virtual void onBegin(void) { }
-	virtual void onEnd(void){}
+	/**
+	 * @brief Will be called as soon as the game starts.
+	 */
+	virtual void onBegin(void);
+
+	/**
+	 * @brief Will be called as soon as the game ends.
+	 */
+	virtual void onEnd(void);
 
 	virtual void onBeginLevel(void) { }
 	virtual void onEndLevel(void){}
 
 	virtual void onBeginScene(void);
 	virtual void onEndScene(void);
+
+	/**
+	 * @brief Adds a SubGame to the list of registered games.
+	 *
+	 * This can be used to catch onBegin, update, draw and onEnd events without
+	 * replacing the real NeoGame.
+	 */
+	void registerSubGame(SubGame* g)
+	{
+		if(g)
+			m_subGames.push_back(g);
+	}
 };
 }
 #endif

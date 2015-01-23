@@ -200,6 +200,56 @@ TEST_F(TestNeoSDK, Object3dHandle_test)
 	ASSERT_EQ(obj, scene->getObjectByHandle(handle));
 }
 
+class TestSubGame: public SubGame
+{
+public:
+	void onBegin()
+	{
+		onBeginCalled = true;
+	}
+
+	void onEnd()
+	{
+		onEndCalled = true;
+	}
+
+	void update()
+	{
+
+	}
+
+	void draw()
+	{
+
+	}
+
+	bool onBeginCalled;
+	bool onEndCalled;
+
+	TestSubGame()
+	{
+		onBeginCalled = false;
+		onEndCalled = false;
+	}
+};
+
+TEST_F(TestNeoSDK, SubGame_test)
+{
+	NeoGame* game = NeoEngine::getInstance()->getGame();
+	TestSubGame sg;
+
+	game->registerSubGame(&sg);
+
+	// Can't test update and draw here
+	// since those need SDL to be initialized
+	// with OpenGL
+	game->onBegin();
+	game->onEnd();
+
+	EXPECT_TRUE(sg.onBeginCalled);
+	EXPECT_TRUE(sg.onEndCalled);
+}
+
 int main(int argc, char* argv[])
 {
 	testing::InitGoogleTest(&argc, argv);
