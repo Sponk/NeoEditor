@@ -63,8 +63,9 @@ void Sprite::draw()
         m_image = level->loadTexture(buf)->getTextureId();
     }
 
-    render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_image, m_rotation);
-
+    if (_isVisible){
+		render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_image, m_rotation, _scale, _flip);
+	}
     if(m_label.length() > 0)
     {
         m_labelText->setText(m_label.c_str());
