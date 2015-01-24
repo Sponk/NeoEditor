@@ -132,8 +132,9 @@ void Tile::draw()
         m_labelText->setAlign(TEXT_ALIGN_CENTER);
     }
 
-	render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_parentSheet->getImage(), m_rotation, m_parentSheet->getTexCoords(m_tilex, m_tiley));
-
+	if (_isVisible)
+		render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_parentSheet->getImage(), m_rotation, _scale, _flip, m_parentSheet->getTexCoords(m_tilex, m_tiley));
+		
     if(m_label.length() > 0)
     {
         m_labelText->setText(m_label.c_str());
