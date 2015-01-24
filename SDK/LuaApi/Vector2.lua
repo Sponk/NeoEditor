@@ -9,6 +9,30 @@ function Vector2.create(x,y)
 	return self
 end
 
+function Vector2:mul(v)
+	return Vector2.create(self.x*v:getX(),self.y*v:getY());
+end
+
+function Vector2:div(v)
+	return Vector2.create(self.x/v:getX(),self.y/v:getY());
+end
+
+function Vector2:sum(v)
+	return Vector2.create(self.x+v:getX(),self.y+v:getY());
+end
+
+function Vector2:sub(v)
+	return Vector2.create(self.x-v:getX(),self.y-v:getY());
+end
+
+function Vector2:addX(x)
+	self.x = self.x + x
+end
+
+function Vector2:addY(y)
+	self.y = self.y + y
+end
+
 function Vector2:set(x,y)
 	self.x = x 
 	self.y = y

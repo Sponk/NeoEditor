@@ -70,7 +70,7 @@ private:
     MVector4 m_highlightBackground;
 
 	bool m_clearScheduled;
-
+	
 public:
 
     GuiSystem();
@@ -105,6 +105,9 @@ public:
     
     void destroyWidget(int id);
 
+	MVector2 _camera_offset = MVector2(0, 0);
+	void setCameraOffset(MVector2 value){ _camera_offset = value; }
+	
     // Deletes all widgets and canvases except the main canvas.
     void clear();
 	void scheduleClear() { m_clearScheduled = true; }

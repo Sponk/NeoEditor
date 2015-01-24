@@ -66,7 +66,7 @@ protected:
 	MVector2 _scale = MVector2(1, 1);
 	MVector2 _flip = MVector2(1, 1);
 	bool _ignor_camera_offset = false;
-
+	
     CALLBACK_FUNCTION m_callback;
     long int m_userData;
 

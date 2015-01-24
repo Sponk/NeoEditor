@@ -570,8 +570,26 @@ int setWidgetIgnorCameraOffset()
 	return 1;
 }
 
-void GuiSystem::setupLuaInterface(MScriptContext* script)
+int setGuiSystemCameraOffset()
 {
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setGuiSystemCameraOffset", 2))
+		return 0;
+
+	MVector2 vec;
+	script->getFloatArray(1, vec, 2);
+	GuiSystem* gui = GuiSystem::getInstance();
+
+	gui->setCameraOffset(vec);
+
+	return 1;
+}
+
+void GuiSystem::setupLuaInterface(MScriptContext* script)
+{	
+	script->addFunction("setGuiSystemCameraOffset", setGuiSystemCameraOffset);
+
 	script->addFunction("setWidgetIgnorCameraOffset", setWidgetIgnorCameraOffset);
 	script->addFunction("setWidgetVisible", setWidgetVisible);
 	

@@ -36,7 +36,7 @@ dofile("Widget.lua")
 --- Tile(x,y,w,h,spritesheet,tx,ty,text)
 -- Constructs a Tile object. The text parameter is optional.
 Tile = class(
-	Sprite,
+	Widget,
 
 	function(object, x, y, w, h, spritesheet,tx,ty,text)
 		if text == nil then text = "" end

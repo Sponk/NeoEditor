@@ -253,6 +253,8 @@ void Render::drawTexturedQuad(float x, float y, float w, float h, int texture, f
 	ModelViewMatrix.translate(pivot);
 	ModelViewMatrix.rotate(MVector3(0, 0, 1), rotation);
 	ModelViewMatrix.translate(-pivot);
+	ModelViewMatrix.scale(MVector3(scale.x,scale.y,0));
+
 
 	ProjModelViewMatrix = ProjMatrix * ModelViewMatrix;
 

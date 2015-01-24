@@ -100,6 +100,10 @@ function Widget:rotate(angle)
     self:setRotation(self.rotation + angle)
 end
 
+function Widget:getRotation()
+	return self.rotation
+end
+
 --- Translates the widget by the given coordinates relative to the current position.
 --
 -- x: The X offset
@@ -166,3 +170,11 @@ end
 function Widget:setWidgetIgnorCameraOffset(value)
     setWidgetIgnorCameraOffset(self.widget,value)
 end
+
+
+
+
+
+
+
+
