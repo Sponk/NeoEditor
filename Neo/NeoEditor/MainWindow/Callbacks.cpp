@@ -26,6 +26,10 @@
 #include <unistd.h>
 #endif
 
+#ifdef __APPLE__
+#include <ApplicationServices/ApplicationServices.h>
+#endif
+
 #include <FL/Fl_Value_Input.H>
 #include <FL/Fl_Int_Input.H>
 #include <FL/Fl_Round_Button.H>
@@ -2365,7 +2369,7 @@ void check_for_updates_callback(Fl_Menu_*, void*)
 
 	while(!check_updates_finished)
 	{
-		Fl::check();
+		Fl::wait();
 	}
 
 	int ret = thread->WaitForReturn();

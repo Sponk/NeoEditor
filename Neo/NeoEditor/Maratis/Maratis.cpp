@@ -3883,7 +3883,7 @@ void Maratis::transformPosition(void)
     float distance = axis.dotProduct((point) - (*position));
 
     // When snap to grid is enabled.
-    if(m_snapToGrid && abs(distance) < m_snapDistance)
+    if(m_snapToGrid && fabs(distance) < m_snapDistance)
     {
     	return;
     }

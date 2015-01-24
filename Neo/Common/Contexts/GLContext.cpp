@@ -38,6 +38,7 @@
 #define GLEW_STATIC
 
 #ifdef __APPLE__
+	#include <glew.h>
 	#include <OpenGL/OpenGL.h>
     #include <OpenGL/gl.h>
 #elif !defined(EMSCRIPTEN)

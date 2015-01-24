@@ -24,7 +24,12 @@ THE SOFTWARE.
 
 #include "ShinyManager.h"
 
+#ifdef __APPLE__
+#include <sys/malloc.h>
+#else
 #include <malloc.h>
+#endif
+
 #include <memory.h>
 #include <string.h>
 #include <stdio.h>

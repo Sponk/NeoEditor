@@ -34,8 +34,6 @@
 #import <Cocoa/Cocoa.h>
 #import <Carbon/Carbon.h>
 
-using namespace Neo;
-
 const char * NeoWindow::getTempDirectory(void)
 {
 	static char tempDirectory[256];
@@ -75,5 +73,24 @@ void NeoWindow::execute(const char * path, const char * args)
 	[task setLaunchPath:_path];
 	[task setArguments:arguments];
 	[task launch];
+	[task waitUntilExit];
 }
+
+void NeoWindow::executeDetached(char const* path, const char* args, bool killproc)
+{
+	NSString * _path = [NSString stringWithCString:path encoding:NSISOLatin1StringEncoding];
+	NSString * _args = [NSString stringWithCString:args encoding:NSISOLatin1StringEncoding];
+	
+	NSArray * arguments = [NSArray arrayWithObjects: _args, nil, nil];
+	
+	NSTask *task;
+	task = [[NSTask alloc] init];
+	[task setLaunchPath:_path];
+	[task setArguments:arguments];
+	[task launch];
+
+	if(killproc)
+		exit(0);
+}
+
 #endif

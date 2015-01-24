@@ -213,7 +213,7 @@ void NeoWindow::setCursorPos(int x, int y)
     }
     else // Fall back to native handler
     {
-#if defined WIN32
+#ifdef WIN32
       BOOL result = SetCursorPos(x, y);
       if (result) return;
 
