@@ -76,8 +76,10 @@ void Button::draw()
         break;
     }
 
-	render->drawColoredQuad(m_x, m_y, m_width, m_height, color, m_rotation);
-	render->drawText(m_labelText, m_x + 0.5*m_width, m_y + 0.5*m_labelText->getSize() + 0.5*m_height, m_rotation);
+	if (_isVisible){
+		render->drawColoredQuad(m_x, m_y, m_width, m_height, color, m_rotation);
+		render->drawText(m_labelText, m_x + 0.5*m_width, m_y + 0.5*m_labelText->getSize() + 0.5*m_height, m_rotation);
+	}
 }
 
 void Button::update()

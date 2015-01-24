@@ -62,21 +62,22 @@ void Canvas::draw()
 	    renderingContext->setViewport(0, 0, m_texture->getWidth(), m_texture->getHeight());
 	    renderingContext->setClearColor(m_clearColor);
 	    renderingContext->clear(M_BUFFER_COLOR);
+		renderingContext->translate(MVector3(1, 0, 0));
     }
     
     // Clear the canvas
     render->drawColoredQuad(0,0, m_width, m_height, m_clearColor);
-
-    // Draw all widgets
+	// Draw all widgets
     Widget* w;
     GuiSystem* gui = GuiSystem::getInstance();
     for(int i = 0; i < m_widgets.size(); i++)
     {
     	w = gui->getWidget(m_widgets[i]);
 
-    	if(w)
-    		w->draw();
-    	else
+		if (w){
+			w->draw();
+		}
+		else
     	    m_widgets.erase(m_widgets.begin()+i);
     }
     
@@ -91,10 +92,9 @@ void Canvas::update()
     for(int i = 0; i < m_widgets.size(); i++)
     {
     	w = gui->getWidget(m_widgets[i]);
-
-    	if(w)
-    		w->update();
-    	else
+		if (w){
+			w->update();
+		}else
     		m_widgets.erase(m_widgets.begin()+i);
     }
 }
@@ -114,7 +114,6 @@ void Canvas::enableRenderToTexture(const char* tex)
 	Level* level = NeoEngine::getInstance()->getLevel();
 	MRenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
 	MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
-	
 	if(tex)
 	{
 		// TODO: Proper clean up!

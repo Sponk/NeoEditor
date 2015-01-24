@@ -48,15 +48,14 @@ dofile("OLight.lua")
 dofile("OEntity.lua")
 
 if enableNeo3DTests then
-    dofile("Graphics2D.lua")
     dofile("Testing/Tests.lua")
     dofile("Testing/LuaUnit.lua")
-    
+    --dofile("Graphics2D.lua")
     Neo3D = {
 		runTests = function()
 		    local lu = LuaUnit.new()
 		    lu:setOutputType("google")
-		    lu:runSuite("Test3DSDK", "Test2DSDK")
+		    lu:runSuite()
 		    --lu:runSuite("-o",  "junit", "-n", "test.xml")
 		end
 	}
