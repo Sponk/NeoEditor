@@ -52,7 +52,6 @@ void TileSheet::loadImage(const char* path, unsigned int width, unsigned int hei
 	Level* level = NeoEngine::getInstance()->getLevel();
 	NeoWindow* window = NeoWindow::getInstance();
 
-	MLOG_INFO("Loading image");
 	if(path != NULL)
 	{
 		char buf[256];

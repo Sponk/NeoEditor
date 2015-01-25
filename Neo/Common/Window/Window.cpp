@@ -812,7 +812,7 @@ bool NeoWindow::create(const char * title, unsigned int width, unsigned int heig
 
 	NeoEngine::getInstance()->getRenderingContext()->init();
 
-// Request a higher resolution thread timer on NeoWindows
+// Request a higher resolution thread timer on Windows
 #ifdef WIN32
     timeBeginPeriod(1);
 #endif
