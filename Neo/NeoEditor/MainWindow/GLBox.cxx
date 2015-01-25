@@ -43,8 +43,6 @@
 #include "../MainWindow/Callbacks.h"
 #include "../MainWindow/MainWindow.h"
 
-#include <SDL.h>
-
 #include "Utils.h"
 
 using namespace Neo;
@@ -209,13 +207,6 @@ void GLBox::draw()
     {
     	maratis->initRenderer();
     	maratis->start();
-
-    	// UGLY!!!
-#ifdef __APPLE__
-    	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-    	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-#endif
 
     	// Get newly created renderer
     	render = engine->getRenderingContext();
