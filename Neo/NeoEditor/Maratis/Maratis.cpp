@@ -231,10 +231,21 @@ m_snapDistance(0.0)
         m_packageManager = new MPackageManagerNPK();
 
         m_physics->setSimulationQuality(2);
-    }
 
-    // start
-    start();
+        NeoEngine * engine = NeoEngine::getInstance();
+
+        // package manager
+        engine->setPackageManager(m_packageManager);
+        m_packageManager->init();
+
+        // contexts
+        engine->setSoundContext(m_soundContext); // sound context
+        engine->setRenderingContext(m_render); // rendering context
+        engine->setPhysicsContext(m_physics); // physics context
+        engine->setScriptContext(m_script); // script context
+        engine->setInputContext(m_input); // input context
+        engine->setSystemContext(m_system); // system context
+    }
 
     // empty text
     m_emptyText.setText("T");
@@ -303,7 +314,6 @@ void Maratis::changeRenderer(const char * name)
 void Maratis::autoSave(void)
 {
     NeoEngine * engine = NeoEngine::getInstance();
-
 
     // autosave name
     char autoSaveName[64];
@@ -450,18 +460,6 @@ void Maratis::start(void)
     // MEngine
     {
         NeoEngine * engine = NeoEngine::getInstance();
-
-        // package manager
-        engine->setPackageManager(m_packageManager);
-        m_packageManager->init();
-
-        // contexts
-        engine->setSoundContext(m_soundContext); // sound context
-        engine->setRenderingContext(m_render); // rendering context
-        engine->setPhysicsContext(m_physics); // physics context
-        engine->setScriptContext(m_script); // script context
-        engine->setInputContext(m_input); // input context
-        engine->setSystemContext(m_system); // system context
 
         // loaders
         engine->getImageLoader()->addLoader(M_loadImage); // image loader

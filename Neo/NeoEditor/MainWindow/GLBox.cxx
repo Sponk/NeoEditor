@@ -206,6 +206,7 @@ void GLBox::draw()
     if(!maratis_init)
     {
     	maratis->initRenderer();
+    	maratis->start();
 
     	// Get newly created renderer
     	render = engine->getRenderingContext();
