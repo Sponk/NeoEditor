@@ -66,6 +66,8 @@ protected:
     CALLBACK_FUNCTION m_callback;
     long int m_userData;
 
+    bool m_visible;
+
 public:
 
     Widget(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label);
@@ -160,6 +162,18 @@ public:
 	 * @brief Calls the callback with the user data as an argument.
 	 */
     void doCallback();
+
+    /**
+     * @brief Returns if the widget is turned visible.
+     * @return The boolean value.
+     */
+    bool isVisible() { return m_visible; }
+
+    /**
+     * @brief Sets the visibility status
+     * @param v The new status
+     */
+    void setVisible(bool v) { m_visible = v; }
 
 	// For runtime identification
 	const char* getStaticName() { return "Widget"; }

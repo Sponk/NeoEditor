@@ -17,6 +17,7 @@ local idleAnimation = SpriteAnimation(0,0,70,false)
 
 function btnCallback()
     print("Button!")
+    tile:setVisible(not tile:isVisible())
 end
 
 local button = Button(20,500,150,25,"Hello World","btnCallback")

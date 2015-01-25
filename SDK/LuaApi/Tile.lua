@@ -52,6 +52,7 @@ Tile = class(
 		object.tx = tx
 		object.ty = ty
 		object.animation = nil
+		object.visible = true
 	end)
 
 --- Attach an SpriteAnimation to an Tile object

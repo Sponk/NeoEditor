@@ -43,7 +43,8 @@ m_rotation(0.0f),
 m_width(width),
 m_height(height),
 m_label(label),
-m_callback(NULL)
+m_callback(NULL),
+m_visible(true)
 {
 
 }
@@ -55,7 +56,8 @@ m_rotation(0.0f),
 m_width(30),
 m_height(30),
 m_label("Widget"),
-m_callback(NULL)
+m_callback(NULL),
+m_visible(true)
 {
 
 }

@@ -309,6 +309,32 @@ int getWidgetPosition()
     return 1;
 }
 
+int setWidgetVisible()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setWidgetVisible", 2))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	w->setVisible(script->getBoolean(1));
+
+	return 1;
+}
+
+int isWidgetVisible()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("isWidgetVisible", 1))
+	return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	script->pushBoolean(w->isVisible());
+	return 1;
+}
+
 int clearGui()
 {
 	GuiSystem::getInstance()->scheduleClear();
@@ -494,18 +520,6 @@ int setTileOffset()
 	{
 		MLOG_ERROR("Given object is not of type Tile!");
 	}
-	return 1;
-}
-
-int setWidgetVisible()
-{
-	MLOG_INFO("Stub");
-	return 1;
-}
-
-int isWidgetVisible()
-{
-	MLOG_INFO("Stub");
 	return 1;
 }
 

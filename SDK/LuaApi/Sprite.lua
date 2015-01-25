@@ -46,4 +46,5 @@ Sprite = class(
 		object.width = w
 		object.height = h
 		object.rotation = 0
+		object.visible = true
 	end)

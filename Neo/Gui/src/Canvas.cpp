@@ -74,9 +74,10 @@ void Canvas::draw()
     {
     	w = gui->getWidget(m_widgets[i]);
 
-    	if(w)
+    	// Only draw the widget if it exists & if it is visible
+    	if(w && w->isVisible())
     		w->draw();
-    	else
+    	else if(w == NULL) // Remove the widget from the list if it does not exist anymore
     	    m_widgets.erase(m_widgets.begin()+i);
     }
     
