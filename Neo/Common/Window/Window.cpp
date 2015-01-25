@@ -46,6 +46,7 @@
 #endif
 
 #ifndef USE_GLES
+#include <glew.h>
 #include <SDL_opengl.h>
 #else
 	#ifdef __APPLE__
@@ -70,6 +71,10 @@
 
 #ifdef linux
 #include <X11/Xlib.h>
+#endif
+
+#ifdef __APPLE__
+#include <ApplicationServices/ApplicationServices.h>
 #endif
 
 using namespace Neo;
@@ -793,7 +798,14 @@ bool NeoWindow::create(const char * title, unsigned int width, unsigned int heig
 		return false;
 	}
 
+#ifdef __APPLE__
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+#endif
+
 	g_context = SDL_GL_CreateContext(g_NeoWindow);
+
 #else
 	SDL_Surface* NeoWindow = SDL_SetVideoMode(width,height,colorBits,SDL_OPENGL | SDL_DOUBLEBUF);
 #endif

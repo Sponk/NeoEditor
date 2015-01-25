@@ -29,7 +29,7 @@
 
 
 #ifdef __APPLE__
-#include "../NeoWindow.h"
+#include "../Window.h"
 
 #import <Cocoa/Cocoa.h>
 #import <Carbon/Carbon.h>

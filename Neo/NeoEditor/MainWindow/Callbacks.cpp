@@ -59,6 +59,10 @@ using namespace Neo;
 #include "../MainWindow/Translator.h"
 #include <Shiny.h>
 
+#ifdef __APPLE__
+#include <ApplicationServices/ApplicationServices.h>
+#endif
+
 open_project_t current_project;
 bool reload_editor = false;
 

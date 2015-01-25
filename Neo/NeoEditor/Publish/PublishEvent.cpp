@@ -21,6 +21,7 @@
 #include "PublishEvent.h"
 #include <NeoEngine.h>
 #include <Project.h>
+#include <Window/Window.h>
 
 #include <sys/stat.h>
 
@@ -401,7 +402,7 @@ void copySysOSX(const char* projName)
 	const char * appName = "NeoPlayer";
 #endif
 
-	MWindow * window = MWindow::getInstance();
+	NeoWindow * window = MWindow::getInstance();
 	NeoEngine* engine = NeoEngine::getInstance();
 	MSystemContext* system = engine->getSystemContext();
 
