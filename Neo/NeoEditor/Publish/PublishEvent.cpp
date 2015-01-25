@@ -402,7 +402,7 @@ void copySysOSX(const char* projName)
 	const char * appName = "NeoPlayer";
 #endif
 
-	NeoWindow * window = MWindow::getInstance();
+	NeoWindow * window = NeoWindow::getInstance();
 	NeoEngine* engine = NeoEngine::getInstance();
 	MSystemContext* system = engine->getSystemContext();
 
