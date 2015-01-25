@@ -106,7 +106,8 @@ int getCanvasClearColor()
 
     Canvas* c = (Canvas*) script->getPointer(0);
 
-    script->pushFloatArray(c->getClearColor(), 4);
+    if(c)
+    	script->pushFloatArray(c->getClearColor(), 4);
     return 1;
 }
 
@@ -121,7 +122,8 @@ int setCanvasClearColor()
     MVector4 vec;
     script->getFloatArray(1, vec, 4);
 
-    c->setClearColor(vec);
+    if(c)
+    	c->setClearColor(vec);
 
     return 1;
 }
@@ -212,7 +214,9 @@ int addWidgetToCanvas()
         return 0;
 
     Canvas* c = (Canvas*) script->getPointer(0);
-    c->addWidget(script->getInteger(1));
+
+    if(c)
+    	c->addWidget(script->getInteger(1));
 
     return 1;
 }
@@ -225,7 +229,9 @@ int setLabel()
         return 0;
 
     Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
-    w->setLabel(script->getString(1));
+
+    if(w)
+    	w->setLabel(script->getString(1));
 
     return 1;
 }
@@ -238,7 +244,9 @@ int getLabel()
         return 0;
 
     Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
-    script->pushString(w->getLabel());
+
+    if(w)
+    	script->pushString(w->getLabel());
 
     return 1;
 }
@@ -265,7 +273,9 @@ int setWidgetPosition()
 
     MVector2 vec;
     script->getFloatArray(1, vec, 2);
-    w->setPosition(vec);
+
+    if(w)
+    	w->setPosition(vec);
 
     return 1;
 }
@@ -279,7 +289,9 @@ int setWidgetRotation()
 
     Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
 
-    w->setRotation(script->getFloat(1));
+    if(w)
+    	w->setRotation(script->getFloat(1));
+
     return 1;
 }
 
@@ -291,7 +303,9 @@ int getWidgetRotation()
         return 0;
 
     Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
-    script->pushFloat(w->getRotation());
+
+    if(w)
+    	script->pushFloat(w->getRotation());
 
     return 1;
 }
@@ -304,7 +318,9 @@ int getWidgetPosition()
         return 0;
 
     Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
-    script->pushFloatArray(w->getPosition(), 2);
+
+    if(w)
+    	script->pushFloatArray(w->getPosition(), 2);
 
     return 1;
 }
@@ -318,7 +334,8 @@ int setWidgetVisible()
 
 	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
 
-	w->setVisible(script->getBoolean(1));
+	if(w)
+		w->setVisible(script->getBoolean(1));
 
 	return 1;
 }
@@ -331,7 +348,10 @@ int isWidgetVisible()
 	return 0;
 
 	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
-	script->pushBoolean(w->isVisible());
+
+	if(w)
+		script->pushBoolean(w->isVisible());
+
 	return 1;
 }
 
@@ -384,7 +404,10 @@ int enableCanvasRenderToTexture()
 		return 0;
 	
 	Canvas* c = (Canvas*) script->getPointer(0);
-	c->enableRenderToTexture(script->getString(1));
+
+    if(c)
+    	c->enableRenderToTexture(script->getString(1));
+
 	return 1;
 }
 
@@ -395,8 +418,11 @@ int disableCanvasRenderToTexture()
 		return 0;
 	
 	Canvas* c = (Canvas*) script->getPointer(0);
-	c->disableRenderToTexture();
-	return 1;
+
+	if(c)
+    	c->disableRenderToTexture();
+
+    return 1;
 }
 
 int createCanvas()
@@ -510,7 +536,7 @@ int setTileOffset()
 
 	Tile* w = (Tile*) GuiSystem::getInstance()->getWidget(script->getInteger(0));
 
-	if(!strcmp(w->getStaticName(), "Tile"))
+	if(w && !strcmp(w->getStaticName(), "Tile"))
 	{
 		MVector2 vec;
 		script->getFloatArray(1, vec, 2);
