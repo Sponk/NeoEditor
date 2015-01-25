@@ -59,10 +59,14 @@ class Widget
 {
 protected:
     float m_x, m_y;
-    float m_rotation;
+    float m_rotation = 0;
     unsigned int m_width, m_height;
     std::string m_label;
-
+	bool _isVisible = true;
+	MVector2 _scale = MVector2(1, 1);
+	MVector2 _flip = MVector2(1, 1);
+	bool _ignor_camera_offset = false;
+	
     CALLBACK_FUNCTION m_callback;
     long int m_userData;
 
@@ -70,17 +74,34 @@ public:
 
     Widget(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label);
     Widget();
-
 	/**
 	 * @brief Virtual function used to draw the widget.
 	 */
     virtual void draw() = 0;
-
 	/**
 	 * @brief Virtual function used to update the widget.
 	 */
     virtual void update() = 0;
-
+	/*
+	*Ignore the movement of the camera for this Widget
+	*/
+	void setIgnorCameraOffset(bool value){ _ignor_camera_offset = value; }
+	/*
+	*Should this Widget be visible?
+	*/
+	void setVisible(bool value) { _isVisible = value; }
+	/*
+	*Get whether or not this Widget is visible
+	*/
+	bool getVisible(){ return _isVisible; }
+	/*
+	*Scale the Widget
+	*/
+	void setScale(MVector2 scale){ _scale = scale; }
+	/*
+	*Flip the Widget
+	*/
+	void setFlip(MVector2 flip){ _flip = flip; }
 	/**
 	 * @brief Sets the callback.
 	 *

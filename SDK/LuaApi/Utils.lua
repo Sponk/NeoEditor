@@ -28,8 +28,8 @@ end
 
 --- Finds the distance between two tables
 function Utils:distanceBetween(a,b)
-	local dx = a.x - b.x;
-	local dy =  a.y - b.y;
+	local dx = a:getPosition().x - b:getPosition().x;
+	local dy =  a:getPosition().y - b:getPosition().y;
 	return (self:vectorLength(dx, dy));
 end
 

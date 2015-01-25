@@ -254,61 +254,6 @@ int setDefaultFontSize()
     return 1;
 }
 
-int setWidgetPosition()
-{
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-
-    if(!script->isFunctionOk("setWidgetPosition", 2))
-        return 0;
-
-    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
-
-    MVector2 vec;
-    script->getFloatArray(1, vec, 2);
-    w->setPosition(vec);
-
-    return 1;
-}
-
-int setWidgetRotation()
-{
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-
-    if(!script->isFunctionOk("setWidgetRotation", 2))
-        return 0;
-
-    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
-
-    w->setRotation(script->getFloat(1));
-    return 1;
-}
-
-int getWidgetRotation()
-{
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-
-    if(!script->isFunctionOk("getWidgetRotation", 1))
-        return 0;
-
-    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
-    script->pushFloat(w->getRotation());
-
-    return 1;
-}
-
-int getWidgetPosition()
-{
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-
-    if(!script->isFunctionOk("getWidgetPosition", 1))
-        return 0;
-
-    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
-    script->pushFloatArray(w->getPosition(), 2);
-
-    return 1;
-}
-
 int clearGui()
 {
 	GuiSystem::getInstance()->scheduleClear();
@@ -497,20 +442,160 @@ int setTileOffset()
 	return 1;
 }
 
+int setWidgetRotation()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setWidgetRotation", 2))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	w->setRotation(script->getFloat(1));
+	return 1;
+}
+
+int getWidgetRotation()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("getWidgetRotation", 1))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	script->pushFloat(w->getRotation());
+
+	return 1;
+}
+
+
 int setWidgetVisible()
 {
-	MLOG_INFO("Stub");
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setWidgetVisible", 2))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	w->setVisible(script->getBoolean(1));
+
 	return 1;
 }
 
 int isWidgetVisible()
+ {
+	 MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	 if (!script->isFunctionOk("isWidgetVisible", 1))
+		 return 0;
+
+	 Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	 script->pushBoolean(w->getVisible());
+	return 1;
+}
+
+
+int setWidgetPosition()
 {
-	MLOG_INFO("Stub");
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setWidgetPosition", 2))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	MVector2 vec;
+	script->getFloatArray(1, vec, 2);
+	w->setPosition(vec);
+
+	return 1;
+}
+
+int getWidgetPosition()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("getWidgetPosition", 1))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	script->pushFloatArray(w->getPosition(), 2);
+
+	return 1;
+}
+
+int setWidgetScale()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setWidgetScale", 2))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	MVector2 vec;
+	script->getFloatArray(1, vec, 2);
+	w->setScale(vec);
+
+	return 1;
+}
+
+int setWidgetFlip()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setWidgetFlip", 2))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	MVector2 vec;
+	script->getFloatArray(1, vec, 2);
+	w->setFlip(vec);
+
+	return 1;
+}
+
+int setWidgetIgnorCameraOffset()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setWidgetIgnorCameraOffset", 2))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	w->setIgnorCameraOffset(script->getBoolean(1));
+	return 1;
+}
+
+int setGuiSystemCameraOffset()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setGuiSystemCameraOffset", 2))
+		return 0;
+
+	MVector2 vec;
+	script->getFloatArray(1, vec, 2);
+	GuiSystem* gui = GuiSystem::getInstance();
+
+	gui->setCameraOffset(vec);
+
 	return 1;
 }
 
 void GuiSystem::setupLuaInterface(MScriptContext* script)
-{
+{	
+	script->addFunction("setGuiSystemCameraOffset", setGuiSystemCameraOffset);
+
+	script->addFunction("setWidgetIgnorCameraOffset", setWidgetIgnorCameraOffset);
+	script->addFunction("setWidgetVisible", setWidgetVisible);
+	
+	script->addFunction("setWidgetScale", setWidgetScale);
+	script->addFunction("setWidgetFlip", setWidgetFlip);
+
     script->addFunction("enableGui", enableGui);
     script->addFunction("getMainCanvas", getMainCanvas);
     script->addFunction("createCanvas", createCanvas);
@@ -549,9 +634,6 @@ void GuiSystem::setupLuaInterface(MScriptContext* script)
 	script->addFunction("loadSpriteSheet", loadSpriteSheet);
 	script->addFunction("setTileSpriteSheet", setTileSpriteSheet);
 	script->addFunction("setTileOffset", setTileOffset);
-
-	script->addFunction("setWidgetVisible", setWidgetVisible);
-	script->addFunction("isWidgetVisible", isWidgetVisible);
 }
 
 void GuiSystem::destroyWidget(int idx)
