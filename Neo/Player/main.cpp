@@ -242,7 +242,7 @@ int main(int argc, char **argv)
 	MaratisPlayer * maratis = MaratisPlayer::getInstance();
 
 	// create window
-	if(! window->create(std::string("Neo ").append(PLAYER_VERSION_STRING).c_str(), width, height, 32, fullscreen == 1))
+	if(!window->create(std::string("Neo ").append(PLAYER_VERSION_STRING).c_str(), width, height, 32, fullscreen == 1))
 	{
 		MLOG_ERROR("cannot create window");
 		return 0;

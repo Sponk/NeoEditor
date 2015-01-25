@@ -298,9 +298,9 @@ void GLBox::draw()
     }
 
     // Workaround for a Bug in Gnome. Should not make a difference though.
-#ifndef LINUX
-    swap_buffers();
-#endif
+//#ifndef LINUX
+    // swap_buffers();
+//#endif
 }
 
 // TODO: Make this a function!
