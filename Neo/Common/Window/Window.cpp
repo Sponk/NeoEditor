@@ -805,6 +805,7 @@ bool NeoWindow::create(const char * title, unsigned int width, unsigned int heig
 #endif
 
 	g_context = SDL_GL_CreateContext(g_NeoWindow);
+	SDL_GL_MakeCurrent(g_NeoWindow, g_context);
 
 #else
 	SDL_Surface* NeoWindow = SDL_SetVideoMode(width,height,colorBits,SDL_OPENGL | SDL_DOUBLEBUF);
