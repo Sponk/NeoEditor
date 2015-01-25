@@ -2,6 +2,8 @@
 --An 'OLight' instance is an light object in a scene which can be
 --manipulated. The 'OLight' class is mostly used to manage lights in your
 --3D scene.
+--
+--See also: <a href="Object3d.lua.html">Widget</a>
 
 dofile("class.lua")
 dofile("Object3d.lua")

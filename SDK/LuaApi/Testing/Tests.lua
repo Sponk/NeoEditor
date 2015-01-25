@@ -78,6 +78,36 @@ function Test3DSDK:TestEntity()
   
 end
 
+function Test3DSDK:TestCamera()
+  
+  local camera = OCamera()
+  
+  -- Check if constructor works
+  assertNotNil(camera)
+  assertNotNil(camera.nativeObject)
+
+  camera:setClearColor({0.5, 0.5, 0.5})    
+  assertVectorEquals(camera:getClearColor(), {0.5,0.5,0.5},  0.0001)
+  
+  camera:setFov(70)
+  assertEquals(camera:getFov(), 70)
+  
+  camera:setNearPlane(0.5)
+  assertAlmostEquals(camera:getNearPlane(), 0.5, 0.0001)
+  
+  camera:setFarPlane(1000)
+  assertAlmostEquals(camera:getFarPlane(), 1000, 0.0001)
+  
+  camera:setFogDistance(200)
+  assertAlmostEquals(camera:getFogDistance(), 200, 0.0001)
+  
+  camera:enableFog(true)
+  assertEquals(camera:hasFog(), true)
+  
+  camera:enableOrtho(true)
+  assertEquals(camera:isOrtho(), true)
+end
+
 function Test2DSDK:TestWidget()
   
   local widget = Widget(0,0,10,10, "Text")

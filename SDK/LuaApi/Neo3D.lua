@@ -46,6 +46,7 @@ dofile("class.lua")
 dofile("Object3d.lua")
 dofile("OLight.lua")
 dofile("OEntity.lua")
+dofile("OCamera.lua")
 
 if enableNeo3DTests then
     dofile("Graphics2D.lua")
@@ -55,7 +56,7 @@ if enableNeo3DTests then
     Neo3D = {
 		runTests = function()
 		    local lu = LuaUnit.new()
-		    lu:setOutputType("google")
+		    lu:setOutputType("text")
 		    lu:runSuite("Test3DSDK", "Test2DSDK")
 		    --lu:runSuite("-o",  "junit", "-n", "test.xml")
 		end

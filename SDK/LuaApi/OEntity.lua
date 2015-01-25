@@ -1,6 +1,8 @@
 --- The OEntity class
 -- An 'OEntity' instance is an entity object in a scene which can be
 -- manipulated. The 'OEntity' class is mostly used to manage meshes in your 3D scene.
+-- 
+-- See also: <a href="Object3d.lua.html">Widget</a>
 
 dofile("class.lua")
 dofile("Object3d.lua")
