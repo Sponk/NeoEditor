@@ -67,12 +67,10 @@ private:
 	// game plugin
 	Neo::Plugin * m_gamePlugin;
 
-private:
+public:
 
 	// start
 	void start(void);
-
-public:
 
 	// renderer
 	void changeRenderer(const char * name);

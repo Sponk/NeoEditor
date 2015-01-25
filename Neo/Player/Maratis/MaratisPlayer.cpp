@@ -82,10 +82,21 @@ m_renderer(NULL)
 		m_packageManager = new MPackageManagerNPK();
 		
         m_physics->setSimulationQuality(2);
-	}
 
-	// start
-	start();
+		NeoEngine * engine = NeoEngine::getInstance();
+
+		// package manager
+		engine->setPackageManager(m_packageManager);
+		m_packageManager->init();
+
+		// contexts
+		engine->setSoundContext(m_soundContext); // sound context
+		engine->setRenderingContext(m_render); // rendering context
+		engine->setPhysicsContext(m_physics); // physics context
+		engine->setScriptContext(m_script); // script context
+		engine->setInputContext(m_input); // input context
+		engine->setSystemContext(m_system); // system context
+	}
 }
 
 MaratisPlayer::~MaratisPlayer(void)
@@ -124,18 +135,6 @@ void MaratisPlayer::start(void)
 	// MEngine
 	{
 		NeoEngine * engine = NeoEngine::getInstance();
-
-		// package manager
-		engine->setPackageManager(m_packageManager);
-		m_packageManager->init();
-		
-		// contexts
-		engine->setSoundContext(m_soundContext); // sound context
-		engine->setRenderingContext(m_render); // rendering context
-		engine->setPhysicsContext(m_physics); // physics context
-		engine->setScriptContext(m_script); // script context
-		engine->setInputContext(m_input); // input context
-		engine->setSystemContext(m_system); // system context
 
 		// loaders
 		engine->getImageLoader()->addLoader(M_loadImage); // image loader

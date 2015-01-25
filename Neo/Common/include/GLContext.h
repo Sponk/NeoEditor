@@ -74,6 +74,8 @@ public:
 	GLContext(void);
 	~GLContext(void);
 
+	void init();
+
 	// version
     const char * getRendererVersion(void) { return m_gl_version; }
 

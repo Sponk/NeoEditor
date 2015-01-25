@@ -810,6 +810,8 @@ bool NeoWindow::create(const char * title, unsigned int width, unsigned int heig
 	SDL_Surface* NeoWindow = SDL_SetVideoMode(width,height,colorBits,SDL_OPENGL | SDL_DOUBLEBUF);
 #endif
 
+	NeoEngine::getInstance()->getRenderingContext()->init();
+
 // Request a higher resolution thread timer on NeoWindows
 #ifdef WIN32
     timeBeginPeriod(1);

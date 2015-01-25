@@ -86,6 +86,8 @@ public:
 	ES2Context(void);
 	~ES2Context(void);
 
+	void init();
+
 	// version
 	const char * getRendererVersion(void) { return m_gl_version; }
 	

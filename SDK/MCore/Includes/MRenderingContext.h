@@ -295,6 +295,8 @@ public:
      */
 	virtual void setClearColor(const MVector4 & color) = 0;
 
+	virtual void init() = 0;
+
 	// texture
 	virtual void enableTexture(void) = 0;
 	virtual void disableTexture(void) = 0;

@@ -183,6 +183,11 @@ static GLenum returnAttachType(M_FRAME_BUFFER_ATTACHMENT type)
 ES2Context::ES2Context(void):
 m_currentFrameBuffer(0)
 {
+
+}
+
+void ES2Context::init()
+{
     m_matrixStep = 0;
     m_matrixMode = M_MATRIX_MODELVIEW;
 

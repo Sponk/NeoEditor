@@ -238,12 +238,17 @@ int main(int argc, char **argv)
 	// get window (first time call onstructor)
 	NeoWindow * window = NeoWindow::getInstance();
 
+	// get Maratis (first time call onstructor)
+	MaratisPlayer * maratis = MaratisPlayer::getInstance();
+
 	// create window
 	if(! window->create(std::string("Neo ").append(PLAYER_VERSION_STRING).c_str(), width, height, 32, fullscreen == 1))
 	{
 		MLOG_ERROR("cannot create window");
 		return 0;
 	}
+
+	maratis->start();
 
 	if(fullscreen)
 		window->hideCursor();
@@ -252,9 +257,6 @@ int main(int argc, char **argv)
 	char rep[256];
 	getRepertory(rep, argv[0]);
 	window->setCurrentDirectory(rep);
-	
-	// get Maratis (first time call onstructor)
-	MaratisPlayer * maratis = MaratisPlayer::getInstance();
 
 	// window pointer event
 	window->setPointerEvent(windowEvents);

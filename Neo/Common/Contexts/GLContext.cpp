@@ -182,6 +182,11 @@ GLenum returnAttachType(M_FRAME_BUFFER_ATTACHMENT type)
 GLContext::GLContext(void):
 m_currentFrameBuffer(0)
 {
+
+}
+
+void GLContext::init()
+{
     GLenum err = glewInit();
     if (GLEW_OK != err)
     {

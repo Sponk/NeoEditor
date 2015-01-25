@@ -273,6 +273,7 @@ void Maratis::initRenderer()
 	m_render = new ES2Context();
 #endif
     NeoEngine::getInstance()->setRenderingContext(m_render);
+    m_render->init();
 }
 
 void Maratis::publish(void)
