@@ -48,3 +48,65 @@ Sprite = class(
 		object.rotation = 0
 		object.visible = true
 	end)
+
+---If a bounding box is assigned then this function needs to be called
+function Sprite:update()
+	if self.boundingBox ~= nil then
+		self:setPosition(self.boundingBox.x,self.boundingBox.y)
+	end
+end	
+---Add a specific bounding box to this sprite.Ex: 'rect','circle','line'
+--- It can be a rectangle,circle or a line
+--- Tag - used for checking collision detection
+--- Width - the width of the bounding box(it can be bigger or smaller than the width of the image)
+--- Height - the height of the bounding box(it can be bigger or smaller than the height of the image)
+function Sprite:addBoundingBox(shape,tag,width,height)
+	self.boundingBox = nil
+	self.boundingBox = collision:addDynamic(shape,tag,self:getPosition().x,self:getPosition().y,width,height)
+end	
+
+function Sprite:getBoundingBox()
+	return self.boundingBox
+end
+
+function Sprite:addFriction(value)
+	if self.boundingBox ~= nil then
+	self.boundingBox.friction = value
+	end
+end
+function Sprite:addDamping(value)
+	if self.boundingBox ~= nil then
+		self.boundingBox.damping = value
+	end
+end
+
+function Sprite:move(speedX,speedY)
+	if self.boundingBox ~= nil then
+	self.boundingBox.xv = self.boundingBox.xv + speedX
+	self.boundingBox.yv = self.boundingBox.yv + speedY
+	end
+end
+
+function Sprite:moveXBy(speedX)
+	if self.boundingBox ~= nil then
+	self.boundingBox.xv = self.boundingBox.xv + speedX
+	end
+end
+
+function Sprite:moveYBy(speedY)
+	if self.boundingBox ~= nil then
+	self.boundingBox.yv = self.boundingBox.yv + speedY
+	end
+end
+
+function Sprite:moveX(speedX)
+	if self.boundingBox ~= nil then
+		self.boundingBox.xv = speedX
+	end
+end
+
+function Sprite:moveY(speedY)
+	if self.boundingBox ~= nil then
+	self.boundingBox.yv = speedY
+	end
+end
