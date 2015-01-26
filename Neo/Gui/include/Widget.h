@@ -67,6 +67,9 @@ protected:
     long int m_userData;
 
     bool m_visible;
+    MVector2 m_scale = MVector2(1, 1);
+    MVector2 m_flip = MVector2(1, 1);
+    bool m_ignore_camera_offset = false;
 
 public:
 
@@ -174,6 +177,18 @@ public:
      * @param v The new status
      */
     void setVisible(bool v) { m_visible = v; }
+	/**
+     	* Scale factor for this Widget
+     	*/
+    void setScale(MVector2 scale) {m_scale = scale;}
+	/**
+	 * Flip the Widget in a specific direction.Ex: -1,1  1,-1
+	 */
+    void setFlip(MVector2 flip) {m_flip = flip;}
+	/**
+	 * Lock the sprite on the screen.
+	 */
+    void setIgnorCameraOffset(bool value){ m_ignore_camera_offset = value; }
 
 	// For runtime identification
 	const char* getStaticName() { return "Widget"; }
