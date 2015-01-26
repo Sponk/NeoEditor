@@ -103,6 +103,9 @@ public:
     Canvas* getCanvas(unsigned int i) { return m_canvasVector[i]; }
     void updateLayers();
     
+    MVector2 _camera_offset = MVector2(0, 0);
+    void setCameraOffset(MVector2 value){ _camera_offset = value; }
+
     void destroyWidget(int id);
 
     // Deletes all widgets and canvases except the main canvas.
