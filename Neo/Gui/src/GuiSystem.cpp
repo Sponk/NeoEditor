@@ -549,6 +549,48 @@ int setTileOffset()
 	return 1;
 }
 
+
+int setWidgetScale() {
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	if (!script->isFunctionOk("setWidgetScale", 2))
+		return 0;
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	MVector2 vec;
+	script->getFloatArray(1, vec, 2);
+	w->setScale(vec);
+	return 1;
+}
+int setWidgetFlip() {
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	if (!script->isFunctionOk("setWidgetFlip", 2))
+		return 0;
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	MVector2 vec;
+	script->getFloatArray(1, vec, 2);
+	w->setFlip(vec);
+	return 1;
+}
+
+int setWidgetIgnorCameraOffset() {
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	if (!script->isFunctionOk("setWidgetIgnorCameraOffset", 2))
+		return 0;
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	w->setIgnorCameraOffset(script->getBoolean(1));
+	return 1;
+}
+int setGuiSystemCameraOffset() {
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	if (!script->isFunctionOk("setGuiSystemCameraOffset", 2))
+		return 0;
+	MVector2 vec;
+	script->getFloatArray(1, vec, 2);
+	GuiSystem* gui = GuiSystem::getInstance();
+	gui->setCameraOffset(vec);
+	return 1;
+}
+
+
 void GuiSystem::setupLuaInterface(MScriptContext* script)
 {
     script->addFunction("enableGui", enableGui);
@@ -592,6 +634,11 @@ void GuiSystem::setupLuaInterface(MScriptContext* script)
 
 	script->addFunction("setWidgetVisible", setWidgetVisible);
 	script->addFunction("isWidgetVisible", isWidgetVisible);
+	
+	script->addFunction("setWidgetScale", setWidgetScale);
+	script->addFunction("setWidgetFlip", setWidgetFlip);
+	script->addFunction("setGuiSystemCameraOffset", setGuiSystemCameraOffset);
+	script->addFunction("setWidgetIgnorCameraOffset", setWidgetIgnorCameraOffset);
 }
 
 void GuiSystem::destroyWidget(int idx)
