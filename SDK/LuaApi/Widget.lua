@@ -157,3 +157,25 @@ end
 function Widget:isVisible()
     return self.visible
 end
+
+
+function Widget:setScale(x,y)
+    self.scale = {}
+    self.scale.x = x
+    self.scale.y = y
+    setWidgetScale(self.widget,{x,y})
+end
+
+function Widget:getScale()
+    return self.scale
+end
+
+function Widget:setFlip(x,y)
+    self.flip = {}
+    self.flip.x = x
+    self.flip.y = y
+    setWidgetFlip(self.widget,{x,y})
+end
+function Widget:setWidgetIgnorCameraOffset(value)
+    setWidgetIgnorCameraOffset(self.widget,value)
+end
