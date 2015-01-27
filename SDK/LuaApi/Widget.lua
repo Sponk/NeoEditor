@@ -112,17 +112,6 @@ function Widget:getPosition()
     return pos
 end
 
---- Whether or not this object can collide with other objects
--- call this in a load function!
-function Widget:setCollidable(value,tag)
-    self.collidable = value
-    self.tag = tag
-    if value  then 
-        table.insert(collidable_objects,self)
-    elseif not value then
-        table.remove(collidable_objects,self)
-    end
-end
 --Returns the Width/Height of this object
 function Widget:getSize()
     local size = {}
