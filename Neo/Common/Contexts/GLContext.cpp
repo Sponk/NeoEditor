@@ -29,7 +29,7 @@
 //
 //========================================================================
 
-#ifndef USE_GLES
+#if !defined(USE_GLES) && defined(USE_LEGACY_GL)
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>

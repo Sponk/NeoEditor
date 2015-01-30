@@ -30,7 +30,7 @@
 //========================================================================
 
 
-#if !defined(_M_GL_CONTEXT_H) && !defined(USE_GLES)
+#if !defined(_M_GL_CONTEXT_H) && !defined(USE_GLES) && defined(USE_LEGACY_GL)
 #define _M_GL_CONTEXT_H
 
 #include <MCore.h>
@@ -274,5 +274,11 @@ public:
     // point size
     void setPointSize(float size);
 };
+}
+#elif !defined(USE_LEGACY_GL)
+#include "GL4Context.h"
+namespace Neo
+{
+	typedef GL4Context GLContext;
 }
 #endif
