@@ -8,7 +8,7 @@ uniform vec3 DiffuseColor;
 in vec2 texCoord;
 
 layout (location = 0) out vec4 FragColor;
-layout (location = 1) out vec4 Normal;
+layout (location = 2) out vec4 Normal;
 
 void main(void)
 {

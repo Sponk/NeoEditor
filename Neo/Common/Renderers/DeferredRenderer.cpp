@@ -102,7 +102,7 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
     void* indices = mesh->getIndices();
 
     Material* material = display->getMaterial();
-    int texturePasses = material->getTexturesPassNumber();
+    int texturePasses = material->getTexturesPassNumber();    
 
     int fx = 0;
     int textureMode = 0;
@@ -114,23 +114,6 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 
         render->createVAO(vao);
         render->bindVAO(*vao);
-
-        // Set up vertex attribute
-        int vertAttrib;
-        render->getAttribLocation(fx, "Vertex", &vertAttrib);
-        render->enableAttribArray(vertAttrib);
-
-        render->setAttribPointer(vertAttrib, M_FLOAT, 3, verts);
-
-        // Set up texcoord attribute
-        int texcoordAttrib = 0;
-        if(texturePasses > 0 && texcoords != NULL)
-        {
-            render->getAttribLocation(fx, "TexCoord", &texcoordAttrib);
-            render->enableAttribArray(texcoordAttrib);
-
-            render->setAttribPointer(texcoordAttrib, M_FLOAT, 2, texcoords + display->getBegin());
-        }
 
         // Bind VBOs
         if(*vboId1 > 0)
@@ -144,9 +127,30 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
             }
         }
 
+        // Set up vertex attribute
+        int vertAttrib;
+        render->getAttribLocation(fx, "Vertex", &vertAttrib);
+        render->enableAttribArray(vertAttrib);
+
+        render->setAttribPointer(vertAttrib, M_FLOAT, 3, NULL);
+
+        // Set up texcoord attribute
+        int texcoordAttrib = 0;
+        if(texturePasses > 0 && texcoords != NULL)
+        {
+            // vert + normal + tang
+            int offset = sizeof(MVector3)*(mesh->getVerticesSize() + mesh->getNormalsSize() + mesh->getTangentsSize());
+
+            render->getAttribLocation(fx, "TexCoord", &texcoordAttrib);
+
+            render->setAttribPointer(texcoordAttrib, M_FLOAT, 2, (void*) offset + display->getBegin());
+            render->enableAttribArray(texcoordAttrib);
+        }
+
         //render->disableAttribArray(vertAttrib);
         //render->disableAttribArray(texcoordAttrib);
-       //render->bindVAO(0);
+       render->bindVAO(0);
+       return;
     }
 
     fx = m_fx[0];
@@ -210,13 +214,13 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 
     // Bind VBOs
     //if(*vboId1 > 0)
-      //  render->bindVBO(M_VBO_ARRAY, *vboId1);
+        //render->bindVBO(M_VBO_ARRAY, *vboId1);
 
     if(indices) // If the SubMesh has indices
     {
         if(*vboId2 > 0) // If the indices are stored in the VBO
         {
-      //      render->bindVBO(M_VBO_ELEMENT_ARRAY, *vboId2);
+            render->bindVBO(M_VBO_ELEMENT_ARRAY, *vboId2);
             switch(indicesType)
             {
                 case M_USHORT:
@@ -418,18 +422,19 @@ void DeferredRenderer::drawScene(Scene* scene, OCamera* camera)
     system->getScreenSize(&screenWidth, &screenHeight);
 
     // render to texture
-    /*render->bindFrameBuffer(m_framebufferID);
+    render->bindFrameBuffer(m_framebufferID);
     render->attachFrameBufferTexture(M_ATTACH_COLOR0, m_gbufferTexID);
     render->attachFrameBufferTexture(M_ATTACH_COLOR1, m_normalTexID);
     render->attachFrameBufferTexture(M_ATTACH_DEPTH, m_depthTexID);
 
     render->setViewport(0, 0, screenWidth, screenHeight); // change viewport
-*/
+
     render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
+
     drawGBuffer(scene, camera);
 
     // finish render to texture
-    //render->bindFrameBuffer(currentFrameBuffer);
+    render->bindFrameBuffer(currentFrameBuffer);
 
     //renderFinalImage();
 }
