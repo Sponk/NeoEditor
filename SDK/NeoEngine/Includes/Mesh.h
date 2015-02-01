@@ -52,6 +52,9 @@ private:
 	unsigned int m_begin;
 	unsigned int m_size;
 
+    // VAO (optional)
+    unsigned int m_vaoId;
+
 	// cull mode
 	M_CULL_MODES m_cullMode;
 
@@ -62,6 +65,8 @@ private:
 	bool m_visibility;
 
 public:
+
+    unsigned int* getVAO() { return &m_vaoId; }
 
 	// array infos
 	inline M_PRIMITIVE_TYPES getPrimitiveType(void){ return m_primitiveType; }

@@ -248,8 +248,6 @@ int main(int argc, char **argv)
 		return 0;
 	}
 
-	maratis->start();
-
 	if(fullscreen)
 		window->hideCursor();
 	
@@ -329,6 +327,8 @@ int main(int argc, char **argv)
 	
     if(profiler)
         MLOG_INFO("Profiling enabled");
+
+    //maratis->start();
 
 	// Init default thread
 	MThreadManager* mgr = MThreadManager::getInstance();

@@ -242,6 +242,18 @@ public:
 	void enablePolygonOffset(float x, float y) {};
 	void disablePolygonOffset() {};
 
+    // VBO
+    void createVBO(unsigned int * vboId);
+    void deleteVBO(unsigned int * vboId);
+    void bindVBO(M_VBO_TYPES type, unsigned int vboId);
+    void setVBO(M_VBO_TYPES type, const void * data, unsigned int size, M_VBO_MODES mode);
+    void setVBOSubData(M_VBO_TYPES type, unsigned int offset, const void * data, unsigned int size);
+
+    // VAO
+    void createVAO(unsigned int* vaoId);
+    void deleteVAO(unsigned int* vaoId);
+    void bindVAO(unsigned int vaoId);
+
 	// point size
 	void setPointSize(float size);
 };

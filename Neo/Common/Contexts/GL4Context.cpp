@@ -168,7 +168,8 @@ static GLenum returnAttachType(M_FRAME_BUFFER_ATTACHMENT type)
 }
 
 GL4Context::GL4Context():
-m_currentFrameBuffer(0)
+m_currentFrameBuffer(0),
+m_gl_version(NULL)
 {
 }
 
@@ -178,6 +179,10 @@ GL4Context::~GL4Context()
 
 void GL4Context::init()
 {
+    // Do not initialize twice!
+    if(m_gl_version != NULL)
+        return;
+
     MLOG_INFO("Initializing GL4 context");
 
     glewExperimental = GL_TRUE;
@@ -198,6 +203,9 @@ void GL4Context::init()
         m_gl_version=version;
         sscanf(version, "%d", &g_GLversion);
     }
+
+    MLOG_INFO("Renderer:\t" << getRendererVersion());
+    MLOG_INFO("Vendor:\t" << glGetString(GL_VENDOR));
 
     // init cull face (back)
     enableCullFace();
@@ -330,12 +338,12 @@ void GL4Context::setClearColor(const MVector4 & color){
 // texture
 void GL4Context::enableTexture(void)
 {
-    glEnable(GL_TEXTURE_2D);
+    //glEnable(GL_TEXTURE_2D);
 }
 
 void GL4Context::disableTexture(void)
 {
-    glDisable(GL_TEXTURE_2D);
+    //glDisable(GL_TEXTURE_2D);
 }
 
 void GL4Context::setTextureGenMode(M_TEX_GEN_MODES mode)
@@ -489,31 +497,42 @@ void GL4Context::texSubImage(unsigned int level, int xoffset, int yoffset, unsig
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy); // anisotropic filtering
 }
 
-void GL4Context::generateMipMap(void){
+void GL4Context::generateMipMap(void)
+{
     glGenerateMipmap(GL_TEXTURE_2D);
 }
 
 // frame buffer
-void GL4Context::createFrameBuffer(unsigned int * frameBufferId){
+void GL4Context::createFrameBuffer(unsigned int * frameBufferId)
+{
     glGenFramebuffers(1, frameBufferId);
 }
-void GL4Context::deleteFrameBuffer(unsigned int * frameBufferId){
+
+void GL4Context::deleteFrameBuffer(unsigned int * frameBufferId)
+{
 #ifndef EMSCRIPTEN
     glDeleteFramebuffers(1, frameBufferId);
 #else
     MLOG_INFO("Can't delete frame buffer on WebGL");
 #endif
 }
-void GL4Context::bindFrameBuffer(unsigned int frameBufferId){
+
+void GL4Context::bindFrameBuffer(unsigned int frameBufferId)
+{
     glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
     m_currentFrameBuffer = frameBufferId;
 }
-void GL4Context::getCurrentFrameBuffer(unsigned int * frameBufferId){
+
+void GL4Context::getCurrentFrameBuffer(unsigned int * frameBufferId)
+{
     (*frameBufferId) = m_currentFrameBuffer;
 }
-void GL4Context::attachFrameBufferTexture(M_FRAME_BUFFER_ATTACHMENT attachment, unsigned int textureId){
+
+void GL4Context::attachFrameBufferTexture(M_FRAME_BUFFER_ATTACHMENT attachment, unsigned int textureId)
+{
     glFramebufferTexture2D(GL_FRAMEBUFFER, returnAttachType(attachment), GL_TEXTURE_2D, textureId, 0);
 }
+
 void GL4Context::setDrawingBuffers(M_FRAME_BUFFER_ATTACHMENT * buffers, unsigned int size)
 {
     /*
@@ -538,15 +557,18 @@ glReadBuffer(GL_BACK);
 }
 
 // shaders
-void GL4Context::createVertexShader(unsigned int * shaderId){
+void GL4Context::createVertexShader(unsigned int * shaderId)
+{
     *shaderId = glCreateShader(GL_VERTEX_SHADER);
 }
 
-void GL4Context::createPixelShader(unsigned int * shaderId){
+void GL4Context::createPixelShader(unsigned int * shaderId)
+{
     *shaderId = glCreateShader(GL_FRAGMENT_SHADER);
 }
 
-void GL4Context::deleteShader(unsigned int * shaderId){
+void GL4Context::deleteShader(unsigned int * shaderId)
+{
     glDeleteShader((*shaderId));
 }
 
@@ -557,7 +579,7 @@ bool GL4Context::sendShaderSource(unsigned int shaderId, const char * source)
 
     GLint compiled;
     glGetShaderiv(shaderId, GL_COMPILE_STATUS, &compiled);
-    if(!compiled)
+    if(compiled == GL_FALSE)
     {
         MLOG_ERROR("OpenGL : unable to compile shader\n");
         char shader_link_error[4096];
@@ -570,7 +592,8 @@ bool GL4Context::sendShaderSource(unsigned int shaderId, const char * source)
 }
 
 // FX
-void GL4Context::bindFX(unsigned int fxId){
+void GL4Context::bindFX(unsigned int fxId)
+{
     glUseProgram(fxId);
 }
 
@@ -587,36 +610,43 @@ void GL4Context::updateFX(unsigned int fxId)
     glLinkProgram(fxId);
 }
 
-void GL4Context::deleteFX(unsigned int * fxId){
+void GL4Context::deleteFX(unsigned int * fxId)
+{
     glDeleteProgram(*fxId);
 }
 
-void GL4Context::sendUniformInt(unsigned int fxId, const char * name, int * values, const int count){
+void GL4Context::sendUniformInt(unsigned int fxId, const char * name, int * values, const int count)
+{
     GLint uValue = glGetUniformLocation(fxId, name);
     if(uValue != -1) glUniform1iv(uValue, count, values);
 }
 
-void GL4Context::sendUniformFloat(unsigned int fxId, const char * name, float * values, const int count){
+void GL4Context::sendUniformFloat(unsigned int fxId, const char * name, float * values, const int count)
+{
     GLint uValue = glGetUniformLocation(fxId, name);
     if(uValue != -1) glUniform1fv(uValue, count, values);
 }
 
-void GL4Context::sendUniformVec2(unsigned int fxId, const char * name, float * values, const int count){
+void GL4Context::sendUniformVec2(unsigned int fxId, const char * name, float * values, const int count)
+{
     GLint uValue = glGetUniformLocation(fxId, name);
     if(uValue != -1) glUniform2fv(uValue, count, values);
 }
 
-void GL4Context::sendUniformVec3(unsigned int fxId, const char * name, float * values, const int count){
+void GL4Context::sendUniformVec3(unsigned int fxId, const char * name, float * values, const int count)
+{
     GLint uValue = glGetUniformLocation(fxId, name);
     if(uValue != -1) glUniform3fv(uValue, count, values);
 }
 
-void GL4Context::sendUniformVec4(unsigned int fxId, const char * name, float * values, const int count){
+void GL4Context::sendUniformVec4(unsigned int fxId, const char * name, float * values, const int count)
+{
     GLint uValue = glGetUniformLocation(fxId, name);
     if(uValue != -1) glUniform4fv(uValue, count, values);
 }
 
-void GL4Context::sendUniformMatrix(unsigned int fxId, const char * name, MMatrix4x4 * matrix, const int count, const bool transpose){
+void GL4Context::sendUniformMatrix(unsigned int fxId, const char * name, MMatrix4x4 * matrix, const int count, const bool transpose)
+{
     GLint uValue = glGetUniformLocation(fxId, name);
     if(uValue != -1) glUniformMatrix4fv(uValue, count, transpose, matrix->entries);
 }
@@ -909,30 +939,42 @@ void GL4Context::popMatrix(void)
         (*m_currentMatrix) = m_matrixSteps[m_matrixStep];
     }
 }
-void GL4Context::multMatrix(const MMatrix4x4 * matrix){
+
+void GL4Context::multMatrix(const MMatrix4x4 * matrix)
+{
     (*m_currentMatrix) *= (*matrix);
 }
-void GL4Context::translate(const MVector3 & position){
+
+void GL4Context::translate(const MVector3 & position)
+{
     m_currentMatrix->translate(position);
 }
-void GL4Context::rotate(const MVector3 & axis, float angle){
+
+void GL4Context::rotate(const MVector3 & axis, float angle)
+{
     m_currentMatrix->rotate(axis, angle);
 }
-void GL4Context::scale(const MVector3 & scale){
+
+void GL4Context::scale(const MVector3 & scale)
+{
     m_currentMatrix->scale(scale);
 }
+
 void GL4Context::getViewport(int * viewport)
 {
     glGetIntegerv(GL_VIEWPORT, viewport);
 }
+
 void GL4Context::getModelViewMatrix(MMatrix4x4 * matrix)
 {
     (*matrix) = m_modelViewMatrix;
 }
+
 void GL4Context::getProjectionMatrix(MMatrix4x4 * matrix)
 {
     (*matrix) = m_projectionMatrix;
 }
+
 void GL4Context::getTextureMatrix(MMatrix4x4 * matrix)
 {
     (*matrix) = m_textureMatrix;
@@ -1115,6 +1157,61 @@ void GL4Context::setBlendingMode(M_BLENDING_MODES mode)
 void GL4Context::setPointSize(float size)
 {
 
+}
+
+// VBO
+void GL4Context::createVBO(unsigned int * vboId)
+{
+    glGenBuffers(1, vboId);
+}
+
+void GL4Context::deleteVBO(unsigned int * vboId)
+{
+    glDeleteBuffers(1, vboId);
+}
+
+void GL4Context::bindVBO(M_VBO_TYPES type, unsigned int vboId)
+{
+    GLenum gltype = type == M_VBO_ARRAY ? GL_ARRAY_BUFFER : GL_ELEMENT_ARRAY_BUFFER;
+    glBindBuffer(gltype, vboId);
+}
+
+void GL4Context::setVBO(M_VBO_TYPES type, const void * data, unsigned int size, M_VBO_MODES mode)
+{
+    GLenum gltype = type == M_VBO_ARRAY ? GL_ARRAY_BUFFER : GL_ELEMENT_ARRAY_BUFFER;
+    switch(mode)
+    {
+        case M_VBO_STATIC:
+            glBufferData(gltype, size, data, GL_STATIC_DRAW);
+            break;
+        case M_VBO_DYNAMIC:
+            glBufferData(gltype, size, data, GL_DYNAMIC_DRAW);
+            break;
+        case M_VBO_STREAM:
+            glBufferData(gltype, size, data, GL_STREAM_DRAW);
+            break;
+    }
+}
+
+void GL4Context::setVBOSubData(M_VBO_TYPES type, unsigned int offset, const void * data, unsigned int size)
+{
+    GLenum gltype = type == M_VBO_ARRAY ? GL_ARRAY_BUFFER : GL_ELEMENT_ARRAY_BUFFER;
+    glBufferSubData(gltype, offset, size, data);
+}
+
+void GL4Context::createVAO(unsigned int* vaoId)
+{
+    glGenVertexArrays(1, vaoId);
+}
+
+void GL4Context::deleteVAO(unsigned int* vaoId)
+{
+
+}
+
+void GL4Context::bindVAO(unsigned int vaoId)
+{
+    glBindVertexArray(vaoId);
 }
 
 #endif

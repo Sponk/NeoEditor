@@ -2699,7 +2699,7 @@ M_AXIS Maratis::selectEditPosition(OCamera * camera, const MVector3 & rayO, cons
     M_AXIS axis = M_AXIS_NONE;
 
     // z
-    if(m_zEntity->isVisible())
+    if(m_zEntity && m_zEntity->isVisible())
     {
         Mesh * mesh = m_zEntity->getMesh();
         if(getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &dist))
@@ -2711,7 +2711,7 @@ M_AXIS Maratis::selectEditPosition(OCamera * camera, const MVector3 & rayO, cons
     }
 
     // y
-    if(m_yEntity->isVisible())
+    if(m_yEntity && m_yEntity->isVisible())
     {
         Mesh * mesh = m_yEntity->getMesh();
         if(getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &dist))
@@ -2731,7 +2731,7 @@ M_AXIS Maratis::selectEditPosition(OCamera * camera, const MVector3 & rayO, cons
     }
 
     // x
-    if(m_xEntity->isVisible())
+    if(m_xEntity && m_xEntity->isVisible())
     {
         Mesh * mesh = m_xEntity->getMesh();
         if(getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &dist))

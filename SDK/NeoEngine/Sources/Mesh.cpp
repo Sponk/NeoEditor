@@ -39,7 +39,9 @@ m_begin(begin),
 m_size(size),
 m_cullMode(M_CULL_BACK),
 m_material(NULL),
-m_visibility(true)
+m_visibility(true),
+m_vaoId(0)
+
 {}
 
 MaterialDisplay::MaterialDisplay(const MaterialDisplay & display):
@@ -48,7 +50,8 @@ m_begin(display.m_begin),
 m_size(display.m_size),
 m_cullMode(display.m_cullMode),
 m_material(display.m_material),
-m_visibility(display.m_visibility)
+m_visibility(display.m_visibility),
+m_vaoId(0)
 {}
 
 MaterialDisplay::~MaterialDisplay(void)

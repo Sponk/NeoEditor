@@ -355,6 +355,11 @@ public:
 	virtual void setVBO(M_VBO_TYPES type, const void * data, unsigned int size, M_VBO_MODES mode){}
 	virtual void setVBOSubData(M_VBO_TYPES type, unsigned int offset, const void * data, unsigned int size){}
 	
+    // VAO
+    virtual void createVAO(unsigned int* vaoId) {}
+    virtual void deleteVAO(unsigned int* vaoId) {}
+    virtual void bindVAO(unsigned int vaoId) {}
+
 	// arrays
 	virtual void enableVertexArray(void) = 0;
 	virtual void enableColorArray(void) = 0;

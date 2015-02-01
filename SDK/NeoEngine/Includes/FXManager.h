@@ -41,7 +41,8 @@ public:
 	FXRef(unsigned int FXId, ShaderRef * vertexShaderRef, ShaderRef * pixelShaderRef):
 		m_FXId(FXId),
 		m_vertexShaderRef(vertexShaderRef),
-		m_pixelShaderRef(pixelShaderRef)
+        m_pixelShaderRef(pixelShaderRef),
+        m_important(false)
 	{}
 
 	~FXRef(void);
@@ -51,12 +52,16 @@ private:
 	unsigned int m_FXId;
 	ShaderRef * m_vertexShaderRef;
 	ShaderRef * m_pixelShaderRef;
+    bool m_important;
 
 public:
 
 	inline unsigned int getFXId(void){ return m_FXId; }
 	inline ShaderRef * getVertexShaderRef(void){ return m_vertexShaderRef; }
 	inline ShaderRef * getPixelShaderRef(void){ return m_pixelShaderRef; }
+    inline bool isImportant() { return m_important; }
+
+    void setImportant(bool val) { m_important = val; }
 };
 
 

@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// MStandardRenderer.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -27,13 +22,14 @@
 //
 //========================================================================
 
+#ifdef USE_LEGACY_GL
 #ifndef USE_GLES
 #include <glew.h>
 #endif
 
 #include <NeoEngine.h>
 
-#ifndef USE_GLES
+#if !defined(USE_GLES)
 #include "StandardShaders.h"
 #include "CompatibleShaders.h"
 #else
@@ -2098,3 +2094,5 @@ void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
 	
 	m_currentCamera = NULL;
 }
+
+#endif // USE_LEGACY_GL

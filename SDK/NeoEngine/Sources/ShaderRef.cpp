@@ -95,4 +95,8 @@ void ShaderRef::update(void)
 			}
 		}
 	}
+	else
+	{
+		MLOG_ERROR("Could not load shader: " << getFilename());
+	}
 }

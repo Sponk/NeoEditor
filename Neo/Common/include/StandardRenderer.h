@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// MStandardRenderer.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,7 +23,7 @@
 //========================================================================
 
 
-#ifndef _M_STANDARD_RENDERER_H
+#if !defined(_M_STANDARD_RENDERER_H) && defined(USE_LEGACY_GL)
 #define _M_STANDARD_RENDERER_H
 
 
@@ -178,4 +173,6 @@ public:
 	void drawText(OText * textObj);
 };
 }
+#else
+#include "DeferredRenderer.h"
 #endif
