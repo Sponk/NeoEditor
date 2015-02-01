@@ -207,6 +207,12 @@ void GL4Context::init()
     MLOG_INFO("Renderer:\t" << getRendererVersion());
     MLOG_INFO("Vendor:\t" << glGetString(GL_VENDOR));
 
+
+    int maxbuffers;
+    glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &maxbuffers);
+
+    MLOG_INFO("#MRT:\t" << maxbuffers);
+
     // init cull face (back)
     enableCullFace();
     setCullMode(M_CULL_BACK);
@@ -535,25 +541,24 @@ void GL4Context::attachFrameBufferTexture(M_FRAME_BUFFER_ATTACHMENT attachment, 
 
 void GL4Context::setDrawingBuffers(M_FRAME_BUFFER_ATTACHMENT * buffers, unsigned int size)
 {
-    /*
-     *     if(size == 0)
-     *     {
-     *		 glDrawBuffer(GL_NONE);
-     *		 glReadBuffer(GL_NONE);
-}
-else
-{
-static GLenum glBuffers[8];
+    if(size == 0)
+    {
+        glDrawBuffer(GL_NONE);
+        glReadBuffer(GL_NONE);
+    }
+    else
+    {
+        static GLenum glBuffers[8];
 
-size = MIN(8, size);
-for(unsigned int i=0; i<size; i++)
-    glBuffers[i] = returnAttachType(buffers[i]);
+        size = MIN(8, size);
+        for(unsigned int i=0; i<size; i++)
+            glBuffers[i] = returnAttachType(buffers[i]);
 
-glDrawBuffers(size, glBuffers);
+        glDrawBuffers(size, glBuffers);
 
-glDrawBuffer(GL_BACK);
-glReadBuffer(GL_BACK);
-}*/
+        glDrawBuffer(GL_BACK);
+        glReadBuffer(GL_BACK);
+    }
 }
 
 // shaders

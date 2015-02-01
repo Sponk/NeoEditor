@@ -42,6 +42,12 @@ class M_ENGINE_EXPORT DeferredRenderer: public Renderer
     unsigned int m_depthTexID;
     unsigned int m_normalTexID;
 
+    unsigned int m_quadVAO;
+    unsigned int m_quadVBO;
+    unsigned int m_quadTexCoordVBO;
+
+    void initQuadVAO(unsigned int* vao, unsigned int *vbo, unsigned int *texcoordVbo, unsigned int fx);
+
     void drawMesh(Mesh* mesh, OCamera* camera);
     void drawSubMesh(SubMesh* mesh, OCamera* camera);
     void drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCamera* camera);

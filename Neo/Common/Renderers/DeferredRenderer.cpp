@@ -134,12 +134,20 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 
         render->setAttribPointer(vertAttrib, M_FLOAT, 3, NULL);
 
+        // Set up normal attribute
+        int normalAttrib;
+        render->getAttribLocation(fx, "Normal", &normalAttrib);
+        render->enableAttribArray(normalAttrib);
+
+        int offset = sizeof(MVector3)*(mesh->getVerticesSize() + display->getBegin());
+        render->setAttribPointer(normalAttrib, M_FLOAT, 3, (void*) offset + display->getBegin());
+
         // Set up texcoord attribute
         int texcoordAttrib = 0;
         if(texturePasses > 0 && texcoords != NULL)
         {
             // vert + normal + tang
-            int offset = sizeof(MVector3)*(mesh->getVerticesSize() + mesh->getNormalsSize() + mesh->getTangentsSize());
+            offset = sizeof(MVector3)*(mesh->getVerticesSize() + mesh->getNormalsSize() + mesh->getTangentsSize());
 
             render->getAttribLocation(fx, "TexCoord", &texcoordAttrib);
 
@@ -211,6 +219,10 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 
     // Send uniforms
     render->sendUniformMatrix(m_fx[0], "ProjModelViewMatrix", &projectionMatrix);
+
+    modelMatrix = (modelMatrix*viewMatrix).getInverse().getTranspose();
+    // Set up normal matrix
+    render->sendUniformMatrix(m_fx[0], "NormalMatrix", &modelMatrix);
 
     // Bind VBOs
     //if(*vboId1 > 0)
@@ -323,6 +335,7 @@ void DeferredRenderer::init()
 	}
 
     initFramebuffers();
+    initQuadVAO(&m_quadVAO, &m_quadVBO, &m_quadTexCoordVBO, m_fx[1]);
 }
 
 inline int Pow2(int x)
@@ -383,19 +396,19 @@ void DeferredRenderer::initFramebuffers()
     render->setTextureFilterMode(M_TEX_FILTER_LINEAR, M_TEX_FILTER_LINEAR);
     render->setTextureUWrapMode(M_WRAP_CLAMP);
     render->setTextureVWrapMode(M_WRAP_CLAMP);
-    render->texImage(0, screenWidth, screenHeight, M_FLOAT, M_RGB, 0);
+    render->texImage(0, screenWidth, screenHeight, M_FLOAT, M_RGBA, 0);
 
     render->createTexture(&m_depthTexID);
     render->bindTexture(m_depthTexID);
     render->setTextureFilterMode(M_TEX_FILTER_NEAREST, M_TEX_FILTER_NEAREST);
-    render->texImage(0, screenWidth, screenHeight, M_UBYTE, M_DEPTH, 0);
+    render->texImage(0, screenWidth, screenHeight, M_FLOAT, M_DEPTH, 0);
 
     render->createTexture(&m_normalTexID);
     render->bindTexture(m_normalTexID);
     render->setTextureFilterMode(M_TEX_FILTER_LINEAR, M_TEX_FILTER_LINEAR);
     render->setTextureUWrapMode(M_WRAP_CLAMP);
     render->setTextureVWrapMode(M_WRAP_CLAMP);
-    render->texImage(0, screenWidth, screenHeight, M_FLOAT, M_RGB, 0);
+    render->texImage(0, screenWidth, screenHeight, M_FLOAT, M_RGBA, 0);
 }
 
 void DeferredRenderer::destroy(void)
@@ -427,16 +440,23 @@ void DeferredRenderer::drawScene(Scene* scene, OCamera* camera)
     render->attachFrameBufferTexture(M_ATTACH_COLOR1, m_normalTexID);
     render->attachFrameBufferTexture(M_ATTACH_DEPTH, m_depthTexID);
 
+    // Enable them to be drawn
+    M_FRAME_BUFFER_ATTACHMENT buffers[3] = {M_ATTACH_COLOR0, M_ATTACH_COLOR1, M_ATTACH_DEPTH};
+    render->setDrawingBuffers(buffers, 2);
+
     render->setViewport(0, 0, screenWidth, screenHeight); // change viewport
 
+    MVector4 clearColor = camera->getClearColor();
+
+    clearColor.w = 0.0;
+    render->setClearColor(clearColor);
     render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
 
     drawGBuffer(scene, camera);
 
     // finish render to texture
     render->bindFrameBuffer(currentFrameBuffer);
-
-    //renderFinalImage();
+    renderFinalImage();
 }
 
 void DeferredRenderer::renderFinalImage()
@@ -450,7 +470,7 @@ void DeferredRenderer::renderFinalImage()
     system->getScreenSize(&screenWidth, &screenHeight);
 
     // draw the rendered textured with a shader effect
-    render->setClearColor(MVector3(1, 0, 0));
+    //render->setClearColor(MVector3(1, 0, 0));
     render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
 
     set2D(screenWidth, screenHeight);
@@ -574,9 +594,6 @@ void DeferredRenderer::drawQuad(MVector2 scale, int fx)
 {
     MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
-    int vertexAttrib;
-    int texcoordAttrib;
-
     // projmodelview matrix
     static MMatrix4x4 ProjMatrix;
     static MMatrix4x4 ModelViewMatrix;
@@ -591,26 +608,48 @@ void DeferredRenderer::drawQuad(MVector2 scale, int fx)
     int texIds[4] = { 0, 1, 2, 3 };
     render->sendUniformInt(fx, "Textures", texIds, 4);
 
-    // Vertex
-    render->getAttribLocation(fx, "Vertex", &vertexAttrib);
-    render->setAttribPointer(vertexAttrib, M_FLOAT, 2, m_vertices);
-    render->enableAttribArray(vertexAttrib);
-
-    // TexCoord
-    render->getAttribLocation(fx, "TexCoord", &texcoordAttrib);
-    render->setAttribPointer(texcoordAttrib, M_FLOAT, 2, m_texCoords);
-    render->enableAttribArray(texcoordAttrib);
-
     // Width
-    render->sendUniformFloat(fx, "Width", &scale.x, 1);
+    //render->sendUniformFloat(fx, "Width", &scale.x, 1);
     // Height
-    render->sendUniformFloat(fx, "Height", &scale.y, 1);
+    //render->sendUniformFloat(fx, "Height", &scale.y, 1);
 
     // draw
+    render->bindVAO(m_quadVAO);
     render->drawArray(M_PRIMITIVE_TRIANGLE_STRIP, 0, 4);
+}
 
-    render->disableAttribArray(vertexAttrib);
-    render->disableAttribArray(texcoordAttrib);
+void DeferredRenderer::initQuadVAO(unsigned int* vao, unsigned int* vbo, unsigned int* texcoordVbo, unsigned int fx)
+{
+    MRenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+
+    render->createVAO(vao);
+    render->bindVAO(*vao);
+
+    render->createVBO(vbo);
+    render->bindVBO(M_VBO_ARRAY, *vbo);
+    render->setVBO(M_VBO_ARRAY, m_vertices, 4*sizeof(MVector2), M_VBO_STATIC);
+
+    render->createVBO(texcoordVbo);
+    render->bindVBO(M_VBO_ARRAY, *texcoordVbo);
+    render->setVBO(M_VBO_ARRAY, m_texCoords, 4*sizeof(MVector2), M_VBO_STATIC);
+
+    // Send Vertex data
+    int vertexAttrib;
+    int texcoordAttrib;
+
+    // Vertex
+    render->bindVBO(M_VBO_ARRAY, *vbo);
+    render->getAttribLocation(fx, "Vertex", &vertexAttrib);
+    render->enableAttribArray(vertexAttrib);
+    render->setAttribPointer(vertexAttrib, M_FLOAT, 2, NULL);
+
+    // TexCoord
+    render->bindVBO(M_VBO_ARRAY, *texcoordVbo);
+    render->getAttribLocation(fx, "TexCoord", &texcoordAttrib);
+    render->enableAttribArray(texcoordAttrib);
+    render->setAttribPointer(texcoordAttrib, M_FLOAT, 2, NULL);
+
+    render->bindVAO(0);
 }
 
 } /* namespace Neo */
