@@ -75,11 +75,19 @@ Fl_Window* sound_window;
 Fl_Window* camera_window;
 
 // TODO: Configurable!
+#ifndef WIN32
 Fl_PNG_Image camera_icon("gui/icons/camera.png");
 Fl_PNG_Image entity_icon("gui/icons/entity.png");
 Fl_PNG_Image light_icon("gui/icons/light.png");
 Fl_PNG_Image text_icon("gui/icons/text.png");
 Fl_PNG_Image sound_icon("gui/icons/sound.png");
+#else
+Fl_PNG_Image camera_icon("gui\\icons\\camera.png");
+Fl_PNG_Image entity_icon("gui\\icons\\entity.png");
+Fl_PNG_Image light_icon("gui\\icons\\light.png");
+Fl_PNG_Image text_icon("gui\\icons\\text.png");
+Fl_PNG_Image sound_icon("gui\\icons\\sound.png");
+#endif
 
 Fl_Text_Buffer textbuf;
 
@@ -2450,11 +2458,11 @@ void project_directory_callback(FileTree* browser, void*)
 	{
 		std::string path = browser->currentPath();
 
-#ifndef WIN32
+/*#ifndef WIN32
 		path += "/";
 #else
 		path += "\\";
-#endif
+#endif*/
 
 		const char* text = browser->text(browser->value());
 
@@ -2462,6 +2470,8 @@ void project_directory_callback(FileTree* browser, void*)
 			return;
 
 		path += text;
+
+		path.erase(path.end());
 
 		if(isDirectory(path.c_str()))
 			browser->load(path.c_str());

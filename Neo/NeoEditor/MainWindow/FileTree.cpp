@@ -22,6 +22,7 @@
 #include <NeoEngine.h>
 #include "../Maratis/Maratis.h"
 #include <FL/fl_message.H>
+#include <algorithm>
 
 using namespace Neo;
 
@@ -29,15 +30,14 @@ int FileTree::handle(int e)
 {
     switch(e)
     {
-    case FL_DND_ENTER:
-    case FL_DND_DRAG:
-    case FL_DND_RELEASE:
-        return 1;
-        break;
-
     case FL_DRAG:
         {
-        	std::string fullPath = "file://" + m_currentPath;
+#ifndef WIN32
+			std::string fullPath = "file://";
+#else
+			std::string fullPath;
+#endif
+			fullPath += m_currentPath;
 
 #ifndef WIN32
         	fullPath += "/";
@@ -52,20 +52,17 @@ int FileTree::handle(int e)
 
     		fullPath += s;
 
+#ifdef WIN32
+			std::replace(fullPath.begin(), fullPath.end(), '/', '\\');
+#endif
+
+			cout << "Copying " << fullPath << "Current Path: " << m_currentPath << endl;
+			//fl_message("Copying %s", fullPath.c_str());
             Fl::copy(fullPath.c_str(), fullPath.length(), 0);
             Fl::dnd();
             return 1;
         }
         break;
-
-    case FL_PASTE:
-        {
-            Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
-            Fl_File_Browser::handle(FL_PUSH);
-
-            this->do_callback(this, (long) 1);
-            return 1;
-        }
     }
 
     return Fl_File_Browser::handle(e);
