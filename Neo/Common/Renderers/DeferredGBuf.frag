@@ -11,6 +11,7 @@ in vec3 normal;
 
 layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 Normal;
+layout (location = 2) out vec4 Position;
 
 void main(void)
 {
@@ -20,4 +21,5 @@ void main(void)
 	FragColor = vec4(DiffuseColor,1.0);
 
     Normal = vec4(normal, 1.0);
+    Position = vec4(position, 1.0);
 }

@@ -232,6 +232,11 @@ int main(int argc, char **argv)
     if(argc > 5)
         sscanf(argv[5], "%d", &profiler);
 	
+    // Init default thread
+    MThreadManager* mgr = MThreadManager::getInstance();
+    mgr->setTemplateSemaphore(new SDLSemaphore());
+    mgr->setTemplateThread(new SDLThread());
+
 	// get engine (first time call onstructor)
 	NeoEngine * engine = NeoEngine::getInstance();
 	
@@ -329,11 +334,6 @@ int main(int argc, char **argv)
         MLOG_INFO("Profiling enabled");
 
     //maratis->start();
-
-	// Init default thread
-	MThreadManager* mgr = MThreadManager::getInstance();
-	mgr->setTemplateSemaphore(new SDLSemaphore());
-	mgr->setTemplateThread(new SDLThread());
 
 	window->createSemaphores();
 

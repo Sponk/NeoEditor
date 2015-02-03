@@ -28,6 +28,7 @@
 #include <NeoEngine.h>
 
 #define DEFERRED_SHADERS 3
+#define MAX_ENTITY_LIGHTS 256
 
 namespace Neo
 {
@@ -41,16 +42,20 @@ class M_ENGINE_EXPORT DeferredRenderer: public Renderer
     unsigned int m_gbufferTexID;
     unsigned int m_depthTexID;
     unsigned int m_normalTexID;
+    unsigned int m_positionTexID;
 
     unsigned int m_quadVAO;
     unsigned int m_quadVBO;
     unsigned int m_quadTexCoordVBO;
 
     void initQuadVAO(unsigned int* vao, unsigned int *vbo, unsigned int *texcoordVbo, unsigned int fx);
+    void clearQuadVAO(unsigned int* vao, unsigned int *vbo, unsigned int *texcoordVbo);
 
     void drawMesh(Mesh* mesh, OCamera* camera);
     void drawSubMesh(SubMesh* mesh, OCamera* camera);
     void drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCamera* camera);
+
+    void sendLight(unsigned int fx, OLight* l, int num, MMatrix4x4 matrix);
 
 	void drawGBuffer(Scene* scene, OCamera* camera);
     void initVBO(SubMesh * subMesh);
@@ -58,16 +63,26 @@ class M_ENGINE_EXPORT DeferredRenderer: public Renderer
     void initFramebuffers();
     void clearFramebuffers();
 
-    void renderFinalImage();
+    void renderFinalImage(OCamera* camera);
 
     void set2D(unsigned int w, unsigned int h);
-    void drawQuad(MVector2 scale, int fx);
+    void drawQuad(int fx);
+
+    // All visible lights. Should be updated by a worker thread.
+    static int light_update_thread(void* data);
+    OLight* m_visibleLights[MAX_ENTITY_LIGHTS];
+    MThread* m_lightUpdateThread;
+    MSemaphore* m_lightUpdateSemaphore;
+    Scene* m_currentScene;
+    int m_numVisibleLights;
 
     // Cache texture coordinates for faster rendering
     MVector2 m_texCoords[4];
 
     // Cache vertices for faster rendering
     MVector2 m_vertices[4];
+
+    MVector2 m_resolution;
 
 public:
 	DeferredRenderer();

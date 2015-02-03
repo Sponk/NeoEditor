@@ -45,6 +45,15 @@ DeferredRenderer::DeferredRenderer()
     m_gbufferTexID = 0;
     m_depthTexID = 0;
 
+    m_quadTexCoordVBO = 0;
+    m_quadVAO = 0;
+    m_quadVBO = 0;
+
+    m_lightUpdateThread = NULL;
+    m_lightUpdateSemaphore = NULL;
+    m_currentScene = NULL;
+    m_numVisibleLights = 0;
+
     m_texCoords[0] = MVector2(0, 1);
     m_texCoords[1] = MVector2(0, 0);
     m_texCoords[3] = MVector2(1, 0);
@@ -140,18 +149,18 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
         render->enableAttribArray(normalAttrib);
 
         int offset = sizeof(MVector3)*(mesh->getVerticesSize() + display->getBegin());
-        render->setAttribPointer(normalAttrib, M_FLOAT, 3, (void*) offset + display->getBegin());
+        render->setAttribPointer(normalAttrib, M_FLOAT, 3, (void*) offset);
 
         // Set up texcoord attribute
         int texcoordAttrib = 0;
         if(texturePasses > 0 && texcoords != NULL)
         {
             // vert + normal + tang
-            offset = sizeof(MVector3)*(mesh->getVerticesSize() + mesh->getNormalsSize() + mesh->getTangentsSize());
+            offset = sizeof(MVector3)*(mesh->getVerticesSize() + mesh->getNormalsSize() + mesh->getTangentsSize()+ display->getBegin());
 
             render->getAttribLocation(fx, "TexCoord", &texcoordAttrib);
 
-            render->setAttribPointer(texcoordAttrib, M_FLOAT, 2, (void*) offset + display->getBegin());
+            render->setAttribPointer(texcoordAttrib, M_FLOAT, 2, (void*) offset);
             render->enableAttribArray(texcoordAttrib);
         }
 
@@ -181,6 +190,7 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
         }
         break;
 
+    default:
     case 1: { // Simple texture
 
             TextureRef* tex = material->getTexturePass(0)->getTexture()->getTextureRef();
@@ -197,32 +207,42 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
             render->setBlendingMode(M_BLENDING_ALPHA);
             break;
         }
-
-    default:
-        return;
     }
 
     // Send the texture mode
     render->sendUniformInt(fx, "TextureMode", &textureMode);
 
     // Set up modelview matrix
-    MMatrix4x4 viewMatrix;
+    MMatrix4x4 modelViewMatrix;
     MMatrix4x4 projectionMatrix;
     MMatrix4x4 modelMatrix;
+    MMatrix4x4 normalMatrix;
 
-    viewMatrix = *camera->getCurrentViewMatrix();
+    modelViewMatrix = *camera->getCurrentViewMatrix();
     projectionMatrix = *camera->getCurrentProjMatrix();
 
     // The modelview matrix holds the matrix of the current entity
+
     render->getModelViewMatrix(&modelMatrix);
-    projectionMatrix = projectionMatrix * (viewMatrix * modelMatrix);
+    render->getProjectionMatrix(&projectionMatrix);
+    modelViewMatrix = (modelViewMatrix * modelMatrix);
+    normalMatrix = (modelViewMatrix.getInverse()).getTranspose();
+
+    projectionMatrix = projectionMatrix * modelViewMatrix;
 
     // Send uniforms
     render->sendUniformMatrix(m_fx[0], "ProjModelViewMatrix", &projectionMatrix);
+    render->sendUniformMatrix(m_fx[0], "ModelViewMatrix", &modelViewMatrix);
 
-    modelMatrix = (modelMatrix*viewMatrix).getInverse().getTranspose();
+    //modelViewMatrix.loadIdentity();
+    //modelViewMatrix.setScale(MVector3(1,1,1));
+    //modelViewMatrix.setRotationPartEuler(camera->getMatrix()->getEulerAngles());
+    //modelViewMatrix = modelViewMatrix * camera->getMatrix()->getInverse().getTranspose();
+
+    //modelViewMatrix.setScale(MVector3(0.5,0.5,0.5));
+
     // Set up normal matrix
-    render->sendUniformMatrix(m_fx[0], "NormalMatrix", &modelMatrix);
+    render->sendUniformMatrix(m_fx[0], "NormalMatrix", &normalMatrix);
 
     // Bind VBOs
     //if(*vboId1 > 0)
@@ -327,15 +347,33 @@ void DeferredRenderer::init()
 		fragShad->update();
 
 		m_shaders[i-1] = level->createFX(vertShad, fragShad);
-        render->updateFX(m_shaders[i-1]->getFXId());
+            render->updateFX(m_shaders[i-1]->getFXId());
 
-        m_shaders[i-1]->setImportant(true);
+            m_shaders[i-1]->setImportant(true);
 
-        m_fx[i-1] = m_shaders[i-1]->getFXId();
+            m_fx[i-1] = m_shaders[i-1]->getFXId();
 	}
 
     initFramebuffers();
     initQuadVAO(&m_quadVAO, &m_quadVBO, &m_quadTexCoordVBO, m_fx[1]);
+
+    // Start worker threads
+    if(m_lightUpdateThread == NULL)
+    {
+        MThreadManager* tmgr = MThreadManager::getInstance();
+        m_lightUpdateThread = tmgr->getNewThread();
+        m_lightUpdateSemaphore = tmgr->getNewSemaphore();
+
+        if(m_lightUpdateThread == NULL || m_lightUpdateSemaphore == NULL)
+        {
+            SAFE_DELETE(m_lightUpdateThread);
+            SAFE_DELETE(m_lightUpdateSemaphore);
+            return;
+        }
+
+        m_lightUpdateSemaphore->Init(1);
+        m_lightUpdateThread->Start(DeferredRenderer::light_update_thread, "LightUpdate", this);
+    }
 }
 
 inline int Pow2(int x)
@@ -375,6 +413,8 @@ void DeferredRenderer::initFramebuffers()
     unsigned int screenHeight = 0;
     system->getScreenSize(&screenWidth, &screenHeight);
 
+    m_resolution = MVector2(screenWidth, screenHeight);
+
     // Update vertex cache
     m_vertices[0] = MVector2(0, 0);
     m_vertices[1] = MVector2(0, screenHeight);
@@ -403,6 +443,18 @@ void DeferredRenderer::initFramebuffers()
     render->setTextureFilterMode(M_TEX_FILTER_NEAREST, M_TEX_FILTER_NEAREST);
     render->texImage(0, screenWidth, screenHeight, M_FLOAT, M_DEPTH, 0);
 
+    render->createTexture(&m_positionTexID);
+    render->bindTexture(m_positionTexID);
+    render->setTextureFilterMode(M_TEX_FILTER_LINEAR, M_TEX_FILTER_LINEAR);
+    render->setTextureUWrapMode(M_WRAP_CLAMP);
+    render->setTextureVWrapMode(M_WRAP_CLAMP);
+    render->texImage(0, screenWidth, screenHeight, M_FLOAT, M_RGBA, 0);
+
+    /*render->setTextureFilterMode(M_TEX_FILTER_LINEAR, M_TEX_FILTER_LINEAR);
+    render->setTextureUWrapMode(M_WRAP_CLAMP);
+    render->setTextureVWrapMode(M_WRAP_CLAMP);
+    render->texImage(0, screenWidth, screenHeight, M_FLOAT, M_RGBA, 0);*/
+
     render->createTexture(&m_normalTexID);
     render->bindTexture(m_normalTexID);
     render->setTextureFilterMode(M_TEX_FILTER_LINEAR, M_TEX_FILTER_LINEAR);
@@ -426,6 +478,8 @@ void DeferredRenderer::drawScene(Scene* scene, OCamera* camera)
     MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
     MSystemContext * system = NeoEngine::getInstance()->getSystemContext();
 
+    m_currentScene = scene;
+
     unsigned int currentFrameBuffer = 0;
     render->getCurrentFrameBuffer(&currentFrameBuffer);
 
@@ -434,15 +488,23 @@ void DeferredRenderer::drawScene(Scene* scene, OCamera* camera)
     unsigned int screenHeight = 0;
     system->getScreenSize(&screenWidth, &screenHeight);
 
+    if(MVector2(screenWidth, screenHeight) != m_resolution)
+    {
+        initFramebuffers();
+        initQuadVAO(&m_quadVAO, &m_quadVBO, &m_quadTexCoordVBO, m_fx[1]);
+    }
+
     // render to texture
     render->bindFrameBuffer(m_framebufferID);
+
     render->attachFrameBufferTexture(M_ATTACH_COLOR0, m_gbufferTexID);
     render->attachFrameBufferTexture(M_ATTACH_COLOR1, m_normalTexID);
+    render->attachFrameBufferTexture(M_ATTACH_COLOR2, m_positionTexID);
     render->attachFrameBufferTexture(M_ATTACH_DEPTH, m_depthTexID);
 
     // Enable them to be drawn
-    M_FRAME_BUFFER_ATTACHMENT buffers[3] = {M_ATTACH_COLOR0, M_ATTACH_COLOR1, M_ATTACH_DEPTH};
-    render->setDrawingBuffers(buffers, 2);
+    M_FRAME_BUFFER_ATTACHMENT buffers[3] = {M_ATTACH_COLOR0, M_ATTACH_COLOR1, M_ATTACH_COLOR2};
+    render->setDrawingBuffers(buffers, 3);
 
     render->setViewport(0, 0, screenWidth, screenHeight); // change viewport
 
@@ -456,10 +518,24 @@ void DeferredRenderer::drawScene(Scene* scene, OCamera* camera)
 
     // finish render to texture
     render->bindFrameBuffer(currentFrameBuffer);
-    renderFinalImage();
+    renderFinalImage(camera);
 }
 
-void DeferredRenderer::renderFinalImage()
+void DeferredRenderer::sendLight(unsigned int fx, OLight* l, int num, MMatrix4x4 matrix)
+{
+    MRenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+
+    char str[255];
+    char ending[255];
+
+    sprintf(str, "lights[%d].", num);
+    strcpy(ending, str);
+
+    strcat(ending, "Position");
+    render->sendUniformVec3(fx, ending, matrix*l->getTransformedPosition());
+}
+
+void DeferredRenderer::renderFinalImage(OCamera* camera)
 {
     MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
     MSystemContext * system = NeoEngine::getInstance()->getSystemContext();
@@ -477,12 +553,26 @@ void DeferredRenderer::renderFinalImage()
 
     render->bindFX(m_fx[1]);
     render->bindTexture(m_gbufferTexID);
-    render->bindTexture(m_depthTexID, 1);
-    render->bindTexture(m_normalTexID, 2);
+    render->bindTexture(m_normalTexID, 1);
+    render->bindTexture(m_depthTexID, 2);
+    render->bindTexture(m_positionTexID, 3);
     render->disableBlending();
 
-    drawQuad(MVector2((float)screenWidth, (float)screenHeight), m_fx[1]);
+    // Send light data
+    m_lightUpdateSemaphore->WaitAndLock();
+
+    MMatrix4x4 camMat = *camera->getCurrentViewMatrix();
+    camMat.setTranslationPart(MVector3(0,0,0));
+
+    render->sendUniformInt(m_fx[1], "LightsCount", &m_numVisibleLights);
+    for(int i = 0; i < m_numVisibleLights; i++)
+    {
+        sendLight(m_fx[1], m_visibleLights[i], i, camMat);
+    }
+
+    drawQuad(m_fx[1]);
     render->bindFX(0);
+    m_lightUpdateSemaphore->Unlock();
 }
 
 void DeferredRenderer::drawText(OText* text)
@@ -590,9 +680,14 @@ void DeferredRenderer::set2D(unsigned int w, unsigned int h)
     render->loadIdentity();
 }
 
-void DeferredRenderer::drawQuad(MVector2 scale, int fx)
+void DeferredRenderer::drawQuad(int fx)
 {
     MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+
+    // screen size
+    int screenWidth = 0;
+    int screenHeight = 0;
+    NeoEngine::getInstance()->getSystemContext()->getScreenSize((unsigned int*) &screenWidth, (unsigned int*) &screenHeight);
 
     // projmodelview matrix
     static MMatrix4x4 ProjMatrix;
@@ -609,9 +704,9 @@ void DeferredRenderer::drawQuad(MVector2 scale, int fx)
     render->sendUniformInt(fx, "Textures", texIds, 4);
 
     // Width
-    //render->sendUniformFloat(fx, "Width", &scale.x, 1);
+    render->sendUniformInt(fx, "Width", &screenWidth, 1);
     // Height
-    //render->sendUniformFloat(fx, "Height", &scale.y, 1);
+    render->sendUniformInt(fx, "Height", &screenHeight, 1);
 
     // draw
     render->bindVAO(m_quadVAO);
@@ -621,6 +716,9 @@ void DeferredRenderer::drawQuad(MVector2 scale, int fx)
 void DeferredRenderer::initQuadVAO(unsigned int* vao, unsigned int* vbo, unsigned int* texcoordVbo, unsigned int fx)
 {
     MRenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+
+    if(*vao || *vbo || *texcoordVbo)
+        clearQuadVAO(vao, vbo, texcoordVbo);
 
     render->createVAO(vao);
     render->bindVAO(*vao);
@@ -650,6 +748,63 @@ void DeferredRenderer::initQuadVAO(unsigned int* vao, unsigned int* vbo, unsigne
     render->setAttribPointer(texcoordAttrib, M_FLOAT, 2, NULL);
 
     render->bindVAO(0);
+}
+
+void DeferredRenderer::clearQuadVAO(unsigned int* vao, unsigned int *vbo, unsigned int *texcoordVbo)
+{
+    MRenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+
+    render->deleteVAO(vao);
+    render->deleteVBO(vbo);
+    render->deleteVBO(texcoordVbo);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// UPDATE THREADS
+//
+////////////////////////////////////////////////////////////////////////////////
+
+int DeferredRenderer::light_update_thread(void* data)
+{
+   DeferredRenderer* self = (DeferredRenderer*) data;
+   if(!self)
+       return 1;
+
+   NeoEngine* engine = NeoEngine::getInstance();
+   NeoWindow* window = NeoWindow::getInstance();
+   Scene* scene;
+   OLight* light;
+
+   while(engine->isActive())
+   {
+       self->m_lightUpdateSemaphore->WaitAndLock();
+       scene = self->m_currentScene;
+
+       if(scene == NULL)
+       {
+           self->m_lightUpdateSemaphore->Unlock();
+           window->sleep(15);
+           continue;
+       }
+
+       int j = 0;
+       for(int i = 0; i < scene->getLightsNumber() && i < MAX_ENTITY_LIGHTS; i++)
+       {
+            if((light = scene->getLightByIndex(i))->isVisible() && light->isActive())
+            {
+                self->m_visibleLights[j] = light;
+                j++;
+            }
+       }
+
+       //MLOG_INFO("Num visible lights: " << j);
+       self->m_numVisibleLights = j;
+       self->m_lightUpdateSemaphore->Unlock();
+       window->sleep(15);
+   }
+
+   return 0;
 }
 
 } /* namespace Neo */

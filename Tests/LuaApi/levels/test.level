@@ -15,7 +15,7 @@
 		<Light name="Light">
 			<active value="true" />
 			<transform 
-				position="0.000000 -24.968735 39.711044"
+				position="0.000000 -24.536106 0.000000"
 				rotation="0.000000 -0.000000 0.000000"
 				scale="1.000000 1.000000 1.000000" />
 			<properties 
@@ -44,7 +44,7 @@
 				skyboxTextures="maps/skybox" />
 		</Camera>
 		<Entity name="Cube1" file="../meshs/box-notex.mesh">
-			<BoundingBox min="-5.677568 -5.677569 -5.677566" max="5.677569 5.677568 5.677566" />
+			<BoundingBox min="-5.000000 -5.000000 -5.000000" max="5.000000 5.000000 5.000000" />
 			<anim id="0" />
 			<active value="true" />
 			<transform 
@@ -64,6 +64,72 @@
 				position="-20.000000 0.000000 0.000000"
 				rotation="0.000000 -0.000000 0.000000"
 				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
+		<Entity name="Cube2" file="../meshs/box.mesh">
+			<BoundingBox min="-5.677568 -5.677569 -5.677566" max="5.677569 5.677568 5.677566" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="0.657169 31.240261 0.000000"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
+		<Entity name="Cube21" file="../meshs/box.mesh">
+			<BoundingBox min="-5.677568 -5.677569 -5.677566" max="5.677569 5.677568 5.677566" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="0.657169 31.240261 23.961315"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
+		<Entity name="Cube22" file="../meshs/box.mesh">
+			<BoundingBox min="-5.677568 -5.677569 -5.677566" max="5.677569 5.677568 5.677566" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="40.867508 -0.682886 0.000000"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
+		<Entity name="Entity0" file="../meshs/box-notex.mesh">
+			<BoundingBox min="-5.000000 -5.000000 -5.000000" max="5.000000 5.000000 5.000000" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				parent="Light"
+				position="0.000000 0.000000 0.000000"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="0.262111 0.262111 0.262111" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
+		<Entity name="Entity1" file="../meshs/barrel02.mesh">
+			<BoundingBox min="-0.918999 -0.918999 -1.189882" max="0.918999 0.918999 1.513789" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="0.000000 0.000000 5.926659"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="5.226978 5.226978 5.226978" />
 			<properties 
 				invisible="false"
 				shadow="true"
