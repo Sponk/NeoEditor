@@ -24,7 +24,7 @@ in vec2 texCoord;
 
 layout (location = 0) out vec4 FragColor;
 
-vec3 diffuseModel(vec3 pos, vec3 n, vec3 Kd, vec3 lpos, float intensity, float shininess)
+vec3 diffuseModel(vec3 pos, vec3 n, vec3 Kd, vec3 Ks, vec3 lpos, float intensity, float shininess)
 {
     vec3 s = normalize(lpos -  pos);
     vec3 v = normalize(-pos);
@@ -32,7 +32,6 @@ vec3 diffuseModel(vec3 pos, vec3 n, vec3 Kd, vec3 lpos, float intensity, float s
 
 
     vec3 Ka = vec3(0);
-    vec3 Ks = vec3(1.0,1.0,1.0);
 
     vec3 diffuse = (Ka+ Kd *  max( 0.0,dot(n, s) ));
     vec3 spec = Ks *  pow(max(0.0, dot(r,v)), shininess);
@@ -50,11 +49,15 @@ void main(void)
     // normal.a => Shininess
    vec4 normal = texture2D(Textures[1], texCoord);
 
+   // position.rgb => Position
+   // position.a => Grayscale specular
+   vec4 position = texture2D(Textures[3], texCoord);
+
 
    FragColor = vec4(0.0,0.0,0.0,0.0);
    for(int i = 0; i < LightsCount; i++)
    {
-       FragColor = FragColor + vec4(diffuseModel(texture2D(Textures[3], texCoord).rgb, normal.rgb, currentPixel.rgb, lights[i].Position, 1.0, normal.a), 1.0);
+       FragColor = FragColor + vec4(diffuseModel(position.rgb, normal.rgb, currentPixel.rgb, position.aaa, lights[i].Position, 1.0, normal.a), 1.0);
    }
    //}
    //else

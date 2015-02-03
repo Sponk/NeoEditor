@@ -31,5 +31,12 @@ void main(void)
 	Normal = vec4(normalize(normal+(texture2D(Textures[2], texCoord).xyz * 2 - 1)), Shininess);
     else
 	Normal = vec4(normal, Shininess);
-    Position = vec4(position, 1.0);
+
+    if(TextureMode >= 3)
+    {
+	vec4 spec = texture2D(Textures[3], texCoord);
+	Position = vec4(position, (spec.r + spec.b + spec.g) / 3);
+    }
+    else
+	Position = vec4(position, (Specular.r + Specular.b + Specular.g) / 3);
 }
