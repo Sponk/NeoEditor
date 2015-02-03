@@ -46,13 +46,15 @@ void main(void)
     if(currentPixel.a != 1.0)
 	discard;
 
-    float depth = texture2D(Textures[2], texCoord).x;
+    // normal.rgb => Normal
+    // normal.a => Shininess
+   vec4 normal = texture2D(Textures[1], texCoord);
 
 
    FragColor = vec4(0.0,0.0,0.0,0.0);
    for(int i = 0; i < LightsCount; i++)
    {
-       FragColor = FragColor + vec4(diffuseModel(texture2D(Textures[3], texCoord).rgb, texture2D(Textures[1], texCoord).rgb, currentPixel.rgb, lights[i].Position, 1.0, 10.0), 1.0);
+       FragColor = FragColor + vec4(diffuseModel(texture2D(Textures[3], texCoord).rgb, normal.rgb, currentPixel.rgb, lights[i].Position, 1.0, normal.a), 1.0);
    }
    //}
    //else

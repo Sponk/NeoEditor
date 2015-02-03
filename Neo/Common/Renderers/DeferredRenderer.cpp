@@ -105,7 +105,6 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
     unsigned int * vao = display->getVAO();
 
     // Save data into variables
-    MVector3* verts = mesh->getVertices();
     MVector2* texcoords = mesh->getTexCoords();
     M_TYPES indicesType = mesh->getIndicesType();
     void* indices = mesh->getIndices();
@@ -114,7 +113,6 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
     int texturePasses = material->getTexturesPassNumber();    
 
     int fx = 0;
-    int textureMode = 0;
 
     if(*vao == 0)
     {
@@ -151,6 +149,14 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
         int offset = sizeof(MVector3)*(mesh->getVerticesSize() + display->getBegin());
         render->setAttribPointer(normalAttrib, M_FLOAT, 3, (void*) offset);
 
+        // Set up tangent attribute
+        int tangentAttrib;
+        render->getAttribLocation(fx, "Tangent", &tangentAttrib);
+        render->enableAttribArray(tangentAttrib);
+
+        offset += sizeof(MVector3)*mesh->getNormalsSize();
+        render->setAttribPointer(tangentAttrib, M_FLOAT, 3, (void*) offset);
+
         // Set up texcoord attribute
         int texcoordAttrib = 0;
         if(texturePasses > 0 && texcoords != NULL)
@@ -175,42 +181,36 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 
     render->bindVAO(*vao);
 
-    switch(texturePasses)
+    if(texturePasses == 0)
     {
-    case 0: { // No texture
-
-            // Tell the shader that we do not have any textures
-            textureMode = 0;
-            render->disableBlending();
-
-            int id = 0;
-            render->sendUniformInt(fx, "Texture", &id);
-
-            render->sendUniformVec3(fx, "DiffuseColor", material->getDiffuse());
-        }
-        break;
-
-    default:
-    case 1: { // Simple texture
-
-            TextureRef* tex = material->getTexturePass(0)->getTexture()->getTextureRef();
-
-            // Tell the shader that we have one diffuse texture
-            textureMode = 1;
-
-            render->enableTexture();
-            render->bindTexture(tex->getTextureId());
-
-            int id = 0;
-            render->sendUniformInt(fx, "Texture", &id);
-            render->enableBlending();
-            render->setBlendingMode(M_BLENDING_ALPHA);
-            break;
-        }
+        // Tell the shader that we do not have any textures
+        render->disableBlending();
+    }
+    else
+    {
+        render->enableBlending();
+        render->setBlendingMode(M_BLENDING_ALPHA);
     }
 
+    for(int i = 0; i < texturePasses; i++)
+    {
+        TexturePass* pass = material->getTexturePass(i);
+
+        if(!pass || !pass->getTexture())
+        {
+            continue;
+        }
+
+        TextureRef* tex = pass->getTexture()->getTextureRef();
+        render->bindTexture(tex->getTextureId(), i);
+    }
+
+    // Texture
+    int texIds[4] = { 0, 1, 2, 3 };
+    render->sendUniformInt(fx, "Textures", texIds, 4);
+
     // Send the texture mode
-    render->sendUniformInt(fx, "TextureMode", &textureMode);
+    render->sendUniformInt(fx, "TextureMode", &texturePasses);
 
     // Set up modelview matrix
     MMatrix4x4 modelViewMatrix;
@@ -233,6 +233,21 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
     // Send uniforms
     render->sendUniformMatrix(m_fx[0], "ProjModelViewMatrix", &projectionMatrix);
     render->sendUniformMatrix(m_fx[0], "ModelViewMatrix", &modelViewMatrix);
+
+/*	float m_shininess;
+    float m_customValue;
+    MVector3 m_diffuse;
+    MVector3 m_specular;
+    MVector3 m_emit;
+  */
+
+    render->sendUniformVec3(m_fx[0], "Diffuse", material->getDiffuse());
+    render->sendUniformVec3(m_fx[0], "Specular", material->getSpecular());
+    render->sendUniformVec3(m_fx[0], "Emit", material->getEmit());
+
+    float shininess = material->getShininess();
+    render->sendUniformFloat(m_fx[0], "Shininess", &shininess);
+
 
     //modelViewMatrix.loadIdentity();
     //modelViewMatrix.setScale(MVector3(1,1,1));
