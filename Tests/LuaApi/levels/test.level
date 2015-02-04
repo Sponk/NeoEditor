@@ -26,6 +26,48 @@
 				spotExponent="0.000000"
 				shadow="false" />
 		</Light>
+		<Light name="Light1">
+			<active value="true" />
+			<transform 
+				position="21.420090 -24.536106 17.814178"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="1000.000000"
+				color="1.000000 0.005787 0.000000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light11">
+			<active value="true" />
+			<transform 
+				position="-56.754780 -24.536106 27.125412"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="1000.000000"
+				color="0.000000 0.215416 1.000000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light111">
+			<active value="true" />
+			<transform 
+				position="65.073990 -81.629478 65.379944"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="1000.000000"
+				color="0.594455 0.000000 1.000000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
 		<Camera name="Camera0">
 			<active value="true" />
 			<transform 
@@ -48,20 +90,30 @@
 			<anim id="0" />
 			<active value="true" />
 			<transform 
-				position="20.000000 0.000000 0.000000"
+				position="20.000000 0.000000 -14.475441"
 				rotation="0.000000 -0.000000 0.000000"
-				scale="1.000000 1.000000 1.000000" />
+				scale="23.963820 24.923080 0.198627" />
 			<properties 
 				invisible="false"
 				shadow="true"
 				occluder="false" />
+			<physics 
+				shape="Box"
+				ghost="false"
+				mass="0.000000"
+				friction="0.500000"
+				restitution="0.000000"
+				linearDamping="0.010000"
+				angularDamping="0.010000"
+				angularFactor="1.000000"
+				linearFactor="1.000000 1.000000 1.000000" />
 		</Entity>
 		<Entity name="Cube" file="../meshs/box.mesh">
 			<BoundingBox min="-5.677568 -5.677569 -5.677566" max="5.677569 5.677568 5.677566" />
 			<anim id="0" />
 			<active value="true" />
 			<transform 
-				position="-20.000000 0.000000 0.000000"
+				position="17.783421 24.757568 32.621712"
 				rotation="0.000000 -0.000000 0.000000"
 				scale="1.000000 1.000000 1.000000" />
 			<properties 
@@ -122,18 +174,281 @@
 				shadow="true"
 				occluder="false" />
 		</Entity>
-		<Entity name="Entity1" file="../meshs/barrel02.mesh">
+		<Entity name="Entity11" file="../meshs/barrel02.mesh">
 			<BoundingBox min="-0.918999 -0.918999 -1.189882" max="0.918999 0.918999 1.513789" />
 			<anim id="0" />
 			<active value="true" />
 			<transform 
-				position="0.000000 0.000000 5.926659"
+				position="-10.259482 0.000000 5.926659"
 				rotation="0.000000 -0.000000 0.000000"
 				scale="5.226978 5.226978 5.226978" />
 			<properties 
 				invisible="false"
 				shadow="true"
 				occluder="false" />
+			<physics 
+				shape="ConvexHull"
+				ghost="false"
+				mass="1.000000"
+				friction="0.500000"
+				restitution="0.000000"
+				linearDamping="0.010000"
+				angularDamping="0.010000"
+				angularFactor="1.000000"
+				linearFactor="1.000000 1.000000 1.000000" />
+		</Entity>
+		<Entity name="Entity111" file="../meshs/barrel02.mesh">
+			<BoundingBox min="-0.918999 -0.918999 -1.189882" max="0.918999 0.918999 1.513789" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="-20.923115 0.000000 5.926659"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="5.226978 5.226978 5.226978" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+			<physics 
+				shape="ConvexHull"
+				ghost="false"
+				mass="1.000000"
+				friction="0.500000"
+				restitution="0.000000"
+				linearDamping="0.010000"
+				angularDamping="0.010000"
+				angularFactor="1.000000"
+				linearFactor="1.000000 1.000000 1.000000" />
+		</Entity>
+		<Entity name="Entity11211" file="../meshs/barrel02.mesh">
+			<BoundingBox min="-0.918999 -0.918999 -1.189882" max="0.918999 0.918999 1.513789" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="-10.896763 0.000000 22.110687"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="5.226978 5.226978 5.226978" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+			<physics 
+				shape="ConvexHull"
+				ghost="false"
+				mass="1.000000"
+				friction="0.500000"
+				restitution="0.000000"
+				linearDamping="0.010000"
+				angularDamping="0.010000"
+				angularFactor="1.000000"
+				linearFactor="1.000000 1.000000 1.000000" />
+		</Entity>
+		<Entity name="Entity111111" file="../meshs/barrel02.mesh">
+			<BoundingBox min="-0.918999 -0.918999 -1.189882" max="0.918999 0.918999 1.513789" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="-21.560394 0.000000 22.110687"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="5.226978 5.226978 5.226978" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+			<physics 
+				shape="ConvexHull"
+				ghost="false"
+				mass="1.000000"
+				friction="0.500000"
+				restitution="0.000000"
+				linearDamping="0.010000"
+				angularDamping="0.010000"
+				angularFactor="1.000000"
+				linearFactor="1.000000 1.000000 1.000000" />
+		</Entity>
+		<Entity name="Entity112" file="../meshs/barrel02.mesh">
+			<BoundingBox min="-0.918999 -0.918999 -1.189882" max="0.918999 0.918999 1.513789" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="11.114552 0.000000 5.926659"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="5.226978 5.226978 5.226978" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+			<physics 
+				shape="ConvexHull"
+				ghost="false"
+				mass="1.000000"
+				friction="0.500000"
+				restitution="0.000000"
+				linearDamping="0.010000"
+				angularDamping="0.010000"
+				angularFactor="1.000000"
+				linearFactor="1.000000 1.000000 1.000000" />
+		</Entity>
+		<Entity name="Entity1111" file="../meshs/barrel02.mesh">
+			<BoundingBox min="-0.918999 -0.918999 -1.189882" max="0.918999 0.918999 1.513789" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="0.450920 0.000000 5.926659"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="5.226978 5.226978 5.226978" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+			<physics 
+				shape="ConvexHull"
+				ghost="false"
+				mass="1.000000"
+				friction="0.500000"
+				restitution="0.000000"
+				linearDamping="0.010000"
+				angularDamping="0.010000"
+				angularFactor="1.000000"
+				linearFactor="1.000000 1.000000 1.000000" />
+		</Entity>
+		<Entity name="Entity112111" file="../meshs/barrel02.mesh">
+			<BoundingBox min="-0.918999 -0.918999 -1.189882" max="0.918999 0.918999 1.513789" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="10.477272 0.000000 22.110687"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="5.226978 5.226978 5.226978" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+			<physics 
+				shape="ConvexHull"
+				ghost="false"
+				mass="1.000000"
+				friction="0.500000"
+				restitution="0.000000"
+				linearDamping="0.010000"
+				angularDamping="0.010000"
+				angularFactor="1.000000"
+				linearFactor="1.000000 1.000000 1.000000" />
+		</Entity>
+		<Entity name="Entity1111111" file="../meshs/barrel02.mesh">
+			<BoundingBox min="-0.918999 -0.918999 -1.189882" max="0.918999 0.918999 1.513789" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="-0.186359 0.000000 22.110687"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="5.226978 5.226978 5.226978" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+			<physics 
+				shape="ConvexHull"
+				ghost="false"
+				mass="1.000000"
+				friction="0.500000"
+				restitution="0.000000"
+				linearDamping="0.010000"
+				angularDamping="0.010000"
+				angularFactor="1.000000"
+				linearFactor="1.000000 1.000000 1.000000" />
+		</Entity>
+		<Entity name="Entity1121" file="../meshs/barrel02.mesh">
+			<BoundingBox min="-0.918999 -0.918999 -1.189882" max="0.918999 0.918999 1.513789" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="32.021595 0.000000 5.926659"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="5.226978 5.226978 5.226978" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+			<physics 
+				shape="ConvexHull"
+				ghost="false"
+				mass="1.000000"
+				friction="0.500000"
+				restitution="0.000000"
+				linearDamping="0.010000"
+				angularDamping="0.010000"
+				angularFactor="1.000000"
+				linearFactor="1.000000 1.000000 1.000000" />
+		</Entity>
+		<Entity name="Entity11111" file="../meshs/barrel02.mesh">
+			<BoundingBox min="-0.918999 -0.918999 -1.189882" max="0.918999 0.918999 1.513789" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="21.357964 0.000000 5.926659"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="5.226978 5.226978 5.226978" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+			<physics 
+				shape="ConvexHull"
+				ghost="false"
+				mass="1.000000"
+				friction="0.500000"
+				restitution="0.000000"
+				linearDamping="0.010000"
+				angularDamping="0.010000"
+				angularFactor="1.000000"
+				linearFactor="1.000000 1.000000 1.000000" />
+		</Entity>
+		<Entity name="Entity1121111" file="../meshs/barrel02.mesh">
+			<BoundingBox min="-0.918999 -0.918999 -1.189882" max="0.918999 0.918999 1.513789" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="31.384315 0.000000 22.110687"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="5.226978 5.226978 5.226978" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+			<physics 
+				shape="ConvexHull"
+				ghost="false"
+				mass="1.000000"
+				friction="0.500000"
+				restitution="0.000000"
+				linearDamping="0.010000"
+				angularDamping="0.010000"
+				angularFactor="1.000000"
+				linearFactor="1.000000 1.000000 1.000000" />
+		</Entity>
+		<Entity name="Entity11111111" file="../meshs/barrel02.mesh">
+			<BoundingBox min="-0.918999 -0.918999 -1.189882" max="0.918999 0.918999 1.513789" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="20.720684 0.000000 22.110687"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="5.226978 5.226978 5.226978" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+			<physics 
+				shape="ConvexHull"
+				ghost="false"
+				mass="1.000000"
+				friction="0.500000"
+				restitution="0.000000"
+				linearDamping="0.010000"
+				angularDamping="0.010000"
+				angularFactor="1.000000"
+				linearFactor="1.000000 1.000000 1.000000" />
 		</Entity>
 
 	</Scene>

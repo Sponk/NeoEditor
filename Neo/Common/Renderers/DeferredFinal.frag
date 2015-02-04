@@ -8,6 +8,7 @@ struct LightInfo
     vec3 Ambient;
     vec3 Diffuse;
     vec3 Specular;
+    float Intensity;
 };
 
 uniform LightInfo lights[MAX_ENTITY_LIGHTS];
@@ -24,7 +25,7 @@ in vec2 texCoord;
 
 layout (location = 0) out vec4 FragColor;
 
-vec3 diffuseModel(vec3 pos, vec3 n, vec3 Kd, vec3 Ks, vec3 lpos, float intensity, float shininess)
+vec3 diffuseModel(vec3 pos, vec3 n, vec3 tex, vec3 Ks, vec3 lpos, vec3 Kd, float intensity, float shininess)
 {
     vec3 s = normalize(lpos -  pos);
     vec3 v = normalize(-pos);
@@ -36,7 +37,7 @@ vec3 diffuseModel(vec3 pos, vec3 n, vec3 Kd, vec3 Ks, vec3 lpos, float intensity
     vec3 diffuse = (Ka+ Kd *  max( 0.0,dot(n, s) ));
     vec3 spec = Ks *  pow(max(0.0, dot(r,v)), shininess);
 
-    return (intensity * diffuse) + 0.2*spec;
+    return tex * intensity * (diffuse + 0.5*spec);
 }
 
 void main(void)
@@ -57,7 +58,7 @@ void main(void)
    FragColor = vec4(0.0,0.0,0.0,0.0);
    for(int i = 0; i < LightsCount; i++)
    {
-       FragColor = FragColor + vec4(diffuseModel(position.rgb, normal.rgb, currentPixel.rgb, position.aaa, lights[i].Position, 1.0, normal.a), 1.0);
+       FragColor = FragColor + vec4(diffuseModel(position.rgb, normal.rgb, currentPixel.rgb, position.aaa, lights[i].Position, lights[i].Diffuse, lights[i].Intensity, normal.a), 1.0);
    }
    //}
    //else

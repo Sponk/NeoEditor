@@ -70,7 +70,7 @@ DeferredRenderer::~DeferredRenderer()
 void DeferredRenderer::drawMesh(Mesh* mesh, OCamera* camera)
 {
 	int num = mesh->getSubMeshsNumber();
-	SubMesh* subMeshes = mesh->getSubMeshs();
+    SubMesh* subMeshes = mesh->getSubMeshs();
 
     for(int i = 0; i < num; i++)
 	{
@@ -81,12 +81,8 @@ void DeferredRenderer::drawMesh(Mesh* mesh, OCamera* camera)
 void DeferredRenderer::drawSubMesh(SubMesh* mesh, OCamera* camera)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
-	MRenderingContext* render = engine->getRenderingContext();
 
     initVBO(mesh);
-
-    MVector3* verts = mesh->getVertices();
-	int numVerts = mesh->getVerticesSize();
 
     for(int i = 0; i < mesh->getDisplaysNumber(); i++)
     {
@@ -170,8 +166,6 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
             render->enableAttribArray(texcoordAttrib);
         }
 
-        //render->disableAttribArray(vertAttrib);
-        //render->disableAttribArray(texcoordAttrib);
        render->bindVAO(0);
        return;
     }
@@ -248,20 +242,11 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
     float shininess = material->getShininess();
     render->sendUniformFloat(m_fx[0], "Shininess", &shininess);
 
-
-    //modelViewMatrix.loadIdentity();
-    //modelViewMatrix.setScale(MVector3(1,1,1));
-    //modelViewMatrix.setRotationPartEuler(camera->getMatrix()->getEulerAngles());
-    //modelViewMatrix = modelViewMatrix * camera->getMatrix()->getInverse().getTranspose();
-
-    //modelViewMatrix.setScale(MVector3(0.5,0.5,0.5));
-
     // Set up normal matrix
     render->sendUniformMatrix(m_fx[0], "NormalMatrix", &normalMatrix);
 
-    // Bind VBOs
-    //if(*vboId1 > 0)
-        //render->bindVBO(M_VBO_ARRAY, *vboId1);
+    // Set cull mode
+    render->setCullMode(display->getCullMode());
 
     if(indices) // If the SubMesh has indices
     {
@@ -279,15 +264,6 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
                 default:
                     MLOG_WARNING("Unsupported indices type!");
             }
-
-            //render->bindVAO(*vao);
-            //render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (void*)(display->getBegin()*sizeof(short)));
-            //render->drawArray(display->getPrimitiveType(), display->getBegin(), display->getSize());
-            // MLOG_INFO("Draw stuff");
-
-            // Clean up
-            //render->bindVBO(M_VBO_ELEMENT_ARRAY, 0);
-            //render->bindVBO(M_VBO_ARRAY, 0);
         }
         else // If the indices are not stored in the VBO
         {
@@ -306,9 +282,6 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
     }
     else // If we have no indices
         render->drawArray(display->getPrimitiveType(), display->getBegin(), display->getSize());
-
-    // Clean up
-    //render->bindVAO(0);
 }
 
 void DeferredRenderer::drawGBuffer(Scene* scene, OCamera* camera)
@@ -446,6 +419,7 @@ void DeferredRenderer::initFramebuffers()
     render->createFrameBuffer(&m_framebufferID);
 
     // create render textures
+    // GBuffer texture
     render->createTexture(&m_gbufferTexID);
     render->bindTexture(m_gbufferTexID);
     render->setTextureFilterMode(M_TEX_FILTER_LINEAR, M_TEX_FILTER_LINEAR);
@@ -453,11 +427,13 @@ void DeferredRenderer::initFramebuffers()
     render->setTextureVWrapMode(M_WRAP_CLAMP);
     render->texImage(0, screenWidth, screenHeight, M_FLOAT, M_RGBA, 0);
 
+    // Depth texture
     render->createTexture(&m_depthTexID);
     render->bindTexture(m_depthTexID);
     render->setTextureFilterMode(M_TEX_FILTER_NEAREST, M_TEX_FILTER_NEAREST);
     render->texImage(0, screenWidth, screenHeight, M_FLOAT, M_DEPTH, 0);
 
+    // Position texture
     render->createTexture(&m_positionTexID);
     render->bindTexture(m_positionTexID);
     render->setTextureFilterMode(M_TEX_FILTER_LINEAR, M_TEX_FILTER_LINEAR);
@@ -465,11 +441,7 @@ void DeferredRenderer::initFramebuffers()
     render->setTextureVWrapMode(M_WRAP_CLAMP);
     render->texImage(0, screenWidth, screenHeight, M_FLOAT, M_RGBA, 0);
 
-    /*render->setTextureFilterMode(M_TEX_FILTER_LINEAR, M_TEX_FILTER_LINEAR);
-    render->setTextureUWrapMode(M_WRAP_CLAMP);
-    render->setTextureVWrapMode(M_WRAP_CLAMP);
-    render->texImage(0, screenWidth, screenHeight, M_FLOAT, M_RGBA, 0);*/
-
+    // Normal texture
     render->createTexture(&m_normalTexID);
     render->bindTexture(m_normalTexID);
     render->setTextureFilterMode(M_TEX_FILTER_LINEAR, M_TEX_FILTER_LINEAR);
@@ -544,10 +516,19 @@ void DeferredRenderer::sendLight(unsigned int fx, OLight* l, int num, MMatrix4x4
     char ending[255];
 
     sprintf(str, "lights[%d].", num);
-    strcpy(ending, str);
 
+    strcpy(ending, str);
     strcat(ending, "Position");
     render->sendUniformVec3(fx, ending, matrix*l->getTransformedPosition());
+
+    strcpy(ending, str);
+    strcat(ending, "Diffuse");
+    render->sendUniformVec3(fx, ending, l->getFinalColor());
+
+    float intensity = l->getIntensity();
+    strcpy(ending, str);
+    strcat(ending, "Intensity");
+    render->sendUniformFloat(fx, ending, &intensity);
 }
 
 void DeferredRenderer::renderFinalImage(OCamera* camera)
@@ -572,6 +553,9 @@ void DeferredRenderer::renderFinalImage(OCamera* camera)
     render->bindTexture(m_depthTexID, 2);
     render->bindTexture(m_positionTexID, 3);
     render->disableBlending();
+
+    // Set cull mode
+    render->setCullMode(M_CULL_BACK);
 
     // Send light data
     m_lightUpdateSemaphore->WaitAndLock();
@@ -793,9 +777,11 @@ int DeferredRenderer::light_update_thread(void* data)
 
    while(engine->isActive())
    {
+       // Aquire lock
        self->m_lightUpdateSemaphore->WaitAndLock();
        scene = self->m_currentScene;
 
+       // If nothing is being rendererd
        if(scene == NULL)
        {
            self->m_lightUpdateSemaphore->Unlock();
@@ -803,9 +789,11 @@ int DeferredRenderer::light_update_thread(void* data)
            continue;
        }
 
+       // Fill the light buffer with all visible lights
        int j = 0;
        for(int i = 0; i < scene->getLightsNumber() && i < MAX_ENTITY_LIGHTS; i++)
        {
+           // If light is visible
             if((light = scene->getLightByIndex(i))->isVisible() && light->isActive())
             {
                 self->m_visibleLights[j] = light;
