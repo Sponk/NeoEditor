@@ -85,8 +85,8 @@
 				fogDistance="0.000000"
 				skyboxTextures="maps/skybox" />
 		</Camera>
-		<Entity name="Cube1" file="../meshs/box-notex.mesh">
-			<BoundingBox min="-5.000000 -5.000000 -5.000000" max="5.000000 5.000000 5.000000" />
+		<Entity name="Cube1" file="../meshs/pavement01.mesh">
+			<BoundingBox min="-2.198268 -2.198268 -2.198268" max="2.198268 2.198268 2.198268" />
 			<anim id="0" />
 			<active value="true" />
 			<transform 
@@ -450,6 +450,90 @@
 				angularFactor="1.000000"
 				linearFactor="1.000000 1.000000 1.000000" />
 		</Entity>
+		<Light name="Light12">
+			<active value="true" />
+			<transform 
+				position="21.420090 47.222412 17.814178"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="1000.000000"
+				color="1.000000 0.005787 0.000000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light112">
+			<active value="true" />
+			<transform 
+				position="-56.754780 47.222412 27.125412"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="1000.000000"
+				color="0.000000 0.215416 1.000000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light1111">
+			<active value="true" />
+			<transform 
+				position="65.073990 -9.870975 65.379944"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="1000.000000"
+				color="0.594455 0.000000 1.000000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light121">
+			<active value="true" />
+			<transform 
+				position="21.420090 17.812639 17.814178"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="1000.000000"
+				color="1.000000 0.005787 0.000000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light1121">
+			<active value="true" />
+			<transform 
+				position="-56.754780 17.812639 27.125412"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="1000.000000"
+				color="0.000000 0.215416 1.000000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light11111">
+			<active value="true" />
+			<transform 
+				position="65.073990 -39.280750 65.379944"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="1000.000000"
+				color="0.594455 0.000000 1.000000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
 
 	</Scene>
 

@@ -153,6 +153,14 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
         offset += sizeof(MVector3)*mesh->getNormalsSize();
         render->setAttribPointer(tangentAttrib, M_FLOAT, 3, (void*) offset);
 
+        // Set up color attribute
+        int colorAttrib;
+        render->getAttribLocation(fx, "Color", &colorAttrib);
+        render->enableAttribArray(colorAttrib);
+
+        offset += sizeof(MVector3)*mesh->getTangentsSize();
+        render->setAttribPointer(colorAttrib, M_FLOAT, 3, (void*) offset);
+
         // Set up texcoord attribute
         int texcoordAttrib = 0;
         if(texturePasses > 0 && texcoords != NULL)
@@ -182,8 +190,7 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
     }
     else
     {
-        render->enableBlending();
-        render->setBlendingMode(M_BLENDING_ALPHA);
+        render->disableBlending();
     }
 
     for(int i = 0; i < texturePasses; i++)
@@ -529,6 +536,35 @@ void DeferredRenderer::sendLight(unsigned int fx, OLight* l, int num, MMatrix4x4
     strcpy(ending, str);
     strcat(ending, "Intensity");
     render->sendUniformFloat(fx, ending, &intensity);
+
+    float radius = l->getRadius();
+    strcpy(ending, str);
+    strcat(ending, "Radius");
+    render->sendUniformFloat(fx, ending, &radius);
+
+    float quadraticAttenuation = 0.0;
+    // attenuation
+    if(l->getSpotAngle() > 0.0f)
+    {
+        quadraticAttenuation = (8.0f / l->getRadius());
+        quadraticAttenuation = (quadraticAttenuation*quadraticAttenuation)*l->getIntensity();
+    }
+
+    strcpy(ending, str);
+    strcat(ending, "QuadraticAttenuation");
+    render->sendUniformFloat(fx, ending, &quadraticAttenuation);
+
+    // Constant attenuation = 1
+    float attenuation = 1.5;
+    strcpy(ending, str);
+    strcat(ending, "ConstantAttenuation");
+    render->sendUniformFloat(fx, ending, &attenuation);
+
+    // Linear attenuation = 0
+    attenuation = 0.0;
+    strcpy(ending, str);
+    strcat(ending, "LinearAttenuation");
+    render->sendUniformFloat(fx, ending, &attenuation);
 }
 
 void DeferredRenderer::renderFinalImage(OCamera* camera)

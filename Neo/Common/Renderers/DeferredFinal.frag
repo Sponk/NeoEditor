@@ -9,6 +9,10 @@ struct LightInfo
     vec3 Diffuse;
     vec3 Specular;
     float Intensity;
+    float QuadraticAttenuation;
+    float ConstantAttenuation;
+    float LinearAttenuation;
+    float Radius;
 };
 
 uniform LightInfo lights[MAX_ENTITY_LIGHTS];
@@ -40,6 +44,28 @@ vec3 diffuseModel(vec3 pos, vec3 n, vec3 tex, vec3 Ks, vec3 lpos, vec3 Kd, float
     return tex * intensity * (diffuse + 0.5*spec);
 }
 
+
+vec3 lambertModel(vec3 pos, vec3 n, vec3 tex, vec3 Ks, LightInfo light, float shininess)
+{
+    vec3 lightDistance = light.Position - pos;
+    float lightDistance2 = dot(lightDistance, lightDistance);
+
+    //if(lightDistance2 > light.Radius)
+	//return vec3(0.0,0.0,0.0);
+
+    vec3 s = normalize(lightDistance);
+    vec3 v = normalize(-pos);
+    vec3 r = reflect(s, n);
+    float attenuation = (1.0 / (light.ConstantAttenuation + (lightDistance2 * light.QuadraticAttenuation)));
+
+    vec3 Ka = vec3(0);
+
+    vec3 diffuse = (Ka + light.Diffuse *  max( 0.0,dot(n, s)));
+    vec3 spec = Ks * pow(max(0.0, dot(r,s)), shininess);
+
+    return tex * light.Intensity * (diffuse + spec) * attenuation;
+}
+
 void main(void)
 {
     vec4 currentPixel = texture2D(Textures[0], texCoord);
@@ -58,13 +84,18 @@ void main(void)
    FragColor = vec4(0.0,0.0,0.0,0.0);
    for(int i = 0; i < LightsCount; i++)
    {
-       FragColor = FragColor + vec4(diffuseModel(position.rgb, normal.rgb, currentPixel.rgb, position.aaa, lights[i].Position, lights[i].Diffuse, lights[i].Intensity, normal.a), 1.0);
+       //FragColor = FragColor + vec4(diffuseModel(position.rgb, normal.rgb, currentPixel.rgb, position.aaa, lights[i].Position, lights[i].Diffuse, lights[i].Intensity, normal.a), 1.0);
+       FragColor = FragColor + vec4(lambertModel(position.rgb, normal.rgb, currentPixel.rgb, position.aaa, lights[i], normal.a), 1.0);
    }
    //}
    //else
    //{
     //if(texCoord.x > 0.5)
 	//FragColor = texture2D(Textures[3], texCoord);
-   //}
+
+    //if(texCoord.x > 0.5 && texCoord.y < 0.5)
+	//FragColor = texture2D(Textures[1], texCoord);
+    //FragColor.a = 1.0;
+	//}
 
 }

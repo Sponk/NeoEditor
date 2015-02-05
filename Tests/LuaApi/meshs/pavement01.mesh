@@ -1,0 +1,161 @@
+<Maratis>
+
+<Mesh>
+
+<Textures num="1">
+	<Texture id="0">
+		<image filename="../maps/textures/pavement01.jpg" mipmap="1" />
+		<mapMode value="1" />
+		<tile u="repeat" v="repeat" />
+		<translate x="0.000000" y="0.000000" />
+		<scale x="1.000000" y="1.000000" />
+		<rotate angle="0.000000" />
+	</Texture>
+</Textures>
+
+<Materials num="1">
+	<Material id="0" type="1">
+		<blend type="0" />
+		<opacity value="1.000000" />
+		<shininess value="50.000000" />
+		<customValue value="0.000000" />
+		<diffuseColor r="0.800000" g="0.800000" b="0.800000" />
+		<specularColor r="0.000000" g="0.000000" b="0.000000" />
+		<emitColor r="0.000000" g="0.000000" b="0.000000" />
+		<customColor r="0.000000" g="0.000000" b="0.000000" />
+		<TexturesPass num="1">
+			<texturePass id="0" texture="0" mode="modulate" mapChannel="0" />
+		</TexturesPass>
+	</Material>
+</Materials>
+
+<BoundingBox minx="-2.198268" miny="-2.198268" minz="-2.198268" maxx="2.198268" maxy="2.198268" maxz="2.198268" />
+
+<SubMeshs num="1">
+	<SubMesh id="0">
+		<BoundingBox minx="-2.198268" miny="-2.198268" minz="-2.198268" maxx="2.198268" maxy="2.198268" maxz="2.198268" />
+		<Vertices num="24">
+			<vertex x="-2.198268" y="2.198268" z="-2.198268" />
+			<vertex x="-2.198268" y="-2.198268" z="-2.198268" />
+			<vertex x="-2.198268" y="-2.198268" z="2.198268" />
+			<vertex x="-2.198268" y="2.198268" z="2.198268" />
+			<vertex x="-2.198268" y="2.198268" z="2.198268" />
+			<vertex x="2.198268" y="2.198268" z="2.198268" />
+			<vertex x="2.198268" y="2.198268" z="-2.198268" />
+			<vertex x="-2.198268" y="2.198268" z="-2.198268" />
+			<vertex x="2.198268" y="2.198268" z="2.198268" />
+			<vertex x="2.198268" y="-2.198268" z="2.198268" />
+			<vertex x="2.198268" y="-2.198268" z="-2.198268" />
+			<vertex x="2.198268" y="2.198268" z="-2.198268" />
+			<vertex x="-2.198268" y="-2.198268" z="-2.198268" />
+			<vertex x="2.198268" y="-2.198268" z="-2.198268" />
+			<vertex x="2.198268" y="-2.198268" z="2.198268" />
+			<vertex x="-2.198268" y="-2.198268" z="2.198268" />
+			<vertex x="-2.198268" y="-2.198268" z="-2.198268" />
+			<vertex x="-2.198268" y="2.198268" z="-2.198268" />
+			<vertex x="2.198268" y="2.198268" z="-2.198268" />
+			<vertex x="2.198268" y="-2.198268" z="-2.198268" />
+			<vertex x="2.198268" y="-2.198268" z="2.198268" />
+			<vertex x="2.198268" y="2.198268" z="2.198268" />
+			<vertex x="-2.198268" y="2.198268" z="2.198268" />
+			<vertex x="-2.198268" y="-2.198268" z="2.198268" />
+		</Vertices>
+		<Normals num="24">
+			<normal x="-0.577349" y="0.577349" z="-0.577349" />
+			<normal x="-0.577349" y="-0.577349" z="-0.577349" />
+			<normal x="-0.577349" y="-0.577349" z="0.577349" />
+			<normal x="-0.577349" y="0.577349" z="0.577349" />
+			<normal x="-0.577349" y="0.577349" z="0.577349" />
+			<normal x="0.577349" y="0.577349" z="0.577349" />
+			<normal x="0.577349" y="0.577349" z="-0.577349" />
+			<normal x="-0.577349" y="0.577349" z="-0.577349" />
+			<normal x="0.577349" y="0.577349" z="0.577349" />
+			<normal x="0.577349" y="-0.577349" z="0.577349" />
+			<normal x="0.577349" y="-0.577349" z="-0.577349" />
+			<normal x="0.577349" y="0.577349" z="-0.577349" />
+			<normal x="-0.577349" y="-0.577349" z="-0.577349" />
+			<normal x="0.577349" y="-0.577349" z="-0.577349" />
+			<normal x="0.577349" y="-0.577349" z="0.577349" />
+			<normal x="-0.577349" y="-0.577349" z="0.577349" />
+			<normal x="-0.577349" y="-0.577349" z="-0.577349" />
+			<normal x="-0.577349" y="0.577349" z="-0.577349" />
+			<normal x="0.577349" y="0.577349" z="-0.577349" />
+			<normal x="0.577349" y="-0.577349" z="-0.577349" />
+			<normal x="0.577349" y="-0.577349" z="0.577349" />
+			<normal x="0.577349" y="0.577349" z="0.577349" />
+			<normal x="-0.577349" y="0.577349" z="0.577349" />
+			<normal x="-0.577349" y="-0.577349" z="0.577349" />
+		</Normals>
+		<TexCoords num="24" mapChannels="0">
+			<texCoord x="-15.598028" y="0.568198" />
+			<texCoord x="16.499573" y="0.666668" />
+			<texCoord x="16.598043" y="-31.430935" />
+			<texCoord x="-15.499559" y="-31.529408" />
+			<texCoord x="-47.695625" y="0.666662" />
+			<texCoord x="-47.794106" y="32.764271" />
+			<texCoord x="-15.696503" y="32.862743" />
+			<texCoord x="-15.598028" y="0.765140" />
+			<texCoord x="48.794106" y="-31.430931" />
+			<texCoord x="16.696507" y="-31.529392" />
+			<texCoord x="16.598043" y="0.568204" />
+			<texCoord x="48.695641" y="0.666668" />
+			<texCoord x="16.499573" y="32.862743" />
+			<texCoord x="16.598043" y="0.765138" />
+			<texCoord x="-15.499559" y="0.666668" />
+			<texCoord x="-15.598028" y="32.764271" />
+			<texCoord x="-15.598028" y="-31.430935" />
+			<texCoord x="-47.695625" y="-31.529408" />
+			<texCoord x="-47.794098" y="0.568190" />
+			<texCoord x="-15.696503" y="0.666662" />
+			<texCoord x="16.598043" y="32.764267" />
+			<texCoord x="48.695637" y="32.862736" />
+			<texCoord x="48.794106" y="0.765140" />
+			<texCoord x="16.696512" y="0.666668" />
+		</TexCoords>
+		<Indices num="36">
+			<index value="0" />
+			<index value="1" />
+			<index value="2" />
+			<index value="2" />
+			<index value="3" />
+			<index value="0" />
+			<index value="4" />
+			<index value="5" />
+			<index value="6" />
+			<index value="6" />
+			<index value="7" />
+			<index value="4" />
+			<index value="8" />
+			<index value="9" />
+			<index value="10" />
+			<index value="10" />
+			<index value="11" />
+			<index value="8" />
+			<index value="12" />
+			<index value="13" />
+			<index value="14" />
+			<index value="14" />
+			<index value="15" />
+			<index value="12" />
+			<index value="16" />
+			<index value="17" />
+			<index value="18" />
+			<index value="18" />
+			<index value="19" />
+			<index value="16" />
+			<index value="20" />
+			<index value="21" />
+			<index value="22" />
+			<index value="22" />
+			<index value="23" />
+			<index value="20" />
+		</Indices>
+		<Displays num="1">
+			<display primType="triangles" begin="0" size="36" material="0" cullFace="2" />
+		</Displays>
+	</SubMesh>
+</SubMeshs>
+
+</Mesh>
+
+</Maratis>

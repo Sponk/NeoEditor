@@ -14,7 +14,7 @@ in vec2 texCoord;
 in vec3 position;
 in vec3 normal;
 in vec3 tangent;
-in mat3 normalMatrix;
+in vec3 color;
 
 layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 Normal;
@@ -25,7 +25,10 @@ void main(void)
     if(TextureMode > 0)
 	FragColor = vec4(Emit, 0.0) + texture2D(Textures[0], texCoord);
     else
-	FragColor = vec4(Diffuse,1.0);
+	FragColor = vec4(Diffuse+color,1.0);
+
+    if(FragColor.a < 1.0)
+	discard;
 
     if(TextureMode >= 2)
 	Normal = vec4(normalize(normal+(texture2D(Textures[2], texCoord).xyz * 2 - 1)), Shininess);
