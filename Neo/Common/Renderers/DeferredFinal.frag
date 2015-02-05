@@ -1,6 +1,7 @@
 #version 330
 
 #define MAX_ENTITY_LIGHTS 256
+#define SPECULAR_MULTIPLIER 3.0
 
 struct LightInfo
 {
@@ -61,9 +62,9 @@ vec3 lambertModel(vec3 pos, vec3 n, vec3 tex, vec3 Ks, LightInfo light, float sh
     vec3 Ka = vec3(0);
 
     vec3 diffuse = (Ka + light.Diffuse *  max( 0.0,dot(n, s)));
-    vec3 spec = Ks * pow(max(0.0, dot(r,s)), shininess);
+    vec3 spec = Ks * pow(max(0.0, dot(r,v)), shininess * SPECULAR_MULTIPLIER);
 
-    return tex * light.Intensity * (diffuse + spec) * attenuation;
+    return tex * light.Intensity * (spec + diffuse) * attenuation; //(diffuse + spec);
 }
 
 void main(void)
@@ -91,10 +92,11 @@ void main(void)
    //else
    //{
     //if(texCoord.x > 0.5)
-	//FragColor = texture2D(Textures[3], texCoord);
+      //  FragColor = texture2D(Textures[3], texCoord);
 
     //if(texCoord.x > 0.5 && texCoord.y < 0.5)
-	//FragColor = texture2D(Textures[1], texCoord);
+      //  FragColor = texture2D(Textures[1], texCoord);
+
     //FragColor.a = 1.0;
 	//}
 

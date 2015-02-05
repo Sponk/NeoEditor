@@ -31,7 +31,7 @@ void main(void)
 	discard;
 
     if(TextureMode >= 2)
-	Normal = vec4(normalize(normal+(texture2D(Textures[2], texCoord).xyz * 2 - 1)), Shininess);
+        Normal = vec4(normalize(normal+(texture2D(Textures[2], texCoord).xyz * 3 - 1)), Shininess);
     else
 	Normal = vec4(normal, Shininess);
 

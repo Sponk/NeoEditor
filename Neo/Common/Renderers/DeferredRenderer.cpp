@@ -555,7 +555,7 @@ void DeferredRenderer::sendLight(unsigned int fx, OLight* l, int num, MMatrix4x4
     render->sendUniformFloat(fx, ending, &quadraticAttenuation);
 
     // Constant attenuation = 1
-    float attenuation = 1.5;
+    float attenuation = 2.0;
     strcpy(ending, str);
     strcat(ending, "ConstantAttenuation");
     render->sendUniformFloat(fx, ending, &attenuation);

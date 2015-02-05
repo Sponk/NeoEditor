@@ -33,7 +33,7 @@
 namespace Neo
 {
 
-class M_ENGINE_EXPORT DeferredRenderer: public Renderer
+class DeferredRenderer: public Renderer
 {
 	FXRef* m_shaders[DEFERRED_SHADERS];
     unsigned int m_fx[DEFERRED_SHADERS];
