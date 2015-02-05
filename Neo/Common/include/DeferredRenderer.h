@@ -63,7 +63,7 @@ class DeferredRenderer: public Renderer
     void initFramebuffers();
     void clearFramebuffers();
 
-    void renderFinalImage(OCamera* camera);
+    void renderFinalImage(Scene *scene, OCamera* camera);
 
     void set2D(unsigned int w, unsigned int h);
     void drawQuad(int fx);

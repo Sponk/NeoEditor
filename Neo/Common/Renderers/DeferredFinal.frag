@@ -1,7 +1,6 @@
 #version 330
 
 #define MAX_ENTITY_LIGHTS 256
-#define SPECULAR_MULTIPLIER 3.0
 
 struct LightInfo
 {
@@ -18,6 +17,8 @@ struct LightInfo
 
 uniform LightInfo lights[MAX_ENTITY_LIGHTS];
 uniform int LightsCount;
+
+uniform vec3 AmbientLight;
 
 uniform int Width;
 uniform int Height;
@@ -51,18 +52,13 @@ vec3 lambertModel(vec3 pos, vec3 n, vec3 tex, vec3 Ks, LightInfo light, float sh
     vec3 lightDistance = light.Position - pos;
     float lightDistance2 = dot(lightDistance, lightDistance);
 
-    //if(lightDistance2 > light.Radius)
-	//return vec3(0.0,0.0,0.0);
-
     vec3 s = normalize(lightDistance);
     vec3 v = normalize(-pos);
     vec3 r = reflect(s, n);
     float attenuation = (1.0 / (light.ConstantAttenuation + (lightDistance2 * light.QuadraticAttenuation)));
 
-    vec3 Ka = vec3(0);
-
-    vec3 diffuse = (Ka + light.Diffuse *  max( 0.0,dot(n, s)));
-    vec3 spec = Ks * pow(max(0.0, dot(r,v)), shininess * SPECULAR_MULTIPLIER);
+    vec3 diffuse = (light.Diffuse *  max( 0.0,dot(n, s)));
+    vec3 spec = Ks * pow(max(0.0, dot(r,v)), shininess);
 
     return tex * light.Intensity * (spec + diffuse) * attenuation; //(diffuse + spec);
 }
@@ -82,7 +78,7 @@ void main(void)
    vec4 position = texture2D(Textures[3], texCoord);
 
 
-   FragColor = vec4(0.0,0.0,0.0,0.0);
+   FragColor = vec4(AmbientLight, 1.0); //vec4(0.0,0.0,0.0,0.0);
    for(int i = 0; i < LightsCount; i++)
    {
        //FragColor = FragColor + vec4(diffuseModel(position.rgb, normal.rgb, currentPixel.rgb, position.aaa, lights[i].Position, lights[i].Diffuse, lights[i].Intensity, normal.a), 1.0);

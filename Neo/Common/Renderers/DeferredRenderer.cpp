@@ -512,7 +512,7 @@ void DeferredRenderer::drawScene(Scene* scene, OCamera* camera)
 
     // finish render to texture
     render->bindFrameBuffer(currentFrameBuffer);
-    renderFinalImage(camera);
+    renderFinalImage(scene, camera);
 }
 
 void DeferredRenderer::sendLight(unsigned int fx, OLight* l, int num, MMatrix4x4 matrix)
@@ -567,7 +567,7 @@ void DeferredRenderer::sendLight(unsigned int fx, OLight* l, int num, MMatrix4x4
     render->sendUniformFloat(fx, ending, &attenuation);
 }
 
-void DeferredRenderer::renderFinalImage(OCamera* camera)
+void DeferredRenderer::renderFinalImage(Scene* scene, OCamera* camera)
 {
     MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
     MSystemContext * system = NeoEngine::getInstance()->getSystemContext();
@@ -592,6 +592,10 @@ void DeferredRenderer::renderFinalImage(OCamera* camera)
 
     // Set cull mode
     render->setCullMode(M_CULL_BACK);
+
+    // Send some data
+    MVector3 ambientLight = scene->getAmbientLight();
+    render->sendUniformVec3(m_fx[1], "AmbientLight", ambientLight);
 
     // Send light data
     m_lightUpdateSemaphore->WaitAndLock();
