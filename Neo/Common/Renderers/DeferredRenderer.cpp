@@ -303,7 +303,7 @@ void DeferredRenderer::drawGBuffer(Scene* scene, OCamera* camera)
 	{
         entity = scene->getEntityByIndex(i);
 
-        if(entity->isVisible() && entity->isActive())
+        if(entity->isVisible() && entity->isActive() && !entity->isInvisible())
         {
             render->setMatrixMode(M_MATRIX_MODELVIEW);
             render->loadIdentity();
