@@ -23,6 +23,7 @@ out vec3 color;
 void main(void)
 {
     gl_Position = ProjModelViewMatrix * vec4(Vertex, 1.0);
+    //position = normalize(Vertex);//normalize(mat3(ModelViewMatrix) * Vertex);
     position = normalize(gl_Position.xyz);
 
     normal = normalize(mat3(NormalMatrix) * Normal);

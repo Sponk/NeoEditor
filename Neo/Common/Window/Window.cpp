@@ -772,8 +772,8 @@ bool NeoWindow::create(const char * title, unsigned int width, unsigned int heig
 	SDL_VERSION(&compiled);
 	SDL_GetVersion(&linked);
 
-	fprintf(stdout, "Info\t SDL compiled version : %d.%d.%d\n", compiled.major, compiled.minor, compiled.patch);
-	fprintf(stdout, "Info\t SDL linked version : %d.%d.%d\n", linked.major, linked.minor, linked.patch);
+    MLOG_INFO("SDL compiled version: " << (int) compiled.major << "." << (int) compiled.minor << "." << (int) compiled.patch);
+    MLOG_INFO("SDL linked version: " << (int)linked.major << "." << (int)linked.minor << "." << (int)linked.patch);
 #endif
 
     // TODO: Haptic feedback

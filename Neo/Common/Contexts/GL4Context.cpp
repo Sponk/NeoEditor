@@ -183,7 +183,8 @@ void GL4Context::init()
     if(m_gl_version != NULL)
         return;
 
-    MLOG_INFO("Initializing GL4 context");
+    MLOG_INFO("********************************************************************************");
+    MLOG_INFO("Initializing OpenGL context");
 
     glewExperimental = GL_TRUE;
     GLenum err = glewInit();
@@ -234,6 +235,7 @@ void GL4Context::init()
 
     // anisotropic filtering
     glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
+    MLOG_INFO("********************************************************************************");
 }
 
 // view
