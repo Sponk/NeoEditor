@@ -4,6 +4,9 @@ uniform mat4 ProjModelViewMatrix;
 uniform mat4 ModelViewMatrix;
 
 uniform mat4 NormalMatrix;
+uniform mat4 ModelMatrix;
+
+uniform vec3 ObjectPosition;
 
 in vec3 Vertex;
 in vec2 TexCoord;
@@ -23,8 +26,9 @@ out vec3 color;
 void main(void)
 {
     gl_Position = ProjModelViewMatrix * vec4(Vertex, 1.0);
-    //position = normalize(Vertex);//normalize(mat3(ModelViewMatrix) * Vertex);
-    position = normalize(gl_Position.xyz);
+    position = vec3(ModelViewMatrix * vec4(Vertex, 0.0));
+    //position = (ModelViewMatrix * vec4(Vertex, 1.0)).xyz;
+    //position = mat3(ModelViewMatrix) * Vertex;
 
     normal = normalize(mat3(NormalMatrix) * Normal);
     texCoord = TexCoord;

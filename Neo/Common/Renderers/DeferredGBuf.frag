@@ -31,15 +31,22 @@ void main(void)
 	discard;
 
     if(TextureMode >= 2)
-        Normal = vec4(normalize(normal+(texture2D(Textures[2], texCoord).xyz * 3 - 1)), Shininess);
+    {
+        vec3 bi = normalize(cross(normal, tangent));
+        vec3 tan = normalize(tangent.xyz);
+
+        vec3 bump = normalize(texture2D(Textures[2], texCoord).xyz * 2.0 - 1.0);
+        Normal = vec4(normalize(tan*bump.x + bi*bump.y + normal*bump.z), Shininess);
+        //Normal = vec4(normalize(normal+(texture2D(Textures[2], texCoord).xyz * 3 - 1)), Shininess);
+    }
     else
 	Normal = vec4(normal, Shininess);
 
     if(TextureMode >= 3)
     {
 	vec4 spec = texture2D(Textures[3], texCoord);
-	Position = vec4(position, (spec.r + spec.b + spec.g) / 3);
+        Position = vec4(position.xyz, (spec.r + spec.b + spec.g) / 3);
     }
     else
-	Position = vec4(position, (Specular.r + Specular.b + Specular.g) / 3);
+        Position = vec4(position.xyz, (Specular.r + Specular.b + Specular.g) / 3);
 }

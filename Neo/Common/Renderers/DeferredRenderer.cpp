@@ -227,13 +227,16 @@ void DeferredRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
     render->getModelViewMatrix(&modelMatrix);
     render->getProjectionMatrix(&projectionMatrix);
     modelViewMatrix = (modelViewMatrix * modelMatrix);
-    normalMatrix = (modelViewMatrix.getInverse()).getTranspose();
+    normalMatrix = modelViewMatrix.getInverse().getTranspose();//(modelViewMatrix.getInverse()).getTranspose();
 
     projectionMatrix = projectionMatrix * modelViewMatrix;
 
     // Send uniforms
     render->sendUniformMatrix(m_fx[0], "ProjModelViewMatrix", &projectionMatrix);
     render->sendUniformMatrix(m_fx[0], "ModelViewMatrix", &modelViewMatrix);
+
+    MVector3 objectPosition = modelMatrix.getTranslationPart();
+    render->sendUniformVec3(m_fx[0], "ObjectPosition", objectPosition);
 
 /*	float m_shininess;
     float m_customValue;
@@ -526,7 +529,8 @@ void DeferredRenderer::sendLight(unsigned int fx, OLight* l, int num, MMatrix4x4
 
     strcpy(ending, str);
     strcat(ending, "Position");
-    render->sendUniformVec3(fx, ending, matrix*l->getTransformedPosition());
+    MVector3 position = l->getTransformedPosition();
+    render->sendUniformVec3(fx, ending, matrix*position);
 
     strcpy(ending, str);
     strcat(ending, "Diffuse");
@@ -542,9 +546,24 @@ void DeferredRenderer::sendLight(unsigned int fx, OLight* l, int num, MMatrix4x4
     strcat(ending, "Radius");
     render->sendUniformFloat(fx, ending, &radius);
 
+    float spotAngle = cosf(l->getSpotAngle()*DEG_TO_RAD);
+    strcpy(ending, str);
+    strcat(ending, "SpotCos");
+    render->sendUniformFloat(fx, ending, &spotAngle);
+
+    float spotExponent = l->getSpotExponent();
+    strcpy(ending, str);
+    strcat(ending, "SpotExp");
+    render->sendUniformFloat(fx, ending, &spotExponent);
+
+    strcpy(ending, str);
+    strcat(ending, "SpotDir");
+    MVector3 spotDirection = l->getRotatedVector(MVector3(0, 0, -1)).getNormalized();
+    render->sendUniformVec3(fx, ending, spotDirection);
+
     float quadraticAttenuation = 0.0;
     // attenuation
-    if(l->getSpotAngle() > 0.0f)
+    if(spotAngle > 0.0f)
     {
         quadraticAttenuation = (8.0f / l->getRadius());
         quadraticAttenuation = (quadraticAttenuation*quadraticAttenuation)*l->getIntensity();
@@ -555,7 +574,7 @@ void DeferredRenderer::sendLight(unsigned int fx, OLight* l, int num, MMatrix4x4
     render->sendUniformFloat(fx, ending, &quadraticAttenuation);
 
     // Constant attenuation = 1
-    float attenuation = 2.0;
+    float attenuation = 1.0;
     strcpy(ending, str);
     strcat(ending, "ConstantAttenuation");
     render->sendUniformFloat(fx, ending, &attenuation);
@@ -600,8 +619,14 @@ void DeferredRenderer::renderFinalImage(Scene* scene, OCamera* camera)
     // Send light data
     m_lightUpdateSemaphore->WaitAndLock();
 
-    MMatrix4x4 camMat = *camera->getCurrentViewMatrix();
+    MMatrix4x4 camMat;
+    camMat = *camera->getCurrentViewMatrix();
     camMat.setTranslationPart(MVector3(0,0,0));
+    //camMat.setRotationPartEuler(0,0,0);
+    //camMat.loadIdentity();
+
+    //camMat.loadIdentity();
+    //camMat.translate(MVector3(0,0,10));
 
     render->sendUniformInt(m_fx[1], "LightsCount", &m_numVisibleLights);
     for(int i = 0; i < m_numVisibleLights; i++)

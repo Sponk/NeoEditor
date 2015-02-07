@@ -22,7 +22,7 @@
 				radius="1000.000000"
 				color="1.000000 1.000000 1.000000"
 				intensity="1.000000"
-				spotAngle="180.000000"
+				spotAngle="0.000000"
 				spotExponent="0.000000"
 				shadow="false" />
 		</Light>
@@ -44,18 +44,19 @@
 				skyboxTextures="maps/skybox" />
 		</Camera>
 		<Entity name="Cube1" file="../meshs/barrel02.mesh">
+			<BoundingBox min="-0.918999 -0.918999 -1.189882" max="0.918999 0.918999 1.513789" />
 			<anim id="0" />
 			<active value="true" />
 			<transform 
-				position="0.000000 10.000000 -30"
+				position="3.630702 9.343395 -54.158451"
 				rotation="0.000000 -0.000000 0.000000"
-				scale="30 30 30" />
+				scale="30.000000 30.000000 30.000000" />
 			<properties 
 				invisible="false"
 				shadow="true"
 				occluder="false" />
 			<physics 
-				shape="Box"
+				shape="ConvexHull"
 				ghost="false"
 				mass="0.000000"
 				friction="0.500000"
@@ -407,6 +408,59 @@
 				angularFactor="1.000000"
 				linearFactor="1.000000 1.000000 1.000000" />
 		</Entity>
+		<Entity name="Entity1" file="../meshs/box-notex.mesh">
+			<BoundingBox min="-5.000000 -5.000000 -5.000000" max="5.000000 5.000000 5.000000" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="-15.974398 -10.995452 0.272231"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
+		<Entity name="Entity12" file="../meshs/box-notex.mesh">
+			<BoundingBox min="-5.000000 -5.000000 -5.000000" max="5.000000 5.000000 5.000000" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="-0.186378 -10.995452 0.272231"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
+		<Entity name="Entity121" file="../meshs/box-notex.mesh">
+			<BoundingBox min="-5.000000 -5.000000 -5.000000" max="5.000000 5.000000 5.000000" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="15.597957 -10.995452 0.272231"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
+		<Entity name="Entity1211" file="../meshs/box-notex.mesh">
+			<BoundingBox min="-5.000000 -5.000000 -5.000000" max="5.000000 5.000000 5.000000" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="30.759560 -10.995452 0.272231"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
+
 	</Scene>
 
 </Level>
