@@ -4591,6 +4591,19 @@ int getWorkingDirectory()
 	return 1;
 }
 
+int loadTextFile()
+{
+    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+    if(!isFunctionOk(script, "loadTextFile", 1))
+        return 0;
+
+    const char* content = readTextFile(script->getString(0));
+    script->pushString(content);
+
+    return 1;
+}
+
 void Neo::bindLuaApi(MScriptContext* context)
 {
 	context->addFunction( "vec3", vec3);
@@ -4816,4 +4829,5 @@ void Neo::bindLuaApi(MScriptContext* context)
 	context->addFunction( "getSystemTick",	getSystemTick);
 	context->addFunction( "quit",			quit);
 	context->addFunction( "getWorkingDirectory", getWorkingDirectory);
+    context->addFunction("loadTextFile", loadTextFile);
 }
