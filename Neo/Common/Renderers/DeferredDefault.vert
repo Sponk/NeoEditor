@@ -26,7 +26,8 @@ out vec3 color;
 void main(void)
 {
     gl_Position = ProjModelViewMatrix * vec4(Vertex, 1.0);
-    position = vec3(ModelViewMatrix * vec4(Vertex, 0.0));
+    vec4 tmp = ModelViewMatrix * vec4(Vertex, 1.0);
+    position = tmp.xyz;
     //position = (ModelViewMatrix * vec4(Vertex, 1.0)).xyz;
     //position = mat3(ModelViewMatrix) * Vertex;
 

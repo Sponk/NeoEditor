@@ -621,12 +621,6 @@ void DeferredRenderer::renderFinalImage(Scene* scene, OCamera* camera)
 
     MMatrix4x4 camMat;
     camMat = *camera->getCurrentViewMatrix();
-    camMat.setTranslationPart(MVector3(0,0,0));
-    //camMat.setRotationPartEuler(0,0,0);
-    //camMat.loadIdentity();
-
-    //camMat.loadIdentity();
-    //camMat.translate(MVector3(0,0,10));
 
     render->sendUniformInt(m_fx[1], "LightsCount", &m_numVisibleLights);
     for(int i = 0; i < m_numVisibleLights; i++)

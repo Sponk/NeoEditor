@@ -156,8 +156,8 @@ void main(void)
     if(texCoord.x < 0.5)
         FragColor = texture2D(Textures[3], texCoord);
 
-    if(texCoord.x < 0.5 && texCoord.y < 0.5)
-        FragColor = abs(texture2D(Textures[1], texCoord));
+   // if(texCoord.x < 0.5 && texCoord.y < 0.5)
+     //   FragColor = abs(texture2D(Textures[1], texCoord));
 
     //FragColor = normalize(vec4(abs(lights[0].Position), 1.0));
 
