@@ -49,6 +49,7 @@ void Sprite::draw()
     GuiSystem* gui = GuiSystem::getInstance();
     MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
     Level* level = NeoEngine::getInstance()->getLevel();
+    OCamera* camera = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getCurrentCamera();
 
     if(m_labelText == NULL)
     {
@@ -63,7 +64,25 @@ void Sprite::draw()
         m_image = level->loadTexture(buf)->getTextureId();
     }
 
-    render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_image, m_rotation);
+    //If this sprite is allowed to ignore the camera then it must stay at the same position even if the camera is moving
+    if (!m_ignorCamera) {
+        MVector3 m = camera->getPosition();
+        float x = -m.x + gui->_camera_offset.x;
+        float y = m.y + gui->_camera_offset.y;
+        render->drawTexturedQuad(m_x + x, m_y + y, m_width, m_height, m_image,m_rotation, m_scale, m_flip);
+
+        if (m_label.length() > 0) {
+                m_labelText->setText(m_label.c_str());
+                render->drawText(m_labelText, x + m_x + 0.5 * m_width,y + m_y + m_height);
+            }
+        } else {
+            render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_image,
+                    m_rotation, m_scale, m_flip);
+            if (m_label.length() > 0) {
+                m_labelText->setText(m_label.c_str());
+                render->drawText(m_labelText, m_x + 0.5 * m_width, m_y + m_height);
+            }
+        }
 
     if(m_label.length() > 0)
     {
