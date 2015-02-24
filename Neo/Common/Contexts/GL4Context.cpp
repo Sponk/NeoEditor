@@ -177,6 +177,68 @@ GL4Context::~GL4Context()
 {
 }
 
+#ifdef GL_DEBUG
+void openglCallbackFunction(GLenum source, GLenum type, GLuint id, GLenum
+                            severity, GLsizei length, GLchar* message, void* userParam)
+{
+
+    MLOG_INFO("--------------------- BEGIN OPENGL DEBUG MESSAGE -------------------");
+
+    int size = strlen(message);
+    if(size > 0 && message[size-1] == '\n')
+        message[size-1] = '\0';
+
+    stringstream ss;
+
+    ss << "\tType: ";
+
+    switch (type)
+    {
+    case GL_DEBUG_TYPE_ERROR:
+        ss << "ERROR";
+        break;
+    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+        ss << "DEPRECATED_BEHAVIOR";
+        break;
+    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+        ss << "UNDEFINED_BEHAVIOR";
+        break;
+    case GL_DEBUG_TYPE_PORTABILITY:
+        ss << "PORTABILITY";
+        break;
+    case GL_DEBUG_TYPE_PERFORMANCE:
+        ss << "PERFORMANCE";
+        break;
+    case GL_DEBUG_TYPE_OTHER:
+        ss << "OTHER";
+        break;
+    }
+    ss << endl;
+
+    ss << "\tMessage: "<< message << endl;
+
+    ss << "\tID: " << id << endl;
+    ss << "\tSeverity: ";
+
+    switch (severity)
+    {
+    case GL_DEBUG_SEVERITY_LOW:
+        ss << "LOW";
+        break;
+    case GL_DEBUG_SEVERITY_MEDIUM:
+        ss << "MEDIUM";
+        break;
+    case GL_DEBUG_SEVERITY_HIGH:
+        ss << "HIGH";
+        break;
+    }
+    ss << endl << endl;
+
+    MLOG_INFO(ss.str());
+    MLOG_INFO("--------------------- END OPENGL DEBUG MESSAGE ---------------------");
+}
+#endif
+
 void GL4Context::init()
 {
     // Do not initialize twice!
@@ -193,6 +255,15 @@ void GL4Context::init()
         MLOG_ERROR("Can't initialize GLEW: " << glewGetErrorString(err));
         return;
     }
+
+#ifdef GL_DEBUG
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glDebugMessageCallback((GLDEBUGPROC) openglCallbackFunction, NULL);
+
+    GLuint unusedIds = 0;
+    glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, &unusedIds,
+                            true);
+#endif
 
     m_matrixStep = 0;
     m_matrixMode = M_MATRIX_MODELVIEW;
@@ -545,8 +616,10 @@ void GL4Context::setDrawingBuffers(M_FRAME_BUFFER_ATTACHMENT * buffers, unsigned
 {
     if(size == 0)
     {
-        glDrawBuffer(GL_NONE);
-        glReadBuffer(GL_NONE);
+        //glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+        //glDrawBuffer(GL_NONE);
+        //glDrawBuffer(GL_NONE);
+        //glReadBuffer(GL_NONE);
     }
     else
     {
@@ -558,8 +631,8 @@ void GL4Context::setDrawingBuffers(M_FRAME_BUFFER_ATTACHMENT * buffers, unsigned
 
         glDrawBuffers(size, glBuffers);
 
-        glDrawBuffer(GL_BACK);
-        glReadBuffer(GL_BACK);
+        //glDrawBuffer(GL_BACK);
+        //glReadBuffer(GL_BACK);
     }
 }
 

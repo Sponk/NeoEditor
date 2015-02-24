@@ -804,6 +804,10 @@ bool NeoWindow::create(const char * title, unsigned int width, unsigned int heig
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 #endif
 
+#ifdef GL_DEBUG
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+#endif
+
 	g_context = SDL_GL_CreateContext(g_NeoWindow);
 	SDL_GL_MakeCurrent(g_NeoWindow, g_context);
 

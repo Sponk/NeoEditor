@@ -47,7 +47,7 @@ ADD_LIBRARY(NeoCommon STATIC ${SOURCES} ${MAC_SOURCES} ${HEADERS})
 # Needed for windows
 TARGET_LINK_LIBRARIES(NeoCommon ${MCORE_LIBRARIES} ${MENGINE_LIBRARIES} ${SDL_LIBRARIES})
 
-ADD_DEFINITIONS(-DSHADER_PATH="Renderers")
+ADD_DEFINITIONS(-DSHADER_PATH="Renderers" -DGL_DEBUG)
 
 # Copy shaders
 copy_files("Renderers/*.vert" "${NEO_BINARY_OUTPUT}/shaders" "copy-vert-shaders")
