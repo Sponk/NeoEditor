@@ -1,10 +1,6 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// Maratis.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 //  Maratis, Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+//  Neo, Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -27,18 +23,19 @@
 // For linking Glew
 #define GLEW_STATIC
 
-// GL, TODO : remove opengl call (should use MRenderingContext to be fully virtual)
+// GL, TODO : remove opengl call (should use MRenderingContext to be fully
+// virtual)
 #ifdef _WIN32
-    #include <glew.h>
+#include <glew.h>
 #elif __APPLE__
-    #include <OpenGL/OpenGL.h>
-    #include <OpenGL/gl.h>
-    #include <sys/stat.h>
-#elif (defined(LINUX) && !defined(USE_GLES))
-    #include <glew.h>
-    #include <sys/stat.h>
+#include <OpenGL/OpenGL.h>
+#include <OpenGL/gl.h>
+#include <sys/stat.h>
+#elif(defined(LINUX) && !defined(USE_GLES))
+#include <glew.h>
+#include <sys/stat.h>
 #else
-    #include <sys/stat.h>
+#include <sys/stat.h>
 #endif
 
 // Maratis Common
@@ -94,28 +91,27 @@
 using namespace Neo;
 
 // add ext if not
-void fileExtension(char * out, const char * in, const char * ext)
+void fileExtension(char *out, const char *in, const char *ext)
 {
-    int extLen = strlen(ext);
+	int extLen = strlen(ext);
 
-    int extId = strlen(in) - extLen;
-    if(extId < 0)
-        extId = 0;
+	int extId = strlen(in) - extLen;
+	if (extId < 0)
+		extId = 0;
 
-    char copy[256];
+	char copy[256];
 
-    // *.level
-    if(strncmp(in + extId, ext, extLen))
-    {
-        sprintf(copy, "%s%s", in, ext);
-        strcpy(out, copy);
-    }
-    else
-    {
-        strcpy(out, in);
-    }
+	// *.level
+	if (strncmp(in + extId, ext, extLen))
+	{
+		sprintf(copy, "%s%s", in, ext);
+		strcpy(out, copy);
+	}
+	else
+	{
+		strcpy(out, in);
+	}
 }
-
 
 // Skin cache
 class MSkinCache
