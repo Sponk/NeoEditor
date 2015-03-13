@@ -1,11 +1,11 @@
 --- Author: Murii
 
-Quad = {}
-Quad.__index = Quad
+QuadTree = {}
+QuadTree.__index = QuadTree
 
-function Quad.create()
+function QuadTree.create()
 	local self = {}
-	setmetatable(self, Quad)
+	setmetatable(self, QuadTree)
 
 	-- local references to common functions
 	self.table = table
@@ -30,7 +30,7 @@ function Quad.create()
 	return self
 end
 --- Creates new cell
-function Quad:createCell(p, r, x, y, s)
+function QuadTree:createCell(p, r, x, y, s)
   local c
   -- are there any unused cells in the pool?
   if #self.deadcells == 0 then
@@ -53,7 +53,7 @@ function Quad:createCell(p, r, x, y, s)
 end
 
 --- Destroys existing cell
-function Quad:destroyCell(c)
+function QuadTree:destroyCell(c)
   -- delete reference from parent to child
   if c.parent then
     c.parent[c.relation] = nil
@@ -68,7 +68,7 @@ function Quad:destroyCell(c)
 end
 
 --- Returns number of child cells
-function Quad:getChildCount(c)
+function QuadTree:getChildCount(c)
   local n = 0
   for _, v in self.ipairs(self.dirs) do
     if c[v] then
@@ -79,12 +79,12 @@ function Quad:getChildCount(c)
 end
 
 --- Returns true if cell has child cells
-function Quad:hasChildren(c)
+function QuadTree:hasChildren(c)
   return c.nw ~= nil or c.sw ~= nil or c.ne ~= nil or c.se ~= nil
 end
 
 --- Returns true if object fits entirely inside cell
-function Quad:fitsInCell(c, x, y, s)
+function QuadTree:fitsInCell(c, x, y, s)
   local dx = self.abs(c.x - x)
   local dy = self.abs(c.y - y)
   local e = c.side/4
@@ -92,7 +92,7 @@ function Quad:fitsInCell(c, x, y, s)
 end
 
 --- Returns child cell direction and offset
-function Quad:getDirection(c, x, y)
+function QuadTree:getDirection(c, x, y)
   local d, ox, oy
   if x < c.x then
     if y < c.y then
@@ -112,7 +112,7 @@ end
 
 --- Returns cell which fits an object of given size
 -- creates the cell if necessary
-function Quad:getCell(c, x, y, s)
+function QuadTree:getCell(c, x, y, s)
   -- object fits inside this cell?
   local q = c.side/2
   if s*2 > q or q < self.mincellsize then
@@ -132,7 +132,7 @@ function Quad:getCell(c, x, y, s)
 end
 
 --- Select all objects in a cell
-function Quad:selectCellAll(root, dest)
+function QuadTree:selectCellAll(root, dest)
   -- insert all objects in this cell
   for i, v in self.ipairs(root) do
     self.tinsert(dest, v)
@@ -146,7 +146,7 @@ function Quad:selectCellAll(root, dest)
 end
 
 --- Select objects in range
-function Quad:selectCell(root, dest, x, y, hw, hh)
+function QuadTree:selectCell(root, dest, x, y, hw, hh)
   -- insert all objects in this cell
   for _, v in self.ipairs(root) do
     self.tinsert(dest, v)
@@ -172,7 +172,7 @@ function Quad:selectCell(root, dest, x, y, hw, hh)
 end
 
 --- Trim empty cells from bottom up
-function Quad:trimBottom(c)
+function QuadTree:trimBottom(c)
   while c and #c == 0 and not self:hasChildren(c) do
     local p = c.parent
     self:destroyCell(c)
@@ -183,7 +183,7 @@ end
 
 --- Trim the top of the quadtree deleting
 -- root nodes if they only have a single child
-function Quad:trimTop()
+function QuadTree:trimTop()
   while self.root and #self.root == 0 do
     -- root has one child only?
     local children = self:getChildCount(self.root)
@@ -210,7 +210,7 @@ end
 
 
 --- Insert new object
-function Quad:insert(object, x, y, hw, hh)
+function QuadTree:insert(object, x, y, hw, hh)
   local s = math.max(hw, hh)
   --assert(s > 0)
   -- remove object from current cell
@@ -254,7 +254,7 @@ function Quad:insert(object, x, y, hw, hh)
 end
 
 --- Remove object
-function Quad:remove(object)
+function QuadTree:remove(object)
   local c = self.handles[object]
   -- removing a non-existing object?
   if c == nil then
@@ -273,14 +273,14 @@ function Quad:remove(object)
 end
 
 --- Select objects in range
-function Quad:select(dest, x, y, hw, hh)
+function QuadTree:select(dest, x, y, hw, hh)
   if self.root then
     self:selectCell(self.root, dest, x, y, hw, hh);
   end
 end
 
 --- Select objects in range
-function Quad:selectAABB(dest, l, t, r, b)
+function QuadTree:selectAABB(dest, l, t, r, b)
   -- realign aabb if necessary
   if l > r then
     l, r = r, l
@@ -295,7 +295,7 @@ function Quad:selectAABB(dest, l, t, r, b)
 end
 
 --- Selects all objects
-function Quad:selectAll(dest, x, y, hw, hh)
+function QuadTree:selectAll(dest, x, y, hw, hh)
   if self.root then
     self:selectCellAll(self.root, dest)
   end
