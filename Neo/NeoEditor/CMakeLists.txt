@@ -79,3 +79,6 @@ TARGET_LINK_LIBRARIES(neo-editor
 )
 
 INSTALL(TARGETS neo-editor DESTINATION ${NEO_INSTALL_DIR})
+
+add_custom_target(neo-editor-test "${NEO_BINARY_OUTPUT}/neo-editor" WORKING_DIRECTORY ${NEO_BINARY_OUTPUT})
+add_dependencies(neo-editor-test neo-editor)
