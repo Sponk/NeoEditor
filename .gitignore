@@ -17,3 +17,4 @@ Additional/AndroidApp/assets/*
 .directory
 profile.txt
 *.kdev4
+*.*~

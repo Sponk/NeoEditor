@@ -134,7 +134,7 @@ int getCurrentSelection()
     Maratis* maratis = Maratis::getInstance();
 
     // FIXME: Pointers have 64bit size on 64bit machines! DON'T USE FLOAT
-    int* objects = new int[maratis->getSelectedObjectsNumber()];
+    int* objects = (int*) new long int[maratis->getSelectedObjectsNumber()];
 
     for(int i = 0; i < maratis->getSelectedObjectsNumber(); i++)
     {
@@ -143,9 +143,40 @@ int getCurrentSelection()
     }
 
     script->pushIntArray(objects, maratis->getSelectedObjectsNumber());
-    delete[] objects;
+    delete[] (long int*) objects;
 
     return 1;
+}
+
+int renameObject()
+{
+	MPluginScript* script =
+		(MPluginScript*)NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("renameObject", 2))
+		return 0;
+
+	Object3d* object = (Object3d*)script->getPointer(0);
+
+	if (!object)
+		return 0;
+
+	const char* newName = script->getString(1);
+	if (NeoEngine::getInstance()
+			->getLevel()
+			->getCurrentScene()
+			->getObjectByName(newName) != NULL)
+	{
+		MLOG_ERROR("Can't rename object to '"
+				   << newName << "': Object with this name already exists!");
+		return 0;
+	}
+
+	object->setName(newName);
+
+    update_scene_tree();
+    window.glbox->redraw();
+	return 1;
 }
 
 int getSelectionCenter()
@@ -367,7 +398,7 @@ int debugLog()
         return 0;
 
     string output = script->getName() + ": " + script->getString(0);
-    pluginOutput.append(("[ Info ] " + output).c_str());
+    pluginOutput.append(("[ Info ] " + output + "\n").c_str());
     MLOG_INFO(output.c_str());
 
     return 1;
@@ -391,6 +422,8 @@ void createFltkLuaBindings(LuaScript* script)
     script->addFunction("getTranslationSpeed", getTranslationSpeed);
     script->addFunction("getRotationSpeed", getRotationSpeed);
 
+	script->addFunction("renameObject", renameObject);
+	
 	script->addFunction("Fl_CreateWindow", Fl_CreateWindow);
 	script->addFunction("Fl_Show", Fl_Show);
 	script->addFunction("Fl_SetCallback", Fl_SetCallback);
