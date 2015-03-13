@@ -56,6 +56,7 @@ GuiSystem::GuiSystem()
     m_enabled = false;
 	m_clearScheduled = false;
 	m_ids = 0;
+	_camera_offset = MVector2(0,0);
 }
 
 GuiSystem::~GuiSystem()
@@ -588,13 +589,13 @@ int setWidgetFlip(){
 int set2DCameraMovement(){
     MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(!script->isFunctionOk("set2DCameraMovement", 2))
+    if(!script->isFunctionOk("set2DCameraMovement", 1))
         return 0;
 
     GuiSystem* g = GuiSystem::getInstance();
 
     MVector2 vec;
-    script->getFloatArray(1, vec, 2);
+    script->getFloatArray(0, vec, 1);
 
     if(g)
         g->setCameraOffset(vec);

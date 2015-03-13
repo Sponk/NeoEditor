@@ -103,7 +103,7 @@ public:
     Canvas* getCanvas(unsigned int i) { return m_canvasVector[i]; }
     void updateLayers();
     
-    MVector2 _camera_offset = MVector2(0, 0);
+    MVector2 _camera_offset;
     void setCameraOffset(MVector2 value){ _camera_offset = value; }
 
     void destroyWidget(int id);

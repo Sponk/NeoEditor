@@ -67,9 +67,9 @@ protected:
     long int m_userData;
 
     bool m_visible;
-    bool m_ignorCamera = false;
-    MVector2 m_scale = MVector2(1,1);
-    MVector2 m_flip = MVector2(1,1);
+    bool m_ignorCamera;
+    MVector2 m_scale;
+    MVector2 m_flip;
 
 public:
 
