@@ -670,13 +670,13 @@ function Collision:setVelocity(a, xv, yv)
 end
 
 --- updates the simulation
-function Collision:update()
+function Collision:update(delta)
   -- track some stats
   mshapes = 0
   cchecks = 0
 
-  -- update velocity vectors
-  local grav = gravity--*dt
+  -- udpate velocity vectors
+  local grav = gravity*delta
   for i = 1, #dynamics do
     local d = dynamics[i]
     -- damping
@@ -775,8 +775,8 @@ function Collision:solveCollision(a, b, nx, ny, pen)
     local f = a.friction
     local dvx = pnx*r + tx*f
     local dvy = pny*r + ty*f
-    a.xv = a.xv - dvx
-    a.yv = a.yv - dvy
+    a.xv = a.xv - dvx*getDelta()
+    a.yv = a.yv - dvy*getDelta()
 
     -- apply force to shape b
     if b.list == dynamics then
