@@ -37,7 +37,7 @@ dofile("Button.lua")
 dofile("InputField.lua")
 dofile("Label.lua")
 dofile("Utils.lua")
-dofile("Quad.lua")
+dofile("QuadTree.lua")
 dofile("Collision.lua")
 dofile("Object3d.lua")
 
