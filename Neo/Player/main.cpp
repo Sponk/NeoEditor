@@ -128,6 +128,9 @@ int update_thread(void* nothing)
 
     while(updateThreadRunning)
     {
+    	prev_tick = curr_tick;
+    	curr_tick = SDL_GetTicks();
+
         // Get input
         NeoEngine::getInstance()->getInputContext()->flush();
         window->onEvents();
