@@ -44,7 +44,10 @@ m_width(width),
 m_height(height),
 m_label(label),
 m_callback(NULL),
-m_visible(true)
+m_visible(true),
+m_ignorCamera(false),
+m_scale(MVector2(1,1)),
+m_flip(MVector2(1,1))
 {
 
 }

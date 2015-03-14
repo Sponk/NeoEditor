@@ -67,6 +67,9 @@ protected:
     long int m_userData;
 
     bool m_visible;
+    bool m_ignorCamera;
+    MVector2 m_scale;
+    MVector2 m_flip;
 
 public:
 
@@ -174,6 +177,23 @@ public:
      * @param v The new status
      */
     void setVisible(bool v) { m_visible = v; }
+    /**
+     * @brief setScale Scale this Widget
+     * @param scale The ammount you want to scale with
+     */
+    void setScale(MVector2 scale) {m_scale = scale; }
+    MVector2 getScale(){return m_scale;}
+    /**
+     * @brief setFlip Flip this Widget
+     */
+    void setFlip(MVector2 flip){m_flip = flip;}
+    MVector2 getFlip(){return m_flip;}
+    /**
+     * @brief setIgnorCamera Whether or not this Widget should move if the camera moves
+     * @param value true or false
+     */
+    void setIgnorCamera(bool value){m_ignorCamera = value;}
+    bool getIgnorCamera(){return m_ignorCamera;}
 
 	// For runtime identification
 	const char* getStaticName() { return "Widget"; }

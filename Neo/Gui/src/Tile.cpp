@@ -57,26 +57,6 @@ void TileSheet::loadImage(const char* path, unsigned int width, unsigned int hei
 		char buf[256];
 		getGlobalFilename(buf, system->getWorkingDirectory(), path);
 
-		/*window->getUpdateSemaphore()->Unlock();
-		Messenger* messenger = Messenger::getInstance();
-		messenger->sendMessage("loadTexture", 0, buf, "MainThread", "UpdateThread");
-
-		Message msg;
-
-		while(msg.messageId != 1)
-		{
-			while(messenger->getMessagesCount("UpdateThread") == 0)
-			{
-				MWindow::getInstance()->sleep(10);
-			}
-
-			msg = messenger->getNextMessage("UpdateThread", "MainThread");
-		}
-
-		window->getUpdateSemaphore()->WaitAndLock();
-
-		Neo::TextureRef* tex = (Neo::TextureRef*) msg.data;*/
-
 		Neo::TextureRef* tex = level->loadTexture(buf);
 		m_image = tex->getTextureId();
 
@@ -122,8 +102,7 @@ void Tile::draw()
 {
     Render* render = Render::getInstance();
     GuiSystem* gui = GuiSystem::getInstance();
-    MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
-    Level* level = NeoEngine::getInstance()->getLevel();
+    OCamera* camera = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getCurrentCamera();
 
     if(m_labelText == NULL)
     {
@@ -131,11 +110,22 @@ void Tile::draw()
         m_labelText->setAlign(TEXT_ALIGN_CENTER);
     }
 
-	render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_parentSheet->getImage(), m_rotation, m_parentSheet->getTexCoords(m_tilex, m_tiley));
+    if (!m_ignorCamera) {
+        MVector3 m = camera->getPosition();
+        float x = -m.x + gui->_camera_offset.x;
+        float y = m.y + gui->_camera_offset.y;
 
-    if(m_label.length() > 0)
-    {
-        m_labelText->setText(m_label.c_str());
-        render->drawText(m_labelText, m_x + 0.5*m_width, m_y + m_height);
+        render->drawTexturedQuad(m_x+x, m_y+y, m_width, m_height, m_parentSheet->getImage(), m_rotation, m_scale, m_flip, m_parentSheet->getTexCoords(m_tilex, m_tiley));
+
+        if (m_label.length() > 0) {
+                m_labelText->setText(m_label.c_str());
+                render->drawText(m_labelText, x + m_x + 0.5 * m_width,y + m_y + m_height);
+            }
+        } else {
+            render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_parentSheet->getImage(), m_rotation, m_scale, m_flip, m_parentSheet->getTexCoords(m_tilex, m_tiley));
+            if (m_label.length() > 0) {
+                m_labelText->setText(m_label.c_str());
+                render->drawText(m_labelText, m_x + 0.5 * m_width, m_y + m_height);
+        }
     }
 }

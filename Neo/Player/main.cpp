@@ -65,6 +65,7 @@ void windowEvents(MWinEvent * windowEvents)
     }
 }
 
+
 // update
 void update(void)
 {
@@ -95,6 +96,19 @@ double updatecount = -1;
 int updatemax = 0;
 int updatemin = -1;
 
+double prev_tick = 0;
+double curr_tick = SDL_GetTicks();
+float delta = 0;
+
+int getDelta() {
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	script->pushFloat(delta);
+	return 1;
+}
+void setupLuaInterface(MScriptContext* script){
+	script->addFunction("getDelta",getDelta);
+}
 int update_thread(void* nothing)
 {
     NeoWindow * window = NeoWindow::getInstance();
@@ -114,9 +128,14 @@ int update_thread(void* nothing)
 
     while(updateThreadRunning)
     {
+    	prev_tick = curr_tick;
+    	curr_tick = SDL_GetTicks();
+
         // Get input
         NeoEngine::getInstance()->getInputContext()->flush();
         window->onEvents();
+
+        delta = (curr_tick - prev_tick) / 1000.0f;
 
 		window->getUpdateSemaphore()->WaitAndLock();
         if(window->getFocus())
@@ -216,9 +235,9 @@ int main(int argc, char **argv)
 #ifndef ANDROID
 	setlocale(LC_NUMERIC, "C");
 #endif
-	
+
 	MLOG_INFO("Neo Player version:\t" << PLAYER_VERSION_STRING);
-	
+
 	unsigned int width = 1024;
 	unsigned int height = 768;
 	int fullscreen = false;
@@ -231,10 +250,10 @@ int main(int argc, char **argv)
 		sscanf(argv[4], "%d", &fullscreen);
     if(argc > 5)
         sscanf(argv[5], "%d", &profiler);
-	
+
 	// get engine (first time call onstructor)
 	NeoEngine * engine = NeoEngine::getInstance();
-	
+
 	// get window (first time call onstructor)
 	NeoWindow * window = NeoWindow::getInstance();
 
@@ -252,7 +271,7 @@ int main(int argc, char **argv)
 
 	if(fullscreen)
 		window->hideCursor();
-	
+
 	// set current directory
 	char rep[256];
 	getRepertory(rep, argv[0]);
@@ -271,6 +290,7 @@ int main(int argc, char **argv)
 		{
             // Initialize GUI bindings
 			Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
+			setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
 			engine->getGame()->begin();
 			projectFound = true;
 		}
@@ -291,10 +311,10 @@ int main(int argc, char **argv)
 			getGlobalFilename(projName, window->getCurrentDirectory(), s_embedded_game_name);
 
 			embeddedProj.startLevel = levelName;
-			
+
 			Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
 			maratis->loadProject(&embeddedProj, projName);
-			
+
 			// This needs to be done in the update thread
 			// engine->getGame()->begin();
 			projectFound = true;
@@ -316,7 +336,7 @@ int main(int argc, char **argv)
 					{
                         // Initialize GUI bindings
 						Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
-
+						setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
 						// This needs to be done in the update thread
 						// engine->getGame()->begin();
 						projectFound = true;
@@ -326,7 +346,7 @@ int main(int argc, char **argv)
 			}
 		}
 	}
-	
+
     if(profiler)
         MLOG_INFO("Profiling enabled");
 
