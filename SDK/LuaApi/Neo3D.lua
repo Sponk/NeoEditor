@@ -47,6 +47,7 @@ dofile("Object3d.lua")
 dofile("OLight.lua")
 dofile("OEntity.lua")
 dofile("OCamera.lua")
+dofile("OSound.lua")
 
 if enableNeo3DTests then
     dofile("Graphics2D.lua")

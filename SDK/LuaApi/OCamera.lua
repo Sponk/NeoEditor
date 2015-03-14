@@ -5,11 +5,12 @@
 -- See also: <a href="Object3d.lua.html">Widget</a>
 
 dofile("class.lua")
+dofile("Object3d.lua")
 
 --- OCamera(object3d)
 -- Create a new OCamera object with the given Object3d
 -- as the base. Will return 'nil' if the given object is not of type 'Camera'.
-OCamera = class(
+OCamera = class(Object3d,
     function(object, object3d)
 
       if object3d ~= nil and objec3d.nativeObject ~= nil then
