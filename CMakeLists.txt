@@ -19,7 +19,7 @@ INCLUDE(FindSSE)
 FIND_PACKAGE(Doxygen 1.8.3)
 
 ## Lua interpreter
-FIND_PACKAGE(Lua51)
+FIND_PACKAGE(Lua52)
 
 ## Set version and info
 SET(NEO_MAJOR_VERSION 0)
