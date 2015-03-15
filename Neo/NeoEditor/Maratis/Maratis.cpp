@@ -626,25 +626,46 @@ void Maratis::loadGamePlugin(void)
     m_gamePlugin->load(gameFile);
 }
 
-void Maratis::getNewObjectName(const char * objectName, char * name)
+void Maratis::getNewObjectName(const char *objectName, char *name)
 {
-    Level * level = NeoEngine::getInstance()->getLevel();
-    Scene * scene = level->getCurrentScene();
+	Level *level = NeoEngine::getInstance()->getLevel();
+	Scene *scene = level->getCurrentScene();
 
-    unsigned int count = 0;
-    int size = scene->getObjectsNumber();
-    for(int i=0; i<size; i++)
-    {
-        Object3d * object = scene->getObjectByIndex(i);
-        if(object->getName())
-            if(strcmp(name, object->getName()) == 0)
-            {
-                // name already exist
-                count++;
-                sprintf(name, "%s%d", objectName, count);
-                i = -1;
-            }
-    }
+	int pos = strlen(objectName) - 1;
+	// Count number at end of string
+	while (pos >= 0 && isalpha(objectName[pos]) == 0)
+	{
+		pos--;
+	}
+
+	if (pos < 0)
+		pos = strlen(objectName);
+
+	// Do not append the new number straight to the
+	// existing one. Prevents names like "Entity11111" when
+	// copying objects.
+	char *shortName = (char *)malloc(pos + 2);
+	strncpy(shortName, objectName, pos + 1);
+	shortName[pos + 2] = '\0';
+
+	unsigned int count = 0;
+	int size = scene->getObjectsNumber();
+	for (int i = 0; i < size; i++)
+	{
+		Object3d *object = scene->getObjectByIndex(i);
+		if (object->getName())
+		{
+			if (strcmp(name, object->getName()) == 0)
+			{
+				// name already exist
+				count++;
+				sprintf(name, "%s%d", shortName, count);
+				i = -1;
+			}
+		}
+	}
+
+	free(shortName);
 }
 
 Object3d* Maratis::duplicateObject(Object3d *object)
