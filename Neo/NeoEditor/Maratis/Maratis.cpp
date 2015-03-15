@@ -647,7 +647,85 @@ void Maratis::getNewObjectName(const char * objectName, char * name)
     }
 }
 
-void Maratis::duplicateSelectedObjects(void)
+Object3d* Maratis::duplicateObject(Object3d *object)
+{
+	Scene *scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
+
+	OLight *light;
+	OEntity *entity;
+	OCamera *camera;
+	OSound *sound;
+	OText *text;
+	Object3d *group;
+	char name[256];
+
+	strcpy(name, object->getName());
+	Object3d* copiedObject;
+	
+	switch (object->getType())
+	{
+		case M_OBJECT3D_ENTITY:
+		{
+			getNewObjectName(object->getName(), name);
+
+			copiedObject = entity = scene->addNewEntity(*(OEntity *)object);
+			entity->setName(name);
+		}
+		break;
+		case M_OBJECT3D_LIGHT:
+		{
+			getNewObjectName(object->getName(), name);
+
+			copiedObject = light = scene->addNewLight(*(OLight *)object);
+			light->setName(name);
+		}
+		break;
+		case M_OBJECT3D_CAMERA:
+		{
+			getNewObjectName(object->getName(), name);
+
+			copiedObject = camera = scene->addNewCamera(*(OCamera *)object);
+			camera->setName(name);
+		}
+		break;
+		case M_OBJECT3D_SOUND:
+		{
+			getNewObjectName(object->getName(), name);
+
+			copiedObject = sound = scene->addNewSound(*(OSound *)object);
+			sound->setName(name);
+		}
+		break;
+		case M_OBJECT3D_TEXT:
+		{
+			getNewObjectName(object->getName(), name);
+			copiedObject = text = scene->addNewText(*(OText *)object);
+			text->setName(name);
+		}
+		break;
+		case M_OBJECT3D:
+		{
+			getNewObjectName(object->getName(), name);
+			copiedObject = group = scene->addNewGroup(*object);
+			group->setName(name);
+		}
+		break;
+	}
+
+	Object3d* childCopy;
+	// Copy all children
+	for (int i = 0; i < object->getChildsNumber(); i++)
+	{
+		childCopy = duplicateObject(object->getChild(i));
+		
+		unlinkTwoObjects(childCopy->getParent(), childCopy);
+		childCopy->linkTo(copiedObject);
+	}
+
+	return copiedObject;
+}
+
+void Maratis::duplicateSelectedObjects()
 {
     autoSave();
 
@@ -660,71 +738,13 @@ void Maratis::duplicateSelectedObjects(void)
     if(oSize == 0)
         return;
 
-    // duplicate
-    OLight * light;
-    OEntity * entity;
-    OCamera * camera;
-    OSound * sound;
-    OText * text;
-    Object3d * group;
-    Object3d * object;
-    char name[256];
-    for(i=0; i<oSize; i++)
+    for(i = 0; i < oSize; i++)
     {
-        object = m_selectedObjects[i];
-        strcpy(name, object->getName());
+		duplicateObject(m_selectedObjects[i]);
+	}
 
-        switch(object->getType())
-        {
-            case M_OBJECT3D_ENTITY:
-            {
-                getNewObjectName(object->getName(), name);
-
-                entity = scene->addNewEntity(*(OEntity *)object);
-                entity->setName(name);
-            }
-                break;
-            case M_OBJECT3D_LIGHT:
-            {
-                getNewObjectName(object->getName(), name);
-
-                light = scene->addNewLight(*(OLight *)object);
-                light->setName(name);
-            }
-                break;
-            case M_OBJECT3D_CAMERA:
-            {
-                getNewObjectName(object->getName(), name);
-
-                camera = scene->addNewCamera(*(OCamera *)object);
-                camera->setName(name);
-            }
-                break;
-            case M_OBJECT3D_SOUND:
-            {
-                getNewObjectName(object->getName(), name);
-
-                sound = scene->addNewSound(*(OSound *)object);
-                sound->setName(name);
-            }
-                break;
-            case M_OBJECT3D_TEXT:
-            {
-                getNewObjectName(object->getName(), name);
-                text = scene->addNewText(*(OText *)object);
-                text->setName(name);
-            }
-                break;
-            case M_OBJECT3D:
-            {
-                getNewObjectName(object->getName(), name);
-                group = scene->addNewGroup(*object);
-                group->setName(name);
-            }
-                break;
-        }
-    }
-
+	Object3d* object = NULL;
+	
     // select duplicated objects
     m_selectedObjects.clear();
     oSize = scene->getObjectsNumber();

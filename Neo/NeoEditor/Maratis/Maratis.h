@@ -275,7 +275,8 @@ public:
 
 	// duplicate selected objects
 	void duplicateSelectedObjects(void);
-
+	Object3d* duplicateObject(Object3d *object);
+	
 	// link
 	void linkSelectedObjects(void);
 	void unlinkSelectedObjects(void);
