@@ -62,6 +62,8 @@ private:
 	TextureRef* m_texture;
 	int m_layer;
 
+	MVector2 m_cameraPosition;
+
 public:
 	static Canvas* getInstance()
 	{
@@ -94,6 +96,8 @@ public:
 			m_renderToTexture = true;
 	}
 	void disableRenderToTexture() { m_renderToTexture = false; }
+	void setCameraOffset(MVector2 value) { m_cameraPosition = value; }
+	MVector2 getCameraOffset() { return m_cameraPosition; }
 };
 }
 }

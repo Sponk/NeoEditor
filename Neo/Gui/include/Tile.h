@@ -96,7 +96,7 @@ public:
 		m_tiley = vec.y;
 	}
 
-	void draw();
+	void draw(MVector2 offset);
 	void update();
 };
 }

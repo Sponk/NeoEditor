@@ -47,7 +47,6 @@ Widget::Widget(unsigned int x, unsigned int y, unsigned int width,
 	  m_label(label),
 	  m_callback(NULL),
 	  m_visible(true),
-	  m_ignorCamera(false),
 	  m_scale(MVector2(1, 1)),
 	  m_flip(MVector2(1, 1))
 {
@@ -61,7 +60,9 @@ Widget::Widget()
 	  m_height(30),
 	  m_label("Widget"),
 	  m_callback(NULL),
-	  m_visible(true)
+	  m_visible(true),
+	  m_scale(MVector2(1, 1)),
+	  m_flip(MVector2(1, 1))
 {
 }
 

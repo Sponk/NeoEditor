@@ -60,6 +60,7 @@ public:
 		   unsigned int height, const char* label);
 
 	void draw();
+	void draw(MVector2 offset) { draw(); }
 	void update();
 };
 }

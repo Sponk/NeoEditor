@@ -97,7 +97,7 @@ MVector4 TileSheet::getTexCoords(unsigned int x, unsigned int y)
 
 void Tile::update() {}
 
-void Tile::draw()
+void Tile::draw(MVector2 offset)
 {
 	Render* render = Render::getInstance();
 	GuiSystem* gui = GuiSystem::getInstance();
@@ -113,33 +113,14 @@ void Tile::draw()
 		m_labelText->setAlign(TEXT_ALIGN_CENTER);
 	}
 
-	if (!m_ignorCamera)
+	render->drawTexturedQuad(m_x + offset.x, m_y + offset.y, m_width, m_height,
+							 m_parentSheet->getImage(), m_rotation, m_scale,
+							 m_flip,
+							 m_parentSheet->getTexCoords(m_tilex, m_tiley));
+	if (m_label.length() > 0)
 	{
-		MVector3 m = camera->getPosition();
-		float x = -m.x + gui->_camera_offset.x;
-		float y = m.y + gui->_camera_offset.y;
-
-		render->drawTexturedQuad(m_x + x, m_y + y, m_width, m_height,
-								 m_parentSheet->getImage(), m_rotation, m_scale,
-								 m_flip,
-								 m_parentSheet->getTexCoords(m_tilex, m_tiley));
-
-		if (m_label.length() > 0)
-		{
-			m_labelText->setText(m_label.c_str());
-			render->drawText(m_labelText, x + m_x + 0.5 * m_width,
-							 y + m_y + m_height);
-		}
-	}
-	else
-	{
-		render->drawTexturedQuad(
-			m_x, m_y, m_width, m_height, m_parentSheet->getImage(), m_rotation,
-			m_scale, m_flip, m_parentSheet->getTexCoords(m_tilex, m_tiley));
-		if (m_label.length() > 0)
-		{
-			m_labelText->setText(m_label.c_str());
-			render->drawText(m_labelText, m_x + 0.5 * m_width, m_y + m_height);
-		}
+		m_labelText->setText(m_label.c_str());
+		render->drawText(m_labelText, m_x + 0.5 * m_width + offset.x,
+						 m_y + m_height + offset.y);
 	}
 }

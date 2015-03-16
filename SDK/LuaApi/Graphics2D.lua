@@ -44,7 +44,7 @@ dofile("Object3d.lua")
 --global instance for Utils class
 util = Utils.create()
 
---collision memebers
+--collision members
 quad = QuadTree.create()
 collision = Collision.create()
 collision:init()

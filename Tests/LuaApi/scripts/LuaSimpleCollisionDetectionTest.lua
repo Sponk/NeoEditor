@@ -12,11 +12,11 @@ mainCanvas:addWidget(sprite2)
 local o1 = collision:addStatic('rect','tag1',120,120,70,70)
 local o2 = collision:addDynamic('rect','tag2',-100,120,70,70)
 o2.friction = 60
-o2.damping = .6
+o2.damping = 0.6
+
+setCanvasCameraPosition(mainCanvas.canvas, {320,0})
 
 function onSceneUpdate()
-
-    set2DCameraMovement({320,0})
 
     --Position of the sprite needs to be the same as the collision body's pos
     sprite2:setPosition(o2.x,o2.y)

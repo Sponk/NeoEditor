@@ -68,7 +68,6 @@ protected:
 	long int m_userData;
 
 	bool m_visible;
-	bool m_ignorCamera;
 	MVector2 m_scale;
 	MVector2 m_flip;
 
@@ -80,7 +79,8 @@ public:
 	/**
 	 * @brief Virtual function used to draw the widget.
 	 */
-	virtual void draw() = 0;
+	virtual void draw() { draw(MVector2(0, 0)); }
+	virtual void draw(MVector2 offset) = 0;
 
 	/**
 	 * @brief Virtual function used to update the widget.
@@ -198,13 +198,6 @@ public:
 	 */
 	void setFlip(MVector2 flip) { m_flip = flip; }
 	MVector2 getFlip() { return m_flip; }
-	/**
-	 * @brief setIgnorCamera Whether or not this Widget should move if the
-	 * camera moves
-	 * @param value true or false
-	 */
-	void setIgnorCamera(bool value) { m_ignorCamera = value; }
-	bool getIgnorCamera() { return m_ignorCamera; }
 
 	// For runtime identification
 	const char* getStaticName() { return "Widget"; }

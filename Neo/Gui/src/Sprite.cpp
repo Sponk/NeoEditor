@@ -51,7 +51,7 @@ Sprite::Sprite(unsigned int x, unsigned int y, unsigned int width,
 
 void Sprite::update() {}
 
-void Sprite::draw()
+void Sprite::draw(MVector2 offset)
 {
 	Render* render = Render::getInstance();
 	GuiSystem* gui = GuiSystem::getInstance();
@@ -74,40 +74,14 @@ void Sprite::draw()
 		loadTexture();
 	}
 
-	// If this sprite is allowed to ignore the camera then it must stay at the
-	// same position even if the camera is moving
-	// FIXME: Should not be here! All camera handling is supposed to be in
-	//        Neo::Gui::Canvas!
-	if (!m_ignorCamera)
-	{
-		MVector3 m = camera->getPosition();
-		float x = -m.x + gui->_camera_offset.x;
-		float y = m.y + gui->_camera_offset.y;
-		render->drawTexturedQuad(m_x + x, m_y + y, m_width, m_height, m_image,
-								 m_rotation, m_scale, m_flip);
-
-		if (m_label.length() > 0)
-		{
-			m_labelText->setText(m_label.c_str());
-			render->drawText(m_labelText, x + m_x + 0.5 * m_width,
-							 y + m_y + m_height);
-		}
-	}
-	else
-	{
-		render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_image,
-								 m_rotation, m_scale, m_flip);
-		if (m_label.length() > 0)
-		{
-			m_labelText->setText(m_label.c_str());
-			render->drawText(m_labelText, m_x + 0.5 * m_width, m_y + m_height);
-		}
-	}
+	render->drawTexturedQuad(m_x + offset.x, m_y + offset.y, m_width, m_height,
+							 m_image, m_rotation, m_scale, m_flip);
 
 	if (m_label.length() > 0)
 	{
 		m_labelText->setText(m_label.c_str());
-		render->drawText(m_labelText, m_x + 0.5 * m_width, m_y + m_height);
+		render->drawText(m_labelText, m_x + 0.5 * m_width + offset.x,
+						 m_y + m_height + offset.y);
 	}
 }
 

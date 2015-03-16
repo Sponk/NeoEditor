@@ -80,7 +80,7 @@ void Canvas::draw()
 
 		// Only draw the widget if it exists & if it is visible
 		if (w && w->isVisible())
-			w->draw();
+			w->draw(m_cameraPosition);
 		else if (w == NULL) // Remove the widget from the list if it does not
 							// exist anymore
 			m_widgets.erase(m_widgets.begin() + i);

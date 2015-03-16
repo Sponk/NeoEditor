@@ -62,7 +62,7 @@ public:
 	Sprite(unsigned int x, unsigned int y, unsigned int width,
 		   unsigned int height, const char *texture, const char *label);
 
-	void draw();
+	void draw(MVector2 offset);
 	void update();
 
 	MVector2 getSize() { return m_imageSize; }

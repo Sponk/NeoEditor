@@ -60,6 +60,7 @@ public:
 	}
 
 	void draw();
+	void draw(MVector2 offset) { draw(); }
 	void update();
 };
 }
