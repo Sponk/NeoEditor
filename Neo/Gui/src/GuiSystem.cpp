@@ -549,6 +549,27 @@ int setTileOffset()
 	return 1;
 }
 
+int getSpriteSize()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if(!script->isFunctionOk("getSpriteSize", 1))
+		return 0;
+
+	Sprite* w = (Sprite*) GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	if(!w)
+	{
+		MLOG_ERROR("Given widget is NULL!");
+		return 0;
+	}
+
+	MVector2 size = w->getSize();
+	script->pushFloatArray(size, 2);
+	
+	return 1;
+}
+
 void GuiSystem::setupLuaInterface(MScriptContext* script)
 {
     script->addFunction("enableGui", enableGui);
@@ -561,6 +582,8 @@ void GuiSystem::setupLuaInterface(MScriptContext* script)
     script->addFunction("createLabel", createLabel);
     script->addFunction("createSprite", createSprite);
 
+	script->addFunction("getSpriteSize", getSpriteSize);
+	
     script->addFunction("addWidgetToCanvas", addWidgetToCanvas);
     script->addFunction("destroyWidget", ::detroyWidget);
 

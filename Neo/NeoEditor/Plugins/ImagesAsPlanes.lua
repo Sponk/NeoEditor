@@ -34,9 +34,14 @@ function load_callback()
 	-- Find all required filenames
 	local filename = openFileDlg("Choose a file", getProjectDir() .. "maps", "*.png")
 
+	local texture = createSprite(0,0,0,0,filename, "")
+	local dimensions = getSpriteSize(texture)
+	debugLog("Texture has dimensions of " .. dimensions[1] .. "x" .. dimensions[2])
+	
+	
 	filename = relpath(filename, projectDir .. "meshs")
 	debugLog("Loading image file: " .. filename)
-	
+
 	local idx = find_last_of(filename, "/")
 	
 	local meshname = projectDir .. "meshs" .. filename:sub(idx, filename:len()) .. ".mesh"
@@ -47,6 +52,8 @@ function load_callback()
 	local data = templateFile:read("*all")
 	
 	data = data:gsub("$IMAGE_FILENAME", filename)
+	data = data:gsub("$IMAGE_WIDTH", dimensions[1])
+	data = data:gsub("$IMAGE_HEIGHT", dimensions[2])
 	
 	local meshfile = io.open(meshname, "w")
 	meshfile:write(data)

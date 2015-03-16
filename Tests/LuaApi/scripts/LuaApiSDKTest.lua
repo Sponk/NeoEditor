@@ -38,7 +38,13 @@ light = OLight(light)
 light.maxBrightness = 2.0
 light.speed = 0.01
 
+
+    local spriteSize = getSpriteSize(sprite.widget)
+    print("Sprite has dimensions of " .. spriteSize[1] .. "x" .. spriteSize[2])
+   
+
 function onSceneUpdate()
+
     sprite:rotate(2)
     button:rotate(2)
 

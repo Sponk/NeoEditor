@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Neo
-// MPluginScript.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2014 Yannick Pflanzer <www.scary-squid.de>
 //
@@ -28,6 +23,7 @@
 //========================================================================
 
 #include "../PluginScript/PluginScript.h"
+#include <GuiSystem.h>
 
 using namespace Neo;
 
@@ -116,6 +112,8 @@ void MPluginScript::init()
     // Add FLTK bindings
     createFltkLuaBindings(this);
 
+	// Add NeoGui bindings
+	Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(this);
     LuaScript::init();
 }
 

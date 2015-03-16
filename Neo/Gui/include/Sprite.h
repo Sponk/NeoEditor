@@ -51,16 +51,20 @@ class Sprite : public Widget
 protected:
     OText* m_labelText;
     int m_image;
+	MVector2 m_imageSize;
 
     std::string m_imagePath;
 
-public:
+	void loadTexture();
 
-    Sprite(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* texture, const char* label) : Widget(x,y,width,height,label),
-        m_labelText(NULL), m_image(0), m_imagePath(texture) {}
+ public:
+	Sprite(unsigned int x, unsigned int y, unsigned int width,
+		   unsigned int height, const char *texture, const char *label);
 
     void draw();
     void update();
+
+	MVector2 getSize() { return m_imageSize; }
 };
 }
 }

@@ -47,4 +47,8 @@ Sprite = class(
 		object.height = h
 		object.rotation = 0
 		object.visible = true
-	end)
+
+		local size = getSpriteSize(object.widget)
+		object.textureWidth = size[1]
+		object.textureHeight = size[2]
+end)
