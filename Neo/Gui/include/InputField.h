@@ -28,7 +28,8 @@
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
  *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
+ * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
+ *diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
@@ -44,24 +45,24 @@ namespace Gui
 {
 enum INPUT_STATE
 {
-    INPUT_NORMAL_STATE = 0,
-    INPUT_HOVER_STATE,
-    INPUT_SELECTED_STATE
+	INPUT_NORMAL_STATE = 0,
+	INPUT_HOVER_STATE,
+	INPUT_SELECTED_STATE
 };
 
 class InputField : public Widget
 {
-    OText* m_labelText;
-    INPUT_STATE m_state;
+	OText* m_labelText;
+	INPUT_STATE m_state;
 
-    void addCharacter(char c);
+	void addCharacter(char c);
 
 public:
+	InputField(unsigned int x, unsigned int y, unsigned int width,
+			   unsigned int height, const char* label);
 
-	InputField(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label);
-
-    void draw();
-    void update();
+	void draw();
+	void update();
 };
 }
 }

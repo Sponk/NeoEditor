@@ -28,7 +28,8 @@
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
  *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
+ * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
+ *diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
@@ -46,7 +47,7 @@ namespace Gui
 #ifndef WIN32
 typedef void (*CALLBACK_FUNCTION)(long int);
 #else
-#define CALLBACK_FUNCTION void*
+#define CALLBACK_FUNCTION void *
 #endif
 
 /**
@@ -58,35 +59,39 @@ typedef void (*CALLBACK_FUNCTION)(long int);
 class Widget
 {
 protected:
-    float m_x, m_y;
-    float m_rotation;
-    unsigned int m_width, m_height;
-    std::string m_label;
+	float m_x, m_y;
+	float m_rotation;
+	unsigned int m_width, m_height;
+	std::string m_label;
 
-    CALLBACK_FUNCTION m_callback;
-    long int m_userData;
+	CALLBACK_FUNCTION m_callback;
+	long int m_userData;
 
-    bool m_visible;
+	bool m_visible;
+	bool m_ignorCamera;
+	MVector2 m_scale;
+	MVector2 m_flip;
 
 public:
-
-    Widget(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label);
-    Widget();
+	Widget(unsigned int x, unsigned int y, unsigned int width,
+		   unsigned int height, const char* label);
+	Widget();
 
 	/**
 	 * @brief Virtual function used to draw the widget.
 	 */
-    virtual void draw() = 0;
+	virtual void draw() = 0;
 
 	/**
 	 * @brief Virtual function used to update the widget.
 	 */
-    virtual void update() = 0;
+	virtual void update() = 0;
 
 	/**
 	 * @brief Sets the callback.
 	 *
-	 * A callback is a function pointer of the type (*CALLBACK_FUNCTION)(long int) and
+	 * A callback is a function pointer of the type (*CALLBACK_FUNCTION)(long
+	 *int) and
 	 * points to a procedure of the form:
 	 *
 	 * /code
@@ -95,7 +100,7 @@ public:
 	 *
 	 * @param func The function pointer
 	 */
-    void setCallback(CALLBACK_FUNCTION func) { m_callback = func; }
+	void setCallback(CALLBACK_FUNCTION func) { m_callback = func; }
 
 	/**
 	 * @brief Sets the callback and appends user data to it.
@@ -108,25 +113,29 @@ public:
 	 * @param func The function pointer
 	 * @param data The user data
 	 */
-	void setCallback(CALLBACK_FUNCTION func, long int data) { m_callback = func; m_userData = data; }
+	void setCallback(CALLBACK_FUNCTION func, long int data)
+	{
+		m_callback = func;
+		m_userData = data;
+	}
 
 	/**
 	 * @brief Retrieves the user data that will be given to every callback call.
 	 * @return The user data.
 	 */
-    long int getUserData() { return m_userData; }
+	long int getUserData() { return m_userData; }
 
 	/**
 	 * @brief Changes the user data that will be given to every callback call.
 	 * @param data The new user data.
 	 */
-    void setUserData(long int data) { m_userData = data; }
+	void setUserData(long int data) { m_userData = data; }
 
 	/**
 	 * @brief Gets the currently displayed label a C string.
 	 * @return The current label.
 	 */
-    const char* getLabel() { return m_label.c_str(); }
+	const char* getLabel() { return m_label.c_str(); }
 
 	/**
 	 * @brief Changes the current label of the widget.
@@ -138,42 +147,64 @@ public:
 	 * @brief Changes the widget position.
 	 * @param pos The new position.
 	 */
-    void setPosition(MVector2 pos) { m_x = pos.x; m_y = pos.y; }
+	void setPosition(MVector2 pos)
+	{
+		m_x = pos.x;
+		m_y = pos.y;
+	}
 
 	/**
 	 * @brief Retrieves the current position.
 	 * @return The current position.
 	 */
-    MVector2 getPosition() { return MVector2(m_x, m_y); }
+	MVector2 getPosition() { return MVector2(m_x, m_y); }
 
 	/**
 	 * @brief Changes the widget rotation.
 	 * @param rot The new rotation.
 	 */
-    void setRotation(float rot) { m_rotation = rot; }
+	void setRotation(float rot) { m_rotation = rot; }
 
 	/**
 	 * @brief Retrieves the current rotation.
 	 * @return The current rotation.
 	 */
-    float getRotation() { return m_rotation; }
+	float getRotation() { return m_rotation; }
 
 	/**
 	 * @brief Calls the callback with the user data as an argument.
 	 */
-    void doCallback();
+	void doCallback();
 
-    /**
-     * @brief Returns if the widget is turned visible.
-     * @return The boolean value.
-     */
-    bool isVisible() { return m_visible; }
+	/**
+	 * @brief Returns if the widget is turned visible.
+	 * @return The boolean value.
+	 */
+	bool isVisible() { return m_visible; }
 
-    /**
-     * @brief Sets the visibility status
-     * @param v The new status
-     */
-    void setVisible(bool v) { m_visible = v; }
+	/**
+	 * @brief Sets the visibility status
+	 * @param v The new status
+	 */
+	void setVisible(bool v) { m_visible = v; }
+	/**
+	 * @brief setScale Scale this Widget
+	 * @param scale The ammount you want to scale with
+	 */
+	void setScale(MVector2 scale) { m_scale = scale; }
+	MVector2 getScale() { return m_scale; }
+	/**
+	 * @brief setFlip Flip this Widget
+	 */
+	void setFlip(MVector2 flip) { m_flip = flip; }
+	MVector2 getFlip() { return m_flip; }
+	/**
+	 * @brief setIgnorCamera Whether or not this Widget should move if the
+	 * camera moves
+	 * @param value true or false
+	 */
+	void setIgnorCamera(bool value) { m_ignorCamera = value; }
+	bool getIgnorCamera() { return m_ignorCamera; }
 
 	// For runtime identification
 	const char* getStaticName() { return "Widget"; }

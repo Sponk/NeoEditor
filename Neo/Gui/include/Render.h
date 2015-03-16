@@ -28,7 +28,8 @@
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
  *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
+ * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
+ *diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
@@ -49,24 +50,37 @@ namespace Gui
 class Render
 {
 private:
-    unsigned int m_colorOnlyFx;
-    unsigned int m_texturedFx;
+	unsigned int m_colorOnlyFx;
+	unsigned int m_texturedFx;
+	int m_right, m_left, m_top, m_bottom;
 
 public:
-    static Render* getInstance() { static Render m_instance; return &m_instance; }
+	static Render* getInstance()
+	{
+		static Render m_instance;
+		return &m_instance;
+	}
 
-    void drawColoredQuad(float x, float y, float w, float h, MVector4 color, float rotation = 0);
-    void drawTexturedQuad(float x, float y, float w, float h, int texture, float rotation = 0);
-	void drawTexturedQuad(float x, float y, float w, float h, int texture, float rotation, MVector4 texcoords);
+	void drawColoredQuad(float x, float y, float w, float h, MVector4 color,
+						 float rotation = 0);
+	void drawTexturedQuad(float x, float y, float w, float h, int texture,
+						  float rotation = 0);
+	void drawTexturedQuad(float x, float y, float w, float h, int texture,
+						  float rotation, MVector2 scale);
+	void drawTexturedQuad(float x, float y, float w, float h, int texture,
+						  float rotation, MVector2 scale, MVector2 flip);
+	void drawTexturedQuad(float x, float y, float w, float h, int texture,
+						  float rotation, MVector2 scale, MVector2 flip,
+						  MVector4 texcoords);
 
 	void drawText(OText* text, float x, float y, float rotation = 0);
-    void set2D(float w, float h);
+	void set2D(float w, float h);
 
-    void loadShader(const char* vert, const char* frag, unsigned int* fx);
+	void loadShader(const char* vert, const char* frag, unsigned int* fx);
 
-    OText* createText(const char* font, float size);
+	OText* createText(const char* font, float size);
 
-    Render();
+	Render();
 };
 }
 }

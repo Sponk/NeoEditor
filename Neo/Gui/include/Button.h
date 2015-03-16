@@ -28,7 +28,8 @@
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
  *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
+ * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
+ *diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
@@ -44,22 +45,22 @@ namespace Gui
 {
 enum BUTTON_STATE
 {
-    BUTTON_NORMAL_STATE = 0,
-    BUTTON_HOVER_STATE,
-    BUTTON_PRESSED_STATE
+	BUTTON_NORMAL_STATE = 0,
+	BUTTON_HOVER_STATE,
+	BUTTON_PRESSED_STATE
 };
 
 class Button : public Widget
 {
-    OText* m_labelText;
-    BUTTON_STATE m_state;
+	OText* m_labelText;
+	BUTTON_STATE m_state;
 
 public:
+	Button(unsigned int x, unsigned int y, unsigned int width,
+		   unsigned int height, const char* label);
 
-    Button(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label);
-
-    void draw();
-    void update();
+	void draw();
+	void update();
 };
 }
 }

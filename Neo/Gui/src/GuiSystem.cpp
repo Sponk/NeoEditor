@@ -28,7 +28,8 @@
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
  *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
+ * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
+ *diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
@@ -47,34 +48,35 @@ using namespace Neo::Gui;
 
 GuiSystem::GuiSystem()
 {
-    m_canvasVector.push_back(Canvas::getInstance());
-    m_defaultFont = "fonts/default.ttf";
-    m_defaultFontSize = 12.0;
-    m_normalBackground = MVector4(0.5,0.5,0.5,1.0);
-    m_hoverBackground = MVector4(0.7,0.7,0.7,1.0);
-    m_highlightBackground = MVector4(0.6,0.7,0.8,1.0);
-    m_enabled = false;
+	m_canvasVector.push_back(Canvas::getInstance());
+	m_defaultFont = "fonts/default.ttf";
+	m_defaultFontSize = 12.0;
+	m_normalBackground = MVector4(0.5, 0.5, 0.5, 1.0);
+	m_hoverBackground = MVector4(0.7, 0.7, 0.7, 1.0);
+	m_highlightBackground = MVector4(0.6, 0.7, 0.8, 1.0);
+	m_enabled = false;
 	m_clearScheduled = false;
 	m_ids = 0;
+	_camera_offset = MVector2(0, 0);
 }
 
 GuiSystem::~GuiSystem()
 {
-    Canvas* c;
-    for(int i = 0; i < m_canvasVector.size(); i++)
-    {
-        c = m_canvasVector[i];
-        if(c && c != Canvas::getInstance())
-            delete c;
-    }
+	Canvas* c;
+	for (int i = 0; i < m_canvasVector.size(); i++)
+	{
+		c = m_canvasVector[i];
+		if (c && c != Canvas::getInstance())
+			delete c;
+	}
 }
 
 std::vector<std::string> scriptCallbacks;
 
 void scriptCallback(long int id)
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-    script->callFunction(scriptCallbacks[id].c_str());
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	script->callFunction(scriptCallbacks[id].c_str());
 }
 
 /**
@@ -83,246 +85,250 @@ void scriptCallback(long int id)
  */
 int enableGui()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-    if(script->isFunctionOk("enableGui", 1))
-        GuiSystem::getInstance()->setEnabled(script->getInteger(0) != 0);
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	if (script->isFunctionOk("enableGui", 1))
+		GuiSystem::getInstance()->setEnabled(script->getInteger(0) != 0);
 
-    return 1;
+	return 1;
 }
 
 int getMainCanvas()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-    script->pushPointer(Canvas::getInstance());
-    return 1;
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	script->pushPointer(Canvas::getInstance());
+	return 1;
 }
 
 int getCanvasClearColor()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(!script->isFunctionOk("getCanvasClearColor", 1))
-        return 0;
+	if (!script->isFunctionOk("getCanvasClearColor", 1))
+		return 0;
 
-    Canvas* c = (Canvas*) script->getPointer(0);
+	Canvas* c = (Canvas*)script->getPointer(0);
 
-    if(c)
-    	script->pushFloatArray(c->getClearColor(), 4);
-    return 1;
+	if (c)
+		script->pushFloatArray(c->getClearColor(), 4);
+	return 1;
 }
 
 int setCanvasClearColor()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(!script->isFunctionOk("setCanvasClearColor", 2))
-        return 0;
+	if (!script->isFunctionOk("setCanvasClearColor", 2))
+		return 0;
 
-    Canvas* c = (Canvas*) script->getPointer(0);
-    MVector4 vec;
-    script->getFloatArray(1, vec, 4);
+	Canvas* c = (Canvas*)script->getPointer(0);
+	MVector4 vec;
+	script->getFloatArray(1, vec, 4);
 
-    if(c)
-    	c->setClearColor(vec);
+	if (c)
+		c->setClearColor(vec);
 
-    return 1;
+	return 1;
 }
 
 int createButton()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(!script->isFunctionOk("createButton", 6))
-        return 0;
+	if (!script->isFunctionOk("createButton", 6))
+		return 0;
 
-    Button* btn = new Button(script->getInteger(0), script->getInteger(1),
-                             script->getInteger(2), script->getInteger(3), script->getString(4));
+	Button* btn = new Button(script->getInteger(0), script->getInteger(1),
+							 script->getInteger(2), script->getInteger(3),
+							 script->getString(4));
 
-    btn->setCallback((CALLBACK_FUNCTION) scriptCallback);
+	btn->setCallback((CALLBACK_FUNCTION)scriptCallback);
 
-    scriptCallbacks.push_back(script->getString(5));
-    btn->setUserData(scriptCallbacks.size()-1);
+	scriptCallbacks.push_back(script->getString(5));
+	btn->setUserData(scriptCallbacks.size() - 1);
 
-    GuiSystem* gui = GuiSystem::getInstance();
-    int idx = gui->addWidget(btn);
+	GuiSystem* gui = GuiSystem::getInstance();
+	int idx = gui->addWidget(btn);
 
-    script->pushInteger(idx);
-    return 1;
+	script->pushInteger(idx);
+	return 1;
 }
 
 int createInput()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(!script->isFunctionOk("createInput", 6))
-        return 0;
+	if (!script->isFunctionOk("createInput", 6))
+		return 0;
 
-    InputField* input = new InputField(script->getInteger(0), script->getInteger(1),
-                             script->getInteger(2), script->getInteger(3), script->getString(4));
+	InputField* input = new InputField(
+		script->getInteger(0), script->getInteger(1), script->getInteger(2),
+		script->getInteger(3), script->getString(4));
 
-    input->setCallback((CALLBACK_FUNCTION) scriptCallback);
+	input->setCallback((CALLBACK_FUNCTION)scriptCallback);
 
-    scriptCallbacks.push_back(script->getString(5));
-    input->setUserData(scriptCallbacks.size()-1);
+	scriptCallbacks.push_back(script->getString(5));
+	input->setUserData(scriptCallbacks.size() - 1);
 
-    GuiSystem* gui = GuiSystem::getInstance();
-    int idx = gui->addWidget(input);
+	GuiSystem* gui = GuiSystem::getInstance();
+	int idx = gui->addWidget(input);
 
-    script->pushInteger(idx);
-    return 1;
+	script->pushInteger(idx);
+	return 1;
 }
 
 int createLabel()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(!script->isFunctionOk("createLabel", 5))
-        return 0;
+	if (!script->isFunctionOk("createLabel", 5))
+		return 0;
 
-    Label* label = new Label(script->getInteger(0), script->getInteger(1),
-                             script->getInteger(2), script->getInteger(3), script->getString(4));
+	Label* label = new Label(script->getInteger(0), script->getInteger(1),
+							 script->getInteger(2), script->getInteger(3),
+							 script->getString(4));
 
-    GuiSystem* gui = GuiSystem::getInstance();
-    int idx = gui->addWidget(label);
+	GuiSystem* gui = GuiSystem::getInstance();
+	int idx = gui->addWidget(label);
 
-    script->pushInteger(idx);
-    return 1;
+	script->pushInteger(idx);
+	return 1;
 }
 
 int createSprite()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(!script->isFunctionOk("createSprite", 6))
-        return 0;
+	if (!script->isFunctionOk("createSprite", 6))
+		return 0;
 
-    Sprite* sprite = new Sprite(script->getInteger(0), script->getInteger(1),
-                             script->getInteger(2), script->getInteger(3), script->getString(4), script->getString(5));
+	Sprite* sprite = new Sprite(script->getInteger(0), script->getInteger(1),
+								script->getInteger(2), script->getInteger(3),
+								script->getString(4), script->getString(5));
 
-    GuiSystem* gui = GuiSystem::getInstance();
-    int idx = gui->addWidget(sprite);
+	GuiSystem* gui = GuiSystem::getInstance();
+	int idx = gui->addWidget(sprite);
 
-    script->pushInteger(idx);
-    return 1;
+	script->pushInteger(idx);
+	return 1;
 }
 
 int addWidgetToCanvas()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(!script->isFunctionOk("addWidgetToCanvas", 2))
-        return 0;
+	if (!script->isFunctionOk("addWidgetToCanvas", 2))
+		return 0;
 
-    Canvas* c = (Canvas*) script->getPointer(0);
+	Canvas* c = (Canvas*)script->getPointer(0);
 
-    if(c)
-    	c->addWidget(script->getInteger(1));
+	if (c)
+		c->addWidget(script->getInteger(1));
 
-    return 1;
+	return 1;
 }
 
 int setLabel()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(script->getArgsNumber() != 2)
-        return 0;
+	if (script->getArgsNumber() != 2)
+		return 0;
 
-    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
 
-    if(w)
-    	w->setLabel(script->getString(1));
+	if (w)
+		w->setLabel(script->getString(1));
 
-    return 1;
+	return 1;
 }
 
 int getLabel()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(!script->isFunctionOk("getLabel", 1))
-        return 0;
+	if (!script->isFunctionOk("getLabel", 1))
+		return 0;
 
-    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
 
-    if(w)
-    	script->pushString(w->getLabel());
+	if (w)
+		script->pushString(w->getLabel());
 
-    return 1;
+	return 1;
 }
 
 int setDefaultFontSize()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(!script->isFunctionOk("setDefaultFontSize", 1))
-        return 0;
+	if (!script->isFunctionOk("setDefaultFontSize", 1))
+		return 0;
 
-    GuiSystem::getInstance()->setDefaultFontSize(script->getFloat(0));
-    return 1;
+	GuiSystem::getInstance()->setDefaultFontSize(script->getFloat(0));
+	return 1;
 }
 
 int setWidgetPosition()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(!script->isFunctionOk("setWidgetPosition", 2))
-        return 0;
+	if (!script->isFunctionOk("setWidgetPosition", 2))
+		return 0;
 
-    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
 
-    MVector2 vec;
-    script->getFloatArray(1, vec, 2);
+	MVector2 vec;
+	script->getFloatArray(1, vec, 2);
 
-    if(w)
-    	w->setPosition(vec);
+	if (w)
+		w->setPosition(vec);
 
-    return 1;
+	return 1;
 }
 
 int setWidgetRotation()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(!script->isFunctionOk("setWidgetRotation", 2))
-        return 0;
+	if (!script->isFunctionOk("setWidgetRotation", 2))
+		return 0;
 
-    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
 
-    if(w)
-    	w->setRotation(script->getFloat(1));
+	if (w)
+		w->setRotation(script->getFloat(1));
 
-    return 1;
+	return 1;
 }
 
 int getWidgetRotation()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(!script->isFunctionOk("getWidgetRotation", 1))
-        return 0;
+	if (!script->isFunctionOk("getWidgetRotation", 1))
+		return 0;
 
-    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
 
-    if(w)
-    	script->pushFloat(w->getRotation());
+	if (w)
+		script->pushFloat(w->getRotation());
 
-    return 1;
+	return 1;
 }
 
 int getWidgetPosition()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(!script->isFunctionOk("getWidgetPosition", 1))
-        return 0;
+	if (!script->isFunctionOk("getWidgetPosition", 1))
+		return 0;
 
-    Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
 
-    if(w)
-    	script->pushFloatArray(w->getPosition(), 2);
+	if (w)
+		script->pushFloatArray(w->getPosition(), 2);
 
-    return 1;
+	return 1;
 }
 
 int setWidgetVisible()
@@ -334,7 +340,7 @@ int setWidgetVisible()
 
 	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
 
-	if(w)
+	if (w)
 		w->setVisible(script->getBoolean(1));
 
 	return 1;
@@ -345,11 +351,11 @@ int isWidgetVisible()
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
 	if (!script->isFunctionOk("isWidgetVisible", 1))
-	return 0;
+		return 0;
 
 	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
 
-	if(w)
+	if (w)
 		script->pushBoolean(w->isVisible());
 
 	return 1;
@@ -358,13 +364,13 @@ int isWidgetVisible()
 int clearGui()
 {
 	GuiSystem::getInstance()->scheduleClear();
-    return 1;
+	return 1;
 }
 
 int setNormalBackground()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	if(!script->isFunctionOk("setNormalBackground", 1))
+	if (!script->isFunctionOk("setNormalBackground", 1))
 		return 0;
 
 	MVector4 vec;
@@ -376,7 +382,7 @@ int setNormalBackground()
 int setHoverBackground()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	if(!script->isFunctionOk("setHoverBackground", 1))
+	if (!script->isFunctionOk("setHoverBackground", 1))
 		return 0;
 
 	MVector4 vec;
@@ -388,7 +394,7 @@ int setHoverBackground()
 int setHighlightBackground()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	if(!script->isFunctionOk("setHighlightBackground", 1))
+	if (!script->isFunctionOk("setHighlightBackground", 1))
 		return 0;
 
 	MVector4 vec;
@@ -400,13 +406,13 @@ int setHighlightBackground()
 int enableCanvasRenderToTexture()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	if(!script->isFunctionOk("enableCanvasRenderToTexture", 2))
+	if (!script->isFunctionOk("enableCanvasRenderToTexture", 2))
 		return 0;
-	
-	Canvas* c = (Canvas*) script->getPointer(0);
 
-    if(c)
-    	c->enableRenderToTexture(script->getString(1));
+	Canvas* c = (Canvas*)script->getPointer(0);
+
+	if (c)
+		c->enableRenderToTexture(script->getString(1));
 
 	return 1;
 }
@@ -414,22 +420,22 @@ int enableCanvasRenderToTexture()
 int disableCanvasRenderToTexture()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	if(!script->isFunctionOk("disableCanvasRenderToTexture", 1))
+	if (!script->isFunctionOk("disableCanvasRenderToTexture", 1))
 		return 0;
-	
-	Canvas* c = (Canvas*) script->getPointer(0);
 
-	if(c)
-    	c->disableRenderToTexture();
+	Canvas* c = (Canvas*)script->getPointer(0);
 
-    return 1;
+	if (c)
+		c->disableRenderToTexture();
+
+	return 1;
 }
 
 int createCanvas()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	Canvas* c = new Canvas;
-	
+
 	GuiSystem::getInstance()->addCanvas(c);
 	script->pushPointer(c);
 	return 1;
@@ -437,39 +443,39 @@ int createCanvas()
 
 int detroyWidget()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(!script->isFunctionOk("destroyWidget", 1))
-        return 0;
+	if (!script->isFunctionOk("destroyWidget", 1))
+		return 0;
 
-    int idx = script->getInteger(0);
-    GuiSystem::getInstance()->destroyWidget(idx);
-    return 1;
+	int idx = script->getInteger(0);
+	GuiSystem::getInstance()->destroyWidget(idx);
+	return 1;
 }
 
 int setCanvasLayer()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-    if(!script->isFunctionOk("setCanvasLayer", 2))
-        return 0;
+	if (!script->isFunctionOk("setCanvasLayer", 2))
+		return 0;
 
-    Canvas* c = (Canvas*) script->getPointer(0);
-    int layer = script->getInteger(1);
+	Canvas* c = (Canvas*)script->getPointer(0);
+	int layer = script->getInteger(1);
 
-    if(c)
-        c->setLayer(layer);
+	if (c)
+		c->setLayer(layer);
 
-    GuiSystem::getInstance()->updateLayers();
+	GuiSystem::getInstance()->updateLayers();
 
-    return 1;
+	return 1;
 }
 
 int loadSpriteSheet()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-	if(!script->isFunctionOk("loadSpriteSheet", 4))
+	if (!script->isFunctionOk("loadSpriteSheet", 4))
 		return 0;
 
 	const char* path = script->getString(0);
@@ -485,20 +491,19 @@ int loadSpriteSheet()
 	return 1;
 }
 
-int deleteSpriteSheet()
-{
-	return 0;
-}
+int deleteSpriteSheet() { return 0; }
 
 int createTile()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-	if(!script->isFunctionOk("createTile", 7))
+	if (!script->isFunctionOk("createTile", 7))
 		return 0;
 
 	Tile* tile = new Tile(script->getInteger(0), script->getInteger(1),
-							 script->getInteger(2), script->getInteger(3), script->getString(4), script->getInteger(5), script->getInteger(6));
+						  script->getInteger(2), script->getInteger(3),
+						  script->getString(4), script->getInteger(5),
+						  script->getInteger(6));
 
 	GuiSystem* gui = GuiSystem::getInstance();
 	int idx = gui->addWidget(tile);
@@ -511,14 +516,14 @@ int setTileSpriteSheet()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-	if(!script->isFunctionOk("setTileSpriteSheet", 2))
+	if (!script->isFunctionOk("setTileSpriteSheet", 2))
 		return 0;
 
-	Tile* w = (Tile*) GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Tile* w = (Tile*)GuiSystem::getInstance()->getWidget(script->getInteger(0));
 
-	if(w && !strcmp(w->getStaticName(), "Tile"))
+	if (w && !strcmp(w->getStaticName(), "Tile"))
 	{
-		w->setTileSheet((TileSheet*) script->getPointer(1));
+		w->setTileSheet((TileSheet*)script->getPointer(1));
 	}
 	else
 	{
@@ -531,12 +536,12 @@ int setTileOffset()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-	if(!script->isFunctionOk("setTileOffset", 2))
+	if (!script->isFunctionOk("setTileOffset", 2))
 		return 0;
 
-	Tile* w = (Tile*) GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Tile* w = (Tile*)GuiSystem::getInstance()->getWidget(script->getInteger(0));
 
-	if(w && !strcmp(w->getStaticName(), "Tile"))
+	if (w && !strcmp(w->getStaticName(), "Tile"))
 	{
 		MVector2 vec;
 		script->getFloatArray(1, vec, 2);
@@ -553,12 +558,13 @@ int getSpriteSize()
 {
 	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
-	if(!script->isFunctionOk("getSpriteSize", 1))
+	if (!script->isFunctionOk("getSpriteSize", 1))
 		return 0;
 
-	Sprite* w = (Sprite*) GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Sprite* w =
+		(Sprite*)GuiSystem::getInstance()->getWidget(script->getInteger(0));
 
-	if(!w)
+	if (!w)
 	{
 		MLOG_ERROR("Given widget is NULL!");
 		return 0;
@@ -566,32 +572,92 @@ int getSpriteSize()
 
 	MVector2 size = w->getSize();
 	script->pushFloatArray(size, 2);
-	
+
+	return 1;
+}
+
+int setWidgetScale()
+{
+
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setWidgetScale", 2))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	MVector2 vec;
+	script->getFloatArray(1, vec, 2);
+
+	if (w)
+		w->setScale(vec);
+
+	return 1;
+}
+
+int setWidgetFlip()
+{
+
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setWidgetFlip", 2))
+		return 0;
+
+	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+
+	MVector2 vec;
+	script->getFloatArray(1, vec, 2);
+
+	if (w)
+		w->setFlip(vec);
+
+	return 1;
+}
+
+int set2DCameraMovement()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("set2DCameraMovement", 1))
+		return 0;
+
+	GuiSystem* g = GuiSystem::getInstance();
+
+	MVector2 vec;
+	script->getFloatArray(0, vec, 1);
+
+	if (g)
+		g->setCameraOffset(vec);
+
 	return 1;
 }
 
 void GuiSystem::setupLuaInterface(MScriptContext* script)
 {
-    script->addFunction("enableGui", enableGui);
-    script->addFunction("getMainCanvas", getMainCanvas);
-    script->addFunction("createCanvas", createCanvas);
-    script->addFunction("getCanvasClearColor", getCanvasClearColor);
-    script->addFunction("setCanvasClearColor", setCanvasClearColor);
-    script->addFunction("createButton", createButton);
-    script->addFunction("createInput", createInput);
-    script->addFunction("createLabel", createLabel);
-    script->addFunction("createSprite", createSprite);
+	script->addFunction("set2DCameraMovement", set2DCameraMovement);
+	script->addFunction("setWidgetFlip", setWidgetFlip);
+	script->addFunction("setWidgetScale", setWidgetScale);
+
+	script->addFunction("enableGui", enableGui);
+	script->addFunction("getMainCanvas", getMainCanvas);
+	script->addFunction("createCanvas", createCanvas);
+	script->addFunction("getCanvasClearColor", getCanvasClearColor);
+	script->addFunction("setCanvasClearColor", setCanvasClearColor);
+	script->addFunction("createButton", createButton);
+	script->addFunction("createInput", createInput);
+	script->addFunction("createLabel", createLabel);
+	script->addFunction("createSprite", createSprite);
 
 	script->addFunction("getSpriteSize", getSpriteSize);
-	
-    script->addFunction("addWidgetToCanvas", addWidgetToCanvas);
-    script->addFunction("destroyWidget", ::detroyWidget);
 
-    script->addFunction("setLabel", setLabel);
-    script->addFunction("getLabel", getLabel);
+	script->addFunction("addWidgetToCanvas", addWidgetToCanvas);
+	script->addFunction("destroyWidget", ::detroyWidget);
 
-    script->addFunction("setDefaultFontSize", ::setDefaultFontSize);
-    script->addFunction("clearGui", clearGui);
+	script->addFunction("setLabel", setLabel);
+	script->addFunction("getLabel", getLabel);
+
+	script->addFunction("setDefaultFontSize", ::setDefaultFontSize);
+	script->addFunction("clearGui", clearGui);
 
 	script->addFunction("getWidgetPosition", getWidgetPosition);
 	script->addFunction("setWidgetPosition", setWidgetPosition);
@@ -599,14 +665,16 @@ void GuiSystem::setupLuaInterface(MScriptContext* script)
 	script->addFunction("getWidgetRotation", getWidgetRotation);
 	script->addFunction("setWidgetRotation", setWidgetRotation);
 
-    script->addFunction("setHighlightBackground", ::setHighlightBackground);
-    script->addFunction("setNormalBackground", ::setNormalBackground);
-    script->addFunction("setHoverBackground", ::setHoverBackground);
-    
-    script->addFunction("enableCanvasRenderToTexture", enableCanvasRenderToTexture);
-    script->addFunction("disableCanvasRenderToTexture", disableCanvasRenderToTexture);
+	script->addFunction("setHighlightBackground", ::setHighlightBackground);
+	script->addFunction("setNormalBackground", ::setNormalBackground);
+	script->addFunction("setHoverBackground", ::setHoverBackground);
 
-    script->addFunction("setCanvasLayer", setCanvasLayer);
+	script->addFunction("enableCanvasRenderToTexture",
+						enableCanvasRenderToTexture);
+	script->addFunction("disableCanvasRenderToTexture",
+						disableCanvasRenderToTexture);
+
+	script->addFunction("setCanvasLayer", setCanvasLayer);
 
 	script->addFunction("createTile", createTile);
 	script->addFunction("loadSpriteSheet", loadSpriteSheet);
@@ -623,59 +691,58 @@ void GuiSystem::destroyWidget(int idx)
 	WidgetId id;
 	int i;
 
-    map<int,WidgetId>::iterator iter = m_widgets.begin();
+	map<int, WidgetId>::iterator iter = m_widgets.begin();
 
-    for(; iter != m_widgets.end(); iter++)
+	for (; iter != m_widgets.end(); iter++)
 	{
-        id = iter->second;
-		if(id.id == idx)
+		id = iter->second;
+		if (id.id == idx)
 		{
 			found = true;
 			break;
 		}
 	}
 
-	if(!found)
+	if (!found)
 		return;
 
 	delete id.w;
-    m_widgets.erase(iter);
+	m_widgets.erase(iter);
 }
 
-Widget* GuiSystem::getWidget(unsigned int idx)
-{
-    return m_widgets[idx].w;
-}
+Widget* GuiSystem::getWidget(unsigned int idx) { return m_widgets[idx].w; }
 
 void GuiSystem::draw()
 {
-    unsigned int width, height;
+	unsigned int width, height;
 
-    NeoEngine::getInstance()->getSystemContext()->getScreenSize(&width, &height);
-    Render::getInstance()->set2D(width, height);
+	NeoEngine::getInstance()->getSystemContext()->getScreenSize(&width,
+																&height);
+	Render::getInstance()->set2D(width, height);
 
-    if(m_enabled)
-    {
-        for(int i = 0; i < m_canvasVector.size(); i++)
-        {
-            m_canvasVector[i]->draw();
-        }
-    }
+	if (m_enabled)
+	{
+		for (int i = 0; i < m_canvasVector.size(); i++)
+		{
+			m_canvasVector[i]->draw();
+		}
+	}
 
-    NeoEngine::getInstance()->getRenderingContext()->setScissor(0,0,width,height);
+	NeoEngine::getInstance()->getRenderingContext()->setScissor(0, 0, width,
+																height);
 }
 
 void GuiSystem::update()
 {
-    if(m_enabled)
-    {
-        for(int i = 0; i < m_canvasVector.size(); i++)
-        {
-            m_canvasVector[i]->update();
-        }
-    }
+	if (m_enabled)
+	{
+		for (int i = 0; i < m_canvasVector.size(); i++)
+		{
+			m_canvasVector[i]->update();
+		}
+	}
 
-	if(m_clearScheduled)
+	if (m_clearScheduled)
 	{
 		clear();
 		m_clearScheduled = false;
@@ -685,38 +752,38 @@ void GuiSystem::update()
 
 void GuiSystem::clear()
 {
-    for(int i = 1; i < m_canvasVector.size(); i++)
-    {
-        delete m_canvasVector[i];
-    }
+	for (int i = 1; i < m_canvasVector.size(); i++)
+	{
+		delete m_canvasVector[i];
+	}
 
-    m_canvasVector.clear();
+	m_canvasVector.clear();
 
-    // Only leave the main canvas in there
-    m_canvasVector.push_back(Canvas::getInstance());
-    Canvas::getInstance()->clear();
+	// Only leave the main canvas in there
+	m_canvasVector.push_back(Canvas::getInstance());
+	Canvas::getInstance()->clear();
 
-	for(int i = 0; i < m_widgets.size(); i++)
-    {
-        delete m_widgets[i].w;
-    }
+	for (int i = 0; i < m_widgets.size(); i++)
+	{
+		delete m_widgets[i].w;
+	}
 
-    m_widgets.clear();
+	m_widgets.clear();
 	scriptCallbacks.clear();
 }
 
 static bool compareCanvasLayer(Canvas* a, Canvas* b)
 {
-    return (a->getLayer() > b->getLayer());
+	return (a->getLayer() > b->getLayer());
 }
 
 void GuiSystem::addCanvas(Canvas* c)
 {
-    if(c)
-        m_canvasVector.push_back(c);
+	if (c)
+		m_canvasVector.push_back(c);
 }
 
 void GuiSystem::updateLayers()
 {
-    std::sort(m_canvasVector.begin(), m_canvasVector.end(), compareCanvasLayer);
+	std::sort(m_canvasVector.begin(), m_canvasVector.end(), compareCanvasLayer);
 }

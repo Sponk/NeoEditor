@@ -28,7 +28,8 @@
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
  *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
+ * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
+ *diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
@@ -36,37 +37,39 @@
 
 using namespace Neo::Gui;
 
-Widget::Widget(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label) :
-m_x(x),
-m_y(y),
-m_rotation(0.0f),
-m_width(width),
-m_height(height),
-m_label(label),
-m_callback(NULL),
-m_visible(true)
+Widget::Widget(unsigned int x, unsigned int y, unsigned int width,
+			   unsigned int height, const char* label)
+	: m_x(x),
+	  m_y(y),
+	  m_rotation(0.0f),
+	  m_width(width),
+	  m_height(height),
+	  m_label(label),
+	  m_callback(NULL),
+	  m_visible(true),
+	  m_ignorCamera(false),
+	  m_scale(MVector2(1, 1)),
+	  m_flip(MVector2(1, 1))
 {
-
 }
 
-Widget::Widget():
-m_x(0),
-m_y(0),
-m_rotation(0.0f),
-m_width(30),
-m_height(30),
-m_label("Widget"),
-m_callback(NULL),
-m_visible(true)
+Widget::Widget()
+	: m_x(0),
+	  m_y(0),
+	  m_rotation(0.0f),
+	  m_width(30),
+	  m_height(30),
+	  m_label("Widget"),
+	  m_callback(NULL),
+	  m_visible(true)
 {
-
 }
 
 void Widget::doCallback()
 {
 #ifdef WIN32
-    ((void (*)(long int)) m_callback)(m_userData);
+	((void (*)(long int))m_callback)(m_userData);
 #else
-    m_callback(m_userData);
+	m_callback(m_userData);
 #endif
 }

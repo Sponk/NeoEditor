@@ -28,7 +28,8 @@
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
  *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
+ * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
+ *diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
@@ -56,10 +57,10 @@ private:
 	unsigned int m_imageWidth, m_imageHeight;
 
 public:
-
 	TileSheet() : m_image(0) {}
 
-	void loadImage(const char* path, unsigned int width, unsigned int height, unsigned int dist);
+	void loadImage(const char* path, unsigned int width, unsigned int height,
+				   unsigned int dist);
 	MVector4 getTexCoords(unsigned int x, unsigned int y);
 	int getImage() { return m_image; }
 };
@@ -70,27 +71,33 @@ public:
 class Tile : public Widget
 {
 protected:
-    OText* m_labelText;
+	OText* m_labelText;
 	TileSheet* m_parentSheet;
 
 	unsigned int m_tilex, m_tiley;
 
 public:
-
-	Tile(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label, unsigned int tilex, unsigned int tiley)
-		:
-		Widget(x,y,width,height,label),
-		m_labelText(NULL),
-		m_tilex(tilex),
-		m_tiley(tiley){}
+	Tile(unsigned int x, unsigned int y, unsigned int width,
+		 unsigned int height, const char* label, unsigned int tilex,
+		 unsigned int tiley)
+		: Widget(x, y, width, height, label),
+		  m_labelText(NULL),
+		  m_tilex(tilex),
+		  m_tiley(tiley)
+	{
+	}
 
 	const char* getStaticName() { return "Tile"; }
 
 	void setTileSheet(TileSheet* sheet) { m_parentSheet = sheet; }
-	void setOffset(MVector2 vec) { m_tilex = vec.x; m_tiley = vec.y; }
+	void setOffset(MVector2 vec)
+	{
+		m_tilex = vec.x;
+		m_tiley = vec.y;
+	}
 
-    void draw();
-    void update();
+	void draw();
+	void update();
 };
 }
 }

@@ -28,7 +28,8 @@
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
  *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
+ * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
+ *diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
@@ -49,20 +50,20 @@ namespace Gui
 class Sprite : public Widget
 {
 protected:
-    OText* m_labelText;
-    int m_image;
+	OText *m_labelText;
+	int m_image;
 	MVector2 m_imageSize;
 
-    std::string m_imagePath;
+	std::string m_imagePath;
 
 	void loadTexture();
 
- public:
+public:
 	Sprite(unsigned int x, unsigned int y, unsigned int width,
 		   unsigned int height, const char *texture, const char *label);
 
-    void draw();
-    void update();
+	void draw();
+	void update();
 
 	MVector2 getSize() { return m_imageSize; }
 };

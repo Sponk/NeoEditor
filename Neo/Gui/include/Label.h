@@ -28,7 +28,8 @@
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
  *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
+ * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
+ *diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
@@ -49,15 +50,17 @@ namespace Gui
 class Label : public Widget
 {
 protected:
-    OText* m_labelText;
+	OText* m_labelText;
 
 public:
+	Label(unsigned int x, unsigned int y, unsigned int width,
+		  unsigned int height, const char* label)
+		: Widget(x, y, width, height, label), m_labelText(NULL)
+	{
+	}
 
-    Label(unsigned int x, unsigned int y, unsigned int width, unsigned int height, const char* label) : Widget(x,y,width,height,label),
-        m_labelText(NULL) {}
-
-    void draw();
-    void update();
+	void draw();
+	void update();
 };
 }
 }

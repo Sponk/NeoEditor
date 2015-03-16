@@ -28,7 +28,8 @@
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
  *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
+ * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
+ *diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 #ifndef __CANVAS_H_
@@ -51,40 +52,48 @@ namespace Gui
 class Canvas
 {
 private:
-    std::vector<int> m_widgets;
-    MVector4 m_clearColor;
+	std::vector<int> m_widgets;
+	MVector4 m_clearColor;
 
-    unsigned int m_width, m_height;
-    unsigned int m_fbo;
-    bool m_renderToTexture;
-    
-    TextureRef* m_texture;
-    int m_layer;
+	unsigned int m_width, m_height;
+	unsigned int m_fbo;
+	bool m_renderToTexture;
+
+	TextureRef* m_texture;
+	int m_layer;
 
 public:
-    static Canvas* getInstance() { static Canvas m_instance; return &m_instance; }
+	static Canvas* getInstance()
+	{
+		static Canvas m_instance;
+		return &m_instance;
+	}
 
-	~Canvas() {clear();}
-    Canvas(): m_layer(0) {}
+	~Canvas() { clear(); }
+	Canvas() : m_layer(0) {}
 
-    /**
-     * @brief Draws the Canvas and its contents.
-     */
-    void draw();
-    void update();
+	/**
+	 * @brief Draws the Canvas and its contents.
+	 */
+	void draw();
+	void update();
 
-    void clear();
+	void clear();
 
-    int getLayer() {return m_layer; }
-    void setLayer(int nl) { m_layer = nl; }
+	int getLayer() { return m_layer; }
+	void setLayer(int nl) { m_layer = nl; }
 
-    void addWidget(int w);
-    MVector4 getClearColor() { return m_clearColor; }
-    void setClearColor(MVector4 vec) { m_clearColor = vec; }
-    
-    void enableRenderToTexture(const char* tex);
-    void enableRenderToTexture() { if(m_texture != NULL) m_renderToTexture = true; }
-    void disableRenderToTexture() { m_renderToTexture = false; }
+	void addWidget(int w);
+	MVector4 getClearColor() { return m_clearColor; }
+	void setClearColor(MVector4 vec) { m_clearColor = vec; }
+
+	void enableRenderToTexture(const char* tex);
+	void enableRenderToTexture()
+	{
+		if (m_texture != NULL)
+			m_renderToTexture = true;
+	}
+	void disableRenderToTexture() { m_renderToTexture = false; }
 };
 }
 }

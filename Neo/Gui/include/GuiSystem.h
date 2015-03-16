@@ -28,7 +28,8 @@
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
  *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
+ * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
+ *diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
@@ -50,63 +51,78 @@ namespace Gui
 class GuiSystem
 {
 private:
-
 	struct WidgetId
 	{
 		Widget* w;
 		int id;
 	};
 
-    bool m_enabled;
-    int m_ids;
+	bool m_enabled;
+	int m_ids;
 
-    std::vector<Canvas*> m_canvasVector;
-    std::map<int,WidgetId> m_widgets;
-    std::string m_defaultFont;
-    float m_defaultFontSize;
+	std::vector<Canvas*> m_canvasVector;
+	std::map<int, WidgetId> m_widgets;
+	std::string m_defaultFont;
+	float m_defaultFontSize;
 
-    MVector4 m_normalBackground;
-    MVector4 m_hoverBackground;
-    MVector4 m_highlightBackground;
+	MVector4 m_normalBackground;
+	MVector4 m_hoverBackground;
+	MVector4 m_highlightBackground;
 
 	bool m_clearScheduled;
 
 public:
+	GuiSystem();
+	~GuiSystem();
 
-    GuiSystem();
-    ~GuiSystem();
+	static GuiSystem* getInstance()
+	{
+		static GuiSystem m_instance;
+		return &m_instance;
+	}
+	void setupLuaInterface(MScriptContext* script);
+	void setEnabled(bool enabled) { m_enabled = enabled; }
 
-    static GuiSystem* getInstance() { static GuiSystem m_instance; return &m_instance; }
-    void setupLuaInterface(MScriptContext* script);
-    void setEnabled(bool enabled) { m_enabled = enabled; }
+	void draw();
+	void update();
 
-    void draw();
-    void update();
+	const char* getDefaultFont() { return m_defaultFont.c_str(); }
+	float getDefaultFontSize() { return m_defaultFontSize; }
+	void setDefaultFontSize(float s) { m_defaultFontSize = s; }
 
-    const char* getDefaultFont() { return m_defaultFont.c_str(); }
-    float getDefaultFontSize() { return m_defaultFontSize; }
-    void setDefaultFontSize(float s) { m_defaultFontSize = s; }
+	MVector4 getNormalBackground() { return m_normalBackground; }
+	MVector4 getHoverBackground() { return m_hoverBackground; }
+	MVector4 getHighlightBackground() { return m_highlightBackground; }
 
-    MVector4 getNormalBackground() { return m_normalBackground; }
-    MVector4 getHoverBackground() { return m_hoverBackground; }
-    MVector4 getHighlightBackground() { return m_highlightBackground; }
+	void setNormalBackground(MVector4 color) { m_normalBackground = color; }
+	void setHoverBackground(MVector4 color) { m_hoverBackground = color; }
+	void setHighlightBackground(MVector4 color)
+	{
+		m_highlightBackground = color;
+	}
 
-    void setNormalBackground(MVector4 color) { m_normalBackground = color; }
-    void setHoverBackground(MVector4 color) { m_hoverBackground = color; }
-    void setHighlightBackground(MVector4 color) { m_highlightBackground = color; }
+	Widget* getWidget(unsigned int idx);
+	int addWidget(Widget* w)
+	{
+		WidgetId id;
+		id.w = w;
+		id.id = ++m_ids;
+		m_widgets[id.id] = id;
+		return m_ids;
+	}
+	size_t getNumWidgets() { return m_widgets.size(); }
 
-    Widget* getWidget(unsigned int idx);
-    int addWidget(Widget* w) { WidgetId id; id.w = w; id.id = ++m_ids; m_widgets[id.id] = id; return m_ids;}
-    size_t getNumWidgets() { return m_widgets.size(); }
+	void addCanvas(Canvas* c);
+	Canvas* getCanvas(unsigned int i) { return m_canvasVector[i]; }
+	void updateLayers();
 
-    void addCanvas(Canvas* c);
-    Canvas* getCanvas(unsigned int i) { return m_canvasVector[i]; }
-    void updateLayers();
-    
-    void destroyWidget(int id);
+	MVector2 _camera_offset;
+	void setCameraOffset(MVector2 value) { _camera_offset = value; }
 
-    // Deletes all widgets and canvases except the main canvas.
-    void clear();
+	void destroyWidget(int id);
+
+	// Deletes all widgets and canvases except the main canvas.
+	void clear();
 	void scheduleClear() { m_clearScheduled = true; }
 };
 }

@@ -114,7 +114,7 @@ void MPluginScript::init()
 
 	// Add NeoGui bindings
 	Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(this);
-    LuaScript::init();
+	LuaScript::init();
 }
 
 bool MPluginScript::runScript(const char* filename)

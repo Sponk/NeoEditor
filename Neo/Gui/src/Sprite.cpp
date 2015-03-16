@@ -28,7 +28,8 @@
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
  *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
+ * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
+ *diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
@@ -38,61 +39,93 @@
 
 using namespace Neo::Gui;
 
-Sprite::Sprite(unsigned int x, unsigned int y, unsigned int width, unsigned int height,
-       const char *texture, const char *label)
-    : Widget(x, y, width, height, label), m_labelText(NULL), m_image(0),
-      m_imagePath(texture)
+Sprite::Sprite(unsigned int x, unsigned int y, unsigned int width,
+			   unsigned int height, const char* texture, const char* label)
+	: Widget(x, y, width, height, label),
+	  m_labelText(NULL),
+	  m_image(0),
+	  m_imagePath(texture)
 {
 	loadTexture();
 }
 
-void Sprite::update()
-{
-
-}
+void Sprite::update() {}
 
 void Sprite::draw()
 {
-    Render* render = Render::getInstance();
-    GuiSystem* gui = GuiSystem::getInstance();
-    MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
-    Level* level = NeoEngine::getInstance()->getLevel();
+	Render* render = Render::getInstance();
+	GuiSystem* gui = GuiSystem::getInstance();
+	MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
+	Level* level = NeoEngine::getInstance()->getLevel();
+	OCamera* camera = NeoEngine::getInstance()
+						  ->getLevel()
+						  ->getCurrentScene()
+						  ->getCurrentCamera();
 
-    if(m_labelText == NULL)
-    {
-        m_labelText = render->createText(gui->getDefaultFont(), gui->getDefaultFontSize());
-        m_labelText->setAlign(TEXT_ALIGN_CENTER);
-    }
+	if (m_labelText == NULL)
+	{
+		m_labelText = render->createText(gui->getDefaultFont(),
+										 gui->getDefaultFontSize());
+		m_labelText->setAlign(TEXT_ALIGN_CENTER);
+	}
 
-    if(m_image == 0 && m_imagePath.length() > 0)
-    {
+	if (m_image == 0 && m_imagePath.length() > 0)
+	{
 		loadTexture();
 	}
 
-    render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_image, m_rotation);
+	// If this sprite is allowed to ignore the camera then it must stay at the
+	// same position even if the camera is moving
+	// FIXME: Should not be here! All camera handling is supposed to be in
+	//        Neo::Gui::Canvas!
+	if (!m_ignorCamera)
+	{
+		MVector3 m = camera->getPosition();
+		float x = -m.x + gui->_camera_offset.x;
+		float y = m.y + gui->_camera_offset.y;
+		render->drawTexturedQuad(m_x + x, m_y + y, m_width, m_height, m_image,
+								 m_rotation, m_scale, m_flip);
 
-    if(m_label.length() > 0)
-    {
-        m_labelText->setText(m_label.c_str());
-        render->drawText(m_labelText, m_x + 0.5*m_width, m_y + m_height);
-    }
+		if (m_label.length() > 0)
+		{
+			m_labelText->setText(m_label.c_str());
+			render->drawText(m_labelText, x + m_x + 0.5 * m_width,
+							 y + m_y + m_height);
+		}
+	}
+	else
+	{
+		render->drawTexturedQuad(m_x, m_y, m_width, m_height, m_image,
+								 m_rotation, m_scale, m_flip);
+		if (m_label.length() > 0)
+		{
+			m_labelText->setText(m_label.c_str());
+			render->drawText(m_labelText, m_x + 0.5 * m_width, m_y + m_height);
+		}
+	}
+
+	if (m_label.length() > 0)
+	{
+		m_labelText->setText(m_label.c_str());
+		render->drawText(m_labelText, m_x + 0.5 * m_width, m_y + m_height);
+	}
 }
 
 void Sprite::loadTexture()
 {
 	Level* level = NeoEngine::getInstance()->getLevel();
 	MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
- 
+
 	char buf[256];
 	getGlobalFilename(buf, system->getWorkingDirectory(), m_imagePath.c_str());
 
-	TextureRef *tex = level->loadTexture(buf);
+	TextureRef* tex = level->loadTexture(buf);
 
 	tex->update();
-	
+
 	m_imageSize = MVector2(tex->getWidth(), tex->getHeight());
 	m_image = tex->getTextureId();
-	
+
 	if (m_width == 0)
 		m_width = m_imageSize.x;
 
