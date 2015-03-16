@@ -61,3 +61,5 @@ TARGET_LINK_LIBRARIES(LuaTestSDK
 )
 
 add_custom_target(lua-test "${NEO_BINARY_OUTPUT}/LuaTestSDK" WORKING_DIRECTORY ${NEO_BINARY_OUTPUT})
+
+add_dependencies(lua-test all)

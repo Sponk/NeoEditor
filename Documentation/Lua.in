@@ -6,7 +6,7 @@
 
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = "Lua API"
-PROJECT_NUMBER         = @MARATIS_VERSION@
+PROJECT_NUMBER         = @NEO_VERSION@
 PROJECT_BRIEF          = "Game Engine"
 PROJECT_LOGO           = 
 OUTPUT_DIRECTORY       = @DOCUMENTATION_BINARY_DIR@/Lua
@@ -104,8 +104,8 @@ WARN_LOGFILE           =
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 
-INPUT                  = @MARATIS_SOURCE_DIR@/Documentation/LuaDocs \
-                         @MARATIS_SOURCE_DIR@/README.md
+INPUT                  = @NEO_SOURCE_DIR@/Documentation/LuaDocs \
+                         @NEO_SOURCE_DIR@/README.md
 
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.lua *.md

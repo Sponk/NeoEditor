@@ -2,6 +2,8 @@
 FILE(GLOB_RECURSE SOURCES *.lua)
 INSTALL(FILES ${SOURCES} DESTINATION ${NEO_INSTALL_DIR}/LuaApi)
 
+INSTALL(DIRECTORY ${NEO_BINARY_OUTPUT}/../Documentation/LuaDoc DESTINATION ${NEO_INSTALL_DIR}/Documentation)
+
 INCLUDE(CopyFiles)
 copy_files("*.lua" "${NEO_BINARY_OUTPUT}/scripts/SDK" "copy-lua-api")
 
