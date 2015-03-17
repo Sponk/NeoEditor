@@ -1642,10 +1642,16 @@ void add_mesh_callback(Fl_Menu_*, void*)
 		return;
 	}
 
-	const char* filename = fl_native_file_chooser(
-		tr("Choose mesh"), "*.mesh", (current_project.path + "meshs").c_str(),
-		Fl_Native_File_Chooser::BROWSE_FILE);
+	//const char* filename = fl_native_file_chooser(
+	//	tr("Choose mesh"), "*.mesh", (current_project.path + "meshs").c_str(),
+	//	Fl_Native_File_Chooser::BROWSE_FILE);
 
+	const char* filename = fl_native_file_chooser(
+		tr("Choose file"), "*.{obj,dae,3ds,b3d,ase,ifc,xgl,zgl,lwo,stl,x,ms3d,"
+						   "cob,irrmesh,md1,md2,md3,mdc,md5,ter,mesh}",
+		current_project.path.c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+
+	
 	if (filename)
 	{
 		Maratis::getInstance()->autoSave();

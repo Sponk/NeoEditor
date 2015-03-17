@@ -201,7 +201,7 @@ class PublishEventMeshsPackage : public PublishEvent
 			
 			if(strstr(files[i].c_str(), "._bin") != 0)
 				continue;
-			
+
 			// export bin
 			if(strstr(files[i].c_str(), ".mesh") != 0)
 			{
@@ -225,6 +225,15 @@ class PublishEventMeshsPackage : public PublishEvent
 			}
 			else
 			{
+				
+				/*if(strstr(files[i].c_str(), ".dae") != 0)
+				  {
+				  if(M_loadAssimpMesh(files[i].c_str(), mesh))
+				  binarized = exportMeshBin((files[i] + "._bin").c_str(), mesh);
+				  else
+				  continue;
+				  }*/
+				
 				// try to export unknow format
 				if(engine->getMeshLoader()->loadData(files[i].c_str(), mesh))
 				{
@@ -239,6 +248,8 @@ class PublishEventMeshsPackage : public PublishEvent
 						packageManager->addFileToPackage((files[i] + ".maa._bin").c_str(), package, localFilename);
 					}
 				}
+				else
+					MLOG_ERROR("Could not export mesh '" << files[i] << "' as binary!");
 			}
 
 			tempLevel->clear();

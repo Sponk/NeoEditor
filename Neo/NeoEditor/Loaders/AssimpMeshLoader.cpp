@@ -873,4 +873,3 @@ bool M_importAssimpMeshes(const char * filename)
 	aiReleaseImport(scene);
 	return true;
 }
-
