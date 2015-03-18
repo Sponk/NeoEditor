@@ -18,6 +18,7 @@
 //========================================================================
 
 #include "Publisher.h"
+#include <MCore.h>
 
 using namespace Neo;
 
@@ -58,6 +59,10 @@ void Publisher::publish(const char* projName, const char* dest, const char* exec
 {
 	setPubDir(dest);
 	setPlayerExecutable(exec);
+
+	if(!isFileExist(dest))
+		createDirectory(dest);
+	
 	for(int prio = 0; prio < m_maxPriorities; ++prio)
 	{
 		for(int ev = 0; ev < m_events[prio].size(); ++ev)

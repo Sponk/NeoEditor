@@ -42,7 +42,6 @@ static string s_playerExecutable;
 
 void setPlayerExecutable(const char* file)
 {
-    // Only set s_pubDir when we can be sure that it exists
     if(!isDirectory(file))
         s_playerExecutable = file;
 }
@@ -50,7 +49,7 @@ void setPlayerExecutable(const char* file)
 const char* getPlayerExecutable()
 {
 	if (!s_playerExecutable.empty())
-#ifdef WIN32
+#ifndef WIN32
 		return s_playerExecutable.c_str();
 #else
 		return (s_playerExecutable + ".exe").c_str();
