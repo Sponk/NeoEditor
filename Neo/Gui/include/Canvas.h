@@ -65,6 +65,10 @@ private:
 	MVector2 m_cameraPosition;
 
 public:
+	/**
+	 * @brief Returns the global canvas object that directly maps to the screen.
+	 * @return The Canavs object.
+	 */
 	static Canvas* getInstance()
 	{
 		static Canvas m_instance;
@@ -78,25 +82,111 @@ public:
 	 * @brief Draws the Canvas and its contents.
 	 */
 	void draw();
+
+	/**
+	 * @brief Updates the Canvas and all its children.
+	 */
 	void update();
 
+	/**
+  	 * @brief Clears the Canvas by removing all children.
+	 *
+	 * Attention: No objects are deleted from memory!
+	 */
 	void clear();
 
+	/**
+	 * @brief Returns which layer this particular Canvas is at.
+	 * 
+	 * Canvases are sorted from low to high, meaning that higher values
+	 * appear in front of lower values.
+	 * @return The current layer value.
+	 */
 	int getLayer() { return m_layer; }
+
+	/**
+	 * @brief Sets the on which layer this Canvas will appear.
+	 *
+	 * Canvases are sorted from low to high, meaning that higher values
+	 * appear in front of lower values.
+	 * @param nl The new layer value.
+	 */ 
 	void setLayer(int nl) { m_layer = nl; }
 
+	/**
+	 * @brief Adds a widget to the Canvas.
+	 *
+	 * The widget will be added to the update and render queue of this Canvas
+	 * so it will display and operate properly. The object is actually a handle
+	 * that is used to retrieve the widget from a global list of widgets.
+	 *
+	 * @param w The widget handle from GuiSystem.
+	 */
 	void addWidget(int w);
+
+	/**
+	 * @brief Returns the clear color of the Canvas.
+	 * @return The clear color as RGBA between 0.0f and 1.0f.
+	 */
 	MVector4 getClearColor() { return m_clearColor; }
+
+	/**
+	 * @brief Changes the clear color of the Canvas.
+	 *
+	 * @param vec The new clear color as RGBA between 0.0f and 1.0f
+	 */
 	void setClearColor(MVector4 vec) { m_clearColor = vec; }
 
+	/**
+	 * @brief Enables render to texture for the Canvas.
+	 *
+	 * When render to texture is enabled the canvas will not render directly
+	 * to the screen anymore. It will draw everything to the specified texture
+	 * in memory instead which can be used as a widget of some sort or some
+	 * texture in the game.
+	 *
+	 * Attention: This will not overwrite the texture file on disk!
+	 * It merely uses it to identify the surface to render to!
+	 *
+	 * @param tex The filename of the texture to render to.
+	 */
 	void enableRenderToTexture(const char* tex);
+
+	/**
+	 * @brief Enables the render to texture flag.
+	 * 
+	 * This is useful to temporarily suspend and resume rendering to a texture
+	 * when Canvas::enableRenderToTexture(const char* text) was already called.
+	 *
+	 * @see Canvas::enableRenderToTexture
+	 */
 	void enableRenderToTexture()
 	{
 		if (m_texture != NULL)
 			m_renderToTexture = true;
 	}
+
+	/**
+	 * @brief Disables the render to texture flag.
+	 * 
+	 * This is useful to temporarily suspend and resume rendering to a texture
+	 * when Canvas::enableRenderToTexture(const char* text) was already called.
+	 *
+	 * @see Canvas::enableRenderToTexture
+	 */
 	void disableRenderToTexture() { m_renderToTexture = false; }
+
+	/**
+	 * @brief Sets the camera offset value that emulates a basic 2D camera.
+	 *
+	 * @param value The new offset that should be applied.
+	 */
 	void setCameraOffset(MVector2 value) { m_cameraPosition = value; }
+
+	/**
+	 * @brief Returns the current camera offset.
+	 * @return The current camera offset.
+	 */
 	MVector2 getCameraOffset() { return m_cameraPosition; }
 };
 }
