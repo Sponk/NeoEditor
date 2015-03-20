@@ -49,7 +49,8 @@ Widget = class(
 		object.height = h
 		object.rotation = 0
 		object.visible = true
-    end
+		object.scale = {1,1}
+	end
 )
 
 function Widget:setPositionX(value)
@@ -58,6 +59,14 @@ end
 
 function Widget:setPostionY(value)
     self.position[2] = value
+end
+
+--- Sets the scale of the widget
+--
+-- scale: A vec2 with the X and Y scale factor.
+function Widget:setScale(scale)
+   self.scale = scale
+   setWidgetScale(self.widget, scale)
 end
 
 --global table for all collision objects

@@ -104,7 +104,8 @@ WARN_LOGFILE           =
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 
-INPUT                  = @NEO_SOURCE_DIR@/SDK \
+INPUT                  = @NEO_SOURCE_DIR@/Neo/Gui \
+						 @NEO_SOURCE_DIR@/SDK \
                          @NEO_SOURCE_DIR@/Documentation \
                          @NEO_SOURCE_DIR@/README.md
 
