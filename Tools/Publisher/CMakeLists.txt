@@ -61,3 +61,5 @@ TARGET_LINK_LIBRARIES(neo-publish
 
 add_custom_target(neo-publish-test ${NEO_BINARY_OUTPUT}/neo-publish -i ${NEO_BINARY_OUTPUT}/LuaApiTest.mproj WORKING_DIRECTORY ${NEO_BINARY_OUTPUT})
 add_dependencies(neo-publish-test neo-publish)
+
+INSTALL(TARGETS neo-publish DESTINATION ${NEO_INSTALL_DIR})
