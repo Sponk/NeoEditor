@@ -16,7 +16,8 @@ public:
 		MSystemContext* context = (MSystemContext*) new Neo::MWinContext();
 		MPackageManager* pmanager = new Neo::MPackageManagerNPK;
 		Neo::BulletContext* physcontext = new Neo::BulletContext();
-
+		MRenderingContext* render = new Neo::DummyContext();
+		
 		pmanager->init();
 
 		level->addNewScene();
@@ -28,7 +29,8 @@ public:
 		engine->setGame(game);
 		engine->setPackageManager(pmanager);
 		engine->setPhysicsContext(physcontext);
-
+		engine->setRenderingContext(render);
+		
 		engine->getBehaviorManager()->addBehavior(Neo::LuaBehavior::getStaticName(), M_OBJECT3D, Neo::LuaBehavior::getNew);
 
 		// Init default thread

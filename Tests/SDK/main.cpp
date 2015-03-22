@@ -31,6 +31,7 @@
 #include <SDLThread.h>
 #include <Server.h>
 #include <BulletContext.h>
+#include <DummyContext.h>
 
 #include <gtest/gtest.h>
 #include <Window/Window.h>
