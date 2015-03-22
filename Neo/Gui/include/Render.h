@@ -46,6 +46,10 @@ namespace Gui
  * @brief The Render class contains helper methods for rendering 2D shapes.
  *
  * All elements can be rendered directly to the screen or to a texture.
+ *
+ * @bug Should be implemented in MRenderingContext!
+ *
+ * @author Yannick Pflanzer
  */
 class Render
 {
@@ -61,23 +65,113 @@ public:
 		return &m_instance;
 	}
 
+	/**
+	 * @brief Draws a colored quad without texture to the screen.
+	 *
+	 * @param x The X-Position
+	 * @param y The Y-Position
+	 * @param w The width
+	 * @param h The height
+	 * @param color The color of the quad in RGBA between 0.0 and 1.0
+	 * @param rotation The rotation of the quad.
+	 */
 	void drawColoredQuad(float x, float y, float w, float h, MVector4 color,
 						 float rotation = 0);
+	/**
+	 * @brief Draws a textured quad to the screen.
+	 *
+	 * @param x The X-Position
+	 * @param y The Y-Position
+	 * @param w The width
+	 * @param h The height
+	 * @param texture The handle of the texture to use
+	 * @param rotation The rotation of the quad.
+	 */
 	void drawTexturedQuad(float x, float y, float w, float h, int texture,
 						  float rotation = 0);
+	/**
+	 * @brief Draws a textured quad to the screen.
+	 *
+	 * @param x The X-Position
+	 * @param y The Y-Position
+	 * @param w The width
+	 * @param h The height
+	 * @param texture The handle of the texture to use
+	 * @param rotation The rotation of the quad
+	 * @param scale The scale of the quad
+	 */
 	void drawTexturedQuad(float x, float y, float w, float h, int texture,
 						  float rotation, MVector2 scale);
+
+	/**
+	 * @brief Draws a textured quad to the screen.
+	 *
+	 * @param x The X-Position
+	 * @param y The Y-Position
+	 * @param w The width
+	 * @param h The height
+	 * @param texture The handle of the texture to use
+	 * @param rotation The rotation of the quad
+	 * @param scale The scale of the quad
+	 * @param flip The vector that specifies how to flip the quad.
+	 */
 	void drawTexturedQuad(float x, float y, float w, float h, int texture,
 						  float rotation, MVector2 scale, MVector2 flip);
+
+	/**
+	 * @brief Draws a textured quad to the screen.
+	 *
+	 * @param x The X-Position
+	 * @param y The Y-Position
+	 * @param w The width
+	 * @param h The height
+	 * @param texture The handle of the texture to use
+	 * @param rotation The rotation of the quad
+	 * @param scale The scale of the quad
+	 * @param flip The vector that specifies how to flip the quad.
+	 * @param texcoords Custom texture coordinates
+	 */
 	void drawTexturedQuad(float x, float y, float w, float h, int texture,
 						  float rotation, MVector2 scale, MVector2 flip,
 						  MVector4 texcoords);
 
+	/**
+	 * @brief Draws a text object to the screen in 2D.
+	 *
+	 * @param text The OText object to draw.
+	 * @param x The X-Position
+	 * @param y The Y-Position
+	 * @param rotation The rotation of the text
+	 */ 
 	void drawText(OText* text, float x, float y, float rotation = 0);
+
+	/**
+	 * @brief Sets a 2D viewport with the given width and height.
+	 *
+	 * @param w The width of the viewport.
+	 * @param h The height of the viewport.
+	 */
 	void set2D(float w, float h);
 
+	/**
+	 * @brief Loads, compiles and links a GLSL shader.
+	 *
+	 * The shader ID will be plased inside the integer specified by the
+	 * fx pointer.
+	 *
+	 * @param vert The vertex shader.
+	 * @param frag The fragment shader.
+	 * @param fx A pointer to and existing integer.
+	 */
 	void loadShader(const char* vert, const char* frag, unsigned int* fx);
 
+	/**
+	 * @brief Creates a new text object.
+	 *
+	 * @param font The font file to use.
+	 * @param size The font size to use.
+	 * @return The new OText object.
+	 */
 	OText* createText(const char* font, float size);
 
 	Render();

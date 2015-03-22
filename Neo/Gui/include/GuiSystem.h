@@ -47,6 +47,8 @@ namespace Gui
 {
 /**
  * @brief The GuiSystem class contains all functionality to set up a GUI.
+ *
+ * @author Yannick Pflanzer
  */
 class GuiSystem
 {
@@ -75,33 +77,110 @@ public:
 	GuiSystem();
 	~GuiSystem();
 
+	/**
+	 * @brief Returns a global instance of the GuiSystem.
+	 * @return The global GuiSystem.
+	 */
 	static GuiSystem* getInstance()
 	{
 		static GuiSystem m_instance;
 		return &m_instance;
 	}
+
+	/**
+	 * @brief Registers all script functions to the given context.
+	 *
+	 * @param script The script interface to register to.
+	 */
 	void setupLuaInterface(MScriptContext* script);
+
+	/**
+	 * @brief Enables or disables the GUI.
+	 * @param A boolean.
+	 */
 	void setEnabled(bool enabled) { m_enabled = enabled; }
 
+	/**
+	 * @brief Draws all Canvases in the order the are layered in.
+	 */
 	void draw();
+
+	/**
+	 * @brief Updates all Canvases
+	 */
 	void update();
 
+	/**
+	 * @brief Returns the default font.
+	 * @return The default font.
+	 */
 	const char* getDefaultFont() { return m_defaultFont.c_str(); }
+
+    /**
+	 * @brief Returns the default font size.
+	 * @return The default font size.
+	 */
 	float getDefaultFontSize() { return m_defaultFontSize; }
+
+	/**
+	 * @brief Changes the default font size.
+	 * @param s The default font size.
+	 */
 	void setDefaultFontSize(float s) { m_defaultFontSize = s; }
 
+	/**
+	 * @brief Returns the normal background color.
+	 * @return The normal background.
+	 */
 	MVector4 getNormalBackground() { return m_normalBackground; }
+
+	/**
+	 * @brief Returns the hover background color.
+	 * @return The hover background.
+	 */
 	MVector4 getHoverBackground() { return m_hoverBackground; }
+
+	/**
+	 * @brief Returns the highlight color.
+	 * @return The highlight background.
+	 */
 	MVector4 getHighlightBackground() { return m_highlightBackground; }
 
+	/**
+	 * @brief Changes the normal background color.
+	 * @param color The normal background.
+	 */
 	void setNormalBackground(MVector4 color) { m_normalBackground = color; }
+
+	/**
+	 * @brief Changes the hover background color.
+	 * @param color The hover background.
+	 */
 	void setHoverBackground(MVector4 color) { m_hoverBackground = color; }
+
+	/**
+	 * @brief Changes the highlight background color.
+	 * @param color The highlight background.
+	 */
 	void setHighlightBackground(MVector4 color)
 	{
 		m_highlightBackground = color;
 	}
 
+	/**
+	 * @brief Retrieves a registered widget using its handle.
+	 *
+	 * @param idx The handle of the widget.
+	 * @return The widget.
+	 */
 	Widget* getWidget(unsigned int idx);
+
+	/**
+	 * @brief Adds a widget to the internal list.
+	 *
+	 * @param The new widget.
+	 * @return The handle of the widget.
+	 */
 	int addWidget(Widget* w)
 	{
 		WidgetId id;
@@ -110,15 +189,41 @@ public:
 		m_widgets[id.id] = id;
 		return m_ids;
 	}
+
+	/**
+	 * @brief Returns the number of registered widgets.
+	 * @return The number of widgets.
+	 */
 	size_t getNumWidgets() { return m_widgets.size(); }
 
+	/**
+	 * @brief Adds a new Canvas to the update list.
+	 * @param c The new Canvas.
+	 */
 	void addCanvas(Canvas* c);
+
+	/**
+	 * @brief Returns the Canvas with the given index.
+	 * @param i The index.
+	 * @return The Canvas.
+	 */
 	Canvas* getCanvas(unsigned int i) { return m_canvasVector[i]; }
+
+	/**
+	 * @brief Sorts all Canvases to match the priority hierarchy defined
+	 * by the layer mechanism.
+	 */
 	void updateLayers();
 
+	/**
+	 * @brief Destroys the widget with the given handle.
+	 * @param id The handle.
+	 */
 	void destroyWidget(int id);
 
-	// Deletes all widgets and canvases except the main canvas.
+	/**
+	 * @brief Deletes all widgets and canvases except the main canvas.
+	 */
 	void clear();
 	void scheduleClear() { m_clearScheduled = true; }
 };

@@ -44,7 +44,12 @@ namespace Neo
 {
 namespace Gui
 {
-
+/**
+ * @brief Implements a tile sheet from which it is possible to retrieve one
+ * specific tile.
+ *
+ * @author Yannick Pflanzer
+ */
 class TileSheet
 {
 private:
@@ -66,7 +71,12 @@ public:
 };
 
 /**
- * @brief The Sprite class displays a texture on the screen.
+ * @brief The Tile class displays a texture on the screen.
+ *
+ * The texture is retrieved using the TileSheet class and can change during
+ * runtime.
+ *
+ * @author Yannick Pflanzer
  */
 class Tile : public Widget
 {

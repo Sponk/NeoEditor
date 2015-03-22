@@ -45,7 +45,10 @@ namespace Gui
 {
 
 #ifndef WIN32
-typedef void (*CALLBACK_FUNCTION)(long int);
+	/** 
+	 * A pointer to a callback.
+	 */
+	typedef void (*CALLBACK_FUNCTION)(long int);
 #else
 #define CALLBACK_FUNCTION void *
 #endif
@@ -55,20 +58,37 @@ typedef void (*CALLBACK_FUNCTION)(long int);
  * to all GUI widgets.
  *
  * Every object that resembles a GUI widget has to derive from this class.
+ *
+ * @author Yannick Pflanzer
  */
 class Widget
 {
 protected:
+	/// The 2D coordinates of the widget
 	float m_x, m_y;
+
+	/// The rotation of the widget
 	float m_rotation;
+
+	/// The width and height of the widget
 	unsigned int m_width, m_height;
+
+	/// The label of the widget
 	std::string m_label;
 
+	/// The callback that should be called
 	CALLBACK_FUNCTION m_callback;
+
+	/// Some userdata that is given to the callback
 	long int m_userData;
 
+	/// Is the widget visible?
 	bool m_visible;
+
+	/// The scale vector
 	MVector2 m_scale;
+
+	/// The flip vector
 	MVector2 m_flip;
 
 public:
@@ -77,13 +97,23 @@ public:
 	Widget();
 
 	/**
-	 * @brief Virtual function used to draw the widget.
+	 * @brief Draws the widget to the canvas it belongs to.
+	 * @see Canvas
+	 * @see draw(MVector2 offset)
 	 */
 	virtual void draw() { draw(MVector2(0, 0)); }
+
+	/**
+	 * @brief Draws the widget to the canvas it belongs to.
+	 * @param offset The offset to apply to the position. 
+	 * Used for emulating a camera.
+	 *
+	 * @see Canvas
+	 */
 	virtual void draw(MVector2 offset) = 0;
 
 	/**
-	 * @brief Virtual function used to update the widget.
+	 * @brief Updates the widget and calls the callback if necessary.
 	 */
 	virtual void update() = 0;
 

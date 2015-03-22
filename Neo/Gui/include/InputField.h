@@ -45,11 +45,20 @@ namespace Gui
 {
 enum INPUT_STATE
 {
+	/// The input field is neither hovered over nor selected
 	INPUT_NORMAL_STATE = 0,
+	/// The input field is hovered by the mouse cursor
 	INPUT_HOVER_STATE,
+	/// The input field currently has focus
 	INPUT_SELECTED_STATE
 };
 
+/**
+ * @brief Implements a basic input field that takes keyboard input and
+ * delivers it to the program.
+ *
+ * @author Yannick Pflanzer
+ */
 class InputField : public Widget
 {
 	OText* m_labelText;

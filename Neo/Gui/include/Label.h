@@ -46,6 +46,8 @@ namespace Gui
 {
 /**
  * @brief The Label class displays a string on the screen.
+ *
+ * @author Yannick Pflanzer
  */
 class Label : public Widget
 {

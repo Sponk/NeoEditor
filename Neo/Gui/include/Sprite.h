@@ -46,6 +46,8 @@ namespace Gui
 {
 /**
  * @brief The Sprite class displays a texture on the screen.
+ *
+ * @author Yannick Pflanzer
  */
 class Sprite : public Widget
 {

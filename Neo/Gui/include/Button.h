@@ -43,13 +43,24 @@ namespace Neo
 {
 namespace Gui
 {
+/**
+ * Represents the state a button can possible have.
+ */
 enum BUTTON_STATE
 {
+	/// If the button is neither selected nor pressed
 	BUTTON_NORMAL_STATE = 0,
+	/// If the button has the mouse cursor over it
 	BUTTON_HOVER_STATE,
-	BUTTON_PRESSED_STATE
+	/// If the mouse is hovering over the button and the left mouse button is pressed
+	BUTTON_PRESSED_STATE 
 };
 
+/**
+ * @brief Implements a simple pushable button that calls the specified callback.
+ *
+ * @author Yannick Pflanzer
+ */
 class Button : public Widget
 {
 	OText* m_labelText;

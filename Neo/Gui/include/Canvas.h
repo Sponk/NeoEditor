@@ -48,6 +48,8 @@ namespace Gui
  *
  * A canvas contains all widgets, layouts, groups.
  * All elements can be rendered directly to the screen or to a texture.
+ *
+ * @author Yannick Pflanzer
  */
 class Canvas
 {
