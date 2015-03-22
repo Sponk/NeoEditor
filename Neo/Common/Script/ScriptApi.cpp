@@ -4604,6 +4604,30 @@ int loadTextFile()
     return 1;
 }
 
+int isFileExistApi()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if(!isFunctionOk(script, "isFileExist", 1))
+		return 0;
+
+	script->pushBoolean(isFileExist(script->getString(0)));
+
+    return 1;
+}
+
+int createDirectoryApi()
+{
+	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if(!isFunctionOk(script, "createDirectory", 1))
+		return 0;
+
+	script->pushBoolean(createDirectory(script->getString(0)));
+
+    return 1;
+}
+
 void Neo::bindLuaApi(MScriptContext* context)
 {
 	context->addFunction( "vec3", vec3);
@@ -4829,5 +4853,8 @@ void Neo::bindLuaApi(MScriptContext* context)
 	context->addFunction( "getSystemTick",	getSystemTick);
 	context->addFunction( "quit",			quit);
 	context->addFunction( "getWorkingDirectory", getWorkingDirectory);
-    context->addFunction("loadTextFile", loadTextFile);
+
+	context->addFunction("loadTextFile", loadTextFile);
+	context->addFunction("isFileExist", isFileExistApi);
+	context->addFunction("createDirectory", createDirectoryApi);
 }
