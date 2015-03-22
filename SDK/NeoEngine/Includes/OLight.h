@@ -63,7 +63,7 @@ private:
 
 	// color
 	float m_intensity;
-	MVector3 m_color;
+	Vector3 m_color;
 	
 	// spot
 	float m_spotAngle;
@@ -100,10 +100,10 @@ public:
 
 	// color
 	inline void setIntensity(float intensity){ m_intensity = intensity; }
-	inline void setColor(const MVector3 & color){ m_color = color; }
+	inline void setColor(const Vector3 & color){ m_color = color; }
 	inline float getIntensity(void){ return m_intensity; }
-	inline MVector3 getColor(void) const { return m_color; }
-	inline MVector3 getFinalColor(void) const { return m_color * m_intensity; }
+	inline Vector3 getColor(void) const { return m_color; }
+	inline Vector3 getFinalColor(void) const { return m_color * m_intensity; }
 
 	// spot
     inline void setSpotAngle(float angle){ m_spotAngle = CLAMP(angle, 0.0f, 180.0f); }

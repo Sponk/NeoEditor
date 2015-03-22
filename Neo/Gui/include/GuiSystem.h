@@ -67,9 +67,9 @@ private:
 	std::string m_defaultFont;
 	float m_defaultFontSize;
 
-	MVector4 m_normalBackground;
-	MVector4 m_hoverBackground;
-	MVector4 m_highlightBackground;
+	Vector4 m_normalBackground;
+	Vector4 m_hoverBackground;
+	Vector4 m_highlightBackground;
 
 	bool m_clearScheduled;
 
@@ -92,7 +92,7 @@ public:
 	 *
 	 * @param script The script interface to register to.
 	 */
-	void setupLuaInterface(MScriptContext* script);
+	void setupLuaInterface(ScriptContext* script);
 
 	/**
 	 * @brief Enables or disables the GUI.
@@ -132,37 +132,37 @@ public:
 	 * @brief Returns the normal background color.
 	 * @return The normal background.
 	 */
-	MVector4 getNormalBackground() { return m_normalBackground; }
+	Vector4 getNormalBackground() { return m_normalBackground; }
 
 	/**
 	 * @brief Returns the hover background color.
 	 * @return The hover background.
 	 */
-	MVector4 getHoverBackground() { return m_hoverBackground; }
+	Vector4 getHoverBackground() { return m_hoverBackground; }
 
 	/**
 	 * @brief Returns the highlight color.
 	 * @return The highlight background.
 	 */
-	MVector4 getHighlightBackground() { return m_highlightBackground; }
+	Vector4 getHighlightBackground() { return m_highlightBackground; }
 
 	/**
 	 * @brief Changes the normal background color.
 	 * @param color The normal background.
 	 */
-	void setNormalBackground(MVector4 color) { m_normalBackground = color; }
+	void setNormalBackground(Vector4 color) { m_normalBackground = color; }
 
 	/**
 	 * @brief Changes the hover background color.
 	 * @param color The hover background.
 	 */
-	void setHoverBackground(MVector4 color) { m_hoverBackground = color; }
+	void setHoverBackground(Vector4 color) { m_hoverBackground = color; }
 
 	/**
 	 * @brief Changes the highlight background color.
 	 * @param color The highlight background.
 	 */
-	void setHighlightBackground(MVector4 color)
+	void setHighlightBackground(Vector4 color)
 	{
 		m_highlightBackground = color;
 	}

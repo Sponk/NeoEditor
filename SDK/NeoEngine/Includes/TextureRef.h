@@ -34,7 +34,7 @@
 namespace Neo
 {
 // Texture ref
-class M_ENGINE_EXPORT TextureRef : public MDataRef
+class M_ENGINE_EXPORT TextureRef : public DataRef
 {
 private:
 

@@ -42,7 +42,7 @@ unsigned long g_startTick = 0;
 		}	\
 	}
 
-bool isFunctionOk(MScriptContext* script, const char* function, int argc)
+bool isFunctionOk(ScriptContext* script, const char* function, int argc)
 {
 	if(script->getArgsNumber() < argc)
 	{
@@ -53,7 +53,7 @@ bool isFunctionOk(MScriptContext* script, const char* function, int argc)
 	return true;
 }
 
-bool getVector4(MScriptContext* script, unsigned int idx, MVector4* vec)
+bool getVector4(ScriptContext* script, unsigned int idx, Vector4* vec)
 {
 	if(script && vec)
 	{
@@ -64,7 +64,7 @@ bool getVector4(MScriptContext* script, unsigned int idx, MVector4* vec)
 	return false;
 }
 
-bool getVector3(MScriptContext* script, unsigned int idx, MVector3* vec)
+bool getVector3(ScriptContext* script, unsigned int idx, Vector3* vec)
 {
 	if(script && vec)
 	{
@@ -75,7 +75,7 @@ bool getVector3(MScriptContext* script, unsigned int idx, MVector3* vec)
 	return false;
 }
 
-bool getVector2(MScriptContext* script, unsigned int idx, MVector2* vec)
+bool getVector2(ScriptContext* script, unsigned int idx, Vector2* vec)
 {
 	if(script && vec)
 	{
@@ -94,16 +94,16 @@ static void linkObjects(Object3d *parent, Object3d *child)
 	child->linkTo(parent);
 
 	// local matrix
-	MMatrix4x4 localMatrix = parent->getMatrix()->getInverse() * (*child->getMatrix());
+	Matrix4x4 localMatrix = parent->getMatrix()->getInverse() * (*child->getMatrix());
 
 	child->setPosition(localMatrix.getTranslationPart());
 	child->setEulerRotation(localMatrix.getEulerAngles());
 
-	float xSize = localMatrix.getRotatedVector3(MVector3(1, 0, 0)).getLength();
-	float ySize = localMatrix.getRotatedVector3(MVector3(0, 1, 0)).getLength();
-	float zSize = localMatrix.getRotatedVector3(MVector3(0, 0, 1)).getLength();
+	float xSize = localMatrix.getRotatedVector3(Vector3(1, 0, 0)).getLength();
+	float ySize = localMatrix.getRotatedVector3(Vector3(0, 1, 0)).getLength();
+	float zSize = localMatrix.getRotatedVector3(Vector3(0, 0, 1)).getLength();
 
-	child->setScale(MVector3(xSize, ySize, zSize));
+	child->setScale(Vector3(xSize, ySize, zSize));
 }
 
 static void unlinkObjects(Object3d *child)
@@ -114,21 +114,21 @@ static void unlinkObjects(Object3d *child)
 	child->unLink();
 
 	// matrix
-	MMatrix4x4 * matrix = child->getMatrix();
+	Matrix4x4 * matrix = child->getMatrix();
 
 	child->setPosition(matrix->getTranslationPart());
 	child->setEulerRotation(matrix->getEulerAngles());
 
-	float xSize = matrix->getRotatedVector3(MVector3(1, 0, 0)).getLength();
-	float ySize = matrix->getRotatedVector3(MVector3(0, 1, 0)).getLength();
-	float zSize = matrix->getRotatedVector3(MVector3(0, 0, 1)).getLength();
+	float xSize = matrix->getRotatedVector3(Vector3(1, 0, 0)).getLength();
+	float ySize = matrix->getRotatedVector3(Vector3(0, 1, 0)).getLength();
+	float zSize = matrix->getRotatedVector3(Vector3(0, 0, 1)).getLength();
 
-	child->setScale(MVector3(xSize, ySize, zSize));
+	child->setScale(Vector3(xSize, ySize, zSize));
 }
 
 static int vec3()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "vec", 3))
 		return 0;
 
@@ -136,17 +136,17 @@ static int vec3()
 	float y = (float)script->getFloat(1);
 	float z = (float)script->getFloat(2);
 
-	script->pushFloatArray(MVector3(x, y, z), 3);
+	script->pushFloatArray(Vector3(x, y, z), 3);
 	return 1;
 }
 
 static int length()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "length", 1))
 		return 0;
 
-	MVector3 a;
+	Vector3 a;
 	script->getFloatArray(0, a, 3);
 	script->pushFloat(a.getLength());
 	return 1;
@@ -154,11 +154,11 @@ static int length()
 
 static int normalize()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "normalize", 1))
 		return 0;
 
-	MVector3 a;
+	Vector3 a;
 	script->getFloatArray(0, a, 3);
 	script->pushFloatArray(a.getNormalized(), 3);
 	return 1;
@@ -166,11 +166,11 @@ static int normalize()
 
 static int dot()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "dot", 2))
 		return 0;
 
-	MVector3 a, b;
+	Vector3 a, b;
 	script->getFloatArray(0, a, 3);
 	script->getFloatArray(1, b, 3);
 	script->pushFloat(a.dotProduct(b));
@@ -179,11 +179,11 @@ static int dot()
 
 static int cross()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "cross", 2))
 		return 0;
 
-	MVector3 a, b;
+	Vector3 a, b;
 	script->getFloatArray(0, a, 3);
 	script->getFloatArray(1, b, 3);
 	script->pushFloatArray(a.crossProduct(b), 3);
@@ -196,7 +196,7 @@ static int cross()
 
 int getScene()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	Level * level = NeoEngine::getInstance()->getLevel();
 
 	if(! isFunctionOk(script, "getScene", 1))
@@ -219,7 +219,7 @@ int getScene()
 
 int getCurrentCamera()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	Level * level = NeoEngine::getInstance()->getLevel();
 	Scene * scene = level->getCurrentScene();
 
@@ -242,7 +242,7 @@ int getCurrentCamera()
 
 int getMeshFilename()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getMeshFilename", 1))
 		return 0;
 
@@ -267,7 +267,7 @@ int getMeshFilename()
 // TODO: Encapsulasation
 void getNewObjectName(const char * objectName, char * name)
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	Level * level = NeoEngine::getInstance()->getLevel();
 	Scene * scene = level->getCurrentScene();
 
@@ -291,7 +291,7 @@ void getNewObjectName(const char * objectName, char * name)
 
 int loadMesh()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "loadMesh", 1))
 		return 0;
 
@@ -324,7 +324,7 @@ int loadMesh()
 
 int loadSound()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "loadSound", 1))
 		return 0;
 
@@ -356,7 +356,7 @@ int loadSound()
 
 int getSoundFilename()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getSoundFilename", 1))
 		return 0;
 
@@ -379,7 +379,7 @@ int getSoundFilename()
 
 int getSoundRolloff()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getSoundRolloff", 1))
 		return 0;
 
@@ -399,7 +399,7 @@ int getSoundRolloff()
 
 int setSoundRolloff()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setSoundRolloff", 2))
 		return 0;
 
@@ -418,7 +418,7 @@ int setSoundRolloff()
 
 int getSoundRadius()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getSoundRadius", 1))
 		return 0;
 
@@ -438,7 +438,7 @@ int getSoundRadius()
 
 int setSoundRadius()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setSoundRadius", 2))
 		return 0;
 
@@ -457,7 +457,7 @@ int setSoundRadius()
 
 int setSoundRelative()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setSoundRelative", 2))
 		return 0;
 
@@ -476,7 +476,7 @@ int setSoundRelative()
 
 int isSoundRelative()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isSoundRelative", 1))
 		return 0;
 
@@ -496,7 +496,7 @@ int isSoundRelative()
 
 int setSoundLooping()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setSoundLooping", 2))
 		return 0;
 
@@ -515,7 +515,7 @@ int setSoundLooping()
 
 int isSoundLooping()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isSoundLooping", 1))
 		return 0;
 
@@ -535,7 +535,7 @@ int isSoundLooping()
 
 int createGroup()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "createGroup", 0))
 		return 0;
 
@@ -551,7 +551,7 @@ int createGroup()
 
 int getObjectType()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getObjectType", 1))
 		return 0;
 
@@ -596,7 +596,7 @@ int getObjectType()
 
 int getBoundingMin()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getBoundingMin", 1))
 		return 0;
 
@@ -621,7 +621,7 @@ int getBoundingMin()
 
 int getBoundingMax()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getBoundingMax", 1))
 		return 0;
 
@@ -646,7 +646,7 @@ int getBoundingMax()
 
 int deleteObject()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "deleteObject", 1))
 		return 0;
 
@@ -666,7 +666,7 @@ int deleteObject()
 	Object3d* object = (Object3d*) script->getPointer(0);
 	if(object != NULL && object->getType() == M_OBJECT3D_ENTITY)
 	{
-		MPhysicsContext* physics = NeoEngine::getInstance()->getPhysicsContext();
+		PhysicsContext* physics = NeoEngine::getInstance()->getPhysicsContext();
 		OEntity * entity = (OEntity*)object;
 		PhysicsProperties * phyProps = entity->getPhysicsProperties();
 		if(phyProps)
@@ -683,7 +683,7 @@ int deleteObject()
 
 int getObject()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	Level * level = NeoEngine::getInstance()->getLevel();
 	Scene * scene = level->getCurrentScene();
 
@@ -714,7 +714,7 @@ int getObject()
 
 int objectExists()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	Level * level = NeoEngine::getInstance()->getLevel();
 	Scene * scene = level->getCurrentScene();
 
@@ -741,7 +741,7 @@ int objectExists()
 
 int getClone()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	Level * level = NeoEngine::getInstance()->getLevel();
 	Scene * scene = level->getCurrentScene();
 
@@ -797,7 +797,7 @@ int getClone()
 
 int getParent()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getParent", 1))
 		return 0;
 
@@ -813,7 +813,7 @@ int getParent()
 
 int getChilds()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getChilds", 1))
 		return 0;
 
@@ -838,12 +838,12 @@ int getChilds()
 
 int getProjectedPoint()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getProjectedPoint", 2))
 		return 0;
 
 	NeoEngine * engine = NeoEngine::getInstance();
-	MSystemContext * system = engine->getSystemContext();
+	SystemContext * system = engine->getSystemContext();
 
 	unsigned int width = 0;
 	unsigned int height = 0;
@@ -856,11 +856,11 @@ int getProjectedPoint()
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
-			MVector3 vec;
+			Vector3 vec;
 			if(getVector3(script, 2, &vec))
 			{
 				OCamera * camera = (OCamera *)object;
-				MVector3 result = camera->getProjectedPoint(vec);
+				Vector3 result = camera->getProjectedPoint(vec);
 				result.x = result.x/(float)width;
 				result.y = 1.0f - (result.y/(float)height);
 				script->pushFloatArray( result, 3);
@@ -874,12 +874,12 @@ int getProjectedPoint()
 
 int getUnProjectedPoint()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getUnProjectedPoint", 2))
 		return 0;
 
 	NeoEngine * engine = NeoEngine::getInstance();
-	MSystemContext * system = engine->getSystemContext();
+	SystemContext * system = engine->getSystemContext();
 
 	unsigned int width = 0;
 	unsigned int height = 0;
@@ -892,11 +892,11 @@ int getUnProjectedPoint()
 	{
 		if(object->getType() == M_OBJECT3D_CAMERA)
 		{
-			MVector3 vec;
+			Vector3 vec;
 			if(getVector3(script, 2, &vec))
 			{
 				OCamera * camera = (OCamera *)object;
-				MVector3 result = camera->getUnProjectedPoint(MVector3(vec.x*width, (1-vec.y)*height, vec.z));
+				Vector3 result = camera->getUnProjectedPoint(Vector3(vec.x*width, (1-vec.y)*height, vec.z));
 				script->pushFloatArray( result, 3);
 				return 1;
 			}
@@ -908,7 +908,7 @@ int getUnProjectedPoint()
 
 int rotate()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "rotate", 3))
 		return 0;
 
@@ -919,7 +919,7 @@ int rotate()
 
 	if((object = (Object3d*) id))
 	{
-		MVector3 axis;
+		Vector3 axis;
 		if(getVector3(script, 2, &axis))
 		{
 			// get angle
@@ -947,7 +947,7 @@ int rotate()
 
 int translate()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "translate", 2))
 		return 0;
 
@@ -958,7 +958,7 @@ int translate()
 
 	if((object = (Object3d*) id))
 	{
-		MVector3 axis;
+		Vector3 axis;
 		if(getVector3(script, 2, &axis))
 		{
 			// is local ?
@@ -986,7 +986,7 @@ int translate()
 
 int getPosition()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getPosition", 1))
 		return 0;
 
@@ -1004,7 +1004,7 @@ int getPosition()
 
 int getRotation()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getRotation", 1))
 		return 0;
 
@@ -1022,7 +1022,7 @@ int getRotation()
 
 int getScale()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getScale", 1))
 		return 0;
 
@@ -1040,7 +1040,7 @@ int getScale()
 
 int getTransformedPosition()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getTransformedPosition", 1))
 		return 0;
 
@@ -1058,7 +1058,7 @@ int getTransformedPosition()
 
 int getTransformedRotation()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getTransformedRotation", 1))
 		return 0;
 
@@ -1076,7 +1076,7 @@ int getTransformedRotation()
 
 int getTransformedScale()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getTransformedScale", 1))
 		return 0;
 
@@ -1094,7 +1094,7 @@ int getTransformedScale()
 
 int setPosition()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setPosition", 2))
 		return 0;
 
@@ -1103,7 +1103,7 @@ int setPosition()
 
 	if((object = (Object3d*) id))
 	{
-		MVector3 position;
+		Vector3 position;
 		if(getVector3(script, 2, &position))
 		{
 			object->setPosition(position);
@@ -1115,7 +1115,7 @@ int setPosition()
 
 int setRotation()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setRotation", 2))
 		return 0;
 
@@ -1124,7 +1124,7 @@ int setRotation()
 
 	if((object = (Object3d*) id))
 	{
-		MVector3 rotation;
+		Vector3 rotation;
 		if(getVector3(script, 2, &rotation))
 		{
 			object->setEulerRotation(rotation);
@@ -1136,7 +1136,7 @@ int setRotation()
 
 int setScale()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setScale", 2))
 		return 0;
 
@@ -1145,7 +1145,7 @@ int setScale()
 
 	if((object = (Object3d*) id))
 	{
-		MVector3 scale;
+		Vector3 scale;
 		if(getVector3(script, 2, &scale))
 		{
 			object->setScale(scale);
@@ -1157,7 +1157,7 @@ int setScale()
 
 int updateMatrix()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "updateMatrix", 1))
 		return 0;
 
@@ -1174,7 +1174,7 @@ int updateMatrix()
 
 int getMatrix()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getMatrix", 1))
 		return 0;
 
@@ -1192,7 +1192,7 @@ int getMatrix()
 
 int getInverseRotatedVector()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getInverseRotatedVector", 2))
 		return 0;
 
@@ -1201,7 +1201,7 @@ int getInverseRotatedVector()
 
 	if((object = (Object3d*) id))
 	{
-		MVector3 vec;
+		Vector3 vec;
 		if(getVector3(script, 2, &vec))
 		{
 			script->pushFloatArray( object->getInverseRotatedVector(vec), 3);
@@ -1214,7 +1214,7 @@ int getInverseRotatedVector()
 
 int getRotatedVector()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getRotatedVector", 2))
 		return 0;
 
@@ -1223,7 +1223,7 @@ int getRotatedVector()
 
 	if((object = (Object3d*) id))
 	{
-		MVector3 vec;
+		Vector3 vec;
 		if(getVector3(script, 2, &vec))
 		{
 			script->pushFloatArray( object->getRotatedVector(vec), 3);
@@ -1236,7 +1236,7 @@ int getRotatedVector()
 
 int getInverseVector()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getInverseVector", 2))
 		return 0;
 
@@ -1245,7 +1245,7 @@ int getInverseVector()
 
 	if((object = (Object3d*) id))
 	{
-		MVector3 vec;
+		Vector3 vec;
 		if(getVector3(script, 2, &vec))
 		{
 			script->pushFloatArray( object->getInversePosition(vec), 3);
@@ -1258,7 +1258,7 @@ int getInverseVector()
 
 int getTransformedVector()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getTransformedVector", 2))
 		return 0;
 
@@ -1267,7 +1267,7 @@ int getTransformedVector()
 
 	if((object = (Object3d*) id))
 	{
-		MVector3 vec;
+		Vector3 vec;
 		if(getVector3(script, 2, &vec))
 		{
 			script->pushFloatArray( object->getTransformedVector(vec), 3);
@@ -1280,7 +1280,7 @@ int getTransformedVector()
 
 int isVisible()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isVisible", 1))
 		return 0;
 
@@ -1299,7 +1299,7 @@ int isVisible()
 
 int setInvisible()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setInvisible", 2))
 		return 0;
 
@@ -1321,8 +1321,8 @@ int setInvisible()
 
 int activate()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "activate", 1))
 		return 0;
@@ -1350,8 +1350,8 @@ int activate()
 
 int deactivate()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "deactivate", 1))
 		return 0;
@@ -1379,7 +1379,7 @@ int deactivate()
 
 int isActive()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isActive", 1))
 		return 0;
 
@@ -1397,7 +1397,7 @@ int isActive()
 
 int getName()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getName", 1))
 		return 0;
 
@@ -1413,7 +1413,7 @@ int getName()
 
 int setParent()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setParent", 2))
 		return 0;
 
@@ -1435,7 +1435,7 @@ int setParent()
 
 int changeAnimation()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "changeAnimation", 2))
 		return 0;
 
@@ -1458,7 +1458,7 @@ int changeAnimation()
 
 int isAnimationOver()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isAnimationOver", 1))
 		return 0;
 
@@ -1481,7 +1481,7 @@ int isAnimationOver()
 
 int getCurrentAnimation()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getCurrentAnimation", 1))
 		return 0;
 
@@ -1504,7 +1504,7 @@ int getCurrentAnimation()
 
 int setAnimationSpeed()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setAnimationSpeed", 2))
 		return 0;
 
@@ -1518,7 +1518,7 @@ int setAnimationSpeed()
 
 int getAnimationSpeed()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getAnimationSpeed", 1))
 		return 0;
 
@@ -1532,7 +1532,7 @@ int getAnimationSpeed()
 
 int setCurrentFrame()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setCurrentFrame", 2))
 		return 0;
 
@@ -1546,7 +1546,7 @@ int setCurrentFrame()
 
 int getCurrentFrame()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getCurrentFrame", 1))
 		return 0;
 
@@ -1560,7 +1560,7 @@ int getCurrentFrame()
 
 int getGravity()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	Level * level = NeoEngine::getInstance()->getLevel();
 	Scene * scene = level->getCurrentScene();
 
@@ -1578,7 +1578,7 @@ int getGravity()
 
 int setGravity()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	Level * level = NeoEngine::getInstance()->getLevel();
 	Scene * scene = level->getCurrentScene();
 
@@ -1592,7 +1592,7 @@ int setGravity()
 		scene = level->getSceneByIndex(sceneId);
 	}
 
-	MVector3 gravity;
+	Vector3 gravity;
 	if(getVector3(script, nbArguments, &gravity))
 		scene->setGravity(gravity);
 
@@ -1601,7 +1601,7 @@ int setGravity()
 
 int changeCurrentCamera()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	Level * level = NeoEngine::getInstance()->getLevel();
 	Scene * scene = level->getCurrentScene();
 
@@ -1638,7 +1638,7 @@ int changeCurrentCamera()
 
 int isGhost()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isGhost", 1))
 		return 0;
 
@@ -1660,7 +1660,7 @@ int isGhost()
 
 int enableGhost()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "enableGhost", 2))
 		return 0;
 
@@ -1681,7 +1681,7 @@ int enableGhost()
 
 int addCentralForce()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	int nbArguments = script->getArgsNumber();
 	if(! isFunctionOk(script, "addCentralForce", 2))
 		return 0;
@@ -1693,7 +1693,7 @@ int addCentralForce()
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MVector3 force;
+			Vector3 force;
 			if(getVector3(script, 2, &force))
 			{
 				// is local ?
@@ -1712,7 +1712,7 @@ int addCentralForce()
 					if(local)
 						force = object->getRotatedVector(force);
 
-					MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+					PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 					physics->addCentralForce(phyProps->getCollisionObjectId(), force);
 				}
 			}
@@ -1724,7 +1724,7 @@ int addCentralForce()
 
 int clearForces()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	Object3d * object;
 	Object3d* id = (Object3d*) script->getPointer(0);
 
@@ -1736,7 +1736,7 @@ int clearForces()
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
-				MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+				PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 				physics->clearForces(phyProps->getCollisionObjectId());
 			}
 		}
@@ -1747,7 +1747,7 @@ int clearForces()
 
 int addTorque()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	int nbArguments = script->getArgsNumber();
 	if(! isFunctionOk(script, "addTorque", 2))
 		return 0;
@@ -1759,7 +1759,7 @@ int addTorque()
 	{
 		if(object->getType() == M_OBJECT3D_ENTITY)
 		{
-			MVector3 torque;
+			Vector3 torque;
 			if(getVector3(script, 2, &torque))
 			{
 				// is local ?
@@ -1778,7 +1778,7 @@ int addTorque()
 					if(local)
 						torque = object->getRotatedVector(torque);
 
-					MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+					PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 					physics->addTorque(phyProps->getCollisionObjectId(), torque);
 				}
 			}
@@ -1790,7 +1790,7 @@ int addTorque()
 
 int getLinearDamping()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getLinearDamping", 1))
 		return 0;
 
@@ -1816,8 +1816,8 @@ int getLinearDamping()
 
 int setLinearDamping()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "setLinearDamping", 2))
 		return 0;
@@ -1849,7 +1849,7 @@ int setLinearDamping()
 
 int getAngularDamping()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getAngularDamping", 1))
 		return 0;
 
@@ -1875,8 +1875,8 @@ int getAngularDamping()
 
 int setAngularDamping()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "setAngularDamping", 2))
 		return 0;
@@ -1908,7 +1908,7 @@ int setAngularDamping()
 
 int setConstraintParent()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setConstraintParent", 2))
 		return 0;
 
@@ -1941,7 +1941,7 @@ int setConstraintParent()
 
 int getConstraintParent()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setConstraintParent", 2))
 		return 0;
 
@@ -1975,7 +1975,7 @@ int getConstraintParent()
 
 int enableParentCollision()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "enableParentCollision", 2))
 		return 0;
 
@@ -2008,8 +2008,8 @@ int enableParentCollision()
 
 int getCentralForce()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "getCentralForce", 1))
 		return 0;
@@ -2024,7 +2024,7 @@ int getCentralForce()
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
-				MVector3 force;
+				Vector3 force;
 				physics->getCentralForce(phyProps->getCollisionObjectId(), &force);
 				script->pushFloatArray( force, 3);
 				return 1;
@@ -2037,8 +2037,8 @@ int getCentralForce()
 
 int getTorque()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "getTorque", 1))
 		return 0;
@@ -2053,7 +2053,7 @@ int getTorque()
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
-				MVector3 force;
+				Vector3 force;
 				physics->getTorque(phyProps->getCollisionObjectId(), &force);
 				script->pushFloatArray( force, 3);
 				return 1;
@@ -2066,7 +2066,7 @@ int getTorque()
 
 int getMass()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getMass", 1))
 		return 0;
 
@@ -2092,12 +2092,12 @@ int getMass()
 
 int enablePhysics()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if (!isFunctionOk(script, "enablePhysics", 2))
 		return 0;
 
 	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, M_OBJECT3D_ENTITY)
-	MPhysicsContext* physics = NeoEngine::getInstance()->getPhysicsContext();
+	PhysicsContext* physics = NeoEngine::getInstance()->getPhysicsContext();
 	PhysicsProperties* phyProps = entity->createPhysicsProperties();
 	Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
 
@@ -2117,8 +2117,8 @@ int enablePhysics()
 
 int setMass()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "setMass", 2))
 		return 0;
@@ -2146,7 +2146,7 @@ int setMass()
 
 int getFriction()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getFriction", 1))
 		return 0;
 
@@ -2172,8 +2172,8 @@ int getFriction()
 
 int setFriction()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "setFriction", 2))
 		return 0;
@@ -2201,7 +2201,7 @@ int setFriction()
 
 int getRestitution()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getRestitution", 1))
 		return 0;
 
@@ -2227,8 +2227,8 @@ int getRestitution()
 
 int setRestitution()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "setRestitution", 2))
 		return 0;
@@ -2256,7 +2256,7 @@ int setRestitution()
 
 int getAngularFactor()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getAngularFactor", 1))
 		return 0;
 
@@ -2282,8 +2282,8 @@ int getAngularFactor()
 
 int setAngularFactor()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "setAngularFactor", 2))
 		return 0;
@@ -2311,7 +2311,7 @@ int setAngularFactor()
 
 int getLinearFactor()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getLinearFactor", 1))
 		return 0;
 
@@ -2325,7 +2325,7 @@ int getLinearFactor()
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
-				MVector3 * linFactor = phyProps->getLinearFactor();
+				Vector3 * linFactor = phyProps->getLinearFactor();
 				script->pushFloatArray( *linFactor, 3);
 				return 1;
 			}
@@ -2337,8 +2337,8 @@ int getLinearFactor()
 
 int setLinearFactor()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	if(! isFunctionOk(script, "setLinearFactor", 2))
 		return 0;
@@ -2353,7 +2353,7 @@ int setLinearFactor()
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
-				MVector3 linFactor;
+				Vector3 linFactor;
 				if(getVector3(script, 2, &linFactor))
 				{
 					phyProps->setLinearFactor(linFactor);
@@ -2369,7 +2369,7 @@ int setLinearFactor()
 
 int getNumCollisions()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getNumCollisions", 1))
 		return 0;
 
@@ -2383,7 +2383,7 @@ int getNumCollisions()
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
-				MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+				PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 				int collision = physics->isObjectInCollision(phyProps->getCollisionObjectId());
 				script->pushInteger( collision);
 				return 1;
@@ -2396,7 +2396,7 @@ int getNumCollisions()
 
 int isCollisionTest()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isCollisionTest", 1))
 		return 0;
 
@@ -2410,7 +2410,7 @@ int isCollisionTest()
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
 			if(phyProps)
 			{
-				MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+				PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 				int collision = MIN(1, physics->isObjectInCollision(phyProps->getCollisionObjectId()));
 				script->pushBoolean( collision);
 				return 1;
@@ -2423,7 +2423,7 @@ int isCollisionTest()
 
 int isCollisionBetween()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isCollisionBetween", 2))
 		return 0;
 
@@ -2443,7 +2443,7 @@ int isCollisionBetween()
 			PhysicsProperties * phyProps2 = entity2->getPhysicsProperties();
 			if(phyProps1 && phyProps2)
 			{
-				MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+				PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 				int collision = physics->isObjectsCollision(
 					phyProps1->getCollisionObjectId(),
 					phyProps2->getCollisionObjectId()
@@ -2459,7 +2459,7 @@ int isCollisionBetween()
 
 int rayHit()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	Level * level = NeoEngine::getInstance()->getLevel();
 	Scene * scene = level->getCurrentScene();
 
@@ -2468,13 +2468,13 @@ int rayHit()
 
 	int nbArguments = script->getArgsNumber();
 
-	MVector3 start, end;
+	Vector3 start, end;
 	if(getVector3(script, 1, &start) && getVector3(script, 2, &end))
 	{
-		MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+		PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 		unsigned int collisionObjId;
-		MVector3 point;
+		Vector3 point;
 
 		// ray test
 		if(physics->isRayHit(start, end, &collisionObjId, &point))
@@ -2528,8 +2528,8 @@ int rayHit()
 
 int isKeyPressed()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MInputContext * input = NeoEngine::getInstance()->getInputContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	InputContext * input = NeoEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(script, "isKeyPressed", 1))
 		return 0;
@@ -2547,8 +2547,8 @@ int isKeyPressed()
 
 int onKeyDown()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MInputContext * input = NeoEngine::getInstance()->getInputContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	InputContext * input = NeoEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(script, "onKeyDown", 1))
 		return 0;
@@ -2566,8 +2566,8 @@ int onKeyDown()
 
 int onKeyUp()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MInputContext * input = NeoEngine::getInstance()->getInputContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	InputContext * input = NeoEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(script, "onKeyUp", 1))
 		return 0;
@@ -2585,8 +2585,8 @@ int onKeyUp()
 
 int getAxis()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MInputContext * input = NeoEngine::getInstance()->getInputContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	InputContext * input = NeoEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(script, "getAxis", 1))
 		return 0;
@@ -2604,8 +2604,8 @@ int getAxis()
 
 int getProperty()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MInputContext * input = NeoEngine::getInstance()->getInputContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	InputContext * input = NeoEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(script, "getProperty", 1))
 		return 0;
@@ -2623,8 +2623,8 @@ int getProperty()
 
 int getTouchPosition()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MInputContext * input = NeoEngine::getInstance()->getInputContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	InputContext * input = NeoEngine::getInstance()->getInputContext();
 
 	if (!isFunctionOk(script, "getTouchPosition", 1))
 		return 0;
@@ -2637,8 +2637,8 @@ int getTouchPosition()
 
 int getLastTouchPosition()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MInputContext * input = NeoEngine::getInstance()->getInputContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	InputContext * input = NeoEngine::getInstance()->getInputContext();
 
 	if (!isFunctionOk(script, "getLastTouchPosition", 1))
 		return 0;
@@ -2651,8 +2651,8 @@ int getLastTouchPosition()
 
 int getTouchPhase()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	MInputContext * input = NeoEngine::getInstance()->getInputContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	InputContext * input = NeoEngine::getInstance()->getInputContext();
 
 	if (!isFunctionOk(script, "getTouchPhase", 1))
 		return 0;
@@ -2665,7 +2665,7 @@ int getTouchPhase()
 
 int playSound()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "playSound", 1))
 		return 0;
 
@@ -2686,7 +2686,7 @@ int playSound()
 
 int pauseSound()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "pauseSound", 1))
 		return 0;
 
@@ -2707,7 +2707,7 @@ int pauseSound()
 
 int stopSound()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "stopSound", 1))
 		return 0;
 
@@ -2728,7 +2728,7 @@ int stopSound()
 
 int setSoundPitch()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setSoundPitch", 2))
 		return 0;
 
@@ -2749,7 +2749,7 @@ int setSoundPitch()
 
 int getSoundPitch()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "getSoundPitch", 1))
 		return 0;
 
@@ -2770,7 +2770,7 @@ int getSoundPitch()
 
 int changeScene()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	NeoEngine * engine = NeoEngine::getInstance();
 	Level * level = engine->getLevel();
 
@@ -2785,7 +2785,7 @@ int changeScene()
 
 int getCurrentSceneId()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	NeoEngine * engine = NeoEngine::getInstance();
 	Level * level = engine->getLevel();
 
@@ -2795,7 +2795,7 @@ int getCurrentSceneId()
 
 int getScenesNumber()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	NeoEngine * engine = NeoEngine::getInstance();
 	Level * level = engine->getLevel();
 
@@ -2805,7 +2805,7 @@ int getScenesNumber()
 
 int loadLevel()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "loadLevel", 1))
 		return 0;
 
@@ -2825,7 +2825,7 @@ int quit()
 
 int doesLevelExist()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	NeoEngine * engine = NeoEngine::getInstance();
 
 	if(! isFunctionOk(script, "doesLevelExist", 1))
@@ -2839,7 +2839,7 @@ int doesLevelExist()
 
 int getLightColor()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getLightColor", 1))
 		return 0;
 
@@ -2861,7 +2861,7 @@ int getLightColor()
 
 int getLightRadius()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getLightRadius", 1))
 		return 0;
 
@@ -2883,7 +2883,7 @@ int getLightRadius()
 
 int getLightIntensity()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getLightIntensity", 1))
 		return 0;
 
@@ -2905,7 +2905,7 @@ int getLightIntensity()
 
 int setLightColor()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setLightColor", 2))
 		return 0;
 
@@ -2914,7 +2914,7 @@ int setLightColor()
 
 	if((object = (Object3d*) id))
 	{
-		MVector3 color;
+		Vector3 color;
 		if(object->getType() == M_OBJECT3D_LIGHT && getVector3(script, 2, &color))
 		{
 			OLight * light = (OLight*)object;
@@ -2928,7 +2928,7 @@ int setLightColor()
 
 int setLightRadius()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setLightRadius", 2))
 		return 0;
 
@@ -2952,7 +2952,7 @@ int setLightRadius()
 
 int setLightIntensity()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setLightIntensity", 2))
 		return 0;
 
@@ -2976,7 +2976,7 @@ int setLightIntensity()
 
 int enableShadow()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "enableShadow", 2))
 		return 0;
 
@@ -3006,7 +3006,7 @@ int enableShadow()
 
 int isCastingShadow()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isCastingShadow", 1))
 		return 0;
 
@@ -3028,7 +3028,7 @@ int isCastingShadow()
 
 int setlightShadowQuality()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setlightShadowQuality", 2))
 		return 0;
 
@@ -3051,7 +3051,7 @@ int setlightShadowQuality()
 
 int setlightShadowBias()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setlightShadowBias", 2))
 		return 0;
 
@@ -3074,7 +3074,7 @@ int setlightShadowBias()
 
 int setlightShadowBlur()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setlightShadowBlur", 2))
 		return 0;
 
@@ -3097,7 +3097,7 @@ int setlightShadowBlur()
 
 int getlightShadowQuality()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getlightShadowQuality", 1))
 		return 0;
 
@@ -3119,7 +3119,7 @@ int getlightShadowQuality()
 
 int getlightShadowBias()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getlightShadowBias", 1))
 		return 0;
 
@@ -3141,7 +3141,7 @@ int getlightShadowBias()
 
 int getlightShadowBlur()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getlightShadowBlur", 1))
 		return 0;
 
@@ -3163,7 +3163,7 @@ int getlightShadowBlur()
 
 int setlightSpotAngle()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setlightSpotAngle", 2))
 		return 0;
 
@@ -3186,7 +3186,7 @@ int setlightSpotAngle()
 
 int setlightSpotExponent()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setlightSpotExponent", 2))
 		return 0;
 
@@ -3209,7 +3209,7 @@ int setlightSpotExponent()
 
 int getlightSpotAngle()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getlightSpotAngle", 1))
 		return 0;
 
@@ -3231,7 +3231,7 @@ int getlightSpotAngle()
 
 int getlightSpotExponent()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getlightSpotExponent", 1))
 		return 0;
 
@@ -3253,7 +3253,7 @@ int getlightSpotExponent()
 
 int createLight()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	OLight* light = NeoEngine::getInstance()->getLevel()->getCurrentScene()->addNewLight();
 	char name[256] = "Light0";
 	getNewObjectName("Light", name);
@@ -3266,7 +3266,7 @@ int createLight()
 
 int getSoundGain()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getSoundGain", 1))
 		return 0;
 
@@ -3288,7 +3288,7 @@ int getSoundGain()
 
 int setSoundGain()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setSoundGain", 2))
 		return 0;
 
@@ -3311,7 +3311,7 @@ int setSoundGain()
 
 int createCamera()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	OCamera* camera = NeoEngine::getInstance()->getLevel()->getCurrentScene()->addNewCamera();
 	char name[256] = "Camera0";
 	getNewObjectName("Camera", name);
@@ -3323,7 +3323,7 @@ int createCamera()
 
 int setCameraClearColor()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setCameraClearColor", 2))
 		return 0;
 
@@ -3331,7 +3331,7 @@ int setCameraClearColor()
 
 	if(object)
 	{
-		MVector3 color;
+		Vector3 color;
 		if(object->getType() == M_OBJECT3D_CAMERA && getVector3(script, 2, &color))
 		{
 			OCamera * camera = (OCamera*)object;
@@ -3345,7 +3345,7 @@ int setCameraClearColor()
 
 int getCameraClearColor()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getCameraClearColor", 1))
 		return 0;
 
@@ -3366,7 +3366,7 @@ int getCameraClearColor()
 
 int setCameraNear()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setCameraNear", 2))
 		return 0;
 
@@ -3389,7 +3389,7 @@ int setCameraNear()
 
 int getCameraNear()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getCameraNear", 1))
 		return 0;
 
@@ -3411,7 +3411,7 @@ int getCameraNear()
 
 int setCameraFar()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setCameraFar", 2))
 		return 0;
 
@@ -3434,7 +3434,7 @@ int setCameraFar()
 
 int getCameraFar()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getCameraFar", 1))
 		return 0;
 
@@ -3456,7 +3456,7 @@ int getCameraFar()
 
 int setCameraFov()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setCameraFov", 2))
 		return 0;
 
@@ -3479,7 +3479,7 @@ int setCameraFov()
 
 int getCameraFov()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getCameraFov", 1))
 		return 0;
 
@@ -3501,7 +3501,7 @@ int getCameraFov()
 
 int setCameraFogDistance()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setCameraFogDistance", 2))
 		return 0;
 
@@ -3524,7 +3524,7 @@ int setCameraFogDistance()
 
 int getCameraFogDistance()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getCameraFogDistance", 1))
 		return 0;
 
@@ -3546,7 +3546,7 @@ int getCameraFogDistance()
 
 int enableCameraOrtho()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "enableCameraOrtho", 2))
 		return 0;
 
@@ -3568,7 +3568,7 @@ int enableCameraOrtho()
 
 int isCameraOrtho()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isCameraOrtho", 1))
 		return 0;
 
@@ -3590,7 +3590,7 @@ int isCameraOrtho()
 
 int enableCameraFog()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "enableCameraFog", 2))
 		return 0;
 
@@ -3613,7 +3613,7 @@ int enableCameraFog()
 
 int isCameraFogEnabled()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "isCameraFogEnabled", 1))
 		return 0;
 
@@ -3635,7 +3635,7 @@ int isCameraFogEnabled()
 
 int enableCameraLayer()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "enableCameraLayer", 2))
 		return 0;
 
@@ -3658,7 +3658,7 @@ int enableCameraLayer()
 
 int disableCameraLayer()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "disableCameraLayer", 1))
 		return 0;
 
@@ -3680,10 +3680,10 @@ int disableCameraLayer()
 
 int enableRenderToTexture()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	NeoEngine * engine = NeoEngine::getInstance();
-	MSystemContext * system = engine->getSystemContext();
-	MRenderingContext * render = engine->getRenderingContext();
+	SystemContext * system = engine->getSystemContext();
+	RenderingContext * render = engine->getRenderingContext();
 	Level * level = engine->getLevel();
 
 	if(! isFunctionOk(script, "enableRenderToTexture", 4))
@@ -3719,17 +3719,17 @@ int enableRenderToTexture()
 
 				render->createTexture(&m_colorTextureId);
 				render->bindTexture(m_colorTextureId);
-				render->setTextureFilterMode(M_TEX_FILTER_LINEAR, M_TEX_FILTER_LINEAR);
-				render->setTextureUWrapMode(M_WRAP_CLAMP);
-				render->setTextureVWrapMode(M_WRAP_CLAMP);
-				render->texImage(0, width, height, M_UBYTE, M_RGBA, 0);
+				render->setTextureFilterMode(TEX_FILTER_LINEAR, TEX_FILTER_LINEAR);
+				render->setTextureUWrapMode(WRAP_CLAMP);
+				render->setTextureVWrapMode(WRAP_CLAMP);
+				render->texImage(0, width, height, VAR_UBYTE, TEX_RGBA, 0);
 
 				render->createTexture(&m_depthTextureId);
 				render->bindTexture(m_depthTextureId);
-				render->setTextureFilterMode(M_TEX_FILTER_LINEAR, M_TEX_FILTER_LINEAR);
-				render->setTextureUWrapMode(M_WRAP_CLAMP);
-				render->setTextureVWrapMode(M_WRAP_CLAMP);
-				render->texImage(0, width, height, M_UINT, M_DEPTH, 0);
+				render->setTextureFilterMode(TEX_FILTER_LINEAR, TEX_FILTER_LINEAR);
+				render->setTextureUWrapMode(WRAP_CLAMP);
+				render->setTextureVWrapMode(WRAP_CLAMP);
+				render->texImage(0, width, height, VAR_UINT, TEX_DEPTH, 0);
 				render->bindTexture(0);
 
 				colorTexture->setTextureId(m_colorTextureId);
@@ -3749,7 +3749,7 @@ int enableRenderToTexture()
 
 int disableRenderToTexture()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "disableRenderToTexture", 1))
 		return 0;
 
@@ -3778,7 +3778,7 @@ int disableRenderToTexture()
 
 int getBehaviorVariable()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getBehaviorVariable", 3))
 		return 0;
 
@@ -3828,22 +3828,22 @@ int getBehaviorVariable()
 							}
 						case M_VARIABLE_STRING:
 							{
-								script->pushString( ((MString *)variable.getPointer())->getSafeString());
+								script->pushString( ((String *)variable.getPointer())->getSafeString());
 								return 1;
 							}
 						case M_VARIABLE_VEC2:
 							{
-								script->pushFloatArray( *(MVector2 *)variable.getPointer(), 2);
+								script->pushFloatArray( *(Vector2 *)variable.getPointer(), 2);
 								return 1;
 							}
 						case M_VARIABLE_VEC3:
 							{
-								script->pushFloatArray( *(MVector3 *)variable.getPointer(), 3);
+								script->pushFloatArray( *(Vector3 *)variable.getPointer(), 3);
 								return 1;
 							}
 						case M_VARIABLE_VEC4:
 							{
-								script->pushFloatArray( *(MVector4 *)variable.getPointer(), 4);
+								script->pushFloatArray( *(Vector4 *)variable.getPointer(), 4);
 								return 1;
 							}
 						}
@@ -3858,7 +3858,7 @@ int getBehaviorVariable()
 
 int setBehaviorVariable()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setBehaviorVariable", 4))
 		return 0;
 
@@ -3913,28 +3913,28 @@ int setBehaviorVariable()
 							{
 								const char * str = script->getString(3);
 								if(str)
-									((MString *)variable.getPointer())->set(str);
+									((String *)variable.getPointer())->set(str);
 								return 0;
 							}
 						case M_VARIABLE_VEC2:
 							{
-								MVector2 vec;
+								Vector2 vec;
 								if(getVector2(script, 4, &vec))
-									*(MVector2 *)variable.getPointer() = vec;
+									*(Vector2 *)variable.getPointer() = vec;
 								return 0;
 							}
 						case M_VARIABLE_VEC3:
 							{
-								MVector3 vec;
+								Vector3 vec;
 								if(getVector3(script, 4, &vec))
-									*(MVector3 *)variable.getPointer() = vec;
+									*(Vector3 *)variable.getPointer() = vec;
 								return 0;
 							}
 						case M_VARIABLE_VEC4:
 							{
-								MVector4 vec;
+								Vector4 vec;
 								if(getVector4(script, 4, &vec))
-									*(MVector4 *)variable.getPointer() = vec;
+									*(Vector4 *)variable.getPointer() = vec;
 								return 0;
 							}
 						}
@@ -3949,7 +3949,7 @@ int setBehaviorVariable()
 
 int getBehaviorsNumber()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getBehaviorsNumber", 1))
 		return 0;
 
@@ -3966,7 +3966,7 @@ int getBehaviorsNumber()
 
 int getBehaviorName()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getBehaviorName", 2))
 		return 0;
 
@@ -3982,7 +3982,7 @@ int getBehaviorName()
 
 int getBehaviorVariablesNumber()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getBehaviorVariablesNumber", 2))
 		return 0;
 
@@ -4000,7 +4000,7 @@ int getBehaviorVariablesNumber()
 
 int getBehaviorVariableType()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getBehaviorVariablesNumber", 3))
 		return 0;
 
@@ -4047,7 +4047,7 @@ int getBehaviorVariableType()
 // addBehavior(object, behaviorName)
 int addBehavior()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "addBehavior", 2))
 		return 0;
 
@@ -4083,8 +4083,8 @@ int addBehavior()
 int centerCursor()
 {
 	NeoEngine * engine = NeoEngine::getInstance();
-	MSystemContext * system = engine->getSystemContext();
-	MInputContext * input = engine->getInputContext();
+	SystemContext * system = engine->getSystemContext();
+	InputContext * input = engine->getInputContext();
 
 	unsigned int width = 0;
 	unsigned int height = 0;
@@ -4102,7 +4102,7 @@ int centerCursor()
 int hideCursor()
 {
 	NeoEngine * engine = NeoEngine::getInstance();
-	MSystemContext * system = engine->getSystemContext();
+	SystemContext * system = engine->getSystemContext();
 
 	system->hideCursor();
 
@@ -4112,7 +4112,7 @@ int hideCursor()
 int showCursor()
 {
 	NeoEngine * engine = NeoEngine::getInstance();
-	MSystemContext * system = engine->getSystemContext();
+	SystemContext * system = engine->getSystemContext();
 
 	system->showCursor();
 
@@ -4121,7 +4121,7 @@ int showCursor()
 
 int loadTextFont()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "loadTextFont", 1))
 		return 0;
 
@@ -4155,7 +4155,7 @@ int loadTextFont()
 
 int getFontFilename()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getFontFilename", 1))
 		return 0;
 
@@ -4178,7 +4178,7 @@ int getFontFilename()
 
 int getTextAlignment()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getTextAlignment", 1))
 		return 0;
 
@@ -4209,7 +4209,7 @@ int getTextAlignment()
 
 int setTextAlignment()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setTextAlignment", 2))
 		return 0;
 
@@ -4239,7 +4239,7 @@ int setTextAlignment()
 
 int getTextFontSize()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getTextFontSize", 1))
 		return 0;
 
@@ -4260,7 +4260,7 @@ int getTextFontSize()
 
 int setTextFontSize()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setTextFontSize", 2))
 		return 0;
 
@@ -4280,7 +4280,7 @@ int setTextFontSize()
 
 int getText()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getText", 1))
 		return 0;
 
@@ -4304,7 +4304,7 @@ int getText()
 
 int setText()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setText", 2))
 		return 0;
 
@@ -4325,7 +4325,7 @@ int setText()
 
 int getTextColor()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "getTextColor", 1))
 		return 0;
 
@@ -4336,7 +4336,7 @@ int getTextColor()
 	{
 		if(object->getType() == M_OBJECT3D_TEXT)
 		{
-			MVector4 color = ((OText *)object)->getColor();
+			Vector4 color = ((OText *)object)->getColor();
 			script->pushFloatArray(color, 4);
 			return 1;
 		}
@@ -4347,7 +4347,7 @@ int getTextColor()
 
 int setTextColor()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setTextColor", 2))
 		return 0;
 
@@ -4358,7 +4358,7 @@ int setTextColor()
 	{
 		if(object->getType() == M_OBJECT3D_TEXT)
 		{
-			MVector4 color;
+			Vector4 color;
 			script->getFloatArray(1, color, 4);
 			((OText *)object)->setColor(color);
 		}
@@ -4369,9 +4369,9 @@ int setTextColor()
 
 int getWindowScale()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	NeoEngine * engine = NeoEngine::getInstance();
-	MSystemContext * system = engine->getSystemContext();
+	SystemContext * system = engine->getSystemContext();
 
 	unsigned int width, height;
 	system->getScreenSize(&width, &height);
@@ -4384,9 +4384,9 @@ int getWindowScale()
 
 int getSystemTick()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	NeoEngine * engine = NeoEngine::getInstance();
-	MSystemContext * system = engine->getSystemContext();
+	SystemContext * system = engine->getSystemContext();
 
 	script->pushInteger( (long int)(system->getSystemTick() - g_startTick));
 	return 1;
@@ -4394,7 +4394,7 @@ int getSystemTick()
 
 int doFile()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "doFile", 1))
 		return 0;
 
@@ -4434,7 +4434,7 @@ int doFile()
 
 int setPhysicsQuality()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "setPhysicsQuality", 1))
 		return 0;
 
@@ -4446,7 +4446,7 @@ int setPhysicsQuality()
 
 int loadCameraSkybox()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "loadCameraSkybox", 2))
 		return 0;
 
@@ -4461,7 +4461,7 @@ int loadCameraSkybox()
 // enablePostEffects(vertShadSrc, fragShadSrc)
 int enablePostEffects()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	int num_args = script->getArgsNumber();
 	NeoGame* game = NeoEngine::getInstance()->getGame();
 
@@ -4482,7 +4482,7 @@ int enablePostEffects()
 // loadPostEffectsShader(vertShadFile, fragShadFile)
 int loadPostEffectsShader()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "loadPostEffectsShader", 2))
 		return 0;
 
@@ -4506,7 +4506,7 @@ int disablePostEffects()
 
 int setPostEffectsResolution()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setPostEffectsResolution", 1))
 		return 0;
 
@@ -4522,7 +4522,7 @@ int setPostEffectsResolution()
 
 int getPostEffectsResolution()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	NeoGame* game = NeoEngine::getInstance()->getGame();
 	script->pushFloat( game->getPostProcessor()->getResolutionMultiplier());
 	return 1;
@@ -4530,7 +4530,7 @@ int getPostEffectsResolution()
 
 int setPostEffectsUniformFloat()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setPostEffectsUniformFloat", 2))
 		return 0;
 
@@ -4541,7 +4541,7 @@ int setPostEffectsUniformFloat()
 
 int addPostEffectsUniformFloat()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setPostEffectsUniformFloat", 2))
 		return 0;
 
@@ -4553,7 +4553,7 @@ int addPostEffectsUniformFloat()
 
 int setPostEffectsUniformInt()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setPostEffectsUniformInt", 2))
 		return 0;
 
@@ -4564,7 +4564,7 @@ int setPostEffectsUniformInt()
 
 int addPostEffectsUniformInt()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "setPostEffectsUniformInt", 2))
 		return 0;
 
@@ -4576,7 +4576,7 @@ int addPostEffectsUniformInt()
 
 int resizeWindow()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(!isFunctionOk(script, "resizeWindow", 2))
 		return 0;
 
@@ -4586,14 +4586,14 @@ int resizeWindow()
 
 int getWorkingDirectory()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	script->pushString(NeoWindow::getInstance()->getWorkingDirectory());
 	return 1;
 }
 
 int loadTextFile()
 {
-    MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+    ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
     if(!isFunctionOk(script, "loadTextFile", 1))
         return 0;
@@ -4606,7 +4606,7 @@ int loadTextFile()
 
 int isFileExistApi()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
 	if(!isFunctionOk(script, "isFileExist", 1))
 		return 0;
@@ -4618,7 +4618,7 @@ int isFileExistApi()
 
 int createDirectoryApi()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
 	if(!isFunctionOk(script, "createDirectory", 1))
 		return 0;
@@ -4628,7 +4628,7 @@ int createDirectoryApi()
     return 1;
 }
 
-void Neo::bindLuaApi(MScriptContext* context)
+void Neo::bindLuaApi(ScriptContext* context)
 {
 	context->addFunction( "vec3", vec3);
 	context->addFunction( "length", length);

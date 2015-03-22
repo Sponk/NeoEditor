@@ -34,7 +34,7 @@
 namespace Neo
 {
 // Mesh ref
-class M_ENGINE_EXPORT MeshRef : public MDataRef
+class M_ENGINE_EXPORT MeshRef : public DataRef
 {
 private:
 

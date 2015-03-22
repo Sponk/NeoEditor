@@ -22,8 +22,8 @@
 //
 //========================================================================
 
+#include <NeoCore.h>
 #include <NeoEngine.h>
-#include <MCore.h>
 
 using namespace Neo;
 
@@ -97,7 +97,7 @@ void Messenger::waitForAccess()
 {
     if(m_semaphore == NULL)
 	{
-		m_semaphore = MThreadManager::getInstance()->getNewSemaphore();
+		m_semaphore = ThreadFactory::getInstance()->getNewSemaphore();
         m_semaphore->Init(1);
     }
 
@@ -108,7 +108,7 @@ void Messenger::finishAccess()
 {
     if(m_semaphore == NULL)
 	{
-		m_semaphore = MThreadManager::getInstance()->getNewSemaphore();
+		m_semaphore = ThreadFactory::getInstance()->getNewSemaphore();
         m_semaphore->Init(1);
 	}
 

@@ -33,17 +33,17 @@
 
 namespace Neo
 {
-void openNode(MFile * file, const char * name, unsigned int tab, const char * sep = NULL);
-void closeNode(MFile * file, const char * name, unsigned int tab, const char * sep = NULL);
-void openAttributeNode(MFile * file, const char * name, unsigned int tab);
-void closeAttributeNode(MFile * file, const char * sep = NULL);
-void closeNodeAttributes(MFile * file, const char * sep = NULL);
-void writeBool(MFile * file, const char * name, bool variable, const char * sep = NULL);
-void writeString(MFile * file, const char * name, const char * string, const char * sep = NULL);
-void writeInt(MFile * file, const char * name, int variable, const char * sep = NULL);
-void writeFloat(MFile * file, const char * name, float variable, const char * sep = NULL);
-void writeFloatValues(MFile * file, const char * name, float * vector, unsigned int size, const char * sep = NULL);
-void writeFilename(MFile * file, const char * name, const char * filename, const char * workingDirectory = NULL, const char * sep = NULL);
-void writeVariable(MFile * file, NeoVariable * variable, const char * workingDirectory = NULL, const char * sep = NULL);
+void openNode(File * file, const char * name, unsigned int tab, const char * sep = NULL);
+void closeNode(File * file, const char * name, unsigned int tab, const char * sep = NULL);
+void openAttributeNode(File * file, const char * name, unsigned int tab);
+void closeAttributeNode(File * file, const char * sep = NULL);
+void closeNodeAttributes(File * file, const char * sep = NULL);
+void writeBool(File * file, const char * name, bool variable, const char * sep = NULL);
+void writeString(File * file, const char * name, const char * string, const char * sep = NULL);
+void writeInt(File * file, const char * name, int variable, const char * sep = NULL);
+void writeFloat(File * file, const char * name, float variable, const char * sep = NULL);
+void writeFloatValues(File * file, const char * name, float * vector, unsigned int size, const char * sep = NULL);
+void writeFilename(File * file, const char * name, const char * filename, const char * workingDirectory = NULL, const char * sep = NULL);
+void writeVariable(File * file, NeoVariable * variable, const char * workingDirectory = NULL, const char * sep = NULL);
 }
 #endif

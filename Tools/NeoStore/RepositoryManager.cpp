@@ -1,8 +1,9 @@
 #include "RepositoryManager.h"
+
+#include <NeoCore.h>
 #include <iostream>
 #include <fstream>
 #include <algorithm>
-#include <MCore.h>
 #include "Downloader.h"
 #include <zip.h>
 #include <cstdio>

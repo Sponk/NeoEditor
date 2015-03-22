@@ -106,8 +106,8 @@ void OText::updateLinesOffset(void)
 	float max = 0;
 
 	// bounding box
-	MVector3 * boxMin = &m_boundingBox.min;
-	MVector3 * boxMax = &m_boundingBox.max;
+	Vector3 * boxMin = &m_boundingBox.min;
+	Vector3 * boxMax = &m_boundingBox.max;
 	
 	// clear lines
 	m_linesOffset.clear();
@@ -152,8 +152,8 @@ void OText::updateLinesOffset(void)
 			if(! character)
 				continue;
 			
-			MVector2 scale = character->getScale();
-			MVector2 offset = character->getOffset() * m_size;
+			Vector2 scale = character->getScale();
+			Vector2 offset = character->getOffset() * m_size;
 			
 			float width = scale.x * widthFactor * m_size;
 			
@@ -217,10 +217,10 @@ void OText::prepare(void)
 		return;
 	}
 
-	MVector3 * min = &m_boundingBox.min;
-	MVector3 * max = &m_boundingBox.max;
+	Vector3 * min = &m_boundingBox.min;
+	Vector3 * max = &m_boundingBox.max;
 
-	(*min) = (*max) = MVector3(0, 0, 0);
+	(*min) = (*max) = Vector3(0, 0, 0);
 
 	float tabSize = m_size*2;
 	float fontSize = (float)font->getFontSize();
@@ -252,14 +252,14 @@ void OText::prepare(void)
 		if(! character)
 			continue;
 
-		MVector2 scale = character->getScale();
-		MVector2 offset = character->getOffset() * m_size;
+		Vector2 scale = character->getScale();
+		Vector2 offset = character->getOffset() * m_size;
 
 		float width = scale.x * widthFactor * m_size;
 		float height = scale.y * heightFactor * m_size;
 
-		MVector2 charMin = MVector2(xc, yc) + offset;
-		MVector2 charMax = charMin + MVector2(width, height);
+		Vector2 charMin = Vector2(xc, yc) + offset;
+		Vector2 charMax = charMin + Vector2(width, height);
 
 		if(charMin.x < min->x)
 			min->x = charMin.x;
@@ -282,18 +282,18 @@ void OText::updateVisibility(OCamera * camera)
 {
 	Frustum * frustum = camera->getFrustum();
 
-	MVector3 * min = &m_boundingBox.min;
-	MVector3 * max = &m_boundingBox.max;
+	Vector3 * min = &m_boundingBox.min;
+	Vector3 * max = &m_boundingBox.max;
 
-	MVector3 points[8] = {
-		getTransformedVector(MVector3(min->x, min->y, min->z)),
-		getTransformedVector(MVector3(min->x, max->y, min->z)),
-		getTransformedVector(MVector3(max->x, max->y, min->z)),
-		getTransformedVector(MVector3(max->x, min->y, min->z)),
-		getTransformedVector(MVector3(min->x, min->y, max->z)),
-		getTransformedVector(MVector3(min->x, max->y, max->z)),
-		getTransformedVector(MVector3(max->x, max->y, max->z)),
-		getTransformedVector(MVector3(max->x, min->y, max->z))
+	Vector3 points[8] = {
+		getTransformedVector(Vector3(min->x, min->y, min->z)),
+		getTransformedVector(Vector3(min->x, max->y, min->z)),
+		getTransformedVector(Vector3(max->x, max->y, min->z)),
+		getTransformedVector(Vector3(max->x, min->y, min->z)),
+		getTransformedVector(Vector3(min->x, min->y, max->z)),
+		getTransformedVector(Vector3(min->x, max->y, max->z)),
+		getTransformedVector(Vector3(max->x, max->y, max->z)),
+		getTransformedVector(Vector3(max->x, min->y, max->z))
 	};
 
 	// is box in frustum

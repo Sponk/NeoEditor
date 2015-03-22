@@ -58,7 +58,7 @@ void update_editor(void*)
         return;
 
     NeoGame* game = NeoEngine::getInstance()->getGame();
-    MInputContext* input = NeoEngine::getInstance()->getInputContext();
+    InputContext* input = NeoEngine::getInstance()->getInputContext();
     Maratis* maratis = Maratis::getInstance();
 
     if(window.inputMethod == NULL && !game->isRunning())
@@ -75,7 +75,7 @@ void update_editor(void*)
             }
 
 
-            vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
+            vue->setPosition(vue->getPosition() + vue->getRotatedVector(Vector3(0,0,direction*translation_speed)));
             vue->updateMatrix();
 
             //window.glbox->redraw();
@@ -90,7 +90,7 @@ void update_editor(void*)
                 vue->setFov(vue->getFov() + direction*translation_speed);
             }
 
-            vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
+            vue->setPosition(vue->getPosition() + vue->getRotatedVector(Vector3(0,0,direction*translation_speed)));
             vue->updateMatrix();
 
             //window.glbox->redraw();
@@ -101,7 +101,7 @@ void update_editor(void*)
             int direction = -1;
 
             OCamera * vue = maratis->getPerspectiveVue();
-            vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(direction*translation_speed,0,0)));
+            vue->setPosition(vue->getPosition() + vue->getRotatedVector(Vector3(direction*translation_speed,0,0)));
             vue->updateMatrix();
 
             //window.glbox->redraw();
@@ -111,7 +111,7 @@ void update_editor(void*)
             int direction = 1;
 
             OCamera * vue = maratis->getPerspectiveVue();
-            vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(direction*translation_speed,0,0)));
+            vue->setPosition(vue->getPosition() + vue->getRotatedVector(Vector3(direction*translation_speed,0,0)));
             vue->updateMatrix();
 
             //window.glbox->redraw();
@@ -120,7 +120,7 @@ void update_editor(void*)
         if(input->isKeyPressed("E"))
         {
             OCamera * vue = maratis->getPerspectiveVue();
-            vue->setPosition(vue->getPosition()+vue->getRotatedVector(MVector3(0,translation_speed, 0)));
+            vue->setPosition(vue->getPosition()+vue->getRotatedVector(Vector3(0,translation_speed, 0)));
             vue->updateMatrix();
 
             //window.glbox->redraw();
@@ -128,7 +128,7 @@ void update_editor(void*)
         else if(input->isKeyPressed("C"))
         {
             OCamera * vue = maratis->getPerspectiveVue();
-            vue->setPosition(vue->getPosition()+vue->getRotatedVector(MVector3(0,-translation_speed, 0)));
+            vue->setPosition(vue->getPosition()+vue->getRotatedVector(Vector3(0,-translation_speed, 0)));
             vue->updateMatrix();
 
             //window.glbox->redraw();
@@ -201,7 +201,7 @@ void GLBox::draw()
     Maratis* maratis = Maratis::getInstance();
     NeoEngine* engine = NeoEngine::getInstance();
     NeoWindow* window = NeoWindow::getInstance();
-    MRenderingContext* render = engine->getRenderingContext();
+    RenderingContext* render = engine->getRenderingContext();
 
     if(!maratis_init)
     {
@@ -235,10 +235,10 @@ void GLBox::draw()
 
         // MLOG_INFO("Render version : " << render->getRendererVersion());
 
-        render->setTextureFilterMode(M_TEX_FILTER_NEAREST, M_TEX_FILTER_NEAREST_MIPMAP_NEAREST);
+        render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST_MIPMAP_NEAREST);
 
         // TODO: Don't hardcode this!
-        render->setClearColor(MVector4(0.18, 0.32, 0.45, 1));
+        render->setClearColor(Vector4(0.18, 0.32, 0.45, 1));
 
         m_postProcessor.eraseTextures();
         m_postProcessor.updateResolution();
@@ -261,7 +261,7 @@ void GLBox::draw()
         engine->updateRequests();
 
         // TODO: Don't hardcode this!
-        render->setClearColor(MVector4(0.18, 0.32, 0.45, 1));
+        render->setClearColor(Vector4(0.18, 0.32, 0.45, 1));
 
         render->disableScissorTest();
         if(!m_postProcessing || !m_postProcessor.draw(maratis->getPerspectiveVue()))
@@ -282,7 +282,7 @@ void GLBox::draw()
                 Scene* scene = engine->getLevel()->getCurrentScene();
 
                 // Render everything
-                render->clear(M_BUFFER_DEPTH | M_BUFFER_COLOR);
+                render->clear(BUFFER_DEPTH | BUFFER_COLOR);
                 scene->draw(static_cast<OCamera*>(camera));
                 scene->drawObjectsBehaviors();
 
@@ -310,7 +310,7 @@ int GLBox::handle(int event)
 {
     //fprintf(stderr, "Handle %d FL_KEYBOARD is %d\n", event, FL_KEYBOARD);
     char key[2] = {0,0};
-    MInputContext* input = NeoEngine::getInstance()->getInputContext();
+    InputContext* input = NeoEngine::getInstance()->getInputContext();
     NeoWindow* window = NeoWindow::getInstance();
     Maratis* maratis = Maratis::getInstance();
 
@@ -562,13 +562,13 @@ int GLBox::handle(int event)
             MMouse* mouse = MMouse::getInstance();
             mouse->setWheelDirection(direction);
 
-            MInputContext* input = NeoEngine::getInstance()->getInputContext();
+            InputContext* input = NeoEngine::getInstance()->getInputContext();
             input->setAxis("MOUSE_WHEEL", input->getAxis("MOUSE_WHEEL") + direction);
 
             if(::window.inputMethod == NULL)
             {
                 OCamera * vue = maratis->getPerspectiveVue();
-                vue->setPosition(vue->getPosition() + vue->getRotatedVector(MVector3(0,0,direction*translation_speed)));
+                vue->setPosition(vue->getPosition() + vue->getRotatedVector(Vector3(0,0,direction*translation_speed)));
                 vue->updateMatrix();
             }
 
@@ -626,7 +626,7 @@ int GLBox::handle(int event)
             }
 
             {
-                    MInputContext* input = NeoEngine::getInstance()->getInputContext();
+                    InputContext* input = NeoEngine::getInstance()->getInputContext();
 
                     switch(Fl::event_button())
                     {
@@ -659,7 +659,7 @@ int GLBox::handle(int event)
 
     case FL_RELEASE:
     {
-        MInputContext* input = NeoEngine::getInstance()->getInputContext();
+        InputContext* input = NeoEngine::getInstance()->getInputContext();
 
         switch(Fl::event_button())
         {
@@ -697,7 +697,7 @@ int GLBox::handle(int event)
             {
                 OCamera * vue = maratis->getPerspectiveVue();
 
-                vue->setEulerRotation(vue->getEulerRotation() + MVector3(mouse_y - Fl::event_y(), 0, mouse_x-Fl::event_x())*0.5*rotation_speed);
+                vue->setEulerRotation(vue->getEulerRotation() + Vector3(mouse_y - Fl::event_y(), 0, mouse_x-Fl::event_x())*0.5*rotation_speed);
                 vue->updateMatrix();
             }
 

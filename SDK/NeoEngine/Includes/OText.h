@@ -59,7 +59,7 @@ private:
 	FontRef * m_fontRef;
 
 	// text
-	MString m_text;
+	String m_text;
 
 	// align
 	TEXT_ALIGN_MODES m_align;
@@ -69,7 +69,7 @@ private:
 	float m_size;
 
 	// color
-	MVector4 m_color;
+	Vector4 m_color;
 
 	// bounding box
 	Box3d m_boundingBox;
@@ -105,8 +105,8 @@ public:
 	inline float getSize(void){ return m_size; }
 
 	// color
-	inline void setColor(const MVector4 & color){ m_color = color; }
-	inline MVector4 getColor(void) const { return m_color; }
+	inline void setColor(const Vector4 & color){ m_color = color; }
+	inline Vector4 getColor(void) const { return m_color; }
 
 	// bounding box
 	inline Box3d * getBoundingBox(void){ return &m_boundingBox; }

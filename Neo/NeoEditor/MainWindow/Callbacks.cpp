@@ -43,7 +43,7 @@
 #include <ImageLoader.h>
 #include <LevelLoad.h>
 #include <LevelSave.h>
-#include <MCore.h>
+#include <NeoCore.h>
 
 #include "Utils.h"
 #include <HTTPRequest.h>
@@ -54,7 +54,7 @@ using namespace Neo;
 
 #include "../FilesUpdate/FilesUpdate.h"
 #include "../Loaders/AssimpMeshLoader.h"
-#include <MCore.h>
+#include <NeoCore.h>
 #include "../MainWindow/MainWindow.h"
 #include "../MainWindow/Translator.h"
 #include <Shiny.h>
@@ -136,7 +136,7 @@ void save_settings()
 		else
 			out << "scheme=none" << endl;
 
-		MVector3 vector = flColorToVector(Fl::get_color(FL_BACKGROUND_COLOR));
+		Vector3 vector = flColorToVector(Fl::get_color(FL_BACKGROUND_COLOR));
 		out << "background_r=" << vector.x << endl;
 		out << "background_g=" << vector.y << endl;
 		out << "background_b=" << vector.z << endl;
@@ -517,7 +517,7 @@ void behavior_string_callback(Fl_Input* input, const char* data)
 	if (!object || !input || !data)
 		return;
 
-	((MString*)get_variable_pointer(data, input->label(), object))
+	((String*)get_variable_pointer(data, input->label(), object))
 		->set(input->value());
 	window.m_deferredUiUpdate = true;
 }
@@ -541,8 +541,8 @@ void behavior_vector4_callback(Fl_Value_Input* input, const char* data)
 		return;
 	}
 
-	MVector4* vector =
-		(MVector4*)get_variable_pointer(group->label(), data, object);
+	Vector4* vector =
+		(Vector4*)get_variable_pointer(group->label(), data, object);
 
 	if (!vector)
 	{
@@ -586,8 +586,8 @@ void behavior_vector3_callback(Fl_Value_Input* input, const char* data)
 		return;
 	}
 
-	MVector3* vector =
-		(MVector3*)get_variable_pointer(group->label(), data, object);
+	Vector3* vector =
+		(Vector3*)get_variable_pointer(group->label(), data, object);
 
 	if (!vector)
 	{
@@ -628,8 +628,8 @@ void behavior_vector2_callback(Fl_Value_Input* input, const char* data)
 		return;
 	}
 
-	MVector2* vector =
-		(MVector2*)get_variable_pointer(group->label(), data, object);
+	Vector2* vector =
+		(Vector2*)get_variable_pointer(group->label(), data, object);
 
 	if (!vector)
 	{
@@ -745,7 +745,7 @@ void create_behavior_ui(Object3d* object)
 					Fl_Input* input = new Fl_Input(x + 5, y + height + 20, 205,
 												   22, var.getName());
 					input->align(Fl_Align(FL_ALIGN_TOP_LEFT));
-					input->value(((MString*)var.getPointer())->getSafeString());
+					input->value(((String*)var.getPointer())->getSafeString());
 
 					input->callback((Fl_Callback*)behavior_string_callback,
 									(void*)behavior->getName());
@@ -764,7 +764,7 @@ void create_behavior_ui(Object3d* object)
 
 					height += 3;
 
-					MVector3* vector = (MVector3*)var.getPointer();
+					Vector3* vector = (Vector3*)var.getPointer();
 
 					float values[3] = { vector->x, vector->y, vector->z };
 
@@ -796,7 +796,7 @@ void create_behavior_ui(Object3d* object)
 
 					height += 3;
 
-					MVector2* vector = (MVector2*)var.getPointer();
+					Vector2* vector = (Vector2*)var.getPointer();
 
 					float values[2] = { vector->x, vector->y };
 
@@ -828,7 +828,7 @@ void create_behavior_ui(Object3d* object)
 
 					height += 3;
 
-					MVector4* vector = (MVector4*)var.getPointer();
+					Vector4* vector = (Vector4*)var.getPointer();
 
 					float values[4] = { vector->x, vector->y, vector->z,
 										vector->w };
@@ -966,9 +966,9 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
 		Maratis::getInstance()->getPerspectiveVue()->updateMatrix();
 	}
 
-	MVector3 position = object->getPosition();
-	MVector3 rotation = object->getEulerRotation();
-	MVector3 scale = object->getScale();
+	Vector3 position = object->getPosition();
+	Vector3 rotation = object->getEulerRotation();
+	Vector3 scale = object->getScale();
 
 	if (update_name)
 		create_behavior_ui(object);
@@ -1013,7 +1013,7 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
 				phys->getAngularDamping());
 			window.object_linear_damping_edit->value(phys->getLinearDamping());
 
-			MVector3 linear_factor = *phys->getLinearFactor();
+			Vector3 linear_factor = *phys->getLinearFactor();
 			window.xlinear_edit->value(linear_factor.x);
 			window.ylinear_edit->value(linear_factor.y);
 			window.zlinear_edit->value(linear_factor.z);
@@ -1065,7 +1065,7 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
 
 		window.light_radius_edit->value(light->getRadius());
 
-		MVector3 color = light->getColor();
+		Vector3 color = light->getColor();
 		window.light_color_r->value(color.x);
 		window.light_color_g->value(color.y);
 		window.light_color_b->value(color.z);
@@ -1097,8 +1097,8 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
 		}
 
 		OCamera* camera = (OCamera*)object;
-		MVector3 clearColor = camera->getClearColor();
-		MVector3 fogColor = camera->getFogColor();
+		Vector3 clearColor = camera->getClearColor();
+		Vector3 fogColor = camera->getFogColor();
 
 		window.camera_color_r->value(clearColor.x);
 		window.camera_color_g->value(clearColor.y);
@@ -1153,7 +1153,7 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
 		window.text_size_edit->value(text->getSize());
 		window.text_alignment_chooser->value(text->getAlign());
 
-		MVector4 color = text->getColor();
+		Vector4 color = text->getColor();
 		window.text_r->value(color.x);
 		window.text_g->value(color.y);
 		window.text_b->value(color.z);
@@ -1235,7 +1235,7 @@ void edit_object_callback(Fl_Value_Input* input, long c)
 			Scene* scene =
 				NeoEngine::getInstance()->getLevel()->getCurrentScene();
 			Object3d* entity = scene->getObjectByName(name);
-			MVector3 position(window.xpos_edit->value(),
+			Vector3 position(window.xpos_edit->value(),
 							  window.ypos_edit->value(),
 							  window.zpos_edit->value());
 
@@ -1256,7 +1256,7 @@ void edit_object_callback(Fl_Value_Input* input, long c)
 				NeoEngine::getInstance()->getLevel()->getCurrentScene();
 			Object3d* entity = scene->getObjectByName(name);
 
-			MVector3 rotation(window.xrot_edit->value(),
+			Vector3 rotation(window.xrot_edit->value(),
 							  window.yrot_edit->value(),
 							  window.zrot_edit->value());
 
@@ -1277,7 +1277,7 @@ void edit_object_callback(Fl_Value_Input* input, long c)
 				NeoEngine::getInstance()->getLevel()->getCurrentScene();
 			Object3d* entity = scene->getObjectByName(name);
 
-			MVector3 scale(window.xscale_edit->value(),
+			Vector3 scale(window.xscale_edit->value(),
 						   window.yscale_edit->value(),
 						   window.zscale_edit->value());
 
@@ -1362,7 +1362,7 @@ void edit_light_properties(Fl_Value_Input*, void*)
 	}
 
 	light->setRadius(window.light_radius_edit->value());
-	light->setColor(MVector3(window.light_color_r->value(),
+	light->setColor(Vector3(window.light_color_r->value(),
 							 window.light_color_g->value(),
 							 window.light_color_b->value()));
 
@@ -1628,7 +1628,7 @@ void edit_object_properties(Fl_Value_Input*, void*)
 	phys->setAngularDamping(window.object_angular_damping_edit->value());
 	phys->setLinearDamping(window.object_linear_damping_edit->value());
 
-	phys->setLinearFactor(MVector3(window.xlinear_edit->value(),
+	phys->setLinearFactor(Vector3(window.xlinear_edit->value(),
 								   window.ylinear_edit->value(),
 								   window.zlinear_edit->value()));
 	phys->setAngularFactor(window.object_angular_factor_edit->value());
@@ -1682,10 +1682,10 @@ void edit_camera_properties(Fl_Value_Input*, void*)
 		return;
 	}
 
-	camera->setClearColor(MVector3(window.camera_color_r->value(),
+	camera->setClearColor(Vector3(window.camera_color_r->value(),
 								   window.camera_color_g->value(),
 								   window.camera_color_b->value()));
-	camera->setFogColor(MVector3(window.fog_color_r->value(),
+	camera->setFogColor(Vector3(window.fog_color_r->value(),
 								 window.fog_color_g->value(),
 								 window.fog_color_b->value()));
 
@@ -1796,7 +1796,7 @@ void edit_text_properties(Fl_Widget*, void*)
 	text->setText(window.text_text_edit->buffer()->text());
 	text->setSize(window.text_size_edit->value());
 
-	MVector4 color;
+	Vector4 color;
 	color.x = window.text_r->value();
 	color.y = window.text_g->value();
 	color.z = window.text_b->value();
@@ -2331,7 +2331,7 @@ void post_effects_setup_callback(Fl_Menu_*, void*)
 
 int redirect_script_print()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if (script->getArgsNumber() <= 0)
 		return 0;
 
@@ -2372,8 +2372,8 @@ void setCursorPos(int x, int y)
 int centerCursorReplacement()
 {
 	NeoEngine* engine = NeoEngine::getInstance();
-	MSystemContext* system = engine->getSystemContext();
-	MInputContext* input = engine->getInputContext();
+	SystemContext* system = engine->getSystemContext();
+	InputContext* input = engine->getInputContext();
 
 	unsigned int width = 0;
 	unsigned int height = 0;
@@ -2432,7 +2432,7 @@ void play_game_in_editor(Fl_Button* button, void*)
 	Fl::focus(::window.glbox);
 
 	// Save perspective vue
-	MMatrix4x4 matrix =
+	Matrix4x4 matrix =
 		*Maratis::getInstance()->getPerspectiveVue()->getMatrix();
 
 	engine->setScriptContext(&scriptContext);
@@ -2575,7 +2575,7 @@ int check_updates_thread(void* data)
 
 void check_for_updates_callback(Fl_Menu_*, void*)
 {
-	MThread* thread = MThreadManager::getInstance()->getNewThread();
+	Thread* thread = ThreadFactory::getInstance()->getNewThread();
 
 	std::string version;
 	check_updates_finished = false;

@@ -50,12 +50,12 @@ public:
 private:
 
 	// MEngine
-	MSoundContext * m_soundContext;
-	MRenderingContext * m_render;
-	MPhysicsContext * m_physics;
-	MScriptContext * m_script;
-	MInputContext * m_input;
-	MSystemContext * m_system;
+	SoundContext * m_soundContext;
+	RenderingContext * m_render;
+	PhysicsContext * m_physics;
+	ScriptContext * m_script;
+	InputContext * m_input;
+	SystemContext * m_system;
 	NeoGame * m_game;
 	Level * m_level;
 	Renderer * m_renderer;

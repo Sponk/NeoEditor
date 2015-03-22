@@ -28,7 +28,7 @@
 #include <NeoEngine.h>
 namespace Neo
 {
-void bindLuaApi(MScriptContext* context);
+void bindLuaApi(ScriptContext* context);
 }
 
 #endif

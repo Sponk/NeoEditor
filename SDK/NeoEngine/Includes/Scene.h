@@ -62,13 +62,13 @@ public:
 private:
 
 	// name
-	MString m_name;
+	String m_name;
 
 	// data mode
 	M_DATA_MODES m_dataMode;
 
 	// script
-	MString m_scriptFilename;
+	String m_scriptFilename;
 
 	// objects pointers
 	vector <Object3d *> m_objects;
@@ -90,10 +90,10 @@ private:
 	unsigned int m_currentCamera;
 
 	// gravity
-	MVector3 m_gravity;
+	Vector3 m_gravity;
 
     // Ambient light
-    MVector3 m_ambientLight;
+    Vector3 m_ambientLight;
 
 public:
 
@@ -115,8 +115,8 @@ public:
      */
 	inline const char * getName(void){ return m_name.getSafeString(); }
 
-    inline MVector3 getAmbientLight() { return m_ambientLight; }
-    inline void setAmbientLight(MVector3 light) { m_ambientLight = light; }
+    inline Vector3 getAmbientLight() { return m_ambientLight; }
+    inline void setAmbientLight(Vector3 light) { m_ambientLight = light; }
 
 	// data mode
 	inline void setDataMode(M_DATA_MODES dataMode){ m_dataMode = dataMode; }
@@ -151,13 +151,13 @@ public:
      *
      * @param gravity
      */
-	inline void setGravity(const MVector3 & gravity){ m_gravity = gravity; }
+	inline void setGravity(const Vector3 & gravity){ m_gravity = gravity; }
 
     /**
      * @brief Returns the current gravity in a MVector3
      * @return The gravity vector.
      */
-	inline MVector3 getGravity(void) const { return m_gravity; }
+	inline Vector3 getGravity(void) const { return m_gravity; }
 
 	// sounds
 	void playLoopSounds(void);

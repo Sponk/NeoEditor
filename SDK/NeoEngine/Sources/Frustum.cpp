@@ -54,10 +54,10 @@ void Frustum::makeVolume(OCamera * camera)
 	wPoints2d[3][1] = viewport[1] + viewport[3];
 
 	// front normal
-	m_direction = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();
+	m_direction = camera->getRotatedVector(Vector3(0, 0, -1)).getNormalized();
 
  	// compute volume points
-	MVector3 position = camera->getTransformedPosition();
+	Vector3 position = camera->getTransformedPosition();
 
 	float zNear = camera->getClippingNear();
 	float zFar = camera->getClippingFar();
@@ -65,8 +65,8 @@ void Frustum::makeVolume(OCamera * camera)
 	m_farPoint = position + (m_direction * zFar);
 
 	int i;
-	MVector3 vec;
-	MVector3 p3d(0, 0, 0);
+	Vector3 vec;
+	Vector3 p3d(0, 0, 0);
 	for(i=0; i<4; i++)
 	{
 		p3d.x = (float)wPoints2d[i][0];
@@ -93,14 +93,14 @@ void Frustum::makeVolume(OCamera * camera)
 	else
 	{
 		// compute normals (ortho)
-		m_normals[0] = camera->getRotatedVector(MVector3(1, 0, 0)).getNormalized();
+		m_normals[0] = camera->getRotatedVector(Vector3(1, 0, 0)).getNormalized();
 		m_normals[2] = - m_normals[0];
-		m_normals[1] = camera->getRotatedVector(MVector3(0, 1, 0)).getNormalized();
+		m_normals[1] = camera->getRotatedVector(Vector3(0, 1, 0)).getNormalized();
 		m_normals[3] = - m_normals[1];
 	}
 }
 
-bool Frustum::isVolumePointsVisible(MVector3 * points, unsigned int pointsNumber)
+bool Frustum::isVolumePointsVisible(Vector3 * points, unsigned int pointsNumber)
 {
 	bool out = true;
 	unsigned int p;
@@ -134,7 +134,7 @@ bool Frustum::isVolumePointsVisible(MVector3 * points, unsigned int pointsNumber
 	// out of camera planes
 	for(int i=0; i<4; i++)
 	{
-		MVector3 * origin = &m_points[pointsId[i][1]];
+		Vector3 * origin = &m_points[pointsId[i][1]];
 
 		out = true;
 		for(p=0; p<pointsNumber; p++)

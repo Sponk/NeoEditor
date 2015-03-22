@@ -62,7 +62,7 @@ public:
 	}
 
 	void draw();
-	void draw(MVector2 offset) { draw(); }
+	void draw(Vector2 offset) { draw(); }
 	void update();
 };
 }

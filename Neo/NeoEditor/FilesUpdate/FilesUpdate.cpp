@@ -31,13 +31,13 @@
 
 using namespace Neo;
 
-void updateRefs(MDataManager * dataManager)
+void updateRefs(DataManager * dataManager)
 {
 	unsigned int i;
 	unsigned int size = dataManager->getRefsNumber();
 	for(i=0; i<size; i++)
 	{
-		MDataRef * ref = dataManager->getRef(i);
+		DataRef * ref = dataManager->getRef(i);
 		const char * filename = ref->getFilename();
 		if(filename)
 		{
@@ -60,13 +60,13 @@ void FilesUpdate::update(void)
 	NeoEngine * engine = NeoEngine::getInstance();
 	Level * level = engine->getLevel();
 
-	MDataManager * textureManager = level->getTextureManager();
-	MDataManager * shaderManager = level->getShaderManager();
-	MDataManager * soundManager = level->getSoundManager();
-	MDataManager * meshManager = level->getMeshManager();
-	MDataManager * armatureAnimManager = level->getArmatureAnimManager();
-	MDataManager * texturesAnimManager = level->getTexturesAnimManager();
-	MDataManager * materialsAnimManager = level->getMaterialsAnimManager();
+	DataManager * textureManager = level->getTextureManager();
+	DataManager * shaderManager = level->getShaderManager();
+	DataManager * soundManager = level->getSoundManager();
+	DataManager * meshManager = level->getMeshManager();
+	DataManager * armatureAnimManager = level->getArmatureAnimManager();
+	DataManager * texturesAnimManager = level->getTexturesAnimManager();
+	DataManager * materialsAnimManager = level->getMaterialsAnimManager();
 
 	updateRefs(textureManager);
 	updateRefs(shaderManager);

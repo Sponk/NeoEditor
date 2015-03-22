@@ -38,7 +38,7 @@ extern EditorWindow window;
 void SceneSetupDlg::ok_button_callback(Fl_Button* button, SceneSetupDlg* dlg)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
-	MVector3 ambientLight(dlg->color_r->value(), dlg->color_g->value(),
+	Vector3 ambientLight(dlg->color_r->value(), dlg->color_g->value(),
 			dlg->color_b->value());
 
 	engine->getLevel()->getCurrentScene()->setAmbientLight(ambientLight);
@@ -120,7 +120,7 @@ void MaterialEditDlg::material_changed(Fl_Choice* choice, MaterialEditDlg* dlg)
 	if (!material)
 		return;
 
-	MVector3 color = material->getEmit();
+	Vector3 color = material->getEmit();
 
 	dlg->color_r->value(color.x);
 	dlg->color_g->value(color.y);
@@ -170,7 +170,7 @@ void MaterialEditDlg::apply_callback(Fl_Button*, MaterialEditDlg* dlg)
 	if (!material)
 		return;
 
-	MVector3 color;
+	Vector3 color;
 
 	color.x = dlg->color_r->value();
 	color.y = dlg->color_g->value();
@@ -417,7 +417,7 @@ void ConstraintPropertiesDlg::close_callback(Fl_Button*,
 
 	if (constraint)
 	{
-		MVector3 vector;
+		Vector3 vector;
 
 		vector.x = dlg->xpivot_edit->value();
 		vector.y = dlg->ypivot_edit->value();

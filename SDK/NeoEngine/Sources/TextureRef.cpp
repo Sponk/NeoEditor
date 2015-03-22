@@ -65,9 +65,9 @@ void TextureRef::destroy(void)
 void TextureRef::update(void)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
-	MRenderingContext * render = engine->getRenderingContext();
+	RenderingContext * render = engine->getRenderingContext();
 
-	MImage image;
+	Image image;
 	if(engine->getImageLoader()->loadData(getFilename(), &image))
 	{
 		if(m_textureId == 0)

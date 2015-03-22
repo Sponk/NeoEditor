@@ -145,7 +145,7 @@ void readPhysics(TiXmlElement * node, PhysicsProperties * physicsProperties)
 		physicsProperties->setAngularFactor(angularFactor);
 
 	// linearFactor
-	MVector3 linearFactor;
+	Vector3 linearFactor;
 	if(readFloatValues(node, "linearFactor", linearFactor, 3))
 		physicsProperties->setLinearFactor(linearFactor);
 }
@@ -181,7 +181,7 @@ void readSceneProperties(TiXmlElement * node, Scene * scene)
 	}
 
 	// gravity
-    MVector3 vector;
+    Vector3 vector;
     if(readFloatValues(node, "gravity", vector, 3))
         scene->setGravity(vector);
 
@@ -258,7 +258,7 @@ void readTextProperties(TiXmlElement * node, OText * text)
 	}
 
 	// color 
-	MVector4 color(1, 1, 1, 1);
+	Vector4 color(1, 1, 1, 1);
 	if(readFloatValues(node, "color", color, 4))
 		text->setColor(color);
 }
@@ -273,12 +273,12 @@ void readTextData(TiXmlElement * node, OText * text)
 void readCameraProperties(TiXmlElement * node, OCamera * camera)
 {
 	// clear color
-	MVector3 clearColor;
+	Vector3 clearColor;
 	if(readFloatValues(node, "clearColor", clearColor, 3))
 		camera->setClearColor(clearColor);
 
     // fog color
-    MVector3 fogColor;
+    Vector3 fogColor;
     if(readFloatValues(node, "fogColor", fogColor, 3))
         camera->setFogColor(fogColor);
 
@@ -326,7 +326,7 @@ void readLightProperties(TiXmlElement * node, OLight * light)
 		light->setRadius(radius);
 
 	// color 
-	MVector3 color;
+	Vector3 color;
 	if(readFloatValues(node, "color", color, 3))
 		light->setColor(color);
 
@@ -393,17 +393,17 @@ void readObjectTransform(TiXmlElement * node, Object3d * object)
 	}
 
 	// position
-	MVector3 position;
+	Vector3 position;
 	if(readFloatValues(node, "position", position, 3))
 		object->setPosition(position);
 
 	// rotation
-	MVector3 rotation;
+	Vector3 rotation;
 	if(readFloatValues(node, "rotation", rotation, 3))
 		object->setEulerRotation(rotation);
 
 	// scale
-	MVector3 scale;
+	Vector3 scale;
 	if(readFloatValues(node, "scale", scale, 3))
 		object->setScale(scale);
 }
@@ -428,7 +428,7 @@ void readBehaviorProperties(TiXmlElement * node, Behavior * behavior)
             {
                 const char * str = node->Attribute(name);
                 if(str)
-                    ((MString*)variable.getPointer())->set(str);
+                    ((String*)variable.getPointer())->set(str);
 
 				size = behavior->getVariablesNumber();
             }
@@ -444,13 +444,13 @@ void readBehaviorProperties(TiXmlElement * node, Behavior * behavior)
 			node->QueryFloatAttribute(name, (float*)variable.getPointer());
 			break;
 		case M_VARIABLE_VEC2:
-			readFloatValues(node, name, *((MVector2*)variable.getPointer()), 2);
+			readFloatValues(node, name, *((Vector2*)variable.getPointer()), 2);
 			break;
 		case M_VARIABLE_VEC3:
-			readFloatValues(node, name, *((MVector3*)variable.getPointer()), 3);
+			readFloatValues(node, name, *((Vector3*)variable.getPointer()), 3);
 			break;
 		case M_VARIABLE_VEC4:
-			readFloatValues(node, name, *((MVector4*)variable.getPointer()), 4);
+			readFloatValues(node, name, *((Vector4*)variable.getPointer()), 4);
 			break;
 		case M_VARIABLE_TEXTURE_REF:
 			{

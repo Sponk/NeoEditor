@@ -45,7 +45,7 @@ typedef Neo::ES2Context GLContext;
 #include <BinFontLoader.h>
 #include <BinMeshLoader.h>
 
-#include <MCore.h>
+#include <NeoCore.h>
 #include <NeoEngine.h>
 #include <Window/Mouse.h>
 #include <LookAtBehavior.h>
@@ -313,7 +313,7 @@ void MaratisPlayer::graphicLoop(void)
 {
 	Window * window = Window::getInstance();
 	NeoEngine * engine = NeoEngine::getInstance();
-	MRenderingContext * render = engine->getRenderingContext();
+	RenderingContext * render = engine->getRenderingContext();
 
 	// game
 	NeoGame * game = engine->getGame();

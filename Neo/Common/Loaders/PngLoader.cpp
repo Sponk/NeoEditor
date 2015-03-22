@@ -1,10 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MaratisCommon
-// MPngLoader.cpp
-//
-// PNG image loader
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2014 Anael Seghezzi <www.maratis3d.com>
 //
@@ -29,16 +22,16 @@
 //
 //========================================================================
 
+#include <NeoCore.h>
 #include <png.h>
 
-#include <MCore.h>
 #include "PngLoader.h"
 
 namespace Neo
 {
 void user_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-    M_fread(data, 1, length, (MFile *)png_get_io_ptr(png_ptr));
+    M_fread(data, 1, length, (File *)png_get_io_ptr(png_ptr));
 }
 
 bool M_loadPngImage(const char * filename, void * data)
@@ -46,7 +39,7 @@ bool M_loadPngImage(const char * filename, void * data)
     if((!data) || (!filename))
         return false;
 
-    MFile* file = M_fopen(filename, "rb");
+    File* file = M_fopen(filename, "rb");
     if (!file)
     {
         //fprintf(stderr, "ERROR Load PNG : unable to open %s\n", filename);
@@ -115,8 +108,8 @@ bool M_loadPngImage(const char * filename, void * data)
 
     M_fclose(file);
 
-    MImage * image = (MImage *)data;
-    image->create(M_UBYTE, (unsigned int)width, (unsigned int)height, components);
+    Image * image = (Image *)data;
+    image->create(VAR_UBYTE, (unsigned int)width, (unsigned int)height, components);
     memcpy(image->getData(), out, sizeof(char)*image->getSize());
     delete [] out;
 

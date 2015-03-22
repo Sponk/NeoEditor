@@ -30,7 +30,6 @@
 
 #include <MeshSave.h>
 
-
 using namespace Neo;
 
 static NeoEngine * engine = NeoEngine().getInstance();
@@ -42,7 +41,7 @@ struct BoneData
 	float weight;
 };
 
-struct SkinData
+struct AssimpSkinData
 {
 	vector<BoneData> bones;
 };
@@ -78,13 +77,13 @@ static void countNodes(const aiScene * scene, const aiNode * nd, unsigned int * 
 }
 
 
-static void createArmature(const aiScene * scene, const aiNode * nd, Armature * armature, OBone * parent, const MMatrix4x4 & parentMatrix)
+static void createArmature(const aiScene * scene, const aiNode * nd, Armature * armature, OBone * parent, const Matrix4x4 & parentMatrix)
 {	
 	aiMatrix4x4 nodeMat = nd->mTransformation;
 	aiTransposeMatrix4(&nodeMat);
 	
-	MMatrix4x4 matrix = MMatrix4x4((float*)&nodeMat);
-	MMatrix4x4 globalMatrix = parentMatrix * matrix;
+	Matrix4x4 matrix = Matrix4x4((float*)&nodeMat);
+	Matrix4x4 globalMatrix = parentMatrix * matrix;
 	
 	if(parent == NULL)
 		matrix = globalMatrix;
@@ -93,9 +92,9 @@ static void createArmature(const aiScene * scene, const aiNode * nd, Armature * 
 	bone->setName(nd->mName.data);
 	bone->linkTo(parent);
 	
-	MVector3 pos = matrix.getTranslationPart();
-	MVector3 rot = matrix.getEulerAngles();
-	MVector3 scale = matrix.getScale();
+	Vector3 pos = matrix.getTranslationPart();
+	Vector3 rot = matrix.getEulerAngles();
+	Vector3 scale = matrix.getScale();
 		
 	bone->setPosition(pos);
 	bone->setEulerRotation(rot);
@@ -111,7 +110,7 @@ static void initBones(const aiScene * scene, const aiMesh * nodeMesh, Mesh * mes
 	Armature * armature = mesh->getArmature();
 	
 	BoneData bdata;
-	map<unsigned int, SkinData> skinDatas;
+	map<unsigned int, AssimpSkinData> skinDatas;
 	
 	
 	// bones
@@ -127,13 +126,13 @@ static void initBones(const aiScene * scene, const aiMesh * nodeMesh, Mesh * mes
 		
 		aiMatrix4x4 offsetMat = nodeBone->mOffsetMatrix;
 		aiTransposeMatrix4(&offsetMat);
-		MMatrix4x4 matrix = (*bone->getMatrix()) * MMatrix4x4((float*)&offsetMat);
+		Matrix4x4 matrix = (*bone->getMatrix()) * Matrix4x4((float*)&offsetMat);
 		
 		
 		// pose skinning
-		MVector3 * vertices = subMesh->getVertices();
-		MVector3 * normals = subMesh->getNormals();
-		MVector3 * tangents = subMesh->getTangents();
+		Vector3 * vertices = subMesh->getVertices();
+		Vector3 * normals = subMesh->getNormals();
+		Vector3 * tangents = subMesh->getTangents();
 		
 		unsigned int w;
 		for(w=0; w<nodeBone->mNumWeights; w++)
@@ -147,19 +146,19 @@ static void initBones(const aiScene * scene, const aiMesh * nodeMesh, Mesh * mes
 
 			if(skinDatas[vid].bones.size() == 1)
 			{
-				if(vertices) vertices[vid] = MVector3(0, 0, 0);
-				if(normals) normals[vid] = MVector3(0, 0, 0);
-				if(tangents) tangents[vid] = MVector3(0, 0, 0);
+				if(vertices) vertices[vid] = Vector3(0, 0, 0);
+				if(normals) normals[vid] = Vector3(0, 0, 0);
+				if(tangents) tangents[vid] = Vector3(0, 0, 0);
 			}
 			
 			if(vertices)
-				vertices[vid] += matrix * MVector3(nodeMesh->mVertices[vid].x, nodeMesh->mVertices[vid].y, nodeMesh->mVertices[vid].z) * weight;
+				vertices[vid] += matrix * Vector3(nodeMesh->mVertices[vid].x, nodeMesh->mVertices[vid].y, nodeMesh->mVertices[vid].z) * weight;
 			
 			if(normals)
-				normals[vid] += matrix.getRotatedVector3(MVector3(nodeMesh->mNormals[vid].x, nodeMesh->mNormals[vid].y, nodeMesh->mNormals[vid].z)) * weight;
+				normals[vid] += matrix.getRotatedVector3(Vector3(nodeMesh->mNormals[vid].x, nodeMesh->mNormals[vid].y, nodeMesh->mNormals[vid].z)) * weight;
 			
 			if(tangents)
-				tangents[vid] += matrix.getRotatedVector3(MVector3(nodeMesh->mTangents[vid].x, nodeMesh->mTangents[vid].y, nodeMesh->mTangents[vid].z)) * weight;
+				tangents[vid] += matrix.getRotatedVector3(Vector3(nodeMesh->mTangents[vid].x, nodeMesh->mTangents[vid].y, nodeMesh->mTangents[vid].z)) * weight;
 		}
 	}
 	
@@ -168,10 +167,10 @@ static void initBones(const aiScene * scene, const aiMesh * nodeMesh, Mesh * mes
 	unsigned int skinSize = skinDatas.size();
 	if(skinSize > 0)
 	{
-		MSkinData * skin = subMesh->createSkinData();
-		MSkinPoint * skinPoints = skin->allocPoints(skinSize);
+		SkinData * skin = subMesh->createSkinData();
+		SkinPoint * skinPoints = skin->allocPoints(skinSize);
 		
-		map<unsigned int, SkinData>::iterator
+		map<unsigned int, AssimpSkinData>::iterator
 			mit (skinDatas.begin()),
 			mend(skinDatas.end());
 		
@@ -179,7 +178,7 @@ static void initBones(const aiScene * scene, const aiMesh * nodeMesh, Mesh * mes
 		for(; mit!=mend; ++mit)
 		{
 			unsigned int vertexId = mit->first;
-			SkinData * sdata = &mit->second;
+			AssimpSkinData * sdata = &mit->second;
 			
 			unsigned int b, bSize = sdata->bones.size();
 			
@@ -203,12 +202,12 @@ static void initBones(const aiScene * scene, const aiMesh * nodeMesh, Mesh * mes
 }
 
 
-static void createSubMesh(const aiScene * scene, const aiNode * nd, Mesh * mesh, SubMesh * subMeshs, unsigned int * count, const MMatrix4x4 & parentMatrix)
+static void createSubMesh(const aiScene * scene, const aiNode * nd, Mesh * mesh, SubMesh * subMeshs, unsigned int * count, const Matrix4x4 & parentMatrix)
 {
 	aiMatrix4x4 nodeMat = nd->mTransformation;
 	aiTransposeMatrix4(&nodeMat);
 	
-	MMatrix4x4 matrix = parentMatrix * MMatrix4x4((float*)&nodeMat);
+	Matrix4x4 matrix = parentMatrix * Matrix4x4((float*)&nodeMat);
 	
 	
 	unsigned int m;
@@ -225,32 +224,32 @@ static void createSubMesh(const aiScene * scene, const aiNode * nd, Mesh * mesh,
 	
 		
 		// vertices
-		MVector3 * vertices = subMesh->allocVertices(nodeMesh->mNumVertices);
+		Vector3 * vertices = subMesh->allocVertices(nodeMesh->mNumVertices);
 		for(i=0; i<nodeMesh->mNumVertices; i++)
-			vertices[i] = matrix * MVector3(nodeMesh->mVertices[i].x, nodeMesh->mVertices[i].y, nodeMesh->mVertices[i].z);
+			vertices[i] = matrix * Vector3(nodeMesh->mVertices[i].x, nodeMesh->mVertices[i].y, nodeMesh->mVertices[i].z);
 		
 		// normals
 		if(nodeMesh->mNormals)
 		{
-			MVector3 * normals = subMesh->allocNormals(nodeMesh->mNumVertices);
+			Vector3 * normals = subMesh->allocNormals(nodeMesh->mNumVertices);
 			for(i=0; i<nodeMesh->mNumVertices; i++)
-				normals[i] = matrix.getRotatedVector3(MVector3(nodeMesh->mNormals[i].x, nodeMesh->mNormals[i].y, nodeMesh->mNormals[i].z)).getNormalized();
+				normals[i] = matrix.getRotatedVector3(Vector3(nodeMesh->mNormals[i].x, nodeMesh->mNormals[i].y, nodeMesh->mNormals[i].z)).getNormalized();
 		}
 		
 		// tangents
 		if(nodeMesh->mTangents)
 		{
-			MVector3 * tangents = subMesh->allocTangents(nodeMesh->mNumVertices);
+			Vector3 * tangents = subMesh->allocTangents(nodeMesh->mNumVertices);
 			for(i=0; i<nodeMesh->mNumVertices; i++)
-				tangents[i] = matrix.getRotatedVector3(MVector3(nodeMesh->mTangents[i].x, nodeMesh->mTangents[i].y, nodeMesh->mTangents[i].z)).getNormalized();
+				tangents[i] = matrix.getRotatedVector3(Vector3(nodeMesh->mTangents[i].x, nodeMesh->mTangents[i].y, nodeMesh->mTangents[i].z)).getNormalized();
 		}
 		
 		// colors
 		if(nodeMesh->mColors[0])
 		{
-			MColor * colors = subMesh->allocColors(nodeMesh->mNumVertices);
+			Color * colors = subMesh->allocColors(nodeMesh->mNumVertices);
 			for(i=0; i<nodeMesh->mNumVertices; i++)
-				colors[i] = MColor(nodeMesh->mColors[0][i].r, nodeMesh->mColors[0][i].g, nodeMesh->mColors[0][i].b, nodeMesh->mColors[0][i].a);
+				colors[i] = Color(nodeMesh->mColors[0][i].r, nodeMesh->mColors[0][i].g, nodeMesh->mColors[0][i].b, nodeMesh->mColors[0][i].a);
 		}
 		
 		// uvcoords
@@ -262,7 +261,7 @@ static void createSubMesh(const aiScene * scene, const aiNode * nd, Mesh * mesh,
 					nb_texLayers++;
 			}
 			
-			MVector2 * uvCoords = subMesh->allocTexCoords(nodeMesh->mNumVertices*nb_texLayers);
+			Vector2 * uvCoords = subMesh->allocTexCoords(nodeMesh->mNumVertices*nb_texLayers);
 	
 			nb_texLayers = 0;
 			for(t=0; t<AI_MAX_NUMBER_OF_TEXTURECOORDS; t++)
@@ -273,7 +272,7 @@ static void createSubMesh(const aiScene * scene, const aiNode * nd, Mesh * mesh,
 					subMesh->setMapChannelOffset(t, offset);
 					
 					for(i=0; i<nodeMesh->mNumVertices; i++){
-						uvCoords[offset+i] = MVector2(nodeMesh->mTextureCoords[t][i].x, 1-nodeMesh->mTextureCoords[t][i].y);
+						uvCoords[offset+i] = Vector2(nodeMesh->mTextureCoords[t][i].x, 1-nodeMesh->mTextureCoords[t][i].y);
 					}
 					
 					nb_texLayers++;
@@ -287,7 +286,7 @@ static void createSubMesh(const aiScene * scene, const aiNode * nd, Mesh * mesh,
 			
 			if(nodeMesh->mNumVertices < 65536)
 			{
-				unsigned short * indices = (unsigned short *)subMesh->allocIndices(nodeMesh->mNumFaces*3, M_USHORT);
+				unsigned short * indices = (unsigned short *)subMesh->allocIndices(nodeMesh->mNumFaces*3, VAR_USHORT);
 				for(f=0; f<nodeMesh->mNumFaces; f++)
 				{
 					aiFace * face = &nodeMesh->mFaces[f];
@@ -298,7 +297,7 @@ static void createSubMesh(const aiScene * scene, const aiNode * nd, Mesh * mesh,
 			}
 			else	
 			{
-				unsigned int * indices = (unsigned int *)subMesh->allocIndices(nodeMesh->mNumFaces*3, M_UINT);
+				unsigned int * indices = (unsigned int *)subMesh->allocIndices(nodeMesh->mNumFaces*3, VAR_UINT);
 				for(f=0; f<nodeMesh->mNumFaces; f++)
 				{
 					aiFace * face = &nodeMesh->mFaces[f];
@@ -316,7 +315,7 @@ static void createSubMesh(const aiScene * scene, const aiNode * nd, Mesh * mesh,
 		
 		// display
 		subMesh->allocDisplays(1);
-		MaterialDisplay * display = subMesh->addNewDisplay(M_PRIMITIVE_TRIANGLES, 0, subMesh->getIndicesSize());
+		MaterialDisplay * display = subMesh->addNewDisplay(PRIMITIVE_TRIANGLES, 0, subMesh->getIndicesSize());
 		display->setMaterial(mesh->getMaterial(nodeMesh->mMaterialIndex));
 		
 		// cull mode
@@ -325,7 +324,7 @@ static void createSubMesh(const aiScene * scene, const aiNode * nd, Mesh * mesh,
 		if(AI_SUCCESS == aiGetMaterialInteger(mtl, AI_MATKEY_TWOSIDED, &twosided))
 		{
 			if(twosided != 0)
-				display->setCullMode(M_CULL_NONE);
+				display->setCullMode(CULL_NONE);
 		}
 		
 		// bounding box
@@ -396,13 +395,13 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 		material->setType(1);
 		
 		if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_DIFFUSE, &color))
-			material->setDiffuse(MVector3(color.r, color.g, color.b));
+			material->setDiffuse(Vector3(color.r, color.g, color.b));
 		
 		if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_SPECULAR, &color))
-			material->setSpecular(MVector3(color.r, color.g, color.b));
+			material->setSpecular(Vector3(color.r, color.g, color.b));
 		
 		if(AI_SUCCESS == aiGetMaterialColor(mtl, AI_MATKEY_COLOR_EMISSIVE, &color))
-			material->setEmit(MVector3(color.r, color.g, color.b));
+			material->setEmit(Vector3(color.r, color.g, color.b));
 	
 		if(AI_SUCCESS == aiGetMaterialFloat(mtl, AI_MATKEY_OPACITY, &value))
 		   material->setOpacity(value);
@@ -419,10 +418,10 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 				{
 					default:
 					case aiBlendMode_Default:
-						material->setBlendMode(M_BLENDING_NONE);
+						material->setBlendMode(BLENDING_NONE);
 						break;
 					case aiBlendMode_Additive:
-						material->setBlendMode(M_BLENDING_ADD);
+						material->setBlendMode(BLENDING_ADD);
 						break;
 				}
 			}
@@ -446,11 +445,11 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 				TextureRef * texRef = level->loadTexture(globalPath, true);
 				Texture * texture = mesh->addNewTexture(texRef);
 				if(mapmode == aiTextureMapMode_Clamp){
-					texture->setUWrapMode(M_WRAP_CLAMP);
-					texture->setVWrapMode(M_WRAP_CLAMP);
+					texture->setUWrapMode(WRAP_CLAMP);
+					texture->setVWrapMode(WRAP_CLAMP);
 				}
 				
-				material->addTexturePass(texture, M_TEX_COMBINE_MODULATE, uvindex);
+				material->addTexturePass(texture, TEX_COMBINE_MODULATE, uvindex);
 			}
 		
 			if(AI_SUCCESS == mtl->GetTexture(aiTextureType_SPECULAR, 0, &path, &mapping, &uvindex, &blend, &op, &mapmode))
@@ -459,14 +458,14 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 				TextureRef * texRef = level->loadTexture(globalPath, true);
 				Texture * texture = mesh->addNewTexture(texRef);
 				if(mapmode == aiTextureMapMode_Clamp){
-					texture->setUWrapMode(M_WRAP_CLAMP);
-					texture->setVWrapMode(M_WRAP_CLAMP);
+					texture->setUWrapMode(WRAP_CLAMP);
+					texture->setVWrapMode(WRAP_CLAMP);
 				}
 				
 				while(material->getTexturesPassNumber() < 1)
-					material->addTexturePass(NULL, M_TEX_COMBINE_MODULATE, 0);
+					material->addTexturePass(NULL, TEX_COMBINE_MODULATE, 0);
 				
-				material->addTexturePass(texture, M_TEX_COMBINE_MODULATE, uvindex);
+				material->addTexturePass(texture, TEX_COMBINE_MODULATE, uvindex);
 			}
 		
 			if(AI_SUCCESS == mtl->GetTexture(aiTextureType_NORMALS, 0, &path, &mapping, &uvindex, &blend, &op, &mapmode))
@@ -475,14 +474,14 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 				TextureRef * texRef = level->loadTexture(globalPath, true);
 				Texture * texture = mesh->addNewTexture(texRef);
 				if(mapmode == aiTextureMapMode_Clamp){
-					texture->setUWrapMode(M_WRAP_CLAMP);
-					texture->setVWrapMode(M_WRAP_CLAMP);
+					texture->setUWrapMode(WRAP_CLAMP);
+					texture->setVWrapMode(WRAP_CLAMP);
 				}
 				
 				while(material->getTexturesPassNumber() < 2)
-					material->addTexturePass(NULL, M_TEX_COMBINE_MODULATE, 0);
+					material->addTexturePass(NULL, TEX_COMBINE_MODULATE, 0);
 					
-				material->addTexturePass(texture, M_TEX_COMBINE_MODULATE, uvindex);
+				material->addTexturePass(texture, TEX_COMBINE_MODULATE, uvindex);
 			}
 		
 			if(AI_SUCCESS == mtl->GetTexture(aiTextureType_EMISSIVE, 0, &path, &mapping, &uvindex, &blend, &op, &mapmode))
@@ -491,14 +490,14 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 				TextureRef * texRef = level->loadTexture(globalPath, true);
 				Texture * texture = mesh->addNewTexture(texRef);
 				if(mapmode == aiTextureMapMode_Clamp){
-					texture->setUWrapMode(M_WRAP_CLAMP);
-					texture->setVWrapMode(M_WRAP_CLAMP);
+					texture->setUWrapMode(WRAP_CLAMP);
+					texture->setVWrapMode(WRAP_CLAMP);
 				}
 				
 				while(material->getTexturesPassNumber() < 3)
-					material->addTexturePass(NULL, M_TEX_COMBINE_MODULATE, 0);
+					material->addTexturePass(NULL, TEX_COMBINE_MODULATE, 0);
 				
-				material->addTexturePass(texture, M_TEX_COMBINE_MODULATE, uvindex);
+				material->addTexturePass(texture, TEX_COMBINE_MODULATE, uvindex);
 			}
 		}
 	}
@@ -511,9 +510,9 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 	
 	if(nb_subMeshs > 0)
 	{
-		MMatrix4x4 rootMatrix;
+		Matrix4x4 rootMatrix;
 		if(rotate90)
-			rootMatrix.rotate(MVector3(1, 0, 0), 90);
+			rootMatrix.rotate(Vector3(1, 0, 0), 90);
 		
 		// create armature
 		if(nb_bones > 0)
@@ -660,7 +659,7 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 						for(k=0; k<channel->mNumPositionKeys; k++)
 						{
 							posKeys[infos->nbKeyPos+k].setT(prevT + getMaratisTick(channel->mPositionKeys[k].mTime, anim->mTicksPerSecond));
-							*(posKeys[infos->nbKeyPos+k].createVector3Data()) = MVector3(
+							*(posKeys[infos->nbKeyPos+k].createVector3Data()) = Vector3(
 								channel->mPositionKeys[k].mValue.x,
 								channel->mPositionKeys[k].mValue.y,
 								channel->mPositionKeys[k].mValue.z
@@ -671,7 +670,7 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 						for(k=0; k<channel->mNumRotationKeys; k++)
 						{
 							rotKeys[infos->nbKeyRot+k].setT(prevT + getMaratisTick(channel->mRotationKeys[k].mTime, anim->mTicksPerSecond));
-							*(rotKeys[infos->nbKeyRot+k].createQuaternionData()) = MQuaternion(
+							*(rotKeys[infos->nbKeyRot+k].createQuaternionData()) = Quaternion(
 								channel->mRotationKeys[k].mValue.x,
 								channel->mRotationKeys[k].mValue.y,
 								channel->mRotationKeys[k].mValue.z,
@@ -683,7 +682,7 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 						for(k=0; k<channel->mNumScalingKeys; k++)
 						{
 							scaleKeys[infos->nbKeyScale+k].setT(prevT + getMaratisTick(channel->mScalingKeys[k].mTime, anim->mTicksPerSecond));
-							*(scaleKeys[infos->nbKeyScale+k].createVector3Data()) = MVector3(
+							*(scaleKeys[infos->nbKeyScale+k].createVector3Data()) = Vector3(
 								channel->mScalingKeys[k].mValue.x,
 								channel->mScalingKeys[k].mValue.y,
 								channel->mScalingKeys[k].mValue.z

@@ -29,7 +29,7 @@ static char M_MA_HEADER[8] = {'M', 'M', 'A', '\0', '\0', '\0', '\0', '\0'}; // m
 static char M_TA_HEADER[8] = {'M', 'T', 'A', '\0', '\0', '\0', '\0', '\0'}; // textures anim
 
 // tools
-static void writeString(MFile * file, const char * str)
+static void writeString(File * file, const char * str)
 {
 	unsigned int l = strlen(str) + 1;
 	
@@ -38,7 +38,7 @@ static void writeString(MFile * file, const char * str)
 		M_fwrite(str, sizeof(char), l, file);
 }
 
-static void writeKey(MFile * file, Key * key, M_VARIABLE_TYPE type)
+static void writeKey(File * file, Key * key, M_VARIABLE_TYPE type)
 {
 	int t = key->getT();
 	M_fwrite(&t, sizeof(int), 1, file);
@@ -53,32 +53,32 @@ static void writeKey(MFile * file, Key * key, M_VARIABLE_TYPE type)
 		}
 		case M_VARIABLE_VEC2:
 		{
-			MVector2 * data = (MVector2 *)key->getData();
-			M_fwrite(data, sizeof(MVector2), 1, file);
+			Vector2 * data = (Vector2 *)key->getData();
+			M_fwrite(data, sizeof(Vector2), 1, file);
 			break;
 		}
 		case M_VARIABLE_VEC3:
 		{
-			MVector3 * data = (MVector3 *)key->getData();
-			M_fwrite(data, sizeof(MVector3), 1, file);
+			Vector3 * data = (Vector3 *)key->getData();
+			M_fwrite(data, sizeof(Vector3), 1, file);
 			break;
 		}
 		case M_VARIABLE_VEC4:
 		{
-			MVector4 * data = (MVector4 *)key->getData();
-			M_fwrite(data, sizeof(MVector4), 1, file);
+			Vector4 * data = (Vector4 *)key->getData();
+			M_fwrite(data, sizeof(Vector4), 1, file);
 			break;
 		}
 		case M_VARIABLE_QUAT:
 		{
-			MQuaternion * data = (MQuaternion *)key->getData();
-			M_fwrite(data, sizeof(MQuaternion), 1, file);
+			Quaternion * data = (Quaternion *)key->getData();
+			M_fwrite(data, sizeof(Quaternion), 1, file);
 			break;
 		}
 	}
 }
 
-static void writeKeys(MFile * file, Key * keys, M_VARIABLE_TYPE type, unsigned int keysNumber)
+static void writeKeys(File * file, Key * keys, M_VARIABLE_TYPE type, unsigned int keysNumber)
 {
 	unsigned int k;
 	
@@ -87,7 +87,7 @@ static void writeKeys(MFile * file, Key * keys, M_VARIABLE_TYPE type, unsigned i
 		writeKey(file, &(keys[k]), type);
 }
 
-static void writeDataRef(MFile * file, MDataRef * dataRef, const char * rep)
+static void writeDataRef(File * file, DataRef * dataRef, const char * rep)
 {
 	char localFile[256];
 	
@@ -141,7 +141,7 @@ bool exportMeshBin(const char * filename, Mesh * mesh)
 	
 	
 	// create file
-	MFile * file = M_fopen(filename, "wb");
+	File * file = M_fopen(filename, "wb");
 	if(! file)
 	{
 		fprintf(stderr, "Error : can't create file %s\n", filename);
@@ -195,11 +195,11 @@ bool exportMeshBin(const char * filename, Mesh * mesh)
 			Texture * texture = mesh->getTexture(t);
 			
 			TextureRef * textureRef = texture->getTextureRef();
-			M_TEX_GEN_MODES genMode = texture->getGenMode();
-			M_WRAP_MODES UWrapMode = texture->getUWrapMode();
-			M_WRAP_MODES VWrapMode = texture->getVWrapMode();
-			MVector2 texTranslate = texture->getTexTranslate();
-			MVector2 texScale = texture->getTexScale();
+			TEX_GEN_MODES genMode = texture->getGenMode();
+			WRAP_MODES UWrapMode = texture->getUWrapMode();
+			WRAP_MODES VWrapMode = texture->getVWrapMode();
+			Vector2 texTranslate = texture->getTexTranslate();
+			Vector2 texScale = texture->getTexScale();
 			float texRotate = texture->getTexRotate();
 			
 			// texture ref
@@ -211,11 +211,11 @@ bool exportMeshBin(const char * filename, Mesh * mesh)
 			}
 			
 			// data
-			M_fwrite(&genMode, sizeof(M_TEX_GEN_MODES), 1, file);
-			M_fwrite(&UWrapMode, sizeof(M_WRAP_MODES), 1, file);
-			M_fwrite(&VWrapMode, sizeof(M_WRAP_MODES), 1, file);
-			M_fwrite(&texTranslate, sizeof(MVector2), 1, file);
-			M_fwrite(&texScale, sizeof(MVector2), 1, file);
+			M_fwrite(&genMode, sizeof(TEX_GEN_MODES), 1, file);
+			M_fwrite(&UWrapMode, sizeof(WRAP_MODES), 1, file);
+			M_fwrite(&VWrapMode, sizeof(WRAP_MODES), 1, file);
+			M_fwrite(&texTranslate, sizeof(Vector2), 1, file);
+			M_fwrite(&texScale, sizeof(Vector2), 1, file);
 			M_fwrite(&texRotate, sizeof(float), 1, file);
 		}
 	}
@@ -233,11 +233,11 @@ bool exportMeshBin(const char * filename, Mesh * mesh)
 			float opacity = material->getOpacity();
 			float shininess = material->getShininess();
 			float customValue = material->getCustomValue();
-			M_BLENDING_MODES blendMode = material->getBlendMode();
-			MVector3 emit = material->getEmit();
-			MVector3 diffuse = material->getDiffuse();
-			MVector3 specular = material->getSpecular();
-			MVector3 customColor = material->getCustomColor();
+			BLENDING_MODES blendMode = material->getBlendMode();
+			Vector3 emit = material->getEmit();
+			Vector3 diffuse = material->getDiffuse();
+			Vector3 specular = material->getSpecular();
+			Vector3 customColor = material->getCustomColor();
 			FXRef * fx_ref = material->getFXRef();
 			FXRef * zfx_ref = material->getZFXRef();
 			
@@ -270,11 +270,11 @@ bool exportMeshBin(const char * filename, Mesh * mesh)
 			M_fwrite(&opacity, sizeof(float), 1, file);
 			M_fwrite(&shininess, sizeof(float), 1, file);
 			M_fwrite(&customValue, sizeof(float), 1, file);
-			M_fwrite(&blendMode, sizeof(M_BLENDING_MODES), 1, file);
-			M_fwrite(&emit, sizeof(MVector3), 1, file);
-			M_fwrite(&diffuse, sizeof(MVector3), 1, file);
-			M_fwrite(&specular, sizeof(MVector3), 1, file);
-			M_fwrite(&customColor, sizeof(MVector3), 1, file);
+			M_fwrite(&blendMode, sizeof(BLENDING_MODES), 1, file);
+			M_fwrite(&emit, sizeof(Vector3), 1, file);
+			M_fwrite(&diffuse, sizeof(Vector3), 1, file);
+			M_fwrite(&specular, sizeof(Vector3), 1, file);
+			M_fwrite(&customColor, sizeof(Vector3), 1, file);
 			
 			// textures pass
 			unsigned int t, texturesPassNumber = material->getTexturesPassNumber();
@@ -286,7 +286,7 @@ bool exportMeshBin(const char * filename, Mesh * mesh)
 				
 				Texture * texture = texturePass->getTexture();
 				unsigned int mapChannel = texturePass->getMapChannel();
-				M_TEX_COMBINE_MODES combineMode = texturePass->getCombineMode();
+				TEX_COMBINE_MODES combineMode = texturePass->getCombineMode();
 				
 				// texture id
 				int textureId = getTextureId(mesh, texture);
@@ -294,7 +294,7 @@ bool exportMeshBin(const char * filename, Mesh * mesh)
 				
 				// data
 				M_fwrite(&mapChannel, sizeof(int), 1, file);
-				M_fwrite(&combineMode, sizeof(M_TEX_COMBINE_MODES), 1, file);
+				M_fwrite(&combineMode, sizeof(TEX_COMBINE_MODES), 1, file);
 			}
 		}
 	}
@@ -315,9 +315,9 @@ bool exportMeshBin(const char * filename, Mesh * mesh)
 				OBone * bone = armature->getBone(b);
 				Object3d * parent = bone->getParent();
 				
-				MVector3 position = bone->getPosition();
-				MVector3 scale = bone->getScale();
-				MQuaternion rotation = bone->getRotation();
+				Vector3 position = bone->getPosition();
+				Vector3 scale = bone->getScale();
+				Quaternion rotation = bone->getRotation();
 				
 				// name
 				writeString(file, bone->getName());
@@ -334,9 +334,9 @@ bool exportMeshBin(const char * filename, Mesh * mesh)
 				M_fwrite(&parentId, sizeof(int), 1, file);
 				
 				// position / rotation / scale
-				M_fwrite(&position, sizeof(MVector3), 1, file);
-				M_fwrite(&rotation, sizeof(MQuaternion), 1, file);
-				M_fwrite(&scale, sizeof(MVector3), 1, file);
+				M_fwrite(&position, sizeof(Vector3), 1, file);
+				M_fwrite(&rotation, sizeof(Quaternion), 1, file);
+				M_fwrite(&scale, sizeof(Vector3), 1, file);
 			}
 		}
 	}
@@ -366,17 +366,17 @@ bool exportMeshBin(const char * filename, Mesh * mesh)
 			unsigned int texCoordsSize = subMesh->getTexCoordsSize();
 			unsigned int colorsSize = subMesh->getColorsSize();
 			
-			M_TYPES indicesType = subMesh->getIndicesType();
+			VAR_TYPES indicesType = subMesh->getIndicesType();
 			void * indices = subMesh->getIndices();
 			
-			MColor * colors = subMesh->getColors();
-			MVector3 * vertices = subMesh->getVertices();
-			MVector3 * normals = subMesh->getNormals();
-			MVector3 * tangents = subMesh->getTangents();
-			MVector2 * texCoords = subMesh->getTexCoords();
+			Color * colors = subMesh->getColors();
+			Vector3 * vertices = subMesh->getVertices();
+			Vector3 * normals = subMesh->getNormals();
+			Vector3 * tangents = subMesh->getTangents();
+			Vector2 * texCoords = subMesh->getTexCoords();
 			
 			Box3d * box = subMesh->getBoundingBox();
-			MSkinData * skin = subMesh->getSkinData();
+			SkinData * skin = subMesh->getSkinData();
 			map<unsigned int, unsigned int> * mapChannelOffsets = subMesh->getMapChannelOffsets();
 			
 			
@@ -388,13 +388,13 @@ bool exportMeshBin(const char * filename, Mesh * mesh)
 			if(indicesSize > 0)
 			{
 				// indice type
-				M_fwrite(&indicesType, sizeof(M_TYPES), 1, file);
+				M_fwrite(&indicesType, sizeof(VAR_TYPES), 1, file);
 				switch(indicesType)
 				{
-					case M_USHORT:
+					case VAR_USHORT:
 						M_fwrite(indices, sizeof(short), indicesSize, file);
 						break;
-					case M_UINT:
+					case VAR_UINT:
 						M_fwrite(indices, sizeof(int), indicesSize, file);
 						break;
 				}
@@ -403,27 +403,27 @@ bool exportMeshBin(const char * filename, Mesh * mesh)
 			// vertices
 			M_fwrite(&verticesSize, sizeof(int), 1, file);
 			if(verticesSize > 0)
-				M_fwrite(vertices, sizeof(MVector3), verticesSize, file);
+				M_fwrite(vertices, sizeof(Vector3), verticesSize, file);
 			
 			// normals
 			M_fwrite(&normalsSize, sizeof(int), 1, file);
 			if(normalsSize > 0)
-				M_fwrite(normals, sizeof(MVector3), normalsSize, file);
+				M_fwrite(normals, sizeof(Vector3), normalsSize, file);
 			
 			// tangents
 			M_fwrite(&tangentsSize, sizeof(int), 1, file);
 			if(tangentsSize > 0)
-				M_fwrite(tangents, sizeof(MVector3), tangentsSize, file);
+				M_fwrite(tangents, sizeof(Vector3), tangentsSize, file);
 			
 			// texCoords
 			M_fwrite(&texCoordsSize, sizeof(int), 1, file);
 			if(texCoordsSize > 0)
-				M_fwrite(texCoords, sizeof(MVector2), texCoordsSize, file);
+				M_fwrite(texCoords, sizeof(Vector2), texCoordsSize, file);
 			
 			// colors
 			M_fwrite(&colorsSize, sizeof(int), 1, file);
 			if(colorsSize > 0)
-				M_fwrite(colors, sizeof(MColor), colorsSize, file);
+				M_fwrite(colors, sizeof(Color), colorsSize, file);
 			
 			// mapChannels
 			{
@@ -452,7 +452,7 @@ bool exportMeshBin(const char * filename, Mesh * mesh)
 				M_fwrite(&pointsNumber, sizeof(int), 1, file);
 				for(p=0; p<pointsNumber; p++)
 				{
-					MSkinPoint * skinPoint = skin->getPoint(p);
+					SkinPoint * skinPoint = skin->getPoint(p);
 					
 					unsigned int vertexId = skinPoint->getVertexId();
 					unsigned int bonesNumber = skinPoint->getBonesNumber();
@@ -478,20 +478,20 @@ bool exportMeshBin(const char * filename, Mesh * mesh)
 			{
 				MaterialDisplay * display = subMesh->getDisplay(d);
 				
-				M_PRIMITIVE_TYPES primitiveType = display->getPrimitiveType();
+				PRIMITIVE_TYPES primitiveType = display->getPrimitiveType();
 				unsigned int begin = display->getBegin();
 				unsigned int size = display->getSize();
 				Material * material = display->getMaterial();
-				M_CULL_MODES cullMode = display->getCullMode();
+				CULL_MODES cullMode = display->getCullMode();
 				
 				int materialId = getMaterialId(mesh, material);
 				
 				// data
-				M_fwrite(&primitiveType, sizeof(M_PRIMITIVE_TYPES), 1, file);
+				M_fwrite(&primitiveType, sizeof(PRIMITIVE_TYPES), 1, file);
 				M_fwrite(&begin, sizeof(int), 1, file);
 				M_fwrite(&size, sizeof(int), 1, file);
 				M_fwrite(&materialId, sizeof(int), 1, file);
-				M_fwrite(&cullMode, sizeof(M_CULL_MODES), 1, file);
+				M_fwrite(&cullMode, sizeof(CULL_MODES), 1, file);
 			}
 		}
 	}
@@ -509,7 +509,7 @@ bool exportArmatureAnimBin(const char * filename, ArmatureAnim * anim)
 	
 	
 	// create file
-	MFile * file = M_fopen(filename, "wb");
+	File * file = M_fopen(filename, "wb");
 	if(! file)
 	{
 		fprintf(stderr, "Error : can't create file %s\n", filename);
@@ -559,7 +559,7 @@ bool exportTexturesAnimBin(const char * filename, TexturesAnim * anim)
 	
 	
 	// create file
-	MFile * file = M_fopen(filename, "wb");
+	File * file = M_fopen(filename, "wb");
 	if(! file)
 	{
 		fprintf(stderr, "Error : can't create file %s\n", filename);
@@ -609,7 +609,7 @@ bool exportMaterialsAnimBin(const char * filename, MaterialsAnim * anim)
 	
 	
 	// create file
-	MFile * file = M_fopen(filename, "wb");
+	File * file = M_fopen(filename, "wb");
 	if(! file)
 	{
 		fprintf(stderr, "Error : can't create file %s\n", filename);

@@ -28,9 +28,9 @@
 #include <MLog.h>
 #include <SDL_log.h>
 
-#include <MGameWinEvents.h>
 #include "Maratis/MaratisPlayer.h"
 #include <emscripten.h>
+#include <GameWinEvents.h>
 #include <Window/Window.h>
 
 // window events

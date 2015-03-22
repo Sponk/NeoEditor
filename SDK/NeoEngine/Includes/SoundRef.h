@@ -34,7 +34,7 @@
 namespace Neo
 {
 // Sound ref
-class M_ENGINE_EXPORT SoundRef : public MDataRef
+class M_ENGINE_EXPORT SoundRef : public DataRef
 {
 private:
 

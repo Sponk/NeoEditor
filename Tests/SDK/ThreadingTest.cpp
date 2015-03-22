@@ -23,11 +23,11 @@
 //========================================================================
 
 #include <NeoEngine.h>
-#include <MCore.h>
 #include <Window/Window.h>
 #include <SDLThread.h>
 
 #include <gtest/gtest.h>
+#include <NeoCore.h>
 
 using namespace Neo;
 
@@ -40,7 +40,7 @@ public:
 		NeoEngine* engine = NeoEngine::getInstance();
 
 		// Init default thread
-		MThreadManager* mgr = MThreadManager::getInstance();
+		ThreadFactory* mgr = ThreadFactory::getInstance();
 		mgr->setTemplateSemaphore(new SDLSemaphore());
 		mgr->setTemplateThread(new SDLThread());
 
@@ -49,7 +49,7 @@ public:
 
 	void TearDown()
 	{
-		MThreadManager::getInstance()->clear();
+		ThreadFactory::getInstance()->clear();
 	}
 };
 
@@ -63,8 +63,8 @@ int test_thread(void* pointer)
 
 TEST_F(TestThreading, CreateThread_test)
 {
-	MThreadManager* mgr = MThreadManager::getInstance();
-	MThread* thrd = mgr->getNewThread();
+	ThreadFactory* mgr = ThreadFactory::getInstance();
+	Thread* thrd = mgr->getNewThread();
 
 	ASSERT_NE((void*)NULL, thrd);
 
@@ -77,7 +77,7 @@ TEST_F(TestThreading, CreateThread_test)
 
 int test_semaphore_thread(void* sem)
 {
-	MSemaphore* semaphore = (MSemaphore*) sem;
+	Semaphore* semaphore = (Semaphore*) sem;
 	semaphore->WaitAndLock();
 
 	return 1;
@@ -85,9 +85,9 @@ int test_semaphore_thread(void* sem)
 
 TEST_F(TestThreading, Semaphore_test)
 {
-	MThreadManager* mgr = MThreadManager::getInstance();
-	MThread* thrd = mgr->getNewThread();
-	MSemaphore* sem = mgr->getNewSemaphore();
+	ThreadFactory* mgr = ThreadFactory::getInstance();
+	Thread* thrd = mgr->getNewThread();
+	Semaphore* sem = mgr->getNewSemaphore();
 
 	ASSERT_NE((void*)NULL, thrd);
 	ASSERT_NE((void*)NULL, sem);

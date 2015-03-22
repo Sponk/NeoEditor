@@ -49,7 +49,7 @@ m_textureHeight(0)
 
 Font::~Font(void)
 {
-	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 	render->deleteTexture(&m_textureId);
 }
 

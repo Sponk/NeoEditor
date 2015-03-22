@@ -44,7 +44,7 @@ void NeoGame::update(void)
 {
     PROFILE_SHARED_BLOCK(GameUpdate);
 	NeoEngine * engine = NeoEngine::getInstance();
-	MScriptContext * scriptContext = engine->getScriptContext();
+	ScriptContext * scriptContext = engine->getScriptContext();
 
     PROFILE_SHARED_BEGIN(Scripts);
 	// update script
@@ -102,7 +102,7 @@ void NeoGame::update(void)
 void NeoGame::draw(void)
 {
     PROFILE_SHARED_BLOCK(GameRender);
-	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 	// get level
 	Level * level = NeoEngine::getInstance()->getLevel();
@@ -150,13 +150,13 @@ void NeoGame::draw(void)
 
 				render->enableDepthTest();
 
-				render->attachFrameBufferTexture(M_ATTACH_COLOR0, colorTexture->getTextureId());
+				render->attachFrameBufferTexture(ATTACH_COLOR0, colorTexture->getTextureId());
 				if(depthTexture)
-					render->attachFrameBufferTexture(M_ATTACH_DEPTH, depthTexture->getTextureId());
+					render->attachFrameBufferTexture(ATTACH_DEPTH, depthTexture->getTextureId());
 
 				render->setViewport(0, 0, width, height);
 				render->setClearColor(camera->getClearColor());
-				render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
+				render->clear(BUFFER_COLOR | BUFFER_DEPTH);
 
 				// draw the scene
 				camera->enable();
@@ -183,7 +183,7 @@ void NeoGame::draw(void)
 		OCamera camera;
 
 		render->setClearColor(camera.getClearColor());
-		render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
+		render->clear(BUFFER_COLOR | BUFFER_DEPTH);
 
 		camera.enable();
 		camera.updateListener();
@@ -198,7 +198,7 @@ void NeoGame::draw(void)
         if(!camera->getRenderColorTexture() && (!m_postEffectsEnabled || !m_postProcessor.draw(camera)))
 		{
 			render->setClearColor(camera->getClearColor());
-			render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
+			render->clear(BUFFER_COLOR | BUFFER_DEPTH);
 
 			camera->enable();
 			camera->updateListener();
@@ -220,7 +220,7 @@ void NeoGame::draw(void)
 			}
 
 			// draw on top
-			render->clear(M_BUFFER_DEPTH);
+			render->clear(BUFFER_DEPTH);
 			sceneLayer->draw(camera);
 			sceneLayer->drawObjectsBehaviors();
 		}

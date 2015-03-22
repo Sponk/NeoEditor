@@ -64,7 +64,7 @@ private:
 	};
 
 	std::map<std::string, Inbox> m_boxes;
-	MSemaphore* m_semaphore;
+	Semaphore* m_semaphore;
 
 	void waitForAccess();
 	void finishAccess();

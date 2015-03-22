@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MCore
-// MBulletContext.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -50,7 +45,7 @@ BulletContext::~BulletContext(void)
 }
 
 // init
-void BulletContext::init(const MVector3 & worldMin, const MVector3 & worldMax)
+void BulletContext::init(const Vector3 & worldMin, const Vector3 & worldMax)
 {
 	clear();
 
@@ -124,18 +119,18 @@ void BulletContext::updateSimulation(void)
 }
 
 // world
-void BulletContext::setWorldGravity(const MVector3 & gravity){
+void BulletContext::setWorldGravity(const Vector3 & gravity){
 	m_dynamicsWorld->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
 }
 
 // create object
-void BulletContext::createGhost(unsigned int * objectId, unsigned int shapeId, const MVector3 & position, const MQuaternion & rotation)
+void BulletContext::createGhost(unsigned int * objectId, unsigned int shapeId, const Vector3 & position, const Quaternion & rotation)
 {
 	createRigidBody(objectId, shapeId, position, rotation, 0.0000001f);
 	m_collisionObjects[*objectId]->setCollisionFlags(m_collisionObjects[*objectId]->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE | btCollisionObject::CF_KINEMATIC_OBJECT);
 }
 
-void BulletContext::createRigidBody(unsigned int * objectId, unsigned int shapeId, const MVector3 & position, const MQuaternion & rotation, float mass)
+void BulletContext::createRigidBody(unsigned int * objectId, unsigned int shapeId, const Vector3 & position, const Quaternion & rotation, float mass)
 {
 	*objectId = m_collisionObjects.size();
 
@@ -258,7 +253,7 @@ void BulletContext::setObjectFriction(unsigned int objectId, float friction)
 	}
 }
 
-void BulletContext::setObjectLinearFactor(unsigned int objectId, const MVector3 & linearFactor)
+void BulletContext::setObjectLinearFactor(unsigned int objectId, const Vector3 & linearFactor)
 {
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object->getInternalType() == btCollisionObject::CO_RIGID_BODY)
@@ -288,7 +283,7 @@ void BulletContext::setObjectDamping(unsigned int objectId, float linearDamping,
 	}
 }
 
-void BulletContext::setObjectTransform(unsigned int objectId, const MVector3 & position, const MQuaternion & rotation)
+void BulletContext::setObjectTransform(unsigned int objectId, const Vector3 & position, const Quaternion & rotation)
 {
 	btTransform transform;
 	transform.setIdentity();
@@ -338,7 +333,7 @@ void BulletContext::setObjectTransform(unsigned int objectId, const MVector3 & p
 	}
 }
 
-void BulletContext::getObjectTransform(unsigned int objectId, MVector3 * position, MQuaternion * rotation)
+void BulletContext::getObjectTransform(unsigned int objectId, Vector3 * position, Quaternion * rotation)
 {
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object->getInternalType() == btCollisionObject::CO_RIGID_BODY)
@@ -389,7 +384,7 @@ void * BulletContext::getObjectUserPointer(unsigned int objectId)
 
 
 // affectors
-void BulletContext::addCentralForce(unsigned int objectId, const MVector3 & force)
+void BulletContext::addCentralForce(unsigned int objectId, const Vector3 & force)
 {
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object->getInternalType() == btCollisionObject::CO_RIGID_BODY)
@@ -400,7 +395,7 @@ void BulletContext::addCentralForce(unsigned int objectId, const MVector3 & forc
 	}
 }
 
-void BulletContext::getCentralForce(unsigned int objectId, MVector3 * force)
+void BulletContext::getCentralForce(unsigned int objectId, Vector3 * force)
 {
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object->getInternalType() == btCollisionObject::CO_RIGID_BODY)
@@ -414,7 +409,7 @@ void BulletContext::getCentralForce(unsigned int objectId, MVector3 * force)
 	}
 }
 
-void BulletContext::addTorque(unsigned int objectId, const MVector3 & torque)
+void BulletContext::addTorque(unsigned int objectId, const Vector3 & torque)
 {
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object->getInternalType() == btCollisionObject::CO_RIGID_BODY)
@@ -425,7 +420,7 @@ void BulletContext::addTorque(unsigned int objectId, const MVector3 & torque)
 	}
 }
 
-void BulletContext::getTorque(unsigned int objectId, MVector3 * torque)
+void BulletContext::getTorque(unsigned int objectId, Vector3 * torque)
 {
 	btCollisionObject * object = m_collisionObjects[objectId];
 	if(object->getInternalType() == btCollisionObject::CO_RIGID_BODY)
@@ -522,7 +517,7 @@ bool BulletContext::isObjectsCollision(unsigned int object1Id, unsigned int obje
 	return false;
 }
 
-bool BulletContext::isRayHit(const MVector3 & start, const MVector3 & end, unsigned int * objectId, MVector3 * point, MVector3 * normal)
+bool BulletContext::isRayHit(const Vector3 & start, const Vector3 & end, unsigned int * objectId, Vector3 * point, Vector3 * normal)
 {
 	//m_dynamicsWorld->updateAabbs();
 	//m_dynamicsWorld->computeOverlappingPairs();
@@ -570,7 +565,7 @@ void BulletContext::createMultiShape(unsigned int * shapeId)
 	m_collisionShapes.push_back(shape);
 }
 
-void BulletContext::createBoxShape(unsigned int * shapeId, const MVector3 & scale)
+void BulletContext::createBoxShape(unsigned int * shapeId, const Vector3 & scale)
 {
 	*shapeId = m_collisionShapes.size();
 	btCollisionShape * shape = new btBoxShape(btVector3(scale.x, scale.y, scale.z));
@@ -605,22 +600,22 @@ void BulletContext::createCylinderShape(unsigned int * shapeId, float radius, fl
 	m_collisionShapes.push_back(shape);
 }
 
-void BulletContext::createConvexHullShape(unsigned int * shapeId, const MVector3 * vertices, unsigned int verticesNumber, const MVector3 scale)
+void BulletContext::createConvexHullShape(unsigned int * shapeId, const Vector3 * vertices, unsigned int verticesNumber, const Vector3 scale)
 {
 	*shapeId = m_collisionShapes.size();
-	btConvexHullShape * shape = new btConvexHullShape((btScalar*)vertices, verticesNumber, sizeof(MVector3));
+	btConvexHullShape * shape = new btConvexHullShape((btScalar*)vertices, verticesNumber, sizeof(Vector3));
 	shape->setLocalScaling(btVector3(scale.x, scale.y, scale.z));
 	m_collisionShapes.push_back(shape);
 }
 
-void BulletContext::createTriangleMeshShape(unsigned int * shapeId, const MVector3 * vertices, unsigned int verticesNumber, const void * indices, unsigned int indicesNumber, M_TYPES indicesType, const MVector3 scale)
+void BulletContext::createTriangleMeshShape(unsigned int * shapeId, const Vector3 * vertices, unsigned int verticesNumber, const void * indices, unsigned int indicesNumber, VAR_TYPES indicesType, const Vector3 scale)
 {
 	*shapeId = m_collisionShapes.size();
 
 	PHY_ScalarType iType = PHY_INTEGER;
 	int triIndexStride = sizeof(int)*3;
 	
-	if(indicesType == M_USHORT)
+	if(indicesType == VAR_USHORT)
 	{
 		iType = PHY_SHORT;
 		triIndexStride = sizeof(short)*3;
@@ -629,7 +624,7 @@ void BulletContext::createTriangleMeshShape(unsigned int * shapeId, const MVecto
 	btIndexedMesh iMesh;
 	iMesh.m_numTriangles = (int)(indicesNumber/3);
 	iMesh.m_numVertices = (int)verticesNumber;
-	iMesh.m_vertexStride = sizeof(MVector3);
+	iMesh.m_vertexStride = sizeof(Vector3);
 	iMesh.m_triangleIndexStride = triIndexStride;
 	iMesh.m_triangleIndexBase = (const unsigned char *)indices;
 	iMesh.m_vertexBase = (const unsigned char *)vertices;
@@ -654,7 +649,7 @@ void BulletContext::deleteShape(unsigned int * shapeId)
 }
 
 // add child shape to multishape
-void BulletContext::addChildShape(unsigned int multiShapeId, unsigned int shapeId, const MVector3 & position, const MQuaternion & rotation)
+void BulletContext::addChildShape(unsigned int multiShapeId, unsigned int shapeId, const Vector3 & position, const Quaternion & rotation)
 {
 	btTransform transform;
 	transform.setIdentity();
@@ -669,7 +664,7 @@ void BulletContext::addChildShape(unsigned int multiShapeId, unsigned int shapeI
 }
 
 // create constraint
-void BulletContext::createConstraint(unsigned int * constraintId, unsigned int parentObjectId, unsigned int objectId, const MVector3 & pivot, bool disableParentCollision)
+void BulletContext::createConstraint(unsigned int * constraintId, unsigned int parentObjectId, unsigned int objectId, const Vector3 & pivot, bool disableParentCollision)
 {
 	btRigidBody * bA = btRigidBody::upcast(m_collisionObjects[parentObjectId]);
 	btRigidBody * bB = btRigidBody::upcast(m_collisionObjects[objectId]);
@@ -681,9 +676,9 @@ void BulletContext::createConstraint(unsigned int * constraintId, unsigned int p
 		
 		*constraintId = m_constraints.size();
 		
-		MVector3 position, euler;
-		MQuaternion rotation;
-		MMatrix4x4 matrix, matrix1, matrix2, rotMatrix;
+		Vector3 position, euler;
+		Quaternion rotation;
+		Matrix4x4 matrix, matrix1, matrix2, rotMatrix;
 		
 		rotMatrix.setRotationEuler(90, 0, 0);
 		
@@ -720,7 +715,7 @@ void BulletContext::createConstraint(unsigned int * constraintId, unsigned int p
 	}
 }
 
-void BulletContext::setLinearLimit(unsigned int constraintId, const MVector3 & lower, const MVector3 & upper)
+void BulletContext::setLinearLimit(unsigned int constraintId, const Vector3 & lower, const Vector3 & upper)
 {
 	btGeneric6DofSpringConstraint * constraint = (btGeneric6DofSpringConstraint *)m_constraints[constraintId];
 	if(constraint)
@@ -730,7 +725,7 @@ void BulletContext::setLinearLimit(unsigned int constraintId, const MVector3 & l
 	}
 }
 
-void BulletContext::setAngularLimit(unsigned int constraintId, const MVector3 & lower, const MVector3 & upper)
+void BulletContext::setAngularLimit(unsigned int constraintId, const Vector3 & lower, const Vector3 & upper)
 {
 	btGeneric6DofSpringConstraint * constraint = (btGeneric6DofSpringConstraint *)m_constraints[constraintId];
 	if(constraint)

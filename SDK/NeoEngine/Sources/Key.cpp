@@ -50,34 +50,34 @@ float * Key::createFloatData(void)
 	return value;
 }
 
-MVector2 * Key::createVector2Data(void)
+Vector2 * Key::createVector2Data(void)
 {
 	SAFE_FREE(m_data);
-	MVector2 * vec2 = new MVector2();
+	Vector2 * vec2 = new Vector2();
 	m_data = vec2;
 	return vec2;
 }
 
-MVector3 * Key::createVector3Data(void)
+Vector3 * Key::createVector3Data(void)
 {
 	SAFE_FREE(m_data);
-	MVector3 * vec3 = new MVector3();
+	Vector3 * vec3 = new Vector3();
 	m_data = vec3;
 	return vec3;
 }
 
-MVector4 * Key::createVector4Data(void)
+Vector4 * Key::createVector4Data(void)
 {
 	SAFE_FREE(m_data);
-	MVector4 * vec4 = new MVector4();
+	Vector4 * vec4 = new Vector4();
 	m_data = vec4;
 	return vec4;
 }
 
-MQuaternion * Key::createQuaternionData(void)
+Quaternion * Key::createQuaternionData(void)
 {
 	SAFE_FREE(m_data);
-	MQuaternion * quat = new MQuaternion();
+	Quaternion * quat = new Quaternion();
 	m_data = quat;
 	return quat;
 }

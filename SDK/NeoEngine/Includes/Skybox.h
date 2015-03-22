@@ -30,13 +30,13 @@
 #ifndef _M_SKYBOX_H
 #define _M_SKYBOX_H
 
-#include <MCore.h>
+#include <NeoCore.h>
 
 namespace Neo
 {
 class M_ENGINE_EXPORT Skybox
 {
-    void drawQuad(MVector3 v1, MVector3 v2, MVector3 v3, MVector3 v4, MMatrix4x4* matrix, MVector2* texCoords);
+    void drawQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4, Matrix4x4* matrix, Vector2* texCoords);
 
     TextureRef* m_SkyboxTexture[6];
 
@@ -46,14 +46,14 @@ class M_ENGINE_EXPORT Skybox
     unsigned int m_vertShad;
     unsigned int m_pixShad;
 
-    MString m_path;
+    String m_path;
 
 public:
     Skybox();
     // destructor
     ~Skybox(void){}
 
-    void drawSkybox(MVector3 position, MVector3 rotation);
+    void drawSkybox(Vector3 position, Vector3 rotation);
     void loadSkyboxTextures(const char* path);
 
     inline const char* getPath() { return m_path.getSafeString(); }

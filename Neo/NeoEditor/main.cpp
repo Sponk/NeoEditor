@@ -26,8 +26,8 @@
 #include <NeoEngine.h>
 #include <ImageLoader.h>
 #include "Maratis/Maratis.h"
-#include <MCore.h>
 #include <FL/Fl.H>
+#include <NeoCore.h>
 #include <SDL.h>
 #include <SDLThread.h>
 #include <Window/Window.h>
@@ -155,7 +155,7 @@ void loadSettings(const char* path)
 	MLOG_INFO("Loading config: " << dir);
 	INI::Parser parser(dir);
 
-	MVector3 vector(STR1_TO_FLOAT(parser.top()("theme")["background_r"]),
+	Vector3 vector(STR1_TO_FLOAT(parser.top()("theme")["background_r"]),
 					STR1_TO_FLOAT(parser.top()("theme")["background_g"]),
 					STR1_TO_FLOAT(parser.top()("theme")["background_b"]));
 	vector *= 255.0f;
@@ -164,7 +164,7 @@ void loadSettings(const char* path)
 				   static_cast<unsigned char>(vector.y),
 				   static_cast<unsigned char>(vector.z));
 
-	vector = MVector3(STR1_TO_FLOAT(parser.top()("theme")["background2_r"]),
+	vector = Vector3(STR1_TO_FLOAT(parser.top()("theme")["background2_r"]),
 					  STR1_TO_FLOAT(parser.top()("theme")["background2_g"]),
 					  STR1_TO_FLOAT(parser.top()("theme")["background2_b"]));
 	vector *= 255.0f;
@@ -173,7 +173,7 @@ void loadSettings(const char* path)
 					static_cast<unsigned char>(vector.y),
 					static_cast<unsigned char>(vector.z));
 
-	vector = MVector3(STR1_TO_FLOAT(parser.top()("theme")["foreground_r"]),
+	vector = Vector3(STR1_TO_FLOAT(parser.top()("theme")["foreground_r"]),
 					  STR1_TO_FLOAT(parser.top()("theme")["foreground_g"]),
 					  STR1_TO_FLOAT(parser.top()("theme")["foreground_b"]));
 	vector *= 255.0f;
@@ -604,7 +604,7 @@ int main(int argc, char** argv)
 	maratis->start();
 
 	// Init default thread
-	MThreadManager* mgr = MThreadManager::getInstance();
+	ThreadFactory* mgr = ThreadFactory::getInstance();
 	mgr->setTemplateSemaphore(new SDLSemaphore());
 	mgr->setTemplateThread(new SDLThread());
 

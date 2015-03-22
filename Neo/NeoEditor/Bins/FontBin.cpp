@@ -35,10 +35,10 @@ bool exportFontBin(const char * filename, Font * font)
 		return false;
 
 	NeoEngine * engine = NeoEngine::getInstance();
-	MRenderingContext * render = engine->getRenderingContext();
+	RenderingContext * render = engine->getRenderingContext();
 
 	// read image
-	MImage image;
+	Image image;
 	render->bindTexture(font->getTextureId());
 	render->getTexImage(0, &image);
 	
@@ -105,9 +105,9 @@ bool exportFontBin(const char * filename, Font * font)
 			unsigned int charCode = mit->first;
 			Character * character = &mit->second;
 
-			MVector2 pos = character->getPos();
-			MVector2 offset = character->getOffset();
-			MVector2 scale = character->getScale();
+			Vector2 pos = character->getPos();
+			Vector2 offset = character->getOffset();
+			Vector2 scale = character->getScale();
 			float xadvance = character->getXAdvance();
 
 			fwrite(&charCode, sizeof(int), 1, file);

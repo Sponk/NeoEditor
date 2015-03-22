@@ -50,7 +50,7 @@ void TileSheet::loadImage(const char* path, unsigned int width,
 {
 	Render* render = Render::getInstance();
 	GuiSystem* gui = GuiSystem::getInstance();
-	MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
+	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	Level* level = NeoEngine::getInstance()->getLevel();
 	NeoWindow* window = NeoWindow::getInstance();
 
@@ -72,9 +72,9 @@ void TileSheet::loadImage(const char* path, unsigned int width,
 }
 
 // Check for division by zero!!!
-MVector4 TileSheet::getTexCoords(unsigned int x, unsigned int y)
+Vector4 TileSheet::getTexCoords(unsigned int x, unsigned int y)
 {
-	MVector4 ret;
+	Vector4 ret;
 
 	if (x == 0)
 		ret.x = 0;
@@ -97,7 +97,7 @@ MVector4 TileSheet::getTexCoords(unsigned int x, unsigned int y)
 
 void Tile::update() {}
 
-void Tile::draw(MVector2 offset)
+void Tile::draw(Vector2 offset)
 {
 	Render* render = Render::getInstance();
 	GuiSystem* gui = GuiSystem::getInstance();

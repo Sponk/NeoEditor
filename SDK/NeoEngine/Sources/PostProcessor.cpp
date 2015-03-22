@@ -39,7 +39,7 @@ inline int Pow2(int x)
 
 void MPostProcessor::eraseTextures()
 {
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     if(m_ColourTexID != 0)
         render->deleteTexture(&m_ColourTexID);
@@ -53,8 +53,8 @@ void MPostProcessor::eraseTextures()
 
 void MPostProcessor::updateResolution()
 {
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
-    MSystemContext * system = NeoEngine::getInstance()->getSystemContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    SystemContext * system = NeoEngine::getInstance()->getSystemContext();
 
     if(system == NULL || render == NULL)
         return;
@@ -65,10 +65,10 @@ void MPostProcessor::updateResolution()
     system->getScreenSize(&screenWidth, &screenHeight);
 
     // Update vertex cache
-    m_vertices[0] = MVector2(0, 0);
-    m_vertices[1] = MVector2(0, screenHeight);
-    m_vertices[3] = MVector2(screenWidth, screenHeight);
-    m_vertices[2] = MVector2(screenWidth, 0);
+    m_vertices[0] = Vector2(0, 0);
+    m_vertices[1] = Vector2(0, screenHeight);
+    m_vertices[3] = Vector2(screenWidth, screenHeight);
+    m_vertices[2] = Vector2(screenWidth, 0);
 
     m_Resolution = Pow2(max(screenWidth, screenHeight));
 
@@ -82,15 +82,15 @@ void MPostProcessor::updateResolution()
     // create render textures
     render->createTexture(&m_ColourTexID);
     render->bindTexture(m_ColourTexID);
-    render->setTextureFilterMode(M_TEX_FILTER_LINEAR, M_TEX_FILTER_LINEAR);
-    render->setTextureUWrapMode(M_WRAP_CLAMP);
-    render->setTextureVWrapMode(M_WRAP_CLAMP);
-    render->texImage(0, m_Resolution, m_Resolution, M_FLOAT, M_RGB, 0);
+    render->setTextureFilterMode(TEX_FILTER_LINEAR, TEX_FILTER_LINEAR);
+    render->setTextureUWrapMode(WRAP_CLAMP);
+    render->setTextureVWrapMode(WRAP_CLAMP);
+    render->texImage(0, m_Resolution, m_Resolution, VAR_FLOAT, TEX_RGB, 0);
 
     render->createTexture(&m_DepthTexID);
     render->bindTexture(m_DepthTexID);
-    render->setTextureFilterMode(M_TEX_FILTER_NEAREST, M_TEX_FILTER_NEAREST);
-    render->texImage(0, m_Resolution, m_Resolution, M_UBYTE, M_DEPTH, 0);
+    render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
+    render->texImage(0, m_Resolution, m_Resolution, VAR_UBYTE, TEX_DEPTH, 0);
 }
 
 MPostProcessor::MPostProcessor()
@@ -104,10 +104,10 @@ MPostProcessor::MPostProcessor()
 {
     updateResolution();
 
-    m_texCoords[0] = MVector2(0, 1);
-    m_texCoords[1] = MVector2(0, 0);
-    m_texCoords[3] = MVector2(1, 0);
-    m_texCoords[2] = MVector2(1, 1);
+    m_texCoords[0] = Vector2(0, 1);
+    m_texCoords[1] = Vector2(0, 0);
+    m_texCoords[3] = Vector2(1, 0);
+    m_texCoords[2] = Vector2(1, 1);
 }
 
 bool MPostProcessor::draw(OCamera* camera)
@@ -116,8 +116,8 @@ bool MPostProcessor::draw(OCamera* camera)
         return false;
 
     NeoEngine * engine = NeoEngine::getInstance(); // get the engine instance
-    MRenderingContext * render = engine->getRenderingContext(); // get the rendering context
-    MSystemContext * system = engine->getSystemContext();
+    RenderingContext * render = engine->getRenderingContext(); // get the rendering context
+    SystemContext * system = engine->getSystemContext();
 
     unsigned int currentFrameBuffer = 0;
     render->getCurrentFrameBuffer(&currentFrameBuffer);
@@ -138,7 +138,7 @@ bool MPostProcessor::draw(OCamera* camera)
     camera->enable();
     camera->updateListener();
 
-    MVector3 clearColor = camera->getClearColor();
+    Vector3 clearColor = camera->getClearColor();
     render->setClearColor(clearColor);
 
     // screen size
@@ -148,16 +148,16 @@ bool MPostProcessor::draw(OCamera* camera)
 
     // render to texture
     render->bindFrameBuffer(m_BufferID);
-    render->attachFrameBufferTexture(M_ATTACH_COLOR0, m_ColourTexID);
-    render->attachFrameBufferTexture(M_ATTACH_DEPTH, m_DepthTexID);
+    render->attachFrameBufferTexture(ATTACH_COLOR0, m_ColourTexID);
+    render->attachFrameBufferTexture(ATTACH_DEPTH, m_DepthTexID);
     render->setViewport(0, 0, m_Resolution, m_Resolution); // change viewport
 
     render->setClearColor(camera->getClearColor());
 
     if(!camera->getSkybox()->isInitialized())
-        render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
+        render->clear(BUFFER_COLOR | BUFFER_DEPTH);
     else
-        render->clear(M_BUFFER_DEPTH);
+        render->clear(BUFFER_DEPTH);
 
     render->enableDepthTest();
     render->setScissor(0,0,m_Resolution,m_Resolution);
@@ -171,8 +171,8 @@ bool MPostProcessor::draw(OCamera* camera)
 
     // draw the rendered textured with a shader effect
     render->setViewport(0, 0, screenWidth, screenHeight);
-    render->setClearColor(MVector3(1, 0, 0));
-    render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
+    render->setClearColor(Vector3(1, 0, 0));
+    render->clear(BUFFER_COLOR | BUFFER_DEPTH);
 
     set2D(screenWidth, screenHeight);
 
@@ -181,7 +181,7 @@ bool MPostProcessor::draw(OCamera* camera)
     render->bindTexture(m_DepthTexID, 1);
     render->disableBlending();
 
-    drawQuad(MVector2((float)screenWidth, (float)screenHeight));
+    drawQuad(Vector2((float)screenWidth, (float)screenHeight));
     render->bindFX(0);
     return true;
 }
@@ -191,7 +191,7 @@ bool MPostProcessor::loadShader(const char* vertShad, const char* fragShad)
     if(vertShad == NULL || fragShad == NULL)
         return false;
 
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext(); // get the rendering context
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext(); // get the rendering context
     bool success = false;
 
     if(m_vertShad)
@@ -246,22 +246,22 @@ bool MPostProcessor::loadShaderFile(const char* vertShad, const char* fragShad)
 
 void MPostProcessor::set2D(unsigned int w, unsigned int h)
 {
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
     render->setViewport(0, 0, w, h);
 
     // set ortho projection
-    render->setMatrixMode(M_MATRIX_PROJECTION);
+    render->setMatrixMode(MATRIX_PROJECTION);
     render->loadIdentity();
 
     render->setOrthoView(0.0f, (float)w, (float)h, 0.0f, 1.0f, -1.0f);
 
-    render->setMatrixMode(M_MATRIX_MODELVIEW);
+    render->setMatrixMode(MATRIX_MODELVIEW);
     render->loadIdentity();
 }
 
-void MPostProcessor::drawQuad(MVector2 scale)
+void MPostProcessor::drawQuad(Vector2 scale)
 {
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     int vertexAttrib;
     int texcoordAttrib;
@@ -270,9 +270,9 @@ void MPostProcessor::drawQuad(MVector2 scale)
     sendUniforms();
 
     // projmodelview matrix
-    static MMatrix4x4 ProjMatrix;
-    static MMatrix4x4 ModelViewMatrix;
-    static MMatrix4x4 ProjModelViewMatrix;
+    static Matrix4x4 ProjMatrix;
+    static Matrix4x4 ModelViewMatrix;
+    static Matrix4x4 ProjModelViewMatrix;
 
     render->getProjectionMatrix(&ProjMatrix);
     render->getModelViewMatrix(&ModelViewMatrix);
@@ -285,12 +285,12 @@ void MPostProcessor::drawQuad(MVector2 scale)
 
     // Vertex
     render->getAttribLocation(m_fx, "Vertex", &vertexAttrib);
-    render->setAttribPointer(vertexAttrib, M_FLOAT, 2, m_vertices);
+    render->setAttribPointer(vertexAttrib, VAR_FLOAT, 2, m_vertices);
     render->enableAttribArray(vertexAttrib);
 
     // TexCoord
     render->getAttribLocation(m_fx, "TexCoord", &texcoordAttrib);
-    render->setAttribPointer(texcoordAttrib, M_FLOAT, 2, m_texCoords);
+    render->setAttribPointer(texcoordAttrib, VAR_FLOAT, 2, m_texCoords);
     render->enableAttribArray(texcoordAttrib);
 
     // Width
@@ -299,7 +299,7 @@ void MPostProcessor::drawQuad(MVector2 scale)
     render->sendUniformFloat(m_fx, "Height", &scale.y, 1);
 
     // draw
-    render->drawArray(M_PRIMITIVE_TRIANGLE_STRIP, 0, 4);
+    render->drawArray(PRIMITIVE_TRIANGLE_STRIP, 0, 4);
 
     render->disableAttribArray(vertexAttrib);
     render->disableAttribArray(texcoordAttrib);
@@ -405,7 +405,7 @@ M_VARIABLE_TYPE MPostProcessor::getUniformType(int idx)
 
 void MPostProcessor::sendUniforms()
 {
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     // Set dynamic uniforms
     uniform_t* uniform;

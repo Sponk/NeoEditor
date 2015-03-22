@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// MStandardRenderer.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -73,7 +68,7 @@ public:
 	unsigned int shadowTexture;
 	unsigned int shadowQuality;
 	float biasUnity;
-	MMatrix4x4 shadowMatrix;
+	Matrix4x4 shadowMatrix;
 };
 
 
@@ -95,8 +90,8 @@ private:
 	float m_lightShadowBias[4];
 	float m_lightShadowBlur[4];
 	
-	MMatrix4x4 m_currModelViewMatrix;
-	MMatrix4x4 m_lightShadowMatrix[4];
+	Matrix4x4 m_currModelViewMatrix;
+	Matrix4x4 m_lightShadowMatrix[4];
 	OCamera * m_currentCamera;
 	
 	// shadow lights
@@ -107,9 +102,9 @@ private:
 	unsigned int m_verticesNumber;
 	unsigned int m_normalsNumber;
 	unsigned int m_tangentsNumber;
-	MVector3 * m_vertices;
-	MVector3 * m_normals;
-	MVector3 * m_tangents;
+	Vector3 * m_vertices;
+	Vector3 * m_normals;
+	Vector3 * m_tangents;
 	
 	// default FXs
 	unsigned int m_FXsNumber;
@@ -134,17 +129,17 @@ private:
 	
 	void addFX(const char * vert, const char * frag);
 	void updateSkinning(Mesh * mesh, Armature * armature);
-	void drawDisplay(SubMesh * subMesh, MaterialDisplay * display, MVector3 * vertices, MVector3 * normals, MVector3 * tangents, MColor * colors);
+	void drawDisplay(SubMesh * subMesh, MaterialDisplay * display, Vector3 * vertices, Vector3 * normals, Vector3 * tangents, Color * colors);
 	//void drawDisplayTriangles(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices);
 	void drawOpaques(SubMesh * subMesh, Armature * armature);
 	void drawTransparents(SubMesh * subMesh, Armature * armature);
-	void setShadowMatrix(MMatrix4x4 * matrix, OCamera * camera);
+	void setShadowMatrix(Matrix4x4 * matrix, OCamera * camera);
 	void updateVisibility(Scene * scene, OCamera * camera);
 	void enableFog(OCamera * camera);
 	
 	void initVBO(SubMesh * subMesh);
 	
-	float getDistanceToCam(OCamera * camera, const MVector3 & pos);
+	float getDistanceToCam(OCamera * camera, const Vector3 & pos);
 	
 	// shadow lights
 	ShadowLight * createShadowLight(OLight * light);
@@ -152,9 +147,9 @@ private:
 	void decreaseShadowLights(void);
 	
 	// skin cache
-	MVector3 * getVertices(unsigned int size);
-	MVector3 * getNormals(unsigned int size);
-	MVector3 * getTangents(unsigned int size);
+	Vector3 * getVertices(unsigned int size);
+	Vector3 * getNormals(unsigned int size);
+	Vector3 * getTangents(unsigned int size);
 	
 	// subMesh
 	void prepareSubMesh(Scene * scene, OCamera * camera, OEntity * entity, SubMesh * subMesh);

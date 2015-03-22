@@ -93,7 +93,7 @@ class MaterialsAnimRef;
 class Messenger;
 }
 
-#include <MCore.h>
+#include <NeoCore.h>
 
 #include "Log.h"
 
@@ -171,22 +171,22 @@ private:
 	bool m_isActive;
 	
 	// contexts
-	MSoundContext * m_soundContext;
-	MRenderingContext * m_renderingContext;
-	MPhysicsContext * m_physicsContext;
-	MScriptContext * m_scriptContext;
-	MInputContext * m_inputContext;
-	MSystemContext * m_systemContext;
+	SoundContext * m_soundContext;
+	RenderingContext * m_renderingContext;
+	PhysicsContext * m_physicsContext;
+	ScriptContext * m_scriptContext;
+	InputContext * m_inputContext;
+	SystemContext * m_systemContext;
 
 	// data loaders
-	MDataLoader m_fontLoader;
-	MDataLoader m_imageLoader;
-	MDataLoader m_soundLoader;
-	MDataLoader m_meshLoader;
-	MDataLoader m_armatureAnimLoader;
-	MDataLoader m_texturesAnimLoader;
-	MDataLoader m_materialsAnimLoader;
-	MDataLoader m_levelLoader;
+	DataLoader m_fontLoader;
+	DataLoader m_imageLoader;
+	DataLoader m_soundLoader;
+	DataLoader m_meshLoader;
+	DataLoader m_armatureAnimLoader;
+	DataLoader m_texturesAnimLoader;
+	DataLoader m_materialsAnimLoader;
+	DataLoader m_levelLoader;
 
 	// behavior manager
 	BehaviorManager m_behaviorManager;
@@ -220,30 +220,30 @@ public:
 	inline bool isActive(void){ return m_isActive; }
 
 	// contexts
-	void setSoundContext(MSoundContext * soundContext);
-	void setRenderingContext(MRenderingContext * renderingContext);
-	void setPhysicsContext(MPhysicsContext * physicsContext);
-	void setScriptContext(MScriptContext * scriptContext);
-	void setInputContext(MInputContext * inputContext);
-	void setSystemContext(MSystemContext * systemContext);
+	void setSoundContext(SoundContext * soundContext);
+	void setRenderingContext(RenderingContext * renderingContext);
+	void setPhysicsContext(PhysicsContext * physicsContext);
+	void setScriptContext(ScriptContext * scriptContext);
+	void setInputContext(InputContext * inputContext);
+	void setSystemContext(SystemContext * systemContext);
 
 	// get contexts
-	inline MSoundContext * getSoundContext(void){ return m_soundContext; }
-	inline MRenderingContext * getRenderingContext(void){ return m_renderingContext; }
-	inline MPhysicsContext * getPhysicsContext(void){ return m_physicsContext; }
-	inline MScriptContext * getScriptContext(void){ return m_scriptContext; }
-	inline MInputContext * getInputContext(void){ return m_inputContext; }
-	inline MSystemContext * getSystemContext(void){ return m_systemContext; }
+	inline SoundContext * getSoundContext(void){ return m_soundContext; }
+	inline RenderingContext * getRenderingContext(void){ return m_renderingContext; }
+	inline PhysicsContext * getPhysicsContext(void){ return m_physicsContext; }
+	inline ScriptContext * getScriptContext(void){ return m_scriptContext; }
+	inline InputContext * getInputContext(void){ return m_inputContext; }
+	inline SystemContext * getSystemContext(void){ return m_systemContext; }
 
 	// data loaders
-	MDataLoader * getFontLoader(void){ return &m_fontLoader; }
-	MDataLoader * getImageLoader(void){ return &m_imageLoader; }
-	MDataLoader * getSoundLoader(void){ return &m_soundLoader; }
-	MDataLoader * getMeshLoader(void){ return &m_meshLoader; }
-	MDataLoader * getArmatureAnimLoader(void){ return &m_armatureAnimLoader; }
-	MDataLoader * getTexturesAnimLoader(void){ return &m_texturesAnimLoader; }
-	MDataLoader * getMaterialsAnimLoader(void){ return &m_materialsAnimLoader; }
-	MDataLoader * getLevelLoader(void){ return &m_levelLoader; }
+	DataLoader * getFontLoader(void){ return &m_fontLoader; }
+	DataLoader * getImageLoader(void){ return &m_imageLoader; }
+	DataLoader * getSoundLoader(void){ return &m_soundLoader; }
+	DataLoader * getMeshLoader(void){ return &m_meshLoader; }
+	DataLoader * getArmatureAnimLoader(void){ return &m_armatureAnimLoader; }
+	DataLoader * getTexturesAnimLoader(void){ return &m_texturesAnimLoader; }
+	DataLoader * getMaterialsAnimLoader(void){ return &m_materialsAnimLoader; }
+	DataLoader * getLevelLoader(void){ return &m_levelLoader; }
 
 	// behavior manager
 	inline BehaviorManager * getBehaviorManager(void){ return &m_behaviorManager; }

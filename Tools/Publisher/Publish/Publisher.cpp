@@ -18,7 +18,8 @@
 //========================================================================
 
 #include "Publisher.h"
-#include <MCore.h>
+
+#include <NeoCore.h>
 
 using namespace Neo;
 

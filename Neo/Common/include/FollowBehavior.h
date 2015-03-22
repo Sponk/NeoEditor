@@ -55,8 +55,8 @@ private:
 	// variables
 	bool m_local;
 	float m_delay;
-	MVector3 m_offset;
-	MString m_targetName;
+	Vector3 m_offset;
+	String m_targetName;
 	
 public:
 

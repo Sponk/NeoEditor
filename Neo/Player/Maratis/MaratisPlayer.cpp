@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// Maratis.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 //  Maratis, Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -45,7 +40,7 @@ typedef Neo::ES2Context GLContext;
 #include <BinFontLoader.h>
 #include <BinMeshLoader.h>
 
-#include <MCore.h>
+#include <NeoCore.h>
 #include <NeoEngine.h>
 #include <Window/Mouse.h>
 #include <LookAtBehavior.h>
@@ -314,7 +309,7 @@ void MaratisPlayer::graphicLoop(void)
 {
 	NeoWindow * window = NeoWindow::getInstance();
 	NeoEngine * engine = NeoEngine::getInstance();
-	MRenderingContext * render = engine->getRenderingContext();
+	RenderingContext * render = engine->getRenderingContext();
 
 	// game
 	NeoGame * game = engine->getGame();
@@ -328,11 +323,11 @@ void MaratisPlayer::graphicLoop(void)
 		}
 		else
 		{
-			render->clear(M_BUFFER_COLOR);
+			render->clear(BUFFER_COLOR);
 		}
 	}
 	else
 	{
-		render->clear(M_BUFFER_COLOR);
+		render->clear(BUFFER_COLOR);
 	}
 }

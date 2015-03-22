@@ -20,12 +20,12 @@
 #ifndef _M_RENDER_ARRAY_H
 #define _M_RENDER_ARRAY_H
 
-#include <MCore.h>
+#include <NeoCore.h>
 
-void beginDraw(M_PRIMITIVE_TYPES primitiveType);
-void pushVertex(const MVector3 & vertex);
-void setColor(const MVector4 & color);
-void setTexcoords(const MVector2 & texcoords);
-void endDraw(MRenderingContext * render);
+void beginDraw(Neo::PRIMITIVE_TYPES primitiveType);
+void pushVertex(const Neo::Vector3 & vertex);
+void setColor(const Neo::Vector4 & color);
+void setTexcoords(const Neo::Vector2 & texcoords);
+void endDraw(Neo::RenderingContext * render);
 
 #endif

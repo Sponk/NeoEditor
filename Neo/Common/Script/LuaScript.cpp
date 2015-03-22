@@ -106,7 +106,7 @@ static Object3d * getObject3d(LUA_INTEGER object)
 	return (Object3d*)object;
 }
 
-static bool getVector2(lua_State * L, int index, MVector2 * vector)
+static bool getVector2(lua_State * L, int index, Vector2 * vector)
 {
 	if(lua_istable(L, index) && (lua_objlen(L, index) >= 2))
 	{
@@ -126,7 +126,7 @@ static bool getVector2(lua_State * L, int index, MVector2 * vector)
 	return false;
 }
 
-static bool getVector3(lua_State * L, int index, MVector3 * vector)
+static bool getVector3(lua_State * L, int index, Vector3 * vector)
 {
 	if(lua_istable(L, index) && (lua_objlen(L, index) >= 3))
 	{
@@ -150,7 +150,7 @@ static bool getVector3(lua_State * L, int index, MVector3 * vector)
 	return false;
 }
 
-static bool getVector4(lua_State * L, int index, MVector4 * vector)
+static bool getVector4(lua_State * L, int index, Vector4 * vector)
 {
 	if(lua_istable(L, index) && (lua_objlen(L, index) >= 4))
 	{
@@ -186,10 +186,10 @@ static bool getVector4(lua_State * L, int index, MVector4 * vector)
 
 static int vec3__add(lua_State *L)
 {
-	MVector3 a;
+	Vector3 a;
 	if(getVector3(L, 1, &a))
 	{
-		MVector3 b;
+		Vector3 b;
 		if(getVector3(L, 2, &b))
 		{
 			pushFloatArray(L, a+b, 3);
@@ -207,10 +207,10 @@ static int vec3__add(lua_State *L)
 
 static int vec3__sub(lua_State *L)
 {
-	MVector3 a;
+	Vector3 a;
 	if(getVector3(L, 1, &a))
 	{
-		MVector3 b;
+		Vector3 b;
 		if(getVector3(L, 2, &b))
 		{
 			pushFloatArray(L, a-b, 3);
@@ -228,10 +228,10 @@ static int vec3__sub(lua_State *L)
 
 static int vec3__mul(lua_State *L)
 {
-	MVector3 a;
+	Vector3 a;
 	if(getVector3(L, 1, &a))
 	{
-		MVector3 b;
+		Vector3 b;
 		if(getVector3(L, 2, &b))
 		{
 			pushFloatArray(L, a*b, 3);
@@ -249,10 +249,10 @@ static int vec3__mul(lua_State *L)
 
 static int vec3__div(lua_State *L)
 {
-	MVector3 a;
+	Vector3 a;
 	if(getVector3(L, 1, &a))
 	{
-		MVector3 b;
+		Vector3 b;
 		if(getVector3(L, 2, &b))
 		{
 			pushFloatArray(L, a/b, 3);
@@ -270,7 +270,7 @@ static int vec3__div(lua_State *L)
 
 static int vec3__unm(lua_State *L)
 {
-	MVector3 a;
+	Vector3 a;
 	getVector3(L, 1, &a);
 	pushFloatArray(L, -a, 3);
 	return 1;
@@ -314,7 +314,7 @@ int setAttribute(lua_State* L)
 					break;
 				case LUA_TSTRING:
 					{
-						NeoVariable variable(name, new MString(lua_tostring(L, 3)), M_VARIABLE_STRING);
+						NeoVariable variable(name, new String(lua_tostring(L, 3)), M_VARIABLE_STRING);
 						object->setAttribute(name, variable);
 					}
 					break;
@@ -329,7 +329,7 @@ int setAttribute(lua_State* L)
 			}
 			else if(type == LUA_TSTRING && attribute.getType() == M_VARIABLE_STRING)
 			{
-				((MString*)attribute.getPointer())->set(lua_tostring(L, 3));
+				((String*)attribute.getPointer())->set(lua_tostring(L, 3));
 			}
 			else
 			{
@@ -356,7 +356,7 @@ int getAttribute(lua_State* L)
 				lua_pushnumber(L, *(float*)variable.getPointer());
 				break;
 			case M_VARIABLE_STRING:
-				lua_pushstring(L, ((MString*)variable.getPointer())->getSafeString());
+				lua_pushstring(L, ((String*)variable.getPointer())->getSafeString());
 				break;
 			case M_VARIABLE_NULL:
 				lua_pushnil(L);
@@ -388,7 +388,7 @@ LuaScript::~LuaScript(void)
 void LuaScript::init(void)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
-	MSystemContext * system = engine->getSystemContext();
+	SystemContext * system = engine->getSystemContext();
 	
 	g_startTick = system->getSystemTick();
 	

@@ -41,19 +41,19 @@ class M_ENGINE_EXPORT MaterialDisplay
 {
 public:
 
-	MaterialDisplay(M_PRIMITIVE_TYPES primitiveType, unsigned int begin, unsigned int size);
+	MaterialDisplay(PRIMITIVE_TYPES primitiveType, unsigned int begin, unsigned int size);
 	MaterialDisplay(const MaterialDisplay & display);
 	~MaterialDisplay(void);
 
 private:
 
 	// draw array infos
-	M_PRIMITIVE_TYPES m_primitiveType;
+	PRIMITIVE_TYPES m_primitiveType;
 	unsigned int m_begin;
 	unsigned int m_size;
 
 	// cull mode
-	M_CULL_MODES m_cullMode;
+	CULL_MODES m_cullMode;
 
 	// material
 	Material * m_material;
@@ -64,13 +64,13 @@ private:
 public:
 
 	// array infos
-	inline M_PRIMITIVE_TYPES getPrimitiveType(void){ return m_primitiveType; }
+	inline PRIMITIVE_TYPES getPrimitiveType(void){ return m_primitiveType; }
 	inline unsigned int getBegin(void){ return m_begin; }
 	inline unsigned int getSize(void){ return m_size; }
 
 	// cull mode
-	inline void setCullMode(M_CULL_MODES cullMode){ m_cullMode = cullMode; }
-	inline M_CULL_MODES getCullMode(void){ return m_cullMode; }
+	inline void setCullMode(CULL_MODES cullMode){ m_cullMode = cullMode; }
+	inline CULL_MODES getCullMode(void){ return m_cullMode; }
 
 	// material
 	inline void setMaterial(Material * material){ m_material = material; }
@@ -96,7 +96,7 @@ private:
 	MorphingData * m_morphingData;
 
 	// skin data
-	MSkinData * m_skinData;
+	SkinData * m_skinData;
 
 	// data
 	unsigned int m_indicesSize;
@@ -106,14 +106,14 @@ private:
 	unsigned int m_texCoordsSize;
 	unsigned int m_colorsSize;
 
-	M_TYPES m_indicesType;
+	VAR_TYPES m_indicesType;
 	void * m_indices;
 
-	MColor * m_colors;
-	MVector3 * m_vertices;
-	MVector3 * m_normals;
-	MVector3 * m_tangents;
-	MVector2 * m_texCoords;
+	Color * m_colors;
+	Vector3 * m_vertices;
+	Vector3 * m_normals;
+	Vector3 * m_tangents;
+	Vector2 * m_texCoords;
 
 	// VBO (optional)
 	unsigned int m_vboId1;
@@ -138,8 +138,8 @@ public:
 
 	// skin data
 	void clearSkinData(void);
-	MSkinData * createSkinData(void);
-	inline MSkinData * getSkinData(void){ return m_skinData; }
+	SkinData * createSkinData(void);
+	inline SkinData * getSkinData(void){ return m_skinData; }
 
 	// data
 	void clearIndices(void);
@@ -149,12 +149,12 @@ public:
 	void clearTexCoords(void);
 	void clearColors(void);
 
-	void * allocIndices(unsigned int size, M_TYPES type);
-	MColor * allocColors(unsigned int size);
-	MVector3 * allocVertices(unsigned int size);
-	MVector3 * allocNormals(unsigned int size);
-	MVector3 * allocTangents(unsigned int size);
-	MVector2 * allocTexCoords(unsigned int size);
+	void * allocIndices(unsigned int size, VAR_TYPES type);
+	Color * allocColors(unsigned int size);
+	Vector3 * allocVertices(unsigned int size);
+	Vector3 * allocNormals(unsigned int size);
+	Vector3 * allocTangents(unsigned int size);
+	Vector2 * allocTexCoords(unsigned int size);
 
 	inline unsigned int getIndicesSize(void){ return m_indicesSize; }
 	inline unsigned int getVerticesSize(void){ return m_verticesSize; }
@@ -163,14 +163,14 @@ public:
 	inline unsigned int getTexCoordsSize(void){ return m_texCoordsSize; }
 	inline unsigned int getColorsSize(void){ return m_colorsSize; }
 
-	M_TYPES getIndicesType(void){ return m_indicesType; }
+	VAR_TYPES getIndicesType(void){ return m_indicesType; }
 	inline void	* getIndices(void){ return m_indices; }
 
-	inline MColor * getColors(void){ return m_colors; }
-	inline MVector3 * getVertices(void){ return m_vertices; }
-	inline MVector3 * getNormals(void){ return m_normals; }
-	inline MVector3 * getTangents(void){ return m_tangents; }
-	inline MVector2 * getTexCoords(void){ return m_texCoords; }
+	inline Color * getColors(void){ return m_colors; }
+	inline Vector3 * getVertices(void){ return m_vertices; }
+	inline Vector3 * getNormals(void){ return m_normals; }
+	inline Vector3 * getTangents(void){ return m_tangents; }
+	inline Vector2 * getTexCoords(void){ return m_texCoords; }
 
 	// VBO
 	void clearVBO(void);
@@ -187,7 +187,7 @@ public:
 	// displays
 	void allocDisplays(unsigned int size);
 	void clearDisplays(void);
-	MaterialDisplay * addNewDisplay(M_PRIMITIVE_TYPES primitiveType, unsigned int begin, unsigned int size);
+	MaterialDisplay * addNewDisplay(PRIMITIVE_TYPES primitiveType, unsigned int begin, unsigned int size);
 	inline unsigned int getDisplaysNumber(void){ return m_displaysNumber; }
 	inline MaterialDisplay * getDisplay(unsigned int id){ return m_displays[id]; }
 
@@ -200,7 +200,7 @@ public:
 
 
 // MAnimRange
-class M_ENGINE_EXPORT AnimRange : public MRange
+class M_ENGINE_EXPORT AnimRange : public Range
 {
 public:
 	AnimRange(void):

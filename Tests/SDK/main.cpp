@@ -23,7 +23,6 @@
 //========================================================================
 
 #include <NeoEngine.h>
-#include <MCore.h>
 #include <LuaBehavior.h>
 #include <WinContext.h>
 #include <PackageManagerNPK.h>
@@ -34,6 +33,7 @@
 #include <DummyContext.h>
 
 #include <gtest/gtest.h>
+#include <NeoCore.h>
 #include <Window/Window.h>
 
 #ifdef main
@@ -52,9 +52,9 @@ bool compare_float(float a, float b)
 
 TEST_F(TestNeoSDK, Vector3_test)
 {
-	MVector3 testvec(1.0,1.0,1.0);
+	Vector3 testvec(1.0,1.0,1.0);
 	testvec = testvec + testvec;
-	EXPECT_EQ(testvec, MVector3(2.0,2.0,2.0));
+	EXPECT_EQ(testvec, Vector3(2.0,2.0,2.0));
 }
 
 TEST_F(TestNeoSDK, LuaBehavior_test)
@@ -67,7 +67,7 @@ TEST_F(TestNeoSDK, LuaBehavior_test)
 
 	EXPECT_EQ(var.getType(), M_VARIABLE_STRING);
 
-	((MString*) var.getPointer())->set("test.lua");
+	((String*) var.getPointer())->set("test.lua");
 	int num = b->getVariablesNumber();
 
 	ASSERT_EQ(num, 3);
@@ -90,7 +90,7 @@ TEST_F(TestNeoSDK, LuaBehaviorNonExistantScript_test)
 	NeoVariable var = b->getVariable(0);
 	ASSERT_EQ(M_VARIABLE_STRING, var.getType());
 
-	((MString*) var.getPointer())->set("does-not-exist.lua");
+	((String*) var.getPointer())->set("does-not-exist.lua");
 	b->update();
 }
 

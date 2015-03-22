@@ -36,7 +36,7 @@ namespace Neo
 class HTTPRequest
 {
     int m_port;
-    MString m_host;
+    String m_host;
 
     const char* connectionLoop();
 

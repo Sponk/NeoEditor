@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MSkinData.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -30,27 +25,28 @@
 
 #include "../Includes/NeoEngine.h"
 
+using namespace Neo;
 
-MSkinPoint::MSkinPoint(void):
+SkinPoint::SkinPoint(void):
 m_bonesNumber(0),
 m_bonesIds(NULL),
 m_bonesWeights(NULL),
 m_vertexId(0)
 {}
 
-MSkinPoint::~MSkinPoint(void)
+SkinPoint::~SkinPoint(void)
 {
 	clearBonesLinks();
 }
 
-void MSkinPoint::clearBonesLinks(void)
+void SkinPoint::clearBonesLinks(void)
 {
 	m_bonesNumber = 0;
 	SAFE_DELETE_ARRAY(m_bonesIds);
 	SAFE_DELETE_ARRAY(m_bonesWeights);
 }
 
-bool MSkinPoint::allocateBonesLinks(unsigned int size)
+bool SkinPoint::allocateBonesLinks(unsigned int size)
 {
 	clearBonesLinks();
 	if(size == 0)
@@ -63,25 +59,25 @@ bool MSkinPoint::allocateBonesLinks(unsigned int size)
 }
 
 
-MSkinData::MSkinData(void):
+SkinData::SkinData(void):
 m_pointsNumber(0),
 m_points(NULL)
 {}
 
-MSkinData::~MSkinData(void)
+SkinData::~SkinData(void)
 {
 	clearPoints();
 }
 
-MSkinPoint * MSkinData::allocPoints(unsigned int size)
+SkinPoint * SkinData::allocPoints(unsigned int size)
 {
 	clearPoints();
 	m_pointsNumber = size;
-	m_points = new MSkinPoint[m_pointsNumber];
+	m_points = new SkinPoint[m_pointsNumber];
 	return m_points;
 }
 
-void MSkinData::clearPoints(void)
+void SkinData::clearPoints(void)
 {
 	m_pointsNumber = 0;
 	SAFE_DELETE_ARRAY(m_points);

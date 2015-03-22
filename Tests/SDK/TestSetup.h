@@ -13,10 +13,10 @@ public:
 		NeoGame* game = new NeoGame();
 		Neo::LuaScript* script = new Neo::LuaScript();
 		Level* level = new Level();
-		MSystemContext* context = (MSystemContext*) new Neo::MWinContext();
+		SystemContext* context = (SystemContext*) new Neo::MWinContext();
 		MPackageManager* pmanager = new Neo::MPackageManagerNPK;
 		Neo::BulletContext* physcontext = new Neo::BulletContext();
-		MRenderingContext* render = new Neo::DummyContext();
+		RenderingContext* render = new Neo::DummyContext();
 		
 		pmanager->init();
 
@@ -34,7 +34,7 @@ public:
 		engine->getBehaviorManager()->addBehavior(Neo::LuaBehavior::getStaticName(), M_OBJECT3D, Neo::LuaBehavior::getNew);
 
 		// Init default thread
-		MThreadManager* mgr = MThreadManager::getInstance();
+		ThreadFactory* mgr = ThreadFactory::getInstance();
 		mgr->setTemplateSemaphore(new SDLSemaphore());
 		mgr->setTemplateThread(new SDLThread());
 
@@ -54,7 +54,7 @@ public:
 		delete engine->getScriptContext();
 		delete engine->getPackageManager();
 
-		MThreadManager::getInstance()->clear();
+		ThreadFactory::getInstance()->clear();
 
 		engine->setLevel(NULL);
 		engine->setScriptContext(NULL);

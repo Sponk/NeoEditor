@@ -46,24 +46,24 @@ private:
 	// skin cache
 	unsigned int m_verticesNumber;
 	unsigned int m_normalsNumber;
-	MVector3 * m_vertices;
-	MVector3 * m_normals;
+	Vector3 * m_vertices;
+	Vector3 * m_normals;
 	
 private:
 	
 	void updateSkinning(Mesh * mesh, Armature * armature);
-	void drawDisplay(SubMesh * subMesh, MaterialDisplay * display, MVector3 * vertices, MVector3 * normals, MColor * colors);
-	void drawDisplayTriangles(SubMesh * subMesh, MaterialDisplay * display, MVector3 * vertices);
+	void drawDisplay(SubMesh * subMesh, MaterialDisplay * display, Vector3 * vertices, Vector3 * normals, Color * colors);
+	void drawDisplayTriangles(SubMesh * subMesh, MaterialDisplay * display, Vector3 * vertices);
 	void drawOpaques(SubMesh * subMesh, Armature * armature);
 	void drawTransparents(SubMesh * subMesh, Armature * armature);
 	void updateVisibility(Scene * scene, OCamera * camera);
 	void enableFog(OCamera * camera);
 	
-	float getDistanceToCam(OCamera * camera, const MVector3 & pos);
+	float getDistanceToCam(OCamera * camera, const Vector3 & pos);
 	
 	// skin cache
-	MVector3 * getVertices(unsigned int size);
-	MVector3 * getNormals(unsigned int size);
+	Vector3 * getVertices(unsigned int size);
+	Vector3 * getNormals(unsigned int size);
 	
 public:
 	

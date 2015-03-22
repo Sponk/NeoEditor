@@ -29,8 +29,8 @@ bool PostProcessor::draw(OCamera *camera)
         return false;
 
     NeoEngine * engine = NeoEngine::getInstance(); // get the engine instance
-    MRenderingContext * render = engine->getRenderingContext(); // get the rendering context
-    MSystemContext * system = engine->getSystemContext();
+    RenderingContext * render = engine->getRenderingContext(); // get the rendering context
+    SystemContext * system = engine->getSystemContext();
 
     unsigned int currentFrameBuffer = 0;
     render->getCurrentFrameBuffer(&currentFrameBuffer);
@@ -57,8 +57,8 @@ bool PostProcessor::draw(OCamera *camera)
 
     // render to texture
     render->bindFrameBuffer(m_BufferID);
-    render->attachFrameBufferTexture(M_ATTACH_COLOR0, m_ColourTexID);
-    render->attachFrameBufferTexture(M_ATTACH_DEPTH, m_DepthTexID);
+    render->attachFrameBufferTexture(ATTACH_COLOR0, m_ColourTexID);
+    render->attachFrameBufferTexture(ATTACH_DEPTH, m_DepthTexID);
     render->setViewport(0, 0, m_textureWidth, m_textureHeight); // change viewport
 
     render->enableDepthTest();
@@ -66,7 +66,7 @@ bool PostProcessor::draw(OCamera *camera)
     render->setScissor(0,0,m_textureWidth, m_textureHeight);
     render->disableScissorTest();
 
-    render->clear(M_BUFFER_DEPTH | M_BUFFER_COLOR);
+    render->clear(BUFFER_DEPTH | BUFFER_COLOR);
 
     Maratis::getInstance()->drawMainView(NeoEngine::getInstance()->getLevel()->getCurrentScene());
 
@@ -75,7 +75,7 @@ bool PostProcessor::draw(OCamera *camera)
 
     // draw the rendered textured with a shader effect
     render->setViewport(0, 0, screenWidth, screenHeight);
-    render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
+    render->clear(BUFFER_COLOR | BUFFER_DEPTH);
 
     set2D(screenWidth, screenHeight);
 
@@ -84,15 +84,15 @@ bool PostProcessor::draw(OCamera *camera)
     render->bindTexture(m_DepthTexID, 1);
     render->disableBlending();
 
-    drawQuad(MVector2((float)screenWidth, (float)screenHeight));
+    drawQuad(Vector2((float)screenWidth, (float)screenHeight));
     render->bindFX(0);
     return true;
 }
 
 void PostProcessor::updateResolution()
 {
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
-    MSystemContext * system = NeoEngine::getInstance()->getSystemContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    SystemContext * system = NeoEngine::getInstance()->getSystemContext();
 
     if(system == NULL || render == NULL)
         return;
@@ -103,10 +103,10 @@ void PostProcessor::updateResolution()
     system->getScreenSize(&screenWidth, &screenHeight);
 
     // Update vertex cache
-    m_vertices[0] = MVector2(0, 0);
-    m_vertices[1] = MVector2(0, screenHeight);
-    m_vertices[3] = MVector2(screenWidth, screenHeight);
-    m_vertices[2] = MVector2(screenWidth, 0);
+    m_vertices[0] = Vector2(0, 0);
+    m_vertices[1] = Vector2(0, screenHeight);
+    m_vertices[3] = Vector2(screenWidth, screenHeight);
+    m_vertices[2] = Vector2(screenWidth, 0);
 
     m_textureWidth = screenWidth;
     m_textureHeight = screenHeight;
@@ -117,13 +117,13 @@ void PostProcessor::updateResolution()
     // create render textures
     render->createTexture(&m_ColourTexID);
     render->bindTexture(m_ColourTexID);
-    render->setTextureFilterMode(M_TEX_FILTER_LINEAR, M_TEX_FILTER_LINEAR);
-    render->setTextureUWrapMode(M_WRAP_CLAMP);
-    render->setTextureVWrapMode(M_WRAP_CLAMP);
-    render->texImage(0, m_textureWidth, m_textureHeight, M_FLOAT, M_RGB, 0);
+    render->setTextureFilterMode(TEX_FILTER_LINEAR, TEX_FILTER_LINEAR);
+    render->setTextureUWrapMode(WRAP_CLAMP);
+    render->setTextureVWrapMode(WRAP_CLAMP);
+    render->texImage(0, m_textureWidth, m_textureHeight, VAR_FLOAT, TEX_RGB, 0);
 
     render->createTexture(&m_DepthTexID);
     render->bindTexture(m_DepthTexID);
-    render->setTextureFilterMode(M_TEX_FILTER_NEAREST, M_TEX_FILTER_NEAREST);
-    render->texImage(0, m_textureWidth, m_textureHeight, M_UBYTE, M_DEPTH, 0);
+    render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
+    render->texImage(0, m_textureWidth, m_textureHeight, VAR_UBYTE, TEX_DEPTH, 0);
 }

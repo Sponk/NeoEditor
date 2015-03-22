@@ -38,7 +38,7 @@ namespace Neo
 #include <mmintrin.h>
 #include <xmmintrin.h>
 
-static void blendMatrices(MMatrix4x4 * matrix, const MMatrix4x4 * skinMatrix, const float weight)
+static void blendMatrices(Matrix4x4 * matrix, const Matrix4x4 * skinMatrix, const float weight)
 {
 	__m128 w = _mm_set1_ps(weight);
 				
@@ -52,7 +52,7 @@ static void blendMatrices(MMatrix4x4 * matrix, const MMatrix4x4 * skinMatrix, co
 	}
 }
 #else
-static void blendMatrices(MMatrix4x4 * matrix, const MMatrix4x4 * skinMatrix, const float weight)
+static void blendMatrices(Matrix4x4 * matrix, const Matrix4x4 * skinMatrix, const float weight)
 {
 	for(int i=0; i<16; i++)
 		matrix->entries[i] += skinMatrix->entries[i] * weight;
@@ -117,7 +117,7 @@ bool animateFloat(Key * keys, unsigned int keysNumber, float t, float * value)
 	return false;
 }
 
-bool animateVector2(Key * keys, unsigned int keysNumber, float t, MVector2 * vector2)
+bool animateVector2(Key * keys, unsigned int keysNumber, float t, Vector2 * vector2)
 {
 	// no keys
 	if (keysNumber == 0)
@@ -126,7 +126,7 @@ bool animateVector2(Key * keys, unsigned int keysNumber, float t, MVector2 * vec
 	// one key
 	if (keysNumber == 1)
     {
-		(*vector2) = *((MVector2 *)keys->getData());
+		(*vector2) = *((Vector2 *)keys->getData());
 		return true;
 	}
 
@@ -139,13 +139,13 @@ bool animateVector2(Key * keys, unsigned int keysNumber, float t, MVector2 * vec
 
 	if (t <= tMin)
     {
-		(*vector2) = *((MVector2 *)keyMin->getData());
+		(*vector2) = *((Vector2 *)keyMin->getData());
 		return true;
 	}
 
 	if (t >= tMax)
     {
-		(*vector2) = *((MVector2 *)keyMax->getData());
+		(*vector2) = *((Vector2 *)keyMax->getData());
 		return true;
 	}
 
@@ -161,8 +161,8 @@ bool animateVector2(Key * keys, unsigned int keysNumber, float t, MVector2 * vec
 		if ((t >= t0) && (t <= t1))
 		{
 			float factor = (t - t0) / (float)(t1 - t0);
-			MVector2 * data0 = (MVector2 *)key0->getData();
-			MVector2 * data1 = (MVector2 *)key1->getData();
+			Vector2 * data0 = (Vector2 *)key0->getData();
+			Vector2 * data1 = (Vector2 *)key1->getData();
 
 			(*vector2) = (*data0) + ((*data1) - (*data0))*factor;
 			return true;
@@ -174,7 +174,7 @@ bool animateVector2(Key * keys, unsigned int keysNumber, float t, MVector2 * vec
 	return false;
 }
 
-bool animateVector3(Key * keys, unsigned int keysNumber, float t, MVector3 * vector3)
+bool animateVector3(Key * keys, unsigned int keysNumber, float t, Vector3 * vector3)
 {
 	// no keys
 	if (keysNumber == 0)
@@ -183,7 +183,7 @@ bool animateVector3(Key * keys, unsigned int keysNumber, float t, MVector3 * vec
 	// one key
 	if (keysNumber == 1)
     {
-		(*vector3) = *((MVector3 *)keys->getData());
+		(*vector3) = *((Vector3 *)keys->getData());
 		return true;
 	}
 
@@ -196,13 +196,13 @@ bool animateVector3(Key * keys, unsigned int keysNumber, float t, MVector3 * vec
 
 	if (t <= tMin)
     {
-		(*vector3) = *((MVector3 *)keyMin->getData());
+		(*vector3) = *((Vector3 *)keyMin->getData());
 		return true;
 	}
 
 	if (t >= tMax)
     {
-		(*vector3) = *((MVector3 *)keyMax->getData());
+		(*vector3) = *((Vector3 *)keyMax->getData());
 		return true;
 	}
 
@@ -218,8 +218,8 @@ bool animateVector3(Key * keys, unsigned int keysNumber, float t, MVector3 * vec
 		if ((t >= t0) && (t <= t1))
 		{
 			float factor = (t - t0) / (float)(t1 - t0);
-			MVector3 * data0 = (MVector3 *)key0->getData();
-			MVector3 * data1 = (MVector3 *)key1->getData();
+			Vector3 * data0 = (Vector3 *)key0->getData();
+			Vector3 * data1 = (Vector3 *)key1->getData();
 
 			(*vector3) = (*data0) + ((*data1) - (*data0))*factor;
 			return true;
@@ -231,7 +231,7 @@ bool animateVector3(Key * keys, unsigned int keysNumber, float t, MVector3 * vec
 	return false;
 }
 
-bool animateQuaternion(Key * keys, unsigned int keysNumber, float t, MQuaternion * quaternion)
+bool animateQuaternion(Key * keys, unsigned int keysNumber, float t, Quaternion * quaternion)
 {
 	// no keys
 	if (keysNumber == 0)
@@ -240,7 +240,7 @@ bool animateQuaternion(Key * keys, unsigned int keysNumber, float t, MQuaternion
 	// one key
 	if (keysNumber == 1)
     {
-		(*quaternion) = *((MQuaternion *)keys->getData());
+		(*quaternion) = *((Quaternion *)keys->getData());
 		return true;
 	}
 
@@ -253,13 +253,13 @@ bool animateQuaternion(Key * keys, unsigned int keysNumber, float t, MQuaternion
 
 	if (t <= tMin)
     {
-		(*quaternion) = *((MQuaternion *)keyMin->getData());
+		(*quaternion) = *((Quaternion *)keyMin->getData());
 		return true;
 	}
 
 	if (t >= tMax)
     {
-		(*quaternion) = *((MQuaternion *)keyMax->getData());
+		(*quaternion) = *((Quaternion *)keyMax->getData());
 		return true;
 	}
 
@@ -274,23 +274,23 @@ bool animateQuaternion(Key * keys, unsigned int keysNumber, float t, MQuaternion
 
 		if (t == t0)
 		{
-			(*quaternion) = *(MQuaternion *)key0->getData();
+			(*quaternion) = *(Quaternion *)key0->getData();
 			return true;
 		}
 
 		if (t == t1)
 		{
-			(*quaternion) = *(MQuaternion *)key1->getData();
+			(*quaternion) = *(Quaternion *)key1->getData();
 			return true;
 		}
 
 		if ((t > t0) && (t < t1))
 		{
 			float factor = (t - t0) / (float)(t1 - t0);
-			MQuaternion * data0 = (MQuaternion *)key0->getData();
-			MQuaternion * data1 = (MQuaternion *)key1->getData();
+			Quaternion * data0 = (Quaternion *)key0->getData();
+			Quaternion * data1 = (Quaternion *)key1->getData();
 
-			(*quaternion) = MQuaternion(*data0, *data1, factor);
+			(*quaternion) = Quaternion(*data0, *data1, factor);
 			return true;
 		}
 
@@ -304,9 +304,9 @@ void animateArmature(Armature * armature, ArmatureAnim * armatureAnim, float t)
 {
 	Object3dAnim * bonesAnim = armatureAnim->getBonesAnim();
 
-	MVector3 position;
-	MVector3 scale;
-	MQuaternion rotation;
+	Vector3 position;
+	Vector3 scale;
+	Quaternion rotation;
 
 	unsigned int b;
 	unsigned int bSize = armatureAnim->getBonesAnimNumber();
@@ -338,8 +338,8 @@ void animateTextures(Mesh * mesh, TexturesAnim * texturesAnim, float t)
 	TextureAnim * texAnim = texturesAnim->getTexturesAnim();
 
 	float rotation;
-	MVector2 translate;
-	MVector2 scale;
+	Vector2 translate;
+	Vector2 scale;
 
 	unsigned int tex;
 	unsigned int texSize = texturesAnim->getTexturesAnimNumber();
@@ -370,10 +370,10 @@ void animateMaterials(Mesh * mesh, MaterialsAnim * materialsAnim, float t)
 	float opacity;
 	float shininess;
 	float customValue;
-	MVector3 diffuse;
-	MVector3 specular;
-	MVector3 emit;
-	MVector3 customColor;
+	Vector3 diffuse;
+	Vector3 specular;
+	Vector3 emit;
+	Vector3 customColor;
 
 	unsigned int m;
 	unsigned int mSize = materialsAnim->getMaterialsAnimNumber();
@@ -415,9 +415,9 @@ void animateMaterials(Mesh * mesh, MaterialsAnim * materialsAnim, float t)
 
 
 // skinning
-void computeSkinning(Armature * armature, MSkinData * skinData, const MVector3 * baseVertices, const MVector3 * baseNormals, const MVector3 * baseTangents, MVector3 * vertices, MVector3 * normals, MVector3 * tangents)
+void computeSkinning(Armature * armature, SkinData * skinData, const Vector3 * baseVertices, const Vector3 * baseNormals, const Vector3 * baseTangents, Vector3 * vertices, Vector3 * normals, Vector3 * tangents)
 {
-	MMatrix4x4 matrix;
+	Matrix4x4 matrix;
 
 	unsigned int p;
 	unsigned int pSize = skinData->getPointsNumber();
@@ -425,7 +425,7 @@ void computeSkinning(Armature * armature, MSkinData * skinData, const MVector3 *
 	{
 		for(p = 0; p < pSize; p++)
 		{
-			MSkinPoint * point = skinData->getPoint(p);
+			SkinPoint * point = skinData->getPoint(p);
 			const unsigned short * bonesIds = point->getBonesIds();
 			const float * bonesWeights = point->getBonesWeights();
 			
@@ -449,7 +449,7 @@ void computeSkinning(Armature * armature, MSkinData * skinData, const MVector3 *
 	{
 		for(p = 0; p < pSize; p++)
 		{
-			MSkinPoint * point = skinData->getPoint(p);
+			SkinPoint * point = skinData->getPoint(p);
 			const unsigned short * bonesIds = point->getBonesIds();
 			const float * bonesWeights = point->getBonesWeights();
 			
@@ -472,7 +472,7 @@ void computeSkinning(Armature * armature, MSkinData * skinData, const MVector3 *
 	{
 		for(p = 0; p < pSize; p++)
 		{
-			MSkinPoint * point = skinData->getPoint(p);
+			SkinPoint * point = skinData->getPoint(p);
 			const unsigned short * bonesIds = point->getBonesIds();
 			const float * bonesWeights = point->getBonesWeights();
 			
@@ -494,22 +494,22 @@ void computeSkinning(Armature * armature, MSkinData * skinData, const MVector3 *
 
 
 // simple raytracing
-bool isRaytraced(const MVector3 & origin, const MVector3 & dest, const void * indices, M_TYPES indicesType, const MVector3 * vertices, unsigned int size)
+bool isRaytraced(const Vector3 & origin, const Vector3 & dest, const void * indices, VAR_TYPES indicesType, const Vector3 * vertices, unsigned int size)
 {
 	switch(indicesType)
 	{
-	case M_USHORT:
+	case VAR_USHORT:
 		{
 			unsigned int v;
 			unsigned short * idx = (unsigned short *)indices;
 			for(v = 0; v < size; v += 3)
 			{
-				const MVector3 * v1 = &vertices[idx[v]];
-				const MVector3 * v2 = &vertices[idx[v+1]];
-				const MVector3 * v3 = &vertices[idx[v+2]];
+				const Vector3 * v1 = &vertices[idx[v]];
+				const Vector3 * v2 = &vertices[idx[v+1]];
+				const Vector3 * v3 = &vertices[idx[v+2]];
 
 				// make normal
-				MVector3 normal = getTriangleNormal(*v1, *v2, *v3);
+				Vector3 normal = getTriangleNormal(*v1, *v2, *v3);
 
 				// if ray intersection return true
 				if(isEdgeTriangleIntersection(origin, dest, *v1, *v2, *v3, normal, NULL))
@@ -518,18 +518,18 @@ bool isRaytraced(const MVector3 & origin, const MVector3 & dest, const void * in
 		}
 		break;
             
-	case M_UINT:
+	case VAR_UINT:
 		{
 			unsigned int v;
 			unsigned int * idx = (unsigned int *)indices;
 			for(v = 0; v < size; v += 3)
 			{
-				const MVector3 * v1 = &vertices[idx[v]];
-				const MVector3 * v2 = &vertices[idx[v+1]];
-				const MVector3 * v3 = &vertices[idx[v+2]];
+				const Vector3 * v1 = &vertices[idx[v]];
+				const Vector3 * v2 = &vertices[idx[v+1]];
+				const Vector3 * v3 = &vertices[idx[v+2]];
 
 				// make normal
-				MVector3 normal = getTriangleNormal(*v1, *v2, *v3);
+				Vector3 normal = getTriangleNormal(*v1, *v2, *v3);
 
 				// if ray intersection return true
 				if(isEdgeTriangleIntersection(origin, dest, *v1, *v2, *v3, normal, NULL))
@@ -545,31 +545,31 @@ bool isRaytraced(const MVector3 & origin, const MVector3 & dest, const void * in
 	return false;
 }
 
-bool getNearestRaytracedPosition(const MVector3 & origin, const MVector3 & dest, const void * indices, M_TYPES indicesType, const MVector3 * vertices, unsigned int size, MVector3 * intersection, bool invertNormal)
+bool getNearestRaytracedPosition(const Vector3 & origin, const Vector3 & dest, const void * indices, VAR_TYPES indicesType, const Vector3 * vertices, unsigned int size, Vector3 * intersection, bool invertNormal)
 {
 	bool isRaytraced = false;
 	float dist;
 	float nearDist;
-	MVector3 I;
-	MVector3 rayVector = dest - origin;
+	Vector3 I;
+	Vector3 rayVector = dest - origin;
 
 	// init near dist
 	nearDist = rayVector.getSquaredLength();
 
 	switch(indicesType)
 	{
-	case M_USHORT:
+	case VAR_USHORT:
 		{
 			unsigned int v;
 			unsigned short * idx = (unsigned short *)indices;
 			for(v = 0; v < size; v += 3)
 			{
-				const MVector3 * v1 = &vertices[idx[v]];
-				const MVector3 * v2 = &vertices[idx[v+1]];
-				const MVector3 * v3 = &vertices[idx[v+2]];
+				const Vector3 * v1 = &vertices[idx[v]];
+				const Vector3 * v2 = &vertices[idx[v+1]];
+				const Vector3 * v3 = &vertices[idx[v+2]];
 
 				// make normal
-				MVector3 normal = getTriangleNormal(*v1, *v2, *v3);
+				Vector3 normal = getTriangleNormal(*v1, *v2, *v3);
 				
 				bool intersect;
 				if(invertNormal)
@@ -592,18 +592,18 @@ bool getNearestRaytracedPosition(const MVector3 & origin, const MVector3 & dest,
 		}
 		break;
             
-	case M_UINT:
+	case VAR_UINT:
 		{
 			unsigned int v;
 			unsigned int * idx = (unsigned int *)indices;
 			for(v = 0; v < size; v += 3)
 			{
-				const MVector3 * v1 = &vertices[idx[v]];
-				const MVector3 * v2 = &vertices[idx[v+1]];
-				const MVector3 * v3 = &vertices[idx[v+2]];
+				const Vector3 * v1 = &vertices[idx[v]];
+				const Vector3 * v2 = &vertices[idx[v+1]];
+				const Vector3 * v3 = &vertices[idx[v+2]];
 
 				// make normal
-				MVector3 normal = getTriangleNormal(*v1, *v2, *v3);
+				Vector3 normal = getTriangleNormal(*v1, *v2, *v3);
 				
 				bool intersect;
 				if(invertNormal)

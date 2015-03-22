@@ -1,10 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MaratisCommon
-// MBinFontLoader.cpp
-//
-// Maratis bin font loader
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -39,7 +32,7 @@ namespace Neo
 bool M_loadBinFont(const char * filename, void * data)
 {
 	// open file
-	MFile * file = M_fopen(filename, "rb");
+	File * file = M_fopen(filename, "rb");
 	if(! file)
 	{
 		fprintf(stderr, "Error : can't read file %s\n", filename);
@@ -74,8 +67,8 @@ bool M_loadBinFont(const char * filename, void * data)
 		font->setTextureWidth(width);
 		font->setTextureHeight(height);
 		
-		MImage image;
-		image.create(M_UBYTE, width, height, 4);
+		Image image;
+		image.create(VAR_UBYTE, width, height, 4);
 		
 		unsigned char color[4] = {255, 255, 255, 0};
 		unsigned int x, y;
@@ -89,7 +82,7 @@ bool M_loadBinFont(const char * filename, void * data)
 		}
 		
 		NeoEngine * engine = NeoEngine().getInstance();
-		MRenderingContext * render = engine->getRenderingContext();
+		RenderingContext * render = engine->getRenderingContext();
 		
 		// gen texture id
 		unsigned int textureId = font->getTextureId();
@@ -101,8 +94,8 @@ bool M_loadBinFont(const char * filename, void * data)
 		
 		// send texture image
 		render->bindTexture(textureId);
-        render->setTextureUWrapMode(M_WRAP_CLAMP);
-        render->setTextureVWrapMode(M_WRAP_CLAMP);
+        render->setTextureUWrapMode(WRAP_CLAMP);
+        render->setTextureVWrapMode(WRAP_CLAMP);
 		render->sendTextureImage(&image, 0, 1, 0);
 	}
 	
@@ -117,9 +110,9 @@ bool M_loadBinFont(const char * filename, void * data)
 		for(i=0; i<size; i++)
 		{
 			unsigned int charCode;
-			MVector2 pos;
-			MVector2 offset;
-			MVector2 scale;
+			Vector2 pos;
+			Vector2 offset;
+			Vector2 scale;
 			float xadvance;
 			
 			M_fread(&charCode, sizeof(int), 1, file);

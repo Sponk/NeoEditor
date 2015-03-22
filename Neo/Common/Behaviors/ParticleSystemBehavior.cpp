@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// ParticleSystemBehavior.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 //
 // This software is provided 'as-is', without any express or implied
@@ -220,7 +215,7 @@ void ParticleSystemBehavior::update(void)
 void ParticleSystemBehavior::draw()
 {
     NeoEngine* engine = NeoEngine::getInstance();
-    MRenderingContext* render = engine->getRenderingContext();
+    RenderingContext* render = engine->getRenderingContext();
     NeoGame * game = engine->getGame();
     Level* level = engine->getLevel();
 
@@ -278,7 +273,7 @@ void ParticleSystemBehavior::draw()
     {
         render->enableTexture();
         render->enableBlending();
-        render->setBlendingMode(M_BLENDING_ALPHA);
+        render->setBlendingMode(BLENDING_ALPHA);
         m_texRef->update();
     }
 
@@ -287,9 +282,9 @@ void ParticleSystemBehavior::draw()
     render->sendUniformInt(m_fx, "Textures", texIds, 4);
 
     // projmodelview matrix
-    static MMatrix4x4 ProjMatrix;
-    static MMatrix4x4 ModelViewMatrix;
-    static MMatrix4x4 ProjModelViewMatrix;
+    static Matrix4x4 ProjMatrix;
+    static Matrix4x4 ModelViewMatrix;
+    static Matrix4x4 ProjModelViewMatrix;
 
     render->getProjectionMatrix(&ProjMatrix);
     render->getModelViewMatrix(&ModelViewMatrix);
@@ -300,25 +295,25 @@ void ParticleSystemBehavior::draw()
     render->setPointSize(m_size);
 
     render->enableVertexArray();
-    render->setVertexPointer(M_FLOAT, 3, m_particlePositions);
+    render->setVertexPointer(VAR_FLOAT, 3, m_particlePositions);
 
     render->enableColorArray();
-    render->setColorPointer(M_FLOAT, 4, m_particleColors);
+    render->setColorPointer(VAR_FLOAT, 4, m_particleColors);
 
     SDLSemaphore::WaitAndLock(&m_semaphore);
 
     int vertexAttrib;
     render->getAttribLocation(m_fx, "Vertex", &vertexAttrib);
-    render->setAttribPointer(vertexAttrib, M_FLOAT, 3, m_particlePositions);
+    render->setAttribPointer(vertexAttrib, VAR_FLOAT, 3, m_particlePositions);
     render->enableAttribArray(vertexAttrib);
 
     int colorAttrib;
     render->getAttribLocation(m_fx, "Color", &colorAttrib);
-    render->setAttribPointer(colorAttrib, M_FLOAT, 4, m_particleColors);
+    render->setAttribPointer(colorAttrib, VAR_FLOAT, 4, m_particleColors);
     render->enableAttribArray(colorAttrib);
     render->enableScissorTest();
 
-    render->drawArray(M_PRIMITIVE_POINTS, 0, m_particles.size());
+    render->drawArray(PRIMITIVE_POINTS, 0, m_particles.size());
 
     render->disableScissorTest();
     SDLSemaphore::Unlock(&m_semaphore);
@@ -336,10 +331,10 @@ void ParticleSystemBehavior::draw()
 
 #define RANDOM 0.5 - 2.0*static_cast<float>(rand()) / static_cast<float>(RAND_MAX)
 
-void ParticleSystemBehavior::updateParticles(MVector3 parentPosition)
+void ParticleSystemBehavior::updateParticles(Vector3 parentPosition)
 {
     NeoEngine* engine = NeoEngine::getInstance();
-    MSystemContext* system = engine->getSystemContext();
+    SystemContext* system = engine->getSystemContext();
 
     unsigned long currentTime = system->getSystemTick();
     Particle* particle;
@@ -382,7 +377,7 @@ void ParticleSystemBehavior::updateParticles(MVector3 parentPosition)
 
     // Create missing particles
     Particle newParticle;
-    MVector3 divergence;
+    Vector3 divergence;
 
     for(int i = m_particles.size(); i < m_particlesNumber; i++)
     {
@@ -419,14 +414,14 @@ void ParticleSystemBehavior::updateArrays(bool updateColorData)
     // Create vertex buffer
     if(m_particlePositions == NULL)
     {
-        m_particlePositions = new MVector3[static_cast<int>(m_particlesNumber)];
+        m_particlePositions = new Vector3[static_cast<int>(m_particlesNumber)];
         m_oldParticlesNumber = m_particlesNumber;
     }
 
     // Create "color" buffer
     if(m_particleColors == NULL)
     {
-        m_particleColors = new MVector4[static_cast<int>(m_particlesNumber)];
+        m_particleColors = new Vector4[static_cast<int>(m_particlesNumber)];
         updateColorData = true;
     }
 
@@ -437,7 +432,7 @@ void ParticleSystemBehavior::updateArrays(bool updateColorData)
 
     if(updateColorData)
     {
-        MVector4* color;
+        Vector4* color;
         for(int i = 0; i < m_particles.size(); i++)
         {
             color = &m_particleColors[i];

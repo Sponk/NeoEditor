@@ -75,9 +75,9 @@ m_renderColorTexture(NULL),
 m_renderDepthTexture(NULL)
 {}
 
-MVector3 OCamera::getProjectedPoint(const MVector3 & point) const
+Vector3 OCamera::getProjectedPoint(const Vector3 & point) const
 {
-	MVector4 v = m_currentViewMatrix * MVector4(point);
+	Vector4 v = m_currentViewMatrix * Vector4(point);
 	v = m_currentProjMatrix * v;
 	v.x = v.x / v.w;
 	v.y = v.y / v.w;
@@ -87,61 +87,61 @@ MVector3 OCamera::getProjectedPoint(const MVector3 & point) const
 	v.y = m_currentViewport[1] + (m_currentViewport[3] * ((v.y + 1) / 2.0f));
 	v.z = (v.z + 1) / 2.0f;
 
-	return MVector3(v.x, v.y, v.z);
+	return Vector3(v.x, v.y, v.z);
 }
 
-MVector3 OCamera::getUnProjectedPoint(const MVector3 & point) const
+Vector3 OCamera::getUnProjectedPoint(const Vector3 & point) const
 {
-	MVector4 nPoint;
+	Vector4 nPoint;
 
 	nPoint.x = (2 * ((point.x - m_currentViewport[0]) / ((float)m_currentViewport[2]))) - 1;
 	nPoint.y = (2 * ((point.y - m_currentViewport[1]) / ((float)m_currentViewport[3]))) - 1;
 	nPoint.z = (2 * point.z) - 1;
 	nPoint.w = 1;
 
-	MMatrix4x4 matrix = (m_currentProjMatrix * m_currentViewMatrix).getInverse();
-	MVector4 v = matrix * nPoint;
+	Matrix4x4 matrix = (m_currentProjMatrix * m_currentViewMatrix).getInverse();
+	Vector4 v = matrix * nPoint;
 	
 	if(v.w == 0)
 		return getTransformedPosition();
 	
 	float iw = 1.0f / v.w;
-	return MVector3(v.x, v.y, v.z)*iw;
+	return Vector3(v.x, v.y, v.z)*iw;
 }
 
 void OCamera::updateListener(void)
 {
-	MSoundContext * soundContext = NeoEngine::getInstance()->getSoundContext();
+	SoundContext * soundContext = NeoEngine::getInstance()->getSoundContext();
 	if(soundContext)
 	{
-		MVector3 position = getTransformedPosition();
-		MVector3 direction = getRotatedVector(MVector3(0, 0, -1));
-		MVector3 up = getRotatedVector(MVector3(0, 1, 0));
+		Vector3 position = getTransformedPosition();
+		Vector3 direction = getRotatedVector(Vector3(0, 0, -1));
+		Vector3 up = getRotatedVector(Vector3(0, 1, 0));
 		soundContext->updateListenerPosition(position, direction, up);
 	}
 }
 
 void OCamera::enable(void)
 {
-	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 	
 
 	// get viewport
 	render->getViewport(m_currentViewport);
 
 	// projection mode
-	render->setMatrixMode(M_MATRIX_PROJECTION);
+	render->setMatrixMode(MATRIX_PROJECTION);
 	render->loadIdentity();
 
 	float ratio = (m_currentViewport[2] / (float)m_currentViewport[3]);
 
-	MVector3 scale = getTransformedScale();
-	MVector3 iScale(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z);
+	Vector3 scale = getTransformedScale();
+	Vector3 iScale(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z);
 
-	MMatrix4x4 iScaleMatrix;
+	Matrix4x4 iScaleMatrix;
 	iScaleMatrix.setScale(iScale);
 
-	MMatrix4x4 inverseMatrix = ((*getMatrix()) * iScaleMatrix).getInverse();
+	Matrix4x4 inverseMatrix = ((*getMatrix()) * iScaleMatrix).getInverse();
 
 	// perspective view
 	if(! isOrtho())
@@ -150,7 +150,7 @@ void OCamera::enable(void)
 		render->setPerspectiveView(m_fov, ratio, m_clippingNear, m_clippingFar);
 
 		// model view mode
-		render->setMatrixMode(M_MATRIX_MODELVIEW);
+		render->setMatrixMode(MATRIX_MODELVIEW);
 		render->loadIdentity();
 
 		render->multMatrix(&inverseMatrix);
@@ -168,7 +168,7 @@ void OCamera::enable(void)
 	render->setOrthoView(-width, width, -height, height, m_clippingNear, m_clippingFar);
 
 	// model view mode
-	render->setMatrixMode(M_MATRIX_MODELVIEW);
+	render->setMatrixMode(MATRIX_MODELVIEW);
 	render->loadIdentity();
 	
 	render->multMatrix(&inverseMatrix);

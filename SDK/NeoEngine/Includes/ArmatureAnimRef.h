@@ -34,7 +34,7 @@
 namespace Neo
 {
 // Armature Anim ref
-class M_ENGINE_EXPORT ArmatureAnimRef : public MDataRef
+class M_ENGINE_EXPORT ArmatureAnimRef : public DataRef
 {
 private:
 

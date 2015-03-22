@@ -42,7 +42,7 @@ static int g_GLversion = 0;
 static float maxAnisotropy = 0.0f;
 
 
-static GLenum returnGLType(M_TYPES type)
+static GLenum returnGLType(VAR_TYPES type)
 {
 	switch(type)
 	{
@@ -52,16 +52,16 @@ static GLenum returnGLType(M_TYPES type)
             //case M_BOOL:
             //return GL_BOOL;
             
-        case M_BYTE:
+        case VAR_BYTE:
             return GL_BYTE;
             
-        case M_UBYTE:
+        case VAR_UBYTE:
             return GL_UNSIGNED_BYTE;
             
-        case M_SHORT:
+        case VAR_SHORT:
             return GL_SHORT;
             
-        case M_USHORT:
+        case VAR_USHORT:
             return GL_UNSIGNED_SHORT;
             
             //case M_INT:
@@ -70,7 +70,7 @@ static GLenum returnGLType(M_TYPES type)
             //case M_UINT:
             //return GL_UNSIGNED_INT;
             
-        case M_FLOAT:
+        case VAR_FLOAT:
             return GL_FLOAT;
             
             //case M_DOUBLE:
@@ -78,56 +78,56 @@ static GLenum returnGLType(M_TYPES type)
 	}
 }
 
-static GLenum returnPrimitiveType(M_PRIMITIVE_TYPES type)
+static GLenum returnPrimitiveType(PRIMITIVE_TYPES type)
 {
 	switch(type)
 	{
         default:
             //return GL_NONE;
             
-        case M_PRIMITIVE_LINES:
+        case PRIMITIVE_LINES:
             return GL_LINES;
             
-        case M_PRIMITIVE_LINE_LOOP:
+        case PRIMITIVE_LINE_LOOP:
             return GL_LINE_LOOP;
             
-        case M_PRIMITIVE_LINE_STRIP:
+        case PRIMITIVE_LINE_STRIP:
             return GL_LINE_STRIP;
             
-        case M_PRIMITIVE_TRIANGLES:
+        case PRIMITIVE_TRIANGLES:
             return GL_TRIANGLES;
             
-        case M_PRIMITIVE_TRIANGLE_STRIP:
+        case PRIMITIVE_TRIANGLE_STRIP:
             return GL_TRIANGLE_STRIP;
 	}
 }
 
-static GLenum returnTexFilterMode(M_TEX_FILTER_MODES mode)
+static GLenum returnTexFilterMode(TEX_FILTER_MODES mode)
 {
 	switch(mode)
 	{
         default:
-        case M_TEX_FILTER_NEAREST:
+        case TEX_FILTER_NEAREST:
             return GL_NEAREST;
             
-        case M_TEX_FILTER_NEAREST_MIPMAP_NEAREST:
+        case TEX_FILTER_NEAREST_MIPMAP_NEAREST:
             return GL_NEAREST_MIPMAP_NEAREST;
             
-        case M_TEX_FILTER_NEAREST_MIPMAP_LINEAR:
+        case TEX_FILTER_NEAREST_MIPMAP_LINEAR:
             return GL_NEAREST_MIPMAP_LINEAR;
             
-        case M_TEX_FILTER_LINEAR:
+        case TEX_FILTER_LINEAR:
             return GL_LINEAR;
             
-        case M_TEX_FILTER_LINEAR_MIPMAP_NEAREST:
+        case TEX_FILTER_LINEAR_MIPMAP_NEAREST:
             return GL_LINEAR_MIPMAP_NEAREST;
             
-        case M_TEX_FILTER_LINEAR_MIPMAP_LINEAR:
+        case TEX_FILTER_LINEAR_MIPMAP_LINEAR:
             return GL_LINEAR_MIPMAP_LINEAR;
 	}
 }
 
-static GLenum returnTexMode(M_TEX_MODES mode)
+static GLenum returnTexMode(TEX_MODES mode)
 {
 	switch(mode)
 	{
@@ -138,10 +138,10 @@ static GLenum returnTexMode(M_TEX_MODES mode)
             //	return GL_RG;
             
         default:
-        case M_RGB:
+        case TEX_RGB:
             return GL_RGB;
             
-        case M_RGBA:
+        case TEX_RGBA:
             return GL_RGBA;
             
             //case M_DEPTH:
@@ -149,11 +149,11 @@ static GLenum returnTexMode(M_TEX_MODES mode)
 	}
 }
 
-static GLenum returnAttachType(M_FRAME_BUFFER_ATTACHMENT type)
+static GLenum returnAttachType(FRAME_BUFFER_ATTACHMENT type)
 {
-	if(type == M_ATTACH_DEPTH)
+	if(type == ATTACH_DEPTH)
 		return GL_DEPTH_ATTACHMENT_OES;
-	else if(type == M_ATTACH_STENCIL)
+	else if(type == ATTACH_STENCIL)
 		return GL_STENCIL_ATTACHMENT_OES;
 	else
 		return GL_COLOR_ATTACHMENT0_OES + ((int)type - 2);
@@ -172,7 +172,7 @@ m_currentFrameBuffer(0)
     
 	// init cull face (back)
 	enableCullFace();
-	setCullMode(M_CULL_BACK);
+	setCullMode(CULL_BACK);
     
 	// normalize
 	glEnable(GL_NORMALIZE);
@@ -183,7 +183,7 @@ m_currentFrameBuffer(0)
     
 	// depth
 	enableDepthTest();
-	setDepthMode(M_DEPTH_LEQUAL);
+	setDepthMode(DEPTH_LEQUAL);
 	glClearDepthf(1.0f);
     
 	// line
@@ -206,7 +206,7 @@ MES1Context::~MES1Context(void)
 // view
 void MES1Context::setPerspectiveView(float fov, float ratio, float zNear, float zFar)
 {
-	MMatrix4x4 matrix;
+	Matrix4x4 matrix;
     
 	float ymax, xmax;
 	ymax = zNear * tanf((float)(fov * M_PI / 360.0f));
@@ -286,7 +286,7 @@ void MES1Context::clear(int buffer)
 	}
 }
 
-void MES1Context::setClearColor(const MVector4 & color){
+void MES1Context::setClearColor(const Vector4 & color){
 	glClearColor(color.x, color.y, color.z, color.w);
 }
 
@@ -301,53 +301,53 @@ void MES1Context::disableTexture(void)
 	glDisable(GL_TEXTURE_2D);
 }
 
-void MES1Context::setTextureGenMode(M_TEX_GEN_MODES mode)
+void MES1Context::setTextureGenMode(TEX_GEN_MODES mode)
 {
 }
 
-void MES1Context::setTextureFilterMode(M_TEX_FILTER_MODES min, M_TEX_FILTER_MODES mag)
+void MES1Context::setTextureFilterMode(TEX_FILTER_MODES min, TEX_FILTER_MODES mag)
 {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, returnTexFilterMode(min));
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, returnTexFilterMode(mag));
 }
 
-void MES1Context::setTextureUWrapMode(M_WRAP_MODES wrap)
+void MES1Context::setTextureUWrapMode(WRAP_MODES wrap)
 {
 	int glWrap = GL_REPEAT;
-	if(wrap == M_WRAP_CLAMP)
+	if(wrap == WRAP_CLAMP)
 		glWrap = GL_CLAMP_TO_EDGE;
     
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, glWrap);
 }
 
-void MES1Context::setTextureVWrapMode(M_WRAP_MODES wrap)
+void MES1Context::setTextureVWrapMode(WRAP_MODES wrap)
 {
 	int glWrap = GL_REPEAT;
-	if(wrap == M_WRAP_CLAMP)
+	if(wrap == WRAP_CLAMP)
 		glWrap = GL_CLAMP_TO_EDGE;
     
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, glWrap);
 }
 
-void MES1Context::setTextureCombineMode(M_TEX_COMBINE_MODES combine)
+void MES1Context::setTextureCombineMode(TEX_COMBINE_MODES combine)
 {
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
     
 	switch(combine)
 	{
-        case M_TEX_COMBINE_REPLACE:
+        case TEX_COMBINE_REPLACE:
             glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_REPLACE);
             break;
             
-        case M_TEX_COMBINE_MODULATE:
+        case TEX_COMBINE_MODULATE:
             glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
             break;
             
-        case M_TEX_COMBINE_ADD:
+        case TEX_COMBINE_ADD:
             glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_ADD);
             break;
             
-        case M_TEX_COMBINE_SUB:
+        case TEX_COMBINE_SUB:
             glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_SUBTRACT);
             break;
             
@@ -373,7 +373,7 @@ void MES1Context::deleteTexture(unsigned int * textureId)
 	glDeleteTextures(1, textureId);
 }
 
-void MES1Context::sendTextureImage(MImage * image, bool mipMap, bool filter, bool compress)
+void MES1Context::sendTextureImage(Image * image, bool mipMap, bool filter, bool compress)
 {
 	// get properties
 	unsigned int bytePerPix = image->getComponents();
@@ -436,7 +436,7 @@ void MES1Context::sendTextureImage(MImage * image, bool mipMap, bool filter, boo
 	}
 }
 
-void MES1Context::texImage(unsigned int level, unsigned int width, unsigned int height, M_TYPES type, M_TEX_MODES mode, const void * pixels)
+void MES1Context::texImage(unsigned int level, unsigned int width, unsigned int height, VAR_TYPES type, TEX_MODES mode, const void * pixels)
 {
 	GLenum format = returnTexMode(mode);
 	GLenum intFormat = format;
@@ -448,7 +448,7 @@ void MES1Context::texImage(unsigned int level, unsigned int width, unsigned int 
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy); // anisotropic filtering
 }
 
-void MES1Context::texSubImage(unsigned int level, int xoffset, int yoffset, unsigned int width, unsigned int height, M_TYPES type, M_TEX_MODES mode, const void * pixels)
+void MES1Context::texSubImage(unsigned int level, int xoffset, int yoffset, unsigned int width, unsigned int height, VAR_TYPES type, TEX_MODES mode, const void * pixels)
 {
 	GLenum format = returnTexMode(mode);
 	glTexSubImage2D(GL_TEXTURE_2D, level, xoffset, yoffset, width, height, format, returnGLType(type), pixels);
@@ -474,10 +474,10 @@ void MES1Context::bindFrameBuffer(unsigned int frameBufferId){
 void MES1Context::getCurrentFrameBuffer(unsigned int * frameBufferId){
 	(*frameBufferId) = m_currentFrameBuffer;
 }
-void MES1Context::attachFrameBufferTexture(M_FRAME_BUFFER_ATTACHMENT attachment, unsigned int textureId){
+void MES1Context::attachFrameBufferTexture(FRAME_BUFFER_ATTACHMENT attachment, unsigned int textureId){
 	glFramebufferTexture2DOES(GL_FRAMEBUFFER_OES, returnAttachType(attachment), GL_TEXTURE_2D, textureId, 0);
 }
-void MES1Context::setDrawingBuffers(M_FRAME_BUFFER_ATTACHMENT * buffers, unsigned int size)
+void MES1Context::setDrawingBuffers(FRAME_BUFFER_ATTACHMENT * buffers, unsigned int size)
 {
 	/*
      if(size == 0)
@@ -577,7 +577,7 @@ void MES1Context::sendUniformVec4(unsigned int fxId, const char * name, float * 
 	//if(uValue != -1) glUniform4fvARB(uValue, count, values);
 }
 
-void MES1Context::sendUniformMatrix(unsigned int fxId, const char * name, MMatrix4x4 * matrix, const int count, const bool transpose){
+void MES1Context::sendUniformMatrix(unsigned int fxId, const char * name, Matrix4x4 * matrix, const int count, const bool transpose){
 	//GLint uValue = glGetUniformLocationARB((GLhandleARB)fxId, name);
 	//if(uValue != -1) glUniformMatrix4fvARB(uValue, count, transpose, matrix->entries);
 }
@@ -630,34 +630,34 @@ void MES1Context::disableAttribArray(unsigned int location)
 	//glDisableVertexAttribArray(location);
 }
 
-void MES1Context::setVertexPointer(M_TYPES type, unsigned int components, const void * pointer){
+void MES1Context::setVertexPointer(VAR_TYPES type, unsigned int components, const void * pointer){
 	glVertexPointer(components, returnGLType(type), 0, pointer);
 }
 
-void MES1Context::setColorPointer(M_TYPES type, unsigned int components, const void * pointer){
+void MES1Context::setColorPointer(VAR_TYPES type, unsigned int components, const void * pointer){
 	glColorPointer(components, returnGLType(type), 0, pointer);
 }
 
-void MES1Context::setNormalPointer(M_TYPES type, const void * pointer){
+void MES1Context::setNormalPointer(VAR_TYPES type, const void * pointer){
 	glNormalPointer(returnGLType(type), 0, pointer);
 }
 
-void MES1Context::setTexCoordPointer(M_TYPES type, unsigned int components, const void * pointer){
+void MES1Context::setTexCoordPointer(VAR_TYPES type, unsigned int components, const void * pointer){
 	glTexCoordPointer(components, returnGLType(type), 0, pointer);
 }
 
-void MES1Context::setAttribPointer(unsigned int location, M_TYPES type, unsigned int components, const void * pointer, const bool normalized)
+void MES1Context::setAttribPointer(unsigned int location, VAR_TYPES type, unsigned int components, const void * pointer, const bool normalized)
 {
 	//glVertexAttribPointer(location, components, returnGLType(type), normalized, 0, pointer);
 }
 
 // draw
-void MES1Context::drawArray(M_PRIMITIVE_TYPES type, unsigned int begin, unsigned int size)
+void MES1Context::drawArray(PRIMITIVE_TYPES type, unsigned int begin, unsigned int size)
 {
 	glDrawArrays(returnPrimitiveType(type), begin, size);
 }
 
-void MES1Context::drawElement(M_PRIMITIVE_TYPES type, unsigned int size, M_TYPES indicesType, const void * indices)
+void MES1Context::drawElement(PRIMITIVE_TYPES type, unsigned int size, VAR_TYPES indicesType, const void * indices)
 {
 	glDrawElements(returnPrimitiveType(type), size, returnGLType(indicesType), indices);
 }
@@ -667,16 +667,16 @@ void MES1Context::enableLineAntialiasing(void)	{ glEnable(GL_LINE_SMOOTH); }
 void MES1Context::disableLineAntialiasing(void)	{ glDisable(GL_LINE_SMOOTH); }
 
 // material
-void MES1Context::setMaterialDiffuse(const MVector4 & diffuse){
+void MES1Context::setMaterialDiffuse(const Vector4 & diffuse){
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
 }
-void MES1Context::setMaterialSpecular(const MVector4 & specular){
+void MES1Context::setMaterialSpecular(const Vector4 & specular){
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
 }
-void MES1Context::setMaterialAmbient(const MVector4 & ambient){
+void MES1Context::setMaterialAmbient(const Vector4 & ambient){
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
 }
-void MES1Context::setMaterialEmit(const MVector4 & emit){
+void MES1Context::setMaterialEmit(const Vector4 & emit){
 	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emit);
 }
 void MES1Context::setMaterialShininess(float shininess){
@@ -691,14 +691,14 @@ void MES1Context::setScissor(int x, int y, unsigned int width, unsigned int heig
 }
 
 // color
-void MES1Context::setColor(const MColor & color){
+void MES1Context::setColor(const Color & color){
 	glColor4ub(color.r, color.g, color.b, color.a);
 }
 
-void MES1Context::setColor4(const MVector4 & color){
+void MES1Context::setColor4(const Vector4 & color){
 	glColor4f(color.x, color.y, color.z, color.w);
 }
-void MES1Context::setColor3(const MVector3 & color){
+void MES1Context::setColor3(const Vector3 & color){
 	glColor4f(color.x, color.y, color.z, 1.0f);
 }
 
@@ -724,35 +724,35 @@ void MES1Context::setAlphaTest(float value)
 // depth
 void MES1Context::enableDepthTest(void) { glEnable (GL_DEPTH_TEST); }
 void MES1Context::disableDepthTest(void){ glDisable(GL_DEPTH_TEST); }
-void MES1Context::setDepthMode(M_DEPTH_MODES mode)
+void MES1Context::setDepthMode(DEPTH_MODES mode)
 {
 	switch(mode)
 	{
-        case M_DEPTH_ALWAYS:
+        case DEPTH_ALWAYS:
             glDepthFunc(GL_ALWAYS);
             return;
             
-        case M_DEPTH_LESS:
+        case DEPTH_LESS:
             glDepthFunc(GL_LESS);
             return;
             
-        case M_DEPTH_GREATER:
+        case DEPTH_GREATER:
             glDepthFunc(GL_GREATER);
             return;
             
-        case M_DEPTH_EQUAL:
+        case DEPTH_EQUAL:
             glDepthFunc(GL_EQUAL);
             return;
             
-        case M_DEPTH_LEQUAL:
+        case DEPTH_LEQUAL:
             glDepthFunc(GL_LEQUAL);
             return;
             
-        case M_DEPTH_GEQUAL:
+        case DEPTH_GEQUAL:
             glDepthFunc(GL_GEQUAL);
             return;
             
-        case M_DEPTH_NOTEQUAL:
+        case DEPTH_NOTEQUAL:
             glDepthFunc(GL_NOTEQUAL);
             return;
             
@@ -768,19 +768,19 @@ void MES1Context::disableStencilTest(void){ glDisable(GL_STENCIL_TEST); }
 // cull face
 void MES1Context::enableCullFace(void) { glEnable (GL_CULL_FACE); }
 void MES1Context::disableCullFace(void){ glDisable(GL_CULL_FACE); }
-void MES1Context::setCullMode(M_CULL_MODES mode)
+void MES1Context::setCullMode(CULL_MODES mode)
 {
 	switch(mode)
 	{
-        case M_CULL_FRONT:
+        case CULL_FRONT:
             glCullFace(GL_FRONT);
             return;
             
-        case M_CULL_BACK:
+        case CULL_BACK:
             glCullFace(GL_BACK);
             return;
             
-        case M_CULL_FRONT_BACK:
+        case CULL_FRONT_BACK:
             glCullFace(GL_FRONT_AND_BACK);
             return;
             
@@ -794,19 +794,19 @@ void MES1Context::loadIdentity(void){
 	glLoadIdentity();
 }
 
-void MES1Context::setMatrixMode(M_MATRIX_MODES matrixMode)
+void MES1Context::setMatrixMode(MATRIX_MODES matrixMode)
 {
 	switch(matrixMode)
 	{
-        case M_MATRIX_MODELVIEW:
+        case MATRIX_MODELVIEW:
             glMatrixMode(GL_MODELVIEW);
             return;
             
-        case M_MATRIX_PROJECTION:
+        case MATRIX_PROJECTION:
             glMatrixMode(GL_PROJECTION);
             return;
             
-        case M_MATRIX_TEXTURE:
+        case MATRIX_TEXTURE:
             glMatrixMode(GL_TEXTURE);
             return;
 	}
@@ -814,23 +814,23 @@ void MES1Context::setMatrixMode(M_MATRIX_MODES matrixMode)
 
 void MES1Context::pushMatrix(void)									{ glPushMatrix(); }
 void MES1Context::popMatrix(void)									{ glPopMatrix(); }
-void MES1Context::multMatrix(const MMatrix4x4 * matrix)				{ glMultMatrixf(matrix->entries); }
-void MES1Context::translate(const MVector3 & position)				{ glTranslatef(position.x, position.y, position.z); }
-void MES1Context::rotate(const MVector3 & axis, float angle)			{ glRotatef(angle, axis.x, axis.y, axis.z); }
-void MES1Context::scale(const MVector3 & scale)						{ glScalef(scale.x, scale.y, scale.z); }
+void MES1Context::multMatrix(const Matrix4x4 * matrix)				{ glMultMatrixf(matrix->entries); }
+void MES1Context::translate(const Vector3 & position)				{ glTranslatef(position.x, position.y, position.z); }
+void MES1Context::rotate(const Vector3 & axis, float angle)			{ glRotatef(angle, axis.x, axis.y, axis.z); }
+void MES1Context::scale(const Vector3 & scale)						{ glScalef(scale.x, scale.y, scale.z); }
 void MES1Context::getViewport(int * viewport)
 {
 	glGetIntegerv(GL_VIEWPORT, viewport);
 }
-void MES1Context::getModelViewMatrix(MMatrix4x4 * matrix)
+void MES1Context::getModelViewMatrix(Matrix4x4 * matrix)
 {
 	glGetFloatv(GL_MODELVIEW_MATRIX, matrix->entries);
 }
-void MES1Context::getProjectionMatrix(MMatrix4x4 * matrix)
+void MES1Context::getProjectionMatrix(Matrix4x4 * matrix)
 {
 	glGetFloatv(GL_PROJECTION_MATRIX, matrix->entries);
 }
-void MES1Context::getTextureMatrix(MMatrix4x4 * matrix)
+void MES1Context::getTextureMatrix(Matrix4x4 * matrix)
 {
 	glGetFloatv(GL_TEXTURE_MATRIX, matrix->entries);
 }
@@ -838,9 +838,9 @@ void MES1Context::getTextureMatrix(MMatrix4x4 * matrix)
 // fog
 void MES1Context::enableFog(void)						{ glEnable (GL_FOG); }
 void MES1Context::disableFog(void)						{ glDisable(GL_FOG); }
-void MES1Context::setFogColor(const MVector3 & color)
+void MES1Context::setFogColor(const Vector3 & color)
 {
-	glFogfv(GL_FOG_COLOR, MVector4(color));
+	glFogfv(GL_FOG_COLOR, Vector4(color));
 	m_fogColor = color;
 }
 void MES1Context::setFogDistance(float min, float max)
@@ -850,7 +850,7 @@ void MES1Context::setFogDistance(float min, float max)
 	m_fogMin = min;
 	m_fogMax = max;
 }
-void MES1Context::getFogColor(MVector3 * color){
+void MES1Context::getFogColor(Vector3 * color){
 	(*color) = m_fogColor;
 }
 void MES1Context::getFogDistance(float * min, float * max){
@@ -863,7 +863,7 @@ void MES1Context::enableLighting(void)			{ glEnable (GL_LIGHTING); }
 void MES1Context::disableLighting(void)			{ glDisable(GL_LIGHTING); }
 void MES1Context::enableLight(unsigned int id)	{ glEnable (GL_LIGHT0 + id); }
 void MES1Context::disableLight(unsigned int id)	{ glDisable(GL_LIGHT0 + id); }
-void MES1Context::setLightPosition(unsigned int id, const MVector4 & position)
+void MES1Context::setLightPosition(unsigned int id, const Vector4 & position)
 {
 	if(id < MAX_MRCLIGHTS)
 	{
@@ -871,7 +871,7 @@ void MES1Context::setLightPosition(unsigned int id, const MVector4 & position)
 		glLightfv(GL_LIGHT0 + id, GL_POSITION, position);
 	}
 }
-void MES1Context::setLightDiffuse(unsigned int id, const MVector4 & diffuse)
+void MES1Context::setLightDiffuse(unsigned int id, const Vector4 & diffuse)
 {
 	if(id < MAX_MRCLIGHTS)
 	{
@@ -879,7 +879,7 @@ void MES1Context::setLightDiffuse(unsigned int id, const MVector4 & diffuse)
 		glLightfv(GL_LIGHT0 + id, GL_DIFFUSE, diffuse);
 	}
 }
-void MES1Context::setLightSpecular(unsigned int id, const MVector4 & specular)
+void MES1Context::setLightSpecular(unsigned int id, const Vector4 & specular)
 {
 	if(id < MAX_MRCLIGHTS)
 	{
@@ -887,7 +887,7 @@ void MES1Context::setLightSpecular(unsigned int id, const MVector4 & specular)
 		glLightfv(GL_LIGHT0 + id, GL_SPECULAR, specular);
 	}
 }
-void MES1Context::setLightAmbient(unsigned int id, const MVector4 & ambient)
+void MES1Context::setLightAmbient(unsigned int id, const Vector4 & ambient)
 {
 	if(id < MAX_MRCLIGHTS)
 	{
@@ -907,7 +907,7 @@ void MES1Context::setLightAttenuation(unsigned int id, float constant, float lin
 		glLightf(GL_LIGHT0 + id, GL_QUADRATIC_ATTENUATION, quadratic);
 	}
 }
-void MES1Context::setLightSpotDirection(unsigned int id, const MVector3 & direction)
+void MES1Context::setLightSpotDirection(unsigned int id, const Vector3 & direction)
 {
 	if(id < MAX_MRCLIGHTS)
 	{
@@ -931,22 +931,22 @@ void MES1Context::setLightSpotExponent(unsigned int id, float exponent)
 		glLightf(GL_LIGHT0 + id, GL_SPOT_EXPONENT, m_lights[id].exponent);
 	}
 }
-void MES1Context::getLightPosition(unsigned int id, MVector4 * position)
+void MES1Context::getLightPosition(unsigned int id, Vector4 * position)
 {
 	if(id < MAX_MRCLIGHTS)
 		(*position) = m_lights[id].position;
 }
-void MES1Context::getLightDiffuse(unsigned int id, MVector4 * diffuse)
+void MES1Context::getLightDiffuse(unsigned int id, Vector4 * diffuse)
 {
 	if(id < MAX_MRCLIGHTS)
 		(*diffuse) = m_lights[id].diffuse;
 }
-void MES1Context::getLightSpecular(unsigned int id, MVector4 * specular)
+void MES1Context::getLightSpecular(unsigned int id, Vector4 * specular)
 {
 	if(id < MAX_MRCLIGHTS)
 		(*specular) = m_lights[id].specular;
 }
-void MES1Context::getLightAmbient(unsigned int id, MVector4 * ambient)
+void MES1Context::getLightAmbient(unsigned int id, Vector4 * ambient)
 {
 	if(id < MAX_MRCLIGHTS)
 		(*ambient) = m_lights[id].ambient;
@@ -960,7 +960,7 @@ void MES1Context::getLightAttenuation(unsigned int id, float * constant, float *
 		(*quadratic) = m_lights[id].quadratic;
 	}
 }
-void MES1Context::getLightSpotDirection(unsigned int id, MVector3 * direction)
+void MES1Context::getLightSpotDirection(unsigned int id, Vector3 * direction)
 {
 	if(id < MAX_MRCLIGHTS)
 		(*direction) = m_lights[id].direction;
@@ -979,27 +979,27 @@ void MES1Context::getLightSpotExponent(unsigned int id, float * exponent)
 // blending
 void MES1Context::enableBlending(void)	{ glEnable (GL_BLEND); }
 void MES1Context::disableBlending(void)	{ glDisable(GL_BLEND); }
-void MES1Context::setBlendingMode(M_BLENDING_MODES mode)
+void MES1Context::setBlendingMode(BLENDING_MODES mode)
 {
 	switch(mode)
 	{
-        case M_BLENDING_NONE:
+        case BLENDING_NONE:
             glBlendFunc(GL_ONE, GL_ZERO);
             break;
             
-        case M_BLENDING_ALPHA:
+        case BLENDING_ALPHA:
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             break;
             
-        case M_BLENDING_ADD:
+        case BLENDING_ADD:
             glBlendFunc(GL_ONE, GL_ONE);
             break;
             
-        case M_BLENDING_PRODUCT:
+        case BLENDING_PRODUCT:
             glBlendFunc(GL_ZERO, GL_SRC_COLOR);
             break;
             
-        case M_BLENDING_LIGHT:
+        case BLENDING_LIGHT:
             glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
             break;
             

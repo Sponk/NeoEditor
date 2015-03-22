@@ -29,10 +29,10 @@
 //
 //========================================================================
 
+#include <NeoCore.h>
 #include "vorbis/codec.h"
 #include "vorbis/vorbisfile.h"
 
-#include <MCore.h>
 #include <NeoEngine.h>
 #include "VorbisLoader.h"
 
@@ -40,22 +40,22 @@ namespace Neo
 {
 size_t M_VorbisRead(void *dest, size_t size, size_t count, void *file)
 {
-	return M_fread(dest, size, count, (MFile*)file);
+	return M_fread(dest, size, count, (File*)file);
 }
 
 int M_VorbisSeek(void *file, ogg_int64_t offset, int whence)
 {
-	return M_fseek((MFile*)file, offset, whence);
+	return M_fseek((File*)file, offset, whence);
 }
 
 int M_VorbisClose(void *file)
 {
-	return M_fclose((MFile*)file);
+	return M_fclose((File*)file);
 }
 
 long M_VorbisTell(void *file)
 {
-	return M_ftell((MFile*)file);
+	return M_ftell((File*)file);
 }
 
 #ifndef __func__
@@ -67,7 +67,7 @@ bool M_loadVorbisSound(const char * filename, void * data)
 	if((!data) || (!filename))
 		return false;
 
-	MFile* file = M_fopen(filename, "rb");
+	File* file = M_fopen(filename, "rb");
 	if (!file)
 	{
         MLOG_ERROR("Load Vorbis : unable to open \"" << filename << "\"");
@@ -91,21 +91,21 @@ bool M_loadVorbisSound(const char * filename, void * data)
 	vorbis_info * vi = ov_info(&vf, -1);
 	unsigned int size = ov_pcm_total(&vf, -1) * vi->channels * 2;
 
-	M_SOUND_FORMAT format;
+	SOUND_FORMAT format;
 	switch(vi->channels)
 	{
 		case 1:
-			format = M_SOUND_FORMAT_MONO16;
+			format = SOUND_FORMAT_MONO16;
 			break;
 		case 2:
-			format = M_SOUND_FORMAT_STEREO16;
+			format = SOUND_FORMAT_STEREO16;
 			break;
 		default:
             MLOG_ERROR("Load Vorbis : unsupported format");
 			return false;
 	}
 
-	MSound * sound = (MSound *)data;
+	Sound * sound = (Sound *)data;
 	sound->create(format, size, (unsigned int)vi->rate);
 
 	int current_section;

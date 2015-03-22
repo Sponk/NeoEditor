@@ -72,12 +72,12 @@ public:
 private:
 
 	// MEngine
-	MSoundContext * m_soundContext;
-	MRenderingContext * m_render;
-	MPhysicsContext * m_physics;
-	MScriptContext * m_script;
-	MInputContext * m_input;
-	MSystemContext * m_system;
+	SoundContext * m_soundContext;
+	RenderingContext * m_render;
+	PhysicsContext * m_physics;
+	ScriptContext * m_script;
+	InputContext * m_input;
+	SystemContext * m_system;
 	NeoGame * m_game;
 	Level * m_level;
 	Renderer * m_renderer;
@@ -104,11 +104,11 @@ private:
 	M_TRANSFORM_MODE m_transformMode;
 	M_ORIENTATION_MODE m_orientationMode;
 	M_AXIS m_currentAxis;
-	MVector2 m_tMousePosition;
-	MVector2 m_tCenterPosition;
-	MVector2 m_tVectorDirection;
-	MVector2 m_tOffsetDirection;
-	MVector3 m_tPlane;
+	Vector2 m_tMousePosition;
+	Vector2 m_tCenterPosition;
+	Vector2 m_tVectorDirection;
+	Vector2 m_tOffsetDirection;
+	Vector3 m_tPlane;
 
 	// timeline
 	int m_timelinePos;
@@ -116,8 +116,8 @@ private:
 	int m_timelineMax;
 
 	// selection
-	MVector3 m_selectionCenter;
-	MVector3 m_viewCenter;
+	Vector3 m_selectionCenter;
+	Vector3 m_viewCenter;
 	bool m_selectionLock;
 
 	OEntity * m_sphereEntity;
@@ -135,7 +135,7 @@ private:
 	OEntity * m_soundEntity;
 
 	// mesh manager
-	MDataManager m_meshManager;
+	DataManager m_meshManager;
 
 	// user vues
 	OCamera m_perspectiveVue;
@@ -190,25 +190,25 @@ public:
 	void drawArmature(OEntity * entity);
 	void drawBoundingBox(Box3d * box);
 	void drawGrid(Scene * scene);
-	void drawPositionAxis(M_AXIS axis, OCamera * camera, MMatrix4x4 * matrix, const bool viewTest = true);
-	void drawScaleAxis(M_AXIS axis, OCamera * camera, MMatrix4x4 * matrix, const bool viewTest = true);
-	void drawRotationCircle(M_AXIS axis, OCamera * camera, MMatrix4x4 * matrix, const bool zTest = true);
+	void drawPositionAxis(M_AXIS axis, OCamera * camera, Matrix4x4 * matrix, const bool viewTest = true);
+	void drawScaleAxis(M_AXIS axis, OCamera * camera, Matrix4x4 * matrix, const bool viewTest = true);
+	void drawRotationCircle(M_AXIS axis, OCamera * camera, Matrix4x4 * matrix, const bool zTest = true);
 	void drawEditRotation(OCamera * camera);
 	void drawEditPosition(OCamera * camera);
 	void drawEditScale(OCamera * camera);
-	void computeTransformDirection(OCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float distance, const MVector3 & axis);
-	void computeTransformPlane(OCamera * camera, const MVector3 & position, const MVector3 & axis);
+	void computeTransformDirection(OCamera * camera, const Vector3 & rayO, const Vector3 & rayD, const Vector3 & position, float distance, const Vector3 & axis);
+	void computeTransformPlane(OCamera * camera, const Vector3 & position, const Vector3 & axis);
 	void transformRotation(void);
 	void transformPosition(void);
-    void transformPosition(MVector2 delta);
+    void transformPosition(Vector2 delta);
 
 	void transformScale(void);
 
-    Object3d * getNearestMesh(Scene * scene, const MVector3 & rayO, const MVector3 & rayD, MVector3 * intersectPoint);
-	Object3d * getNearestObject(Scene * scene, const MVector3 & rayO, const MVector3 & rayD, MVector3 * intersectPoint = NULL);
-	M_AXIS selectEditRotation(OCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float radius);
-	M_AXIS selectEditPosition(OCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float radius);
-	M_AXIS selectEditScale(OCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float radius);
+    Object3d * getNearestMesh(Scene * scene, const Vector3 & rayO, const Vector3 & rayD, Vector3 * intersectPoint);
+	Object3d * getNearestObject(Scene * scene, const Vector3 & rayO, const Vector3 & rayD, Vector3 * intersectPoint = NULL);
+	M_AXIS selectEditRotation(OCamera * camera, const Vector3 & rayO, const Vector3 & rayD, const Vector3 & position, float radius);
+	M_AXIS selectEditPosition(OCamera * camera, const Vector3 & rayO, const Vector3 & rayD, const Vector3 & position, float radius);
+	M_AXIS selectEditScale(OCamera * camera, const Vector3 & rayO, const Vector3 & rayD, const Vector3 & position, float radius);
 
     void updateCurrentAxis();
 
@@ -326,7 +326,7 @@ public:
 	void transformSelectedObjects(void);
 
 	// selection
-	inline MVector3 * getSelectionCenter(void){ return &m_selectionCenter; }
+	inline Vector3 * getSelectionCenter(void){ return &m_selectionCenter; }
 
 	// user vues
 	void rotateCurrentVue(void);

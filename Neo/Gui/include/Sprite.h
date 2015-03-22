@@ -54,7 +54,7 @@ class Sprite : public Widget
 protected:
 	OText *m_labelText;
 	int m_image;
-	MVector2 m_imageSize;
+	Vector2 m_imageSize;
 
 	std::string m_imagePath;
 
@@ -64,10 +64,10 @@ public:
 	Sprite(unsigned int x, unsigned int y, unsigned int width,
 		   unsigned int height, const char *texture, const char *label);
 
-	void draw(MVector2 offset);
+	void draw(Vector2 offset);
 	void update();
 
-	MVector2 getSize() { return m_imageSize; }
+	Vector2 getSize() { return m_imageSize; }
 };
 }
 }

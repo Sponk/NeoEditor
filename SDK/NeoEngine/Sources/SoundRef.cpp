@@ -48,7 +48,7 @@ SoundRef * SoundRef::getNew(unsigned int bufferId, const char * filename){
 void SoundRef::clear(void)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
-	MSoundContext * soundContext = engine->getSoundContext();
+	SoundContext * soundContext = engine->getSoundContext();
 
 	soundContext->deleteBuffer(&m_bufferId);
 }
@@ -60,12 +60,12 @@ void SoundRef::destroy(void){
 void SoundRef::update(void)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
-	MSoundContext * soundContext = engine->getSoundContext();
+	SoundContext * soundContext = engine->getSoundContext();
 
 	// force clear
 	clear();
 
-	MSound sound;
+	Sound sound;
 	if(engine->getSoundLoader()->loadData(getFilename(), &sound))
 	{
 		// create new buffer

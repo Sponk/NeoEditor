@@ -179,7 +179,7 @@ public:
 
 protected:
     void set2D(unsigned int w, unsigned int h);
-    void drawQuad(MVector2 scale);
+    void drawQuad(Vector2 scale);
 
     void sendUniforms();
 
@@ -194,8 +194,8 @@ protected:
     int m_Resolution;
     float m_ResolutionMultiplier;
 
-    MString m_vertShadPath;
-    MString m_fragShadPath;
+    String m_vertShadPath;
+    String m_fragShadPath;
 
     typedef struct
     {
@@ -223,10 +223,10 @@ protected:
     vector<uintptr_t> m_UniformList;
 
     // Cache texture coordinates for faster rendering
-    MVector2 m_texCoords[4];
+    Vector2 m_texCoords[4];
 
     // Cache vertices for faster rendering
-    MVector2 m_vertices[4];
+    Vector2 m_vertices[4];
 };
 }
 #endif

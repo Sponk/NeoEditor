@@ -47,7 +47,7 @@ private:
 	unsigned int m_vertexId;
 
 	// dif vector
-	MVector3 m_difVector;
+	Vector3 m_difVector;
 
 public:
 

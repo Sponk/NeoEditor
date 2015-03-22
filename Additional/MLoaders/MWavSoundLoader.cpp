@@ -36,7 +36,7 @@
 
 bool M_loadWavSound(const char * filename, void * data)
 {
-	MFile * file = M_fopen(filename, "rb");
+	File * file = M_fopen(filename, "rb");
 	if(! file)
 	{
 		printf("ERROR Load Sound : unable to read %s file\n", filename);
@@ -77,7 +77,7 @@ bool M_loadWavSound(const char * filename, void * data)
 				return false;
 			}
 			
-			M_SOUND_FORMAT format;
+			SOUND_FORMAT format;
 			switch(bits_per_sample)
 			{
 				case 8:
@@ -85,10 +85,10 @@ bool M_loadWavSound(const char * filename, void * data)
 					switch(channels)
 					{
 						case 1:
-							format = M_SOUND_FORMAT_MONO8;
+							format = SOUND_FORMAT_MONO8;
 							break;
 						case 2:
-							format = M_SOUND_FORMAT_STEREO8;
+							format = SOUND_FORMAT_STEREO8;
 							break;
 					}
 					break;
@@ -98,10 +98,10 @@ bool M_loadWavSound(const char * filename, void * data)
 					switch(channels)
 					{
 						case 1:
-							format = M_SOUND_FORMAT_MONO16;
+							format = SOUND_FORMAT_MONO16;
 							break;
 						case 2:
-							format = M_SOUND_FORMAT_STEREO16;
+							format = SOUND_FORMAT_STEREO16;
 							break;
 					}
 					break;
@@ -109,7 +109,7 @@ bool M_loadWavSound(const char * filename, void * data)
 			}
 			
 			// create sound
-			MSound * sound = (MSound *)data;
+			Sound * sound = (Sound *)data;
 			sound->create(format, data_size, sample_rate);
 			
 			// read sound data

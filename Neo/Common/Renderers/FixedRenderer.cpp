@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// MFixedRenderer.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -68,7 +63,7 @@ Renderer * FixedRenderer::getNew(void)
 // Drawing
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-MVector3 * FixedRenderer::getVertices(unsigned int size)
+Vector3 * FixedRenderer::getVertices(unsigned int size)
 {
 	if(size == 0)
 		return NULL;
@@ -76,14 +71,14 @@ MVector3 * FixedRenderer::getVertices(unsigned int size)
 	if(size > m_verticesNumber)
 	{
 		SAFE_DELETE_ARRAY(m_vertices);
-		m_vertices = new MVector3[size];
+		m_vertices = new Vector3[size];
 		m_verticesNumber = size;
 	}
 
 	return m_vertices;
 }
 
-MVector3 * FixedRenderer::getNormals(unsigned int size)
+Vector3 * FixedRenderer::getNormals(unsigned int size)
 {
 	if(size == 0)
 		return NULL;
@@ -91,7 +86,7 @@ MVector3 * FixedRenderer::getNormals(unsigned int size)
 	if(size > m_normalsNumber)
 	{
 		SAFE_DELETE_ARRAY(m_normals);
-		m_normals = new MVector3[size];
+		m_normals = new Vector3[size];
 		m_normalsNumber = size;
 	}
 
@@ -107,16 +102,16 @@ void FixedRenderer::updateSkinning(Mesh * mesh, Armature * armature)
 		SubMesh * subMesh = &mesh->getSubMeshs()[s];
 
 		// data
-		MVector3 * vertices = subMesh->getVertices();
+		Vector3 * vertices = subMesh->getVertices();
 
 		if(! vertices)
 			continue;
 
-		MSkinData * skinData = subMesh->getSkinData();
+		SkinData * skinData = subMesh->getSkinData();
 		if(armature && skinData)
 		{
 			unsigned int verticesSize = subMesh->getVerticesSize();
-			MVector3 * skinVertices = getVertices(verticesSize);
+			Vector3 * skinVertices = getVertices(verticesSize);
 
 			computeSkinning(armature, skinData, vertices, NULL, NULL, skinVertices, NULL, NULL);
 			subMesh->getBoundingBox()->initFromPoints(skinVertices, verticesSize);
@@ -126,13 +121,13 @@ void FixedRenderer::updateSkinning(Mesh * mesh, Armature * armature)
 	mesh->updateBoundingBox();
 }
 
-void FixedRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display, MVector3 * vertices, MVector3 * normals, MColor * colors)
+void FixedRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display, Vector3 * vertices, Vector3 * normals, Color * colors)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
-	MRenderingContext * render = engine->getRenderingContext();
+	RenderingContext * render = engine->getRenderingContext();
 
 
-	render->setColor4(MVector4(1, 1, 1, 1));
+	render->setColor4(Vector4(1, 1, 1, 1));
 
 
 	// get material
@@ -143,29 +138,29 @@ void FixedRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display, MV
 			return;
 
 		// data
-		M_TYPES indicesType = subMesh->getIndicesType();
+		VAR_TYPES indicesType = subMesh->getIndicesType();
 		void * indices = subMesh->getIndices();
-		MVector2 * texCoords = subMesh->getTexCoords();
+		Vector2 * texCoords = subMesh->getTexCoords();
 
 		// begin / size
 		unsigned int begin = display->getBegin();
 		unsigned int size = display->getSize();
 
 		// get properties
-		M_PRIMITIVE_TYPES primitiveType = display->getPrimitiveType();
-		M_BLENDING_MODES blendMode = material->getBlendMode();
-		M_CULL_MODES cullMode = display->getCullMode();
-		MVector3 diffuse = material->getDiffuse();
-		MVector3 specular = material->getSpecular();
-		MVector3 emit = material->getEmit();
+		PRIMITIVE_TYPES primitiveType = display->getPrimitiveType();
+		BLENDING_MODES blendMode = material->getBlendMode();
+		CULL_MODES cullMode = display->getCullMode();
+		Vector3 diffuse = material->getDiffuse();
+		Vector3 specular = material->getSpecular();
+		Vector3 emit = material->getEmit();
 		float shininess = material->getShininess();
 
 		// get current fog color
-		MVector3 currentFogColor;
+		Vector3 currentFogColor;
 		render->getFogColor(&currentFogColor);
 
 		// set cull mode
-		if(cullMode == M_CULL_NONE){
+		if(cullMode == CULL_NONE){
 			render->disableCullFace();
 		}
 		else{
@@ -180,7 +175,7 @@ void FixedRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display, MV
 		render->setBlendingMode(blendMode);
 
 		// alpha test
-		if(blendMode != M_BLENDING_ALPHA && texturesPassNumber > 0)
+		if(blendMode != BLENDING_ALPHA && texturesPassNumber > 0)
 		{
 			TexturePass * texturePass = material->getTexturePass(0);
 			Texture * texture = texturePass->getTexture();
@@ -194,12 +189,12 @@ void FixedRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display, MV
 		// set fog color depending on blending
 		switch(blendMode)
 		{
-			case M_BLENDING_ADD:
-			case M_BLENDING_LIGHT:
-				render->setFogColor(MVector3(0, 0, 0));
+			case BLENDING_ADD:
+			case BLENDING_LIGHT:
+				render->setFogColor(Vector3(0, 0, 0));
 				break;
-			case M_BLENDING_PRODUCT:
-				render->setFogColor(MVector3(1, 1, 1));
+			case BLENDING_PRODUCT:
+				render->setFogColor(Vector3(1, 1, 1));
 				break;
 		}
 
@@ -210,13 +205,13 @@ void FixedRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display, MV
 
 			// Vertex
 			render->enableVertexArray();
-			render->setVertexPointer(M_FLOAT, 3, vertices);
+			render->setVertexPointer(VAR_FLOAT, 3, vertices);
 
 			// Normal
 			if(normals)
 			{
 				render->enableNormalArray();
-				render->setNormalPointer(M_FLOAT, normals);
+				render->setNormalPointer(VAR_FLOAT, normals);
 			}
 			else
 			{
@@ -228,7 +223,7 @@ void FixedRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display, MV
 			{
 				render->disableLighting();
 				render->enableColorArray();
-				render->setColorPointer(M_UBYTE, 4, colors);
+				render->setColorPointer(VAR_UBYTE, 4, colors);
 			}
 			else
 			{
@@ -236,15 +231,15 @@ void FixedRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display, MV
 			}
 
 			// Material
-			render->setMaterialDiffuse(MVector4(diffuse.x, diffuse.y, diffuse.z, opacity));
-			render->setMaterialSpecular(MVector4(specular));
-			render->setMaterialAmbient(MVector4());
-			render->setMaterialEmit(MVector4(emit));
+			render->setMaterialDiffuse(Vector4(diffuse.x, diffuse.y, diffuse.z, opacity));
+			render->setMaterialSpecular(Vector4(specular));
+			render->setMaterialAmbient(Vector4());
+			render->setMaterialEmit(Vector4(emit));
 			render->setMaterialShininess(shininess);
 
 			// switch to texture matrix mode
 			if(texturesPassNumber > 0)
-				render->setMatrixMode(M_MATRIX_TEXTURE);
+				render->setMatrixMode(MATRIX_TEXTURE);
 			else
 			{
 				render->bindTexture(0);
@@ -287,30 +282,30 @@ void FixedRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display, MV
 
 				// texture matrix
 				render->loadIdentity();
-				render->translate(MVector2(0.5f, 0.5f));
+				render->translate(Vector2(0.5f, 0.5f));
 				render->scale(texture->getTexScale());
-				render->rotate(MVector3(0, 0, -1), texture->getTexRotate());
-				render->translate(MVector2(-0.5f, -0.5f));
+				render->rotate(Vector3(0, 0, -1), texture->getTexRotate());
+				render->translate(Vector2(-0.5f, -0.5f));
 				render->translate(texture->getTexTranslate());
 
 				// texture coords
 				render->enableTexCoordArray();
-				render->setTexCoordPointer(M_FLOAT, 2, texCoords + offset);
+				render->setTexCoordPointer(VAR_FLOAT, 2, texCoords + offset);
 			}
 
 			// switch back to modelview matrix mode
 			if(texturesPassNumber > 0)
-				render->setMatrixMode(M_MATRIX_MODELVIEW);
+				render->setMatrixMode(MATRIX_MODELVIEW);
 
 			// draw
 			if(indices)
 			{
 				switch(indicesType)
 				{
-					case M_USHORT:
+					case VAR_USHORT:
 						render->drawElement(primitiveType, size, indicesType, (unsigned short*)indices + begin);
 						break;
-					case M_UINT:
+					case VAR_UINT:
 						render->drawElement(primitiveType, size, indicesType, (unsigned int*)indices + begin);
 						break;
 				}
@@ -331,17 +326,17 @@ void FixedRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display, MV
 				render->bindTexture(0, t);
 				render->disableTexture();
 				render->disableTexCoordArray();
-				render->setTextureCombineMode(M_TEX_COMBINE_MODULATE);
+				render->setTextureCombineMode(TEX_COMBINE_MODULATE);
 
-				render->setMatrixMode(M_MATRIX_TEXTURE);
+				render->setMatrixMode(MATRIX_TEXTURE);
 				render->loadIdentity();
-				render->setMatrixMode(M_MATRIX_MODELVIEW);
+				render->setMatrixMode(MATRIX_MODELVIEW);
 			}
 		}
 
 		// restore fog and alpha test
 		render->setFogColor(currentFogColor);
-		if(blendMode != M_BLENDING_ALPHA)
+		if(blendMode != BLENDING_ALPHA)
 			render->setAlphaTest(0.0f);
 
 		// restore lighting
@@ -350,20 +345,20 @@ void FixedRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display, MV
 	}
 }
 
-void FixedRenderer::drawDisplayTriangles(SubMesh * subMesh, MaterialDisplay * display, MVector3 * vertices)
+void FixedRenderer::drawDisplayTriangles(SubMesh * subMesh, MaterialDisplay * display, Vector3 * vertices)
 {
-	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 	// begin / size
 	unsigned int begin = display->getBegin();
 	unsigned int size = display->getSize();
 
 	// display properties
-	M_PRIMITIVE_TYPES primitiveType = display->getPrimitiveType();
-	M_CULL_MODES cullMode = display->getCullMode();
+	PRIMITIVE_TYPES primitiveType = display->getPrimitiveType();
+	CULL_MODES cullMode = display->getCullMode();
 
 	// cull mode
-	if(cullMode == M_CULL_NONE){
+	if(cullMode == CULL_NONE){
 		render->disableCullFace();
 	}
 	else{
@@ -372,7 +367,7 @@ void FixedRenderer::drawDisplayTriangles(SubMesh * subMesh, MaterialDisplay * di
 	}
 
 	// indices
-	M_TYPES indicesType = subMesh->getIndicesType();
+	VAR_TYPES indicesType = subMesh->getIndicesType();
 	void * indices = subMesh->getIndices();
 
 	// FX
@@ -380,17 +375,17 @@ void FixedRenderer::drawDisplayTriangles(SubMesh * subMesh, MaterialDisplay * di
 
 	// Vertex
 	render->enableVertexArray();
-	render->setVertexPointer(M_FLOAT, 3, vertices);
+	render->setVertexPointer(VAR_FLOAT, 3, vertices);
 
 	// draw
 	if(indices)
 	{
 		switch(indicesType)
 		{
-			case M_USHORT:
+			case VAR_USHORT:
 				render->drawElement(primitiveType, size, indicesType, (unsigned short*)indices + begin);
 				break;
-			case M_UINT:
+			case VAR_UINT:
 				render->drawElement(primitiveType, size, indicesType, (unsigned int*)indices + begin);
 				break;
 		}
@@ -408,21 +403,21 @@ void FixedRenderer::drawDisplayTriangles(SubMesh * subMesh, MaterialDisplay * di
 void FixedRenderer::drawOpaques(SubMesh * subMesh, Armature * armature)
 {
 	// data
-	MVector3 * vertices = subMesh->getVertices();
-	MVector3 * normals = subMesh->getNormals();
-	MColor * colors = subMesh->getColors();
+	Vector3 * vertices = subMesh->getVertices();
+	Vector3 * normals = subMesh->getNormals();
+	Color * colors = subMesh->getColors();
 
 	if(! vertices)
 		return;
 
-	MSkinData * skinData = subMesh->getSkinData();
+	SkinData * skinData = subMesh->getSkinData();
 	if(armature && skinData)
 	{
 		unsigned int verticesSize = subMesh->getVerticesSize();
 		unsigned int normalsSize = subMesh->getNormalsSize();
 
-		MVector3 * skinVertices = getVertices(verticesSize);
-		MVector3 * skinNormals = getNormals(normalsSize);
+		Vector3 * skinVertices = getVertices(verticesSize);
+		Vector3 * skinNormals = getNormals(normalsSize);
 
 		computeSkinning(armature, skinData, vertices, normals, NULL, skinVertices, skinNormals, NULL);
 		subMesh->getBoundingBox()->initFromPoints(skinVertices, verticesSize);
@@ -442,7 +437,7 @@ void FixedRenderer::drawOpaques(SubMesh * subMesh, Armature * armature)
 		Material * material = display->getMaterial();
 		if(material)
 		{
-			if(material->getBlendMode() == M_BLENDING_NONE)
+			if(material->getBlendMode() == BLENDING_NONE)
 				drawDisplay(subMesh, display, vertices, normals, colors);
 		}
 	}
@@ -450,24 +445,24 @@ void FixedRenderer::drawOpaques(SubMesh * subMesh, Armature * armature)
 
 void FixedRenderer::drawTransparents(SubMesh * subMesh, Armature * armature)
 {
-	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 	// data
-	MVector3 * vertices = subMesh->getVertices();
-	MVector3 * normals = subMesh->getNormals();
-	MColor * colors = subMesh->getColors();
+	Vector3 * vertices = subMesh->getVertices();
+	Vector3 * normals = subMesh->getNormals();
+	Color * colors = subMesh->getColors();
 
 	if(! vertices)
 		return;
 
-	MSkinData * skinData = subMesh->getSkinData();
+	SkinData * skinData = subMesh->getSkinData();
 	if(armature && skinData)
 	{
 		unsigned int verticesSize = subMesh->getVerticesSize();
 		unsigned int normalsSize = subMesh->getNormalsSize();
 
-		MVector3 * skinVertices = getVertices(verticesSize);
-		MVector3 * skinNormals = getNormals(normalsSize);
+		Vector3 * skinVertices = getVertices(verticesSize);
+		Vector3 * skinNormals = getNormals(normalsSize);
 
 		computeSkinning(armature, skinData, vertices, normals, NULL, skinVertices, skinNormals, NULL);
 		subMesh->getBoundingBox()->initFromPoints(skinVertices, verticesSize);
@@ -506,7 +501,7 @@ void FixedRenderer::drawTransparents(SubMesh * subMesh, Armature * armature)
 		Material * material = display->getMaterial();
 		if(material)
 		{
-			if(material->getBlendMode() != M_BLENDING_NONE)
+			if(material->getBlendMode() != BLENDING_NONE)
 				drawDisplay(subMesh, display, vertices, normals, colors);
 		}
 	}
@@ -514,14 +509,14 @@ void FixedRenderer::drawTransparents(SubMesh * subMesh, Armature * armature)
 	//render->setDepthMask(1);
 }
 
-float FixedRenderer::getDistanceToCam(OCamera * camera, const MVector3 & pos)
+float FixedRenderer::getDistanceToCam(OCamera * camera, const Vector3 & pos)
 {
 	if(! camera->isOrtho())
 	{
 		return (pos - camera->getTransformedPosition()).getSquaredLength();
 	}
 
-	MVector3 axis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();
+	Vector3 axis = camera->getRotatedVector(Vector3(0, 0, -1)).getNormalized();
 	float dist = (pos - camera->getTransformedPosition()).dotProduct(axis);
 	return dist*dist;
 }
@@ -544,7 +539,7 @@ void FixedRenderer::updateVisibility(Scene * scene, OCamera * camera)
 
 void FixedRenderer::enableFog(OCamera * camera)
 {
-	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 	float fogMin = camera->getClippingFar()*0.9999f;
 	if(camera->hasFog())
@@ -574,7 +569,7 @@ void FixedRenderer::drawText(OText * textObj)
 	if(linesOffset->size() == 0)
 		return;
 
-	MRenderingContext * render = NeoEngine().getInstance()->getRenderingContext();
+	RenderingContext * render = NeoEngine().getInstance()->getRenderingContext();
 
 
 	render->enableBlending();
@@ -584,18 +579,18 @@ void FixedRenderer::drawText(OText * textObj)
 	render->setDepthMask(0);
 
 	render->setColor4(textObj->getColor());
-	render->setBlendingMode(M_BLENDING_ALPHA);
+	render->setBlendingMode(BLENDING_ALPHA);
 
-	static MVector2 vertices[4];
-	static MVector2 texCoords[4];
+	static Vector2 vertices[4];
+	static Vector2 texCoords[4];
 
 	render->disableNormalArray();
 	render->disableColorArray();
 	render->enableVertexArray();
 	render->enableTexCoordArray();
 
-	render->setVertexPointer(M_FLOAT, 2, vertices);
-	render->setTexCoordPointer(M_FLOAT, 2, texCoords);
+	render->setVertexPointer(VAR_FLOAT, 2, vertices);
+	render->setTexCoordPointer(VAR_FLOAT, 2, texCoords);
 
 	render->bindTexture(font->getTextureId());
 
@@ -639,28 +634,28 @@ void FixedRenderer::drawText(OText * textObj)
 		if(! character)
 			continue;
 
-		MVector2 pos = character->getPos();
-		MVector2 scale = character->getScale();
-		MVector2 offset = character->getOffset() * size + MVector2(lineOffset, 0);
+		Vector2 pos = character->getPos();
+		Vector2 scale = character->getScale();
+		Vector2 offset = character->getOffset() * size + Vector2(lineOffset, 0);
 
 		float width = scale.x * widthFactor * size;
 		float height = scale.y * heightFactor * size;
 
 		// construct quad
-		texCoords[0] = MVector2(pos.x, (pos.y + scale.y));
-		vertices[0] = MVector2(xc, (yc + height)) + offset;
+		texCoords[0] = Vector2(pos.x, (pos.y + scale.y));
+		vertices[0] = Vector2(xc, (yc + height)) + offset;
 
-		texCoords[1] = MVector2((pos.x + scale.x), (pos.y + scale.y));
-		vertices[1] = MVector2((xc + width), (yc + height)) + offset;
+		texCoords[1] = Vector2((pos.x + scale.x), (pos.y + scale.y));
+		vertices[1] = Vector2((xc + width), (yc + height)) + offset;
 
-		texCoords[3] = MVector2((pos.x + scale.x), pos.y);
-		vertices[3] = MVector2((xc + width), yc) + offset;
+		texCoords[3] = Vector2((pos.x + scale.x), pos.y);
+		vertices[3] = Vector2((xc + width), yc) + offset;
 
-		texCoords[2] = MVector2(pos.x, pos.y);
-		vertices[2] = MVector2(xc, yc) + offset;
+		texCoords[2] = Vector2(pos.x, pos.y);
+		vertices[2] = Vector2(xc, yc) + offset;
 
 		// draw quad
-		render->drawArray(M_PRIMITIVE_TRIANGLE_STRIP, 0, 4);
+		render->drawArray(PRIMITIVE_TRIANGLE_STRIP, 0, 4);
 
 		//move to next character
 		xc += character->getXAdvance() * size;
@@ -699,7 +694,7 @@ void FixedRenderer::drawScene(Scene * scene, OCamera * camera)
 
 
 	// get render
-	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 	render->enableLighting();
 	render->enableBlending();
 
@@ -715,7 +710,7 @@ void FixedRenderer::drawScene(Scene * scene, OCamera * camera)
 	enableFog(camera);
 
 	// camera
-	MVector3 cameraPos = camera->getTransformedPosition();
+	Vector3 cameraPos = camera->getTransformedPosition();
 
 
 	// transp sub obj number
@@ -776,7 +771,7 @@ void FixedRenderer::drawScene(Scene * scene, OCamera * camera)
 		// draw mesh
 		if(mesh)
 		{
-			MVector3 scale = entity->getTransformedScale();
+			Vector3 scale = entity->getTransformedScale();
 			Box3d * entityBox = entity->getBoundingBox();
 
 			float minScale = scale.x;
@@ -797,14 +792,14 @@ void FixedRenderer::drawScene(Scene * scene, OCamera * camera)
 					continue;
 
 				// light box
-				MVector3 lightPos = light->getTransformedPosition();
-				MVector3 localPos = entity->getInversePosition(lightPos);
+				Vector3 lightPos = light->getTransformedPosition();
+				Vector3 localPos = entity->getInversePosition(lightPos);
 
 				float localRadius = light->getRadius() * minScale;
 
 				Box3d lightBox(
-								MVector3(localPos - localRadius),
-								MVector3(localPos + localRadius)
+								Vector3(localPos - localRadius),
+								Vector3(localPos + localRadius)
 								);
 
 				if(! entityBox->isInCollisionWith(lightBox))
@@ -856,18 +851,18 @@ void FixedRenderer::drawScene(Scene * scene, OCamera * camera)
 				// check if submesh visible
 				if(sSize > 1)
 				{
-					MVector3 * min = &box->min;
-					MVector3 * max = &box->max;
+					Vector3 * min = &box->min;
+					Vector3 * max = &box->max;
 
-					MVector3 points[8] = {
-						entity->getTransformedVector(MVector3(min->x, min->y, min->z)),
-						entity->getTransformedVector(MVector3(min->x, max->y, min->z)),
-						entity->getTransformedVector(MVector3(max->x, max->y, min->z)),
-						entity->getTransformedVector(MVector3(max->x, min->y, min->z)),
-						entity->getTransformedVector(MVector3(min->x, min->y, max->z)),
-						entity->getTransformedVector(MVector3(min->x, max->y, max->z)),
-						entity->getTransformedVector(MVector3(max->x, max->y, max->z)),
-						entity->getTransformedVector(MVector3(max->x, min->y, max->z))
+					Vector3 points[8] = {
+						entity->getTransformedVector(Vector3(min->x, min->y, min->z)),
+						entity->getTransformedVector(Vector3(min->x, max->y, min->z)),
+						entity->getTransformedVector(Vector3(max->x, max->y, min->z)),
+						entity->getTransformedVector(Vector3(max->x, min->y, min->z)),
+						entity->getTransformedVector(Vector3(min->x, min->y, max->z)),
+						entity->getTransformedVector(Vector3(min->x, max->y, max->z)),
+						entity->getTransformedVector(Vector3(max->x, max->y, max->z)),
+						entity->getTransformedVector(Vector3(max->x, min->y, max->z))
 					};
 
 					if(! frustum->isVolumePointsVisible(points, 8))
@@ -875,7 +870,7 @@ void FixedRenderer::drawScene(Scene * scene, OCamera * camera)
 				}
 
 				// subMesh center
-				MVector3 center = box->min + (box->max - box->min)*0.5f;
+				Vector3 center = box->min + (box->max - box->min)*0.5f;
 				center = entity->getTransformedVector(center);
 
 				// sort entity lights
@@ -911,20 +906,20 @@ void FixedRenderer::drawScene(Scene * scene, OCamera * camera)
 					quadraticAttenuation = (quadraticAttenuation*quadraticAttenuation)*light->getIntensity();
 
 					// color
-					MVector3 color = light->getFinalColor();
+					Vector3 color = light->getFinalColor();
 
 					// set light
 					render->enableLight(l);
 					render->setLightPosition(l, light->getTransformedPosition());
-					render->setLightDiffuse(l, MVector4(color));
-					render->setLightSpecular(l, MVector4(color));
-					render->setLightAmbient(l, MVector3(0, 0, 0));
+					render->setLightDiffuse(l, Vector4(color));
+					render->setLightSpecular(l, Vector4(color));
+					render->setLightAmbient(l, Vector3(0, 0, 0));
 					render->setLightAttenuation(l, 1, 0, quadraticAttenuation);
 
 					// spot
 					render->setLightSpotAngle(l, light->getSpotAngle());
 					if(light->getSpotAngle() < 90){
-						render->setLightSpotDirection(l, light->getRotatedVector(MVector3(0, 0, -1)).getNormalized());
+						render->setLightSpotDirection(l, light->getRotatedVector(Vector3(0, 0, -1)).getNormalized());
 						render->setLightSpotExponent(l, light->getSpotExponent());
 					}
 					else {
@@ -988,7 +983,7 @@ void FixedRenderer::drawScene(Scene * scene, OCamera * camera)
 
 			// center
 			Box3d * box = text->getBoundingBox();
-			MVector3 center = box->min + (box->max - box->min)*0.5f;
+			Vector3 center = box->min + (box->max - box->min)*0.5f;
 			center = text->getTransformedVector(center);
 
 			// z distance to camera
@@ -1063,20 +1058,20 @@ void FixedRenderer::drawScene(Scene * scene, OCamera * camera)
 					quadraticAttenuation = (quadraticAttenuation*quadraticAttenuation)*light->getIntensity();
 
 					// color
-					MVector3 color = light->getFinalColor();
+					Vector3 color = light->getFinalColor();
 
 					// set light
 					render->enableLight(l);
 					render->setLightPosition(l, light->getTransformedPosition());
-					render->setLightDiffuse(l, MVector4(color));
-					render->setLightSpecular(l, MVector4(color));
-					render->setLightAmbient(l, MVector3(0, 0, 0));
+					render->setLightDiffuse(l, Vector4(color));
+					render->setLightSpecular(l, Vector4(color));
+					render->setLightAmbient(l, Vector3(0, 0, 0));
 					render->setLightAttenuation(l, 1, 0, quadraticAttenuation);
 
 					// spot
 					render->setLightSpotAngle(l, light->getSpotAngle());
 					if(light->getSpotAngle() < 90){
-						render->setLightSpotDirection(l, light->getRotatedVector(MVector3(0, 0, -1)).getNormalized());
+						render->setLightSpotDirection(l, light->getRotatedVector(Vector3(0, 0, -1)).getNormalized());
 						render->setLightSpotExponent(l, light->getSpotExponent());
 					}
 					else {

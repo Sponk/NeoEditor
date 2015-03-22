@@ -72,7 +72,7 @@ void Object3d::clearObject3d(void)
         break;
 
         case M_VARIABLE_STRING:
-            delete (MString*) it->second.getPointer();
+            delete (String*) it->second.getPointer();
         break;
 
         default:
@@ -246,13 +246,13 @@ void Object3d::computeChildsMatrices(void)
 	m_needToUpdate = false;
 }
 
-MVector3 Object3d::getUniformRotatedVector(const MVector3 & vector)
+Vector3 Object3d::getUniformRotatedVector(const Vector3 & vector)
 {
 	float L = vector.getLength();
 	return (m_matrix.getRotatedVector3(vector).getNormalized() * L);
 }
 
-void Object3d::setPosition(const MVector3 & position)
+void Object3d::setPosition(const Vector3 & position)
 {
 	if(position != m_position)
 	{
@@ -261,9 +261,9 @@ void Object3d::setPosition(const MVector3 & position)
 	}
 }
 
-void Object3d::setEulerRotation(const MVector3 & euler)
+void Object3d::setEulerRotation(const Vector3 & euler)
 {
-	MQuaternion rotation = MQuaternion(euler.x, euler.y, euler.z);
+	Quaternion rotation = Quaternion(euler.x, euler.y, euler.z);
 	if(rotation != m_rotation)
 	{
 		m_rotation = rotation;
@@ -271,9 +271,9 @@ void Object3d::setEulerRotation(const MVector3 & euler)
 	}
 }
 
-void Object3d::setAxisAngleRotation(const MVector3 & axis, const float angle)
+void Object3d::setAxisAngleRotation(const Vector3 & axis, const float angle)
 {
-	MQuaternion rotation = MQuaternion(angle, axis);
+	Quaternion rotation = Quaternion(angle, axis);
 	if(rotation != m_rotation)
 	{
 		m_rotation = rotation;
@@ -281,13 +281,13 @@ void Object3d::setAxisAngleRotation(const MVector3 & axis, const float angle)
 	}
 }
 
-void Object3d::addAxisAngleRotation(const MVector3 & axis, const float angle)
+void Object3d::addAxisAngleRotation(const Vector3 & axis, const float angle)
 {
-	m_rotation *= MQuaternion(angle, axis);
+	m_rotation *= Quaternion(angle, axis);
 	m_needToUpdate = true;
 }
 
-void Object3d::setRotation(const MQuaternion & rotation)
+void Object3d::setRotation(const Quaternion & rotation)
 {
 	if(rotation != m_rotation)
 	{
@@ -296,7 +296,7 @@ void Object3d::setRotation(const MQuaternion & rotation)
 	}
 }
 
-void Object3d::setScale(const MVector3 & scale)
+void Object3d::setScale(const Vector3 & scale)
 {
 	if(scale != m_scale)
 	{

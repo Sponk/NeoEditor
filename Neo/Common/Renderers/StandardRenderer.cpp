@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// MStandardRenderer.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -59,7 +54,7 @@ m_normals(NULL),
 m_tangents(NULL),
 m_FXsNumber(0)
 {
-	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 	MLOG_INFO("Renderer: " << render->getRendererVersion());
 
 #ifndef USE_GLES
@@ -105,8 +100,8 @@ m_FXsNumber(0)
 	addFX(vertShader8.c_str(), fragShader8.c_str());
 #endif
 	// rand texture
-	MImage image;
-	image.create(M_UBYTE, 64, 64, 4);
+	Image image;
+	image.create(VAR_UBYTE, 64, 64, 4);
 	unsigned char * pixel = (unsigned char *)image.getData();
 	for(unsigned int i=0; i<image.getSize(); i++)
 	{
@@ -116,9 +111,9 @@ m_FXsNumber(0)
 
 	render->createTexture(&m_randTexture);
 	render->bindTexture(m_randTexture);
-	render->setTextureFilterMode(M_TEX_FILTER_LINEAR_MIPMAP_LINEAR, M_TEX_FILTER_LINEAR);
-	render->setTextureUWrapMode(M_WRAP_REPEAT);
-	render->setTextureVWrapMode(M_WRAP_REPEAT);
+	render->setTextureFilterMode(TEX_FILTER_LINEAR_MIPMAP_LINEAR, TEX_FILTER_LINEAR);
+	render->setTextureUWrapMode(WRAP_REPEAT);
+	render->setTextureVWrapMode(WRAP_REPEAT);
 
 	render->sendTextureImage(&image, 1, 1, 0);
 }
@@ -126,7 +121,7 @@ m_FXsNumber(0)
 StandardRenderer::~StandardRenderer(void)
 {
 	unsigned int i;
-	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 	// delete default FXs
 	for(i=0; i<m_FXsNumber; i++)
@@ -176,7 +171,7 @@ void StandardRenderer::addFX(const char * vert, const char * frag)
 {
 	if(m_FXsNumber < MAX_DEFAULT_FXS)
 	{
-		MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+		RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 		render->createVertexShader(&m_vertShaders[m_FXsNumber]);
 		render->sendShaderSource(m_vertShaders[m_FXsNumber], vert);
@@ -192,7 +187,7 @@ void StandardRenderer::addFX(const char * vert, const char * frag)
 // Drawing
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-MVector3 * StandardRenderer::getVertices(unsigned int size)
+Vector3 * StandardRenderer::getVertices(unsigned int size)
 {
 	if(size == 0)
 		return NULL;
@@ -200,14 +195,14 @@ MVector3 * StandardRenderer::getVertices(unsigned int size)
 	if(size > m_verticesNumber)
 	{
 		SAFE_DELETE_ARRAY(m_vertices);
-		m_vertices = new MVector3[size];
+		m_vertices = new Vector3[size];
 		m_verticesNumber = size;
 	}
 
 	return m_vertices;
 }
 
-MVector3 * StandardRenderer::getNormals(unsigned int size)
+Vector3 * StandardRenderer::getNormals(unsigned int size)
 {
 	if(size == 0)
 		return NULL;
@@ -215,14 +210,14 @@ MVector3 * StandardRenderer::getNormals(unsigned int size)
 	if(size > m_normalsNumber)
 	{
 		SAFE_DELETE_ARRAY(m_normals);
-		m_normals = new MVector3[size];
+		m_normals = new Vector3[size];
 		m_normalsNumber = size;
 	}
 
 	return m_normals;
 }
 
-MVector3 * StandardRenderer::getTangents(unsigned int size)
+Vector3 * StandardRenderer::getTangents(unsigned int size)
 {
 	if(size == 0)
 		return NULL;
@@ -230,7 +225,7 @@ MVector3 * StandardRenderer::getTangents(unsigned int size)
 	if(size > m_tangentsNumber)
 	{
 		SAFE_DELETE_ARRAY(m_tangents);
-		m_tangents = new MVector3[size];
+		m_tangents = new Vector3[size];
 		m_tangentsNumber = size;
 	}
 
@@ -246,16 +241,16 @@ void StandardRenderer::updateSkinning(Mesh * mesh, Armature * armature)
 		SubMesh * subMesh = &mesh->getSubMeshs()[s];
 
 		// data
-		MVector3 * vertices = subMesh->getVertices();
+		Vector3 * vertices = subMesh->getVertices();
 
 		if(! vertices)
 			continue;
 
-		MSkinData * skinData = subMesh->getSkinData();
+		SkinData * skinData = subMesh->getSkinData();
 		if(armature && skinData)
 		{
 			unsigned int verticesSize = subMesh->getVerticesSize();
-			MVector3 * skinVertices = getVertices(verticesSize);
+			Vector3 * skinVertices = getVertices(verticesSize);
 
 			computeSkinning(armature, skinData, vertices, NULL, NULL, skinVertices, NULL, NULL);
 			subMesh->getBoundingBox()->initFromPoints(skinVertices, verticesSize);
@@ -268,94 +263,94 @@ void StandardRenderer::updateSkinning(Mesh * mesh, Armature * armature)
 void StandardRenderer::initVBO(SubMesh * subMesh)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
-	MRenderingContext * render = engine->getRenderingContext();
+	RenderingContext * render = engine->getRenderingContext();
 	
 	unsigned int * vboId1 = subMesh->getVBOid1();
 	unsigned int * vboId2 = subMesh->getVBOid2();
 	
-	M_VBO_MODES mode = M_VBO_STATIC;
+	VBO_MODES mode = VBO_STATIC;
 	if(subMesh->getSkinData() || subMesh->getMorphingData())
-		mode = M_VBO_DYNAMIC;
+		mode = VBO_DYNAMIC;
 	
-	if(*vboId1 == 0 && mode == M_VBO_STATIC) // only use VBO for static geometry
+	if(*vboId1 == 0 && mode == VBO_STATIC) // only use VBO for static geometry
 	{
 		// data
-		MColor * colors = subMesh->getColors();
-		MVector3 * vertices = subMesh->getVertices();
-		MVector3 * normals = subMesh->getNormals();
-		MVector3 * tangents = subMesh->getTangents();
-		MVector2 * texCoords = subMesh->getTexCoords();
+		Color * colors = subMesh->getColors();
+		Vector3 * vertices = subMesh->getVertices();
+		Vector3 * normals = subMesh->getNormals();
+		Vector3 * tangents = subMesh->getTangents();
+		Vector2 * texCoords = subMesh->getTexCoords();
 		
-		unsigned int totalSize = sizeof(MVector3)*subMesh->getVerticesSize();
+		unsigned int totalSize = sizeof(Vector3)*subMesh->getVerticesSize();
 		if(normals)
-			totalSize += sizeof(MVector3)*subMesh->getNormalsSize();
+			totalSize += sizeof(Vector3)*subMesh->getNormalsSize();
 		if(tangents)
-			totalSize += sizeof(MVector3)*subMesh->getTangentsSize();
+			totalSize += sizeof(Vector3)*subMesh->getTangentsSize();
 		if(texCoords)
-			totalSize += sizeof(MVector2)*subMesh->getTexCoordsSize();
+			totalSize += sizeof(Vector2)*subMesh->getTexCoordsSize();
 		if(colors)
-			totalSize += sizeof(MColor)*subMesh->getColorsSize();
+			totalSize += sizeof(Color)*subMesh->getColorsSize();
 		
 		// indices
-		M_TYPES indicesType = subMesh->getIndicesType();
+		VAR_TYPES indicesType = subMesh->getIndicesType();
 		void * indices = subMesh->getIndices();
 		
 
 		// data VBO
 		render->createVBO(vboId1);
-		render->bindVBO(M_VBO_ARRAY, *vboId1);
+		render->bindVBO(VBO_ARRAY, *vboId1);
 		
-		render->setVBO(M_VBO_ARRAY, 0, totalSize, mode);
+		render->setVBO(VBO_ARRAY, 0, totalSize, mode);
 		
 		unsigned int offset = 0;
-		render->setVBOSubData(M_VBO_ARRAY, offset, vertices, sizeof(MVector3)*subMesh->getVerticesSize());
-		offset += sizeof(MVector3)*subMesh->getVerticesSize();
+		render->setVBOSubData(VBO_ARRAY, offset, vertices, sizeof(Vector3)*subMesh->getVerticesSize());
+		offset += sizeof(Vector3)*subMesh->getVerticesSize();
 		
 		if(normals)
 		{
-			render->setVBOSubData(M_VBO_ARRAY, offset, normals, sizeof(MVector3)*subMesh->getNormalsSize());
-			offset += sizeof(MVector3)*subMesh->getNormalsSize();
+			render->setVBOSubData(VBO_ARRAY, offset, normals, sizeof(Vector3)*subMesh->getNormalsSize());
+			offset += sizeof(Vector3)*subMesh->getNormalsSize();
 		}
 		
 		if(tangents)
 		{
-			render->setVBOSubData(M_VBO_ARRAY, offset, tangents, sizeof(MVector3)*subMesh->getTangentsSize());
-			offset += sizeof(MVector3)*subMesh->getTangentsSize();
+			render->setVBOSubData(VBO_ARRAY, offset, tangents, sizeof(Vector3)*subMesh->getTangentsSize());
+			offset += sizeof(Vector3)*subMesh->getTangentsSize();
 		}
 		
 		if(texCoords)
 		{
-			render->setVBOSubData(M_VBO_ARRAY, offset, texCoords, sizeof(MVector2)*subMesh->getTexCoordsSize());
-			offset += sizeof(MVector2)*subMesh->getTexCoordsSize();
+			render->setVBOSubData(VBO_ARRAY, offset, texCoords, sizeof(Vector2)*subMesh->getTexCoordsSize());
+			offset += sizeof(Vector2)*subMesh->getTexCoordsSize();
 		}
 		
 		if(colors)
 		{
-			render->setVBOSubData(M_VBO_ARRAY, offset, colors, sizeof(MColor)*subMesh->getColorsSize());
-			offset += sizeof(MColor)*subMesh->getColorsSize();
+			render->setVBOSubData(VBO_ARRAY, offset, colors, sizeof(Color)*subMesh->getColorsSize());
+			offset += sizeof(Color)*subMesh->getColorsSize();
 		}
 		
 		// indices VBO
 		if(indices)
 		{
-			unsigned int typeSize = indicesType == M_USHORT ? sizeof(short) : sizeof(int);
+			unsigned int typeSize = indicesType == VAR_USHORT ? sizeof(short) : sizeof(int);
 			
 			render->createVBO(vboId2);
-			render->bindVBO(M_VBO_ELEMENT_ARRAY, *vboId2);
+			render->bindVBO(VBO_ELEMENT_ARRAY, *vboId2);
 			
-			render->setVBO(M_VBO_ELEMENT_ARRAY, indices, subMesh->getIndicesSize()*typeSize, mode);
+			render->setVBO(VBO_ELEMENT_ARRAY, indices, subMesh->getIndicesSize()*typeSize, mode);
 		}
 		
 		
-		render->bindVBO(M_VBO_ARRAY, 0);
-		render->bindVBO(M_VBO_ELEMENT_ARRAY, 0);
+		render->bindVBO(VBO_ARRAY, 0);
+		render->bindVBO(VBO_ELEMENT_ARRAY, 0);
 	}
 }
 
-void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display, MVector3 * vertices, MVector3 * normals, MVector3 * tangents, MColor * colors)
+void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display, Vector3 * vertices, Vector3 * normals, Vector3 * tangents, Color * colors)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
-	MRenderingContext * render = engine->getRenderingContext();
+	RenderingContext * render = engine->getRenderingContext();
 
 
 	// VBO
@@ -373,29 +368,29 @@ void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display,
 			return;
 
 		// data
-		M_TYPES indicesType = subMesh->getIndicesType();
+		VAR_TYPES indicesType = subMesh->getIndicesType();
 		void * indices = subMesh->getIndices();
-		MVector2 * texCoords = subMesh->getTexCoords();
+		Vector2 * texCoords = subMesh->getTexCoords();
 
 		// begin / size
 		unsigned int begin = display->getBegin();
 		unsigned int size = display->getSize();
 
 		// get properties
-		M_PRIMITIVE_TYPES primitiveType = display->getPrimitiveType();
-		M_BLENDING_MODES blendMode = material->getBlendMode();
-		M_CULL_MODES cullMode = display->getCullMode();
-		MVector3 diffuse = material->getDiffuse();
-		MVector3 specular = material->getSpecular();
-        MVector3 emit = material->getEmit() + engine->getLevel()->getCurrentScene()->getAmbientLight();
+		PRIMITIVE_TYPES primitiveType = display->getPrimitiveType();
+		BLENDING_MODES blendMode = material->getBlendMode();
+		CULL_MODES cullMode = display->getCullMode();
+		Vector3 diffuse = material->getDiffuse();
+		Vector3 specular = material->getSpecular();
+        Vector3 emit = material->getEmit() + engine->getLevel()->getCurrentScene()->getAmbientLight();
 		float shininess = material->getShininess();
 
 		// get current fog color
-		MVector3 currentFogColor;
+		Vector3 currentFogColor;
 		render->getFogColor(&currentFogColor);
 
 		// set cull mode
-		if(cullMode == M_CULL_NONE)
+		if(cullMode == CULL_NONE)
         {
 			render->disableCullFace();
 		}
@@ -410,13 +405,13 @@ void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display,
 		// set fog color depending on blending
 		switch(blendMode)
 		{
-			case M_BLENDING_ADD:
-			case M_BLENDING_LIGHT:
-				render->setFogColor(MVector3(0, 0, 0));
+			case BLENDING_ADD:
+			case BLENDING_LIGHT:
+				render->setFogColor(Vector3(0, 0, 0));
 				break;
 
-			case M_BLENDING_PRODUCT:
-				render->setFogColor(MVector3(1, 1, 1));
+			case BLENDING_PRODUCT:
+				render->setFogColor(Vector3(1, 1, 1));
 				break;
 
             default:
@@ -495,19 +490,19 @@ void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display,
 			unsigned int attribListNb = 0;
 		
 			int attribIndex;
-			MMatrix4x4 * cameraViewMatrix = m_currentCamera->getCurrentViewMatrix();
-			MMatrix4x4 * cameraProjMatrix = m_currentCamera->getCurrentProjMatrix();
+			Matrix4x4 * cameraViewMatrix = m_currentCamera->getCurrentViewMatrix();
+			Matrix4x4 * cameraProjMatrix = m_currentCamera->getCurrentProjMatrix();
 
 			// properties
 			static int AlphaTest;
-			static MVector3 FogColor;
+			static Vector3 FogColor;
 			static float FogEnd;
 			static float FogScale;
 
-			static MVector4 LightPosition[4];
-			static MVector3 LightDiffuseProduct[4];
-			static MVector3 LightSpecularProduct[4];
-			static MVector3 LightSpotDirection[4];
+			static Vector4 LightPosition[4];
+			static Vector3 LightDiffuseProduct[4];
+			static Vector3 LightSpecularProduct[4];
+			static Vector3 LightSpotDirection[4];
 			static float LightConstantAttenuation[4];
 			static float LightQuadraticAttenuation[4];
 			static float LightSpotCosCutoff[4];
@@ -516,14 +511,14 @@ void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display,
 
 			static int ShadowMaps[4];
 			static int Texture[8] = {0, 1, 2, 3, 4, 5, 6, 7};
-			static MMatrix4x4 TextureMatrix[8];
-			//static MMatrix4x4 ModelViewMatrix;
-			static MMatrix4x4 ProjModelViewMatrix;
-			static MMatrix4x4 NormalMatrix;
+			static Matrix4x4 TextureMatrix[8];
+			//static Matrix4x4 ModelViewMatrix;
+			static Matrix4x4 ProjModelViewMatrix;
+			static Matrix4x4 NormalMatrix;
 
 
 			// Alpha test
-			AlphaTest = (blendMode != M_BLENDING_ALPHA);
+			AlphaTest = (blendMode != BLENDING_ALPHA);
 
 			// Matrix
 			//render->getModelViewMatrix(&ModelViewMatrix);
@@ -543,7 +538,7 @@ void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display,
 				{
 					float spotAngle;
 					float linearAttenuation;
-					MVector4 lightDiffuse;
+					Vector4 lightDiffuse;
 					render->getLightDiffuse(i, &lightDiffuse);
 					render->getLightPosition(i, &LightPosition[i]);
 					render->getLightSpotDirection(i, &LightSpotDirection[i]);
@@ -553,9 +548,9 @@ void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display,
 
 					LightActive[i] = (lightDiffuse.w > 0.0f);
 					LightSpotCosCutoff[i] = cosf(spotAngle*DEG_TO_RAD);
-					LightDiffuseProduct[i] = (diffuse) * MVector3(lightDiffuse);
-					LightSpecularProduct[i] = (specular) * MVector3(lightDiffuse);
-					LightPosition[i] = (*cameraViewMatrix) * MVector4(LightPosition[i]);
+					LightDiffuseProduct[i] = (diffuse) * Vector3(lightDiffuse);
+					LightSpecularProduct[i] = (specular) * Vector3(lightDiffuse);
+					LightPosition[i] = (*cameraViewMatrix) * Vector4(LightPosition[i]);
 					LightSpotDirection[i] = (cameraViewMatrix->getRotatedVector3(LightSpotDirection[i])).getNormalized();
 				}
 
@@ -570,22 +565,22 @@ void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display,
 			
 			// bind VBO is any
 			if(*vboId1 > 0)
-				render->bindVBO(M_VBO_ARRAY, *vboId1);
+				render->bindVBO(VBO_ARRAY, *vboId1);
 			
 			
 			// Vertex
 			render->getAttribLocation(fxId, "Vertex", &attribIndex);
 			if(attribIndex != -1)
 			{
-				if(*vboId1 > 0)	render->setAttribPointer(attribIndex, M_FLOAT, 3, 0);
-				else			render->setAttribPointer(attribIndex, M_FLOAT, 3, vertices);
+				if(*vboId1 > 0)	render->setAttribPointer(attribIndex, VAR_FLOAT, 3, 0);
+				else			render->setAttribPointer(attribIndex, VAR_FLOAT, 3, vertices);
 				render->enableAttribArray(attribIndex);
 				attribList[attribListNb] = attribIndex; attribListNb++;
 			}
 
 			if(! basicFX)
 			{
-				unsigned int offset = sizeof(MVector3)*subMesh->getVerticesSize();
+				unsigned int offset = sizeof(Vector3)*subMesh->getVerticesSize();
 				
 				// Normal
 				if(normals)
@@ -593,13 +588,13 @@ void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display,
 					render->getAttribLocation(fxId, "Normal", &attribIndex);
 					if(attribIndex != -1)
 					{
-						if(*vboId1 > 0)	render->setAttribPointer(attribIndex, M_FLOAT, 3, (void*)offset);
-						else			render->setAttribPointer(attribIndex, M_FLOAT, 3, normals);
+						if(*vboId1 > 0)	render->setAttribPointer(attribIndex, VAR_FLOAT, 3, (void*)offset);
+						else			render->setAttribPointer(attribIndex, VAR_FLOAT, 3, normals);
 						render->enableAttribArray(attribIndex);
 						attribList[attribListNb] = attribIndex; attribListNb++;
 					}
 					
-					offset += sizeof(MVector3)*subMesh->getNormalsSize();
+					offset += sizeof(Vector3)*subMesh->getNormalsSize();
 				}
 
 				// Tangent
@@ -608,19 +603,19 @@ void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display,
 					render->getAttribLocation(fxId, "Tangent", &attribIndex);
 					if(attribIndex != -1)
 					{
-						if(*vboId1 > 0)	render->setAttribPointer(attribIndex, M_FLOAT, 3, (void*)offset);
-						else			render->setAttribPointer(attribIndex, M_FLOAT, 3, tangents);
+						if(*vboId1 > 0)	render->setAttribPointer(attribIndex, VAR_FLOAT, 3, (void*)offset);
+						else			render->setAttribPointer(attribIndex, VAR_FLOAT, 3, tangents);
 						render->enableAttribArray(attribIndex);
 						attribList[attribListNb] = attribIndex; attribListNb++;
 					}
 					
-					offset += sizeof(MVector3)*subMesh->getTangentsSize();
+					offset += sizeof(Vector3)*subMesh->getTangentsSize();
 				}
 
 				// Texcoords
 				if(texCoords)
 				{
-					offset += sizeof(MVector2)*subMesh->getTexCoordsSize();
+					offset += sizeof(Vector2)*subMesh->getTexCoordsSize();
 				}
 				
 				// Color
@@ -629,8 +624,8 @@ void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display,
 					render->getAttribLocation(fxId, "Color", &attribIndex);
 					if(attribIndex != -1)
 					{
-						if(*vboId1 > 0)	render->setAttribPointer(attribIndex, M_UBYTE, 3, (void*)offset, true);
-						else			render->setAttribPointer(attribIndex, M_UBYTE, 3, colors, true);
+						if(*vboId1 > 0)	render->setAttribPointer(attribIndex, VAR_UBYTE, 3, (void*)offset, true);
+						else			render->setAttribPointer(attribIndex, VAR_UBYTE, 3, colors, true);
 						render->enableAttribArray(attribIndex);
 						attribList[attribListNb] = attribIndex; attribListNb++;
 					}
@@ -639,10 +634,10 @@ void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display,
 
 
 			// Textures
-			unsigned int textureArrayOffset = sizeof(MVector3)*subMesh->getVerticesSize();
+			unsigned int textureArrayOffset = sizeof(Vector3)*subMesh->getVerticesSize();
 			{
-				if(normals) textureArrayOffset += sizeof(MVector3)*subMesh->getNormalsSize();
-				if(tangents) textureArrayOffset += sizeof(MVector3)*subMesh->getTangentsSize();
+				if(normals) textureArrayOffset += sizeof(Vector3)*subMesh->getNormalsSize();
+				if(tangents) textureArrayOffset += sizeof(Vector3)*subMesh->getTangentsSize();
 			}
 			
 			int id = texturesPassNumber;
@@ -674,12 +669,12 @@ void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display,
 				render->setTextureVWrapMode(texture->getVWrapMode());
 
 				// texture matrix
-				MMatrix4x4 * texMatrix = &TextureMatrix[t];
+				Matrix4x4 * texMatrix = &TextureMatrix[t];
 				texMatrix->loadIdentity();
-				texMatrix->translate(MVector2(0.5f, 0.5f));
+				texMatrix->translate(Vector2(0.5f, 0.5f));
 				texMatrix->scale(texture->getTexScale());
-				texMatrix->rotate(MVector3(0, 0, -1), texture->getTexRotate());
-				texMatrix->translate(MVector2(-0.5f, -0.5f));
+				texMatrix->rotate(Vector3(0, 0, -1), texture->getTexRotate());
+				texMatrix->translate(Vector2(-0.5f, -0.5f));
 				texMatrix->translate(texture->getTexTranslate());
 
 				// texture coords
@@ -688,8 +683,8 @@ void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display,
 				render->getAttribLocation(fxId, name, &attribIndex);
 				if(attribIndex != -1)
 				{
-					if(*vboId1 > 0)	render->setAttribPointer(attribIndex, M_FLOAT, 2, (void*)(textureArrayOffset + sizeof(MVector2)*offset));
-					else			render->setAttribPointer(attribIndex, M_FLOAT, 2, texCoords + offset);
+					if(*vboId1 > 0)	render->setAttribPointer(attribIndex, VAR_FLOAT, 2, (void*)(textureArrayOffset + sizeof(Vector2)*offset));
+					else			render->setAttribPointer(attribIndex, VAR_FLOAT, 2, texCoords + offset);
 					render->enableAttribArray(attribIndex);
 					attribList[attribListNb] = attribIndex; attribListNb++;
 				}
@@ -721,7 +716,7 @@ void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display,
 				}
 
 				// uniforms
-				render->sendUniformVec4(fxId, "FogColor", MVector4(FogColor));
+				render->sendUniformVec4(fxId, "FogColor", Vector4(FogColor));
 				render->sendUniformFloat(fxId, "FogEnd", &FogEnd);
 				render->sendUniformFloat(fxId, "FogScale", &FogScale);
 
@@ -767,14 +762,14 @@ void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display,
 			{
 				if(*vboId2 > 0)
 				{
-					render->bindVBO(M_VBO_ELEMENT_ARRAY, *vboId2);
+					render->bindVBO(VBO_ELEMENT_ARRAY, *vboId2);
 					
 					switch(indicesType)
 					{
-						case M_USHORT:
+						case VAR_USHORT:
 							render->drawElement(primitiveType, size, indicesType, (void*)(begin*sizeof(short)));
 							break;
-						case M_UINT:
+						case VAR_UINT:
 							render->drawElement(primitiveType, size, indicesType, (void*)(begin*sizeof(int)));
 							break;
 					}
@@ -783,10 +778,10 @@ void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display,
 				{
 					switch(indicesType)
 					{
-						case M_USHORT:
+						case VAR_USHORT:
 							render->drawElement(primitiveType, size, indicesType, (unsigned short*)indices + begin);
 							break;
-						case M_UINT:
+						case VAR_UINT:
 							render->drawElement(primitiveType, size, indicesType, (unsigned int*)indices + begin);
 							break;
 					}
@@ -812,8 +807,8 @@ void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display,
 			render->bindFX(0);
 			
 			// restore VBO
-			render->bindVBO(M_VBO_ARRAY, 0);
-			render->bindVBO(M_VBO_ELEMENT_ARRAY, 0);
+			render->bindVBO(VBO_ARRAY, 0);
+			render->bindVBO(VBO_ELEMENT_ARRAY, 0);
 		}
 
 		// restore fog and alpha test
@@ -824,24 +819,24 @@ void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display,
 void StandardRenderer::drawOpaques(SubMesh * subMesh, Armature * armature)
 {
 	// data
-	MVector3 * vertices = subMesh->getVertices();
-	MVector3 * normals = subMesh->getNormals();
-	MVector3 * tangents = subMesh->getTangents();
-	MColor * colors = subMesh->getColors();
+	Vector3 * vertices = subMesh->getVertices();
+	Vector3 * normals = subMesh->getNormals();
+	Vector3 * tangents = subMesh->getTangents();
+	Color * colors = subMesh->getColors();
 
 	if (!vertices)
 		return;
 
-	MSkinData * skinData = subMesh->getSkinData();
+	SkinData * skinData = subMesh->getSkinData();
 	if (armature && skinData)
 	{
 		unsigned int verticesSize = subMesh->getVerticesSize();
 		unsigned int normalsSize = subMesh->getNormalsSize();
 		unsigned int tangentsSize = subMesh->getTangentsSize();
 
-		MVector3 * skinVertices = getVertices(verticesSize);
-		MVector3 * skinNormals = getNormals(normalsSize);
-		MVector3 * skinTangents = getTangents(tangentsSize);
+		Vector3 * skinVertices = getVertices(verticesSize);
+		Vector3 * skinNormals = getNormals(normalsSize);
+		Vector3 * skinTangents = getTangents(tangentsSize);
 
 		computeSkinning(armature, skinData, vertices, normals, tangents, skinVertices, skinNormals, skinTangents);
 		subMesh->getBoundingBox()->initFromPoints(skinVertices, verticesSize);
@@ -862,7 +857,7 @@ void StandardRenderer::drawOpaques(SubMesh * subMesh, Armature * armature)
 		Material * material = display->getMaterial();
 		if (material)
 		{
-			if (material->getBlendMode() == M_BLENDING_NONE)
+			if (material->getBlendMode() == BLENDING_NONE)
 				drawDisplay(subMesh, display, vertices, normals, tangents, colors);
 		}
 	}
@@ -870,27 +865,27 @@ void StandardRenderer::drawOpaques(SubMesh * subMesh, Armature * armature)
 
 void StandardRenderer::drawTransparents(SubMesh * subMesh, Armature * armature)
 {
-	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 	// data
-	MVector3 * vertices = subMesh->getVertices();
-	MVector3 * normals = subMesh->getNormals();
-	MVector3 * tangents = subMesh->getTangents();
-	MColor * colors = subMesh->getColors();
+	Vector3 * vertices = subMesh->getVertices();
+	Vector3 * normals = subMesh->getNormals();
+	Vector3 * tangents = subMesh->getTangents();
+	Color * colors = subMesh->getColors();
 
 	if(! vertices)
 		return;
 
-	MSkinData * skinData = subMesh->getSkinData();
+	SkinData * skinData = subMesh->getSkinData();
 	if(armature && skinData)
 	{
 		unsigned int verticesSize = subMesh->getVerticesSize();
 		unsigned int normalsSize = subMesh->getNormalsSize();
 		unsigned int tangentsSize = subMesh->getTangentsSize();
 
-		MVector3 * skinVertices = getVertices(verticesSize);
-		MVector3 * skinNormals = getNormals(normalsSize);
-		MVector3 * skinTangents = getTangents(tangentsSize);
+		Vector3 * skinVertices = getVertices(verticesSize);
+		Vector3 * skinNormals = getNormals(normalsSize);
+		Vector3 * skinTangents = getTangents(tangentsSize);
 
 		computeSkinning(armature, skinData, vertices, normals, tangents, skinVertices, skinNormals, skinTangents);
 		subMesh->getBoundingBox()->initFromPoints(skinVertices, verticesSize);
@@ -918,7 +913,7 @@ void StandardRenderer::drawTransparents(SubMesh * subMesh, Armature * armature)
 		MMaterial * material = display->getMaterial();
 		if(material)
 		{
-			if(material->getBlendMode() != M_BLENDING_NONE)
+			if(material->getBlendMode() != BLENDING_NONE)
 				drawDisplay(subMesh, display, vertices, normals, tangents, colors);
 		}
 	}
@@ -926,7 +921,7 @@ void StandardRenderer::drawTransparents(SubMesh * subMesh, Armature * armature)
 	m_forceNoFX = false;
 	render->setColorMask(1, 1, 1, 1);
 	render->setDepthMask(0);
-	render->setDepthMode(M_DEPTH_EQUAL);*/
+	render->setDepthMode(DEPTH_EQUAL);*/
 
 	for(i=0; i<displayNumber; i++)
 	{
@@ -937,41 +932,41 @@ void StandardRenderer::drawTransparents(SubMesh * subMesh, Armature * armature)
 		Material * material = display->getMaterial();
 		if(material)
 		{
-			if(material->getBlendMode() != M_BLENDING_NONE)
+			if(material->getBlendMode() != BLENDING_NONE)
 				drawDisplay(subMesh, display, vertices, normals, tangents, colors);
 		}
 	}
 
 	//render->setDepthMask(1);
-	//render->setDepthMode(M_DEPTH_LEQUAL);
+	//render->setDepthMode(DEPTH_LEQUAL);
 }
 
-float StandardRenderer::getDistanceToCam(OCamera * camera, const MVector3 & pos)
+float StandardRenderer::getDistanceToCam(OCamera * camera, const Vector3 & pos)
 {
 	if(! camera->isOrtho())
 	{
 		return (pos - camera->getTransformedPosition()).getSquaredLength();
 	}
 
-	MVector3 axis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();
+	Vector3 axis = camera->getRotatedVector(Vector3(0, 0, -1)).getNormalized();
 	float dist = (pos - camera->getTransformedPosition()).dotProduct(axis);
 	return dist*dist;
 }
 
-void StandardRenderer::setShadowMatrix(MMatrix4x4 * matrix, OCamera * camera)
+void StandardRenderer::setShadowMatrix(Matrix4x4 * matrix, OCamera * camera)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
-	MRenderingContext * render = engine->getRenderingContext();
+	RenderingContext * render = engine->getRenderingContext();
 
-	const MMatrix4x4 biasMatrix(
+	const Matrix4x4 biasMatrix(
 		0.5f, 0.0f, 0.0f, 0.0f,
 		0.0f, 0.5f, 0.0f, 0.0f,
 		0.0f, 0.0f, 0.5f, 0.0f,
 		0.5f, 0.5f, 0.5f, 1.0f
 	);
 
-	MMatrix4x4 * modelViewMatrix = camera->getCurrentViewMatrix();
-	MMatrix4x4 * projMatrix = camera->getCurrentProjMatrix();
+	Matrix4x4 * modelViewMatrix = camera->getCurrentViewMatrix();
+	Matrix4x4 * projMatrix = camera->getCurrentProjMatrix();
 
 	(*matrix) = biasMatrix;
 	(*matrix) = (*matrix) * (*projMatrix);
@@ -994,10 +989,10 @@ void StandardRenderer::updateVisibility(Scene * scene, OCamera * camera)
 	}
 
     oSize = scene->getEntitiesNumber();
-    MVector3 min, max, occluderPosition;
-    MVector3 cameraPos = camera->getTransformedPosition();
-    MVector3 box[8];
-    MVector3 objMin, objMax;
+    Vector3 min, max, occluderPosition;
+    Vector3 cameraPos = camera->getTransformedPosition();
+    Vector3 box[8];
+    Vector3 objMin, objMax;
     bool intersection = false;
 
     for(i=0; i < oSize; i++)
@@ -1021,14 +1016,14 @@ void StandardRenderer::updateVisibility(Scene * scene, OCamera * camera)
             objMax = object->getBoundingBox()->max;
 
             box[0] = *object->getMatrix()*objMin;
-            box[1] = *object->getMatrix()*MVector3(objMax.x, objMin.y, objMin.z);
-            box[2] = *object->getMatrix()*MVector3(objMin.x, objMin.y, objMax.z);
-            box[3] = *object->getMatrix()*MVector3(objMax.x, objMin.y, objMax.z);
+            box[1] = *object->getMatrix()*Vector3(objMax.x, objMin.y, objMin.z);
+            box[2] = *object->getMatrix()*Vector3(objMin.x, objMin.y, objMax.z);
+            box[3] = *object->getMatrix()*Vector3(objMax.x, objMin.y, objMax.z);
 
             box[4] = *object->getMatrix()*objMax;
-            box[5] = *object->getMatrix()*MVector3(objMin.x, objMax.y, objMax.z);
-            box[6] = *object->getMatrix()*MVector3(objMin.x, objMax.y, objMin.z);
-            box[7] = *object->getMatrix()*MVector3(objMax.x, objMax.y, objMin.z);
+            box[5] = *object->getMatrix()*Vector3(objMin.x, objMax.y, objMax.z);
+            box[6] = *object->getMatrix()*Vector3(objMin.x, objMax.y, objMin.z);
+            box[7] = *object->getMatrix()*Vector3(objMax.x, objMax.y, objMin.z);
 
             intersection = true;
             for(int p = 0; p < 8; p++)
@@ -1048,7 +1043,7 @@ void StandardRenderer::updateVisibility(Scene * scene, OCamera * camera)
 
 void StandardRenderer::enableFog(OCamera * camera)
 {
-	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 	float fogMin = camera->getClippingFar()*0.9999f;
 	if(camera->hasFog())
@@ -1068,7 +1063,7 @@ void StandardRenderer::enableFog(OCamera * camera)
 
 ShadowLight * StandardRenderer::createShadowLight(OLight * light)
 {
-	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 	unsigned int shadowQuality = light->getShadowQuality();
 
 	map<unsigned long, ShadowLight>::iterator iter = m_shadowLights.find((unsigned long)light);
@@ -1082,7 +1077,7 @@ ShadowLight * StandardRenderer::createShadowLight(OLight * light)
 			shadowLight->shadowQuality = shadowQuality;
 
 			render->bindTexture(shadowLight->shadowTexture);
-			render->texImage(0, shadowQuality, shadowQuality, M_UBYTE, M_DEPTH, 0);
+			render->texImage(0, shadowQuality, shadowQuality, VAR_UBYTE, TEX_DEPTH, 0);
 			render->bindTexture(0);
 		}
 
@@ -1097,10 +1092,10 @@ ShadowLight * StandardRenderer::createShadowLight(OLight * light)
 
 		render->createTexture(&shadowLight->shadowTexture);
 		render->bindTexture(shadowLight->shadowTexture);
-		render->setTextureFilterMode(M_TEX_FILTER_LINEAR, M_TEX_FILTER_LINEAR);
-		render->setTextureUWrapMode(M_WRAP_CLAMP);
-		render->setTextureVWrapMode(M_WRAP_CLAMP);
-		render->texImage(0, shadowQuality, shadowQuality, M_UBYTE, M_DEPTH, 0);
+		render->setTextureFilterMode(TEX_FILTER_LINEAR, TEX_FILTER_LINEAR);
+		render->setTextureUWrapMode(WRAP_CLAMP);
+		render->setTextureVWrapMode(WRAP_CLAMP);
+		render->texImage(0, shadowQuality, shadowQuality, VAR_UBYTE, TEX_DEPTH, 0);
 		render->bindTexture(0);
 
 		return shadowLight;
@@ -1109,7 +1104,7 @@ ShadowLight * StandardRenderer::createShadowLight(OLight * light)
 
 void StandardRenderer::destroyUnusedShadowLights(void)
 {
-	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 	// keys
 	map<unsigned long, ShadowLight>::iterator
@@ -1147,7 +1142,7 @@ void StandardRenderer::decreaseShadowLights(void)
 
 void StandardRenderer::drawText(OText * textObj)
 {
-	MRenderingContext * render = NeoEngine().getInstance()->getRenderingContext();
+	RenderingContext * render = NeoEngine().getInstance()->getRenderingContext();
 
 
 	Font * font = textObj->getFont();
@@ -1165,21 +1160,21 @@ void StandardRenderer::drawText(OText * textObj)
 	int vertAttribIndex;
 	int texAttribIndex;
 	unsigned int fxId;
-	static MVector2 vertices[4];
-	static MVector2 texCoords[4];
-	static MMatrix4x4 ProjModelViewMatrix;
+	static Vector2 vertices[4];
+	static Vector2 texCoords[4];
+	static Matrix4x4 ProjModelViewMatrix;
 	
 	
 	
 	// Matrix
 	if(m_currentCamera)
 	{
-		MMatrix4x4 * cameraProjMatrix = m_currentCamera->getCurrentProjMatrix();
+		Matrix4x4 * cameraProjMatrix = m_currentCamera->getCurrentProjMatrix();
 		ProjModelViewMatrix = (*cameraProjMatrix) * m_currModelViewMatrix;
 	}
 	else
 	{
-		MMatrix4x4 cameraProjMatrix, modelViewMatrix;
+		Matrix4x4 cameraProjMatrix, modelViewMatrix;
 		render->getProjectionMatrix(&cameraProjMatrix);
 		render->getModelViewMatrix(&modelViewMatrix);
 		ProjModelViewMatrix = cameraProjMatrix * modelViewMatrix;
@@ -1192,7 +1187,7 @@ void StandardRenderer::drawText(OText * textObj)
 	
 	// blending
 	render->enableBlending();
-	render->setBlendingMode(M_BLENDING_ALPHA);
+	render->setBlendingMode(BLENDING_ALPHA);
 
 
 	// bind FX
@@ -1213,7 +1208,7 @@ void StandardRenderer::drawText(OText * textObj)
 	render->getAttribLocation(fxId, "Vertex", &vertAttribIndex);
 	if(vertAttribIndex != -1)
 	{
-		render->setAttribPointer(vertAttribIndex, M_FLOAT, 2, vertices);
+		render->setAttribPointer(vertAttribIndex, VAR_FLOAT, 2, vertices);
 		render->enableAttribArray(vertAttribIndex);
 	}
 
@@ -1221,7 +1216,7 @@ void StandardRenderer::drawText(OText * textObj)
 	render->getAttribLocation(fxId, "TexCoord", &texAttribIndex);
 	if(texAttribIndex != -1)
 	{
-		render->setAttribPointer(texAttribIndex, M_FLOAT, 2, texCoords);
+		render->setAttribPointer(texAttribIndex, VAR_FLOAT, 2, texCoords);
 		render->enableAttribArray(texAttribIndex);
 	}
 
@@ -1269,28 +1264,28 @@ void StandardRenderer::drawText(OText * textObj)
 		if(! character)
 			continue;
 
-		MVector2 pos = character->getPos();
-		MVector2 scale = character->getScale();
-		MVector2 offset = character->getOffset() * size + MVector2(lineOffset, 0);
+		Vector2 pos = character->getPos();
+		Vector2 scale = character->getScale();
+		Vector2 offset = character->getOffset() * size + Vector2(lineOffset, 0);
 
 		float width = scale.x * widthFactor * size;
 		float height = scale.y * heightFactor * size;
 
 		// construct quad
-		texCoords[0] = MVector2(pos.x, (pos.y + scale.y));
-		vertices[0] = MVector2(xc, (yc + height)) + offset;
+		texCoords[0] = Vector2(pos.x, (pos.y + scale.y));
+		vertices[0] = Vector2(xc, (yc + height)) + offset;
 
-		texCoords[1] = MVector2((pos.x + scale.x), (pos.y + scale.y));
-		vertices[1] = MVector2((xc + width), (yc + height)) + offset;
+		texCoords[1] = Vector2((pos.x + scale.x), (pos.y + scale.y));
+		vertices[1] = Vector2((xc + width), (yc + height)) + offset;
 
-		texCoords[3] = MVector2((pos.x + scale.x), pos.y);
-		vertices[3] = MVector2((xc + width), yc) + offset;
+		texCoords[3] = Vector2((pos.x + scale.x), pos.y);
+		vertices[3] = Vector2((xc + width), yc) + offset;
 
-		texCoords[2] = MVector2(pos.x, pos.y);
-		vertices[2] = MVector2(xc, yc) + offset;
+		texCoords[2] = Vector2(pos.x, pos.y);
+		vertices[2] = Vector2(xc, yc) + offset;
 
 		// draw quad
-		render->drawArray(M_PRIMITIVE_TRIANGLE_STRIP, 0, 4);
+		render->drawArray(PRIMITIVE_TRIANGLE_STRIP, 0, 4);
 
 		//move to next character
 		xc += character->getXAdvance() * size;
@@ -1309,14 +1304,14 @@ void StandardRenderer::drawText(OText * textObj)
 
 void StandardRenderer::prepareSubMesh(Scene * scene, OCamera * camera, OEntity * entity, SubMesh * subMesh)
 {
-	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 	Mesh * mesh = entity->getMesh();
-	MVector3 scale = entity->getTransformedScale();
+	Vector3 scale = entity->getTransformedScale();
 	Box3d * box = subMesh->getBoundingBox();
 
 	// subMesh center
-	MVector3 center = box->min + (box->max - box->min)*0.5f;
+	Vector3 center = box->min + (box->max - box->min)*0.5f;
 	center = entity->getTransformedVector(center);
 
 	// entity min scale
@@ -1343,14 +1338,14 @@ void StandardRenderer::prepareSubMesh(Scene * scene, OCamera * camera, OEntity *
 			continue;
 
 		// light box
-		MVector3 lightPos = light->getTransformedPosition();
-		MVector3 localPos = entity->getInversePosition(lightPos);
+		Vector3 lightPos = light->getTransformedPosition();
+		Vector3 localPos = entity->getInversePosition(lightPos);
 
 		float localRadius = light->getRadius() * minScale;
 
 		Box3d lightBox(
-			MVector3(localPos - localRadius),
-			MVector3(localPos + localRadius)
+			Vector3(localPos - localRadius),
+			Vector3(localPos + localRadius)
 		);
 
 		if(! box->isInCollisionWith(lightBox))
@@ -1420,21 +1415,21 @@ void StandardRenderer::prepareSubMesh(Scene * scene, OCamera * camera, OEntity *
         }
 
         // color
-		MVector3 color = light->getFinalColor();
+		Vector3 color = light->getFinalColor();
 
 		// set light
 		render->enableLight(l);
 		render->setLightPosition(l, light->getTransformedPosition());
-		render->setLightDiffuse(l, MVector4(color));
-		render->setLightSpecular(l, MVector4(color));
-		render->setLightAmbient(l, MVector3(0, 0, 0));
+		render->setLightDiffuse(l, Vector4(color));
+		render->setLightSpecular(l, Vector4(color));
+		render->setLightAmbient(l, Vector3(0, 0, 0));
 		render->setLightAttenuation(l, 1, 0, quadraticAttenuation);
 
 		// spot
 		render->setLightSpotAngle(l, light->getSpotAngle());
         if(light->getSpotAngle() < 90)
         {
-			render->setLightSpotDirection(l, light->getRotatedVector(MVector3(0, 0, -1)).getNormalized());
+			render->setLightSpotDirection(l, light->getRotatedVector(Vector3(0, 0, -1)).getNormalized());
 			render->setLightSpotExponent(l, light->getSpotExponent());
 		}
         else
@@ -1460,7 +1455,7 @@ void StandardRenderer::prepareSubMesh(Scene * scene, OCamera * camera, OEntity *
 
     for(l=lightsNumber; l<4; l++)
     {
-		render->setLightDiffuse(l, MVector4(0, 0, 0, 0));
+		render->setLightDiffuse(l, Vector4(0, 0, 0, 0));
 		render->disableLight(l);
 		m_lightShadow[l] = 0;
 	}
@@ -1469,12 +1464,12 @@ void StandardRenderer::prepareSubMesh(Scene * scene, OCamera * camera, OEntity *
 void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
 {
 	// get render
-	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 	// current view
 	int currentViewport[4];
-	MMatrix4x4 currentViewMatrix;
-	MMatrix4x4 currentProjMatrix;
+	Matrix4x4 currentViewMatrix;
+	Matrix4x4 currentProjMatrix;
 	render->getViewport(currentViewport);
 	render->getModelViewMatrix(&currentViewMatrix);
 	render->getProjectionMatrix(&currentProjMatrix);
@@ -1542,10 +1537,10 @@ void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
 			ShadowLight * shadowLight = createShadowLight(light);
 
 			render->bindFrameBuffer(m_fboId);
-			render->attachFrameBufferTexture(M_ATTACH_DEPTH, shadowLight->shadowTexture);
+			render->attachFrameBufferTexture(ATTACH_DEPTH, shadowLight->shadowTexture);
 
 			for(int i=0; i<4; i++){
-				render->setLightDiffuse(i, MVector4(0, 0, 0, 0));
+				render->setLightDiffuse(i, Vector4(0, 0, 0, 0));
 				render->disableLight(i);
 				m_lightShadow[i] = 0;
 			}
@@ -1555,7 +1550,7 @@ void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
 			lightCamera.setClippingNear(light->getRadius()*0.001f);
 			lightCamera.setClippingFar(light->getRadius());
 
-            MVector3 cameraAxis = lightCamera.getRotatedVector(MVector3(0, 0, -1)).getNormalized();
+            Vector3 cameraAxis = lightCamera.getRotatedVector(Vector3(0, 0, -1)).getNormalized();
 
             if(light->getSpotAngle() == 0)
             {
@@ -1568,7 +1563,7 @@ void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
                 lightCamera.setFov(light->getSpotAngle()*2.0f);
             }
 
-			MVector3 cameraPos = lightCamera.getTransformedPosition();
+			Vector3 cameraPos = lightCamera.getTransformedPosition();
 
 			render->disableScissorTest();
 			render->enableDepthTest();
@@ -1595,18 +1590,18 @@ void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
 
 					// compute entities visibility
 					Box3d * box = entity->getBoundingBox();
-					MVector3 * min = &box->min;
-					MVector3 * max = &box->max;
+					Vector3 * min = &box->min;
+					Vector3 * max = &box->max;
 
-					MVector3 points[8] = {
-						entity->getTransformedVector(MVector3(min->x, min->y, min->z)),
-						entity->getTransformedVector(MVector3(min->x, max->y, min->z)),
-						entity->getTransformedVector(MVector3(max->x, max->y, min->z)),
-						entity->getTransformedVector(MVector3(max->x, min->y, min->z)),
-						entity->getTransformedVector(MVector3(min->x, min->y, max->z)),
-						entity->getTransformedVector(MVector3(min->x, max->y, max->z)),
-						entity->getTransformedVector(MVector3(max->x, max->y, max->z)),
-						entity->getTransformedVector(MVector3(max->x, min->y, max->z))
+					Vector3 points[8] = {
+						entity->getTransformedVector(Vector3(min->x, min->y, min->z)),
+						entity->getTransformedVector(Vector3(min->x, max->y, min->z)),
+						entity->getTransformedVector(Vector3(max->x, max->y, min->z)),
+						entity->getTransformedVector(Vector3(max->x, min->y, min->z)),
+						entity->getTransformedVector(Vector3(min->x, min->y, max->z)),
+						entity->getTransformedVector(Vector3(min->x, max->y, max->z)),
+						entity->getTransformedVector(Vector3(max->x, max->y, max->z)),
+						entity->getTransformedVector(Vector3(max->x, min->y, max->z))
 					};
 
 					entity->setVisible(frustum->isVolumePointsVisible(points, 8));
@@ -1635,7 +1630,7 @@ void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
 
 			m_currentCamera = &lightCamera;
 
-            render->clear(M_BUFFER_DEPTH);
+            render->clear(BUFFER_DEPTH);
 			render->setColorMask(0, 0, 0, 0);
 			render->enablePolygonOffset(1.0, 4096.0);
 
@@ -1686,18 +1681,18 @@ void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
 						// check if submesh visible
 						if(sSize > 1)
 						{
-							MVector3 * min = &box->min;
-							MVector3 * max = &box->max;
+							Vector3 * min = &box->min;
+							Vector3 * max = &box->max;
 
-							MVector3 points[8] = {
-								entity->getTransformedVector(MVector3(min->x, min->y, min->z)),
-								entity->getTransformedVector(MVector3(min->x, max->y, min->z)),
-								entity->getTransformedVector(MVector3(max->x, max->y, min->z)),
-								entity->getTransformedVector(MVector3(max->x, min->y, min->z)),
-								entity->getTransformedVector(MVector3(min->x, min->y, max->z)),
-								entity->getTransformedVector(MVector3(min->x, max->y, max->z)),
-								entity->getTransformedVector(MVector3(max->x, max->y, max->z)),
-								entity->getTransformedVector(MVector3(max->x, min->y, max->z))
+							Vector3 points[8] = {
+								entity->getTransformedVector(Vector3(min->x, min->y, min->z)),
+								entity->getTransformedVector(Vector3(min->x, max->y, min->z)),
+								entity->getTransformedVector(Vector3(max->x, max->y, min->z)),
+								entity->getTransformedVector(Vector3(max->x, min->y, min->z)),
+								entity->getTransformedVector(Vector3(min->x, min->y, max->z)),
+								entity->getTransformedVector(Vector3(min->x, max->y, max->z)),
+								entity->getTransformedVector(Vector3(max->x, max->y, max->z)),
+								entity->getTransformedVector(Vector3(max->x, min->y, max->z))
 							};
 
 							if(! frustum->isVolumePointsVisible(points, 8))
@@ -1724,8 +1719,8 @@ void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
 
 			// biasUnity
 			{
-				MVector4 pt1 = shadowLight->shadowMatrix * MVector4(cameraPos + cameraAxis);
-				MVector4 pt2 = shadowLight->shadowMatrix * MVector4(cameraPos + cameraAxis*2.0f);
+				Vector4 pt1 = shadowLight->shadowMatrix * Vector4(cameraPos + cameraAxis);
+				Vector4 pt2 = shadowLight->shadowMatrix * Vector4(cameraPos + cameraAxis*2.0f);
 
 				shadowLight->biasUnity = (- (pt1.z - pt2.z*0.5f))*0.01f;
 			}
@@ -1744,15 +1739,15 @@ void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
 	{
 		render->setViewport(currentViewport[0], currentViewport[1], currentViewport[2], currentViewport[3]);
 
-		render->setMatrixMode(M_MATRIX_PROJECTION);
+		render->setMatrixMode(MATRIX_PROJECTION);
 		render->loadIdentity();
 		render->multMatrix(&currentProjMatrix);
 
-		render->setMatrixMode(M_MATRIX_MODELVIEW);
+		render->setMatrixMode(MATRIX_MODELVIEW);
 		render->loadIdentity();
 		render->multMatrix(&currentViewMatrix);
 
-		render->clear(M_BUFFER_DEPTH);
+		render->clear(BUFFER_DEPTH);
 	}
 #endif
 
@@ -1777,7 +1772,7 @@ void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
 	render->enableBlending();
 
 	// camera
-	MVector3 cameraPos = camera->getTransformedPosition();
+	Vector3 cameraPos = camera->getTransformedPosition();
 
 	// opaque/transp number
 	unsigned int opaqueNumber = 0;
@@ -1844,18 +1839,18 @@ void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
 				// check if submesh visible
 				if(sSize > 1)
 				{
-					MVector3 * min = &box->min;
-					MVector3 * max = &box->max;
+					Vector3 * min = &box->min;
+					Vector3 * max = &box->max;
 
-					MVector3 points[8] = {
-						entity->getTransformedVector(MVector3(min->x, min->y, min->z)),
-						entity->getTransformedVector(MVector3(min->x, max->y, min->z)),
-						entity->getTransformedVector(MVector3(max->x, max->y, min->z)),
-						entity->getTransformedVector(MVector3(max->x, min->y, min->z)),
-						entity->getTransformedVector(MVector3(min->x, min->y, max->z)),
-						entity->getTransformedVector(MVector3(min->x, max->y, max->z)),
-						entity->getTransformedVector(MVector3(max->x, max->y, max->z)),
-						entity->getTransformedVector(MVector3(max->x, min->y, max->z))
+					Vector3 points[8] = {
+						entity->getTransformedVector(Vector3(min->x, min->y, min->z)),
+						entity->getTransformedVector(Vector3(min->x, max->y, min->z)),
+						entity->getTransformedVector(Vector3(max->x, max->y, min->z)),
+						entity->getTransformedVector(Vector3(max->x, min->y, min->z)),
+						entity->getTransformedVector(Vector3(min->x, min->y, max->z)),
+						entity->getTransformedVector(Vector3(min->x, max->y, max->z)),
+						entity->getTransformedVector(Vector3(max->x, max->y, max->z)),
+						entity->getTransformedVector(Vector3(max->x, min->y, max->z))
 					};
 
 					if(! frustum->isVolumePointsVisible(points, 8))
@@ -1863,7 +1858,7 @@ void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
 				}
 
 				// subMesh center
-				MVector3 center = box->min + (box->max - box->min)*0.5f;
+				Vector3 center = box->min + (box->max - box->min)*0.5f;
 				center = entity->getTransformedVector(center);
 
 				// z distance
@@ -1922,7 +1917,7 @@ void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
 
 			// center
 			Box3d * box = text->getBoundingBox();
-			MVector3 center = box->min + (box->max - box->min)*0.5f;
+			Vector3 center = box->min + (box->max - box->min)*0.5f;
 			center = text->getTransformedVector(center);
 
 			// z distance to camera
@@ -1943,7 +1938,7 @@ void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
 			sortFloatList(m_opaqueSortList, m_opaqueSortZList, 0, (int)opaqueNumber-1);
 
         // Z pre-pass
-		render->setDepthMode(M_DEPTH_LEQUAL);
+		render->setDepthMode(DEPTH_LEQUAL);
 		render->setColorMask(0, 0, 0, 0);
 
 		for(int s=(int)opaqueNumber-1; s>=0; s--)
@@ -2004,7 +1999,7 @@ void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
 		m_forceNoFX = false;
 		render->setColorMask(1, 1, 1, 1);
 		render->setDepthMask(0);
-		render->setDepthMode(M_DEPTH_EQUAL);
+		render->setDepthMode(DEPTH_EQUAL);
 
 		for(int s=(int)opaqueNumber-1; s>=0; s--)
 		{
@@ -2032,7 +2027,7 @@ void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
 		}
 
 		render->setDepthMask(1);
-		render->setDepthMode(M_DEPTH_LEQUAL);
+		render->setDepthMode(DEPTH_LEQUAL);
 	}
 
 

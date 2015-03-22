@@ -71,18 +71,18 @@ void OLight::updateVisibility(OCamera * camera)
 	Frustum * frustum = camera->getFrustum();
 
 	// TODO: use different test for spot and directional
-	MVector3 min = getTransformedPosition() - m_radius;
-	MVector3 max = getTransformedPosition() + m_radius;
+	Vector3 min = getTransformedPosition() - m_radius;
+	Vector3 max = getTransformedPosition() + m_radius;
 
-	MVector3 points[8] = {
-		MVector3(min.x, min.y, min.z),
-		MVector3(min.x, max.y, min.z),
-		MVector3(max.x, max.y, min.z),
-		MVector3(max.x, min.y, min.z),
-		MVector3(min.x, min.y, max.z),
-		MVector3(min.x, max.y, max.z),
-		MVector3(max.x, max.y, max.z),
-		MVector3(max.x, min.y, max.z)
+	Vector3 points[8] = {
+		Vector3(min.x, min.y, min.z),
+		Vector3(min.x, max.y, min.z),
+		Vector3(max.x, max.y, min.z),
+		Vector3(max.x, min.y, min.z),
+		Vector3(min.x, min.y, max.z),
+		Vector3(min.x, max.y, max.z),
+		Vector3(max.x, max.y, max.z),
+		Vector3(max.x, min.y, max.z)
 	};
 
 	// is box in frustum

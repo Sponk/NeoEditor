@@ -33,11 +33,11 @@
 using namespace Neo;
 
 // MDisplay
-MaterialDisplay::MaterialDisplay(M_PRIMITIVE_TYPES primitiveType, unsigned int begin, unsigned int size):
+MaterialDisplay::MaterialDisplay(PRIMITIVE_TYPES primitiveType, unsigned int begin, unsigned int size):
 m_primitiveType(primitiveType),
 m_begin(begin),
 m_size(size),
-m_cullMode(M_CULL_BACK),
+m_cullMode(CULL_BACK),
 m_material(NULL),
 m_visibility(true)
 {}
@@ -68,7 +68,7 @@ m_tangentsSize(0),
 m_texCoordsSize(0),
 m_colorsSize(0),
 
-m_indicesType(M_UINT),
+m_indicesType(VAR_UINT),
 m_indices(NULL),
 
 m_vertices(NULL),
@@ -143,9 +143,9 @@ void SubMesh::clearSkinData(void)
 	SAFE_DELETE(m_skinData);
 }
 
-MSkinData * SubMesh::createSkinData(void)
+SkinData * SubMesh::createSkinData(void)
 {
-	MSkinData * skinData = new MSkinData();
+	SkinData * skinData = new SkinData();
 	clearSkinData();
 	m_skinData = skinData;
 	return skinData;
@@ -187,7 +187,7 @@ void SubMesh::clearColors(void)
 	SAFE_DELETE_ARRAY(m_colors);
 }
 
-void * SubMesh::allocIndices(unsigned int size, M_TYPES type)
+void * SubMesh::allocIndices(unsigned int size, VAR_TYPES type)
 {
 	clearIndices();
 	if(size == 0)
@@ -198,12 +198,12 @@ void * SubMesh::allocIndices(unsigned int size, M_TYPES type)
 	switch(type)
 	{
 	default:
-	case M_UINT:
-		m_indicesType = M_UINT;
+	case VAR_UINT:
+		m_indicesType = VAR_UINT;
 		m_indices = malloc(sizeof(unsigned int)*size);
 		break;
-	case M_USHORT:
-		m_indicesType = M_USHORT;
+	case VAR_USHORT:
+		m_indicesType = VAR_USHORT;
 		m_indices = malloc(sizeof(unsigned short)*size);
 		break;
 	}
@@ -211,62 +211,62 @@ void * SubMesh::allocIndices(unsigned int size, M_TYPES type)
 	return m_indices;
 }
 
-MVector3 * SubMesh::allocVertices(unsigned int size)
+Vector3 * SubMesh::allocVertices(unsigned int size)
 {
 	clearVertices();
 	if(size == 0)
 		return NULL;
 
 	m_verticesSize = size;
-	m_vertices = new MVector3[size];
+	m_vertices = new Vector3[size];
 
 	return m_vertices;
 }
 
-MVector3 * SubMesh::allocNormals(unsigned int size)
+Vector3 * SubMesh::allocNormals(unsigned int size)
 {
 	clearNormals();
 	if(size == 0)
 		return NULL;
 
 	m_normalsSize = size;
-	m_normals = new MVector3[size];
+	m_normals = new Vector3[size];
 
 	return m_normals;
 }
 
-MVector3 * SubMesh::allocTangents(unsigned int size)
+Vector3 * SubMesh::allocTangents(unsigned int size)
 {
 	clearTangents();
 	if(size == 0)
 		return NULL;
 	
 	m_tangentsSize = size;
-	m_tangents = new MVector3[size];
+	m_tangents = new Vector3[size];
 	
 	return m_tangents;
 }
 
-MVector2 * SubMesh::allocTexCoords(unsigned int size)
+Vector2 * SubMesh::allocTexCoords(unsigned int size)
 {
 	clearTexCoords();
 	if(size == 0)
 		return NULL;
 
 	m_texCoordsSize = size;
-	m_texCoords = new MVector2[size];
+	m_texCoords = new Vector2[size];
 
 	return m_texCoords;
 }
 
-MColor * SubMesh::allocColors(unsigned int size)
+Color * SubMesh::allocColors(unsigned int size)
 {
 	clearColors();
 	if(size == 0)
 		return NULL;
 
 	m_colorsSize = size;
-	m_colors = new MColor[size];
+	m_colors = new Color[size];
 
 	return m_colors;
 }
@@ -274,7 +274,7 @@ MColor * SubMesh::allocColors(unsigned int size)
 void SubMesh::clearVBO(void)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
-	MRenderingContext * render = engine->getRenderingContext();
+	RenderingContext * render = engine->getRenderingContext();
 	if(render && m_vboId1>0)
 	{
 		render->deleteVBO(&m_vboId1);
@@ -300,7 +300,7 @@ void SubMesh::clearDisplays(void)
 	SAFE_FREE(m_displays);
 }
 
-MaterialDisplay * SubMesh::addNewDisplay(M_PRIMITIVE_TYPES primitiveType, unsigned int begin, unsigned int size)
+MaterialDisplay * SubMesh::addNewDisplay(PRIMITIVE_TYPES primitiveType, unsigned int begin, unsigned int size)
 {
 	MaterialDisplay * display = new MaterialDisplay(primitiveType, begin, size);
 	m_displays[m_displaysNumber] = display;
@@ -319,7 +319,7 @@ bool SubMesh::hasTransparency(void)
 		if((! display->isVisible()) || (! display->getMaterial()))
 			continue;
 
-		if(display->getMaterial()->getBlendMode() != M_BLENDING_NONE)
+		if(display->getMaterial()->getBlendMode() != BLENDING_NONE)
 			return true;
 	}
 
@@ -503,8 +503,8 @@ void Mesh::updateBoundingBox(void)
 {
 	if(m_subMeshsNumber > 0)
 	{
-		MVector3 * min = &m_boundingBox.min;
-		MVector3 * max = &m_boundingBox.max;
+		Vector3 * min = &m_boundingBox.min;
+		Vector3 * max = &m_boundingBox.max;
 
 		Box3d * box = m_subMeshs[0].getBoundingBox();
 		(*min) = box->min;
@@ -515,8 +515,8 @@ void Mesh::updateBoundingBox(void)
 		{
 			box = m_subMeshs[i].getBoundingBox();
 
-			MVector3 * subMin = &box->min;
-			MVector3 * subMax = &box->max;
+			Vector3 * subMin = &box->min;
+			Vector3 * subMax = &box->max;
 
 			min->x = MIN(min->x, subMin->x);
 			min->y = MIN(min->y, subMin->y);

@@ -54,7 +54,7 @@
 #include <BinFontLoader.h>
 #include <BinMeshLoader.h>
 
-#include <MCore.h>
+#include <NeoCore.h>
 #include <NeoEngine.h>
 #include <Window/Mouse.h>
 #include <LookAtBehavior.h>
@@ -120,8 +120,8 @@ private:
 
     unsigned int m_verticesNumber;
     unsigned int m_normalsNumber;
-    MVector3 * m_vertices;
-    MVector3 * m_normals;
+    Vector3 * m_vertices;
+    Vector3 * m_normals;
 
 public:
 
@@ -144,24 +144,24 @@ public:
         return &m_instance;
     };
 
-    MVector3 * getVertices(unsigned int size)
+    Vector3 * getVertices(unsigned int size)
     {
         if(size > m_verticesNumber)
         {
             SAFE_DELETE_ARRAY(m_vertices);
-            m_vertices = new MVector3[size];
+            m_vertices = new Vector3[size];
             m_verticesNumber = size;
         }
 
         return m_vertices;
     }
 
-    MVector3 * getNormals(unsigned int size)
+    Vector3 * getNormals(unsigned int size)
     {
         if(size > m_normalsNumber)
         {
             SAFE_DELETE_ARRAY(m_normals);
-            m_normals = new MVector3[size];
+            m_normals = new Vector3[size];
             m_normalsNumber = size;
         }
 
@@ -598,11 +598,11 @@ void Maratis::initVue(void)
     // user vue
     m_perspectiveVue.setClippingNear(0.1);
     m_perspectiveVue.setClippingFar(100000);
-    m_perspectiveVue.setPosition(MVector3(0, -200, 200));
-    m_perspectiveVue.setEulerRotation(MVector3(40, 0, 0));
+    m_perspectiveVue.setPosition(Vector3(0, -200, 200));
+    m_perspectiveVue.setEulerRotation(Vector3(40, 0, 0));
     m_perspectiveVue.updateMatrix();
 
-    m_selectionCenter = MVector3(0, 0, 0);
+    m_selectionCenter = Vector3(0, 0, 0);
     m_viewCenter = m_selectionCenter;
     clearSelectedObjects();
 }
@@ -811,16 +811,16 @@ void Maratis::linkTwoObjects(Object3d *parent, Object3d *child)
     child->linkTo(parent);
 
     // local matrix
-    MMatrix4x4 localMatrix = parent->getMatrix()->getInverse() * (*child->getMatrix());
+    Matrix4x4 localMatrix = parent->getMatrix()->getInverse() * (*child->getMatrix());
 
     child->setPosition(localMatrix.getTranslationPart());
     child->setEulerRotation(localMatrix.getEulerAngles());
 
-    float xSize = localMatrix.getRotatedVector3(MVector3(1, 0, 0)).getLength();
-    float ySize = localMatrix.getRotatedVector3(MVector3(0, 1, 0)).getLength();
-    float zSize = localMatrix.getRotatedVector3(MVector3(0, 0, 1)).getLength();
+    float xSize = localMatrix.getRotatedVector3(Vector3(1, 0, 0)).getLength();
+    float ySize = localMatrix.getRotatedVector3(Vector3(0, 1, 0)).getLength();
+    float zSize = localMatrix.getRotatedVector3(Vector3(0, 0, 1)).getLength();
 
-    child->setScale(MVector3(xSize, ySize, zSize));
+    child->setScale(Vector3(xSize, ySize, zSize));
 }
 
 void Maratis::unlinkTwoObjects(Object3d *parent, Object3d *child)
@@ -831,16 +831,16 @@ void Maratis::unlinkTwoObjects(Object3d *parent, Object3d *child)
     child->unLink();
 
     // matrix
-    MMatrix4x4 * matrix = child->getMatrix();
+    Matrix4x4 * matrix = child->getMatrix();
 
     child->setPosition(matrix->getTranslationPart());
     child->setEulerRotation(matrix->getEulerAngles());
 
-    float xSize = matrix->getRotatedVector3(MVector3(1, 0, 0)).getLength();
-    float ySize = matrix->getRotatedVector3(MVector3(0, 1, 0)).getLength();
-    float zSize = matrix->getRotatedVector3(MVector3(0, 0, 1)).getLength();
+    float xSize = matrix->getRotatedVector3(Vector3(1, 0, 0)).getLength();
+    float ySize = matrix->getRotatedVector3(Vector3(0, 1, 0)).getLength();
+    float zSize = matrix->getRotatedVector3(Vector3(0, 0, 1)).getLength();
 
-    child->setScale(MVector3(xSize, ySize, zSize));
+    child->setScale(Vector3(xSize, ySize, zSize));
 }
 
 void Maratis::deleteSelectedObjects(void)
@@ -871,7 +871,7 @@ void Maratis::addCamera(void)
     camera->setName(name);
 
     camera->setPosition(*getSelectionCenter());
-    camera->setEulerRotation(MVector3(90, 0, 0));
+    camera->setEulerRotation(Vector3(90, 0, 0));
     camera->updateMatrix();
 
     clearSelectedObjects();
@@ -991,7 +991,7 @@ void Maratis::okAddFont(const char * filename)
 
             // set position
             text->setPosition(*maratis->getSelectionCenter());
-            text->setEulerRotation(MVector3(180, 0, 0));
+            text->setEulerRotation(Vector3(180, 0, 0));
             text->updateMatrix();
 
             maratis->clearSelectedObjects();
@@ -1050,7 +1050,7 @@ void Maratis::okNewProject(const char * filename)
 {
     NeoWindow * window = NeoWindow::getInstance();
     Maratis * maratis = Maratis::getInstance();
-    MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
+    SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 
     char file[256];
     fileExtension(file, filename, ".mproj");
@@ -1326,22 +1326,22 @@ void Maratis::rotateCurrentVue(void)
     MMouse * mouse = MMouse::getInstance();
 
     // inverse center
-    MVector3 lCenter = m_perspectiveVue.getInversePosition(m_viewCenter);
+    Vector3 lCenter = m_perspectiveVue.getInversePosition(m_viewCenter);
 
     // rotation
-    m_perspectiveVue.addAxisAngleRotation(MVector3(1, 0, 0), -(float)mouse->getYDirection()*0.65f);
+    m_perspectiveVue.addAxisAngleRotation(Vector3(1, 0, 0), -(float)mouse->getYDirection()*0.65f);
 
-    MMatrix4x4 matrix;
-    MQuaternion rotation = m_perspectiveVue.getRotation();
+    Matrix4x4 matrix;
+    Quaternion rotation = m_perspectiveVue.getRotation();
     matrix.setRotationAxis(rotation.getAngle(), rotation.getAxis());
     matrix.invert();
 
-    MVector3 axis = matrix * MVector3(0, 0, 1);
+    Vector3 axis = matrix * Vector3(0, 0, 1);
     m_perspectiveVue.addAxisAngleRotation(axis, -(float)mouse->getXDirection()*0.65f);
     m_perspectiveVue.updateMatrix();
 
     // position
-    MVector3 fCenter = m_perspectiveVue.getTransformedVector(lCenter);
+    Vector3 fCenter = m_perspectiveVue.getTransformedVector(lCenter);
     m_perspectiveVue.setPosition(m_perspectiveVue.getPosition() + (m_viewCenter - fCenter));
 
     m_perspectiveVue.updateMatrix();
@@ -1354,15 +1354,15 @@ void Maratis::panCurrentVue(void)
 
     int * viewport = camera->getCurrentViewport();
 
-    MVector3 vecX(1, 0, 0);
-    MVector3 vecZ(0, 1, 0);
-    MVector3 xAxis = camera->getRotatedVector(vecX);
-    MVector3 zAxis = camera->getRotatedVector(vecZ);
+    Vector3 vecX(1, 0, 0);
+    Vector3 vecZ(0, 1, 0);
+    Vector3 xAxis = camera->getRotatedVector(vecX);
+    Vector3 zAxis = camera->getRotatedVector(vecZ);
 
     if(camera->isOrtho())
     {
         // position
-        MVector3 position = camera->getPosition();
+        Vector3 position = camera->getPosition();
         float dFactor = camera->getFov() / (viewport[3]);
 
         camera->setPosition(position + ((xAxis * (-(float)mouse->getXDirection())) + (zAxis * (float)mouse->getYDirection()))*dFactor);
@@ -1372,8 +1372,8 @@ void Maratis::panCurrentVue(void)
     }
 
     // position
-    MVector3 position = camera->getPosition();
-    MVector3 axis = camera->getRotatedVector(MVector3(0, 0, -1));
+    Vector3 position = camera->getPosition();
+    Vector3 axis = camera->getRotatedVector(Vector3(0, 0, -1));
 
     float z = (m_viewCenter - position).dotProduct(axis);
     float fovFactor = camera->getFov() * 0.0192f;
@@ -1389,14 +1389,14 @@ void Maratis::zoomCurrentVue(void)
 {
     MMouse * mouse = MMouse::getInstance();
     OCamera * camera = getPerspectiveVue();
-    MVector3 position = camera->getPosition();
+    Vector3 position = camera->getPosition();
 
     if(camera->isOrtho())
     {
         int dir = mouse->getWheelDirection();
         camera->setFov(camera->getFov() - (camera->getFov() * dir * 0.15f));
 
-        MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();;
+        Vector3 cameraAxis = camera->getRotatedVector(Vector3(0, 0, -1)).getNormalized();;
 
         float factor = (camera->getFov() - 1);
         float dist = (m_viewCenter - position).dotProduct(cameraAxis);
@@ -1411,8 +1411,8 @@ void Maratis::zoomCurrentVue(void)
     float dir = (-mouse->getWheelDirection()) * 20.0f;
     float dFactor = (m_viewCenter - position).getLength() * 0.01f;
 
-    MVector3 vec(0, 0, -1);
-    MVector3 axis = camera->getRotatedVector(vec);
+    Vector3 vec(0, 0, -1);
+    Vector3 axis = camera->getRotatedVector(vec);
 
     camera->setPosition(position - (axis * dir * dFactor));
     camera->updateMatrix();
@@ -1421,8 +1421,8 @@ void Maratis::zoomCurrentVue(void)
 void Maratis::switchCurrentVueMode(void)
 {
     OCamera * camera = getPerspectiveVue();
-    MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();;
-    MVector3 position = camera->getPosition();
+    Vector3 cameraAxis = camera->getRotatedVector(Vector3(0, 0, -1)).getNormalized();;
+    Vector3 position = camera->getPosition();
 
     float dist = (m_viewCenter - position).dotProduct(cameraAxis);
 
@@ -1458,16 +1458,16 @@ void Maratis::changeCurrentVue(int vue)
     switch(vue)
     {
         case 1:
-            camera->setEulerRotation(MVector3(90, 0, 0));
+            camera->setEulerRotation(Vector3(90, 0, 0));
             break;
         case 3:
-            camera->setEulerRotation(MVector3(90, 0, 90));
+            camera->setEulerRotation(Vector3(90, 0, 90));
             break;
         case 7:
-            camera->setEulerRotation(MVector3(0, 0, 0));
+            camera->setEulerRotation(Vector3(0, 0, 0));
             break;
         case 9:
-            camera->setEulerRotation(MVector3(180, 0, 0));
+            camera->setEulerRotation(Vector3(180, 0, 0));
             break;
     }
 
@@ -1476,53 +1476,53 @@ void Maratis::changeCurrentVue(int vue)
 
 void Maratis::drawBoundingBox(Box3d * box)
 {
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
-    MVector3 * min = &box->min;
-    MVector3 * max = &box->max;
+    Vector3 * min = &box->min;
+    Vector3 * max = &box->max;
 
-    beginDraw(M_PRIMITIVE_LINES);
+    beginDraw(PRIMITIVE_LINES);
 
-    pushVertex(MVector3(min->x, min->y, min->z));
-    pushVertex(MVector3(max->x, min->y, min->z));
+    pushVertex(Vector3(min->x, min->y, min->z));
+    pushVertex(Vector3(max->x, min->y, min->z));
 
-    pushVertex(MVector3(min->x, min->y, min->z));
-    pushVertex(MVector3(min->x, max->y, min->z));
+    pushVertex(Vector3(min->x, min->y, min->z));
+    pushVertex(Vector3(min->x, max->y, min->z));
 
-    pushVertex(MVector3(min->x, min->y, min->z));
-    pushVertex(MVector3(min->x, min->y, max->z));
+    pushVertex(Vector3(min->x, min->y, min->z));
+    pushVertex(Vector3(min->x, min->y, max->z));
 
-    pushVertex(MVector3(max->x, max->y, max->z));
-    pushVertex(MVector3(min->x, max->y, max->z));
+    pushVertex(Vector3(max->x, max->y, max->z));
+    pushVertex(Vector3(min->x, max->y, max->z));
 
-    pushVertex(MVector3(max->x, max->y, max->z));
-    pushVertex(MVector3(max->x, min->y, max->z));
+    pushVertex(Vector3(max->x, max->y, max->z));
+    pushVertex(Vector3(max->x, min->y, max->z));
 
-    pushVertex(MVector3(max->x, max->y, max->z));
-    pushVertex(MVector3(max->x, max->y, min->z));
+    pushVertex(Vector3(max->x, max->y, max->z));
+    pushVertex(Vector3(max->x, max->y, min->z));
 
-    pushVertex(MVector3(max->x, max->y, min->z));
-    pushVertex(MVector3(min->x, max->y, min->z));
+    pushVertex(Vector3(max->x, max->y, min->z));
+    pushVertex(Vector3(min->x, max->y, min->z));
 
-    pushVertex(MVector3(max->x, min->y, max->z));
-    pushVertex(MVector3(min->x, min->y, max->z));
+    pushVertex(Vector3(max->x, min->y, max->z));
+    pushVertex(Vector3(min->x, min->y, max->z));
 
-    pushVertex(MVector3(max->x, max->y, min->z));
-    pushVertex(MVector3(max->x, min->y, min->z));
+    pushVertex(Vector3(max->x, max->y, min->z));
+    pushVertex(Vector3(max->x, min->y, min->z));
 
-    pushVertex(MVector3(min->x, max->y, max->z));
-    pushVertex(MVector3(min->x, min->y, max->z));
+    pushVertex(Vector3(min->x, max->y, max->z));
+    pushVertex(Vector3(min->x, min->y, max->z));
 
-    pushVertex(MVector3(min->x, max->y, max->z));
-    pushVertex(MVector3(min->x, max->y, min->z));
+    pushVertex(Vector3(min->x, max->y, max->z));
+    pushVertex(Vector3(min->x, max->y, min->z));
 
-    pushVertex(MVector3(max->x, min->y, max->z));
-    pushVertex(MVector3(max->x, min->y, min->z));
+    pushVertex(Vector3(max->x, min->y, max->z));
+    pushVertex(Vector3(max->x, min->y, min->z));
 
     endDraw(render);
 }
 
-bool getNearestRaytracedDistance(Mesh * mesh, MMatrix4x4 * matrix, const MVector3 & origin, const MVector3 & dest, float * distance, OEntity * entity = NULL)
+bool getNearestRaytracedDistance(Mesh * mesh, Matrix4x4 * matrix, const Vector3 & origin, const Vector3 & dest, float * distance, OEntity * entity = NULL)
 {
     // animate armature
     if(entity && mesh->getArmature())
@@ -1543,10 +1543,10 @@ bool getNearestRaytracedDistance(Mesh * mesh, MMatrix4x4 * matrix, const MVector
         }
     }
 
-    MMatrix4x4 iMatrix = matrix->getInverse();
+    Matrix4x4 iMatrix = matrix->getInverse();
 
-    MVector3 localOrigin = iMatrix * origin;
-    MVector3 localDest = iMatrix * dest;
+    Vector3 localOrigin = iMatrix * origin;
+    Vector3 localDest = iMatrix * dest;
 
     Box3d * box = mesh->getBoundingBox();
     if(! isEdgeToBoxCollision(localOrigin, localDest, box->min, box->max))
@@ -1556,8 +1556,8 @@ bool getNearestRaytracedDistance(Mesh * mesh, MMatrix4x4 * matrix, const MVector
 
     float dist;
     float nearDist;
-    MVector3 I, intersectionPoint;
-    MVector3 rayVector = localDest - localOrigin;
+    Vector3 I, intersectionPoint;
+    Vector3 rayVector = localDest - localOrigin;
 
     // init near dist
     nearDist =  rayVector.getSquaredLength();
@@ -1570,11 +1570,11 @@ bool getNearestRaytracedDistance(Mesh * mesh, MMatrix4x4 * matrix, const MVector
         box = subMesh->getBoundingBox();
 
         // skinning
-        MVector3 * vertices = subMesh->getVertices();
+        Vector3 * vertices = subMesh->getVertices();
         if(entity && mesh->getArmature() && subMesh->getSkinData())
         {
             unsigned int verticesSize = subMesh->getVerticesSize();
-            MVector3 * skinVertices = MSkinCache::getInstance()->getVertices(verticesSize);
+            Vector3 * skinVertices = MSkinCache::getInstance()->getVertices(verticesSize);
             computeSkinning(mesh->getArmature(), subMesh->getSkinData(), vertices, NULL, NULL, skinVertices, NULL, NULL);
             vertices = skinVertices;
         }
@@ -1591,13 +1591,13 @@ bool getNearestRaytracedDistance(Mesh * mesh, MMatrix4x4 * matrix, const MVector
                 void * indices = subMesh->getIndices();
                 switch(subMesh->getIndicesType())
                 {
-                    case M_USHORT:
+                    case VAR_USHORT:
                     {
                         unsigned short * idx = (unsigned short *)indices;
                         indices = (void *)(idx + display->getBegin());
                         break;
                     }
-                    case M_UINT:
+                    case VAR_UINT:
                     {
                         unsigned int * idx = (unsigned int *)indices;
                         indices = (void *)(idx + display->getBegin());
@@ -1609,7 +1609,7 @@ bool getNearestRaytracedDistance(Mesh * mesh, MMatrix4x4 * matrix, const MVector
                 }
 
                 // BACK or FRONT and BACK, scan ray
-                if((display->getCullMode() == M_CULL_BACK) || (display->getCullMode() == M_CULL_NONE))
+                if((display->getCullMode() == CULL_BACK) || (display->getCullMode() == CULL_NONE))
                 {
 
                     if(getNearestRaytracedPosition(
@@ -1631,7 +1631,7 @@ bool getNearestRaytracedDistance(Mesh * mesh, MMatrix4x4 * matrix, const MVector
                 }
 
                 // FRONT or FRONT and BACK, scan invert
-                if((display->getCullMode() == M_CULL_FRONT) || (display->getCullMode() == M_CULL_NONE))
+                if((display->getCullMode() == CULL_FRONT) || (display->getCullMode() == CULL_NONE))
                 {
                     if(getNearestRaytracedPosition(
                                                    localOrigin, localDest,
@@ -1660,7 +1660,7 @@ bool getNearestRaytracedDistance(Mesh * mesh, MMatrix4x4 * matrix, const MVector
     return raytraced;
 }
 
-Object3d * Maratis::getNearestMesh(Scene * scene, const MVector3 & rayO, const MVector3 & rayD, MVector3 * intersectPoint)
+Object3d * Maratis::getNearestMesh(Scene * scene, const Vector3 & rayO, const Vector3 & rayD, Vector3 * intersectPoint)
 {
     float distance = 0;
     Object3d * nearestObject = NULL;
@@ -1680,7 +1680,7 @@ Object3d * Maratis::getNearestMesh(Scene * scene, const MVector3 & rayO, const M
 
         float dist;
 
-        MMatrix4x4 * matrix = entity->getMatrix();
+        Matrix4x4 * matrix = entity->getMatrix();
 
         Mesh * mesh = entity->getMesh();
         if(mesh)
@@ -1714,7 +1714,7 @@ Object3d * Maratis::getNearestMesh(Scene * scene, const MVector3 & rayO, const M
     return nearestObject;
 }
 
-Object3d * Maratis::getNearestObject(Scene * scene, const MVector3 & rayO, const MVector3 & rayD, MVector3 * intersectPoint)
+Object3d * Maratis::getNearestObject(Scene * scene, const Vector3 & rayO, const Vector3 & rayD, Vector3 * intersectPoint)
 {
     // get camera
     OCamera * camera = getPerspectiveVue();
@@ -1741,7 +1741,7 @@ Object3d * Maratis::getNearestObject(Scene * scene, const MVector3 & rayO, const
             case M_OBJECT3D_ENTITY:
             {
                 OEntity * entity = (OEntity *)object;
-                MMatrix4x4 * matrix = entity->getMatrix();
+                Matrix4x4 * matrix = entity->getMatrix();
 
                 Mesh * mesh = entity->getMesh();
                 if(mesh)
@@ -1766,9 +1766,9 @@ Object3d * Maratis::getNearestObject(Scene * scene, const MVector3 & rayO, const
                 if(scale < 0.001f)
                     continue;
 
-                MMatrix4x4 scaleMatrix;
-                scaleMatrix.setScale(MVector3(scale, scale, scale));
-                MMatrix4x4 matrix = ((*object->getMatrix()) * scaleMatrix);
+                Matrix4x4 scaleMatrix;
+                scaleMatrix.setScale(Vector3(scale, scale, scale));
+                Matrix4x4 matrix = ((*object->getMatrix()) * scaleMatrix);
 
                 Mesh * mesh = m_cameraEntity->getMesh();
                 if(! getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &dist))
@@ -1787,9 +1787,9 @@ Object3d * Maratis::getNearestObject(Scene * scene, const MVector3 & rayO, const
                 if(scale < 0.001f)
                     continue;
 
-                MMatrix4x4 scaleMatrix;
-                scaleMatrix.setScale(MVector3(scale, scale, scale));
-                MMatrix4x4 matrix = ((*object->getMatrix()) * scaleMatrix);
+                Matrix4x4 scaleMatrix;
+                scaleMatrix.setScale(Vector3(scale, scale, scale));
+                Matrix4x4 matrix = ((*object->getMatrix()) * scaleMatrix);
 
                 Mesh * mesh = m_sphereEntity->getMesh();
                 if(! getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &dist))
@@ -1808,9 +1808,9 @@ Object3d * Maratis::getNearestObject(Scene * scene, const MVector3 & rayO, const
                 if(scale < 0.001f)
                     continue;
 
-                MMatrix4x4 scaleMatrix;
-                scaleMatrix.setScale(MVector3(scale, scale, scale)*1.75f);
-                MMatrix4x4 matrix = ((*object->getMatrix()) * scaleMatrix);
+                Matrix4x4 scaleMatrix;
+                scaleMatrix.setScale(Vector3(scale, scale, scale)*1.75f);
+                Matrix4x4 matrix = ((*object->getMatrix()) * scaleMatrix);
 
                 Mesh * mesh = m_sphereEntity->getMesh();
                 if(! getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &dist))
@@ -1820,8 +1820,8 @@ Object3d * Maratis::getNearestObject(Scene * scene, const MVector3 & rayO, const
             case M_OBJECT3D_TEXT:
             {
                 OText * text = (OText*)object;
-                MVector3 min = text->getBoundingBox()->min;
-                MVector3 max = text->getBoundingBox()->max;
+                Vector3 min = text->getBoundingBox()->min;
+                Vector3 max = text->getBoundingBox()->max;
 
                 if((min.x == 0 && max.x == 0 && min.y == 0 && max.y == 0) || (! text->isActive()))
                 {
@@ -1830,11 +1830,11 @@ Object3d * Maratis::getNearestObject(Scene * scene, const MVector3 & rayO, const
                     max = m_emptyText.getBoundingBox()->max;
                 }
 
-                MMatrix4x4 scaleMatrix;
-                scaleMatrix.setScale(MVector3(max.x - min.x, max.y - min.y, 1));
+                Matrix4x4 scaleMatrix;
+                scaleMatrix.setScale(Vector3(max.x - min.x, max.y - min.y, 1));
                 scaleMatrix.setTranslationPart(min);
 
-                MMatrix4x4 matrix = (*object->getMatrix()) * scaleMatrix;
+                Matrix4x4 matrix = (*object->getMatrix()) * scaleMatrix;
 
                 Mesh * mesh = m_planeEntity->getMesh();
                 if(! getNearestRaytracedDistance(mesh, &matrix, rayO, rayD, &dist))
@@ -1894,7 +1894,7 @@ void Maratis::focusSelection(void)
         return;
 
     float distance = 0.0f;
-    MVector3 center(0, 0, 0);
+    Vector3 center(0, 0, 0);
     for(std::vector <Object3d *>::iterator itObj = m_selectedObjects.begin(); itObj != m_selectedObjects.end(); ++itObj)
     {
         Object3d *pobj = *itObj;
@@ -1915,7 +1915,7 @@ void Maratis::focusSelection(void)
                     OEntity *pentity = (OEntity*)pobj;
                     Box3d *pbox = pentity->getBoundingBox();
 
-                    MVector3 scale = pentity->getTransformedScale();
+                    Vector3 scale = pentity->getTransformedScale();
                     float maxScale = scale.x;
                     maxScale = MAX(maxScale, scale.y);
                     maxScale = MAX(maxScale, scale.z);
@@ -1931,7 +1931,7 @@ void Maratis::focusSelection(void)
     center /= (float)m_selectedObjects.size();
 
     OCamera * camera = getPerspectiveVue();
-    MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();
+    Vector3 cameraAxis = camera->getRotatedVector(Vector3(0, 0, -1)).getNormalized();
     camera->setPosition(center - cameraAxis * distance);
     camera->updateMatrix();
 
@@ -2005,20 +2005,20 @@ void Maratis::updateCurrentAxis()
 
     // get camera
     OCamera * camera = getPerspectiveVue();
-    MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();;
+    Vector3 cameraAxis = camera->getRotatedVector(Vector3(0, 0, -1)).getNormalized();;
 
     // viewport
     int * viewport = camera->getCurrentViewport();
 
     // ray (origin and dest)
-    MVector3 rayO = camera->getTransformedPosition();
-    MVector3 rayD = camera->getUnProjectedPoint(MVector3(
+    Vector3 rayO = camera->getTransformedPosition();
+    Vector3 rayD = camera->getUnProjectedPoint(Vector3(
                                                          (float)mouse->getXPosition(),
                                                          (float)(window->getHeight() - mouse->getYPosition()),
                                                          1));
     if(camera->isOrtho())
     {
-        MVector3 point;
+        Vector3 point;
         isRayPlaneIntersection(rayD, -cameraAxis, rayO + (cameraAxis * camera->getClippingNear()), cameraAxis, &point);
         rayO = point;
     }
@@ -2026,19 +2026,19 @@ void Maratis::updateCurrentAxis()
     rayD = rayO + ((rayD - rayO).getNormalized() * (camera->getClippingFar() - camera->getClippingNear()));
 
     float radius;
-    MVector3 position;
+    Vector3 position;
 
     if(! camera->isOrtho())
     {
         radius = (camera->getFov() * 400) / (float)viewport[3];
-        MVector3 cameraDir = (*getSelectionCenter()) - rayO;
+        Vector3 cameraDir = (*getSelectionCenter()) - rayO;
         cameraDir.normalize();
         position = rayO + cameraDir*200;
     }
     else
     {
         radius = (camera->getFov() * 120) / (float)viewport[3];
-        MVector3 point;
+        Vector3 point;
         isRayPlaneIntersection((*getSelectionCenter()), -cameraAxis, rayO, cameraAxis, &point);
         position = point + cameraAxis*((camera->getClippingFar() - camera->getClippingNear()) * 0.5f);
     }
@@ -2072,21 +2072,21 @@ void Maratis::selectObjectsInMainView(Scene * scene, bool multipleSelection)
 
     // get camera
     OCamera * camera = getPerspectiveVue();
-    MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();;
+    Vector3 cameraAxis = camera->getRotatedVector(Vector3(0, 0, -1)).getNormalized();;
 
     // viewport
     int * viewport = camera->getCurrentViewport();
 
     // ray (origin and dest)
-    MVector3 rayO = camera->getTransformedPosition();
-    MVector3 rayD = camera->getUnProjectedPoint(MVector3(
+    Vector3 rayO = camera->getTransformedPosition();
+    Vector3 rayD = camera->getUnProjectedPoint(Vector3(
                                                          (float)mouse->getXPosition(),
                                                          (float)(window->getHeight() - mouse->getYPosition()),
                                                          1));
 
     if(camera->isOrtho())
     {
-        MVector3 point;
+        Vector3 point;
         isRayPlaneIntersection(rayD, -cameraAxis, rayO + (cameraAxis * camera->getClippingNear()), cameraAxis, &point);
         rayO = point;
     }
@@ -2097,19 +2097,19 @@ void Maratis::selectObjectsInMainView(Scene * scene, bool multipleSelection)
     if(!multipleSelection && (getSelectedObjectsNumber() > 0) && (getTransformMode() != M_TRANSFORM_MOUSE))
     {
         float radius;
-        MVector3 position;
+        Vector3 position;
 
         if(! camera->isOrtho())
         {
             radius = (camera->getFov() * 400) / (float)viewport[3];
-            MVector3 cameraDir = (*getSelectionCenter()) - rayO;
+            Vector3 cameraDir = (*getSelectionCenter()) - rayO;
             cameraDir.normalize();
             position = rayO + cameraDir*200;
         }
         else
         {
             radius = (camera->getFov() * 120) / (float)viewport[3];
-            MVector3 point;
+            Vector3 point;
             isRayPlaneIntersection((*getSelectionCenter()), -cameraAxis, rayO, cameraAxis, &point);
             position = point + cameraAxis*((camera->getClippingFar() - camera->getClippingNear()) * 0.5f);
         }
@@ -2155,15 +2155,15 @@ void Maratis::updateViewCenter(void)
     Level * level = NeoEngine::getInstance()->getLevel();
     Scene * scene = level->getCurrentScene();
 
-    MVector3 rayO = m_perspectiveVue.getTransformedPosition();
-    MVector3 rayD = m_perspectiveVue.getTransformedVector(MVector3(0, 0, -m_perspectiveVue.getClippingFar()));
+    Vector3 rayO = m_perspectiveVue.getTransformedPosition();
+    Vector3 rayD = m_perspectiveVue.getTransformedVector(Vector3(0, 0, -m_perspectiveVue.getClippingFar()));
 
     getNearestMesh(scene, rayO, rayD, &m_viewCenter);
 }
 
 void Maratis::updateSelectionCenter(void)
 {
-    MVector3 position(0, 0, 0);
+    Vector3 position(0, 0, 0);
 
     unsigned int i;
     unsigned int oSize = getSelectedObjectsNumber();
@@ -2180,7 +2180,7 @@ void Maratis::updateSelectionCenter(void)
 void Maratis::drawGrid(Scene * scene)
 {
     // get render
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     render->disableFog();
     render->enableDepthTest();
@@ -2195,94 +2195,94 @@ void Maratis::drawGrid(Scene * scene)
     float gLength = (float)(gSize*gridSpace);
 
     // colors
-    MVector3 clearColor = MVector3(0.2f, 0.3f, 0.4f);
-    MVector3 color1 = (clearColor * 0.8f);
-    MVector3 color2 = (clearColor * 0.9f);
-    MVector3 red =   (clearColor * 0.7f) + (MVector3(1, 0, 0) * 0.3f);
-    MVector3 green = (clearColor * 0.7f) + (MVector3(0, 1, 0) * 0.3f);
+    Vector3 clearColor = Vector3(0.2f, 0.3f, 0.4f);
+    Vector3 color1 = (clearColor * 0.8f);
+    Vector3 color2 = (clearColor * 0.9f);
+    Vector3 red =   (clearColor * 0.7f) + (Vector3(1, 0, 0) * 0.3f);
+    Vector3 green = (clearColor * 0.7f) + (Vector3(0, 1, 0) * 0.3f);
 
     // draw lines
     render->setColor3(color2);
-    beginDraw(M_PRIMITIVE_LINES);
+    beginDraw(PRIMITIVE_LINES);
     for(i=0; i<=gSize; i++)
     {
         float length = (float)(i*gridSpace);
 
-        pushVertex(MVector3(-length, -gLength, 0));
-        pushVertex(MVector3(-length,  gLength, 0));
+        pushVertex(Vector3(-length, -gLength, 0));
+        pushVertex(Vector3(-length,  gLength, 0));
 
-        pushVertex(MVector3( length, -gLength, 0));
-        pushVertex(MVector3( length,  gLength, 0));
+        pushVertex(Vector3( length, -gLength, 0));
+        pushVertex(Vector3( length,  gLength, 0));
 
-        pushVertex(MVector3(-gLength, -length, 0));
-        pushVertex(MVector3( gLength, -length, 0));
+        pushVertex(Vector3(-gLength, -length, 0));
+        pushVertex(Vector3( gLength, -length, 0));
 
-        pushVertex(MVector3(-gLength, length, 0));
-        pushVertex(MVector3( gLength, length, 0));
+        pushVertex(Vector3(-gLength, length, 0));
+        pushVertex(Vector3( gLength, length, 0));
     }
     endDraw(render);
 
     render->disableDepthTest();
 
     render->setColor3(color1);
-    beginDraw(M_PRIMITIVE_LINES);
+    beginDraw(PRIMITIVE_LINES);
     for(i=0; i<=gSize; i+=gridSpace)
     {
         float length = (float)(i*gridSpace);
 
-        pushVertex(MVector3(-length, -gLength, 0));
-        pushVertex(MVector3(-length,  gLength, 0));
+        pushVertex(Vector3(-length, -gLength, 0));
+        pushVertex(Vector3(-length,  gLength, 0));
 
-        pushVertex(MVector3( length, -gLength, 0));
-        pushVertex(MVector3( length,  gLength, 0));
+        pushVertex(Vector3( length, -gLength, 0));
+        pushVertex(Vector3( length,  gLength, 0));
 
-        pushVertex(MVector3(-gLength, -length, 0));
-        pushVertex(MVector3( gLength, -length, 0));
+        pushVertex(Vector3(-gLength, -length, 0));
+        pushVertex(Vector3( gLength, -length, 0));
 
-        pushVertex(MVector3(-gLength, length, 0));
-        pushVertex(MVector3( gLength, length, 0));
+        pushVertex(Vector3(-gLength, length, 0));
+        pushVertex(Vector3( gLength, length, 0));
     }
     endDraw(render);
 
     // axis
     render->setColor3(red);
-    beginDraw(M_PRIMITIVE_LINES);
-    pushVertex(MVector3(-gLength, 0, 0));
-    pushVertex(MVector3( gLength, 0, 0));
+    beginDraw(PRIMITIVE_LINES);
+    pushVertex(Vector3(-gLength, 0, 0));
+    pushVertex(Vector3( gLength, 0, 0));
     endDraw(render);
 
     render->setColor3(green);
-    beginDraw(M_PRIMITIVE_LINES);
-    pushVertex(MVector3(0, -gLength, 0));
-    pushVertex(MVector3(0,  gLength, 0));
+    beginDraw(PRIMITIVE_LINES);
+    pushVertex(Vector3(0, -gLength, 0));
+    pushVertex(Vector3(0,  gLength, 0));
     endDraw(render);
 }
 
-void Maratis::drawScaleAxis(M_AXIS axis, OCamera * camera, MMatrix4x4 * matrix, const bool viewTest)
+void Maratis::drawScaleAxis(M_AXIS axis, OCamera * camera, Matrix4x4 * matrix, const bool viewTest)
 {
     // get render
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
-    MVector3 position = matrix->getTranslationPart();
+    Vector3 position = matrix->getTranslationPart();
 
     // normal
-    MVector3 normal;
+    Vector3 normal;
     Object3d * object = NULL;
 
     switch(axis)
     {
         case M_AXIS_X:
-            normal = MVector3(1, 0, 0);
+            normal = Vector3(1, 0, 0);
             object = m_xEntity;
             break;
 
         case M_AXIS_Y:
-            normal = MVector3(0, 1, 0);
+            normal = Vector3(0, 1, 0);
             object = m_yEntity;
             break;
 
         case M_AXIS_Z:
-            normal = MVector3(0, 0, 1);
+            normal = Vector3(0, 0, 1);
             object = m_zEntity;
             break;
 
@@ -2290,8 +2290,8 @@ void Maratis::drawScaleAxis(M_AXIS axis, OCamera * camera, MMatrix4x4 * matrix, 
     }
 
     // camera direction
-    MVector3 cameraPos = camera->getTransformedPosition();
-    MVector3 cameraDir;
+    Vector3 cameraPos = camera->getTransformedPosition();
+    Vector3 cameraDir;
 
     if(! camera->isOrtho())
     {
@@ -2300,13 +2300,13 @@ void Maratis::drawScaleAxis(M_AXIS axis, OCamera * camera, MMatrix4x4 * matrix, 
     }
     else
     {
-        cameraDir = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();;
+        cameraDir = camera->getRotatedVector(Vector3(0, 0, -1)).getNormalized();;
     }
 
     // view test
     if(viewTest)
     {
-        MVector3 axisNormal = matrix->getRotatedVector3(normal).getNormalized();
+        Vector3 axisNormal = matrix->getRotatedVector3(normal).getNormalized();
 
         // view factor
         float viewFactor = fabs(cameraDir.dotProduct(axisNormal));
@@ -2326,54 +2326,54 @@ void Maratis::drawScaleAxis(M_AXIS axis, OCamera * camera, MMatrix4x4 * matrix, 
     switch(axis)
     {
         case M_AXIS_X:
-            render->rotate(MVector3(0, 1, 0), 90);
+            render->rotate(Vector3(0, 1, 0), 90);
             break;
 
         case M_AXIS_Y:
-            render->rotate(MVector3(1, 0, 0), -90);
+            render->rotate(Vector3(1, 0, 0), -90);
             break;
 
         default:
             break;
     }
 
-    beginDraw(M_PRIMITIVE_LINES);
-    pushVertex(MVector3(0, 0, 0.3f));
-    pushVertex(MVector3(0, 0, 0.9f));
+    beginDraw(PRIMITIVE_LINES);
+    pushVertex(Vector3(0, 0, 0.3f));
+    pushVertex(Vector3(0, 0, 0.9f));
     endDraw(render);
 
-    render->translate(MVector3(0, 0, 0.9f));
+    render->translate(Vector3(0, 0, 0.9f));
     drawTriangles(m_cubeEntity->getMesh());
 
     render->popMatrix();
 }
 
-void Maratis::drawPositionAxis(M_AXIS axis, OCamera * camera, MMatrix4x4 * matrix, const bool viewTest)
+void Maratis::drawPositionAxis(M_AXIS axis, OCamera * camera, Matrix4x4 * matrix, const bool viewTest)
 {
     // get render
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     // get position from matrix
-    MVector3 position = matrix->getTranslationPart();
+    Vector3 position = matrix->getTranslationPart();
 
     // normal
-    MVector3 normal;
+    Vector3 normal;
     Object3d * object = NULL;
 
     switch(axis)
     {
         case M_AXIS_X:
-            normal = MVector3(1, 0, 0);
+            normal = Vector3(1, 0, 0);
             object = m_xEntity;
             break;
 
         case M_AXIS_Y:
-            normal = MVector3(0, 1, 0);
+            normal = Vector3(0, 1, 0);
             object = m_yEntity;
             break;
 
         case M_AXIS_Z:
-            normal = MVector3(0, 0, 1);
+            normal = Vector3(0, 0, 1);
             object = m_zEntity;
             break;
 
@@ -2382,8 +2382,8 @@ void Maratis::drawPositionAxis(M_AXIS axis, OCamera * camera, MMatrix4x4 * matri
     }
 
     // camera direction
-    MVector3 cameraPos = camera->getTransformedPosition();
-    MVector3 cameraDir;
+    Vector3 cameraPos = camera->getTransformedPosition();
+    Vector3 cameraDir;
 
     if(! camera->isOrtho())
     {
@@ -2392,13 +2392,13 @@ void Maratis::drawPositionAxis(M_AXIS axis, OCamera * camera, MMatrix4x4 * matri
     }
     else
     {
-        cameraDir = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();
+        cameraDir = camera->getRotatedVector(Vector3(0, 0, -1)).getNormalized();
     }
 
     // view test
     if(viewTest)
     {
-        MVector3 axisNormal = matrix->getRotatedVector3(normal).getNormalized();
+        Vector3 axisNormal = matrix->getRotatedVector3(normal).getNormalized();
 
         // view factor
         float viewFactor = fabs(cameraDir.dotProduct(axisNormal));
@@ -2418,42 +2418,42 @@ void Maratis::drawPositionAxis(M_AXIS axis, OCamera * camera, MMatrix4x4 * matri
     switch(axis)
     {
         case M_AXIS_X:
-            render->rotate(MVector3(0, 1, 0), 90);
+            render->rotate(Vector3(0, 1, 0), 90);
             break;
 
         case M_AXIS_Y:
-            render->rotate(MVector3(1, 0, 0), -90);
+            render->rotate(Vector3(1, 0, 0), -90);
             break;
 
         default:
             break;
     }
 
-    beginDraw(M_PRIMITIVE_LINES);
-    pushVertex(MVector3(0, 0, 0.3f));
-    pushVertex(MVector3(0, 0, 0.9f));
+    beginDraw(PRIMITIVE_LINES);
+    pushVertex(Vector3(0, 0, 0.3f));
+    pushVertex(Vector3(0, 0, 0.9f));
     endDraw(render);
 
-    render->translate(MVector3(0, 0, 0.9f));
+    render->translate(Vector3(0, 0, 0.9f));
     drawTriangles(m_coneEntity->getMesh());
 
     render->popMatrix();
 }
 
-void Maratis::drawRotationCircle(M_AXIS axis, OCamera * camera, MMatrix4x4 * matrix, const bool zTest)
+void Maratis::drawRotationCircle(M_AXIS axis, OCamera * camera, Matrix4x4 * matrix, const bool zTest)
 {
     // get render
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     // normal
-    MVector3 normal;
-    MVector3 vector;
+    Vector3 normal;
+    Vector3 vector;
 
-    MVector3 position = matrix->getTranslationPart();
+    Vector3 position = matrix->getTranslationPart();
 
     // camera direction
-    MVector3 cameraPos = camera->getTransformedPosition();
-    MVector3 cameraDir;
+    Vector3 cameraPos = camera->getTransformedPosition();
+    Vector3 cameraDir;
 
     if(! camera->isOrtho())
     {
@@ -2462,24 +2462,24 @@ void Maratis::drawRotationCircle(M_AXIS axis, OCamera * camera, MMatrix4x4 * mat
     }
     else
     {
-        cameraDir = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();;
+        cameraDir = camera->getRotatedVector(Vector3(0, 0, -1)).getNormalized();;
     }
 
     switch(axis)
     {
         case M_AXIS_X:
-            normal = MVector3(1, 0, 0);
-            vector = MVector3(0, 1, 0);
+            normal = Vector3(1, 0, 0);
+            vector = Vector3(0, 1, 0);
             break;
 
         case M_AXIS_Y:
-            normal = MVector3(0, 1, 0);
-            vector = MVector3(1, 0, 0);
+            normal = Vector3(0, 1, 0);
+            vector = Vector3(1, 0, 0);
             break;
 
         case M_AXIS_Z:
-            normal = MVector3(0, 0, 1);
-            vector = MVector3(1, 0, 0);
+            normal = Vector3(0, 0, 1);
+            vector = Vector3(1, 0, 0);
             break;
 
         default:
@@ -2490,7 +2490,7 @@ void Maratis::drawRotationCircle(M_AXIS axis, OCamera * camera, MMatrix4x4 * mat
         render->disableDepthTest();
     else
     {
-        MVector3 axisNormal = matrix->getRotatedVector3(normal).getNormalized();
+        Vector3 axisNormal = matrix->getRotatedVector3(normal).getNormalized();
 
         // view factor
         float viewFactor = fabs(cameraDir.dotProduct(axisNormal));
@@ -2507,9 +2507,9 @@ void Maratis::drawRotationCircle(M_AXIS axis, OCamera * camera, MMatrix4x4 * mat
     render->multMatrix(matrix);
 
     // draw
-    beginDraw(M_PRIMITIVE_LINE_STRIP);
+    beginDraw(PRIMITIVE_LINE_STRIP);
 
-    MVector3 vec;
+    Vector3 vec;
     unsigned int i;
     for(i=0; i<=360; i+=10)
     {
@@ -2521,7 +2521,7 @@ void Maratis::drawRotationCircle(M_AXIS axis, OCamera * camera, MMatrix4x4 * mat
     render->popMatrix();
 }
 
-void Maratis::computeTransformDirection(OCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, const float distance, const MVector3 & axis)
+void Maratis::computeTransformDirection(OCamera * camera, const Vector3 & rayO, const Vector3 & rayD, const Vector3 & position, const float distance, const Vector3 & axis)
 {
     // get window
     NeoWindow * window = NeoWindow::getInstance();
@@ -2530,22 +2530,22 @@ void Maratis::computeTransformDirection(OCamera * camera, const MVector3 & rayO,
     MMouse * mouse = MMouse::getInstance();
 
     // intersection
-    MVector3 intersection = rayO + ((rayD - rayO).getNormalized() * distance);
+    Vector3 intersection = rayO + ((rayD - rayO).getNormalized() * distance);
 
     // normal
-    MVector3 normal = getTriangleNormal(position, intersection, position + axis);
+    Vector3 normal = getTriangleNormal(position, intersection, position + axis);
 
     // mouse position
-    m_tMousePosition = MVector2((float)mouse->getXPosition(), (float)mouse->getYPosition());
+    m_tMousePosition = Vector2((float)mouse->getXPosition(), (float)mouse->getYPosition());
 
     // vector direction
-    MVector3 pPoint = camera->getProjectedPoint(intersection - (normal * 100));
+    Vector3 pPoint = camera->getProjectedPoint(intersection - (normal * 100));
     pPoint.y = window->getHeight() - pPoint.y;
 
-    m_tVectorDirection = (MVector2(pPoint.x, pPoint.y) - m_tMousePosition).getNormalized();
+    m_tVectorDirection = (Vector2(pPoint.x, pPoint.y) - m_tMousePosition).getNormalized();
 }
 
-void Maratis::computeTransformPlane(OCamera * camera, const MVector3 & position, const MVector3 & axis)
+void Maratis::computeTransformPlane(OCamera * camera, const Vector3 & position, const Vector3 & axis)
 {
     // get window
     NeoWindow * window = NeoWindow::getInstance();
@@ -2554,51 +2554,51 @@ void Maratis::computeTransformPlane(OCamera * camera, const MVector3 & position,
     MMouse * mouse = MMouse::getInstance();
 
     // plane
-    MVector3 up = camera->getRotatedVector(MVector3(1, 1, 1));
-    m_tPlane = getTriangleNormal(MVector3(0, 0, 0), axis, up);
+    Vector3 up = camera->getRotatedVector(Vector3(1, 1, 1));
+    m_tPlane = getTriangleNormal(Vector3(0, 0, 0), axis, up);
 
     // center position
-    MVector3 pPoint = camera->getProjectedPoint(position);
+    Vector3 pPoint = camera->getProjectedPoint(position);
     pPoint.y = window->getHeight() - pPoint.y;
 
-    m_tCenterPosition = MVector2(pPoint.x, pPoint.y);
+    m_tCenterPosition = Vector2(pPoint.x, pPoint.y);
 
     // vector direction
     pPoint = camera->getProjectedPoint(position + (axis * 100));
     pPoint.y = window->getHeight() - pPoint.y;
 
-    m_tVectorDirection = MVector2(pPoint.x, pPoint.y) - m_tCenterPosition;
+    m_tVectorDirection = Vector2(pPoint.x, pPoint.y) - m_tCenterPosition;
     m_tVectorDirection.normalize();
 
     // mouse position
-    m_tMousePosition = MVector2((float)mouse->getXPosition(), (float)mouse->getYPosition());
+    m_tMousePosition = Vector2((float)mouse->getXPosition(), (float)mouse->getYPosition());
 
     // offset direction
     m_tOffsetDirection = m_tMousePosition - m_tCenterPosition;
 }
 
-M_AXIS Maratis::selectEditScale(OCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float radius)
+M_AXIS Maratis::selectEditScale(OCamera * camera, const Vector3 & rayO, const Vector3 & rayD, const Vector3 & position, float radius)
 {
     // axis
-    MVector3 radiusScale = MVector3(radius, radius, radius);
-    MVector3 xAxis(1, 0, 0);
-    MVector3 yAxis(0, 1, 0);
-    MVector3 zAxis(0, 0, 1);
+    Vector3 radiusScale = Vector3(radius, radius, radius);
+    Vector3 xAxis(1, 0, 0);
+    Vector3 yAxis(0, 1, 0);
+    Vector3 zAxis(0, 0, 1);
 
     // objects
     unsigned int oSize = getSelectedObjectsNumber();
 
     // rotation
-    MVector3 rotation(0, 0, 0);
+    Vector3 rotation(0, 0, 0);
     if(oSize == 1)
     {
         Object3d * object = getSelectedObjectByIndex(0);
-        MVector3 worldScale = object->getTransformedScale();
+        Vector3 worldScale = object->getTransformedScale();
 
-        MMatrix4x4 iScaleMatrix;
-        iScaleMatrix.setScale(MVector3(1.0f / worldScale.x, 1.0f / worldScale.y, 1.0f / worldScale.z));
+        Matrix4x4 iScaleMatrix;
+        iScaleMatrix.setScale(Vector3(1.0f / worldScale.x, 1.0f / worldScale.y, 1.0f / worldScale.z));
 
-        MMatrix4x4 matrix = (*object->getMatrix()) * iScaleMatrix;
+        Matrix4x4 matrix = (*object->getMatrix()) * iScaleMatrix;
 
         rotation = matrix.getEulerAngles();
 
@@ -2608,7 +2608,7 @@ M_AXIS Maratis::selectEditScale(OCamera * camera, const MVector3 & rayO, const M
     }
 
     // matrice
-    MMatrix4x4 matrix;
+    Matrix4x4 matrix;
     matrix.setRotationEuler(rotation.x, rotation.y, rotation.z);
     matrix.setTranslationPart(position);
     matrix.scale(radiusScale);
@@ -2681,7 +2681,7 @@ M_AXIS Maratis::selectEditScale(OCamera * camera, const MVector3 & rayO, const M
             Object3d * object = getSelectedObjectByIndex(i);
             if(getNearestObject(scene, rayO, rayD) == object)
             {
-                computeTransformPlane(camera, position, MVector3(0, 0, 0));
+                computeTransformPlane(camera, position, Vector3(0, 0, 0));
                 autoSave();
                 return M_AXIS_VIEW;
             }
@@ -2694,28 +2694,28 @@ M_AXIS Maratis::selectEditScale(OCamera * camera, const MVector3 & rayO, const M
     return axis;
 }
 
-M_AXIS Maratis::selectEditPosition(OCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, float radius)
+M_AXIS Maratis::selectEditPosition(OCamera * camera, const Vector3 & rayO, const Vector3 & rayD, const Vector3 & position, float radius)
 {
     // axis
-    MVector3 radiusScale = MVector3(radius, radius, radius);
-    MVector3 xAxis(1, 0, 0);
-    MVector3 yAxis(0, 1, 0);
-    MVector3 zAxis(0, 0, 1);
+    Vector3 radiusScale = Vector3(radius, radius, radius);
+    Vector3 xAxis(1, 0, 0);
+    Vector3 yAxis(0, 1, 0);
+    Vector3 zAxis(0, 0, 1);
 
     // objects
     unsigned int oSize = getSelectedObjectsNumber();
 
     // rotation
-    MVector3 rotation(0, 0, 0);
+    Vector3 rotation(0, 0, 0);
     if((oSize == 1) && (getOrientationMode() == M_ORIENTATION_LOCAL))
     {
         Object3d * object = getSelectedObjectByIndex(0);
-        MVector3 worldScale = object->getTransformedScale();
+        Vector3 worldScale = object->getTransformedScale();
 
-        MMatrix4x4 iScaleMatrix;
-        iScaleMatrix.setScale(MVector3(1.0f / worldScale.x, 1.0f / worldScale.y, 1.0f / worldScale.z));
+        Matrix4x4 iScaleMatrix;
+        iScaleMatrix.setScale(Vector3(1.0f / worldScale.x, 1.0f / worldScale.y, 1.0f / worldScale.z));
 
-        MMatrix4x4 matrix = (*object->getMatrix()) * iScaleMatrix;
+        Matrix4x4 matrix = (*object->getMatrix()) * iScaleMatrix;
 
         rotation = matrix.getEulerAngles();
 
@@ -2725,7 +2725,7 @@ M_AXIS Maratis::selectEditPosition(OCamera * camera, const MVector3 & rayO, cons
     }
 
     // matrice
-    MMatrix4x4 matrix;
+    Matrix4x4 matrix;
     matrix.setRotationEuler(rotation.x, rotation.y, rotation.z);
     matrix.setTranslationPart(position);
     matrix.scale(radiusScale);
@@ -2799,7 +2799,7 @@ M_AXIS Maratis::selectEditPosition(OCamera * camera, const MVector3 & rayO, cons
             Object3d * object = getSelectedObjectByIndex(i);
             if(object == nearestObj)
             {
-                computeTransformPlane(camera, position, MVector3(0, 0, 0));
+                computeTransformPlane(camera, position, Vector3(0, 0, 0));
                 autoSave();
                 return M_AXIS_VIEW;
             }
@@ -2812,27 +2812,27 @@ M_AXIS Maratis::selectEditPosition(OCamera * camera, const MVector3 & rayO, cons
     return axis;
 }
 
-M_AXIS Maratis::selectEditRotation(OCamera * camera, const MVector3 & rayO, const MVector3 & rayD, const MVector3 & position, const float radius)
+M_AXIS Maratis::selectEditRotation(OCamera * camera, const Vector3 & rayO, const Vector3 & rayD, const Vector3 & position, const float radius)
 {
     // objects
     unsigned int oSize = getSelectedObjectsNumber();
 
-    MVector3 radiusScale = MVector3(radius, radius, radius);
-    MVector3 xAxis(1, 0, 0);
-    MVector3 yAxis(0, 1, 0);
-    MVector3 zAxis(0, 0, 1);
+    Vector3 radiusScale = Vector3(radius, radius, radius);
+    Vector3 xAxis(1, 0, 0);
+    Vector3 yAxis(0, 1, 0);
+    Vector3 zAxis(0, 0, 1);
 
     // rotation
-    MVector3 rotation(0, 0, 0);
+    Vector3 rotation(0, 0, 0);
     if((oSize == 1) && (getOrientationMode() == M_ORIENTATION_LOCAL))
     {
         Object3d * object = getSelectedObjectByIndex(0);
-        MVector3 worldScale = object->getTransformedScale();
+        Vector3 worldScale = object->getTransformedScale();
 
-        MMatrix4x4 iScaleMatrix;
-        iScaleMatrix.setScale(MVector3(1.0f / worldScale.x, 1.0f / worldScale.y, 1.0f / worldScale.z));
+        Matrix4x4 iScaleMatrix;
+        iScaleMatrix.setScale(Vector3(1.0f / worldScale.x, 1.0f / worldScale.y, 1.0f / worldScale.z));
 
-        MMatrix4x4 matrix = (*object->getMatrix()) * iScaleMatrix;
+        Matrix4x4 matrix = (*object->getMatrix()) * iScaleMatrix;
 
         rotation = matrix.getEulerAngles();
 
@@ -2841,7 +2841,7 @@ M_AXIS Maratis::selectEditRotation(OCamera * camera, const MVector3 & rayO, cons
         zAxis = matrix.getRotatedVector3(zAxis);
     }
 
-    MMatrix4x4 matrix;
+    Matrix4x4 matrix;
     matrix.setRotationEuler(rotation.x, rotation.y, rotation.z);
     matrix.setTranslationPart(position);
     matrix.scale(radiusScale);
@@ -2895,7 +2895,7 @@ M_AXIS Maratis::selectEditRotation(OCamera * camera, const MVector3 & rayO, cons
         Object3d * object = getSelectedObjectByIndex(i);
         if(getNearestObject(scene, rayO, rayD) == object)
         {
-            computeTransformPlane(camera, position, MVector3(0, 0, 0));
+            computeTransformPlane(camera, position, Vector3(0, 0, 0));
             autoSave();
             return M_AXIS_VIEW;
         }
@@ -2913,48 +2913,48 @@ void Maratis::drawEditPosition(OCamera * camera)
     unsigned int oSize = getSelectedObjectsNumber();
 
     // get render
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     // get mouse
     MMouse * mouse = MMouse::getInstance();
 
     float radius;
-    MVector3 position;
+    Vector3 position;
 
     if(! camera->isOrtho())
     {
         radius = (camera->getFov() * 400) / (float)viewport[3];
-        MVector3 cameraPos = camera->getTransformedPosition();
-        MVector3 cameraDir = (*getSelectionCenter()) - cameraPos;
+        Vector3 cameraPos = camera->getTransformedPosition();
+        Vector3 cameraDir = (*getSelectionCenter()) - cameraPos;
         cameraDir.normalize();
         position = cameraPos + cameraDir*200;
     }
     else
     {
         radius = (camera->getFov() * 120) / (float)viewport[3];
-        MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();;
-        MVector3 point;
+        Vector3 cameraAxis = camera->getRotatedVector(Vector3(0, 0, -1)).getNormalized();;
+        Vector3 point;
         isRayPlaneIntersection((*getSelectionCenter()), -cameraAxis, camera->getTransformedPosition(), cameraAxis, &point);
         position = point + cameraAxis*200;
     }
 
-    MVector3 radiusScale = MVector3(radius, radius, radius);
+    Vector3 radiusScale = Vector3(radius, radius, radius);
 
     // rotation
-    MVector3 rotation(0, 0, 0);
+    Vector3 rotation(0, 0, 0);
     if((oSize == 1) && (getOrientationMode() == M_ORIENTATION_LOCAL))
     {
         Object3d * object = getSelectedObjectByIndex(0);
-        MVector3 worldScale = object->getTransformedScale();
+        Vector3 worldScale = object->getTransformedScale();
 
-        MMatrix4x4 iScaleMatrix;
-        iScaleMatrix.setScale(MVector3(1.0f / worldScale.x, 1.0f / worldScale.y, 1.0f / worldScale.z));
+        Matrix4x4 iScaleMatrix;
+        iScaleMatrix.setScale(Vector3(1.0f / worldScale.x, 1.0f / worldScale.y, 1.0f / worldScale.z));
 
         rotation = ((*object->getMatrix()) * iScaleMatrix).getEulerAngles();
     }
 
     // matrix
-    MMatrix4x4 matrix;
+    Matrix4x4 matrix;
     matrix.setRotationEuler(rotation.x, rotation.y, rotation.z);
     matrix.setTranslationPart(position);
     matrix.scale(radiusScale);
@@ -2965,17 +2965,17 @@ void Maratis::drawEditPosition(OCamera * camera)
         switch(m_currentAxis)
         {
             case M_AXIS_X:
-                render->setColor3(MVector3(1, 1, 0));
+                render->setColor3(Vector3(1, 1, 0));
                 drawPositionAxis(M_AXIS_X, camera, &matrix, false);
                 return;
 
             case M_AXIS_Y:
-                render->setColor3(MVector3(1, 1, 0));
+                render->setColor3(Vector3(1, 1, 0));
                 drawPositionAxis(M_AXIS_Y, camera, &matrix, false);
                 return;
 
             case M_AXIS_Z:
-                render->setColor3(MVector3(1, 1, 0));
+                render->setColor3(Vector3(1, 1, 0));
                 drawPositionAxis(M_AXIS_Z, camera, &matrix, false);
                 return;
 
@@ -2992,29 +2992,29 @@ void Maratis::drawEditPosition(OCamera * camera)
         switch(m_currentAxis)
         {
             case M_AXIS_X:
-                render->setColor3(MVector3(1, 1, 0));
+                render->setColor3(Vector3(1, 1, 0));
                 drawPositionAxis(M_AXIS_X, camera, &matrix, false);
-                render->setColor3(MVector3(0, 1, 0));
+                render->setColor3(Vector3(0, 1, 0));
                 drawPositionAxis(M_AXIS_Y, camera, &matrix);
-                render->setColor3(MVector3(0, 0, 1));
+                render->setColor3(Vector3(0, 0, 1));
                 drawPositionAxis(M_AXIS_Z, camera, &matrix);
                 return;
 
             case M_AXIS_Y:
-                render->setColor3(MVector3(1, 1, 0));
+                render->setColor3(Vector3(1, 1, 0));
                 drawPositionAxis(M_AXIS_Y, camera, &matrix, false);
-                render->setColor3(MVector3(1, 0, 0));
+                render->setColor3(Vector3(1, 0, 0));
                 drawPositionAxis(M_AXIS_X, camera, &matrix);
-                render->setColor3(MVector3(0, 0, 1));
+                render->setColor3(Vector3(0, 0, 1));
                 drawPositionAxis(M_AXIS_Z, camera, &matrix);
                 return;
 
             case M_AXIS_Z:
-                render->setColor3(MVector3(1, 1, 0));
+                render->setColor3(Vector3(1, 1, 0));
                 drawPositionAxis(M_AXIS_Z, camera, &matrix, false);
-                render->setColor3(MVector3(1, 0, 0));
+                render->setColor3(Vector3(1, 0, 0));
                 drawPositionAxis(M_AXIS_X, camera, &matrix);
-                render->setColor3(MVector3(0, 1, 0));
+                render->setColor3(Vector3(0, 1, 0));
                 drawPositionAxis(M_AXIS_Y, camera, &matrix);
                 return;
 
@@ -3025,11 +3025,11 @@ void Maratis::drawEditPosition(OCamera * camera)
 
 
     // draw axis
-    render->setColor3(MVector3(1, 0, 0));
+    render->setColor3(Vector3(1, 0, 0));
     drawPositionAxis(M_AXIS_X, camera, &matrix);
-    render->setColor3(MVector3(0, 1, 0));
+    render->setColor3(Vector3(0, 1, 0));
     drawPositionAxis(M_AXIS_Y, camera, &matrix);
-    render->setColor3(MVector3(0, 0, 1));
+    render->setColor3(Vector3(0, 0, 1));
     drawPositionAxis(M_AXIS_Z, camera, &matrix);
 }
 
@@ -3042,48 +3042,48 @@ void Maratis::drawEditScale(OCamera * camera)
     unsigned int oSize = getSelectedObjectsNumber();
 
     // get render
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     // get mouse
     MMouse * mouse = MMouse::getInstance();
 
     float radius;
-    MVector3 position;
+    Vector3 position;
 
     if(! camera->isOrtho())
     {
         radius = (camera->getFov() * 400) / (float)viewport[3];
-        MVector3 cameraPos = camera->getTransformedPosition();
-        MVector3 cameraDir = (*getSelectionCenter()) - cameraPos;
+        Vector3 cameraPos = camera->getTransformedPosition();
+        Vector3 cameraDir = (*getSelectionCenter()) - cameraPos;
         cameraDir.normalize();
         position = cameraPos + cameraDir*200;
     }
     else
     {
         radius = (camera->getFov() * 120) / (float)viewport[3];
-        MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();;
-        MVector3 point;
+        Vector3 cameraAxis = camera->getRotatedVector(Vector3(0, 0, -1)).getNormalized();;
+        Vector3 point;
         isRayPlaneIntersection((*getSelectionCenter()), -cameraAxis, camera->getTransformedPosition(), cameraAxis, &point);
         position = point + cameraAxis*200;
     }
 
-    MVector3 radiusScale = MVector3(radius, radius, radius);
+    Vector3 radiusScale = Vector3(radius, radius, radius);
 
     // rotation
-    MVector3 rotation(0, 0, 0);
+    Vector3 rotation(0, 0, 0);
     if(oSize == 1)
     {
         Object3d * object = getSelectedObjectByIndex(0);
-        MVector3 worldScale = object->getTransformedScale();
+        Vector3 worldScale = object->getTransformedScale();
 
-        MMatrix4x4 iScaleMatrix;
-        iScaleMatrix.setScale(MVector3(1.0f / worldScale.x, 1.0f / worldScale.y, 1.0f / worldScale.z));
+        Matrix4x4 iScaleMatrix;
+        iScaleMatrix.setScale(Vector3(1.0f / worldScale.x, 1.0f / worldScale.y, 1.0f / worldScale.z));
 
         rotation = ((*object->getMatrix()) * iScaleMatrix).getEulerAngles();
     }
 
     // matrix
-    MMatrix4x4 matrix;
+    Matrix4x4 matrix;
     matrix.setRotationEuler(rotation.x, rotation.y, rotation.z);
     matrix.setTranslationPart(position);
     matrix.scale(radiusScale);
@@ -3094,17 +3094,17 @@ void Maratis::drawEditScale(OCamera * camera)
         switch(m_currentAxis)
         {
             case M_AXIS_X:
-                render->setColor3(MVector3(1, 1, 0));
+                render->setColor3(Vector3(1, 1, 0));
                 drawScaleAxis(M_AXIS_X, camera, &matrix, false);
                 return;
 
             case M_AXIS_Y:
-                render->setColor3(MVector3(1, 1, 0));
+                render->setColor3(Vector3(1, 1, 0));
                 drawScaleAxis(M_AXIS_Y, camera, &matrix, false);
                 return;
 
             case M_AXIS_Z:
-                render->setColor3(MVector3(1, 1, 0));
+                render->setColor3(Vector3(1, 1, 0));
                 drawScaleAxis(M_AXIS_Z, camera, &matrix, false);
                 return;
 
@@ -3121,29 +3121,29 @@ void Maratis::drawEditScale(OCamera * camera)
         switch(m_currentAxis)
         {
             case M_AXIS_X:
-                render->setColor3(MVector3(1, 1, 0));
+                render->setColor3(Vector3(1, 1, 0));
                 drawScaleAxis(M_AXIS_X, camera, &matrix, false);
-                render->setColor3(MVector3(0, 1, 0));
+                render->setColor3(Vector3(0, 1, 0));
                 drawScaleAxis(M_AXIS_Y, camera, &matrix);
-                render->setColor3(MVector3(0, 0, 1));
+                render->setColor3(Vector3(0, 0, 1));
                 drawScaleAxis(M_AXIS_Z, camera, &matrix);
                 return;
 
             case M_AXIS_Y:
-                render->setColor3(MVector3(1, 1, 0));
+                render->setColor3(Vector3(1, 1, 0));
                 drawScaleAxis(M_AXIS_Y, camera, &matrix, false);
-                render->setColor3(MVector3(1, 0, 0));
+                render->setColor3(Vector3(1, 0, 0));
                 drawScaleAxis(M_AXIS_X, camera, &matrix);
-                render->setColor3(MVector3(0, 0, 1));
+                render->setColor3(Vector3(0, 0, 1));
                 drawScaleAxis(M_AXIS_Z, camera, &matrix);
                 return;
 
             case M_AXIS_Z:
-                render->setColor3(MVector3(1, 1, 0));
+                render->setColor3(Vector3(1, 1, 0));
                 drawScaleAxis(M_AXIS_Z, camera, &matrix, false);
-                render->setColor3(MVector3(1, 0, 0));
+                render->setColor3(Vector3(1, 0, 0));
                 drawScaleAxis(M_AXIS_X, camera, &matrix);
-                render->setColor3(MVector3(0, 1, 0));
+                render->setColor3(Vector3(0, 1, 0));
                 drawScaleAxis(M_AXIS_Y, camera, &matrix);
                 return;
 
@@ -3153,11 +3153,11 @@ void Maratis::drawEditScale(OCamera * camera)
     }
 
     // draw axis
-    render->setColor3(MVector3(1, 0, 0));
+    render->setColor3(Vector3(1, 0, 0));
     drawScaleAxis(M_AXIS_X, camera, &matrix);
-    render->setColor3(MVector3(0, 1, 0));
+    render->setColor3(Vector3(0, 1, 0));
     drawScaleAxis(M_AXIS_Y, camera, &matrix);
-    render->setColor3(MVector3(0, 0, 1));
+    render->setColor3(Vector3(0, 0, 1));
     drawScaleAxis(M_AXIS_Z, camera, &matrix);
 }
 
@@ -3170,48 +3170,48 @@ void Maratis::drawEditRotation(OCamera * camera)
     unsigned int oSize = getSelectedObjectsNumber();
 
     // get engine
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     // get mouse
     MMouse * mouse = MMouse::getInstance();
 
     float radius;
-    MVector3 position;
-    MVector3 cameraPos = camera->getTransformedPosition();
-    MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();;
+    Vector3 position;
+    Vector3 cameraPos = camera->getTransformedPosition();
+    Vector3 cameraAxis = camera->getRotatedVector(Vector3(0, 0, -1)).getNormalized();;
 
     if(! camera->isOrtho())
     {
         radius = (camera->getFov() * 400) / (float)viewport[3];
-        MVector3 cameraDir = (*getSelectionCenter()) - cameraPos;
+        Vector3 cameraDir = (*getSelectionCenter()) - cameraPos;
         cameraDir.normalize();
         position = cameraPos + cameraDir*200;
     }
     else
     {
         radius = (camera->getFov() * 120) / (float)viewport[3];
-        MVector3 point;
+        Vector3 point;
         isRayPlaneIntersection((*getSelectionCenter()), -cameraAxis, camera->getTransformedPosition(), cameraAxis, &point);
         position = point + cameraAxis*200;
     }
 
-    MVector3 radiusScale = MVector3(radius, radius, radius);
+    Vector3 radiusScale = Vector3(radius, radius, radius);
 
     // rotation
-    MVector3 rotation(0, 0, 0);
+    Vector3 rotation(0, 0, 0);
     if((oSize == 1) && (getOrientationMode() == M_ORIENTATION_LOCAL))
     {
         Object3d * object = getSelectedObjectByIndex(0);
-        MVector3 worldScale = object->getTransformedScale();
+        Vector3 worldScale = object->getTransformedScale();
 
-        MMatrix4x4 iScaleMatrix;
-        iScaleMatrix.setScale(MVector3(1.0f / worldScale.x, 1.0f / worldScale.y, 1.0f / worldScale.z));
+        Matrix4x4 iScaleMatrix;
+        iScaleMatrix.setScale(Vector3(1.0f / worldScale.x, 1.0f / worldScale.y, 1.0f / worldScale.z));
 
         rotation = ((*object->getMatrix()) * iScaleMatrix).getEulerAngles();
     }
 
     // matrix
-    MMatrix4x4 matrix;
+    Matrix4x4 matrix;
     matrix.setRotationEuler(rotation.x, rotation.y, rotation.z);
     matrix.setTranslationPart(position);
     matrix.scale(radiusScale);
@@ -3226,21 +3226,21 @@ void Maratis::drawEditRotation(OCamera * camera)
 
     // enable blending
     render->enableBlending();
-    render->setBlendingMode(M_BLENDING_ALPHA);
+    render->setBlendingMode(BLENDING_ALPHA);
 
     // draw view circle
-    render->setColor4(MVector4(1, 1, 1, 0.2f));
+    render->setColor4(Vector4(1, 1, 1, 0.2f));
 
-    MMatrix4x4 eyeMatrix;
+    Matrix4x4 eyeMatrix;
     if(! camera->isOrtho())
     {
-        MQuaternion quat;
-        quat.setFromVectors(MVector3(0, 0, 1), (*getSelectionCenter()) - cameraPos);
+        Quaternion quat;
+        quat.setFromVectors(Vector3(0, 0, 1), (*getSelectionCenter()) - cameraPos);
         eyeMatrix.setRotationAxis(quat.getAngle(), quat.getAxis());
     }
     else
     {
-        MQuaternion rotation = camera->getRotation();
+        Quaternion rotation = camera->getRotation();
         eyeMatrix.setRotationAxis(rotation.getAngle(), rotation.getAxis());
     }
 
@@ -3255,23 +3255,23 @@ void Maratis::drawEditRotation(OCamera * camera)
         switch(m_currentAxis)
         {
             case M_AXIS_X:
-                render->setColor4(MVector4(1, 1, 1, 0.2f));
+                render->setColor4(Vector4(1, 1, 1, 0.2f));
                 drawRotationCircle(M_AXIS_X, camera, &matrix, false);
-                render->setColor3(MVector3(1, 1, 0));
+                render->setColor3(Vector3(1, 1, 0));
                 drawRotationCircle(M_AXIS_X, camera, &matrix);
                 return;
 
             case M_AXIS_Y:
-                render->setColor4(MVector4(1, 1, 1, 0.2f));
+                render->setColor4(Vector4(1, 1, 1, 0.2f));
                 drawRotationCircle(M_AXIS_Y, camera, &matrix, false);
-                render->setColor3(MVector3(1, 1, 0));
+                render->setColor3(Vector3(1, 1, 0));
                 drawRotationCircle(M_AXIS_Y, camera, &matrix);
                 return;
 
             case M_AXIS_Z:
-                render->setColor4(MVector4(1, 1, 1, 0.2f));
+                render->setColor4(Vector4(1, 1, 1, 0.2f));
                 drawRotationCircle(M_AXIS_Z, camera, &matrix, false);
-                render->setColor3(MVector3(1, 1, 0));
+                render->setColor3(Vector3(1, 1, 0));
                 drawRotationCircle(M_AXIS_Z, camera, &matrix);
                 return;
 
@@ -3283,11 +3283,11 @@ void Maratis::drawEditRotation(OCamera * camera)
         }
     }
 
-    render->setColor3(MVector3(1, 0, 0));
+    render->setColor3(Vector3(1, 0, 0));
     drawRotationCircle(M_AXIS_X, camera, &matrix);
-    render->setColor3(MVector3(0, 1, 0));
+    render->setColor3(Vector3(0, 1, 0));
     drawRotationCircle(M_AXIS_Y, camera, &matrix);
-    render->setColor3(MVector3(0, 0, 1));
+    render->setColor3(Vector3(0, 0, 1));
     drawRotationCircle(M_AXIS_Z, camera, &matrix);
 }
 
@@ -3298,7 +3298,7 @@ void Maratis::transformRotation(void)
 
     // get mouse
     MMouse * mouse = MMouse::getInstance();
-    MVector2 dir = MVector2((float)mouse->getXDirection(), (float)mouse->getYDirection());
+    Vector2 dir = Vector2((float)mouse->getXDirection(), (float)mouse->getYDirection());
 
     // angle
     float angle;
@@ -3311,8 +3311,8 @@ void Maratis::transformRotation(void)
             break;
         case M_AXIS_VIEW:
         {
-            MVector2 vec = (m_tMousePosition - m_tCenterPosition).getNormalized();
-            angle = MVector2(-vec.y, vec.x).dotProduct(dir);
+            Vector2 vec = (m_tMousePosition - m_tCenterPosition).getNormalized();
+            angle = Vector2(-vec.y, vec.x).dotProduct(dir);
         }
             break;
 
@@ -3326,27 +3326,27 @@ void Maratis::transformRotation(void)
     // rotate
     if(getOrientationMode() == M_ORIENTATION_WORLD)
     {
-        MVector3 axis;
-        MVector3 * position = getSelectionCenter();
+        Vector3 axis;
+        Vector3 * position = getSelectionCenter();
 
         switch(m_currentAxis)
         {
             case M_AXIS_X:
-                axis = MVector3(1, 0, 0);
+                axis = Vector3(1, 0, 0);
                 break;
 
             case M_AXIS_Y:
-                axis = MVector3(0, 1, 0);
+                axis = Vector3(0, 1, 0);
                 break;
 
             case M_AXIS_Z:
-                axis = MVector3(0, 0, 1);
+                axis = Vector3(0, 0, 1);
                 break;
 
             case M_AXIS_VIEW:
             {
                 if(camera->isOrtho())
-                    axis = camera->getRotatedVector(MVector3(0, 0, -1));
+                    axis = camera->getRotatedVector(Vector3(0, 0, -1));
                 else
                     axis = (*getSelectionCenter() - camera->getTransformedPosition()).getNormalized();
             }
@@ -3368,26 +3368,26 @@ void Maratis::transformRotation(void)
                     continue;
 
                 // translate
-                MVector3 vec = object->getTransformedPosition() - (*position);
+                Vector3 vec = object->getTransformedPosition() - (*position);
                 vec.rotateAxis((double)angle, axis);
 
-                MVector3 localPos = parent->getInversePosition((*position) + vec);
+                Vector3 localPos = parent->getInversePosition((*position) + vec);
                 object->setPosition(localPos);
 
                 // rotate
-                MVector3 iAxis = object->getInverseRotatedVector(axis) / object->getTransformedScale();
+                Vector3 iAxis = object->getInverseRotatedVector(axis) / object->getTransformedScale();
 
                 object->addAxisAngleRotation(iAxis, angle);
             }
             else
             {
                 // translate
-                MVector3 vec = object->getTransformedPosition() - (*position);
+                Vector3 vec = object->getTransformedPosition() - (*position);
                 vec.rotateAxis((double)angle, axis);
                 object->setPosition((*position) + vec);
 
                 // rotate
-                MVector3 iAxis = object->getInverseRotatedVector(axis) / object->getTransformedScale();
+                Vector3 iAxis = object->getInverseRotatedVector(axis) / object->getTransformedScale();
                 object->addAxisAngleRotation(iAxis, angle);
             }
 
@@ -3397,26 +3397,26 @@ void Maratis::transformRotation(void)
     }
     else
     {
-        MVector3 axis;
+        Vector3 axis;
 
         switch(m_currentAxis)
         {
             case M_AXIS_X:
-                axis = MVector3(1, 0, 0);
+                axis = Vector3(1, 0, 0);
                 break;
 
             case M_AXIS_Y:
-                axis = MVector3(0, 1, 0);
+                axis = Vector3(0, 1, 0);
                 break;
 
             case M_AXIS_Z:
-                axis = MVector3(0, 0, 1);
+                axis = Vector3(0, 0, 1);
                 break;
 
             case M_AXIS_VIEW:
             {
                 if(camera->isOrtho())
-                    axis = camera->getRotatedVector(MVector3(0, 0, -1));
+                    axis = camera->getRotatedVector(Vector3(0, 0, -1));
             }
                 break;
 
@@ -3434,7 +3434,7 @@ void Maratis::transformRotation(void)
                 if(! camera->isOrtho())
                     axis = (object->getTransformedPosition() - camera->getTransformedPosition()).getNormalized();
 
-                MVector3 iAxis = object->getInverseRotatedVector(axis) / object->getTransformedScale();
+                Vector3 iAxis = object->getInverseRotatedVector(axis) / object->getTransformedScale();
                 object->addAxisAngleRotation(iAxis, angle);
                 object->updateMatrix();
                 continue;
@@ -3455,16 +3455,16 @@ void Maratis::transformScale(void)
     MMouse * mouse = MMouse::getInstance();
 
     // position
-    MVector3 * position = getSelectionCenter();
+    Vector3 * position = getSelectionCenter();
 
     // mouse direction
-    MVector2 mouseDir = MVector2((float)mouse->getXDirection(), (float)mouse->getYDirection());
+    Vector2 mouseDir = Vector2((float)mouse->getXDirection(), (float)mouse->getYDirection());
 
     // view axis
     if(m_currentAxis == M_AXIS_VIEW)
     {
         // scale factor
-        MVector2 dir = (m_tMousePosition - m_tCenterPosition).getNormalized();
+        Vector2 dir = (m_tMousePosition - m_tCenterPosition).getNormalized();
         float scaleFactor = 1.0f + dir.dotProduct(mouseDir) * 0.01f;
 
         unsigned int i;
@@ -3480,18 +3480,18 @@ void Maratis::transformScale(void)
                     if(isObjectSelected(parent))
                         continue;
 
-                    MVector3 worldPos = object->getTransformedPosition();
-                    MVector3 localPos = parent->getInversePosition((*position) + ((worldPos - (*position)) * scaleFactor));
+                    Vector3 worldPos = object->getTransformedPosition();
+                    Vector3 localPos = parent->getInversePosition((*position) + ((worldPos - (*position)) * scaleFactor));
                     object->setPosition(localPos);
                 }
                 else
                 {
-                    MVector3 worldPos = object->getTransformedPosition();
+                    Vector3 worldPos = object->getTransformedPosition();
                     object->setPosition((*position) + ((worldPos - (*position)) * scaleFactor));
                 }
             }
 
-            MVector3 scale = object->getScale() * scaleFactor;
+            Vector3 scale = object->getScale() * scaleFactor;
 
             object->setScale(scale);
             object->updateMatrix();
@@ -3501,21 +3501,21 @@ void Maratis::transformScale(void)
     }
 
     // axis
-    MVector3 axis;
+    Vector3 axis;
     if(oSize > 1)
     {
         switch(m_currentAxis)
         {
             case M_AXIS_X:
-                axis = MVector3(1, 0, 0);
+                axis = Vector3(1, 0, 0);
                 break;
 
             case M_AXIS_Y:
-                axis = MVector3(0, 1, 0);
+                axis = Vector3(0, 1, 0);
                 break;
 
             case M_AXIS_Z:
-                axis = MVector3(0, 0, 1);
+                axis = Vector3(0, 0, 1);
                 break;
 
             default:
@@ -3527,23 +3527,23 @@ void Maratis::transformScale(void)
         Object3d * object = getSelectedObjectByIndex(0);
 
         // matrix
-        MVector3 scale = object->getTransformedScale();
-        MMatrix4x4 iScaleMatrix;
-        iScaleMatrix.setScale(MVector3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z));
-        MMatrix4x4 matrix = (*object->getMatrix()) * iScaleMatrix;
+        Vector3 scale = object->getTransformedScale();
+        Matrix4x4 iScaleMatrix;
+        iScaleMatrix.setScale(Vector3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z));
+        Matrix4x4 matrix = (*object->getMatrix()) * iScaleMatrix;
 
         switch(m_currentAxis)
         {
             case M_AXIS_X:
-                axis = matrix.getRotatedVector3(MVector3(1, 0, 0));
+                axis = matrix.getRotatedVector3(Vector3(1, 0, 0));
                 break;
 
             case M_AXIS_Y:
-                axis = matrix.getRotatedVector3(MVector3(0, 1, 0));
+                axis = matrix.getRotatedVector3(Vector3(0, 1, 0));
                 break;
 
             case M_AXIS_Z:
-                axis = matrix.getRotatedVector3(MVector3(0, 0, 1));
+                axis = matrix.getRotatedVector3(Vector3(0, 0, 1));
                 break;
 
             default:
@@ -3558,9 +3558,9 @@ void Maratis::transformScale(void)
     for(i=0; i<oSize; i++)
     {
         Object3d * object = getSelectedObjectByIndex(i);
-        MVector3 worldPos = object->getTransformedPosition();
+        Vector3 worldPos = object->getTransformedPosition();
 
-        MVector3 scale = object->getScale();
+        Vector3 scale = object->getScale();
         switch(m_currentAxis)
         {
             case M_AXIS_X:
@@ -3582,7 +3582,7 @@ void Maratis::transformScale(void)
     }
 }
 
-void Maratis::transformPosition(MVector2 delta)
+void Maratis::transformPosition(Vector2 delta)
 {
     // objects
     unsigned int oSize = getSelectedObjectsNumber();
@@ -3598,26 +3598,26 @@ void Maratis::transformPosition(MVector2 delta)
 
     // position
     updateSelectionCenter();
-    MVector3 * position = getSelectionCenter();
+    Vector3 * position = getSelectionCenter();
 
     // mouse position
-    MVector2 mousePos((float)mouse->getXPosition(), (float)mouse->getYPosition());
+    Vector2 mousePos((float)mouse->getXPosition(), (float)mouse->getYPosition());
     mousePos = mousePos - m_tOffsetDirection;
 
     // view axis
     if(m_currentAxis == M_AXIS_VIEW)
     {
-        MVector3 viewAxis = camera->getRotatedVector(MVector3(0, 0, -1));
+        Vector3 viewAxis = camera->getRotatedVector(Vector3(0, 0, -1));
 
         // ray (origin and dest)
-        MVector3 rayO = camera->getTransformedPosition();
-        MVector3 rayD = camera->getUnProjectedPoint(
-                                                    MVector3((float)mousePos.x, (float)(window->getHeight() - mousePos.y), 1)
+        Vector3 rayO = camera->getTransformedPosition();
+        Vector3 rayD = camera->getUnProjectedPoint(
+                                                    Vector3((float)mousePos.x, (float)(window->getHeight() - mousePos.y), 1)
                                                     );
 
         if(camera->isOrtho())
         {
-            MVector3 point;
+            Vector3 point;
             isRayPlaneIntersection(rayD, -viewAxis, rayO, viewAxis, &point);
             rayO = point;
             rayD = (rayD - rayO).getNormalized();
@@ -3628,21 +3628,21 @@ void Maratis::transformPosition(MVector2 delta)
         }
 
         // intersection
-        MVector3 point;
+        Vector3 point;
         isRayPlaneIntersection(rayO, rayD, (*position), viewAxis, &point);
 
         unsigned int i;
         for(i=0; i<oSize; i++)
         {
             Object3d * object = getSelectedObjectByIndex(i);
-            MVector3 worldPos = object->getTransformedPosition();
+            Vector3 worldPos = object->getTransformedPosition();
 
             if(object->hasParent())
             {
                 Object3d * parent = object->getParent();
                 if(! isObjectSelected(parent))
                 {
-                    MVector3 localPos = parent->getInversePosition(point + (worldPos - (*position)));
+                    Vector3 localPos = parent->getInversePosition(point + (worldPos - (*position)));
                     object->setPosition(localPos);
                 }
             }
@@ -3657,21 +3657,21 @@ void Maratis::transformPosition(MVector2 delta)
     }
 
     // axis
-    MVector3 axis;
+    Vector3 axis;
     if((getOrientationMode() == M_ORIENTATION_WORLD) || (oSize > 1))
     {
         switch(m_currentAxis)
         {
             case M_AXIS_X:
-                axis = MVector3(1, 0, 0);
+                axis = Vector3(1, 0, 0);
                 break;
 
             case M_AXIS_Y:
-                axis = MVector3(0, 1, 0);
+                axis = Vector3(0, 1, 0);
                 break;
 
             case M_AXIS_Z:
-                axis = MVector3(0, 0, 1);
+                axis = Vector3(0, 0, 1);
                 break;
 
             default:
@@ -3683,23 +3683,23 @@ void Maratis::transformPosition(MVector2 delta)
         Object3d * object = getSelectedObjectByIndex(0);
 
         // matrix
-        MVector3 scale = object->getTransformedScale();
-        MMatrix4x4 iScaleMatrix;
-        iScaleMatrix.setScale(MVector3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z));
-        MMatrix4x4 matrix = (*object->getMatrix()) * iScaleMatrix;
+        Vector3 scale = object->getTransformedScale();
+        Matrix4x4 iScaleMatrix;
+        iScaleMatrix.setScale(Vector3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z));
+        Matrix4x4 matrix = (*object->getMatrix()) * iScaleMatrix;
 
         switch(m_currentAxis)
         {
             case M_AXIS_X:
-                axis = matrix.getRotatedVector3(MVector3(1, 0, 0));
+                axis = matrix.getRotatedVector3(Vector3(1, 0, 0));
                 break;
 
             case M_AXIS_Y:
-                axis = matrix.getRotatedVector3(MVector3(0, 1, 0));
+                axis = matrix.getRotatedVector3(Vector3(0, 1, 0));
                 break;
 
             case M_AXIS_Z:
-                axis = matrix.getRotatedVector3(MVector3(0, 0, 1));
+                axis = matrix.getRotatedVector3(Vector3(0, 0, 1));
                 break;
 
             default:
@@ -3708,21 +3708,21 @@ void Maratis::transformPosition(MVector2 delta)
     }
 
     // mouse position on axis
-    MVector2 axisNormal(-m_tVectorDirection.y, m_tVectorDirection.x);
+    Vector2 axisNormal(-m_tVectorDirection.y, m_tVectorDirection.x);
     float axisMouseDist = (mousePos - m_tCenterPosition).dotProduct(axisNormal);
     mousePos = mousePos - (axisNormal * axisMouseDist);
 
-    MVector3 viewAxis = camera->getRotatedVector(MVector3(0, 0, -1));
+    Vector3 viewAxis = camera->getRotatedVector(Vector3(0, 0, -1));
 
     // ray (origin and dest)
-    MVector3 rayO = camera->getTransformedPosition();
-    MVector3 rayD = camera->getUnProjectedPoint(
-                                                MVector3(mousePos.x, (window->getHeight() - mousePos.y), 0.499238f)
+    Vector3 rayO = camera->getTransformedPosition();
+    Vector3 rayD = camera->getUnProjectedPoint(
+                                                Vector3(mousePos.x, (window->getHeight() - mousePos.y), 0.499238f)
                                                 );
 
     if(camera->isOrtho())
     {
-        MVector3 point;
+        Vector3 point;
         isRayPlaneIntersection(rayD, -viewAxis, rayO, viewAxis, &point);
         rayO = point;
         rayD = (rayD - rayO).getNormalized();
@@ -3733,7 +3733,7 @@ void Maratis::transformPosition(MVector2 delta)
     }
 
     // intersection
-    MVector3 point;
+    Vector3 point;
     isRayPlaneIntersection(rayO, rayD, (*position), m_tPlane, &point);
 
     float distance = axis.dotProduct((point) - (*position));
@@ -3742,14 +3742,14 @@ void Maratis::transformPosition(MVector2 delta)
     for(i=0; i<oSize; i++)
     {
         Object3d * object = getSelectedObjectByIndex(i);
-        MVector3 worldPos = object->getTransformedPosition();
+        Vector3 worldPos = object->getTransformedPosition();
 
         if(object->hasParent())
         {
             Object3d * parent = object->getParent();
             if(! isObjectSelected(parent))
             {
-                MVector3 localPos = parent->getInversePosition(worldPos + (axis * distance));
+                Vector3 localPos = parent->getInversePosition(worldPos + (axis * distance));
                 object->setPosition(localPos);
             }
         }
@@ -3778,26 +3778,26 @@ void Maratis::transformPosition(void)
 
     // position
     updateSelectionCenter();
-    MVector3 * position = getSelectionCenter();
+    Vector3 * position = getSelectionCenter();
 
     // mouse position
-    MVector2 mousePos((float)mouse->getXPosition(), (float)mouse->getYPosition());
+    Vector2 mousePos((float)mouse->getXPosition(), (float)mouse->getYPosition());
     mousePos = mousePos - m_tOffsetDirection;
 
     // view axis
     if(m_currentAxis == M_AXIS_VIEW)
     {
-        MVector3 viewAxis = camera->getRotatedVector(MVector3(0, 0, -1));
+        Vector3 viewAxis = camera->getRotatedVector(Vector3(0, 0, -1));
 
         // ray (origin and dest)
-        MVector3 rayO = camera->getTransformedPosition();
-        MVector3 rayD = camera->getUnProjectedPoint(
-                                                    MVector3((float)mousePos.x, (float)(window->getHeight() - mousePos.y), 1)
+        Vector3 rayO = camera->getTransformedPosition();
+        Vector3 rayD = camera->getUnProjectedPoint(
+                                                    Vector3((float)mousePos.x, (float)(window->getHeight() - mousePos.y), 1)
                                                     );
 
         if(camera->isOrtho())
         {
-            MVector3 point;
+            Vector3 point;
             isRayPlaneIntersection(rayD, -viewAxis, rayO, viewAxis, &point);
             rayO = point;
             rayD = (rayD - rayO).getNormalized();
@@ -3808,21 +3808,21 @@ void Maratis::transformPosition(void)
         }
 
         // intersection
-        MVector3 point;
+        Vector3 point;
         isRayPlaneIntersection(rayO, rayD, (*position), viewAxis, &point);
 
         unsigned int i;
         for(i=0; i<oSize; i++)
         {
             Object3d * object = getSelectedObjectByIndex(i);
-            MVector3 worldPos = object->getTransformedPosition();
+            Vector3 worldPos = object->getTransformedPosition();
 
             if(object->hasParent())
             {
                 Object3d * parent = object->getParent();
                 if(! isObjectSelected(parent))
                 {
-                    MVector3 localPos = parent->getInversePosition(point + (worldPos - (*position)));
+                    Vector3 localPos = parent->getInversePosition(point + (worldPos - (*position)));
                     object->setPosition(localPos);
                 }
             }
@@ -3837,21 +3837,21 @@ void Maratis::transformPosition(void)
     }
 
     // axis
-    MVector3 axis;
+    Vector3 axis;
     if((getOrientationMode() == M_ORIENTATION_WORLD) || (oSize > 1))
     {
         switch(m_currentAxis)
         {
             case M_AXIS_X:
-                axis = MVector3(1, 0, 0);
+                axis = Vector3(1, 0, 0);
                 break;
 
             case M_AXIS_Y:
-                axis = MVector3(0, 1, 0);
+                axis = Vector3(0, 1, 0);
                 break;
 
             case M_AXIS_Z:
-                axis = MVector3(0, 0, 1);
+                axis = Vector3(0, 0, 1);
                 break;
 
             default:
@@ -3863,23 +3863,23 @@ void Maratis::transformPosition(void)
         Object3d * object = getSelectedObjectByIndex(0);
 
         // matrix
-        MVector3 scale = object->getTransformedScale();
-        MMatrix4x4 iScaleMatrix;
-        iScaleMatrix.setScale(MVector3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z));
-        MMatrix4x4 matrix = (*object->getMatrix()) * iScaleMatrix;
+        Vector3 scale = object->getTransformedScale();
+        Matrix4x4 iScaleMatrix;
+        iScaleMatrix.setScale(Vector3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z));
+        Matrix4x4 matrix = (*object->getMatrix()) * iScaleMatrix;
 
         switch(m_currentAxis)
         {
             case M_AXIS_X:
-                axis = matrix.getRotatedVector3(MVector3(1, 0, 0));
+                axis = matrix.getRotatedVector3(Vector3(1, 0, 0));
                 break;
 
             case M_AXIS_Y:
-                axis = matrix.getRotatedVector3(MVector3(0, 1, 0));
+                axis = matrix.getRotatedVector3(Vector3(0, 1, 0));
                 break;
 
             case M_AXIS_Z:
-                axis = matrix.getRotatedVector3(MVector3(0, 0, 1));
+                axis = matrix.getRotatedVector3(Vector3(0, 0, 1));
                 break;
 
             default:
@@ -3888,21 +3888,21 @@ void Maratis::transformPosition(void)
     }
 
     // mouse position on axis
-    MVector2 axisNormal(-m_tVectorDirection.y, m_tVectorDirection.x);
+    Vector2 axisNormal(-m_tVectorDirection.y, m_tVectorDirection.x);
     float axisMouseDist = (mousePos - m_tCenterPosition).dotProduct(axisNormal);
     mousePos = mousePos - (axisNormal * axisMouseDist);
 
-    MVector3 viewAxis = camera->getRotatedVector(MVector3(0, 0, -1));
+    Vector3 viewAxis = camera->getRotatedVector(Vector3(0, 0, -1));
 
     // ray (origin and dest)
-    MVector3 rayO = camera->getTransformedPosition();
-    MVector3 rayD = camera->getUnProjectedPoint(
-                                                MVector3(mousePos.x, (window->getHeight() - mousePos.y), 0.499238f)
+    Vector3 rayO = camera->getTransformedPosition();
+    Vector3 rayD = camera->getUnProjectedPoint(
+                                                Vector3(mousePos.x, (window->getHeight() - mousePos.y), 0.499238f)
                                                 );
 
     if(camera->isOrtho())
     {
-        MVector3 point;
+        Vector3 point;
         isRayPlaneIntersection(rayD, -viewAxis, rayO, viewAxis, &point);
         rayO = point;
         rayD = (rayD - rayO).getNormalized();
@@ -3913,7 +3913,7 @@ void Maratis::transformPosition(void)
     }
 
     // intersection
-    MVector3 point;
+    Vector3 point;
     isRayPlaneIntersection(rayO, rayD, (*position), m_tPlane, &point);
 
     float distance = axis.dotProduct((point) - (*position));
@@ -3937,14 +3937,14 @@ void Maratis::transformPosition(void)
     for(i=0; i<oSize; i++)
     {
         Object3d * object = getSelectedObjectByIndex(i);
-        MVector3 worldPos = object->getTransformedPosition();
+        Vector3 worldPos = object->getTransformedPosition();
 
         if(object->hasParent())
         {
             Object3d * parent = object->getParent();
             if(! isObjectSelected(parent))
             {
-                MVector3 localPos = parent->getInversePosition(worldPos + (axis * distance));
+                Vector3 localPos = parent->getInversePosition(worldPos + (axis * distance));
                 object->setPosition(localPos);
             }
         }
@@ -4004,7 +4004,7 @@ void Maratis::drawInvisibleEntity(OEntity * entity)
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #endif
 
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
     Mesh * mesh = entity->getMesh();
     if(mesh)
     {
@@ -4026,11 +4026,11 @@ void Maratis::drawInvisibleEntity(OEntity * entity)
 void Maratis::drawCamera(Scene * scene, OCamera * camera)
 {
     // get render
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     // clear z buffer
     render->enableDepthTest();
-    render->clear(M_BUFFER_DEPTH);
+    render->clear(BUFFER_DEPTH);
 
     // draw scene
     camera->enable();
@@ -4041,7 +4041,7 @@ void Maratis::drawCamera(Scene * scene, OCamera * camera)
 void Maratis::drawTriangles(Mesh * mesh)
 {
     // get render
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     // subMeshs
     unsigned int s;
@@ -4057,7 +4057,7 @@ void Maratis::drawTriangles(Mesh * mesh)
 
         // vertices
         render->enableVertexArray();
-        render->setVertexPointer(M_FLOAT, 3, subMesh->getVertices());
+        render->setVertexPointer(VAR_FLOAT, 3, subMesh->getVertices());
 
         unsigned int i;
         unsigned int displayNumber = subMesh->getDisplaysNumber();
@@ -4072,8 +4072,8 @@ void Maratis::drawTriangles(Mesh * mesh)
             unsigned int size = display->getSize();
 
             // display properties
-            M_PRIMITIVE_TYPES primitiveType = display->getPrimitiveType();
-            M_CULL_MODES cullMode = display->getCullMode();
+            PRIMITIVE_TYPES primitiveType = display->getPrimitiveType();
+            CULL_MODES cullMode = display->getCullMode();
 
             // cull mode
             render->setCullMode(cullMode);
@@ -4086,12 +4086,12 @@ void Maratis::drawTriangles(Mesh * mesh)
             {
                 switch(subMesh->getIndicesType())
                 {
-                    case M_USHORT:
-                        render->drawElement(primitiveType, size, M_USHORT, (unsigned short*)indices + begin);
+                    case VAR_USHORT:
+                        render->drawElement(primitiveType, size, VAR_USHORT, (unsigned short*)indices + begin);
                         break;
 
-                    case M_UINT:
-                        render->drawElement(primitiveType, size, M_UINT, (unsigned int*)indices + begin);
+                    case VAR_UINT:
+                        render->drawElement(primitiveType, size, VAR_UINT, (unsigned int*)indices + begin);
                         break;
 
                     default:
@@ -4106,16 +4106,16 @@ void Maratis::drawTriangles(Mesh * mesh)
 
 void Maratis::drawLight(void)
 {
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     Mesh * mesh = m_lightEntity->getMesh();
     unsigned short * indices = (unsigned short *)mesh->getSubMeshs()[0].getIndices();
-    MVector3 * vertices = mesh->getSubMeshs()[0].getVertices();
+    Vector3 * vertices = mesh->getSubMeshs()[0].getVertices();
 
     unsigned int i;
     for(i=0; i<mesh->getSubMeshs()[0].getIndicesSize(); i+=3)
     {
-        beginDraw(M_PRIMITIVE_LINES);
+        beginDraw(PRIMITIVE_LINES);
 
         pushVertex(vertices[indices[i+0]]);
         pushVertex(vertices[indices[i+1]]);
@@ -4128,16 +4128,16 @@ void Maratis::drawLight(void)
 
 void Maratis::drawCamera(void)
 {
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     Mesh * mesh = m_cameraEntity->getMesh();
     unsigned short * indices = (unsigned short *)mesh->getSubMeshs()[0].getIndices();
-    MVector3 * vertices = mesh->getSubMeshs()[0].getVertices();
+    Vector3 * vertices = mesh->getSubMeshs()[0].getVertices();
 
     unsigned int i;
     for(i=0; i<mesh->getSubMeshs()[0].getIndicesSize(); i+=3)
     {
-        beginDraw(M_PRIMITIVE_LINES);
+        beginDraw(PRIMITIVE_LINES);
 
         pushVertex(vertices[indices[i+0]]);
         pushVertex(vertices[indices[i+1]]);
@@ -4150,16 +4150,16 @@ void Maratis::drawCamera(void)
 
 void Maratis::drawSound(void)
 {
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     Mesh * mesh = m_soundEntity->getMesh();
     unsigned short * indices = (unsigned short *)mesh->getSubMeshs()[0].getIndices();
-    MVector3 * vertices = mesh->getSubMeshs()[0].getVertices();
+    Vector3 * vertices = mesh->getSubMeshs()[0].getVertices();
 
     unsigned int i;
     for(i=0; i<mesh->getSubMeshs()[0].getIndicesSize(); i+=3)
     {
-        beginDraw(M_PRIMITIVE_LINES);
+        beginDraw(PRIMITIVE_LINES);
 
         pushVertex(vertices[indices[i+0]]);
         pushVertex(vertices[indices[i+1]]);
@@ -4173,7 +4173,7 @@ void Maratis::drawSound(void)
 void Maratis::drawArmature(OEntity * entity)
 {
     NeoEngine * engine = NeoEngine::getInstance();
-    MRenderingContext * render = engine->getRenderingContext();
+    RenderingContext * render = engine->getRenderingContext();
 
     Mesh * mesh = entity->getMesh();
     if(mesh)
@@ -4195,24 +4195,24 @@ void Maratis::drawArmature(OEntity * entity)
                 armature->updateBonesSkinMatrix();
             }
 
-            MVector3 iVue = m_perspectiveVue.getPosition();
+            Vector3 iVue = m_perspectiveVue.getPosition();
 
-            beginDraw(M_PRIMITIVE_LINES);
+            beginDraw(PRIMITIVE_LINES);
 
             unsigned int b, bSize = armature->getBonesNumber();
             for(b=0; b<bSize; b++)
             {
                 OBone * bone = armature->getBone(b);
 
-                MVector3 pos = entity->getTransformedVector(bone->getTransformedPosition());
+                Vector3 pos = entity->getTransformedVector(bone->getTransformedPosition());
                 float size = (pos - iVue).getLength() * 0.01f;
 
-                pushVertex(pos + bone->getUniformRotatedVector(MVector3(-size, 0, 0)));
-                pushVertex(pos + bone->getUniformRotatedVector(MVector3( size, 0, 0)));
-                pushVertex(pos + bone->getUniformRotatedVector(MVector3(0, -size, 0)));
-                pushVertex(pos + bone->getUniformRotatedVector(MVector3(0,  size, 0)));
-                pushVertex(pos + bone->getUniformRotatedVector(MVector3(0, 0, -size)));
-                pushVertex(pos + bone->getUniformRotatedVector(MVector3(0, 0,  size)));
+                pushVertex(pos + bone->getUniformRotatedVector(Vector3(-size, 0, 0)));
+                pushVertex(pos + bone->getUniformRotatedVector(Vector3( size, 0, 0)));
+                pushVertex(pos + bone->getUniformRotatedVector(Vector3(0, -size, 0)));
+                pushVertex(pos + bone->getUniformRotatedVector(Vector3(0,  size, 0)));
+                pushVertex(pos + bone->getUniformRotatedVector(Vector3(0, 0, -size)));
+                pushVertex(pos + bone->getUniformRotatedVector(Vector3(0, 0,  size)));
             }
 
             endDraw(render);
@@ -4228,16 +4228,16 @@ void Maratis::drawMainView(Scene * scene)
     NeoEngine * engine = NeoEngine::getInstance();
 
     // get render
-    MRenderingContext * render = engine->getRenderingContext();
+    RenderingContext * render = engine->getRenderingContext();
     Renderer * renderer = engine->getRenderer();
 
     // get camera
     OCamera * camera = getPerspectiveVue();
-    MVector3 cameraAxis = camera->getRotatedVector(MVector3(0, 0, -1)).getNormalized();
+    Vector3 cameraAxis = camera->getRotatedVector(Vector3(0, 0, -1)).getNormalized();
 
     // clear z buffer
     render->enableDepthTest();
-    render->clear(M_BUFFER_DEPTH);
+    render->clear(BUFFER_DEPTH);
 
     // draw grid
     camera->enable();
@@ -4252,7 +4252,7 @@ void Maratis::drawMainView(Scene * scene)
     render->disableLighting();
     render->disableTexture();
     render->enableBlending();
-    render->setBlendingMode(M_BLENDING_ALPHA);
+    render->setBlendingMode(BLENDING_ALPHA);
 
     int * viewport = camera->getCurrentViewport();
     float editObjectSize = 10.0f / (float)viewport[3];
@@ -4266,9 +4266,9 @@ void Maratis::drawMainView(Scene * scene)
         if(! entity->isActive())
         {
             if(isObjectSelected(entity))
-                render->setColor3(MVector3(1, 1, 0));
+                render->setColor3(Vector3(1, 1, 0));
             else
-                render->setColor3(MVector3(0.5f));
+                render->setColor3(Vector3(0.5f));
 
             entity->updateMatrix();
             drawInvisibleEntity(entity);
@@ -4276,9 +4276,9 @@ void Maratis::drawMainView(Scene * scene)
         else if(entity->isInvisible())
         {
             if(isObjectSelected(entity))
-                render->setColor3(MVector3(1, 1, 0));
+                render->setColor3(Vector3(1, 1, 0));
             else
-                render->setColor3(MVector3(1.0f));
+                render->setColor3(Vector3(1.0f));
 
             drawInvisibleEntity(entity);
         }
@@ -4299,23 +4299,23 @@ void Maratis::drawMainView(Scene * scene)
             size = camera->getFov() * editObjectSize;
 
         m_soundEntity->getMatrix()->loadIdentity();
-        m_soundEntity->getMatrix()->setScale(sound->getTransformedScale() * MVector3(size));
+        m_soundEntity->getMatrix()->setScale(sound->getTransformedScale() * Vector3(size));
         m_soundEntity->getMatrix()->setTranslationPart(sound->getTransformedPosition());
 
         if(isObjectSelected(sound))
-            render->setColor3(MVector3(1, 1, 0));
+            render->setColor3(Vector3(1, 1, 0));
         else
         {
             if(sound->isActive())
-                render->setColor3(MVector3(1.0f));
+                render->setColor3(Vector3(1.0f));
             else
-                render->setColor3(MVector3(0.5f));
+                render->setColor3(Vector3(0.5f));
         }
 
         render->pushMatrix();
 
-        MMatrix4x4 matrix = *camera->getMatrix();
-        matrix.setTranslationPart(MVector3());
+        Matrix4x4 matrix = *camera->getMatrix();
+        matrix.setTranslationPart(Vector3());
 
         render->multMatrix(m_soundEntity->getMatrix());
         render->multMatrix(&matrix);
@@ -4340,24 +4340,24 @@ void Maratis::drawMainView(Scene * scene)
             size = camera->getFov() * editObjectSize;
 
         m_lightEntity->getMatrix()->loadIdentity();
-        m_lightEntity->getMatrix()->setScale(light->getTransformedScale() * MVector3(size));
+        m_lightEntity->getMatrix()->setScale(light->getTransformedScale() * Vector3(size));
         m_lightEntity->getMatrix()->setTranslationPart(light->getTransformedPosition());
 
         bool selected = isObjectSelected(light);
         if(selected)
-            render->setColor3(MVector3(1, 1, 0));
+            render->setColor3(Vector3(1, 1, 0));
         else
         {
             if(light->isActive())
-                render->setColor3(MVector3(1.0f));
+                render->setColor3(Vector3(1.0f));
             else
-                render->setColor3(MVector3(0.5f));
+                render->setColor3(Vector3(0.5f));
         }
 
         render->pushMatrix();
 
-        MMatrix4x4 matrix = *camera->getMatrix();
-        matrix.setTranslationPart(MVector3(0, 0, 0));
+        Matrix4x4 matrix = *camera->getMatrix();
+        matrix.setTranslationPart(Vector3(0, 0, 0));
 
         render->multMatrix(m_lightEntity->getMatrix());
         render->multMatrix(&matrix);
@@ -4373,24 +4373,24 @@ void Maratis::drawMainView(Scene * scene)
             if(spotAngle < 90)
             {
                 if(selected)
-                    render->setColor4(MVector4(1, 1, 0, 0.5f));
+                    render->setColor4(Vector4(1, 1, 0, 0.5f));
                 else
                 {
                     if(light->isActive())
-                        render->setColor4(MVector4(1, 1, 1, 0.5f));
+                        render->setColor4(Vector4(1, 1, 1, 0.5f));
                     else
-                        render->setColor4(MVector4(0.5f, 0.5f, 0.5f, 0.5f));
+                        render->setColor4(Vector4(0.5f, 0.5f, 0.5f, 0.5f));
                 }
 
                 size = size*10;
                 if(size > light->getRadius()*0.25f)
                     size = light->getRadius()*0.25f;
 
-                MVector3 pos = light->getTransformedPosition();
-                MVector3 dir1 = light->getRotatedVector(MVector3(0, 0, -1));//.getRotatedX(spotAngle)).getNormalized();
-                MVector3 dir2 = light->getRotatedVector(MVector3(0, 0, -1));//.getRotatedX(-spotAngle)).getNormalized();
+                Vector3 pos = light->getTransformedPosition();
+                Vector3 dir1 = light->getRotatedVector(Vector3(0, 0, -1));//.getRotatedX(spotAngle)).getNormalized();
+                Vector3 dir2 = light->getRotatedVector(Vector3(0, 0, -1));//.getRotatedX(-spotAngle)).getNormalized();
 
-                MVector3 axis = light->getInverseRotatedVector(cameraAxis);
+                Vector3 axis = light->getInverseRotatedVector(cameraAxis);
                 axis.z = 0;
                 axis = light->getRotatedVector(axis);
 
@@ -4405,17 +4405,17 @@ void Maratis::drawMainView(Scene * scene)
                 dir1.normalize();
                 dir2.normalize();
 
-                beginDraw(M_PRIMITIVE_LINES);
+                beginDraw(PRIMITIVE_LINES);
                 pushVertex(pos);
                 pushVertex(pos + dir1*size);
                 pushVertex(pos);
                 pushVertex(pos + dir2*size);
                 endDraw(render);
 
-                beginDraw(M_PRIMITIVE_LINE_LOOP);
+                beginDraw(PRIMITIVE_LINE_LOOP);
                 for(int x=0; x<360; x+=10)
                 {
-                    MVector3 dir = MVector3(0, 0, -1).getRotatedX(spotAngle);
+                    Vector3 dir = Vector3(0, 0, -1).getRotatedX(spotAngle);
                     dir.rotateZ(x);
                     dir = light->getRotatedVector(dir).getNormalized();
                     pushVertex(pos + dir*size);
@@ -4436,26 +4436,26 @@ void Maratis::drawMainView(Scene * scene)
         if(! camera->isOrtho())
         {
             float scale = (oCamera->getTransformedPosition() - camera->getTransformedPosition()).getLength() * editObjectSize;
-            MMatrix4x4 scaleMatrix;
-            scaleMatrix.setScale(MVector3(scale, scale, scale));
+            Matrix4x4 scaleMatrix;
+            scaleMatrix.setScale(Vector3(scale, scale, scale));
             (*m_cameraEntity->getMatrix()) = (*oCamera->getMatrix()) * scaleMatrix;
         }
         else
         {
             float scale = camera->getFov() * editObjectSize;
-            MMatrix4x4 scaleMatrix;
-            scaleMatrix.setScale(MVector3(scale, scale, scale));
+            Matrix4x4 scaleMatrix;
+            scaleMatrix.setScale(Vector3(scale, scale, scale));
             (*m_cameraEntity->getMatrix()) = (*oCamera->getMatrix()) * scaleMatrix;
         }
 
         if(isObjectSelected(oCamera))
-            render->setColor3(MVector3(1, 1, 0));
+            render->setColor3(Vector3(1, 1, 0));
         else
         {
             if(oCamera->isActive())
-                render->setColor3(MVector3(1.0f));
+                render->setColor3(Vector3(1.0f));
             else
-                render->setColor3(MVector3(0.5f));
+                render->setColor3(Vector3(0.5f));
         }
 
         render->pushMatrix();
@@ -4474,8 +4474,8 @@ void Maratis::drawMainView(Scene * scene)
         if(! text->isActive())
             text->updateMatrix();
 
-        MVector3 min = text->getBoundingBox()->min;
-        MVector3 max = text->getBoundingBox()->max;
+        Vector3 min = text->getBoundingBox()->min;
+        Vector3 max = text->getBoundingBox()->max;
 
         if((min.x == 0 && max.x == 0 && min.y == 0 && max.y == 0) || (! text->isActive()))
         {
@@ -4489,7 +4489,7 @@ void Maratis::drawMainView(Scene * scene)
 
             if(isObjectSelected(text))
             {
-                render->setColor3(MVector3(1, 1, 0));
+                render->setColor3(Vector3(1, 1, 0));
                 drawBoundingBox(m_emptyText.getBoundingBox());
             }
 
@@ -4505,7 +4505,7 @@ void Maratis::drawMainView(Scene * scene)
         OEntity * entity = scene->getEntityByIndex(i);
         if(entity->isActive() && !entity->isInvisible() && isObjectSelected(entity))
         {
-            render->setColor3(MVector3(0.75f));
+            render->setColor3(Vector3(0.75f));
             drawArmature(entity);
         }
     }
@@ -4515,7 +4515,7 @@ void Maratis::drawMainView(Scene * scene)
     if((! mouse->isLeftButtonPushed()) || (m_currentAxis == M_AXIS_NONE))
     {
         render->enableBlending();
-        render->setBlendingMode(M_BLENDING_ALPHA);
+        render->setBlendingMode(BLENDING_ALPHA);
 
         Object3d * object;
         OEntity * entity;
@@ -4535,7 +4535,7 @@ void Maratis::drawMainView(Scene * scene)
                 {
                     entity = (OEntity *)object;
 
-                    render->setColor4(MVector4(1, 1, 0, 0.2f));
+                    render->setColor4(Vector4(1, 1, 0, 0.2f));
                     render->pushMatrix();
                     render->multMatrix(entity->getMatrix());
                     drawBoundingBox(entity->getBoundingBox());
@@ -4546,7 +4546,7 @@ void Maratis::drawMainView(Scene * scene)
                 {
                     text = (OText *)object;
 
-                    render->setColor4(MVector4(1, 1, 0, 0.2f));
+                    render->setColor4(Vector4(1, 1, 0, 0.2f));
                     render->pushMatrix();
                     render->multMatrix(text->getMatrix());
                     drawBoundingBox(text->getBoundingBox());
@@ -4561,7 +4561,7 @@ void Maratis::drawMainView(Scene * scene)
     if(getSelectedObjectsNumber() > 0)
     {
         render->disableDepthTest();
-        render->clear(M_BUFFER_DEPTH);
+        render->clear(BUFFER_DEPTH);
         camera->enable();
 
         switch(getTransformMode())
@@ -4630,14 +4630,14 @@ void Maratis::logicLoop(void)
 void Maratis::graphicLoop(void)
 {
     PROFILE_SHARED_BLOCK(Render);
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     NeoWindow* window = NeoWindow::getInstance();
     // viewport
     unsigned int w = (unsigned int)window->getWidth();
     unsigned int h = (unsigned int)window->getHeight();
 
-    render->clear(M_BUFFER_COLOR | M_BUFFER_DEPTH);
+    render->clear(BUFFER_COLOR | BUFFER_DEPTH);
 
     // game
     NeoGame * game = NeoEngine::getInstance()->getGame();

@@ -47,8 +47,8 @@ private:
 
     struct Particle
     {
-        MVector3 position;
-        MVector3 speed;
+        Vector3 position;
+        Vector3 speed;
         float size;
         float alpha;
         float spin;
@@ -61,8 +61,8 @@ private:
     bool m_emitting;
     float m_lifeTime;
     float m_particlesNumber;
-    MVector3 m_initialSpeed;
-    MVector3 m_gravity;
+    Vector3 m_initialSpeed;
+    Vector3 m_gravity;
     float m_speedDivergence;
     float m_lifeDivergence;
     float m_size;
@@ -80,16 +80,16 @@ private:
 
     float m_oldParticlesNumber;
 
-    MString m_textureFile;
-    MString m_currentTextureFile;
+    String m_textureFile;
+    String m_currentTextureFile;
     TextureRef* m_texRef;
 
     vector<Particle> m_particles;
-    MVector3* m_particlePositions;
+    Vector3* m_particlePositions;
 
     // Attention: Is not used to convey color in any way!
     // Instead it contains additional data like spin or size
-    MVector4* m_particleColors;
+    Vector4* m_particleColors;
 
     unsigned int m_fx;
     unsigned int m_vertShad;
@@ -98,7 +98,7 @@ private:
     SDLThread m_thread;
     SDLSemaphore m_semaphore;
 
-    void updateParticles(MVector3 parentPosition);
+    void updateParticles(Vector3 parentPosition);
     void updateArrays(bool updateColorData);
     inline void applySpeed();
 

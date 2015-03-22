@@ -51,10 +51,10 @@ public:
 	inline int getT(void){ return m_t; }
 
 	float * createFloatData(void);
-	MVector2 * createVector2Data(void);
-	MVector3 * createVector3Data(void);
-	MVector4 * createVector4Data(void);
-	MQuaternion * createQuaternionData(void);
+	Vector2 * createVector2Data(void);
+	Vector3 * createVector3Data(void);
+	Vector4 * createVector4Data(void);
+	Quaternion * createQuaternionData(void);
 
 	inline void * getData(void){ return m_data; }
 };

@@ -23,7 +23,6 @@
 //========================================================================
 
 #include <NeoEngine.h>
-#include <MCore.h>
 #include <LuaBehavior.h>
 #include <WinContext.h>
 #include <PackageManagerNPK.h>
@@ -33,6 +32,7 @@
 #include <BulletContext.h>
 
 #include <gtest/gtest.h>
+#include <NeoCore.h>
 #include <Window/Window.h>
 
 #ifdef main
@@ -62,7 +62,7 @@ public:
 		Gui::GuiSystem::getInstance()->setupLuaInterface(script);
 
 		Level* level = new Level();
-		MSystemContext* context = (MSystemContext*) new Neo::MWinContext();
+		SystemContext* context = (SystemContext*) new Neo::MWinContext();
 		MPackageManager* pmanager = new Neo::MPackageManagerNPK;
 		Neo::BulletContext* physcontext = new Neo::BulletContext();
 
@@ -81,7 +81,7 @@ public:
 		engine->getBehaviorManager()->addBehavior(Neo::LuaBehavior::getStaticName(), M_OBJECT3D, Neo::LuaBehavior::getNew);
 
 		// Init default thread
-		MThreadManager* mgr = MThreadManager::getInstance();
+		ThreadFactory* mgr = ThreadFactory::getInstance();
 		mgr->setTemplateSemaphore(new SDLSemaphore());
 		mgr->setTemplateThread(new SDLThread());
 
@@ -101,7 +101,7 @@ public:
 		delete engine->getScriptContext();
 		delete engine->getPackageManager();
 
-		MThreadManager::getInstance()->clear();
+		ThreadFactory::getInstance()->clear();
 
 		engine->setLevel(NULL);
 		engine->setScriptContext(NULL);
@@ -121,7 +121,7 @@ int main(int argc, char* argv[])
 {
 	TestNeoSDK::SetUp();
 
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	script->runString(lua_code);
 
 	TestNeoSDK::TearDown();

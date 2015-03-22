@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MCore
-// Material.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -36,7 +31,7 @@ Material::Material(void):
 m_type(0),
 m_FXRef(NULL),
 m_ZFXRef(NULL),
-m_blendMode(M_BLENDING_NONE),
+m_blendMode(BLENDING_NONE),
 m_opacity(1),
 m_shininess(0),
 m_customValue(0),
@@ -97,7 +92,7 @@ void Material::clearTexturesPass(void)
 	SAFE_FREE(m_texturesPass);
 }
 
-void Material::addTexturePass(Texture * texture, M_TEX_COMBINE_MODES combineMode, unsigned int mapChannel)
+void Material::addTexturePass(Texture * texture, TEX_COMBINE_MODES combineMode, unsigned int mapChannel)
 {
 	m_texturesPass[m_texturesPassNumber] = new TexturePass(texture, combineMode, mapChannel);
 	m_texturesPassNumber++;

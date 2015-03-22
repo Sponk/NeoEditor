@@ -58,7 +58,7 @@ void ShaderRef::update(void)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
 	Level * level = engine->getLevel();
-	MRenderingContext * render = engine->getRenderingContext();
+	RenderingContext * render = engine->getRenderingContext();
 
 	char * text = readTextFile(getFilename());
 	if(text)

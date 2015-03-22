@@ -58,32 +58,32 @@ NeoEngine * NeoEngine::getInstance(void)
 	return &m_instance;
 }
 
-void NeoEngine::setRenderingContext(MRenderingContext * renderingContext)
+void NeoEngine::setRenderingContext(RenderingContext * renderingContext)
 {
 	m_renderingContext = renderingContext;
 }
 
-void NeoEngine::setSoundContext(MSoundContext * soundContext)
+void NeoEngine::setSoundContext(SoundContext * soundContext)
 {
 	m_soundContext = soundContext;
 }
 
-void NeoEngine::setPhysicsContext(MPhysicsContext * physicsContext)
+void NeoEngine::setPhysicsContext(PhysicsContext * physicsContext)
 {
 	m_physicsContext = physicsContext;
 }
 
-void NeoEngine::setScriptContext(MScriptContext * scriptContext)
+void NeoEngine::setScriptContext(ScriptContext * scriptContext)
 {
 	m_scriptContext = scriptContext;
 }
 
-void NeoEngine::setInputContext(MInputContext * inputContext)
+void NeoEngine::setInputContext(InputContext * inputContext)
 {
 	m_inputContext = inputContext;
 }
 
-void NeoEngine::setSystemContext(MSystemContext * systemContext)
+void NeoEngine::setSystemContext(SystemContext * systemContext)
 {
 	m_systemContext = systemContext;
 }

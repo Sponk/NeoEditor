@@ -25,7 +25,7 @@
 #include <FL/Fl_Box.H>
 #include <FL/gl.h>
 #include <FL/Fl_Gl_Window.H>
-#include <MCore.h>
+#include <NeoCore.h>
 #include <NeoEngine.h>
 #include <vector>
 
@@ -58,6 +58,6 @@ private:
   PostProcessor m_postProcessor;
 };
 
-bool getNearestRaytracedDistance(Neo::Mesh * mesh, MMatrix4x4 * matrix, const MVector3 & origin, const MVector3 & dest, float * distance, Neo::OEntity * entity = NULL);
+bool getNearestRaytracedDistance(Neo::Mesh * mesh, Neo::Matrix4x4 * matrix, const Neo::Vector3 & origin, const Neo::Vector3 & dest, float * distance, Neo::OEntity * entity = NULL);
 
 #endif

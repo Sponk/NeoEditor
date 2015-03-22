@@ -36,8 +36,8 @@
 #ifndef __WIDGET_H__
 #define __WIDGET_H__
 
+#include <NeoCore.h>
 #include <string>
-#include <MCore.h>
 
 namespace Neo
 {
@@ -86,10 +86,10 @@ protected:
 	bool m_visible;
 
 	/// The scale vector
-	MVector2 m_scale;
+	Vector2 m_scale;
 
 	/// The flip vector
-	MVector2 m_flip;
+	Vector2 m_flip;
 
 public:
 	Widget(unsigned int x, unsigned int y, unsigned int width,
@@ -101,7 +101,7 @@ public:
 	 * @see Canvas
 	 * @see draw(MVector2 offset)
 	 */
-	virtual void draw() { draw(MVector2(0, 0)); }
+	virtual void draw() { draw(Vector2(0, 0)); }
 
 	/**
 	 * @brief Draws the widget to the canvas it belongs to.
@@ -110,7 +110,7 @@ public:
 	 *
 	 * @see Canvas
 	 */
-	virtual void draw(MVector2 offset) = 0;
+	virtual void draw(Vector2 offset) = 0;
 
 	/**
 	 * @brief Updates the widget and calls the callback if necessary.
@@ -177,7 +177,7 @@ public:
 	 * @brief Changes the widget position.
 	 * @param pos The new position.
 	 */
-	void setPosition(MVector2 pos)
+	void setPosition(Vector2 pos)
 	{
 		m_x = pos.x;
 		m_y = pos.y;
@@ -187,7 +187,7 @@ public:
 	 * @brief Retrieves the current position.
 	 * @return The current position.
 	 */
-	MVector2 getPosition() { return MVector2(m_x, m_y); }
+	Vector2 getPosition() { return Vector2(m_x, m_y); }
 
 	/**
 	 * @brief Changes the widget rotation.
@@ -221,13 +221,13 @@ public:
 	 * @brief setScale Scale this Widget
 	 * @param scale The ammount you want to scale with
 	 */
-	void setScale(MVector2 scale) { m_scale = scale; }
-	MVector2 getScale() { return m_scale; }
+	void setScale(Vector2 scale) { m_scale = scale; }
+	Vector2 getScale() { return m_scale; }
 	/**
 	 * @brief setFlip Flip this Widget
 	 */
-	void setFlip(MVector2 flip) { m_flip = flip; }
-	MVector2 getFlip() { return m_flip; }
+	void setFlip(Vector2 flip) { m_flip = flip; }
+	Vector2 getFlip() { return m_flip; }
 
 	// For runtime identification
 	const char* getStaticName() { return "Widget"; }

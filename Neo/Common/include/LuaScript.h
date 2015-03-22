@@ -32,7 +32,7 @@
 
 namespace Neo
 {
-class LuaScript : public MScriptContext
+class LuaScript : public ScriptContext
 {
 public :
 

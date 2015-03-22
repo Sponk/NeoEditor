@@ -45,7 +45,7 @@ public:
 private:
 
 	// variables
-	MString m_targetName;
+	String m_targetName;
 
 public:
 

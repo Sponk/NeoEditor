@@ -29,7 +29,7 @@
 #define _M_WINDOW_H
 
 #include <Window/WinEvents.h>
-#include <MCore.h>
+#include <NeoCore.h>
 
 #ifndef EMSCRIPTEN
 	#include <SDL_joystick.h>
@@ -163,14 +163,14 @@ public:
     void messagebox(const char* content, const char* title);
     void executeDetached(const char *path, const char *args, bool killParent);
 
-	MSemaphore* getUpdateSemaphore() { return updateSemaphore; }
-	MSemaphore* getGraphicsSemaphore() { return graphicsSemaphore; }
+	Neo::Semaphore* getUpdateSemaphore() { return updateSemaphore; }
+	Neo::Semaphore* getGraphicsSemaphore() { return graphicsSemaphore; }
 
 	void createSemaphores();
 
 private:
-	MSemaphore* updateSemaphore;
-	MSemaphore* graphicsSemaphore;
+	Neo::Semaphore* updateSemaphore;
+	Neo::Semaphore* graphicsSemaphore;
 };
 
 #else

@@ -1,10 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MaratisCommon
-// MBinMeshLoader.cpp
-//
-// Maratis bin mesh loader
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2012 Anael Seghezzi <www.maratis3d.com>
 //
@@ -37,7 +30,7 @@ namespace Neo
 {
 
 // tools
-static void readKey(MFile * file, Key * key, M_VARIABLE_TYPE type)
+static void readKey(File * file, Key * key, M_VARIABLE_TYPE type)
 {
 	int t;
 	M_fread(&t, sizeof(int), 1, file);
@@ -53,46 +46,46 @@ static void readKey(MFile * file, Key * key, M_VARIABLE_TYPE type)
 		}
 		case M_VARIABLE_VEC2:
 		{
-			MVector2 * data = key->createVector2Data();
-			M_fread(data, sizeof(MVector2), 1, file);
+			Vector2 * data = key->createVector2Data();
+			M_fread(data, sizeof(Vector2), 1, file);
 			break;
 		}
 		case M_VARIABLE_VEC3:
 		{
-			MVector3 * data = key->createVector3Data();
-			M_fread(data, sizeof(MVector3), 1, file);
+			Vector3 * data = key->createVector3Data();
+			M_fread(data, sizeof(Vector3), 1, file);
 			break;
 		}
 		case M_VARIABLE_VEC4:
 		{
-			MVector4 * data = key->createVector4Data();
-			M_fread(data, sizeof(MVector4), 1, file);
+			Vector4 * data = key->createVector4Data();
+			M_fread(data, sizeof(Vector4), 1, file);
 			break;
 		}
 		case M_VARIABLE_QUAT:
 		{
-			MQuaternion * data = key->createQuaternionData();
-			M_fread(data, sizeof(MQuaternion), 1, file);
+			Quaternion * data = key->createQuaternionData();
+			M_fread(data, sizeof(Quaternion), 1, file);
 			break;
 		}
 	}
 }
 
-static unsigned int readKeysNumber(MFile * file)
+static unsigned int readKeysNumber(File * file)
 {
 	unsigned int keysNumber;
 	M_fread(&keysNumber, sizeof(int), 1, file);
 	return keysNumber;
 }
 
-static void readKeys(MFile * file, Key * keys, M_VARIABLE_TYPE type, unsigned int keysNumber)
+static void readKeys(File * file, Key * keys, M_VARIABLE_TYPE type, unsigned int keysNumber)
 {
 	unsigned int k;
 	for(k=0; k<keysNumber; k++)
 		readKey(file, &(keys[k]), type);
 }
 
-static void readString(MFile * file, char * str)
+static void readString(File * file, char * str)
 {
 	unsigned int l;
 	M_fread(&l, sizeof(int), 1, file);
@@ -100,7 +93,7 @@ static void readString(MFile * file, char * str)
 		M_fread(str, sizeof(char), l, file);
 }
 
-static bool readDataRef(MFile * file, char * filename, const char * rep)
+static bool readDataRef(File * file, char * filename, const char * rep)
 {
 	char localFile[256];
 	bool state;
@@ -123,7 +116,7 @@ bool M_loadBinMesh(const char * filename, void * data)
 	bool state;
 
 	// open file
-	MFile * file = M_fopen(filename, "rb");
+	File * file = M_fopen(filename, "rb");
 	if(! file)
 	{
 		MLOG_WARNING("Can't read file " << (filename?filename:"NULL"));
@@ -201,11 +194,11 @@ bool M_loadBinMesh(const char * filename, void * data)
 			{
 				Texture * texture = mesh->addNewTexture(NULL);
 
-				M_TEX_GEN_MODES genMode;
-				M_WRAP_MODES UWrapMode;
-				M_WRAP_MODES VWrapMode;
-				MVector2 texTranslate;
-				MVector2 texScale;
+				TEX_GEN_MODES genMode;
+				WRAP_MODES UWrapMode;
+				WRAP_MODES VWrapMode;
+				Vector2 texTranslate;
+				Vector2 texScale;
 				float texRotate;
 
 				// texture ref
@@ -220,11 +213,11 @@ bool M_loadBinMesh(const char * filename, void * data)
 				}
 
 				// data
-				M_fread(&genMode, sizeof(M_TEX_GEN_MODES), 1, file);
-				M_fread(&UWrapMode, sizeof(M_WRAP_MODES), 1, file);
-				M_fread(&VWrapMode, sizeof(M_WRAP_MODES), 1, file);
-				M_fread(&texTranslate, sizeof(MVector2), 1, file);
-				M_fread(&texScale, sizeof(MVector2), 1, file);
+				M_fread(&genMode, sizeof(TEX_GEN_MODES), 1, file);
+				M_fread(&UWrapMode, sizeof(WRAP_MODES), 1, file);
+				M_fread(&VWrapMode, sizeof(WRAP_MODES), 1, file);
+				M_fread(&texTranslate, sizeof(Vector2), 1, file);
+				M_fread(&texScale, sizeof(Vector2), 1, file);
 				M_fread(&texRotate, sizeof(float), 1, file);
 
 				texture->setGenMode(genMode);
@@ -254,8 +247,8 @@ bool M_loadBinMesh(const char * filename, void * data)
 				float opacity;
 				float shininess;
 				float customValue;
-				M_BLENDING_MODES blendMode;
-				MVector3 emit, diffuse, specular, customColor;
+				BLENDING_MODES blendMode;
+				Vector3 emit, diffuse, specular, customColor;
 
 				
 				// FX ref
@@ -301,11 +294,11 @@ bool M_loadBinMesh(const char * filename, void * data)
 				M_fread(&opacity, sizeof(float), 1, file);
 				M_fread(&shininess, sizeof(float), 1, file);
 				M_fread(&customValue, sizeof(float), 1, file);
-				M_fread(&blendMode, sizeof(M_BLENDING_MODES), 1, file);
-				M_fread(&emit, sizeof(MVector3), 1, file);
-				M_fread(&diffuse, sizeof(MVector3), 1, file);
-				M_fread(&specular, sizeof(MVector3), 1, file);
-				M_fread(&customColor, sizeof(MVector3), 1, file);
+				M_fread(&blendMode, sizeof(BLENDING_MODES), 1, file);
+				M_fread(&emit, sizeof(Vector3), 1, file);
+				M_fread(&diffuse, sizeof(Vector3), 1, file);
+				M_fread(&specular, sizeof(Vector3), 1, file);
+				M_fread(&customColor, sizeof(Vector3), 1, file);
 
 				material->setType(type);
 				material->setOpacity(opacity);
@@ -327,7 +320,7 @@ bool M_loadBinMesh(const char * filename, void * data)
 					for(t=0; t<texturesPassNumber; t++)
 					{
 						unsigned int mapChannel;
-						M_TEX_COMBINE_MODES combineMode;
+						TEX_COMBINE_MODES combineMode;
 
 						// texture id
 						int textureId;
@@ -335,7 +328,7 @@ bool M_loadBinMesh(const char * filename, void * data)
 
 						// data
 						M_fread(&mapChannel, sizeof(int), 1, file);
-						M_fread(&combineMode, sizeof(M_TEX_COMBINE_MODES), 1, file);
+						M_fread(&combineMode, sizeof(TEX_COMBINE_MODES), 1, file);
 
 						Texture * texture = NULL;
 						if(textureId >= 0)
@@ -375,9 +368,9 @@ bool M_loadBinMesh(const char * filename, void * data)
 					OBone * bone = armature->getBone(b);
 
 					int parentId;
-					MVector3 position;
-					MVector3 scale;
-					MQuaternion rotation;
+					Vector3 position;
+					Vector3 scale;
+					Quaternion rotation;
 
 					// name
 					readString(file, name);
@@ -389,9 +382,9 @@ bool M_loadBinMesh(const char * filename, void * data)
 						bone->linkTo(armature->getBone(parentId));
 
 					// position / rotation / scale
-					M_fread(&position, sizeof(MVector3), 1, file);
-					M_fread(&rotation, sizeof(MQuaternion), 1, file);
-					M_fread(&scale, sizeof(MVector3), 1, file);
+					M_fread(&position, sizeof(Vector3), 1, file);
+					M_fread(&rotation, sizeof(Quaternion), 1, file);
+					M_fread(&scale, sizeof(Vector3), 1, file);
 
 					bone->setPosition(position);
 					bone->setRotation(rotation);
@@ -433,17 +426,17 @@ bool M_loadBinMesh(const char * filename, void * data)
 				unsigned int texCoordsSize;
 				unsigned int colorsSize;
 
-				M_TYPES indicesType;
+				VAR_TYPES indicesType;
 				void * indices;
 
-				MColor * colors;
-				MVector3 * vertices;
-				MVector3 * normals;
-				MVector3 * tangents;
-				MVector2 * texCoords;
+				Color * colors;
+				Vector3 * vertices;
+				Vector3 * normals;
+				Vector3 * tangents;
+				Vector2 * texCoords;
 
 				Box3d * box = subMesh->getBoundingBox();
-				MSkinData * skin;
+				SkinData * skin;
 
 
 				// BoundingBox
@@ -454,15 +447,15 @@ bool M_loadBinMesh(const char * filename, void * data)
 				if(indicesSize > 0)
 				{
 					// indice type
-					M_fread(&indicesType, sizeof(M_TYPES), 1, file);
+					M_fread(&indicesType, sizeof(VAR_TYPES), 1, file);
 					indices = subMesh->allocIndices(indicesSize, indicesType);
 
 					switch(indicesType)
 					{
-						case M_USHORT:
+						case VAR_USHORT:
 							M_fread(indices, sizeof(short), indicesSize, file);
 							break;
-						case M_UINT:
+						case VAR_UINT:
 							M_fread(indices, sizeof(int), indicesSize, file);
 							break;
 					}
@@ -473,7 +466,7 @@ bool M_loadBinMesh(const char * filename, void * data)
 				if(verticesSize > 0)
 				{
 					vertices = subMesh->allocVertices(verticesSize);
-					M_fread(vertices, sizeof(MVector3), verticesSize, file);
+					M_fread(vertices, sizeof(Vector3), verticesSize, file);
 				}
 
 				// normals
@@ -481,7 +474,7 @@ bool M_loadBinMesh(const char * filename, void * data)
 				if(normalsSize > 0)
 				{
 					normals = subMesh->allocNormals(normalsSize);
-					M_fread(normals, sizeof(MVector3), normalsSize, file);
+					M_fread(normals, sizeof(Vector3), normalsSize, file);
 				}
 
 				// tangents
@@ -489,7 +482,7 @@ bool M_loadBinMesh(const char * filename, void * data)
 				if(tangentsSize > 0)
 				{
 					tangents = subMesh->allocTangents(tangentsSize);
-					M_fread(tangents, sizeof(MVector3), tangentsSize, file);
+					M_fread(tangents, sizeof(Vector3), tangentsSize, file);
 				}
 
 				// texCoords
@@ -497,7 +490,7 @@ bool M_loadBinMesh(const char * filename, void * data)
 				if(texCoordsSize > 0)
 				{
 					texCoords = subMesh->allocTexCoords(texCoordsSize);
-					M_fread(texCoords, sizeof(MVector2), texCoordsSize, file);
+					M_fread(texCoords, sizeof(Vector2), texCoordsSize, file);
 				}
 
 				// colors
@@ -505,7 +498,7 @@ bool M_loadBinMesh(const char * filename, void * data)
 				if(colorsSize > 0)
 				{
 					colors = subMesh->allocColors(colorsSize);
-					M_fread(colors, sizeof(MColor), colorsSize, file);
+					M_fread(colors, sizeof(Color), colorsSize, file);
 				}
 
 
@@ -537,7 +530,7 @@ bool M_loadBinMesh(const char * filename, void * data)
 						skin->allocPoints(pointsNumber);
 						for(p=0; p<pointsNumber; p++)
 						{
-							MSkinPoint * skinPoint = skin->getPoint(p);
+							SkinPoint * skinPoint = skin->getPoint(p);
 
 							unsigned int vertexId;
 							unsigned int bonesNumber;
@@ -575,17 +568,17 @@ bool M_loadBinMesh(const char * filename, void * data)
 					{
 						unsigned int begin;
 						unsigned int size;
-						M_CULL_MODES cullMode;
-						M_PRIMITIVE_TYPES primitiveType;
+						CULL_MODES cullMode;
+						PRIMITIVE_TYPES primitiveType;
 
 						int materialId;
 
 						// data
-						M_fread(&primitiveType, sizeof(M_PRIMITIVE_TYPES), 1, file);
+						M_fread(&primitiveType, sizeof(PRIMITIVE_TYPES), 1, file);
 						M_fread(&begin, sizeof(int), 1, file);
 						M_fread(&size, sizeof(int), 1, file);
 						M_fread(&materialId, sizeof(int), 1, file);
-						M_fread(&cullMode, sizeof(M_CULL_MODES), 1, file);
+						M_fread(&cullMode, sizeof(CULL_MODES), 1, file);
 
 						// display
 						MaterialDisplay * display = subMesh->addNewDisplay(primitiveType, begin, size);
@@ -613,7 +606,7 @@ bool M_loadBinArmatureAnim(const char * filename, void * data)
 
 
 	// open file
-	MFile * file = M_fopen(filename, "rb");
+	File * file = M_fopen(filename, "rb");
 	if(! file)
 	{
 		fprintf(stderr, "Error : can't read file %s\n", filename);
@@ -676,7 +669,7 @@ bool M_loadBinTexturesAnim(const char * filename, void * data)
 
 
 	// open file
-	MFile * file = M_fopen(filename, "rb");
+	File * file = M_fopen(filename, "rb");
 	if(! file)
 	{
 		fprintf(stderr, "Error : can't read file %s\n", filename);
@@ -739,7 +732,7 @@ bool M_loadBinMaterialsAnim(const char * filename, void * data)
 
 
 	// open file
-	MFile * file = M_fopen(filename, "rb");
+	File * file = M_fopen(filename, "rb");
 	if(! file)
 	{
 		fprintf(stderr, "Error : can't read file %s\n", filename);

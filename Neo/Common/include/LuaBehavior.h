@@ -50,7 +50,7 @@ public:
 private:
 
 	// variables
-	MString m_scriptFile;
+	String m_scriptFile;
     LuaScript m_script;
     bool m_init;
 
@@ -89,7 +89,7 @@ private:
             SAFE_DELETE(var);
         }
 
-        MString value;
+        String value;
     };
 
     std::vector<MValueVariable*> m_globalVariables;

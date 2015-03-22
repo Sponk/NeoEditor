@@ -80,7 +80,7 @@ unsigned int LuaBehavior::getVariablesNumber(void)
     NeoEngine* engine = NeoEngine::getInstance();
 
 	// Save current context
-	MScriptContext* original = engine->getScriptContext();
+	ScriptContext* original = engine->getScriptContext();
 
 	// Set new context
 	engine->setScriptContext(&m_script);
@@ -244,7 +244,7 @@ void LuaBehavior::update(void)
             return;
 
 	// Save current context
-	MScriptContext* original = engine->getScriptContext();
+	ScriptContext* original = engine->getScriptContext();
 
 	// Set new context
 	engine->setScriptContext(&m_script);
@@ -293,7 +293,7 @@ void LuaBehavior::update(void)
             break;
 
 		case M_VARIABLE_STRING:
-				lua_pushstring(L, ((MString*) m_variables[i]->getPointer())->getSafeString());
+				lua_pushstring(L, ((String*) m_variables[i]->getPointer())->getSafeString());
 			break;
         }
 

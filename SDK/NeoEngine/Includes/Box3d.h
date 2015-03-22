@@ -39,12 +39,12 @@ public:
 
 	Box3d(void);
 	Box3d(const Box3d & box);
-	Box3d(const MVector3 & _min, const MVector3 & _max);
+	Box3d(const Vector3 & _min, const Vector3 & _max);
 
-	MVector3 min;
-	MVector3 max;
+	Vector3 min;
+	Vector3 max;
 
-	void initFromPoints(const MVector3 * points, unsigned int pointsNumber);
+	void initFromPoints(const Vector3 * points, unsigned int pointsNumber);
 	bool isInCollisionWith(const Box3d & box);
 };
 }

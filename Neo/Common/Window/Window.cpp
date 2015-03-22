@@ -750,7 +750,7 @@ void NeoWindow::swapBuffer(void)
 
 void NeoWindow::createSemaphores()
 {
-	MThreadManager* mgr = MThreadManager::getInstance();
+	ThreadFactory* mgr = ThreadFactory::getInstance();
 	updateSemaphore = mgr->getNewSemaphore();
 	graphicsSemaphore = mgr->getNewSemaphore();
 

@@ -30,7 +30,7 @@
 #ifndef SDLTHREAD_H
 #define SDLTHREAD_H
 
-#include <MCore.h>
+#include <NeoCore.h>
 #include <SDL.h>
 
 namespace Neo
@@ -42,7 +42,7 @@ namespace Neo
  * @see MSemaphore
  * @see MSleep
  */
-class SDLThread : public MThread
+class SDLThread : public Thread
 {
 private:
         SDL_Thread* m_sdlThread; ///< The SDL thread
@@ -99,7 +99,7 @@ public:
      */
     int GetId();
 
-	MThread* getNew() { return new SDLThread(); }
+	Thread* getNew() { return new SDLThread(); }
 };
 
 /**
@@ -109,7 +109,7 @@ public:
  * @see MSemaphoreWaitAndLock
  * @see MSemaphoreUnlock
  */
-class SDLSemaphore : public MSemaphore
+class SDLSemaphore : public Semaphore
 {
     SDL_semaphore* m_sdlSemaphore; ///< The SDL semaphore
 public:
@@ -129,7 +129,7 @@ public:
 	bool WaitAndLock();
 	bool Unlock();
 
-	MSemaphore* getNew() { return new SDLSemaphore(); }
+	Semaphore* getNew() { return new SDLSemaphore(); }
  };
 }
 #endif

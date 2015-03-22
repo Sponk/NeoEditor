@@ -42,9 +42,9 @@ using namespace Neo::Gui;
 void Canvas::draw()
 {
 	Render* render = Render::getInstance();
-	MRenderingContext* renderingContext =
+	RenderingContext* renderingContext =
 		NeoEngine::getInstance()->getRenderingContext();
-	MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
+	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	system->getScreenSize(&m_width, &m_height);
 
 	unsigned int currentFrameBuffer = 0;
@@ -59,13 +59,13 @@ void Canvas::draw()
 
 		renderingContext->bindFrameBuffer(m_fbo);
 		renderingContext->disableDepthTest();
-		renderingContext->attachFrameBufferTexture(M_ATTACH_COLOR0,
+		renderingContext->attachFrameBufferTexture(ATTACH_COLOR0,
 												   m_texture->getTextureId());
 
 		renderingContext->setViewport(0, 0, m_texture->getWidth(),
 									  m_texture->getHeight());
 		renderingContext->setClearColor(m_clearColor);
-		renderingContext->clear(M_BUFFER_COLOR);
+		renderingContext->clear(BUFFER_COLOR);
 	}
 
 	// Clear the canvas
@@ -112,8 +112,8 @@ void Canvas::clear() { m_widgets.clear(); }
 void Canvas::enableRenderToTexture(const char* tex)
 {
 	Level* level = NeoEngine::getInstance()->getLevel();
-	MRenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
-	MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
+	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 
 	if (tex)
 	{
@@ -131,11 +131,11 @@ void Canvas::enableRenderToTexture(const char* tex)
 
 		render->createTexture(&m_colorTextureId);
 		render->bindTexture(m_colorTextureId);
-		render->setTextureFilterMode(M_TEX_FILTER_LINEAR, M_TEX_FILTER_LINEAR);
-		render->setTextureUWrapMode(M_WRAP_CLAMP);
-		render->setTextureVWrapMode(M_WRAP_CLAMP);
+		render->setTextureFilterMode(TEX_FILTER_LINEAR, TEX_FILTER_LINEAR);
+		render->setTextureUWrapMode(WRAP_CLAMP);
+		render->setTextureVWrapMode(WRAP_CLAMP);
 		render->texImage(0, m_texture->getWidth(), m_texture->getHeight(),
-						 M_UBYTE, M_RGBA, 0);
+						 VAR_UBYTE, TEX_RGBA, 0);
 
 		m_texture->setTextureId(m_colorTextureId);
 

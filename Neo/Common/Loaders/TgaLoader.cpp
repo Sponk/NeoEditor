@@ -1,10 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MaratisCommon
-// MTgaLoader.cpp
-//
-// TGA image loader
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2014 Anael Seghezzi <www.maratis3d.com>
 //
@@ -29,21 +22,21 @@
 //
 //========================================================================
 
-#include <MCore.h>
+#include <NeoCore.h>
 #include <NeoEngine.h>
 #include "TgaLoader.h"
 
 namespace Neo
 {
-static void flipImage(MImage * source)
+static void flipImage(Image * source)
 {
 	unsigned int y;
 	unsigned int width = source->getWidth();
 	unsigned int height = source->getHeight();
 	unsigned int components = source->getComponents();
 
-	MImage copy;
-	copy.create(M_UBYTE, width, height, components);
+	Image copy;
+	copy.create(VAR_UBYTE, width, height, components);
 	memcpy(copy.getData(), source->getData(), sizeof(char)*source->getSize());
 	void * data = copy.getData();
 	void * resultData = source->getData();
@@ -79,7 +72,7 @@ bool M_loadTgaImage(const char * filename, void * data)
 	if((!data) || (!filename))
 		return false;
 
-	MFile* file = M_fopen(filename, "rb");
+	File* file = M_fopen(filename, "rb");
 	if (!file)
 	{
         //fprintf(stderr, "ERROR Load TGA : unable to open %s\n", filename);
@@ -208,8 +201,8 @@ bool M_loadTgaImage(const char * filename, void * data)
 	for(int i = 0; i < size; i += components)
 		image_data[i] ^= image_data[i+2] ^= image_data[i] ^= image_data[i+2];
 
-	MImage * image = (MImage *)data;
-	image->create(M_UBYTE, (unsigned int)header.im_width, (unsigned int)header.im_height, components);
+	Image * image = (Image *)data;
+	image->create(VAR_UBYTE, (unsigned int)header.im_width, (unsigned int)header.im_height, components);
 	memcpy(image->getData(), image_data, sizeof(char)*image->getSize());
 	delete [] image_data;
 

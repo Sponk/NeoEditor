@@ -34,7 +34,7 @@
 namespace Neo
 {
 // Font ref
-class M_ENGINE_EXPORT FontRef : public MDataRef
+class M_ENGINE_EXPORT FontRef : public DataRef
 {
 private:
 

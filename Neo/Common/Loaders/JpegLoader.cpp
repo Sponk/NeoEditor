@@ -1,10 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MaratisCommon
-// MJpegLoader.cpp
-//
-// JPEG image loader
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2014 Anael Seghezzi <www.maratis3d.com>
 //
@@ -34,8 +27,8 @@
 
 #include <jpeglib.h>
 #include <jerror.h>
+#include <NeoCore.h>
 
-#include <MCore.h>
 #include <NeoEngine.h>
 #include "JpegLoader.h"
 
@@ -61,7 +54,7 @@ bool M_loadJpegImage(const char * filename, void * data)
     if((!data) || (!filename))
         return false;
 
-	MFile* file = M_fopen(filename, "rb");
+	File* file = M_fopen(filename, "rb");
 	if (!file)
 	{
         //fprintf(stderr, "ERROR Load JPEG : unable to open %s\n", filename);
@@ -126,8 +119,8 @@ bool M_loadJpegImage(const char * filename, void * data)
     jpeg_destroy_decompress(&cinfo);
     delete [] buffer;
 
-    MImage * image = (MImage *)data;
-    image->create(M_UBYTE, (unsigned int)cinfo.output_width, (unsigned int)cinfo.output_height, (unsigned int)cinfo.output_components);
+    Image * image = (Image *)data;
+    image->create(VAR_UBYTE, (unsigned int)cinfo.output_width, (unsigned int)cinfo.output_height, (unsigned int)cinfo.output_components);
     memcpy(image->getData(), out, sizeof(char)*image->getSize());
     delete [] out;
 

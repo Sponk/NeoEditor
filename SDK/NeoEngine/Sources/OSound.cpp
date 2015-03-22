@@ -112,7 +112,7 @@ float OSound::getSoundDuration(void)
 
 void OSound::play(void)
 {
-	MSoundContext * soundContext = NeoEngine::getInstance()->getSoundContext();
+	SoundContext * soundContext = NeoEngine::getInstance()->getSoundContext();
 
 	if(m_soundRef)
 	{
@@ -134,7 +134,7 @@ void OSound::stop(void)
 
 void OSound::setLooping(bool loop)
 { 
-	MSoundContext * soundContext = NeoEngine::getInstance()->getSoundContext();
+	SoundContext * soundContext = NeoEngine::getInstance()->getSoundContext();
 
 	if(loop != m_isLooping)
 	{

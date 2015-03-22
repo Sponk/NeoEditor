@@ -1,10 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MaratisCommon
-// MFreetypeLoader.cpp
-//
-// Freetype font loader
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -40,7 +33,7 @@
 namespace Neo
 {
 
-static void drawBitmap(MImage * image, FT_Bitmap * bitmap, int left, int top)
+static void drawBitmap(Image * image, FT_Bitmap * bitmap, int left, int top)
 {
 	int x, y;
 	int width = bitmap->width;
@@ -74,7 +67,7 @@ bool M_loadFont(const char * filename, void * data)
 	unsigned int width = 512;
 	unsigned int height = 0;
 
-	MImage image;
+	Image image;
 
 	FT_GlyphSlot slot;
 	FT_Library library;
@@ -92,7 +85,7 @@ bool M_loadFont(const char * filename, void * data)
 	
 	
 	// open file
-	MFile * file = M_fopen(filename, "rb");
+	File * file = M_fopen(filename, "rb");
 	if(! file)
 	{
 		FT_Done_FreeType(library);
@@ -172,7 +165,7 @@ bool M_loadFont(const char * filename, void * data)
 
 	// create image
     height = getNextPowerOfTwo(height);
-    image.create(M_UBYTE, width, height, 4);
+    image.create(VAR_UBYTE, width, height, 4);
 
 	unsigned char color[4] = {255, 255, 255, 0};
 	image.clear(color);
@@ -206,9 +199,9 @@ bool M_loadFont(const char * filename, void * data)
 
 		// get character properties
 		float xAdvance = (slot->advance.x >> 6) / ((float)size);
-		MVector2 offset = MVector2((float)slot->bitmap_left, - (float)slot->bitmap_top) / ((float)size);
-		MVector2 pos = MVector2((float)(pen_x-1) / (float)width, (float)(pen_y-1) / (float)height);
-		MVector2 scale = MVector2((float)(slot->bitmap.width+2) / (float)width, (float)(slot->bitmap.rows+2) / (float)height);
+		Vector2 offset = Vector2((float)slot->bitmap_left, - (float)slot->bitmap_top) / ((float)size);
+		Vector2 pos = Vector2((float)(pen_x-1) / (float)width, (float)(pen_y-1) / (float)height);
+		Vector2 scale = Vector2((float)(slot->bitmap.width+2) / (float)width, (float)(slot->bitmap.rows+2) / (float)height);
 
 		// set character
 		font->setCharacter(n, Character(xAdvance, offset, pos, scale));
@@ -223,7 +216,7 @@ bool M_loadFont(const char * filename, void * data)
 
 	// send texture
 	NeoEngine * engine = NeoEngine().getInstance();
-	MRenderingContext * render = engine->getRenderingContext();
+	RenderingContext * render = engine->getRenderingContext();
 	
 	// gen texture id
 	unsigned int textureId = font->getTextureId();
@@ -235,9 +228,9 @@ bool M_loadFont(const char * filename, void * data)
 	
 	// send texture image
 	render->bindTexture(textureId);
-    render->setTextureUWrapMode(M_WRAP_CLAMP);
-    render->setTextureVWrapMode(M_WRAP_CLAMP);
-    render->setTextureFilterMode(M_TEX_FILTER_NEAREST, M_TEX_FILTER_NEAREST);
+    render->setTextureUWrapMode(WRAP_CLAMP);
+    render->setTextureVWrapMode(WRAP_CLAMP);
+    render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
 	render->sendTextureImage(&image, 0, 1, 0);
 
 	// finish

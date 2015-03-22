@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// MMeshSave.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -34,7 +29,7 @@
 namespace Neo
 {
 // tools
-static void writeKey(MFile * file, Key * key, M_VARIABLE_TYPE type)
+static void writeKey(File * file, Key * key, M_VARIABLE_TYPE type)
 {
 	openAttributeNode(file, "k", 3);
 
@@ -51,14 +46,14 @@ static void writeKey(MFile * file, Key * key, M_VARIABLE_TYPE type)
 		}
 		case M_VARIABLE_VEC2:
 		{
-			MVector2 * data = (MVector2 *)key->getData();
+			Vector2 * data = (Vector2 *)key->getData();
 			writeFloat(file, "x", data->x, " ");
 			writeFloat(file, "y", data->y);
 			break;
 		}
 		case M_VARIABLE_VEC3:
 		{
-			MVector3 * data = (MVector3 *)key->getData();
+			Vector3 * data = (Vector3 *)key->getData();
 			writeFloat(file, "x", data->x, " ");
 			writeFloat(file, "y", data->y, " ");
 			writeFloat(file, "z", data->z);
@@ -66,7 +61,7 @@ static void writeKey(MFile * file, Key * key, M_VARIABLE_TYPE type)
 		}
 		case M_VARIABLE_VEC4:
 		{
-			MVector4 * data = (MVector4 *)key->getData();
+			Vector4 * data = (Vector4 *)key->getData();
 			writeFloat(file, "x", data->x, " ");
 			writeFloat(file, "y", data->y, " ");
 			writeFloat(file, "z", data->z, " ");
@@ -75,8 +70,8 @@ static void writeKey(MFile * file, Key * key, M_VARIABLE_TYPE type)
 		}
 		case M_VARIABLE_QUAT:
 		{
-			MQuaternion * data = (MQuaternion *)key->getData();
-			MVector3 euler = data->getEulerAngles();
+			Quaternion * data = (Quaternion *)key->getData();
+			Vector3 euler = data->getEulerAngles();
 			writeFloat(file, "x", euler.x, " ");
 			writeFloat(file, "y", euler.y, " ");
 			writeFloat(file, "z", euler.z);
@@ -87,7 +82,7 @@ static void writeKey(MFile * file, Key * key, M_VARIABLE_TYPE type)
 	closeAttributeNode(file, "\n");
 }
 
-static void writeKeys(MFile * file, const char * name, Key * keys, M_VARIABLE_TYPE type, unsigned int keysNumber)
+static void writeKeys(File * file, const char * name, Key * keys, M_VARIABLE_TYPE type, unsigned int keysNumber)
 {
 	if(keysNumber > 0)
 	{
@@ -136,7 +131,7 @@ bool xmlMeshSave(const char * filename, Mesh * mesh)
 	
 	
 	// create file
-	MFile * file = M_fopen(filename, "wt");
+	File * file = M_fopen(filename, "wt");
 	if(! file)
 	{
 		MLOG_ERROR("can't create file : " << filename);
@@ -238,11 +233,11 @@ bool xmlMeshSave(const char * filename, Mesh * mesh)
 				Texture * texture = mesh->getTexture(t);
 				
 				TextureRef * textureRef = texture->getTextureRef();
-				M_TEX_GEN_MODES genMode = texture->getGenMode();
-				M_WRAP_MODES UWrapMode = texture->getUWrapMode();
-				M_WRAP_MODES VWrapMode = texture->getVWrapMode();
-				MVector2 texTranslate = texture->getTexTranslate();
-				MVector2 texScale = texture->getTexScale();
+				TEX_GEN_MODES genMode = texture->getGenMode();
+				WRAP_MODES UWrapMode = texture->getUWrapMode();
+				WRAP_MODES VWrapMode = texture->getVWrapMode();
+				Vector2 texTranslate = texture->getTexTranslate();
+				Vector2 texScale = texture->getTexScale();
 				float texRotate = texture->getTexRotate();
 				
 				
@@ -266,8 +261,8 @@ bool xmlMeshSave(const char * filename, Mesh * mesh)
 				closeAttributeNode(file, "\n");
 				
 				openAttributeNode(file, "tile", 2);
-				(UWrapMode == M_WRAP_CLAMP) ? writeString(file, "u", "clamp", " ") : writeString(file, "u", "repeat", " ");
-				(VWrapMode == M_WRAP_CLAMP) ? writeString(file, "v", "clamp") : writeString(file, "v", "repeat");
+				(UWrapMode == WRAP_CLAMP) ? writeString(file, "u", "clamp", " ") : writeString(file, "u", "repeat", " ");
+				(VWrapMode == WRAP_CLAMP) ? writeString(file, "v", "clamp") : writeString(file, "v", "repeat");
 				closeAttributeNode(file, "\n");
 				
 				openAttributeNode(file, "translate", 2);
@@ -315,11 +310,11 @@ bool xmlMeshSave(const char * filename, Mesh * mesh)
 				float opacity = material->getOpacity();
 				float shininess = material->getShininess();
 				float customValue = material->getCustomValue();
-				M_BLENDING_MODES blendMode = material->getBlendMode();
-				MVector3 emit = material->getEmit();
-				MVector3 diffuse = material->getDiffuse();
-				MVector3 specular = material->getSpecular();
-				MVector3 customColor = material->getCustomColor();
+				BLENDING_MODES blendMode = material->getBlendMode();
+				Vector3 emit = material->getEmit();
+				Vector3 diffuse = material->getDiffuse();
+				Vector3 specular = material->getSpecular();
+				Vector3 customColor = material->getCustomColor();
 				FXRef * fx_ref = material->getFXRef();
 				FXRef * zfx_ref = material->getZFXRef();
 				
@@ -337,13 +332,13 @@ bool xmlMeshSave(const char * filename, Mesh * mesh)
 					default:
 						writeInt(file, "type", 0);
 						break;
-					case M_BLENDING_ALPHA:
+					case BLENDING_ALPHA:
 						writeInt(file, "type", 2);
 						break;
-					case M_BLENDING_ADD:
+					case BLENDING_ADD:
 						writeInt(file, "type", 3);
 						break;
-					case M_BLENDING_PRODUCT:
+					case BLENDING_PRODUCT:
 						writeInt(file, "type", 4);
 						break;
 				}
@@ -432,7 +427,7 @@ bool xmlMeshSave(const char * filename, Mesh * mesh)
 						
 						Texture * texture = texturePass->getTexture();
 						unsigned int mapChannel = texturePass->getMapChannel();
-						M_TEX_COMBINE_MODES combineMode = texturePass->getCombineMode();
+						TEX_COMBINE_MODES combineMode = texturePass->getCombineMode();
 						
 						
 						openAttributeNode(file, "texturePass", 3);
@@ -448,19 +443,19 @@ bool xmlMeshSave(const char * filename, Mesh * mesh)
 								default:
 									writeString(file, "mode", "modulate", " ");
 									break;
-								case M_TEX_COMBINE_REPLACE:
+								case TEX_COMBINE_REPLACE:
 									writeString(file, "mode", "replace", " ");
 									break;
-								case M_TEX_COMBINE_ALPHA:
+								case TEX_COMBINE_ALPHA:
 									writeString(file, "mode", "alpha", " ");
 									break;
-								case M_TEX_COMBINE_DOT:
+								case TEX_COMBINE_DOT:
 									writeString(file, "mode", "dot", " ");
 									break;
-								case M_TEX_COMBINE_ADD:
+								case TEX_COMBINE_ADD:
 									writeString(file, "mode", "add", " ");
 									break;
-								case M_TEX_COMBINE_SUB:
+								case TEX_COMBINE_SUB:
 									writeString(file, "mode", "sub", " ");
 									break;
 							}
@@ -504,9 +499,9 @@ bool xmlMeshSave(const char * filename, Mesh * mesh)
 					OBone * bone = armature->getBone(b);
 					Object3d * parent = bone->getParent();
 					
-					MVector3 position = bone->getPosition();
-					MVector3 scale = bone->getScale();
-					MVector3 rotation = bone->getRotation().getEulerAngles();
+					Vector3 position = bone->getPosition();
+					Vector3 scale = bone->getScale();
+					Vector3 rotation = bone->getRotation().getEulerAngles();
 					
 					
 					openAttributeNode(file, "Bone", 1);
@@ -594,17 +589,17 @@ bool xmlMeshSave(const char * filename, Mesh * mesh)
 			unsigned int texCoordsSize = subMesh->getTexCoordsSize();
 			unsigned int colorsSize = subMesh->getColorsSize();
 			
-			M_TYPES indicesType = subMesh->getIndicesType();
+			VAR_TYPES indicesType = subMesh->getIndicesType();
 			void * indices = subMesh->getIndices();
 			
-			MColor * colors = subMesh->getColors();
-			MVector3 * vertices = subMesh->getVertices();
-			MVector3 * normals = subMesh->getNormals();
-			MVector3 * tangents = subMesh->getTangents();
-			MVector2 * texCoords = subMesh->getTexCoords();
+			Color * colors = subMesh->getColors();
+			Vector3 * vertices = subMesh->getVertices();
+			Vector3 * normals = subMesh->getNormals();
+			Vector3 * tangents = subMesh->getTangents();
+			Vector2 * texCoords = subMesh->getTexCoords();
 			
 			Box3d * box = subMesh->getBoundingBox();
-			MSkinData * skin = subMesh->getSkinData();
+			SkinData * skin = subMesh->getSkinData();
 			map<unsigned int, unsigned int> * mapChannelOffsets = subMesh->getMapChannelOffsets();
 			
 			
@@ -736,7 +731,7 @@ bool xmlMeshSave(const char * filename, Mesh * mesh)
 				
 				switch(indicesType)
 				{
-					case M_USHORT:
+					case VAR_USHORT:
 					{
 						for(i=0; i<indicesSize; i++)
 						{
@@ -746,7 +741,7 @@ bool xmlMeshSave(const char * filename, Mesh * mesh)
 						}
 						break;
 					}
-					case M_UINT:
+					case VAR_UINT:
 					{
 						for(i=0; i<indicesSize; i++)
 						{
@@ -776,7 +771,7 @@ bool xmlMeshSave(const char * filename, Mesh * mesh)
 				
 					for(p=0; p<pointsNumber; p++)
 					{
-						MSkinPoint * skinPoint = skin->getPoint(p);
+						SkinPoint * skinPoint = skin->getPoint(p);
 					
 						unsigned int vertexId = skinPoint->getVertexId();
 						unsigned int bonesNumber = skinPoint->getBonesNumber();
@@ -819,11 +814,11 @@ bool xmlMeshSave(const char * filename, Mesh * mesh)
 				{
 					MaterialDisplay * display = subMesh->getDisplay(d);
 				
-					M_PRIMITIVE_TYPES primitiveType = display->getPrimitiveType();
+					PRIMITIVE_TYPES primitiveType = display->getPrimitiveType();
 					unsigned int begin = display->getBegin();
 					unsigned int size = display->getSize();
 					Material * material = display->getMaterial();
-					M_CULL_MODES cullMode = display->getCullMode();
+					CULL_MODES cullMode = display->getCullMode();
 				
 					int materialId = getMaterialId(mesh, material);
 				
@@ -839,10 +834,10 @@ bool xmlMeshSave(const char * filename, Mesh * mesh)
 						default:
 							writeInt(file, "cullFace", 0);
 							break;
-						case M_CULL_FRONT:
+						case CULL_FRONT:
 							writeInt(file, "cullFace", 1);
 							break;
-						case M_CULL_NONE:
+						case CULL_NONE:
 							writeInt(file, "cullFace", 2);
 							break;
 					}
@@ -880,7 +875,7 @@ bool xmlMeshSave(const char * filename, Mesh * mesh)
 bool xmlArmatureAnimSave(const char * filename, ArmatureAnim * anim)
 {
 	// create file
-	MFile * file = M_fopen(filename, "wt");
+	File * file = M_fopen(filename, "wt");
 	if(! file)
 	{
 		MLOG_ERROR("can't create file : " << filename);
@@ -944,7 +939,7 @@ bool xmlArmatureAnimSave(const char * filename, ArmatureAnim * anim)
 bool xmlTexturesAnimSave(const char * filename, TexturesAnim * anim)
 {
 	// create file
-	MFile * file = M_fopen(filename, "wt");
+	File * file = M_fopen(filename, "wt");
 	if(! file)
 	{
 		MLOG_ERROR("can't create file : " << filename);
@@ -1008,7 +1003,7 @@ bool xmlTexturesAnimSave(const char * filename, TexturesAnim * anim)
 bool xmlMaterialsAnimSave(const char * filename, MaterialsAnim * anim)
 {
 	// create file
-	MFile * file = M_fopen(filename, "wt");
+	File * file = M_fopen(filename, "wt");
 	if(! file)
 	{
 		MLOG_ERROR("can't create file : " << filename);

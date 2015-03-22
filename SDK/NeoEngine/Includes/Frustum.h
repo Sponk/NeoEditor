@@ -37,16 +37,16 @@ class M_ENGINE_EXPORT Frustum
 {
 private:
 
-	MVector3 m_nearPoint;
-	MVector3 m_farPoint;
-	MVector3 m_direction;
-	MVector3 m_points[4];
-	MVector3 m_normals[4];
+	Vector3 m_nearPoint;
+	Vector3 m_farPoint;
+	Vector3 m_direction;
+	Vector3 m_points[4];
+	Vector3 m_normals[4];
 
 public:
 
 	void makeVolume(OCamera * camera);
-	bool isVolumePointsVisible(MVector3 * points, unsigned int pointsNumber);
+	bool isVolumePointsVisible(Vector3 * points, unsigned int pointsNumber);
 };
 }
 #endif

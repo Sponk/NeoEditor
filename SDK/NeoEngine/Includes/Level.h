@@ -47,18 +47,18 @@ private:
 	FXManager m_FXManager;
 
 	// data managers
-	MDataManager m_fontManager;
-	MDataManager m_textureManager;
-	MDataManager m_shaderManager;
-	MDataManager m_soundManager;
-	MDataManager m_meshManager;
-	MDataManager m_armatureAnimManager;
-	MDataManager m_texturesAnimManager;
-	MDataManager m_materialsAnimManager;
+	DataManager m_fontManager;
+	DataManager m_textureManager;
+	DataManager m_shaderManager;
+	DataManager m_soundManager;
+	DataManager m_meshManager;
+	DataManager m_armatureAnimManager;
+	DataManager m_texturesAnimManager;
+	DataManager m_materialsAnimManager;
 
 	// data queues
-	vector <MDataRef *> m_updateQueue;
-	vector <MDataRef *> m_clearQueue;
+	vector <DataRef *> m_updateQueue;
+	vector <DataRef *> m_clearQueue;
 
 	// scenes
 	unsigned int		m_currentSceneId;
@@ -75,8 +75,8 @@ private:
 
 	friend class NeoEngine;
 	
-	void incrDataRefScore(MDataRef * ref);
-	void decrDataRefScore(MDataRef * ref);
+	void incrDataRefScore(DataRef * ref);
+	void decrDataRefScore(DataRef * ref);
 	void changeCurrentSceneIfRequested();
 
 public:
@@ -90,14 +90,14 @@ public:
 	FXRef * createFX(ShaderRef * vertexShaderRef, ShaderRef * pixelShaderRef);
 
 	// data managers
-	inline MDataManager * getFontManager(void){ return &m_fontManager; }
-	inline MDataManager * getTextureManager(void){ return &m_textureManager; }
-	inline MDataManager * getShaderManager(void){ return &m_shaderManager; }
-	inline MDataManager * getSoundManager(void){ return &m_soundManager; }
-	inline MDataManager * getMeshManager(void){ return &m_meshManager; }
-	inline MDataManager * getArmatureAnimManager(void){ return &m_armatureAnimManager; }
-	inline MDataManager * getTexturesAnimManager(void){ return &m_texturesAnimManager; }
-	inline MDataManager * getMaterialsAnimManager(void){ return &m_materialsAnimManager; }
+	inline DataManager * getFontManager(void){ return &m_fontManager; }
+	inline DataManager * getTextureManager(void){ return &m_textureManager; }
+	inline DataManager * getShaderManager(void){ return &m_shaderManager; }
+	inline DataManager * getSoundManager(void){ return &m_soundManager; }
+	inline DataManager * getMeshManager(void){ return &m_meshManager; }
+	inline DataManager * getArmatureAnimManager(void){ return &m_armatureAnimManager; }
+	inline DataManager * getTexturesAnimManager(void){ return &m_texturesAnimManager; }
+	inline DataManager * getMaterialsAnimManager(void){ return &m_materialsAnimManager; }
 
 	/**
 	 * @brief Loads a font from a file and returns the new FontRef object.
@@ -162,14 +162,14 @@ public:
 	 *
 	 * @param ref The DataRef object.
 	 */
-	void sendToUpdateQueue(MDataRef * ref);
+	void sendToUpdateQueue(DataRef * ref);
 
 	/**
 	 * @brief Appends a DataRef to the clear queue.
 	 *
 	 * @param ref The DataRef object.
 	 */
-	void sendToClearQueue(MDataRef * ref);
+	void sendToClearQueue(DataRef * ref);
 
 	/**
 	 * @brief Updates all DataRef's in the update queue.

@@ -1,9 +1,9 @@
 #include <NeoEngine.h>
-#include <MCore.h>
 #include <LuaBehavior.h>
 #include <WinContext.h>
 #include <PackageManagerNPK.h>
 #include <GuiSystem.h>
+#include <NeoCore.h>
 #include <Widget.h>
 #include <Window/Window.h>
 
@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
     NeoGame* game = new NeoGame();
     Neo::LuaScript* script = new Neo::LuaScript();
     Level* level = new Level();
-    MSystemContext* context = (MSystemContext*) new Neo::MWinContext();
+    SystemContext* context = (SystemContext*) new Neo::MWinContext();
     MPackageManager* pmanager = new Neo::MPackageManagerNPK;
 
     pmanager->init();

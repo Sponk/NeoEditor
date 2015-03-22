@@ -228,12 +228,12 @@ void Scene::setScriptFilename(const char * scriptFilename)
 
 bool createShape(OEntity * entity, PhysicsProperties * phyProps, unsigned int * shapeId)
 {
-	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+	PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 
 	// get bounding box
 	Box3d * box = entity->getBoundingBox();
 
-	MVector3 scale = entity->getTransformedScale();
+	Vector3 scale = entity->getTransformedScale();
 
 	// swith shapes
 	switch(phyProps->getCollisionShape())
@@ -245,7 +245,7 @@ bool createShape(OEntity * entity, PhysicsProperties * phyProps, unsigned int * 
 
 	case COLLISION_SHAPE_SPHERE:
 		{
-			MVector3 vec = (box->max - box->min)*scale*0.5f;
+			Vector3 vec = (box->max - box->min)*scale*0.5f;
 			float radius = vec.x;
 			radius = MAX(radius, vec.y);
 			radius = MAX(radius, vec.z);
@@ -255,7 +255,7 @@ bool createShape(OEntity * entity, PhysicsProperties * phyProps, unsigned int * 
 
 	case COLLISION_SHAPE_CONE:
 		{
-			MVector3 vec = (box->max - box->min)*scale;
+			Vector3 vec = (box->max - box->min)*scale;
 			float height = vec.y;
 			float radius = vec.x*0.5f;
 			radius = MAX(radius, vec.z*0.5f);
@@ -265,7 +265,7 @@ bool createShape(OEntity * entity, PhysicsProperties * phyProps, unsigned int * 
 
 	case COLLISION_SHAPE_CAPSULE:
 		{
-			MVector3 vec = (box->max - box->min)*scale;
+			Vector3 vec = (box->max - box->min)*scale;
 			float height = vec.y;
 			float radius = vec.x*0.5f;
 			radius = MAX(radius, vec.z*0.5f);
@@ -275,7 +275,7 @@ bool createShape(OEntity * entity, PhysicsProperties * phyProps, unsigned int * 
 
 	case COLLISION_SHAPE_CYLINDER:
 		{
-			MVector3 vec = (box->max - box->min)*scale;
+			Vector3 vec = (box->max - box->min)*scale;
 			float height = vec.y;
 			float radius = vec.x*0.5f;
 			radius = MAX(radius, vec.z*0.5f);
@@ -310,7 +310,7 @@ bool createShape(OEntity * entity, PhysicsProperties * phyProps, unsigned int * 
 						if(subMesh->getVerticesSize() > 0)
 						{
 							physics->createConvexHullShape(&subShapeId, subMesh->getVertices(), subMesh->getVerticesSize(), entity->getScale());
-							physics->addChildShape(*shapeId, subShapeId, MVector3(), MQuaternion());
+							physics->addChildShape(*shapeId, subShapeId, Vector3(), Quaternion());
 						}
 					}
 				}
@@ -356,7 +356,7 @@ bool createShape(OEntity * entity, PhysicsProperties * phyProps, unsigned int * 
 								subMesh->getIndices(), subMesh->getIndicesSize(), subMesh->getIndicesType(),
 								entity->getScale()
 							);
-							physics->addChildShape(*shapeId, subShapeId, MVector3(), MQuaternion());
+							physics->addChildShape(*shapeId, subShapeId, Vector3(), Quaternion());
 						}
 					}
 				}
@@ -373,7 +373,7 @@ bool createShape(OEntity * entity, PhysicsProperties * phyProps, unsigned int * 
 
 void Scene::prepareCollisionShape(OEntity * entity)
 {
-	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+	PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 	PhysicsProperties * phyProps = entity->getPhysicsProperties();
 
 	if(! phyProps)
@@ -409,7 +409,7 @@ void Scene::prepareCollisionShape(OEntity * entity)
 		{
 			unsigned int subShapeId = shapeId;
 			physics->createMultiShape(&shapeId);
-			physics->addChildShape(shapeId, subShapeId, MVector3(), MQuaternion());
+			physics->addChildShape(shapeId, subShapeId, Vector3(), Quaternion());
 		}
 
 		phyProps->setShapeId(shapeId);
@@ -418,7 +418,7 @@ void Scene::prepareCollisionShape(OEntity * entity)
 
 void Scene::prepareCollisionObject(OEntity * entity)
 {
-	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+	PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 	PhysicsProperties * phyProps = entity->getPhysicsProperties();
 	if(! phyProps)
 		return;
@@ -445,8 +445,8 @@ void Scene::prepareCollisionObject(OEntity * entity)
 
 	if(parentPhyProps) // add shape to parent multi-shape
 	{
-		MVector3 position = entity->getPosition() * parentEntity->getTransformedScale();
-		MQuaternion rotation = entity->getRotation();
+		Vector3 position = entity->getPosition() * parentEntity->getTransformedScale();
+		Quaternion rotation = entity->getRotation();
 
 		phyProps->setShapeId(shapeId);
 		physics->addChildShape(parentPhyProps->getShapeId(), shapeId, position, rotation);
@@ -457,12 +457,12 @@ void Scene::prepareCollisionObject(OEntity * entity)
 
 		if(phyProps->isGhost())
 		{
-			MVector3 euler = entity->getTransformedRotation();
+			Vector3 euler = entity->getTransformedRotation();
 
 			physics->createGhost(
 				&collisionObjectId, shapeId,
 				entity->getTransformedPosition(),
-				MQuaternion(euler.x, euler.y, euler.z)
+				Quaternion(euler.x, euler.y, euler.z)
 			);
 
 			phyProps->setShapeId(shapeId);
@@ -497,7 +497,7 @@ void Scene::prepareCollisionObject(OEntity * entity)
 
 void Scene::prepareConstraints(OEntity * entity)
 {
-	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+	PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 	PhysicsProperties * phyProps = entity->getPhysicsProperties();
 
 	if(! phyProps)
@@ -539,11 +539,11 @@ void Scene::prepareConstraints(OEntity * entity)
 
 void Scene::preparePhysics(void)
 {
-	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+	PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 	if(! physics)
 		return;
 
-	physics->init(MVector3(-10000), MVector3(10000));
+	physics->init(Vector3(-10000), Vector3(10000));
 	physics->setWorldGravity(m_gravity);
 
 	// create shapes
@@ -765,7 +765,7 @@ OText * Scene::getTextByName(const char * name)
 void Scene::begin(void)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
-	MScriptContext * scriptContext = engine->getScriptContext();
+	ScriptContext * scriptContext = engine->getScriptContext();
 
 	updateObjectsMatrices();
 	playLoopSounds();
@@ -783,7 +783,7 @@ void Scene::end(void)
 
 void Scene::updatePhysics(void)
 {
-	MPhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
+	PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
 	if(! physics)
 		return;
 
@@ -804,11 +804,11 @@ void Scene::updatePhysics(void)
 			Object3d * parent = entity->getParent();
 			if(parent && phyProps->isGhost())
 			{
-				MVector3 euler = entity->getTransformedRotation();
+				Vector3 euler = entity->getTransformedRotation();
 				physics->setObjectTransform(
 					phyProps->getCollisionObjectId(),
 					entity->getTransformedPosition(),
-					MQuaternion(euler.x, euler.y, euler.z)
+					Quaternion(euler.x, euler.y, euler.z)
 				);
 			}
 			else if(entity->needToUpdate())
@@ -836,8 +836,8 @@ void Scene::updatePhysics(void)
 		{
 			if((phyProps->getCollisionObjectId() > 0) && (! phyProps->isGhost()))
 			{
-				MVector3 position = entity->getPosition();
-				MQuaternion rotation = entity->getRotation();
+				Vector3 position = entity->getPosition();
+				Quaternion rotation = entity->getRotation();
 
 				physics->getObjectTransform(phyProps->getCollisionObjectId(), &position, &rotation);
 

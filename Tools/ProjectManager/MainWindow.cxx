@@ -3,7 +3,7 @@
 #include "MainWindow.h"
 #include <FL/fl_message.H>
 #include <FL/Fl_Native_File_Chooser.H>
-#include <MCore.h>
+#include <NeoCore.h>
 #include <fstream>
 #include <algorithm>
 extern std::string currentDirectory;

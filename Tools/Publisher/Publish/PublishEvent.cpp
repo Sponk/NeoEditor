@@ -76,7 +76,7 @@ const char* getPubDir()
         return s_pubDir.c_str();
 
 	NeoEngine* engine = NeoEngine::getInstance();
-	MSystemContext* system = engine->getSystemContext();
+	SystemContext* system = engine->getSystemContext();
 
 	char dir[256];
 	getGlobalFilename(dir, system->getWorkingDirectory(), "published");
@@ -96,7 +96,7 @@ const char* getDataDir()
 MPackage openProjectPackage(const char* projName)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
-	MSystemContext* system = engine->getSystemContext();
+	SystemContext* system = engine->getSystemContext();
 
 	char projFile[256];
 	getLocalFilename(projFile, system->getWorkingDirectory(), projName);
@@ -145,7 +145,7 @@ class PublishEvent##dir##Package : public PublishEvent \
 	void	execute(const char* projName) \
 	{ \
 		NeoEngine* engine = NeoEngine::getInstance(); \
-		MSystemContext* system = engine->getSystemContext(); \
+		SystemContext* system = engine->getSystemContext(); \
 		char directory[256], localFilename[256]; \
 		getGlobalFilename(directory, system->getWorkingDirectory(), #dir); \
 		vector<string> files; \
@@ -174,7 +174,7 @@ class PublishEvent##dir : public PublishEvent \
 	void	execute(const char* projName) \
 	{ \
 		NeoEngine* engine = NeoEngine::getInstance(); \
-		MSystemContext* system = engine->getSystemContext(); \
+		SystemContext* system = engine->getSystemContext(); \
 		char directory[256]; \
 		getGlobalFilename(directory, system->getWorkingDirectory(), #dir); \
 		char destDirectory[256]; \
@@ -199,7 +199,7 @@ class PublishEventMeshsPackage : public PublishEvent
 	void execute(const char* projName)
 	{
 		NeoEngine* engine = NeoEngine::getInstance();
-		MSystemContext* system = engine->getSystemContext();
+		SystemContext* system = engine->getSystemContext();
 		MPackageManager* packageManager = engine->getPackageManager();
 
 		char directory[256], localFilename[256];
@@ -398,7 +398,7 @@ void copySysWindows(const char* projName)
 #endif
 
 	NeoEngine* engine = NeoEngine::getInstance();
-	MSystemContext* system = engine->getSystemContext();
+	SystemContext* system = engine->getSystemContext();
 
 	char filename[256];
 	getLocalFilename(filename, system->getWorkingDirectory(), projName);
@@ -438,7 +438,7 @@ void copySysOSX(const char* projName)
 
 	NeoWindow * window = NeoWindow::getInstance();
 	NeoEngine* engine = NeoEngine::getInstance();
-	MSystemContext* system = engine->getSystemContext();
+	SystemContext* system = engine->getSystemContext();
 
 	char filename[256];
 	getLocalFilename(filename, system->getWorkingDirectory(), projName);
@@ -489,7 +489,7 @@ void copySysLinux(const char* projName)
 #endif
 
 	NeoEngine* engine = NeoEngine::getInstance();
-	MSystemContext* system = engine->getSystemContext();
+	SystemContext* system = engine->getSystemContext();
 
 	char filename[256];
 	getLocalFilename(filename, system->getWorkingDirectory(), projName);
@@ -560,7 +560,7 @@ class PublishEventCopyGame : public PublishEvent
 	void	execute(const char* projName)
 	{
 		NeoEngine* engine = NeoEngine::getInstance();
-		MSystemContext* system = engine->getSystemContext();
+		SystemContext* system = engine->getSystemContext();
 
 		char filename[256];
 		char destFilename[256];

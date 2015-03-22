@@ -20,7 +20,7 @@
 #ifndef NEO_NEOEDITOR_MAINWINDOW_UTILS_H_
 #define NEO_NEOEDITOR_MAINWINDOW_UTILS_H_
 
-#include <MCore.h>
+#include <NeoCore.h>
 
 /**
  * @brief Calls the native file chooser.
@@ -49,7 +49,7 @@ int ask(const char* text);
  * @param c The color.
  * @return The color as a vector3.
  */
-MVector3 flColorToVector(int c);
+Neo::Vector3 flColorToVector(int c);
 
 /*
  * Windows helper for POSIX functionality.

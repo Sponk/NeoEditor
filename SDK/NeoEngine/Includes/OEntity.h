@@ -54,12 +54,12 @@ struct PhysicsConstraint
 	unsigned int constraintId;
 	unsigned int parentObjectId;
 	
-	MString parentName;
-	MVector3 pivot;
-	MVector3 lowerLinearLimit;
-	MVector3 upperLinearLimit;
-	MVector3 lowerAngularLimit;
-	MVector3 upperAngularLimit;
+	String parentName;
+	Vector3 pivot;
+	Vector3 lowerLinearLimit;
+	Vector3 upperLinearLimit;
+	Vector3 lowerAngularLimit;
+	Vector3 upperAngularLimit;
 	bool disableParentCollision;
 };
 
@@ -86,7 +86,7 @@ private:
 	float m_linearDamping;
 	float m_angularDamping;
 	float m_angularFactor;
-	MVector3 m_linearFactor;
+	Vector3 m_linearFactor;
 
 public:
 
@@ -136,8 +136,8 @@ public:
 	inline float getAngularFactor(void){ return m_angularFactor; }
 
 	// linear factor
-	inline void setLinearFactor(const MVector3 & linearFactor){ m_linearFactor = linearFactor; }
-	inline MVector3 * getLinearFactor(void){ return &m_linearFactor; }
+	inline void setLinearFactor(const Vector3 & linearFactor){ m_linearFactor = linearFactor; }
+	inline Vector3 * getLinearFactor(void){ return &m_linearFactor; }
 };
 
 class M_ENGINE_EXPORT OEntity : public Object3d

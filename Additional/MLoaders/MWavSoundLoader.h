@@ -33,7 +33,7 @@
 #ifndef _M_WAV_SOUND_LOADER_H
 #define _M_WAV_SOUND_LOADER_H
 
-#include <MCore.h>
+#include <NeoCore.h>
 
 bool M_loadWavSound(const char * filename, void * data);
 

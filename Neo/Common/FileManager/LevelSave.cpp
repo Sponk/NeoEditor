@@ -37,7 +37,7 @@ namespace Neo
 
 static char rep[256];
 
-void writePhysics(MFile * file, PhysicsProperties * physicsProperties)
+void writePhysics(File * file, PhysicsProperties * physicsProperties)
 {
 	openAttributeNode(file, "physics", 3);
 	M_fprintf(file, "\n");
@@ -158,7 +158,7 @@ void writePhysics(MFile * file, PhysicsProperties * physicsProperties)
 	}
 }
 
-void writeCameraProperties(MFile * file, OCamera * camera)
+void writeCameraProperties(File * file, OCamera * camera)
 {
 	openAttributeNode(file, "properties", 3);
 	M_fprintf(file, "\n");
@@ -211,7 +211,7 @@ void writeCameraProperties(MFile * file, OCamera * camera)
 	M_fprintf(file, "\n");
 }
 
-void writeEntityProperties(MFile * file, OEntity * entity)
+void writeEntityProperties(File * file, OEntity * entity)
 {
 	openAttributeNode(file, "properties", 3);
 	M_fprintf(file, "\n");
@@ -233,7 +233,7 @@ void writeEntityProperties(MFile * file, OEntity * entity)
 	M_fprintf(file, "\n");
 }
 
-void writeSoundProperties(MFile * file, OSound * sound)
+void writeSoundProperties(File * file, OSound * sound)
 {
 	openAttributeNode(file, "properties", 3);
 	M_fprintf(file, "\n");
@@ -271,7 +271,7 @@ void writeSoundProperties(MFile * file, OSound * sound)
 	M_fprintf(file, "\n");
 }
 
-void writeTextProperties(MFile * file, OText * text)
+void writeTextProperties(File * file, OText * text)
 {
 	openAttributeNode(file, "properties", 3);
 	M_fprintf(file, "\n");
@@ -320,7 +320,7 @@ void writeTextProperties(MFile * file, OText * text)
 	}
 }
 
-void writeSceneProperties(MFile * file, Scene * scene)
+void writeSceneProperties(File * file, Scene * scene)
 {
 	openAttributeNode(file, "properties", 2);
 	M_fprintf(file, "\n");
@@ -358,7 +358,7 @@ void writeSceneProperties(MFile * file, Scene * scene)
 	M_fprintf(file, "\n");
 }
 
-void writeLightProperties(MFile * file, OLight * light)
+void writeLightProperties(File * file, OLight * light)
 {
 	openAttributeNode(file, "properties", 3);
 	M_fprintf(file, "\n");
@@ -415,7 +415,7 @@ void writeLightProperties(MFile * file, OLight * light)
 	M_fprintf(file, "\n");
 }
 
-void writeObjectTransform(MFile * file, Object3d * object)
+void writeObjectTransform(File * file, Object3d * object)
 {
 	openAttributeNode(file, "active", 3);
 	writeBool(file, "value", object->isActive());
@@ -441,7 +441,7 @@ void writeObjectTransform(MFile * file, Object3d * object)
 
 	// rotation
 	M_fprintf(file, "\t\t\t\t");
-	MVector3 rotation = object->getEulerRotation();
+	Vector3 rotation = object->getEulerRotation();
 	writeFloatValues(file, "rotation", rotation, 3);
 	M_fprintf(file, "\n");
 
@@ -453,7 +453,7 @@ void writeObjectTransform(MFile * file, Object3d * object)
 	M_fprintf(file, "\n");
 }
 
-void writeBehavior(MFile * file, Behavior * behavior)
+void writeBehavior(File * file, Behavior * behavior)
 {
 	openAttributeNode(file, "Behavior", 3);
 	writeString(file, "name", behavior->getName());
@@ -486,7 +486,7 @@ void writeBehavior(MFile * file, Behavior * behavior)
 	M_fprintf(file, "\n");
 }
 
-void writeBehaviors(MFile * file, Object3d * object)
+void writeBehaviors(File * file, Object3d * object)
 {
 	unsigned int i;
 	unsigned int size = object->getBehaviorsNumber();
@@ -499,7 +499,7 @@ void writeBehaviors(MFile * file, Object3d * object)
 
 bool xmlLevelSave(Level * level, const char * filename)
 {
-	MFile * file = M_fopen(filename, "wt");
+	File * file = M_fopen(filename, "wt");
 	if(! file)
 		return false;
 

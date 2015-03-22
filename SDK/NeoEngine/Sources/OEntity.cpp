@@ -232,18 +232,18 @@ void OEntity::updateVisibility(OCamera * camera)
 
 	Frustum * frustum = camera->getFrustum();
 
-	MVector3 * min = &m_boundingBox.min;
-	MVector3 * max = &m_boundingBox.max;
+	Vector3 * min = &m_boundingBox.min;
+	Vector3 * max = &m_boundingBox.max;
 
-	MVector3 points[8] = {
-		getTransformedVector(MVector3(min->x, min->y, min->z)),
-		getTransformedVector(MVector3(min->x, max->y, min->z)),
-		getTransformedVector(MVector3(max->x, max->y, min->z)),
-		getTransformedVector(MVector3(max->x, min->y, min->z)),
-		getTransformedVector(MVector3(min->x, min->y, max->z)),
-		getTransformedVector(MVector3(min->x, max->y, max->z)),
-		getTransformedVector(MVector3(max->x, max->y, max->z)),
-		getTransformedVector(MVector3(max->x, min->y, max->z))
+	Vector3 points[8] = {
+		getTransformedVector(Vector3(min->x, min->y, min->z)),
+		getTransformedVector(Vector3(min->x, max->y, min->z)),
+		getTransformedVector(Vector3(max->x, max->y, min->z)),
+		getTransformedVector(Vector3(max->x, min->y, min->z)),
+		getTransformedVector(Vector3(min->x, min->y, max->z)),
+		getTransformedVector(Vector3(min->x, max->y, max->z)),
+		getTransformedVector(Vector3(max->x, max->y, max->z)),
+		getTransformedVector(Vector3(max->x, min->y, max->z))
 	};
 
 	// is box in frustum

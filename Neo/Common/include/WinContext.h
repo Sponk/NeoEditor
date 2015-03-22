@@ -31,11 +31,11 @@
 #ifndef _M_WIN_CONTEXT_H
 #define _M_WIN_CONTEXT_H
 
-#include <MCore.h>
+#include <NeoCore.h>
 
 namespace Neo
 {
-class MWinContext : public MSystemContext
+class MWinContext : public SystemContext
 {
 public:
 

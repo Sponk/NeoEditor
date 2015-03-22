@@ -31,11 +31,11 @@
 #ifndef _M_INPUT_H
 #define _M_INPUT_H
 
-#include <MCore.h>
+#include <NeoCore.h>
 
 namespace Neo
 {
-class Input : public MInputContext
+class Input : public InputContext
 {
 public :
 
@@ -46,13 +46,13 @@ private :
 
     struct TouchData
     {
-        M_TOUCH_PHASE phase;
-        MVector2 touchPoint;
-        MVector2 lastTouchPoint;
+        TOUCH_PHASE phase;
+        Vector2 touchPoint;
+        Vector2 lastTouchPoint;
         
         TouchData(void)
         {
-            phase = M_TOUCH_NONE;
+            phase = TOUCH_NONE;
             touchPoint.loadIdentity();
             lastTouchPoint.loadIdentity();
         }
@@ -82,14 +82,14 @@ public:
 	float getAxis(const char * name);
 	int getProperty(const char * name);
     
-    void beginTouch(int touchID, MVector2 touchPoint);
-    void updateTouch(int touchID, MVector2 touchPoint);
-    void endTouch(int touchID, MVector2 touchPoint);
-    void cancelTouch(int touchID, MVector2 touchPoint);
+    void beginTouch(int touchID, Vector2 touchPoint);
+    void updateTouch(int touchID, Vector2 touchPoint);
+    void endTouch(int touchID, Vector2 touchPoint);
+    void cancelTouch(int touchID, Vector2 touchPoint);
     
-    MVector2 getTouchPosition(int touchID);
-    MVector2 getLastTouchPosition(int touchID);
-    M_TOUCH_PHASE getTouchPhase(int touchID);
+    Vector2 getTouchPosition(int touchID);
+    Vector2 getLastTouchPosition(int touchID);
+    TOUCH_PHASE getTouchPhase(int touchID);
 
 	void flush(void);
 };

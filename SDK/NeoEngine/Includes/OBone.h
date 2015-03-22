@@ -47,10 +47,10 @@ public:
 	OBone(const OBone & bone);
 
 	// inverse pose matrix
-	MMatrix4x4 m_inversePoseMatrix;
+	Matrix4x4 m_inversePoseMatrix;
 
 	// skin matrix
-	MMatrix4x4 m_skinMatrix;
+	Matrix4x4 m_skinMatrix;
 
 public:
 
@@ -61,10 +61,10 @@ public:
 	void processChildsLinking(void);
 
 	// inverse pose matrix
-	MMatrix4x4 * getInversePoseMatrix(void){ return &m_inversePoseMatrix; }
+	Matrix4x4 * getInversePoseMatrix(void){ return &m_inversePoseMatrix; }
 
 	// skin matrix
-	MMatrix4x4 * getSkinMatrix(void){ return &m_skinMatrix; }
+	Matrix4x4 * getSkinMatrix(void){ return &m_skinMatrix; }
 };
 }
 #endif

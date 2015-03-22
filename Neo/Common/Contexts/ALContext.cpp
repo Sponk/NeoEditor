@@ -33,21 +33,21 @@
 
 using namespace Neo;
 
-ALenum returnALFormat(M_SOUND_FORMAT format)
+ALenum returnALFormat(SOUND_FORMAT format)
 {
 	switch(format)
 	{
 	default:
-	case M_SOUND_FORMAT_MONO8 :
+	case SOUND_FORMAT_MONO8 :
 		return AL_FORMAT_MONO8;
 
-	case M_SOUND_FORMAT_STEREO8 :
+	case SOUND_FORMAT_STEREO8 :
 		return AL_FORMAT_STEREO8;
 
-	case M_SOUND_FORMAT_MONO16 :
+	case SOUND_FORMAT_MONO16 :
 		return AL_FORMAT_MONO16;
 
-	case M_SOUND_FORMAT_STEREO16 :
+	case SOUND_FORMAT_STEREO16 :
 		return AL_FORMAT_STEREO16;
 	}
 }
@@ -122,7 +122,7 @@ void ALContext::deleteBuffer(unsigned int * bufferId)
 	}
 }
 
-void ALContext::sendBufferSound(unsigned int bufferId, MSound * sound)
+void ALContext::sendBufferSound(unsigned int bufferId, Sound * sound)
 {
 	if(! sound)
 		return;
@@ -141,7 +141,7 @@ void ALContext::sendBufferSound(unsigned int bufferId, MSound * sound)
     }
 }
 
-void ALContext::sendBufferData(unsigned int bufferId, M_SOUND_FORMAT format, void * data, unsigned int size, unsigned int freq)
+void ALContext::sendBufferData(unsigned int bufferId, SOUND_FORMAT format, void * data, unsigned int size, unsigned int freq)
 {
 	// properties
 	ALenum alFormat = returnALFormat(format);
@@ -217,7 +217,7 @@ void ALContext::setSourceBufferId(unsigned int sourceId, unsigned int bufferId)
 	m_sources[sourceId] = bufferId;
 }
 
-void ALContext::setSourcePosition(unsigned int sourceId, const MVector3 & position)
+void ALContext::setSourcePosition(unsigned int sourceId, const Vector3 & position)
 {
 	alSourcefv(sourceId, AL_POSITION, position);
 }
@@ -334,7 +334,7 @@ unsigned int ALContext::getSourceBuffersProcessed(unsigned int sourceId)
 }
 
 // listener
-void ALContext::updateListenerPosition(const MVector3 & position, const MVector3 & direction, const MVector3 & up)
+void ALContext::updateListenerPosition(const Vector3 & position, const Vector3 & direction, const Vector3 & up)
 {
 	ALfloat ListenerPos[] = { position.x, position.y, position.z };
 	ALfloat ListenerVel[] = { 0.0, 0.0, 0.0 };

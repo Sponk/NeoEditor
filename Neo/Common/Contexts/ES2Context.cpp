@@ -1,10 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MCore
-// ES2Context.cpp
-//
-// OpenGL-ES2 Rendering Context
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -228,7 +221,7 @@ ES2Context::~ES2Context(void)
 // view
 void ES2Context::setPerspectiveView(float fov, float ratio, float zNear, float zFar)
 {
-    MMatrix4x4 matrix;
+    Matrix4x4 matrix;
 
     float ymax, xmax;
     ymax = zNear * tanf((float)(fov * M_PI / 360.0f));
@@ -276,7 +269,7 @@ void ES2Context::setOrthoView(float left, float right, float bottom, float top, 
     float ty = - (top + bottom)/(top - bottom);
     float tz = - (zFar + zNear)/(zFar - zNear);
 
-    MMatrix4x4 matrix(
+    Matrix4x4 matrix(
         2.0f/(right-left), 0.0f, 0.0f, 0.0f,
               0.0f, 2.0f/(top-bottom), 0.0f, 0.0f,
               0.0f, 0.0f, -2.0f/(zFar-zNear), 0.0f,
@@ -296,31 +289,31 @@ void ES2Context::clear(int buffer)
 {
     switch(buffer)
     {
-        case M_BUFFER_COLOR:
+        case BUFFER_COLOR:
             glClear(GL_COLOR_BUFFER_BIT);
             return;
 
-        case M_BUFFER_DEPTH:
+        case BUFFER_DEPTH:
             glClear(GL_DEPTH_BUFFER_BIT);
             return;
 
-        case M_BUFFER_STENCIL:
+        case BUFFER_STENCIL:
             glClear(GL_STENCIL_BUFFER_BIT);
             return;
 
-        case M_BUFFER_COLOR | M_BUFFER_DEPTH:
+        case BUFFER_COLOR | BUFFER_DEPTH:
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             return;
 
-        case M_BUFFER_COLOR | M_BUFFER_STENCIL:
+        case BUFFER_COLOR | BUFFER_STENCIL:
             glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
             return;
 
-        case M_BUFFER_COLOR | M_BUFFER_DEPTH | M_BUFFER_STENCIL:
+        case BUFFER_COLOR | BUFFER_DEPTH | BUFFER_STENCIL:
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
             return;
 
-        case M_BUFFER_DEPTH | M_BUFFER_STENCIL:
+        case BUFFER_DEPTH | BUFFER_STENCIL:
             glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
             return;
     }
@@ -619,7 +612,7 @@ void ES2Context::sendUniformVec4(unsigned int fxId, const char * name, float * v
     if(uValue != -1) glUniform4fv(uValue, count, values);
 }
 
-void ES2Context::sendUniformMatrix(unsigned int fxId, const char * name, MMatrix4x4 * matrix, const int count, const bool transpose){
+void ES2Context::sendUniformMatrix(unsigned int fxId, const char * name, Matrix4x4 * matrix, const int count, const bool transpose){
     GLint uValue = glGetUniformLocation(fxId, name);
     if(uValue != -1) glUniformMatrix4fv(uValue, count, transpose, matrix->entries);
 }
@@ -912,7 +905,7 @@ void ES2Context::popMatrix(void)
         (*m_currentMatrix) = m_matrixSteps[m_matrixStep];
     }
 }
-void ES2Context::multMatrix(const MMatrix4x4 * matrix){
+void ES2Context::multMatrix(const Matrix4x4 * matrix){
     (*m_currentMatrix) *= (*matrix);
 }
 void ES2Context::translate(const MVector3 & position){
@@ -928,15 +921,15 @@ void ES2Context::getViewport(int * viewport)
 {
     glGetIntegerv(GL_VIEWPORT, viewport);
 }
-void ES2Context::getModelViewMatrix(MMatrix4x4 * matrix)
+void ES2Context::getModelViewMatrix(Matrix4x4 * matrix)
 {
     (*matrix) = m_modelViewMatrix;
 }
-void ES2Context::getProjectionMatrix(MMatrix4x4 * matrix)
+void ES2Context::getProjectionMatrix(Matrix4x4 * matrix)
 {
     (*matrix) = m_projectionMatrix;
 }
-void ES2Context::getTextureMatrix(MMatrix4x4 * matrix)
+void ES2Context::getTextureMatrix(Matrix4x4 * matrix)
 {
     (*matrix) = m_textureMatrix;
 }

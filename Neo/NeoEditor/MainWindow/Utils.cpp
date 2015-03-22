@@ -22,6 +22,8 @@
 #include <FL/Fl_File_Chooser.H>
 #include <FL/Fl_Native_File_Chooser.H>
 
+using namespace Neo;
+
 const char* fl_native_file_chooser(const char* title, const char* files, const char* dir, int type)
 {
     Fl_Native_File_Chooser* dlg = new Fl_Native_File_Chooser();
@@ -41,7 +43,7 @@ int ask(const char* text)
     return fl_choice("%s", "No", "Yes", NULL, text);
 }
 
-MVector3 flColorToVector(int c)
+Vector3 flColorToVector(int c)
 {
     char unsigned bytes[4];
     bytes[0] = (c >> 24) & 0xFF;
@@ -49,7 +51,7 @@ MVector3 flColorToVector(int c)
     bytes[2] = (c >> 8) & 0xFF;
     bytes[3] = c & 0xFF;
 
-    return MVector3(static_cast<float>(bytes[0])/255.0f, static_cast<float>(bytes[1])/255.0f, static_cast<float>(bytes[2])/255.0f);
+    return Vector3(static_cast<float>(bytes[0])/255.0f, static_cast<float>(bytes[1])/255.0f, static_cast<float>(bytes[2])/255.0f);
 }
 
 /*

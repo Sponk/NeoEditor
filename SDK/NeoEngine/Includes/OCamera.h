@@ -39,17 +39,17 @@ private:
 
 	// properties
 	bool m_fog;
-    MVector3 m_fogColor;
+    Vector3 m_fogColor;
 	bool m_ortho;
 	float m_fov;
 	float m_fogDistance;
 	float m_clippingNear;
 	float m_clippingFar;
-	MVector3 m_clearColor;
+	Vector3 m_clearColor;
 
 	// current matrices
-	MMatrix4x4 m_currentViewMatrix; // current model view matrix
-	MMatrix4x4 m_currentProjMatrix; // current projection matrix
+	Matrix4x4 m_currentViewMatrix; // current model view matrix
+	Matrix4x4 m_currentProjMatrix; // current projection matrix
 
 	// current viewport
 	int m_currentViewport[4]; // 0=x 1=y 2=width 3=height
@@ -84,8 +84,8 @@ public:
 
 	// properties
 	inline void enableFog(const bool fog){ m_fog = fog; }
-    inline MVector3 getFogColor() { return m_fogColor; }
-    inline void setFogColor(MVector3 color) { m_fogColor = color; }
+    inline Vector3 getFogColor() { return m_fogColor; }
+    inline void setFogColor(Vector3 color) { m_fogColor = color; }
 	inline void enableOrtho(const bool ortho){ m_ortho = ortho; }
 	inline void setFov(const float fov){ m_fov = fov; }
 	inline void setFogDistance(const float fogDistance){ m_fogDistance = fogDistance; }
@@ -97,16 +97,16 @@ public:
 	inline float getClippingFar(void){ return m_clippingFar; }
 	inline float getFov(void){ return m_fov; }
 	inline float getFogDistance(void){ return m_fogDistance; }
-	inline void setClearColor(MVector3 clearColor) { m_clearColor = clearColor; }
-	inline MVector3 getClearColor(void) const { return m_clearColor; }
+	inline void setClearColor(Vector3 clearColor) { m_clearColor = clearColor; }
+	inline Vector3 getClearColor(void) const { return m_clearColor; }
 
 	// projection
-	MVector3 getProjectedPoint(const MVector3 & point) const;
-	MVector3 getUnProjectedPoint(const MVector3 & point) const;
+	Vector3 getProjectedPoint(const Vector3 & point) const;
+	Vector3 getUnProjectedPoint(const Vector3 & point) const;
 
 	// matrices
-	inline MMatrix4x4 * getCurrentViewMatrix(void){ return &m_currentViewMatrix; }
-	inline MMatrix4x4 * getCurrentProjMatrix(void){ return &m_currentProjMatrix; }
+	inline Matrix4x4 * getCurrentViewMatrix(void){ return &m_currentViewMatrix; }
+	inline Matrix4x4 * getCurrentProjMatrix(void){ return &m_currentProjMatrix; }
 
 	// viewport
 	int * getCurrentViewport(void){ return m_currentViewport; }

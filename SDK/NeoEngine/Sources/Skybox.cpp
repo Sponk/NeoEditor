@@ -69,9 +69,9 @@ Skybox::Skybox() :
     }
 }
 
-void Skybox::drawSkybox(MVector3 position, MVector3 rotation)
+void Skybox::drawSkybox(Vector3 position, Vector3 rotation)
 {
-    MRenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
     if(!m_init)
     {
         return;
@@ -79,86 +79,86 @@ void Skybox::drawSkybox(MVector3 position, MVector3 rotation)
 
     // projmodelview matrix
     rotation *= -1;
-    static MMatrix4x4 ProjMatrix;
-    static MMatrix4x4 ModelViewMatrix;
-    static MMatrix4x4 ProjModelViewMatrix;
+    static Matrix4x4 ProjMatrix;
+    static Matrix4x4 ModelViewMatrix;
+    static Matrix4x4 ProjModelViewMatrix;
 
     render->getProjectionMatrix(&ProjMatrix);
     render->getModelViewMatrix(&ModelViewMatrix);
 
     ModelViewMatrix.loadIdentity();
 
-    ModelViewMatrix.rotate(MVector3(1.0,0.0,0.0), rotation.x);
-    ModelViewMatrix.rotate(MVector3(0.0,1.0,0.0), rotation.y);
-    ModelViewMatrix.rotate(MVector3(0.0,0.0,1.0), rotation.z);
+    ModelViewMatrix.rotate(Vector3(1.0,0.0,0.0), rotation.x);
+    ModelViewMatrix.rotate(Vector3(0.0,1.0,0.0), rotation.y);
+    ModelViewMatrix.rotate(Vector3(0.0,0.0,1.0), rotation.z);
 
     ProjModelViewMatrix = ProjMatrix * ModelViewMatrix;
 
     render->disableDepthTest();
     render->bindFX(m_fx);
-    static MVector2 texCoords[4];
+    static Vector2 texCoords[4];
 
-    texCoords[0] = MVector2(1, 0);
-    texCoords[1] = MVector2(0, 0);
-    texCoords[3] = MVector2(0, 1);
-    texCoords[2] = MVector2(1, 1);
+    texCoords[0] = Vector2(1, 0);
+    texCoords[1] = Vector2(0, 0);
+    texCoords[3] = Vector2(0, 1);
+    texCoords[2] = Vector2(1, 1);
 
     // TODO: Cache coords!
     // unten 1
     render->bindTexture(m_SkyboxTexture[1]->getTextureId());
-    drawQuad(MVector3(-SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE), MVector3(SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE),
-                MVector3(SKYBOX_SIZE,-SKYBOX_SIZE, -SKYBOX_SIZE), MVector3(-SKYBOX_SIZE,-SKYBOX_SIZE, -SKYBOX_SIZE), &ProjModelViewMatrix, (MVector2*) &texCoords);
+    drawQuad(Vector3(-SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE), Vector3(SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE),
+                Vector3(SKYBOX_SIZE,-SKYBOX_SIZE, -SKYBOX_SIZE), Vector3(-SKYBOX_SIZE,-SKYBOX_SIZE, -SKYBOX_SIZE), &ProjModelViewMatrix, (Vector2*) &texCoords);
 
-    texCoords[0] = MVector2(1, 1);
-    texCoords[1] = MVector2(0, 1);
-    texCoords[3] = MVector2(0, 0);
-    texCoords[2] = MVector2(1, 0);
+    texCoords[0] = Vector2(1, 1);
+    texCoords[1] = Vector2(0, 1);
+    texCoords[3] = Vector2(0, 0);
+    texCoords[2] = Vector2(1, 0);
 
     // oben 2
     render->bindTexture(m_SkyboxTexture[4]->getTextureId());
-    drawQuad(MVector3(-SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE), MVector3(SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE),
-                MVector3(SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), MVector3(-SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), &ProjModelViewMatrix, (MVector2*) &texCoords);
+    drawQuad(Vector3(-SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE), Vector3(SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE),
+                Vector3(SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), Vector3(-SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), &ProjModelViewMatrix, (Vector2*) &texCoords);
 
-    texCoords[0] = MVector2(0, 1);
-    texCoords[1] = MVector2(1, 1);
-    texCoords[3] = MVector2(1, 0);
-    texCoords[2] = MVector2(0, 0);
+    texCoords[0] = Vector2(0, 1);
+    texCoords[1] = Vector2(1, 1);
+    texCoords[3] = Vector2(1, 0);
+    texCoords[2] = Vector2(0, 0);
 
     // vorne 3
     render->bindTexture(m_SkyboxTexture[5]->getTextureId());
-    drawQuad(MVector3(SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE), MVector3(-SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE),
-            MVector3(-SKYBOX_SIZE,SKYBOX_SIZE, SKYBOX_SIZE), MVector3(SKYBOX_SIZE,SKYBOX_SIZE, SKYBOX_SIZE), &ProjModelViewMatrix, (MVector2*) &texCoords);
+    drawQuad(Vector3(SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE), Vector3(-SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE),
+            Vector3(-SKYBOX_SIZE,SKYBOX_SIZE, SKYBOX_SIZE), Vector3(SKYBOX_SIZE,SKYBOX_SIZE, SKYBOX_SIZE), &ProjModelViewMatrix, (Vector2*) &texCoords);
 
-    texCoords[0] = MVector2(1, 1);
-    texCoords[1] = MVector2(0, 1);
-    texCoords[3] = MVector2(0, 0);
-    texCoords[2] = MVector2(1, 0);
+    texCoords[0] = Vector2(1, 1);
+    texCoords[1] = Vector2(0, 1);
+    texCoords[3] = Vector2(0, 0);
+    texCoords[2] = Vector2(1, 0);
 
     // hinten 4
     render->bindTexture(m_SkyboxTexture[2]->getTextureId());
-    drawQuad(MVector3(SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE), MVector3(-SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE),
-               MVector3(-SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), MVector3(SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), &ProjModelViewMatrix, (MVector2*) &texCoords);
+    drawQuad(Vector3(SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE), Vector3(-SKYBOX_SIZE, -SKYBOX_SIZE, -SKYBOX_SIZE),
+               Vector3(-SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), Vector3(SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), &ProjModelViewMatrix, (Vector2*) &texCoords);
 
-    texCoords[0] = MVector2(0, 0);
-    texCoords[1] = MVector2(0, 1);
-    texCoords[3] = MVector2(1, 1);
-    texCoords[2] = MVector2(1, 0);
+    texCoords[0] = Vector2(0, 0);
+    texCoords[1] = Vector2(0, 1);
+    texCoords[3] = Vector2(1, 1);
+    texCoords[2] = Vector2(1, 0);
 
     // links 5
     render->bindTexture(m_SkyboxTexture[3]->getTextureId());
-    drawQuad(MVector3(-SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE), MVector3(-SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE),
-                MVector3(-SKYBOX_SIZE,-SKYBOX_SIZE, -SKYBOX_SIZE), MVector3(-SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), &ProjModelViewMatrix, (MVector2*) &texCoords);
+    drawQuad(Vector3(-SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE), Vector3(-SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE),
+                Vector3(-SKYBOX_SIZE,-SKYBOX_SIZE, -SKYBOX_SIZE), Vector3(-SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), &ProjModelViewMatrix, (Vector2*) &texCoords);
 
 
-    texCoords[3] = MVector2(0, 1);
-    texCoords[2] = MVector2(0, 0);
-    texCoords[1] = MVector2(1, 1);
-    texCoords[0] = MVector2(1, 0);
+    texCoords[3] = Vector2(0, 1);
+    texCoords[2] = Vector2(0, 0);
+    texCoords[1] = Vector2(1, 1);
+    texCoords[0] = Vector2(1, 0);
 
     // rechts 6
     render->bindTexture(m_SkyboxTexture[0]->getTextureId());
-    drawQuad(MVector3(SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE), MVector3(SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE),
-                MVector3(SKYBOX_SIZE,-SKYBOX_SIZE, -SKYBOX_SIZE), MVector3(SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), &ProjModelViewMatrix, (MVector2*) &texCoords);
+    drawQuad(Vector3(SKYBOX_SIZE, SKYBOX_SIZE, SKYBOX_SIZE), Vector3(SKYBOX_SIZE, SKYBOX_SIZE, -SKYBOX_SIZE),
+                Vector3(SKYBOX_SIZE,-SKYBOX_SIZE, -SKYBOX_SIZE), Vector3(SKYBOX_SIZE,-SKYBOX_SIZE, SKYBOX_SIZE), &ProjModelViewMatrix, (Vector2*) &texCoords);
 
     render->bindFX(0);
 }
@@ -172,7 +172,7 @@ void Skybox::loadSkyboxTextures(const char *path)
         return;
     }
 
-    MRenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
     NeoEngine* engine = NeoEngine::getInstance();
 
     char globalFilename[256];
@@ -222,21 +222,21 @@ void Skybox::loadSkyboxTextures(const char *path)
         }
 
         render->bindTexture(m_SkyboxTexture[i]->getTextureId());
-        render->setTextureUWrapMode(M_WRAP_CLAMP);
-        render->setTextureVWrapMode(M_WRAP_CLAMP);
+        render->setTextureUWrapMode(WRAP_CLAMP);
+        render->setTextureVWrapMode(WRAP_CLAMP);
     }
 
     render->bindTexture(0);
     m_init = true;
 }
 
-void Skybox::drawQuad(MVector3 v1, MVector3 v2, MVector3 v3, MVector3 v4, MMatrix4x4* matrix, MVector2* texCoords)
+void Skybox::drawQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4, Matrix4x4* matrix, Vector2* texCoords)
 {
-    MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+    RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
     int vertexAttrib;
     int texcoordAttrib;
-    static MVector3 vertices[4];
+    static Vector3 vertices[4];
 
     vertices[0] = v1;
     vertices[1] = v2;
@@ -251,16 +251,16 @@ void Skybox::drawQuad(MVector3 v1, MVector3 v2, MVector3 v3, MVector3 v4, MMatri
 
     // Vertex
     render->getAttribLocation(m_fx, "Vertex", &vertexAttrib);
-    render->setAttribPointer(vertexAttrib, M_FLOAT, 3, vertices);
+    render->setAttribPointer(vertexAttrib, VAR_FLOAT, 3, vertices);
     render->enableAttribArray(vertexAttrib);
 
     // TexCoord
     render->getAttribLocation(m_fx, "TexCoord", &texcoordAttrib);
-    render->setAttribPointer(texcoordAttrib, M_FLOAT, 2, texCoords);
+    render->setAttribPointer(texcoordAttrib, VAR_FLOAT, 2, texCoords);
     render->enableAttribArray(texcoordAttrib);
 
     // draw
-    render->drawArray(M_PRIMITIVE_TRIANGLE_STRIP, 0, 4);
+    render->drawArray(PRIMITIVE_TRIANGLE_STRIP, 0, 4);
 
     render->disableAttribArray(vertexAttrib);
     render->disableAttribArray(texcoordAttrib);

@@ -23,10 +23,10 @@
 //========================================================================
 //jan 2012 - Philipp Geyer <philipp@geyer.co.uk> - embedded project/package manager
 
+#include <GameWinEvents.h>
 #include <NeoEngine.h>
 #include <SDLThread.h>
 
-#include <MGameWinEvents.h>
 #include "Maratis/MaratisPlayer.h"
 
 // NeoGui
@@ -101,12 +101,12 @@ float delta = 0;
 
 int getDelta()
 {
-	MScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 
 	script->pushFloat(delta);
 	return 1;
 }
-void setupLuaInterface(MScriptContext* script)
+void setupLuaInterface(ScriptContext* script)
 {
 	script->addFunction("getDelta", getDelta);
 }
@@ -353,7 +353,7 @@ int main(int argc, char **argv)
         MLOG_INFO("Profiling enabled");
 
 	// Init default thread
-	MThreadManager* mgr = MThreadManager::getInstance();
+	ThreadFactory* mgr = ThreadFactory::getInstance();
 	mgr->setTemplateSemaphore(new SDLSemaphore());
 	mgr->setTemplateThread(new SDLThread());
 

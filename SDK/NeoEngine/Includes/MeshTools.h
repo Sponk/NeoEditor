@@ -35,9 +35,9 @@ namespace Neo
 {
 
 M_ENGINE_EXPORT bool animateFloat(Key * keys, unsigned int keysNumber, float t, float * value);
-M_ENGINE_EXPORT bool animateVector2(Key * keys, unsigned int keysNumber, float t, MVector2 * vector2);
-M_ENGINE_EXPORT bool animateVector3(Key * keys, unsigned int keysNumber, float t, MVector3 * vector3);
-M_ENGINE_EXPORT bool animateQuaternion(Key * keys, unsigned int keysNumber, float t, MQuaternion * quaternion);
+M_ENGINE_EXPORT bool animateVector2(Key * keys, unsigned int keysNumber, float t, Vector2 * vector2);
+M_ENGINE_EXPORT bool animateVector3(Key * keys, unsigned int keysNumber, float t, Vector3 * vector3);
+M_ENGINE_EXPORT bool animateQuaternion(Key * keys, unsigned int keysNumber, float t, Quaternion * quaternion);
 
 M_ENGINE_EXPORT void animateArmature(
 	Armature * armature,
@@ -59,32 +59,32 @@ M_ENGINE_EXPORT void animateMaterials(
 
 M_ENGINE_EXPORT void computeSkinning(
 	Armature * armature,
-	MSkinData * skinData,
-	const MVector3 * baseVertices,
-	const MVector3 * baseNormals,
-	const MVector3 * baseTangents,
-	MVector3 * vertices,
-	MVector3 * normals,
-	MVector3 * tangents
+	SkinData * skinData,
+	const Vector3 * baseVertices,
+	const Vector3 * baseNormals,
+	const Vector3 * baseTangents,
+	Vector3 * vertices,
+	Vector3 * normals,
+	Vector3 * tangents
 	);
 
 M_ENGINE_EXPORT bool isRaytraced(
-	const MVector3 & origin,
-	const MVector3 & dest, 
+	const Vector3 & origin,
+	const Vector3 & dest, 
 	const void * indices, 
-	M_TYPES indicesType,
-	const MVector3 * vertices, 
+	VAR_TYPES indicesType,
+	const Vector3 * vertices, 
 	unsigned int size
 	);
 
 M_ENGINE_EXPORT bool getNearestRaytracedPosition(
-	const MVector3 & origin, 
-	const MVector3 & dest, 
+	const Vector3 & origin, 
+	const Vector3 & dest, 
 	const void * indices, 
-	M_TYPES indicesType,
-	const MVector3 * vertices, 
+	VAR_TYPES indicesType,
+	const Vector3 * vertices, 
 	unsigned int size, 
-	MVector3 * intersection,
+	Vector3 * intersection,
 	bool invertNormal = false
 	);
 }

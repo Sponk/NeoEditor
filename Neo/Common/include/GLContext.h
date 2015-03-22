@@ -1,10 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MCore
-// MGLContext.h
-//
-// OpenGL-Glew Rendering Context
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -33,7 +26,7 @@
 #if !defined(_M_GL_CONTEXT_H) && !defined(USE_GLES)
 #define _M_GL_CONTEXT_H
 
-#include <MCore.h>
+#include <NeoCore.h>
 #define MAX_MRCLIGHTS 8
 namespace Neo
 {
@@ -42,7 +35,7 @@ namespace Neo
  *
  * @see MRenderingContext
  */
-class GLContext : public MRenderingContext
+class GLContext : public RenderingContext
 {
 private:
 
@@ -54,16 +47,16 @@ private:
 
 	// fog
 	float m_fogMin, m_fogMax;
-	MVector3 m_fogColor;
+	Vector3 m_fogColor;
 
 	// lights
 	struct
 	{
-		MVector4 position;
-		MVector4 diffuse;
-		MVector4 specular;
-		MVector4 ambient;
-		MVector3 direction;
+		Vector4 position;
+		Vector4 diffuse;
+		Vector4 specular;
+		Vector4 ambient;
+		Vector3 direction;
 		float angle, exponent;
 		float constant, linear, quadratic;
 	}
@@ -88,39 +81,39 @@ public:
 
 	// clear
 	void clear(int buffer);
-	void setClearColor(const MVector4 & color);
+	void setClearColor(const Vector4 & color);
 
 	// texture
 	void enableTexture(void);
 	void disableTexture(void);
-	void setTextureGenMode(M_TEX_GEN_MODES mode);
-	void setTextureFilterMode(M_TEX_FILTER_MODES min, M_TEX_FILTER_MODES mag);
-	void setTextureUWrapMode(M_WRAP_MODES wrap);
-	void setTextureVWrapMode(M_WRAP_MODES wrap);
-	void setTextureCombineMode(M_TEX_COMBINE_MODES combine);
+	void setTextureGenMode(TEX_GEN_MODES mode);
+	void setTextureFilterMode(TEX_FILTER_MODES min, TEX_FILTER_MODES mag);
+	void setTextureUWrapMode(WRAP_MODES wrap);
+	void setTextureVWrapMode(WRAP_MODES wrap);
+	void setTextureCombineMode(TEX_COMBINE_MODES combine);
 	void bindTexture(unsigned int textureId, const unsigned int multitextureId = 0);
 	void createTexture(unsigned int * textureId);
 	void deleteTexture(unsigned int * textureId);
-	void sendTextureImage(MImage * image, bool mipMap, bool filter, bool compress);
-	void texImage(unsigned int level, unsigned int width, unsigned int height, M_TYPES type, M_TEX_MODES mode, const void * pixels);
-	void texSubImage(unsigned int level, int xoffset, int yoffset, unsigned int width, unsigned int height, M_TYPES type, M_TEX_MODES mode, const void * pixels);
+	void sendTextureImage(Image * image, bool mipMap, bool filter, bool compress);
+	void texImage(unsigned int level, unsigned int width, unsigned int height, VAR_TYPES type, TEX_MODES mode, const void * pixels);
+	void texSubImage(unsigned int level, int xoffset, int yoffset, unsigned int width, unsigned int height, VAR_TYPES type, TEX_MODES mode, const void * pixels);
 	void generateMipMap(void);
-	void getTexImage(unsigned int level, MImage * image);
+	void getTexImage(unsigned int level, Image * image);
 
 	// frame buffer
 	void createFrameBuffer(unsigned int * frameBufferId);
 	void deleteFrameBuffer(unsigned int * frameBufferId);
 	void bindFrameBuffer(unsigned int frameBufferId);
 	void getCurrentFrameBuffer(unsigned int * frameBufferId);
-	void attachFrameBufferTexture(M_FRAME_BUFFER_ATTACHMENT attachment, unsigned int textureId);
-	void attachFrameBufferRB(M_FRAME_BUFFER_ATTACHMENT attachment, unsigned int renderBufferId);
-	void setDrawingBuffers(M_FRAME_BUFFER_ATTACHMENT * buffers, unsigned int size);
+	void attachFrameBufferTexture(FRAME_BUFFER_ATTACHMENT attachment, unsigned int textureId);
+	void attachFrameBufferRB(FRAME_BUFFER_ATTACHMENT attachment, unsigned int renderBufferId);
+	void setDrawingBuffers(FRAME_BUFFER_ATTACHMENT * buffers, unsigned int size);
 
 	// render buffer
 	void createRenderBuffer(unsigned int * renderBufferId);
 	void deleteRenderBuffer(unsigned int * renderBufferId);
 	void bindRenderBuffer(unsigned int renderBufferId);
-	void setRenderBuffer(M_RENDER_BUFFER_MODES mode, unsigned int width, unsigned int height);
+	void setRenderBuffer(RENDER_BUFFER_MODES mode, unsigned int width, unsigned int height);
 
 	// shaders
 	void createVertexShader(unsigned int * shaderId);
@@ -138,15 +131,15 @@ public:
     void sendUniformVec2(unsigned int fxId, const char * name, float * values, const int count = 1);
     void sendUniformVec3(unsigned int fxId, const char * name, float * values, const int count = 1);
 	void sendUniformVec4(unsigned int fxId, const char * name, float * values, const int count = 1);
-	void sendUniformMatrix(unsigned int fxId, const char * name, MMatrix4x4 * matrix, const int count = 1, const bool transpose = false);
+	void sendUniformMatrix(unsigned int fxId, const char * name, Matrix4x4 * matrix, const int count = 1, const bool transpose = false);
 	void getAttribLocation(unsigned int fxId, const char * name, int * location);
 
 	// VBO
 	void createVBO(unsigned int * vboId);
 	void deleteVBO(unsigned int * vboId);
-	void bindVBO(M_VBO_TYPES type, unsigned int vboId);
-	void setVBO(M_VBO_TYPES type, const void * data, unsigned int size, M_VBO_MODES mode);
-	void setVBOSubData(M_VBO_TYPES type, unsigned int offset, const void * data, unsigned int size);
+	void bindVBO(VBO_TYPES type, unsigned int vboId);
+	void setVBO(VBO_TYPES type, const void * data, unsigned int size, VBO_MODES mode);
+	void setVBOSubData(VBO_TYPES type, unsigned int offset, const void * data, unsigned int size);
 	
 	// arrays
 	void enableVertexArray(void);
@@ -159,25 +152,25 @@ public:
 	void disableNormalArray(void);
 	void disableTexCoordArray(void);
 	void disableAttribArray(unsigned int location);
-	void setVertexPointer(M_TYPES type, unsigned int components, const void * pointer);
-	void setColorPointer(M_TYPES type, unsigned int components, const void * pointer);
-	void setNormalPointer(M_TYPES type, const void * pointer);
-	void setTexCoordPointer(M_TYPES type, unsigned int components, const void * pointer);
-	void setAttribPointer(unsigned int location, M_TYPES type, unsigned int components, const void * pointer, const bool normalized = false);
+	void setVertexPointer(VAR_TYPES type, unsigned int components, const void * pointer);
+	void setColorPointer(VAR_TYPES type, unsigned int components, const void * pointer);
+	void setNormalPointer(VAR_TYPES type, const void * pointer);
+	void setTexCoordPointer(VAR_TYPES type, unsigned int components, const void * pointer);
+	void setAttribPointer(unsigned int location, VAR_TYPES type, unsigned int components, const void * pointer, const bool normalized = false);
 
 	// draw
-	void drawArray(M_PRIMITIVE_TYPES type, unsigned int begin, unsigned int size);
-	void drawElement(M_PRIMITIVE_TYPES type, unsigned int size, M_TYPES indicesType, const void * indices);
+	void drawArray(PRIMITIVE_TYPES type, unsigned int begin, unsigned int size);
+	void drawElement(PRIMITIVE_TYPES type, unsigned int size, VAR_TYPES indicesType, const void * indices);
 
 	// lines
 	void enableLineAntialiasing(void);
 	void disableLineAntialiasing(void);
 
 	// material
-	void setMaterialDiffuse(const MVector4 & diffuse);
-	void setMaterialSpecular(const MVector4 & specular);
-	void setMaterialAmbient(const MVector4 & ambient);
-	void setMaterialEmit(const MVector4 & emit);
+	void setMaterialDiffuse(const Vector4 & diffuse);
+	void setMaterialSpecular(const Vector4 & specular);
+	void setMaterialAmbient(const Vector4 & ambient);
+	void setMaterialEmit(const Vector4 & emit);
 	void setMaterialShininess(float shininess);
 
 	// scissor
@@ -186,9 +179,9 @@ public:
 	void setScissor(int x, int y, unsigned int width, unsigned int height);
 
 	// color
-	void setColor(const MColor & color);
-	void setColor3(const MVector3 & color);
-	void setColor4(const MVector4 & color);
+	void setColor(const Color & color);
+	void setColor3(const Vector3 & color);
+	void setColor4(const Vector4 & color);
 
 	// masks
 	void setColorMask(bool r, bool g, bool b, bool a);
@@ -200,20 +193,20 @@ public:
 	// depth
 	void enableDepthTest(void);
 	void disableDepthTest(void);
-	void setDepthMode(M_DEPTH_MODES mode);
+	void setDepthMode(DEPTH_MODES mode);
 	void enablePolygonOffset(float x, float y);
 	void disablePolygonOffset();
 
 	// stencil
 	void enableStencilTest(void);
 	void disableStencilTest(void);
-	void setStencilFunc(M_STENCIL_FUNCS func, int ref=0);
-	void setStencilOp(M_STENCIL_OPS op);
+	void setStencilFunc(STENCIL_FUNCS func, int ref=0);
+	void setStencilOp(STENCIL_OPS op);
 
 	// cull face
 	void enableCullFace(void);
 	void disableCullFace(void);
-	void setCullMode(M_CULL_MODES mode);
+	void setCullMode(CULL_MODES mode);
 
 	// occlusion
 	void createQuery(unsigned int * queryId);
@@ -224,24 +217,24 @@ public:
 
 	// matrix
 	void loadIdentity(void);
-	void setMatrixMode(M_MATRIX_MODES mode);
+	void setMatrixMode(MATRIX_MODES mode);
 	void pushMatrix(void);
 	void popMatrix(void);
-	void multMatrix(const MMatrix4x4 * matrix);
-	void translate(const MVector3 & position);
-	void rotate(const MVector3 & axis, float angle);
-	void scale(const MVector3 & scale);
+	void multMatrix(const Matrix4x4 * matrix);
+	void translate(const Vector3 & position);
+	void rotate(const Vector3 & axis, float angle);
+	void scale(const Vector3 & scale);
 	void getViewport(int * viewport);
-	void getModelViewMatrix(MMatrix4x4 * matrix);
-	void getProjectionMatrix(MMatrix4x4 * matrix);
-	void getTextureMatrix(MMatrix4x4 * matrix);
+	void getModelViewMatrix(Matrix4x4 * matrix);
+	void getProjectionMatrix(Matrix4x4 * matrix);
+	void getTextureMatrix(Matrix4x4 * matrix);
 
 	// fog
 	void enableFog(void);
 	void disableFog(void);
-	void setFogColor(const MVector3 & color);
+	void setFogColor(const Vector3 & color);
 	void setFogDistance(float min, float max);
-	void getFogColor(MVector3 * color);
+	void getFogColor(Vector3 * color);
 	void getFogDistance(float * min, float * max);
 
 	// lighting
@@ -249,27 +242,27 @@ public:
 	void disableLighting(void);
 	void enableLight(unsigned int id);
 	void disableLight(unsigned int id);
-	void setLightPosition(unsigned int id, const MVector4 & position);
-	void setLightDiffuse(unsigned int id, const MVector4 & diffuse);
-	void setLightSpecular(unsigned int id, const MVector4 & specular);
-	void setLightAmbient(unsigned int id, const MVector4 & ambient);
+	void setLightPosition(unsigned int id, const Vector4 & position);
+	void setLightDiffuse(unsigned int id, const Vector4 & diffuse);
+	void setLightSpecular(unsigned int id, const Vector4 & specular);
+	void setLightAmbient(unsigned int id, const Vector4 & ambient);
 	void setLightAttenuation(unsigned int id, float constant, float linear, float quadratic);
-	void setLightSpotDirection(unsigned int id, const MVector3 & direction);
+	void setLightSpotDirection(unsigned int id, const Vector3 & direction);
 	void setLightSpotAngle(unsigned int id, float angle);
 	void setLightSpotExponent(unsigned int id, float exponent);
-	void getLightPosition(unsigned int id, MVector4 * position);
-	void getLightDiffuse(unsigned int id, MVector4 * diffuse);
-	void getLightSpecular(unsigned int id, MVector4 * specular);
-	void getLightAmbient(unsigned int id, MVector4 * ambient);
+	void getLightPosition(unsigned int id, Vector4 * position);
+	void getLightDiffuse(unsigned int id, Vector4 * diffuse);
+	void getLightSpecular(unsigned int id, Vector4 * specular);
+	void getLightAmbient(unsigned int id, Vector4 * ambient);
 	void getLightAttenuation(unsigned int id, float * constant, float * linear, float * quadratic);
-	void getLightSpotDirection(unsigned int id, MVector3 * direction);
+	void getLightSpotDirection(unsigned int id, Vector3 * direction);
 	void getLightSpotAngle(unsigned int id, float * angle);
 	void getLightSpotExponent(unsigned int id, float * exponent);
 
 	// blending
 	void enableBlending(void);
 	void disableBlending(void);
-	void setBlendingMode(M_BLENDING_MODES mode);
+	void setBlendingMode(BLENDING_MODES mode);
 
     // point size
     void setPointSize(float size);

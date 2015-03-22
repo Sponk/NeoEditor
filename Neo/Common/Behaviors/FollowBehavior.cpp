@@ -120,12 +120,12 @@ void FollowBehavior::update(void)
 		return;
 
 	// targetPos
-	MVector3 offset = m_offset;
+	Vector3 offset = m_offset;
 	if(m_local)
 		offset = object->getRotatedVector(offset);
 
 	float delay = MAX(1, m_delay);
-	MVector3 direction = (object->getTransformedPosition() + offset) - parent->getPosition();
+	Vector3 direction = (object->getTransformedPosition() + offset) - parent->getPosition();
 
 	if(parent->getType() == M_OBJECT3D_ENTITY)
 	{
@@ -137,7 +137,7 @@ void FollowBehavior::update(void)
 			{
 				if(game->isRunning())
 				{
-					MPhysicsContext * physics = engine->getPhysicsContext();
+					PhysicsContext * physics = engine->getPhysicsContext();
 					physics->addCentralForce(phyProps->getCollisionObjectId(), (direction/delay)*phyProps->getMass());
 				}
 				return;
@@ -145,7 +145,7 @@ void FollowBehavior::update(void)
 		}
 	}
 
-	MVector3 position = parent->getPosition() + (direction / delay);
+	Vector3 position = parent->getPosition() + (direction / delay);
 	parent->setPosition(position);
 	parent->updateMatrix();
 }

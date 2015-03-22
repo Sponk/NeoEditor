@@ -20,43 +20,44 @@
 
 #include "RenderArray.h"
 
+using namespace Neo;
 
 #define M_MAX_ARRAY 100000
 
-static M_PRIMITIVE_TYPES g_primitiveType;
+static PRIMITIVE_TYPES g_primitiveType;
 static unsigned int g_verticesNumber;
-static MVector3 g_vertices[M_MAX_ARRAY];
-static MVector4 g_colors[M_MAX_ARRAY];
-static MVector2 g_texCoords[M_MAX_ARRAY];
+static Vector3 g_vertices[M_MAX_ARRAY];
+static Vector4 g_colors[M_MAX_ARRAY];
+static Vector2 g_texCoords[M_MAX_ARRAY];
 
-static MVector4 previousColor(1, 1, 1, 1);
-static MVector2 previousTexcoords(0, 0);
+static Vector4 previousColor(1, 1, 1, 1);
+static Vector2 previousTexcoords(0, 0);
 static bool renderColors = false;
 static bool renderTexcoords = false;
 
-void beginDraw(M_PRIMITIVE_TYPES primitiveType)
+void beginDraw(PRIMITIVE_TYPES primitiveType)
 {
 	g_verticesNumber = 0;
 	g_primitiveType = primitiveType;
 	renderColors = false;
 	renderTexcoords = false;
-	previousColor = MVector4(1, 1, 1, 1);
-	previousTexcoords = MVector2(0, 0);
+	previousColor = Vector4(1, 1, 1, 1);
+	previousTexcoords = Vector2(0, 0);
 }
 
-void setColor(const MVector4 & color)
+void setColor(const Vector4 & color)
 {
 	previousColor = color;
 	renderColors = true;
 }
 
-void setTexcoords(const MVector2 & texcoords)
+void setTexcoords(const Vector2 & texcoords)
 {
 	previousTexcoords = texcoords;
 	renderTexcoords = true;
 }
 
-void pushVertex(const MVector3 & vertex)
+void pushVertex(const Vector3 & vertex)
 {
 	g_vertices[g_verticesNumber] = vertex;
 	g_colors[g_verticesNumber] = previousColor;
@@ -64,7 +65,7 @@ void pushVertex(const MVector3 & vertex)
 	g_verticesNumber++;
 }
 
-void endDraw(MRenderingContext * render)
+void endDraw(RenderingContext * render)
 {
 	if(g_verticesNumber == 0)
 		return;
@@ -72,7 +73,7 @@ void endDraw(MRenderingContext * render)
 	if(renderColors)
 	{
 		render->enableColorArray();
-		render->setColorPointer(M_FLOAT, 4, g_colors);
+		render->setColorPointer(VAR_FLOAT, 4, g_colors);
 	}
 	else
 	{
@@ -82,7 +83,7 @@ void endDraw(MRenderingContext * render)
 	if(renderTexcoords)
 	{
 		render->enableTexCoordArray();
-		render->setTexCoordPointer(M_FLOAT, 2, g_texCoords);
+		render->setTexCoordPointer(VAR_FLOAT, 2, g_texCoords);
 	}
 	else
 	{
@@ -92,7 +93,7 @@ void endDraw(MRenderingContext * render)
 	render->disableNormalArray();
 	render->enableVertexArray();
 
-	render->setVertexPointer(M_FLOAT, 3, g_vertices);
+	render->setVertexPointer(VAR_FLOAT, 3, g_vertices);
 	render->drawArray(g_primitiveType, 0, g_verticesNumber);
 }
 

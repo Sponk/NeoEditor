@@ -40,7 +40,7 @@ min(box.min),
 max(box.max)
 {}
 
-Box3d::Box3d(const MVector3 & _min, const MVector3 & _max):
+Box3d::Box3d(const Vector3 & _min, const Vector3 & _max):
 min(_min),
 max(_max)
 {}
@@ -53,11 +53,11 @@ bool Box3d::isInCollisionWith(const Box3d & box)
 	return true;
 }
 
-void Box3d::initFromPoints(const MVector3 * points, unsigned int pointsNumber)
+void Box3d::initFromPoints(const Vector3 * points, unsigned int pointsNumber)
 {
 	if(pointsNumber > 0)
 	{
-		const MVector3 * point = &points[0];
+		const Vector3 * point = &points[0];
 		min = max = (*point);
 
 		unsigned int i;

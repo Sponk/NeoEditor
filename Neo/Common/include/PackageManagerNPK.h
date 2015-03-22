@@ -32,10 +32,10 @@
 
 namespace Neo
 {
-class PackageFileOpenHook : public MFileOpenHook
+class PackageFileOpenHook : public FileOpenHook
 {
 public:
-	MFile* open(const char* path, const char* mode);
+	File* open(const char* path, const char* mode);
 };
 
 /*--------------------------------------------------------------------------------

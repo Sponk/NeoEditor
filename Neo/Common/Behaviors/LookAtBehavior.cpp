@@ -108,45 +108,45 @@ void LookAtBehavior::update(void)
 		return;
 
 	// direction
-	MVector3 direction = object->getTransformedPosition() - parent->getTransformedPosition();
+	Vector3 direction = object->getTransformedPosition() - parent->getTransformedPosition();
 	if(direction.x == 0 && direction.y == 0 && direction.z == 0)
 		return;
 
 	float angle;
 	float roll;
 
-	MVector3 axis;
+	Vector3 axis;
 
 	// compute initial roll
-	MVector3 ZAxis = parent->getInverseRotatedVector(MVector3(0, 0, 1)).getNormalized();
+	Vector3 ZAxis = parent->getInverseRotatedVector(Vector3(0, 0, 1)).getNormalized();
 	ZAxis.z = 0;
 	ZAxis.normalize();
 
 	if(ZAxis.x == 0 && ZAxis.y == 0)
 	{
-		MVector3 YAxis = parent->getInverseRotatedVector(MVector3(0, 1, 0)).getNormalized();
+		Vector3 YAxis = parent->getInverseRotatedVector(Vector3(0, 1, 0)).getNormalized();
 		YAxis.z = 0;
 		YAxis.normalize();
 
-		axis = MVector3(0, 1, 0).crossProduct(YAxis);
-		roll = acosf(MVector3(0, 1, 0).dotProduct(YAxis));
+		axis = Vector3(0, 1, 0).crossProduct(YAxis);
+		roll = acosf(Vector3(0, 1, 0).dotProduct(YAxis));
 
-		if(MVector3(0, 0, 1).dotProduct(axis) < 0)
+		if(Vector3(0, 0, 1).dotProduct(axis) < 0)
 			roll = -roll;
 	}
 	else
 	{
-		axis = MVector3(0, 1, 0).crossProduct(ZAxis);
-		roll = acosf(MVector3(0, 1, 0).dotProduct(ZAxis));
+		axis = Vector3(0, 1, 0).crossProduct(ZAxis);
+		roll = acosf(Vector3(0, 1, 0).dotProduct(ZAxis));
 
-		if(MVector3(0, 0, 1).dotProduct(axis) < 0)
+		if(Vector3(0, 0, 1).dotProduct(axis) < 0)
 			roll = -roll;
 	}
 
 	if(roll < 0.001f && roll > -0.001f) roll = 0;
 
 	// look-at
-	MVector3 cameraAxis = MVector3(0, 0, -1);
+	Vector3 cameraAxis = Vector3(0, 0, -1);
 
 	axis = cameraAxis.crossProduct(direction);
 	angle = acosf(cameraAxis.dotProduct(direction.getNormalized()));
@@ -155,24 +155,24 @@ void LookAtBehavior::update(void)
 	parent->updateMatrix();
 
 	// set roll
-	ZAxis = parent->getInverseRotatedVector(MVector3(0, 0, 1)).getNormalized();;
+	ZAxis = parent->getInverseRotatedVector(Vector3(0, 0, 1)).getNormalized();;
 	ZAxis.z = 0;
 	ZAxis.normalize();
 
 	if(ZAxis.x == 0 && ZAxis.y == 0)
 	{
-		parent->addAxisAngleRotation(MVector3(0, 0, 1), (float)(-roll*RAD_TO_DEG));
+		parent->addAxisAngleRotation(Vector3(0, 0, 1), (float)(-roll*RAD_TO_DEG));
 	}
 	else
 	{
-		axis = MVector3(0, 1, 0).crossProduct(ZAxis);
-		angle = acosf(MVector3(0, 1, 0).dotProduct(ZAxis));
+		axis = Vector3(0, 1, 0).crossProduct(ZAxis);
+		angle = acosf(Vector3(0, 1, 0).dotProduct(ZAxis));
 		if(angle < 0.001f && angle > -0.001f) angle = 0;
 
-		if(MVector3(0, 0, 1).dotProduct(axis) < 0)
+		if(Vector3(0, 0, 1).dotProduct(axis) < 0)
 			angle = -angle;
 
-		parent->addAxisAngleRotation(MVector3(0, 0, 1), (float)((angle-roll)*RAD_TO_DEG));
+		parent->addAxisAngleRotation(Vector3(0, 0, 1), (float)((angle-roll)*RAD_TO_DEG));
 	}
 
 }

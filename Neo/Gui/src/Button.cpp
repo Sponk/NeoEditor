@@ -62,7 +62,7 @@ void Button::draw()
 
 	m_labelText->setText(m_label.c_str());
 
-	MVector4 color;
+	Vector4 color;
 	switch (m_state)
 	{
 		case BUTTON_NORMAL_STATE:

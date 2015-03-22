@@ -39,7 +39,7 @@ class M_ENGINE_EXPORT Character
 public:
 
 	Character(void);
-	Character(float xAdvance, const MVector2 & offset, const MVector2 & pos, const MVector2 & scale):
+	Character(float xAdvance, const Vector2 & offset, const Vector2 & pos, const Vector2 & scale):
 		m_xAdvance(xAdvance),
 		m_offset(offset),
 		m_pos(pos),
@@ -49,16 +49,16 @@ public:
 private:
 
 	float m_xAdvance;
-	MVector2 m_offset;
-	MVector2 m_pos;
-	MVector2 m_scale;
+	Vector2 m_offset;
+	Vector2 m_pos;
+	Vector2 m_scale;
 	
 public:
 
 	inline float getXAdvance(void){ return m_xAdvance; }
-	inline MVector2 getOffset(void) const { return m_offset; }
-	inline MVector2 getPos(void) const { return m_pos; }
-	inline MVector2 getScale(void) const { return m_scale; }
+	inline Vector2 getOffset(void) const { return m_offset; }
+	inline Vector2 getPos(void) const { return m_pos; }
+	inline Vector2 getScale(void) const { return m_scale; }
 };
 
 

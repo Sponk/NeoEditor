@@ -66,7 +66,7 @@ public:
 
 	void loadImage(const char* path, unsigned int width, unsigned int height,
 				   unsigned int dist);
-	MVector4 getTexCoords(unsigned int x, unsigned int y);
+	Vector4 getTexCoords(unsigned int x, unsigned int y);
 	int getImage() { return m_image; }
 };
 
@@ -100,13 +100,13 @@ public:
 	const char* getStaticName() { return "Tile"; }
 
 	void setTileSheet(TileSheet* sheet) { m_parentSheet = sheet; }
-	void setOffset(MVector2 vec)
+	void setOffset(Vector2 vec)
 	{
 		m_tilex = vec.x;
 		m_tiley = vec.y;
 	}
 
-	void draw(MVector2 offset);
+	void draw(Vector2 offset);
 	void update();
 };
 }

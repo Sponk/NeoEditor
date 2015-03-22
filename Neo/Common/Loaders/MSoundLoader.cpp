@@ -29,7 +29,7 @@
 //
 //========================================================================
 
-#include <MCore.h>
+#include <NeoCore.h>
 #include "SoundLoader.h"
 #include "VorbisLoader.h"
 #include "WAVLoader.h"

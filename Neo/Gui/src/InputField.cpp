@@ -53,7 +53,7 @@ InputField::InputField(unsigned int x, unsigned int y, unsigned int width,
 void InputField::draw()
 {
 	Render* render = Render::getInstance();
-	MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
+	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	GuiSystem* gui = GuiSystem::getInstance();
 
 	unsigned int winh, winw;
@@ -66,7 +66,7 @@ void InputField::draw()
 		m_labelText->setAlign(TEXT_ALIGN_LEFT);
 	}
 
-	MVector4 color;
+	Vector4 color;
 	switch (m_state)
 	{
 		case INPUT_NORMAL_STATE:
@@ -93,7 +93,7 @@ void InputField::draw()
 	else
 		m_labelText->setText(m_label.c_str());
 
-	MRenderingContext* renderContext =
+	RenderingContext* renderContext =
 		NeoEngine::getInstance()->getRenderingContext();
 
 	render->drawColoredQuad(m_x, m_y, m_width, m_height, color);

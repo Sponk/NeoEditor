@@ -43,7 +43,7 @@ enum M_SHADER_TYPES
 
 
 // Shader ref
-class M_ENGINE_EXPORT ShaderRef : public MDataRef
+class M_ENGINE_EXPORT ShaderRef : public DataRef
 {
 private:
 

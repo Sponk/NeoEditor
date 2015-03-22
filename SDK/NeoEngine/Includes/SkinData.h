@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MSkinData.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,17 +23,18 @@
 //========================================================================
 
 
-#ifndef _M_SKIN_DATA_H
-#define _M_SKIN_DATA_H
+#ifndef __SKIN_DATA_H
+#define __SKIN_DATA_H
 
-
+namespace Neo
+{
 // Skin Point
-class M_ENGINE_EXPORT MSkinPoint
+class M_ENGINE_EXPORT SkinPoint
 {
 public:
 
-	MSkinPoint(void);
-	~MSkinPoint(void);
+	SkinPoint(void);
+	~SkinPoint(void);
 
 private:
 
@@ -67,26 +63,26 @@ public:
 
 
 // Skin Data
-class M_ENGINE_EXPORT MSkinData
+class M_ENGINE_EXPORT SkinData
 {
 public:
 
-	MSkinData(void);
-	~MSkinData(void);
+	SkinData(void);
+	~SkinData(void);
 
 private:
 
 	// points
 	unsigned int m_pointsNumber;
-	MSkinPoint * m_points;
+	SkinPoint * m_points;
 
 public:
 
 	// points
 	void clearPoints(void);
-	MSkinPoint * allocPoints(unsigned int size);
+	SkinPoint * allocPoints(unsigned int size);
 	inline unsigned int getPointsNumber(void){ return m_pointsNumber; }
-	inline MSkinPoint * getPoint(unsigned int id){ return &m_points[id]; }
+	inline SkinPoint * getPoint(unsigned int id){ return &m_points[id]; }
 };
-
+}
 #endif

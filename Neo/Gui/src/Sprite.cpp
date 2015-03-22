@@ -51,11 +51,11 @@ Sprite::Sprite(unsigned int x, unsigned int y, unsigned int width,
 
 void Sprite::update() {}
 
-void Sprite::draw(MVector2 offset)
+void Sprite::draw(Vector2 offset)
 {
 	Render* render = Render::getInstance();
 	GuiSystem* gui = GuiSystem::getInstance();
-	MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
+	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	Level* level = NeoEngine::getInstance()->getLevel();
 	OCamera* camera = NeoEngine::getInstance()
 						  ->getLevel()
@@ -88,7 +88,7 @@ void Sprite::draw(MVector2 offset)
 void Sprite::loadTexture()
 {
 	Level* level = NeoEngine::getInstance()->getLevel();
-	MSystemContext* system = NeoEngine::getInstance()->getSystemContext();
+	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 
 	char buf[256];
 	getGlobalFilename(buf, system->getWorkingDirectory(), m_imagePath.c_str());
@@ -97,7 +97,7 @@ void Sprite::loadTexture()
 
 	tex->update();
 
-	m_imageSize = MVector2(tex->getWidth(), tex->getHeight());
+	m_imageSize = Vector2(tex->getWidth(), tex->getHeight());
 	m_image = tex->getTextureId();
 
 	if (m_width == 0)

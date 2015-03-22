@@ -50,15 +50,15 @@ public:
 protected:
 
 	// name
-	MString m_name;
+	String m_name;
 
 	// transform
-	MVector3 m_position;
-	MVector3 m_scale;
-	MQuaternion m_rotation;
+	Vector3 m_position;
+	Vector3 m_scale;
+	Quaternion m_rotation;
 
 	// matrices
-	MMatrix4x4 m_matrix;
+	Matrix4x4 m_matrix;
 
 	// childs
 	vector <Object3d *> m_childs;
@@ -98,7 +98,7 @@ public:
 	// matrices
 	void updateMatrix(void);
 	void computeLocalMatrix(void);
-	inline MMatrix4x4 *	getMatrix(void){ return &m_matrix; }
+	inline Matrix4x4 *	getMatrix(void){ return &m_matrix; }
 
 	// childs
 	void unlinkChilds(void);
@@ -109,30 +109,30 @@ public:
 	inline NeoVariable getAttribute(const char* name) { return m_attributes[name]; };
 
 	// transform
-	MVector3 getUniformRotatedVector(const MVector3 & vector);
-	inline MVector3	getInverseRotatedVector(const MVector3 & vector) const	{ return m_matrix.getInverseRotatedVector3(vector); }
-	inline MVector3	getRotatedVector(const MVector3 & vector) const			{ return m_matrix.getRotatedVector3(vector); }
-	inline MVector3	getInversePosition(const MVector3 & position) const		{ return m_matrix.getInverse() * position; }
-	inline MVector3	getTransformedVector(const MVector3 & vector) const		{ return m_matrix * vector; }
+	Vector3 getUniformRotatedVector(const Vector3 & vector);
+	inline Vector3	getInverseRotatedVector(const Vector3 & vector) const	{ return m_matrix.getInverseRotatedVector3(vector); }
+	inline Vector3	getRotatedVector(const Vector3 & vector) const			{ return m_matrix.getRotatedVector3(vector); }
+	inline Vector3	getInversePosition(const Vector3 & position) const		{ return m_matrix.getInverse() * position; }
+	inline Vector3	getTransformedVector(const Vector3 & vector) const		{ return m_matrix * vector; }
 
 	// position
-	void setPosition(const MVector3 & position);
-	inline MVector3	getTransformedPosition(void) const { return MVector3(m_matrix.entries[12], m_matrix.entries[13], m_matrix.entries[14]); }
-	inline MVector3 getPosition(void) const { return m_position; }
+	void setPosition(const Vector3 & position);
+	inline Vector3	getTransformedPosition(void) const { return Vector3(m_matrix.entries[12], m_matrix.entries[13], m_matrix.entries[14]); }
+	inline Vector3 getPosition(void) const { return m_position; }
 
 	// rotation
-	void setEulerRotation(const MVector3 & euler);
-	void setAxisAngleRotation(const MVector3 & axis, float angle);
-	void addAxisAngleRotation(const MVector3 & axis, float angle);
-	void setRotation(const MQuaternion & rotation);
-	inline MVector3	getTransformedRotation(void) const { return m_matrix.getEulerAngles(); }
-	inline MVector3 getEulerRotation(void) const { return m_rotation.getEulerAngles(); }
-	inline MQuaternion getRotation(void) const { return m_rotation; }
+	void setEulerRotation(const Vector3 & euler);
+	void setAxisAngleRotation(const Vector3 & axis, float angle);
+	void addAxisAngleRotation(const Vector3 & axis, float angle);
+	void setRotation(const Quaternion & rotation);
+	inline Vector3	getTransformedRotation(void) const { return m_matrix.getEulerAngles(); }
+	inline Vector3 getEulerRotation(void) const { return m_rotation.getEulerAngles(); }
+	inline Quaternion getRotation(void) const { return m_rotation; }
 
 	// scale
-	void setScale(const MVector3 & scale);
-	inline MVector3 getTransformedScale(void) const { return m_matrix.getScale(); }
-	inline MVector3 getScale(void) const { return m_scale; }
+	void setScale(const Vector3 & scale);
+	inline Vector3 getTransformedScale(void) const { return m_matrix.getScale(); }
+	inline Vector3 getScale(void) const { return m_scale; }
 	
 	// linking
 	void linkTo(Object3d * parent);

@@ -35,7 +35,7 @@
 namespace Neo
 {
 
-void openNode(MFile * file, const char * name, unsigned int tab, const char * sep)
+void openNode(File * file, const char * name, unsigned int tab, const char * sep)
 {
 	for(unsigned int i=0; i<tab; i++)
 		M_fprintf(file, "\t");
@@ -44,7 +44,7 @@ void openNode(MFile * file, const char * name, unsigned int tab, const char * se
 		M_fprintf(file, sep);
 }
 
-void closeNode(MFile * file, const char * name, unsigned int tab, const char * sep)
+void closeNode(File * file, const char * name, unsigned int tab, const char * sep)
 {
 	for(unsigned int i=0; i<tab; i++)
 		M_fprintf(file, "\t");
@@ -53,28 +53,28 @@ void closeNode(MFile * file, const char * name, unsigned int tab, const char * s
 		M_fprintf(file, sep);
 }
 
-void openAttributeNode(MFile * file, const char * name, unsigned int tab)
+void openAttributeNode(File * file, const char * name, unsigned int tab)
 {
 	for(unsigned int i=0; i<tab; i++)
 		M_fprintf(file, "\t");
 	M_fprintf(file, "<%s ", name);
 }
 
-void closeAttributeNode(MFile * file, const char * sep)
+void closeAttributeNode(File * file, const char * sep)
 {
 	M_fprintf(file, " />");
 	if(sep)
 		M_fprintf(file, sep);
 }
 
-void closeNodeAttributes(MFile * file, const char * sep)
+void closeNodeAttributes(File * file, const char * sep)
 {
 	M_fprintf(file, ">");
 	if(sep)
 		M_fprintf(file, sep);
 }
 
-void writeBool(MFile * file, const char * name, bool variable, const char * sep)
+void writeBool(File * file, const char * name, bool variable, const char * sep)
 {
 	M_fprintf(file, "%s=\"", name);
 	if(variable)
@@ -86,7 +86,7 @@ void writeBool(MFile * file, const char * name, bool variable, const char * sep)
 		M_fprintf(file, sep);
 }
 
-void writeString(MFile * file, const char * name, const char * string, const char * sep)
+void writeString(File * file, const char * name, const char * string, const char * sep)
 {
 	TIXML_STRING S1(string);
 	TIXML_STRING S2;
@@ -97,21 +97,21 @@ void writeString(MFile * file, const char * name, const char * string, const cha
 		M_fprintf(file, sep);
 }
 
-void writeInt(MFile * file, const char * name, int variable, const char * sep)
+void writeInt(File * file, const char * name, int variable, const char * sep)
 {
 	M_fprintf(file, "%s=\"%d\"", name, variable);
 	if(sep)
 		M_fprintf(file, sep);
 }
 
-void writeFloat(MFile * file, const char * name, float variable, const char * sep)
+void writeFloat(File * file, const char * name, float variable, const char * sep)
 {
 	M_fprintf(file, "%s=\"%f\"", name, variable);
 	if(sep)
 		M_fprintf(file, sep);
 }
 
-void writeFloatValues(MFile * file, const char * name, float * vector, unsigned int size, const char * sep)
+void writeFloatValues(File * file, const char * name, float * vector, unsigned int size, const char * sep)
 {
 	M_fprintf(file, "%s=\"", name);
 	for(unsigned int i=0; i<size; i++)
@@ -125,7 +125,7 @@ void writeFloatValues(MFile * file, const char * name, float * vector, unsigned 
 		M_fprintf(file, sep);
 }
 
-void writeFilename(MFile * file, const char * name, const char * filename, const char * workingDirectory, const char * sep)
+void writeFilename(File * file, const char * name, const char * filename, const char * workingDirectory, const char * sep)
 {
 	if(workingDirectory)
 	{
@@ -142,7 +142,7 @@ void writeFilename(MFile * file, const char * name, const char * filename, const
 		M_fprintf(file, sep);
 }
 
-void writeVariable(MFile * file, NeoVariable * variable, const char * workingDirectory, const char * sep)
+void writeVariable(File * file, NeoVariable * variable, const char * workingDirectory, const char * sep)
 {
     const char * name = variable->getName();
     
@@ -159,16 +159,16 @@ void writeVariable(MFile * file, NeoVariable * variable, const char * workingDir
 			writeFloat(file, name, *((float*)variable->getPointer()));
 			break;
 		case M_VARIABLE_STRING:
-			writeString(file, name, ((MString*)variable->getPointer())->getSafeString());
+			writeString(file, name, ((String*)variable->getPointer())->getSafeString());
 			break;
 		case M_VARIABLE_VEC2:
-			writeFloatValues(file, name, *((MVector2*)variable->getPointer()), 2);
+			writeFloatValues(file, name, *((Vector2*)variable->getPointer()), 2);
 			break;
 		case M_VARIABLE_VEC3:
-			writeFloatValues(file, name, *((MVector3*)variable->getPointer()), 3);
+			writeFloatValues(file, name, *((Vector3*)variable->getPointer()), 3);
 			break;
 		case M_VARIABLE_VEC4:
-			writeFloatValues(file, name, *((MVector4*)variable->getPointer()), 4);
+			writeFloatValues(file, name, *((Vector4*)variable->getPointer()), 4);
 			break;
 		case M_VARIABLE_TEXTURE_REF:
         {

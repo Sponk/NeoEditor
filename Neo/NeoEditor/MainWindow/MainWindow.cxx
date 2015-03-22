@@ -1021,7 +1021,7 @@ Fl_Double_Window* SceneSetupDlg::create_window() {
   NeoEngine* engine = NeoEngine::getInstance();
   Scene* scene = engine->getLevel()->getCurrentScene();
   
-  MVector3 ambientLight = scene->getAmbientLight();
+  Vector3 ambientLight = scene->getAmbientLight();
   color_r->value(ambientLight.x);
   color_g->value(ambientLight.y);
   color_b->value(ambientLight.z);
@@ -4019,7 +4019,7 @@ Fl_Double_Window* ConstraintPropertiesDlg::create_window() {
   
   enabled_button->value(1);
   
-  MVector3 vector;
+  Vector3 vector;
   
   vector = constraint->pivot;
   xpivot_edit->value(vector.x);

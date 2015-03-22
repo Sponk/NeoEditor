@@ -55,7 +55,7 @@ class Canvas
 {
 private:
 	std::vector<int> m_widgets;
-	MVector4 m_clearColor;
+	Vector4 m_clearColor;
 
 	unsigned int m_width, m_height;
 	unsigned int m_fbo;
@@ -64,7 +64,7 @@ private:
 	TextureRef* m_texture;
 	int m_layer;
 
-	MVector2 m_cameraPosition;
+	Vector2 m_cameraPosition;
 
 public:
 	/**
@@ -130,14 +130,14 @@ public:
 	 * @brief Returns the clear color of the Canvas.
 	 * @return The clear color as RGBA between 0.0f and 1.0f.
 	 */
-	MVector4 getClearColor() { return m_clearColor; }
+	Vector4 getClearColor() { return m_clearColor; }
 
 	/**
 	 * @brief Changes the clear color of the Canvas.
 	 *
 	 * @param vec The new clear color as RGBA between 0.0f and 1.0f
 	 */
-	void setClearColor(MVector4 vec) { m_clearColor = vec; }
+	void setClearColor(Vector4 vec) { m_clearColor = vec; }
 
 	/**
 	 * @brief Enables render to texture for the Canvas.
@@ -183,13 +183,13 @@ public:
 	 *
 	 * @param value The new offset that should be applied.
 	 */
-	void setCameraOffset(MVector2 value) { m_cameraPosition = value; }
+	void setCameraOffset(Vector2 value) { m_cameraPosition = value; }
 
 	/**
 	 * @brief Returns the current camera offset.
 	 * @return The current camera offset.
 	 */
-	MVector2 getCameraOffset() { return m_cameraPosition; }
+	Vector2 getCameraOffset() { return m_cameraPosition; }
 };
 }
 }

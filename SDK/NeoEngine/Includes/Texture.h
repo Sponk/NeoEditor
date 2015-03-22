@@ -40,13 +40,13 @@ public:
 	// constructor
 	Texture(TextureRef * texRef):
 		m_texRef(texRef),
-		m_genMode(M_TEX_GEN_NONE),
+		m_genMode(TEX_GEN_NONE),
 		m_texTranslate(0, 0),
 		m_texScale(1, 1),
 		m_texRotate(0)
 		{
-			m_wrapMode[0] = M_WRAP_REPEAT;
-			m_wrapMode[1] = M_WRAP_REPEAT;
+			m_wrapMode[0] = WRAP_REPEAT;
+			m_wrapMode[1] = WRAP_REPEAT;
 		}
 
 	// copy constructor
@@ -67,14 +67,14 @@ private:
 	TextureRef * m_texRef;
 
 	// gen mode
-	M_TEX_GEN_MODES m_genMode;
+	TEX_GEN_MODES m_genMode;
 
 	// wrap mode
-	M_WRAP_MODES m_wrapMode[2];
+	WRAP_MODES m_wrapMode[2];
 
 	// texture matrix
-	MVector2 m_texTranslate;
-	MVector2 m_texScale;
+	Vector2 m_texTranslate;
+	Vector2 m_texScale;
 	float m_texRotate;
 
 public:
@@ -84,22 +84,22 @@ public:
 	TextureRef * getTextureRef(void){ return m_texRef; }
 
 	// gen mode
-	void setGenMode(M_TEX_GEN_MODES genMode){ m_genMode = genMode; }
-	M_TEX_GEN_MODES getGenMode(void){ return m_genMode; }
+	void setGenMode(TEX_GEN_MODES genMode){ m_genMode = genMode; }
+	TEX_GEN_MODES getGenMode(void){ return m_genMode; }
 
 	// wrap mode
-	void setUWrapMode(M_WRAP_MODES wrapMode){ m_wrapMode[0] = wrapMode; }
-	void setVWrapMode(M_WRAP_MODES wrapMode){ m_wrapMode[1] = wrapMode; }
-	M_WRAP_MODES getUWrapMode(void){ return m_wrapMode[0]; }
-	M_WRAP_MODES getVWrapMode(void){ return m_wrapMode[1]; }
+	void setUWrapMode(WRAP_MODES wrapMode){ m_wrapMode[0] = wrapMode; }
+	void setVWrapMode(WRAP_MODES wrapMode){ m_wrapMode[1] = wrapMode; }
+	WRAP_MODES getUWrapMode(void){ return m_wrapMode[0]; }
+	WRAP_MODES getVWrapMode(void){ return m_wrapMode[1]; }
 
 	// texture matrix
-	inline void setTexTranslate(const MVector2 & texTranslate){ m_texTranslate = texTranslate; }
-	inline void setTexScale(const MVector2 & texScale){ m_texScale = texScale; }
+	inline void setTexTranslate(const Vector2 & texTranslate){ m_texTranslate = texTranslate; }
+	inline void setTexScale(const Vector2 & texScale){ m_texScale = texScale; }
 	inline void setTexRotate(float texRotate){ m_texRotate = texRotate; }
 
-	inline MVector2 getTexTranslate(void) const { return m_texTranslate; }
-	inline MVector2 getTexScale(void) const { return m_texScale; }
+	inline Vector2 getTexTranslate(void) const { return m_texTranslate; }
+	inline Vector2 getTexScale(void) const { return m_texScale; }
 	inline float getTexRotate(void){ return m_texRotate; }
 };
 }

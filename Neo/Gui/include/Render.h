@@ -75,7 +75,7 @@ public:
 	 * @param color The color of the quad in RGBA between 0.0 and 1.0
 	 * @param rotation The rotation of the quad.
 	 */
-	void drawColoredQuad(float x, float y, float w, float h, MVector4 color,
+	void drawColoredQuad(float x, float y, float w, float h, Vector4 color,
 						 float rotation = 0);
 	/**
 	 * @brief Draws a textured quad to the screen.
@@ -101,7 +101,7 @@ public:
 	 * @param scale The scale of the quad
 	 */
 	void drawTexturedQuad(float x, float y, float w, float h, int texture,
-						  float rotation, MVector2 scale);
+						  float rotation, Vector2 scale);
 
 	/**
 	 * @brief Draws a textured quad to the screen.
@@ -116,7 +116,7 @@ public:
 	 * @param flip The vector that specifies how to flip the quad.
 	 */
 	void drawTexturedQuad(float x, float y, float w, float h, int texture,
-						  float rotation, MVector2 scale, MVector2 flip);
+						  float rotation, Vector2 scale, Vector2 flip);
 
 	/**
 	 * @brief Draws a textured quad to the screen.
@@ -132,8 +132,8 @@ public:
 	 * @param texcoords Custom texture coordinates
 	 */
 	void drawTexturedQuad(float x, float y, float w, float h, int texture,
-						  float rotation, MVector2 scale, MVector2 flip,
-						  MVector4 texcoords);
+						  float rotation, Vector2 scale, Vector2 flip,
+						  Vector4 texcoords);
 
 	/**
 	 * @brief Draws a text object to the screen in 2D.

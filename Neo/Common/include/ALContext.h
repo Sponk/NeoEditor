@@ -41,7 +41,7 @@
 	#include <AL/alc.h>
 #endif
 
-#include <MCore.h>
+#include <NeoCore.h>
 
 namespace Neo
 {
@@ -50,7 +50,7 @@ namespace Neo
  *
  * @see MSoundContext
  */
-class ALContext : public MSoundContext
+class ALContext : public SoundContext
 {
 private:
 
@@ -72,8 +72,8 @@ public:
 	// buffer
 	void createBuffer(unsigned int * bufferId);
 	void deleteBuffer(unsigned int * bufferId);
-	void sendBufferSound(unsigned int bufferId, MSound * sound);
-	void sendBufferData(unsigned int bufferId, M_SOUND_FORMAT format, void * data, unsigned int size, unsigned int freq);
+	void sendBufferSound(unsigned int bufferId, Sound * sound);
+	void sendBufferData(unsigned int bufferId, SOUND_FORMAT format, void * data, unsigned int size, unsigned int freq);
 
 	float getBufferDuration(unsigned int bufferId);
 
@@ -87,7 +87,7 @@ public:
 	void setSourceRelative(unsigned int sourceId, bool relative);
 
 	void setSourceBufferId(unsigned int sourceId, unsigned int bufferId);
-	void setSourcePosition(unsigned int sourceId, const MVector3 & position);
+	void setSourcePosition(unsigned int sourceId, const Vector3 & position);
 	void setSourceRadius(unsigned int sourceId, float radius);
 	void setSourcePitch(unsigned int sourceId, float pitch);
 	void setSourceGain(unsigned int sourceId, float gain);
@@ -110,7 +110,7 @@ public:
 	unsigned int getSourceBuffersProcessed(unsigned int sourceId);
 
 	// listener
-	void updateListenerPosition(const MVector3 & position, const MVector3 & direction, const MVector3 & up);
+	void updateListenerPosition(const Vector3 & position, const Vector3 & direction, const Vector3 & up);
 };
 }
 #endif

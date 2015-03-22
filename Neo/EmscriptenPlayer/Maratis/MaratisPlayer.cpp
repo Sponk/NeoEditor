@@ -310,7 +310,7 @@ void MaratisPlayer::graphicLoop(void)
 {
 	NeoWindow * window = NeoWindow::getInstance();
 	NeoEngine * engine = NeoEngine::getInstance();
-	MRenderingContext * render = engine->getRenderingContext();
+	RenderingContext * render = engine->getRenderingContext();
 
 	// game
 	NeoGame * game = engine->getGame();

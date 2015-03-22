@@ -39,7 +39,7 @@ Level::~Level(void)
 	clear();
 }
 
-void Level::incrDataRefScore(MDataRef * ref)
+void Level::incrDataRefScore(DataRef * ref)
 {
 	if(! ref)
 		return;
@@ -50,7 +50,7 @@ void Level::incrDataRefScore(MDataRef * ref)
 	ref->incrScore();
 }
 
-void Level::decrDataRefScore(MDataRef * ref)
+void Level::decrDataRefScore(DataRef * ref)
 {
 	if(! ref)
 		return;
@@ -316,7 +316,7 @@ ShaderRef * Level::loadShader(const char * filename, M_SHADER_TYPES type)
 
 FXRef * Level::createFX(ShaderRef * vertexShaderRef, ShaderRef * pixelShaderRef)
 {
-	MRenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
 	unsigned int i;
 	unsigned int size = m_FXManager.getFXRefsNumber();
@@ -332,12 +332,12 @@ FXRef * Level::createFX(ShaderRef * vertexShaderRef, ShaderRef * pixelShaderRef)
 	return m_FXManager.addFXRef(FXId, vertexShaderRef, pixelShaderRef);
 }
 
-void Level::sendToUpdateQueue(MDataRef * ref)
+void Level::sendToUpdateQueue(DataRef * ref)
 {
 	m_updateQueue.push_back(ref);
 }
 
-void Level::sendToClearQueue(MDataRef * ref)
+void Level::sendToClearQueue(DataRef * ref)
 {
 	m_clearQueue.push_back(ref);
 }
@@ -347,7 +347,7 @@ void Level::updateQueueDatas(void)
 	unsigned int i;
 	for(i=0; i<m_updateQueue.size(); i++)
 	{
-		MDataRef * ref = m_updateQueue[i];
+		DataRef * ref = m_updateQueue[i];
 		ref->update();
 	}
 
@@ -359,7 +359,7 @@ void Level::clearQueueDatas(void)
 	unsigned int i;
 	for(i=0; i<m_clearQueue.size(); i++)
 	{
-		MDataRef * ref = m_clearQueue[i];
+		DataRef * ref = m_clearQueue[i];
 		ref->clear();
 	}
 

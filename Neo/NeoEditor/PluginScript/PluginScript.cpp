@@ -170,7 +170,7 @@ bool MPluginScript::runScript(const char* filename)
 void MPluginScript::callFunction(const char* name)
 {
     NeoEngine* engine = NeoEngine::getInstance();
-    MScriptContext* oldContext = engine->getScriptContext();
+    ScriptContext* oldContext = engine->getScriptContext();
 
     engine->setScriptContext(this);
     LuaScript::callFunction(name);

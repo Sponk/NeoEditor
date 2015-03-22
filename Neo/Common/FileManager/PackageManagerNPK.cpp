@@ -44,7 +44,7 @@ int teakey[4] = { 0,0,0,0 };
  * MPackageFile
  * Packaged file - Read-only
  *-------------------------------------------------------------------------------*/
-class MPackageFile : public MFile
+class MPackageFile : public File
 {
 public:
 	
@@ -136,24 +136,24 @@ public:
  * MPackageFileOpenHook::open
  * File open callback
  *-------------------------------------------------------------------------------*/
-MFile* PackageFileOpenHook::open(const char* path, const char* mode)
+File* PackageFileOpenHook::open(const char* path, const char* mode)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
-	MSystemContext * system = engine->getSystemContext();
+	SystemContext * system = engine->getSystemContext();
 	
 	char localFilename[256];
 	getLocalFilename(localFilename, system->getWorkingDirectory(), path);
 	
 	
 	if(strstr(mode, "w") != 0)
-		return MStdFile::getNew(path, mode);
+		return StdFile::getNew(path, mode);
 	
 	// look within the package for a file with the requested name
 	if(MPackageEnt ent = engine->getPackageManager()->findEntity(localFilename))
 		return MPackageFile::getNew(ent);
 	
 	// give up, just look for a new file using stdio
-	return MStdFile::getNew(path, mode);
+	return StdFile::getNew(path, mode);
 }
 
 /*--------------------------------------------------------------------------------
@@ -163,7 +163,7 @@ MFile* PackageFileOpenHook::open(const char* path, const char* mode)
  *-------------------------------------------------------------------------------*/
 struct MPackageNPK {
 	NPK_PACKAGE package;
-	MString		filename;
+	String		filename;
 };
 
 /*--------------------------------------------------------------------------------
