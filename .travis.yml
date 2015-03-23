@@ -32,6 +32,9 @@ after_success:
   - curl --ftp-create-dirs -T *.rpm -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
   - curl --ftp-create-dirs -T *.sh -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
 
+  - curl --ftp-create-dirs -T Documentation/LuaDoc -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/documentation
+  - curl --ftp-create-dirs -T Documentation/SDK/html/* -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/documentation/SDK/
+
  # - cd ../build-windows
   
  # - curl --ftp-create-dirs -T *.exe -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
