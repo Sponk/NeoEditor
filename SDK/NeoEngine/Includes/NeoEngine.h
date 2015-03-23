@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MEngine.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -27,9 +22,8 @@
 //
 //========================================================================
 
-
-#ifndef _M_ENGINE_H
-#define _M_ENGINE_H
+#ifndef __ENGINE_H
+#define __ENGINE_H
 
 #ifdef WIN32
 
@@ -111,7 +105,7 @@ class Messenger;
 #include "FXManager.h"
 #include "PostProcessor.h"
 
-#include "Variable.h"
+#include "PointerVariable.h"
 #include "Behavior.h"
 #include "BehaviorCreator.h"
 #include "BehaviorManager.h"

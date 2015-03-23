@@ -20,7 +20,7 @@
 #ifndef __MPOST_PROCESSOR_H__
 #define __MPOST_PROCESSOR_H__
 
-#include "Variable.h"
+#include "PointerVariable.h"
 #include <stdint.h>
 
 namespace Neo
