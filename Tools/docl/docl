@@ -148,10 +148,16 @@ else
       elseif result ~= false then
       	
       	  local outPath = file
-      	  if ignorepath ==  true then
-      	  	local idx = file:len()-file:reverse():find("/")+2
-      	  	outPath = file:sub(idx, file:len())
-      	  	-- print("File is now: " .. outPath)
+      	  if ignorepath ==  true and file ~= nil then
+			 local idx = file:len()
+			 local reverseFile = file:reverse()
+			 local sepPos = reverseFile:find("/")
+
+			 if sepPos ~= nil then				
+				idx = idx - sepPos + 2
+				outPath = file:sub(idx, file:len())
+			 end
+			-- print("File is now: " .. outPath)
       	  end
       	
           local output = outPath:sub(#commonprefix == 0 and 0 or #commonprefix+2):gsub("/", ".")
