@@ -1,10 +1,6 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// MLevelLoad.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -32,6 +28,7 @@
 #include <tinyxml.h>
 
 #include "LevelLoad.h"
+#include "LevelSave.h"
 
 namespace Neo
 {
@@ -549,12 +546,27 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 
 	// maratis
 	rootNode = hDoc.FirstChildElement().Element();
-	if(! rootNode)
+	if (!rootNode)
 		return false;
 
-	if(strcmp(rootNode->Value(), "Maratis") != 0)
-		return false;
+	if (strcmp(rootNode->Value(), "Neo") != 0)
+	{
+		if (strcmp(rootNode->Value(), "Maratis") == 0)
+		{
+			MLOG_WARNING(
+				"You try to load a level that was created using Maratis.");
+		}
+		else
+		{
+			MLOG_ERROR("Can't load level: File is invalid!");
+			return false;
+		}
+	}
 
+	if(strcmp(rootNode->Attribute("version"), LEVEL_VERSION_STRING) != 0)
+		MLOG_WARNING("Will try to convert from old level version '"
+					 << rootNode->Attribute("version") << "'.");
+	
 	hRoot = TiXmlHandle(rootNode);
 
 	// level

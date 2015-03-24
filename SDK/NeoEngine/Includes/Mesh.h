@@ -1,10 +1,6 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MMesh.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -27,9 +23,8 @@
 //
 //========================================================================
 
-
-#ifndef _M_MESH_H
-#define _M_MESH_H
+#ifndef __MESH_H
+#define __MESH_H
 
 #include "MorphingData.h"
 #include "SkinData.h"
@@ -40,13 +35,13 @@ namespace Neo
 class M_ENGINE_EXPORT MaterialDisplay
 {
 public:
+	MaterialDisplay(PRIMITIVE_TYPES primitiveType, unsigned int begin,
+					unsigned int size);
 
-	MaterialDisplay(PRIMITIVE_TYPES primitiveType, unsigned int begin, unsigned int size);
-	MaterialDisplay(const MaterialDisplay & display);
+	MaterialDisplay(const MaterialDisplay &display);
 	~MaterialDisplay(void);
 
 private:
-
 	// draw array infos
 	PRIMITIVE_TYPES m_primitiveType;
 	unsigned int m_begin;
@@ -56,47 +51,43 @@ private:
 	CULL_MODES m_cullMode;
 
 	// material
-	Material * m_material;
+	Material *m_material;
 
 	// visibility
 	bool m_visibility;
 
 public:
-
 	// array infos
-	inline PRIMITIVE_TYPES getPrimitiveType(void){ return m_primitiveType; }
-	inline unsigned int getBegin(void){ return m_begin; }
-	inline unsigned int getSize(void){ return m_size; }
+	inline PRIMITIVE_TYPES getPrimitiveType(void) { return m_primitiveType; }
+	inline unsigned int getBegin(void) { return m_begin; }
+	inline unsigned int getSize(void) { return m_size; }
 
 	// cull mode
-	inline void setCullMode(CULL_MODES cullMode){ m_cullMode = cullMode; }
-	inline CULL_MODES getCullMode(void){ return m_cullMode; }
+	inline void setCullMode(CULL_MODES cullMode) { m_cullMode = cullMode; }
+	inline CULL_MODES getCullMode(void) { return m_cullMode; }
 
 	// material
-	inline void setMaterial(Material * material){ m_material = material; }
-	inline Material * getMaterial(void){ return m_material; }
+	inline void setMaterial(Material *material) { m_material = material; }
+	inline Material *getMaterial(void) { return m_material; }
 
 	// visibility
-	inline void setVisibility(bool visibility){ m_visibility = visibility; }
-	inline bool isVisible(void){ return m_visibility; }
+	inline void setVisibility(bool visibility) { m_visibility = visibility; }
+	inline bool isVisible(void) { return m_visibility; }
 };
-
 
 // SubMesh
 class M_ENGINE_EXPORT SubMesh
 {
 public:
-
 	SubMesh(void);
 	~SubMesh(void);
 
 private:
-
 	// morphing data
-	MorphingData * m_morphingData;
+	MorphingData *m_morphingData;
 
 	// skin data
-	SkinData * m_skinData;
+	SkinData *m_skinData;
 
 	// data
 	unsigned int m_indicesSize;
@@ -107,39 +98,39 @@ private:
 	unsigned int m_colorsSize;
 
 	VAR_TYPES m_indicesType;
-	void * m_indices;
+	void *m_indices;
 
-	Color * m_colors;
-	Vector3 * m_vertices;
-	Vector3 * m_normals;
-	Vector3 * m_tangents;
-	Vector2 * m_texCoords;
+	Color *m_colors;
+	Vector3 *m_vertices;
+	Vector3 *m_normals;
+	Vector3 *m_tangents;
+	Vector2 *m_texCoords;
 
 	// VBO (optional)
 	unsigned int m_vboId1;
 	unsigned int m_vboId2; // for indices
-	
-	// mapChannels offset (map of textureCoords offsets used for channel mapping)
+
+	// mapChannels offset (map of textureCoords offsets used for channel
+	// mapping)
 	map<unsigned int, unsigned int> m_mapChannelsOffset;
-	
+
 	// displays
 	unsigned int m_displaysNumber;
-	MaterialDisplay ** m_displays;
+	MaterialDisplay **m_displays;
 
 	// bounding box
 	Box3d m_boundingBox;
 
 public:
-
 	// morphing data
 	void clearMorphingData(void);
-	MorphingData * createMorphingData(void);
-	inline MorphingData * getMorphingData(void){ return m_morphingData; }
+	MorphingData *createMorphingData(void);
+	inline MorphingData *getMorphingData(void) { return m_morphingData; }
 
 	// skin data
 	void clearSkinData(void);
-	SkinData * createSkinData(void);
-	inline SkinData * getSkinData(void){ return m_skinData; }
+	SkinData *createSkinData(void);
+	inline SkinData *getSkinData(void) { return m_skinData; }
 
 	// data
 	void clearIndices(void);
@@ -149,69 +140,83 @@ public:
 	void clearTexCoords(void);
 	void clearColors(void);
 
-	void * allocIndices(unsigned int size, VAR_TYPES type);
-	Color * allocColors(unsigned int size);
-	Vector3 * allocVertices(unsigned int size);
-	Vector3 * allocNormals(unsigned int size);
-	Vector3 * allocTangents(unsigned int size);
-	Vector2 * allocTexCoords(unsigned int size);
+	void *allocIndices(unsigned int size, VAR_TYPES type);
+	Color *allocColors(unsigned int size);
+	Vector3 *allocVertices(unsigned int size);
+	Vector3 *allocNormals(unsigned int size);
+	Vector3 *allocTangents(unsigned int size);
+	Vector2 *allocTexCoords(unsigned int size);
 
-	inline unsigned int getIndicesSize(void){ return m_indicesSize; }
-	inline unsigned int getVerticesSize(void){ return m_verticesSize; }
-	inline unsigned int getNormalsSize(void){ return m_normalsSize; }
-	inline unsigned int getTangentsSize(void){ return m_tangentsSize; }
-	inline unsigned int getTexCoordsSize(void){ return m_texCoordsSize; }
-	inline unsigned int getColorsSize(void){ return m_colorsSize; }
+	inline unsigned int getIndicesSize(void) { return m_indicesSize; }
+	inline unsigned int getVerticesSize(void) { return m_verticesSize; }
+	inline unsigned int getNormalsSize(void) { return m_normalsSize; }
+	inline unsigned int getTangentsSize(void) { return m_tangentsSize; }
+	inline unsigned int getTexCoordsSize(void) { return m_texCoordsSize; }
+	inline unsigned int getColorsSize(void) { return m_colorsSize; }
 
-	VAR_TYPES getIndicesType(void){ return m_indicesType; }
-	inline void	* getIndices(void){ return m_indices; }
+	VAR_TYPES getIndicesType(void) { return m_indicesType; }
+	inline void *getIndices(void) { return m_indices; }
 
-	inline Color * getColors(void){ return m_colors; }
-	inline Vector3 * getVertices(void){ return m_vertices; }
-	inline Vector3 * getNormals(void){ return m_normals; }
-	inline Vector3 * getTangents(void){ return m_tangents; }
-	inline Vector2 * getTexCoords(void){ return m_texCoords; }
+	inline Color *getColors(void) { return m_colors; }
+	inline Vector3 *getVertices(void) { return m_vertices; }
+	inline Vector3 *getNormals(void) { return m_normals; }
+	inline Vector3 *getTangents(void) { return m_tangents; }
+	inline Vector2 *getTexCoords(void) { return m_texCoords; }
 
 	// VBO
 	void clearVBO(void);
-	unsigned int * getVBOid1(void){ return &m_vboId1; }
-	unsigned int * getVBOid2(void){ return &m_vboId2; }
-	
+	unsigned int *getVBOid1(void) { return &m_vboId1; }
+	unsigned int *getVBOid2(void) { return &m_vboId2; }
+
 	// mapChannels offset
 	void clearMapChannelOffset(void);
 	void setMapChannelOffset(unsigned int channel, unsigned int offset);
 	bool isMapChannelExist(unsigned int channel);
 	unsigned int getMapChannelOffset(unsigned int channel);
-	map<unsigned int, unsigned int> * getMapChannelOffsets(void){ return &m_mapChannelsOffset; }
 	
+	map<unsigned int, unsigned int> *getMapChannelOffsets(void)
+	{
+		return &m_mapChannelsOffset;
+	}
+
 	// displays
 	void allocDisplays(unsigned int size);
 	void clearDisplays(void);
-	MaterialDisplay * addNewDisplay(PRIMITIVE_TYPES primitiveType, unsigned int begin, unsigned int size);
-	inline unsigned int getDisplaysNumber(void){ return m_displaysNumber; }
-	inline MaterialDisplay * getDisplay(unsigned int id){ return m_displays[id]; }
+	MaterialDisplay *addNewDisplay(PRIMITIVE_TYPES primitiveType,
+								   unsigned int begin, unsigned int size);
+	
+	inline unsigned int getDisplaysNumber(void) { return m_displaysNumber; }
+
+	inline MaterialDisplay *getDisplay(unsigned int id)
+	{
+		return m_displays[id];
+	}
 
 	// bounding box
-	inline Box3d * getBoundingBox(void){ return &m_boundingBox; }
+	inline Box3d *getBoundingBox(void) { return &m_boundingBox; }
 
 	// transparency
 	bool hasTransparency(void);
 };
 
-
-// MAnimRange
+/**
+ * @brief Describes a Range in an animation starting at a certain frame
+ * and ending at another certain frame.
+ */
 class M_ENGINE_EXPORT AnimRange : public Range
 {
 public:
-	AnimRange(void):
-	  loops(-1)
-	{}
+	AnimRange(void) : loops(-1) {}
 
+	/// How should the animation loop
 	int loops;
 };
 
-
-// Mesh
+/**
+ * @brief The Mesh class contains the implementation of a generic
+ * (i.e. file format agnostic) 3D mesh with support for armature animation,
+ * material animation and multitexturing.
+ */
 class M_ENGINE_EXPORT Mesh
 {
 public:
@@ -219,7 +224,18 @@ public:
 	Mesh(void);
 	~Mesh(void);
 
+	/**
+	 * @brief Creates a new Mesh instance.
+	 *
+	 * Used by the mesh factory class.
+	 *
+	 * @return The new Mesh.
+	 */
 	static Mesh * getNew(void);
+
+	/**
+	 * @brief Destroys the mesh instance and frees all allocated memory.
+	 */
 	void destroy(void);
 
 private:
@@ -262,53 +278,141 @@ public:
 
 	// anims ranges
 	void clearAnimsRanges(void);
-	AnimRange * allocAnimsRanges(unsigned int size);
-	inline unsigned int getAnimsRangesNumber(void){ return m_animsRangesNumber; }
-	inline AnimRange * getAnimsRanges(void){ return m_animsRanges; }
+	AnimRange *allocAnimsRanges(unsigned int size);
 
-	// armature anim
-	inline void setArmatureAnimRef(ArmatureAnimRef * armatureAnimRef){ m_armatureAnimRef = armatureAnimRef; }
-	inline ArmatureAnimRef * getArmatureAnimRef(void){ return m_armatureAnimRef; }
-	ArmatureAnim * getArmatureAnim(void);
+	/**
+	 * @brief Returns the number of animation ranges.
+	 * @return The number animation ranges.
+	 */
+	inline unsigned int getAnimsRangesNumber(void)
+	{
+		return m_animsRangesNumber;
+	}
+
+	/**
+	 * @brief Returns the array of animation ranges.
+	 * @return The array of animation ranges.
+	 */
+	inline AnimRange *getAnimsRanges(void) { return m_animsRanges; }
+
+	/**
+	 * @brief Sets the armature reference.
+	 * @param armatureAnimRef The new armature animation reference.
+	 *
+	 * @see ArmatureAnimRef
+	 */
+	inline void setArmatureAnimRef(ArmatureAnimRef *armatureAnimRef)
+	{
+		m_armatureAnimRef = armatureAnimRef;
+	}
+
+	/**
+	 * @brief Returns the current armature animation reference.
+	 * @return The armature animation reference.
+	 * @see ArmatureAnimRef
+	 */
+	inline ArmatureAnimRef *getArmatureAnimRef(void)
+	{
+		return m_armatureAnimRef;
+	}
+
+	ArmatureAnim *getArmatureAnim(void);
 
 	// textures anim
-	inline void setTexturesAnimRef(TexturesAnimRef * texturesAnimRef){ m_texturesAnimRef = texturesAnimRef; }
-	inline TexturesAnimRef * getTexturesAnimRef(void){ return m_texturesAnimRef; }
-	TexturesAnim * getTexturesAnim(void);
+	inline void setTexturesAnimRef(TexturesAnimRef *texturesAnimRef)
+	{
+		m_texturesAnimRef = texturesAnimRef;
+	}
+	inline TexturesAnimRef *getTexturesAnimRef(void)
+	{
+		return m_texturesAnimRef;
+	}
 
-	// materials anim
-	inline void setMaterialsAnimRef(MaterialsAnimRef * materialsAnimRef){ m_materialsAnimRef = materialsAnimRef; }
-	inline MaterialsAnimRef * getMaterialsAnimRef(void){ return m_materialsAnimRef; }
-	MaterialsAnim * getMaterialsAnim(void);
+	TexturesAnim *getTexturesAnim(void);
+
+	/**
+	 * @brief Sets the material animation reference.
+	 * @param armatureAnimRef The new material animation reference.
+	 *
+	 * @see MaterialsAnimRef
+	 */
+	inline void setMaterialsAnimRef(MaterialsAnimRef *materialsAnimRef)
+	{
+		m_materialsAnimRef = materialsAnimRef;
+	}
+
+	/**
+	 * @brief Returns the current material animation reference.
+	 * @return The material animation reference.
+	 * @see MaterialsAnimRef
+	 */
+	inline MaterialsAnimRef *getMaterialsAnimRef(void)
+	{
+		return m_materialsAnimRef;
+	}
+
+	MaterialsAnim *getMaterialsAnim(void);
 
 	// armature
 	void clearArmature(void);
-	Armature * createArmature(void);
-	inline Armature * getArmature(void){ return m_armature; }
+	Armature *createArmature(void);
+	inline Armature *getArmature(void) { return m_armature; }
 
 	// textures
 	void allocTextures(unsigned int size);
 	void clearTextures(void);
-	Texture * addNewTexture(TextureRef * texRef);
-	inline unsigned int getTexturesNumber(void){ return m_texturesNumber; }
-	inline Texture * getTexture(unsigned int id){ return m_textures[id]; }
+	Texture *addNewTexture(TextureRef *texRef);
+	inline unsigned int getTexturesNumber(void) { return m_texturesNumber; }
+	inline Texture *getTexture(unsigned int id) { return m_textures[id]; }
 
-	// materials
+	/**
+	 * @brief Allocates enough memory for all materials.
+	 * @param size The number of materials to allocate.
+	 */
 	void allocMaterials(unsigned int size);
+
+	/**
+	 * @brief Deletes all contained materials.
+	 */
 	void clearMaterials(void);
-	Material * addNewMaterial(void);
-	inline unsigned int getMaterialsNumber(void){ return m_materialsNumber; }
-	inline Material * getMaterial(unsigned int id){ return m_materials[id]; }
 
-	// subMeshs
+	/**
+	 * @brief Creates a new Material, adds it to the internal array and returns
+	 * it.
+	 * @return The new Material.
+	 */
+	Material *addNewMaterial(void);
+
+	/**
+	 * @brief Returns the number of currently active materials.
+	 * @return The number of active materials.
+	 */
+	inline unsigned int getMaterialsNumber(void) { return m_materialsNumber; }
+
+	/**
+	 * @brief Retrieves a specific material from the internal array.
+	 * @param id The index to the array.
+	 * @return The material
+	 */
+	inline Material *getMaterial(unsigned int id) { return m_materials[id]; }
+
 	void clearSubMeshs(void);
-	SubMesh * allocSubMeshs(unsigned int size);
-	inline unsigned int getSubMeshsNumber(void){ return m_subMeshsNumber; }
-	inline SubMesh * getSubMeshs(void){ return m_subMeshs; }
+	SubMesh *allocSubMeshs(unsigned int size);
+	inline unsigned int getSubMeshsNumber(void) { return m_subMeshsNumber; }
+	inline SubMesh *getSubMeshs(void) { return m_subMeshs; }
 
-	// bounding box
+	/**
+	 * @brief Recalculates the bounding box to contain all vertices
+	 * of the mesh.
+	 */
 	void updateBoundingBox(void);
-	inline Box3d * getBoundingBox(void){ return &m_boundingBox; }
+
+	/**
+	 * @brief Returns the current bounding box.
+	 * @return The bounding box.
+	 * @see updateBoundingBox
+	 */
+	inline Box3d *getBoundingBox(void) { return &m_boundingBox; }
 };
 }
 #endif

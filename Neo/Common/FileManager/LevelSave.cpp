@@ -1,10 +1,6 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// MLevelSave.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -508,7 +504,7 @@ bool xmlLevelSave(Level * level, const char * filename)
 	// get rep
 	getRepertory(rep, filename);
 
-    openNode(file, "Maratis version=\"3.1\"", 0);
+    openNode(file, "Neo version=\"" LEVEL_VERSION_STRING "\"", 0);
 	M_fprintf(file, "\n\n");
 	openNode(file, "Level", 0);
 	M_fprintf(file, "\n\n");
@@ -754,7 +750,7 @@ bool xmlLevelSave(Level * level, const char * filename)
 	M_fprintf(file, "\n");
 	closeNode(file, "Level", 0);
 	M_fprintf(file, "\n\n");
-	closeNode(file, "Maratis", 0);
+	closeNode(file, "Neo", 0);
 
 	M_fclose(file);
 	return true;

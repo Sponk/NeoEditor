@@ -1,10 +1,6 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// MLevelSave.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2015 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -28,8 +24,10 @@
 //========================================================================
 
 
-#ifndef _M_LEVEL_SAVE_H
-#define _M_LEVEL_SAVE_H
+#ifndef __LEVEL_SAVE_H
+#define __LEVEL_SAVE_H
+
+#define LEVEL_VERSION_STRING "0.4"
 
 namespace Neo
 {
