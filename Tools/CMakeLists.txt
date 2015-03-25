@@ -5,6 +5,7 @@ IF(NOT NO_TOOLS)
 	ADD_SUBDIRECTORY(NeoStore)
 	ADD_SUBDIRECTORY(ProjectManager)
 	ADD_SUBDIRECTORY(Publisher)
+	ADD_SUBDIRECTORY(MonDoc)
 	
 	MESSAGE("-- Building tools is enabled.")
 	
