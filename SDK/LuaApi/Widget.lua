@@ -15,15 +15,11 @@ dofile("class.lua")
 -- 
 -- <b>Do not write to these directly! Use the suitable methods for that!</b>
 -- 
--- position[1]: The X position of the widget
--- 
--- position[2] : The Y position of the widget
--- 
--- height: The height of the widget
--- 
--- width: The width of the widget
--- 
--- rotation: The current rotation of the widget.
+-- @param position[1] The X position of the widget
+-- @param position[2] The Y position of the widget
+-- @param height The height of the widget
+-- @param width The width of the widget
+-- @param rotation The current rotation of the widget.
 
 --- Widget(x,y,w,h,text)
 -- Creates a new Widget object.
@@ -58,8 +54,7 @@ function Widget:setPostionY(value)
 end
 
 --- Sets the scale of the widget
---
--- scale: A vec2 with the X and Y scale factor.
+-- @param scale A vec2 with the X and Y scale factor.
 function Widget:setScale(scale)
    self.scale = scale
    setWidgetScale(self.widget, scale)
@@ -69,10 +64,8 @@ end
 --collidable_objects = {}
 
 --- Sets the current position of the widget
---
--- x: The new X position
---
--- y: The new Y position
+-- @param x The new X position
+-- @param y The new Y position
 function Widget:setPosition(x,y)
     self.position[1] = x
     self.position[2] = y
@@ -81,35 +74,29 @@ function Widget:setPosition(x,y)
 end
 
 --- Sets the current rotation of the widget
---
--- r: The new rotation
+-- @param r The new rotation angle
 function Widget:setRotation(r)
     self.rotation = r
     setWidgetRotation(self.widget, self.rotation)
 end
 
 --- Rotates the widget by an angle.
---
--- angle: The angle to rotate by
+-- @param angle The angle to rotate by
 function Widget:rotate(angle)
     self:setRotation(self.rotation + angle)
 end
 
 --- Translates the widget by the given coordinates relative to the current position.
---
--- x: The X offset
---
--- y: The Y offset
+-- @param x The X offset
+-- @param y The Y offset
 function Widget:translate(x,y)
     self:setPosition(self.position[1] + x, self.position[2] + y)
 end
 
 
 --- Gets the current position of the widget.
---
--- x: The X cordonat
---
--- y: The Y cordonat
+-- @param x The X cordonat
+-- @param y The Y cordonat
 function Widget:getPosition()
     local pos = {}
     pos.x = self.position[1]
@@ -117,7 +104,8 @@ function Widget:getPosition()
     return pos
 end
 
---Returns the Width/Height of this object
+--- Returns the width and height of this object.
+-- @return A vec2 with the width and the height.
 function Widget:getSize()
     local size = {}
     size.width = self.width
@@ -126,28 +114,26 @@ function Widget:getSize()
 end
 
 --- Retrieves the current label of the widget.
+-- @return The label as a string.
 function Widget:getLabel()
     return getLabel(self.widget)
 end
 
 --- Changes the current label of the widget.
---
--- label: The new label.
+-- @param label The new label.
 function Widget:setLabel(label)
     setLabel(self.widget, label)
 end
 
 --- Changes the widget visibility
--- 
--- value: A boolean indicating if the widget should be visible or not.
+-- @param value A boolean indicating if the widget should be visible or not.
 function Widget:setVisible(value)
     self.visible = value
     setWidgetVisible(self.widget, value)
 end
 
 --- Returns if the widget is turned visible.
---
--- return: A boolean value.
+-- @return A boolean value.
 function Widget:isVisible()
     return self.visible
 end

@@ -17,6 +17,7 @@ ADD_CUSTOM_TARGET(lua-docs ALL
   )
 
 add_dependencies(lua-docs mondoc)
+FILE(MAKE_DIRECTORY ${DOCUMENTATION_BINARY_DIR}/LuaDoc)
 
 ELSE()
     message("-- Will NOT generate Lua documentation.\n--")
