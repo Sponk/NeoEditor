@@ -4,6 +4,7 @@
 #include <cstring>
 #include <fstream>
 #include <algorithm>
+#include <cerrno>
 
 #include "LuaSource.h"
 
@@ -148,6 +149,7 @@ int main(int argc, char* argv[])
 	{
 		cout << "Could not write search index!" << endl;
 		cout << (s.outputDirectory + SEPERATOR + "searchindex.js") << endl;
+		cout << "Error: " << strerror(errno) << endl;
 		return 1;
 	}
 
