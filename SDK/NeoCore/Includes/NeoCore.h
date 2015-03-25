@@ -32,19 +32,16 @@
 		#pragma warning(disable: 4251)
 	#endif
 
-	#if defined(MCORE_DLL)
+	#if defined(NEO_CORE_DLL)
 		#define NEO_CORE_EXPORT __declspec( dllexport )
-	#elif defined(MCORE_STATIC)
+	#elif defined(NEO_CORE_STATIC)
 		#define NEO_CORE_EXPORT
 	#else
 		#define NEO_CORE_EXPORT __declspec( dllimport )
 	#endif
 
 #else
-
-	// M_CORE_EXPORT
 	#define NEO_CORE_EXPORT
-
 #endif
 
 namespace Neo

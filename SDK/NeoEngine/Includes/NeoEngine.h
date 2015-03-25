@@ -28,9 +28,9 @@
 #ifdef WIN32
 
 	// M_ENGINE_EXPORT
-	#if defined(MENGINE_DLL)
+	#if defined(NEO_ENGINE_DLL)
 		#define M_ENGINE_EXPORT __declspec( dllexport )
-	#elif defined(MENGINE_STATIC)
+	#elif defined(NEO_ENGINE_STATIC)
 		#define M_ENGINE_EXPORT
 	#else
 		#define M_ENGINE_EXPORT __declspec( dllimport )
