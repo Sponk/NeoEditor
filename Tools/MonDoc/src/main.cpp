@@ -130,10 +130,15 @@ int main(int argc, char* argv[])
 	string execPath = getPath(argv[0]);
 	copyFile(execPath + "style.css",
 			 s.outputDirectory + SEPERATOR + "style.css");
+	
+	copyFile(execPath + "syntax-style.css",
+			 s.outputDirectory + SEPERATOR + "syntax-style.css");
+	
 	copyFile(execPath + "searchprovider.js",
 			 s.outputDirectory + SEPERATOR + "searchprovider.js");
 	copyFile(execPath + "lunr.js", s.outputDirectory + SEPERATOR + "lunr.js");
-
+	copyFile(execPath + "highlight.pack.js", s.outputDirectory + SEPERATOR + "highlight.pack.js");
+	
 	cout << "Processing " << s.inputFiles.size() << " file(s)" << endl;
 
 	ofstream searchOut;
@@ -172,10 +177,16 @@ int main(int argc, char* argv[])
 		out << "<script src=\"lunr.js\"></script>" << endl;
 		out << "<script src=\"searchprovider.js\"></script>" << endl;
 		out << "<script src=\"searchindex.js\"></script>" << endl;
-
+		out << "<script src=\"highlight.pack.js\"></script>" << endl;
+		out << "<script>hljs.initHighlightingOnLoad();</script>" << endl;
+		
 		out << "<body onload='processOnLoadSearch();'>" << endl;
 		out << "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\"/>"
 			<< endl;
+
+		out << "<link rel=\"stylesheet\" type=\"text/css\" href=\"syntax-style.css\"/>"
+			<< endl;
+		
 		out << "<div class='function' id='searchresults'></div>" << endl;
 		out << "<div class='sidepanel'>" << endl;
 

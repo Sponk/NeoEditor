@@ -26,17 +26,13 @@ dofile("class.lua")
 -- rotation: The current rotation of the widget.
 
 --- Widget(x,y,w,h,text)
--- Creates a new Widget object.<br><br>
+-- Creates a new Widget object.
 --
--- x: The x position on the canvas
---
--- y: The y position on the canvas
---
--- w: The width of the widget
---
--- h: The height of the widget
---
--- text: (optional) The label of the widget.
+-- @param x The x position on the canvas
+-- @param y The y position on the canvas
+-- @param w The width of the widget
+-- @param h The height of the widget
+-- @param text The label of the widget. (optional)
 Widget = class(
 	function(object, x, y, w, h, text)
 		if text == nil then text = "" end

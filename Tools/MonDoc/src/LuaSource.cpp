@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <cstring>
 
 using namespace std;
 
@@ -40,6 +41,28 @@ void trimWhitespace(string &str)
 	trimString(str, '\t');
 }
 
+void replaceString(string &src, const char* s1, const char* s2)
+{
+	size_t s1Size = strlen(s1);
+	size_t s2Size = strlen(s2);
+
+	if(s1Size == 0)
+        return;
+
+	size_t idx = 0;
+    while((idx = src.find(s1, idx)) != -1)
+	{
+        src.replace(idx, s1Size, s2);
+        idx += s2Size;
+    }
+}
+
+
+void replaceString(string &src, string &s1, string &s2)
+{
+	replaceString(src, s1.c_str(), s2.c_str());
+}
+
 string commentToString(Comment c)
 {
 	string output;
@@ -53,39 +76,44 @@ string commentToString(Comment c)
 	}
 	else
 	{
-		output += "<h1>";
+		output += "<h2>";
 		int idx = c.description.find("\n");
 
 		string title = c.description;
 		if (idx != -1)
 		{
 			title.erase(idx);
-			output += title + "</h1><p>\n\n";
+			output += title + "</h2><p>\n\n";
 
 			c.description = c.description.substr(idx);
 		}
 	}
+
+	replaceString(c.description, "/code", "<pre class='code'><code>");
+	replaceString(c.description, "/endcode", "</code></pre>");
+	replaceString(c.description, "\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
+	replaceString(c.description, "    ", "&nbsp;&nbsp;&nbsp;&nbsp;");
 
 	output += c.description + "</p>";
 
 	int numParams = c.parameter.size();
 
 	if (numParams > 0)
-		output += "<p>Parameter:<br>";
+		output += "<p><h3>Parameter</h3>";
 
 	Parameter p;
 	for (int i = 0; i < numParams; i++)
 	{
 		p = c.parameter[i];
-		output += "<p>" + p.name + "</p>\n";
-		output += "<p class='indented'>" + p.description + "</p>\n";
+		output += "<p><strong>" + p.name + "</strong>\n";
+		output += "<div class='indented'>" + p.description + "</div></p>\n";
 	}
 
 	if (numParams > 0)
 		output += "</p>";
 
 	if (!c.returnDescription.empty())
-		output += "<p> Return: " + c.returnDescription + "</p>";
+		output += "<p> <strong>Return:</strong> " + c.returnDescription + "</p>";
 
 	output += "</div>";
 	return output;
@@ -104,6 +132,7 @@ string generateHtml(const char *filename)
 	}
 
 	string line;
+	bool insideCodeBlock = false;
 	while (!in.eof())
 	{
 		std::getline(in, line);
@@ -116,9 +145,19 @@ string generateHtml(const char *filename)
 
 			do
 			{
-				trimString(line, '-');
-				trimWhitespace(line);
+				// Are we inside a code example?
+				if(line.find("/code") != -1)
+					insideCodeBlock = true;
 
+				if(line.find("/endcode") != -1)
+					insideCodeBlock = false;
+				
+				trimString(line, '-');
+
+				// Only trim whitespaces if we don't need them!
+				if(!insideCodeBlock)
+					trimWhitespace(line);
+			    				
 				if (line.find("@param") == 0)
 				{
 					Parameter p;
@@ -145,6 +184,7 @@ string generateHtml(const char *filename)
 					trimWhitespace(comment.returnDescription);
 				}
 				else
+					// FIXME: Make this html agnostic!
 					comment.description += line + "<br>\n";
 
 				std::getline(in, line);

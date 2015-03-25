@@ -11,8 +11,43 @@
 .rgba-primary-3 { color: rgba( 42, 42, 51,1) }
 .rgba-primary-4 { color: rgba( 26, 27, 42,1) }
 
+.indented 
+{ 
+	text-indent : 2em; 
+	margin: -1em;
+}
 
-.indented { text-indent : 2em; }
+.comment { color: #666; }
+.keyword { color: #00bcff; font-weight: bold; }
+.operator { color: white ; font-weight: bold; }
+.string { color: #00bcff; font-weight: normal; }
+.escape { color: blue; font-weight: normal; }
+.number { color: red; font-weight: bold; }
+
+pre br {margin-bottom:.2em}
+pre 
+{
+    display: inline-block;
+    padding: 1em;
+    margin: 0 1em 1em 0;
+    vertical-align: top;
+    width: 95%;
+    overflow: auto;
+
+    font-family: console, monospace;
+    background-color: #343538;
+    color:#e2e2e2;
+    white-space: normal;
+}
+pre::before
+{
+    content: "Code";
+    display: block;
+    position: relative;
+    top: -.25em;
+    font-family: sans-serif;
+    color: white;
+}
 
 .function
 {
