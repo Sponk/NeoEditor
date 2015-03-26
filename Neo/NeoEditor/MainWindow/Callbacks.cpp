@@ -53,7 +53,7 @@
 using namespace Neo;
 
 #include "../FilesUpdate/FilesUpdate.h"
-#include "../Loaders/AssimpMeshLoader.h"
+#include <AssimpMeshLoader.h>
 #include <NeoCore.h>
 #include "../MainWindow/MainWindow.h"
 #include "../MainWindow/Translator.h"

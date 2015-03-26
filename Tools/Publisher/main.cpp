@@ -23,7 +23,7 @@ using namespace Neo;
 #include <PackageManagerNPK.h>
 #include <Project.h>
 #include "Publish/Publisher.h"
-#include "Loaders/AssimpMeshLoader.h"
+#include <AssimpMeshLoader.h>
 
 using namespace std;
 

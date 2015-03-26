@@ -1,5 +1,6 @@
 //========================================================================
 //  Maratis, Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+//  Neo, Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -17,12 +18,8 @@
 //
 //========================================================================
 
-
 #include "MaratisPlayer.h"
-
 #include <Window/Window.h>
-
-// MaratisCore
 
 #ifndef USE_GLES
 #include <GLContext.h>
@@ -39,6 +36,7 @@ typedef Neo::ES2Context GLContext;
 #include <FreetypeLoader.h>
 #include <BinFontLoader.h>
 #include <BinMeshLoader.h>
+#include <AssimpMeshLoader.h>
 
 #include <NeoCore.h>
 #include <NeoEngine.h>
@@ -151,6 +149,7 @@ void MaratisPlayer::start(void)
 		// mesh loader
 		engine->getMeshLoader()->addLoader(xmlMeshLoad);
 		engine->getMeshLoader()->addLoader(M_loadBinMesh);
+		engine->getMeshLoader()->addLoader(M_loadAssimpMesh);
 		engine->getArmatureAnimLoader()->addLoader(xmlArmatureAnimLoad);
 		engine->getArmatureAnimLoader()->addLoader(M_loadBinArmatureAnim);
 		engine->getTexturesAnimLoader()->addLoader(xmlTextureAnimLoad);

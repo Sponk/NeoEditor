@@ -83,7 +83,7 @@
 #include "../Publish/Publisher.h"
 
 // assimp loader
-#include "../Loaders/AssimpMeshLoader.h"
+#include <AssimpMeshLoader.h>
 
 // Profiler
 #include <Shiny.h>
