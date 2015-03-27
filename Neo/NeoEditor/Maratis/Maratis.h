@@ -213,14 +213,14 @@ public:
     void updateCurrentAxis();
 
 	// file browser
-	static void okAddEntity(const char * filename);
-	static void okAddSound(const char * filename);
-	static void okAddFont(const char * filename);
-	static void okNewProject(const char * filename);
-	static void okLoadProject(const char * filename);
-	static void okLoadLevel(const char * filename);
-	static void okSaveAs(const char * filename);
-	static void okImportExternal(const char * filename);
+	void okAddEntity(const char * filename);
+	void okAddSound(const char * filename);
+	void okAddFont(const char * filename);
+	void okNewProject(const char * filename);
+	void okLoadProject(const char * filename);
+	void okLoadLevel(const char * filename);
+	void okSaveAs(const char * filename);
+	void okImportExternal(const char * filename);
 	
 public:
 
@@ -229,6 +229,9 @@ public:
 
 	// renderer
 	void changeRenderer(const char * name);
+
+	// Used by tests
+	void setRenderingContext(RenderingContext* context) { m_render = context; }
 	
 	// undo
 	void autoSave(void);

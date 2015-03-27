@@ -917,7 +917,6 @@ void Maratis::okAddEntity(const char * filename)
 {
     if(filename)
     {
-        Maratis * maratis = Maratis::getInstance();
         Level * level = NeoEngine::getInstance()->getLevel();
         Scene * scene = level->getCurrentScene();
 
@@ -925,18 +924,18 @@ void Maratis::okAddEntity(const char * filename)
         if(meshRef && meshRef->getMesh()->getSubMeshsNumber() > 0)
         {
             char name[256] = "Entity0";
-            maratis->getNewObjectName("Entity", name);
+            getNewObjectName("Entity", name);
 
             // add entity
             OEntity * entity = scene->addNewEntity(meshRef);
             entity->setName(name);
 
             // set entity position
-            entity->setPosition(*maratis->getSelectionCenter());
+            entity->setPosition(*getSelectionCenter());
             entity->updateMatrix();
 
-            maratis->clearSelectedObjects();
-            maratis->addSelectedObject(entity);
+            clearSelectedObjects();
+            addSelectedObject(entity);
         }
     }
 }
@@ -945,7 +944,6 @@ void Maratis::okAddSound(const char * filename)
 {
     if(filename)
     {
-        Maratis * maratis = Maratis::getInstance();
         Level * level = NeoEngine::getInstance()->getLevel();
         Scene * scene = level->getCurrentScene();
 
@@ -953,18 +951,18 @@ void Maratis::okAddSound(const char * filename)
         if(soundRef)
         {
             char name[256] = "Sound0";
-            maratis->getNewObjectName("Sound", name);
+            getNewObjectName("Sound", name);
 
             // add sound
             OSound * sound = scene->addNewSound(soundRef);
             sound->setName(name);
 
             // set position
-            sound->setPosition(*maratis->getSelectionCenter());
+            sound->setPosition(*getSelectionCenter());
             sound->updateMatrix();
 
-            maratis->clearSelectedObjects();
-            maratis->addSelectedObject(sound);
+            clearSelectedObjects();
+            addSelectedObject(sound);
         }
     }
 }
@@ -973,7 +971,6 @@ void Maratis::okAddFont(const char * filename)
 {
     if(filename)
     {
-        Maratis * maratis = Maratis::getInstance();
         Level * level = NeoEngine::getInstance()->getLevel();
         Scene * scene = level->getCurrentScene();
 
@@ -984,18 +981,18 @@ void Maratis::okAddFont(const char * filename)
             OText * text = scene->addNewText(fontRef);
 
             char name[256] = "Text0";
-            maratis->getNewObjectName("Text", name);
+            getNewObjectName("Text", name);
 
             text->setName(name);
             text->setText("Text");
 
             // set position
-            text->setPosition(*maratis->getSelectionCenter());
+            text->setPosition(*getSelectionCenter());
             text->setEulerRotation(Vector3(180, 0, 0));
             text->updateMatrix();
 
-            maratis->clearSelectedObjects();
-            maratis->addSelectedObject(text);
+            clearSelectedObjects();
+            addSelectedObject(text);
         }
     }
 }
@@ -1049,7 +1046,6 @@ void Maratis::updateTitle(const char * additional)
 void Maratis::okNewProject(const char * filename)
 {
     NeoWindow * window = NeoWindow::getInstance();
-    Maratis * maratis = Maratis::getInstance();
     SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 
     char file[256];
@@ -1093,14 +1089,14 @@ void Maratis::okNewProject(const char * filename)
 #endif
         // update
         window->setWorkingDirectory(rep);
-        strcpy(maratis->m_currentProject, file);
-        strcpy(maratis->m_currentLevel, "");
-        maratis->updateTitle();
+        strcpy(m_currentProject, file);
+        strcpy(m_currentLevel, "");
+        updateTitle();
 
         // new
-        maratis->restart();
-        maratis->newLevel();
-        maratis->loadGamePlugin();
+        restart();
+        newLevel();
+        loadGamePlugin();
     }
 }
 
@@ -1121,8 +1117,7 @@ void Maratis::newProject(void)
 
 void Maratis::okLoadProject(const char * filename)
 {
-    Maratis * maratis = Maratis::getInstance();
-    maratis->loadProject(filename);
+	loadProject(filename);
 }
 
 void Maratis::loadProject(void)
@@ -1229,8 +1224,7 @@ bool Maratis::loadLevel(const char * filename)
 
 void Maratis::okLoadLevel(const char * filename)
 {
-    Maratis * maratis = Maratis::getInstance();
-    maratis->loadLevel(filename);
+    loadLevel(filename);
 }
 
 void Maratis::loadLevel(void)
@@ -1272,7 +1266,6 @@ void Maratis::okSaveAs(const char * filename)
     if(! filename)
         return;
 
-    Maratis * maratis = Maratis::getInstance();
     NeoEngine * engine = NeoEngine::getInstance();
 
     // save level
@@ -1280,17 +1273,17 @@ void Maratis::okSaveAs(const char * filename)
     fileExtension(file, filename, ".level");
     if(xmlLevelSave(engine->getLevel(), file))
     {
-        strcpy(maratis->m_currentLevel, file);
+        strcpy(m_currentLevel, file);
         Project proj;
-        proj.startLevel = maratis->m_currentLevel;
-        if(maratis->m_renderer)
+        proj.startLevel = m_currentLevel;
+        if(m_renderer)
         {
-            const char * name = maratis->m_renderer->getName();
+            const char * name = m_renderer->getName();
             if(name)
                 proj.renderer = name;
         }
-        proj.saveXML(maratis->m_currentProject);
-        maratis->updateTitle();
+        proj.saveXML(m_currentProject);
+        updateTitle();
     }
 }
 

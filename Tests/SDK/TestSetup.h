@@ -2,27 +2,41 @@
 #ifndef _TEST_SETUP_H
 #define _TEST_SETUP_H
 
+#include <NeoEngine.h>
+#include <LuaBehavior.h>
+#include <WinContext.h>
+#include <PackageManagerNPK.h>
+#include <GuiSystem.h>
+#include <SDLThread.h>
+#include <Server.h>
+#include <BulletContext.h>
+#include <DummyContext.h>
+#include <Window/Window.h>
+
+#include <gtest/gtest.h>
+
 class TestNeoSDK: public testing::Test
 {
 public:
 
 	void SetUp()
 	{
-		NeoEngine* engine = NeoEngine::getInstance();
+		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 
-		NeoGame* game = new NeoGame();
+		Neo::NeoGame* game = new Neo::NeoGame();
 		Neo::LuaScript* script = new Neo::LuaScript();
-		Level* level = new Level();
-		SystemContext* context = (SystemContext*) new Neo::MWinContext();
+		Neo::Level* level = new Neo::Level();
+		Neo::SystemContext* context = (Neo::SystemContext*) new Neo::MWinContext();
 		MPackageManager* pmanager = new Neo::MPackageManagerNPK;
 		Neo::BulletContext* physcontext = new Neo::BulletContext();
-		RenderingContext* render = new Neo::DummyContext();
+		Neo::RenderingContext* render = new Neo::DummyContext();
 		
 		pmanager->init();
 
 		level->addNewScene();
 		level->setCurrentSceneId(0);
-
+		level->getCurrentScene()->setName("Scene-0");
+		
 		engine->setLevel(level);
 		engine->setScriptContext(script);
 		engine->setSystemContext(context);
@@ -34,9 +48,9 @@ public:
 		engine->getBehaviorManager()->addBehavior(Neo::LuaBehavior::getStaticName(), M_OBJECT3D, Neo::LuaBehavior::getNew);
 
 		// Init default thread
-		ThreadFactory* mgr = ThreadFactory::getInstance();
-		mgr->setTemplateSemaphore(new SDLSemaphore());
-		mgr->setTemplateThread(new SDLThread());
+		Neo::ThreadFactory* mgr = Neo::ThreadFactory::getInstance();
+		mgr->setTemplateSemaphore(new Neo::SDLSemaphore());
+		mgr->setTemplateThread(new Neo::SDLThread());
 
 		NeoWindow::getInstance()->createSemaphores();
 
@@ -46,7 +60,7 @@ public:
 	void TearDown()
 	{
 		//MLOG_INFO("Clearing engine");
-		NeoEngine* engine = NeoEngine::getInstance();
+		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 
 		delete engine->getSystemContext();
 		delete engine->getGame();
@@ -54,7 +68,7 @@ public:
 		delete engine->getScriptContext();
 		delete engine->getPackageManager();
 
-		ThreadFactory::getInstance()->clear();
+		Neo::ThreadFactory::getInstance()->clear();
 
 		engine->setLevel(NULL);
 		engine->setScriptContext(NULL);
