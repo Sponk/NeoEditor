@@ -75,3 +75,102 @@ TEST_F(EditorBackendTest, LoadLevel_test)
 	delete maratis;
 	resetEngine();
 }
+
+
+TEST_F(EditorBackendTest, Undo_test)
+{
+	NeoEngine* engine = NeoEngine::getInstance();
+	Maratis* maratis = new Maratis();
+
+	maratis->setRenderingContext(new DummyContext());
+	maratis->start();
+
+	Scene* scene = engine->getLevel()->getCurrentScene();
+
+	// Create new object
+	Object3d* obj = scene->addNewLight();
+	obj->setName("Light");
+
+	// Autosave
+	maratis->autoSave();
+
+	// Do some change
+	obj->setName("LightNewName");
+
+	// Check
+	EXPECT_EQ(0, strcmp("LightNewName", obj->getName()));
+	maratis->undo();
+
+	// Now the old name should be re-fetched
+	EXPECT_EQ(0, strcmp("Light", obj->getName()));
+	
+	delete maratis;
+	resetEngine();
+}
+
+TEST_F(EditorBackendTest, MultiUndo_test)
+{
+	NeoEngine* engine = NeoEngine::getInstance();
+	Maratis* maratis = new Maratis();
+
+	maratis->setRenderingContext(new DummyContext());
+	maratis->start();
+
+	Scene* scene = engine->getLevel()->getCurrentScene();
+
+	// Create new object
+	Object3d* obj = scene->addNewLight();
+	obj->setName("Light");
+
+	// Autosave
+	maratis->autoSave();
+
+	// Do some change
+	obj->setName("LightNewName");
+
+	maratis->autoSave();
+
+	// Do some change
+	obj->setName("Name");
+	
+	// Check
+	EXPECT_EQ(0, strcmp("Name", obj->getName()));
+	maratis->undo();
+
+	EXPECT_EQ(0, strcmp("LightNewName", obj->getName()));
+	maratis->undo();
+	
+	// Now the old name should be re-fetched
+	EXPECT_EQ(0, strcmp("Light", obj->getName()));
+	
+	delete maratis;
+	resetEngine();
+}
+
+TEST_F(EditorBackendTest, DuplicateObjects_test)
+{
+	NeoEngine* engine = NeoEngine::getInstance();
+	Maratis* maratis = new Maratis();
+
+	maratis->setRenderingContext(new DummyContext());
+	maratis->start();
+
+	Scene* scene = engine->getLevel()->getCurrentScene();
+
+	// Test duplicateObject
+	Object3d* obj = scene->addNewCamera();
+	obj->setName("Camera");
+
+	obj = maratis->duplicateObject(obj);
+
+	EXPECT_EQ(0, strcmp("Camera1", obj->getName()));
+
+	// Test duplicateSelection
+	maratis->addSelectedObject(obj);
+	maratis->duplicateSelectedObjects();
+
+	EXPECT_EQ(3, scene->getObjectsNumber());
+	
+	delete maratis;
+	resetEngine();
+}
