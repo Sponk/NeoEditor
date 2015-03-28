@@ -1,10 +1,6 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Maratis
-// MProject.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -66,8 +62,19 @@ bool Project::loadXML(const char * filename)
 	if(! rootNode)
 		return false;
 
-	if(strcmp(rootNode->Value(), "Maratis") != 0)
-		return false;
+	if (strcmp(rootNode->Value(), "Neo") != 0)
+	{
+		if (strcmp(rootNode->Value(), "Maratis") == 0)
+		{
+			MLOG_WARNING(
+				"You try to load a project that was created using Maratis.");
+		}
+		else
+		{
+			MLOG_ERROR("Can't load project: File is invalid!");
+			return false;
+		}
+	}
 
 	hRoot = TiXmlHandle(rootNode);
 
@@ -140,8 +147,9 @@ bool Project::saveXML(const char * filename)
 	char rep[256];
 	getRepertory(rep, filename);
 
-	char version[] = "3.0";
-	fprintf(file, "<Maratis version=\"%s\">\n\n", version);
+	/// BUG: Should use the real version!
+	char version[] = "0.4";
+	fprintf(file, "<Neo version=\"%s\">\n\n", version);
 
     // Write game config (post effects etc.)
     NeoGame* game = NeoEngine::getInstance()->getGame();
@@ -169,7 +177,7 @@ bool Project::saveXML(const char * filename)
 	}
 
 	fprintf(file, "</Project>\n\n");
-	fprintf(file, "</Maratis>");
+	fprintf(file, "</Neo>");
 
 	fclose(file);
 	return true;
