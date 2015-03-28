@@ -174,3 +174,96 @@ TEST_F(EditorBackendTest, DuplicateObjects_test)
 	delete maratis;
 	resetEngine();
 }
+
+TEST_F(EditorBackendTest, Redo_test)
+{
+	NeoEngine* engine = NeoEngine::getInstance();
+	Maratis* maratis = new Maratis();
+
+	maratis->setRenderingContext(new DummyContext());
+	maratis->start();
+
+	Scene* scene = engine->getLevel()->getCurrentScene();
+
+	// Create new object
+	Object3d* obj = scene->addNewLight();
+	obj->setName("Light");
+
+	// Autosave
+	maratis->autoSave();
+
+	// Do some change
+	obj->setName("LightNewName");
+
+	// Check
+	EXPECT_EQ(0, strcmp("LightNewName", obj->getName()));
+	maratis->undo();
+
+	// Now the old name should be re-fetched
+	EXPECT_EQ(0, strcmp("Light", obj->getName()));
+
+	// redo
+	maratis->redo();
+	
+	// Check
+	EXPECT_EQ(0, strcmp("LightNewName", obj->getName()));
+	maratis->undo();
+
+	// Now the old name should be re-fetched
+	EXPECT_EQ(0, strcmp("Light", obj->getName()));
+
+	delete maratis;
+	resetEngine();
+}
+
+TEST_F(EditorBackendTest, ProjectSave_test)
+{
+	
+	NeoEngine* engine = NeoEngine::getInstance();
+	Maratis* maratis = new Maratis();
+
+	maratis->setRenderingContext(new DummyContext());
+	maratis->start();
+
+    engine->getGame()->enablePostEffects();
+	MPostProcessor* pp = engine->getGame()->getPostProcessor();
+	pp->setShaderPath("shad.vert", "shad.frag");	
+	
+	Scene* scene = engine->getLevel()->getCurrentScene();
+
+	Object3d* obj = scene->addNewLight();
+	obj->setName("Light");
+	
+	obj = scene->addNewCamera();
+	obj->setName("Camera");
+
+	maratis->okSaveAs("test.level");
+	maratis->okNewProject("test.mproj");
+
+	// TODO: More serious checking!
+	EXPECT_EQ(true, isFileExist("test.level"));
+	EXPECT_EQ(true, isFileExist("test.mproj"));
+	
+	delete maratis;
+	resetEngine();
+}
+
+TEST_F(EditorBackendTest, ProjectLoad_test)
+{
+	
+	NeoEngine* engine = NeoEngine::getInstance();
+	Maratis* maratis = new Maratis();
+
+	maratis->setRenderingContext(new DummyContext());
+	maratis->start();
+
+	// Load the project
+	maratis->okLoadProject("test.mproj");
+
+	// Fetch the post processor
+	MPostProcessor* pp = engine->getGame()->getPostProcessor();
+	EXPECT_EQ(0, strcmp("shad.vert", pp->getVertexShader()));
+	
+	delete maratis;
+	resetEngine();
+}
