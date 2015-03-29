@@ -7,6 +7,7 @@ end
 
 Test3DSDK = {}
 Test2DSDK = {}
+TestDofile = {}
 
 function Test3DSDK:TestLight()
 

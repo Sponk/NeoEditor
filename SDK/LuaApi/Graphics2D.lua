@@ -39,9 +39,6 @@ dofile("QuadTree.lua")
 dofile("Collision.lua")
 dofile("Object3d.lua")
 
---global instance for Utils class
-util = Utils.create()
-
 --collision members
 quad = QuadTree.create()
 collision = Collision.create()

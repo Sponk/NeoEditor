@@ -5,8 +5,8 @@ Utils = {}
 
 Utils.PI = 3.1415927;
 
-Utils.RADTODEG = (180 / self.PI);
-Utils.DEGTORAD = (self.PI / 180);
+Utils.RADTODEG = (180 / Utils.PI);
+Utils.DEGTORAD = (Utils.PI / 180);
 
 --- Calculates the length of the given vector
 -- @param dx The X component
@@ -26,7 +26,7 @@ end
 function Utils.distanceBetween(a,b)
    local dx = a[1] - b[1];
    local dy =  a[2] - b[2];
-   return (self:vectorLength(dx, dy));
+   return (Utils.vectorLength(dx, dy));
 end
 
 --- Calculates the angle (in radians) between an two vectors.
