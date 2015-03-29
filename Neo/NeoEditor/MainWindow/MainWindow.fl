@@ -1,11 +1,11 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0303 
+version 1.0302 
 i18n_type 1 
 i18n_include "Translator.h" 
 i18n_function tr 
 header_name {.h} 
 code_name {.cxx}
-decl {\#include "Utils.h"} {selected private local
+decl {\#include "Utils.h"} {private local
 } 
 
 decl {\#include "Callbacks.h"} {private local
@@ -33,9 +33,9 @@ class EditorWindow {open
     Fl_Window {} {
       label {Neo Editor}
       callback window_quit open
-      xywh {488 277 907 612} type Double labelsize 11 align 80 resizable size_range {0 0 2048 2048} visible
+      xywh {646 267 910 610} type Double labelsize 11 align 80 resizable size_range {0 0 2048 2048} visible
     } {
-      Fl_Menu_Bar menu_bar {open
+      Fl_Menu_Bar menu_bar {
         xywh {0 0 920 25} selection_color 38
       } {
         Submenu {} {
@@ -291,7 +291,7 @@ class EditorWindow {open
           image {../../../Data/Editor/scale.png} xywh {282 27 39 24} type Radio box UP_FRAME down_box ROUND_DOWN_BOX shortcut 0x33
         }
         Fl_Choice scenes_menu {open
-          xywh {597 27 129 24} down_box BORDER_BOX
+          xywh {570 27 129 24} down_box BORDER_BOX
         } {}
         Fl_Group speed_group {open
           xywh {3 25 192 23}
@@ -311,10 +311,10 @@ class EditorWindow {open
         Fl_Check_Button vue_ortho_button {
           label Ortho
           callback ortho_callback
-          xywh {732 27 57 24} down_box DOWN_BOX shortcut 0x35
+          xywh {705 27 63 24} down_box DOWN_BOX shortcut 0x35
         }
         Fl_Choice {} {open
-          xywh {801 27 107 24} down_box BORDER_BOX
+          xywh {775 26 109 24} down_box BORDER_BOX
         } {
           MenuItem {} {
             label Other
@@ -349,17 +349,17 @@ class EditorWindow {open
         }
         Fl_Button {} {
           callback play_game_button_callback
-          image {../../../Data/Editor/buttonGame.png} xywh {333 27 39 24}
+          image {../../../Data/Editor/buttonGame.png} xywh {330 27 39 24}
         }
         Fl_Button {} {
           label {Play in Editor}
           callback play_game_in_editor
-          xywh {381 27 96 24} shortcut 0xffc3
+          xywh {375 27 104 24} shortcut 0xffc3
         }
         Fl_Button {} {
           label Console
           callback show_console_callback
-          xywh {486 27 84 24}
+          xywh {485 27 70 24}
         }
       }
       Fl_Tabs {} {open
@@ -476,7 +476,7 @@ class EditorWindow {open
           } {}
         }
       }
-      Fl_Group {} {open
+      Fl_Group dynamicToolbar {open
         xywh {200 55 485 30}
       } {}
       Fl_Tabs left_panel_tabs {open
@@ -486,13 +486,13 @@ class EditorWindow {open
           label Scene
           user_data 0 user_data_type long
           callback scene_tree_callback
-          xywh {0 70 200 565} selection_color 52 when 4 hide
+          xywh {0 70 200 565} selection_color 52 when 4
           code0 {\#include "DnDTree.h"}
           class DnDTree
         }
         Fl_Group {} {
           label {Project Directory} open
-          xywh {0 70 200 565}
+          xywh {0 70 200 565} hide
         } {
           Fl_File_Browser project_directory_browser {
             callback project_directory_callback
@@ -524,7 +524,7 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
           Fl_Value_Input light_radius_edit {
             label {Radius:}
             callback edit_light_properties
-            xywh {21 54 165 21} align 5 maximum 1e+007 step 2
+            xywh {21 54 165 21} align 5 maximum 1e+07 step 2
           }
           Fl_Value_Input light_color_r {
             label {Red:}
@@ -966,7 +966,8 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
       }
     }
   }
-  Function {create_sound_window()} {} {
+  Function {create_sound_window()} {open
+  } {
     Fl_Window {} {open
       xywh {418 129 258 720} type Double hide
     } {
@@ -1014,7 +1015,8 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
   decl {std::string scene_name;} {
     comment {Scene name to use when creating a new scene} public local
   }
-  Function {create_scene_window()} {} {
+  Function {create_scene_window()} {open
+  } {
     Fl_Window {} {
       label {New Scene} open
       xywh {1859 389 273 87} type Double hide modal
@@ -1035,7 +1037,7 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
       }
     }
   }
-  decl {MPluginScript* inputMethod;} {public local
+  decl {MPluginScript* inputMethod;} {selected public local
   }
   decl {int systemColors[3];} {private local
   }
@@ -1048,7 +1050,8 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
 decl {extern EditorWindow window;} {private local
 } 
 
-class SceneSetupDlg {} {
+class SceneSetupDlg {open
+} {
   Function {ok_button_callback(Fl_Button* button, SceneSetupDlg* dlg)} {open return_type {static void}
   } {}
   Function {cancel_button_callback(Fl_Button* button, void*)} {open return_type {static void}
@@ -1114,7 +1117,7 @@ class SceneSetupDlg {} {
     code {NeoEngine* engine = NeoEngine::getInstance();
 Scene* scene = engine->getLevel()->getCurrentScene();
 
-MVector3 ambientLight = scene->getAmbientLight();
+Vector3 ambientLight = scene->getAmbientLight();
 color_r->value(ambientLight.x);
 color_g->value(ambientLight.y);
 color_b->value(ambientLight.z);} {}
@@ -1125,7 +1128,8 @@ color_b->value(ambientLight.z);} {}
   }
 } 
 
-class PlayerConsole {} {
+class PlayerConsole {open
+} {
   Function {create_window()} {open
   } {
     Fl_Window {} {
@@ -1149,7 +1153,8 @@ class PlayerConsole {} {
   }
 } 
 
-class MaterialEditDlg {} {
+class MaterialEditDlg {open
+} {
   decl {char object_name[256];} {private local
   }
   Function {create_window(const char* name)} {open
@@ -1311,7 +1316,8 @@ material_changed(materials_chooser, this);} {}
   } {}
 } 
 
-class AboutDlg {} {
+class AboutDlg {open
+} {
   Function {create_window()} {open
   } {
     Fl_Window {} {
@@ -1342,7 +1348,8 @@ class AboutDlg {} {
   }
 } 
 
-class PublishDlg {} {
+class PublishDlg {open
+} {
   decl {Fl_Window* window;} {private local
   }
   Function {create_window()} {open
@@ -1406,7 +1413,8 @@ Function {new_scene_ok_callback(Fl_Button* button,void*)} {open
 Function {new_scene_cancel_callback(Fl_Button* button,void*)} {open
 } {} 
 
-class ConstraintPropertiesDlg {} {
+class ConstraintPropertiesDlg {open
+} {
   decl {Fl_Window* win;} {private local
   }
   Function {create_window()} {open
@@ -1575,7 +1583,7 @@ if(!constraint)
 
 enabled_button->value(1);
 
-MVector3 vector;
+Vector3 vector;
 
 vector = constraint->pivot;
 xpivot_edit->value(vector.x);
@@ -1613,7 +1621,8 @@ parent_input->value(constraint->parentName.getSafeString());} {}
   } {}
 } 
 
-class ConfigurationDlg {} {
+class ConfigurationDlg {open
+} {
   decl {Fl_Text_Buffer text_buffer;} {private local
   }
   Function {create_window()} {open
@@ -1627,7 +1636,7 @@ class ConfigurationDlg {} {
       } {
         Fl_Group {} {
           label Theme open
-          xywh {3 27 543 318}
+          xywh {3 27 543 318} hide
         } {
           Fl_Choice theme_chooser {
             label {Themes:}
@@ -1747,7 +1756,7 @@ class ConfigurationDlg {} {
         }
         Fl_Group {} {
           label Plugins open
-          xywh {0 27 546 318} box DOWN_BOX hide
+          xywh {0 27 546 318} box DOWN_BOX
         } {
           Fl_Browser plugin_browser {
             user_data this user_data_type {ConfigurationDlg*}
@@ -1879,8 +1888,10 @@ description_edit->buffer(&text_buffer);} {}
   } {}
 } 
 
-class PostEffectsDlg {} {
-  Function {create_window()} {} {
+class PostEffectsDlg {open
+} {
+  Function {create_window()} {open
+  } {
     Fl_Window {} {
       label {Post Effects Setup} open
       xywh {2089 371 591 348} type Double hide
@@ -2042,7 +2053,8 @@ else
   } {}
 } 
 
-class WaitDlg {} {
+class WaitDlg {open
+} {
   Function {create_window()} {open
   } {
     Fl_Window {} {
