@@ -25,89 +25,80 @@ Object3d = class(
 --- Finds the object with the given name in the current scene
 -- and constructs a new Object3d instance for it.
 --
--- Example:
---[[
-function onSceneUpdate()
-  -- Get the object with name "Entity0"
-  object = Object3d.getObject("Entity0")
-end
-]]
+-- <strong>Example:</strong>
 --
---
--- name: The object name.
---
--- return: A new Object3d instance
---
+-- /code
+-- function onSceneUpdate()
+--     -- Get the object with name "Entity0"
+--     object = Object3d.getObject("Entity0")
+-- end
+-- /endcode
+
+--- Static methods to fetch the object with the given name.
+-- @param name The object name.
+-- @param return A new Object3d instance containing the fetched object.
 function Object3d.getObject(name)
     local object = Object3d(getObject(name))
     return object
 end
 
 --- Returns the position of the object.
---
--- returns: A vec3 containing the position.
+-- @returns A vec3 containing the position.
 function Object3d:getPosition()
     return self.position
 end
 
 --- Returns the rotation of the object.
---
--- returns: A vec3 containing the rotation.
+-- @returns A vec3 containing the rotation.
 function Object3d:getRotation()
     return self.rotation
 end
 
 --- Returns the scale of the object.
---
--- returns: A vec3 containing the scale.
+-- @returns A vec3 containing the scale.
 function Object3d:getScale()
     return self.scale
 end
 
 --- Sets the position of the object
---
--- pos: The new position as a vec3
+-- @param pos The new position as a vec3
 function Object3d:setPosition(pos)
     self.position = vec3(pos[1], pos[2], pos[3])
     setPosition(self.nativeObject, pos)
 end
 
 --- Sets the rotation of the object
---
--- pos: The new rotation as a vec3
+-- @param pos The new rotation as a vec3
 function Object3d:setRotation(rot)
     self.rotation = vec3(rot[1], rot[2], rot[3])
     setRotation(self.nativeObject, rot)
 end
 
 --- Sets the scale of the object
---
--- pos: The new scale as a vec3
+-- @param pos The new scale as a vec3
 function Object3d:setScale(scale)
     self.scale = vec3(scale[1], scale[2], scale[3])
     setScale(self.nativeObject, scale)
 end
 
 --- Translates the object by the given vec3
---
 -- The mode parameter is optional and should contain "local" when a local translation
 -- should be executed. If this parameter is not given the translation will be done in
 -- world space.
 --
--- Example:
---[[
-function onSceneUpdate()
-  -- Translate 50 units towards the global Z-Axis
-  object:translate({0,0,50})
-
-  -- Translate 50 units towards the local Y-Axis
-  object:translate({0,50,0}, "local")
-end
-]]
+-- <strong>Example:</strong>
+-- /code
+-- function onSceneUpdate()
+--     -- Translate 50 units towards the global Z-Axis
+--     object:translate({0,0,50})
 --
--- vec: A vec3 containing the direction to translate towards.
+--     -- Translate 50 units towards the local Y-Axis
+--     object:translate({0,50,0}, "local")
+-- end
+-- /endcode
 --
--- mode: The mode of the translation. Either nil or "local"
+-- @param vec A vec3 containing the direction to translate towards.
+-- @param mode The mode of the translation. Either nil or "local"
 function Object3d:translate(vec, mode)
     translate(self.nativeObject, vec, mode)
     self.position = getPosition(self.nativeObject)
@@ -120,21 +111,19 @@ end
 -- world space.
 --
 -- Example:
---[[
-function onSceneUpdate()
-  -- Rotate 10° globally around the Z-Axis
-  object:rotate({0,0,1}, 10)
-
-  -- Rotate 10° locally around the X-Axis
-  object:rotate({1,0,0}, 10, "local")
-end
-]]
+-- /code
+-- function onSceneUpdate()
+--     -- Rotate 10° globally around the Z-Axis
+--     object:rotate({0,0,1}, 10)
 --
--- axis: A vec3 containing the axis to rotate around
+--     -- Rotate 10° locally around the X-Axis
+--     object:rotate({1,0,0}, 10, "local")
+-- end
+-- /endcode
 --
--- amount: The amount of how much to rotate
---
--- mode: The mode of the rotation. Either nil or "local"
+-- @param axis A vec3 containing the axis to rotate around
+-- @param amount The amount of how much to rotate
+-- @param mode The mode of the rotation. Either nil or "local"
 function Object3d:rotate(axis, amount, mode)
     rotate(self.nativeObject, axis, amount, mode)
     self.rotation = getRotation(self.nativeObject)
@@ -142,8 +131,7 @@ function Object3d:rotate(axis, amount, mode)
 end
 
 --- Returns the parent of the object or 'nil' if there isn't any.
---
--- return: The parent object as Object3d.
+-- @return The parent object as Object3d.
 function Object3d:getParent()
     local nativeParent = getParent(self.nativeObject)
 
@@ -158,20 +146,21 @@ end
 --
 -- You can remove the parent by setting the parent to 'nil'
 --
--- Example:
---[[
-function onSceneUpdate()
-  local newParent = Object3d.getObject("Parent")
-
-  -- Set the new parent
-  object:setParent(newParent)
-
-  -- Remove parent
-  object:setParent(nil)
-end
-]]
+-- <strong>Example:</strong>
 --
--- object: An Object3d instance that will be the new parent.
+-- /code
+-- function onSceneUpdate()
+--     local newParent = Object3d.getObject("Parent")
+--
+--     -- Set the new parent
+--     object:setParent(newParent)
+--
+--     -- Remove parent
+--     object:setParent(nil)
+-- end
+-- /endcode
+--
+-- @param object An Object3d instance that will be the new parent.
 function Object3d:setParent(object)
     if object == nil then
     	setParent(self.nativeObject, nil)
@@ -182,8 +171,7 @@ function Object3d:setParent(object)
 end
 
 --- Returns the name of the object.
---
--- return: The name as a string
+-- @return The name as a string
 function Object3d:getName()
     return getName(self.nativeObject)
 end
@@ -194,7 +182,6 @@ function Object3d:activate()
 end
 
 --- Deactivates an inactive Object3d.
---
 -- This function does _not_ delete the object from the scene!
 -- The object will be invisible and physically inactive but 'not deleted'!
 function Object3d:deactivate()
@@ -202,20 +189,21 @@ function Object3d:deactivate()
 end
 
 --- Sets the activity status.
---
 -- Calls either Object3d:activate or Object3d:deactivate to set the status.
 --
--- Example:
---[[
-function onSceneUpdate()
-  -- Activate the object
-  object:setActive(true)
-
-  -- Deactivate the object
-  object:setActive(false)
-end
-]]
--- status: A boolean representing the new status.
+-- <strong>Example:</strong>
+--
+-- /code
+-- function onSceneUpdate()
+--     -- Activate the object
+--     object:setActive(true)
+--
+--     -- Deactivate the object
+--     object:setActive(false)
+-- end
+-- /endcode
+--
+-- @param status A boolean representing the new status.
 function Object3d:setActive(status)
     if status then
 	self:activate()
@@ -225,27 +213,22 @@ function Object3d:setActive(status)
 end
 
 --- Returns the current activation status of the object.
---
--- return: A boolean.
+-- @return A boolean.
 function Object3d:isActive()
     return isActive(self.nativeObject)
 end
 
 --- Creates a clone of the object and returns it as an Object3d.
---
 -- This will only clone the object and not the children.
 -- Children need to be cloned manually!
---
--- return: The clone as Object3d
+-- @return: The clone as Object3d
 function Object3d:getClone()
     return Object3d(getClone(self.nativeObject))
 end
 
 --- Returns a table with all of the objects children.
---
 -- The children are of the type Object3d.
---
--- return: A list of Object3d
+-- @return A list of Object3d
 function Object3d:getChildren()
     local nativeList = getChilds(self.nativeObject)
     local objects = {}

@@ -10,7 +10,7 @@ dofile("Object3d.lua")
 --- OSound(file)
 -- Creates a new sound object and loads the specified file.
 --
--- file: A string containing the path to a sound file.
+-- @param file A string containing the path to a sound file.
 OSound = class(Object3d,
    function(obj, file)
 	  if not isstring(file) then error("OSound requires a file path!") end
@@ -28,16 +28,14 @@ OSound = class(Object3d,
 )
 
 --- Sets sound gain.
---
--- g: The new sound gain as a number.
+-- @param g The new sound gain as a number.
 function OSound:setGain(g)
    self.gain = g
    setSoundGain(self.nativeObject, g)
 end
 
 --- Sets if the sound should repeat in a loop.
---
--- looping: A boolean.
+-- @param looping A boolean.
 function OSound:setLooping(looping)
    self.looping = looping
    setSoundLooping(self.nativeObject, tonumber(looping))

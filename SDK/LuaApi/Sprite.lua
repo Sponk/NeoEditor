@@ -6,36 +6,31 @@ dofile("Widget.lua")
 --
 -- See also: <a href="Widget.lua.html">Widget</a>
 --
--- Example:
---[[
-  dofile("SDK/Graphics2D.lua")
-
-  -- Load a sprite without caption
-  sprite = Sprite(20,20,90,90,"maps/sprite.png", "")
-
-  -- Add sprite to the main canvas
-  mainCanvas:addWidget(sprite)
-
-  function onSceneUpdate()
-    -- Rotate sprite by 2° every frame
-    sprite:rotate(2)
-  end
-]]
+-- <strong>Example:</strong>
+--
+-- /code
+--  dofile("SDK/Graphics2D.lua")
+--
+--  -- Load a sprite without caption
+--  sprite = Sprite(20,20,90,90,"maps/sprite.png", "")
+--
+--  -- Add sprite to the main canvas
+--  mainCanvas:addWidget(sprite)
+--
+--  function onSceneUpdate()
+--    -- Rotate sprite by 2° every frame
+--    sprite:rotate(2)
+--  end
+-- /endcode
 
 --- Sprite(x,y,w,h,file,text)
 -- Loads a texture into memory and creates a Sprite object with it.
---
--- x: The x position on the canvas
---
--- y: The y position on the canvas
---
--- w: The width of the widget
---
--- h: The height of the widget
---
--- file: The image file to load
---
--- text: (optional) The label of the widget
+-- @param x The x position on the canvas
+-- @param y The y position on the canvas
+-- @param w The width of the widget
+-- @param h The height of the widget
+-- @param file The image file to load
+-- @param text (optional) The label of the widget
 Sprite = class(
 	Widget,
 

@@ -2,31 +2,19 @@ dofile("class.lua")
 
 --- The SpriteAnimation class
 -- Contains the primitives to play animations using a sprite sheet.
---
----- Class members
--- start: First frame of the animation
--- 
--- length: The length of the animation. The last frame shown is (start + length)
--- 
--- delay: The delay between frames in milliseconds
--- 
--- looping: A boolean which contains whether or not too loop the animation.
--- 
--- currentFrame: the current frame
--- 
--- lastTime: The last time the frame got switched. DO NOT MODIFY!
-
+-- @param start First frame of the animation
+-- @param length The length of the animation. The last frame shown is (start + length)
+-- @param delay The delay between frames in milliseconds
+-- @param looping A boolean which contains whether or not too loop the animation.
+-- @param currentFrame the current frame
+-- @param lastTime The last time the frame got switched. DO NOT MODIFY!
 
 --- SpriteAnimation(start,length,delay,looping)
 -- Create a SpriteAnimation object.
---
--- start: The first frame of the animation in the sprite sheet.
---
--- length: The length of the animation in frames.
---
--- delay: The delay between frames in milliseconds.
---
--- looping: A boolean specifying if the animation should loop after finishing.
+-- @param start The first frame of the animation in the sprite sheet.
+-- @param length The length of the animation in frames.
+-- @param delay The delay between frames in milliseconds.
+-- @param looping A boolean specifying if the animation should loop after finishing.
 SpriteAnimation = class(
 	function(object, start, length, delay, looping)
 	    object.start = start
@@ -39,8 +27,8 @@ SpriteAnimation = class(
 	end)
 
 --- Calculates the next frame in the animation
---
 -- and returns the new frame number in the sprite sheet as a number.
+-- @return The next frame number.
 function SpriteAnimation:nextFrame()
 
     -- Only update if the delay is over

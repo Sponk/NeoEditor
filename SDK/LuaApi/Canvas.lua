@@ -19,8 +19,7 @@ Canvas = class(
 mainCanvas = Canvas(getMainCanvas())
 
 --- Adds a Widget to the Canvas.
---
--- widget: The Widget object. See also Widget.
+-- @param widget The Widget object. See also Widget.
 function Canvas:addWidget(widget)
     addWidgetToCanvas(self.canvas, widget.widget)
 end

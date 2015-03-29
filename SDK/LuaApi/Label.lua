@@ -7,27 +7,24 @@ dofile("Widget.lua")
 --
 -- See also: <a href="Widget.lua.html">Widget</a>
 --
--- Example:
---[[
--- Create a label
-label = Label(10, 10, 100, 20, "This is an input field!")
-
--- Add it to the main canvas
-mainCanvas:addWidget(label)
-]]
+-- <strong>Example:</strong>
+--
+-- /code
+-- -- Create a label
+-- label = Label(10, 10, 100, 20, "This is an input field!")
+--
+-- -- Add it to the main canvas
+-- mainCanvas:addWidget(label)
+-- /endcode
 
 --- Label(x,y,w,h,text)
 -- Creates a new button.
 --
--- x: The x position on the canvas
---
--- y: The y position on the canvas
---
--- w: The width of the widget
---
--- h: The height of the widget
---
--- text: The label of the widget
+-- @param x The x position on the canvas
+-- @param y The y position on the canvas
+-- @param w The width of the widget
+-- @param h The height of the widget
+-- @param text The label of the widget
 Label = class(
 	Widget,
 

@@ -7,33 +7,27 @@ dofile("Widget.lua")
 -- See also: <a href="Widget.lua.html">Widget</a>
 --
 -- Example:
---[[
--- The button callback
-function button_callback()
-    print("Button pressed!")
-end
-
--- Create a button
-button = Button(10, 10, 100, 20, "This is a button!", "button_callback")
-
--- Add it to the main canvas
-mainCanvas:addWidget(button)
-]]
+-- /code
+-- -- The button callback
+-- function button_callback()
+--     print("Button pressed!")
+-- end
+-- 
+-- -- Create a button
+-- button = Button(10, 10, 100, 20, "This is a button!", "button_callback")
+-- 
+-- -- Add it to the main canvas
+-- mainCanvas:addWidget(button)
+-- /endcode
 
 --- Button(x,y,w,h,text,callback)
 -- Creates a new button.
---
--- x: The x position on the canvas
---
--- y: The y position on the canvas
---
--- w: The width of the widget
---
--- h: The height of the widget
---
--- text: The label of the widget
---
--- callback: (optional) The callback of the button
+-- @param x The x position on the canvas
+-- @param y The y position on the canvas
+-- @param w The width of the widget
+-- @param h The height of the widget
+-- @param text The label of the widget
+-- @param callback (optional) The callback of the button
 Button = class(
 	Widget,
 
