@@ -4,7 +4,6 @@
 #include <cstring>
 #include <fstream>
 #include <algorithm>
-#include <cerrno>
 
 #include "LuaSource.h"
 
@@ -21,6 +20,7 @@ using namespace std;
 struct Settings
 {
 	vector<string> inputFiles;
+	string indexFile;
 	string outputDirectory;
 	bool showHelp;
 };
@@ -44,6 +44,10 @@ Settings parseCommandLine(int argc, char* argv[])
 		{
 			s.outputDirectory = argv[++i];
 		}
+		else if (!strcmp("-i", argv[i]))
+		{
+			s.indexFile = argv[++i];
+		}
 		else if (!strcmp(argv[i], "-h"))
 		{
 			s.showHelp = true;
@@ -64,6 +68,7 @@ void displayHelp()
 	cout << "from Lua source files. The syntax is similar to doxygen." << endl;
 	cout << endl;
 	cout << "Usage: mondoc -o <output> <input files>" << endl;
+	cout << "\t-i: The file used to produce the index.html" << endl;
 	cout << "\t-o: Selects the output directory" << endl;
 	cout << endl;
 	cout << "\"Der Mond, das blasse Auge der Nacht.\" - Heinrich Heine" << endl; 
@@ -91,7 +96,6 @@ string getPath(string filename)
 
 void copyFile(string src, string dest)
 {
-	cout << "Copying " << src << " to " << dest << endl;
 	ifstream in;
 	ofstream out;
 
@@ -112,6 +116,82 @@ void copyFile(string src, string dest)
 
 	out << in.rdbuf();
 	in.close();
+	out.close();
+}
+
+void writeHtml(string luaFilename, string outputDirectory, int idx, Settings& s, ofstream& searchOut, string outputFilename = "")
+{
+
+	string filename;
+	string title;
+
+	if(outputFilename.empty())
+		title = getFilename(luaFilename);
+	else
+		title = outputFilename;
+	
+	ofstream out;
+	out.open((outputDirectory + SEPERATOR + title + ".html").c_str(), ios::out);
+	if (!out)
+	{
+		cout << "Could not write file!" << endl;
+		return;
+	}
+
+	out << "<head>" << endl;
+	out << "<title> Reference | " << title << "</title>" << endl;
+	out << "</head>" << endl;
+
+	// Start writing html stuff
+	out << "<html>" << endl;
+	out << "<script src=\"lunr.js\"></script>" << endl;
+	out << "<script src=\"searchprovider.js\"></script>" << endl;
+	out << "<script src=\"searchindex.js\"></script>" << endl;
+	out << "<script src=\"highlight.pack.js\"></script>" << endl;
+	out << "<script>hljs.initHighlightingOnLoad();</script>" << endl;
+
+	out << "<body onload='processOnLoadSearch();'>" << endl;
+	out << "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\"/>"
+		<< endl;
+
+	out << "<link rel=\"stylesheet\" type=\"text/css\" "
+		   "href=\"syntax-style.css\"/>" << endl;
+
+	out << "<div class='function' id='searchresults'></div>" << endl;
+	out << "<div class='sidepanel'>" << endl;
+
+	// Write search field
+	out << "<form>" << endl;
+	out << "<input type=\"text\" name=\"searchedit\" "
+		   "placeholder=\"Search...\">" << endl;
+	out << "<input type=\"button\" name=\"\" value=\"Search\"";
+	out << " onclick=\"submitSearch(this.form.searchedit.value); return "
+		   "false;\">" << endl;
+	out << "</form>" << endl;
+
+	for (int j = 0; j < s.inputFiles.size(); j++)
+	{
+		filename = getFilename(s.inputFiles[j]);
+
+		out << "<a class='filelink' href='" << filename;
+		out << ".html'>" << filename << "</a><br>" << endl;
+	}
+
+	out << "</div>" << endl;
+
+	string html = generateHtml(luaFilename.c_str());
+	out << html << "</body></html>";
+
+	std::replace(html.begin(), html.end(), '\"', '\'');
+	std::replace(html.begin(), html.end(), '\n', ' ');
+
+	searchOut << "index.add({ id: " << idx << ", title: '";
+	searchOut << title << "', ";
+	searchOut << "body: \"" << html << "\"});" << endl;
+
+	searchOut << "sites.push({title: '" << title << "',";
+	searchOut << "link: '" << title << ".html'});" << endl;
+
 	out.close();
 }
 
@@ -149,7 +229,6 @@ int main(int argc, char* argv[])
 	{
 		cout << "Could not write search index!" << endl;
 		cout << (s.outputDirectory + SEPERATOR + "searchindex.js") << endl;
-		cout << "Error: " << strerror(errno) << endl;
 		return 1;
 	}
 
@@ -160,71 +239,14 @@ int main(int argc, char* argv[])
 
 	searchOut << "var sites = Array();" << endl;
 
-	string filename;
-	string title;
+	if (!s.indexFile.empty())
+	{
+		writeHtml(s.indexFile, s.outputDirectory, 0, s, searchOut, "index");
+	}
+
 	for (int i = 0; i < s.inputFiles.size(); i++)
 	{
-		title = getFilename(s.inputFiles[i]);
-		ofstream out;
-		out.open((s.outputDirectory + SEPERATOR + title + ".html").c_str(),
-				 ios::out);
-		if (!out)
-		{
-			cout << "Could not write file!" << endl;
-			continue;
-		}
-
-		// Start writing html stuff
-		out << "<html>" << endl;
-		out << "<script src=\"lunr.js\"></script>" << endl;
-		out << "<script src=\"searchprovider.js\"></script>" << endl;
-		out << "<script src=\"searchindex.js\"></script>" << endl;
-		out << "<script src=\"highlight.pack.js\"></script>" << endl;
-		out << "<script>hljs.initHighlightingOnLoad();</script>" << endl;
-		
-		out << "<body onload='processOnLoadSearch();'>" << endl;
-		out << "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\"/>"
-			<< endl;
-
-		out << "<link rel=\"stylesheet\" type=\"text/css\" href=\"syntax-style.css\"/>"
-			<< endl;
-		
-		out << "<div class='function' id='searchresults'></div>" << endl;
-		out << "<div class='sidepanel'>" << endl;
-
-		// Write search field
-		out << "<form>" << endl;
-		out << "<input type=\"text\" name=\"searchedit\" "
-			   "placeholder=\"Search...\">" << endl;
-		out << "<input type=\"button\" name=\"\" value=\"Search\"";
-		out << " onclick=\"submitSearch(this.form.searchedit.value); return "
-			   "false;\">" << endl;
-		out << "</form>" << endl;
-
-		for (int j = 0; j < s.inputFiles.size(); j++)
-		{
-			filename = getFilename(s.inputFiles[j]);
-
-			out << "<a class='filelink' href='" << filename;
-			out << ".html'>" << filename << "</a><br>" << endl;
-		}
-
-		out << "</div>" << endl;
-
-		string html = generateHtml(s.inputFiles[i].c_str());
-		out << html << "</body></html>";
-
-		std::replace(html.begin(), html.end(), '\"', '\'');
-		std::replace(html.begin(), html.end(), '\n', ' ');
-
-		searchOut << "index.add({ id: " << i << ", title: '";
-		searchOut << title << "', ";
-		searchOut << "body: \"" << html << "\"});" << endl;
-
-		searchOut << "sites.push({title: '" << title << "',";
-		searchOut << "link: '" << title << ".html'});" << endl;
-
-		out.close();
+		writeHtml(s.inputFiles[i], s.outputDirectory, i, s, searchOut);
 	}
 
 	return 0;
