@@ -48,8 +48,14 @@ Settings parseOpt(int argc, char* argv[])
 	}
 
 	s.printHelp = false;
+
+#ifndef WIN32
 	s.outputDirectory = "./published";
 	s.player = "NeoPlayer";
+#else
+	s.outputDirectory = ".\\published";
+	s.player = "NeoPlayer.exe";
+#endif
 	
 	string arg;
 	string opt;

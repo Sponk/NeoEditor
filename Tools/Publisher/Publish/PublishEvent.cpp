@@ -49,17 +49,13 @@ void setPlayerExecutable(const char* file)
 const char* getPlayerExecutable()
 {
 	if (!s_playerExecutable.empty())
-#ifndef WIN32
 		return s_playerExecutable.c_str();
-#else
-		return (s_playerExecutable + ".exe").c_str();
-#endif
 
-#ifdef WIN32
-	return "NeoPlayer.exe";
-#else
-	return "NeoPlayer";
-#endif
+		/*#ifdef WIN32
+		  return "NeoPlayer.exe";
+		  #else
+		  return "NeoPlayer";
+		  #endif*/
 }
 
 void setPubDir(const char* dir)
@@ -247,16 +243,7 @@ class PublishEventMeshsPackage : public PublishEvent
 					binarized = exportTexturesAnimBin((files[i] + "._bin").c_str(), texAnim);
 			}
 			else
-			{
-				
-				/*if(strstr(files[i].c_str(), ".dae") != 0)
-				  {
-				  if(M_loadAssimpMesh(files[i].c_str(), mesh))
-				  binarized = exportMeshBin((files[i] + "._bin").c_str(), mesh);
-				  else
-				  continue;
-				  }*/
-				
+			{				
 				// try to export unknow format
 				if(engine->getMeshLoader()->loadData(files[i].c_str(), mesh))
 				{
@@ -322,6 +309,7 @@ static void embedProject(const char * src, const char * dest, const char * game,
 	if (!fp)
 	{
 		MLOG_ERROR("Could not embed static data into the player!");
+		MLOG_ERROR("Could not open file: " << src);
 		return;
 	}
 
@@ -414,7 +402,6 @@ void copySysWindows(const char* projName)
 
 			char level[256];
 			getLocalFilename(level, system->getWorkingDirectory(), proj.startLevel.c_str());
-
 			// we need the project "filename" to still be a .mproj for NeoPlayer to behave
 			// correctly
 			strcpy(ext, ".mproj");
