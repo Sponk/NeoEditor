@@ -16,6 +16,10 @@ o2.damping = 0.6
 
 setCanvasCameraPosition(mainCanvas.canvas, {320,0})
 
+function getDelta()
+   return 1/60
+end
+
 function onSceneUpdate()
 
     --Position of the sprite needs to be the same as the collision body's pos

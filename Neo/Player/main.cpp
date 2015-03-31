@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MaratisPlayer
-// main.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 //  Maratis, Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -95,21 +90,6 @@ double updatecount = -1;
 int updatemax = 0;
 int updatemin = -1;
 
-double prev_tick = 0;
-double curr_tick = SDL_GetTicks();
-float delta = 0;
-
-int getDelta()
-{
-	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-
-	script->pushFloat(delta);
-	return 1;
-}
-void setupLuaInterface(ScriptContext* script)
-{
-	script->addFunction("getDelta", getDelta);
-}
 int update_thread(void* nothing)
 {
     NeoWindow * window = NeoWindow::getInstance();
@@ -129,14 +109,9 @@ int update_thread(void* nothing)
 
     while(updateThreadRunning)
     {
-		prev_tick = curr_tick;
-		curr_tick = SDL_GetTicks();
-
 		// Get input
         NeoEngine::getInstance()->getInputContext()->flush();
         window->onEvents();
-
-		delta = (curr_tick - prev_tick) / 1000.0f;
 
 		window->getUpdateSemaphore()->WaitAndLock();
         if(window->getFocus())
@@ -291,8 +266,7 @@ int main(int argc, char **argv)
 		{
             // Initialize GUI bindings
 			Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
-			setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
-			engine->getGame()->begin();
+	    	engine->getGame()->begin();
 			projectFound = true;
 		}
 	}
@@ -337,8 +311,6 @@ int main(int argc, char **argv)
 					{
                         // Initialize GUI bindings
 						Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
-						setupLuaInterface(
-							NeoEngine::getInstance()->getScriptContext());
 						// This needs to be done in the update thread
 						// engine->getGame()->begin();
 						projectFound = true;
