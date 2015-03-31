@@ -18,12 +18,13 @@
 //
 //========================================================================
 
-#include <stdio.h>
+#include <cstdio>
+#include <algorithm>
 
 // For linking Glew
 #define GLEW_STATIC
 
-// GL, TODO : remove opengl call (should use MRenderingContext to be fully
+// GL, TODO : remove opengl call (should use RenderingContext to be fully
 // virtual)
 #ifdef _WIN32
 #include <glew.h>
@@ -290,6 +291,31 @@ void Maratis::publish(void)
         Publisher * publisher = Publisher::getInstance();
         publisher->publish(m_currentProject);
     }
+}
+
+void Maratis::publish(const char* dest, const char* exec)
+{
+	char tooldir[256];
+	getGlobalFilename(
+		tooldir,
+		NeoWindow::getInstance()->getCurrentDirectory(),
+		"neo-publish");
+	
+	// FIXME: DON'T USE SYSTEM!
+	string cmd = tooldir;
+	cmd += " -e ";
+	cmd += exec;
+	cmd += " -o ";
+	cmd += dest;
+	cmd += " -i ";
+	cmd += m_currentProject;
+
+#ifdef WIN32
+	std::replace(cmd.begin(), cmd.end(), '/', '\\');
+#endif
+
+	MLOG_INFO("Calling publisher: " << cmd);
+	system(cmd.c_str());
 }
 
 void Maratis::changeRenderer(const char * name)

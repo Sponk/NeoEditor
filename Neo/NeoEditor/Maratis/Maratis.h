@@ -350,6 +350,7 @@ public:
 
 	// publish
 	void publish(void);
+	void publish(const char* dest, const char* exec);
 	
 	// main loops
 	static void logicLoop(void);

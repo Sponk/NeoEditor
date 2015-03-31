@@ -257,20 +257,25 @@ void PublishDlg::publish_click(Fl_Button*, PublishDlg* dlg)
 {
 	Maratis* maratis = Maratis::getInstance();
 
-	setPubDir(dlg->output_edit->value());
-	std::string oldLevel = maratis->getCurrentLevel();
+	char dir[256];
+#ifndef WIN32
+	getGlobalFilename(
+		dir,
+		NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(),
+		"NeoPlayer");
+#else
+	getGlobalFilename(
+		dir,
+		NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(),
+		"NeoPlayer.exe");
+#endif
 
 	// TODO: Make more efficient!
 	maratis->save();
-	maratis->loadLevel(dlg->level_edit->value());
-	maratis->save();
-
-	maratis->publish();
+	maratis->publish(dlg->output_edit->value(), dir);
 
 	// TODO: Error checking!
 	fl_message("Project was successfully published!");
-
-	maratis->loadLevel(oldLevel.c_str());
 	dlg->window->hide();
 	delete dlg;
 }
