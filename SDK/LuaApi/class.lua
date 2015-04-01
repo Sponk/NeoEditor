@@ -1,4 +1,31 @@
 --- The Class interface
+-- This function is used to generate class constructors that support
+-- inheritance to allow more sophisticated object oriented design.
+--
+-- Inheritance allows using all methods in subclasses.
+-- <strong>Attention:</strong> Fields will not be available in the subclass!
+--
+-- Example:
+--
+-- /code
+-- Constructor = class(
+--     function(self, arg)
+--         -- This is the actual constructor!
+--         self.somevar = arg
+--     end
+-- )
+--
+-- ConstructorChild = class( Constructor,
+--     function(self, arg)
+--          self.somevar = arg
+--     end
+-- )
+--
+-- function Constructor:someMethod()
+--     -- Do something!
+-- end
+-- /endcode
+--
 -- Taken from: <a href="http://lua-users.org/wiki/SimpleLuaClasses">lua-users.org</a>
 --
 -- class.lua <br>
