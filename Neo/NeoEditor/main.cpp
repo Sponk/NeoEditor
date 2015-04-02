@@ -25,7 +25,7 @@
 #include <iterator>
 #include <NeoEngine.h>
 #include <ImageLoader.h>
-#include "Maratis/Maratis.h"
+#include "Backend/EditorBackend.h"
 #include <FL/Fl.H>
 #include <NeoCore.h>
 #include <SDL.h>
@@ -67,69 +67,6 @@ extern void update_editor(void*);
 Fl_Double_Window* main_window = NULL;
 EditorWindow window;
 const char* executable = NULL;
-
-std::vector<MPluginScript*> editorPlugins;
-
-bool vectorContains(std::string name)
-{
-	for (int i = 0; i < editorPlugins.size(); i++)
-	{
-		if (editorPlugins[i]->getName() == name)
-			return true;
-	}
-
-	return false;
-}
-
-void loadPluginsFrom(const char* src)
-{
-	std::vector<std::string> files;
-	char dir[256];
-	getGlobalFilename(dir, src, "plugins");
-
-	readDirectory(dir, &files, false, false);
-	MLOG_INFO("Searching for plugins in " << dir);
-
-	std::string currentFile;
-	for (int i = 0; i < files.size(); i++)
-	{
-		currentFile = files[i];
-
-		// Check if file ends with ".lua"
-		if (currentFile.find_last_of(".lua") == currentFile.length() - 1)
-		{
-			MPluginScript* script = new MPluginScript;
-
-			currentFile = dir + std::string("/") + currentFile;
-
-			script->runScript(currentFile.c_str());
-
-			if (!vectorContains(script->getName()))
-			{
-				editorPlugins.push_back(script);
-			}
-			else
-			{
-				MLOG_ERROR(
-					"Multiple plugins with the same name loaded:\n\tName: "
-					<< script->getName() << "\n\tFile: " << currentFile);
-
-				fl_message("There are multiple plugins with the same name "
-						   "inside the plugin search path.\n"
-						   "Remove all redundant scripts or else the editor "
-						   "will not be able to start anymore.\n\n"
-						   "Name: %s\nFile: %s\n ",
-						   script->getName().c_str(), currentFile.c_str());
-
-				MLOG_ERROR("Exiting editor due to errors!");
-				exit(-1);
-			}
-		}
-	}
-
-	files.clear();
-	MLOG_INFO("Successfully loaded " << editorPlugins.size() << " plugins.");
-}
 
 #define STR1_TO_FLOAT(x) static_cast<float>(::atof(x.c_str()))
 
@@ -185,13 +122,8 @@ void loadSettings(const char* path)
 
 	window.inputMethod = NULL;
 	std::string inputMethod = parser.top()("input")["inputMethod"];
-	for (int i = 0; i < editorPlugins.size(); i++)
-	{
-		if (editorPlugins[i]->getName() == inputMethod)
-		{
-			window.inputMethod = editorPlugins[i];
-		}
-	}
+
+	EditorBackend::getInstance()->selectInputMethod(inputMethod.c_str());    
 
 	int width = STR1_TO_FLOAT(parser.top()("window")["width"]);
 	int height = STR1_TO_FLOAT(parser.top()("window")["height"]);
@@ -306,7 +238,7 @@ void crash_handler(int sig)
 				snprintf(signum, 3, "%d", sig);
 				std::string stack = stacktrace();
 				std::string complete_text =
-					"Catched signal " + string(signum) + " (" + signal + ")\n";
+					"Cought signal " + string(signum) + " (" + signal + ")\n";
 
 				complete_text += "\nSystem data:\n";
 
@@ -599,9 +531,9 @@ int main(int argc, char** argv)
 
 	// Init the engine
 	NeoEngine* engine = NeoEngine::getInstance();
-	Maratis* maratis = Maratis::getInstance();
+	EditorBackend* backend = EditorBackend::getInstance();
 
-	maratis->start();
+	backend->start();
 
 	// Init default thread
 	ThreadFactory* mgr = ThreadFactory::getInstance();
@@ -609,9 +541,7 @@ int main(int argc, char** argv)
 	mgr->setTemplateThread(new SDLThread());
 
 	mwindow->createSemaphores();
-
-	// Load all plugins (TODO: Search in user home too!)
-	loadPluginsFrom(rep);
+	backend->initPlugins();
 
 #ifndef WIN32
 	loadSettings(getenv("HOME"));

@@ -20,7 +20,7 @@
 #include "FileTree.h"
 
 #include <NeoEngine.h>
-#include "../Maratis/Maratis.h"
+#include "../Backend/EditorBackend.h"
 #include <FL/fl_message.H>
 #include <algorithm>
 

@@ -31,10 +31,15 @@ INCLUDE_DIRECTORIES(
   ${GTEST_INCLUDE_DIR}
 
   # For testing the editor
-  ${NEO_SOURCE_DIR}/Neo/NeoEditor/Maratis
+  ${NEO_SOURCE_DIR}/Neo/NeoEditor/Backend
   )
 
-ADD_EXECUTABLE(TestSDK ${NEO_SOURCE_DIR}/Neo/NeoEditor/Maratis/Maratis.cpp ${SOURCES} ${HEADERS})
+SET(BACKEND_SRC
+  ${NEO_SOURCE_DIR}/Neo/NeoEditor/Backend/EditorBackend.cpp
+  ${NEO_SOURCE_DIR}/Neo/NeoEditor/PluginScript/PluginScript.cpp
+  )
+
+ADD_EXECUTABLE(TestSDK ${BACKEND_SRC}  ${SOURCES} ${HEADERS})
 
 TARGET_LINK_LIBRARIES(TestSDK
   ${NEO_COMMON_LIBRARIES}

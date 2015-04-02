@@ -19,7 +19,7 @@
 
 #include "../MainWindow/PostProcessor.h"
 
-#include "../Maratis/Maratis.h"
+#include "../Backend/EditorBackend.h"
 
 using namespace Neo;
 
@@ -68,7 +68,7 @@ bool PostProcessor::draw(OCamera *camera)
 
     render->clear(BUFFER_DEPTH | BUFFER_COLOR);
 
-    Maratis::getInstance()->drawMainView(NeoEngine::getInstance()->getLevel()->getCurrentScene());
+    EditorBackend::getInstance()->drawMainView(NeoEngine::getInstance()->getLevel()->getCurrentScene());
 
     // finish render to texture
     render->bindFrameBuffer(currentFrameBuffer);

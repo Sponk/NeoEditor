@@ -20,7 +20,7 @@
 #include "DnDTree.h"
 
 #include <NeoEngine.h>
-#include "../Maratis/Maratis.h"
+#include "../Backend/EditorBackend.h"
 #include <FL/fl_message.H>
 
 using namespace Neo;
@@ -85,12 +85,12 @@ int DnDTree::handle(int e)
                 return 1;
 
             if(object == newParent->getParent())
-                Maratis::getInstance()->unlinkTwoObjects(object, newParent);
+                EditorBackend::getInstance()->unlinkTwoObjects(object, newParent);
 
             if(parent)
-                Maratis::getInstance()->unlinkTwoObjects(parent, object);
+                EditorBackend::getInstance()->unlinkTwoObjects(parent, object);
 
-            Maratis::getInstance()->linkTwoObjects(newParent, object);
+            EditorBackend::getInstance()->linkTwoObjects(newParent, object);
 
             this->do_callback(this, (long) 1);
             return 1;

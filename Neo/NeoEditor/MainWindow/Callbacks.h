@@ -29,7 +29,7 @@
 #include <string>
 
 // Maratis includes (for MainWindow.cxx)
-#include "../Maratis/Maratis.h"
+#include "../Backend/EditorBackend.h"
 #include "../MainWindow/ini.h"
 #include "../Publish/Publisher.h"
 

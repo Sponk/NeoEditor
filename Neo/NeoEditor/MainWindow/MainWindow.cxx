@@ -3859,7 +3859,7 @@ Fl_Double_Window* PublishDlg::create_window() {
       o->callback((Fl_Callback*)find_output_dir, (void*)(this));
     } // Fl_Button* o
     { level_edit = new Fl_Input(130, 51, 339, 24, tr("Default level:"));
-      level_edit->value(Maratis::getInstance()->getCurrentLevel());
+      level_edit->value(EditorBackend::getInstance()->getCurrentLevel());
     } // Fl_Input* level_edit
     { Fl_Button* o = new Fl_Button(472, 51, 26, 24, tr("..."));
       o->callback((Fl_Callback*)find_main_level, (void*)(this));
@@ -4270,17 +4270,18 @@ Fl_Double_Window* ConfigurationDlg::create_window() {
   input_methods_choice->value(0);	
   
   int idx = 0;
-  
-  for(int i = 0; i < editorPlugins.size(); i++)
+  EditorBackend* backend = EditorBackend::getInstance();
+  for(int i = 0; i < backend->getNumPlugins(); i++)
   {	
-  	if(editorPlugins[i]->hasInputMethod())
+  	MPluginScript* s = backend->getPlugin(i);
+  	if(s->hasInputMethod())
   	{
-  		input_methods_choice->add(editorPlugins[i]->getName().c_str(),0, (Fl_Callback*) ConfigurationDlg::setInputMethod, (void*) i);
-  		if(window.inputMethod != NULL && editorPlugins[i]->getName() == window.inputMethod->getName())
+  		input_methods_choice->add(s->getName().c_str(),0, (Fl_Callback*) ConfigurationDlg::setInputMethod, (void*) i);
+  		if(backend->getInputMethod() != NULL && s->getName() == backend->getInputMethod()->getName())
   			idx = input_methods_choice->size()-2;
   	}
   	
-  	plugin_browser->add(editorPlugins[i]->getName().c_str());
+  	plugin_browser->add(s->getName().c_str());
   }
   
   input_methods_choice->value(idx);

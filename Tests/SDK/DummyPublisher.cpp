@@ -1,6 +1,7 @@
 
 #include <NeoEngine.h>
 #include <../../../Neo/NeoEditor/Publish/Publisher.h>
+#include <LuaScript.h>
 
 namespace Neo
 {
@@ -12,3 +13,5 @@ namespace Neo
 void beginDraw(Neo::PRIMITIVE_TYPES) {}
 void pushVertex(const Neo::Vector3& v) {}
 void endDraw(Neo::RenderingContext* c) {}
+
+void createFltkLuaBindings(Neo::LuaScript*) {}

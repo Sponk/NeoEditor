@@ -31,9 +31,8 @@ function zoom_vue(camera)
 
     local wheel = getAxis("MOUSE_WHEEL") * 30.0
     local factor = length(selection_center() - position) * 0.01
-    
-    setPosition(camera, position - (axis * (wheel - mwheel) * factor)*getTranslationSpeed())
-    mwheel = wheel
+
+    setPosition(camera, position - (axis * wheel * factor) * getTranslationSpeed())
 end
 
 function pan_vue(camera)

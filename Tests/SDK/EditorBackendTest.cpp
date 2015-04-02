@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include "TestSetup.h"
-#include <Maratis.h>
+#include <EditorBackend.h>
 
 using namespace Neo;
 
@@ -35,10 +35,10 @@ TEST_F(EditorBackendTest, SaveLevel_test)
 {
 	
 	NeoEngine* engine = NeoEngine::getInstance();
-	Maratis* maratis = new Maratis();
+	EditorBackend* backend = new EditorBackend();
 
-	maratis->setRenderingContext(new DummyContext());
-	maratis->start();
+	backend->setRenderingContext(new DummyContext());
+	backend->start();
 
 	Scene* scene = engine->getLevel()->getCurrentScene();
 
@@ -48,31 +48,31 @@ TEST_F(EditorBackendTest, SaveLevel_test)
 	obj = scene->addNewCamera();
 	obj->setName("Camera");
 
-	maratis->okSaveAs("test.level");
+	backend->okSaveAs("test.level");
 
 	// TODO: More serious checking!
 	EXPECT_EQ(true, isFileExist("test.level"));
 
-	delete maratis;
+	delete backend;
 	resetEngine();
 }
 
 TEST_F(EditorBackendTest, LoadLevel_test)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
-	Maratis* maratis = new Maratis();
+	EditorBackend* backend = new EditorBackend();
 
-	maratis->setRenderingContext(new DummyContext());
-	maratis->start();
+	backend->setRenderingContext(new DummyContext());
+	backend->start();
 
 	Scene* scene = engine->getLevel()->getCurrentScene();
 
-	maratis->loadLevel("test.level");
+	backend->loadLevel("test.level");
 
 	EXPECT_TRUE(scene->getObjectByName("Light") != NULL);
 	EXPECT_TRUE(scene->getObjectByName("Camera") != NULL);
 
-	delete maratis;
+	delete backend;
 	resetEngine();
 }
 
@@ -80,10 +80,10 @@ TEST_F(EditorBackendTest, LoadLevel_test)
 TEST_F(EditorBackendTest, Undo_test)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
-	Maratis* maratis = new Maratis();
+	EditorBackend* backend = new EditorBackend();
 
-	maratis->setRenderingContext(new DummyContext());
-	maratis->start();
+	backend->setRenderingContext(new DummyContext());
+	backend->start();
 
 	Scene* scene = engine->getLevel()->getCurrentScene();
 
@@ -92,29 +92,29 @@ TEST_F(EditorBackendTest, Undo_test)
 	obj->setName("Light");
 
 	// Autosave
-	maratis->autoSave();
+	backend->autoSave();
 
 	// Do some change
 	obj->setName("LightNewName");
 
 	// Check
 	EXPECT_EQ(0, strcmp("LightNewName", obj->getName()));
-	maratis->undo();
+	backend->undo();
 
 	// Now the old name should be re-fetched
 	EXPECT_EQ(0, strcmp("Light", obj->getName()));
 	
-	delete maratis;
+	delete backend;
 	resetEngine();
 }
 
 TEST_F(EditorBackendTest, MultiUndo_test)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
-	Maratis* maratis = new Maratis();
+	EditorBackend* backend = new EditorBackend();
 
-	maratis->setRenderingContext(new DummyContext());
-	maratis->start();
+	backend->setRenderingContext(new DummyContext());
+	backend->start();
 
 	Scene* scene = engine->getLevel()->getCurrentScene();
 
@@ -123,37 +123,37 @@ TEST_F(EditorBackendTest, MultiUndo_test)
 	obj->setName("Light");
 
 	// Autosave
-	maratis->autoSave();
+	backend->autoSave();
 
 	// Do some change
 	obj->setName("LightNewName");
 
-	maratis->autoSave();
+	backend->autoSave();
 
 	// Do some change
 	obj->setName("Name");
 	
 	// Check
 	EXPECT_EQ(0, strcmp("Name", obj->getName()));
-	maratis->undo();
+	backend->undo();
 
 	EXPECT_EQ(0, strcmp("LightNewName", obj->getName()));
-	maratis->undo();
+	backend->undo();
 	
 	// Now the old name should be re-fetched
 	EXPECT_EQ(0, strcmp("Light", obj->getName()));
 	
-	delete maratis;
+	delete backend;
 	resetEngine();
 }
 
 TEST_F(EditorBackendTest, DuplicateObjects_test)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
-	Maratis* maratis = new Maratis();
+	EditorBackend* backend = new EditorBackend();
 
-	maratis->setRenderingContext(new DummyContext());
-	maratis->start();
+	backend->setRenderingContext(new DummyContext());
+	backend->start();
 
 	Scene* scene = engine->getLevel()->getCurrentScene();
 
@@ -161,27 +161,27 @@ TEST_F(EditorBackendTest, DuplicateObjects_test)
 	Object3d* obj = scene->addNewCamera();
 	obj->setName("Camera");
 
-	obj = maratis->duplicateObject(obj);
+	obj = backend->duplicateObject(obj);
 
 	EXPECT_EQ(0, strcmp("Camera1", obj->getName()));
 
 	// Test duplicateSelection
-	maratis->addSelectedObject(obj);
-	maratis->duplicateSelectedObjects();
+	backend->addSelectedObject(obj);
+	backend->duplicateSelectedObjects();
 
 	EXPECT_EQ(3, scene->getObjectsNumber());
 	
-	delete maratis;
+	delete backend;
 	resetEngine();
 }
 
 TEST_F(EditorBackendTest, Redo_test)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
-	Maratis* maratis = new Maratis();
+	EditorBackend* backend = new EditorBackend();
 
-	maratis->setRenderingContext(new DummyContext());
-	maratis->start();
+	backend->setRenderingContext(new DummyContext());
+	backend->start();
 
 	Scene* scene = engine->getLevel()->getCurrentScene();
 
@@ -190,29 +190,29 @@ TEST_F(EditorBackendTest, Redo_test)
 	obj->setName("Light");
 
 	// Autosave
-	maratis->autoSave();
+	backend->autoSave();
 
 	// Do some change
 	obj->setName("LightNewName");
 
 	// Check
 	EXPECT_EQ(0, strcmp("LightNewName", obj->getName()));
-	maratis->undo();
+	backend->undo();
 
 	// Now the old name should be re-fetched
 	EXPECT_EQ(0, strcmp("Light", obj->getName()));
 
 	// redo
-	maratis->redo();
+	backend->redo();
 	
 	// Check
 	EXPECT_EQ(0, strcmp("LightNewName", obj->getName()));
-	maratis->undo();
+	backend->undo();
 
 	// Now the old name should be re-fetched
 	EXPECT_EQ(0, strcmp("Light", obj->getName()));
 
-	delete maratis;
+	delete backend;
 	resetEngine();
 }
 
@@ -220,10 +220,10 @@ TEST_F(EditorBackendTest, ProjectSave_test)
 {
 	
 	NeoEngine* engine = NeoEngine::getInstance();
-	Maratis* maratis = new Maratis();
+	EditorBackend* backend = new EditorBackend();
 
-	maratis->setRenderingContext(new DummyContext());
-	maratis->start();
+	backend->setRenderingContext(new DummyContext());
+	backend->start();
 
     engine->getGame()->enablePostEffects();
 	MPostProcessor* pp = engine->getGame()->getPostProcessor();
@@ -237,14 +237,14 @@ TEST_F(EditorBackendTest, ProjectSave_test)
 	obj = scene->addNewCamera();
 	obj->setName("Camera");
 
-	maratis->okSaveAs("test.level");
-	maratis->okNewProject("test.mproj");
+	backend->okSaveAs("test.level");
+	backend->okNewProject("test.mproj");
 
 	// TODO: More serious checking!
 	EXPECT_EQ(true, isFileExist("test.level"));
 	EXPECT_EQ(true, isFileExist("test.mproj"));
 	
-	delete maratis;
+	delete backend;
 	resetEngine();
 }
 
@@ -252,18 +252,18 @@ TEST_F(EditorBackendTest, ProjectLoad_test)
 {
 	
 	NeoEngine* engine = NeoEngine::getInstance();
-	Maratis* maratis = new Maratis();
+	EditorBackend* backend = new EditorBackend();
 
-	maratis->setRenderingContext(new DummyContext());
-	maratis->start();
+	backend->setRenderingContext(new DummyContext());
+	backend->start();
 
 	// Load the project
-	maratis->okLoadProject("test.mproj");
+	backend->okLoadProject("test.mproj");
 
 	// Fetch the post processor
 	MPostProcessor* pp = engine->getGame()->getPostProcessor();
 	EXPECT_EQ(0, strcmp("shad.vert", pp->getVertexShader()));
 	
-	delete maratis;
+	delete backend;
 	resetEngine();
 }

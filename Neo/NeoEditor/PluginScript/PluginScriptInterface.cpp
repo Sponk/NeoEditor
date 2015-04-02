@@ -31,7 +31,7 @@
 
 #include "../MainWindow/Callbacks.h"
 #include "../MainWindow/MainWindow.h"
-#include "../Maratis/Maratis.h"
+#include "../Backend/EditorBackend.h"
 
 // TODO: All globals in own file!
 #include "../PluginScript/PluginScript.h"
@@ -131,7 +131,7 @@ int addEditorMenu()
 int getCurrentSelection()
 {
     MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
-    Maratis* maratis = Maratis::getInstance();
+    EditorBackend* maratis = EditorBackend::getInstance();
 
     // FIXME: Pointers have 64bit size on 64bit machines! DON'T USE FLOAT
     int* objects = (int*) new long int[maratis->getSelectedObjectsNumber()];
@@ -182,7 +182,7 @@ int renameObject()
 int getSelectionCenter()
 {
     LuaScript* script = (LuaScript*) NeoEngine::getInstance()->getScriptContext();
-    script->pushFloatArray(*Maratis::getInstance()->getSelectionCenter(), 3);
+    script->pushFloatArray(*EditorBackend::getInstance()->getSelectionCenter(), 3);
 
     return 1;
 }
@@ -367,7 +367,7 @@ int getPerspectiveVue()
 {
     MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
 
-    script->pushInteger((long int) Maratis::getInstance()->getPerspectiveVue());
+    script->pushInteger((long int) EditorBackend::getInstance()->getPerspectiveVue());
     return 1;
 }
 

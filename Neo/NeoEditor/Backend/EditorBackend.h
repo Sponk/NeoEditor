@@ -19,53 +19,55 @@
 //========================================================================
 
 
-#ifndef _MARATIS_H
-#define _MARATIS_H
+#ifndef _EDITOR_BACKEND_H
+#define _EDITOR_BACKEND_H
 
 #include <vector>
 #include <NeoEngine.h>
 #include <Plugin.h>
 
 #include "../RenderArray/RenderArray.h"
+#include "../PluginScript/PluginScript.h"
+
 
 namespace Neo
 {
-enum M_AXIS
+enum AXIS
 {
-	M_AXIS_NONE = 0,
-	M_AXIS_X,
-	M_AXIS_Y,
-	M_AXIS_Z,
-	M_AXIS_VIEW
+	AXIS_NONE = 0,
+	AXIS_X,
+	AXIS_Y,
+	AXIS_Z,
+	AXIS_VIEW
 };
 
-enum M_ORIENTATION_MODE
+enum ORIENTATION_MODE
 {
-	M_ORIENTATION_WORLD = 0,
-	M_ORIENTATION_LOCAL
+	ORIENTATION_WORLD = 0,
+	ORIENTATION_LOCAL
 };
 
-enum M_TRANSFORM_MODE
+enum TRANSFORM_MODE
 {
-	M_TRANSFORM_MOUSE = 0,
-	M_TRANSFORM_POSITION,
-	M_TRANSFORM_ROTATION,
-	M_TRANSFORM_SCALE
+	TRANSFORM_MOUSE = 0,
+	TRANSFORM_POSITION,
+	TRANSFORM_ROTATION,
+	TRANSFORM_SCALE
 };
 
 
-class Maratis
+class EditorBackend
 {
 public:
 
 	// constructor / destructor
-	Maratis(void);
-	~Maratis(void);
+	EditorBackend(void);
+	~EditorBackend(void);
 
 	// instance
-	static Maratis * getInstance(void)
+	static EditorBackend * getInstance(void)
 	{
-		static Maratis m_instance;
+		static EditorBackend m_instance;
 		return &m_instance;
 	}
 
@@ -101,9 +103,9 @@ private:
 	unsigned int m_undoLevel;
 
 	// transform
-	M_TRANSFORM_MODE m_transformMode;
-	M_ORIENTATION_MODE m_orientationMode;
-	M_AXIS m_currentAxis;
+	TRANSFORM_MODE m_transformMode;
+	ORIENTATION_MODE m_orientationMode;
+	AXIS m_currentAxis;
 	Vector2 m_tMousePosition;
 	Vector2 m_tCenterPosition;
 	Vector2 m_tVectorDirection;
@@ -156,8 +158,26 @@ private:
 	bool m_snapToGrid;
 	float m_snapDistance;
 
+	// Lua plugins
+	std::vector<MPluginScript*> m_editorPlugins;
+	MPluginScript* m_inputMethod;
+
+	bool vectorContains(std::string name);
+
 public:
 
+	// Lua plugins
+	void loadPluginsFrom(const char* src);
+	void initPlugins();
+	void selectInputMethod(const char* name);
+	MPluginScript* getPlugin(int idx) { return m_editorPlugins[idx]; }
+
+	MPluginScript* getInputMethod() { return m_inputMethod; }
+	void setInputMethod(MPluginScript* s) { m_inputMethod = s; }
+
+	size_t getNumPlugins() { return m_editorPlugins.size(); }
+	
+	
 	void enableSnapToGrid() { m_snapToGrid = true; }
 	void disableSnapToGrid() { m_snapToGrid = false; }
 
@@ -190,9 +210,9 @@ public:
 	void drawArmature(OEntity * entity);
 	void drawBoundingBox(Box3d * box);
 	void drawGrid(Scene * scene);
-	void drawPositionAxis(M_AXIS axis, OCamera * camera, Matrix4x4 * matrix, const bool viewTest = true);
-	void drawScaleAxis(M_AXIS axis, OCamera * camera, Matrix4x4 * matrix, const bool viewTest = true);
-	void drawRotationCircle(M_AXIS axis, OCamera * camera, Matrix4x4 * matrix, const bool zTest = true);
+	void drawPositionAxis(AXIS axis, OCamera * camera, Matrix4x4 * matrix, const bool viewTest = true);
+	void drawScaleAxis(AXIS axis, OCamera * camera, Matrix4x4 * matrix, const bool viewTest = true);
+	void drawRotationCircle(AXIS axis, OCamera * camera, Matrix4x4 * matrix, const bool zTest = true);
 	void drawEditRotation(OCamera * camera);
 	void drawEditPosition(OCamera * camera);
 	void drawEditScale(OCamera * camera);
@@ -206,9 +226,9 @@ public:
 
     Object3d * getNearestMesh(Scene * scene, const Vector3 & rayO, const Vector3 & rayD, Vector3 * intersectPoint);
 	Object3d * getNearestObject(Scene * scene, const Vector3 & rayO, const Vector3 & rayD, Vector3 * intersectPoint = NULL);
-	M_AXIS selectEditRotation(OCamera * camera, const Vector3 & rayO, const Vector3 & rayD, const Vector3 & position, float radius);
-	M_AXIS selectEditPosition(OCamera * camera, const Vector3 & rayO, const Vector3 & rayD, const Vector3 & position, float radius);
-	M_AXIS selectEditScale(OCamera * camera, const Vector3 & rayO, const Vector3 & rayD, const Vector3 & position, float radius);
+	AXIS selectEditRotation(OCamera * camera, const Vector3 & rayO, const Vector3 & rayD, const Vector3 & position, float radius);
+	AXIS selectEditPosition(OCamera * camera, const Vector3 & rayO, const Vector3 & rayD, const Vector3 & position, float radius);
+	AXIS selectEditScale(OCamera * camera, const Vector3 & rayO, const Vector3 & rayD, const Vector3 & position, float radius);
 
     void updateCurrentAxis();
 
@@ -321,11 +341,11 @@ public:
 	inline int * getTimelineMaxPtr(void){ return &m_timelineMax; }
 
 	// trasform mode
-	inline void setTransformMode(M_TRANSFORM_MODE transformMode){ m_transformMode = transformMode; }
-	inline void setOrientationMode(M_ORIENTATION_MODE orientationMode){ m_orientationMode = orientationMode; }
-	inline M_TRANSFORM_MODE getTransformMode(void){ return m_transformMode; }
-	inline M_ORIENTATION_MODE getOrientationMode(void){ return m_orientationMode; }
-	inline void clearCurrentAxis(void){ m_currentAxis = M_AXIS_NONE; }
+	inline void setTransformMode(TRANSFORM_MODE transformMode){ m_transformMode = transformMode; }
+	inline void setOrientationMode(ORIENTATION_MODE orientationMode){ m_orientationMode = orientationMode; }
+	inline TRANSFORM_MODE getTransformMode(void){ return m_transformMode; }
+	inline ORIENTATION_MODE getOrientationMode(void){ return m_orientationMode; }
+	inline void clearCurrentAxis(void){ m_currentAxis = AXIS_NONE; }
 	void transformSelectedObjects(void);
 
 	// selection
@@ -353,8 +373,8 @@ public:
 	void publish(const char* dest, const char* exec);
 	
 	// main loops
-	static void logicLoop(void);
-	static void graphicLoop(void);
+	void logicLoop(void);
+	void graphicLoop(void);
 };
 }
 #endif

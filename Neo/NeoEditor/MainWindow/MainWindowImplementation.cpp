@@ -255,7 +255,7 @@ void MaterialEditDlg::choose_emit_color(Fl_Button* button, MaterialEditDlg* dlg)
 
 void PublishDlg::publish_click(Fl_Button*, PublishDlg* dlg)
 {
-	Maratis* maratis = Maratis::getInstance();
+	EditorBackend* backend = EditorBackend::getInstance();
 
 	char dir[256];
 #ifndef WIN32
@@ -271,8 +271,8 @@ void PublishDlg::publish_click(Fl_Button*, PublishDlg* dlg)
 #endif
 
 	// TODO: Make more efficient!
-	maratis->save();
-	maratis->publish(dlg->output_edit->value(), dir);
+	backend->save();
+	backend->publish(dlg->output_edit->value(), dir);
 
 	// TODO: Error checking!
 	fl_message("Project was successfully published!");
@@ -561,29 +561,30 @@ void ConfigurationDlg::apply_settings_callback(Fl_Button*,
 
 void ConfigurationDlg::setInputMethod(Fl_Menu_*, long idx)
 {
+	EditorBackend* backend = EditorBackend::getInstance();
 	if (idx == -1)
 	{
-		window.inputMethod = NULL;
+		backend->setInputMethod(NULL);
 		return;
 	}
 
-	extern std::vector<MPluginScript*> editorPlugins;
-	window.inputMethod = editorPlugins[idx];
+	backend->setInputMethod(backend->getPlugin(idx));
 }
 
 void ConfigurationDlg::plugin_changed_callback(Fl_Browser*,
 		ConfigurationDlg* dlg)
 {
-	extern std::vector<MPluginScript*> editorPlugins;
-
-	if (editorPlugins.size() < dlg->plugin_browser->value())
+	EditorBackend* backend = EditorBackend::getInstance();
+	int num = backend->getNumPlugins();
+	if (num < dlg->plugin_browser->value())
 		return;
+
 	int idx = dlg->plugin_browser->value() - 1;
 
 	if (idx < 0)
 		return;
 
-	MPluginScript* plugin = editorPlugins[idx];
+	MPluginScript* plugin = backend->getPlugin(idx);
 	dlg->author_edit->value(plugin->getAuthor().c_str());
 	dlg->license_edit->value(plugin->getLicense().c_str());
 

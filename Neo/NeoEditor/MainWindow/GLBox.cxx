@@ -23,7 +23,7 @@
 #include <ImageLoader.h>
 #include <GuiSystem.h>
 
-#include "../Maratis/Maratis.h"
+#include "../Backend/EditorBackend.h"
 #include "../RenderArray/RenderArray.h"
 
 #include <FL/Enumerations.H>
@@ -59,9 +59,9 @@ void update_editor(void*)
 
     NeoGame* game = NeoEngine::getInstance()->getGame();
     InputContext* input = NeoEngine::getInstance()->getInputContext();
-    Maratis* maratis = Maratis::getInstance();
+    EditorBackend* maratis = EditorBackend::getInstance();
 
-    if(window.inputMethod == NULL && !game->isRunning())
+    if(maratis->getInputMethod() == NULL && !game->isRunning())
     {
         if(input->isKeyPressed("W"))
         {
@@ -134,10 +134,6 @@ void update_editor(void*)
             //window.glbox->redraw();
         }
     }
-    else if(!game->isRunning())
-    {
-        window.inputMethod->callFunction(window.inputMethod->getInputUpdate().c_str());
-    }
 
     if(maratis->hasTitleChanged())
     {
@@ -198,7 +194,7 @@ void GLBox::loadPostEffectsFromGame(NeoGame* game)
 
 void GLBox::draw()
 {
-    Maratis* maratis = Maratis::getInstance();
+    EditorBackend* maratis = EditorBackend::getInstance();
     NeoEngine* engine = NeoEngine::getInstance();
     NeoWindow* window = NeoWindow::getInstance();
     RenderingContext* render = engine->getRenderingContext();
@@ -312,7 +308,7 @@ int GLBox::handle(int event)
     char key[2] = {0,0};
     InputContext* input = NeoEngine::getInstance()->getInputContext();
     NeoWindow* window = NeoWindow::getInstance();
-    Maratis* maratis = Maratis::getInstance();
+    EditorBackend* maratis = EditorBackend::getInstance();
 
     switch(event)
     {

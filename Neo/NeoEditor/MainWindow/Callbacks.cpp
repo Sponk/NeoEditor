@@ -119,14 +119,15 @@ void save_settings()
 		createDirectory(fullpath.c_str());
 
 	MLOG_INFO("Saving settings to: " << dir);
-
+	EditorBackend* backend = EditorBackend::getInstance();
+	
 	ofstream out(dir);
 	if (out)
 	{
-		if (window.inputMethod != NULL)
+		if (backend->getInputMethod() != NULL)
 		{
 			out << "[input]" << endl;
-			out << "inputMethod=" << window.inputMethod->getName() << endl;
+			out << "inputMethod=" << backend->getInputMethod()->getName() << endl;
 		}
 
 		out << "[theme]" << endl;
@@ -270,9 +271,9 @@ void change_scene_callback(Fl_Menu_*, long index)
 	// MLOG_INFO("Changing to scene " << index);
 
 	Level* level = NeoEngine::getInstance()->getLevel();
-	Maratis::getInstance()->autoSave();
+	EditorBackend::getInstance()->autoSave();
 	level->setCurrentSceneId(index);
-	Maratis::getInstance()->clearSelectedObjects();
+	EditorBackend::getInstance()->clearSelectedObjects();
 
 	update_scene_tree();
 }
@@ -324,7 +325,7 @@ void open_level_callback(Fl_Menu_*, void*)
 
 	if (filename)
 	{
-		Maratis::getInstance()->loadLevel(filename);
+		EditorBackend::getInstance()->loadLevel(filename);
 
 		update_scene_tree();
 		current_project.level = filename;
@@ -383,12 +384,12 @@ void open_project_callback(Fl_Menu_*, void*)
 			current_project.path.length());
 #endif
 		NeoGame* game = NeoEngine::getInstance()->getGame();
-		Maratis::getInstance()->loadProject(filename);
+		EditorBackend::getInstance()->loadProject(filename);
 
 		::window.project_directory_browser->load(current_project.path.c_str());
 		::window.glbox->loadPostEffectsFromGame(game);
 
-		current_project.level = Maratis::getInstance()->getCurrentLevel();
+		current_project.level = EditorBackend::getInstance()->getCurrentLevel();
 		update_scene_tree();
 
 		// Destroy the dialog
@@ -418,15 +419,15 @@ void set_edit_type(Fl_Round_Button* button, long c)
 	switch (c)
 	{
 		case 't':
-			Maratis::getInstance()->setTransformMode(M_TRANSFORM_POSITION);
+			EditorBackend::getInstance()->setTransformMode(TRANSFORM_POSITION);
 			break;
 
 		case 'r':
-			Maratis::getInstance()->setTransformMode(M_TRANSFORM_ROTATION);
+			EditorBackend::getInstance()->setTransformMode(TRANSFORM_ROTATION);
 			break;
 
 		case 's':
-			Maratis::getInstance()->setTransformMode(M_TRANSFORM_SCALE);
+			EditorBackend::getInstance()->setTransformMode(TRANSFORM_SCALE);
 			break;
 	}
 }
@@ -658,7 +659,7 @@ void remove_behavior(Fl_Button*, long behavior)
 	if (!object)
 		return;
 
-	Maratis::getInstance()->autoSave();
+	EditorBackend::getInstance()->autoSave();
 	object->deleteBehavior(behavior);
 
 	update_scene_tree();
@@ -925,12 +926,12 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
 		return;
 	}
 
-	Maratis* maratis = Maratis::getInstance();
+	EditorBackend* backend = EditorBackend::getInstance();
 
 	// if(item == tree->find_clicked())
 	//{
-	maratis->clearSelectedObjects();
-	maratis->addSelectedObject(object);
+	backend->clearSelectedObjects();
+	backend->addSelectedObject(object);
 
 	Fl_Tree_Item* t = item;
 	while ((t = t->next()) != NULL)
@@ -949,7 +950,7 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
 							   ->getObjectByName(name);
 
 		if (object)
-			maratis->addSelectedObject(object);
+			backend->addSelectedObject(object);
 	}
 	//}
 
@@ -957,13 +958,13 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
 	if (Fl::event_clicks() &&
 		(tree == Fl::focus() || window.glbox == Fl::focus()))
 	{
-		/*MOCamera* vue = Maratis::getInstance()->getPerspectiveVue();
+		/*MOCamera* vue = EditorBackend::getInstance()->getPerspectiveVue();
 		vue->setPosition(object->getPosition());
 		vue->updateMatrix();
 		window.glbox->redraw();*/
 
-		Maratis::getInstance()->focusSelection();
-		Maratis::getInstance()->getPerspectiveVue()->updateMatrix();
+		EditorBackend::getInstance()->focusSelection();
+		EditorBackend::getInstance()->getPerspectiveVue()->updateMatrix();
 	}
 
 	Vector3 position = object->getPosition();
@@ -1301,10 +1302,10 @@ void edit_object_callback(Fl_Value_Input* input, long c)
 
 void edit_name_callback(Fl_Input*, void*)
 {
-	if (Maratis::getInstance()->getSelectedObjectsNumber() == 0)
+	if (EditorBackend::getInstance()->getSelectedObjectsNumber() == 0)
 		return;
 
-	Object3d* object = Maratis::getInstance()->getSelectedObjectByIndex(0);
+	Object3d* object = EditorBackend::getInstance()->getSelectedObjectByIndex(0);
 	object->setName(window.name_edit->value());
 
 	Object3d* parent = object->getParent();
@@ -1331,12 +1332,12 @@ void edit_name_callback(Fl_Input*, void*)
 			return;
 		}
 
-		Maratis::getInstance()->linkTwoObjects(parent, object);
+		EditorBackend::getInstance()->linkTwoObjects(parent, object);
 	}
 	else if (parent && !strcmp(window.parent_edit->value(), "none") ||
 			 strlen(window.parent_edit->value()) == 0)
 	{
-		Maratis::getInstance()->unlinkTwoObjects(parent, object);
+		EditorBackend::getInstance()->unlinkTwoObjects(parent, object);
 	}
 
 	update_scene_tree();
@@ -1494,7 +1495,7 @@ void save_level_callback(Fl_Menu_*, long mode)
 				current_project.level = filename;
 			}
 
-			Maratis::getInstance()->setCurrentLevel(
+			EditorBackend::getInstance()->setCurrentLevel(
 				current_project.level.c_str());
 
 			break;
@@ -1509,7 +1510,7 @@ void save_level_callback(Fl_Menu_*, long mode)
 				return;
 
 			current_project.level = filename;
-			Maratis::getInstance()->setCurrentLevel(
+			EditorBackend::getInstance()->setCurrentLevel(
 				current_project.level.c_str());
 
 			break;
@@ -1520,7 +1521,7 @@ void save_level_callback(Fl_Menu_*, long mode)
 		::window.glbox->getPostProcessor()->getVertexShader(),
 		::window.glbox->getPostProcessor()->getFragmentShader());
 
-	Maratis::getInstance()->save();
+	EditorBackend::getInstance()->save();
 }
 
 void new_project_callback(Fl_Menu_*, void*)
@@ -1548,7 +1549,7 @@ void new_project_callback(Fl_Menu_*, void*)
 								   current_project.path.length());
 #endif
 
-	Maratis::getInstance()->okNewProject(filename);
+	EditorBackend::getInstance()->okNewProject(filename);
 	update_scene_tree();
 }
 
@@ -1556,7 +1557,7 @@ void new_level_callback(Fl_Menu_*, void*)
 {
 	current_project.level = "";
 
-	Maratis::getInstance()->newLevel();
+	EditorBackend::getInstance()->newLevel();
 	update_scene_tree();
 	// main_window->label("Untitled level");
 }
@@ -1654,8 +1655,8 @@ void add_mesh_callback(Fl_Menu_*, void*)
 	
 	if (filename)
 	{
-		Maratis::getInstance()->autoSave();
-		Maratis::getInstance()->okAddEntity(filename);
+		EditorBackend::getInstance()->autoSave();
+		EditorBackend::getInstance()->okAddEntity(filename);
 		update_scene_tree();
 	}
 
@@ -1664,8 +1665,8 @@ void add_mesh_callback(Fl_Menu_*, void*)
 
 void add_light_callback(Fl_Menu_*, void*)
 {
-	Maratis::getInstance()->autoSave();
-	Maratis::getInstance()->addLight();
+	EditorBackend::getInstance()->autoSave();
+	EditorBackend::getInstance()->addLight();
 	update_scene_tree();
 }
 
@@ -1856,16 +1857,16 @@ void add_text_callback(Fl_Menu_*, void*)
 	if (!filename)
 		return;
 
-	Maratis* maratis = Maratis::getInstance();
-	maratis->autoSave();
+	EditorBackend* backend = EditorBackend::getInstance();
+	backend->autoSave();
 
-	maratis->okAddFont(filename);
+	backend->okAddFont(filename);
 	update_scene_tree();
 }
 
 void add_camera_callback(Fl_Menu_*, void*)
 {
-	Maratis::getInstance()->addCamera();
+	EditorBackend::getInstance()->addCamera();
 	update_scene_tree();
 }
 
@@ -2047,21 +2048,21 @@ void import_mesh_callback(Fl_Menu_*, void*)
 
 void delete_object_callback(Fl_Menu_*, void*)
 {
-	Maratis::getInstance()->deleteSelectedObjects();
+	EditorBackend::getInstance()->deleteSelectedObjects();
 
 	update_scene_tree();
 }
 
 void undo_callback(Fl_Menu_*, void*)
 {
-	Maratis::getInstance()->undo();
+	EditorBackend::getInstance()->undo();
 
 	update_scene_tree();
 }
 
 void redo_callback(Fl_Menu_*, void*)
 {
-	Maratis::getInstance()->redo();
+	EditorBackend::getInstance()->redo();
 
 	update_scene_tree();
 }
@@ -2082,7 +2083,7 @@ void add_sound_callback(Fl_Menu_*, void*)
 	if (!filename)
 		return;
 
-	Maratis::getInstance()->okAddSound(filename);
+	EditorBackend::getInstance()->okAddSound(filename);
 
 	update_scene_tree();
 }
@@ -2126,7 +2127,7 @@ void add_scene_callback(Fl_Menu_*, void*)
 	if (window.scene_name.empty())
 		return;
 
-	Maratis::getInstance()->autoSave();
+	EditorBackend::getInstance()->autoSave();
 	Level* level = NeoEngine::getInstance()->getLevel();
 	Scene* scene = level->addNewScene();
 	scene->setName(window.scene_name.c_str());
@@ -2163,7 +2164,7 @@ void scene_setup_callback(Fl_Menu_*, void*)
 		return;
 	}
 
-	Maratis::getInstance()->autoSave();
+	EditorBackend::getInstance()->autoSave();
 	scene->setName(dlg.scene_name_edit->value());
 	scene->setScriptFilename(dlg.lua_script_edit->value());
 
@@ -2182,16 +2183,16 @@ void delete_scene_callback(Fl_Menu_*, void*)
 		return;
 	}
 
-	Maratis::getInstance()->autoSave();
+	EditorBackend::getInstance()->autoSave();
 	level->deleteScene(level->getCurrentSceneId());
 
-	Maratis::getInstance()->clearSelectedObjects();
+	EditorBackend::getInstance()->clearSelectedObjects();
 	update_scene_tree();
 }
 
 void duplicate_object_callback(Fl_Menu_*, void*)
 {
-	Maratis::getInstance()->duplicateSelectedObjects();
+	EditorBackend::getInstance()->duplicateSelectedObjects();
 	update_scene_tree();
 }
 
@@ -2208,7 +2209,7 @@ void about_menu_callback(Fl_Menu_*, void*)
 
 void select_all_callback(Fl_Menu_*, void*)
 {
-	Maratis::getInstance()->selectAll();
+	EditorBackend::getInstance()->selectAll();
 	update_scene_tree();
 }
 
@@ -2263,14 +2264,14 @@ void update_player_callback(Fl_Menu_*, void*)
 
 void add_group_callback(Fl_Menu_*, void*)
 {
-	Maratis::getInstance()->addGroup();
+	EditorBackend::getInstance()->addGroup();
 
 	update_scene_tree();
 }
 
 void ortho_callback(Fl_Check_Button*, void*)
 {
-	Maratis::getInstance()->switchCurrentVueMode();
+	EditorBackend::getInstance()->switchCurrentVueMode();
 }
 
 void change_vue_callback(Fl_Menu_*, long mode)
@@ -2278,7 +2279,7 @@ void change_vue_callback(Fl_Menu_*, long mode)
 	if (mode == 0)
 		return;
 
-	Maratis::getInstance()->changeCurrentVue(mode);
+	EditorBackend::getInstance()->changeCurrentVue(mode);
 	window.vue_ortho_button->value(1);
 }
 
@@ -2317,7 +2318,7 @@ void configuration_callback(Fl_Menu_*, void*)
 
 void post_effects_setup_callback(Fl_Menu_*, void*)
 {
-	Maratis::getInstance()->autoSave();
+	EditorBackend::getInstance()->autoSave();
 
 	PostEffectsDlg dlg;
 	Fl_Window* window = dlg.create_window();
@@ -2433,12 +2434,12 @@ void play_game_in_editor(Fl_Button* button, void*)
 
 	// Save perspective vue
 	Matrix4x4 matrix =
-		*Maratis::getInstance()->getPerspectiveVue()->getMatrix();
+		*EditorBackend::getInstance()->getPerspectiveVue()->getMatrix();
 
 	engine->setScriptContext(&scriptContext);
 
 	// Save current state
-	const char* temp = Maratis::getInstance()->getTempDir();
+	const char* temp = EditorBackend::getInstance()->getTempDir();
 	if (temp)
 	{
 		string tempFile(temp);
@@ -2479,11 +2480,11 @@ void play_game_in_editor(Fl_Button* button, void*)
 	}
 
 	scene = level->getCurrentScene();
-	Maratis::getInstance()->clearSelectedObjects();
+	EditorBackend::getInstance()->clearSelectedObjects();
 
 	// update matrices
 	scene->updateObjectsMatrices();
-	*Maratis::getInstance()->getPerspectiveVue()->getMatrix() = matrix;
+	*EditorBackend::getInstance()->getPerspectiveVue()->getMatrix() = matrix;
 	button->label(text);
 
 	update_scene_tree();
@@ -2508,23 +2509,23 @@ void show_console_callback(Fl_Button*, void*)
 
 void apply_editor_perspective(Fl_Button*, void*)
 {
-	OCamera* vue = Maratis::getInstance()->getPerspectiveVue();
+	OCamera* vue = EditorBackend::getInstance()->getPerspectiveVue();
 	Object3d* selectedObject =
-		Maratis::getInstance()->getSelectedObjectByIndex(0);
+		EditorBackend::getInstance()->getSelectedObjectByIndex(0);
 
 	if (selectedObject)
 	{
 		*selectedObject->getMatrix() = *vue->getMatrix();
 	}
 
-	Maratis::getInstance()->clearSelectedObjects();
+	EditorBackend::getInstance()->clearSelectedObjects();
 }
 
 void set_editor_perspective(Fl_Button*, void*)
 {
-	OCamera* vue = Maratis::getInstance()->getPerspectiveVue();
+	OCamera* vue = EditorBackend::getInstance()->getPerspectiveVue();
 	Object3d* selectedObject =
-		Maratis::getInstance()->getSelectedObjectByIndex(0);
+		EditorBackend::getInstance()->getSelectedObjectByIndex(0);
 
 	if (selectedObject)
 	{
@@ -2532,7 +2533,7 @@ void set_editor_perspective(Fl_Button*, void*)
 		vue->setRotation(selectedObject->getRotation());
 	}
 
-	Maratis::getInstance()->clearSelectedObjects();
+	EditorBackend::getInstance()->clearSelectedObjects();
 }
 
 void open_profile_viewer_callback(Fl_Menu_*, void*)
@@ -2630,9 +2631,9 @@ void check_for_updates_callback(Fl_Menu_*, void*)
 
 void local_transform_mode_callback(Fl_Menu_* menu, void*)
 {
-	Maratis* maratis = Maratis::getInstance();
-	maratis->setOrientationMode(menu->value() ? M_ORIENTATION_LOCAL
-											  : M_ORIENTATION_WORLD);
+	EditorBackend* backend = EditorBackend::getInstance();
+	backend->setOrientationMode(menu->value() ? ORIENTATION_LOCAL
+											  : ORIENTATION_WORLD);
 }
 
 void import_lua_sdk_callback(Fl_Menu_*, void*)
@@ -2650,14 +2651,14 @@ void import_lua_sdk_callback(Fl_Menu_*, void*)
 
 void enable_snap_to_grid_callback(Fl_Menu_* menu, void*)
 {
-	Maratis* maratis = Maratis::getInstance();
+	EditorBackend* backend = EditorBackend::getInstance();
 
-	if (maratis->isSnapToGridEnabled())
-		maratis->disableSnapToGrid();
+	if (backend->isSnapToGridEnabled())
+		backend->disableSnapToGrid();
 	else
-		maratis->enableSnapToGrid();
+		backend->enableSnapToGrid();
 
-	maratis->setSnapDistance(10);
+	backend->setSnapDistance(10);
 }
 
 void project_directory_callback(FileTree* browser, void*)
