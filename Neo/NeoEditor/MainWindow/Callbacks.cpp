@@ -2649,7 +2649,7 @@ void import_lua_sdk_callback(Fl_Menu_*, void*)
 	copyDirectory(src, dir);
 }
 
-void enable_snap_to_grid_callback(Fl_Menu_* menu, void*)
+void enable_snap_to_grid_callback(Fl_Menu_* m, void*)
 {
 	EditorBackend* backend = EditorBackend::getInstance();
 
@@ -2659,6 +2659,25 @@ void enable_snap_to_grid_callback(Fl_Menu_* menu, void*)
 		backend->enableSnapToGrid();
 
 	backend->setSnapDistance(10);
+}
+
+
+void enable_snap_to_grid_button_callback(Fl_Round_Button* m, void*)
+{
+	EditorBackend* backend = EditorBackend::getInstance();
+
+	if (backend->isSnapToGridEnabled())
+		backend->disableSnapToGrid();
+	else
+		backend->enableSnapToGrid();
+
+	//backend->setSnapDistance(100);
+}
+
+void update_grid_size_callback(Fl_Value_Input* input, void*)
+{
+	EditorBackend* backend = EditorBackend::getInstance();
+	backend->setSnapDistance(input->value());
 }
 
 void project_directory_callback(FileTree* browser, void*)

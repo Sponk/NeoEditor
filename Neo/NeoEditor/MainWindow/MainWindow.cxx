@@ -311,18 +311,21 @@ Fl_Double_Window* EditorWindow::show_window() {
       { scenes_menu = new Fl_Choice(570, 27, 129, 24);
         scenes_menu->down_box(FL_BORDER_BOX);
       } // Fl_Choice* scenes_menu
-      { speed_group = new Fl_Group(3, 25, 192, 23);
-        { rotation_speed = new Fl_Value_Input(39, 27, 45, 20, tr("Rot.:"));
-          rotation_speed->value(1);
-          rotation_speed->callback((Fl_Callback*)rotation_speed_callback);
-          rotation_speed->align(Fl_Align(68));
-          rotation_speed->when(FL_WHEN_ENTER_KEY);
-        } // Fl_Value_Input* rotation_speed
-        { translation_speed = new Fl_Value_Input(141, 28, 45, 20, tr("Trans.:"));
-          translation_speed->value(1);
-          translation_speed->callback((Fl_Callback*)translation_speed_callback);
-          translation_speed->when(FL_WHEN_ENTER_KEY);
-        } // Fl_Value_Input* translation_speed
+      { speed_group = new Fl_Group(3, 25, 192, 25);
+        { Fl_Round_Button* o = new Fl_Round_Button(125, 26, 60, 24, tr("Grid"));
+          o->box(FL_UP_FRAME);
+          o->shortcut(0x40067);
+          o->down_box(FL_ROUND_DOWN_BOX);
+          o->callback((Fl_Callback*)enable_snap_to_grid_button_callback);
+          o->align(Fl_Align(260|FL_ALIGN_INSIDE));
+        } // Fl_Round_Button* o
+        { grid_size_edit = new Fl_Value_Input(80, 27, 40, 22, tr("Grid Size:"));
+          grid_size_edit->maximum(1000);
+          grid_size_edit->step(1);
+          grid_size_edit->value(100);
+          grid_size_edit->callback((Fl_Callback*)update_grid_size_callback);
+          grid_size_edit->value(EditorBackend::getInstance()->getSnapDistance());
+        } // Fl_Value_Input* grid_size_edit
         speed_group->resizable(NULL);
         speed_group->end();
       } // Fl_Group* speed_group

@@ -149,9 +149,6 @@ void loadSettings(const char* path)
 
 	if (translation_speed == 0.0)
 		translation_speed = 1.0;
-
-	window.translation_speed->value(translation_speed);
-	window.rotation_speed->value(rotation_speed);
 }
 
 // Based on stacktrace.h (c) 2008, Timo Bingmann from http://idlebox.net/

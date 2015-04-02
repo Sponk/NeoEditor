@@ -45,9 +45,9 @@ extern void about_menu_callback(Fl_Menu_*, void*);
 #include <FL/Fl_Round_Button.H>
 extern void set_edit_type(Fl_Round_Button*, long);
 #include <FL/Fl_Choice.H>
+extern void enable_snap_to_grid_button_callback(Fl_Round_Button*, void*);
 #include <FL/Fl_Value_Input.H>
-extern void rotation_speed_callback(Fl_Value_Input*, void*);
-extern void translation_speed_callback(Fl_Value_Input*, void*);
+extern void update_grid_size_callback(Fl_Value_Input*, void*);
 #include <FL/Fl_Check_Button.H>
 extern void ortho_callback(Fl_Check_Button*, void*);
 extern void change_vue_callback(Fl_Menu_*, long);
@@ -105,8 +105,7 @@ public:
   Fl_Group *edit_group;
   Fl_Choice *scenes_menu;
   Fl_Group *speed_group;
-  Fl_Value_Input *rotation_speed;
-  Fl_Value_Input *translation_speed;
+  Fl_Value_Input *grid_size_edit;
   Fl_Check_Button *vue_ortho_button;
   static unsigned char menu__i18n_done;
   static Fl_Menu_Item menu_[];

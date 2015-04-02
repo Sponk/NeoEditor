@@ -193,7 +193,7 @@ m_emptyText(NULL),
 m_renderer(NULL),
 m_selectionLock(false),
 m_snapToGrid(false),
-m_snapDistance(0.0),
+m_snapDistance(10.0),
 m_inputMethod(NULL)
 {
     sprintf(m_windowTitle, "Neo");

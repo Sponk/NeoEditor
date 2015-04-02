@@ -33,7 +33,7 @@ class EditorWindow {open
     Fl_Window {} {
       label {Neo Editor}
       callback window_quit open
-      xywh {646 267 910 610} type Double labelsize 11 align 80 resizable size_range {0 0 2048 2048} visible
+      xywh {776 321 910 610} type Double labelsize 11 align 80 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {
         xywh {0 0 920 25} selection_color 38
@@ -294,18 +294,19 @@ class EditorWindow {open
           xywh {570 27 129 24} down_box BORDER_BOX
         } {}
         Fl_Group speed_group {open
-          xywh {3 25 192 23}
+          xywh {3 25 192 25}
           code0 {speed_group->resizable(NULL);}
         } {
-          Fl_Value_Input rotation_speed {
-            label {Rot.:}
-            callback rotation_speed_callback
-            xywh {39 27 45 20} align 68 when 8 value 1
+          Fl_Round_Button {} {
+            label Grid user_data_type {void*}
+            callback enable_snap_to_grid_button_callback
+            xywh {125 26 60 24} box UP_FRAME down_box ROUND_DOWN_BOX shortcut 0x40067 align 276
           }
-          Fl_Value_Input translation_speed {
-            label {Trans.:}
-            callback translation_speed_callback
-            xywh {141 28 45 20} when 8 value 1
+          Fl_Value_Input grid_size_edit {
+            label {Grid Size:}
+            callback update_grid_size_callback selected
+            xywh {80 27 40 22} maximum 1000 step 1 value 100
+            code0 {grid_size_edit->value(EditorBackend::getInstance()->getSnapDistance());}
           }
         }
         Fl_Check_Button vue_ortho_button {
@@ -1869,8 +1870,7 @@ for(int i = 0; i < backend->getNumPlugins(); i++)
 }
 
 input_methods_choice->value(idx);
-description_edit->buffer(&text_buffer);} {selected
-    }
+description_edit->buffer(&text_buffer);} {}
   }
   Function {choose_background_color(Fl_Button*, ConfigurationDlg* dlg)} {open return_type {static void}
   } {}
