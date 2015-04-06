@@ -76,7 +76,20 @@ function Test3DSDK:TestEntity()
   assertEquals(entity:getPosition(), {0,0,0})  
   
   assertEquals(entity:getPath(), getWorkingDirectory() .. "/meshs/box.mesh")
-  
+
+  entity:changeAnimation(15) -- Animation does not exist!
+  assertEquals(entity:getCurrentAnimation(), 0)
+
+  assertEquals(entity:isAnimationOver(), false)
+
+  entity:setAnimationSpeed(2.0)
+  assertEquals(entity:getAnimationSpeed(), 2.0)
+
+  entity:setCurrentFrame(20)
+  assertEquals(entity:getCurrentFrame(), 20)
+
+  -- entity:enableShadow(false)
+  -- assertEquals(entity:hasShadow(), false)
 end
 
 function Test3DSDK:TestCamera()
