@@ -179,8 +179,9 @@ void writeHtml(string luaFilename, string outputDirectory, int idx, Settings& s,
 
 	out << "</div>" << endl;
 
+	out << "<div id='content'>" << endl;
 	string html = generateHtml(luaFilename.c_str());
-	out << html << "</body></html>";
+	out << html << "</div></body></html>";
 
 	std::replace(html.begin(), html.end(), '\"', '\'');
 	std::replace(html.begin(), html.end(), '\n', ' ');
