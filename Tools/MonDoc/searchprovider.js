@@ -23,7 +23,7 @@ function submitSearch(term)
 	
 	for(var i = 0; i < results.length; i++)
 	{
-		var site = sites[results[i].ref];
+		var site = sites[parseInt(results[i].ref) + 1];
 		var entry = "<a class='filelink' href='" + site.link + "'>";
 		entry += site.title + "</a><br>";
 		document.getElementById('searchresults').innerHTML += entry;

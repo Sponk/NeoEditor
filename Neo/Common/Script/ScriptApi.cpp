@@ -2090,6 +2090,7 @@ int getMass()
 	return 0;
 }
 
+/// BUG: getBoolean(0) ?
 int enablePhysics()
 {
 	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
@@ -2161,7 +2162,7 @@ int getFriction()
 			if(phyProps)
 			{
 				float friction = phyProps->getFriction();
-				script->pushFloat( (float)friction);
+				script->pushFloat(friction);
 				return 1;
 			}
 		}

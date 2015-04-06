@@ -811,7 +811,6 @@ function stopSound(object)
 -- @param object A sound object.
 -- @return A number.
 --
- 
 function getSoundGain(object)
 
 ---
@@ -821,7 +820,9 @@ function getSoundGain(object)
 -- @param object A sound object.
 -- @param gain A number between 0.0 and 1.0
 --
-function setSoundGain(object, gain)---
+function setSoundGain(object, gain)
+
+---
 -- Sets the cursor to the center of the screen.
 --
 function centerCursor()
@@ -1073,3 +1074,362 @@ function updateMatrix(object)
 -- @return A table containing the current matrix.
 --
 function getMatrix(object)
+
+---
+-- Checks if the object with the given name exists.
+-- @param name The name of the object as a string
+-- @return A boolean.
+function objectExists(name)
+
+---
+-- Loads a skybox from the given path.
+-- The textures need to be in a directory and need to be named
+-- in the fashion of "posx.jpg", "negx.jpg", "posy.jpg", "negy.jpg",
+-- "posz.jpg", "negz.jpg"
+--
+-- @param camera The camera object.
+-- @param path The path to the directory containing textures
+function loadCameraSkybox(camera, path)
+
+---
+-- Deletes the given object from the scene and
+-- free's its memory.
+--
+-- <strong>Attention:</strong> Do not use objects after deleting them!
+-- @param object The object to delete
+function deleteObject(object)
+
+---
+-- Resizes the game window.
+-- @param width The new width
+-- @param height The new height
+function resizeWindow(width, height)
+
+---
+-- Retrieves the filename of the mesh from the given entity.
+-- @param An entity
+-- @return A string containing the path
+function getMeshFilename(object)
+
+---
+-- Loads a mesh from disk and adds it as an entity to the current
+-- scene.
+-- @param filename Path to the mesh file.
+-- @return The new object
+function loadMesh(filename)
+
+---
+-- Retrieves the object type of the given object
+--
+-- Valid return values are
+-- "Entity", "Camera", "Light", "Sound", "Text", "Object"
+-- @return The type as a string
+function getObjectType(object)
+
+---
+-- Returns the maximum point of the given entity as a vec3.
+-- @param object The object
+-- @return The point in space
+function getBoundingMax(object)
+
+---
+-- Returns the minimum point of the given entity as a vec3.
+-- @param object The object
+-- @return The point in space
+function getBoundingMin(object)
+
+---
+-- Creates an empty group.
+-- Groups have the type "Object" when using "getObjectType(object)"
+-- @return The empty group
+function createGroup()
+
+---
+-- Returns the number of behaviors an object has attached.
+-- If the operation fails it returns '-1'.
+-- @param object The object to operate on.
+-- @return The number of behaviors
+function getBehaviorsNumber(object)
+
+---
+-- Returns the name of a behavior that is attached to the given object.
+-- @param object The object.
+-- @param idx The index of the behavior.
+-- @return The name as a string.
+function getBehaviorName(object, idx)
+
+---
+-- Returns the number of variables a behavior owns.
+-- @param object The object.
+-- @param idx The index of the behavior.
+-- @return The count as a number.
+function getBehaviorVariablesNumber(object, idx)
+
+---
+-- Returns the variable type of a variable that belongs to a behavior
+-- as a string.
+-- Valid values are:
+-- "bool", "vec2", "vec3", "vec4", "float", "int", "string", "uint"
+-- @param object The object to operate on
+-- @param bid The behavior ID
+-- @param vid The variable ID
+-- @return The type as a string
+function getBehaviorVariableType(object, bid, vid)
+
+---
+-- Adds a new behavior to the given object.
+-- @param object The object.
+-- @param behaviorName The name of the behavior to add.
+function addBehavior(object, behaviorName)
+
+---
+-- Enables or disables all physics properties of an object.
+-- @param object The object to operate on.
+-- @param enabled A boolean.
+function enablePhysics(object, enabled)
+
+---
+-- Sets the physical mass of an object.
+-- @param object The entity.
+-- @param mass The new mass as a number.
+function setMass(object, mass)
+
+---
+-- Returns the physical mass of an object.
+-- @param object The entity.
+-- @return The mass as a number.
+function getMass(object)
+
+---
+-- Returns the physical friction of an entity.
+-- @param object The entity.
+-- @return The friction as a number.
+function getFriction(object)
+
+---
+-- Sets the physical friction of an entity.
+-- @param object The entity
+-- @param friction The new friction as a number.
+function setFriction(object, friction)
+
+---
+-- Returns the physical restitution of an object.
+-- @param object The entity
+-- @return The restitution as a number.
+function getRestitution()
+
+---
+-- Sets the physical restitution of an entity.
+-- @param object The entity
+-- @param rest The new restitution as a number.
+function setRestitution(object, rest)
+
+---
+-- Returns the physical angular factor of an object.
+-- @param object The entity
+-- @return The angular factor as a number.
+function getAngularFactor(object)
+
+---
+-- Sets the physical angular factor of an entity.
+-- @param object The entity
+-- @param value The new angular factor as a number.
+function setAngularFactor(object, value)
+
+---
+-- Returns the physical linear factor of an object.
+-- @param object The entity
+-- @return The linear factor as a number.
+function getLinearFactor()
+
+---
+-- Sets the physical linear factor of an entity.
+-- @param object The entity
+-- @param value The new linear factor as a number.
+function setLinearFactor(object, value)
+
+---
+-- Sets the physics quality. The default value is 2, higher values mean
+-- higher precision.
+-- @param value The new value as a number.
+function setPhysicsQuality(value)
+
+---
+-- Changes the physical parent of an entity.
+-- @param object The entity
+-- @param parent The new parent
+function setConstraintParent()
+
+---
+-- Returns the current physical parent or nil if there is none.
+-- @param object The entity to operate on
+-- @return The parent as an object.
+function getConstraintParent()
+
+---
+-- Enables or disables collision with the physical parent object.
+-- @param object The entity.
+-- @param enabled A boolean value.
+function enableParentCollision(object, enabled)
+
+---
+-- Returns if the given entity is or is no ghost object.
+-- @param object The entity.
+-- @return A boolean
+function isGhost(object)
+
+---
+-- Enables/Disables the ghost property of an entity.
+-- @param object The entity
+-- @param enabled A boolean
+function enableGhost(object, enabled)
+
+---
+-- Loads a sound from the given file and adds it to the current scene.
+-- @param filename The file to load.
+-- @return The new sound object
+function loadSound(filename)
+
+---
+-- Returns the filename of the given sound object.
+-- @param The sound object
+-- @return The filename as a string
+function getSoundFilename(sound)
+
+---
+-- Returns the sound pitch of a sound object.
+-- @param object The sound object.
+-- @return The pitch as a number.
+function getSoundPitch(object)
+
+---
+-- Changes the sound pitch.
+-- @param object The sound object
+-- @param value The new pitch
+function setSoundPitch(object, value)
+
+---
+-- Returns the sound rolloff value
+-- @param object The sound object
+-- @return The sound rolloff as a number
+function getSoundRolloff(object)
+
+---
+-- Changes the sound rolloff of a sound
+-- @param object The sound object
+-- @param value The new rolloff value
+function setSoundRolloff(object, value)
+
+---
+-- Returns the sound radius of a sound object.
+-- @param object The sound object
+-- @return The radius as a number
+function getSoundRadius(object)
+
+---
+-- Changes the sound radius of a sound object.
+-- @param object The sound object
+-- @param value The new radius as a number
+function setSoundRadius(object, value)
+
+---
+-- Checks if the sound is relative
+-- @param object The sound object
+-- @return A boolean
+function isSoundRelative(object)
+
+---
+-- Sets the sound relative according to the given value
+-- @param object The sound object
+-- @param enabled A boolean
+function setSoundRelative(object, enabled)
+
+---
+-- Checks if the sound is looping
+-- @param object The sound object
+-- @return A boolean
+function isSoundLooping(object)
+
+---
+-- Sets the sound relative according to the given value
+-- @param object The sound object
+-- @param enabled A boolean
+function setSoundLooping()
+
+---
+-- Creates a new light object
+-- @return The new light object
+function createLight()
+
+---
+-- Creates a new camera object
+-- @return The new camera
+function createCamera()
+
+---
+-- Creates a new text object with the given font
+-- @param filename The path to the font to use
+-- @return A new text object
+function loadTextFont(filename)
+
+---
+-- Returns the file name of the font used by the given text object.
+-- @param object The text object
+-- @return the file as a string
+function getFontFilename(object)
+
+---
+-- Returns the font size of the given text
+-- @param object The text object
+-- @return The font size as a number
+function getTextFontSize(object)
+
+---
+-- Changes the font size of the given text
+-- @param object The text object
+-- @param size The new size as a number
+function setTextFontSize(object, size)
+
+---
+-- Changes the text alignment
+--
+-- The alignment is given as a string.
+-- Valid values are: "Center", "Left", "Right"
+--
+-- @param object The text object
+-- @param align The new alignment as a string
+function setTextAlignment(object, alignment)
+
+---
+-- Returns the text alignment
+--
+-- The alignment is given as a string.
+-- Valid values are: "Center", "Left", "Right"
+--
+-- @param object The text object
+-- @return The alignment as a string
+function getTextAlignment(object)
+
+---
+-- Returns the current working directory
+-- @return The working directory as a string
+function getWorkingDirectory()
+
+---
+-- Loads a text file completely from disk. Also accesses files inside
+-- the game NPK after the game is published.
+-- @param filename The file to load.
+-- @return The content as a string
+function loadTextFile(filename)
+
+---
+-- Checks if a file exists
+-- @param filename The file to check
+-- @return A boolean
+function isFileExist(filename)
+
+---
+-- Creates a new directory.
+-- @param path The directory to create.
+function createDirectory(path)
+
