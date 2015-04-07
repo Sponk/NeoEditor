@@ -50,6 +50,19 @@ InputField::InputField(unsigned int x, unsigned int y, unsigned int width,
 {
 }
 
+float InputField::calculateWidth(OText* text)
+{
+	float length = 0;
+	Font* font = text->getFontRef()->getFont();
+	map<unsigned int, Character>* chars = font->getCharacters();
+
+	const char* s = text->getText();
+	while(*s)
+		length += ((*chars)[*(s++)]).getXAdvance();
+	
+	return length * text->getSize();
+}
+
 void InputField::draw()
 {
 	Render* render = Render::getInstance();
@@ -82,16 +95,15 @@ void InputField::draw()
 			break;
 	}
 
-	float size =
-		m_labelText->getFont()->getTextureWith() / m_labelText->getSize();
-	int maxChars = (int)ceil(3.7 * (m_width / size));
-	// MLOG_INFO("Max chars: " << maxChars);
+	// Update text
+	m_labelText->setText(m_label.c_str());
 
-	if (m_label.length() > maxChars)
-		m_labelText->setText(
-			m_label.substr(m_label.length() - maxChars).c_str());
-	else
-		m_labelText->setText(m_label.c_str());
+	Box3d* box = m_labelText->getBoundingBox();
+	float offset = calculateWidth(m_labelText);
+
+	// Calculate overflow offset
+	if(offset <= m_width) offset = 0.0f; // If we do not overflow, simply ignore
+	else offset -= m_width; // Calculate the new position relative to the right edge
 
 	RenderingContext* renderContext =
 		NeoEngine::getInstance()->getRenderingContext();
@@ -101,12 +113,10 @@ void InputField::draw()
 	renderContext->enableScissorTest();
 	renderContext->setScissor(m_x, winh - (m_y + m_height), m_width, m_height);
 
-	/*renderContext->setClearColor(MVector4(1,0,0, 1));
-	renderContext->clear(M_BUFFER_COLOR);
-	renderContext->setClearColor(MVector4(0,0,0,1));*/
+	render->drawText(m_labelText, m_x - offset,
+					 m_y + 0.5*(box->max.y - box->min.y) + 0.5 * m_height,
+					 m_rotation);
 
-	render->drawText(m_labelText, m_x,
-					 m_y + 0.5 * m_labelText->getSize() + 0.5 * m_height);
 	renderContext->disableScissorTest();
 }
 

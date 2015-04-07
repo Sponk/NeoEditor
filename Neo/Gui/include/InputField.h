@@ -66,6 +66,13 @@ class InputField : public Widget
 
 	void addCharacter(char c);
 
+	/**
+	 * @brief Calculates the full width of the given text object.
+	 * @param text The text object to operate on.
+	 * @return The full width in pixels
+	 */
+	float calculateWidth(OText* text);
+	
 public:
 	InputField(unsigned int x, unsigned int y, unsigned int width,
 			   unsigned int height, const char* label);
