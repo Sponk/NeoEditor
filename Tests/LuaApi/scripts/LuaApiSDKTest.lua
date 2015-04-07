@@ -39,13 +39,13 @@ light.maxBrightness = 2.0
 light.speed = 0.01
 
 
-    local spriteSize = getSpriteSize(sprite.widget)
-    print("Sprite has dimensions of " .. spriteSize[1] .. "x" .. spriteSize[2])
-   
+local spriteSize = getSpriteSize(sprite.widget)
+print("Sprite has dimensions of " .. spriteSize[1] .. "x" .. spriteSize[2])
 
-	--- Themed button!
-	local themedButton = createThemedButton(500,500,200,40,"This is a button!", "")
-	addWidgetToCanvas(mainCanvas.canvas, themedButton)
+
+--- Themed button!
+local themedButton = ThemedButton(20,700,200,40,"This is a button!", "btnCallback")
+mainCanvas:addWidget(themedButton)
 	
 function onSceneUpdate()
 
