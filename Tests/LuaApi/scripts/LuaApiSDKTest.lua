@@ -43,6 +43,10 @@ light.speed = 0.01
     print("Sprite has dimensions of " .. spriteSize[1] .. "x" .. spriteSize[2])
    
 
+	--- Themed button!
+	local themedButton = createThemedButton(500,500,200,40,"This is a button!", "")
+	addWidgetToCanvas(mainCanvas.canvas, themedButton)
+	
 function onSceneUpdate()
 
     sprite:rotate(2)

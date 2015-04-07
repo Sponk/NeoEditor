@@ -234,13 +234,16 @@ void Render::drawTexturedQuad(float x, float y, float w, float h, int texture,
 	render->enableBlending();
 	render->setBlendingMode(BLENDING_ALPHA);
 	render->bindTexture(texture);
+
 	// projmodelview matrix
 	static Matrix4x4 ProjMatrix;
 	static Matrix4x4 ModelViewMatrix;
 	static Matrix4x4 ProjModelViewMatrix;
 	render->getProjectionMatrix(&ProjMatrix);
 	render->getModelViewMatrix(&ModelViewMatrix);
+
 	Vector3 pivot = Vector3(x + 0.5 * w, y + 0.5 * h, 0);
+
 	ModelViewMatrix.translate(pivot);
 	ModelViewMatrix.rotate(Vector3(0, 0, 1), rotation);
 	ModelViewMatrix.translate(-pivot);

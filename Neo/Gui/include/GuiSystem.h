@@ -73,10 +73,43 @@ private:
 
 	bool m_clearScheduled;
 
+	String m_themeBorderH;
+	String m_themeBorderV;
+	String m_themeBody;
+	String m_themeEdge;
+
+	String m_themeBorderHHover;
+	String m_themeBorderVHover;
+	String m_themeBodyHover;
+	String m_themeEdgeHover;
+
+	String m_themeBorderHPressed;
+	String m_themeBorderVPressed;
+	String m_themeBodyPressed;
+	String m_themeEdgePressed;
+	
 public:
 	GuiSystem();
 	~GuiSystem();
 
+	const char* getThemeBorderH() { return m_themeBorderH.getSafeString(); }
+	const char* getThemeBorderV() { return m_themeBorderV.getSafeString(); }
+	const char* getThemeBody() { return m_themeBody.getSafeString(); }
+	const char* getThemeEdge() { return m_themeEdge.getSafeString(); }	
+
+	const char* getThemeBorderHHover() { return m_themeBorderHHover.getSafeString(); }
+	const char* getThemeBorderVHover() { return m_themeBorderVHover.getSafeString(); }
+	const char* getThemeBodyHover() { return m_themeBodyHover.getSafeString(); }
+	const char* getThemeEdgeHover() { return m_themeEdgeHover.getSafeString(); }	
+
+
+	const char* getThemeBorderHPressed() { return m_themeBorderHPressed.getSafeString(); }
+	const char* getThemeBorderVPressed() { return m_themeBorderVPressed.getSafeString(); }
+	const char* getThemeBodyPressed() { return m_themeBodyPressed.getSafeString(); }
+	const char* getThemeEdgePressed() { return m_themeEdgePressed.getSafeString(); }	
+
+	void setThemeDirectory(const char* dir);
+	
 	/**
 	 * @brief Returns a global instance of the GuiSystem.
 	 * @return The global GuiSystem.

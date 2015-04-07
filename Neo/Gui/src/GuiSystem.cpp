@@ -36,6 +36,7 @@
 #include <GuiSystem.h>
 #include <Canvas.h>
 #include <Button.h>
+#include <ThemedButton.h>
 #include <InputField.h>
 #include <Render.h>
 #include <Label.h>
@@ -50,6 +51,9 @@ GuiSystem::GuiSystem()
 {
 	m_canvasVector.push_back(Canvas::getInstance());
 	m_defaultFont = "fonts/default.ttf";
+
+	setThemeDirectory("maps");
+	
 	m_defaultFontSize = 12.0;
 	m_normalBackground = Vector4(0.5, 0.5, 0.5, 1.0);
 	m_hoverBackground = Vector4(0.7, 0.7, 0.7, 1.0);
@@ -137,6 +141,29 @@ int createButton()
 		return 0;
 
 	Button* btn = new Button(script->getInteger(0), script->getInteger(1),
+							 script->getInteger(2), script->getInteger(3),
+							 script->getString(4));
+
+	btn->setCallback((CALLBACK_FUNCTION)scriptCallback);
+
+	scriptCallbacks.push_back(script->getString(5));
+	btn->setUserData(scriptCallbacks.size() - 1);
+
+	GuiSystem* gui = GuiSystem::getInstance();
+	int idx = gui->addWidget(btn);
+
+	script->pushInteger(idx);
+	return 1;
+}
+
+int createThemedButton()
+{
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("createThemedButton", 6))
+		return 0;
+
+	ThemedButton* btn = new ThemedButton(script->getInteger(0), script->getInteger(1),
 							 script->getInteger(2), script->getInteger(3),
 							 script->getString(4));
 
@@ -636,8 +663,22 @@ int setCanvasCameraPosition()
 	return 1;
 }
 
+int setThemeDirectory()
+{
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+
+	if (!script->isFunctionOk("setThemeDirectory", 2))
+		return 0;
+
+	GuiSystem::getInstance()->setThemeDirectory(script->getString(0));
+	return 1;
+}
+	
+
 void GuiSystem::setupLuaInterface(ScriptContext* script)
 {
+	script->addFunction("setThemeDirectory", ::setThemeDirectory);
+	
 	script->addFunction("setCanvasCameraPosition", setCanvasCameraPosition);
 	script->addFunction("setWidgetFlip", setWidgetFlip);
 	script->addFunction("setWidgetScale", setWidgetScale);
@@ -647,7 +688,10 @@ void GuiSystem::setupLuaInterface(ScriptContext* script)
 	script->addFunction("createCanvas", createCanvas);
 	script->addFunction("getCanvasClearColor", getCanvasClearColor);
 	script->addFunction("setCanvasClearColor", setCanvasClearColor);
+
 	script->addFunction("createButton", createButton);
+	script->addFunction("createThemedButton", createThemedButton);
+	
 	script->addFunction("createInput", createInput);
 	script->addFunction("createLabel", createLabel);
 	script->addFunction("createSprite", createSprite);
@@ -790,4 +834,58 @@ void GuiSystem::addCanvas(Canvas* c)
 void GuiSystem::updateLayers()
 {
 	std::sort(m_canvasVector.begin(), m_canvasVector.end(), compareCanvasLayer);
+}
+
+void GuiSystem::setThemeDirectory(const char* dir)
+{
+	char path[256];
+
+	strcpy(path, dir);
+	strcat(path, "/body.png");
+	m_themeBody = path;
+
+	strcpy(path, dir);
+	strcat(path, "/edge.png");
+	m_themeEdge = path;
+
+	strcpy(path, dir);
+	strcat(path, "/borderh.png");
+	m_themeBorderH = path;
+	
+	strcpy(path, dir);
+	strcat(path, "/borderv.png");
+	m_themeBorderV = path;
+
+	strcpy(path, dir);
+	strcat(path, "/body-hover.png");
+	m_themeBodyHover = path;
+	
+	strcpy(path, dir);
+	strcat(path, "/edge-hover.png");
+	m_themeEdgeHover = path;
+
+	strcpy(path, dir);
+	strcat(path, "/borderh-hover.png");
+	m_themeBorderHHover = path;
+	
+	strcpy(path, dir);
+	strcat(path, "/borderv-hover.png");
+	m_themeBorderVHover = path;
+	
+	strcpy(path, dir);
+	strcat(path, "/body-pressed.png");
+	m_themeBodyPressed = path;
+	
+	strcpy(path, dir);
+	strcat(path, "/edge-pressed.png");
+	m_themeEdgePressed = path;
+
+	strcpy(path, dir);
+	strcat(path, "/borderh-pressed.png");
+	m_themeBorderHPressed = path;
+
+	strcpy(path, dir);
+	strcat(path, "/borderv-pressed.png");
+	m_themeBorderVPressed = path;
+	
 }

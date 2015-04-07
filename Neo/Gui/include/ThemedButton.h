@@ -33,47 +33,56 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __BUTTON_H__
-#define __BUTTON_H__
+#ifndef __THEMED_BUTTON_H__
+#define __THEMED_BUTTON_H__
 
-#include <Widget.h>
+#include <Button.h>
+#include <Sprite.h>
 #include <NeoEngine.h>
 
 namespace Neo
 {
 namespace Gui
 {
-/**
- * Represents the state a button can possible have.
- */
-enum BUTTON_STATE
-{
-	/// If the button is neither selected nor pressed
-	BUTTON_NORMAL_STATE = 0,
-	/// If the button has the mouse cursor over it
-	BUTTON_HOVER_STATE,
-	/// If the mouse is hovering over the button and the left mouse button is pressed
-	BUTTON_PRESSED_STATE 
-};
 
+#define NUM_SPRITES 9
+	
 /**
- * @brief Implements a simple pushable button that calls the specified callback.
+ * @brief Implements a simple pushable button that calls the specified callback. This
+ * implementation uses Sprites to become themable.
  *
  * @author Yannick Pflanzer
  */
-class Button : public Widget
+class ThemedButton : public Button
 {
-protected:
-	OText* m_labelText;
-	BUTTON_STATE m_state;
+	enum SPRITE_POS
+	{
+		BODY = 0,
+		TOP,
+		BOTTOM,
+		LEFT,
+		RIGHT,
+		TOP_LEFT,
+		TOP_RIGHT,
+		BOTTOM_LEFT,
+		BOTTOM_RIGHT
+	};
+	
+	Sprite* m_sprites[NUM_SPRITES];
+	Sprite* m_hoveredSprites[NUM_SPRITES];
+	Sprite* m_pressedSprites[NUM_SPRITES];
 
+    
+	void loadSprites(Sprite* sprites[], const char* vert,
+					 const char* hor, const char* body,
+					 const char* edge);
+	
+	void drawSprites(Sprite* sprites[]);
 public:
-	Button(unsigned int x, unsigned int y, unsigned int width,
+	ThemedButton(unsigned int x, unsigned int y, unsigned int width,
 		   unsigned int height, const char* label);
 
 	void draw();
-	void draw(Vector2 offset) { draw(); }
-	void update();
 };
 }
 }
