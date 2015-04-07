@@ -25,9 +25,18 @@ using namespace Neo;
 #include "Publish/Publisher.h"
 #include <AssimpMeshLoader.h>
 
+#include <Window/Window.h>
+#include <unistd.h>
+
 using namespace std;
 
 #define VERSION "0.1"
+
+#ifndef WIN32
+#define SEPERATOR "/"
+#else
+#define SEPERATOR "\\"
+#endif
 
 struct Settings
 {
@@ -89,6 +98,13 @@ Settings parseOpt(int argc, char* argv[])
 
 		else if (arg == "-h")
 		{
+			s.printHelp = true;
+			return s;
+		}
+
+		else
+		{
+			cout << "Unknown option '" << arg << "'" << endl;
 			s.printHelp = true;
 			return s;
 		}
@@ -200,6 +216,23 @@ int main(int argc, char* argv[])
 	if(!loadProject(s))
 		return 1;
 
+	cout << "Publishing from: " << s.inputProject << endl;
+	cout << "Publishing to: " << s.outputDirectory << endl;
+	cout << "Using player: " << s.player << endl;
+
+	string workingDirectory = s.outputDirectory;
+	if(int idx = workingDirectory.find_last_of(SEPERATOR))
+		workingDirectory.erase(idx);
+
+	
+	string dataDirectory = argv[0];
+	if(int idx = dataDirectory.find_last_of(SEPERATOR))
+		dataDirectory.erase(idx);
+
+	chdir(dataDirectory.c_str());
+	NeoWindow::getInstance()->setWorkingDirectory(workingDirectory.c_str());
+	NeoWindow::getInstance()->setCurrentDirectory(".");
+    
 	Publisher* publisher = Publisher::getInstance();
 	publisher->publish(s.inputProject.c_str(), s.outputDirectory.c_str(),
 					   s.player.c_str());

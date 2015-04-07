@@ -484,12 +484,11 @@ void copySysLinux(const char* projName)
 	if(char* ext = strstr(filename, ".mproj"))
 	{
 		*ext = 0;
-
 		Project proj;
         if(proj.loadXML(projName))
 		{
 			char destName[256];
-			getGlobalFilename(destName, getPubDir(), filename);
+		    getGlobalFilename(destName, getPubDir(), filename);
 
 			char level[256];
 			getLocalFilename(level, system->getWorkingDirectory(), proj.startLevel.c_str());

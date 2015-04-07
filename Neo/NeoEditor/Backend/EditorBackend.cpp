@@ -301,7 +301,7 @@ void EditorBackend::publish(const char* dest, const char* exec)
 	
 	// FIXME: DON'T USE SYSTEM!
 	string cmd = tooldir;
-	cmd += " -e ";
+	cmd += " -p ";
 	cmd += exec;
 	cmd += " -o ";
 	cmd += dest;
