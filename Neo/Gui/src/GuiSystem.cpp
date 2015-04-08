@@ -673,10 +673,67 @@ int setThemeDirectory()
 	GuiSystem::getInstance()->setThemeDirectory(script->getString(0));
 	return 1;
 }
+
+int createSpriteBatch()
+{
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	
+	SpriteBatch* s = new SpriteBatch();
+	script->pushPointer(s);
+	return 1;
+}
+
+int addSpriteBatchToCanvas()
+{
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	
+	if (!script->isFunctionOk("addSpriteBatchToCanvas", 2))
+		return 0;
+
+	Canvas* c = (Canvas*) script->getPointer(0);
+	c->addSpriteBatch((SpriteBatch*) script->getPointer(1));
+	return 1;
+}
+
+int addSpriteToBatch()
+{
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	
+	if (!script->isFunctionOk("addSpriteToBatch", 2))
+		return 0;
+
+	Sprite* sprite = new Sprite(0,0,0,0,script->getString(1), "");
+	SpriteBatch* sb = (SpriteBatch*) script->getPointer(0);
+	sb->addSprite(sprite);
+
+	script->pushPointer(sprite);
+	
+	return 1;
+}
+
+int updateBatchSprite()
+{
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	
+	if (!script->isFunctionOk("addSpriteToBatch", 6))
+		return 0;
+
+	Sprite* sprite = (Sprite*) script->getPointer(0);
+
+	sprite->setPosition(Vector2(script->getFloat(1), script->getFloat(2)));
+	sprite->setScale(Vector2(script->getFloat(3), script->getFloat(4)));
+	sprite->setRotation(script->getFloat(5));
+
+	return 1;
+}
 
 void GuiSystem::setupLuaInterface(ScriptContext* script)
 {
+	script->addFunction("updateBatchSprite", updateBatchSprite);
+	script->addFunction("createSpriteBatch", createSpriteBatch);
+	script->addFunction("addSpriteBatchToCanvas", addSpriteBatchToCanvas);
+	script->addFunction("addSpriteToBatch", addSpriteToBatch);
+	
 	script->addFunction("setThemeDirectory", ::setThemeDirectory);
 	
 	script->addFunction("setCanvasCameraPosition", setCanvasCameraPosition);

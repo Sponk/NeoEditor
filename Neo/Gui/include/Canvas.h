@@ -36,6 +36,7 @@
 #define __CANVAS_H_
 
 #include <Widget.h>
+#include <Sprite.h>
 #include <vector>
 #include <NeoEngine.h>
 
@@ -43,6 +44,15 @@ namespace Neo
 {
 namespace Gui
 {
+
+class SpriteBatch
+{
+	std::vector<Sprite*> m_sprites;
+public:
+	void addSprite(Sprite* s) { m_sprites.push_back(s); }
+	void draw();
+};
+	
 /**
  * @brief The Canvas class contains all widgets and renders them.
  *
@@ -66,6 +76,7 @@ private:
 
 	Vector2 m_cameraPosition;
 
+	std::vector<SpriteBatch*> m_batches;
 public:
 	/**
 	 * @brief Returns the global canvas object that directly maps to the screen.
@@ -80,6 +91,8 @@ public:
 	~Canvas() { clear(); }
 	Canvas() : m_layer(0) {}
 
+	void addSpriteBatch(SpriteBatch* b) { m_batches.push_back(b); }
+	
 	/**
 	 * @brief Draws the Canvas and its contents.
 	 */

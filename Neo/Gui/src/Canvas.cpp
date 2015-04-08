@@ -86,6 +86,9 @@ void Canvas::draw()
 			m_widgets.erase(m_widgets.begin() + i);
 	}
 
+	for(int i = 0; i < m_batches.size(); i++)
+		m_batches[i]->draw();
+	
 	renderingContext->bindFrameBuffer(currentFrameBuffer);
 }
 
@@ -141,4 +144,10 @@ void Canvas::enableRenderToTexture(const char* tex)
 
 		m_renderToTexture = true;
 	}
+}
+
+void SpriteBatch::draw()
+{
+	for(int i = 0; i < m_sprites.size(); i++)
+		m_sprites[i]->draw(Vector2(0,0));
 }
