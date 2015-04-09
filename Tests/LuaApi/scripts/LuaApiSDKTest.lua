@@ -46,7 +46,14 @@ print("Sprite has dimensions of " .. spriteSize[1] .. "x" .. spriteSize[2])
 --- Themed button!
 local themedButton = ThemedButton(20,700,200,40,"This is a button!", "btnCallback")
 mainCanvas:addWidget(themedButton)
-	
+
+local spriteBatch = SpriteBatch()
+mainCanvas:addBatch(spriteBatch)
+
+local sprite = spriteBatch:createSprite("maps/neo-icon.png")
+sprite:translate(100, 0)
+sprite:update()
+
 function onSceneUpdate()
 
     sprite:rotate(2)

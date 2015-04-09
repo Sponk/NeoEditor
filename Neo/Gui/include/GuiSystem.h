@@ -107,7 +107,19 @@ public:
 	const char* getThemeBorderVPressed() { return m_themeBorderVPressed.getSafeString(); }
 	const char* getThemeBodyPressed() { return m_themeBodyPressed.getSafeString(); }
 	const char* getThemeEdgePressed() { return m_themeEdgePressed.getSafeString(); }	
-
+	/**
+	 * @brief Changes the current GUI theme.
+	 * This change only applies to newly created widgets, all existing ones
+	 * will keep using the previously selected theme.
+	 *
+	 * Following fils are required:
+	 * "/body.png", "/edge.png", "/borderh.png", "/borderv.png",
+	 * "/body-hover.png", "/edge-hover.png", "/borderh-hover.png",
+	 * "/borderv-hover.png", "/body-pressed.png", "/edge-pressed.png",
+	 * "/borderh-pressed.png", "/borderv-pressed.png"
+	 *
+	 * @param dir The directory containing the theme files.
+	 */
 	void setThemeDirectory(const char* dir);
 	
 	/**

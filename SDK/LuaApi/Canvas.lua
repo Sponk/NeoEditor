@@ -23,3 +23,9 @@ mainCanvas = Canvas(getMainCanvas())
 function Canvas:addWidget(widget)
     addWidgetToCanvas(self.canvas, widget.widget)
 end
+
+--- Adds a batch to the Canvas.
+-- @param widget The batch object. See also SpriteBatch.
+function Canvas:addBatch(widget)
+    addSpriteBatchToCanvas(self.canvas, widget.batch)
+end
