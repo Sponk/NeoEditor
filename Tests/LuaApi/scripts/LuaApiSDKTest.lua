@@ -61,10 +61,12 @@ function onSceneUpdate(delta)
 
     cube:rotate({0,1,0}, 100*delta)
 
-    if isKeyPressed("RIGHT") then
+	if isKeyPressed("JOY1_BUTTON_A") then print ("BUTTON!") end
+
+    if isKeyPressed("RIGHT") or isKeyPressed("JOY1_BUTTON_DPADRIGHT") or getAxis("JOY1_AXIS_LEFTX") > 0.2 then
 	tile:attachAnimation(walkAnimation)
 	tile:translate(2,0)
-    elseif isKeyPressed("LEFT") then
+    elseif isKeyPressed("LEFT") or getAxis("JOY1_AXIS_LEFTX") < -0.2 then
 	tile:attachAnimation(walkAnimation)
 	tile:translate(-2,0)
     else

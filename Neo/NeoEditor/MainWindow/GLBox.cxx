@@ -57,6 +57,10 @@ void update_editor(void*)
     if(!window.glbox->maratis_init)
         return;
 
+
+	NeoWindow::getInstance()->onEvents();
+	NeoWindow::getInstance()->onWindowEvents();
+
     NeoGame* game = NeoEngine::getInstance()->getGame();
     InputContext* input = NeoEngine::getInstance()->getInputContext();
     EditorBackend* maratis = EditorBackend::getInstance();

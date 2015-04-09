@@ -37,6 +37,7 @@
 #include "MainWindow/MainWindow.h"
 #include "MainWindow/Translator.h"
 #include "MainWindow/Utils.h"
+#include <GameWinEvents.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -449,6 +450,11 @@ void load_translation(const char* confdir, const char* rep)
 	Translator::getInstance()->loadTranslation(dir);
 }
 
+void windowEvents(MWinEvent * windowEvents)
+{
+	gameWinEvents(windowEvents);
+}
+
 // main
 int main(int argc, char** argv)
 {
@@ -476,7 +482,7 @@ int main(int argc, char** argv)
 									  << (int)linked.patch);
 
 	// Don't init audio. We have OpenAL for that!
-	if (SDL_Init(SDL_INIT_EVERYTHING & ~SDL_INIT_HAPTIC & ~SDL_INIT_AUDIO) != 0)
+	if (SDL_Init(SDL_INIT_JOYSTICK & ~SDL_INIT_HAPTIC & ~SDL_INIT_AUDIO) != 0)
 	{
 		MLOG_ERROR("SDL Error: " << SDL_GetError());
 		return -1;
@@ -516,6 +522,7 @@ int main(int argc, char** argv)
 
 	NeoWindow* mwindow = NeoWindow::getInstance();
 	mwindow->setCurrentDirectory(rep);
+	mwindow->setPointerEvent(windowEvents);
 
 	executable = argv[0];
 
@@ -547,10 +554,6 @@ int main(int argc, char** argv)
 #endif
 
 	Fl::add_timeout(0.2, update_editor);
-	while (Fl::check())
-	{
-		mwindow->onEvents();
-		mwindow->onWindowEvents();
-	}
+	while (Fl::check());
 	return 0;
 }

@@ -47,9 +47,18 @@ void NeoGame::update(void)
 	ScriptContext * scriptContext = engine->getScriptContext();
 
     PROFILE_SHARED_BEGIN(Scripts);
+	long int curtime = engine->getSystemContext()->getSystemTick();
+	m_frameDelta = (float) (curtime - m_lastFrame) * 0.001; 
+	m_lastFrame = curtime;
+
 	// update script
 	if(scriptContext)
-		scriptContext->callFunction("onSceneUpdate");
+		{
+			scriptContext->startCallFunction("onSceneUpdate");
+			scriptContext->pushFloat(m_frameDelta);
+			scriptContext->endCallFunction(1);
+		}
+
     PROFILE_END();
 
 	// get level
