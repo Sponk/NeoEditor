@@ -36,7 +36,7 @@ light = Object3d.getObject("Light")
 
 light = OLight(light)
 light.maxBrightness = 2.0
-light.speed = 0.01
+light.speed = 1
 
 
 local spriteSize = getSpriteSize(sprite.widget)
@@ -50,16 +50,16 @@ mainCanvas:addWidget(themedButton)
 local spriteBatch = SpriteBatch()
 mainCanvas:addBatch(spriteBatch)
 
-local sprite = spriteBatch:createSprite("maps/neo-icon.png")
-sprite:translate(100, 0)
-sprite:update()
+local bsprite = spriteBatch:createSprite("maps/neo-icon.png")
+bsprite:translate(100, 0)
+bsprite:update()
 
-function onSceneUpdate()
+function onSceneUpdate(delta)
 
-    sprite:rotate(2)
-    button:rotate(2)
+    sprite:rotate(100*delta)
+    button:rotate(100*delta)
 
-    cube:rotate({0,1,0}, 2)
+    cube:rotate({0,1,0}, 100*delta)
 
     if isKeyPressed("RIGHT") then
 	tile:attachAnimation(walkAnimation)
@@ -76,6 +76,6 @@ function onSceneUpdate()
 	light.speed = light.speed * -1
     end
 
-    light:setIntensity(light:getIntensity() + light.speed)
+    light:setIntensity(light:getIntensity() + light.speed * delta)
     tile:update()
 end

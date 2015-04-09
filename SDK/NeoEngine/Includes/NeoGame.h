@@ -50,6 +50,8 @@ class M_ENGINE_EXPORT NeoGame
 {
 private:
 
+	long int m_lastFrame;
+	float m_frameDelta;
 	bool m_isRunning;
 
     bool m_postEffectsEnabled;

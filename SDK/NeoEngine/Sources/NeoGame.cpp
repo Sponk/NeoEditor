@@ -42,13 +42,21 @@ NeoGame::~NeoGame(void)
 }
 
 void NeoGame::update(void)
-{
+{ 
 	NeoEngine * engine = NeoEngine::getInstance();
 	ScriptContext * scriptContext = engine->getScriptContext();
 
+	long int curtime = engine->getSystemContext()->getSystemTick();
+	m_frameDelta = (float) (curtime - m_lastFrame) * 0.001; 
+	m_lastFrame = curtime;
+
 	// update script
 	if(scriptContext)
-		scriptContext->callFunction("onSceneUpdate");
+		{
+			scriptContext->startCallFunction("onSceneUpdate");
+			scriptContext->pushFloat(m_frameDelta);
+			scriptContext->endCallFunction(1);
+		}
 
 	// get level
 	Level * level = NeoEngine::getInstance()->getLevel();
