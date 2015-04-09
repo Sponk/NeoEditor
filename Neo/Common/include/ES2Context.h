@@ -1,10 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MCore
-// MES2Context.h
-//
-// OpenGL-ES2 Rendering Context
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -30,8 +23,8 @@
 //========================================================================
 
 
-#ifndef _M_ES2_CONTEXT_H
-#define _M_ES2_CONTEXT_H
+#ifndef __ES2_CONTEXT_H
+#define __ES2_CONTEXT_H
 
 #include <NeoCore.h>
 #define MAX_MRCLIGHTS 8
@@ -40,9 +33,9 @@
 namespace Neo
 {
 /**
- * The MES2Context class implements the interface dictated by MRenderingContext on top of OpenGL ES.
+ * The ES2Context class implements the interface dictated by RenderingContext on top of OpenGL ES.
  *
- * @see MRenderingContext
+ * @see RenderingContext
  */
 class ES2Context : public RenderingContext
 {
@@ -54,12 +47,12 @@ private:
 	// Matrices
 	unsigned int m_matrixStep;
 	MATRIX_MODES m_matrixMode;
-	MMatrix4x4 m_projectionMatrix;
-	MMatrix4x4 m_modelViewMatrix;
-	MMatrix4x4 m_textureMatrix;
+	Matrix4x4 m_projectionMatrix;
+	Matrix4x4 m_modelViewMatrix;
+	Matrix4x4 m_textureMatrix;
 	
-	MMatrix4x4 * m_currentMatrix;
-	MMatrix4x4 m_matrixSteps[MAX_MATRIX_STEPS];
+	Matrix4x4 * m_currentMatrix;
+	Matrix4x4 m_matrixSteps[MAX_MATRIX_STEPS];
 	
 	// frame buffer
 	unsigned int m_currentFrameBuffer;
@@ -142,7 +135,7 @@ public:
     void sendUniformVec2(unsigned int fxId, const char * name, float * values, const int count = 1);
     void sendUniformVec3(unsigned int fxId, const char * name, float * values, const int count = 1);
 	void sendUniformVec4(unsigned int fxId, const char * name, float * values, const int count = 1);
-	void sendUniformMatrix(unsigned int fxId, const char * name, MMatrix4x4 * matrix, const int count = 1, const bool transpose = false);
+	void sendUniformMatrix(unsigned int fxId, const char * name, Matrix4x4 * matrix, const int count = 1, const bool transpose = false);
 	void getAttribLocation(unsigned int fxId, const char * name, int * location);
 	
 	// arrays
@@ -213,14 +206,14 @@ public:
 	void setMatrixMode(MATRIX_MODES mode);
 	void pushMatrix(void);
 	void popMatrix(void);
-	void multMatrix(const MMatrix4x4 * matrix);
+	void multMatrix(const Matrix4x4 * matrix);
 	void translate(const Vector3 & position);
 	void rotate(const Vector3 & axis, float angle);
 	void scale(const Vector3 & scale);
 	void getViewport(int * viewport);
-	void getModelViewMatrix(MMatrix4x4 * matrix);
-	void getProjectionMatrix(MMatrix4x4 * matrix);
-	void getTextureMatrix(MMatrix4x4 * matrix);
+	void getModelViewMatrix(Matrix4x4 * matrix);
+	void getProjectionMatrix(Matrix4x4 * matrix);
+	void getTextureMatrix(Matrix4x4 * matrix);
 
 	// fog
 	void enableFog(void);

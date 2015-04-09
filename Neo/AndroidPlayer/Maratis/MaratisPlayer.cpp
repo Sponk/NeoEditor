@@ -228,7 +228,7 @@ void MaratisPlayer::restart(void)
 void MaratisPlayer::loadGamePlugin(void)
 {
 	char gameFile[256];
-	Window * window = Window::getInstance();
+	NeoWindow * window = NeoWindow::getInstance();
 
 	#ifdef WIN32
 		getGlobalFilename(gameFile, window->getWorkingDirectory(), "Game.dll");
@@ -261,7 +261,7 @@ bool MaratisPlayer::loadProject(const char * filename)
 
 void MaratisPlayer::loadProject(Project* proj, const char * filename)
 {
-	Window * window = Window::getInstance();
+	NeoWindow * window = NeoWindow::getInstance();
 	NeoEngine * engine = NeoEngine::getInstance();
 	
 	
@@ -311,7 +311,7 @@ void MaratisPlayer::logicLoop(void)
 
 void MaratisPlayer::graphicLoop(void)
 {
-	Window * window = Window::getInstance();
+	NeoWindow * window = NeoWindow::getInstance();
 	NeoEngine * engine = NeoEngine::getInstance();
 	RenderingContext * render = engine->getRenderingContext();
 
@@ -327,11 +327,11 @@ void MaratisPlayer::graphicLoop(void)
 		}
 		else
 		{
-			render->clear(M_BUFFER_COLOR);
+			render->clear(BUFFER_COLOR);
 		}
 	}
 	else
 	{
-		render->clear(M_BUFFER_COLOR);
+		render->clear(BUFFER_COLOR);
 	}
 }

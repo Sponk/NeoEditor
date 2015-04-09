@@ -63,6 +63,10 @@
 
 using namespace std;
 
+#ifdef ANDROID
+#include <cstdio>
+#include <cctype>
+#endif
 
 namespace happyhttp
 {

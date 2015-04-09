@@ -56,7 +56,7 @@ using namespace Neo;
 static int g_GLversion = 0;
 static float maxAnisotropy = 0.0f;
 
-static GLenum returnGLType(M_TYPES type)
+static GLenum returnGLType(VAR_TYPES type)
 {
     switch(type)
     {
@@ -65,25 +65,25 @@ static GLenum returnGLType(M_TYPES type)
             //case M_BOOL:
             //return GL_BOOL;
 
-        case M_BYTE:
+        case VAR_BYTE:
             return GL_BYTE;
 
-        case M_UBYTE:
+        case VAR_UBYTE:
             return GL_UNSIGNED_BYTE;
 
-        case M_SHORT:
+        case VAR_SHORT:
             return GL_SHORT;
 
-        case M_USHORT:
+        case VAR_USHORT:
             return GL_UNSIGNED_SHORT;
 
-        case M_INT:
+        case VAR_INT:
             return GL_INT;
 
-        case M_UINT:
+        case VAR_UINT:
             return GL_UNSIGNED_INT;
 
-        case M_FLOAT:
+        case VAR_FLOAT:
             return GL_FLOAT;
 
             //case M_DOUBLE:
@@ -91,57 +91,57 @@ static GLenum returnGLType(M_TYPES type)
     }
 }
 
-static GLenum returnPrimitiveType(M_PRIMITIVE_TYPES type)
+static GLenum returnPrimitiveType(PRIMITIVE_TYPES type)
 {
     switch(type)
     {
         default:
-        case M_PRIMITIVE_LINES:
+        case PRIMITIVE_LINES:
             return GL_LINES;
 
-        case M_PRIMITIVE_LINE_LOOP:
+        case PRIMITIVE_LINE_LOOP:
             return GL_LINE_LOOP;
 
-        case M_PRIMITIVE_LINE_STRIP:
+        case PRIMITIVE_LINE_STRIP:
             return GL_LINE_STRIP;
 
-        case M_PRIMITIVE_TRIANGLES:
+        case PRIMITIVE_TRIANGLES:
             return GL_TRIANGLES;
 
-        case M_PRIMITIVE_TRIANGLE_STRIP:
+        case PRIMITIVE_TRIANGLE_STRIP:
             return GL_TRIANGLE_STRIP;
 
-        case M_PRIMITIVE_POINTS:
+        case PRIMITIVE_POINTS:
             return GL_POINTS;
     }
 }
 
-static GLenum returnTexFilterMode(M_TEX_FILTER_MODES mode)
+static GLenum returnTexFilterMode(TEX_FILTER_MODES mode)
 {
     switch(mode)
     {
         default:
-        case M_TEX_FILTER_NEAREST:
+        case TEX_FILTER_NEAREST:
             return GL_NEAREST;
 
-        case M_TEX_FILTER_NEAREST_MIPMAP_NEAREST:
+        case TEX_FILTER_NEAREST_MIPMAP_NEAREST:
             return GL_NEAREST_MIPMAP_NEAREST;
 
-        case M_TEX_FILTER_NEAREST_MIPMAP_LINEAR:
+        case TEX_FILTER_NEAREST_MIPMAP_LINEAR:
             return GL_NEAREST_MIPMAP_LINEAR;
 
-        case M_TEX_FILTER_LINEAR:
+        case TEX_FILTER_LINEAR:
             return GL_LINEAR;
 
-        case M_TEX_FILTER_LINEAR_MIPMAP_NEAREST:
+        case TEX_FILTER_LINEAR_MIPMAP_NEAREST:
             return GL_LINEAR_MIPMAP_NEAREST;
 
-        case M_TEX_FILTER_LINEAR_MIPMAP_LINEAR:
+        case TEX_FILTER_LINEAR_MIPMAP_LINEAR:
             return GL_LINEAR_MIPMAP_LINEAR;
     }
 }
 
-static GLenum returnTexMode(M_TEX_MODES mode)
+static GLenum returnTexMode(TEX_MODES mode)
 {
     switch(mode)
     {
@@ -152,22 +152,22 @@ static GLenum returnTexMode(M_TEX_MODES mode)
         //	return GL_RG;
 
         default:
-        case M_RGB:
+        case TEX_RGB:
             return GL_RGB;
 
-        case M_RGBA:
+        case TEX_RGBA:
             return GL_RGBA;
 
-        case M_DEPTH:
+        case TEX_DEPTH:
             return GL_DEPTH_COMPONENT;
     }
 }
 
-static GLenum returnAttachType(M_FRAME_BUFFER_ATTACHMENT type)
+static GLenum returnAttachType(FRAME_BUFFER_ATTACHMENT type)
 {
-    if(type == M_ATTACH_DEPTH)
+    if(type == ATTACH_DEPTH)
         return GL_DEPTH_ATTACHMENT;
-    else if(type == M_ATTACH_STENCIL)
+    else if(type == ATTACH_STENCIL)
         return GL_STENCIL_ATTACHMENT;
     else
         return GL_COLOR_ATTACHMENT0 + ((int)type - 2);
@@ -182,7 +182,7 @@ m_currentFrameBuffer(0)
 void ES2Context::init()
 {
     m_matrixStep = 0;
-    m_matrixMode = M_MATRIX_MODELVIEW;
+    m_matrixMode = MATRIX_MODELVIEW;
 
     // version
     const char * version = (const char *)glGetString(GL_VERSION);
@@ -194,11 +194,11 @@ void ES2Context::init()
 
     // init cull face (back)
     enableCullFace();
-    setCullMode(M_CULL_BACK);
+    setCullMode(CULL_BACK);
 
     // depth
     enableDepthTest();
-    setDepthMode(M_DEPTH_LEQUAL);
+    setDepthMode(DEPTH_LEQUAL);
     glClearDepthf(1.0f);
 
 	// line
@@ -319,7 +319,7 @@ void ES2Context::clear(int buffer)
     }
 }
 
-void ES2Context::setClearColor(const MVector4 & color){
+void ES2Context::setClearColor(const Vector4 & color){
     glClearColor(color.x, color.y, color.z, color.w);
 }
 
@@ -334,35 +334,35 @@ void ES2Context::disableTexture(void)
     glDisable(GL_TEXTURE_2D);
 }
 
-void ES2Context::setTextureGenMode(M_TEX_GEN_MODES mode)
+void ES2Context::setTextureGenMode(TEX_GEN_MODES mode)
 {
 }
 
-void ES2Context::setTextureFilterMode(M_TEX_FILTER_MODES min, M_TEX_FILTER_MODES mag)
+void ES2Context::setTextureFilterMode(TEX_FILTER_MODES min, TEX_FILTER_MODES mag)
 {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, returnTexFilterMode(min));
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, returnTexFilterMode(mag));
 }
 
-void ES2Context::setTextureUWrapMode(M_WRAP_MODES wrap)
+void ES2Context::setTextureUWrapMode(WRAP_MODES wrap)
 {
     int glWrap = GL_REPEAT;
-    if(wrap == M_WRAP_CLAMP)
+    if(wrap == WRAP_CLAMP)
         glWrap = GL_CLAMP_TO_EDGE;
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, glWrap);
 }
 
-void ES2Context::setTextureVWrapMode(M_WRAP_MODES wrap)
+void ES2Context::setTextureVWrapMode(WRAP_MODES wrap)
 {
     int glWrap = GL_REPEAT;
-    if(wrap == M_WRAP_CLAMP)
+    if(wrap == WRAP_CLAMP)
         glWrap = GL_CLAMP_TO_EDGE;
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, glWrap);
 }
 
-void ES2Context::setTextureCombineMode(M_TEX_COMBINE_MODES combine)
+void ES2Context::setTextureCombineMode(TEX_COMBINE_MODES combine)
 {
     /*
      *	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
@@ -406,7 +406,7 @@ void ES2Context::deleteTexture(unsigned int * textureId)
     glDeleteTextures(1, textureId);
 }
 
-void ES2Context::sendTextureImage(MImage * image, bool mipMap, bool filter, bool compress)
+void ES2Context::sendTextureImage(Image * image, bool mipMap, bool filter, bool compress)
 {
     // get properties
     unsigned int bytePerPix = image->getComponents();
@@ -467,7 +467,7 @@ else*/
 	}
 }
 
-void ES2Context::texImage(unsigned int level, unsigned int width, unsigned int height, M_TYPES type, M_TEX_MODES mode, const void * pixels)
+void ES2Context::texImage(unsigned int level, unsigned int width, unsigned int height, VAR_TYPES type, TEX_MODES mode, const void * pixels)
 {
     GLenum format = returnTexMode(mode);
     GLenum intFormat = format;
@@ -477,7 +477,7 @@ void ES2Context::texImage(unsigned int level, unsigned int width, unsigned int h
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy); // anisotropic filtering
 }
 
-void ES2Context::texSubImage(unsigned int level, int xoffset, int yoffset, unsigned int width, unsigned int height, M_TYPES type, M_TEX_MODES mode, const void * pixels)
+void ES2Context::texSubImage(unsigned int level, int xoffset, int yoffset, unsigned int width, unsigned int height, VAR_TYPES type, TEX_MODES mode, const void * pixels)
 {
     GLenum format = returnTexMode(mode);
     glTexSubImage2D(GL_TEXTURE_2D, level, xoffset, yoffset, width, height, format, returnGLType(type), pixels);
@@ -507,10 +507,10 @@ void ES2Context::bindFrameBuffer(unsigned int frameBufferId){
 void ES2Context::getCurrentFrameBuffer(unsigned int * frameBufferId){
     (*frameBufferId) = m_currentFrameBuffer;
 }
-void ES2Context::attachFrameBufferTexture(M_FRAME_BUFFER_ATTACHMENT attachment, unsigned int textureId){
+void ES2Context::attachFrameBufferTexture(FRAME_BUFFER_ATTACHMENT attachment, unsigned int textureId){
     glFramebufferTexture2D(GL_FRAMEBUFFER, returnAttachType(attachment), GL_TEXTURE_2D, textureId, 0);
 }
-void ES2Context::setDrawingBuffers(M_FRAME_BUFFER_ATTACHMENT * buffers, unsigned int size)
+void ES2Context::setDrawingBuffers(FRAME_BUFFER_ATTACHMENT * buffers, unsigned int size)
 {
     /*
      *     if(size == 0)
@@ -690,46 +690,46 @@ void ES2Context::disableAttribArray(unsigned int location)
     glDisableVertexAttribArray(location);
 }
 
-void ES2Context::setVertexPointer(M_TYPES type, unsigned int components, const void * pointer)
+void ES2Context::setVertexPointer(VAR_TYPES type, unsigned int components, const void * pointer)
 {
     //int location;
     //getAttribLocation(simpleFX, "Vertex", &location);
     //setAttribPointer(location, type, components, pointer);
 }
 
-void ES2Context::setColorPointer(M_TYPES type, unsigned int components, const void * pointer)
+void ES2Context::setColorPointer(VAR_TYPES type, unsigned int components, const void * pointer)
 {
     //int location;
     //getAttribLocation(simpleFX, "Color", &location);
     //setAttribPointer(location, type, components, pointer);
 }
 
-void ES2Context::setNormalPointer(M_TYPES type, const void * pointer)
+void ES2Context::setNormalPointer(VAR_TYPES type, const void * pointer)
 {
     //int location;
     //getAttribLocation(simpleFX, "Normal", &location);
     //setAttribPointer(location, type, components, pointer, 1);
 }
 
-void ES2Context::setTexCoordPointer(M_TYPES type, unsigned int components, const void * pointer)
+void ES2Context::setTexCoordPointer(VAR_TYPES type, unsigned int components, const void * pointer)
 {
     //int location;
     //getAttribLocation(simpleFX, "TexCoord", &location);
     //setAttribPointer(location, type, components, pointer);
 }
 
-void ES2Context::setAttribPointer(unsigned int location, M_TYPES type, unsigned int components, const void * pointer, const bool normalized)
+void ES2Context::setAttribPointer(unsigned int location, VAR_TYPES type, unsigned int components, const void * pointer, const bool normalized)
 {
     glVertexAttribPointer(location, components, returnGLType(type), normalized, 0, pointer);
 }
 
 // draw
-void ES2Context::drawArray(M_PRIMITIVE_TYPES type, unsigned int begin, unsigned int size)
+void ES2Context::drawArray(PRIMITIVE_TYPES type, unsigned int begin, unsigned int size)
 {
     glDrawArrays(returnPrimitiveType(type), begin, size);
 }
 
-void ES2Context::drawElement(M_PRIMITIVE_TYPES type, unsigned int size, M_TYPES indicesType, const void * indices)
+void ES2Context::drawElement(PRIMITIVE_TYPES type, unsigned int size, VAR_TYPES indicesType, const void * indices)
 {
     glDrawElements(returnPrimitiveType(type), size, returnGLType(indicesType), indices);
 }
@@ -739,16 +739,16 @@ void ES2Context::enableLineAntialiasing(void)	{ /*glEnable(GL_LINE_SMOOTH);*/ }
 void ES2Context::disableLineAntialiasing(void)	{ /*glDisable(GL_LINE_SMOOTH);*/ }
 
 // material
-void ES2Context::setMaterialDiffuse(const MVector4 & diffuse){
+void ES2Context::setMaterialDiffuse(const Vector4 & diffuse){
     //glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
 }
-void ES2Context::setMaterialSpecular(const MVector4 & specular){
+void ES2Context::setMaterialSpecular(const Vector4 & specular){
     //glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
 }
-void ES2Context::setMaterialAmbient(const MVector4 & ambient){
+void ES2Context::setMaterialAmbient(const Vector4 & ambient){
     //glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
 }
-void ES2Context::setMaterialEmit(const MVector4 & emit){
+void ES2Context::setMaterialEmit(const Vector4 & emit){
     //glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emit);
 }
 void ES2Context::setMaterialShininess(float shininess){
@@ -763,16 +763,16 @@ void ES2Context::setScissor(int x, int y, unsigned int width, unsigned int heigh
 }
 
 // color
-void ES2Context::setColor(const MColor & color)
+void ES2Context::setColor(const Color & color)
 {
     //glColor4ub(color.r, color.g, color.b, color.a);
 }
 
-void ES2Context::setColor4(const MVector4 & color)
+void ES2Context::setColor4(const Vector4 & color)
 {
     //glColor4f(color.x, color.y, color.z, color.w);
 }
-void ES2Context::setColor3(const MVector3 & color)
+void ES2Context::setColor3(const Vector3 & color)
 {
     //glColor4f(color.x, color.y, color.z, 1.0f);
 }
@@ -800,35 +800,35 @@ glAlphaFunc(GL_GREATER, value);*/
 // depth
 void ES2Context::enableDepthTest(void) { glEnable (GL_DEPTH_TEST); }
 void ES2Context::disableDepthTest(void){ glDisable(GL_DEPTH_TEST); }
-void ES2Context::setDepthMode(M_DEPTH_MODES mode)
+void ES2Context::setDepthMode(DEPTH_MODES mode)
 {
     switch(mode)
     {
-        case M_DEPTH_ALWAYS:
+        case DEPTH_ALWAYS:
             glDepthFunc(GL_ALWAYS);
             return;
 
-        case M_DEPTH_LESS:
+        case DEPTH_LESS:
             glDepthFunc(GL_LESS);
             return;
 
-        case M_DEPTH_GREATER:
+        case DEPTH_GREATER:
             glDepthFunc(GL_GREATER);
             return;
 
-        case M_DEPTH_EQUAL:
+        case DEPTH_EQUAL:
             glDepthFunc(GL_EQUAL);
             return;
 
-        case M_DEPTH_LEQUAL:
+        case DEPTH_LEQUAL:
             glDepthFunc(GL_LEQUAL);
             return;
 
-        case M_DEPTH_GEQUAL:
+        case DEPTH_GEQUAL:
             glDepthFunc(GL_GEQUAL);
             return;
 
-        case M_DEPTH_NOTEQUAL:
+        case DEPTH_NOTEQUAL:
             glDepthFunc(GL_NOTEQUAL);
             return;
 
@@ -844,19 +844,19 @@ void ES2Context::disableStencilTest(void){ glDisable(GL_STENCIL_TEST); }
 // cull face
 void ES2Context::enableCullFace(void) { glEnable (GL_CULL_FACE); }
 void ES2Context::disableCullFace(void){ glDisable(GL_CULL_FACE); }
-void ES2Context::setCullMode(M_CULL_MODES mode)
+void ES2Context::setCullMode(CULL_MODES mode)
 {
     switch(mode)
     {
-        case M_CULL_FRONT:
+        case CULL_FRONT:
             glCullFace(GL_FRONT);
             return;
 
-        case M_CULL_BACK:
+        case CULL_BACK:
             glCullFace(GL_BACK);
             return;
 
-        case M_CULL_FRONT_BACK:
+        case CULL_FRONT_BACK:
             glCullFace(GL_FRONT_AND_BACK);
             return;
 
@@ -871,22 +871,22 @@ void ES2Context::loadIdentity(void)
     m_currentMatrix->loadIdentity();
 }
 
-void ES2Context::setMatrixMode(M_MATRIX_MODES matrixMode)
+void ES2Context::setMatrixMode(MATRIX_MODES matrixMode)
 {
     m_matrixStep = 0;
     m_matrixMode = matrixMode;
 
     switch(matrixMode)
     {
-        case M_MATRIX_MODELVIEW:
+        case MATRIX_MODELVIEW:
             m_currentMatrix = &m_modelViewMatrix;
             return;
 
-        case M_MATRIX_PROJECTION:
+        case MATRIX_PROJECTION:
             m_currentMatrix = &m_projectionMatrix;
             return;
 
-        case M_MATRIX_TEXTURE:
+        case MATRIX_TEXTURE:
             m_currentMatrix = &m_textureMatrix;
             return;
     }
@@ -908,13 +908,13 @@ void ES2Context::popMatrix(void)
 void ES2Context::multMatrix(const Matrix4x4 * matrix){
     (*m_currentMatrix) *= (*matrix);
 }
-void ES2Context::translate(const MVector3 & position){
+void ES2Context::translate(const Vector3 & position){
     m_currentMatrix->translate(position);
 }
-void ES2Context::rotate(const MVector3 & axis, float angle){
+void ES2Context::rotate(const Vector3 & axis, float angle){
     m_currentMatrix->rotate(axis, angle);
 }
-void ES2Context::scale(const MVector3 & scale){
+void ES2Context::scale(const Vector3 & scale){
     m_currentMatrix->scale(scale);
 }
 void ES2Context::getViewport(int * viewport)
@@ -937,9 +937,9 @@ void ES2Context::getTextureMatrix(Matrix4x4 * matrix)
 // fog
 void ES2Context::enableFog(void)						{ /*glEnable (GL_FOG);*/ }
 void ES2Context::disableFog(void)						{ /*glDisable(GL_FOG);*/ }
-void ES2Context::setFogColor(const MVector3 & color)
+void ES2Context::setFogColor(const Vector3 & color)
 {
-    //glFogfv(GL_FOG_COLOR, MVector4(color));
+    //glFogfv(GL_FOG_COLOR, Vector4(color));
     m_fogColor = color;
 }
 void ES2Context::setFogDistance(float min, float max)
@@ -949,7 +949,7 @@ void ES2Context::setFogDistance(float min, float max)
     m_fogMin = min;
     m_fogMax = max;
 }
-void ES2Context::getFogColor(MVector3 * color){
+void ES2Context::getFogColor(Vector3 * color){
     (*color) = m_fogColor;
 }
 void ES2Context::getFogDistance(float * min, float * max){
@@ -962,7 +962,7 @@ void ES2Context::enableLighting(void)			{ /*glEnable (GL_LIGHTING);*/ }
 void ES2Context::disableLighting(void)			{ /*glDisable(GL_LIGHTING);*/ }
 void ES2Context::enableLight(unsigned int id)	{ /*glEnable (GL_LIGHT0 + id);*/ }
 void ES2Context::disableLight(unsigned int id)	{ /*glDisable(GL_LIGHT0 + id);*/ }
-void ES2Context::setLightPosition(unsigned int id, const MVector4 & position)
+void ES2Context::setLightPosition(unsigned int id, const Vector4 & position)
 {
     if(id < MAX_MRCLIGHTS)
     {
@@ -970,7 +970,7 @@ void ES2Context::setLightPosition(unsigned int id, const MVector4 & position)
         //glLightfv(GL_LIGHT0 + id, GL_POSITION, position);
     }
 }
-void ES2Context::setLightDiffuse(unsigned int id, const MVector4 & diffuse)
+void ES2Context::setLightDiffuse(unsigned int id, const Vector4 & diffuse)
 {
     if(id < MAX_MRCLIGHTS)
     {
@@ -978,7 +978,7 @@ void ES2Context::setLightDiffuse(unsigned int id, const MVector4 & diffuse)
         //glLightfv(GL_LIGHT0 + id, GL_DIFFUSE, diffuse);
     }
 }
-void ES2Context::setLightSpecular(unsigned int id, const MVector4 & specular)
+void ES2Context::setLightSpecular(unsigned int id, const Vector4 & specular)
 {
     if(id < MAX_MRCLIGHTS)
     {
@@ -986,7 +986,7 @@ void ES2Context::setLightSpecular(unsigned int id, const MVector4 & specular)
         //glLightfv(GL_LIGHT0 + id, GL_SPECULAR, specular);
     }
 }
-void ES2Context::setLightAmbient(unsigned int id, const MVector4 & ambient)
+void ES2Context::setLightAmbient(unsigned int id, const Vector4 & ambient)
 {
     if(id < MAX_MRCLIGHTS)
     {
@@ -1006,7 +1006,7 @@ void ES2Context::setLightAttenuation(unsigned int id, float constant, float line
         //glLightf(GL_LIGHT0 + id, GL_QUADRATIC_ATTENUATION, quadratic);
     }
 }
-void ES2Context::setLightSpotDirection(unsigned int id, const MVector3 & direction)
+void ES2Context::setLightSpotDirection(unsigned int id, const Vector3 & direction)
 {
     if(id < MAX_MRCLIGHTS)
     {
@@ -1030,22 +1030,22 @@ void ES2Context::setLightSpotExponent(unsigned int id, float exponent)
         //glLightf(GL_LIGHT0 + id, GL_SPOT_EXPONENT, m_lights[id].exponent);
     }
 }
-void ES2Context::getLightPosition(unsigned int id, MVector4 * position)
+void ES2Context::getLightPosition(unsigned int id, Vector4 * position)
 {
     if(id < MAX_MRCLIGHTS)
         (*position) = m_lights[id].position;
 }
-void ES2Context::getLightDiffuse(unsigned int id, MVector4 * diffuse)
+void ES2Context::getLightDiffuse(unsigned int id, Vector4 * diffuse)
 {
     if(id < MAX_MRCLIGHTS)
         (*diffuse) = m_lights[id].diffuse;
 }
-void ES2Context::getLightSpecular(unsigned int id, MVector4 * specular)
+void ES2Context::getLightSpecular(unsigned int id, Vector4 * specular)
 {
     if(id < MAX_MRCLIGHTS)
         (*specular) = m_lights[id].specular;
 }
-void ES2Context::getLightAmbient(unsigned int id, MVector4 * ambient)
+void ES2Context::getLightAmbient(unsigned int id, Vector4 * ambient)
 {
     if(id < MAX_MRCLIGHTS)
         (*ambient) = m_lights[id].ambient;
@@ -1059,7 +1059,7 @@ void ES2Context::getLightAttenuation(unsigned int id, float * constant, float * 
         (*quadratic) = m_lights[id].quadratic;
     }
 }
-void ES2Context::getLightSpotDirection(unsigned int id, MVector3 * direction)
+void ES2Context::getLightSpotDirection(unsigned int id, Vector3 * direction)
 {
     if(id < MAX_MRCLIGHTS)
         (*direction) = m_lights[id].direction;
@@ -1078,27 +1078,27 @@ void ES2Context::getLightSpotExponent(unsigned int id, float * exponent)
 // blending
 void ES2Context::enableBlending(void)	{ glEnable (GL_BLEND); }
 void ES2Context::disableBlending(void)	{ glDisable(GL_BLEND); }
-void ES2Context::setBlendingMode(M_BLENDING_MODES mode)
+void ES2Context::setBlendingMode(BLENDING_MODES mode)
 {
     switch(mode)
     {
-		case M_BLENDING_NONE:
+		case BLENDING_NONE:
             glBlendFunc(GL_ONE, GL_ZERO);
             break;
 
-        case M_BLENDING_ALPHA:
+        case BLENDING_ALPHA:
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             break;
 
-        case M_BLENDING_ADD:
+        case BLENDING_ADD:
             glBlendFunc(GL_ONE, GL_ONE);
             break;
 
-        case M_BLENDING_PRODUCT:
+        case BLENDING_PRODUCT:
             glBlendFunc(GL_ZERO, GL_SRC_COLOR);
             break;
 
-        case M_BLENDING_LIGHT:
+        case BLENDING_LIGHT:
             glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
             break;
 

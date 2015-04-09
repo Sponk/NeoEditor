@@ -29,13 +29,13 @@
 //========================================================================
 
 
-#if !defined(_M_ANDROID_WINDOW_H) && defined(ANDROID)
-#define _M_ANDROID_WINDOW_H
+#if !defined(__ANDROID_WINDOW_H) && defined(ANDROID)
+#define __ANDROID_WINDOW_H
 
-#include <Window/MWinEvents.h>
+#include <Window/WinEvents.h>
 #include <vector>
 
-class MAndroidWindow
+class AndroidWindow
 {
 private:
 
@@ -56,13 +56,13 @@ private:
 
 public:
 
-	MAndroidWindow(void);
-	~MAndroidWindow(void);
+	AndroidWindow(void);
+	~AndroidWindow(void);
 
 	// instance
-	static MAndroidWindow * getInstance(void)
+	static AndroidWindow * getInstance(void)
 	{
-		static MAndroidWindow m_instance;
+		static AndroidWindow m_instance;
 		return &m_instance;
 	}
 
@@ -126,6 +126,6 @@ public:
     void resize(int width, int height) {}
 };
 
-typedef MAndroidWindow MWindow;
+typedef AndroidWindow NeoWindow;
 
 #endif

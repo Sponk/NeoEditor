@@ -7,7 +7,7 @@ INSTALL(DIRECTORY ${NEO_BINARY_OUTPUT}/../Documentation/LuaDoc DESTINATION ${NEO
 INCLUDE(CopyFiles)
 copy_files("*.lua" "${NEO_BINARY_OUTPUT}/scripts/SDK" "copy-lua-api")
 
-IF(NOT NO_DOCUMENTATION)
+IF(NOT NO_DOCUMENTATION AND NOT ANDROID)
   ## TODO: Document behavior!
   ## TODO: Get proper Lua executable path!
 ADD_CUSTOM_TARGET(lua-docs ALL

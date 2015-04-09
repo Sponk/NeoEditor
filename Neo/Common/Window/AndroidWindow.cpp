@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MGui
-// MSDLWindow.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2014 Anael Seghezzi <www.maratis3d.com>
 // Copyright (c) 2014 Anders Dahnielson <anders@dahnielson.com>
@@ -29,9 +24,9 @@
 //========================================================================
 
 #ifdef ANDROID
-#include <MMouse.h>
-#include <MKeyboard.h>
-#include <MAndroidWindow.h>
+#include <Window/Mouse.h>
+#include <Window/Keyboard.h>
+#include <Window/AndroidWindow.h>
 
 #include <SDL.h>
 
@@ -167,7 +162,7 @@ static int translateKey(SDL_Keycode key)
 	return -1;
 }
 
-MAndroidWindow::MAndroidWindow(void) :
+AndroidWindow::AndroidWindow(void) :
 	m_focus(true),
 	m_active(true),
 	m_fullscreen(false),
@@ -180,19 +175,19 @@ MAndroidWindow::MAndroidWindow(void) :
 	m_position[1] = 0;
 }
 
-MAndroidWindow::~MAndroidWindow(void)
+AndroidWindow::~AndroidWindow(void)
 {
 	SDL_GL_DeleteContext(g_context);
 	SDL_DestroyWindow(g_window);
 	SDL_Quit();
 }
 
-void MAndroidWindow::setCursorPos(int x, int y)
+void AndroidWindow::setCursorPos(int x, int y)
 {
 	SDL_WarpMouseInWindow(g_window, x, y);
 }
 
-void MAndroidWindow::hideCursor(void)
+void AndroidWindow::hideCursor(void)
 {
 	int r = SDL_ShowCursor(SDL_DISABLE);
 
@@ -200,7 +195,7 @@ void MAndroidWindow::hideCursor(void)
 		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
 }
 
-void MAndroidWindow::showCursor(void)
+void AndroidWindow::showCursor(void)
 {
 	int r = SDL_ShowCursor(SDL_ENABLE);
 
@@ -208,12 +203,12 @@ void MAndroidWindow::showCursor(void)
 		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
 }
 
-void MAndroidWindow::setTitle(const char * title)
+void AndroidWindow::setTitle(const char * title)
 {
 	SDL_SetWindowTitle(g_window, title);
 }
 
-void MAndroidWindow::setFullscreen(bool fullscreen)
+void AndroidWindow::setFullscreen(bool fullscreen)
 {
 	int r;
 
@@ -228,7 +223,7 @@ void MAndroidWindow::setFullscreen(bool fullscreen)
 	m_fullscreen = fullscreen;
 }
 
-void MAndroidWindow::sendEvents(MWinEvent * event)
+void AndroidWindow::sendEvents(MWinEvent * event)
 {
 	MKeyboard * keyboard = MKeyboard::getInstance();
 	MMouse * mouse = MMouse::getInstance();
@@ -274,7 +269,7 @@ void MAndroidWindow::sendEvents(MWinEvent * event)
 		m_pointerEvent(event);
 }
 
-bool MAndroidWindow::isMouseOverWindow(void)
+bool AndroidWindow::isMouseOverWindow(void)
 {
 	MMouse * mouse = MMouse::getInstance();
 	int x = mouse->getXPosition();
@@ -286,12 +281,12 @@ bool MAndroidWindow::isMouseOverWindow(void)
 	return false;
 }
 
-unsigned long MAndroidWindow::getSystemTick(void)
+unsigned long AndroidWindow::getSystemTick(void)
 {
 	return SDL_GetTicks();
 }
 
-bool MAndroidWindow::onEvents(void)
+bool AndroidWindow::onEvents(void)
 {
 	MWinEvent mevent;
 	SDL_Event event;
@@ -539,12 +534,12 @@ bool MAndroidWindow::onEvents(void)
 	return true;
 }
 
-void MAndroidWindow::swapBuffer(void)
+void AndroidWindow::swapBuffer(void)
 {
 	SDL_GL_SwapWindow(g_window);
 }
 
-bool MAndroidWindow::create(const char * title, unsigned int width, unsigned int height, int colorBits, bool fullscreen)
+bool AndroidWindow::create(const char * title, unsigned int width, unsigned int height, int colorBits, bool fullscreen)
 {
 	m_width = width;
 	m_height = height;
@@ -595,7 +590,7 @@ bool MAndroidWindow::create(const char * title, unsigned int width, unsigned int
 	return true;
 }
 
-void MAndroidWindow::sleep(double time)
+void AndroidWindow::sleep(double time)
 {
 	if (time <= 0)
 		return;
@@ -603,25 +598,25 @@ void MAndroidWindow::sleep(double time)
 	SDL_Delay(time);
 }
 
-const char * MAndroidWindow::getTempDirectory(void)
+const char * AndroidWindow::getTempDirectory(void)
 {
 	static char tempDirectory[8] = "/tmp";
 	return tempDirectory;
 }
 
-const char * MAndroidWindow::getCurrentDirectory(void)
+const char * AndroidWindow::getCurrentDirectory(void)
 {
 	static char currentDirectory[256];
 	getcwd(currentDirectory, 256);
 	return currentDirectory;
 }
 
-void MAndroidWindow::setCurrentDirectory(const char * directory)
+void AndroidWindow::setCurrentDirectory(const char * directory)
 {
 	chdir(directory);
 }
 
-void MAndroidWindow::setWorkingDirectory(const char * directory)
+void AndroidWindow::setWorkingDirectory(const char * directory)
 {
 	strcpy(m_workingDirectory, directory);
 }

@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MCore
-// MWinContext.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -31,7 +26,7 @@
 #ifndef ANDROID
 #include <Window/Window.h>
 #else
-#include <Window/MAndroidWindow.h>
+#include <Window/AndroidWindow.h>
 #endif
 
 #include "WinContext.h"

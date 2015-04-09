@@ -1,10 +1,4 @@
 #ifdef ANDROID
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MaratisPlayer
-// main.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 //  Maratis, Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -27,11 +21,11 @@
 
 
 #include <NeoEngine.h>
-#include <MAndroidWindow.h>
+#include <Window/AndroidWindow.h>
 #include <SDL_log.h>
 #include <GuiSystem.h>
 
-#include <MGameWinEvents.h>
+#include <GameWinEvents.h>
 #include "Maratis/MaratisPlayer.h"
 #include <SDL_log.h>
 
@@ -70,7 +64,7 @@ void draw(void)
 {
 	MaratisPlayer::getInstance()->graphicLoop();
 	Neo::Gui::GuiSystem::getInstance()->draw();
-	MWindow::getInstance()->swapBuffer();
+	NeoWindow::getInstance()->swapBuffer();
 }
 
 extern const char* asset_directory;
@@ -86,7 +80,7 @@ extern "C" int player_main(int argc, char* argv[])
 	NeoEngine * engine = NeoEngine::getInstance();
 	
 	// get window (first time call onstructor)
-	MWindow * window = MWindow::getInstance();
+	NeoWindow * window = NeoWindow::getInstance();
 
 	// create window
 	if(!window->create("Neo", width, height, 32, fullscreen == 1))
