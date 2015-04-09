@@ -93,6 +93,11 @@ function BatchSprite:getSize()
     return size
 end
 
+function BatchSprite:setScale(x, y)
+   self.width = x
+   self.height = y
+end
+
 --- Pushes all data like position and rotation to the rendering
 -- backend.
 -- <strong>Attention:</strong> All changes to the sprite will only take effect
