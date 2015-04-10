@@ -247,4 +247,8 @@ function OEntity:getNumCollisions()
    return getNumCollisions(self.nativeObject)
 end
 
-
+--- Enables physics for the entity
+-- @param value A boolean value
+function OEntity:enablePhysics(value)
+   enablePhysics(self.nativeObject, value)
+end

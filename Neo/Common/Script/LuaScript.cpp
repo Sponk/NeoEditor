@@ -28,6 +28,7 @@
 #include <ScriptApi.h>
 #include <NeoEngine.h>
 #include <Window/Window.h>
+#include <sstream>
 
 using namespace Neo;
 
@@ -367,75 +368,6 @@ int getAttribute(lua_State* L)
 	return 1;
 }
 
-static void findloader(lua_State *L, const char *name)
-{
-	int i;
-	luaL_Buffer msg; /* to build error message */
-	luaL_buffinit(L, &msg);
-	lua_getfield(L, lua_upvalueindex(1), "searchers"); /* will be at index 3 */
-
-	if (!lua_istable(L, 3))
-		luaL_error(L, LUA_QL("package.searchers") " must be a table");
-
-	/*  iterate over available seachers to find a loader */
-	for (i = 1;; i++)
-	{
-		lua_rawgeti(L, 3, i); /* get a seacher */
-
-		if (lua_isnil(L, -1))
-		{						   /* no more searchers? */
-			lua_pop(L, 1);		   /* remove nil */
-			luaL_pushresult(&msg); /* create error message */
-			luaL_error(L, "module " LUA_QS " not found:%s", name,
-					   lua_tostring(L, -1));
-		}
-
-		lua_pushstring(L, name);
-		lua_call(L, 1, 2); /* call it */
-
-		if (lua_isfunction(L, -2))	/* did it find a loader? */
-			return;					  /* module loader found */
-		else if (lua_isstring(L, -2)) /* searcher returned error message? */
-		{
-			lua_pop(L, 1);		 /* remove extra return */
-			luaL_addvalue(&msg); /* concatenate error message */
-		}
-		else
-			lua_pop(L, 2); /* remove both returns */
-	}
-}
-
-int require(lua_State *L)
-{
-	const char *name = luaL_checkstring(L, 1);
-
-	lua_settop(L, 1); /* _LOADED table will be at index 2 */
-	lua_getfield(L, LUA_REGISTRYINDEX, "_LOADED");
-	lua_getfield(L, 2, name); /* _LOADED[name] */
-
-	if (lua_toboolean(L, -1)) /* is it there? */
-		return 1;			  /* package is already loaded */
-
-	/* else must load package */
-	lua_pop(L, 1); /* remove 'getfield' result */
-	findloader(L, name);
-	lua_pushstring(L, name); /* pass name as argument to module loader */
-	lua_insert(L, -2);		 /* name is 1st argument (before search data) */
-	lua_call(L, 2, 1);		 /* run loader to load module */
-
-	if (!lua_isnil(L, -1))		  /* non-nil return? */
-		lua_setfield(L, 2, name); /* _LOADED[name] = returned value */
-	lua_getfield(L, 2, name);
-
-	if (lua_isnil(L, -1))
-	{							  /* module did not set a value? */
-		lua_pushboolean(L, 1);	/* use true as result */
-		lua_pushvalue(L, -1);	 /* extra copy to be returned */
-		lua_setfield(L, 2, name); /* _LOADED[name] = true */
-	}
-	return 1;
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Init
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -476,7 +408,34 @@ void LuaScript::init(void)
 
     lua_register(m_state, "setAttribute",           setAttribute);
     lua_register(m_state, "getAttribute",           getAttribute);
-	lua_register(m_state, "require", require);
+
+	runString("table.insert(package.loaders, "
+						"function(s) "
+						       "s = s:gsub(\".\", \"/\") "
+						       "s = s .. \".lua\" "
+						       "local src = loadTextFile(s) "
+						   
+						       "if(src == nil) then "
+								  "return \"Could not load \" .. s "
+							  "end "
+											  
+							  "return loadstring(src) "
+						 "end "
+						   ")");
+
+	runString("function require(str) "
+			  "local err = \"\" "
+			  "for k,v in pairs(package.loaders) do "
+			  "local ret = v(str) "
+			  "if type(ret) == \"string\" then "
+			  "err = err .. ret "
+			  "else "
+			  "return ret() "
+			  "end "
+			  "end "
+			  "print(err) "
+			  "return nil "
+			  "end");
 
 	// register custom functions
 	map<string, int (*)(void)>::iterator
@@ -548,7 +507,10 @@ bool LuaScript::runScript(const char * filename)
         MLOG_ERROR("Lua Script: \n" << lua_tostring(m_state, -1) << "\n");
 		m_isRunning = false;
 		SAFE_FREE(text);
-        return false;
+
+		printStack();
+
+		return false;
 	}
 	
 	// finish
@@ -574,10 +536,13 @@ bool LuaScript::startCallFunction(const char* name)
 
 bool LuaScript::endCallFunction(int numArgs)
 {
+	if(!m_isRunning) return false;
+
 	if(lua_pcall(m_state, numArgs, 0, 0) != 0)
 	{
         MLOG_ERROR("Lua Script: \n" << lua_tostring(m_state, -1) << "\n");
 		m_isRunning = false;
+		printStack();
 		return false;
 	}
 	return true;
@@ -708,6 +673,33 @@ bool LuaScript::isNumber(unsigned int arg)
 	return lua_isnumber(m_state, arg+1);
 }
 
+void LuaScript::printStack()
+{
+	lua_Debug info;
+	int level = 0;
+
+	std::stringstream stacktrace;
+
+	stacktrace << "Stacktrace:" << std::endl;
+	while (lua_getstack(m_state, level, &info))
+	{
+		lua_getinfo(m_state, "nSl", &info);
+		stacktrace << std::endl
+				   << "\t[" << level << "] " << info.short_src << ":"
+				   << info.currentline << " -- "
+				   << (info.name ? info.name : "<unknown> ") << "[" << info.what
+				   << "]";
+		level++;
+	}
+	
+	if(level > 0)
+		stacktrace << std::endl << std::endl;
+	else
+		stacktrace << "\t<empty>" << std::endl;
+
+	MLOG_ERROR(stacktrace.str());
+}
+
 bool LuaScript::runString(const char* str)
 {
     if(!m_state)
@@ -717,6 +709,8 @@ bool LuaScript::runString(const char* str)
 	if(luaL_dostring(m_state, str) != 0)
 	{
 		MLOG_ERROR("Lua Script: \n" << lua_tostring(m_state, -1) << "\n");
+		printStack();
+		m_isRunning = false;
 		return false;
 	}
 

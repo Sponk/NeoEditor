@@ -53,6 +53,7 @@ protected:
 
 public:
 
+	void printStack();
     lua_State* getLuaState() { return m_state; }
 
 	// run script

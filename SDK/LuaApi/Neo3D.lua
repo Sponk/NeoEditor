@@ -49,11 +49,15 @@ dofile("OEntity.lua")
 dofile("OCamera.lua")
 dofile("OSound.lua")
 
+scriptDebug = false
+
 if enableNeo3DTests then
     dofile("Graphics2D.lua")
     dofile("Testing/Tests.lua")
     dofile("Testing/LuaUnit.lua")
-    
+
+    scriptDebug = true
+
     Neo3D = {
 		runTests = function()
 		    local lu = LuaUnit.new()

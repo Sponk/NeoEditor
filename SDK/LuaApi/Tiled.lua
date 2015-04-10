@@ -103,7 +103,6 @@ function TiledLevel:loadTiledFile(canvas, path)
 end
 
 --- Loads a Lua file exported by the Tiled 2D map editor
--- and returns a table of Tiles containing all loaded tiles.
 -- @param canvas The canvas that will display the tiles
 -- @param path The Lua file to load
 function loadTiledFile(canvas, path)

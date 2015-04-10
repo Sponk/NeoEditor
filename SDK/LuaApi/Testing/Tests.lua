@@ -134,7 +134,7 @@ function Test2DSDK:TestWidget()
     
 end
 
-function Test2DSDK:TestTiledLoader()
+function Test2DSDK:disabledTestTiledLoader()
    local level = TiledLevel()
    level:loadTiledFile(mainCanvas, "scripts/SDK/Testing/testlevel.lua")
 end
