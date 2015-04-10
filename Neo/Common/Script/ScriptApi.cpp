@@ -4430,7 +4430,7 @@ int doFile()
 	strcpy(g_currentDirectory, current);
 
 	SAFE_FREE(text);
-	return 0;
+	return 1;
 }
 
 int setPhysicsQuality()

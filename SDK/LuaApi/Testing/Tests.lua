@@ -7,7 +7,7 @@ end
 
 Test3DSDK = {}
 Test2DSDK = {}
-TestDofile = {}
+TestModules = {}
 
 function Test3DSDK:TestLight()
 
@@ -132,4 +132,10 @@ function Test2DSDK:TestWidget()
   widget:setVisible(true)
   assertEquals(widget:isVisible(), true)
     
+end
+
+local shouldBe42 = dofile("dofiletest.lua")
+function TestModules:TestDofile()
+   assertNotNil(shouldBe42)
+   assertEquals(shouldBe42, 42)
 end

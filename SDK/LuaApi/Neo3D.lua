@@ -57,8 +57,8 @@ if enableNeo3DTests then
     Neo3D = {
 		runTests = function()
 		    local lu = LuaUnit.new()
-		    lu:setOutputType("text")
-		    lu:runSuite("Test3DSDK", "Test2DSDK")
+		    lu:setOutputType("google")
+		    lu:runSuite("Test3DSDK", "Test2DSDK", "TestModules")
 		    --lu:runSuite("-o",  "junit", "-n", "test.xml")
 		end
 	}
