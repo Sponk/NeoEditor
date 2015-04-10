@@ -1,302 +1,367 @@
 --- Author: Murii
 
-QuadTree = {}
-QuadTree.__index = QuadTree
+-- references to common functions
+local tremove = table.remove
 
-function QuadTree.create()
-	local self = {}
-	setmetatable(self, QuadTree)
+-- quadrant names
+local rdirs = { nw='se', sw='ne', ne='sw', se='nw' }
 
-	-- local references to common functions
-	self.table = table
-	self.ipairs = ipairs
-	self.abs = math.abs
-	self.max = math.max
-	self.tinsert = table.insert
-	self.tremove = table.remove
-	-- quadrant names
-	self.dirs = { 'nw', 'sw', 'ne', 'se' }
-	self.rdirs = { nw='se', sw='ne', ne='sw', se='nw' }
-	-- tree structure
-	self.root = nil
-	self.handles = {}
-	self.deadcells = {}
-	self.mincellsize = 8
+-- minimum cell size
+local mincellsize = 8
 
-	-- some stats
-	self.objects = 0
-	self.livecells = 0
+-- some stats (optional)
+local nobjects = 0
+local nlivecells = 0
+local ndeadcells = 0
 
-	return self
-end
---- Creates new cell
-function QuadTree:createCell(p, r, x, y, s)
-  local c
-  -- are there any unused cells in the pool?
-  if #self.deadcells == 0 then
-    c = {}
-  else
-    c = self.tremove(self.deadcells)
-    c.nw = nil
-    c.ne = nil
-    c.sw = nil
-    c.se = nil
-  end
-  c.parent = p
-  c.relation = r
-  c.x = x
-  c.y = y
-  c.side = s
-  -- update the livecells count
-  self.livecells = self.livecells + 1
-  return c
+-- internals
+local root = nil
+local handles = {}
+local deadcells = {}
+
+-- create cell
+local function createC(p, q, x, y, s)
+   -- get a cell from the pool
+   local c = tremove(deadcells) or {}
+   -- parent cell
+   c.parent = p
+   -- quadrant in parent cell
+   c.quad = q
+   -- position
+   c.x = x
+   c.y = y
+   -- half-width/height extent
+   c.s = s
+   c.nchildren = 0
+   -- update parent
+   if p then
+	  p.nchildren = p.nchildren + 1
+	  p[q] = c
+   end
+   -- update the stats
+   nlivecells = nlivecells + 1
+   ndeadcells = #deadcells
+   return c
 end
 
---- Destroys existing cell
-function QuadTree:destroyCell(c)
-  -- delete reference from parent to child
-  if c.parent then
-    c.parent[c.relation] = nil
-  end
-  -- update the livecells count
-  self.livecells = self.livecells - 1
-  self.tinsert(self.deadcells, c)
-  -- is this the root cell?
-  if c == root then
-    root = nil
-  end
+-- destroy cell
+local function destroyC(c)
+   -- delete reference from parent to child
+   local p = c.parent
+   if p then
+	  p[c.quad] = nil
+	  p.nchildren = p.nchildren - 1
+   end
+   -- clear references
+   c.nw = nil
+   c.ne = nil
+   c.sw = nil
+   c.se = nil
+   deadcells[#deadcells + 1] = c
+   -- update the stats
+   nlivecells = nlivecells - 1
+   ndeadcells = #deadcells
 end
 
---- Returns number of child cells
-function QuadTree:getChildCount(c)
-  local n = 0
-  for _, v in self.ipairs(self.dirs) do
-    if c[v] then
-      n = n + 1
-    end
-  end
-  return n
+-- create a new root cell
+local function createR(x, y, s)
+   if x < 0 then
+	  x = -x
+   end
+   if y < 0 then
+	  y = -y
+   end
+   local d = x
+   if d < y then
+	  d = y
+   end
+   d = d + s
+   d = d*2
+   local n = math.ceil(math.log(d)/math.log(mincellsize))
+   local rs = math.pow(mincellsize, n)
+   assert(rs >= mincellsize)
+   root = createC(nil, nil, 0, 0, rs)
+   return root
 end
 
---- Returns true if cell has child cells
-function QuadTree:hasChildren(c)
-  return c.nw ~= nil or c.sw ~= nil or c.ne ~= nil or c.se ~= nil
+-- returns quad direction and offset
+local function getQuad(c, x, y)
+   if x < c.x then
+	  if y < c.y then
+		 return 'nw', -1, -1
+	  else
+		 return 'sw', -1, 1
+	  end
+   else
+	  if y < c.y then
+		 return 'ne', 1, -1
+	  else
+		 return 'se', 1, 1
+	  end
+   end
 end
 
---- Returns true if object fits entirely inside cell
-function QuadTree:fitsInCell(c, x, y, s)
-  local dx = self.abs(c.x - x)
-  local dy = self.abs(c.y - y)
-  local e = c.side/4
-  return s < e and dx < e and dy < e
+-- returns true if the object fits inside a cell
+local function fitsInCell(c, x, y, s)
+   local dx = c.x - x
+   local dy = c.y - y
+   if dx < 0 then
+	  dx = -dx
+   end
+   if dy < 0 then
+	  dy = -dy
+   end
+   local d = dx
+   if dy > d then
+	  d = dy
+   end
+   return d + s < c.s/2
+   --local cs4 = c.s/4
+   --return s < cs4 and dx < cs4 and dy < cs4
 end
 
---- Returns child cell direction and offset
-function QuadTree:getDirection(c, x, y)
-  local d, ox, oy
-  if x < c.x then
-    if y < c.y then
-      d, ox, oy = 'nw', -1, -1
-    else
-      d, ox, oy = 'sw', -1, 1
-    end
-  else
-    if y < c.y then
-      d, ox, oy = 'ne', 1, -1
-    else
-      d, ox, oy = 'se', 1, 1
-    end
-  end
-  return d, ox, oy
+local function expandUp(x, y, s)
+   if fitsInCell(root, x, y, s) then
+	  return root
+   end
+   -- expand tree upwards
+   local d, ox, oy = getQuad(root, x, y)
+   d = rdirs[d]
+   local q = root.s/2
+   ox = ox*q + root.x
+   oy = oy*q + root.y
+   -- create new root
+   local c = createC(nil, nil, ox, oy, root.s*2)
+   c.nchildren = 1
+   c[d] = root
+   root.quad = d
+   root.parent = c
+   -- assign new root
+   root = c
+   expandUp(x, y, s)
 end
 
---- Returns cell which fits an object of given size
+-- returns cell which fits an object of given size
 -- creates the cell if necessary
-function QuadTree:getCell(c, x, y, s)
-  -- object fits inside this cell?
-  local q = c.side/2
-  if s*2 > q or q < self.mincellsize then
-    return c
-  end
-  -- find which sub-cell the object belongs to
-  local d, ox, oy = self:getDirection(c, x, y)
-  -- create sub-cell if necessary
-  if c[d] == nil then
-    local e = q/2
-    ox = ox*e + c.x
-    oy = oy*e + c.y
-    c[d] = self:createCell(c, d, ox, oy, q)
-  end
-  -- descend deeper down the tree
-  return self:getCell(c[d], x, y, s)
+local function expandDown(c, x, y, s)
+   local cs = c.s
+   local cs4 = cs/4
+   -- can't fit in a child cell?
+   if s >= cs4 or cs == mincellsize then
+	  return c
+   end
+   --assert(fitsInCell(c, x, y, s), "object is larger than cell")
+   -- find which sub-cell the object belongs to
+   local d, ox, oy = getQuad(c, x, y)
+   -- create sub-cell if necessary
+   if c[d] == nil then
+	  ox = ox*cs4 + c.x
+	  oy = oy*cs4 + c.y
+	  createC(c, d, ox, oy, cs/2)
+   end
+   -- descend deeper down the tree
+   return expandDown(c[d], x, y, s)
 end
 
---- Select all objects in a cell
-function QuadTree:selectCellAll(root, dest)
-  -- insert all objects in this cell
-  for i, v in self.ipairs(root) do
-    self.tinsert(dest, v)
-  end
-  for i, v in self.ipairs(self.dirs) do
-    local c = root[v]
-    if c then
-      self:selectCellAll(c, dest)
-    end
-  end
+-- trim from the bottom up
+-- removing empty cells
+local function trimBottom(c)
+   if #c > 0 or c.nchildren > 0 then
+	  return
+   end
+   local p = c.parent
+   destroyC(c)
+   if c == root then
+	  root = nil
+	  return
+   end
+   trimBottom(p)
 end
 
---- Select objects in range
-function QuadTree:selectCell(root, dest, x, y, hw, hh)
-  -- insert all objects in this cell
-  for _, v in self.ipairs(root) do
-    self.tinsert(dest, v)
-  end
-  -- descent down the tree
-  for _, v in self.ipairs(self.dirs) do
-    local c = root[v]
-    if c then
-      local r = c.side
-      local dx = math.abs(c.x - x)
-      local dy = self.abs(c.y - y)
-      -- query intersect this cell?
-      if r > dx - hw and r > dy - hh then
-        -- query covers the cell entirely?
-        if r < hw - dx and r < hh - dy then
-          self:selectCellAll(c, dest)
-        else
-          self:selectCell(c, dest, x, y, hw, hh)
-        end
-      end
-    end
-  end
+-- trim from the top down
+-- removing empty cells or cells that have only have one child
+local function trimTop()
+   if root == nil or #root == 0 then
+	  return
+   end
+   -- root has one child only?
+   if root.nchildren ~= 1 then
+	  return
+   end
+   -- get the only child node
+   local c = root.nw or root.ne or root.sw or root.se
+   -- severe the link between child and parent
+   local nroot = c
+   nroot.quad = nil
+   nroot.parent = nil
+   -- before we remove the old root
+   -- make sure it doesn't point to its only child
+   root[c] = nil
+   destroyC(root)
+   -- assign new root
+   root = nroot
+   trimTop()
 end
 
---- Trim empty cells from bottom up
-function QuadTree:trimBottom(c)
-  while c and #c == 0 and not self:hasChildren(c) do
-    local p = c.parent
-    self:destroyCell(c)
-    c = p
-  end
+-- remove object
+local function removeO(object)
+   local c = handles[object]
+   -- removing a non-existing object?
+   if c == nil then
+	  return
+   end
+   nobjects = nobjects - 1
+   handles[object] = nil
+   -- todo: make constant time
+   for i = 1, #c do
+	  if c[i] == object then
+		 tremove(c, i)
+		 break
+	  end
+   end
+   trimBottom(c)
 end
 
+-- insert new object
+local function insertO(object, x, y, hw, hh)
+   local s = hw
+   if s < hh then
+	  s = hh
+   end
 
---- Trim the top of the quadtree deleting
--- root nodes if they only have a single child
-function QuadTree:trimTop()
-  while self.root and #self.root == 0 do
-    -- root has one child only?
-    local children = self:getChildCount(self.root)
-    if children > 1 then
-      return
-    end
-    -- get the only child node
-    local child = self.root.nw or self.root.ne or self.root.sw or self.root.se
-    if child == nil then
-      return
-    end
-    -- severe the link between child and parent
-    local nroot = self.root[child]
-    nroot.relation = 'none'
-    nroot.parent = nil
-    -- before we remove the old root
-    -- make sure it doesn't point to its only child
-    self.root[child] = nil
-    self:destroyCell(self.root)
-    -- assign new root
-    self.root = nroot
-  end
+   -- remove object from current cell
+   local c = handles[object]
+   if c then
+	  -- object remains in its current cell?
+	  if fitsInCell(c, x, y, s) then
+		 --return
+	  end
+	  removeO(object)
+   end
+
+   -- add root cell
+   if root == nil then
+	  createR(x, y, s)
+	  local sz = root.x .. "," .. root.y .. "x" .. root.s
+	  sz = sz .. "=>" .. x .. "," .. y .. "x" .. s
+	  assert(fitsInCell(root, x,y,s), sz)
+   end
+
+   -- expand tree up
+   expandUp(x, y, s)
+   
+   local c2 = root
+   -- expand tree down
+   c2 = expandDown(root, x, y, s)
+
+   -- insert object
+   c2[#c2 + 1] = object
+   handles[object] = c2
+   nobjects = nobjects + 1
 end
 
-
---- Insert new object
-function QuadTree:insert(object, x, y, hw, hh)
-  local s = math.max(hw, hh)
-  --assert(s > 0)
-  -- remove object from current cell
-  local c = self.handles[object]
-  if c then
-    -- object remains in its current cell?
-    if self:fitsInCell(c, x, y, s) then
-      return
-    end
-    self:remove(object)
-  end
-  -- add root cell
-  if self.root == nil then
-    self.root = self:createCell(nil, 'none', 0, 0, s*4)
-  end
-  -- expand tree if necessary
-  while true do
-    -- can the object fit in the root cell?
-    if self:fitsInCell(self.root, x, y, s) then
-      local c = self:getCell(self.root, x, y, s)
-      -- insert object
-      self.tinsert(c, object)
-      self.handles[object] = c
-      self.objects = self.objects + 1
-      return
-    end
-    -- expand tree upwards
-    local d, ox, oy = self:getDirection(self.root, x, y)
-    d = self.rdirs[d]
-    local q = self.root.side*.5
-    ox = ox*q + self.root.x
-    oy = oy*q + self.root.y
-    -- create new root
-    local nroot = self:createCell(nil, 'none', ox, oy, self.root.side*2)
-    nroot[d] = self.root
-    self.root.relation = d
-    self.root.parent = nroot
-    -- assign new root
-    self.root = nroot
-  end
+-- select entire cell
+local function selectC(c, dest)
+   -- insert all objects in this cell
+   local n = #dest
+   for i = 1, #c do
+	  dest[n + i] = c[i]
+   end
+   -- descent down the tree
+   if c.nw then
+	  selectC(c.nw, dest)
+   end
+   if c.ne then
+	  selectC(c.ne, dest)
+   end
+   if c.se then
+	  selectC(c.se, dest)
+   end
+   if c.sw then
+	  selectC(c.sw, dest)
+   end
 end
 
---- Remove object
-function QuadTree:remove(object)
-  local c = self.handles[object]
-  -- removing a non-existing object?
-  if c == nil then
-    return
-  end
-  self.objects = self.objects - 1
-  self.handles[object] = nil
-  -- todo: make constant time
-  for i, v in self.ipairs(c) do
-    if v == object then
-      self.tremove(c, i)
-      break
-    end
-  end
-  self:trimBottom(c)
+-- select part of a cell
+local function selectCR(c, x, y, hw, hh, dest)
+   local dx = c.x - x
+   local dy = c.y - y
+   if dx < 0 then
+	  dx = -dx
+   end
+   if dy < 0 then
+	  dy = -dy
+   end
+   -- range is outside of the cell
+   local s = c.s
+   if s + hw < dx or s + hh < dy then
+	  return
+   end
+   -- range covers the cell entirely
+   if s + dx < hw and s + dy < hh then
+	  return selectC(c, dest)
+   end
+   -- range covers the cell partially
+   -- insert all objects in this cell
+   local n = #dest
+   for i = 1, #c do
+	  dest[n + i] = c[i]
+   end
+   -- descent down the tree
+   if c.nw then
+	  selectCR(c.nw, x, y, hw, hh, dest)
+   end
+   if c.ne then
+	  selectCR(c.ne, x, y, hw, hh, dest)
+   end
+   if c.se then
+	  selectCR(c.se, x, y, hw, hh, dest)
+   end
+   if c.sw then
+	  selectCR(c.sw, x, y, hw, hh, dest)
+   end
+   return dest
 end
 
---- Select objects in range
-function QuadTree:select(dest, x, y, hw, hh)
-  if self.root then
-    self:selectCell(self.root, dest, x, y, hw, hh);
-  end
+-- select by given range
+local function selectR(x, y, w, h, dest)
+   dest = dest or {}
+   -- tree is empty?
+   if root == nil then
+	  return dest
+   end
+   return selectCR(root, x, y, w, h, dest)
 end
 
---- Select objects in range
-function QuadTree:selectAABB(dest, l, t, r, b)
-  -- realign aabb if necessary
-  if l > r then
-    l, r = r, l
-  end
-  if t > b then
-    t, b = b, t
-  end
-  local x, y = (l + r)/2, (t + b)/2
-  local hw = (r - l)/2
-  local hh = (b - t)/2
-  self:select(dest, x, y, hw, hh)
+-- select by object
+local function selectO(object, dest)
+   dest = dest or {}
+   -- get the cell of the object
+   local c = handles[object]
+   -- object not in the tree?
+   if c == nil then
+	  return dest
+   end
+   return selectR(c.x, c.y, c.s, c.s, dest)
 end
 
---- Selects all objects
-function QuadTree:selectAll(dest, x, y, hw, hh)
-  if self.root then
-    self:selectCellAll(self.root, dest)
-  end
+-- get the cell range of an object
+local function getR(object)
+   local c = handles[object]
+   -- object not in the tree?
+   if c == nil then
+	  return dest
+   end
+   return c.x, c.y, c.s, c.s
 end
+
+quad = {}
+
+quad.insert = insertO
+quad.remove = removeO
+quad.select = selectO
+quad.selectRange = selectR
+quad.trimTop = trimT
+quad.getRange = getR
+
+return quad

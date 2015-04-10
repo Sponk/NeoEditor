@@ -36,16 +36,11 @@ dofile("InputField.lua")
 dofile("Label.lua")
 dofile("Utils.lua")
 dofile("QuadTree.lua")
-dofile("Collision.lua")
+Collision = dofile("Collision.lua")
 dofile("Object3d.lua")
 
 dofile("ThemedButton.lua")
 dofile("SpriteBatch.lua")
 dofile("Tiled.lua")
-
---collision members
-quad = QuadTree.create()
-collision = Collision.create()
-collision:init()
 
 enableGui(1)
