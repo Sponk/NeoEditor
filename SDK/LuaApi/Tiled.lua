@@ -28,8 +28,12 @@ end
 -- @param path The Lua file to load
 function loadTiledFile(canvas, path)
 
-   -- FIXME: Does not work with direct output from Tiled!
-   dofile(path)
+   path:gsub("/", ".")
+
+   -- FIXME: Deletes every ".lua", not just the file ending!
+   path:gsub(".lua", "")
+
+   local tiledLevel = require(path)
    
    local resolution = getWindowScale()
    local tiledSpriteSheet = tiledLevel.tilesets[1]
