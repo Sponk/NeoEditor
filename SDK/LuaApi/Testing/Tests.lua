@@ -134,6 +134,11 @@ function Test2DSDK:TestWidget()
     
 end
 
+function Test2DSDK:TestTiledLoader()
+   local level = TiledLevel()
+   level:loadTiledFile(mainCanvas, "scripts/SDK/Testing/testlevel.lua")
+end
+
 local shouldBe42 = dofile("dofiletest.lua")
 function TestModules:TestDofile()
    assertNotNil(shouldBe42)

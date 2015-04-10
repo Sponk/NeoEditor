@@ -41,6 +41,7 @@ dofile("Object3d.lua")
 
 dofile("ThemedButton.lua")
 dofile("SpriteBatch.lua")
+dofile("Tiled.lua")
 
 --collision members
 quad = QuadTree.create()
