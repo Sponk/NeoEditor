@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2015 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -28,6 +29,10 @@
 
 namespace Neo
 {
+/**
+ * @brief Implements a framework for string manipulation that
+ * operates directly on C strings.
+ */
 class NEO_CORE_EXPORT String
 {
 public:
@@ -43,9 +48,30 @@ private:
 	
 public:
 	
+	/**
+	 * @brief Clears the string.
+	 */
 	void clear(void);
+	
+	/**
+	 * @brief Copies the given string to the internal buffer.
+	 * @param data The new string data.
+	 */
 	void set(const char * data);
+	
+	/**
+	 * @brief Returns the C string.
+	 * This method is ensured to return a valid C string and never NULL.
+	 * @return The C string
+	 */
 	const char * getSafeString(void);
+	
+	/**
+	 * @brief Returns the current internal string buffer.
+	 * Attention: Might return NULL!
+	 * 
+	 * @return The internal string buffer
+	 */
 	inline const char * getData(void){ return m_data; }
 	
 	inline void operator = (const String & string){ set(string.m_data); }
