@@ -2102,7 +2102,7 @@ int enablePhysics()
 	PhysicsProperties* phyProps = entity->createPhysicsProperties();
 	Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
 
-	if (script->getBoolean(0) != 0)
+	if (script->getBoolean(1) != 0)
 	{
 		entity->deletePhysicsProperties();
 		return 1;

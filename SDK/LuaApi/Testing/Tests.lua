@@ -88,6 +88,8 @@ function Test3DSDK:TestEntity()
   entity:setCurrentFrame(20)
   assertEquals(entity:getCurrentFrame(), 20)
 
+  entity:enablePhysics(true)
+
   -- entity:enableShadow(false)
   -- assertEquals(entity:hasShadow(), false)
 end
