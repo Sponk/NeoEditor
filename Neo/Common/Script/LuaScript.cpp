@@ -367,6 +367,75 @@ int getAttribute(lua_State* L)
 	return 1;
 }
 
+static void findloader(lua_State *L, const char *name)
+{
+	int i;
+	luaL_Buffer msg; /* to build error message */
+	luaL_buffinit(L, &msg);
+	lua_getfield(L, lua_upvalueindex(1), "searchers"); /* will be at index 3 */
+
+	if (!lua_istable(L, 3))
+		luaL_error(L, LUA_QL("package.searchers") " must be a table");
+
+	/*  iterate over available seachers to find a loader */
+	for (i = 1;; i++)
+	{
+		lua_rawgeti(L, 3, i); /* get a seacher */
+
+		if (lua_isnil(L, -1))
+		{						   /* no more searchers? */
+			lua_pop(L, 1);		   /* remove nil */
+			luaL_pushresult(&msg); /* create error message */
+			luaL_error(L, "module " LUA_QS " not found:%s", name,
+					   lua_tostring(L, -1));
+		}
+
+		lua_pushstring(L, name);
+		lua_call(L, 1, 2); /* call it */
+
+		if (lua_isfunction(L, -2))	/* did it find a loader? */
+			return;					  /* module loader found */
+		else if (lua_isstring(L, -2)) /* searcher returned error message? */
+		{
+			lua_pop(L, 1);		 /* remove extra return */
+			luaL_addvalue(&msg); /* concatenate error message */
+		}
+		else
+			lua_pop(L, 2); /* remove both returns */
+	}
+}
+
+int require(lua_State *L)
+{
+	const char *name = luaL_checkstring(L, 1);
+
+	lua_settop(L, 1); /* _LOADED table will be at index 2 */
+	lua_getfield(L, LUA_REGISTRYINDEX, "_LOADED");
+	lua_getfield(L, 2, name); /* _LOADED[name] */
+
+	if (lua_toboolean(L, -1)) /* is it there? */
+		return 1;			  /* package is already loaded */
+
+	/* else must load package */
+	lua_pop(L, 1); /* remove 'getfield' result */
+	findloader(L, name);
+	lua_pushstring(L, name); /* pass name as argument to module loader */
+	lua_insert(L, -2);		 /* name is 1st argument (before search data) */
+	lua_call(L, 2, 1);		 /* run loader to load module */
+
+	if (!lua_isnil(L, -1))		  /* non-nil return? */
+		lua_setfield(L, 2, name); /* _LOADED[name] = returned value */
+	lua_getfield(L, 2, name);
+
+	if (lua_isnil(L, -1))
+	{							  /* module did not set a value? */
+		lua_pushboolean(L, 1);	/* use true as result */
+		lua_pushvalue(L, -1);	 /* extra copy to be returned */
+		lua_setfield(L, 2, name); /* _LOADED[name] = true */
+	}
+	return 1;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Init
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -407,6 +476,7 @@ void LuaScript::init(void)
 
     lua_register(m_state, "setAttribute",           setAttribute);
     lua_register(m_state, "getAttribute",           getAttribute);
+	lua_register(m_state, "require", require);
 
 	// register custom functions
 	map<string, int (*)(void)>::iterator

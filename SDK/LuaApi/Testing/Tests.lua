@@ -139,3 +139,10 @@ function TestModules:TestDofile()
    assertNotNil(shouldBe42)
    assertEquals(shouldBe42, 42)
 end
+
+
+function TestModules:TestRequire()
+   local another42Value = require("scripts.SDK.Testing.dofiletest")
+   assertNotNil(another42Value)
+   assertEquals(another42Value, 42)
+end
