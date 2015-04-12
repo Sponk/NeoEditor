@@ -1,10 +1,6 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MOEntity.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -28,8 +24,8 @@
 //========================================================================
 
 
-#ifndef _M_OENTITY_H
-#define _M_OENTITY_H
+#ifndef __OENTITY_H
+#define __OENTITY_H
 
 namespace Neo
 {
@@ -140,25 +136,34 @@ public:
 	inline Vector3 * getLinearFactor(void){ return &m_linearFactor; }
 };
 
+/**
+ * @brief Represents a 3D mesh in the scene.
+ *
+ * How to create a new OEntity
+ * @code
+ * Level* level = NeoEngine::getInstance()->getLevel();
+ * Scene* scene = level->getCurrentScene();
+ * OEntity* newEntity = scene->addNewEntity(level->loadMesh("assets/mesh.dae"));
+ * @endcode
+ * @see Object3d
+ */
 class M_ENGINE_EXPORT OEntity : public Object3d
 {
 public:
-
 	// constructor / destructor
-	OEntity(MeshRef * meshRef);
+	OEntity(MeshRef *meshRef);
 	~OEntity(void);
 
 	// copy constructor
-	OEntity(const OEntity & entity);
+	OEntity(const OEntity &entity);
 
 private:
-
 	// mesh
-	MeshRef * m_meshRef;
+	MeshRef *m_meshRef;
 
 	// invisible
 	bool m_isInvisible;
-    bool m_hasShadow;
+	bool m_hasShadow;
 
 	// animation
 	unsigned int m_animationId;
@@ -167,58 +172,157 @@ private:
 	float m_currentFrame;
 
 	// collision
-	PhysicsProperties * m_physicsProperties;
+	PhysicsProperties *m_physicsProperties;
 
 	// bounding box
 	Box3d m_boundingBox;
-    bool m_isOccluder;
+	bool m_isOccluder;
 
 public:
+	/**
+	 * @brief Sets if this object is a occluder or not.
+	 *
+	 * An occluder is used by the renderer to do occlusion culling.
+	 * @param value A boolean value.
+	 */
+	inline void enableOccluder(bool value) { m_isOccluder = value; }
 
-    // occluder
-    inline void enableOccluder(bool value) { m_isOccluder = value; }
-    inline bool isOccluder() { return m_isOccluder; }
+	/**
+	 * @brief Checks if the OEntity is an occluder.
+	 * @return A boolean value.
+	 */
+	inline bool isOccluder() { return m_isOccluder; }
 
 	// type
-	int getType(void){ return M_OBJECT3D_ENTITY; }
+	virtual int getType(void) { return M_OBJECT3D_ENTITY; }
+	virtual void setActive(bool active);
 
-	void setActive(bool active);
+	/**
+	 * @brief Changes if the OEntity is invisible or not.
+	 *
+	 * This value is not used for culling.
+	 * @param invisible A boolean value.
+	 * @see setVisible
+	 */
+	void setInvisible(bool invisible) { m_isInvisible = invisible; }
+
+	/**
+	 * @brief Checks if the OEntity is invisible.
+	 * @return A boolean value.
+	 */
+	bool isInvisible(void) { return m_isInvisible; }
+
+	/**
+	 * @brief Returns the Mesh of the OEntity.
+	 * @return The Mesh object.
+	 */
+	Mesh *getMesh(void);
 	
-	// invisible
-	void setInvisible(bool invisible){ m_isInvisible = invisible; }
-	bool isInvisible(void){ return m_isInvisible; }
+	/**
+	 * @brief Sets the MeshRef of the OEntity.
+	 * @param meshRef The MeshRef.
+	 * @see MeshRef
+	 */
+	void setMeshRef(MeshRef *meshRef);
+	
+	/**
+	 * @brief Returns the MeshRef of the OEntity.
+	 * @return The MeshRef.
+	 * @see MeshRef
+	 */
+	inline MeshRef *getMeshRef(void) { return m_meshRef; }
 
-	// mesh
-	Mesh * getMesh(void);
-	void setMeshRef(MeshRef * meshRef);
-	inline MeshRef * getMeshRef(void){ return m_meshRef; }
-
-	// animation
+	/**
+	 * @brief Changes the currently running animation to the one with the 
+	 * given ID.
+	 * @param animationId The animation ID.
+	 */
 	void changeAnimation(unsigned int animationId);
+	
+	/**
+	 * @brief Checks if the currently running animation has finished.
+	 * @return A boolean value.
+	 */
 	bool isAnimationOver(void);
-	inline void setAnimationSpeed(float animationSpeed){ m_animationSpeed = animationSpeed; }
-	inline void setCurrentFrame(float currentFrame){ m_currentFrame = currentFrame; }
-	inline unsigned int getAnimationId(void){ return m_animationId; }
-	inline float getAnimationSpeed(void){ return m_animationSpeed; }
-	inline float getCurrentFrame(void){ return m_currentFrame; }
 
-	// physics
+	/**
+	 * @brief Changes the animation speed.
+	 * @param animationSpeed The new animation speed.
+	 */
+	inline void setAnimationSpeed(float animationSpeed)
+	{
+		m_animationSpeed = animationSpeed;
+	}
+
+	/**
+	 * @brief Changes the current frame in the current animation.
+	 * @param currentFrame The new frame to display.
+	 */
+	inline void setCurrentFrame(float currentFrame)
+	{
+		m_currentFrame = currentFrame;
+	}
+
+	/**
+	 * @brief Returns the animation ID of the currently running animation.
+	 * @return The animation ID.
+	 */
+	inline unsigned int getAnimationId(void) { return m_animationId; }
+
+	/**
+	 * @brief Returns the animation speed of the currently running animation.
+	 * @return The animation speed.
+	 */	
+	inline float getAnimationSpeed(void) { return m_animationSpeed; }
+	
+	/**
+	 * @brief Returns the animation current frame in the currently 
+	 * running animation.
+	 * @return The current frame.
+	 */
+	inline float getCurrentFrame(void) { return m_currentFrame; }
+
+	/**
+	 * @brief Disables physics and deletes the physics properties.
+	 */
 	void deletePhysicsProperties(void);
-	PhysicsProperties * createPhysicsProperties(void);
-	inline PhysicsProperties * getPhysicsProperties(void){ return m_physicsProperties; }
+	
+	/**
+	 * @brief Enables physics and creates a new PhysicsProperties object.
+	 * @return The new PhysicsProperties object.
+	 */
+	PhysicsProperties *createPhysicsProperties(void);
 
-	// bounding box
-	inline Box3d * getBoundingBox(void){ return &m_boundingBox; }
+	/**
+	 * @brief Returns the physics properties object.
+	 * @return The PhysicsProperties.
+	 */ 
+	inline PhysicsProperties *getPhysicsProperties(void)
+	{
+		return m_physicsProperties;
+	}
 
-    // Shadow
-    inline bool hasShadow() { return m_hasShadow; }
-    inline void enableShadow(bool shadow) { m_hasShadow = shadow; }
+	/**
+	 * @brief Returns the bounding box.
+	 * @return The bounding box.
+	 * @see Box3d
+	 */
+	inline Box3d *getBoundingBox(void) { return &m_boundingBox; }
 
-	// update
-	void update(void);
+	/**
+	 * @brief Checks if the OEntity has a shadow.
+	 * @return A boolean value.
+	 */
+	inline bool hasShadow() { return m_hasShadow; }
+	
+	/**
+	 * @brief Enables or disables shadows for the OEntity.
+	 * @param shadow The enable value.
+	 */
+	inline void enableShadow(bool shadow) { m_hasShadow = shadow; }
 
-	// visibility
-	void updateVisibility(OCamera * camera);
+	virtual void update(void);
+	virtual void updateVisibility(OCamera *camera);
 };
 }
 #endif
