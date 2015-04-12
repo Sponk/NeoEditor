@@ -230,7 +230,7 @@ void add_to_tree(Object3d* entity, std::string path)
 			}
 		}
 
-		for (int i = 0; i < entity->getChildsNumber(); i++)
+		for (int i = 0; i < entity->getChildrenNumber(); i++)
 		{
 			Object3d* object = entity->getChild(i);
 			if (!window.scene_tree->find_item(

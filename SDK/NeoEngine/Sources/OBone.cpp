@@ -49,10 +49,10 @@ m_inversePoseMatrix(bone.m_inversePoseMatrix),
 m_skinMatrix(bone.m_skinMatrix)
 {}
 
-void OBone::processChildsLinking(void)
+void OBone::processChildrenLinking(void)
 {
 	unsigned int i;
-	unsigned int size = getChildsNumber();
+	unsigned int size = getChildrenNumber();
 
 	OBone * child = NULL;
 	for(i=0; i<size; i++) // for all childs
@@ -62,6 +62,6 @@ void OBone::processChildsLinking(void)
 		// compute parenting (parent matrix * child local matrix)
 		child->computeLocalMatrix();
 		(*child->getMatrix()) = (*getMatrix()) * (*child->getMatrix());
-		child->processChildsLinking();
+		child->processChildrenLinking();
 	}
 }

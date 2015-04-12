@@ -42,6 +42,7 @@
 #include <Label.h>
 #include <Sprite.h>
 #include <Tile.h>
+#include <LuaScript.h>
 #include <algorithm>
 
 using namespace Neo;
@@ -711,6 +712,24 @@ int addSpriteToBatch()
 	return 1;
 }
 
+// addTileToBatch(batch, width, height, path)
+int addTileToBatch()
+{
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	
+	if (!script->isFunctionOk("addTileToBatch", 4))
+		return 0;
+
+	Tile* sprite = new Tile(0,0, script->getFloat(1), script->getFloat(2), 
+							script->getString(3), 0, 0);
+	
+	SpriteBatch* sb = (SpriteBatch*) script->getPointer(0);
+	sb->addSprite(sprite);
+
+	script->pushPointer(sprite);
+	return 1;
+}
+
 int updateBatchSprite()
 {
 	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
@@ -718,17 +737,22 @@ int updateBatchSprite()
 	if (!script->isFunctionOk("addSpriteToBatch", 6))
 		return 0;
 
-	Sprite* sprite = (Sprite*) script->getPointer(0);
+	Widget* sprite = (Widget*) script->getPointer(0);
 
 	sprite->setPosition(Vector2(script->getFloat(1), script->getFloat(2)));
 	sprite->setScale(Vector2(script->getFloat(3), script->getFloat(4)));
 	sprite->setRotation(script->getFloat(5));
+
+	// FIXME: Faster way to determine type!
+	if(strcmp(sprite->getStaticName(), "Tile") == 0)
+		((Tile*) sprite)->setOffset(Vector2(script->getInteger(6), script->getInteger(7)));
 
 	return 1;
 }
 
 void GuiSystem::setupLuaInterface(ScriptContext* script)
 {
+	script->addFunction("addTileToBatch", addTileToBatch);
 	script->addFunction("updateBatchSprite", updateBatchSprite);
 	script->addFunction("createSpriteBatch", createSpriteBatch);
 	script->addFunction("addSpriteBatchToCanvas", addSpriteBatchToCanvas);

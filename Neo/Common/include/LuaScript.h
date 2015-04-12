@@ -40,8 +40,6 @@ public :
 	~LuaScript(void);
 
 protected:
-
-	void init();
 	void clear();
 
 	static int function(lua_State * L);
@@ -52,6 +50,7 @@ protected:
 	map<string, int (*)(void)> m_functions;
 
 public:
+	void init();
 
 	void printStack();
     lua_State* getLuaState() { return m_state; }

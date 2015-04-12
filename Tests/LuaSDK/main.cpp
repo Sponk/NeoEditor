@@ -59,8 +59,7 @@ public:
 
 		// Setup script context
 		Neo::LuaScript* script = new Neo::LuaScript();
-		Gui::GuiSystem::getInstance()->setupLuaInterface(script);
-
+		
 		Level* level = new Level();
 		SystemContext* context = (SystemContext*) new Neo::MWinContext();
 		MPackageManager* pmanager = new Neo::MPackageManagerNPK;
@@ -87,6 +86,7 @@ public:
 
 		NeoWindow::getInstance()->createSemaphores();
 
+		Gui::GuiSystem::getInstance()->setupLuaInterface(script);
 		game->begin();
 	}
 

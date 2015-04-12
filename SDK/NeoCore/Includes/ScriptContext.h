@@ -38,6 +38,8 @@ public :
 	/// Destructor.
 	virtual ~ScriptContext(void){}
 
+	virtual void init() = 0;
+
 	/// Run script.
 	/// \param filename	Script filename
     virtual bool runScript(const char * filename) = 0;

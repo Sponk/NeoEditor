@@ -112,9 +112,10 @@ void MPluginScript::init()
     // Add FLTK bindings
     createFltkLuaBindings(this);
 
-	// Add NeoGui bindings
-	Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(this);
-	LuaScript::init();
+    LuaScript::init();
+
+    // Add NeoGui bindings
+    Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(this);
 }
 
 bool MPluginScript::runScript(const char* filename)

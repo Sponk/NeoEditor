@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MArmature.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -143,7 +138,7 @@ void Armature::processBonesLinking(void)
 		if(! bone->hasParent())
 		{
 			bone->computeLocalMatrix();
-			bone->processChildsLinking();
+			bone->processChildrenLinking();
 		}
 	}
 }

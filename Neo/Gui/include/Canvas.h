@@ -47,9 +47,9 @@ namespace Gui
 
 class SpriteBatch
 {
-	std::vector<Sprite*> m_sprites;
+	std::vector<Widget*> m_sprites;
 public:
-	void addSprite(Sprite* s) { m_sprites.push_back(s); }
+	void addSprite(Widget* s) { m_sprites.push_back(s); }
 	void draw();
 };
 	

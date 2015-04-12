@@ -821,7 +821,7 @@ int getChilds()
 
 	if(object)
 	{
-		unsigned int cSize = object->getChildsNumber();
+		unsigned int cSize = object->getChildrenNumber();
 		long int * childs = new long int[cSize];
 
 		for(unsigned int c=0; c<cSize; c++)

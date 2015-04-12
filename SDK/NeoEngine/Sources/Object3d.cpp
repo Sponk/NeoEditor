@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MObject3d.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -26,7 +21,6 @@
 //    distribution.
 //
 //========================================================================
-
 
 #include "../Includes/NeoEngine.h"
 
@@ -55,7 +49,7 @@ void Object3d::clearObject3d(void)
 		m_behaviors[i]->destroy();
 	
 	m_behaviors.clear();
-	m_childs.clear();
+	m_children.clear();
 
     // All MVariables have to have their content on the heap! No static variables allowed!
 	for (AttributeIterator it = m_attributes.begin(); it != m_attributes.end(); ++it)
@@ -149,24 +143,24 @@ void Object3d::changeBehavior(unsigned int id, Behavior * behavior)
 void Object3d::removeChild(Object3d * child)
 {
 	unsigned int i;
-	unsigned int cSize = m_childs.size();
+	unsigned int cSize = m_children.size();
 	for(i=0; i<cSize; i++)
 	{
-		if(m_childs[i] == child)
+		if(m_children[i] == child)
 		{
-			m_childs.erase(m_childs.begin() + i);
+			m_children.erase(m_children.begin() + i);
 			return;
 		}
 	}
 }
 
-void Object3d::unlinkChilds(void)
+void Object3d::unlinkChildren(void)
 {
 	unsigned int i;
-	unsigned int cSize = m_childs.size();
+	unsigned int cSize = m_children.size();
 	for(i=0; i<cSize; i++)
-		m_childs[i]->setParent(NULL);
-	m_childs.clear();
+		m_children[i]->setParent(NULL);
+	m_children.clear();
 }
 
 void Object3d::unLink(void)
@@ -223,15 +217,15 @@ void Object3d::computeLocalMatrix(void)
 	m_matrix.scale(m_scale);
 }
 
-void Object3d::computeChildsMatrices(void)
+void Object3d::computeChildrenMatrices(void)
 {
 	unsigned int i;
-	unsigned int childSize = m_childs.size();
+	unsigned int childrenize = m_children.size();
 	Object3d * childObject = NULL;
 
-	for(i=0; i<childSize; i++) // for all childs
+	for(i=0; i<childrenize; i++) // for all children
 	{
-		childObject = m_childs[i];
+		childObject = m_children[i];
 
 		// compute parenting (parent matrix * child local matrix)
 		if(m_needToUpdate || childObject->needToUpdate())
@@ -240,7 +234,7 @@ void Object3d::computeChildsMatrices(void)
 			childObject->m_matrix = m_matrix * childObject->m_matrix;
 			childObject->m_needToUpdate = true;
 		}
-		childObject->computeChildsMatrices();
+		childObject->computeChildrenMatrices();
 	}
 
 	m_needToUpdate = false;

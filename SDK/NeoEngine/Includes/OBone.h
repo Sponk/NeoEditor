@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MOBone.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,8 +23,8 @@
 //========================================================================
 
 
-#ifndef _M_OBONE_H
-#define _M_OBONE_H
+#ifndef __OBONE_H
+#define __OBONE_H
 
 namespace Neo
 {
@@ -58,7 +53,7 @@ public:
 	int getType(void){ return M_OBJECT3D_BONE; }
 
 	// childs linking
-	void processChildsLinking(void);
+	void processChildrenLinking(void);
 
 	// inverse pose matrix
 	Matrix4x4 * getInversePoseMatrix(void){ return &m_inversePoseMatrix; }

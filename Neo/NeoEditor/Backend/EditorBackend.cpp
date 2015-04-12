@@ -793,7 +793,7 @@ Object3d* EditorBackend::duplicateObject(Object3d *object)
 
 	Object3d* childCopy;
 	// Copy all children
-	for (int i = 0; i < object->getChildsNumber(); i++)
+	for (int i = 0; i < object->getChildrenNumber(); i++)
 	{
 		childCopy = duplicateObject(object->getChild(i));
 		

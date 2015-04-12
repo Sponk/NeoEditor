@@ -9,6 +9,10 @@ Test3DSDK = {}
 Test2DSDK = {}
 TestModules = {}
 
+require("NeoEngine")
+require("NeoCore")
+require("NeoGui")
+
 function Test3DSDK:TestLight()
 
   local light = OLight()

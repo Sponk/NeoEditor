@@ -18,6 +18,9 @@ INCLUDE(FindSSE)
 ## Documentation tool
 FIND_PACKAGE(Doxygen 1.8.3)
 
+## SWIG for script bindings
+FIND_PACKAGE(SWIG)
+
 ## Set version and info
 SET(NEO_MAJOR_VERSION 0)
 SET(NEO_MINOR_VERSION 4)

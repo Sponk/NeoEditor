@@ -416,7 +416,7 @@ void LuaScript::init(void)
 						       "local src = loadTextFile(s) "
 						   
 						       "if(src == nil) then "
-								  "return \"Could not load \" .. s "
+								  "return \" \\n\\tno file \\'\" .. s .. \"\\'\""
 							  "end "
 											  
 							  "return loadstring(src) "
@@ -429,7 +429,7 @@ void LuaScript::init(void)
 			  "local ret = v(str) "
 			  "if type(ret) == \"string\" then "
 			  "err = err .. ret "
-			  "else "
+			  "elseif ret ~= nil then "
 			  "return ret() "
 			  "end "
 			  "end "

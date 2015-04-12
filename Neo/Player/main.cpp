@@ -266,6 +266,7 @@ int main(int argc, char **argv)
 		{
             // Initialize GUI bindings
 			Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
+
 	    	engine->getGame()->begin();
 			projectFound = true;
 		}
@@ -288,6 +289,7 @@ int main(int argc, char **argv)
 			embeddedProj.startLevel = levelName;
 
 			Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
+
 			maratis->loadProject(&embeddedProj, projName);
 
 			// This needs to be done in the update thread
@@ -311,6 +313,7 @@ int main(int argc, char **argv)
 					{
                         // Initialize GUI bindings
 						Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
+
 						// This needs to be done in the update thread
 						// engine->getGame()->begin();
 						projectFound = true;

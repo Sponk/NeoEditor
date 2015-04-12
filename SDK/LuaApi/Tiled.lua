@@ -39,7 +39,7 @@ end
 -- and returns a table of Tiles containing all loaded tiles.
 -- @param canvas The canvas that will display the tiles
 -- @param path The Lua file to load
-function TiledLevel:loadTiledFile(canvas, path)
+function TiledLevel:loadTiledFile(path)
 
    path = path:gsub("/", ".")
 

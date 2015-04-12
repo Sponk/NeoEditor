@@ -385,7 +385,7 @@ void Scene::prepareCollisionShape(OEntity * entity)
 		// has physics child
 		bool hasPhysicsChild = false;
 		unsigned int o;
-		unsigned int oSize = entity->getChildsNumber();
+		unsigned int oSize = entity->getChildrenNumber();
 		for(o=0; o<oSize; o++)
 		{
 			Object3d * childObject = entity->getChild(o);
@@ -662,7 +662,7 @@ void Scene::deleteObject(Object3d * object)
 		if(obj == object)
 		{
 			obj->unLink();
-			obj->unlinkChilds();
+			obj->unlinkChildren();
 
 			m_objects.erase(m_objects.begin() + i);
 			SAFE_DELETE(obj);
@@ -890,7 +890,7 @@ void Scene::updateObjectsMatrices(void)
 		{
 			if(object->needToUpdate())
 				object->computeLocalMatrix();
-			object->computeChildsMatrices();
+			object->computeChildrenMatrices();
 		}
 	}
 }
