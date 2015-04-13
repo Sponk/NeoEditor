@@ -45,6 +45,51 @@ namespace Neo
 namespace Gui
 {
 
+/**
+ * @brief Implements a batch of sprites that can be used to circumvent the
+ * GUI system when rendering 2D objects for better performance.
+ *
+ * @par Creating a new SpriteBatch in C++
+ * @code
+ * GuiSystem* gui = GuiSystem::getInstance();
+ *
+ * // Fetch main canvas
+ * Canvas* mainCanvas = gui->getCanvas(0);
+ * 
+ * // Calling Sprite(x, y, w, h, file, label) with w = 0 and h = 0
+ * // so the resolution of the texture is used 
+ * Sprite* sprite = new Sprite(100, 100, 0, 0, "assets/tex.png", "label");
+ * SpriteBatch* batch = new SpriteBatch();
+ *
+ * // Add sprite do render pipeline
+ * batch->addSprite(sprite);
+ *
+ * // Add to canvas
+ * mainCanvas->addSpriteBatch(batch);
+ *
+ * @endcode
+ *
+ * @par Creating a new SpriteBatch in Lua
+ * @code
+ * require("NeoGui")
+ * local gui = NeoGui.GuiSystem.getInstance()
+ *
+ * -- Fetch main canvas
+ * local mainCanvas = gui:getCanvas(0);
+ * 
+ * -- Calling Sprite(x, y, w, h, file, label) with w = 0 and h = 0
+ * -- so the resolution of the texture is used 
+ * local sprite = NeoGui.Sprite(100, 100, 0, 0, "assets/tex.png", "label");
+ * local batch = NeoGui.SpriteBatch()
+ *
+ * -- Add sprite do render pipeline
+ * batch:addSprite(sprite);
+ *
+ * -- Add to canvas
+ * mainCanvas:addSpriteBatch(batch);
+ * @endcode
+ * @author Yannick Pflanzer
+ */
 class SpriteBatch
 {
 	std::vector<Widget*> m_sprites;

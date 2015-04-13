@@ -47,6 +47,10 @@ namespace Gui
 /**
  * @brief The Sprite class displays a texture on the screen.
  *
+ * @warning This way of using Sprites is very slow since the GUI system is not
+ * designed for displaying 2D graphics but displaying reusable GUI data!
+ * Use a SpriteBatch to display large numbers of Sprite's or Tile's instead! 
+ *
  * @par Creating a new Sprite in C++
  * @code
  * GuiSystem* gui = GuiSystem::getInstance();
