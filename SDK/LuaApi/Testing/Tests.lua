@@ -13,6 +13,15 @@ require("NeoEngine")
 require("NeoCore")
 require("NeoGui")
 
+function Test3DSDK:TestNeoCore()
+   local vect2 = NeoCore.Vector2(15, 13)
+   local vect3 = NeoCore.Vector3(20, 20, 13)
+   local vect4 = NeoCore.Vector4(20, 20, 15, 50)
+
+   assertEquals(vect2.x, 15)
+   assertEquals(vect2.y, 13)
+end
+
 function Test3DSDK:TestLight()
 
   local light = OLight()

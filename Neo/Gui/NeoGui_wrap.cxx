@@ -3655,6 +3655,64 @@ fail:
 }
 
 
+static int _wrap_Widget_translate(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo::Vector2 arg2 ;
+  Neo::Vector2 *argp2 ;
+  
+  SWIG_check_num_args("Neo::Gui::Widget::translate",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::translate",1,"Neo::Gui::Widget *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Gui::Widget::translate",2,"Neo::Vector2");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
+    SWIG_fail_ptr("Widget_translate",1,SWIGTYPE_p_Neo__Gui__Widget);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("Widget_translate",2,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg2 = *argp2;
+  
+  (arg1)->translate(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Widget_rotate(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  float arg2 ;
+  
+  SWIG_check_num_args("Neo::Gui::Widget::rotate",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::rotate",1,"Neo::Gui::Widget *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::Widget::rotate",2,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
+    SWIG_fail_ptr("Widget_rotate",1,SWIGTYPE_p_Neo__Gui__Widget);
+  }
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  (arg1)->rotate(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_Widget_doCallback(lua_State* L) {
   int SWIG_arg = 0;
   Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
@@ -3886,6 +3944,8 @@ static swig_lua_method swig_Neo_Gui_Widget_methods[] = {
     {"getPosition", _wrap_Widget_getPosition}, 
     {"setRotation", _wrap_Widget_setRotation}, 
     {"getRotation", _wrap_Widget_getRotation}, 
+    {"translate", _wrap_Widget_translate}, 
+    {"rotate", _wrap_Widget_rotate}, 
     {"doCallback", _wrap_Widget_doCallback}, 
     {"isVisible", _wrap_Widget_isVisible}, 
     {"setVisible", _wrap_Widget_setVisible}, 

@@ -202,6 +202,22 @@ public:
 	float getRotation() { return m_rotation; }
 
 	/**
+	 * @brief Translates the object.
+	 * @param vec The offset to apply.
+	 */
+	void translate(Vector2 vec) 
+	{ 
+		m_x += vec.x;
+		m_y += vec.y;
+	}
+
+	/**
+	 * @brief Rotates the object.
+	 * @param value The offset to apply.
+	 */
+	void rotate(float value) { m_rotation += value; }
+
+	/**
 	 * @brief Calls the callback with the user data as an argument.
 	 */
 	void doCallback();
