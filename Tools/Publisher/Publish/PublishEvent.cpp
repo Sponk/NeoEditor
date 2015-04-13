@@ -181,12 +181,13 @@ class PublishEvent##dir : public PublishEvent \
 }; \
 M_PUBLISH_EVENT_IMPLEMENT(PublishEvent##dir); \
 
-M_PUBLISH_PACKAGE_DIR(maps)
+/*M_PUBLISH_PACKAGE_DIR(maps)
 M_PUBLISH_PACKAGE_DIR(scripts)
 M_PUBLISH_PACKAGE_DIR(sounds)
 M_PUBLISH_PACKAGE_DIR(shaders)
 M_PUBLISH_PACKAGE_DIR(fonts)
-M_PUBLISH_PACKAGE_DIR(levels)
+M_PUBLISH_PACKAGE_DIR(levels)*/
+M_PUBLISH_PACKAGE_DIR(assets);
 M_PUBLISH_DIR(plugins)
 
 // write and pack binary mesh files

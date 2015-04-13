@@ -1117,7 +1117,10 @@ void EditorBackend::okNewProject(const char * filename)
         char dir[256];
         getRepertory(rep, file);
 
-        getGlobalFilename(dir, rep, "levels");
+		getGlobalFilename(dir, rep, "assets");
+        createDirectory(dir);
+
+		/*getGlobalFilename(dir, rep, "levels");
         createDirectory(dir);
         getGlobalFilename(dir, rep, "maps");
         createDirectory(dir);
@@ -1130,17 +1133,17 @@ void EditorBackend::okNewProject(const char * filename)
         getGlobalFilename(dir, rep, "shaders");
         createDirectory(dir);
         getGlobalFilename(dir, rep, "fonts");
-        createDirectory(dir);
+        createDirectory(dir);*/
 
         getGlobalFilename(src, system->getWorkingDirectory(), "NeoPlayer");
         getGlobalFilename(dir, rep, "NeoPlayer");
 
         copyFile(src, dir);
 
-		getGlobalFilename(src, system->getWorkingDirectory(), "LuaApi");
+		/*getGlobalFilename(src, system->getWorkingDirectory(), "LuaApi");
 		getGlobalFilename(dir, rep, "scripts/SDK");
 
-		copyDirectory(src, dir);
+		copyDirectory(src, dir);*/
 
 #ifndef WIN32
         chmod(dir, S_IRWXU);

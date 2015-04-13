@@ -55,7 +55,7 @@ void SceneSetupDlg::cancel_button_callback(Fl_Button* button, void*)
 void SceneSetupDlg::find_file_callback(Fl_Button* button, void*)
 {
 	const char* filename = fl_native_file_chooser("Choose file", "*.lua",
-			(current_project.path + "scripts").c_str(),
+			(current_project.path + "assets").c_str(),
 			Fl_Native_File_Chooser::BROWSE_FILE);
 
 	int children = button->parent()->children();

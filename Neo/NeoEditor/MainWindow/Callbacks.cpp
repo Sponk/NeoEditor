@@ -320,7 +320,7 @@ void update_scene_tree()
 void open_level_callback(Fl_Menu_*, void*)
 {
 	const char* filename = fl_native_file_chooser(
-		tr("Open level"), "*.level", (current_project.path + "/levels").c_str(),
+		tr("Open level"), "*.level", (current_project.path + "/assets").c_str(),
 		Fl_Native_File_Chooser::BROWSE_FILE);
 
 	if (filename)
@@ -1486,7 +1486,7 @@ void save_level_callback(Fl_Menu_*, long mode)
 			{
 				filename = fl_native_file_chooser(
 					tr("Select a file to save"), "*.level",
-					(current_project.path + "levels").c_str(),
+					(current_project.path + "assets").c_str(),
 					Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
 
 				if (filename == NULL)
@@ -1503,7 +1503,7 @@ void save_level_callback(Fl_Menu_*, long mode)
 		case 1:
 			filename = fl_native_file_chooser(
 				tr("Select a file to save"), "*.level",
-				(current_project.path + "levels").c_str(),
+				(current_project.path + "assets").c_str(),
 				Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
 
 			if (filename == NULL)
@@ -1650,7 +1650,7 @@ void add_mesh_callback(Fl_Menu_*, void*)
 	const char* filename = fl_native_file_chooser(
 		tr("Choose file"), "*.{obj,dae,3ds,b3d,ase,ifc,xgl,zgl,lwo,stl,x,ms3d,"
 						   "cob,irrmesh,md1,md2,md3,mdc,md5,ter,mesh}",
-		current_project.path.c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
+		(current_project.path + "assets").c_str(), Fl_Native_File_Chooser::BROWSE_FILE);
 
 	
 	if (filename)
@@ -1758,7 +1758,7 @@ bool text_load_font(const char* name, OText* text)
 void text_find_font_callback(Fl_Button*, void*)
 {
 	const char* filename = fl_native_file_chooser(
-		tr("Choose font"), "*.ttf", (current_project.path + "fonts").c_str(),
+		tr("Choose font"), "*.ttf", (current_project.path + "assets").c_str(),
 		Fl_Native_File_Chooser::BROWSE_FILE);
 	Level* level = NeoEngine::getInstance()->getLevel();
 	OText* text =
@@ -1851,7 +1851,7 @@ void add_text_callback(Fl_Menu_*, void*)
 	}
 
 	const char* filename = fl_native_file_chooser(
-		tr("Choose font"), "*.ttf", (current_project.path + "fonts").c_str(),
+		tr("Choose font"), "*.ttf", (current_project.path + "assets").c_str(),
 		Fl_Native_File_Chooser::BROWSE_FILE);
 
 	if (!filename)
@@ -2077,7 +2077,7 @@ void add_sound_callback(Fl_Menu_*, void*)
 
 	const char* filename =
 		fl_native_file_chooser(tr("Choose file"), "*.{wav,ogg}",
-							   (current_project.path + "sounds").c_str(),
+							   (current_project.path + "assets").c_str(),
 							   Fl_Native_File_Chooser::BROWSE_FILE);
 
 	if (!filename)
@@ -2644,7 +2644,7 @@ void import_lua_sdk_callback(Fl_Menu_*, void*)
 	char src[255];
 	char dir[255];
 	getGlobalFilename(src, ".", "LuaApi");
-	getGlobalFilename(dir, current_project.path.c_str(), "scripts/SDK");
+	getGlobalFilename(dir, current_project.path.c_str(), "assets/scripts/SDK");
 
 	copyDirectory(src, dir);
 }
