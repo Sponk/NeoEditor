@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -31,6 +32,10 @@ namespace Neo
 
 /**
  * @brief The Object3d class represents a general object in a 3D scene.
+ *
+ * You can add new types of objects by creating sub-classes that extend this
+ * class.
+ *
  * @see OEntity
  * @see OSound
  * @see OText
@@ -104,12 +109,12 @@ protected:
 public:
 
 	/**
-	 * @brief Recalculates the internal matrix.
+	 * @brief Recalculates the internal matrix relative to the parent object.
 	 */
 	void updateMatrix(void);
 
 	/**
-	 * @brief Calculates the local matrix in respect of the parent object.
+	 * @brief Calculates the local matrix without respecting the parent.
 	 */
 	void computeLocalMatrix(void);
 	
@@ -121,7 +126,7 @@ public:
 	inline Matrix4x4 *	getMatrix(void){ return &m_matrix; }
 
 	/**
-	 * @brief Unlinks all children from this object.
+	 * @brief Unlinks all children from this object and sets their parent to NULL.
 	 */
 	void unlinkChildren(void);
 	
@@ -460,6 +465,9 @@ public:
 	 * @brief Changes if the object is visible or not.
 	 * 
 	 * This value is used for culling and will be updated on every frame.
+	 * This makes setting it manually useless. For OEntity objects you can use
+	 * OEntity::setInvisible to overwrite the visibility.
+	 *
 	 * @param visible The new visibility value.
 	 */
 	inline void setVisible(bool visible) { m_isVisible = visible; }
@@ -481,6 +489,8 @@ public:
 
 	/**
 	 * @brief Change the object name.
+	 * 
+	 * Attention: Names must be unique!
 	 * @param name The new name.
 	 */
 	void setName(const char* name);
