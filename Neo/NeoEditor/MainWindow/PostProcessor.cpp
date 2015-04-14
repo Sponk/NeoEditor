@@ -23,7 +23,7 @@
 
 using namespace Neo;
 
-bool PostProcessor::draw(OCamera *camera)
+bool EditorPostProcessor::draw(OCamera *camera)
 {
     if(m_fx == 0)
         return false;
@@ -89,7 +89,7 @@ bool PostProcessor::draw(OCamera *camera)
     return true;
 }
 
-void PostProcessor::updateResolution()
+void EditorPostProcessor::updateResolution()
 {
     RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
     SystemContext * system = NeoEngine::getInstance()->getSystemContext();

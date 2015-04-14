@@ -30,10 +30,10 @@ namespace Neo
  * the current scene to a texture to allow applying GLSL post effects when
  * rendering the final image to the screen.
  */
-class NEO_ENGINE_EXPORT MPostProcessor
+class NEO_ENGINE_EXPORT PostProcessor
 {
 public:
-    MPostProcessor();
+	PostProcessor();
 
     /**
      * @brief Renders the current scene to a texture and then to the screen

@@ -39,7 +39,7 @@ public:
 
   bool maratis_init;
   bool hasPostEffects() { return m_postProcessing; }
-  PostProcessor* getPostProcessor() { return &m_postProcessor; }
+  Neo::PostProcessor* getPostProcessor() { return &m_postProcessor; }
   void loadPostEffectsFromGame(Neo::NeoGame* game);
 
   void resize(int x, int y, int w, int h);
@@ -55,7 +55,7 @@ private:
   int mouse_y;
 
   bool m_postProcessing;
-  PostProcessor m_postProcessor;
+  EditorPostProcessor m_postProcessor;
 };
 
 bool getNearestRaytracedDistance(Neo::Mesh * mesh, Neo::Matrix4x4 * matrix, const Neo::Vector3 & origin, const Neo::Vector3 & dest, float * distance, Neo::OEntity * entity = NULL);

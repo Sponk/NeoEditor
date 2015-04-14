@@ -37,7 +37,7 @@ inline int Pow2(int x)
     return x+1;
 }
 
-void MPostProcessor::eraseTextures()
+void PostProcessor::eraseTextures()
 {
     RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
@@ -51,7 +51,7 @@ void MPostProcessor::eraseTextures()
         render->deleteFrameBuffer(&m_BufferID);
 }
 
-void MPostProcessor::updateResolution()
+void PostProcessor::updateResolution()
 {
     RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
     SystemContext * system = NeoEngine::getInstance()->getSystemContext();
@@ -93,7 +93,7 @@ void MPostProcessor::updateResolution()
     render->texImage(0, m_Resolution, m_Resolution, VAR_UBYTE, TEX_DEPTH, 0);
 }
 
-MPostProcessor::MPostProcessor()
+PostProcessor::PostProcessor()
     : m_BufferID(0)
     , m_ColourTexID(0)
     , m_DepthTexID(0)
@@ -110,7 +110,7 @@ MPostProcessor::MPostProcessor()
     m_texCoords[2] = Vector2(1, 1);
 }
 
-bool MPostProcessor::draw(OCamera* camera)
+bool PostProcessor::draw(OCamera* camera)
 {
     if(m_fx == 0)
         return false;
@@ -186,7 +186,7 @@ bool MPostProcessor::draw(OCamera* camera)
     return true;
 }
 
-bool MPostProcessor::loadShader(const char* vertShad, const char* fragShad)
+bool PostProcessor::loadShader(const char* vertShad, const char* fragShad)
 {
     if(vertShad == NULL || fragShad == NULL)
         return false;
@@ -217,7 +217,7 @@ bool MPostProcessor::loadShader(const char* vertShad, const char* fragShad)
     return success;
 }
 
-bool MPostProcessor::loadShaderFile(const char* vertShad, const char* fragShad)
+bool PostProcessor::loadShaderFile(const char* vertShad, const char* fragShad)
 {
     char path[255];
     getGlobalFilename(path, NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(), vertShad);
@@ -244,7 +244,7 @@ bool MPostProcessor::loadShaderFile(const char* vertShad, const char* fragShad)
     return ret;
 }
 
-void MPostProcessor::set2D(unsigned int w, unsigned int h)
+void PostProcessor::set2D(unsigned int w, unsigned int h)
 {
     RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
     render->setViewport(0, 0, w, h);
@@ -259,7 +259,7 @@ void MPostProcessor::set2D(unsigned int w, unsigned int h)
     render->loadIdentity();
 }
 
-void MPostProcessor::drawQuad(Vector2 scale)
+void PostProcessor::drawQuad(Vector2 scale)
 {
     RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
@@ -305,7 +305,7 @@ void MPostProcessor::drawQuad(Vector2 scale)
     render->disableAttribArray(texcoordAttrib);
 }
 
-void MPostProcessor::addFloatUniform(const char* name)
+void PostProcessor::addFloatUniform(const char* name)
 {
     float_uniform_t* uniform = (float_uniform_t*) malloc(sizeof(float_uniform_t));
     uniform->variable = NeoVariable(uniform->name, (void*) &uniform->value, M_VARIABLE_FLOAT);
@@ -317,7 +317,7 @@ void MPostProcessor::addFloatUniform(const char* name)
     m_UniformList.push_back((uintptr_t) uniform);
 }
 
-float MPostProcessor::getFloatUniformValue(int idx)
+float PostProcessor::getFloatUniformValue(int idx)
 {
     if(idx > m_UniformList.size() || idx < 0)
         return 0.0;
@@ -329,7 +329,7 @@ float MPostProcessor::getFloatUniformValue(int idx)
     return 0.0;
 }
 
-void MPostProcessor::setFloatUniformValue(const char* name, float value)
+void PostProcessor::setFloatUniformValue(const char* name, float value)
 {
     for(unsigned int i = 0; i < m_UniformList.size(); i++)
     {
@@ -342,7 +342,7 @@ void MPostProcessor::setFloatUniformValue(const char* name, float value)
     }
 }
 
-void MPostProcessor::addIntUniform(const char* name)
+void PostProcessor::addIntUniform(const char* name)
 {
     int_uniform_t* uniform = (int_uniform_t*) malloc(sizeof(int_uniform_t));
     uniform->variable = NeoVariable(uniform->name, (void*) &uniform->value, M_VARIABLE_INT);
@@ -354,7 +354,7 @@ void MPostProcessor::addIntUniform(const char* name)
     m_UniformList.push_back((uintptr_t) uniform);
 }
 
-int MPostProcessor::getIntUniformValue(int idx)
+int PostProcessor::getIntUniformValue(int idx)
 {
     if(idx > m_UniformList.size() || idx < 0)
         return 0;
@@ -366,7 +366,7 @@ int MPostProcessor::getIntUniformValue(int idx)
     return 0;
 }
 
-void MPostProcessor::setIntUniformValue(const char* name, float value)
+void PostProcessor::setIntUniformValue(const char* name, float value)
 {
     for(unsigned int i = 0; i < m_UniformList.size(); i++)
     {
@@ -379,7 +379,7 @@ void MPostProcessor::setIntUniformValue(const char* name, float value)
     }
 }
 
-const char* MPostProcessor::getUniformName(int idx)
+const char* PostProcessor::getUniformName(int idx)
 {
     if(idx > m_UniformList.size() -1 || idx < 0)
         return NULL;
@@ -391,7 +391,7 @@ const char* MPostProcessor::getUniformName(int idx)
     return NULL;
 }
 
-M_VARIABLE_TYPE MPostProcessor::getUniformType(int idx)
+M_VARIABLE_TYPE PostProcessor::getUniformType(int idx)
 {
     if(idx > m_UniformList.size() -1 || idx < 0)
         return M_VARIABLE_NULL;
@@ -403,7 +403,7 @@ M_VARIABLE_TYPE MPostProcessor::getUniformType(int idx)
     return M_VARIABLE_NULL;
 }
 
-void MPostProcessor::sendUniforms()
+void PostProcessor::sendUniforms()
 {
     RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
@@ -435,7 +435,7 @@ void MPostProcessor::sendUniforms()
     }
 }
 
-void MPostProcessor::clear()
+void PostProcessor::clear()
 {
     for(int i = 0; i < m_UniformList.size(); i++)
     {
@@ -445,7 +445,7 @@ void MPostProcessor::clear()
     m_UniformList.clear();
 }
 
-void MPostProcessor::setShaderPath(const char* vertPath, const char* fragPath)
+void PostProcessor::setShaderPath(const char* vertPath, const char* fragPath)
 {
     char path[255];
     getLocalFilename(path, NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(), vertPath);

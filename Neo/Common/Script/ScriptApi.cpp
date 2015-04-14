@@ -4513,7 +4513,7 @@ int setPostEffectsResolution()
 
 	float mp = script->getFloat(0);
 	NeoGame* game = NeoEngine::getInstance()->getGame();
-	MPostProcessor* pp = game->getPostProcessor();
+	PostProcessor* pp = game->getPostProcessor();
 	pp->setResolutionMultiplier(mp);
 	pp->eraseTextures();
 	pp->updateResolution();

@@ -226,7 +226,7 @@ TEST_F(EditorBackendTest, ProjectSave_test)
 	backend->start();
 
     engine->getGame()->enablePostEffects();
-	MPostProcessor* pp = engine->getGame()->getPostProcessor();
+	PostProcessor* pp = engine->getGame()->getPostProcessor();
 	pp->setShaderPath("shad.vert", "shad.frag");	
 	
 	Scene* scene = engine->getLevel()->getCurrentScene();
@@ -261,7 +261,7 @@ TEST_F(EditorBackendTest, ProjectLoad_test)
 	backend->okLoadProject("test.mproj");
 
 	// Fetch the post processor
-	MPostProcessor* pp = engine->getGame()->getPostProcessor();
+	PostProcessor* pp = engine->getGame()->getPostProcessor();
 	EXPECT_EQ(0, strcmp("shad.vert", pp->getVertexShader()));
 	
 	delete backend;

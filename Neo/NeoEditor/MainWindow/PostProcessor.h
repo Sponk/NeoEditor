@@ -17,12 +17,12 @@
 //
 //========================================================================
 
-#ifndef POST_PROCESSOR_H
-#define POST_PROCESSOR_H
+#ifndef EDITOR_POST_PROCESSOR_H
+#define EDITOR_POST_PROCESSOR_H
 
 #include <NeoEngine.h>
 
-class PostProcessor : public Neo::MPostProcessor
+class EditorPostProcessor : public Neo::PostProcessor
 {
     int m_textureWidth;
     int m_textureHeight;

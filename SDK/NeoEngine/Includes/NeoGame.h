@@ -55,7 +55,7 @@ private:
 	bool m_isRunning;
 
     bool m_postEffectsEnabled;
-    MPostProcessor m_postProcessor;
+	PostProcessor m_postProcessor;
 
     std::vector<SubGame*> m_subGames;
 
@@ -74,7 +74,7 @@ public:
     inline void enablePostEffects() { m_postEffectsEnabled = true; }
     inline void disablePostEffects() { m_postEffectsEnabled = false; }
 
-    inline MPostProcessor* getPostProcessor() { return &m_postProcessor; }
+	inline PostProcessor* getPostProcessor() { return &m_postProcessor; }
 
 	// begin / end
 	void begin(void) { onBegin(); onBeginLevel(); onBeginScene(); m_isRunning = true; }
