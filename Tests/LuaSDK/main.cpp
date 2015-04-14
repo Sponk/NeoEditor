@@ -62,7 +62,7 @@ public:
 		
 		Level* level = new Level();
 		SystemContext* context = (SystemContext*) new Neo::MWinContext();
-		MPackageManager* pmanager = new Neo::MPackageManagerNPK;
+		PackageManager* pmanager = new Neo::PackageManagerNPK;
 		Neo::BulletContext* physcontext = new Neo::BulletContext();
 
 		pmanager->init();

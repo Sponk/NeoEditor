@@ -26,8 +26,6 @@
 #define __ENGINE_H
 
 #ifdef WIN32
-
-	// M_ENGINE_EXPORT
 	#if defined(NEO_ENGINE_DLL)
 		#define NEO_ENGINE_EXPORT __declspec( dllexport )
 	#elif defined(NEO_ENGINE_STATIC)
@@ -35,7 +33,6 @@
 	#else
 		#define NEO_ENGINE_EXPORT __declspec( dllimport )
 	#endif
-
 #else
 	#define NEO_ENGINE_EXPORT
 #endif
@@ -188,7 +185,7 @@ private:
 	RendererManager m_rendererManager;
 
 	// package manager
-	MPackageManager * m_packageManager;
+	PackageManager * m_packageManager;
 	
 	// level
 	Level * m_level;
@@ -245,8 +242,8 @@ public:
 	inline RendererManager * getRendererManager(void){ return &m_rendererManager; }
 
 	// package manager
-	void setPackageManager(MPackageManager * packageManager);
-	inline MPackageManager * getPackageManager(void){ return m_packageManager; }
+	void setPackageManager(PackageManager * packageManager);
+	inline PackageManager * getPackageManager(void){ return m_packageManager; }
 
 	// update requests
 	void updateRequests(void);

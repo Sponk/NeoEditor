@@ -88,7 +88,7 @@ void NeoEngine::setSystemContext(SystemContext * systemContext)
 	m_systemContext = systemContext;
 }
 
-void NeoEngine::setPackageManager(MPackageManager * packageManager)
+void NeoEngine::setPackageManager(PackageManager * packageManager)
 {
 	m_packageManager = packageManager;
 }

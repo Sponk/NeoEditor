@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
     Neo::LuaScript* script = new Neo::LuaScript();
     Level* level = new Level();
     SystemContext* context = (SystemContext*) new Neo::MWinContext();
-    MPackageManager* pmanager = new Neo::MPackageManagerNPK;
+    PackageManager* pmanager = new Neo::PackageManagerNPK;
 
     pmanager->init();
 

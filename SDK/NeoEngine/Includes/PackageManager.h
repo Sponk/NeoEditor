@@ -25,39 +25,41 @@
 #ifndef __PACKAGE_MANAGER_H
 #define __PACKAGE_MANAGER_H
 
-typedef void * MPackageEnt;
-typedef void * MPackage;
+namespace Neo
+{
+typedef void * PackageEnt;
+typedef void * Package;
 
 /*--------------------------------------------------------------------------------
- * MPackageManager
- * Interface for adding package managers. Can be used for any file I/O managers
- * such as package file, or network streams
+ * PackageManager
+ * @brief Interface for adding package managers. Can be used for any 
+ * file I/O managers such as package file, or network streams
  *-------------------------------------------------------------------------------*/
-class NEO_ENGINE_EXPORT MPackageManager
+class NEO_ENGINE_EXPORT PackageManager
 {
 public:
-	
 	// destructor
-	virtual ~MPackageManager(void){}
-	
+	virtual ~PackageManager(void) {}
+
 	virtual void init() = 0;
 	virtual void cleanup() = 0;
-	
+
 	// accessors for loading
 	// will add a package to the package list and
 	// allow searching for files within it
-	virtual MPackage	loadPackage(const char * packageName) = 0;
-	virtual MPackageEnt findEntity(const char * name) = 0;
-	virtual void		offlinePackage(MPackage package) = 0;
-	virtual void		unloadPackage(MPackage package) = 0;
+	virtual Package loadPackage(const char *packageName) = 0;
+	virtual PackageEnt findEntity(const char *name) = 0;
+	virtual void offlinePackage(Package package) = 0;
+	virtual void unloadPackage(Package package) = 0;
 
 	// accessors for publishing.
 	// this will not add to the package list
 	// handling these packages will be your own task
-	virtual MPackage	openPackage(const char * packageName) = 0;
-	virtual void		closePackage(MPackage package) = 0;
-	virtual MPackageEnt addFileToPackage(const char * filename, MPackage package, const char * entityName) = 0;
-	virtual MPackage	mountPackage(MPackage package) = 0;
+	virtual Package openPackage(const char *packageName) = 0;
+	virtual void closePackage(Package package) = 0;
+	virtual PackageEnt addFileToPackage(const char *filename, Package package,
+										const char *entityName) = 0;
+	virtual Package mountPackage(Package package) = 0;
 };
-
+}
 #endif

@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MaratisCommon
-// MPackageManagerNPK.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2012 Philipp Geyer <http://nistur.com>
 //
@@ -27,8 +22,8 @@
 //
 //========================================================================
 
-#ifndef _M_PACKAGE_MANAGER_NPK_H
-#define _M_PACKAGE_MANAGER_NPK_H
+#ifndef __PACKAGE_MANAGER_NPK_H
+#define __PACKAGE_MANAGER_NPK_H
 
 namespace Neo
 {
@@ -43,37 +38,37 @@ public:
  * Package manager with NPK backend
  * <http://npk.googlecode.com/>
  *-------------------------------------------------------------------------------*/
-class MPackageManagerNPK : public MPackageManager
+class PackageManagerNPK : public PackageManager
 {
 private:
 	
-	MPackage* m_packages;
+	Package* m_packages;
 	PackageFileOpenHook* m_fileOpenHook;
 
-	MPackage m_writable;
+	Package m_writable;
 	
 public:
 
-	MPackageManagerNPK();
-	~MPackageManagerNPK();
+	PackageManagerNPK();
+	~PackageManagerNPK();
 
 	void init();
 	void cleanup();
 	
-	MPackage	loadPackage(const char* packageName);
-	MPackageEnt findEntity(const char* name);
-	void		unloadPackage(MPackage package);
+	Package	loadPackage(const char* packageName);
+	PackageEnt findEntity(const char* name);
+	void		unloadPackage(Package package);
 	// for now this will just call unloadPackage
 	// in future it should keep the package in a state
 	// where it can be searched (store a list of the files?)
 	// and then only reloaded when files are requested
-	void		offlinePackage(MPackage package);
+	void		offlinePackage(Package package);
 
 	// publishing
-	MPackage	openPackage(const char* packageName);
-	void		closePackage(MPackage package);
-	MPackageEnt addFileToPackage(const char* filename, MPackage package, const char* entityName);
-	MPackage	mountPackage(MPackage package);
+	Package	openPackage(const char* packageName);
+	void		closePackage(Package package);
+	PackageEnt addFileToPackage(const char* filename, Package package, const char* entityName);
+	Package	mountPackage(Package package);
 };
 }
 #endif

@@ -1878,50 +1878,50 @@ SWIG_Lua_dostring(lua_State *L, const char* str) {
 #define SWIGTYPE_p_Font swig_types[13]
 #define SWIGTYPE_p_Frustum swig_types[14]
 #define SWIGTYPE_p_InputContext swig_types[15]
-#define SWIGTYPE_p_MPackageManager swig_types[16]
-#define SWIGTYPE_p_MPostProcessor swig_types[17]
-#define SWIGTYPE_p_M_SHADER_TYPES swig_types[18]
-#define SWIGTYPE_p_MaterialsAnim swig_types[19]
-#define SWIGTYPE_p_MorphingData swig_types[20]
-#define SWIGTYPE_p_NeoVariable swig_types[21]
-#define SWIGTYPE_p_Neo__AnimRange swig_types[22]
-#define SWIGTYPE_p_Neo__Armature swig_types[23]
-#define SWIGTYPE_p_Neo__ArmatureAnimRef swig_types[24]
-#define SWIGTYPE_p_Neo__Box3d swig_types[25]
-#define SWIGTYPE_p_Neo__Color swig_types[26]
-#define SWIGTYPE_p_Neo__FontRef swig_types[27]
-#define SWIGTYPE_p_Neo__Level swig_types[28]
-#define SWIGTYPE_p_Neo__Material swig_types[29]
-#define SWIGTYPE_p_Neo__MaterialDisplay swig_types[30]
-#define SWIGTYPE_p_Neo__MaterialsAnimRef swig_types[31]
-#define SWIGTYPE_p_Neo__Matrix4x4 swig_types[32]
-#define SWIGTYPE_p_Neo__Mesh swig_types[33]
-#define SWIGTYPE_p_Neo__MeshRef swig_types[34]
-#define SWIGTYPE_p_Neo__NeoEngine swig_types[35]
-#define SWIGTYPE_p_Neo__NeoGame swig_types[36]
-#define SWIGTYPE_p_Neo__OBone swig_types[37]
-#define SWIGTYPE_p_Neo__OCamera swig_types[38]
-#define SWIGTYPE_p_Neo__OEntity swig_types[39]
-#define SWIGTYPE_p_Neo__OLight swig_types[40]
-#define SWIGTYPE_p_Neo__OSound swig_types[41]
-#define SWIGTYPE_p_Neo__OText swig_types[42]
-#define SWIGTYPE_p_Neo__Object3d swig_types[43]
-#define SWIGTYPE_p_Neo__PhysicsConstraint swig_types[44]
-#define SWIGTYPE_p_Neo__PhysicsProperties swig_types[45]
-#define SWIGTYPE_p_Neo__Quaternion swig_types[46]
-#define SWIGTYPE_p_Neo__Scene swig_types[47]
-#define SWIGTYPE_p_Neo__ShaderRef swig_types[48]
-#define SWIGTYPE_p_Neo__SoundRef swig_types[49]
-#define SWIGTYPE_p_Neo__SubGame swig_types[50]
-#define SWIGTYPE_p_Neo__SubMesh swig_types[51]
-#define SWIGTYPE_p_Neo__Texture swig_types[52]
-#define SWIGTYPE_p_Neo__TexturePass swig_types[53]
-#define SWIGTYPE_p_Neo__TextureRef swig_types[54]
-#define SWIGTYPE_p_Neo__TexturesAnimRef swig_types[55]
-#define SWIGTYPE_p_Neo__Vector2 swig_types[56]
-#define SWIGTYPE_p_Neo__Vector3 swig_types[57]
-#define SWIGTYPE_p_Neo__Vector4 swig_types[58]
-#define SWIGTYPE_p_PRIMITIVE_TYPES swig_types[59]
+#define SWIGTYPE_p_MPostProcessor swig_types[16]
+#define SWIGTYPE_p_M_SHADER_TYPES swig_types[17]
+#define SWIGTYPE_p_MaterialsAnim swig_types[18]
+#define SWIGTYPE_p_MorphingData swig_types[19]
+#define SWIGTYPE_p_NeoVariable swig_types[20]
+#define SWIGTYPE_p_Neo__AnimRange swig_types[21]
+#define SWIGTYPE_p_Neo__Armature swig_types[22]
+#define SWIGTYPE_p_Neo__ArmatureAnimRef swig_types[23]
+#define SWIGTYPE_p_Neo__Box3d swig_types[24]
+#define SWIGTYPE_p_Neo__Color swig_types[25]
+#define SWIGTYPE_p_Neo__FontRef swig_types[26]
+#define SWIGTYPE_p_Neo__Level swig_types[27]
+#define SWIGTYPE_p_Neo__Material swig_types[28]
+#define SWIGTYPE_p_Neo__MaterialDisplay swig_types[29]
+#define SWIGTYPE_p_Neo__MaterialsAnimRef swig_types[30]
+#define SWIGTYPE_p_Neo__Matrix4x4 swig_types[31]
+#define SWIGTYPE_p_Neo__Mesh swig_types[32]
+#define SWIGTYPE_p_Neo__MeshRef swig_types[33]
+#define SWIGTYPE_p_Neo__NeoEngine swig_types[34]
+#define SWIGTYPE_p_Neo__NeoGame swig_types[35]
+#define SWIGTYPE_p_Neo__OBone swig_types[36]
+#define SWIGTYPE_p_Neo__OCamera swig_types[37]
+#define SWIGTYPE_p_Neo__OEntity swig_types[38]
+#define SWIGTYPE_p_Neo__OLight swig_types[39]
+#define SWIGTYPE_p_Neo__OSound swig_types[40]
+#define SWIGTYPE_p_Neo__OText swig_types[41]
+#define SWIGTYPE_p_Neo__Object3d swig_types[42]
+#define SWIGTYPE_p_Neo__PhysicsConstraint swig_types[43]
+#define SWIGTYPE_p_Neo__PhysicsProperties swig_types[44]
+#define SWIGTYPE_p_Neo__Quaternion swig_types[45]
+#define SWIGTYPE_p_Neo__Scene swig_types[46]
+#define SWIGTYPE_p_Neo__ShaderRef swig_types[47]
+#define SWIGTYPE_p_Neo__SoundRef swig_types[48]
+#define SWIGTYPE_p_Neo__SubGame swig_types[49]
+#define SWIGTYPE_p_Neo__SubMesh swig_types[50]
+#define SWIGTYPE_p_Neo__Texture swig_types[51]
+#define SWIGTYPE_p_Neo__TexturePass swig_types[52]
+#define SWIGTYPE_p_Neo__TextureRef swig_types[53]
+#define SWIGTYPE_p_Neo__TexturesAnimRef swig_types[54]
+#define SWIGTYPE_p_Neo__Vector2 swig_types[55]
+#define SWIGTYPE_p_Neo__Vector3 swig_types[56]
+#define SWIGTYPE_p_Neo__Vector4 swig_types[57]
+#define SWIGTYPE_p_PRIMITIVE_TYPES swig_types[58]
+#define SWIGTYPE_p_PackageManager swig_types[59]
 #define SWIGTYPE_p_PhysicsContext swig_types[60]
 #define SWIGTYPE_p_Renderer swig_types[61]
 #define SWIGTYPE_p_RendererManager swig_types[62]
@@ -10031,19 +10031,19 @@ fail:
 static int _wrap_NeoEngine_setPackageManager(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *arg1 = (Neo::NeoEngine *) 0 ;
-  MPackageManager *arg2 = (MPackageManager *) 0 ;
+  PackageManager *arg2 = (PackageManager *) 0 ;
   
   SWIG_check_num_args("Neo::NeoEngine::setPackageManager",2,2)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::NeoEngine::setPackageManager",1,"Neo::NeoEngine *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::NeoEngine::setPackageManager",2,"MPackageManager *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::NeoEngine::setPackageManager",2,"PackageManager *");
   
   if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__NeoEngine,0))){
     SWIG_fail_ptr("NeoEngine_setPackageManager",1,SWIGTYPE_p_Neo__NeoEngine);
   }
   
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_MPackageManager,0))){
-    SWIG_fail_ptr("NeoEngine_setPackageManager",2,SWIGTYPE_p_MPackageManager);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_PackageManager,0))){
+    SWIG_fail_ptr("NeoEngine_setPackageManager",2,SWIGTYPE_p_PackageManager);
   }
   
   (arg1)->setPackageManager(arg2);
@@ -10061,7 +10061,7 @@ fail:
 static int _wrap_NeoEngine_getPackageManager(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *arg1 = (Neo::NeoEngine *) 0 ;
-  MPackageManager *result = 0 ;
+  PackageManager *result = 0 ;
   
   SWIG_check_num_args("Neo::NeoEngine::getPackageManager",1,1)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::NeoEngine::getPackageManager",1,"Neo::NeoEngine *");
@@ -10070,8 +10070,8 @@ static int _wrap_NeoEngine_getPackageManager(lua_State* L) {
     SWIG_fail_ptr("NeoEngine_getPackageManager",1,SWIGTYPE_p_Neo__NeoEngine);
   }
   
-  result = (MPackageManager *)(arg1)->getPackageManager();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_MPackageManager,0); SWIG_arg++; 
+  result = (PackageManager *)(arg1)->getPackageManager();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_PackageManager,0); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -26749,7 +26749,6 @@ static swig_type_info _swigt__p_FXRef = {"_p_FXRef", "FXRef *", 0, 0, (void*)0, 
 static swig_type_info _swigt__p_Font = {"_p_Font", "Font *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Frustum = {"_p_Frustum", "Frustum *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_InputContext = {"_p_InputContext", "InputContext *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_MPackageManager = {"_p_MPackageManager", "MPackageManager *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_MPostProcessor = {"_p_MPostProcessor", "MPostProcessor *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_M_SHADER_TYPES = {"_p_M_SHADER_TYPES", "M_SHADER_TYPES *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_MaterialsAnim = {"_p_MaterialsAnim", "MaterialsAnim *", 0, 0, (void*)0, 0};
@@ -26793,6 +26792,7 @@ static swig_type_info _swigt__p_Neo__Vector2 = {"_p_Neo__Vector2", "Neo::Vector2
 static swig_type_info _swigt__p_Neo__Vector3 = {"_p_Neo__Vector3", "Neo::Vector3 *", 0, 0, (void*)&_wrap_class_Neo_Vector3, 0};
 static swig_type_info _swigt__p_Neo__Vector4 = {"_p_Neo__Vector4", "Neo::Vector4 *", 0, 0, (void*)&_wrap_class_Neo_Vector4, 0};
 static swig_type_info _swigt__p_PRIMITIVE_TYPES = {"_p_PRIMITIVE_TYPES", "PRIMITIVE_TYPES *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_PackageManager = {"_p_PackageManager", "PackageManager *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_PhysicsContext = {"_p_PhysicsContext", "PhysicsContext *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Renderer = {"_p_Renderer", "Renderer *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_RendererManager = {"_p_RendererManager", "RendererManager *", 0, 0, (void*)0, 0};
@@ -26835,7 +26835,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Font,
   &_swigt__p_Frustum,
   &_swigt__p_InputContext,
-  &_swigt__p_MPackageManager,
   &_swigt__p_MPostProcessor,
   &_swigt__p_M_SHADER_TYPES,
   &_swigt__p_MaterialsAnim,
@@ -26879,6 +26878,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Neo__Vector3,
   &_swigt__p_Neo__Vector4,
   &_swigt__p_PRIMITIVE_TYPES,
+  &_swigt__p_PackageManager,
   &_swigt__p_PhysicsContext,
   &_swigt__p_Renderer,
   &_swigt__p_RendererManager,
@@ -26921,7 +26921,6 @@ static swig_cast_info _swigc__p_FXRef[] = {  {&_swigt__p_FXRef, 0, 0, 0},{0, 0, 
 static swig_cast_info _swigc__p_Font[] = {  {&_swigt__p_Font, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Frustum[] = {  {&_swigt__p_Frustum, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_InputContext[] = {  {&_swigt__p_InputContext, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_MPackageManager[] = {  {&_swigt__p_MPackageManager, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_MPostProcessor[] = {  {&_swigt__p_MPostProcessor, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_M_SHADER_TYPES[] = {  {&_swigt__p_M_SHADER_TYPES, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_MaterialsAnim[] = {  {&_swigt__p_MaterialsAnim, 0, 0, 0},{0, 0, 0, 0}};
@@ -26965,6 +26964,7 @@ static swig_cast_info _swigc__p_Neo__Vector2[] = {  {&_swigt__p_Neo__Vector2, 0,
 static swig_cast_info _swigc__p_Neo__Vector3[] = {  {&_swigt__p_Neo__Vector3, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Vector4[] = {  {&_swigt__p_Neo__Vector4, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_PRIMITIVE_TYPES[] = {  {&_swigt__p_PRIMITIVE_TYPES, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_PackageManager[] = {  {&_swigt__p_PackageManager, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_PhysicsContext[] = {  {&_swigt__p_PhysicsContext, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Renderer[] = {  {&_swigt__p_Renderer, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_RendererManager[] = {  {&_swigt__p_RendererManager, 0, 0, 0},{0, 0, 0, 0}};
@@ -27007,7 +27007,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Font,
   _swigc__p_Frustum,
   _swigc__p_InputContext,
-  _swigc__p_MPackageManager,
   _swigc__p_MPostProcessor,
   _swigc__p_M_SHADER_TYPES,
   _swigc__p_MaterialsAnim,
@@ -27051,6 +27050,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Neo__Vector3,
   _swigc__p_Neo__Vector4,
   _swigc__p_PRIMITIVE_TYPES,
+  _swigc__p_PackageManager,
   _swigc__p_PhysicsContext,
   _swigc__p_Renderer,
   _swigc__p_RendererManager,

@@ -70,7 +70,7 @@ const char* getDataDir()
 	return s_dataDir.c_str();
 }
 
-MPackage openProjectPackage(const char* projName)
+Package openProjectPackage(const char* projName)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
 	SystemContext* system = engine->getSystemContext();
@@ -88,8 +88,8 @@ MPackage openProjectPackage(const char* projName)
 
 	getGlobalFilename(packFile, getDataDir(), projFile);
 
-	MPackageManager* packageManager = engine->getPackageManager();
-	MPackage package = packageManager->openPackage(packFile);
+	PackageManager* packageManager = engine->getPackageManager();
+	Package package = packageManager->openPackage(packFile);
 
 	return package;
 }
@@ -127,8 +127,8 @@ class PublishEvent##dir##Package : public PublishEvent \
 		getGlobalFilename(directory, system->getWorkingDirectory(), #dir); \
 		vector<string> files; \
 		readDirectory(directory, &files, 1, 1); \
-		MPackage package = openProjectPackage(projName); \
-		MPackageManager* packageManager = engine->getPackageManager();\
+		Package package = openProjectPackage(projName); \
+		PackageManager* packageManager = engine->getPackageManager();\
 		for(int i = 0; i < files.size(); ++i) \
 		{ \
 			getLocalFilename(localFilename, system->getWorkingDirectory(), files[i].c_str()); \
@@ -177,7 +177,7 @@ class PublishEventMeshsPackage : public PublishEvent
 	{
 		NeoEngine* engine = NeoEngine::getInstance();
 		SystemContext* system = engine->getSystemContext();
-		MPackageManager* packageManager = engine->getPackageManager();
+		PackageManager* packageManager = engine->getPackageManager();
 
 		char directory[256], localFilename[256];
 		getGlobalFilename(directory, system->getWorkingDirectory(), "meshs");
@@ -194,7 +194,7 @@ class PublishEventMeshsPackage : public PublishEvent
 		MaterialsAnim* matAnim = MaterialsAnim::getNew();
 
 		// open package and scan meshes
-		MPackage package = openProjectPackage(projName);
+		Package package = openProjectPackage(projName);
 		for(int i = 0; i < files.size(); ++i)
 		{
 			bool binarized = false;

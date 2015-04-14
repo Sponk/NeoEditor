@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MaratisCommon
-// MPackageManagerNPK.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2012 Philipp Geyer <http://nistur.com>
 //
@@ -41,10 +36,10 @@ using namespace Neo;
 int teakey[4] = { 0,0,0,0 };
 
 /*--------------------------------------------------------------------------------
- * MPackageFile
+ * PackageFile
  * Packaged file - Read-only
  *-------------------------------------------------------------------------------*/
-class MPackageFile : public File
+class PackageFile : public File
 {
 public:
 	
@@ -54,7 +49,7 @@ public:
 	
 public:
 	
-	MPackageFile(MPackageEnt ent)
+	PackageFile(PackageEnt ent)
 	{
 		m_size = npk_entity_get_size(ent);
 		m_buffer = new char[m_size];
@@ -62,9 +57,9 @@ public:
 		m_pos = m_buffer;
 	}
 	
-	static MPackageFile * getNew(MPackageEnt ent)
+	static PackageFile * getNew(PackageEnt ent)
 	{
-		return new MPackageFile(ent);
+		return new PackageFile(ent);
 	}
 
 	void open(const char* path, const char* mode)
@@ -133,7 +128,7 @@ public:
 
 
 /*--------------------------------------------------------------------------------
- * MPackageFileOpenHook::open
+ * PackageFileOpenHook::open
  * File open callback
  *-------------------------------------------------------------------------------*/
 File* PackageFileOpenHook::open(const char* path, const char* mode)
@@ -149,45 +144,45 @@ File* PackageFileOpenHook::open(const char* path, const char* mode)
 		return StdFile::getNew(path, mode);
 	
 	// look within the package for a file with the requested name
-	if(MPackageEnt ent = engine->getPackageManager()->findEntity(localFilename))
-		return MPackageFile::getNew(ent);
+	if(PackageEnt ent = engine->getPackageManager()->findEntity(localFilename))
+		return PackageFile::getNew(ent);
 	
 	// give up, just look for a new file using stdio
 	return StdFile::getNew(path, mode);
 }
 
 /*--------------------------------------------------------------------------------
- * MPackageNPK
+ * PackageNPK
  * Small struct to allow opaque access to the package, also for storing the
  * filename
  *-------------------------------------------------------------------------------*/
-struct MPackageNPK {
+struct PackageNPK {
 	NPK_PACKAGE package;
 	String		filename;
 };
 
 /*--------------------------------------------------------------------------------
- * MPackageManagerNPK
+ * PackageManagerNPK
  *-------------------------------------------------------------------------------*/
-MPackageManagerNPK::MPackageManagerNPK():
+PackageManagerNPK::PackageManagerNPK():
 m_packages(NULL),
 m_fileOpenHook(NULL)
 {
 }
 
-MPackageManagerNPK::~MPackageManagerNPK()
+PackageManagerNPK::~PackageManagerNPK()
 {
 	cleanup();
 }
 
-void MPackageManagerNPK::init()
+void PackageManagerNPK::init()
 {
 	if(! m_fileOpenHook)
 	{
 		m_fileOpenHook = new PackageFileOpenHook;
 		
-		MPackageNPK** packages = new MPackageNPK*[M_MAX_PACKAGES];
-		m_packages = (MPackage*)packages;
+		PackageNPK** packages = new PackageNPK*[M_MAX_PACKAGES];
+		m_packages = (Package*)packages;
 		for(int i = 0; i < M_MAX_PACKAGES; ++i)
 			m_packages[i] = 0;
 	}
@@ -197,7 +192,7 @@ void MPackageManagerNPK::init()
 	m_writable = 0;
 }
 
-void MPackageManagerNPK::cleanup()
+void PackageManagerNPK::cleanup()
 {
 	if(m_fileOpenHook)
 	{
@@ -212,7 +207,7 @@ void MPackageManagerNPK::cleanup()
 		{
 			if(m_packages[i] != 0)
 			{
-				MPackageNPK* pack = (MPackageNPK*)m_packages[i];
+				PackageNPK* pack = (PackageNPK*)m_packages[i];
 				npk_package_close(pack->package);
 				
 				delete pack;
@@ -224,9 +219,9 @@ void MPackageManagerNPK::cleanup()
 	}
 }
 
-MPackage MPackageManagerNPK::loadPackage(const char* packageName)
+Package PackageManagerNPK::loadPackage(const char* packageName)
 {
-	MPackageNPK* pack = new MPackageNPK;
+	PackageNPK* pack = new PackageNPK;
 
 	if(!(pack->package = npk_package_open(packageName, teakey)))
 	{
@@ -245,13 +240,13 @@ MPackage MPackageManagerNPK::loadPackage(const char* packageName)
 	return pack;
 }
 
-MPackageEnt MPackageManagerNPK::findEntity(const char* name)
+PackageEnt PackageManagerNPK::findEntity(const char* name)
 {
 	for(int i = M_MAX_PACKAGES-1; i >=0; --i)
 	{
 		if(m_packages[i])
 		{
-			MPackageNPK* pack = (MPackageNPK*)m_packages[i];
+			PackageNPK* pack = (PackageNPK*)m_packages[i];
 			if(NPK_ENTITY ent = npk_package_get_entity(pack->package, name))
 			{
 				return ent;
@@ -262,14 +257,14 @@ MPackageEnt MPackageManagerNPK::findEntity(const char* name)
 	return 0;
 }
 
-void MPackageManagerNPK::unloadPackage(MPackage package)
+void PackageManagerNPK::unloadPackage(Package package)
 {
 	for(int i = 0; i < M_MAX_PACKAGES; ++i)
 	{
 		if(m_packages[i] == package)
 		{
 			m_packages[i] = 0;
-			MPackageNPK* pack = (MPackageNPK*)package;
+			PackageNPK* pack = (PackageNPK*)package;
 			npk_package_close(pack->package);
 
 			delete pack;
@@ -278,15 +273,15 @@ void MPackageManagerNPK::unloadPackage(MPackage package)
 	}
 }
 
-void MPackageManagerNPK::offlinePackage(MPackage package)
+void PackageManagerNPK::offlinePackage(Package package)
 {
 	unloadPackage(package);
 }
 
-MPackage MPackageManagerNPK::openPackage(const char* packageName)
+Package PackageManagerNPK::openPackage(const char* packageName)
 {
 #ifdef M_PACKAGE_WRITABLE
-	MPackageNPK* package = new MPackageNPK;
+	PackageNPK* package = new PackageNPK;
 	if(isFileExist(packageName))
 	{
 		package->package = npk_package_open(packageName, teakey);
@@ -306,7 +301,7 @@ MPackage MPackageManagerNPK::openPackage(const char* packageName)
 	return 0;
 }
 
-void MPackageManagerNPK::closePackage(MPackage package)
+void PackageManagerNPK::closePackage(Package package)
 {
 #ifdef M_PACKAGE_WRITABLE
 	if(package)
@@ -314,7 +309,7 @@ void MPackageManagerNPK::closePackage(MPackage package)
 		if(m_writable == package)
 			m_writable = 0;
 
-		MPackageNPK* pack = (MPackageNPK*)package;
+		PackageNPK* pack = (PackageNPK*)package;
 		npk_package_save(pack->package, pack->filename.getSafeString(), true);
 		npk_package_close(pack->package);
 		delete pack;
@@ -322,13 +317,13 @@ void MPackageManagerNPK::closePackage(MPackage package)
 #endif
 }
 
-MPackageEnt MPackageManagerNPK::addFileToPackage(const char* filename, MPackage package, const char* entityName)
+PackageEnt PackageManagerNPK::addFileToPackage(const char* filename, Package package, const char* entityName)
 {
 #ifdef M_PACKAGE_WRITABLE
 	NPK_ENTITY entity = 0;
 	if(filename && package && entityName)
 	{
-		npk_package_add_file(((MPackageNPK*)package)->package, filename, entityName, &entity);
+		npk_package_add_file(((PackageNPK*)package)->package, filename, entityName, &entity);
 	}
 
 	return entity;
@@ -336,7 +331,7 @@ MPackageEnt MPackageManagerNPK::addFileToPackage(const char* filename, MPackage 
 	return 0;
 }
 
-MPackage MPackageManagerNPK::mountPackage(MPackage package)
+Package PackageManagerNPK::mountPackage(Package package)
 {
 	if(m_packages[M_MAX_PACKAGES- 1])
 		return 0; // fail, no free packages
@@ -347,7 +342,7 @@ MPackage MPackageManagerNPK::mountPackage(MPackage package)
 		if(m_packages[pkgNum] == 0)
 			break;
 
-	MPackageNPK* pack = (MPackageNPK*)package;
+	PackageNPK* pack = (PackageNPK*)package;
 
 	// loaded the package, now save it for later access
 	m_packages[pkgNum] = pack;

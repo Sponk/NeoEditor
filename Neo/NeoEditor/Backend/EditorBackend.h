@@ -83,7 +83,7 @@ private:
 	NeoGame * m_game;
 	Level * m_level;
 	Renderer * m_renderer;
-	MPackageManager * m_packageManager;
+	PackageManager * m_packageManager;
 	
 	// temp dir
 	char m_tempDir[256];

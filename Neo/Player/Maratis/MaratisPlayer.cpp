@@ -72,7 +72,7 @@ m_renderer(NULL)
 		m_system = new MWinContext();
 		m_level = new Level();
 		m_game = new NeoGame();
-		m_packageManager = new MPackageManagerNPK();
+		m_packageManager = new PackageManagerNPK();
 		
         m_physics->setSimulationQuality(2);
 
@@ -273,7 +273,7 @@ void MaratisPlayer::loadProject(Project* proj, const char * filename)
 	changeRenderer(proj->renderer.c_str());
 	
 	// if we have a package manager, try to load the package
-	if(MPackageManager* pPackMan = NeoEngine::getInstance()->getPackageManager())
+	if(PackageManager* pPackMan = NeoEngine::getInstance()->getPackageManager())
 	{
 		char projName[256];
 		getLocalFilename(projName, workingDir, filename);

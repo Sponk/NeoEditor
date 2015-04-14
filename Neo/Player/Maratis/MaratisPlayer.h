@@ -53,7 +53,7 @@ private:
 	NeoGame * m_game;
 	Level * m_level;
 	Renderer * m_renderer;
-	MPackageManager * m_packageManager;
+	PackageManager * m_packageManager;
 
 	// plugins
 	std::vector <Neo::Plugin *> m_plugins;
