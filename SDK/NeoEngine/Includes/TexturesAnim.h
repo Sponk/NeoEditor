@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MTexturesAnim.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,12 +23,12 @@
 //========================================================================
 
 
-#ifndef _M_TEXTURES_ANIM
-#define _M_TEXTURES_ANIM
+#ifndef __TEXTURES_ANIM
+#define __TEXTURES_ANIM
 
 namespace Neo
 {
-class M_ENGINE_EXPORT TexturesAnim
+class NEO_ENGINE_EXPORT TexturesAnim
 {
 public:
 

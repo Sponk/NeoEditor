@@ -37,7 +37,7 @@ enum TEXT_ALIGN_MODES
 };
 
 // MOText
-class M_ENGINE_EXPORT OText : public Object3d
+class NEO_ENGINE_EXPORT OText : public Object3d
 {
 public:
 

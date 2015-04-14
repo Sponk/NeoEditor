@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MMaterialsAnimRef.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,13 +23,13 @@
 //========================================================================
 
 
-#ifndef _M_MATERIALS_ANIM_REF_H
-#define _M_MATERIALS_ANIM_REF_H
+#ifndef __MATERIALS_ANIM_REF_H
+#define __MATERIALS_ANIM_REF_H
 
 namespace Neo
 {
 // Materials Anim ref
-class M_ENGINE_EXPORT MaterialsAnimRef : public DataRef
+class NEO_ENGINE_EXPORT MaterialsAnimRef : public DataRef
 {
 private:
 

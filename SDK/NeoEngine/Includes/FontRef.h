@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MFontRef.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,13 +23,13 @@
 //========================================================================
 
 
-#ifndef _M_FONT_REF_H
-#define _M_FONT_REF_H
+#ifndef __FONT_REF_H
+#define __FONT_REF_H
 
 namespace Neo
 {
 // Font ref
-class M_ENGINE_EXPORT FontRef : public DataRef
+class NEO_ENGINE_EXPORT FontRef : public DataRef
 {
 private:
 

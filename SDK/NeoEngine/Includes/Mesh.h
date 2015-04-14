@@ -32,7 +32,7 @@
 namespace Neo
 {
 // Display
-class M_ENGINE_EXPORT MaterialDisplay
+class NEO_ENGINE_EXPORT MaterialDisplay
 {
 public:
 	MaterialDisplay(PRIMITIVE_TYPES primitiveType, unsigned int begin,
@@ -76,7 +76,7 @@ public:
 };
 
 // SubMesh
-class M_ENGINE_EXPORT SubMesh
+class NEO_ENGINE_EXPORT SubMesh
 {
 public:
 	SubMesh(void);
@@ -203,7 +203,7 @@ public:
  * @brief Describes a Range in an animation starting at a certain frame
  * and ending at another certain frame.
  */
-class M_ENGINE_EXPORT AnimRange : public Range
+class NEO_ENGINE_EXPORT AnimRange : public Range
 {
 public:
 	AnimRange(void) : loops(-1) {}
@@ -217,7 +217,7 @@ public:
  * (i.e. file format agnostic) 3D mesh with support for armature animation,
  * material animation and multitexturing.
  */
-class M_ENGINE_EXPORT Mesh
+class NEO_ENGINE_EXPORT Mesh
 {
 public:
 

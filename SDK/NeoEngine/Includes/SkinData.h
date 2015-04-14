@@ -29,7 +29,7 @@
 namespace Neo
 {
 // Skin Point
-class M_ENGINE_EXPORT SkinPoint
+class NEO_ENGINE_EXPORT SkinPoint
 {
 public:
 
@@ -63,7 +63,7 @@ public:
 
 
 // Skin Data
-class M_ENGINE_EXPORT SkinData
+class NEO_ENGINE_EXPORT SkinData
 {
 public:
 

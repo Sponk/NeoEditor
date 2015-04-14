@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MBehavior.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,20 +23,20 @@
 //========================================================================
 
 
-#ifndef _M_BEHAVIOR_H
-#define _M_BEHAVIOR_H
+#ifndef __BEHAVIOR_H
+#define __BEHAVIOR_H
 
 namespace Neo
 {
 // class for creating behaviors
 /**
- * @brief The MBehavior class is an abstraction for creating behaviors.
+ * @brief The Behavior class is an abstraction for creating behaviors.
  *
  * Behaviors can be attached to objects in a Maratis scene.
  * They contain several methods for interacting with the engine and the parent object allowing them
  * to be used as one of the main interfaces for programming game logic.
  */
-class M_ENGINE_EXPORT Behavior
+class NEO_ENGINE_EXPORT Behavior
 {
 public:
 

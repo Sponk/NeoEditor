@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MRendererCreator.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,12 +23,12 @@
 //========================================================================
 
 
-#ifndef _M_RENDERER_CREATOR_H
-#define _M_RENDERER_CREATOR_H
+#ifndef __RENDERER_CREATOR_H
+#define __RENDERER_CREATOR_H
 
 namespace Neo
 {
-class M_ENGINE_EXPORT RendererCreator
+class NEO_ENGINE_EXPORT RendererCreator
 {
 public:
 

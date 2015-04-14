@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MScene.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -27,8 +22,8 @@
 //
 //========================================================================
 
-#ifndef _M_SCENE_H
-#define _M_SCENE_H
+#ifndef __SCENE_H
+#define __SCENE_H
 
 #include <map>
 
@@ -43,7 +38,6 @@ enum M_DATA_MODES
 	M_DATA_STREAM
 };
 
-// MScene
 /**
  * @brief The MScene class represents a scene in a Maratis level.
  *
@@ -51,7 +45,7 @@ enum M_DATA_MODES
  * You can use this to overlay a scene over another to create ingame GUI or similar.
  *
  */
-class M_ENGINE_EXPORT Scene
+class NEO_ENGINE_EXPORT Scene
 {
 public:
 

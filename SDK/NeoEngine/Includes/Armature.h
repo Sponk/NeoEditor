@@ -1,10 +1,6 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MArmature.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -28,12 +24,12 @@
 //========================================================================
 
 
-#ifndef _M_ARMATURE_H
-#define _M_ARMATURE_H
+#ifndef __ARMATURE_H
+#define __ARMATURE_H
 
 namespace Neo
 {
-class M_ENGINE_EXPORT Armature
+class NEO_ENGINE_EXPORT Armature
 {
 private:
 

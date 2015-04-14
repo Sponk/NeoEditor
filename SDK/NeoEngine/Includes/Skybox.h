@@ -1,7 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MSkybox.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2014 Yannick Pflanzer <www.scary-squid.de>
 //
@@ -27,14 +23,14 @@
 //========================================================================
 
 
-#ifndef _M_SKYBOX_H
-#define _M_SKYBOX_H
+#ifndef __SKYBOX_H
+#define __SKYBOX_H
 
 #include <NeoCore.h>
 
 namespace Neo
 {
-class M_ENGINE_EXPORT Skybox
+class NEO_ENGINE_EXPORT Skybox
 {
     void drawQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4, Matrix4x4* matrix, Vector2* texCoords);
 

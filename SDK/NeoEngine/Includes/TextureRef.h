@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MTextureRef.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,13 +23,13 @@
 //========================================================================
 
 
-#ifndef _M_TEXTURE_REF_H
-#define _M_TEXTURE_REF_H
+#ifndef __TEXTURE_REF_H
+#define __TEXTURE_REF_H
 
 namespace Neo
 {
 // Texture ref
-class M_ENGINE_EXPORT TextureRef : public DataRef
+class NEO_ENGINE_EXPORT TextureRef : public DataRef
 {
 private:
 

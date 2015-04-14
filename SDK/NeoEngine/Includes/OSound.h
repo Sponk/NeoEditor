@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MOSound.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,12 +23,12 @@
 //========================================================================
 
 
-#ifndef _M_OSOUND_SOURCE_H
-#define _M_OSOUND_SOURCE_H
+#ifndef __OSOUND_SOURCE_H
+#define __OSOUND_SOURCE_H
 
 namespace Neo
 {
-class M_ENGINE_EXPORT OSound : public Object3d
+class NEO_ENGINE_EXPORT OSound : public Object3d
 {
 public:
 

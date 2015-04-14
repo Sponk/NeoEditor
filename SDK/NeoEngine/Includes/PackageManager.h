@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MPackageManager.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Philipp Geyer <http://nistur.com>
 //
@@ -27,8 +22,8 @@
 //
 //========================================================================
 
-#ifndef _M_PACKAGE_MANAGER_H
-#define _M_PACKAGE_MANAGER_H
+#ifndef __PACKAGE_MANAGER_H
+#define __PACKAGE_MANAGER_H
 
 typedef void * MPackageEnt;
 typedef void * MPackage;
@@ -38,7 +33,7 @@ typedef void * MPackage;
  * Interface for adding package managers. Can be used for any file I/O managers
  * such as package file, or network streams
  *-------------------------------------------------------------------------------*/
-class M_ENGINE_EXPORT MPackageManager
+class NEO_ENGINE_EXPORT MPackageManager
 {
 public:
 	

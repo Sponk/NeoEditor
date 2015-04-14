@@ -29,7 +29,7 @@
 namespace Neo
 {
 // Character
-class M_ENGINE_EXPORT Character
+class NEO_ENGINE_EXPORT Character
 {
 public:
 
@@ -58,7 +58,7 @@ public:
 
 
 // Font
-class M_ENGINE_EXPORT Font
+class NEO_ENGINE_EXPORT Font
 {
 public:
 

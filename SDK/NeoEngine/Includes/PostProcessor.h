@@ -1,4 +1,4 @@
-/* * Copyright (C) 2014
+/** Copyright (C) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
  *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the authors be held liable for any damages
@@ -17,8 +17,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#ifndef __MPOST_PROCESSOR_H__
-#define __MPOST_PROCESSOR_H__
+#ifndef __POST_PROCESSOR_H__
+#define __POST_PROCESSOR_H__
 
 #include "PointerVariable.h"
 #include <stdint.h>
@@ -30,7 +30,7 @@ namespace Neo
  * the current scene to a texture to allow applying GLSL post effects when
  * rendering the final image to the screen.
  */
-class M_ENGINE_EXPORT MPostProcessor
+class NEO_ENGINE_EXPORT MPostProcessor
 {
 public:
     MPostProcessor();

@@ -41,7 +41,7 @@ namespace Neo
  * @see OText
  * @see OLight
  */
-class M_ENGINE_EXPORT Object3d
+class NEO_ENGINE_EXPORT Object3d
 {
 public:
 

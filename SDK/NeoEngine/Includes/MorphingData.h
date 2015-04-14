@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MMorphingData.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,13 +23,13 @@
 //========================================================================
 
 
-#ifndef _M_MORPHING_DATA_H
-#define _M_MORPHING_DATA_H
+#ifndef __MORPHING_DATA_H
+#define __MORPHING_DATA_H
 
 namespace Neo
 {
 // Buffer
-class M_ENGINE_EXPORT MorphingPoint
+class NEO_ENGINE_EXPORT MorphingPoint
 {
 public:
 
@@ -57,7 +52,7 @@ public:
 
 
 // Pose
-class M_ENGINE_EXPORT MorphingPose
+class NEO_ENGINE_EXPORT MorphingPose
 {
 public:
 
@@ -84,7 +79,7 @@ public:
 
 
 // Morphing Data
-class M_ENGINE_EXPORT MorphingData
+class NEO_ENGINE_EXPORT MorphingData
 {
 public:
 

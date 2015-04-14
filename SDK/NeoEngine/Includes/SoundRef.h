@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MSoundRef.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,13 +23,13 @@
 //========================================================================
 
 
-#ifndef _M_SOUND_REF_H
-#define _M_SOUND_REF_H
+#ifndef __SOUND_REF_H
+#define __SOUND_REF_H
 
 namespace Neo
 {
 // Sound ref
-class M_ENGINE_EXPORT SoundRef : public DataRef
+class NEO_ENGINE_EXPORT SoundRef : public DataRef
 {
 private:
 

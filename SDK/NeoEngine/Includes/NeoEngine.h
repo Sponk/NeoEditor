@@ -29,16 +29,15 @@
 
 	// M_ENGINE_EXPORT
 	#if defined(NEO_ENGINE_DLL)
-		#define M_ENGINE_EXPORT __declspec( dllexport )
+		#define NEO_ENGINE_EXPORT __declspec( dllexport )
 	#elif defined(NEO_ENGINE_STATIC)
-		#define M_ENGINE_EXPORT
+		#define NEO_ENGINE_EXPORT
 	#else
-		#define M_ENGINE_EXPORT __declspec( dllimport )
+		#define NEO_ENGINE_EXPORT __declspec( dllimport )
 	#endif
 
 #else
-	// M_ENGINE_EXPORT
-	#define M_ENGINE_EXPORT
+	#define NEO_ENGINE_EXPORT
 #endif
 
 
@@ -149,7 +148,7 @@ class Messenger;
 
 namespace Neo
 {
-class M_ENGINE_EXPORT NeoEngine
+class NEO_ENGINE_EXPORT NeoEngine
 {
 public:
 

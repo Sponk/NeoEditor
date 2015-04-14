@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MArmatureAnim.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,12 +23,12 @@
 //========================================================================
 
 
-#ifndef _M_ARMATURE_ANIM
-#define _M_ARMATURE_ANIM
+#ifndef __ARMATURE_ANIM
+#define __ARMATURE_ANIM
 
 namespace Neo
 {
-class M_ENGINE_EXPORT ArmatureAnim
+class NEO_ENGINE_EXPORT ArmatureAnim
 {
 public:
 

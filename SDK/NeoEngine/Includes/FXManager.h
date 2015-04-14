@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MFXManager.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,13 +23,13 @@
 //========================================================================
 
 
-#ifndef _M_FX_MANAGER_H
-#define _M_FX_MANAGER_H
+#ifndef __FX_MANAGER_H
+#define __FX_MANAGER_H
 
 namespace Neo
 {
 // FX ref
-class M_ENGINE_EXPORT FXRef
+class NEO_ENGINE_EXPORT FXRef
 {
 public:
 
@@ -61,7 +56,7 @@ public:
 
 
 // FX manager
-class M_ENGINE_EXPORT FXManager
+class NEO_ENGINE_EXPORT FXManager
 {
 private:
 

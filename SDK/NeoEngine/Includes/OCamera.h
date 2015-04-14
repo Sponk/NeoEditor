@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MOCamera.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,12 +23,12 @@
 //========================================================================
 
 
-#ifndef _M_OCAMERA_H
-#define _M_OCAMERA_H
+#ifndef __OCAMERA_H
+#define __OCAMERA_H
 
 namespace Neo
 {
-class M_ENGINE_EXPORT OCamera : public Object3d
+class NEO_ENGINE_EXPORT OCamera : public Object3d
 {
 private:
 

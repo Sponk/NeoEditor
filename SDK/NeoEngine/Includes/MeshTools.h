@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MMeshTools.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,36 +23,36 @@
 //========================================================================
 
 
-#ifndef _M_MESH_TOOLS_H
-#define _M_MESH_TOOLS_H
+#ifndef __MESH_TOOLS_H
+#define __MESH_TOOLS_H
 
 namespace Neo
 {
 
-M_ENGINE_EXPORT bool animateFloat(Key * keys, unsigned int keysNumber, float t, float * value);
-M_ENGINE_EXPORT bool animateVector2(Key * keys, unsigned int keysNumber, float t, Vector2 * vector2);
-M_ENGINE_EXPORT bool animateVector3(Key * keys, unsigned int keysNumber, float t, Vector3 * vector3);
-M_ENGINE_EXPORT bool animateQuaternion(Key * keys, unsigned int keysNumber, float t, Quaternion * quaternion);
+NEO_ENGINE_EXPORT bool animateFloat(Key * keys, unsigned int keysNumber, float t, float * value);
+NEO_ENGINE_EXPORT bool animateVector2(Key * keys, unsigned int keysNumber, float t, Vector2 * vector2);
+NEO_ENGINE_EXPORT bool animateVector3(Key * keys, unsigned int keysNumber, float t, Vector3 * vector3);
+NEO_ENGINE_EXPORT bool animateQuaternion(Key * keys, unsigned int keysNumber, float t, Quaternion * quaternion);
 
-M_ENGINE_EXPORT void animateArmature(
+NEO_ENGINE_EXPORT void animateArmature(
 	Armature * armature,
 	ArmatureAnim * armatureAnim,
 	float t
 	);
 
-M_ENGINE_EXPORT void animateTextures(
+NEO_ENGINE_EXPORT void animateTextures(
 	Mesh * mesh,
 	TexturesAnim * texturesAnim,
 	float t
 	);
 
-M_ENGINE_EXPORT void animateMaterials(
+NEO_ENGINE_EXPORT void animateMaterials(
 	Mesh * mesh,
 	MaterialsAnim * materialsAnim,
 	float t
 	);
 
-M_ENGINE_EXPORT void computeSkinning(
+NEO_ENGINE_EXPORT void computeSkinning(
 	Armature * armature,
 	SkinData * skinData,
 	const Vector3 * baseVertices,
@@ -68,7 +63,7 @@ M_ENGINE_EXPORT void computeSkinning(
 	Vector3 * tangents
 	);
 
-M_ENGINE_EXPORT bool isRaytraced(
+NEO_ENGINE_EXPORT bool isRaytraced(
 	const Vector3 & origin,
 	const Vector3 & dest, 
 	const void * indices, 
@@ -77,7 +72,7 @@ M_ENGINE_EXPORT bool isRaytraced(
 	unsigned int size
 	);
 
-M_ENGINE_EXPORT bool getNearestRaytracedPosition(
+NEO_ENGINE_EXPORT bool getNearestRaytracedPosition(
 	const Vector3 & origin, 
 	const Vector3 & dest, 
 	const void * indices, 

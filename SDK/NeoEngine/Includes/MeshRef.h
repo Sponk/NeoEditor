@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MMeshRef.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,13 +23,13 @@
 //========================================================================
 
 
-#ifndef _M_MESH_REF_H
-#define _M_MESH_REF_H
+#ifndef __MESH_REF_H
+#define __MESH_REF_H
 
 namespace Neo
 {
 // Mesh ref
-class M_ENGINE_EXPORT MeshRef : public DataRef
+class NEO_ENGINE_EXPORT MeshRef : public DataRef
 {
 private:
 

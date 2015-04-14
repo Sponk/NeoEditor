@@ -1,5 +1,5 @@
 //========================================================================
-// Copyright (c) 2014 Yannick Pflanzer <neo-engine.de>
+// Copyright (c) 2014-2015 Yannick Pflanzer <neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -52,7 +52,7 @@ struct Message
  * You can create a new inbox for your thread and request messages from it.
  * This class also handles sending messages to other threads as well.
  */
-class M_ENGINE_EXPORT Messenger
+class NEO_ENGINE_EXPORT Messenger
 {
 private:
 	struct Inbox

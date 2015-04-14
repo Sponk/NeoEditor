@@ -35,7 +35,7 @@ namespace Neo
  * Examples for texture passes are the diffuse texture, normal map and
  * specular map.
  */
-class M_ENGINE_EXPORT TexturePass
+class NEO_ENGINE_EXPORT TexturePass
 {
 public:
 	TexturePass(Texture *texture, TEX_COMBINE_MODES combineMode,
@@ -115,7 +115,7 @@ public:
  *
  * @see Mesh
  */
-class M_ENGINE_EXPORT Material
+class NEO_ENGINE_EXPORT Material
 {
 public:
 	Material(void);

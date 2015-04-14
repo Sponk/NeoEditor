@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MLog.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2012 Skaiware
 //
@@ -28,8 +23,8 @@
 //========================================================================
 
 
-#ifndef _M_LOG
-#define _M_LOG
+#ifndef __LOG
+#define __LOG
 
 #include <ostream>
 #include <iostream>
@@ -76,7 +71,7 @@ namespace Neo
 #define MLOG_DEBUG(USERMESSAGE) MLOG(7, USERMESSAGE)
 
 
-class M_ENGINE_EXPORT Log
+class NEO_ENGINE_EXPORT Log
 {
 private:
 	

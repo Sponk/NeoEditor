@@ -28,7 +28,7 @@
 
 namespace Neo
 {
-class M_ENGINE_EXPORT OBone : public Object3d
+class NEO_ENGINE_EXPORT OBone : public Object3d
 {
 public:
 

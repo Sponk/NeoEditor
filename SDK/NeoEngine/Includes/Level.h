@@ -39,7 +39,7 @@ namespace Neo
  * will be unloaded and the RAM it used will be free'd what allows to clean up
  * during runtime.
  */
-class M_ENGINE_EXPORT Level
+class NEO_ENGINE_EXPORT Level
 {
 private:
 

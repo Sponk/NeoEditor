@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MObject3dAnim.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,12 +23,12 @@
 //========================================================================
 
 
-#ifndef _M_OBJECT3D_ANIM
-#define _M_OBJECT3D_ANIM
+#ifndef __OBJECT3D_ANIM
+#define __OBJECT3D_ANIM
 
 namespace Neo
 {
-class M_ENGINE_EXPORT Object3dAnim
+class NEO_ENGINE_EXPORT Object3dAnim
 {
 public:
 

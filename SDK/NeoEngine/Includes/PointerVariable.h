@@ -52,7 +52,7 @@ enum M_VARIABLE_TYPE
  *
  * This class is used by behaviors and the editor to store and process unknown data.
  */
-class M_ENGINE_EXPORT NeoVariable
+class NEO_ENGINE_EXPORT NeoVariable
 {
 private:
 

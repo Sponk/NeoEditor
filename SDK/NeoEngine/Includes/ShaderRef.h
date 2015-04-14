@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MShaderRef.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,8 +23,8 @@
 //========================================================================
 
 
-#ifndef _M_SHADER_REF_H
-#define _M_SHADER_REF_H
+#ifndef __SHADER_REF_H
+#define __SHADER_REF_H
 
 namespace Neo
 {
@@ -43,7 +38,7 @@ enum M_SHADER_TYPES
 
 
 // Shader ref
-class M_ENGINE_EXPORT ShaderRef : public DataRef
+class NEO_ENGINE_EXPORT ShaderRef : public DataRef
 {
 private:
 

@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MMaterialsAnim.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,12 +23,12 @@
 //========================================================================
 
 
-#ifndef _M_MATERIALS_ANIM
-#define _M_MATERIALS_ANIM
+#ifndef __MATERIALS_ANIM
+#define __MATERIALS_ANIM
 
 namespace Neo
 {
-class M_ENGINE_EXPORT MaterialsAnim
+class NEO_ENGINE_EXPORT MaterialsAnim
 {
 public:
 

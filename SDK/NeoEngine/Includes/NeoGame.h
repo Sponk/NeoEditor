@@ -36,7 +36,7 @@ namespace Neo
  * plugins that do not want to replace the global NeoGame but just want to
  * install callbacks for those methods.
  */
-class M_ENGINE_EXPORT SubGame
+class NEO_ENGINE_EXPORT SubGame
 {
 public:
 	virtual void update(void) = 0;
@@ -46,7 +46,7 @@ public:
 	virtual void onEnd(void) = 0;
 };
 
-class M_ENGINE_EXPORT NeoGame
+class NEO_ENGINE_EXPORT NeoGame
 {
 private:
 

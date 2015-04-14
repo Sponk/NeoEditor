@@ -49,7 +49,7 @@ enum LIGHT_TYPES
  * @endcode
  * @see Object3d
  */
-class M_ENGINE_EXPORT OLight : public Object3d
+class NEO_ENGINE_EXPORT OLight : public Object3d
 {
 public:
 

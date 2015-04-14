@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MBehaviorManager.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,15 +23,15 @@
 //========================================================================
 
 
-#ifndef _M_BEHAVIOR_MANAGER_H
-#define _M_BEHAVIOR_MANAGER_H
+#ifndef __BEHAVIOR_MANAGER_H
+#define __BEHAVIOR_MANAGER_H
 
 namespace Neo
 {
 /**
  * @brief This class manages all registered behaviors.
  */
-class M_ENGINE_EXPORT BehaviorManager
+class NEO_ENGINE_EXPORT BehaviorManager
 {
 public:
 

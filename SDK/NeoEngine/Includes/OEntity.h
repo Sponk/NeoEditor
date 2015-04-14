@@ -59,7 +59,7 @@ struct PhysicsConstraint
 	bool disableParentCollision;
 };
 
-class M_ENGINE_EXPORT PhysicsProperties
+class NEO_ENGINE_EXPORT PhysicsProperties
 {
 public:
 
@@ -147,7 +147,7 @@ public:
  * @endcode
  * @see Object3d
  */
-class M_ENGINE_EXPORT OEntity : public Object3d
+class NEO_ENGINE_EXPORT OEntity : public Object3d
 {
 public:
 	// constructor / destructor

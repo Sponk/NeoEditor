@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MEngine
-// MBehaviorCreator.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,15 +23,15 @@
 //========================================================================
 
 
-#ifndef _M_BEHAVIOR_CREATOR_H
-#define _M_BEHAVIOR_CREATOR_H
+#ifndef __BEHAVIOR_CREATOR_H
+#define __BEHAVIOR_CREATOR_H
 
 namespace Neo
 {
 /**
  * @brief This class is used to instanciate new behavior objects.
  */
-class M_ENGINE_EXPORT BehaviorCreator
+class NEO_ENGINE_EXPORT BehaviorCreator
 {
 public:
 
