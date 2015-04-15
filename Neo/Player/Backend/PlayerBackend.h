@@ -18,8 +18,8 @@
 //========================================================================
 
 
-#ifndef _MARATIS_PLAYER_H
-#define _MARATIS_PLAYER_H
+#ifndef _PLAYER_BACKEND_H
+#define _PLAYER_BACKEND_H
 
 #include <NeoEngine.h>
 #include <Plugin.h>
@@ -27,18 +27,18 @@
 
 namespace Neo
 {
-class MaratisPlayer
+class PlayerBackend
 {
 public:
 
 	// constructor / destructor
-	MaratisPlayer(void);
-	~MaratisPlayer(void);
+	PlayerBackend(void);
+	~PlayerBackend(void);
 
 	// instance
-	static MaratisPlayer * getInstance(void)
+	static PlayerBackend * getInstance(void)
 	{
-		static MaratisPlayer m_instance;
+		static PlayerBackend m_instance;
 		return &m_instance;
 	}
 

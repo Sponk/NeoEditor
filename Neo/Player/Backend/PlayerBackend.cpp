@@ -18,7 +18,7 @@
 //
 //========================================================================
 
-#include "MaratisPlayer.h"
+#include "PlayerBackend.h"
 #include <Window/Window.h>
 
 #ifndef USE_GLES
@@ -58,7 +58,7 @@ typedef Neo::ES2Context GLContext;
 
 using namespace Neo;
 
-MaratisPlayer::MaratisPlayer(void):
+PlayerBackend::PlayerBackend(void):
 m_gamePlugin(NULL),
 m_renderer(NULL)
 {
@@ -92,7 +92,7 @@ m_renderer(NULL)
 	}
 }
 
-MaratisPlayer::~MaratisPlayer(void)
+PlayerBackend::~PlayerBackend(void)
 {
 	clear();
 
@@ -108,7 +108,7 @@ MaratisPlayer::~MaratisPlayer(void)
 	SAFE_DELETE(m_packageManager);
 }
 
-void MaratisPlayer::changeRenderer(const char * name)
+void PlayerBackend::changeRenderer(const char * name)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
 	RendererManager * rendererManager = engine->getRendererManager();
@@ -123,7 +123,7 @@ void MaratisPlayer::changeRenderer(const char * name)
 	}
 }
 
-void MaratisPlayer::start(void)
+void PlayerBackend::start(void)
 {
 	// MEngine
 	{
@@ -170,7 +170,7 @@ void MaratisPlayer::start(void)
 	}
 }
 
-void MaratisPlayer::clear(void)
+void PlayerBackend::clear(void)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
 	
@@ -214,13 +214,13 @@ void MaratisPlayer::clear(void)
 	}
 }
 
-void MaratisPlayer::restart(void)
+void PlayerBackend::restart(void)
 {
 	clear();
 	start();
 }
 
-void MaratisPlayer::loadGamePlugin(void)
+void PlayerBackend::loadGamePlugin(void)
 {
 	char gameFile[256];
 	NeoWindow * window = NeoWindow::getInstance();
@@ -238,7 +238,7 @@ void MaratisPlayer::loadGamePlugin(void)
 	m_gamePlugin->load(gameFile);
 }
 
-bool MaratisPlayer::loadProject(const char * filename)
+bool PlayerBackend::loadProject(const char * filename)
 {
 	if(! filename)
 		return false;
@@ -254,7 +254,7 @@ bool MaratisPlayer::loadProject(const char * filename)
 	return false;
 }
 
-void MaratisPlayer::loadProject(Project* proj, const char * filename)
+void PlayerBackend::loadProject(Project* proj, const char * filename)
 {
 	NeoWindow * window = NeoWindow::getInstance();
 	NeoEngine * engine = NeoEngine::getInstance();
@@ -290,7 +290,7 @@ void MaratisPlayer::loadProject(Project* proj, const char * filename)
 	engine->loadLevel(proj->startLevel.c_str());
 }
 
-void MaratisPlayer::logicLoop(void)
+void PlayerBackend::logicLoop(void)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
 
@@ -304,7 +304,7 @@ void MaratisPlayer::logicLoop(void)
 	}
 }
 
-void MaratisPlayer::graphicLoop(void)
+void PlayerBackend::graphicLoop(void)
 {
 	NeoWindow * window = NeoWindow::getInstance();
 	NeoEngine * engine = NeoEngine::getInstance();

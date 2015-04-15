@@ -22,7 +22,7 @@
 #include <NeoEngine.h>
 #include <SDLThread.h>
 
-#include "Maratis/MaratisPlayer.h"
+#include "Backend/PlayerBackend.h"
 
 // NeoGui
 #include <GuiSystem.h>
@@ -63,14 +63,14 @@ void windowEvents(MWinEvent * windowEvents)
 // update
 void update(void)
 {
-	MaratisPlayer::getInstance()->logicLoop();
+	PlayerBackend::getInstance()->logicLoop();
 	Neo::Gui::GuiSystem::getInstance()->update();
 }
 
 // draw
 void draw(void)
 {
-	MaratisPlayer::getInstance()->graphicLoop();
+	PlayerBackend::getInstance()->graphicLoop();
 	Neo::Gui::GuiSystem::getInstance()->draw();
     NeoWindow::getInstance()->swapBuffer();
 }
@@ -234,7 +234,7 @@ int main(int argc, char **argv)
 	NeoWindow * window = NeoWindow::getInstance();
 
 	// get Maratis (first time call onstructor)
-	MaratisPlayer * maratis = MaratisPlayer::getInstance();
+	PlayerBackend * maratis = PlayerBackend::getInstance();
 
 	// create window
 	if(!window->create(std::string("Neo ").append(PLAYER_VERSION_STRING).c_str(), width, height, 32, fullscreen == 1))
