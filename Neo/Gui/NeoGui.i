@@ -10,6 +10,7 @@
 	#include <Tile.h>
 	#include <InputField.h>
 	#include <Canvas.h>
+	#include <Label.h>
 
 	using namespace Neo;
 	using namespace Gui;
@@ -28,3 +29,4 @@
 %include <Tile.h>
 %include <InputField.h>
 %include <ThemedButton.h>
+%include <Label.h>

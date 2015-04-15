@@ -45,7 +45,7 @@ Widget::Widget(unsigned int x, unsigned int y, unsigned int width,
 	  m_width(width),
 	  m_height(height),
 	  m_label(label),
-	  m_callback(NULL),
+	  m_callback(Widget::doNothing),
 	  m_visible(true),
 	  m_scale(Vector2(1, 1)),
 	  m_flip(Vector2(1, 1))
@@ -59,7 +59,7 @@ Widget::Widget()
 	  m_width(30),
 	  m_height(30),
 	  m_label("Widget"),
-	  m_callback(NULL),
+	  m_callback(Widget::doNothing),
 	  m_visible(true),
 	  m_scale(Vector2(1, 1)),
 	  m_flip(Vector2(1, 1))
@@ -69,8 +69,8 @@ Widget::Widget()
 void Widget::doCallback()
 {
 #ifdef WIN32
-	((void (*)(long int))m_callback)(m_userData);
+	((void (*)(long int))m_callback)(this, m_userData);
 #else
-	m_callback(m_userData);
+	m_callback(this, m_userData);
 #endif
 }

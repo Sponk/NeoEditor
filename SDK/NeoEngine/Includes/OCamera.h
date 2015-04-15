@@ -22,7 +22,6 @@
 //
 //========================================================================
 
-
 #ifndef __OCAMERA_H
 #define __OCAMERA_H
 
@@ -51,7 +50,7 @@ private:
 
 	// frustum (camera volume for elimination)
 	Frustum m_frustum;
-	
+
 	// scene layer (used for GUI etc)
 	unsigned int m_sceneLayer;
 
@@ -60,7 +59,7 @@ private:
 	TextureRef * m_renderDepthTexture;
 
     Skybox m_skybox;
-	
+
 public:
 
 	// constructor
@@ -112,13 +111,13 @@ public:
 	// scene layer
 	inline void setSceneLayer(unsigned int sceneLayer){ m_sceneLayer = sceneLayer; }
 	inline unsigned int getSceneLayer(void){ return m_sceneLayer; }
-	
+
 	// render to texture
 	inline void setRenderColorTexture(TextureRef * renderColorTexture){ m_renderColorTexture = renderColorTexture; }
 	inline void setRenderDepthTexture(TextureRef * renderDepthTexture){ m_renderDepthTexture = renderDepthTexture; }
 	inline TextureRef * getRenderColorTexture(void){ return m_renderColorTexture; }
 	inline TextureRef * getRenderDepthTexture(void){ return m_renderDepthTexture; }
-	
+
     inline void drawSkybox() { enable(); m_skybox.drawSkybox(getTransformedPosition(), getTransformedRotation()); }
     inline void loadSkybox(const char* path) { m_skybox.loadSkyboxTextures(path); }
     inline Skybox * getSkybox() { return &m_skybox; }

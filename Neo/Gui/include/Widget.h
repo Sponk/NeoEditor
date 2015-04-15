@@ -36,7 +36,7 @@
 #ifndef __WIDGET_H__
 #define __WIDGET_H__
 
-#include <NeoCore.h>
+#include <NeoEngine.h>
 #include <string>
 
 namespace Neo
@@ -44,11 +44,14 @@ namespace Neo
 namespace Gui
 {
 
+// Predefinition
+class Widget;
+
 #ifndef WIN32
 	/** 
 	 * A pointer to a callback.
 	 */
-	typedef void (*CALLBACK_FUNCTION)(long int);
+	typedef void (*CALLBACK_FUNCTION)(Widget*, long int);
 #else
 #define CALLBACK_FUNCTION void *
 #endif
@@ -79,6 +82,8 @@ protected:
 	/// The callback that should be called
 	CALLBACK_FUNCTION m_callback;
 
+	String m_callbackScript;
+
 	/// Some userdata that is given to the callback
 	long int m_userData;
 
@@ -90,6 +95,21 @@ protected:
 
 	/// The flip vector
 	Vector2 m_flip;
+
+private:
+	/**
+	 * @brief Does nothing.
+	 *
+	 * Used to deliver the default callback to prevent crashes.
+	 * @param data Some data.
+	 */
+	static void doNothing(Widget* w, long data) {}
+
+	static void callScript(Widget* w, long data)
+	{
+		Neo::ScriptContext* script = Neo::NeoEngine::getInstance()->getScriptContext();
+		script->callFunction(w->m_callbackScript.getSafeString());
+	}
 
 public:
 	Widget(unsigned int x, unsigned int y, unsigned int width,
@@ -131,6 +151,12 @@ public:
 	 * @param func The function pointer
 	 */
 	void setCallback(CALLBACK_FUNCTION func) { m_callback = func; }
+
+	void setScriptCallback(const char* name)
+	{
+		m_callbackScript = name;
+		m_callback = Widget::callScript;
+	}
 
 	/**
 	 * @brief Sets the callback and appends user data to it.

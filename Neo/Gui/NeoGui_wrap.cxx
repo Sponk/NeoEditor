@@ -1866,20 +1866,21 @@ SWIG_Lua_dostring(lua_State *L, const char* str) {
 #define SWIGTYPE_p_Neo__Gui__Canvas swig_types[1]
 #define SWIGTYPE_p_Neo__Gui__GuiSystem swig_types[2]
 #define SWIGTYPE_p_Neo__Gui__InputField swig_types[3]
-#define SWIGTYPE_p_Neo__Gui__Sprite swig_types[4]
-#define SWIGTYPE_p_Neo__Gui__SpriteBatch swig_types[5]
-#define SWIGTYPE_p_Neo__Gui__ThemedButton swig_types[6]
-#define SWIGTYPE_p_Neo__Gui__Tile swig_types[7]
-#define SWIGTYPE_p_Neo__Gui__TileSheet swig_types[8]
-#define SWIGTYPE_p_Neo__Gui__Widget swig_types[9]
-#define SWIGTYPE_p_Neo__Vector2 swig_types[10]
-#define SWIGTYPE_p_ScriptContext swig_types[11]
-#define SWIGTYPE_p_Vector3 swig_types[12]
-#define SWIGTYPE_p_Vector4 swig_types[13]
-#define SWIGTYPE_p_f_long__void swig_types[14]
-#define SWIGTYPE_p_float swig_types[15]
-static swig_type_info *swig_types[17];
-static swig_module_info swig_module = {swig_types, 16, 0, 0, 0, 0};
+#define SWIGTYPE_p_Neo__Gui__Label swig_types[4]
+#define SWIGTYPE_p_Neo__Gui__Sprite swig_types[5]
+#define SWIGTYPE_p_Neo__Gui__SpriteBatch swig_types[6]
+#define SWIGTYPE_p_Neo__Gui__ThemedButton swig_types[7]
+#define SWIGTYPE_p_Neo__Gui__Tile swig_types[8]
+#define SWIGTYPE_p_Neo__Gui__TileSheet swig_types[9]
+#define SWIGTYPE_p_Neo__Gui__Widget swig_types[10]
+#define SWIGTYPE_p_Neo__Vector2 swig_types[11]
+#define SWIGTYPE_p_ScriptContext swig_types[12]
+#define SWIGTYPE_p_Vector3 swig_types[13]
+#define SWIGTYPE_p_Vector4 swig_types[14]
+#define SWIGTYPE_p_f_p_Neo__Gui__Widget_long__void swig_types[15]
+#define SWIGTYPE_p_float swig_types[16]
+static swig_type_info *swig_types[18];
+static swig_module_info swig_module = {swig_types, 17, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -1906,6 +1907,7 @@ typedef struct{} LANGUAGE_OBJ;
 	#include <Tile.h>
 	#include <InputField.h>
 	#include <Canvas.h>
+	#include <Label.h>
 
 	using namespace Neo;
 	using namespace Gui;
@@ -3328,11 +3330,37 @@ static int _wrap_Widget_setCallback__SWIG_0(lua_State* L) {
   }
   
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_f_long__void,0))){
-    SWIG_fail_ptr("Widget_setCallback",2,SWIGTYPE_p_f_long__void);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_f_p_Neo__Gui__Widget_long__void,0))){
+    SWIG_fail_ptr("Widget_setCallback",2,SWIGTYPE_p_f_p_Neo__Gui__Widget_long__void);
   }
   
   (arg1)->setCallback(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Widget_setScriptCallback(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  char *arg2 = (char *) 0 ;
+  
+  SWIG_check_num_args("Neo::Gui::Widget::setScriptCallback",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::setScriptCallback",1,"Neo::Gui::Widget *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::Gui::Widget::setScriptCallback",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
+    SWIG_fail_ptr("Widget_setScriptCallback",1,SWIGTYPE_p_Neo__Gui__Widget);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  (arg1)->setScriptCallback((char const *)arg2);
   
   return SWIG_arg;
   
@@ -3360,8 +3388,8 @@ static int _wrap_Widget_setCallback__SWIG_1(lua_State* L) {
   }
   
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_f_long__void,0))){
-    SWIG_fail_ptr("Widget_setCallback",2,SWIGTYPE_p_f_long__void);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_f_p_Neo__Gui__Widget_long__void,0))){
+    SWIG_fail_ptr("Widget_setCallback",2,SWIGTYPE_p_f_p_Neo__Gui__Widget_long__void);
   }
   
   arg3 = (long)lua_tonumber(L, 3);
@@ -3397,7 +3425,7 @@ static int _wrap_Widget_setCallback(lua_State* L) {
     if (_v) {
       {
         void *ptr;
-        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_f_long__void, 0)) {
+        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_f_p_Neo__Gui__Widget_long__void, 0)) {
           _v = 0;
         } else {
           _v = 1;
@@ -3421,7 +3449,7 @@ static int _wrap_Widget_setCallback(lua_State* L) {
     if (_v) {
       {
         void *ptr;
-        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_f_long__void, 0)) {
+        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_f_p_Neo__Gui__Widget_long__void, 0)) {
           _v = 0;
         } else {
           _v = 1;
@@ -3935,6 +3963,7 @@ delete arg1;
 static swig_lua_method swig_Neo_Gui_Widget_methods[] = {
     {"draw", _wrap_Widget_draw}, 
     {"update", _wrap_Widget_update}, 
+    {"setScriptCallback", _wrap_Widget_setScriptCallback}, 
     {"setCallback", _wrap_Widget_setCallback}, 
     {"getUserData", _wrap_Widget_getUserData}, 
     {"setUserData", _wrap_Widget_setUserData}, 
@@ -6517,6 +6546,199 @@ static swig_lua_class *swig_Neo_Gui_ThemedButton_bases[] = {0,0};
 static const char *swig_Neo_Gui_ThemedButton_base_names[] = {"Neo::Gui::Button *",0};
 static swig_lua_class _wrap_class_Neo_Gui_ThemedButton = { "ThemedButton", &SWIGTYPE_p_Neo__Gui__ThemedButton,_wrap_new_ThemedButton, swig_delete_ThemedButton, swig_Neo_Gui_ThemedButton_methods, swig_Neo_Gui_ThemedButton_attributes, { "ThemedButton", swig_Neo_Gui_ThemedButton_cls_methods, swig_Neo_Gui_ThemedButton_cls_attributes, swig_Neo_Gui_ThemedButton_cls_constants }, swig_Neo_Gui_ThemedButton_bases, swig_Neo_Gui_ThemedButton_base_names };
 
+static int _wrap_new_Label(lua_State* L) {
+  int SWIG_arg = 0;
+  unsigned int arg1 ;
+  unsigned int arg2 ;
+  unsigned int arg3 ;
+  unsigned int arg4 ;
+  char *arg5 = (char *) 0 ;
+  Neo::Gui::Label *result = 0 ;
+  
+  SWIG_check_num_args("Neo::Gui::Label::Label",5,5)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo::Gui::Label::Label",1,"unsigned int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::Label::Label",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::Gui::Label::Label",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::Gui::Label::Label",4,"unsigned int");
+  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo::Gui::Label::Label",5,"char const *");
+  SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
+  arg1 = (unsigned int)lua_tonumber(L, 1);
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
+  arg4 = (unsigned int)lua_tonumber(L, 4);
+  arg5 = (char *)lua_tostring(L, 5);
+  result = (Neo::Gui::Label *)new Neo::Gui::Label(arg1,arg2,arg3,arg4,(char const *)arg5);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Gui__Label,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Label_draw__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  
+  SWIG_check_num_args("Neo::Gui::Label::draw",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Label::draw",1,"Neo::Gui::Label *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Label,0))){
+    SWIG_fail_ptr("Label_draw",1,SWIGTYPE_p_Neo__Gui__Label);
+  }
+  
+  (arg1)->draw();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Label_draw__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  Neo::Vector2 arg2 ;
+  Neo::Vector2 *argp2 ;
+  
+  SWIG_check_num_args("Neo::Gui::Label::draw",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Label::draw",1,"Neo::Gui::Label *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Gui::Label::draw",2,"Neo::Vector2");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Label,0))){
+    SWIG_fail_ptr("Label_draw",1,SWIGTYPE_p_Neo__Gui__Label);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("Label_draw",2,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg2 = *argp2;
+  
+  (arg1)->draw(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Label_draw(lua_State* L) {
+  int argc;
+  int argv[3]={
+    1,2,3
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 1) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Gui__Label, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      return _wrap_Label_draw__SWIG_0(L);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Gui__Label, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Neo__Vector2, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        return _wrap_Label_draw__SWIG_1(L);
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'Label_draw'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::Gui::Label::draw()\n"
+    "    Neo::Gui::Label::draw(Neo::Vector2)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_Label_update(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  
+  SWIG_check_num_args("Neo::Gui::Label::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Label::update",1,"Neo::Gui::Label *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Label,0))){
+    SWIG_fail_ptr("Label_update",1,SWIGTYPE_p_Neo__Gui__Label);
+  }
+  
+  (arg1)->update();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_Label(void *obj) {
+Neo::Gui::Label *arg1 = (Neo::Gui::Label *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Neo_Gui_Label_methods[] = {
+    {"draw", _wrap_Label_draw}, 
+    {"update", _wrap_Label_update}, 
+    {0,0}
+};
+static swig_lua_attribute swig_Neo_Gui_Label_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_attribute swig_Neo_Gui_Label_cls_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_Neo_Gui_Label_cls_methods[] = {
+    {0,0}
+};
+static swig_lua_const_info swig_Neo_Gui_Label_cls_constants[] = {
+    {0,0,0,0,0,0}
+};
+static swig_lua_class *swig_Neo_Gui_Label_bases[] = {0,0};
+static const char *swig_Neo_Gui_Label_base_names[] = {"Neo::Gui::Widget *",0};
+static swig_lua_class _wrap_class_Neo_Gui_Label = { "Label", &SWIGTYPE_p_Neo__Gui__Label,_wrap_new_Label, swig_delete_Label, swig_Neo_Gui_Label_methods, swig_Neo_Gui_Label_attributes, { "Label", swig_Neo_Gui_Label_cls_methods, swig_Neo_Gui_Label_cls_attributes, swig_Neo_Gui_Label_cls_constants }, swig_Neo_Gui_Label_bases, swig_Neo_Gui_Label_base_names };
+
 #ifdef __cplusplus
 }
 #endif
@@ -6547,6 +6769,9 @@ static swig_lua_const_info swig_constants[] = {
 static void *_p_Neo__Gui__ThemedButtonTo_p_Neo__Gui__Button(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo::Gui::Button *)  ((Neo::Gui::ThemedButton *) x));
 }
+static void *_p_Neo__Gui__LabelTo_p_Neo__Gui__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Neo::Gui::Widget *)  ((Neo::Gui::Label *) x));
+}
 static void *_p_Neo__Gui__ButtonTo_p_Neo__Gui__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo::Gui::Widget *)  ((Neo::Gui::Button *) x));
 }
@@ -6566,6 +6791,7 @@ static swig_type_info _swigt__p_Neo__Gui__Button = {"_p_Neo__Gui__Button", "Neo:
 static swig_type_info _swigt__p_Neo__Gui__Canvas = {"_p_Neo__Gui__Canvas", "Neo::Gui::Canvas *", 0, 0, (void*)&_wrap_class_Neo_Gui_Canvas, 0};
 static swig_type_info _swigt__p_Neo__Gui__GuiSystem = {"_p_Neo__Gui__GuiSystem", "Neo::Gui::GuiSystem *", 0, 0, (void*)&_wrap_class_Neo_Gui_GuiSystem, 0};
 static swig_type_info _swigt__p_Neo__Gui__InputField = {"_p_Neo__Gui__InputField", "Neo::Gui::InputField *", 0, 0, (void*)&_wrap_class_Neo_Gui_InputField, 0};
+static swig_type_info _swigt__p_Neo__Gui__Label = {"_p_Neo__Gui__Label", "Neo::Gui::Label *", 0, 0, (void*)&_wrap_class_Neo_Gui_Label, 0};
 static swig_type_info _swigt__p_Neo__Gui__Sprite = {"_p_Neo__Gui__Sprite", "Neo::Gui::Sprite *", 0, 0, (void*)&_wrap_class_Neo_Gui_Sprite, 0};
 static swig_type_info _swigt__p_Neo__Gui__SpriteBatch = {"_p_Neo__Gui__SpriteBatch", "Neo::Gui::SpriteBatch *", 0, 0, (void*)&_wrap_class_Neo_Gui_SpriteBatch, 0};
 static swig_type_info _swigt__p_Neo__Gui__ThemedButton = {"_p_Neo__Gui__ThemedButton", "Neo::Gui::ThemedButton *", 0, 0, (void*)&_wrap_class_Neo_Gui_ThemedButton, 0};
@@ -6576,7 +6802,7 @@ static swig_type_info _swigt__p_Neo__Vector2 = {"_p_Neo__Vector2", "Neo::Vector2
 static swig_type_info _swigt__p_ScriptContext = {"_p_ScriptContext", "ScriptContext *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Vector3 = {"_p_Vector3", "Vector3 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Vector4 = {"_p_Vector4", "Vector4 *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_f_long__void = {"_p_f_long__void", "void (*)(long)|Neo::Gui::CALLBACK_FUNCTION", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_f_p_Neo__Gui__Widget_long__void = {"_p_f_p_Neo__Gui__Widget_long__void", "void (*)(Neo::Gui::Widget *,long)|Neo::Gui::CALLBACK_FUNCTION", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_float = {"_p_float", "float *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
@@ -6584,6 +6810,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Neo__Gui__Canvas,
   &_swigt__p_Neo__Gui__GuiSystem,
   &_swigt__p_Neo__Gui__InputField,
+  &_swigt__p_Neo__Gui__Label,
   &_swigt__p_Neo__Gui__Sprite,
   &_swigt__p_Neo__Gui__SpriteBatch,
   &_swigt__p_Neo__Gui__ThemedButton,
@@ -6594,7 +6821,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_ScriptContext,
   &_swigt__p_Vector3,
   &_swigt__p_Vector4,
-  &_swigt__p_f_long__void,
+  &_swigt__p_f_p_Neo__Gui__Widget_long__void,
   &_swigt__p_float,
 };
 
@@ -6602,17 +6829,18 @@ static swig_cast_info _swigc__p_Neo__Gui__Button[] = {  {&_swigt__p_Neo__Gui__Th
 static swig_cast_info _swigc__p_Neo__Gui__Canvas[] = {  {&_swigt__p_Neo__Gui__Canvas, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Gui__GuiSystem[] = {  {&_swigt__p_Neo__Gui__GuiSystem, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Gui__InputField[] = {  {&_swigt__p_Neo__Gui__InputField, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo__Gui__Label[] = {  {&_swigt__p_Neo__Gui__Label, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Gui__Sprite[] = {  {&_swigt__p_Neo__Gui__Sprite, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Gui__SpriteBatch[] = {  {&_swigt__p_Neo__Gui__SpriteBatch, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Gui__ThemedButton[] = {  {&_swigt__p_Neo__Gui__ThemedButton, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Gui__Tile[] = {  {&_swigt__p_Neo__Gui__Tile, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Gui__TileSheet[] = {  {&_swigt__p_Neo__Gui__TileSheet, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo__Gui__Widget[] = {  {&_swigt__p_Neo__Gui__Tile, _p_Neo__Gui__TileTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__ThemedButton, _p_Neo__Gui__ThemedButtonTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__Button, _p_Neo__Gui__ButtonTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__Sprite, _p_Neo__Gui__SpriteTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__InputField, _p_Neo__Gui__InputFieldTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__Widget, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo__Gui__Widget[] = {  {&_swigt__p_Neo__Gui__Label, _p_Neo__Gui__LabelTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__Tile, _p_Neo__Gui__TileTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__ThemedButton, _p_Neo__Gui__ThemedButtonTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__Button, _p_Neo__Gui__ButtonTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__Sprite, _p_Neo__Gui__SpriteTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__InputField, _p_Neo__Gui__InputFieldTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__Widget, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Vector2[] = {  {&_swigt__p_Neo__Vector2, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ScriptContext[] = {  {&_swigt__p_ScriptContext, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Vector3[] = {  {&_swigt__p_Vector3, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Vector4[] = {  {&_swigt__p_Vector4, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_long__void[] = {  {&_swigt__p_f_long__void, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_p_Neo__Gui__Widget_long__void[] = {  {&_swigt__p_f_p_Neo__Gui__Widget_long__void, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_float[] = {  {&_swigt__p_float, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
@@ -6620,6 +6848,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Neo__Gui__Canvas,
   _swigc__p_Neo__Gui__GuiSystem,
   _swigc__p_Neo__Gui__InputField,
+  _swigc__p_Neo__Gui__Label,
   _swigc__p_Neo__Gui__Sprite,
   _swigc__p_Neo__Gui__SpriteBatch,
   _swigc__p_Neo__Gui__ThemedButton,
@@ -6630,7 +6859,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_ScriptContext,
   _swigc__p_Vector3,
   _swigc__p_Vector4,
-  _swigc__p_f_long__void,
+  _swigc__p_f_p_Neo__Gui__Widget_long__void,
   _swigc__p_float,
 };
 

@@ -23,7 +23,6 @@
 //
 //========================================================================
 
-
 #ifndef __OBJECT3D_H
 #define __OBJECT3D_H
 
@@ -53,7 +52,7 @@ public:
 
 	// copy constructor
 	Object3d(const Object3d & object);
-	
+
 protected:
 
 	/// The name of the object
@@ -103,9 +102,9 @@ private:
 	void removeChild(Object3d* child);
 
 protected:
-	
+
 	void clearObject3d(void);
-	
+
 public:
 
 	/**
@@ -117,7 +116,7 @@ public:
 	 * @brief Calculates the local matrix without respecting the parent.
 	 */
 	void computeLocalMatrix(void);
-	
+
 	/**
 	 * @brief Returns the current matrix.
 	 * @return The pointer to the internal matrix.
@@ -129,7 +128,7 @@ public:
 	 * @brief Unlinks all children from this object and sets their parent to NULL.
 	 */
 	void unlinkChildren(void);
-	
+
 	/**
 	 * @brief Calculates the matrix of every child object.
 	 */
@@ -144,7 +143,7 @@ public:
 	{
 		m_attributes[name] = variable;
 	}
-	
+
 	/**
 	 * @brief Returns the value of the attribute variable with the given name.
 	 * @param name The name of the variable to fetch.
@@ -235,15 +234,15 @@ public:
 
 	/**
 	 * @brief Changes the Euler rotation.
-	 * 
+	 *
 	 * The unit is degrees.
 	 * @param euler The vector containing the new value in deggrees for each axis.
 	 */
 	void setEulerRotation(const Vector3& euler);
-	
+
 	/**
 	 * @brief Changes the angle of the specified axis.
-	 * 
+	 *
 	 * @code
 	 * object->setAxisAngleRotation(Vector3(1.0f,0.0f,0.0f), 15.0f);
 	 * @endcode
@@ -252,17 +251,17 @@ public:
 	 * @param angle The angle in degrees.
 	 */
 	void setAxisAngleRotation(const Vector3& axis, float angle);
-	
+
 	/**
 	 * @brief Changes the angle of the specified axis by adding the given value.
-	 * 
+	 *
 	 * @code
 	 * object->addAxisAngleRotation(Vector3(1.0f,0.0f,0.0f), 15.0f);
 	 * @endcode
 	 *
 	 * @param axis The axis to change. Only one axis should be 1.0f at a time!
 	 * @param angle The angle in degrees.
-	 */ 
+	 */
 	void addAxisAngleRotation(const Vector3& axis, float angle);
 
 	/**
@@ -271,7 +270,7 @@ public:
 	 * @see Quaternion
 	 */
 	void setRotation(const Quaternion& rotation);
-	
+
 	/**
 	 * @brief Returns the transformed rotation.
 	 * @return The Transformed rotation.
@@ -280,7 +279,7 @@ public:
 	{
 		return m_matrix.getEulerAngles();
 	}
-	
+
 	/**
 	 * @brief Returns the Euler rotation in a Vector3 in degrees.
 	 * @return The Euler rotation.
@@ -302,7 +301,7 @@ public:
 	 * @param scale The new scale.
 	 */
 	void setScale(const Vector3& scale);
-	
+
 	/**
 	 * @brief Returns the transformed scale of the object.
 	 * @return The transformed scale.
@@ -328,7 +327,7 @@ public:
 	 * @see unLink
 	 */
 	void linkTo(Object3d* parent);
-	
+
 	/**
 	 * @brief Removing the link to the parent object.
 	 * @see linkTo
@@ -343,19 +342,19 @@ public:
 	 * @see linkTo
 	 */
 	inline void setParent(Object3d* object) { m_parent = object; }
-	
+
 	/**
 	 * @brief Adds an Object3d to the list of children.
 	 * @param child The new child object.
 	 */
 	inline void addChild(Object3d* child) { m_children.push_back(child); }
-	
+
 	/**
 	 * @brief Checks if the object has a parent.
 	 * @return A boolean value.
 	 */
 	inline bool hasParent(void) { return (m_parent != NULL); }
-	
+
 	/**
 	 * @brief Returns the number of children.
 	 * @return The number of children.
@@ -367,7 +366,7 @@ public:
 	 * @return The parent object.
 	 */
 	inline Object3d* getParent(void) { return m_parent; }
-	
+
 	/**
 	 * @brief Returns the child with the given ID.
 	 *
@@ -381,7 +380,7 @@ public:
 	 * @return The ID.
 	 */
 	unsigned long getId() { return m_id; }
-	
+
 	/**
 	 * @brief Changes the ID of the object.
 	 * @param id The new ID.
@@ -392,12 +391,12 @@ public:
 	 * @brief Updates all behaviors.
 	 */
 	void updateBehaviors(void);
-	
+
 	/**
 	 * @brief Draws all behaviors.
 	 */
 	void drawBehaviors(void);
-	
+
 	/**
 	 * @brief Deletes the Behavior with the given ID.
 	 * @param id The ID to delete.
@@ -435,7 +434,7 @@ public:
 	 * @return The number of registered Behaviors.
 	 */
 	inline unsigned int getBehaviorsNumber(void) { return m_behaviors.size(); }
-	
+
 	/**
 	 * @brief Returns the Behavior with the given ID.
 	 * @param id The ID of the Behavior.
@@ -454,7 +453,7 @@ public:
 	 * @param active The new activity value.
 	 */
 	virtual void setActive(bool active) { m_isActive = active; }
-	
+
 	/**
 	 * @brief Checks if the object is active.
 	 * @return A boolean value.
@@ -463,7 +462,7 @@ public:
 
 	/**
 	 * @brief Changes if the object is visible or not.
-	 * 
+	 *
 	 * This value is used for culling and will be updated on every frame.
 	 * This makes setting it manually useless. For OEntity objects you can use
 	 * OEntity::setInvisible to overwrite the visibility.
@@ -471,14 +470,14 @@ public:
 	 * @param visible The new visibility value.
 	 */
 	inline void setVisible(bool visible) { m_isVisible = visible; }
-	
+
 	/**
 	 * @brief Checks if the object is visible.
 	 * @return A boolean value.
 	 * @see setVisible
 	 */
 	inline bool isVisible(void) { return m_isVisible; }
-	
+
 	/**
 	 * @brief Recalculates visibility for the given camera.
 	 *
@@ -489,12 +488,12 @@ public:
 
 	/**
 	 * @brief Change the object name.
-	 * 
+	 *
 	 * Attention: Names must be unique!
 	 * @param name The new name.
 	 */
 	void setName(const char* name);
-	
+
 	/**
 	 * @brief Returns the object name.
 	 * @return The name of the object.
