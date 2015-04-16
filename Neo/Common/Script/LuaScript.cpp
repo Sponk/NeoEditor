@@ -527,6 +527,7 @@ bool LuaScript::startCallFunction(const char* name)
 		if(!lua_isfunction(m_state, -1))
 		{
 			lua_pop(m_state, 1);
+			m_isRunning = false;
 			return false;
 		}
 		return true;
