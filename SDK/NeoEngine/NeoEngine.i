@@ -12,9 +12,11 @@
 %include <Color.h>
 %include <Matrix4x4.h>
 %include <Quaternion.h>
+%include <InputContext.h>
+%include <SystemContext.h>
+%include <PhysicsContext.h>
 
 %include <NeoEngine.h>
-%include <Color.h>
 %include <NeoGame.h>
 %include <Object3d.h>
 %include <Scene.h>

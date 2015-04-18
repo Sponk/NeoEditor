@@ -1877,17 +1877,17 @@ SWIG_Lua_dostring(lua_State *L, const char* str) {
 #define SWIGTYPE_p_FXRef swig_types[12]
 #define SWIGTYPE_p_Font swig_types[13]
 #define SWIGTYPE_p_Frustum swig_types[14]
-#define SWIGTYPE_p_InputContext swig_types[15]
-#define SWIGTYPE_p_M_SHADER_TYPES swig_types[16]
-#define SWIGTYPE_p_MaterialsAnim swig_types[17]
-#define SWIGTYPE_p_MorphingData swig_types[18]
-#define SWIGTYPE_p_NeoVariable swig_types[19]
-#define SWIGTYPE_p_Neo__AnimRange swig_types[20]
-#define SWIGTYPE_p_Neo__Armature swig_types[21]
-#define SWIGTYPE_p_Neo__ArmatureAnimRef swig_types[22]
-#define SWIGTYPE_p_Neo__Box3d swig_types[23]
-#define SWIGTYPE_p_Neo__Color swig_types[24]
-#define SWIGTYPE_p_Neo__FontRef swig_types[25]
+#define SWIGTYPE_p_M_SHADER_TYPES swig_types[15]
+#define SWIGTYPE_p_MaterialsAnim swig_types[16]
+#define SWIGTYPE_p_MorphingData swig_types[17]
+#define SWIGTYPE_p_NeoVariable swig_types[18]
+#define SWIGTYPE_p_Neo__AnimRange swig_types[19]
+#define SWIGTYPE_p_Neo__Armature swig_types[20]
+#define SWIGTYPE_p_Neo__ArmatureAnimRef swig_types[21]
+#define SWIGTYPE_p_Neo__Box3d swig_types[22]
+#define SWIGTYPE_p_Neo__Color swig_types[23]
+#define SWIGTYPE_p_Neo__FontRef swig_types[24]
+#define SWIGTYPE_p_Neo__InputContext swig_types[25]
 #define SWIGTYPE_p_Neo__Level swig_types[26]
 #define SWIGTYPE_p_Neo__Material swig_types[27]
 #define SWIGTYPE_p_Neo__MaterialDisplay swig_types[28]
@@ -1905,33 +1905,33 @@ SWIG_Lua_dostring(lua_State *L, const char* str) {
 #define SWIGTYPE_p_Neo__OText swig_types[40]
 #define SWIGTYPE_p_Neo__Object3d swig_types[41]
 #define SWIGTYPE_p_Neo__PhysicsConstraint swig_types[42]
-#define SWIGTYPE_p_Neo__PhysicsProperties swig_types[43]
-#define SWIGTYPE_p_Neo__Quaternion swig_types[44]
-#define SWIGTYPE_p_Neo__Scene swig_types[45]
-#define SWIGTYPE_p_Neo__ShaderRef swig_types[46]
-#define SWIGTYPE_p_Neo__SoundRef swig_types[47]
-#define SWIGTYPE_p_Neo__SubGame swig_types[48]
-#define SWIGTYPE_p_Neo__SubMesh swig_types[49]
-#define SWIGTYPE_p_Neo__Texture swig_types[50]
-#define SWIGTYPE_p_Neo__TexturePass swig_types[51]
-#define SWIGTYPE_p_Neo__TextureRef swig_types[52]
-#define SWIGTYPE_p_Neo__TexturesAnimRef swig_types[53]
-#define SWIGTYPE_p_Neo__Vector2 swig_types[54]
-#define SWIGTYPE_p_Neo__Vector3 swig_types[55]
-#define SWIGTYPE_p_Neo__Vector4 swig_types[56]
-#define SWIGTYPE_p_PRIMITIVE_TYPES swig_types[57]
-#define SWIGTYPE_p_PackageManager swig_types[58]
-#define SWIGTYPE_p_PhysicsContext swig_types[59]
-#define SWIGTYPE_p_PostProcessor swig_types[60]
-#define SWIGTYPE_p_Renderer swig_types[61]
-#define SWIGTYPE_p_RendererManager swig_types[62]
-#define SWIGTYPE_p_RenderingContext swig_types[63]
-#define SWIGTYPE_p_ScriptContext swig_types[64]
-#define SWIGTYPE_p_SkinData swig_types[65]
-#define SWIGTYPE_p_Skybox swig_types[66]
-#define SWIGTYPE_p_SoundContext swig_types[67]
-#define SWIGTYPE_p_String swig_types[68]
-#define SWIGTYPE_p_SystemContext swig_types[69]
+#define SWIGTYPE_p_Neo__PhysicsContext swig_types[43]
+#define SWIGTYPE_p_Neo__PhysicsProperties swig_types[44]
+#define SWIGTYPE_p_Neo__Quaternion swig_types[45]
+#define SWIGTYPE_p_Neo__Scene swig_types[46]
+#define SWIGTYPE_p_Neo__ShaderRef swig_types[47]
+#define SWIGTYPE_p_Neo__SoundRef swig_types[48]
+#define SWIGTYPE_p_Neo__SubGame swig_types[49]
+#define SWIGTYPE_p_Neo__SubMesh swig_types[50]
+#define SWIGTYPE_p_Neo__SystemContext swig_types[51]
+#define SWIGTYPE_p_Neo__Texture swig_types[52]
+#define SWIGTYPE_p_Neo__TexturePass swig_types[53]
+#define SWIGTYPE_p_Neo__TextureRef swig_types[54]
+#define SWIGTYPE_p_Neo__TexturesAnimRef swig_types[55]
+#define SWIGTYPE_p_Neo__Vector2 swig_types[56]
+#define SWIGTYPE_p_Neo__Vector3 swig_types[57]
+#define SWIGTYPE_p_Neo__Vector4 swig_types[58]
+#define SWIGTYPE_p_PRIMITIVE_TYPES swig_types[59]
+#define SWIGTYPE_p_PackageManager swig_types[60]
+#define SWIGTYPE_p_PostProcessor swig_types[61]
+#define SWIGTYPE_p_Renderer swig_types[62]
+#define SWIGTYPE_p_RendererManager swig_types[63]
+#define SWIGTYPE_p_RenderingContext swig_types[64]
+#define SWIGTYPE_p_ScriptContext swig_types[65]
+#define SWIGTYPE_p_SkinData swig_types[66]
+#define SWIGTYPE_p_Skybox swig_types[67]
+#define SWIGTYPE_p_SoundContext swig_types[68]
+#define SWIGTYPE_p_String swig_types[69]
 #define SWIGTYPE_p_TEX_COMBINE_MODES swig_types[70]
 #define SWIGTYPE_p_TEX_GEN_MODES swig_types[71]
 #define SWIGTYPE_p_Texture swig_types[72]
@@ -9380,6 +9380,3421 @@ static swig_lua_class *swig_Neo_Quaternion_bases[] = {0};
 static const char *swig_Neo_Quaternion_base_names[] = {0};
 static swig_lua_class _wrap_class_Neo_Quaternion = { "Quaternion", &SWIGTYPE_p_Neo__Quaternion,_wrap_new_Quaternion, swig_delete_Quaternion, swig_Neo_Quaternion_methods, swig_Neo_Quaternion_attributes, { "Quaternion", swig_Neo_Quaternion_cls_methods, swig_Neo_Quaternion_cls_attributes, swig_Neo_Quaternion_cls_constants }, swig_Neo_Quaternion_bases, swig_Neo_Quaternion_base_names };
 
+static int _wrap_InputContext_createKey(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  char *arg2 = (char *) 0 ;
+  
+  SWIG_check_num_args("Neo::InputContext::createKey",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::createKey",1,"Neo::InputContext *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::InputContext::createKey",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_createKey",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  (arg1)->createKey((char const *)arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_createAxis__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  char *arg2 = (char *) 0 ;
+  bool arg3 ;
+  
+  SWIG_check_num_args("Neo::InputContext::createAxis",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::createAxis",1,"Neo::InputContext *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::InputContext::createAxis",2,"char const *");
+  if(!lua_isboolean(L,3)) SWIG_fail_arg("Neo::InputContext::createAxis",3,"bool");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_createAxis",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  arg3 = (lua_toboolean(L, 3)!=0);
+  (arg1)->createAxis((char const *)arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_createAxis__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  char *arg2 = (char *) 0 ;
+  
+  SWIG_check_num_args("Neo::InputContext::createAxis",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::createAxis",1,"Neo::InputContext *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::InputContext::createAxis",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_createAxis",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  (arg1)->createAxis((char const *)arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_createAxis(lua_State* L) {
+  int argc;
+  int argv[4]={
+    1,2,3,4
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 2) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__InputContext, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = SWIG_lua_isnilstring(L,argv[1]);
+      }
+      if (_v) {
+        return _wrap_InputContext_createAxis__SWIG_1(L);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__InputContext, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = SWIG_lua_isnilstring(L,argv[1]);
+      }
+      if (_v) {
+        {
+          _v = lua_isboolean(L,argv[2]);
+        }
+        if (_v) {
+          return _wrap_InputContext_createAxis__SWIG_0(L);
+        }
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'InputContext_createAxis'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::InputContext::createAxis(char const *,bool)\n"
+    "    Neo::InputContext::createAxis(char const *)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_InputContext_createProperty(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  char *arg2 = (char *) 0 ;
+  
+  SWIG_check_num_args("Neo::InputContext::createProperty",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::createProperty",1,"Neo::InputContext *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::InputContext::createProperty",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_createProperty",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  (arg1)->createProperty((char const *)arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_downKey(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  char *arg2 = (char *) 0 ;
+  
+  SWIG_check_num_args("Neo::InputContext::downKey",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::downKey",1,"Neo::InputContext *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::InputContext::downKey",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_downKey",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  (arg1)->downKey((char const *)arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_upKey(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  char *arg2 = (char *) 0 ;
+  
+  SWIG_check_num_args("Neo::InputContext::upKey",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::upKey",1,"Neo::InputContext *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::InputContext::upKey",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_upKey",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  (arg1)->upKey((char const *)arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_setAxis(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  char *arg2 = (char *) 0 ;
+  float arg3 ;
+  
+  SWIG_check_num_args("Neo::InputContext::setAxis",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::setAxis",1,"Neo::InputContext *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::InputContext::setAxis",2,"char const *");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::InputContext::setAxis",3,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_setAxis",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  (arg1)->setAxis((char const *)arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_setProperty(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  char *arg2 = (char *) 0 ;
+  int arg3 ;
+  
+  SWIG_check_num_args("Neo::InputContext::setProperty",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::setProperty",1,"Neo::InputContext *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::InputContext::setProperty",2,"char const *");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::InputContext::setProperty",3,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_setProperty",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  arg3 = (int)lua_tonumber(L, 3);
+  (arg1)->setProperty((char const *)arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_isKeyPressed(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  char *arg2 = (char *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo::InputContext::isKeyPressed",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::isKeyPressed",1,"Neo::InputContext *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::InputContext::isKeyPressed",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_isKeyPressed",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  result = (bool)(arg1)->isKeyPressed((char const *)arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_onKeyDown(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  char *arg2 = (char *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo::InputContext::onKeyDown",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::onKeyDown",1,"Neo::InputContext *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::InputContext::onKeyDown",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_onKeyDown",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  result = (bool)(arg1)->onKeyDown((char const *)arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_onKeyUp(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  char *arg2 = (char *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo::InputContext::onKeyUp",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::onKeyUp",1,"Neo::InputContext *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::InputContext::onKeyUp",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_onKeyUp",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  result = (bool)(arg1)->onKeyUp((char const *)arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_getAxis(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  char *arg2 = (char *) 0 ;
+  float result;
+  
+  SWIG_check_num_args("Neo::InputContext::getAxis",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::getAxis",1,"Neo::InputContext *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::InputContext::getAxis",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_getAxis",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  result = (float)(arg1)->getAxis((char const *)arg2);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_getProperty(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  char *arg2 = (char *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("Neo::InputContext::getProperty",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::getProperty",1,"Neo::InputContext *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::InputContext::getProperty",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_getProperty",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  result = (int)(arg1)->getProperty((char const *)arg2);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_beginTouch(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  int arg2 ;
+  Neo::Vector2 arg3 ;
+  Neo::Vector2 *argp3 ;
+  
+  SWIG_check_num_args("Neo::InputContext::beginTouch",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::beginTouch",1,"Neo::InputContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::InputContext::beginTouch",2,"int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("Neo::InputContext::beginTouch",3,"Neo::Vector2");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_beginTouch",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&argp3,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("InputContext_beginTouch",3,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg3 = *argp3;
+  
+  (arg1)->beginTouch(arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_updateTouch(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  int arg2 ;
+  Neo::Vector2 arg3 ;
+  Neo::Vector2 *argp3 ;
+  
+  SWIG_check_num_args("Neo::InputContext::updateTouch",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::updateTouch",1,"Neo::InputContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::InputContext::updateTouch",2,"int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("Neo::InputContext::updateTouch",3,"Neo::Vector2");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_updateTouch",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&argp3,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("InputContext_updateTouch",3,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg3 = *argp3;
+  
+  (arg1)->updateTouch(arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_endTouch(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  int arg2 ;
+  Neo::Vector2 arg3 ;
+  Neo::Vector2 *argp3 ;
+  
+  SWIG_check_num_args("Neo::InputContext::endTouch",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::endTouch",1,"Neo::InputContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::InputContext::endTouch",2,"int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("Neo::InputContext::endTouch",3,"Neo::Vector2");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_endTouch",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&argp3,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("InputContext_endTouch",3,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg3 = *argp3;
+  
+  (arg1)->endTouch(arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_cancelTouch(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  int arg2 ;
+  Neo::Vector2 arg3 ;
+  Neo::Vector2 *argp3 ;
+  
+  SWIG_check_num_args("Neo::InputContext::cancelTouch",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::cancelTouch",1,"Neo::InputContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::InputContext::cancelTouch",2,"int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("Neo::InputContext::cancelTouch",3,"Neo::Vector2");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_cancelTouch",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&argp3,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("InputContext_cancelTouch",3,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg3 = *argp3;
+  
+  (arg1)->cancelTouch(arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_getTouchPosition(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  int arg2 ;
+  Neo::Vector2 result;
+  
+  SWIG_check_num_args("Neo::InputContext::getTouchPosition",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::getTouchPosition",1,"Neo::InputContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::InputContext::getTouchPosition",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_getTouchPosition",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  result = (arg1)->getTouchPosition(arg2);
+  {
+    Neo::Vector2 * resultptr = new Neo::Vector2((const Neo::Vector2 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector2,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_getLastTouchPosition(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  int arg2 ;
+  Neo::Vector2 result;
+  
+  SWIG_check_num_args("Neo::InputContext::getLastTouchPosition",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::getLastTouchPosition",1,"Neo::InputContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::InputContext::getLastTouchPosition",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_getLastTouchPosition",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  result = (arg1)->getLastTouchPosition(arg2);
+  {
+    Neo::Vector2 * resultptr = new Neo::Vector2((const Neo::Vector2 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector2,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_getTouchPhase(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  int arg2 ;
+  Neo::TOUCH_PHASE result;
+  
+  SWIG_check_num_args("Neo::InputContext::getTouchPhase",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::getTouchPhase",1,"Neo::InputContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::InputContext::getTouchPhase",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_getTouchPhase",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  result = (Neo::TOUCH_PHASE)(arg1)->getTouchPhase(arg2);
+  lua_pushnumber(L, (lua_Number)(int)(result)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_flush(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  
+  SWIG_check_num_args("Neo::InputContext::flush",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::flush",1,"Neo::InputContext *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_flush",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  (arg1)->flush();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_InputContext(void *obj) {
+Neo::InputContext *arg1 = (Neo::InputContext *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Neo_InputContext_methods[] = {
+    {"createKey", _wrap_InputContext_createKey}, 
+    {"createAxis", _wrap_InputContext_createAxis}, 
+    {"createProperty", _wrap_InputContext_createProperty}, 
+    {"downKey", _wrap_InputContext_downKey}, 
+    {"upKey", _wrap_InputContext_upKey}, 
+    {"setAxis", _wrap_InputContext_setAxis}, 
+    {"setProperty", _wrap_InputContext_setProperty}, 
+    {"isKeyPressed", _wrap_InputContext_isKeyPressed}, 
+    {"onKeyDown", _wrap_InputContext_onKeyDown}, 
+    {"onKeyUp", _wrap_InputContext_onKeyUp}, 
+    {"getAxis", _wrap_InputContext_getAxis}, 
+    {"getProperty", _wrap_InputContext_getProperty}, 
+    {"beginTouch", _wrap_InputContext_beginTouch}, 
+    {"updateTouch", _wrap_InputContext_updateTouch}, 
+    {"endTouch", _wrap_InputContext_endTouch}, 
+    {"cancelTouch", _wrap_InputContext_cancelTouch}, 
+    {"getTouchPosition", _wrap_InputContext_getTouchPosition}, 
+    {"getLastTouchPosition", _wrap_InputContext_getLastTouchPosition}, 
+    {"getTouchPhase", _wrap_InputContext_getTouchPhase}, 
+    {"flush", _wrap_InputContext_flush}, 
+    {0,0}
+};
+static swig_lua_attribute swig_Neo_InputContext_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_attribute swig_Neo_InputContext_cls_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_Neo_InputContext_cls_methods[] = {
+    {0,0}
+};
+static swig_lua_const_info swig_Neo_InputContext_cls_constants[] = {
+    {0,0,0,0,0,0}
+};
+static swig_lua_class *swig_Neo_InputContext_bases[] = {0};
+static const char *swig_Neo_InputContext_base_names[] = {0};
+static swig_lua_class _wrap_class_Neo_InputContext = { "InputContext", &SWIGTYPE_p_Neo__InputContext,0, swig_delete_InputContext, swig_Neo_InputContext_methods, swig_Neo_InputContext_attributes, { "InputContext", swig_Neo_InputContext_cls_methods, swig_Neo_InputContext_cls_attributes, swig_Neo_InputContext_cls_constants }, swig_Neo_InputContext_bases, swig_Neo_InputContext_base_names };
+
+static int _wrap_SystemContext_getScreenSize(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::SystemContext *arg1 = (Neo::SystemContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  unsigned int *arg3 = (unsigned int *) 0 ;
+  
+  SWIG_check_num_args("Neo::SystemContext::getScreenSize",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::SystemContext::getScreenSize",1,"Neo::SystemContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::SystemContext::getScreenSize",2,"unsigned int *");
+  if(!SWIG_isptrtype(L,3)) SWIG_fail_arg("Neo::SystemContext::getScreenSize",3,"unsigned int *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__SystemContext,0))){
+    SWIG_fail_ptr("SystemContext_getScreenSize",1,SWIGTYPE_p_Neo__SystemContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("SystemContext_getScreenSize",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("SystemContext_getScreenSize",3,SWIGTYPE_p_unsigned_int);
+  }
+  
+  (arg1)->getScreenSize(arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_SystemContext_setCursorPosition(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::SystemContext *arg1 = (Neo::SystemContext *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  SWIG_check_num_args("Neo::SystemContext::setCursorPosition",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::SystemContext::setCursorPosition",1,"Neo::SystemContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::SystemContext::setCursorPosition",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::SystemContext::setCursorPosition",3,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__SystemContext,0))){
+    SWIG_fail_ptr("SystemContext_setCursorPosition",1,SWIGTYPE_p_Neo__SystemContext);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (int)lua_tonumber(L, 3);
+  (arg1)->setCursorPosition(arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_SystemContext_hideCursor(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::SystemContext *arg1 = (Neo::SystemContext *) 0 ;
+  
+  SWIG_check_num_args("Neo::SystemContext::hideCursor",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::SystemContext::hideCursor",1,"Neo::SystemContext *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__SystemContext,0))){
+    SWIG_fail_ptr("SystemContext_hideCursor",1,SWIGTYPE_p_Neo__SystemContext);
+  }
+  
+  (arg1)->hideCursor();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_SystemContext_showCursor(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::SystemContext *arg1 = (Neo::SystemContext *) 0 ;
+  
+  SWIG_check_num_args("Neo::SystemContext::showCursor",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::SystemContext::showCursor",1,"Neo::SystemContext *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__SystemContext,0))){
+    SWIG_fail_ptr("SystemContext_showCursor",1,SWIGTYPE_p_Neo__SystemContext);
+  }
+  
+  (arg1)->showCursor();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_SystemContext_getWorkingDirectory(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::SystemContext *arg1 = (Neo::SystemContext *) 0 ;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("Neo::SystemContext::getWorkingDirectory",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::SystemContext::getWorkingDirectory",1,"Neo::SystemContext *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__SystemContext,0))){
+    SWIG_fail_ptr("SystemContext_getWorkingDirectory",1,SWIGTYPE_p_Neo__SystemContext);
+  }
+  
+  result = (char *)(arg1)->getWorkingDirectory();
+  lua_pushstring(L,(const char *)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_SystemContext_getSystemTick(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::SystemContext *arg1 = (Neo::SystemContext *) 0 ;
+  unsigned long result;
+  
+  SWIG_check_num_args("Neo::SystemContext::getSystemTick",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::SystemContext::getSystemTick",1,"Neo::SystemContext *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__SystemContext,0))){
+    SWIG_fail_ptr("SystemContext_getSystemTick",1,SWIGTYPE_p_Neo__SystemContext);
+  }
+  
+  result = (unsigned long)(arg1)->getSystemTick();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_SystemContext(void *obj) {
+Neo::SystemContext *arg1 = (Neo::SystemContext *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Neo_SystemContext_methods[] = {
+    {"getScreenSize", _wrap_SystemContext_getScreenSize}, 
+    {"setCursorPosition", _wrap_SystemContext_setCursorPosition}, 
+    {"hideCursor", _wrap_SystemContext_hideCursor}, 
+    {"showCursor", _wrap_SystemContext_showCursor}, 
+    {"getWorkingDirectory", _wrap_SystemContext_getWorkingDirectory}, 
+    {"getSystemTick", _wrap_SystemContext_getSystemTick}, 
+    {0,0}
+};
+static swig_lua_attribute swig_Neo_SystemContext_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_attribute swig_Neo_SystemContext_cls_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_Neo_SystemContext_cls_methods[] = {
+    {0,0}
+};
+static swig_lua_const_info swig_Neo_SystemContext_cls_constants[] = {
+    {0,0,0,0,0,0}
+};
+static swig_lua_class *swig_Neo_SystemContext_bases[] = {0};
+static const char *swig_Neo_SystemContext_base_names[] = {0};
+static swig_lua_class _wrap_class_Neo_SystemContext = { "SystemContext", &SWIGTYPE_p_Neo__SystemContext,0, swig_delete_SystemContext, swig_Neo_SystemContext_methods, swig_Neo_SystemContext_attributes, { "SystemContext", swig_Neo_SystemContext_cls_methods, swig_Neo_SystemContext_cls_attributes, swig_Neo_SystemContext_cls_constants }, swig_Neo_SystemContext_bases, swig_Neo_SystemContext_base_names };
+
+static int _wrap_PhysicsContext_init(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  Neo::Vector3 *arg2 = 0 ;
+  Neo::Vector3 *arg3 = 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::init",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::init",1,"Neo::PhysicsContext *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::PhysicsContext::init",2,"Neo::Vector3 const &");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("Neo::PhysicsContext::init",3,"Neo::Vector3 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_init",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_init",2,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_init",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  (arg1)->init((Neo::Vector3 const &)*arg2,(Neo::Vector3 const &)*arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_clear(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::clear",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::clear",1,"Neo::PhysicsContext *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_clear",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  (arg1)->clear();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_setSimulationQuality(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::setSimulationQuality",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::setSimulationQuality",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::setSimulationQuality",2,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_setSimulationQuality",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  (arg1)->setSimulationQuality(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_updateSimulation(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::updateSimulation",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::updateSimulation",1,"Neo::PhysicsContext *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_updateSimulation",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  (arg1)->updateSimulation();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_setWorldGravity(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  Neo::Vector3 *arg2 = 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::setWorldGravity",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::setWorldGravity",1,"Neo::PhysicsContext *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::PhysicsContext::setWorldGravity",2,"Neo::Vector3 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_setWorldGravity",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_setWorldGravity",2,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  (arg1)->setWorldGravity((Neo::Vector3 const &)*arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_createGhost(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  unsigned int arg3 ;
+  Neo::Vector3 *arg4 = 0 ;
+  Neo::Quaternion *arg5 = 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::createGhost",5,5)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::createGhost",1,"Neo::PhysicsContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::PhysicsContext::createGhost",2,"unsigned int *");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::PhysicsContext::createGhost",3,"unsigned int");
+  if(!lua_isuserdata(L,4)) SWIG_fail_arg("Neo::PhysicsContext::createGhost",4,"Neo::Vector3 const &");
+  if(!lua_isuserdata(L,5)) SWIG_fail_arg("Neo::PhysicsContext::createGhost",5,"Neo::Quaternion const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_createGhost",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_createGhost",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,4,(void**)&arg4,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_createGhost",4,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,5,(void**)&arg5,SWIGTYPE_p_Neo__Quaternion,0))){
+    SWIG_fail_ptr("PhysicsContext_createGhost",5,SWIGTYPE_p_Neo__Quaternion);
+  }
+  
+  (arg1)->createGhost(arg2,arg3,(Neo::Vector3 const &)*arg4,(Neo::Quaternion const &)*arg5);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_createRigidBody(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  unsigned int arg3 ;
+  Neo::Vector3 *arg4 = 0 ;
+  Neo::Quaternion *arg5 = 0 ;
+  float arg6 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::createRigidBody",6,6)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::createRigidBody",1,"Neo::PhysicsContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::PhysicsContext::createRigidBody",2,"unsigned int *");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::PhysicsContext::createRigidBody",3,"unsigned int");
+  if(!lua_isuserdata(L,4)) SWIG_fail_arg("Neo::PhysicsContext::createRigidBody",4,"Neo::Vector3 const &");
+  if(!lua_isuserdata(L,5)) SWIG_fail_arg("Neo::PhysicsContext::createRigidBody",5,"Neo::Quaternion const &");
+  if(!lua_isnumber(L,6)) SWIG_fail_arg("Neo::PhysicsContext::createRigidBody",6,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_createRigidBody",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_createRigidBody",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,4,(void**)&arg4,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_createRigidBody",4,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,5,(void**)&arg5,SWIGTYPE_p_Neo__Quaternion,0))){
+    SWIG_fail_ptr("PhysicsContext_createRigidBody",5,SWIGTYPE_p_Neo__Quaternion);
+  }
+  
+  arg6 = (float)lua_tonumber(L, 6);
+  (arg1)->createRigidBody(arg2,arg3,(Neo::Vector3 const &)*arg4,(Neo::Quaternion const &)*arg5,arg6);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_activateObject(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::activateObject",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::activateObject",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::activateObject",2,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_activateObject",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  (arg1)->activateObject(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_deactivateObject(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::deactivateObject",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::deactivateObject",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::deactivateObject",2,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_deactivateObject",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  (arg1)->deactivateObject(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_deleteObject(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::deleteObject",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::deleteObject",1,"Neo::PhysicsContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::PhysicsContext::deleteObject",2,"unsigned int *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_deleteObject",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_deleteObject",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  (arg1)->deleteObject(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_enableObjectKinematic(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::enableObjectKinematic",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::enableObjectKinematic",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::enableObjectKinematic",2,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_enableObjectKinematic",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  (arg1)->enableObjectKinematic(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_disableObjectKinematic(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::disableObjectKinematic",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::disableObjectKinematic",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::disableObjectKinematic",2,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_disableObjectKinematic",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  (arg1)->disableObjectKinematic(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_setObjectShape(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  unsigned int arg3 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::setObjectShape",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::setObjectShape",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::setObjectShape",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::PhysicsContext::setObjectShape",3,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_setObjectShape",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  (arg1)->setObjectShape(arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_setObjectMass(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  float arg3 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::setObjectMass",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::setObjectMass",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::setObjectMass",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::PhysicsContext::setObjectMass",3,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_setObjectMass",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  (arg1)->setObjectMass(arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_setObjectRestitution(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  float arg3 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::setObjectRestitution",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::setObjectRestitution",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::setObjectRestitution",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::PhysicsContext::setObjectRestitution",3,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_setObjectRestitution",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  (arg1)->setObjectRestitution(arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_setObjectFriction(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  float arg3 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::setObjectFriction",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::setObjectFriction",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::setObjectFriction",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::PhysicsContext::setObjectFriction",3,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_setObjectFriction",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  (arg1)->setObjectFriction(arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_setObjectLinearFactor(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  Neo::Vector3 *arg3 = 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::setObjectLinearFactor",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::setObjectLinearFactor",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::setObjectLinearFactor",2,"unsigned int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("Neo::PhysicsContext::setObjectLinearFactor",3,"Neo::Vector3 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_setObjectLinearFactor",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_setObjectLinearFactor",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  (arg1)->setObjectLinearFactor(arg2,(Neo::Vector3 const &)*arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_setObjectAngularFactor(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  float arg3 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::setObjectAngularFactor",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::setObjectAngularFactor",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::setObjectAngularFactor",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::PhysicsContext::setObjectAngularFactor",3,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_setObjectAngularFactor",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  (arg1)->setObjectAngularFactor(arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_setObjectDamping(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  float arg3 ;
+  float arg4 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::setObjectDamping",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::setObjectDamping",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::setObjectDamping",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::PhysicsContext::setObjectDamping",3,"float");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::PhysicsContext::setObjectDamping",4,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_setObjectDamping",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  arg4 = (float)lua_tonumber(L, 4);
+  (arg1)->setObjectDamping(arg2,arg3,arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_setObjectTransform(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  Neo::Vector3 *arg3 = 0 ;
+  Neo::Quaternion *arg4 = 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::setObjectTransform",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::setObjectTransform",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::setObjectTransform",2,"unsigned int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("Neo::PhysicsContext::setObjectTransform",3,"Neo::Vector3 const &");
+  if(!lua_isuserdata(L,4)) SWIG_fail_arg("Neo::PhysicsContext::setObjectTransform",4,"Neo::Quaternion const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_setObjectTransform",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_setObjectTransform",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,4,(void**)&arg4,SWIGTYPE_p_Neo__Quaternion,0))){
+    SWIG_fail_ptr("PhysicsContext_setObjectTransform",4,SWIGTYPE_p_Neo__Quaternion);
+  }
+  
+  (arg1)->setObjectTransform(arg2,(Neo::Vector3 const &)*arg3,(Neo::Quaternion const &)*arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_getObjectTransform(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  Neo::Vector3 *arg3 = (Neo::Vector3 *) 0 ;
+  Neo::Quaternion *arg4 = (Neo::Quaternion *) 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::getObjectTransform",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::getObjectTransform",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::getObjectTransform",2,"unsigned int");
+  if(!SWIG_isptrtype(L,3)) SWIG_fail_arg("Neo::PhysicsContext::getObjectTransform",3,"Neo::Vector3 *");
+  if(!SWIG_isptrtype(L,4)) SWIG_fail_arg("Neo::PhysicsContext::getObjectTransform",4,"Neo::Quaternion *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_getObjectTransform",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_getObjectTransform",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,4,(void**)&arg4,SWIGTYPE_p_Neo__Quaternion,0))){
+    SWIG_fail_ptr("PhysicsContext_getObjectTransform",4,SWIGTYPE_p_Neo__Quaternion);
+  }
+  
+  (arg1)->getObjectTransform(arg2,arg3,arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_setObjectUserPointer(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  void *arg3 = (void *) 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::setObjectUserPointer",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::setObjectUserPointer",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::setObjectUserPointer",2,"unsigned int");
+  if(!SWIG_isptrtype(L,3)) SWIG_fail_arg("Neo::PhysicsContext::setObjectUserPointer",3,"void *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_setObjectUserPointer",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  arg3=(void *)SWIG_MustGetPtr(L,3,0,0,3,"PhysicsContext_setObjectUserPointer");
+  (arg1)->setObjectUserPointer(arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_getObjectUserPointer(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  void *result = 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::getObjectUserPointer",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::getObjectUserPointer",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::getObjectUserPointer",2,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_getObjectUserPointer",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  result = (void *)(arg1)->getObjectUserPointer(arg2);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_void,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_addCentralForce(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  Neo::Vector3 *arg3 = 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::addCentralForce",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::addCentralForce",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::addCentralForce",2,"unsigned int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("Neo::PhysicsContext::addCentralForce",3,"Neo::Vector3 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_addCentralForce",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_addCentralForce",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  (arg1)->addCentralForce(arg2,(Neo::Vector3 const &)*arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_getCentralForce(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  Neo::Vector3 *arg3 = (Neo::Vector3 *) 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::getCentralForce",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::getCentralForce",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::getCentralForce",2,"unsigned int");
+  if(!SWIG_isptrtype(L,3)) SWIG_fail_arg("Neo::PhysicsContext::getCentralForce",3,"Neo::Vector3 *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_getCentralForce",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_getCentralForce",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  (arg1)->getCentralForce(arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_addTorque(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  Neo::Vector3 *arg3 = 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::addTorque",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::addTorque",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::addTorque",2,"unsigned int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("Neo::PhysicsContext::addTorque",3,"Neo::Vector3 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_addTorque",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_addTorque",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  (arg1)->addTorque(arg2,(Neo::Vector3 const &)*arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_getTorque(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  Neo::Vector3 *arg3 = (Neo::Vector3 *) 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::getTorque",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::getTorque",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::getTorque",2,"unsigned int");
+  if(!SWIG_isptrtype(L,3)) SWIG_fail_arg("Neo::PhysicsContext::getTorque",3,"Neo::Vector3 *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_getTorque",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_getTorque",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  (arg1)->getTorque(arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_clearForces(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::clearForces",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::clearForces",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::clearForces",2,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_clearForces",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  (arg1)->clearForces(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_isObjectInCollision__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  unsigned int *arg3 = (unsigned int *) 0 ;
+  unsigned int arg4 ;
+  int result;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::isObjectInCollision",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::isObjectInCollision",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::isObjectInCollision",2,"unsigned int");
+  if(!SWIG_isptrtype(L,3)) SWIG_fail_arg("Neo::PhysicsContext::isObjectInCollision",3,"unsigned int *");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::PhysicsContext::isObjectInCollision",4,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_isObjectInCollision",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_isObjectInCollision",3,SWIGTYPE_p_unsigned_int);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
+  arg4 = (unsigned int)lua_tonumber(L, 4);
+  result = (int)(arg1)->isObjectInCollision(arg2,arg3,arg4);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_isObjectInCollision__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  unsigned int *arg3 = (unsigned int *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::isObjectInCollision",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::isObjectInCollision",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::isObjectInCollision",2,"unsigned int");
+  if(!SWIG_isptrtype(L,3)) SWIG_fail_arg("Neo::PhysicsContext::isObjectInCollision",3,"unsigned int *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_isObjectInCollision",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_isObjectInCollision",3,SWIGTYPE_p_unsigned_int);
+  }
+  
+  result = (int)(arg1)->isObjectInCollision(arg2,arg3);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_isObjectInCollision__SWIG_2(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  int result;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::isObjectInCollision",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::isObjectInCollision",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::isObjectInCollision",2,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_isObjectInCollision",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  result = (int)(arg1)->isObjectInCollision(arg2);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_isObjectInCollision(lua_State* L) {
+  int argc;
+  int argv[5]={
+    1,2,3,4,5
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 2) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__PhysicsContext, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = lua_isnumber(L,argv[1]);
+      }
+      if (_v) {
+        return _wrap_PhysicsContext_isObjectInCollision__SWIG_2(L);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__PhysicsContext, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = lua_isnumber(L,argv[1]);
+      }
+      if (_v) {
+        {
+          void *ptr;
+          if (SWIG_isptrtype(L,argv[2])==0 || SWIG_ConvertPtr(L,argv[2], (void **) &ptr, SWIGTYPE_p_unsigned_int, 0)) {
+            _v = 0;
+          } else {
+            _v = 1;
+          }
+        }
+        if (_v) {
+          return _wrap_PhysicsContext_isObjectInCollision__SWIG_1(L);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__PhysicsContext, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = lua_isnumber(L,argv[1]);
+      }
+      if (_v) {
+        {
+          void *ptr;
+          if (SWIG_isptrtype(L,argv[2])==0 || SWIG_ConvertPtr(L,argv[2], (void **) &ptr, SWIGTYPE_p_unsigned_int, 0)) {
+            _v = 0;
+          } else {
+            _v = 1;
+          }
+        }
+        if (_v) {
+          {
+            _v = lua_isnumber(L,argv[3]);
+          }
+          if (_v) {
+            return _wrap_PhysicsContext_isObjectInCollision__SWIG_0(L);
+          }
+        }
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'PhysicsContext_isObjectInCollision'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::PhysicsContext::isObjectInCollision(unsigned int,unsigned int *,unsigned int)\n"
+    "    Neo::PhysicsContext::isObjectInCollision(unsigned int,unsigned int *)\n"
+    "    Neo::PhysicsContext::isObjectInCollision(unsigned int)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_PhysicsContext_isObjectsCollision(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  unsigned int arg3 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::isObjectsCollision",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::isObjectsCollision",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::isObjectsCollision",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::PhysicsContext::isObjectsCollision",3,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_isObjectsCollision",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  result = (bool)(arg1)->isObjectsCollision(arg2,arg3);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_isRayHit__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  Neo::Vector3 *arg2 = 0 ;
+  Neo::Vector3 *arg3 = 0 ;
+  unsigned int *arg4 = (unsigned int *) 0 ;
+  Neo::Vector3 *arg5 = (Neo::Vector3 *) 0 ;
+  Neo::Vector3 *arg6 = (Neo::Vector3 *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::isRayHit",6,6)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::isRayHit",1,"Neo::PhysicsContext *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::PhysicsContext::isRayHit",2,"Neo::Vector3 const &");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("Neo::PhysicsContext::isRayHit",3,"Neo::Vector3 const &");
+  if(!SWIG_isptrtype(L,4)) SWIG_fail_arg("Neo::PhysicsContext::isRayHit",4,"unsigned int *");
+  if(!SWIG_isptrtype(L,5)) SWIG_fail_arg("Neo::PhysicsContext::isRayHit",5,"Neo::Vector3 *");
+  if(!SWIG_isptrtype(L,6)) SWIG_fail_arg("Neo::PhysicsContext::isRayHit",6,"Neo::Vector3 *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_isRayHit",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_isRayHit",2,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_isRayHit",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,4,(void**)&arg4,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_isRayHit",4,SWIGTYPE_p_unsigned_int);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,5,(void**)&arg5,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_isRayHit",5,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,6,(void**)&arg6,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_isRayHit",6,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  result = (bool)(arg1)->isRayHit((Neo::Vector3 const &)*arg2,(Neo::Vector3 const &)*arg3,arg4,arg5,arg6);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_isRayHit__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  Neo::Vector3 *arg2 = 0 ;
+  Neo::Vector3 *arg3 = 0 ;
+  unsigned int *arg4 = (unsigned int *) 0 ;
+  Neo::Vector3 *arg5 = (Neo::Vector3 *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::isRayHit",5,5)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::isRayHit",1,"Neo::PhysicsContext *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::PhysicsContext::isRayHit",2,"Neo::Vector3 const &");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("Neo::PhysicsContext::isRayHit",3,"Neo::Vector3 const &");
+  if(!SWIG_isptrtype(L,4)) SWIG_fail_arg("Neo::PhysicsContext::isRayHit",4,"unsigned int *");
+  if(!SWIG_isptrtype(L,5)) SWIG_fail_arg("Neo::PhysicsContext::isRayHit",5,"Neo::Vector3 *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_isRayHit",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_isRayHit",2,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_isRayHit",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,4,(void**)&arg4,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_isRayHit",4,SWIGTYPE_p_unsigned_int);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,5,(void**)&arg5,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_isRayHit",5,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  result = (bool)(arg1)->isRayHit((Neo::Vector3 const &)*arg2,(Neo::Vector3 const &)*arg3,arg4,arg5);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_isRayHit__SWIG_2(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  Neo::Vector3 *arg2 = 0 ;
+  Neo::Vector3 *arg3 = 0 ;
+  unsigned int *arg4 = (unsigned int *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::isRayHit",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::isRayHit",1,"Neo::PhysicsContext *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::PhysicsContext::isRayHit",2,"Neo::Vector3 const &");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("Neo::PhysicsContext::isRayHit",3,"Neo::Vector3 const &");
+  if(!SWIG_isptrtype(L,4)) SWIG_fail_arg("Neo::PhysicsContext::isRayHit",4,"unsigned int *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_isRayHit",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_isRayHit",2,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_isRayHit",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,4,(void**)&arg4,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_isRayHit",4,SWIGTYPE_p_unsigned_int);
+  }
+  
+  result = (bool)(arg1)->isRayHit((Neo::Vector3 const &)*arg2,(Neo::Vector3 const &)*arg3,arg4);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_isRayHit__SWIG_3(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  Neo::Vector3 *arg2 = 0 ;
+  Neo::Vector3 *arg3 = 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::isRayHit",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::isRayHit",1,"Neo::PhysicsContext *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::PhysicsContext::isRayHit",2,"Neo::Vector3 const &");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("Neo::PhysicsContext::isRayHit",3,"Neo::Vector3 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_isRayHit",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_isRayHit",2,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_isRayHit",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  result = (bool)(arg1)->isRayHit((Neo::Vector3 const &)*arg2,(Neo::Vector3 const &)*arg3);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_isRayHit(lua_State* L) {
+  int argc;
+  int argv[7]={
+    1,2,3,4,5,6,7
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 3) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__PhysicsContext, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        {
+          void *ptr;
+          if (lua_isuserdata(L,argv[2])==0 || SWIG_ConvertPtr(L,argv[2], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+            _v = 0;
+          } else {
+            _v = 1;
+          }
+        }
+        if (_v) {
+          return _wrap_PhysicsContext_isRayHit__SWIG_3(L);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__PhysicsContext, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        {
+          void *ptr;
+          if (lua_isuserdata(L,argv[2])==0 || SWIG_ConvertPtr(L,argv[2], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+            _v = 0;
+          } else {
+            _v = 1;
+          }
+        }
+        if (_v) {
+          {
+            void *ptr;
+            if (SWIG_isptrtype(L,argv[3])==0 || SWIG_ConvertPtr(L,argv[3], (void **) &ptr, SWIGTYPE_p_unsigned_int, 0)) {
+              _v = 0;
+            } else {
+              _v = 1;
+            }
+          }
+          if (_v) {
+            return _wrap_PhysicsContext_isRayHit__SWIG_2(L);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 5) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__PhysicsContext, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        {
+          void *ptr;
+          if (lua_isuserdata(L,argv[2])==0 || SWIG_ConvertPtr(L,argv[2], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+            _v = 0;
+          } else {
+            _v = 1;
+          }
+        }
+        if (_v) {
+          {
+            void *ptr;
+            if (SWIG_isptrtype(L,argv[3])==0 || SWIG_ConvertPtr(L,argv[3], (void **) &ptr, SWIGTYPE_p_unsigned_int, 0)) {
+              _v = 0;
+            } else {
+              _v = 1;
+            }
+          }
+          if (_v) {
+            {
+              void *ptr;
+              if (SWIG_isptrtype(L,argv[4])==0 || SWIG_ConvertPtr(L,argv[4], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+                _v = 0;
+              } else {
+                _v = 1;
+              }
+            }
+            if (_v) {
+              return _wrap_PhysicsContext_isRayHit__SWIG_1(L);
+            }
+          }
+        }
+      }
+    }
+  }
+  if (argc == 6) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__PhysicsContext, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        {
+          void *ptr;
+          if (lua_isuserdata(L,argv[2])==0 || SWIG_ConvertPtr(L,argv[2], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+            _v = 0;
+          } else {
+            _v = 1;
+          }
+        }
+        if (_v) {
+          {
+            void *ptr;
+            if (SWIG_isptrtype(L,argv[3])==0 || SWIG_ConvertPtr(L,argv[3], (void **) &ptr, SWIGTYPE_p_unsigned_int, 0)) {
+              _v = 0;
+            } else {
+              _v = 1;
+            }
+          }
+          if (_v) {
+            {
+              void *ptr;
+              if (SWIG_isptrtype(L,argv[4])==0 || SWIG_ConvertPtr(L,argv[4], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+                _v = 0;
+              } else {
+                _v = 1;
+              }
+            }
+            if (_v) {
+              {
+                void *ptr;
+                if (SWIG_isptrtype(L,argv[5])==0 || SWIG_ConvertPtr(L,argv[5], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+                  _v = 0;
+                } else {
+                  _v = 1;
+                }
+              }
+              if (_v) {
+                return _wrap_PhysicsContext_isRayHit__SWIG_0(L);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'PhysicsContext_isRayHit'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::PhysicsContext::isRayHit(Neo::Vector3 const &,Neo::Vector3 const &,unsigned int *,Neo::Vector3 *,Neo::Vector3 *)\n"
+    "    Neo::PhysicsContext::isRayHit(Neo::Vector3 const &,Neo::Vector3 const &,unsigned int *,Neo::Vector3 *)\n"
+    "    Neo::PhysicsContext::isRayHit(Neo::Vector3 const &,Neo::Vector3 const &,unsigned int *)\n"
+    "    Neo::PhysicsContext::isRayHit(Neo::Vector3 const &,Neo::Vector3 const &)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_PhysicsContext_createMultiShape(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::createMultiShape",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::createMultiShape",1,"Neo::PhysicsContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::PhysicsContext::createMultiShape",2,"unsigned int *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_createMultiShape",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_createMultiShape",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  (arg1)->createMultiShape(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_createBoxShape(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  Neo::Vector3 *arg3 = 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::createBoxShape",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::createBoxShape",1,"Neo::PhysicsContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::PhysicsContext::createBoxShape",2,"unsigned int *");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("Neo::PhysicsContext::createBoxShape",3,"Neo::Vector3 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_createBoxShape",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_createBoxShape",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_createBoxShape",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  (arg1)->createBoxShape(arg2,(Neo::Vector3 const &)*arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_createSphereShape(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  float arg3 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::createSphereShape",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::createSphereShape",1,"Neo::PhysicsContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::PhysicsContext::createSphereShape",2,"unsigned int *");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::PhysicsContext::createSphereShape",3,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_createSphereShape",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_createSphereShape",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  arg3 = (float)lua_tonumber(L, 3);
+  (arg1)->createSphereShape(arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_createConeShape(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  float arg3 ;
+  float arg4 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::createConeShape",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::createConeShape",1,"Neo::PhysicsContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::PhysicsContext::createConeShape",2,"unsigned int *");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::PhysicsContext::createConeShape",3,"float");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::PhysicsContext::createConeShape",4,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_createConeShape",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_createConeShape",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  arg3 = (float)lua_tonumber(L, 3);
+  arg4 = (float)lua_tonumber(L, 4);
+  (arg1)->createConeShape(arg2,arg3,arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_createCapsuleShape(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  float arg3 ;
+  float arg4 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::createCapsuleShape",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::createCapsuleShape",1,"Neo::PhysicsContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::PhysicsContext::createCapsuleShape",2,"unsigned int *");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::PhysicsContext::createCapsuleShape",3,"float");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::PhysicsContext::createCapsuleShape",4,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_createCapsuleShape",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_createCapsuleShape",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  arg3 = (float)lua_tonumber(L, 3);
+  arg4 = (float)lua_tonumber(L, 4);
+  (arg1)->createCapsuleShape(arg2,arg3,arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_createCylinderShape(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  float arg3 ;
+  float arg4 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::createCylinderShape",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::createCylinderShape",1,"Neo::PhysicsContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::PhysicsContext::createCylinderShape",2,"unsigned int *");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::PhysicsContext::createCylinderShape",3,"float");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::PhysicsContext::createCylinderShape",4,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_createCylinderShape",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_createCylinderShape",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  arg3 = (float)lua_tonumber(L, 3);
+  arg4 = (float)lua_tonumber(L, 4);
+  (arg1)->createCylinderShape(arg2,arg3,arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_createConvexHullShape__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  Neo::Vector3 *arg3 = (Neo::Vector3 *) 0 ;
+  unsigned int arg4 ;
+  Neo::Vector3 arg5 ;
+  Neo::Vector3 *argp5 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::createConvexHullShape",5,5)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::createConvexHullShape",1,"Neo::PhysicsContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::PhysicsContext::createConvexHullShape",2,"unsigned int *");
+  if(!SWIG_isptrtype(L,3)) SWIG_fail_arg("Neo::PhysicsContext::createConvexHullShape",3,"Neo::Vector3 const *");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::PhysicsContext::createConvexHullShape",4,"unsigned int");
+  if(!lua_isuserdata(L,5)) SWIG_fail_arg("Neo::PhysicsContext::createConvexHullShape",5,"Neo::Vector3 const");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_createConvexHullShape",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_createConvexHullShape",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_createConvexHullShape",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
+  arg4 = (unsigned int)lua_tonumber(L, 4);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,5,(void**)&argp5,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_createConvexHullShape",5,SWIGTYPE_p_Neo__Vector3);
+  }
+  arg5 = *argp5;
+  
+  (arg1)->createConvexHullShape(arg2,(Neo::Vector3 const *)arg3,arg4,arg5);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_createConvexHullShape__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  Neo::Vector3 *arg3 = (Neo::Vector3 *) 0 ;
+  unsigned int arg4 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::createConvexHullShape",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::createConvexHullShape",1,"Neo::PhysicsContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::PhysicsContext::createConvexHullShape",2,"unsigned int *");
+  if(!SWIG_isptrtype(L,3)) SWIG_fail_arg("Neo::PhysicsContext::createConvexHullShape",3,"Neo::Vector3 const *");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::PhysicsContext::createConvexHullShape",4,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_createConvexHullShape",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_createConvexHullShape",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_createConvexHullShape",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
+  arg4 = (unsigned int)lua_tonumber(L, 4);
+  (arg1)->createConvexHullShape(arg2,(Neo::Vector3 const *)arg3,arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_createConvexHullShape(lua_State* L) {
+  int argc;
+  int argv[6]={
+    1,2,3,4,5,6
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 4) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__PhysicsContext, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_unsigned_int, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        {
+          void *ptr;
+          if (SWIG_isptrtype(L,argv[2])==0 || SWIG_ConvertPtr(L,argv[2], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+            _v = 0;
+          } else {
+            _v = 1;
+          }
+        }
+        if (_v) {
+          {
+            _v = lua_isnumber(L,argv[3]);
+          }
+          if (_v) {
+            return _wrap_PhysicsContext_createConvexHullShape__SWIG_1(L);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 5) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__PhysicsContext, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_unsigned_int, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        {
+          void *ptr;
+          if (SWIG_isptrtype(L,argv[2])==0 || SWIG_ConvertPtr(L,argv[2], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+            _v = 0;
+          } else {
+            _v = 1;
+          }
+        }
+        if (_v) {
+          {
+            _v = lua_isnumber(L,argv[3]);
+          }
+          if (_v) {
+            {
+              void *ptr;
+              if (lua_isuserdata(L,argv[4])==0 || SWIG_ConvertPtr(L,argv[4], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+                _v = 0;
+              } else {
+                _v = 1;
+              }
+            }
+            if (_v) {
+              return _wrap_PhysicsContext_createConvexHullShape__SWIG_0(L);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'PhysicsContext_createConvexHullShape'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::PhysicsContext::createConvexHullShape(unsigned int *,Neo::Vector3 const *,unsigned int,Neo::Vector3 const)\n"
+    "    Neo::PhysicsContext::createConvexHullShape(unsigned int *,Neo::Vector3 const *,unsigned int)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_PhysicsContext_createTriangleMeshShape__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  Neo::Vector3 *arg3 = (Neo::Vector3 *) 0 ;
+  unsigned int arg4 ;
+  void *arg5 = (void *) 0 ;
+  unsigned int arg6 ;
+  VAR_TYPES arg7 ;
+  Neo::Vector3 arg8 ;
+  VAR_TYPES *argp7 ;
+  Neo::Vector3 *argp8 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::createTriangleMeshShape",8,8)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::createTriangleMeshShape",1,"Neo::PhysicsContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::PhysicsContext::createTriangleMeshShape",2,"unsigned int *");
+  if(!SWIG_isptrtype(L,3)) SWIG_fail_arg("Neo::PhysicsContext::createTriangleMeshShape",3,"Neo::Vector3 const *");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::PhysicsContext::createTriangleMeshShape",4,"unsigned int");
+  if(!SWIG_isptrtype(L,5)) SWIG_fail_arg("Neo::PhysicsContext::createTriangleMeshShape",5,"void const *");
+  if(!lua_isnumber(L,6)) SWIG_fail_arg("Neo::PhysicsContext::createTriangleMeshShape",6,"unsigned int");
+  if(!lua_isuserdata(L,7)) SWIG_fail_arg("Neo::PhysicsContext::createTriangleMeshShape",7,"VAR_TYPES");
+  if(!lua_isuserdata(L,8)) SWIG_fail_arg("Neo::PhysicsContext::createTriangleMeshShape",8,"Neo::Vector3 const");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_createTriangleMeshShape",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_createTriangleMeshShape",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_createTriangleMeshShape",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
+  arg4 = (unsigned int)lua_tonumber(L, 4);
+  arg5=(void *)SWIG_MustGetPtr(L,5,0,0,5,"PhysicsContext_createTriangleMeshShape");
+  SWIG_contract_assert((lua_tonumber(L,6)>=0),"number must not be negative")
+  arg6 = (unsigned int)lua_tonumber(L, 6);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,7,(void**)&argp7,SWIGTYPE_p_VAR_TYPES,0))){
+    SWIG_fail_ptr("PhysicsContext_createTriangleMeshShape",7,SWIGTYPE_p_VAR_TYPES);
+  }
+  arg7 = *argp7;
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,8,(void**)&argp8,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_createTriangleMeshShape",8,SWIGTYPE_p_Neo__Vector3);
+  }
+  arg8 = *argp8;
+  
+  (arg1)->createTriangleMeshShape(arg2,(Neo::Vector3 const *)arg3,arg4,(void const *)arg5,arg6,arg7,arg8);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_createTriangleMeshShape__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  Neo::Vector3 *arg3 = (Neo::Vector3 *) 0 ;
+  unsigned int arg4 ;
+  void *arg5 = (void *) 0 ;
+  unsigned int arg6 ;
+  VAR_TYPES arg7 ;
+  VAR_TYPES *argp7 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::createTriangleMeshShape",7,7)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::createTriangleMeshShape",1,"Neo::PhysicsContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::PhysicsContext::createTriangleMeshShape",2,"unsigned int *");
+  if(!SWIG_isptrtype(L,3)) SWIG_fail_arg("Neo::PhysicsContext::createTriangleMeshShape",3,"Neo::Vector3 const *");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::PhysicsContext::createTriangleMeshShape",4,"unsigned int");
+  if(!SWIG_isptrtype(L,5)) SWIG_fail_arg("Neo::PhysicsContext::createTriangleMeshShape",5,"void const *");
+  if(!lua_isnumber(L,6)) SWIG_fail_arg("Neo::PhysicsContext::createTriangleMeshShape",6,"unsigned int");
+  if(!lua_isuserdata(L,7)) SWIG_fail_arg("Neo::PhysicsContext::createTriangleMeshShape",7,"VAR_TYPES");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_createTriangleMeshShape",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_createTriangleMeshShape",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_createTriangleMeshShape",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
+  arg4 = (unsigned int)lua_tonumber(L, 4);
+  arg5=(void *)SWIG_MustGetPtr(L,5,0,0,5,"PhysicsContext_createTriangleMeshShape");
+  SWIG_contract_assert((lua_tonumber(L,6)>=0),"number must not be negative")
+  arg6 = (unsigned int)lua_tonumber(L, 6);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,7,(void**)&argp7,SWIGTYPE_p_VAR_TYPES,0))){
+    SWIG_fail_ptr("PhysicsContext_createTriangleMeshShape",7,SWIGTYPE_p_VAR_TYPES);
+  }
+  arg7 = *argp7;
+  
+  (arg1)->createTriangleMeshShape(arg2,(Neo::Vector3 const *)arg3,arg4,(void const *)arg5,arg6,arg7);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_createTriangleMeshShape(lua_State* L) {
+  int argc;
+  int argv[9]={
+    1,2,3,4,5,6,7,8,9
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 7) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__PhysicsContext, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_unsigned_int, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        {
+          void *ptr;
+          if (SWIG_isptrtype(L,argv[2])==0 || SWIG_ConvertPtr(L,argv[2], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+            _v = 0;
+          } else {
+            _v = 1;
+          }
+        }
+        if (_v) {
+          {
+            _v = lua_isnumber(L,argv[3]);
+          }
+          if (_v) {
+            {
+              void *ptr;
+              if (SWIG_isptrtype(L,argv[4])==0 || SWIG_ConvertPtr(L,argv[4], (void **) &ptr, 0, 0)) {
+                _v = 0;
+              } else {
+                _v = 1;
+              }
+            }
+            if (_v) {
+              {
+                _v = lua_isnumber(L,argv[5]);
+              }
+              if (_v) {
+                {
+                  void *ptr;
+                  if (lua_isuserdata(L,argv[6])==0 || SWIG_ConvertPtr(L,argv[6], (void **) &ptr, SWIGTYPE_p_VAR_TYPES, 0)) {
+                    _v = 0;
+                  } else {
+                    _v = 1;
+                  }
+                }
+                if (_v) {
+                  return _wrap_PhysicsContext_createTriangleMeshShape__SWIG_1(L);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  if (argc == 8) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__PhysicsContext, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_unsigned_int, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        {
+          void *ptr;
+          if (SWIG_isptrtype(L,argv[2])==0 || SWIG_ConvertPtr(L,argv[2], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+            _v = 0;
+          } else {
+            _v = 1;
+          }
+        }
+        if (_v) {
+          {
+            _v = lua_isnumber(L,argv[3]);
+          }
+          if (_v) {
+            {
+              void *ptr;
+              if (SWIG_isptrtype(L,argv[4])==0 || SWIG_ConvertPtr(L,argv[4], (void **) &ptr, 0, 0)) {
+                _v = 0;
+              } else {
+                _v = 1;
+              }
+            }
+            if (_v) {
+              {
+                _v = lua_isnumber(L,argv[5]);
+              }
+              if (_v) {
+                {
+                  void *ptr;
+                  if (lua_isuserdata(L,argv[6])==0 || SWIG_ConvertPtr(L,argv[6], (void **) &ptr, SWIGTYPE_p_VAR_TYPES, 0)) {
+                    _v = 0;
+                  } else {
+                    _v = 1;
+                  }
+                }
+                if (_v) {
+                  {
+                    void *ptr;
+                    if (lua_isuserdata(L,argv[7])==0 || SWIG_ConvertPtr(L,argv[7], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+                      _v = 0;
+                    } else {
+                      _v = 1;
+                    }
+                  }
+                  if (_v) {
+                    return _wrap_PhysicsContext_createTriangleMeshShape__SWIG_0(L);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'PhysicsContext_createTriangleMeshShape'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::PhysicsContext::createTriangleMeshShape(unsigned int *,Neo::Vector3 const *,unsigned int,void const *,unsigned int,VAR_TYPES,Neo::Vector3 const)\n"
+    "    Neo::PhysicsContext::createTriangleMeshShape(unsigned int *,Neo::Vector3 const *,unsigned int,void const *,unsigned int,VAR_TYPES)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_PhysicsContext_deleteShape(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::deleteShape",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::deleteShape",1,"Neo::PhysicsContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::PhysicsContext::deleteShape",2,"unsigned int *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_deleteShape",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_deleteShape",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  (arg1)->deleteShape(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_addChildShape(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  unsigned int arg3 ;
+  Neo::Vector3 *arg4 = 0 ;
+  Neo::Quaternion *arg5 = 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::addChildShape",5,5)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::addChildShape",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::addChildShape",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::PhysicsContext::addChildShape",3,"unsigned int");
+  if(!lua_isuserdata(L,4)) SWIG_fail_arg("Neo::PhysicsContext::addChildShape",4,"Neo::Vector3 const &");
+  if(!lua_isuserdata(L,5)) SWIG_fail_arg("Neo::PhysicsContext::addChildShape",5,"Neo::Quaternion const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_addChildShape",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,4,(void**)&arg4,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_addChildShape",4,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,5,(void**)&arg5,SWIGTYPE_p_Neo__Quaternion,0))){
+    SWIG_fail_ptr("PhysicsContext_addChildShape",5,SWIGTYPE_p_Neo__Quaternion);
+  }
+  
+  (arg1)->addChildShape(arg2,arg3,(Neo::Vector3 const &)*arg4,(Neo::Quaternion const &)*arg5);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_createConstraint(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  unsigned int arg3 ;
+  unsigned int arg4 ;
+  Neo::Vector3 *arg5 = 0 ;
+  bool arg6 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::createConstraint",6,6)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::createConstraint",1,"Neo::PhysicsContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::PhysicsContext::createConstraint",2,"unsigned int *");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::PhysicsContext::createConstraint",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::PhysicsContext::createConstraint",4,"unsigned int");
+  if(!lua_isuserdata(L,5)) SWIG_fail_arg("Neo::PhysicsContext::createConstraint",5,"Neo::Vector3 const &");
+  if(!lua_isboolean(L,6)) SWIG_fail_arg("Neo::PhysicsContext::createConstraint",6,"bool");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_createConstraint",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_createConstraint",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
+  arg4 = (unsigned int)lua_tonumber(L, 4);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,5,(void**)&arg5,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_createConstraint",5,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  arg6 = (lua_toboolean(L, 6)!=0);
+  (arg1)->createConstraint(arg2,arg3,arg4,(Neo::Vector3 const &)*arg5,arg6);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_setLinearLimit(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  Neo::Vector3 *arg3 = 0 ;
+  Neo::Vector3 *arg4 = 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::setLinearLimit",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::setLinearLimit",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::setLinearLimit",2,"unsigned int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("Neo::PhysicsContext::setLinearLimit",3,"Neo::Vector3 const &");
+  if(!lua_isuserdata(L,4)) SWIG_fail_arg("Neo::PhysicsContext::setLinearLimit",4,"Neo::Vector3 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_setLinearLimit",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_setLinearLimit",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,4,(void**)&arg4,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_setLinearLimit",4,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  (arg1)->setLinearLimit(arg2,(Neo::Vector3 const &)*arg3,(Neo::Vector3 const &)*arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_setAngularLimit(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int arg2 ;
+  Neo::Vector3 *arg3 = 0 ;
+  Neo::Vector3 *arg4 = 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::setAngularLimit",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::setAngularLimit",1,"Neo::PhysicsContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::PhysicsContext::setAngularLimit",2,"unsigned int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("Neo::PhysicsContext::setAngularLimit",3,"Neo::Vector3 const &");
+  if(!lua_isuserdata(L,4)) SWIG_fail_arg("Neo::PhysicsContext::setAngularLimit",4,"Neo::Vector3 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_setAngularLimit",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_setAngularLimit",3,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,4,(void**)&arg4,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("PhysicsContext_setAngularLimit",4,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  (arg1)->setAngularLimit(arg2,(Neo::Vector3 const &)*arg3,(Neo::Vector3 const &)*arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PhysicsContext_deleteConstraint(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  
+  SWIG_check_num_args("Neo::PhysicsContext::deleteConstraint",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::PhysicsContext::deleteConstraint",1,"Neo::PhysicsContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::PhysicsContext::deleteConstraint",2,"unsigned int *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("PhysicsContext_deleteConstraint",1,SWIGTYPE_p_Neo__PhysicsContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("PhysicsContext_deleteConstraint",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  (arg1)->deleteConstraint(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_PhysicsContext(void *obj) {
+Neo::PhysicsContext *arg1 = (Neo::PhysicsContext *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Neo_PhysicsContext_methods[] = {
+    {"init", _wrap_PhysicsContext_init}, 
+    {"clear", _wrap_PhysicsContext_clear}, 
+    {"setSimulationQuality", _wrap_PhysicsContext_setSimulationQuality}, 
+    {"updateSimulation", _wrap_PhysicsContext_updateSimulation}, 
+    {"setWorldGravity", _wrap_PhysicsContext_setWorldGravity}, 
+    {"createGhost", _wrap_PhysicsContext_createGhost}, 
+    {"createRigidBody", _wrap_PhysicsContext_createRigidBody}, 
+    {"activateObject", _wrap_PhysicsContext_activateObject}, 
+    {"deactivateObject", _wrap_PhysicsContext_deactivateObject}, 
+    {"deleteObject", _wrap_PhysicsContext_deleteObject}, 
+    {"enableObjectKinematic", _wrap_PhysicsContext_enableObjectKinematic}, 
+    {"disableObjectKinematic", _wrap_PhysicsContext_disableObjectKinematic}, 
+    {"setObjectShape", _wrap_PhysicsContext_setObjectShape}, 
+    {"setObjectMass", _wrap_PhysicsContext_setObjectMass}, 
+    {"setObjectRestitution", _wrap_PhysicsContext_setObjectRestitution}, 
+    {"setObjectFriction", _wrap_PhysicsContext_setObjectFriction}, 
+    {"setObjectLinearFactor", _wrap_PhysicsContext_setObjectLinearFactor}, 
+    {"setObjectAngularFactor", _wrap_PhysicsContext_setObjectAngularFactor}, 
+    {"setObjectDamping", _wrap_PhysicsContext_setObjectDamping}, 
+    {"setObjectTransform", _wrap_PhysicsContext_setObjectTransform}, 
+    {"getObjectTransform", _wrap_PhysicsContext_getObjectTransform}, 
+    {"setObjectUserPointer", _wrap_PhysicsContext_setObjectUserPointer}, 
+    {"getObjectUserPointer", _wrap_PhysicsContext_getObjectUserPointer}, 
+    {"addCentralForce", _wrap_PhysicsContext_addCentralForce}, 
+    {"getCentralForce", _wrap_PhysicsContext_getCentralForce}, 
+    {"addTorque", _wrap_PhysicsContext_addTorque}, 
+    {"getTorque", _wrap_PhysicsContext_getTorque}, 
+    {"clearForces", _wrap_PhysicsContext_clearForces}, 
+    {"isObjectInCollision", _wrap_PhysicsContext_isObjectInCollision}, 
+    {"isObjectsCollision", _wrap_PhysicsContext_isObjectsCollision}, 
+    {"isRayHit", _wrap_PhysicsContext_isRayHit}, 
+    {"createMultiShape", _wrap_PhysicsContext_createMultiShape}, 
+    {"createBoxShape", _wrap_PhysicsContext_createBoxShape}, 
+    {"createSphereShape", _wrap_PhysicsContext_createSphereShape}, 
+    {"createConeShape", _wrap_PhysicsContext_createConeShape}, 
+    {"createCapsuleShape", _wrap_PhysicsContext_createCapsuleShape}, 
+    {"createCylinderShape", _wrap_PhysicsContext_createCylinderShape}, 
+    {"createConvexHullShape", _wrap_PhysicsContext_createConvexHullShape}, 
+    {"createTriangleMeshShape", _wrap_PhysicsContext_createTriangleMeshShape}, 
+    {"deleteShape", _wrap_PhysicsContext_deleteShape}, 
+    {"addChildShape", _wrap_PhysicsContext_addChildShape}, 
+    {"createConstraint", _wrap_PhysicsContext_createConstraint}, 
+    {"setLinearLimit", _wrap_PhysicsContext_setLinearLimit}, 
+    {"setAngularLimit", _wrap_PhysicsContext_setAngularLimit}, 
+    {"deleteConstraint", _wrap_PhysicsContext_deleteConstraint}, 
+    {0,0}
+};
+static swig_lua_attribute swig_Neo_PhysicsContext_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_attribute swig_Neo_PhysicsContext_cls_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_Neo_PhysicsContext_cls_methods[] = {
+    {0,0}
+};
+static swig_lua_const_info swig_Neo_PhysicsContext_cls_constants[] = {
+    {0,0,0,0,0,0}
+};
+static swig_lua_class *swig_Neo_PhysicsContext_bases[] = {0};
+static const char *swig_Neo_PhysicsContext_base_names[] = {0};
+static swig_lua_class _wrap_class_Neo_PhysicsContext = { "PhysicsContext", &SWIGTYPE_p_Neo__PhysicsContext,0, swig_delete_PhysicsContext, swig_Neo_PhysicsContext_methods, swig_Neo_PhysicsContext_attributes, { "PhysicsContext", swig_Neo_PhysicsContext_cls_methods, swig_Neo_PhysicsContext_cls_attributes, swig_Neo_PhysicsContext_cls_constants }, swig_Neo_PhysicsContext_bases, swig_Neo_PhysicsContext_base_names };
+
 static int _wrap_new_NeoEngine(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *result = 0 ;
@@ -9527,19 +12942,19 @@ fail:
 static int _wrap_NeoEngine_setPhysicsContext(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *arg1 = (Neo::NeoEngine *) 0 ;
-  PhysicsContext *arg2 = (PhysicsContext *) 0 ;
+  Neo::PhysicsContext *arg2 = (Neo::PhysicsContext *) 0 ;
   
   SWIG_check_num_args("Neo::NeoEngine::setPhysicsContext",2,2)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::NeoEngine::setPhysicsContext",1,"Neo::NeoEngine *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::NeoEngine::setPhysicsContext",2,"PhysicsContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::NeoEngine::setPhysicsContext",2,"Neo::PhysicsContext *");
   
   if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__NeoEngine,0))){
     SWIG_fail_ptr("NeoEngine_setPhysicsContext",1,SWIGTYPE_p_Neo__NeoEngine);
   }
   
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_PhysicsContext,0))){
-    SWIG_fail_ptr("NeoEngine_setPhysicsContext",2,SWIGTYPE_p_PhysicsContext);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__PhysicsContext,0))){
+    SWIG_fail_ptr("NeoEngine_setPhysicsContext",2,SWIGTYPE_p_Neo__PhysicsContext);
   }
   
   (arg1)->setPhysicsContext(arg2);
@@ -9587,19 +13002,19 @@ fail:
 static int _wrap_NeoEngine_setInputContext(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *arg1 = (Neo::NeoEngine *) 0 ;
-  InputContext *arg2 = (InputContext *) 0 ;
+  Neo::InputContext *arg2 = (Neo::InputContext *) 0 ;
   
   SWIG_check_num_args("Neo::NeoEngine::setInputContext",2,2)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::NeoEngine::setInputContext",1,"Neo::NeoEngine *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::NeoEngine::setInputContext",2,"InputContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::NeoEngine::setInputContext",2,"Neo::InputContext *");
   
   if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__NeoEngine,0))){
     SWIG_fail_ptr("NeoEngine_setInputContext",1,SWIGTYPE_p_Neo__NeoEngine);
   }
   
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_InputContext,0))){
-    SWIG_fail_ptr("NeoEngine_setInputContext",2,SWIGTYPE_p_InputContext);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("NeoEngine_setInputContext",2,SWIGTYPE_p_Neo__InputContext);
   }
   
   (arg1)->setInputContext(arg2);
@@ -9617,19 +13032,19 @@ fail:
 static int _wrap_NeoEngine_setSystemContext(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *arg1 = (Neo::NeoEngine *) 0 ;
-  SystemContext *arg2 = (SystemContext *) 0 ;
+  Neo::SystemContext *arg2 = (Neo::SystemContext *) 0 ;
   
   SWIG_check_num_args("Neo::NeoEngine::setSystemContext",2,2)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::NeoEngine::setSystemContext",1,"Neo::NeoEngine *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::NeoEngine::setSystemContext",2,"SystemContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::NeoEngine::setSystemContext",2,"Neo::SystemContext *");
   
   if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__NeoEngine,0))){
     SWIG_fail_ptr("NeoEngine_setSystemContext",1,SWIGTYPE_p_Neo__NeoEngine);
   }
   
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_SystemContext,0))){
-    SWIG_fail_ptr("NeoEngine_setSystemContext",2,SWIGTYPE_p_SystemContext);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__SystemContext,0))){
+    SWIG_fail_ptr("NeoEngine_setSystemContext",2,SWIGTYPE_p_Neo__SystemContext);
   }
   
   (arg1)->setSystemContext(arg2);
@@ -9695,7 +13110,7 @@ fail:
 static int _wrap_NeoEngine_getPhysicsContext(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *arg1 = (Neo::NeoEngine *) 0 ;
-  PhysicsContext *result = 0 ;
+  Neo::PhysicsContext *result = 0 ;
   
   SWIG_check_num_args("Neo::NeoEngine::getPhysicsContext",1,1)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::NeoEngine::getPhysicsContext",1,"Neo::NeoEngine *");
@@ -9704,8 +13119,8 @@ static int _wrap_NeoEngine_getPhysicsContext(lua_State* L) {
     SWIG_fail_ptr("NeoEngine_getPhysicsContext",1,SWIGTYPE_p_Neo__NeoEngine);
   }
   
-  result = (PhysicsContext *)(arg1)->getPhysicsContext();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_PhysicsContext,0); SWIG_arg++; 
+  result = (Neo::PhysicsContext *)(arg1)->getPhysicsContext();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__PhysicsContext,0); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -9743,7 +13158,7 @@ fail:
 static int _wrap_NeoEngine_getInputContext(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *arg1 = (Neo::NeoEngine *) 0 ;
-  InputContext *result = 0 ;
+  Neo::InputContext *result = 0 ;
   
   SWIG_check_num_args("Neo::NeoEngine::getInputContext",1,1)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::NeoEngine::getInputContext",1,"Neo::NeoEngine *");
@@ -9752,8 +13167,8 @@ static int _wrap_NeoEngine_getInputContext(lua_State* L) {
     SWIG_fail_ptr("NeoEngine_getInputContext",1,SWIGTYPE_p_Neo__NeoEngine);
   }
   
-  result = (InputContext *)(arg1)->getInputContext();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_InputContext,0); SWIG_arg++; 
+  result = (Neo::InputContext *)(arg1)->getInputContext();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__InputContext,0); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -9767,7 +13182,7 @@ fail:
 static int _wrap_NeoEngine_getSystemContext(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *arg1 = (Neo::NeoEngine *) 0 ;
-  SystemContext *result = 0 ;
+  Neo::SystemContext *result = 0 ;
   
   SWIG_check_num_args("Neo::NeoEngine::getSystemContext",1,1)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::NeoEngine::getSystemContext",1,"Neo::NeoEngine *");
@@ -9776,8 +13191,8 @@ static int _wrap_NeoEngine_getSystemContext(lua_State* L) {
     SWIG_fail_ptr("NeoEngine_getSystemContext",1,SWIGTYPE_p_Neo__NeoEngine);
   }
   
-  result = (SystemContext *)(arg1)->getSystemContext();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_SystemContext,0); SWIG_arg++; 
+  result = (Neo::SystemContext *)(arg1)->getSystemContext();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__SystemContext,0); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -11415,6 +14830,286 @@ fail:
 }
 
 
+static int _wrap_Object3d_translate__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Object3d *arg1 = (Neo::Object3d *) 0 ;
+  Neo::Vector3 *arg2 = 0 ;
+  bool arg3 ;
+  
+  SWIG_check_num_args("Neo::Object3d::translate",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Object3d::translate",1,"Neo::Object3d *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Object3d::translate",2,"Neo::Vector3 const &");
+  if(!lua_isboolean(L,3)) SWIG_fail_arg("Neo::Object3d::translate",3,"bool");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Object3d,0))){
+    SWIG_fail_ptr("Object3d_translate",1,SWIGTYPE_p_Neo__Object3d);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("Object3d_translate",2,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  arg3 = (lua_toboolean(L, 3)!=0);
+  (arg1)->translate((Neo::Vector3 const &)*arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Object3d_translate__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Object3d *arg1 = (Neo::Object3d *) 0 ;
+  Neo::Vector3 *arg2 = 0 ;
+  
+  SWIG_check_num_args("Neo::Object3d::translate",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Object3d::translate",1,"Neo::Object3d *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Object3d::translate",2,"Neo::Vector3 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Object3d,0))){
+    SWIG_fail_ptr("Object3d_translate",1,SWIGTYPE_p_Neo__Object3d);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("Object3d_translate",2,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  (arg1)->translate((Neo::Vector3 const &)*arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Object3d_translate(lua_State* L) {
+  int argc;
+  int argv[4]={
+    1,2,3,4
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 2) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Object3d, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        return _wrap_Object3d_translate__SWIG_1(L);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Object3d, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        {
+          _v = lua_isboolean(L,argv[2]);
+        }
+        if (_v) {
+          return _wrap_Object3d_translate__SWIG_0(L);
+        }
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'Object3d_translate'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::Object3d::translate(Neo::Vector3 const &,bool)\n"
+    "    Neo::Object3d::translate(Neo::Vector3 const &)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_Object3d_rotate__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Object3d *arg1 = (Neo::Object3d *) 0 ;
+  Neo::Vector3 *arg2 = 0 ;
+  float arg3 ;
+  bool arg4 ;
+  
+  SWIG_check_num_args("Neo::Object3d::rotate",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Object3d::rotate",1,"Neo::Object3d *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Object3d::rotate",2,"Neo::Vector3 const &");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::Object3d::rotate",3,"float");
+  if(!lua_isboolean(L,4)) SWIG_fail_arg("Neo::Object3d::rotate",4,"bool");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Object3d,0))){
+    SWIG_fail_ptr("Object3d_rotate",1,SWIGTYPE_p_Neo__Object3d);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("Object3d_rotate",2,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  arg3 = (float)lua_tonumber(L, 3);
+  arg4 = (lua_toboolean(L, 4)!=0);
+  (arg1)->rotate((Neo::Vector3 const &)*arg2,arg3,arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Object3d_rotate__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Object3d *arg1 = (Neo::Object3d *) 0 ;
+  Neo::Vector3 *arg2 = 0 ;
+  float arg3 ;
+  
+  SWIG_check_num_args("Neo::Object3d::rotate",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Object3d::rotate",1,"Neo::Object3d *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Object3d::rotate",2,"Neo::Vector3 const &");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::Object3d::rotate",3,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Object3d,0))){
+    SWIG_fail_ptr("Object3d_rotate",1,SWIGTYPE_p_Neo__Object3d);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("Object3d_rotate",2,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  arg3 = (float)lua_tonumber(L, 3);
+  (arg1)->rotate((Neo::Vector3 const &)*arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Object3d_rotate(lua_State* L) {
+  int argc;
+  int argv[5]={
+    1,2,3,4,5
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 3) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Object3d, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        {
+          _v = lua_isnumber(L,argv[2]);
+        }
+        if (_v) {
+          return _wrap_Object3d_rotate__SWIG_1(L);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Object3d, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Neo__Vector3, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        {
+          _v = lua_isnumber(L,argv[2]);
+        }
+        if (_v) {
+          {
+            _v = lua_isboolean(L,argv[3]);
+          }
+          if (_v) {
+            return _wrap_Object3d_rotate__SWIG_0(L);
+          }
+        }
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'Object3d_rotate'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::Object3d::rotate(Neo::Vector3 const &,float,bool)\n"
+    "    Neo::Object3d::rotate(Neo::Vector3 const &,float)\n");
+  lua_error(L);return 0;
+}
+
+
 static int _wrap_Object3d_getTransformedPosition(lua_State* L) {
   int SWIG_arg = 0;
   Neo::Object3d *arg1 = (Neo::Object3d *) 0 ;
@@ -12513,6 +16208,8 @@ static swig_lua_method swig_Neo_Object3d_methods[] = {
     {"getInversePosition", _wrap_Object3d_getInversePosition}, 
     {"getTransformedVector", _wrap_Object3d_getTransformedVector}, 
     {"setPosition", _wrap_Object3d_setPosition}, 
+    {"translate", _wrap_Object3d_translate}, 
+    {"rotate", _wrap_Object3d_rotate}, 
     {"getTransformedPosition", _wrap_Object3d_getTransformedPosition}, 
     {"getPosition", _wrap_Object3d_getPosition}, 
     {"setEulerRotation", _wrap_Object3d_setEulerRotation}, 
@@ -26679,6 +30376,11 @@ static swig_lua_var_info swig_variables[] = {
 };
 
 static swig_lua_const_info swig_constants[] = {
+    {SWIG_LUA_CONSTTAB_INT("TOUCH_BEGIN", Neo::TOUCH_BEGIN)},
+    {SWIG_LUA_CONSTTAB_INT("TOUCH_UPDATE", Neo::TOUCH_UPDATE)},
+    {SWIG_LUA_CONSTTAB_INT("TOUCH_END", Neo::TOUCH_END)},
+    {SWIG_LUA_CONSTTAB_INT("TOUCH_CANCELLED", Neo::TOUCH_CANCELLED)},
+    {SWIG_LUA_CONSTTAB_INT("TOUCH_NONE", Neo::TOUCH_NONE)},
     {SWIG_LUA_CONSTTAB_INT("M_OBJECT3D", 0)},
     {SWIG_LUA_CONSTTAB_INT("M_OBJECT3D_BONE", 1)},
     {SWIG_LUA_CONSTTAB_INT("M_OBJECT3D_CAMERA", 2)},
@@ -26748,7 +30450,6 @@ static swig_type_info _swigt__p_FXManager = {"_p_FXManager", "FXManager *", 0, 0
 static swig_type_info _swigt__p_FXRef = {"_p_FXRef", "FXRef *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Font = {"_p_Font", "Font *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Frustum = {"_p_Frustum", "Frustum *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_InputContext = {"_p_InputContext", "InputContext *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_M_SHADER_TYPES = {"_p_M_SHADER_TYPES", "M_SHADER_TYPES *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_MaterialsAnim = {"_p_MaterialsAnim", "MaterialsAnim *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_MorphingData = {"_p_MorphingData", "MorphingData *", 0, 0, (void*)0, 0};
@@ -26759,6 +30460,7 @@ static swig_type_info _swigt__p_Neo__ArmatureAnimRef = {"_p_Neo__ArmatureAnimRef
 static swig_type_info _swigt__p_Neo__Box3d = {"_p_Neo__Box3d", "Neo::Box3d *", 0, 0, (void*)&_wrap_class_Neo_Box3d, 0};
 static swig_type_info _swigt__p_Neo__Color = {"_p_Neo__Color", "Neo::Color *", 0, 0, (void*)&_wrap_class_Neo_Color, 0};
 static swig_type_info _swigt__p_Neo__FontRef = {"_p_Neo__FontRef", "Neo::FontRef *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Neo__InputContext = {"_p_Neo__InputContext", "Neo::InputContext *", 0, 0, (void*)&_wrap_class_Neo_InputContext, 0};
 static swig_type_info _swigt__p_Neo__Level = {"_p_Neo__Level", "Neo::Level *", 0, 0, (void*)&_wrap_class_Neo_Level, 0};
 static swig_type_info _swigt__p_Neo__Material = {"_p_Neo__Material", "Neo::Material *", 0, 0, (void*)&_wrap_class_Neo_Material, 0};
 static swig_type_info _swigt__p_Neo__MaterialDisplay = {"_p_Neo__MaterialDisplay", "Neo::MaterialDisplay *", 0, 0, (void*)&_wrap_class_Neo_MaterialDisplay, 0};
@@ -26776,6 +30478,7 @@ static swig_type_info _swigt__p_Neo__OSound = {"_p_Neo__OSound", "Neo::OSound *"
 static swig_type_info _swigt__p_Neo__OText = {"_p_Neo__OText", "Neo::OText *", 0, 0, (void*)&_wrap_class_Neo_OText, 0};
 static swig_type_info _swigt__p_Neo__Object3d = {"_p_Neo__Object3d", "Neo::Object3d *", 0, 0, (void*)&_wrap_class_Neo_Object3d, 0};
 static swig_type_info _swigt__p_Neo__PhysicsConstraint = {"_p_Neo__PhysicsConstraint", "Neo::PhysicsConstraint *", 0, 0, (void*)&_wrap_class_Neo_PhysicsConstraint, 0};
+static swig_type_info _swigt__p_Neo__PhysicsContext = {"_p_Neo__PhysicsContext", "Neo::PhysicsContext *", 0, 0, (void*)&_wrap_class_Neo_PhysicsContext, 0};
 static swig_type_info _swigt__p_Neo__PhysicsProperties = {"_p_Neo__PhysicsProperties", "Neo::PhysicsProperties *", 0, 0, (void*)&_wrap_class_Neo_PhysicsProperties, 0};
 static swig_type_info _swigt__p_Neo__Quaternion = {"_p_Neo__Quaternion", "Neo::Quaternion *", 0, 0, (void*)&_wrap_class_Neo_Quaternion, 0};
 static swig_type_info _swigt__p_Neo__Scene = {"_p_Neo__Scene", "Neo::Scene *", 0, 0, (void*)&_wrap_class_Neo_Scene, 0};
@@ -26783,6 +30486,7 @@ static swig_type_info _swigt__p_Neo__ShaderRef = {"_p_Neo__ShaderRef", "Neo::Sha
 static swig_type_info _swigt__p_Neo__SoundRef = {"_p_Neo__SoundRef", "Neo::SoundRef *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Neo__SubGame = {"_p_Neo__SubGame", "Neo::SubGame *", 0, 0, (void*)&_wrap_class_Neo_SubGame, 0};
 static swig_type_info _swigt__p_Neo__SubMesh = {"_p_Neo__SubMesh", "Neo::SubMesh *", 0, 0, (void*)&_wrap_class_Neo_SubMesh, 0};
+static swig_type_info _swigt__p_Neo__SystemContext = {"_p_Neo__SystemContext", "Neo::SystemContext *", 0, 0, (void*)&_wrap_class_Neo_SystemContext, 0};
 static swig_type_info _swigt__p_Neo__Texture = {"_p_Neo__Texture", "Neo::Texture *", 0, 0, (void*)&_wrap_class_Neo_Texture, 0};
 static swig_type_info _swigt__p_Neo__TexturePass = {"_p_Neo__TexturePass", "Neo::TexturePass *", 0, 0, (void*)&_wrap_class_Neo_TexturePass, 0};
 static swig_type_info _swigt__p_Neo__TextureRef = {"_p_Neo__TextureRef", "Neo::TextureRef *", 0, 0, (void*)&_wrap_class_Neo_TextureRef, 0};
@@ -26792,7 +30496,6 @@ static swig_type_info _swigt__p_Neo__Vector3 = {"_p_Neo__Vector3", "Neo::Vector3
 static swig_type_info _swigt__p_Neo__Vector4 = {"_p_Neo__Vector4", "Neo::Vector4 *", 0, 0, (void*)&_wrap_class_Neo_Vector4, 0};
 static swig_type_info _swigt__p_PRIMITIVE_TYPES = {"_p_PRIMITIVE_TYPES", "PRIMITIVE_TYPES *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_PackageManager = {"_p_PackageManager", "PackageManager *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_PhysicsContext = {"_p_PhysicsContext", "PhysicsContext *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_PostProcessor = {"_p_PostProcessor", "PostProcessor *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Renderer = {"_p_Renderer", "Renderer *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_RendererManager = {"_p_RendererManager", "RendererManager *", 0, 0, (void*)0, 0};
@@ -26802,7 +30505,6 @@ static swig_type_info _swigt__p_SkinData = {"_p_SkinData", "SkinData *", 0, 0, (
 static swig_type_info _swigt__p_Skybox = {"_p_Skybox", "Skybox *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_SoundContext = {"_p_SoundContext", "SoundContext *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_String = {"_p_String", "String *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_SystemContext = {"_p_SystemContext", "SystemContext *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_TEX_COMBINE_MODES = {"_p_TEX_COMBINE_MODES", "TEX_COMBINE_MODES *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_TEX_GEN_MODES = {"_p_TEX_GEN_MODES", "TEX_GEN_MODES *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Texture = {"_p_Texture", "Texture *", 0, 0, (void*)0, 0};
@@ -26834,7 +30536,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_FXRef,
   &_swigt__p_Font,
   &_swigt__p_Frustum,
-  &_swigt__p_InputContext,
   &_swigt__p_M_SHADER_TYPES,
   &_swigt__p_MaterialsAnim,
   &_swigt__p_MorphingData,
@@ -26845,6 +30546,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Neo__Box3d,
   &_swigt__p_Neo__Color,
   &_swigt__p_Neo__FontRef,
+  &_swigt__p_Neo__InputContext,
   &_swigt__p_Neo__Level,
   &_swigt__p_Neo__Material,
   &_swigt__p_Neo__MaterialDisplay,
@@ -26862,6 +30564,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Neo__OText,
   &_swigt__p_Neo__Object3d,
   &_swigt__p_Neo__PhysicsConstraint,
+  &_swigt__p_Neo__PhysicsContext,
   &_swigt__p_Neo__PhysicsProperties,
   &_swigt__p_Neo__Quaternion,
   &_swigt__p_Neo__Scene,
@@ -26869,6 +30572,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Neo__SoundRef,
   &_swigt__p_Neo__SubGame,
   &_swigt__p_Neo__SubMesh,
+  &_swigt__p_Neo__SystemContext,
   &_swigt__p_Neo__Texture,
   &_swigt__p_Neo__TexturePass,
   &_swigt__p_Neo__TextureRef,
@@ -26878,7 +30582,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Neo__Vector4,
   &_swigt__p_PRIMITIVE_TYPES,
   &_swigt__p_PackageManager,
-  &_swigt__p_PhysicsContext,
   &_swigt__p_PostProcessor,
   &_swigt__p_Renderer,
   &_swigt__p_RendererManager,
@@ -26888,7 +30591,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Skybox,
   &_swigt__p_SoundContext,
   &_swigt__p_String,
-  &_swigt__p_SystemContext,
   &_swigt__p_TEX_COMBINE_MODES,
   &_swigt__p_TEX_GEN_MODES,
   &_swigt__p_Texture,
@@ -26920,7 +30622,6 @@ static swig_cast_info _swigc__p_FXManager[] = {  {&_swigt__p_FXManager, 0, 0, 0}
 static swig_cast_info _swigc__p_FXRef[] = {  {&_swigt__p_FXRef, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Font[] = {  {&_swigt__p_Font, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Frustum[] = {  {&_swigt__p_Frustum, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_InputContext[] = {  {&_swigt__p_InputContext, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_M_SHADER_TYPES[] = {  {&_swigt__p_M_SHADER_TYPES, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_MaterialsAnim[] = {  {&_swigt__p_MaterialsAnim, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_MorphingData[] = {  {&_swigt__p_MorphingData, 0, 0, 0},{0, 0, 0, 0}};
@@ -26931,6 +30632,7 @@ static swig_cast_info _swigc__p_Neo__ArmatureAnimRef[] = {  {&_swigt__p_Neo__Arm
 static swig_cast_info _swigc__p_Neo__Box3d[] = {  {&_swigt__p_Neo__Box3d, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Color[] = {  {&_swigt__p_Neo__Color, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__FontRef[] = {  {&_swigt__p_Neo__FontRef, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo__InputContext[] = {  {&_swigt__p_Neo__InputContext, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Level[] = {  {&_swigt__p_Neo__Level, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Material[] = {  {&_swigt__p_Neo__Material, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__MaterialDisplay[] = {  {&_swigt__p_Neo__MaterialDisplay, 0, 0, 0},{0, 0, 0, 0}};
@@ -26948,6 +30650,7 @@ static swig_cast_info _swigc__p_Neo__OSound[] = {  {&_swigt__p_Neo__OSound, 0, 0
 static swig_cast_info _swigc__p_Neo__OText[] = {  {&_swigt__p_Neo__OText, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Object3d[] = {  {&_swigt__p_Neo__OLight, _p_Neo__OLightTo_p_Neo__Object3d, 0, 0},  {&_swigt__p_Neo__OSound, _p_Neo__OSoundTo_p_Neo__Object3d, 0, 0},  {&_swigt__p_Neo__Object3d, 0, 0, 0},  {&_swigt__p_Neo__OEntity, _p_Neo__OEntityTo_p_Neo__Object3d, 0, 0},  {&_swigt__p_Neo__OText, _p_Neo__OTextTo_p_Neo__Object3d, 0, 0},  {&_swigt__p_Neo__OCamera, _p_Neo__OCameraTo_p_Neo__Object3d, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__PhysicsConstraint[] = {  {&_swigt__p_Neo__PhysicsConstraint, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo__PhysicsContext[] = {  {&_swigt__p_Neo__PhysicsContext, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__PhysicsProperties[] = {  {&_swigt__p_Neo__PhysicsProperties, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Quaternion[] = {  {&_swigt__p_Neo__Quaternion, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Scene[] = {  {&_swigt__p_Neo__Scene, 0, 0, 0},{0, 0, 0, 0}};
@@ -26955,6 +30658,7 @@ static swig_cast_info _swigc__p_Neo__ShaderRef[] = {  {&_swigt__p_Neo__ShaderRef
 static swig_cast_info _swigc__p_Neo__SoundRef[] = {  {&_swigt__p_Neo__SoundRef, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__SubGame[] = {  {&_swigt__p_Neo__SubGame, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__SubMesh[] = {  {&_swigt__p_Neo__SubMesh, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo__SystemContext[] = {  {&_swigt__p_Neo__SystemContext, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Texture[] = {  {&_swigt__p_Neo__Texture, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__TexturePass[] = {  {&_swigt__p_Neo__TexturePass, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__TextureRef[] = {  {&_swigt__p_Neo__TextureRef, 0, 0, 0},{0, 0, 0, 0}};
@@ -26964,7 +30668,6 @@ static swig_cast_info _swigc__p_Neo__Vector3[] = {  {&_swigt__p_Neo__Vector3, 0,
 static swig_cast_info _swigc__p_Neo__Vector4[] = {  {&_swigt__p_Neo__Vector4, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_PRIMITIVE_TYPES[] = {  {&_swigt__p_PRIMITIVE_TYPES, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_PackageManager[] = {  {&_swigt__p_PackageManager, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_PhysicsContext[] = {  {&_swigt__p_PhysicsContext, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_PostProcessor[] = {  {&_swigt__p_PostProcessor, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Renderer[] = {  {&_swigt__p_Renderer, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_RendererManager[] = {  {&_swigt__p_RendererManager, 0, 0, 0},{0, 0, 0, 0}};
@@ -26974,7 +30677,6 @@ static swig_cast_info _swigc__p_SkinData[] = {  {&_swigt__p_SkinData, 0, 0, 0},{
 static swig_cast_info _swigc__p_Skybox[] = {  {&_swigt__p_Skybox, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_SoundContext[] = {  {&_swigt__p_SoundContext, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_String[] = {  {&_swigt__p_String, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_SystemContext[] = {  {&_swigt__p_SystemContext, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_TEX_COMBINE_MODES[] = {  {&_swigt__p_TEX_COMBINE_MODES, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_TEX_GEN_MODES[] = {  {&_swigt__p_TEX_GEN_MODES, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Texture[] = {  {&_swigt__p_Texture, 0, 0, 0},{0, 0, 0, 0}};
@@ -27006,7 +30708,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_FXRef,
   _swigc__p_Font,
   _swigc__p_Frustum,
-  _swigc__p_InputContext,
   _swigc__p_M_SHADER_TYPES,
   _swigc__p_MaterialsAnim,
   _swigc__p_MorphingData,
@@ -27017,6 +30718,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Neo__Box3d,
   _swigc__p_Neo__Color,
   _swigc__p_Neo__FontRef,
+  _swigc__p_Neo__InputContext,
   _swigc__p_Neo__Level,
   _swigc__p_Neo__Material,
   _swigc__p_Neo__MaterialDisplay,
@@ -27034,6 +30736,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Neo__OText,
   _swigc__p_Neo__Object3d,
   _swigc__p_Neo__PhysicsConstraint,
+  _swigc__p_Neo__PhysicsContext,
   _swigc__p_Neo__PhysicsProperties,
   _swigc__p_Neo__Quaternion,
   _swigc__p_Neo__Scene,
@@ -27041,6 +30744,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Neo__SoundRef,
   _swigc__p_Neo__SubGame,
   _swigc__p_Neo__SubMesh,
+  _swigc__p_Neo__SystemContext,
   _swigc__p_Neo__Texture,
   _swigc__p_Neo__TexturePass,
   _swigc__p_Neo__TextureRef,
@@ -27050,7 +30754,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Neo__Vector4,
   _swigc__p_PRIMITIVE_TYPES,
   _swigc__p_PackageManager,
-  _swigc__p_PhysicsContext,
   _swigc__p_PostProcessor,
   _swigc__p_Renderer,
   _swigc__p_RendererManager,
@@ -27060,7 +30763,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Skybox,
   _swigc__p_SoundContext,
   _swigc__p_String,
-  _swigc__p_SystemContext,
   _swigc__p_TEX_COMBINE_MODES,
   _swigc__p_TEX_GEN_MODES,
   _swigc__p_Texture,

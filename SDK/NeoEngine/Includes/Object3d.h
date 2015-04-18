@@ -217,6 +217,36 @@ public:
 	void setPosition(const Vector3& position);
 
 	/**
+	 * @brief Translates the object.
+	 *
+	 * If local is set to true the translation will happen relative to
+	 * the objects rotation.
+	 *
+	 * @param vec The direction to translate with.
+	 * @param local Sets the translation to local if true.
+	 */
+	inline void translate(const Vector3& vec, bool local = false)
+	{
+		m_position += (local) ? (vec + getTransformedVector(vec)) : vec;
+	}
+
+	/**
+	 * @brief Rotates the object.
+	 *
+	 * If local is set to true the rotation will happen relative to
+	 * the objects current rotation.
+	 *
+	 * @param axis The axis to rotate around.
+	 * @param angle The amount to rotate.
+	 * @param local Sets the rotation to local if true.
+	 */
+	inline void rotate(const Vector3& axis, float angle, bool local = false)
+	{
+		addAxisAngleRotation((local) ? (getInverseRotatedVector(axis)) : axis,
+							 angle);
+	}
+
+	/**
 	 * @brief Returns the transformed position directly from the internal matrix.
 	 * @return The transformed position.
 	 */
