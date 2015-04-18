@@ -51,7 +51,7 @@ using namespace Neo::Gui;
 GuiSystem::GuiSystem()
 {
 	m_canvasVector.push_back(Canvas::getInstance());
-	m_defaultFont = "fonts/default.ttf";
+	m_defaultFont = "assets/default.ttf";
 
 	setThemeDirectory("maps");
 	

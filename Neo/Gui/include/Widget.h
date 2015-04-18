@@ -95,7 +95,7 @@ protected:
 
 	/// The flip vector
 	Vector2 m_flip;
-
+	float m_fontSize;
 private:
 	/**
 	 * @brief Does nothing.
@@ -115,6 +115,9 @@ public:
 	Widget(unsigned int x, unsigned int y, unsigned int width,
 		   unsigned int height, const char* label);
 	Widget();
+
+	float getFontSize() { return m_fontSize; }
+	void setFontSize(float s) { m_fontSize = s; }
 
 	/**
 	 * @brief Draws the widget to the canvas it belongs to.

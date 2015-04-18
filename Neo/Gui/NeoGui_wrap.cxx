@@ -3184,6 +3184,56 @@ static swig_lua_class *swig_Neo_Vector2_bases[] = {0};
 static const char *swig_Neo_Vector2_base_names[] = {0};
 static swig_lua_class _wrap_class_Neo_Vector2 = { "Vector2", &SWIGTYPE_p_Neo__Vector2,_wrap_new_Vector2, swig_delete_Vector2, swig_Neo_Vector2_methods, swig_Neo_Vector2_attributes, { "Vector2", swig_Neo_Vector2_cls_methods, swig_Neo_Vector2_cls_attributes, swig_Neo_Vector2_cls_constants }, swig_Neo_Vector2_bases, swig_Neo_Vector2_base_names };
 
+static int _wrap_Widget_getFontSize(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  float result;
+  
+  SWIG_check_num_args("Neo::Gui::Widget::getFontSize",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::getFontSize",1,"Neo::Gui::Widget *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
+    SWIG_fail_ptr("Widget_getFontSize",1,SWIGTYPE_p_Neo__Gui__Widget);
+  }
+  
+  result = (float)(arg1)->getFontSize();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Widget_setFontSize(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  float arg2 ;
+  
+  SWIG_check_num_args("Neo::Gui::Widget::setFontSize",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::setFontSize",1,"Neo::Gui::Widget *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::Widget::setFontSize",2,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
+    SWIG_fail_ptr("Widget_setFontSize",1,SWIGTYPE_p_Neo__Gui__Widget);
+  }
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  (arg1)->setFontSize(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_Widget_draw__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
   Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
@@ -3961,6 +4011,8 @@ Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) obj;
 delete arg1;
 }
 static swig_lua_method swig_Neo_Gui_Widget_methods[] = {
+    {"getFontSize", _wrap_Widget_getFontSize}, 
+    {"setFontSize", _wrap_Widget_setFontSize}, 
     {"draw", _wrap_Widget_draw}, 
     {"update", _wrap_Widget_update}, 
     {"setScriptCallback", _wrap_Widget_setScriptCallback}, 
