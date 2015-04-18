@@ -25223,6 +25223,146 @@ static int _wrap_new_OEntity(lua_State* L) {
 }
 
 
+static int _wrap_OEntity_enablePhysics__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::OEntity *arg1 = (Neo::OEntity *) 0 ;
+  Neo::Scene *arg2 = (Neo::Scene *) 0 ;
+  Neo::PhysicsProperties *result = 0 ;
+  
+  SWIG_check_num_args("Neo::OEntity::enablePhysics",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::OEntity::enablePhysics",1,"Neo::OEntity *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::OEntity::enablePhysics",2,"Neo::Scene *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__OEntity,0))){
+    SWIG_fail_ptr("OEntity_enablePhysics",1,SWIGTYPE_p_Neo__OEntity);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Scene,0))){
+    SWIG_fail_ptr("OEntity_enablePhysics",2,SWIGTYPE_p_Neo__Scene);
+  }
+  
+  result = (Neo::PhysicsProperties *)(arg1)->enablePhysics(arg2);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__PhysicsProperties,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_OEntity_enablePhysics__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::OEntity *arg1 = (Neo::OEntity *) 0 ;
+  Neo::PhysicsProperties *result = 0 ;
+  
+  SWIG_check_num_args("Neo::OEntity::enablePhysics",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::OEntity::enablePhysics",1,"Neo::OEntity *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__OEntity,0))){
+    SWIG_fail_ptr("OEntity_enablePhysics",1,SWIGTYPE_p_Neo__OEntity);
+  }
+  
+  result = (Neo::PhysicsProperties *)(arg1)->enablePhysics();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__PhysicsProperties,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_OEntity_enablePhysics(lua_State* L) {
+  int argc;
+  int argv[3]={
+    1,2,3
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 1) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__OEntity, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      return _wrap_OEntity_enablePhysics__SWIG_1(L);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__OEntity, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Neo__Scene, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        return _wrap_OEntity_enablePhysics__SWIG_0(L);
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'OEntity_enablePhysics'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::OEntity::enablePhysics(Neo::Scene *)\n"
+    "    Neo::OEntity::enablePhysics()\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_OEntity_isColliding(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::OEntity *arg1 = (Neo::OEntity *) 0 ;
+  Neo::OEntity *arg2 = (Neo::OEntity *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo::OEntity::isColliding",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::OEntity::isColliding",1,"Neo::OEntity *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::OEntity::isColliding",2,"Neo::OEntity *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__OEntity,0))){
+    SWIG_fail_ptr("OEntity_isColliding",1,SWIGTYPE_p_Neo__OEntity);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__OEntity,0))){
+    SWIG_fail_ptr("OEntity_isColliding",2,SWIGTYPE_p_Neo__OEntity);
+  }
+  
+  result = (bool)(arg1)->isColliding(arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_OEntity_enableOccluder(lua_State* L) {
   int SWIG_arg = 0;
   Neo::OEntity *arg1 = (Neo::OEntity *) 0 ;
@@ -25829,6 +25969,8 @@ Neo::OEntity *arg1 = (Neo::OEntity *) obj;
 delete arg1;
 }
 static swig_lua_method swig_Neo_OEntity_methods[] = {
+    {"enablePhysics", _wrap_OEntity_enablePhysics}, 
+    {"isColliding", _wrap_OEntity_isColliding}, 
     {"enableOccluder", _wrap_OEntity_enableOccluder}, 
     {"isOccluder", _wrap_OEntity_isOccluder}, 
     {"getType", _wrap_OEntity_getType}, 

@@ -136,6 +136,32 @@ OEntity::~OEntity(void)
 	Object3d::clearObject3d();
 }
 
+PhysicsProperties* OEntity::enablePhysics(Scene *scene)
+{
+	PhysicsContext* physics = NeoEngine::getInstance()->getPhysicsContext();
+	PhysicsProperties* phys =
+		(m_physicsProperties) ? m_physicsProperties : createPhysicsProperties();
+
+	updateMatrix();
+	scene->prepareCollisionShape(this);
+	scene->prepareCollisionObject(this);
+
+	return phys;
+}
+
+PhysicsProperties* OEntity::enablePhysics()
+{
+	return enablePhysics(
+		NeoEngine::getInstance()->getLevel()->getCurrentScene());
+}
+
+bool OEntity::isColliding(OEntity* entity)
+{
+	PhysicsContext* physics = NeoEngine::getInstance()->getPhysicsContext();
+	return physics->isObjectsCollision(m_physicsProperties->getCollisionObjectId(),
+									   entity->getPhysicsProperties()->getCollisionObjectId());
+}
+
 void OEntity::changeAnimation(unsigned int animationId)
 {
 	Mesh * mesh = getMesh();

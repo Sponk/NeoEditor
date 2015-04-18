@@ -180,6 +180,32 @@ private:
 
 public:
 	/**
+	 * @brief Sets up the OEntity to become a physical active object
+	 * in the given scene.
+	 *
+	 * @param scene The scene the object operates in.
+	 * @return The new PhysicsProperties of the object.
+	 */
+	PhysicsProperties* enablePhysics(Scene *scene);
+	
+	/**
+	 * @brief Sets up the OEntity to become a physical active object
+	 * in the current scene.
+	 * @return The new PhysicsProperties of the object.
+	 * @see enablePhysics(Scene* scene)
+	 */
+	PhysicsProperties* enablePhysics();
+
+	/**
+	 * @brief Checks if the object is colliding with the other object.
+	 * @param entity The other object.
+	 * @return A boolean value.
+	 * @see enablePhysics
+	 * @see createPhysicsProperties
+	 */
+	bool isColliding(OEntity* entity);
+
+	/**
 	 * @brief Sets if this object is a occluder or not.
 	 *
 	 * An occluder is used by the renderer to do occlusion culling.
