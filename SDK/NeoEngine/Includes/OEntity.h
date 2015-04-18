@@ -206,6 +206,13 @@ public:
 	bool isColliding(OEntity* entity);
 
 	/**
+	 * @brief Checks if the object has any collision with any other object.
+	 * @return A boolean value.
+	 * @see isColliding(OEntity*)
+	 */
+	bool isColliding();
+
+	/**
 	 * @brief Sets if this object is a occluder or not.
 	 *
 	 * An occluder is used by the renderer to do occlusion culling.

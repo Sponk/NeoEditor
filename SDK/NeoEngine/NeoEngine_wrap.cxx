@@ -25332,7 +25332,7 @@ static int _wrap_OEntity_enablePhysics(lua_State* L) {
 }
 
 
-static int _wrap_OEntity_isColliding(lua_State* L) {
+static int _wrap_OEntity_isColliding__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
   Neo::OEntity *arg1 = (Neo::OEntity *) 0 ;
   Neo::OEntity *arg2 = (Neo::OEntity *) 0 ;
@@ -25360,6 +25360,84 @@ static int _wrap_OEntity_isColliding(lua_State* L) {
 fail:
   lua_error(L);
   return SWIG_arg;
+}
+
+
+static int _wrap_OEntity_isColliding__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::OEntity *arg1 = (Neo::OEntity *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo::OEntity::isColliding",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::OEntity::isColliding",1,"Neo::OEntity *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__OEntity,0))){
+    SWIG_fail_ptr("OEntity_isColliding",1,SWIGTYPE_p_Neo__OEntity);
+  }
+  
+  result = (bool)(arg1)->isColliding();
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_OEntity_isColliding(lua_State* L) {
+  int argc;
+  int argv[3]={
+    1,2,3
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 1) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__OEntity, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      return _wrap_OEntity_isColliding__SWIG_1(L);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__OEntity, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Neo__OEntity, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        return _wrap_OEntity_isColliding__SWIG_0(L);
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'OEntity_isColliding'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::OEntity::isColliding(Neo::OEntity *)\n"
+    "    Neo::OEntity::isColliding()\n");
+  lua_error(L);return 0;
 }
 
 

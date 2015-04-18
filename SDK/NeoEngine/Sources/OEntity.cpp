@@ -162,6 +162,13 @@ bool OEntity::isColliding(OEntity* entity)
 									   entity->getPhysicsProperties()->getCollisionObjectId());
 }
 
+bool OEntity::isColliding()
+{
+	PhysicsContext* physics = NeoEngine::getInstance()->getPhysicsContext();
+	return MIN(1, physics->isObjectInCollision(
+					  m_physicsProperties->getCollisionObjectId()));
+}
+
 void OEntity::changeAnimation(unsigned int animationId)
 {
 	Mesh * mesh = getMesh();
