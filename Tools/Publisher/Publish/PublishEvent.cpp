@@ -39,6 +39,7 @@ namespace Neo
 static string s_pubDir;
 static string s_dataDir;
 static string s_playerExecutable;
+static bool s_verbose = false;
 
 void setPlayerExecutable(const char* file)
 {
@@ -87,6 +88,11 @@ const char* getDataDir()
 		return getPubDir();
 
 	return s_dataDir.c_str();
+}
+
+void setVerbose(bool v)
+{
+	s_verbose = v;
 }
 
 Package openProjectPackage(const char* projName)
@@ -187,8 +193,8 @@ M_PUBLISH_PACKAGE_DIR(sounds)
 M_PUBLISH_PACKAGE_DIR(shaders)
 M_PUBLISH_PACKAGE_DIR(fonts)
 M_PUBLISH_PACKAGE_DIR(levels)*/
-M_PUBLISH_PACKAGE_DIR(assets);
-M_PUBLISH_DIR(plugins)
+//M_PUBLISH_PACKAGE_DIR(assets);
+//M_PUBLISH_DIR(plugins)
 
 // write and pack binary mesh files
 class PublishEventMeshsPackage : public PublishEvent
@@ -200,7 +206,7 @@ class PublishEventMeshsPackage : public PublishEvent
 		PackageManager* packageManager = engine->getPackageManager();
 
 		char directory[256], localFilename[256];
-		getGlobalFilename(directory, system->getWorkingDirectory(), "meshs");
+		getGlobalFilename(directory, system->getWorkingDirectory(), "assets");
 		vector<string> files;
 		readDirectory(directory, &files, 1, 1);
 
@@ -243,7 +249,8 @@ class PublishEventMeshsPackage : public PublishEvent
 				if(engine->getTexturesAnimLoader()->loadData(files[i].c_str(), texAnim))
 					binarized = exportTexturesAnimBin((files[i] + "._bin").c_str(), texAnim);
 			}
-			else
+			else if (strstr(files[i].c_str(), ".dae") != 0 || strstr(files[i].c_str(), ".dae") != 0
+						|| strstr(files[i].c_str(), ".3ds") != 0 || strstr(files[i].c_str(), ".fbx") != 0)
 			{				
 				// try to export unknow format
 				if(engine->getMeshLoader()->loadData(files[i].c_str(), mesh))
@@ -268,10 +275,12 @@ class PublishEventMeshsPackage : public PublishEvent
 			// pack file
 			getLocalFilename(localFilename, system->getWorkingDirectory(), files[i].c_str());
 			
-			if(binarized)
-				packageManager->addFileToPackage((files[i] + "._bin").c_str(), package, localFilename); // pack bin file
-			else
-				packageManager->addFileToPackage(files[i].c_str(), package, localFilename); // pack original file
+			if(s_verbose)
+			{
+				MLOG_INFO("Packaging file: " << files[i]);
+			}
+
+			packageManager->addFileToPackage((files[i] + ((binarized) ? "._bin" : "")).c_str(), package, localFilename);
 		}
 		packageManager->closePackage(package);
 

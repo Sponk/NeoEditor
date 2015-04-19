@@ -69,5 +69,6 @@ static eventName##AutoAdd s_##eventName
 void setPubDir(const char* dir);
 
 void setPlayerExecutable(const char* file);
+void setVerbose(bool v);
 }
 #endif /*__M_PUBLISH_EVENT_H__*/

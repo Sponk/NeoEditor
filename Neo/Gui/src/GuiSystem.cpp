@@ -53,7 +53,7 @@ GuiSystem::GuiSystem()
 	m_canvasVector.push_back(Canvas::getInstance());
 	m_defaultFont = "assets/default.ttf";
 
-	setThemeDirectory("maps");
+	setThemeDirectory("assets");
 	
 	m_defaultFontSize = 12.0;
 	m_normalBackground = Vector4(0.5, 0.5, 0.5, 1.0);

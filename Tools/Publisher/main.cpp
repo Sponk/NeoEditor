@@ -45,6 +45,7 @@ struct Settings
 	string startLevel;
 	string player;
 	bool printHelp;
+	bool verbose;
 };
 
 Settings parseOpt(int argc, char* argv[])
@@ -57,6 +58,7 @@ Settings parseOpt(int argc, char* argv[])
 	}
 
 	s.printHelp = false;
+	s.verbose = false;
 
 #ifndef WIN32
 	s.outputDirectory = "./published";
@@ -96,6 +98,12 @@ Settings parseOpt(int argc, char* argv[])
 			s.player = argv[i];
 		}
 
+		else if (arg == "-v")
+		{
+			s.verbose = true;
+			return s;
+		}
+
 		else if (arg == "-h")
 		{
 			s.printHelp = true;
@@ -122,6 +130,7 @@ void printHelp()
 	cout << "\t\t-s\tStart level. Defaults to the one specified in the project "
 			"file." << endl;
 	cout << "\t\t-p\tThe executable player file. This is crossplatform." << endl;
+	cout << "\t\t-v\tMakes the tool verbose." << endl;
 	cout << "\t\t-h\tPrint this help." << endl;
 	cout << "This tool has puffin powers!" << endl;
 }
@@ -216,9 +225,12 @@ int main(int argc, char* argv[])
 	if(!loadProject(s))
 		return 1;
 
-	cout << "Publishing from: " << s.inputProject << endl;
-	cout << "Publishing to: " << s.outputDirectory << endl;
-	cout << "Using player: " << s.player << endl;
+	if(s.verbose)
+	{
+		cout << "Publishing from: " << s.inputProject << endl;
+		cout << "Publishing to: " << s.outputDirectory << endl;
+		cout << "Using player: " << s.player << endl;
+	}
 
 	string workingDirectory = s.outputDirectory;
 	if(int idx = workingDirectory.find_last_of(SEPERATOR))
@@ -235,7 +247,7 @@ int main(int argc, char* argv[])
     
 	Publisher* publisher = Publisher::getInstance();
 	publisher->publish(s.inputProject.c_str(), s.outputDirectory.c_str(),
-					   s.player.c_str());
+					   s.player.c_str(), s.verbose);
 
 	cout << "Project was successfully published!" << endl;
 	return 0;

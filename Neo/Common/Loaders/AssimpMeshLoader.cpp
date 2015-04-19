@@ -714,8 +714,7 @@ bool M_loadAssimpMesh(const char * filename, void * data)
 		return false;
 
 	if(! scene->mRootNode)
-		return false;
-	
+		return false;	
 	
 	// post process
 	unsigned int ppFlags = 

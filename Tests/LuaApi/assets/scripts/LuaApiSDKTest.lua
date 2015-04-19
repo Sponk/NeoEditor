@@ -4,10 +4,10 @@ dofile("luaunit.lua")
 
 loadCameraSkybox(getCurrentCamera(), "")
 
-local sprite = Sprite(0,0,70,70,"maps/neo-icon.png")
+local sprite = Sprite(0,0,70,70,"assets/maps/neo-icon.png")
 mainCanvas:addWidget(sprite)
 
-local spriteSheet = SpriteSheet("maps/p1_spritesheet.png", 72, 97, 1)
+local spriteSheet = SpriteSheet("assets/maps/p1_spritesheet.png", 72, 97, 1)
 local tile = Tile(100,100,72,97,spriteSheet,0,0)
 
 mainCanvas:addWidget(tile)
@@ -50,7 +50,7 @@ mainCanvas:addWidget(themedButton)
 local spriteBatch = SpriteBatch()
 mainCanvas:addBatch(spriteBatch)
 
-local bsprite = spriteBatch:createSprite("maps/neo-icon.png")
+local bsprite = spriteBatch:createSprite("assets/maps/neo-icon.png")
 bsprite:translate(100, 0)
 bsprite:update()
 

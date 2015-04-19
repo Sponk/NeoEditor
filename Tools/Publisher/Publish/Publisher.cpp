@@ -56,10 +56,11 @@ void Publisher::addEvent(PublishEvent* pubEvent)
 
 }
 
-void Publisher::publish(const char* projName, const char* dest, const char* exec)
+void Publisher::publish(const char* projName, const char* dest, const char* exec, bool verbose)
 {
 	setPubDir(dest);
 	setPlayerExecutable(exec);
+	setVerbose(verbose);
 
 	if(!isFileExist(dest))
 		createDirectory(dest);

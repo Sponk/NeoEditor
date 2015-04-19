@@ -41,7 +41,7 @@
 				clippingFar="1000.000000"
 				fog="false"
 				fogDistance="0.000000"
-				skyboxTextures="maps/skybox" />
+				skyboxTextures="assets/maps/skybox" />
 		</Camera>
 		<Entity name="Cube" file="../meshs/box.mesh">
 			<BoundingBox min="-5.677568 -5.677569 -5.677566" max="5.677569 5.677568 5.677566" />

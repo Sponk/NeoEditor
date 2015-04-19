@@ -53,7 +53,7 @@ public:
 	}
 	
 	void addEvent(PublishEvent* pubEvent);
-	void publish(const char* projName, const char* dest, const char* exec);
+	void publish(const char* projName, const char* dest, const char* exec, bool verbose);
 };
 }
 #endif /*__PUBLISHER_H__*/
