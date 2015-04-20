@@ -53,13 +53,16 @@ class Label : public Widget
 {
 protected:
 	OText* m_labelText;
+	TEXT_ALIGN_MODES m_alignment;
 
 public:
 	Label(unsigned int x, unsigned int y, unsigned int width,
 		  unsigned int height, const char* label)
-		: Widget(x, y, width, height, label), m_labelText(NULL)
+		: Widget(x, y, width, height, label), m_labelText(NULL), m_alignment(TEXT_ALIGN_LEFT)
 	{
 	}
+
+	void setAlignment(int mode) { m_alignment = (Neo::TEXT_ALIGN_MODES) mode; }
 
 	void draw();
 	void draw(Vector2 offset) { draw(); }

@@ -50,7 +50,7 @@ void Label::draw()
 	{
 		m_labelText = render->createText(gui->getDefaultFont(),
 										 m_fontSize);
-		m_labelText->setAlign(TEXT_ALIGN_LEFT);
+		m_labelText->setAlign(m_alignment);
 	}
 
 	m_labelText->setText(m_label.c_str());

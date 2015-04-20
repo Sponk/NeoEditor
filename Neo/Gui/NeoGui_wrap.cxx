@@ -6634,6 +6634,32 @@ fail:
 }
 
 
+static int _wrap_Label_setAlignment(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  int arg2 ;
+  
+  SWIG_check_num_args("Neo::Gui::Label::setAlignment",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Label::setAlignment",1,"Neo::Gui::Label *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::Label::setAlignment",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Label,0))){
+    SWIG_fail_ptr("Label_setAlignment",1,SWIGTYPE_p_Neo__Gui__Label);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  (arg1)->setAlignment(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_Label_draw__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
   Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
@@ -6771,6 +6797,7 @@ Neo::Gui::Label *arg1 = (Neo::Gui::Label *) obj;
 delete arg1;
 }
 static swig_lua_method swig_Neo_Gui_Label_methods[] = {
+    {"setAlignment", _wrap_Label_setAlignment}, 
     {"draw", _wrap_Label_draw}, 
     {"update", _wrap_Label_update}, 
     {0,0}
