@@ -1875,12 +1875,13 @@ SWIG_Lua_dostring(lua_State *L, const char* str) {
 #define SWIGTYPE_p_Neo__Gui__Widget swig_types[10]
 #define SWIGTYPE_p_Neo__Vector2 swig_types[11]
 #define SWIGTYPE_p_ScriptContext swig_types[12]
-#define SWIGTYPE_p_Vector3 swig_types[13]
-#define SWIGTYPE_p_Vector4 swig_types[14]
-#define SWIGTYPE_p_f_p_Neo__Gui__Widget_long__void swig_types[15]
-#define SWIGTYPE_p_float swig_types[16]
-static swig_type_info *swig_types[18];
-static swig_module_info swig_module = {swig_types, 17, 0, 0, 0, 0};
+#define SWIGTYPE_p_TEXT_ALIGN_MODES swig_types[13]
+#define SWIGTYPE_p_Vector3 swig_types[14]
+#define SWIGTYPE_p_Vector4 swig_types[15]
+#define SWIGTYPE_p_f_p_Neo__Gui__Widget_long__void swig_types[16]
+#define SWIGTYPE_p_float swig_types[17]
+static swig_type_info *swig_types[19];
+static swig_module_info swig_module = {swig_types, 18, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -6658,6 +6659,83 @@ fail:
 }
 
 
+static int _wrap_Label_getAlignment(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  TEXT_ALIGN_MODES result;
+  
+  SWIG_check_num_args("Neo::Gui::Label::getAlignment",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Label::getAlignment",1,"Neo::Gui::Label *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Label,0))){
+    SWIG_fail_ptr("Label_getAlignment",1,SWIGTYPE_p_Neo__Gui__Label);
+  }
+  
+  result = (arg1)->getAlignment();
+  {
+    TEXT_ALIGN_MODES * resultptr = new TEXT_ALIGN_MODES((const TEXT_ALIGN_MODES &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_TEXT_ALIGN_MODES,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Label_setFont(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  char *arg2 = (char *) 0 ;
+  
+  SWIG_check_num_args("Neo::Gui::Label::setFont",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Label::setFont",1,"Neo::Gui::Label *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::Gui::Label::setFont",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Label,0))){
+    SWIG_fail_ptr("Label_setFont",1,SWIGTYPE_p_Neo__Gui__Label);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  (arg1)->setFont((char const *)arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Label_getFont(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("Neo::Gui::Label::getFont",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Label::getFont",1,"Neo::Gui::Label *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Label,0))){
+    SWIG_fail_ptr("Label_getFont",1,SWIGTYPE_p_Neo__Gui__Label);
+  }
+  
+  result = (char *)(arg1)->getFont();
+  lua_pushstring(L,(const char *)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_Label_draw__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
   Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
@@ -6796,6 +6874,9 @@ delete arg1;
 }
 static swig_lua_method swig_Neo_Gui_Label_methods[] = {
     {"setAlignment", _wrap_Label_setAlignment}, 
+    {"getAlignment", _wrap_Label_getAlignment}, 
+    {"setFont", _wrap_Label_setFont}, 
+    {"getFont", _wrap_Label_getFont}, 
     {"draw", _wrap_Label_draw}, 
     {"update", _wrap_Label_update}, 
     {0,0}
@@ -6877,6 +6958,7 @@ static swig_type_info _swigt__p_Neo__Gui__TileSheet = {"_p_Neo__Gui__TileSheet",
 static swig_type_info _swigt__p_Neo__Gui__Widget = {"_p_Neo__Gui__Widget", "Neo::Gui::Widget *", 0, 0, (void*)&_wrap_class_Neo_Gui_Widget, 0};
 static swig_type_info _swigt__p_Neo__Vector2 = {"_p_Neo__Vector2", "Neo::Vector2 *", 0, 0, (void*)&_wrap_class_Neo_Vector2, 0};
 static swig_type_info _swigt__p_ScriptContext = {"_p_ScriptContext", "ScriptContext *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_TEXT_ALIGN_MODES = {"_p_TEXT_ALIGN_MODES", "TEXT_ALIGN_MODES *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Vector3 = {"_p_Vector3", "Vector3 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Vector4 = {"_p_Vector4", "Vector4 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_f_p_Neo__Gui__Widget_long__void = {"_p_f_p_Neo__Gui__Widget_long__void", "void (*)(Neo::Gui::Widget *,long)|Neo::Gui::CALLBACK_FUNCTION", 0, 0, (void*)0, 0};
@@ -6896,6 +6978,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Neo__Gui__Widget,
   &_swigt__p_Neo__Vector2,
   &_swigt__p_ScriptContext,
+  &_swigt__p_TEXT_ALIGN_MODES,
   &_swigt__p_Vector3,
   &_swigt__p_Vector4,
   &_swigt__p_f_p_Neo__Gui__Widget_long__void,
@@ -6915,6 +6998,7 @@ static swig_cast_info _swigc__p_Neo__Gui__TileSheet[] = {  {&_swigt__p_Neo__Gui_
 static swig_cast_info _swigc__p_Neo__Gui__Widget[] = {  {&_swigt__p_Neo__Gui__Label, _p_Neo__Gui__LabelTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__Tile, _p_Neo__Gui__TileTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__ThemedButton, _p_Neo__Gui__ThemedButtonTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__Button, _p_Neo__Gui__ButtonTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__Sprite, _p_Neo__Gui__SpriteTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__InputField, _p_Neo__Gui__InputFieldTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__Widget, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Vector2[] = {  {&_swigt__p_Neo__Vector2, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ScriptContext[] = {  {&_swigt__p_ScriptContext, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_TEXT_ALIGN_MODES[] = {  {&_swigt__p_TEXT_ALIGN_MODES, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Vector3[] = {  {&_swigt__p_Vector3, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Vector4[] = {  {&_swigt__p_Vector4, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_Neo__Gui__Widget_long__void[] = {  {&_swigt__p_f_p_Neo__Gui__Widget_long__void, 0, 0, 0},{0, 0, 0, 0}};
@@ -6934,6 +7018,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Neo__Gui__Widget,
   _swigc__p_Neo__Vector2,
   _swigc__p_ScriptContext,
+  _swigc__p_TEXT_ALIGN_MODES,
   _swigc__p_Vector3,
   _swigc__p_Vector4,
   _swigc__p_f_p_Neo__Gui__Widget_long__void,

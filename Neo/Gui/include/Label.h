@@ -54,15 +54,45 @@ class Label : public Widget
 protected:
 	OText* m_labelText;
 	TEXT_ALIGN_MODES m_alignment;
+	String m_font;
 
 public:
 	Label(unsigned int x, unsigned int y, unsigned int width,
 		  unsigned int height, const char* label)
-		: Widget(x, y, width, height, label), m_labelText(NULL), m_alignment(TEXT_ALIGN_LEFT)
+		: Widget(x, y, width, height, label), m_labelText(NULL), m_alignment(TEXT_ALIGN_LEFT), m_font("assets/default.ttf")
 	{
 	}
 
+	/**
+	 * @brief Changes the text alignment.
+	 * 
+	 * Defaults to TEXT_ALIGN_LEFT.
+	 * @param mode The align mode.
+	 */
 	void setAlignment(int mode) { m_alignment = (Neo::TEXT_ALIGN_MODES) mode; }
+
+	/**
+	 * @brief Returns the current align mode.
+	 * @return The align mode.
+	 * @see setAlignment
+	 */
+	TEXT_ALIGN_MODES getAlignment() { return m_alignment; }
+
+	/**
+	 * @brief Changes the font used to display text.
+	 *
+	 * The font file will be loaded in the first draw call and thus can't be
+	 * changed for now. Defaults to "assets/default.ttf".
+	 * @param file The font file to load.
+	 */
+	void setFont(const char* file) { m_font = file; }
+	
+	/**
+	 * @brief Returns the path to the currently used font file.
+	 * @return The font file.
+	 * @see setFont
+	 */
+	const char* getFont() { return m_font.getSafeString(); }
 
 	void draw();
 	void draw(Vector2 offset) { draw(); }
