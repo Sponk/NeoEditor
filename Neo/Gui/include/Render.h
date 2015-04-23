@@ -47,7 +47,7 @@ namespace Gui
  *
  * All elements can be rendered directly to the screen or to a texture.
  *
- * @bug Should be implemented in MRenderingContext!
+ * @bug Should be implemented in Neo::RenderingContext!
  *
  * @author Yannick Pflanzer
  */

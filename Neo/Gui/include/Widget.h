@@ -122,7 +122,7 @@ public:
 	/**
 	 * @brief Draws the widget to the canvas it belongs to.
 	 * @see Canvas
-	 * @see draw(MVector2 offset)
+	 * @see draw(Vector2 offset)
 	 */
 	virtual void draw() { draw(Vector2(0, 0)); }
 
