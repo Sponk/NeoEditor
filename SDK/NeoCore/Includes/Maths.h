@@ -70,7 +70,9 @@ NEO_CORE_EXPORT unsigned int getNextPowerOfTwo(unsigned int x);
 NEO_CORE_EXPORT float loopFloat(float val, float min, float max);
 
 
-// structs
+/**
+ * @brief Implements a range data structure.
+ */
 struct NEO_CORE_EXPORT Range
 {
 	int start;

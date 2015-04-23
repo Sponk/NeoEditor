@@ -2414,6 +2414,7 @@ void play_game_in_editor(Fl_Button* button, void*)
 	// Quit the game
 	if (game->isRunning())
 	{
+		Neo::Gui::GuiSystem::getInstance()->clear();
 		game->end();
 		return;
 	}

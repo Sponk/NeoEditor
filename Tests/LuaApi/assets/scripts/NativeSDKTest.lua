@@ -3,13 +3,13 @@ require("NeoGui")
 local gui = NeoGui.GuiSystem.getInstance()
 gui:setEnabled(true)
 
-local button = NeoGui.ThemedButton(100, 100, 300, 30, "This is a button!")
-local label = NeoGui.Label(100, 200, 0, 30, "This is a label!")
+button = NeoGui.ThemedButton(100, 100, 300, 30, "This is a button!")
+label = NeoGui.Label(100, 200, 0, 30, "This is a label!")
 
-local labelhandle = gui:addWidget(label)
-local buttonhandle = gui:addWidget(button)
+labelhandle = gui:addWidget(label)
+buttonhandle = gui:addWidget(button)
 
-local canvas = gui:getCanvas(0)
+canvas = gui:getCanvas(0)
 canvas:addWidget(buttonhandle)
 canvas:addWidget(labelhandle)
 

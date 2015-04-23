@@ -41,6 +41,12 @@
 #include <Canvas.h>
 #include <string>
 
+#ifdef SWIG
+#define DISOWN(a) %apply SWIGTYPE* DISOWN {a};
+#else
+#define DISOWN(a)
+#endif
+
 namespace Neo
 {
 namespace Gui
@@ -226,7 +232,7 @@ public:
 	 * @param The new widget.
 	 * @return The handle of the widget.
 	 */
-	int addWidget(Widget* w)
+    DISOWN(Widget* w) int addWidget(Widget* w)
 	{
 		WidgetId id;
 		id.w = w;
@@ -245,7 +251,7 @@ public:
 	 * @brief Adds a new Canvas to the update list.
 	 * @param c The new Canvas.
 	 */
-	void addCanvas(Canvas* c);
+    DISOWN(Canvas* c) void addCanvas(Canvas* c);
 
 	/**
 	 * @brief Returns the Canvas with the given index.

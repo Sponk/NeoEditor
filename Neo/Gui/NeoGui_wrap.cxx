@@ -5376,8 +5376,7 @@ static int _wrap_GuiSystem_addWidget(lua_State* L) {
     SWIG_fail_ptr("GuiSystem_addWidget",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
   }
   
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Gui__Widget,0))){
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Gui__Widget,SWIG_POINTER_DISOWN))){
     SWIG_fail_ptr("GuiSystem_addWidget",2,SWIGTYPE_p_Neo__Gui__Widget);
   }
   
@@ -5430,8 +5429,7 @@ static int _wrap_GuiSystem_addCanvas(lua_State* L) {
     SWIG_fail_ptr("GuiSystem_addCanvas",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
   }
   
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Gui__Canvas,0))){
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Gui__Canvas,SWIG_POINTER_DISOWN))){
     SWIG_fail_ptr("GuiSystem_addCanvas",2,SWIGTYPE_p_Neo__Gui__Canvas);
   }
   
