@@ -1,0 +1,84 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0303 
+header_name {.h} 
+code_name {.cxx}
+class MainWindow {open
+} {
+  decl {bool readyForFinish;} {private local
+  }
+  decl {int currentPage;} {private local
+  }
+  Function {create_window()} {open
+  } {
+    Fl_Window {} {
+      label {New Project} open
+      xywh {1837 295 630 370} type Double visible
+    } {
+      Fl_Wizard wizard {open selected
+        private xywh {140 0 490 445}
+      } {
+        Fl_Group {} {open
+          xywh {140 0 490 335}
+        } {
+          Fl_Group {} {
+            label General
+            xywh {150 25 470 295} box ENGRAVED_FRAME align 5
+          } {
+            Fl_Input project_name_edit {
+              label {Name:}
+              xywh {260 50 160 25}
+            }
+            Fl_Input project_directory_edit {
+              label {Directory:}
+              xywh {260 85 310 25}
+            }
+            Fl_Button {} {
+              label {...}
+              user_data this user_data_type {MainWindow*}
+              callback find_project_dir
+              xywh {575 85 25 25}
+            }
+            Fl_Choice game_type_choice {
+              label {Game Type:} open
+              xywh {260 120 70 25} down_box BORDER_BOX
+            } {
+              MenuItem {} {
+                label 2D
+                xywh {10 10 100 20}
+              }
+              MenuItem {} {
+                label 3D
+                xywh {10 10 100 20}
+              }
+            }
+          }
+        }
+      }
+      Fl_Button nextButton {
+        label Next
+        user_data this user_data_type {MainWindow*}
+        callback next_page
+        xywh {545 340 80 25}
+      }
+      Fl_Button prevButton {
+        label Back
+        user_data this user_data_type {MainWindow*}
+        callback prev_page
+        xywh {455 340 80 25} deactivate
+      }
+      Fl_Box {} {
+        image {../../Data/banner.png} xywh {0 0 140 370}
+      }
+    }
+    code {currentPage = 0;
+readyForFinish = true;} {}
+  }
+  Function {next_page(Fl_Button*, MainWindow*)} {open return_type {static void}
+  } {}
+  Function {prev_page(Fl_Button*, MainWindow*)} {open return_type {static void}
+  } {}
+  Function {find_project_dir(Fl_Button*, MainWindow*)} {open return_type {static void}
+  } {}
+  Function {generateProjectStructure(const char* path, const char* name, bool scene)} {open return_type {static const char*}
+  } {}
+} 
