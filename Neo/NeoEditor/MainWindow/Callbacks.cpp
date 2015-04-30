@@ -1493,6 +1493,8 @@ void save_level_callback(Fl_Menu_*, long mode)
 					return;
 
 				current_project.level = filename;
+				if(current_project.level.find(".level") == -1)
+					current_project.level += ".level";
 			}
 
 			EditorBackend::getInstance()->setCurrentLevel(
@@ -1510,6 +1512,11 @@ void save_level_callback(Fl_Menu_*, long mode)
 				return;
 
 			current_project.level = filename;
+
+			
+			if(current_project.level.find(".level") == -1)
+				current_project.level += ".level";
+
 			EditorBackend::getInstance()->setCurrentLevel(
 				current_project.level.c_str());
 
