@@ -82,3 +82,9 @@ INSTALL(TARGETS neo-editor DESTINATION ${NEO_INSTALL_DIR})
 
 add_custom_target(neo-editor-test "${NEO_BINARY_OUTPUT}/neo-editor" WORKING_DIRECTORY ${NEO_BINARY_OUTPUT})
 add_dependencies(neo-editor-test neo-editor)
+
+## Update needed translations
+if(UNIX)
+  add_custom_target(grep-translations-editor grep -o -r "\"tr(\\\".*\\\")\"" ./MainWindow > translations.txt
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+ENDIF()
