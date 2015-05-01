@@ -18,22 +18,48 @@
 //========================================================================
 
 #include "../MainWindow/Translator.h"
-
 #include <NeoEngine.h>
+#include <fstream>
+#include <sstream>
+
+using namespace std;
 
 const char* tr(const char* key)
 {
     return Translator::getInstance()->translate(key);
 }
 
-void Translator::loadTranslation(const char* file)
+void Translator::loadTranslation(const char* file, char delim)
 {
     if(!isFileExist(file))
 		return;
 
+	/*
     SAFE_DELETE(m_parser);
     m_parser = new INI::Parser(file);
+	*/
 
+	ifstream in(file);
+	if (!in)
+	{
+		MLOG_ERROR("Could not load translation!");
+		return;
+	}
+
+	m_phrases.clear();
+	
+	string line, key, value;
+	while(in)
+		{
+			getline(in, line);
+
+			stringstream ss(line);
+			getline(ss, key, delim);
+			getline(ss, value, delim);
+			
+			m_phrases[key] = value;
+		}
+	
 #ifndef WIN32
     const char* substr = strrchr(file, '/');
 #else
@@ -43,15 +69,12 @@ void Translator::loadTranslation(const char* file)
     if(substr == NULL)
         substr = file;
 
-    strcpy(m_langFile, ++substr);
+    m_langFile = ++substr;
 }
 
 const char* Translator::translate(const char* key)
 {
-    if(!m_parser)
-        return key;
-
-    std::string value = m_parser->top()("Keys")[key];
+    std::string value = m_phrases[key];
     if(value.empty())
         return key;
 

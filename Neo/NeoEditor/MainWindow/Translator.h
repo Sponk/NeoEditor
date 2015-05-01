@@ -21,21 +21,24 @@
 #define TRANSLATOR_H
 
 #include "../MainWindow/ini.h"
+#include <map>
+#include <string>
 
 const char* tr(const char* key);
 
 class Translator
 {
     INI::Parser* m_parser;
-    char m_langFile[255];
-
+	std::string m_langFile;
+	std::map<std::string, std::string> m_phrases;
+	
 public:
     static Translator* getInstance() { static Translator m_tr; return &m_tr; }
 
     Translator(): m_parser(NULL) {}
-    void loadTranslation(const char* file);
+    void loadTranslation(const char* file, char delim = ',');
     const char* translate(const char* key);
-    const char* getLanguageFile() { return m_langFile; }
+    const char* getLanguageFile() { return m_langFile.c_str(); }
 };
 
 #endif
