@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0302 
+version 1.0303 
 header_name {.h} 
 code_name {.cxx}
 decl {\#include <FL/fl_message.H>} {private local
@@ -8,7 +8,7 @@ decl {\#include <FL/fl_message.H>} {private local
 decl {\#include <FL/Fl_Native_File_Chooser.H>} {private local
 } 
 
-decl {\#include <MCore.h>} {private local
+decl {\#include <NeoCore.h>} {selected private local
 } 
 
 decl {\#include <string>} {public global
@@ -107,7 +107,7 @@ class MainWindow {open
       }
     }
   }
-  Function {open_neo_store(Fl_Button*, MainWindow* dlg)} {open selected return_type {static void}
+  Function {open_neo_store(Fl_Button*, MainWindow* dlg)} {open return_type {static void}
   } {}
   Function {update_package_list()} {open
   } {}
@@ -130,53 +130,5 @@ class MainWindow {open
   Function {copy_cpp_sdk(Fl_Button*, MainWindow* dlg)} {open return_type {static void}
   } {}
   Function {create_project(Fl_Button*, MainWindow* dlg)} {open return_type {static void}
-  } {}
-  Function {createNewProjectDlg()} {} {
-    Fl_Window {} {
-      label {New Project} open
-      xywh {2097 514 555 185} type Double modal visible
-    } {
-      Fl_Input project_name_edit {
-        label {Project Name:}
-        xywh {140 15 145 25}
-      }
-      Fl_Input project_directory_edit {
-        label {Project Directory:}
-        tooltip {Will create a directory with the same name as the project in here.} xywh {140 45 365 25}
-      }
-      Fl_Button {} {
-        label {...}
-        user_data this user_data_type {MainWindow*}
-        callback find_project_directory
-        xywh {510 45 30 25}
-      }
-      Fl_Check_Button install_lua_check {
-        label {Install Lua SDK}
-        xywh {140 85 145 25} down_box DOWN_BOX
-      }
-      Fl_Check_Button create_initial_scene_check {
-        label {Create initial scene}
-        xywh {140 110 165 25} down_box DOWN_BOX
-      }
-      Fl_Button {} {
-        label {Create Project}
-        user_data this user_data_type {MainWindow*}
-        callback generate_project
-        xywh {370 145 135 25}
-      }
-      Fl_Button {} {
-        label Cancel
-        callback cancel_np_dialog
-        xywh {140 145 135 25}
-      }
-    }
-  }
-  Function {find_project_directory(Fl_Button*, MainWindow* dlg)} {open return_type {static void}
-  } {}
-  Function {cancel_np_dialog(Fl_Button* btn, void* dlg)} {open return_type {static void}
-  } {}
-  Function {generateProjectStructure(const char* path, const char* name, bool lua, bool scene)} {open return_type {const char*}
-  } {}
-  Function {generate_project(Fl_Button* btn, MainWindow* dlg)} {open return_type {static void}
   } {}
 } 

@@ -35,7 +35,7 @@ INCLUDE_DIRECTORIES(
 )
 
 IF(${SWIG_FOUND})
-  MESSAGE("Generating Lua bindings for NeoGui")
+  MESSAGE("-- Generating Lua bindings for NeoGui")
 
   EXECUTE_PROCESS(
 	COMMAND ${SWIG_EXECUTABLE} -lua -c++ -I${NEO_CORE_INCLUDE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/NeoGui.i
@@ -50,14 +50,14 @@ IF(${SWIG_FOUND})
 	)
 
   IF(NOT ${SWIG_swiglib_result} EQUAL 0)
-	MESSAGE(SEND_ERROR "Generating Lua bindings for NeoGui failed with output:\n${SWIG_swiglib_error}")
+	MESSAGE(SEND_ERROR "-- Generating Lua bindings for NeoGui failed with output:\n${SWIG_swiglib_error}")
   ELSE()
 	SET(CMAKE_SHARED_LIBRARY_PREFIX "")
 	# ADD_LIBRARY(NeoGui SHARED NeoGui_wrap.cxx)
   ENDIF(NOT ${SWIG_swiglib_result} EQUAL 0)
 
 ELSE()
-  MESSAGE("Will NOT generate Lua bindings for NeoGui")
+  MESSAGE("-- Will NOT generate Lua bindings for NeoGui")
 ENDIF()
 
 ADD_LIBRARY(NeoGui SHARED ${SOURCES} ${HEADERS} NeoGui_wrap.cxx)

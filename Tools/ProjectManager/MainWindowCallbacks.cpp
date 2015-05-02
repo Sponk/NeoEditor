@@ -18,6 +18,32 @@ using namespace std;
 
 extern string currentDirectory;
 
+void executeBlocking(const char* cmd)
+{
+	// FIXME: Don't use system!!!
+#ifndef WIN32
+    system(cmd);
+#else
+    //ShellExecute(NULL, "open",
+    //			(currentDirectory + "\\NeoStore.exe").c_str(),
+    //			NULL,NULL, 1);
+
+    SHELLEXECUTEINFO ShExecInfo = {0};
+    ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
+    ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
+    ShExecInfo.hwnd = NULL;
+    ShExecInfo.lpVerb = NULL;
+    ShExecInfo.lpFile = cmd;
+    ShExecInfo.lpParameters = "";
+    ShExecInfo.lpDirectory = NULL;
+    ShExecInfo.nShow = SW_SHOW;
+    ShExecInfo.hInstApp = NULL;
+
+    ShellExecuteEx(&ShExecInfo);
+    WaitForSingleObject(ShExecInfo.hProcess,INFINITE);
+#endif
+}
+
 // FLTK helper
 const char* fl_native_file_chooser(const char* title, const char* files, const char* dir, int type)
 {
@@ -35,30 +61,13 @@ const char* fl_native_file_chooser(const char* title, const char* files, const c
 
 void MainWindow::open_neo_store(Fl_Button*, MainWindow* dlg)
 {
-    // FIXME: Don't use system!!!
 #ifndef WIN32
-    system("./NeoStore");
+	std::string path = currentDirectory + "/NeoStore";
 #else
-    //ShellExecute(NULL, "open",
-    //			(currentDirectory + "\\NeoStore.exe").c_str(),
-    //			NULL,NULL, 1);
-
     std::string path = currentDirectory + "\\NeoStore.exe";
-    SHELLEXECUTEINFO ShExecInfo = {0};
-    ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
-    ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
-    ShExecInfo.hwnd = NULL;
-    ShExecInfo.lpVerb = NULL;
-    ShExecInfo.lpFile = path.c_str();
-    ShExecInfo.lpParameters = "";
-    ShExecInfo.lpDirectory = NULL;
-    ShExecInfo.nShow = SW_SHOW;
-    ShExecInfo.hInstApp = NULL;
-
-    ShellExecuteEx(&ShExecInfo);
-    WaitForSingleObject(ShExecInfo.hProcess,INFINITE);
 #endif
 
+	executeBlocking(path.c_str());
     dlg->update_package_list();
 }
 
@@ -242,12 +251,13 @@ void MainWindow::saveProjectList()
     sep = '\\';
 #endif
 
-    for(std::map<std::string,std::string>::iterator iter = m_projects.begin(); iter != m_projects.end(); ++iter)
-    {
-        out << iter->second << sep << iter->first << endl;
-    }
+	for (std::map<std::string, std::string>::iterator iter = m_projects.begin();
+		 iter != m_projects.end(); ++iter)
+	{
+		out << iter->second << sep << iter->first << endl;
+	}
 
-    out.close();
+	out.close();
 }
 
 void MainWindow::addProject(const char* filepath)
@@ -345,154 +355,11 @@ void MainWindow::copy_cpp_sdk(Fl_Button*, MainWindow* dlg)
 
 void MainWindow::create_project(Fl_Button*, MainWindow* dlg)
 {
-    Fl_Window* win = dlg->createNewProjectDlg();
-    win->show();
-
-    while(win->shown())
-    {
-        Fl::check();
-    }
-}
-
-/////////////////////////////////////////////////////////////////
-//
-// New Project Dialog methods
-//
-/////////////////////////////////////////////////////////////////
-
-void MainWindow::find_project_directory(Fl_Button*, MainWindow* dlg)
-{
-    const char* homedir = NULL;
-
 #ifndef WIN32
-    homedir = getenv("HOME");
+	std::string path = currentDirectory + "/ProjectWizard";
+#else
+	std::string path = currentDirectory + "\\ProjectWizard";
 #endif
 
-
-    const char* projectFile = fl_native_file_chooser("Choose a project directory", NULL,
-                                                     homedir, Fl_Native_File_Chooser::BROWSE_DIRECTORY);
-
-
-    if(projectFile)
-        dlg->project_directory_edit->value(projectFile);
-}
-
-void MainWindow::cancel_np_dialog(Fl_Button* btn, void* dlg) {
-    btn->parent()->hide();
-}
-
-const char* MainWindow::generateProjectStructure(const char* path, const char* name, bool lua, bool scene)
-{
-    std::string p = path;
-    if(!createDirectory(path, true) ||
-            !createDirectory((p + "/fonts").c_str(), true) ||
-            !createDirectory((p + "/levels").c_str(), true) ||
-            !createDirectory((p + "/maps").c_str(), true) ||
-            !createDirectory((p + "/meshs").c_str(), true) ||
-            !createDirectory((p + "/scripts").c_str(), true) ||
-            !createDirectory((p + "/shaders").c_str(), true) ||
-            !createDirectory((p + "/sounds").c_str(), true))
-    {
-        fl_message("Could not create project directory!");
-        removeDirectory(path);
-        return NULL;
-    }
-
-    if(lua)
-    {
-        char src[255];
-        char dir[255];
-        getGlobalFilename(src, currentDirectory.c_str(), "LuaApi");
-        getGlobalFilename(dir, path, "scripts/SDK");
-
-        if(!copyDirectory(src, dir))
-        {
-            fl_message("Could not copy the Lua SDK!");
-            //removeDirectory(path);
-            //return;
-        }
-    }
-
-    std::string levelFile;
-    if(scene)
-    {
-        levelFile = std::string("levels/") + name + ".level";
-        string levelSystemPath = levelFile;
-
-#ifdef WIN32
-        replace(levelSystemPath.begin(), levelSystemPath.end(), '/', '\\');
-#endif
-
-        FILE* file = fopen(levelSystemPath.c_str(), "w");
-        if(!file)
-        {
-            fl_message("Could not create level!");
-            removeDirectory(path);
-            return NULL;
-        }
-
-        fprintf(file, "<Maratis version=\"3.1\">\n");
-        fprintf(file, "<Level><properties currentScene=\"0\"/>");
-        fprintf(file, "<Scene name=\"Scene-1\">");
-        fprintf(file, "<script file=\"\"");
-        fprintf(file, "<properties data=\"Static\" gravity=\"0.000000 0.000000 -0.981000\" "
-                      "ambientLight=\"0.0 0.0 0.0\"/></Scene></Level></Maratis>");
-
-        fclose(file);
-    }
-
-    std::string project_path = p+"/"+name+".mproj";
-
-#ifdef WIN32
-    replace(project_path.begin(), project_path.end(), '/', '\\');
-#endif
-
-    FILE* file = fopen(project_path.c_str(), "w");
-    if(!file)
-    {
-        fl_message("Could not create project file!");
-        removeDirectory(path);
-        return NULL;
-    }
-
-    fprintf(file, "<Maratis version=\"3.1\">\n");
-    fprintf(file, "<Project><renderer name=\"StandardRenderer\"/>"
-                  "<start file=\"%s\"/></Project></Maratis>", levelFile.c_str());
-
-    fclose(file);
-
-    return project_path.c_str();
-}
-
-void MainWindow::generate_project(Fl_Button* btn, MainWindow* dlg)
-{
-    std::string path = dlg->project_directory_edit->value();
-
-    if(path.empty())
-    {
-        fl_message("You need to select a project directory!");
-        return;
-    }
-
-    const char* name = dlg->project_name_edit->value();
-    if(strcmp(name, "") == 0)
-    {
-        fl_message("You need to specify a project name!");
-        return;
-    }
-
-    path += "/";
-    path += name;
-
-    fl_message("Creating project in %s", path.c_str());
-    replace(path.begin(), path.end(), '\\', '/');
-
-    const char* proj = dlg->generateProjectStructure(path.c_str(), name, dlg->install_lua_check->value() != 0, dlg->create_initial_scene_check->value() != 0);
-    if(proj)
-    {
-        dlg->addProject(proj);
-        dlg->saveProjectList();
-    }
-
-    btn->parent()->hide();
+	executeBlocking(path.c_str());
 }

@@ -17,7 +17,7 @@ ADD_DEFINITIONS(-DNEO_CORE_DLL)
 SET(CMAKE_SHARED_LIBRARY_PREFIX "")
 
 IF(${SWIG_FOUND})
-  MESSAGE("Generating Lua bindings for NeoCore")
+  MESSAGE("-- Generating Lua bindings for NeoCore")
 
   EXECUTE_PROCESS(
 	COMMAND ${SWIG_EXECUTABLE} -lua -c++ -I${CMAKE_CURRENT_SOURCE_DIR}/Includes ${CMAKE_CURRENT_SOURCE_DIR}/NeoCore.i
@@ -32,11 +32,11 @@ IF(${SWIG_FOUND})
 	)
 
   IF(NOT ${SWIG_swiglib_result} EQUAL 0)
-	MESSAGE(SEND_ERROR "Generating Lua bindings for NeoCore failed with output:\n${SWIG_swiglib_error}")
+	MESSAGE(SEND_ERROR "-- Generating Lua bindings for NeoCore failed with output:\n${SWIG_swiglib_error}")
   ENDIF(NOT ${SWIG_swiglib_result} EQUAL 0)
 
 ELSE()
-  MESSAGE("Will NOT generate Lua bindings for NeoCore")
+  MESSAGE("-- Will NOT generate Lua bindings for NeoCore")
 ENDIF()
 
 IF(NOT ANDROID AND NOT EMSCRIPTEN)

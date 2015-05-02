@@ -20,7 +20,7 @@ INCLUDE_DIRECTORIES(
 ADD_DEFINITIONS(-DNEO_ENGINE_DLL)
 
 IF(${SWIG_FOUND})
-  MESSAGE("Generating Lua bindings for NeoEngine")
+  MESSAGE("-- Generating Lua bindings for NeoEngine")
 
   EXECUTE_PROCESS(
 	COMMAND ${SWIG_EXECUTABLE} -lua -c++ -I${NEO_CORE_INCLUDE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/Includes ${CMAKE_CURRENT_SOURCE_DIR}/NeoEngine.i
@@ -35,11 +35,11 @@ IF(${SWIG_FOUND})
 	)
 
   IF(NOT ${SWIG_swiglib_result} EQUAL 0)
-	MESSAGE(SEND_ERROR "Generating Lua bindings for NeoEngine failed with output:\n${SWIG_swiglib_error}")
+	MESSAGE(SEND_ERROR "-- Generating Lua bindings for NeoEngine failed with output:\n${SWIG_swiglib_error}")
   ENDIF(NOT ${SWIG_swiglib_result} EQUAL 0)
 
 ELSE()
-  MESSAGE("Will NOT generate Lua bindings for NeoEngine")
+  MESSAGE("-- Will NOT generate Lua bindings for NeoEngine")
 ENDIF()
 
 SET(CMAKE_SHARED_LIBRARY_PREFIX "")

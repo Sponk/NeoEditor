@@ -52,7 +52,7 @@ Bottom,Basso
 Red:,Rosso:
 Green:,Verde:
 Blue:,Blu:
-Intensity:,Intensit√ :
+Intensity:,Intensit:
 Choose color:,Scegliere un colore:
 Spotlight:,Spotlight:
 Spot Angle:,Angolo spot:
@@ -60,7 +60,7 @@ Shadow:,Ombra:
 Shadows:,Ombre:
 Shadow Bias:,Bias ombra:
 Shadow Blur:,Sfocatura ombra:
-Shadow Quality:,Qualit√  ombra:
+Shadow Quality:,Qualit  ombra:
 Publishing project. Please wait...,Pubblicazione in corso. Attendere...
 Settings:,Impostazioni:
 Invisible:,Invisibile:
@@ -108,8 +108,8 @@ Scene setup:,Setup scena:
 Ambient Light:,Luce ambient:
 Emit Color:,Colore luce:
 Apply,Applica
-Shininess:,Specularit√ :
-Opacity:,Opacit√ :
+Shininess:,Specularit:
+Opacity:,Opacit:
 Diffuse Color:,Diffusione colore:
 Level,Livello
 Name:,Nome:
