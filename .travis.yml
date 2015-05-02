@@ -13,7 +13,7 @@ script:
 
   # - mkdir ../build-windows && cd ../build-windows && export DXSDK_DIR=~/ && cmake -DCMAKE_TOOLCHAIN_FILE=../NeoEditor/CMake/Toolchains/CrossWindowsMingw.cmake ../NeoEditor && make -j2 package 
 
-  - su -c mkdir ../build && cd ../build && cmake ../NeoEditor -DNEO_VERSION_STRING="\"$VERSION\"" && sudo make -j2 package && sudo make sdk-test && sudo make lua-test
+  - mkdir ../build && cd ../build && cmake ../NeoEditor -DNEO_VERSION_STRING="\"$VERSION\"" && sudo make -j2 package && sudo make sdk-test && sudo make lua-test
  
   
 notifications:
