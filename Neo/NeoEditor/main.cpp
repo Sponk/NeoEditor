@@ -57,7 +57,7 @@
 
 // Don't show cmd window
 #ifdef _MSC_VER
-#pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
+//#pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 #endif
 
 using namespace Neo;
@@ -438,7 +438,7 @@ void load_translation(const char* confdir, const char* rep)
 
 	// Default to english
 	if (langname.empty())
-		langname = "english.ini";
+		langname = "english.csv";
 
 #ifndef WIN32
 	langname = string("translations/") + langname;

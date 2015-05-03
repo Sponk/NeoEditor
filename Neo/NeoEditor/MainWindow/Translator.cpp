@@ -21,6 +21,7 @@
 #include <NeoEngine.h>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 using namespace std;
 
@@ -31,10 +32,7 @@ const char* tr(const char* key)
 
 void Translator::loadTranslation(const char* file, char delim)
 {
-    if(!isFileExist(file))
-		return;
-
-	/*
+   	/*
     SAFE_DELETE(m_parser);
     m_parser = new INI::Parser(file);
 	*/
@@ -42,7 +40,7 @@ void Translator::loadTranslation(const char* file, char delim)
 	ifstream in(file);
 	if (!in)
 	{
-		MLOG_ERROR("Could not load translation!");
+		MLOG_ERROR("Could not load translation from '" << file << "'!");
 		return;
 	}
 
@@ -60,16 +58,18 @@ void Translator::loadTranslation(const char* file, char delim)
 			m_phrases[key] = value;
 		}
 	
-#ifndef WIN32
-    const char* substr = strrchr(file, '/');
-#else
-    const char* substr = strrchr(file, '\\');
+	string filename = file;
+#ifdef WIN32
+	std::replace(filename.begin(), filename.end(), '\\', '/');
 #endif
 
-    if(substr == NULL)
-        substr = file;
-
-    m_langFile = ++substr;
+	int idx = filename.find_last_of("/");
+	if (idx != -1)
+		m_langFile = filename.substr(idx+1);
+	else
+		m_langFile = filename;
+    
+	MLOG_INFO("Loaded translation from '" << m_langFile << "'");
 }
 
 const char* Translator::translate(const char* key)
