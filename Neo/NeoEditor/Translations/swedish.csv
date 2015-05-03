@@ -1,0 +1,132 @@
+File,Fil
+Edit,Redigera
+Project,Projekt
+Open,Öppna
+Save,Spara
+Save as...,Spara som...
+Save level,Spara nivå
+Save level as...,Spara nivå som...
+Import Mesh,Importera mesh
+Quit,Avsluta
+New,Nytt
+Add,Lägg till
+Help,Hjälp
+Console,Konsoll
+Do you really want to exit?,Vill du verkligen avsluta?
+Object,Objekt
+Scale:,Skala:
+Parent:,Förälder:
+Play in Editor,Spela i redigerare
+Undo,Ångra
+Redo,Gör om
+Select all,Välj alla
+Duplicate object,Duplicera objekt
+Delete object,Ta bort objekt
+Post Effects Setup,Effekt-inställningar
+Scene setup,Scen-inställningar
+Delete current scene,Ta bort nuvarande scen
+Configuration,Konfiguration
+Stop game,Stoppa spel
+Light,Ljus
+Camera,Kamera
+Sound,Ljud
+Add Behavior,Lägg till beteende
+Scene,Scen
+Group,Grupp
+Special,Speciell
+Plugin Console,Plugin-konsoll
+Run Game,Kör spel
+Update player,Updatera spelare
+Publish,Publicera
+About,Information
+The Neo Editor is distributed under the terms and conditions of the GNU General Public License.,Neo-redigeraren distribueras under GNU General Public License villkoren.
+Yes,Ja
+No,Nej
+Copies the player from the editor directory to the project directory.,Kopierar spelaren från redigerarens mapp till projektets mapp.
+Other,Andra
+Face,Framsida
+Right,Höger
+Top,Topp
+Bottom,Botten
+Red:,Röd:
+Green:,Grön:
+Blue:,Blå:
+Intensity:,Intensitet:
+Choose color:,Välj färg:
+Spotlight:,Strålkastare:
+Spot Angle:,Strålvinkel:
+Shadow:,Skugga:
+Shadows:,Skuggor:
+Shadow Bias:,Skugg-förspänning:
+Shadow Blur:,Skugg-oskärpa:
+Shadow Quality:,Skugg-kvalitet:
+Publishing project. Please wait...,Publicerar projekt. Var god vänta...
+Settings:,Inställningar:
+Invisible:,Osynlig:
+Edit Materials:,Redigera material:
+Shadow,Skugga
+Occluder,Occluder
+Physics:,Fysik:
+Shape:,Form:
+Box,Box
+Sphere,Sfär
+Cone,Kona
+Capsule,Kapsyl
+Cylinder,Cylinder
+Convex-hull,Konvext hölje
+Triangle-mesh,Triangel-mesh
+Ghost,Spöke
+Mass:,Massa:
+Friction:,Friktion:
+Restitution:,Motstånd
+Physics,Fysik
+Damping:,Dämpning:
+Linear:,Linjär:
+Angular:,Vinkel:
+Linear Factor:,Linjär faktor:
+Angular Factor:,Vinkel faktor:
+Constraint properties:,Begränsnings-egenskaper:
+Clear Color:,Bakgrundsfärg:
+Fog:,Dimma:
+Fog Distance:,Dimm-avstånd
+Skybox Textures:,Skybox-texturer
+Path to textures used by the skybox.,Sökväg till texturer som skyboxen använder.
+Size:,Storlek:
+Alignment:,Inriktning:
+Left,Vänster
+Center,Mitten
+Color:,Färg:
+Loop,Slinga
+Pitch:,Tonhöjd:
+Gain:,Förstärkning:
+Relative:,Relativ:
+New Scene:,Ny scen:
+Cancel,Avbryt
+Scene Name:,Scen-namn:
+Scene setup:,Scen-inställningar:
+Ambient Light:,Ambient ljus:
+Emit Color:,Avge färg:
+Apply,Tillämpa
+Shininess:,Blankhet:
+Opacity:,Opacitet:
+Diffuse Color:,Diffus-färg:
+Can't publish: You need to create/open a project first!,Kan inte publicera. Du måste skapa/öppna ett projekt först!
+Select a file to save,Välj en fil att spara
+Select project file,Välj projekt-fil
+You need to save the level before adding meshes!,Nivån måste sparas innan du kan lägga till en mesh!
+Choose mesh,Välj mesh
+Choose file,Välj fil
+Choose font,Välj typsnitt
+Could not load font!,Kunde inte ladda typsnitt!
+Text field does not exist!,Textfältet finns inte!
+Can't run the game: You first have to open a project!,Kunde inte köra spel: Du måste öppna ett projekt först!
+You need to save the level before editing scene properties!,Du måste spara nivån innan du ändrar scen-inställningar!
+Can not delete scene! The level needs at least one scene!,Kunde inte ta bort scenen! Nivån behöver minst en scen!
+Could not retrieve version information from the server!,Kunde ej hämta version-information från servern!
+Version data is invalid! Please try again.,Version-infermationen är inte giltlig! Var god försök igen.
+Your language selection requires the application to restart. Continue?,Ditt språkvar kräven en omstart. Fortsätt?
+If you load a new shader all uniform settings you created will be lost. Continue?,Om du laddar en ny shader kommer alla uniform-inställningar du skapat förloras. Fortsätt?
+Apply editor perspective,Tillämpa redigerar-perspektiv
+Set perspective to camera,Sätt perspektiv till kamera
+Loading...,Laddar...
+The Neo Editor is loading. Please wait...,Neo Redigeraren laddar. Var god vänta...
