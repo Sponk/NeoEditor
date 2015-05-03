@@ -196,6 +196,9 @@ m_snapToGrid(false),
 m_snapDistance(10.0),
 m_inputMethod(NULL)
 {
+	memset(m_currentLevel, '\0', sizeof(m_currentLevel));
+	memset(m_currentProject, '\0', sizeof(m_currentProject));
+
     sprintf(m_windowTitle, "Neo");
     m_titleChanged = false;
 
@@ -689,21 +692,22 @@ void EditorBackend::getNewObjectName(const char *objectName, char *name)
 	Level *level = NeoEngine::getInstance()->getLevel();
 	Scene *scene = level->getCurrentScene();
 
-	int pos = strlen(objectName) - 1;
+	int length = strlen(objectName);
+	int pos = length - 1;
 	// Count number at end of string
 	while (pos >= 0 && isalpha(objectName[pos]) == 0)
 	{
 		pos--;
 	}
 
-	if (pos < 0)
-		pos = strlen(objectName);
+	if (pos < 0 && (pos = length-1) <= 0)
+		return;
 
 	// Do not append the new number straight to the
 	// existing one. Prevents names like "Entity11111" when
 	// copying objects.
-	char *shortName = (char *)malloc(pos + 2);
-	strncpy(shortName, objectName, pos + 1);
+	char shortName[256];
+	strncpy(shortName, objectName, pos + 2);
 	shortName[pos + 2] = '\0';
 
 	unsigned int count = 0;
@@ -718,12 +722,10 @@ void EditorBackend::getNewObjectName(const char *objectName, char *name)
 				// name already exist
 				count++;
 				sprintf(name, "%s%d", shortName, count);
-				i = -1;
+				i = 0;
 			}
 		}
 	}
-
-	free(shortName);
 }
 
 Object3d* EditorBackend::duplicateObject(Object3d *object)

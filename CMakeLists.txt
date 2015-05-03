@@ -292,7 +292,10 @@ SET(NPK_INCLUDE_DIR ${NEO_SOURCE_DIR}/3rdparty/npk/include)
 SET(SDL_INCLUDE_DIR ${NEO_SOURCE_DIR}/3rdparty/sdl2/include)
 SET(OPENAL_INCLUDE_DIR ${NEO_SOURCE_DIR}/3rdparty/openal-soft/include)
 SET(TINYXML_INCLUDE_DIR ${NEO_SOURCE_DIR}/3rdparty/tinyxml)
+
 SET(ZLIB_INCLUDE_DIR ${NEO_SOURCE_DIR}/3rdparty/zlib)
+SET(ZLIB_INCLUDE_DIRS ${NEO_SOURCE_DIR}/3rdparty/zlib)
+
 SET(FLTK_INCLUDE_DIR ${NEO_SOURCE_DIR}/3rdparty/fltk ${CMAKE_BINARY_DIR}/3rdparty/fltk)
 SET(SHINY_INCLUDE_DIR ${NEO_SOURCE_DIR}/3rdparty/shinyprofiler/Shiny/include)
 SET(LIBZIP_INCLUDE_DIR ${NEO_SOURCE_DIR}/3rdparty/libzip/src ${NEO_SOURCE_DIR}/3rdparty/libzip/lib)

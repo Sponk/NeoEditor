@@ -89,7 +89,7 @@ public:
 	void createVertexShader(unsigned int * shaderId){}
 	void createPixelShader(unsigned int * shaderId){}
 	void deleteShader(unsigned int * shaderId){}
-    bool sendShaderSource(unsigned int shaderId, const char * source){}
+	bool sendShaderSource(unsigned int shaderId, const char * source){ return false; }
 
 	// FX
 	void bindFX(unsigned int fxId){}

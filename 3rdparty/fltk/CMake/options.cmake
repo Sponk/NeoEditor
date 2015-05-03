@@ -154,7 +154,7 @@ if(OPTION_LARGE_FILE)
 endif(OPTION_LARGE_FILE)
 
 #######################################################################
-option(OPTION_USE_SYSTEM_ZLIB "Use's system zlib" ON)
+option(OPTION_USE_SYSTEM_ZLIB "Use's system zlib" OFF)
 
 if(OPTION_USE_SYSTEM_ZLIB AND LIB_zlib)
    include(FindZLIB)

@@ -37,6 +37,7 @@
 #include <Render.h>
 #include <GuiSystem.h>
 
+using namespace Neo;
 using namespace Neo::Gui;
 
 Sprite::Sprite(unsigned int x, unsigned int y, unsigned int width,

@@ -26,7 +26,12 @@ using namespace Neo;
 #include <AssimpMeshLoader.h>
 
 #include <Window/Window.h>
+
+#ifndef _MSC_VER
 #include <unistd.h>
+#else
+#include <direct.h>
+#endif
 
 using namespace std;
 

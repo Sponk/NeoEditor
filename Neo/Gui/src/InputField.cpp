@@ -40,6 +40,7 @@
 #include <Window/Mouse.h>
 #include <Window/WinEvents.h>
 
+using namespace Neo;
 using namespace Neo::Gui;
 
 InputField::InputField(unsigned int x, unsigned int y, unsigned int width,
