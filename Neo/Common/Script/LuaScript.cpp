@@ -394,8 +394,9 @@ void LuaScript::init(void)
 	g_startTick = system->getSystemTick();
 	
 	// create context
-	m_state = lua_open();
-
+	//m_state = lua_open();
+	m_state = luaL_newstate();
+	
 	if(!m_state)
 	{
 		MLOG_ERROR("Could not open Lua state!");
