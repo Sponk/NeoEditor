@@ -4,6 +4,8 @@
 	using namespace Neo;
 %}
 
+%include <windows.i>
+
 %include <NeoCore.h>
 %include <Utils.h>
 

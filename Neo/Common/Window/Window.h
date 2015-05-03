@@ -25,8 +25,8 @@
 //========================================================================
 
 
-#if !defined(_M_WINDOW_H) && !defined(ANDROID)
-#define _M_WINDOW_H
+#if !defined(_NEO_WINDOW_H) && !defined(ANDROID)
+#define _NEO_WINDOW_H
 
 #include <Window/WinEvents.h>
 #include <NeoCore.h>

@@ -52,7 +52,6 @@ void TileSheet::loadImage(const char* path, unsigned int width,
 	GuiSystem* gui = GuiSystem::getInstance();
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	Level* level = NeoEngine::getInstance()->getLevel();
-	NeoWindow* window = NeoWindow::getInstance();
 
 	if (path != NULL)
 	{

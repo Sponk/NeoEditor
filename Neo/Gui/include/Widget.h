@@ -47,12 +47,12 @@ namespace Gui
 // Predefinition
 class Widget;
 
-#ifndef WIN32
+#if !defined(WIN32)
 	/** 
 	 * A pointer to a callback.
 	 */
 	typedef void (*CALLBACK_FUNCTION)(Widget*, long int);
-#else
+#elif  !defined(SWIG)
 #define CALLBACK_FUNCTION void *
 #endif
 
@@ -79,8 +79,10 @@ protected:
 	/// The label of the widget
 	std::string m_label;
 
+#ifndef SWIG
 	/// The callback that should be called
 	CALLBACK_FUNCTION m_callback;
+#endif
 
 	String m_callbackScript;
 
@@ -153,12 +155,14 @@ public:
 	 *
 	 * @param func The function pointer
 	 */
+#ifndef SWIG
 	void setCallback(CALLBACK_FUNCTION func) { m_callback = func; }
+#endif
 
 	void setScriptCallback(const char* name)
 	{
 		m_callbackScript = name;
-		m_callback = Widget::callScript;
+		m_callback = (CALLBACK_FUNCTION) Widget::callScript;
 	}
 
 	/**
@@ -172,12 +176,13 @@ public:
 	 * @param func The function pointer
 	 * @param data The user data
 	 */
+#ifndef SWIG
 	void setCallback(CALLBACK_FUNCTION func, long int data)
 	{
 		m_callback = func;
 		m_userData = data;
 	}
-
+#endif
 	/**
 	 * @brief Retrieves the user data that will be given to every callback call.
 	 * @return The user data.

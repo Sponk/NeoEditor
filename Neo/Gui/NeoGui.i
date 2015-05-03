@@ -18,6 +18,8 @@
 	// #define Canvas Neo::Gui::Canvas
 %}
 
+%include <windows.i>
+
 #define NEO_CORE_EXPORT
 %include <Vector2.h>
 %include <Widget.h>

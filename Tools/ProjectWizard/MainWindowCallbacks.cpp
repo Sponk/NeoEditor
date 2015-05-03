@@ -2,6 +2,9 @@
 #include <FL/Fl_Native_File_Chooser.H>
 #include <NeoCore.h>
 #include <string>
+#include <algorithm>
+
+#include <FL/fl_ask.H>
 
 using namespace std;
 

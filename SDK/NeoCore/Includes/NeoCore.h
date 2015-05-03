@@ -27,7 +27,6 @@
 #define __CORE_H
 
 #ifdef WIN32
-
 	#ifdef _MSC_VER
 		#pragma warning(disable: 4251)
 	#endif
@@ -51,7 +50,7 @@ class Sound;
 }
 
 #include <Utils.h>
-#include <String.h>
+#include <NeoString.h>
 #include <File.h>
 #include <StdFile.h>
 #include <FileTools.h>

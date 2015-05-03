@@ -2640,10 +2640,23 @@ SWIG_Lua_dostring(lua_State *L, const char *str) {
 #define SWIGTYPE_p_TEXT_ALIGN_MODES swig_types[13]
 #define SWIGTYPE_p_Vector3 swig_types[14]
 #define SWIGTYPE_p_Vector4 swig_types[15]
-#define SWIGTYPE_p_f_p_Neo__Gui__Widget_long__void swig_types[16]
-#define SWIGTYPE_p_float swig_types[17]
-static swig_type_info *swig_types[19];
-static swig_module_info swig_module = {swig_types, 18, 0, 0, 0, 0};
+#define SWIGTYPE_p___int64 swig_types[16]
+#define SWIGTYPE_p_char swig_types[17]
+#define SWIGTYPE_p_float swig_types[18]
+#define SWIGTYPE_p_int swig_types[19]
+#define SWIGTYPE_p_long swig_types[20]
+#define SWIGTYPE_p_p_char swig_types[21]
+#define SWIGTYPE_p_p_unsigned_long swig_types[22]
+#define SWIGTYPE_p_short swig_types[23]
+#define SWIGTYPE_p_signed___int64 swig_types[24]
+#define SWIGTYPE_p_signed_char swig_types[25]
+#define SWIGTYPE_p_unsigned___int64 swig_types[26]
+#define SWIGTYPE_p_unsigned_char swig_types[27]
+#define SWIGTYPE_p_unsigned_int swig_types[28]
+#define SWIGTYPE_p_unsigned_long swig_types[29]
+#define SWIGTYPE_p_unsigned_short swig_types[30]
+static swig_type_info *swig_types[32];
+static swig_module_info swig_module = {swig_types, 31, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -4159,36 +4172,6 @@ fail:
 }
 
 
-static int _wrap_Widget_setCallback__SWIG_0(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
-  Neo::Gui::CALLBACK_FUNCTION arg2 = (Neo::Gui::CALLBACK_FUNCTION) 0 ;
-  
-  SWIG_check_num_args("Neo::Gui::Widget::setCallback",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::setCallback",1,"Neo::Gui::Widget *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::Gui::Widget::setCallback",2,"Neo::Gui::CALLBACK_FUNCTION");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_setCallback",1,SWIGTYPE_p_Neo__Gui__Widget);
-  }
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_f_p_Neo__Gui__Widget_long__void,0))){
-    SWIG_fail_ptr("Widget_setCallback",2,SWIGTYPE_p_f_p_Neo__Gui__Widget_long__void);
-  }
-  
-  (arg1)->setCallback(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
 static int _wrap_Widget_setScriptCallback(lua_State* L) {
   int SWIG_arg = 0;
   Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
@@ -4212,108 +4195,6 @@ static int _wrap_Widget_setScriptCallback(lua_State* L) {
 fail:
   lua_error(L);
   return SWIG_arg;
-}
-
-
-static int _wrap_Widget_setCallback__SWIG_1(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
-  Neo::Gui::CALLBACK_FUNCTION arg2 = (Neo::Gui::CALLBACK_FUNCTION) 0 ;
-  long arg3 ;
-  
-  SWIG_check_num_args("Neo::Gui::Widget::setCallback",3,3)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::setCallback",1,"Neo::Gui::Widget *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::Gui::Widget::setCallback",2,"Neo::Gui::CALLBACK_FUNCTION");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::Gui::Widget::setCallback",3,"long");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_setCallback",1,SWIGTYPE_p_Neo__Gui__Widget);
-  }
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_f_p_Neo__Gui__Widget_long__void,0))){
-    SWIG_fail_ptr("Widget_setCallback",2,SWIGTYPE_p_f_p_Neo__Gui__Widget_long__void);
-  }
-  
-  arg3 = (long)lua_tonumber(L, 3);
-  (arg1)->setCallback(arg2,arg3);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_Widget_setCallback(lua_State* L) {
-  int argc;
-  int argv[4]={
-    1,2,3,4
-  };
-  
-  argc = lua_gettop(L);
-  if (argc == 2) {
-    int _v;
-    {
-      void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Gui__Widget, 0)) {
-        _v = 0;
-      } else {
-        _v = 1;
-      }
-    }
-    if (_v) {
-      {
-        void *ptr;
-        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_f_p_Neo__Gui__Widget_long__void, 0)) {
-          _v = 0;
-        } else {
-          _v = 1;
-        }
-      }
-      if (_v) {
-        return _wrap_Widget_setCallback__SWIG_0(L);
-      }
-    }
-  }
-  if (argc == 3) {
-    int _v;
-    {
-      void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Gui__Widget, 0)) {
-        _v = 0;
-      } else {
-        _v = 1;
-      }
-    }
-    if (_v) {
-      {
-        void *ptr;
-        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_f_p_Neo__Gui__Widget_long__void, 0)) {
-          _v = 0;
-        } else {
-          _v = 1;
-        }
-      }
-      if (_v) {
-        {
-          _v = lua_isnumber(L,argv[2]);
-        }
-        if (_v) {
-          return _wrap_Widget_setCallback__SWIG_1(L);
-        }
-      }
-    }
-  }
-  
-  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'Widget_setCallback'\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    Neo::Gui::Widget::setCallback(Neo::Gui::CALLBACK_FUNCTION)\n"
-    "    Neo::Gui::Widget::setCallback(Neo::Gui::CALLBACK_FUNCTION,long)\n");
-  lua_error(L);return 0;
 }
 
 
@@ -4812,7 +4693,6 @@ static swig_lua_method swig_Widget_methods[]= {
     { "draw", _wrap_Widget_draw},
     { "update", _wrap_Widget_update},
     { "setScriptCallback", _wrap_Widget_setScriptCallback},
-    { "setCallback", _wrap_Widget_setCallback},
     { "getUserData", _wrap_Widget_getUserData},
     { "setUserData", _wrap_Widget_setUserData},
     { "getLabel", _wrap_Widget_getLabel},
@@ -8033,8 +7913,21 @@ static swig_type_info _swigt__p_ScriptContext = {"_p_ScriptContext", "ScriptCont
 static swig_type_info _swigt__p_TEXT_ALIGN_MODES = {"_p_TEXT_ALIGN_MODES", "TEXT_ALIGN_MODES *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Vector3 = {"_p_Vector3", "Vector3 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Vector4 = {"_p_Vector4", "Vector4 *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_f_p_Neo__Gui__Widget_long__void = {"_p_f_p_Neo__Gui__Widget_long__void", "void (*)(Neo::Gui::Widget *,long)|Neo::Gui::CALLBACK_FUNCTION", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_float = {"_p_float", "float *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p___int64 = {"_p___int64", "__int64 *|LONGLONG *|LONG64 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_char = {"_p_char", "CHAR *|TCHAR *|char *|CCHAR *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_float = {"_p_float", "FLOAT *|float *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int = {"_p_int", "BOOL *|INT32 *|int *|INT *|INT_PTR *|LONG32 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_long = {"_p_long", "SHANDLE_PTR *|LONG_PTR *|LONG *|HRESULT *|long *|SSIZE_T *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_p_char = {"_p_p_char", "PTCH *|PCTSTR *|LPCTSTR *|LPTCH *|PUTSTR *|LPUTSTR *|PCUTSTR *|LPCUTSTR *|char **|PTSTR *|LPTSTR *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_p_unsigned_long = {"_p_p_unsigned_long", "unsigned long **|PLCID *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_short = {"_p_short", "HALF_PTR *|short *|SHORT *|INT16 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_signed___int64 = {"_p_signed___int64", "INT64 *|signed __int64 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_signed_char = {"_p_signed_char", "signed char *|INT8 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned___int64 = {"_p_unsigned___int64", "UINT64 *|DWORD64 *|unsigned __int64 *|DWORDLONG *|ULONGLONG *|ULONG64 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "FCHAR *|unsigned char *|UCHAR *|BYTE *|TBYTE *|UINT8 *|BOOLEAN *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_int = {"_p_unsigned_int", "UINT32 *|DWORD32 *|UINT *|unsigned int *|UINT_PTR *|ULONG32 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_long = {"_p_unsigned_long", "HANDLE_PTR *|DWORD *|ULONG_PTR *|DWORD_PTR *|FLONG *|unsigned long *|ULONG *|SIZE_T *|LCID *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_short = {"_p_unsigned_short", "WORD *|UHALF_PTR *|unsigned short *|USHORT *|FSHORT *|LANGID *|UINT16 *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Neo__Gui__Button,
@@ -8053,8 +7946,21 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_TEXT_ALIGN_MODES,
   &_swigt__p_Vector3,
   &_swigt__p_Vector4,
-  &_swigt__p_f_p_Neo__Gui__Widget_long__void,
+  &_swigt__p___int64,
+  &_swigt__p_char,
   &_swigt__p_float,
+  &_swigt__p_int,
+  &_swigt__p_long,
+  &_swigt__p_p_char,
+  &_swigt__p_p_unsigned_long,
+  &_swigt__p_short,
+  &_swigt__p_signed___int64,
+  &_swigt__p_signed_char,
+  &_swigt__p_unsigned___int64,
+  &_swigt__p_unsigned_char,
+  &_swigt__p_unsigned_int,
+  &_swigt__p_unsigned_long,
+  &_swigt__p_unsigned_short,
 };
 
 static swig_cast_info _swigc__p_Neo__Gui__Button[] = {  {&_swigt__p_Neo__Gui__ThemedButton, _p_Neo__Gui__ThemedButtonTo_p_Neo__Gui__Button, 0, 0},  {&_swigt__p_Neo__Gui__Button, 0, 0, 0},{0, 0, 0, 0}};
@@ -8073,8 +7979,21 @@ static swig_cast_info _swigc__p_ScriptContext[] = {  {&_swigt__p_ScriptContext, 
 static swig_cast_info _swigc__p_TEXT_ALIGN_MODES[] = {  {&_swigt__p_TEXT_ALIGN_MODES, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Vector3[] = {  {&_swigt__p_Vector3, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Vector4[] = {  {&_swigt__p_Vector4, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_p_Neo__Gui__Widget_long__void[] = {  {&_swigt__p_f_p_Neo__Gui__Widget_long__void, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p___int64[] = {  {&_swigt__p___int64, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_float[] = {  {&_swigt__p_float, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_long[] = {  {&_swigt__p_long, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_p_char[] = {  {&_swigt__p_p_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_p_unsigned_long[] = {  {&_swigt__p_p_unsigned_long, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_short[] = {  {&_swigt__p_short, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_signed___int64[] = {  {&_swigt__p_signed___int64, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_signed_char[] = {  {&_swigt__p_signed_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned___int64[] = {  {&_swigt__p_unsigned___int64, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_int[] = {  {&_swigt__p_unsigned_int, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_long[] = {  {&_swigt__p_unsigned_long, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_short[] = {  {&_swigt__p_unsigned_short, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Neo__Gui__Button,
@@ -8093,8 +8012,21 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_TEXT_ALIGN_MODES,
   _swigc__p_Vector3,
   _swigc__p_Vector4,
-  _swigc__p_f_p_Neo__Gui__Widget_long__void,
+  _swigc__p___int64,
+  _swigc__p_char,
   _swigc__p_float,
+  _swigc__p_int,
+  _swigc__p_long,
+  _swigc__p_p_char,
+  _swigc__p_p_unsigned_long,
+  _swigc__p_short,
+  _swigc__p_signed___int64,
+  _swigc__p_signed_char,
+  _swigc__p_unsigned___int64,
+  _swigc__p_unsigned_char,
+  _swigc__p_unsigned_int,
+  _swigc__p_unsigned_long,
+  _swigc__p_unsigned_short,
 };
 
 

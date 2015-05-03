@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0302 
+version 1.0303 
 i18n_type 1 
 i18n_include "Translator.h" 
 i18n_function tr 
@@ -33,7 +33,7 @@ class EditorWindow {open
     Fl_Window {} {
       label {Neo Editor}
       callback window_quit open
-      xywh {776 321 910 610} type Double labelsize 11 align 80 resizable size_range {0 0 2048 2048} visible
+      xywh {365 201 910 610} type Double labelsize 11 align 80 resizable size_range {0 0 2048 2048} visible
     } {
       Fl_Menu_Bar menu_bar {
         xywh {0 0 920 25} selection_color 38
@@ -304,7 +304,7 @@ class EditorWindow {open
           }
           Fl_Value_Input grid_size_edit {
             label {Grid Size:}
-            callback update_grid_size_callback selected
+            callback update_grid_size_callback
             xywh {80 27 40 22} maximum 1000 step 1 value 100
             code0 {grid_size_edit->value(EditorBackend::getInstance()->getSnapDistance());}
           }
@@ -525,7 +525,7 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
           Fl_Value_Input light_radius_edit {
             label {Radius:}
             callback edit_light_properties
-            xywh {21 54 165 21} align 5 maximum 1e+07 step 2
+            xywh {21 54 165 21} align 5 maximum 1e+007 step 2
           }
           Fl_Value_Input light_color_r {
             label {Red:}
@@ -1628,14 +1628,14 @@ class ConfigurationDlg {open
   } {
     Fl_Window {} {
       label Configuration open
-      xywh {2026 473 543 348} type Double hide
+      xywh {442 389 543 348} type Double visible
     } {
       Fl_Tabs {} {open
         xywh {0 3 546 342}
       } {
         Fl_Group {} {
-          label Theme open
-          xywh {3 27 543 318} hide
+          label Theme open selected
+          xywh {3 27 543 318}
         } {
           Fl_Choice theme_chooser {
             label {Themes:}
@@ -1755,7 +1755,7 @@ class ConfigurationDlg {open
         }
         Fl_Group {} {
           label Plugins open
-          xywh {0 27 546 318} box DOWN_BOX
+          xywh {0 27 546 318} box DOWN_BOX hide
         } {
           Fl_Browser plugin_browser {
             user_data this user_data_type {ConfigurationDlg*}

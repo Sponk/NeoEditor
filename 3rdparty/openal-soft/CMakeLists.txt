@@ -45,7 +45,7 @@ OPTION(ALSOFT_BACKEND_SNDIO   "Check for SndIO backend"               OFF)
 OPTION(ALSOFT_BACKEND_QSA     "Check for QSA backend"                 OFF)
 OPTION(ALSOFT_BACKEND_MMDEVAPI "Check for MMDevApi backend"           OFF)
 OPTION(ALSOFT_BACKEND_DSOUND   "Check for DirectSound backend"        ON) ## Used on Windows
-OPTION(ALSOFT_BACKEND_WINMM    "Check for Windows Multimedia backend" OFF)
+OPTION(ALSOFT_BACKEND_WINMM    "Check for Windows Multimedia backend" ON)
 OPTION(ALSOFT_BACKEND_PORTAUDIO  "Check for PortAudio backend"        ON)
 OPTION(ALSOFT_BACKEND_PULSEAUDIO "Check for PulseAudio backend"       ON) ## Used on Ubuntu Linux
 OPTION(ALSOFT_BACKEND_COREAUDIO  "Check for CoreAudio backend"        ON) ## Used on OSX/iOS
@@ -867,7 +867,7 @@ IF(HAVE_WINDOWS_H)
             ENDIF()
         ENDIF()
     ENDIF()
-
+	
     # Check DSound backend
     FIND_PACKAGE(DSound)
     IF(DSOUND_FOUND)

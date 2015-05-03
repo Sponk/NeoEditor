@@ -36,16 +36,33 @@
 #ifndef __GUI_SYSTEM__
 #define __GUI_SYSTEM__
 
-#include <NeoEngine.h>
-#include <map>
-#include <Canvas.h>
-#include <string>
-
 #ifdef SWIG
 #define DISOWN(a) %apply SWIGTYPE* DISOWN {a};
 #else
 #define DISOWN(a)
 #endif
+
+#ifdef WIN32
+	#ifdef _MSC_VER
+		#pragma warning(disable: 4251)
+	#endif
+
+	#if defined(NEO2D_DLL)
+		#define NEO2D_EXPORT __declspec( dllexport )
+	#elif defined(NEO_CORE_STATIC)
+		#define NEO2D_EXPORT
+	#else
+		#define NEO2D_EXPORT __declspec( dllimport )
+	#endif
+
+#else
+	#define NEO2D_EXPORT
+#endif
+
+#include <NeoEngine.h>
+#include <map>
+#include <Canvas.h>
+#include <string>
 
 namespace Neo
 {
@@ -56,7 +73,7 @@ namespace Gui
  *
  * @author Yannick Pflanzer
  */
-class GuiSystem
+class NEO2D_EXPORT GuiSystem
 {
 private:
 	struct WidgetId

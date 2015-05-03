@@ -4,6 +4,8 @@
 	using namespace Neo;
 %}
 
+%include <windows.i>
+
 #define NEO_CORE_EXPORT
 
 %include <Vector2.h>

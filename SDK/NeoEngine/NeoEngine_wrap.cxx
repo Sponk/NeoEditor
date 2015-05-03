@@ -2702,14 +2702,26 @@ SWIG_Lua_dostring(lua_State *L, const char *str) {
 #define SWIGTYPE_p_Vector3 swig_types[75]
 #define SWIGTYPE_p_Vector4 swig_types[76]
 #define SWIGTYPE_p_WRAP_MODES swig_types[77]
-#define SWIGTYPE_p_float swig_types[78]
-#define SWIGTYPE_p_int swig_types[79]
-#define SWIGTYPE_p_mapT_unsigned_int_unsigned_int_t swig_types[80]
-#define SWIGTYPE_p_unsigned_int swig_types[81]
-#define SWIGTYPE_p_vectorT_float_t swig_types[82]
-#define SWIGTYPE_p_void swig_types[83]
-static swig_type_info *swig_types[85];
-static swig_module_info swig_module = {swig_types, 84, 0, 0, 0, 0};
+#define SWIGTYPE_p___int64 swig_types[78]
+#define SWIGTYPE_p_char swig_types[79]
+#define SWIGTYPE_p_float swig_types[80]
+#define SWIGTYPE_p_int swig_types[81]
+#define SWIGTYPE_p_long swig_types[82]
+#define SWIGTYPE_p_mapT_unsigned_int_unsigned_int_t swig_types[83]
+#define SWIGTYPE_p_p_char swig_types[84]
+#define SWIGTYPE_p_p_unsigned_long swig_types[85]
+#define SWIGTYPE_p_short swig_types[86]
+#define SWIGTYPE_p_signed___int64 swig_types[87]
+#define SWIGTYPE_p_signed_char swig_types[88]
+#define SWIGTYPE_p_unsigned___int64 swig_types[89]
+#define SWIGTYPE_p_unsigned_char swig_types[90]
+#define SWIGTYPE_p_unsigned_int swig_types[91]
+#define SWIGTYPE_p_unsigned_long swig_types[92]
+#define SWIGTYPE_p_unsigned_short swig_types[93]
+#define SWIGTYPE_p_vectorT_float_t swig_types[94]
+#define SWIGTYPE_p_void swig_types[95]
+static swig_type_info *swig_types[97];
+static swig_module_info swig_module = {swig_types, 96, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -32308,10 +32320,22 @@ static swig_type_info _swigt__p_VAR_TYPES = {"_p_VAR_TYPES", "VAR_TYPES *", 0, 0
 static swig_type_info _swigt__p_Vector3 = {"_p_Vector3", "Vector3 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Vector4 = {"_p_Vector4", "Vector4 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_WRAP_MODES = {"_p_WRAP_MODES", "WRAP_MODES *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_float = {"_p_float", "float *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int = {"_p_int", "int *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p___int64 = {"_p___int64", "__int64 *|LONGLONG *|LONG64 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_char = {"_p_char", "CHAR *|TCHAR *|char *|CCHAR *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_float = {"_p_float", "FLOAT *|float *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int = {"_p_int", "BOOL *|INT32 *|int *|INT *|INT_PTR *|LONG32 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_long = {"_p_long", "SHANDLE_PTR *|LONG_PTR *|LONG *|HRESULT *|long *|SSIZE_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mapT_unsigned_int_unsigned_int_t = {"_p_mapT_unsigned_int_unsigned_int_t", "map< unsigned int,unsigned int > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_unsigned_int = {"_p_unsigned_int", "unsigned int *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_p_char = {"_p_p_char", "PTCH *|PCTSTR *|LPCTSTR *|LPTCH *|PUTSTR *|LPUTSTR *|PCUTSTR *|LPCUTSTR *|char **|PTSTR *|LPTSTR *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_p_unsigned_long = {"_p_p_unsigned_long", "unsigned long **|PLCID *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_short = {"_p_short", "HALF_PTR *|short *|SHORT *|INT16 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_signed___int64 = {"_p_signed___int64", "INT64 *|signed __int64 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_signed_char = {"_p_signed_char", "signed char *|INT8 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned___int64 = {"_p_unsigned___int64", "UINT64 *|DWORD64 *|unsigned __int64 *|DWORDLONG *|ULONGLONG *|ULONG64 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "FCHAR *|unsigned char *|UCHAR *|BYTE *|TBYTE *|UINT8 *|BOOLEAN *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_int = {"_p_unsigned_int", "UINT32 *|DWORD32 *|UINT *|unsigned int *|UINT_PTR *|ULONG32 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_long = {"_p_unsigned_long", "HANDLE_PTR *|DWORD *|ULONG_PTR *|DWORD_PTR *|FLONG *|unsigned long *|ULONG *|SIZE_T *|LCID *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_short = {"_p_unsigned_short", "WORD *|UHALF_PTR *|unsigned short *|USHORT *|FSHORT *|LANGID *|UINT16 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_vectorT_float_t = {"_p_vectorT_float_t", "vector< float > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_void = {"_p_void", "void *", 0, 0, (void*)0, 0};
 
@@ -32394,10 +32418,22 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Vector3,
   &_swigt__p_Vector4,
   &_swigt__p_WRAP_MODES,
+  &_swigt__p___int64,
+  &_swigt__p_char,
   &_swigt__p_float,
   &_swigt__p_int,
+  &_swigt__p_long,
   &_swigt__p_mapT_unsigned_int_unsigned_int_t,
+  &_swigt__p_p_char,
+  &_swigt__p_p_unsigned_long,
+  &_swigt__p_short,
+  &_swigt__p_signed___int64,
+  &_swigt__p_signed_char,
+  &_swigt__p_unsigned___int64,
+  &_swigt__p_unsigned_char,
   &_swigt__p_unsigned_int,
+  &_swigt__p_unsigned_long,
+  &_swigt__p_unsigned_short,
   &_swigt__p_vectorT_float_t,
   &_swigt__p_void,
 };
@@ -32480,10 +32516,22 @@ static swig_cast_info _swigc__p_VAR_TYPES[] = {  {&_swigt__p_VAR_TYPES, 0, 0, 0}
 static swig_cast_info _swigc__p_Vector3[] = {  {&_swigt__p_Vector3, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Vector4[] = {  {&_swigt__p_Vector4, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_WRAP_MODES[] = {  {&_swigt__p_WRAP_MODES, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p___int64[] = {  {&_swigt__p___int64, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_float[] = {  {&_swigt__p_float, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_long[] = {  {&_swigt__p_long, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mapT_unsigned_int_unsigned_int_t[] = {  {&_swigt__p_mapT_unsigned_int_unsigned_int_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_p_char[] = {  {&_swigt__p_p_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_p_unsigned_long[] = {  {&_swigt__p_p_unsigned_long, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_short[] = {  {&_swigt__p_short, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_signed___int64[] = {  {&_swigt__p_signed___int64, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_signed_char[] = {  {&_swigt__p_signed_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned___int64[] = {  {&_swigt__p_unsigned___int64, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_int[] = {  {&_swigt__p_unsigned_int, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_long[] = {  {&_swigt__p_unsigned_long, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_short[] = {  {&_swigt__p_unsigned_short, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_vectorT_float_t[] = {  {&_swigt__p_vectorT_float_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_void[] = {  {&_swigt__p_void, 0, 0, 0},{0, 0, 0, 0}};
 
@@ -32566,10 +32614,22 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Vector3,
   _swigc__p_Vector4,
   _swigc__p_WRAP_MODES,
+  _swigc__p___int64,
+  _swigc__p_char,
   _swigc__p_float,
   _swigc__p_int,
+  _swigc__p_long,
   _swigc__p_mapT_unsigned_int_unsigned_int_t,
+  _swigc__p_p_char,
+  _swigc__p_p_unsigned_long,
+  _swigc__p_short,
+  _swigc__p_signed___int64,
+  _swigc__p_signed_char,
+  _swigc__p_unsigned___int64,
+  _swigc__p_unsigned_char,
   _swigc__p_unsigned_int,
+  _swigc__p_unsigned_long,
+  _swigc__p_unsigned_short,
   _swigc__p_vectorT_float_t,
   _swigc__p_void,
 };
