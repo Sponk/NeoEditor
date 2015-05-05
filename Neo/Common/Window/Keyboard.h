@@ -28,9 +28,8 @@
 //========================================================================
 
 
-#ifndef _M_KEYBOARD_H
-#define _M_KEYBOARD_H
-
+#ifndef __KEYBOARD_H
+#define __KEYBOARD_H
 
 class MKeyboard
 {

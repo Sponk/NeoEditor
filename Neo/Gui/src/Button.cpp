@@ -79,19 +79,24 @@ void Button::draw()
 	}
 
 	render->drawColoredQuad(m_x, m_y, m_width, m_height, color, m_rotation);
-	render->drawText(m_labelText, m_x + 0.5 * (float) m_width,
-					 m_y + 0.5 * m_labelText->getSize() + 0.5 * (float) m_height,
+	render->drawText(m_labelText, m_x + 0.5 * m_width,
+					 m_y + 0.5 * m_labelText->getSize() + 0.5 * m_height,
 					 m_rotation);
 }
 
 void Button::update()
 {
-	MMouse* mouse = MMouse::getInstance();
+	NeoEngine* engine = NeoEngine::getInstance();
+	SystemContext* system = engine->getSystemContext();
+	InputContext* input = engine->getInputContext();
 
-	unsigned int x = mouse->getXPosition();
-	unsigned int y = mouse->getYPosition();
+	unsigned int x = 0;
+	unsigned int y = 0;
+	Vector2 res = system->getScreenSize();
+	x = input->getAxis("MOUSE_X") * res.x;
+	y = input->getAxis("MOUSE_Y") * res.y;
 
-	if (m_state == BUTTON_PRESSED_STATE && !mouse->isLeftButtonPushed())
+	if (m_state == BUTTON_PRESSED_STATE && !input->isKeyPressed("MOUSE_BUTTON_LEFT"))
 	{
 		doCallback();
 	}
@@ -105,7 +110,7 @@ void Button::update()
 		m_state = BUTTON_NORMAL_STATE;
 	}
 
-	if (m_state == BUTTON_HOVER_STATE && mouse->isLeftButtonPushed())
+	if (m_state == BUTTON_HOVER_STATE && input->isKeyPressed("MOUSE_BUTTON_LEFT"))
 	{
 		m_state = BUTTON_PRESSED_STATE;
 	}

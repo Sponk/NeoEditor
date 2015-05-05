@@ -41,6 +41,12 @@ void MWinContext::getScreenSize(unsigned int * width, unsigned int * height)
 	*height = window->getHeight();
 }
 
+Vector2 MWinContext::getScreenSize()
+{
+	NeoWindow* window = NeoWindow::getInstance();
+	return Vector2(window->getWidth(), window->getHeight());
+}
+
 // cursor
 void MWinContext::setCursorPosition(int x, int y)
 {

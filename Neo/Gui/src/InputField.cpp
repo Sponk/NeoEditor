@@ -18,18 +18,18 @@
  *
  * Diese Datei ist Teil von NeoGui.
  *
- * NeoGui ist Freie Software: Sie können es unter den Bedingungen
+ * NeoGui ist Freie Software: Sie kÃ¶nnen es unter den Bedingungen
  * der GNU Lesser General Public License, wie von der Free Software Foundation,
  * Version 3 der Lizenz oder (nach Ihrer Wahl) jeder spÃ¤teren
  * verÃ¶ffentlichten Version, weiterverbreiten und/oder modifizieren.
  *
- * NeoGui wird in der Hoffnung, dass es nützlich sein wird, aber
- * OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite
- * GewÃ¤hrleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
- * Siehe die GNU Lesser General Public License für weitere Details.
+ * NeoGui wird in der Hoffnung, dass es nÃ¼tzlich sein wird, aber
+ * OHNE JEDE GEWÃ„HRLEISTUNG, bereitgestellt; sogar ohne die implizite
+ * GewÃ¤hrleistung der MARKTFÃ„HIGKEIT oder EIGNUNG FÃœR EINEN BESTIMMTEN ZWECK.
+ * Siehe die GNU Lesser General Public License fÃ¼r weitere Details.
  *
  * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
- * diesem
+ *diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
@@ -115,7 +115,7 @@ void InputField::draw()
 	renderContext->setScissor(m_x, winh - (m_y + m_height), m_width, m_height);
 
 	render->drawText(m_labelText, m_x - offset,
-					 m_y + 0.5*(box->max.y - box->min.y) + 0.5 * (float) m_height,
+					 m_y + 0.5*(box->max.y - box->min.y) + 0.5 * m_height,
 					 m_rotation);
 
 	renderContext->disableScissorTest();
@@ -135,9 +135,16 @@ void InputField::update()
 #ifndef ANDROID
 	MMouse* mouse = MMouse::getInstance();
 	MKeyboard* kbd = MKeyboard::getInstance();
+	
+	NeoEngine* engine = NeoEngine::getInstance();
+	SystemContext* system = engine->getSystemContext();
+	InputContext* input = engine->getInputContext();
 
-	unsigned int x = mouse->getXPosition();
-	unsigned int y = mouse->getYPosition();
+	unsigned int x = 0;
+	unsigned int y = 0;
+	Vector2 res = system->getScreenSize();
+	x = input->getAxis("MOUSE_X") * res.x;
+	y = input->getAxis("MOUSE_Y") * res.y;
 
 	if (x >= m_x && x <= m_x + m_width && y >= m_y && y <= m_y + m_height &&
 		m_state != INPUT_SELECTED_STATE)
@@ -150,13 +157,13 @@ void InputField::update()
 	}
 	else if (!(x >= m_x && x <= m_x + m_width && y >= m_y &&
 			   y <= m_y + m_height) &&
-			 m_state == INPUT_SELECTED_STATE && mouse->isLeftButtonPushed())
+			 m_state == INPUT_SELECTED_STATE && input->isKeyPressed("MOUSE_BUTTON_LEFT"))
 	{
 		m_label.erase(--m_label.end(), m_label.end());
 		m_state = INPUT_NORMAL_STATE;
 	}
 
-	if (m_state == INPUT_HOVER_STATE && mouse->isLeftButtonPushed())
+	if (m_state == INPUT_HOVER_STATE && input->isKeyPressed("MOUSE_BUTTON_LEFT"))
 	{
 		m_label += "|";
 		m_state = INPUT_SELECTED_STATE;

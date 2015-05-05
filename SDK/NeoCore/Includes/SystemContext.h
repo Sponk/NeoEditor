@@ -37,6 +37,7 @@ public:
 
 	// screen
 	virtual void getScreenSize(unsigned int * width, unsigned int * height) = 0;
+	virtual Vector2 getScreenSize() = 0;
 
 	// cursor
 	virtual void setCursorPosition(int x, int y){};

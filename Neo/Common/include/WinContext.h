@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MCore
-// MWinContext.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,8 +23,8 @@
 //========================================================================
 
 
-#ifndef _M_WIN_CONTEXT_H
-#define _M_WIN_CONTEXT_H
+#ifndef __WIN_CONTEXT_H
+#define __WIN_CONTEXT_H
 
 #include <NeoCore.h>
 
@@ -44,6 +39,7 @@ public:
 
 	// screen
 	void getScreenSize(unsigned int * width, unsigned int * height);
+	Vector2 getScreenSize();
 
 	// cursor
 	void setCursorPosition(int x, int y);
