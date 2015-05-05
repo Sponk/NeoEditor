@@ -134,7 +134,7 @@ public:
 	}
 
 	~Canvas() { clear(); }
-	Canvas() : m_layer(0) {}
+	Canvas() : m_layer(0), m_renderToTexture(false), m_fbo(0), m_texture(NULL), m_width(0), m_height(0) {}
 
 	void addSpriteBatch(SpriteBatch* b) { m_batches.push_back(b); }
 	

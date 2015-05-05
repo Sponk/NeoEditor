@@ -59,7 +59,7 @@ GuiSystem::GuiSystem()
 	m_normalBackground = Vector4(0.5, 0.5, 0.5, 1.0);
 	m_hoverBackground = Vector4(0.7, 0.7, 0.7, 1.0);
 	m_highlightBackground = Vector4(0.6, 0.7, 0.8, 1.0);
-	m_enabled = false;
+	m_enabled = true;
 	m_clearScheduled = false;
 	m_ids = 0;
 }

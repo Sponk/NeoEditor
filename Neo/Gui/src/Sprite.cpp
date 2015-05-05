@@ -81,7 +81,7 @@ void Sprite::draw(Vector2 offset)
 	if (m_label.length() > 0)
 	{
 		m_labelText->setText(m_label.c_str());
-		render->drawText(m_labelText, m_x + 0.5 * m_width + offset.x,
+		render->drawText(m_labelText, m_x + 0.5 * (float) m_width + offset.x,
 						 m_y + m_height + offset.y);
 	}
 }

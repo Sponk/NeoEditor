@@ -54,6 +54,6 @@ void Label::draw()
 	}
 
 	m_labelText->setText(m_label.c_str());
-	render->drawText(m_labelText, m_x + 0.5 * m_width,
-					 m_y + 0.5 * m_labelText->getSize() + 0.5 * m_height);
+	render->drawText(m_labelText, m_x + 0.5 * (float) m_width,
+					 m_y + 0.5 * m_labelText->getSize() + 0.5 * (float) m_height);
 }
