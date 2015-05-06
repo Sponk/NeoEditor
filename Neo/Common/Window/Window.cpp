@@ -270,7 +270,7 @@ void NeoWindow::setFullscreen(bool fullscreen)
 #endif
 	m_fullscreen = fullscreen;
 }
-
+#include <NeoEngine.h>
 void NeoWindow::sendEvents(MWinEvent * event)
 {
 	MKeyboard * keyboard = MKeyboard::getInstance();
@@ -342,7 +342,6 @@ bool NeoWindow::onEvents(void)
 {
 	MWinEvent mevent;
 	SDL_Event event;
-    std::vector<SDL_Event> unhandled;
 
 	while (SDL_PollEvent(&event))
 	{
@@ -353,11 +352,6 @@ bool NeoWindow::onEvents(void)
 				mevent.type = MWIN_EVENT_WINDOW_CLOSE;
 				sendEvents(&mevent);
 				break;
-			}
-
-			case SDL_WINDOWEVENT:
-			{
-                unhandled.push_back(event);
 			}
 
 			// Keyboard
@@ -662,95 +656,48 @@ bool NeoWindow::onEvents(void)
 				break;
 			}
 
+			case SDL_WINDOWEVENT:
+			{
+				switch (event.window.event)
+				{
+				case SDL_WINDOWEVENT_RESIZED:
+					mevent.type = MWIN_EVENT_WINDOW_RESIZE;
+					mevent.data[0] = event.window.data1;
+					mevent.data[1] = event.window.data2;
+					sendEvents(&mevent);
+					break;
+				case SDL_WINDOWEVENT_MOVED:
+					mevent.type = MWIN_EVENT_WINDOW_MOVE;
+					mevent.data[0] = event.window.data1;
+					mevent.data[1] = event.window.data2;
+					sendEvents(&mevent);
+					break;
+				case SDL_WINDOWEVENT_CLOSE:
+					mevent.type = MWIN_EVENT_WINDOW_CLOSE;
+					sendEvents(&mevent);
+					break;
+				case SDL_WINDOWEVENT_FOCUS_GAINED:
+					m_focus = true;
+					break;
+				case SDL_WINDOWEVENT_FOCUS_LOST:
+					m_focus = false;
+					break;
+				}
+				break;
+			}
+
 			// Default
 			default:
 				break;
 		}
 	}
 
-    for(int i = 0; i < unhandled.size(); i++)
-    {
-        SDL_PushEvent(&unhandled[i]);
-    }
-
 	return true;
-}
-
-bool NeoWindow::onWindowEvents(void)
-{
-    MWinEvent mevent;
-    SDL_Event event;
-    vector<SDL_Event> unhandled;
-
-    while (SDL_PollEvent(&event))
-    {
-        switch (event.type)
-        {
-            case SDL_QUIT:
-            {
-                mevent.type = MWIN_EVENT_WINDOW_CLOSE;
-                sendEvents(&mevent);
-                break;
-            }
-
-            case SDL_WINDOWEVENT:
-            {
-                switch (event.window.event)
-                {
-                    case SDL_WINDOWEVENT_RESIZED:
-                        mevent.type = MWIN_EVENT_WINDOW_RESIZE;
-                        mevent.data[0] = event.window.data1;
-                        mevent.data[1] = event.window.data2;
-                        sendEvents(&mevent);
-                        break;
-                    case SDL_WINDOWEVENT_MOVED:
-                        mevent.type = MWIN_EVENT_WINDOW_MOVE;
-                        mevent.data[0] = event.window.data1;
-                        mevent.data[1] = event.window.data2;
-                        sendEvents(&mevent);
-                        break;
-                    case SDL_WINDOWEVENT_CLOSE:
-                        mevent.type = MWIN_EVENT_WINDOW_CLOSE;
-                        sendEvents(&mevent);
-                        break;
-                    case SDL_WINDOWEVENT_FOCUS_GAINED:
-                        m_focus = true;
-                        break;
-                    case SDL_WINDOWEVENT_FOCUS_LOST:
-                        m_focus = false;
-                        break;
-                }
-                break;
-            }
-
-            // Default
-            default:
-                unhandled.push_back(event);
-                break;
-        }
-    }
-
-    for(int i = 0; i < unhandled.size(); i++)
-    {
-        SDL_PushEvent(&unhandled[i]);
-    }
-
-    return true;
 }
 
 void NeoWindow::swapBuffer(void)
 {
 	SDL_GL_SwapWindow(g_NeoWindow);
-}
-
-void NeoWindow::createSemaphores()
-{
-	ThreadFactory* mgr = ThreadFactory::getInstance();
-	updateSemaphore = mgr->getNewSemaphore();
-	graphicsSemaphore = mgr->getNewSemaphore();
-
-	updateSemaphore->Init(1);
-	graphicsSemaphore->Init(1);
 }
 
 bool NeoWindow::create(const char * title, unsigned int width, unsigned int height, int colorBits, bool fullscreen)

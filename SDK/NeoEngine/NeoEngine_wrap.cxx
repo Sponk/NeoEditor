@@ -11051,7 +11051,7 @@ static swig_lua_class *swig_InputContext_bases[] = {0};
 static const char *swig_InputContext_base_names[] = {0};
 static swig_lua_class _wrap_class_InputContext = { "InputContext", "InputContext", &SWIGTYPE_p_Neo__InputContext,0, swig_delete_InputContext, swig_InputContext_methods, swig_InputContext_attributes, &swig_InputContext_Sf_SwigStatic, swig_InputContext_meta, swig_InputContext_bases, swig_InputContext_base_names };
 
-static int _wrap_SystemContext_getScreenSize(lua_State* L) {
+static int _wrap_SystemContext_getScreenSize__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
   Neo::SystemContext *arg1 = (Neo::SystemContext *) 0 ;
   unsigned int *arg2 = (unsigned int *) 0 ;
@@ -11085,6 +11085,97 @@ static int _wrap_SystemContext_getScreenSize(lua_State* L) {
 fail:
   lua_error(L);
   return SWIG_arg;
+}
+
+
+static int _wrap_SystemContext_getScreenSize__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::SystemContext *arg1 = (Neo::SystemContext *) 0 ;
+  Neo::Vector2 result;
+  
+  SWIG_check_num_args("Neo::SystemContext::getScreenSize",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::SystemContext::getScreenSize",1,"Neo::SystemContext *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__SystemContext,0))){
+    SWIG_fail_ptr("SystemContext_getScreenSize",1,SWIGTYPE_p_Neo__SystemContext);
+  }
+  
+  result = (arg1)->getScreenSize();
+  {
+    Neo::Vector2 * resultptr = new Neo::Vector2((const Neo::Vector2 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector2,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_SystemContext_getScreenSize(lua_State* L) {
+  int argc;
+  int argv[4]={
+    1,2,3,4
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 1) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__SystemContext, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      return _wrap_SystemContext_getScreenSize__SWIG_1(L);
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__SystemContext, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_unsigned_int, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        {
+          void *ptr;
+          if (SWIG_isptrtype(L,argv[2])==0 || SWIG_ConvertPtr(L,argv[2], (void **) &ptr, SWIGTYPE_p_unsigned_int, 0)) {
+            _v = 0;
+          } else {
+            _v = 1;
+          }
+        }
+        if (_v) {
+          return _wrap_SystemContext_getScreenSize__SWIG_0(L);
+        }
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'SystemContext_getScreenSize'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::SystemContext::getScreenSize(unsigned int *,unsigned int *)\n"
+    "    Neo::SystemContext::getScreenSize()\n");
+  lua_error(L);return 0;
 }
 
 
@@ -14997,6 +15088,30 @@ fail:
 }
 
 
+static int _wrap_NeoGame_getFrameDelta(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::NeoGame *arg1 = (Neo::NeoGame *) 0 ;
+  float result;
+  
+  SWIG_check_num_args("Neo::NeoGame::getFrameDelta",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::NeoGame::getFrameDelta",1,"Neo::NeoGame *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__NeoGame,0))){
+    SWIG_fail_ptr("NeoGame_getFrameDelta",1,SWIGTYPE_p_Neo__NeoGame);
+  }
+  
+  result = (float)(arg1)->getFrameDelta();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_NeoGame_isRunning(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoGame *arg1 = (Neo::NeoGame *) 0 ;
@@ -15391,6 +15506,7 @@ static swig_lua_attribute swig_NeoGame_attributes[] = {
     {0,0,0}
 };
 static swig_lua_method swig_NeoGame_methods[]= {
+    { "getFrameDelta", _wrap_NeoGame_getFrameDelta},
     { "isRunning", _wrap_NeoGame_isRunning},
     { "hasPostEffects", _wrap_NeoGame_hasPostEffects},
     { "enablePostEffects", _wrap_NeoGame_enablePostEffects},

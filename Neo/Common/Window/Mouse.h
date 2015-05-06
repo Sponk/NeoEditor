@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MGui
-// MMouse.h
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2014 Anael Seghezzi <www.maratis3d.com>
 //
@@ -28,8 +23,8 @@
 //========================================================================
 
 
-#ifndef _M_MOUSE_H
-#define _M_MOUSE_H
+#ifndef __MOUSE_H
+#define __MOUSE_H
 
 
 class MMouse
@@ -59,11 +54,7 @@ private:
 public:
 
 	// instance
-	static MMouse * getInstance()
-	{
-		static MMouse m_instance;
-		return &m_instance;
-	};
+	static MMouse * getInstance();
 
 	inline void refreshLastPosition(){ m_lastPosition[0] = m_position[0]; m_lastPosition[1] = m_position[1]; }
 

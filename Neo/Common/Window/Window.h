@@ -107,7 +107,6 @@ public:
 	inline void setPointerEvent(void (*pointerEvent)(MWinEvent * windowEvents)){ m_pointerEvent = pointerEvent; }
 	void sendEvents(MWinEvent * event);
 	bool onEvents(void);
-    bool onWindowEvents(void);
 
 	// cursor
 	void setCursorPos(int x, int y);
@@ -162,15 +161,6 @@ public:
     // messagebox
     void messagebox(const char* content, const char* title);
     void executeDetached(const char *path, const char *args, bool killParent);
-
-	Neo::Semaphore* getUpdateSemaphore() { return updateSemaphore; }
-	Neo::Semaphore* getGraphicsSemaphore() { return graphicsSemaphore; }
-
-	void createSemaphores();
-
-private:
-	Neo::Semaphore* updateSemaphore;
-	Neo::Semaphore* graphicsSemaphore;
 };
 
 #else

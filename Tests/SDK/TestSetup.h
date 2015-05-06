@@ -52,8 +52,6 @@ public:
 		mgr->setTemplateSemaphore(new Neo::SDLSemaphore());
 		mgr->setTemplateThread(new Neo::SDLThread());
 
-		NeoWindow::getInstance()->createSemaphores();
-
 		game->begin();
 	}
 

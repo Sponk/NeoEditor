@@ -84,8 +84,6 @@ public:
 		mgr->setTemplateSemaphore(new SDLSemaphore());
 		mgr->setTemplateThread(new SDLThread());
 
-		NeoWindow::getInstance()->createSemaphores();
-
 		Gui::GuiSystem::getInstance()->setupLuaInterface(script);
 		game->begin();
 	}

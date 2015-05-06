@@ -1,8 +1,3 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MGui
-// MMouse.cpp
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -30,6 +25,11 @@
 
 #include <Window/Mouse.h>
 
+MMouse* MMouse::getInstance()
+{
+	static MMouse m_instance;
+	return &m_instance;
+}
 
 void MMouse::setPosition(float x, float y)
 {

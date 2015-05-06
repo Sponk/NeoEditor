@@ -43,8 +43,6 @@
 using namespace Neo::Gui;
 using namespace Neo;
 
-extern Neo::SDLSemaphore updateSemaphore;
-
 void TileSheet::loadImage(const char* path, unsigned int width,
 						  unsigned int height, unsigned int dist)
 {

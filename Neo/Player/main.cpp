@@ -21,6 +21,7 @@
 #include <GameWinEvents.h>
 #include <NeoEngine.h>
 #include <SDLThread.h>
+#include <algorithm>
 
 #include "Backend/PlayerBackend.h"
 
@@ -75,136 +76,6 @@ void draw(void)
     NeoWindow::getInstance()->swapBuffer();
 }
 
-SDLSemaphore updateSemaphore;
-bool updateThreadRunning = true;
-int profiler = false;
-
-// TODO: Abstraction!
-double frametime = 0;
-double framecount = -1;
-int framemax = 0;
-int framemin = -1;
-
-double updatetime = 0;
-double updatecount = -1;
-int updatemax = 0;
-int updatemin = -1;
-
-int update_thread(void* nothing)
-{
-    NeoWindow * window = NeoWindow::getInstance();
-
-	Messenger* messenger = Messenger::getInstance();
-	messenger->addInbox("MainThread", 0);
-
-	//window->getUpdateSemaphore()->WaitAndLock();
-	//NeoEngine::getInstance()->getGame()->begin();
-	//window->getUpdateSemaphore()->Unlock();
-
-    // time
-    int frequency = 60;
-    int skipTicks = 1000 / frequency - 5;
-    long previousFrame = 0;
-    long startTick = window->getSystemTick();
-
-    while(updateThreadRunning)
-    {
-		// Get input
-        NeoEngine::getInstance()->getInputContext()->flush();
-        window->onEvents();
-
-		window->getUpdateSemaphore()->WaitAndLock();
-        if(window->getFocus())
-        {
-            // compute target tick
-            unsigned long currentTick = window->getSystemTick();
-
-            unsigned long tick = currentTick - startTick;
-            unsigned long frame = (long)(tick * (frequency * 0.001f));
-
-            // update elapsed time
-            unsigned int i;
-            unsigned int steps = (int)(frame - previousFrame);
-
-            // don't wait too much
-            if(steps >= (frequency/2))
-            {
-               update();
-               unsigned int oldTick = currentTick;
-               currentTick = window->getSystemTick();
-
-                previousFrame = frame;
-
-                int sleep = skipTicks - (currentTick - oldTick);
-
-				if (profiler)
-				{
-					int time = currentTick - oldTick;
-					updatecount++;
-					updatetime += time;
-
-					if (time > updatemax)
-					{
-						updatemax = time;
-					}
-					else if (time < updatemin || updatemin < 0)
-					{
-						updatemin = time;
-					}
-				}
-
-				window->getUpdateSemaphore()->Unlock();
-                window->sleep(sleep);
-
-                continue;
-            }
-
-            // update
-            for(i=0; i<steps; i++)
-            {
-                update();
-                previousFrame++;
-            }
-
-            unsigned int oldTick = currentTick;
-            currentTick = window->getSystemTick();
-
-            int sleep = skipTicks - (currentTick - oldTick);
-
-			if (profiler)
-			{
-				int time = currentTick - oldTick;
-				updatecount++;
-				updatetime += time;
-
-				if (time > updatemax)
-				{
-					updatemax = time;
-				}
-				else if (time < updatemin || updatemin < 0)
-				{
-					updatemin = time;
-				}
-            }
-
-			window->getUpdateSemaphore()->Unlock();
-            window->sleep(sleep);
-        }
-        else
-        {
-			window->getUpdateSemaphore()->Unlock();
-			window->sleep(100);
-        }
-
-        fflush(stdout);
-	}
-
-	NeoEngine::getInstance()->getGame()->end();
-
-    return 0;
-}
-
-// TODO: Make profiler a compiler option
 // main
 int main(int argc, char **argv)
 {
@@ -224,17 +95,15 @@ int main(int argc, char **argv)
 		sscanf(argv[3], "%d", &height);
 	if(argc > 4)
 		sscanf(argv[4], "%d", &fullscreen);
-    if(argc > 5)
-        sscanf(argv[5], "%d", &profiler);
 
-	// get engine (first time call onstructor)
+	// get engine (first time call constructor)
 	NeoEngine * engine = NeoEngine::getInstance();
 
-	// get window (first time call onstructor)
+	// get window (first time call constructor)
 	NeoWindow * window = NeoWindow::getInstance();
 
-	// get Maratis (first time call onstructor)
-	PlayerBackend * maratis = PlayerBackend::getInstance();
+	// get the backend (first time call constructor)
+	PlayerBackend * backend = PlayerBackend::getInstance();
 
 	// create window
 	if(!window->create(std::string("Neo ").append(PLAYER_VERSION_STRING).c_str(), width, height, 32, fullscreen == 1))
@@ -243,7 +112,7 @@ int main(int argc, char **argv)
 		return 0;
 	}
 
-	maratis->start();
+	backend->start();
 
 	if(fullscreen)
 		window->hideCursor();
@@ -262,12 +131,12 @@ int main(int argc, char **argv)
     {
 		char filename[256];
 		getGlobalFilename(filename, window->getCurrentDirectory(), argv[1]);
-		if(maratis->loadProject(filename))
+		if(backend->loadProject(filename))
 		{
             // Initialize GUI bindings
 			Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
 
-	    	engine->getGame()->begin();
+	    	//engine->getGame()->begin();
 			projectFound = true;
 		}
 	}
@@ -288,9 +157,9 @@ int main(int argc, char **argv)
 
 			embeddedProj.startLevel = levelName;
 
-			Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
+			Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(engine->getScriptContext());
 
-			maratis->loadProject(&embeddedProj, projName);
+			backend->loadProject(&embeddedProj, projName);
 
 			// This needs to be done in the update thread
 			// engine->getGame()->begin();
@@ -309,13 +178,13 @@ int main(int argc, char **argv)
 					char filename[256];
 					getGlobalFilename(filename, window->getCurrentDirectory(), files[i].c_str());
 
-					if(maratis->loadProject(filename))
+					if(backend->loadProject(filename))
 					{
                         // Initialize GUI bindings
-						Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
+						Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(engine->getScriptContext());
 
 						// This needs to be done in the update thread
-						// engine->getGame()->begin();
+						//engine->getGame()->begin();
 						projectFound = true;
 						break;
 					}
@@ -324,86 +193,51 @@ int main(int argc, char **argv)
 		}
 	}
 
-	if(profiler)
-        MLOG_INFO("Profiling enabled");
-
 	// Init default thread
 	ThreadFactory* mgr = ThreadFactory::getInstance();
 	mgr->setTemplateSemaphore(new SDLSemaphore());
 	mgr->setTemplateThread(new SDLThread());
-
-	window->createSemaphores();
 
     // create the update thread
     SDLThread updateThread;
 	Neo::Gui::GuiSystem* guiSystem = Neo::Gui::GuiSystem::getInstance();
 
 	//window->getUpdateSemaphore()->WaitAndLock();
-	NeoEngine::getInstance()->getGame()->begin();
-    //window->getUpdateSemaphore()->Unlock();
+	NeoGame* game = engine->getGame();
+	game->begin();
 
-	// Init thread
-    updateThread.Start(update_thread, "Update", NULL);
+//    Messenger* messenger = Messenger::getInstance();
+//    messenger->addInbox("MainThread", 0);
 
-    Messenger* messenger = Messenger::getInstance();
-    messenger->addInbox("MainThread", 0);
+	SystemContext* system = engine->getSystemContext();
+	unsigned int frameStart = 0;
 
     bool isActive = true;
     // on events
     while(isActive)
     {
-		window->getUpdateSemaphore()->WaitAndLock();
-        window->onWindowEvents();
-
-		// Handle all messages
-		while(messenger->getMessagesCount("MainThread") != 0)
-		{
-			Message msg = messenger->getNextMessage("MainThread");
-
-			// loadTexture has ID 1
-			if(msg.message == "loadTexture")
-			{
-				TextureRef* tex = engine->getLevel()->loadTexture((const char*) msg.data);
-				messenger->sendMessage("Done.", 1, (void*) tex, msg.sender.c_str(), "MainThread");
-			}
-		}
-
-		//MLOG_INFO("DRAW");
+    	frameStart = system->getSystemTick();
+		window->onEvents();
 
         if(!isActive)
         {
-            engine->getGame()->end();
-			window->getUpdateSemaphore()->Unlock();
+            game->end();
 			break;
         }
 
         if(window->getFocus())
         {
-            int tick = engine->getSystemContext()->getSystemTick();
+            int tick = system->getSystemTick();
+            update();
             draw();
-
-			if (profiler)
-			{
-				int time = engine->getSystemContext()->getSystemTick() - tick;
-				framecount++;
-				frametime += time;
-
-				if (time > framemax)
-				{
-					framemax = time;
-				}
-				else if (time < framemin || framemin < 0)
-				{
-					framemin = time;
-				}
-			}
         }
         else
         {
+        	update();
             draw();
+
 			guiSystem->draw();
-			window->getUpdateSemaphore()->Unlock();
-            window->sleep(100);
+            window->sleep(100.0);
 			continue;
         }
 
@@ -411,54 +245,11 @@ int main(int argc, char **argv)
 
         // update postponed requests
         NeoEngine::getInstance()->updateRequests();
-		window->getUpdateSemaphore()->Unlock();
 
-        window->sleep(5);
-        //window->sleep(0.001); // 1 mili sec seems to slow down on some machines...
+        // TODO: Make target frame time configurable!
+        window->sleep(16.6 - (system->getSystemTick() - frameStart));
     }
 
-    updateThreadRunning = false;
-    int ret = updateThread.WaitForReturn();
-
-	MLOG_INFO("Update thread returned with exit code " << ret);
-
-	if (profiler)
-	{
-		using namespace std;
-
-		float avUpdate = (float)updatetime / (float)updatecount;
-		float avFrame = (float)frametime / (float)framecount;
-
-		cout << "\nProfiling report\n";
-		cout << "******************************************************\n";
-
-		cout << "Graphics data:\n";
-		cout << "----------------\n";
-
-		cout << "Number of frames: " << framecount << "\n";
-		cout << "Average frametime: " << avFrame << " ms\n";
-		cout << "Average framerate: " << 1000 / avFrame << " FPS\n";
-		cout << "Max: " << framemax << " ms\n";
-		cout << "Min: " << framemin << " ms\n";
-
-		cout << "\nUpdate data (scripts, physics, etc.):\n";
-		cout << "-----------------------------------------\n";
-		cout << "Number of frames: " << updatecount << "\n";
-		cout << "Average frametime: " << avUpdate << " ms\n";
-		cout << "Average framerate: " << 1000 / avUpdate << " FPS\n";
-		cout << "Max: " << updatemax << " ms\n";
-		cout << "Min: " << updatemin << " ms\n";
-
-		if (avUpdate > avFrame)
-		{
-			cout << "\nResult: Your application is CPU capped!\n";
-		}
-		else
-		{
-			cout << "\nResult: Your application is GPU capped!\n";
-		}
-	}
-
-	maratis->clear();
+	backend->clear();
 	return 0;
 }

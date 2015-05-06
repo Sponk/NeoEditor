@@ -43,8 +43,6 @@ public:
 		ThreadFactory* mgr = ThreadFactory::getInstance();
 		mgr->setTemplateSemaphore(new SDLSemaphore());
 		mgr->setTemplateThread(new SDLThread());
-
-		NeoWindow::getInstance()->createSemaphores();
 	}
 
 	void TearDown()

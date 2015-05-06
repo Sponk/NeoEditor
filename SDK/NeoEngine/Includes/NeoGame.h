@@ -66,6 +66,8 @@ public:
 
 public:
 
+	inline float getFrameDelta() { return m_frameDelta; }
+
 	// is running
 	inline bool isRunning(void){ return m_isRunning; }
 

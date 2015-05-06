@@ -23,6 +23,6 @@ button:setScriptCallback("buttonCallback")
 
 local lastDelta = 0.0
 function onSceneUpdate(delta)
-    label:setLabel("Delta: " .. delta*1000 .. "\nDelta Skew: " .. 100*(1000*lastDelta / 1000*delta) .. "%")
+    label:setLabel("Delta: " .. delta*1000 .. "ms\nDelta Skew: " .. (1000*lastDelta - 1000*delta) .. "ms")
     lastDelta = delta
 end

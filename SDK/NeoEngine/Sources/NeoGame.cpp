@@ -29,7 +29,10 @@ using namespace Neo;
 static unsigned int s_renderBufferId = 0;
 
 NeoGame::NeoGame(void):
-m_isRunning(false)
+m_isRunning(false),
+m_frameDelta(0),
+m_lastFrame(0),
+m_postEffectsEnabled(false)
 {}
 
 NeoGame::~NeoGame(void)

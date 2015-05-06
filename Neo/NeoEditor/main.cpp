@@ -544,7 +544,6 @@ int main(int argc, char** argv)
 	mgr->setTemplateSemaphore(new SDLSemaphore());
 	mgr->setTemplateThread(new SDLThread());
 
-	mwindow->createSemaphores();
 	backend->initPlugins();
 
 #ifndef WIN32

@@ -133,9 +133,8 @@ void InputField::addCharacter(char c)
 void InputField::update()
 {
 #ifndef ANDROID
-	MMouse* mouse = MMouse::getInstance();
 	MKeyboard* kbd = MKeyboard::getInstance();
-	
+
 	NeoEngine* engine = NeoEngine::getInstance();
 	SystemContext* system = engine->getSystemContext();
 	InputContext* input = engine->getInputContext();

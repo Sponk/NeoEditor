@@ -57,9 +57,7 @@ void update_editor(void*)
     if(!window.glbox->maratis_init)
         return;
 
-
 	NeoWindow::getInstance()->onEvents();
-	NeoWindow::getInstance()->onWindowEvents();
 
     NeoGame* game = NeoEngine::getInstance()->getGame();
     InputContext* input = NeoEngine::getInstance()->getInputContext();
@@ -77,7 +75,6 @@ void update_editor(void*)
             {
                 vue->setFov(vue->getFov() + direction*translation_speed);
             }
-
 
             vue->setPosition(vue->getPosition() + vue->getRotatedVector(Vector3(0,0,direction*translation_speed)));
             vue->updateMatrix();
