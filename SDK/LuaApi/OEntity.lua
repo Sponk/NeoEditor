@@ -48,6 +48,12 @@ function OEntity:getPath()
   return self.path
 end
 
+--- Set the position of this object
+-- @parm pos The position as a vec3
+function OEntity:setPosition(pos)
+   setPosition(self.nativeObject, pos)
+end
+
 --- Returns the ID of the currently running animation.
 -- @return The ID as a number
 function OEntity:getCurrentAnimation()
