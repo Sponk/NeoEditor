@@ -356,6 +356,11 @@ ADD_SUBDIRECTORY(SDK)
 ADD_SUBDIRECTORY(Neo)
 ADD_SUBDIRECTORY(Data)
 
+## Target for regenerating Lua bindings
+IF(${SWIG_FOUND})
+ADD_CUSTOM_TARGET(swig DEPENDS neogui-swig neoengine-swig neocore-swig)
+ENDIF()
+
 IF(NOT NO_DOCUMENTATION AND NOT ANDROID)
 	ADD_SUBDIRECTORY(Documentation)
 ENDIF()
