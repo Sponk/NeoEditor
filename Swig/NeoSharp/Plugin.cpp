@@ -21,6 +21,14 @@ extern "C" void StartPlugin()
 	NeoGame* game = engine->getGame();
 	MonoContext* monoContext = MonoContext::getInstance();
 
+	const char* enableDebugStr = getenv("NEOSHARP_DEBUG");
+	bool enableDebug = (enableDebugStr && strcmp(enableDebugStr, "true") == 0);
+
+	if(enableDebug) MLOG_INFO("Enabled Mono soft debugger");
+
+	// Enable debugging
+	monoContext->enableDebugging(enableDebug);
+
 	// Load our assembly and init subgame if
 	// it is successfully loaded
 	if(monoContext->loadAssembly("NeoSharp.dll")

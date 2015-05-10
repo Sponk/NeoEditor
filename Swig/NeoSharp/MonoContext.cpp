@@ -1,5 +1,6 @@
 #include "MonoContext.h"
 #include <NeoEngine.h>
+#include <mono/metadata/mono-debug.h>
 #include <mono/metadata/debug-helpers.h>
 #include <mono/metadata/threads.h>
 
@@ -34,6 +35,17 @@ bool MonoContext::addAssembly(const char* path)
 {
 	if(!path || !domain)
 		return false;
+
+	if(m_debug)
+	{
+		static const char* options[] = {
+				  //"--soft-breakpoints",
+				  "--debugger-agent=transport=dt_socket,address=127.0.0.1:10000"
+				};
+
+		mono_jit_parse_options(sizeof(options)/sizeof(char*), (char**)options);
+		mono_debug_init(MONO_DEBUG_FORMAT_MONO);
+	}
 
 	// FIXME: More fine grained control over what assembly to use!
 	assembly = mono_domain_assembly_open(domain, path);

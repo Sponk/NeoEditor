@@ -8,6 +8,7 @@ class MonoContext
 {
 	MonoDomain* domain;
 	MonoAssembly* assembly;
+	bool m_debug;
 
 	void clear();
 
@@ -20,6 +21,8 @@ public:
 
 	void callMethod(const char* name);
 	void attachToThread();
+
+	void enableDebugging(bool value) { m_debug = value; }
 
 	static MonoContext* getInstance() { static MonoContext context; return &context; }
 };
