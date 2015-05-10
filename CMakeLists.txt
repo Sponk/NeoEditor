@@ -20,6 +20,7 @@ FIND_PACKAGE(Doxygen 1.8.3)
 
 ## SWIG for script bindings
 FIND_PACKAGE(SWIG)
+FIND_PACKAGE(Mono)
 
 ## Set version and info
 SET(NEO_MAJOR_VERSION 0)
@@ -355,6 +356,8 @@ ADD_SUBDIRECTORY(3rdparty)
 ADD_SUBDIRECTORY(SDK)
 ADD_SUBDIRECTORY(Neo)
 ADD_SUBDIRECTORY(Data)
+
+ADD_SUBDIRECTORY(Swig)
 
 ## Target for regenerating Lua bindings
 IF(${SWIG_FOUND})

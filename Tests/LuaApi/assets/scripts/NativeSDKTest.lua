@@ -1,11 +1,11 @@
-require("NeoGui")
+require("Neo")
 
-local gui = NeoGui.GuiSystem.getInstance()
+local gui = Neo.GuiSystem.getInstance()
 gui:setEnabled(true)
 
-inputField = NeoGui.InputField(100, 300, 300, 30, "This is an text input!");
-button = NeoGui.ThemedButton(100, 100, 300, 30, "This is a button!")
-label = NeoGui.Label(100, 200, 0, 30, "This is a label!")
+inputField = Neo.InputField(100, 300, 300, 30, "This is an text input!");
+button = Neo.ThemedButton(100, 100, 300, 30, "This is a button!")
+label = Neo.Label(100, 200, 0, 30, "This is a label!")
 
 labelhandle = gui:addWidget(label)
 buttonhandle = gui:addWidget(button)

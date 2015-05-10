@@ -18,36 +18,12 @@ INCLUDE_DIRECTORIES(
 # SET(CMAKE_INSTALL_RPATH "./") # "${CMAKE_INSTALL_PREFIX}")
 
 ADD_DEFINITIONS(-DNEO_ENGINE_DLL)
-
-IF(${SWIG_FOUND})
-  MESSAGE("-- Generating Lua bindings for NeoEngine")
-
-  EXECUTE_PROCESS(
-	COMMAND ${SWIG_EXECUTABLE} -lua -c++ -I${NEO_CORE_INCLUDE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/Includes ${CMAKE_CURRENT_SOURCE_DIR}/NeoEngine.i
-
-	OUTPUT_VARIABLE SWIG_swiglib_output
-	ERROR_VARIABLE SWIG_swiglib_error
-	RESULT_VARIABLE SWIG_swiglib_result
-	)
-
-  ADD_CUSTOM_TARGET(neoengine-swig
-	COMMAND ${SWIG_EXECUTABLE} -lua -c++ -I${NEO_CORE_INCLUDE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/Includes ${CMAKE_CURRENT_SOURCE_DIR}/NeoEngine.i
-	)
-
-  IF(NOT ${SWIG_swiglib_result} EQUAL 0)
-	MESSAGE(SEND_ERROR "-- Generating Lua bindings for NeoEngine failed with output:\n${SWIG_swiglib_error}")
-  ENDIF(NOT ${SWIG_swiglib_result} EQUAL 0)
-
-ELSE()
-  MESSAGE("-- Will NOT generate Lua bindings for NeoEngine")
-ENDIF()
-
 SET(CMAKE_SHARED_LIBRARY_PREFIX "")
 
 IF(NOT ANDROID AND NOT EMSCRIPTEN)
-	ADD_LIBRARY(NeoEngine SHARED ${SOURCES} ${HEADERS} NeoEngine_wrap.cxx)
+        ADD_LIBRARY(NeoEngine SHARED ${SOURCES} ${HEADERS})
 ELSE()
-	ADD_LIBRARY(NeoEngine STATIC ${SOURCES} ${HEADERS} NeoEngine_wrap.cxx)
+        ADD_LIBRARY(NeoEngine STATIC ${SOURCES} ${HEADERS})
 ENDIF()
 
 TARGET_LINK_LIBRARIES(NeoEngine ${NEO_CORE_LIBRARIES})
