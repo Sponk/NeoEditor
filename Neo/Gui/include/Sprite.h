@@ -90,7 +90,7 @@ namespace Gui
  * @endcode
  * @author Yannick Pflanzer
  */
-class Sprite : public Widget
+class NEO2D_EXPORT Sprite : public Widget
 {
 protected:
 	OText *m_labelText;

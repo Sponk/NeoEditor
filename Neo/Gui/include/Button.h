@@ -61,7 +61,7 @@ enum BUTTON_STATE
  *
  * @author Yannick Pflanzer
  */
-class Button : public Widget
+class NEO2D_EXPORT Button : public Widget
 {
 protected:
 	OText* m_labelText;

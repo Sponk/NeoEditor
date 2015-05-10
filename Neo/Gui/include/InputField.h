@@ -59,7 +59,7 @@ enum INPUT_STATE
  *
  * @author Yannick Pflanzer
  */
-class InputField : public Widget
+class NEO2D_EXPORT InputField : public Widget
 {
 	OText* m_labelText;
 	INPUT_STATE m_state;

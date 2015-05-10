@@ -53,7 +53,7 @@ namespace Gui
  *
  * @author Yannick Pflanzer
  */
-class ThemedButton : public Button
+class NEO2D_EXPORT ThemedButton : public Button
 {
 	enum SPRITE_POS
 	{

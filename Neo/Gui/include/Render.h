@@ -37,6 +37,7 @@
 #define __RENDER_H__
 
 #include <NeoEngine.h>
+#include <Neo2D.h>
 
 namespace Neo
 {
@@ -51,7 +52,7 @@ namespace Gui
  *
  * @author Yannick Pflanzer
  */
-class Render
+class NEO2D_EXPORT Render
 {
 private:
 	unsigned int m_colorOnlyFx;

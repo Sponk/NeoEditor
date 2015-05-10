@@ -50,7 +50,7 @@ namespace Gui
  *
  * @author Yannick Pflanzer
  */
-class TileSheet
+class NEO2D_EXPORT TileSheet
 {
 private:
 	int m_image;
@@ -78,7 +78,7 @@ public:
  *
  * @author Yannick Pflanzer
  */
-class Tile : public Widget
+class NEO2D_EXPORT Tile : public Widget
 {
 protected:
 	OText* m_labelText;

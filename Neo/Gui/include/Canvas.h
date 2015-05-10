@@ -90,7 +90,7 @@ namespace Gui
  * @endcode
  * @author Yannick Pflanzer
  */
-class SpriteBatch
+class NEO2D_EXPORT SpriteBatch
 {
 	std::vector<Widget*> m_sprites;
 public:
@@ -106,7 +106,7 @@ public:
  *
  * @author Yannick Pflanzer
  */
-class Canvas
+class NEO2D_EXPORT Canvas
 {
 private:
 	std::vector<int> m_widgets;

@@ -42,7 +42,7 @@ enum COLLISION_SHAPE_TYPE
 	COLLISION_SHAPE_TRIANGLE_MESH
 };
 
-struct PhysicsConstraint
+struct NEO_ENGINE_EXPORT PhysicsConstraint
 {
 	PhysicsConstraint(void);
 	PhysicsConstraint(const PhysicsConstraint & constraint);

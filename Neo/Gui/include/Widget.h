@@ -37,6 +37,7 @@
 #define __WIDGET_H__
 
 #include <NeoEngine.h>
+#include <Neo2d.h>
 #include <string>
 
 namespace Neo
@@ -64,7 +65,7 @@ class Widget;
  *
  * @author Yannick Pflanzer
  */
-class Widget
+class NEO2D_EXPORT Widget
 {
 protected:
 	/// The 2D coordinates of the widget

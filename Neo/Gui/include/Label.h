@@ -49,7 +49,7 @@ namespace Gui
  *
  * @author Yannick Pflanzer
  */
-class Label : public Widget
+class NEO2D_EXPORT Label : public Widget
 {
 protected:
 	OText* m_labelText;
