@@ -37,7 +37,7 @@
 #define __WIDGET_H__
 
 #include <NeoEngine.h>
-#include <Neo2d.h>
+#include <Neo2D.h>
 #include <string>
 
 namespace Neo
@@ -49,7 +49,7 @@ namespace Gui
 class Widget;
 
 #if !defined(WIN32)
-	/** 
+	/**
 	 * A pointer to a callback.
 	 */
 	typedef void (*CALLBACK_FUNCTION)(Widget*, long int);
@@ -131,7 +131,7 @@ public:
 
 	/**
 	 * @brief Draws the widget to the canvas it belongs to.
-	 * @param offset The offset to apply to the position. 
+	 * @param offset The offset to apply to the position.
 	 * Used for emulating a camera.
 	 *
 	 * @see Canvas
@@ -240,8 +240,8 @@ public:
 	 * @brief Translates the object.
 	 * @param vec The offset to apply.
 	 */
-	void translate(Vector2 vec) 
-	{ 
+	void translate(Vector2 vec)
+	{
 		m_x += vec.x;
 		m_y += vec.y;
 	}
