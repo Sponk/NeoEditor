@@ -12,7 +12,7 @@ IF(${SWIG_FOUND})
 	)
 
 	EXECUTE_PROCESS(
-		COMMAND ${SWIG_EXECUTABLE} -lua -c++ -I${NEO_CORE_INCLUDE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/Includes 
+		COMMAND ${SWIG_EXECUTABLE} -lua -c++ -I${NEO_CORE_INCLUDE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/Includes
 			-I${NEOGUI_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR}
                         ${CMAKE_CURRENT_SOURCE_DIR}/Neo.i
 
@@ -22,18 +22,17 @@ IF(${SWIG_FOUND})
 		)
 
 	ADD_CUSTOM_TARGET(neo-swig
-		COMMAND ${SWIG_EXECUTABLE} -lua -c++ -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR} -I${NEOGUI_INCLUDE_DIR} 
+		COMMAND ${SWIG_EXECUTABLE} -lua -c++ -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR} -I${NEOGUI_INCLUDE_DIR}
 			    ${CMAKE_CURRENT_SOURCE_DIR}/Neo.i
 		)
 
   	IF(${ENABLE_MONO})
-  	
+
   		FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/Swig)
-  		  		
+
 	  	EXECUTE_PROCESS(
 	  		COMMAND ${SWIG_EXECUTABLE} -csharp -c++ -outdir ${CMAKE_BINARY_DIR}/Swig -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR}
-	  			-I${NEOGUI_INCLUDE_DIR} 
-                                -dllimport Game.so ${CMAKE_CURRENT_SOURCE_DIR}/NeoSharp.i
+	  			-I${NEOGUI_INCLUDE_DIR} -dllimport Game.so ${CMAKE_CURRENT_SOURCE_DIR}/NeoSharp.i
 
 			OUTPUT_VARIABLE SWIG_swiglib_output
 			ERROR_VARIABLE SWIG_swiglib_error
@@ -42,15 +41,14 @@ IF(${SWIG_FOUND})
 
 	  	ADD_CUSTOM_TARGET(neo-mono-swig
 			COMMAND ${SWIG_EXECUTABLE} -csharp -c++ -outdir ${CMAKE_BINARY_DIR}/Swig -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR}
-				-I${NEOGUI_INCLUDE_DIR} 
-                                -dllimport Game.so NeoSharp ${CMAKE_CURRENT_SOURCE_DIR}/NeoSharp.i
+				-I${NEOGUI_INCLUDE_DIR} -dllimport Game.so NeoSharp ${CMAKE_CURRENT_SOURCE_DIR}/NeoSharp.i
 			)
-			
+
 		FILE(GLOB_RECURSE SWIG_SOURCES ${CMAKE_BINARY_DIR}/Swig/*.cs)
                 FILE(GLOB_RECURSE PLUGIN_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/NeoSharp/*.cpp)
-		
-		ADD_CUSTOM_TARGET(build-neo-sharp ALL ${GMCS_EXECUTABLE} -t:library -out:${NEO_BINARY_OUTPUT}/NeoSharp.dll ${SWIG_SOURCES})
-		
+
+		ADD_CUSTOM_TARGET(build-neo-sharp ALL ${MCS_EXECUTABLE} -t:library -out:${NEO_BINARY_OUTPUT}/NeoSharp.dll ${SWIG_SOURCES})
+
 		IF(NOT ANDROID AND NOT EMSCRIPTEN)
                         ADD_LIBRARY(Game SHARED ${PLUGIN_SOURCES} NeoSharp_wrap.cxx)
 		ELSE()
@@ -65,7 +63,7 @@ IF(${SWIG_FOUND})
                 INSTALL(FILES ${NEO_BINARY_OUTPUT}/NeoSharp.dll DESTINATION ${NEO_INSTALL_DIR})
   	ENDIF()
 
-        ADD_LIBRARY(Neo SHARED Neo_wrap.cxx)
+  ADD_LIBRARY(Neo SHARED Neo_wrap.cxx)
 	TARGET_LINK_LIBRARIES(Neo ${NEO_CORE_LIBRARIES} ${NEO_ENGINE_LIBRARIES} ${NEOGUI_LIBRARIES} ${LUA_LIBRARIES})
 
   IF(NOT ${SWIG_swiglib_result} EQUAL 0)
@@ -78,4 +76,3 @@ IF(${SWIG_FOUND})
 ELSE()
   MESSAGE("-- Will NOT generate Lua bindings for Neo")
 ENDIF()
-

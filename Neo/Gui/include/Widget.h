@@ -46,7 +46,9 @@ namespace Gui
 {
 
 // Predefinition
+#ifndef SWIG
 class Widget;
+#endif
 
 #if !defined(WIN32)
 	/**

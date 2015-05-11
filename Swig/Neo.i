@@ -68,6 +68,8 @@
 
 
 #define NEO_CORE_EXPORT
+#define NEO2D_EXPORT
+%include <Neo2D.h>
 %include <Widget.h>
 %include <Canvas.h>
 %include <GuiSystem.h>

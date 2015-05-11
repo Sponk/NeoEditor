@@ -94,7 +94,7 @@ class NEO2D_EXPORT SpriteBatch
 {
 	std::vector<Widget*> m_sprites;
 public:
-	void addSprite(Widget* s) { m_sprites.push_back(s); }
+	DISOWN(Widget* s) void addSprite(Widget* s) { m_sprites.push_back(s); }
 	void draw();
 };
 	
@@ -136,7 +136,7 @@ public:
 	~Canvas() { clear(); }
 	Canvas() : m_layer(0), m_renderToTexture(false), m_fbo(0), m_texture(NULL), m_width(0), m_height(0) {}
 
-	void addSpriteBatch(SpriteBatch* b) { m_batches.push_back(b); }
+	DISOWN(SpriteBatch* b) void addSpriteBatch(SpriteBatch* b) { m_batches.push_back(b); }
 	
 	/**
 	 * @brief Draws the Canvas and its contents.

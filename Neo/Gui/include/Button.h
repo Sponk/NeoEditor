@@ -36,8 +36,8 @@
 #ifndef __BUTTON_H__
 #define __BUTTON_H__
 
-#include <Widget.h>
 #include <NeoEngine.h>
+#include <Widget.h>
 
 namespace Neo
 {
