@@ -2735,11 +2735,11 @@ static swig_module_info swig_module = {swig_types, 104, 0, 0, 0, 0};
 
 /* -------- TYPES TABLE (END) -------- */
 
-#define SWIG_name      "Neo"
-#define SWIG_init      luaopen_Neo
-#define SWIG_init_user luaopen_Neo_user
+#define SWIG_name      "NeoLua"
+#define SWIG_init      luaopen_NeoLua
+#define SWIG_init_user luaopen_NeoLua_user
 
-#define SWIG_LUACODE   luaopen_Neo_luacode
+#define SWIG_LUACODE   luaopen_NeoLua_luacode
 
 namespace swig {
 typedef struct{} LANGUAGE_OBJ;
@@ -46594,7 +46594,7 @@ static swig_lua_namespace* swig_SwigModule_namespaces[] = {
 };
 
 static swig_lua_namespace swig_SwigModule = {
-    "Neo",
+    "NeoLua",
     swig_SwigModule_methods,
     swig_SwigModule_attributes,
     swig_SwigModule_constants,

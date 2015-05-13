@@ -1,4 +1,4 @@
-%module Neo
+%module NeoLua
 %{
         #include <NeoEngine.h>
         #include <NeoCore.h>
