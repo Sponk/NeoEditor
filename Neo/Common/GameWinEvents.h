@@ -1,6 +1,7 @@
 //========================================================================
 // Copyright (c) 2003-2014 Anael Seghezzi <www.maratis3d.com>
 // Copyright (c) 2014 Anders Dahnielson <anders@dahnielson.com>
+// Copyright (c) 2015 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -88,6 +89,17 @@ const char * getKeyName(unsigned int key)
 	case MKEY_KP7: return "7";
 	case MKEY_KP8: return "8";
 	case MKEY_KP9: return "9";
+
+	case MKEY_0: return "0";
+	case MKEY_1: return "1";
+	case MKEY_2: return "2";
+	case MKEY_3: return "3";
+	case MKEY_4: return "4";
+	case MKEY_5: return "5";
+	case MKEY_6: return "6";
+	case MKEY_7: return "7";
+	case MKEY_8: return "8";
+	case MKEY_9: return "9";
 	}
 
 	return NULL;

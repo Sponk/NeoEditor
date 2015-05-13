@@ -43281,8 +43281,7 @@ static int _wrap_SpriteBatch_addSprite(lua_State* L) {
     SWIG_fail_ptr("SpriteBatch_addSprite",1,SWIGTYPE_p_Neo__Gui__SpriteBatch);
   }
   
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Gui__Widget,0))){
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Gui__Widget,SWIG_POINTER_DISOWN))){
     SWIG_fail_ptr("SpriteBatch_addSprite",2,SWIGTYPE_p_Neo__Gui__Widget);
   }
   
@@ -43434,8 +43433,7 @@ static int _wrap_Canvas_addSpriteBatch(lua_State* L) {
     SWIG_fail_ptr("Canvas_addSpriteBatch",1,SWIGTYPE_p_Neo__Gui__Canvas);
   }
   
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Gui__SpriteBatch,0))){
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Gui__SpriteBatch,SWIG_POINTER_DISOWN))){
     SWIG_fail_ptr("Canvas_addSpriteBatch",2,SWIGTYPE_p_Neo__Gui__SpriteBatch);
   }
   

@@ -171,17 +171,16 @@ void InputField::update()
 	if (m_state == INPUT_SELECTED_STATE)
 	{
 		bool shift = false;
+		char key[2] = {'\0', '\0' };
 
-		if (kbd->isKeyPressed(MKEY_LSHIFT) || kbd->isKeyPressed(MKEY_RSHIFT))
-		{
-			shift = true;
-		}
+		shift = (input->isKeyPressed("LSHIFT") || input->isKeyPressed("RSHIFT"));
 
-		for (int i = MKEY_A; i < MKEY_Z; i++)
+		for (char i = MKEY_A; i < MKEY_Z; i++)
 		{
-			if (kbd->isKeyPressed(i))
+			key[0] = i;
+			if (input->isKeyPressed(key))
 			{
-				kbd->onKeyUp(i);
+				input->upKey(key);
 
 				if (!shift)
 					addCharacter(tolower(i));
@@ -190,11 +189,12 @@ void InputField::update()
 			}
 		}
 
-		for (int i = MKEY_0; i <= MKEY_9; i++)
+		for (char i = MKEY_0; i <= MKEY_9; i++)
 		{
-			if (kbd->isKeyPressed(i))
+			key[0] = i;
+			if (input->isKeyPressed(key))
 			{
-				kbd->onKeyUp(i);
+				input->upKey(key);
 
 				if (!shift)
 					addCharacter(i);
@@ -203,15 +203,15 @@ void InputField::update()
 			}
 		}
 
-		if (kbd->isKeyPressed(MKEY_SPACE))
+		if (input->isKeyPressed("SPACE"))
 		{
-			kbd->onKeyUp(MKEY_SPACE);
+			input->upKey("SPACE");
 			addCharacter(' ');
 		}
 
-		if (kbd->isKeyPressed(MKEY_BACKSPACE))
+		if (input->isKeyPressed("BACKSPACE"))
 		{
-			kbd->onKeyUp(MKEY_BACKSPACE);
+			input->upKey("BACKSPACE");
 			if (m_label.length() >= 2)
 				m_label.erase(m_label.end() - 2, --m_label.end());
 		}
