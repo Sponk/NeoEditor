@@ -26,7 +26,7 @@
 #include "Backend/PlayerBackend.h"
 
 // NeoGui
-#include <GuiSystem.h>
+#include <Neo2DEngine.h>
 #include <Window/Window.h>
 
 using namespace Neo;
@@ -65,14 +65,14 @@ void windowEvents(MWinEvent * windowEvents)
 void update(void)
 {
 	PlayerBackend::getInstance()->logicLoop();
-	Neo::Gui::GuiSystem::getInstance()->update();
+	Neo2D::Neo2DEngine::getInstance()->update();
 }
 
 // draw
 void draw(void)
 {
 	PlayerBackend::getInstance()->graphicLoop();
-	Neo::Gui::GuiSystem::getInstance()->draw();
+	Neo2D::Neo2DEngine::getInstance()->draw();
     NeoWindow::getInstance()->swapBuffer();
 }
 
@@ -134,7 +134,7 @@ int main(int argc, char **argv)
 		if(backend->loadProject(filename))
 		{
             // Initialize GUI bindings
-			Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
+			Neo2D::Neo2DEngine::getInstance()->setupLuaInterface(NeoEngine::getInstance()->getScriptContext());
 
 	    	//engine->getGame()->begin();
 			projectFound = true;
@@ -157,7 +157,7 @@ int main(int argc, char **argv)
 
 			embeddedProj.startLevel = levelName;
 
-			Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(engine->getScriptContext());
+			Neo2D::Neo2DEngine::getInstance()->setupLuaInterface(engine->getScriptContext());
 
 			backend->loadProject(&embeddedProj, projName);
 
@@ -181,7 +181,7 @@ int main(int argc, char **argv)
 					if(backend->loadProject(filename))
 					{
                         // Initialize GUI bindings
-						Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(engine->getScriptContext());
+						Neo2D::Neo2DEngine::getInstance()->setupLuaInterface(engine->getScriptContext());
 
 						// This needs to be done in the update thread
 						//engine->getGame()->begin();
@@ -200,7 +200,7 @@ int main(int argc, char **argv)
 
     // create the update thread
     SDLThread updateThread;
-	Neo::Gui::GuiSystem* guiSystem = Neo::Gui::GuiSystem::getInstance();
+    Neo2D::Neo2DEngine* guiSystem = Neo2D::Neo2DEngine::getInstance();
 
 	//window->getUpdateSemaphore()->WaitAndLock();
 	NeoGame* game = engine->getGame();

@@ -26,7 +26,7 @@
 #include <LuaBehavior.h>
 #include <WinContext.h>
 #include <PackageManagerNPK.h>
-#include <GuiSystem.h>
+#include <Neo2DEngine.h>
 #include <SDLThread.h>
 #include <Server.h>
 #include <BulletContext.h>
@@ -41,7 +41,8 @@
 #endif
 
 using namespace Neo;
-using namespace Gui;
+using namespace Neo2D;
+// using namespace Gui;
 
 #include "TestSetup.h"
 
@@ -95,10 +96,10 @@ TEST_F(TestNeoSDK, LuaBehaviorNonExistantScript_test)
 }
 
 #define CANVAS_TEST_SIZE 4
-TEST_F(TestNeoSDK, GuiSystem_test)
+TEST_F(TestNeoSDK, Neo2DEngine_test)
 {
 
-    GuiSystem* gui = GuiSystem::getInstance();
+    Neo2DEngine* engine = Neo2DEngine::getInstance();
 
     Canvas* canvases[CANVAS_TEST_SIZE];
     for(int i = 0; i < CANVAS_TEST_SIZE; i++)
@@ -108,12 +109,12 @@ TEST_F(TestNeoSDK, GuiSystem_test)
         canvases[i] = testc;
         testc->setLayer(i);
 
-        gui->addCanvas(testc);
+        engine->addCanvas(testc);
     }
 
     for(int i = 1; i < CANVAS_TEST_SIZE; i++)
     {
-		EXPECT_EQ(i-1, gui->getCanvas(i)->getLayer());
+		EXPECT_EQ(i-1, engine->getCanvas(i)->getLayer());
     }
 }
 

@@ -1,29 +1,29 @@
 /*
  * Copyright 2014-2015 (C) Yannick Pflanzer <neo-engine.de>
  *
- * This file is part of NeoGui.
+ * This file is part of Neo2D.
  *
- * NeoGui is free software: you can redistribute it and/or modify
+ * Neo2D is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * NeoGui is distributed in the hope that it will be useful,
+ * Neo2D is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with NeoGui.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Neo2D.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Diese Datei ist Teil von NeoGui.
+ * Diese Datei ist Teil von Neo2D.
  *
- * NeoGui ist Freie Software: Sie können es unter den Bedingungen
+ * Neo2D ist Freie Software: Sie können es unter den Bedingungen
  * der GNU Lesser General Public License, wie von der Free Software Foundation,
  * Version 3 der Lizenz oder (nach Ihrer Wahl) jeder späteren
  * veröffentlichten Version, weiterverbreiten und/oder modifizieren.
  *
- * NeoGui wird in der Hoffnung, dass es nützlich sein wird, aber
+ * Neo2D wird in der Hoffnung, dass es nützlich sein wird, aber
  * OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
@@ -33,7 +33,7 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include <GuiSystem.h>
+#include <Neo2DEngine.h>
 #include <Canvas.h>
 #include <Button.h>
 #include <ThemedButton.h>
@@ -46,9 +46,10 @@
 #include <algorithm>
 
 using namespace Neo;
-using namespace Neo::Gui;
+using namespace Neo2D;
+using namespace Gui;
 
-GuiSystem::GuiSystem()
+Neo2DEngine::Neo2DEngine()
 {
 	m_canvasVector.push_back(Canvas::getInstance());
 	m_defaultFont = "assets/default.ttf";
@@ -64,7 +65,7 @@ GuiSystem::GuiSystem()
 	m_ids = 0;
 }
 
-GuiSystem::~GuiSystem()
+Neo2DEngine::~Neo2DEngine()
 {
 	Canvas* c;
 	for (int i = 0; i < m_canvasVector.size(); i++)
@@ -91,7 +92,7 @@ int enableGui()
 {
 	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if (script->isFunctionOk("enableGui", 1))
-		GuiSystem::getInstance()->setEnabled(script->getInteger(0) != 0);
+		Neo2DEngine::getInstance()->setEnabled(script->getInteger(0) != 0);
 
 	return 1;
 }
@@ -150,7 +151,7 @@ int createButton()
 	scriptCallbacks.push_back(script->getString(5));
 	btn->setUserData(scriptCallbacks.size() - 1);
 
-	GuiSystem* gui = GuiSystem::getInstance();
+	Neo2DEngine* gui = Neo2DEngine::getInstance();
 	int idx = gui->addWidget(btn);
 
 	script->pushInteger(idx);
@@ -173,7 +174,7 @@ int createThemedButton()
 	scriptCallbacks.push_back(script->getString(5));
 	btn->setUserData(scriptCallbacks.size() - 1);
 
-	GuiSystem* gui = GuiSystem::getInstance();
+	Neo2DEngine* gui = Neo2DEngine::getInstance();
 	int idx = gui->addWidget(btn);
 
 	script->pushInteger(idx);
@@ -196,7 +197,7 @@ int createInput()
 	scriptCallbacks.push_back(script->getString(5));
 	input->setUserData(scriptCallbacks.size() - 1);
 
-	GuiSystem* gui = GuiSystem::getInstance();
+	Neo2DEngine* gui = Neo2DEngine::getInstance();
 	int idx = gui->addWidget(input);
 
 	script->pushInteger(idx);
@@ -214,7 +215,7 @@ int createLabel()
 							 script->getInteger(2), script->getInteger(3),
 							 script->getString(4));
 
-	GuiSystem* gui = GuiSystem::getInstance();
+	Neo2DEngine* gui = Neo2DEngine::getInstance();
 	int idx = gui->addWidget(label);
 
 	script->pushInteger(idx);
@@ -232,7 +233,7 @@ int createSprite()
 								script->getInteger(2), script->getInteger(3),
 								script->getString(4), script->getString(5));
 
-	GuiSystem* gui = GuiSystem::getInstance();
+	Neo2DEngine* gui = Neo2DEngine::getInstance();
 	int idx = gui->addWidget(sprite);
 
 	script->pushInteger(idx);
@@ -261,7 +262,7 @@ int setLabel()
 	if (script->getArgsNumber() != 2)
 		return 0;
 
-	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Widget* w = Neo2DEngine::getInstance()->getWidget(script->getInteger(0));
 
 	if (w)
 		w->setLabel(script->getString(1));
@@ -276,7 +277,7 @@ int getLabel()
 	if (!script->isFunctionOk("getLabel", 1))
 		return 0;
 
-	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Widget* w = Neo2DEngine::getInstance()->getWidget(script->getInteger(0));
 
 	if (w)
 		script->pushString(w->getLabel());
@@ -291,7 +292,7 @@ int setDefaultFontSize()
 	if (!script->isFunctionOk("setDefaultFontSize", 1))
 		return 0;
 
-	GuiSystem::getInstance()->setDefaultFontSize(script->getFloat(0));
+	Neo2DEngine::getInstance()->setDefaultFontSize(script->getFloat(0));
 	return 1;
 }
 
@@ -302,7 +303,7 @@ int setWidgetPosition()
 	if (!script->isFunctionOk("setWidgetPosition", 2))
 		return 0;
 
-	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Widget* w = Neo2DEngine::getInstance()->getWidget(script->getInteger(0));
 
 	Vector2 vec;
 	script->getFloatArray(1, vec, 2);
@@ -320,7 +321,7 @@ int setWidgetRotation()
 	if (!script->isFunctionOk("setWidgetRotation", 2))
 		return 0;
 
-	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Widget* w = Neo2DEngine::getInstance()->getWidget(script->getInteger(0));
 
 	if (w)
 		w->setRotation(script->getFloat(1));
@@ -335,7 +336,7 @@ int getWidgetRotation()
 	if (!script->isFunctionOk("getWidgetRotation", 1))
 		return 0;
 
-	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Widget* w = Neo2DEngine::getInstance()->getWidget(script->getInteger(0));
 
 	if (w)
 		script->pushFloat(w->getRotation());
@@ -350,7 +351,7 @@ int getWidgetPosition()
 	if (!script->isFunctionOk("getWidgetPosition", 1))
 		return 0;
 
-	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Widget* w = Neo2DEngine::getInstance()->getWidget(script->getInteger(0));
 
 	if (w)
 		script->pushFloatArray(w->getPosition(), 2);
@@ -365,7 +366,7 @@ int setWidgetVisible()
 	if (!script->isFunctionOk("setWidgetVisible", 2))
 		return 0;
 
-	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Widget* w = Neo2DEngine::getInstance()->getWidget(script->getInteger(0));
 
 	if (w)
 		w->setVisible(script->getBoolean(1));
@@ -380,7 +381,7 @@ int isWidgetVisible()
 	if (!script->isFunctionOk("isWidgetVisible", 1))
 		return 0;
 
-	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Widget* w = Neo2DEngine::getInstance()->getWidget(script->getInteger(0));
 
 	if (w)
 		script->pushBoolean(w->isVisible());
@@ -390,7 +391,7 @@ int isWidgetVisible()
 
 int clearGui()
 {
-	GuiSystem::getInstance()->scheduleClear();
+	Neo2DEngine::getInstance()->scheduleClear();
 	return 1;
 }
 
@@ -402,7 +403,7 @@ int setNormalBackground()
 
 	Vector4 vec;
 	script->getFloatArray(0, vec, 4);
-	GuiSystem::getInstance()->setNormalBackground(vec);
+	Neo2DEngine::getInstance()->setNormalBackground(vec);
 	return 1;
 }
 
@@ -414,7 +415,7 @@ int setHoverBackground()
 
 	Vector4 vec;
 	script->getFloatArray(0, vec, 4);
-	GuiSystem::getInstance()->setHoverBackground(vec);
+	Neo2DEngine::getInstance()->setHoverBackground(vec);
 	return 1;
 }
 
@@ -426,7 +427,7 @@ int setHighlightBackground()
 
 	Vector4 vec;
 	script->getFloatArray(0, vec, 4);
-	GuiSystem::getInstance()->setHoverBackground(vec);
+	Neo2DEngine::getInstance()->setHoverBackground(vec);
 	return 1;
 }
 
@@ -463,7 +464,7 @@ int createCanvas()
 	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	Canvas* c = new Canvas;
 
-	GuiSystem::getInstance()->addCanvas(c);
+	Neo2DEngine::getInstance()->addCanvas(c);
 	script->pushPointer(c);
 	return 1;
 }
@@ -476,7 +477,7 @@ int detroyWidget()
 		return 0;
 
 	int idx = script->getInteger(0);
-	GuiSystem::getInstance()->destroyWidget(idx);
+	Neo2DEngine::getInstance()->destroyWidget(idx);
 	return 1;
 }
 
@@ -493,7 +494,7 @@ int setCanvasLayer()
 	if (c)
 		c->setLayer(layer);
 
-	GuiSystem::getInstance()->updateLayers();
+	Neo2DEngine::getInstance()->updateLayers();
 
 	return 1;
 }
@@ -532,7 +533,7 @@ int createTile()
 						  script->getString(4), script->getInteger(5),
 						  script->getInteger(6));
 
-	GuiSystem* gui = GuiSystem::getInstance();
+	Neo2DEngine* gui = Neo2DEngine::getInstance();
 	int idx = gui->addWidget(tile);
 
 	script->pushInteger(idx);
@@ -546,7 +547,7 @@ int setTileSpriteSheet()
 	if (!script->isFunctionOk("setTileSpriteSheet", 2))
 		return 0;
 
-	Tile* w = (Tile*)GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Tile* w = (Tile*)Neo2DEngine::getInstance()->getWidget(script->getInteger(0));
 
 	if (w && !strcmp(w->getStaticName(), "Tile"))
 	{
@@ -566,7 +567,7 @@ int setTileOffset()
 	if (!script->isFunctionOk("setTileOffset", 2))
 		return 0;
 
-	Tile* w = (Tile*)GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Tile* w = (Tile*)Neo2DEngine::getInstance()->getWidget(script->getInteger(0));
 
 	if (w && !strcmp(w->getStaticName(), "Tile"))
 	{
@@ -589,7 +590,7 @@ int getSpriteSize()
 		return 0;
 
 	Sprite* w =
-		(Sprite*)GuiSystem::getInstance()->getWidget(script->getInteger(0));
+		(Sprite*)Neo2DEngine::getInstance()->getWidget(script->getInteger(0));
 
 	if (!w)
 	{
@@ -611,7 +612,7 @@ int setWidgetScale()
 	if (!script->isFunctionOk("setWidgetScale", 2))
 		return 0;
 
-	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Widget* w = Neo2DEngine::getInstance()->getWidget(script->getInteger(0));
 
 	Vector2 vec;
 	script->getFloatArray(1, vec, 2);
@@ -630,7 +631,7 @@ int setWidgetFlip()
 	if (!script->isFunctionOk("setWidgetFlip", 2))
 		return 0;
 
-	Widget* w = GuiSystem::getInstance()->getWidget(script->getInteger(0));
+	Widget* w = Neo2DEngine::getInstance()->getWidget(script->getInteger(0));
 
 	Vector2 vec;
 	script->getFloatArray(1, vec, 2);
@@ -671,7 +672,7 @@ int setThemeDirectory()
 	if (!script->isFunctionOk("setThemeDirectory", 2))
 		return 0;
 
-	GuiSystem::getInstance()->setThemeDirectory(script->getString(0));
+	Neo2DEngine::getInstance()->setThemeDirectory(script->getString(0));
 	return 1;
 }
 
@@ -750,7 +751,7 @@ int updateBatchSprite()
 	return 1;
 }
 
-void GuiSystem::setupLuaInterface(ScriptContext* script)
+void Neo2DEngine::setupLuaInterface(ScriptContext* script)
 {
 	script->addFunction("addTileToBatch", addTileToBatch);
 	script->addFunction("updateBatchSprite", updateBatchSprite);
@@ -814,7 +815,7 @@ void GuiSystem::setupLuaInterface(ScriptContext* script)
 	script->addFunction("isWidgetVisible", isWidgetVisible);
 }
 
-void GuiSystem::destroyWidget(int idx)
+void Neo2DEngine::destroyWidget(int idx)
 {
 	bool found = false;
 	WidgetId id;
@@ -839,9 +840,9 @@ void GuiSystem::destroyWidget(int idx)
 	m_widgets.erase(iter);
 }
 
-Widget* GuiSystem::getWidget(unsigned int idx) { return m_widgets[idx].w; }
+Widget* Neo2DEngine::getWidget(unsigned int idx) { return m_widgets[idx].w; }
 
-void GuiSystem::draw()
+void Neo2DEngine::draw()
 {
 	unsigned int width, height;
 
@@ -861,7 +862,7 @@ void GuiSystem::draw()
 																height);
 }
 
-void GuiSystem::update()
+void Neo2DEngine::update()
 {
 	if (m_enabled)
 	{
@@ -879,7 +880,7 @@ void GuiSystem::update()
 	}
 }
 
-void GuiSystem::clear()
+void Neo2DEngine::clear()
 {
 	for (int i = 1; i < m_canvasVector.size(); i++)
 	{
@@ -906,18 +907,18 @@ static bool compareCanvasLayer(Canvas* a, Canvas* b)
 	return (a->getLayer() > b->getLayer());
 }
 
-void GuiSystem::addCanvas(Canvas* c)
+void Neo2DEngine::addCanvas(Canvas* c)
 {
 	if (c)
 		m_canvasVector.push_back(c);
 }
 
-void GuiSystem::updateLayers()
+void Neo2DEngine::updateLayers()
 {
 	std::sort(m_canvasVector.begin(), m_canvasVector.end(), compareCanvasLayer);
 }
 
-void GuiSystem::setThemeDirectory(const char* dir)
+void Neo2DEngine::setThemeDirectory(const char* dir)
 {
 	char path[256];
 

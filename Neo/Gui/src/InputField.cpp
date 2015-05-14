@@ -1,29 +1,29 @@
 /*
  * Copyright 2014 (C) Yannick Pflanzer <neo-engine.de>
  *
- * This file is part of NeoGui.
+ * This file is part of Neo2D.
  *
- * NeoGui is free software: you can redistribute it and/or modify
+ * Neo2D is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * NeoGui is distributed in the hope that it will be useful,
+ * Neo2D is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with NeoGui.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Neo2D.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Diese Datei ist Teil von NeoGui.
+ * Diese Datei ist Teil von Neo2D.
  *
- * NeoGui ist Freie Software: Sie können es unter den Bedingungen
+ * Neo2D ist Freie Software: Sie können es unter den Bedingungen
  * der GNU Lesser General Public License, wie von der Free Software Foundation,
  * Version 3 der Lizenz oder (nach Ihrer Wahl) jeder späteren
  * veröffentlichten Version, weiterverbreiten und/oder modifizieren.
  *
- * NeoGui wird in der Hoffnung, dass es nützlich sein wird, aber
+ * Neo2D wird in der Hoffnung, dass es nützlich sein wird, aber
  * OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
@@ -35,13 +35,14 @@
 
 #include <InputField.h>
 #include <Render.h>
-#include <GuiSystem.h>
+#include <Neo2DEngine.h>
 #include <Window/Keyboard.h>
 #include <Window/Mouse.h>
 #include <Window/WinEvents.h>
 
 using namespace Neo;
-using namespace Neo::Gui;
+using namespace Neo2D;
+using namespace Gui;
 
 InputField::InputField(unsigned int x, unsigned int y, unsigned int width,
 					   unsigned int height, const char* label)
@@ -68,7 +69,7 @@ void InputField::draw()
 {
 	Render* render = Render::getInstance();
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
-	GuiSystem* gui = GuiSystem::getInstance();
+	Neo2DEngine* gui = Neo2DEngine::getInstance();
 
 	unsigned int winh, winw;
 	system->getScreenSize(&winw, &winh);
@@ -84,15 +85,15 @@ void InputField::draw()
 	switch (m_state)
 	{
 		case INPUT_NORMAL_STATE:
-			color = 1.5 * GuiSystem::getInstance()->getNormalBackground();
+			color = 1.5 * Neo2DEngine::getInstance()->getNormalBackground();
 			break;
 
 		case INPUT_HOVER_STATE:
-			color = 1.2 * GuiSystem::getInstance()->getHoverBackground();
+			color = 1.2 * Neo2DEngine::getInstance()->getHoverBackground();
 			break;
 
 		case INPUT_SELECTED_STATE:
-			color = GuiSystem::getInstance()->getHighlightBackground();
+			color = Neo2DEngine::getInstance()->getHighlightBackground();
 			break;
 	}
 

@@ -1,29 +1,29 @@
 /*
  * Copyright 2014 (C) Yannick Pflanzer <neo-engine.de>
  *
- * This file is part of NeoGui.
+ * This file is part of Neo2D.
  *
- * NeoGui is free software: you can redistribute it and/or modify
+ * Neo2D is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * NeoGui is distributed in the hope that it will be useful,
+ * Neo2D is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with NeoGui.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Neo2D.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Diese Datei ist Teil von NeoGui.
+ * Diese Datei ist Teil von Neo2D.
  *
- * NeoGui ist Freie Software: Sie können es unter den Bedingungen
+ * Neo2D ist Freie Software: Sie können es unter den Bedingungen
  * der GNU Lesser General Public License, wie von der Free Software Foundation,
  * Version 3 der Lizenz oder (nach Ihrer Wahl) jeder späteren
  * veröffentlichten Version, weiterverbreiten und/oder modifizieren.
  *
- * NeoGui wird in der Hoffnung, dass es nützlich sein wird, aber
+ * Neo2D wird in der Hoffnung, dass es nützlich sein wird, aber
  * OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
@@ -64,16 +64,17 @@
 #include <Canvas.h>
 #include <string>
 
-namespace Neo
+namespace Neo2D
 {
-namespace Gui
-{
+
+using namespace Neo;
+
 /**
- * @brief The GuiSystem class contains all functionality to set up a GUI.
+ * @brief The Neo2DEngine class contains all functionality to set up a GUI.
  *
  * @author Yannick Pflanzer
  */
-class NEO2D_EXPORT GuiSystem
+class NEO2D_EXPORT Neo2DEngine
 {
 private:
 	struct WidgetId
@@ -112,8 +113,8 @@ private:
 	String m_themeEdgePressed;
 	
 public:
-	GuiSystem();
-	~GuiSystem();
+	Neo2DEngine();
+	~Neo2DEngine();
 
 	const char* getThemeBorderH() { return m_themeBorderH.getSafeString(); }
 	const char* getThemeBorderV() { return m_themeBorderV.getSafeString(); }
@@ -149,9 +150,9 @@ public:
 	 * @brief Returns a global instance of the GuiSystem.
 	 * @return The global GuiSystem.
 	 */
-	static GuiSystem* getInstance()
+	static Neo2DEngine* getInstance()
 	{
-		static GuiSystem m_instance;
+		static Neo2DEngine m_instance;
 		return &m_instance;
 	}
 
@@ -295,7 +296,6 @@ public:
 	void clear();
 	void scheduleClear() { m_clearScheduled = true; }
 };
-}
 }
 
 #endif

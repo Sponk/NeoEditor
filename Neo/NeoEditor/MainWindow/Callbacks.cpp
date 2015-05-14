@@ -48,7 +48,7 @@
 #include "Utils.h"
 #include <HTTPRequest.h>
 
-#include <GuiSystem.h>
+#include <Neo2DEngine.h>
 
 using namespace Neo;
 
@@ -2421,7 +2421,7 @@ void play_game_in_editor(Fl_Button* button, void*)
 	// Quit the game
 	if (game->isRunning())
 	{
-		Neo::Gui::GuiSystem::getInstance()->clear();
+		Neo2D::Neo2DEngine::getInstance()->clear();
 		game->end();
 		return;
 	}
@@ -2432,7 +2432,7 @@ void play_game_in_editor(Fl_Button* button, void*)
 	scriptContext.addFunction("quit", quitReplacement);
 	scriptContext.addFunction("loadLevel", loadLevelReplacement);
 
-	Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(&scriptContext);
+	Neo2D::Neo2DEngine::getInstance()->setupLuaInterface(&scriptContext);
 
 	const char* text = button->label();
 	button->label(tr("Stop game"));
@@ -2496,7 +2496,7 @@ void play_game_in_editor(Fl_Button* button, void*)
 	button->label(text);
 
 	update_scene_tree();
-	Gui::GuiSystem::getInstance()->clear();
+	Neo2D::Neo2DEngine::getInstance()->clear();
 
 	// Save profile
 	PROFILE_OUTPUT((current_project.path + "/profile.txt").c_str());

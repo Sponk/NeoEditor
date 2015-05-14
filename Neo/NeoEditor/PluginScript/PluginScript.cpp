@@ -23,7 +23,7 @@
 //========================================================================
 
 #include "../PluginScript/PluginScript.h"
-#include <GuiSystem.h>
+#include <Neo2DEngine.h>
 
 using namespace Neo;
 
@@ -115,7 +115,7 @@ void MPluginScript::init()
     LuaScript::init();
 
     // Add NeoGui bindings
-    Neo::Gui::GuiSystem::getInstance()->setupLuaInterface(this);
+    Neo2D::Neo2DEngine::getInstance()->setupLuaInterface(this);
 }
 
 bool MPluginScript::runScript(const char* filename)

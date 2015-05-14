@@ -1,17 +1,17 @@
 require("NeoLua")
 
-local gui = NeoLua.GuiSystem.getInstance()
-gui:setEnabled(true)
+local engine = NeoLua.Neo2DEngine.getInstance()
+engine:setEnabled(true)
 
 inputField = NeoLua.InputField(100, 300, 300, 30, "This is an text input!");
 button = NeoLua.ThemedButton(100, 100, 300, 30, "This is a button!")
 label = NeoLua.Label(100, 200, 0, 30, "This is a label!")
 
-labelhandle = gui:addWidget(label)
-buttonhandle = gui:addWidget(button)
-inputhandle = gui:addWidget(inputField)
+labelhandle = engine:addWidget(label)
+buttonhandle = engine:addWidget(button)
+inputhandle = engine:addWidget(inputField)
 
-canvas = gui:getCanvas(0)
+canvas = engine:getCanvas(0)
 canvas:addWidget(buttonhandle)
 canvas:addWidget(labelhandle)
 canvas:addWidget(inputhandle)

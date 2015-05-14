@@ -2,7 +2,7 @@
 %{
         #include <NeoEngine.h>
         #include <NeoCore.h>
-        #include <GuiSystem.h>
+        #include <Neo2DEngine.h>
         #include <Widget.h>
         #include <Button.h>
 
@@ -14,6 +14,7 @@
         #include <Label.h>
 
         using namespace Neo;
+        using namespace Neo2D;
         using namespace Gui;
 
         // #define Canvas Neo::Gui::Canvas
@@ -72,7 +73,7 @@
 %include <Neo2D.h>
 %include <Widget.h>
 %include <Canvas.h>
-%include <GuiSystem.h>
+%include <Neo2DEngine.h>
 %include <Button.h>
 
 %include <Sprite.h>

@@ -41,7 +41,7 @@ IF(${SWIG_FOUND})
 
 	  	ADD_CUSTOM_TARGET(neo-mono-swig
 			COMMAND ${SWIG_EXECUTABLE} -csharp -c++ -outdir ${CMAKE_BINARY_DIR}/Swig -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR}
-                                -I${NEO2D_INCLUDE_DIR} -dllimport Game.so NeoSharp ${CMAKE_CURRENT_SOURCE_DIR}/NeoSharp.i
+                                -I${NEO2D_INCLUDE_DIR} -dllimport Game.so ${CMAKE_CURRENT_SOURCE_DIR}/NeoSharp.i
 			)
 
 		FILE(GLOB_RECURSE SWIG_SOURCES ${CMAKE_BINARY_DIR}/Swig/*.cs)

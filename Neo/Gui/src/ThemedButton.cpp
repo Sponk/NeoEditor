@@ -1,29 +1,29 @@
 /*
  * Copyright 2014 (C) Yannick Pflanzer <neo-engine.de>
  *
- * This file is part of NeoGui.
+ * This file is part of Neo2D.
  *
- * NeoGui is free software: you can redistribute it and/or modify
+ * Neo2D is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * NeoGui is distributed in the hope that it will be useful,
+ * Neo2D is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with NeoGui.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Neo2D.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Diese Datei ist Teil von NeoGui.
+ * Diese Datei ist Teil von Neo2D.
  *
- * NeoGui ist Freie Software: Sie können es unter den Bedingungen
+ * Neo2D ist Freie Software: Sie können es unter den Bedingungen
  * der GNU Lesser General Public License, wie von der Free Software Foundation,
  * Version 3 der Lizenz oder (nach Ihrer Wahl) jeder späteren
  * veröffentlichten Version, weiterverbreiten und/oder modifizieren.
  *
- * NeoGui wird in der Hoffnung, dass es nützlich sein wird, aber
+ * Neo2D wird in der Hoffnung, dass es nützlich sein wird, aber
  * OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
@@ -35,10 +35,11 @@
 
 #include <ThemedButton.h>
 #include <Render.h>
-#include <GuiSystem.h>
+#include <Neo2DEngine.h>
 #include <Window/Mouse.h>
 
-using namespace Neo::Gui;
+using namespace Neo2D;
+using namespace Gui;
 
 ThemedButton::ThemedButton(unsigned int x, unsigned int y, unsigned int width,
 						   unsigned int height, const char* label)
@@ -81,7 +82,7 @@ void ThemedButton::loadSprites(Sprite* sprites[], const char* vert,
 void ThemedButton::draw()
 {
 	Render* render = Render::getInstance();
-	GuiSystem* gui = GuiSystem::getInstance();
+	Neo2DEngine* gui = Neo2DEngine::getInstance();
 
 	if (m_labelText == NULL)
 	{
@@ -112,18 +113,18 @@ void ThemedButton::draw()
 	switch (m_state)
 	{
 		case BUTTON_NORMAL_STATE:
-			color = GuiSystem::getInstance()->getNormalBackground();
+			color = Neo2DEngine::getInstance()->getNormalBackground();
 			drawSprites(m_sprites);
 			break;
 
 		case BUTTON_HOVER_STATE:
 			drawSprites(m_hoveredSprites);
-			color = GuiSystem::getInstance()->getHoverBackground();
+			color = Neo2DEngine::getInstance()->getHoverBackground();
 			break;
 
 		case BUTTON_PRESSED_STATE:
 			drawSprites(m_pressedSprites);
-			color = GuiSystem::getInstance()->getHighlightBackground();
+			color = Neo2DEngine::getInstance()->getHighlightBackground();
 			break;
 	}
 

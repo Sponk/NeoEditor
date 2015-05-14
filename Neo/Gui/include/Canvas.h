@@ -1,29 +1,29 @@
 /*
  * Copyright 2014 (C) Yannick Pflanzer <neo-engine.de>
  *
- * This file is part of NeoGui.
+ * This file is part of Neo2D.
  *
- * NeoGui is free software: you can redistribute it and/or modify
+ * Neo2D is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * NeoGui is distributed in the hope that it will be useful,
+ * Neo2D is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with NeoGui.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Neo2D.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Diese Datei ist Teil von NeoGui.
+ * Diese Datei ist Teil von Neo2D.
  *
- * NeoGui ist Freie Software: Sie können es unter den Bedingungen
+ * Neo2D ist Freie Software: Sie können es unter den Bedingungen
  * der GNU Lesser General Public License, wie von der Free Software Foundation,
  * Version 3 der Lizenz oder (nach Ihrer Wahl) jeder späteren
  * veröffentlichten Version, weiterverbreiten und/oder modifizieren.
  *
- * NeoGui wird in der Hoffnung, dass es nützlich sein wird, aber
+ * Neo2D wird in der Hoffnung, dass es nützlich sein wird, aber
  * OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
@@ -40,10 +40,10 @@
 #include <vector>
 #include <NeoEngine.h>
 
-namespace Neo
+namespace Neo2D
 {
-namespace Gui
-{
+
+using namespace Neo;
 
 /**
  * @brief Implements a batch of sprites that can be used to circumvent the
@@ -51,10 +51,10 @@ namespace Gui
  *
  * @par Creating a new SpriteBatch in C++
  * @code
- * GuiSystem* gui = GuiSystem::getInstance();
+ * Neo2DEngine* engine = Neo2DEngine::getInstance();
  *
  * // Fetch main canvas
- * Canvas* mainCanvas = gui->getCanvas(0);
+ * Canvas* mainCanvas = engine->getCanvas(0);
  * 
  * // Calling Sprite(x, y, w, h, file, label) with w = 0 and h = 0
  * // so the resolution of the texture is used 
@@ -71,16 +71,16 @@ namespace Gui
  *
  * @par Creating a new SpriteBatch in Lua
  * @code
- * require("NeoGui")
- * local gui = NeoGui.GuiSystem.getInstance()
+ * require("NeoLua")
+ * local engine = NeoLua.Neo2DEngine.getInstance()
  *
  * -- Fetch main canvas
  * local mainCanvas = gui:getCanvas(0);
  * 
  * -- Calling Sprite(x, y, w, h, file, label) with w = 0 and h = 0
  * -- so the resolution of the texture is used 
- * local sprite = NeoGui.Sprite(100, 100, 0, 0, "assets/tex.png", "label");
- * local batch = NeoGui.SpriteBatch()
+ * local sprite = NeoLua.Sprite(100, 100, 0, 0, "assets/tex.png", "label");
+ * local batch = NeoLua.SpriteBatch()
  *
  * -- Add sprite do render pipeline
  * batch:addSprite(sprite);
@@ -249,6 +249,5 @@ public:
 	 */
 	Vector2 getCameraOffset() { return m_cameraPosition; }
 };
-}
 }
 #endif

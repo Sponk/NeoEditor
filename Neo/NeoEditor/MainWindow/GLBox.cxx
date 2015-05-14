@@ -21,7 +21,7 @@
 
 #include <NeoEngine.h>
 #include <ImageLoader.h>
-#include <GuiSystem.h>
+#include <Neo2DEngine.h>
 
 #include "../Backend/EditorBackend.h"
 #include "../RenderArray/RenderArray.h"
@@ -166,7 +166,7 @@ void update_editor(void*)
     window.glbox->redraw();
 
     maratis->logicLoop();
-	Neo::Gui::GuiSystem::getInstance()->update();
+	Neo2D::Neo2DEngine::getInstance()->update();
 
     if(window.m_deferredUiUpdate)
     {
@@ -291,7 +291,7 @@ void GLBox::draw()
     else
     {
         maratis->graphicLoop();
-		Neo::Gui::GuiSystem::getInstance()->draw();
+		Neo2D::Neo2DEngine::getInstance()->draw();
     }
 
     // Workaround for a Bug in Gnome. Should not make a difference though.

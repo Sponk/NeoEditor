@@ -26,7 +26,7 @@
 #include <LuaBehavior.h>
 #include <WinContext.h>
 #include <PackageManagerNPK.h>
-#include <GuiSystem.h>
+#include <Neo2DEngine.h>
 #include <SDLThread.h>
 #include <Server.h>
 #include <BulletContext.h>
@@ -40,7 +40,8 @@
 #endif
 
 using namespace Neo;
-using namespace Gui;
+using namespace Neo2D;
+// using namespace Gui;
 
 bool compare_float(float a, float b)
 {
@@ -84,7 +85,7 @@ public:
 		mgr->setTemplateSemaphore(new SDLSemaphore());
 		mgr->setTemplateThread(new SDLThread());
 
-		Gui::GuiSystem::getInstance()->setupLuaInterface(script);
+		Neo2DEngine::getInstance()->setupLuaInterface(script);
 		game->begin();
 	}
 

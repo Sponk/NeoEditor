@@ -2636,29 +2636,29 @@ SWIG_Lua_dostring(lua_State *L, const char *str) {
 #define SWIGTYPE_p_M_SHADER_TYPES swig_types[9]
 #define SWIGTYPE_p_MaterialsAnim swig_types[10]
 #define SWIGTYPE_p_MorphingData swig_types[11]
-#define SWIGTYPE_p_NeoVariable swig_types[12]
-#define SWIGTYPE_p_Neo__AnimRange swig_types[13]
-#define SWIGTYPE_p_Neo__Armature swig_types[14]
-#define SWIGTYPE_p_Neo__ArmatureAnimRef swig_types[15]
-#define SWIGTYPE_p_Neo__Box3d swig_types[16]
-#define SWIGTYPE_p_Neo__Color swig_types[17]
-#define SWIGTYPE_p_Neo__DataLoadFunction swig_types[18]
-#define SWIGTYPE_p_Neo__DataLoader swig_types[19]
-#define SWIGTYPE_p_Neo__DataManager swig_types[20]
-#define SWIGTYPE_p_Neo__DataRef swig_types[21]
-#define SWIGTYPE_p_Neo__FRAME_BUFFER_ATTACHMENT swig_types[22]
-#define SWIGTYPE_p_Neo__FontRef swig_types[23]
-#define SWIGTYPE_p_Neo__Gui__Button swig_types[24]
-#define SWIGTYPE_p_Neo__Gui__Canvas swig_types[25]
-#define SWIGTYPE_p_Neo__Gui__GuiSystem swig_types[26]
-#define SWIGTYPE_p_Neo__Gui__InputField swig_types[27]
-#define SWIGTYPE_p_Neo__Gui__Label swig_types[28]
-#define SWIGTYPE_p_Neo__Gui__Sprite swig_types[29]
-#define SWIGTYPE_p_Neo__Gui__SpriteBatch swig_types[30]
-#define SWIGTYPE_p_Neo__Gui__ThemedButton swig_types[31]
-#define SWIGTYPE_p_Neo__Gui__Tile swig_types[32]
-#define SWIGTYPE_p_Neo__Gui__TileSheet swig_types[33]
-#define SWIGTYPE_p_Neo__Gui__Widget swig_types[34]
+#define SWIGTYPE_p_Neo2D__Canvas swig_types[12]
+#define SWIGTYPE_p_Neo2D__Gui__Button swig_types[13]
+#define SWIGTYPE_p_Neo2D__Gui__InputField swig_types[14]
+#define SWIGTYPE_p_Neo2D__Gui__Label swig_types[15]
+#define SWIGTYPE_p_Neo2D__Gui__ThemedButton swig_types[16]
+#define SWIGTYPE_p_Neo2D__Neo2DEngine swig_types[17]
+#define SWIGTYPE_p_Neo2D__Sprite swig_types[18]
+#define SWIGTYPE_p_Neo2D__SpriteBatch swig_types[19]
+#define SWIGTYPE_p_Neo2D__Tile swig_types[20]
+#define SWIGTYPE_p_Neo2D__TileSheet swig_types[21]
+#define SWIGTYPE_p_Neo2D__Widget swig_types[22]
+#define SWIGTYPE_p_NeoVariable swig_types[23]
+#define SWIGTYPE_p_Neo__AnimRange swig_types[24]
+#define SWIGTYPE_p_Neo__Armature swig_types[25]
+#define SWIGTYPE_p_Neo__ArmatureAnimRef swig_types[26]
+#define SWIGTYPE_p_Neo__Box3d swig_types[27]
+#define SWIGTYPE_p_Neo__Color swig_types[28]
+#define SWIGTYPE_p_Neo__DataLoadFunction swig_types[29]
+#define SWIGTYPE_p_Neo__DataLoader swig_types[30]
+#define SWIGTYPE_p_Neo__DataManager swig_types[31]
+#define SWIGTYPE_p_Neo__DataRef swig_types[32]
+#define SWIGTYPE_p_Neo__FRAME_BUFFER_ATTACHMENT swig_types[33]
+#define SWIGTYPE_p_Neo__FontRef swig_types[34]
 #define SWIGTYPE_p_Neo__Image swig_types[35]
 #define SWIGTYPE_p_Neo__InputContext swig_types[36]
 #define SWIGTYPE_p_Neo__Level swig_types[37]
@@ -2748,7 +2748,7 @@ typedef struct{} LANGUAGE_OBJ;
 
         #include <NeoEngine.h>
         #include <NeoCore.h>
-        #include <GuiSystem.h>
+        #include <Neo2DEngine.h>
         #include <Widget.h>
         #include <Button.h>
 
@@ -2760,6 +2760,7 @@ typedef struct{} LANGUAGE_OBJ;
         #include <Label.h>
 
         using namespace Neo;
+        using namespace Neo2D;
         using namespace Gui;
 
         // #define Canvas Neo::Gui::Canvas
@@ -42518,14 +42519,14 @@ static swig_lua_class _wrap_class_Armature = { "Armature", "Armature", &SWIGTYPE
 
 static int _wrap_Widget_getFontSize(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   float result;
   
-  SWIG_check_num_args("Neo::Gui::Widget::getFontSize",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::getFontSize",1,"Neo::Gui::Widget *");
+  SWIG_check_num_args("Neo2D::Widget::getFontSize",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::getFontSize",1,"Neo2D::Widget *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_getFontSize",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_getFontSize",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   result = (float)(arg1)->getFontSize();
@@ -42542,15 +42543,15 @@ fail:
 
 static int _wrap_Widget_setFontSize(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   float arg2 ;
   
-  SWIG_check_num_args("Neo::Gui::Widget::setFontSize",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::setFontSize",1,"Neo::Gui::Widget *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::Widget::setFontSize",2,"float");
+  SWIG_check_num_args("Neo2D::Widget::setFontSize",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::setFontSize",1,"Neo2D::Widget *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Widget::setFontSize",2,"float");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_setFontSize",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_setFontSize",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   arg2 = (float)lua_tonumber(L, 2);
@@ -42568,13 +42569,13 @@ fail:
 
 static int _wrap_Widget_draw__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Widget::draw",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::draw",1,"Neo::Gui::Widget *");
+  SWIG_check_num_args("Neo2D::Widget::draw",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::draw",1,"Neo2D::Widget *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_draw",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_draw",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   (arg1)->draw();
@@ -42591,16 +42592,16 @@ fail:
 
 static int _wrap_Widget_draw__SWIG_1(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  SWIG_check_num_args("Neo::Gui::Widget::draw",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::draw",1,"Neo::Gui::Widget *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Gui::Widget::draw",2,"Neo::Vector2");
+  SWIG_check_num_args("Neo2D::Widget::draw",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::draw",1,"Neo2D::Widget *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Widget::draw",2,"Neo::Vector2");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_draw",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_draw",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   
@@ -42632,7 +42633,7 @@ static int _wrap_Widget_draw(lua_State* L) {
     int _v;
     {
       void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Gui__Widget, 0)) {
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Widget, 0)) {
         _v = 0;
       } else {
         _v = 1;
@@ -42646,7 +42647,7 @@ static int _wrap_Widget_draw(lua_State* L) {
     int _v;
     {
       void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Gui__Widget, 0)) {
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Widget, 0)) {
         _v = 0;
       } else {
         _v = 1;
@@ -42669,21 +42670,21 @@ static int _wrap_Widget_draw(lua_State* L) {
   
   SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'Widget_draw'\n"
     "  Possible C/C++ prototypes are:\n"
-    "    Neo::Gui::Widget::draw()\n"
-    "    Neo::Gui::Widget::draw(Neo::Vector2)\n");
+    "    Neo2D::Widget::draw()\n"
+    "    Neo2D::Widget::draw(Neo::Vector2)\n");
   lua_error(L);return 0;
 }
 
 
 static int _wrap_Widget_update(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Widget::update",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::update",1,"Neo::Gui::Widget *");
+  SWIG_check_num_args("Neo2D::Widget::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::update",1,"Neo2D::Widget *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_update",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_update",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   (arg1)->update();
@@ -42700,15 +42701,15 @@ fail:
 
 static int _wrap_Widget_setScriptCallback(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   char *arg2 = (char *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Widget::setScriptCallback",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::setScriptCallback",1,"Neo::Gui::Widget *");
-  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::Gui::Widget::setScriptCallback",2,"char const *");
+  SWIG_check_num_args("Neo2D::Widget::setScriptCallback",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::setScriptCallback",1,"Neo2D::Widget *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo2D::Widget::setScriptCallback",2,"char const *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_setScriptCallback",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_setScriptCallback",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   arg2 = (char *)lua_tostring(L, 2);
@@ -42726,14 +42727,14 @@ fail:
 
 static int _wrap_Widget_getUserData(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   long result;
   
-  SWIG_check_num_args("Neo::Gui::Widget::getUserData",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::getUserData",1,"Neo::Gui::Widget *");
+  SWIG_check_num_args("Neo2D::Widget::getUserData",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::getUserData",1,"Neo2D::Widget *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_getUserData",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_getUserData",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   result = (long)(arg1)->getUserData();
@@ -42750,15 +42751,15 @@ fail:
 
 static int _wrap_Widget_setUserData(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   long arg2 ;
   
-  SWIG_check_num_args("Neo::Gui::Widget::setUserData",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::setUserData",1,"Neo::Gui::Widget *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::Widget::setUserData",2,"long");
+  SWIG_check_num_args("Neo2D::Widget::setUserData",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::setUserData",1,"Neo2D::Widget *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Widget::setUserData",2,"long");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_setUserData",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_setUserData",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   arg2 = (long)lua_tonumber(L, 2);
@@ -42776,14 +42777,14 @@ fail:
 
 static int _wrap_Widget_getLabel(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   char *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Widget::getLabel",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::getLabel",1,"Neo::Gui::Widget *");
+  SWIG_check_num_args("Neo2D::Widget::getLabel",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::getLabel",1,"Neo2D::Widget *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_getLabel",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_getLabel",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   result = (char *)(arg1)->getLabel();
@@ -42800,15 +42801,15 @@ fail:
 
 static int _wrap_Widget_setLabel(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   char *arg2 = (char *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Widget::setLabel",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::setLabel",1,"Neo::Gui::Widget *");
-  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::Gui::Widget::setLabel",2,"char const *");
+  SWIG_check_num_args("Neo2D::Widget::setLabel",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::setLabel",1,"Neo2D::Widget *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo2D::Widget::setLabel",2,"char const *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_setLabel",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_setLabel",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   arg2 = (char *)lua_tostring(L, 2);
@@ -42826,16 +42827,16 @@ fail:
 
 static int _wrap_Widget_setPosition(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  SWIG_check_num_args("Neo::Gui::Widget::setPosition",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::setPosition",1,"Neo::Gui::Widget *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Gui::Widget::setPosition",2,"Neo::Vector2");
+  SWIG_check_num_args("Neo2D::Widget::setPosition",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::setPosition",1,"Neo2D::Widget *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Widget::setPosition",2,"Neo::Vector2");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_setPosition",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_setPosition",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   
@@ -42858,14 +42859,14 @@ fail:
 
 static int _wrap_Widget_getPosition(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   Neo::Vector2 result;
   
-  SWIG_check_num_args("Neo::Gui::Widget::getPosition",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::getPosition",1,"Neo::Gui::Widget *");
+  SWIG_check_num_args("Neo2D::Widget::getPosition",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::getPosition",1,"Neo2D::Widget *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_getPosition",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_getPosition",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   result = (arg1)->getPosition();
@@ -42885,15 +42886,15 @@ fail:
 
 static int _wrap_Widget_setRotation(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   float arg2 ;
   
-  SWIG_check_num_args("Neo::Gui::Widget::setRotation",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::setRotation",1,"Neo::Gui::Widget *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::Widget::setRotation",2,"float");
+  SWIG_check_num_args("Neo2D::Widget::setRotation",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::setRotation",1,"Neo2D::Widget *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Widget::setRotation",2,"float");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_setRotation",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_setRotation",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   arg2 = (float)lua_tonumber(L, 2);
@@ -42911,14 +42912,14 @@ fail:
 
 static int _wrap_Widget_getRotation(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   float result;
   
-  SWIG_check_num_args("Neo::Gui::Widget::getRotation",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::getRotation",1,"Neo::Gui::Widget *");
+  SWIG_check_num_args("Neo2D::Widget::getRotation",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::getRotation",1,"Neo2D::Widget *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_getRotation",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_getRotation",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   result = (float)(arg1)->getRotation();
@@ -42935,16 +42936,16 @@ fail:
 
 static int _wrap_Widget_translate(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  SWIG_check_num_args("Neo::Gui::Widget::translate",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::translate",1,"Neo::Gui::Widget *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Gui::Widget::translate",2,"Neo::Vector2");
+  SWIG_check_num_args("Neo2D::Widget::translate",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::translate",1,"Neo2D::Widget *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Widget::translate",2,"Neo::Vector2");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_translate",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_translate",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   
@@ -42967,15 +42968,15 @@ fail:
 
 static int _wrap_Widget_rotate(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   float arg2 ;
   
-  SWIG_check_num_args("Neo::Gui::Widget::rotate",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::rotate",1,"Neo::Gui::Widget *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::Widget::rotate",2,"float");
+  SWIG_check_num_args("Neo2D::Widget::rotate",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::rotate",1,"Neo2D::Widget *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Widget::rotate",2,"float");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_rotate",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_rotate",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   arg2 = (float)lua_tonumber(L, 2);
@@ -42993,13 +42994,13 @@ fail:
 
 static int _wrap_Widget_doCallback(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Widget::doCallback",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::doCallback",1,"Neo::Gui::Widget *");
+  SWIG_check_num_args("Neo2D::Widget::doCallback",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::doCallback",1,"Neo2D::Widget *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_doCallback",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_doCallback",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   (arg1)->doCallback();
@@ -43016,14 +43017,14 @@ fail:
 
 static int _wrap_Widget_isVisible(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   bool result;
   
-  SWIG_check_num_args("Neo::Gui::Widget::isVisible",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::isVisible",1,"Neo::Gui::Widget *");
+  SWIG_check_num_args("Neo2D::Widget::isVisible",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::isVisible",1,"Neo2D::Widget *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_isVisible",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_isVisible",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   result = (bool)(arg1)->isVisible();
@@ -43040,15 +43041,15 @@ fail:
 
 static int _wrap_Widget_setVisible(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   bool arg2 ;
   
-  SWIG_check_num_args("Neo::Gui::Widget::setVisible",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::setVisible",1,"Neo::Gui::Widget *");
-  if(!lua_isboolean(L,2)) SWIG_fail_arg("Neo::Gui::Widget::setVisible",2,"bool");
+  SWIG_check_num_args("Neo2D::Widget::setVisible",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::setVisible",1,"Neo2D::Widget *");
+  if(!lua_isboolean(L,2)) SWIG_fail_arg("Neo2D::Widget::setVisible",2,"bool");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_setVisible",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_setVisible",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   arg2 = (lua_toboolean(L, 2)!=0);
@@ -43066,16 +43067,16 @@ fail:
 
 static int _wrap_Widget_setScale(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  SWIG_check_num_args("Neo::Gui::Widget::setScale",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::setScale",1,"Neo::Gui::Widget *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Gui::Widget::setScale",2,"Neo::Vector2");
+  SWIG_check_num_args("Neo2D::Widget::setScale",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::setScale",1,"Neo2D::Widget *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Widget::setScale",2,"Neo::Vector2");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_setScale",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_setScale",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   
@@ -43098,14 +43099,14 @@ fail:
 
 static int _wrap_Widget_getScale(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   Neo::Vector2 result;
   
-  SWIG_check_num_args("Neo::Gui::Widget::getScale",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::getScale",1,"Neo::Gui::Widget *");
+  SWIG_check_num_args("Neo2D::Widget::getScale",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::getScale",1,"Neo2D::Widget *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_getScale",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_getScale",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   result = (arg1)->getScale();
@@ -43125,16 +43126,16 @@ fail:
 
 static int _wrap_Widget_setFlip(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  SWIG_check_num_args("Neo::Gui::Widget::setFlip",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::setFlip",1,"Neo::Gui::Widget *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Gui::Widget::setFlip",2,"Neo::Vector2");
+  SWIG_check_num_args("Neo2D::Widget::setFlip",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::setFlip",1,"Neo2D::Widget *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Widget::setFlip",2,"Neo::Vector2");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_setFlip",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_setFlip",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   
@@ -43157,14 +43158,14 @@ fail:
 
 static int _wrap_Widget_getFlip(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   Neo::Vector2 result;
   
-  SWIG_check_num_args("Neo::Gui::Widget::getFlip",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::getFlip",1,"Neo::Gui::Widget *");
+  SWIG_check_num_args("Neo2D::Widget::getFlip",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::getFlip",1,"Neo2D::Widget *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_getFlip",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_getFlip",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   result = (arg1)->getFlip();
@@ -43184,14 +43185,14 @@ fail:
 
 static int _wrap_Widget_getStaticName(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   char *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Widget::getStaticName",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Widget::getStaticName",1,"Neo::Gui::Widget *");
+  SWIG_check_num_args("Neo2D::Widget::getStaticName",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::getStaticName",1,"Neo2D::Widget *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Widget,0))){
-    SWIG_fail_ptr("Widget_getStaticName",1,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_getStaticName",1,SWIGTYPE_p_Neo2D__Widget);
   }
   
   result = (char *)(arg1)->getStaticName();
@@ -43207,7 +43208,7 @@ fail:
 
 
 static void swig_delete_Widget(void *obj) {
-Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) obj;
+Neo2D::Widget *arg1 = (Neo2D::Widget *) obj;
 delete arg1;
 }
 static swig_lua_attribute swig_Widget_attributes[] = {
@@ -43266,23 +43267,23 @@ static swig_lua_namespace swig_Widget_Sf_SwigStatic = {
 };
 static swig_lua_class *swig_Widget_bases[] = {0};
 static const char *swig_Widget_base_names[] = {0};
-static swig_lua_class _wrap_class_Widget = { "Widget", "Widget", &SWIGTYPE_p_Neo__Gui__Widget,0, swig_delete_Widget, swig_Widget_methods, swig_Widget_attributes, &swig_Widget_Sf_SwigStatic, swig_Widget_meta, swig_Widget_bases, swig_Widget_base_names };
+static swig_lua_class _wrap_class_Widget = { "Widget", "Widget", &SWIGTYPE_p_Neo2D__Widget,0, swig_delete_Widget, swig_Widget_methods, swig_Widget_attributes, &swig_Widget_Sf_SwigStatic, swig_Widget_meta, swig_Widget_bases, swig_Widget_base_names };
 
 static int _wrap_SpriteBatch_addSprite(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::SpriteBatch *arg1 = (Neo::Gui::SpriteBatch *) 0 ;
-  Neo::Gui::Widget *arg2 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::SpriteBatch *arg1 = (Neo2D::SpriteBatch *) 0 ;
+  Neo2D::Widget *arg2 = (Neo2D::Widget *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::SpriteBatch::addSprite",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::SpriteBatch::addSprite",1,"Neo::Gui::SpriteBatch *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::Gui::SpriteBatch::addSprite",2,"Neo::Gui::Widget *");
+  SWIG_check_num_args("Neo2D::SpriteBatch::addSprite",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::SpriteBatch::addSprite",1,"Neo2D::SpriteBatch *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo2D::SpriteBatch::addSprite",2,"Neo2D::Widget *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__SpriteBatch,0))){
-    SWIG_fail_ptr("SpriteBatch_addSprite",1,SWIGTYPE_p_Neo__Gui__SpriteBatch);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__SpriteBatch,0))){
+    SWIG_fail_ptr("SpriteBatch_addSprite",1,SWIGTYPE_p_Neo2D__SpriteBatch);
   }
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Gui__Widget,SWIG_POINTER_DISOWN))){
-    SWIG_fail_ptr("SpriteBatch_addSprite",2,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo2D__Widget,SWIG_POINTER_DISOWN))){
+    SWIG_fail_ptr("SpriteBatch_addSprite",2,SWIGTYPE_p_Neo2D__Widget);
   }
   
   (arg1)->addSprite(arg2);
@@ -43299,13 +43300,13 @@ fail:
 
 static int _wrap_SpriteBatch_draw(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::SpriteBatch *arg1 = (Neo::Gui::SpriteBatch *) 0 ;
+  Neo2D::SpriteBatch *arg1 = (Neo2D::SpriteBatch *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::SpriteBatch::draw",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::SpriteBatch::draw",1,"Neo::Gui::SpriteBatch *");
+  SWIG_check_num_args("Neo2D::SpriteBatch::draw",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::SpriteBatch::draw",1,"Neo2D::SpriteBatch *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__SpriteBatch,0))){
-    SWIG_fail_ptr("SpriteBatch_draw",1,SWIGTYPE_p_Neo__Gui__SpriteBatch);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__SpriteBatch,0))){
+    SWIG_fail_ptr("SpriteBatch_draw",1,SWIGTYPE_p_Neo2D__SpriteBatch);
   }
   
   (arg1)->draw();
@@ -43322,11 +43323,11 @@ fail:
 
 static int _wrap_new_SpriteBatch(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::SpriteBatch *result = 0 ;
+  Neo2D::SpriteBatch *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::SpriteBatch::SpriteBatch",0,0)
-  result = (Neo::Gui::SpriteBatch *)new Neo::Gui::SpriteBatch();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Gui__SpriteBatch,1); SWIG_arg++; 
+  SWIG_check_num_args("Neo2D::SpriteBatch::SpriteBatch",0,0)
+  result = (Neo2D::SpriteBatch *)new Neo2D::SpriteBatch();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__SpriteBatch,1); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -43338,7 +43339,7 @@ fail:
 
 
 static void swig_delete_SpriteBatch(void *obj) {
-Neo::Gui::SpriteBatch *arg1 = (Neo::Gui::SpriteBatch *) obj;
+Neo2D::SpriteBatch *arg1 = (Neo2D::SpriteBatch *) obj;
 delete arg1;
 }
 static int _proxy__wrap_new_SpriteBatch(lua_State *L) {
@@ -43384,15 +43385,15 @@ static swig_lua_namespace swig_SpriteBatch_Sf_SwigStatic = {
 };
 static swig_lua_class *swig_SpriteBatch_bases[] = {0};
 static const char *swig_SpriteBatch_base_names[] = {0};
-static swig_lua_class _wrap_class_SpriteBatch = { "SpriteBatch", "SpriteBatch", &SWIGTYPE_p_Neo__Gui__SpriteBatch,_proxy__wrap_new_SpriteBatch, swig_delete_SpriteBatch, swig_SpriteBatch_methods, swig_SpriteBatch_attributes, &swig_SpriteBatch_Sf_SwigStatic, swig_SpriteBatch_meta, swig_SpriteBatch_bases, swig_SpriteBatch_base_names };
+static swig_lua_class _wrap_class_SpriteBatch = { "SpriteBatch", "SpriteBatch", &SWIGTYPE_p_Neo2D__SpriteBatch,_proxy__wrap_new_SpriteBatch, swig_delete_SpriteBatch, swig_SpriteBatch_methods, swig_SpriteBatch_attributes, &swig_SpriteBatch_Sf_SwigStatic, swig_SpriteBatch_meta, swig_SpriteBatch_bases, swig_SpriteBatch_base_names };
 
 static int _wrap_Canvas_getInstance(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Canvas *result = 0 ;
+  Neo2D::Canvas *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Canvas::getInstance",0,0)
-  result = (Neo::Gui::Canvas *)Neo::Gui::Canvas::getInstance();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Gui__Canvas,0); SWIG_arg++; 
+  SWIG_check_num_args("Neo2D::Canvas::getInstance",0,0)
+  result = (Neo2D::Canvas *)Neo2D::Canvas::getInstance();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Canvas,0); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -43405,11 +43406,11 @@ fail:
 
 static int _wrap_new_Canvas(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Canvas *result = 0 ;
+  Neo2D::Canvas *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Canvas::Canvas",0,0)
-  result = (Neo::Gui::Canvas *)new Neo::Gui::Canvas();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Gui__Canvas,1); SWIG_arg++; 
+  SWIG_check_num_args("Neo2D::Canvas::Canvas",0,0)
+  result = (Neo2D::Canvas *)new Neo2D::Canvas();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Canvas,1); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -43422,19 +43423,19 @@ fail:
 
 static int _wrap_Canvas_addSpriteBatch(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
-  Neo::Gui::SpriteBatch *arg2 = (Neo::Gui::SpriteBatch *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
+  Neo2D::SpriteBatch *arg2 = (Neo2D::SpriteBatch *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Canvas::addSpriteBatch",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Canvas::addSpriteBatch",1,"Neo::Gui::Canvas *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::Gui::Canvas::addSpriteBatch",2,"Neo::Gui::SpriteBatch *");
+  SWIG_check_num_args("Neo2D::Canvas::addSpriteBatch",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Canvas::addSpriteBatch",1,"Neo2D::Canvas *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo2D::Canvas::addSpriteBatch",2,"Neo2D::SpriteBatch *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Canvas,0))){
-    SWIG_fail_ptr("Canvas_addSpriteBatch",1,SWIGTYPE_p_Neo__Gui__Canvas);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Canvas,0))){
+    SWIG_fail_ptr("Canvas_addSpriteBatch",1,SWIGTYPE_p_Neo2D__Canvas);
   }
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Gui__SpriteBatch,SWIG_POINTER_DISOWN))){
-    SWIG_fail_ptr("Canvas_addSpriteBatch",2,SWIGTYPE_p_Neo__Gui__SpriteBatch);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo2D__SpriteBatch,SWIG_POINTER_DISOWN))){
+    SWIG_fail_ptr("Canvas_addSpriteBatch",2,SWIGTYPE_p_Neo2D__SpriteBatch);
   }
   
   (arg1)->addSpriteBatch(arg2);
@@ -43451,13 +43452,13 @@ fail:
 
 static int _wrap_Canvas_draw(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Canvas::draw",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Canvas::draw",1,"Neo::Gui::Canvas *");
+  SWIG_check_num_args("Neo2D::Canvas::draw",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Canvas::draw",1,"Neo2D::Canvas *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Canvas,0))){
-    SWIG_fail_ptr("Canvas_draw",1,SWIGTYPE_p_Neo__Gui__Canvas);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Canvas,0))){
+    SWIG_fail_ptr("Canvas_draw",1,SWIGTYPE_p_Neo2D__Canvas);
   }
   
   (arg1)->draw();
@@ -43474,13 +43475,13 @@ fail:
 
 static int _wrap_Canvas_update(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Canvas::update",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Canvas::update",1,"Neo::Gui::Canvas *");
+  SWIG_check_num_args("Neo2D::Canvas::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Canvas::update",1,"Neo2D::Canvas *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Canvas,0))){
-    SWIG_fail_ptr("Canvas_update",1,SWIGTYPE_p_Neo__Gui__Canvas);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Canvas,0))){
+    SWIG_fail_ptr("Canvas_update",1,SWIGTYPE_p_Neo2D__Canvas);
   }
   
   (arg1)->update();
@@ -43497,13 +43498,13 @@ fail:
 
 static int _wrap_Canvas_clear(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Canvas::clear",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Canvas::clear",1,"Neo::Gui::Canvas *");
+  SWIG_check_num_args("Neo2D::Canvas::clear",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Canvas::clear",1,"Neo2D::Canvas *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Canvas,0))){
-    SWIG_fail_ptr("Canvas_clear",1,SWIGTYPE_p_Neo__Gui__Canvas);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Canvas,0))){
+    SWIG_fail_ptr("Canvas_clear",1,SWIGTYPE_p_Neo2D__Canvas);
   }
   
   (arg1)->clear();
@@ -43520,14 +43521,14 @@ fail:
 
 static int _wrap_Canvas_getLayer(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   int result;
   
-  SWIG_check_num_args("Neo::Gui::Canvas::getLayer",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Canvas::getLayer",1,"Neo::Gui::Canvas *");
+  SWIG_check_num_args("Neo2D::Canvas::getLayer",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Canvas::getLayer",1,"Neo2D::Canvas *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Canvas,0))){
-    SWIG_fail_ptr("Canvas_getLayer",1,SWIGTYPE_p_Neo__Gui__Canvas);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Canvas,0))){
+    SWIG_fail_ptr("Canvas_getLayer",1,SWIGTYPE_p_Neo2D__Canvas);
   }
   
   result = (int)(arg1)->getLayer();
@@ -43544,15 +43545,15 @@ fail:
 
 static int _wrap_Canvas_setLayer(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   int arg2 ;
   
-  SWIG_check_num_args("Neo::Gui::Canvas::setLayer",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Canvas::setLayer",1,"Neo::Gui::Canvas *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::Canvas::setLayer",2,"int");
+  SWIG_check_num_args("Neo2D::Canvas::setLayer",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Canvas::setLayer",1,"Neo2D::Canvas *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Canvas::setLayer",2,"int");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Canvas,0))){
-    SWIG_fail_ptr("Canvas_setLayer",1,SWIGTYPE_p_Neo__Gui__Canvas);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Canvas,0))){
+    SWIG_fail_ptr("Canvas_setLayer",1,SWIGTYPE_p_Neo2D__Canvas);
   }
   
   arg2 = (int)lua_tonumber(L, 2);
@@ -43570,15 +43571,15 @@ fail:
 
 static int _wrap_Canvas_addWidget(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   int arg2 ;
   
-  SWIG_check_num_args("Neo::Gui::Canvas::addWidget",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Canvas::addWidget",1,"Neo::Gui::Canvas *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::Canvas::addWidget",2,"int");
+  SWIG_check_num_args("Neo2D::Canvas::addWidget",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Canvas::addWidget",1,"Neo2D::Canvas *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Canvas::addWidget",2,"int");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Canvas,0))){
-    SWIG_fail_ptr("Canvas_addWidget",1,SWIGTYPE_p_Neo__Gui__Canvas);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Canvas,0))){
+    SWIG_fail_ptr("Canvas_addWidget",1,SWIGTYPE_p_Neo2D__Canvas);
   }
   
   arg2 = (int)lua_tonumber(L, 2);
@@ -43596,14 +43597,14 @@ fail:
 
 static int _wrap_Canvas_getClearColor(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   Neo::Vector4 result;
   
-  SWIG_check_num_args("Neo::Gui::Canvas::getClearColor",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Canvas::getClearColor",1,"Neo::Gui::Canvas *");
+  SWIG_check_num_args("Neo2D::Canvas::getClearColor",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Canvas::getClearColor",1,"Neo2D::Canvas *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Canvas,0))){
-    SWIG_fail_ptr("Canvas_getClearColor",1,SWIGTYPE_p_Neo__Gui__Canvas);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Canvas,0))){
+    SWIG_fail_ptr("Canvas_getClearColor",1,SWIGTYPE_p_Neo2D__Canvas);
   }
   
   result = (arg1)->getClearColor();
@@ -43623,16 +43624,16 @@ fail:
 
 static int _wrap_Canvas_setClearColor(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   Neo::Vector4 arg2 ;
   Neo::Vector4 *argp2 ;
   
-  SWIG_check_num_args("Neo::Gui::Canvas::setClearColor",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Canvas::setClearColor",1,"Neo::Gui::Canvas *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Gui::Canvas::setClearColor",2,"Neo::Vector4");
+  SWIG_check_num_args("Neo2D::Canvas::setClearColor",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Canvas::setClearColor",1,"Neo2D::Canvas *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Canvas::setClearColor",2,"Neo::Vector4");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Canvas,0))){
-    SWIG_fail_ptr("Canvas_setClearColor",1,SWIGTYPE_p_Neo__Gui__Canvas);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Canvas,0))){
+    SWIG_fail_ptr("Canvas_setClearColor",1,SWIGTYPE_p_Neo2D__Canvas);
   }
   
   
@@ -43655,15 +43656,15 @@ fail:
 
 static int _wrap_Canvas_enableRenderToTexture__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   char *arg2 = (char *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Canvas::enableRenderToTexture",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Canvas::enableRenderToTexture",1,"Neo::Gui::Canvas *");
-  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::Gui::Canvas::enableRenderToTexture",2,"char const *");
+  SWIG_check_num_args("Neo2D::Canvas::enableRenderToTexture",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Canvas::enableRenderToTexture",1,"Neo2D::Canvas *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo2D::Canvas::enableRenderToTexture",2,"char const *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Canvas,0))){
-    SWIG_fail_ptr("Canvas_enableRenderToTexture",1,SWIGTYPE_p_Neo__Gui__Canvas);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Canvas,0))){
+    SWIG_fail_ptr("Canvas_enableRenderToTexture",1,SWIGTYPE_p_Neo2D__Canvas);
   }
   
   arg2 = (char *)lua_tostring(L, 2);
@@ -43681,13 +43682,13 @@ fail:
 
 static int _wrap_Canvas_enableRenderToTexture__SWIG_1(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Canvas::enableRenderToTexture",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Canvas::enableRenderToTexture",1,"Neo::Gui::Canvas *");
+  SWIG_check_num_args("Neo2D::Canvas::enableRenderToTexture",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Canvas::enableRenderToTexture",1,"Neo2D::Canvas *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Canvas,0))){
-    SWIG_fail_ptr("Canvas_enableRenderToTexture",1,SWIGTYPE_p_Neo__Gui__Canvas);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Canvas,0))){
+    SWIG_fail_ptr("Canvas_enableRenderToTexture",1,SWIGTYPE_p_Neo2D__Canvas);
   }
   
   (arg1)->enableRenderToTexture();
@@ -43713,7 +43714,7 @@ static int _wrap_Canvas_enableRenderToTexture(lua_State* L) {
     int _v;
     {
       void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Gui__Canvas, 0)) {
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Canvas, 0)) {
         _v = 0;
       } else {
         _v = 1;
@@ -43727,7 +43728,7 @@ static int _wrap_Canvas_enableRenderToTexture(lua_State* L) {
     int _v;
     {
       void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Gui__Canvas, 0)) {
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Canvas, 0)) {
         _v = 0;
       } else {
         _v = 1;
@@ -43745,21 +43746,21 @@ static int _wrap_Canvas_enableRenderToTexture(lua_State* L) {
   
   SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'Canvas_enableRenderToTexture'\n"
     "  Possible C/C++ prototypes are:\n"
-    "    Neo::Gui::Canvas::enableRenderToTexture(char const *)\n"
-    "    Neo::Gui::Canvas::enableRenderToTexture()\n");
+    "    Neo2D::Canvas::enableRenderToTexture(char const *)\n"
+    "    Neo2D::Canvas::enableRenderToTexture()\n");
   lua_error(L);return 0;
 }
 
 
 static int _wrap_Canvas_disableRenderToTexture(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Canvas::disableRenderToTexture",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Canvas::disableRenderToTexture",1,"Neo::Gui::Canvas *");
+  SWIG_check_num_args("Neo2D::Canvas::disableRenderToTexture",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Canvas::disableRenderToTexture",1,"Neo2D::Canvas *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Canvas,0))){
-    SWIG_fail_ptr("Canvas_disableRenderToTexture",1,SWIGTYPE_p_Neo__Gui__Canvas);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Canvas,0))){
+    SWIG_fail_ptr("Canvas_disableRenderToTexture",1,SWIGTYPE_p_Neo2D__Canvas);
   }
   
   (arg1)->disableRenderToTexture();
@@ -43776,16 +43777,16 @@ fail:
 
 static int _wrap_Canvas_setCameraOffset(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  SWIG_check_num_args("Neo::Gui::Canvas::setCameraOffset",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Canvas::setCameraOffset",1,"Neo::Gui::Canvas *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Gui::Canvas::setCameraOffset",2,"Neo::Vector2");
+  SWIG_check_num_args("Neo2D::Canvas::setCameraOffset",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Canvas::setCameraOffset",1,"Neo2D::Canvas *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Canvas::setCameraOffset",2,"Neo::Vector2");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Canvas,0))){
-    SWIG_fail_ptr("Canvas_setCameraOffset",1,SWIGTYPE_p_Neo__Gui__Canvas);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Canvas,0))){
+    SWIG_fail_ptr("Canvas_setCameraOffset",1,SWIGTYPE_p_Neo2D__Canvas);
   }
   
   
@@ -43808,14 +43809,14 @@ fail:
 
 static int _wrap_Canvas_getCameraOffset(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   Neo::Vector2 result;
   
-  SWIG_check_num_args("Neo::Gui::Canvas::getCameraOffset",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Canvas::getCameraOffset",1,"Neo::Gui::Canvas *");
+  SWIG_check_num_args("Neo2D::Canvas::getCameraOffset",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Canvas::getCameraOffset",1,"Neo2D::Canvas *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Canvas,0))){
-    SWIG_fail_ptr("Canvas_getCameraOffset",1,SWIGTYPE_p_Neo__Gui__Canvas);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Canvas,0))){
+    SWIG_fail_ptr("Canvas_getCameraOffset",1,SWIGTYPE_p_Neo2D__Canvas);
   }
   
   result = (arg1)->getCameraOffset();
@@ -43834,7 +43835,7 @@ fail:
 
 
 static void swig_delete_Canvas(void *obj) {
-Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) obj;
+Neo2D::Canvas *arg1 = (Neo2D::Canvas *) obj;
 delete arg1;
 }
 static int _proxy__wrap_new_Canvas(lua_State *L) {
@@ -43892,15 +43893,15 @@ static swig_lua_namespace swig_Canvas_Sf_SwigStatic = {
 };
 static swig_lua_class *swig_Canvas_bases[] = {0};
 static const char *swig_Canvas_base_names[] = {0};
-static swig_lua_class _wrap_class_Canvas = { "Canvas", "Canvas", &SWIGTYPE_p_Neo__Gui__Canvas,_proxy__wrap_new_Canvas, swig_delete_Canvas, swig_Canvas_methods, swig_Canvas_attributes, &swig_Canvas_Sf_SwigStatic, swig_Canvas_meta, swig_Canvas_bases, swig_Canvas_base_names };
+static swig_lua_class _wrap_class_Canvas = { "Canvas", "Canvas", &SWIGTYPE_p_Neo2D__Canvas,_proxy__wrap_new_Canvas, swig_delete_Canvas, swig_Canvas_methods, swig_Canvas_attributes, &swig_Canvas_Sf_SwigStatic, swig_Canvas_meta, swig_Canvas_bases, swig_Canvas_base_names };
 
-static int _wrap_new_GuiSystem(lua_State* L) {
+static int _wrap_new_Neo2DEngine(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *result = 0 ;
+  Neo2D::Neo2DEngine *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::GuiSystem",0,0)
-  result = (Neo::Gui::GuiSystem *)new Neo::Gui::GuiSystem();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Gui__GuiSystem,1); SWIG_arg++; 
+  SWIG_check_num_args("Neo2D::Neo2DEngine::Neo2DEngine",0,0)
+  result = (Neo2D::Neo2DEngine *)new Neo2D::Neo2DEngine();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Neo2DEngine,1); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -43911,16 +43912,16 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getThemeBorderH(lua_State* L) {
+static int _wrap_Neo2DEngine_getThemeBorderH(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getThemeBorderH",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getThemeBorderH",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getThemeBorderH",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getThemeBorderH",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getThemeBorderH",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getThemeBorderH",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   result = (char *)(arg1)->getThemeBorderH();
@@ -43935,16 +43936,16 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getThemeBorderV(lua_State* L) {
+static int _wrap_Neo2DEngine_getThemeBorderV(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getThemeBorderV",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getThemeBorderV",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getThemeBorderV",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getThemeBorderV",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getThemeBorderV",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getThemeBorderV",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   result = (char *)(arg1)->getThemeBorderV();
@@ -43959,16 +43960,16 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getThemeBody(lua_State* L) {
+static int _wrap_Neo2DEngine_getThemeBody(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getThemeBody",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getThemeBody",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getThemeBody",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getThemeBody",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getThemeBody",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getThemeBody",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   result = (char *)(arg1)->getThemeBody();
@@ -43983,16 +43984,16 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getThemeEdge(lua_State* L) {
+static int _wrap_Neo2DEngine_getThemeEdge(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getThemeEdge",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getThemeEdge",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getThemeEdge",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getThemeEdge",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getThemeEdge",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getThemeEdge",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   result = (char *)(arg1)->getThemeEdge();
@@ -44007,16 +44008,16 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getThemeBorderHHover(lua_State* L) {
+static int _wrap_Neo2DEngine_getThemeBorderHHover(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getThemeBorderHHover",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getThemeBorderHHover",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getThemeBorderHHover",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getThemeBorderHHover",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getThemeBorderHHover",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getThemeBorderHHover",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   result = (char *)(arg1)->getThemeBorderHHover();
@@ -44031,16 +44032,16 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getThemeBorderVHover(lua_State* L) {
+static int _wrap_Neo2DEngine_getThemeBorderVHover(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getThemeBorderVHover",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getThemeBorderVHover",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getThemeBorderVHover",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getThemeBorderVHover",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getThemeBorderVHover",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getThemeBorderVHover",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   result = (char *)(arg1)->getThemeBorderVHover();
@@ -44055,16 +44056,16 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getThemeBodyHover(lua_State* L) {
+static int _wrap_Neo2DEngine_getThemeBodyHover(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getThemeBodyHover",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getThemeBodyHover",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getThemeBodyHover",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getThemeBodyHover",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getThemeBodyHover",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getThemeBodyHover",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   result = (char *)(arg1)->getThemeBodyHover();
@@ -44079,16 +44080,16 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getThemeEdgeHover(lua_State* L) {
+static int _wrap_Neo2DEngine_getThemeEdgeHover(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getThemeEdgeHover",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getThemeEdgeHover",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getThemeEdgeHover",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getThemeEdgeHover",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getThemeEdgeHover",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getThemeEdgeHover",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   result = (char *)(arg1)->getThemeEdgeHover();
@@ -44103,16 +44104,16 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getThemeBorderHPressed(lua_State* L) {
+static int _wrap_Neo2DEngine_getThemeBorderHPressed(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getThemeBorderHPressed",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getThemeBorderHPressed",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getThemeBorderHPressed",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getThemeBorderHPressed",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getThemeBorderHPressed",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getThemeBorderHPressed",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   result = (char *)(arg1)->getThemeBorderHPressed();
@@ -44127,16 +44128,16 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getThemeBorderVPressed(lua_State* L) {
+static int _wrap_Neo2DEngine_getThemeBorderVPressed(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getThemeBorderVPressed",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getThemeBorderVPressed",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getThemeBorderVPressed",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getThemeBorderVPressed",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getThemeBorderVPressed",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getThemeBorderVPressed",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   result = (char *)(arg1)->getThemeBorderVPressed();
@@ -44151,16 +44152,16 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getThemeBodyPressed(lua_State* L) {
+static int _wrap_Neo2DEngine_getThemeBodyPressed(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getThemeBodyPressed",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getThemeBodyPressed",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getThemeBodyPressed",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getThemeBodyPressed",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getThemeBodyPressed",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getThemeBodyPressed",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   result = (char *)(arg1)->getThemeBodyPressed();
@@ -44175,16 +44176,16 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getThemeEdgePressed(lua_State* L) {
+static int _wrap_Neo2DEngine_getThemeEdgePressed(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getThemeEdgePressed",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getThemeEdgePressed",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getThemeEdgePressed",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getThemeEdgePressed",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getThemeEdgePressed",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getThemeEdgePressed",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   result = (char *)(arg1)->getThemeEdgePressed();
@@ -44199,17 +44200,17 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_setThemeDirectory(lua_State* L) {
+static int _wrap_Neo2DEngine_setThemeDirectory(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *arg2 = (char *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::setThemeDirectory",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::setThemeDirectory",1,"Neo::Gui::GuiSystem *");
-  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::Gui::GuiSystem::setThemeDirectory",2,"char const *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::setThemeDirectory",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::setThemeDirectory",1,"Neo2D::Neo2DEngine *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo2D::Neo2DEngine::setThemeDirectory",2,"char const *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_setThemeDirectory",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_setThemeDirectory",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   arg2 = (char *)lua_tostring(L, 2);
@@ -44225,13 +44226,13 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getInstance(lua_State* L) {
+static int _wrap_Neo2DEngine_getInstance(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *result = 0 ;
+  Neo2D::Neo2DEngine *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getInstance",0,0)
-  result = (Neo::Gui::GuiSystem *)Neo::Gui::GuiSystem::getInstance();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Gui__GuiSystem,0); SWIG_arg++; 
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getInstance",0,0)
+  result = (Neo2D::Neo2DEngine *)Neo2D::Neo2DEngine::getInstance();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Neo2DEngine,0); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -44242,22 +44243,22 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_setupLuaInterface(lua_State* L) {
+static int _wrap_Neo2DEngine_setupLuaInterface(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   Neo::ScriptContext *arg2 = (Neo::ScriptContext *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::setupLuaInterface",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::setupLuaInterface",1,"Neo::Gui::GuiSystem *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::Gui::GuiSystem::setupLuaInterface",2,"Neo::ScriptContext *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::setupLuaInterface",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::setupLuaInterface",1,"Neo2D::Neo2DEngine *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo2D::Neo2DEngine::setupLuaInterface",2,"Neo::ScriptContext *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_setupLuaInterface",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_setupLuaInterface",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   
   if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__ScriptContext,0))){
-    SWIG_fail_ptr("GuiSystem_setupLuaInterface",2,SWIGTYPE_p_Neo__ScriptContext);
+    SWIG_fail_ptr("Neo2DEngine_setupLuaInterface",2,SWIGTYPE_p_Neo__ScriptContext);
   }
   
   (arg1)->setupLuaInterface(arg2);
@@ -44272,17 +44273,17 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_setEnabled(lua_State* L) {
+static int _wrap_Neo2DEngine_setEnabled(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   bool arg2 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::setEnabled",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::setEnabled",1,"Neo::Gui::GuiSystem *");
-  if(!lua_isboolean(L,2)) SWIG_fail_arg("Neo::Gui::GuiSystem::setEnabled",2,"bool");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::setEnabled",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::setEnabled",1,"Neo2D::Neo2DEngine *");
+  if(!lua_isboolean(L,2)) SWIG_fail_arg("Neo2D::Neo2DEngine::setEnabled",2,"bool");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_setEnabled",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_setEnabled",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   arg2 = (lua_toboolean(L, 2)!=0);
@@ -44298,15 +44299,15 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_draw(lua_State* L) {
+static int _wrap_Neo2DEngine_draw(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::draw",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::draw",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::draw",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::draw",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_draw",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_draw",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   (arg1)->draw();
@@ -44321,15 +44322,15 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_update(lua_State* L) {
+static int _wrap_Neo2DEngine_update(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::update",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::update",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::update",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_update",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_update",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   (arg1)->update();
@@ -44344,16 +44345,16 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getDefaultFont(lua_State* L) {
+static int _wrap_Neo2DEngine_getDefaultFont(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getDefaultFont",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getDefaultFont",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getDefaultFont",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getDefaultFont",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getDefaultFont",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getDefaultFont",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   result = (char *)(arg1)->getDefaultFont();
@@ -44368,16 +44369,16 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getDefaultFontSize(lua_State* L) {
+static int _wrap_Neo2DEngine_getDefaultFontSize(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   float result;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getDefaultFontSize",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getDefaultFontSize",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getDefaultFontSize",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getDefaultFontSize",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getDefaultFontSize",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getDefaultFontSize",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   result = (float)(arg1)->getDefaultFontSize();
@@ -44392,17 +44393,17 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_setDefaultFontSize(lua_State* L) {
+static int _wrap_Neo2DEngine_setDefaultFontSize(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   float arg2 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::setDefaultFontSize",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::setDefaultFontSize",1,"Neo::Gui::GuiSystem *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::GuiSystem::setDefaultFontSize",2,"float");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::setDefaultFontSize",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::setDefaultFontSize",1,"Neo2D::Neo2DEngine *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Neo2DEngine::setDefaultFontSize",2,"float");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_setDefaultFontSize",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_setDefaultFontSize",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   arg2 = (float)lua_tonumber(L, 2);
@@ -44418,16 +44419,16 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getNormalBackground(lua_State* L) {
+static int _wrap_Neo2DEngine_getNormalBackground(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   Neo::Vector4 result;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getNormalBackground",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getNormalBackground",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getNormalBackground",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getNormalBackground",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getNormalBackground",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getNormalBackground",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   result = (arg1)->getNormalBackground();
@@ -44445,16 +44446,16 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getHoverBackground(lua_State* L) {
+static int _wrap_Neo2DEngine_getHoverBackground(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   Neo::Vector4 result;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getHoverBackground",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getHoverBackground",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getHoverBackground",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getHoverBackground",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getHoverBackground",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getHoverBackground",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   result = (arg1)->getHoverBackground();
@@ -44472,16 +44473,16 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getHighlightBackground(lua_State* L) {
+static int _wrap_Neo2DEngine_getHighlightBackground(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   Neo::Vector4 result;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getHighlightBackground",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getHighlightBackground",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getHighlightBackground",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getHighlightBackground",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getHighlightBackground",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getHighlightBackground",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   result = (arg1)->getHighlightBackground();
@@ -44499,23 +44500,23 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_setNormalBackground(lua_State* L) {
+static int _wrap_Neo2DEngine_setNormalBackground(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   Neo::Vector4 arg2 ;
   Neo::Vector4 *argp2 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::setNormalBackground",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::setNormalBackground",1,"Neo::Gui::GuiSystem *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Gui::GuiSystem::setNormalBackground",2,"Neo::Vector4");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::setNormalBackground",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::setNormalBackground",1,"Neo2D::Neo2DEngine *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Neo2DEngine::setNormalBackground",2,"Neo::Vector4");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_setNormalBackground",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_setNormalBackground",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   
   if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector4,0))){
-    SWIG_fail_ptr("GuiSystem_setNormalBackground",2,SWIGTYPE_p_Neo__Vector4);
+    SWIG_fail_ptr("Neo2DEngine_setNormalBackground",2,SWIGTYPE_p_Neo__Vector4);
   }
   arg2 = *argp2;
   
@@ -44531,23 +44532,23 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_setHoverBackground(lua_State* L) {
+static int _wrap_Neo2DEngine_setHoverBackground(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   Neo::Vector4 arg2 ;
   Neo::Vector4 *argp2 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::setHoverBackground",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::setHoverBackground",1,"Neo::Gui::GuiSystem *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Gui::GuiSystem::setHoverBackground",2,"Neo::Vector4");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::setHoverBackground",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::setHoverBackground",1,"Neo2D::Neo2DEngine *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Neo2DEngine::setHoverBackground",2,"Neo::Vector4");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_setHoverBackground",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_setHoverBackground",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   
   if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector4,0))){
-    SWIG_fail_ptr("GuiSystem_setHoverBackground",2,SWIGTYPE_p_Neo__Vector4);
+    SWIG_fail_ptr("Neo2DEngine_setHoverBackground",2,SWIGTYPE_p_Neo__Vector4);
   }
   arg2 = *argp2;
   
@@ -44563,23 +44564,23 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_setHighlightBackground(lua_State* L) {
+static int _wrap_Neo2DEngine_setHighlightBackground(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   Neo::Vector4 arg2 ;
   Neo::Vector4 *argp2 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::setHighlightBackground",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::setHighlightBackground",1,"Neo::Gui::GuiSystem *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Gui::GuiSystem::setHighlightBackground",2,"Neo::Vector4");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::setHighlightBackground",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::setHighlightBackground",1,"Neo2D::Neo2DEngine *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Neo2DEngine::setHighlightBackground",2,"Neo::Vector4");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_setHighlightBackground",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_setHighlightBackground",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   
   if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector4,0))){
-    SWIG_fail_ptr("GuiSystem_setHighlightBackground",2,SWIGTYPE_p_Neo__Vector4);
+    SWIG_fail_ptr("Neo2DEngine_setHighlightBackground",2,SWIGTYPE_p_Neo__Vector4);
   }
   arg2 = *argp2;
   
@@ -44595,24 +44596,24 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getWidget(lua_State* L) {
+static int _wrap_Neo2DEngine_getWidget(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   unsigned int arg2 ;
-  Neo::Gui::Widget *result = 0 ;
+  Neo2D::Widget *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getWidget",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getWidget",1,"Neo::Gui::GuiSystem *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::GuiSystem::getWidget",2,"unsigned int");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getWidget",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getWidget",1,"Neo2D::Neo2DEngine *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Neo2DEngine::getWidget",2,"unsigned int");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getWidget",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getWidget",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
   arg2 = (unsigned int)lua_tonumber(L, 2);
-  result = (Neo::Gui::Widget *)(arg1)->getWidget(arg2);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Gui__Widget,0); SWIG_arg++; 
+  result = (Neo2D::Widget *)(arg1)->getWidget(arg2);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Widget,0); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -44623,22 +44624,22 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_addWidget(lua_State* L) {
+static int _wrap_Neo2DEngine_addWidget(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
-  Neo::Gui::Widget *arg2 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
+  Neo2D::Widget *arg2 = (Neo2D::Widget *) 0 ;
   int result;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::addWidget",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::addWidget",1,"Neo::Gui::GuiSystem *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::Gui::GuiSystem::addWidget",2,"Neo::Gui::Widget *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::addWidget",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::addWidget",1,"Neo2D::Neo2DEngine *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo2D::Neo2DEngine::addWidget",2,"Neo2D::Widget *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_addWidget",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_addWidget",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Gui__Widget,SWIG_POINTER_DISOWN))){
-    SWIG_fail_ptr("GuiSystem_addWidget",2,SWIGTYPE_p_Neo__Gui__Widget);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo2D__Widget,SWIG_POINTER_DISOWN))){
+    SWIG_fail_ptr("Neo2DEngine_addWidget",2,SWIGTYPE_p_Neo2D__Widget);
   }
   
   result = (int)(arg1)->addWidget(arg2);
@@ -44653,16 +44654,16 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getNumWidgets(lua_State* L) {
+static int _wrap_Neo2DEngine_getNumWidgets(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   size_t result;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getNumWidgets",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getNumWidgets",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getNumWidgets",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getNumWidgets",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getNumWidgets",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getNumWidgets",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   result = (arg1)->getNumWidgets();
@@ -44677,21 +44678,21 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_addCanvas(lua_State* L) {
+static int _wrap_Neo2DEngine_addCanvas(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
-  Neo::Gui::Canvas *arg2 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
+  Neo2D::Canvas *arg2 = (Neo2D::Canvas *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::addCanvas",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::addCanvas",1,"Neo::Gui::GuiSystem *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::Gui::GuiSystem::addCanvas",2,"Neo::Gui::Canvas *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::addCanvas",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::addCanvas",1,"Neo2D::Neo2DEngine *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo2D::Neo2DEngine::addCanvas",2,"Neo2D::Canvas *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_addCanvas",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_addCanvas",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Gui__Canvas,SWIG_POINTER_DISOWN))){
-    SWIG_fail_ptr("GuiSystem_addCanvas",2,SWIGTYPE_p_Neo__Gui__Canvas);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo2D__Canvas,SWIG_POINTER_DISOWN))){
+    SWIG_fail_ptr("Neo2DEngine_addCanvas",2,SWIGTYPE_p_Neo2D__Canvas);
   }
   
   (arg1)->addCanvas(arg2);
@@ -44706,24 +44707,24 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_getCanvas(lua_State* L) {
+static int _wrap_Neo2DEngine_getCanvas(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   unsigned int arg2 ;
-  Neo::Gui::Canvas *result = 0 ;
+  Neo2D::Canvas *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::getCanvas",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::getCanvas",1,"Neo::Gui::GuiSystem *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::GuiSystem::getCanvas",2,"unsigned int");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getCanvas",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getCanvas",1,"Neo2D::Neo2DEngine *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Neo2DEngine::getCanvas",2,"unsigned int");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_getCanvas",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getCanvas",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
   arg2 = (unsigned int)lua_tonumber(L, 2);
-  result = (Neo::Gui::Canvas *)(arg1)->getCanvas(arg2);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Gui__Canvas,0); SWIG_arg++; 
+  result = (Neo2D::Canvas *)(arg1)->getCanvas(arg2);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Canvas,0); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -44734,15 +44735,15 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_updateLayers(lua_State* L) {
+static int _wrap_Neo2DEngine_updateLayers(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::updateLayers",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::updateLayers",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::updateLayers",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::updateLayers",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_updateLayers",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_updateLayers",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   (arg1)->updateLayers();
@@ -44757,17 +44758,17 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_destroyWidget(lua_State* L) {
+static int _wrap_Neo2DEngine_destroyWidget(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   int arg2 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::destroyWidget",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::destroyWidget",1,"Neo::Gui::GuiSystem *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::GuiSystem::destroyWidget",2,"int");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::destroyWidget",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::destroyWidget",1,"Neo2D::Neo2DEngine *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Neo2DEngine::destroyWidget",2,"int");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_destroyWidget",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_destroyWidget",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   arg2 = (int)lua_tonumber(L, 2);
@@ -44783,15 +44784,15 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_clear(lua_State* L) {
+static int _wrap_Neo2DEngine_clear(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::clear",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::clear",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::clear",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::clear",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_clear",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_clear",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   (arg1)->clear();
@@ -44806,15 +44807,15 @@ fail:
 }
 
 
-static int _wrap_GuiSystem_scheduleClear(lua_State* L) {
+static int _wrap_Neo2DEngine_scheduleClear(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::GuiSystem::scheduleClear",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::GuiSystem::scheduleClear",1,"Neo::Gui::GuiSystem *");
+  SWIG_check_num_args("Neo2D::Neo2DEngine::scheduleClear",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::scheduleClear",1,"Neo2D::Neo2DEngine *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__GuiSystem,0))){
-    SWIG_fail_ptr("GuiSystem_scheduleClear",1,SWIGTYPE_p_Neo__Gui__GuiSystem);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_scheduleClear",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
   }
   
   (arg1)->scheduleClear();
@@ -44829,88 +44830,88 @@ fail:
 }
 
 
-static void swig_delete_GuiSystem(void *obj) {
-Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) obj;
+static void swig_delete_Neo2DEngine(void *obj) {
+Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) obj;
 delete arg1;
 }
-static int _proxy__wrap_new_GuiSystem(lua_State *L) {
+static int _proxy__wrap_new_Neo2DEngine(lua_State *L) {
     assert(lua_istable(L,1));
-    lua_pushcfunction(L,_wrap_new_GuiSystem);
+    lua_pushcfunction(L,_wrap_new_Neo2DEngine);
     assert(!lua_isnil(L,-1));
     lua_replace(L,1); /* replace our table with real constructor */
     lua_call(L,lua_gettop(L)-1,1);
     return 1;
 }
-static swig_lua_attribute swig_GuiSystem_attributes[] = {
+static swig_lua_attribute swig_Neo2DEngine_attributes[] = {
     {0,0,0}
 };
-static swig_lua_method swig_GuiSystem_methods[]= {
-    { "getThemeBorderH", _wrap_GuiSystem_getThemeBorderH},
-    { "getThemeBorderV", _wrap_GuiSystem_getThemeBorderV},
-    { "getThemeBody", _wrap_GuiSystem_getThemeBody},
-    { "getThemeEdge", _wrap_GuiSystem_getThemeEdge},
-    { "getThemeBorderHHover", _wrap_GuiSystem_getThemeBorderHHover},
-    { "getThemeBorderVHover", _wrap_GuiSystem_getThemeBorderVHover},
-    { "getThemeBodyHover", _wrap_GuiSystem_getThemeBodyHover},
-    { "getThemeEdgeHover", _wrap_GuiSystem_getThemeEdgeHover},
-    { "getThemeBorderHPressed", _wrap_GuiSystem_getThemeBorderHPressed},
-    { "getThemeBorderVPressed", _wrap_GuiSystem_getThemeBorderVPressed},
-    { "getThemeBodyPressed", _wrap_GuiSystem_getThemeBodyPressed},
-    { "getThemeEdgePressed", _wrap_GuiSystem_getThemeEdgePressed},
-    { "setThemeDirectory", _wrap_GuiSystem_setThemeDirectory},
-    { "setupLuaInterface", _wrap_GuiSystem_setupLuaInterface},
-    { "setEnabled", _wrap_GuiSystem_setEnabled},
-    { "draw", _wrap_GuiSystem_draw},
-    { "update", _wrap_GuiSystem_update},
-    { "getDefaultFont", _wrap_GuiSystem_getDefaultFont},
-    { "getDefaultFontSize", _wrap_GuiSystem_getDefaultFontSize},
-    { "setDefaultFontSize", _wrap_GuiSystem_setDefaultFontSize},
-    { "getNormalBackground", _wrap_GuiSystem_getNormalBackground},
-    { "getHoverBackground", _wrap_GuiSystem_getHoverBackground},
-    { "getHighlightBackground", _wrap_GuiSystem_getHighlightBackground},
-    { "setNormalBackground", _wrap_GuiSystem_setNormalBackground},
-    { "setHoverBackground", _wrap_GuiSystem_setHoverBackground},
-    { "setHighlightBackground", _wrap_GuiSystem_setHighlightBackground},
-    { "getWidget", _wrap_GuiSystem_getWidget},
-    { "addWidget", _wrap_GuiSystem_addWidget},
-    { "getNumWidgets", _wrap_GuiSystem_getNumWidgets},
-    { "addCanvas", _wrap_GuiSystem_addCanvas},
-    { "getCanvas", _wrap_GuiSystem_getCanvas},
-    { "updateLayers", _wrap_GuiSystem_updateLayers},
-    { "destroyWidget", _wrap_GuiSystem_destroyWidget},
-    { "clear", _wrap_GuiSystem_clear},
-    { "scheduleClear", _wrap_GuiSystem_scheduleClear},
+static swig_lua_method swig_Neo2DEngine_methods[]= {
+    { "getThemeBorderH", _wrap_Neo2DEngine_getThemeBorderH},
+    { "getThemeBorderV", _wrap_Neo2DEngine_getThemeBorderV},
+    { "getThemeBody", _wrap_Neo2DEngine_getThemeBody},
+    { "getThemeEdge", _wrap_Neo2DEngine_getThemeEdge},
+    { "getThemeBorderHHover", _wrap_Neo2DEngine_getThemeBorderHHover},
+    { "getThemeBorderVHover", _wrap_Neo2DEngine_getThemeBorderVHover},
+    { "getThemeBodyHover", _wrap_Neo2DEngine_getThemeBodyHover},
+    { "getThemeEdgeHover", _wrap_Neo2DEngine_getThemeEdgeHover},
+    { "getThemeBorderHPressed", _wrap_Neo2DEngine_getThemeBorderHPressed},
+    { "getThemeBorderVPressed", _wrap_Neo2DEngine_getThemeBorderVPressed},
+    { "getThemeBodyPressed", _wrap_Neo2DEngine_getThemeBodyPressed},
+    { "getThemeEdgePressed", _wrap_Neo2DEngine_getThemeEdgePressed},
+    { "setThemeDirectory", _wrap_Neo2DEngine_setThemeDirectory},
+    { "setupLuaInterface", _wrap_Neo2DEngine_setupLuaInterface},
+    { "setEnabled", _wrap_Neo2DEngine_setEnabled},
+    { "draw", _wrap_Neo2DEngine_draw},
+    { "update", _wrap_Neo2DEngine_update},
+    { "getDefaultFont", _wrap_Neo2DEngine_getDefaultFont},
+    { "getDefaultFontSize", _wrap_Neo2DEngine_getDefaultFontSize},
+    { "setDefaultFontSize", _wrap_Neo2DEngine_setDefaultFontSize},
+    { "getNormalBackground", _wrap_Neo2DEngine_getNormalBackground},
+    { "getHoverBackground", _wrap_Neo2DEngine_getHoverBackground},
+    { "getHighlightBackground", _wrap_Neo2DEngine_getHighlightBackground},
+    { "setNormalBackground", _wrap_Neo2DEngine_setNormalBackground},
+    { "setHoverBackground", _wrap_Neo2DEngine_setHoverBackground},
+    { "setHighlightBackground", _wrap_Neo2DEngine_setHighlightBackground},
+    { "getWidget", _wrap_Neo2DEngine_getWidget},
+    { "addWidget", _wrap_Neo2DEngine_addWidget},
+    { "getNumWidgets", _wrap_Neo2DEngine_getNumWidgets},
+    { "addCanvas", _wrap_Neo2DEngine_addCanvas},
+    { "getCanvas", _wrap_Neo2DEngine_getCanvas},
+    { "updateLayers", _wrap_Neo2DEngine_updateLayers},
+    { "destroyWidget", _wrap_Neo2DEngine_destroyWidget},
+    { "clear", _wrap_Neo2DEngine_clear},
+    { "scheduleClear", _wrap_Neo2DEngine_scheduleClear},
     {0,0}
 };
-static swig_lua_method swig_GuiSystem_meta[] = {
+static swig_lua_method swig_Neo2DEngine_meta[] = {
     {0,0}
 };
 
-static swig_lua_attribute swig_GuiSystem_Sf_SwigStatic_attributes[] = {
+static swig_lua_attribute swig_Neo2DEngine_Sf_SwigStatic_attributes[] = {
     {0,0,0}
 };
-static swig_lua_const_info swig_GuiSystem_Sf_SwigStatic_constants[]= {
+static swig_lua_const_info swig_Neo2DEngine_Sf_SwigStatic_constants[]= {
     {0,0,0,0,0,0}
 };
-static swig_lua_method swig_GuiSystem_Sf_SwigStatic_methods[]= {
-    { "getInstance", _wrap_GuiSystem_getInstance},
+static swig_lua_method swig_Neo2DEngine_Sf_SwigStatic_methods[]= {
+    { "getInstance", _wrap_Neo2DEngine_getInstance},
     {0,0}
 };
-static swig_lua_class* swig_GuiSystem_Sf_SwigStatic_classes[]= {
+static swig_lua_class* swig_Neo2DEngine_Sf_SwigStatic_classes[]= {
     0
 };
 
-static swig_lua_namespace swig_GuiSystem_Sf_SwigStatic = {
-    "GuiSystem",
-    swig_GuiSystem_Sf_SwigStatic_methods,
-    swig_GuiSystem_Sf_SwigStatic_attributes,
-    swig_GuiSystem_Sf_SwigStatic_constants,
-    swig_GuiSystem_Sf_SwigStatic_classes,
+static swig_lua_namespace swig_Neo2DEngine_Sf_SwigStatic = {
+    "Neo2DEngine",
+    swig_Neo2DEngine_Sf_SwigStatic_methods,
+    swig_Neo2DEngine_Sf_SwigStatic_attributes,
+    swig_Neo2DEngine_Sf_SwigStatic_constants,
+    swig_Neo2DEngine_Sf_SwigStatic_classes,
     0
 };
-static swig_lua_class *swig_GuiSystem_bases[] = {0};
-static const char *swig_GuiSystem_base_names[] = {0};
-static swig_lua_class _wrap_class_GuiSystem = { "GuiSystem", "GuiSystem", &SWIGTYPE_p_Neo__Gui__GuiSystem,_proxy__wrap_new_GuiSystem, swig_delete_GuiSystem, swig_GuiSystem_methods, swig_GuiSystem_attributes, &swig_GuiSystem_Sf_SwigStatic, swig_GuiSystem_meta, swig_GuiSystem_bases, swig_GuiSystem_base_names };
+static swig_lua_class *swig_Neo2DEngine_bases[] = {0};
+static const char *swig_Neo2DEngine_base_names[] = {0};
+static swig_lua_class _wrap_class_Neo2DEngine = { "Neo2DEngine", "Neo2DEngine", &SWIGTYPE_p_Neo2D__Neo2DEngine,_proxy__wrap_new_Neo2DEngine, swig_delete_Neo2DEngine, swig_Neo2DEngine_methods, swig_Neo2DEngine_attributes, &swig_Neo2DEngine_Sf_SwigStatic, swig_Neo2DEngine_meta, swig_Neo2DEngine_bases, swig_Neo2DEngine_base_names };
 
 static int _wrap_new_Button(lua_State* L) {
   int SWIG_arg = 0;
@@ -44919,14 +44920,14 @@ static int _wrap_new_Button(lua_State* L) {
   unsigned int arg3 ;
   unsigned int arg4 ;
   char *arg5 = (char *) 0 ;
-  Neo::Gui::Button *result = 0 ;
+  Neo2D::Gui::Button *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Button::Button",5,5)
-  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo::Gui::Button::Button",1,"unsigned int");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::Button::Button",2,"unsigned int");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::Gui::Button::Button",3,"unsigned int");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::Gui::Button::Button",4,"unsigned int");
-  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo::Gui::Button::Button",5,"char const *");
+  SWIG_check_num_args("Neo2D::Gui::Button::Button",5,5)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::Button::Button",1,"unsigned int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::Button::Button",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::Button::Button",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::Button::Button",4,"unsigned int");
+  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo2D::Gui::Button::Button",5,"char const *");
   SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
   arg1 = (unsigned int)lua_tonumber(L, 1);
   SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
@@ -44936,8 +44937,8 @@ static int _wrap_new_Button(lua_State* L) {
   SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
   arg4 = (unsigned int)lua_tonumber(L, 4);
   arg5 = (char *)lua_tostring(L, 5);
-  result = (Neo::Gui::Button *)new Neo::Gui::Button(arg1,arg2,arg3,arg4,(char const *)arg5);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Gui__Button,1); SWIG_arg++; 
+  result = (Neo2D::Gui::Button *)new Neo2D::Gui::Button(arg1,arg2,arg3,arg4,(char const *)arg5);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__Button,1); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -44950,13 +44951,13 @@ fail:
 
 static int _wrap_Button_draw__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Button *arg1 = (Neo::Gui::Button *) 0 ;
+  Neo2D::Gui::Button *arg1 = (Neo2D::Gui::Button *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Button::draw",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Button::draw",1,"Neo::Gui::Button *");
+  SWIG_check_num_args("Neo2D::Gui::Button::draw",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Button::draw",1,"Neo2D::Gui::Button *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Button,0))){
-    SWIG_fail_ptr("Button_draw",1,SWIGTYPE_p_Neo__Gui__Button);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Button,0))){
+    SWIG_fail_ptr("Button_draw",1,SWIGTYPE_p_Neo2D__Gui__Button);
   }
   
   (arg1)->draw();
@@ -44973,16 +44974,16 @@ fail:
 
 static int _wrap_Button_draw__SWIG_1(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Button *arg1 = (Neo::Gui::Button *) 0 ;
+  Neo2D::Gui::Button *arg1 = (Neo2D::Gui::Button *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  SWIG_check_num_args("Neo::Gui::Button::draw",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Button::draw",1,"Neo::Gui::Button *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Gui::Button::draw",2,"Neo::Vector2");
+  SWIG_check_num_args("Neo2D::Gui::Button::draw",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Button::draw",1,"Neo2D::Gui::Button *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::Button::draw",2,"Neo::Vector2");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Button,0))){
-    SWIG_fail_ptr("Button_draw",1,SWIGTYPE_p_Neo__Gui__Button);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Button,0))){
+    SWIG_fail_ptr("Button_draw",1,SWIGTYPE_p_Neo2D__Gui__Button);
   }
   
   
@@ -45014,7 +45015,7 @@ static int _wrap_Button_draw(lua_State* L) {
     int _v;
     {
       void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Gui__Button, 0)) {
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__Button, 0)) {
         _v = 0;
       } else {
         _v = 1;
@@ -45028,7 +45029,7 @@ static int _wrap_Button_draw(lua_State* L) {
     int _v;
     {
       void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Gui__Button, 0)) {
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__Button, 0)) {
         _v = 0;
       } else {
         _v = 1;
@@ -45051,21 +45052,21 @@ static int _wrap_Button_draw(lua_State* L) {
   
   SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'Button_draw'\n"
     "  Possible C/C++ prototypes are:\n"
-    "    Neo::Gui::Button::draw()\n"
-    "    Neo::Gui::Button::draw(Neo::Vector2)\n");
+    "    Neo2D::Gui::Button::draw()\n"
+    "    Neo2D::Gui::Button::draw(Neo::Vector2)\n");
   lua_error(L);return 0;
 }
 
 
 static int _wrap_Button_update(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Button *arg1 = (Neo::Gui::Button *) 0 ;
+  Neo2D::Gui::Button *arg1 = (Neo2D::Gui::Button *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Button::update",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Button::update",1,"Neo::Gui::Button *");
+  SWIG_check_num_args("Neo2D::Gui::Button::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Button::update",1,"Neo2D::Gui::Button *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Button,0))){
-    SWIG_fail_ptr("Button_update",1,SWIGTYPE_p_Neo__Gui__Button);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Button,0))){
+    SWIG_fail_ptr("Button_update",1,SWIGTYPE_p_Neo2D__Gui__Button);
   }
   
   (arg1)->update();
@@ -45081,7 +45082,7 @@ fail:
 
 
 static void swig_delete_Button(void *obj) {
-Neo::Gui::Button *arg1 = (Neo::Gui::Button *) obj;
+Neo2D::Gui::Button *arg1 = (Neo2D::Gui::Button *) obj;
 delete arg1;
 }
 static int _proxy__wrap_new_Button(lua_State *L) {
@@ -45126,8 +45127,8 @@ static swig_lua_namespace swig_Button_Sf_SwigStatic = {
     0
 };
 static swig_lua_class *swig_Button_bases[] = {0,0};
-static const char *swig_Button_base_names[] = {"Neo::Gui::Widget *",0};
-static swig_lua_class _wrap_class_Button = { "Button", "Button", &SWIGTYPE_p_Neo__Gui__Button,_proxy__wrap_new_Button, swig_delete_Button, swig_Button_methods, swig_Button_attributes, &swig_Button_Sf_SwigStatic, swig_Button_meta, swig_Button_bases, swig_Button_base_names };
+static const char *swig_Button_base_names[] = {"Neo2D::Widget *",0};
+static swig_lua_class _wrap_class_Button = { "Button", "Button", &SWIGTYPE_p_Neo2D__Gui__Button,_proxy__wrap_new_Button, swig_delete_Button, swig_Button_methods, swig_Button_attributes, &swig_Button_Sf_SwigStatic, swig_Button_meta, swig_Button_bases, swig_Button_base_names };
 
 static int _wrap_new_Sprite(lua_State* L) {
   int SWIG_arg = 0;
@@ -45137,15 +45138,15 @@ static int _wrap_new_Sprite(lua_State* L) {
   unsigned int arg4 ;
   char *arg5 = (char *) 0 ;
   char *arg6 = (char *) 0 ;
-  Neo::Gui::Sprite *result = 0 ;
+  Neo2D::Sprite *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Sprite::Sprite",6,6)
-  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo::Gui::Sprite::Sprite",1,"unsigned int");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::Sprite::Sprite",2,"unsigned int");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::Gui::Sprite::Sprite",3,"unsigned int");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::Gui::Sprite::Sprite",4,"unsigned int");
-  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo::Gui::Sprite::Sprite",5,"char const *");
-  if(!SWIG_lua_isnilstring(L,6)) SWIG_fail_arg("Neo::Gui::Sprite::Sprite",6,"char const *");
+  SWIG_check_num_args("Neo2D::Sprite::Sprite",6,6)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Sprite::Sprite",1,"unsigned int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Sprite::Sprite",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Sprite::Sprite",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Sprite::Sprite",4,"unsigned int");
+  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo2D::Sprite::Sprite",5,"char const *");
+  if(!SWIG_lua_isnilstring(L,6)) SWIG_fail_arg("Neo2D::Sprite::Sprite",6,"char const *");
   SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
   arg1 = (unsigned int)lua_tonumber(L, 1);
   SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
@@ -45156,8 +45157,8 @@ static int _wrap_new_Sprite(lua_State* L) {
   arg4 = (unsigned int)lua_tonumber(L, 4);
   arg5 = (char *)lua_tostring(L, 5);
   arg6 = (char *)lua_tostring(L, 6);
-  result = (Neo::Gui::Sprite *)new Neo::Gui::Sprite(arg1,arg2,arg3,arg4,(char const *)arg5,(char const *)arg6);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Gui__Sprite,1); SWIG_arg++; 
+  result = (Neo2D::Sprite *)new Neo2D::Sprite(arg1,arg2,arg3,arg4,(char const *)arg5,(char const *)arg6);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Sprite,1); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -45170,16 +45171,16 @@ fail:
 
 static int _wrap_Sprite_draw(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Sprite *arg1 = (Neo::Gui::Sprite *) 0 ;
+  Neo2D::Sprite *arg1 = (Neo2D::Sprite *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  SWIG_check_num_args("Neo::Gui::Sprite::draw",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Sprite::draw",1,"Neo::Gui::Sprite *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Gui::Sprite::draw",2,"Neo::Vector2");
+  SWIG_check_num_args("Neo2D::Sprite::draw",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Sprite::draw",1,"Neo2D::Sprite *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Sprite::draw",2,"Neo::Vector2");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Sprite,0))){
-    SWIG_fail_ptr("Sprite_draw",1,SWIGTYPE_p_Neo__Gui__Sprite);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Sprite,0))){
+    SWIG_fail_ptr("Sprite_draw",1,SWIGTYPE_p_Neo2D__Sprite);
   }
   
   
@@ -45202,13 +45203,13 @@ fail:
 
 static int _wrap_Sprite_update(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Sprite *arg1 = (Neo::Gui::Sprite *) 0 ;
+  Neo2D::Sprite *arg1 = (Neo2D::Sprite *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Sprite::update",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Sprite::update",1,"Neo::Gui::Sprite *");
+  SWIG_check_num_args("Neo2D::Sprite::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Sprite::update",1,"Neo2D::Sprite *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Sprite,0))){
-    SWIG_fail_ptr("Sprite_update",1,SWIGTYPE_p_Neo__Gui__Sprite);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Sprite,0))){
+    SWIG_fail_ptr("Sprite_update",1,SWIGTYPE_p_Neo2D__Sprite);
   }
   
   (arg1)->update();
@@ -45225,14 +45226,14 @@ fail:
 
 static int _wrap_Sprite_getSize(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Sprite *arg1 = (Neo::Gui::Sprite *) 0 ;
+  Neo2D::Sprite *arg1 = (Neo2D::Sprite *) 0 ;
   Neo::Vector2 result;
   
-  SWIG_check_num_args("Neo::Gui::Sprite::getSize",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Sprite::getSize",1,"Neo::Gui::Sprite *");
+  SWIG_check_num_args("Neo2D::Sprite::getSize",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Sprite::getSize",1,"Neo2D::Sprite *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Sprite,0))){
-    SWIG_fail_ptr("Sprite_getSize",1,SWIGTYPE_p_Neo__Gui__Sprite);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Sprite,0))){
+    SWIG_fail_ptr("Sprite_getSize",1,SWIGTYPE_p_Neo2D__Sprite);
   }
   
   result = (arg1)->getSize();
@@ -45251,7 +45252,7 @@ fail:
 
 
 static void swig_delete_Sprite(void *obj) {
-Neo::Gui::Sprite *arg1 = (Neo::Gui::Sprite *) obj;
+Neo2D::Sprite *arg1 = (Neo2D::Sprite *) obj;
 delete arg1;
 }
 static int _proxy__wrap_new_Sprite(lua_State *L) {
@@ -45297,16 +45298,16 @@ static swig_lua_namespace swig_Sprite_Sf_SwigStatic = {
     0
 };
 static swig_lua_class *swig_Sprite_bases[] = {0,0};
-static const char *swig_Sprite_base_names[] = {"Neo::Gui::Widget *",0};
-static swig_lua_class _wrap_class_Sprite = { "Sprite", "Sprite", &SWIGTYPE_p_Neo__Gui__Sprite,_proxy__wrap_new_Sprite, swig_delete_Sprite, swig_Sprite_methods, swig_Sprite_attributes, &swig_Sprite_Sf_SwigStatic, swig_Sprite_meta, swig_Sprite_bases, swig_Sprite_base_names };
+static const char *swig_Sprite_base_names[] = {"Neo2D::Widget *",0};
+static swig_lua_class _wrap_class_Sprite = { "Sprite", "Sprite", &SWIGTYPE_p_Neo2D__Sprite,_proxy__wrap_new_Sprite, swig_delete_Sprite, swig_Sprite_methods, swig_Sprite_attributes, &swig_Sprite_Sf_SwigStatic, swig_Sprite_meta, swig_Sprite_bases, swig_Sprite_base_names };
 
 static int _wrap_new_TileSheet(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::TileSheet *result = 0 ;
+  Neo2D::TileSheet *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::TileSheet::TileSheet",0,0)
-  result = (Neo::Gui::TileSheet *)new Neo::Gui::TileSheet();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Gui__TileSheet,1); SWIG_arg++; 
+  SWIG_check_num_args("Neo2D::TileSheet::TileSheet",0,0)
+  result = (Neo2D::TileSheet *)new Neo2D::TileSheet();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__TileSheet,1); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -45319,21 +45320,21 @@ fail:
 
 static int _wrap_TileSheet_loadImage(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::TileSheet *arg1 = (Neo::Gui::TileSheet *) 0 ;
+  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
   char *arg2 = (char *) 0 ;
   unsigned int arg3 ;
   unsigned int arg4 ;
   unsigned int arg5 ;
   
-  SWIG_check_num_args("Neo::Gui::TileSheet::loadImage",5,5)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::TileSheet::loadImage",1,"Neo::Gui::TileSheet *");
-  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::Gui::TileSheet::loadImage",2,"char const *");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::Gui::TileSheet::loadImage",3,"unsigned int");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::Gui::TileSheet::loadImage",4,"unsigned int");
-  if(!lua_isnumber(L,5)) SWIG_fail_arg("Neo::Gui::TileSheet::loadImage",5,"unsigned int");
+  SWIG_check_num_args("Neo2D::TileSheet::loadImage",5,5)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::TileSheet::loadImage",1,"Neo2D::TileSheet *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo2D::TileSheet::loadImage",2,"char const *");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::TileSheet::loadImage",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::TileSheet::loadImage",4,"unsigned int");
+  if(!lua_isnumber(L,5)) SWIG_fail_arg("Neo2D::TileSheet::loadImage",5,"unsigned int");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__TileSheet,0))){
-    SWIG_fail_ptr("TileSheet_loadImage",1,SWIGTYPE_p_Neo__Gui__TileSheet);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__TileSheet,0))){
+    SWIG_fail_ptr("TileSheet_loadImage",1,SWIGTYPE_p_Neo2D__TileSheet);
   }
   
   arg2 = (char *)lua_tostring(L, 2);
@@ -45357,18 +45358,18 @@ fail:
 
 static int _wrap_TileSheet_getTexCoords(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::TileSheet *arg1 = (Neo::Gui::TileSheet *) 0 ;
+  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
   unsigned int arg2 ;
   unsigned int arg3 ;
   Neo::Vector4 result;
   
-  SWIG_check_num_args("Neo::Gui::TileSheet::getTexCoords",3,3)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::TileSheet::getTexCoords",1,"Neo::Gui::TileSheet *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::TileSheet::getTexCoords",2,"unsigned int");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::Gui::TileSheet::getTexCoords",3,"unsigned int");
+  SWIG_check_num_args("Neo2D::TileSheet::getTexCoords",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::TileSheet::getTexCoords",1,"Neo2D::TileSheet *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::TileSheet::getTexCoords",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::TileSheet::getTexCoords",3,"unsigned int");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__TileSheet,0))){
-    SWIG_fail_ptr("TileSheet_getTexCoords",1,SWIGTYPE_p_Neo__Gui__TileSheet);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__TileSheet,0))){
+    SWIG_fail_ptr("TileSheet_getTexCoords",1,SWIGTYPE_p_Neo2D__TileSheet);
   }
   
   SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
@@ -45392,14 +45393,14 @@ fail:
 
 static int _wrap_TileSheet_getImage(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::TileSheet *arg1 = (Neo::Gui::TileSheet *) 0 ;
+  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
   int result;
   
-  SWIG_check_num_args("Neo::Gui::TileSheet::getImage",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::TileSheet::getImage",1,"Neo::Gui::TileSheet *");
+  SWIG_check_num_args("Neo2D::TileSheet::getImage",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::TileSheet::getImage",1,"Neo2D::TileSheet *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__TileSheet,0))){
-    SWIG_fail_ptr("TileSheet_getImage",1,SWIGTYPE_p_Neo__Gui__TileSheet);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__TileSheet,0))){
+    SWIG_fail_ptr("TileSheet_getImage",1,SWIGTYPE_p_Neo2D__TileSheet);
   }
   
   result = (int)(arg1)->getImage();
@@ -45415,7 +45416,7 @@ fail:
 
 
 static void swig_delete_TileSheet(void *obj) {
-Neo::Gui::TileSheet *arg1 = (Neo::Gui::TileSheet *) obj;
+Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) obj;
 delete arg1;
 }
 static int _proxy__wrap_new_TileSheet(lua_State *L) {
@@ -45462,7 +45463,7 @@ static swig_lua_namespace swig_TileSheet_Sf_SwigStatic = {
 };
 static swig_lua_class *swig_TileSheet_bases[] = {0};
 static const char *swig_TileSheet_base_names[] = {0};
-static swig_lua_class _wrap_class_TileSheet = { "TileSheet", "TileSheet", &SWIGTYPE_p_Neo__Gui__TileSheet,_proxy__wrap_new_TileSheet, swig_delete_TileSheet, swig_TileSheet_methods, swig_TileSheet_attributes, &swig_TileSheet_Sf_SwigStatic, swig_TileSheet_meta, swig_TileSheet_bases, swig_TileSheet_base_names };
+static swig_lua_class _wrap_class_TileSheet = { "TileSheet", "TileSheet", &SWIGTYPE_p_Neo2D__TileSheet,_proxy__wrap_new_TileSheet, swig_delete_TileSheet, swig_TileSheet_methods, swig_TileSheet_attributes, &swig_TileSheet_Sf_SwigStatic, swig_TileSheet_meta, swig_TileSheet_bases, swig_TileSheet_base_names };
 
 static int _wrap_new_Tile(lua_State* L) {
   int SWIG_arg = 0;
@@ -45473,16 +45474,16 @@ static int _wrap_new_Tile(lua_State* L) {
   char *arg5 = (char *) 0 ;
   unsigned int arg6 ;
   unsigned int arg7 ;
-  Neo::Gui::Tile *result = 0 ;
+  Neo2D::Tile *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Tile::Tile",7,7)
-  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo::Gui::Tile::Tile",1,"unsigned int");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::Tile::Tile",2,"unsigned int");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::Gui::Tile::Tile",3,"unsigned int");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::Gui::Tile::Tile",4,"unsigned int");
-  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo::Gui::Tile::Tile",5,"char const *");
-  if(!lua_isnumber(L,6)) SWIG_fail_arg("Neo::Gui::Tile::Tile",6,"unsigned int");
-  if(!lua_isnumber(L,7)) SWIG_fail_arg("Neo::Gui::Tile::Tile",7,"unsigned int");
+  SWIG_check_num_args("Neo2D::Tile::Tile",7,7)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Tile::Tile",1,"unsigned int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Tile::Tile",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Tile::Tile",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Tile::Tile",4,"unsigned int");
+  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo2D::Tile::Tile",5,"char const *");
+  if(!lua_isnumber(L,6)) SWIG_fail_arg("Neo2D::Tile::Tile",6,"unsigned int");
+  if(!lua_isnumber(L,7)) SWIG_fail_arg("Neo2D::Tile::Tile",7,"unsigned int");
   SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
   arg1 = (unsigned int)lua_tonumber(L, 1);
   SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
@@ -45496,8 +45497,8 @@ static int _wrap_new_Tile(lua_State* L) {
   arg6 = (unsigned int)lua_tonumber(L, 6);
   SWIG_contract_assert((lua_tonumber(L,7)>=0),"number must not be negative")
   arg7 = (unsigned int)lua_tonumber(L, 7);
-  result = (Neo::Gui::Tile *)new Neo::Gui::Tile(arg1,arg2,arg3,arg4,(char const *)arg5,arg6,arg7);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Gui__Tile,1); SWIG_arg++; 
+  result = (Neo2D::Tile *)new Neo2D::Tile(arg1,arg2,arg3,arg4,(char const *)arg5,arg6,arg7);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Tile,1); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -45510,14 +45511,14 @@ fail:
 
 static int _wrap_Tile_getStaticName(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Tile *arg1 = (Neo::Gui::Tile *) 0 ;
+  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
   char *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Tile::getStaticName",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Tile::getStaticName",1,"Neo::Gui::Tile *");
+  SWIG_check_num_args("Neo2D::Tile::getStaticName",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Tile::getStaticName",1,"Neo2D::Tile *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Tile,0))){
-    SWIG_fail_ptr("Tile_getStaticName",1,SWIGTYPE_p_Neo__Gui__Tile);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Tile,0))){
+    SWIG_fail_ptr("Tile_getStaticName",1,SWIGTYPE_p_Neo2D__Tile);
   }
   
   result = (char *)(arg1)->getStaticName();
@@ -45534,20 +45535,20 @@ fail:
 
 static int _wrap_Tile_setTileSheet(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Tile *arg1 = (Neo::Gui::Tile *) 0 ;
-  Neo::Gui::TileSheet *arg2 = (Neo::Gui::TileSheet *) 0 ;
+  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
+  Neo2D::TileSheet *arg2 = (Neo2D::TileSheet *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Tile::setTileSheet",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Tile::setTileSheet",1,"Neo::Gui::Tile *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::Gui::Tile::setTileSheet",2,"Neo::Gui::TileSheet *");
+  SWIG_check_num_args("Neo2D::Tile::setTileSheet",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Tile::setTileSheet",1,"Neo2D::Tile *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo2D::Tile::setTileSheet",2,"Neo2D::TileSheet *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Tile,0))){
-    SWIG_fail_ptr("Tile_setTileSheet",1,SWIGTYPE_p_Neo__Gui__Tile);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Tile,0))){
+    SWIG_fail_ptr("Tile_setTileSheet",1,SWIGTYPE_p_Neo2D__Tile);
   }
   
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Gui__TileSheet,0))){
-    SWIG_fail_ptr("Tile_setTileSheet",2,SWIGTYPE_p_Neo__Gui__TileSheet);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo2D__TileSheet,0))){
+    SWIG_fail_ptr("Tile_setTileSheet",2,SWIGTYPE_p_Neo2D__TileSheet);
   }
   
   (arg1)->setTileSheet(arg2);
@@ -45564,16 +45565,16 @@ fail:
 
 static int _wrap_Tile_setOffset(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Tile *arg1 = (Neo::Gui::Tile *) 0 ;
+  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  SWIG_check_num_args("Neo::Gui::Tile::setOffset",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Tile::setOffset",1,"Neo::Gui::Tile *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Gui::Tile::setOffset",2,"Neo::Vector2");
+  SWIG_check_num_args("Neo2D::Tile::setOffset",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Tile::setOffset",1,"Neo2D::Tile *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Tile::setOffset",2,"Neo::Vector2");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Tile,0))){
-    SWIG_fail_ptr("Tile_setOffset",1,SWIGTYPE_p_Neo__Gui__Tile);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Tile,0))){
+    SWIG_fail_ptr("Tile_setOffset",1,SWIGTYPE_p_Neo2D__Tile);
   }
   
   
@@ -45596,16 +45597,16 @@ fail:
 
 static int _wrap_Tile_draw(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Tile *arg1 = (Neo::Gui::Tile *) 0 ;
+  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  SWIG_check_num_args("Neo::Gui::Tile::draw",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Tile::draw",1,"Neo::Gui::Tile *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Gui::Tile::draw",2,"Neo::Vector2");
+  SWIG_check_num_args("Neo2D::Tile::draw",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Tile::draw",1,"Neo2D::Tile *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Tile::draw",2,"Neo::Vector2");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Tile,0))){
-    SWIG_fail_ptr("Tile_draw",1,SWIGTYPE_p_Neo__Gui__Tile);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Tile,0))){
+    SWIG_fail_ptr("Tile_draw",1,SWIGTYPE_p_Neo2D__Tile);
   }
   
   
@@ -45628,13 +45629,13 @@ fail:
 
 static int _wrap_Tile_update(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Tile *arg1 = (Neo::Gui::Tile *) 0 ;
+  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Tile::update",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Tile::update",1,"Neo::Gui::Tile *");
+  SWIG_check_num_args("Neo2D::Tile::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Tile::update",1,"Neo2D::Tile *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Tile,0))){
-    SWIG_fail_ptr("Tile_update",1,SWIGTYPE_p_Neo__Gui__Tile);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Tile,0))){
+    SWIG_fail_ptr("Tile_update",1,SWIGTYPE_p_Neo2D__Tile);
   }
   
   (arg1)->update();
@@ -45650,7 +45651,7 @@ fail:
 
 
 static void swig_delete_Tile(void *obj) {
-Neo::Gui::Tile *arg1 = (Neo::Gui::Tile *) obj;
+Neo2D::Tile *arg1 = (Neo2D::Tile *) obj;
 delete arg1;
 }
 static int _proxy__wrap_new_Tile(lua_State *L) {
@@ -45698,8 +45699,8 @@ static swig_lua_namespace swig_Tile_Sf_SwigStatic = {
     0
 };
 static swig_lua_class *swig_Tile_bases[] = {0,0};
-static const char *swig_Tile_base_names[] = {"Neo::Gui::Widget *",0};
-static swig_lua_class _wrap_class_Tile = { "Tile", "Tile", &SWIGTYPE_p_Neo__Gui__Tile,_proxy__wrap_new_Tile, swig_delete_Tile, swig_Tile_methods, swig_Tile_attributes, &swig_Tile_Sf_SwigStatic, swig_Tile_meta, swig_Tile_bases, swig_Tile_base_names };
+static const char *swig_Tile_base_names[] = {"Neo2D::Widget *",0};
+static swig_lua_class _wrap_class_Tile = { "Tile", "Tile", &SWIGTYPE_p_Neo2D__Tile,_proxy__wrap_new_Tile, swig_delete_Tile, swig_Tile_methods, swig_Tile_attributes, &swig_Tile_Sf_SwigStatic, swig_Tile_meta, swig_Tile_bases, swig_Tile_base_names };
 
 static int _wrap_new_InputField(lua_State* L) {
   int SWIG_arg = 0;
@@ -45708,14 +45709,14 @@ static int _wrap_new_InputField(lua_State* L) {
   unsigned int arg3 ;
   unsigned int arg4 ;
   char *arg5 = (char *) 0 ;
-  Neo::Gui::InputField *result = 0 ;
+  Neo2D::Gui::InputField *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::InputField::InputField",5,5)
-  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo::Gui::InputField::InputField",1,"unsigned int");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::InputField::InputField",2,"unsigned int");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::Gui::InputField::InputField",3,"unsigned int");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::Gui::InputField::InputField",4,"unsigned int");
-  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo::Gui::InputField::InputField",5,"char const *");
+  SWIG_check_num_args("Neo2D::Gui::InputField::InputField",5,5)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::InputField",1,"unsigned int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::InputField::InputField",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::InputField::InputField",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::InputField::InputField",4,"unsigned int");
+  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo2D::Gui::InputField::InputField",5,"char const *");
   SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
   arg1 = (unsigned int)lua_tonumber(L, 1);
   SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
@@ -45725,8 +45726,8 @@ static int _wrap_new_InputField(lua_State* L) {
   SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
   arg4 = (unsigned int)lua_tonumber(L, 4);
   arg5 = (char *)lua_tostring(L, 5);
-  result = (Neo::Gui::InputField *)new Neo::Gui::InputField(arg1,arg2,arg3,arg4,(char const *)arg5);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Gui__InputField,1); SWIG_arg++; 
+  result = (Neo2D::Gui::InputField *)new Neo2D::Gui::InputField(arg1,arg2,arg3,arg4,(char const *)arg5);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__InputField,1); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -45739,13 +45740,13 @@ fail:
 
 static int _wrap_InputField_draw__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::InputField *arg1 = (Neo::Gui::InputField *) 0 ;
+  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::InputField::draw",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::InputField::draw",1,"Neo::Gui::InputField *");
+  SWIG_check_num_args("Neo2D::Gui::InputField::draw",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::draw",1,"Neo2D::Gui::InputField *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__InputField,0))){
-    SWIG_fail_ptr("InputField_draw",1,SWIGTYPE_p_Neo__Gui__InputField);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
+    SWIG_fail_ptr("InputField_draw",1,SWIGTYPE_p_Neo2D__Gui__InputField);
   }
   
   (arg1)->draw();
@@ -45762,16 +45763,16 @@ fail:
 
 static int _wrap_InputField_draw__SWIG_1(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::InputField *arg1 = (Neo::Gui::InputField *) 0 ;
+  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  SWIG_check_num_args("Neo::Gui::InputField::draw",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::InputField::draw",1,"Neo::Gui::InputField *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Gui::InputField::draw",2,"Neo::Vector2");
+  SWIG_check_num_args("Neo2D::Gui::InputField::draw",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::draw",1,"Neo2D::Gui::InputField *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::InputField::draw",2,"Neo::Vector2");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__InputField,0))){
-    SWIG_fail_ptr("InputField_draw",1,SWIGTYPE_p_Neo__Gui__InputField);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
+    SWIG_fail_ptr("InputField_draw",1,SWIGTYPE_p_Neo2D__Gui__InputField);
   }
   
   
@@ -45803,7 +45804,7 @@ static int _wrap_InputField_draw(lua_State* L) {
     int _v;
     {
       void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Gui__InputField, 0)) {
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__InputField, 0)) {
         _v = 0;
       } else {
         _v = 1;
@@ -45817,7 +45818,7 @@ static int _wrap_InputField_draw(lua_State* L) {
     int _v;
     {
       void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Gui__InputField, 0)) {
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__InputField, 0)) {
         _v = 0;
       } else {
         _v = 1;
@@ -45840,21 +45841,21 @@ static int _wrap_InputField_draw(lua_State* L) {
   
   SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'InputField_draw'\n"
     "  Possible C/C++ prototypes are:\n"
-    "    Neo::Gui::InputField::draw()\n"
-    "    Neo::Gui::InputField::draw(Neo::Vector2)\n");
+    "    Neo2D::Gui::InputField::draw()\n"
+    "    Neo2D::Gui::InputField::draw(Neo::Vector2)\n");
   lua_error(L);return 0;
 }
 
 
 static int _wrap_InputField_update(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::InputField *arg1 = (Neo::Gui::InputField *) 0 ;
+  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::InputField::update",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::InputField::update",1,"Neo::Gui::InputField *");
+  SWIG_check_num_args("Neo2D::Gui::InputField::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::update",1,"Neo2D::Gui::InputField *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__InputField,0))){
-    SWIG_fail_ptr("InputField_update",1,SWIGTYPE_p_Neo__Gui__InputField);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
+    SWIG_fail_ptr("InputField_update",1,SWIGTYPE_p_Neo2D__Gui__InputField);
   }
   
   (arg1)->update();
@@ -45870,7 +45871,7 @@ fail:
 
 
 static void swig_delete_InputField(void *obj) {
-Neo::Gui::InputField *arg1 = (Neo::Gui::InputField *) obj;
+Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) obj;
 delete arg1;
 }
 static int _proxy__wrap_new_InputField(lua_State *L) {
@@ -45915,8 +45916,8 @@ static swig_lua_namespace swig_InputField_Sf_SwigStatic = {
     0
 };
 static swig_lua_class *swig_InputField_bases[] = {0,0};
-static const char *swig_InputField_base_names[] = {"Neo::Gui::Widget *",0};
-static swig_lua_class _wrap_class_InputField = { "InputField", "InputField", &SWIGTYPE_p_Neo__Gui__InputField,_proxy__wrap_new_InputField, swig_delete_InputField, swig_InputField_methods, swig_InputField_attributes, &swig_InputField_Sf_SwigStatic, swig_InputField_meta, swig_InputField_bases, swig_InputField_base_names };
+static const char *swig_InputField_base_names[] = {"Neo2D::Widget *",0};
+static swig_lua_class _wrap_class_InputField = { "InputField", "InputField", &SWIGTYPE_p_Neo2D__Gui__InputField,_proxy__wrap_new_InputField, swig_delete_InputField, swig_InputField_methods, swig_InputField_attributes, &swig_InputField_Sf_SwigStatic, swig_InputField_meta, swig_InputField_bases, swig_InputField_base_names };
 
 static int _wrap_new_ThemedButton(lua_State* L) {
   int SWIG_arg = 0;
@@ -45925,14 +45926,14 @@ static int _wrap_new_ThemedButton(lua_State* L) {
   unsigned int arg3 ;
   unsigned int arg4 ;
   char *arg5 = (char *) 0 ;
-  Neo::Gui::ThemedButton *result = 0 ;
+  Neo2D::Gui::ThemedButton *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::ThemedButton::ThemedButton",5,5)
-  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo::Gui::ThemedButton::ThemedButton",1,"unsigned int");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::ThemedButton::ThemedButton",2,"unsigned int");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::Gui::ThemedButton::ThemedButton",3,"unsigned int");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::Gui::ThemedButton::ThemedButton",4,"unsigned int");
-  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo::Gui::ThemedButton::ThemedButton",5,"char const *");
+  SWIG_check_num_args("Neo2D::Gui::ThemedButton::ThemedButton",5,5)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::ThemedButton",1,"unsigned int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::ThemedButton",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::ThemedButton",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::ThemedButton",4,"unsigned int");
+  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::ThemedButton",5,"char const *");
   SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
   arg1 = (unsigned int)lua_tonumber(L, 1);
   SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
@@ -45942,8 +45943,8 @@ static int _wrap_new_ThemedButton(lua_State* L) {
   SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
   arg4 = (unsigned int)lua_tonumber(L, 4);
   arg5 = (char *)lua_tostring(L, 5);
-  result = (Neo::Gui::ThemedButton *)new Neo::Gui::ThemedButton(arg1,arg2,arg3,arg4,(char const *)arg5);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Gui__ThemedButton,1); SWIG_arg++; 
+  result = (Neo2D::Gui::ThemedButton *)new Neo2D::Gui::ThemedButton(arg1,arg2,arg3,arg4,(char const *)arg5);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__ThemedButton,1); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -45956,13 +45957,13 @@ fail:
 
 static int _wrap_ThemedButton_draw(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::ThemedButton *arg1 = (Neo::Gui::ThemedButton *) 0 ;
+  Neo2D::Gui::ThemedButton *arg1 = (Neo2D::Gui::ThemedButton *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::ThemedButton::draw",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::ThemedButton::draw",1,"Neo::Gui::ThemedButton *");
+  SWIG_check_num_args("Neo2D::Gui::ThemedButton::draw",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::draw",1,"Neo2D::Gui::ThemedButton *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__ThemedButton,0))){
-    SWIG_fail_ptr("ThemedButton_draw",1,SWIGTYPE_p_Neo__Gui__ThemedButton);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ThemedButton,0))){
+    SWIG_fail_ptr("ThemedButton_draw",1,SWIGTYPE_p_Neo2D__Gui__ThemedButton);
   }
   
   (arg1)->draw();
@@ -45978,7 +45979,7 @@ fail:
 
 
 static void swig_delete_ThemedButton(void *obj) {
-Neo::Gui::ThemedButton *arg1 = (Neo::Gui::ThemedButton *) obj;
+Neo2D::Gui::ThemedButton *arg1 = (Neo2D::Gui::ThemedButton *) obj;
 delete arg1;
 }
 static int _proxy__wrap_new_ThemedButton(lua_State *L) {
@@ -46022,8 +46023,8 @@ static swig_lua_namespace swig_ThemedButton_Sf_SwigStatic = {
     0
 };
 static swig_lua_class *swig_ThemedButton_bases[] = {0,0};
-static const char *swig_ThemedButton_base_names[] = {"Neo::Gui::Button *",0};
-static swig_lua_class _wrap_class_ThemedButton = { "ThemedButton", "ThemedButton", &SWIGTYPE_p_Neo__Gui__ThemedButton,_proxy__wrap_new_ThemedButton, swig_delete_ThemedButton, swig_ThemedButton_methods, swig_ThemedButton_attributes, &swig_ThemedButton_Sf_SwigStatic, swig_ThemedButton_meta, swig_ThemedButton_bases, swig_ThemedButton_base_names };
+static const char *swig_ThemedButton_base_names[] = {"Neo2D::Gui::Button *",0};
+static swig_lua_class _wrap_class_ThemedButton = { "ThemedButton", "ThemedButton", &SWIGTYPE_p_Neo2D__Gui__ThemedButton,_proxy__wrap_new_ThemedButton, swig_delete_ThemedButton, swig_ThemedButton_methods, swig_ThemedButton_attributes, &swig_ThemedButton_Sf_SwigStatic, swig_ThemedButton_meta, swig_ThemedButton_bases, swig_ThemedButton_base_names };
 
 static int _wrap_new_Label(lua_State* L) {
   int SWIG_arg = 0;
@@ -46032,14 +46033,14 @@ static int _wrap_new_Label(lua_State* L) {
   unsigned int arg3 ;
   unsigned int arg4 ;
   char *arg5 = (char *) 0 ;
-  Neo::Gui::Label *result = 0 ;
+  Neo2D::Gui::Label *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Label::Label",5,5)
-  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo::Gui::Label::Label",1,"unsigned int");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::Label::Label",2,"unsigned int");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::Gui::Label::Label",3,"unsigned int");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::Gui::Label::Label",4,"unsigned int");
-  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo::Gui::Label::Label",5,"char const *");
+  SWIG_check_num_args("Neo2D::Gui::Label::Label",5,5)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::Label::Label",1,"unsigned int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::Label::Label",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::Label::Label",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::Label::Label",4,"unsigned int");
+  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo2D::Gui::Label::Label",5,"char const *");
   SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
   arg1 = (unsigned int)lua_tonumber(L, 1);
   SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
@@ -46049,8 +46050,8 @@ static int _wrap_new_Label(lua_State* L) {
   SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
   arg4 = (unsigned int)lua_tonumber(L, 4);
   arg5 = (char *)lua_tostring(L, 5);
-  result = (Neo::Gui::Label *)new Neo::Gui::Label(arg1,arg2,arg3,arg4,(char const *)arg5);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Gui__Label,1); SWIG_arg++; 
+  result = (Neo2D::Gui::Label *)new Neo2D::Gui::Label(arg1,arg2,arg3,arg4,(char const *)arg5);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__Label,1); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -46063,15 +46064,15 @@ fail:
 
 static int _wrap_Label_setAlignment(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  Neo2D::Gui::Label *arg1 = (Neo2D::Gui::Label *) 0 ;
   int arg2 ;
   
-  SWIG_check_num_args("Neo::Gui::Label::setAlignment",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Label::setAlignment",1,"Neo::Gui::Label *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Gui::Label::setAlignment",2,"int");
+  SWIG_check_num_args("Neo2D::Gui::Label::setAlignment",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Label::setAlignment",1,"Neo2D::Gui::Label *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::Label::setAlignment",2,"int");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Label,0))){
-    SWIG_fail_ptr("Label_setAlignment",1,SWIGTYPE_p_Neo__Gui__Label);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Label,0))){
+    SWIG_fail_ptr("Label_setAlignment",1,SWIGTYPE_p_Neo2D__Gui__Label);
   }
   
   arg2 = (int)lua_tonumber(L, 2);
@@ -46089,14 +46090,14 @@ fail:
 
 static int _wrap_Label_getAlignment(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  Neo2D::Gui::Label *arg1 = (Neo2D::Gui::Label *) 0 ;
   Neo::TEXT_ALIGN_MODES result;
   
-  SWIG_check_num_args("Neo::Gui::Label::getAlignment",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Label::getAlignment",1,"Neo::Gui::Label *");
+  SWIG_check_num_args("Neo2D::Gui::Label::getAlignment",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Label::getAlignment",1,"Neo2D::Gui::Label *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Label,0))){
-    SWIG_fail_ptr("Label_getAlignment",1,SWIGTYPE_p_Neo__Gui__Label);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Label,0))){
+    SWIG_fail_ptr("Label_getAlignment",1,SWIGTYPE_p_Neo2D__Gui__Label);
   }
   
   result = (Neo::TEXT_ALIGN_MODES)(arg1)->getAlignment();
@@ -46113,15 +46114,15 @@ fail:
 
 static int _wrap_Label_setFont(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  Neo2D::Gui::Label *arg1 = (Neo2D::Gui::Label *) 0 ;
   char *arg2 = (char *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Label::setFont",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Label::setFont",1,"Neo::Gui::Label *");
-  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::Gui::Label::setFont",2,"char const *");
+  SWIG_check_num_args("Neo2D::Gui::Label::setFont",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Label::setFont",1,"Neo2D::Gui::Label *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo2D::Gui::Label::setFont",2,"char const *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Label,0))){
-    SWIG_fail_ptr("Label_setFont",1,SWIGTYPE_p_Neo__Gui__Label);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Label,0))){
+    SWIG_fail_ptr("Label_setFont",1,SWIGTYPE_p_Neo2D__Gui__Label);
   }
   
   arg2 = (char *)lua_tostring(L, 2);
@@ -46139,14 +46140,14 @@ fail:
 
 static int _wrap_Label_getFont(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  Neo2D::Gui::Label *arg1 = (Neo2D::Gui::Label *) 0 ;
   char *result = 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Label::getFont",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Label::getFont",1,"Neo::Gui::Label *");
+  SWIG_check_num_args("Neo2D::Gui::Label::getFont",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Label::getFont",1,"Neo2D::Gui::Label *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Label,0))){
-    SWIG_fail_ptr("Label_getFont",1,SWIGTYPE_p_Neo__Gui__Label);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Label,0))){
+    SWIG_fail_ptr("Label_getFont",1,SWIGTYPE_p_Neo2D__Gui__Label);
   }
   
   result = (char *)(arg1)->getFont();
@@ -46163,13 +46164,13 @@ fail:
 
 static int _wrap_Label_draw__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  Neo2D::Gui::Label *arg1 = (Neo2D::Gui::Label *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Label::draw",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Label::draw",1,"Neo::Gui::Label *");
+  SWIG_check_num_args("Neo2D::Gui::Label::draw",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Label::draw",1,"Neo2D::Gui::Label *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Label,0))){
-    SWIG_fail_ptr("Label_draw",1,SWIGTYPE_p_Neo__Gui__Label);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Label,0))){
+    SWIG_fail_ptr("Label_draw",1,SWIGTYPE_p_Neo2D__Gui__Label);
   }
   
   (arg1)->draw();
@@ -46186,16 +46187,16 @@ fail:
 
 static int _wrap_Label_draw__SWIG_1(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  Neo2D::Gui::Label *arg1 = (Neo2D::Gui::Label *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  SWIG_check_num_args("Neo::Gui::Label::draw",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Label::draw",1,"Neo::Gui::Label *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Gui::Label::draw",2,"Neo::Vector2");
+  SWIG_check_num_args("Neo2D::Gui::Label::draw",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Label::draw",1,"Neo2D::Gui::Label *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::Label::draw",2,"Neo::Vector2");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Label,0))){
-    SWIG_fail_ptr("Label_draw",1,SWIGTYPE_p_Neo__Gui__Label);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Label,0))){
+    SWIG_fail_ptr("Label_draw",1,SWIGTYPE_p_Neo2D__Gui__Label);
   }
   
   
@@ -46227,7 +46228,7 @@ static int _wrap_Label_draw(lua_State* L) {
     int _v;
     {
       void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Gui__Label, 0)) {
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__Label, 0)) {
         _v = 0;
       } else {
         _v = 1;
@@ -46241,7 +46242,7 @@ static int _wrap_Label_draw(lua_State* L) {
     int _v;
     {
       void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Gui__Label, 0)) {
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__Label, 0)) {
         _v = 0;
       } else {
         _v = 1;
@@ -46264,21 +46265,21 @@ static int _wrap_Label_draw(lua_State* L) {
   
   SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'Label_draw'\n"
     "  Possible C/C++ prototypes are:\n"
-    "    Neo::Gui::Label::draw()\n"
-    "    Neo::Gui::Label::draw(Neo::Vector2)\n");
+    "    Neo2D::Gui::Label::draw()\n"
+    "    Neo2D::Gui::Label::draw(Neo::Vector2)\n");
   lua_error(L);return 0;
 }
 
 
 static int _wrap_Label_update(lua_State* L) {
   int SWIG_arg = 0;
-  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  Neo2D::Gui::Label *arg1 = (Neo2D::Gui::Label *) 0 ;
   
-  SWIG_check_num_args("Neo::Gui::Label::update",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Gui::Label::update",1,"Neo::Gui::Label *");
+  SWIG_check_num_args("Neo2D::Gui::Label::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Label::update",1,"Neo2D::Gui::Label *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Gui__Label,0))){
-    SWIG_fail_ptr("Label_update",1,SWIGTYPE_p_Neo__Gui__Label);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Label,0))){
+    SWIG_fail_ptr("Label_update",1,SWIGTYPE_p_Neo2D__Gui__Label);
   }
   
   (arg1)->update();
@@ -46294,7 +46295,7 @@ fail:
 
 
 static void swig_delete_Label(void *obj) {
-Neo::Gui::Label *arg1 = (Neo::Gui::Label *) obj;
+Neo2D::Gui::Label *arg1 = (Neo2D::Gui::Label *) obj;
 delete arg1;
 }
 static int _proxy__wrap_new_Label(lua_State *L) {
@@ -46343,8 +46344,8 @@ static swig_lua_namespace swig_Label_Sf_SwigStatic = {
     0
 };
 static swig_lua_class *swig_Label_bases[] = {0,0};
-static const char *swig_Label_base_names[] = {"Neo::Gui::Widget *",0};
-static swig_lua_class _wrap_class_Label = { "Label", "Label", &SWIGTYPE_p_Neo__Gui__Label,_proxy__wrap_new_Label, swig_delete_Label, swig_Label_methods, swig_Label_attributes, &swig_Label_Sf_SwigStatic, swig_Label_meta, swig_Label_bases, swig_Label_base_names };
+static const char *swig_Label_base_names[] = {"Neo2D::Widget *",0};
+static swig_lua_class _wrap_class_Label = { "Label", "Label", &SWIGTYPE_p_Neo2D__Gui__Label,_proxy__wrap_new_Label, swig_delete_Label, swig_Label_methods, swig_Label_attributes, &swig_Label_Sf_SwigStatic, swig_Label_meta, swig_Label_bases, swig_Label_base_names };
 
 static swig_lua_attribute swig_SwigModule_attributes[] = {
     {0,0,0}
@@ -46486,12 +46487,12 @@ static swig_lua_const_info swig_SwigModule_constants[]= {
     {SWIG_LUA_CONSTTAB_INT("TEXT_ALIGN_LEFT", Neo::TEXT_ALIGN_LEFT)},
     {SWIG_LUA_CONSTTAB_INT("TEXT_ALIGN_RIGHT", Neo::TEXT_ALIGN_RIGHT)},
     {SWIG_LUA_CONSTTAB_INT("TEXT_ALIGN_CENTER", Neo::TEXT_ALIGN_CENTER)},
-    {SWIG_LUA_CONSTTAB_INT("BUTTON_NORMAL_STATE", Neo::Gui::BUTTON_NORMAL_STATE)},
-    {SWIG_LUA_CONSTTAB_INT("BUTTON_HOVER_STATE", Neo::Gui::BUTTON_HOVER_STATE)},
-    {SWIG_LUA_CONSTTAB_INT("BUTTON_PRESSED_STATE", Neo::Gui::BUTTON_PRESSED_STATE)},
-    {SWIG_LUA_CONSTTAB_INT("INPUT_NORMAL_STATE", Neo::Gui::INPUT_NORMAL_STATE)},
-    {SWIG_LUA_CONSTTAB_INT("INPUT_HOVER_STATE", Neo::Gui::INPUT_HOVER_STATE)},
-    {SWIG_LUA_CONSTTAB_INT("INPUT_SELECTED_STATE", Neo::Gui::INPUT_SELECTED_STATE)},
+    {SWIG_LUA_CONSTTAB_INT("BUTTON_NORMAL_STATE", Neo2D::Gui::BUTTON_NORMAL_STATE)},
+    {SWIG_LUA_CONSTTAB_INT("BUTTON_HOVER_STATE", Neo2D::Gui::BUTTON_HOVER_STATE)},
+    {SWIG_LUA_CONSTTAB_INT("BUTTON_PRESSED_STATE", Neo2D::Gui::BUTTON_PRESSED_STATE)},
+    {SWIG_LUA_CONSTTAB_INT("INPUT_NORMAL_STATE", Neo2D::Gui::INPUT_NORMAL_STATE)},
+    {SWIG_LUA_CONSTTAB_INT("INPUT_HOVER_STATE", Neo2D::Gui::INPUT_HOVER_STATE)},
+    {SWIG_LUA_CONSTTAB_INT("INPUT_SELECTED_STATE", Neo2D::Gui::INPUT_SELECTED_STATE)},
     {SWIG_LUA_CONSTTAB_INT("NUM_SPRITES", 9)},
     {0,0,0,0,0,0}
 };
@@ -46530,7 +46531,7 @@ static swig_lua_method swig_SwigModule_methods[]= {
     { "Mesh_getNew", _wrap_Mesh_getNew},
     { "TextureRef_getNew", _wrap_TextureRef_getNew},
     { "Canvas_getInstance", _wrap_Canvas_getInstance},
-    { "GuiSystem_getInstance", _wrap_GuiSystem_getInstance},
+    { "Neo2DEngine_getInstance", _wrap_Neo2DEngine_getInstance},
     {0,0}
 };
 static swig_lua_class* swig_SwigModule_classes[]= {
@@ -46579,7 +46580,7 @@ static swig_lua_class* swig_SwigModule_classes[]= {
 &_wrap_class_Widget,
 &_wrap_class_SpriteBatch,
 &_wrap_class_Canvas,
-&_wrap_class_GuiSystem,
+&_wrap_class_Neo2DEngine,
 &_wrap_class_Button,
 &_wrap_class_Sprite,
 &_wrap_class_TileSheet,
@@ -46607,8 +46608,8 @@ static swig_lua_namespace swig_SwigModule = {
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
-static void *_p_Neo__Gui__ThemedButtonTo_p_Neo__Gui__Button(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Neo::Gui::Button *)  ((Neo::Gui::ThemedButton *) x));
+static void *_p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Gui__Button(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Neo2D::Gui::Button *)  ((Neo2D::Gui::ThemedButton *) x));
 }
 static void *_p_Neo__AnimRangeTo_p_Neo__Range(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo::Range *)  ((Neo::AnimRange *) x));
@@ -46616,23 +46617,23 @@ static void *_p_Neo__AnimRangeTo_p_Neo__Range(void *x, int *SWIGUNUSEDPARM(newme
 static void *_p_Neo__TextureRefTo_p_Neo__DataRef(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo::DataRef *)  ((Neo::TextureRef *) x));
 }
-static void *_p_Neo__Gui__LabelTo_p_Neo__Gui__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Neo::Gui::Widget *)  ((Neo::Gui::Label *) x));
+static void *_p_Neo2D__Gui__LabelTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Neo2D::Widget *)  ((Neo2D::Gui::Label *) x));
 }
-static void *_p_Neo__Gui__ButtonTo_p_Neo__Gui__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Neo::Gui::Widget *)  ((Neo::Gui::Button *) x));
+static void *_p_Neo2D__Gui__ButtonTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Neo2D::Widget *)  ((Neo2D::Gui::Button *) x));
 }
-static void *_p_Neo__Gui__ThemedButtonTo_p_Neo__Gui__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Neo::Gui::Widget *) (Neo::Gui::Button *) ((Neo::Gui::ThemedButton *) x));
+static void *_p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Neo2D::Widget *) (Neo2D::Gui::Button *) ((Neo2D::Gui::ThemedButton *) x));
 }
-static void *_p_Neo__Gui__SpriteTo_p_Neo__Gui__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Neo::Gui::Widget *)  ((Neo::Gui::Sprite *) x));
+static void *_p_Neo2D__SpriteTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Neo2D::Widget *)  ((Neo2D::Sprite *) x));
 }
-static void *_p_Neo__Gui__InputFieldTo_p_Neo__Gui__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Neo::Gui::Widget *)  ((Neo::Gui::InputField *) x));
+static void *_p_Neo2D__Gui__InputFieldTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Neo2D::Widget *)  ((Neo2D::Gui::InputField *) x));
 }
-static void *_p_Neo__Gui__TileTo_p_Neo__Gui__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Neo::Gui::Widget *)  ((Neo::Gui::Tile *) x));
+static void *_p_Neo2D__TileTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Neo2D::Widget *)  ((Neo2D::Tile *) x));
 }
 static void *_p_Neo__OLightTo_p_Neo__Object3d(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo::Object3d *)  ((Neo::OLight *) x));
@@ -46661,6 +46662,17 @@ static swig_type_info _swigt__p_Frustum = {"_p_Frustum", "Frustum *", 0, 0, (voi
 static swig_type_info _swigt__p_M_SHADER_TYPES = {"_p_M_SHADER_TYPES", "M_SHADER_TYPES *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_MaterialsAnim = {"_p_MaterialsAnim", "MaterialsAnim *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_MorphingData = {"_p_MorphingData", "MorphingData *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Neo2D__Canvas = {"_p_Neo2D__Canvas", "Neo2D::Canvas *", 0, 0, (void*)&_wrap_class_Canvas, 0};
+static swig_type_info _swigt__p_Neo2D__Gui__Button = {"_p_Neo2D__Gui__Button", "Neo2D::Gui::Button *", 0, 0, (void*)&_wrap_class_Button, 0};
+static swig_type_info _swigt__p_Neo2D__Gui__InputField = {"_p_Neo2D__Gui__InputField", "Neo2D::Gui::InputField *", 0, 0, (void*)&_wrap_class_InputField, 0};
+static swig_type_info _swigt__p_Neo2D__Gui__Label = {"_p_Neo2D__Gui__Label", "Neo2D::Gui::Label *", 0, 0, (void*)&_wrap_class_Label, 0};
+static swig_type_info _swigt__p_Neo2D__Gui__ThemedButton = {"_p_Neo2D__Gui__ThemedButton", "Neo2D::Gui::ThemedButton *", 0, 0, (void*)&_wrap_class_ThemedButton, 0};
+static swig_type_info _swigt__p_Neo2D__Neo2DEngine = {"_p_Neo2D__Neo2DEngine", "Neo2D::Neo2DEngine *", 0, 0, (void*)&_wrap_class_Neo2DEngine, 0};
+static swig_type_info _swigt__p_Neo2D__Sprite = {"_p_Neo2D__Sprite", "Neo2D::Sprite *", 0, 0, (void*)&_wrap_class_Sprite, 0};
+static swig_type_info _swigt__p_Neo2D__SpriteBatch = {"_p_Neo2D__SpriteBatch", "Neo2D::SpriteBatch *", 0, 0, (void*)&_wrap_class_SpriteBatch, 0};
+static swig_type_info _swigt__p_Neo2D__Tile = {"_p_Neo2D__Tile", "Neo2D::Tile *", 0, 0, (void*)&_wrap_class_Tile, 0};
+static swig_type_info _swigt__p_Neo2D__TileSheet = {"_p_Neo2D__TileSheet", "Neo2D::TileSheet *", 0, 0, (void*)&_wrap_class_TileSheet, 0};
+static swig_type_info _swigt__p_Neo2D__Widget = {"_p_Neo2D__Widget", "Neo2D::Widget *", 0, 0, (void*)&_wrap_class_Widget, 0};
 static swig_type_info _swigt__p_NeoVariable = {"_p_NeoVariable", "NeoVariable *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Neo__AnimRange = {"_p_Neo__AnimRange", "Neo::AnimRange *", 0, 0, (void*)&_wrap_class_AnimRange, 0};
 static swig_type_info _swigt__p_Neo__Armature = {"_p_Neo__Armature", "Neo::Armature *", 0, 0, (void*)&_wrap_class_Armature, 0};
@@ -46673,17 +46685,6 @@ static swig_type_info _swigt__p_Neo__DataManager = {"_p_Neo__DataManager", "Neo:
 static swig_type_info _swigt__p_Neo__DataRef = {"_p_Neo__DataRef", "Neo::DataRef *", 0, 0, (void*)&_wrap_class_DataRef, 0};
 static swig_type_info _swigt__p_Neo__FRAME_BUFFER_ATTACHMENT = {"_p_Neo__FRAME_BUFFER_ATTACHMENT", "enum Neo::FRAME_BUFFER_ATTACHMENT *|Neo::FRAME_BUFFER_ATTACHMENT *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Neo__FontRef = {"_p_Neo__FontRef", "Neo::FontRef *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_Neo__Gui__Button = {"_p_Neo__Gui__Button", "Neo::Gui::Button *", 0, 0, (void*)&_wrap_class_Button, 0};
-static swig_type_info _swigt__p_Neo__Gui__Canvas = {"_p_Neo__Gui__Canvas", "Neo::Gui::Canvas *", 0, 0, (void*)&_wrap_class_Canvas, 0};
-static swig_type_info _swigt__p_Neo__Gui__GuiSystem = {"_p_Neo__Gui__GuiSystem", "Neo::Gui::GuiSystem *", 0, 0, (void*)&_wrap_class_GuiSystem, 0};
-static swig_type_info _swigt__p_Neo__Gui__InputField = {"_p_Neo__Gui__InputField", "Neo::Gui::InputField *", 0, 0, (void*)&_wrap_class_InputField, 0};
-static swig_type_info _swigt__p_Neo__Gui__Label = {"_p_Neo__Gui__Label", "Neo::Gui::Label *", 0, 0, (void*)&_wrap_class_Label, 0};
-static swig_type_info _swigt__p_Neo__Gui__Sprite = {"_p_Neo__Gui__Sprite", "Neo::Gui::Sprite *", 0, 0, (void*)&_wrap_class_Sprite, 0};
-static swig_type_info _swigt__p_Neo__Gui__SpriteBatch = {"_p_Neo__Gui__SpriteBatch", "Neo::Gui::SpriteBatch *", 0, 0, (void*)&_wrap_class_SpriteBatch, 0};
-static swig_type_info _swigt__p_Neo__Gui__ThemedButton = {"_p_Neo__Gui__ThemedButton", "Neo::Gui::ThemedButton *", 0, 0, (void*)&_wrap_class_ThemedButton, 0};
-static swig_type_info _swigt__p_Neo__Gui__Tile = {"_p_Neo__Gui__Tile", "Neo::Gui::Tile *", 0, 0, (void*)&_wrap_class_Tile, 0};
-static swig_type_info _swigt__p_Neo__Gui__TileSheet = {"_p_Neo__Gui__TileSheet", "Neo::Gui::TileSheet *", 0, 0, (void*)&_wrap_class_TileSheet, 0};
-static swig_type_info _swigt__p_Neo__Gui__Widget = {"_p_Neo__Gui__Widget", "Neo::Gui::Widget *", 0, 0, (void*)&_wrap_class_Widget, 0};
 static swig_type_info _swigt__p_Neo__Image = {"_p_Neo__Image", "Neo::Image *", 0, 0, (void*)&_wrap_class_Image, 0};
 static swig_type_info _swigt__p_Neo__InputContext = {"_p_Neo__InputContext", "Neo::InputContext *", 0, 0, (void*)&_wrap_class_InputContext, 0};
 static swig_type_info _swigt__p_Neo__Level = {"_p_Neo__Level", "Neo::Level *", 0, 0, (void*)&_wrap_class_Level, 0};
@@ -46767,6 +46768,17 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_M_SHADER_TYPES,
   &_swigt__p_MaterialsAnim,
   &_swigt__p_MorphingData,
+  &_swigt__p_Neo2D__Canvas,
+  &_swigt__p_Neo2D__Gui__Button,
+  &_swigt__p_Neo2D__Gui__InputField,
+  &_swigt__p_Neo2D__Gui__Label,
+  &_swigt__p_Neo2D__Gui__ThemedButton,
+  &_swigt__p_Neo2D__Neo2DEngine,
+  &_swigt__p_Neo2D__Sprite,
+  &_swigt__p_Neo2D__SpriteBatch,
+  &_swigt__p_Neo2D__Tile,
+  &_swigt__p_Neo2D__TileSheet,
+  &_swigt__p_Neo2D__Widget,
   &_swigt__p_NeoVariable,
   &_swigt__p_Neo__AnimRange,
   &_swigt__p_Neo__Armature,
@@ -46779,17 +46791,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Neo__DataRef,
   &_swigt__p_Neo__FRAME_BUFFER_ATTACHMENT,
   &_swigt__p_Neo__FontRef,
-  &_swigt__p_Neo__Gui__Button,
-  &_swigt__p_Neo__Gui__Canvas,
-  &_swigt__p_Neo__Gui__GuiSystem,
-  &_swigt__p_Neo__Gui__InputField,
-  &_swigt__p_Neo__Gui__Label,
-  &_swigt__p_Neo__Gui__Sprite,
-  &_swigt__p_Neo__Gui__SpriteBatch,
-  &_swigt__p_Neo__Gui__ThemedButton,
-  &_swigt__p_Neo__Gui__Tile,
-  &_swigt__p_Neo__Gui__TileSheet,
-  &_swigt__p_Neo__Gui__Widget,
   &_swigt__p_Neo__Image,
   &_swigt__p_Neo__InputContext,
   &_swigt__p_Neo__Level,
@@ -46873,6 +46874,17 @@ static swig_cast_info _swigc__p_Frustum[] = {  {&_swigt__p_Frustum, 0, 0, 0},{0,
 static swig_cast_info _swigc__p_M_SHADER_TYPES[] = {  {&_swigt__p_M_SHADER_TYPES, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_MaterialsAnim[] = {  {&_swigt__p_MaterialsAnim, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_MorphingData[] = {  {&_swigt__p_MorphingData, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Canvas[] = {  {&_swigt__p_Neo2D__Canvas, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Gui__Button[] = {  {&_swigt__p_Neo2D__Gui__ThemedButton, _p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Gui__Button, 0, 0},  {&_swigt__p_Neo2D__Gui__Button, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Gui__InputField[] = {  {&_swigt__p_Neo2D__Gui__InputField, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Gui__Label[] = {  {&_swigt__p_Neo2D__Gui__Label, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Gui__ThemedButton[] = {  {&_swigt__p_Neo2D__Gui__ThemedButton, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Neo2DEngine[] = {  {&_swigt__p_Neo2D__Neo2DEngine, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Sprite[] = {  {&_swigt__p_Neo2D__Sprite, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__SpriteBatch[] = {  {&_swigt__p_Neo2D__SpriteBatch, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Tile[] = {  {&_swigt__p_Neo2D__Tile, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__TileSheet[] = {  {&_swigt__p_Neo2D__TileSheet, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Widget[] = {  {&_swigt__p_Neo2D__Gui__Label, _p_Neo2D__Gui__LabelTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ThemedButton, _p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Tile, _p_Neo2D__TileTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Button, _p_Neo2D__Gui__ButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Sprite, _p_Neo2D__SpriteTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__InputField, _p_Neo2D__Gui__InputFieldTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Widget, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_NeoVariable[] = {  {&_swigt__p_NeoVariable, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__AnimRange[] = {  {&_swigt__p_Neo__AnimRange, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Armature[] = {  {&_swigt__p_Neo__Armature, 0, 0, 0},{0, 0, 0, 0}};
@@ -46885,17 +46897,6 @@ static swig_cast_info _swigc__p_Neo__DataManager[] = {  {&_swigt__p_Neo__DataMan
 static swig_cast_info _swigc__p_Neo__DataRef[] = {  {&_swigt__p_Neo__DataRef, 0, 0, 0},  {&_swigt__p_Neo__TextureRef, _p_Neo__TextureRefTo_p_Neo__DataRef, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__FRAME_BUFFER_ATTACHMENT[] = {  {&_swigt__p_Neo__FRAME_BUFFER_ATTACHMENT, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__FontRef[] = {  {&_swigt__p_Neo__FontRef, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo__Gui__Button[] = {  {&_swigt__p_Neo__Gui__ThemedButton, _p_Neo__Gui__ThemedButtonTo_p_Neo__Gui__Button, 0, 0},  {&_swigt__p_Neo__Gui__Button, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo__Gui__Canvas[] = {  {&_swigt__p_Neo__Gui__Canvas, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo__Gui__GuiSystem[] = {  {&_swigt__p_Neo__Gui__GuiSystem, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo__Gui__InputField[] = {  {&_swigt__p_Neo__Gui__InputField, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo__Gui__Label[] = {  {&_swigt__p_Neo__Gui__Label, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo__Gui__Sprite[] = {  {&_swigt__p_Neo__Gui__Sprite, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo__Gui__SpriteBatch[] = {  {&_swigt__p_Neo__Gui__SpriteBatch, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo__Gui__ThemedButton[] = {  {&_swigt__p_Neo__Gui__ThemedButton, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo__Gui__Tile[] = {  {&_swigt__p_Neo__Gui__Tile, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo__Gui__TileSheet[] = {  {&_swigt__p_Neo__Gui__TileSheet, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo__Gui__Widget[] = {  {&_swigt__p_Neo__Gui__Label, _p_Neo__Gui__LabelTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__Tile, _p_Neo__Gui__TileTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__ThemedButton, _p_Neo__Gui__ThemedButtonTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__Button, _p_Neo__Gui__ButtonTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__Sprite, _p_Neo__Gui__SpriteTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__InputField, _p_Neo__Gui__InputFieldTo_p_Neo__Gui__Widget, 0, 0},  {&_swigt__p_Neo__Gui__Widget, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Image[] = {  {&_swigt__p_Neo__Image, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__InputContext[] = {  {&_swigt__p_Neo__InputContext, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Level[] = {  {&_swigt__p_Neo__Level, 0, 0, 0},{0, 0, 0, 0}};
@@ -46979,6 +46980,17 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_M_SHADER_TYPES,
   _swigc__p_MaterialsAnim,
   _swigc__p_MorphingData,
+  _swigc__p_Neo2D__Canvas,
+  _swigc__p_Neo2D__Gui__Button,
+  _swigc__p_Neo2D__Gui__InputField,
+  _swigc__p_Neo2D__Gui__Label,
+  _swigc__p_Neo2D__Gui__ThemedButton,
+  _swigc__p_Neo2D__Neo2DEngine,
+  _swigc__p_Neo2D__Sprite,
+  _swigc__p_Neo2D__SpriteBatch,
+  _swigc__p_Neo2D__Tile,
+  _swigc__p_Neo2D__TileSheet,
+  _swigc__p_Neo2D__Widget,
   _swigc__p_NeoVariable,
   _swigc__p_Neo__AnimRange,
   _swigc__p_Neo__Armature,
@@ -46991,17 +47003,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Neo__DataRef,
   _swigc__p_Neo__FRAME_BUFFER_ATTACHMENT,
   _swigc__p_Neo__FontRef,
-  _swigc__p_Neo__Gui__Button,
-  _swigc__p_Neo__Gui__Canvas,
-  _swigc__p_Neo__Gui__GuiSystem,
-  _swigc__p_Neo__Gui__InputField,
-  _swigc__p_Neo__Gui__Label,
-  _swigc__p_Neo__Gui__Sprite,
-  _swigc__p_Neo__Gui__SpriteBatch,
-  _swigc__p_Neo__Gui__ThemedButton,
-  _swigc__p_Neo__Gui__Tile,
-  _swigc__p_Neo__Gui__TileSheet,
-  _swigc__p_Neo__Gui__Widget,
   _swigc__p_Neo__Image,
   _swigc__p_Neo__InputContext,
   _swigc__p_Neo__Level,

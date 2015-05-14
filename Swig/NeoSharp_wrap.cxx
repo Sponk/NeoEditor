@@ -224,7 +224,7 @@ static void SWIGUNUSED SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpExcepti
 #ifdef __cplusplus
 extern "C" 
 #endif
-SWIGEXPORT void SWIGSTDCALL SWIGRegisterExceptionCallbacks_Neo(
+SWIGEXPORT void SWIGSTDCALL SWIGRegisterExceptionCallbacks_NeoSharp(
                                                 SWIG_CSharpExceptionCallback_t applicationCallback,
                                                 SWIG_CSharpExceptionCallback_t arithmeticCallback,
                                                 SWIG_CSharpExceptionCallback_t divideByZeroCallback, 
@@ -252,7 +252,7 @@ SWIGEXPORT void SWIGSTDCALL SWIGRegisterExceptionCallbacks_Neo(
 #ifdef __cplusplus
 extern "C" 
 #endif
-SWIGEXPORT void SWIGSTDCALL SWIGRegisterExceptionArgumentCallbacks_Neo(
+SWIGEXPORT void SWIGSTDCALL SWIGRegisterExceptionArgumentCallbacks_NeoSharp(
                                                 SWIG_CSharpExceptionArgumentCallback_t argumentCallback,
                                                 SWIG_CSharpExceptionArgumentCallback_t argumentNullCallback,
                                                 SWIG_CSharpExceptionArgumentCallback_t argumentOutOfRangeCallback) {
@@ -270,7 +270,7 @@ static SWIG_CSharpStringHelperCallback SWIG_csharp_string_callback = NULL;
 #ifdef __cplusplus
 extern "C" 
 #endif
-SWIGEXPORT void SWIGSTDCALL SWIGRegisterStringCallback_Neo(SWIG_CSharpStringHelperCallback callback) {
+SWIGEXPORT void SWIGSTDCALL SWIGRegisterStringCallback_NeoSharp(SWIG_CSharpStringHelperCallback callback) {
   SWIG_csharp_string_callback = callback;
 }
 
@@ -282,7 +282,7 @@ SWIGEXPORT void SWIGSTDCALL SWIGRegisterStringCallback_Neo(SWIG_CSharpStringHelp
 
         #include <NeoEngine.h>
         #include <NeoCore.h>
-        #include <GuiSystem.h>
+        #include <Neo2DEngine.h>
         #include <Widget.h>
         #include <Button.h>
 
@@ -294,6 +294,7 @@ SWIGEXPORT void SWIGSTDCALL SWIGRegisterStringCallback_Neo(SWIG_CSharpStringHelp
         #include <Label.h>
 
         using namespace Neo;
+        using namespace Neo2D;
         using namespace Gui;
 
         // #define Canvas Neo::Gui::Canvas
@@ -14623,10 +14624,10 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Armature_processBonesLinking(void * jarg1) {
 
 SWIGEXPORT float SWIGSTDCALL CSharp_Widget_getFontSize(void * jarg1) {
   float jresult ;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   float result;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   result = (float)(arg1)->getFontSize();
   jresult = result; 
   return jresult;
@@ -14634,29 +14635,29 @@ SWIGEXPORT float SWIGSTDCALL CSharp_Widget_getFontSize(void * jarg1) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Widget_setFontSize(void * jarg1, float jarg2) {
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   float arg2 ;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   arg2 = (float)jarg2; 
   (arg1)->setFontSize(arg2);
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Widget_draw__SWIG_0(void * jarg1) {
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   (arg1)->draw();
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Widget_draw__SWIG_1(void * jarg1, void * jarg2) {
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   argp2 = (Neo::Vector2 *)jarg2; 
   if (!argp2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null Neo::Vector2", 0);
@@ -14668,18 +14669,18 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Widget_draw__SWIG_1(void * jarg1, void * jarg
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Widget_update(void * jarg1) {
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   (arg1)->update();
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Widget_setScriptCallback(void * jarg1, char * jarg2) {
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   char *arg2 = (char *) 0 ;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   arg2 = (char *)jarg2; 
   (arg1)->setScriptCallback((char const *)arg2);
 }
@@ -14687,10 +14688,10 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Widget_setScriptCallback(void * jarg1, char *
 
 SWIGEXPORT long SWIGSTDCALL CSharp_Widget_getUserData(void * jarg1) {
   long jresult ;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   long result;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   result = (long)(arg1)->getUserData();
   jresult = result; 
   return jresult;
@@ -14698,10 +14699,10 @@ SWIGEXPORT long SWIGSTDCALL CSharp_Widget_getUserData(void * jarg1) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Widget_setUserData(void * jarg1, long jarg2) {
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   long arg2 ;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   arg2 = (long)jarg2; 
   (arg1)->setUserData(arg2);
 }
@@ -14709,10 +14710,10 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Widget_setUserData(void * jarg1, long jarg2) 
 
 SWIGEXPORT char * SWIGSTDCALL CSharp_Widget_getLabel(void * jarg1) {
   char * jresult ;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   char *result = 0 ;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   result = (char *)(arg1)->getLabel();
   jresult = SWIG_csharp_string_callback((const char *)result); 
   return jresult;
@@ -14720,21 +14721,21 @@ SWIGEXPORT char * SWIGSTDCALL CSharp_Widget_getLabel(void * jarg1) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Widget_setLabel(void * jarg1, char * jarg2) {
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   char *arg2 = (char *) 0 ;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   arg2 = (char *)jarg2; 
   (arg1)->setLabel((char const *)arg2);
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Widget_setPosition(void * jarg1, void * jarg2) {
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   argp2 = (Neo::Vector2 *)jarg2; 
   if (!argp2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null Neo::Vector2", 0);
@@ -14747,10 +14748,10 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Widget_setPosition(void * jarg1, void * jarg2
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_Widget_getPosition(void * jarg1) {
   void * jresult ;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   Neo::Vector2 result;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   result = (arg1)->getPosition();
   jresult = new Neo::Vector2((const Neo::Vector2 &)result); 
   return jresult;
@@ -14758,10 +14759,10 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_Widget_getPosition(void * jarg1) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Widget_setRotation(void * jarg1, float jarg2) {
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   float arg2 ;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   arg2 = (float)jarg2; 
   (arg1)->setRotation(arg2);
 }
@@ -14769,10 +14770,10 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Widget_setRotation(void * jarg1, float jarg2)
 
 SWIGEXPORT float SWIGSTDCALL CSharp_Widget_getRotation(void * jarg1) {
   float jresult ;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   float result;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   result = (float)(arg1)->getRotation();
   jresult = result; 
   return jresult;
@@ -14780,11 +14781,11 @@ SWIGEXPORT float SWIGSTDCALL CSharp_Widget_getRotation(void * jarg1) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Widget_translate(void * jarg1, void * jarg2) {
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   argp2 = (Neo::Vector2 *)jarg2; 
   if (!argp2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null Neo::Vector2", 0);
@@ -14796,29 +14797,29 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Widget_translate(void * jarg1, void * jarg2) 
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Widget_rotate(void * jarg1, float jarg2) {
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   float arg2 ;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   arg2 = (float)jarg2; 
   (arg1)->rotate(arg2);
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Widget_doCallback(void * jarg1) {
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   (arg1)->doCallback();
 }
 
 
 SWIGEXPORT unsigned int SWIGSTDCALL CSharp_Widget_isVisible(void * jarg1) {
   unsigned int jresult ;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   bool result;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   result = (bool)(arg1)->isVisible();
   jresult = result; 
   return jresult;
@@ -14826,21 +14827,21 @@ SWIGEXPORT unsigned int SWIGSTDCALL CSharp_Widget_isVisible(void * jarg1) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Widget_setVisible(void * jarg1, unsigned int jarg2) {
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   bool arg2 ;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   arg2 = jarg2 ? true : false; 
   (arg1)->setVisible(arg2);
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Widget_setScale(void * jarg1, void * jarg2) {
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   argp2 = (Neo::Vector2 *)jarg2; 
   if (!argp2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null Neo::Vector2", 0);
@@ -14853,10 +14854,10 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Widget_setScale(void * jarg1, void * jarg2) {
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_Widget_getScale(void * jarg1) {
   void * jresult ;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   Neo::Vector2 result;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   result = (arg1)->getScale();
   jresult = new Neo::Vector2((const Neo::Vector2 &)result); 
   return jresult;
@@ -14864,11 +14865,11 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_Widget_getScale(void * jarg1) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Widget_setFlip(void * jarg1, void * jarg2) {
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   argp2 = (Neo::Vector2 *)jarg2; 
   if (!argp2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null Neo::Vector2", 0);
@@ -14881,10 +14882,10 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Widget_setFlip(void * jarg1, void * jarg2) {
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_Widget_getFlip(void * jarg1) {
   void * jresult ;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   Neo::Vector2 result;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   result = (arg1)->getFlip();
   jresult = new Neo::Vector2((const Neo::Vector2 &)result); 
   return jresult;
@@ -14893,10 +14894,10 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_Widget_getFlip(void * jarg1) {
 
 SWIGEXPORT char * SWIGSTDCALL CSharp_Widget_getStaticName(void * jarg1) {
   char * jresult ;
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   char *result = 0 ;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   result = (char *)(arg1)->getStaticName();
   jresult = SWIG_csharp_string_callback((const char *)result); 
   return jresult;
@@ -14904,117 +14905,117 @@ SWIGEXPORT char * SWIGSTDCALL CSharp_Widget_getStaticName(void * jarg1) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_delete_Widget(void * jarg1) {
-  Neo::Gui::Widget *arg1 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
   
-  arg1 = (Neo::Gui::Widget *)jarg1; 
+  arg1 = (Neo2D::Widget *)jarg1; 
   delete arg1;
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_SpriteBatch_addSprite(void * jarg1, void * jarg2) {
-  Neo::Gui::SpriteBatch *arg1 = (Neo::Gui::SpriteBatch *) 0 ;
-  Neo::Gui::Widget *arg2 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::SpriteBatch *arg1 = (Neo2D::SpriteBatch *) 0 ;
+  Neo2D::Widget *arg2 = (Neo2D::Widget *) 0 ;
   
-  arg1 = (Neo::Gui::SpriteBatch *)jarg1; 
-  arg2 = (Neo::Gui::Widget *)jarg2; 
+  arg1 = (Neo2D::SpriteBatch *)jarg1; 
+  arg2 = (Neo2D::Widget *)jarg2; 
   (arg1)->addSprite(arg2);
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_SpriteBatch_draw(void * jarg1) {
-  Neo::Gui::SpriteBatch *arg1 = (Neo::Gui::SpriteBatch *) 0 ;
+  Neo2D::SpriteBatch *arg1 = (Neo2D::SpriteBatch *) 0 ;
   
-  arg1 = (Neo::Gui::SpriteBatch *)jarg1; 
+  arg1 = (Neo2D::SpriteBatch *)jarg1; 
   (arg1)->draw();
 }
 
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_new_SpriteBatch() {
   void * jresult ;
-  Neo::Gui::SpriteBatch *result = 0 ;
+  Neo2D::SpriteBatch *result = 0 ;
   
-  result = (Neo::Gui::SpriteBatch *)new Neo::Gui::SpriteBatch();
+  result = (Neo2D::SpriteBatch *)new Neo2D::SpriteBatch();
   jresult = (void *)result; 
   return jresult;
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_delete_SpriteBatch(void * jarg1) {
-  Neo::Gui::SpriteBatch *arg1 = (Neo::Gui::SpriteBatch *) 0 ;
+  Neo2D::SpriteBatch *arg1 = (Neo2D::SpriteBatch *) 0 ;
   
-  arg1 = (Neo::Gui::SpriteBatch *)jarg1; 
+  arg1 = (Neo2D::SpriteBatch *)jarg1; 
   delete arg1;
 }
 
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_Canvas_getInstance() {
   void * jresult ;
-  Neo::Gui::Canvas *result = 0 ;
+  Neo2D::Canvas *result = 0 ;
   
-  result = (Neo::Gui::Canvas *)Neo::Gui::Canvas::getInstance();
+  result = (Neo2D::Canvas *)Neo2D::Canvas::getInstance();
   jresult = (void *)result; 
   return jresult;
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_delete_Canvas(void * jarg1) {
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   
-  arg1 = (Neo::Gui::Canvas *)jarg1; 
+  arg1 = (Neo2D::Canvas *)jarg1; 
   delete arg1;
 }
 
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_new_Canvas() {
   void * jresult ;
-  Neo::Gui::Canvas *result = 0 ;
+  Neo2D::Canvas *result = 0 ;
   
-  result = (Neo::Gui::Canvas *)new Neo::Gui::Canvas();
+  result = (Neo2D::Canvas *)new Neo2D::Canvas();
   jresult = (void *)result; 
   return jresult;
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Canvas_addSpriteBatch(void * jarg1, void * jarg2) {
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
-  Neo::Gui::SpriteBatch *arg2 = (Neo::Gui::SpriteBatch *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
+  Neo2D::SpriteBatch *arg2 = (Neo2D::SpriteBatch *) 0 ;
   
-  arg1 = (Neo::Gui::Canvas *)jarg1; 
-  arg2 = (Neo::Gui::SpriteBatch *)jarg2; 
+  arg1 = (Neo2D::Canvas *)jarg1; 
+  arg2 = (Neo2D::SpriteBatch *)jarg2; 
   (arg1)->addSpriteBatch(arg2);
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Canvas_draw(void * jarg1) {
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   
-  arg1 = (Neo::Gui::Canvas *)jarg1; 
+  arg1 = (Neo2D::Canvas *)jarg1; 
   (arg1)->draw();
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Canvas_update(void * jarg1) {
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   
-  arg1 = (Neo::Gui::Canvas *)jarg1; 
+  arg1 = (Neo2D::Canvas *)jarg1; 
   (arg1)->update();
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Canvas_clear(void * jarg1) {
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   
-  arg1 = (Neo::Gui::Canvas *)jarg1; 
+  arg1 = (Neo2D::Canvas *)jarg1; 
   (arg1)->clear();
 }
 
 
 SWIGEXPORT int SWIGSTDCALL CSharp_Canvas_getLayer(void * jarg1) {
   int jresult ;
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   int result;
   
-  arg1 = (Neo::Gui::Canvas *)jarg1; 
+  arg1 = (Neo2D::Canvas *)jarg1; 
   result = (int)(arg1)->getLayer();
   jresult = result; 
   return jresult;
@@ -15022,20 +15023,20 @@ SWIGEXPORT int SWIGSTDCALL CSharp_Canvas_getLayer(void * jarg1) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Canvas_setLayer(void * jarg1, int jarg2) {
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   int arg2 ;
   
-  arg1 = (Neo::Gui::Canvas *)jarg1; 
+  arg1 = (Neo2D::Canvas *)jarg1; 
   arg2 = (int)jarg2; 
   (arg1)->setLayer(arg2);
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Canvas_addWidget(void * jarg1, int jarg2) {
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   int arg2 ;
   
-  arg1 = (Neo::Gui::Canvas *)jarg1; 
+  arg1 = (Neo2D::Canvas *)jarg1; 
   arg2 = (int)jarg2; 
   (arg1)->addWidget(arg2);
 }
@@ -15043,10 +15044,10 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Canvas_addWidget(void * jarg1, int jarg2) {
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_Canvas_getClearColor(void * jarg1) {
   void * jresult ;
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   Neo::Vector4 result;
   
-  arg1 = (Neo::Gui::Canvas *)jarg1; 
+  arg1 = (Neo2D::Canvas *)jarg1; 
   result = (arg1)->getClearColor();
   jresult = new Neo::Vector4((const Neo::Vector4 &)result); 
   return jresult;
@@ -15054,11 +15055,11 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_Canvas_getClearColor(void * jarg1) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Canvas_setClearColor(void * jarg1, void * jarg2) {
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   Neo::Vector4 arg2 ;
   Neo::Vector4 *argp2 ;
   
-  arg1 = (Neo::Gui::Canvas *)jarg1; 
+  arg1 = (Neo2D::Canvas *)jarg1; 
   argp2 = (Neo::Vector4 *)jarg2; 
   if (!argp2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null Neo::Vector4", 0);
@@ -15070,37 +15071,37 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Canvas_setClearColor(void * jarg1, void * jar
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Canvas_enableRenderToTexture__SWIG_0(void * jarg1, char * jarg2) {
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   char *arg2 = (char *) 0 ;
   
-  arg1 = (Neo::Gui::Canvas *)jarg1; 
+  arg1 = (Neo2D::Canvas *)jarg1; 
   arg2 = (char *)jarg2; 
   (arg1)->enableRenderToTexture((char const *)arg2);
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Canvas_enableRenderToTexture__SWIG_1(void * jarg1) {
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   
-  arg1 = (Neo::Gui::Canvas *)jarg1; 
+  arg1 = (Neo2D::Canvas *)jarg1; 
   (arg1)->enableRenderToTexture();
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Canvas_disableRenderToTexture(void * jarg1) {
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   
-  arg1 = (Neo::Gui::Canvas *)jarg1; 
+  arg1 = (Neo2D::Canvas *)jarg1; 
   (arg1)->disableRenderToTexture();
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Canvas_setCameraOffset(void * jarg1, void * jarg2) {
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  arg1 = (Neo::Gui::Canvas *)jarg1; 
+  arg1 = (Neo2D::Canvas *)jarg1; 
   argp2 = (Neo::Vector2 *)jarg2; 
   if (!argp2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null Neo::Vector2", 0);
@@ -15113,310 +15114,310 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Canvas_setCameraOffset(void * jarg1, void * j
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_Canvas_getCameraOffset(void * jarg1) {
   void * jresult ;
-  Neo::Gui::Canvas *arg1 = (Neo::Gui::Canvas *) 0 ;
+  Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   Neo::Vector2 result;
   
-  arg1 = (Neo::Gui::Canvas *)jarg1; 
+  arg1 = (Neo2D::Canvas *)jarg1; 
   result = (arg1)->getCameraOffset();
   jresult = new Neo::Vector2((const Neo::Vector2 &)result); 
   return jresult;
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_new_GuiSystem() {
+SWIGEXPORT void * SWIGSTDCALL CSharp_new_Neo2DEngine() {
   void * jresult ;
-  Neo::Gui::GuiSystem *result = 0 ;
+  Neo2D::Neo2DEngine *result = 0 ;
   
-  result = (Neo::Gui::GuiSystem *)new Neo::Gui::GuiSystem();
+  result = (Neo2D::Neo2DEngine *)new Neo2D::Neo2DEngine();
   jresult = (void *)result; 
   return jresult;
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_delete_GuiSystem(void * jarg1) {
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_delete_Neo2DEngine(void * jarg1) {
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   delete arg1;
 }
 
 
-SWIGEXPORT char * SWIGSTDCALL CSharp_GuiSystem_getThemeBorderH(void * jarg1) {
+SWIGEXPORT char * SWIGSTDCALL CSharp_Neo2DEngine_getThemeBorderH(void * jarg1) {
   char * jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   result = (char *)(arg1)->getThemeBorderH();
   jresult = SWIG_csharp_string_callback((const char *)result); 
   return jresult;
 }
 
 
-SWIGEXPORT char * SWIGSTDCALL CSharp_GuiSystem_getThemeBorderV(void * jarg1) {
+SWIGEXPORT char * SWIGSTDCALL CSharp_Neo2DEngine_getThemeBorderV(void * jarg1) {
   char * jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   result = (char *)(arg1)->getThemeBorderV();
   jresult = SWIG_csharp_string_callback((const char *)result); 
   return jresult;
 }
 
 
-SWIGEXPORT char * SWIGSTDCALL CSharp_GuiSystem_getThemeBody(void * jarg1) {
+SWIGEXPORT char * SWIGSTDCALL CSharp_Neo2DEngine_getThemeBody(void * jarg1) {
   char * jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   result = (char *)(arg1)->getThemeBody();
   jresult = SWIG_csharp_string_callback((const char *)result); 
   return jresult;
 }
 
 
-SWIGEXPORT char * SWIGSTDCALL CSharp_GuiSystem_getThemeEdge(void * jarg1) {
+SWIGEXPORT char * SWIGSTDCALL CSharp_Neo2DEngine_getThemeEdge(void * jarg1) {
   char * jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   result = (char *)(arg1)->getThemeEdge();
   jresult = SWIG_csharp_string_callback((const char *)result); 
   return jresult;
 }
 
 
-SWIGEXPORT char * SWIGSTDCALL CSharp_GuiSystem_getThemeBorderHHover(void * jarg1) {
+SWIGEXPORT char * SWIGSTDCALL CSharp_Neo2DEngine_getThemeBorderHHover(void * jarg1) {
   char * jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   result = (char *)(arg1)->getThemeBorderHHover();
   jresult = SWIG_csharp_string_callback((const char *)result); 
   return jresult;
 }
 
 
-SWIGEXPORT char * SWIGSTDCALL CSharp_GuiSystem_getThemeBorderVHover(void * jarg1) {
+SWIGEXPORT char * SWIGSTDCALL CSharp_Neo2DEngine_getThemeBorderVHover(void * jarg1) {
   char * jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   result = (char *)(arg1)->getThemeBorderVHover();
   jresult = SWIG_csharp_string_callback((const char *)result); 
   return jresult;
 }
 
 
-SWIGEXPORT char * SWIGSTDCALL CSharp_GuiSystem_getThemeBodyHover(void * jarg1) {
+SWIGEXPORT char * SWIGSTDCALL CSharp_Neo2DEngine_getThemeBodyHover(void * jarg1) {
   char * jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   result = (char *)(arg1)->getThemeBodyHover();
   jresult = SWIG_csharp_string_callback((const char *)result); 
   return jresult;
 }
 
 
-SWIGEXPORT char * SWIGSTDCALL CSharp_GuiSystem_getThemeEdgeHover(void * jarg1) {
+SWIGEXPORT char * SWIGSTDCALL CSharp_Neo2DEngine_getThemeEdgeHover(void * jarg1) {
   char * jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   result = (char *)(arg1)->getThemeEdgeHover();
   jresult = SWIG_csharp_string_callback((const char *)result); 
   return jresult;
 }
 
 
-SWIGEXPORT char * SWIGSTDCALL CSharp_GuiSystem_getThemeBorderHPressed(void * jarg1) {
+SWIGEXPORT char * SWIGSTDCALL CSharp_Neo2DEngine_getThemeBorderHPressed(void * jarg1) {
   char * jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   result = (char *)(arg1)->getThemeBorderHPressed();
   jresult = SWIG_csharp_string_callback((const char *)result); 
   return jresult;
 }
 
 
-SWIGEXPORT char * SWIGSTDCALL CSharp_GuiSystem_getThemeBorderVPressed(void * jarg1) {
+SWIGEXPORT char * SWIGSTDCALL CSharp_Neo2DEngine_getThemeBorderVPressed(void * jarg1) {
   char * jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   result = (char *)(arg1)->getThemeBorderVPressed();
   jresult = SWIG_csharp_string_callback((const char *)result); 
   return jresult;
 }
 
 
-SWIGEXPORT char * SWIGSTDCALL CSharp_GuiSystem_getThemeBodyPressed(void * jarg1) {
+SWIGEXPORT char * SWIGSTDCALL CSharp_Neo2DEngine_getThemeBodyPressed(void * jarg1) {
   char * jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   result = (char *)(arg1)->getThemeBodyPressed();
   jresult = SWIG_csharp_string_callback((const char *)result); 
   return jresult;
 }
 
 
-SWIGEXPORT char * SWIGSTDCALL CSharp_GuiSystem_getThemeEdgePressed(void * jarg1) {
+SWIGEXPORT char * SWIGSTDCALL CSharp_Neo2DEngine_getThemeEdgePressed(void * jarg1) {
   char * jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   result = (char *)(arg1)->getThemeEdgePressed();
   jresult = SWIG_csharp_string_callback((const char *)result); 
   return jresult;
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_GuiSystem_setThemeDirectory(void * jarg1, char * jarg2) {
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_Neo2DEngine_setThemeDirectory(void * jarg1, char * jarg2) {
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *arg2 = (char *) 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   arg2 = (char *)jarg2; 
   (arg1)->setThemeDirectory((char const *)arg2);
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_GuiSystem_getInstance() {
+SWIGEXPORT void * SWIGSTDCALL CSharp_Neo2DEngine_getInstance() {
   void * jresult ;
-  Neo::Gui::GuiSystem *result = 0 ;
+  Neo2D::Neo2DEngine *result = 0 ;
   
-  result = (Neo::Gui::GuiSystem *)Neo::Gui::GuiSystem::getInstance();
+  result = (Neo2D::Neo2DEngine *)Neo2D::Neo2DEngine::getInstance();
   jresult = (void *)result; 
   return jresult;
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_GuiSystem_setupLuaInterface(void * jarg1, void * jarg2) {
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_Neo2DEngine_setupLuaInterface(void * jarg1, void * jarg2) {
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   Neo::ScriptContext *arg2 = (Neo::ScriptContext *) 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   arg2 = (Neo::ScriptContext *)jarg2; 
   (arg1)->setupLuaInterface(arg2);
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_GuiSystem_setEnabled(void * jarg1, unsigned int jarg2) {
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_Neo2DEngine_setEnabled(void * jarg1, unsigned int jarg2) {
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   bool arg2 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   arg2 = jarg2 ? true : false; 
   (arg1)->setEnabled(arg2);
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_GuiSystem_draw(void * jarg1) {
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_Neo2DEngine_draw(void * jarg1) {
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   (arg1)->draw();
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_GuiSystem_update(void * jarg1) {
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_Neo2DEngine_update(void * jarg1) {
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   (arg1)->update();
 }
 
 
-SWIGEXPORT char * SWIGSTDCALL CSharp_GuiSystem_getDefaultFont(void * jarg1) {
+SWIGEXPORT char * SWIGSTDCALL CSharp_Neo2DEngine_getDefaultFont(void * jarg1) {
   char * jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   char *result = 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   result = (char *)(arg1)->getDefaultFont();
   jresult = SWIG_csharp_string_callback((const char *)result); 
   return jresult;
 }
 
 
-SWIGEXPORT float SWIGSTDCALL CSharp_GuiSystem_getDefaultFontSize(void * jarg1) {
+SWIGEXPORT float SWIGSTDCALL CSharp_Neo2DEngine_getDefaultFontSize(void * jarg1) {
   float jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   float result;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   result = (float)(arg1)->getDefaultFontSize();
   jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_GuiSystem_setDefaultFontSize(void * jarg1, float jarg2) {
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_Neo2DEngine_setDefaultFontSize(void * jarg1, float jarg2) {
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   float arg2 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   arg2 = (float)jarg2; 
   (arg1)->setDefaultFontSize(arg2);
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_GuiSystem_getNormalBackground(void * jarg1) {
+SWIGEXPORT void * SWIGSTDCALL CSharp_Neo2DEngine_getNormalBackground(void * jarg1) {
   void * jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   Neo::Vector4 result;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   result = (arg1)->getNormalBackground();
   jresult = new Neo::Vector4((const Neo::Vector4 &)result); 
   return jresult;
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_GuiSystem_getHoverBackground(void * jarg1) {
+SWIGEXPORT void * SWIGSTDCALL CSharp_Neo2DEngine_getHoverBackground(void * jarg1) {
   void * jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   Neo::Vector4 result;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   result = (arg1)->getHoverBackground();
   jresult = new Neo::Vector4((const Neo::Vector4 &)result); 
   return jresult;
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_GuiSystem_getHighlightBackground(void * jarg1) {
+SWIGEXPORT void * SWIGSTDCALL CSharp_Neo2DEngine_getHighlightBackground(void * jarg1) {
   void * jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   Neo::Vector4 result;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   result = (arg1)->getHighlightBackground();
   jresult = new Neo::Vector4((const Neo::Vector4 &)result); 
   return jresult;
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_GuiSystem_setNormalBackground(void * jarg1, void * jarg2) {
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_Neo2DEngine_setNormalBackground(void * jarg1, void * jarg2) {
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   Neo::Vector4 arg2 ;
   Neo::Vector4 *argp2 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   argp2 = (Neo::Vector4 *)jarg2; 
   if (!argp2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null Neo::Vector4", 0);
@@ -15427,12 +15428,12 @@ SWIGEXPORT void SWIGSTDCALL CSharp_GuiSystem_setNormalBackground(void * jarg1, v
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_GuiSystem_setHoverBackground(void * jarg1, void * jarg2) {
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_Neo2DEngine_setHoverBackground(void * jarg1, void * jarg2) {
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   Neo::Vector4 arg2 ;
   Neo::Vector4 *argp2 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   argp2 = (Neo::Vector4 *)jarg2; 
   if (!argp2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null Neo::Vector4", 0);
@@ -15443,12 +15444,12 @@ SWIGEXPORT void SWIGSTDCALL CSharp_GuiSystem_setHoverBackground(void * jarg1, vo
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_GuiSystem_setHighlightBackground(void * jarg1, void * jarg2) {
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_Neo2DEngine_setHighlightBackground(void * jarg1, void * jarg2) {
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   Neo::Vector4 arg2 ;
   Neo::Vector4 *argp2 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   argp2 = (Neo::Vector4 *)jarg2; 
   if (!argp2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null Neo::Vector4", 0);
@@ -15459,100 +15460,100 @@ SWIGEXPORT void SWIGSTDCALL CSharp_GuiSystem_setHighlightBackground(void * jarg1
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_GuiSystem_getWidget(void * jarg1, unsigned int jarg2) {
+SWIGEXPORT void * SWIGSTDCALL CSharp_Neo2DEngine_getWidget(void * jarg1, unsigned int jarg2) {
   void * jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   unsigned int arg2 ;
-  Neo::Gui::Widget *result = 0 ;
+  Neo2D::Widget *result = 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   arg2 = (unsigned int)jarg2; 
-  result = (Neo::Gui::Widget *)(arg1)->getWidget(arg2);
+  result = (Neo2D::Widget *)(arg1)->getWidget(arg2);
   jresult = (void *)result; 
   return jresult;
 }
 
 
-SWIGEXPORT int SWIGSTDCALL CSharp_GuiSystem_addWidget(void * jarg1, void * jarg2) {
+SWIGEXPORT int SWIGSTDCALL CSharp_Neo2DEngine_addWidget(void * jarg1, void * jarg2) {
   int jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
-  Neo::Gui::Widget *arg2 = (Neo::Gui::Widget *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
+  Neo2D::Widget *arg2 = (Neo2D::Widget *) 0 ;
   int result;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
-  arg2 = (Neo::Gui::Widget *)jarg2; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
+  arg2 = (Neo2D::Widget *)jarg2; 
   result = (int)(arg1)->addWidget(arg2);
   jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT unsigned long SWIGSTDCALL CSharp_GuiSystem_getNumWidgets(void * jarg1) {
+SWIGEXPORT unsigned long SWIGSTDCALL CSharp_Neo2DEngine_getNumWidgets(void * jarg1) {
   unsigned long jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   size_t result;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   result = (arg1)->getNumWidgets();
   jresult = (unsigned long)result; 
   return jresult;
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_GuiSystem_addCanvas(void * jarg1, void * jarg2) {
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
-  Neo::Gui::Canvas *arg2 = (Neo::Gui::Canvas *) 0 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_Neo2DEngine_addCanvas(void * jarg1, void * jarg2) {
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
+  Neo2D::Canvas *arg2 = (Neo2D::Canvas *) 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
-  arg2 = (Neo::Gui::Canvas *)jarg2; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
+  arg2 = (Neo2D::Canvas *)jarg2; 
   (arg1)->addCanvas(arg2);
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_GuiSystem_getCanvas(void * jarg1, unsigned int jarg2) {
+SWIGEXPORT void * SWIGSTDCALL CSharp_Neo2DEngine_getCanvas(void * jarg1, unsigned int jarg2) {
   void * jresult ;
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   unsigned int arg2 ;
-  Neo::Gui::Canvas *result = 0 ;
+  Neo2D::Canvas *result = 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   arg2 = (unsigned int)jarg2; 
-  result = (Neo::Gui::Canvas *)(arg1)->getCanvas(arg2);
+  result = (Neo2D::Canvas *)(arg1)->getCanvas(arg2);
   jresult = (void *)result; 
   return jresult;
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_GuiSystem_updateLayers(void * jarg1) {
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_Neo2DEngine_updateLayers(void * jarg1) {
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   (arg1)->updateLayers();
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_GuiSystem_destroyWidget(void * jarg1, int jarg2) {
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_Neo2DEngine_destroyWidget(void * jarg1, int jarg2) {
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   int arg2 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   arg2 = (int)jarg2; 
   (arg1)->destroyWidget(arg2);
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_GuiSystem_clear(void * jarg1) {
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_Neo2DEngine_clear(void * jarg1) {
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   (arg1)->clear();
 }
 
 
-SWIGEXPORT void SWIGSTDCALL CSharp_GuiSystem_scheduleClear(void * jarg1) {
-  Neo::Gui::GuiSystem *arg1 = (Neo::Gui::GuiSystem *) 0 ;
+SWIGEXPORT void SWIGSTDCALL CSharp_Neo2DEngine_scheduleClear(void * jarg1) {
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
   
-  arg1 = (Neo::Gui::GuiSystem *)jarg1; 
+  arg1 = (Neo2D::Neo2DEngine *)jarg1; 
   (arg1)->scheduleClear();
 }
 
@@ -15564,33 +15565,33 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_Button(unsigned int jarg1, unsigned int
   unsigned int arg3 ;
   unsigned int arg4 ;
   char *arg5 = (char *) 0 ;
-  Neo::Gui::Button *result = 0 ;
+  Neo2D::Gui::Button *result = 0 ;
   
   arg1 = (unsigned int)jarg1; 
   arg2 = (unsigned int)jarg2; 
   arg3 = (unsigned int)jarg3; 
   arg4 = (unsigned int)jarg4; 
   arg5 = (char *)jarg5; 
-  result = (Neo::Gui::Button *)new Neo::Gui::Button(arg1,arg2,arg3,arg4,(char const *)arg5);
+  result = (Neo2D::Gui::Button *)new Neo2D::Gui::Button(arg1,arg2,arg3,arg4,(char const *)arg5);
   jresult = (void *)result; 
   return jresult;
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Button_draw__SWIG_0(void * jarg1) {
-  Neo::Gui::Button *arg1 = (Neo::Gui::Button *) 0 ;
+  Neo2D::Gui::Button *arg1 = (Neo2D::Gui::Button *) 0 ;
   
-  arg1 = (Neo::Gui::Button *)jarg1; 
+  arg1 = (Neo2D::Gui::Button *)jarg1; 
   (arg1)->draw();
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Button_draw__SWIG_1(void * jarg1, void * jarg2) {
-  Neo::Gui::Button *arg1 = (Neo::Gui::Button *) 0 ;
+  Neo2D::Gui::Button *arg1 = (Neo2D::Gui::Button *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  arg1 = (Neo::Gui::Button *)jarg1; 
+  arg1 = (Neo2D::Gui::Button *)jarg1; 
   argp2 = (Neo::Vector2 *)jarg2; 
   if (!argp2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null Neo::Vector2", 0);
@@ -15602,17 +15603,17 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Button_draw__SWIG_1(void * jarg1, void * jarg
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Button_update(void * jarg1) {
-  Neo::Gui::Button *arg1 = (Neo::Gui::Button *) 0 ;
+  Neo2D::Gui::Button *arg1 = (Neo2D::Gui::Button *) 0 ;
   
-  arg1 = (Neo::Gui::Button *)jarg1; 
+  arg1 = (Neo2D::Gui::Button *)jarg1; 
   (arg1)->update();
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_delete_Button(void * jarg1) {
-  Neo::Gui::Button *arg1 = (Neo::Gui::Button *) 0 ;
+  Neo2D::Gui::Button *arg1 = (Neo2D::Gui::Button *) 0 ;
   
-  arg1 = (Neo::Gui::Button *)jarg1; 
+  arg1 = (Neo2D::Gui::Button *)jarg1; 
   delete arg1;
 }
 
@@ -15625,7 +15626,7 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_Sprite(unsigned int jarg1, unsigned int
   unsigned int arg4 ;
   char *arg5 = (char *) 0 ;
   char *arg6 = (char *) 0 ;
-  Neo::Gui::Sprite *result = 0 ;
+  Neo2D::Sprite *result = 0 ;
   
   arg1 = (unsigned int)jarg1; 
   arg2 = (unsigned int)jarg2; 
@@ -15633,18 +15634,18 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_Sprite(unsigned int jarg1, unsigned int
   arg4 = (unsigned int)jarg4; 
   arg5 = (char *)jarg5; 
   arg6 = (char *)jarg6; 
-  result = (Neo::Gui::Sprite *)new Neo::Gui::Sprite(arg1,arg2,arg3,arg4,(char const *)arg5,(char const *)arg6);
+  result = (Neo2D::Sprite *)new Neo2D::Sprite(arg1,arg2,arg3,arg4,(char const *)arg5,(char const *)arg6);
   jresult = (void *)result; 
   return jresult;
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Sprite_draw(void * jarg1, void * jarg2) {
-  Neo::Gui::Sprite *arg1 = (Neo::Gui::Sprite *) 0 ;
+  Neo2D::Sprite *arg1 = (Neo2D::Sprite *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  arg1 = (Neo::Gui::Sprite *)jarg1; 
+  arg1 = (Neo2D::Sprite *)jarg1; 
   argp2 = (Neo::Vector2 *)jarg2; 
   if (!argp2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null Neo::Vector2", 0);
@@ -15656,19 +15657,19 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Sprite_draw(void * jarg1, void * jarg2) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Sprite_update(void * jarg1) {
-  Neo::Gui::Sprite *arg1 = (Neo::Gui::Sprite *) 0 ;
+  Neo2D::Sprite *arg1 = (Neo2D::Sprite *) 0 ;
   
-  arg1 = (Neo::Gui::Sprite *)jarg1; 
+  arg1 = (Neo2D::Sprite *)jarg1; 
   (arg1)->update();
 }
 
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_Sprite_getSize(void * jarg1) {
   void * jresult ;
-  Neo::Gui::Sprite *arg1 = (Neo::Gui::Sprite *) 0 ;
+  Neo2D::Sprite *arg1 = (Neo2D::Sprite *) 0 ;
   Neo::Vector2 result;
   
-  arg1 = (Neo::Gui::Sprite *)jarg1; 
+  arg1 = (Neo2D::Sprite *)jarg1; 
   result = (arg1)->getSize();
   jresult = new Neo::Vector2((const Neo::Vector2 &)result); 
   return jresult;
@@ -15676,31 +15677,31 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_Sprite_getSize(void * jarg1) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_delete_Sprite(void * jarg1) {
-  Neo::Gui::Sprite *arg1 = (Neo::Gui::Sprite *) 0 ;
+  Neo2D::Sprite *arg1 = (Neo2D::Sprite *) 0 ;
   
-  arg1 = (Neo::Gui::Sprite *)jarg1; 
+  arg1 = (Neo2D::Sprite *)jarg1; 
   delete arg1;
 }
 
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_new_TileSheet() {
   void * jresult ;
-  Neo::Gui::TileSheet *result = 0 ;
+  Neo2D::TileSheet *result = 0 ;
   
-  result = (Neo::Gui::TileSheet *)new Neo::Gui::TileSheet();
+  result = (Neo2D::TileSheet *)new Neo2D::TileSheet();
   jresult = (void *)result; 
   return jresult;
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_TileSheet_loadImage(void * jarg1, char * jarg2, unsigned int jarg3, unsigned int jarg4, unsigned int jarg5) {
-  Neo::Gui::TileSheet *arg1 = (Neo::Gui::TileSheet *) 0 ;
+  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
   char *arg2 = (char *) 0 ;
   unsigned int arg3 ;
   unsigned int arg4 ;
   unsigned int arg5 ;
   
-  arg1 = (Neo::Gui::TileSheet *)jarg1; 
+  arg1 = (Neo2D::TileSheet *)jarg1; 
   arg2 = (char *)jarg2; 
   arg3 = (unsigned int)jarg3; 
   arg4 = (unsigned int)jarg4; 
@@ -15711,12 +15712,12 @@ SWIGEXPORT void SWIGSTDCALL CSharp_TileSheet_loadImage(void * jarg1, char * jarg
 
 SWIGEXPORT void * SWIGSTDCALL CSharp_TileSheet_getTexCoords(void * jarg1, unsigned int jarg2, unsigned int jarg3) {
   void * jresult ;
-  Neo::Gui::TileSheet *arg1 = (Neo::Gui::TileSheet *) 0 ;
+  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
   unsigned int arg2 ;
   unsigned int arg3 ;
   Neo::Vector4 result;
   
-  arg1 = (Neo::Gui::TileSheet *)jarg1; 
+  arg1 = (Neo2D::TileSheet *)jarg1; 
   arg2 = (unsigned int)jarg2; 
   arg3 = (unsigned int)jarg3; 
   result = (arg1)->getTexCoords(arg2,arg3);
@@ -15727,10 +15728,10 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_TileSheet_getTexCoords(void * jarg1, unsign
 
 SWIGEXPORT int SWIGSTDCALL CSharp_TileSheet_getImage(void * jarg1) {
   int jresult ;
-  Neo::Gui::TileSheet *arg1 = (Neo::Gui::TileSheet *) 0 ;
+  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
   int result;
   
-  arg1 = (Neo::Gui::TileSheet *)jarg1; 
+  arg1 = (Neo2D::TileSheet *)jarg1; 
   result = (int)(arg1)->getImage();
   jresult = result; 
   return jresult;
@@ -15738,9 +15739,9 @@ SWIGEXPORT int SWIGSTDCALL CSharp_TileSheet_getImage(void * jarg1) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_delete_TileSheet(void * jarg1) {
-  Neo::Gui::TileSheet *arg1 = (Neo::Gui::TileSheet *) 0 ;
+  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
   
-  arg1 = (Neo::Gui::TileSheet *)jarg1; 
+  arg1 = (Neo2D::TileSheet *)jarg1; 
   delete arg1;
 }
 
@@ -15754,7 +15755,7 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_Tile(unsigned int jarg1, unsigned int j
   char *arg5 = (char *) 0 ;
   unsigned int arg6 ;
   unsigned int arg7 ;
-  Neo::Gui::Tile *result = 0 ;
+  Neo2D::Tile *result = 0 ;
   
   arg1 = (unsigned int)jarg1; 
   arg2 = (unsigned int)jarg2; 
@@ -15763,7 +15764,7 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_Tile(unsigned int jarg1, unsigned int j
   arg5 = (char *)jarg5; 
   arg6 = (unsigned int)jarg6; 
   arg7 = (unsigned int)jarg7; 
-  result = (Neo::Gui::Tile *)new Neo::Gui::Tile(arg1,arg2,arg3,arg4,(char const *)arg5,arg6,arg7);
+  result = (Neo2D::Tile *)new Neo2D::Tile(arg1,arg2,arg3,arg4,(char const *)arg5,arg6,arg7);
   jresult = (void *)result; 
   return jresult;
 }
@@ -15771,10 +15772,10 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_Tile(unsigned int jarg1, unsigned int j
 
 SWIGEXPORT char * SWIGSTDCALL CSharp_Tile_getStaticName(void * jarg1) {
   char * jresult ;
-  Neo::Gui::Tile *arg1 = (Neo::Gui::Tile *) 0 ;
+  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
   char *result = 0 ;
   
-  arg1 = (Neo::Gui::Tile *)jarg1; 
+  arg1 = (Neo2D::Tile *)jarg1; 
   result = (char *)(arg1)->getStaticName();
   jresult = SWIG_csharp_string_callback((const char *)result); 
   return jresult;
@@ -15782,21 +15783,21 @@ SWIGEXPORT char * SWIGSTDCALL CSharp_Tile_getStaticName(void * jarg1) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Tile_setTileSheet(void * jarg1, void * jarg2) {
-  Neo::Gui::Tile *arg1 = (Neo::Gui::Tile *) 0 ;
-  Neo::Gui::TileSheet *arg2 = (Neo::Gui::TileSheet *) 0 ;
+  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
+  Neo2D::TileSheet *arg2 = (Neo2D::TileSheet *) 0 ;
   
-  arg1 = (Neo::Gui::Tile *)jarg1; 
-  arg2 = (Neo::Gui::TileSheet *)jarg2; 
+  arg1 = (Neo2D::Tile *)jarg1; 
+  arg2 = (Neo2D::TileSheet *)jarg2; 
   (arg1)->setTileSheet(arg2);
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Tile_setOffset(void * jarg1, void * jarg2) {
-  Neo::Gui::Tile *arg1 = (Neo::Gui::Tile *) 0 ;
+  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  arg1 = (Neo::Gui::Tile *)jarg1; 
+  arg1 = (Neo2D::Tile *)jarg1; 
   argp2 = (Neo::Vector2 *)jarg2; 
   if (!argp2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null Neo::Vector2", 0);
@@ -15808,11 +15809,11 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Tile_setOffset(void * jarg1, void * jarg2) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Tile_draw(void * jarg1, void * jarg2) {
-  Neo::Gui::Tile *arg1 = (Neo::Gui::Tile *) 0 ;
+  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  arg1 = (Neo::Gui::Tile *)jarg1; 
+  arg1 = (Neo2D::Tile *)jarg1; 
   argp2 = (Neo::Vector2 *)jarg2; 
   if (!argp2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null Neo::Vector2", 0);
@@ -15824,17 +15825,17 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Tile_draw(void * jarg1, void * jarg2) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Tile_update(void * jarg1) {
-  Neo::Gui::Tile *arg1 = (Neo::Gui::Tile *) 0 ;
+  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
   
-  arg1 = (Neo::Gui::Tile *)jarg1; 
+  arg1 = (Neo2D::Tile *)jarg1; 
   (arg1)->update();
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_delete_Tile(void * jarg1) {
-  Neo::Gui::Tile *arg1 = (Neo::Gui::Tile *) 0 ;
+  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
   
-  arg1 = (Neo::Gui::Tile *)jarg1; 
+  arg1 = (Neo2D::Tile *)jarg1; 
   delete arg1;
 }
 
@@ -15846,33 +15847,33 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_InputField(unsigned int jarg1, unsigned
   unsigned int arg3 ;
   unsigned int arg4 ;
   char *arg5 = (char *) 0 ;
-  Neo::Gui::InputField *result = 0 ;
+  Neo2D::Gui::InputField *result = 0 ;
   
   arg1 = (unsigned int)jarg1; 
   arg2 = (unsigned int)jarg2; 
   arg3 = (unsigned int)jarg3; 
   arg4 = (unsigned int)jarg4; 
   arg5 = (char *)jarg5; 
-  result = (Neo::Gui::InputField *)new Neo::Gui::InputField(arg1,arg2,arg3,arg4,(char const *)arg5);
+  result = (Neo2D::Gui::InputField *)new Neo2D::Gui::InputField(arg1,arg2,arg3,arg4,(char const *)arg5);
   jresult = (void *)result; 
   return jresult;
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_InputField_draw__SWIG_0(void * jarg1) {
-  Neo::Gui::InputField *arg1 = (Neo::Gui::InputField *) 0 ;
+  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
   
-  arg1 = (Neo::Gui::InputField *)jarg1; 
+  arg1 = (Neo2D::Gui::InputField *)jarg1; 
   (arg1)->draw();
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_InputField_draw__SWIG_1(void * jarg1, void * jarg2) {
-  Neo::Gui::InputField *arg1 = (Neo::Gui::InputField *) 0 ;
+  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  arg1 = (Neo::Gui::InputField *)jarg1; 
+  arg1 = (Neo2D::Gui::InputField *)jarg1; 
   argp2 = (Neo::Vector2 *)jarg2; 
   if (!argp2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null Neo::Vector2", 0);
@@ -15884,17 +15885,17 @@ SWIGEXPORT void SWIGSTDCALL CSharp_InputField_draw__SWIG_1(void * jarg1, void * 
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_InputField_update(void * jarg1) {
-  Neo::Gui::InputField *arg1 = (Neo::Gui::InputField *) 0 ;
+  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
   
-  arg1 = (Neo::Gui::InputField *)jarg1; 
+  arg1 = (Neo2D::Gui::InputField *)jarg1; 
   (arg1)->update();
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_delete_InputField(void * jarg1) {
-  Neo::Gui::InputField *arg1 = (Neo::Gui::InputField *) 0 ;
+  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
   
-  arg1 = (Neo::Gui::InputField *)jarg1; 
+  arg1 = (Neo2D::Gui::InputField *)jarg1; 
   delete arg1;
 }
 
@@ -15916,31 +15917,31 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_ThemedButton(unsigned int jarg1, unsign
   unsigned int arg3 ;
   unsigned int arg4 ;
   char *arg5 = (char *) 0 ;
-  Neo::Gui::ThemedButton *result = 0 ;
+  Neo2D::Gui::ThemedButton *result = 0 ;
   
   arg1 = (unsigned int)jarg1; 
   arg2 = (unsigned int)jarg2; 
   arg3 = (unsigned int)jarg3; 
   arg4 = (unsigned int)jarg4; 
   arg5 = (char *)jarg5; 
-  result = (Neo::Gui::ThemedButton *)new Neo::Gui::ThemedButton(arg1,arg2,arg3,arg4,(char const *)arg5);
+  result = (Neo2D::Gui::ThemedButton *)new Neo2D::Gui::ThemedButton(arg1,arg2,arg3,arg4,(char const *)arg5);
   jresult = (void *)result; 
   return jresult;
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_ThemedButton_draw(void * jarg1) {
-  Neo::Gui::ThemedButton *arg1 = (Neo::Gui::ThemedButton *) 0 ;
+  Neo2D::Gui::ThemedButton *arg1 = (Neo2D::Gui::ThemedButton *) 0 ;
   
-  arg1 = (Neo::Gui::ThemedButton *)jarg1; 
+  arg1 = (Neo2D::Gui::ThemedButton *)jarg1; 
   (arg1)->draw();
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_delete_ThemedButton(void * jarg1) {
-  Neo::Gui::ThemedButton *arg1 = (Neo::Gui::ThemedButton *) 0 ;
+  Neo2D::Gui::ThemedButton *arg1 = (Neo2D::Gui::ThemedButton *) 0 ;
   
-  arg1 = (Neo::Gui::ThemedButton *)jarg1; 
+  arg1 = (Neo2D::Gui::ThemedButton *)jarg1; 
   delete arg1;
 }
 
@@ -15952,24 +15953,24 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_Label(unsigned int jarg1, unsigned int 
   unsigned int arg3 ;
   unsigned int arg4 ;
   char *arg5 = (char *) 0 ;
-  Neo::Gui::Label *result = 0 ;
+  Neo2D::Gui::Label *result = 0 ;
   
   arg1 = (unsigned int)jarg1; 
   arg2 = (unsigned int)jarg2; 
   arg3 = (unsigned int)jarg3; 
   arg4 = (unsigned int)jarg4; 
   arg5 = (char *)jarg5; 
-  result = (Neo::Gui::Label *)new Neo::Gui::Label(arg1,arg2,arg3,arg4,(char const *)arg5);
+  result = (Neo2D::Gui::Label *)new Neo2D::Gui::Label(arg1,arg2,arg3,arg4,(char const *)arg5);
   jresult = (void *)result; 
   return jresult;
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Label_setAlignment(void * jarg1, int jarg2) {
-  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  Neo2D::Gui::Label *arg1 = (Neo2D::Gui::Label *) 0 ;
   int arg2 ;
   
-  arg1 = (Neo::Gui::Label *)jarg1; 
+  arg1 = (Neo2D::Gui::Label *)jarg1; 
   arg2 = (int)jarg2; 
   (arg1)->setAlignment(arg2);
 }
@@ -15977,10 +15978,10 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Label_setAlignment(void * jarg1, int jarg2) {
 
 SWIGEXPORT int SWIGSTDCALL CSharp_Label_getAlignment(void * jarg1) {
   int jresult ;
-  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  Neo2D::Gui::Label *arg1 = (Neo2D::Gui::Label *) 0 ;
   Neo::TEXT_ALIGN_MODES result;
   
-  arg1 = (Neo::Gui::Label *)jarg1; 
+  arg1 = (Neo2D::Gui::Label *)jarg1; 
   result = (Neo::TEXT_ALIGN_MODES)(arg1)->getAlignment();
   jresult = (int)result; 
   return jresult;
@@ -15988,10 +15989,10 @@ SWIGEXPORT int SWIGSTDCALL CSharp_Label_getAlignment(void * jarg1) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Label_setFont(void * jarg1, char * jarg2) {
-  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  Neo2D::Gui::Label *arg1 = (Neo2D::Gui::Label *) 0 ;
   char *arg2 = (char *) 0 ;
   
-  arg1 = (Neo::Gui::Label *)jarg1; 
+  arg1 = (Neo2D::Gui::Label *)jarg1; 
   arg2 = (char *)jarg2; 
   (arg1)->setFont((char const *)arg2);
 }
@@ -15999,10 +16000,10 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Label_setFont(void * jarg1, char * jarg2) {
 
 SWIGEXPORT char * SWIGSTDCALL CSharp_Label_getFont(void * jarg1) {
   char * jresult ;
-  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  Neo2D::Gui::Label *arg1 = (Neo2D::Gui::Label *) 0 ;
   char *result = 0 ;
   
-  arg1 = (Neo::Gui::Label *)jarg1; 
+  arg1 = (Neo2D::Gui::Label *)jarg1; 
   result = (char *)(arg1)->getFont();
   jresult = SWIG_csharp_string_callback((const char *)result); 
   return jresult;
@@ -16010,19 +16011,19 @@ SWIGEXPORT char * SWIGSTDCALL CSharp_Label_getFont(void * jarg1) {
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Label_draw__SWIG_0(void * jarg1) {
-  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  Neo2D::Gui::Label *arg1 = (Neo2D::Gui::Label *) 0 ;
   
-  arg1 = (Neo::Gui::Label *)jarg1; 
+  arg1 = (Neo2D::Gui::Label *)jarg1; 
   (arg1)->draw();
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Label_draw__SWIG_1(void * jarg1, void * jarg2) {
-  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  Neo2D::Gui::Label *arg1 = (Neo2D::Gui::Label *) 0 ;
   Neo::Vector2 arg2 ;
   Neo::Vector2 *argp2 ;
   
-  arg1 = (Neo::Gui::Label *)jarg1; 
+  arg1 = (Neo2D::Gui::Label *)jarg1; 
   argp2 = (Neo::Vector2 *)jarg2; 
   if (!argp2) {
     SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Attempt to dereference null Neo::Vector2", 0);
@@ -16034,17 +16035,17 @@ SWIGEXPORT void SWIGSTDCALL CSharp_Label_draw__SWIG_1(void * jarg1, void * jarg2
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_Label_update(void * jarg1) {
-  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  Neo2D::Gui::Label *arg1 = (Neo2D::Gui::Label *) 0 ;
   
-  arg1 = (Neo::Gui::Label *)jarg1; 
+  arg1 = (Neo2D::Gui::Label *)jarg1; 
   (arg1)->update();
 }
 
 
 SWIGEXPORT void SWIGSTDCALL CSharp_delete_Label(void * jarg1) {
-  Neo::Gui::Label *arg1 = (Neo::Gui::Label *) 0 ;
+  Neo2D::Gui::Label *arg1 = (Neo2D::Gui::Label *) 0 ;
   
-  arg1 = (Neo::Gui::Label *)jarg1; 
+  arg1 = (Neo2D::Gui::Label *)jarg1; 
   delete arg1;
 }
 
@@ -16077,28 +16078,28 @@ SWIGEXPORT Neo::DataRef * SWIGSTDCALL CSharp_TextureRef_SWIGUpcast(Neo::TextureR
     return (Neo::DataRef *)jarg1;
 }
 
-SWIGEXPORT Neo::Gui::Widget * SWIGSTDCALL CSharp_Button_SWIGUpcast(Neo::Gui::Button *jarg1) {
-    return (Neo::Gui::Widget *)jarg1;
+SWIGEXPORT Neo2D::Widget * SWIGSTDCALL CSharp_Button_SWIGUpcast(Neo2D::Gui::Button *jarg1) {
+    return (Neo2D::Widget *)jarg1;
 }
 
-SWIGEXPORT Neo::Gui::Widget * SWIGSTDCALL CSharp_Sprite_SWIGUpcast(Neo::Gui::Sprite *jarg1) {
-    return (Neo::Gui::Widget *)jarg1;
+SWIGEXPORT Neo2D::Widget * SWIGSTDCALL CSharp_Sprite_SWIGUpcast(Neo2D::Sprite *jarg1) {
+    return (Neo2D::Widget *)jarg1;
 }
 
-SWIGEXPORT Neo::Gui::Widget * SWIGSTDCALL CSharp_Tile_SWIGUpcast(Neo::Gui::Tile *jarg1) {
-    return (Neo::Gui::Widget *)jarg1;
+SWIGEXPORT Neo2D::Widget * SWIGSTDCALL CSharp_Tile_SWIGUpcast(Neo2D::Tile *jarg1) {
+    return (Neo2D::Widget *)jarg1;
 }
 
-SWIGEXPORT Neo::Gui::Widget * SWIGSTDCALL CSharp_InputField_SWIGUpcast(Neo::Gui::InputField *jarg1) {
-    return (Neo::Gui::Widget *)jarg1;
+SWIGEXPORT Neo2D::Widget * SWIGSTDCALL CSharp_InputField_SWIGUpcast(Neo2D::Gui::InputField *jarg1) {
+    return (Neo2D::Widget *)jarg1;
 }
 
-SWIGEXPORT Neo::Gui::Button * SWIGSTDCALL CSharp_ThemedButton_SWIGUpcast(Neo::Gui::ThemedButton *jarg1) {
-    return (Neo::Gui::Button *)jarg1;
+SWIGEXPORT Neo2D::Gui::Button * SWIGSTDCALL CSharp_ThemedButton_SWIGUpcast(Neo2D::Gui::ThemedButton *jarg1) {
+    return (Neo2D::Gui::Button *)jarg1;
 }
 
-SWIGEXPORT Neo::Gui::Widget * SWIGSTDCALL CSharp_Label_SWIGUpcast(Neo::Gui::Label *jarg1) {
-    return (Neo::Gui::Widget *)jarg1;
+SWIGEXPORT Neo2D::Widget * SWIGSTDCALL CSharp_Label_SWIGUpcast(Neo2D::Gui::Label *jarg1) {
+    return (Neo2D::Widget *)jarg1;
 }
 
 #ifdef __cplusplus

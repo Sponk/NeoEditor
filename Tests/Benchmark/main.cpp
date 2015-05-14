@@ -2,7 +2,7 @@
 #include <LuaBehavior.h>
 #include <WinContext.h>
 #include <PackageManagerNPK.h>
-#include <GuiSystem.h>
+#include <Neo2DEngine.h>
 #include <NeoCore.h>
 #include <Widget.h>
 #include <Window/Window.h>
@@ -12,7 +12,7 @@ using namespace Neo;
 void guiSystemGetWidget(unsigned int iterations, unsigned int num_widgets)
 {
     MLOG_INFO("Running guiSystemGetWidget benchmark with " << iterations << " iterations and " << num_widgets << " widgets...");
-    Gui::GuiSystem* gui = Gui::GuiSystem::getInstance();
+    Neo2D::Neo2DEngine* gui = Neo2D::Neo2DEngine::getInstance();
 
     for(int i = 0; i < num_widgets; i++)
     {
@@ -22,7 +22,7 @@ void guiSystemGetWidget(unsigned int iterations, unsigned int num_widgets)
     unsigned long start = NeoEngine::getInstance()->getSystemContext()->getSystemTick();
     unsigned long end = 0;
 
-    Gui::Widget* w;
+    Neo2D::Widget* w;
     for(int i = 0; i < iterations; i++)
     {
         w = gui->getWidget(i);

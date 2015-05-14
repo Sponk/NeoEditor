@@ -6,7 +6,7 @@
 #include <LuaBehavior.h>
 #include <WinContext.h>
 #include <PackageManagerNPK.h>
-#include <GuiSystem.h>
+#include <Neo2DEngine.h>
 #include <SDLThread.h>
 #include <Server.h>
 #include <BulletContext.h>
