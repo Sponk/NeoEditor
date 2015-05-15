@@ -28,8 +28,7 @@ decl {using namespace Neo;} {private global
 
 class EditorWindow {open
 } {
-  Function {show_window()} {open
-  } {
+  Function {show_window()} {} {
     Fl_Window {} {
       label {Neo Editor}
       callback window_quit open
@@ -525,7 +524,7 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
           Fl_Value_Input light_radius_edit {
             label {Radius:}
             callback edit_light_properties
-            xywh {21 54 165 21} align 5 maximum 1e+007 step 2
+            xywh {21 54 165 21} align 5 maximum 1e+07 step 2
           }
           Fl_Value_Input light_color_r {
             label {Red:}
@@ -967,8 +966,7 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
       }
     }
   }
-  Function {create_sound_window()} {open
-  } {
+  Function {create_sound_window()} {} {
     Fl_Window {} {open
       xywh {418 129 258 720} type Double hide
     } {
@@ -1016,8 +1014,7 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
   decl {std::string scene_name;} {
     comment {Scene name to use when creating a new scene} public local
   }
-  Function {create_scene_window()} {open
-  } {
+  Function {create_scene_window()} {} {
     Fl_Window {} {
       label {New Scene} open
       xywh {1859 389 273 87} type Double hide modal
@@ -1037,8 +1034,6 @@ systemColors[2] = Fl::get_color(FL_FOREGROUND_COLOR);} {}
         xywh {105 12 156 27}
       }
     }
-  }
-  decl {MPluginScript* inputMethod;} {public local
   }
   decl {int systemColors[3];} {private local
   }
@@ -1628,13 +1623,13 @@ class ConfigurationDlg {open
   } {
     Fl_Window {} {
       label Configuration open
-      xywh {442 389 543 348} type Double visible
+      xywh {442 389 540 345} type Double visible
     } {
       Fl_Tabs {} {open
         xywh {0 3 546 342}
       } {
         Fl_Group {} {
-          label Theme open selected
+          label Theme open
           xywh {3 27 543 318}
         } {
           Fl_Choice theme_chooser {
@@ -1849,7 +1844,7 @@ for(int i = 0; i < files.size(); i++)
 		lang_chooser->value(i);
 }
 
-extern std::vector<MPluginScript*> editorPlugins;
+extern std::vector<PluginScript*> editorPlugins;
 
 input_methods_choice->add("Native", 0, (Fl_Callback*) ConfigurationDlg::setInputMethod, (void*) -1);
 input_methods_choice->value(0);	
@@ -1858,7 +1853,7 @@ int idx = 0;
 EditorBackend* backend = EditorBackend::getInstance();
 for(int i = 0; i < backend->getNumPlugins(); i++)
 {	
-	MPluginScript* s = backend->getPlugin(i);
+	PluginScript* s = backend->getPlugin(i);
 	if(s->hasInputMethod())
 	{
 		input_methods_choice->add(s->getName().c_str(),0, (Fl_Callback*) ConfigurationDlg::setInputMethod, (void*) i);
@@ -1870,7 +1865,8 @@ for(int i = 0; i < backend->getNumPlugins(); i++)
 }
 
 input_methods_choice->value(idx);
-description_edit->buffer(&text_buffer);} {}
+description_edit->buffer(&text_buffer);} {selected
+    }
   }
   Function {choose_background_color(Fl_Button*, ConfigurationDlg* dlg)} {open return_type {static void}
   } {}

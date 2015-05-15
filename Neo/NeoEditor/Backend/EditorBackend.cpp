@@ -561,7 +561,7 @@ void EditorBackend::initPlugins()
 		// Find the first available input method.
 		for (int i = 0; i < m_editorPlugins.size(); i++)
 		{
-			MPluginScript *p = m_editorPlugins[i];
+			PluginScript *p = m_editorPlugins[i];
 			if (p->hasInputMethod())
 			{
 				m_inputMethod = p;
@@ -4755,7 +4755,7 @@ void EditorBackend::loadPluginsFrom(const char* src)
 		// Check if file ends with ".lua"
 		if (currentFile.find_last_of(".lua") == currentFile.length() - 1)
 		{
-			MPluginScript* script = new MPluginScript;
+			PluginScript* script = new PluginScript;
 
 			currentFile = dir + std::string("/") + currentFile;
 

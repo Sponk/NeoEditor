@@ -31,9 +31,9 @@ using namespace Neo;
 void createFltkLuaBindings(LuaScript* script);
 
 // Methods to setup plugin data (name, author, license etc.)
-int MPluginScript::setName()
+int PluginScript::setName()
 {
-    MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
+    PluginScript* script = (PluginScript*) NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -42,9 +42,9 @@ int MPluginScript::setName()
     return 1;
 }
 
-int MPluginScript::setAuthor()
+int PluginScript::setAuthor()
 {
-    MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
+    PluginScript* script = (PluginScript*) NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -53,9 +53,9 @@ int MPluginScript::setAuthor()
     return 1;
 }
 
-int MPluginScript::setContact()
+int PluginScript::setContact()
 {
-    MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
+    PluginScript* script = (PluginScript*) NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -64,9 +64,9 @@ int MPluginScript::setContact()
     return 1;
 }
 
-int MPluginScript::setLicense()
+int PluginScript::setLicense()
 {
-    MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
+    PluginScript* script = (PluginScript*) NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -75,9 +75,9 @@ int MPluginScript::setLicense()
     return 1;
 }
 
-int MPluginScript::setDescription()
+int PluginScript::setDescription()
 {
-    MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
+    PluginScript* script = (PluginScript*) NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -86,9 +86,9 @@ int MPluginScript::setDescription()
     return 1;
 }
 
-int MPluginScript::enableInputMethod()
+int PluginScript::enableInputMethod()
 {
-    MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
+    PluginScript* script = (PluginScript*) NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 1)
         return 0;
@@ -99,15 +99,15 @@ int MPluginScript::enableInputMethod()
 }
 
 // Overwrite some methods from MScript to update the script context
-void MPluginScript::init()
+void PluginScript::init()
 {
     m_hasInputMethod = false;
 
-    addFunction("setPluginName", MPluginScript::setName);
-    addFunction("setPluginAuthor", MPluginScript::setAuthor);
-    addFunction("setPluginLicense", MPluginScript::setLicense);
-    addFunction("setPluginDescription", MPluginScript::setDescription);
-    addFunction("enableInputMethod", MPluginScript::enableInputMethod);
+    addFunction("setPluginName", PluginScript::setName);
+    addFunction("setPluginAuthor", PluginScript::setAuthor);
+    addFunction("setPluginLicense", PluginScript::setLicense);
+    addFunction("setPluginDescription", PluginScript::setDescription);
+    addFunction("enableInputMethod", PluginScript::enableInputMethod);
 
     // Add FLTK bindings
     createFltkLuaBindings(this);
@@ -118,7 +118,7 @@ void MPluginScript::init()
     Neo2D::Neo2DEngine::getInstance()->setupLuaInterface(this);
 }
 
-bool MPluginScript::runScript(const char* filename)
+bool PluginScript::runScript(const char* filename)
 {
     NeoEngine::getInstance()->setScriptContext(this);
     char g_currentDirectory[256];
@@ -168,7 +168,7 @@ bool MPluginScript::runScript(const char* filename)
     return true;
 }
 
-void MPluginScript::callFunction(const char* name)
+void PluginScript::callFunction(const char* name)
 {
     NeoEngine* engine = NeoEngine::getInstance();
     ScriptContext* oldContext = engine->getScriptContext();
@@ -178,13 +178,13 @@ void MPluginScript::callFunction(const char* name)
     engine->setScriptContext(oldContext);
 }
 
-bool MPluginScript::startCallFunction(const char *name)
+bool PluginScript::startCallFunction(const char *name)
 {
     NeoEngine::getInstance()->setScriptContext(this);
     return LuaScript::startCallFunction(name);
 }
 
-bool MPluginScript::endCallFunction(int numArgs)
+bool PluginScript::endCallFunction(int numArgs)
 {
     NeoEngine::getInstance()->setScriptContext(this);
     return LuaScript::endCallFunction(numArgs);

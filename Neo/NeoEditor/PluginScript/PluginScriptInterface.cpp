@@ -44,7 +44,7 @@ extern EditorWindow window;
 
 typedef struct
 {
-    MPluginScript* plugin;
+    PluginScript* plugin;
     std::string function;
 
 } lua_callback_t;
@@ -106,7 +106,7 @@ int saveFileDlg()
 // addEditorMenu(name, callbackName)
 int addEditorMenu()
 {
-    MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
+    PluginScript* script = (PluginScript*) NeoEngine::getInstance()->getScriptContext();
 
     if(script->getArgsNumber() != 2)
         return 0;
@@ -130,7 +130,7 @@ int addEditorMenu()
 
 int getCurrentSelection()
 {
-    MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
+    PluginScript* script = (PluginScript*) NeoEngine::getInstance()->getScriptContext();
     EditorBackend* maratis = EditorBackend::getInstance();
 
     // FIXME: Pointers have 64bit size on 64bit machines! DON'T USE FLOAT
@@ -150,8 +150,8 @@ int getCurrentSelection()
 
 int renameObject()
 {
-	MPluginScript* script =
-		(MPluginScript*)NeoEngine::getInstance()->getScriptContext();
+	PluginScript* script =
+		(PluginScript*)NeoEngine::getInstance()->getScriptContext();
 
 	if (!script->isFunctionOk("renameObject", 2))
 		return 0;
@@ -196,7 +196,7 @@ int getProjectDir()
 int updateEditorView()
 {
     // FIXME: Somehow needed or else scripts will crash
-    MPluginScript* script = (MPluginScript*) NeoEngine::getInstance()->getScriptContext();
+    PluginScript* script = (PluginScript*) NeoEngine::getInstance()->getScriptContext();
     script->pushInteger(0);
 
     update_scene_tree();
@@ -206,7 +206,7 @@ int updateEditorView()
 
 int Fl_CreateWindow()
 {
-	MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
+	PluginScript* script = (PluginScript*)NeoEngine::getInstance()->getScriptContext();
 
 	if (script->getArgsNumber() != 5)
 		return 0;
@@ -228,7 +228,7 @@ int Fl_CreateWindow()
 
 int Fl_CreateButton()
 {
-	MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
+	PluginScript* script = (PluginScript*)NeoEngine::getInstance()->getScriptContext();
 
 	if (script->getArgsNumber() != 5)
 		return 0;
@@ -250,7 +250,7 @@ int Fl_CreateButton()
 
 int Fl_CreateInput()
 {
-	MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
+	PluginScript* script = (PluginScript*)NeoEngine::getInstance()->getScriptContext();
 
 	if (script->getArgsNumber() != 5)
 		return 0;
@@ -272,7 +272,7 @@ int Fl_CreateInput()
 
 int Fl_Add()
 {
-	MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
+	PluginScript* script = (PluginScript*)NeoEngine::getInstance()->getScriptContext();
 
 	if (script->getArgsNumber() != 2)
 		return 0;
@@ -294,7 +294,7 @@ int Fl_Add()
 // Fl_Show(widget, shown)
 int Fl_Show()
 {
-	MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
+	PluginScript* script = (PluginScript*)NeoEngine::getInstance()->getScriptContext();
 
 	if (script->getArgsNumber() < 1)
 		return 0;
@@ -315,7 +315,7 @@ int Fl_Show()
 
 int Fl_SetCallback()
 {
-	MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
+	PluginScript* script = (PluginScript*)NeoEngine::getInstance()->getScriptContext();
 
 	if (script->getArgsNumber() != 2)
 		return 0;
@@ -334,7 +334,7 @@ int Fl_SetCallback()
 
 int Fl_DeleteWidget()
 {
-	MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
+	PluginScript* script = (PluginScript*)NeoEngine::getInstance()->getScriptContext();
 
 	if (script->getArgsNumber() != 1)
 		return 0;
@@ -345,7 +345,7 @@ int Fl_DeleteWidget()
 
 int Fl_InputValue()
 {
-	MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
+	PluginScript* script = (PluginScript*)NeoEngine::getInstance()->getScriptContext();
 
 	if (script->getArgsNumber() < 1)
 		return 0;
@@ -365,7 +365,7 @@ int Fl_InputValue()
 
 int getPerspectiveVue()
 {
-    MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
+    PluginScript* script = (PluginScript*)NeoEngine::getInstance()->getScriptContext();
 
     script->pushInteger((long int) EditorBackend::getInstance()->getPerspectiveVue());
     return 1;
@@ -373,7 +373,7 @@ int getPerspectiveVue()
 
 int getTranslationSpeed()
 {
-    MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
+    PluginScript* script = (PluginScript*)NeoEngine::getInstance()->getScriptContext();
 
     script->pushFloat(translation_speed);
     return 1;
@@ -381,7 +381,7 @@ int getTranslationSpeed()
 
 int getRotationSpeed()
 {
-    MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
+    PluginScript* script = (PluginScript*)NeoEngine::getInstance()->getScriptContext();
 
     script->pushFloat(rotation_speed);
     return 1;
@@ -392,7 +392,7 @@ extern Fl_Text_Buffer pluginOutput;
 
 int debugLog()
 {
-    MPluginScript* script = (MPluginScript*)NeoEngine::getInstance()->getScriptContext();
+    PluginScript* script = (PluginScript*)NeoEngine::getInstance()->getScriptContext();
 
     if (script->getArgsNumber() < 1)
         return 0;

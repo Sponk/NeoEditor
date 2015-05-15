@@ -562,7 +562,7 @@ int GLBox::handle(int event)
             InputContext* input = NeoEngine::getInstance()->getInputContext();
             input->setAxis("MOUSE_WHEEL", input->getAxis("MOUSE_WHEEL") + direction);
 
-            if(::window.inputMethod == NULL)
+            if(EditorBackend::getInstance()->getInputMethod() == NULL)
             {
                 OCamera * vue = maratis->getPerspectiveVue();
                 vue->setPosition(vue->getPosition() + vue->getRotatedVector(Vector3(0,0,direction*translation_speed)));
@@ -690,7 +690,7 @@ int GLBox::handle(int event)
     case FL_DRAG:
         {
             NeoGame* game = NeoEngine::getInstance()->getGame();
-            if(Fl::event_button3() && ::window.inputMethod == NULL && !game->isRunning())
+            if(Fl::event_button3() && EditorBackend::getInstance()->getInputMethod() == NULL && !game->isRunning())
             {
                 OCamera * vue = maratis->getPerspectiveVue();
 

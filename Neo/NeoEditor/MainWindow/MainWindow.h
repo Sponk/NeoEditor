@@ -200,7 +200,6 @@ public:
   std::string scene_name; 
   Fl_Double_Window* create_scene_window();
   Fl_Input *scene_name_input;
-  MPluginScript* inputMethod; 
 private:
   int systemColors[3]; 
 public:

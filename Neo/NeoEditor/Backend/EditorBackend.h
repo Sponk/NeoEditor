@@ -159,8 +159,8 @@ private:
 	float m_snapDistance;
 
 	// Lua plugins
-	std::vector<MPluginScript*> m_editorPlugins;
-	MPluginScript* m_inputMethod;
+	std::vector<PluginScript*> m_editorPlugins;
+	PluginScript* m_inputMethod;
 
 	bool vectorContains(std::string name);
 
@@ -170,10 +170,10 @@ public:
 	void loadPluginsFrom(const char* src);
 	void initPlugins();
 	void selectInputMethod(const char* name);
-	MPluginScript* getPlugin(int idx) { return m_editorPlugins[idx]; }
+	PluginScript* getPlugin(int idx) { return m_editorPlugins[idx]; }
 
-	MPluginScript* getInputMethod() { return m_inputMethod; }
-	void setInputMethod(MPluginScript* s) { m_inputMethod = s; }
+	PluginScript* getInputMethod() { return m_inputMethod; }
+	void setInputMethod(PluginScript* s) { m_inputMethod = s; }
 
 	size_t getNumPlugins() { return m_editorPlugins.size(); }
 	

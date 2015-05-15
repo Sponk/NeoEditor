@@ -22,13 +22,13 @@
 //
 //========================================================================
 
-#ifndef MPLUGIN_SCRIPT_H
-#define MPLUGIN_SCRIPT_H
+#ifndef __PLUGIN_SCRIPT_H
+#define __PLUGIN_SCRIPT_H
 
 #include <LuaScript.h>
 #include <string>
 
-class MPluginScript : public Neo::LuaScript
+class PluginScript : public Neo::LuaScript
 {
 private:
     void init();
@@ -53,8 +53,8 @@ private:
 
 public:
 
-    MPluginScript() {}
-    ~MPluginScript() {}
+    PluginScript() {}
+    ~PluginScript() {}
 
     bool runScript(const char* filename);
     void callFunction(const char* name);

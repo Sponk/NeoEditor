@@ -584,7 +584,7 @@ void ConfigurationDlg::plugin_changed_callback(Fl_Browser*,
 	if (idx < 0)
 		return;
 
-	MPluginScript* plugin = backend->getPlugin(idx);
+	PluginScript* plugin = backend->getPlugin(idx);
 	dlg->author_edit->value(plugin->getAuthor().c_str());
 	dlg->license_edit->value(plugin->getLicense().c_str());
 

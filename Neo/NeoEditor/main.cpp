@@ -121,9 +121,7 @@ void loadSettings(const char* path)
 				   static_cast<unsigned char>(vector.z));
 	Fl::scheme(parser.top()("theme")["scheme"].c_str());
 
-	window.inputMethod = NULL;
 	std::string inputMethod = parser.top()("input")["inputMethod"];
-
 	EditorBackend::getInstance()->selectInputMethod(inputMethod.c_str());    
 
 	int width = STR1_TO_FLOAT(parser.top()("window")["width"]);
