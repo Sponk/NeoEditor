@@ -44,9 +44,9 @@ INCLUDE_DIRECTORIES(
 )
 
 # SET(CMAKE_INSTALL_RPATH "./")
-ADD_EXECUTABLE(neo-editor ${SOURCES} ${HEADERS})
+ADD_EXECUTABLE(NeoEditor ${SOURCES} ${HEADERS})
 
-TARGET_LINK_LIBRARIES(neo-editor
+TARGET_LINK_LIBRARIES(NeoEditor
   ${NEO_COMMON_LIBRARIES}
   ${NEO_CORE_LIBRARIES}
   ${NEO_ENGINE_LIBRARIES}
@@ -78,10 +78,10 @@ TARGET_LINK_LIBRARIES(neo-editor
   ${WINSOCK_LIBRARIES}
 )
 
-INSTALL(TARGETS neo-editor DESTINATION ${NEO_INSTALL_DIR})
+INSTALL(TARGETS NeoEditor DESTINATION ${NEO_INSTALL_DIR})
 
-add_custom_target(neo-editor-test "${NEO_BINARY_OUTPUT}/neo-editor" WORKING_DIRECTORY ${NEO_BINARY_OUTPUT})
-add_dependencies(neo-editor-test neo-editor)
+add_custom_target(neo-editor-test "${NEO_BINARY_OUTPUT}/NeoEditor" WORKING_DIRECTORY ${NEO_BINARY_OUTPUT})
+add_dependencies(neo-editor-test NeoEditor)
 
 ## Update needed translations
 if(UNIX)
