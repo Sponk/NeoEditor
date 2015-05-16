@@ -30,9 +30,16 @@ IF(${SWIG_FOUND})
 
   		FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/Swig)
 
+			## Select library to import
+			IF(WIN32)
+				SET(DLLIMPORT -dllimport Game.dll)
+			ELSE()
+				SET(DLLIMPORT -dllimport Game.so)
+			ENDIF()
+
 	  	EXECUTE_PROCESS(
 	  		COMMAND ${SWIG_EXECUTABLE} -csharp -c++ -outdir ${CMAKE_BINARY_DIR}/Swig -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR}
-                                -I${NEO2D_INCLUDE_DIR} -dllimport Game.so ${CMAKE_CURRENT_SOURCE_DIR}/NeoSharp.i
+                                -I${NEO2D_INCLUDE_DIR} ${DLLIMPORT} ${CMAKE_CURRENT_SOURCE_DIR}/NeoSharp.i
 
 			OUTPUT_VARIABLE SWIG_swiglib_output
 			ERROR_VARIABLE SWIG_swiglib_error
@@ -41,7 +48,7 @@ IF(${SWIG_FOUND})
 
 	  	ADD_CUSTOM_TARGET(neo-mono-swig
 			COMMAND ${SWIG_EXECUTABLE} -csharp -c++ -outdir ${CMAKE_BINARY_DIR}/Swig -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR}
-                                -I${NEO2D_INCLUDE_DIR} -dllimport Game.so ${CMAKE_CURRENT_SOURCE_DIR}/NeoSharp.i
+                                -I${NEO2D_INCLUDE_DIR} ${DLLIMPORT} ${CMAKE_CURRENT_SOURCE_DIR}/NeoSharp.i
 			)
 
 		FILE(GLOB_RECURSE SWIG_SOURCES ${CMAKE_BINARY_DIR}/Swig/*.cs)
