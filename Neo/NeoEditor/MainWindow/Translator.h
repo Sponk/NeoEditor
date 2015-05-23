@@ -22,23 +22,27 @@
 
 #include "../MainWindow/ini.h"
 #include <map>
+#include <NeoCore.h>
 #include <string>
 
 const char* tr(const char* key);
 
 class Translator
 {
-    INI::Parser* m_parser;
 	std::string m_langFile;
-	std::map<std::string, std::string> m_phrases;
+	std::map<std::string, Neo::String*> m_phrases;
 	
 public:
     static Translator* getInstance() { static Translator m_tr; return &m_tr; }
 
-    Translator(): m_parser(NULL) {}
+    Translator() {}
+	~Translator(){ clear(); }
+
     void loadTranslation(const char* file, char delim = ',');
     const char* translate(const char* key);
     const char* getLanguageFile() { return m_langFile.c_str(); }
+
+	void clear();
 };
 
 #endif

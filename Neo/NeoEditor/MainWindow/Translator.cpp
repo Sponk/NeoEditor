@@ -32,11 +32,6 @@ const char* tr(const char* key)
 
 void Translator::loadTranslation(const char* file, char delim)
 {
-   	/*
-    SAFE_DELETE(m_parser);
-    m_parser = new INI::Parser(file);
-	*/
-
 	ifstream in(file);
 	if (!in)
 	{
@@ -55,7 +50,7 @@ void Translator::loadTranslation(const char* file, char delim)
 			getline(ss, key, delim);
 			getline(ss, value, delim);
 			
-			m_phrases[key] = value;
+			m_phrases[key] = new Neo::String(value.c_str());
 		}
 	
 	string filename = file;
@@ -74,9 +69,20 @@ void Translator::loadTranslation(const char* file, char delim)
 
 const char* Translator::translate(const char* key)
 {
-    std::string value = m_phrases[key];
-    if(value.empty())
+    Neo::String* value = m_phrases[key];
+    if(value == NULL || strlen(value->getSafeString()) == 0)
         return key;
 
-    return value.c_str();
+    return value->getSafeString();
+}
+
+void Translator::clear()
+{
+	std::map<std::string, Neo::String*>::iterator iterator;
+	for (iterator = m_phrases.begin(); iterator != m_phrases.end(); iterator++)
+	{
+		delete iterator->second;
+	}
+
+	m_phrases.clear();
 }

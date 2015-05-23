@@ -39,7 +39,7 @@ Run Game,Spiel ausführen
 Update player,Player aktualisieren
 Publish,Veröffentlichen
 About,Information
-The Neo Editor is distributed under the terms and conditions of the GNU General Public License.,Der Neo Editor steht Ihnen unter den Bedingungen der GNU General Public License zur Verfügung. 
+The Neo Editor is distributed under the terms and conditions of the GNU General Public License.,Der Neo Editor steht Ihnen unter den Bedingungen der GNU General Public License zur Verfügung.
 Yes,Ja
 No,Nein
 Copies the player from the editor directory to the project directory.,Kopiert den Player in das aktuelle Projektverzeichnis.
