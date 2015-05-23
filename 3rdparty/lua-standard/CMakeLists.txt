@@ -148,7 +148,13 @@ if ( LUA_BUILD_WLUA )
 endif ( )
 
 #install_executable ( lua luac )
-#install_library ( liblua )
+#install_targets (${NEO_INSTALL_DIR} liblua )
+
+install ( TARGETS liblua
+          RUNTIME DESTINATION ${NEO_INSTALL_DIR} COMPONENT Runtime
+          LIBRARY DESTINATION ${NEO_INSTALL_DIR} COMPONENT Runtime 
+          ARCHIVE DESTINATION ${NEO_INSTALL_DIR} COMPONENT Library )
+
 #install_data ( README.md )
 #install_lua_module ( strict etc/strict.lua )
 #install_header ( src/lua.h src/lualib.h src/lauxlib.h src/lua.hpp ${CMAKE_CURRENT_BINARY_DIR}/luaconf.h )
