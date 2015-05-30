@@ -4606,6 +4606,165 @@ static int _wrap_new_Vector2(lua_State* L) {
 }
 
 
+static int _wrap_Vector2_add(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Vector2 *arg1 = (Neo::Vector2 *) 0 ;
+  Neo::Vector2 *arg2 = 0 ;
+  Neo::Vector2 result;
+  
+  SWIG_check_num_args("Neo::Vector2::add",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Vector2::add",1,"Neo::Vector2 const *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Vector2::add",2,"Neo::Vector2 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("Vector2_add",1,SWIGTYPE_p_Neo__Vector2);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("Vector2_add",2,SWIGTYPE_p_Neo__Vector2);
+  }
+  
+  result = ((Neo::Vector2 const *)arg1)->add((Neo::Vector2 const &)*arg2);
+  {
+    Neo::Vector2 * resultptr = new Neo::Vector2((const Neo::Vector2 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector2,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Vector2_substract(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Vector2 *arg1 = (Neo::Vector2 *) 0 ;
+  Neo::Vector2 *arg2 = 0 ;
+  Neo::Vector2 result;
+  
+  SWIG_check_num_args("Neo::Vector2::substract",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Vector2::substract",1,"Neo::Vector2 const *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Vector2::substract",2,"Neo::Vector2 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("Vector2_substract",1,SWIGTYPE_p_Neo__Vector2);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("Vector2_substract",2,SWIGTYPE_p_Neo__Vector2);
+  }
+  
+  result = ((Neo::Vector2 const *)arg1)->substract((Neo::Vector2 const &)*arg2);
+  {
+    Neo::Vector2 * resultptr = new Neo::Vector2((const Neo::Vector2 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector2,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Vector2_multiply(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Vector2 *arg1 = (Neo::Vector2 *) 0 ;
+  float arg2 ;
+  Neo::Vector2 result;
+  
+  SWIG_check_num_args("Neo::Vector2::multiply",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Vector2::multiply",1,"Neo::Vector2 const *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Vector2::multiply",2,"float const");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("Vector2_multiply",1,SWIGTYPE_p_Neo__Vector2);
+  }
+  
+  arg2 = (float const)lua_tonumber(L, 2);
+  result = ((Neo::Vector2 const *)arg1)->multiply(arg2);
+  {
+    Neo::Vector2 * resultptr = new Neo::Vector2((const Neo::Vector2 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector2,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Vector2_divide(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Vector2 *arg1 = (Neo::Vector2 *) 0 ;
+  float arg2 ;
+  Neo::Vector2 result;
+  
+  SWIG_check_num_args("Neo::Vector2::divide",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Vector2::divide",1,"Neo::Vector2 const *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Vector2::divide",2,"float const");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("Vector2_divide",1,SWIGTYPE_p_Neo__Vector2);
+  }
+  
+  arg2 = (float const)lua_tonumber(L, 2);
+  result = ((Neo::Vector2 const *)arg1)->divide(arg2);
+  {
+    Neo::Vector2 * resultptr = new Neo::Vector2((const Neo::Vector2 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector2,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Vector2_equals(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Vector2 *arg1 = (Neo::Vector2 *) 0 ;
+  Neo::Vector2 *arg2 = 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo::Vector2::equals",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Vector2::equals",1,"Neo::Vector2 const *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Vector2::equals",2,"Neo::Vector2 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("Vector2_equals",1,SWIGTYPE_p_Neo__Vector2);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("Vector2_equals",2,SWIGTYPE_p_Neo__Vector2);
+  }
+  
+  result = (bool)((Neo::Vector2 const *)arg1)->equals((Neo::Vector2 const &)*arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_Vector2___add__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
   Neo::Vector2 *arg1 = (Neo::Vector2 *) 0 ;
@@ -5521,6 +5680,11 @@ static swig_lua_attribute swig_Vector2_attributes[] = {
     {0,0,0}
 };
 static swig_lua_method swig_Vector2_methods[]= {
+    { "add", _wrap_Vector2_add},
+    { "substract", _wrap_Vector2_substract},
+    { "multiply", _wrap_Vector2_multiply},
+    { "divide", _wrap_Vector2_divide},
+    { "equals", _wrap_Vector2_equals},
     { "__sub", _wrap_Vector2___sub},
     { "__mul", _wrap_Vector2___mul},
     { "__div", _wrap_Vector2___div},
@@ -5989,6 +6153,165 @@ static int _wrap_new_Vector3(lua_State* L) {
     "    Neo::Vector3::Vector3(Neo::Vector4 const &)\n"
     "    Neo::Vector3::Vector3(Neo::Vector2 const &)\n");
   lua_error(L);return 0;
+}
+
+
+static int _wrap_Vector3_add(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Vector3 *arg1 = (Neo::Vector3 *) 0 ;
+  Neo::Vector3 *arg2 = 0 ;
+  Neo::Vector3 result;
+  
+  SWIG_check_num_args("Neo::Vector3::add",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Vector3::add",1,"Neo::Vector3 const *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Vector3::add",2,"Neo::Vector3 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("Vector3_add",1,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("Vector3_add",2,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  result = ((Neo::Vector3 const *)arg1)->add((Neo::Vector3 const &)*arg2);
+  {
+    Neo::Vector3 * resultptr = new Neo::Vector3((const Neo::Vector3 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector3,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Vector3_substract(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Vector3 *arg1 = (Neo::Vector3 *) 0 ;
+  Neo::Vector3 *arg2 = 0 ;
+  Neo::Vector3 result;
+  
+  SWIG_check_num_args("Neo::Vector3::substract",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Vector3::substract",1,"Neo::Vector3 const *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Vector3::substract",2,"Neo::Vector3 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("Vector3_substract",1,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("Vector3_substract",2,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  result = ((Neo::Vector3 const *)arg1)->substract((Neo::Vector3 const &)*arg2);
+  {
+    Neo::Vector3 * resultptr = new Neo::Vector3((const Neo::Vector3 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector3,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Vector3_multiply(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Vector3 *arg1 = (Neo::Vector3 *) 0 ;
+  float arg2 ;
+  Neo::Vector3 result;
+  
+  SWIG_check_num_args("Neo::Vector3::multiply",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Vector3::multiply",1,"Neo::Vector3 const *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Vector3::multiply",2,"float const");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("Vector3_multiply",1,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  arg2 = (float const)lua_tonumber(L, 2);
+  result = ((Neo::Vector3 const *)arg1)->multiply(arg2);
+  {
+    Neo::Vector3 * resultptr = new Neo::Vector3((const Neo::Vector3 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector3,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Vector3_divide(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Vector3 *arg1 = (Neo::Vector3 *) 0 ;
+  float arg2 ;
+  Neo::Vector3 result;
+  
+  SWIG_check_num_args("Neo::Vector3::divide",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Vector3::divide",1,"Neo::Vector3 const *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Vector3::divide",2,"float const");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("Vector3_divide",1,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  arg2 = (float const)lua_tonumber(L, 2);
+  result = ((Neo::Vector3 const *)arg1)->divide(arg2);
+  {
+    Neo::Vector3 * resultptr = new Neo::Vector3((const Neo::Vector3 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector3,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Vector3_equals(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Vector3 *arg1 = (Neo::Vector3 *) 0 ;
+  Neo::Vector3 *arg2 = 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo::Vector3::equals",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Vector3::equals",1,"Neo::Vector3 const *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Vector3::equals",2,"Neo::Vector3 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("Vector3_equals",1,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("Vector3_equals",2,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  result = (bool)((Neo::Vector3 const *)arg1)->equals((Neo::Vector3 const &)*arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
 }
 
 
@@ -7098,6 +7421,11 @@ static swig_lua_attribute swig_Vector3_attributes[] = {
     {0,0,0}
 };
 static swig_lua_method swig_Vector3_methods[]= {
+    { "add", _wrap_Vector3_add},
+    { "substract", _wrap_Vector3_substract},
+    { "multiply", _wrap_Vector3_multiply},
+    { "divide", _wrap_Vector3_divide},
+    { "equals", _wrap_Vector3_equals},
     { "__sub", _wrap_Vector3___sub},
     { "__mul", _wrap_Vector3___mul},
     { "__div", _wrap_Vector3___div},
@@ -7633,6 +7961,165 @@ static int _wrap_new_Vector4(lua_State* L) {
 }
 
 
+static int _wrap_Vector4_add(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Vector4 *arg1 = (Neo::Vector4 *) 0 ;
+  Neo::Vector4 *arg2 = 0 ;
+  Neo::Vector4 result;
+  
+  SWIG_check_num_args("Neo::Vector4::add",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Vector4::add",1,"Neo::Vector4 const *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Vector4::add",2,"Neo::Vector4 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Vector4,0))){
+    SWIG_fail_ptr("Vector4_add",1,SWIGTYPE_p_Neo__Vector4);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector4,0))){
+    SWIG_fail_ptr("Vector4_add",2,SWIGTYPE_p_Neo__Vector4);
+  }
+  
+  result = ((Neo::Vector4 const *)arg1)->add((Neo::Vector4 const &)*arg2);
+  {
+    Neo::Vector4 * resultptr = new Neo::Vector4((const Neo::Vector4 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector4,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Vector4_substract(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Vector4 *arg1 = (Neo::Vector4 *) 0 ;
+  Neo::Vector4 *arg2 = 0 ;
+  Neo::Vector4 result;
+  
+  SWIG_check_num_args("Neo::Vector4::substract",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Vector4::substract",1,"Neo::Vector4 const *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Vector4::substract",2,"Neo::Vector4 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Vector4,0))){
+    SWIG_fail_ptr("Vector4_substract",1,SWIGTYPE_p_Neo__Vector4);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector4,0))){
+    SWIG_fail_ptr("Vector4_substract",2,SWIGTYPE_p_Neo__Vector4);
+  }
+  
+  result = ((Neo::Vector4 const *)arg1)->substract((Neo::Vector4 const &)*arg2);
+  {
+    Neo::Vector4 * resultptr = new Neo::Vector4((const Neo::Vector4 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector4,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Vector4_multiply(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Vector4 *arg1 = (Neo::Vector4 *) 0 ;
+  float arg2 ;
+  Neo::Vector4 result;
+  
+  SWIG_check_num_args("Neo::Vector4::multiply",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Vector4::multiply",1,"Neo::Vector4 const *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Vector4::multiply",2,"float const");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Vector4,0))){
+    SWIG_fail_ptr("Vector4_multiply",1,SWIGTYPE_p_Neo__Vector4);
+  }
+  
+  arg2 = (float const)lua_tonumber(L, 2);
+  result = ((Neo::Vector4 const *)arg1)->multiply(arg2);
+  {
+    Neo::Vector4 * resultptr = new Neo::Vector4((const Neo::Vector4 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector4,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Vector4_divide(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Vector4 *arg1 = (Neo::Vector4 *) 0 ;
+  float arg2 ;
+  Neo::Vector4 result;
+  
+  SWIG_check_num_args("Neo::Vector4::divide",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Vector4::divide",1,"Neo::Vector4 const *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Vector4::divide",2,"float const");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Vector4,0))){
+    SWIG_fail_ptr("Vector4_divide",1,SWIGTYPE_p_Neo__Vector4);
+  }
+  
+  arg2 = (float const)lua_tonumber(L, 2);
+  result = ((Neo::Vector4 const *)arg1)->divide(arg2);
+  {
+    Neo::Vector4 * resultptr = new Neo::Vector4((const Neo::Vector4 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector4,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Vector4_equals(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Vector4 *arg1 = (Neo::Vector4 *) 0 ;
+  Neo::Vector4 *arg2 = 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo::Vector4::equals",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Vector4::equals",1,"Neo::Vector4 const *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo::Vector4::equals",2,"Neo::Vector4 const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Vector4,0))){
+    SWIG_fail_ptr("Vector4_equals",1,SWIGTYPE_p_Neo__Vector4);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Vector4,0))){
+    SWIG_fail_ptr("Vector4_equals",2,SWIGTYPE_p_Neo__Vector4);
+  }
+  
+  result = (bool)((Neo::Vector4 const *)arg1)->equals((Neo::Vector4 const &)*arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_Vector4___add__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
   Neo::Vector4 *arg1 = (Neo::Vector4 *) 0 ;
@@ -8046,6 +8533,11 @@ static swig_lua_attribute swig_Vector4_attributes[] = {
     {0,0,0}
 };
 static swig_lua_method swig_Vector4_methods[]= {
+    { "add", _wrap_Vector4_add},
+    { "substract", _wrap_Vector4_substract},
+    { "multiply", _wrap_Vector4_multiply},
+    { "divide", _wrap_Vector4_divide},
+    { "equals", _wrap_Vector4_equals},
     { "__sub", _wrap_Vector4___sub},
     { "__mul", _wrap_Vector4___mul},
     { "__div", _wrap_Vector4___div},
