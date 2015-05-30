@@ -85,6 +85,32 @@ public:
 
 public:
 
+	Vector4 add(const Vector4 & vec) const
+	{
+		return Vector4(x + vec.x, y + vec.y, z + vec.z, w + vec.w);
+	}
+
+	Vector4 substract(const Vector4 & vec) const
+	{
+		return Vector4(x - vec.x, y - vec.y, z - vec.z, w - vec.w);
+	}
+
+	Vector4 multiply(const float value) const
+	{
+		return Vector4(x * value, y * value, z * value, w * value);
+	}
+
+	Vector4 divide(const float value) const
+	{
+		if (value == 0.0f) return Vector4(0.0f, 0.0f, 0.0f, 0.0f);
+		return Vector4(x / value, y / value, z / value, w / value);
+	}
+
+	bool equals(const Vector4 & vec) const
+	{
+		return !((*this) == vec);
+	}
+
 	Vector4 operator + (const Vector4 & vec) const
 	{
 		return Vector4(x + vec.x, y + vec.y, z + vec.z, w + vec.w);

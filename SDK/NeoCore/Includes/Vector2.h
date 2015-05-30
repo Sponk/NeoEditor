@@ -66,6 +66,32 @@ public:
 
 public:
 
+	Vector2 add(const Vector2 & vec) const
+	{
+		return Vector2(x + vec.x, y + vec.y);
+	}
+
+	Vector2 substract(const Vector2 & vec) const
+	{
+		return Vector2(x - vec.x, y - vec.y);
+	}
+
+	Vector2 multiply(const float value) const
+	{
+		return Vector2(x * value, y * value);
+	}
+
+	Vector2 divide(const float value) const
+	{
+		if (value == 0.0f) return Vector2(0.0f, 0.0f);
+		return Vector2(x / value, y / value);
+	}
+
+	bool equals(const Vector2 & vec) const
+	{
+		return !((*this) == vec);
+	}
+
 	inline Vector2 operator + (const float value) const
 	{	
 		return Vector2(x + value, y + value);

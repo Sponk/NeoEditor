@@ -1256,6 +1256,88 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_Vector2__SWIG_5(void * jarg1) {
 }
 
 
+SWIGEXPORT void * SWIGSTDCALL CSharp_Vector2_add(void * jarg1, void * jarg2) {
+  void * jresult ;
+  Neo::Vector2 *arg1 = (Neo::Vector2 *) 0 ;
+  Neo::Vector2 *arg2 = 0 ;
+  Neo::Vector2 result;
+  
+  arg1 = (Neo::Vector2 *)jarg1; 
+  arg2 = (Neo::Vector2 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Neo::Vector2 const & type is null", 0);
+    return 0;
+  } 
+  result = ((Neo::Vector2 const *)arg1)->add((Neo::Vector2 const &)*arg2);
+  jresult = new Neo::Vector2((const Neo::Vector2 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_Vector2_substract(void * jarg1, void * jarg2) {
+  void * jresult ;
+  Neo::Vector2 *arg1 = (Neo::Vector2 *) 0 ;
+  Neo::Vector2 *arg2 = 0 ;
+  Neo::Vector2 result;
+  
+  arg1 = (Neo::Vector2 *)jarg1; 
+  arg2 = (Neo::Vector2 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Neo::Vector2 const & type is null", 0);
+    return 0;
+  } 
+  result = ((Neo::Vector2 const *)arg1)->substract((Neo::Vector2 const &)*arg2);
+  jresult = new Neo::Vector2((const Neo::Vector2 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_Vector2_multiply(void * jarg1, float jarg2) {
+  void * jresult ;
+  Neo::Vector2 *arg1 = (Neo::Vector2 *) 0 ;
+  float arg2 ;
+  Neo::Vector2 result;
+  
+  arg1 = (Neo::Vector2 *)jarg1; 
+  arg2 = (float)jarg2; 
+  result = ((Neo::Vector2 const *)arg1)->multiply(arg2);
+  jresult = new Neo::Vector2((const Neo::Vector2 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_Vector2_divide(void * jarg1, float jarg2) {
+  void * jresult ;
+  Neo::Vector2 *arg1 = (Neo::Vector2 *) 0 ;
+  float arg2 ;
+  Neo::Vector2 result;
+  
+  arg1 = (Neo::Vector2 *)jarg1; 
+  arg2 = (float)jarg2; 
+  result = ((Neo::Vector2 const *)arg1)->divide(arg2);
+  jresult = new Neo::Vector2((const Neo::Vector2 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_Vector2_equals(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  Neo::Vector2 *arg1 = (Neo::Vector2 *) 0 ;
+  Neo::Vector2 *arg2 = 0 ;
+  bool result;
+  
+  arg1 = (Neo::Vector2 *)jarg1; 
+  arg2 = (Neo::Vector2 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Neo::Vector2 const & type is null", 0);
+    return 0;
+  } 
+  result = (bool)((Neo::Vector2 const *)arg1)->equals((Neo::Vector2 const &)*arg2);
+  jresult = result; 
+  return jresult;
+}
+
+
 SWIGEXPORT void SWIGSTDCALL CSharp_Vector2_set(void * jarg1, float jarg2, float jarg3) {
   Neo::Vector2 *arg1 = (Neo::Vector2 *) 0 ;
   float arg2 ;
@@ -1568,6 +1650,88 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_Vector3__SWIG_6(void * jarg1) {
   } 
   result = (Neo::Vector3 *)new Neo::Vector3((Neo::Vector2 const &)*arg1);
   jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_Vector3_add(void * jarg1, void * jarg2) {
+  void * jresult ;
+  Neo::Vector3 *arg1 = (Neo::Vector3 *) 0 ;
+  Neo::Vector3 *arg2 = 0 ;
+  Neo::Vector3 result;
+  
+  arg1 = (Neo::Vector3 *)jarg1; 
+  arg2 = (Neo::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Neo::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = ((Neo::Vector3 const *)arg1)->add((Neo::Vector3 const &)*arg2);
+  jresult = new Neo::Vector3((const Neo::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_Vector3_substract(void * jarg1, void * jarg2) {
+  void * jresult ;
+  Neo::Vector3 *arg1 = (Neo::Vector3 *) 0 ;
+  Neo::Vector3 *arg2 = 0 ;
+  Neo::Vector3 result;
+  
+  arg1 = (Neo::Vector3 *)jarg1; 
+  arg2 = (Neo::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Neo::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = ((Neo::Vector3 const *)arg1)->substract((Neo::Vector3 const &)*arg2);
+  jresult = new Neo::Vector3((const Neo::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_Vector3_multiply(void * jarg1, float jarg2) {
+  void * jresult ;
+  Neo::Vector3 *arg1 = (Neo::Vector3 *) 0 ;
+  float arg2 ;
+  Neo::Vector3 result;
+  
+  arg1 = (Neo::Vector3 *)jarg1; 
+  arg2 = (float)jarg2; 
+  result = ((Neo::Vector3 const *)arg1)->multiply(arg2);
+  jresult = new Neo::Vector3((const Neo::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_Vector3_divide(void * jarg1, float jarg2) {
+  void * jresult ;
+  Neo::Vector3 *arg1 = (Neo::Vector3 *) 0 ;
+  float arg2 ;
+  Neo::Vector3 result;
+  
+  arg1 = (Neo::Vector3 *)jarg1; 
+  arg2 = (float)jarg2; 
+  result = ((Neo::Vector3 const *)arg1)->divide(arg2);
+  jresult = new Neo::Vector3((const Neo::Vector3 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_Vector3_equals(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  Neo::Vector3 *arg1 = (Neo::Vector3 *) 0 ;
+  Neo::Vector3 *arg2 = 0 ;
+  bool result;
+  
+  arg1 = (Neo::Vector3 *)jarg1; 
+  arg2 = (Neo::Vector3 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Neo::Vector3 const & type is null", 0);
+    return 0;
+  } 
+  result = (bool)((Neo::Vector3 const *)arg1)->equals((Neo::Vector3 const &)*arg2);
+  jresult = result; 
   return jresult;
 }
 
@@ -1994,6 +2158,88 @@ SWIGEXPORT void * SWIGSTDCALL CSharp_new_Vector4__SWIG_6(void * jarg1) {
   } 
   result = (Neo::Vector4 *)new Neo::Vector4((Neo::Color const &)*arg1);
   jresult = (void *)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_Vector4_add(void * jarg1, void * jarg2) {
+  void * jresult ;
+  Neo::Vector4 *arg1 = (Neo::Vector4 *) 0 ;
+  Neo::Vector4 *arg2 = 0 ;
+  Neo::Vector4 result;
+  
+  arg1 = (Neo::Vector4 *)jarg1; 
+  arg2 = (Neo::Vector4 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Neo::Vector4 const & type is null", 0);
+    return 0;
+  } 
+  result = ((Neo::Vector4 const *)arg1)->add((Neo::Vector4 const &)*arg2);
+  jresult = new Neo::Vector4((const Neo::Vector4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_Vector4_substract(void * jarg1, void * jarg2) {
+  void * jresult ;
+  Neo::Vector4 *arg1 = (Neo::Vector4 *) 0 ;
+  Neo::Vector4 *arg2 = 0 ;
+  Neo::Vector4 result;
+  
+  arg1 = (Neo::Vector4 *)jarg1; 
+  arg2 = (Neo::Vector4 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Neo::Vector4 const & type is null", 0);
+    return 0;
+  } 
+  result = ((Neo::Vector4 const *)arg1)->substract((Neo::Vector4 const &)*arg2);
+  jresult = new Neo::Vector4((const Neo::Vector4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_Vector4_multiply(void * jarg1, float jarg2) {
+  void * jresult ;
+  Neo::Vector4 *arg1 = (Neo::Vector4 *) 0 ;
+  float arg2 ;
+  Neo::Vector4 result;
+  
+  arg1 = (Neo::Vector4 *)jarg1; 
+  arg2 = (float)jarg2; 
+  result = ((Neo::Vector4 const *)arg1)->multiply(arg2);
+  jresult = new Neo::Vector4((const Neo::Vector4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT void * SWIGSTDCALL CSharp_Vector4_divide(void * jarg1, float jarg2) {
+  void * jresult ;
+  Neo::Vector4 *arg1 = (Neo::Vector4 *) 0 ;
+  float arg2 ;
+  Neo::Vector4 result;
+  
+  arg1 = (Neo::Vector4 *)jarg1; 
+  arg2 = (float)jarg2; 
+  result = ((Neo::Vector4 const *)arg1)->divide(arg2);
+  jresult = new Neo::Vector4((const Neo::Vector4 &)result); 
+  return jresult;
+}
+
+
+SWIGEXPORT unsigned int SWIGSTDCALL CSharp_Vector4_equals(void * jarg1, void * jarg2) {
+  unsigned int jresult ;
+  Neo::Vector4 *arg1 = (Neo::Vector4 *) 0 ;
+  Neo::Vector4 *arg2 = 0 ;
+  bool result;
+  
+  arg1 = (Neo::Vector4 *)jarg1; 
+  arg2 = (Neo::Vector4 *)jarg2;
+  if (!arg2) {
+    SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentNullException, "Neo::Vector4 const & type is null", 0);
+    return 0;
+  } 
+  result = (bool)((Neo::Vector4 const *)arg1)->equals((Neo::Vector4 const &)*arg2);
+  jresult = result; 
   return jresult;
 }
 

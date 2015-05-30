@@ -78,6 +78,32 @@ public:
 
 public:
 
+	Vector3 add(const Vector3 & vec) const
+	{
+		return Vector3(x + vec.x, y + vec.y, z + vec.z);
+	}
+
+	Vector3 substract(const Vector3 & vec) const
+	{
+		return Vector3(x - vec.x, y - vec.y, z - vec.z);
+	}
+
+	Vector3 multiply(const float value) const
+	{
+		return Vector3(x * value, y * value, z * value);
+	}
+
+	Vector3 divide(const float value) const
+	{
+		if (value == 0.0f) return Vector3(0.0f, 0.0f, 0.0f);
+		return Vector3(x / value, y / value, z / value);
+	}
+
+	bool equals(const Vector3 & vec) const
+	{
+		return !((*this) == vec);
+	}
+
 	inline Vector3 operator + (const Vector3 & vec) const
 	{	
 		return Vector3(x + vec.x, y + vec.y, z + vec.z);
