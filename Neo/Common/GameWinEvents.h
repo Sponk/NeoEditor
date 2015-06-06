@@ -442,6 +442,10 @@ void gameWinEvents(MWinEvent * windowEvents)
 					(float) windowEvents->data[2] / INT_MAX
 				));
 		break;
+
+		case MWIN_EVENT_CHAR:
+			input->setLastChar(windowEvents->data[0]);
+			break;
 	}
 }
 

@@ -23,8 +23,8 @@
 //========================================================================
 
 
-#ifndef _M_INPUT_H
-#define _M_INPUT_H
+#ifndef __INPUT_H
+#define __INPUT_H
 
 #include <NeoCore.h>
 
@@ -60,6 +60,8 @@ private :
 	
 	vector<float *> m_axisToFlush;
 
+	char m_lastChar;
+	
 public:
 
 	void createKey(const char * name);
@@ -87,6 +89,9 @@ public:
     TOUCH_PHASE getTouchPhase(int touchID);
 
 	void flush(void);
+
+	void setLastChar(char c) { m_lastChar = c; }
+	char popLastChar() { char c = m_lastChar; m_lastChar = '\0'; return c; }
 };
 }
 #endif

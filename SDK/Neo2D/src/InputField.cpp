@@ -171,7 +171,9 @@ void InputField::update()
 
 	if (m_state == INPUT_SELECTED_STATE)
 	{
-		bool shift = false;
+		char c = input->popLastChar();
+		
+		/*bool shift = false;
 		char key[2] = {'\0', '\0' };
 
 		shift = (input->isKeyPressed("LSHIFT") || input->isKeyPressed("RSHIFT"));
@@ -190,7 +192,7 @@ void InputField::update()
 			}
 		}
 
-		for (char i = MKEY_0; i <= MKEY_9; i++)
+		for (char i = MKEY_0; i <= MKEY_QUESTION; i++)
 		{
 			key[0] = i;
 			if (input->isKeyPressed(key))
@@ -208,7 +210,7 @@ void InputField::update()
 		{
 			input->upKey("SPACE");
 			addCharacter(' ');
-		}
+			}*/
 
 		if (input->isKeyPressed("BACKSPACE"))
 		{
@@ -216,6 +218,8 @@ void InputField::update()
 			if (m_label.length() >= 2)
 				m_label.erase(m_label.end() - 2, --m_label.end());
 		}
+		else if(c != '\0')			
+			addCharacter(c);
 	}
 #endif
 }

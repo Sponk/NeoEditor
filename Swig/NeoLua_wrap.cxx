@@ -2708,28 +2708,35 @@ SWIG_Lua_dostring(lua_State *L, const char *str) {
 #define SWIGTYPE_p_String swig_types[81]
 #define SWIGTYPE_p_Texture swig_types[82]
 #define SWIGTYPE_p_TexturesAnim swig_types[83]
-#define SWIGTYPE_p___int64 swig_types[84]
-#define SWIGTYPE_p_char swig_types[85]
-#define SWIGTYPE_p_f_p_q_const__char_p_void__bool swig_types[86]
-#define SWIGTYPE_p_f_void__int swig_types[87]
-#define SWIGTYPE_p_float swig_types[88]
-#define SWIGTYPE_p_int swig_types[89]
-#define SWIGTYPE_p_long swig_types[90]
-#define SWIGTYPE_p_mapT_unsigned_int_unsigned_int_t swig_types[91]
-#define SWIGTYPE_p_p_char swig_types[92]
-#define SWIGTYPE_p_p_unsigned_long swig_types[93]
-#define SWIGTYPE_p_short swig_types[94]
-#define SWIGTYPE_p_signed___int64 swig_types[95]
-#define SWIGTYPE_p_signed_char swig_types[96]
-#define SWIGTYPE_p_unsigned___int64 swig_types[97]
-#define SWIGTYPE_p_unsigned_char swig_types[98]
-#define SWIGTYPE_p_unsigned_int swig_types[99]
-#define SWIGTYPE_p_unsigned_long swig_types[100]
-#define SWIGTYPE_p_unsigned_short swig_types[101]
-#define SWIGTYPE_p_vectorT_float_t swig_types[102]
-#define SWIGTYPE_p_void swig_types[103]
-static swig_type_info *swig_types[105];
-static swig_module_info swig_module = {swig_types, 104, 0, 0, 0, 0};
+#define SWIGTYPE_p_Vector3p swig_types[84]
+#define SWIGTYPE_p___int64 swig_types[85]
+#define SWIGTYPE_p_char swig_types[86]
+#define SWIGTYPE_p_double swig_types[87]
+#define SWIGTYPE_p_doublep swig_types[88]
+#define SWIGTYPE_p_f_p_q_const__char_p_void__bool swig_types[89]
+#define SWIGTYPE_p_f_void__int swig_types[90]
+#define SWIGTYPE_p_f_void__intp swig_types[91]
+#define SWIGTYPE_p_float swig_types[92]
+#define SWIGTYPE_p_floatp swig_types[93]
+#define SWIGTYPE_p_int swig_types[94]
+#define SWIGTYPE_p_intp swig_types[95]
+#define SWIGTYPE_p_long swig_types[96]
+#define SWIGTYPE_p_mapT_unsigned_int_unsigned_int_t swig_types[97]
+#define SWIGTYPE_p_p_char swig_types[98]
+#define SWIGTYPE_p_p_unsigned_long swig_types[99]
+#define SWIGTYPE_p_short swig_types[100]
+#define SWIGTYPE_p_signed___int64 swig_types[101]
+#define SWIGTYPE_p_signed_char swig_types[102]
+#define SWIGTYPE_p_uintp swig_types[103]
+#define SWIGTYPE_p_unsigned___int64 swig_types[104]
+#define SWIGTYPE_p_unsigned_char swig_types[105]
+#define SWIGTYPE_p_unsigned_int swig_types[106]
+#define SWIGTYPE_p_unsigned_long swig_types[107]
+#define SWIGTYPE_p_unsigned_short swig_types[108]
+#define SWIGTYPE_p_vectorT_float_t swig_types[109]
+#define SWIGTYPE_p_void swig_types[110]
+static swig_type_info *swig_types[112];
+static swig_module_info swig_module = {swig_types, 111, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2773,6 +2780,111 @@ SWIGINTERN int SWIG_lua_isnilstring(lua_State *L, int idx) {
   return ret;
 }
 
+
+typedef int intp;
+
+SWIGINTERN intp *new_intp(){
+  return new int();
+}
+SWIGINTERN void delete_intp(intp *self){
+  if (self) delete self;
+}
+SWIGINTERN void intp_assign(intp *self,int value){
+  *self = value;
+}
+SWIGINTERN int intp_value(intp *self){
+  return *self;
+}
+SWIGINTERN int *intp_cast(intp *self){
+  return self;
+}
+SWIGINTERN intp *intp_frompointer(int *t){
+  return (intp *) t;
+}
+
+typedef unsigned int uintp;
+
+SWIGINTERN uintp *new_uintp(){
+  return new unsigned int();
+}
+SWIGINTERN void delete_uintp(uintp *self){
+  if (self) delete self;
+}
+SWIGINTERN void uintp_assign(uintp *self,unsigned int value){
+  *self = value;
+}
+SWIGINTERN unsigned int uintp_value(uintp *self){
+  return *self;
+}
+SWIGINTERN unsigned int *uintp_cast(uintp *self){
+  return self;
+}
+SWIGINTERN uintp *uintp_frompointer(unsigned int *t){
+  return (uintp *) t;
+}
+
+typedef float floatp;
+
+SWIGINTERN floatp *new_floatp(){
+  return new float();
+}
+SWIGINTERN void delete_floatp(floatp *self){
+  if (self) delete self;
+}
+SWIGINTERN void floatp_assign(floatp *self,float value){
+  *self = value;
+}
+SWIGINTERN float floatp_value(floatp *self){
+  return *self;
+}
+SWIGINTERN float *floatp_cast(floatp *self){
+  return self;
+}
+SWIGINTERN floatp *floatp_frompointer(float *t){
+  return (floatp *) t;
+}
+
+typedef double doublep;
+
+SWIGINTERN doublep *new_doublep(){
+  return new double();
+}
+SWIGINTERN void delete_doublep(doublep *self){
+  if (self) delete self;
+}
+SWIGINTERN void doublep_assign(doublep *self,double value){
+  *self = value;
+}
+SWIGINTERN double doublep_value(doublep *self){
+  return *self;
+}
+SWIGINTERN double *doublep_cast(doublep *self){
+  return self;
+}
+SWIGINTERN doublep *doublep_frompointer(double *t){
+  return (doublep *) t;
+}
+
+typedef Neo::Vector3 Vector3p;
+
+SWIGINTERN Vector3p *new_Vector3p(){
+  return new Neo::Vector3();
+}
+SWIGINTERN void delete_Vector3p(Vector3p *self){
+  if (self) delete self;
+}
+SWIGINTERN void Vector3p_assign(Vector3p *self,Neo::Vector3 value){
+  *self = value;
+}
+SWIGINTERN Neo::Vector3 Vector3p_value(Vector3p *self){
+  return *self;
+}
+SWIGINTERN Neo::Vector3 *Vector3p_cast(Vector3p *self){
+  return self;
+}
+SWIGINTERN Vector3p *Vector3p_frompointer(Neo::Vector3 *t){
+  return (Vector3p *) t;
+}
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -13314,6 +13426,56 @@ fail:
 }
 
 
+static int _wrap_InputContext_setLastChar(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  char arg2 ;
+  
+  SWIG_check_num_args("Neo::InputContext::setLastChar",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::setLastChar",1,"Neo::InputContext *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::InputContext::setLastChar",2,"char");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_setLastChar",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  arg2 = (lua_tostring(L, 2))[0];
+  (arg1)->setLastChar(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputContext_popLastChar(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
+  char result;
+  
+  SWIG_check_num_args("Neo::InputContext::popLastChar",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::popLastChar",1,"Neo::InputContext *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
+    SWIG_fail_ptr("InputContext_popLastChar",1,SWIGTYPE_p_Neo__InputContext);
+  }
+  
+  result = (char)(arg1)->popLastChar();
+  lua_pushfstring(L,"%c",result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_InputContext(void *obj) {
 Neo::InputContext *arg1 = (Neo::InputContext *) obj;
 delete arg1;
@@ -13342,6 +13504,8 @@ static swig_lua_method swig_InputContext_methods[]= {
     { "getLastTouchPosition", _wrap_InputContext_getLastTouchPosition},
     { "getTouchPhase", _wrap_InputContext_getTouchPhase},
     { "flush", _wrap_InputContext_flush},
+    { "setLastChar", _wrap_InputContext_setLastChar},
+    { "popLastChar", _wrap_InputContext_popLastChar},
     {0,0}
 };
 static swig_lua_method swig_InputContext_meta[] = {
@@ -46362,6 +46526,32 @@ fail:
 }
 
 
+static int _wrap_InputField_setState(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
+  Neo2D::Gui::INPUT_STATE arg2 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::InputField::setState",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::setState",1,"Neo2D::Gui::InputField *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::InputField::setState",2,"Neo2D::Gui::INPUT_STATE");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
+    SWIG_fail_ptr("InputField_setState",1,SWIGTYPE_p_Neo2D__Gui__InputField);
+  }
+  
+  arg2 = (Neo2D::Gui::INPUT_STATE)(int)lua_tonumber(L, 2);
+  (arg1)->setState(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_InputField(void *obj) {
 Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) obj;
 delete arg1;
@@ -46380,6 +46570,7 @@ static swig_lua_attribute swig_InputField_attributes[] = {
 static swig_lua_method swig_InputField_methods[]= {
     { "draw", _wrap_InputField_draw},
     { "update", _wrap_InputField_update},
+    { "setState", _wrap_InputField_setState},
     {0,0}
 };
 static swig_lua_method swig_InputField_meta[] = {
@@ -46839,6 +47030,846 @@ static swig_lua_class *swig_Label_bases[] = {0,0};
 static const char *swig_Label_base_names[] = {"Neo2D::Widget *",0};
 static swig_lua_class _wrap_class_Label = { "Label", "Label", &SWIGTYPE_p_Neo2D__Gui__Label,_proxy__wrap_new_Label, swig_delete_Label, swig_Label_methods, swig_Label_attributes, &swig_Label_Sf_SwigStatic, swig_Label_meta, swig_Label_bases, swig_Label_base_names };
 
+static int _wrap_new_intp(lua_State* L) {
+  int SWIG_arg = 0;
+  intp *result = 0 ;
+  
+  SWIG_check_num_args("intp::intp",0,0)
+  result = (intp *)new_intp();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_intp,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_intp_assign(lua_State* L) {
+  int SWIG_arg = 0;
+  intp *arg1 = (intp *) 0 ;
+  int arg2 ;
+  
+  SWIG_check_num_args("intp::assign",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("intp::assign",1,"intp *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("intp::assign",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_intp,0))){
+    SWIG_fail_ptr("intp_assign",1,SWIGTYPE_p_intp);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  intp_assign(arg1,arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_intp_value(lua_State* L) {
+  int SWIG_arg = 0;
+  intp *arg1 = (intp *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("intp::value",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("intp::value",1,"intp *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_intp,0))){
+    SWIG_fail_ptr("intp_value",1,SWIGTYPE_p_intp);
+  }
+  
+  result = (int)intp_value(arg1);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_intp_cast(lua_State* L) {
+  int SWIG_arg = 0;
+  intp *arg1 = (intp *) 0 ;
+  int *result = 0 ;
+  
+  SWIG_check_num_args("intp::cast",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("intp::cast",1,"intp *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_intp,0))){
+    SWIG_fail_ptr("intp_cast",1,SWIGTYPE_p_intp);
+  }
+  
+  result = (int *)intp_cast(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_int,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_intp_frompointer(lua_State* L) {
+  int SWIG_arg = 0;
+  int *arg1 = (int *) 0 ;
+  intp *result = 0 ;
+  
+  SWIG_check_num_args("intp::intp_frompointer",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("intp::intp_frompointer",1,"int *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_int,0))){
+    SWIG_fail_ptr("intp_frompointer",1,SWIGTYPE_p_int);
+  }
+  
+  result = (intp *)intp_frompointer(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_intp,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_intp(void *obj) {
+intp *arg1 = (intp *) obj;
+delete_intp(arg1);
+}
+static int _proxy__wrap_new_intp(lua_State *L) {
+    assert(lua_istable(L,1));
+    lua_pushcfunction(L,_wrap_new_intp);
+    assert(!lua_isnil(L,-1));
+    lua_replace(L,1); /* replace our table with real constructor */
+    lua_call(L,lua_gettop(L)-1,1);
+    return 1;
+}
+static swig_lua_attribute swig_intp_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_intp_methods[]= {
+    { "assign", _wrap_intp_assign},
+    { "value", _wrap_intp_value},
+    { "cast", _wrap_intp_cast},
+    {0,0}
+};
+static swig_lua_method swig_intp_meta[] = {
+    {0,0}
+};
+
+static swig_lua_attribute swig_intp_SwigStatic_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_const_info swig_intp_SwigStatic_constants[]= {
+    {0,0,0,0,0,0}
+};
+static swig_lua_method swig_intp_SwigStatic_methods[]= {
+    { "frompointer", _wrap_intp_frompointer},
+    {0,0}
+};
+static swig_lua_class* swig_intp_SwigStatic_classes[]= {
+    0
+};
+
+static swig_lua_namespace swig_intp_SwigStatic = {
+    "intp",
+    swig_intp_SwigStatic_methods,
+    swig_intp_SwigStatic_attributes,
+    swig_intp_SwigStatic_constants,
+    swig_intp_SwigStatic_classes,
+    0
+};
+static swig_lua_class *swig_intp_bases[] = {0};
+static const char *swig_intp_base_names[] = {0};
+static swig_lua_class _wrap_class_intp = { "intp", "intp", &SWIGTYPE_p_intp,_proxy__wrap_new_intp, swig_delete_intp, swig_intp_methods, swig_intp_attributes, &swig_intp_SwigStatic, swig_intp_meta, swig_intp_bases, swig_intp_base_names };
+
+static int _wrap_new_uintp(lua_State* L) {
+  int SWIG_arg = 0;
+  uintp *result = 0 ;
+  
+  SWIG_check_num_args("uintp::uintp",0,0)
+  result = (uintp *)new_uintp();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_uintp,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_uintp_assign(lua_State* L) {
+  int SWIG_arg = 0;
+  uintp *arg1 = (uintp *) 0 ;
+  unsigned int arg2 ;
+  
+  SWIG_check_num_args("uintp::assign",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("uintp::assign",1,"uintp *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("uintp::assign",2,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_uintp,0))){
+    SWIG_fail_ptr("uintp_assign",1,SWIGTYPE_p_uintp);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  uintp_assign(arg1,arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_uintp_value(lua_State* L) {
+  int SWIG_arg = 0;
+  uintp *arg1 = (uintp *) 0 ;
+  unsigned int result;
+  
+  SWIG_check_num_args("uintp::value",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("uintp::value",1,"uintp *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_uintp,0))){
+    SWIG_fail_ptr("uintp_value",1,SWIGTYPE_p_uintp);
+  }
+  
+  result = (unsigned int)uintp_value(arg1);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_uintp_cast(lua_State* L) {
+  int SWIG_arg = 0;
+  uintp *arg1 = (uintp *) 0 ;
+  unsigned int *result = 0 ;
+  
+  SWIG_check_num_args("uintp::cast",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("uintp::cast",1,"uintp *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_uintp,0))){
+    SWIG_fail_ptr("uintp_cast",1,SWIGTYPE_p_uintp);
+  }
+  
+  result = (unsigned int *)uintp_cast(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_unsigned_int,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_uintp_frompointer(lua_State* L) {
+  int SWIG_arg = 0;
+  unsigned int *arg1 = (unsigned int *) 0 ;
+  uintp *result = 0 ;
+  
+  SWIG_check_num_args("uintp::uintp_frompointer",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("uintp::uintp_frompointer",1,"unsigned int *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("uintp_frompointer",1,SWIGTYPE_p_unsigned_int);
+  }
+  
+  result = (uintp *)uintp_frompointer(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_uintp,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_uintp(void *obj) {
+uintp *arg1 = (uintp *) obj;
+delete_uintp(arg1);
+}
+static int _proxy__wrap_new_uintp(lua_State *L) {
+    assert(lua_istable(L,1));
+    lua_pushcfunction(L,_wrap_new_uintp);
+    assert(!lua_isnil(L,-1));
+    lua_replace(L,1); /* replace our table with real constructor */
+    lua_call(L,lua_gettop(L)-1,1);
+    return 1;
+}
+static swig_lua_attribute swig_uintp_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_uintp_methods[]= {
+    { "assign", _wrap_uintp_assign},
+    { "value", _wrap_uintp_value},
+    { "cast", _wrap_uintp_cast},
+    {0,0}
+};
+static swig_lua_method swig_uintp_meta[] = {
+    {0,0}
+};
+
+static swig_lua_attribute swig_uintp_SwigStatic_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_const_info swig_uintp_SwigStatic_constants[]= {
+    {0,0,0,0,0,0}
+};
+static swig_lua_method swig_uintp_SwigStatic_methods[]= {
+    { "frompointer", _wrap_uintp_frompointer},
+    {0,0}
+};
+static swig_lua_class* swig_uintp_SwigStatic_classes[]= {
+    0
+};
+
+static swig_lua_namespace swig_uintp_SwigStatic = {
+    "uintp",
+    swig_uintp_SwigStatic_methods,
+    swig_uintp_SwigStatic_attributes,
+    swig_uintp_SwigStatic_constants,
+    swig_uintp_SwigStatic_classes,
+    0
+};
+static swig_lua_class *swig_uintp_bases[] = {0};
+static const char *swig_uintp_base_names[] = {0};
+static swig_lua_class _wrap_class_uintp = { "uintp", "uintp", &SWIGTYPE_p_uintp,_proxy__wrap_new_uintp, swig_delete_uintp, swig_uintp_methods, swig_uintp_attributes, &swig_uintp_SwigStatic, swig_uintp_meta, swig_uintp_bases, swig_uintp_base_names };
+
+static int _wrap_new_floatp(lua_State* L) {
+  int SWIG_arg = 0;
+  floatp *result = 0 ;
+  
+  SWIG_check_num_args("floatp::floatp",0,0)
+  result = (floatp *)new_floatp();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_floatp,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_floatp_assign(lua_State* L) {
+  int SWIG_arg = 0;
+  floatp *arg1 = (floatp *) 0 ;
+  float arg2 ;
+  
+  SWIG_check_num_args("floatp::assign",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("floatp::assign",1,"floatp *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("floatp::assign",2,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_floatp,0))){
+    SWIG_fail_ptr("floatp_assign",1,SWIGTYPE_p_floatp);
+  }
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  floatp_assign(arg1,arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_floatp_value(lua_State* L) {
+  int SWIG_arg = 0;
+  floatp *arg1 = (floatp *) 0 ;
+  float result;
+  
+  SWIG_check_num_args("floatp::value",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("floatp::value",1,"floatp *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_floatp,0))){
+    SWIG_fail_ptr("floatp_value",1,SWIGTYPE_p_floatp);
+  }
+  
+  result = (float)floatp_value(arg1);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_floatp_cast(lua_State* L) {
+  int SWIG_arg = 0;
+  floatp *arg1 = (floatp *) 0 ;
+  float *result = 0 ;
+  
+  SWIG_check_num_args("floatp::cast",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("floatp::cast",1,"floatp *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_floatp,0))){
+    SWIG_fail_ptr("floatp_cast",1,SWIGTYPE_p_floatp);
+  }
+  
+  result = (float *)floatp_cast(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_float,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_floatp_frompointer(lua_State* L) {
+  int SWIG_arg = 0;
+  float *arg1 = (float *) 0 ;
+  floatp *result = 0 ;
+  
+  SWIG_check_num_args("floatp::floatp_frompointer",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("floatp::floatp_frompointer",1,"float *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_float,0))){
+    SWIG_fail_ptr("floatp_frompointer",1,SWIGTYPE_p_float);
+  }
+  
+  result = (floatp *)floatp_frompointer(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_floatp,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_floatp(void *obj) {
+floatp *arg1 = (floatp *) obj;
+delete_floatp(arg1);
+}
+static int _proxy__wrap_new_floatp(lua_State *L) {
+    assert(lua_istable(L,1));
+    lua_pushcfunction(L,_wrap_new_floatp);
+    assert(!lua_isnil(L,-1));
+    lua_replace(L,1); /* replace our table with real constructor */
+    lua_call(L,lua_gettop(L)-1,1);
+    return 1;
+}
+static swig_lua_attribute swig_floatp_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_floatp_methods[]= {
+    { "assign", _wrap_floatp_assign},
+    { "value", _wrap_floatp_value},
+    { "cast", _wrap_floatp_cast},
+    {0,0}
+};
+static swig_lua_method swig_floatp_meta[] = {
+    {0,0}
+};
+
+static swig_lua_attribute swig_floatp_SwigStatic_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_const_info swig_floatp_SwigStatic_constants[]= {
+    {0,0,0,0,0,0}
+};
+static swig_lua_method swig_floatp_SwigStatic_methods[]= {
+    { "frompointer", _wrap_floatp_frompointer},
+    {0,0}
+};
+static swig_lua_class* swig_floatp_SwigStatic_classes[]= {
+    0
+};
+
+static swig_lua_namespace swig_floatp_SwigStatic = {
+    "floatp",
+    swig_floatp_SwigStatic_methods,
+    swig_floatp_SwigStatic_attributes,
+    swig_floatp_SwigStatic_constants,
+    swig_floatp_SwigStatic_classes,
+    0
+};
+static swig_lua_class *swig_floatp_bases[] = {0};
+static const char *swig_floatp_base_names[] = {0};
+static swig_lua_class _wrap_class_floatp = { "floatp", "floatp", &SWIGTYPE_p_floatp,_proxy__wrap_new_floatp, swig_delete_floatp, swig_floatp_methods, swig_floatp_attributes, &swig_floatp_SwigStatic, swig_floatp_meta, swig_floatp_bases, swig_floatp_base_names };
+
+static int _wrap_new_doublep(lua_State* L) {
+  int SWIG_arg = 0;
+  doublep *result = 0 ;
+  
+  SWIG_check_num_args("doublep::doublep",0,0)
+  result = (doublep *)new_doublep();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_doublep,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_doublep_assign(lua_State* L) {
+  int SWIG_arg = 0;
+  doublep *arg1 = (doublep *) 0 ;
+  double arg2 ;
+  
+  SWIG_check_num_args("doublep::assign",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("doublep::assign",1,"doublep *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("doublep::assign",2,"double");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_doublep,0))){
+    SWIG_fail_ptr("doublep_assign",1,SWIGTYPE_p_doublep);
+  }
+  
+  arg2 = (double)lua_tonumber(L, 2);
+  doublep_assign(arg1,arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_doublep_value(lua_State* L) {
+  int SWIG_arg = 0;
+  doublep *arg1 = (doublep *) 0 ;
+  double result;
+  
+  SWIG_check_num_args("doublep::value",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("doublep::value",1,"doublep *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_doublep,0))){
+    SWIG_fail_ptr("doublep_value",1,SWIGTYPE_p_doublep);
+  }
+  
+  result = (double)doublep_value(arg1);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_doublep_cast(lua_State* L) {
+  int SWIG_arg = 0;
+  doublep *arg1 = (doublep *) 0 ;
+  double *result = 0 ;
+  
+  SWIG_check_num_args("doublep::cast",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("doublep::cast",1,"doublep *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_doublep,0))){
+    SWIG_fail_ptr("doublep_cast",1,SWIGTYPE_p_doublep);
+  }
+  
+  result = (double *)doublep_cast(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_double,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_doublep_frompointer(lua_State* L) {
+  int SWIG_arg = 0;
+  double *arg1 = (double *) 0 ;
+  doublep *result = 0 ;
+  
+  SWIG_check_num_args("doublep::doublep_frompointer",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("doublep::doublep_frompointer",1,"double *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_double,0))){
+    SWIG_fail_ptr("doublep_frompointer",1,SWIGTYPE_p_double);
+  }
+  
+  result = (doublep *)doublep_frompointer(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_doublep,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_doublep(void *obj) {
+doublep *arg1 = (doublep *) obj;
+delete_doublep(arg1);
+}
+static int _proxy__wrap_new_doublep(lua_State *L) {
+    assert(lua_istable(L,1));
+    lua_pushcfunction(L,_wrap_new_doublep);
+    assert(!lua_isnil(L,-1));
+    lua_replace(L,1); /* replace our table with real constructor */
+    lua_call(L,lua_gettop(L)-1,1);
+    return 1;
+}
+static swig_lua_attribute swig_doublep_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_doublep_methods[]= {
+    { "assign", _wrap_doublep_assign},
+    { "value", _wrap_doublep_value},
+    { "cast", _wrap_doublep_cast},
+    {0,0}
+};
+static swig_lua_method swig_doublep_meta[] = {
+    {0,0}
+};
+
+static swig_lua_attribute swig_doublep_SwigStatic_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_const_info swig_doublep_SwigStatic_constants[]= {
+    {0,0,0,0,0,0}
+};
+static swig_lua_method swig_doublep_SwigStatic_methods[]= {
+    { "frompointer", _wrap_doublep_frompointer},
+    {0,0}
+};
+static swig_lua_class* swig_doublep_SwigStatic_classes[]= {
+    0
+};
+
+static swig_lua_namespace swig_doublep_SwigStatic = {
+    "doublep",
+    swig_doublep_SwigStatic_methods,
+    swig_doublep_SwigStatic_attributes,
+    swig_doublep_SwigStatic_constants,
+    swig_doublep_SwigStatic_classes,
+    0
+};
+static swig_lua_class *swig_doublep_bases[] = {0};
+static const char *swig_doublep_base_names[] = {0};
+static swig_lua_class _wrap_class_doublep = { "doublep", "doublep", &SWIGTYPE_p_doublep,_proxy__wrap_new_doublep, swig_delete_doublep, swig_doublep_methods, swig_doublep_attributes, &swig_doublep_SwigStatic, swig_doublep_meta, swig_doublep_bases, swig_doublep_base_names };
+
+static int _wrap_new_Vector3p(lua_State* L) {
+  int SWIG_arg = 0;
+  Vector3p *result = 0 ;
+  
+  SWIG_check_num_args("Vector3p::Vector3p",0,0)
+  result = (Vector3p *)new_Vector3p();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Vector3p,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Vector3p_assign(lua_State* L) {
+  int SWIG_arg = 0;
+  Vector3p *arg1 = (Vector3p *) 0 ;
+  Neo::Vector3 arg2 ;
+  Neo::Vector3 *argp2 ;
+  
+  SWIG_check_num_args("Vector3p::assign",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Vector3p::assign",1,"Vector3p *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Vector3p::assign",2,"Neo::Vector3");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Vector3p,0))){
+    SWIG_fail_ptr("Vector3p_assign",1,SWIGTYPE_p_Vector3p);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("Vector3p_assign",2,SWIGTYPE_p_Neo__Vector3);
+  }
+  arg2 = *argp2;
+  
+  Vector3p_assign(arg1,arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Vector3p_value(lua_State* L) {
+  int SWIG_arg = 0;
+  Vector3p *arg1 = (Vector3p *) 0 ;
+  Neo::Vector3 result;
+  
+  SWIG_check_num_args("Vector3p::value",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Vector3p::value",1,"Vector3p *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Vector3p,0))){
+    SWIG_fail_ptr("Vector3p_value",1,SWIGTYPE_p_Vector3p);
+  }
+  
+  result = Vector3p_value(arg1);
+  {
+    Neo::Vector3 * resultptr = new Neo::Vector3((const Neo::Vector3 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector3,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Vector3p_cast(lua_State* L) {
+  int SWIG_arg = 0;
+  Vector3p *arg1 = (Vector3p *) 0 ;
+  Neo::Vector3 *result = 0 ;
+  
+  SWIG_check_num_args("Vector3p::cast",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Vector3p::cast",1,"Vector3p *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Vector3p,0))){
+    SWIG_fail_ptr("Vector3p_cast",1,SWIGTYPE_p_Vector3p);
+  }
+  
+  result = (Neo::Vector3 *)Vector3p_cast(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Vector3,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Vector3p_frompointer(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Vector3 *arg1 = (Neo::Vector3 *) 0 ;
+  Vector3p *result = 0 ;
+  
+  SWIG_check_num_args("Vector3p::Vector3p_frompointer",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Vector3p::Vector3p_frompointer",1,"Neo::Vector3 *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Vector3,0))){
+    SWIG_fail_ptr("Vector3p_frompointer",1,SWIGTYPE_p_Neo__Vector3);
+  }
+  
+  result = (Vector3p *)Vector3p_frompointer(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Vector3p,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_Vector3p(void *obj) {
+Vector3p *arg1 = (Vector3p *) obj;
+delete_Vector3p(arg1);
+}
+static int _proxy__wrap_new_Vector3p(lua_State *L) {
+    assert(lua_istable(L,1));
+    lua_pushcfunction(L,_wrap_new_Vector3p);
+    assert(!lua_isnil(L,-1));
+    lua_replace(L,1); /* replace our table with real constructor */
+    lua_call(L,lua_gettop(L)-1,1);
+    return 1;
+}
+static swig_lua_attribute swig_Vector3p_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_Vector3p_methods[]= {
+    { "assign", _wrap_Vector3p_assign},
+    { "value", _wrap_Vector3p_value},
+    { "cast", _wrap_Vector3p_cast},
+    {0,0}
+};
+static swig_lua_method swig_Vector3p_meta[] = {
+    {0,0}
+};
+
+static swig_lua_attribute swig_Vector3p_SwigStatic_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_const_info swig_Vector3p_SwigStatic_constants[]= {
+    {0,0,0,0,0,0}
+};
+static swig_lua_method swig_Vector3p_SwigStatic_methods[]= {
+    { "frompointer", _wrap_Vector3p_frompointer},
+    {0,0}
+};
+static swig_lua_class* swig_Vector3p_SwigStatic_classes[]= {
+    0
+};
+
+static swig_lua_namespace swig_Vector3p_SwigStatic = {
+    "Vector3p",
+    swig_Vector3p_SwigStatic_methods,
+    swig_Vector3p_SwigStatic_attributes,
+    swig_Vector3p_SwigStatic_constants,
+    swig_Vector3p_SwigStatic_classes,
+    0
+};
+static swig_lua_class *swig_Vector3p_bases[] = {0};
+static const char *swig_Vector3p_base_names[] = {0};
+static swig_lua_class _wrap_class_Vector3p = { "Vector3p", "Vector3p", &SWIGTYPE_p_Vector3p,_proxy__wrap_new_Vector3p, swig_delete_Vector3p, swig_Vector3p_methods, swig_Vector3p_attributes, &swig_Vector3p_SwigStatic, swig_Vector3p_meta, swig_Vector3p_bases, swig_Vector3p_base_names };
+
 static swig_lua_attribute swig_SwigModule_attributes[] = {
     {0,0,0}
 };
@@ -47024,6 +48055,11 @@ static swig_lua_method swig_SwigModule_methods[]= {
     { "TextureRef_getNew", _wrap_TextureRef_getNew},
     { "Canvas_getInstance", _wrap_Canvas_getInstance},
     { "Neo2DEngine_getInstance", _wrap_Neo2DEngine_getInstance},
+    { "intp_frompointer", _wrap_intp_frompointer},
+    { "uintp_frompointer", _wrap_uintp_frompointer},
+    { "floatp_frompointer", _wrap_floatp_frompointer},
+    { "doublep_frompointer", _wrap_doublep_frompointer},
+    { "Vector3p_frompointer", _wrap_Vector3p_frompointer},
     {0,0}
 };
 static swig_lua_class* swig_SwigModule_classes[]= {
@@ -47080,6 +48116,11 @@ static swig_lua_class* swig_SwigModule_classes[]= {
 &_wrap_class_InputField,
 &_wrap_class_ThemedButton,
 &_wrap_class_Label,
+&_wrap_class_intp,
+&_wrap_class_uintp,
+&_wrap_class_floatp,
+&_wrap_class_doublep,
+&_wrap_class_Vector3p,
     0
 };
 static swig_lua_namespace* swig_SwigModule_namespaces[] = {
@@ -47100,8 +48141,20 @@ static swig_lua_namespace swig_SwigModule = {
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
+static void *_p_doublepTo_p_double(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((double *)  ((doublep *) x));
+}
+static void *_p_f_void__intpTo_p_f_void__int(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((int (*)(void))  ((intp (*)(void)) x));
+}
+static void *_p_uintpTo_p_unsigned_int(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((unsigned int *)  ((uintp *) x));
+}
 static void *_p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Gui__Button(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::Gui::Button *)  ((Neo2D::Gui::ThemedButton *) x));
+}
+static void *_p_floatpTo_p_float(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((float *)  ((floatp *) x));
 }
 static void *_p_Neo__AnimRangeTo_p_Neo__Range(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo::Range *)  ((Neo::AnimRange *) x));
@@ -47127,6 +48180,9 @@ static void *_p_Neo2D__Gui__InputFieldTo_p_Neo2D__Widget(void *x, int *SWIGUNUSE
 static void *_p_Neo2D__TileTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::Widget *)  ((Neo2D::Tile *) x));
 }
+static void *_p_Vector3pTo_p_Neo__Vector3(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Neo::Vector3 *)  ((Vector3p *) x));
+}
 static void *_p_Neo__OLightTo_p_Neo__Object3d(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo::Object3d *)  ((Neo::OLight *) x));
 }
@@ -47141,6 +48197,9 @@ static void *_p_Neo__OTextTo_p_Neo__Object3d(void *x, int *SWIGUNUSEDPARM(newmem
 }
 static void *_p_Neo__OCameraTo_p_Neo__Object3d(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo::Object3d *)  ((Neo::OCamera *) x));
+}
+static void *_p_intpTo_p_int(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((int *)  ((intp *) x));
 }
 static swig_type_info _swigt__p_Armature = {"_p_Armature", "Armature *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ArmatureAnim = {"_p_ArmatureAnim", "ArmatureAnim *", 0, 0, (void*)0, 0};
@@ -47226,12 +48285,18 @@ static swig_type_info _swigt__p_Skybox = {"_p_Skybox", "Skybox *", 0, 0, (void*)
 static swig_type_info _swigt__p_String = {"_p_String", "String *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Texture = {"_p_Texture", "Texture *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_TexturesAnim = {"_p_TexturesAnim", "TexturesAnim *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Vector3p = {"_p_Vector3p", "Vector3p *", 0, 0, (void*)&_wrap_class_Vector3p, 0};
 static swig_type_info _swigt__p___int64 = {"_p___int64", "__int64 *|LONGLONG *|LONG64 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "CHAR *|TCHAR *|char *|CCHAR *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_doublep = {"_p_doublep", "doublep *", 0, 0, (void*)&_wrap_class_doublep, 0};
 static swig_type_info _swigt__p_f_p_q_const__char_p_void__bool = {"_p_f_p_q_const__char_p_void__bool", "bool (*)(char const *,void *)", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_f_void__int = {"_p_f_void__int", "int (*)(void)", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_f_void__intp = {"_p_f_void__intp", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_float = {"_p_float", "FLOAT *|float *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_floatp = {"_p_floatp", "floatp *", 0, 0, (void*)&_wrap_class_floatp, 0};
 static swig_type_info _swigt__p_int = {"_p_int", "BOOL *|INT32 *|int *|INT *|INT_PTR *|LONG32 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_intp = {"_p_intp", "intp *", 0, 0, (void*)&_wrap_class_intp, 0};
 static swig_type_info _swigt__p_long = {"_p_long", "SHANDLE_PTR *|LONG_PTR *|LONG *|HRESULT *|long *|SSIZE_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mapT_unsigned_int_unsigned_int_t = {"_p_mapT_unsigned_int_unsigned_int_t", "map< unsigned int,unsigned int > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_char = {"_p_p_char", "PTCH *|PCTSTR *|LPCTSTR *|LPTCH *|PUTSTR *|LPUTSTR *|PCUTSTR *|LPCUTSTR *|char **|PTSTR *|LPTSTR *", 0, 0, (void*)0, 0};
@@ -47239,6 +48304,7 @@ static swig_type_info _swigt__p_p_unsigned_long = {"_p_p_unsigned_long", "unsign
 static swig_type_info _swigt__p_short = {"_p_short", "HALF_PTR *|short *|SHORT *|INT16 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_signed___int64 = {"_p_signed___int64", "INT64 *|signed __int64 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_signed_char = {"_p_signed_char", "signed char *|INT8 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uintp = {"_p_uintp", "uintp *", 0, 0, (void*)&_wrap_class_uintp, 0};
 static swig_type_info _swigt__p_unsigned___int64 = {"_p_unsigned___int64", "UINT64 *|DWORD64 *|unsigned __int64 *|DWORDLONG *|ULONGLONG *|ULONG64 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "FCHAR *|unsigned char *|UCHAR *|BYTE *|TBYTE *|UINT8 *|BOOLEAN *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_int = {"_p_unsigned_int", "UINT32 *|DWORD32 *|UINT *|unsigned int *|UINT_PTR *|ULONG32 *", 0, 0, (void*)0, 0};
@@ -47332,12 +48398,18 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_String,
   &_swigt__p_Texture,
   &_swigt__p_TexturesAnim,
+  &_swigt__p_Vector3p,
   &_swigt__p___int64,
   &_swigt__p_char,
+  &_swigt__p_double,
+  &_swigt__p_doublep,
   &_swigt__p_f_p_q_const__char_p_void__bool,
   &_swigt__p_f_void__int,
+  &_swigt__p_f_void__intp,
   &_swigt__p_float,
+  &_swigt__p_floatp,
   &_swigt__p_int,
+  &_swigt__p_intp,
   &_swigt__p_long,
   &_swigt__p_mapT_unsigned_int_unsigned_int_t,
   &_swigt__p_p_char,
@@ -47345,6 +48417,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_short,
   &_swigt__p_signed___int64,
   &_swigt__p_signed_char,
+  &_swigt__p_uintp,
   &_swigt__p_unsigned___int64,
   &_swigt__p_unsigned_char,
   &_swigt__p_unsigned_int,
@@ -47427,7 +48500,7 @@ static swig_cast_info _swigc__p_Neo__TexturePass[] = {  {&_swigt__p_Neo__Texture
 static swig_cast_info _swigc__p_Neo__TextureRef[] = {  {&_swigt__p_Neo__TextureRef, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__TexturesAnimRef[] = {  {&_swigt__p_Neo__TexturesAnimRef, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Vector2[] = {  {&_swigt__p_Neo__Vector2, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo__Vector3[] = {  {&_swigt__p_Neo__Vector3, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo__Vector3[] = {  {&_swigt__p_Vector3p, _p_Vector3pTo_p_Neo__Vector3, 0, 0},  {&_swigt__p_Neo__Vector3, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Vector4[] = {  {&_swigt__p_Neo__Vector4, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_PackageManager[] = {  {&_swigt__p_PackageManager, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_PostProcessor[] = {  {&_swigt__p_PostProcessor, 0, 0, 0},{0, 0, 0, 0}};
@@ -47438,12 +48511,18 @@ static swig_cast_info _swigc__p_Skybox[] = {  {&_swigt__p_Skybox, 0, 0, 0},{0, 0
 static swig_cast_info _swigc__p_String[] = {  {&_swigt__p_String, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Texture[] = {  {&_swigt__p_Texture, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_TexturesAnim[] = {  {&_swigt__p_TexturesAnim, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Vector3p[] = {  {&_swigt__p_Vector3p, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p___int64[] = {  {&_swigt__p___int64, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},  {&_swigt__p_doublep, _p_doublepTo_p_double, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_doublep[] = {  {&_swigt__p_doublep, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_p_q_const__char_p_void__bool[] = {  {&_swigt__p_f_p_q_const__char_p_void__bool, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_void__int[] = {  {&_swigt__p_f_void__int, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_float[] = {  {&_swigt__p_float, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_void__intp[] = {{&_swigt__p_f_void__intp, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_f_void__int[] = {  {&_swigt__p_f_void__int, 0, 0, 0},  {&_swigt__p_f_void__intp, _p_f_void__intpTo_p_f_void__int, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_float[] = {  {&_swigt__p_float, 0, 0, 0},  {&_swigt__p_floatp, _p_floatpTo_p_float, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_floatp[] = {  {&_swigt__p_floatp, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_intp, _p_intpTo_p_int, 0, 0},  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_intp[] = {  {&_swigt__p_intp, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_long[] = {  {&_swigt__p_long, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mapT_unsigned_int_unsigned_int_t[] = {  {&_swigt__p_mapT_unsigned_int_unsigned_int_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_char[] = {  {&_swigt__p_p_char, 0, 0, 0},{0, 0, 0, 0}};
@@ -47451,9 +48530,10 @@ static swig_cast_info _swigc__p_p_unsigned_long[] = {  {&_swigt__p_p_unsigned_lo
 static swig_cast_info _swigc__p_short[] = {  {&_swigt__p_short, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_signed___int64[] = {  {&_swigt__p_signed___int64, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_signed_char[] = {  {&_swigt__p_signed_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_uintp[] = {  {&_swigt__p_uintp, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned___int64[] = {  {&_swigt__p_unsigned___int64, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_unsigned_int[] = {  {&_swigt__p_unsigned_int, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_unsigned_int[] = {  {&_swigt__p_uintp, _p_uintpTo_p_unsigned_int, 0, 0},  {&_swigt__p_unsigned_int, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_long[] = {  {&_swigt__p_unsigned_long, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_short[] = {  {&_swigt__p_unsigned_short, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_vectorT_float_t[] = {  {&_swigt__p_vectorT_float_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -47544,12 +48624,18 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_String,
   _swigc__p_Texture,
   _swigc__p_TexturesAnim,
+  _swigc__p_Vector3p,
   _swigc__p___int64,
   _swigc__p_char,
+  _swigc__p_double,
+  _swigc__p_doublep,
   _swigc__p_f_p_q_const__char_p_void__bool,
   _swigc__p_f_void__int,
+  _swigc__p_f_void__intp,
   _swigc__p_float,
+  _swigc__p_floatp,
   _swigc__p_int,
+  _swigc__p_intp,
   _swigc__p_long,
   _swigc__p_mapT_unsigned_int_unsigned_int_t,
   _swigc__p_p_char,
@@ -47557,6 +48643,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_short,
   _swigc__p_signed___int64,
   _swigc__p_signed_char,
+  _swigc__p_uintp,
   _swigc__p_unsigned___int64,
   _swigc__p_unsigned_char,
   _swigc__p_unsigned_int,

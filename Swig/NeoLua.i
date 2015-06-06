@@ -21,6 +21,7 @@
 %}
 
 %include <windows.i>
+%include <cpointer.i>
 
 #define NEO_CORE_EXPORT
 
@@ -81,3 +82,13 @@
 %include <InputField.h>
 %include <ThemedButton.h>
 %include <Label.h>
+
+
+//  Some pointer stuff
+%pointer_class(int, intp);
+%pointer_class(unsigned int, uintp);
+%pointer_class(float, floatp);
+%pointer_class(double, doublep);
+%pointer_class(Neo::Vector3, Vector3p);
+
+

@@ -83,6 +83,8 @@ public:
 	void draw();
 	void draw(Vector2 offset) { draw(); }
 	void update();
+
+	void setState(INPUT_STATE state) { m_state = state; }
 };
 }
 }
