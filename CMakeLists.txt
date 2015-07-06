@@ -150,7 +150,28 @@ IF(APPLE)
   FIND_LIBRARY(ZLIB_LIBRARY zlib PATHS "${NEO_SOURCE_DIR}/3rdparty/zlib/osx" NO_DEFAULT_PATH)
   FIND_LIBRARY(OPENAL_LIBRARY OpenAL)
 
-  # SET(NEO_BUILD_FLAGS "-isysroot /Developer/SDKs/MacOSX10.6.sdk -DOSX")
+  FIND_LIBRARY(APPLE_CORE_FOUNDATION CoreFoundation)
+  if (NOT APPLE_CORE_FOUNDATION)
+    MESSAGE(FATAL_ERROR "Failed to find CoreFoundation framework.")
+  endif()
+
+  FIND_LIBRARY(APPLE_CORE_GRAPHICS CoreGraphics)
+  if (NOT APPLE_CORE_GRAPHICS)
+    MESSAGE(FATAL_ERROR "Failed to find CoreGraphics framework")
+  endif()
+
+  FIND_LIBRARY(APPLE_APP_KIT AppKit)
+  if (NOT APPLE_APP_KIT)
+    MESSAGE(FATAR_ERROR "Failed to find AppKit framework")
+  endif()
+
+  FIND_LIBRARY(APPLE_FOUNDATION Foundation)
+  if (NOT APPLE_FOUNDATION)
+    MESSAGE(FATAL_ERROR "Failed to find Foundation framework")
+  endif()
+
+  # there is probably a better way to do this
+  SET(FLTK_DEPENDENCIES "-framework CoreFoundation -framework CoreGraphics -framework AppKit -framework Foundation")
 
   SET(NEO_BUILD_FLAGS -DOSX)
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${NEO_BUILD_FLAGS}")
