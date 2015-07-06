@@ -1,0 +1,31 @@
+<Maratis>
+
+<TextureAnim num="3">
+
+	<Texture id="0">
+		<translate num="1">
+			<k t="250" x="0.000000" y="0.000000" />
+		</translate>
+		<scale num="1">
+			<k t="250" x="1.000000" y="1.000000" />
+		</scale>
+	</Texture>
+	<Texture id="1">
+		<translate num="1">
+			<k t="250" x="0.000000" y="0.000000" />
+		</translate>
+		<scale num="1">
+			<k t="250" x="1.000000" y="1.000000" />
+		</scale>
+	</Texture>
+	<Texture id="2">
+		<translate num="1">
+			<k t="250" x="0.000000" y="0.000000" />
+		</translate>
+		<scale num="1">
+			<k t="250" x="1.000000" y="1.000000" />
+		</scale>
+	</Texture>
+</TextureAnim>
+
+</Maratis>

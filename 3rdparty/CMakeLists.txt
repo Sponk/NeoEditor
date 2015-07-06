@@ -2,7 +2,7 @@
 IF(NOT ANDROID AND NOT EMSCRIPTEN)
 	ADD_SUBDIRECTORY(assimp)
 	ADD_SUBDIRECTORY(fltk)
-	
+
 	ADD_SUBDIRECTORY(libzip)
 
 	# We compile sdl2 differently on Android
@@ -39,6 +39,3 @@ ADD_SUBDIRECTORY(libjpeg)
 ADD_SUBDIRECTORY(libpng)
 ADD_SUBDIRECTORY(libvorbis)
 ADD_SUBDIRECTORY(npk)
-
-
-

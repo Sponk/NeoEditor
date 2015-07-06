@@ -105,6 +105,11 @@ int main(int argc, char **argv)
 	// get the backend (first time call constructor)
 	PlayerBackend * backend = PlayerBackend::getInstance();
 
+	// Init default thread
+	ThreadFactory* mgr = ThreadFactory::getInstance();
+	mgr->setTemplateSemaphore(new SDLSemaphore());
+	mgr->setTemplateThread(new SDLThread());
+
 	// create window
 	if(!window->create(std::string("Neo ").append(PLAYER_VERSION_STRING).c_str(), width, height, 32, fullscreen == 1))
 	{
@@ -193,12 +198,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	// Init default thread
-	ThreadFactory* mgr = ThreadFactory::getInstance();
-	mgr->setTemplateSemaphore(new SDLSemaphore());
-	mgr->setTemplateThread(new SDLThread());
-
-    // create the update thread
+	// create the update thread
     SDLThread updateThread;
     Neo2D::Neo2DEngine* guiSystem = Neo2D::Neo2DEngine::getInstance();
 

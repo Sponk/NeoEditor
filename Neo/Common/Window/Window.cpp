@@ -380,7 +380,7 @@ bool NeoWindow::onEvents(void)
 			case SDL_TEXTINPUT:
 			{
 				mevent.type = MWIN_EVENT_CHAR;
-				mevent.data[0] = (int) event.text.text[0];
+				mevent.data[0] = *(int*) &(event.text.text);
 				sendEvents(&mevent);
 				break;
 			}
@@ -714,15 +714,15 @@ bool NeoWindow::create(const char * title, unsigned int width, unsigned int heig
 	SDL_VERSION(&compiled);
 	SDL_GetVersion(&linked);
 
-	fprintf(stdout, "Info\t SDL compiled version : %d.%d.%d\n", compiled.major, compiled.minor, compiled.patch);
-	fprintf(stdout, "Info\t SDL linked version : %d.%d.%d\n", linked.major, linked.minor, linked.patch);
+	MLOG_INFO("SDL compiled version :\t" << static_cast<int>(compiled.major) << "." << static_cast<int>(compiled.minor) << "." << static_cast<int>(compiled.patch));
+	MLOG_INFO("SDL linked version :\t" << static_cast<int>(linked.major) << "." << static_cast<int>(linked.minor) << "." << static_cast<int>(linked.patch));
 #endif
 
     // TODO: Haptic feedback
     // We don't need SDL sound. We have OpenAL for that!
     if (SDL_Init(SDL_INIT_EVERYTHING & ~SDL_INIT_HAPTIC & ~SDL_INIT_AUDIO) != 0)
 	{
-		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
+		MLOG_ERROR("SDL Error : " << SDL_GetError());
 		return false;
 	}
 
@@ -736,15 +736,18 @@ bool NeoWindow::create(const char * title, unsigned int width, unsigned int heig
 
 	if (!g_NeoWindow)
 	{
-		fprintf(stderr, "SDL Error : %s\n", SDL_GetError());
+		MLOG_ERROR("SDL Error : " << SDL_GetError());
 		return false;
 	}
 
-#ifdef __APPLE__
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+//#ifdef __APPLE__
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-#endif
+
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+//#endif
 
 	g_context = SDL_GL_CreateContext(g_NeoWindow);
 	SDL_GL_MakeCurrent(g_NeoWindow, g_context);
@@ -753,7 +756,7 @@ bool NeoWindow::create(const char * title, unsigned int width, unsigned int heig
 	SDL_Surface* NeoWindow = SDL_SetVideoMode(width,height,colorBits,SDL_OPENGL | SDL_DOUBLEBUF);
 #endif
 
-	NeoEngine::getInstance()->getRenderingContext()->init();
+	//NeoEngine::getInstance()->getRenderingContext()->init();
 
 // Request a higher resolution thread timer on Windows
 #ifdef WIN32

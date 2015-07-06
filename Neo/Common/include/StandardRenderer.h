@@ -23,55 +23,18 @@
 //========================================================================
 
 
-#ifndef _M_STANDARD_RENDERER_H
-#define _M_STANDARD_RENDERER_H
+#ifndef __STANDARD_RENDERER_H
+#define __STANDARD_RENDERER_H
 
+#define NUM_SHADERS 4
 
 #define MAX_ENTITY_LIGHTS 256
 #define MAX_SHADOW_LIGHTS 64
-#define MAX_DEFAULT_FXS 16
 #define MAX_OPAQUE 4096
 #define MAX_TRANSP 2048
 
 namespace Neo
 {
-
-// Entity light
-struct EntityLight
-{
-	Box3d lightBox;
-	OLight * light;
-};
-
-
-// SubMesh pass
-class SubMeshPass
-{
-public:
-	SubMeshPass(void):occlusionQuery(0){}
-	
-	unsigned int occlusionQuery;
-	unsigned int subMeshId;
-	unsigned int lightsNumber;
-	Object3d * object;
-	OLight * lights[4];
-};
-
-
-// Shadow Light
-class ShadowLight
-{
-public:
-	ShadowLight(void):shadowTexture(0), score(0){}
-	
-	int score;
-	unsigned int shadowTexture;
-	unsigned int shadowQuality;
-	float biasUnity;
-	Matrix4x4 shadowMatrix;
-};
-
-
 // Standard Renderer
 class StandardRenderer : public Renderer
 {
@@ -80,79 +43,75 @@ public:
 	StandardRenderer(void);
 	~StandardRenderer(void);
 	
+	FXRef* m_shaders[NUM_SHADERS];
+		unsigned int m_fx[NUM_SHADERS];
+
+		unsigned int m_framebufferID;
+		unsigned int m_gbufferTexID;
+		unsigned int m_depthTexID;
+		unsigned int m_normalTexID;
+		unsigned int m_positionTexID;
+		unsigned int m_dataTexID;
+
+		unsigned int m_quadVAO;
+		unsigned int m_textVAO;
+
+		unsigned int m_quadVBO;
+		unsigned int m_quadTexCoordVBO;
+
+		unsigned int m_textTexCoordVBO;
+		unsigned int m_textVBO;
+
+		void initQuadVAO(unsigned int* vao, unsigned int *vbo, unsigned int *texcoordVbo, unsigned int fx);
+		void clearQuadVAO(unsigned int* vao, unsigned int *vbo, unsigned int *texcoordVbo);
+
+		void drawMesh(Mesh* mesh, OCamera* camera);
+		void drawSubMesh(SubMesh* mesh, OCamera* camera);
+		void drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCamera* camera);
+
+		void sendLight(unsigned int fx, OLight* l, int num, Matrix4x4 matrix);
+
+		void drawGBuffer(Scene* scene, OCamera* camera);
+		void initVBO(SubMesh * subMesh);
+
+		void initFramebuffers(Vector2 res = Vector2(0,0));
+		void clearFramebuffers();
+
+		void renderFinalImage(Scene *scene, OCamera* camera);
+
+		void set2D(unsigned int w, unsigned int h);
+		void drawQuad(int fx);
+
+		// All visible lights. Should be updated by a worker thread.
+		static int light_update_thread(void* data);
+		OLight* m_visibleLights[MAX_ENTITY_LIGHTS];
+		Thread* m_lightUpdateThread;
+		Semaphore* m_lightUpdateSemaphore;
+		Scene* m_currentScene;
+		int m_numVisibleLights;
+
+		// Cache texture coordinates for faster rendering
+		Vector2 m_texCoords[4];
+
+		// Cache vertices for faster rendering
+		Vector2 m_vertices[4];
+		Vector2 m_resolution;
+
 private:
-	
-	// globals
-	bool m_forceNoFX;
-	unsigned int m_fboId;
-	int m_lightShadow[4];
-	int m_lightShadowTexture[4];
-	float m_lightShadowBias[4];
-	float m_lightShadowBlur[4];
-	
-	Matrix4x4 m_currModelViewMatrix;
-	Matrix4x4 m_lightShadowMatrix[4];
-	OCamera * m_currentCamera;
-	
-	// shadow lights
-	unsigned int m_randTexture;
-	map<unsigned long, ShadowLight> m_shadowLights;
-	
-	// skin cache
-	unsigned int m_verticesNumber;
-	unsigned int m_normalsNumber;
-	unsigned int m_tangentsNumber;
-	Vector3 * m_vertices;
-	Vector3 * m_normals;
-	Vector3 * m_tangents;
-	
-	// default FXs
-	unsigned int m_FXsNumber;
-	unsigned int m_vertShaders[MAX_DEFAULT_FXS];
-	unsigned int m_fragShaders[MAX_DEFAULT_FXS];
-	unsigned int m_FXs[MAX_DEFAULT_FXS];
 	
 	// lists
 	int m_transpSortList[MAX_TRANSP];
 	int m_opaqueSortList[MAX_OPAQUE];
 	float m_transpSortZList[MAX_TRANSP];
 	float m_opaqueSortZList[MAX_OPAQUE];
-	SubMeshPass m_transpList[MAX_TRANSP];
-	SubMeshPass m_opaqueList[MAX_OPAQUE];
 	
-	// lights list
-	int m_entityLightsList[MAX_ENTITY_LIGHTS];
-	float m_entityLightsZList[MAX_ENTITY_LIGHTS];
-	EntityLight m_entityLights[MAX_ENTITY_LIGHTS];
-	
-private:
-	
-	void addFX(const char * vert, const char * frag);
-	void updateSkinning(Mesh * mesh, Armature * armature);
 	void drawDisplay(SubMesh * subMesh, MaterialDisplay * display, Vector3 * vertices, Vector3 * normals, Vector3 * tangents, Color * colors);
 	//void drawDisplayTriangles(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices);
 	void drawOpaques(SubMesh * subMesh, Armature * armature);
 	void drawTransparents(SubMesh * subMesh, Armature * armature);
-	void setShadowMatrix(Matrix4x4 * matrix, OCamera * camera);
 	void updateVisibility(Scene * scene, OCamera * camera);
-	void enableFog(OCamera * camera);
-	
-	void initVBO(SubMesh * subMesh);
 	
 	float getDistanceToCam(OCamera * camera, const Vector3 & pos);
-	
-	// shadow lights
-	ShadowLight * createShadowLight(OLight * light);
-	void destroyUnusedShadowLights(void);
-	void decreaseShadowLights(void);
-	
-	// skin cache
-	Vector3 * getVertices(unsigned int size);
-	Vector3 * getNormals(unsigned int size);
-	Vector3 * getTangents(unsigned int size);
-	
-	// subMesh
-	void prepareSubMesh(Scene * scene, OCamera * camera, OEntity * entity, SubMesh * subMesh);
 	
 public:
 	
@@ -160,7 +119,7 @@ public:
 	void destroy(void);
 	
 	// get new
-	static Renderer * getNew(void);
+	static Renderer * getNew(void) { return new StandardRenderer(); }
 
 	// name
 	static const char * getStaticName(void){ return "StandardRenderer"; }
@@ -168,9 +127,29 @@ public:
 	
 	// draw
 	void drawScene(Scene * scene, OCamera * camera);
-	
+	void drawToTexture(Scene * scene, OCamera* camera, unsigned int texId);
+
 	// extra
-	void drawText(OText * textObj);
+	void drawText(OText * textObj, OCamera* camera);
+	void drawText(OText * textObj) { drawText(textObj, NULL);  }
+
+	void drawEntity(OEntity* e, OCamera* camera);
+	void drawDisplay(OEntity* e, SubMesh* mesh, MaterialDisplay* display, OCamera* camera);
+	void drawSubmesh(OEntity* e, SubMesh* submesh, OCamera* camera);
+
+	void init();
+	void smallInit(unsigned int width, unsigned int height);
+
+private:
+
+	void prepareSubmesh(SubMesh* mesh);
+	void prepareMaterialDisplay(SubMesh* mesh, MaterialDisplay* display);
+	
+	void sendLights(unsigned int shader, OCamera* camera);
+	void initTextVAO(unsigned int* vao, unsigned int* vbo, unsigned int* texcoordVbo, unsigned int fx);
+	
+	static int visibility_thread_mainscene(void* data);
+	Thread* m_visibilityThread;
 };
 }
 #endif

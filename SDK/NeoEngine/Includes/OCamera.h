@@ -127,6 +127,8 @@ public:
 
 	// enable
 	void enable(void);
+	Matrix4x4 setPerspectiveView(float fov, float ratio, float zNear, float zFar);
+	Matrix4x4 setOrthoView(float left, float right, float bottom, float top, float zNear, float zFar);
 };
 }
 #endif

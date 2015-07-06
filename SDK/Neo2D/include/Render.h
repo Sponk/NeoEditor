@@ -60,6 +60,11 @@ private:
 	unsigned int m_texturedFx;
 	int m_right, m_left, m_top, m_bottom;
 
+	unsigned int m_colorVao;
+	unsigned int m_textureVao;
+
+	void init(unsigned int fx, unsigned int* vao);
+
 public:
 	static Render* getInstance()
 	{

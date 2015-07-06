@@ -150,11 +150,7 @@ public:
 	 * @brief Returns a global instance of the GuiSystem.
 	 * @return The global GuiSystem.
 	 */
-	static Neo2DEngine* getInstance()
-	{
-		static Neo2DEngine m_instance;
-		return &m_instance;
-	}
+	static Neo2DEngine* getInstance();
 
 	/**
 	 * @brief Registers all script functions to the given context.
@@ -250,14 +246,7 @@ public:
 	 * @param The new widget.
 	 * @return The handle of the widget.
 	 */
-    DISOWN(Widget* w) int addWidget(Widget* w)
-	{
-		WidgetId id;
-		id.w = w;
-		id.id = ++m_ids;
-		m_widgets[id.id] = id;
-		return m_ids;
-	}
+    DISOWN(Widget* w) int addWidget(Widget* w);
 
 	/**
 	 * @brief Returns the number of registered widgets.

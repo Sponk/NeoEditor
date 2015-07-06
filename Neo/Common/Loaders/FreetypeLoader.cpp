@@ -63,9 +63,14 @@ bool M_loadFont(const char * filename, void * data)
 	int pen_x, pen_y;
 	unsigned int n;
 	unsigned int space = 2;
-    unsigned int size = 128;
+
+	// Change this for higher resolutions
+	Font * font = (Font *)data;
+
+	// FIXME: UGLY HACK!
+	unsigned int size = font->getFontSize(); //32;
 	unsigned int width = 512;
-	unsigned int height = 0;
+	unsigned int height = 0;//32;
 
 	Image image;
 
@@ -75,14 +80,12 @@ bool M_loadFont(const char * filename, void * data)
 	FT_Byte * file_base;
 	FT_Long file_size;
 
-
 	// init
 	FT_Error error = FT_Init_FreeType(&library); 
 	if(error){
 		fprintf(stderr, "ERROR Load Font : unable to init FreeType\n");
 		return false;
-	}
-	
+	}	
 	
 	// open file
 	File * file = M_fopen(filename, "rb");
@@ -143,7 +146,7 @@ bool M_loadFont(const char * filename, void * data)
 
 		if(FT_Get_Char_Index(face, n) == 0)
 			continue;
-
+		
         if((pen_x + slot->bitmap.width) > 512){
 			pen_x = 0;
 			pen_y += size + space;
@@ -170,17 +173,15 @@ bool M_loadFont(const char * filename, void * data)
 	unsigned char color[4] = {255, 255, 255, 0};
 	image.clear(color);
 
-
 	// init font
-	Font * font = (Font *)data;
 	font->setFontSize(size);
 	font->setTextureWidth(width);
 	font->setTextureHeight(height);
-
-
+	
 	// create font texture
 	slot = face->glyph;
-	pen_x = space; pen_y = space; 
+	pen_x = space; pen_y = space;
+	
 	for(n = 0; n<256; n++)
 	{
 		// load glyph image into the slot (erase previous one)
@@ -193,7 +194,7 @@ bool M_loadFont(const char * filename, void * data)
 			continue;
 
 		if((pen_x + slot->bitmap.width) > (int)image.getWidth()){
-			pen_x = 0;
+			pen_x = space;
 			pen_y += size + space;
 		}
 
@@ -215,7 +216,7 @@ bool M_loadFont(const char * filename, void * data)
 
 
 	// send texture
-	NeoEngine * engine = NeoEngine().getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	RenderingContext * render = engine->getRenderingContext();
 	
 	// gen texture id
@@ -228,9 +229,9 @@ bool M_loadFont(const char * filename, void * data)
 	
 	// send texture image
 	render->bindTexture(textureId);
-    render->setTextureUWrapMode(WRAP_CLAMP);
-    render->setTextureVWrapMode(WRAP_CLAMP);
-    render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
+    render->setTextureUWrapMode(WRAP_REPEAT);
+    render->setTextureVWrapMode(WRAP_REPEAT);
+   // render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
 	render->sendTextureImage(&image, 0, 1, 0);
 
 	// finish

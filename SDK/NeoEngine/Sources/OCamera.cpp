@@ -116,19 +116,73 @@ void OCamera::updateListener(void)
 	}
 }
 
+Matrix4x4 OCamera::setPerspectiveView(float fov, float ratio, float zNear, float zFar)
+{
+	Matrix4x4 matrix;
+
+	float ymax, xmax;
+	ymax = zNear * tanf((float)(fov * M_PI / 360.0f));
+	xmax = ymax * ratio;
+
+	float left = -xmax;
+	float right = xmax;
+	float bottom = -ymax;
+	float top = ymax;
+
+	float temp, temp2, temp3, temp4;
+	temp = 2.0f * zNear;
+	temp2 = right - left;
+	temp3 = top - bottom;
+	temp4 = zFar - zNear;
+	matrix.entries[0] = temp / temp2;
+	matrix.entries[1] = 0.0;
+	matrix.entries[2] = 0.0;
+	matrix.entries[3] = 0.0;
+	matrix.entries[4] = 0.0;
+	matrix.entries[5] = temp / temp3;
+	matrix.entries[6] = 0.0;
+	matrix.entries[7] = 0.0;
+	matrix.entries[8] = (right + left) / temp2;
+	matrix.entries[9] = (top + bottom) / temp3;
+	matrix.entries[10] = (-zFar - zNear) / temp4;
+	matrix.entries[11] = -1.0;
+	matrix.entries[12] = 0.0;
+	matrix.entries[13] = 0.0;
+	matrix.entries[14] = (-temp * zFar) / temp4;
+	matrix.entries[15] = 0.0;
+
+	return matrix;
+}
+
+Matrix4x4 OCamera::setOrthoView(float left, float right, float bottom, float top, float zNear, float zFar)
+{
+	if(right == left || top == bottom || zFar == zNear)
+	{
+		// GL_INVALID_VALUE;
+		return Matrix4x4();
+	}
+
+	float tx = - (right + left)/(right - left);
+	float ty = - (top + bottom)/(top - bottom);
+	float tz = - (zFar + zNear)/(zFar - zNear);
+
+	Matrix4x4 matrix(
+		2.0f/(right-left), 0.0f, 0.0f, 0.0f,
+			  0.0f, 2.0f/(top-bottom), 0.0f, 0.0f,
+			  0.0f, 0.0f, -2.0f/(zFar-zNear), 0.0f,
+			  tx, ty, tz, 1.0f
+	);
+
+	return matrix;
+}
+
 void OCamera::enable(void)
 {
-	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
-	
+	Vector2 viewport = NeoEngine::getInstance()->getSystemContext()->getScreenSize();
+	m_currentViewport[2] = viewport.x;
+	m_currentViewport[3] = viewport.y;
 
-	// get viewport
-	render->getViewport(m_currentViewport);
-
-	// projection mode
-	render->setMatrixMode(MATRIX_PROJECTION);
-	render->loadIdentity();
-
-	float ratio = (m_currentViewport[2] / (float)m_currentViewport[3]);
+	float ratio = (m_currentViewport[2] / (float) m_currentViewport[3]);
 
 	Vector3 scale = getTransformedScale();
 	Vector3 iScale(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z);
@@ -142,17 +196,8 @@ void OCamera::enable(void)
 	if(! isOrtho())
 	{
 		// normal perspective projection
-		render->setPerspectiveView(m_fov, ratio, m_clippingNear, m_clippingFar);
-
-		// model view mode
-		render->setMatrixMode(MATRIX_MODELVIEW);
-		render->loadIdentity();
-
-		render->multMatrix(&inverseMatrix);
-
-		// get current matrices
-		render->getModelViewMatrix(&m_currentViewMatrix);
-		render->getProjectionMatrix(&m_currentProjMatrix);
+		m_currentProjMatrix = setPerspectiveView(m_fov, ratio, m_clippingNear, m_clippingFar);
+		m_currentViewMatrix = inverseMatrix;
 		return;
 	}
 
@@ -160,15 +205,6 @@ void OCamera::enable(void)
 	float height = m_fov * 0.5f;
 	float width = height * ratio;
 
-	render->setOrthoView(-width, width, -height, height, m_clippingNear, m_clippingFar);
-
-	// model view mode
-	render->setMatrixMode(MATRIX_MODELVIEW);
-	render->loadIdentity();
-	
-	render->multMatrix(&inverseMatrix);
-
-	// get current matrices
-	render->getModelViewMatrix(&m_currentViewMatrix);
-	render->getProjectionMatrix(&m_currentProjMatrix);
+	m_currentProjMatrix = setOrthoView(-width, width, -height, height, m_clippingNear, m_clippingFar);
+	m_currentViewMatrix = inverseMatrix;
 }

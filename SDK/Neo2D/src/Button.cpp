@@ -51,6 +51,7 @@ Button::Button(unsigned int x, unsigned int y, unsigned int width,
 
 void Button::draw()
 {
+	MLOG_INFO("DRAW");
 	Render* render = Render::getInstance();
 	Neo2DEngine* gui = Neo2DEngine::getInstance();
 

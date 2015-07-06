@@ -22,10 +22,10 @@
 #include <Window/Window.h>
 
 #ifndef USE_GLES
-#include <GLContext.h>
+#include <GL4Context.h>
 #else
 #include <ES2Context.h>
-typedef Neo::ES2Context GLContext;
+typedef Neo::ES2Context GL4Context;
 #endif
 
 #include <ALContext.h>
@@ -62,10 +62,9 @@ PlayerBackend::PlayerBackend(void):
 m_gamePlugin(NULL),
 m_renderer(NULL)
 {
-	// MEngine
 	{
 		m_soundContext = new ALContext();
-		m_render = new GLContext();
+		m_render = new GL4Context();
 		m_physics = new BulletContext();
 		m_script = new LuaScript();
 		m_input = new Input();
@@ -113,6 +112,8 @@ void PlayerBackend::changeRenderer(const char * name)
 	NeoEngine * engine = NeoEngine::getInstance();
 	RendererManager * rendererManager = engine->getRendererManager();
 	
+	if (engine->getRenderer() && strcmp(engine->getRenderer()->getName(), name) == 0) return;
+
 	RendererCreator * renderer = rendererManager->getRendererByName(name);
     if(renderer && strcmp(engine->getRenderer()->getName(), name) != 0)
     {
@@ -125,7 +126,6 @@ void PlayerBackend::changeRenderer(const char * name)
 
 void PlayerBackend::start(void)
 {
-	// MEngine
 	{
 		NeoEngine * engine = NeoEngine::getInstance();
 
@@ -166,6 +166,7 @@ void PlayerBackend::start(void)
 		// set default renderer (standard)
 		if(m_renderer == NULL)
 			m_renderer = new StandardRenderer();
+
 		engine->setRenderer(m_renderer);
 	}
 }

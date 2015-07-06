@@ -474,6 +474,12 @@ public:
 	virtual void disableBlending(void) = 0;
 	virtual void setBlendingMode(BLENDING_MODES mode) = 0;
 
+	virtual void createVAO(unsigned int* vaoId) {}
+	virtual void deleteVAO(unsigned int* vaoId) {}
+	virtual void bindVAO(unsigned int vaoId) {}
+
+	virtual void selectSubroutine(unsigned int fx, unsigned int type, const char* routine) {}
+
     // point size
     virtual void setPointSize(float size) = 0;
 };

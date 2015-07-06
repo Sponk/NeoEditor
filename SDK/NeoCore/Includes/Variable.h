@@ -30,7 +30,9 @@ enum VARIABLE_TYPE
 	/// A Neo::Quaternion object
 	VARIABLE_QUAT,
 	/// A TextureRef object
-	VARIABLE_TEXTURE_REF
+	VARIABLE_TEXTURE_REF,
+	/// Some other data
+	VARIABLE_OTHER
 };
 
 /**

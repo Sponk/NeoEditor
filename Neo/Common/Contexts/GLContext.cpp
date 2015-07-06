@@ -33,12 +33,12 @@
 #ifdef __APPLE__
 	#include <glew.h>
 	#include <OpenGL/OpenGL.h>
-    #include <OpenGL/gl.h>
+	#include <OpenGL/gl.h>
 #elif !defined(EMSCRIPTEN)
-    #include <glew.h>
+	#include <glew.h>
 #else
-    #include <GL/glew.h>
-    #include <GL/gl.h>
+	#include <GL/glew.h>
+	#include <GL/gl.h>
 #endif
 
 #include <NeoEngine.h>
@@ -110,8 +110,8 @@ GLenum returnPrimitiveType(PRIMITIVE_TYPES type)
 	case PRIMITIVE_TRIANGLE_FAN:
 		return GL_TRIANGLE_FAN;
 
-    case PRIMITIVE_POINTS:
-        return GL_POINTS;
+	case PRIMITIVE_POINTS:
+		return GL_POINTS;
 	}
 }
 
@@ -181,82 +181,82 @@ m_currentFrameBuffer(0)
 #define GL_DEBUG
 #ifdef GL_DEBUG
 void openglCallbackFunction(GLenum source, GLenum type, GLuint id, GLenum
-                            severity, GLsizei length, GLchar* message, void* userParam)
+							severity, GLsizei length, GLchar* message, void* userParam)
 {
 
-    MLOG_INFO("--------------------- BEGIN OPENGL DEBUG MESSAGE -------------------");
+	MLOG_INFO("--------------------- BEGIN OPENGL DEBUG MESSAGE -------------------");
 
-    int size = strlen(message);
-    if(size > 0 && message[size-1] == '\n')
-        message[size-1] = '\0';
+	int size = strlen(message);
+	if(size > 0 && message[size-1] == '\n')
+		message[size-1] = '\0';
 
-    stringstream ss;
+	stringstream ss;
 
-    ss << "\tType: ";
+	ss << "\tType: ";
 
-    switch (type)
-    {
-    case GL_DEBUG_TYPE_ERROR:
-        ss << "ERROR";
-        break;
-    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-        ss << "DEPRECATED_BEHAVIOR";
-        break;
-    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
-        ss << "UNDEFINED_BEHAVIOR";
-        break;
-    case GL_DEBUG_TYPE_PORTABILITY:
-        ss << "PORTABILITY";
-        break;
-    case GL_DEBUG_TYPE_PERFORMANCE:
-        ss << "PERFORMANCE";
-        break;
-    case GL_DEBUG_TYPE_OTHER:
-        ss << "OTHER";
-        break;
-    }
-    ss << endl;
+	switch (type)
+	{
+	case GL_DEBUG_TYPE_ERROR:
+		ss << "ERROR";
+		break;
+	case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+		ss << "DEPRECATED_BEHAVIOR";
+		break;
+	case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+		ss << "UNDEFINED_BEHAVIOR";
+		break;
+	case GL_DEBUG_TYPE_PORTABILITY:
+		ss << "PORTABILITY";
+		break;
+	case GL_DEBUG_TYPE_PERFORMANCE:
+		ss << "PERFORMANCE";
+		break;
+	case GL_DEBUG_TYPE_OTHER:
+		ss << "OTHER";
+		break;
+	}
+	ss << endl;
 
-    ss << "\tMessage: "<< message << endl;
+	ss << "\tMessage: "<< message << endl;
 
-    ss << "\tID: " << id << endl;
-    ss << "\tSeverity: ";
+	ss << "\tID: " << id << endl;
+	ss << "\tSeverity: ";
 
-    switch (severity)
-    {
-    case GL_DEBUG_SEVERITY_LOW:
-        ss << "LOW";
-        break;
-    case GL_DEBUG_SEVERITY_MEDIUM:
-        ss << "MEDIUM";
-        break;
-    case GL_DEBUG_SEVERITY_HIGH:
-        ss << "HIGH";
-        break;
-    }
-    ss << endl << endl;
+	switch (severity)
+	{
+	case GL_DEBUG_SEVERITY_LOW:
+		ss << "LOW";
+		break;
+	case GL_DEBUG_SEVERITY_MEDIUM:
+		ss << "MEDIUM";
+		break;
+	case GL_DEBUG_SEVERITY_HIGH:
+		ss << "HIGH";
+		break;
+	}
+	ss << endl << endl;
 
-    MLOG_INFO(ss.str());
-    MLOG_INFO("--------------------- END OPENGL DEBUG MESSAGE ---------------------");
+	MLOG_INFO(ss.str());
+	MLOG_INFO("--------------------- END OPENGL DEBUG MESSAGE ---------------------");
 }
 #endif
 
 void GLContext::init()
 {
-    GLenum err = glewInit();
-    if (GLEW_OK != err)
-    {
-        MLOG_ERROR("Can't initialize GLEW: " << glewGetErrorString(err));
-        return;
-    }
+	GLenum err = glewInit();
+	if (GLEW_OK != err)
+	{
+		MLOG_ERROR("Can't initialize GLEW: " << glewGetErrorString(err));
+		return;
+	}
 
 #ifdef GL_DEBUG
-    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-    glDebugMessageCallback((GLDEBUGPROC) openglCallbackFunction, NULL);
+	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+	glDebugMessageCallback((GLDEBUGPROC) openglCallbackFunction, NULL);
 
-    GLuint unusedIds = 0;
-    glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, &unusedIds,
-                            true);
+	GLuint unusedIds = 0;
+	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, &unusedIds,
+							true);
 #endif
 
 
@@ -264,7 +264,7 @@ void GLContext::init()
 	const char * version = (const char *)glGetString(GL_VERSION);
 	if(version)
 	{
-	    m_gl_version=version;
+		m_gl_version=version;
 		sscanf(version, "%d", &g_GLversion);
 	}
 
@@ -289,16 +289,16 @@ void GLContext::init()
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
 	// point
-    glPointSize(2.0);
-    glEnable(GL_POINT_SMOOTH);
-    glEnable(GL_POINT_SPRITE);
-    glEnable(GL_PROGRAM_POINT_SIZE_ARB);
+	glPointSize(2.0);
+	glEnable(GL_POINT_SMOOTH);
+	glEnable(GL_POINT_SPRITE);
+	glEnable(GL_PROGRAM_POINT_SIZE_ARB);
 
-    float coeffs[] = {2.0f, 1.0f, 0.1f};
-    glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, coeffs);
+	float coeffs[] = {2.0f, 1.0f, 0.1f};
+	glPointParameterfv(GL_POINT_DISTANCE_ATTENUATION, coeffs);
 
-    glPointParameterf (GL_POINT_SIZE_MAX, 100.0);
-    glPointParameterf (GL_POINT_SIZE_MIN, 0.1f);
+	glPointParameterf (GL_POINT_SIZE_MAX, 100.0);
+	glPointParameterf (GL_POINT_SIZE_MIN, 0.1f);
 
 	// stencil
 	glClearStencil(0);
@@ -307,7 +307,7 @@ void GLContext::init()
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
-    //glPointSize(50);
+	//glPointSize(50);
 
 	// anisotropic filtering
 	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
@@ -406,12 +406,12 @@ void GLContext::setClearColor(const Vector4 & color){
 // texture
 void GLContext::enableTexture(void)
 {
-	glEnable(GL_TEXTURE_2D);
+	//glEnable(GL_TEXTURE_2D);
 }
 
 void GLContext::disableTexture(void)
 {
-	glDisable(GL_TEXTURE_2D);
+	//glDisable(GL_TEXTURE_2D);
 }
 
 void GLContext::setTextureGenMode(TEX_GEN_MODES mode)
@@ -468,8 +468,8 @@ void GLContext::setTextureCombineMode(TEX_COMBINE_MODES combine)
 
 void GLContext::bindTexture(unsigned int textureId, unsigned int multitextureId)
 {
-	glActiveTexture(GL_TEXTURE0 + multitextureId);
-	glClientActiveTexture(GL_TEXTURE0 + multitextureId);
+	//glActiveTexture(GL_TEXTURE0 + multitextureId);
+	//glClientActiveTexture(GL_TEXTURE0 + multitextureId);
 	glBindTexture(GL_TEXTURE_2D, textureId);
 }
 
@@ -628,11 +628,11 @@ void CHECK_FRAMEBUFFER_STATUS()
 
 	switch(status){
 		case GL_FRAMEBUFFER_COMPLETE:
-            break;
-          case GL_FRAMEBUFFER_UNSUPPORTED:
+			break;
+		  case GL_FRAMEBUFFER_UNSUPPORTED:
 			fprintf(stderr, "couldn't find a supported config\n");
 			break;
-          default:
+		  default:
 			fprintf(stderr, "error");
 	}
 }
@@ -738,14 +738,14 @@ bool GLContext::sendShaderSource(unsigned int shaderId, const char * source)
 	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &compiled);
 	if(!compiled)
 	{
-        MLOG_ERROR("OpenGL : Unable to compile shader");
+		MLOG_ERROR("OpenGL : Unable to compile shader");
 		char shader_link_error[4096];
-        glGetInfoLogARB((GLhandleARB)shaderId, sizeof(shader_link_error), NULL, shader_link_error);
-        MLOG_ERROR(shader_link_error);
-        return false;
+		glGetInfoLogARB((GLhandleARB)shaderId, sizeof(shader_link_error), NULL, shader_link_error);
+		MLOG_ERROR(shader_link_error);
+		return false;
 	}
 
-    return true;
+	return true;
 }
 
 // FX
@@ -1331,7 +1331,7 @@ void GLContext::setBlendingMode(BLENDING_MODES mode)
 // point size
 void GLContext::setPointSize(float size)
 {
-    glPointSize(size);
+	glPointSize(size);
 }
 
 #endif

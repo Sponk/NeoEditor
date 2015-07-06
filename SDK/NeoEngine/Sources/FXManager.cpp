@@ -42,9 +42,13 @@ void FXManager::clear(void)
 	unsigned int i;
 	unsigned int size = m_FXRefs.size();
 	for(i=0; i<size; i++)
-		SAFE_DELETE(m_FXRefs[i]);
-
-	m_FXRefs.clear();
+	{
+		if(!m_FXRefs[i]->isImportant())
+		{
+			SAFE_DELETE(m_FXRefs[i]);
+			m_FXRefs.erase(m_FXRefs.begin() + i);
+		}
+	}
 }
 
 FXRef * FXManager::addFXRef(unsigned int FXId, ShaderRef * vertexShaderRef, ShaderRef * pixelShaderRef)

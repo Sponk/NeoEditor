@@ -95,7 +95,15 @@ protected:
 	/// List of behaviors
 	vector <Behavior *> m_behaviors;
 
+public:
+	// Definition of some additional data
+	class AdditionalData {};
+
 private:
+
+	/// Custom data attached to an object
+	AdditionalData* m_additionalData;
+
 	/**
 	 * @brief Removes the given child from the children list.
 	 */
@@ -106,6 +114,9 @@ protected:
 	void clearObject3d(void);
 
 public:
+
+	AdditionalData* getAdditionalData() { return m_additionalData; }
+	void setAdditionalData(AdditionalData* d) { m_additionalData = d; }
 
 	/**
 	 * @brief Recalculates the internal matrix relative to the parent object.
@@ -227,7 +238,7 @@ public:
 	 */
 	inline void translate(const Vector3& vec, bool local = false)
 	{
-		m_position += (local) ? (vec + getTransformedVector(vec)) : vec;
+		m_position += (local ? (vec + getTransformedVector(vec)) : vec);
 	}
 
 	/**

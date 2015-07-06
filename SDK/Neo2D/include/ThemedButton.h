@@ -71,6 +71,8 @@ class NEO2D_EXPORT ThemedButton : public Button
 	Sprite* m_hoveredSprites[NUM_SPRITES];
 	Sprite* m_pressedSprites[NUM_SPRITES];
 
+	float m_marginTop;
+	float m_marginSide;
     
 	void loadSprites(Sprite* sprites[], const char* vert,
 					 const char* hor, const char* body,
@@ -82,6 +84,7 @@ public:
 		   unsigned int height, const char* label);
 
 	void draw();
+	void update();
 };
 }
 }

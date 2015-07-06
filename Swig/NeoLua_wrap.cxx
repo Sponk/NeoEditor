@@ -2677,66 +2677,68 @@ SWIG_Lua_dostring(lua_State *L, const char *str) {
 #define SWIGTYPE_p_Neo__OSound swig_types[50]
 #define SWIGTYPE_p_Neo__OText swig_types[51]
 #define SWIGTYPE_p_Neo__Object3d swig_types[52]
-#define SWIGTYPE_p_Neo__PhysicsConstraint swig_types[53]
-#define SWIGTYPE_p_Neo__PhysicsContext swig_types[54]
-#define SWIGTYPE_p_Neo__PhysicsProperties swig_types[55]
-#define SWIGTYPE_p_Neo__Quaternion swig_types[56]
-#define SWIGTYPE_p_Neo__Range swig_types[57]
-#define SWIGTYPE_p_Neo__RenderingContext swig_types[58]
-#define SWIGTYPE_p_Neo__Scene swig_types[59]
-#define SWIGTYPE_p_Neo__ScriptContext swig_types[60]
-#define SWIGTYPE_p_Neo__ShaderRef swig_types[61]
-#define SWIGTYPE_p_Neo__Sound swig_types[62]
-#define SWIGTYPE_p_Neo__SoundContext swig_types[63]
-#define SWIGTYPE_p_Neo__SoundRef swig_types[64]
-#define SWIGTYPE_p_Neo__SubGame swig_types[65]
-#define SWIGTYPE_p_Neo__SubMesh swig_types[66]
-#define SWIGTYPE_p_Neo__SystemContext swig_types[67]
-#define SWIGTYPE_p_Neo__Texture swig_types[68]
-#define SWIGTYPE_p_Neo__TexturePass swig_types[69]
-#define SWIGTYPE_p_Neo__TextureRef swig_types[70]
-#define SWIGTYPE_p_Neo__TexturesAnimRef swig_types[71]
-#define SWIGTYPE_p_Neo__Vector2 swig_types[72]
-#define SWIGTYPE_p_Neo__Vector3 swig_types[73]
-#define SWIGTYPE_p_Neo__Vector4 swig_types[74]
-#define SWIGTYPE_p_PackageManager swig_types[75]
-#define SWIGTYPE_p_PostProcessor swig_types[76]
-#define SWIGTYPE_p_Renderer swig_types[77]
-#define SWIGTYPE_p_RendererManager swig_types[78]
-#define SWIGTYPE_p_SkinData swig_types[79]
-#define SWIGTYPE_p_Skybox swig_types[80]
-#define SWIGTYPE_p_String swig_types[81]
-#define SWIGTYPE_p_Texture swig_types[82]
-#define SWIGTYPE_p_TexturesAnim swig_types[83]
-#define SWIGTYPE_p_Vector3p swig_types[84]
-#define SWIGTYPE_p___int64 swig_types[85]
-#define SWIGTYPE_p_char swig_types[86]
-#define SWIGTYPE_p_double swig_types[87]
-#define SWIGTYPE_p_doublep swig_types[88]
-#define SWIGTYPE_p_f_p_q_const__char_p_void__bool swig_types[89]
-#define SWIGTYPE_p_f_void__int swig_types[90]
-#define SWIGTYPE_p_f_void__intp swig_types[91]
-#define SWIGTYPE_p_float swig_types[92]
-#define SWIGTYPE_p_floatp swig_types[93]
-#define SWIGTYPE_p_int swig_types[94]
-#define SWIGTYPE_p_intp swig_types[95]
-#define SWIGTYPE_p_long swig_types[96]
-#define SWIGTYPE_p_mapT_unsigned_int_unsigned_int_t swig_types[97]
-#define SWIGTYPE_p_p_char swig_types[98]
-#define SWIGTYPE_p_p_unsigned_long swig_types[99]
-#define SWIGTYPE_p_short swig_types[100]
-#define SWIGTYPE_p_signed___int64 swig_types[101]
-#define SWIGTYPE_p_signed_char swig_types[102]
-#define SWIGTYPE_p_uintp swig_types[103]
-#define SWIGTYPE_p_unsigned___int64 swig_types[104]
-#define SWIGTYPE_p_unsigned_char swig_types[105]
-#define SWIGTYPE_p_unsigned_int swig_types[106]
-#define SWIGTYPE_p_unsigned_long swig_types[107]
-#define SWIGTYPE_p_unsigned_short swig_types[108]
-#define SWIGTYPE_p_vectorT_float_t swig_types[109]
-#define SWIGTYPE_p_void swig_types[110]
-static swig_type_info *swig_types[112];
-static swig_module_info swig_module = {swig_types, 111, 0, 0, 0, 0};
+#define SWIGTYPE_p_Neo__Object3d__AdditionalData swig_types[53]
+#define SWIGTYPE_p_Neo__PhysicsConstraint swig_types[54]
+#define SWIGTYPE_p_Neo__PhysicsContext swig_types[55]
+#define SWIGTYPE_p_Neo__PhysicsProperties swig_types[56]
+#define SWIGTYPE_p_Neo__Quaternion swig_types[57]
+#define SWIGTYPE_p_Neo__Range swig_types[58]
+#define SWIGTYPE_p_Neo__RenderingContext swig_types[59]
+#define SWIGTYPE_p_Neo__Scene swig_types[60]
+#define SWIGTYPE_p_Neo__Scene__AdditionalData swig_types[61]
+#define SWIGTYPE_p_Neo__ScriptContext swig_types[62]
+#define SWIGTYPE_p_Neo__ShaderRef swig_types[63]
+#define SWIGTYPE_p_Neo__Sound swig_types[64]
+#define SWIGTYPE_p_Neo__SoundContext swig_types[65]
+#define SWIGTYPE_p_Neo__SoundRef swig_types[66]
+#define SWIGTYPE_p_Neo__SubGame swig_types[67]
+#define SWIGTYPE_p_Neo__SubMesh swig_types[68]
+#define SWIGTYPE_p_Neo__SystemContext swig_types[69]
+#define SWIGTYPE_p_Neo__Texture swig_types[70]
+#define SWIGTYPE_p_Neo__TexturePass swig_types[71]
+#define SWIGTYPE_p_Neo__TextureRef swig_types[72]
+#define SWIGTYPE_p_Neo__TexturesAnimRef swig_types[73]
+#define SWIGTYPE_p_Neo__Vector2 swig_types[74]
+#define SWIGTYPE_p_Neo__Vector3 swig_types[75]
+#define SWIGTYPE_p_Neo__Vector4 swig_types[76]
+#define SWIGTYPE_p_PackageManager swig_types[77]
+#define SWIGTYPE_p_PostProcessor swig_types[78]
+#define SWIGTYPE_p_Renderer swig_types[79]
+#define SWIGTYPE_p_RendererManager swig_types[80]
+#define SWIGTYPE_p_SkinData swig_types[81]
+#define SWIGTYPE_p_Skybox swig_types[82]
+#define SWIGTYPE_p_String swig_types[83]
+#define SWIGTYPE_p_Texture swig_types[84]
+#define SWIGTYPE_p_TexturesAnim swig_types[85]
+#define SWIGTYPE_p_Vector3p swig_types[86]
+#define SWIGTYPE_p___int64 swig_types[87]
+#define SWIGTYPE_p_char swig_types[88]
+#define SWIGTYPE_p_double swig_types[89]
+#define SWIGTYPE_p_doublep swig_types[90]
+#define SWIGTYPE_p_f_p_q_const__char_p_void__bool swig_types[91]
+#define SWIGTYPE_p_f_void__int swig_types[92]
+#define SWIGTYPE_p_f_void__intp swig_types[93]
+#define SWIGTYPE_p_float swig_types[94]
+#define SWIGTYPE_p_floatp swig_types[95]
+#define SWIGTYPE_p_int swig_types[96]
+#define SWIGTYPE_p_intp swig_types[97]
+#define SWIGTYPE_p_long swig_types[98]
+#define SWIGTYPE_p_mapT_unsigned_int_unsigned_int_t swig_types[99]
+#define SWIGTYPE_p_p_char swig_types[100]
+#define SWIGTYPE_p_p_unsigned_long swig_types[101]
+#define SWIGTYPE_p_short swig_types[102]
+#define SWIGTYPE_p_signed___int64 swig_types[103]
+#define SWIGTYPE_p_signed_char swig_types[104]
+#define SWIGTYPE_p_uintp swig_types[105]
+#define SWIGTYPE_p_unsigned___int64 swig_types[106]
+#define SWIGTYPE_p_unsigned_char swig_types[107]
+#define SWIGTYPE_p_unsigned_int swig_types[108]
+#define SWIGTYPE_p_unsigned_long swig_types[109]
+#define SWIGTYPE_p_unsigned_short swig_types[110]
+#define SWIGTYPE_p_vectorT_float_t swig_types[111]
+#define SWIGTYPE_p_void swig_types[112]
+static swig_type_info *swig_types[114];
+static swig_module_info swig_module = {swig_types, 113, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -13429,17 +13431,18 @@ fail:
 static int _wrap_InputContext_setLastChar(lua_State* L) {
   int SWIG_arg = 0;
   Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
-  char arg2 ;
+  unsigned int arg2 ;
   
   SWIG_check_num_args("Neo::InputContext::setLastChar",2,2)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::setLastChar",1,"Neo::InputContext *");
-  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::InputContext::setLastChar",2,"char");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::InputContext::setLastChar",2,"unsigned int");
   
   if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__InputContext,0))){
     SWIG_fail_ptr("InputContext_setLastChar",1,SWIGTYPE_p_Neo__InputContext);
   }
   
-  arg2 = (lua_tostring(L, 2))[0];
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
   (arg1)->setLastChar(arg2);
   
   return SWIG_arg;
@@ -13455,7 +13458,7 @@ fail:
 static int _wrap_InputContext_popLastChar(lua_State* L) {
   int SWIG_arg = 0;
   Neo::InputContext *arg1 = (Neo::InputContext *) 0 ;
-  char result;
+  unsigned int result;
   
   SWIG_check_num_args("Neo::InputContext::popLastChar",1,1)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::InputContext::popLastChar",1,"Neo::InputContext *");
@@ -13464,8 +13467,8 @@ static int _wrap_InputContext_popLastChar(lua_State* L) {
     SWIG_fail_ptr("InputContext_popLastChar",1,SWIGTYPE_p_Neo__InputContext);
   }
   
-  result = (char)(arg1)->popLastChar();
-  lua_pushfstring(L,"%c",result); SWIG_arg++;
+  result = (unsigned int)(arg1)->popLastChar();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -18982,6 +18985,127 @@ fail:
 }
 
 
+static int _wrap_RenderingContext_createVAO(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::RenderingContext *arg1 = (Neo::RenderingContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  
+  SWIG_check_num_args("Neo::RenderingContext::createVAO",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::RenderingContext::createVAO",1,"Neo::RenderingContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::RenderingContext::createVAO",2,"unsigned int *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__RenderingContext,0))){
+    SWIG_fail_ptr("RenderingContext_createVAO",1,SWIGTYPE_p_Neo__RenderingContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("RenderingContext_createVAO",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  (arg1)->createVAO(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_RenderingContext_deleteVAO(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::RenderingContext *arg1 = (Neo::RenderingContext *) 0 ;
+  unsigned int *arg2 = (unsigned int *) 0 ;
+  
+  SWIG_check_num_args("Neo::RenderingContext::deleteVAO",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::RenderingContext::deleteVAO",1,"Neo::RenderingContext *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::RenderingContext::deleteVAO",2,"unsigned int *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__RenderingContext,0))){
+    SWIG_fail_ptr("RenderingContext_deleteVAO",1,SWIGTYPE_p_Neo__RenderingContext);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_unsigned_int,0))){
+    SWIG_fail_ptr("RenderingContext_deleteVAO",2,SWIGTYPE_p_unsigned_int);
+  }
+  
+  (arg1)->deleteVAO(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_RenderingContext_bindVAO(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::RenderingContext *arg1 = (Neo::RenderingContext *) 0 ;
+  unsigned int arg2 ;
+  
+  SWIG_check_num_args("Neo::RenderingContext::bindVAO",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::RenderingContext::bindVAO",1,"Neo::RenderingContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::RenderingContext::bindVAO",2,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__RenderingContext,0))){
+    SWIG_fail_ptr("RenderingContext_bindVAO",1,SWIGTYPE_p_Neo__RenderingContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  (arg1)->bindVAO(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_RenderingContext_selectSubroutine(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::RenderingContext *arg1 = (Neo::RenderingContext *) 0 ;
+  unsigned int arg2 ;
+  unsigned int arg3 ;
+  char *arg4 = (char *) 0 ;
+  
+  SWIG_check_num_args("Neo::RenderingContext::selectSubroutine",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::RenderingContext::selectSubroutine",1,"Neo::RenderingContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::RenderingContext::selectSubroutine",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::RenderingContext::selectSubroutine",3,"unsigned int");
+  if(!SWIG_lua_isnilstring(L,4)) SWIG_fail_arg("Neo::RenderingContext::selectSubroutine",4,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__RenderingContext,0))){
+    SWIG_fail_ptr("RenderingContext_selectSubroutine",1,SWIGTYPE_p_Neo__RenderingContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  arg4 = (char *)lua_tostring(L, 4);
+  (arg1)->selectSubroutine(arg2,arg3,(char const *)arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_RenderingContext_setPointSize(lua_State* L) {
   int SWIG_arg = 0;
   Neo::RenderingContext *arg1 = (Neo::RenderingContext *) 0 ;
@@ -19160,6 +19284,10 @@ static swig_lua_method swig_RenderingContext_methods[]= {
     { "enableBlending", _wrap_RenderingContext_enableBlending},
     { "disableBlending", _wrap_RenderingContext_disableBlending},
     { "setBlendingMode", _wrap_RenderingContext_setBlendingMode},
+    { "createVAO", _wrap_RenderingContext_createVAO},
+    { "deleteVAO", _wrap_RenderingContext_deleteVAO},
+    { "bindVAO", _wrap_RenderingContext_bindVAO},
+    { "selectSubroutine", _wrap_RenderingContext_selectSubroutine},
     { "setPointSize", _wrap_RenderingContext_setPointSize},
     {0,0}
 };
@@ -26662,6 +26790,60 @@ static int _wrap_new_Object3d(lua_State* L) {
 }
 
 
+static int _wrap_Object3d_getAdditionalData(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Object3d *arg1 = (Neo::Object3d *) 0 ;
+  Neo::Object3d::AdditionalData *result = 0 ;
+  
+  SWIG_check_num_args("Neo::Object3d::getAdditionalData",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Object3d::getAdditionalData",1,"Neo::Object3d *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Object3d,0))){
+    SWIG_fail_ptr("Object3d_getAdditionalData",1,SWIGTYPE_p_Neo__Object3d);
+  }
+  
+  result = (Neo::Object3d::AdditionalData *)(arg1)->getAdditionalData();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Object3d__AdditionalData,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Object3d_setAdditionalData(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Object3d *arg1 = (Neo::Object3d *) 0 ;
+  Neo::Object3d::AdditionalData *arg2 = (Neo::Object3d::AdditionalData *) 0 ;
+  
+  SWIG_check_num_args("Neo::Object3d::setAdditionalData",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Object3d::setAdditionalData",1,"Neo::Object3d *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::Object3d::setAdditionalData",2,"Neo::Object3d::AdditionalData *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Object3d,0))){
+    SWIG_fail_ptr("Object3d_setAdditionalData",1,SWIGTYPE_p_Neo__Object3d);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Object3d__AdditionalData,0))){
+    SWIG_fail_ptr("Object3d_setAdditionalData",2,SWIGTYPE_p_Neo__Object3d__AdditionalData);
+  }
+  
+  (arg1)->setAdditionalData(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_Object3d_updateMatrix(lua_State* L) {
   int SWIG_arg = 0;
   Neo::Object3d *arg1 = (Neo::Object3d *) 0 ;
@@ -28419,6 +28601,8 @@ static swig_lua_attribute swig_Object3d_attributes[] = {
     {0,0,0}
 };
 static swig_lua_method swig_Object3d_methods[]= {
+    { "getAdditionalData", _wrap_Object3d_getAdditionalData},
+    { "setAdditionalData", _wrap_Object3d_setAdditionalData},
     { "updateMatrix", _wrap_Object3d_updateMatrix},
     { "computeLocalMatrix", _wrap_Object3d_computeLocalMatrix},
     { "getMatrix", _wrap_Object3d_getMatrix},
@@ -28512,6 +28696,60 @@ static int _wrap_new_Scene(lua_State* L) {
   SWIG_check_num_args("Neo::Scene::Scene",0,0)
   result = (Neo::Scene *)new Neo::Scene();
   SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Scene,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Scene_getAdditionalData(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Scene *arg1 = (Neo::Scene *) 0 ;
+  Neo::Scene::AdditionalData *result = 0 ;
+  
+  SWIG_check_num_args("Neo::Scene::getAdditionalData",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Scene::getAdditionalData",1,"Neo::Scene *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Scene,0))){
+    SWIG_fail_ptr("Scene_getAdditionalData",1,SWIGTYPE_p_Neo__Scene);
+  }
+  
+  result = (Neo::Scene::AdditionalData *)(arg1)->getAdditionalData();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Scene__AdditionalData,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Scene_setAdditionalData(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Scene *arg1 = (Neo::Scene *) 0 ;
+  Neo::Scene::AdditionalData *arg2 = (Neo::Scene::AdditionalData *) 0 ;
+  
+  SWIG_check_num_args("Neo::Scene::setAdditionalData",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Scene::setAdditionalData",1,"Neo::Scene *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::Scene::setAdditionalData",2,"Neo::Scene::AdditionalData *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Scene,0))){
+    SWIG_fail_ptr("Scene_setAdditionalData",1,SWIGTYPE_p_Neo__Scene);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Scene__AdditionalData,0))){
+    SWIG_fail_ptr("Scene_setAdditionalData",2,SWIGTYPE_p_Neo__Scene__AdditionalData);
+  }
+  
+  (arg1)->setAdditionalData(arg2);
+  
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -30550,6 +30788,8 @@ static swig_lua_attribute swig_Scene_attributes[] = {
     {0,0,0}
 };
 static swig_lua_method swig_Scene_methods[]= {
+    { "getAdditionalData", _wrap_Scene_getAdditionalData},
+    { "setAdditionalData", _wrap_Scene_setAdditionalData},
     { "setName", _wrap_Scene_setName},
     { "getName", _wrap_Scene_getName},
     { "getAmbientLight", _wrap_Scene_getAmbientLight},
@@ -33746,6 +33986,30 @@ fail:
 }
 
 
+static int _wrap_MaterialDisplay_getVAO(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::MaterialDisplay *arg1 = (Neo::MaterialDisplay *) 0 ;
+  unsigned int *result = 0 ;
+  
+  SWIG_check_num_args("Neo::MaterialDisplay::getVAO",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::MaterialDisplay::getVAO",1,"Neo::MaterialDisplay *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__MaterialDisplay,0))){
+    SWIG_fail_ptr("MaterialDisplay_getVAO",1,SWIGTYPE_p_Neo__MaterialDisplay);
+  }
+  
+  result = (unsigned int *)(arg1)->getVAO();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_unsigned_int,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_MaterialDisplay(void *obj) {
 Neo::MaterialDisplay *arg1 = (Neo::MaterialDisplay *) obj;
 delete arg1;
@@ -33771,6 +34035,7 @@ static swig_lua_method swig_MaterialDisplay_methods[]= {
     { "getMaterial", _wrap_MaterialDisplay_getMaterial},
     { "setVisibility", _wrap_MaterialDisplay_setVisibility},
     { "isVisible", _wrap_MaterialDisplay_isVisible},
+    { "getVAO", _wrap_MaterialDisplay_getVAO},
     {0,0}
 };
 static swig_lua_method swig_MaterialDisplay_meta[] = {
@@ -34582,6 +34847,78 @@ fail:
 }
 
 
+static int _wrap_SubMesh_getSkinVertices(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::SubMesh *arg1 = (Neo::SubMesh *) 0 ;
+  Neo::Vector3 *result = 0 ;
+  
+  SWIG_check_num_args("Neo::SubMesh::getSkinVertices",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::SubMesh::getSkinVertices",1,"Neo::SubMesh *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__SubMesh,0))){
+    SWIG_fail_ptr("SubMesh_getSkinVertices",1,SWIGTYPE_p_Neo__SubMesh);
+  }
+  
+  result = (Neo::Vector3 *)(arg1)->getSkinVertices();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Vector3,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_SubMesh_getSkinNormals(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::SubMesh *arg1 = (Neo::SubMesh *) 0 ;
+  Neo::Vector3 *result = 0 ;
+  
+  SWIG_check_num_args("Neo::SubMesh::getSkinNormals",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::SubMesh::getSkinNormals",1,"Neo::SubMesh *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__SubMesh,0))){
+    SWIG_fail_ptr("SubMesh_getSkinNormals",1,SWIGTYPE_p_Neo__SubMesh);
+  }
+  
+  result = (Neo::Vector3 *)(arg1)->getSkinNormals();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Vector3,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_SubMesh_getSkinTangents(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::SubMesh *arg1 = (Neo::SubMesh *) 0 ;
+  Neo::Vector3 *result = 0 ;
+  
+  SWIG_check_num_args("Neo::SubMesh::getSkinTangents",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::SubMesh::getSkinTangents",1,"Neo::SubMesh *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__SubMesh,0))){
+    SWIG_fail_ptr("SubMesh_getSkinTangents",1,SWIGTYPE_p_Neo__SubMesh);
+  }
+  
+  result = (Neo::Vector3 *)(arg1)->getSkinTangents();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Vector3,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_SubMesh_clearVBO(lua_State* L) {
   int SWIG_arg = 0;
   Neo::SubMesh *arg1 = (Neo::SubMesh *) 0 ;
@@ -35019,6 +35356,9 @@ static swig_lua_method swig_SubMesh_methods[]= {
     { "getNormals", _wrap_SubMesh_getNormals},
     { "getTangents", _wrap_SubMesh_getTangents},
     { "getTexCoords", _wrap_SubMesh_getTexCoords},
+    { "getSkinVertices", _wrap_SubMesh_getSkinVertices},
+    { "getSkinNormals", _wrap_SubMesh_getSkinNormals},
+    { "getSkinTangents", _wrap_SubMesh_getSkinTangents},
     { "clearVBO", _wrap_SubMesh_clearVBO},
     { "getVBOid1", _wrap_SubMesh_getVBOid1},
     { "getVBOid2", _wrap_SubMesh_getVBOid2},
@@ -41479,6 +41819,90 @@ fail:
 }
 
 
+static int _wrap_OCamera_setPerspectiveView(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::OCamera *arg1 = (Neo::OCamera *) 0 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  float arg5 ;
+  Neo::Matrix4x4 result;
+  
+  SWIG_check_num_args("Neo::OCamera::setPerspectiveView",5,5)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::OCamera::setPerspectiveView",1,"Neo::OCamera *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::OCamera::setPerspectiveView",2,"float");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::OCamera::setPerspectiveView",3,"float");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::OCamera::setPerspectiveView",4,"float");
+  if(!lua_isnumber(L,5)) SWIG_fail_arg("Neo::OCamera::setPerspectiveView",5,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__OCamera,0))){
+    SWIG_fail_ptr("OCamera_setPerspectiveView",1,SWIGTYPE_p_Neo__OCamera);
+  }
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  arg4 = (float)lua_tonumber(L, 4);
+  arg5 = (float)lua_tonumber(L, 5);
+  result = (arg1)->setPerspectiveView(arg2,arg3,arg4,arg5);
+  {
+    Neo::Matrix4x4 * resultptr = new Neo::Matrix4x4((const Neo::Matrix4x4 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Matrix4x4,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_OCamera_setOrthoView(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::OCamera *arg1 = (Neo::OCamera *) 0 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  float arg5 ;
+  float arg6 ;
+  float arg7 ;
+  Neo::Matrix4x4 result;
+  
+  SWIG_check_num_args("Neo::OCamera::setOrthoView",7,7)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::OCamera::setOrthoView",1,"Neo::OCamera *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::OCamera::setOrthoView",2,"float");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::OCamera::setOrthoView",3,"float");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo::OCamera::setOrthoView",4,"float");
+  if(!lua_isnumber(L,5)) SWIG_fail_arg("Neo::OCamera::setOrthoView",5,"float");
+  if(!lua_isnumber(L,6)) SWIG_fail_arg("Neo::OCamera::setOrthoView",6,"float");
+  if(!lua_isnumber(L,7)) SWIG_fail_arg("Neo::OCamera::setOrthoView",7,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__OCamera,0))){
+    SWIG_fail_ptr("OCamera_setOrthoView",1,SWIGTYPE_p_Neo__OCamera);
+  }
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  arg4 = (float)lua_tonumber(L, 4);
+  arg5 = (float)lua_tonumber(L, 5);
+  arg6 = (float)lua_tonumber(L, 6);
+  arg7 = (float)lua_tonumber(L, 7);
+  result = (arg1)->setOrthoView(arg2,arg3,arg4,arg5,arg6,arg7);
+  {
+    Neo::Matrix4x4 * resultptr = new Neo::Matrix4x4((const Neo::Matrix4x4 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Matrix4x4,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_OCamera(void *obj) {
 Neo::OCamera *arg1 = (Neo::OCamera *) obj;
 delete arg1;
@@ -41529,6 +41953,8 @@ static swig_lua_method swig_OCamera_methods[]= {
     { "getSkybox", _wrap_OCamera_getSkybox},
     { "updateListener", _wrap_OCamera_updateListener},
     { "enable", _wrap_OCamera_enable},
+    { "setPerspectiveView", _wrap_OCamera_setPerspectiveView},
+    { "setOrthoView", _wrap_OCamera_setOrthoView},
     {0,0}
 };
 static swig_lua_method swig_OCamera_meta[] = {
@@ -46552,6 +46978,30 @@ fail:
 }
 
 
+static int _wrap_InputField_getStaticName(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::InputField::getStaticName",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::getStaticName",1,"Neo2D::Gui::InputField *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
+    SWIG_fail_ptr("InputField_getStaticName",1,SWIGTYPE_p_Neo2D__Gui__InputField);
+  }
+  
+  result = (char *)(arg1)->getStaticName();
+  lua_pushstring(L,(const char *)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_InputField(void *obj) {
 Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) obj;
 delete arg1;
@@ -46571,6 +47021,7 @@ static swig_lua_method swig_InputField_methods[]= {
     { "draw", _wrap_InputField_draw},
     { "update", _wrap_InputField_update},
     { "setState", _wrap_InputField_setState},
+    { "getStaticName", _wrap_InputField_getStaticName},
     {0,0}
 };
 static swig_lua_method swig_InputField_meta[] = {
@@ -46661,6 +47112,29 @@ fail:
 }
 
 
+static int _wrap_ThemedButton_update(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::ThemedButton *arg1 = (Neo2D::Gui::ThemedButton *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::ThemedButton::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::update",1,"Neo2D::Gui::ThemedButton *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ThemedButton,0))){
+    SWIG_fail_ptr("ThemedButton_update",1,SWIGTYPE_p_Neo2D__Gui__ThemedButton);
+  }
+  
+  (arg1)->update();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_ThemedButton(void *obj) {
 Neo2D::Gui::ThemedButton *arg1 = (Neo2D::Gui::ThemedButton *) obj;
 delete arg1;
@@ -46678,6 +47152,7 @@ static swig_lua_attribute swig_ThemedButton_attributes[] = {
 };
 static swig_lua_method swig_ThemedButton_methods[]= {
     { "draw", _wrap_ThemedButton_draw},
+    { "update", _wrap_ThemedButton_update},
     {0,0}
 };
 static swig_lua_method swig_ThemedButton_meta[] = {
@@ -48254,6 +48729,7 @@ static swig_type_info _swigt__p_Neo__OLight = {"_p_Neo__OLight", "Neo::OLight *"
 static swig_type_info _swigt__p_Neo__OSound = {"_p_Neo__OSound", "Neo::OSound *", 0, 0, (void*)&_wrap_class_OSound, 0};
 static swig_type_info _swigt__p_Neo__OText = {"_p_Neo__OText", "Neo::OText *", 0, 0, (void*)&_wrap_class_OText, 0};
 static swig_type_info _swigt__p_Neo__Object3d = {"_p_Neo__Object3d", "Neo::Object3d *", 0, 0, (void*)&_wrap_class_Object3d, 0};
+static swig_type_info _swigt__p_Neo__Object3d__AdditionalData = {"_p_Neo__Object3d__AdditionalData", "Neo::Object3d::AdditionalData *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Neo__PhysicsConstraint = {"_p_Neo__PhysicsConstraint", "Neo::PhysicsConstraint *", 0, 0, (void*)&_wrap_class_PhysicsConstraint, 0};
 static swig_type_info _swigt__p_Neo__PhysicsContext = {"_p_Neo__PhysicsContext", "Neo::PhysicsContext *", 0, 0, (void*)&_wrap_class_PhysicsContext, 0};
 static swig_type_info _swigt__p_Neo__PhysicsProperties = {"_p_Neo__PhysicsProperties", "Neo::PhysicsProperties *", 0, 0, (void*)&_wrap_class_PhysicsProperties, 0};
@@ -48261,6 +48737,7 @@ static swig_type_info _swigt__p_Neo__Quaternion = {"_p_Neo__Quaternion", "Neo::Q
 static swig_type_info _swigt__p_Neo__Range = {"_p_Neo__Range", "Neo::Range *", 0, 0, (void*)&_wrap_class_Range, 0};
 static swig_type_info _swigt__p_Neo__RenderingContext = {"_p_Neo__RenderingContext", "Neo::RenderingContext *", 0, 0, (void*)&_wrap_class_RenderingContext, 0};
 static swig_type_info _swigt__p_Neo__Scene = {"_p_Neo__Scene", "Neo::Scene *", 0, 0, (void*)&_wrap_class_Scene, 0};
+static swig_type_info _swigt__p_Neo__Scene__AdditionalData = {"_p_Neo__Scene__AdditionalData", "Neo::Scene::AdditionalData *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Neo__ScriptContext = {"_p_Neo__ScriptContext", "Neo::ScriptContext *", 0, 0, (void*)&_wrap_class_ScriptContext, 0};
 static swig_type_info _swigt__p_Neo__ShaderRef = {"_p_Neo__ShaderRef", "Neo::ShaderRef *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Neo__Sound = {"_p_Neo__Sound", "Neo::Sound *", 0, 0, (void*)&_wrap_class_Sound, 0};
@@ -48367,6 +48844,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Neo__OSound,
   &_swigt__p_Neo__OText,
   &_swigt__p_Neo__Object3d,
+  &_swigt__p_Neo__Object3d__AdditionalData,
   &_swigt__p_Neo__PhysicsConstraint,
   &_swigt__p_Neo__PhysicsContext,
   &_swigt__p_Neo__PhysicsProperties,
@@ -48374,6 +48852,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Neo__Range,
   &_swigt__p_Neo__RenderingContext,
   &_swigt__p_Neo__Scene,
+  &_swigt__p_Neo__Scene__AdditionalData,
   &_swigt__p_Neo__ScriptContext,
   &_swigt__p_Neo__ShaderRef,
   &_swigt__p_Neo__Sound,
@@ -48480,6 +48959,7 @@ static swig_cast_info _swigc__p_Neo__OLight[] = {  {&_swigt__p_Neo__OLight, 0, 0
 static swig_cast_info _swigc__p_Neo__OSound[] = {  {&_swigt__p_Neo__OSound, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__OText[] = {  {&_swigt__p_Neo__OText, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Object3d[] = {  {&_swigt__p_Neo__OLight, _p_Neo__OLightTo_p_Neo__Object3d, 0, 0},  {&_swigt__p_Neo__OSound, _p_Neo__OSoundTo_p_Neo__Object3d, 0, 0},  {&_swigt__p_Neo__Object3d, 0, 0, 0},  {&_swigt__p_Neo__OEntity, _p_Neo__OEntityTo_p_Neo__Object3d, 0, 0},  {&_swigt__p_Neo__OText, _p_Neo__OTextTo_p_Neo__Object3d, 0, 0},  {&_swigt__p_Neo__OCamera, _p_Neo__OCameraTo_p_Neo__Object3d, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo__Object3d__AdditionalData[] = {  {&_swigt__p_Neo__Object3d__AdditionalData, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__PhysicsConstraint[] = {  {&_swigt__p_Neo__PhysicsConstraint, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__PhysicsContext[] = {  {&_swigt__p_Neo__PhysicsContext, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__PhysicsProperties[] = {  {&_swigt__p_Neo__PhysicsProperties, 0, 0, 0},{0, 0, 0, 0}};
@@ -48487,6 +48967,7 @@ static swig_cast_info _swigc__p_Neo__Quaternion[] = {  {&_swigt__p_Neo__Quaterni
 static swig_cast_info _swigc__p_Neo__Range[] = {  {&_swigt__p_Neo__Range, 0, 0, 0},  {&_swigt__p_Neo__AnimRange, _p_Neo__AnimRangeTo_p_Neo__Range, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__RenderingContext[] = {  {&_swigt__p_Neo__RenderingContext, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Scene[] = {  {&_swigt__p_Neo__Scene, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo__Scene__AdditionalData[] = {  {&_swigt__p_Neo__Scene__AdditionalData, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__ScriptContext[] = {  {&_swigt__p_Neo__ScriptContext, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__ShaderRef[] = {  {&_swigt__p_Neo__ShaderRef, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Sound[] = {  {&_swigt__p_Neo__Sound, 0, 0, 0},{0, 0, 0, 0}};
@@ -48593,6 +49074,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Neo__OSound,
   _swigc__p_Neo__OText,
   _swigc__p_Neo__Object3d,
+  _swigc__p_Neo__Object3d__AdditionalData,
   _swigc__p_Neo__PhysicsConstraint,
   _swigc__p_Neo__PhysicsContext,
   _swigc__p_Neo__PhysicsProperties,
@@ -48600,6 +49082,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Neo__Range,
   _swigc__p_Neo__RenderingContext,
   _swigc__p_Neo__Scene,
+  _swigc__p_Neo__Scene__AdditionalData,
   _swigc__p_Neo__ScriptContext,
   _swigc__p_Neo__ShaderRef,
   _swigc__p_Neo__Sound,

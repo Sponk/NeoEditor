@@ -45,5 +45,11 @@ INCLUDE_DIRECTORIES(
 ADD_LIBRARY(NeoCommon STATIC ${SOURCES} ${MAC_SOURCES} ${HEADERS})
 
 # Needed for windows
-TARGET_LINK_LIBRARIES(NeoCommon ${MCORE_LIBRARIES} ${MENGINE_LIBRARIES} ${SDL_LIBRARIES})
+TARGET_LINK_LIBRARIES(NeoCommon ${NEO_CORE_LIBRARIES} ${NEO_ENGINE_LIBRARIES} ${SDL_LIBRARIES})
 
+INCLUDE(CopyFiles)
+ADD_DEFINITIONS(-DSHADER_PATH="assets/shaders/Renderers" -DGL_DEBUG)
+
+# Copy shaders
+copy_files("Renderers/*.vert" "${NEO_BINARY_OUTPUT}/assets/shaders" "copy-vert-shaders")
+copy_files("Renderers/*.frag" "${NEO_BINARY_OUTPUT}/assets/shaders" "copy-frag-shaders")

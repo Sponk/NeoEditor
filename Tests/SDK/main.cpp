@@ -58,43 +58,6 @@ TEST_F(TestNeoSDK, Vector3_test)
 	EXPECT_EQ(testvec, Vector3(2.0,2.0,2.0));
 }
 
-TEST_F(TestNeoSDK, LuaBehavior_test)
-{
-	NeoEngine* engine = NeoEngine::getInstance();
-
-	Object3d* object = engine->getLevel()->getCurrentScene()->addNewLight();
-	Neo::LuaBehavior* b = (Neo::LuaBehavior*) engine->getBehaviorManager()->getBehaviorByName("LuaScript")->getNewBehavior(object);
-	NeoVariable var = b->getVariable(0);
-
-	EXPECT_EQ(var.getType(), M_VARIABLE_STRING);
-
-	((String*) var.getPointer())->set("test.lua");
-	int num = b->getVariablesNumber();
-
-	ASSERT_EQ(num, 3);
-
-	var = b->getVariable(0);
-	ASSERT_EQ(var.getType(), M_VARIABLE_STRING);
-
-	var = b->getVariable(2);
-	ASSERT_EQ(M_VARIABLE_FLOAT, var.getType());
-
-	ASSERT_FLOAT_EQ(123.123, *((float*)var.getPointer()));
-}
-
-TEST_F(TestNeoSDK, LuaBehaviorNonExistantScript_test)
-{
-	NeoEngine* engine = NeoEngine::getInstance();
-
-	Object3d* object = engine->getLevel()->getCurrentScene()->addNewLight();
-	Neo::LuaBehavior* b = (Neo::LuaBehavior*) engine->getBehaviorManager()->getBehaviorByName("LuaScript")->getNewBehavior(object);
-	NeoVariable var = b->getVariable(0);
-	ASSERT_EQ(M_VARIABLE_STRING, var.getType());
-
-	((String*) var.getPointer())->set("does-not-exist.lua");
-	b->update();
-}
-
 #define CANVAS_TEST_SIZE 4
 TEST_F(TestNeoSDK, Neo2DEngine_test)
 {

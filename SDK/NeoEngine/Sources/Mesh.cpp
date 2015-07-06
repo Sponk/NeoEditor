@@ -34,7 +34,8 @@ m_begin(begin),
 m_size(size),
 m_cullMode(CULL_BACK),
 m_material(NULL),
-m_visibility(true)
+m_visibility(true),
+m_vao(0)
 {}
 
 MaterialDisplay::MaterialDisplay(const MaterialDisplay & display):
@@ -43,7 +44,8 @@ m_begin(display.m_begin),
 m_size(display.m_size),
 m_cullMode(display.m_cullMode),
 m_material(display.m_material),
-m_visibility(display.m_visibility)
+m_visibility(display.m_visibility),
+m_vao(0)
 {}
 
 MaterialDisplay::~MaterialDisplay(void)
@@ -71,6 +73,10 @@ m_normals(NULL),
 m_tangents(NULL),
 m_texCoords(NULL),
 m_colors(NULL),
+
+m_skinVertices(NULL),
+m_skinNormals(NULL),
+m_skinTangents(NULL),
 
 m_vboId1(0),
 m_vboId2(0),
@@ -156,18 +162,21 @@ void SubMesh::clearVertices(void)
 {
 	m_verticesSize = 0;
 	SAFE_DELETE_ARRAY(m_vertices);
+	SAFE_DELETE_ARRAY(m_skinVertices);
 }
 
 void SubMesh::clearNormals(void)
 {
 	m_normalsSize = 0;
 	SAFE_DELETE_ARRAY(m_normals);
+	SAFE_DELETE_ARRAY(m_skinNormals);
 }
 
 void SubMesh::clearTangents(void)
 {
 	m_tangentsSize = 0;
 	SAFE_DELETE_ARRAY(m_tangents);
+	SAFE_DELETE_ARRAY(m_skinTangents);
 }
 
 void SubMesh::clearTexCoords(void)
@@ -214,6 +223,7 @@ Vector3 * SubMesh::allocVertices(unsigned int size)
 
 	m_verticesSize = size;
 	m_vertices = new Vector3[size];
+	m_skinVertices = new Vector3[size];
 
 	return m_vertices;
 }
@@ -226,6 +236,7 @@ Vector3 * SubMesh::allocNormals(unsigned int size)
 
 	m_normalsSize = size;
 	m_normals = new Vector3[size];
+	m_skinNormals = new Vector3[size];
 
 	return m_normals;
 }
@@ -238,6 +249,7 @@ Vector3 * SubMesh::allocTangents(unsigned int size)
 	
 	m_tangentsSize = size;
 	m_tangents = new Vector3[size];
+	m_skinTangents = new Vector3[size];
 	
 	return m_tangents;
 }

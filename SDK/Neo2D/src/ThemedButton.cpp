@@ -42,8 +42,11 @@ using namespace Neo2D;
 using namespace Gui;
 
 ThemedButton::ThemedButton(unsigned int x, unsigned int y, unsigned int width,
-						   unsigned int height, const char* label)
-	: Button(x, y, width, height, label)
+						   unsigned int height, const char* label) :
+	Button(x, y, width, height, label),
+	m_marginTop(0),
+	m_marginSide(0)
+
 {
 	for (int i = 0; i < NUM_SPRITES; i++)
 	{
@@ -58,25 +61,38 @@ void ThemedButton::loadSprites(Sprite* sprites[], const char* vert,
 							   const char* edge)
 {
 		sprites[TOP] = new Sprite(m_x, m_y, m_width, 0, hor, "");
-		sprites[BOTTOM] = new Sprite(m_x, m_y+m_height, m_width, 0, hor, "");
+		m_marginTop = sprites[TOP]->getSize().y;
 
-		sprites[LEFT] = new Sprite(m_x, m_y, 0, m_height, vert, "");
-		sprites[RIGHT] = new Sprite(m_x+m_width, m_y, 0, m_height, vert, "");
+		sprites[BOTTOM] = new Sprite(m_x, m_y+m_height+m_marginTop, m_width, 0, hor, "");
 
+		sprites[LEFT] = new Sprite(m_x, m_y+m_marginTop, 0, m_height, vert, "");
+		m_marginSide = sprites[LEFT]->getSize().x;
+
+		sprites[RIGHT] = new Sprite(m_x+m_width+m_marginSide, m_y+m_marginTop, 0, m_height, vert, "");
 		
-		sprites[BODY] = new Sprite(m_x, m_y, m_width, m_height, body, "");
+		sprites[BODY] = new Sprite(m_x + m_marginSide, m_y + m_marginTop, m_width, m_height, body, "");
 
 		sprites[TOP_LEFT] = new Sprite(m_x, m_y, 0, 0, edge, "");
-		sprites[TOP_RIGHT] = new Sprite(m_x+m_width, m_y, 0, 0, edge, "");
+		sprites[TOP_RIGHT] = new Sprite(m_x+m_width+m_marginTop, m_y, 0, 0, edge, "");
 
-		sprites[BOTTOM_LEFT] = new Sprite(m_x, m_y+m_height, 0, 0, edge, "");
-		sprites[BOTTOM_RIGHT] = new Sprite(m_x+m_width, m_y+m_height, 0, 0, edge, "");		
-		
-		sprites[RIGHT]->setFlip(Vector2(-1.0,-1.0));
-		sprites[BOTTOM]->setFlip(Vector2(-1.0f, -1.0f));
-		sprites[TOP_RIGHT]->setFlip(Vector2(-1,1));
-		sprites[BOTTOM_LEFT]->setFlip(Vector2(1,-1));
-		sprites[BOTTOM_RIGHT]->setFlip(Vector2(-1,-1));
+		sprites[BOTTOM_LEFT] = new Sprite(m_x, m_y+m_height+m_marginSide, 0, 0, edge, "");
+		sprites[BOTTOM_RIGHT] = new Sprite(m_x+m_width+m_marginSide, m_y+m_height+m_marginTop, 0, 0, edge, "");		
+	
+		sprites[TOP]->translate(Vector2(m_marginSide, 0));
+		sprites[BOTTOM]->translate(Vector2(m_marginSide, 0));
+
+		/*sprites[RIGHT]->setFlip(Vector2(1.0,1.0));
+		sprites[BOTTOM]->setFlip(Vector2(0.0, 0.0));
+		sprites[TOP_RIGHT]->setFlip(Vector2(1.0,1.0));
+		sprites[BOTTOM_LEFT]->setFlip(Vector2(1.0,1.0));*/
+		//sprites[BOTTOM_RIGHT]->setFlip(Vector2(0,0));
+
+		sprites[TOP]->setRotation(180.0);
+		sprites[TOP_RIGHT]->setRotation(180);
+		sprites[TOP_LEFT]->setRotation(90);
+
+		sprites[RIGHT]->setRotation(-180);
+		sprites[BOTTOM_RIGHT]->setRotation(-90);
 }
 
 void ThemedButton::draw()
@@ -89,6 +105,9 @@ void ThemedButton::draw()
 		m_labelText = render->createText(gui->getDefaultFont(),
 										 gui->getDefaultFontSize());
 		m_labelText->setAlign(TEXT_ALIGN_CENTER);
+
+		// Make variable!
+		m_labelText->setColor(Vector3(0,0,0));
 	}
 
 	if (m_sprites[0] == NULL)
@@ -135,6 +154,38 @@ void ThemedButton::draw()
 					 m_rotation);
 }
 
+void ThemedButton::update()
+{
+	NeoEngine* engine = NeoEngine::getInstance();
+	SystemContext* system = engine->getSystemContext();
+	InputContext* input = engine->getInputContext();
+
+	unsigned int x = 0;
+	unsigned int y = 0;
+	Vector2 res = system->getScreenSize();
+	x = input->getAxis("MOUSE_X") * res.x;
+	y = input->getAxis("MOUSE_Y") * res.y;
+
+	if (m_state == BUTTON_PRESSED_STATE && !input->isKeyPressed("MOUSE_BUTTON_LEFT"))
+	{
+		doCallback();
+	}
+
+	if (x >= m_x && x <= m_x + m_width + m_marginSide
+		&& y >= m_y && y <= m_y + m_height + m_marginTop)
+	{
+		m_state = BUTTON_HOVER_STATE;
+	}
+	else
+	{
+		m_state = BUTTON_NORMAL_STATE;
+	}
+
+	if (m_state == BUTTON_HOVER_STATE && input->isKeyPressed("MOUSE_BUTTON_LEFT"))
+	{
+		m_state = BUTTON_PRESSED_STATE;
+	}
+}
 
 void ThemedButton::drawSprites(Sprite* sprites[])
 {

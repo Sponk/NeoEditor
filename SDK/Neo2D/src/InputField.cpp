@@ -40,6 +40,8 @@
 #include <Window/Mouse.h>
 #include <Window/WinEvents.h>
 
+#include <codecvt>
+
 using namespace Neo;
 using namespace Neo2D;
 using namespace Gui;
@@ -47,9 +49,9 @@ using namespace Gui;
 InputField::InputField(unsigned int x, unsigned int y, unsigned int width,
 					   unsigned int height, const char* label)
 	: Widget(x, y, width, height, label),
-	  m_labelText(NULL),
-	  m_state(INPUT_NORMAL_STATE)
+	  m_labelText(NULL)
 {
+
 }
 
 float InputField::calculateWidth(OText* text)
@@ -98,7 +100,7 @@ void InputField::draw()
 	}
 
 	// Update text
-	m_labelText->setText(m_label.c_str());
+	updateLabel(m_label);
 
 	Box3d* box = m_labelText->getBoundingBox();
 	float offset = calculateWidth(m_labelText);
@@ -122,17 +124,16 @@ void InputField::draw()
 	renderContext->disableScissorTest();
 }
 
-void InputField::addCharacter(char c)
+void InputField::updateLabel(string s)
 {
-#ifndef ANDROID
-	m_label.erase(--m_label.end(), m_label.end());
-	m_label += c;
-	m_label += "|";
-#endif
+	// Update text
+	m_labelText->setText((s + ((m_state == INPUT_SELECTED_STATE) ? "|" : "")).c_str());
 }
 
 void InputField::update()
 {
+	if (m_labelText == nullptr) return;
+
 #ifndef ANDROID
 	MKeyboard* kbd = MKeyboard::getInstance();
 
@@ -145,7 +146,7 @@ void InputField::update()
 	Vector2 res = system->getScreenSize();
 	x = input->getAxis("MOUSE_X") * res.x;
 	y = input->getAxis("MOUSE_Y") * res.y;
-
+	
 	if (x >= m_x && x <= m_x + m_width && y >= m_y && y <= m_y + m_height &&
 		m_state != INPUT_SELECTED_STATE)
 	{
@@ -159,67 +160,30 @@ void InputField::update()
 			   y <= m_y + m_height) &&
 			 m_state == INPUT_SELECTED_STATE && input->isKeyPressed("MOUSE_BUTTON_LEFT"))
 	{
-		m_label.erase(--m_label.end(), m_label.end());
 		m_state = INPUT_NORMAL_STATE;
 	}
 
 	if (m_state == INPUT_HOVER_STATE && input->isKeyPressed("MOUSE_BUTTON_LEFT"))
 	{
-		m_label += "|";
 		m_state = INPUT_SELECTED_STATE;
+		return;
 	}
 
 	if (m_state == INPUT_SELECTED_STATE)
 	{
-		char c = input->popLastChar();
-		
-		/*bool shift = false;
-		char key[2] = {'\0', '\0' };
-
-		shift = (input->isKeyPressed("LSHIFT") || input->isKeyPressed("RSHIFT"));
-
-		for (char i = MKEY_A; i < MKEY_Z; i++)
-		{
-			key[0] = i;
-			if (input->isKeyPressed(key))
-			{
-				input->upKey(key);
-
-				if (!shift)
-					addCharacter(tolower(i));
-				else
-					addCharacter(i);
-			}
-		}
-
-		for (char i = MKEY_0; i <= MKEY_QUESTION; i++)
-		{
-			key[0] = i;
-			if (input->isKeyPressed(key))
-			{
-				input->upKey(key);
-
-				if (!shift)
-					addCharacter(i);
-				else
-					addCharacter(i - 16);
-			}
-		}
-
-		if (input->isKeyPressed("SPACE"))
-		{
-			input->upKey("SPACE");
-			addCharacter(' ');
-			}*/
+		unsigned int c = input->popLastChar();
 
 		if (input->isKeyPressed("BACKSPACE"))
 		{
 			input->upKey("BACKSPACE");
-			if (m_label.length() >= 2)
-				m_label.erase(m_label.end() - 2, --m_label.end());
+			if (m_label.length() >= 1)
+				m_label.erase(m_label.end() - 1, m_label.end());
 		}
-		else if(c != '\0')			
-			addCharacter(c);
+
+
+		if (c != '\0')
+			m_label += (char) c;
 	}
+
 #endif
 }
