@@ -502,7 +502,8 @@ void EditorBackend::start(void)
         // add renderers
         if(GLversion >= 2)
             engine->getRendererManager()->addRenderer(StandardRenderer::getStaticName(), StandardRenderer::getNew);
-        engine->getRendererManager()->addRenderer(FixedRenderer::getStaticName(), FixedRenderer::getNew);
+        else
+           engine->getRendererManager()->addRenderer(FixedRenderer::getStaticName(), FixedRenderer::getNew);
 
         // mesh loaders
         engine->getMeshLoader()->addLoader(xmlMeshLoad);
