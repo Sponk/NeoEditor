@@ -40,7 +40,7 @@
 #include <Window/Mouse.h>
 #include <Window/WinEvents.h>
 
-#include <codecvt>
+//#include <codecvt>
 
 using namespace Neo;
 using namespace Neo2D;

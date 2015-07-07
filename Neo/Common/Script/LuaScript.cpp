@@ -41,7 +41,7 @@ const char * LUA_VEC3 = "LUA_VEC3";
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define GET_OBJECT_SUBCLASS_BEGIN(type_, var_, type_enum)	\
-	MObject3d * object;	\
+    Object3d * object;	\
 	lua_Integer id = lua_tointeger(L, 1);	\
 	if((object = getObject3d(id)))	\
 	{	\

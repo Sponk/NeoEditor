@@ -308,8 +308,8 @@ target_link_libraries ( liblua ${LIBS} )
 set_target_properties ( liblua PROPERTIES OUTPUT_NAME lua CLEAN_DIRECT_OUTPUT 1 )
 
 ## LuaJIT Executable
-add_executable ( lua src/luajit.c src/luajit.rc )
-target_link_libraries ( lua liblua )
+## add_executable ( lua src/luajit.c src/luajit.rc )
+## target_link_libraries ( lua liblua )
 
 # On Windows build a no-console variant also
 # if ( LUA_BUILD_WLUA )

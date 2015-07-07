@@ -61,7 +61,7 @@ using namespace Neo;
 PlayerBackend::PlayerBackend(void):
 m_gamePlugin(NULL),
 m_renderer(NULL)
-{
+{        
 	{
 		m_soundContext = new ALContext();
 		m_render = new GL4Context();
@@ -89,6 +89,16 @@ m_renderer(NULL)
 		engine->setInputContext(m_input); // input context
 		engine->setSystemContext(m_system); // system context
 	}
+
+
+    // Output some info about the middleware used
+#ifndef LUAJIT_VERSION
+    MLOG_INFO("Lua interpreter: " << LUA_VERSION);
+    MLOG_INFO("Lua credits: " << LUA_AUTHORS);
+#else
+    MLOG_INFO("Lua interpreter: " << LUAJIT_VERSION);
+    MLOG_INFO("Lua credits: " << LUAJIT_COPYRIGHT);
+#endif
 }
 
 PlayerBackend::~PlayerBackend(void)
@@ -168,7 +178,7 @@ void PlayerBackend::start(void)
 			m_renderer = new StandardRenderer();
 
 		engine->setRenderer(m_renderer);
-	}
+    }
 }
 
 void PlayerBackend::clear(void)
