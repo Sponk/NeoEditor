@@ -1,4 +1,6 @@
-#version 330
+
+#extension ARB_explicit_attrib_location : require
+//#version 330
 
 #define MAX_ENTITY_LIGHTS 256
 

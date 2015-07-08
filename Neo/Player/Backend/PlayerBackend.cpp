@@ -93,11 +93,11 @@ m_renderer(NULL)
 
     // Output some info about the middleware used
 #ifndef LUAJIT_VERSION
-    MLOG_INFO("Lua interpreter: " << LUA_VERSION);
-    MLOG_INFO("Lua credits: " << LUA_AUTHORS);
+	MLOG_INFO("Lua interpreter:\t" << LUA_VERSION);
+	MLOG_INFO("Lua credits:\t" << LUA_AUTHORS);
 #else
-    MLOG_INFO("Lua interpreter: " << LUAJIT_VERSION);
-    MLOG_INFO("Lua credits: " << LUAJIT_COPYRIGHT);
+	MLOG_INFO("Lua interpreter:\t" << LUAJIT_VERSION);
+	MLOG_INFO("Lua credits:\t" << LUAJIT_COPYRIGHT);
 #endif
 }
 
@@ -202,7 +202,6 @@ void PlayerBackend::clear(void)
 
 	m_plugins.clear();
 
-	// MEngine
 	{
 		// loaders
 		engine->getImageLoader()->clear();

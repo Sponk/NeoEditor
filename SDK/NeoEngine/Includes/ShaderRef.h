@@ -45,6 +45,7 @@ private:
 	// data
 	M_SHADER_TYPES m_type;
 	unsigned int m_shaderId;
+	String m_header;
 
 public:
 
@@ -71,6 +72,8 @@ public:
 	inline void setShaderId(unsigned int shaderId){ m_shaderId = shaderId; }
 	inline unsigned int getShaderId(void){ return m_shaderId; }
 	inline M_SHADER_TYPES getShaderType(void){ return m_type; }
+	const char* getHeader() { return m_header.getSafeString(); }
+	void setHeader(const char* s) { m_header.set(s); }
 };
 }
 #endif

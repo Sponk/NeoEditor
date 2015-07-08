@@ -29,7 +29,9 @@ using namespace Neo;
 
 ShaderRef::ShaderRef(unsigned int shaderId, M_SHADER_TYPES type, const char * filename):
 	m_shaderId(shaderId),
-	m_type(type){
+	m_type(type),
+	m_header("")
+{
 	m_filename.set(filename);
 }
 
@@ -72,9 +74,15 @@ void ShaderRef::update(void)
 			}
 		}
 
+		size_t sz = strlen(text) + strlen(m_header.getSafeString());
+		char* sources = new char[sz];
+		strcpy(sources, m_header.getSafeString());
+		strcat(sources, text);
+
 		// send shader source
-		render->sendShaderSource(m_shaderId, text);
+		render->sendShaderSource(m_shaderId, sources);
 		SAFE_FREE(text);
+		SAFE_DELETE(sources);
 
 		FXManager * fx_manager = level->getFXManager();
 

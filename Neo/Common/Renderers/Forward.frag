@@ -1,10 +1,18 @@
-#version 400
+
+//#version 400
+
+#extension ARB_explicit_attrib_location : require
+
+#define COMPAT_MODE
+#ifndef COMPAT_MODE
+subroutine vec4 shadeModelType(vec3 position, vec3 normal);
+subroutine uniform shadeModelType shadeModel;
+#else
+#define subroutine(x)
+#endif
 
 uniform sampler2D Textures[5];
 #define MAX_ENTITY_LIGHTS 256
-
-subroutine vec4 shadeModelType(vec3 position, vec3 normal);
-subroutine uniform shadeModelType shadeModel;
 
 struct LightInfo
 {
@@ -391,7 +399,9 @@ void main(void)
 	// When rendering text!
 	if(TextureMode == -1)
 	{
+#ifndef COMPAT_MODE
 		FragColor = shadeModel(position, normal);
+#endif
 
 		if(FragColor.a < 0.5)
 			discard;
@@ -414,7 +424,9 @@ void main(void)
 		if(FragColor.a < 1.0) discard;
 	}
 	else
+#ifndef COMPAT_MODE
 		FragColor = shadeModel(position, normal);
+#endif
 		
     //FragColor = vec4(normal, 1.0);
     //FragColor = vec4(normalize(position - lights[0].Position), 1.0);

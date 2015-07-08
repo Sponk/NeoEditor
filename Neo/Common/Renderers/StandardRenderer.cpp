@@ -22,6 +22,8 @@
 //
 //========================================================================
 
+#include <glew.h>
+
 #include <NeoEngine.h>
 #include <StandardRenderer.h>
 #include <Window/Window.h>
@@ -175,7 +177,10 @@ StandardRenderer::StandardRenderer()
 {
 	// Let's hope we have an GL context
 	for(int i = 0; i < NUM_SHADERS; i++)
+	{
 		m_shaders[i] = NULL;
+		m_fx[i] = -1;
+	}
 
 	m_framebufferID = 0;
 	m_gbufferTexID = 0;
@@ -461,7 +466,17 @@ void StandardRenderer::init()
 	NeoWindow* window = NeoWindow::getInstance();
 	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
 
+	// Do not initialize twice
+	if(m_fx[0] != -1 && m_fx[1] != -1)
+		return;
+
+	MLOG_INFO("Initializing the rendering engine");
 	render->init();
+
+	// Check for all needed extensions
+	std::string glslDefines = "#version 330\n";
+	if(strstr(render->getRendererVersion(), "4.") == NULL)
+		glslDefines += "#define COMPAT_MODE\n";
 
 	path = window->getCurrentDirectory();
 	path += "/";
@@ -477,8 +492,12 @@ void StandardRenderer::init()
 
 	for(int i = 1; i < NUM_SHADERS; i++)
 	{
+		MLOG_INFO("Loading shader: " << defaultShaderFiles[i]);
 		getGlobalFilename(file, path.c_str(), defaultShaderFiles[i]);
+
 		fragShad = level->loadShader(file, M_SHADER_PIXEL);
+
+		fragShad->setHeader(glslDefines.c_str());
 		fragShad->update();
 
 		m_shaders[i-1] = level->createFX(vertShad, fragShad);

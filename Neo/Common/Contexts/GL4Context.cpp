@@ -32,8 +32,8 @@
 #define GLEW_STATIC
 
 #ifdef __APPLE__
-        #include <glew.h>
-        #include <OpenGL/OpenGL.h>
+	#include <glew.h>
+	#include <OpenGL/OpenGL.h>
     #include <OpenGL/gl.h>
 #elif !defined(EMSCRIPTEN)
     #include <glew.h>
@@ -199,7 +199,8 @@ GL4Context::~GL4Context()
 {
 }
 
-#define GL_DEBUG
+//#define GL_DEBUG
+#undef GL_DEBUG
 #ifdef GL_DEBUG
 void openglCallbackFunction(GLenum source, GLenum type, GLuint id, GLenum
                             severity, GLsizei length, GLchar* message, void* userParam)
@@ -295,7 +296,7 @@ void GL4Context::init()
 
 	int data;
 	glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &data);
-	MLOG_INFO("Number of render targets:\t" << data << "\t");
+	MLOG_INFO("Number of render targets:\t\t" << data << "\t");
 
 	glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &data);
 	MLOG_INFO("Number of textures:\t\t" << data << "\t");
@@ -332,7 +333,7 @@ void GL4Context::init()
 	float maxAnisotropy;
 	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
 
-	MLOG_INFO("Maximal anisotropy level:\t" << maxAnisotropy << "\t");
+	MLOG_INFO("Maximal anisotropy level:\t\t" << maxAnisotropy << "\t");
 	MLOG_INFO("********************************************************************************");
 }
 
@@ -695,7 +696,7 @@ bool GL4Context::sendShaderSource(unsigned int shaderId, const char * source)
         char shader_link_error[4096];
         glGetShaderInfoLog(shaderId, sizeof(shader_link_error), NULL, shader_link_error);
         MLOG_ERROR(shader_link_error);
-				//MLOG_ERROR("Sources: \n" << source);
+				// MLOG_ERROR("Sources: \n" << source);
         return false;
     }
     return true;

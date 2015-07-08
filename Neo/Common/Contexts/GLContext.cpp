@@ -178,7 +178,8 @@ m_currentFrameBuffer(0)
 
 }
 
-#define GL_DEBUG
+//#define GL_DEBUG
+#undef GL_DEBUG
 #ifdef GL_DEBUG
 void openglCallbackFunction(GLenum source, GLenum type, GLuint id, GLenum
 							severity, GLsizei length, GLchar* message, void* userParam)
@@ -257,6 +258,8 @@ void GLContext::init()
 	GLuint unusedIds = 0;
 	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, &unusedIds,
 							true);
+#else
+	glDisable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 #endif
 
 

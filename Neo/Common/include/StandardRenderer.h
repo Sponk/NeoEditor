@@ -43,59 +43,60 @@ public:
 	StandardRenderer(void);
 	~StandardRenderer(void);
 	
+	//bool m_isInitialized;
 	FXRef* m_shaders[NUM_SHADERS];
-		unsigned int m_fx[NUM_SHADERS];
+	unsigned int m_fx[NUM_SHADERS];
 
-		unsigned int m_framebufferID;
-		unsigned int m_gbufferTexID;
-		unsigned int m_depthTexID;
-		unsigned int m_normalTexID;
-		unsigned int m_positionTexID;
-		unsigned int m_dataTexID;
+	unsigned int m_framebufferID;
+	unsigned int m_gbufferTexID;
+	unsigned int m_depthTexID;
+	unsigned int m_normalTexID;
+	unsigned int m_positionTexID;
+	unsigned int m_dataTexID;
 
-		unsigned int m_quadVAO;
-		unsigned int m_textVAO;
+	unsigned int m_quadVAO;
+	unsigned int m_textVAO;
 
-		unsigned int m_quadVBO;
-		unsigned int m_quadTexCoordVBO;
+	unsigned int m_quadVBO;
+	unsigned int m_quadTexCoordVBO;
 
-		unsigned int m_textTexCoordVBO;
-		unsigned int m_textVBO;
+	unsigned int m_textTexCoordVBO;
+	unsigned int m_textVBO;
 
-		void initQuadVAO(unsigned int* vao, unsigned int *vbo, unsigned int *texcoordVbo, unsigned int fx);
-		void clearQuadVAO(unsigned int* vao, unsigned int *vbo, unsigned int *texcoordVbo);
+	void initQuadVAO(unsigned int* vao, unsigned int *vbo, unsigned int *texcoordVbo, unsigned int fx);
+	void clearQuadVAO(unsigned int* vao, unsigned int *vbo, unsigned int *texcoordVbo);
 
-		void drawMesh(Mesh* mesh, OCamera* camera);
-		void drawSubMesh(SubMesh* mesh, OCamera* camera);
-		void drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCamera* camera);
+	void drawMesh(Mesh* mesh, OCamera* camera);
+	void drawSubMesh(SubMesh* mesh, OCamera* camera);
+	void drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCamera* camera);
 
-		void sendLight(unsigned int fx, OLight* l, int num, Matrix4x4 matrix);
+	void sendLight(unsigned int fx, OLight* l, int num, Matrix4x4 matrix);
 
-		void drawGBuffer(Scene* scene, OCamera* camera);
-		void initVBO(SubMesh * subMesh);
+	void drawGBuffer(Scene* scene, OCamera* camera);
+	void initVBO(SubMesh * subMesh);
 
-		void initFramebuffers(Vector2 res = Vector2(0,0));
-		void clearFramebuffers();
+	void initFramebuffers(Vector2 res = Vector2(0,0));
+	void clearFramebuffers();
 
-		void renderFinalImage(Scene *scene, OCamera* camera);
+	void renderFinalImage(Scene *scene, OCamera* camera);
 
-		void set2D(unsigned int w, unsigned int h);
-		void drawQuad(int fx);
+	void set2D(unsigned int w, unsigned int h);
+	void drawQuad(int fx);
 
-		// All visible lights. Should be updated by a worker thread.
-		static int light_update_thread(void* data);
-		OLight* m_visibleLights[MAX_ENTITY_LIGHTS];
-		Thread* m_lightUpdateThread;
-		Semaphore* m_lightUpdateSemaphore;
-		Scene* m_currentScene;
-		int m_numVisibleLights;
+	// All visible lights. Should be updated by a worker thread.
+	static int light_update_thread(void* data);
+	OLight* m_visibleLights[MAX_ENTITY_LIGHTS];
+	Thread* m_lightUpdateThread;
+	Semaphore* m_lightUpdateSemaphore;
+	Scene* m_currentScene;
+	int m_numVisibleLights;
 
-		// Cache texture coordinates for faster rendering
-		Vector2 m_texCoords[4];
+	// Cache texture coordinates for faster rendering
+	Vector2 m_texCoords[4];
 
-		// Cache vertices for faster rendering
-		Vector2 m_vertices[4];
-		Vector2 m_resolution;
+	// Cache vertices for faster rendering
+	Vector2 m_vertices[4];
+	Vector2 m_resolution;
 
 private:
 	

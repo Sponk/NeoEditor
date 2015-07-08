@@ -179,9 +179,9 @@ IF(UNIX AND NOT APPLE AND NOT ANDROID AND NOT EMSCRIPTEN)
 
   SET(NEO_BUILD_FLAGS "")
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${NEO_BUILD_FLAGS} -O3 -fPIC -DLINUX -pthread")
-  SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -D__Debug__ -pthread")
+  SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -D__Debug__ -pthread -Og")
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NEO_BUILD_FLAGS} -O3 -fPIC -DLINUX -pthread -std=c++11")
-  SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -D__Debug__ -pthread -std=c++11")
+  SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -D__Debug__ -pthread -std=c++11 -Og")
   SET(CMAKE_SHARED_LINKER_FLAGS "-ldl -Wl,--as-needed,--allow-multiple-definition,--build-id")
 
   SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lm -ldl -Wl,--allow-multiple-definition,-rpath ." )
