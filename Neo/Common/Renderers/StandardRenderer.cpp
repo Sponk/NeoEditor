@@ -473,11 +473,6 @@ void StandardRenderer::init()
 	MLOG_INFO("Initializing the rendering engine");
 	render->init();
 
-	// Check for all needed extensions
-	std::string glslDefines = "#version 330\n";
-	if(strstr(render->getRendererVersion(), "4.") == NULL)
-		glslDefines += "#define COMPAT_MODE\n";
-
 	path = window->getCurrentDirectory();
 	path += "/";
 	path += SHADER_PATH;
@@ -496,8 +491,6 @@ void StandardRenderer::init()
 		getGlobalFilename(file, path.c_str(), defaultShaderFiles[i]);
 
 		fragShad = level->loadShader(file, M_SHADER_PIXEL);
-
-		fragShad->setHeader(glslDefines.c_str());
 		fragShad->update();
 
 		m_shaders[i-1] = level->createFX(vertShad, fragShad);

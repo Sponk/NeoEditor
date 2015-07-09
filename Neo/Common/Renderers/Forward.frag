@@ -1,10 +1,10 @@
-
+#version 330
 //#version 400
 
-#extension ARB_explicit_attrib_location : require
+#extension ARB_explicit_attrib_location : enable
+#extension ARB_shader_subroutines : enable
 
-#define COMPAT_MODE
-#ifndef COMPAT_MODE
+#ifdef ARB_shader_subroutines
 subroutine vec4 shadeModelType(vec3 position, vec3 normal);
 subroutine uniform shadeModelType shadeModel;
 #else
@@ -55,10 +55,17 @@ in vec3 tangent;
 in vec3 color;
 in mat4 projModelViewMatrix;
 
+#ifdef ARB_explicit_attrib_location
 layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 Normal;
 layout (location = 2) out vec4 Position;
 layout (location = 3) out vec3 Data;
+#else
+out vec4 FragColor;
+out vec4 Normal;
+out vec4 Position;
+out vec3 Data;
+#endif
 
 float inverseSquareLaw(float distance, float strength)
 {
@@ -390,6 +397,34 @@ vec4 TextShader(vec3 position, vec3 n)
 	return /*vec4(Diffuse, alpha) */ vec4(Diffuse, 1.0) * texture2D(Textures[0], texCoord);// + vec4(0,0,0,1);
 }
 
+// Fallback selection
+#ifndef ARB_shader_subroutines
+vec4 shadeModel(vec3 position, vec3 n)
+{
+    vec4 retval;
+
+    /*switch(TextureMode)
+    {
+        case -1: // Text
+            retval = TextShader(position, n);
+        break;
+    }*/
+
+    if(TextureMode == -1)
+        return TextShader(position, n);
+    else if(TextureMode == 0)
+        return cookModelColor(position, n);
+    else if(TextureMode == 1)
+        return cookModelDiffuse(position, n);
+    else if(TextureMode == 2)
+        return cookModelDiffuseSpecular(position, n);
+    else if(TextureMode == 3)
+        return cookModelDiffuseNormalSpecular(position, n);
+
+    return retval;
+}
+#endif
+
 void main(void)
 {
 /*    if(TextureMode > 0)
@@ -399,14 +434,12 @@ void main(void)
 	// When rendering text!
 	if(TextureMode == -1)
 	{
-#ifndef COMPAT_MODE
 		FragColor = shadeModel(position, normal);
-#endif
 
 		if(FragColor.a < 0.5)
 			discard;
 		
-	    Data.r = 1.0;
+                Data.r = 1.0;
 		//FragColor.a = 1.0;
 		return;
 	}
@@ -424,9 +457,7 @@ void main(void)
 		if(FragColor.a < 1.0) discard;
 	}
 	else
-#ifndef COMPAT_MODE
 		FragColor = shadeModel(position, normal);
-#endif
 		
     //FragColor = vec4(normal, 1.0);
     //FragColor = vec4(normalize(position - lights[0].Position), 1.0);
@@ -441,11 +472,11 @@ void main(void)
         //Normal = vec4(normalize(normal+(texture2D(Textures[2], texCoord).xyz * 3 - 1)), Shininess);
     }
     else
-		Normal = vec4(normal, Shininess);
+        Normal = vec4(normal, Shininess);
 
     if(TextureMode >= 3)
     {
-		vec4 spec = texture2D(Textures[3], texCoord);
+        vec4 spec = texture2D(Textures[3], texCoord);
         Position = vec4(position.xyz, (spec.r + spec.b + spec.g) / 3);
     }
     else

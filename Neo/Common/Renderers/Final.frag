@@ -1,6 +1,7 @@
+#version 330
 
-#extension ARB_explicit_attrib_location : require
-//#version 330
+#extension ARB_explicit_attrib_location : enable
+#extension ARB_shader_subroutines : enable
 
 #define MAX_ENTITY_LIGHTS 256
 
@@ -38,12 +39,16 @@ in vec2 texCoord;
 
 vec3 Specular = vec3(1,1,1);
 
+#ifdef ARB_explicit_attrib_location
 layout (location = 0) out vec4 FragColor;
+#else
+out vec4 FragColor;
+#endif
 
 vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float roughness)
 {
   vec3 l = light.Position - p;
-  //if(length(l) > light.Radius) return vec4(0,0,0,0);
+  if(length(l) > light.Radius) return vec4(0,0,0,0);
   
   roughness = 1.0 - 1.0/roughness;//0.00001; //roughness;
   // Guass constant
@@ -109,9 +114,9 @@ vec4 gammaCorrection(vec4 diffuse, float gamma)
 void main(void)
 {
 	vec4 data = texture2D(Textures[4], texCoord);
-    FragColor = texture2D(Textures[0], texCoord);//gammaCorrection(texture2D(Textures[0], texCoord), 1.2);
+        FragColor = texture2D(Textures[0], texCoord);//gammaCorrection(texture2D(Textures[0], texCoord), 1.2);
 
-	if(FragColor.a == 1.0 && data.r == 0)
+        if(FragColor.a == 1.0 /*&& data.r == 0*/)
 	{
 		vec4 p = texture2D(Textures[3], texCoord);
 		vec3 n = texture2D(Textures[1], texCoord).xyz;
@@ -119,5 +124,5 @@ void main(void)
 	}
 	
 	FragColor = gammaCorrection(FragColor, 1.2);
-	//FragColor = texture2D(Textures[1], texCoord);
+        //FragColor = texture2D(Textures[0], texCoord);
 }
