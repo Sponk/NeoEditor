@@ -11,12 +11,9 @@ require("NeoLua")
 local engine2d = NeoLua.Neo2DEngine.getInstance()
 engine2d:setEnabled(true)
 
-engine2d:setDefaultFontSize(16)
 inputField = NeoLua.InputField(100, 300, 300, 30, "");
-button = NeoLua.ThemedButton(100, 100, 300, 25, "This is a button!||")
+button = NeoLua.ThemedButton(100, 100, 300, 90, "This is a button!")
 label = NeoLua.Label(100, 200, 0, 30, "This is a label!")
-
-button2 = NeoLua.Label(300, 100, 300, 25, "Another button!")
 
 labelhandle = engine2d:addWidget(label)
 buttonhandle = engine2d:addWidget(button)
@@ -27,10 +24,10 @@ canvas:addWidget(buttonhandle)
 canvas:addWidget(labelhandle)
 canvas:addWidget(inputhandle)
 
-canvas:addWidget(engine2d:addWidget(button2))
+button:setFontSize(16)
 
 function buttonCallback()
-    print("Callback!")
+	print("Callback!")
 	inputField:setLabel(inputField:getLabel() .. " BUTTON PRESS ")
 end
 button:setScriptCallback("buttonCallback")

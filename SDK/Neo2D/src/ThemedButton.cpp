@@ -54,6 +54,8 @@ ThemedButton::ThemedButton(unsigned int x, unsigned int y, unsigned int width,
 		m_hoveredSprites[i] = NULL;
 		m_pressedSprites[i] = NULL;
 	}
+
+	m_fontSize = Neo2DEngine::getInstance()->getDefaultFontSize();
 }
 
 void ThemedButton::loadSprites(Sprite* sprites[], const char* vert,
@@ -103,7 +105,7 @@ void ThemedButton::draw()
 	if (m_labelText == NULL)
 	{
 		m_labelText = render->createText(gui->getDefaultFont(),
-										 gui->getDefaultFontSize());
+										 m_fontSize);
 		m_labelText->setAlign(TEXT_ALIGN_CENTER);
 		
 		// Make variable!
@@ -150,7 +152,7 @@ void ThemedButton::draw()
 	Box3d* box = m_labelText->getBoundingBox();
 	//render->drawColoredQuad(m_x, m_y, m_width, m_height, color, m_rotation);
 	render->drawText(m_labelText, m_x + 0.5 * (float) m_width,
-					 m_y + (box->max.y - box->min.y) + 0.5 * (float) m_height,
+					 m_y - (box->max.y - box->min.y) + m_height,
 					 m_rotation);
 }
 
@@ -159,7 +161,7 @@ void ThemedButton::update()
 	NeoEngine* engine = NeoEngine::getInstance();
 	SystemContext* system = engine->getSystemContext();
 	InputContext* input = engine->getInputContext();
-
+	
 	unsigned int x = 0;
 	unsigned int y = 0;
 	Vector2 res = system->getScreenSize();

@@ -56,7 +56,7 @@ Neo2DEngine::Neo2DEngine()
 
 	setThemeDirectory("assets/default-theme");
 	
-	m_defaultFontSize = 12;
+	m_defaultFontSize = 8;
 	m_normalBackground = Vector4(0.5, 0.5, 0.5, 1.0);
 	m_hoverBackground = Vector4(0.7, 0.7, 0.7, 1.0);
 	m_highlightBackground = Vector4(0.6, 0.7, 0.8, 1.0);
