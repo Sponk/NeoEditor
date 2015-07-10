@@ -157,21 +157,12 @@ public:
 			m_camera[i]->setFov(90.0f);
 		}
 
-		// Quaternion.Euler(-90,0,0), Quaternion.Euler(0,90,0), Quaternion.Euler(0,0,0), Quaternion.Euler(90,0,0), Quaternion.Euler(0,-90,0), Quaternion.Euler(0,180,0)
 		m_camera[0]->rotate(Vector3(1, 0, 0), -90);
 		m_camera[1]->rotate(Vector3(0, 1, 0), 90);
-		//m_cameras[2]->rotate(Vector3(0, 0, 0), 180);
-
+	
 		m_camera[3]->rotate(Vector3(1, 0, 0), 90);
 		m_camera[4]->rotate(Vector3(0, 1, 0), -90);
 		m_camera[5]->rotate(Vector3(0, 1, 0), 180);
-
-
-		// Depth texture
-		/*render->createTexture(&m_depthTexID);
-		render->bindTexture(m_depthTexID);
-		render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
-		render->texImage(0, screenWidth, screenHeight, VAR_FLOAT, TEX_DEPTH, 0);*/
 	}
 
 	void bindCubemap()
@@ -332,27 +323,11 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 	modelViewMatrix = *camera->getCurrentViewMatrix() * modelMatrix;
 	modelViewProjectionMatrix = *camera->getCurrentProjMatrix() * modelViewMatrix;
 	
-	// The modelview matrix holds the matrix of the current entity
-
-	//render->getProjectionMatrix(&projectionMatrix);
-
-	// MVP = projection * view * model
-	//modelViewMatrix = (modelViewMatrix * modelMatrix);
-	//normalMatrix = modelViewMatrix.getInverse().getTranspose();//(modelViewMatrix.getInverse()).getTranspose();
-
 	normalMatrix = modelViewMatrix.getInverse().getTranspose();
 
 	// Send uniforms
 	render->sendUniformMatrix(m_fx[0], "ProjModelViewMatrix", &modelViewProjectionMatrix);
 	render->sendUniformMatrix(m_fx[0], "ModelViewMatrix", &modelViewMatrix);
-
-/*	float m_shininess;
-	float m_customValue;
-	Vector3 m_diffuse;
-	Vector3 m_specular;
-	Vector3 m_emit;
-  */
-
 	render->sendUniformVec3(m_fx[0], "Diffuse", material->getDiffuse());
 	render->sendUniformVec3(m_fx[0], "Specular", material->getSpecular());
 	render->sendUniformVec3(m_fx[0], "Emit", material->getEmit());
@@ -623,14 +598,8 @@ void StandardRenderer::initFramebuffers(Vector2 res)
 	// Update vertex cache
 	m_vertices[0] = Vector2(0, 0);
 	m_vertices[1] = Vector2(0, res.y);
-	m_vertices[3] = Vector2(res.x, res.y);
 	m_vertices[2] = Vector2(res.x, 0);
-
-	//m_Resolution = Pow2(max(screenWidth, screenHeight));
-
-	//if(m_ResolutionMultiplier == 0) m_ResolutionMultiplier = 1.0f;
-
-	//m_Resolution *= m_ResolutionMultiplier;
+	m_vertices[3] = Vector2(res.x, res.y);
 
 	// create frame buffer
 	render->createFrameBuffer(&m_framebufferID);
@@ -1027,7 +996,7 @@ void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera)
 
 void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 {
-	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
 	Font* font = textObj->getFont();
 
 	Matrix4x4 modelViewMatrix;
@@ -1036,7 +1005,8 @@ void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 
 	if (camera != nullptr)
 	{
-		modelViewMatrix = (*camera->getCurrentViewMatrix()) * (*textObj->getMatrix());
+		modelViewMatrix =
+			(*camera->getCurrentViewMatrix()) * (*textObj->getMatrix());
 		projectionMatrix = *camera->getCurrentProjMatrix();
 	}
 	else
@@ -1055,7 +1025,7 @@ void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 
 	render->enableBlending();
 	render->setBlendingMode(BLENDING_ALPHA);
-	
+
 	render->disableCullFace();
 
 	int uniform = 1;
@@ -1072,16 +1042,16 @@ void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 
 	const char* text = textObj->getText();
 	size_t length = strlen(text);
-	
-	Matrix4x4 characterMatrix;
+
 	Character* c;
 	Vector2 scale;
 	Vector2 pos;
 
 	float fontSize = font->getFontSize();
 	float size = textObj->getSize();
-	float widthFactor = font->getTextureWith() / fontSize;
-	float heightFactor = font->getTextureHeight() / fontSize;
+	float tabsize = size * 2.0f;
+	float widthFactor = static_cast<float>(font->getTextureWith()) / fontSize;
+	float heightFactor = static_cast<float>(font->getTextureHeight()) / fontSize;
 
 	float xpos = 0;
 	float ypos = 0;
@@ -1092,7 +1062,8 @@ void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 
 	vector<float>* linesOffset = textObj->getLinesOffset();
 
-	if (!linesOffset || linesOffset->size() == 0) return;
+	if (!linesOffset || linesOffset->size() == 0)
+		return;
 
 	float lineOffset = (*linesOffset)[0];
 	int line = 0;
@@ -1109,18 +1080,26 @@ void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 			continue;
 		}
 
+		if(text[i] == '\t')
+		{
+			unsigned int tab = static_cast<unsigned int>(xpos / tabsize) + 1;
+			xpos = tab*tabsize;
+			continue;
+		}
+		
 		c = font->getCharacter(text[i]);
 
-		if (!c) continue;
+		if (!c)
+			continue;
 
 		pos = c->getPos();
 		scale = c->getScale();
-		offset = c->getOffset() *size;
+		offset = c->getOffset() * size;
 		offset.x += lineOffset;
 
 		texCoords[0] = Vector2(pos.x, pos.y + scale.y);
-		texCoords[2] = Vector2(pos.x, pos.y);
 		texCoords[1] = Vector2(pos.x + scale.x, pos.y + scale.y);
+		texCoords[2] = Vector2(pos.x, pos.y);
 		texCoords[3] = Vector2(pos.x + scale.x, pos.y);
 
 		float width = scale.x * widthFactor * size;
@@ -1128,8 +1107,8 @@ void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 
 		vertices[0] = Vector2(xpos, ypos + height) + offset;
 		vertices[1] = Vector2(xpos + width, ypos + height) + offset;
-		vertices[3] = Vector2(xpos + width, ypos) + offset;
 		vertices[2] = Vector2(xpos, ypos) + offset;
+		vertices[3] = Vector2(xpos + width, ypos) + offset;
 
 		// TexCoord
 		render->bindVBO(VBO_ARRAY, m_textTexCoordVBO);

@@ -423,8 +423,8 @@ OText* Render::createText(const char* font, float size)
 	fontref->getFont()->setFontSize(size);
 	fontref->update();
 
-	text = new OText(/*NeoEngine::getInstance()->getLevel()->loadFont(file)*/ fontref);
-	text->setSize(size);
+	text = new OText(/*NeoEngine::getInstance()->getLevel()->loadFont(file));*/ fontref);
+	//text->setSize(fontref->getFont()->getFontSize());
 
 	return text;
 }

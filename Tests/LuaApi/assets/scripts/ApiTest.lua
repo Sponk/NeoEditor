@@ -16,6 +16,8 @@ inputField = NeoLua.InputField(100, 300, 300, 30, "");
 button = NeoLua.ThemedButton(100, 100, 300, 25, "This is a button!||")
 label = NeoLua.Label(100, 200, 0, 30, "This is a label!")
 
+button2 = NeoLua.Label(300, 100, 300, 25, "Another button!")
+
 labelhandle = engine2d:addWidget(label)
 buttonhandle = engine2d:addWidget(button)
 inputhandle = engine2d:addWidget(inputField)
@@ -24,6 +26,8 @@ canvas = engine2d:getCanvas(0)
 canvas:addWidget(buttonhandle)
 canvas:addWidget(labelhandle)
 canvas:addWidget(inputhandle)
+
+canvas:addWidget(engine2d:addWidget(button2))
 
 function buttonCallback()
     print("Callback!")

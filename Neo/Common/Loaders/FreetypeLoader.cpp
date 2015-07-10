@@ -38,14 +38,14 @@ static void drawBitmap(Image * image, FT_Bitmap * bitmap, int left, int top)
 	int x, y;
 	int width = bitmap->width;
 	int height = bitmap->rows;
-	int imgWidth = (int)image->getWidth();
-	int imgHeight = (int)image->getHeight();
+	int imgWidth = (int) image->getWidth();
+	int imgHeight = (int) image->getHeight();
 
 	unsigned char * pixel = bitmap->buffer;
 
-	for(y=top; y<top+height; y++)
+	for(y = top; y < top + height; y++)
 	{
-		for(x=left; x<left+width; x++)
+		for(x = left; x < left+width; x++)
 		{
 			if(y >= 0 && y < imgHeight && 
 			   x >= 0 && x < imgWidth)
@@ -60,18 +60,22 @@ static void drawBitmap(Image * image, FT_Bitmap * bitmap, int left, int top)
 
 bool M_loadFont(const char * filename, void * data)
 {
-	int pen_x, pen_y;
+	int pen_x, pen_y, max;
 	unsigned int n;
 	unsigned int space = 2;
+	unsigned int numChars = 4096;
 
 	// Change this for higher resolutions
 	Font * font = (Font *)data;
-
-	// FIXME: UGLY HACK!
-	unsigned int size = font->getFontSize(); //32;
-	unsigned int width = 512;
+	float size = font->getFontSize() * 2;
+	unsigned int width = 1024;
 	unsigned int height = 0;//32;
 
+	unsigned int flags = FT_LOAD_RENDER | FT_LOAD_NO_HINTING;
+	
+	// Turn font size from float to uint
+	font->setFontSize(size);
+	
 	Image image;
 
 	FT_GlyphSlot slot;
@@ -132,25 +136,27 @@ bool M_loadFont(const char * filename, void * data)
 		return false;
 	}
 
-
 	// parse characters
+	max = 0;
 	slot = face->glyph;
 	pen_x = space; pen_y = space; 
-	for(n = 0; n<256; n++)
+	for(n = 0; n < numChars; n++)
 	{
 		// load glyph image into the slot (erase previous one)
-		error = FT_Load_Char(face, n, FT_LOAD_RENDER); 
+		error = FT_Load_Char(face, n, flags); 
 
 		if(error) 
 			continue;
 
 		if(FT_Get_Char_Index(face, n) == 0)
 			continue;
+
+		max = MAX(max, slot->bitmap.rows);
 		
-        if((pen_x + slot->bitmap.width) > 512){
+        if((pen_x + slot->bitmap.width + space) > width){
 			pen_x = 0;
-			pen_y += size + space;
-			height += size + space;
+			pen_y += max + space;
+			height += max + space;
         }
 
 		// increment pen position 
@@ -165,7 +171,6 @@ bool M_loadFont(const char * filename, void * data)
 		return false;
 	}
 
-
 	// create image
     height = getNextPowerOfTwo(height);
     image.create(VAR_UBYTE, width, height, 4);
@@ -174,7 +179,6 @@ bool M_loadFont(const char * filename, void * data)
 	image.clear(color);
 
 	// init font
-	font->setFontSize(size);
 	font->setTextureWidth(width);
 	font->setTextureHeight(height);
 	
@@ -182,10 +186,10 @@ bool M_loadFont(const char * filename, void * data)
 	slot = face->glyph;
 	pen_x = space; pen_y = space;
 	
-	for(n = 0; n<256; n++)
+	for(n = 0; n < numChars; n++)
 	{
 		// load glyph image into the slot (erase previous one)
-		error = FT_Load_Char(face, n, FT_LOAD_RENDER); 
+		error = FT_Load_Char(face, n, flags); 
 
 		if(error) 
 			continue;
@@ -193,14 +197,16 @@ bool M_loadFont(const char * filename, void * data)
 		if(FT_Get_Char_Index(face, n) == 0)
 			continue;
 
-		if((pen_x + slot->bitmap.width) > (int)image.getWidth()){
+		max = MAX(max, slot->bitmap.rows);
+		
+		if((pen_x + slot->bitmap.width + space) > (int) image.getWidth()){
 			pen_x = space;
-			pen_y += size + space;
+			pen_y += max + space;
 		}
 
 		// get character properties
 		float xAdvance = (slot->advance.x >> 6) / ((float)size);
-		Vector2 offset = Vector2((float)slot->bitmap_left, - (float)slot->bitmap_top) / ((float)size);
+		Vector2 offset = Vector2((float)slot->bitmap_left - 1, - (float)slot->bitmap_top - 1) / ((float)size);
 		Vector2 pos = Vector2((float)(pen_x-1) / (float)width, (float)(pen_y-1) / (float)height);
 		Vector2 scale = Vector2((float)(slot->bitmap.width+2) / (float)width, (float)(slot->bitmap.rows+2) / (float)height);
 
@@ -212,7 +218,7 @@ bool M_loadFont(const char * filename, void * data)
 
 		// increment pen position 
 		pen_x += slot->bitmap.width + space; 
-	} 
+	}
 
 
 	// send texture
@@ -229,9 +235,9 @@ bool M_loadFont(const char * filename, void * data)
 	
 	// send texture image
 	render->bindTexture(textureId);
-    render->setTextureUWrapMode(WRAP_REPEAT);
-    render->setTextureVWrapMode(WRAP_REPEAT);
-   // render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
+    render->setTextureUWrapMode(WRAP_CLAMP);
+    render->setTextureVWrapMode(WRAP_CLAMP);
+    render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
 	render->sendTextureImage(&image, 0, 1, 0);
 
 	// finish

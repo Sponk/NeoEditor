@@ -105,7 +105,7 @@ void ThemedButton::draw()
 		m_labelText = render->createText(gui->getDefaultFont(),
 										 gui->getDefaultFontSize());
 		m_labelText->setAlign(TEXT_ALIGN_CENTER);
-
+		
 		// Make variable!
 		m_labelText->setColor(Vector3(0,0,0));
 	}

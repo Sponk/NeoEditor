@@ -222,7 +222,7 @@ void OText::prepare(void)
 	float widthFactor = font->getTextureWith() / fontSize;
 	float heightFactor = font->getTextureHeight() / fontSize;
 	float xc = 0, yc = 0;
-
+		
 	unsigned int i;
 	unsigned int size = strlen(text);
 	for(i=0; i<size; i++)

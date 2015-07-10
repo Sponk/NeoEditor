@@ -317,7 +317,9 @@ void GL4Context::init()
 	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
 	glEnable(GL_LINE_SMOOTH);
-	glEnable(GL_POLYGON_SMOOTH);
+	//glEnable(GL_POLYGON_SMOOTH);
+
+	//glPolygoneMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	// line
 	glLineWidth(1);
