@@ -50,6 +50,11 @@ public:
 		visibilityLock = ThreadFactory::getInstance()->getNewSemaphore();
 		visibilityLock->Init(1);
 	}
+
+	~SceneData()
+	{
+		SAFE_DELETE(visibilityLock);
+	}			   
 };
 
 /*
@@ -72,6 +77,12 @@ public:
 
 		lightLock = ThreadFactory::getInstance()->getNewSemaphore();
 		lightLock->Init(1);
+	}
+
+	~CameraData()
+	{
+		SAFE_DELETE(lightLock);
+		SAFE_DELETE(visibilityLock);
 	}
 };
 

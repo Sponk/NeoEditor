@@ -50,6 +50,8 @@ Scene::~Scene()
 	m_cameras.clear();
 	m_lights.clear();
 	m_sounds.clear();
+
+	SAFE_DELETE(m_additionalData);
 }
 
 Object3d * Scene::addNewGroup(void)

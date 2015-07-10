@@ -40,6 +40,7 @@ Object3d::Object3d(void):
 Object3d::~Object3d(void)
 {
 	clearObject3d();
+	SAFE_DELETE(m_additionalData);
 }
 
 void Object3d::clearObject3d(void)
