@@ -83,12 +83,6 @@ void ThemedButton::loadSprites(Sprite* sprites[], const char* vert,
 		sprites[TOP]->translate(Vector2(m_marginSide, 0));
 		sprites[BOTTOM]->translate(Vector2(m_marginSide, 0));
 
-		/*sprites[RIGHT]->setFlip(Vector2(1.0,1.0));
-		sprites[BOTTOM]->setFlip(Vector2(0.0, 0.0));
-		sprites[TOP_RIGHT]->setFlip(Vector2(1.0,1.0));
-		sprites[BOTTOM_LEFT]->setFlip(Vector2(1.0,1.0));*/
-		//sprites[BOTTOM_RIGHT]->setFlip(Vector2(0,0));
-
 		sprites[TOP]->setRotation(180.0);
 		sprites[TOP_RIGHT]->setRotation(180);
 		sprites[TOP_LEFT]->setRotation(90);
@@ -149,8 +143,6 @@ void ThemedButton::draw()
 			break;
 	}
 
-	Box3d* box = m_labelText->getBoundingBox();
-	//render->drawColoredQuad(m_x, m_y, m_width, m_height, color, m_rotation);
 	render->drawText(m_labelText, m_x + 0.5 * (float) m_width,
 					 m_y + 0.5 * m_labelText->getSize() +
 					 0.5 * static_cast<float>(m_height),
