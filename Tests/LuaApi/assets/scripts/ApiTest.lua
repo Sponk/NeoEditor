@@ -11,7 +11,7 @@ require("NeoLua")
 local engine2d = NeoLua.Neo2DEngine.getInstance()
 engine2d:setEnabled(true)
 
-inputField = NeoLua.InputField(100, 300, 300, 30, "");
+inputField = NeoLua.ThemedInputField(100, 300, 300, 30, "");
 button = NeoLua.ThemedButton(100, 100, 300, 90, "This is a button!")
 label = NeoLua.Label(100, 200, 0, 30, "This is a label!")
 

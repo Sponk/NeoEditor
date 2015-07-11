@@ -111,10 +111,14 @@ private:
 	String m_themeBorderVPressed;
 	String m_themeBodyPressed;
 	String m_themeEdgePressed;
+
+	String m_themeDirectory;
 	
 public:
 	Neo2DEngine();
 	~Neo2DEngine();
+
+	const char* getThemeDirectory() { return m_themeDirectory.getSafeString(); }
 
 	const char* getThemeBorderH() { return m_themeBorderH.getSafeString(); }
 	const char* getThemeBorderV() { return m_themeBorderV.getSafeString(); }

@@ -80,7 +80,7 @@ void InputField::draw()
 	if (m_labelText == NULL)
 	{
 		m_labelText = render->createText(gui->getDefaultFont(),
-										 gui->getDefaultFontSize());
+										 m_fontSize);
 		m_labelText->setAlign(TEXT_ALIGN_LEFT);
 	}
 
@@ -171,6 +171,7 @@ void InputField::update()
 
 	if (m_state == INPUT_HOVER_STATE && input->isKeyPressed("MOUSE_BUTTON_LEFT"))
 	{
+		m_cursorpos = m_label.length();
 		m_state = INPUT_SELECTED_STATE;
 		return;
 	}
@@ -215,7 +216,8 @@ void InputField::update()
 			prefix.erase(m_cursorpos);
 						
 			string postfix = m_label.substr(m_cursorpos);
-			m_label = prefix + (char) c + postfix;
+			//m_label = prefix + ((char*)&c)[0] + ((char*)&c)[1] + ((char*)&c)[2] + postfix;
+			m_label = prefix + (char) c + postfix;			
 			
 			m_cursorpos++;
 		}

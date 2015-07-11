@@ -3,7 +3,7 @@
  *
  * This file is part of Neo2D.
  *
- * Neo2D is free software: you can redistribute it and/or modify
+ * NeoGui is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
@@ -14,7 +14,7 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with Neo2D.  If not, see <http://www.gnu.org/licenses/>.
+ * along with Neo2D. If not, see <http://www.gnu.org/licenses/>.
  *
  * Diese Datei ist Teil von Neo2D.
  *
@@ -28,69 +28,63 @@
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
  *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
- *diesem
+ * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __INPUT_H__
-#define __INPUT_H__
+#ifndef __THEMED_INPUT_FIELD_H__
+#define __THEMED_INPUT_FIELD_H__
 
-#include <Widget.h>
+#include <InputField.h>
+#include <Sprite.h>
 #include <NeoEngine.h>
-#include <string>
 
 namespace Neo2D
 {
 namespace Gui
 {
 
-using namespace Neo;
-
-enum INPUT_STATE
-{
-	/// The input field is neither hovered over nor selected
-	INPUT_NORMAL_STATE = 0,
-	/// The input field is hovered by the mouse cursor
-	INPUT_HOVER_STATE,
-	/// The input field currently has focus
-	INPUT_SELECTED_STATE
-};
-
+#define NUM_SPRITES 9
+	
 /**
- * @brief Implements a basic input field that takes keyboard input and
- * delivers it to the program.
+ * @brief Implements a simple pushable button that calls the specified callback. This
+ * implementation uses Sprites to become themable.
  *
  * @author Yannick Pflanzer
  */
-class NEO2D_EXPORT InputField : public Widget
+class NEO2D_EXPORT ThemedInputField : public InputField
 {
-protected:
-	OText* m_labelText;
-	INPUT_STATE m_state;
-	unsigned int m_cursorpos;
+	enum SPRITE_POS
+	{
+		BODY = 0,
+		TOP,
+		BOTTOM,
+		LEFT,
+		RIGHT,
+		TOP_LEFT,
+		TOP_RIGHT,
+		BOTTOM_LEFT,
+		BOTTOM_RIGHT
+	};
 	
-	void updateLabel(string s);
+	Sprite* m_sprites[NUM_SPRITES];
+	Sprite* m_hoveredSprites[NUM_SPRITES];
+	Sprite* m_pressedSprites[NUM_SPRITES];
 
-	/**
-	 * @brief Calculates the full width of the given text object.
-	 * @param text The text object to operate on.
-	 * @return The full width in pixels
-	 */
-	float calculateWidth(OText* text);
+	float m_marginTop;
+	float m_marginSide;
+    
+	void loadSprites(Sprite* sprites[], const char* vert,
+					 const char* hor, const char* body,
+					 const char* edge);
 	
+	void drawSprites(Sprite* sprites[]);
 public:
-	InputField(unsigned int x, unsigned int y, unsigned int width,
-			   unsigned int height, const char* label);
+	ThemedInputField(unsigned int x, unsigned int y, unsigned int width,
+					 unsigned int height, const char* label);
 
 	void draw();
-	void draw(Vector2 offset) { draw(); }
-	void update();
-
-	void setState(INPUT_STATE state) { m_state = state; }
-	const char* getStaticName() { return "InputField"; }
 };
 }
 }
-
 #endif

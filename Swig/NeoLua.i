@@ -10,6 +10,7 @@
         #include <Sprite.h>
         #include <Tile.h>
         #include <InputField.h>
+        #include <ThemedInputField.h>
         #include <Canvas.h>
         #include <Label.h>
 
@@ -80,7 +81,10 @@
 %include <Sprite.h>
 %include <Tile.h>
 %include <InputField.h>
+
 %include <ThemedButton.h>
+%include <ThemedInputField.h>
+
 %include <Label.h>
 
 

@@ -940,6 +940,8 @@ void Neo2DEngine::setThemeDirectory(const char* dir)
 {
 	char path[256];
 
+	m_themeDirectory.set(dir);
+
 	strcpy(path, dir);
 	strcat(path, "/body.png");
 	m_themeBody = path;

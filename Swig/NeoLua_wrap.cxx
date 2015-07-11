@@ -2641,104 +2641,105 @@ SWIG_Lua_dostring(lua_State *L, const char *str) {
 #define SWIGTYPE_p_Neo2D__Gui__InputField swig_types[14]
 #define SWIGTYPE_p_Neo2D__Gui__Label swig_types[15]
 #define SWIGTYPE_p_Neo2D__Gui__ThemedButton swig_types[16]
-#define SWIGTYPE_p_Neo2D__Neo2DEngine swig_types[17]
-#define SWIGTYPE_p_Neo2D__Sprite swig_types[18]
-#define SWIGTYPE_p_Neo2D__SpriteBatch swig_types[19]
-#define SWIGTYPE_p_Neo2D__Tile swig_types[20]
-#define SWIGTYPE_p_Neo2D__TileSheet swig_types[21]
-#define SWIGTYPE_p_Neo2D__Widget swig_types[22]
-#define SWIGTYPE_p_NeoVariable swig_types[23]
-#define SWIGTYPE_p_Neo__AnimRange swig_types[24]
-#define SWIGTYPE_p_Neo__Armature swig_types[25]
-#define SWIGTYPE_p_Neo__ArmatureAnimRef swig_types[26]
-#define SWIGTYPE_p_Neo__Box3d swig_types[27]
-#define SWIGTYPE_p_Neo__Color swig_types[28]
-#define SWIGTYPE_p_Neo__DataLoadFunction swig_types[29]
-#define SWIGTYPE_p_Neo__DataLoader swig_types[30]
-#define SWIGTYPE_p_Neo__DataManager swig_types[31]
-#define SWIGTYPE_p_Neo__DataRef swig_types[32]
-#define SWIGTYPE_p_Neo__FRAME_BUFFER_ATTACHMENT swig_types[33]
-#define SWIGTYPE_p_Neo__FontRef swig_types[34]
-#define SWIGTYPE_p_Neo__Image swig_types[35]
-#define SWIGTYPE_p_Neo__InputContext swig_types[36]
-#define SWIGTYPE_p_Neo__Level swig_types[37]
-#define SWIGTYPE_p_Neo__Material swig_types[38]
-#define SWIGTYPE_p_Neo__MaterialDisplay swig_types[39]
-#define SWIGTYPE_p_Neo__MaterialsAnimRef swig_types[40]
-#define SWIGTYPE_p_Neo__Matrix4x4 swig_types[41]
-#define SWIGTYPE_p_Neo__Mesh swig_types[42]
-#define SWIGTYPE_p_Neo__MeshRef swig_types[43]
-#define SWIGTYPE_p_Neo__NeoEngine swig_types[44]
-#define SWIGTYPE_p_Neo__NeoGame swig_types[45]
-#define SWIGTYPE_p_Neo__OBone swig_types[46]
-#define SWIGTYPE_p_Neo__OCamera swig_types[47]
-#define SWIGTYPE_p_Neo__OEntity swig_types[48]
-#define SWIGTYPE_p_Neo__OLight swig_types[49]
-#define SWIGTYPE_p_Neo__OSound swig_types[50]
-#define SWIGTYPE_p_Neo__OText swig_types[51]
-#define SWIGTYPE_p_Neo__Object3d swig_types[52]
-#define SWIGTYPE_p_Neo__Object3d__AdditionalData swig_types[53]
-#define SWIGTYPE_p_Neo__PhysicsConstraint swig_types[54]
-#define SWIGTYPE_p_Neo__PhysicsContext swig_types[55]
-#define SWIGTYPE_p_Neo__PhysicsProperties swig_types[56]
-#define SWIGTYPE_p_Neo__Quaternion swig_types[57]
-#define SWIGTYPE_p_Neo__Range swig_types[58]
-#define SWIGTYPE_p_Neo__RenderingContext swig_types[59]
-#define SWIGTYPE_p_Neo__Scene swig_types[60]
-#define SWIGTYPE_p_Neo__Scene__AdditionalData swig_types[61]
-#define SWIGTYPE_p_Neo__ScriptContext swig_types[62]
-#define SWIGTYPE_p_Neo__ShaderRef swig_types[63]
-#define SWIGTYPE_p_Neo__Sound swig_types[64]
-#define SWIGTYPE_p_Neo__SoundContext swig_types[65]
-#define SWIGTYPE_p_Neo__SoundRef swig_types[66]
-#define SWIGTYPE_p_Neo__SubGame swig_types[67]
-#define SWIGTYPE_p_Neo__SubMesh swig_types[68]
-#define SWIGTYPE_p_Neo__SystemContext swig_types[69]
-#define SWIGTYPE_p_Neo__Texture swig_types[70]
-#define SWIGTYPE_p_Neo__TexturePass swig_types[71]
-#define SWIGTYPE_p_Neo__TextureRef swig_types[72]
-#define SWIGTYPE_p_Neo__TexturesAnimRef swig_types[73]
-#define SWIGTYPE_p_Neo__Vector2 swig_types[74]
-#define SWIGTYPE_p_Neo__Vector3 swig_types[75]
-#define SWIGTYPE_p_Neo__Vector4 swig_types[76]
-#define SWIGTYPE_p_PackageManager swig_types[77]
-#define SWIGTYPE_p_PostProcessor swig_types[78]
-#define SWIGTYPE_p_Renderer swig_types[79]
-#define SWIGTYPE_p_RendererManager swig_types[80]
-#define SWIGTYPE_p_SkinData swig_types[81]
-#define SWIGTYPE_p_Skybox swig_types[82]
-#define SWIGTYPE_p_String swig_types[83]
-#define SWIGTYPE_p_Texture swig_types[84]
-#define SWIGTYPE_p_TexturesAnim swig_types[85]
-#define SWIGTYPE_p_Vector3p swig_types[86]
-#define SWIGTYPE_p___int64 swig_types[87]
-#define SWIGTYPE_p_char swig_types[88]
-#define SWIGTYPE_p_double swig_types[89]
-#define SWIGTYPE_p_doublep swig_types[90]
-#define SWIGTYPE_p_f_p_q_const__char_p_void__bool swig_types[91]
-#define SWIGTYPE_p_f_void__int swig_types[92]
-#define SWIGTYPE_p_f_void__intp swig_types[93]
-#define SWIGTYPE_p_float swig_types[94]
-#define SWIGTYPE_p_floatp swig_types[95]
-#define SWIGTYPE_p_int swig_types[96]
-#define SWIGTYPE_p_intp swig_types[97]
-#define SWIGTYPE_p_long swig_types[98]
-#define SWIGTYPE_p_mapT_unsigned_int_unsigned_int_t swig_types[99]
-#define SWIGTYPE_p_p_char swig_types[100]
-#define SWIGTYPE_p_p_unsigned_long swig_types[101]
-#define SWIGTYPE_p_short swig_types[102]
-#define SWIGTYPE_p_signed___int64 swig_types[103]
-#define SWIGTYPE_p_signed_char swig_types[104]
-#define SWIGTYPE_p_uintp swig_types[105]
-#define SWIGTYPE_p_unsigned___int64 swig_types[106]
-#define SWIGTYPE_p_unsigned_char swig_types[107]
-#define SWIGTYPE_p_unsigned_int swig_types[108]
-#define SWIGTYPE_p_unsigned_long swig_types[109]
-#define SWIGTYPE_p_unsigned_short swig_types[110]
-#define SWIGTYPE_p_vectorT_float_t swig_types[111]
-#define SWIGTYPE_p_void swig_types[112]
-static swig_type_info *swig_types[114];
-static swig_module_info swig_module = {swig_types, 113, 0, 0, 0, 0};
+#define SWIGTYPE_p_Neo2D__Gui__ThemedInputField swig_types[17]
+#define SWIGTYPE_p_Neo2D__Neo2DEngine swig_types[18]
+#define SWIGTYPE_p_Neo2D__Sprite swig_types[19]
+#define SWIGTYPE_p_Neo2D__SpriteBatch swig_types[20]
+#define SWIGTYPE_p_Neo2D__Tile swig_types[21]
+#define SWIGTYPE_p_Neo2D__TileSheet swig_types[22]
+#define SWIGTYPE_p_Neo2D__Widget swig_types[23]
+#define SWIGTYPE_p_NeoVariable swig_types[24]
+#define SWIGTYPE_p_Neo__AnimRange swig_types[25]
+#define SWIGTYPE_p_Neo__Armature swig_types[26]
+#define SWIGTYPE_p_Neo__ArmatureAnimRef swig_types[27]
+#define SWIGTYPE_p_Neo__Box3d swig_types[28]
+#define SWIGTYPE_p_Neo__Color swig_types[29]
+#define SWIGTYPE_p_Neo__DataLoadFunction swig_types[30]
+#define SWIGTYPE_p_Neo__DataLoader swig_types[31]
+#define SWIGTYPE_p_Neo__DataManager swig_types[32]
+#define SWIGTYPE_p_Neo__DataRef swig_types[33]
+#define SWIGTYPE_p_Neo__FRAME_BUFFER_ATTACHMENT swig_types[34]
+#define SWIGTYPE_p_Neo__FontRef swig_types[35]
+#define SWIGTYPE_p_Neo__Image swig_types[36]
+#define SWIGTYPE_p_Neo__InputContext swig_types[37]
+#define SWIGTYPE_p_Neo__Level swig_types[38]
+#define SWIGTYPE_p_Neo__Material swig_types[39]
+#define SWIGTYPE_p_Neo__MaterialDisplay swig_types[40]
+#define SWIGTYPE_p_Neo__MaterialsAnimRef swig_types[41]
+#define SWIGTYPE_p_Neo__Matrix4x4 swig_types[42]
+#define SWIGTYPE_p_Neo__Mesh swig_types[43]
+#define SWIGTYPE_p_Neo__MeshRef swig_types[44]
+#define SWIGTYPE_p_Neo__NeoEngine swig_types[45]
+#define SWIGTYPE_p_Neo__NeoGame swig_types[46]
+#define SWIGTYPE_p_Neo__OBone swig_types[47]
+#define SWIGTYPE_p_Neo__OCamera swig_types[48]
+#define SWIGTYPE_p_Neo__OEntity swig_types[49]
+#define SWIGTYPE_p_Neo__OLight swig_types[50]
+#define SWIGTYPE_p_Neo__OSound swig_types[51]
+#define SWIGTYPE_p_Neo__OText swig_types[52]
+#define SWIGTYPE_p_Neo__Object3d swig_types[53]
+#define SWIGTYPE_p_Neo__Object3d__AdditionalData swig_types[54]
+#define SWIGTYPE_p_Neo__PhysicsConstraint swig_types[55]
+#define SWIGTYPE_p_Neo__PhysicsContext swig_types[56]
+#define SWIGTYPE_p_Neo__PhysicsProperties swig_types[57]
+#define SWIGTYPE_p_Neo__Quaternion swig_types[58]
+#define SWIGTYPE_p_Neo__Range swig_types[59]
+#define SWIGTYPE_p_Neo__RenderingContext swig_types[60]
+#define SWIGTYPE_p_Neo__Scene swig_types[61]
+#define SWIGTYPE_p_Neo__Scene__AdditionalData swig_types[62]
+#define SWIGTYPE_p_Neo__ScriptContext swig_types[63]
+#define SWIGTYPE_p_Neo__ShaderRef swig_types[64]
+#define SWIGTYPE_p_Neo__Sound swig_types[65]
+#define SWIGTYPE_p_Neo__SoundContext swig_types[66]
+#define SWIGTYPE_p_Neo__SoundRef swig_types[67]
+#define SWIGTYPE_p_Neo__SubGame swig_types[68]
+#define SWIGTYPE_p_Neo__SubMesh swig_types[69]
+#define SWIGTYPE_p_Neo__SystemContext swig_types[70]
+#define SWIGTYPE_p_Neo__Texture swig_types[71]
+#define SWIGTYPE_p_Neo__TexturePass swig_types[72]
+#define SWIGTYPE_p_Neo__TextureRef swig_types[73]
+#define SWIGTYPE_p_Neo__TexturesAnimRef swig_types[74]
+#define SWIGTYPE_p_Neo__Vector2 swig_types[75]
+#define SWIGTYPE_p_Neo__Vector3 swig_types[76]
+#define SWIGTYPE_p_Neo__Vector4 swig_types[77]
+#define SWIGTYPE_p_PackageManager swig_types[78]
+#define SWIGTYPE_p_PostProcessor swig_types[79]
+#define SWIGTYPE_p_Renderer swig_types[80]
+#define SWIGTYPE_p_RendererManager swig_types[81]
+#define SWIGTYPE_p_SkinData swig_types[82]
+#define SWIGTYPE_p_Skybox swig_types[83]
+#define SWIGTYPE_p_String swig_types[84]
+#define SWIGTYPE_p_Texture swig_types[85]
+#define SWIGTYPE_p_TexturesAnim swig_types[86]
+#define SWIGTYPE_p_Vector3p swig_types[87]
+#define SWIGTYPE_p___int64 swig_types[88]
+#define SWIGTYPE_p_char swig_types[89]
+#define SWIGTYPE_p_double swig_types[90]
+#define SWIGTYPE_p_doublep swig_types[91]
+#define SWIGTYPE_p_f_p_q_const__char_p_void__bool swig_types[92]
+#define SWIGTYPE_p_f_void__int swig_types[93]
+#define SWIGTYPE_p_f_void__intp swig_types[94]
+#define SWIGTYPE_p_float swig_types[95]
+#define SWIGTYPE_p_floatp swig_types[96]
+#define SWIGTYPE_p_int swig_types[97]
+#define SWIGTYPE_p_intp swig_types[98]
+#define SWIGTYPE_p_long swig_types[99]
+#define SWIGTYPE_p_mapT_unsigned_int_unsigned_int_t swig_types[100]
+#define SWIGTYPE_p_p_char swig_types[101]
+#define SWIGTYPE_p_p_unsigned_long swig_types[102]
+#define SWIGTYPE_p_short swig_types[103]
+#define SWIGTYPE_p_signed___int64 swig_types[104]
+#define SWIGTYPE_p_signed_char swig_types[105]
+#define SWIGTYPE_p_uintp swig_types[106]
+#define SWIGTYPE_p_unsigned___int64 swig_types[107]
+#define SWIGTYPE_p_unsigned_char swig_types[108]
+#define SWIGTYPE_p_unsigned_int swig_types[109]
+#define SWIGTYPE_p_unsigned_long swig_types[110]
+#define SWIGTYPE_p_unsigned_short swig_types[111]
+#define SWIGTYPE_p_vectorT_float_t swig_types[112]
+#define SWIGTYPE_p_void swig_types[113]
+static swig_type_info *swig_types[115];
+static swig_module_info swig_module = {swig_types, 114, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2765,6 +2766,7 @@ typedef struct{} LANGUAGE_OBJ;
         #include <Sprite.h>
         #include <Tile.h>
         #include <InputField.h>
+        #include <ThemedInputField.h>
         #include <Canvas.h>
         #include <Label.h>
 
@@ -44994,6 +44996,30 @@ fail:
 }
 
 
+static int _wrap_Neo2DEngine_getThemeDirectory(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Neo2DEngine::getThemeDirectory",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::getThemeDirectory",1,"Neo2D::Neo2DEngine *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_getThemeDirectory",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
+  }
+  
+  result = (char *)(arg1)->getThemeDirectory();
+  lua_pushstring(L,(const char *)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_Neo2DEngine_getThemeBorderH(lua_State* L) {
   int SWIG_arg = 0;
   Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
@@ -45928,6 +45954,7 @@ static swig_lua_attribute swig_Neo2DEngine_attributes[] = {
     {0,0,0}
 };
 static swig_lua_method swig_Neo2DEngine_methods[]= {
+    { "getThemeDirectory", _wrap_Neo2DEngine_getThemeDirectory},
     { "getThemeBorderH", _wrap_Neo2DEngine_getThemeBorderH},
     { "getThemeBorderV", _wrap_Neo2DEngine_getThemeBorderV},
     { "getThemeBody", _wrap_Neo2DEngine_getThemeBody},
@@ -47183,6 +47210,113 @@ static swig_lua_namespace swig_ThemedButton_Sf_SwigStatic = {
 static swig_lua_class *swig_ThemedButton_bases[] = {0,0};
 static const char *swig_ThemedButton_base_names[] = {"Neo2D::Gui::Button *",0};
 static swig_lua_class _wrap_class_ThemedButton = { "ThemedButton", "ThemedButton", &SWIGTYPE_p_Neo2D__Gui__ThemedButton,_proxy__wrap_new_ThemedButton, swig_delete_ThemedButton, swig_ThemedButton_methods, swig_ThemedButton_attributes, &swig_ThemedButton_Sf_SwigStatic, swig_ThemedButton_meta, swig_ThemedButton_bases, swig_ThemedButton_base_names };
+
+static int _wrap_new_ThemedInputField(lua_State* L) {
+  int SWIG_arg = 0;
+  unsigned int arg1 ;
+  unsigned int arg2 ;
+  unsigned int arg3 ;
+  unsigned int arg4 ;
+  char *arg5 = (char *) 0 ;
+  Neo2D::Gui::ThemedInputField *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::ThemedInputField::ThemedInputField",5,5)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::ThemedInputField",1,"unsigned int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::ThemedInputField",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::ThemedInputField",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::ThemedInputField",4,"unsigned int");
+  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::ThemedInputField",5,"char const *");
+  SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
+  arg1 = (unsigned int)lua_tonumber(L, 1);
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
+  arg4 = (unsigned int)lua_tonumber(L, 4);
+  arg5 = (char *)lua_tostring(L, 5);
+  result = (Neo2D::Gui::ThemedInputField *)new Neo2D::Gui::ThemedInputField(arg1,arg2,arg3,arg4,(char const *)arg5);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__ThemedInputField,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ThemedInputField_draw(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::ThemedInputField *arg1 = (Neo2D::Gui::ThemedInputField *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::ThemedInputField::draw",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::draw",1,"Neo2D::Gui::ThemedInputField *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ThemedInputField,0))){
+    SWIG_fail_ptr("ThemedInputField_draw",1,SWIGTYPE_p_Neo2D__Gui__ThemedInputField);
+  }
+  
+  (arg1)->draw();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_ThemedInputField(void *obj) {
+Neo2D::Gui::ThemedInputField *arg1 = (Neo2D::Gui::ThemedInputField *) obj;
+delete arg1;
+}
+static int _proxy__wrap_new_ThemedInputField(lua_State *L) {
+    assert(lua_istable(L,1));
+    lua_pushcfunction(L,_wrap_new_ThemedInputField);
+    assert(!lua_isnil(L,-1));
+    lua_replace(L,1); /* replace our table with real constructor */
+    lua_call(L,lua_gettop(L)-1,1);
+    return 1;
+}
+static swig_lua_attribute swig_ThemedInputField_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_ThemedInputField_methods[]= {
+    { "draw", _wrap_ThemedInputField_draw},
+    {0,0}
+};
+static swig_lua_method swig_ThemedInputField_meta[] = {
+    {0,0}
+};
+
+static swig_lua_attribute swig_ThemedInputField_Sf_SwigStatic_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_const_info swig_ThemedInputField_Sf_SwigStatic_constants[]= {
+    {0,0,0,0,0,0}
+};
+static swig_lua_method swig_ThemedInputField_Sf_SwigStatic_methods[]= {
+    {0,0}
+};
+static swig_lua_class* swig_ThemedInputField_Sf_SwigStatic_classes[]= {
+    0
+};
+
+static swig_lua_namespace swig_ThemedInputField_Sf_SwigStatic = {
+    "ThemedInputField",
+    swig_ThemedInputField_Sf_SwigStatic_methods,
+    swig_ThemedInputField_Sf_SwigStatic_attributes,
+    swig_ThemedInputField_Sf_SwigStatic_constants,
+    swig_ThemedInputField_Sf_SwigStatic_classes,
+    0
+};
+static swig_lua_class *swig_ThemedInputField_bases[] = {0,0};
+static const char *swig_ThemedInputField_base_names[] = {"Neo2D::Gui::InputField *",0};
+static swig_lua_class _wrap_class_ThemedInputField = { "ThemedInputField", "ThemedInputField", &SWIGTYPE_p_Neo2D__Gui__ThemedInputField,_proxy__wrap_new_ThemedInputField, swig_delete_ThemedInputField, swig_ThemedInputField_methods, swig_ThemedInputField_attributes, &swig_ThemedInputField_Sf_SwigStatic, swig_ThemedInputField_meta, swig_ThemedInputField_bases, swig_ThemedInputField_base_names };
 
 static int _wrap_new_Label(lua_State* L) {
   int SWIG_arg = 0;
@@ -48590,6 +48724,7 @@ static swig_lua_class* swig_SwigModule_classes[]= {
 &_wrap_class_Tile,
 &_wrap_class_InputField,
 &_wrap_class_ThemedButton,
+&_wrap_class_ThemedInputField,
 &_wrap_class_Label,
 &_wrap_class_intp,
 &_wrap_class_uintp,
@@ -48625,6 +48760,9 @@ static void *_p_f_void__intpTo_p_f_void__int(void *x, int *SWIGUNUSEDPARM(newmem
 static void *_p_uintpTo_p_unsigned_int(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((unsigned int *)  ((uintp *) x));
 }
+static void *_p_Neo2D__Gui__ThemedInputFieldTo_p_Neo2D__Gui__InputField(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Neo2D::Gui::InputField *)  ((Neo2D::Gui::ThemedInputField *) x));
+}
 static void *_p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Gui__Button(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::Gui::Button *)  ((Neo2D::Gui::ThemedButton *) x));
 }
@@ -48651,6 +48789,9 @@ static void *_p_Neo2D__SpriteTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(new
 }
 static void *_p_Neo2D__Gui__InputFieldTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::Widget *)  ((Neo2D::Gui::InputField *) x));
+}
+static void *_p_Neo2D__Gui__ThemedInputFieldTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Neo2D::Widget *) (Neo2D::Gui::InputField *) ((Neo2D::Gui::ThemedInputField *) x));
 }
 static void *_p_Neo2D__TileTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::Widget *)  ((Neo2D::Tile *) x));
@@ -48693,6 +48834,7 @@ static swig_type_info _swigt__p_Neo2D__Gui__Button = {"_p_Neo2D__Gui__Button", "
 static swig_type_info _swigt__p_Neo2D__Gui__InputField = {"_p_Neo2D__Gui__InputField", "Neo2D::Gui::InputField *", 0, 0, (void*)&_wrap_class_InputField, 0};
 static swig_type_info _swigt__p_Neo2D__Gui__Label = {"_p_Neo2D__Gui__Label", "Neo2D::Gui::Label *", 0, 0, (void*)&_wrap_class_Label, 0};
 static swig_type_info _swigt__p_Neo2D__Gui__ThemedButton = {"_p_Neo2D__Gui__ThemedButton", "Neo2D::Gui::ThemedButton *", 0, 0, (void*)&_wrap_class_ThemedButton, 0};
+static swig_type_info _swigt__p_Neo2D__Gui__ThemedInputField = {"_p_Neo2D__Gui__ThemedInputField", "Neo2D::Gui::ThemedInputField *", 0, 0, (void*)&_wrap_class_ThemedInputField, 0};
 static swig_type_info _swigt__p_Neo2D__Neo2DEngine = {"_p_Neo2D__Neo2DEngine", "Neo2D::Neo2DEngine *", 0, 0, (void*)&_wrap_class_Neo2DEngine, 0};
 static swig_type_info _swigt__p_Neo2D__Sprite = {"_p_Neo2D__Sprite", "Neo2D::Sprite *", 0, 0, (void*)&_wrap_class_Sprite, 0};
 static swig_type_info _swigt__p_Neo2D__SpriteBatch = {"_p_Neo2D__SpriteBatch", "Neo2D::SpriteBatch *", 0, 0, (void*)&_wrap_class_SpriteBatch, 0};
@@ -48808,6 +48950,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Neo2D__Gui__InputField,
   &_swigt__p_Neo2D__Gui__Label,
   &_swigt__p_Neo2D__Gui__ThemedButton,
+  &_swigt__p_Neo2D__Gui__ThemedInputField,
   &_swigt__p_Neo2D__Neo2DEngine,
   &_swigt__p_Neo2D__Sprite,
   &_swigt__p_Neo2D__SpriteBatch,
@@ -48920,15 +49063,16 @@ static swig_cast_info _swigc__p_MaterialsAnim[] = {  {&_swigt__p_MaterialsAnim, 
 static swig_cast_info _swigc__p_MorphingData[] = {  {&_swigt__p_MorphingData, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Canvas[] = {  {&_swigt__p_Neo2D__Canvas, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Gui__Button[] = {  {&_swigt__p_Neo2D__Gui__ThemedButton, _p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Gui__Button, 0, 0},  {&_swigt__p_Neo2D__Gui__Button, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo2D__Gui__InputField[] = {  {&_swigt__p_Neo2D__Gui__InputField, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Gui__InputField[] = {  {&_swigt__p_Neo2D__Gui__InputField, 0, 0, 0},  {&_swigt__p_Neo2D__Gui__ThemedInputField, _p_Neo2D__Gui__ThemedInputFieldTo_p_Neo2D__Gui__InputField, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Gui__Label[] = {  {&_swigt__p_Neo2D__Gui__Label, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Gui__ThemedButton[] = {  {&_swigt__p_Neo2D__Gui__ThemedButton, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Gui__ThemedInputField[] = {  {&_swigt__p_Neo2D__Gui__ThemedInputField, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Neo2DEngine[] = {  {&_swigt__p_Neo2D__Neo2DEngine, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Sprite[] = {  {&_swigt__p_Neo2D__Sprite, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__SpriteBatch[] = {  {&_swigt__p_Neo2D__SpriteBatch, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Tile[] = {  {&_swigt__p_Neo2D__Tile, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__TileSheet[] = {  {&_swigt__p_Neo2D__TileSheet, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo2D__Widget[] = {  {&_swigt__p_Neo2D__Gui__Label, _p_Neo2D__Gui__LabelTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ThemedButton, _p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Tile, _p_Neo2D__TileTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Button, _p_Neo2D__Gui__ButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Sprite, _p_Neo2D__SpriteTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__InputField, _p_Neo2D__Gui__InputFieldTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Widget, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Widget[] = {  {&_swigt__p_Neo2D__Gui__Label, _p_Neo2D__Gui__LabelTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ThemedButton, _p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Tile, _p_Neo2D__TileTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Button, _p_Neo2D__Gui__ButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Sprite, _p_Neo2D__SpriteTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__InputField, _p_Neo2D__Gui__InputFieldTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ThemedInputField, _p_Neo2D__Gui__ThemedInputFieldTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Widget, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_NeoVariable[] = {  {&_swigt__p_NeoVariable, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__AnimRange[] = {  {&_swigt__p_Neo__AnimRange, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Armature[] = {  {&_swigt__p_Neo__Armature, 0, 0, 0},{0, 0, 0, 0}};
@@ -49038,6 +49182,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Neo2D__Gui__InputField,
   _swigc__p_Neo2D__Gui__Label,
   _swigc__p_Neo2D__Gui__ThemedButton,
+  _swigc__p_Neo2D__Gui__ThemedInputField,
   _swigc__p_Neo2D__Neo2DEngine,
   _swigc__p_Neo2D__Sprite,
   _swigc__p_Neo2D__SpriteBatch,

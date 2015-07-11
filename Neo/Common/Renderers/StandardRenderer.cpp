@@ -29,6 +29,9 @@
 #include <Window/Window.h>
 #include <string>
 
+//#include <codecvt>
+//#include <locale>
+
 #ifndef SHADER_PATH
 #define SHADER_PATH "./"
 #endif
@@ -1067,7 +1070,11 @@ void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 
 	float lineOffset = (*linesOffset)[0];
 	int line = 0;
-
+	
+	/*std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> utf16conv;
+    std::u32string unicodeStr = utf16conv.from_bytes(text);
+	length = unicodeStr.length();*/
+	
 	for (int i = 0; i < length; i++)
 	{
 		if (text[i] == '\n')
@@ -1086,7 +1093,7 @@ void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 			xpos = tab*tabsize;
 			continue;
 		}
-		
+
 		c = font->getCharacter(text[i]);
 
 		if (!c)
