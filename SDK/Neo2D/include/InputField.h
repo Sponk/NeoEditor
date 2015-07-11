@@ -67,6 +67,7 @@ class NEO2D_EXPORT InputField : public Widget
 {
 	OText* m_labelText;
 	INPUT_STATE m_state;
+	unsigned int m_cursorpos;
 	
 	void updateLabel(string s);
 

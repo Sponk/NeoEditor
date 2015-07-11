@@ -436,10 +436,10 @@ void main(void)
 	{
 		FragColor = shadeModel(position, normal);
 
+        Data.r = 1.0;
 		if(FragColor.a < 0.1)
 			discard;
 		
-        Data.r = 1.0;
 		//FragColor.a = 1.0;
 		return;
 	}

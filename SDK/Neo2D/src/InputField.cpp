@@ -49,7 +49,8 @@ using namespace Gui;
 InputField::InputField(unsigned int x, unsigned int y, unsigned int width,
 					   unsigned int height, const char* label)
 	: Widget(x, y, width, height, label),
-	  m_labelText(NULL)
+	  m_labelText(NULL),
+	  m_cursorpos(0)
 {
 
 }
@@ -127,7 +128,12 @@ void InputField::draw()
 void InputField::updateLabel(string s)
 {
 	// Update text
-	m_labelText->setText((s + ((m_state == INPUT_SELECTED_STATE) ? "|" : "")).c_str());
+	string prefix = s;
+	prefix.erase(m_cursorpos);
+
+	string postfix = s.substr(m_cursorpos);
+	
+	m_labelText->setText((prefix + ((m_state == INPUT_SELECTED_STATE) ? "|" : "") + postfix).c_str());
 }
 
 void InputField::update()
@@ -173,16 +179,46 @@ void InputField::update()
 	{
 		unsigned int c = input->popLastChar();
 
+		if(input->isKeyPressed("LEFT") && m_cursorpos > 0)
+			m_cursorpos--;
+
+		if(input->isKeyPressed("RIGHT") && m_cursorpos < m_label.length())
+			m_cursorpos++;
+
+		input->upKey("LEFT");
+		input->upKey("RIGHT");			
+		
 		if (input->isKeyPressed("BACKSPACE"))
 		{
 			input->upKey("BACKSPACE");
-			if (m_label.length() >= 1)
-				m_label.erase(m_label.end() - 1, m_label.end());
+			if (m_label.length() >= 1 && m_cursorpos > 0)
+			{
+				auto endDelete = m_label.begin() + m_cursorpos;
+				m_label.erase(endDelete - 1, endDelete);
+				m_cursorpos--;
+			}
 		}
 
+		if (input->isKeyPressed("DELETE"))
+		{
+			input->upKey("DELETE");
+			if (m_label.length() >= 1 && m_cursorpos < m_label.length())
+			{
+				auto endDelete = m_label.begin() + m_cursorpos;
+				m_label.erase(endDelete, endDelete + 1);
+			}
+		}
 
 		if (c != '\0')
-			m_label += (char) c;
+		{
+			string prefix = m_label;
+			prefix.erase(m_cursorpos);
+						
+			string postfix = m_label.substr(m_cursorpos);
+			m_label = prefix + (char) c + postfix;
+			
+			m_cursorpos++;
+		}
 	}
 
 #endif

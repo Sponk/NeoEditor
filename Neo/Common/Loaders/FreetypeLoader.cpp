@@ -67,9 +67,16 @@ bool M_loadFont(const char * filename, void * data)
 
 	// Change this for higher resolutions
 	Font * font = (Font *)data;
-	float size = font->getFontSize() * 2;
+
+	float size;
+
+	if(font->getFontSize() > 0)
+		size = font->getFontSize() * 2;
+	else
+		size = 128;
+	
 	unsigned int width = 1024;
-	unsigned int height = 0;//32;
+	unsigned int height = 0;
 
 	unsigned int flags = FT_LOAD_RENDER | FT_LOAD_NO_HINTING;
 	
