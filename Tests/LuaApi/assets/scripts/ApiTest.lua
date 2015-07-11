@@ -11,7 +11,8 @@ require("NeoLua")
 local engine2d = NeoLua.Neo2DEngine.getInstance()
 engine2d:setEnabled(true)
 
-inputField = NeoLua.ThemedInputField(100, 300, 300, 30, "");
+engine2d:setDefaultFontSize(16)
+inputField = NeoLua.ThemedInputField(100, 300, 300, 300, "");
 button = NeoLua.ThemedButton(100, 100, 300, 90, "This is a button!")
 label = NeoLua.Label(100, 200, 0, 30, "This is a label!")
 
@@ -24,7 +25,7 @@ canvas:addWidget(buttonhandle)
 canvas:addWidget(labelhandle)
 canvas:addWidget(inputhandle)
 
-button:setFontSize(16)
+button:setFontSize(14)
 
 function buttonCallback()
 	print("Callback!")

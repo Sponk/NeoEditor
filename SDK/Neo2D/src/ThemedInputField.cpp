@@ -150,6 +150,7 @@ void ThemedInputField::draw()
 	// Update text
 	updateLabel(m_label);
 	float offset = calculateWidth(m_labelText);
+	Box3d* box = m_labelText->getBoundingBox();
 
 	// Calculate overflow offset
 	if(offset <= m_width) offset = 0.0f; // If we do not overflow, simply ignore
@@ -162,7 +163,7 @@ void ThemedInputField::draw()
 	renderContext->setScissor(m_x, winh - (m_y + m_height), m_width, m_height);
 
 	render->drawText(m_labelText, m_x - offset,
-					 m_y + 0.5*m_height,
+					 m_y + m_fontSize + m_marginTop,
 					 m_rotation);
 
 	renderContext->disableScissorTest();

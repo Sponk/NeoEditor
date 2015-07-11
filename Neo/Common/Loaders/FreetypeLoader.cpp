@@ -71,7 +71,7 @@ bool M_loadFont(const char * filename, void * data)
 	float size;
 
 	if(font->getFontSize() > 0)
-		size = font->getFontSize() * 2;
+		size = font->getFontSize();
 	else
 		size = 128;
 	

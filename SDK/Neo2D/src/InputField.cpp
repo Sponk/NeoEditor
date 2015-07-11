@@ -185,9 +185,6 @@ void InputField::update()
 
 		if(input->isKeyPressed("RIGHT") && m_cursorpos < m_label.length())
 			m_cursorpos++;
-
-		input->upKey("LEFT");
-		input->upKey("RIGHT");			
 		
 		if (input->isKeyPressed("BACKSPACE"))
 		{
@@ -209,6 +206,13 @@ void InputField::update()
 				m_label.erase(endDelete, endDelete + 1);
 			}
 		}
+
+		if(input->isKeyPressed("ENTER") && c == '\0')
+			c = '\n';
+
+		input->upKey("LEFT");
+		input->upKey("RIGHT");
+		input->upKey("ENTER");
 
 		if (c != '\0')
 		{
