@@ -83,8 +83,7 @@ public:
 	InputField(unsigned int x, unsigned int y, unsigned int width,
 			   unsigned int height, const char* label);
 
-	void draw();
-	void draw(Vector2 offset) { draw(); }
+	void draw(Vector2 offset);
 	void update();
 
 	void setState(INPUT_STATE state) { m_state = state; }

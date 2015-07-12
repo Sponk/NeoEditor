@@ -1,8 +1,11 @@
-#version 330
-//#version 400
+#version 400
+//#version 330
 
-#extension ARB_explicit_attrib_location : enable
-#extension ARB_shader_subroutines : enable
+//#extension ARB_explicit_attrib_location : enable
+//#extension ARB_shader_subroutines : enable
+
+#define ARB_shader_subroutines
+#define ARB_explicit_attrib_location
 
 #ifdef ARB_shader_subroutines
 subroutine vec4 shadeModelType(vec3 position, vec3 normal);
@@ -398,17 +401,10 @@ vec4 TextShader(vec3 position, vec3 n)
 }
 
 // Fallback selection
-#ifndef ARB_shader_subroutines
+/*#ifndef ARB_shader_subroutines
 vec4 shadeModel(vec3 position, vec3 n)
 {
     vec4 retval;
-
-    /*switch(TextureMode)
-    {
-        case -1: // Text
-            retval = TextShader(position, n);
-        break;
-    }*/
 
     if(TextureMode == -1)
         return TextShader(position, n);
@@ -423,7 +419,7 @@ vec4 shadeModel(vec3 position, vec3 n)
 
     return retval;
 }
-#endif
+#endif*/
 
 void main(void)
 {
@@ -436,7 +432,7 @@ void main(void)
 	{
 		FragColor = shadeModel(position, normal);
 
-        Data.r = 1.0;
+                Data.r = 1.0;
 		if(FragColor.a < 0.1)
 			discard;
 		

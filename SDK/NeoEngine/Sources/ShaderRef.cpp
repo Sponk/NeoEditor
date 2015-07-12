@@ -75,14 +75,14 @@ void ShaderRef::update(void)
 		}
 
 		size_t sz = strlen(text) + strlen(m_header.getSafeString());
-		char* sources = new char[sz];
-		strcpy(sources, m_header.getSafeString());
-		strcat(sources, text);
+		//char* sources = new char[sz];
+		//strcpy(sources, m_header.getSafeString());
+		//strcat(sources, text);
 
 		// send shader source
-		render->sendShaderSource(m_shaderId, sources);
+		render->sendShaderSource(m_shaderId, text);
 		SAFE_FREE(text);
-		SAFE_DELETE(sources);
+		//SAFE_DELETE(sources);
 
 		FXManager * fx_manager = level->getFXManager();
 

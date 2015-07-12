@@ -600,7 +600,7 @@ void FixedRenderer::drawText(OText * textObj)
 	float size = textObj->getSize();
 	float tabSize = size*2;
 	float fontSize = (float)font->getFontSize();
-	float widthFactor = font->getTextureWith() / fontSize;
+    float widthFactor = font->getTextureWidth() / fontSize;
 	float heightFactor = font->getTextureHeight() / fontSize;
 	float xc = 0, yc = 0;
 

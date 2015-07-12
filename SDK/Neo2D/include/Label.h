@@ -97,8 +97,7 @@ public:
 	 */
 	const char* getFont() { return m_font.getSafeString(); }
 
-	void draw();
-	void draw(Vector2 offset) { draw(); }
+	void draw(Vector2 offset);
 	void update();
 };
 }

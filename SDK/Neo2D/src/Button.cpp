@@ -49,8 +49,10 @@ Button::Button(unsigned int x, unsigned int y, unsigned int width,
 {
 }
 
-void Button::draw()
+void Button::draw(Vector2 offset)
 {
+	Widget::draw(offset);
+
 	Render* render = Render::getInstance();
 	Neo2DEngine* gui = Neo2DEngine::getInstance();
 

@@ -95,7 +95,7 @@ void OText::updateLinesOffset(void)
 
 	float tabSize = m_size*2;
 	float fontSize = (float)font->getFontSize();
-	float widthFactor = font->getTextureWith() / fontSize;
+    float widthFactor = font->getTextureWidth() / fontSize;
 	float xc = 0;
 	float min = 0;
 	float max = 0;
@@ -219,7 +219,7 @@ void OText::prepare(void)
 
 	float tabSize = m_size*2;
 	float fontSize = (float)font->getFontSize();
-	float widthFactor = font->getTextureWith() / fontSize;
+    float widthFactor = font->getTextureWidth() / fontSize;
 	float heightFactor = font->getTextureHeight() / fontSize;
 	float xc = 0, yc = 0;
 		

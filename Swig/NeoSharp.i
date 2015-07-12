@@ -14,6 +14,9 @@
         #include <Canvas.h>
         #include <Label.h>
 
+        #include <Container.h>
+		#include <Window.h>
+
         using namespace Neo;
         using namespace Neo2D;
         using namespace Gui;
@@ -68,7 +71,6 @@
 %include <Armature.h>
 
 
-
 #define NEO_CORE_EXPORT
 #define NEO2D_EXPORT
 %include <Neo2D.h>
@@ -77,9 +79,13 @@
 %include <Neo2DEngine.h>
 %include <Button.h>
 
+%include <Container.h>
+%include <Window.h>
+
 %include <Sprite.h>
 %include <Tile.h>
 %include <InputField.h>
 %include <ThemedInputField.h>
 %include <ThemedButton.h>
 %include <Label.h>
+

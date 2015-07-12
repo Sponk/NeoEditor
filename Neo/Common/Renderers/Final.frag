@@ -1,7 +1,9 @@
-#version 330
+#version 400
 
-#extension ARB_explicit_attrib_location : enable
-#extension ARB_shader_subroutines : enable
+//#extension ARB_explicit_attrib_location : enable
+//#extension ARB_shader_subroutines : enable
+
+#define ARB_explicit_attrib_location
 
 #define MAX_ENTITY_LIGHTS 256
 
@@ -116,7 +118,7 @@ void main(void)
 	vec4 data = texture2D(Textures[4], texCoord);
 	FragColor = texture2D(Textures[0], texCoord);//gammaCorrection(texture2D(Textures[0], texCoord), 1.2);
 
-	data.r = 0;
+    data.r = 0;
     if(FragColor.a == 1.0 && data.r == 0)
 	{
 		vec4 p = texture2D(Textures[3], texCoord);

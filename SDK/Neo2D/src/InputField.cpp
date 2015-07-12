@@ -68,11 +68,14 @@ float InputField::calculateWidth(OText* text)
 	return length * text->getSize();
 }
 
-void InputField::draw()
+void InputField::draw(Vector2 offset)
 {
 	Render* render = Render::getInstance();
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	Neo2DEngine* gui = Neo2DEngine::getInstance();
+
+	Widget::draw(offset);
+	offset += getPosition();
 
 	unsigned int winh, winw;
 	system->getScreenSize(&winw, &winh);
@@ -104,22 +107,22 @@ void InputField::draw()
 	updateLabel(m_label);
 
 	Box3d* box = m_labelText->getBoundingBox();
-	float offset = calculateWidth(m_labelText);
+	float textOffset = calculateWidth(m_labelText);
 
 	// Calculate overflow offset
-	if(offset <= m_width) offset = 0.0f; // If we do not overflow, simply ignore
-	else offset -= m_width; // Calculate the new position relative to the right edge
+	if (textOffset <= m_width) textOffset = 0.0f; // If we do not overflow, simply ignore
+	else textOffset -= m_width; // Calculate the new position relative to the right edge
 
 	RenderingContext* renderContext =
 		NeoEngine::getInstance()->getRenderingContext();
 
-	render->drawColoredQuad(m_x, m_y, m_width, m_height, color);
+	render->drawColoredQuad(offset.x, offset.y, m_width, m_height, color);
 
 	renderContext->enableScissorTest();
-	renderContext->setScissor(m_x, winh - (m_y + m_height), m_width, m_height);
+	renderContext->setScissor(offset.x, winh - (offset.y + m_height), m_width, m_height);
 
-	render->drawText(m_labelText, m_x - offset,
-					 m_y + 0.5*(box->max.y - box->min.y) + 0.5 * m_height,
+	render->drawText(m_labelText, offset.x - textOffset,
+					offset.y + 0.5*(box->max.y - box->min.y) + 0.5 * m_height,
 					 m_rotation);
 
 	renderContext->disableScissorTest();
@@ -153,7 +156,10 @@ void InputField::update()
 	x = input->getAxis("MOUSE_X") * res.x;
 	y = input->getAxis("MOUSE_Y") * res.y;
 	
-	if (x >= m_x && x <= m_x + m_width && y >= m_y && y <= m_y + m_height &&
+	unsigned int wx = m_offset.x + m_x;
+	unsigned int wy = m_offset.y + m_y;
+
+	if (x >= wx && x <= wx + m_width && y >= wy && y <= wy + m_height &&
 		m_state != INPUT_SELECTED_STATE)
 	{
 		m_state = INPUT_HOVER_STATE;
@@ -162,8 +168,8 @@ void InputField::update()
 	{
 		m_state = INPUT_NORMAL_STATE;
 	}
-	else if (!(x >= m_x && x <= m_x + m_width && y >= m_y &&
-			   y <= m_y + m_height) &&
+	else if (!(x >= wx && x <= wx + m_width && y >= wy &&
+		y <= wy + m_height) &&
 			 m_state == INPUT_SELECTED_STATE && input->isKeyPressed("MOUSE_BUTTON_LEFT"))
 	{
 		m_state = INPUT_NORMAL_STATE;

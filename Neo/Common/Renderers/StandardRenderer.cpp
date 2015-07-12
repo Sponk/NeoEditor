@@ -1053,7 +1053,7 @@ void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 	float fontSize = font->getFontSize();
 	float size = textObj->getSize();
 	float tabsize = size * 2.0f;
-	float widthFactor = static_cast<float>(font->getTextureWith()) / fontSize;
+    float widthFactor = static_cast<float>(font->getTextureWidth()) / fontSize;
 	float heightFactor = static_cast<float>(font->getTextureHeight()) / fontSize;
 
 	float xpos = 0;

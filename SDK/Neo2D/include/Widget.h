@@ -82,6 +82,9 @@ protected:
 	/// The label of the widget
 	std::string m_label;
 
+	/// The offset that was used for rendering in the last frame
+	Vector2 m_offset;
+
 #ifndef SWIG
 	/// The callback that should be called
 	CALLBACK_FUNCTION m_callback;
@@ -138,7 +141,7 @@ public:
 	 *
 	 * @see Canvas
 	 */
-	virtual void draw(Vector2 offset) = 0;
+	virtual void draw(Vector2 offset) { m_offset = offset; }
 
 	/**
 	 * @brief Updates the widget and calls the callback if necessary.

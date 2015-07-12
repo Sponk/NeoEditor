@@ -12,18 +12,19 @@ local engine2d = NeoLua.Neo2DEngine.getInstance()
 engine2d:setEnabled(true)
 
 engine2d:setDefaultFontSize(16)
-inputField = NeoLua.ThemedInputField(100, 300, 300, 20, "");
-button = NeoLua.ThemedButton(100, 100, 300, 20, "This is a button!")
-label = NeoLua.Label(100, 200, 0, 30, "This is a label!")
+inputField = NeoLua.ThemedInputField(10, 40, 200, 20, "");
+button = NeoLua.ThemedButton(10, 10, 120, 20, "This is a button!")
+label = NeoLua.Label(10, 70, 0, 30, "This is a label!")
 
-labelhandle = engine2d:addWidget(label)
-buttonhandle = engine2d:addWidget(button)
-inputhandle = engine2d:addWidget(inputField)
+container = NeoLua.Window(500,100,400,300,"Window title!")
+container:addWidget(button)
+container:addWidget(inputField)
+container:addWidget(label)
+
+containerhandle = engine2d:addWidget(container)
 
 canvas = engine2d:getCanvas(0)
-canvas:addWidget(buttonhandle)
-canvas:addWidget(labelhandle)
-canvas:addWidget(inputhandle)
+canvas:addWidget(containerhandle)
 
 button:setFontSize(14)
 

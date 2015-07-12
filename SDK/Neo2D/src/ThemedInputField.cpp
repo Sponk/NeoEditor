@@ -91,11 +91,14 @@ void ThemedInputField::loadSprites(Sprite* sprites[], const char* vert,
 		sprites[BOTTOM_RIGHT]->setRotation(-90);
 }
 
-void ThemedInputField::draw()
+void ThemedInputField::draw(Vector2 offset)
 {
 	Render* render = Render::getInstance();
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	Neo2DEngine* gui = Neo2DEngine::getInstance();
+
+	Widget::draw(offset);
+	offset += getPosition();
 
 	unsigned int winh, winw;
 	system->getScreenSize(&winw, &winh);
@@ -149,21 +152,21 @@ void ThemedInputField::draw()
 
 	// Update text
 	updateLabel(m_label);
-	float offset = calculateWidth(m_labelText);
+	float textOffset = calculateWidth(m_labelText);
 	Box3d* box = m_labelText->getBoundingBox();
 
 	// Calculate overflow offset
-	if(offset <= m_width) offset = 0.0f; // If we do not overflow, simply ignore
-	else offset -= m_width; // Calculate the new position relative to the right edge
+	if (textOffset <= m_width) textOffset = 0.0f; // If we do not overflow, simply ignore
+	else textOffset -= m_width; // Calculate the new position relative to the right edge
 
 	RenderingContext* renderContext =
 		NeoEngine::getInstance()->getRenderingContext();
 
 	renderContext->enableScissorTest();
-	renderContext->setScissor(m_x, winh - (m_y + m_height), m_width, m_height);
+	renderContext->setScissor(offset.x, winh - (offset.y + m_height), m_width, m_height);
 
-	render->drawText(m_labelText, m_x - offset,
-					 m_y + m_fontSize + m_marginTop,
+	render->drawText(m_labelText, offset.x - textOffset,
+					 offset.y + m_fontSize + m_marginTop,
 					 m_rotation);
 
 	renderContext->disableScissorTest();
@@ -172,5 +175,5 @@ void ThemedInputField::draw()
 void ThemedInputField::drawSprites(Sprite* sprites[])
 {
 	for(int i = 0; i < NUM_SPRITES; i++)
-		sprites[i]->draw(Vector2(0,0));
+		sprites[i]->draw(m_offset);
 }
