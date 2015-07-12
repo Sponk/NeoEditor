@@ -46063,30 +46063,7 @@ fail:
 }
 
 
-static int _wrap_Button_draw__SWIG_0(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::Button *arg1 = (Neo2D::Gui::Button *) 0 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::Button::draw",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Button::draw",1,"Neo2D::Gui::Button *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Button,0))){
-    SWIG_fail_ptr("Button_draw",1,SWIGTYPE_p_Neo2D__Gui__Button);
-  }
-  
-  (arg1)->draw();
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_Button_draw__SWIG_1(lua_State* L) {
+static int _wrap_Button_draw(lua_State* L) {
   int SWIG_arg = 0;
   Neo2D::Gui::Button *arg1 = (Neo2D::Gui::Button *) 0 ;
   Neo::Vector2 arg2 ;
@@ -46115,60 +46092,6 @@ static int _wrap_Button_draw__SWIG_1(lua_State* L) {
 fail:
   lua_error(L);
   return SWIG_arg;
-}
-
-
-static int _wrap_Button_draw(lua_State* L) {
-  int argc;
-  int argv[3]={
-    1,2,3
-  };
-  
-  argc = lua_gettop(L);
-  if (argc == 1) {
-    int _v;
-    {
-      void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__Button, 0)) {
-        _v = 0;
-      } else {
-        _v = 1;
-      }
-    }
-    if (_v) {
-      return _wrap_Button_draw__SWIG_0(L);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    {
-      void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__Button, 0)) {
-        _v = 0;
-      } else {
-        _v = 1;
-      }
-    }
-    if (_v) {
-      {
-        void *ptr;
-        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Neo__Vector2, 0)) {
-          _v = 0;
-        } else {
-          _v = 1;
-        }
-      }
-      if (_v) {
-        return _wrap_Button_draw__SWIG_1(L);
-      }
-    }
-  }
-  
-  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'Button_draw'\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    Neo2D::Gui::Button::draw()\n"
-    "    Neo2D::Gui::Button::draw(Neo::Vector2)\n");
-  lua_error(L);return 0;
 }
 
 
@@ -46441,6 +46364,10 @@ fail:
 }
 
 
+static void swig_delete_Container(void *obj) {
+Neo2D::Gui::Container *arg1 = (Neo2D::Gui::Container *) obj;
+delete arg1;
+}
 static int _proxy__wrap_new_Container(lua_State *L) {
     assert(lua_istable(L,1));
     lua_pushcfunction(L,_wrap_new_Container);
@@ -46485,7 +46412,7 @@ static swig_lua_namespace swig_Container_Sf_SwigStatic = {
 };
 static swig_lua_class *swig_Container_bases[] = {0,0};
 static const char *swig_Container_base_names[] = {"Neo2D::Widget *",0};
-static swig_lua_class _wrap_class_Container = { "Container", "Container", &SWIGTYPE_p_Neo2D__Gui__Container,_proxy__wrap_new_Container,0, swig_Container_methods, swig_Container_attributes, &swig_Container_Sf_SwigStatic, swig_Container_meta, swig_Container_bases, swig_Container_base_names };
+static swig_lua_class _wrap_class_Container = { "Container", "Container", &SWIGTYPE_p_Neo2D__Gui__Container,_proxy__wrap_new_Container, swig_delete_Container, swig_Container_methods, swig_Container_attributes, &swig_Container_Sf_SwigStatic, swig_Container_meta, swig_Container_bases, swig_Container_base_names };
 
 static int _wrap_new_Window(lua_State* L) {
   int SWIG_arg = 0;
@@ -46655,6 +46582,10 @@ fail:
 }
 
 
+static void swig_delete_Window(void *obj) {
+Neo2D::Gui::Window *arg1 = (Neo2D::Gui::Window *) obj;
+delete arg1;
+}
 static int _proxy__wrap_new_Window(lua_State *L) {
     assert(lua_istable(L,1));
     lua_pushcfunction(L,_wrap_new_Window);
@@ -46698,7 +46629,7 @@ static swig_lua_namespace swig_Window_Sf_SwigStatic = {
 };
 static swig_lua_class *swig_Window_bases[] = {0,0};
 static const char *swig_Window_base_names[] = {"Neo2D::Gui::Container *",0};
-static swig_lua_class _wrap_class_Window = { "Window", "Window", &SWIGTYPE_p_Neo2D__Gui__Window,_proxy__wrap_new_Window,0, swig_Window_methods, swig_Window_attributes, &swig_Window_Sf_SwigStatic, swig_Window_meta, swig_Window_bases, swig_Window_base_names };
+static swig_lua_class _wrap_class_Window = { "Window", "Window", &SWIGTYPE_p_Neo2D__Gui__Window,_proxy__wrap_new_Window, swig_delete_Window, swig_Window_methods, swig_Window_attributes, &swig_Window_Sf_SwigStatic, swig_Window_meta, swig_Window_bases, swig_Window_base_names };
 
 static int _wrap_new_Sprite(lua_State* L) {
   int SWIG_arg = 0;
@@ -47308,30 +47239,7 @@ fail:
 }
 
 
-static int _wrap_InputField_draw__SWIG_0(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::InputField::draw",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::draw",1,"Neo2D::Gui::InputField *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
-    SWIG_fail_ptr("InputField_draw",1,SWIGTYPE_p_Neo2D__Gui__InputField);
-  }
-  
-  (arg1)->draw();
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_InputField_draw__SWIG_1(lua_State* L) {
+static int _wrap_InputField_draw(lua_State* L) {
   int SWIG_arg = 0;
   Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
   Neo::Vector2 arg2 ;
@@ -47360,60 +47268,6 @@ static int _wrap_InputField_draw__SWIG_1(lua_State* L) {
 fail:
   lua_error(L);
   return SWIG_arg;
-}
-
-
-static int _wrap_InputField_draw(lua_State* L) {
-  int argc;
-  int argv[3]={
-    1,2,3
-  };
-  
-  argc = lua_gettop(L);
-  if (argc == 1) {
-    int _v;
-    {
-      void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__InputField, 0)) {
-        _v = 0;
-      } else {
-        _v = 1;
-      }
-    }
-    if (_v) {
-      return _wrap_InputField_draw__SWIG_0(L);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    {
-      void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__InputField, 0)) {
-        _v = 0;
-      } else {
-        _v = 1;
-      }
-    }
-    if (_v) {
-      {
-        void *ptr;
-        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Neo__Vector2, 0)) {
-          _v = 0;
-        } else {
-          _v = 1;
-        }
-      }
-      if (_v) {
-        return _wrap_InputField_draw__SWIG_1(L);
-      }
-    }
-  }
-  
-  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'InputField_draw'\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    Neo2D::Gui::InputField::draw()\n"
-    "    Neo2D::Gui::InputField::draw(Neo::Vector2)\n");
-  lua_error(L);return 0;
 }
 
 
@@ -47720,15 +47574,24 @@ fail:
 static int _wrap_ThemedInputField_draw(lua_State* L) {
   int SWIG_arg = 0;
   Neo2D::Gui::ThemedInputField *arg1 = (Neo2D::Gui::ThemedInputField *) 0 ;
+  Neo::Vector2 arg2 ;
+  Neo::Vector2 *argp2 ;
   
-  SWIG_check_num_args("Neo2D::Gui::ThemedInputField::draw",1,1)
+  SWIG_check_num_args("Neo2D::Gui::ThemedInputField::draw",2,2)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::draw",1,"Neo2D::Gui::ThemedInputField *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::draw",2,"Neo::Vector2");
   
   if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ThemedInputField,0))){
     SWIG_fail_ptr("ThemedInputField_draw",1,SWIGTYPE_p_Neo2D__Gui__ThemedInputField);
   }
   
-  (arg1)->draw();
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("ThemedInputField_draw",2,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg2 = *argp2;
+  
+  (arg1)->draw(arg2);
   
   return SWIG_arg;
   
@@ -47924,30 +47787,7 @@ fail:
 }
 
 
-static int _wrap_Label_draw__SWIG_0(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::Label *arg1 = (Neo2D::Gui::Label *) 0 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::Label::draw",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Label::draw",1,"Neo2D::Gui::Label *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Label,0))){
-    SWIG_fail_ptr("Label_draw",1,SWIGTYPE_p_Neo2D__Gui__Label);
-  }
-  
-  (arg1)->draw();
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_Label_draw__SWIG_1(lua_State* L) {
+static int _wrap_Label_draw(lua_State* L) {
   int SWIG_arg = 0;
   Neo2D::Gui::Label *arg1 = (Neo2D::Gui::Label *) 0 ;
   Neo::Vector2 arg2 ;
@@ -47976,60 +47816,6 @@ static int _wrap_Label_draw__SWIG_1(lua_State* L) {
 fail:
   lua_error(L);
   return SWIG_arg;
-}
-
-
-static int _wrap_Label_draw(lua_State* L) {
-  int argc;
-  int argv[3]={
-    1,2,3
-  };
-  
-  argc = lua_gettop(L);
-  if (argc == 1) {
-    int _v;
-    {
-      void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__Label, 0)) {
-        _v = 0;
-      } else {
-        _v = 1;
-      }
-    }
-    if (_v) {
-      return _wrap_Label_draw__SWIG_0(L);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    {
-      void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__Label, 0)) {
-        _v = 0;
-      } else {
-        _v = 1;
-      }
-    }
-    if (_v) {
-      {
-        void *ptr;
-        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Neo__Vector2, 0)) {
-          _v = 0;
-        } else {
-          _v = 1;
-        }
-      }
-      if (_v) {
-        return _wrap_Label_draw__SWIG_1(L);
-      }
-    }
-  }
-  
-  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'Label_draw'\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    Neo2D::Gui::Label::draw()\n"
-    "    Neo2D::Gui::Label::draw(Neo::Vector2)\n");
-  lua_error(L);return 0;
 }
 
 
@@ -49092,6 +48878,9 @@ static swig_lua_const_info swig_SwigModule_constants[]= {
     {SWIG_LUA_CONSTTAB_INT("BUTTON_NORMAL_STATE", Neo2D::Gui::BUTTON_NORMAL_STATE)},
     {SWIG_LUA_CONSTTAB_INT("BUTTON_HOVER_STATE", Neo2D::Gui::BUTTON_HOVER_STATE)},
     {SWIG_LUA_CONSTTAB_INT("BUTTON_PRESSED_STATE", Neo2D::Gui::BUTTON_PRESSED_STATE)},
+    {SWIG_LUA_CONSTTAB_INT("WINDOW_UNSELECTED_STATE", Neo2D::Gui::WINDOW_UNSELECTED_STATE)},
+    {SWIG_LUA_CONSTTAB_INT("WINDOW_GRABBED_STATE", Neo2D::Gui::WINDOW_GRABBED_STATE)},
+    {SWIG_LUA_CONSTTAB_INT("WINDOW_SELECTED_STATE", Neo2D::Gui::WINDOW_SELECTED_STATE)},
     {SWIG_LUA_CONSTTAB_INT("INPUT_NORMAL_STATE", Neo2D::Gui::INPUT_NORMAL_STATE)},
     {SWIG_LUA_CONSTTAB_INT("INPUT_HOVER_STATE", Neo2D::Gui::INPUT_HOVER_STATE)},
     {SWIG_LUA_CONSTTAB_INT("INPUT_SELECTED_STATE", Neo2D::Gui::INPUT_SELECTED_STATE)},

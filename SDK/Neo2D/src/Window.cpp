@@ -2,13 +2,18 @@
 #include <Window.h>
 #include <Render.h>
 
+#define TITLE_HEIGHT 30
+
 using namespace Neo;
 using namespace Neo2D;
 using namespace Neo2D::Gui;
 
 Window::~Window()
 {
-	Container::~Container();
+    for(Widget* w : m_content)
+        SAFE_DELETE(w);
+
+    m_content.clear();
 }
 
 void Window::draw()
@@ -25,8 +30,10 @@ void Window::draw()
 	m_labelText->setText(m_label.c_str());
 
 	// Draw window title bar
-	render->drawColoredQuad(m_x, m_y-20, m_width, 20, Vector4(0.2, 0.2, 0.2, 1.0), 0.0);
-	render->drawText(m_labelText, m_x + 5, m_y-5);
+	render->drawColoredQuad(m_x, m_y - TITLE_HEIGHT, m_width, TITLE_HEIGHT, Vector4(0.2, 0.2, 0.2, 1.0), 0.0);
+	render->drawText(m_labelText, m_x + 5,
+						m_y + 0.5 * m_labelText->getSize() -
+						0.5 * TITLE_HEIGHT);
 
 	// Draw body
 	render->drawColoredQuad(m_x, m_y, m_width, m_height, Vector4(0.5, 0.5, 0.5, 1.0), 0.0);
@@ -55,7 +62,7 @@ void Window::update()
 	if (input->isKeyPressed("MOUSE_BUTTON_LEFT") &&
 		x >= m_x && x <= m_x + m_width
 		&& y <= m_y
-		&& y >= m_y - 20 || m_state == WINDOW_GRABBED_STATE)
+		&& y >= m_y - TITLE_HEIGHT || m_state == WINDOW_GRABBED_STATE)
 	{
 		m_x = m_x + dx;
 		m_y = m_y + dy;

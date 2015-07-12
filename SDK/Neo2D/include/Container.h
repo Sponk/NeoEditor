@@ -29,7 +29,7 @@ class NEO2D_EXPORT Container : public Widget
 			{
 			}
 				
-		Container::~Container();
+        ~Container();
 
 		DISOWN(Widget* w) void addWidget(Widget* w) { m_content.push_back(w); }
 

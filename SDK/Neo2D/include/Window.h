@@ -39,7 +39,7 @@ class NEO2D_EXPORT Window : public Container
 		float m_my;
 
 		WINDOW_STATE m_state;
-
+		
 	public:
 			Window(unsigned int x, unsigned int y, unsigned int width,
 			unsigned int height, const char* label)
@@ -49,7 +49,7 @@ class NEO2D_EXPORT Window : public Container
 			{
 			}
 				
-		Window::~Window();
+        ~Window();
 
 		void draw();
 		void draw(Vector2 offset) { draw(); }
