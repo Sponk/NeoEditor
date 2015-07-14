@@ -1,8 +1,7 @@
 #include <NeoEngine.h>
 #include <Window.h>
 #include <Render.h>
-
-#define TITLE_HEIGHT 30
+#include <cmath>
 
 using namespace Neo;
 using namespace Neo2D;
@@ -76,32 +75,49 @@ void Window::update()
 	m_mx = x;
 	m_my = y;
 
+	if (m_wm && input->isKeyPressed("MOUSE_BUTTON_LEFT")
+		&& fabs(dx) < 0.2 && fabs(dy) < 0.2)
+	{
+		if (containsPoint(x, y) && !m_wm->getSelectedWindow()->containsPoint(x,y))
+		{
+			m_wm->selectWindow(this);
+		}
+	}
+
 	if (m_state != WINDOW_RESIZING_STATE
 		&& input->isKeyPressed("MOUSE_BUTTON_LEFT")
 		&& x >= m_x && x <= m_x + m_width
 		&& y <= m_y
-		&& y >= m_y - TITLE_HEIGHT || m_state == WINDOW_GRABBED_STATE)
+		&& y >= m_y - TITLE_HEIGHT
+		&& (m_wm && m_wm->getSelectedWindow() == this)
+		|| m_state == WINDOW_GRABBED_STATE)
 	{
 		m_x = m_x + dx;
 		m_y = m_y + dy;
 
 		m_state = WINDOW_GRABBED_STATE;
+
+		if(m_wm)
+			m_wm->selectWindow(this);
 	}
 
 	if (!input->isKeyPressed("MOUSE_BUTTON_LEFT")
 		&& (m_state == WINDOW_GRABBED_STATE ||
 		   m_state == WINDOW_RESIZING_STATE))
 	{
+		//if(m_wm)
+		//	m_wm->selectWindow(this);
+			
 		m_state = WINDOW_SELECTED_STATE;
 	}
 
 	// RESIZING
 	if (m_state == WINDOW_SELECTED_STATE
-			&& input->isKeyPressed("MOUSE_BUTTON_LEFT")
-			&& x >= m_x + m_width - TITLE_HEIGHT
-			&& x <= m_x + m_width
-			&& y >= m_y + m_height - TITLE_HEIGHT
-			&& y <= m_y + m_height || m_state == WINDOW_RESIZING_STATE)
+		&& input->isKeyPressed("MOUSE_BUTTON_LEFT")
+		&& x >= m_x + m_width - TITLE_HEIGHT && x <= m_x + m_width
+		&& y >= m_y + m_height - TITLE_HEIGHT && y <= m_y + m_height
+		|| m_state == WINDOW_RESIZING_STATE
+		&& (m_wm && m_wm->getSelectedWindow() == this))
 	{
 		m_width = m_width + dx;
 		m_height = m_height + dy;

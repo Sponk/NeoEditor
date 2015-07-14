@@ -420,12 +420,8 @@ OText* Render::createText(const char* font, float size)
 	getGlobalFilename(file, system->getWorkingDirectory(), font);
 
 	OText* text;
-	//FontRef* fontref = FontRef::getNew(NULL, file);
 	FontRef* fontref = NeoEngine::getInstance()->getLevel()->loadFont(file, size); 
 	
-	fontref->getFont()->setFontSize(size);
-	fontref->update();
-
 	text = new OText(fontref);
 	text->setSize(fontref->getFont()->getFontSize());
 

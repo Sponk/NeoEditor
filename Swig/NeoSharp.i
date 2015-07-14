@@ -17,6 +17,8 @@
         #include <Container.h>
 		#include <Window.h>
 
+	#include <WindowManager.h>
+	
         using namespace Neo;
         using namespace Neo2D;
         using namespace Gui;
@@ -81,6 +83,7 @@
 
 %include <Container.h>
 %include <Window.h>
+%include <WindowManager.h>
 
 %include <Sprite.h>
 %include <Tile.h>

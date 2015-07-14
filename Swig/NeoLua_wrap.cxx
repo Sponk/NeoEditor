@@ -2644,104 +2644,106 @@ SWIG_Lua_dostring(lua_State *L, const char *str) {
 #define SWIGTYPE_p_Neo2D__Gui__ThemedButton swig_types[17]
 #define SWIGTYPE_p_Neo2D__Gui__ThemedInputField swig_types[18]
 #define SWIGTYPE_p_Neo2D__Gui__Window swig_types[19]
-#define SWIGTYPE_p_Neo2D__Neo2DEngine swig_types[20]
-#define SWIGTYPE_p_Neo2D__Sprite swig_types[21]
-#define SWIGTYPE_p_Neo2D__SpriteBatch swig_types[22]
-#define SWIGTYPE_p_Neo2D__Tile swig_types[23]
-#define SWIGTYPE_p_Neo2D__TileSheet swig_types[24]
-#define SWIGTYPE_p_Neo2D__Widget swig_types[25]
-#define SWIGTYPE_p_NeoVariable swig_types[26]
-#define SWIGTYPE_p_Neo__AnimRange swig_types[27]
-#define SWIGTYPE_p_Neo__Armature swig_types[28]
-#define SWIGTYPE_p_Neo__ArmatureAnimRef swig_types[29]
-#define SWIGTYPE_p_Neo__Box3d swig_types[30]
-#define SWIGTYPE_p_Neo__Color swig_types[31]
-#define SWIGTYPE_p_Neo__DataLoadFunction swig_types[32]
-#define SWIGTYPE_p_Neo__DataLoader swig_types[33]
-#define SWIGTYPE_p_Neo__DataManager swig_types[34]
-#define SWIGTYPE_p_Neo__DataRef swig_types[35]
-#define SWIGTYPE_p_Neo__FRAME_BUFFER_ATTACHMENT swig_types[36]
-#define SWIGTYPE_p_Neo__FontRef swig_types[37]
-#define SWIGTYPE_p_Neo__Image swig_types[38]
-#define SWIGTYPE_p_Neo__InputContext swig_types[39]
-#define SWIGTYPE_p_Neo__Level swig_types[40]
-#define SWIGTYPE_p_Neo__Material swig_types[41]
-#define SWIGTYPE_p_Neo__MaterialDisplay swig_types[42]
-#define SWIGTYPE_p_Neo__MaterialsAnimRef swig_types[43]
-#define SWIGTYPE_p_Neo__Matrix4x4 swig_types[44]
-#define SWIGTYPE_p_Neo__Mesh swig_types[45]
-#define SWIGTYPE_p_Neo__MeshRef swig_types[46]
-#define SWIGTYPE_p_Neo__NeoEngine swig_types[47]
-#define SWIGTYPE_p_Neo__NeoGame swig_types[48]
-#define SWIGTYPE_p_Neo__OBone swig_types[49]
-#define SWIGTYPE_p_Neo__OCamera swig_types[50]
-#define SWIGTYPE_p_Neo__OEntity swig_types[51]
-#define SWIGTYPE_p_Neo__OLight swig_types[52]
-#define SWIGTYPE_p_Neo__OSound swig_types[53]
-#define SWIGTYPE_p_Neo__OText swig_types[54]
-#define SWIGTYPE_p_Neo__Object3d swig_types[55]
-#define SWIGTYPE_p_Neo__Object3d__AdditionalData swig_types[56]
-#define SWIGTYPE_p_Neo__PhysicsConstraint swig_types[57]
-#define SWIGTYPE_p_Neo__PhysicsContext swig_types[58]
-#define SWIGTYPE_p_Neo__PhysicsProperties swig_types[59]
-#define SWIGTYPE_p_Neo__Quaternion swig_types[60]
-#define SWIGTYPE_p_Neo__Range swig_types[61]
-#define SWIGTYPE_p_Neo__RenderingContext swig_types[62]
-#define SWIGTYPE_p_Neo__Scene swig_types[63]
-#define SWIGTYPE_p_Neo__Scene__AdditionalData swig_types[64]
-#define SWIGTYPE_p_Neo__ScriptContext swig_types[65]
-#define SWIGTYPE_p_Neo__ShaderRef swig_types[66]
-#define SWIGTYPE_p_Neo__Sound swig_types[67]
-#define SWIGTYPE_p_Neo__SoundContext swig_types[68]
-#define SWIGTYPE_p_Neo__SoundRef swig_types[69]
-#define SWIGTYPE_p_Neo__SubGame swig_types[70]
-#define SWIGTYPE_p_Neo__SubMesh swig_types[71]
-#define SWIGTYPE_p_Neo__SystemContext swig_types[72]
-#define SWIGTYPE_p_Neo__Texture swig_types[73]
-#define SWIGTYPE_p_Neo__TexturePass swig_types[74]
-#define SWIGTYPE_p_Neo__TextureRef swig_types[75]
-#define SWIGTYPE_p_Neo__TexturesAnimRef swig_types[76]
-#define SWIGTYPE_p_Neo__Vector2 swig_types[77]
-#define SWIGTYPE_p_Neo__Vector3 swig_types[78]
-#define SWIGTYPE_p_Neo__Vector4 swig_types[79]
-#define SWIGTYPE_p_PackageManager swig_types[80]
-#define SWIGTYPE_p_PostProcessor swig_types[81]
-#define SWIGTYPE_p_Renderer swig_types[82]
-#define SWIGTYPE_p_RendererManager swig_types[83]
-#define SWIGTYPE_p_SkinData swig_types[84]
-#define SWIGTYPE_p_Skybox swig_types[85]
-#define SWIGTYPE_p_String swig_types[86]
-#define SWIGTYPE_p_Texture swig_types[87]
-#define SWIGTYPE_p_TexturesAnim swig_types[88]
-#define SWIGTYPE_p_Vector3p swig_types[89]
-#define SWIGTYPE_p___int64 swig_types[90]
-#define SWIGTYPE_p_char swig_types[91]
-#define SWIGTYPE_p_double swig_types[92]
-#define SWIGTYPE_p_doublep swig_types[93]
-#define SWIGTYPE_p_f_p_q_const__char_p_void__bool swig_types[94]
-#define SWIGTYPE_p_f_void__int swig_types[95]
-#define SWIGTYPE_p_f_void__intp swig_types[96]
-#define SWIGTYPE_p_float swig_types[97]
-#define SWIGTYPE_p_floatp swig_types[98]
-#define SWIGTYPE_p_int swig_types[99]
-#define SWIGTYPE_p_intp swig_types[100]
-#define SWIGTYPE_p_long swig_types[101]
-#define SWIGTYPE_p_mapT_unsigned_int_unsigned_int_t swig_types[102]
-#define SWIGTYPE_p_p_char swig_types[103]
-#define SWIGTYPE_p_p_unsigned_long swig_types[104]
-#define SWIGTYPE_p_short swig_types[105]
-#define SWIGTYPE_p_signed___int64 swig_types[106]
-#define SWIGTYPE_p_signed_char swig_types[107]
-#define SWIGTYPE_p_uintp swig_types[108]
-#define SWIGTYPE_p_unsigned___int64 swig_types[109]
-#define SWIGTYPE_p_unsigned_char swig_types[110]
-#define SWIGTYPE_p_unsigned_int swig_types[111]
-#define SWIGTYPE_p_unsigned_long swig_types[112]
-#define SWIGTYPE_p_unsigned_short swig_types[113]
-#define SWIGTYPE_p_vectorT_float_t swig_types[114]
-#define SWIGTYPE_p_void swig_types[115]
-static swig_type_info *swig_types[117];
-static swig_module_info swig_module = {swig_types, 116, 0, 0, 0, 0};
+#define SWIGTYPE_p_Neo2D__Gui__WindowManager swig_types[20]
+#define SWIGTYPE_p_Neo2D__Neo2DEngine swig_types[21]
+#define SWIGTYPE_p_Neo2D__Sprite swig_types[22]
+#define SWIGTYPE_p_Neo2D__SpriteBatch swig_types[23]
+#define SWIGTYPE_p_Neo2D__Tile swig_types[24]
+#define SWIGTYPE_p_Neo2D__TileSheet swig_types[25]
+#define SWIGTYPE_p_Neo2D__Widget swig_types[26]
+#define SWIGTYPE_p_NeoVariable swig_types[27]
+#define SWIGTYPE_p_Neo__AnimRange swig_types[28]
+#define SWIGTYPE_p_Neo__Armature swig_types[29]
+#define SWIGTYPE_p_Neo__ArmatureAnimRef swig_types[30]
+#define SWIGTYPE_p_Neo__Box3d swig_types[31]
+#define SWIGTYPE_p_Neo__Color swig_types[32]
+#define SWIGTYPE_p_Neo__DataLoadFunction swig_types[33]
+#define SWIGTYPE_p_Neo__DataLoader swig_types[34]
+#define SWIGTYPE_p_Neo__DataManager swig_types[35]
+#define SWIGTYPE_p_Neo__DataRef swig_types[36]
+#define SWIGTYPE_p_Neo__FRAME_BUFFER_ATTACHMENT swig_types[37]
+#define SWIGTYPE_p_Neo__FontRef swig_types[38]
+#define SWIGTYPE_p_Neo__Image swig_types[39]
+#define SWIGTYPE_p_Neo__InputContext swig_types[40]
+#define SWIGTYPE_p_Neo__Level swig_types[41]
+#define SWIGTYPE_p_Neo__Material swig_types[42]
+#define SWIGTYPE_p_Neo__MaterialDisplay swig_types[43]
+#define SWIGTYPE_p_Neo__MaterialsAnimRef swig_types[44]
+#define SWIGTYPE_p_Neo__Matrix4x4 swig_types[45]
+#define SWIGTYPE_p_Neo__Mesh swig_types[46]
+#define SWIGTYPE_p_Neo__MeshRef swig_types[47]
+#define SWIGTYPE_p_Neo__NeoEngine swig_types[48]
+#define SWIGTYPE_p_Neo__NeoGame swig_types[49]
+#define SWIGTYPE_p_Neo__OBone swig_types[50]
+#define SWIGTYPE_p_Neo__OCamera swig_types[51]
+#define SWIGTYPE_p_Neo__OEntity swig_types[52]
+#define SWIGTYPE_p_Neo__OLight swig_types[53]
+#define SWIGTYPE_p_Neo__OSound swig_types[54]
+#define SWIGTYPE_p_Neo__OText swig_types[55]
+#define SWIGTYPE_p_Neo__Object3d swig_types[56]
+#define SWIGTYPE_p_Neo__Object3d__AdditionalData swig_types[57]
+#define SWIGTYPE_p_Neo__PhysicsConstraint swig_types[58]
+#define SWIGTYPE_p_Neo__PhysicsContext swig_types[59]
+#define SWIGTYPE_p_Neo__PhysicsProperties swig_types[60]
+#define SWIGTYPE_p_Neo__Quaternion swig_types[61]
+#define SWIGTYPE_p_Neo__Range swig_types[62]
+#define SWIGTYPE_p_Neo__RenderingContext swig_types[63]
+#define SWIGTYPE_p_Neo__Scene swig_types[64]
+#define SWIGTYPE_p_Neo__Scene__AdditionalData swig_types[65]
+#define SWIGTYPE_p_Neo__ScriptContext swig_types[66]
+#define SWIGTYPE_p_Neo__ShaderRef swig_types[67]
+#define SWIGTYPE_p_Neo__Sound swig_types[68]
+#define SWIGTYPE_p_Neo__SoundContext swig_types[69]
+#define SWIGTYPE_p_Neo__SoundRef swig_types[70]
+#define SWIGTYPE_p_Neo__SubGame swig_types[71]
+#define SWIGTYPE_p_Neo__SubMesh swig_types[72]
+#define SWIGTYPE_p_Neo__SystemContext swig_types[73]
+#define SWIGTYPE_p_Neo__Texture swig_types[74]
+#define SWIGTYPE_p_Neo__TexturePass swig_types[75]
+#define SWIGTYPE_p_Neo__TextureRef swig_types[76]
+#define SWIGTYPE_p_Neo__TexturesAnimRef swig_types[77]
+#define SWIGTYPE_p_Neo__Vector2 swig_types[78]
+#define SWIGTYPE_p_Neo__Vector3 swig_types[79]
+#define SWIGTYPE_p_Neo__Vector4 swig_types[80]
+#define SWIGTYPE_p_PackageManager swig_types[81]
+#define SWIGTYPE_p_PostProcessor swig_types[82]
+#define SWIGTYPE_p_Renderer swig_types[83]
+#define SWIGTYPE_p_RendererManager swig_types[84]
+#define SWIGTYPE_p_SkinData swig_types[85]
+#define SWIGTYPE_p_Skybox swig_types[86]
+#define SWIGTYPE_p_String swig_types[87]
+#define SWIGTYPE_p_Texture swig_types[88]
+#define SWIGTYPE_p_TexturesAnim swig_types[89]
+#define SWIGTYPE_p_Vector3p swig_types[90]
+#define SWIGTYPE_p_WindowManager swig_types[91]
+#define SWIGTYPE_p___int64 swig_types[92]
+#define SWIGTYPE_p_char swig_types[93]
+#define SWIGTYPE_p_double swig_types[94]
+#define SWIGTYPE_p_doublep swig_types[95]
+#define SWIGTYPE_p_f_p_q_const__char_p_void__bool swig_types[96]
+#define SWIGTYPE_p_f_void__int swig_types[97]
+#define SWIGTYPE_p_f_void__intp swig_types[98]
+#define SWIGTYPE_p_float swig_types[99]
+#define SWIGTYPE_p_floatp swig_types[100]
+#define SWIGTYPE_p_int swig_types[101]
+#define SWIGTYPE_p_intp swig_types[102]
+#define SWIGTYPE_p_long swig_types[103]
+#define SWIGTYPE_p_mapT_unsigned_int_unsigned_int_t swig_types[104]
+#define SWIGTYPE_p_p_char swig_types[105]
+#define SWIGTYPE_p_p_unsigned_long swig_types[106]
+#define SWIGTYPE_p_short swig_types[107]
+#define SWIGTYPE_p_signed___int64 swig_types[108]
+#define SWIGTYPE_p_signed_char swig_types[109]
+#define SWIGTYPE_p_uintp swig_types[110]
+#define SWIGTYPE_p_unsigned___int64 swig_types[111]
+#define SWIGTYPE_p_unsigned_char swig_types[112]
+#define SWIGTYPE_p_unsigned_int swig_types[113]
+#define SWIGTYPE_p_unsigned_long swig_types[114]
+#define SWIGTYPE_p_unsigned_short swig_types[115]
+#define SWIGTYPE_p_vectorT_float_t swig_types[116]
+#define SWIGTYPE_p_void swig_types[117]
+static swig_type_info *swig_types[119];
+static swig_module_info swig_module = {swig_types, 118, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2758,28 +2760,29 @@ typedef struct{} LANGUAGE_OBJ;
 }
 
 
-        #include <NeoEngine.h>
-        #include <NeoCore.h>
-        #include <Neo2DEngine.h>
-        #include <Widget.h>
-        #include <Button.h>
+#include <NeoEngine.h>
+#include <NeoCore.h>
+#include <Neo2DEngine.h>
+#include <Widget.h>
+#include <Button.h>
 
-        #include <ThemedButton.h>
-        #include <Sprite.h>
-        #include <Tile.h>
-        #include <InputField.h>
-        #include <ThemedInputField.h>
-        #include <Canvas.h>
-        #include <Label.h>
+#include <ThemedButton.h>
+#include <Sprite.h>
+#include <Tile.h>
+#include <InputField.h>
+#include <ThemedInputField.h>
+#include <Canvas.h>
+#include <Label.h>
 
-        #include <Container.h>
-		#include <Window.h>
+#include <Container.h>
+#include <Window.h>
+#include <WindowManager.h>
+	
+	using namespace Neo;
+	using namespace Neo2D;
+	using namespace Gui;
 
-        using namespace Neo;
-        using namespace Neo2D;
-        using namespace Gui;
-
-        // #define Canvas Neo::Gui::Canvas
+	// #define Canvas Neo::Gui::Canvas
 
 
 SWIGINTERN int SWIG_lua_isnilstring(lua_State *L, int idx) {
@@ -46601,6 +46604,66 @@ fail:
 }
 
 
+static int _wrap_Window_setWindowManager(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::Window *arg1 = (Neo2D::Gui::Window *) 0 ;
+  WindowManager *arg2 = (WindowManager *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::Window::setWindowManager",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Window::setWindowManager",1,"Neo2D::Gui::Window *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo2D::Gui::Window::setWindowManager",2,"WindowManager *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Window,0))){
+    SWIG_fail_ptr("Window_setWindowManager",1,SWIGTYPE_p_Neo2D__Gui__Window);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_WindowManager,0))){
+    SWIG_fail_ptr("Window_setWindowManager",2,SWIGTYPE_p_WindowManager);
+  }
+  
+  (arg1)->setWindowManager(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Window_containsPoint(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::Window *arg1 = (Neo2D::Gui::Window *) 0 ;
+  float arg2 ;
+  float arg3 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo2D::Gui::Window::containsPoint",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Window::containsPoint",1,"Neo2D::Gui::Window *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::Window::containsPoint",2,"float");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::Window::containsPoint",3,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Window,0))){
+    SWIG_fail_ptr("Window_containsPoint",1,SWIGTYPE_p_Neo2D__Gui__Window);
+  }
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  result = (bool)(arg1)->containsPoint(arg2,arg3);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_Window_draw__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
   Neo2D::Gui::Window *arg1 = (Neo2D::Gui::Window *) 0 ;
@@ -46749,6 +46812,8 @@ static swig_lua_attribute swig_Window_attributes[] = {
     {0,0,0}
 };
 static swig_lua_method swig_Window_methods[]= {
+    { "setWindowManager", _wrap_Window_setWindowManager},
+    { "containsPoint", _wrap_Window_containsPoint},
     { "draw", _wrap_Window_draw},
     { "update", _wrap_Window_update},
     {0,0}
@@ -46781,6 +46846,224 @@ static swig_lua_namespace swig_Window_Sf_SwigStatic = {
 static swig_lua_class *swig_Window_bases[] = {0,0};
 static const char *swig_Window_base_names[] = {"Neo2D::Gui::Container *",0};
 static swig_lua_class _wrap_class_Window = { "Window", "Window", &SWIGTYPE_p_Neo2D__Gui__Window,_proxy__wrap_new_Window, swig_delete_Window, swig_Window_methods, swig_Window_attributes, &swig_Window_Sf_SwigStatic, swig_Window_meta, swig_Window_bases, swig_Window_base_names };
+
+static int _wrap_new_WindowManager(lua_State* L) {
+  int SWIG_arg = 0;
+  unsigned int arg1 ;
+  unsigned int arg2 ;
+  unsigned int arg3 ;
+  unsigned int arg4 ;
+  char *arg5 = (char *) 0 ;
+  Neo2D::Gui::WindowManager *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::WindowManager::WindowManager",5,5)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::WindowManager::WindowManager",1,"unsigned int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::WindowManager::WindowManager",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::WindowManager::WindowManager",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::WindowManager::WindowManager",4,"unsigned int");
+  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo2D::Gui::WindowManager::WindowManager",5,"char const *");
+  SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
+  arg1 = (unsigned int)lua_tonumber(L, 1);
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
+  arg4 = (unsigned int)lua_tonumber(L, 4);
+  arg5 = (char *)lua_tostring(L, 5);
+  result = (Neo2D::Gui::WindowManager *)new Neo2D::Gui::WindowManager(arg1,arg2,arg3,arg4,(char const *)arg5);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__WindowManager,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_WindowManager_addWindow(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::WindowManager *arg1 = (Neo2D::Gui::WindowManager *) 0 ;
+  Neo2D::Gui::Window *arg2 = (Neo2D::Gui::Window *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::WindowManager::addWindow",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::WindowManager::addWindow",1,"Neo2D::Gui::WindowManager *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo2D::Gui::WindowManager::addWindow",2,"Neo2D::Gui::Window *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__WindowManager,0))){
+    SWIG_fail_ptr("WindowManager_addWindow",1,SWIGTYPE_p_Neo2D__Gui__WindowManager);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo2D__Gui__Window,0))){
+    SWIG_fail_ptr("WindowManager_addWindow",2,SWIGTYPE_p_Neo2D__Gui__Window);
+  }
+  
+  (arg1)->addWindow(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_WindowManager_draw(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::WindowManager *arg1 = (Neo2D::Gui::WindowManager *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::WindowManager::draw",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::WindowManager::draw",1,"Neo2D::Gui::WindowManager *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__WindowManager,0))){
+    SWIG_fail_ptr("WindowManager_draw",1,SWIGTYPE_p_Neo2D__Gui__WindowManager);
+  }
+  
+  (arg1)->draw();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_WindowManager_update(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::WindowManager *arg1 = (Neo2D::Gui::WindowManager *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::WindowManager::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::WindowManager::update",1,"Neo2D::Gui::WindowManager *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__WindowManager,0))){
+    SWIG_fail_ptr("WindowManager_update",1,SWIGTYPE_p_Neo2D__Gui__WindowManager);
+  }
+  
+  (arg1)->update();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_WindowManager_selectWindow(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::WindowManager *arg1 = (Neo2D::Gui::WindowManager *) 0 ;
+  Neo2D::Gui::Window *arg2 = (Neo2D::Gui::Window *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::WindowManager::selectWindow",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::WindowManager::selectWindow",1,"Neo2D::Gui::WindowManager *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo2D::Gui::WindowManager::selectWindow",2,"Neo2D::Gui::Window *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__WindowManager,0))){
+    SWIG_fail_ptr("WindowManager_selectWindow",1,SWIGTYPE_p_Neo2D__Gui__WindowManager);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo2D__Gui__Window,0))){
+    SWIG_fail_ptr("WindowManager_selectWindow",2,SWIGTYPE_p_Neo2D__Gui__Window);
+  }
+  
+  (arg1)->selectWindow(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_WindowManager_getSelectedWindow(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::WindowManager *arg1 = (Neo2D::Gui::WindowManager *) 0 ;
+  Neo2D::Gui::Window *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::WindowManager::getSelectedWindow",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::WindowManager::getSelectedWindow",1,"Neo2D::Gui::WindowManager *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__WindowManager,0))){
+    SWIG_fail_ptr("WindowManager_getSelectedWindow",1,SWIGTYPE_p_Neo2D__Gui__WindowManager);
+  }
+  
+  result = (Neo2D::Gui::Window *)(arg1)->getSelectedWindow();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__Window,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_WindowManager(void *obj) {
+Neo2D::Gui::WindowManager *arg1 = (Neo2D::Gui::WindowManager *) obj;
+delete arg1;
+}
+static int _proxy__wrap_new_WindowManager(lua_State *L) {
+    assert(lua_istable(L,1));
+    lua_pushcfunction(L,_wrap_new_WindowManager);
+    assert(!lua_isnil(L,-1));
+    lua_replace(L,1); /* replace our table with real constructor */
+    lua_call(L,lua_gettop(L)-1,1);
+    return 1;
+}
+static swig_lua_attribute swig_WindowManager_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_WindowManager_methods[]= {
+    { "addWindow", _wrap_WindowManager_addWindow},
+    { "draw", _wrap_WindowManager_draw},
+    { "update", _wrap_WindowManager_update},
+    { "selectWindow", _wrap_WindowManager_selectWindow},
+    { "getSelectedWindow", _wrap_WindowManager_getSelectedWindow},
+    {0,0}
+};
+static swig_lua_method swig_WindowManager_meta[] = {
+    {0,0}
+};
+
+static swig_lua_attribute swig_WindowManager_Sf_SwigStatic_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_const_info swig_WindowManager_Sf_SwigStatic_constants[]= {
+    {0,0,0,0,0,0}
+};
+static swig_lua_method swig_WindowManager_Sf_SwigStatic_methods[]= {
+    {0,0}
+};
+static swig_lua_class* swig_WindowManager_Sf_SwigStatic_classes[]= {
+    0
+};
+
+static swig_lua_namespace swig_WindowManager_Sf_SwigStatic = {
+    "WindowManager",
+    swig_WindowManager_Sf_SwigStatic_methods,
+    swig_WindowManager_Sf_SwigStatic_attributes,
+    swig_WindowManager_Sf_SwigStatic_constants,
+    swig_WindowManager_Sf_SwigStatic_classes,
+    0
+};
+static swig_lua_class *swig_WindowManager_bases[] = {0,0};
+static const char *swig_WindowManager_base_names[] = {"Neo2D::Gui::Container *",0};
+static swig_lua_class _wrap_class_WindowManager = { "WindowManager", "WindowManager", &SWIGTYPE_p_Neo2D__Gui__WindowManager,_proxy__wrap_new_WindowManager, swig_delete_WindowManager, swig_WindowManager_methods, swig_WindowManager_attributes, &swig_WindowManager_Sf_SwigStatic, swig_WindowManager_meta, swig_WindowManager_bases, swig_WindowManager_base_names };
 
 static int _wrap_new_Sprite(lua_State* L) {
   int SWIG_arg = 0;
@@ -49132,6 +49415,7 @@ static swig_lua_class* swig_SwigModule_classes[]= {
 &_wrap_class_Button,
 &_wrap_class_Container,
 &_wrap_class_Window,
+&_wrap_class_WindowManager,
 &_wrap_class_Sprite,
 &_wrap_class_TileSheet,
 &_wrap_class_Tile,
@@ -49170,6 +49454,9 @@ static void *_p_doublepTo_p_double(void *x, int *SWIGUNUSEDPARM(newmemory)) {
 static void *_p_Neo2D__Gui__WindowTo_p_Neo2D__Gui__Container(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::Gui::Container *)  ((Neo2D::Gui::Window *) x));
 }
+static void *_p_Neo2D__Gui__WindowManagerTo_p_Neo2D__Gui__Container(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Neo2D::Gui::Container *)  ((Neo2D::Gui::WindowManager *) x));
+}
 static void *_p_f_void__intpTo_p_f_void__int(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((int (*)(void))  ((intp (*)(void)) x));
 }
@@ -49202,6 +49489,9 @@ static void *_p_Neo2D__Gui__WindowTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPAR
 }
 static void *_p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::Widget *) (Neo2D::Gui::Button *) ((Neo2D::Gui::ThemedButton *) x));
+}
+static void *_p_Neo2D__Gui__WindowManagerTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Neo2D::Widget *) (Neo2D::Gui::Container *) ((Neo2D::Gui::WindowManager *) x));
 }
 static void *_p_Neo2D__SpriteTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::Widget *)  ((Neo2D::Sprite *) x));
@@ -49259,6 +49549,7 @@ static swig_type_info _swigt__p_Neo2D__Gui__Label = {"_p_Neo2D__Gui__Label", "Ne
 static swig_type_info _swigt__p_Neo2D__Gui__ThemedButton = {"_p_Neo2D__Gui__ThemedButton", "Neo2D::Gui::ThemedButton *", 0, 0, (void*)&_wrap_class_ThemedButton, 0};
 static swig_type_info _swigt__p_Neo2D__Gui__ThemedInputField = {"_p_Neo2D__Gui__ThemedInputField", "Neo2D::Gui::ThemedInputField *", 0, 0, (void*)&_wrap_class_ThemedInputField, 0};
 static swig_type_info _swigt__p_Neo2D__Gui__Window = {"_p_Neo2D__Gui__Window", "Neo2D::Gui::Window *", 0, 0, (void*)&_wrap_class_Window, 0};
+static swig_type_info _swigt__p_Neo2D__Gui__WindowManager = {"_p_Neo2D__Gui__WindowManager", "Neo2D::Gui::WindowManager *", 0, 0, (void*)&_wrap_class_WindowManager, 0};
 static swig_type_info _swigt__p_Neo2D__Neo2DEngine = {"_p_Neo2D__Neo2DEngine", "Neo2D::Neo2DEngine *", 0, 0, (void*)&_wrap_class_Neo2DEngine, 0};
 static swig_type_info _swigt__p_Neo2D__Sprite = {"_p_Neo2D__Sprite", "Neo2D::Sprite *", 0, 0, (void*)&_wrap_class_Sprite, 0};
 static swig_type_info _swigt__p_Neo2D__SpriteBatch = {"_p_Neo2D__SpriteBatch", "Neo2D::SpriteBatch *", 0, 0, (void*)&_wrap_class_SpriteBatch, 0};
@@ -49329,6 +49620,7 @@ static swig_type_info _swigt__p_String = {"_p_String", "String *", 0, 0, (void*)
 static swig_type_info _swigt__p_Texture = {"_p_Texture", "Texture *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_TexturesAnim = {"_p_TexturesAnim", "TexturesAnim *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Vector3p = {"_p_Vector3p", "Vector3p *", 0, 0, (void*)&_wrap_class_Vector3p, 0};
+static swig_type_info _swigt__p_WindowManager = {"_p_WindowManager", "WindowManager *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p___int64 = {"_p___int64", "__int64 *|LONGLONG *|LONG64 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "CHAR *|TCHAR *|char *|CCHAR *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
@@ -49377,6 +49669,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Neo2D__Gui__ThemedButton,
   &_swigt__p_Neo2D__Gui__ThemedInputField,
   &_swigt__p_Neo2D__Gui__Window,
+  &_swigt__p_Neo2D__Gui__WindowManager,
   &_swigt__p_Neo2D__Neo2DEngine,
   &_swigt__p_Neo2D__Sprite,
   &_swigt__p_Neo2D__SpriteBatch,
@@ -49447,6 +49740,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Texture,
   &_swigt__p_TexturesAnim,
   &_swigt__p_Vector3p,
+  &_swigt__p_WindowManager,
   &_swigt__p___int64,
   &_swigt__p_char,
   &_swigt__p_double,
@@ -49489,18 +49783,19 @@ static swig_cast_info _swigc__p_MaterialsAnim[] = {  {&_swigt__p_MaterialsAnim, 
 static swig_cast_info _swigc__p_MorphingData[] = {  {&_swigt__p_MorphingData, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Canvas[] = {  {&_swigt__p_Neo2D__Canvas, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Gui__Button[] = {  {&_swigt__p_Neo2D__Gui__ThemedButton, _p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Gui__Button, 0, 0},  {&_swigt__p_Neo2D__Gui__Button, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo2D__Gui__Container[] = {  {&_swigt__p_Neo2D__Gui__Window, _p_Neo2D__Gui__WindowTo_p_Neo2D__Gui__Container, 0, 0},  {&_swigt__p_Neo2D__Gui__Container, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Gui__Container[] = {  {&_swigt__p_Neo2D__Gui__Window, _p_Neo2D__Gui__WindowTo_p_Neo2D__Gui__Container, 0, 0},  {&_swigt__p_Neo2D__Gui__WindowManager, _p_Neo2D__Gui__WindowManagerTo_p_Neo2D__Gui__Container, 0, 0},  {&_swigt__p_Neo2D__Gui__Container, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Gui__InputField[] = {  {&_swigt__p_Neo2D__Gui__InputField, 0, 0, 0},  {&_swigt__p_Neo2D__Gui__ThemedInputField, _p_Neo2D__Gui__ThemedInputFieldTo_p_Neo2D__Gui__InputField, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Gui__Label[] = {  {&_swigt__p_Neo2D__Gui__Label, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Gui__ThemedButton[] = {  {&_swigt__p_Neo2D__Gui__ThemedButton, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Gui__ThemedInputField[] = {  {&_swigt__p_Neo2D__Gui__ThemedInputField, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Gui__Window[] = {  {&_swigt__p_Neo2D__Gui__Window, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Gui__WindowManager[] = {  {&_swigt__p_Neo2D__Gui__WindowManager, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Neo2DEngine[] = {  {&_swigt__p_Neo2D__Neo2DEngine, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Sprite[] = {  {&_swigt__p_Neo2D__Sprite, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__SpriteBatch[] = {  {&_swigt__p_Neo2D__SpriteBatch, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Tile[] = {  {&_swigt__p_Neo2D__Tile, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__TileSheet[] = {  {&_swigt__p_Neo2D__TileSheet, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo2D__Widget[] = {  {&_swigt__p_Neo2D__Gui__Label, _p_Neo2D__Gui__LabelTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ThemedButton, _p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Tile, _p_Neo2D__TileTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Button, _p_Neo2D__Gui__ButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Window, _p_Neo2D__Gui__WindowTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Sprite, _p_Neo2D__SpriteTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__InputField, _p_Neo2D__Gui__InputFieldTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ThemedInputField, _p_Neo2D__Gui__ThemedInputFieldTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Widget, 0, 0, 0},  {&_swigt__p_Neo2D__Gui__Container, _p_Neo2D__Gui__ContainerTo_p_Neo2D__Widget, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Widget[] = {  {&_swigt__p_Neo2D__Gui__Label, _p_Neo2D__Gui__LabelTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ThemedButton, _p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Tile, _p_Neo2D__TileTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Button, _p_Neo2D__Gui__ButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Window, _p_Neo2D__Gui__WindowTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__WindowManager, _p_Neo2D__Gui__WindowManagerTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Sprite, _p_Neo2D__SpriteTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__InputField, _p_Neo2D__Gui__InputFieldTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ThemedInputField, _p_Neo2D__Gui__ThemedInputFieldTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Widget, 0, 0, 0},  {&_swigt__p_Neo2D__Gui__Container, _p_Neo2D__Gui__ContainerTo_p_Neo2D__Widget, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_NeoVariable[] = {  {&_swigt__p_NeoVariable, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__AnimRange[] = {  {&_swigt__p_Neo__AnimRange, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Armature[] = {  {&_swigt__p_Neo__Armature, 0, 0, 0},{0, 0, 0, 0}};
@@ -49565,6 +49860,7 @@ static swig_cast_info _swigc__p_String[] = {  {&_swigt__p_String, 0, 0, 0},{0, 0
 static swig_cast_info _swigc__p_Texture[] = {  {&_swigt__p_Texture, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_TexturesAnim[] = {  {&_swigt__p_TexturesAnim, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Vector3p[] = {  {&_swigt__p_Vector3p, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_WindowManager[] = {  {&_swigt__p_WindowManager, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p___int64[] = {  {&_swigt__p___int64, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},  {&_swigt__p_doublep, _p_doublepTo_p_double, 0, 0},{0, 0, 0, 0}};
@@ -49613,6 +49909,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Neo2D__Gui__ThemedButton,
   _swigc__p_Neo2D__Gui__ThemedInputField,
   _swigc__p_Neo2D__Gui__Window,
+  _swigc__p_Neo2D__Gui__WindowManager,
   _swigc__p_Neo2D__Neo2DEngine,
   _swigc__p_Neo2D__Sprite,
   _swigc__p_Neo2D__SpriteBatch,
@@ -49683,6 +49980,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Texture,
   _swigc__p_TexturesAnim,
   _swigc__p_Vector3p,
+  _swigc__p_WindowManager,
   _swigc__p___int64,
   _swigc__p_char,
   _swigc__p_double,

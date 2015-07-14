@@ -3,7 +3,10 @@
 
 #include <Neo2DEngine.h>
 #include <Container.h>
+#include <WindowManager.h>
 #include <vector>
+
+#define TITLE_HEIGHT 30
 
 namespace Neo2D
 {
@@ -37,17 +40,29 @@ class NEO2D_EXPORT Window : public Container
 		float m_my;
 
 		WINDOW_STATE m_state;
+
+		WindowManager* m_wm;
 		
 	public:
-			Window(unsigned int x, unsigned int y, unsigned int width,
-			unsigned int height, const char* label)
+		Window(unsigned int x, unsigned int y, unsigned int width,
+			   unsigned int height, const char* label)
 			: Container(x, y, width, height, label),
-			m_labelText(NULL),
-			m_state(WINDOW_SELECTED_STATE)
-			{
-			}
-				
-        ~Window();
+			  m_labelText(NULL),
+			  m_state(WINDOW_SELECTED_STATE),
+			  m_wm(NULL)
+
+		{
+		}
+
+		~Window();
+
+		void setWindowManager(WindowManager* wm) { m_wm = wm; }
+
+		bool containsPoint(float x, float y)
+		{
+			return (x >= m_x && x <= m_x + m_width && y >= m_y-TITLE_HEIGHT &&
+					y <= m_y + m_height);
+		}
 
 		void draw();
 		void draw(Vector2 offset) { draw(); }

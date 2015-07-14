@@ -10,13 +10,10 @@ require("NeoLua")
 
 local engine2d = NeoLua.Neo2DEngine.getInstance()
 engine2d:setEnabled(true)
-
 engine2d:setDefaultFontSize(16)
 
-function buttonCallback()
-        print("Callback!")
-        -- inputField:setLabel(inputField:getLabel() .. " BUTTON PRESS ")
-end
+local winmgr = NeoLua.WindowManager(0,0,0,0,"")
+engine2d:getCanvas(0):addWidget(engine2d:addWidget(winmgr))
 
 function createExampleWindow(x,y)
         local inputField = NeoLua.ThemedInputField(10, 40, 200, 20, "");
@@ -28,10 +25,7 @@ function createExampleWindow(x,y)
         container:addWidget(inputField)
         container:addWidget(label)
 
-        local containerhandle = engine2d:addWidget(container)
-
-        canvas = engine2d:getCanvas(0)
-        canvas:addWidget(containerhandle)
+		winmgr:addWindow(container)
 
         button:setFontSize(14)
         button:setScriptCallback("buttonCallback")
@@ -41,6 +35,12 @@ end
 
 win1 = createExampleWindow(500,100)
 win2 = createExampleWindow(10,50)
+
+function buttonCallback()
+        print("Callback!")
+		createExampleWindow(math.random(0, 100), math.random(0,100))
+		-- inputField:setLabel(inputField:getLabel() .. " BUTTON PRESS ")
+end
 
 local engine = NeoLua.NeoEngine.getInstance()
 local input = engine:getInputContext()

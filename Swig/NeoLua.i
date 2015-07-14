@@ -1,27 +1,28 @@
 %module NeoLua
 %{
-        #include <NeoEngine.h>
-        #include <NeoCore.h>
-        #include <Neo2DEngine.h>
-        #include <Widget.h>
-        #include <Button.h>
+#include <NeoEngine.h>
+#include <NeoCore.h>
+#include <Neo2DEngine.h>
+#include <Widget.h>
+#include <Button.h>
 
-        #include <ThemedButton.h>
-        #include <Sprite.h>
-        #include <Tile.h>
-        #include <InputField.h>
-        #include <ThemedInputField.h>
-        #include <Canvas.h>
-        #include <Label.h>
+#include <ThemedButton.h>
+#include <Sprite.h>
+#include <Tile.h>
+#include <InputField.h>
+#include <ThemedInputField.h>
+#include <Canvas.h>
+#include <Label.h>
 
-        #include <Container.h>
-		#include <Window.h>
+#include <Container.h>
+#include <Window.h>
+#include <WindowManager.h>
+	
+	using namespace Neo;
+	using namespace Neo2D;
+	using namespace Gui;
 
-        using namespace Neo;
-        using namespace Neo2D;
-        using namespace Gui;
-
-        // #define Canvas Neo::Gui::Canvas
+	// #define Canvas Neo::Gui::Canvas
 %}
 
 %include <windows.i>
@@ -82,6 +83,7 @@
 
 %include <Container.h>
 %include <Window.h>
+%include <WindowManager.h>
 
 %include <Sprite.h>
 %include <Tile.h>
