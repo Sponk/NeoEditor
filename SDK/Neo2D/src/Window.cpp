@@ -34,13 +34,15 @@ void Window::draw()
 	m_labelText->setText(m_label.c_str());
 
 	renderContext->enableScissorTest();
-	renderContext->setScissor(m_x, res.y - (m_y + m_height) + TITLE_HEIGHT, m_width, m_height + TITLE_HEIGHT);
+	renderContext->setScissor(m_x, res.y - m_y, m_width, TITLE_HEIGHT);
+	
+	renderContext->clear(BUFFER_COLOR);
 
 	// Draw window title bar
 	render->drawColoredQuad(m_x, m_y - TITLE_HEIGHT, m_width, TITLE_HEIGHT, Vector4(0.2, 0.2, 0.2, 1.0), 0.0);
 	render->drawText(m_labelText, m_x + 5,
-						m_y + 0.5 * m_labelText->getSize() -
-						0.5 * TITLE_HEIGHT);
+					 m_y + 0.5 * m_labelText->getSize() -
+					 0.5 * TITLE_HEIGHT);
 
 	renderContext->disableScissorTest();
 
@@ -122,11 +124,13 @@ void Window::update()
 		m_width = m_width + dx;
 		m_height = m_height + dy;
 
-		if(m_width <= 0)
-			m_width = 1;
+		// MIN SIZE!
+		static int minSize = 50;
+		if(m_width <= minSize)
+			m_width = minSize;
 
-		if(m_height <= 0)
-			m_height = 1;
+		if(m_height <= minSize)
+			m_height = minSize;
 
 		m_state = WINDOW_RESIZING_STATE;
 	}

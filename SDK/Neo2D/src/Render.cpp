@@ -162,6 +162,7 @@ void Render::drawColoredQuad(float x, float y, float w, float h, Vector4 color,
 	render->bindVAO(m_colorVao);
 	render->bindFX(m_colorOnlyFx);
 	render->enableBlending();
+	render->setBlendingMode(BLENDING_ALPHA);
 	render->disableCullFace();
 	render->disableDepthTest();
 
