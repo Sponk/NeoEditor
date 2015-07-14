@@ -61,14 +61,16 @@ void Level::decrDataRefScore(DataRef * ref)
 	ref->decrScore();
 }
 
-FontRef * Level::loadFont(const char * filename)
+FontRef * Level::loadFont(const char * filename, unsigned int fontsize)
 {
 	unsigned int i;
 	unsigned int size = m_fontManager.getRefsNumber();
 	for(i=0; i<size; i++)
 	{
 		FontRef * ref = (FontRef *)m_fontManager.getRef(i);
-		if(strcmp(ref->getFilename(), filename) == 0)
+		// Check for equality, including the font size!
+		if(strcmp(ref->getFilename(), filename) == 0
+		   && ref->getFont()->getFontSize() == fontsize)
 		{
 			if(ref->getScore() == 0)
 				ref->update();
@@ -79,6 +81,8 @@ FontRef * Level::loadFont(const char * filename)
 
 	// add data
 	FontRef * ref = FontRef::getNew(NULL, filename);
+	ref->getFont()->setFontSize(fontsize);
+	
 	m_fontManager.addRef(ref);
 	if(ref->getScore() == 0)
 		ref->update();

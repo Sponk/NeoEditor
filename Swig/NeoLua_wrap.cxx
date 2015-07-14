@@ -31201,7 +31201,38 @@ fail:
 }
 
 
-static int _wrap_Level_loadFont(lua_State* L) {
+static int _wrap_Level_loadFont__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Level *arg1 = (Neo::Level *) 0 ;
+  char *arg2 = (char *) 0 ;
+  unsigned int arg3 ;
+  Neo::FontRef *result = 0 ;
+  
+  SWIG_check_num_args("Neo::Level::loadFont",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Level::loadFont",1,"Neo::Level *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::Level::loadFont",2,"char const *");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::Level::loadFont",3,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Level,0))){
+    SWIG_fail_ptr("Level_loadFont",1,SWIGTYPE_p_Neo__Level);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  result = (Neo::FontRef *)(arg1)->loadFont((char const *)arg2,arg3);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__FontRef,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Level_loadFont__SWIG_1(lua_State* L) {
   int SWIG_arg = 0;
   Neo::Level *arg1 = (Neo::Level *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -31225,6 +31256,65 @@ static int _wrap_Level_loadFont(lua_State* L) {
 fail:
   lua_error(L);
   return SWIG_arg;
+}
+
+
+static int _wrap_Level_loadFont(lua_State* L) {
+  int argc;
+  int argv[4]={
+    1,2,3,4
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 2) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Level, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = SWIG_lua_isnilstring(L,argv[1]);
+      }
+      if (_v) {
+        return _wrap_Level_loadFont__SWIG_1(L);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Level, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = SWIG_lua_isnilstring(L,argv[1]);
+      }
+      if (_v) {
+        {
+          _v = lua_isnumber(L,argv[2]);
+        }
+        if (_v) {
+          return _wrap_Level_loadFont__SWIG_0(L);
+        }
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'Level_loadFont'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::Level::loadFont(char const *,unsigned int)\n"
+    "    Neo::Level::loadFont(char const *)\n");
+  lua_error(L);return 0;
 }
 
 
