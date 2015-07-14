@@ -94,14 +94,12 @@ void ThemedInputField::loadSprites(Sprite* sprites[], const char* vert,
 void ThemedInputField::draw(Vector2 offset)
 {
 	Render* render = Render::getInstance();
-	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	Neo2DEngine* gui = Neo2DEngine::getInstance();
+	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 
-	Widget::draw(offset);
-	offset += getPosition();
+	offset += getPosition() + m_offset;
 
-	unsigned int winh, winw;
-	system->getScreenSize(&winw, &winh);
+	Vector2 res = system->getScreenSize();
 
 	if (m_labelText == NULL)
 	{
@@ -163,10 +161,10 @@ void ThemedInputField::draw(Vector2 offset)
 		NeoEngine::getInstance()->getRenderingContext();
 
 	renderContext->enableScissorTest();
-	renderContext->setScissor(offset.x, winh - (offset.y + m_height), m_width, m_height);
+	renderContext->setScissor(offset.x, res.y - (offset.y + m_height), m_width, m_height);
 
-	render->drawText(m_labelText, offset.x - textOffset,
-					 offset.y + m_fontSize + m_marginTop,
+	render->drawText(m_labelText, m_x - textOffset,
+					 m_y + m_fontSize + m_marginTop,
 					 m_rotation);
 
 	renderContext->disableScissorTest();
@@ -175,5 +173,5 @@ void ThemedInputField::draw(Vector2 offset)
 void ThemedInputField::drawSprites(Sprite* sprites[])
 {
 	for(int i = 0; i < NUM_SPRITES; i++)
-		sprites[i]->draw(m_offset);
+		sprites[i]->draw(Vector2(0,0));
 }

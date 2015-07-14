@@ -127,6 +127,9 @@ public:
 	float getFontSize() { return m_fontSize; }
 	void setFontSize(float s) { m_fontSize = s; }
 
+	void setOffset(Vector2 offset) { m_offset = offset; }
+	Vector2 getOffset() { return m_offset; }
+
 	/**
 	 * @brief Draws the widget to the canvas it belongs to.
 	 * @see Canvas

@@ -364,6 +364,8 @@ void Render::set2D(float w, float h)
 
 	render->setMatrixMode(MATRIX_MODELVIEW);
 	render->loadIdentity();
+
+	m_resolution = Vector2(w, h);
 }
 
 void Render::loadShader(const char* vert, const char* frag, unsigned int* fx)

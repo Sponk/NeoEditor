@@ -16,11 +16,14 @@ Container::~Container()
 void Container::draw()
 {
 	for(Widget* w : m_content)
-		w->draw(getPosition());
+		w->draw();
 }
 
 void Container::update()
 {
 	for(Widget* w : m_content)
+	{
+		w->setOffset(getPosition());
 		w->update();
+	}
 }

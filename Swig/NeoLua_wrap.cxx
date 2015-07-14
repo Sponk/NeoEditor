@@ -43656,6 +43656,65 @@ fail:
 }
 
 
+static int _wrap_Widget_setOffset(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
+  Neo::Vector2 arg2 ;
+  Neo::Vector2 *argp2 ;
+  
+  SWIG_check_num_args("Neo2D::Widget::setOffset",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::setOffset",1,"Neo2D::Widget *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Widget::setOffset",2,"Neo::Vector2");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_setOffset",1,SWIGTYPE_p_Neo2D__Widget);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("Widget_setOffset",2,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg2 = *argp2;
+  
+  (arg1)->setOffset(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Widget_getOffset(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
+  Neo::Vector2 result;
+  
+  SWIG_check_num_args("Neo2D::Widget::getOffset",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::getOffset",1,"Neo2D::Widget *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_getOffset",1,SWIGTYPE_p_Neo2D__Widget);
+  }
+  
+  result = (arg1)->getOffset();
+  {
+    Neo::Vector2 * resultptr = new Neo::Vector2((const Neo::Vector2 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector2,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_Widget_draw__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
   Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
@@ -44306,6 +44365,8 @@ static swig_lua_attribute swig_Widget_attributes[] = {
 static swig_lua_method swig_Widget_methods[]= {
     { "getFontSize", _wrap_Widget_getFontSize},
     { "setFontSize", _wrap_Widget_setFontSize},
+    { "setOffset", _wrap_Widget_setOffset},
+    { "getOffset", _wrap_Widget_getOffset},
     { "draw", _wrap_Widget_draw},
     { "update", _wrap_Widget_update},
     { "setScriptCallback", _wrap_Widget_setScriptCallback},
@@ -48881,6 +48942,7 @@ static swig_lua_const_info swig_SwigModule_constants[]= {
     {SWIG_LUA_CONSTTAB_INT("WINDOW_UNSELECTED_STATE", Neo2D::Gui::WINDOW_UNSELECTED_STATE)},
     {SWIG_LUA_CONSTTAB_INT("WINDOW_GRABBED_STATE", Neo2D::Gui::WINDOW_GRABBED_STATE)},
     {SWIG_LUA_CONSTTAB_INT("WINDOW_SELECTED_STATE", Neo2D::Gui::WINDOW_SELECTED_STATE)},
+    {SWIG_LUA_CONSTTAB_INT("WINDOW_RESIZING_STATE", Neo2D::Gui::WINDOW_RESIZING_STATE)},
     {SWIG_LUA_CONSTTAB_INT("INPUT_NORMAL_STATE", Neo2D::Gui::INPUT_NORMAL_STATE)},
     {SWIG_LUA_CONSTTAB_INT("INPUT_HOVER_STATE", Neo2D::Gui::INPUT_HOVER_STATE)},
     {SWIG_LUA_CONSTTAB_INT("INPUT_SELECTED_STATE", Neo2D::Gui::INPUT_SELECTED_STATE)},

@@ -16,12 +16,10 @@ using namespace Neo;
 */
 enum WINDOW_STATE
 {
-	/// If the button is neither selected nor pressed
 	WINDOW_UNSELECTED_STATE = 0,
-	/// If the button has the mouse cursor over it
 	WINDOW_GRABBED_STATE,
-	/// If the mouse is hovering over the button and the left mouse button is pressed
-	WINDOW_SELECTED_STATE
+	WINDOW_SELECTED_STATE,
+	WINDOW_RESIZING_STATE
 };
 
 /**

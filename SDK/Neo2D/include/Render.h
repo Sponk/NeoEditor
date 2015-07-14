@@ -63,6 +63,8 @@ private:
 	unsigned int m_colorVao;
 	unsigned int m_textureVao;
 
+	Vector2 m_resolution;
+
 	void init(unsigned int fx, unsigned int* vao);
 
 public:
@@ -71,6 +73,8 @@ public:
 		static Render m_instance;
 		return &m_instance;
 	}
+
+	Vector2 getResolution() { return m_resolution; }
 
 	/**
 	 * @brief Draws a colored quad without texture to the screen.

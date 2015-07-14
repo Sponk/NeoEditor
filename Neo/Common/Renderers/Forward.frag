@@ -1,13 +1,12 @@
-#version 400
-//#version 330
+#version 330
 
-//#extension ARB_explicit_attrib_location : enable
-//#extension ARB_shader_subroutines : enable
+#extension GL_ARB_explicit_attrib_location : enable
+#extension GL_ARB_shader_subroutines : enable
 
-#define ARB_shader_subroutines
-#define ARB_explicit_attrib_location
+//#define ARB_shader_subroutines
+//#define ARB_explicit_attrib_location
 
-#ifdef ARB_shader_subroutines
+#ifdef GL_ARB_shader_subroutines
 subroutine vec4 shadeModelType(vec3 position, vec3 normal);
 subroutine uniform shadeModelType shadeModel;
 #else
@@ -58,7 +57,7 @@ in vec3 tangent;
 in vec3 color;
 in mat4 projModelViewMatrix;
 
-#ifdef ARB_explicit_attrib_location
+#ifdef GL_ARB_explicit_attrib_location
 layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 Normal;
 layout (location = 2) out vec4 Position;
@@ -401,7 +400,7 @@ vec4 TextShader(vec3 position, vec3 n)
 }
 
 // Fallback selection
-/*#ifndef ARB_shader_subroutines
+#ifndef GL_ARB_shader_subroutines
 vec4 shadeModel(vec3 position, vec3 n)
 {
     vec4 retval;
@@ -419,7 +418,7 @@ vec4 shadeModel(vec3 position, vec3 n)
 
     return retval;
 }
-#endif*/
+#endif
 
 void main(void)
 {

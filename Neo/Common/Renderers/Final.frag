@@ -1,7 +1,7 @@
-#version 400
+#version 330
 
-//#extension ARB_explicit_attrib_location : enable
-//#extension ARB_shader_subroutines : enable
+#extension GL_ARB_explicit_attrib_location : enable
+#extension GL_ARB_shader_subroutines : enable
 
 #define ARB_explicit_attrib_location
 
@@ -41,7 +41,7 @@ in vec2 texCoord;
 
 vec3 Specular = vec3(1,1,1);
 
-#ifdef ARB_explicit_attrib_location
+#ifdef GL_ARB_explicit_attrib_location
 layout (location = 0) out vec4 FragColor;
 #else
 out vec4 FragColor;
