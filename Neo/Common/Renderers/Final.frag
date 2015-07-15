@@ -52,9 +52,9 @@ vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float r
   vec3 l = light.Position - p;
   //if(length(l) > light.Radius) return vec4(0,0,0,0);
   
-  roughness = 1.0 - 1.0/roughness;//0.00001; //roughness;
+  roughness = roughness; //1.0/roughness;//0.00001; //roughness;
   // Guass constant
-  float c = 5.0;
+  float c = 1.0;
   
   vec3 s = normalize(l);
   vec3 v = normalize(-p);
@@ -68,17 +68,24 @@ vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float r
   float Geometric = min(1.0, min((2*nDoth*nDotv)/vDoth, (2*nDoth*nDots)/vDoth));
 
   float alpha = acos(nDoth);
-  float Roughness = c * exp(-((alpha * alpha) / (roughness * roughness)));
+  float Roughness = c * exp(-(alpha / (roughness * roughness)));
 
+  float normIncidence = 1.0;
   float F0 = 1;
-  float Fresnel = F0 + pow(1 - vDoth, 5) * (1 - F0);
+  float Fresnel = F0 + pow(1.0f - vDoth, 5.0f) * (1.0f - F0);
+  Fresnel *= (1.0f - normIncidence);
+  Fresnel += normIncidence;
 
-  float rs = ((Fresnel * Geometric * Roughness) / (3.14159265 * dot(v,n)));
+  float numerator = (Fresnel * Geometric * Roughness);
+  float denominator = nDotv * nDots;
+  float rs = numerator / denominator;
+  
+  //float rs = ((Fresnel * Geometric * Roughness) / (3.14159265 * dot(v,n)));
 
   //vec3 specular = max(0.0f, nDotv) * (Geometric * Roughness * Fresnel) / (nDotv * nDots) * light.Specular);
   // vec3 retval = light.Intensity * max(0.0, nDots) * ((/*light.Specular */ Specular) * rs + (diffuse.rgb * light.Diffuse));
-  vec3 retval = light.Intensity * max(0.0, nDots) * (diffuse.rgb * light.Diffuse + (light.Specular * Specular) * rs);
-   
+  vec3 retval = light.Intensity * (max(0.0, nDots) * ((diffuse.rgb * light.Diffuse) + (light.Diffuse*Specular) * rs));
+      
   if(light.SpotCos > 0.0 /*&& light.SpotCos < 1.0*/)
   {
 	float spot = dot(-s, light.SpotDir);
@@ -86,11 +93,11 @@ vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float r
 	if(spot > light.SpotCos)
 	{
 		spot = clamp(pow(spot, light.SpotExp), 0.0, 1.0);
-        float attenuation = spot/(light.ConstantAttenuation + (dot(l,l) * light.QuadraticAttenuation));//*shadow;
+        	float attenuation = spot/(light.ConstantAttenuation + (dot(l,l) * light.QuadraticAttenuation));//*shadow;
 
 		//retval = vec3(1.0,1.0,1.0);
-        return vec4(attenuation*retval, diffuse.a);
-    }
+        	return vec4(attenuation*retval, diffuse.a);
+    	}
    
     return vec4(0,0,0,0);
    }
@@ -99,11 +106,50 @@ vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float r
    return vec4(attenuation*retval, diffuse.a);
 }
 
+vec4 calculatePhongLight(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float shininess)
+{  
+  vec3 l = light.Position - p;
+  vec3 s = normalize(l);
+  vec3 v = normalize(-p);
+  vec3 h = normalize(v + s);
+  float ldsqr = dot(l,l);
+ 
+  shininess *= 2.0;
+  vec3 returnColor = light.Intensity * (AmbientLight + light.Diffuse * diffuse.rgb * max(dot(s, n), 0.0) + Specular * pow(max(dot(h,n), 0.0), shininess));
+  
+  if(light.SpotCos > 0.0 && light.SpotCos < 1.0)
+  {
+	float spot = dot(-s, light.SpotDir);
+
+	if(spot > light.SpotCos)
+	{
+		spot = clamp(pow(spot, light.SpotExp), 0.0, 1.0);
+
+		float attenuation = (spot / (light.ConstantAttenuation + (ldsqr * light.QuadraticAttenuation)));//*shadow;
+   		return vec4(returnColor * attenuation, 1.0);
+   	}
+   
+    return vec4(0,0,0,0);
+   }
+  
+  float attenuation = (1.0 / (light.ConstantAttenuation + (ldsqr * light.QuadraticAttenuation)));
+  return vec4(returnColor * attenuation, 1.0);
+}
+
 vec4 calculateAllCookLight(vec3 p, vec3 n, vec4 d, float s)
 {
   vec4 result;
   for(int i = 0; i < LightsCount; i++)
     result = result + cookTorranceSpecular(lights[i], p, n, d, s);
+
+  return result;
+}
+
+vec4 calculateAllPhongLight(vec3 p, vec3 n, vec4 d, float s)
+{
+  vec4 result;
+  for(int i = 0; i < LightsCount; i++)
+    result = result + calculatePhongLight(lights[i], p, n, d, s);
 
   return result;
 }
@@ -123,7 +169,7 @@ void main(void)
 	{
 		vec4 p = texture2D(Textures[3], texCoord);
 		vec3 n = texture2D(Textures[1], texCoord).xyz;
-		FragColor = calculateAllCookLight(p.xyz, n, FragColor, /*p.a*/ 1.0);
+		FragColor = calculateAllCookLight(p.xyz, n, FragColor, p.a);
 	}
 	
 	FragColor = gammaCorrection(FragColor, 1.2);

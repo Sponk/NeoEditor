@@ -33,8 +33,33 @@ function createExampleWindow(x,y)
         return container
 end
 
-win1 = createExampleWindow(500,100)
-win2 = createExampleWindow(10,50)
+function createSettingsWindow(x,y)
+        local button = NeoLua.ThemedButton(50, 10, 120, 20, "Flip Ortho")
+        local inputField = NeoLua.ThemedInputField(50, 40, 200, 20, "100");
+        local label = NeoLua.Label(10, 40, 0, 20, "FOV: ")
+        local setFovButton = NeoLua.ThemedButton(50, 70, 120, 20, "Set FOV")
+
+        local container = NeoLua.Window(x,y,300,150,"Camera Settings")
+        container:addWidget(button)
+        container:addWidget(inputField)
+        container:addWidget(label)
+	container:addWidget(setFovButton)
+
+	winmgr:addWindow(container)
+
+        button:setFontSize(14)
+        button:setScriptCallback("flipOrthoCallback")
+        setFovButton:setScriptCallback("setFovCallback")
+
+	local win = {}
+	win.window = container
+	win.inputField = inputField
+
+        return win
+end
+
+-- win1 = createExampleWindow(500,100)
+settingsWindow = createSettingsWindow(10,50)
 
 function buttonCallback()
         print("Callback!")
@@ -49,6 +74,16 @@ local scene = engine:getLevel():getCurrentScene()
 local cam = scene:getObjectByName("Light")
 local teapot = scene:getObjectByName("Teapot")
 local sphere = scene:getObjectByName("Sphere")
+
+function flipOrthoCallback()
+	local camera = scene:getCurrentCamera()
+	camera:enableOrtho(not camera:isOrtho())
+end
+
+function setFovCallback()
+	local camera = scene:getCurrentCamera()
+	camera:setFov(tonumber(settingsWindow.inputField:getLabel()))
+end
 
 function onSceneUpdate(delta)
 
