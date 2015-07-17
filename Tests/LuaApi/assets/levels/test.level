@@ -21,7 +21,7 @@
 			<properties 
 				radius="200.000000"
 				color="1.000000 1.000000 1.000000"
-				intensity="1.000000"
+				intensity="0.800000"
 				spotAngle="180.000000"
 				spotExponent="0.000000"
 				shadow="false" />
@@ -192,6 +192,19 @@
 				shadow="true"
 				occluder="false" />
 		</Entity>
+		<Entity name="Entity1" file="../meshs/teapot.mesh">
+			<BoundingBox min="-84.445297 -55.742798 -39.508904" max="98.276901 57.958904 48.265701" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="10.029486 41.474052 22.664635"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="0.267257 0.267257 0.267257" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
 		<Text name="Text0" file="../default.ttf">
 			<active value="true" />
 			<transform 
@@ -206,19 +219,6 @@
 				<![CDATA[Text]]>
 			</textData>
 		</Text>
-		<Entity name="Entity1" file="../meshs/teapot.mesh">
-			<BoundingBox min="-84.445297 -55.742798 -39.508904" max="98.276901 57.958904 48.265701" />
-			<anim id="0" />
-			<active value="true" />
-			<transform 
-				position="10.029486 41.474052 22.664635"
-				rotation="0.000000 -0.000000 0.000000"
-				scale="0.267257 0.267257 0.267257" />
-			<properties 
-				invisible="false"
-				shadow="true"
-				occluder="false" />
-		</Entity>
 
 	</Scene>
 

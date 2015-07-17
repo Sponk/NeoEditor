@@ -52,7 +52,7 @@ vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float r
   vec3 l = light.Position - p;
   //if(length(l) > light.Radius) return vec4(0,0,0,0);
   
-  roughness = roughness; //1.0/roughness;//0.00001; //roughness;
+  //roughness = roughness; //1.0/roughness;//0.00001; //roughness;
   // Guass constant
   float c = 1.0;
   
