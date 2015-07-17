@@ -46,6 +46,7 @@ uniform vec3 Emit;
 uniform vec3 Specular;
 uniform float Shininess;
 uniform int HasTransparency;
+uniform float Opacity;
 
 uniform vec2 TextureOffset;
 
@@ -464,6 +465,7 @@ void main(void)
 	else
 	{
 		FragColor = shadeModel(position, normal);
+		FragColor.a = Opacity;
 		Normal.a = 0;
 		return;
 	}

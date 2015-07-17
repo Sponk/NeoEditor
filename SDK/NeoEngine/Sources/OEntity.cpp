@@ -239,6 +239,16 @@ void OEntity::setMeshRef(MeshRef * meshRef)
 		{
 			// create nounding box
 			m_boundingBox = (*mesh->getBoundingBox());
+			m_hasTransparency = false;
+
+			for (int i = 0; i < mesh->getSubMeshsNumber(); i++)
+			{
+				if (mesh->getSubMeshs()[i].hasTransparency())
+				{
+					m_hasTransparency = true;
+					break;
+				}
+			}
 		}
 	}
 }

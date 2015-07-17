@@ -68,6 +68,7 @@ class CameraData : public Object3d::AdditionalData
 public:
 	// FIXME: Check for sub meshes?
 	std::vector<OEntity*> visibleEntities;
+	std::vector<OEntity*> visibleTransparentEntities;
 	Semaphore* visibilityLock;
 
 	Semaphore* lightLock;
@@ -339,8 +340,15 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 	render->sendUniformInt(m_fx[0], "HasTransparency", &hasTransparency);
 
 	if (hasTransparency)
+	{
+		render->enableBlending();
+		render->setBlendingMode(material->getBlendMode());
 		sendLights(m_fx[0], camera);
 
+		float opacity = material->getOpacity();
+		render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
+	}
+	
 	float shininess = material->getShininess();
 	render->sendUniformFloat(m_fx[0], "Shininess", &shininess);
 
@@ -391,6 +399,8 @@ void StandardRenderer::drawGBuffer(Scene* scene, OCamera* camera)
 	NeoEngine* engine = NeoEngine::getInstance();
 	RenderingContext* render = engine->getRenderingContext();
 
+	render->setDepthMask(true);
+	
 	OEntity* entity;
 	Mesh* mesh;
 	
@@ -402,6 +412,62 @@ void StandardRenderer::drawGBuffer(Scene* scene, OCamera* camera)
 	data->visibilityLock->WaitAndLock();
 
 	for (OEntity* entity : data->visibleEntities)
+	{
+		if (entity->isVisible() && entity->isActive() && !entity->isInvisible())
+		{			
+			render->setMatrixMode(MATRIX_MODELVIEW);
+			render->loadIdentity();
+			render->multMatrix(entity->getMatrix());
+						
+			mesh = entity->getMesh();
+
+			// Update Animation
+			if (mesh->getArmatureAnim())
+			{
+				animateArmature(
+					mesh->getArmature(),
+					mesh->getArmatureAnim(),
+					entity->getCurrentFrame()
+					);
+			}
+			else if (mesh->getArmature())
+			{
+				mesh->getArmature()->processBonesLinking();
+				mesh->getArmature()->updateBonesSkinMatrix();
+			}
+
+			if (mesh->getMaterialsAnim())
+				animateMaterials(mesh, mesh->getMaterialsAnim(), entity->getCurrentFrame());
+
+			if (mesh->getTexturesAnim())
+				animateTextures(mesh, mesh->getTexturesAnim(), entity->getCurrentFrame());
+
+			drawMesh(entity->getMesh(), camera);
+		}
+	}
+
+	render->setMatrixMode(MATRIX_MODELVIEW);
+	render->loadIdentity();
+	data->visibilityLock->Unlock();
+}
+
+
+void StandardRenderer::drawTransparents(Scene* scene, OCamera* camera)
+{
+	NeoEngine* engine = NeoEngine::getInstance();
+	RenderingContext* render = engine->getRenderingContext();
+
+	OEntity* entity;
+	Mesh* mesh;
+	
+	// Lock scene so we don't have a surprise
+	CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
+
+	if(!data) return;
+
+	data->visibilityLock->WaitAndLock();
+
+	for (OEntity* entity : data->visibleTransparentEntities)
 	{
 		if (entity->isVisible() && entity->isActive() && !entity->isInvisible())
 		{			
@@ -620,7 +686,7 @@ void StandardRenderer::initFramebuffers(Vector2 res)
 	render->createTexture(&m_depthTexID);
 	render->bindTexture(m_depthTexID);
 	render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
-	render->texImage(0, res.x, res.y, VAR_FLOAT, TEX_DEPTH, 0);
+	render->texImage(0, res.x, res.y, VAR_UBYTE, TEX_DEPTH, 0);
 
 	// Position texture
 	render->createTexture(&m_positionTexID);
@@ -731,61 +797,6 @@ void StandardRenderer::prepareMaterialDisplay(SubMesh* mesh, MaterialDisplay* di
 
 void StandardRenderer::drawToTexture(Scene * scene, OCamera* camera, unsigned int texId)
 {
-	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
-	SystemContext * system = NeoEngine::getInstance()->getSystemContext();
-
-	if (texId == 0)
-		texId = m_gbufferTexID;
-
-	m_currentScene = scene;
-
-	unsigned int currentFrameBuffer = 0;
-	render->getCurrentFrameBuffer(&currentFrameBuffer);
-
-	// screen size
-	unsigned int screenWidth = 0;
-	unsigned int screenHeight = 0;
-	system->getScreenSize(&screenWidth, &screenHeight);
-
-	if (Vector2(screenWidth, screenHeight) != m_resolution)
-	{
-		initFramebuffers();
-		initQuadVAO(&m_quadVAO, &m_quadVBO, &m_quadTexCoordVBO, m_fx[1]);
-	}
-
-	// render to texture
-	render->bindFrameBuffer(m_framebufferID);
-
-	render->attachFrameBufferTexture(ATTACH_COLOR0, texId);
-	render->attachFrameBufferTexture(ATTACH_COLOR1, m_normalTexID);
-	render->attachFrameBufferTexture(ATTACH_COLOR2, m_positionTexID);
-	render->attachFrameBufferTexture(ATTACH_COLOR3, m_dataTexID);
-	render->attachFrameBufferTexture(ATTACH_DEPTH, m_depthTexID);
-
-	// Enable them to be drawn
-	FRAME_BUFFER_ATTACHMENT buffers[4] = { ATTACH_COLOR0, ATTACH_COLOR1, ATTACH_COLOR2, ATTACH_COLOR3 };
-	render->setDrawingBuffers(buffers, 4);
-
-	render->setViewport(0, 0, screenWidth, screenHeight); // change viewport
-
-	Vector4 clearColor = camera->getClearColor();
-
-	clearColor.w = 0.0;
-	render->setClearColor(clearColor);
-	render->clear(BUFFER_COLOR | BUFFER_DEPTH);
-
-	// Send some common data
-	Vector3 ambientLight = scene->getAmbientLight();
-	render->sendUniformVec3(m_fx[0], "AmbientLight", ambientLight);
-
-	render->enableBlending();
-
-	sendLights(m_fx[1], camera);
-	drawGBuffer(scene, camera);
-
-	// finish render to texture
-	render->bindFrameBuffer(currentFrameBuffer);
-	renderFinalImage(scene, camera);
 }
 
 void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
@@ -843,9 +854,9 @@ void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
 	render->attachFrameBufferTexture(ATTACH_COLOR2, m_positionTexID);
 	render->attachFrameBufferTexture(ATTACH_COLOR3, m_dataTexID);
 	render->attachFrameBufferTexture(ATTACH_DEPTH, m_depthTexID);
-
+	
 	// Enable them to be drawn
-	FRAME_BUFFER_ATTACHMENT buffers[4] = {ATTACH_COLOR0, ATTACH_COLOR1, ATTACH_COLOR2, ATTACH_COLOR3};
+	FRAME_BUFFER_ATTACHMENT buffers[5] = {ATTACH_COLOR0, ATTACH_COLOR1, ATTACH_COLOR2, ATTACH_COLOR3, ATTACH_DEPTH};
 	render->setDrawingBuffers(buffers, 4);
 
 	render->setViewport(0, 0, screenWidth, screenHeight); // change viewport
@@ -860,14 +871,15 @@ void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
 	Vector3 ambientLight = scene->getAmbientLight();
 	render->sendUniformVec3(m_fx[0], "AmbientLight", ambientLight);
 
-	render->enableBlending();
-
 	sendLights(m_fx[1], camera);
 	drawGBuffer(scene, camera);
 
 	// finish render to texture
 	render->bindFrameBuffer(currentFrameBuffer);
 	renderFinalImage(scene, camera);
+
+	render->enableDepthTest();
+	drawTransparents(scene, camera);
 }
 
 
@@ -978,23 +990,26 @@ void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera)
 
 	// draw the rendered textured with a shader effect
 	//render->setClearColor(Vector3(1, 0, 0));
-	render->clear(BUFFER_COLOR | BUFFER_DEPTH);
-
+	render->clear(BUFFER_COLOR);
 	set2D(screenWidth, screenHeight);
 
 	render->bindFX(m_fx[1]);
 	render->bindTexture(m_gbufferTexID);
 	render->bindTexture(m_normalTexID, 1);
-	render->bindTexture(m_depthTexID, 2);
-	render->bindTexture(m_positionTexID, 3);
-	render->bindTexture(m_dataTexID, 4);
+	render->bindTexture(m_positionTexID, 2);
+	render->bindTexture(m_dataTexID, 3);
+	render->bindTexture(m_depthTexID, 4);
 	render->disableBlending();
 
 	// Set cull mode
 	render->setCullMode(CULL_BACK);
-
+	render->disableDepthTest();
+	render->setDepthMask(false);
+	
 	drawQuad(m_fx[1]);
 	render->bindFX(0);
+	render->enableDepthTest();
+	render->setDepthMask(true);
 }
 
 void StandardRenderer::drawText(OText* textObj, OCamera* camera)
@@ -1462,6 +1477,7 @@ int StandardRenderer::visibility_thread_mainscene(void* data)
 		// Culling!
 		data->visibilityLock->WaitAndLock();
 		data->visibleEntities.clear();
+		data->visibleTransparentEntities.clear();
 
 		size_t sz = scene->getEntitiesNumber();
 		for (int i = 0; i < sz; i++)
@@ -1474,7 +1490,10 @@ int StandardRenderer::visibility_thread_mainscene(void* data)
 
 				if (e->isVisible())
 				{
-					data->visibleEntities.push_back(e);
+					if(e->hasTransparency())
+						data->visibleTransparentEntities.push_back(e);
+					else
+						data->visibleEntities.push_back(e);
 					//MLOG_INFO(e->getName() << " is visible!");
 				}
 			}

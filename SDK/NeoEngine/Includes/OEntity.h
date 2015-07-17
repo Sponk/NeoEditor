@@ -84,8 +84,7 @@ private:
 	float m_angularFactor;
 	Vector3 m_linearFactor;
 
-public:
-
+public:	
     // constraint
 	void deleteConstraint(void);
 	PhysicsConstraint * createConstraint(void);
@@ -178,7 +177,12 @@ private:
 	Box3d m_boundingBox;
 	bool m_isOccluder;
 
+	bool m_hasTransparency;
+	
 public:
+
+	bool hasTransparency() { return m_hasTransparency; }
+
 	/**
 	 * @brief Sets up the OEntity to become a physical active object
 	 * in the given scene.

@@ -168,9 +168,21 @@ void main(void)
 	//    data.r = 0;
     if(FragColor.a == 1.0 && n.a == 0)
 	{
-		vec4 p = texture2D(Textures[3], texCoord);
+		vec4 p = texture2D(Textures[2], texCoord);
 		FragColor = calculateAllCookLight(p.xyz, n.rgb, FragColor, p.a);
 	}
-	
+
+	/*if(texCoord.x <= 0.5)
+		if(texCoord.y <= 0.5)
+			FragColor = vec4(0,0,0,1);//texture2D(Textures[1], texCoord);
+		else			
+			FragColor = texture2D(Textures[2], texCoord);
+	else
+		if(texCoord.y <= 0.5)
+			FragColor = vec4(1,0,0,1);//texture2D(Textures[3], texCoord);
+		else
+		FragColor = vec4(texture2D(Textures[4], texCoord).r);*/
+
+	//FragColor = texture2D(Textures[4], texCoord);
 	FragColor = gammaCorrection(FragColor, 1.2);
 }

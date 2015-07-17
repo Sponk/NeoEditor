@@ -73,6 +73,8 @@ public:
 	void sendLight(unsigned int fx, OLight* l, int num, Matrix4x4 matrix);
 
 	void drawGBuffer(Scene* scene, OCamera* camera);
+
+	void drawTransparents(Scene* scene, OCamera* camera);
 	void initVBO(SubMesh * subMesh);
 
 	void initFramebuffers(Vector2 res = Vector2(0,0));
