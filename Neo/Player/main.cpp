@@ -206,6 +206,8 @@ int main(int argc, char **argv)
 	NeoGame* game = engine->getGame();
 	game->begin();
 
+	engine->getScriptContext()->runScript("assets/main.lua");
+	
 //    Messenger* messenger = Messenger::getInstance();
 //    messenger->addInbox("MainThread", 0);
 

@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2015 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -54,7 +55,7 @@ void NeoGame::update(void)
 	m_lastFrame = curtime;
 
 	// update script
-	if(scriptContext && scriptContext->startCallFunction("onSceneUpdate"))
+	if(scriptContext && scriptContext->startCallFunction("update"))
 	{
 		scriptContext->pushFloat(m_frameDelta);
 		scriptContext->endCallFunction(1);
@@ -243,7 +244,8 @@ void NeoGame::draw(void)
 void NeoGame::onBeginScene(void)
 {
 	// get level
-	Level * level = NeoEngine::getInstance()->getLevel();
+	NeoEngine* engine = NeoEngine::getInstance(); 
+	Level * level = engine->getLevel();
 	if(! level)
 		return;
 
@@ -254,7 +256,7 @@ void NeoGame::onBeginScene(void)
 
 	// begin scene
 	scene->begin();
-
+	
     m_postProcessor.eraseTextures();
     m_postProcessor.updateResolution();
 

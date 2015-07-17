@@ -429,24 +429,27 @@ vec4 shadeModel(vec3 position, vec3 n)
 
 void main(void)
 {
+	int processFlag = 0;
 /*    if(TextureMode > 0)
 	FragColor = vec4(Emit, 0.0) + texture2D(Textures[0], texCoord);
         */
 
+	if(Normal.a == 1) return;
+	
 	// When rendering text!
 	if(TextureMode == -1)
 	{
 		FragColor = shadeModel(position, normal);
 
-                Data.r = 1.0;
 		if(FragColor.a < 0.1)
 			discard;
-		
+
+		Normal.a = 1;
 		//FragColor.a = 1.0;
 		return;
 	}
 	
-    Data.r = 0.0;
+    //Data.r = 0.0;
 
     //FragColor = calculatePhongLight(lights[0], position, normal, texture2D(Textures[0], texCoord));
 	if(HasTransparency == 0)
@@ -455,32 +458,36 @@ void main(void)
 			FragColor = vec4(Emit, 0.0) + texture2D(Textures[0], texCoord) + vec4(AmbientLight, 0.0);
 		else
 			FragColor = vec4(Emit, 0.0) + vec4(Diffuse, 1.0) + vec4(AmbientLight, 0.0);
-				
+
 		if(FragColor.a < 1.0) discard;
 	}
 	else
+	{
 		FragColor = shadeModel(position, normal);
-		
+		Normal.a = 0;
+		return;
+	}
+	
     //FragColor = vec4(normal, 1.0);
     //FragColor = vec4(normalize(position - lights[0].Position), 1.0);
 
     if(TextureMode >= 2)
     {
         vec3 bi = normalize(cross(normal, tangent));
-        vec3 tan = normalize(tangent.xyz);
+        vec3 tang = normalize(tangent.xyz);
 
         vec3 bump = normalize(texture2D(Textures[2], texCoord).xyz * 2.0 - 1.0);
-        Normal = vec4(normalize(tan*bump.x + bi*bump.y + normal*bump.z), Shininess);
+        Normal = vec4(normalize(tang*bump.x + bi*bump.y + normal*bump.z), processFlag);
         //Normal = vec4(normalize(normal+(texture2D(Textures[2], texCoord).xyz * 3 - 1)), Shininess);
     }
     else
-        Normal = vec4(normal, Shininess);
+        Normal = vec4(normal, processFlag);
 
     if(TextureMode >= 3)
     {
-        vec4 spec = texture2D(Textures[3], texCoord);
-        Position = vec4(position.xyz, (spec.r + spec.b + spec.g) / 3);
+        vec4 spec = texture2D(Textures[1], texCoord);
+        Position = vec4(position.xyz, (spec.r + spec.b + spec.g) / 3 * Shininess);
     }
     else
-        Position = vec4(position.xyz, (Specular.r + Specular.b + Specular.g) / 3);
+        Position = vec4(position.xyz, Shininess);
 }

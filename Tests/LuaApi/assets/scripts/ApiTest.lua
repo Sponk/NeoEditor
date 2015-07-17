@@ -73,7 +73,7 @@ local scene = engine:getLevel():getCurrentScene()
 
 local cam = scene:getObjectByName("Light")
 local teapot = scene:getObjectByName("Teapot")
-local sphere = scene:getObjectByName("Sphere")
+local cube = scene:getObjectByName("Cube")
 
 function flipOrthoCallback()
 	local camera = scene:getCurrentCamera()
@@ -85,9 +85,11 @@ function setFovCallback()
 	camera:setFov(tonumber(settingsWindow.inputField:getLabel()))
 end
 
-function onSceneUpdate(delta)
+function update(delta)
 
-        sphere:rotate(NeoLua.Vector3(0,0,1), 10*delta)
+        cube:rotate(NeoLua.Vector3(0,0,1), 30*delta)
+        cube:rotate(NeoLua.Vector3(1,0,0), 30*delta)
+        
         teapot:rotate(NeoLua.Vector3(0,0,1), 10*delta)
 
         if input:isKeyPressed("UP") then

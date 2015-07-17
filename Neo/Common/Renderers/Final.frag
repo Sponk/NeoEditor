@@ -96,14 +96,14 @@ vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float r
         	float attenuation = spot/(light.ConstantAttenuation + (dot(l,l) * light.QuadraticAttenuation));//*shadow;
 
 		//retval = vec3(1.0,1.0,1.0);
-        	return vec4(attenuation*retval, diffuse.a);
+        	return vec4(attenuation*retval, 1.0);
     	}
    
     return vec4(0,0,0,0);
    }
    
    float attenuation = 1.0/(light.ConstantAttenuation + (dot(l,l) * light.QuadraticAttenuation));//1.0/dot(l,l) * light.Radius; //(1.0 / dot(l,l));//)(light.ConstantAttenuation + (dot(l,l) * light.QuadraticAttenuation)));	
-   return vec4(attenuation*retval, diffuse.a);
+   return vec4(attenuation*retval, 1.0);
 }
 
 vec4 calculatePhongLight(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float shininess)
@@ -163,13 +163,13 @@ void main(void)
 {
 	vec4 data = texture2D(Textures[4], texCoord);
 	FragColor = texture2D(Textures[0], texCoord);//gammaCorrection(texture2D(Textures[0], texCoord), 1.2);
-
-    data.r = 0;
-    if(FragColor.a == 1.0 && data.r == 0)
+	vec4 n = texture2D(Textures[1], texCoord);
+	
+	//    data.r = 0;
+    if(FragColor.a == 1.0 && n.a == 0)
 	{
 		vec4 p = texture2D(Textures[3], texCoord);
-		vec3 n = texture2D(Textures[1], texCoord).xyz;
-		FragColor = calculateAllCookLight(p.xyz, n, FragColor, p.a);
+		FragColor = calculateAllCookLight(p.xyz, n.rgb, FragColor, p.a);
 	}
 	
 	FragColor = gammaCorrection(FragColor, 1.2);

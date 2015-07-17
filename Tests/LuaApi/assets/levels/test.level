@@ -118,8 +118,8 @@
 			<anim id="0" />
 			<active value="true" />
 			<transform 
-				position="63.279922 0.000000 0.000000"
-				rotation="0.000000 -0.000000 0.000000"
+				position="46.173641 0.000000 0.000000"
+				rotation="-0.000000 90.000000 0.000000"
 				scale="1.000000 1.000000 1.000000" />
 			<properties 
 				invisible="false"
@@ -174,19 +174,6 @@
 				position="10.029486 0.000000 0.000000"
 				rotation="0.000000 -0.000000 0.000000"
 				scale="2.666181 2.666181 2.666181" />
-			<properties 
-				invisible="false"
-				shadow="true"
-				occluder="false" />
-		</Entity>
-		<Entity name="Sphere" file="../meshs/sphere.mesh">
-			<BoundingBox min="-3.982128 -3.982127 -3.982128" max="3.982129 3.982129 3.982128" />
-			<anim id="0" />
-			<active value="true" />
-			<transform 
-				position="45.566551 -0.092899 -0.140472"
-				rotation="0.000000 -0.000000 0.000000"
-				scale="1.868561 1.868561 1.868561" />
 			<properties 
 				invisible="false"
 				shadow="true"

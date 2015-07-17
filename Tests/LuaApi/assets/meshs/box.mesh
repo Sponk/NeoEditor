@@ -2,9 +2,25 @@
 
 <Mesh>
 
-<Textures num="1">
+<Textures num="3">
 	<Texture id="0">
-		<image filename="../maps/neo-icon.png" mipmap="1" />
+		<image filename="..\maps\neo-icon.png" mipmap="1" />
+		<mapMode value="1" />
+		<tile u="repeat" v="repeat" />
+		<translate x="0.000000" y="0.000000" />
+		<scale x="1.000000" y="1.000000" />
+		<rotate angle="0.000000" />
+	</Texture>
+	<Texture id="1">
+		<image filename="..\maps\neo-icon-specular.png" mipmap="1" />
+		<mapMode value="1" />
+		<tile u="repeat" v="repeat" />
+		<translate x="0.000000" y="0.000000" />
+		<scale x="1.000000" y="1.000000" />
+		<rotate angle="0.000000" />
+	</Texture>
+	<Texture id="2">
+		<image filename="..\maps\neo-icon-normal.png" mipmap="1" />
 		<mapMode value="1" />
 		<tile u="repeat" v="repeat" />
 		<translate x="0.000000" y="0.000000" />
@@ -23,8 +39,10 @@
 		<specularColor r="0.500000" g="0.500000" b="0.500000" />
 		<emitColor r="0.000000" g="0.000000" b="0.000000" />
 		<customColor r="0.000000" g="0.000000" b="0.000000" />
-		<TexturesPass num="1">
+		<TexturesPass num="3">
 			<texturePass id="0" texture="0" mode="modulate" mapChannel="0" />
+			<texturePass id="1" texture="1" mode="modulate" mapChannel="0" />
+			<texturePass id="2" texture="2" mode="modulate" mapChannel="0" />
 		</TexturesPass>
 	</Material>
 </Materials>

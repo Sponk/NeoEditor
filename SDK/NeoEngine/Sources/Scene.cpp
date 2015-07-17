@@ -770,8 +770,8 @@ void Scene::begin(void)
 	preparePhysics();
 
 	// run script
-	if(scriptContext)
-		scriptContext->runScript(getScriptFilename());
+	// if(scriptContext)
+	//	scriptContext->runScript(getScriptFilename());
 }
 
 void Scene::end(void)

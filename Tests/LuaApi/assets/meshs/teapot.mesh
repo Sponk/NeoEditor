@@ -6,7 +6,7 @@
 	<Material id="0" type="1">
 		<blend type="0" />
 		<opacity value="1.000000" />
-		<shininess value="50.000000" />
+		<shininess value="1.000000" />
 		<customValue value="0.000000" />
 		<diffuseColor r="0.800000" g="0.800000" b="0.800000" />
 		<specularColor r="0.500000" g="0.500000" b="0.500000" />
