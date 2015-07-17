@@ -81,6 +81,7 @@ public:
 	// project load
 	bool loadProject(const char * filename);
 	void loadProject(Neo::Project * proj, const char * filename);
+	void setupEmptyProject();
 	
 	// main loops
 	static void logicLoop(void);

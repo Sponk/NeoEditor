@@ -202,6 +202,12 @@ int main(int argc, char **argv)
     SDLThread updateThread;
     Neo2D::Neo2DEngine* guiSystem = Neo2D::Neo2DEngine::getInstance();
 
+	if(!projectFound)
+	{
+		backend->start();
+		backend->setupEmptyProject();
+	}
+	
 	//window->getUpdateSemaphore()->WaitAndLock();
 	NeoGame* game = engine->getGame();
 	game->begin();

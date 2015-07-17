@@ -117,6 +117,12 @@ PlayerBackend::~PlayerBackend(void)
 	SAFE_DELETE(m_packageManager);
 }
 
+void PlayerBackend::setupEmptyProject()
+{
+	NeoEngine* engine = NeoEngine::getInstance();
+	engine->getLevel()->addNewScene()->setName("Scene-0");
+}
+
 void PlayerBackend::changeRenderer(const char * name)
 {
 	NeoEngine * engine = NeoEngine::getInstance();

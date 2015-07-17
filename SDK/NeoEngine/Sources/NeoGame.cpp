@@ -257,7 +257,7 @@ void NeoGame::onBeginScene(void)
 	// begin scene
 	scene->begin();
 	
-    m_postProcessor.eraseTextures();
+    /*m_postProcessor.eraseTextures();
     m_postProcessor.updateResolution();
 
     if(m_postProcessor.getFX() == 0 && hasPostEffects() &&
@@ -265,7 +265,7 @@ void NeoGame::onBeginScene(void)
             strlen(m_postProcessor.getVertexShader()) > 0)
     {
         m_postProcessor.loadShaderFile(m_postProcessor.getVertexShader(), m_postProcessor.getFragmentShader());
-    }
+		}*/
 }
 
 void NeoGame::onEndScene(void)
