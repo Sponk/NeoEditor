@@ -30,7 +30,7 @@ function createExampleWindow(x,y)
         button:setFontSize(14)
         button:setScriptCallback("buttonCallback")
 
-        return container
+        return {label = label}
 end
 
 function createSettingsWindow(x,y)
@@ -121,6 +121,8 @@ function setFovCallback()
 end
 
 function update(delta)
+
+	win1.label:setLabel("Frame Delta: " .. (1/delta))
 
 	if input:onKeyUp("MOUSE_BUTTON_RIGHT") then
 		local res = system:getScreenSize()

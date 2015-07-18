@@ -42,7 +42,7 @@
 #include <Widget.h>
 #include <Button.h>
 
-#define LINE_HEIGHT 20
+#define LINE_HEIGHT 25
 
 namespace Neo2D
 {

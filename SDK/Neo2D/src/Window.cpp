@@ -77,7 +77,7 @@ void Window::update()
 	m_mx = x;
 	m_my = y;
 
-	if (m_wm && input->isKeyPressed("MOUSE_BUTTON_LEFT")
+	if (m_wm && input->onKeyDown("MOUSE_BUTTON_LEFT")
 		&& fabs(dx) < 0.2 && fabs(dy) < 0.2)
 	{
 		if (containsPoint(x, y) && !m_wm->getSelectedWindow()->containsPoint(x,y))
@@ -87,7 +87,7 @@ void Window::update()
 	}
 
 	if (m_state != WINDOW_RESIZING_STATE
-		&& input->isKeyPressed("MOUSE_BUTTON_LEFT")
+		&& input->onKeyDown("MOUSE_BUTTON_LEFT")
 		&& x >= m_x && x <= m_x + m_width
 		&& y <= m_y
 		&& y >= m_y - TITLE_HEIGHT
@@ -103,7 +103,7 @@ void Window::update()
 			m_wm->selectWindow(this);
 	}
 
-	if (!input->isKeyPressed("MOUSE_BUTTON_LEFT")
+	if (input->onKeyUp("MOUSE_BUTTON_LEFT")
 		&& (m_state == WINDOW_GRABBED_STATE ||
 		   m_state == WINDOW_RESIZING_STATE))
 	{
@@ -115,7 +115,7 @@ void Window::update()
 
 	// RESIZING
 	if (m_state == WINDOW_SELECTED_STATE
-		&& input->isKeyPressed("MOUSE_BUTTON_LEFT")
+		&& input->onKeyDown("MOUSE_BUTTON_LEFT")
 		&& x >= m_x + m_width - TITLE_HEIGHT && x <= m_x + m_width
 		&& y >= m_y + m_height - TITLE_HEIGHT && y <= m_y + m_height
 		|| m_state == WINDOW_RESIZING_STATE

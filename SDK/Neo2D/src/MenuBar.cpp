@@ -70,7 +70,10 @@ void MenuBar::draw(Vector2 offset)
 {
 	Render* render = Render::getInstance();
 	Neo2DEngine* gui = Neo2DEngine::getInstance();
+	Vector2 res = NeoEngine::getInstance()->getSystemContext()->getScreenSize();
 
+	render->drawColoredQuad(0,0,res.x, m_height, Vector3(0.3,0.3,0.3));
+	
 	for (Menu* l : m_entries)
 	{
 		if(l->isVisible())
