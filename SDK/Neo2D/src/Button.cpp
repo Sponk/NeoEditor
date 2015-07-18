@@ -45,7 +45,8 @@ Button::Button(unsigned int x, unsigned int y, unsigned int width,
 			   unsigned int height, const char* label)
 	: Widget(x, y, width, height, label),
 	  m_labelText(NULL),
-	  m_state(BUTTON_NORMAL_STATE)
+	  m_state(BUTTON_NORMAL_STATE),
+	  m_alignment(TEXT_ALIGN_CENTER)
 {
 }
 
@@ -60,7 +61,7 @@ void Button::draw(Vector2 offset)
 	{
 		m_labelText = render->createText(gui->getDefaultFont(),
 										 gui->getDefaultFontSize());
-		m_labelText->setAlign(TEXT_ALIGN_CENTER);
+		m_labelText->setAlign(m_alignment);
 	}
 
 	m_labelText->setText(m_label.c_str());
@@ -82,12 +83,21 @@ void Button::draw(Vector2 offset)
 	}
 
 	render->drawColoredQuad(m_x, m_y, m_width, m_height, color, m_rotation);
-	render->drawText(m_labelText,
+
+	if(m_alignment == TEXT_ALIGN_CENTER)
+		render->drawText(m_labelText,
 
 					 m_x + 0.5 * static_cast<float>(m_width),
 					 m_y + 0.5 * m_labelText->getSize() +
 					 0.5 * static_cast<float>(m_height),
 
+					 m_rotation);
+
+	else if(m_alignment == TEXT_ALIGN_LEFT)
+		render->drawText(m_labelText,
+					 m_x,
+					 m_y + 0.5 * m_labelText->getSize() +
+					 0.5 * static_cast<float>(m_height),
 					 m_rotation);
 }
 

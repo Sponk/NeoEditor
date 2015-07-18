@@ -65,8 +65,11 @@ function printStuff()
 	print("STUFF")
 end
 
+local menubar = NeoLua.MenuBar(25)
+engine2d:getCanvas(0):addWidget(engine2d:addWidget(menubar))
+
 local menu = NeoLua.Menu(500,100)
-		
+
 entry1 = NeoLua.Button(0,0,0,0,"This is a menu item!")
 entry1:setScriptCallback("printStuff")
 
@@ -76,12 +79,25 @@ entry2:setScriptCallback("printStuff")
 menu:addEntry(entry2)
 menu:addEntry(entry1)		
 
+local quitEntry = NeoLua.Button(0,0,0,0,"Quit")
+quitEntry:setScriptCallback("quitApplication")
+
+local filemenu = NeoLua.Menu(500,100)
+filemenu:setLabel("File")
+filemenu:addEntry(quitEntry)
+menubar:addEntry(filemenu)
+
 engine2d:getCanvas(0):addWidget(engine2d:addWidget(menu))
 menu:setVisible(false)
 
 function buttonCallback()
         print("CREATING MENU")
 	menu:show()
+end
+
+function quitApplication()
+	NeoLua.NeoEngine.getInstance():setActive(false)
+	--os.exit(0)
 end
 
 local engine = NeoLua.NeoEngine.getInstance()

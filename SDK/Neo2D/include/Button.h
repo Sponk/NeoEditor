@@ -70,10 +70,15 @@ protected:
 	OText* m_labelText;
 	BUTTON_STATE m_state;
 
+	TEXT_ALIGN_MODES m_alignment;
+	
 public:
 	Button(unsigned int x, unsigned int y, unsigned int width,
 		   unsigned int height, const char* label);
 
+	TEXT_ALIGN_MODES getAlignment() { return m_alignment; }
+	void setAlignment(TEXT_ALIGN_MODES align) { m_alignment = align; }
+	
 	void draw(Vector2 offset);
 	void update();
 };

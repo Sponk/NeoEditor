@@ -33,63 +33,62 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __MENUBAR_H__
+#define __MENUBAR_H__
+
+#include <string>
+#include <vector>
+#include <NeoEngine.h>
+#include <Widget.h>
+#include <Button.h>
 #include <Menu.h>
-#include <Render.h>
-#include <Neo2DEngine.h>
 
-using namespace Neo2D;
-using namespace Gui;
+#define LINE_HEIGHT 20
 
-void Menu::update()
-{	
-	NeoEngine* engine = NeoEngine::getInstance();
-	InputContext* input = engine->getInputContext();
-
-	if (m_waitingForInit && input->onKeyUp("MOUSE_BUTTON_LEFT"))
-	{
-		m_waitingForInit = false;
-		return;
-	}
-	
-	if(m_waitingForInit) return;
-	
-	for (int i = 0; i < m_entries.size(); i++)
-	{
-		m_entries[i].setPosition(Vector2(m_x, m_y + LINE_HEIGHT * i));
-		m_entries[i].update();
-	}
-
-	if(input->onKeyUp("MOUSE_BUTTON_LEFT"))
-	{
-		m_visible = false;
-	}
-}
-
-void Menu::draw(Vector2 offset)
+namespace Neo2D
 {
-	Render* render = Render::getInstance();
-	Neo2DEngine* gui = Neo2DEngine::getInstance();
-
-	unsigned int i = 0;
-	unsigned int line = 0;	
-	for (Button l : m_entries)
-	{
-		/*if(i == m_selectedEntry)
-			render->drawColoredQuad(m_x, m_y - line, m_width, LINE_HEIGHT, Vector3(0.75,0.75,0.75));
-		else
-			render->drawColoredQuad(m_x, m_y - line, m_width, LINE_HEIGHT, Vector3(0.5,0.5,0.5));*/
-
-		l.setPosition(Vector2(m_x, m_y + line));
-		l.draw(Vector2(/*m_x, m_y - line*/ 0,0));
-		line += LINE_HEIGHT;
-		i++;
-	}
-}
-
-void Menu::addEntry(Button l)
+namespace Gui
 {
-	l.setSize(m_width, LINE_HEIGHT);
-	l.setAlignment(TEXT_ALIGN_LEFT);
+
+using namespace Neo;
 	
-	m_entries.push_back(l);
+/**
+ * @brief The MenuBar class implements the global menu bar on the top of the window.
+ * 
+ * @todo Can't be used for Neo2D windows because it uses the main window size for its width.
+ *
+ * @author Yannick Pflanzer
+ */
+class NEO2D_EXPORT MenuBar : public Widget
+{
+protected:
+
+	int m_selectedEntry;
+	std::vector<Menu*> m_entries;
+	std::vector<Button> m_buttons;
+
+	static void buttonCallback(Widget* w, long int data);
+
+	struct CallbackData
+	{
+		unsigned int index;
+		MenuBar* parent;
+	};
+	
+public:
+	MenuBar(unsigned int height)
+		: Widget(0, 0, 0, height, "")
+	{
+	}
+
+	~MenuBar();
+	
+	Menu* getEntry(unsigned int idx) { return m_entries[idx]; }
+	DISOWN(Menu* l) void addEntry(Menu* l);
+	
+	void draw(Vector2 offset);
+	void update();
+};
 }
+}
+#endif

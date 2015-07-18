@@ -33,63 +33,74 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#include <Menu.h>
+#include <MenuBar.h>
 #include <Render.h>
 #include <Neo2DEngine.h>
 
 using namespace Neo2D;
 using namespace Gui;
 
-void Menu::update()
-{	
-	NeoEngine* engine = NeoEngine::getInstance();
-	InputContext* input = engine->getInputContext();
+#define MENU_WIDTH 70
 
-	if (m_waitingForInit && input->onKeyUp("MOUSE_BUTTON_LEFT"))
+MenuBar::~MenuBar()
+{
+	for (Button b : m_buttons)
 	{
-		m_waitingForInit = false;
-		return;
-	}
-	
-	if(m_waitingForInit) return;
-	
-	for (int i = 0; i < m_entries.size(); i++)
-	{
-		m_entries[i].setPosition(Vector2(m_x, m_y + LINE_HEIGHT * i));
-		m_entries[i].update();
-	}
-
-	if(input->onKeyUp("MOUSE_BUTTON_LEFT"))
-	{
-		m_visible = false;
+		CallbackData* cdata = (CallbackData*)b.getUserData();
+		SAFE_DELETE(cdata);
 	}
 }
 
-void Menu::draw(Vector2 offset)
+void MenuBar::update()
+{	
+	NeoEngine* engine = NeoEngine::getInstance();
+	InputContext* input = engine->getInputContext();
+	
+	for (Menu* l : m_entries)
+	{
+		if(l->isVisible())
+			l->update();
+	}
+
+	for(int i = 0; i < m_buttons.size(); i++)
+		m_buttons[i].update();
+}
+
+void MenuBar::draw(Vector2 offset)
 {
 	Render* render = Render::getInstance();
 	Neo2DEngine* gui = Neo2DEngine::getInstance();
 
-	unsigned int i = 0;
-	unsigned int line = 0;	
-	for (Button l : m_entries)
+	for (Menu* l : m_entries)
 	{
-		/*if(i == m_selectedEntry)
-			render->drawColoredQuad(m_x, m_y - line, m_width, LINE_HEIGHT, Vector3(0.75,0.75,0.75));
-		else
-			render->drawColoredQuad(m_x, m_y - line, m_width, LINE_HEIGHT, Vector3(0.5,0.5,0.5));*/
-
-		l.setPosition(Vector2(m_x, m_y + line));
-		l.draw(Vector2(/*m_x, m_y - line*/ 0,0));
-		line += LINE_HEIGHT;
-		i++;
+		if(l->isVisible())
+			l->draw(offset);
 	}
+
+	for(Button b : m_buttons)
+		b.draw(offset);
 }
 
-void Menu::addEntry(Button l)
+void MenuBar::addEntry(Menu* l)
 {
-	l.setSize(m_width, LINE_HEIGHT);
-	l.setAlignment(TEXT_ALIGN_LEFT);
-	
+	float x = m_entries.size() * MENU_WIDTH;
+	l->setSize(m_width, LINE_HEIGHT);
+	l->setPosition(Vector2(x, m_height));
 	m_entries.push_back(l);
+
+	Button b(x, 0, MENU_WIDTH, m_height, l->getLabel());
+	CallbackData* data = new CallbackData();
+	data->index = m_buttons.size();
+	data->parent = this;
+	
+	b.setCallback(MenuBar::buttonCallback);
+	b.setUserData((long int) data);
+	
+	m_buttons.push_back(b);
+}
+
+void MenuBar::buttonCallback(Widget* w, long int data)
+{
+	CallbackData* cdata = (CallbackData*) data;
+	cdata->parent->getEntry(cdata->index)->setVisible(true);
 }

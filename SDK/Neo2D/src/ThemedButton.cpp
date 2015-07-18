@@ -104,7 +104,7 @@ void ThemedButton::draw(Vector2 offset)
 	{
 		m_labelText = render->createText(gui->getDefaultFont(),
 			m_fontSize);
-		m_labelText->setAlign(TEXT_ALIGN_CENTER);
+		m_labelText->setAlign(m_alignment);
 
 		// Make variable!
 		m_labelText->setColor(Vector3(0, 0, 0));
@@ -147,10 +147,17 @@ void ThemedButton::draw(Vector2 offset)
 		break;
 	}
 
-	render->drawText(m_labelText, offset.x + 0.5 * (float)m_width,
-		offset.y + 0.5 * m_labelText->getSize() +
-		0.5 * static_cast<float>(m_height),
-		m_rotation);
+	if(m_alignment == TEXT_ALIGN_CENTER)
+		render->drawText(m_labelText, offset.x + 0.5 * (float)m_width,
+						 offset.y + 0.5 * m_labelText->getSize() +
+						 0.5 * static_cast<float>(m_height),
+						 m_rotation);
+
+	else if(m_alignment == TEXT_ALIGN_LEFT)
+		render->drawText(m_labelText, offset.x,
+						 offset.y + 0.5 * m_labelText->getSize() +
+						 0.5 * static_cast<float>(m_height),
+						 m_rotation);
 }
 
 void ThemedButton::update()

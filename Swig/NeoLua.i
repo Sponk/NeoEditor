@@ -19,6 +19,7 @@
 #include <WindowManager.h>
 
 #include <Menu.h>
+#include <MenuBar.h>
 	
 	using namespace Neo;
 	using namespace Neo2D;
@@ -96,6 +97,7 @@
 
 %include <Label.h>
 %include <Menu.h>
+%include <MenuBar.h>
 
 //  Some pointer stuff
 %pointer_class(int, intp);
