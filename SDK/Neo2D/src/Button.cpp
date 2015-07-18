@@ -103,11 +103,18 @@ void Button::update()
 	x = input->getAxis("MOUSE_X") * res.x;
 	y = input->getAxis("MOUSE_Y") * res.y;
 
-	if (m_state == BUTTON_PRESSED_STATE && !input->isKeyPressed("MOUSE_BUTTON_LEFT"))
+	if (m_state == BUTTON_PRESSED_STATE && input->onKeyUp("MOUSE_BUTTON_LEFT"))
 	{
 		doCallback();
+		m_state = BUTTON_NORMAL_STATE;
 	}
 
+	if (m_state == BUTTON_PRESSED_STATE || (m_state == BUTTON_HOVER_STATE && input->onKeyDown("MOUSE_BUTTON_LEFT")))
+	{
+		m_state = BUTTON_PRESSED_STATE;
+		return;
+	}
+	
 	if (x >= m_x && x <= m_x + m_width && y >= m_y && y <= m_y + m_height)
 	{
 		m_state = BUTTON_HOVER_STATE;
@@ -115,10 +122,5 @@ void Button::update()
 	else
 	{
 		m_state = BUTTON_NORMAL_STATE;
-	}
-
-	if (m_state == BUTTON_HOVER_STATE && input->isKeyPressed("MOUSE_BUTTON_LEFT"))
-	{
-		m_state = BUTTON_PRESSED_STATE;
 	}
 }

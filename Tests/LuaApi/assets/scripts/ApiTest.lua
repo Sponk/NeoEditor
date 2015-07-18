@@ -25,7 +25,7 @@ function createExampleWindow(x,y)
         container:addWidget(inputField)
         container:addWidget(label)
 
-		winmgr:addWindow(container)
+	winmgr:addWindow(container)
 
         button:setFontSize(14)
         button:setScriptCallback("buttonCallback")
@@ -58,18 +58,37 @@ function createSettingsWindow(x,y)
         return win
 end
 
--- win1 = createExampleWindow(500,100)
+win1 = createExampleWindow(500,100)
 settingsWindow = createSettingsWindow(10,50)
 
+function printStuff()
+	print("STUFF")
+end
+
+local menu = NeoLua.Menu(500,100)
+		
+entry1 = NeoLua.Button(0,0,0,0,"This is a menu item!")
+entry1:setScriptCallback("printStuff")
+
+entry2 = NeoLua.Button(0,0,0,0,"This is another menu item!")
+entry2:setScriptCallback("printStuff")
+
+menu:addEntry(entry2)
+menu:addEntry(entry1)		
+
+engine2d:getCanvas(0):addWidget(engine2d:addWidget(menu))
+menu:setVisible(false)
+
 function buttonCallback()
-        print("Callback!")
-		createExampleWindow(math.random(0, 100), math.random(0,100))
-		-- inputField:setLabel(inputField:getLabel() .. " BUTTON PRESS ")
+        print("CREATING MENU")
+	menu:show()
 end
 
 local engine = NeoLua.NeoEngine.getInstance()
 local input = engine:getInputContext()
 local scene = engine:getLevel():getCurrentScene()
+local system = engine:getSystemContext()
+local input = engine:getInputContext()
 
 local cam = scene:getObjectByName("Light")
 local teapot = scene:getObjectByName("Teapot")
@@ -86,6 +105,15 @@ function setFovCallback()
 end
 
 function update(delta)
+
+	if input:onKeyUp("MOUSE_BUTTON_RIGHT") then
+		local res = system:getScreenSize()
+		local mx = input:getAxis("MOUSE_X") * res.x
+		local my = input:getAxis("MOUSE_Y") * res.y
+
+		menu:setPosition(NeoLua.Vector2(mx, my))
+		menu:setVisible(true)
+	end
 
         cube:rotate(NeoLua.Vector3(0,0,1), 30*delta)
         cube:rotate(NeoLua.Vector3(1,0,0), 30*delta)

@@ -168,11 +168,18 @@ void ThemedButton::update()
 	unsigned int wx = m_offset.x + m_x;
 	unsigned int wy = m_offset.y + m_y;
 
-	if (m_state == BUTTON_PRESSED_STATE && !input->isKeyPressed("MOUSE_BUTTON_LEFT"))
+	if (m_state == BUTTON_PRESSED_STATE && input->onKeyUp("MOUSE_BUTTON_LEFT"))
 	{
 		doCallback();
+		m_state = BUTTON_NORMAL_STATE;
 	}
 
+	if (m_state == BUTTON_PRESSED_STATE || (m_state == BUTTON_HOVER_STATE && input->onKeyDown("MOUSE_BUTTON_LEFT")))
+	{
+		m_state = BUTTON_PRESSED_STATE;
+	   	return;
+	}
+	
 	if (x >= wx && x <= wx + m_width + m_marginSide
 		&& y >= wy && y <= wy + m_height + m_marginTop)
 	{
@@ -181,11 +188,6 @@ void ThemedButton::update()
 	else
 	{
 		m_state = BUTTON_NORMAL_STATE;
-	}
-
-	if (m_state == BUTTON_HOVER_STATE && input->isKeyPressed("MOUSE_BUTTON_LEFT"))
-	{
-		m_state = BUTTON_PRESSED_STATE;
 	}
 }
 

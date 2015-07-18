@@ -18,6 +18,7 @@
 		#include <Window.h>
 
 	#include <WindowManager.h>
+	#include <Menu.h>
 	
         using namespace Neo;
         using namespace Neo2D;
@@ -91,4 +92,4 @@
 %include <ThemedInputField.h>
 %include <ThemedButton.h>
 %include <Label.h>
-
+%include <Menu.h>

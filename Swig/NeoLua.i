@@ -17,6 +17,8 @@
 #include <Container.h>
 #include <Window.h>
 #include <WindowManager.h>
+
+#include <Menu.h>
 	
 	using namespace Neo;
 	using namespace Neo2D;
@@ -93,6 +95,7 @@
 %include <ThemedInputField.h>
 
 %include <Label.h>
+%include <Menu.h>
 
 //  Some pointer stuff
 %pointer_class(int, intp);

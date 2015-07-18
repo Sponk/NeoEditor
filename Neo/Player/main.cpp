@@ -64,8 +64,9 @@ void windowEvents(MWinEvent * windowEvents)
 // update
 void update(void)
 {
-	PlayerBackend::getInstance()->logicLoop();
+	// Update Neo2D before the rest so all input is still in the pipeline
 	Neo2D::Neo2DEngine::getInstance()->update();
+	PlayerBackend::getInstance()->logicLoop();
 }
 
 // draw
