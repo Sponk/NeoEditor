@@ -36,8 +36,9 @@ void WindowManager::addWindow(Window* window)
 void WindowManager::selectWindow(Window* w)
 {
 	int idx = 0;
-	for (Widget* win : m_content)
+	for (int i = 0; i < m_content.size(); i++)
 	{
+		Widget* win = m_content[i];
 		if (win == w)
 		{
 			m_selectedWindow = w;

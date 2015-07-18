@@ -87,7 +87,7 @@ void MenuBar::draw(Vector2 offset)
 void MenuBar::addEntry(Menu* l)
 {
 	float x = m_entries.size() * MENU_WIDTH;
-	l->setSize(m_width, LINE_HEIGHT);
+	l->setSize(m_width, MENU_LINE_HEIGHT);
 	l->setPosition(Vector2(x, m_height));
 	m_entries.push_back(l);
 

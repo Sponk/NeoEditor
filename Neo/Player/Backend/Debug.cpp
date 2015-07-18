@@ -12,6 +12,121 @@
 #include <cxxabi.h>
 #endif
 
+/*
+* Windows helper for POSIX functionality.
+*/
+
+#if defined(_MSC_VER)
+
+#include <cstdio>
+#include <cstdlib>
+
+#define snprintf c99_snprintf
+
+inline int c99_vsnprintf(char* str, size_t size, const char* format, va_list ap)
+{
+	int count = -1;
+
+	if (size != 0)
+		count = _vsnprintf_s(str, size, _TRUNCATE, format, ap);
+	if (count == -1)
+		count = _vscprintf(format, ap);
+
+	return count;
+}
+
+int c99_snprintf(char* str, size_t size, const char* format, ...)
+{
+	int count;
+	va_list ap;
+
+	va_start(ap, format);
+	count = c99_vsnprintf(str, size, format, ap);
+	va_end(ap);
+
+	return count;
+}
+#endif
+
+#if defined(_MSC_VER) || defined(_WIN32)
+size_t c99_getline(char** lineptr, size_t* n, FILE* stream)
+{
+	char* bufptr = NULL;
+	char* p = bufptr;
+	size_t size;
+	int c;
+
+	if (lineptr == NULL)
+	{
+		return -1;
+	}
+
+	if (stream == NULL)
+	{
+		return -1;
+	}
+
+	if (n == NULL)
+	{
+		return -1;
+	}
+
+	bufptr = *lineptr;
+	size = *n;
+
+	if (feof(stream))
+	{
+		return -1;
+	}
+
+	c = fgetc(stream);
+
+	if (bufptr == NULL)
+	{
+		bufptr = (char*)malloc(128);
+		if (bufptr == NULL)
+		{
+			return -1;
+		}
+		size = 128;
+	}
+
+	p = bufptr;
+
+	while (!feof(stream))
+	{
+		if ((p - bufptr) > (size - 1))
+		{
+			size = size + 128;
+			bufptr = (char*)realloc(bufptr, size);
+
+			if (bufptr == NULL)
+			{
+				return -1;
+			}
+		}
+
+		*p++ = c;
+
+		if (c == '\n')
+		{
+			break;
+		}
+
+		c = fgetc(stream);
+	}
+
+	*p++ = '\0';
+	*lineptr = bufptr;
+	*n = size;
+
+	return p - bufptr - 1;
+}
+
+
+#endif // _MSC_VER
+
+
 // Based on stacktrace.h (c) 2008, Timo Bingmann from http://idlebox.net/
 // published under the WTFPL v2.0
 std::string stacktrace(unsigned int max_frames = 63)

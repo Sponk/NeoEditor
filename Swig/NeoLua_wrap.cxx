@@ -46279,6 +46279,56 @@ fail:
 }
 
 
+static int _wrap_Button_getAlignment(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::Button *arg1 = (Neo2D::Gui::Button *) 0 ;
+  Neo::TEXT_ALIGN_MODES result;
+  
+  SWIG_check_num_args("Neo2D::Gui::Button::getAlignment",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Button::getAlignment",1,"Neo2D::Gui::Button *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Button,0))){
+    SWIG_fail_ptr("Button_getAlignment",1,SWIGTYPE_p_Neo2D__Gui__Button);
+  }
+  
+  result = (Neo::TEXT_ALIGN_MODES)(arg1)->getAlignment();
+  lua_pushnumber(L, (lua_Number)(int)(result)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Button_setAlignment(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::Button *arg1 = (Neo2D::Gui::Button *) 0 ;
+  Neo::TEXT_ALIGN_MODES arg2 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::Button::setAlignment",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Button::setAlignment",1,"Neo2D::Gui::Button *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::Button::setAlignment",2,"Neo::TEXT_ALIGN_MODES");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Button,0))){
+    SWIG_fail_ptr("Button_setAlignment",1,SWIGTYPE_p_Neo2D__Gui__Button);
+  }
+  
+  arg2 = (Neo::TEXT_ALIGN_MODES)(int)lua_tonumber(L, 2);
+  (arg1)->setAlignment(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_Button_draw(lua_State* L) {
   int SWIG_arg = 0;
   Neo2D::Gui::Button *arg1 = (Neo2D::Gui::Button *) 0 ;
@@ -46350,6 +46400,8 @@ static swig_lua_attribute swig_Button_attributes[] = {
     {0,0,0}
 };
 static swig_lua_method swig_Button_methods[]= {
+    { "getAlignment", _wrap_Button_getAlignment},
+    { "setAlignment", _wrap_Button_setAlignment},
     { "draw", _wrap_Button_draw},
     { "update", _wrap_Button_update},
     {0,0}
@@ -46958,8 +47010,7 @@ static int _wrap_WindowManager_addWindow(lua_State* L) {
     SWIG_fail_ptr("WindowManager_addWindow",1,SWIGTYPE_p_Neo2D__Gui__WindowManager);
   }
   
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo2D__Gui__Window,0))){
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo2D__Gui__Window,SWIG_POINTER_DISOWN))){
     SWIG_fail_ptr("WindowManager_addWindow",2,SWIGTYPE_p_Neo2D__Gui__Window);
   }
   
@@ -48701,6 +48752,42 @@ static swig_lua_class *swig_Menu_bases[] = {0,0};
 static const char *swig_Menu_base_names[] = {"Neo2D::Widget *",0};
 static swig_lua_class _wrap_class_Menu = { "Menu", "Menu", &SWIGTYPE_p_Neo2D__Gui__Menu,_proxy__wrap_new_Menu, swig_delete_Menu, swig_Menu_methods, swig_Menu_attributes, &swig_Menu_Sf_SwigStatic, swig_Menu_meta, swig_Menu_bases, swig_Menu_base_names };
 
+static int _wrap_MENU_LINE_HEIGHT_set(lua_State* L) {
+  int SWIG_arg = 0;
+  int arg1 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::MENU_LINE_HEIGHT",1,1)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::MENU_LINE_HEIGHT",1,"int");
+  arg1 = (int)lua_tonumber(L, 1);
+  Neo2D::Gui::MENU_LINE_HEIGHT = arg1;
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_MENU_LINE_HEIGHT_get(lua_State* L) {
+  int SWIG_arg = 0;
+  int result;
+  
+  SWIG_check_num_args("Neo2D::Gui::MENU_LINE_HEIGHT",0,0)
+  result = (int)Neo2D::Gui::MENU_LINE_HEIGHT;
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_new_MenuBar(lua_State* L) {
   int SWIG_arg = 0;
   unsigned int arg1 ;
@@ -49726,6 +49813,7 @@ static const char *swig_Vector3p_base_names[] = {0};
 static swig_lua_class _wrap_class_Vector3p = { "Vector3p", "Vector3p", &SWIGTYPE_p_Vector3p,_proxy__wrap_new_Vector3p, swig_delete_Vector3p, swig_Vector3p_methods, swig_Vector3p_attributes, &swig_Vector3p_SwigStatic, swig_Vector3p_meta, swig_Vector3p_bases, swig_Vector3p_base_names };
 
 static swig_lua_attribute swig_SwigModule_attributes[] = {
+    { "MENU_LINE_HEIGHT", _wrap_MENU_LINE_HEIGHT_get, _wrap_MENU_LINE_HEIGHT_set },
     {0,0,0}
 };
 static swig_lua_const_info swig_SwigModule_constants[]= {
@@ -49877,7 +49965,7 @@ static swig_lua_const_info swig_SwigModule_constants[]= {
     {SWIG_LUA_CONSTTAB_INT("INPUT_HOVER_STATE", Neo2D::Gui::INPUT_HOVER_STATE)},
     {SWIG_LUA_CONSTTAB_INT("INPUT_SELECTED_STATE", Neo2D::Gui::INPUT_SELECTED_STATE)},
     {SWIG_LUA_CONSTTAB_INT("NUM_SPRITES", 9)},
-    {SWIG_LUA_CONSTTAB_INT("LINE_HEIGHT", 20)},
+    {SWIG_LUA_CONSTTAB_INT("LINE_HEIGHT", 25)},
     {0,0,0,0,0,0}
 };
 static swig_lua_method swig_SwigModule_methods[]= {

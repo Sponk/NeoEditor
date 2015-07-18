@@ -35,11 +35,11 @@ class NEO2D_EXPORT WindowManager : public Container
 	
 	~WindowManager();
 
-	void addWindow(Window* window);	
+	DISOWN(Window* window) void addWindow(Window* window);	
 	void draw();
 	void update();
 
-	void selectWindow(Window* w);
+	DISOWN(Window* window) void selectWindow(Window* w);
 	Window* getSelectedWindow() { return m_selectedWindow; }
 };
 

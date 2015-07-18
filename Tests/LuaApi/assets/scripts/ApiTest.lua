@@ -25,7 +25,7 @@ function createExampleWindow(x,y)
         container:addWidget(inputField)
         container:addWidget(label)
 
-	winmgr:addWindow(container)
+		winmgr:addWindow(container)
 
         button:setFontSize(14)
         button:setScriptCallback("buttonCallback")
@@ -43,17 +43,17 @@ function createSettingsWindow(x,y)
         container:addWidget(button)
         container:addWidget(inputField)
         container:addWidget(label)
-	container:addWidget(setFovButton)
+		container:addWidget(setFovButton)
 
-	winmgr:addWindow(container)
+		winmgr:addWindow(container)
 
         button:setFontSize(14)
         button:setScriptCallback("flipOrthoCallback")
         setFovButton:setScriptCallback("setFovCallback")
 
-	local win = {}
-	win.window = container
-	win.inputField = inputField
+		local win = {}
+		win.window = container
+		win.inputField = inputField
 
         return win
 end

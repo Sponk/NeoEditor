@@ -21,8 +21,9 @@ void Container::draw()
 
 void Container::update()
 {
-	for(Widget* w : m_content)
+	for (int i = 0; i < m_content.size(); i++)
 	{
+		Widget* w = m_content[i];
 		w->setOffset(getPosition());
 		w->update();
 	}

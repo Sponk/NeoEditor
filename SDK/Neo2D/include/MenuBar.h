@@ -43,12 +43,12 @@
 #include <Button.h>
 #include <Menu.h>
 
-#define LINE_HEIGHT 20
-
 namespace Neo2D
 {
 namespace Gui
 {
+
+	static int MENU_LINE_HEIGHT = 20;
 
 using namespace Neo;
 	
