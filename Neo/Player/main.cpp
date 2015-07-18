@@ -77,6 +77,9 @@ void draw(void)
     NeoWindow::getInstance()->swapBuffer();
 }
 
+// FIXME: In header file
+void registerDebugHandler();
+
 // main
 int main(int argc, char **argv)
 {
@@ -84,6 +87,8 @@ int main(int argc, char **argv)
 	setlocale(LC_NUMERIC, "C");
 #endif
 
+	registerDebugHandler();
+	
 	MLOG_INFO("Neo Player version:\t" << PLAYER_VERSION_STRING);
 
 	unsigned int width = 1024;
