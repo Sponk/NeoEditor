@@ -71,6 +71,7 @@ protected:
 	BUTTON_STATE m_state;
 
 	TEXT_ALIGN_MODES m_alignment;
+	float m_fontSize;
 	
 public:
 	Button(unsigned int x, unsigned int y, unsigned int width,
@@ -79,6 +80,12 @@ public:
 	TEXT_ALIGN_MODES getAlignment() { return m_alignment; }
 	void setAlignment(TEXT_ALIGN_MODES align) { m_alignment = align; }
 	
+	void setButtonState(BUTTON_STATE s) { m_state = s; }
+	BUTTON_STATE getButtonState() { return m_state; }
+
+	float getFontSize() { return m_fontSize; }
+	void setFontSize(float f) { m_fontSize = f; }
+
 	void draw(Vector2 offset);
 	void update();
 };

@@ -227,11 +227,11 @@ void crash_handler(int sig)
 
 				MLOG_ERROR(complete_text << endl);
 
-				std::string path = getenv("HOME");
-				path += "/.neoeditor/logfile.txt";
+				//std::string path = getenv("HOME");
+				//path += "/.neoeditor/logfile.txt";
 
-				copyFile("logfile.txt", path.c_str());
-				system("./CrashHandler");
+				//copyFile("logfile.txt", path.c_str());
+				//system("./CrashHandler");
 
 				exit(sig);
 				break;
@@ -385,11 +385,11 @@ LONG WINAPI windows_exception_handler(EXCEPTION_POINTERS* ExceptionInfo)
 
 	MLOG_ERROR(complete_text << endl);
 
-	std::string path = getenv("APPDATA");
-	path += "\\neoeditor\\logfile.txt";
+	//std::string path = getenv("APPDATA");
+	//path += "\\neoeditor\\logfile.txt";
 
-	copyFile("logfile.txt", path.c_str());
-	system(".\\CrashHandler.exe");
+	//copyFile("logfile.txt", path.c_str());
+	//system(".\\CrashHandler.exe");
 
 	exit(-1);
 }

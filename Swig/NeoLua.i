@@ -17,9 +17,13 @@
 #include <Container.h>
 #include <Window.h>
 #include <WindowManager.h>
+#include <List.h>
+#include <Tree.h>
 
 #include <Menu.h>
 #include <MenuBar.h>
+	
+#include <Slider.h>
 	
 	using namespace Neo;
 	using namespace Neo2D;
@@ -30,6 +34,7 @@
 
 %include <windows.i>
 %include <cpointer.i>
+%include <std_string.i>
 
 #define NEO_CORE_EXPORT
 
@@ -74,7 +79,7 @@
 %include <Material.h>
 %include <Box3d.h>
 %include <Armature.h>
-
+%include <Log.h>
 
 #define NEO_CORE_EXPORT
 #define NEO2D_EXPORT
@@ -98,6 +103,10 @@
 %include <Label.h>
 %include <Menu.h>
 %include <MenuBar.h>
+%include <List.h>
+%include <Tree.h>
+
+%include <Slider.h>
 
 //  Some pointer stuff
 %pointer_class(int, intp);

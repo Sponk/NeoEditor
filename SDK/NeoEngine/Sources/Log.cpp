@@ -123,3 +123,11 @@ void Log::log(int severity, const char * function, const char * filename, const 
 	if(m_logfstream.good())
         m_logfstream<<sev<<" "<<m_string<< " in " << (function?function:"?") << " in "<< (filename?filename:"?") <<std::endl;
 }
+
+void Neo::infoLog(const char* s, const char* function, const char* filename, int line)
+{
+	Log::m_stringstream.str(std::string(""));
+	Log::m_stringstream << s;
+	Log::m_string = Neo::Log::m_stringstream.str();
+	Log::log(6, function, filename, line);
+}

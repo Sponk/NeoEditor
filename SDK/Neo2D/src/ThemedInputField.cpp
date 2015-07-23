@@ -54,8 +54,6 @@ ThemedInputField::ThemedInputField(unsigned int x, unsigned int y, unsigned int 
 		m_hoveredSprites[i] = NULL;
 		m_pressedSprites[i] = NULL;
 	}
-
-	m_fontSize = Neo2DEngine::getInstance()->getDefaultFontSize();
 }
 
 void ThemedInputField::loadSprites(Sprite* sprites[], const char* vert,
@@ -161,9 +159,9 @@ void ThemedInputField::draw(Vector2 offset)
 		NeoEngine::getInstance()->getRenderingContext();
 
 	renderContext->enableScissorTest();
-	renderContext->setScissor(offset.x, res.y - (offset.y + m_height), m_width, m_height);
+	renderContext->setScissor(offset.x, res.y - (offset.y + m_height), m_width + 2, m_height);
 
-	render->drawText(m_labelText, m_x - textOffset,
+	render->drawText(m_labelText, m_x - textOffset + 2,
 					 m_y + m_fontSize + m_marginTop,
 					 m_rotation);
 

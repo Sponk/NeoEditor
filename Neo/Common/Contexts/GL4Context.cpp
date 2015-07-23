@@ -296,7 +296,7 @@ void GL4Context::init()
 
 	int data;
 	glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &data);
-	MLOG_INFO("Number of render targets:\t\t" << data << "\t");
+	MLOG_INFO("Number of render targets:\t" << data << "\t");
 
 	glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &data);
 	MLOG_INFO("Number of textures:\t\t" << data << "\t");
@@ -335,7 +335,7 @@ void GL4Context::init()
 	float maxAnisotropy;
 	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
 
-	MLOG_INFO("Maximal anisotropy level:\t\t" << maxAnisotropy << "\t");
+	MLOG_INFO("Maximal anisotropy level:\t" << maxAnisotropy << "\t");
 	MLOG_INFO("********************************************************************************");
 }
 

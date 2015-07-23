@@ -16,7 +16,7 @@ Container::~Container()
 void Container::draw()
 {
 	for(Widget* w : m_content)
-		w->draw();
+		if(w->isVisible()) w->draw();
 }
 
 void Container::update()
@@ -24,7 +24,11 @@ void Container::update()
 	for (int i = 0; i < m_content.size(); i++)
 	{
 		Widget* w = m_content[i];
-		w->setOffset(getPosition());
-		w->update();
+
+		if(w->isVisible())
+		{
+			w->setOffset(getPosition());
+			w->update();
+		}
 	}
 }

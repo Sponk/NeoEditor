@@ -46,24 +46,24 @@ Button::Button(unsigned int x, unsigned int y, unsigned int width,
 	: Widget(x, y, width, height, label),
 	  m_labelText(NULL),
 	  m_state(BUTTON_NORMAL_STATE),
-	  m_alignment(TEXT_ALIGN_CENTER)
+	  m_alignment(TEXT_ALIGN_CENTER),
+	  m_fontSize(11)
 {
 }
 
 void Button::draw(Vector2 offset)
 {
-	Widget::draw(offset);
-
 	Render* render = Render::getInstance();
 	Neo2DEngine* gui = Neo2DEngine::getInstance();
 
 	if (m_labelText == NULL)
 	{
 		m_labelText = render->createText(gui->getDefaultFont(),
-										 gui->getDefaultFontSize());
+										 m_fontSize);
 		m_labelText->setAlign(m_alignment);
 	}
 
+	m_labelText->setSize(m_fontSize);
 	m_labelText->setText(m_label.c_str());
 
 	Vector4 color;
@@ -113,6 +113,9 @@ void Button::update()
 	x = input->getAxis("MOUSE_X") * res.x;
 	y = input->getAxis("MOUSE_Y") * res.y;
 
+	unsigned int wx = m_offset.x + m_x;
+	unsigned int wy = m_offset.y + m_y;
+
 	if (m_state == BUTTON_PRESSED_STATE && input->onKeyUp("MOUSE_BUTTON_LEFT"))
 	{
 		doCallback();
@@ -122,10 +125,11 @@ void Button::update()
 	if (m_state == BUTTON_PRESSED_STATE || (m_state == BUTTON_HOVER_STATE && input->onKeyDown("MOUSE_BUTTON_LEFT")))
 	{
 		m_state = BUTTON_PRESSED_STATE;
-		return;
+	   	return;
 	}
 	
-	if (x >= m_x && x <= m_x + m_width && y >= m_y && y <= m_y + m_height)
+	if (x >= wx && x <= wx + m_width
+		&& y >= wy && y <= wy + m_height)
 	{
 		m_state = BUTTON_HOVER_STATE;
 	}

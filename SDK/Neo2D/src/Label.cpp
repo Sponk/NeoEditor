@@ -56,6 +56,7 @@ void Label::draw(Vector2 offset)
 		m_labelText->setAlign(m_alignment);
 	}
 
+	m_labelText->setColor(m_color);
 	m_labelText->setText(m_label.c_str());
 	render->drawText(m_labelText, offset.x + 0.5 * (float)m_width,
 					offset.y + 0.5 * m_labelText->getSize() + 0.5 * (float)m_height);

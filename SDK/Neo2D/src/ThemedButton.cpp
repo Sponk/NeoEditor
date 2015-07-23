@@ -46,7 +46,6 @@ ThemedButton::ThemedButton(unsigned int x, unsigned int y, unsigned int width,
 	Button(x, y, width, height, label),
 	m_marginTop(0),
 	m_marginSide(0)
-
 {
 	for (int i = 0; i < NUM_SPRITES; i++)
 	{
@@ -55,7 +54,7 @@ ThemedButton::ThemedButton(unsigned int x, unsigned int y, unsigned int width,
 		m_pressedSprites[i] = NULL;
 	}
 
-	m_fontSize = Neo2DEngine::getInstance()->getDefaultFontSize();
+	m_fontSize = 11;
 }
 
 void ThemedButton::loadSprites(Sprite* sprites[], const char* vert,
@@ -102,8 +101,7 @@ void ThemedButton::draw(Vector2 offset)
 
 	if (m_labelText == NULL)
 	{
-		m_labelText = render->createText(gui->getDefaultFont(),
-			m_fontSize);
+		m_labelText = render->createText(gui->getDefaultFont(),	m_fontSize);
 		m_labelText->setAlign(m_alignment);
 
 		// Make variable!
@@ -126,6 +124,7 @@ void ThemedButton::draw(Vector2 offset)
 
 	}
 
+	m_labelText->setSize(m_fontSize);
 	m_labelText->setText(m_label.c_str());
 
 	Vector4 color;

@@ -131,6 +131,7 @@ public:
 	Vector2 getOffset() { return m_offset; }
 
 	void setSize(unsigned int w, unsigned int h) { m_width = w; m_height = h; }
+	Vector2 getSize() { return Vector2(m_width, m_height); }
 	
 	/**
 	 * @brief Draws the widget to the canvas it belongs to.

@@ -78,7 +78,7 @@ bool M_loadFont(const char * filename, void * data)
 	unsigned int width = 1024;
 	unsigned int height = 0;
 
-	unsigned int flags = FT_LOAD_RENDER | FT_LOAD_NO_HINTING;
+	unsigned int flags = FT_LOAD_RENDER;
 	
 	// Turn font size from float to uint
 	font->setFontSize(size);

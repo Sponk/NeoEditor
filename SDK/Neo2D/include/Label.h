@@ -59,10 +59,14 @@ protected:
 	TEXT_ALIGN_MODES m_alignment;
 	String m_font;
 
+	Vector4 m_color;
+
 public:
 	Label(unsigned int x, unsigned int y, unsigned int width,
 		  unsigned int height, const char* label)
-		: Widget(x, y, width, height, label), m_labelText(NULL), m_alignment(TEXT_ALIGN_LEFT), m_font("assets/default.ttf")
+		: Widget(x, y, width, height, label), m_labelText(NULL),
+		  m_alignment(TEXT_ALIGN_LEFT), m_font("assets/default.ttf"),
+		  m_color(0,0,0,1)
 	{
 	}
 
@@ -96,6 +100,9 @@ public:
 	 * @see setFont
 	 */
 	const char* getFont() { return m_font.getSafeString(); }
+
+	Vector4 getColor() { return m_color; }
+	void setColor(Vector4 color) { m_color = color; }
 
 	void draw(Vector2 offset);
 	void update();

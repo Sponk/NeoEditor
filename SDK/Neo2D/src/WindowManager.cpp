@@ -16,13 +16,11 @@ WindowManager::~WindowManager()
 
 void WindowManager::draw()
 {
-
 	Container::draw();
 }
 
 void WindowManager::update()
 {
-
 	Container::update();
 }
 

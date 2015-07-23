@@ -19,7 +19,11 @@
 
 #include <WindowManager.h>
 #include <Menu.h>
-#include <MenuBar.h>	
+#include <MenuBar.h>
+#include <List.h>
+#include <Tree.h>
+
+#include <Slider.h>
 
 	using namespace Neo;
 	using namespace Neo2D;
@@ -29,6 +33,7 @@
 %}
 
 %include <windows.i>
+%include <std_string.i>
 
 #define NEO_CORE_EXPORT
 
@@ -73,6 +78,7 @@
 %include <Material.h>
 %include <Box3d.h>
 %include <Armature.h>
+%include <Log.h>
 
 
 #define NEO_CORE_EXPORT
@@ -95,3 +101,7 @@
 %include <Label.h>
 %include <Menu.h>
 %include <MenuBar.h>
+%include <List.h>
+%include <Tree.h>
+
+%include <Slider.h>

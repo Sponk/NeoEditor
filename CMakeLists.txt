@@ -18,9 +18,18 @@ INCLUDE(FindSSE)
 ## Documentation tool
 FIND_PACKAGE(Doxygen 1.8.3)
 
+IF("${FORCE_LOCAL_SDL}" STREQUAL "")
+  SET(FORCE_LOCAL_SDL FALSE)
+  SET(SDL2_FOUND FALSE)
+ENDIF()
+
 ## SWIG for script bindings
 FIND_PACKAGE(SWIG)
 FIND_PACKAGE(Mono)
+
+IF(NOT ${FORCE_LOCAL_SDL})
+	INCLUDE(FindSDL2)
+ENDIF()
 
 ## Set version and info
 SET(NEO_MAJOR_VERSION 0)
