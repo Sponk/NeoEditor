@@ -43,7 +43,7 @@
 #ifdef USE_GLES
 #include <ES2Context.h>
 #else
-#include <GLContext.h>
+#include <GL4Context.h>
 #endif
 
 #include <ALContext.h>
@@ -217,7 +217,6 @@ m_inputMethod(NULL)
         createDirectory(m_tempDir);
     }
 
-    // MEngine
     {
         m_soundContext = new ALContext();
         m_physics = new BulletContext();
@@ -277,7 +276,7 @@ void EditorBackend::initRenderer()
 {
     if(m_render) return;
 #ifndef USE_GLES
-    m_render = new GLContext();
+	m_render = new GL4Context();
 #else
 	m_render = new ES2Context();
 #endif
@@ -482,7 +481,6 @@ void EditorBackend::start(void)
     GLversion = 2;
 #endif
 
-    // MEngine
     {
         NeoEngine * engine = NeoEngine::getInstance();
 
@@ -500,10 +498,8 @@ void EditorBackend::start(void)
 		engine->getBehaviorManager()->addBehavior(ParticleSystemBehavior::getStaticName(), M_OBJECT3D, ParticleSystemBehavior::getNew);
 
         // add renderers
-        if(GLversion >= 2)
-            engine->getRendererManager()->addRenderer(StandardRenderer::getStaticName(), StandardRenderer::getNew);
+        engine->getRendererManager()->addRenderer(StandardRenderer::getStaticName(), StandardRenderer::getNew);
         else
-           engine->getRendererManager()->addRenderer(FixedRenderer::getStaticName(), FixedRenderer::getNew);
 
         // mesh loaders
         engine->getMeshLoader()->addLoader(xmlMeshLoad);
@@ -524,14 +520,10 @@ void EditorBackend::start(void)
         // game
         engine->setGame(m_game);
 
-        // set default renderer
+        // set default renderer (standard)
         if(m_renderer == NULL)
-        {
-            if(GLversion >= 2)
-                m_renderer = new StandardRenderer();
-            else
-                m_renderer = new FixedRenderer();
-        }
+            m_renderer = new StandardRenderer();
+
         engine->setRenderer(m_renderer);
     }
 

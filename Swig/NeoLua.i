@@ -1,27 +1,40 @@
 %module NeoLua
 %{
-        #include <NeoEngine.h>
-        #include <NeoCore.h>
-        #include <Neo2DEngine.h>
-        #include <Widget.h>
-        #include <Button.h>
+#include <NeoEngine.h>
+#include <NeoCore.h>
+#include <Neo2DEngine.h>
+#include <Widget.h>
+#include <Button.h>
 
-        #include <ThemedButton.h>
-        #include <Sprite.h>
-        #include <Tile.h>
-        #include <InputField.h>
-        #include <Canvas.h>
-        #include <Label.h>
+#include <ThemedButton.h>
+#include <Sprite.h>
+#include <Tile.h>
+#include <InputField.h>
+#include <ThemedInputField.h>
+#include <Canvas.h>
+#include <Label.h>
 
-        using namespace Neo;
-        using namespace Neo2D;
-        using namespace Gui;
+#include <Container.h>
+#include <Window.h>
+#include <WindowManager.h>
+#include <List.h>
+#include <Tree.h>
 
-        // #define Canvas Neo::Gui::Canvas
+#include <Menu.h>
+#include <MenuBar.h>
+	
+#include <Slider.h>
+	
+	using namespace Neo;
+	using namespace Neo2D;
+	using namespace Gui;
+
+	// #define Canvas Neo::Gui::Canvas
 %}
 
 %include <windows.i>
 %include <cpointer.i>
+%include <std_string.i>
 
 #define NEO_CORE_EXPORT
 
@@ -66,8 +79,7 @@
 %include <Material.h>
 %include <Box3d.h>
 %include <Armature.h>
-
-
+%include <Log.h>
 
 #define NEO_CORE_EXPORT
 #define NEO2D_EXPORT
@@ -77,12 +89,24 @@
 %include <Neo2DEngine.h>
 %include <Button.h>
 
+%include <Container.h>
+%include <Window.h>
+%include <WindowManager.h>
+
 %include <Sprite.h>
 %include <Tile.h>
 %include <InputField.h>
-%include <ThemedButton.h>
-%include <Label.h>
 
+%include <ThemedButton.h>
+%include <ThemedInputField.h>
+
+%include <Label.h>
+%include <Menu.h>
+%include <MenuBar.h>
+%include <List.h>
+%include <Tree.h>
+
+%include <Slider.h>
 
 //  Some pointer stuff
 %pointer_class(int, intp);

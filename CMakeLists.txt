@@ -18,9 +18,18 @@ INCLUDE(FindSSE)
 ## Documentation tool
 FIND_PACKAGE(Doxygen 1.8.3)
 
+IF("${FORCE_LOCAL_SDL}" STREQUAL "")
+  SET(FORCE_LOCAL_SDL FALSE)
+  SET(SDL2_FOUND FALSE)
+ENDIF()
+
 ## SWIG for script bindings
 FIND_PACKAGE(SWIG)
 FIND_PACKAGE(Mono)
+
+IF(NOT ${FORCE_LOCAL_SDL})
+	INCLUDE(FindSDL2)
+ENDIF()
 
 ## Set version and info
 SET(NEO_MAJOR_VERSION 0)
@@ -63,7 +72,7 @@ ELSE()
 ENDIF()
 
 SET(CPACK_PACKAGE_VENDOR "${NEO_VENDOR}")
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Neo Editor and Maratis game engine.")
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Neo game engine and editor.")
 SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
 SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 SET(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
@@ -94,14 +103,14 @@ IF(WIN32)
   if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     # using GCC
     # LuaJIT does not build with the current MinGW
-    SET(STANDARD_LUA TRUE)
+    OPTION(STANDARD_LUA TRUE)
 
     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${NEO_BUILD_FLAGS} -O2 -DWIN32 -I\"$ENV{DXSDK_DIR}/Include\"")
     SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D__Debug__ -I\"$ENV{DXSDK_DIR}/Include\"")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NEO_BUILD_FLAGS} -O2 -DWIN32 -I\"$ENV{DXSDK_DIR}/Include\"")
-    SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D__Debug__ -I\"$ENV{DXSDK_DIR}/Include\"")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NEO_BUILD_FLAGS} -O2 -DWIN32 -I\"$ENV{DXSDK_DIR}/Include\" -std=c++11 -D_USE_MATH_DEFINES")
+    SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D__Debug__ -I\"$ENV{DXSDK_DIR}/Include\" -std=c++11 -D_USE_MATH_DEFINES")
 
-    SET(CMAKE_SHARED_LINKER_FLAGS "-lcomctl32 -lkernel32 -Wl,--subsystem,windows,--as-needed,--allow-multiple-definition -static -static-libstdc++ -static-libgcc")
+    SET(CMAKE_SHARED_LINKER_FLAGS "-lcomctl32 -lkernel32 -Wl,--subsystem,windows,--as-needed,--allow-multiple-definition -static -static-libstdc++ -static-libgcc -std=c++11")
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--allow-multiple-definition -static -static-libstdc++ -static-libgcc")
     SET(CPACK_STRIP_FILES ON)
 
@@ -176,8 +185,8 @@ IF(APPLE)
   SET(NEO_BUILD_FLAGS -DOSX)
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${NEO_BUILD_FLAGS}")
   SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D__Debug__")
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NEO_BUILD_FLAGS}")
-  SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D__Debug__")
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NEO_BUILD_FLAGS}" -std=c++11)
+  SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D__Debug__" -std=c++11)
   SET(CMAKE_SHARED_LINKER_FLAGS "-Wl")
 ENDIF(APPLE)
 
@@ -200,9 +209,9 @@ IF(UNIX AND NOT APPLE AND NOT ANDROID AND NOT EMSCRIPTEN)
 
   SET(NEO_BUILD_FLAGS "")
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${NEO_BUILD_FLAGS} -O3 -fPIC -DLINUX -pthread")
-  SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -D__Debug__ -pthread")
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NEO_BUILD_FLAGS} -O3 -fPIC -DLINUX -pthread")
-  SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -D__Debug__ -pthread")
+  SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -D__Debug__ -pthread -Og")
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NEO_BUILD_FLAGS} -O3 -fPIC -DLINUX -pthread -std=c++11")
+  SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -D__Debug__ -pthread -std=c++11 -Og")
   SET(CMAKE_SHARED_LINKER_FLAGS "-ldl -Wl,--as-needed,--allow-multiple-definition,--build-id")
 
   SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lm -ldl -Wl,--allow-multiple-definition,-rpath ." )

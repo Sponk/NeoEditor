@@ -45,7 +45,10 @@ namespace Neo
 	7	Debug	debug	Debug-level messages.	Info useful to developers for debugging the application, not useful during operations.
 */
 
+// For exposure to Lua
+void infoLog(const char* s, const char* function, const char* filename, int line);
 
+#ifndef SWIG
 // Only give the filename and not the path
 #ifndef WIN32
 #define __SFILENAME__ \
@@ -70,7 +73,6 @@ namespace Neo
 #define MLOG_INFO(USERMESSAGE) MLOG(6, USERMESSAGE)
 #define MLOG_DEBUG(USERMESSAGE) MLOG(7, USERMESSAGE)
 
-
 class NEO_ENGINE_EXPORT Log
 {
 private:
@@ -89,5 +91,7 @@ public:
 	static string m_string;
 	static void log(int severity, const char * func, const char * fil, const int & line_no);
 };
+#endif // SWIG
+
 }
 #endif

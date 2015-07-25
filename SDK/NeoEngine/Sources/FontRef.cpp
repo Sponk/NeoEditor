@@ -28,8 +28,10 @@
 using namespace Neo;
 
 FontRef::FontRef(Font * font, const char * filename):
-	m_font(font){
+	m_font(font)
+{
 	m_filename.set(filename);
+	m_font = Font::getNew();
 }
 
 FontRef::~FontRef(void){
@@ -58,8 +60,8 @@ void FontRef::update(void)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
 
-	if(! m_font)
-		m_font = Font::getNew();
+//	if(! m_font)
+//		m_font = Font::getNew();
 
 	engine->getFontLoader()->loadData(getFilename(), m_font);
 }

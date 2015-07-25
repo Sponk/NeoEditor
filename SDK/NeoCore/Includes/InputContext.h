@@ -75,8 +75,8 @@ public:
 	// flush
 	virtual void flush(void) = 0;
 
-	virtual void setLastChar(char c) = 0;
-	virtual char popLastChar() = 0;
+	virtual void setLastChar(unsigned int c) = 0;
+	virtual unsigned int popLastChar() = 0;
 };
 }
 #endif

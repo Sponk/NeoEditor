@@ -29,7 +29,8 @@
 
 using namespace Neo;
 
-Input::Input(void)
+Input::Input(void):
+m_lastChar(0)
 {
 	// ASCII keys
 	char name[2] = {0, 0};

@@ -33,7 +33,7 @@ namespace Neo
 /**
  * The GLContext class implements the interface dictated by MRenderingContext on top of OpenGL.
  *
- * @see MRenderingContext
+ * @see RenderingContext
  */
 class GLContext : public RenderingContext
 {

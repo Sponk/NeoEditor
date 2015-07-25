@@ -30,7 +30,7 @@
 
 using namespace Neo;
 
-// MDataRef
+// DataRef
 DataRef::DataRef(void):
 m_time(0),
 m_score(0)
@@ -48,7 +48,7 @@ void DataRef::decrScore(void)
 }
 
 
-// MDataManager
+//DataManager
 DataManager::~DataManager(void)
 {
 	clear();

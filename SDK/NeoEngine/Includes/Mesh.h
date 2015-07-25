@@ -56,6 +56,8 @@ private:
 	// visibility
 	bool m_visibility;
 
+	unsigned int m_vao;
+
 public:
 	// array infos
 	inline PRIMITIVE_TYPES getPrimitiveType(void) { return m_primitiveType; }
@@ -73,6 +75,8 @@ public:
 	// visibility
 	inline void setVisibility(bool visibility) { m_visibility = visibility; }
 	inline bool isVisible(void) { return m_visibility; }
+
+	inline unsigned int* getVAO() { return &m_vao; }
 };
 
 // SubMesh
@@ -98,13 +102,17 @@ private:
 	unsigned int m_colorsSize;
 
 	VAR_TYPES m_indicesType;
-	void *m_indices;
+	void* m_indices;
 
-	Color *m_colors;
-	Vector3 *m_vertices;
-	Vector3 *m_normals;
-	Vector3 *m_tangents;
-	Vector2 *m_texCoords;
+	Color* m_colors;
+	Vector3* m_vertices;
+	Vector3* m_normals;
+	Vector3* m_tangents;
+	Vector2* m_texCoords;
+
+	Vector3* m_skinVertices;
+	Vector3* m_skinNormals;
+	Vector3* m_skinTangents;
 
 	// VBO (optional)
 	unsigned int m_vboId1;
@@ -162,6 +170,11 @@ public:
 	inline Vector3 *getNormals(void) { return m_normals; }
 	inline Vector3 *getTangents(void) { return m_tangents; }
 	inline Vector2 *getTexCoords(void) { return m_texCoords; }
+
+	inline Vector3 *getSkinVertices(void) { return m_skinVertices; }
+	inline Vector3 *getSkinNormals(void) { return m_skinNormals; }
+	inline Vector3 *getSkinTangents(void) { return m_skinTangents; }
+
 
 	// VBO
 	void clearVBO(void);

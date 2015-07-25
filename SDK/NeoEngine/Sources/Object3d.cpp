@@ -32,13 +32,15 @@ Object3d::Object3d(void):
 	m_scale(1, 1, 1),
 	m_isVisible(true),
 	m_isActive(true),
-    m_needToUpdate(true)
+    m_needToUpdate(true),
+	m_additionalData(NULL)
 {}
 
 // destructor
 Object3d::~Object3d(void)
 {
 	clearObject3d();
+	SAFE_DELETE(m_additionalData);
 }
 
 void Object3d::clearObject3d(void)

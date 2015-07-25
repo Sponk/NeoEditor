@@ -60,7 +60,7 @@ private :
 	
 	vector<float *> m_axisToFlush;
 
-	char m_lastChar;
+	unsigned int m_lastChar;
 	
 public:
 
@@ -90,8 +90,8 @@ public:
 
 	void flush(void);
 
-	void setLastChar(char c) { m_lastChar = c; }
-	char popLastChar() { char c = m_lastChar; m_lastChar = '\0'; return c; }
+	void setLastChar(unsigned int c) { m_lastChar = c; }
+	unsigned int popLastChar() { unsigned int c = m_lastChar; m_lastChar = '\0'; return c; }
 };
 }
 #endif

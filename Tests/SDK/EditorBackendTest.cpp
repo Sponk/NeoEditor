@@ -29,6 +29,7 @@ void resetEngine()
 	engine->setSystemContext(NULL);
 	engine->setGame(NULL);
 	engine->setPackageManager(NULL);
+    engine->setRenderingContext(NULL);
 }
 
 TEST_F(EditorBackendTest, SaveLevel_test)
@@ -36,9 +37,12 @@ TEST_F(EditorBackendTest, SaveLevel_test)
 	
 	NeoEngine* engine = NeoEngine::getInstance();
 	EditorBackend* backend = new EditorBackend();
+    RenderingContext* render = new DummyContext();
 
-	backend->setRenderingContext(new DummyContext());
-	backend->start();
+    backend->setRenderingContext(render);
+    engine->setRenderingContext(render);
+
+    backend->start();
 
 	Scene* scene = engine->getLevel()->getCurrentScene();
 
@@ -61,8 +65,10 @@ TEST_F(EditorBackendTest, LoadLevel_test)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
 	EditorBackend* backend = new EditorBackend();
+	RenderingContext* render = new DummyContext();
 
-	backend->setRenderingContext(new DummyContext());
+	backend->setRenderingContext(render);
+	engine->setRenderingContext(render);
 	backend->start();
 
 	Scene* scene = engine->getLevel()->getCurrentScene();
@@ -81,8 +87,10 @@ TEST_F(EditorBackendTest, Undo_test)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
 	EditorBackend* backend = new EditorBackend();
+	RenderingContext* render = new DummyContext();
 
-	backend->setRenderingContext(new DummyContext());
+	backend->setRenderingContext(render);
+	engine->setRenderingContext(render);
 	backend->start();
 
 	Scene* scene = engine->getLevel()->getCurrentScene();
@@ -112,8 +120,10 @@ TEST_F(EditorBackendTest, MultiUndo_test)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
 	EditorBackend* backend = new EditorBackend();
+	RenderingContext* render = new DummyContext();
 
-	backend->setRenderingContext(new DummyContext());
+	backend->setRenderingContext(render);
+	engine->setRenderingContext(render);
 	backend->start();
 
 	Scene* scene = engine->getLevel()->getCurrentScene();
@@ -151,8 +161,10 @@ TEST_F(EditorBackendTest, DuplicateObjects_test)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
 	EditorBackend* backend = new EditorBackend();
+	RenderingContext* render = new DummyContext();
 
-	backend->setRenderingContext(new DummyContext());
+	backend->setRenderingContext(render);
+	engine->setRenderingContext(render);
 	backend->start();
 
 	Scene* scene = engine->getLevel()->getCurrentScene();
@@ -179,8 +191,10 @@ TEST_F(EditorBackendTest, Redo_test)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
 	EditorBackend* backend = new EditorBackend();
+	RenderingContext* render = new DummyContext();
 
-	backend->setRenderingContext(new DummyContext());
+	backend->setRenderingContext(render);
+	engine->setRenderingContext(render);
 	backend->start();
 
 	Scene* scene = engine->getLevel()->getCurrentScene();
@@ -221,8 +235,10 @@ TEST_F(EditorBackendTest, ProjectSave_test)
 	
 	NeoEngine* engine = NeoEngine::getInstance();
 	EditorBackend* backend = new EditorBackend();
+	RenderingContext* render = new DummyContext();
 
-	backend->setRenderingContext(new DummyContext());
+	backend->setRenderingContext(render);
+	engine->setRenderingContext(render);
 	backend->start();
 
     engine->getGame()->enablePostEffects();
@@ -253,8 +269,10 @@ TEST_F(EditorBackendTest, ProjectLoad_test)
 	
 	NeoEngine* engine = NeoEngine::getInstance();
 	EditorBackend* backend = new EditorBackend();
+	RenderingContext* render = new DummyContext();
 
-	backend->setRenderingContext(new DummyContext());
+	backend->setRenderingContext(render);
+	engine->setRenderingContext(render);
 	backend->start();
 
 	// Load the project

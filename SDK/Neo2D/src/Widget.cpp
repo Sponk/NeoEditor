@@ -48,8 +48,9 @@ Widget::Widget(unsigned int x, unsigned int y, unsigned int width,
 	  m_callback((CALLBACK_FUNCTION) Widget::doNothing),
 	  m_visible(true),
 	  m_scale(Vector2(1, 1)),
-	  m_flip(Vector2(1, 1)),
-	  m_fontSize(12.0)
+	  m_flip(Vector2(0, 0)),
+	  m_fontSize(12.0),
+	  m_userData(0)
 {
 }
 
@@ -63,8 +64,9 @@ Widget::Widget()
 	  m_callback((CALLBACK_FUNCTION) Widget::doNothing),
 	  m_visible(true),
 	  m_scale(Vector2(1, 1)),
-	  m_flip(Vector2(1, 1)),
-	  m_fontSize(12.0)
+	  m_flip(Vector2(0, 0)),
+	  m_fontSize(12.0),
+	  m_userData(0)
 {
 }
 

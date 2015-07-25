@@ -38,6 +38,7 @@
 
 #include <Widget.h>
 #include <NeoEngine.h>
+#include <string>
 
 namespace Neo2D
 {
@@ -64,10 +65,12 @@ enum INPUT_STATE
  */
 class NEO2D_EXPORT InputField : public Widget
 {
+protected:
 	OText* m_labelText;
 	INPUT_STATE m_state;
-
-	void addCharacter(char c);
+	unsigned int m_cursorpos;
+	
+	void updateLabel(string s);
 
 	/**
 	 * @brief Calculates the full width of the given text object.
@@ -80,11 +83,11 @@ public:
 	InputField(unsigned int x, unsigned int y, unsigned int width,
 			   unsigned int height, const char* label);
 
-	void draw();
-	void draw(Vector2 offset) { draw(); }
+	void draw(Vector2 offset);
 	void update();
 
 	void setState(INPUT_STATE state) { m_state = state; }
+	const char* getStaticName() { return "InputField"; }
 };
 }
 }

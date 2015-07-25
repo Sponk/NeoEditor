@@ -2,11 +2,14 @@
 IF(NOT ANDROID AND NOT EMSCRIPTEN)
 	ADD_SUBDIRECTORY(assimp)
 	ADD_SUBDIRECTORY(fltk)
-	
+
 	ADD_SUBDIRECTORY(libzip)
 
 	# We compile sdl2 differently on Android
-	ADD_SUBDIRECTORY(sdl2)
+	# Only compile SDL2 if we found no "native" one
+	IF(NOT ${SDL2_FOUND})
+		ADD_SUBDIRECTORY(sdl2)
+	ENDIF()
 
 	# Android has native zlib
 	ADD_SUBDIRECTORY(zlib)
@@ -39,6 +42,3 @@ ADD_SUBDIRECTORY(libjpeg)
 ADD_SUBDIRECTORY(libpng)
 ADD_SUBDIRECTORY(libvorbis)
 ADD_SUBDIRECTORY(npk)
-
-
-

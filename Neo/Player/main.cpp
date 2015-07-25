@@ -64,8 +64,9 @@ void windowEvents(MWinEvent * windowEvents)
 // update
 void update(void)
 {
-	PlayerBackend::getInstance()->logicLoop();
+	// Update Neo2D before the rest so all input is still in the pipeline
 	Neo2D::Neo2DEngine::getInstance()->update();
+	PlayerBackend::getInstance()->logicLoop();
 }
 
 // draw
@@ -76,6 +77,9 @@ void draw(void)
     NeoWindow::getInstance()->swapBuffer();
 }
 
+// FIXME: In header file
+void registerDebugHandler();
+
 // main
 int main(int argc, char **argv)
 {
@@ -83,6 +87,8 @@ int main(int argc, char **argv)
 	setlocale(LC_NUMERIC, "C");
 #endif
 
+	registerDebugHandler();
+	
 	MLOG_INFO("Neo Player version:\t" << PLAYER_VERSION_STRING);
 
 	unsigned int width = 1024;
@@ -105,6 +111,11 @@ int main(int argc, char **argv)
 	// get the backend (first time call constructor)
 	PlayerBackend * backend = PlayerBackend::getInstance();
 
+	// Init default thread
+	ThreadFactory* mgr = ThreadFactory::getInstance();
+	mgr->setTemplateSemaphore(new SDLSemaphore());
+	mgr->setTemplateThread(new SDLThread());
+
 	// create window
 	if(!window->create(std::string("Neo ").append(PLAYER_VERSION_STRING).c_str(), width, height, 32, fullscreen == 1))
 	{
@@ -112,7 +123,7 @@ int main(int argc, char **argv)
 		return 0;
 	}
 
-	backend->start();
+	//backend->start();
 
 	if(fullscreen)
 		window->hideCursor();
@@ -193,19 +204,22 @@ int main(int argc, char **argv)
 		}
 	}
 
-	// Init default thread
-	ThreadFactory* mgr = ThreadFactory::getInstance();
-	mgr->setTemplateSemaphore(new SDLSemaphore());
-	mgr->setTemplateThread(new SDLThread());
-
-    // create the update thread
+	// create the update thread
     SDLThread updateThread;
     Neo2D::Neo2DEngine* guiSystem = Neo2D::Neo2DEngine::getInstance();
 
+	if(!projectFound)
+	{
+		backend->start();
+		backend->setupEmptyProject();
+	}
+	
 	//window->getUpdateSemaphore()->WaitAndLock();
 	NeoGame* game = engine->getGame();
 	game->begin();
 
+	engine->getScriptContext()->runScript("assets/main.lua");
+	
 //    Messenger* messenger = Messenger::getInstance();
 //    messenger->addInbox("MainThread", 0);
 

@@ -60,12 +60,21 @@ private:
 	unsigned int m_texturedFx;
 	int m_right, m_left, m_top, m_bottom;
 
+	unsigned int m_colorVao;
+	unsigned int m_textureVao;
+
+	Vector2 m_resolution;
+
+	void init(unsigned int fx, unsigned int* vao);
+
 public:
 	static Render* getInstance()
 	{
 		static Render m_instance;
 		return &m_instance;
 	}
+
+	Vector2 getResolution() { return m_resolution; }
 
 	/**
 	 * @brief Draws a colored quad without texture to the screen.

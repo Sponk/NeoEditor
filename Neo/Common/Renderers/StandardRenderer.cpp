@@ -1,5 +1,5 @@
 //========================================================================
-// Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2015 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -22,139 +22,695 @@
 //
 //========================================================================
 
-#ifndef USE_GLES
 #include <glew.h>
-#endif
 
 #include <NeoEngine.h>
+#include <StandardRenderer.h>
+#include <Window/Window.h>
+#include <string>
 
-#ifndef USE_GLES
-#include "StandardShaders.h"
-#include "CompatibleShaders.h"
-#else
-#include "GLESShaders.h"
+//#include <codecvt>
+//#include <locale>
+
+#ifndef SHADER_PATH
+#define SHADER_PATH "./"
 #endif
-
-#include "StandardRenderer.h"
 
 using namespace Neo;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Init
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-StandardRenderer::StandardRenderer(void):
-m_fboId(0),
-m_forceNoFX(false),
-m_verticesNumber(0),
-m_normalsNumber(0),
-m_tangentsNumber(0),
-m_vertices(NULL),
-m_normals(NULL),
-m_tangents(NULL),
-m_FXsNumber(0)
+/*
+ * Additional scene data
+ */
+class SceneData : public Scene::AdditionalData
 {
-	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
-	MLOG_INFO("Renderer: " << render->getRendererVersion());
+public:
+	// FIXME: Check for sub meshes?
+	std::vector<OEntity*> visibleEntities;
+	Semaphore* visibilityLock;
 
-#ifndef USE_GLES
-    float version;
-    sscanf(render->getRendererVersion(), "%3f", &version);
-    if(version < 4.0)
-    {
-        MLOG_INFO("No GL4 compatible context found. Falling back to compat shaders.");
-        // compat FXs
-        addFX(compat_vertShader0.c_str(), compat_fragShader0.c_str());
-        addFX(compat_vertShader1.c_str(), compat_fragShader1.c_str());
-        addFX(compat_vertShader2.c_str(), compat_fragShader2.c_str());
-        addFX(compat_vertShader3.c_str(), compat_fragShader3.c_str());
-        addFX(compat_vertShader4.c_str(), compat_fragShader4.c_str());
-        addFX(compat_vertShader5.c_str(), compat_fragShader5.c_str());
-        addFX(compat_vertShader6.c_str(), compat_fragShader6.c_str());
-        addFX(compat_vertShader7.c_str(), compat_fragShader7.c_str());
-        addFX(compat_vertShader8.c_str(), compat_fragShader8.c_str());
-    }
-    else
-    {
-        // default FXs
-        addFX(vertShader0.c_str(), fragShader0.c_str());
-        addFX(vertShader1.c_str(), fragShader1.c_str());
-        addFX(vertShader2.c_str(), fragShader2.c_str());
-        addFX(vertShader3.c_str(), fragShader3.c_str());
-        addFX(vertShader4.c_str(), fragShader4.c_str());
-        addFX(vertShader5.c_str(), fragShader5.c_str());
-        addFX(vertShader6.c_str(), fragShader6.c_str());
-        addFX(vertShader7.c_str(), fragShader7.c_str());
-        addFX(vertShader8.c_str(), fragShader8.c_str());
-    }
-#else
-	// default FXs
-	addFX(vertShader0.c_str(), fragShader0.c_str());
-	addFX(vertShader1.c_str(), fragShader1.c_str());
-	addFX(vertShader2.c_str(), fragShader2.c_str());
-	addFX(vertShader3.c_str(), fragShader3.c_str());
-	addFX(vertShader4.c_str(), fragShader4.c_str());
-	addFX(vertShader5.c_str(), fragShader5.c_str());
-	addFX(vertShader6.c_str(), fragShader6.c_str());
-	addFX(vertShader7.c_str(), fragShader7.c_str());
-	addFX(vertShader8.c_str(), fragShader8.c_str());
-#endif
-	// rand texture
-	Image image;
-	image.create(VAR_UBYTE, 64, 64, 4);
-	unsigned char * pixel = (unsigned char *)image.getData();
-	for(unsigned int i=0; i<image.getSize(); i++)
+	SceneData()
 	{
-        (*pixel) = (unsigned char)(rand()%256);
-		pixel++;
+		visibilityLock = ThreadFactory::getInstance()->getNewSemaphore();
+		visibilityLock->Init(1);
 	}
 
-	render->createTexture(&m_randTexture);
-	render->bindTexture(m_randTexture);
-	render->setTextureFilterMode(TEX_FILTER_LINEAR_MIPMAP_LINEAR, TEX_FILTER_LINEAR);
-	render->setTextureUWrapMode(WRAP_REPEAT);
-	render->setTextureVWrapMode(WRAP_REPEAT);
+	~SceneData()
+	{
+		SAFE_DELETE(visibilityLock);
+	}			   
+};
 
-	render->sendTextureImage(&image, 1, 1, 0);
+/*
+ * Additional Object3d data
+ */
+class CameraData : public Object3d::AdditionalData
+{
+public:
+	// FIXME: Check for sub meshes?
+	std::vector<OEntity*> visibleEntities;
+	std::vector<OEntity*> visibleTransparentEntities;
+	Semaphore* visibilityLock;
+
+	Semaphore* lightLock;
+	std::vector<OLight*> visibleLights;
+
+	CameraData()
+	{
+		visibilityLock = ThreadFactory::getInstance()->getNewSemaphore();
+		visibilityLock->Init(1);
+
+		lightLock = ThreadFactory::getInstance()->getNewSemaphore();
+		lightLock->Init(1);
+	}
+
+	~CameraData()
+	{
+		SAFE_DELETE(lightLock);
+		SAFE_DELETE(visibilityLock);
+	}
+};
+
+/*
+ * Additional OEntity and OLight data
+ */
+class EntityData : public Object3d::AdditionalData
+{
+	unsigned int m_framebuffer;
+	unsigned int m_texture[6];
+	OCamera* m_camera[6];
+	Object3d* m_parent;
+	Scene* m_scene;
+	StandardRenderer* m_renderer;
+
+public:
+
+	EntityData() :
+		m_parent(nullptr),
+		m_scene(nullptr)
+	{
+
+	}
+
+	void drawCubemap()
+	{
+		NeoEngine* engine = NeoEngine::getInstance();
+		StandardRenderer* renderer = static_cast<StandardRenderer*>(engine->getRenderer());
+		RenderingContext* render = engine->getRenderingContext();
+				
+		render->bindFrameBuffer(m_framebuffer);
+		render->attachFrameBufferTexture(ATTACH_COLOR0, m_texture[0]);
+
+		// Enable them to be drawn
+		//FRAME_BUFFER_ATTACHMENT buffers[1] = { ATTACH_COLOR0 };
+		//render->setDrawingBuffers(buffers, 1);
+
+		for (int i = 0; i < 6; i++)
+			m_renderer->drawToTexture(m_scene, m_camera[i], 0);
+
+		//MLOG_INFO("RENDER");
+		render->bindFrameBuffer(0);
+
+		//render->setViewport(0, 0, screenWidth, screenHeight); // change viewport
+	}
+
+	void initTextures(int res, Scene* scene, Object3d* parent)
+	{
+		if (m_scene) return;
+
+		m_renderer = new StandardRenderer();
+		RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+		m_parent = parent;
+		m_scene = scene;
+
+		m_renderer->smallInit(res, res);
+
+		render->createFrameBuffer(&m_framebuffer);
+
+		// GBuffer texture
+		for (int i = 0; i < 6; i++)
+		{
+			render->createTexture(&m_texture[i]);
+			render->bindTexture(m_texture[i]);
+			render->setTextureFilterMode(TEX_FILTER_LINEAR, TEX_FILTER_LINEAR);
+			render->setTextureUWrapMode(WRAP_CLAMP);
+			render->setTextureVWrapMode(WRAP_CLAMP);
+			render->texImage(0, res, res, VAR_FLOAT, TEX_RGBA, 0);
+
+			m_camera[i] = scene->addNewCamera();
+			m_camera[i]->linkTo(parent);
+			m_camera[i]->setFov(90.0f);
+		}
+
+		m_camera[0]->rotate(Vector3(1, 0, 0), -90);
+		m_camera[1]->rotate(Vector3(0, 1, 0), 90);
+	
+		m_camera[3]->rotate(Vector3(1, 0, 0), 90);
+		m_camera[4]->rotate(Vector3(0, 1, 0), -90);
+		m_camera[5]->rotate(Vector3(0, 1, 0), 180);
+	}
+
+	void bindCubemap()
+	{
+
+	}
+};
+
+static const char* defaultShaderFiles[NUM_SHADERS] = {"Default.vert", "Forward.frag", "Final.frag", "Shadow.frag"};
+static const char* subroutines[5] = { "cookModelColor", "cookModelDiffuse", "cookModelDiffuseSpecular", "cookModelDiffuseNormal", "cookModelDiffuseNormalSpecular"};
+//static const char* subroutines[5] = { "phongModelColor", "phongModelDiffuse", "phongModelDiffuseSpecular", "phongModelDiffuseNormal", "phongModelDiffuseNormalSpecular" };
+
+StandardRenderer::StandardRenderer()
+{
+	// Let's hope we have an GL context
+	for(int i = 0; i < NUM_SHADERS; i++)
+	{
+		m_shaders[i] = NULL;
+		m_fx[i] = -1;
+	}
+
+	m_framebufferID = 0;
+	m_gbufferTexID = 0;
+	m_depthTexID = 0;
+
+	m_quadTexCoordVBO = 0;
+	m_quadVAO = 0;
+	m_quadVBO = 0;
+
+	m_lightUpdateThread = NULL;
+	m_lightUpdateSemaphore = NULL;
+	m_currentScene = NULL;
+	m_numVisibleLights = 0;
+
+	m_texCoords[0] = Vector2(0, 1);
+	m_texCoords[1] = Vector2(0, 0);
+	m_texCoords[3] = Vector2(1, 0);
+	m_texCoords[2] = Vector2(1, 1);
+
+	init();
 }
 
-StandardRenderer::~StandardRenderer(void)
+StandardRenderer::~StandardRenderer()
 {
-	unsigned int i;
+
+}
+
+void StandardRenderer::drawMesh(Mesh* mesh, OCamera* camera)
+{
+	int num = mesh->getSubMeshsNumber();
+	SubMesh* subMeshes = mesh->getSubMeshs();
+	Armature* armature = mesh->getArmature();
+
+	for(int i = 0; i < num; i++)
+	{
+		SkinData* skinData = subMeshes[i].getSkinData();
+		
+		if (armature && skinData)
+		{
+			unsigned int verticesSize = subMeshes[i].getVerticesSize();
+			Vector3* skinVertices = subMeshes[i].getSkinVertices();
+			Vector3* skinNormals = subMeshes[i].getSkinNormals();
+			Vector3* skinTangents = subMeshes[i].getSkinTangents();
+						
+			computeSkinning(armature, skinData, subMeshes[i].getVertices(), subMeshes[i].getNormals(),
+								subMeshes[i].getTangents(), skinVertices, skinNormals, skinTangents);
+
+			subMeshes[i].getBoundingBox()->initFromPoints(skinVertices, verticesSize);
+		}
+
+		drawSubMesh(&subMeshes[i], camera);
+	}
+
+	mesh->updateBoundingBox();
+}
+
+void StandardRenderer::drawSubMesh(SubMesh* mesh, OCamera* camera)
+{
+	NeoEngine* engine = NeoEngine::getInstance();
+
+	initVBO(mesh);
+
+	for(int i = 0; i < mesh->getDisplaysNumber(); i++)
+	{
+		drawDisplay(mesh, mesh->getDisplay(i), camera);
+	}
+}
+
+void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCamera* camera)
+{
+	NeoEngine* engine = NeoEngine::getInstance();
+	RenderingContext* render = engine->getRenderingContext();
+
+	// Retrieve VBO information
+	unsigned int* vboId1 = mesh->getVBOid1();
+	unsigned int* vboId2 = mesh->getVBOid2();
+	unsigned int* vao = display->getVAO();
+
+	// Save data into variables
+	Vector2* texcoords = mesh->getTexCoords();
+	VAR_TYPES indicesType = mesh->getIndicesType();
+	void* indices = mesh->getIndices();
+
+	Material* material = display->getMaterial();
+	int texturePasses = material->getTexturesPassNumber();
+
+	int fx = 0;
+	if(*vao == 0)
+	{
+		prepareMaterialDisplay(mesh, display);
+		return;
+	}
+
+	fx = m_fx[0];
+	render->bindFX(fx);
+	render->bindVAO(*vao);
+
+	if(texturePasses == 0)
+	{
+		// Tell the shader that we do not have any textures
+		render->disableBlending();
+	}
+	else
+	{
+		render->disableBlending();
+	}
+
+	for(int i = 0; i < texturePasses; i++)
+	{
+		TexturePass* pass = material->getTexturePass(i);
+
+		if(!pass || !pass->getTexture())
+		{
+			continue;
+		}
+
+		TextureRef* tex = pass->getTexture()->getTextureRef();
+		render->bindTexture(tex->getTextureId(), i);
+	}
+
+	// Texture
+	int texIds[4] = { 0, 1, 2, 3 };
+	render->sendUniformInt(fx, "Textures", texIds, 4);
+
+	// Send the texture mode
+	render->sendUniformInt(fx, "TextureMode", &texturePasses);
+	render->selectSubroutine(fx, M_SHADER_PIXEL, subroutines[texturePasses]);
+
+	// Set up modelview matrix
+	Matrix4x4 modelViewMatrix;
+	Matrix4x4 modelViewProjectionMatrix;
+	Matrix4x4 modelMatrix;
+	Matrix4x4 normalMatrix;
+
+	render->getModelViewMatrix(&modelMatrix);
+
+	camera->enable();
+	modelViewMatrix = *camera->getCurrentViewMatrix() * modelMatrix;
+	modelViewProjectionMatrix = *camera->getCurrentProjMatrix() * modelViewMatrix;
+	
+	normalMatrix = modelViewMatrix.getInverse().getTranspose();
+
+	// Send uniforms
+	render->sendUniformMatrix(m_fx[0], "ProjModelViewMatrix", &modelViewProjectionMatrix);
+	render->sendUniformMatrix(m_fx[0], "ModelViewMatrix", &modelViewMatrix);
+	render->sendUniformVec3(m_fx[0], "Diffuse", material->getDiffuse());
+	render->sendUniformVec3(m_fx[0], "Specular", material->getSpecular());
+	render->sendUniformVec3(m_fx[0], "Emit", material->getEmit());
+
+	int hasTransparency = (mesh->hasTransparency()) ? 1 : 0;
+	render->sendUniformInt(m_fx[0], "HasTransparency", &hasTransparency);
+
+	if (hasTransparency)
+	{
+		render->enableBlending();
+		render->setBlendingMode(material->getBlendMode());
+		sendLights(m_fx[0], camera);
+
+		float opacity = material->getOpacity();
+		render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
+	}
+	
+	float shininess = material->getShininess();
+	render->sendUniformFloat(m_fx[0], "Shininess", &shininess);
+
+	// Set up normal matrix
+	render->sendUniformMatrix(m_fx[0], "NormalMatrix", &normalMatrix);
+
+	// Set cull mode
+	render->setCullMode(display->getCullMode());
+
+	if(indices) // If the SubMesh has indices
+	{
+		if(*vboId2 > 0) // If the indices are stored in the VBO
+		{
+			render->bindVBO(VBO_ELEMENT_ARRAY, *vboId2);
+			switch(indicesType)
+			{
+				case VAR_USHORT:
+					render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (void*)(display->getBegin()*sizeof(short)));
+					break;
+				case VAR_UINT:
+					render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (void*)(display->getBegin()*sizeof(int)));
+					break;
+				default:
+					MLOG_WARNING("Unsupported indices type!");
+			}
+		}
+		else // If the indices are not stored in the VBO
+		{
+			switch(indicesType)
+			{
+				case VAR_USHORT:
+					render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (unsigned short*)indices + display->getBegin());
+					break;
+				case VAR_UINT:
+					render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (unsigned int*)indices + display->getBegin());
+					break;
+				default:
+					MLOG_WARNING("Unsupported indices type!");
+			}
+		}
+	}
+	else // If we have no indices
+		render->drawArray(display->getPrimitiveType(), display->getBegin(), display->getSize());
+}
+
+void StandardRenderer::drawGBuffer(Scene* scene, OCamera* camera)
+{
+	NeoEngine* engine = NeoEngine::getInstance();
+	RenderingContext* render = engine->getRenderingContext();
+
+	render->setDepthMask(true);
+	
+	OEntity* entity;
+	Mesh* mesh;
+	
+	// Lock scene so we don't have a surprise
+	CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
+
+	if(!data) return;
+
+	data->visibilityLock->WaitAndLock();
+
+	for (OEntity* entity : data->visibleEntities)
+	{
+		if (entity->isVisible() && entity->isActive() && !entity->isInvisible())
+		{			
+			render->setMatrixMode(MATRIX_MODELVIEW);
+			render->loadIdentity();
+			render->multMatrix(entity->getMatrix());
+						
+			mesh = entity->getMesh();
+
+			// Update Animation
+			if (mesh->getArmatureAnim())
+			{
+				animateArmature(
+					mesh->getArmature(),
+					mesh->getArmatureAnim(),
+					entity->getCurrentFrame()
+					);
+			}
+			else if (mesh->getArmature())
+			{
+				mesh->getArmature()->processBonesLinking();
+				mesh->getArmature()->updateBonesSkinMatrix();
+			}
+
+			if (mesh->getMaterialsAnim())
+				animateMaterials(mesh, mesh->getMaterialsAnim(), entity->getCurrentFrame());
+
+			if (mesh->getTexturesAnim())
+				animateTextures(mesh, mesh->getTexturesAnim(), entity->getCurrentFrame());
+
+			drawMesh(entity->getMesh(), camera);
+		}
+	}
+
+	render->setMatrixMode(MATRIX_MODELVIEW);
+	render->loadIdentity();
+	data->visibilityLock->Unlock();
+}
+
+
+void StandardRenderer::drawTransparents(Scene* scene, OCamera* camera)
+{
+	NeoEngine* engine = NeoEngine::getInstance();
+	RenderingContext* render = engine->getRenderingContext();
+
+	OEntity* entity;
+	Mesh* mesh;
+	
+	// Lock scene so we don't have a surprise
+	CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
+
+	if(!data) return;
+
+	data->visibilityLock->WaitAndLock();
+
+	for (OEntity* entity : data->visibleTransparentEntities)
+	{
+		if (entity->isVisible() && entity->isActive() && !entity->isInvisible())
+		{			
+			render->setMatrixMode(MATRIX_MODELVIEW);
+			render->loadIdentity();
+			render->multMatrix(entity->getMatrix());
+						
+			mesh = entity->getMesh();
+
+			// Update Animation
+			if (mesh->getArmatureAnim())
+			{
+				animateArmature(
+					mesh->getArmature(),
+					mesh->getArmatureAnim(),
+					entity->getCurrentFrame()
+					);
+			}
+			else if (mesh->getArmature())
+			{
+				mesh->getArmature()->processBonesLinking();
+				mesh->getArmature()->updateBonesSkinMatrix();
+			}
+
+			if (mesh->getMaterialsAnim())
+				animateMaterials(mesh, mesh->getMaterialsAnim(), entity->getCurrentFrame());
+
+			if (mesh->getTexturesAnim())
+				animateTextures(mesh, mesh->getTexturesAnim(), entity->getCurrentFrame());
+
+			drawMesh(entity->getMesh(), camera);
+		}
+	}
+
+	render->setMatrixMode(MATRIX_MODELVIEW);
+	render->loadIdentity();
+
+	int num = scene->getTextsNumber();
+	for (int i = 0; i < num; i++)
+	{
+		drawText(scene->getTextByIndex(i), camera);
+	}
+
+	data->visibilityLock->Unlock();
+}
+
+void StandardRenderer::init()
+{
+	std::string path;
+	Level* level = NeoEngine::getInstance()->getLevel();
+	NeoWindow* window = NeoWindow::getInstance();
+	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+
+	// Do not initialize twice
+	if(m_fx[0] != -1 && m_fx[1] != -1)
+		return;
+
+	MLOG_INFO("Initializing the rendering engine");
+	render->init();
+
+	path = window->getCurrentDirectory();
+	path += "/";
+	path += SHADER_PATH;
+
+	char file[512];
+
+	getGlobalFilename(file, path.c_str(), defaultShaderFiles[0]);
+	ShaderRef* vertShad = level->loadShader(file, M_SHADER_VERTEX);
+	ShaderRef* fragShad;
+
+	vertShad->update();
+
+	for(int i = 1; i < NUM_SHADERS; i++)
+	{
+		MLOG_INFO("Loading shader: " << defaultShaderFiles[i]);
+		getGlobalFilename(file, path.c_str(), defaultShaderFiles[i]);
+
+		fragShad = level->loadShader(file, M_SHADER_PIXEL);
+		fragShad->update();
+
+		m_shaders[i-1] = level->createFX(vertShad, fragShad);
+		render->updateFX(m_shaders[i-1]->getFXId());
+
+		m_shaders[i-1]->setImportant(true);
+		m_fx[i-1] = m_shaders[i-1]->getFXId();
+	}
+
+	initFramebuffers();
+	initQuadVAO(&m_quadVAO, &m_quadVBO, &m_quadTexCoordVBO, m_fx[1]);
+	initTextVAO(&m_textVAO, &m_textVBO, &m_textTexCoordVBO, m_fx[0]);
+
+	// Start worker threads
+	if(m_lightUpdateThread == NULL)
+	{
+		ThreadFactory* tmgr = ThreadFactory::getInstance();
+		m_lightUpdateThread = tmgr->getNewThread();
+		m_lightUpdateSemaphore = tmgr->getNewSemaphore();
+		m_visibilityThread = tmgr->getNewThread();
+
+		if(m_lightUpdateThread == NULL || m_lightUpdateSemaphore == NULL || m_visibilityThread == NULL)
+		{
+			MLOG_INFO("Could not create update threads!");
+			SAFE_DELETE(m_lightUpdateThread);
+			SAFE_DELETE(m_lightUpdateSemaphore);
+			SAFE_DELETE(m_visibilityThread);
+			return;
+		}
+
+		m_lightUpdateSemaphore->Init(1);
+		m_lightUpdateThread->Start(StandardRenderer::light_update_thread, "LightUpdate", this);
+		m_visibilityThread->Start(StandardRenderer::visibility_thread_mainscene, "VisUpdate", this);
+	}
+}
+
+void StandardRenderer::smallInit(unsigned int width, unsigned int height)
+{
+	std::string path;
+	Level* level = NeoEngine::getInstance()->getLevel();
+	NeoWindow* window = NeoWindow::getInstance();
+	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+
+	render->init();
+
+	path = window->getCurrentDirectory();
+	path += "/";
+	path += SHADER_PATH;
+
+	char file[512];
+
+	getGlobalFilename(file, path.c_str(), defaultShaderFiles[0]);
+	ShaderRef* vertShad = level->loadShader(file, M_SHADER_VERTEX);
+	ShaderRef* fragShad;
+
+	vertShad->update();
+
+	for (int i = 1; i < NUM_SHADERS; i++)
+	{
+		getGlobalFilename(file, path.c_str(), defaultShaderFiles[i]);
+		fragShad = level->loadShader(file, M_SHADER_PIXEL);
+		fragShad->update();
+
+		m_shaders[i - 1] = level->createFX(vertShad, fragShad);
+		render->updateFX(m_shaders[i - 1]->getFXId());
+
+		m_shaders[i - 1]->setImportant(true);
+		m_fx[i - 1] = m_shaders[i - 1]->getFXId();
+	}
+
+	initFramebuffers(Vector2(width, height));
+	initQuadVAO(&m_quadVAO, &m_quadVBO, &m_quadTexCoordVBO, m_fx[1]);
+	initTextVAO(&m_textVAO, &m_textVBO, &m_textTexCoordVBO, m_fx[0]);
+}
+
+inline int Pow2(int x)
+{
+	--x;
+	x |= x >> 1;
+	x |= x >> 2;
+	x |= x >> 4;
+	x |= x >> 8;
+	x |= x >> 16;
+	return x+1;
+}
+
+void StandardRenderer::clearFramebuffers()
+{
 	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
-	// delete default FXs
-	for(i=0; i<m_FXsNumber; i++)
+	if(m_gbufferTexID != 0)
+		render->deleteTexture(&m_gbufferTexID);
+
+	if(m_depthTexID != 0)
+		render->deleteTexture(&m_depthTexID);
+
+	if(m_framebufferID != 0)
+		render->deleteFrameBuffer(&m_framebufferID);
+}
+
+void StandardRenderer::initFramebuffers(Vector2 res)
+{
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	SystemContext * system = NeoEngine::getInstance()->getSystemContext();
+
+	clearFramebuffers();
+
+	// screen size
+	if (res.x == 0 || res.y == 0)
 	{
-		render->deleteFX(&m_FXs[i]);
-		render->deleteShader(&m_fragShaders[i]);
-		render->deleteShader(&m_vertShaders[i]);
+		unsigned int screenWidth = 0;
+		unsigned int screenHeight = 0;
+		system->getScreenSize(&screenWidth, &screenHeight);
+		res = Vector2(screenWidth, screenHeight);
 	}
 
-	// delete shadowLights
-	map<unsigned long, ShadowLight>::iterator
-	mit (m_shadowLights.begin()),
-	mend(m_shadowLights.end());
-	for(;mit!=mend;++mit)
-	{
-		render->deleteTexture(&mit->second.shadowTexture);
-	}
+	m_resolution = Vector2(res.x, res.y);
 
-	// delete occlusion queries
-	for(i=0; i<MAX_TRANSP; i++)
-		render->deleteQuery(&m_transpList[i].occlusionQuery);
-	for(i=0; i<MAX_OPAQUE; i++)
-		render->deleteQuery(&m_opaqueList[i].occlusionQuery);
+	// Update vertex cache
+	m_vertices[0] = Vector2(0, 0);
+	m_vertices[1] = Vector2(0, res.y);
+	m_vertices[2] = Vector2(res.x, 0);
+	m_vertices[3] = Vector2(res.x, res.y);
 
-	// delete rand texture
-	render->deleteTexture(&m_randTexture);
+	// create frame buffer
+	render->createFrameBuffer(&m_framebufferID);
 
-	// delete FBO
-	render->deleteFrameBuffer(&m_fboId);
+	// create render textures
+	// GBuffer texture
+	render->createTexture(&m_gbufferTexID);
+	render->bindTexture(m_gbufferTexID);
+	render->setTextureFilterMode(TEX_FILTER_LINEAR, TEX_FILTER_LINEAR);
+	render->setTextureUWrapMode(WRAP_CLAMP);
+	render->setTextureVWrapMode(WRAP_CLAMP);
+	render->texImage(0, res.x, res.y, VAR_FLOAT, TEX_RGBA, 0);
 
-	// delete skin cache
-	SAFE_DELETE_ARRAY(m_vertices);
-	SAFE_DELETE_ARRAY(m_normals);
+	// Depth texture
+	render->createTexture(&m_depthTexID);
+	render->bindTexture(m_depthTexID);
+	render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
+	render->texImage(0, res.x, res.y, VAR_UBYTE, TEX_DEPTH, 0);
+
+	// Position texture
+	render->createTexture(&m_positionTexID);
+	render->bindTexture(m_positionTexID);
+	render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
+	render->setTextureUWrapMode(WRAP_CLAMP);
+	render->setTextureVWrapMode(WRAP_CLAMP);
+	render->texImage(0, res.x, res.y, VAR_FLOAT, TEX_RGBA, 0);
+
+	// Normal texture
+	render->createTexture(&m_normalTexID);
+	render->bindTexture(m_normalTexID);
+	render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
+	render->setTextureUWrapMode(WRAP_CLAMP);
+	render->setTextureVWrapMode(WRAP_CLAMP);
+	render->texImage(0, res.x, res.y, VAR_FLOAT, TEX_RGBA, 0);
+
+	// Data texture
+	render->createTexture(&m_dataTexID);
+	render->bindTexture(m_dataTexID);
+	render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
+	render->setTextureUWrapMode(WRAP_CLAMP);
+	render->setTextureVWrapMode(WRAP_CLAMP);
+	render->texImage(0, res.x, res.y, VAR_FLOAT, TEX_RGBA, 0);
 }
 
 void StandardRenderer::destroy(void)
@@ -162,125 +718,465 @@ void StandardRenderer::destroy(void)
 	delete this;
 }
 
-Renderer * StandardRenderer::getNew(void)
+void StandardRenderer::prepareMaterialDisplay(SubMesh* mesh, MaterialDisplay* display)
 {
-	return new StandardRenderer();
-}
+	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+	
+	unsigned int* vao = display->getVAO();
+	unsigned int* vboId1 = mesh->getVBOid1();
+	unsigned int* vboId2 = mesh->getVBOid2();
+	void* indices = mesh->getIndices();
+	Vector2* texcoords = mesh->getTexCoords();
 
-void StandardRenderer::addFX(const char * vert, const char * frag)
-{
-	if(m_FXsNumber < MAX_DEFAULT_FXS)
+	render->bindFX(m_fx[0]);
+
+	if (*vao == 0)
+		render->createVAO(vao);
+	
+	render->bindVAO(*vao);
+
+	// Bind VBOs
+	if (*vboId1 > 0)
+		render->bindVBO(VBO_ARRAY, *vboId1);
+
+	if (indices) // If the SubMesh has indices
 	{
-		RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
-
-		render->createVertexShader(&m_vertShaders[m_FXsNumber]);
-		render->sendShaderSource(m_vertShaders[m_FXsNumber], vert);
-		render->createPixelShader(&m_fragShaders[m_FXsNumber]);
-		render->sendShaderSource(m_fragShaders[m_FXsNumber], frag);
-		render->createFX(&m_FXs[m_FXsNumber], m_vertShaders[m_FXsNumber], m_fragShaders[m_FXsNumber]);
-		m_FXsNumber++;
-	}
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Drawing
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-Vector3 * StandardRenderer::getVertices(unsigned int size)
-{
-	if(size == 0)
-		return NULL;
-
-	if(size > m_verticesNumber)
-	{
-		SAFE_DELETE_ARRAY(m_vertices);
-		m_vertices = new Vector3[size];
-		m_verticesNumber = size;
-	}
-
-	return m_vertices;
-}
-
-Vector3 * StandardRenderer::getNormals(unsigned int size)
-{
-	if(size == 0)
-		return NULL;
-
-	if(size > m_normalsNumber)
-	{
-		SAFE_DELETE_ARRAY(m_normals);
-		m_normals = new Vector3[size];
-		m_normalsNumber = size;
-	}
-
-	return m_normals;
-}
-
-Vector3 * StandardRenderer::getTangents(unsigned int size)
-{
-	if(size == 0)
-		return NULL;
-
-	if(size > m_tangentsNumber)
-	{
-		SAFE_DELETE_ARRAY(m_tangents);
-		m_tangents = new Vector3[size];
-		m_tangentsNumber = size;
-	}
-
-	return m_tangents;
-}
-
-void StandardRenderer::updateSkinning(Mesh * mesh, Armature * armature)
-{
-	unsigned int s;
-	unsigned int sSize = mesh->getSubMeshsNumber();
-	for(s=0; s<sSize; s++)
-	{
-		SubMesh * subMesh = &mesh->getSubMeshs()[s];
-
-		// data
-		Vector3 * vertices = subMesh->getVertices();
-
-		if(! vertices)
-			continue;
-
-		SkinData * skinData = subMesh->getSkinData();
-		if(armature && skinData)
+		if (*vboId2 > 0) // If the indices are stored in the VBO
 		{
-			unsigned int verticesSize = subMesh->getVerticesSize();
-			Vector3 * skinVertices = getVertices(verticesSize);
-
-			computeSkinning(armature, skinData, vertices, NULL, NULL, skinVertices, NULL, NULL);
-			subMesh->getBoundingBox()->initFromPoints(skinVertices, verticesSize);
+			render->bindVBO(VBO_ELEMENT_ARRAY, *vboId2);
 		}
 	}
 
-	mesh->updateBoundingBox();
+	// Set up vertex attribute
+	int vertAttrib;
+	int offset = 0;
+
+	render->getAttribLocation(m_fx[0], "Vertex", &vertAttrib);
+	render->enableAttribArray(vertAttrib);
+	render->setAttribPointer(vertAttrib, VAR_FLOAT, 3, NULL);
+
+	offset = sizeof(Vector3)*(mesh->getVerticesSize() + display->getBegin());
+
+	// Set up normal attribute
+	int normalAttrib;
+	render->getAttribLocation(m_fx[0], "Normal", &normalAttrib);
+	render->enableAttribArray(normalAttrib);
+	render->setAttribPointer(normalAttrib, VAR_FLOAT, 3, (void*)offset);
+
+	offset += sizeof(Vector3)*mesh->getNormalsSize();
+
+	// Set up tangent attribute
+	int tangentAttrib;
+	render->getAttribLocation(m_fx[0], "Tangent", &tangentAttrib);
+	render->enableAttribArray(tangentAttrib);
+	render->setAttribPointer(tangentAttrib, VAR_FLOAT, 3, (void*)offset);
+
+	offset += sizeof(Vector3)*mesh->getTangentsSize();
+
+	// Set up color attribute
+	int colorAttrib;
+	render->getAttribLocation(m_fx[0], "Color", &colorAttrib);
+	render->enableAttribArray(colorAttrib);
+	render->setAttribPointer(colorAttrib, VAR_FLOAT, 3, (void*)offset);
+
+	// Set up texcoord attribute
+	int texcoordAttrib = 0;
+	if (display->getMaterial()->getTexturesPassNumber() > 0 && texcoords != NULL)
+	{
+		// vert + normal + tang
+		offset = sizeof(Vector3)*(mesh->getVerticesSize() + mesh->getNormalsSize() + mesh->getTangentsSize() + display->getBegin());
+
+		render->getAttribLocation(m_fx[0], "TexCoord", &texcoordAttrib);
+		render->setAttribPointer(texcoordAttrib, VAR_FLOAT, 2, (void*)offset);
+		render->enableAttribArray(texcoordAttrib);
+	}
+
+	render->bindVAO(0);
+}
+
+
+void StandardRenderer::drawToTexture(Scene * scene, OCamera* camera, unsigned int texId)
+{
+}
+
+void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
+{
+	/// FIXME: MAKE IT SWITCHABLE!
+	// Lock scene so we don't have a surprise
+/*	CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
+
+	if (!data) return;
+
+	data->visibilityLock->WaitAndLock();
+
+	for (OEntity* entity : data->visibleEntities)
+	{
+		if (entity->isVisible() && entity->isActive() && !entity->isInvisible())
+		{
+			EntityData* edata = static_cast<EntityData*>(entity->getAdditionalData());
+			if (!edata)
+			{
+				edata = new EntityData();
+				edata->initTextures(256, scene, entity);
+				entity->setAdditionalData(edata);
+			}
+
+			edata->drawCubemap();
+		}
+	}
+	data->visibilityLock->Unlock();*/
+
+	//drawToTexture(scene, camera, m_gbufferTexID);
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	SystemContext * system = NeoEngine::getInstance()->getSystemContext();
+
+	m_currentScene = scene;
+
+	unsigned int currentFrameBuffer = 0;
+	render->getCurrentFrameBuffer(&currentFrameBuffer);
+
+	// screen size
+	unsigned int screenWidth = 0;
+	unsigned int screenHeight = 0;
+	system->getScreenSize(&screenWidth, &screenHeight);
+
+	if(Vector2(screenWidth, screenHeight) != m_resolution)
+	{
+		initFramebuffers();
+		initQuadVAO(&m_quadVAO, &m_quadVBO, &m_quadTexCoordVBO, m_fx[1]);
+	}
+		
+	// render to texture
+	render->bindFrameBuffer(m_framebufferID);
+
+	render->attachFrameBufferTexture(ATTACH_COLOR0, m_gbufferTexID);
+	render->attachFrameBufferTexture(ATTACH_COLOR1, m_normalTexID);
+	render->attachFrameBufferTexture(ATTACH_COLOR2, m_positionTexID);
+	render->attachFrameBufferTexture(ATTACH_COLOR3, m_dataTexID);
+	render->attachFrameBufferTexture(ATTACH_DEPTH, m_depthTexID);
+	
+	// Enable them to be drawn
+	FRAME_BUFFER_ATTACHMENT buffers[5] = {ATTACH_COLOR0, ATTACH_COLOR1, ATTACH_COLOR2, ATTACH_COLOR3, ATTACH_DEPTH};
+	render->setDrawingBuffers(buffers, 4);
+
+	render->setViewport(0, 0, screenWidth, screenHeight); // change viewport
+
+	Vector4 clearColor = camera->getClearColor();
+
+	clearColor.w = 0.0;
+	render->setClearColor(clearColor);
+	render->clear(BUFFER_COLOR | BUFFER_DEPTH);
+	
+	// Send some common data
+	Vector3 ambientLight = scene->getAmbientLight();
+	render->sendUniformVec3(m_fx[0], "AmbientLight", ambientLight);
+
+	sendLights(m_fx[1], camera);
+	drawGBuffer(scene, camera);
+
+	// finish render to texture
+	render->bindFrameBuffer(currentFrameBuffer);
+	renderFinalImage(scene, camera);
+
+	render->enableDepthTest();
+	drawTransparents(scene, camera);
+}
+
+
+void StandardRenderer::sendLights(unsigned int shader, OCamera* camera)
+{
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	
+	render->bindFX(shader);
+
+	Matrix4x4 camMat;
+	camera->enable();
+	camMat = *camera->getCurrentViewMatrix();
+
+	// Send light data
+	CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
+	if(!data) return;
+
+    data->lightLock->WaitAndLock();
+
+    int num = data->visibleLights.size();
+	render->sendUniformInt(shader, "LightsCount", &num);
+
+	int i = 0;
+	for (OLight* l : data->visibleLights)
+	{
+		sendLight(shader, l, i++, camMat);
+	}
+	data->lightLock->Unlock();
+}
+
+void StandardRenderer::sendLight(unsigned int fx, OLight* l, int num, Matrix4x4 matrix)
+{
+	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+
+	char str[255];
+	char ending[255];
+
+	sprintf(str, "lights[%d].", num);
+
+	strcpy(ending, str);
+	strcat(ending, "Position");
+	Vector3 position = matrix * l->getTransformedPosition();
+	render->sendUniformVec3(fx, ending, position);
+
+	strcpy(ending, str);
+	strcat(ending, "Diffuse");
+	render->sendUniformVec3(fx, ending, l->getFinalColor());
+
+	float intensity = l->getIntensity();
+	strcpy(ending, str);
+	strcat(ending, "Intensity");
+	render->sendUniformFloat(fx, ending, &intensity);
+
+	float radius = l->getRadius();
+	strcpy(ending, str);
+	strcat(ending, "Radius");
+	render->sendUniformFloat(fx, ending, &radius);
+
+	float spotAngle = cosf(l->getSpotAngle()*DEG_TO_RAD);
+	strcpy(ending, str);
+	strcat(ending, "SpotCos");
+	render->sendUniformFloat(fx, ending, &spotAngle);
+
+	float spotExponent = l->getSpotExponent();
+	strcpy(ending, str);
+	strcat(ending, "SpotExp");
+	render->sendUniformFloat(fx, ending, &spotExponent);
+
+	strcpy(ending, str);
+	strcat(ending, "SpotDir");
+	Vector3 spotDirection = matrix.getRotatedVector3(l->getRotatedVector(Vector3(0, 0, -1))).getNormalized();
+	render->sendUniformVec3(fx, ending, spotDirection);
+
+	float quadraticAttenuation = 0.0;
+	// attenuation
+	//if (l->getSpotAngle() > 0.0f)
+	//{
+		quadraticAttenuation = (8.0f / l->getRadius());
+		quadraticAttenuation = (quadraticAttenuation*quadraticAttenuation)*l->getIntensity();
+	//}
+
+	strcpy(ending, str);
+	strcat(ending, "QuadraticAttenuation");
+	render->sendUniformFloat(fx, ending, &quadraticAttenuation);
+
+	// Constant attenuation = 1
+	float attenuation = 1.0;
+	strcpy(ending, str);
+	strcat(ending, "ConstantAttenuation");
+	render->sendUniformFloat(fx, ending, &attenuation);
+
+	// Linear attenuation = 0
+	attenuation = 0.0;
+	strcpy(ending, str);
+	strcat(ending, "LinearAttenuation");
+	render->sendUniformFloat(fx, ending, &attenuation);
+}
+
+void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera)
+{
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	SystemContext * system = NeoEngine::getInstance()->getSystemContext();
+
+	// screen size
+	unsigned int screenWidth = 0;
+	unsigned int screenHeight = 0;
+	system->getScreenSize(&screenWidth, &screenHeight);
+
+	// draw the rendered textured with a shader effect
+	//render->setClearColor(Vector3(1, 0, 0));
+	render->clear(BUFFER_COLOR);
+	set2D(screenWidth, screenHeight);
+
+	render->bindFX(m_fx[1]);
+	render->bindTexture(m_gbufferTexID);
+	render->bindTexture(m_normalTexID, 1);
+	render->bindTexture(m_positionTexID, 2);
+	render->bindTexture(m_dataTexID, 3);
+	render->bindTexture(m_depthTexID, 4);
+	render->disableBlending();
+
+	// Set cull mode
+	render->setCullMode(CULL_BACK);
+	render->disableDepthTest();
+	render->setDepthMask(false);
+	
+	drawQuad(m_fx[1]);
+	render->bindFX(0);
+	render->enableDepthTest();
+	render->setDepthMask(true);
+}
+
+void StandardRenderer::drawText(OText* textObj, OCamera* camera)
+{
+	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+	Font* font = textObj->getFont();
+
+	Matrix4x4 modelViewMatrix;
+	Matrix4x4 projectionMatrix;
+	Matrix4x4 mvp;
+
+	if (camera != nullptr)
+	{
+		modelViewMatrix =
+			(*camera->getCurrentViewMatrix()) * (*textObj->getMatrix());
+		projectionMatrix = *camera->getCurrentProjMatrix();
+	}
+	else
+	{
+		render->getModelViewMatrix(&modelViewMatrix);
+		render->getProjectionMatrix(&projectionMatrix);
+	}
+
+	mvp = projectionMatrix * modelViewMatrix;
+
+	render->bindFX(m_fx[0]);
+	render->bindVAO(m_textVAO);
+
+	render->selectSubroutine(m_fx[0], M_SHADER_PIXEL, "TextShader");
+	render->bindTexture(font->getTextureId());
+
+	render->enableBlending();
+	render->setBlendingMode(BLENDING_ALPHA);
+
+	render->disableCullFace();
+
+	int uniform = 1;
+	render->sendUniformInt(m_fx[0], "HasTransparency", &uniform);
+
+	uniform = -1;
+	render->sendUniformInt(m_fx[0], "TextureMode", &uniform);
+
+	int texIds[4] = { 0, 1, 2, 3 };
+	render->sendUniformInt(m_fx[0], "Textures", texIds, 4);
+	render->sendUniformMatrix(m_fx[0], "ProjModelViewMatrix", &mvp);
+
+	render->sendUniformVec3(m_fx[0], "Diffuse", textObj->getColor());
+
+	const char* text = textObj->getText();
+	size_t length = strlen(text);
+
+	Character* c;
+	Vector2 scale;
+	Vector2 pos;
+
+	float fontSize = font->getFontSize();
+	float size = textObj->getSize();
+	float tabsize = size * 2.0f;
+    float widthFactor = static_cast<float>(font->getTextureWidth()) / fontSize;
+	float heightFactor = static_cast<float>(font->getTextureHeight()) / fontSize;
+
+	float xpos = 0;
+	float ypos = 0;
+
+	Vector2 texCoords[4];
+	Vector2 vertices[4];
+	Vector2 offset;
+
+	vector<float>* linesOffset = textObj->getLinesOffset();
+
+	if (!linesOffset || linesOffset->size() == 0)
+		return;
+
+	float lineOffset = (*linesOffset)[0];
+	int line = 0;
+	
+	/*std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> utf16conv;
+    std::u32string unicodeStr = utf16conv.from_bytes(text);
+	length = unicodeStr.length();*/
+	
+	for (int i = 0; i < length; i++)
+	{
+		if (text[i] == '\n')
+		{
+			line++;
+			lineOffset = (*linesOffset)[line];
+
+			xpos = 0;
+			ypos += size;
+			continue;
+		}
+
+		if(text[i] == '\t')
+		{
+			unsigned int tab = static_cast<unsigned int>(xpos / tabsize) + 1;
+			xpos = tab*tabsize;
+			continue;
+		}
+
+		c = font->getCharacter(text[i]);
+
+		if (!c)
+			continue;
+
+		pos = c->getPos();
+		scale = c->getScale();
+		offset = c->getOffset() * size;
+		offset.x += lineOffset;
+
+		texCoords[0] = Vector2(pos.x, pos.y + scale.y);
+		texCoords[1] = Vector2(pos.x + scale.x, pos.y + scale.y);
+		texCoords[2] = Vector2(pos.x, pos.y);
+		texCoords[3] = Vector2(pos.x + scale.x, pos.y);
+
+		float width = scale.x * widthFactor * size;
+		float height = scale.y * heightFactor * size;
+
+		vertices[0] = Vector2(xpos, ypos + height) + offset;
+		vertices[1] = Vector2(xpos + width, ypos + height) + offset;
+		vertices[2] = Vector2(xpos, ypos) + offset;
+		vertices[3] = Vector2(xpos + width, ypos) + offset;
+
+		// TexCoord
+		render->bindVBO(VBO_ARRAY, m_textTexCoordVBO);
+		render->setVBO(VBO_ARRAY, texCoords, 4 * sizeof(Vector2), VBO_DYNAMIC);
+
+		// Vertices
+		render->bindVBO(VBO_ARRAY, m_textVBO);
+		render->setVBO(VBO_ARRAY, vertices, 4 * sizeof(Vector2), VBO_DYNAMIC);
+
+		render->drawArray(PRIMITIVE_TRIANGLE_STRIP, 0, 4);
+		xpos += c->getXAdvance() * size;
+	}
+
+	render->bindVAO(0);
 }
 
 void StandardRenderer::initVBO(SubMesh * subMesh)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
 	RenderingContext * render = engine->getRenderingContext();
-	
-	unsigned int * vboId1 = subMesh->getVBOid1();
-	unsigned int * vboId2 = subMesh->getVBOid2();
-	
+
+	unsigned int* vboId1 = subMesh->getVBOid1();
+	unsigned int* vboId2 = subMesh->getVBOid2();
+
 	VBO_MODES mode = VBO_STATIC;
 	if(subMesh->getSkinData() || subMesh->getMorphingData())
 		mode = VBO_DYNAMIC;
-	
-	if(*vboId1 == 0 && mode == VBO_STATIC) // only use VBO for static geometry
+
+	if(*vboId1 == 0 || mode == VBO_DYNAMIC)
 	{
 		// data
 		Color * colors = subMesh->getColors();
+		
 		Vector3 * vertices = subMesh->getVertices();
 		Vector3 * normals = subMesh->getNormals();
 		Vector3 * tangents = subMesh->getTangents();
+
 		Vector2 * texCoords = subMesh->getTexCoords();
-		
+
+		if (mode == VBO_DYNAMIC)
+		{
+			vertices = subMesh->getSkinVertices();
+			normals = subMesh->getSkinNormals();
+			tangents = subMesh->getSkinTangents();
+		}
+
 		unsigned int totalSize = sizeof(Vector3)*subMesh->getVerticesSize();
 		if(normals)
 			totalSize += sizeof(Vector3)*subMesh->getNormalsSize();
@@ -290,1806 +1186,336 @@ void StandardRenderer::initVBO(SubMesh * subMesh)
 			totalSize += sizeof(Vector2)*subMesh->getTexCoordsSize();
 		if(colors)
 			totalSize += sizeof(Color)*subMesh->getColorsSize();
-		
+
 		// indices
 		VAR_TYPES indicesType = subMesh->getIndicesType();
 		void * indices = subMesh->getIndices();
-		
 
 		// data VBO
-		render->createVBO(vboId1);
+		if (*vboId1 == 0)
+			render->createVBO(vboId1);
+		
 		render->bindVBO(VBO_ARRAY, *vboId1);
-		
 		render->setVBO(VBO_ARRAY, 0, totalSize, mode);
-		
+
 		unsigned int offset = 0;
 		render->setVBOSubData(VBO_ARRAY, offset, vertices, sizeof(Vector3)*subMesh->getVerticesSize());
 		offset += sizeof(Vector3)*subMesh->getVerticesSize();
-		
+
 		if(normals)
 		{
 			render->setVBOSubData(VBO_ARRAY, offset, normals, sizeof(Vector3)*subMesh->getNormalsSize());
 			offset += sizeof(Vector3)*subMesh->getNormalsSize();
 		}
-		
+
 		if(tangents)
 		{
 			render->setVBOSubData(VBO_ARRAY, offset, tangents, sizeof(Vector3)*subMesh->getTangentsSize());
 			offset += sizeof(Vector3)*subMesh->getTangentsSize();
 		}
-		
+
 		if(texCoords)
 		{
 			render->setVBOSubData(VBO_ARRAY, offset, texCoords, sizeof(Vector2)*subMesh->getTexCoordsSize());
 			offset += sizeof(Vector2)*subMesh->getTexCoordsSize();
 		}
-		
+
 		if(colors)
 		{
 			render->setVBOSubData(VBO_ARRAY, offset, colors, sizeof(Color)*subMesh->getColorsSize());
 			offset += sizeof(Color)*subMesh->getColorsSize();
 		}
-		
+
 		// indices VBO
 		if(indices)
 		{
 			unsigned int typeSize = indicesType == VAR_USHORT ? sizeof(short) : sizeof(int);
+
+			if (*vboId2 == 0)
+				render->createVBO(vboId2);
 			
-			render->createVBO(vboId2);
 			render->bindVBO(VBO_ELEMENT_ARRAY, *vboId2);
-			
 			render->setVBO(VBO_ELEMENT_ARRAY, indices, subMesh->getIndicesSize()*typeSize, mode);
 		}
-		
-		
+
 		render->bindVBO(VBO_ARRAY, 0);
 		render->bindVBO(VBO_ELEMENT_ARRAY, 0);
 	}
 }
 
-void StandardRenderer::drawDisplay(SubMesh * subMesh, MaterialDisplay * display, Vector3 * vertices, Vector3 * normals, Vector3 * tangents, Color * colors)
+void StandardRenderer::set2D(unsigned int w, unsigned int h)
 {
-	NeoEngine * engine = NeoEngine::getInstance();
-	RenderingContext * render = engine->getRenderingContext();
+	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	render->setViewport(0, 0, w, h);
 
+	// set ortho projection
+	render->setMatrixMode(MATRIX_PROJECTION);
+	render->loadIdentity();
 
-	// VBO
-	initVBO(subMesh);
-	
-	unsigned int * vboId1 = subMesh->getVBOid1();
-	unsigned int * vboId2 = subMesh->getVBOid2();
-	
-	
-	// get material
-	Material * material = display->getMaterial();
-	{
-		float opacity = material->getOpacity();
-		if(opacity <= 0.0f)
-			return;
+	render->setOrthoView(0.0f, (float)w, (float)h, 0.0f, 1.0f, -1.0f);
 
-		// data
-		VAR_TYPES indicesType = subMesh->getIndicesType();
-		void * indices = subMesh->getIndices();
-		Vector2 * texCoords = subMesh->getTexCoords();
-
-		// begin / size
-		unsigned int begin = display->getBegin();
-		unsigned int size = display->getSize();
-
-		// get properties
-		PRIMITIVE_TYPES primitiveType = display->getPrimitiveType();
-		BLENDING_MODES blendMode = material->getBlendMode();
-		CULL_MODES cullMode = display->getCullMode();
-		Vector3 diffuse = material->getDiffuse();
-		Vector3 specular = material->getSpecular();
-        Vector3 emit = material->getEmit() + engine->getLevel()->getCurrentScene()->getAmbientLight();
-		float shininess = material->getShininess();
-
-		// get current fog color
-		Vector3 currentFogColor;
-		render->getFogColor(&currentFogColor);
-
-		// set cull mode
-		if(cullMode == CULL_NONE)
-        {
-			render->disableCullFace();
-		}
-		else{
-			render->enableCullFace();
-			render->setCullMode(cullMode);
-		}
-
-		// set blending mode
-		render->setBlendingMode(blendMode);
-
-		// set fog color depending on blending
-		switch(blendMode)
-		{
-			case BLENDING_ADD:
-			case BLENDING_LIGHT:
-				render->setFogColor(Vector3(0, 0, 0));
-				break;
-
-			case BLENDING_PRODUCT:
-				render->setFogColor(Vector3(1, 1, 1));
-				break;
-
-            default:
-                break;
-		}
-
-		// texture passes
-		unsigned int texturesPassNumber = MIN(8, material->getTexturesPassNumber());
-
-		// FX
-		unsigned int fxId = 0;
-		FXRef * fx_ref = material->getFXRef();
-		FXRef * zfx_ref = material->getZFXRef();
-
-		if(fx_ref)
-			fxId = fx_ref->getFXId();
-
-		bool basicFX = false;
-
-		// force NoFX
-		if(m_forceNoFX)
-		{
-			// optimize only for standard shader (for custom shader we don't know how geometry and alpha test is done)
-			if(fxId == 0)
-			{
-				fxId = m_FXs[0]; // basic FX
-				texturesPassNumber = 0;
-
-				// alpha test
-				if(material->getTexturesPassNumber() > 0)
-				{
-					Texture * texture = material->getTexturePass(0)->getTexture();
-					if(texture)
-					{
-						if(texture->getTextureRef())
-						{
-							if(texture->getTextureRef()->getComponents() > 3)
-							{
-								fxId = m_FXs[7]; // basic FX with texture
-								texturesPassNumber = 1;
-							}
-						}
-					}
-				}
-
-				basicFX = true;
-			}
-			else if(zfx_ref) // if custom shader, use the Z FX is any
-			{
-				fxId = zfx_ref->getFXId();
-			}
-		}
-
-		// standard shader
-		else if(fxId == 0)
-		{
-			if(material->getTexturesPassNumber() == 0) // simple
-				fxId = m_FXs[1];
-			else if(material->getTexturesPassNumber() == 1) // diffuse
-				fxId = m_FXs[2];
-			else if(material->getTexturesPassNumber() == 2) // diffuse+specular
-				fxId = m_FXs[3];
-			else if(material->getTexturesPassNumber() == 3) // diffuse+specular+normal
-				fxId = m_FXs[4];
-			else{
-				if(material->getTexturePass(2)->getTexture()) // diffuse+specular+emit+normal
-					fxId = m_FXs[6];
-				else
-					fxId = m_FXs[5]; // diffuse+specular+emit
-			}
-		}
-
-		// FX pipeline
-		{
-			static unsigned int attribList[64];
-			unsigned int attribListNb = 0;
-		
-			int attribIndex;
-			Matrix4x4 * cameraViewMatrix = m_currentCamera->getCurrentViewMatrix();
-			Matrix4x4 * cameraProjMatrix = m_currentCamera->getCurrentProjMatrix();
-
-			// properties
-			static int AlphaTest;
-			static Vector3 FogColor;
-			static float FogEnd;
-			static float FogScale;
-
-			static Vector4 LightPosition[4];
-			static Vector3 LightDiffuseProduct[4];
-			static Vector3 LightSpecularProduct[4];
-			static Vector3 LightSpotDirection[4];
-			static float LightConstantAttenuation[4];
-			static float LightQuadraticAttenuation[4];
-			static float LightSpotCosCutoff[4];
-			static float LightSpotExponent[4];
-			static int LightActive[4];
-
-			static int ShadowMaps[4];
-			static int Texture[8] = {0, 1, 2, 3, 4, 5, 6, 7};
-			static Matrix4x4 TextureMatrix[8];
-			//static Matrix4x4 ModelViewMatrix;
-			static Matrix4x4 ProjModelViewMatrix;
-			static Matrix4x4 NormalMatrix;
-
-
-			// Alpha test
-			AlphaTest = (blendMode != BLENDING_ALPHA);
-
-			// Matrix
-			//render->getModelViewMatrix(&ModelViewMatrix);
-			ProjModelViewMatrix = (*cameraProjMatrix) * m_currModelViewMatrix;
-
-			if(! basicFX)
-			{
-				// Fog
-				float min, max;
-				render->getFogColor(&FogColor);
-				render->getFogDistance(&min, &max);
-				FogEnd = max;
-				FogScale = 1.0f / (max - min);
-
-				// Lights
-				for(int i=0; i<4; i++)
-				{
-					float spotAngle;
-					float linearAttenuation;
-					Vector4 lightDiffuse;
-					render->getLightDiffuse(i, &lightDiffuse);
-					render->getLightPosition(i, &LightPosition[i]);
-					render->getLightSpotDirection(i, &LightSpotDirection[i]);
-					render->getLightAttenuation(i, &LightConstantAttenuation[i], &linearAttenuation, &LightQuadraticAttenuation[i]);
-					render->getLightSpotAngle(i, &spotAngle);
-					render->getLightSpotExponent(i, &LightSpotExponent[i]);
-
-					LightActive[i] = (lightDiffuse.w > 0.0f);
-					LightSpotCosCutoff[i] = cosf(spotAngle*DEG_TO_RAD);
-					LightDiffuseProduct[i] = (diffuse) * Vector3(lightDiffuse);
-					LightSpecularProduct[i] = (specular) * Vector3(lightDiffuse);
-					LightPosition[i] = (*cameraViewMatrix) * Vector4(LightPosition[i]);
-					LightSpotDirection[i] = (cameraViewMatrix->getRotatedVector3(LightSpotDirection[i])).getNormalized();
-				}
-
-				// Normal Matrix
-				NormalMatrix = (m_currModelViewMatrix.getInverse()).getTranspose();
-			}
-
-
-			// bind FX
-			render->bindFX(fxId);
-
-			
-			// bind VBO is any
-			if(*vboId1 > 0)
-				render->bindVBO(VBO_ARRAY, *vboId1);
-			
-			
-			// Vertex
-			render->getAttribLocation(fxId, "Vertex", &attribIndex);
-			if(attribIndex != -1)
-			{
-				if(*vboId1 > 0)	render->setAttribPointer(attribIndex, VAR_FLOAT, 3, 0);
-				else			render->setAttribPointer(attribIndex, VAR_FLOAT, 3, vertices);
-				render->enableAttribArray(attribIndex);
-				attribList[attribListNb] = attribIndex; attribListNb++;
-			}
-
-			if(! basicFX)
-			{
-				unsigned int offset = sizeof(Vector3)*subMesh->getVerticesSize();
-				
-				// Normal
-				if(normals)
-				{
-					render->getAttribLocation(fxId, "Normal", &attribIndex);
-					if(attribIndex != -1)
-					{
-						if(*vboId1 > 0)	render->setAttribPointer(attribIndex, VAR_FLOAT, 3, (void*)offset);
-						else			render->setAttribPointer(attribIndex, VAR_FLOAT, 3, normals);
-						render->enableAttribArray(attribIndex);
-						attribList[attribListNb] = attribIndex; attribListNb++;
-					}
-					
-					offset += sizeof(Vector3)*subMesh->getNormalsSize();
-				}
-
-				// Tangent
-				if(tangents)
-				{
-					render->getAttribLocation(fxId, "Tangent", &attribIndex);
-					if(attribIndex != -1)
-					{
-						if(*vboId1 > 0)	render->setAttribPointer(attribIndex, VAR_FLOAT, 3, (void*)offset);
-						else			render->setAttribPointer(attribIndex, VAR_FLOAT, 3, tangents);
-						render->enableAttribArray(attribIndex);
-						attribList[attribListNb] = attribIndex; attribListNb++;
-					}
-					
-					offset += sizeof(Vector3)*subMesh->getTangentsSize();
-				}
-
-				// Texcoords
-				if(texCoords)
-				{
-					offset += sizeof(Vector2)*subMesh->getTexCoordsSize();
-				}
-				
-				// Color
-				if(colors)
-				{
-					render->getAttribLocation(fxId, "Color", &attribIndex);
-					if(attribIndex != -1)
-					{
-						if(*vboId1 > 0)	render->setAttribPointer(attribIndex, VAR_UBYTE, 3, (void*)offset, true);
-						else			render->setAttribPointer(attribIndex, VAR_UBYTE, 3, colors, true);
-						render->enableAttribArray(attribIndex);
-						attribList[attribListNb] = attribIndex; attribListNb++;
-					}
-				}
-			}
-
-
-			// Textures
-			unsigned int textureArrayOffset = sizeof(Vector3)*subMesh->getVerticesSize();
-			{
-				if(normals) textureArrayOffset += sizeof(Vector3)*subMesh->getNormalsSize();
-				if(tangents) textureArrayOffset += sizeof(Vector3)*subMesh->getTangentsSize();
-			}
-			
-			int id = texturesPassNumber;
-			for(unsigned int t=0; t<texturesPassNumber; t++)
-			{
-				TexturePass * texturePass = material->getTexturePass(t);
-
-				Neo::Texture * texture = texturePass->getTexture();
-				if((! texture) || (! texCoords))
-				{
-					render->bindTexture(0, t);
-					continue;
-				}
-
-				// texCoords
-				unsigned int offset = 0;
-				if(subMesh->isMapChannelExist(texturePass->getMapChannel()))
-					offset = subMesh->getMapChannelOffset(texturePass->getMapChannel());
-
-				// texture id
-				unsigned int textureId = 0;
-				TextureRef * texRef = texture->getTextureRef();
-				if(texRef)
-					textureId = texRef->getTextureId();
-
-				// bind texture
-				render->bindTexture(textureId, t);
-				render->setTextureUWrapMode(texture->getUWrapMode());
-				render->setTextureVWrapMode(texture->getVWrapMode());
-
-				// texture matrix
-				Matrix4x4 * texMatrix = &TextureMatrix[t];
-				texMatrix->loadIdentity();
-				texMatrix->translate(Vector2(0.5f, 0.5f));
-				texMatrix->scale(texture->getTexScale());
-				texMatrix->rotate(Vector3(0, 0, -1), texture->getTexRotate());
-				texMatrix->translate(Vector2(-0.5f, -0.5f));
-				texMatrix->translate(texture->getTexTranslate());
-
-				// texture coords
-				char name[16];
-				sprintf(name, "TexCoord%d", t);
-				render->getAttribLocation(fxId, name, &attribIndex);
-				if(attribIndex != -1)
-				{
-					if(*vboId1 > 0)	render->setAttribPointer(attribIndex, VAR_FLOAT, 2, (void*)(textureArrayOffset + sizeof(Vector2)*offset));
-					else			render->setAttribPointer(attribIndex, VAR_FLOAT, 2, texCoords + offset);
-					render->enableAttribArray(attribIndex);
-					attribList[attribListNb] = attribIndex; attribListNb++;
-				}
-			}
-
-			if(! basicFX)
-			{
-				// Shadows
-				for(int i=0; i<4; i++)
-				{
-					if(m_lightShadow[i] == 1)
-					{
-						render->bindTexture(m_lightShadowTexture[i], id);
-						ShadowMaps[i] = id;
-						id++;
-					}
-					else {
-						render->bindTexture(0, id);
-						ShadowMaps[i] = id;
-						id++;
-					}
-				}
-
-				// rand texture
-				int randTextureId = id;
-				{
-					render->bindTexture(m_randTexture, id);
-					id++;
-				}
-
-				// uniforms
-				render->sendUniformVec4(fxId, "FogColor", Vector4(FogColor));
-				render->sendUniformFloat(fxId, "FogEnd", &FogEnd);
-				render->sendUniformFloat(fxId, "FogScale", &FogScale);
-
-				render->sendUniformVec3(fxId, "MaterialEmit", emit);
-				render->sendUniformFloat(fxId, "MaterialShininess", &shininess);
-
-				render->sendUniformVec4(fxId, "LightPosition", LightPosition[0], 4);
-				render->sendUniformVec3(fxId, "LightDiffuseProduct", LightDiffuseProduct[0], 4);
-				render->sendUniformVec3(fxId, "LightSpecularProduct", LightSpecularProduct[0], 4);
-				render->sendUniformVec3(fxId, "LightSpotDirection", LightSpotDirection[0], 4);
-				render->sendUniformFloat(fxId, "LightConstantAttenuation", LightConstantAttenuation, 4);
-				render->sendUniformFloat(fxId, "LightQuadraticAttenuation", LightQuadraticAttenuation, 4);
-				render->sendUniformFloat(fxId, "LightSpotCosCutoff", LightSpotCosCutoff, 4);
-				render->sendUniformFloat(fxId, "LightSpotExponent", LightSpotExponent, 4);
-				render->sendUniformInt(fxId, "LightActive", LightActive, 4);
-
-				render->sendUniformInt(fxId, "LightShadowMap", ShadowMaps, 4);
-				render->sendUniformInt(fxId, "LightShadow", m_lightShadow, 4);
-				render->sendUniformFloat(fxId, "LightShadowBias", m_lightShadowBias, 4);
-				render->sendUniformFloat(fxId, "LightShadowBlur", m_lightShadowBlur, 4);
-				render->sendUniformMatrix(fxId, "LightShadowMatrix", m_lightShadowMatrix, 4);
-
-				render->sendUniformInt(fxId, "RandTexture", &randTextureId);
-
-				render->sendUniformMatrix(fxId, "ModelViewMatrix", &m_currModelViewMatrix);
-				render->sendUniformMatrix(fxId, "NormalMatrix", &NormalMatrix);
-				render->sendUniformMatrix(fxId, "ProjectionMatrix", cameraProjMatrix);
-			}
-
-			if(texturesPassNumber > 0)
-			{
-				render->sendUniformInt(fxId, "AlphaTest", &AlphaTest);
-				render->sendUniformInt(fxId, "Texture", Texture, texturesPassNumber);
-				render->sendUniformMatrix(fxId, "TextureMatrix", TextureMatrix, texturesPassNumber);
-			}
-
-			render->sendUniformFloat(fxId, "MaterialOpacity", &opacity);
-			render->sendUniformMatrix(fxId, "ProjModelViewMatrix", &ProjModelViewMatrix);
-
-
-			// draw
-			if(indices)
-			{
-				if(*vboId2 > 0)
-				{
-					render->bindVBO(VBO_ELEMENT_ARRAY, *vboId2);
-					
-					switch(indicesType)
-					{
-						case VAR_USHORT:
-							render->drawElement(primitiveType, size, indicesType, (void*)(begin*sizeof(short)));
-							break;
-						case VAR_UINT:
-							render->drawElement(primitiveType, size, indicesType, (void*)(begin*sizeof(int)));
-							break;
-					}
-				}
-				else
-				{
-					switch(indicesType)
-					{
-						case VAR_USHORT:
-							render->drawElement(primitiveType, size, indicesType, (unsigned short*)indices + begin);
-							break;
-						case VAR_UINT:
-							render->drawElement(primitiveType, size, indicesType, (unsigned int*)indices + begin);
-							break;
-					}
-				}
-			}
-			else{
-				render->drawArray(primitiveType, begin, size);
-			}
-
-
-			// disable attribs
-			for(int i=0; i<attribListNb; i++)
-				render->disableAttribArray(attribList[i]);
-
-			// restore textures
-			for(int t=(int)(id-1); t>=0; t--)
-			{
-				render->bindTexture(0, t);
-				render->disableTexture();
-			}
-
-			// restore FX
-			render->bindFX(0);
-			
-			// restore VBO
-			render->bindVBO(VBO_ARRAY, 0);
-			render->bindVBO(VBO_ELEMENT_ARRAY, 0);
-		}
-
-		// restore fog and alpha test
-		render->setFogColor(currentFogColor);
-	}
+	render->setMatrixMode(MATRIX_MODELVIEW);
+	render->loadIdentity();
 }
 
-void StandardRenderer::drawOpaques(SubMesh * subMesh, Armature * armature)
-{
-	// data
-	Vector3 * vertices = subMesh->getVertices();
-	Vector3 * normals = subMesh->getNormals();
-	Vector3 * tangents = subMesh->getTangents();
-	Color * colors = subMesh->getColors();
-
-	if (!vertices)
-		return;
-
-	SkinData * skinData = subMesh->getSkinData();
-	if (armature && skinData)
-	{
-		unsigned int verticesSize = subMesh->getVerticesSize();
-		unsigned int normalsSize = subMesh->getNormalsSize();
-		unsigned int tangentsSize = subMesh->getTangentsSize();
-
-		Vector3 * skinVertices = getVertices(verticesSize);
-		Vector3 * skinNormals = getNormals(normalsSize);
-		Vector3 * skinTangents = getTangents(tangentsSize);
-
-		computeSkinning(armature, skinData, vertices, normals, tangents, skinVertices, skinNormals, skinTangents);
-		subMesh->getBoundingBox()->initFromPoints(skinVertices, verticesSize);
-
-		vertices = skinVertices;
-		normals = skinNormals;
-		tangents = skinTangents;
-	}
-
-	unsigned int i;
-	unsigned int displayNumber = subMesh->getDisplaysNumber();
-	for (i = 0; i<displayNumber; i++)
-	{
-		MaterialDisplay * display = subMesh->getDisplay(i);
-		if (!display->isVisible())
-			continue;
-
-		Material * material = display->getMaterial();
-		if (material)
-		{
-			if (material->getBlendMode() == BLENDING_NONE)
-				drawDisplay(subMesh, display, vertices, normals, tangents, colors);
-		}
-	}
-}
-
-void StandardRenderer::drawTransparents(SubMesh * subMesh, Armature * armature)
+void StandardRenderer::drawQuad(int fx)
 {
 	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 
-	// data
-	Vector3 * vertices = subMesh->getVertices();
-	Vector3 * normals = subMesh->getNormals();
-	Vector3 * tangents = subMesh->getTangents();
-	Color * colors = subMesh->getColors();
+	// screen size
+	int screenWidth = 0;
+	int screenHeight = 0;
+	NeoEngine::getInstance()->getSystemContext()->getScreenSize((unsigned int*) &screenWidth, (unsigned int*) &screenHeight);
 
-	if(! vertices)
-		return;
-
-	SkinData * skinData = subMesh->getSkinData();
-	if(armature && skinData)
-	{
-		unsigned int verticesSize = subMesh->getVerticesSize();
-		unsigned int normalsSize = subMesh->getNormalsSize();
-		unsigned int tangentsSize = subMesh->getTangentsSize();
-
-		Vector3 * skinVertices = getVertices(verticesSize);
-		Vector3 * skinNormals = getNormals(normalsSize);
-		Vector3 * skinTangents = getTangents(tangentsSize);
-
-		computeSkinning(armature, skinData, vertices, normals, tangents, skinVertices, skinNormals, skinTangents);
-		subMesh->getBoundingBox()->initFromPoints(skinVertices, verticesSize);
-
-		vertices = skinVertices;
-		normals = skinNormals;
-		tangents = skinTangents;
-	}
-
-	
-	unsigned int i;
-	unsigned int displayNumber = subMesh->getDisplaysNumber();
-	
-	/*
-	// not sure of this technique
-	render->setColorMask(0, 0, 0, 0);
-	m_forceNoFX = true;
-
-	for(i=0; i<displayNumber; i++)
-	{
-		MDisplay * display = subMesh->getDisplay(i);
-		if((! display->isVisible()) || (! display->getMaterial()))
-			continue;
-
-		MMaterial * material = display->getMaterial();
-		if(material)
-		{
-			if(material->getBlendMode() != BLENDING_NONE)
-				drawDisplay(subMesh, display, vertices, normals, tangents, colors);
-		}
-	}
-
-	m_forceNoFX = false;
-	render->setColorMask(1, 1, 1, 1);
-	render->setDepthMask(0);
-	render->setDepthMode(DEPTH_EQUAL);*/
-
-	for(i=0; i<displayNumber; i++)
-	{
-		MaterialDisplay * display = subMesh->getDisplay(i);
-		if(! display->isVisible())
-			continue;
-
-		Material * material = display->getMaterial();
-		if(material)
-		{
-			if(material->getBlendMode() != BLENDING_NONE)
-				drawDisplay(subMesh, display, vertices, normals, tangents, colors);
-		}
-	}
-
-	//render->setDepthMask(1);
-	//render->setDepthMode(DEPTH_LEQUAL);
-}
-
-float StandardRenderer::getDistanceToCam(OCamera * camera, const Vector3 & pos)
-{
-	if(! camera->isOrtho())
-	{
-		return (pos - camera->getTransformedPosition()).getSquaredLength();
-	}
-
-	Vector3 axis = camera->getRotatedVector(Vector3(0, 0, -1)).getNormalized();
-	float dist = (pos - camera->getTransformedPosition()).dotProduct(axis);
-	return dist*dist;
-}
-
-void StandardRenderer::setShadowMatrix(Matrix4x4 * matrix, OCamera * camera)
-{
-	NeoEngine * engine = NeoEngine::getInstance();
-	RenderingContext * render = engine->getRenderingContext();
-
-	const Matrix4x4 biasMatrix(
-		0.5f, 0.0f, 0.0f, 0.0f,
-		0.0f, 0.5f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.5f, 0.0f,
-		0.5f, 0.5f, 0.5f, 1.0f
-	);
-
-	Matrix4x4 * modelViewMatrix = camera->getCurrentViewMatrix();
-	Matrix4x4 * projMatrix = camera->getCurrentProjMatrix();
-
-	(*matrix) = biasMatrix;
-	(*matrix) = (*matrix) * (*projMatrix);
-	(*matrix) = (*matrix) * (*modelViewMatrix);
-}
-
-void StandardRenderer::updateVisibility(Scene * scene, OCamera * camera)
-{
-	// make frustum
-	camera->getFrustum()->makeVolume(camera);
-
-	// compute object visibility
-	unsigned int i;
-	unsigned int oSize = scene->getObjectsNumber();
-	for(i=0; i<oSize; i++)
-	{
-		Object3d * object = scene->getObjectByIndex(i);
-		if(object->isActive())
-			object->updateVisibility(camera);
-	}
-
-    oSize = scene->getEntitiesNumber();
-    Vector3 min, max, occluderPosition;
-    Vector3 cameraPos = camera->getTransformedPosition();
-    Vector3 box[8];
-    Vector3 objMin, objMax;
-    bool intersection = false;
-
-    for(i=0; i < oSize; i++)
-    {
-        OEntity* occluder = scene->getEntityByIndex(i);
-
-        if(!occluder->isOccluder())
-            continue;
-
-        occluderPosition = occluder->getTransformedPosition();
-        min = *occluder->getMatrix()*occluder->getBoundingBox()->min;
-        max = *occluder->getMatrix()*occluder->getBoundingBox()->max;
-
-        for(int j = 0; j < oSize; j++)
-        {
-            OEntity* object = scene->getEntityByIndex(j);
-            if(object->isOccluder() || object->isInvisible())
-                continue;
-
-            objMin = object->getBoundingBox()->min;
-            objMax = object->getBoundingBox()->max;
-
-            box[0] = *object->getMatrix()*objMin;
-            box[1] = *object->getMatrix()*Vector3(objMax.x, objMin.y, objMin.z);
-            box[2] = *object->getMatrix()*Vector3(objMin.x, objMin.y, objMax.z);
-            box[3] = *object->getMatrix()*Vector3(objMax.x, objMin.y, objMax.z);
-
-            box[4] = *object->getMatrix()*objMax;
-            box[5] = *object->getMatrix()*Vector3(objMin.x, objMax.y, objMax.z);
-            box[6] = *object->getMatrix()*Vector3(objMin.x, objMax.y, objMin.z);
-            box[7] = *object->getMatrix()*Vector3(objMax.x, objMax.y, objMin.z);
-
-            intersection = true;
-            for(int p = 0; p < 8; p++)
-            {
-                if(isEdgeToBoxCollision(cameraPos, box[p], min, max) == false)
-                {
-                    intersection = false;
-                    break;
-                }
-            }
-
-
-            object->setVisible(!intersection);
-        }
-    }
-}
-
-void StandardRenderer::enableFog(OCamera * camera)
-{
-	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
-
-	float fogMin = camera->getClippingFar()*0.9999f;
-	if(camera->hasFog())
-	{
-		render->enableFog();
-		float camFogMin = camera->getClippingFar() - camera->getFogDistance();
-		if(camFogMin < fogMin)
-			fogMin = camFogMin;
-	}
-	else {
-		render->disableFog();
-	}
-
-    render->setFogColor(camera->getFogColor());
-	render->setFogDistance(fogMin, camera->getClippingFar());
-}
-
-ShadowLight * StandardRenderer::createShadowLight(OLight * light)
-{
-	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
-	unsigned int shadowQuality = light->getShadowQuality();
-
-	map<unsigned long, ShadowLight>::iterator iter = m_shadowLights.find((unsigned long)light);
-	if(iter != m_shadowLights.end())
-	{
-		ShadowLight * shadowLight = &iter->second;
-		shadowLight->score = 1;
-
-		if(shadowLight->shadowQuality != shadowQuality)
-		{
-			shadowLight->shadowQuality = shadowQuality;
-
-			render->bindTexture(shadowLight->shadowTexture);
-			render->texImage(0, shadowQuality, shadowQuality, VAR_UBYTE, TEX_DEPTH, 0);
-			render->bindTexture(0);
-		}
-
-		return shadowLight;
-	}
-	else
-	{
-		m_shadowLights[(unsigned long)(light)] = ShadowLight();
-		ShadowLight * shadowLight = &m_shadowLights[(unsigned long)(light)];
-		shadowLight->score = 1;
-		shadowLight->shadowQuality = shadowQuality;
-
-		render->createTexture(&shadowLight->shadowTexture);
-		render->bindTexture(shadowLight->shadowTexture);
-		render->setTextureFilterMode(TEX_FILTER_LINEAR, TEX_FILTER_LINEAR);
-		render->setTextureUWrapMode(WRAP_CLAMP);
-		render->setTextureVWrapMode(WRAP_CLAMP);
-		render->texImage(0, shadowQuality, shadowQuality, VAR_UBYTE, TEX_DEPTH, 0);
-		render->bindTexture(0);
-
-		return shadowLight;
-	}
-}
-
-void StandardRenderer::destroyUnusedShadowLights(void)
-{
-	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
-
-	// keys
-	map<unsigned long, ShadowLight>::iterator
-	mit (m_shadowLights.begin()),
-	mend(m_shadowLights.end());
-
-	for(;mit!=mend;++mit)
-	{
-		ShadowLight * shadowLight = &mit->second;
-		if(shadowLight->score < 1)
-		{
-			render->deleteTexture(&shadowLight->shadowTexture);
-			m_shadowLights.erase(mit);
-			mit = m_shadowLights.begin();
-			mend = m_shadowLights.end();
-			if(mit == mend)
-				return;
-		}
-	}
-}
-
-void StandardRenderer::decreaseShadowLights(void)
-{
-	// keys
-	map<unsigned long, ShadowLight>::iterator
-	mit (m_shadowLights.begin()),
-	mend(m_shadowLights.end());
-
-	for(;mit!=mend;++mit)
-	{
-		ShadowLight * shadowLight = &mit->second;
-		shadowLight->score--;
-	}
-}
-
-void StandardRenderer::drawText(OText * textObj)
-{
-	RenderingContext * render = NeoEngine().getInstance()->getRenderingContext();
-
-
-	Font * font = textObj->getFont();
-	const char * text = textObj->getText();
-	vector <float> * linesOffset = textObj->getLinesOffset();
-
-	if(! (strlen(text) > 0 && font))
-		return;
-
-	if(linesOffset->size() == 0)
-		return;
-
-
-	int id = 0;
-	int vertAttribIndex;
-	int texAttribIndex;
-	unsigned int fxId;
-	static Vector2 vertices[4];
-	static Vector2 texCoords[4];
+	// projmodelview matrix
+	static Matrix4x4 ProjMatrix;
+	static Matrix4x4 ModelViewMatrix;
 	static Matrix4x4 ProjModelViewMatrix;
-	
-	
-	
-	// Matrix
-	if(m_currentCamera)
-	{
-		Matrix4x4 * cameraProjMatrix = m_currentCamera->getCurrentProjMatrix();
-		ProjModelViewMatrix = (*cameraProjMatrix) * m_currModelViewMatrix;
-	}
-	else
-	{
-		Matrix4x4 cameraProjMatrix, modelViewMatrix;
-		render->getProjectionMatrix(&cameraProjMatrix);
-		render->getModelViewMatrix(&modelViewMatrix);
-		ProjModelViewMatrix = cameraProjMatrix * modelViewMatrix;
-	}
-	
 
-	// cull face
-	render->disableCullFace();
-	render->setDepthMask(0);
-	
-	// blending
-	render->enableBlending();
-	render->setBlendingMode(BLENDING_ALPHA);
+	render->getProjectionMatrix(&ProjMatrix);
+	render->getModelViewMatrix(&ModelViewMatrix);
+	ProjModelViewMatrix = ProjMatrix * ModelViewMatrix;
+	render->sendUniformMatrix(fx, "ProjModelViewMatrix", &ProjModelViewMatrix);
 
+	// Texture
+	int texIds[4] = { 0, 1, 2, 3 };
+	render->sendUniformInt(fx, "Textures", texIds, 4);
 
-	// bind FX
-	fxId = m_FXs[8];
-	render->bindFX(fxId);
+	// Width
+	render->sendUniformInt(fx, "Width", &screenWidth, 1);
+	// Height
+	render->sendUniformInt(fx, "Height", &screenHeight, 1);
 
+	// draw
+	render->bindVAO(m_quadVAO);
+	render->drawArray(PRIMITIVE_TRIANGLE_STRIP, 0, 4);
+}
 
-	// ProjModelViewMatrix
-	render->sendUniformMatrix(fxId, "ProjModelViewMatrix", &ProjModelViewMatrix);
+void StandardRenderer::initQuadVAO(unsigned int* vao, unsigned int* vbo, unsigned int* texcoordVbo, unsigned int fx)
+{
+	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
 
-	// Texture0
-	render->sendUniformInt(fxId, "Texture0", &id);
+	if(*vao || *vbo || *texcoordVbo)
+		clearQuadVAO(vao, vbo, texcoordVbo);
 
-	// Color
-	render->sendUniformVec4(fxId, "Color", textObj->getColor());
+	render->createVAO(vao);
+	render->bindVAO(*vao);
+
+	render->createVBO(vbo);
+	render->bindVBO(VBO_ARRAY, *vbo);
+	render->setVBO(VBO_ARRAY, m_vertices, 4*sizeof(Vector2), VBO_STATIC);
+
+	render->createVBO(texcoordVbo);
+	render->bindVBO(VBO_ARRAY, *texcoordVbo);
+	render->setVBO(VBO_ARRAY, m_texCoords, 4*sizeof(Vector2), VBO_STATIC);
+
+	// Send Vertex data
+	int vertexAttrib;
+	int texcoordAttrib;
 
 	// Vertex
-	render->getAttribLocation(fxId, "Vertex", &vertAttribIndex);
-	if(vertAttribIndex != -1)
-	{
-		render->setAttribPointer(vertAttribIndex, VAR_FLOAT, 2, vertices);
-		render->enableAttribArray(vertAttribIndex);
-	}
+	render->bindVBO(VBO_ARRAY, *vbo);
+	render->getAttribLocation(fx, "Vertex", &vertexAttrib);
+	render->enableAttribArray(vertexAttrib);
+	render->setAttribPointer(vertexAttrib, VAR_FLOAT, 2, NULL);
 
 	// TexCoord
-	render->getAttribLocation(fxId, "TexCoord", &texAttribIndex);
-	if(texAttribIndex != -1)
-	{
-		render->setAttribPointer(texAttribIndex, VAR_FLOAT, 2, texCoords);
-		render->enableAttribArray(texAttribIndex);
-	}
+	render->bindVBO(VBO_ARRAY, *texcoordVbo);
+	render->getAttribLocation(fx, "TexCoord", &texcoordAttrib);
+	render->enableAttribArray(texcoordAttrib);
+	render->setAttribPointer(texcoordAttrib, VAR_FLOAT, 2, NULL);
 
+	render->bindVAO(0);
+}
+void StandardRenderer::initTextVAO(unsigned int* vao, unsigned int* vbo, unsigned int* texcoordVbo, unsigned int fx)
+{
+	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
 
-	// bind texture
-	render->bindTexture(font->getTextureId());
+	// Update vertex cache
+	Vector2 vertices[4];
+	vertices[0] = Vector2(0, 0);
+	vertices[1] = Vector2(0, 1);
+	vertices[3] = Vector2(1, 1);
+	vertices[2] = Vector2(1, 0);
 
-	unsigned int lineId = 0;
-	float lineOffset = (*linesOffset)[0];
+	render->createVAO(vao);
+	render->bindVAO(*vao);
 
-	float size = textObj->getSize();
-	float tabSize = size*2;
-	float fontSize = (float)font->getFontSize();
-	float widthFactor = font->getTextureWith() / fontSize;
-	float heightFactor = font->getTextureHeight() / fontSize;
-	float xc = 0, yc = 0;
+	render->createVBO(vbo);
+	render->bindVBO(VBO_ARRAY, *vbo);
+	render->setVBO(VBO_ARRAY, vertices, 4 * sizeof(Vector2), VBO_DYNAMIC);
 
-	unsigned int i;
-	unsigned int textLen = strlen(text);
-	for(i=0; i<textLen; i++)
-	{
-		if(text[i] == '\n') // return
-		{
-			if(((i+1) < textLen))
-			{
-				lineId++;
-				lineOffset = (*linesOffset)[lineId];
+	render->createVBO(texcoordVbo);
+	render->bindVBO(VBO_ARRAY, *texcoordVbo);
+	render->setVBO(VBO_ARRAY, m_texCoords, 4 * sizeof(Vector2), VBO_DYNAMIC);
 
-				yc += size;
-				xc = 0;
-			}
-			continue;
-		}
+	// Send Vertex data
+	int vertexAttrib;
+	int texcoordAttrib;
 
-		if(text[i] == '\t') // tab
-		{
-			int tab = (int)(xc / tabSize) + 1;
-			xc = tab*tabSize;
-			continue;
-		}
+	// Vertex
+	render->bindVBO(VBO_ARRAY, *vbo);
+	render->getAttribLocation(fx, "Vertex", &vertexAttrib);
+	render->enableAttribArray(vertexAttrib);
+	render->setAttribPointer(vertexAttrib, VAR_FLOAT, 2, NULL);
 
-		// get character
-		unsigned int charCode = (unsigned int)((unsigned char)text[i]);
-		Character * character = font->getCharacter(charCode);
-		if(! character)
-			continue;
+	// TexCoord
+	render->bindVBO(VBO_ARRAY, *texcoordVbo);
+	render->getAttribLocation(fx, "TexCoord", &texcoordAttrib);
+	render->enableAttribArray(texcoordAttrib);
+	render->setAttribPointer(texcoordAttrib, VAR_FLOAT, 2, NULL);
 
-		Vector2 pos = character->getPos();
-		Vector2 scale = character->getScale();
-		Vector2 offset = character->getOffset() * size + Vector2(lineOffset, 0);
-
-		float width = scale.x * widthFactor * size;
-		float height = scale.y * heightFactor * size;
-
-		// construct quad
-		texCoords[0] = Vector2(pos.x, (pos.y + scale.y));
-		vertices[0] = Vector2(xc, (yc + height)) + offset;
-
-		texCoords[1] = Vector2((pos.x + scale.x), (pos.y + scale.y));
-		vertices[1] = Vector2((xc + width), (yc + height)) + offset;
-
-		texCoords[3] = Vector2((pos.x + scale.x), pos.y);
-		vertices[3] = Vector2((xc + width), yc) + offset;
-
-		texCoords[2] = Vector2(pos.x, pos.y);
-		vertices[2] = Vector2(xc, yc) + offset;
-
-		// draw quad
-		render->drawArray(PRIMITIVE_TRIANGLE_STRIP, 0, 4);
-
-		//move to next character
-		xc += character->getXAdvance() * size;
-	}
-
-	// disable attribs
-	if(vertAttribIndex != -1)
-		render->disableAttribArray(vertAttribIndex);
-	if(texAttribIndex != -1)
-		render->disableAttribArray(texAttribIndex);
-
-	// release FX
-	render->bindFX(0);
-	render->setDepthMask(1);
+	render->bindVAO(0);
 }
 
-void StandardRenderer::prepareSubMesh(Scene * scene, OCamera * camera, OEntity * entity, SubMesh * subMesh)
+
+void StandardRenderer::clearQuadVAO(unsigned int* vao, unsigned int *vbo, unsigned int *texcoordVbo)
 {
-	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
 
-	Mesh * mesh = entity->getMesh();
-	Vector3 scale = entity->getTransformedScale();
-	Box3d * box = subMesh->getBoundingBox();
-
-	// subMesh center
-	Vector3 center = box->min + (box->max - box->min)*0.5f;
-	center = entity->getTransformedVector(center);
-
-	// entity min scale
-	float minScale = scale.x;
-	minScale = MIN(minScale, scale.y);
-	minScale = MIN(minScale, scale.z);
-	minScale = 1.0f / minScale;
-
-	// lights
-	unsigned int l;
-	unsigned int lSize = scene->getLightsNumber();
-	unsigned int lightsNumber = 0;
-	for(l=0; l<lSize; l++)
-	{
-		OLight * light = scene->getLightByIndex(l);
-
-		if(! light->isActive())
-			continue;
-
-		if(! light->isVisible())
-			continue;
-
-		if(light->getRadius() <= 0.0f)
-			continue;
-
-		// light box
-		Vector3 lightPos = light->getTransformedPosition();
-		Vector3 localPos = entity->getInversePosition(lightPos);
-
-		float localRadius = light->getRadius() * minScale;
-
-		Box3d lightBox(
-			Vector3(localPos - localRadius),
-			Vector3(localPos + localRadius)
-		);
-
-		if(! box->isInCollisionWith(lightBox))
-			continue;
-
-		EntityLight * entityLight = &m_entityLights[lightsNumber];
-		entityLight->lightBox = lightBox;
-		entityLight->light = light;
-
-		m_entityLightsList[lightsNumber] = lightsNumber;
-
-		float z = (center - light->getTransformedPosition()).getLength();
-		m_entityLightsZList[lightsNumber] = (1.0f/z)*light->getRadius();
-
-		lightsNumber++;
-		if(lightsNumber == MAX_ENTITY_LIGHTS)
-			break;
-	}
-
-	// sort lights
-	if(lightsNumber > 1)
-		sortFloatList(m_entityLightsList, m_entityLightsZList, 0, (int)lightsNumber-1);
-
-	// animate armature
-	if(mesh->getArmature())
-	{
-		Armature * armature = mesh->getArmature();
-		if(mesh->getArmatureAnim())
-		{
-			animateArmature(
-				mesh->getArmature(),
-				mesh->getArmatureAnim(),
-				entity->getCurrentFrame()
-			);
-		}
-		else
-		{
-			armature->processBonesLinking();
-			armature->updateBonesSkinMatrix();
-		}
-	}
-
-	// animate textures
-	if(mesh->getTexturesAnim())
-		animateTextures(mesh, mesh->getTexturesAnim(), entity->getCurrentFrame());
-
-	// animate materials
-	if(mesh->getMaterialsAnim())
-		animateMaterials(mesh, mesh->getMaterialsAnim(), entity->getCurrentFrame());
-
-
-	// local lights
-	if(lightsNumber > 4)
-		lightsNumber = 4;
-
-	for(l=0; l<lightsNumber; l++)
-	{
-		EntityLight * entityLight = &m_entityLights[m_entityLightsList[l]];
-		OLight * light = entityLight->light;
-
-        float quadraticAttenuation = 0.0;
-		// attenuation	
-        if(light->getSpotAngle() > 0.0f)
-        {
-            quadraticAttenuation = (8.0f / light->getRadius());
-            quadraticAttenuation = (quadraticAttenuation*quadraticAttenuation)*light->getIntensity();
-        }
-
-        // color
-		Vector3 color = light->getFinalColor();
-
-		// set light
-		render->enableLight(l);
-		render->setLightPosition(l, light->getTransformedPosition());
-		render->setLightDiffuse(l, Vector4(color));
-		render->setLightSpecular(l, Vector4(color));
-		render->setLightAmbient(l, Vector3(0, 0, 0));
-		render->setLightAttenuation(l, 1, 0, quadraticAttenuation);
-
-		// spot
-		render->setLightSpotAngle(l, light->getSpotAngle());
-        if(light->getSpotAngle() < 90)
-        {
-			render->setLightSpotDirection(l, light->getRotatedVector(Vector3(0, 0, -1)).getNormalized());
-			render->setLightSpotExponent(l, light->getSpotExponent());
-		}
-        else
-        {
-			render->setLightSpotExponent(l, 0.0f);
-		}
-
-		// shadow
-		if(light->isCastingShadow())
-		{
-			ShadowLight * shadowLight = &m_shadowLights[(unsigned long)(light)];
-			m_lightShadow[l] = 1;
-			m_lightShadowBias[l] = light->getShadowBias()*shadowLight->biasUnity;
-			m_lightShadowBlur[l] = light->getShadowBlur();
-			m_lightShadowTexture[l] = (int)shadowLight->shadowTexture;
-            m_lightShadowMatrix[l] = shadowLight->shadowMatrix * (*entity->getMatrix());
-		}
-        else
-        {
-			m_lightShadow[l] = 0;
-		}
-	}
-
-    for(l=lightsNumber; l<4; l++)
-    {
-		render->setLightDiffuse(l, Vector4(0, 0, 0, 0));
-		render->disableLight(l);
-		m_lightShadow[l] = 0;
-	}
+	render->deleteVAO(vao);
+	render->deleteVBO(vbo);
+	render->deleteVBO(texcoordVbo);
 }
 
-void StandardRenderer::drawScene(Scene * scene, OCamera * camera)
+////////////////////////////////////////////////////////////////////////////////
+//
+// UPDATE THREADS
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#define THREAD_SLEEP 50
+
+int StandardRenderer::light_update_thread(void* data)
 {
-	// get render
-	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+   StandardRenderer* self = (StandardRenderer*) data;
+   if(!self)
+	   return 1;
 
-	// current view
-	int currentViewport[4];
-	Matrix4x4 currentViewMatrix;
-	Matrix4x4 currentProjMatrix;
-	render->getViewport(currentViewport);
-	render->getModelViewMatrix(&currentViewMatrix);
-	render->getProjectionMatrix(&currentProjMatrix);
+   NeoEngine* engine = NeoEngine::getInstance();
+   NeoWindow* window = NeoWindow::getInstance();
+   Scene* scene;
+   OLight* light;
 
-	// current render buffer
-	unsigned int currentFrameBuffer = 0;
-	render->getCurrentFrameBuffer(&currentFrameBuffer);
+   while (!engine->getGame()->isRunning()) window->sleep(100);
 
-        // init
-	render->setAlphaTest(0);
-	render->disableVertexArray();
-	render->disableTexCoordArray();
-	render->disableNormalArray();
-	render->disableColorArray();
-        
-	// destroy unused shadowLights
-	destroyUnusedShadowLights();
+   while(engine->isActive())
+   {
+	   if (!engine->getGame()->isRunning())
+		   continue;
 
-	// decrease shadowLights score
-	decreaseShadowLights();
-       
-	// lights
-	unsigned int l;
-	unsigned int lSize = scene->getLightsNumber();
-        
-	// make frustum
-	camera->getFrustum()->makeVolume(camera);
-        
-#ifndef EMSCRIPTEN
-	// compute lights visibility
-	for(l=0; l<lSize; l++)
+	   // Aquire lock
+	   scene = engine->getLevel()->getCurrentScene();
+	   OCamera* camera = scene->getCurrentCamera();
+	   
+		if(!camera)
+		{
+			window->sleep(THREAD_SLEEP);
+			continue;
+		}
+	   
+	   CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
+
+	   if(!data) continue;
+
+	   data->lightLock->WaitAndLock();
+	   data->visibleLights.clear();
+
+	   // Fill the light buffer with all visible lights
+	   int j = 0;
+	   for(int i = 0; i < scene->getLightsNumber() && i < MAX_ENTITY_LIGHTS; i++)
+	   {
+		   // If light is visible
+		   if ((light = scene->getLightByIndex(i))->isActive() && light->isVisible())
+			{
+				data->visibleLights.push_back(light);
+				j++;
+			}
+	   }
+
+	   data->lightLock->Unlock();
+	   window->sleep(THREAD_SLEEP);
+   }
+
+   return 0;
+}
+
+/*
+ * Scene update threads
+ */
+
+int StandardRenderer::visibility_thread_mainscene(void* data)
+{
+	NeoEngine* engine = NeoEngine::getInstance();
+	StandardRenderer* render = (StandardRenderer*) data;
+	NeoWindow* window = NeoWindow::getInstance();
+
+	// Wait for engine to start the game
+	while (!engine->getGame()->isRunning()) window->sleep(100);
+
+	// Initialize scenes with additional data
+	Level* level = engine->getLevel();
+	for (int i = 0; i < level->getScenesNumber(); i++)
 	{
-		OLight * light = scene->getLightByIndex(l);
-		if(light->isActive())
-			light->updateVisibility(camera);
+		Scene* s = level->getSceneByIndex(i);
+		s->setAdditionalData(new SceneData());
+
+		for (int j = 0; j < s->getCamerasNumber(); j++)
+		{
+			s->getCameraByIndex(j)->setAdditionalData(new CameraData());
+		}
 	}
-	
-	// create frame buffer (TODO: only if minimum one shadow light)
-	if(m_fboId == 0)
-	{
-		render->createFrameBuffer(&m_fboId);
-		render->bindFrameBuffer(m_fboId);
-		render->setDrawingBuffers(NULL, 0);
-		render->bindFrameBuffer(currentFrameBuffer);
-	}
-	
-	render->disableLighting();
-	render->disableBlending();
-	m_forceNoFX = true;
 
-	bool restoreCamera = false;
-
-	for(l=0; l<lSize; l++)
+	while (engine->isActive())
 	{
-		OLight * light = scene->getLightByIndex(l);
-		if(! (light->isActive() && light->isVisible()))
+		if (!engine->getGame()->isRunning())
 			continue;
 
-		if(light->getSpotAngle() < 90.0f && light->isCastingShadow())
+		// Preparation
+		Level* level = engine->getLevel();
+		Scene* scene = level->getCurrentScene();
+		OCamera* camera = scene->getCurrentCamera();
+
+		if(!camera)
 		{
-			unsigned int i;
-			unsigned int eSize = scene->getEntitiesNumber();
-
-			unsigned int shadowQuality = light->getShadowQuality();
-			ShadowLight * shadowLight = createShadowLight(light);
-
-			render->bindFrameBuffer(m_fboId);
-			render->attachFrameBufferTexture(ATTACH_DEPTH, shadowLight->shadowTexture);
-
-			for(int i=0; i<4; i++){
-				render->setLightDiffuse(i, Vector4(0, 0, 0, 0));
-				render->disableLight(i);
-				m_lightShadow[i] = 0;
-			}
-
-			OCamera lightCamera;
-			*lightCamera.getMatrix() = *light->getMatrix();
-			lightCamera.setClippingNear(light->getRadius()*0.001f);
-			lightCamera.setClippingFar(light->getRadius());
-
-            Vector3 cameraAxis = lightCamera.getRotatedVector(Vector3(0, 0, -1)).getNormalized();
-
-            if(light->getSpotAngle() == 0)
-            {
-                lightCamera.enableOrtho(true);
-                lightCamera.setFov(light->getRadius()*0.01f);
-            }
-            else
-            {
-                lightCamera.enableOrtho(false);
-                lightCamera.setFov(light->getSpotAngle()*2.0f);
-            }
-
-			Vector3 cameraPos = lightCamera.getTransformedPosition();
-
-			render->disableScissorTest();
-			render->enableDepthTest();
-			render->setViewport(0, 0, shadowQuality, shadowQuality);
-
-			lightCamera.enable();
-
-			// frustum
-			Frustum * frustum = lightCamera.getFrustum();
-			frustum->makeVolume(&lightCamera);
-
-			float distMin = lightCamera.getClippingFar();
-			float distMax = lightCamera.getClippingNear();
-
-			for(i=0; i<eSize; i++)
-			{
-				OEntity * entity = scene->getEntityByIndex(i);
-                if(entity->isActive() && entity->hasShadow())
-				{
-					if(entity->isInvisible()){
-						entity->setVisible(false);
-						continue;
-					}
-
-					// compute entities visibility
-					Box3d * box = entity->getBoundingBox();
-					Vector3 * min = &box->min;
-					Vector3 * max = &box->max;
-
-					Vector3 points[8] = {
-						entity->getTransformedVector(Vector3(min->x, min->y, min->z)),
-						entity->getTransformedVector(Vector3(min->x, max->y, min->z)),
-						entity->getTransformedVector(Vector3(max->x, max->y, min->z)),
-						entity->getTransformedVector(Vector3(max->x, min->y, min->z)),
-						entity->getTransformedVector(Vector3(min->x, min->y, max->z)),
-						entity->getTransformedVector(Vector3(min->x, max->y, max->z)),
-						entity->getTransformedVector(Vector3(max->x, max->y, max->z)),
-						entity->getTransformedVector(Vector3(max->x, min->y, max->z))
-					};
-
-					entity->setVisible(frustum->isVolumePointsVisible(points, 8));
-
-					// adapt clipping
-					if(entity->isVisible())
-					{
-						for(int p=0; p<8; p++)
-						{
-							float dist = (points[p] - cameraPos).dotProduct(cameraAxis);
-							distMin = MIN(distMin, dist);
-							distMax = MAX(distMax, dist);
-						}
-					}
-				}
-                else if(!entity->hasShadow())
-                {
-                    entity->setVisible(false);
-                }
-			}
-
-			// sort Zlist and set clipping
-			lightCamera.setClippingFar(MIN(lightCamera.getClippingFar(), distMax));
-			lightCamera.setClippingNear(MAX(lightCamera.getClippingNear(), distMin));
-			lightCamera.enable(); // need to enable the camera again
-
-			m_currentCamera = &lightCamera;
-
-            render->clear(BUFFER_DEPTH);
-			render->setColorMask(0, 0, 0, 0);
-			render->enablePolygonOffset(1.0, 4096.0);
-
-			// entities
-			for(i=0; i<eSize; i++)
-			{
-				// get entity
-				OEntity * entity = scene->getEntityByIndex(i);
-				Mesh * mesh = entity->getMesh();
-
-				// draw mesh
-				if(mesh && entity->isActive() && entity->isVisible())
-				{
-					// animate armature
-					if(mesh->getArmature())
-					{
-						Armature * armature = mesh->getArmature();
-						if(mesh->getArmatureAnim())
-						{
-							animateArmature(
-								mesh->getArmature(),
-								mesh->getArmatureAnim(),
-								entity->getCurrentFrame()
-							);
-						}
-						else
-						{
-							armature->processBonesLinking();
-							armature->updateBonesSkinMatrix();
-						}
-					}
-
-					// animate textures
-					if(mesh->getTexturesAnim())
-						animateTextures(mesh, mesh->getTexturesAnim(), entity->getCurrentFrame());
-
-					// animate materials
-					if(mesh->getMaterialsAnim())
-						animateMaterials(mesh, mesh->getMaterialsAnim(), entity->getCurrentFrame());
-
-					unsigned int s;
-					unsigned int sSize = mesh->getSubMeshsNumber();
-					for(s=0; s<sSize; s++)
-					{
-						SubMesh * subMesh = &mesh->getSubMeshs()[s];
-						Box3d * box = subMesh->getBoundingBox();
-
-						// check if submesh visible
-						if(sSize > 1)
-						{
-							Vector3 * min = &box->min;
-							Vector3 * max = &box->max;
-
-							Vector3 points[8] = {
-								entity->getTransformedVector(Vector3(min->x, min->y, min->z)),
-								entity->getTransformedVector(Vector3(min->x, max->y, min->z)),
-								entity->getTransformedVector(Vector3(max->x, max->y, min->z)),
-								entity->getTransformedVector(Vector3(max->x, min->y, min->z)),
-								entity->getTransformedVector(Vector3(min->x, min->y, max->z)),
-								entity->getTransformedVector(Vector3(min->x, max->y, max->z)),
-								entity->getTransformedVector(Vector3(max->x, max->y, max->z)),
-								entity->getTransformedVector(Vector3(max->x, min->y, max->z))
-							};
-
-							if(! frustum->isVolumePointsVisible(points, 8))
-								continue;
-						}
-
-						//render->pushMatrix();
-						//render->multMatrix(entity->getMatrix());
-						m_currModelViewMatrix = (*lightCamera.getCurrentViewMatrix()) * (*entity->getMatrix());
-
-						// draw opaques
-                        drawOpaques(subMesh, mesh->getArmature());
-
-						//render->popMatrix();
-					}
-
-					mesh->updateBoundingBox();
-					(*entity->getBoundingBox()) = (*mesh->getBoundingBox());
-				}
-			}
-
-			render->disablePolygonOffset();
-			setShadowMatrix(&shadowLight->shadowMatrix, &lightCamera);
-
-			// biasUnity
-			{
-				Vector4 pt1 = shadowLight->shadowMatrix * Vector4(cameraPos + cameraAxis);
-				Vector4 pt2 = shadowLight->shadowMatrix * Vector4(cameraPos + cameraAxis*2.0f);
-
-				shadowLight->biasUnity = (- (pt1.z - pt2.z*0.5f))*0.01f;
-			}
-
-			render->setColorMask(1, 1, 1, 1);
-			render->bindFrameBuffer(currentFrameBuffer);
-			render->bindTexture(0);
-			restoreCamera = true;
-
+			window->sleep(THREAD_SLEEP);
+			continue;
 		}
 
-	}
+		CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
 
-	// restore camera after shadow pass
-	if(restoreCamera)
-	{
-		render->setViewport(currentViewport[0], currentViewport[1], currentViewport[2], currentViewport[3]);
+		camera->enable();
+		camera->getFrustum()->makeVolume(camera);
+		
+		// Culling!
+		data->visibilityLock->WaitAndLock();
+		data->visibleEntities.clear();
+		data->visibleTransparentEntities.clear();
 
-		render->setMatrixMode(MATRIX_PROJECTION);
-		render->loadIdentity();
-		render->multMatrix(&currentProjMatrix);
-
-		render->setMatrixMode(MATRIX_MODELVIEW);
-		render->loadIdentity();
-		render->multMatrix(&currentViewMatrix);
-
-		render->clear(BUFFER_DEPTH);
-	}
-#endif
-
-    render->disableDepthTest();
-    render->disableCullFace();
-    render->enableScissorTest();
-
-    camera->drawSkybox();
-    render->enableDepthTest();
-    render->disableScissorTest();
-    
-	// update visibility
-        updateVisibility(scene, camera);
-
-	// get camera frustum
-	Frustum * frustum = camera->getFrustum();
-        
-	// fog
-	enableFog(camera);
-
-	// enable blending
-	render->enableBlending();
-
-	// camera
-	Vector3 cameraPos = camera->getTransformedPosition();
-
-	// opaque/transp number
-	unsigned int opaqueNumber = 0;
-	unsigned int transpNumber = 0;
-
-	m_currentCamera = camera;
-
-	// entities
-	unsigned int i;
-	unsigned int eSize = scene->getEntitiesNumber();
-
-	// make opaque and transp list
-	for(i=0; i<eSize; i++)
-	{
-		// get entity
-		OEntity * entity = scene->getEntityByIndex(i);
-		Mesh * mesh = entity->getMesh();
-
-		if(! entity->isActive())
-			continue;
-
-		if(! entity->isVisible())
+		size_t sz = scene->getEntitiesNumber();
+		for (int i = 0; i < sz; i++)
 		{
-			/*
-			// TODO : optimize and add a tag to desactivate it
-			if(mesh)
+			OEntity* e = scene->getEntityByIndex(i);
+
+			if (e->isActive())
 			{
-				MArmature * armature = mesh->getArmature();
-				MArmatureAnim * armatureAnim = mesh->getArmatureAnim();
-				if(armature)
+				e->updateVisibility(camera);
+
+				if (e->isVisible())
 				{
-					// animate armature
-					if(armatureAnim)
-					{
-						animateArmature(
-							mesh->getArmature(),
-							mesh->getArmatureAnim(),
-							entity->getCurrentFrame()
-						);
-					}
+					if(e->hasTransparency())
+						data->visibleTransparentEntities.push_back(e);
 					else
-					{
-						armature->processBonesLinking();
-						armature->updateBonesSkinMatrix();
-					}
-
-					updateSkinning(mesh, armature);
-					(*entity->getBoundingBox()) = (*mesh->getBoundingBox());
-				}
-			}*/
-
-			continue;
-		}
-
-		if(mesh)
-		{
-			unsigned int s;
-			unsigned int sSize = mesh->getSubMeshsNumber();
-			for(s=0; s<sSize; s++)
-			{
-				SubMesh * subMesh = &mesh->getSubMeshs()[s];
-				Box3d * box = subMesh->getBoundingBox();
-
-				// check if submesh visible
-				if(sSize > 1)
-				{
-					Vector3 * min = &box->min;
-					Vector3 * max = &box->max;
-
-					Vector3 points[8] = {
-						entity->getTransformedVector(Vector3(min->x, min->y, min->z)),
-						entity->getTransformedVector(Vector3(min->x, max->y, min->z)),
-						entity->getTransformedVector(Vector3(max->x, max->y, min->z)),
-						entity->getTransformedVector(Vector3(max->x, min->y, min->z)),
-						entity->getTransformedVector(Vector3(min->x, min->y, max->z)),
-						entity->getTransformedVector(Vector3(min->x, max->y, max->z)),
-						entity->getTransformedVector(Vector3(max->x, max->y, max->z)),
-						entity->getTransformedVector(Vector3(max->x, min->y, max->z))
-					};
-
-					if(! frustum->isVolumePointsVisible(points, 8))
-						continue;
-				}
-
-				// subMesh center
-				Vector3 center = box->min + (box->max - box->min)*0.5f;
-				center = entity->getTransformedVector(center);
-
-				// z distance
-				float z = getDistanceToCam(camera, center);
-
-				// transparent
-				if(subMesh->hasTransparency())
-				{
-					if(transpNumber < MAX_TRANSP)
-					{
-						// transparent subMesh pass
-						SubMeshPass * subMeshPass = &m_transpList[transpNumber];
-
-						// set values
-						m_transpSortList[transpNumber] = transpNumber;
-						m_transpSortZList[transpNumber] = z;
-						subMeshPass->subMeshId = s;
-						subMeshPass->object = entity;
-						if(subMeshPass->occlusionQuery == 0)
-							render->createQuery(&subMeshPass->occlusionQuery);
-						transpNumber++;
-					}
-				}
-				// opaque
-				else
-				{
-					if(opaqueNumber < MAX_OPAQUE)
-					{
-						// opaque subMesh pass
-						SubMeshPass * subMeshPass = &m_opaqueList[opaqueNumber];
-
-						// set values
-						m_opaqueSortList[opaqueNumber] = opaqueNumber;
-						m_opaqueSortZList[opaqueNumber] = z;
-						subMeshPass->subMeshId = s;
-						subMeshPass->object = entity;
-						if(subMeshPass->occlusionQuery == 0)
-							render->createQuery(&subMeshPass->occlusionQuery);
-						opaqueNumber++;
-					}
-				}
-
-			}
-		}
-	}
-
-	// add texts to transp list
-	unsigned int tSize = scene->getTextsNumber();
-	for(i=0; i<tSize; i++)
-	{
-		OText * text = scene->getTextByIndex(i);
-		if(text->isActive() && text->isVisible() && transpNumber < MAX_TRANSP)
-		{
-			// transparent pass
-			SubMeshPass * subMeshPass = &m_transpList[transpNumber];
-
-			// center
-			Box3d * box = text->getBoundingBox();
-			Vector3 center = box->min + (box->max - box->min)*0.5f;
-			center = text->getTransformedVector(center);
-
-			// z distance to camera
-			float z = getDistanceToCam(camera, center);
-
-			// set values
-			m_transpSortList[transpNumber] = transpNumber;
-			m_transpSortZList[transpNumber] = z;
-			subMeshPass->object = text;
-
-			transpNumber++;
-		}
-	}
-
-	// draw opaques
-	{
-		if(opaqueNumber > 1)
-			sortFloatList(m_opaqueSortList, m_opaqueSortZList, 0, (int)opaqueNumber-1);
-
-        // Z pre-pass
-		render->setDepthMode(DEPTH_LEQUAL);
-		render->setColorMask(0, 0, 0, 0);
-
-		for(int s=(int)opaqueNumber-1; s>=0; s--)
-		{
-			SubMeshPass * subMeshPass = &m_opaqueList[m_opaqueSortList[s]];
-			
-			
-			OEntity * entity = (OEntity *)subMeshPass->object;
-			Mesh * mesh = entity->getMesh();
-			SubMesh * subMesh = &mesh->getSubMeshs()[subMeshPass->subMeshId];
-
-			// animate armature
-			if(mesh->getArmature())
-			{
-				Armature * armature = mesh->getArmature();
-				if(mesh->getArmatureAnim())
-				{
-					animateArmature(
-						mesh->getArmature(),
-						mesh->getArmatureAnim(),
-						entity->getCurrentFrame()
-					);
-				}
-				else
-				{
-					armature->processBonesLinking();
-					armature->updateBonesSkinMatrix();
-				}
-			}
-
-			// animate textures
-			if(mesh->getTexturesAnim())
-				animateTextures(mesh, mesh->getTexturesAnim(), entity->getCurrentFrame());
-
-			// animate materials
-			if(mesh->getMaterialsAnim())
-				animateMaterials(mesh, mesh->getMaterialsAnim(), entity->getCurrentFrame());
-
-			//render->pushMatrix();
-			//render->multMatrix(entity->getMatrix());
-			m_currModelViewMatrix = currentViewMatrix * (*entity->getMatrix());
-			
-			// draw opaques
-			render->beginQuery(subMeshPass->occlusionQuery);
-			drawOpaques(subMesh, mesh->getArmature());
-			render->endQuery();
-
-			//render->popMatrix();
-
-			// update bounding box
-			mesh->updateBoundingBox();
-			(*entity->getBoundingBox()) = (*mesh->getBoundingBox());
-		}
-
-
-		
-		// render pass
-		m_forceNoFX = false;
-		render->setColorMask(1, 1, 1, 1);
-		render->setDepthMask(0);
-		render->setDepthMode(DEPTH_EQUAL);
-
-		for(int s=(int)opaqueNumber-1; s>=0; s--)
-		{
-			SubMeshPass * subMeshPass = &m_opaqueList[m_opaqueSortList[s]];
-			OEntity * entity = (OEntity *)subMeshPass->object;
-			Mesh * mesh = entity->getMesh();
-			SubMesh * subMesh = &mesh->getSubMeshs()[subMeshPass->subMeshId];
-
-
-			// read occlusion result
-			unsigned int queryResult = 1;
-			render->getQueryResult(subMeshPass->occlusionQuery, &queryResult);
-			if(queryResult > 0)
-			{
-				prepareSubMesh(scene, camera, entity, subMesh);
-
-				//render->pushMatrix();
-				//render->multMatrix(entity->getMatrix());
-				m_currModelViewMatrix = currentViewMatrix * (*entity->getMatrix());
-				
-				drawOpaques(subMesh, mesh->getArmature());
-				
-				//render->popMatrix();
-			}
-		}
-
-		render->setDepthMask(1);
-		render->setDepthMode(DEPTH_LEQUAL);
-	}
-
-
-	m_forceNoFX = false;
-
-	// draw transparent
-	{
-		render->setDepthMask(0);
-		
-		if(transpNumber > 1)
-			sortFloatList(m_transpSortList, m_transpSortZList, 0, (int)transpNumber-1);
-
-		for(int s=0; s<transpNumber; s++)
-		{
-			SubMeshPass * subMeshPass = &m_transpList[m_transpSortList[s]];
-			Object3d * object = subMeshPass->object;
-
-			// objects
-			switch(object->getType())
-			{
-				case M_OBJECT3D_ENTITY:
-				{
-					OEntity * entity = (OEntity *)object;
-					Mesh * mesh = entity->getMesh();
-					SubMesh * subMesh = &mesh->getSubMeshs()[subMeshPass->subMeshId];
-
-					prepareSubMesh(scene, camera, entity, subMesh);
-
-					//render->pushMatrix();
-					//render->multMatrix(entity->getMatrix());
-					m_currModelViewMatrix = currentViewMatrix * (*entity->getMatrix());
-					
-					drawTransparents(subMesh, mesh->getArmature());
-					
-					//render->popMatrix();
-
-					// update bounding box
-					mesh->updateBoundingBox();
-					(*entity->getBoundingBox()) = (*mesh->getBoundingBox());
-
-					break;
-				}
-
-				case M_OBJECT3D_TEXT:
-				{
-					OText * text = (OText *)object;
-
-					//render->pushMatrix();
-					//render->multMatrix(text->getMatrix());
-					m_currModelViewMatrix = currentViewMatrix * (*text->getMatrix());
-					
-					drawText(text);
-					
-					//render->popMatrix();
-
-					break;
+						data->visibleEntities.push_back(e);
+					//MLOG_INFO(e->getName() << " is visible!");
 				}
 			}
 		}
-		
-		render->setDepthMask(1);
+		data->visibilityLock->Unlock();
+
+		// MLOG_INFO("Got " << data->visibleEntities.size() << " entities! ");
+		window->sleep(THREAD_SLEEP);
 	}
-	
-	m_currentCamera = NULL;
+
+	return 0;
 }

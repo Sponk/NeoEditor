@@ -40,6 +40,8 @@
 #include <Window/Mouse.h>
 #include <Window/WinEvents.h>
 
+//#include <codecvt>
+
 using namespace Neo;
 using namespace Neo2D;
 using namespace Gui;
@@ -48,8 +50,9 @@ InputField::InputField(unsigned int x, unsigned int y, unsigned int width,
 					   unsigned int height, const char* label)
 	: Widget(x, y, width, height, label),
 	  m_labelText(NULL),
-	  m_state(INPUT_NORMAL_STATE)
+	  m_cursorpos(0)
 {
+
 }
 
 float InputField::calculateWidth(OText* text)
@@ -65,11 +68,14 @@ float InputField::calculateWidth(OText* text)
 	return length * text->getSize();
 }
 
-void InputField::draw()
+void InputField::draw(Vector2 offset)
 {
 	Render* render = Render::getInstance();
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	Neo2DEngine* gui = Neo2DEngine::getInstance();
+
+	Widget::draw(offset);
+	offset += getPosition();
 
 	unsigned int winh, winw;
 	system->getScreenSize(&winw, &winh);
@@ -77,7 +83,7 @@ void InputField::draw()
 	if (m_labelText == NULL)
 	{
 		m_labelText = render->createText(gui->getDefaultFont(),
-										 gui->getDefaultFontSize());
+										 m_fontSize);
 		m_labelText->setAlign(TEXT_ALIGN_LEFT);
 	}
 
@@ -98,41 +104,45 @@ void InputField::draw()
 	}
 
 	// Update text
-	m_labelText->setText(m_label.c_str());
+	updateLabel(m_label);
 
 	Box3d* box = m_labelText->getBoundingBox();
-	float offset = calculateWidth(m_labelText);
+	float textOffset = calculateWidth(m_labelText);
 
 	// Calculate overflow offset
-	if(offset <= m_width) offset = 0.0f; // If we do not overflow, simply ignore
-	else offset -= m_width; // Calculate the new position relative to the right edge
+	if (textOffset <= m_width) textOffset = 0.0f; // If we do not overflow, simply ignore
+	else textOffset -= m_width; // Calculate the new position relative to the right edge
 
 	RenderingContext* renderContext =
 		NeoEngine::getInstance()->getRenderingContext();
 
-	render->drawColoredQuad(m_x, m_y, m_width, m_height, color);
+	render->drawColoredQuad(offset.x, offset.y, m_width, m_height, color);
 
 	renderContext->enableScissorTest();
-	renderContext->setScissor(m_x, winh - (m_y + m_height), m_width, m_height);
+	renderContext->setScissor(offset.x, winh - (offset.y + m_height), m_width, m_height);
 
-	render->drawText(m_labelText, m_x - offset,
-					 m_y + 0.5*(box->max.y - box->min.y) + 0.5 * m_height,
+	render->drawText(m_labelText, offset.x - textOffset,
+					offset.y + 0.5*(box->max.y - box->min.y) + 0.5 * m_height,
 					 m_rotation);
 
 	renderContext->disableScissorTest();
 }
 
-void InputField::addCharacter(char c)
+void InputField::updateLabel(string s)
 {
-#ifndef ANDROID
-	m_label.erase(--m_label.end(), m_label.end());
-	m_label += c;
-	m_label += "|";
-#endif
+	// Update text
+	string prefix = s;
+	prefix.erase(m_cursorpos);
+
+	string postfix = s.substr(m_cursorpos);
+	
+	m_labelText->setText((prefix + ((m_state == INPUT_SELECTED_STATE) ? "|" : "") + postfix).c_str());
 }
 
 void InputField::update()
 {
+	if (m_labelText == nullptr) return;
+
 #ifndef ANDROID
 	MKeyboard* kbd = MKeyboard::getInstance();
 
@@ -145,8 +155,11 @@ void InputField::update()
 	Vector2 res = system->getScreenSize();
 	x = input->getAxis("MOUSE_X") * res.x;
 	y = input->getAxis("MOUSE_Y") * res.y;
+	
+	unsigned int wx = m_offset.x + m_x;
+	unsigned int wy = m_offset.y + m_y;
 
-	if (x >= m_x && x <= m_x + m_width && y >= m_y && y <= m_y + m_height &&
+	if (x >= wx && x <= wx + m_width && y >= wy && y <= wy + m_height &&
 		m_state != INPUT_SELECTED_STATE)
 	{
 		m_state = INPUT_HOVER_STATE;
@@ -155,71 +168,70 @@ void InputField::update()
 	{
 		m_state = INPUT_NORMAL_STATE;
 	}
-	else if (!(x >= m_x && x <= m_x + m_width && y >= m_y &&
-			   y <= m_y + m_height) &&
+	else if (!(x >= wx && x <= wx + m_width && y >= wy &&
+		y <= wy + m_height) &&
 			 m_state == INPUT_SELECTED_STATE && input->isKeyPressed("MOUSE_BUTTON_LEFT"))
 	{
-		m_label.erase(--m_label.end(), m_label.end());
 		m_state = INPUT_NORMAL_STATE;
 	}
 
 	if (m_state == INPUT_HOVER_STATE && input->isKeyPressed("MOUSE_BUTTON_LEFT"))
 	{
-		m_label += "|";
+		m_cursorpos = m_label.length();
 		m_state = INPUT_SELECTED_STATE;
+		return;
 	}
 
 	if (m_state == INPUT_SELECTED_STATE)
 	{
-		char c = input->popLastChar();
+		unsigned int c = input->popLastChar();
+
+		if(input->isKeyPressed("LEFT") && m_cursorpos > 0)
+			m_cursorpos--;
+
+		if(input->isKeyPressed("RIGHT") && m_cursorpos < m_label.length())
+			m_cursorpos++;
 		
-		/*bool shift = false;
-		char key[2] = {'\0', '\0' };
-
-		shift = (input->isKeyPressed("LSHIFT") || input->isKeyPressed("RSHIFT"));
-
-		for (char i = MKEY_A; i < MKEY_Z; i++)
-		{
-			key[0] = i;
-			if (input->isKeyPressed(key))
-			{
-				input->upKey(key);
-
-				if (!shift)
-					addCharacter(tolower(i));
-				else
-					addCharacter(i);
-			}
-		}
-
-		for (char i = MKEY_0; i <= MKEY_QUESTION; i++)
-		{
-			key[0] = i;
-			if (input->isKeyPressed(key))
-			{
-				input->upKey(key);
-
-				if (!shift)
-					addCharacter(i);
-				else
-					addCharacter(i - 16);
-			}
-		}
-
-		if (input->isKeyPressed("SPACE"))
-		{
-			input->upKey("SPACE");
-			addCharacter(' ');
-			}*/
-
 		if (input->isKeyPressed("BACKSPACE"))
 		{
 			input->upKey("BACKSPACE");
-			if (m_label.length() >= 2)
-				m_label.erase(m_label.end() - 2, --m_label.end());
+			if (m_label.length() >= 1 && m_cursorpos > 0)
+			{
+				auto endDelete = m_label.begin() + m_cursorpos;
+				m_label.erase(endDelete - 1, endDelete);
+				m_cursorpos--;
+			}
 		}
-		else if(c != '\0')			
-			addCharacter(c);
+
+		if (input->isKeyPressed("DELETE"))
+		{
+			input->upKey("DELETE");
+			if (m_label.length() >= 1 && m_cursorpos < m_label.length())
+			{
+				auto endDelete = m_label.begin() + m_cursorpos;
+				m_label.erase(endDelete, endDelete + 1);
+			}
+		}
+
+		if(input->isKeyPressed("ENTER") && c == '\0')
+			c = '\n';
+
+		input->upKey("LEFT");
+		input->upKey("RIGHT");
+		input->upKey("ENTER");
+
+		if (c != '\0')
+		{
+			string prefix = m_label;
+			prefix.erase(m_cursorpos);
+						
+			string postfix = m_label.substr(m_cursorpos);
+			//m_label = prefix + ((char*)&c)[0] + ((char*)&c)[1] + ((char*)&c)[2] + postfix;
+			m_label = prefix + (char) c + postfix;			
+			
+			m_cursorpos++;
+		}
 	}
+
 #endif
 }

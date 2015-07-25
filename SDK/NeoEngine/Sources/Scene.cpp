@@ -31,7 +31,8 @@ Scene::Scene():
 m_dataMode(M_DATA_STATIC),
 m_currentFrame(0),
 m_currentCamera(0),
-m_gravity(0, 0, -0.981f)
+m_gravity(0, 0, -0.981f),
+m_additionalData(NULL)
 {}
 
 Scene::~Scene()
@@ -49,6 +50,8 @@ Scene::~Scene()
 	m_cameras.clear();
 	m_lights.clear();
 	m_sounds.clear();
+
+	SAFE_DELETE(m_additionalData);
 }
 
 Object3d * Scene::addNewGroup(void)
@@ -767,8 +770,8 @@ void Scene::begin(void)
 	preparePhysics();
 
 	// run script
-	if(scriptContext)
-		scriptContext->runScript(getScriptFilename());
+	// if(scriptContext)
+	//	scriptContext->runScript(getScriptFilename());
 }
 
 void Scene::end(void)

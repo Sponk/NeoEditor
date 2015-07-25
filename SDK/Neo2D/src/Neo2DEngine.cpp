@@ -54,9 +54,9 @@ Neo2DEngine::Neo2DEngine()
 	m_canvasVector.push_back(Canvas::getInstance());
 	m_defaultFont = "assets/default.ttf";
 
-	setThemeDirectory("assets");
+	setThemeDirectory("assets/default-theme");
 	
-	m_defaultFontSize = 12.0;
+	m_defaultFontSize = 11;
 	m_normalBackground = Vector4(0.5, 0.5, 0.5, 1.0);
 	m_hoverBackground = Vector4(0.7, 0.7, 0.7, 1.0);
 	m_highlightBackground = Vector4(0.6, 0.7, 0.8, 1.0);
@@ -815,6 +815,21 @@ void Neo2DEngine::setupLuaInterface(ScriptContext* script)
 	script->addFunction("isWidgetVisible", isWidgetVisible);
 }
 
+Neo2DEngine* Neo2DEngine::getInstance()
+{
+	static Neo2DEngine m_instance;
+	return &m_instance;
+}
+
+int Neo2DEngine::addWidget(Widget* w)
+{
+	WidgetId id;
+	id.w = w;
+	id.id = ++m_ids;
+	m_widgets[id.id] = id;
+	return m_ids;
+}
+
 void Neo2DEngine::destroyWidget(int idx)
 {
 	bool found = false;
@@ -840,7 +855,10 @@ void Neo2DEngine::destroyWidget(int idx)
 	m_widgets.erase(iter);
 }
 
-Widget* Neo2DEngine::getWidget(unsigned int idx) { return m_widgets[idx].w; }
+Widget* Neo2DEngine::getWidget(unsigned int idx)
+{
+	return m_widgets[idx].w;
+}
 
 void Neo2DEngine::draw()
 {
@@ -921,6 +939,8 @@ void Neo2DEngine::updateLayers()
 void Neo2DEngine::setThemeDirectory(const char* dir)
 {
 	char path[256];
+
+	m_themeDirectory.set(dir);
 
 	strcpy(path, dir);
 	strcat(path, "/body.png");

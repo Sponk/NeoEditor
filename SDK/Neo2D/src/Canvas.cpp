@@ -44,7 +44,7 @@ void Canvas::draw()
 {
 	Render* render = Render::getInstance();
 	RenderingContext* renderingContext =
-		NeoEngine::getInstance()->getRenderingContext();
+	NeoEngine::getInstance()->getRenderingContext();
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	system->getScreenSize(&m_width, &m_height);
 
@@ -80,10 +80,10 @@ void Canvas::draw()
 		w = gui->getWidget(m_widgets[i]);
 
 		// Only draw the widget if it exists & if it is visible
-		if (w && w->isVisible())
+		if (w != nullptr && w->isVisible())
 			w->draw(m_cameraPosition);
-		else if (w == NULL) // Remove the widget from the list if it does not
-							// exist anymore
+		else if (w == nullptr) 	// Remove the widget from the list if it does not
+								// exist anymore
 			m_widgets.erase(m_widgets.begin() + i);
 	}
 

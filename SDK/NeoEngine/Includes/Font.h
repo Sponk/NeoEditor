@@ -84,7 +84,7 @@ public:
 	inline void setTextureWidth(unsigned int width){ m_textureWidth = width; }
 	inline void setTextureHeight(unsigned int height){ m_textureHeight = height; }
 	inline unsigned int getTextureId(void){ return m_textureId; }
-	inline unsigned int getTextureWith(void){ return m_textureWidth; }
+    inline unsigned int getTextureWidth(void){ return m_textureWidth; }
 	inline unsigned int getTextureHeight(void){ return m_textureHeight; }
 
 	// font size

@@ -1,4 +1,4 @@
-<Maratis version="3.1">
+<Neo version="0.4">
 
 <Level>
 
@@ -15,28 +15,98 @@
 		<Light name="Light">
 			<active value="true" />
 			<transform 
-				position="0.000000 -24.968735 39.711044"
+				position="-16.995811 -24.968735 39.711044"
 				rotation="0.000000 -0.000000 0.000000"
 				scale="1.000000 1.000000 1.000000" />
 			<properties 
-				radius="1000.000000"
+				radius="200.000000"
 				color="1.000000 1.000000 1.000000"
-				intensity="1.000000"
+				intensity="0.800000"
 				spotAngle="180.000000"
 				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light01">
+			<active value="true" />
+			<transform 
+				position="45.427383 -12.878654 1.563580"
+				rotation="0.000000 -15.324636 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="100.000000"
+				color="0.517094 0.757150 1.000000"
+				intensity="1.100000"
+				spotAngle="180.000000"
+				spotExponent="0.330000"
+				shadow="false" />
+		</Light>
+		<Light name="Light02">
+			<active value="true" />
+			<transform 
+				position="10.017162 -8.283119 13.911819"
+				rotation="0.000000 -15.324636 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="34.000000"
+				color="0.069650 1.000000 0.000000"
+				intensity="1.300000"
+				spotAngle="180.000000"
+				spotExponent="0.330000"
+				shadow="false" />
+		</Light>
+		<Light name="Light03">
+			<active value="true" />
+			<transform 
+				position="1.412033 -1.781609 13.911819"
+				rotation="0.000000 -15.324636 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="34.000000"
+				color="1.000000 0.288342 0.000000"
+				intensity="1.300000"
+				spotAngle="180.000000"
+				spotExponent="0.330000"
+				shadow="false" />
+		</Light>
+		<Light name="Light04">
+			<active value="true" />
+			<transform 
+				position="18.007702 -1.781609 13.911819"
+				rotation="0.000000 -15.324636 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="34.000000"
+				color="1.000000 0.000000 0.710234"
+				intensity="1.300000"
+				spotAngle="180.000000"
+				spotExponent="0.330000"
+				shadow="false" />
+		</Light>
+		<Light name="Light05">
+			<active value="true" />
+			<transform 
+				position="11.006080 -15.735081 -3.131695"
+				rotation="90.000000 -15.324636 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="34.000000"
+				color="0.000000 0.782015 1.000000"
+				intensity="1.300000"
+				spotAngle="180.000000"
+				spotExponent="0.330000"
 				shadow="false" />
 		</Light>
 		<Camera name="Camera0">
 			<active value="true" />
 			<transform 
-				position="0.000000 -72.376923 17.554047"
-				rotation="90.000000 -0.000000 0.000000"
+				position="11.472992 -86.044128 31.492950"
+				rotation="76.067223 -0.000000 0.000000"
 				scale="1.000000 1.000000 1.000000" />
 			<properties 
 				clearColor="0.200000 0.300000 0.400000"
 				fogColor="1.000000 1.000000 1.000000"
-				ortho="false"
-				fov="60.000000"
+				ortho="true"
+				fov="100.000000"
 				clippingNear="1.000000"
 				clippingFar="1000.000000"
 				fog="false"
@@ -48,6 +118,33 @@
 			<anim id="0" />
 			<active value="true" />
 			<transform 
+				position="46.173641 0.000000 0.000000"
+				rotation="-0.000000 90.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
+		<Entity name="Entity02" file="../meshs/box-water.dae">
+			<BoundingBox min="-1.000000 -1.000001 -1.000000" max="1.000000 1.000000 1.000000" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="29.086611 -162.526031 0.000000"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="8.005987 8.005987 8.005987" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
+		<Entity name="Entity03" file="../meshs/box-water.dae">
+			<BoundingBox min="-1.000000 -1.000001 -1.000000" max="1.000000 1.000000 1.000000" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				parent="Light"
 				position="0.000000 0.000000 0.000000"
 				rotation="0.000000 -0.000000 0.000000"
 				scale="1.000000 1.000000 1.000000" />
@@ -56,9 +153,75 @@
 				shadow="true"
 				occluder="false" />
 		</Entity>
+		<Entity name="Teapot" file="../meshs/teapot.mesh">
+			<BoundingBox min="-84.445297 -55.742798 -39.508904" max="98.276901 57.958904 48.265701" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="-29.093964 0.000000 0.000000"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="0.246365 0.246365 0.246365" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
+		<Entity name="Entity0" file="../meshs/suzie.mesh">
+			<BoundingBox min="-6.221394 -3.875040 -4.479403" max="6.221394 3.875040 4.479403" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="10.029486 0.000000 0.000000"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="2.666181 2.666181 2.666181" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
+		<Entity name="Entity1" file="../meshs/teapot.mesh">
+			<BoundingBox min="-84.445297 -55.742798 -39.508904" max="98.276901 57.958904 48.265701" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="10.029486 41.474052 22.664635"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="0.267257 0.267257 0.267257" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
+		<Entity name="Entity2" file="../meshs/suzie-transparent.mesh">
+			<BoundingBox min="-6.221394 -3.875040 -4.479403" max="6.221394 3.875040 4.479403" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="12.024605 -2.016586 32.087105"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
+		<Text name="Text0" file="../default.ttf">
+			<active value="true" />
+			<transform 
+				position="-4.468990 -22.549616 12.118637"
+				rotation="-90.000000 0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				size="16.000000"
+				align="Left"
+				color="1.000000 1.000000 1.000000 1.000000" />
+			<textData>
+				<![CDATA[Text]]>
+			</textData>
+		</Text>
 
 	</Scene>
 
 </Level>
 
-</Maratis>
+</Neo>

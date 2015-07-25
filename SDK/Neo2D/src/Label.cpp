@@ -42,10 +42,12 @@ using namespace Gui;
 
 void Label::update() {}
 
-void Label::draw()
+void Label::draw(Vector2 offset)
 {
 	Render* render = Render::getInstance();
 	Neo2DEngine* gui = Neo2DEngine::getInstance();
+
+	offset += getPosition();
 
 	if (m_labelText == NULL)
 	{
@@ -54,7 +56,8 @@ void Label::draw()
 		m_labelText->setAlign(m_alignment);
 	}
 
+	m_labelText->setColor(m_color);
 	m_labelText->setText(m_label.c_str());
-	render->drawText(m_labelText, m_x + 0.5 * (float) m_width,
-					 m_y + 0.5 * m_labelText->getSize() + 0.5 * (float) m_height);
+	render->drawText(m_labelText, offset.x + 0.5 * (float)m_width,
+					offset.y + 0.5 * m_labelText->getSize() + 0.5 * (float)m_height);
 }

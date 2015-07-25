@@ -39,7 +39,7 @@ enum M_DATA_MODES
 };
 
 /**
- * @brief The MScene class represents a scene in a Maratis level.
+ * @brief The Scene class represents a scene in a Maratis level.
  *
  * One level can have multiple independent scenes with objects and scripts.
  * You can use this to overlay a scene over another to create ingame GUI or similar.
@@ -49,11 +49,16 @@ class NEO_ENGINE_EXPORT Scene
 {
 public:
 
+	// Definition of some additional data for rendering
+	class AdditionalData {};
+
 	// constructor / destructor
 	Scene(void);
 	~Scene(void);
 
 private:
+
+	AdditionalData* m_additionalData;
 
 	// name
 	String m_name;
@@ -91,13 +96,16 @@ private:
 
 public:
 
+	AdditionalData* getAdditionalData() { return m_additionalData; }
+	void setAdditionalData(AdditionalData* d) { m_additionalData = d; }
+
 	// name
     /**
      * @brief Sets the scene name.
      *
      * The scene name is a property by which you can find a particular scene.
      *
-     * @see MLevel::getSceneByName
+     * @see Level::getSceneByName
      *
      * @param name The new name which will be copied to an internal buffer.
      */

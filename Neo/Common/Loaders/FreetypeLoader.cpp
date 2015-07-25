@@ -38,14 +38,14 @@ static void drawBitmap(Image * image, FT_Bitmap * bitmap, int left, int top)
 	int x, y;
 	int width = bitmap->width;
 	int height = bitmap->rows;
-	int imgWidth = (int)image->getWidth();
-	int imgHeight = (int)image->getHeight();
+	int imgWidth = (int) image->getWidth();
+	int imgHeight = (int) image->getHeight();
 
 	unsigned char * pixel = bitmap->buffer;
 
-	for(y=top; y<top+height; y++)
+	for(y = top; y < top + height; y++)
 	{
-		for(x=left; x<left+width; x++)
+		for(x = left; x < left+width; x++)
 		{
 			if(y >= 0 && y < imgHeight && 
 			   x >= 0 && x < imgWidth)
@@ -60,13 +60,29 @@ static void drawBitmap(Image * image, FT_Bitmap * bitmap, int left, int top)
 
 bool M_loadFont(const char * filename, void * data)
 {
-	int pen_x, pen_y;
+	int pen_x, pen_y, max;
 	unsigned int n;
 	unsigned int space = 2;
-    unsigned int size = 128;
-	unsigned int width = 512;
+	unsigned int numChars = 4096;
+
+	// Change this for higher resolutions
+	Font * font = (Font *)data;
+
+	float size;
+
+	if(font->getFontSize() > 0)
+		size = font->getFontSize();
+	else
+		size = 128;
+	
+	unsigned int width = 1024;
 	unsigned int height = 0;
 
+	unsigned int flags = FT_LOAD_RENDER;
+	
+	// Turn font size from float to uint
+	font->setFontSize(size);
+	
 	Image image;
 
 	FT_GlyphSlot slot;
@@ -75,14 +91,12 @@ bool M_loadFont(const char * filename, void * data)
 	FT_Byte * file_base;
 	FT_Long file_size;
 
-
 	// init
 	FT_Error error = FT_Init_FreeType(&library); 
 	if(error){
 		fprintf(stderr, "ERROR Load Font : unable to init FreeType\n");
 		return false;
-	}
-	
+	}	
 	
 	// open file
 	File * file = M_fopen(filename, "rb");
@@ -129,14 +143,14 @@ bool M_loadFont(const char * filename, void * data)
 		return false;
 	}
 
-
 	// parse characters
+	max = 0;
 	slot = face->glyph;
 	pen_x = space; pen_y = space; 
-	for(n = 0; n<256; n++)
+	for(n = 0; n < numChars; n++)
 	{
 		// load glyph image into the slot (erase previous one)
-		error = FT_Load_Char(face, n, FT_LOAD_RENDER); 
+		error = FT_Load_Char(face, n, flags); 
 
 		if(error) 
 			continue;
@@ -144,10 +158,12 @@ bool M_loadFont(const char * filename, void * data)
 		if(FT_Get_Char_Index(face, n) == 0)
 			continue;
 
-        if((pen_x + slot->bitmap.width) > 512){
+		max = MAX(max, slot->bitmap.rows);
+		
+        if((pen_x + slot->bitmap.width + space) > width){
 			pen_x = 0;
-			pen_y += size + space;
-			height += size + space;
+			pen_y += max + space;
+			height += max + space;
         }
 
 		// increment pen position 
@@ -162,7 +178,6 @@ bool M_loadFont(const char * filename, void * data)
 		return false;
 	}
 
-
 	// create image
     height = getNextPowerOfTwo(height);
     image.create(VAR_UBYTE, width, height, 4);
@@ -170,21 +185,18 @@ bool M_loadFont(const char * filename, void * data)
 	unsigned char color[4] = {255, 255, 255, 0};
 	image.clear(color);
 
-
 	// init font
-	Font * font = (Font *)data;
-	font->setFontSize(size);
 	font->setTextureWidth(width);
 	font->setTextureHeight(height);
-
-
+	
 	// create font texture
 	slot = face->glyph;
-	pen_x = space; pen_y = space; 
-	for(n = 0; n<256; n++)
+	pen_x = space; pen_y = space;
+	
+	for(n = 0; n < numChars; n++)
 	{
 		// load glyph image into the slot (erase previous one)
-		error = FT_Load_Char(face, n, FT_LOAD_RENDER); 
+		error = FT_Load_Char(face, n, flags); 
 
 		if(error) 
 			continue;
@@ -192,14 +204,16 @@ bool M_loadFont(const char * filename, void * data)
 		if(FT_Get_Char_Index(face, n) == 0)
 			continue;
 
-		if((pen_x + slot->bitmap.width) > (int)image.getWidth()){
-			pen_x = 0;
-			pen_y += size + space;
+		max = MAX(max, slot->bitmap.rows);
+		
+		if((pen_x + slot->bitmap.width + space) > (int) image.getWidth()){
+			pen_x = space;
+			pen_y += max + space;
 		}
 
 		// get character properties
 		float xAdvance = (slot->advance.x >> 6) / ((float)size);
-		Vector2 offset = Vector2((float)slot->bitmap_left, - (float)slot->bitmap_top) / ((float)size);
+		Vector2 offset = Vector2((float)slot->bitmap_left - 1, - (float)slot->bitmap_top - 1) / ((float)size);
 		Vector2 pos = Vector2((float)(pen_x-1) / (float)width, (float)(pen_y-1) / (float)height);
 		Vector2 scale = Vector2((float)(slot->bitmap.width+2) / (float)width, (float)(slot->bitmap.rows+2) / (float)height);
 
@@ -211,11 +225,11 @@ bool M_loadFont(const char * filename, void * data)
 
 		// increment pen position 
 		pen_x += slot->bitmap.width + space; 
-	} 
+	}
 
 
 	// send texture
-	NeoEngine * engine = NeoEngine().getInstance();
+	NeoEngine * engine = NeoEngine::getInstance();
 	RenderingContext * render = engine->getRenderingContext();
 	
 	// gen texture id

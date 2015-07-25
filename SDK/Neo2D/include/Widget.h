@@ -82,6 +82,9 @@ protected:
 	/// The label of the widget
 	std::string m_label;
 
+	/// The offset that was used for rendering in the last frame
+	Vector2 m_offset;
+
 #ifndef SWIG
 	/// The callback that should be called
 	CALLBACK_FUNCTION m_callback;
@@ -124,6 +127,12 @@ public:
 	float getFontSize() { return m_fontSize; }
 	void setFontSize(float s) { m_fontSize = s; }
 
+	void setOffset(Vector2 offset) { m_offset = offset; }
+	Vector2 getOffset() { return m_offset; }
+
+	void setSize(unsigned int w, unsigned int h) { m_width = w; m_height = h; }
+	Vector2 getSize() { return Vector2(m_width, m_height); }
+	
 	/**
 	 * @brief Draws the widget to the canvas it belongs to.
 	 * @see Canvas
@@ -138,7 +147,7 @@ public:
 	 *
 	 * @see Canvas
 	 */
-	virtual void draw(Vector2 offset) = 0;
+	virtual void draw(Vector2 offset) { m_offset = offset; }
 
 	/**
 	 * @brief Updates the widget and calls the callback if necessary.
