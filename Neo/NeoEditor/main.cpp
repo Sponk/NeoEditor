@@ -535,6 +535,7 @@ int main(int argc, char** argv)
 	NeoEngine* engine = NeoEngine::getInstance();
 	EditorBackend* backend = EditorBackend::getInstance();
 
+	backend->initRenderer();
 	backend->start();
 
 	// Init default thread

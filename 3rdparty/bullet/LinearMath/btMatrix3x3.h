@@ -22,10 +22,15 @@ subject to the following restrictions:
 
 #ifdef BT_USE_SSE
 //const __m128 ATTRIBUTE_ALIGNED16(v2220) = {2.0f, 2.0f, 2.0f, 0.0f};
-const __m128 ATTRIBUTE_ALIGNED16(vMPPP) = {-0.0f, +0.0f, +0.0f, +0.0f};
+//const __m128 ATTRIBUTE_ALIGNED16(vMPPP) = {-0.0f, +0.0f, +0.0f, +0.0f};
+#define vMPPP (_mm_set_ps (+0.0f, +0.0f, +0.0f, -0.0f))
 #endif
 
-#if defined(BT_USE_SSE) || defined(BT_USE_NEON)
+#if defined(BT_USE_SSE)
+#define v1000 (_mm_set_ps(0.0f,0.0f,0.0f,1.0f))
+#define v0100 (_mm_set_ps(0.0f,0.0f,1.0f,0.0f))
+#define v0010 (_mm_set_ps(0.0f,1.0f,0.0f,0.0f))
+#elif defined(BT_USE_NEON)
 const btSimdFloat4 ATTRIBUTE_ALIGNED16(v1000) = {1.0f, 0.0f, 0.0f, 0.0f};
 const btSimdFloat4 ATTRIBUTE_ALIGNED16(v0100) = {0.0f, 1.0f, 0.0f, 0.0f};
 const btSimdFloat4 ATTRIBUTE_ALIGNED16(v0010) = {0.0f, 0.0f, 1.0f, 0.0f};
@@ -362,7 +367,7 @@ public:
         vm[2] = v2;
 #elif defined(BT_USE_NEON)
         // note: zeros the w channel. We can preserve it at the cost of two more vtrn instructions.
-        static const uint32x2_t zMask = (const uint32x2_t) {-1, 0 };
+        static const uint32x2_t zMask = (const uint32x2_t) {static_cast<uint32_t>(-1), 0 };
         float32x4_t *vm = (float32x4_t *)m;
         float32x4x2_t top = vtrnq_f32( m_el[0].mVec128, m_el[1].mVec128 );  // {x0 x1 z0 z1}, {y0 y1 w0 w1}
         float32x2x2_t bl = vtrn_f32( vget_low_f32(m_el[2].mVec128), vdup_n_f32(0.0f) );       // {x2  0 }, {y2 0}
@@ -604,6 +609,27 @@ public:
 	btMatrix3x3 transpose() const;
 	/**@brief Return the inverse of the matrix */
 	btMatrix3x3 inverse() const; 
+
+	/// Solve A * x = b, where b is a column vector. This is more efficient
+	/// than computing the inverse in one-shot cases.
+	///Solve33 is from Box2d, thanks to Erin Catto,
+	btVector3 solve33(const btVector3& b) const
+	{
+		btVector3 col1 = getColumn(0);
+		btVector3 col2 = getColumn(1);
+		btVector3 col3 = getColumn(2);
+		
+		btScalar det = btDot(col1, btCross(col2, col3));
+		if (btFabs(det)>SIMD_EPSILON)
+		{
+			det = 1.0f / det;
+		}
+		btVector3 x;
+		x[0] = det * btDot(b, btCross(col2, col3));
+		x[1] = det * btDot(col1, btCross(b, col3));
+		x[2] = det * btDot(col1, btCross(col2, b));
+		return x;
+	}
 
 	btMatrix3x3 transposeTimes(const btMatrix3x3& m) const;
 	btMatrix3x3 timesTranspose(const btMatrix3x3& m) const;
@@ -993,7 +1019,7 @@ btMatrix3x3::transpose() const
     return btMatrix3x3( v0, v1, v2 );
 #elif defined(BT_USE_NEON)
     // note: zeros the w channel. We can preserve it at the cost of two more vtrn instructions.
-    static const uint32x2_t zMask = (const uint32x2_t) {-1, 0 };
+    static const uint32x2_t zMask = (const uint32x2_t) {static_cast<uint32_t>(-1), 0 };
     float32x4x2_t top = vtrnq_f32( m_el[0].mVec128, m_el[1].mVec128 );  // {x0 x1 z0 z1}, {y0 y1 w0 w1}
     float32x2x2_t bl = vtrn_f32( vget_low_f32(m_el[2].mVec128), vdup_n_f32(0.0f) );       // {x2  0 }, {y2 0}
     float32x4_t v0 = vcombine_f32( vget_low_f32(top.val[0]), bl.val[0] );
@@ -1053,7 +1079,7 @@ btMatrix3x3::transposeTimes(const btMatrix3x3& m) const
 
 #elif defined BT_USE_NEON
     // zeros w
-    static const uint32x4_t xyzMask = (const uint32x4_t){ -1, -1, -1, 0 };
+    static const uint32x4_t xyzMask = (const uint32x4_t){ static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), static_cast<uint32_t>(-1), 0 };
     float32x4_t m0 = (float32x4_t) vandq_u32( (uint32x4_t) m.getRow(0).mVec128, xyzMask );
     float32x4_t m1 = (float32x4_t) vandq_u32( (uint32x4_t) m.getRow(1).mVec128, xyzMask );
     float32x4_t m2 = (float32x4_t) vandq_u32( (uint32x4_t) m.getRow(2).mVec128, xyzMask );

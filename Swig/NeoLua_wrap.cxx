@@ -51799,6 +51799,8 @@ static swig_lua_const_info swig_SwigModule_constants[]= {
     {SWIG_LUA_CONSTTAB_INT("LINE_HEIGHT", 25)},
     {SWIG_LUA_CONSTTAB_INT("SLIDER_HORIZONTAL", Neo2D::Gui::SLIDER_HORIZONTAL)},
     {SWIG_LUA_CONSTTAB_INT("SLIDER_VERTICAL", Neo2D::Gui::SLIDER_VERTICAL)},
+    {SWIG_LUA_CONSTTAB_INT("SLIDER_NORMAL", Neo2D::Gui::SLIDER_NORMAL)},
+    {SWIG_LUA_CONSTTAB_INT("SLIDER_GRABBED", Neo2D::Gui::SLIDER_GRABBED)},
     {0,0,0,0,0,0}
 };
 static swig_lua_method swig_SwigModule_methods[]= {

@@ -6,7 +6,7 @@
     SET (CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g")
 
     SET (CMAKE_CXX_COMPILER             "/usr/bin/clang++")
-    SET (CMAKE_CXX_FLAGS                "-Wno-c++11-narrowing")
+    SET (CMAKE_CXX_FLAGS                "-Wno-c++11-narrowing -Wc++11-narrowing")
     SET (CMAKE_CXX_FLAGS_DEBUG          "-g")
     SET (CMAKE_CXX_FLAGS_MINSIZEREL     "-Os -DNDEBUG")
     SET (CMAKE_CXX_FLAGS_RELEASE        "-O4 -DNDEBUG")
