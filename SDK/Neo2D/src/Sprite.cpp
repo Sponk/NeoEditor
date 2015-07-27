@@ -58,10 +58,6 @@ void Sprite::draw(Vector2 offset)
 	Neo2DEngine* gui = Neo2DEngine::getInstance();
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	Level* level = NeoEngine::getInstance()->getLevel();
-	OCamera* camera = NeoEngine::getInstance()
-						  ->getLevel()
-						  ->getCurrentScene()
-						  ->getCurrentCamera();
 
 	if (m_labelText == NULL)
 	{

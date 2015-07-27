@@ -33,12 +33,13 @@
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __LABEL_H__
-#define __LABEL_H__
+#ifndef __SCROLLBAR_H__
+#define __SCROLLBAR_H__
 
 #include <string>
 #include <NeoEngine.h>
 #include <Widget.h>
+#include <Slider.h>
 
 namespace Neo2D
 {
@@ -46,66 +47,43 @@ namespace Gui
 {
 
 using namespace Neo;
-	
+
 /**
- * @brief The Label class displays a string on the screen.
+ * @brief The ScrollBar class implements a slider that interpolates values
+ * in a given range.
  *
  * @author Yannick Pflanzer
  */
-class NEO2D_EXPORT Label : public Widget
+class NEO2D_EXPORT ScrollBar : public Widget
 {
-protected:
-	OText* m_labelText;
-	TEXT_ALIGN_MODES m_alignment;
-	String m_font;
+	SLIDER_DIRECTION m_direction;
+	SLIDER_STATE m_state;
 
-	Vector4 m_color;
+	Vector2 m_range;
+	float m_value;
+
+	float m_mx;
+	float m_my;
 
 public:
-	Label(unsigned int x, unsigned int y, unsigned int width,
-		  unsigned int height, const char* label)
-		: Widget(x, y, width, height, label), m_labelText(NULL),
-		  m_alignment(TEXT_ALIGN_LEFT), m_font("assets/default.ttf"),
-		  m_color(0,0,0,1)
-	{
-	}
+	ScrollBar(unsigned int x, unsigned int y, unsigned int width,
+		  unsigned int height, float min, float max, SLIDER_DIRECTION dir)
+		: Widget(x, y, width, height, ""),
+		  m_direction(dir),
+		  m_range(min, max),
+		  m_mx(0),
+		  m_my(0),
+		  m_value(0),
+		  m_state(SLIDER_NORMAL)
+	{}
 
-	/**
-	 * @brief Changes the text alignment.
-	 * 
-	 * Defaults to TEXT_ALIGN_LEFT.
-	 * @param mode The align mode.
-	 */
-	void setAlignment(int mode) { m_alignment = (Neo::TEXT_ALIGN_MODES) mode; }
+	Vector2 getRange() { return m_range; }
+	void setRange(Vector2 range) { m_range = range; }
 
-	/**
-	 * @brief Returns the current align mode.
-	 * @return The align mode.
-	 * @see setAlignment
-	 */
-	TEXT_ALIGN_MODES getAlignment() { return m_alignment; }
-
-	/**
-	 * @brief Changes the font used to display text.
-	 *
-	 * The font file will be loaded in the first draw call and thus can't be
-	 * changed for now. Defaults to "assets/default.ttf".
-	 * @param file The font file to load.
-	 */
-	void setFont(const char* file) { m_font = file; }
-	
-	/**
-	 * @brief Returns the path to the currently used font file.
-	 * @return The font file.
-	 * @see setFont
-	 */
-	const char* getFont() { return m_font.getSafeString(); }
-
-	Vector4 getColor() { return m_color; }
-	void setColor(Vector4 color) { m_color = color; }
+	void setValue(float value) { m_value = value; }
+	float getValue() { return m_value; }
 
 	void draw(Vector2 offset);
-	void draw() { draw(Vector2()); }
 	void update();
 };
 }

@@ -24,7 +24,8 @@
 #include <Tree.h>
 
 #include <Slider.h>
-
+#include <ScrollPane.h>
+	
 	using namespace Neo;
 	using namespace Neo2D;
 	using namespace Gui;
@@ -105,3 +106,4 @@
 %include <Tree.h>
 
 %include <Slider.h>
+%include <ScrollPane.h>

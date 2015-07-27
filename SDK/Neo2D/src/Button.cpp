@@ -87,9 +87,9 @@ void Button::draw(Vector2 offset)
 	if(m_alignment == TEXT_ALIGN_CENTER)
 		render->drawText(m_labelText,
 
-					 m_x + 0.5 * static_cast<float>(m_width),
+					 m_x + 0.5 * m_width,
 					 m_y + 0.5 * m_labelText->getSize() +
-					 0.5 * static_cast<float>(m_height),
+					 0.5 * m_height,
 
 					 m_rotation);
 
@@ -97,7 +97,7 @@ void Button::draw(Vector2 offset)
 		render->drawText(m_labelText,
 					 m_x,
 					 m_y + 0.5 * m_labelText->getSize() +
-					 0.5 * static_cast<float>(m_height),
+					 0.5 * m_height,
 					 m_rotation);
 }
 

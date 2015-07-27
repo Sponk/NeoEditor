@@ -5,7 +5,7 @@ return {
     type = "Window",
     x = 10,
     y = 50,
-    w = 500,
+    w = 750,
     h = 350,
     label = "Demo",
     content = {
@@ -20,7 +20,20 @@ return {
       [6] = {name = "slider", type = "Slider", x = 220, y = 50, w = 200, h = 1, range = {0,100},
             callback = "sliderCallback"},
       [7] = {name = "slider2", type = "Slider", x = 430, y = 50, w = 1, h = 200, range = {0,100},
-              direction = NeoLua.SLIDER_VERTICAL}
+			 direction = NeoLua.SLIDER_VERTICAL},
+
+	  [8] = {name = "scrollpanel", type = "ScrollPane", x = 450,
+			 y = 50, w = 150, h = 150, content = {
+				[1] = {
+				   name = "label2", type = "Label",
+				   x = 10, y = 10, w = 0, h = 0, label = "Label"
+				},
+
+				[2] = {name = "button2", type = "Button", x = 10, y = 40, w = 100, h = 40, label = "Button"},
+				[3] = {name = "button3", type = "Button", x = 10, y = 150, w = 100, h = 40, label = "Button"}
+			 }
+			 
+	  }
     }
   }
 }

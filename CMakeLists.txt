@@ -413,6 +413,10 @@ IF(ANDROID)
     copy_files("Additional/AndroidApp/*" "${CMAKE_BINARY_DIR}" "copy-android-sources")
 ENDIF()
 
+## Enable tests
+enable_testing()
+add_test(NeoTest ${NEO_BINARY_OUTPUT}/TestSDK)
+
 ## Install files
 INSTALL(FILES
   CREDITS

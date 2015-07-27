@@ -141,29 +141,3 @@ TEST_F(TestEngine, Collision_test)
 
 	EXPECT_EQ(true, entity1->isColliding(entity2));
 }
-
-// FIXME: Move to own file!
-#include <Input.h>
-#include <InputField.h>
-
-TEST_F(TestEngine, TextInputTest)
-{
-	// Needs '|' because we skip the actual selection process
-	const char* labelbefore = "LABEL|";
-	const char* labelafter = "LABEL!|";
-
-	Input input;
-	NeoEngine* engine = NeoEngine::getInstance();
-	engine->setInputContext(&input);
-
-	Neo2D::Gui::InputField field(0,0,0,0,labelbefore);
-
-	// Simulate key press!
-	field.setState(Neo2D::Gui::INPUT_STATE::INPUT_SELECTED_STATE);
-	input.setLastChar('!');
-	field.update();
-	
-	ASSERT_EQ('\0', input.popLastChar());
-	ASSERT_EQ(string(labelafter), string(field.getLabel()));
-	engine->setInputContext(NULL);
-}

@@ -24,6 +24,7 @@
 #include <MenuBar.h>
 	
 #include <Slider.h>
+#include <ScrollPane.h>
 	
 	using namespace Neo;
 	using namespace Neo2D;
@@ -107,6 +108,7 @@
 %include <Tree.h>
 
 %include <Slider.h>
+%include <ScrollPane.h>
 
 //  Some pointer stuff
 %pointer_class(int, intp);

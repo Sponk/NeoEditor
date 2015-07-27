@@ -147,15 +147,15 @@ void ThemedButton::draw(Vector2 offset)
 	}
 
 	if(m_alignment == TEXT_ALIGN_CENTER)
-		render->drawText(m_labelText, offset.x + 0.5 * (float)m_width,
+		render->drawText(m_labelText, offset.x + 0.5 * m_width,
 						 offset.y + 0.5 * m_labelText->getSize() +
-						 0.5 * static_cast<float>(m_height),
+						 0.5 * m_height,
 						 m_rotation);
 
 	else if(m_alignment == TEXT_ALIGN_LEFT)
 		render->drawText(m_labelText, offset.x,
 						 offset.y + 0.5 * m_labelText->getSize() +
-						 0.5 * static_cast<float>(m_height),
+						 0.5 * m_height,
 						 m_rotation);
 }
 

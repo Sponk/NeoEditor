@@ -1406,13 +1406,13 @@ int StandardRenderer::light_update_thread(void* data)
 
 	   // Aquire lock
 	   scene = engine->getLevel()->getCurrentScene();
-	   OCamera* camera = scene->getCurrentCamera();
+	   OCamera* camera;
 	   
-		if(!camera)
-		{
-			window->sleep(THREAD_SLEEP);
-			continue;
-		}
+	   if(!scene || !(camera = scene->getCurrentCamera()))
+	   {
+		   window->sleep(THREAD_SLEEP);
+		   continue;
+	   }
 	   
 	   CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
 
@@ -1474,9 +1474,9 @@ int StandardRenderer::visibility_thread_mainscene(void* data)
 		// Preparation
 		Level* level = engine->getLevel();
 		Scene* scene = level->getCurrentScene();
-		OCamera* camera = scene->getCurrentCamera();
-
-		if(!camera)
+		OCamera* camera;
+		
+		if(!scene || !(camera = scene->getCurrentCamera()))
 		{
 			window->sleep(THREAD_SLEEP);
 			continue;

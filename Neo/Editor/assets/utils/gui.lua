@@ -56,6 +56,64 @@ local neo2d = NeoLua.Neo2DEngine.getInstance()
 local canvas = neo2d:getCanvas(0)
 canvas:addWidget(neo2d:addWidget(Gui.wm))
 
+function Gui.loadWidget(v, p)
+   if v.type == "Button" then
+	  local btn = NeoLua.ThemedButton(v.x,v.y,v.w,v.h,v.label or "")
+	  
+	  btn:setScriptCallback(v.callback or "")
+	  btn:setUserData(v.userData or 0)
+	  btn:setFontSize(v.fontSize or 12)
+	  p:addWidget(btn)
+	  
+	  return btn
+	  
+   elseif v.type == "InputField" then
+	  local input = NeoLua.ThemedInputField(v.x, v.y, v.w, v.h, v.label or "")
+	  p:addWidget(input)
+	  input:setFontSize(v.fontSize or 12)
+	  
+	  return input
+   elseif v.type == "Label" then
+	  local input = NeoLua.Label(v.x, v.y, v.w, v.h, v.label or "")
+	  p:addWidget(input)
+	  input:setFontSize(v.fontSize or 12)
+	  
+	  return input
+	  
+   elseif v.type == "List" then
+	  local list = NeoLua.List(v.x, v.y, v.w, v.h, v.label or "")
+	  p:addWidget(list)                  
+	  
+	  for k,l in ipairs(v.content) do
+		 list:addEntry(l)
+	  end
+
+	  return list
+   elseif v.type == "Tree" then
+	  local tree = NeoLua.TreeView(v.x, v.y, v.w, v.h, v.label or "")
+	  p:addWidget(tree)
+	  return tree
+	  
+   elseif v.type == "Slider" then
+	  local slider = NeoLua.Slider(v.x, v.y, v.w, v.h, v.range[1] or 0, v.range[2] or 100, v.direction or 0)
+	  slider:setScriptCallback(v.callback or "")
+	  p:addWidget(slider)                  
+	  return slider
+	  
+   elseif v.type == "ScrollPane" then
+	  local scrollPane = NeoLua.ScrollPane(v.x, v.y, v.w, v.h)
+	  
+	  p:addWidget(scrollPane)                  
+	  local retval = {type = "ScrollPane", widget = scrollPane, content = {}}
+	  
+	  for k,l in ipairs(v.content) do
+		 retval.content[v.name] = Gui.loadWidget(l, scrollPane)
+	  end
+
+	  return retval
+   end
+end
+
 function Gui.loadFromTable(t)
   neo2d:setDefaultFontSize(12)
   
@@ -69,9 +127,13 @@ function Gui.loadFromTable(t)
       
       Gui.wm:addWindow(win)
       topLevel[v.name] = content
-    
+
+	  for j,k in ipairs(v.content) do
+		 content[k.name] = Gui.loadWidget(k, win)
+	  end
+	  
       -- Add all contained widgets
-      for i,v in ipairs(v.content) do
+    --[[  for i,v in ipairs(v.content) do
         if v.type == "Button" then
           local btn = NeoLua.ThemedButton(v.x,v.y,v.w,v.h,v.label or "")
           
@@ -112,8 +174,13 @@ function Gui.loadFromTable(t)
           slider:setScriptCallback(v.callback or "")
           win:addWidget(slider)                  
           content[v.name] = slider
-        end
-      end
+        elseif v.type == "ScrollPane" then
+		   local scrollPane = NeoLua.ScrollPane(v.x, v.y, v.w, v.h)
+		   
+		   win:addWidget(scrollPane)                  
+		   content[v.name] = scrollPane
+		end				
+	   end]]
     
     elseif v.type == "MenuBar" then
     

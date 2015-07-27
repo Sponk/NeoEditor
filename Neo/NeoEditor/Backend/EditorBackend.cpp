@@ -499,8 +499,7 @@ void EditorBackend::start(void)
 
         // add renderers
         engine->getRendererManager()->addRenderer(StandardRenderer::getStaticName(), StandardRenderer::getNew);
-        else
-
+        
         // mesh loaders
         engine->getMeshLoader()->addLoader(xmlMeshLoad);
 		engine->getMeshLoader()->addLoader(M_loadBinMesh);
@@ -519,8 +518,9 @@ void EditorBackend::start(void)
 
         // game
         engine->setGame(m_game);
-
+		
         // set default renderer (standard)
+	m_renderer = engine->getRenderer();
         if(m_renderer == NULL)
             m_renderer = new StandardRenderer();
 
@@ -596,8 +596,8 @@ void EditorBackend::clear(void)
     SAFE_DELETE(m_cameraEntity);
     SAFE_DELETE(m_soundEntity);
 
-    // level
     m_level->clear();
+    
     if(m_renderer)
     {
         m_renderer->destroy();

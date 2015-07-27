@@ -16,7 +16,10 @@ Container::~Container()
 void Container::draw()
 {
 	for(Widget* w : m_content)
+	{
+		w->setOffset(m_offset + getPosition());
 		if(w->isVisible()) w->draw();
+	}
 }
 
 void Container::update()
@@ -27,7 +30,7 @@ void Container::update()
 
 		if(w->isVisible())
 		{
-			w->setOffset(getPosition());
+			w->setOffset(m_offset + getPosition());
 			w->update();
 		}
 	}

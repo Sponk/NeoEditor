@@ -149,6 +149,7 @@ int main(int argc, char **argv)
 
 	    	//engine->getGame()->begin();
 			projectFound = true;
+			MLOG_INFO("Found project: " << filename);
 		}
 	}
 
@@ -175,6 +176,7 @@ int main(int argc, char **argv)
 			// This needs to be done in the update thread
 			// engine->getGame()->begin();
 			projectFound = true;
+			MLOG_INFO("Found embedded project: " << projName);
 		}
 		else
 		{
@@ -197,6 +199,7 @@ int main(int argc, char **argv)
 						// This needs to be done in the update thread
 						//engine->getGame()->begin();
 						projectFound = true;
+						MLOG_INFO("Found project: " << filename);
 						break;
 					}
 				}
@@ -210,6 +213,7 @@ int main(int argc, char **argv)
 
 	if(!projectFound)
 	{
+		MLOG_INFO("No project found. Launching empty level.");
 		backend->start();
 		backend->setupEmptyProject();
 	}
