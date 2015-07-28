@@ -23,14 +23,14 @@ return {
 			 direction = NeoLua.SLIDER_VERTICAL},
 
 	  [8] = {name = "scrollpanel", type = "ScrollPane", x = 450,
-			 y = 50, w = 150, h = 150, content = {
+			 y = 50, w = 250, h = 150, content = {
 				[1] = {
 				   name = "label2", type = "Label",
 				   x = 10, y = 10, w = 0, h = 0, label = "Label"
 				},
 
 				[2] = {name = "button2", type = "Button", x = 10, y = 40, w = 100, h = 40, label = "Button"},
-				[3] = {name = "button3", type = "Button", x = 10, y = 150, w = 100, h = 40, label = "Button"}
+				[3] = {name = "button3", type = "Button", x = 10, y = 150, w = 200, h = 40, label = "Es gibt jetzt UTF-8! ÄÖÜß!!!"}
 			 }
 			 
 	  }

@@ -24,6 +24,7 @@
 
 
 #include "../Includes/NeoEngine.h"
+#include <tinyutf8.h>
 
 using namespace Neo;
 
@@ -91,7 +92,7 @@ void OText::setSize(float size)
 void OText::updateLinesOffset(void)
 {
 	Font * font = getFont();
-	const char * text = m_text.getData();
+	unsigned char * text = (unsigned char*) m_text.getData();
 
 	float tabSize = m_size*2;
 	float fontSize = (float)font->getFontSize();
@@ -107,13 +108,18 @@ void OText::updateLinesOffset(void)
 	// clear lines
 	m_linesOffset.clear();
 
+	unsigned int state = 0;
+	unsigned int character;
+
 	if(text)
 	{
 		unsigned int i;
-		unsigned int size = strlen(text);
-		for(i=0; i<size; i++)
+		for(; *text; text++)
 		{
-			if(text[i] == '\n') // return
+			if(utf8_decode(&state, &character, *text) != UTF8_ACCEPT)
+					continue;
+
+			if(character == '\n') // return
 			{
 				switch(m_align)
 				{
@@ -134,21 +140,19 @@ void OText::updateLinesOffset(void)
 				continue;
 			}
 			
-			if(text[i] == '\t') // tab
+			if(character == '\t') // tab
 			{
 				int tab = (int)(xc / tabSize) + 1;
 				xc = tab*tabSize;
 				continue;
 			}
-			
-			// get character
-			unsigned int charCode = (unsigned int)((unsigned char)text[i]);
-			Character * character = font->getCharacter(charCode);
-			if(! character)
+
+			Character * c = font->getCharacter(character);
+			if(!c)
 				continue;
 			
-			Vector2 scale = character->getScale();
-			Vector2 offset = character->getOffset() * m_size;
+			Vector2 scale = c->getScale();
+			Vector2 offset = c->getOffset() * m_size;
 			
 			float width = scale.x * widthFactor * m_size;
 			
@@ -162,7 +166,7 @@ void OText::updateLinesOffset(void)
 				max = charMax;
 			
 			//move to next character
-			xc += character->getXAdvance() * m_size;
+			xc += c->getXAdvance() * m_size;
 		}
 	}
 
@@ -200,14 +204,14 @@ void OText::updateLinesOffset(void)
 void OText::prepare(void)
 {
 	Font * font = getFont();
-	const char * text = m_text.getData();
+	unsigned char * text = (unsigned char*) m_text.getData();
 	if(! text)
 	{
 		m_boundingBox = Box3d();
 		return;
 	}
 	
-	if(! (strlen(text) > 0 && font)){
+	if(! (strlen((const char*) text) > 0 && font)){
 		m_boundingBox = Box3d();
 		return;
 	}
@@ -222,19 +226,24 @@ void OText::prepare(void)
     float widthFactor = font->getTextureWidth() / fontSize;
 	float heightFactor = font->getTextureHeight() / fontSize;
 	float xc = 0, yc = 0;
-		
+
+	unsigned int state = 0;
+	unsigned int charCode;
+
 	unsigned int i;
-	unsigned int size = strlen(text);
-	for(i=0; i<size; i++)
+	for(; *text; text++)
 	{
-		if(text[i] == '\n') // return
+		if(utf8_decode(&state, &charCode, *text) != UTF8_ACCEPT)
+			continue;
+
+		if(charCode == '\n') // return
 		{
 			yc += m_size;
 			xc = 0;
 			continue;
 		}
 
-		if(text[i] == '\t') // tab
+		if(charCode == '\t') // tab
 		{
 			int tab = (int)(xc / tabSize) + 1;
 			xc = tab*tabSize;
@@ -242,7 +251,6 @@ void OText::prepare(void)
 		}
 
 		// get character
-		unsigned int charCode = (unsigned int)((unsigned char)text[i]);
 		Character * character = font->getCharacter(charCode);
 		if(! character)
 			continue;

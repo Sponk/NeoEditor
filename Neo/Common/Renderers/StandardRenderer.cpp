@@ -28,9 +28,7 @@
 #include <StandardRenderer.h>
 #include <Window/Window.h>
 #include <string>
-
-//#include <codecvt>
-//#include <locale>
+#include <tinyutf8.h>
 
 #ifndef SHADER_PATH
 #define SHADER_PATH "./"
@@ -1014,6 +1012,11 @@ void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera)
 
 void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 {
+	const char* text = textObj->getText();
+
+	if(!text || strlen(text) == 0)
+		return;
+
 	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
 	Font* font = textObj->getFont();
 
@@ -1058,9 +1061,6 @@ void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 
 	render->sendUniformVec3(m_fx[0], "Diffuse", textObj->getColor());
 
-	const char* text = textObj->getText();
-	size_t length = strlen(text);
-
 	Character* c;
 	Vector2 scale;
 	Vector2 pos;
@@ -1089,10 +1089,17 @@ void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 	/*std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> utf16conv;
     std::u32string unicodeStr = utf16conv.from_bytes(text);
 	length = unicodeStr.length();*/
+
+	unsigned int state = 0;
+	unsigned int character;
+	unsigned char* s = (unsigned char*) text;
 	
-	for (int i = 0; i < length; i++)
+	for(; *s; s++)
 	{
-		if (text[i] == '\n')
+		if(utf8_decode(&state, &character, *s) != UTF8_ACCEPT)
+			continue;
+
+		if (character == '\n')
 		{
 			line++;
 			lineOffset = (*linesOffset)[line];
@@ -1102,14 +1109,14 @@ void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 			continue;
 		}
 
-		if(text[i] == '\t')
+		if(character == '\t')
 		{
 			unsigned int tab = static_cast<unsigned int>(xpos / tabsize) + 1;
 			xpos = tab*tabsize;
 			continue;
 		}
-
-		c = font->getCharacter(text[i]);
+		
+		c = font->getCharacter(character);
 
 		if (!c)
 			continue;
