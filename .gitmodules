@@ -1,6 +1,0 @@
-[submodule "Tests/tllut"]
-	path = Tests/tllut
-	url = http://213.136.90.196:82/yp81zewe/tiny-little-lua-unit-testing-tllut.git
-[submodule "Neo/Editor/assets/tests/tllut"]
-	path = Neo/Editor/assets/tests/tllut
-	url = http://213.136.90.196:82/yp81zewe/tiny-little-lua-unit-testing-tllut.git
