@@ -80,7 +80,12 @@ public:
 	Vector2 getRange() { return m_range; }
 	void setRange(Vector2 range) { m_range = range; }
 
-	void setValue(float value) { m_value = value; }
+	void setValue(float value)
+	{
+		float length = (m_direction == SLIDER_HORIZONTAL) ? m_width : m_height;
+		m_value = MAX(m_range.x, MIN(value, m_range.y - length));
+	}
+
 	float getValue() { return m_value; }
 
 	void draw(Vector2 offset);

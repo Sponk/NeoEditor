@@ -56,16 +56,29 @@ void ScrollPane::update()
 	SystemContext* system = engine->getSystemContext();
 	InputContext* input = engine->getInputContext();
 
-	Vector2 sz = calculateContentSize();
-	m_horizontal->setRange(Vector2(m_width, MAX(m_width, sz.x)));
-	m_vertical->setRange(Vector2(m_height, MAX(m_height, sz.y)));
+	Vector2 offset = m_offset + getPosition();
+	unsigned int x = 0;
+	unsigned int y = 0;
+	Vector2 res = system->getScreenSize();
+	x = input->getAxis("MOUSE_X") * res.x;
+	y = input->getAxis("MOUSE_Y") * res.y;
 	
+	Vector2 sz = calculateContentSize();
+	m_horizontal->setRange(Vector2(0, MAX(m_width, sz.x)));
+	m_vertical->setRange(Vector2(0, MAX(m_height, sz.y)));
+
+	float scrollWheel = input->getAxis("MOUSE_WHEEL") * 10.0;
 	Vector2 curValue = calculateValue();
 
 	m_horizontal->setOffset(m_offset);
 	m_vertical->setOffset(m_offset);
 	
 	m_horizontal->update();
+
+	if (x >= offset.x && x <= offset.x + m_width
+		&& y >= offset.y && y <= offset.y + m_height)
+		m_vertical->setValue(m_vertical->getValue() - scrollWheel);
+
 	m_vertical->update();
 
 	for(Widget* w : m_content)

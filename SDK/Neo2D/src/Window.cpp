@@ -7,6 +7,8 @@ using namespace Neo;
 using namespace Neo2D;
 using namespace Neo2D::Gui;
 
+#define BORDER_WIDTH 3
+
 Window::~Window()
 {
 	for(Widget* w : m_content)
@@ -49,6 +51,12 @@ void Window::draw()
 	// Draw body
 	render->drawColoredQuad(m_x, m_y, m_width, m_height, Vector4(0.8, 0.8, 0.82, 1.0), 0.0);
 
+	// Draw borders
+	render->drawColoredQuad(m_x, m_y, BORDER_WIDTH, m_height+BORDER_WIDTH, Vector4(0.2, 0.2, 0.2, 1.0), 0.0);
+	render->drawColoredQuad(m_x+m_width-BORDER_WIDTH, m_y, BORDER_WIDTH, m_height+BORDER_WIDTH, Vector4(0.2, 0.2, 0.2, 1.0), 0.0);
+	render->drawColoredQuad(m_x, m_y+m_height, m_width, BORDER_WIDTH, Vector4(0.2, 0.2, 0.2, 1.0), 0.0);
+
+	
 	render->set2D(m_width, m_height);
 	renderContext->setViewport(m_x, res.y - (m_y + m_height), m_width, m_height);
 

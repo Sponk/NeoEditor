@@ -177,13 +177,13 @@ void InputField::update()
 		m_state = INPUT_NORMAL_STATE;
 	}
 	else if (!(x >= wx && x <= wx + m_width && y >= wy &&
-		y <= wy + m_height) &&
-			 m_state == INPUT_SELECTED_STATE && input->isKeyPressed("MOUSE_BUTTON_LEFT"))
+			   y <= wy + m_height) &&
+			 m_state == INPUT_SELECTED_STATE && input->onKeyDown("MOUSE_BUTTON_LEFT"))
 	{
 		m_state = INPUT_NORMAL_STATE;
 	}
 
-	if (m_state == INPUT_HOVER_STATE && input->isKeyPressed("MOUSE_BUTTON_LEFT"))
+	if (m_state == INPUT_HOVER_STATE && input->onKeyDown("MOUSE_BUTTON_LEFT"))
 	{
 		m_cursorpos = m_label.length();
 		m_state = INPUT_SELECTED_STATE;
