@@ -39,6 +39,7 @@
 #include <Window/Keyboard.h>
 #include <Window/Mouse.h>
 #include <Window/WinEvents.h>
+#include <tinyutf8.h>
 
 //#include <codecvt>
 
@@ -61,9 +62,16 @@ float InputField::calculateWidth(OText* text)
 	Font* font = text->getFontRef()->getFont();
 	map<unsigned int, Character>* chars = font->getCharacters();
 
-	const char* s = text->getText();
+	unsigned int state = 0;
+	unsigned int character;
+	unsigned char* s = (unsigned char*) text->getText();
 	while(*s)
-		length += ((*chars)[*(s++)]).getXAdvance();
+	{
+		if(utf8_decode(&state, &character, *s) == UTF8_ACCEPT)
+			length += ((*chars)[character]).getXAdvance();
+
+		s++;
+	}
 	
 	return length * text->getSize();
 }
@@ -222,14 +230,18 @@ void InputField::update()
 
 		if (c != '\0')
 		{
+			char character[5];
 			string prefix = m_label;
 			prefix.erase(m_cursorpos);
 						
 			string postfix = m_label.substr(m_cursorpos);
-			//m_label = prefix + ((char*)&c)[0] + ((char*)&c)[1] + ((char*)&c)[2] + postfix;
-			m_label = prefix + (char) c + postfix;			
+
+			unsigned int state = 0;
+			unsigned int codepoint;
+			unsigned int result;
 			
-			m_cursorpos++;
+			m_label = prefix + (const char*) &c + postfix;
+			m_cursorpos += strlen((const char*) &c);
 		}
 	}
 

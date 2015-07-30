@@ -270,7 +270,7 @@ void NeoWindow::setFullscreen(bool fullscreen)
 #endif
 	m_fullscreen = fullscreen;
 }
-#include <NeoEngine.h>
+
 void NeoWindow::sendEvents(MWinEvent * event)
 {
 	MKeyboard * keyboard = MKeyboard::getInstance();
@@ -380,7 +380,8 @@ bool NeoWindow::onEvents(void)
 			case SDL_TEXTINPUT:
 			{
 				mevent.type = MWIN_EVENT_CHAR;
-				mevent.data[0] = *(int*) &(event.text.text);
+				strncpy((char*) &mevent.data[0], event.text.text, 4);
+				//mevent.data[0] = *(unsigned int*) &(event.text.text);
 				sendEvents(&mevent);
 				break;
 			}

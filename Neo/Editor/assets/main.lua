@@ -2,38 +2,37 @@
 require("NeoLua")
 
 dofile("utils/utils.lua")
+dofile("utils/translator.lua")
 dofile("utils/gui.lua")
+dofile("utils/neo-extensions.lua")
+dofile("settings.lua")
 
-local demo = dofile("widget-demo.lua")
-local demo = Gui.loadFromTable(demo)
+local runTests = true
+local testUi = true
 
-local tree = demo["demo-window"]["tree"]
-local model = tree:getTreeModel()
+NeoLua.updateEasyAccess()
 
-local elem1 = model:addChild("Element1")
-model:addChild("Element2")
-local elem3 = model:addChild("Element3")
+if testUi then
+   NeoLua.engine:loadLevel(Settings.startLevel)
+   dofile("editor/tests/generate-test-ui.lua")
 
-elem1:addChild("Child1")
-elem1:addChild("Child2")
-elem1:addChild("Child3")
-
-local child6 = elem3:addChild("Child6")
-elem3:addChild("Child7")
-
-child6:addChild("SubChild1")
-child6:addChild("SubChild2")
-child6:addChild("SubChild3")
-
-tree:setScriptCallback("treeCallback")
-function treeCallback()
-  infoLog("Tree selection changed: " .. tree:getSelected())
+   Gui.messageBox("Title", "THIS IS A MESSAGE")
 end
 
-function sliderCallback()
-  demo["demo-window"]["label"]:setLabel("Slider: " .. demo["demo-window"]["slider"]:getValue())
+if runTests then
+   dofile("editor/tests/tests.lua")
 end
 
+-- Load the actual game
+dofile("game.lua")
+local gameUpdate = update
+
+--- The update function for the editor
+-- Calls the game update if the game is running
 function update(dt)
-
+   NeoLua.updateEasyAccess()
+   
+   if Settings.gameRunning and gameUpdate ~= nil then
+	  gameUpdate(dt)
+   end
 end
