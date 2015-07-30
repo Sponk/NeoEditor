@@ -235,10 +235,6 @@ void InputField::update()
 			prefix.erase(m_cursorpos);
 						
 			string postfix = m_label.substr(m_cursorpos);
-
-			unsigned int state = 0;
-			unsigned int codepoint;
-			unsigned int result;
 			
 			m_label = prefix + (const char*) &c + postfix;
 			m_cursorpos += strlen((const char*) &c);
