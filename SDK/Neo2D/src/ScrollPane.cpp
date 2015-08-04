@@ -30,12 +30,10 @@ void ScrollPane::draw(Vector2 offset)
 	// renderContext->enableStencilTest();
 	
 	render->drawColoredQuad(m_x, m_y, m_width, m_height, Vector4(1, 1, 1, 1), 0.0);
-	m_horizontal->draw(Vector2());
-	m_vertical->draw(Vector2());
 	
 	//render->set2D(m_width, m_height);
 	//renderContext->setViewport(offset.x, res.y - (offset.y + m_height), m_width, m_height);
-	renderContext->setScissor(offset.x, res.y - (offset.y + m_height), m_width, m_height);
+	renderContext->setScissor(offset.x, res.y - (offset.y + m_height), m_width-SCROLL_BAR_WIDTH, m_height);
 	renderContext->enableScissorTest();
 	
 	for(Widget* w : m_content)
@@ -44,6 +42,9 @@ void ScrollPane::draw(Vector2 offset)
 	}
 	
 	renderContext->disableScissorTest();
+
+	m_horizontal->draw(Vector2());
+	m_vertical->draw(Vector2());
 	// renderContext->disableStencilTest();
 
 	//render->set2D(res.x, res.y);
@@ -62,11 +63,9 @@ void ScrollPane::update()
 	Vector2 res = system->getScreenSize();
 	x = input->getAxis("MOUSE_X") * res.x;
 	y = input->getAxis("MOUSE_Y") * res.y;
-	
-	Vector2 sz = calculateContentSize();
-	m_horizontal->setRange(Vector2(0, MAX(m_width, sz.x)));
-	m_vertical->setRange(Vector2(0, MAX(m_height, sz.y)));
 
+	positionScrollBars();
+	
 	float scrollWheel = input->getAxis("MOUSE_WHEEL") * 10.0;
 	Vector2 curValue = calculateValue();
 

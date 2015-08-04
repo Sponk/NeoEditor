@@ -46,23 +46,26 @@ using namespace Gui;
 
 void TreeView::update()
 {
-	NeoEngine* engine = NeoEngine::getInstance();
-	InputContext* input = engine->getInputContext();
-
-	if(m_label == nullptr)
-	{
-		m_label = new Label(0,0,BUTTON_SIZE,BUTTON_SIZE,"");
-		m_label->setColor(Vector4(0,0,0,1));
-	}
-
 	Vector2 level(0,-1);
 	updateTree(&m_root, &level);
+
+	if(m_autoSize)
+	{
+		m_width = getParent()->getSize().x;
+		m_height = level.y * LINE_HEIGHT;
+	}
 }
 
 void TreeView::draw(Vector2 offset)
 {
 	Render* render = Render::getInstance();
 	Neo2DEngine* gui = Neo2DEngine::getInstance();
+
+	if(m_label == nullptr)
+	{
+		m_label = new Label(0,0,BUTTON_SIZE,BUTTON_SIZE,"");
+		m_label->setColor(Vector4(0,0,0,1));
+	}
 
 	m_offset = offset + getPosition();
 	render->drawColoredQuad(m_offset.x, m_offset.y, m_width, m_height, Vector4(1,1,1,1));
@@ -71,19 +74,13 @@ void TreeView::draw(Vector2 offset)
 	drawTree(&m_root, &level);
 }
 
-void TreeView::treeCallback(Widget* w, long int data)
-{
-	TreeNode<std::string>* node = (TreeNode<std::string>*) data;
-	node->setOpen(!node->isOpen());
-}
-
 void TreeView::updateTree(TreeNode<std::string>* root, Vector2* level)
 {
 	if(root == nullptr)
 		return;
 
 	Vector2 pos = Vector2(m_x + m_offset.x, m_y + m_offset.y) + *level * LINE_HEIGHT;
-	m_label->setPosition(pos + Vector2(LINE_HEIGHT, 0));
+	//m_label->setPosition(pos + Vector2(LINE_HEIGHT, 0));
 
 	if(level->x > 0)
 	{
@@ -97,9 +94,6 @@ void TreeView::updateTree(TreeNode<std::string>* root, Vector2* level)
 		x = input->getAxis("MOUSE_X") * res.x;
 		y = input->getAxis("MOUSE_Y") * res.y;
 
-		unsigned int wx = m_offset.x + m_x;
-		unsigned int wy = m_offset.y + m_y;
-
 		if(x <= pos.x + BUTTON_SIZE && x >= pos.x
 			&& y <= pos.y + BUTTON_SIZE && y >= pos.y &&
 			input->onKeyDown("MOUSE_BUTTON_LEFT"))
@@ -107,14 +101,17 @@ void TreeView::updateTree(TreeNode<std::string>* root, Vector2* level)
 			root->setOpen(!root->isOpen());
 		}
 		else if(x <= pos.x + m_width && x >= pos.x
-				&& y <= pos.y + LINE_HEIGHT && y >= pos.y &&
-				input->onKeyDown("MOUSE_BUTTON_LEFT"))
+				&& y <= pos.y + LINE_HEIGHT && y >= pos.y
+				&& input->onKeyDown("MOUSE_BUTTON_LEFT"))
 		{
 			m_selected = root;
 			doCallback();
 		}
 
-		m_label->update();
+		// MLOG_INFO("x: " << pos.x << " y: " << pos.y << " mx: " << x << " my: " << y << " width: " << m_width);
+
+		if(m_label)
+			m_label->update();
 	}
 
 	level->y++;

@@ -78,7 +78,7 @@ bool M_loadFont(const char * filename, void * data)
 	unsigned int width = 1024;
 	unsigned int height = 0;
 
-	unsigned int flags = FT_LOAD_RENDER;
+	unsigned int flags = FT_LOAD_RENDER; // | FT_LOAD_NO_HINTING;
 	
 	// Turn font size from float to uint
 	font->setFontSize(size);
@@ -244,7 +244,7 @@ bool M_loadFont(const char * filename, void * data)
 	render->bindTexture(textureId);
     render->setTextureUWrapMode(WRAP_CLAMP);
     render->setTextureVWrapMode(WRAP_CLAMP);
-    render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
+    render->setTextureFilterMode(TEX_FILTER_LINEAR, TEX_FILTER_LINEAR);
 	render->sendTextureImage(&image, 0, 1, 0);
 
 	// finish

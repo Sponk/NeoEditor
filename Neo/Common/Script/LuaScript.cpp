@@ -528,7 +528,8 @@ bool LuaScript::startCallFunction(const char* name)
 		if(!lua_isfunction(m_state, -1))
 		{
 			lua_pop(m_state, 1);
-			m_isRunning = false;
+			m_isRunning = false;			
+			MLOG_ERROR("Lua function '" << name << "' not found!");
 			return false;
 		}
 		return true;

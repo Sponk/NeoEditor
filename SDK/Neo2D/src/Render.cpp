@@ -236,7 +236,6 @@ void Render::drawTexturedQuad(float x, float y, float w, float h, int texture,
 {
 
 	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
-
 	if (m_texturedFx == 0)
 	{
 		loadShader(m_texturedVertShader, m_texturedFragShader, &m_texturedFx);
@@ -395,7 +394,7 @@ void Render::drawText(OText* text, float x, float y, float rotation)
 	RenderingContext* renderContext =
 		NeoEngine::getInstance()->getRenderingContext();
 
-	text->setPosition(Vector3(x, y, 0));
+	text->setPosition(Vector3(floor(x), floor(y), 0));
 	text->setRotation(Quaternion(0, 0, rotation));
 	text->updateMatrix();
 

@@ -402,8 +402,8 @@ vec4 TextShader(vec3 position, vec3 n)
 	w += step(0.3, texture2D(Textures[0], texCoord - vec2(0.0, size)).w);
 	w *= 0.2;*/
 	
-	float afwidth = smooth * SQRT2 / (2.0*gl_FragCoord.w);
-	float alpha = smoothstep(THRESHOLD-afwidth, THRESHOLD+afwidth, length(gl_FragCoord.xyz));
+	// float afwidth = smooth * SQRT2 / (2.0*gl_FragCoord.w);
+	// float alpha = smoothstep(THRESHOLD-afwidth, THRESHOLD+afwidth, length(gl_FragCoord.xyz));
 	return vec4(Diffuse, 1.0) * texture2D(Textures[0], texCoord); //mix(texture2D(Textures[0], texCoord), vec4(Diffuse, 1.0), 0.5);
 }
 

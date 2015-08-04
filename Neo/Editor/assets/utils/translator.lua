@@ -22,8 +22,17 @@ function translator.swapTranslation(name)
    translator.currentTranslation = translator.translations[name]
 end
 
+function translator.printTranslations()
+    for k,v in pairs(translator.translations) do
+      printTable(v)
+      print("*****************************************************")
+    end
+end
+
 function tr(str)
-   return translator.currentTranslation[str] or str
+   local str = translator.currentTranslation[str] or str
+   
+   return str:gsub("\\n", "\n")
 end
 
 return translator

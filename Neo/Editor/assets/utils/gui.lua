@@ -79,6 +79,12 @@ function Gui.loadWidget(v, p)
 	  input:setFontSize(v.fontSize or 12)
 	  
 	  return input
+
+   elseif v.type == "Sprite" then
+          local sprite = NeoLua.Sprite(v.x, v.y, v.w, v.h, v.file, v.label or "")
+          p:addWidget(sprite)
+
+          return input
 	  
    elseif v.type == "List" then
 	  local list = NeoLua.List(v.x, v.y, v.w, v.h, v.label or "")
@@ -104,10 +110,21 @@ function Gui.loadWidget(v, p)
 	  local scrollPane = NeoLua.ScrollPane(v.x, v.y, v.w, v.h)
 	  
 	  p:addWidget(scrollPane)                  
-	  local retval = {type = "ScrollPane", widget = scrollPane, content = {}}
+	  local retval = {type = "ScrollPane", widget = scrollPane}
 	  
 	  for k,l in ipairs(v.content) do
-		 retval.content[v.name] = Gui.loadWidget(l, scrollPane)
+		 retval[l.name] = Gui.loadWidget(l, scrollPane)
+	  end
+
+	  return retval
+   elseif v.type == "ScaleLayout" then
+	  local layout = NeoLua.ScaleLayout(v.x, v.y, v.w, v.h)
+	  
+	  p:addWidget(layout)                  
+	  local retval = {type = "ScaleLayout", widget = layout}
+	  
+	  for k,l in ipairs(v.content) do
+		 retval[l.name] = Gui.loadWidget(l, layout)
 	  end
 
 	  return retval

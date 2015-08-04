@@ -104,6 +104,9 @@ protected:
 	/// The flip vector
 	Vector2 m_flip;
 	float m_fontSize;
+
+	Widget* m_parent;
+	
 private:
 	/**
 	 * @brief Does nothing.
@@ -124,6 +127,9 @@ public:
 		   unsigned int height, const char* label);
 	Widget();
 
+	void setParent(Widget* w) { m_parent = w; }
+	Widget* getParent() { return m_parent; }
+	
 	float getFontSize() { return m_fontSize; }
 	void setFontSize(float s) { m_fontSize = s; }
 

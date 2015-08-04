@@ -205,13 +205,13 @@ void OText::prepare(void)
 {
 	Font * font = getFont();
 	unsigned char * text = (unsigned char*) m_text.getData();
-	if(! text)
+	if(!text)
 	{
 		m_boundingBox = Box3d();
 		return;
 	}
 	
-	if(! (strlen((const char*) text) > 0 && font)){
+	if(!(strlen((const char*) text) > 0 && font)){
 		m_boundingBox = Box3d();
 		return;
 	}

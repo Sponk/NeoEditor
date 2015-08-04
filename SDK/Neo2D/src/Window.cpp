@@ -142,5 +142,9 @@ void Window::update()
 		m_state = WINDOW_RESIZING_STATE;
 	}
 
-	Container::update();
+	// Only update content if the window is selected
+	if(m_wm->getSelectedWindow() == this
+		&& m_state != WINDOW_GRABBED_STATE)
+
+		Container::update();
 }

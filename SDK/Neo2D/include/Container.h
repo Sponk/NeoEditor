@@ -31,7 +31,11 @@ class NEO2D_EXPORT Container : public Widget
 				
         ~Container();
 
-		DISOWN(Widget* w) void addWidget(Widget* w) { m_content.push_back(w); }
+		DISOWN(Widget* w) void addWidget(Widget* w)
+		{
+			w->setParent(this);
+			m_content.push_back(w);
+		}
 
 		void draw();
 		void draw(Vector2 offset) { draw(); }

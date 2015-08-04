@@ -79,3 +79,8 @@ unsigned long MWinContext::getSystemTick(void)
 	NeoWindow * window = NeoWindow::getInstance();
 	return window->getSystemTick();
 }
+
+void MWinContext::setWindowTitle(const char* title)
+{
+	NeoWindow::getInstance()->setTitle(title);
+}

@@ -7,6 +7,7 @@
 #include <vector>
 
 #define m_scrollWidth 1
+#define SCROLL_BAR_WIDTH 10
 
 namespace Neo2D
 {
@@ -23,6 +24,20 @@ class NEO2D_EXPORT ScrollPane : public Container
 {
 	ScrollBar* m_horizontal;
 	ScrollBar* m_vertical;
+
+	void positionScrollBars()
+	{		
+		// Update scale and position
+		m_horizontal->setSize(m_width - SCROLL_BAR_WIDTH, 1);
+		m_vertical->setSize(1, m_height - SCROLL_BAR_WIDTH);
+
+		m_horizontal->setPosition(Vector2(m_x, m_y+m_height-SCROLL_BAR_WIDTH));
+		m_vertical->setPosition(Vector2(m_x + m_width - SCROLL_BAR_WIDTH, m_y));
+
+		Vector2 sz = calculateContentSize();
+		m_horizontal->setRange(Vector2(0, MAX(m_width - SCROLL_BAR_WIDTH, sz.x)));
+		m_vertical->setRange(Vector2(0, MAX(m_height - SCROLL_BAR_WIDTH, sz.y)));
+	}
 	
 	public:
 		ScrollPane(unsigned int x, unsigned int y, unsigned int width,
@@ -33,6 +48,7 @@ class NEO2D_EXPORT ScrollPane : public Container
 									  width, m_scrollWidth, 0, 100, SLIDER_HORIZONTAL);
 			
 			m_vertical = new ScrollBar(x + width, y, m_scrollWidth, height, 0, 100, SLIDER_VERTICAL);
+			positionScrollBars();
 		}
 
 		~ScrollPane();
@@ -45,6 +61,8 @@ class NEO2D_EXPORT ScrollPane : public Container
 		Vector2 calculateValue() { return getPosition() - Vector2(floor(m_horizontal->getValue()), floor(m_vertical->getValue())); }
 
 		Vector2 calculateContentSize();
+
+		Vector2 getSize() { return Vector2(m_width - SCROLL_BAR_WIDTH, m_height - SCROLL_BAR_WIDTH); }
 };
 
 }

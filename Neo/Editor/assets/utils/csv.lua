@@ -1,5 +1,6 @@
 --- csv.lua - A collection of tools to read and parse CSV files into Lua tables
 
+local utf8 = require("lua-utf8")
 local csv = {}
 
 --- Reads the content of a text file and returns it as a string
@@ -31,13 +32,15 @@ end
 -- @return The table with the key value pairs
 function csv.parseString(str, delim)
    local retval = {}
-
-   local lines = string.gmatch(str, "([^\n]+)")
+   
+   -- old: "(%w+)" .. delim .. "(%w+)"
+   local pattern = "([%w_ ]+)" .. delim .. "([%w_ %\\%p]+)"
+   local lines = utf8.gmatch(str, "([^\n]+)")
    for k,v in lines do
-	  local values = string.gmatch(str, "(%w+)" .. delim .. "(%w+)")
-	 for i,j in values do
-		retval[i] = j
-	 end
+	   local values = utf8.gmatch(str, pattern)
+  	 for i,j in values do
+  		retval[i] = j
+  	 end
    end
    
    return retval

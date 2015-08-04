@@ -49,6 +49,9 @@ public:
 
 	// system tick
 	virtual unsigned long getSystemTick(void) = 0;
+
+	// changing the window title
+	virtual void setWindowTitle(const char* title) = 0;
 };
 }
 #endif

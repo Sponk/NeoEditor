@@ -56,8 +56,6 @@ void Sprite::draw(Vector2 offset)
 {
 	Render* render = Render::getInstance();
 	Neo2DEngine* gui = Neo2DEngine::getInstance();
-	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
-	Level* level = NeoEngine::getInstance()->getLevel();
 
 	if (m_labelText == NULL)
 	{

@@ -51,6 +51,8 @@ public:
 
 	// system tick
 	unsigned long getSystemTick(void);
+
+	void setWindowTitle(const char* title);
 };
 }
 #endif

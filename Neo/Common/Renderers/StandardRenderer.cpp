@@ -1068,8 +1068,8 @@ void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 	float fontSize = font->getFontSize();
 	float size = textObj->getSize();
 	float tabsize = size * 2.0f;
-    float widthFactor = static_cast<float>(font->getTextureWidth()) / fontSize;
-	float heightFactor = static_cast<float>(font->getTextureHeight()) / fontSize;
+    float widthFactor = font->getTextureWidth() / fontSize;
+	float heightFactor = font->getTextureHeight() / fontSize;
 
 	float xpos = 0;
 	float ypos = 0;
@@ -1124,7 +1124,10 @@ void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 		pos = c->getPos();
 		scale = c->getScale();
 		offset = c->getOffset() * size;
-		offset.x += lineOffset;
+
+		// Round to keep the text pixel aligned when doing
+		// 2D rendering. Should not affect 3D text much.
+		offset.x += floor(lineOffset);
 
 		texCoords[0] = Vector2(pos.x, pos.y + scale.y);
 		texCoords[1] = Vector2(pos.x + scale.x, pos.y + scale.y);
@@ -1490,6 +1493,12 @@ int StandardRenderer::visibility_thread_mainscene(void* data)
 		}
 
 		CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
+
+		if(!data)
+		{
+			window->sleep(THREAD_SLEEP);
+			continue;
+		}
 
 		camera->enable();
 		camera->getFrustum()->makeVolume(camera);

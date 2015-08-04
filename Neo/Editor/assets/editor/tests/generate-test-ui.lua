@@ -27,3 +27,5 @@ end
 function sliderCallback()
   demo["demo-window"]["label"]:setLabel("Slider: " .. demo["demo-window"]["slider"]:getValue())
 end
+
+tree:setAutoSize(false)

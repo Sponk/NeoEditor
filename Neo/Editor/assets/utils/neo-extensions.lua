@@ -12,3 +12,9 @@ function NeoLua.updateEasyAccess()
    NeoLua.system = NeoLua.engine:getSystemContext()
 end
 
+function NeoLua.sleep(time)
+  local endtime = NeoLua.system:getSystemTick() + time
+  while NeoLua.system:getSystemTick() < endtime do end
+end
+
+NeoLua.updateEasyAccess()

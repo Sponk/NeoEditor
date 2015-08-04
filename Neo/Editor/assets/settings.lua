@@ -3,3 +3,4 @@
 Settings = {}
 Settings.startLevel = "assets/levels/test.level"
 Settings.gameRunning = true
+Settings.editorEnabled = true

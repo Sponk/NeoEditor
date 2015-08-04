@@ -25,6 +25,7 @@
 	
 #include <Slider.h>
 #include <ScrollPane.h>
+#include <ScaleLayout.h>
 	
 	using namespace Neo;
 	using namespace Neo2D;
@@ -109,6 +110,8 @@
 
 %include <Slider.h>
 %include <ScrollPane.h>
+
+%include <ScaleLayout.h>
 
 //  Some pointer stuff
 %pointer_class(int, intp);

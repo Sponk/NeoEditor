@@ -47,7 +47,7 @@ Button::Button(unsigned int x, unsigned int y, unsigned int width,
 	  m_labelText(NULL),
 	  m_state(BUTTON_NORMAL_STATE),
 	  m_alignment(TEXT_ALIGN_CENTER),
-	  m_fontSize(11)
+	  m_fontSize(12)
 {
 }
 
