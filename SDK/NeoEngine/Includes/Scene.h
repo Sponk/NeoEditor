@@ -255,6 +255,8 @@ public:
 	inline void setCurrentCameraId(unsigned int id){ m_currentCamera = id; }
 	inline unsigned int getCurrentCameraId(void){ return m_currentCamera; }
 
+	void setCurrentCamera(OCamera* c);
+
     /**
      * @brief Returns the currently active camera from this scene.
      *

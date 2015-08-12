@@ -50,7 +50,7 @@ public:
 public:
 
 	// type
-	int getType(void){ return M_OBJECT3D_BONE; }
+	int getType(void){ return OBJECT3D_BONE; }
 
 	// childs linking
 	void processChildrenLinking(void);

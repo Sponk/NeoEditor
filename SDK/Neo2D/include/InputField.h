@@ -57,6 +57,13 @@ enum INPUT_STATE
 	INPUT_SELECTED_STATE
 };
 
+enum INPUT_TYPE
+{
+	NORMAL_INPUT = 0,
+	DECIMAL_INPUT,
+	INTEGER_INPUT
+};
+
 /**
  * @brief Implements a basic input field that takes keyboard input and
  * delivers it to the program.
@@ -70,6 +77,9 @@ protected:
 	INPUT_STATE m_state;
 	unsigned int m_cursorpos;
 	
+	INPUT_TYPE m_inputType;
+	bool m_multiline;
+
 	void updateLabel(string s);
 
 	/**
@@ -77,7 +87,8 @@ protected:
 	 * @param text The text object to operate on.
 	 * @return The full width in pixels
 	 */
-	float calculateWidth(OText* text);
+	Vector2 calculateCursorPos(OText* text, int pos = -1);
+	void addChar(unsigned int c);
 	
 public:
 	InputField(unsigned int x, unsigned int y, unsigned int width,
@@ -88,6 +99,14 @@ public:
 
 	void setState(INPUT_STATE state) { m_state = state; }
 	const char* getStaticName() { return "InputField"; }
+
+	void setLabel(const char* str) { m_cursorpos = 0; Widget::setLabel(str); }
+
+	INPUT_TYPE getType() { return m_inputType; }
+	void setType(INPUT_TYPE t) { m_inputType = t; }
+
+	bool isMultiline() { return m_multiline; }
+	void setMultiline(bool b) { m_multiline = b; }
 };
 }
 }

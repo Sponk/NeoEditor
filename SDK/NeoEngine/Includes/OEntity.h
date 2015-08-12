@@ -178,8 +178,12 @@ private:
 	bool m_isOccluder;
 
 	bool m_hasTransparency;
+	bool m_wireframe;
 	
 public:
+
+	bool hasWireframe() { return m_wireframe; }
+	void enableWireframe(bool v) { m_wireframe = v; }
 
 	bool hasTransparency() { return m_hasTransparency; }
 
@@ -231,7 +235,7 @@ public:
 	inline bool isOccluder() { return m_isOccluder; }
 
 	// type
-	virtual int getType(void) { return M_OBJECT3D_ENTITY; }
+	virtual int getType(void) { return OBJECT3D_ENTITY; }
 	virtual void setActive(bool active);
 
 	/**

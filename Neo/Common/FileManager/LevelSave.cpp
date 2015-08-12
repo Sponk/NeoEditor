@@ -550,7 +550,7 @@ bool xmlLevelSave(Level * level, const char * filename)
 
             switch(object->getType())
             {
-            case M_OBJECT3D:
+            case OBJECT3D:
                     openAttributeNode(file, "Group", 2);
                     writeString(file, "name", object->getName());
                     M_fprintf(file, ">\n");
@@ -560,7 +560,7 @@ bool xmlLevelSave(Level * level, const char * filename)
                     M_fprintf(file, "\n");
                 break;
 
-            case M_OBJECT3D_LIGHT: {
+            case OBJECT3D_LIGHT: {
 
                 OLight* light = static_cast<OLight*>(object);
 
@@ -583,7 +583,7 @@ bool xmlLevelSave(Level * level, const char * filename)
                 }
                 break;
 
-            case M_OBJECT3D_CAMERA: {
+            case OBJECT3D_CAMERA: {
 
                 OCamera * camera = static_cast<OCamera*>(object);
 
@@ -606,7 +606,7 @@ bool xmlLevelSave(Level * level, const char * filename)
                 }
                 break;
 
-            case M_OBJECT3D_ENTITY: {
+            case OBJECT3D_ENTITY: {
 
                 OEntity * entity = static_cast<OEntity*>(object);
 
@@ -663,7 +663,7 @@ bool xmlLevelSave(Level * level, const char * filename)
             }
             break;
 
-            case M_OBJECT3D_SOUND: {
+            case OBJECT3D_SOUND: {
                     OSound * sound = static_cast<OSound*>(object);
 
                     openAttributeNode(file, "Sound", 2);
@@ -702,7 +702,7 @@ bool xmlLevelSave(Level * level, const char * filename)
                 }
                 break;
 
-            case M_OBJECT3D_TEXT: {
+            case OBJECT3D_TEXT: {
                     OText * text = static_cast<OText*>(object);
 
                     openAttributeNode(file, "Text", 2);

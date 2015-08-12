@@ -105,8 +105,8 @@
 			<properties 
 				clearColor="0.200000 0.300000 0.400000"
 				fogColor="1.000000 1.000000 1.000000"
-				ortho="true"
-				fov="100.000000"
+				ortho="false"
+				fov="70"
 				clippingNear="1.000000"
 				clippingFar="1000.000000"
 				fog="false"

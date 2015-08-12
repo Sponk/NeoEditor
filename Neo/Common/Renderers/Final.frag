@@ -31,6 +31,7 @@ uniform vec3 AmbientLight;
 
 uniform int Width;
 uniform int Height;
+uniform int PostEffects;
 
 // 0 -> GBuffer
 // 1 -> Normals
@@ -159,17 +160,149 @@ vec4 gammaCorrection(vec4 diffuse, float gamma)
 	return pow(diffuse, vec4(1.0 / gamma));
 }
 
+// Based on code found here: 
+// http://www.geeks3d.com/20110405/fxaa-fast-approximate-anti-aliasing-demo-glsl-opengl-test-radeon-geforce/
+vec4 fxaa(sampler2D textureSampler, vec2 vertTexcoord, vec2 texcoordOffset)
+{
+	// The parameters are hardcoded for now, but could be
+	// made into uniforms to control fromt he program.
+	float FXAA_SPAN_MAX = 4.0;
+	float FXAA_REDUCE_MUL = 1.0/16.0;//1.0/8.0;
+	float FXAA_REDUCE_MIN = 1.0/256.0;//(1.0/128.0);
+
+	vec3 rgbNW = texture(textureSampler, vertTexcoord + (vec2(-1.0, -1.0) * texcoordOffset)).xyz;
+	vec3 rgbNE = texture(textureSampler, vertTexcoord + (vec2(+1.0, -1.0) * texcoordOffset)).xyz;
+	vec3 rgbSW = texture(textureSampler, vertTexcoord + (vec2(-1.0, +1.0) * texcoordOffset)).xyz;
+	vec3 rgbSE = texture(textureSampler, vertTexcoord + (vec2(+1.0, +1.0) * texcoordOffset)).xyz;
+	vec3 rgbM  = texture(textureSampler, vertTexcoord).xyz;
+	
+	vec3 luma = vec3(0.299, 0.587, 0.114);
+	float lumaNW = dot(rgbNW, luma);
+	float lumaNE = dot(rgbNE, luma);
+	float lumaSW = dot(rgbSW, luma);
+	float lumaSE = dot(rgbSE, luma);
+	float lumaM  = dot( rgbM, luma);
+	
+	float lumaMin = min(lumaM, min(min(lumaNW, lumaNE), min(lumaSW, lumaSE)));
+	float lumaMax = max(lumaM, max(max(lumaNW, lumaNE), max(lumaSW, lumaSE)));
+	
+	vec2 dir;
+	dir.x = -((lumaNW + lumaNE) - (lumaSW + lumaSE));
+	dir.y =  ((lumaNW + lumaSW) - (lumaNE + lumaSE));
+	
+	float dirReduce = max((lumaNW + lumaNE + lumaSW + lumaSE) * (0.25 * FXAA_REDUCE_MUL), FXAA_REDUCE_MIN);
+	  
+	float rcpDirMin = 1.0/(min(abs(dir.x), abs(dir.y)) + dirReduce);
+	
+	dir = min(vec2(FXAA_SPAN_MAX,  FXAA_SPAN_MAX), 
+    	  max(vec2(-FXAA_SPAN_MAX, -FXAA_SPAN_MAX), dir * rcpDirMin)) * texcoordOffset;
+		
+	vec3 rgbA = (1.0/2.0) * (
+              texture(textureSampler, vertTexcoord + dir * (1.0/3.0 - 0.5)).xyz +
+              texture(textureSampler, vertTexcoord + dir * (2.0/3.0 - 0.5)).xyz);
+	vec3 rgbB = rgbA * (1.0/2.0) + (1.0/4.0) * (
+              texture(textureSampler, vertTexcoord + dir * (0.0/3.0 - 0.5)).xyz +
+              texture(textureSampler, vertTexcoord + dir * (3.0/3.0 - 0.5)).xyz);
+	float lumaB = dot(rgbB, luma);
+
+	vec4 outfrag;
+  
+	if((lumaB < lumaMin) || (lumaB > lumaMax))
+	{
+    	outfrag.xyz = rgbA;
+	} 
+	else 
+	{
+    	outfrag.xyz = rgbB;
+	}
+  
+  	return outfrag;
+}
+
+#define FxaaInt2 ivec2
+#define FxaaFloat2 vec2
+#define FxaaTexLod0(t, p) textureLod(t, p, 0.0)
+#define FxaaTexOff(t, p, o, r) textureLodOffset(t, p, 0.0, o)
+
+//uniform float FXAA_SPAN_MAX = 8.0;
+//uniform float FXAA_REDUCE_MUL = 1.0/4.0; //1.0/8.0;
+
+vec3 FxaaPixelShader(vec4 posPos, sampler2D tex, vec2 rcpFrame)
+{   
+/*--------------------------------------------------------------------------*/
+	float FXAA_SPAN_MAX = 4.0;
+	float FXAA_REDUCE_MUL = 1.0/16.0;//1.0/8.0;
+	float FXAA_REDUCE_MIN = 1.0/256.0;//(1.0/128.0);
+/*--------------------------------------------------------------------------*/
+    vec3 rgbNW = FxaaTexLod0(tex, posPos.zw).xyz;
+    vec3 rgbNE = FxaaTexOff(tex, posPos.zw, FxaaInt2(1,0), rcpFrame.xy).xyz;
+    vec3 rgbSW = FxaaTexOff(tex, posPos.zw, FxaaInt2(0,1), rcpFrame.xy).xyz;
+    vec3 rgbSE = FxaaTexOff(tex, posPos.zw, FxaaInt2(1,1), rcpFrame.xy).xyz;
+    vec3 rgbM  = FxaaTexLod0(tex, posPos.xy).xyz;
+/*--------------------------------------------------------------------------*/
+    vec3 luma = vec3(0.299, 0.587, 0.114);
+    float lumaNW = dot(rgbNW, luma);
+    float lumaNE = dot(rgbNE, luma);
+    float lumaSW = dot(rgbSW, luma);
+    float lumaSE = dot(rgbSE, luma);
+    float lumaM  = dot(rgbM,  luma);
+/*--------------------------------------------------------------------------*/
+    float lumaMin = min(lumaM, min(min(lumaNW, lumaNE), min(lumaSW, lumaSE)));
+    float lumaMax = max(lumaM, max(max(lumaNW, lumaNE), max(lumaSW, lumaSE)));
+/*--------------------------------------------------------------------------*/
+    vec2 dir; 
+    dir.x = -((lumaNW + lumaNE) - (lumaSW + lumaSE));
+    dir.y =  ((lumaNW + lumaSW) - (lumaNE + lumaSE));
+/*--------------------------------------------------------------------------*/
+    float dirReduce = max(
+        (lumaNW + lumaNE + lumaSW + lumaSE) * (0.25 * FXAA_REDUCE_MUL),
+        FXAA_REDUCE_MIN);
+    float rcpDirMin = 1.0/(min(abs(dir.x), abs(dir.y)) + dirReduce);
+    dir = min(FxaaFloat2( FXAA_SPAN_MAX,  FXAA_SPAN_MAX), 
+          max(FxaaFloat2(-FXAA_SPAN_MAX, -FXAA_SPAN_MAX), 
+          dir * rcpDirMin)) * rcpFrame.xy;
+/*--------------------------------------------------------------------------*/
+    vec3 rgbA = (1.0/2.0) * (
+        FxaaTexLod0(tex, posPos.xy + dir * (1.0/3.0 - 0.5)).xyz +
+        FxaaTexLod0(tex, posPos.xy + dir * (2.0/3.0 - 0.5)).xyz);
+    vec3 rgbB = rgbA * (1.0/2.0) + (1.0/4.0) * (
+        FxaaTexLod0(tex, posPos.xy + dir * (0.0/3.0 - 0.5)).xyz +
+        FxaaTexLod0(tex, posPos.xy + dir * (3.0/3.0 - 0.5)).xyz);
+    float lumaB = dot(rgbB, luma);
+    if((lumaB < lumaMin) || (lumaB > lumaMax)) return rgbA;
+    return rgbB;
+}
+
+#define FXAA_SUBPIX_SHIFT 0.5
+
 void main(void)
 {
+
+	if(PostEffects == 1)
+	{		
+		FragColor = texture2D(Textures[0], texCoord);
+		
+		if(FragColor.a == 0.0) discard;
+		
+		vec2 frame = vec2(vec2(1.0 / Width, 1.0/ Height));
+		//FragColor = fxaa(Textures[0], texCoord, frame);
+		FragColor.rgb = FxaaPixelShader(vec4(texCoord.xy, texCoord.xy - frame * (0.5 + FXAA_SUBPIX_SHIFT)), Textures[0], frame);
+		FragColor = gammaCorrection(FragColor, 1.2);
+		return;
+	}
+
 	vec4 data = texture2D(Textures[4], texCoord);
 	FragColor = texture2D(Textures[0], texCoord);//gammaCorrection(texture2D(Textures[0], texCoord), 1.2);
+	vec4 startColor = FragColor;
 	vec4 n = texture2D(Textures[1], texCoord);
-	
+		
+	float transparency = FragColor.a;
 	//    data.r = 0;
     if(FragColor.a == 1.0 && n.a == 0)
 	{
 		vec4 p = texture2D(Textures[2], texCoord);
 		FragColor = calculateAllCookLight(p.xyz, n.rgb, FragColor, p.a);
+		FragColor.a = transparency;
 	}
 
 	/*if(texCoord.x <= 0.5)
@@ -184,5 +317,4 @@ void main(void)
 		FragColor = vec4(texture2D(Textures[4], texCoord).r);*/
 
 	//FragColor = texture2D(Textures[4], texCoord);
-	FragColor = gammaCorrection(FragColor, 1.2);
 }

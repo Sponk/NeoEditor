@@ -387,7 +387,7 @@ void Scene::prepareCollisionShape(OEntity * entity)
 		for(o=0; o<oSize; o++)
 		{
 			Object3d * childObject = entity->getChild(o);
-			if(childObject->getType() == M_OBJECT3D_ENTITY)
+			if(childObject->getType() == OBJECT3D_ENTITY)
 			{
 				OEntity * childEntity = (OEntity*)childObject;
 				PhysicsProperties * childPhyProps = childEntity->getPhysicsProperties();
@@ -433,7 +433,7 @@ void Scene::prepareCollisionObject(OEntity * entity)
 		Object3d * parentObject = entity->getParent();
 		if(parentObject)
 		{
-			if(parentObject->getType() == M_OBJECT3D_ENTITY)
+			if(parentObject->getType() == OBJECT3D_ENTITY)
 			{
 				parentEntity = (OEntity*)parentObject;
 				parentPhyProps = parentEntity->getPhysicsProperties();
@@ -582,7 +582,7 @@ void Scene::deleteObject(Object3d * object)
 	// objects
 	switch(object->getType())
 	{
-	case M_OBJECT3D_ENTITY:
+	case OBJECT3D_ENTITY:
 		{
 			// entities
 			oSize = m_entities.size();
@@ -596,7 +596,7 @@ void Scene::deleteObject(Object3d * object)
 		}
 		break;
 
-	case M_OBJECT3D_CAMERA:
+	case OBJECT3D_CAMERA:
 		{
 			// cameras
 			oSize = m_cameras.size();
@@ -610,7 +610,7 @@ void Scene::deleteObject(Object3d * object)
 		}
 		break;
 
-	case M_OBJECT3D_LIGHT:
+	case OBJECT3D_LIGHT:
 		{
 			// lights
 			oSize = m_lights.size();
@@ -624,7 +624,7 @@ void Scene::deleteObject(Object3d * object)
 		}
 		break;
 
-	case M_OBJECT3D_SOUND:
+	case OBJECT3D_SOUND:
 		{
 			// sounds
 			oSize = m_sounds.size();
@@ -638,7 +638,7 @@ void Scene::deleteObject(Object3d * object)
 		}
 		break;
 
-	case M_OBJECT3D_TEXT:
+	case OBJECT3D_TEXT:
 		{
 			// sounds
 			oSize = m_texts.size();
@@ -941,4 +941,18 @@ void Scene::draw(OCamera * camera)
     {
 		renderer->drawScene(this, camera);
     }
+}
+
+void Scene::setCurrentCamera(OCamera* c)
+{
+	unsigned int i = 0;
+	for(OCamera* cam : m_cameras)
+	{
+		if(c == cam)
+		{
+			m_currentCamera = i;
+			return;
+		}
+		i++;
+	}
 }

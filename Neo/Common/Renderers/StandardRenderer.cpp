@@ -187,8 +187,10 @@ StandardRenderer::StandardRenderer()
 	}
 
 	m_framebufferID = 0;
+	m_finalFramebufferID = 0;
 	m_gbufferTexID = 0;
 	m_depthTexID = 0;
+	m_finalTexID = 0;
 
 	m_quadTexCoordVBO = 0;
 	m_quadVAO = 0;
@@ -212,7 +214,7 @@ StandardRenderer::~StandardRenderer()
 
 }
 
-void StandardRenderer::drawMesh(Mesh* mesh, OCamera* camera)
+void StandardRenderer::drawMesh(Mesh* mesh, OCamera* camera, bool wireframe)
 {
 	int num = mesh->getSubMeshsNumber();
 	SubMesh* subMeshes = mesh->getSubMeshs();
@@ -235,13 +237,13 @@ void StandardRenderer::drawMesh(Mesh* mesh, OCamera* camera)
 			subMeshes[i].getBoundingBox()->initFromPoints(skinVertices, verticesSize);
 		}
 
-		drawSubMesh(&subMeshes[i], camera);
+		drawSubMesh(&subMeshes[i], camera, wireframe);
 	}
 
 	mesh->updateBoundingBox();
 }
 
-void StandardRenderer::drawSubMesh(SubMesh* mesh, OCamera* camera)
+void StandardRenderer::drawSubMesh(SubMesh* mesh, OCamera* camera, bool wireframe)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
 
@@ -249,11 +251,11 @@ void StandardRenderer::drawSubMesh(SubMesh* mesh, OCamera* camera)
 
 	for(int i = 0; i < mesh->getDisplaysNumber(); i++)
 	{
-		drawDisplay(mesh, mesh->getDisplay(i), camera);
+		drawDisplay(mesh, mesh->getDisplay(i), camera, wireframe);
 	}
 }
 
-void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCamera* camera)
+void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCamera* camera, bool wireframe)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
 	RenderingContext* render = engine->getRenderingContext();
@@ -355,6 +357,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 
 	// Set cull mode
 	render->setCullMode(display->getCullMode());
+	render->enableDepthTest();
 
 	if(indices) // If the SubMesh has indices
 	{
@@ -365,9 +368,23 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 			{
 				case VAR_USHORT:
 					render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (void*)(display->getBegin()*sizeof(short)));
+					if(wireframe)
+					{
+						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0.1,0.1,0.1));
+						render->enablePolygonOffset(-5.0,-5.0);
+						//render->disableDepthTest();
+
+						render->drawElement(PRIMITIVE_LINES, display->getSize(), indicesType, (void*)(display->getBegin()*sizeof(short)));
+						render->disablePolygonOffset();
+					}
 					break;
 				case VAR_UINT:
 					render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (void*)(display->getBegin()*sizeof(int)));
+					if(wireframe)
+					{
+						//render->disableDepthTest();
+						render->drawElement(PRIMITIVE_LINES, display->getSize(), indicesType, (void*)(display->getBegin()*sizeof(short)));
+					}
 					break;
 				default:
 					MLOG_WARNING("Unsupported indices type!");
@@ -379,9 +396,19 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 			{
 				case VAR_USHORT:
 					render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (unsigned short*)indices + display->getBegin());
+					if(wireframe)
+					{
+						//render->disableDepthTest();
+						render->drawElement(PRIMITIVE_LINES, display->getSize(), indicesType, (unsigned short*)indices + display->getBegin());
+					}
 					break;
-				case VAR_UINT:
-					render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (unsigned int*)indices + display->getBegin());
+			case VAR_UINT:
+					render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (unsigned int*) indices + display->getBegin());
+					if (wireframe)
+					{
+						// render->disableDepthTest();
+						render->drawElement(PRIMITIVE_LINES, display->getSize(), indicesType, (unsigned short*) indices + display->getBegin());
+					}
 					break;
 				default:
 					MLOG_WARNING("Unsupported indices type!");
@@ -440,7 +467,7 @@ void StandardRenderer::drawGBuffer(Scene* scene, OCamera* camera)
 			if (mesh->getTexturesAnim())
 				animateTextures(mesh, mesh->getTexturesAnim(), entity->getCurrentFrame());
 
-			drawMesh(entity->getMesh(), camera);
+			drawMesh(entity->getMesh(), camera, entity->hasWireframe());
 		}
 	}
 
@@ -496,7 +523,7 @@ void StandardRenderer::drawTransparents(Scene* scene, OCamera* camera)
 			if (mesh->getTexturesAnim())
 				animateTextures(mesh, mesh->getTexturesAnim(), entity->getCurrentFrame());
 
-			drawMesh(entity->getMesh(), camera);
+			drawMesh(entity->getMesh(), camera, entity->hasWireframe());
 		}
 	}
 
@@ -675,7 +702,7 @@ void StandardRenderer::initFramebuffers(Vector2 res)
 	// GBuffer texture
 	render->createTexture(&m_gbufferTexID);
 	render->bindTexture(m_gbufferTexID);
-	render->setTextureFilterMode(TEX_FILTER_LINEAR, TEX_FILTER_LINEAR);
+	render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
 	render->setTextureUWrapMode(WRAP_CLAMP);
 	render->setTextureVWrapMode(WRAP_CLAMP);
 	render->texImage(0, res.x, res.y, VAR_FLOAT, TEX_RGBA, 0);
@@ -709,6 +736,37 @@ void StandardRenderer::initFramebuffers(Vector2 res)
 	render->setTextureUWrapMode(WRAP_CLAMP);
 	render->setTextureVWrapMode(WRAP_CLAMP);
 	render->texImage(0, res.x, res.y, VAR_FLOAT, TEX_RGBA, 0);
+
+	render->bindFrameBuffer(m_framebufferID);
+
+	render->attachFrameBufferTexture(ATTACH_COLOR0, m_gbufferTexID);
+	render->attachFrameBufferTexture(ATTACH_COLOR1, m_normalTexID);
+	render->attachFrameBufferTexture(ATTACH_COLOR2, m_positionTexID);
+	render->attachFrameBufferTexture(ATTACH_COLOR3, m_dataTexID);
+	render->attachFrameBufferTexture(ATTACH_DEPTH, m_depthTexID);
+
+	// Enable them to be drawn
+	FRAME_BUFFER_ATTACHMENT buffers[5] = {ATTACH_COLOR0, ATTACH_COLOR1, ATTACH_COLOR2, ATTACH_COLOR3, ATTACH_DEPTH};
+	render->setDrawingBuffers(buffers, 4);
+	render->bindFrameBuffer(0);
+
+	// Prepare post process fbo
+	render->createFrameBuffer(&m_finalFramebufferID);
+	render->bindFrameBuffer(m_finalFramebufferID);
+
+	render->createTexture(&m_finalTexID);
+	render->bindTexture(m_finalTexID);
+	render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
+	render->setTextureUWrapMode(WRAP_CLAMP);
+	render->setTextureVWrapMode(WRAP_CLAMP);
+	render->texImage(0, res.x, res.y, VAR_FLOAT, TEX_RGB, 0);
+
+	render->attachFrameBufferTexture(ATTACH_COLOR0, m_finalTexID);
+
+	FRAME_BUFFER_ATTACHMENT finalbuffers[1] = {ATTACH_COLOR0};
+	render->setDrawingBuffers(finalbuffers, 1);
+
+	render->bindFrameBuffer(0);
 }
 
 void StandardRenderer::destroy(void)
@@ -847,17 +905,17 @@ void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
 	// render to texture
 	render->bindFrameBuffer(m_framebufferID);
 
-	render->attachFrameBufferTexture(ATTACH_COLOR0, m_gbufferTexID);
+/*	render->attachFrameBufferTexture(ATTACH_COLOR0, m_gbufferTexID);
 	render->attachFrameBufferTexture(ATTACH_COLOR1, m_normalTexID);
 	render->attachFrameBufferTexture(ATTACH_COLOR2, m_positionTexID);
 	render->attachFrameBufferTexture(ATTACH_COLOR3, m_dataTexID);
 	render->attachFrameBufferTexture(ATTACH_DEPTH, m_depthTexID);
 	
 	// Enable them to be drawn
-	FRAME_BUFFER_ATTACHMENT buffers[5] = {ATTACH_COLOR0, ATTACH_COLOR1, ATTACH_COLOR2, ATTACH_COLOR3, ATTACH_DEPTH};
+	FRAME_BUFFER_ATTACHMENT buffers[5] = {ATTACH_COLOR0, ATTACH_COLOR1, ATTACH_COLOR2, ATTACH_COLOR3, ATTACH_COLOR4, ATTACH_DEPTH};
 	render->setDrawingBuffers(buffers, 4);
 
-	render->setViewport(0, 0, screenWidth, screenHeight); // change viewport
+	render->setViewport(0, 0, screenWidth, screenHeight); // change viewport*/
 
 	Vector4 clearColor = camera->getClearColor();
 
@@ -873,11 +931,14 @@ void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
 	drawGBuffer(scene, camera);
 
 	// finish render to texture
-	render->bindFrameBuffer(currentFrameBuffer);
+	render->bindFrameBuffer(m_finalFramebufferID);
 	renderFinalImage(scene, camera);
 
 	render->enableDepthTest();
 	drawTransparents(scene, camera);
+
+	render->bindFrameBuffer(currentFrameBuffer);
+	renderFinalImage(scene, camera, true);
 }
 
 
@@ -976,7 +1037,7 @@ void StandardRenderer::sendLight(unsigned int fx, OLight* l, int num, Matrix4x4 
 	render->sendUniformFloat(fx, ending, &attenuation);
 }
 
-void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera)
+void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera, bool postFx)
 {
 	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
 	SystemContext * system = NeoEngine::getInstance()->getSystemContext();
@@ -992,10 +1053,20 @@ void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera)
 	set2D(screenWidth, screenHeight);
 
 	render->bindFX(m_fx[1]);
-	render->bindTexture(m_gbufferTexID);
-	render->bindTexture(m_normalTexID, 1);
-	render->bindTexture(m_positionTexID, 2);
-	render->bindTexture(m_dataTexID, 3);
+	int postEffects = 1;
+
+	if(!postFx)
+	{
+		postEffects = 0;
+		render->bindTexture(m_gbufferTexID);
+		render->bindTexture(m_normalTexID, 1);
+		render->bindTexture(m_positionTexID, 2);
+		render->bindTexture(m_dataTexID, 3);
+	}
+	else
+		render->bindTexture(m_finalTexID);
+
+	render->sendUniformInt(m_fx[1], "PostEffects", &postEffects, 1);
 	render->bindTexture(m_depthTexID, 4);
 	render->disableBlending();
 
@@ -1496,8 +1567,11 @@ int StandardRenderer::visibility_thread_mainscene(void* data)
 
 		if(!data)
 		{
-			window->sleep(THREAD_SLEEP);
-			continue;
+			data = new CameraData();
+			camera->setAdditionalData(data);
+
+			//window->sleep(THREAD_SLEEP);
+			//continue;
 		}
 
 		camera->enable();

@@ -51,25 +51,36 @@ InputField::InputField(unsigned int x, unsigned int y, unsigned int width,
 					   unsigned int height, const char* label)
 	: Widget(x, y, width, height, label),
 	  m_labelText(NULL),
-	  m_cursorpos(0)
+	  m_cursorpos(0),
+	  m_inputType(NORMAL_INPUT),
+	  m_multiline(false)
 {
 
 }
 
-float InputField::calculateWidth(OText* text)
+Vector2 InputField::calculateCursorPos(OText* text, int pos)
 {
-	float length = 0;
+	Vector2 length;
 	Font* font = text->getFontRef()->getFont();
 	map<unsigned int, Character>* chars = font->getCharacters();
 
 	unsigned int state = 0;
 	unsigned int character;
 	unsigned char* s = (unsigned char*) text->getText();
-	while(*s)
+	int i = 0;
+
+	while(*s && (i < pos || pos == -1))
 	{
 		if(utf8_decode(&state, &character, *s) == UTF8_ACCEPT)
-			length += ((*chars)[character]).getXAdvance();
+			length.x += ((*chars)[character]).getXAdvance();
 
+		if(character == '\n')
+		{
+			length.x = 0;
+			length.y++;
+		}
+
+		i++;
 		s++;
 	}
 	
@@ -115,10 +126,11 @@ void InputField::draw(Vector2 offset)
 	updateLabel(m_label);
 
 	Box3d* box = m_labelText->getBoundingBox();
-	float textOffset = calculateWidth(m_labelText);
+	Vector2 cursorPos = calculateCursorPos(m_labelText, m_cursorpos);
+	float textOffset = cursorPos.x;
 
 	// Calculate overflow offset
-	if (textOffset <= m_width) textOffset = 0.0f; // If we do not overflow, simply ignore
+	if (textOffset <= m_width || m_multiline) textOffset = 0.0f; // If we do not overflow, simply ignore
 	else textOffset -= m_width; // Calculate the new position relative to the right edge
 
 	RenderingContext* renderContext =
@@ -133,11 +145,25 @@ void InputField::draw(Vector2 offset)
 					offset.y + 0.5*(box->max.y - box->min.y) + 0.5 * m_height,
 					 m_rotation);
 
+	// Draw caret
+	if(m_state == INPUT_SELECTED_STATE)
+	{
+		cursorPos += getPosition();
+		render->drawColoredQuad(cursorPos.x - textOffset + 2, cursorPos.y + 0.25*m_fontSize, 1.5,
+								m_fontSize, m_labelText->getColor() + Vector4(0.01,0.01,0.01,0));
+	}
+
 	renderContext->disableScissorTest();
 }
 
 void InputField::updateLabel(string s)
 {
+	m_labelText->setText(s.c_str());
+	return;
+
+	if(m_cursorpos > s.length())
+		return;
+
 	// Update text
 	string prefix = s;
 	prefix.erase(m_cursorpos);
@@ -145,6 +171,17 @@ void InputField::updateLabel(string s)
 	string postfix = s.substr(m_cursorpos);
 	
 	m_labelText->setText((prefix + ((m_state == INPUT_SELECTED_STATE) ? "|" : "") + postfix).c_str());
+}
+
+void InputField::addChar(unsigned int c)
+{
+	string prefix = m_label;
+	prefix.erase(m_cursorpos);
+
+	string postfix = m_label.substr(m_cursorpos);
+
+	m_label = prefix + (const char*) &c + postfix;
+	m_cursorpos += strlen((const char*) &c);
 }
 
 void InputField::update()
@@ -211,7 +248,7 @@ void InputField::update()
 			}
 		}
 
-		if (input->isKeyPressed("DELETE"))
+		if (input->onKeyDown("DELETE"))
 		{
 			input->upKey("DELETE");
 			if (m_label.length() >= 1 && m_cursorpos < m_label.length())
@@ -221,8 +258,13 @@ void InputField::update()
 			}
 		}
 
-		if(input->isKeyPressed("ENTER") && c == '\0')
+		if(input->onKeyDown("ENTER") && c == '\0' && m_multiline)
 			c = '\n';
+		else if(!m_multiline && input->onKeyDown("ENTER"))
+		{
+			m_state = INPUT_NORMAL_STATE;
+			doCallback();
+		}
 
 		input->upKey("LEFT");
 		input->upKey("RIGHT");
@@ -230,14 +272,24 @@ void InputField::update()
 
 		if (c != '\0')
 		{
-			char character[5];
-			string prefix = m_label;
-			prefix.erase(m_cursorpos);
-						
-			string postfix = m_label.substr(m_cursorpos);
-			
-			m_label = prefix + (const char*) &c + postfix;
-			m_cursorpos += strlen((const char*) &c);
+			switch(m_inputType)
+			{
+			case INTEGER_INPUT:
+				if(isdigit(c) || (c == '-' && m_cursorpos == 0))
+					addChar(c);
+				break;
+
+			case DECIMAL_INPUT:
+				if(isdigit(c)
+					|| (c == '.' && m_label.find(".") == -1)
+					|| (c == '-' && m_cursorpos == 0))
+						addChar(c);
+				break;
+
+			case NORMAL_INPUT:
+				addChar(c);
+				break;
+			}
 		}
 	}
 

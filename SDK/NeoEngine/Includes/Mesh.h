@@ -175,6 +175,10 @@ public:
 	inline Vector3 *getSkinNormals(void) { return m_skinNormals; }
 	inline Vector3 *getSkinTangents(void) { return m_skinTangents; }
 
+	Vector3* getVertex(size_t idx) { return m_vertices + idx; }
+	unsigned int getIndex(size_t idx) { return (m_indicesType == VAR_UINT) ?
+												*(((unsigned int*) m_indices) + idx)
+												: *(((unsigned short*) m_indices) + idx); }
 
 	// VBO
 	void clearVBO(void);
@@ -413,6 +417,8 @@ public:
 	SubMesh *allocSubMeshs(unsigned int size);
 	inline unsigned int getSubMeshsNumber(void) { return m_subMeshsNumber; }
 	inline SubMesh *getSubMeshs(void) { return m_subMeshs; }
+
+	SubMesh* getSubMesh(size_t idx) { return &m_subMeshs[idx]; }
 
 	/**
 	 * @brief Recalculates the bounding box to contain all vertices

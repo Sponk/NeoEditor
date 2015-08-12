@@ -127,7 +127,7 @@ void FollowBehavior::update(void)
 	float delay = MAX(1, m_delay);
 	Vector3 direction = (object->getTransformedPosition() + offset) - parent->getPosition();
 
-	if(parent->getType() == M_OBJECT3D_ENTITY)
+	if(parent->getType() == OBJECT3D_ENTITY)
 	{
 		OEntity * entity = (OEntity *)parent;
 		PhysicsProperties * phyProps = entity->getPhysicsProperties();

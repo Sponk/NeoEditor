@@ -1161,7 +1161,7 @@ Fl_Double_Window* MaterialEditDlg::create_window(const char* name) {
   	return NULL;
   }
   
-  if(object->getType() != M_OBJECT3D_ENTITY)
+  if(object->getType() != OBJECT3D_ENTITY)
   	return NULL;
   	
   OEntity* entity = (OEntity*) object;

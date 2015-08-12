@@ -60,7 +60,7 @@ function Gui.loadWidget(v, p)
    if v.type == "Button" then
 	  local btn = NeoLua.ThemedButton(v.x,v.y,v.w,v.h,v.label or "")
 	  
-	  btn:setScriptCallback(v.callback or "")
+	  btn:setScriptCallback(v.callback or "EmptyCallback")
 	  btn:setUserData(v.userData or 0)
 	  btn:setFontSize(v.fontSize or 12)
 	  p:addWidget(btn)
@@ -70,7 +70,11 @@ function Gui.loadWidget(v, p)
    elseif v.type == "InputField" then
 	  local input = NeoLua.ThemedInputField(v.x, v.y, v.w, v.h, v.label or "")
 	  p:addWidget(input)
+	  
 	  input:setFontSize(v.fontSize or 12)
+	  input:setType(v.inputType or 0)
+	  input:setMultiline(v.isMultiline or false)
+	  input:setScriptCallback(v.callback or "EmptyCallback")
 	  
 	  return input
    elseif v.type == "Label" then
@@ -97,12 +101,13 @@ function Gui.loadWidget(v, p)
 	  return list
    elseif v.type == "Tree" then
 	  local tree = NeoLua.TreeView(v.x, v.y, v.w, v.h, v.label or "")
+	  tree:setScriptCallback(v.callback or "EmptyCallback")
 	  p:addWidget(tree)
 	  return tree
 	  
    elseif v.type == "Slider" then
 	  local slider = NeoLua.Slider(v.x, v.y, v.w, v.h, v.range[1] or 0, v.range[2] or 100, v.direction or 0)
-	  slider:setScriptCallback(v.callback or "")
+	  slider:setScriptCallback(v.callback or "EmptyCallback")
 	  p:addWidget(slider)                  
 	  return slider
 	  
@@ -214,7 +219,7 @@ function Gui.loadFromTable(t)
         for i,j in ipairs(k.content) do
           if j.type == "Item" then
             local btn = NeoLua.Button(0,0,0,0,j.label)
-            btn:setScriptCallback(j.callback or "")
+            btn:setScriptCallback(j.callback or "EmptyCallback")
             btn:setFontSize(j.fontSize or 12)
             
             menu:addEntry(btn)
@@ -268,3 +273,8 @@ end
 function messageBoxOkCallback()
    msgBox["msgBox"].window:setVisible(false)
 end
+
+function EmptyCallback()
+
+end
+

@@ -322,7 +322,7 @@ void GL4Context::init()
 	//glPolygoneMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	// line
-	glLineWidth(1);
+	glLineWidth(1.0f);
 
 	// stencil
 	glClearStencil(0);
@@ -332,10 +332,9 @@ void GL4Context::init()
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
 	// anisotropic filtering
-	float maxAnisotropy;
-	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
+	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &m_anisotropy);
 
-	MLOG_INFO("Maximal anisotropy level:\t" << maxAnisotropy << "\t");
+	MLOG_INFO("Maximal anisotropy level:\t" << m_anisotropy << "\t");
 	MLOG_INFO("********************************************************************************");
 }
 
@@ -463,6 +462,7 @@ void GL4Context::setTextureFilterMode(TEX_FILTER_MODES min, TEX_FILTER_MODES mag
 {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, returnTexFilterMode(min));
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, returnTexFilterMode(mag));
+    // glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, m_anisotropy);
 }
 
 void GL4Context::setTextureUWrapMode(WRAP_MODES wrap)
@@ -1346,6 +1346,19 @@ void GL4Context::selectSubroutine(unsigned int fx, unsigned int type, const char
 
 	GLuint index = glGetSubroutineIndex(fx, type, routine);
 	glUniformSubroutinesuiv(type, 1, &index);
+}
+
+void GL4Context::enablePolygonOffset(float x, float y)
+{
+	glEnable(GL_POLYGON_OFFSET_FILL);
+	glEnable(GL_POLYGON_OFFSET_LINE);
+	glPolygonOffset(x, y);
+}
+
+void GL4Context::disablePolygonOffset()
+{
+	glDisable(GL_POLYGON_OFFSET_FILL);
+	glDisable(GL_POLYGON_OFFSET_LINE);
 }
 
 #endif

@@ -17,18 +17,18 @@ return {
     content = {
       [1] = {name = "label", type = "Label", x = 10, y = 10, w = 0, h = 0, label = "Label"},
       [2] = {name = "button", type = "Button", x = 10, y = 300, w = 100, h = 40, label = "Button"},
-      [3] = {name = "input", type = "InputField", x = 10, y = 50, w = 100, h = 20, label = "InputField"},
-      [4] = {name = "list", type = "List", x = 10, y = 100, w = 200, h = 195,
-        content = {"Entry1", "Entry2", "Entry3", "Entry4"}
-      },
+      [3] = {name = "input", type = "InputField", x = 10, y = 50, w = 150, h = 200, label = "InputField"},
+      --[4] = {name = "list", type = "List", x = 10, y = 200, w = 140, h = 120,
+      --  content = {"Entry1", "Entry2", "Entry3", "Entry4"}
+      --},
       
-      [5] = {name = "tree", type = "Tree", x = 220, y = 100, w = 200, h = 195, label = ""},
-      [6] = {name = "slider", type = "Slider", x = 220, y = 50, w = 200, h = 1, range = {0,100},
+      [4] = {name = "tree", type = "Tree", x = 220, y = 100, w = 200, h = 195, label = ""},
+      [5] = {name = "slider", type = "Slider", x = 220, y = 50, w = 200, h = 1, range = {0,100},
             callback = "sliderCallback"},
-      [7] = {name = "slider2", type = "Slider", x = 430, y = 50, w = 1, h = 200, range = {0,100},
+      [6] = {name = "slider2", type = "Slider", x = 430, y = 50, w = 1, h = 200, range = {0,100},
 			 direction = NeoLua.SLIDER_VERTICAL},
 
-	  [8] = {name = "scrollpanel", type = "ScrollPane", x = 450,
+	    [7] = {name = "scrollpanel", type = "ScrollPane", x = 450,
 			 y = 50, w = 280, h = 210, content = {
 				[1] = {
 				   name = "label2", type = "Label",

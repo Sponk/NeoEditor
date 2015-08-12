@@ -1,5 +1,5 @@
 --- scene-tree-desc.lua - Contains the description for the scene tree dialog
-local dlg = {
+local dlgTable = {
    [1] = {
 	  name = "window",
 	  type = "Window",
@@ -20,9 +20,9 @@ local dlg = {
 			   [1] = {
 			   	  name = "scrollpanel", type = "ScrollPane", x = 0, y = 0,
 			   	  w = 280, h = 210,
-				  content = {			   		 
-                                         [1] = {name = "tree", type = "Tree", x = 0, y = 0,
-			   				w = 200, h = 0}
+				    content = {			   		 
+                [1] = {name = "tree", type = "Tree", x = 0, y = 0,
+			   				        w = 200, h = 0, callback = "sceneTreeCallback"}
 				  }			
 			   }
 			}
@@ -31,6 +31,15 @@ local dlg = {
    }
 }
 
+local dlg = Gui.loadFromTable(dlgTable)
 
+function sceneTreeCallback()
+  local name = dlg["window"]["layout"]["scrollpanel"]["tree"]:getSelected()
+  Editor.select(NeoLua.level:getCurrentScene():getEntityByName(name) 
+                or NeoLua.level:getCurrentScene():getLightByName(name)
+                or NeoLua.level:getCurrentScene():getSoundByName(name)
+                or NeoLua.level:getCurrentScene():getTextByName(name)
+                or NeoLua.level:getCurrentScene():getLightByName(name))
+end
 
 return dlg

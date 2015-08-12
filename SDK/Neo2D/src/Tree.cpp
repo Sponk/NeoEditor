@@ -181,4 +181,33 @@ void TreeView::clear(TreeNode<std::string>* root)
 	root->clearChildren();
 	if(root != &m_root)
 		SAFE_DELETE(root);
+
+	m_selected = nullptr;
+}
+
+TreeNode<std::string>* TreeView::find(const char* name, TreeNode<std::string>* root)
+{
+	if(root == nullptr) return nullptr;
+
+	if(root->getData() == name)
+		return root;
+
+	TreeNode<std::string>* entry;
+	for(int i = 0; i < root->getNumChildren(); i++)
+	{
+		if((entry = find(name, root->getChild(i))) != nullptr)
+			return entry;
+	}
+
+	return nullptr;
+}
+
+TreeNode<std::string>* TreeView::find(const char* name)
+{
+	return find(name, &m_root);
+}
+
+void TreeView::selectEntry(const char* name)
+{
+	m_selected = find(name);
 }

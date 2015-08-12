@@ -62,8 +62,8 @@
 %include <DataManager.h>
 %include <DataLoader.h>
 
-
 %include <NeoEngine.h>
+%include <Box3d.h>
 %include <NeoGame.h>
 %include <Object3d.h>
 %include <Scene.h>
@@ -81,7 +81,6 @@
 %include <Box3d.h>
 %include <Armature.h>
 %include <Log.h>
-
 
 #define NEO_CORE_EXPORT
 #define NEO2D_EXPORT

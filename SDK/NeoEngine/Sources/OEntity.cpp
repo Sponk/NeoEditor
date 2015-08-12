@@ -109,7 +109,8 @@ m_currentLoop(0),
 m_animationId(0),
 m_physicsProperties(NULL),
 m_hasShadow(true),
-m_isOccluder(false)
+m_isOccluder(false),
+m_wireframe(false)
 {
 	setMeshRef(meshRef);
 }
@@ -123,7 +124,8 @@ m_currentFrame(entity.m_currentFrame),
 m_currentLoop(entity.m_currentLoop),
 m_animationId(entity.m_animationId),
 m_hasShadow(entity.m_hasShadow),
-m_isOccluder(entity.m_isOccluder)
+m_isOccluder(entity.m_isOccluder),
+m_wireframe(entity.m_wireframe)
 {
 	setMeshRef(entity.m_meshRef);
 	if(entity.m_physicsProperties)

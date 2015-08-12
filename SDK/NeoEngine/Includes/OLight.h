@@ -85,7 +85,7 @@ private:
 public:
 
 	// type
-	virtual int getType(void){ return M_OBJECT3D_LIGHT; }
+	virtual int getType(void){ return OBJECT3D_LIGHT; }
 
 	/**
 	 * @brief Changes the light type the OLight has.

@@ -491,5 +491,6 @@ void main(void)
         Position = vec4(position.xyz, (spec.r + spec.b + spec.g) / 3 * Shininess);
     }
     else
-        Position = vec4(position.xyz, Shininess);
+        Position = vec4(position.xyz, Shininess);      
+
 }

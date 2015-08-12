@@ -96,7 +96,6 @@ void ThemedInputField::draw(Vector2 offset)
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 
 	offset += getPosition() + m_offset;
-
 	Vector2 res = system->getScreenSize();
 
 	if (m_labelText == NULL)
@@ -104,7 +103,7 @@ void ThemedInputField::draw(Vector2 offset)
 		m_labelText = render->createText(gui->getDefaultFont(),
 										 m_fontSize);
 		m_labelText->setAlign(TEXT_ALIGN_LEFT);
-		m_labelText->setColor(Vector3(0,0,0));
+		m_labelText->setColor(Vector4(0,0,0,1));
 	}
 
 	if (m_sprites[0] == NULL)
@@ -148,7 +147,9 @@ void ThemedInputField::draw(Vector2 offset)
 
 	// Update text
 	updateLabel(m_label);
-	float textOffset = calculateWidth(m_labelText);
+	Vector2 cursorPos = calculateCursorPos(m_labelText, m_cursorpos);
+	float textOffset = cursorPos.x;
+
 	Box3d* box = m_labelText->getBoundingBox();
 
 	// Calculate overflow offset
@@ -164,6 +165,14 @@ void ThemedInputField::draw(Vector2 offset)
 	render->drawText(m_labelText, m_x - textOffset + 2,
 					 m_y + m_fontSize + m_marginTop,
 					 m_rotation);
+
+	// Draw caret
+	if(m_state == INPUT_SELECTED_STATE)
+	{
+		cursorPos += getPosition();
+		render->drawColoredQuad(cursorPos.x - textOffset + 2, cursorPos.y + 0.25*m_fontSize, 1.5,
+								m_fontSize, m_labelText->getColor() + Vector4(0.01,0.01,0.01,0));
+	}
 
 	renderContext->disableScissorTest();
 }

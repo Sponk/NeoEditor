@@ -288,6 +288,8 @@ public:
 	 */
 	void clear();
 	void scheduleClear() { m_clearScheduled = true; }
+
+	bool isMouseOnGui();
 };
 }
 

@@ -267,7 +267,7 @@ void GLBox::draw()
         if(maratis->getSelectedObjectsNumber() > 0)
         {
             Object3d* camera = maratis->getSelectedObjectByIndex(0);
-            if(camera != NULL && camera->getType() == M_OBJECT3D_CAMERA)
+            if(camera != NULL && camera->getType() == OBJECT3D_CAMERA)
             {
                 render->setClearColor(static_cast<OCamera*>(camera)->getClearColor());
                 render->setViewport(0,0, w()/3, h()/3);

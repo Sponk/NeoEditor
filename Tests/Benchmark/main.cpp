@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
     engine->setGame(game);
     engine->setPackageManager(pmanager);
 
-    engine->getBehaviorManager()->addBehavior(Neo::LuaBehavior::getStaticName(), M_OBJECT3D, Neo::LuaBehavior::getNew);
+    engine->getBehaviorManager()->addBehavior(Neo::LuaBehavior::getStaticName(), OBJECT3D, Neo::LuaBehavior::getNew);
 
     game->begin();
 

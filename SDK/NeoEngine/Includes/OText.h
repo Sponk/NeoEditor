@@ -77,7 +77,7 @@ private:
 public:
 
 	// type
-	int getType(void){ return M_OBJECT3D_TEXT; }
+	int getType(void){ return OBJECT3D_TEXT; }
 
 	// font
 	void setFontRef(FontRef * fontRef);

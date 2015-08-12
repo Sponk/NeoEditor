@@ -252,7 +252,7 @@ int getMeshFilename()
 
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity* entity = (OEntity*) object;
 			script->pushString(entity->getMeshRef()->getFilename());
@@ -365,7 +365,7 @@ int getSoundFilename()
 	Object3d * object = (Object3d*) script->getPointer(nbArguments-1);
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_SOUND)
+		if(object->getType() == OBJECT3D_SOUND)
 		{
 			OSound* sound = (OSound*) object;
 			script->pushString(sound->getSoundRef()->getFilename());
@@ -386,7 +386,7 @@ int getSoundRolloff()
 	Object3d * object = (Object3d*) script->getPointer(0);
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_SOUND)
+		if(object->getType() == OBJECT3D_SOUND)
 		{
 			OSound * sound = (OSound*)object;
 			script->pushInteger((long int)sound->getRolloff());
@@ -406,7 +406,7 @@ int setSoundRolloff()
 	Object3d * object = (Object3d*) script->getPointer(0);
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_SOUND)
+		if(object->getType() == OBJECT3D_SOUND)
 		{
 			OSound * sound = (OSound*)object;
 			sound->setRolloff(script->getFloat(1));
@@ -425,7 +425,7 @@ int getSoundRadius()
 	Object3d * object = (Object3d*) script->getPointer(0);
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_SOUND)
+		if(object->getType() == OBJECT3D_SOUND)
 		{
 			OSound * sound = (OSound*)object;
 			script->pushFloat(sound->getRadius());
@@ -445,7 +445,7 @@ int setSoundRadius()
 	Object3d * object = (Object3d*) script->getPointer(0);
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_SOUND)
+		if(object->getType() == OBJECT3D_SOUND)
 		{
 			OSound * sound = (OSound*)object;
 			sound->setRadius(script->getFloat(1));
@@ -464,7 +464,7 @@ int setSoundRelative()
 	Object3d * object = (Object3d*) script->getPointer(0);
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_SOUND)
+		if(object->getType() == OBJECT3D_SOUND)
 		{
 			OSound * sound = (OSound*)object;
 			sound->setRelative(script->getBoolean(1));
@@ -483,7 +483,7 @@ int isSoundRelative()
 	Object3d * object = (Object3d*) script->getPointer(0);
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_SOUND)
+		if(object->getType() == OBJECT3D_SOUND)
 		{
 			OSound * sound = (OSound*)object;
 			script->pushBoolean(sound->isRelative());
@@ -503,7 +503,7 @@ int setSoundLooping()
 	Object3d * object = (Object3d*) script->getPointer(0);
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_SOUND)
+		if(object->getType() == OBJECT3D_SOUND)
 		{
 			OSound * sound = (OSound*)object;
 			sound->setLooping(script->getBoolean(1));
@@ -522,7 +522,7 @@ int isSoundLooping()
 	Object3d * object = (Object3d*) script->getPointer(0);
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_SOUND)
+		if(object->getType() == OBJECT3D_SOUND)
 		{
 			OSound * sound = (OSound*)object;
 			script->pushBoolean(sound->isLooping());
@@ -562,26 +562,26 @@ int getObjectType()
 	{
 		switch (object->getType())
 		{
-		case M_OBJECT3D_ENTITY:
+		case OBJECT3D_ENTITY:
 				script->pushString("Entity");
 			break;
-		case M_OBJECT3D_CAMERA:
+		case OBJECT3D_CAMERA:
 				script->pushString("Camera");
 			break;
 
-		case M_OBJECT3D_LIGHT:
+		case OBJECT3D_LIGHT:
 				script->pushString("Light");
 			break;
 
-		case M_OBJECT3D_SOUND:
+		case OBJECT3D_SOUND:
 				script->pushString("Sound");
 			break;
 
-		case M_OBJECT3D_TEXT:
+		case OBJECT3D_TEXT:
 				script->pushString("Text");
 			break;
 
-		case M_OBJECT3D:
+		case OBJECT3D:
 				script->pushString("Object");
 			break;
 		default:
@@ -605,7 +605,7 @@ int getBoundingMin()
 	Object3d * object = (Object3d*) script->getPointer(nbArguments-1);
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity* entity = (OEntity*) object;
 
@@ -630,7 +630,7 @@ int getBoundingMax()
 	Object3d * object = (Object3d*) script->getPointer(nbArguments-1);
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity* entity = (OEntity*) object;
 
@@ -664,7 +664,7 @@ int deleteObject()
 	}
 
 	Object3d* object = (Object3d*) script->getPointer(0);
-	if(object != NULL && object->getType() == M_OBJECT3D_ENTITY)
+	if(object != NULL && object->getType() == OBJECT3D_ENTITY)
 	{
 		PhysicsContext* physics = NeoEngine::getInstance()->getPhysicsContext();
 		OEntity * entity = (OEntity*)object;
@@ -763,20 +763,20 @@ int getClone()
 
 		switch(object->getType())
 		{
-			case M_OBJECT3D_CAMERA:
+			case OBJECT3D_CAMERA:
 				cloneObj = scene->addNewCamera(*(OCamera*)object);
 				break;
-			case M_OBJECT3D_LIGHT:
+			case OBJECT3D_LIGHT:
 				cloneObj = scene->addNewLight(*(OLight*)object);
 				break;
-			case M_OBJECT3D_ENTITY:
+			case OBJECT3D_ENTITY:
 				cloneObj = scene->addNewEntity(*(OEntity*)object);
 				scene->prepareCollisionObject((OEntity*)cloneObj);
 				break;
-			case M_OBJECT3D_SOUND:
+			case OBJECT3D_SOUND:
 				cloneObj = scene->addNewSound(*(OSound*)object);
 				break;
-			case M_OBJECT3D_TEXT:
+			case OBJECT3D_TEXT:
 				cloneObj = scene->addNewText(*(OText*)object);
 				break;
 		}
@@ -854,7 +854,7 @@ int getProjectedPoint()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			Vector3 vec;
 			if(getVector3(script, 2, &vec))
@@ -890,7 +890,7 @@ int getUnProjectedPoint()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			Vector3 vec;
 			if(getVector3(script, 2, &vec))
@@ -1308,7 +1308,7 @@ int setInvisible()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity* entity = static_cast<OEntity*>(object);
 			entity->setInvisible(script->getBoolean(1) != 0);
@@ -1335,7 +1335,7 @@ int activate()
 		if(! object->isActive())
 		{
 			object->setActive(true);
-			if(object->getType() == M_OBJECT3D_ENTITY)
+			if(object->getType() == OBJECT3D_ENTITY)
 			{
 				OEntity * entity = (OEntity*)object;
 				PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -1364,7 +1364,7 @@ int deactivate()
 		if(object->isActive())
 		{
 			object->setActive(false);
-			if(object->getType() == M_OBJECT3D_ENTITY)
+			if(object->getType() == OBJECT3D_ENTITY)
 			{
 				OEntity * entity = (OEntity*)object;
 				PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -1443,7 +1443,7 @@ int changeAnimation()
 
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 
@@ -1467,7 +1467,7 @@ int isAnimationOver()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			int isAnimOver = entity->isAnimationOver();
@@ -1490,7 +1490,7 @@ int getCurrentAnimation()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			int anim = (int)entity->getAnimationId();
@@ -1508,7 +1508,7 @@ int setAnimationSpeed()
 	if(! isFunctionOk(script, "setAnimationSpeed", 2))
 		return 0;
 
-	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, M_OBJECT3D_ENTITY)
+	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, OBJECT3D_ENTITY)
 			entity->setAnimationSpeed((float)script->getFloat(1));
 			return 0;
 	GET_OBJECT_SUBCLASS_END()
@@ -1522,7 +1522,7 @@ int getAnimationSpeed()
 	if(! isFunctionOk(script, "getAnimationSpeed", 1))
 		return 0;
 
-	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, M_OBJECT3D_ENTITY)
+	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, OBJECT3D_ENTITY)
 			script->pushFloat( (float)entity->getAnimationSpeed());
 			return 1;
 	GET_OBJECT_SUBCLASS_END()
@@ -1536,7 +1536,7 @@ int setCurrentFrame()
 	if(! isFunctionOk(script, "setCurrentFrame", 2))
 		return 0;
 
-	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, M_OBJECT3D_ENTITY)
+	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, OBJECT3D_ENTITY)
 			entity->setCurrentFrame((float)script->getFloat(1));
 			return 0;
 	GET_OBJECT_SUBCLASS_END()
@@ -1550,7 +1550,7 @@ int getCurrentFrame()
 	if(! isFunctionOk(script, "getCurrentFrame", 1))
 		return 0;
 
-	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, M_OBJECT3D_ENTITY)
+	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, OBJECT3D_ENTITY)
 			script->pushFloat( (float)entity->getCurrentFrame());
 			return 1;
 	GET_OBJECT_SUBCLASS_END()
@@ -1618,7 +1618,7 @@ int changeCurrentCamera()
 	Object3d * object = (Object3d*) script->getPointer(nbArguments-1);
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			unsigned int i;
 			unsigned int size = scene->getCamerasNumber();
@@ -1642,7 +1642,7 @@ int isGhost()
 	if(! isFunctionOk(script, "isGhost", 1))
 		return 0;
 
-	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, M_OBJECT3D_ENTITY)
+	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, OBJECT3D_ENTITY)
 			PhysicsProperties* phys = entity->getPhysicsProperties();
 
 			if(!phys)
@@ -1664,7 +1664,7 @@ int enableGhost()
 	if(! isFunctionOk(script, "enableGhost", 2))
 		return 0;
 
-	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, M_OBJECT3D_ENTITY)
+	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, OBJECT3D_ENTITY)
 			PhysicsProperties* phys = entity->getPhysicsProperties();
 
 			if(!phys)
@@ -1691,7 +1691,7 @@ int addCentralForce()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			Vector3 force;
 			if(getVector3(script, 2, &force))
@@ -1730,7 +1730,7 @@ int clearForces()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -1757,7 +1757,7 @@ int addTorque()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			Vector3 torque;
 			if(getVector3(script, 2, &torque))
@@ -1798,7 +1798,7 @@ int getLinearDamping()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -1826,7 +1826,7 @@ int setLinearDamping()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -1857,7 +1857,7 @@ int getAngularDamping()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -1885,7 +1885,7 @@ int setAngularDamping()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -1916,7 +1916,7 @@ int setConstraintParent()
 	Object3d* parent = (Object3d*) script->getPointer(1);
 	if(object && parent)
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY && parent->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY && parent->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -1950,7 +1950,7 @@ int getConstraintParent()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -1984,7 +1984,7 @@ int enableParentCollision()
 
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -2018,7 +2018,7 @@ int getCentralForce()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -2047,7 +2047,7 @@ int getTorque()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -2074,7 +2074,7 @@ int getMass()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -2097,7 +2097,7 @@ int enablePhysics()
 	if (!isFunctionOk(script, "enablePhysics", 2))
 		return 0;
 
-	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, M_OBJECT3D_ENTITY)
+	GET_OBJECT_SUBCLASS_BEGIN(OEntity, entity, OBJECT3D_ENTITY)
 	PhysicsContext* physics = NeoEngine::getInstance()->getPhysicsContext();
 	PhysicsProperties* phyProps = entity->createPhysicsProperties();
 	Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
@@ -2128,7 +2128,7 @@ int setMass()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -2155,7 +2155,7 @@ int getFriction()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -2183,7 +2183,7 @@ int setFriction()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -2210,7 +2210,7 @@ int getRestitution()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -2238,7 +2238,7 @@ int setRestitution()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -2265,7 +2265,7 @@ int getAngularFactor()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -2293,7 +2293,7 @@ int setAngularFactor()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -2320,7 +2320,7 @@ int getLinearFactor()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -2348,7 +2348,7 @@ int setLinearFactor()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -2378,7 +2378,7 @@ int getNumCollisions()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -2405,7 +2405,7 @@ int isCollisionTest()
 	Object3d* id = (Object3d*) script->getPointer(0);
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
 		{
 			OEntity * entity = (OEntity*)object;
 			PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -2435,7 +2435,7 @@ int isCollisionBetween()
 	object2 = (Object3d*) script->getPointer(1);
 	if(object1 && object2)
 	{
-		if((object1->getType() == M_OBJECT3D_ENTITY) && (object2->getType() == M_OBJECT3D_ENTITY))
+		if((object1->getType() == OBJECT3D_ENTITY) && (object2->getType() == OBJECT3D_ENTITY))
 		{
 			OEntity * entity1 = (OEntity*)object1;
 			OEntity * entity2 = (OEntity*)object2;
@@ -2485,7 +2485,7 @@ int rayHit()
 				Object3d * object = (Object3d*) script->getPointer(2);
 				if(object)
 				{
-					if(object->getType() == M_OBJECT3D_ENTITY)
+					if(object->getType() == OBJECT3D_ENTITY)
 					{
 						OEntity * entity = (OEntity*)object;
 						PhysicsProperties * phyProps = entity->getPhysicsProperties();
@@ -2675,7 +2675,7 @@ int playSound()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_SOUND)
+		if(object->getType() == OBJECT3D_SOUND)
 		{
 			OSound * sound = (OSound*)object;
 			sound->play();
@@ -2696,7 +2696,7 @@ int pauseSound()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_SOUND)
+		if(object->getType() == OBJECT3D_SOUND)
 		{
 			OSound * sound = (OSound*)object;
 			sound->pause();
@@ -2717,7 +2717,7 @@ int stopSound()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_SOUND)
+		if(object->getType() == OBJECT3D_SOUND)
 		{
 			OSound * sound = (OSound*)object;
 			sound->stop();
@@ -2738,7 +2738,7 @@ int setSoundPitch()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_SOUND)
+		if(object->getType() == OBJECT3D_SOUND)
 		{
 			OSound * sound = (OSound*)object;
 			sound->setPitch(script->getFloat(1));
@@ -2759,7 +2759,7 @@ int getSoundPitch()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_SOUND)
+		if(object->getType() == OBJECT3D_SOUND)
 		{
 			OSound * sound = (OSound*)object;
 			script->pushFloat( sound->getPitch());
@@ -2849,7 +2849,7 @@ int getLightColor()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_LIGHT)
+		if(object->getType() == OBJECT3D_LIGHT)
 		{
 			OLight * light = (OLight*) object;
 			script->pushFloatArray(light->getColor(), 3);
@@ -2871,7 +2871,7 @@ int getLightRadius()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_LIGHT)
+		if(object->getType() == OBJECT3D_LIGHT)
 		{
 			OLight * light = (OLight*)object;
 			script->pushFloat( (float)light->getRadius());
@@ -2893,7 +2893,7 @@ int getLightIntensity()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_LIGHT)
+		if(object->getType() == OBJECT3D_LIGHT)
 		{
 			OLight * light = (OLight*)object;
 			script->pushFloat( (float)light->getIntensity());
@@ -2916,7 +2916,7 @@ int setLightColor()
 	if((object = (Object3d*) id))
 	{
 		Vector3 color;
-		if(object->getType() == M_OBJECT3D_LIGHT && getVector3(script, 2, &color))
+		if(object->getType() == OBJECT3D_LIGHT && getVector3(script, 2, &color))
 		{
 			OLight * light = (OLight*)object;
 			light->setColor(color);
@@ -2938,7 +2938,7 @@ int setLightRadius()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_LIGHT)
+		if(object->getType() == OBJECT3D_LIGHT)
 		{
 			float radius = (float)script->getFloat(1);
 
@@ -2962,7 +2962,7 @@ int setLightIntensity()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_LIGHT)
+		if(object->getType() == OBJECT3D_LIGHT)
 		{
 			float intensity = (float)script->getFloat(1);
 
@@ -2986,14 +2986,14 @@ int enableShadow()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_LIGHT)
+		if(object->getType() == OBJECT3D_LIGHT)
 		{
 			bool shadow = script->getBoolean(1) == 1;
 			OLight* light = (OLight*) object;
 			light->castShadow(shadow);
 			return 0;
 		}
-		else if(object->getType() == M_OBJECT3D_ENTITY)
+		else if(object->getType() == OBJECT3D_ENTITY)
 		{
 			bool shadow = script->getBoolean(1) == 1;
 			OEntity* entity = (OEntity*) object;
@@ -3016,7 +3016,7 @@ int isCastingShadow()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_LIGHT)
+		if(object->getType() == OBJECT3D_LIGHT)
 		{
 			OLight * light = (OLight*)object;
 			script->pushBoolean( light->isCastingShadow());
@@ -3038,7 +3038,7 @@ int setlightShadowQuality()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_LIGHT)
+		if(object->getType() == OBJECT3D_LIGHT)
 		{
 			int quality = script->getInteger(1);
 			OLight * light = (OLight*)object;
@@ -3061,7 +3061,7 @@ int setlightShadowBias()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_LIGHT)
+		if(object->getType() == OBJECT3D_LIGHT)
 		{
 			float bias = script->getFloat(1);
 			OLight * light = (OLight*)object;
@@ -3084,7 +3084,7 @@ int setlightShadowBlur()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_LIGHT)
+		if(object->getType() == OBJECT3D_LIGHT)
 		{
 			float blur = script->getFloat(1);
 			OLight * light = (OLight*)object;
@@ -3107,7 +3107,7 @@ int getlightShadowQuality()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_LIGHT)
+		if(object->getType() == OBJECT3D_LIGHT)
 		{
 			OLight * light = (OLight*)object;
 			script->pushInteger( light->getShadowQuality());
@@ -3129,7 +3129,7 @@ int getlightShadowBias()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_LIGHT)
+		if(object->getType() == OBJECT3D_LIGHT)
 		{
 			OLight * light = (OLight*)object;
 			script->pushFloat( light->getShadowBias());
@@ -3151,7 +3151,7 @@ int getlightShadowBlur()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_LIGHT)
+		if(object->getType() == OBJECT3D_LIGHT)
 		{
 			OLight * light = (OLight*)object;
 			script->pushFloat( light->getShadowBlur());
@@ -3173,7 +3173,7 @@ int setlightSpotAngle()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_LIGHT)
+		if(object->getType() == OBJECT3D_LIGHT)
 		{
 			float angle = script->getFloat(1);
 			OLight * light = (OLight*)object;
@@ -3196,7 +3196,7 @@ int setlightSpotExponent()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_LIGHT)
+		if(object->getType() == OBJECT3D_LIGHT)
 		{
 			float exponent = script->getFloat(1);
 			OLight * light = (OLight*)object;
@@ -3219,7 +3219,7 @@ int getlightSpotAngle()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_LIGHT)
+		if(object->getType() == OBJECT3D_LIGHT)
 		{
 			OLight * light = (OLight*)object;
 			script->pushFloat( light->getSpotAngle());
@@ -3241,7 +3241,7 @@ int getlightSpotExponent()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_LIGHT)
+		if(object->getType() == OBJECT3D_LIGHT)
 		{
 			OLight * light = (OLight*)object;
 			script->pushFloat( light->getSpotExponent());
@@ -3276,7 +3276,7 @@ int getSoundGain()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_SOUND)
+		if(object->getType() == OBJECT3D_SOUND)
 		{
 			OSound * sound = (OSound*)object;
 			script->pushFloat( (float)sound->getGain());
@@ -3298,7 +3298,7 @@ int setSoundGain()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_SOUND)
+		if(object->getType() == OBJECT3D_SOUND)
 		{
 			float gain = (float)script->getFloat(1);
 			OSound * sound = (OSound*)object;
@@ -3333,7 +3333,7 @@ int setCameraClearColor()
 	if(object)
 	{
 		Vector3 color;
-		if(object->getType() == M_OBJECT3D_CAMERA && getVector3(script, 2, &color))
+		if(object->getType() == OBJECT3D_CAMERA && getVector3(script, 2, &color))
 		{
 			OCamera * camera = (OCamera*)object;
 			camera->setClearColor(color);
@@ -3354,7 +3354,7 @@ int getCameraClearColor()
 
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			OCamera * camera = (OCamera*)object;
 			script->pushFloatArray( camera->getClearColor(), 3);
@@ -3376,7 +3376,7 @@ int setCameraNear()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			float clipNear = (float)script->getFloat(1);
 			OCamera * camera = (OCamera*)object;
@@ -3399,7 +3399,7 @@ int getCameraNear()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			OCamera * camera = (OCamera*)object;
 			script->pushFloat( (float)camera->getClippingNear());
@@ -3421,7 +3421,7 @@ int setCameraFar()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			float clipFar = (float)script->getFloat(1);
 			OCamera * camera = (OCamera*)object;
@@ -3444,7 +3444,7 @@ int getCameraFar()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			OCamera * camera = (OCamera*)object;
 			script->pushFloat( (float)camera->getClippingFar());
@@ -3466,7 +3466,7 @@ int setCameraFov()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			float fov = (float)script->getFloat(1);
 			OCamera * camera = (OCamera*)object;
@@ -3489,7 +3489,7 @@ int getCameraFov()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			OCamera * camera = (OCamera*)object;
 			script->pushFloat( (float)camera->getFov());
@@ -3511,7 +3511,7 @@ int setCameraFogDistance()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			float fogDist = (float)script->getFloat(1);
 			OCamera * camera = (OCamera*)object;
@@ -3534,7 +3534,7 @@ int getCameraFogDistance()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			OCamera * camera = (OCamera*)object;
 			script->pushFloat( (float)camera->getFogDistance());
@@ -3555,7 +3555,7 @@ int enableCameraOrtho()
 
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			bool ortho = script->getBoolean(1) == 1;
 			OCamera * camera = (OCamera*)object;
@@ -3578,7 +3578,7 @@ int isCameraOrtho()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			OCamera * camera = (OCamera*)object;
 			script->pushBoolean( camera->isOrtho());
@@ -3600,7 +3600,7 @@ int enableCameraFog()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			bool fog = script->getBoolean(1) == 1;
 			OCamera * camera = (OCamera*)object;
@@ -3623,7 +3623,7 @@ int isCameraFogEnabled()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			OCamera * camera = (OCamera*)object;
 			script->pushBoolean( camera->hasFog());
@@ -3645,7 +3645,7 @@ int enableCameraLayer()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			unsigned int sceneId = (unsigned int)script->getInteger(1);
 			OCamera * camera = (OCamera*)object;
@@ -3668,7 +3668,7 @@ int disableCameraLayer()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			OCamera * camera = (OCamera*)object;
 			camera->setSceneLayer(0);
@@ -3694,7 +3694,7 @@ int enableRenderToTexture()
 
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			const char * name = script->getString(1);
 			if(name)
@@ -3759,7 +3759,7 @@ int disableRenderToTexture()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_CAMERA)
+		if(object->getType() == OBJECT3D_CAMERA)
 		{
 			OCamera * camera = (OCamera *)object;
 
@@ -4166,7 +4166,7 @@ int getFontFilename()
 
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_TEXT)
+		if(object->getType() == OBJECT3D_TEXT)
 		{
 			OText* text = (OText*) object;
 			script->pushString( text->getFontRef()->getFilename());
@@ -4187,7 +4187,7 @@ int getTextAlignment()
 
 	if(object)
 	{
-		if(object->getType() == M_OBJECT3D_TEXT)
+		if(object->getType() == OBJECT3D_TEXT)
 		{
 			switch(((OText*) object)->getAlign())
 			{
@@ -4220,7 +4220,7 @@ int setTextAlignment()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_TEXT)
+		if(object->getType() == OBJECT3D_TEXT)
 		{
 			if(!strcmp(alignment, "Center"))
 				static_cast<OText*>(object)->setAlign(TEXT_ALIGN_CENTER);
@@ -4249,7 +4249,7 @@ int getTextFontSize()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_TEXT)
+		if(object->getType() == OBJECT3D_TEXT)
 		{
 			script->pushFloat( ((OText*) object)->getSize());
 			return 1;
@@ -4270,7 +4270,7 @@ int setTextFontSize()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_TEXT)
+		if(object->getType() == OBJECT3D_TEXT)
 		{
 			((OText *)object)->setSize(script->getFloat(1));
 		}
@@ -4290,7 +4290,7 @@ int getText()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_TEXT)
+		if(object->getType() == OBJECT3D_TEXT)
 		{
 			const char * text = ((OText *)object)->getText();
 			if(text){
@@ -4315,7 +4315,7 @@ int setText()
 	if((object = (Object3d*) id))
 	{
 		const char * text = script->getString(1);
-		if((text) && (object->getType() == M_OBJECT3D_TEXT))
+		if((text) && (object->getType() == OBJECT3D_TEXT))
 		{
 			((OText *)object)->setText(text);
 		}
@@ -4335,7 +4335,7 @@ int getTextColor()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_TEXT)
+		if(object->getType() == OBJECT3D_TEXT)
 		{
 			Vector4 color = ((OText *)object)->getColor();
 			script->pushFloatArray(color, 4);
@@ -4357,7 +4357,7 @@ int setTextColor()
 
 	if((object = (Object3d*) id))
 	{
-		if(object->getType() == M_OBJECT3D_TEXT)
+		if(object->getType() == OBJECT3D_TEXT)
 		{
 			Vector4 color;
 			script->getFloatArray(1, color, 4);
@@ -4451,7 +4451,7 @@ int loadCameraSkybox()
 	if(!isFunctionOk(script, "loadCameraSkybox", 2))
 		return 0;
 
-	GET_OBJECT_SUBCLASS_BEGIN(OCamera, camera, M_OBJECT3D_CAMERA)
+	GET_OBJECT_SUBCLASS_BEGIN(OCamera, camera, OBJECT3D_CAMERA)
 			camera->loadSkybox(script->getString(1));
 			return 1;
 	GET_OBJECT_SUBCLASS_END()

@@ -48,3 +48,14 @@ void WindowManager::selectWindow(Window* w)
 		idx++;
 	}
 }
+
+bool WindowManager::isMouseOver()
+{
+	for(Widget* w : m_content)
+	{
+		if(w->isMouseOver())
+			return true;
+	}
+
+	return false;
+}

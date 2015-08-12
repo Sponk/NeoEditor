@@ -48,7 +48,10 @@ public:
 	unsigned int m_fx[NUM_SHADERS];
 
 	unsigned int m_framebufferID;
+	unsigned int m_finalFramebufferID;
+
 	unsigned int m_gbufferTexID;
+	unsigned int m_finalTexID;
 	unsigned int m_depthTexID;
 	unsigned int m_normalTexID;
 	unsigned int m_positionTexID;
@@ -66,9 +69,9 @@ public:
 	void initQuadVAO(unsigned int* vao, unsigned int *vbo, unsigned int *texcoordVbo, unsigned int fx);
 	void clearQuadVAO(unsigned int* vao, unsigned int *vbo, unsigned int *texcoordVbo);
 
-	void drawMesh(Mesh* mesh, OCamera* camera);
-	void drawSubMesh(SubMesh* mesh, OCamera* camera);
-	void drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCamera* camera);
+	void drawMesh(Mesh* mesh, OCamera* camera, bool wireframe);
+	void drawSubMesh(SubMesh* mesh, OCamera* camera, bool wireframe);
+	void drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCamera* camera, bool wireframe);
 
 	void sendLight(unsigned int fx, OLight* l, int num, Matrix4x4 matrix);
 
@@ -80,7 +83,7 @@ public:
 	void initFramebuffers(Vector2 res = Vector2(0,0));
 	void clearFramebuffers();
 
-	void renderFinalImage(Scene *scene, OCamera* camera);
+	void renderFinalImage(Scene *scene, OCamera* camera, bool postFx = false);
 
 	void set2D(unsigned int w, unsigned int h);
 	void drawQuad(int fx);

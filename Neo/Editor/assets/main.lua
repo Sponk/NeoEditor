@@ -39,6 +39,6 @@ function update(dt)
    NeoLua.updateEasyAccess()
    
    if Settings.gameRunning and gameUpdate ~= nil then
-	  pcall(gameUpdate, dt)
+	   gameUpdate(dt)
    end
 end

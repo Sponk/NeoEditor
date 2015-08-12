@@ -239,6 +239,7 @@ public:
 	inline void translate(const Vector3& vec, bool local = false)
 	{
 		m_position += (local ? (vec + getTransformedVector(vec)) : vec);
+		m_needToUpdate = true;
 	}
 
 	/**
@@ -545,7 +546,7 @@ public:
 	 * @brief Returns the type of the object.
 	 * @return The type.
 	 */
-	virtual int getType(void) { return M_OBJECT3D; }
+	virtual int getType(void) { return OBJECT3D; }
 
 	/**
 	 * @brief Updates the object.

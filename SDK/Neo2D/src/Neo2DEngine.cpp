@@ -991,3 +991,15 @@ void Neo2DEngine::setThemeDirectory(const char* dir)
 	m_themeBorderVPressed = path;
 	
 }
+
+bool Neo2DEngine::isMouseOnGui()
+{
+	for(auto iter = m_widgets.begin(); iter != m_widgets.end(); iter++)
+	{
+		Widget* widget = iter->second.w;
+		if(widget->isMouseOver())
+			return true;
+	}
+
+	return false;
+}

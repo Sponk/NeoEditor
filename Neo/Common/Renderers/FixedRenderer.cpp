@@ -1014,7 +1014,7 @@ void FixedRenderer::drawScene(Scene * scene, OCamera * camera)
 		// objects
 		switch(object->getType())
 		{
-			case M_OBJECT3D_ENTITY:
+			case OBJECT3D_ENTITY:
 			{
 				OEntity * entity = (OEntity *)object;
 				unsigned int subMeshId = subMeshPass->subMeshId;
@@ -1093,7 +1093,7 @@ void FixedRenderer::drawScene(Scene * scene, OCamera * camera)
 			}
 				break;
 
-			case M_OBJECT3D_TEXT:
+			case OBJECT3D_TEXT:
 			{
 				OText * text = (OText *)object;
 

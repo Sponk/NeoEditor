@@ -1,6 +1,8 @@
 ## Find source and headers
 FILE(GLOB_RECURSE HEADERS *.h)
 FILE(GLOB_RECURSE SOURCES *.c*)
+FILE(GLOB_RECURSE VERT_SHADERS *.vert)
+FILE(GLOB_RECURSE FRAG_SHADERS *.frag)
 
 IF(APPLE)
     FILE(GLOB_RECURSE MAC_SOURCES *.mm)
@@ -54,3 +56,5 @@ ADD_DEFINITIONS(-DSHADER_PATH="assets/shaders/Renderers" -DGL_DEBUG)
 # Copy shaders
 copy_files("Renderers/*.vert" "${NEO_BINARY_OUTPUT}/assets/shaders" "copy-vert-shaders")
 copy_files("Renderers/*.frag" "${NEO_BINARY_OUTPUT}/assets/shaders" "copy-frag-shaders")
+
+INSTALL(FILES ${VERT_SHADERS} ${FRAG_SHADERS} DESTINATION ${NEO_INSTALL_DIR}/assets/shaders/Renderers)

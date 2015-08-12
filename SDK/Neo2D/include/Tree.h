@@ -169,6 +169,8 @@ protected:
 	 */
 	void drawTree(TreeNode<std::string>* root, Vector2* level);
 
+	TreeNode<std::string>* find(const char* name, TreeNode<std::string>* root);
+
 public:
 	TreeView(unsigned int x, unsigned int y, unsigned int width,
 		  unsigned int height, const char* label)
@@ -231,6 +233,11 @@ public:
 	 * @return The name of the selected node.
 	 */
 	const char* getSelected() { if(m_selected) return m_selected->getData().c_str(); return nullptr; }
+
+	void selectEntry(const char* name);
+	void selectEntry(TreeNode<std::string>* node) { m_selected = node; }
+
+	TreeNode<std::string>* find(const char* name);
 
 	void draw(Vector2 offset);
 	void update();

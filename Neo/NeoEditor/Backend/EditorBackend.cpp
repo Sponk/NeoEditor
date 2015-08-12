@@ -492,10 +492,10 @@ void EditorBackend::start(void)
 		engine->getFontLoader()->addLoader(M_loadBinFont); // bin font loader
 
         // add behaviors
-		engine->getBehaviorManager()->addBehavior(LookAtBehavior::getStaticName(), M_OBJECT3D, LookAtBehavior::getNew);
-		engine->getBehaviorManager()->addBehavior(FollowBehavior::getStaticName(), M_OBJECT3D, FollowBehavior::getNew);
-		engine->getBehaviorManager()->addBehavior(LuaBehavior::getStaticName(), M_OBJECT3D, LuaBehavior::getNew);
-		engine->getBehaviorManager()->addBehavior(ParticleSystemBehavior::getStaticName(), M_OBJECT3D, ParticleSystemBehavior::getNew);
+		engine->getBehaviorManager()->addBehavior(LookAtBehavior::getStaticName(), OBJECT3D, LookAtBehavior::getNew);
+		engine->getBehaviorManager()->addBehavior(FollowBehavior::getStaticName(), OBJECT3D, FollowBehavior::getNew);
+		engine->getBehaviorManager()->addBehavior(LuaBehavior::getStaticName(), OBJECT3D, LuaBehavior::getNew);
+		engine->getBehaviorManager()->addBehavior(ParticleSystemBehavior::getStaticName(), OBJECT3D, ParticleSystemBehavior::getNew);
 
         // add renderers
         engine->getRendererManager()->addRenderer(StandardRenderer::getStaticName(), StandardRenderer::getNew);
@@ -740,7 +740,7 @@ Object3d* EditorBackend::duplicateObject(Object3d *object)
 	
 	switch (object->getType())
 	{
-		case M_OBJECT3D_ENTITY:
+		case OBJECT3D_ENTITY:
 		{
 			getNewObjectName(object->getName(), name);
 
@@ -748,7 +748,7 @@ Object3d* EditorBackend::duplicateObject(Object3d *object)
 			entity->setName(name);
 		}
 		break;
-		case M_OBJECT3D_LIGHT:
+		case OBJECT3D_LIGHT:
 		{
 			getNewObjectName(object->getName(), name);
 
@@ -756,7 +756,7 @@ Object3d* EditorBackend::duplicateObject(Object3d *object)
 			light->setName(name);
 		}
 		break;
-		case M_OBJECT3D_CAMERA:
+		case OBJECT3D_CAMERA:
 		{
 			getNewObjectName(object->getName(), name);
 
@@ -764,7 +764,7 @@ Object3d* EditorBackend::duplicateObject(Object3d *object)
 			camera->setName(name);
 		}
 		break;
-		case M_OBJECT3D_SOUND:
+		case OBJECT3D_SOUND:
 		{
 			getNewObjectName(object->getName(), name);
 
@@ -772,14 +772,14 @@ Object3d* EditorBackend::duplicateObject(Object3d *object)
 			sound->setName(name);
 		}
 		break;
-		case M_OBJECT3D_TEXT:
+		case OBJECT3D_TEXT:
 		{
 			getNewObjectName(object->getName(), name);
 			copiedObject = text = scene->addNewText(*(OText *)object);
 			text->setName(name);
 		}
 		break;
-		case M_OBJECT3D:
+		case OBJECT3D:
 		{
 			getNewObjectName(object->getName(), name);
 			copiedObject = group = scene->addNewGroup(*object);
@@ -1789,7 +1789,7 @@ Object3d * EditorBackend::getNearestObject(Scene * scene, const Vector3 & rayO, 
         float dist;
         switch(object->getType())
         {
-			case M_OBJECT3D_ENTITY:
+			case OBJECT3D_ENTITY:
             {
                 OEntity * entity = (OEntity *)object;
                 Matrix4x4 * matrix = entity->getMatrix();
@@ -1805,7 +1805,7 @@ Object3d * EditorBackend::getNearestObject(Scene * scene, const Vector3 & rayO, 
                 }
             }
                 break;
-			case M_OBJECT3D_CAMERA:
+			case OBJECT3D_CAMERA:
             {
                 float scale;
 
@@ -1826,7 +1826,7 @@ Object3d * EditorBackend::getNearestObject(Scene * scene, const Vector3 & rayO, 
                     continue;
             }
                 break;
-			case M_OBJECT3D_LIGHT:
+			case OBJECT3D_LIGHT:
             {
                 float scale;
 
@@ -1847,7 +1847,7 @@ Object3d * EditorBackend::getNearestObject(Scene * scene, const Vector3 & rayO, 
                     continue;
             }
                 break;
-			case M_OBJECT3D_SOUND:
+			case OBJECT3D_SOUND:
             {
                 float scale;
 
@@ -1868,7 +1868,7 @@ Object3d * EditorBackend::getNearestObject(Scene * scene, const Vector3 & rayO, 
                     continue;
             }
                 break;
-			case M_OBJECT3D_TEXT:
+			case OBJECT3D_TEXT:
             {
                 OText * text = (OText*)object;
                 Vector3 min = text->getBoundingBox()->min;
@@ -1952,16 +1952,16 @@ void EditorBackend::focusSelection(void)
         center += pobj->getTransformedPosition();
         switch(pobj->getType())
         {
-			case M_OBJECT3D:
-			case M_OBJECT3D_BONE:
-			case M_OBJECT3D_CAMERA:
-			case M_OBJECT3D_LIGHT:
-			case M_OBJECT3D_SOUND:
-			case M_OBJECT3D_TEXT:
+			case OBJECT3D:
+			case OBJECT3D_BONE:
+			case OBJECT3D_CAMERA:
+			case OBJECT3D_LIGHT:
+			case OBJECT3D_SOUND:
+			case OBJECT3D_TEXT:
                 distance = 20.0f;
                 break;
 
-			case M_OBJECT3D_ENTITY:
+			case OBJECT3D_ENTITY:
                 {
                     OEntity *pentity = (OEntity*)pobj;
                     Box3d *pbox = pentity->getBoundingBox();
@@ -2016,7 +2016,7 @@ void EditorBackend::selectSameMesh(void)
     for(i=0; i<selSize; i++)
     {
         Object3d * object = getSelectedObjectByIndex(i);
-		if(object->getType() == M_OBJECT3D_ENTITY)
+		if(object->getType() == OBJECT3D_ENTITY)
         {
             OEntity * entity = (OEntity *)object;
             Mesh * mesh = entity->getMesh();
@@ -4582,7 +4582,7 @@ void EditorBackend::drawMainView(Scene * scene)
 
             switch(object->getType())
             {
-				case M_OBJECT3D_ENTITY:
+				case OBJECT3D_ENTITY:
                 {
                     entity = (OEntity *)object;
 
@@ -4593,7 +4593,7 @@ void EditorBackend::drawMainView(Scene * scene)
                     render->popMatrix();
                 }
                     break;
-				case M_OBJECT3D_TEXT:
+				case OBJECT3D_TEXT:
                 {
                     text = (OText *)object;
 

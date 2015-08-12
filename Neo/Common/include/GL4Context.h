@@ -61,6 +61,7 @@ private:
         // fog
         float m_fogMin, m_fogMax;
 		Vector3 m_fogColor;
+		float m_anisotropy;
 
 public:
 
@@ -239,8 +240,8 @@ public:
 		void setBlendingMode(BLENDING_MODES mode);
 
         // not yet implemented
-        void enablePolygonOffset(float x, float y) {};
-        void disablePolygonOffset() {};
+        void enablePolygonOffset(float x, float y);
+        void disablePolygonOffset();
 
     // VBO
     void createVBO(unsigned int * vboId);

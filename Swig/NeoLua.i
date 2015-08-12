@@ -63,8 +63,8 @@
 %include <DataManager.h>
 %include <DataLoader.h>
 
-
 %include <NeoEngine.h>
+%include <Box3d.h>
 %include <NeoGame.h>
 %include <Object3d.h>
 %include <Scene.h>

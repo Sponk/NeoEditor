@@ -153,10 +153,10 @@ void PlayerBackend::start(void)
 		engine->getFontLoader()->addLoader(M_loadBinFont); // bin font loader
 
 		// add behaviors
-        engine->getBehaviorManager()->addBehavior(LookAtBehavior::getStaticName(), M_OBJECT3D_CAMERA, LookAtBehavior::getNew);
-		engine->getBehaviorManager()->addBehavior(FollowBehavior::getStaticName(), M_OBJECT3D, FollowBehavior::getNew);
-        engine->getBehaviorManager()->addBehavior(LuaBehavior::getStaticName(), M_OBJECT3D, LuaBehavior::getNew);
-        engine->getBehaviorManager()->addBehavior(ParticleSystemBehavior::getStaticName(), M_OBJECT3D, ParticleSystemBehavior::getNew);
+        engine->getBehaviorManager()->addBehavior(LookAtBehavior::getStaticName(), OBJECT3D_CAMERA, LookAtBehavior::getNew);
+		engine->getBehaviorManager()->addBehavior(FollowBehavior::getStaticName(), OBJECT3D, FollowBehavior::getNew);
+        engine->getBehaviorManager()->addBehavior(LuaBehavior::getStaticName(), OBJECT3D, LuaBehavior::getNew);
+        engine->getBehaviorManager()->addBehavior(ParticleSystemBehavior::getStaticName(), OBJECT3D, ParticleSystemBehavior::getNew);
 
 		// add renderers
 		engine->getRendererManager()->addRenderer(StandardRenderer::getStaticName(), StandardRenderer::getNew);

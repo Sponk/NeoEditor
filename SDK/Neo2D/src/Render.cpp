@@ -161,8 +161,10 @@ void Render::drawColoredQuad(float x, float y, float w, float h, Vector4 color,
 	// Set up env
 	render->bindVAO(m_colorVao);
 	render->bindFX(m_colorOnlyFx);
+
 	render->enableBlending();
 	render->setBlendingMode(BLENDING_ALPHA);
+
 	render->disableCullFace();
 	render->disableDepthTest();
 
@@ -289,9 +291,12 @@ void Render::drawTexturedQuad(float x, float y, float w, float h, int texture,
 	// Set up env
 	render->bindVAO(m_textureVao);
 	render->bindFX(m_texturedFx);
+
 	render->enableBlending();
 	render->setBlendingMode(BLENDING_ALPHA);
+
 	render->disableDepthTest();
+	render->disableCullFace();
 	render->bindTexture(texture);
 
 	// projmodelview matrix

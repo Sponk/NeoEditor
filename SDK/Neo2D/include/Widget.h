@@ -299,6 +299,8 @@ public:
 
 	// For runtime identification
 	const char* getStaticName() { return "Widget"; }
+
+	virtual bool isMouseOver();
 };
 }
 #endif

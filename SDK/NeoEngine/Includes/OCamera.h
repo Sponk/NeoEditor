@@ -74,7 +74,7 @@ public:
 public:
 
 	// type
-	int getType(void){ return M_OBJECT3D_CAMERA; }
+	int getType(void){ return OBJECT3D_CAMERA; }
 
 	// properties
 	inline void enableFog(const bool fog){ m_fog = fog; }

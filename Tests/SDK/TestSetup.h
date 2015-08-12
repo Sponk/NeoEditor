@@ -45,7 +45,7 @@ public:
 		engine->setPhysicsContext(physcontext);
 		engine->setRenderingContext(render);
 		
-		engine->getBehaviorManager()->addBehavior(Neo::LuaBehavior::getStaticName(), M_OBJECT3D, Neo::LuaBehavior::getNew);
+		engine->getBehaviorManager()->addBehavior(Neo::LuaBehavior::getStaticName(), OBJECT3D, Neo::LuaBehavior::getNew);
 
 		// Init default thread
 		Neo::ThreadFactory* mgr = Neo::ThreadFactory::getInstance();

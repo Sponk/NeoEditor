@@ -41,6 +41,8 @@ class NEO2D_EXPORT WindowManager : public Container
 
 	DISOWN(Window* window) void selectWindow(Window* w);
 	Window* getSelectedWindow() { return m_selectedWindow; }
+
+	bool isMouseOver();
 };
 
 }

@@ -211,19 +211,19 @@ void add_to_tree(Object3d* entity, std::string path)
 				// Assign icons
 				switch (entity->getType())
 				{
-					case M_OBJECT3D_CAMERA:
+					case OBJECT3D_CAMERA:
 						item->usericon(&camera_icon);
 						break;
-					case M_OBJECT3D_LIGHT:
+					case OBJECT3D_LIGHT:
 						item->usericon(&light_icon);
 						break;
-					case M_OBJECT3D_ENTITY:
+					case OBJECT3D_ENTITY:
 						item->usericon(&entity_icon);
 						break;
-					case M_OBJECT3D_TEXT:
+					case OBJECT3D_TEXT:
 						item->usericon(&text_icon);
 						break;
-					case M_OBJECT3D_SOUND:
+					case OBJECT3D_SOUND:
 						item->usericon(&sound_icon);
 						break;
 				}
@@ -242,19 +242,19 @@ void add_to_tree(Object3d* entity, std::string path)
 				// Assign icons
 				switch (entity->getType())
 				{
-					case M_OBJECT3D_CAMERA:
+					case OBJECT3D_CAMERA:
 						item->usericon(&camera_icon);
 						break;
-					case M_OBJECT3D_LIGHT:
+					case OBJECT3D_LIGHT:
 						item->usericon(&light_icon);
 						break;
-					case M_OBJECT3D_ENTITY:
+					case OBJECT3D_ENTITY:
 						item->usericon(&entity_icon);
 						break;
-					case M_OBJECT3D_TEXT:
+					case OBJECT3D_TEXT:
 						item->usericon(&text_icon);
 						break;
-					case M_OBJECT3D_SOUND:
+					case OBJECT3D_SOUND:
 						item->usericon(&sound_icon);
 						break;
 				}
@@ -976,7 +976,7 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
 
 	window.special_tab->begin();
 
-	if (object->getType() == M_OBJECT3D_ENTITY)
+	if (object->getType() == OBJECT3D_ENTITY)
 	{
 		DELETE_WINDOW(text_window);
 		DELETE_WINDOW(light_window);
@@ -1033,7 +1033,7 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
 			window.object_physics_button->value(0);
 		}
 	}
-	else if (object->getType() == M_OBJECT3D_LIGHT)
+	else if (object->getType() == OBJECT3D_LIGHT)
 	{
 		OLight* light = (OLight*)object;
 
@@ -1081,7 +1081,7 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
 
 		position = light->getPosition();
 	}
-	else if (object->getType() == M_OBJECT3D_CAMERA)
+	else if (object->getType() == OBJECT3D_CAMERA)
 	{
 		DELETE_WINDOW(text_window);
 		DELETE_WINDOW(light_window);
@@ -1122,7 +1122,7 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
 			window.camera_fog_button->value(camera->hasFog());
 		}
 	}
-	else if (object->getType() == M_OBJECT3D_TEXT)
+	else if (object->getType() == OBJECT3D_TEXT)
 	{
 		DELETE_WINDOW(camera_window);
 		DELETE_WINDOW(light_window);
@@ -1160,7 +1160,7 @@ void scene_tree_callback(DnDTree* tree, long update_tree)
 		window.text_b->value(color.z);
 		window.text_a->value(color.w);
 	}
-	else if (object->getType() == M_OBJECT3D_SOUND)
+	else if (object->getType() == OBJECT3D_SOUND)
 	{
 		DELETE_WINDOW(text_window);
 		DELETE_WINDOW(light_window);
@@ -2008,7 +2008,7 @@ void add_behavior_menu_callback(Fl_Menu_* menu, const char* name)
 	}
 
 	if ((behavior->getObjectFilter() != object->getType()) &&
-		(behavior->getObjectFilter() != M_OBJECT3D))
+		(behavior->getObjectFilter() != OBJECT3D))
 	{
 		MLOG_ERROR("Can't add behavior: Behavior is from a different type!");
 		fl_alert(tr("Could not add behavior: Behavior is from a different type "

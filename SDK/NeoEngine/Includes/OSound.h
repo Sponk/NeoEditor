@@ -59,7 +59,7 @@ private:
 public:
 
 	// type
-	int getType(void){ return M_OBJECT3D_SOUND; }
+	int getType(void){ return OBJECT3D_SOUND; }
 
 	// sound ref
 	void setSoundRef(SoundRef * soundRef);
