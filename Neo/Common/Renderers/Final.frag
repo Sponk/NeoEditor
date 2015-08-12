@@ -277,27 +277,27 @@ vec3 FxaaPixelShader(vec4 posPos, sampler2D tex, vec2 rcpFrame)
 
 void main(void)
 {
+	FragColor = texture2D(Textures[0], texCoord);		
+
+	if(FragColor.a == 0.0)
+		discard;
+		
+	float transparency = FragColor.a;
 
 	if(PostEffects == 1)
-	{		
-		FragColor = texture2D(Textures[0], texCoord);
-		
-		if(FragColor.a == 0.0) discard;
-		
+	{					
 		vec2 frame = vec2(vec2(1.0 / Width, 1.0/ Height));
 		//FragColor = fxaa(Textures[0], texCoord, frame);
 		FragColor.rgb = FxaaPixelShader(vec4(texCoord.xy, texCoord.xy - frame * (0.5 + FXAA_SUBPIX_SHIFT)), Textures[0], frame);
 		FragColor = gammaCorrection(FragColor, 1.2);
 		return;
 	}
-
+	
 	vec4 data = texture2D(Textures[4], texCoord);
-	FragColor = texture2D(Textures[0], texCoord);//gammaCorrection(texture2D(Textures[0], texCoord), 1.2);
 	vec4 startColor = FragColor;
 	vec4 n = texture2D(Textures[1], texCoord);
 		
-	float transparency = FragColor.a;
-	//    data.r = 0;
+	// data.r = 0;float transparency = FragColor.a;
     if(FragColor.a == 1.0 && n.a == 0)
 	{
 		vec4 p = texture2D(Textures[2], texCoord);

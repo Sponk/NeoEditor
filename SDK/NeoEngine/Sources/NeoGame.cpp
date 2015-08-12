@@ -209,7 +209,7 @@ void NeoGame::draw(void)
 		OCamera * camera = scene->getCurrentCamera();
 
 		// draw current scene
-        if(!camera->getRenderColorTexture() && (!m_postEffectsEnabled || !m_postProcessor.draw(camera)))
+        if(!camera->getRenderColorTexture())
 		{
 			render->setClearColor(camera->getClearColor());
 			render->clear(BUFFER_COLOR | BUFFER_DEPTH);

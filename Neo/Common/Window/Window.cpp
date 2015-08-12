@@ -748,6 +748,7 @@ bool NeoWindow::create(const char * title, unsigned int width, unsigned int heig
 
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+
 //#endif
 
 	g_context = SDL_GL_CreateContext(g_NeoWindow);

@@ -304,7 +304,7 @@ function update(dt)
   end
   
   Editor.mx = mx
-  Editor.my = my
+  Editor.my = my 
 end
 
 Editor.loadTranslationList()
@@ -320,7 +320,7 @@ Editor.overlayScene = NeoLua.level:addNewScene()
 Editor.overlayScene:setName("EditorOverlay")
 
 Editor.overlaySceneId = NeoLua.level:getScenesNumber()
--- Editor.sceneCamera:setSceneLayer(Editor.overlaySceneId)
+Editor.sceneCamera:setSceneLayer(Editor.overlaySceneId)
 
 Editor.sceneCamera:setName("MainSceneCamera")
 Editor.sceneCamera:setPosition(NeoLua.Vector3(0, -200, 200))
@@ -328,8 +328,9 @@ Editor.sceneCamera:setEulerRotation(NeoLua.Vector3(90,0,0))
 Editor.sceneCamera:setClippingFar(100000)
 Editor.sceneCamera:setEulerRotation(NeoLua.Vector3(40, 0, 0))
 
-Editor.overlayCamera = Editor.overlayScene:addNewCamera(Editor.sceneCamera)
+Editor.overlayCamera = Editor.overlayScene:addNewCamera()
 Editor.overlayCamera:setName("Camera")
+Editor.overlayCamera:linkTo(Editor.sceneCamera)
 
 Editor.lastPoint = NeoLua.Vector3()
 Editor.currentSelection = {}

@@ -759,7 +759,7 @@ void StandardRenderer::initFramebuffers(Vector2 res)
 	render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
 	render->setTextureUWrapMode(WRAP_CLAMP);
 	render->setTextureVWrapMode(WRAP_CLAMP);
-	render->texImage(0, res.x, res.y, VAR_FLOAT, TEX_RGB, 0);
+	render->texImage(0, res.x, res.y, VAR_FLOAT, TEX_RGBA, 0);
 
 	render->attachFrameBufferTexture(ATTACH_COLOR0, m_finalTexID);
 
@@ -904,18 +904,7 @@ void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
 		
 	// render to texture
 	render->bindFrameBuffer(m_framebufferID);
-
-/*	render->attachFrameBufferTexture(ATTACH_COLOR0, m_gbufferTexID);
-	render->attachFrameBufferTexture(ATTACH_COLOR1, m_normalTexID);
-	render->attachFrameBufferTexture(ATTACH_COLOR2, m_positionTexID);
-	render->attachFrameBufferTexture(ATTACH_COLOR3, m_dataTexID);
-	render->attachFrameBufferTexture(ATTACH_DEPTH, m_depthTexID);
-	
-	// Enable them to be drawn
-	FRAME_BUFFER_ATTACHMENT buffers[5] = {ATTACH_COLOR0, ATTACH_COLOR1, ATTACH_COLOR2, ATTACH_COLOR3, ATTACH_COLOR4, ATTACH_DEPTH};
-	render->setDrawingBuffers(buffers, 4);
-
-	render->setViewport(0, 0, screenWidth, screenHeight); // change viewport*/
+	render->setViewport(0, 0, screenWidth, screenHeight); // change viewport
 
 	Vector4 clearColor = camera->getClearColor();
 
@@ -1048,8 +1037,6 @@ void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera, bool post
 	system->getScreenSize(&screenWidth, &screenHeight);
 
 	// draw the rendered textured with a shader effect
-	//render->setClearColor(Vector3(1, 0, 0));
-	render->clear(BUFFER_COLOR);
 	set2D(screenWidth, screenHeight);
 
 	render->bindFX(m_fx[1]);
@@ -1062,13 +1049,20 @@ void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera, bool post
 		render->bindTexture(m_normalTexID, 1);
 		render->bindTexture(m_positionTexID, 2);
 		render->bindTexture(m_dataTexID, 3);
+
+		render->enableBlending();
+		render->setBlendingMode(BLENDING_ALPHA);
+
+		render->clear(BUFFER_COLOR);
 	}
 	else
+	{
+		render->disableBlending();
 		render->bindTexture(m_finalTexID);
+	}
 
 	render->sendUniformInt(m_fx[1], "PostEffects", &postEffects, 1);
 	render->bindTexture(m_depthTexID, 4);
-	render->disableBlending();
 
 	// Set cull mode
 	render->setCullMode(CULL_BACK);
@@ -1076,6 +1070,7 @@ void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera, bool post
 	render->setDepthMask(false);
 	
 	drawQuad(m_fx[1]);
+
 	render->bindFX(0);
 	render->enableDepthTest();
 	render->setDepthMask(true);
@@ -1477,6 +1472,7 @@ int StandardRenderer::light_update_thread(void* data)
    NeoWindow* window = NeoWindow::getInstance();
    Scene* scene;
    OLight* light;
+   Level* level = engine->getLevel();
 
    while (!engine->getGame()->isRunning()) window->sleep(100);
 
@@ -1486,35 +1482,36 @@ int StandardRenderer::light_update_thread(void* data)
 		   continue;
 
 	   // Aquire lock
-	   scene = engine->getLevel()->getCurrentScene();
-	   OCamera* camera;
-	   
-	   if(!scene || !(camera = scene->getCurrentCamera()))
+	   for(int i = 0; i < level->getScenesNumber(); i++)
 	   {
-		   window->sleep(THREAD_SLEEP);
-		   continue;
+		   scene = level->getSceneByIndex(i);
+		   OCamera* camera;
+
+		   if(!scene || !(camera = scene->getCurrentCamera()))
+			   break;
+
+		   CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
+
+		   if(!data) continue;
+
+		   data->lightLock->WaitAndLock();
+		   data->visibleLights.clear();
+
+		   // Fill the light buffer with all visible lights
+		   int j = 0;
+		   for(int i = 0; i < scene->getLightsNumber() && i < MAX_ENTITY_LIGHTS; i++)
+		   {
+			   // If light is visible
+			   if ((light = scene->getLightByIndex(i))->isActive() && light->isVisible())
+				{
+					data->visibleLights.push_back(light);
+					j++;
+				}
+		   }
+
+		   data->lightLock->Unlock();
 	   }
-	   
-	   CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
 
-	   if(!data) continue;
-
-	   data->lightLock->WaitAndLock();
-	   data->visibleLights.clear();
-
-	   // Fill the light buffer with all visible lights
-	   int j = 0;
-	   for(int i = 0; i < scene->getLightsNumber() && i < MAX_ENTITY_LIGHTS; i++)
-	   {
-		   // If light is visible
-		   if ((light = scene->getLightByIndex(i))->isActive() && light->isVisible())
-			{
-				data->visibleLights.push_back(light);
-				j++;
-			}
-	   }
-
-	   data->lightLock->Unlock();
 	   window->sleep(THREAD_SLEEP);
    }
 
@@ -1554,57 +1551,61 @@ int StandardRenderer::visibility_thread_mainscene(void* data)
 
 		// Preparation
 		Level* level = engine->getLevel();
-		Scene* scene = level->getCurrentScene();
+		Scene* scene;
 		OCamera* camera;
 		
-		if(!scene || !(camera = scene->getCurrentCamera()))
+		for(int i = 0; i < level->getScenesNumber(); i++)
 		{
-			window->sleep(THREAD_SLEEP);
-			continue;
-		}
-
-		CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
-
-		if(!data)
-		{
-			data = new CameraData();
-			camera->setAdditionalData(data);
-
-			//window->sleep(THREAD_SLEEP);
-			//continue;
-		}
-
-		camera->enable();
-		camera->getFrustum()->makeVolume(camera);
-		
-		// Culling!
-		data->visibilityLock->WaitAndLock();
-		data->visibleEntities.clear();
-		data->visibleTransparentEntities.clear();
-
-		size_t sz = scene->getEntitiesNumber();
-		for (int i = 0; i < sz; i++)
-		{
-			OEntity* e = scene->getEntityByIndex(i);
-
-			if (e->isActive())
+			scene = level->getSceneByIndex(i);
+			if(!scene || !(camera = scene->getCurrentCamera()))
 			{
-				e->updateVisibility(camera);
+				window->sleep(THREAD_SLEEP);
+				continue;
+			}
 
-				if (e->isVisible())
+			CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
+
+			if(!data)
+			{
+				data = new CameraData();
+				camera->setAdditionalData(data);
+
+				//window->sleep(THREAD_SLEEP);
+				//continue;
+			}
+
+			camera->enable();
+			camera->getFrustum()->makeVolume(camera);
+
+			// Culling!
+			data->visibilityLock->WaitAndLock();
+			data->visibleEntities.clear();
+			data->visibleTransparentEntities.clear();
+
+			size_t sz = scene->getEntitiesNumber();
+			for (int i = 0; i < sz; i++)
+			{
+				OEntity* e = scene->getEntityByIndex(i);
+
+				if (e->isActive())
 				{
-					if(e->hasTransparency())
-						data->visibleTransparentEntities.push_back(e);
-					else
-						data->visibleEntities.push_back(e);
-					//MLOG_INFO(e->getName() << " is visible!");
+					e->updateVisibility(camera);
+
+					if (e->isVisible())
+					{
+						if(e->hasTransparency())
+							data->visibleTransparentEntities.push_back(e);
+						else
+							data->visibleEntities.push_back(e);
+						//MLOG_INFO(e->getName() << " is visible!");
+					}
 				}
 			}
+			data->visibilityLock->Unlock();
 		}
-		data->visibilityLock->Unlock();
-
 		// MLOG_INFO("Got " << data->visibleEntities.size() << " entities! ");
 		window->sleep(THREAD_SLEEP);
+
 	}
 
 	return 0;

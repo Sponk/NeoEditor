@@ -301,7 +301,6 @@ void GL4Context::init()
 	glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &data);
 	MLOG_INFO("Number of textures:\t\t" << data << "\t");
 
-
 	// init cull face (back)
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
