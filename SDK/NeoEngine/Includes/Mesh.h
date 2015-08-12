@@ -52,6 +52,7 @@ private:
 
 	// material
 	Material *m_material;
+	unsigned int m_materialId;
 
 	// visibility
 	bool m_visibility;
@@ -77,6 +78,9 @@ public:
 	inline bool isVisible(void) { return m_visibility; }
 
 	inline unsigned int* getVAO() { return &m_vao; }
+
+	void setMaterialId(unsigned int id) { m_materialId = id; }
+	unsigned int getMaterialId() { return m_materialId; }
 };
 
 // SubMesh

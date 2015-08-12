@@ -317,6 +317,7 @@ static void createSubMesh(const aiScene * scene, const aiNode * nd, Mesh * mesh,
 		subMesh->allocDisplays(1);
 		MaterialDisplay * display = subMesh->addNewDisplay(PRIMITIVE_TRIANGLES, 0, subMesh->getIndicesSize());
 		display->setMaterial(mesh->getMaterial(nodeMesh->mMaterialIndex));
+		display->setMaterialId(nodeMesh->mMaterialIndex);
 		
 		// cull mode
 		int twosided = 0;

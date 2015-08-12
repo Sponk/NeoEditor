@@ -1407,7 +1407,10 @@ bool xmlMeshLoad(const char * filename, void * data)
 
 				// set material
 				if(material < mesh->getMaterialsNumber())
+				{
+					display->setMaterialId(material);
 					display->setMaterial(mesh->getMaterial(material));
+				}
 
 				// set cull mode
 				CULL_MODES cullMode = CULL_BACK;

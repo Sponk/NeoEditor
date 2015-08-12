@@ -96,6 +96,10 @@ function Editor.loadMeshes()
   local x = scene:addNewEntity(NeoLua.arrow)
   local y = scene:addNewEntity(NeoLua.arrow)
   
+  x:getMaterial(0):setEmit(NeoLua.Vector3(1,0,0))
+  y:getMaterial(0):setEmit(NeoLua.Vector3(0,1,0))
+  z:getMaterial(0):setEmit(NeoLua.Vector3(0,0,1))
+  
   x:setEulerRotation(NeoLua.Vector3(0,90,0))
   y:setEulerRotation(NeoLua.Vector3(90,0,0))
   
@@ -273,16 +277,33 @@ function Editor.select(obj)
     
     arrows.x:setActive(true)
     arrows.y:setActive(true)
-    arrows.z:setActive(true)
-    
-    arrows.x:setPosition(position)
-    arrows.y:setPosition(position)
-    arrows.z:setPosition(position)
+    arrows.z:setActive(true)  
 
     Editor.entityEditor.setShownObject(obj:getName())
     Editor.currentSelection = {obj}
     
     Editor.sceneDlg["window"]["layout"]["scrollpanel"]["tree"]:selectEntry(obj:getName())
+end
+
+function Editor.getSelectionCenter()
+    local selection = Editor.currentSelection
+    local position = NeoLua.Vector3(0,0,0)
+        
+    for k,v in ipairs(selection) do
+        position = position + v:getTransformedPosition()
+    end
+    
+    return position/#selection
+end
+
+function Editor.updateHandles()
+    local arrows = Editor.sceneMeshes
+
+    local position = Editor.getSelectionCenter()
+
+    arrows.x:setPosition(position)
+    arrows.y:setPosition(position)
+    arrows.z:setPosition(position)
 end
 
 function quitCallback()
@@ -301,6 +322,7 @@ function update(dt)
   if not NeoLua.Neo2DEngine.getInstance():isMouseOnGui() then
     Editor.inputMethod()
     Editor.selectObject()
+    Editor.updateHandles()
   end
   
   Editor.mx = mx

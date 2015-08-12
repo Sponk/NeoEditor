@@ -312,6 +312,7 @@ MaterialDisplay * SubMesh::addNewDisplay(PRIMITIVE_TYPES primitiveType, unsigned
 	MaterialDisplay * display = new MaterialDisplay(primitiveType, begin, size);
 	m_displays[m_displaysNumber] = display;
 	m_displaysNumber++;
+
 	return display;
 }
 

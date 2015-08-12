@@ -69,9 +69,9 @@ public:
 	void initQuadVAO(unsigned int* vao, unsigned int *vbo, unsigned int *texcoordVbo, unsigned int fx);
 	void clearQuadVAO(unsigned int* vao, unsigned int *vbo, unsigned int *texcoordVbo);
 
-	void drawMesh(Mesh* mesh, OCamera* camera, bool wireframe);
-	void drawSubMesh(SubMesh* mesh, OCamera* camera, bool wireframe);
-	void drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCamera* camera, bool wireframe);
+	void drawMesh(Mesh* mesh, OCamera* camera, Material* materials, bool wireframe);
+	void drawSubMesh(SubMesh* mesh, OCamera* camera, Material* materials, bool wireframe);
+	void drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCamera* camera, Material* materials, bool wireframe);
 
 	void sendLight(unsigned int fx, OLight* l, int num, Matrix4x4 matrix);
 

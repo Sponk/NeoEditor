@@ -84,7 +84,8 @@ private:
 	float m_angularFactor;
 	Vector3 m_linearFactor;
 
-public:	
+public:
+
     // constraint
 	void deleteConstraint(void);
 	PhysicsConstraint * createConstraint(void);
@@ -180,7 +181,13 @@ private:
 	bool m_hasTransparency;
 	bool m_wireframe;
 	
+	Material* m_materials;
+	unsigned int m_numMaterials;
+
 public:
+
+	Material* getMaterial(size_t idx = 0) { return &m_materials[idx]; }
+	size_t getMaterialsNumber() { return m_numMaterials; }
 
 	bool hasWireframe() { return m_wireframe; }
 	void enableWireframe(bool v) { m_wireframe = v; }

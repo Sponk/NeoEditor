@@ -110,7 +110,8 @@ m_animationId(0),
 m_physicsProperties(NULL),
 m_hasShadow(true),
 m_isOccluder(false),
-m_wireframe(false)
+m_wireframe(false),
+m_materials(nullptr)
 {
 	setMeshRef(meshRef);
 }
@@ -125,7 +126,8 @@ m_currentLoop(entity.m_currentLoop),
 m_animationId(entity.m_animationId),
 m_hasShadow(entity.m_hasShadow),
 m_isOccluder(entity.m_isOccluder),
-m_wireframe(entity.m_wireframe)
+m_wireframe(entity.m_wireframe),
+m_materials(nullptr)
 {
 	setMeshRef(entity.m_meshRef);
 	if(entity.m_physicsProperties)
@@ -239,9 +241,18 @@ void OEntity::setMeshRef(MeshRef * meshRef)
 		Mesh * mesh = meshRef->getMesh();
 		if(mesh)
 		{
-			// create nounding box
+			// create bounding box
 			m_boundingBox = (*mesh->getBoundingBox());
 			m_hasTransparency = false;
+
+			m_numMaterials = mesh->getMaterialsNumber();
+			SAFE_DELETE_ARRAY(m_materials);
+
+			m_materials = new Material[m_numMaterials];
+			for(int i = 0; i < m_numMaterials; i++)
+			{
+				m_materials[i] = *mesh->getMaterial(i);
+			}
 
 			for (int i = 0; i < mesh->getSubMeshsNumber(); i++)
 			{

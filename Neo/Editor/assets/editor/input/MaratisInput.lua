@@ -7,24 +7,13 @@ local function mouse_input(camera)
 
 end
 
-function selection_center()
-    local selection = Editor.currentSelection -- getCurrentSelection()
-    local position = NeoLua.Vector3(0,0,0)
-        
-    for i = 1, #selection, 1 do
-        position = position + selection[i]:getPosition()
-    end
-    
-    return position/#selection
-end
-
 function zoom_vue(camera)
 
     local position = camera:getPosition()
     local axis = camera:getRotatedVector(NeoLua.Vector3(0,0,-1))
 
     local wheel = NeoLua.input:getAxis("MOUSE_WHEEL") * -30.0
-    local factor = (selection_center() - position):getLength() * 0.01
+    local factor = (Editor.getSelectionCenter() - position):getLength() * 0.01
 
     camera:setPosition(position - (axis * wheel * factor))
 end
@@ -37,7 +26,7 @@ function pan_vue(camera)
     local position = camera:getPosition()
     local axis = camera:getRotatedVector(NeoLua.Vector3(0,0,-1))
     
-    local z = (selection_center() - position):dotProduct(axis)
+    local z = (Editor.getSelectionCenter() - position):dotProduct(axis)
     local fovFactor = camera:getFov() * 0.0192;
     
     mx = NeoLua.input:getAxis("MOUSE_X")
@@ -48,11 +37,12 @@ function pan_vue(camera)
 end
 
 function rotate_vue(camera)
-    local center = camera:getInversePosition(selection_center())
+    local selectionCenter = Editor.getSelectionCenter()
+    local center = camera:getInversePosition(selectionCenter)
     local position = camera:getPosition()
     local rotationSpeed = 1
 
-    camera:setPosition(selection_center())
+    camera:setPosition(selectionCenter)
     
     camera:setEulerRotation(camera:getEulerRotation() + NeoLua.Vector3(-(NeoLua.input:getAxis("MOUSE_Y") - ypos)*150*rotationSpeed, 0, -(NeoLua.input:getAxis("MOUSE_X") - xpos)*150*rotationSpeed))
     --rotate(camera, getRotatedVector(camera, {0,1,0}), -(getAxis("MOUSE_X") - xpos)*150*rotationSpeed)
@@ -64,7 +54,7 @@ function rotate_vue(camera)
     camera:updateMatrix()
 
     center = camera:getTransformedVector(center)
-    camera:setPosition(camera:getPosition() + (selection_center() - center))
+    camera:setPosition(camera:getPosition() + (selectionCenter - center))
 end
 
 function update_input()

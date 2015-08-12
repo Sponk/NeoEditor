@@ -585,7 +585,10 @@ bool M_loadBinMesh(const char * filename, void * data)
 						display->setCullMode(cullMode);
 
 						if(materialId >= 0)
+						{
+							display->setMaterialId(materialId);
 							display->setMaterial(mesh->getMaterial(materialId));
+						}
 					}
 				}
 			}

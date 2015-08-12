@@ -34822,6 +34822,57 @@ fail:
 }
 
 
+static int _wrap_MaterialDisplay_setMaterialId(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::MaterialDisplay *arg1 = (Neo::MaterialDisplay *) 0 ;
+  unsigned int arg2 ;
+  
+  SWIG_check_num_args("Neo::MaterialDisplay::setMaterialId",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::MaterialDisplay::setMaterialId",1,"Neo::MaterialDisplay *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::MaterialDisplay::setMaterialId",2,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__MaterialDisplay,0))){
+    SWIG_fail_ptr("MaterialDisplay_setMaterialId",1,SWIGTYPE_p_Neo__MaterialDisplay);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  (arg1)->setMaterialId(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_MaterialDisplay_getMaterialId(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::MaterialDisplay *arg1 = (Neo::MaterialDisplay *) 0 ;
+  unsigned int result;
+  
+  SWIG_check_num_args("Neo::MaterialDisplay::getMaterialId",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::MaterialDisplay::getMaterialId",1,"Neo::MaterialDisplay *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__MaterialDisplay,0))){
+    SWIG_fail_ptr("MaterialDisplay_getMaterialId",1,SWIGTYPE_p_Neo__MaterialDisplay);
+  }
+  
+  result = (unsigned int)(arg1)->getMaterialId();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_MaterialDisplay(void *obj) {
 Neo::MaterialDisplay *arg1 = (Neo::MaterialDisplay *) obj;
 delete arg1;
@@ -34848,6 +34899,8 @@ static swig_lua_method swig_MaterialDisplay_methods[]= {
     { "setVisibility", _wrap_MaterialDisplay_setVisibility},
     { "isVisible", _wrap_MaterialDisplay_isVisible},
     { "getVAO", _wrap_MaterialDisplay_getVAO},
+    { "setMaterialId", _wrap_MaterialDisplay_setMaterialId},
+    { "getMaterialId", _wrap_MaterialDisplay_getMaterialId},
     {0,0}
 };
 static swig_lua_method swig_MaterialDisplay_meta[] = {
@@ -38866,6 +38919,58 @@ static int _wrap_new_OEntity(lua_State* L) {
 }
 
 
+static int _wrap_OEntity_getMaterial(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::OEntity *arg1 = (Neo::OEntity *) 0 ;
+  size_t arg2 ;
+  Neo::Material *result = 0 ;
+  
+  SWIG_check_num_args("Neo::OEntity::getMaterial",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::OEntity::getMaterial",1,"Neo::OEntity *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::OEntity::getMaterial",2,"size_t");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__OEntity,0))){
+    SWIG_fail_ptr("OEntity_getMaterial",1,SWIGTYPE_p_Neo__OEntity);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (size_t)lua_tonumber(L, 2);
+  result = (Neo::Material *)(arg1)->getMaterial(arg2);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Material,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_OEntity_getMaterialsNumber(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::OEntity *arg1 = (Neo::OEntity *) 0 ;
+  size_t result;
+  
+  SWIG_check_num_args("Neo::OEntity::getMaterialsNumber",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::OEntity::getMaterialsNumber",1,"Neo::OEntity *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__OEntity,0))){
+    SWIG_fail_ptr("OEntity_getMaterialsNumber",1,SWIGTYPE_p_Neo__OEntity);
+  }
+  
+  result = (arg1)->getMaterialsNumber();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_OEntity_hasWireframe(lua_State* L) {
   int SWIG_arg = 0;
   Neo::OEntity *arg1 = (Neo::OEntity *) 0 ;
@@ -39775,6 +39880,8 @@ static swig_lua_attribute swig_OEntity_attributes[] = {
     {0,0,0}
 };
 static swig_lua_method swig_OEntity_methods[]= {
+    { "getMaterial", _wrap_OEntity_getMaterial},
+    { "getMaterialsNumber", _wrap_OEntity_getMaterialsNumber},
     { "hasWireframe", _wrap_OEntity_hasWireframe},
     { "enableWireframe", _wrap_OEntity_enableWireframe},
     { "hasTransparency", _wrap_OEntity_hasTransparency},
@@ -47390,30 +47497,6 @@ fail:
 }
 
 
-static int _wrap_Container_isMouseOver(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::Container *arg1 = (Neo2D::Gui::Container *) 0 ;
-  bool result;
-  
-  SWIG_check_num_args("Neo2D::Gui::Container::isMouseOver",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Container::isMouseOver",1,"Neo2D::Gui::Container *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Container,0))){
-    SWIG_fail_ptr("Container_isMouseOver",1,SWIGTYPE_p_Neo2D__Gui__Container);
-  }
-  
-  result = (bool)(arg1)->isMouseOver();
-  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
 static void swig_delete_Container(void *obj) {
 Neo2D::Gui::Container *arg1 = (Neo2D::Gui::Container *) obj;
 delete arg1;
@@ -47433,7 +47516,6 @@ static swig_lua_method swig_Container_methods[]= {
     { "addWidget", _wrap_Container_addWidget},
     { "draw", _wrap_Container_draw},
     { "update", _wrap_Container_update},
-    { "isMouseOver", _wrap_Container_isMouseOver},
     {0,0}
 };
 static swig_lua_method swig_Container_meta[] = {
@@ -47909,6 +47991,30 @@ fail:
 }
 
 
+static int _wrap_WindowManager_isMouseOver(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::WindowManager *arg1 = (Neo2D::Gui::WindowManager *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo2D::Gui::WindowManager::isMouseOver",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::WindowManager::isMouseOver",1,"Neo2D::Gui::WindowManager *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__WindowManager,0))){
+    SWIG_fail_ptr("WindowManager_isMouseOver",1,SWIGTYPE_p_Neo2D__Gui__WindowManager);
+  }
+  
+  result = (bool)(arg1)->isMouseOver();
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_WindowManager(void *obj) {
 Neo2D::Gui::WindowManager *arg1 = (Neo2D::Gui::WindowManager *) obj;
 delete arg1;
@@ -47930,6 +48036,7 @@ static swig_lua_method swig_WindowManager_methods[]= {
     { "update", _wrap_WindowManager_update},
     { "selectWindow", _wrap_WindowManager_selectWindow},
     { "getSelectedWindow", _wrap_WindowManager_getSelectedWindow},
+    { "isMouseOver", _wrap_WindowManager_isMouseOver},
     {0,0}
 };
 static swig_lua_method swig_WindowManager_meta[] = {

@@ -214,7 +214,7 @@ StandardRenderer::~StandardRenderer()
 
 }
 
-void StandardRenderer::drawMesh(Mesh* mesh, OCamera* camera, bool wireframe)
+void StandardRenderer::drawMesh(Mesh* mesh, OCamera* camera, Material* materials, bool wireframe)
 {
 	int num = mesh->getSubMeshsNumber();
 	SubMesh* subMeshes = mesh->getSubMeshs();
@@ -237,13 +237,13 @@ void StandardRenderer::drawMesh(Mesh* mesh, OCamera* camera, bool wireframe)
 			subMeshes[i].getBoundingBox()->initFromPoints(skinVertices, verticesSize);
 		}
 
-		drawSubMesh(&subMeshes[i], camera, wireframe);
+		drawSubMesh(&subMeshes[i], camera, materials, wireframe);
 	}
 
 	mesh->updateBoundingBox();
 }
 
-void StandardRenderer::drawSubMesh(SubMesh* mesh, OCamera* camera, bool wireframe)
+void StandardRenderer::drawSubMesh(SubMesh* mesh, OCamera* camera, Material* materials, bool wireframe)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
 
@@ -251,11 +251,11 @@ void StandardRenderer::drawSubMesh(SubMesh* mesh, OCamera* camera, bool wirefram
 
 	for(int i = 0; i < mesh->getDisplaysNumber(); i++)
 	{
-		drawDisplay(mesh, mesh->getDisplay(i), camera, wireframe);
+		drawDisplay(mesh, mesh->getDisplay(i), camera, materials, wireframe);
 	}
 }
 
-void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCamera* camera, bool wireframe)
+void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCamera* camera, Material* materials, bool wireframe)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
 	RenderingContext* render = engine->getRenderingContext();
@@ -270,7 +270,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 	VAR_TYPES indicesType = mesh->getIndicesType();
 	void* indices = mesh->getIndices();
 
-	Material* material = display->getMaterial();
+	Material* material = &materials[display->getMaterialId()];
 	int texturePasses = material->getTexturesPassNumber();
 
 	int fx = 0;
@@ -467,7 +467,7 @@ void StandardRenderer::drawGBuffer(Scene* scene, OCamera* camera)
 			if (mesh->getTexturesAnim())
 				animateTextures(mesh, mesh->getTexturesAnim(), entity->getCurrentFrame());
 
-			drawMesh(entity->getMesh(), camera, entity->hasWireframe());
+			drawMesh(entity->getMesh(), camera, entity->getMaterial(), entity->hasWireframe());
 		}
 	}
 
@@ -523,7 +523,7 @@ void StandardRenderer::drawTransparents(Scene* scene, OCamera* camera)
 			if (mesh->getTexturesAnim())
 				animateTextures(mesh, mesh->getTexturesAnim(), entity->getCurrentFrame());
 
-			drawMesh(entity->getMesh(), camera, entity->hasWireframe());
+			drawMesh(entity->getMesh(), camera, entity->getMaterial(), entity->hasWireframe());
 		}
 	}
 

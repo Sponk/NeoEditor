@@ -456,15 +456,15 @@ void main(void)
 	if(HasTransparency == 0)
 	{
 		if(TextureMode > 0)
-			FragColor = vec4(Emit, 0.0) + texture2D(Textures[0], texCoord) + vec4(AmbientLight, 0.0);
+			FragColor = texture2D(Textures[0], texCoord) + vec4(AmbientLight, 0.0);
 		else
-			FragColor = vec4(Emit, 0.0) + vec4(Diffuse, 1.0) + vec4(AmbientLight, 0.0);
+			FragColor = vec4(Diffuse, 1.0) + vec4(AmbientLight, 0.0);
 
 		if(FragColor.a < 1.0) discard;
 	}
 	else
 	{
-		FragColor = shadeModel(position, normal);
+		FragColor = shadeModel(position, normal) + vec4(Emit, 0.0);
 		FragColor.a = Opacity;
 		Normal.a = 0;
 		return;
@@ -491,6 +491,8 @@ void main(void)
         Position = vec4(position.xyz, (spec.r + spec.b + spec.g) / 3 * Shininess);
     }
     else
-        Position = vec4(position.xyz, Shininess);      
+        Position = vec4(position.xyz, Shininess);
+        
+    Data.rgb = Emit;
 
 }

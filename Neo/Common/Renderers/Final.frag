@@ -293,7 +293,7 @@ void main(void)
 		return;
 	}
 	
-	vec4 data = texture2D(Textures[4], texCoord);
+	vec4 data = texture2D(Textures[3], texCoord);
 	vec4 startColor = FragColor;
 	vec4 n = texture2D(Textures[1], texCoord);
 		
@@ -303,18 +303,6 @@ void main(void)
 		vec4 p = texture2D(Textures[2], texCoord);
 		FragColor = calculateAllCookLight(p.xyz, n.rgb, FragColor, p.a);
 		FragColor.a = transparency;
+		FragColor.xyz += data.rgb;
 	}
-
-	/*if(texCoord.x <= 0.5)
-		if(texCoord.y <= 0.5)
-			FragColor = vec4(0,0,0,1);//texture2D(Textures[1], texCoord);
-		else			
-			FragColor = texture2D(Textures[2], texCoord);
-	else
-		if(texCoord.y <= 0.5)
-			FragColor = vec4(1,0,0,1);//texture2D(Textures[3], texCoord);
-		else
-		FragColor = vec4(texture2D(Textures[4], texCoord).r);*/
-
-	//FragColor = texture2D(Textures[4], texCoord);
 }
