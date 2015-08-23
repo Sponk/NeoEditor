@@ -261,7 +261,9 @@ function updateEntityConfig()
 end
 
 function entityEditor.updateData()
-  entityEditor.setShownObject(entityEditor.entity:getName())
+  if entityEditor.entity ~= nil then
+    entityEditor.setShownObject(entityEditor.entity:getName())
+  end
 end
 
 return entityEditor

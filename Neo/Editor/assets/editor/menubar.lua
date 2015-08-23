@@ -7,7 +7,8 @@ local menubar = {
 	  content = {
 		 [1] = {label = "File", 
 				content = {
-				   [2] = {type = "Item", label = "Quit", callback = "quitCallback"},
+				   [3] = {type = "Item", label = "Quit", callback = "quitCallback"},
+				   [2] = {type = "Item", label = "Save", callback = "saveCallback"},
 				   [1] = {type = "Item", label = "Open", callback = "openCallback"}
 				}
 		 },

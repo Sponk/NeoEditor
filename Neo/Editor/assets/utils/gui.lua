@@ -261,8 +261,8 @@ function Gui.messageBox(title, text)
 	  return false
    end
    
-   msgBox["msgBox"].window:setLabel(title)
-   msgBox["msgBox"]["label"]:setLabel(text)
+   msgBox["msgBox"].window:setLabel(tostring(title))
+   msgBox["msgBox"]["label"]:setLabel(tostring(text))
    msgBox["msgBox"].window:setVisible(true)
 
    Gui.wm:selectWindow(msgBox["msgBox"].window)

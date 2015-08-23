@@ -38919,7 +38919,7 @@ static int _wrap_new_OEntity(lua_State* L) {
 }
 
 
-static int _wrap_OEntity_getMaterial(lua_State* L) {
+static int _wrap_OEntity_getMaterial__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
   Neo::OEntity *arg1 = (Neo::OEntity *) 0 ;
   size_t arg2 ;
@@ -38944,6 +38944,79 @@ static int _wrap_OEntity_getMaterial(lua_State* L) {
 fail:
   lua_error(L);
   return SWIG_arg;
+}
+
+
+static int _wrap_OEntity_getMaterial__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::OEntity *arg1 = (Neo::OEntity *) 0 ;
+  Neo::Material *result = 0 ;
+  
+  SWIG_check_num_args("Neo::OEntity::getMaterial",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::OEntity::getMaterial",1,"Neo::OEntity *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__OEntity,0))){
+    SWIG_fail_ptr("OEntity_getMaterial",1,SWIGTYPE_p_Neo__OEntity);
+  }
+  
+  result = (Neo::Material *)(arg1)->getMaterial();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Material,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_OEntity_getMaterial(lua_State* L) {
+  int argc;
+  int argv[3]={
+    1,2,3
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 1) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__OEntity, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      return _wrap_OEntity_getMaterial__SWIG_1(L);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__OEntity, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = lua_isnumber(L,argv[1]);
+      }
+      if (_v) {
+        return _wrap_OEntity_getMaterial__SWIG_0(L);
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'OEntity_getMaterial'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::OEntity::getMaterial(size_t)\n"
+    "    Neo::OEntity::getMaterial()\n");
+  lua_error(L);return 0;
 }
 
 
@@ -47775,6 +47848,30 @@ fail:
 }
 
 
+static int _wrap_Window_isMouseOver(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::Window *arg1 = (Neo2D::Gui::Window *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo2D::Gui::Window::isMouseOver",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Window::isMouseOver",1,"Neo2D::Gui::Window *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Window,0))){
+    SWIG_fail_ptr("Window_isMouseOver",1,SWIGTYPE_p_Neo2D__Gui__Window);
+  }
+  
+  result = (bool)(arg1)->isMouseOver();
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_Window(void *obj) {
 Neo2D::Gui::Window *arg1 = (Neo2D::Gui::Window *) obj;
 delete arg1;
@@ -47795,6 +47892,7 @@ static swig_lua_method swig_Window_methods[]= {
     { "containsPoint", _wrap_Window_containsPoint},
     { "draw", _wrap_Window_draw},
     { "update", _wrap_Window_update},
+    { "isMouseOver", _wrap_Window_isMouseOver},
     {0,0}
 };
 static swig_lua_method swig_Window_meta[] = {

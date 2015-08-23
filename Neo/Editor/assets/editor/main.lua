@@ -1,6 +1,9 @@
 --- main.lua - The editor main script
 Editor = {}
 
+Shortcuts = dofile("shortcuts.lua")
+
+dofile("callbacks.lua")
 local lfs = require("lfs")
 
 function Editor.loadUI()
@@ -109,6 +112,13 @@ end
 
 local function castRay(entity, rayO, rayD)
 
+      if entity == nil then return unpack({false, nil}) end;
+
+      local box = 1
+      if entity:getType() ~= NeoLua.OBJECT3D_ENTITY then
+	  return
+      end
+
       entity:getMesh():updateBoundingBox()
       local box = entity:getMesh():getBoundingBox()
 
@@ -174,10 +184,33 @@ function Editor.selectObject()
 
   rayD = rayO + ((rayD - rayO):getNormalized() * (camera:getClippingFar() - camera:getClippingNear()));
 
-  if NeoLua.input:isKeyPressed("MOUSE_BUTTON_LEFT") and Editor.selectedArrow ~= nil then
+  if NeoLua.input:isKeyPressed("MOUSE_BUTTON_LEFT") and Editor.selectedArrow ~= nil and #Editor.currentSelection == 1 then
     
-    value,point = castRay(Editor.selectedArrow, rayO, rayD)
-    if not value then return end
+    --infoLog("SELECTED ARROW");
+    --value,point = castRay(Editor.selectedArrow, rayO, rayD)
+    --if not value then return end
+
+    local p1 = camera:getUnProjectedPoint(NeoLua.Vector3(mx, my, 0.3))
+    local p2 = camera:getUnProjectedPoint(NeoLua.Vector3(Editor.mx*res.x, (1-Editor.my)*res.y, 0.3))
+    local dif = p1 - p2
+    local dif = Editor.selectedArrow * dif:getNormalized() * dif:getLength()
+
+      -- print("mx: ", mx, my)
+      -- print("omx: ", Editor.mx, Editor.my)
+      -- print("p1: ", p1.x, p1.y, p1.z)
+      -- print("p2: ", p2.x, p2.y, p2.z)
+      -- print("dif: ", dif.x, dif.y, dif.z)
+
+    local scale = (camera:getPosition() - Editor.currentSelection[1]:getTransformedPosition()):getLength()
+
+    Editor.currentSelection[1]:translate(dif*scale*0.7)
+    Editor.currentSelection[1]:updateMatrix()
+
+    Editor.entityEditor.updateData()
+
+    Editor.lastPoint = point
+
+    return
         
     --Editor.selectedArrow:translate(Editor.lastPoint - point)   
   elseif NeoLua.input:isKeyPressed("MOUSE_BUTTON_LEFT") and #Editor.currentSelection == 1 then
@@ -215,13 +248,13 @@ function Editor.selectObject()
     if #Editor.currentSelection > 0 then
       local meshes = Editor.sceneMeshes
       if castRay(meshes.x, rayO, rayD) then
-        Editor.selectedArrow = meshes.x
+	Editor.selectedArrow = NeoLua.Vector3(1,0,0)
         return
       elseif castRay(meshes.y, rayO, rayD) then
-        Editor.selectedArrow = meshes.y
+	Editor.selectedArrow = NeoLua.Vector3(0,1,0)
         return
       elseif castRay(meshes.z, rayO, rayD) then
-        Editor.selectedArrow = meshes.z
+	Editor.selectedArrow = NeoLua.Vector3(0,0,1)
         return
       end
     end
@@ -229,7 +262,7 @@ function Editor.selectObject()
     local possibleSelection = {}
     for i = 0, numObjects - 1, 1 do
       local entity = scene:getEntityByIndex(i)      
-      if castRay(entity, rayO, rayD) then
+      if entity ~= nil and castRay(entity, rayO, rayD) then
         
         table.insert(possibleSelection, entity)
         --Editor.entityEditor.setShownObject(entity:getName())
@@ -274,7 +307,7 @@ function Editor.select(obj)
     end
 
     local position = obj:getTransformedPosition()
-    
+
     arrows.x:setActive(true)
     arrows.y:setActive(true)
     arrows.z:setActive(true)  
@@ -322,8 +355,10 @@ function update(dt)
   if not NeoLua.Neo2DEngine.getInstance():isMouseOnGui() then
     Editor.inputMethod()
     Editor.selectObject()
-    Editor.updateHandles()
+    Shortcuts.update()
   end
+
+  Editor.updateHandles()
   
   Editor.mx = mx
   Editor.my = my 

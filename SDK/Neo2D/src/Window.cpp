@@ -148,3 +148,22 @@ void Window::update()
 
 		Container::update();
 }
+
+bool Window::isMouseOver()
+{
+	NeoEngine* engine = NeoEngine::getInstance();
+	SystemContext* system = engine->getSystemContext();
+	InputContext* input = engine->getInputContext();
+
+	unsigned int x = 0;
+	unsigned int y = 0;
+	Vector2 res = system->getScreenSize();
+	x = input->getAxis("MOUSE_X") * res.x;
+	y = input->getAxis("MOUSE_Y") * res.y;
+
+	unsigned int wx = m_offset.x + m_x;
+	unsigned int wy = m_offset.y + m_y;
+
+	return isVisible() && (x >= wx && x <= wx + m_width
+			&& (y + TITLE_HEIGHT) >= wy && y <= wy + m_height);
+}

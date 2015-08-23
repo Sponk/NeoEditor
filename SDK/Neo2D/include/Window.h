@@ -67,6 +67,8 @@ class NEO2D_EXPORT Window : public Container
 		void draw();
 		void draw(Vector2 offset) { draw(); }
 		void update();
+
+		virtual bool isMouseOver();
 };
 
 }
