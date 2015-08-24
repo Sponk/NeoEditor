@@ -82,13 +82,13 @@ void Sprite::draw(Vector2 offset)
 
 void Sprite::loadTexture()
 {
-	Level* level = NeoEngine::getInstance()->getLevel();
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
+	Neo2DEngine* engine2d = Neo2DEngine::getInstance();
 
 	char buf[256];
 	getGlobalFilename(buf, system->getWorkingDirectory(), m_imagePath.c_str());
 
-	TextureRef* tex = level->loadTexture(buf);
+	TextureRef* tex = engine2d->loadTexture(buf);
 
 	tex->update();
 

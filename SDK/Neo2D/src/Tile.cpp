@@ -49,14 +49,13 @@ void TileSheet::loadImage(const char* path, unsigned int width,
 	Render* render = Render::getInstance();
 	Neo2DEngine* gui = Neo2DEngine::getInstance();
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
-	Level* level = NeoEngine::getInstance()->getLevel();
 
 	if (path != NULL)
 	{
 		char buf[256];
 		getGlobalFilename(buf, system->getWorkingDirectory(), path);
 
-		Neo::TextureRef* tex = level->loadTexture(buf);
+		Neo::TextureRef* tex = gui->loadTexture(buf);
 		m_image = tex->getTextureId();
 
 		m_tileWidth = width;

@@ -364,6 +364,27 @@ function update(dt)
   Editor.my = my 
 end
 
+function Editor.setupLevel()
+	Editor.sceneCamera = NeoLua.level:getCurrentScene():addNewCamera()
+	Editor.overlayScene = NeoLua.level:addNewScene()
+	Editor.overlayScene:setName("EditorOverlay")
+
+	Editor.overlaySceneId = NeoLua.level:getScenesNumber()
+	Editor.sceneCamera:setSceneLayer(Editor.overlaySceneId)
+
+	Editor.sceneCamera:setName("MainSceneCamera")
+	Editor.sceneCamera:setPosition(NeoLua.Vector3(0, -200, 200))
+	Editor.sceneCamera:setEulerRotation(NeoLua.Vector3(90,0,0))
+	Editor.sceneCamera:setClippingFar(100000)
+	Editor.sceneCamera:setEulerRotation(NeoLua.Vector3(40, 0, 0))
+
+	Editor.overlayCamera = Editor.overlayScene:addNewCamera()
+	Editor.overlayCamera:setName("Camera")
+	Editor.overlayCamera:linkTo(Editor.sceneCamera)
+
+	NeoLua.level:getCurrentScene():setCurrentCamera(Editor.sceneCamera)
+end
+
 Editor.loadTranslationList()
 Translator.swapTranslation("english.csv")
 
@@ -372,27 +393,11 @@ Editor.my = 0
 
 Editor.loadInputSystem()
 Editor.inputMethod = dofile(Editor.inputMethods["MaratisInput.lua"]) or function() end
-Editor.sceneCamera = NeoLua.level:getCurrentScene():addNewCamera()
-Editor.overlayScene = NeoLua.level:addNewScene()
-Editor.overlayScene:setName("EditorOverlay")
-
-Editor.overlaySceneId = NeoLua.level:getScenesNumber()
-Editor.sceneCamera:setSceneLayer(Editor.overlaySceneId)
-
-Editor.sceneCamera:setName("MainSceneCamera")
-Editor.sceneCamera:setPosition(NeoLua.Vector3(0, -200, 200))
-Editor.sceneCamera:setEulerRotation(NeoLua.Vector3(90,0,0))
-Editor.sceneCamera:setClippingFar(100000)
-Editor.sceneCamera:setEulerRotation(NeoLua.Vector3(40, 0, 0))
-
-Editor.overlayCamera = Editor.overlayScene:addNewCamera()
-Editor.overlayCamera:setName("Camera")
-Editor.overlayCamera:linkTo(Editor.sceneCamera)
 
 Editor.lastPoint = NeoLua.Vector3()
 Editor.currentSelection = {}
 
-NeoLua.level:getCurrentScene():setCurrentCamera(Editor.sceneCamera)
+Editor.setupLevel()
 
 --infoLog("Camera: " .. Editor.sceneCamera:getFov())
 --print(Editor.sceneCamera:getPosition().x, Editor.sceneCamera:getPosition().y, Editor.sceneCamera:getPosition().z)

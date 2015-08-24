@@ -193,6 +193,11 @@ entityEditor.dlg["window"].window:setVisible(false)
 
 function entityEditor.setShownObject(objName)
 
+  if objName == nil then
+	entityEditor.entity = nil
+	return
+  end
+
   if entityEditor.entity ~= nil then
     entityEditor.entity:enableWireframe(false)
   end

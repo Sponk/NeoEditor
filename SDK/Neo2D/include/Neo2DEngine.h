@@ -113,10 +113,16 @@ private:
 	String m_themeEdgePressed;
 
 	String m_themeDirectory;
+
+	DataManager m_fontManager;
+	DataManager m_textureManager;
 	
 public:
 	Neo2DEngine();
 	~Neo2DEngine();
+
+	FontRef* loadFont(const char * filename, unsigned int fontsize);
+	TextureRef* loadTexture(const char * filename, const bool mipmap = true, const bool preload = true);
 
 	const char* getThemeDirectory() { return m_themeDirectory.getSafeString(); }
 
@@ -135,6 +141,7 @@ public:
 	const char* getThemeBorderVPressed() { return m_themeBorderVPressed.getSafeString(); }
 	const char* getThemeBodyPressed() { return m_themeBodyPressed.getSafeString(); }
 	const char* getThemeEdgePressed() { return m_themeEdgePressed.getSafeString(); }	
+
 	/**
 	 * @brief Changes the current GUI theme.
 	 * This change only applies to newly created widgets, all existing ones

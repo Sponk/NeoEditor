@@ -8,7 +8,17 @@ end
 
 function openCallback()
 	local filename = LuaCommonDlg.getOpenFilename(os.getenv("HOME"))
+
+	if filename == nil then return end
+
 	Gui.messageBox("Opening file", filename)
+	NeoLua.engine:loadLevel(filename)
+
+	Editor.setupLevel()
+
+	--Editor.select(nil)
+	--Editor.entityEditor.setShownObject(nil)
+	Editor.updateSceneTree()
 end
 
 function lol() infoLog("lol") end

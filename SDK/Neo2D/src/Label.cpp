@@ -45,8 +45,6 @@ void Label::update() {}
 void Label::draw(Vector2 offset)
 {
 	Render* render = Render::getInstance();
-	Neo2DEngine* gui = Neo2DEngine::getInstance();
-
 	offset += getPosition();
 
 	if (m_labelText == NULL)

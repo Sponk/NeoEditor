@@ -35,6 +35,7 @@ private:
 
 	// data
 	Font * m_font;
+	bool m_important;
 
 public:
 
@@ -48,8 +49,6 @@ public:
 
 	// get new
 	static FontRef * getNew(Font * font, const char * filename);
-
-public:
 
 	// update
 	void update(void);

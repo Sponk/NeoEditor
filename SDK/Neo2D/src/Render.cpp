@@ -425,7 +425,13 @@ OText* Render::createText(const char* font, float size)
 	getGlobalFilename(file, system->getWorkingDirectory(), font);
 
 	OText* text;
-	FontRef* fontref = NeoEngine::getInstance()->getLevel()->loadFont(file, size); 
+	FontRef * fontref = Neo2DEngine::getInstance()->loadFont(file, size);
+
+			/*FontRef::getNew(NULL, file);
+	fontref->getFont()->setFontSize(size);
+	fontref->update();*/
+
+	//FontRef* fontref = NeoEngine::getInstance()->getLevel()->loadFont(file, size);
 	
 	text = new OText(fontref);
 	text->setSize(fontref->getFont()->getFontSize());

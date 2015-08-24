@@ -1003,3 +1003,67 @@ bool Neo2DEngine::isMouseOnGui()
 
 	return false;
 }
+
+// Cloned from Neo::Level
+FontRef * Neo2DEngine::loadFont(const char * filename, unsigned int fontsize)
+{
+	unsigned int i;
+	unsigned int size = m_fontManager.getRefsNumber();
+	for(i=0; i<size; i++)
+	{
+		FontRef * ref = (FontRef *)m_fontManager.getRef(i);
+		// Check for equality, including the font size!
+		if(strcmp(ref->getFilename(), filename) == 0
+		   && ref->getFont()->getFontSize() == fontsize)
+		{
+			if(ref->getScore() == 0)
+				ref->update();
+			ref->incrScore();
+			return ref;
+		}
+	}
+
+	// add data
+	FontRef * ref = FontRef::getNew(NULL, filename);
+	ref->getFont()->setFontSize(fontsize);
+
+	m_fontManager.addRef(ref);
+	if(ref->getScore() == 0)
+		ref->update();
+	ref->incrScore();
+	return ref;
+}
+
+TextureRef * Neo2DEngine::loadTexture(const char * filename, const bool mipmap, const bool preload)
+{
+	unsigned int i;
+	unsigned int size = m_textureManager.getRefsNumber();
+	for(i=0; i<size; i++)
+	{
+		TextureRef * ref = (TextureRef *)m_textureManager.getRef(i);
+		if(strcmp(ref->getFilename(), filename) == 0)
+		{
+			if(preload)
+			{
+				if(ref->getScore() == 0)
+					ref->update();
+				ref->incrScore();
+			}
+
+			return ref;
+		}
+	}
+
+	// add data
+	TextureRef * ref = TextureRef::getNew(0, filename, mipmap);
+	m_textureManager.addRef(ref);
+
+	if(preload)
+	{
+		if(ref->getScore() == 0)
+			ref->update();
+		ref->incrScore();
+	}
+
+	return ref;
+}
