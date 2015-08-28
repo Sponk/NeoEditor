@@ -17,6 +17,10 @@ function Editor.loadUI()
    -- Editor.aboutDlg = Gui.loadFromTable(aboutDlgTable)
    
    Editor.entityEditor = Editor.dlgTables.entityEditor.create()
+   Editor.lightEditor = Editor.dlgTables.lightEditor.create()
+   Editor.textEditor = Editor.dlgTables.textEditor.create()
+   Editor.soundEditor = Editor.dlgTables.soundEditor.create()
+
    Gui.wm:selectWindow(Editor.sceneDlg["window"].window)
 end
 
@@ -113,7 +117,6 @@ local function castRay(entity, rayO, rayD)
 
       if entity == nil then return unpack({false, nil}) end;
 
-      local box = 1
       if entity:getType() ~= NeoLua.OBJECT3D_ENTITY then
 	  return
       end
@@ -158,6 +161,16 @@ local function castRay(entity, rayO, rayD)
       end
       
       return unpack({false, nil})
+end
+
+local function castRayOnBox(obj, rayO, rayD)
+	local box = obj:getBoundingBox()
+	local pos = obj:getTransformedPosition()
+	local iMatrix = obj:getMatrix():getInverse()
+
+	local localRayO = iMatrix * rayO
+	local localRayD = iMatrix * rayD
+	return NeoLua.isEdgeToBoxCollision(localRayO, localRayD, box.min, box.max)
 end
 
 function Editor.selectObject()
@@ -206,9 +219,11 @@ function Editor.selectObject()
     Editor.currentSelection[1]:updateMatrix()
 
     Editor.entityEditor.updateData()
+    Editor.lightEditor.updateData()
+    Editor.textEditor.updateData()
+    Editor.soundEditor.updateData()
 
     Editor.lastPoint = point
-
     return
         
     --Editor.selectedArrow:translate(Editor.lastPoint - point)   
@@ -229,13 +244,16 @@ function Editor.selectObject()
       -- print("p2: ", p2.x, p2.y, p2.z)
       -- print("dif: ", dif.x, dif.y, dif.z)
       
-      local scale = (camera:getPosition() - Editor.currentSelection[1]:getTransformedPosition()):getLength() * 100
-      
+      local scale = (camera:getPosition() - Editor.currentSelection[1]:getTransformedPosition()):getLength() * 100    
+
       Editor.currentSelection[1]:translate(dif*scale*0.7)
-      Editor.currentSelection[1]:updateMatrix()
-      
+      Editor.currentSelection[1]:updateMatrix()     
+
       Editor.entityEditor.updateData()
-      
+      Editor.lightEditor.updateData()
+      Editor.textEditor.updateData()
+      Editor.soundEditor.updateData()
+
       Editor.lastPoint = point
     --end
   end
@@ -259,6 +277,8 @@ function Editor.selectObject()
     end
  
     local possibleSelection = {}
+
+    -- Check all entities
     for i = 0, numObjects - 1, 1 do
       local entity = scene:getEntityByIndex(i)      
       if entity ~= nil and castRay(entity, rayO, rayD) then
@@ -267,6 +287,16 @@ function Editor.selectObject()
         --Editor.entityEditor.setShownObject(entity:getName())
         
         --return entity
+      end
+    end
+
+    numObjects = scene:getTextsNumber()
+
+    -- Check all text objects
+    for i = 0, numObjects - 1, 1 do
+      local entity = scene:getTextByIndex(i)
+      if entity ~= nil and castRayOnBox(entity, rayO, rayD) then
+	table.insert(possibleSelection, entity)
       end
     end
     
@@ -294,7 +324,9 @@ function Editor.select(obj)
     if obj == nil then
     
       for k,v in ipairs(Editor.currentSelection) do
-        v:enableWireframe(false)
+	if v:getType() == NeoLua.OBJECT3D_ENTITY then
+	    v:enableWireframe(false)
+	end
       end
 
       arrows.x:setActive(false)
@@ -312,6 +344,10 @@ function Editor.select(obj)
     arrows.z:setActive(true)  
 
     Editor.entityEditor.setShownObject(obj:getName())
+    Editor.lightEditor.setShownObject(obj:getName())
+    Editor.textEditor.setShownObject(obj:getName())
+    Editor.soundEditor.setShownObject(obj:getName())
+
     Editor.currentSelection = {obj}
     
     Editor.sceneDlg["window"]["layout"]["scrollpanel"]["tree"]:selectEntry(obj:getName())
@@ -330,8 +366,14 @@ end
 
 function Editor.updateHandles()
     local arrows = Editor.sceneMeshes
-
     local position = Editor.getSelectionCenter()
+    local res = NeoLua.system:getScreenSize()
+
+    local radius = (Editor.sceneCamera:getPosition() - position):getLength() * 0.005
+
+    arrows.x:setScale(NeoLua.Vector3(radius, radius, radius))
+    arrows.y:setScale(NeoLua.Vector3(radius, radius, radius))
+    arrows.z:setScale(NeoLua.Vector3(radius, radius, radius))
 
     arrows.x:setPosition(position)
     arrows.y:setPosition(position)
@@ -382,14 +424,18 @@ function Editor.setupLevel()
 	Editor.sceneCamera:setPosition(NeoLua.Vector3(0, -200, 200))
 	Editor.sceneCamera:setEulerRotation(NeoLua.Vector3(90,0,0))
 
-	Editor.sceneCamera:setClippingFar(100000)
-	Editor.sceneCamera:setClippingNear(0.01)
-
 	Editor.sceneCamera:setEulerRotation(NeoLua.Vector3(40, 0, 0))
 
 	Editor.overlayCamera = Editor.overlayScene:addNewCamera()
 	Editor.overlayCamera:setName("Camera")
 	Editor.overlayCamera:linkTo(Editor.sceneCamera)
+
+	-- Set up cameras for maximum view range
+	Editor.sceneCamera:setClippingFar(100000)
+	Editor.sceneCamera:setClippingNear(0.01)
+
+	Editor.overlayCamera:setClippingFar(100000)
+	Editor.overlayCamera:setClippingNear(0.01)
 
 	NeoLua.level:setCurrentScene(currentScene)
 	currentScene:setCurrentCamera(Editor.sceneCamera)
@@ -415,6 +461,9 @@ function Editor.setupTranslatedUI(translation)
 		sceneDlg = dofile("dialogs/scene-tree-desc.lua"),
 		aboutDlg = dofile("dialogs/aboutdlg.lua"),
 		entityEditor = dofile("dialogs/entity-editor.lua"),
+		lightEditor = dofile("dialogs/light-editor.lua"),
+		textEditor = dofile("dialogs/text-editor.lua"),
+		soundEditor = dofile("dialogs/sound-editor.lua"),
 		menubarTable = dofile("menubar.lua")
 	}
 end
