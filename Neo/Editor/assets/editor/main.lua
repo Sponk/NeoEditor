@@ -7,17 +7,16 @@ dofile("callbacks.lua")
 local lfs = require("lfs")
 
 function Editor.loadUI()
-   Editor.sceneDlg = dofile("dialogs/scene-tree-desc.lua")
+   Editor.sceneDlg = Editor.dlgTables.sceneDlg.create()
    Editor.updateSceneTree()
 
-   local menubarTable = dofile("menubar.lua")
-   Gui.loadFromTable(menubarTable)
+   Gui.loadFromTable(Editor.dlgTables.menubarTable)
 
    -- This one sets itself up
-   Editor.aboutDlg = dofile("dialogs/aboutdlg.lua")
+   Editor.aboutDlg = Editor.dlgTables.aboutDlg.create()
    -- Editor.aboutDlg = Gui.loadFromTable(aboutDlgTable)
    
-   Editor.entityEditor = dofile("dialogs/entity-editor.lua")  
+   Editor.entityEditor = Editor.dlgTables.entityEditor.create()
    Gui.wm:selectWindow(Editor.sceneDlg["window"].window)
 end
 
@@ -193,7 +192,7 @@ function Editor.selectObject()
     local p1 = camera:getUnProjectedPoint(NeoLua.Vector3(mx, my, 0.3))
     local p2 = camera:getUnProjectedPoint(NeoLua.Vector3(Editor.mx*res.x, (1-Editor.my)*res.y, 0.3))
     local dif = p1 - p2
-    local dif = Editor.selectedArrow * dif:getNormalized() * dif:getLength()
+    local dif = Editor.selectedArrow * dif:getNormalized() * dif:getLength() * 100
 
       -- print("mx: ", mx, my)
       -- print("omx: ", Editor.mx, Editor.my)
@@ -230,7 +229,7 @@ function Editor.selectObject()
       -- print("p2: ", p2.x, p2.y, p2.z)
       -- print("dif: ", dif.x, dif.y, dif.z)
       
-      local scale = (camera:getPosition() - Editor.currentSelection[1]:getTransformedPosition()):getLength()
+      local scale = (camera:getPosition() - Editor.currentSelection[1]:getTransformedPosition()):getLength() * 100
       
       Editor.currentSelection[1]:translate(dif*scale*0.7)
       Editor.currentSelection[1]:updateMatrix()
@@ -345,6 +344,11 @@ end
 
 function update(dt)
 
+  if Editor.requestReload == true then
+	Editor.reload()
+	Editor.requestReload = false
+  end
+
   -- Calculate mouse delta
   local mx = NeoLua.input:getAxis("MOUSE_X")
   local my = NeoLua.input:getAxis("MOUSE_Y")
@@ -365,7 +369,9 @@ function update(dt)
 end
 
 function Editor.setupLevel()
-	Editor.sceneCamera = NeoLua.level:getCurrentScene():addNewCamera()
+	local currentScene = NeoLua.level:getCurrentScene()
+
+	Editor.sceneCamera = currentScene:addNewCamera()
 	Editor.overlayScene = NeoLua.level:addNewScene()
 	Editor.overlayScene:setName("EditorOverlay")
 
@@ -375,21 +381,48 @@ function Editor.setupLevel()
 	Editor.sceneCamera:setName("MainSceneCamera")
 	Editor.sceneCamera:setPosition(NeoLua.Vector3(0, -200, 200))
 	Editor.sceneCamera:setEulerRotation(NeoLua.Vector3(90,0,0))
+
 	Editor.sceneCamera:setClippingFar(100000)
+	Editor.sceneCamera:setClippingNear(0.01)
+
 	Editor.sceneCamera:setEulerRotation(NeoLua.Vector3(40, 0, 0))
 
 	Editor.overlayCamera = Editor.overlayScene:addNewCamera()
 	Editor.overlayCamera:setName("Camera")
 	Editor.overlayCamera:linkTo(Editor.sceneCamera)
 
-	NeoLua.level:getCurrentScene():setCurrentCamera(Editor.sceneCamera)
+	NeoLua.level:setCurrentScene(currentScene)
+	currentScene:setCurrentCamera(Editor.sceneCamera)
 end
 
-Editor.loadTranslationList()
-Translator.swapTranslation("english.csv")
+function Editor.reload()
+	NeoLua.Neo2DEngine.getInstance():clear()
+
+	--NeoLua.engine:loadLevel(filename)
+	Editor.setupLevel()
+
+	Editor.loadMeshes()
+
+	Gui.setupWM()
+	Editor.loadUI()
+	Editor.updateSceneTree()
+end
+
+function Editor.setupTranslatedUI(translation)
+	Translator.swapTranslation(translation)
+
+	Editor.dlgTables = {
+		sceneDlg = dofile("dialogs/scene-tree-desc.lua"),
+		aboutDlg = dofile("dialogs/aboutdlg.lua"),
+		entityEditor = dofile("dialogs/entity-editor.lua"),
+		menubarTable = dofile("menubar.lua")
+	}
+end
 
 Editor.mx = 0
 Editor.my = 0
+
+Editor.requestLevelLoad = nil
 
 Editor.loadInputSystem()
 Editor.inputMethod = dofile(Editor.inputMethods["MaratisInput.lua"]) or function() end
@@ -397,12 +430,18 @@ Editor.inputMethod = dofile(Editor.inputMethods["MaratisInput.lua"]) or function
 Editor.lastPoint = NeoLua.Vector3()
 Editor.currentSelection = {}
 
+-- Load translations
+Editor.loadTranslationList()
+
 Editor.setupLevel()
 
 --infoLog("Camera: " .. Editor.sceneCamera:getFov())
 --print(Editor.sceneCamera:getPosition().x, Editor.sceneCamera:getPosition().y, Editor.sceneCamera:getPosition().z)
 
 Editor.loadMeshes()
+
+Editor.setupTranslatedUI("english.csv")
 Editor.loadUI()
+
 NeoLua.system:setWindowTitle("Neo Scene Editor")
 infoLog("Loaded editor!")

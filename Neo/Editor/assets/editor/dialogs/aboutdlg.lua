@@ -17,23 +17,29 @@ local dlg = {
   }
 }
 
-local aboutDlg = Gui.loadFromTable(dlg)
-local win = aboutDlg["window"].window
-win:setVisible(false)
-aboutDlg["window"]["label"]:setAlignment(NeoLua.TEXT_ALIGN_CENTER)
+local data = {}
+
+function dlg.create()
+	data.aboutDlg = Gui.loadFromTable(dlg)
+	data.win = data.aboutDlg["window"].window
+	data.win:setVisible(false)
+	data.aboutDlg["window"]["label"]:setAlignment(NeoLua.TEXT_ALIGN_CENTER)
+
+	return data.aboutDlg
+end
 
 function aboutCallback()
 
   local system = NeoLua.NeoEngine.getInstance():getSystemContext()
   local res = system:getScreenSize()
-  local size = win:getSize()  
+  local size = data.win:getSize()
   
-  win:setPosition(NeoLua.Vector2(res.x/2 - size.x/2, res.y/2 - size.y/2))
-  win:setVisible(true)
+  data.win:setPosition(NeoLua.Vector2(res.x/2 - size.x/2, res.y/2 - size.y/2))
+  data.win:setVisible(true)
 end
 
 function closeAboutCallback()
-  win:setVisible(false)
+  data.win:setVisible(false)
 end
 
 return dlg

@@ -115,6 +115,8 @@ bool NeoEngine::loadLevel(const char * filename)
 	if(! isFileExist(globalFilename))
 		return false;
 
+	m_renderer->stopThreads();
+
 	if(m_game)
 	{
 		if(m_game->isRunning())
@@ -133,9 +135,11 @@ bool NeoEngine::loadLevel(const char * filename)
 				m_game->onBeginScene();
 			}
 		}
+		m_renderer->startThreads();
 		return true;
 	}
 
+	m_renderer->startThreads();
 	return false;
 }
 

@@ -11,7 +11,7 @@ static void updateGtk()
 
 void initToolkit()
 {
-	gtk_init(NULL, NULL);
+	gtk_init(0, NULL);
 
 }
 
@@ -26,13 +26,13 @@ int getOpenFilename(lua_State* L)
 	int retval = 0;
 
 	dialog = gtk_file_chooser_dialog_new("Open File",
-										 NULL,
-										 action,
-										 GTK_STOCK_CANCEL,
-										 GTK_RESPONSE_CANCEL,
-										 GTK_STOCK_OPEN,
-										 GTK_RESPONSE_ACCEPT,
-										 NULL);
+					NULL,
+					action,
+					GTK_STOCK_CANCEL,
+					GTK_RESPONSE_CANCEL,
+					GTK_STOCK_OPEN,
+					GTK_RESPONSE_ACCEPT,
+					NULL);
 
 	gtk_file_chooser_set_current_folder(dialog, startdir);
 

@@ -188,9 +188,6 @@ local dlg = {
   }
 }
 
-entityEditor.dlg = Gui.loadFromTable(dlg)
-entityEditor.dlg["window"].window:setVisible(false)
-
 function entityEditor.setShownObject(objName)
 
   if objName == nil then
@@ -235,6 +232,12 @@ function entityEditor.setShownObject(objName)
   dlg.window:update()
 end
 
+function dlg.create()
+	entityEditor.dlg = Gui.loadFromTable(dlg)
+	entityEditor.dlg["window"].window:setVisible(false)
+	return entityEditor
+end
+
 function updateEntityConfig()
   -- infoLog("Updating entity!")
   local dlg = entityEditor.dlg["window"]
@@ -271,4 +274,4 @@ function entityEditor.updateData()
   end
 end
 
-return entityEditor
+return dlg

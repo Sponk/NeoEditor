@@ -71,6 +71,7 @@ void NeoGame::update(void)
 	if(! scene)
 		return;
 
+	engine->getRenderer()->stopThreads();
 	// update behaviors
 	scene->updateObjectsBehaviors();
 
@@ -103,6 +104,8 @@ void NeoGame::update(void)
 	{
 		m_subGames[i]->update();
 	}
+
+	engine->getRenderer()->startThreads();
 
 	// flush input
 	engine->getInputContext()->flush();

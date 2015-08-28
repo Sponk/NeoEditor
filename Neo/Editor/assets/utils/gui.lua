@@ -50,11 +50,56 @@
 
 Gui = {}
 
-Gui.wm = NeoLua.WindowManager(0,0,0,0,"")
-
 local neo2d = NeoLua.Neo2DEngine.getInstance()
 local canvas = neo2d:getCanvas(0)
-canvas:addWidget(neo2d:addWidget(Gui.wm))
+
+local messageBoxTable = {
+   [1] = {
+	  name = "msgBox",
+	  type = "Window",
+	  x = 100,
+	  y = 100,
+	  w = 300,
+	  h = 100,
+	  label = "Message",
+
+	  content = {
+		 [1] = {name = "ok", type = "Button", x = 150-25, y = 70, w = 50, h = 20, label = tr("OK"), callback = "messageBoxOkCallback"},
+
+		 [2] = {name = "label", type = "Label", x = 10, y = 10, w = 0, h = 0, label = ""}
+	  }
+   },
+}
+
+local msgBoxData = {}
+
+function Gui.messageBox(title, text)
+
+   if msgBoxData.msgBox["msgBox"].window:isVisible() then
+	  infoLog("Can not create message box because one is already visible!")
+	  return false
+   end
+
+   msgBoxData.msgBox["msgBox"].window:setLabel(tostring(title))
+   msgBoxData.msgBox["msgBox"]["label"]:setLabel(tostring(text))
+   msgBoxData.msgBox["msgBox"].window:setVisible(true)
+
+   Gui.wm:selectWindow(msgBoxData.msgBox["msgBox"].window)
+
+   return true
+end
+
+function messageBoxOkCallback()
+   msgBox["msgBox"].window:setVisible(false)
+end
+
+function Gui.setupWM()
+	Gui.wm = NeoLua.WindowManager(0,0,0,0,"")
+	canvas:addWidget(neo2d:addWidget(Gui.wm))
+
+	msgBoxData.msgBox = Gui.loadFromTable(messageBoxTable)
+	msgBoxData.msgBox["msgBox"].window:setVisible(false)
+end
 
 function Gui.loadWidget(v, p)
    if v.type == "Button" then
@@ -233,48 +278,8 @@ function Gui.loadFromTable(t)
   return topLevel
 end
 
-local messageBoxTable = {
-   [1] = {
-	  name = "msgBox",
-	  type = "Window",
-	  x = 100,
-	  y = 100,
-	  w = 300,
-	  h = 100,
-	  label = "Message",
-	  
-	  content = {
-		 [1] = {name = "ok", type = "Button", x = 150-25, y = 70, w = 50, h = 20, label = tr("OK"), callback = "messageBoxOkCallback"},
-		 
-		 [2] = {name = "label", type = "Label", x = 10, y = 10, w = 0, h = 0, label = ""}
-	  }    
-   },
-}
-
-local msgBox = Gui.loadFromTable(messageBoxTable)
-msgBox["msgBox"].window:setVisible(false)
-
-function Gui.messageBox(title, text)
-
-   if msgBox["msgBox"].window:isVisible() then
-	  infoLog("Can not create message box because one is already visible!")
-	  return false
-   end
-   
-   msgBox["msgBox"].window:setLabel(tostring(title))
-   msgBox["msgBox"]["label"]:setLabel(tostring(text))
-   msgBox["msgBox"].window:setVisible(true)
-
-   Gui.wm:selectWindow(msgBox["msgBox"].window)
-   
-   return true
-end
-
-function messageBoxOkCallback()
-   msgBox["msgBox"].window:setVisible(false)
-end
-
 function EmptyCallback()
 
 end
 
+Gui.setupWM()

@@ -589,7 +589,10 @@ void StandardRenderer::init()
 	{
 		ThreadFactory* tmgr = ThreadFactory::getInstance();
 		m_lightUpdateThread = tmgr->getNewThread();
+
 		m_lightUpdateSemaphore = tmgr->getNewSemaphore();
+		m_visibilityUpdateSemaphore = tmgr->getNewSemaphore();
+
 		m_visibilityThread = tmgr->getNewThread();
 
 		if(m_lightUpdateThread == NULL || m_lightUpdateSemaphore == NULL || m_visibilityThread == NULL)
@@ -597,11 +600,14 @@ void StandardRenderer::init()
 			MLOG_INFO("Could not create update threads!");
 			SAFE_DELETE(m_lightUpdateThread);
 			SAFE_DELETE(m_lightUpdateSemaphore);
+			SAFE_DELETE(m_visibilityUpdateSemaphore);
 			SAFE_DELETE(m_visibilityThread);
 			return;
 		}
 
 		m_lightUpdateSemaphore->Init(1);
+		m_visibilityUpdateSemaphore->Init(1);
+
 		m_lightUpdateThread->Start(StandardRenderer::light_update_thread, "LightUpdate", this);
 		m_visibilityThread->Start(StandardRenderer::visibility_thread_mainscene, "VisUpdate", this);
 	}
@@ -914,7 +920,7 @@ void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
 	
 	// Send some common data
 	Vector3 ambientLight = scene->getAmbientLight();
-	render->sendUniformVec3(m_fx[0], "AmbientLight", ambientLight);
+	render->sendUniformVec3(m_fx[1], "AmbientLight", ambientLight);
 
 	sendLights(m_fx[1], camera);
 	drawGBuffer(scene, camera);
@@ -1454,6 +1460,19 @@ void StandardRenderer::clearQuadVAO(unsigned int* vao, unsigned int *vbo, unsign
 	render->deleteVBO(texcoordVbo);
 }
 
+
+void StandardRenderer::stopThreads()
+{
+	m_lightUpdateSemaphore->WaitAndLock();
+	m_visibilityUpdateSemaphore->WaitAndLock();
+}
+
+void StandardRenderer::startThreads()
+{
+	m_lightUpdateSemaphore->Unlock();
+	m_visibilityUpdateSemaphore->Unlock();
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 // UPDATE THREADS
@@ -1470,9 +1489,9 @@ int StandardRenderer::light_update_thread(void* data)
 
    NeoEngine* engine = NeoEngine::getInstance();
    NeoWindow* window = NeoWindow::getInstance();
+
    Scene* scene;
    OLight* light;
-   Level* level = engine->getLevel();
 
    while (!engine->getGame()->isRunning()) window->sleep(100);
 
@@ -1480,6 +1499,10 @@ int StandardRenderer::light_update_thread(void* data)
    {
 	   if (!engine->getGame()->isRunning())
 		   continue;
+
+	   StandardRenderer* render = (StandardRenderer*) engine->getRenderer();
+	   render->m_lightUpdateSemaphore->WaitAndLock();
+	   Level* level = engine->getLevel();
 
 	   // Aquire lock
 	   for(int i = 0; i < level->getScenesNumber(); i++)
@@ -1492,7 +1515,11 @@ int StandardRenderer::light_update_thread(void* data)
 
 		   CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
 
-		   if(!data) continue;
+		   if(!data)
+		   {
+			   data = new CameraData();
+			   camera->setAdditionalData(data);
+		   }
 
 		   data->lightLock->WaitAndLock();
 		   data->visibleLights.clear();
@@ -1502,7 +1529,7 @@ int StandardRenderer::light_update_thread(void* data)
 		   for(int i = 0; i < scene->getLightsNumber() && i < MAX_ENTITY_LIGHTS; i++)
 		   {
 			   // If light is visible
-			   if ((light = scene->getLightByIndex(i))->isActive() && light->isVisible())
+			   if ((light = scene->getLightByIndex(i)) != NULL && light->isActive() && light->isVisible())
 				{
 					data->visibleLights.push_back(light);
 					j++;
@@ -1512,6 +1539,7 @@ int StandardRenderer::light_update_thread(void* data)
 		   data->lightLock->Unlock();
 	   }
 
+	   render->m_lightUpdateSemaphore->Unlock();
 	   window->sleep(THREAD_SLEEP);
    }
 
@@ -1525,14 +1553,13 @@ int StandardRenderer::light_update_thread(void* data)
 int StandardRenderer::visibility_thread_mainscene(void* data)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
-	StandardRenderer* render = (StandardRenderer*) data;
 	NeoWindow* window = NeoWindow::getInstance();
 
 	// Wait for engine to start the game
 	while (!engine->getGame()->isRunning()) window->sleep(100);
 
 	// Initialize scenes with additional data
-	Level* level = engine->getLevel();
+	/*Level* level = engine->getLevel();
 	for (int i = 0; i < level->getScenesNumber(); i++)
 	{
 		Scene* s = level->getSceneByIndex(i);
@@ -1542,12 +1569,15 @@ int StandardRenderer::visibility_thread_mainscene(void* data)
 		{
 			s->getCameraByIndex(j)->setAdditionalData(new CameraData());
 		}
-	}
+	}*/
 
 	while (engine->isActive())
 	{
 		if (!engine->getGame()->isRunning())
 			continue;
+
+		StandardRenderer* render = (StandardRenderer*) engine->getRenderer();
+		render->m_visibilityUpdateSemaphore->WaitAndLock();
 
 		// Preparation
 		Level* level = engine->getLevel();
@@ -1603,6 +1633,9 @@ int StandardRenderer::visibility_thread_mainscene(void* data)
 			}
 			data->visibilityLock->Unlock();
 		}
+
+
+		render->m_visibilityUpdateSemaphore->Unlock();
 		// MLOG_INFO("Got " << data->visibleEntities.size() << " entities! ");
 		window->sleep(THREAD_SLEEP);
 

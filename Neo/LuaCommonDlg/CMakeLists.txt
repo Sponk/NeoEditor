@@ -14,11 +14,36 @@ INCLUDE_DIRECTORIES(
   ${LUA_INCLUDE_DIR}
 )
 
+SET(USE_GTK OFF)
+SET(USE_QT OFF)
+SET(USE_NFD TRUE)
+
+IF(UNIX AND USE_GTK)
+	SET(SOURCES ${SOURCES} opendlg-gtk.c)
+ELSEIF(UNIX AND USE_QT)
+	SET(SOURCES ${SOURCES} opendlg-qt.cpp)
+ELSEIF(USE_NFD)
+	IF(UNIX AND NOT APPLE)
+		SET(SOURCES ${SOURCES} nativefiledialog/src/nfd_gtk.c nativefiledialog/src/nfd_common.c)
+	ELSEIF(APPLE)
+		SET(SOURCES ${SOURCES} nativefiledialog/src/nfd_common.c nativefiledialog/src/nfd_cocoa.m)
+	ELSEIF(WIN32)
+		SET(SOURCES ${SOURCES} nativefiledialog/src/nfd_common.c nativefiledialog/src/nfd_win.cpp)
+	ENDIF()
+
+	## Build
+	INCLUDE_DIRECTORIES(
+	  ${LUA_INCLUDE_DIR}
+	  nativefiledialog/src/include
+	)
+	SET(SOURCES ${SOURCES} opendlg-nfd.c)
+ENDIF()
+
 SET(CMAKE_SHARED_LIBRARY_PREFIX "")
 ADD_LIBRARY(LuaCommonDlg ${SOURCES} ${HEADERS})
 TARGET_LINK_LIBRARIES(LuaCommonDlg ${LUA_LIBRARIES})
 
-IF(UNIX)
+IF(UNIX AND USE_GTK)
 	find_package(PkgConfig REQUIRED)
 	pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
 
@@ -29,6 +54,33 @@ IF(UNIX)
 	ELSE()
 	   MESSAGE(FATAL_ERROR "-- Could not find GTK3!")
 	ENDIF(GTK3_FOUND)
+	ADD_DEFINITIONS(-DGTK_BACKEND)
+	
+ELSEIF(UNIX AND USE_QT)
+	FIND_PACKAGE(Qt5Core REQUIRED)
+	FIND_PACKAGE(Qt5Gui REQUIRED)
+	
+	ADD_DEFINITIONS(-DQT_BACKEND)
+
+	QT5_USE_MODULES(LuaCommonDlg Widgets)
+ELSEIF(USE_NFD)
+	ADD_DEFINITIONS(-DNFD_BACKEND)
+		IF(UNIX AND NOT APPLE)
+		find_package(PkgConfig REQUIRED)
+		pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+
+		IF(GTK3_FOUND)
+		   MESSAGE("-- Found GTK3 with include dir " ${GTK3_INCLUDE_DIRS})
+		   INCLUDE_DIRECTORIES(${GTK3_INCLUDE_DIRS})
+		   TARGET_LINK_LIBRARIES(LuaCommonDlg ${GTK3_LIBRARIES})
+		ELSE()
+		   MESSAGE(FATAL_ERROR "-- Could not find GTK3!")
+		ENDIF(GTK3_FOUND)
+	ELSEIF(APPLE)
+
+	ELSEIF(WIN32)
+
+	ENDIF()
 ENDIF()
 
 INSTALL(TARGETS LuaCommonDlg DESTINATION ${NEO_INSTALL_DIR})

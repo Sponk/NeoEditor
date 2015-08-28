@@ -33124,6 +33124,36 @@ fail:
 }
 
 
+static int _wrap_Level_setCurrentScene(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Level *arg1 = (Neo::Level *) 0 ;
+  Neo::Scene *arg2 = (Neo::Scene *) 0 ;
+  
+  SWIG_check_num_args("Neo::Level::setCurrentScene",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Level::setCurrentScene",1,"Neo::Level *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::Level::setCurrentScene",2,"Neo::Scene *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Level,0))){
+    SWIG_fail_ptr("Level_setCurrentScene",1,SWIGTYPE_p_Neo__Level);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo__Scene,0))){
+    SWIG_fail_ptr("Level_setCurrentScene",2,SWIGTYPE_p_Neo__Scene);
+  }
+  
+  (arg1)->setCurrentScene(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_Level_getCurrentSceneId(lua_State* L) {
   int SWIG_arg = 0;
   Neo::Level *arg1 = (Neo::Level *) 0 ;
@@ -33247,6 +33277,7 @@ static swig_lua_method swig_Level_methods[]= {
     { "getSceneByName", _wrap_Level_getSceneByName},
     { "getCurrentScene", _wrap_Level_getCurrentScene},
     { "setCurrentSceneId", _wrap_Level_setCurrentSceneId},
+    { "setCurrentScene", _wrap_Level_setCurrentScene},
     { "getCurrentSceneId", _wrap_Level_getCurrentSceneId},
     { "getScenesNumber", _wrap_Level_getScenesNumber},
     { "getSceneByIndex", _wrap_Level_getSceneByIndex},
@@ -46026,6 +46057,216 @@ fail:
 }
 
 
+static int _wrap_Neo2DEngine_loadFont(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
+  char *arg2 = (char *) 0 ;
+  unsigned int arg3 ;
+  Neo::FontRef *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Neo2DEngine::loadFont",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::loadFont",1,"Neo2D::Neo2DEngine *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo2D::Neo2DEngine::loadFont",2,"char const *");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Neo2DEngine::loadFont",3,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_loadFont",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  result = (Neo::FontRef *)(arg1)->loadFont((char const *)arg2,arg3);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__FontRef,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Neo2DEngine_loadTexture__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
+  char *arg2 = (char *) 0 ;
+  bool arg3 ;
+  bool arg4 ;
+  Neo::TextureRef *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Neo2DEngine::loadTexture",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::loadTexture",1,"Neo2D::Neo2DEngine *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo2D::Neo2DEngine::loadTexture",2,"char const *");
+  if(!lua_isboolean(L,3)) SWIG_fail_arg("Neo2D::Neo2DEngine::loadTexture",3,"bool const");
+  if(!lua_isboolean(L,4)) SWIG_fail_arg("Neo2D::Neo2DEngine::loadTexture",4,"bool const");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_loadTexture",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  arg3 = (lua_toboolean(L, 3)!=0);
+  arg4 = (lua_toboolean(L, 4)!=0);
+  result = (Neo::TextureRef *)(arg1)->loadTexture((char const *)arg2,arg3,arg4);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__TextureRef,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Neo2DEngine_loadTexture__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
+  char *arg2 = (char *) 0 ;
+  bool arg3 ;
+  Neo::TextureRef *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Neo2DEngine::loadTexture",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::loadTexture",1,"Neo2D::Neo2DEngine *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo2D::Neo2DEngine::loadTexture",2,"char const *");
+  if(!lua_isboolean(L,3)) SWIG_fail_arg("Neo2D::Neo2DEngine::loadTexture",3,"bool const");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_loadTexture",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  arg3 = (lua_toboolean(L, 3)!=0);
+  result = (Neo::TextureRef *)(arg1)->loadTexture((char const *)arg2,arg3);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__TextureRef,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Neo2DEngine_loadTexture__SWIG_2(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
+  char *arg2 = (char *) 0 ;
+  Neo::TextureRef *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Neo2DEngine::loadTexture",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Neo2DEngine::loadTexture",1,"Neo2D::Neo2DEngine *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo2D::Neo2DEngine::loadTexture",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Neo2DEngine,0))){
+    SWIG_fail_ptr("Neo2DEngine_loadTexture",1,SWIGTYPE_p_Neo2D__Neo2DEngine);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  result = (Neo::TextureRef *)(arg1)->loadTexture((char const *)arg2);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__TextureRef,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Neo2DEngine_loadTexture(lua_State* L) {
+  int argc;
+  int argv[5]={
+    1,2,3,4,5
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 2) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Neo2DEngine, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = SWIG_lua_isnilstring(L,argv[1]);
+      }
+      if (_v) {
+        return _wrap_Neo2DEngine_loadTexture__SWIG_2(L);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Neo2DEngine, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = SWIG_lua_isnilstring(L,argv[1]);
+      }
+      if (_v) {
+        {
+          _v = lua_isboolean(L,argv[2]);
+        }
+        if (_v) {
+          return _wrap_Neo2DEngine_loadTexture__SWIG_1(L);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Neo2DEngine, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = SWIG_lua_isnilstring(L,argv[1]);
+      }
+      if (_v) {
+        {
+          _v = lua_isboolean(L,argv[2]);
+        }
+        if (_v) {
+          {
+            _v = lua_isboolean(L,argv[3]);
+          }
+          if (_v) {
+            return _wrap_Neo2DEngine_loadTexture__SWIG_0(L);
+          }
+        }
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'Neo2DEngine_loadTexture'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo2D::Neo2DEngine::loadTexture(char const *,bool const,bool const)\n"
+    "    Neo2D::Neo2DEngine::loadTexture(char const *,bool const)\n"
+    "    Neo2D::Neo2DEngine::loadTexture(char const *)\n");
+  lua_error(L);return 0;
+}
+
+
 static int _wrap_Neo2DEngine_getThemeDirectory(lua_State* L) {
   int SWIG_arg = 0;
   Neo2D::Neo2DEngine *arg1 = (Neo2D::Neo2DEngine *) 0 ;
@@ -47008,6 +47249,8 @@ static swig_lua_attribute swig_Neo2DEngine_attributes[] = {
     {0,0,0}
 };
 static swig_lua_method swig_Neo2DEngine_methods[]= {
+    { "loadFont", _wrap_Neo2DEngine_loadFont},
+    { "loadTexture", _wrap_Neo2DEngine_loadTexture},
     { "getThemeDirectory", _wrap_Neo2DEngine_getThemeDirectory},
     { "getThemeBorderH", _wrap_Neo2DEngine_getThemeBorderH},
     { "getThemeBorderV", _wrap_Neo2DEngine_getThemeBorderV},

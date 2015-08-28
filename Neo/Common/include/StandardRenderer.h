@@ -92,7 +92,10 @@ public:
 	static int light_update_thread(void* data);
 	OLight* m_visibleLights[MAX_ENTITY_LIGHTS];
 	Thread* m_lightUpdateThread;
+
 	Semaphore* m_lightUpdateSemaphore;
+	Semaphore* m_visibilityUpdateSemaphore;
+
 	Scene* m_currentScene;
 	int m_numVisibleLights;
 
@@ -145,6 +148,9 @@ public:
 
 	void init();
 	void smallInit(unsigned int width, unsigned int height);
+
+	virtual void stopThreads();
+	virtual void startThreads();
 
 private:
 

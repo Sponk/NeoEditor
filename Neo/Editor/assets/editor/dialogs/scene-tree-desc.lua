@@ -21,7 +21,7 @@ local dlgTable = {
 			   	  name = "scrollpanel", type = "ScrollPane", x = 0, y = 0,
 			   	  w = 280, h = 210,
 				    content = {			   		 
-                [1] = {name = "tree", type = "Tree", x = 0, y = 0,
+						[1] = {name = "tree", type = "Tree", x = 0, y = 0,
 			   				        w = 200, h = 0, callback = "sceneTreeCallback"}
 				  }			
 			   }
@@ -31,15 +31,19 @@ local dlgTable = {
    }
 }
 
-local dlg = Gui.loadFromTable(dlgTable)
-
-function sceneTreeCallback()
-  local name = dlg["window"]["layout"]["scrollpanel"]["tree"]:getSelected()
-  Editor.select(NeoLua.level:getCurrentScene():getEntityByName(name) 
-                or NeoLua.level:getCurrentScene():getLightByName(name)
-                or NeoLua.level:getCurrentScene():getSoundByName(name)
-                or NeoLua.level:getCurrentScene():getTextByName(name)
-                or NeoLua.level:getCurrentScene():getLightByName(name))
+local data = {}
+function dlgTable.create()
+	data.dlg = Gui.loadFromTable(dlgTable)
+	return data.dlg
 end
 
-return dlg
+function sceneTreeCallback()
+  local name = data.dlg["window"]["layout"]["scrollpanel"]["tree"]:getSelected()
+  Editor.select(NeoLua.level:getCurrentScene():getEntityByName(name)
+		or NeoLua.level:getCurrentScene():getLightByName(name)
+		or NeoLua.level:getCurrentScene():getSoundByName(name)
+		or NeoLua.level:getCurrentScene():getTextByName(name)
+		or NeoLua.level:getCurrentScene():getLightByName(name))
+end
+
+return dlgTable

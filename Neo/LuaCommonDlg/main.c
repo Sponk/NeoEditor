@@ -2,10 +2,34 @@
 #include <lua.h>
 #include <lauxlib.h>
 
-#ifndef WIN32
-#include "opendlg-gtk.c"
+#if (!defined(WIN32) && defined(GTK_BACKEND))
+#include "opendlg-gtk.h"
+#elif (!defined(WIN32) && defined(QT_BACKEND))
+#include "opendlg-qt.h"
+#elif defined(WIN32)
+#include "opendlg-win32.h"
+#elif defined(NFD_BACKEND)
+int getOpenFilename(lua_State* L);
+int getSaveFilename(lua_State* L);
+void initToolkit();
 #else
-#include "opendlg-win32.c"
+
+int getOpenFilename(lua_State* L)
+{
+	return 0;
+}
+
+
+int getSaveFilename(lua_State* L)
+{
+	return 0;
+}
+
+void initToolkit()
+{
+
+}
+
 #endif
 
 static const luaL_Reg luacommondlg[] = {

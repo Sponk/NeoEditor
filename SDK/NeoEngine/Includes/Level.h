@@ -243,6 +243,12 @@ public:
 	 * @param id The ID of the new scene.
 	 */
 	void setCurrentSceneId(unsigned int id);
+	void setCurrentScene(Scene* s)
+	{
+		int oldId = m_currentSceneId;
+		if(!getSceneIndexByName(s->getName(), &m_currentSceneId))
+			m_currentSceneId = oldId;
+	}
 
 	/**
 	 * @brief Returns the current scene ID

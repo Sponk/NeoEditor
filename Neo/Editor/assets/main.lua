@@ -12,7 +12,7 @@ local runTests = false
 local testUi = true
 
 if testUi then
-   NeoLua.engine:loadLevel(Settings.startLevel)
+   -- NeoLua.engine:loadLevel(Settings.startLevel)
    -- dofile("editor/tests/generate-test-ui.lua")
 end
 
@@ -27,6 +27,13 @@ else
   -- Load the actual game if the editor is not running
   dofile("game.lua")
 end
+
+NeoLua.updateEasyAccess()
+--NeoLua.engine:getGame():pause(false)
+local bool = NeoLua.engine:loadLevel(Settings.startLevel)
+Editor.reload()
+
+--NeoLua.engine:getGame():pause(true)
 
 -- Put the custon update into a variable
 -- for later use

@@ -49,6 +49,9 @@ public:
 	
 	// extra
 	virtual void drawText(OText * text) = 0;
+
+	virtual void stopThreads() {}
+	virtual void startThreads() {}
 };
 }
 #endif
