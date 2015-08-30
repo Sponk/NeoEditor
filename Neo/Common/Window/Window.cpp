@@ -23,8 +23,6 @@
 //
 //========================================================================
 
-#ifndef ANDROID
-
 #include <NeoEngine.h>
 #include <Window/Mouse.h>
 #include <Window/Keyboard.h>
@@ -849,5 +847,25 @@ int NeoWindow::removeGameController(int id)
 	}
 #endif
 	return -1;
+}
+
+#ifdef ANDROID
+#include <unistd.h>
+
+const char * NeoWindow::getCurrentDirectory(void)
+{
+	static char currentDirectory[256];
+	getcwd(currentDirectory, 256);
+	return currentDirectory;
+}
+
+void NeoWindow::setCurrentDirectory(const char * directory)
+{
+	chdir(directory);
+}
+
+void NeoWindow::setWorkingDirectory(const char * directory)
+{
+	strcpy(m_workingDirectory, directory);
 }
 #endif

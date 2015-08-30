@@ -80,15 +80,21 @@ void draw(void)
 // FIXME: In header file
 void registerDebugHandler();
 
+#ifdef ANDROID
+extern "C" void player_main()
+{
+
+}
+#endif
+
 // main
 int main(int argc, char **argv)
 {
 #ifndef ANDROID
 	setlocale(LC_NUMERIC, "C");
+	registerDebugHandler();
 #endif
 
-	registerDebugHandler();
-	
 	MLOG_INFO("Neo Player version:\t" << PLAYER_VERSION_STRING);
 
 	unsigned int width = 1024;

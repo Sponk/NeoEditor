@@ -9,8 +9,8 @@ LOCAL_SRC_FILES := $(NEO_PATH)/libNeoCommon.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE    := MCore 
-LOCAL_SRC_FILES := $(NEO_PATH)/libMCore.a
+LOCAL_MODULE    := NeoCore 
+LOCAL_SRC_FILES := $(NEO_PATH)/libNeoCore.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
@@ -69,30 +69,29 @@ LOCAL_SRC_FILES := $(NEO_PATH)/libbullet.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE    := AndroidPlayer
-LOCAL_SRC_FILES := $(NEO_PATH)/libAndroidPlayer.a
+LOCAL_MODULE    := NeoPlayer
+LOCAL_SRC_FILES := $(NEO_PATH)/libNeoPlayer.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE    := NeoGui
-LOCAL_SRC_FILES := $(NEO_PATH)/libNeoGui.a
+LOCAL_MODULE    := Neo2D
+LOCAL_SRC_FILES := $(NEO_PATH)/libNeo2D.a
 include $(PREBUILT_STATIC_LIBRARY)
-
-
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := main
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(NEO_INCLUDE)
 
 # Add your application source files here...
-LOCAL_SRC_FILES := glue_main.c		
+LOCAL_SRC_FILES := glue_main.c
 		
 LOCAL_SHARED_LIBRARIES := 
-LOCAL_STATIC_LIBRARIES := AndroidPlayer NeoCommon NeoEngine NeoGui SDL2 SDL2_static freetype bullet openal vorbis npk zlib jpeg png ogg MCore tinyxml lua stlport_static
+LOCAL_STATIC_LIBRARIES := SDL2 SDL2_static NeoPlayer Neo2D NeoCommon NeoEngine NeoCore SDL2 SDL2_static freetype bullet openal vorbis npk zlib jpeg png ogg tinyxml lua stlport_static
 
-LOCAL_LDLIBS := -L$(NEO_PATH) -lGLESv1_CM -lGLESv2 -llog -landroid -lOpenSLES -lz
+LOCAL_LDLIBS := -L../../libs/armeabi-v7a/ -lGLESv1_CM -lGLESv2 -llog -landroid -lOpenSLES -lz
+#-lNeoPlayer -lNeoCommon -lNeoEngine -lNeoCore -lfreetype -lbullet -lopenal -lvorbis -lnpk -ljpeg -lpng -logg -ltinyxml -llua -lgnustl_static -lsup++
 
-LOCAL_CPPFLAGS += -fno-exceptions -fno-rtti
+LOCAL_CPPFLAGS += -std=c++11
 
 include $(BUILD_SHARED_LIBRARY)
 

@@ -19,3 +19,5 @@ profile.txt
 *.kdev4
 *.*~
 CMakeLists.txt.user.aed3775
+build
+.idea

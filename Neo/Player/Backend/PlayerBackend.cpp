@@ -53,8 +53,14 @@ typedef Neo::ES2Context GL4Context;
 #include <MeshSave.h>
 #include <PackageManagerNPK.h>
 #include <Project.h>
+
+#ifndef MOBILE_RENDERER
 #include <StandardRenderer.h>
 #include <FixedRenderer.h>
+#else
+#include <MobileRenderer.h>
+typedef Neo::MobileRenderer StandardRenderer;
+#endif
 
 using namespace Neo;
 
@@ -159,13 +165,21 @@ void PlayerBackend::start(void)
         engine->getBehaviorManager()->addBehavior(ParticleSystemBehavior::getStaticName(), OBJECT3D, ParticleSystemBehavior::getNew);
 
 		// add renderers
-		engine->getRendererManager()->addRenderer(StandardRenderer::getStaticName(), StandardRenderer::getNew);
+#ifndef MOBILE_RENDERER
+		engine->getRendererManager()->addRenderer(StandardRenderer::getStaticName(), StandardRenderer::getNew);		
 		engine->getRendererManager()->addRenderer(FixedRenderer::getStaticName(), FixedRenderer::getNew);
-		
+#else
+		engine->getRendererManager()->addRenderer(MobileRenderer::getStaticName(), MobileRenderer::getNew);
+#endif
+
 		// mesh loader
 		engine->getMeshLoader()->addLoader(xmlMeshLoad);
 		engine->getMeshLoader()->addLoader(M_loadBinMesh);
+
+#ifndef ANDROID
 		engine->getMeshLoader()->addLoader(M_loadAssimpMesh);
+#endif
+
 		engine->getArmatureAnimLoader()->addLoader(xmlArmatureAnimLoad);
 		engine->getArmatureAnimLoader()->addLoader(M_loadBinArmatureAnim);
 		engine->getTexturesAnimLoader()->addLoader(xmlTextureAnimLoad);

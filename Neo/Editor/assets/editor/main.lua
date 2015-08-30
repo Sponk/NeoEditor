@@ -229,7 +229,7 @@ function Editor.selectObject()
     --Editor.selectedArrow:translate(Editor.lastPoint - point)   
   elseif NeoLua.input:isKeyPressed("MOUSE_BUTTON_LEFT") and #Editor.currentSelection == 1 then
     
-    value,point = castRay(Editor.currentSelection[1], rayO, rayD)
+    local value,point = castRay(Editor.currentSelection[1], rayO, rayD)
     --if not value then return end
     
     --if value then

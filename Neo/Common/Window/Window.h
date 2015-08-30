@@ -25,7 +25,7 @@
 //========================================================================
 
 
-#if !defined(_NEO_WINDOW_H) && !defined(ANDROID)
+#if !defined(_NEO_WINDOW_H)
 #define _NEO_WINDOW_H
 
 #include <Window/WinEvents.h>
@@ -163,7 +163,4 @@ public:
     void executeDetached(const char *path, const char *args, bool killParent);
 };
 
-#else
-#include <cctype>
-#include <Window/AndroidWindow.h>
 #endif

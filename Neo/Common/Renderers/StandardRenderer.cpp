@@ -22,6 +22,8 @@
 //
 //========================================================================
 
+#ifndef MOBILE_RENDERER
+
 #include <glew.h>
 
 #include <NeoEngine.h>
@@ -1643,3 +1645,5 @@ int StandardRenderer::visibility_thread_mainscene(void* data)
 
 	return 0;
 }
+
+#endif // MOBILE_RENDERER

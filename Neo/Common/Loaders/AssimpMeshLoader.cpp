@@ -20,6 +20,7 @@
 
 // done using code from assimp samples : http://assimp.sourceforge.net/
 
+#ifndef ANDROID
 
 #include "AssimpMeshLoader.h"
 #include <assimp/cimport.h>
@@ -872,3 +873,5 @@ bool M_importAssimpMeshes(const char * filename)
 	aiReleaseImport(scene);
 	return true;
 }
+
+#endif

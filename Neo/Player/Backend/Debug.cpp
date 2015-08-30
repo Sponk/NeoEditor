@@ -1,4 +1,6 @@
 
+#ifndef ANDROID
+
 #include <NeoEngine.h>
 #include <signal.h>
 
@@ -406,3 +408,5 @@ void registerDebugHandler()
 	SetUnhandledExceptionFilter(windows_exception_handler);
 #endif
 }
+
+#endif

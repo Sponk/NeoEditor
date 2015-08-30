@@ -111,7 +111,7 @@ m_physicsProperties(NULL),
 m_hasShadow(true),
 m_isOccluder(false),
 m_wireframe(false),
-m_materials(nullptr)
+m_materials(NULL)
 {
 	setMeshRef(meshRef);
 }
@@ -127,7 +127,7 @@ m_animationId(entity.m_animationId),
 m_hasShadow(entity.m_hasShadow),
 m_isOccluder(entity.m_isOccluder),
 m_wireframe(entity.m_wireframe),
-m_materials(nullptr)
+m_materials(NULL)
 {
 	setMeshRef(entity.m_meshRef);
 	if(entity.m_physicsProperties)

@@ -201,8 +201,10 @@ static void buffreplace (LexState *ls, char from, char to) {
 }
 
 
-#if !defined(getlocaledecpoint)
+#if !defined(getlocaledecpoint) && !defined(ANDROID)
 #define getlocaledecpoint()	(localeconv()->decimal_point[0])
+#elif !defined(getlocaledecpoint) && defined(ANDROID)
+#define getlocaledecpoint()	('.')
 #endif
 
 
