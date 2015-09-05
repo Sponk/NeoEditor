@@ -28,6 +28,6 @@
 
 namespace Neo
 {
-bool M_loadBinFont(const char * filename, void * data);
+bool M_loadBinFont(const char * filename, Font* font);
 }
 #endif

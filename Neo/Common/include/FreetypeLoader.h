@@ -27,6 +27,6 @@
 #define _M_FREETYPE_FONT_LOADER_H
 namespace Neo
 {
-bool M_loadFont(const char * filename, void * data);
+bool M_loadFont(const char * filename, Font* font);
 }
 #endif

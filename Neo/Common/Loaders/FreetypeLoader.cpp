@@ -58,18 +58,14 @@ static void drawBitmap(Image * image, FT_Bitmap * bitmap, int left, int top)
 	}
 }
 
-bool M_loadFont(const char * filename, void * data)
+bool M_loadFont(const char * filename, Font* font)
 {
 	int pen_x, pen_y, max;
 	unsigned int n;
 	unsigned int space = 2;
 	unsigned int numChars = 4096;
 
-	// Change this for higher resolutions
-	Font * font = (Font *)data;
-
 	float size;
-
 	if(font->getFontSize() > 0)
 		size = font->getFontSize();
 	else

@@ -23,11 +23,11 @@
 //========================================================================
 
 
-#ifndef _M_SOUND_LOADER_H
-#define _M_SOUND_LOADER_H
+#ifndef __SOUND_LOADER_H
+#define __SOUND_LOADER_H
 
 namespace Neo
 {
-bool M_loadSound(const char * filename, void * data);
+bool M_loadSound(const char * filename, Sound* sound);
 }
 #endif

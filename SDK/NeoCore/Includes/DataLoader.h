@@ -26,44 +26,71 @@
 #ifndef __DATA_LOADER_H
 #define __DATA_LOADER_H
 
+#include <functional>
+
 namespace Neo
 {
-// Data load function
-class NEO_CORE_EXPORT DataLoadFunction
-{
-public:
-
-	DataLoadFunction(bool (* functionPtr)(const char * filename, void * data));
-	~DataLoadFunction(void);
-
-	bool (* m_functionPtr)(const char * filename, void * data);
-};
-
 
 // Data loader
-class NEO_CORE_EXPORT DataLoader
+template<class T> class NEO_CORE_EXPORT DataLoader
 {
 private:
 
-	// loaders
-	vector <DataLoadFunction *> m_loaders;
+	typedef std::function<bool(const char* filename, const char* type, T& data)> save_function_t;
+	typedef std::function<bool(const char* filename, T* data)> load_function_t;
+
+	vector<load_function_t> m_loaders;
+	vector<save_function_t> m_savers;
 
 public:
 
-	// constructor / destructor
-	DataLoader(void);
-	~DataLoader(void);
+	// Data loader
+	DataLoader(void)
+	{}
 
-public:
+	~DataLoader(void)
+	{
+		clear();
+	}
 
-	// clear
-	void clear(void);
+	void clear(void)
+	{
+		m_loaders.clear();
+		m_savers.clear();
+	}
 
-	// loaders
-	void addLoader(bool (* functionPtr)(const char * filename, void * data));
+	void addLoader(load_function_t function)
+	{
+		m_loaders.push_back(function);
+	}
 
-	// data
-	bool loadData(const char * filename, void * data);
+	void addSaver(save_function_t function)
+	{
+		m_savers.push_back(function);
+	}
+
+	bool loadData(const char * filename, T* data)
+	{
+		for(load_function_t f : m_loaders)
+		{
+			if(f(filename, data))
+				return true;
+		}
+
+		return false;
+	}
+
+
+	bool saveData(const char* filename, const char* type, T& data)
+	{
+		for(save_function_t f : m_savers)
+		{
+			if(f(filename, type, data))
+				return true;
+		}
+
+		return false;
+	}
 };
 }
 #endif

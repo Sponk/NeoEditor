@@ -505,11 +505,12 @@ void readBehaviors(TiXmlElement * node, Object3d * object)
 	}
 }
 
-bool xmlLevelLoad(const char * filename, void * data){
-	return M_loadLevel(filename, data);
+bool xmlLevelLoad(const char * filename, Level* level)
+{
+	return M_loadLevel(filename, level);
 }
 
-bool M_loadLevel(const char * filename, void * data, const bool clearData)
+bool M_loadLevel(const char * filename, Level* level, const bool clearData)
 {
 	char scriptFilename[256];
 	char soundFilename[256];
@@ -583,7 +584,6 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 	Level * oldLevel = engine->getLevel();
 
 	// create new level
-	level = (Level *)data;
 	if(clearData)
 		level->clear();
 	else

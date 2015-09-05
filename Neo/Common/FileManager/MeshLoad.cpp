@@ -266,7 +266,7 @@ void readVector3Keys(TiXmlElement * node, Key * keys)
 	}
 }
 
-bool xmlArmatureAnimLoad(const char * filename, void * data)
+bool xmlArmatureAnimLoad(const char * filename, ArmatureAnim* armatureAnim)
 {
 	TiXmlDocument doc(filename);
 	if(! doc.LoadFile())
@@ -297,7 +297,6 @@ bool xmlArmatureAnimLoad(const char * filename, void * data)
 		return false;
 
 	// create armature anim
-	ArmatureAnim * armatureAnim = (ArmatureAnim *)data;
 	Object3dAnim * objAnims = armatureAnim->allocBonesAnim(bonesAnimNumber);
 
 	// Bone
@@ -358,7 +357,7 @@ bool xmlArmatureAnimLoad(const char * filename, void * data)
 	return true;
 }
 
-bool xmlTextureAnimLoad(const char * filename, void * data)
+bool xmlTextureAnimLoad(const char * filename, TexturesAnim* texturesAnim)
 {
 	TiXmlDocument doc(filename);
 	if(! doc.LoadFile())
@@ -389,7 +388,6 @@ bool xmlTextureAnimLoad(const char * filename, void * data)
 		return false;
 
 	// create textures anim
-	TexturesAnim * texturesAnim = (TexturesAnim *)data;
 	TextureAnim * texAnims = texturesAnim->allocTexturesAnim(texturesAnimNumber);
 
 	// Texture
@@ -432,7 +430,7 @@ bool xmlTextureAnimLoad(const char * filename, void * data)
 	return true;
 }
 
-bool xmlMaterialAnimLoad(const char * filename, void * data)
+bool xmlMaterialAnimLoad(const char * filename, MaterialsAnim* materialsAnim)
 {
 	TiXmlDocument doc(filename);
 	if(! doc.LoadFile())
@@ -463,7 +461,6 @@ bool xmlMaterialAnimLoad(const char * filename, void * data)
 		return false;
 
 	// create materials anim
-	MaterialsAnim * materialsAnim = (MaterialsAnim *)data;
 	MaterialAnim * matAnims = materialsAnim->allocMaterialsAnim(materialsAnimNumber);
 
 	// Material
@@ -655,7 +652,7 @@ bool loadAnimFile(Mesh * mesh, const char * filename, const char * repertory)
 	return loadAnim(pRootNode, repertory, mesh);
 }
 
-bool xmlMeshLoad(const char * filename, void * data)
+bool xmlMeshLoad(const char * filename, Mesh* mesh)
 {
     MLOG_DEBUG("xmlMeshLoad " << filename?filename:"NULL");
 	
@@ -699,7 +696,6 @@ bool xmlMeshLoad(const char * filename, void * data)
 	}
 
 	// create new mesh
-	Mesh * mesh = (Mesh *)data;
 	mesh->clear();
 
 	char path[256];

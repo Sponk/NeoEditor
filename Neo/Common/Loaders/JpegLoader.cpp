@@ -49,9 +49,9 @@ METHODDEF(void) my_error_exit(j_common_ptr cinfo)
 	longjmp(myerr->setjmp_buffer, 1);
 }
 
-bool M_loadJpegImage(const char * filename, void * data)
+bool M_loadJpegImage(const char * filename, Image* image)
 {
-    if((!data) || (!filename))
+    if((!image) || (!filename))
         return false;
 
 	File* file = M_fopen(filename, "rb");
@@ -119,7 +119,6 @@ bool M_loadJpegImage(const char * filename, void * data)
     jpeg_destroy_decompress(&cinfo);
     delete [] buffer;
 
-    Image * image = (Image *)data;
     image->create(VAR_UBYTE, (unsigned int)cinfo.output_width, (unsigned int)cinfo.output_height, (unsigned int)cinfo.output_components);
     memcpy(image->getData(), out, sizeof(char)*image->getSize());
     delete [] out;

@@ -29,7 +29,7 @@
 
 namespace Neo
 {
-bool M_loadSound(const char * filename, void * data)
+bool M_loadSound(const char * filename, Sound* data)
 {
 	if (M_loadVorbisSound(filename, data))
 		return true;

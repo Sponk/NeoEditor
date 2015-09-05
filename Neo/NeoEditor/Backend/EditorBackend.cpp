@@ -46,6 +46,9 @@
 #include <GL4Context.h>
 #endif
 
+#include <NeoCore.h>
+#include <NeoEngine.h>
+
 #include <ALContext.h>
 #include <BulletContext.h>
 #include <WinContext.h>
@@ -55,8 +58,6 @@
 #include <BinFontLoader.h>
 #include <BinMeshLoader.h>
 
-#include <NeoCore.h>
-#include <NeoEngine.h>
 #include <Window/Mouse.h>
 #include <LookAtBehavior.h>
 #include <FollowBehavior.h>

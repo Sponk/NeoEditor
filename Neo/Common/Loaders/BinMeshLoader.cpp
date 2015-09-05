@@ -110,7 +110,7 @@ static bool readDataRef(File * file, char * filename, const char * rep)
 
 
 // Mesh bin loading
-bool M_loadBinMesh(const char * filename, void * data)
+bool M_loadBinMesh(const char * filename, Mesh* mesh)
 {
 	char rep[256], path[256];
 	bool state;
@@ -126,10 +126,8 @@ bool M_loadBinMesh(const char * filename, void * data)
 	// get engine, level, mesh
 	NeoEngine * engine = NeoEngine().getInstance();
 	Level * level = engine->getLevel();
-	Mesh * mesh = (Mesh *)data;
-	
+
 	mesh->clear();
-	
 
 	// get file directory
 	getRepertory(rep, filename);
@@ -602,11 +600,10 @@ bool M_loadBinMesh(const char * filename, void * data)
 
 
 // Armature anim bin loading
-bool M_loadBinArmatureAnim(const char * filename, void * data)
+bool M_loadBinArmatureAnim(const char * filename, ArmatureAnim* anim)
 {
 	int version;
 	char header[8];
-
 
 	// open file
 	File * file = M_fopen(filename, "rb");
@@ -615,10 +612,6 @@ bool M_loadBinArmatureAnim(const char * filename, void * data)
 		fprintf(stderr, "Error : can't read file %s\n", filename);
 		return false;
 	}
-
-	// data
-	ArmatureAnim * anim = (ArmatureAnim *)data;
-
 
 	// header
 	M_fread(header, sizeof(char), 8, file);
@@ -665,7 +658,7 @@ bool M_loadBinArmatureAnim(const char * filename, void * data)
 
 
 // Textures anim bin loading
-bool M_loadBinTexturesAnim(const char * filename, void * data)
+bool M_loadBinTexturesAnim(const char * filename, TexturesAnim* anim)
 {
 	int version;
 	char header[8];
@@ -678,10 +671,6 @@ bool M_loadBinTexturesAnim(const char * filename, void * data)
 		fprintf(stderr, "Error : can't read file %s\n", filename);
 		return false;
 	}
-
-	// data
-	TexturesAnim * anim = (TexturesAnim *)data;
-
 
 	// header
 	M_fread(header, sizeof(char), 8, file);
@@ -728,7 +717,7 @@ bool M_loadBinTexturesAnim(const char * filename, void * data)
 
 
 // Materials anim bin export
-bool M_loadBinMaterialsAnim(const char * filename, void * data)
+bool M_loadBinMaterialsAnim(const char * filename, MaterialsAnim* anim)
 {
 	int version;
 	char header[8];
@@ -741,10 +730,6 @@ bool M_loadBinMaterialsAnim(const char * filename, void * data)
 		fprintf(stderr, "Error : can't read file %s\n", filename);
 		return false;
 	}
-
-	// data
-	MaterialsAnim * anim = (MaterialsAnim *)data;
-
 
 	// header
 	M_fread(header, sizeof(char), 8, file);

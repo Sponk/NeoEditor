@@ -55,9 +55,9 @@ long M_VorbisTell(void *file)
 #define __func__ __FUNCTION__
 #endif
 
-bool M_loadVorbisSound(const char * filename, void * data)
+bool M_loadVorbisSound(const char * filename, Sound* sound)
 {
-	if((!data) || (!filename))
+	if((!sound) || (!filename))
 		return false;
 
 	File* file = M_fopen(filename, "rb");
@@ -98,7 +98,6 @@ bool M_loadVorbisSound(const char * filename, void * data)
 			return false;
 	}
 
-	Sound * sound = (Sound *)data;
 	sound->create(format, size, (unsigned int)vi->rate);
 
 	int current_section;

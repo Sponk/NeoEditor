@@ -172,14 +172,14 @@ private:
 	SystemContext * m_systemContext;
 
 	// data loaders
-	DataLoader m_fontLoader;
-	DataLoader m_imageLoader;
-	DataLoader m_soundLoader;
-	DataLoader m_meshLoader;
-	DataLoader m_armatureAnimLoader;
-	DataLoader m_texturesAnimLoader;
-	DataLoader m_materialsAnimLoader;
-	DataLoader m_levelLoader;
+	DataLoader<Font> m_fontLoader;
+	DataLoader<Image> m_imageLoader;
+	DataLoader<Sound> m_soundLoader;
+	DataLoader<Mesh> m_meshLoader;
+	DataLoader<ArmatureAnim> m_armatureAnimLoader;
+	DataLoader<TexturesAnim> m_texturesAnimLoader;
+	DataLoader<MaterialsAnim> m_materialsAnimLoader;
+	DataLoader<Level> m_levelLoader;
 
 	// behavior manager
 	BehaviorManager m_behaviorManager;
@@ -229,14 +229,14 @@ public:
 	inline SystemContext * getSystemContext(void){ return m_systemContext; }
 
 	// data loaders
-	DataLoader * getFontLoader(void){ return &m_fontLoader; }
-	DataLoader * getImageLoader(void){ return &m_imageLoader; }
-	DataLoader * getSoundLoader(void){ return &m_soundLoader; }
-	DataLoader * getMeshLoader(void){ return &m_meshLoader; }
-	DataLoader * getArmatureAnimLoader(void){ return &m_armatureAnimLoader; }
-	DataLoader * getTexturesAnimLoader(void){ return &m_texturesAnimLoader; }
-	DataLoader * getMaterialsAnimLoader(void){ return &m_materialsAnimLoader; }
-	DataLoader * getLevelLoader(void){ return &m_levelLoader; }
+	DataLoader<Font>* getFontLoader(void){ return &m_fontLoader; }
+	DataLoader<Image>* getImageLoader(void){ return &m_imageLoader; }
+	DataLoader<Sound>* getSoundLoader(void){ return &m_soundLoader; }
+	DataLoader<Mesh>* getMeshLoader(void){ return &m_meshLoader; }
+	DataLoader<ArmatureAnim>* getArmatureAnimLoader(void){ return &m_armatureAnimLoader; }
+	DataLoader<TexturesAnim>* getTexturesAnimLoader(void){ return &m_texturesAnimLoader; }
+	DataLoader<MaterialsAnim>* getMaterialsAnimLoader(void){ return &m_materialsAnimLoader; }
+	DataLoader<Level>* getLevelLoader(void){ return &m_levelLoader; }
 
 	// behavior manager
 	inline BehaviorManager * getBehaviorManager(void){ return &m_behaviorManager; }

@@ -67,9 +67,9 @@ typedef struct
 } Header;
 #pragma pack(pop)
 
-bool M_loadTgaImage(const char * filename, void * data)
+bool M_loadTgaImage(const char * filename, Image* image)
 {
-	if((!data) || (!filename))
+	if((!image) || (!filename))
 		return false;
 
 	File* file = M_fopen(filename, "rb");
@@ -201,7 +201,6 @@ bool M_loadTgaImage(const char * filename, void * data)
 	for(int i = 0; i < size; i += components)
 		image_data[i] ^= image_data[i+2] ^= image_data[i] ^= image_data[i+2];
 
-	Image * image = (Image *)data;
 	image->create(VAR_UBYTE, (unsigned int)header.im_width, (unsigned int)header.im_height, components);
 	memcpy(image->getData(), image_data, sizeof(char)*image->getSize());
 	delete [] image_data;

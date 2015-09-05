@@ -23,8 +23,8 @@
 //========================================================================
 
 
-#ifndef _M_TGA_IMAGE_LOADER_H
-#define _M_TGA_IMAGE_LOADER_H
+#ifndef __TGA_IMAGE_LOADER_H
+#define __TGA_IMAGE_LOADER_H
 
 namespace Neo
 {
@@ -35,7 +35,7 @@ namespace Neo
  * @param data A pointer to allocated memory.
  * @return Returns <b>true</b> on success and <b>false</b> on failure.
  */
-bool M_loadTgaImage(const char * filename, void * data);
+bool M_loadTgaImage(const char * filename, Image* image);
 }
 
 #endif

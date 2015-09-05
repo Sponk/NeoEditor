@@ -2680,94 +2680,99 @@ SWIG_Lua_dostring(lua_State *L, const char *str) {
 #define SWIGTYPE_p_Neo__ArmatureAnimRef swig_types[37]
 #define SWIGTYPE_p_Neo__Box3d swig_types[38]
 #define SWIGTYPE_p_Neo__Color swig_types[39]
-#define SWIGTYPE_p_Neo__DataLoadFunction swig_types[40]
-#define SWIGTYPE_p_Neo__DataLoader swig_types[41]
-#define SWIGTYPE_p_Neo__DataManager swig_types[42]
-#define SWIGTYPE_p_Neo__DataRef swig_types[43]
-#define SWIGTYPE_p_Neo__FRAME_BUFFER_ATTACHMENT swig_types[44]
-#define SWIGTYPE_p_Neo__FontRef swig_types[45]
-#define SWIGTYPE_p_Neo__Image swig_types[46]
-#define SWIGTYPE_p_Neo__InputContext swig_types[47]
-#define SWIGTYPE_p_Neo__Level swig_types[48]
-#define SWIGTYPE_p_Neo__Material swig_types[49]
-#define SWIGTYPE_p_Neo__MaterialDisplay swig_types[50]
-#define SWIGTYPE_p_Neo__MaterialsAnimRef swig_types[51]
-#define SWIGTYPE_p_Neo__Matrix4x4 swig_types[52]
-#define SWIGTYPE_p_Neo__Mesh swig_types[53]
-#define SWIGTYPE_p_Neo__MeshRef swig_types[54]
-#define SWIGTYPE_p_Neo__NeoEngine swig_types[55]
-#define SWIGTYPE_p_Neo__NeoGame swig_types[56]
-#define SWIGTYPE_p_Neo__OBone swig_types[57]
-#define SWIGTYPE_p_Neo__OCamera swig_types[58]
-#define SWIGTYPE_p_Neo__OEntity swig_types[59]
-#define SWIGTYPE_p_Neo__OLight swig_types[60]
-#define SWIGTYPE_p_Neo__OSound swig_types[61]
-#define SWIGTYPE_p_Neo__OText swig_types[62]
-#define SWIGTYPE_p_Neo__Object3d swig_types[63]
-#define SWIGTYPE_p_Neo__Object3d__AdditionalData swig_types[64]
-#define SWIGTYPE_p_Neo__PhysicsConstraint swig_types[65]
-#define SWIGTYPE_p_Neo__PhysicsContext swig_types[66]
-#define SWIGTYPE_p_Neo__PhysicsProperties swig_types[67]
-#define SWIGTYPE_p_Neo__Quaternion swig_types[68]
-#define SWIGTYPE_p_Neo__Range swig_types[69]
-#define SWIGTYPE_p_Neo__RenderingContext swig_types[70]
-#define SWIGTYPE_p_Neo__Scene swig_types[71]
-#define SWIGTYPE_p_Neo__Scene__AdditionalData swig_types[72]
-#define SWIGTYPE_p_Neo__ScriptContext swig_types[73]
-#define SWIGTYPE_p_Neo__ShaderRef swig_types[74]
-#define SWIGTYPE_p_Neo__Sound swig_types[75]
-#define SWIGTYPE_p_Neo__SoundContext swig_types[76]
-#define SWIGTYPE_p_Neo__SoundRef swig_types[77]
-#define SWIGTYPE_p_Neo__SubGame swig_types[78]
-#define SWIGTYPE_p_Neo__SubMesh swig_types[79]
-#define SWIGTYPE_p_Neo__SystemContext swig_types[80]
-#define SWIGTYPE_p_Neo__Texture swig_types[81]
-#define SWIGTYPE_p_Neo__TexturePass swig_types[82]
-#define SWIGTYPE_p_Neo__TextureRef swig_types[83]
-#define SWIGTYPE_p_Neo__TexturesAnimRef swig_types[84]
-#define SWIGTYPE_p_Neo__Vector2 swig_types[85]
-#define SWIGTYPE_p_Neo__Vector3 swig_types[86]
-#define SWIGTYPE_p_Neo__Vector4 swig_types[87]
-#define SWIGTYPE_p_PackageManager swig_types[88]
-#define SWIGTYPE_p_PostProcessor swig_types[89]
-#define SWIGTYPE_p_Renderer swig_types[90]
-#define SWIGTYPE_p_RendererManager swig_types[91]
-#define SWIGTYPE_p_SkinData swig_types[92]
-#define SWIGTYPE_p_Skybox swig_types[93]
-#define SWIGTYPE_p_String swig_types[94]
-#define SWIGTYPE_p_Texture swig_types[95]
-#define SWIGTYPE_p_TexturesAnim swig_types[96]
-#define SWIGTYPE_p_Vector3p swig_types[97]
-#define SWIGTYPE_p_WindowManager swig_types[98]
-#define SWIGTYPE_p___int64 swig_types[99]
-#define SWIGTYPE_p_char swig_types[100]
-#define SWIGTYPE_p_double swig_types[101]
-#define SWIGTYPE_p_doublep swig_types[102]
-#define SWIGTYPE_p_f_p_q_const__char_p_void__bool swig_types[103]
-#define SWIGTYPE_p_f_void__int swig_types[104]
-#define SWIGTYPE_p_f_void__intp swig_types[105]
-#define SWIGTYPE_p_float swig_types[106]
-#define SWIGTYPE_p_floatp swig_types[107]
-#define SWIGTYPE_p_int swig_types[108]
-#define SWIGTYPE_p_intp swig_types[109]
-#define SWIGTYPE_p_long swig_types[110]
-#define SWIGTYPE_p_mapT_unsigned_int_unsigned_int_t swig_types[111]
-#define SWIGTYPE_p_p_char swig_types[112]
-#define SWIGTYPE_p_p_unsigned_long swig_types[113]
-#define SWIGTYPE_p_short swig_types[114]
-#define SWIGTYPE_p_signed___int64 swig_types[115]
-#define SWIGTYPE_p_signed_char swig_types[116]
-#define SWIGTYPE_p_std__string swig_types[117]
-#define SWIGTYPE_p_uintp swig_types[118]
-#define SWIGTYPE_p_unsigned___int64 swig_types[119]
-#define SWIGTYPE_p_unsigned_char swig_types[120]
-#define SWIGTYPE_p_unsigned_int swig_types[121]
-#define SWIGTYPE_p_unsigned_long swig_types[122]
-#define SWIGTYPE_p_unsigned_short swig_types[123]
-#define SWIGTYPE_p_vectorT_float_t swig_types[124]
-#define SWIGTYPE_p_void swig_types[125]
-static swig_type_info *swig_types[127];
-static swig_module_info swig_module = {swig_types, 126, 0, 0, 0, 0};
+#define SWIGTYPE_p_Neo__DataLoaderT_ArmatureAnim_t swig_types[40]
+#define SWIGTYPE_p_Neo__DataLoaderT_Font_t swig_types[41]
+#define SWIGTYPE_p_Neo__DataLoaderT_MaterialsAnim_t swig_types[42]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Image_t swig_types[43]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Level_t swig_types[44]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Mesh_t swig_types[45]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Sound_t swig_types[46]
+#define SWIGTYPE_p_Neo__DataLoaderT_TexturesAnim_t swig_types[47]
+#define SWIGTYPE_p_Neo__DataManager swig_types[48]
+#define SWIGTYPE_p_Neo__DataRef swig_types[49]
+#define SWIGTYPE_p_Neo__FRAME_BUFFER_ATTACHMENT swig_types[50]
+#define SWIGTYPE_p_Neo__FontRef swig_types[51]
+#define SWIGTYPE_p_Neo__Image swig_types[52]
+#define SWIGTYPE_p_Neo__InputContext swig_types[53]
+#define SWIGTYPE_p_Neo__Level swig_types[54]
+#define SWIGTYPE_p_Neo__Material swig_types[55]
+#define SWIGTYPE_p_Neo__MaterialDisplay swig_types[56]
+#define SWIGTYPE_p_Neo__MaterialsAnimRef swig_types[57]
+#define SWIGTYPE_p_Neo__Matrix4x4 swig_types[58]
+#define SWIGTYPE_p_Neo__Mesh swig_types[59]
+#define SWIGTYPE_p_Neo__MeshRef swig_types[60]
+#define SWIGTYPE_p_Neo__NeoEngine swig_types[61]
+#define SWIGTYPE_p_Neo__NeoGame swig_types[62]
+#define SWIGTYPE_p_Neo__OBone swig_types[63]
+#define SWIGTYPE_p_Neo__OCamera swig_types[64]
+#define SWIGTYPE_p_Neo__OEntity swig_types[65]
+#define SWIGTYPE_p_Neo__OLight swig_types[66]
+#define SWIGTYPE_p_Neo__OSound swig_types[67]
+#define SWIGTYPE_p_Neo__OText swig_types[68]
+#define SWIGTYPE_p_Neo__Object3d swig_types[69]
+#define SWIGTYPE_p_Neo__Object3d__AdditionalData swig_types[70]
+#define SWIGTYPE_p_Neo__PhysicsConstraint swig_types[71]
+#define SWIGTYPE_p_Neo__PhysicsContext swig_types[72]
+#define SWIGTYPE_p_Neo__PhysicsProperties swig_types[73]
+#define SWIGTYPE_p_Neo__Quaternion swig_types[74]
+#define SWIGTYPE_p_Neo__Range swig_types[75]
+#define SWIGTYPE_p_Neo__RenderingContext swig_types[76]
+#define SWIGTYPE_p_Neo__Scene swig_types[77]
+#define SWIGTYPE_p_Neo__Scene__AdditionalData swig_types[78]
+#define SWIGTYPE_p_Neo__ScriptContext swig_types[79]
+#define SWIGTYPE_p_Neo__ShaderRef swig_types[80]
+#define SWIGTYPE_p_Neo__Sound swig_types[81]
+#define SWIGTYPE_p_Neo__SoundContext swig_types[82]
+#define SWIGTYPE_p_Neo__SoundRef swig_types[83]
+#define SWIGTYPE_p_Neo__SubGame swig_types[84]
+#define SWIGTYPE_p_Neo__SubMesh swig_types[85]
+#define SWIGTYPE_p_Neo__SystemContext swig_types[86]
+#define SWIGTYPE_p_Neo__Texture swig_types[87]
+#define SWIGTYPE_p_Neo__TexturePass swig_types[88]
+#define SWIGTYPE_p_Neo__TextureRef swig_types[89]
+#define SWIGTYPE_p_Neo__TexturesAnimRef swig_types[90]
+#define SWIGTYPE_p_Neo__Vector2 swig_types[91]
+#define SWIGTYPE_p_Neo__Vector3 swig_types[92]
+#define SWIGTYPE_p_Neo__Vector4 swig_types[93]
+#define SWIGTYPE_p_PackageManager swig_types[94]
+#define SWIGTYPE_p_PostProcessor swig_types[95]
+#define SWIGTYPE_p_Renderer swig_types[96]
+#define SWIGTYPE_p_RendererManager swig_types[97]
+#define SWIGTYPE_p_SkinData swig_types[98]
+#define SWIGTYPE_p_Skybox swig_types[99]
+#define SWIGTYPE_p_String swig_types[100]
+#define SWIGTYPE_p_Texture swig_types[101]
+#define SWIGTYPE_p_TexturesAnim swig_types[102]
+#define SWIGTYPE_p_Vector3p swig_types[103]
+#define SWIGTYPE_p_WindowManager swig_types[104]
+#define SWIGTYPE_p___int64 swig_types[105]
+#define SWIGTYPE_p_char swig_types[106]
+#define SWIGTYPE_p_double swig_types[107]
+#define SWIGTYPE_p_doublep swig_types[108]
+#define SWIGTYPE_p_f_void__int swig_types[109]
+#define SWIGTYPE_p_f_void__intp swig_types[110]
+#define SWIGTYPE_p_float swig_types[111]
+#define SWIGTYPE_p_floatp swig_types[112]
+#define SWIGTYPE_p_int swig_types[113]
+#define SWIGTYPE_p_intp swig_types[114]
+#define SWIGTYPE_p_long swig_types[115]
+#define SWIGTYPE_p_mapT_unsigned_int_unsigned_int_t swig_types[116]
+#define SWIGTYPE_p_p_char swig_types[117]
+#define SWIGTYPE_p_p_unsigned_long swig_types[118]
+#define SWIGTYPE_p_short swig_types[119]
+#define SWIGTYPE_p_signed___int64 swig_types[120]
+#define SWIGTYPE_p_signed_char swig_types[121]
+#define SWIGTYPE_p_std__string swig_types[122]
+#define SWIGTYPE_p_uintp swig_types[123]
+#define SWIGTYPE_p_unsigned___int64 swig_types[124]
+#define SWIGTYPE_p_unsigned_char swig_types[125]
+#define SWIGTYPE_p_unsigned_int swig_types[126]
+#define SWIGTYPE_p_unsigned_long swig_types[127]
+#define SWIGTYPE_p_unsigned_short swig_types[128]
+#define SWIGTYPE_p_vectorT_float_t swig_types[129]
+#define SWIGTYPE_p_void swig_types[130]
+static swig_type_info *swig_types[132];
+static swig_module_info swig_module = {swig_types, 131, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -25108,282 +25113,6 @@ static swig_lua_class *swig_DataManager_bases[] = {0};
 static const char *swig_DataManager_base_names[] = {0};
 static swig_lua_class _wrap_class_DataManager = { "DataManager", "DataManager", &SWIGTYPE_p_Neo__DataManager,_proxy__wrap_new_DataManager, swig_delete_DataManager, swig_DataManager_methods, swig_DataManager_attributes, &swig_DataManager_Sf_SwigStatic, swig_DataManager_meta, swig_DataManager_bases, swig_DataManager_base_names };
 
-static int _wrap_new_DataLoadFunction(lua_State* L) {
-  int SWIG_arg = 0;
-  bool (*arg1)(char const *,void *) = (bool (*)(char const *,void *)) 0 ;
-  Neo::DataLoadFunction *result = 0 ;
-  
-  SWIG_check_num_args("Neo::DataLoadFunction::DataLoadFunction",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::DataLoadFunction::DataLoadFunction",1,"bool (*)(char const *,void *)");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_f_p_q_const__char_p_void__bool,0))){
-    SWIG_fail_ptr("new_DataLoadFunction",1,SWIGTYPE_p_f_p_q_const__char_p_void__bool);
-  }
-  
-  result = (Neo::DataLoadFunction *)new Neo::DataLoadFunction(arg1);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__DataLoadFunction,1); SWIG_arg++; 
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_DataLoadFunction_m_functionPtr_set(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo::DataLoadFunction *arg1 = (Neo::DataLoadFunction *) 0 ;
-  bool (*arg2)(char const *,void *) = (bool (*)(char const *,void *)) 0 ;
-  
-  SWIG_check_num_args("Neo::DataLoadFunction::m_functionPtr",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::DataLoadFunction::m_functionPtr",1,"Neo::DataLoadFunction *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::DataLoadFunction::m_functionPtr",2,"bool (*)(char const *,void *)");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__DataLoadFunction,0))){
-    SWIG_fail_ptr("DataLoadFunction_m_functionPtr_set",1,SWIGTYPE_p_Neo__DataLoadFunction);
-  }
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_f_p_q_const__char_p_void__bool,0))){
-    SWIG_fail_ptr("DataLoadFunction_m_functionPtr_set",2,SWIGTYPE_p_f_p_q_const__char_p_void__bool);
-  }
-  
-  if (arg1) (arg1)->m_functionPtr = arg2;
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_DataLoadFunction_m_functionPtr_get(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo::DataLoadFunction *arg1 = (Neo::DataLoadFunction *) 0 ;
-  bool (*result)(char const *,void *) = 0 ;
-  
-  SWIG_check_num_args("Neo::DataLoadFunction::m_functionPtr",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::DataLoadFunction::m_functionPtr",1,"Neo::DataLoadFunction *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__DataLoadFunction,0))){
-    SWIG_fail_ptr("DataLoadFunction_m_functionPtr_get",1,SWIGTYPE_p_Neo__DataLoadFunction);
-  }
-  
-  result = (bool (*)(char const *,void *)) ((arg1)->m_functionPtr);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_f_p_q_const__char_p_void__bool,0); SWIG_arg++; 
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static void swig_delete_DataLoadFunction(void *obj) {
-Neo::DataLoadFunction *arg1 = (Neo::DataLoadFunction *) obj;
-delete arg1;
-}
-static int _proxy__wrap_new_DataLoadFunction(lua_State *L) {
-    assert(lua_istable(L,1));
-    lua_pushcfunction(L,_wrap_new_DataLoadFunction);
-    assert(!lua_isnil(L,-1));
-    lua_replace(L,1); /* replace our table with real constructor */
-    lua_call(L,lua_gettop(L)-1,1);
-    return 1;
-}
-static swig_lua_attribute swig_DataLoadFunction_attributes[] = {
-    { "m_functionPtr", _wrap_DataLoadFunction_m_functionPtr_get, _wrap_DataLoadFunction_m_functionPtr_set },
-    {0,0,0}
-};
-static swig_lua_method swig_DataLoadFunction_methods[]= {
-    {0,0}
-};
-static swig_lua_method swig_DataLoadFunction_meta[] = {
-    {0,0}
-};
-
-static swig_lua_attribute swig_DataLoadFunction_Sf_SwigStatic_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_const_info swig_DataLoadFunction_Sf_SwigStatic_constants[]= {
-    {0,0,0,0,0,0}
-};
-static swig_lua_method swig_DataLoadFunction_Sf_SwigStatic_methods[]= {
-    {0,0}
-};
-static swig_lua_class* swig_DataLoadFunction_Sf_SwigStatic_classes[]= {
-    0
-};
-
-static swig_lua_namespace swig_DataLoadFunction_Sf_SwigStatic = {
-    "DataLoadFunction",
-    swig_DataLoadFunction_Sf_SwigStatic_methods,
-    swig_DataLoadFunction_Sf_SwigStatic_attributes,
-    swig_DataLoadFunction_Sf_SwigStatic_constants,
-    swig_DataLoadFunction_Sf_SwigStatic_classes,
-    0
-};
-static swig_lua_class *swig_DataLoadFunction_bases[] = {0};
-static const char *swig_DataLoadFunction_base_names[] = {0};
-static swig_lua_class _wrap_class_DataLoadFunction = { "DataLoadFunction", "DataLoadFunction", &SWIGTYPE_p_Neo__DataLoadFunction,_proxy__wrap_new_DataLoadFunction, swig_delete_DataLoadFunction, swig_DataLoadFunction_methods, swig_DataLoadFunction_attributes, &swig_DataLoadFunction_Sf_SwigStatic, swig_DataLoadFunction_meta, swig_DataLoadFunction_bases, swig_DataLoadFunction_base_names };
-
-static int _wrap_new_DataLoader(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo::DataLoader *result = 0 ;
-  
-  SWIG_check_num_args("Neo::DataLoader::DataLoader",0,0)
-  result = (Neo::DataLoader *)new Neo::DataLoader();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__DataLoader,1); SWIG_arg++; 
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_DataLoader_clear(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo::DataLoader *arg1 = (Neo::DataLoader *) 0 ;
-  
-  SWIG_check_num_args("Neo::DataLoader::clear",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::DataLoader::clear",1,"Neo::DataLoader *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__DataLoader,0))){
-    SWIG_fail_ptr("DataLoader_clear",1,SWIGTYPE_p_Neo__DataLoader);
-  }
-  
-  (arg1)->clear();
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_DataLoader_addLoader(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo::DataLoader *arg1 = (Neo::DataLoader *) 0 ;
-  bool (*arg2)(char const *,void *) = (bool (*)(char const *,void *)) 0 ;
-  
-  SWIG_check_num_args("Neo::DataLoader::addLoader",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::DataLoader::addLoader",1,"Neo::DataLoader *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo::DataLoader::addLoader",2,"bool (*)(char const *,void *)");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__DataLoader,0))){
-    SWIG_fail_ptr("DataLoader_addLoader",1,SWIGTYPE_p_Neo__DataLoader);
-  }
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_f_p_q_const__char_p_void__bool,0))){
-    SWIG_fail_ptr("DataLoader_addLoader",2,SWIGTYPE_p_f_p_q_const__char_p_void__bool);
-  }
-  
-  (arg1)->addLoader(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_DataLoader_loadData(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo::DataLoader *arg1 = (Neo::DataLoader *) 0 ;
-  char *arg2 = (char *) 0 ;
-  void *arg3 = (void *) 0 ;
-  bool result;
-  
-  SWIG_check_num_args("Neo::DataLoader::loadData",3,3)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::DataLoader::loadData",1,"Neo::DataLoader *");
-  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::DataLoader::loadData",2,"char const *");
-  if(!SWIG_isptrtype(L,3)) SWIG_fail_arg("Neo::DataLoader::loadData",3,"void *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__DataLoader,0))){
-    SWIG_fail_ptr("DataLoader_loadData",1,SWIGTYPE_p_Neo__DataLoader);
-  }
-  
-  arg2 = (char *)lua_tostring(L, 2);
-  arg3=(void *)SWIG_MustGetPtr(L,3,0,0,3,"DataLoader_loadData");
-  result = (bool)(arg1)->loadData((char const *)arg2,arg3);
-  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static void swig_delete_DataLoader(void *obj) {
-Neo::DataLoader *arg1 = (Neo::DataLoader *) obj;
-delete arg1;
-}
-static int _proxy__wrap_new_DataLoader(lua_State *L) {
-    assert(lua_istable(L,1));
-    lua_pushcfunction(L,_wrap_new_DataLoader);
-    assert(!lua_isnil(L,-1));
-    lua_replace(L,1); /* replace our table with real constructor */
-    lua_call(L,lua_gettop(L)-1,1);
-    return 1;
-}
-static swig_lua_attribute swig_DataLoader_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_method swig_DataLoader_methods[]= {
-    { "clear", _wrap_DataLoader_clear},
-    { "addLoader", _wrap_DataLoader_addLoader},
-    { "loadData", _wrap_DataLoader_loadData},
-    {0,0}
-};
-static swig_lua_method swig_DataLoader_meta[] = {
-    {0,0}
-};
-
-static swig_lua_attribute swig_DataLoader_Sf_SwigStatic_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_const_info swig_DataLoader_Sf_SwigStatic_constants[]= {
-    {0,0,0,0,0,0}
-};
-static swig_lua_method swig_DataLoader_Sf_SwigStatic_methods[]= {
-    {0,0}
-};
-static swig_lua_class* swig_DataLoader_Sf_SwigStatic_classes[]= {
-    0
-};
-
-static swig_lua_namespace swig_DataLoader_Sf_SwigStatic = {
-    "DataLoader",
-    swig_DataLoader_Sf_SwigStatic_methods,
-    swig_DataLoader_Sf_SwigStatic_attributes,
-    swig_DataLoader_Sf_SwigStatic_constants,
-    swig_DataLoader_Sf_SwigStatic_classes,
-    0
-};
-static swig_lua_class *swig_DataLoader_bases[] = {0};
-static const char *swig_DataLoader_base_names[] = {0};
-static swig_lua_class _wrap_class_DataLoader = { "DataLoader", "DataLoader", &SWIGTYPE_p_Neo__DataLoader,_proxy__wrap_new_DataLoader, swig_delete_DataLoader, swig_DataLoader_methods, swig_DataLoader_attributes, &swig_DataLoader_Sf_SwigStatic, swig_DataLoader_meta, swig_DataLoader_bases, swig_DataLoader_base_names };
-
 static int _wrap_new_NeoEngine(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *result = 0 ;
@@ -25795,7 +25524,7 @@ fail:
 static int _wrap_NeoEngine_getFontLoader(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *arg1 = (Neo::NeoEngine *) 0 ;
-  Neo::DataLoader *result = 0 ;
+  Neo::DataLoader< Font > *result = 0 ;
   
   SWIG_check_num_args("Neo::NeoEngine::getFontLoader",1,1)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::NeoEngine::getFontLoader",1,"Neo::NeoEngine *");
@@ -25804,8 +25533,8 @@ static int _wrap_NeoEngine_getFontLoader(lua_State* L) {
     SWIG_fail_ptr("NeoEngine_getFontLoader",1,SWIGTYPE_p_Neo__NeoEngine);
   }
   
-  result = (Neo::DataLoader *)(arg1)->getFontLoader();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__DataLoader,0); SWIG_arg++; 
+  result = (Neo::DataLoader< Font > *)(arg1)->getFontLoader();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__DataLoaderT_Font_t,0); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -25819,7 +25548,7 @@ fail:
 static int _wrap_NeoEngine_getImageLoader(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *arg1 = (Neo::NeoEngine *) 0 ;
-  Neo::DataLoader *result = 0 ;
+  Neo::DataLoader< Neo::Image > *result = 0 ;
   
   SWIG_check_num_args("Neo::NeoEngine::getImageLoader",1,1)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::NeoEngine::getImageLoader",1,"Neo::NeoEngine *");
@@ -25828,8 +25557,8 @@ static int _wrap_NeoEngine_getImageLoader(lua_State* L) {
     SWIG_fail_ptr("NeoEngine_getImageLoader",1,SWIGTYPE_p_Neo__NeoEngine);
   }
   
-  result = (Neo::DataLoader *)(arg1)->getImageLoader();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__DataLoader,0); SWIG_arg++; 
+  result = (Neo::DataLoader< Neo::Image > *)(arg1)->getImageLoader();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__DataLoaderT_Neo__Image_t,0); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -25843,7 +25572,7 @@ fail:
 static int _wrap_NeoEngine_getSoundLoader(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *arg1 = (Neo::NeoEngine *) 0 ;
-  Neo::DataLoader *result = 0 ;
+  Neo::DataLoader< Neo::Sound > *result = 0 ;
   
   SWIG_check_num_args("Neo::NeoEngine::getSoundLoader",1,1)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::NeoEngine::getSoundLoader",1,"Neo::NeoEngine *");
@@ -25852,8 +25581,8 @@ static int _wrap_NeoEngine_getSoundLoader(lua_State* L) {
     SWIG_fail_ptr("NeoEngine_getSoundLoader",1,SWIGTYPE_p_Neo__NeoEngine);
   }
   
-  result = (Neo::DataLoader *)(arg1)->getSoundLoader();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__DataLoader,0); SWIG_arg++; 
+  result = (Neo::DataLoader< Neo::Sound > *)(arg1)->getSoundLoader();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__DataLoaderT_Neo__Sound_t,0); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -25867,7 +25596,7 @@ fail:
 static int _wrap_NeoEngine_getMeshLoader(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *arg1 = (Neo::NeoEngine *) 0 ;
-  Neo::DataLoader *result = 0 ;
+  Neo::DataLoader< Mesh > *result = 0 ;
   
   SWIG_check_num_args("Neo::NeoEngine::getMeshLoader",1,1)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::NeoEngine::getMeshLoader",1,"Neo::NeoEngine *");
@@ -25876,8 +25605,8 @@ static int _wrap_NeoEngine_getMeshLoader(lua_State* L) {
     SWIG_fail_ptr("NeoEngine_getMeshLoader",1,SWIGTYPE_p_Neo__NeoEngine);
   }
   
-  result = (Neo::DataLoader *)(arg1)->getMeshLoader();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__DataLoader,0); SWIG_arg++; 
+  result = (Neo::DataLoader< Mesh > *)(arg1)->getMeshLoader();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__DataLoaderT_Neo__Mesh_t,0); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -25891,7 +25620,7 @@ fail:
 static int _wrap_NeoEngine_getArmatureAnimLoader(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *arg1 = (Neo::NeoEngine *) 0 ;
-  Neo::DataLoader *result = 0 ;
+  Neo::DataLoader< ArmatureAnim > *result = 0 ;
   
   SWIG_check_num_args("Neo::NeoEngine::getArmatureAnimLoader",1,1)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::NeoEngine::getArmatureAnimLoader",1,"Neo::NeoEngine *");
@@ -25900,8 +25629,8 @@ static int _wrap_NeoEngine_getArmatureAnimLoader(lua_State* L) {
     SWIG_fail_ptr("NeoEngine_getArmatureAnimLoader",1,SWIGTYPE_p_Neo__NeoEngine);
   }
   
-  result = (Neo::DataLoader *)(arg1)->getArmatureAnimLoader();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__DataLoader,0); SWIG_arg++; 
+  result = (Neo::DataLoader< ArmatureAnim > *)(arg1)->getArmatureAnimLoader();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__DataLoaderT_ArmatureAnim_t,0); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -25915,7 +25644,7 @@ fail:
 static int _wrap_NeoEngine_getTexturesAnimLoader(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *arg1 = (Neo::NeoEngine *) 0 ;
-  Neo::DataLoader *result = 0 ;
+  Neo::DataLoader< TexturesAnim > *result = 0 ;
   
   SWIG_check_num_args("Neo::NeoEngine::getTexturesAnimLoader",1,1)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::NeoEngine::getTexturesAnimLoader",1,"Neo::NeoEngine *");
@@ -25924,8 +25653,8 @@ static int _wrap_NeoEngine_getTexturesAnimLoader(lua_State* L) {
     SWIG_fail_ptr("NeoEngine_getTexturesAnimLoader",1,SWIGTYPE_p_Neo__NeoEngine);
   }
   
-  result = (Neo::DataLoader *)(arg1)->getTexturesAnimLoader();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__DataLoader,0); SWIG_arg++; 
+  result = (Neo::DataLoader< TexturesAnim > *)(arg1)->getTexturesAnimLoader();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__DataLoaderT_TexturesAnim_t,0); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -25939,7 +25668,7 @@ fail:
 static int _wrap_NeoEngine_getMaterialsAnimLoader(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *arg1 = (Neo::NeoEngine *) 0 ;
-  Neo::DataLoader *result = 0 ;
+  Neo::DataLoader< MaterialsAnim > *result = 0 ;
   
   SWIG_check_num_args("Neo::NeoEngine::getMaterialsAnimLoader",1,1)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::NeoEngine::getMaterialsAnimLoader",1,"Neo::NeoEngine *");
@@ -25948,8 +25677,8 @@ static int _wrap_NeoEngine_getMaterialsAnimLoader(lua_State* L) {
     SWIG_fail_ptr("NeoEngine_getMaterialsAnimLoader",1,SWIGTYPE_p_Neo__NeoEngine);
   }
   
-  result = (Neo::DataLoader *)(arg1)->getMaterialsAnimLoader();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__DataLoader,0); SWIG_arg++; 
+  result = (Neo::DataLoader< MaterialsAnim > *)(arg1)->getMaterialsAnimLoader();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__DataLoaderT_MaterialsAnim_t,0); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -25963,7 +25692,7 @@ fail:
 static int _wrap_NeoEngine_getLevelLoader(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *arg1 = (Neo::NeoEngine *) 0 ;
-  Neo::DataLoader *result = 0 ;
+  Neo::DataLoader< Neo::Level > *result = 0 ;
   
   SWIG_check_num_args("Neo::NeoEngine::getLevelLoader",1,1)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::NeoEngine::getLevelLoader",1,"Neo::NeoEngine *");
@@ -25972,8 +25701,8 @@ static int _wrap_NeoEngine_getLevelLoader(lua_State* L) {
     SWIG_fail_ptr("NeoEngine_getLevelLoader",1,SWIGTYPE_p_Neo__NeoEngine);
   }
   
-  result = (Neo::DataLoader *)(arg1)->getLevelLoader();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__DataLoader,0); SWIG_arg++; 
+  result = (Neo::DataLoader< Neo::Level > *)(arg1)->getLevelLoader();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__DataLoaderT_Neo__Level_t,0); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -53323,8 +53052,6 @@ static swig_lua_class* swig_SwigModule_classes[]= {
 &_wrap_class_Sound,
 &_wrap_class_DataRef,
 &_wrap_class_DataManager,
-&_wrap_class_DataLoadFunction,
-&_wrap_class_DataLoader,
 &_wrap_class_NeoEngine,
 &_wrap_class_Box3d,
 &_wrap_class_SubGame,
@@ -53544,8 +53271,14 @@ static swig_type_info _swigt__p_Neo__Armature = {"_p_Neo__Armature", "Neo::Armat
 static swig_type_info _swigt__p_Neo__ArmatureAnimRef = {"_p_Neo__ArmatureAnimRef", "Neo::ArmatureAnimRef *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Neo__Box3d = {"_p_Neo__Box3d", "Neo::Box3d *", 0, 0, (void*)&_wrap_class_Box3d, 0};
 static swig_type_info _swigt__p_Neo__Color = {"_p_Neo__Color", "Neo::Color *", 0, 0, (void*)&_wrap_class_Color, 0};
-static swig_type_info _swigt__p_Neo__DataLoadFunction = {"_p_Neo__DataLoadFunction", "Neo::DataLoadFunction *", 0, 0, (void*)&_wrap_class_DataLoadFunction, 0};
-static swig_type_info _swigt__p_Neo__DataLoader = {"_p_Neo__DataLoader", "Neo::DataLoader *", 0, 0, (void*)&_wrap_class_DataLoader, 0};
+static swig_type_info _swigt__p_Neo__DataLoaderT_ArmatureAnim_t = {"_p_Neo__DataLoaderT_ArmatureAnim_t", "Neo::DataLoader< ArmatureAnim > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Neo__DataLoaderT_Font_t = {"_p_Neo__DataLoaderT_Font_t", "Neo::DataLoader< Font > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Neo__DataLoaderT_MaterialsAnim_t = {"_p_Neo__DataLoaderT_MaterialsAnim_t", "Neo::DataLoader< MaterialsAnim > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Neo__DataLoaderT_Neo__Image_t = {"_p_Neo__DataLoaderT_Neo__Image_t", "Neo::DataLoader< Neo::Image > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Neo__DataLoaderT_Neo__Level_t = {"_p_Neo__DataLoaderT_Neo__Level_t", "Neo::DataLoader< Neo::Level > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Neo__DataLoaderT_Neo__Mesh_t = {"_p_Neo__DataLoaderT_Neo__Mesh_t", "Neo::DataLoader< Mesh > *|Neo::DataLoader< Neo::Mesh > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Neo__DataLoaderT_Neo__Sound_t = {"_p_Neo__DataLoaderT_Neo__Sound_t", "Neo::DataLoader< Neo::Sound > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Neo__DataLoaderT_TexturesAnim_t = {"_p_Neo__DataLoaderT_TexturesAnim_t", "Neo::DataLoader< TexturesAnim > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Neo__DataManager = {"_p_Neo__DataManager", "Neo::DataManager *", 0, 0, (void*)&_wrap_class_DataManager, 0};
 static swig_type_info _swigt__p_Neo__DataRef = {"_p_Neo__DataRef", "Neo::DataRef *", 0, 0, (void*)&_wrap_class_DataRef, 0};
 static swig_type_info _swigt__p_Neo__FRAME_BUFFER_ATTACHMENT = {"_p_Neo__FRAME_BUFFER_ATTACHMENT", "enum Neo::FRAME_BUFFER_ATTACHMENT *|Neo::FRAME_BUFFER_ATTACHMENT *", 0, 0, (void*)0, 0};
@@ -53607,7 +53340,6 @@ static swig_type_info _swigt__p___int64 = {"_p___int64", "__int64 *|LONGLONG *|L
 static swig_type_info _swigt__p_char = {"_p_char", "CHAR *|TCHAR *|char *|CCHAR *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_doublep = {"_p_doublep", "doublep *", 0, 0, (void*)&_wrap_class_doublep, 0};
-static swig_type_info _swigt__p_f_p_q_const__char_p_void__bool = {"_p_f_p_q_const__char_p_void__bool", "bool (*)(char const *,void *)", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_f_void__int = {"_p_f_void__int", "int (*)(void)", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_f_void__intp = {"_p_f_void__intp", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_float = {"_p_float", "FLOAT *|float *", 0, 0, (void*)0, 0};
@@ -53672,8 +53404,14 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Neo__ArmatureAnimRef,
   &_swigt__p_Neo__Box3d,
   &_swigt__p_Neo__Color,
-  &_swigt__p_Neo__DataLoadFunction,
-  &_swigt__p_Neo__DataLoader,
+  &_swigt__p_Neo__DataLoaderT_ArmatureAnim_t,
+  &_swigt__p_Neo__DataLoaderT_Font_t,
+  &_swigt__p_Neo__DataLoaderT_MaterialsAnim_t,
+  &_swigt__p_Neo__DataLoaderT_Neo__Image_t,
+  &_swigt__p_Neo__DataLoaderT_Neo__Level_t,
+  &_swigt__p_Neo__DataLoaderT_Neo__Mesh_t,
+  &_swigt__p_Neo__DataLoaderT_Neo__Sound_t,
+  &_swigt__p_Neo__DataLoaderT_TexturesAnim_t,
   &_swigt__p_Neo__DataManager,
   &_swigt__p_Neo__DataRef,
   &_swigt__p_Neo__FRAME_BUFFER_ATTACHMENT,
@@ -53735,7 +53473,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_char,
   &_swigt__p_double,
   &_swigt__p_doublep,
-  &_swigt__p_f_p_q_const__char_p_void__bool,
   &_swigt__p_f_void__int,
   &_swigt__p_f_void__intp,
   &_swigt__p_float,
@@ -53800,8 +53537,14 @@ static swig_cast_info _swigc__p_Neo__Armature[] = {  {&_swigt__p_Neo__Armature, 
 static swig_cast_info _swigc__p_Neo__ArmatureAnimRef[] = {  {&_swigt__p_Neo__ArmatureAnimRef, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Box3d[] = {  {&_swigt__p_Neo__Box3d, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Color[] = {  {&_swigt__p_Neo__Color, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo__DataLoadFunction[] = {  {&_swigt__p_Neo__DataLoadFunction, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo__DataLoader[] = {  {&_swigt__p_Neo__DataLoader, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo__DataLoaderT_ArmatureAnim_t[] = {  {&_swigt__p_Neo__DataLoaderT_ArmatureAnim_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo__DataLoaderT_Font_t[] = {  {&_swigt__p_Neo__DataLoaderT_Font_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo__DataLoaderT_MaterialsAnim_t[] = {  {&_swigt__p_Neo__DataLoaderT_MaterialsAnim_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo__DataLoaderT_Neo__Image_t[] = {  {&_swigt__p_Neo__DataLoaderT_Neo__Image_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo__DataLoaderT_Neo__Level_t[] = {  {&_swigt__p_Neo__DataLoaderT_Neo__Level_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo__DataLoaderT_Neo__Mesh_t[] = {  {&_swigt__p_Neo__DataLoaderT_Neo__Mesh_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo__DataLoaderT_Neo__Sound_t[] = {  {&_swigt__p_Neo__DataLoaderT_Neo__Sound_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo__DataLoaderT_TexturesAnim_t[] = {  {&_swigt__p_Neo__DataLoaderT_TexturesAnim_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__DataManager[] = {  {&_swigt__p_Neo__DataManager, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__DataRef[] = {  {&_swigt__p_Neo__DataRef, 0, 0, 0},  {&_swigt__p_Neo__TextureRef, _p_Neo__TextureRefTo_p_Neo__DataRef, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__FRAME_BUFFER_ATTACHMENT[] = {  {&_swigt__p_Neo__FRAME_BUFFER_ATTACHMENT, 0, 0, 0},{0, 0, 0, 0}};
@@ -53863,7 +53606,6 @@ static swig_cast_info _swigc__p___int64[] = {  {&_swigt__p___int64, 0, 0, 0},{0,
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},  {&_swigt__p_doublep, _p_doublepTo_p_double, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_doublep[] = {  {&_swigt__p_doublep, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_f_p_q_const__char_p_void__bool[] = {  {&_swigt__p_f_p_q_const__char_p_void__bool, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_void__intp[] = {{&_swigt__p_f_void__intp, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_f_void__int[] = {  {&_swigt__p_f_void__int, 0, 0, 0},  {&_swigt__p_f_void__intp, _p_f_void__intpTo_p_f_void__int, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_float[] = {  {&_swigt__p_float, 0, 0, 0},  {&_swigt__p_floatp, _p_floatpTo_p_float, 0, 0},{0, 0, 0, 0}};
@@ -53928,8 +53670,14 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Neo__ArmatureAnimRef,
   _swigc__p_Neo__Box3d,
   _swigc__p_Neo__Color,
-  _swigc__p_Neo__DataLoadFunction,
-  _swigc__p_Neo__DataLoader,
+  _swigc__p_Neo__DataLoaderT_ArmatureAnim_t,
+  _swigc__p_Neo__DataLoaderT_Font_t,
+  _swigc__p_Neo__DataLoaderT_MaterialsAnim_t,
+  _swigc__p_Neo__DataLoaderT_Neo__Image_t,
+  _swigc__p_Neo__DataLoaderT_Neo__Level_t,
+  _swigc__p_Neo__DataLoaderT_Neo__Mesh_t,
+  _swigc__p_Neo__DataLoaderT_Neo__Sound_t,
+  _swigc__p_Neo__DataLoaderT_TexturesAnim_t,
   _swigc__p_Neo__DataManager,
   _swigc__p_Neo__DataRef,
   _swigc__p_Neo__FRAME_BUFFER_ATTACHMENT,
@@ -53991,7 +53739,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_char,
   _swigc__p_double,
   _swigc__p_doublep,
-  _swigc__p_f_p_q_const__char_p_void__bool,
   _swigc__p_f_void__int,
   _swigc__p_f_void__intp,
   _swigc__p_float,

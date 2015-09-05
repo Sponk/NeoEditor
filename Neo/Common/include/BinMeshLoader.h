@@ -23,14 +23,14 @@
 //========================================================================
 
 
-#ifndef _M_BIN_MESH_LOADER_H
-#define _M_BIN_MESH_LOADER_H
+#ifndef __BIN_MESH_LOADER_H
+#define __BIN_MESH_LOADER_H
 
 namespace Neo
 {
-bool M_loadBinMesh(const char * filename, void * data);
-bool M_loadBinArmatureAnim(const char * filename, void * data);
-bool M_loadBinTexturesAnim(const char * filename, void * data);
-bool M_loadBinMaterialsAnim(const char * filename, void * data);
+bool M_loadBinMesh(const char * filename, Neo::Mesh* mesh);
+bool M_loadBinArmatureAnim(const char * filename, Neo::ArmatureAnim* anim);
+bool M_loadBinTexturesAnim(const char * filename, Neo::TexturesAnim* anim);
+bool M_loadBinMaterialsAnim(const char * filename, Neo::MaterialsAnim* anim);
 }
 #endif

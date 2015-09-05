@@ -23,11 +23,11 @@
 //========================================================================
 
 
-#ifndef MWAVLOADER_H
-#define MWAVLOADER_H
+#ifndef __WAVLOADER_H
+#define __WAVLOADER_H
 
 namespace Neo
 {
-bool M_loadWAVSound(const char * filename, void * data);
+bool M_loadWAVSound(const char * filename, Neo::Sound* sound);
 }
 #endif // MWAVLOADER_H

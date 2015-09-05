@@ -23,14 +23,14 @@
 //========================================================================
 
 
-#ifndef _M_MESH_LOAD_H
-#define _M_MESH_LOAD_H
+#ifndef __MESH_LOAD_H
+#define __MESH_LOAD_H
 
 namespace Neo
 {
-bool xmlArmatureAnimLoad(const char * filename, void * data);
-bool xmlTextureAnimLoad(const char * filename, void * data);
-bool xmlMaterialAnimLoad(const char * filename, void * data);
-bool xmlMeshLoad(const char * filename, void * data);
+bool xmlArmatureAnimLoad(const char * filename, ArmatureAnim* armatureAnim);
+bool xmlTextureAnimLoad(const char * filename, TexturesAnim* texturesAnim);
+bool xmlMaterialAnimLoad(const char * filename, MaterialsAnim* materialsAnim);
+bool xmlMeshLoad(const char * filename, Mesh* mesh);
 }
 #endif

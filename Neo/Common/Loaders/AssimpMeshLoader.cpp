@@ -22,12 +22,12 @@
 
 #ifndef ANDROID
 
+#include <NeoEngine.h>
+
 #include "AssimpMeshLoader.h"
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-
-#include <NeoEngine.h>
 
 #include <MeshSave.h>
 
@@ -708,7 +708,7 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 }
 
 
-bool M_loadAssimpMesh(const char * filename, void * data)
+bool M_loadAssimpMesh(const char * filename, Mesh* mesh)
 {
 	const aiScene * scene = aiImportFile(filename, 0);
 	
@@ -738,10 +738,7 @@ bool M_loadAssimpMesh(const char * filename, void * data)
 	
 	// level
 	level = engine->getLevel();
-	
-	// get mesh
-	Mesh * mesh = (Mesh *)data;
-	
+
 	// mesh rep
 	char meshRep[256];
 	getRepertory(meshRep, filename);

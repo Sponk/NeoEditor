@@ -29,7 +29,7 @@
 namespace Neo
 {
 
-bool M_loadBinFont(const char * filename, void * data)
+bool M_loadBinFont(const char * filename, Font* data)
 {
 	// open file
 	File * file = M_fopen(filename, "rb");

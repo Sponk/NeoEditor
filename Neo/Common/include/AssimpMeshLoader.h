@@ -22,7 +22,7 @@
 #ifndef _ASSIMP_MESH_LOADER_H
 #define _ASSIMP_MESH_LOADER_H
 
-bool M_loadAssimpMesh(const char * filename, void * data);
+bool M_loadAssimpMesh(const char * filename, Neo::Mesh* mesh);
 bool M_importAssimpMeshes(const char * filename);
 
 #endif

@@ -30,7 +30,7 @@
 namespace Neo
 {
 
-bool M_loadWAVSound(const char * filename, void * data)
+bool M_loadWAVSound(const char * filename, Sound* sound)
 {
 	File * file = M_fopen(filename, "rb");
 	if(! file)
@@ -105,7 +105,6 @@ bool M_loadWAVSound(const char * filename, void * data)
 			}
 			
 			// create sound
-			Sound * sound = (Sound *)data;
 			sound->create(format, data_size, sample_rate);
 			
 			// read sound data

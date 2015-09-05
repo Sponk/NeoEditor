@@ -38,6 +38,6 @@ namespace Neo
  * @param data A pointer to allocated memory.
  * @return Returns the success value.
  */
-bool M_loadImage(const char * filename, void * data);
+bool M_loadImage(const char * filename, Image* image);
 }
 #endif

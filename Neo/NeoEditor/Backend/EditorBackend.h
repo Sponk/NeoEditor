@@ -73,7 +73,6 @@ public:
 
 private:
 
-	// MEngine
 	SoundContext * m_soundContext;
 	RenderingContext * m_render;
 	PhysicsContext * m_physics;
