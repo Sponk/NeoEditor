@@ -113,7 +113,14 @@ bool NeoEngine::loadLevel(const char * filename)
 
 	// Check if there is a level under the given name
 	if(! isFileExist(globalFilename))
+	{
+		MLOG_ERROR("Could not load level '" << filename << "', loading an empty level instead.");
+		m_level->clear();
+		m_level->clearScenes();
+		m_level->addNewScene()->setName("Scene-0");
+
 		return false;
+	}
 
 	m_renderer->stopThreads();
 
@@ -128,7 +135,8 @@ bool NeoEngine::loadLevel(const char * filename)
 
     if(m_levelLoader.loadData(globalFilename, m_level))
 	{
-		if(m_game){
+		if(m_game)
+		{
 			if(m_game->isRunning())
 			{
 				m_game->onBeginLevel();
@@ -137,6 +145,20 @@ bool NeoEngine::loadLevel(const char * filename)
 		}
 		m_renderer->startThreads();
 		return true;
+	}
+
+	MLOG_ERROR("Could not load level '" << filename << "', loading an empty level instead.");
+	m_level->clear();
+	m_level->clearScenes();
+	m_level->addNewScene()->setName("Scene-0");
+
+	if(m_game)
+	{
+		if(m_game->isRunning())
+		{
+			m_game->onBeginLevel();
+			m_game->onBeginScene();
+		}
 	}
 
 	m_renderer->startThreads();

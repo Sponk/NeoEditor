@@ -90,7 +90,7 @@ function Gui.messageBox(title, text)
 end
 
 function messageBoxOkCallback()
-   msgBox["msgBox"].window:setVisible(false)
+   msgBoxData.msgBox["msgBox"].window:setVisible(false)
 end
 
 function Gui.setupWM()

@@ -167,8 +167,10 @@ public:
 
 	// delete object
     /**
-     * @brief Removes the given object from this scene.
+     * @brief Removes the given object from this scene and deletes its memory.
      * @param object The object to be removed.
+     *
+     * @fixme Should also remove all children!
      */
 	void deleteObject(Object3d * object);
 
@@ -176,7 +178,7 @@ public:
     /**
      * @brief Creates a new camera, adds it to the scene and returns it.
      *
-     * @see MCamera
+     * @see OCamera
      *
      * @return The new camera.
      */
@@ -260,7 +262,7 @@ public:
     /**
      * @brief Returns the currently active camera from this scene.
      *
-     * @see MOCamera
+     * @see OCamera
      *
      * @return The current camera.
      */
@@ -304,7 +306,7 @@ public:
     /**
      * @brief Returns the camera with the given name or NULL if it is not found.
      *
-     * @see MOCamera
+     * @see OCamera
      *
      * @param name The cameras name.
      * @return The camera or NULL.
@@ -385,13 +387,13 @@ public:
 	// behaviors
     /**
      * @brief Updates all behaviors of objects in this scene.
-     * @see MBehavior
+     * @see Behavior
      */
 	void updateObjectsBehaviors(void);
 
     /**
      * @brief Call draw for all behaviors in this scene.
-     * @see MBehavior
+     * @see Behavior
      */
 	void drawObjectsBehaviors(void);
 	
@@ -403,9 +405,9 @@ public:
      * @brief Renders the scene to the screen.
      *
      * This method takes the camera and renders everything from this point of view to the screen/buffer.
-     * This is done by using a subclass of MRenderingContext to render.
+     * This is done by using a subclass of RenderingContext to render.
      *
-     * @see MRenderingContext
+     * @see RenderingContext
      *
      * @param camera The camera to use.
      */

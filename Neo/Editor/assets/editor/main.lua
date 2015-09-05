@@ -1,4 +1,8 @@
 --- main.lua - The editor main script
+-- This script contains most of the logic that drives the scene editor including
+-- input management and translations. It is built in a way that allows suspending the whole UI,
+-- deleting it from memory and reloading it on the fly for playing the game in the editor.
+
 Editor = {}
 
 Shortcuts = dofile("shortcuts.lua")
@@ -6,6 +10,9 @@ Shortcuts = dofile("shortcuts.lua")
 dofile("callbacks.lua")
 local lfs = require("lfs")
 
+--- Loads the complete UI into Neo2D and displays it.
+-- Needs Editor.setupTranslatedUI to be called first so the GUI description is loaded with the
+-- right translation.
 function Editor.loadUI()
    Editor.sceneDlg = Editor.dlgTables.sceneDlg.create()
    Editor.updateSceneTree()
@@ -21,19 +28,30 @@ function Editor.loadUI()
    Editor.textEditor = Editor.dlgTables.textEditor.create()
    Editor.soundEditor = Editor.dlgTables.soundEditor.create()
 
+   Editor.toolbar = Editor.dlgTables.toolbar.create()
+
    Gui.wm:selectWindow(Editor.sceneDlg["window"].window)
 end
 
-local function addChildrenToTree(obj, node)
+--- Adds the given object and all child objects to the given tree node
+-- to mirror the scene tree.
+--
+-- This function is recursive and walks down the tree until no child is left to add.
+--
+-- @param obj The object to add.
+-- @param node The node to use as the root node.
+function Editor.addChildrenToTree(obj, node)
    local sz = obj:getChildrenNumber()
 
    for i = 0, sz-1, 1 do
 	  local child = obj:getChild(i)
 	  local childNode = node:addChild(child:getName())
-	  addChildrenToTree(child, childNode)
+      Editor.addChildrenToTree(child, childNode)
    end
 end
 
+--- Update the scene tree by clearing it first and then rebuilding the tree from
+-- the current scene tree.
 function Editor.updateSceneTree()
    local scene = NeoLua.level:getCurrentScene()
    local sz = scene:getObjectsNumber()
@@ -49,12 +67,18 @@ function Editor.updateSceneTree()
 	  if not object:hasParent() and object:getId() ~= Editor.sceneCamera:getId() then
 	   if object:getName():len() > 0 then
 		  local childNode = node:addChild(object:getName())
-		  addChildrenToTree(object, childNode)
+		  Editor.addChildrenToTree(object, childNode)
 		 end
 	  end
    end
 end
 
+--- Loads the list of available translations from "./translations"
+-- while using LFS for iterating over those files.
+-- Translations are automatically added to the translator with
+-- "Translator.addTranslation" and can be used directly.
+--
+-- FIXME: Should take the translator as an argument!
 function Editor.loadTranslationList()
     -- Load list of translations
     local iter, dir_obj = lfs.dir("./translations")
@@ -73,6 +97,11 @@ function Editor.loadTranslationList()
     infoLog("Found editor translations: " .. translationsList)
 end
 
+--- Loads all available input methods from "assets/editor/input/" and
+-- registers them with the input system. The default method chosen is usually
+-- "MaratisInput.lua"
+--
+-- FIXME: Should return the list as a value, not manipulate it directly!
 function Editor.loadInputSystem()
     -- Load list of input methods
     Editor.inputMethods = {}
@@ -93,6 +122,9 @@ function Editor.loadInputSystem()
     infoLog("Found input methods: " .. inputList)
 end
 
+
+--- Loads all meshes needed for displaying input handles and similar into
+-- the current level. This also includes adding them to the new scene.
 function Editor.loadMeshes()
   Editor.sceneMeshes = {}
   
@@ -110,10 +142,21 @@ function Editor.loadMeshes()
   y:setEulerRotation(NeoLua.Vector3(90,0,0))
   
   Editor.sceneMeshes = {y = y, x = x, z = z}
-  
 end
 
-local function castRay(entity, rayO, rayD)
+--- Casts a ray starting at the given origin into the
+-- given direction and returns the point and a boolean if the object was hit.
+--
+-- Can be used as follows:
+-- \code
+-- wasHit,point = Editor.castRay(entity, rayO, rayD)
+-- \endcode
+--
+-- @param entity An OEntity object
+-- @param rayO The origin of the ray
+-- @param rayD The direction of the ray
+-- @return {boolean, object3d}
+function Editor.castRay(entity, rayO, rayD)
 
       if entity == nil then return unpack({false, nil}) end;
 
@@ -163,7 +206,15 @@ local function castRay(entity, rayO, rayD)
       return unpack({false, nil})
 end
 
-local function castRayOnBox(obj, rayO, rayD)
+--- Casts a ray onto a bounding box only.
+-- Can be used with any object type that defines a "getBoundingBox()" method.
+--
+-- @param entity An OEntity object
+-- @param rayO The origin of the ray
+-- @param rayD The direction of the ray
+-- @param obj Any Object3d subclass that has a bounding box.
+-- @return A boolean value.
+function Editor.castRayOnBox(obj, rayO, rayD)
 	local box = obj:getBoundingBox()
 	local pos = obj:getTransformedPosition()
 	local iMatrix = obj:getMatrix():getInverse()
@@ -173,6 +224,8 @@ local function castRayOnBox(obj, rayO, rayD)
 	return NeoLua.isEdgeToBoxCollision(localRayO, localRayD, box.min, box.max)
 end
 
+--- Updates the current selection and translates/rotates/scales the selection
+-- using the transformation handles in the scene.
 function Editor.selectObject()
 
   local scene = NeoLua.level:getCurrentScene()
@@ -199,7 +252,7 @@ function Editor.selectObject()
   if NeoLua.input:isKeyPressed("MOUSE_BUTTON_LEFT") and Editor.selectedArrow ~= nil and #Editor.currentSelection == 1 then
     
     --infoLog("SELECTED ARROW");
-    --value,point = castRay(Editor.selectedArrow, rayO, rayD)
+    --value,point = Editor.castRay(Editor.selectedArrow, rayO, rayD)
     --if not value then return end
 
     local p1 = camera:getUnProjectedPoint(NeoLua.Vector3(mx, my, 0.3))
@@ -229,7 +282,7 @@ function Editor.selectObject()
     --Editor.selectedArrow:translate(Editor.lastPoint - point)   
   elseif NeoLua.input:isKeyPressed("MOUSE_BUTTON_LEFT") and #Editor.currentSelection == 1 then
     
-    local value,point = castRay(Editor.currentSelection[1], rayO, rayD)
+    local value,point = Editor.castRay(Editor.currentSelection[1], rayO, rayD)
     --if not value then return end
     
     --if value then
@@ -264,13 +317,13 @@ function Editor.selectObject()
     -- Check arrows
     if #Editor.currentSelection > 0 then
       local meshes = Editor.sceneMeshes
-      if castRay(meshes.x, rayO, rayD) then
+      if Editor.castRay(meshes.x, rayO, rayD) then
 	Editor.selectedArrow = NeoLua.Vector3(1,0,0)
         return
-      elseif castRay(meshes.y, rayO, rayD) then
+      elseif Editor.castRay(meshes.y, rayO, rayD) then
 	Editor.selectedArrow = NeoLua.Vector3(0,1,0)
         return
-      elseif castRay(meshes.z, rayO, rayD) then
+      elseif Editor.castRay(meshes.z, rayO, rayD) then
 	Editor.selectedArrow = NeoLua.Vector3(0,0,1)
         return
       end
@@ -281,7 +334,7 @@ function Editor.selectObject()
     -- Check all entities
     for i = 0, numObjects - 1, 1 do
       local entity = scene:getEntityByIndex(i)      
-      if entity ~= nil and castRay(entity, rayO, rayD) then
+      if entity ~= nil and Editor.castRay(entity, rayO, rayD) then
         
         table.insert(possibleSelection, entity)
         --Editor.entityEditor.setShownObject(entity:getName())
@@ -295,7 +348,7 @@ function Editor.selectObject()
     -- Check all text objects
     for i = 0, numObjects - 1, 1 do
       local entity = scene:getTextByIndex(i)
-      if entity ~= nil and castRayOnBox(entity, rayO, rayD) then
+      if entity ~= nil and Editor.castRayOnBox(entity, rayO, rayD) then
 	table.insert(possibleSelection, entity)
       end
     end
@@ -317,6 +370,10 @@ function Editor.selectObject()
   end
 end
 
+--- Select the given Object3d and updates all dialogs and handles
+-- accordingly.
+--
+-- @param obj The object to select.
 function Editor.select(obj)
 
     local arrows = Editor.sceneMeshes
@@ -353,6 +410,8 @@ function Editor.select(obj)
     Editor.sceneDlg["window"]["layout"]["scrollpanel"]["tree"]:selectEntry(obj:getName())
 end
 
+--- Calculates the center of the current selection.
+-- @return A NeoLua.Vector3
 function Editor.getSelectionCenter()
     local selection = Editor.currentSelection
     local position = NeoLua.Vector3(0,0,0)
@@ -364,6 +423,7 @@ function Editor.getSelectionCenter()
     return position/#selection
 end
 
+--- Updates all translation handles in the current scene.
 function Editor.updateHandles()
     local arrows = Editor.sceneMeshes
     local position = Editor.getSelectionCenter()
@@ -380,12 +440,20 @@ function Editor.updateHandles()
     arrows.z:setPosition(position)
 end
 
+--- Quits the program
 function quitCallback()
   NeoLua.engine:setActive(false)
 end
 
+--- Updates the editor and calls the game specific update function
+-- when he game is running inside the editor.
 function update(dt)
 
+  if Editor.isGameRunning then
+	pcall(Editor.gameUpdate, dt)
+	return
+  end
+	
   if Editor.requestReload == true then
 	Editor.reload()
 	Editor.requestReload = false
@@ -398,21 +466,29 @@ function update(dt)
   Editor.dx = mx - Editor.mx
   Editor.dy = my - Editor.my
 
+  Editor.inputMethod()
+
   if not NeoLua.Neo2DEngine.getInstance():isMouseOnGui() then
-    Editor.inputMethod()
     Editor.selectObject()
-    Shortcuts.update()
   end
 
+  Shortcuts.update()
+  Editor.toolbar.update()
   Editor.updateHandles()
   
   Editor.mx = mx
   Editor.my = my 
 end
 
+Editor.update = update
+
+--- Sets up the current level and scene with the right
+-- editor camera and an additional scene for overlays.
 function Editor.setupLevel()
 	local currentScene = NeoLua.level:getCurrentScene()
 
+	Editor.gameCamera = currentScene:getCurrentCamera()
+	
 	Editor.sceneCamera = currentScene:addNewCamera()
 	Editor.overlayScene = NeoLua.level:addNewScene()
 	Editor.overlayScene:setName("EditorOverlay")
@@ -441,6 +517,7 @@ function Editor.setupLevel()
 	currentScene:setCurrentCamera(Editor.sceneCamera)
 end
 
+--- Reloads the editor UI
 function Editor.reload()
 	NeoLua.Neo2DEngine.getInstance():clear()
 
@@ -454,6 +531,8 @@ function Editor.reload()
 	Editor.updateSceneTree()
 end
 
+--- Loads the translated UI description into memory.
+-- Needs to be called before Editor.setupUI!
 function Editor.setupTranslatedUI(translation)
 	Translator.swapTranslation(translation)
 
@@ -464,8 +543,37 @@ function Editor.setupTranslatedUI(translation)
 		lightEditor = dofile("dialogs/light-editor.lua"),
 		textEditor = dofile("dialogs/text-editor.lua"),
 		soundEditor = dofile("dialogs/sound-editor.lua"),
-		menubarTable = dofile("menubar.lua")
+		menubarTable = dofile("menubar.lua"),
+		toolbar = dofile("toolbar.lua")
 	}
+end
+
+--- Plays the game inside the editor and suspends the editor.
+-- The editor needs to be reloaded after calling this.
+--
+-- @param mainscript The main script file to execute.
+function Editor.playGame(mainscript)
+	local updateBackup = update
+	update = nil
+	dofile(mainscript)
+	
+	if update == nil then 
+		update = updateBackup
+		Gui.messageBox(tr("Error"), tr("Can not play the game!\nScript file \"game.lua\" not found!"))
+		return 
+	end
+	
+	Editor.gameUpdate = update
+	Editor.isGameRunning = true
+	update = updateBackup
+	
+	NeoLua.Neo2DEngine.getInstance():clear()
+	
+	--Editor.sceneMeshes.x:setActive(false)
+	--Editor.sceneMeshes.y:setActive(false)
+	--Editor.sceneMeshes.z:setActive(false)
+	
+	NeoLua.level:getCurrentScene():setCurrentCamera(Editor.gameCamera)
 end
 
 Editor.mx = 0
@@ -493,4 +601,5 @@ Editor.setupTranslatedUI("english.csv")
 Editor.loadUI()
 
 NeoLua.system:setWindowTitle("Neo Scene Editor")
+NeoLua.system:showCursor()
 infoLog("Loaded editor!")

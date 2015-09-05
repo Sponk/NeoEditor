@@ -224,15 +224,15 @@ vec4 fxaa(sampler2D textureSampler, vec2 vertTexcoord, vec2 texcoordOffset)
 #define FxaaTexLod0(t, p) textureLod(t, p, 0.0)
 #define FxaaTexOff(t, p, o, r) textureLodOffset(t, p, 0.0, o)
 
-//uniform float FXAA_SPAN_MAX = 8.0;
-//uniform float FXAA_REDUCE_MUL = 1.0/4.0; //1.0/8.0;
+//uniform float FXAA_SPAN_MAX = 2.0;
+//uniform float FXAA_REDUCE_MUL = 2.0; //1.0/8.0;
 
 vec3 FxaaPixelShader(vec4 posPos, sampler2D tex, vec2 rcpFrame)
 {   
 /*--------------------------------------------------------------------------*/
-	float FXAA_SPAN_MAX = 4.0;
-	float FXAA_REDUCE_MUL = 1.0/16.0;//1.0/8.0;
-	float FXAA_REDUCE_MIN = 1.0/256.0;//(1.0/128.0);
+	float FXAA_SPAN_MAX = 8.0; // 4.0
+	float FXAA_REDUCE_MUL = 1.0/8.0; //1.0/32.0;//1.0/8.0;
+	float FXAA_REDUCE_MIN = 1.0/128.0;//1.0/256.0;//(1.0/128.0);
 /*--------------------------------------------------------------------------*/
     vec3 rgbNW = FxaaTexLod0(tex, posPos.zw).xyz;
     vec3 rgbNE = FxaaTexOff(tex, posPos.zw, FxaaInt2(1,0), rcpFrame.xy).xyz;
@@ -290,6 +290,7 @@ void main(void)
 		//FragColor = fxaa(Textures[0], texCoord, frame);
 		FragColor.rgb = FxaaPixelShader(vec4(texCoord.xy, texCoord.xy - frame * (0.5 + FXAA_SUBPIX_SHIFT)), Textures[0], frame);
 		FragColor = gammaCorrection(FragColor, 1.2);
+		FragColor.a = 1.0;
 		return;
 	}
 	

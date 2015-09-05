@@ -1,7 +1,6 @@
 
 local xpos = getAxis("MOUSE_X")
 local ypos = getAxis("MOUSE_Y")
-local mwheel = getAxis("MOUSE_WHEEL")
 
 local function mouse_input(camera)
 
@@ -29,8 +28,8 @@ function pan_vue(camera)
     local z = (Editor.getSelectionCenter() - position):dotProduct(axis)
     local fovFactor = camera:getFov() * 0.0192;
     
-    mx = NeoLua.input:getAxis("MOUSE_X")
-    my = NeoLua.input:getAxis("MOUSE_Y")
+    local mx = NeoLua.input:getAxis("MOUSE_X")
+    local my = NeoLua.input:getAxis("MOUSE_Y")
     
     local translationSpeed = -1    
     camera:setPosition(position - (xAxis * -(mx - xpos)*z*fovFactor)*translationSpeed + (zAxis * -(my - ypos)*z*fovFactor)*translationSpeed)
@@ -58,7 +57,7 @@ function rotate_vue(camera)
 end
 
 function update_input()
-    camera = NeoLua.level:getCurrentScene():getCurrentCamera()
+    local camera = NeoLua.level:getCurrentScene():getCurrentCamera()
     zoom_vue(camera)
       
     if NeoLua.input:isKeyPressed("MOUSE_BUTTON_MIDDLE") and NeoLua.input:isKeyPressed("LSHIFT") then
@@ -69,6 +68,30 @@ function update_input()
     
     xpos = NeoLua.input:getAxis("MOUSE_X")
     ypos = NeoLua.input:getAxis("MOUSE_Y")
+
+    if NeoLua.input:isKeyPressed("MOUSE_BUTTON_MIDDLE") then
+        local res = NeoLua.system:getScreenSize()
+        local mx = xpos * res.x
+        local my = ypos * res.y
+
+        if mx >= res.x - 10 then
+            NeoLua.system:setCursorPosition(0, my)
+            xpos = 0
+        elseif mx <= 10 then
+            NeoLua.system:setCursorPosition(res.x - 11, my)
+            xpos = 1
+        end
+
+        if my >= res.y - 10 then
+            NeoLua.system:setCursorPosition(mx, 0)
+            ypos = 0
+        elseif my <= 10 then
+            NeoLua.system:setCursorPosition(mx, res.y - 11)
+            ypos = 1
+        end
+
+    end
+
     camera:updateMatrix()
 end
 

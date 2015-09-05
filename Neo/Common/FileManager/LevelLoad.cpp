@@ -544,7 +544,6 @@ bool M_loadLevel(const char * filename, void * data, const bool clearData)
 	TiXmlElement * rootNode;
 	TiXmlHandle hRoot(0);
 
-	// maratis
 	rootNode = hDoc.FirstChildElement().Element();
 	if (!rootNode)
 		return false;

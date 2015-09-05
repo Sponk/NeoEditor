@@ -11,10 +11,11 @@ function openCallback()
 
 	if filename == nil then return end
 
-	NeoLua.engine:loadLevel(filename)
-	Editor.requestReload = true
+	if not NeoLua.engine:loadLevel(filename) then
 
-	Gui.messageBox("Opening file", filename)
+	end
+
+	Editor.requestReload = true
 end
 
 function lol() infoLog("lol") end

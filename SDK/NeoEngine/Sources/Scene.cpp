@@ -588,7 +588,8 @@ void Scene::deleteObject(Object3d * object)
 			oSize = m_entities.size();
 			for(i=0; i<oSize; i++){
 				Object3d * obj = m_entities[i];
-				if(obj == object){
+				if(obj == object)
+				{
 					m_entities.erase(m_entities.begin() + i);
 					break;
 				}
@@ -600,9 +601,11 @@ void Scene::deleteObject(Object3d * object)
 		{
 			// cameras
 			oSize = m_cameras.size();
-			for(i=0; i<oSize; i++){
+			for(i=0; i<oSize; i++)
+			{
 				Object3d * obj = m_cameras[i];
-				if(obj == object){
+				if(obj == object)
+				{
 					m_cameras.erase(m_cameras.begin() + i);
 					break;
 				}
@@ -614,9 +617,11 @@ void Scene::deleteObject(Object3d * object)
 		{
 			// lights
 			oSize = m_lights.size();
-			for(i=0; i<oSize; i++){
+			for(i=0; i<oSize; i++)
+			{
 				Object3d * obj = m_lights[i];
-				if(obj == object){
+				if(obj == object)
+				{
 					m_lights.erase(m_lights.begin() + i);
 					break;
 				}
@@ -628,9 +633,11 @@ void Scene::deleteObject(Object3d * object)
 		{
 			// sounds
 			oSize = m_sounds.size();
-			for(i=0; i<oSize; i++){
+			for(i=0; i<oSize; i++)
+			{
 				Object3d * obj = m_sounds[i];
-				if(obj == object){
+				if(obj == object)
+				{
 					m_sounds.erase(m_sounds.begin() + i);
 					break;
 				}
@@ -642,9 +649,11 @@ void Scene::deleteObject(Object3d * object)
 		{
 			// sounds
 			oSize = m_texts.size();
-			for(i=0; i<oSize; i++){
+			for(i=0; i<oSize; i++)
+			{
 				Object3d * obj = m_texts[i];
-				if(obj == object){
+				if(obj == object)
+				{
 					m_texts.erase(m_texts.begin() + i);
 					break;
 				}
@@ -655,7 +664,8 @@ void Scene::deleteObject(Object3d * object)
 
 	// objects pointer
 	oSize = m_objects.size();
-	for(i=0; i<oSize; i++){
+	for(i=0; i<oSize; i++)
+	{
 		Object3d * obj = m_objects[i];
 		if(obj == object)
 		{
