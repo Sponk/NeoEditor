@@ -36,7 +36,7 @@ template<class T> class NEO_CORE_EXPORT DataLoader
 {
 private:
 
-	typedef std::function<bool(const char* filename, const char* type, T& data)> save_function_t;
+	typedef std::function<bool(const char* filename, const char* type, T* data)> save_function_t;
 	typedef std::function<bool(const char* filename, T* data)> load_function_t;
 
 	vector<load_function_t> m_loaders;
@@ -81,7 +81,7 @@ public:
 	}
 
 
-	bool saveData(const char* filename, const char* type, T& data)
+	bool saveData(const char* filename, const char* type, T* data)
 	{
 		for(save_function_t f : m_savers)
 		{

@@ -578,8 +578,8 @@ void Level::changeCurrentSceneIfRequested()
 
 void Level::deleteScene(unsigned int id)
 {
-	SAFE_DELETE(m_scenes[id]);
 	m_scenes.erase(m_scenes.begin() + id);
+	SAFE_DELETE(m_scenes[id]);
 
 	unsigned int sSize = getScenesNumber();
 	if(sSize == 0)

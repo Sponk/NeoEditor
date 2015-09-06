@@ -4,7 +4,7 @@
 int getOpenFilename(lua_State* L)
 {
 	nfdchar_t* filename = NULL;
-	nfdresult_t result = NFD_OpenDialog(NULL, NULL, &filename);
+	nfdresult_t result = NFD_OpenDialog(lua_tostring(L, 2), lua_tostring(L, 1), &filename);
 
 	if(result == NFD_OKAY)
 	{
@@ -19,7 +19,7 @@ int getOpenFilename(lua_State* L)
 int getSaveFilename(lua_State* L)
 {
 	nfdchar_t* filename = NULL;
-	nfdresult_t result = NFD_SaveDialog(NULL, NULL, &filename);
+	nfdresult_t result = NFD_SaveDialog(lua_tostring(L, 2), lua_tostring(L, 1), &filename);
 
 	if(result == NFD_OKAY)
 	{

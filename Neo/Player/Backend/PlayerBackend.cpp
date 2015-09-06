@@ -136,12 +136,12 @@ void PlayerBackend::changeRenderer(const char * name)
 	
 	if (engine->getRenderer() && strcmp(engine->getRenderer()->getName(), name) == 0) return;
 
-	RendererCreator * renderer = rendererManager->getRendererByName(name);
-    if(renderer && strcmp(engine->getRenderer()->getName(), name) != 0)
+	RendererCreator* renderCreator = rendererManager->getRendererByName(name);
+    if(renderCreator && strcmp(engine->getRenderer()->getName(), name) != 0)
     {
 		if(m_renderer)
 			m_renderer->destroy();
-		m_renderer = renderer->getNewRenderer();
+		m_renderer = renderCreator->getNewRenderer();
 		engine->setRenderer(m_renderer);
 	}
 }
@@ -155,6 +155,8 @@ void PlayerBackend::start(void)
 		engine->getImageLoader()->addLoader(M_loadImage); // image loader
 		engine->getSoundLoader()->addLoader(M_loadSound); // sound loader
 		engine->getLevelLoader()->addLoader(xmlLevelLoad); // level loader
+		engine->getLevelLoader()->addSaver(M_saveLevel); // level saver
+
 		engine->getFontLoader()->addLoader(M_loadFont); // font loader
 		engine->getFontLoader()->addLoader(M_loadBinFont); // bin font loader
 

@@ -32,5 +32,6 @@
 namespace Neo
 {
 bool xmlLevelSave(Level * level, const char * filename);
+bool M_saveLevel(const char* filename, const char* type, Level* level);
 }
 #endif

@@ -576,6 +576,19 @@ function Editor.playGame(mainscript)
 	NeoLua.level:getCurrentScene():setCurrentCamera(Editor.gameCamera)
 end
 
+function Editor.cleanUp()
+    infoLog("Removing: " .. Editor.overlaySceneId)
+    NeoLua.level:deleteScene(Editor.overlaySceneId - 1)
+    NeoLua.level:getCurrentScene():deleteObject(Editor.sceneCamera)
+
+    Editor.sceneCamera = nil
+    Editor.overlayScene = nil
+    Editor.overlaySceneId = nil
+    Editor.sceneMeshes = nil
+    Editor.sceneCamera = nil
+    Editor.overlayCamera = nil
+end
+
 Editor.mx = 0
 Editor.my = 0
 
@@ -602,4 +615,4 @@ Editor.loadUI()
 
 NeoLua.system:setWindowTitle("Neo Scene Editor")
 NeoLua.system:showCursor()
-infoLog("Loaded editor!")
+infoLog("Loaded editor from project: " .. NeoLua.system:getWorkingDirectory())

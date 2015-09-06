@@ -493,6 +493,16 @@ void writeBehaviors(File * file, Object3d * object)
 	}
 }
 
+bool M_saveLevel(const char* filename, const char* type, Level* level)
+{
+	if(strcmp(type, "level"))
+	{
+		return false;
+	}
+
+	return xmlLevelSave(level, filename);
+}
+
 bool xmlLevelSave(Level * level, const char * filename)
 {
 	File * file = M_fopen(filename, "wt");

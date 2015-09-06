@@ -25868,6 +25868,33 @@ fail:
 }
 
 
+static int _wrap_NeoEngine_saveLevel(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::NeoEngine *arg1 = (Neo::NeoEngine *) 0 ;
+  char *arg2 = (char *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo::NeoEngine::saveLevel",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::NeoEngine::saveLevel",1,"Neo::NeoEngine *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo::NeoEngine::saveLevel",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__NeoEngine,0))){
+    SWIG_fail_ptr("NeoEngine_saveLevel",1,SWIGTYPE_p_Neo__NeoEngine);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  result = (bool)(arg1)->saveLevel((char const *)arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_NeoEngine_loadLevel(lua_State* L) {
   int SWIG_arg = 0;
   Neo::NeoEngine *arg1 = (Neo::NeoEngine *) 0 ;
@@ -26124,6 +26151,7 @@ static swig_lua_method swig_NeoEngine_methods[]= {
     { "getPackageManager", _wrap_NeoEngine_getPackageManager},
     { "updateRequests", _wrap_NeoEngine_updateRequests},
     { "setLevel", _wrap_NeoEngine_setLevel},
+    { "saveLevel", _wrap_NeoEngine_saveLevel},
     { "loadLevel", _wrap_NeoEngine_loadLevel},
     { "requestLoadLevel", _wrap_NeoEngine_requestLoadLevel},
     { "doesLevelExist", _wrap_NeoEngine_doesLevelExist},

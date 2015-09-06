@@ -253,7 +253,8 @@ public:
 
 	// level
 	void setLevel(Level * level);
-	bool loadLevel(const char * filename); // loads level immediately
+	bool saveLevel(const char* filename);
+	bool loadLevel(const char* filename); // loads level immediately
 	void requestLoadLevel(const char * filename); // send a request to load a level
 	bool doesLevelExist(const char * filename);
 	inline Level * getLevel(void){ return m_level; }

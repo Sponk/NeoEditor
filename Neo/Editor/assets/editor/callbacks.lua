@@ -2,12 +2,20 @@
 local LuaCommonDlg = require("LuaCommonDlg")
 
 function saveCallback()
-	local filename = LuaCommonDlg.getSaveFilename(os.getenv("HOME"))
-	Gui.messageBox("Saving file", filename)
+	local filename = LuaCommonDlg.getSaveFilename(NeoLua.system:getWorkingDirectory() .. "/assets", "level")
+
+	if filename ~= nil then
+		Editor.cleanUp()
+		NeoLua.engine:saveLevel(filename)
+
+		Editor.setupLevel()
+		Editor.loadMeshes()
+	end
+
 end
 
 function openCallback()
-	local filename = LuaCommonDlg.getOpenFilename(os.getenv("HOME"))
+	local filename = LuaCommonDlg.getOpenFilename(NeoLua.system:getWorkingDirectory() .. "/assets", "level")
 
 	if filename == nil then return end
 
@@ -17,8 +25,6 @@ function openCallback()
 
 	Editor.requestReload = true
 end
-
-function lol() infoLog("lol") end
 
 Shortcuts.addShortcut({"LCONTROL", "O"}, openCallback)
 Shortcuts.addShortcut({"RCONTROL", "O"}, openCallback)
