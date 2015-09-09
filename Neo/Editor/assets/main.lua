@@ -30,7 +30,7 @@ end
 
 NeoLua.updateEasyAccess()
 --NeoLua.engine:getGame():pause(false)
-local bool = NeoLua.engine:loadLevel(Settings.startLevel)
+NeoLua.engine:loadLevel(Settings.startLevel)
 Editor.reload()
 
 --NeoLua.engine:getGame():pause(true)

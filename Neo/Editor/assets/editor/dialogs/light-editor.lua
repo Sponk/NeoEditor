@@ -216,6 +216,96 @@ local dlg = {
 	label = "",
 	inputType = NeoLua.DECIMAL_INPUT,
 	callback = "updateLightConfig"
+      },
+
+      [19] = {
+        name = "colorLabel",
+        type = "Label",
+        x = 10,
+        y = 270,
+        w = 0,
+        h = 0,
+        label = tr("Color:")
+      },
+
+      [20] = {
+        name = "crInput",
+        type = "InputField",
+        x = 10,
+        y = 280,
+        w = 60,
+        h = 20,
+        label = "",
+        inputType = NeoLua.DECIMAL_INPUT,
+        callback = "updateLightConfig"
+      },
+
+      [21] = {
+        name = "cgInput",
+        type = "InputField",
+        x = 85,
+        y = 280,
+        w = 60,
+        h = 20,
+        label = "",
+        inputType = NeoLua.DECIMAL_INPUT,
+        callback = "updateLightConfig"
+      },
+
+      [22] = {
+        name = "cbInput",
+        type = "InputField",
+        x = 160,
+        y = 280,
+        w = 60,
+        h = 20,
+        label = "",
+        inputType = NeoLua.DECIMAL_INPUT,
+        callback = "updateLightConfig"
+      },
+
+      [23] = {
+        name = "spotAngleLabel",
+        type = "Label",
+        x = 10,
+        y = 310,
+        w = 0,
+        h = 0,
+        label = tr("Spot Angle:")
+      },
+
+      [24] = {
+        name = "spotAngleInput",
+        type = "InputField",
+        x = 10,
+        y = 320,
+        w = 280,
+        h = 20,
+        label = "",
+        inputType = NeoLua.DECIMAL_INPUT,
+        callback = "updateLightConfig"
+      },
+
+      [25] = {
+        name = "spotExponentLabel",
+        type = "Label",
+        x = 10,
+        y = 350,
+        w = 0,
+        h = 0,
+        label = tr("Spot Exponent:")
+      },
+
+      [26] = {
+        name = "spotExponentInput",
+        type = "InputField",
+        x = 10,
+        y = 360,
+        w = 280,
+        h = 20,
+        label = "",
+        inputType = NeoLua.DECIMAL_INPUT,
+        callback = "updateLightConfig"
       }
     }
   }
@@ -256,8 +346,15 @@ function editor.setShownObject(objName)
   dlg["syInput"]:setLabel(round(scale.y, 3))
   dlg["szInput"]:setLabel(round(scale.z, 3))
 
-  dlg["radiusInput"]:setLabel(editor.entity:getRadius())
-  dlg["intensityInput"]:setLabel(editor.entity:getIntensity())
+  local color = editor.entity:getColor()
+  dlg["crInput"]:setLabel(round(color.x, 4))
+  dlg["cgInput"]:setLabel(round(color.y, 4))
+  dlg["cbInput"]:setLabel(round(color.z, 4))
+
+  dlg["radiusInput"]:setLabel(round(editor.entity:getRadius(), 4))
+  dlg["intensityInput"]:setLabel(round(editor.entity:getIntensity(), 4))
+  dlg["spotAngleInput"]:setLabel(round(editor.entity:getSpotAngle(), 4))
+  dlg["spotExponentInput"]:setLabel(round(editor.entity:getSpotExponent(), 4))
 
   dlg.window:setVisible(true)
   Gui.wm:selectWindow(dlg.window)
@@ -282,8 +379,13 @@ function updateLightConfig()
   editor.entity:setScale(NeoLua.Vector3(dlg["sxInput"]:getLabel(),
                                   dlg["syInput"]:getLabel(), dlg["szInput"]:getLabel()))
 
+  editor.entity:setColor(NeoLua.Vector3(dlg["crInput"]:getLabel(),
+                                  dlg["cgInput"]:getLabel(), dlg["cbInput"]:getLabel()))
+
   editor.entity:setRadius(dlg["radiusInput"]:getLabel())
   editor.entity:setIntensity(dlg["intensityInput"]:getLabel())
+  editor.entity:setSpotAngle(dlg["spotAngleInput"]:getLabel())
+  editor.entity:setSpotExponent(dlg["spotExponentInput"]:getLabel())
 
   -- Set new rounded values (no rotation > 360°)
   local rot = editor.entity:getEulerRotation()

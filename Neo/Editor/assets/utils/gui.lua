@@ -111,7 +111,15 @@ function Gui.loadWidget(v, p)
 	  p:addWidget(btn)
 	  
 	  return btn
-	  
+   elseif v.type == "CheckButton" then
+       local btn = NeoLua.CheckButton(v.x,v.y,v.size,v.label or "")
+
+       btn:setScriptCallback(v.callback or "EmptyCallback")
+       btn:setFontSize(v.fontSize or 12)
+       p:addWidget(btn)
+
+       return btn
+
    elseif v.type == "InputField" then
 	  local input = NeoLua.ThemedInputField(v.x, v.y, v.w, v.h, v.label or "")
 	  p:addWidget(input)

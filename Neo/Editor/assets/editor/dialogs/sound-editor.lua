@@ -1,4 +1,4 @@
---- light-editor.lua - Contains the light editor dialog
+--- sound-editor.lua - Contains the light editor dialog
 
 local res = NeoLua.system:getScreenSize()
 local editor = {}

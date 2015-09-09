@@ -43,7 +43,8 @@ function sceneTreeCallback()
 		or NeoLua.level:getCurrentScene():getLightByName(name)
 		or NeoLua.level:getCurrentScene():getSoundByName(name)
 		or NeoLua.level:getCurrentScene():getTextByName(name)
-		or NeoLua.level:getCurrentScene():getLightByName(name))
+		or NeoLua.level:getCurrentScene():getLightByName(name)
+  		or NeoLua.level:getCurrentScene():getCameraByName(name))
 end
 
 return dlgTable

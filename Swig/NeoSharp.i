@@ -26,6 +26,7 @@
 #include <Slider.h>
 #include <ScrollPane.h>
 #include <ScaleLayout.h>
+#include <CheckButton.h>
 	
 	using namespace Neo;
 	using namespace Neo2D;
@@ -99,6 +100,7 @@
 %include <InputField.h>
 %include <ThemedInputField.h>
 %include <ThemedButton.h>
+%include <CheckButton.h>
 %include <Label.h>
 %include <Menu.h>
 %include <MenuBar.h>
