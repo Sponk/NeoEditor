@@ -123,17 +123,14 @@ function Editor.loadInputSystem()
     infoLog("Found input methods: " .. inputList)
 end
 
+function Editor.loadHandleMesh(filename, scene)
+    local model = NeoLua.level:loadMesh(filename)
 
---- Loads all meshes needed for displaying input handles and similar into
--- the current level. This also includes adding them to the new scene.
-function Editor.loadMeshes()
-    Editor.sceneMeshes = {}
+    if model == nil then return nil end
 
-    NeoLua.arrow = NeoLua.level:loadMesh("assets/editor/meshes/arrow.obj")
-    local scene = Editor.overlayScene
-    local z = scene:addNewEntity(NeoLua.arrow)
-    local x = scene:addNewEntity(NeoLua.arrow)
-    local y = scene:addNewEntity(NeoLua.arrow)
+    local x = scene:addNewEntity(model)
+    local y = scene:addNewEntity(model)
+    local z = scene:addNewEntity(model)
 
     x:getMaterial(0):setEmit(NeoLua.Vector3(1, 0, 0))
     y:getMaterial(0):setEmit(NeoLua.Vector3(0, 1, 0))
@@ -142,7 +139,23 @@ function Editor.loadMeshes()
     x:setEulerRotation(NeoLua.Vector3(0, 90, 0))
     y:setEulerRotation(NeoLua.Vector3(90, 0, 0))
 
-    Editor.sceneMeshes = { y = y, x = x, z = z }
+    x:setActive(false)
+    y:setActive(false)
+    z:setActive(false)
+
+    return {x = x, y = y, z = z}
+end
+
+--- Loads all meshes needed for displaying input handles and similar into
+-- the current level. This also includes adding them to the new scene.
+function Editor.loadMeshes()
+    Editor.sceneMeshes = {
+        translation = Editor.loadHandleMesh("assets/editor/meshes/arrow.obj", Editor.overlayScene),
+        rotation = Editor.loadHandleMesh("assets/editor/meshes/torus.obj", Editor.overlayScene),
+        scale = Editor.loadHandleMesh("assets/editor/meshes/scale-arrow.obj", Editor.overlayScene)
+    }
+
+    Editor.translationMode = Editor.sceneMeshes.translation
 end
 
 --- Casts a ray starting at the given origin into the
@@ -258,8 +271,8 @@ function Editor.selectObject()
 
         local p1 = camera:getUnProjectedPoint(NeoLua.Vector3(mx, my, 0.3))
         local p2 = camera:getUnProjectedPoint(NeoLua.Vector3(Editor.mx * res.x, (1 - Editor.my) * res.y, 0.3))
-        local dif = p1 - p2
-        local dif = Editor.selectedArrow * dif:getNormalized() * dif:getLength() * 100
+        local dif = (p1 - p2) * 100
+        --local dif = dif * 100 --dif:getNormalized() * dif:getLength() * 100
 
         -- print("mx: ", mx, my)
         -- print("omx: ", Editor.mx, Editor.my)
@@ -269,7 +282,14 @@ function Editor.selectObject()
 
         local scale = (camera:getPosition() - Editor.currentSelection[1]:getTransformedPosition()):getLength()
 
-        Editor.currentSelection[1]:translate(dif * scale * 0.7)
+        if Editor.translationMode == Editor.sceneMeshes.translation then
+            Editor.currentSelection[1]:translate(Editor.selectedArrow * dif * scale * 0.7)
+        elseif Editor.translationMode == Editor.sceneMeshes.scale then
+            Editor.currentSelection[1]:setScale(Editor.currentSelection[1]:getScale() + Editor.selectedArrow * dif * scale * 0.007)
+        elseif Editor.translationMode == Editor.sceneMeshes.rotation then
+            Editor.currentSelection[1]:setEulerRotation(Editor.currentSelection[1]:getEulerRotation() + Editor.selectedArrow * dif * scale)
+        end
+
         Editor.currentSelection[1]:updateMatrix()
 
         Editor.entityEditor.updateData()
@@ -301,7 +321,14 @@ function Editor.selectObject()
 
         local scale = (camera:getPosition() - Editor.currentSelection[1]:getTransformedPosition()):getLength() * 100
 
-        Editor.currentSelection[1]:translate(dif * scale * 0.7)
+        if Editor.translationMode == Editor.sceneMeshes.translation then
+            Editor.currentSelection[1]:translate(dif * scale * 0.7)
+        elseif Editor.translationMode == Editor.sceneMeshes.scale then
+            Editor.currentSelection[1]:setScale(Editor.currentSelection[1]:getScale() * (1-Editor.dy))
+        elseif Editor.translationMode == Editor.sceneMeshes.rotation then
+            Editor.currentSelection[1]:setEulerRotation(Editor.currentSelection[1]:getEulerRotation() + dif * -scale)
+        end
+
         Editor.currentSelection[1]:updateMatrix()
 
         Editor.entityEditor.updateData()
@@ -319,17 +346,43 @@ function Editor.selectObject()
     if NeoLua.input:onKeyDown("MOUSE_BUTTON_LEFT") then
         -- Check arrows
         if #Editor.currentSelection > 0 then
-            local meshes = Editor.sceneMeshes
-            if Editor.castRay(meshes.x, rayO, rayD) then
-                Editor.selectedArrow = NeoLua.Vector3(1, 0, 0)
-                return
-            elseif Editor.castRay(meshes.y, rayO, rayD) then
-                Editor.selectedArrow = NeoLua.Vector3(0, 1, 0)
-                return
-            elseif Editor.castRay(meshes.z, rayO, rayD) then
-                Editor.selectedArrow = NeoLua.Vector3(0, 0, 1)
-                return
-            end
+           --[[ if Editor.translationMode == Editor.sceneMeshes.translation then
+                local meshes = Editor.sceneMeshes.translation
+                if Editor.castRay(meshes.x, rayO, rayD) then
+                    Editor.selectedArrow = NeoLua.Vector3(1, 0, 0)
+                    return
+                elseif Editor.castRay(meshes.y, rayO, rayD) then
+                    Editor.selectedArrow = NeoLua.Vector3(0, 1, 0)
+                    return
+                elseif Editor.castRay(meshes.z, rayO, rayD) then
+                    Editor.selectedArrow = NeoLua.Vector3(0, 0, 1)
+                    return
+                end
+            elseif Editor.translationMode == Editor.sceneMeshes.rotation then
+                local meshes = Editor.sceneMeshes.rotation
+                if Editor.castRay(meshes.x, rayO, rayD) then
+                    Editor.selectedArrow = NeoLua.Vector3(1, 0, 0)
+                    return
+                elseif Editor.castRay(meshes.y, rayO, rayD) then
+                    Editor.selectedArrow = NeoLua.Vector3(0, 1, 0)
+                    return
+                elseif Editor.castRay(meshes.z, rayO, rayD) then
+                    Editor.selectedArrow = NeoLua.Vector3(0, 0, 1)
+                    return
+                end
+            end]]
+
+           local meshes = Editor.translationMode
+           if Editor.castRay(meshes.x, rayO, rayD) then
+               Editor.selectedArrow = NeoLua.Vector3(1, 0, 0)
+               return
+           elseif Editor.castRay(meshes.y, rayO, rayD) then
+               Editor.selectedArrow = NeoLua.Vector3(0, 1, 0)
+               return
+           elseif Editor.castRay(meshes.z, rayO, rayD) then
+               Editor.selectedArrow = NeoLua.Vector3(0, 0, 1)
+               return
+           end
         end
 
         local possibleSelection = {}
@@ -379,7 +432,7 @@ end
 -- @param obj The object to select.
 function Editor.select(obj)
 
-    local arrows = Editor.sceneMeshes
+    local arrows = Editor.translationMode
 
     if obj == nil then
 
@@ -389,9 +442,11 @@ function Editor.select(obj)
             end
         end
 
-        arrows.x:setActive(false)
-        arrows.y:setActive(false)
-        arrows.z:setActive(false)
+        for k,arrows in pairs(Editor.sceneMeshes) do
+            arrows.x:setActive(false)
+            arrows.y:setActive(false)
+            arrows.z:setActive(false)
+        end
 
         Editor.currentSelection = {}
         return
@@ -429,7 +484,7 @@ end
 
 --- Updates all translation handles in the current scene.
 function Editor.updateHandles()
-    local arrows = Editor.sceneMeshes
+    local arrows = Editor.translationMode
     local position = Editor.getSelectionCenter()
     local res = NeoLua.system:getScreenSize()
 
@@ -576,7 +631,7 @@ function Editor.playGame(mainscript)
 
     NeoLua.Neo2DEngine.getInstance():clear()
 
-    --Editor.sceneMeshes.x:setActive(false)
+    --Editor.sceheMeshes.arrows.x:setActive(false)
     --Editor.sceneMeshes.y:setActive(false)
     --Editor.sceneMeshes.z:setActive(false)
 

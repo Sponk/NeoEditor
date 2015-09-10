@@ -31,3 +31,18 @@ Shortcuts.addShortcut({"RCONTROL", "O"}, openCallback)
 
 Shortcuts.addShortcut({"LCONTROL", "S"}, saveCallback)
 Shortcuts.addShortcut({"RCONTROL", "S"}, saveCallback)
+
+Shortcuts.addShortcut({"1"}, function()
+	Editor.translationMode = Editor.sceneMeshes.translation
+	Editor.select(nil)
+end)
+
+Shortcuts.addShortcut({"2"}, function()
+	Editor.translationMode = Editor.sceneMeshes.rotation
+	Editor.select(nil)
+end)
+
+Shortcuts.addShortcut({"3"}, function()
+	Editor.translationMode = Editor.sceneMeshes.scale
+	Editor.select(nil)
+end)
