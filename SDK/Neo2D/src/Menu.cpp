@@ -72,15 +72,14 @@ void Menu::draw(Vector2 offset)
 
 	unsigned int i = 0;
 	unsigned int line = 0;	
-	for (Button l : m_entries)
-	{
+	for (Button l : m_entries) {
 		/*if(i == m_selectedEntry)
 			render->drawColoredQuad(m_x, m_y - line, m_width, LINE_HEIGHT, Vector3(0.75,0.75,0.75));
 		else
 			render->drawColoredQuad(m_x, m_y - line, m_width, LINE_HEIGHT, Vector3(0.5,0.5,0.5));*/
 
 		l.setPosition(Vector2(m_x, m_y + line));
-		l.draw(Vector2(/*m_x, m_y - line*/ 0,0));
+		l.draw(Vector2(/*m_x, m_y - line*/ 0, 0));
 		line += LINE_HEIGHT;
 		i++;
 	}
@@ -90,6 +89,7 @@ void Menu::addEntry(Button l)
 {
 	l.setSize(m_width, LINE_HEIGHT);
 	l.setAlignment(TEXT_ALIGN_LEFT);
-	
+	m_height += LINE_HEIGHT;
+
 	m_entries.push_back(l);
 }

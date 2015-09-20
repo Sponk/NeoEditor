@@ -11,7 +11,7 @@ local dlg = {
     y = 70,
     w = 300,
     h = 650,
-    label = tr("Edit Entity"),
+    label = tr("Edit Light"),
     content = {
       [1] = {
         name = "nameLabel",
@@ -306,6 +306,84 @@ local dlg = {
         label = "",
         inputType = NeoLua.DECIMAL_INPUT,
         callback = "updateLightConfig"
+      },
+
+      [27] = {
+        name = "shadowCheckButton",
+        type = "CheckButton",
+        label = tr("Shadow"),
+        x = 10,
+        y = 395,
+        size = 15,
+        label = "",
+        inputType = NeoLua.DECIMAL_INPUT,
+        callback = "updateLightConfig"
+      },
+
+      [28] = {
+        name = "shadowQualityLabel",
+        type = "Label",
+        x = 10,
+        y = 420,
+        w = 0,
+        h = 0,
+        label = tr("Shadow Quality:")
+      },
+
+      [29] = {
+        name = "shadowQualityInput",
+        type = "InputField",
+        x = 10,
+        y = 430,
+        w = 280,
+        h = 20,
+        label = "",
+        inputType = NeoLua.DECIMAL_INPUT,
+        callback = "updateLightConfig"
+      },
+
+      [30] = {
+        name = "shadowBiasLabel",
+        type = "Label",
+        x = 10,
+        y = 460,
+        w = 0,
+        h = 0,
+        label = tr("Shadow Bias:")
+      },
+
+      [31] = {
+        name = "shadowBiasInput",
+        type = "InputField",
+        x = 10,
+        y = 470,
+        w = 280,
+        h = 20,
+        label = "",
+        inputType = NeoLua.DECIMAL_INPUT,
+        callback = "updateLightConfig"
+      },
+
+      [32] = {
+        name = "shadowBlurLabel",
+        type = "Label",
+        x = 10,
+        y = 500,
+        w = 0,
+        h = 0,
+        label = tr("Shadow Bias:")
+      },
+
+      [33] = {
+        name = "shadowBlurInput",
+        type = "InputField",
+        x = 10,
+        y = 510,
+        w = 280,
+        h = 20,
+        label = "",
+        inputType = NeoLua.DECIMAL_INPUT,
+        callback = "updateLightConfig"
       }
     }
   }
@@ -356,6 +434,11 @@ function editor.setShownObject(objName)
   dlg["spotAngleInput"]:setLabel(round(editor.entity:getSpotAngle(), 4))
   dlg["spotExponentInput"]:setLabel(round(editor.entity:getSpotExponent(), 4))
 
+  dlg["shadowCheckButton"]:setValue(editor.entity:isCastingShadow())
+  dlg["shadowQualityInput"]:setLabel(editor.entity:getShadowQuality())
+  dlg["shadowBiasInput"]:setLabel(editor.entity:getShadowBias())
+  dlg["shadowBlurInput"]:setLabel(editor.entity:getShadowBlur())
+
   dlg.window:setVisible(true)
   Gui.wm:selectWindow(dlg.window)
   dlg.window:update()
@@ -386,6 +469,11 @@ function updateLightConfig()
   editor.entity:setIntensity(dlg["intensityInput"]:getLabel())
   editor.entity:setSpotAngle(dlg["spotAngleInput"]:getLabel())
   editor.entity:setSpotExponent(dlg["spotExponentInput"]:getLabel())
+
+  editor.entity:castShadow(dlg["shadowCheckButton"]:getValue())
+  editor.entity:setShadowQuality(dlg["shadowQualityInput"]:getLabel())
+  editor.entity:setShadowBias(dlg["shadowBiasInput"]:getLabel())
+  editor.entity:setShadowBlur(dlg["shadowBlurInput"]:getLabel())
 
   -- Set new rounded values (no rotation > 360°)
   local rot = editor.entity:getEulerRotation()

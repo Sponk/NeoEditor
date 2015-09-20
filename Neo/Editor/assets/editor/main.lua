@@ -595,6 +595,7 @@ end
 --- Loads the translated UI description into memory.
 -- Needs to be called before Editor.setupUI!
 function Editor.setupTranslatedUI(translation)
+    infoLog("Using translation: " .. translation)
     Translator.swapTranslation(translation)
 
     Editor.dlgTables = {
@@ -639,7 +640,6 @@ function Editor.playGame(mainscript)
 end
 
 function Editor.cleanUp()
-    infoLog("Removing: " .. Editor.overlaySceneId)
     NeoLua.level:deleteScene(Editor.overlaySceneId - 1)
     NeoLua.level:getCurrentScene():deleteObject(Editor.sceneCamera)
 
@@ -685,10 +685,14 @@ Editor.setupLevel()
 Editor.loadMeshes()
 
 Editor.setupTranslatedUI("english.csv")
+--Editor.setupTranslatedUI("german.csv")
 Editor.loadUI()
 
 NeoLua.system:setWindowTitle("Neo Scene Editor")
 NeoLua.system:showCursor()
-infoLog("Loaded editor from project: " .. NeoLua.system:getWorkingDirectory())
+
+Editor.project = { directory = NeoLua.system:getWorkingDirectory(), level = ""}
+infoLog("Loaded editor from project: " .. Editor.project.directory)
+
 
 infoLog(os.tmpname())

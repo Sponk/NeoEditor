@@ -19,3 +19,9 @@ ELSE()
     ADD_CUSTOM_TARGET(editor-doc ALL COMMAND ${MONDOC_EXECUTABLE} -o ${DOCUMENTATION_BINARY_DIR}/Editor -i ${CMAKE_CURRENT_SOURCE_DIR}/assets/editor/main.lua ${SOURCES})
     INSTALL(DIRECTORY ${DOCUMENTATION_BINARY_DIR}/Editor DESTINATION ${NEO_INSTALL_DIR}/Documentation/Editor)
 ENDIF()
+
+## Update needed translations
+if(UNIX)
+  add_custom_target(grep-translations-lua-editor grep -o -r "\"tr(\\\".*\\\")\"" ./assets > translations.txt
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+ENDIF()

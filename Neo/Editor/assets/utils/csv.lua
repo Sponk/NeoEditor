@@ -34,7 +34,7 @@ function csv.parseString(str, delim)
    local retval = {}
    
    -- old: "(%w+)" .. delim .. "(%w+)"
-   local pattern = "([%w_ ]+)" .. delim .. "([%w_ %\\%p]+)"
+   local pattern = "([%w_ :]+)" .. delim .. "([%w_ :%\\%p]+)"
    local lines = utf8.gmatch(str, "([^\n]+)")
    for k,v in lines do
 	   local values = utf8.gmatch(str, pattern)

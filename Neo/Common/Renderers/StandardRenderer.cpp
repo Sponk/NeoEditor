@@ -1126,6 +1126,9 @@ void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 	int uniform = 1;
 	render->sendUniformInt(m_fx[0], "HasTransparency", &uniform);
 
+	float opacity = textObj->getColor().w;
+	render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
+
 	uniform = -1;
 	render->sendUniformInt(m_fx[0], "TextureMode", &uniform);
 

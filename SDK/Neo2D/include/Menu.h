@@ -28,8 +28,7 @@
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
  *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
- *diesem
+ * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 

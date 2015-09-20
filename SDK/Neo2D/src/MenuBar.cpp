@@ -68,6 +68,7 @@ void MenuBar::draw(Vector2 offset)
 	Render* render = Render::getInstance();
 	Vector2 res = NeoEngine::getInstance()->getSystemContext()->getScreenSize();
 
+	m_width = res.x;
 	render->drawColoredQuad(0,0,res.x, m_height, Vector3(0.3,0.3,0.3));
 	
 	for (Menu* l : m_entries)
@@ -83,8 +84,8 @@ void MenuBar::draw(Vector2 offset)
 void MenuBar::addEntry(Menu* l)
 {
 	float x = m_entries.size() * MENU_WIDTH;
-	l->setSize(m_width, MENU_LINE_HEIGHT);
 	l->setPosition(Vector2(x, m_height));
+
 	m_entries.push_back(l);
 
 	Button b(x, 0, MENU_WIDTH, m_height, l->getLabel());
@@ -102,4 +103,19 @@ void MenuBar::buttonCallback(Widget* w, long int data)
 {
 	CallbackData* cdata = (CallbackData*) data;
 	cdata->parent->getEntry(cdata->index)->setVisible(true);
+}
+
+bool MenuBar::isMouseOver()
+{
+	if(Widget::isMouseOver()) return true;
+	for(Menu* m : m_entries)
+	{
+		m->setOffset(m_offset);
+		if(m->isVisible() && m->isMouseOver())
+		{
+			return true;
+		}
+	}
+
+	return false;
 }

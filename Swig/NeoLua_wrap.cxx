@@ -50420,6 +50420,30 @@ fail:
 }
 
 
+static int _wrap_MenuBar_isMouseOver(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::MenuBar *arg1 = (Neo2D::Gui::MenuBar *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo2D::Gui::MenuBar::isMouseOver",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::MenuBar::isMouseOver",1,"Neo2D::Gui::MenuBar *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__MenuBar,0))){
+    SWIG_fail_ptr("MenuBar_isMouseOver",1,SWIGTYPE_p_Neo2D__Gui__MenuBar);
+  }
+  
+  result = (bool)(arg1)->isMouseOver();
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_MenuBar(void *obj) {
 Neo2D::Gui::MenuBar *arg1 = (Neo2D::Gui::MenuBar *) obj;
 delete arg1;
@@ -50440,6 +50464,7 @@ static swig_lua_method swig_MenuBar_methods[]= {
     { "addEntry", _wrap_MenuBar_addEntry},
     { "draw", _wrap_MenuBar_draw},
     { "update", _wrap_MenuBar_update},
+    { "isMouseOver", _wrap_MenuBar_isMouseOver},
     {0,0}
 };
 static swig_lua_method swig_MenuBar_meta[] = {

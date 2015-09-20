@@ -178,7 +178,7 @@ local dlg = {
 	name = "textLabel",
 	type = "Label",
 	x = 10,
-	y = 170,
+	y = 180,
 	w = 0,
 	h = 0,
 	label = tr("Text:")
@@ -190,9 +190,66 @@ local dlg = {
 	x = 10,
 	y = 190,
 	w = 280,
-	h = 200,
+	h = 100,
 	label = "",
 	callback = "updateTextConfig"
+      },
+
+      [17] = {
+        name = "colorLabel",
+        type = "Label",
+        x = 10,
+        y = 310,
+        w = 0,
+        h = 0,
+        label = tr("Color:")
+      },
+
+      [18] = {
+        name = "crInput",
+        type = "InputField",
+        x = 10,
+        y = 320,
+        w = 60,
+        h = 20,
+        label = "",
+        inputType = NeoLua.DECIMAL_INPUT,
+        callback = "updateTextConfig"
+      },
+
+      [19] = {
+        name = "cgInput",
+        type = "InputField",
+        x = 80,
+        y = 320,
+        w = 60,
+        h = 20,
+        label = "",
+        inputType = NeoLua.DECIMAL_INPUT,
+        callback = "updateTextConfig"
+      },
+
+      [20] = {
+        name = "cbInput",
+        type = "InputField",
+        x = 150,
+        y = 320,
+        w = 60,
+        h = 20,
+        label = "",
+        inputType = NeoLua.DECIMAL_INPUT,
+        callback = "updateTextConfig"
+      },
+      [21] = {
+        name = "caInput",
+        type = "InputField",
+        x = 220,
+        y = 320,
+        w = 60,
+        h = 20,
+        label = "",
+        inputType = NeoLua.DECIMAL_INPUT,
+        callback = "updateTextConfig"
       }
     }
   }
@@ -233,6 +290,12 @@ function editor.setShownObject(objName)
   dlg["syInput"]:setLabel(round(scale.y, 3))
   dlg["szInput"]:setLabel(round(scale.z, 3))
 
+  local color = editor.entity:getColor()
+  dlg["crInput"]:setLabel(round(color.x, 4))
+  dlg["cgInput"]:setLabel(round(color.y, 4))
+  dlg["cbInput"]:setLabel(round(color.z, 4))
+  dlg["caInput"]:setLabel(round(color.w, 4))
+
   dlg["textInput"]:setLabel(editor.entity:getText())
 
   dlg.window:setVisible(true)
@@ -257,6 +320,8 @@ function updateTextConfig()
                                   
   editor.entity:setScale(NeoLua.Vector3(dlg["sxInput"]:getLabel(),
                                   dlg["syInput"]:getLabel(), dlg["szInput"]:getLabel()))
+
+  editor.entity:setColor(NeoLua.Vector4(dlg["crInput"]:getLabel(), dlg["cgInput"]:getLabel(), dlg["cbInput"]:getLabel(), dlg["caInput"]:getLabel()))
 
   editor.entity:setText(dlg["textInput"]:getLabel())
 

@@ -182,10 +182,94 @@ local dlg = {
             [17] = {
                 name = "orthoCheckButton",
                 type = "CheckButton",
-                label = tr("Orthogonal"),
+                label = tr("Orthographic"),
                 x = 10,
                 y = 210,
                 size = 15,
+                label = "",
+                inputType = NeoLua.DECIMAL_INPUT,
+                callback = "updateCameraConfig"
+            },
+
+            [18] = {
+                name = "clippingNearLabel",
+                type = "Label",
+                x = 10,
+                y = 240,
+                w = 0,
+                h = 0,
+                label = tr("Clipping Near Distance:")
+            },
+            [19] = {
+                name = "clippingNearInput",
+                type = "InputField",
+                x = 10,
+                y = 250,
+                w = 280,
+                h = 20,
+                label = "",
+                inputType = NeoLua.DECIMAL_INPUT,
+                callback = "updateCameraConfig"
+            },
+            [20] = {
+                name = "clippingFarLabel",
+                type = "Label",
+                x = 10,
+                y = 280,
+                w = 0,
+                h = 0,
+                label = tr("Clipping Far Distance:")
+            },
+            [21] = {
+                name = "clippingFarInput",
+                type = "InputField",
+                x = 10,
+                y = 290,
+                w = 280,
+                h = 20,
+                label = "",
+                inputType = NeoLua.DECIMAL_INPUT,
+                callback = "updateCameraConfig"
+            },
+            [22] = {
+                name = "clearColorLabel",
+                type = "Label",
+                x = 10,
+                y = 330,
+                w = 0,
+                h = 0,
+                label = tr("Clear Color:")
+            },
+            [23] = {
+                name = "crInput",
+                type = "InputField",
+                x = 10,
+                y = 340,
+                w = 60,
+                h = 20,
+                label = "",
+                inputType = NeoLua.DECIMAL_INPUT,
+                callback = "updateCameraConfig"
+            },
+            [24] = {
+                name = "cgInput",
+                type = "InputField",
+                x = 85,
+                y = 340,
+                w = 60,
+                h = 20,
+                label = "",
+                inputType = NeoLua.DECIMAL_INPUT,
+                callback = "updateCameraConfig"
+            },
+
+            [25] = {
+                name = "cbInput",
+                type = "InputField",
+                x = 160,
+                y = 340,
+                w = 60,
+                h = 20,
                 label = "",
                 inputType = NeoLua.DECIMAL_INPUT,
                 callback = "updateCameraConfig"
@@ -230,8 +314,15 @@ function editor.setShownObject(objName)
     dlg["szInput"]:setLabel(round(scale.z, 3))
 
     dlg["fovInput"]:setLabel(round(editor.entity:getFov(), 3))
+    dlg["clippingNearInput"]:setLabel(round(editor.entity:getClippingNear()))
+    dlg["clippingFarInput"]:setLabel(round(editor.entity:getClippingFar()))
 
     dlg["orthoCheckButton"]:setValue(editor.entity:isOrtho())
+
+    local color = editor.entity:getClearColor()
+    dlg["crInput"]:setLabel(round(color.x, 3))
+    dlg["cgInput"]:setLabel(round(color.y, 3))
+    dlg["cbInput"]:setLabel(round(color.z, 3))
 
     dlg.window:setVisible(true)
     Gui.wm:selectWindow(dlg.window)
@@ -258,12 +349,17 @@ function updateCameraConfig()
 
     editor.entity:setFov(dlg["fovInput"]:getLabel())
     editor.entity:enableOrtho(dlg["orthoCheckButton"]:getValue())
+    editor.entity:setClippingNear(dlg["clippingNearInput"])
+    editor.entity:setClippingFar(dlg["clippingFarInput"])
 
     -- Set new rounded values (no rotation > 360°)
     local rot = editor.entity:getEulerRotation()
     dlg["rxInput"]:setLabel(round(rot.x, 3))
     dlg["ryInput"]:setLabel(round(rot.y, 3))
     dlg["rzInput"]:setLabel(round(rot.z, 3))
+
+    editor.entity:setClearColor(NeoLua.Vector3(dlg["crInput"]:getLabel(),
+        dlg["cgInput"]:getLabel(), dlg["cbInput"]:getLabel()))
 
     local newName = dlg["nameInput"]:getLabel()
     if newName:len() > 0 and newName ~= editor.entity:getName() then
