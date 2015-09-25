@@ -30,6 +30,7 @@
 #include <StandardRenderer.h>
 #include <Window/Window.h>
 #include <string>
+#include <algorithm>
 #include <tinyutf8.h>
 
 #ifndef SHADER_PATH
@@ -1124,8 +1125,8 @@ void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 
 	render->enableBlending();
 	render->setBlendingMode(BLENDING_ALPHA);
-
-	render->disableCullFace();
+	render->enableDepthTest();
+	//render->disableCullFace();
 
 	int uniform = 1;
 	render->sendUniformInt(m_fx[0], "HasTransparency", &uniform);
@@ -1559,6 +1560,13 @@ int StandardRenderer::light_update_thread(void* data)
  * Scene update threads
  */
 
+/// UUUUGLY!
+Vector3 g_referenceCameraPos;
+bool zCompare(const OEntity* lhs, const OEntity* rhs)
+{
+	return (lhs->getTransformedPosition() - g_referenceCameraPos).getLength() > (rhs->getTransformedPosition() - g_referenceCameraPos).getLength();
+}
+
 int StandardRenderer::visibility_thread_mainscene(void* data)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
@@ -1624,15 +1632,13 @@ int StandardRenderer::visibility_thread_mainscene(void* data)
 			size_t sz = scene->getEntitiesNumber();
 			for (int i = 0; i < sz; i++)
 			{
-				OEntity* e = scene->getEntityByIndex(i);
+				OEntity *e = scene->getEntityByIndex(i);
 
-				if (e->isActive())
-				{
+				if (e->isActive()) {
 					e->updateVisibility(camera);
 
-					if (e->isVisible())
-					{
-						if(e->hasTransparency())
+					if (e->isVisible()) {
+						if (e->hasTransparency())
 							data->visibleTransparentEntities.push_back(e);
 						else
 							data->visibleEntities.push_back(e);
@@ -1640,6 +1646,11 @@ int StandardRenderer::visibility_thread_mainscene(void* data)
 					}
 				}
 			}
+
+			g_referenceCameraPos = camera->getTransformedPosition();
+			std::sort(data->visibleTransparentEntities.begin(), data->visibleTransparentEntities.end(), zCompare);
+
+			//while(1);
 			data->visibilityLock->Unlock();
 		}
 
