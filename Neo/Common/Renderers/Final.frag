@@ -256,7 +256,7 @@ vec4 fxaa(sampler2D textureSampler, vec2 vertTexcoord, vec2 texcoordOffset)
 vec3 FxaaPixelShader(vec4 posPos, sampler2D tex, vec2 rcpFrame)
 {   
 /*--------------------------------------------------------------------------*/
-	float FXAA_SPAN_MAX = 16.0; // 4.0
+	float FXAA_SPAN_MAX = 4.0; // 4.0
 	float FXAA_REDUCE_MUL = 1.0/32.0; //1.0/8.0; //1.0/32.0;//1.0/8.0;
 	float FXAA_REDUCE_MIN = 1.0/256.0;//1.0/256.0;//(1.0/128.0);
 /*--------------------------------------------------------------------------*/

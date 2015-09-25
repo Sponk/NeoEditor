@@ -46,6 +46,28 @@ function openCallback()
 	Editor.requestReload = true
 end
 
+function addLightCallback()
+	Editor.addLight()
+end
+
+function addEntityCallback()
+	local filename = LuaCommonDlg.getOpenFilename(NeoLua.system:getWorkingDirectory() .. "/assets", "mesh,fbx,dae,obj,3ds")
+	if filename == nil then return end
+	Editor.addEntity(filename)
+end
+
+function addSoundCallback()
+	local filename = LuaCommonDlg.getOpenFilename(NeoLua.system:getWorkingDirectory() .. "/assets", "wav,ogg")
+	if filename == nil then return end
+	Editor.addSound(filename)
+end
+
+function addTextCallback()
+	local filename = LuaCommonDlg.getOpenFilename(NeoLua.system:getWorkingDirectory() .. "/assets", "ttf")
+	if filename == nil then return end
+	Editor.addText(filename)
+end
+
 Shortcuts.addShortcut({"LCONTROL", "O"}, openCallback)
 Shortcuts.addShortcut({"RCONTROL", "O"}, openCallback)
 

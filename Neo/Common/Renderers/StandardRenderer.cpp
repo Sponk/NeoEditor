@@ -82,6 +82,10 @@ public:
 
 		lightLock = ThreadFactory::getInstance()->getNewSemaphore();
 		lightLock->Init(1);
+
+		visibleLights.reserve(256);
+		visibleEntities.reserve(256);
+		visibleTransparentEntities.reserve(256);
 	}
 
 	~CameraData()

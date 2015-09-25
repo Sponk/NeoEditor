@@ -146,6 +146,36 @@ function Editor.loadHandleMesh(filename, scene)
     return {x = x, y = y, z = z}
 end
 
+function Editor.addObjectBillboard(object, modelpath)
+    local bmanager = NeoLua.engine:getBehaviorManager()
+    local lookAtCreator = bmanager:getBehaviorByName("LookAt")
+    local followCreator = bmanager:getBehaviorByName("Follow")
+
+    local model = NeoLua.level:loadMesh(modelpath)
+    local scene = NeoLua.level:getCurrentScene()
+
+    local entity = Editor.overlayScene:addNewEntity(model)
+    local behavior = lookAtCreator:getNewBehavior(entity)
+    entity:addBehavior(behavior)
+
+    local var = behavior:getVariable(0)
+    local str = NeoLua.Voidp2String(var:getPointer())
+    str:set("MainSceneCamera")
+
+    behavior = followCreator:getNewBehavior(entity)
+    entity:addBehavior(behavior)
+
+    var = behavior:getVariable(0)
+    str = NeoLua.Voidp2String(var:getPointer())
+    str:set(object:getName())
+
+    local delay = NeoLua.floatp.frompointer(NeoLua.Voidp2Float(behavior:getVariable(1):getPointer()))
+    delay:assign(0)
+
+    entity:setName(object:getName())
+    return entity;
+end
+
 --- Loads all meshes needed for displaying input handles and similar into
 -- the current level. This also includes adding them to the new scene.
 function Editor.loadMeshes()
@@ -196,60 +226,54 @@ function Editor.loadMeshes()
     local model = NeoLua.level:loadMesh("assets/editor/meshes/objects/light.dae")
     for i = 0, scene:getLightsNumber() - 1, 1 do
 
-        local camera = scene:getLightByIndex(i)
-        if camera:getName() ~= "MainSceneCamera" then
+        local light = scene:getLightByIndex(i)
+        local entity = Editor.overlayScene:addNewEntity(model)
+        local behavior = lookAtCreator:getNewBehavior(entity)
+        entity:addBehavior(behavior)
 
-            local entity = Editor.overlayScene:addNewEntity(model)
-            local behavior = lookAtCreator:getNewBehavior(entity)
-            entity:addBehavior(behavior)
+        local var = behavior:getVariable(0)
+        local str = NeoLua.Voidp2String(var:getPointer())
+        str:set("MainSceneCamera")
 
-            local var = behavior:getVariable(0)
-            local str = NeoLua.Voidp2String(var:getPointer())
-            str:set("MainSceneCamera")
+        behavior = followCreator:getNewBehavior(entity)
+        entity:addBehavior(behavior)
 
-            behavior = followCreator:getNewBehavior(entity)
-            entity:addBehavior(behavior)
+        var = behavior:getVariable(0)
+        str = NeoLua.Voidp2String(var:getPointer())
+        str:set(light:getName())
 
-            var = behavior:getVariable(0)
-            str = NeoLua.Voidp2String(var:getPointer())
-            str:set(camera:getName())
+        local delay = NeoLua.floatp.frompointer(NeoLua.Voidp2Float(behavior:getVariable(1):getPointer()))
+        delay:assign(0)
 
-            local delay = NeoLua.floatp.frompointer(NeoLua.Voidp2Float(behavior:getVariable(1):getPointer()))
-            delay:assign(0)
-
-            entity:setName(camera:getName())
-            table.insert(Editor.lightBillboards, entity)
-        end
+        entity:setName(light:getName())
+        table.insert(Editor.lightBillboards, entity)
     end
 
     Editor.soundBillboards = {}
     local model = NeoLua.level:loadMesh("assets/editor/meshes/objects/sound.dae")
     for i = 0, scene:getSoundsNumber() - 1, 1 do
 
-        local camera = scene:getSoundByIndex(i)
-        if camera:getName() ~= "MainSceneCamera" then
+        local sound = scene:getSoundByIndex(i)
+        local entity = Editor.overlayScene:addNewEntity(model)
+        local behavior = lookAtCreator:getNewBehavior(entity)
+        entity:addBehavior(behavior)
 
-            local entity = Editor.overlayScene:addNewEntity(model)
-            local behavior = lookAtCreator:getNewBehavior(entity)
-            entity:addBehavior(behavior)
+        local var = behavior:getVariable(0)
+        local str = NeoLua.Voidp2String(var:getPointer())
+        str:set("MainSceneCamera")
 
-            local var = behavior:getVariable(0)
-            local str = NeoLua.Voidp2String(var:getPointer())
-            str:set("MainSceneCamera")
+        behavior = followCreator:getNewBehavior(entity)
+        entity:addBehavior(behavior)
 
-            behavior = followCreator:getNewBehavior(entity)
-            entity:addBehavior(behavior)
+        var = behavior:getVariable(0)
+        str = NeoLua.Voidp2String(var:getPointer())
+        str:set(sound:getName())
 
-            var = behavior:getVariable(0)
-            str = NeoLua.Voidp2String(var:getPointer())
-            str:set(camera:getName())
+        local delay = NeoLua.floatp.frompointer(NeoLua.Voidp2Float(behavior:getVariable(1):getPointer()))
+        delay:assign(0)
 
-            local delay = NeoLua.floatp.frompointer(NeoLua.Voidp2Float(behavior:getVariable(1):getPointer()))
-            delay:assign(0)
-
-            entity:setName(camera:getName())
-            table.insert(Editor.soundBillboards, entity)
-        end
+        entity:setName(sound:getName())
+        table.insert(Editor.soundBillboards, entity)
     end
 
     --entity:enableWireframe(true)
@@ -784,6 +808,52 @@ function Editor.autoSave()
 end
 
 function Editor.loadAutoSave()
+end
+
+function Editor.addLight()
+    local light = NeoLua.level:getCurrentScene():addNewLight()
+    light:setName(findName("Light", false))
+    light:setPosition(Editor.getSelectionCenter())
+
+    local entity = Editor.addObjectBillboard(light, "assets/editor/meshes/objects/light.dae")
+    table.insert(Editor.lightBillboards, entity)
+
+    Editor.updateSceneTree()
+    Editor.select(light)
+end
+
+function Editor.addSound(path)
+    local sound = NeoLua.level:getCurrentScene():addNewLight()
+    sound:setName(findName("Sound", false))
+    sound:setPosition(Editor.getSelectionCenter())
+
+    local entity = Editor.addObjectBillboard(light, "assets/editor/meshes/objects/sound.dae")
+    table.insert(Editor.soundBillboards, entity)
+
+    Editor.updateSceneTree()
+    Editor.select(sound)
+end
+
+function Editor.addEntity(path)
+    local mesh = NeoLua.level:loadMesh(path)
+    local entity = NeoLua.level:getCurrentScene():addNewEntity(mesh)
+    entity:setName(findName("Entity", false))
+    entity:setPosition(Editor.getSelectionCenter())
+
+    Editor.updateSceneTree()
+    Editor.select(entity)
+end
+
+
+function Editor.addText(path)
+    local font = NeoLua.level:loadFont(path, 36)
+    local entity = NeoLua.level:getCurrentScene():addNewText(font)
+    entity:setName(findName("Text", false))
+    entity:setPosition(Editor.getSelectionCenter())
+    entity:setText("Text")
+
+    Editor.updateSceneTree()
+    Editor.select(entity)
 end
 
 Editor.mx = 0
