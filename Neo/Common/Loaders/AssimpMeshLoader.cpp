@@ -210,7 +210,6 @@ static void createSubMesh(const aiScene * scene, const aiNode * nd, Mesh * mesh,
 	
 	Matrix4x4 matrix = parentMatrix * Matrix4x4((float*)&nodeMat);
 	
-	
 	unsigned int m;
 	for(m=0; m<nd->mNumMeshes; m++)
 	{
@@ -309,17 +308,15 @@ static void createSubMesh(const aiScene * scene, const aiNode * nd, Mesh * mesh,
 			}
 		}
 		
-		
 		// bones
 		initBones(scene, nodeMesh, mesh, subMesh);
-		
-		
+
 		// display
 		subMesh->allocDisplays(1);
 		MaterialDisplay * display = subMesh->addNewDisplay(PRIMITIVE_TRIANGLES, 0, subMesh->getIndicesSize());
 		display->setMaterial(mesh->getMaterial(nodeMesh->mMaterialIndex));
 		display->setMaterialId(nodeMesh->mMaterialIndex);
-		
+
 		// cull mode
 		int twosided = 0;
 		aiMaterial * mtl = scene->mMaterials[nodeMesh->mMaterialIndex];
@@ -383,7 +380,6 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 	
 	mesh->allocTextures(nb_textures);
 	
-	
 	// materials
 	mesh->allocMaterials(scene->mNumMaterials);
 	for(i=0; i<scene->mNumMaterials; i++)
@@ -410,7 +406,10 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 		
 		if(AI_SUCCESS == aiGetMaterialFloat(mtl, AI_MATKEY_SHININESS, &value))
 			 material->setShininess(value);
-		
+
+		if(material->getOpacity() < 1.0)
+			material->setBlendMode(BLENDING_ALPHA);
+
 		// blend
 		{
 			int blendMode;

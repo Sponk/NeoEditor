@@ -41,8 +41,13 @@
 
 #define NEO_CORE_EXPORT
 
+// Turn off StdFile since it produces errors
+#define __STD_FILE_H
+#define __FILE_H
+#define __THREAD_H
+
 %include <NeoCore.h>
-%include <Utils.h>
+/*%include <Utils.h>
 
 %include <Maths.h>
 %include <Vector2.h>
@@ -84,6 +89,10 @@
 %include <Armature.h>
 %include <Log.h>
 
+%include <Behavior.h>
+%include <BehaviorManager.h>
+%include <BehaviorCreator.h>*/
+
 #define NEO_CORE_EXPORT
 #define NEO2D_EXPORT
 %include <Neo2D.h>
@@ -120,6 +129,12 @@
 %pointer_class(unsigned int, uintp);
 %pointer_class(float, floatp);
 %pointer_class(double, doublep);
+
+%pointer_cast(void*, Neo::String*, Voidp2String);
+%pointer_cast(void*, float*, Voidp2Float);
+//%pointer_functions(float*, floatp)
+
+%pointer_class(Neo::String, Stringp);
 %pointer_class(Neo::Vector3, Vector3p);
 
 

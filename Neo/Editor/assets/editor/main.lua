@@ -156,6 +156,103 @@ function Editor.loadMeshes()
     }
 
     Editor.translationMode = Editor.sceneMeshes.translation
+
+    local bmanager = NeoLua.engine:getBehaviorManager()
+    local lookAtCreator = bmanager:getBehaviorByName("LookAt")
+    local followCreator = bmanager:getBehaviorByName("Follow")
+
+    Editor.cameraBillboards = {}
+    local model = NeoLua.level:loadMesh("assets/editor/meshes/objects/camera.dae")
+    local scene = NeoLua.level:getCurrentScene()
+    for i = 0, scene:getCamerasNumber() - 1, 1 do
+
+        local camera = scene:getCameraByIndex(i)
+        if camera:getName() ~= "MainSceneCamera" then
+
+            local entity = Editor.overlayScene:addNewEntity(model)
+            local behavior = lookAtCreator:getNewBehavior(entity)
+            entity:addBehavior(behavior)
+
+            local var = behavior:getVariable(0)
+            local str = NeoLua.Voidp2String(var:getPointer())
+            str:set("MainSceneCamera")
+
+            behavior = followCreator:getNewBehavior(entity)
+            entity:addBehavior(behavior)
+
+            var = behavior:getVariable(0)
+            str = NeoLua.Voidp2String(var:getPointer())
+            str:set(camera:getName())
+
+            local delay = NeoLua.floatp.frompointer(NeoLua.Voidp2Float(behavior:getVariable(1):getPointer()))
+            delay:assign(0)
+
+            entity:setName(camera:getName())
+            table.insert(Editor.cameraBillboards, entity)
+        end
+    end
+
+    Editor.lightBillboards = {}
+    local model = NeoLua.level:loadMesh("assets/editor/meshes/objects/light.dae")
+    for i = 0, scene:getLightsNumber() - 1, 1 do
+
+        local camera = scene:getLightByIndex(i)
+        if camera:getName() ~= "MainSceneCamera" then
+
+            local entity = Editor.overlayScene:addNewEntity(model)
+            local behavior = lookAtCreator:getNewBehavior(entity)
+            entity:addBehavior(behavior)
+
+            local var = behavior:getVariable(0)
+            local str = NeoLua.Voidp2String(var:getPointer())
+            str:set("MainSceneCamera")
+
+            behavior = followCreator:getNewBehavior(entity)
+            entity:addBehavior(behavior)
+
+            var = behavior:getVariable(0)
+            str = NeoLua.Voidp2String(var:getPointer())
+            str:set(camera:getName())
+
+            local delay = NeoLua.floatp.frompointer(NeoLua.Voidp2Float(behavior:getVariable(1):getPointer()))
+            delay:assign(0)
+
+            entity:setName(camera:getName())
+            table.insert(Editor.lightBillboards, entity)
+        end
+    end
+
+    Editor.soundBillboards = {}
+    local model = NeoLua.level:loadMesh("assets/editor/meshes/objects/sound.dae")
+    for i = 0, scene:getSoundsNumber() - 1, 1 do
+
+        local camera = scene:getSoundByIndex(i)
+        if camera:getName() ~= "MainSceneCamera" then
+
+            local entity = Editor.overlayScene:addNewEntity(model)
+            local behavior = lookAtCreator:getNewBehavior(entity)
+            entity:addBehavior(behavior)
+
+            local var = behavior:getVariable(0)
+            local str = NeoLua.Voidp2String(var:getPointer())
+            str:set("MainSceneCamera")
+
+            behavior = followCreator:getNewBehavior(entity)
+            entity:addBehavior(behavior)
+
+            var = behavior:getVariable(0)
+            str = NeoLua.Voidp2String(var:getPointer())
+            str:set(camera:getName())
+
+            local delay = NeoLua.floatp.frompointer(NeoLua.Voidp2Float(behavior:getVariable(1):getPointer()))
+            delay:assign(0)
+
+            entity:setName(camera:getName())
+            table.insert(Editor.soundBillboards, entity)
+        end
+    end
+
+    --entity:enableWireframe(true)
 end
 
 --- Casts a ray starting at the given origin into the
@@ -409,6 +506,30 @@ function Editor.selectObject()
             end
         end
 
+        -- Check all light objects
+        for i,v in ipairs(Editor.lightBillboards) do
+            local entity = scene:getLightByName(v:getName())
+            if entity ~= nil and Editor.castRayOnBox(v, rayO, rayD) then
+                table.insert(possibleSelection, entity)
+            end
+        end
+
+        -- Check all sound objects
+        for i,v in ipairs(Editor.soundBillboards) do
+            local entity = scene:getSoundByName(v:getName())
+            if entity ~= nil and Editor.castRayOnBox(v, rayO, rayD) then
+                table.insert(possibleSelection, entity)
+            end
+        end
+
+        -- Check all camera objects
+        for i,v in ipairs(Editor.cameraBillboards) do
+            local entity = scene:getCameraByName(v:getName())
+            if entity ~= nil and Editor.castRayOnBox(v, rayO, rayD) then
+                table.insert(possibleSelection, entity)
+            end
+        end
+
         if #possibleSelection <= 0 then Editor.select(nil) return end
 
         local camPos = camera:getPosition()
@@ -539,6 +660,8 @@ function update(dt)
 
     Editor.mx = mx
     Editor.my = my
+
+    -- collectgarbage("steps", 2)
 end
 
 Editor.update = update

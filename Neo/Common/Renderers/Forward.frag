@@ -431,9 +431,6 @@ vec4 shadeModel(vec3 position, vec3 n)
 void main(void)
 {
 	int processFlag = 0;
-/*    if(TextureMode > 0)
-	FragColor = vec4(Emit, 0.0) + texture2D(Textures[0], texCoord);
-        */
 
 	if(Normal.a == 1) return;
 	
@@ -453,7 +450,7 @@ void main(void)
     //Data.r = 0.0;
 
     //FragColor = calculatePhongLight(lights[0], position, normal, texture2D(Textures[0], texCoord));
-	if(HasTransparency == 0)
+	if(Opacity == 1.0)
 	{
 		if(TextureMode > 0)
 			FragColor = texture2D(Textures[0], texCoord) + vec4(AmbientLight, 0.0);
@@ -464,8 +461,15 @@ void main(void)
 	}
 	else
 	{
-		FragColor = shadeModel(position, normal) + vec4(Emit, 0.0);
-		FragColor.a = Opacity;
+	    if(TextureMode > 0)
+    	    FragColor = texture2D(Textures[0], texCoord);
+        else if(TextureMode == 0)
+            FragColor = vec4(Diffuse, Opacity);
+
+	    float trans = FragColor.a;
+		FragColor = shadeModel(position, normal) + vec4(FragColor.rgb * Emit, 0.0);
+		//FragColor.a = trans;
+		FragColor.a = trans + Opacity;
 		Normal.a = 0;
 		return;
 	}

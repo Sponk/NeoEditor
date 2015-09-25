@@ -259,25 +259,24 @@ void StandardRenderer::drawSubMesh(SubMesh* mesh, OCamera* camera, Material* mat
 
 void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCamera* camera, Material* materials, bool wireframe)
 {
-	NeoEngine* engine = NeoEngine::getInstance();
-	RenderingContext* render = engine->getRenderingContext();
+	NeoEngine *engine = NeoEngine::getInstance();
+	RenderingContext *render = engine->getRenderingContext();
 
 	// Retrieve VBO information
-	unsigned int* vboId1 = mesh->getVBOid1();
-	unsigned int* vboId2 = mesh->getVBOid2();
-	unsigned int* vao = display->getVAO();
+	unsigned int *vboId1 = mesh->getVBOid1();
+	unsigned int *vboId2 = mesh->getVBOid2();
+	unsigned int *vao = display->getVAO();
 
 	// Save data into variables
-	Vector2* texcoords = mesh->getTexCoords();
+	Vector2 *texcoords = mesh->getTexCoords();
 	VAR_TYPES indicesType = mesh->getIndicesType();
-	void* indices = mesh->getIndices();
+	void *indices = mesh->getIndices();
 
-	Material* material = &materials[display->getMaterialId()];
+	Material *material = &materials[display->getMaterialId()];
 	int texturePasses = material->getTexturesPassNumber();
 
 	int fx = 0;
-	if(*vao == 0)
-	{
+	if (*vao == 0) {
 		prepareMaterialDisplay(mesh, display);
 		return;
 	}
@@ -286,31 +285,27 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 	render->bindFX(fx);
 	render->bindVAO(*vao);
 
-	if(texturePasses == 0)
-	{
+	if (texturePasses == 0) {
 		// Tell the shader that we do not have any textures
 		render->disableBlending();
 	}
-	else
-	{
+	else {
 		render->disableBlending();
 	}
 
-	for(int i = 0; i < texturePasses; i++)
-	{
-		TexturePass* pass = material->getTexturePass(i);
+	for (int i = 0; i < texturePasses; i++) {
+		TexturePass *pass = material->getTexturePass(i);
 
-		if(!pass || !pass->getTexture())
-		{
+		if (!pass || !pass->getTexture()) {
 			continue;
 		}
 
-		TextureRef* tex = pass->getTexture()->getTextureRef();
+		TextureRef *tex = pass->getTexture()->getTextureRef();
 		render->bindTexture(tex->getTextureId(), i);
 	}
 
 	// Texture
-	int texIds[4] = { 0, 1, 2, 3 };
+	int texIds[4] = {0, 1, 2, 3};
 	render->sendUniformInt(fx, "Textures", texIds, 4);
 
 	// Send the texture mode
@@ -328,7 +323,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 	camera->enable();
 	modelViewMatrix = *camera->getCurrentViewMatrix() * modelMatrix;
 	modelViewProjectionMatrix = *camera->getCurrentProjMatrix() * modelViewMatrix;
-	
+
 	normalMatrix = modelViewMatrix.getInverse().getTranspose();
 
 	// Send uniforms
@@ -339,18 +334,26 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 	render->sendUniformVec3(m_fx[0], "Emit", material->getEmit());
 
 	int hasTransparency = (mesh->hasTransparency()) ? 1 : 0;
+	float opacity = material->getOpacity();
+
 	render->sendUniformInt(m_fx[0], "HasTransparency", &hasTransparency);
 
-	if (hasTransparency)
-	{
+	if (hasTransparency) {
 		render->enableBlending();
 		render->setBlendingMode(material->getBlendMode());
+		render->disableCullFace();
+		//render->setDepthMask(true);
+
 		sendLights(m_fx[0], camera);
 
-		float opacity = material->getOpacity();
 		render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
 	}
-	
+	else
+	{
+		render->setDepthMask(true);
+		render->enableCullFace();
+	}
+
 	float shininess = material->getShininess();
 	render->sendUniformFloat(m_fx[0], "Shininess", &shininess);
 
@@ -372,6 +375,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 					render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (void*)(display->getBegin()*sizeof(short)));
 					if(wireframe)
 					{
+						render->disableBlending();
 						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0.1,0.1,0.1));
 						render->enablePolygonOffset(-5.0,-5.0);
 						//render->disableDepthTest();
@@ -1065,7 +1069,7 @@ void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera, bool post
 	}
 	else
 	{
-		render->disableBlending();
+		render->enableBlending();
 		render->bindTexture(m_finalTexID);
 	}
 

@@ -160,15 +160,35 @@ vec4 gammaCorrection(vec4 diffuse, float gamma)
 	return pow(diffuse, vec4(1.0 / gamma));
 }
 
+vec4 blur(vec4 diffuse, vec2 texcoord, sampler2D sampler, float amount, float strength)
+{
+    if(strength == 0.0 || amount == 0.0)
+       return diffuse;
+
+        //strength *= float(textureSize(Texture[0], 1).x);
+
+    vec4 color;
+	color += texture2D(sampler, texcoord+vec2(0.01, 0.0) * amount);
+	color += texture2D(sampler, texcoord+vec2(-0.01, 0.0) * amount);
+	color += texture2D(sampler, texcoord+vec2(0.0, 0.01) * amount);
+	color += texture2D(sampler, texcoord+vec2(0.0, -0.01) * amount);
+	color += texture2D(sampler, texcoord+vec2(0.007, 0.007) * amount);
+	color += texture2D(sampler, texcoord+vec2(-0.007, -0.007) * amount);
+	color += texture2D(sampler, texcoord+vec2(0.007, -0.007) * amount);
+	color += texture2D(sampler, texcoord+vec2(-0.007, 0.007) * amount);
+
+	return mix(diffuse, color / vec4(8.0), amount);
+}
+
 // Based on code found here: 
 // http://www.geeks3d.com/20110405/fxaa-fast-approximate-anti-aliasing-demo-glsl-opengl-test-radeon-geforce/
 vec4 fxaa(sampler2D textureSampler, vec2 vertTexcoord, vec2 texcoordOffset)
 {
 	// The parameters are hardcoded for now, but could be
 	// made into uniforms to control fromt he program.
-	float FXAA_SPAN_MAX = 4.0;
-	float FXAA_REDUCE_MUL = 1.0/16.0;//1.0/8.0;
-	float FXAA_REDUCE_MIN = 1.0/256.0;//(1.0/128.0);
+	float FXAA_SPAN_MAX = 8.0;
+	float FXAA_REDUCE_MUL = 1.0/6.0;//1.0/8.0;
+	float FXAA_REDUCE_MIN = 1.0/128.0;//(1.0/128.0);
 
 	vec3 rgbNW = texture(textureSampler, vertTexcoord + (vec2(-1.0, -1.0) * texcoordOffset)).xyz;
 	vec3 rgbNE = texture(textureSampler, vertTexcoord + (vec2(+1.0, -1.0) * texcoordOffset)).xyz;
@@ -215,7 +235,8 @@ vec4 fxaa(sampler2D textureSampler, vec2 vertTexcoord, vec2 texcoordOffset)
 	{
     	outfrag.xyz = rgbB;
 	}
-  
+
+    outfrag.a = 1.0;
   	return outfrag;
 }
 
@@ -230,9 +251,9 @@ vec4 fxaa(sampler2D textureSampler, vec2 vertTexcoord, vec2 texcoordOffset)
 vec3 FxaaPixelShader(vec4 posPos, sampler2D tex, vec2 rcpFrame)
 {   
 /*--------------------------------------------------------------------------*/
-	float FXAA_SPAN_MAX = 8.0; // 4.0
-	float FXAA_REDUCE_MUL = 1.0/8.0; //1.0/32.0;//1.0/8.0;
-	float FXAA_REDUCE_MIN = 1.0/128.0;//1.0/256.0;//(1.0/128.0);
+	float FXAA_SPAN_MAX = 16.0; // 4.0
+	float FXAA_REDUCE_MUL = 1.0/32.0; //1.0/8.0; //1.0/32.0;//1.0/8.0;
+	float FXAA_REDUCE_MIN = 1.0/256.0;//1.0/256.0;//(1.0/128.0);
 /*--------------------------------------------------------------------------*/
     vec3 rgbNW = FxaaTexLod0(tex, posPos.zw).xyz;
     vec3 rgbNE = FxaaTexOff(tex, posPos.zw, FxaaInt2(1,0), rcpFrame.xy).xyz;
@@ -275,25 +296,88 @@ vec3 FxaaPixelShader(vec4 posPos, sampler2D tex, vec2 rcpFrame)
 
 #define FXAA_SUBPIX_SHIFT 0.5
 
+/*vec4 bloom(vec4 diffuse, vec2 texcoord, sampler2D sampler, float amount, float strength)
+{
+    if(strength == 0.0 || amount == 0.0)
+       return diffuse;
+
+        //strength *= float(textureSize(Texture[0], 1).x);
+
+	diffuse.a = 1.0;
+
+    float color;
+	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(0.01, 0.0) * amount));
+	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(-0.01, 0.0) * amount));
+	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(0.0, 0.01) * amount));
+	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(0.0, -0.01) * amount));
+	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(0.007, 0.007) * amount));
+	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(-0.007, -0.007) * amount));
+	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(0.007, -0.007) * amount));
+	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(-0.007, 0.007) * amount));
+
+	return mix(diffuse, diffuse*(color / 8.0), amount);
+}*/
+
+vec4 bloom(vec4 diffuse, vec2 texcoord, sampler2D sampler, float strength, int samples)
+{
+ return diffuse;
+}
+
+vec4 radialBlur(vec4 color, vec2 texcoord, sampler2D sampler, float sampleDist, float sampleStrength)
+{
+	float samples[10] =
+	float[](-0.08,-0.05,-0.03,-0.02,-0.01,0.01,0.02,0.03,0.05,0.08);
+
+	vec2 dir = vec2(0.5, 0.5) - texcoord;
+
+	float dist = sqrt(dir.x*dir.x + dir.y*dir.y);
+
+	dir = dir/dist;
+
+	vec4 sum = color;
+	for (int i = 0; i < 10; i++)
+	{
+		sum += texture2D(sampler, texcoord + dir * samples[i] * sampleDist);
+	}
+
+	sum *= 1.0/11.0;
+
+	float t = dist * sampleStrength;
+	t = clamp(t, 0.0, 1.0); //0 &lt;= t &lt;= 1
+
+	return mix(color, sum, t);
+}
+
 void main(void)
 {
 	FragColor = texture2D(Textures[0], texCoord);		
 
-	if(FragColor.a == 0.0)
-		discard;
-		
 	float transparency = FragColor.a;
-
 	if(PostEffects == 1)
-	{					
+	{
 		vec2 frame = vec2(vec2(1.0 / Width, 1.0/ Height));
 		//FragColor = fxaa(Textures[0], texCoord, frame);
+
 		FragColor.rgb = FxaaPixelShader(vec4(texCoord.xy, texCoord.xy - frame * (0.5 + FXAA_SUBPIX_SHIFT)), Textures[0], frame);
+
+		//FragColor = radialBlur(FragColor, texCoord, Textures[0], 0.3, 5);
+        // FragColor = blur(FragColor, texCoord, Textures[0], 1, 0.5);
+        //FragColor = bloom(FragColor, texCoord, Textures[0], 0.01, 5);
+		//FragColor = bloom(FragColor, texCoord, Textures[0], 0.01, 5);
+
 		FragColor = gammaCorrection(FragColor, 1.2);
-		FragColor.a = 1.0;
+		//FragColor.a = transparency;
+
+		/*if(FragColor.r > 1.0 || FragColor.g > 1.0 || FragColor.b > 1.0)
+		    FragColor = vec4(1,1,1,1);
+		else
+		    FragColor = vec4(0);*/
 		return;
 	}
-	
+
+	if(FragColor.a == 0.0)
+    	discard;
+
 	vec4 data = texture2D(Textures[3], texCoord);
 	vec4 startColor = FragColor;
 	vec4 n = texture2D(Textures[1], texCoord);
@@ -302,8 +386,8 @@ void main(void)
     if(FragColor.a == 1.0 && n.a == 0)
 	{
 		vec4 p = texture2D(Textures[2], texCoord);
-		FragColor = calculateAllCookLight(p.xyz, n.rgb, FragColor, p.a);
+		FragColor = calculateAllCookLight(p.xyz, n.rgb, FragColor, p.a) + vec4(startColor.rgb * data.rgb, 0.0);
 		FragColor.a = transparency;
-		FragColor.xyz += data.rgb;
+		//FragColor.xyz += data.rgb;
 	}
 }

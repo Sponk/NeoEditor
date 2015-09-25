@@ -83,6 +83,10 @@
 %include <Armature.h>
 %include <Log.h>
 
+%include <Behavior.h>
+%include <BehaviorCreator.h>
+%include <BehaviorManager.h>
+
 #define NEO_CORE_EXPORT
 #define NEO2D_EXPORT
 %include <Neo2D.h>

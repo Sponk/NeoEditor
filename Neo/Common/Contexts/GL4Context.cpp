@@ -333,6 +333,7 @@ void GL4Context::init()
 	// anisotropic filtering
 	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &m_anisotropy);
 
+
 	MLOG_INFO("Maximal anisotropy level:\t" << m_anisotropy << "\t");
 	MLOG_INFO("********************************************************************************");
 }

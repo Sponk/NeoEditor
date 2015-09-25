@@ -1,8 +1,8 @@
 -- main.lua - The main file of the NeoEditor
 require("NeoLua")
 
-io.stdout:setvbuf('no'); if os.getenv('DEBUG_MODE') then require 'debugger' ; require 'debugger.plugins.ffi'end
---require ('debugger')();
+-- io.stdout:setvbuf('no'); if os.getenv('DEBUG_MODE') then require 'debugger' ; require 'debugger.plugins.ffi'end
+-- require ('debugger')();
 
 Translator = dofile("utils/translator.lua")
 
