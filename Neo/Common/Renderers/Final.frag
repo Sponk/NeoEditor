@@ -50,7 +50,12 @@ out vec4 FragColor;
 
 vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float roughness)
 {
-  vec3 l = light.Position - p;
+  vec3 l;
+  if(light.SpotCos < 1.0)
+  	l = light.Position - p;
+  else
+  	l = -light.SpotDir;
+
   //if(length(l) > light.Radius) return vec4(0,0,0,0);
   
   //roughness = roughness; //1.0/roughness;//0.00001; //roughness;
@@ -87,7 +92,7 @@ vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float r
   // vec3 retval = light.Intensity * max(0.0, nDots) * ((/*light.Specular */ Specular) * rs + (diffuse.rgb * light.Diffuse));
   vec3 retval = light.Intensity * (max(0.0, nDots) * ((diffuse.rgb * light.Diffuse) + (light.Diffuse*Specular) * rs));
       
-  if(light.SpotCos > 0.0 /*&& light.SpotCos < 1.0*/)
+  if(light.SpotCos > 0.0 && light.SpotCos < 1.0)
   {
 	float spot = dot(-s, light.SpotDir);
 

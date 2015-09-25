@@ -146,7 +146,11 @@ float cookTorranceSpecularPower(vec3 lightDirection, vec3 viewDirection, vec3 su
 
 vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float roughness)
 {
-  vec3 l = light.Position - p;
+    vec3 l;
+    if(light.SpotCos < 1.0)
+    	l = light.Position - p;
+    else
+    	l = -light.SpotDir;
   //if(length(l) > light.Radius) return vec4(0,0,0,0);
   
   roughness = roughness; //1.0/roughness;//0.00001; //roughness;

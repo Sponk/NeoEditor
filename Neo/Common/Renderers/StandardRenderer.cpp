@@ -1538,9 +1538,9 @@ int StandardRenderer::light_update_thread(void* data)
 		   int j = 0;
 		   for(int i = 0; i < scene->getLightsNumber() && i < MAX_ENTITY_LIGHTS; i++)
 		   {
-			   // If light is visible
-			   if ((light = scene->getLightByIndex(i)) != NULL && light->isActive() && light->isVisible())
-				{
+			   	// If light is visible
+			   	if ((light = scene->getLightByIndex(i)) != NULL && light->isActive() && (light->isVisible() || light->getSpotAngle() == 0))
+			   	{
 					data->visibleLights.push_back(light);
 					j++;
 				}
