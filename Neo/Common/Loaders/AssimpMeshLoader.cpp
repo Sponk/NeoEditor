@@ -407,9 +407,6 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 		if(AI_SUCCESS == aiGetMaterialFloat(mtl, AI_MATKEY_SHININESS, &value))
 			 material->setShininess(value);
 
-		if(material->getOpacity() < 1.0)
-			material->setBlendMode(BLENDING_ALPHA);
-
 		// blend
 		{
 			int blendMode;
@@ -419,13 +416,16 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 				{
 					default:
 					case aiBlendMode_Default:
-						material->setBlendMode(BLENDING_NONE);
+						material->setBlendMode(BLENDING_ALPHA);
 						break;
 					case aiBlendMode_Additive:
 						material->setBlendMode(BLENDING_ADD);
 						break;
 				}
 			}
+			else if(material->getOpacity() < 1.0)
+				material->setBlendMode(BLENDING_ALPHA);
+			else material->setBlendMode(BLENDING_NONE);
 		}
 
 		// textures

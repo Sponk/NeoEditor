@@ -259,6 +259,9 @@ public:
 
         // point size
         void setPointSize(float size);
+	
+	void setPolygonMode(PRIMITIVE_TYPES t);
+
 };
 }
 

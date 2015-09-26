@@ -479,7 +479,8 @@ public:
 	virtual void bindVAO(unsigned int vaoId) {}
 
 	virtual void selectSubroutine(unsigned int fx, unsigned int type, const char* routine) {}
-
+	virtual void setPolygonMode(PRIMITIVE_TYPES t) {};
+	
     // point size
     virtual void setPointSize(float size) = 0;
 };

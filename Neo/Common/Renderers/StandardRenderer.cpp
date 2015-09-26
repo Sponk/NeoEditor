@@ -350,7 +350,6 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 		//render->setDepthMask(true);
 
 		sendLights(m_fx[0], camera);
-
 		render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
 	}
 	else
@@ -382,10 +381,12 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 					{
 						render->disableBlending();
 						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0.1,0.1,0.1));
-						render->enablePolygonOffset(-5.0,-5.0);
-						//render->disableDepthTest();
+						render->enablePolygonOffset(-0.2, -1);
 
-						render->drawElement(PRIMITIVE_LINES, display->getSize(), indicesType, (void*)(display->getBegin()*sizeof(short)));
+						render->setPolygonMode(PRIMITIVE_LINES);
+						render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (void*)(display->getBegin()*sizeof(short)));
+						render->setPolygonMode(PRIMITIVE_TRIANGLES);
+						
 						render->disablePolygonOffset();
 					}
 					break;
@@ -393,8 +394,15 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 					render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (void*)(display->getBegin()*sizeof(int)));
 					if(wireframe)
 					{
-						//render->disableDepthTest();
-						render->drawElement(PRIMITIVE_LINES, display->getSize(), indicesType, (void*)(display->getBegin()*sizeof(short)));
+						render->disableBlending();
+						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0.1,0.1,0.1));
+						render->enablePolygonOffset(-0.2, -1);
+
+						render->setPolygonMode(PRIMITIVE_LINES);
+						render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (void*)(display->getBegin()*sizeof(int)));
+						render->setPolygonMode(PRIMITIVE_TRIANGLES);
+						
+						render->disablePolygonOffset();
 					}
 					break;
 				default:
@@ -409,16 +417,30 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 					render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (unsigned short*)indices + display->getBegin());
 					if(wireframe)
 					{
-						//render->disableDepthTest();
-						render->drawElement(PRIMITIVE_LINES, display->getSize(), indicesType, (unsigned short*)indices + display->getBegin());
+						render->disableBlending();
+						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0.1,0.1,0.1));
+						render->enablePolygonOffset(-0.2, -1);
+
+						render->setPolygonMode(PRIMITIVE_LINES);
+						render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (unsigned short*)indices + display->getBegin());
+						render->setPolygonMode(PRIMITIVE_TRIANGLES);
+						
+						render->disablePolygonOffset();
 					}
 					break;
 			case VAR_UINT:
 					render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (unsigned int*) indices + display->getBegin());
 					if (wireframe)
 					{
-						// render->disableDepthTest();
-						render->drawElement(PRIMITIVE_LINES, display->getSize(), indicesType, (unsigned short*) indices + display->getBegin());
+						render->disableBlending();
+						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0.1,0.1,0.1));
+						render->enablePolygonOffset(-0.2, -1);
+
+						render->setPolygonMode(PRIMITIVE_LINES);
+						render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (unsigned int*) indices + display->getBegin());
+						render->setPolygonMode(PRIMITIVE_TRIANGLES);
+						
+						render->disablePolygonOffset();
 					}
 					break;
 				default:

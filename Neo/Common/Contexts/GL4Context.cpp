@@ -310,18 +310,13 @@ void GL4Context::init()
 
 	glClearDepth(1.0);
 
-	glEnable(GL_MULTISAMPLE);
-
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 
-	glEnable(GL_LINE_SMOOTH);
-	//glEnable(GL_POLYGON_SMOOTH);
-
-	//glPolygoneMode(GL_FRONT_AND_BACK, GL_FILL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	// line
-	glLineWidth(1.0f);
+	glLineWidth(1.2f);
 
 	// stencil
 	glClearStencil(0);
@@ -332,7 +327,6 @@ void GL4Context::init()
 
 	// anisotropic filtering
 	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &m_anisotropy);
-
 
 	MLOG_INFO("Maximal anisotropy level:\t" << m_anisotropy << "\t");
 	MLOG_INFO("********************************************************************************");
@@ -1361,4 +1355,20 @@ void GL4Context::disablePolygonOffset()
 	glDisable(GL_POLYGON_OFFSET_LINE);
 }
 
+
+void GL4Context::setPolygonMode(PRIMITIVE_TYPES t)
+{
+	switch(t)
+	{
+		case PRIMITIVE_LINES: glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		break;
+		
+		case PRIMITIVE_POINTS: glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+		break;
+		
+		default:
+		case PRIMITIVE_TRIANGLES: glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		break;
+	}
+}
 #endif

@@ -465,15 +465,18 @@ void main(void)
 	}
 	else
 	{
-	    if(TextureMode > 0)
-    	    FragColor = texture2D(Textures[0], texCoord);
-        else if(TextureMode == 0)
-            FragColor = vec4(Diffuse, Opacity);
+		float trans = Opacity;
+		if(TextureMode > 0)
+		{
+			FragColor = texture2D(Textures[0], texCoord);
+			trans += FragColor.a;
+		}
+		else if(TextureMode == 0)
+			FragColor = vec4(Diffuse, Opacity);
 
-	    float trans = FragColor.a;
 		FragColor = shadeModel(position, normal) + vec4(FragColor.rgb * Emit, 0.0);
-		//FragColor.a = trans;
-		FragColor.a = trans + Opacity;
+		FragColor.a = trans;
+		//FragColor.a = Opacity;
 		Normal.a = 0;
 		return;
 	}

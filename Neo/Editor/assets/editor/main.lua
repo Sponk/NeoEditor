@@ -887,5 +887,4 @@ NeoLua.system:showCursor()
 Editor.project = { directory = NeoLua.system:getWorkingDirectory(), level = ""}
 infoLog("Loaded editor from project: " .. Editor.project.directory)
 
-
 infoLog(os.tmpname())
