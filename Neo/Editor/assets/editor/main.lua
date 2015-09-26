@@ -182,9 +182,20 @@ function Editor.loadMeshes()
     Editor.sceneMeshes = {
         translation = Editor.loadHandleMesh("assets/editor/meshes/arrow.obj", Editor.overlayScene),
         rotation = Editor.loadHandleMesh("assets/editor/meshes/torus.obj", Editor.overlayScene),
-        scale = Editor.loadHandleMesh("assets/editor/meshes/scale-arrow.obj", Editor.overlayScene)
+        scale = Editor.loadHandleMesh("assets/editor/meshes/scale-arrow.obj", Editor.overlayScene),
     }
 
+    local level = NeoLua.level
+    Editor.objectMeshes = {}
+    
+    Editor.objectMeshes.sphere = Editor.overlayScene:addNewEntity(level:loadMesh("assets/editor/meshes/sphere.obj"))
+    Editor.objectMeshes.sphere:enableWireframe(true)
+    Editor.objectMeshes.sphere:setActive(false)
+    
+    Editor.objectMeshes.cone = Editor.overlayScene:addNewEntity(level:loadMesh("assets/editor/meshes/cone.obj"))   
+    Editor.objectMeshes.cone:enableWireframe(true)
+    Editor.objectMeshes.cone:setActive(false)
+    
     Editor.translationMode = Editor.sceneMeshes.translation
 
     local bmanager = NeoLua.engine:getBehaviorManager()
@@ -592,6 +603,10 @@ function Editor.select(obj)
             arrows.y:setActive(false)
             arrows.z:setActive(false)
         end
+	
+	for k,v in pairs(Editor.objectMeshes) do
+            v:setActive(false)
+        end
 
         Editor.currentSelection = {}
         return
@@ -610,6 +625,32 @@ function Editor.select(obj)
     Editor.cameraEditor.setShownObject(obj:getName())
 
     Editor.currentSelection = { obj }
+    
+    if obj:getType() == NeoLua.OBJECT3D_LIGHT then
+	if obj:getSpotAngle()  >= 180 then
+		Editor.objectMeshes.sphere:setPosition(position)
+		
+		local radius = obj:getRadius() * 0.05
+		Editor.objectMeshes.sphere:setScale(NeoLua.Vector3(radius, radius, radius))
+		Editor.objectMeshes.sphere:setActive(true)
+		Editor.objectMeshes.cone:setActive(false)
+	else
+		Editor.objectMeshes.cone:setPosition(position)
+		
+		local radius = obj:getRadius() * 0.05
+		
+		-- Calculate lower width with trigonometry
+		-- tan(alpha) = width / radius <=> radius * tan(alpha) = width
+		
+		local width = radius * math.tan(obj:getSpotAngle())
+		Editor.objectMeshes.cone:setScale(NeoLua.Vector3(width, width, radius))
+		Editor.objectMeshes.cone:setActive(true)
+		
+		Editor.objectMeshes.sphere:setActive(false)
+	end
+    else
+	Editor.objectMeshes.sphere:setActive(false)
+    end
 
     Editor.sceneDlg["window"]["layout"]["scrollpanel"]["tree"]:selectEntry(obj:getName())
 end
@@ -629,19 +670,42 @@ end
 
 --- Updates all translation handles in the current scene.
 function Editor.updateHandles()
-    local arrows = Editor.translationMode
-    local position = Editor.getSelectionCenter()
-    local res = NeoLua.system:getScreenSize()
+	local arrows = Editor.translationMode
+	local position = Editor.getSelectionCenter()
+	local res = NeoLua.system:getScreenSize()
 
-    local radius = (Editor.sceneCamera:getPosition() - position):getLength() * 0.005
+	local radius = (Editor.sceneCamera:getPosition() - position):getLength() * 0.005
 
-    arrows.x:setScale(NeoLua.Vector3(radius, radius, radius))
-    arrows.y:setScale(NeoLua.Vector3(radius, radius, radius))
-    arrows.z:setScale(NeoLua.Vector3(radius, radius, radius))
+	arrows.x:setScale(NeoLua.Vector3(radius, radius, radius))
+	arrows.y:setScale(NeoLua.Vector3(radius, radius, radius))
+	arrows.z:setScale(NeoLua.Vector3(radius, radius, radius))
 
-    arrows.x:setPosition(position)
-    arrows.y:setPosition(position)
-    arrows.z:setPosition(position)
+	arrows.x:setPosition(position)
+	arrows.y:setPosition(position)
+	arrows.z:setPosition(position)
+	
+	if #Editor.currentSelection > 0 then
+		if Editor.currentSelection[1]:getType() == NeoLua.OBJECT3D_LIGHT then
+			local radius = Editor.currentSelection[1]:getRadius() * 0.05
+			Editor.objectMeshes.sphere:setScale(NeoLua.Vector3(radius, radius, radius))
+			
+			local width = radius * math.tan(Editor.currentSelection[1]:getSpotAngle())
+			Editor.objectMeshes.cone:setScale(NeoLua.Vector3(width, width, radius))
+			
+			Editor.objectMeshes.cone:setEulerRotation(Editor.currentSelection[1]:getEulerRotation())
+		
+			if Editor.currentSelection[1]:getSpotAngle()  >= 180 then
+				Editor.objectMeshes.cone:setActive(false)
+				Editor.objectMeshes.sphere:setActive(true)
+			else
+				Editor.objectMeshes.sphere:setActive(false)
+				Editor.objectMeshes.cone:setActive(true)
+			end
+		end
+	end
+	
+	Editor.objectMeshes.sphere:setPosition(position)
+	Editor.objectMeshes.cone:setPosition(position)	
 end
 
 --- Quits the program

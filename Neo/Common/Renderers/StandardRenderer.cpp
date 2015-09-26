@@ -380,6 +380,8 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 					if(wireframe)
 					{
 						render->disableBlending();
+						opacity = 1.0;
+						render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
 						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0.1,0.1,0.1));
 						render->enablePolygonOffset(-0.2, -1);
 
@@ -396,6 +398,10 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 					{
 						render->disableBlending();
 						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0.1,0.1,0.1));
+						
+						opacity = 1.0;
+						render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
+						
 						render->enablePolygonOffset(-0.2, -1);
 
 						render->setPolygonMode(PRIMITIVE_LINES);
@@ -419,6 +425,10 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 					{
 						render->disableBlending();
 						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0.1,0.1,0.1));
+						
+						opacity = 1.0;
+						render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
+						
 						render->enablePolygonOffset(-0.2, -1);
 
 						render->setPolygonMode(PRIMITIVE_LINES);
@@ -434,6 +444,10 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 					{
 						render->disableBlending();
 						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0.1,0.1,0.1));
+						
+						opacity = 1.0;
+						render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
+						
 						render->enablePolygonOffset(-0.2, -1);
 
 						render->setPolygonMode(PRIMITIVE_LINES);

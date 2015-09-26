@@ -20418,6 +20418,32 @@ fail:
 }
 
 
+static int _wrap_RenderingContext_setPolygonMode(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::RenderingContext *arg1 = (Neo::RenderingContext *) 0 ;
+  Neo::PRIMITIVE_TYPES arg2 ;
+  
+  SWIG_check_num_args("Neo::RenderingContext::setPolygonMode",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::RenderingContext::setPolygonMode",1,"Neo::RenderingContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::RenderingContext::setPolygonMode",2,"Neo::PRIMITIVE_TYPES");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__RenderingContext,0))){
+    SWIG_fail_ptr("RenderingContext_setPolygonMode",1,SWIGTYPE_p_Neo__RenderingContext);
+  }
+  
+  arg2 = (Neo::PRIMITIVE_TYPES)(int)lua_tonumber(L, 2);
+  (arg1)->setPolygonMode(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_RenderingContext_setPointSize(lua_State* L) {
   int SWIG_arg = 0;
   Neo::RenderingContext *arg1 = (Neo::RenderingContext *) 0 ;
@@ -20600,6 +20626,7 @@ static swig_lua_method swig_RenderingContext_methods[]= {
     { "deleteVAO", _wrap_RenderingContext_deleteVAO},
     { "bindVAO", _wrap_RenderingContext_bindVAO},
     { "selectSubroutine", _wrap_RenderingContext_selectSubroutine},
+    { "setPolygonMode", _wrap_RenderingContext_setPolygonMode},
     { "setPointSize", _wrap_RenderingContext_setPointSize},
     {0,0}
 };
