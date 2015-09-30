@@ -6,7 +6,10 @@ IF(NOT NO_TOOLS)
 	ADD_SUBDIRECTORY(ProjectManager)
 	# ADD_SUBDIRECTORY(ProjectWizard)
 	ADD_SUBDIRECTORY(Publisher)
-	ADD_SUBDIRECTORY(External)
+	
+	IF(EXISTS External)
+		ADD_SUBDIRECTORY(External)
+	ENDIF()
 	
 	MESSAGE("-- Building tools is enabled.")
 	
