@@ -10,7 +10,7 @@ local function appendLevelExtension(filename)
 end
 
 function saveCallback()
-	local filename = LuaCommonDlg.getSaveFilename(NeoLua.system:getWorkingDirectory() .. "/assets", "level")
+	local filename = Editor.project.level or LuaCommonDlg.getSaveFilename(NeoLua.system:getWorkingDirectory() .. "/assets", "level")
 
 	if filename ~= nil then
 

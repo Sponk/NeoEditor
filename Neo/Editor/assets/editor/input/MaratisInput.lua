@@ -74,18 +74,18 @@ function update_input()
         local mx = xpos * res.x
         local my = ypos * res.y
 
-        if mx >= res.x - 10 then
-            NeoLua.system:setCursorPosition(0, my)
+        if mx > res.x - 10 then
+            NeoLua.system:setCursorPosition(10, my)
             xpos = 0
-        elseif mx <= 10 then
-            NeoLua.system:setCursorPosition(res.x - 11, my)
+        elseif mx < 10 then
+            NeoLua.system:setCursorPosition(res.x - 10, my)
             xpos = 1
         end
 
-        if my >= res.y - 10 then
-            NeoLua.system:setCursorPosition(mx, 0)
+        if my > res.y - 10 then
+            NeoLua.system:setCursorPosition(mx, 10)
             ypos = 0
-        elseif my <= 10 then
+        elseif my < 10 then
             NeoLua.system:setCursorPosition(mx, res.y - 11)
             ypos = 1
         end

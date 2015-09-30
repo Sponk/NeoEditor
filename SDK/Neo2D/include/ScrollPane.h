@@ -39,29 +39,28 @@ class NEO2D_EXPORT ScrollPane : public Container
 		m_vertical->setRange(Vector2(0, MAX(m_height - SCROLL_BAR_WIDTH, sz.y)));
 	}
 	
-	public:
-		ScrollPane(unsigned int x, unsigned int y, unsigned int width,
-			   unsigned int height)
-			: Container(x, y, width, height, "")
-		{
-			m_horizontal = new ScrollBar(x, y+height-m_scrollWidth,
-									  width, m_scrollWidth, 0, 100, SLIDER_HORIZONTAL);
-			
-			m_vertical = new ScrollBar(x + width, y, m_scrollWidth, height, 0, 100, SLIDER_VERTICAL);
-			positionScrollBars();
-		}
+public:
+	ScrollPane(unsigned int x, unsigned int y, unsigned int width,
+		   unsigned int height)
+		: Container(x, y, width, height, "")
+	{
+		m_horizontal = new ScrollBar(x, y+height-m_scrollWidth, width, m_scrollWidth, 0, 100, SLIDER_HORIZONTAL);
+		
+		m_vertical = new ScrollBar(x + width, y, m_scrollWidth, height, 0, 100, SLIDER_VERTICAL);
+		positionScrollBars();
+	}
 
-		~ScrollPane();
+	~ScrollPane();
 
-		void draw() { draw(Vector2(0,0)); }
-		void draw(Vector2 offset);
-		void update();
+	void draw() { draw(Vector2(0,0)); }
+	void draw(Vector2 offset);
+	void update();
 
  private:
-		Vector2 calculateValue() { return getPosition() - Vector2(floor(m_horizontal->getValue()), floor(m_vertical->getValue())); }
+	Vector2 calculateValue() { return getPosition() - Vector2(floor(m_horizontal->getValue()), floor(m_vertical->getValue())); }
 
-		Vector2 calculateContentSize();
-		Vector2 getSize() { return Vector2(m_width - SCROLL_BAR_WIDTH, m_height - SCROLL_BAR_WIDTH); }
+	Vector2 calculateContentSize();
+	Vector2 getSize() { return Vector2(m_width - SCROLL_BAR_WIDTH, m_height - SCROLL_BAR_WIDTH); }
 };
 
 }
