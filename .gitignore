@@ -22,3 +22,4 @@ CMakeLists.txt.user.aed3775
 build
 .idea
 nbproject
+Tools/External/*

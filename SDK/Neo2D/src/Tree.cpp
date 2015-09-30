@@ -51,7 +51,8 @@ void TreeView::update()
 
 	if(m_autoSize)
 	{
-		m_width = getParent()->getSize().x;
+		// FIXME: UGLY! SHOULD BE DONE WITH LAYOUTS!
+		m_width = getParent()->getSize().x - 15;
 		m_height = level.y * LINE_HEIGHT;
 	}
 }
@@ -100,7 +101,7 @@ void TreeView::updateTree(TreeNode<std::string>* root, Vector2* level)
 		{
 			root->setOpen(!root->isOpen());
 		}
-		else if(x <= pos.x + m_width && x >= pos.x
+		else if(x <= pos.x + m_width - 10 && x >= pos.x
 				&& y <= pos.y + LINE_HEIGHT && y >= pos.y
 				&& input->onKeyDown("MOUSE_BUTTON_LEFT"))
 		{

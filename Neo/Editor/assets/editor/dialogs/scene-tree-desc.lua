@@ -20,10 +20,10 @@ local dlgTable = {
 			   [1] = {
 			   	  name = "scrollpanel", type = "ScrollPane", x = 0, y = 0,
 			   	  w = 280, h = 210,
-				    content = {			   		 
+				    content = { 
 						[1] = {name = "tree", type = "Tree", x = 0, y = 0,
 			   				        w = 200, h = 0, callback = "sceneTreeCallback"}
-				  }			
+				  }
 			   }
 			}
 		 }

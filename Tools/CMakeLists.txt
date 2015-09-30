@@ -4,8 +4,9 @@ IF(NOT NO_TOOLS)
 	ADD_SUBDIRECTORY(ProfileViewer)
 	ADD_SUBDIRECTORY(NeoStore)
 	ADD_SUBDIRECTORY(ProjectManager)
-	ADD_SUBDIRECTORY(ProjectWizard)
+	# ADD_SUBDIRECTORY(ProjectWizard)
 	ADD_SUBDIRECTORY(Publisher)
+	ADD_SUBDIRECTORY(External)
 	
 	MESSAGE("-- Building tools is enabled.")
 	

@@ -123,6 +123,13 @@ function Editor.loadInputSystem()
     infoLog("Found input methods: " .. inputList)
 end
 
+--- Loads handle meshes with three components, customizes their color and
+-- adds them to the given scene. The handles will be invisible by default and
+-- colored in red, green and blue.
+--
+-- @param filename The mesh file to load.
+-- @param scene The scene to add the handles to.
+-- @return A table with the new entities as x, y and z components.
 function Editor.loadHandleMesh(filename, scene)
     local model = NeoLua.level:loadMesh(filename)
 
@@ -146,6 +153,12 @@ function Editor.loadHandleMesh(filename, scene)
     return {x = x, y = y, z = z}
 end
 
+--- Loads a new billboard to the overlay scene and sets up all
+-- behaviors needed for it to function properly.
+--
+-- @param object The parent object of the billboard.
+-- @param modelpath The path to the billboard to use.
+-- @return The billboard entity.
 function Editor.addObjectBillboard(object, modelpath)
     local bmanager = NeoLua.engine:getBehaviorManager()
     local lookAtCreator = bmanager:getBehaviorByName("LookAt")
@@ -850,6 +863,8 @@ function Editor.playGame(mainscript)
     NeoLua.level:getCurrentScene():setCurrentCamera(Editor.gameCamera)
 end
 
+--- Cleans up the editor data structures and removes the overlay editor scene
+-- with all objects in it.
 function Editor.cleanUp()
     NeoLua.level:deleteScene(Editor.overlaySceneId - 1)
     NeoLua.level:getCurrentScene():deleteObject(Editor.sceneCamera)
@@ -874,6 +889,7 @@ end
 function Editor.loadAutoSave()
 end
 
+--- Adds a new light to the current scene and selects it.
 function Editor.addLight()
     local light = NeoLua.level:getCurrentScene():addNewLight()
     light:setName(findName("Light", false))
@@ -886,6 +902,8 @@ function Editor.addLight()
     Editor.select(light)
 end
 
+--- Adds a new sound to the current scene.
+-- @param path The sound file to load.
 function Editor.addSound(path)
     local sound = NeoLua.level:getCurrentScene():addNewLight()
     sound:setName(findName("Sound", false))
@@ -898,6 +916,8 @@ function Editor.addSound(path)
     Editor.select(sound)
 end
 
+--- Adds a new entity mesh to the current scene.
+-- @param path The mesh file to load.
 function Editor.addEntity(path)
     local mesh = NeoLua.level:loadMesh(path)
     local entity = NeoLua.level:getCurrentScene():addNewEntity(mesh)
@@ -908,7 +928,8 @@ function Editor.addEntity(path)
     Editor.select(entity)
 end
 
-
+--- Adds a new text to the current scene.
+-- @param path The font file to load.
 function Editor.addText(path)
     local font = NeoLua.level:loadFont(path, 36)
     local entity = NeoLua.level:getCurrentScene():addNewText(font)
