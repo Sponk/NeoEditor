@@ -30,15 +30,24 @@
 namespace Neo
 {
 
-// collision shape types
+/**
+ * @brief Defines various types of collision shapes used for collision detection.
+ */
 enum COLLISION_SHAPE_TYPE
 {
+	/// Uses the bounding box for collision detection
 	COLLISION_SHAPE_BOX = 0,
+	/// Uses the bounding sphere for collision detection
 	COLLISION_SHAPE_SPHERE,
+	/// Uses a cone that completely surrounds the object for collision detection
 	COLLISION_SHAPE_CONE,
+	/// Generate a capsule around the object and uses that for collision detection
 	COLLISION_SHAPE_CAPSULE,
+	/// Uses a cylinder that surrounds the object for collision detection
 	COLLISION_SHAPE_CYLINDER,
+	/// Generates a convex hull around the object for collision detection
 	COLLISION_SHAPE_CONVEX_HULL,
+	/// Uses the triangle mesh directly for collision detection
 	COLLISION_SHAPE_TRIANGLE_MESH
 };
 
@@ -59,6 +68,9 @@ struct NEO_ENGINE_EXPORT PhysicsConstraint
 	bool disableParentCollision;
 };
 
+/**
+ * @brief The PhysicsProperties class contains all physical properties an object can possibly possess.
+ */
 class NEO_ENGINE_EXPORT PhysicsProperties
 {
 public:
@@ -86,53 +98,161 @@ private:
 
 public:
 
-    // constraint
+	/**
+	 * @brief Deletes the physics constraint from memory.
+	 */
 	void deleteConstraint(void);
 	PhysicsConstraint * createConstraint(void);
+	
+	/**
+	 * @brief Retrieves a pointer to the physics constraint object.
+	 * @return The PhysicsConstraint object.
+	 */
 	inline PhysicsConstraint * getConstraint(void){ return m_constraint; }
 
-	// shape id
+	/**
+	 * @brief Changes the physics shape ID that is given out by the physics context.
+	 * @param shapeID The new shape ID.
+	 */
 	inline void setShapeId(unsigned int shapeId){ m_shapeId = shapeId; }
+	
+	/**
+	 * @brief Retrieves the current physics ID.
+	 * @return The shape ID.
+	 */
 	inline unsigned int getShapeId(void){ return m_shapeId; }
 
-	// collision object id
+	/**
+	 * @brief Changes the collision object ID used by the physics context.
+	 * @param collisionObjectId The new collision object ID.
+	 */
 	inline void setCollisionObjectId(unsigned int collisionObjectId){ m_collisionObjectId = collisionObjectId; }
+	
+	/**
+	 * @brief Retrieves the current collision object ID that is used by the physics context.
+	 * @return the collision object ID.
+	 */
 	inline unsigned int getCollisionObjectId(void){ return m_collisionObjectId; }
 
-	// collision shape
+	/**
+	 * @brief Changes the collision shape used for collision detection.
+	 * @param collisionShape The new shape.
+	 */
 	inline void setCollisionShape(COLLISION_SHAPE_TYPE collisionShape){ m_collisionShape = collisionShape; }
+	
+	/**
+	 * @brief Retrieves the current collision shape that is used for collision detection.
+	 * @return the collision shape.
+	 */
 	inline COLLISION_SHAPE_TYPE getCollisionShape(void){ return m_collisionShape; }
 
-	// ghost
+	/**
+	 * @brief Sets the ghost property to the given value.
+	 * @param ghost The new value.
+	 * @see isGhost
+	 */
 	inline void setGhost(bool ghost){ m_ghost = ghost; }
+	
+	/**
+	 * @brief Checks if the given object is a physical "ghost".
+	 * 
+	 * A ghost is an object that has physical properties in a scene but
+	 * does not actively react to collisions. This property is useful
+	 * for implementing triggers and items that detect collision but
+	 * do not react with the player.
+	 * 
+	 * @return A boolean value.
+	 */
 	inline bool isGhost(void){ return m_ghost; }
 
-	// mass
+	/**
+	 * @brief Changes the mass.
+	 * 
+	 * The mass of an object is needed for it to react to physical collisions.
+	 * If the mass is set to 0 the object will be static and will not
+	 * react to any collision or force applied to it.
+	 * 
+	 * @param mass The new mass.
+	 */
 	inline void setMass(float mass){ m_mass = mass; }
+	
+	/**
+	 * @brief Retrieves the mass of the object.
+	 * @return The mass.
+	 * @see setMass
+	 */
 	inline float getMass(void){ return m_mass; }
 
-	// friction
+	/**
+	 * @brief Changes the friction coefficient used for calculations.
+	 * @param friction The new value.
+	 */
 	inline void setFriction(float friction){ m_friction = friction; }
+	
+	/**
+	 * @brief Retrieves the current friction value.
+	 * @return The current value.
+	 */
 	inline float getFriction(void){ return m_friction; }
 
-	// restitution
+	/**
+	 * @brief Changes the restitution coefficient used for calculations.
+	 * @param restitution The new value.
+	 */
 	inline void setRestitution(float restitution){ m_restitution = restitution; }
+	
+	/**
+	 * @brief Retrieves the current restitution value.
+	 * @return The current value.
+	 */
 	inline float getRestitution(void){ return m_restitution; }
 
-	// linear damping
+	/**
+	 * @brief Changes the linear damping coefficient used for calculations.
+	 * @param restitution The new value.
+	 */
 	inline void setLinearDamping(float linearDamping){ m_linearDamping = linearDamping; }
+	
+	/**
+	 * @brief Retrieves the current linear damping value.
+	 * @return The current value.
+	 */
 	inline float getLinearDamping(void){ return m_linearDamping; }
 
-	// angular damping
+	/**
+	 * @brief Changes the angular damping coefficient used for calculations.
+	 * @param restitution The new value.
+	 */
 	inline void setAngularDamping(float angularDamping){ m_angularDamping = angularDamping; }
+	
+	/**
+	 * @brief Retrieves the current angular damping value.
+	 * @return The current value.
+	 */
 	inline float getAngularDamping(void){ return m_angularDamping; }
 
-	// angular factor
+	/**
+	 * @brief Changes the angular factor coefficient used for calculations.
+	 * @param restitution The new value.
+	 */
 	inline void setAngularFactor(float angularFactor){ m_angularFactor = angularFactor; }
+	
+	/**
+	 * @brief Retrieves the current angular factor value.
+	 * @return The current value.
+	 */
 	inline float getAngularFactor(void){ return m_angularFactor; }
 
-	// linear factor
+	/**
+	 * @brief Changes the linear factor coefficient used for calculations.
+	 * @param restitution The new value.
+	 */
 	inline void setLinearFactor(const Vector3 & linearFactor){ m_linearFactor = linearFactor; }
+	
+	/**
+	 * @brief Retrieves the current linear factor value.
+	 * @return The current value.
+	 */
 	inline Vector3 * getLinearFactor(void){ return &m_linearFactor; }
 };
 
@@ -186,12 +306,34 @@ private:
 
 public:
 
+	/**
+	 * @brief Retrieves the material with the given index.
+	 * @param idx The index to retrieve from.
+	 */
 	Material* getMaterial(size_t idx = 0) { return &m_materials[idx]; }
+	
+	/**
+	 * @brief Returns the number of materials attached to this entity.
+	 * @return The number of materials.
+	 */
 	size_t getMaterialsNumber() { return m_numMaterials; }
 
+	/**
+	 * @brief Checks if the entity has the wireframe mode enabled.
+	 * @return A boolean value.
+	 */
 	bool hasWireframe() { return m_wireframe; }
+	
+	/**
+	 * @brief Enables/Disable the wireframe of the entity.
+	 * @param v A boolean value.
+	 */
 	void enableWireframe(bool v) { m_wireframe = v; }
 
+	/**
+	 * @brief Checks if the entity has any transparent material.
+	 * @return A boolean value.
+	 */
 	bool hasTransparency() { return m_hasTransparency; }
 
 	/**
@@ -241,7 +383,6 @@ public:
 	 */
 	inline bool isOccluder() { return m_isOccluder; }
 
-	// type
 	virtual int getType(void) { return OBJECT3D_ENTITY; }
 	virtual void setActive(bool active);
 
