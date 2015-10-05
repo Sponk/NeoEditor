@@ -343,13 +343,13 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 
 	render->sendUniformInt(m_fx[0], "HasTransparency", &hasTransparency);
 
-	if (hasTransparency) {
+	if (hasTransparency) 
+	{
 		render->enableBlending();
 		render->setBlendingMode(material->getBlendMode());
 		render->disableCullFace();
 		render->setDepthMask(true);
-
-		sendLights(m_fx[0], camera);
+		
 		render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
 	}
 	else
@@ -537,6 +537,9 @@ void StandardRenderer::drawTransparents(Scene* scene, OCamera* camera)
 
 	if(!data) return;
 
+	sendLights(m_fx[0], camera);
+	render->bindTexture(m_depthTexID, 4);
+	
 	data->visibilityLock->WaitAndLock();
 
 	for (OEntity* entity : data->visibleTransparentEntities)
@@ -569,7 +572,7 @@ void StandardRenderer::drawTransparents(Scene* scene, OCamera* camera)
 
 			if (mesh->getTexturesAnim())
 				animateTextures(mesh, mesh->getTexturesAnim(), entity->getCurrentFrame());
-
+			
 			drawMesh(entity->getMesh(), camera, entity->getMaterial(), entity->hasWireframe());
 		}
 	}
@@ -822,6 +825,7 @@ void StandardRenderer::initFramebuffers(Vector2 res)
 	render->texImage(0, res.x, res.y, VAR_FLOAT, TEX_RGBA, 0);
 
 	render->attachFrameBufferTexture(ATTACH_COLOR0, m_finalTexID);
+	render->attachFrameBufferTexture(ATTACH_DEPTH, m_depthTexID);
 
 	FRAME_BUFFER_ATTACHMENT finalbuffers[1] = {ATTACH_COLOR0};
 	render->setDrawingBuffers(finalbuffers, 1);

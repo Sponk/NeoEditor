@@ -434,6 +434,11 @@ vec4 shadeModel(vec3 position, vec3 n)
 }
 #endif
 
+float linearize_depth(float z, float near, float far)
+{
+	return (2.0 * near) / (far + near - z * (far - near));
+}
+
 void main(void)
 {
 	int processFlag = 0;
@@ -467,6 +472,24 @@ void main(void)
 	}
 	else
 	{
+		//float d = gl_FragCoord.z; //texture2D(Textures[4], texCoord).r;
+		//d = linearize_depth(d, 0.01, 100000);
+		
+		//d = linearize_depth(d, 1.0, 100);
+		//FragColor = vec4(d,d,d,1);
+				
+		//float pdepth = gl_FragColor.z; //linearize_depth(gl_FragCoord.z, 0.01, 100000); //1.0/((gl_FragCoord.z + 1.0) * 0.5);
+		
+		//float depth = (gl_FragCoord.z - nearValue) / (farValue - nearValue)
+		
+		//if(texture2D(Textures[4], texCoord).r <= )
+		//	discard;
+		
+		//FragColor = vec4(pdepth, pdepth, pdepth, 1.0);
+		//FragColor = vec4(depth, depth, depth, 1.0);
+
+		//return;
+		
 		float trans = Opacity;
 		if(TextureMode > 0)
 		{
@@ -507,5 +530,6 @@ void main(void)
         Position = vec4(position.xyz, Shininess);
         
     Data.rgb = Emit;
-	Depth = vec4(0.5, 1, 0, 1);
+    //Depth.r = gl_FragCoord.z;
+    //Depth.a = 1.0;
 }

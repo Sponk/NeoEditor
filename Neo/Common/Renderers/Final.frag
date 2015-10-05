@@ -353,16 +353,25 @@ vec4 radialBlur(vec4 color, vec2 texcoord, sampler2D sampler, float sampleDist, 
 	return mix(color, sum, t);
 }
 
+float linearize_depth(float z, float near, float far)
+{
+	return (2.0 * near) / (far + near - z * (far - near));
+}
+
 void main(void)
 {
-	FragColor = texture2D(Textures[0], texCoord);		
+	FragColor = texture2D(Textures[0], texCoord);
 
 	float transparency = FragColor.a;
 	if(PostEffects == 1)
 	{
-	/*	FragColor = texture2D(Textures[4], texCoord);	
-		FragColor.a = 1;
+		/*FragColor = texture2D(Textures[4], texCoord);
+		
+		float d = linearize_depth(FragColor.r, 1.0, 100);
+		FragColor = vec4(d,d,d,1);
+		
 		return;*/
+		
 		
 		vec2 frame = vec2(vec2(1.0 / Width, 1.0/ Height));
 		//FragColor = fxaa(Textures[0], texCoord, frame);
@@ -370,8 +379,8 @@ void main(void)
 		FragColor.rgb = FxaaPixelShader(vec4(texCoord.xy, texCoord.xy - frame * (0.5 + FXAA_SUBPIX_SHIFT)), Textures[0], frame);
 
 		//FragColor = radialBlur(FragColor, texCoord, Textures[0], 0.3, 5);
-        // FragColor = blur(FragColor, texCoord, Textures[0], 1, 0.5);
-        //FragColor = bloom(FragColor, texCoord, Textures[0], 0.01, 5);
+		// FragColor = blur(FragColor, texCoord, Textures[0], 1, 0.5);
+		//FragColor = bloom(FragColor, texCoord, Textures[0], 0.01, 5);
 		//FragColor = bloom(FragColor, texCoord, Textures[0], 0.01, 5);
 
 		FragColor = gammaCorrection(FragColor, 1.2);
@@ -383,16 +392,16 @@ void main(void)
 		    FragColor = vec4(0);*/
 		return;
 	}
-
+	
 	if(FragColor.a == 0.0)
-    	discard;
-
+		discard;
+		
 	vec4 data = texture2D(Textures[3], texCoord);
 	vec4 startColor = FragColor;
 	vec4 n = texture2D(Textures[1], texCoord);
 		
 	// data.r = 0;float transparency = FragColor.a;
-    if(FragColor.a == 1.0 && n.a == 0)
+	if(FragColor.a == 1.0 && n.a == 0)
 	{
 		vec4 p = texture2D(Textures[2], texCoord);
 		FragColor = calculateAllCookLight(p.xyz, n.rgb, FragColor, p.a) + vec4(startColor.rgb * data.rgb, 0.0);

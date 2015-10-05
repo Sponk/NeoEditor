@@ -8,7 +8,8 @@ local menubar = {
 			[1] = {
 				label = tr("File"),
 				content = {
-					[3] = { type = "Item", label = tr("Quit"), callback = "quitCallback" },
+					[4] = { type = "Item", label = tr("Quit"), callback = "quitCallback" },
+					[3] = { type = "Item", label = tr("Save As..."), callback = "saveAsCallback" },
 					[2] = { type = "Item", label = tr("Save"), callback = "saveCallback" },
 					[1] = { type = "Item", label = tr("Open"), callback = "openCallback" }
 				}

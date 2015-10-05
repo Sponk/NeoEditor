@@ -27,6 +27,24 @@ function saveCallback()
 	end
 end
 
+function saveAsCallback()
+	local filename = LuaCommonDlg.getSaveFilename(NeoLua.system:getWorkingDirectory() .. "/assets", "level")
+
+	if filename ~= nil then
+
+		filename = appendLevelExtension(filename)
+
+		Editor.cleanUp()
+		NeoLua.engine:saveLevel(filename)
+
+		Editor.setupLevel()
+		Editor.loadMeshes()
+
+		NeoLua.system:setWindowTitle("Neo Scene Editor - " .. filename)
+		Editor.project.level = filename
+	end
+end
+
 function openCallback()
 	local filename = LuaCommonDlg.getOpenFilename(NeoLua.system:getWorkingDirectory() .. "/assets", "level")
 
