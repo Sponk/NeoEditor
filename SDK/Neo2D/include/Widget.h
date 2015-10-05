@@ -38,6 +38,7 @@
 #include <NeoEngine.h>
 #include <Neo2D.h>
 #include <string>
+#include <functional>
 
 namespace Neo2D
 {
@@ -49,14 +50,16 @@ using namespace Neo;
 class Widget;
 #endif
 
-#if !defined(WIN32)
+//#if !defined(WIN32)
 	/**
 	 * A pointer to a callback.
 	 */
-	typedef void (*CALLBACK_FUNCTION)(Widget*, long int);
-#elif  !defined(SWIG)
-#define CALLBACK_FUNCTION void *
-#endif
+	//typedef void (*CALLBACK_FUNCTION)(Widget*, long int);
+//#elif  !defined(SWIG)
+//#define CALLBACK_FUNCTION void *
+//#endif
+
+typedef std::function<void (Widget*, long int)> NEO_CALLBACK_FUNCTION;
 
 /**
  * @brief The Widget class contains all information that is common
@@ -86,7 +89,7 @@ protected:
 
 #ifndef SWIG
 	/// The callback that should be called
-	CALLBACK_FUNCTION m_callback;
+	NEO_CALLBACK_FUNCTION m_callback;
 #endif
 
 	String m_callbackScript;
@@ -173,13 +176,13 @@ public:
 	 * @param func The function pointer
 	 */
 #ifndef SWIG
-	void setCallback(CALLBACK_FUNCTION func) { m_callback = func; }
+	void setCallback(NEO_CALLBACK_FUNCTION func) { m_callback = func; }
 #endif
 
 	void setScriptCallback(const char* name)
 	{
 		m_callbackScript = name;
-		m_callback = (CALLBACK_FUNCTION) Widget::callScript;
+		m_callback = Widget::callScript;
 	}
 
 	/**
@@ -194,7 +197,7 @@ public:
 	 * @param data The user data
 	 */
 #ifndef SWIG
-	void setCallback(CALLBACK_FUNCTION func, long int data)
+	void setCallback(NEO_CALLBACK_FUNCTION func, long int data)
 	{
 		m_callback = func;
 		m_userData = data;

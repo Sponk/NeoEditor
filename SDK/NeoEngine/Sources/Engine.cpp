@@ -167,7 +167,7 @@ bool NeoEngine::loadLevel(const char * filename)
 
 bool NeoEngine::saveLevel(const char *filename)
 {
-	m_levelLoader.saveData(filename, "level", m_level);
+	return m_levelLoader.saveData(filename, "level", m_level);
 }
 
 void NeoEngine::requestLoadLevel(const char * filename)

@@ -78,7 +78,7 @@ Neo2DEngine::~Neo2DEngine()
 
 std::vector<std::string> scriptCallbacks;
 
-void scriptCallback(long int id)
+void scriptCallback(Widget* w, long int id)
 {
 	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	script->callFunction(scriptCallbacks[id].c_str());
@@ -146,7 +146,7 @@ int createButton()
 							 script->getInteger(2), script->getInteger(3),
 							 script->getString(4));
 
-	btn->setCallback((CALLBACK_FUNCTION)scriptCallback);
+	btn->setCallback(scriptCallback);
 
 	scriptCallbacks.push_back(script->getString(5));
 	btn->setUserData(scriptCallbacks.size() - 1);
@@ -169,7 +169,7 @@ int createThemedButton()
 							 script->getInteger(2), script->getInteger(3),
 							 script->getString(4));
 
-	btn->setCallback((CALLBACK_FUNCTION)scriptCallback);
+	btn->setCallback((NEO_CALLBACK_FUNCTION)scriptCallback);
 
 	scriptCallbacks.push_back(script->getString(5));
 	btn->setUserData(scriptCallbacks.size() - 1);
@@ -192,7 +192,7 @@ int createInput()
 		script->getInteger(0), script->getInteger(1), script->getInteger(2),
 		script->getInteger(3), script->getString(4));
 
-	input->setCallback((CALLBACK_FUNCTION)scriptCallback);
+	input->setCallback(scriptCallback);
 
 	scriptCallbacks.push_back(script->getString(5));
 	input->setUserData(scriptCallbacks.size() - 1);

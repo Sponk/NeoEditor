@@ -360,6 +360,10 @@ void main(void)
 	float transparency = FragColor.a;
 	if(PostEffects == 1)
 	{
+	/*	FragColor = texture2D(Textures[4], texCoord);	
+		FragColor.a = 1;
+		return;*/
+		
 		vec2 frame = vec2(vec2(1.0 / Width, 1.0/ Height));
 		//FragColor = fxaa(Textures[0], texCoord, frame);
 

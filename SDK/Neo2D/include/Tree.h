@@ -52,7 +52,7 @@ namespace Gui
  * @brief Represents a single tree node.
  * @author Yannick Pflanzer
  */
-template<class T> class NEO2D_EXPORT TreeNode
+template<class T> class TreeNode
 {
 protected:
 	T m_data;

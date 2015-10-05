@@ -8,7 +8,7 @@
 #include "opendlg-qt.h"
 #elif defined(WIN32)
 #include "opendlg-win32.h"
-#elif defined(NFD_BACKEND)
+#elif defined(NFD_BACKEND) || defined(WIN32)
 int getOpenFilename(lua_State* L);
 int getSaveFilename(lua_State* L);
 void initToolkit();
@@ -38,7 +38,11 @@ static const luaL_Reg luacommondlg[] = {
 	{NULL, NULL}
 };
 
-LUALIB_API int luaopen_LuaCommonDlg (lua_State *L)
+#ifndef WIN32
+int luaopen_LuaCommonDlg (lua_State *L)
+#else
+__declspec(dllexport) int luaopen_LuaCommonDlg (lua_State *L)
+#endif
 {
 	luaL_register(L, "LuaCommonDlg", luacommondlg);
 	initToolkit();

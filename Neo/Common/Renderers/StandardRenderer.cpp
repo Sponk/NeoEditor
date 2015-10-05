@@ -347,7 +347,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 		render->enableBlending();
 		render->setBlendingMode(material->getBlendMode());
 		render->disableCullFace();
-		//render->setDepthMask(true);
+		render->setDepthMask(true);
 
 		sendLights(m_fx[0], camera);
 		render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
@@ -720,6 +720,9 @@ void StandardRenderer::clearFramebuffers()
 	if(m_depthTexID != 0)
 		render->deleteTexture(&m_depthTexID);
 
+	if (m_dataTexID != 0)
+		render->deleteTexture(&m_dataTexID);
+
 	if(m_framebufferID != 0)
 		render->deleteFrameBuffer(&m_framebufferID);
 }
@@ -764,7 +767,9 @@ void StandardRenderer::initFramebuffers(Vector2 res)
 	render->createTexture(&m_depthTexID);
 	render->bindTexture(m_depthTexID);
 	render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
-	render->texImage(0, res.x, res.y, VAR_UBYTE, TEX_DEPTH, 0);
+	render->setTextureUWrapMode(WRAP_CLAMP);
+	render->setTextureVWrapMode(WRAP_CLAMP);
+	render->texImage(0, res.x, res.y, VAR_FLOAT, TEX_DEPTH, 0);
 
 	// Position texture
 	render->createTexture(&m_positionTexID);
@@ -796,12 +801,14 @@ void StandardRenderer::initFramebuffers(Vector2 res)
 	render->attachFrameBufferTexture(ATTACH_COLOR1, m_normalTexID);
 	render->attachFrameBufferTexture(ATTACH_COLOR2, m_positionTexID);
 	render->attachFrameBufferTexture(ATTACH_COLOR3, m_dataTexID);
+	// render->attachFrameBufferTexture(ATTACH_COLOR4, m_depthTexID);
 	render->attachFrameBufferTexture(ATTACH_DEPTH, m_depthTexID);
 
 	// Enable them to be drawn
-	FRAME_BUFFER_ATTACHMENT buffers[5] = {ATTACH_COLOR0, ATTACH_COLOR1, ATTACH_COLOR2, ATTACH_COLOR3, ATTACH_DEPTH};
+	FRAME_BUFFER_ATTACHMENT buffers[5] = {ATTACH_COLOR0, ATTACH_COLOR1, ATTACH_COLOR2, ATTACH_COLOR3, ATTACH_COLOR4};
 	render->setDrawingBuffers(buffers, 4);
 	render->bindFrameBuffer(0);
+	render->bindTexture(0);
 
 	// Prepare post process fbo
 	render->createFrameBuffer(&m_finalFramebufferID);
@@ -976,7 +983,6 @@ void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
 	render->bindFrameBuffer(m_finalFramebufferID);
 	renderFinalImage(scene, camera);
 
-	render->enableDepthTest();
 	drawTransparents(scene, camera);
 
 	render->bindFrameBuffer(currentFrameBuffer);
@@ -1117,6 +1123,9 @@ void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera, bool post
 	render->sendUniformInt(m_fx[1], "PostEffects", &postEffects, 1);
 	render->bindTexture(m_depthTexID, 4);
 
+	int texIds[5] = { 0, 1, 2, 3, 4 };
+	render->sendUniformInt(m_fx[1], "Textures", texIds, 5);
+
 	// Set cull mode
 	render->setCullMode(CULL_BACK);
 	render->disableDepthTest();
@@ -1177,8 +1186,8 @@ void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 	uniform = -1;
 	render->sendUniformInt(m_fx[0], "TextureMode", &uniform);
 
-	int texIds[4] = { 0, 1, 2, 3 };
-	render->sendUniformInt(m_fx[0], "Textures", texIds, 4);
+	int texIds[5] = { 0, 1, 2, 3, 4 };
+	render->sendUniformInt(m_fx[0], "Textures", texIds, 5);
 	render->sendUniformMatrix(m_fx[0], "ProjModelViewMatrix", &mvp);
 
 	render->sendUniformVec3(m_fx[0], "Diffuse", textObj->getColor());

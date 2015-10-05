@@ -32,7 +32,7 @@ namespace Neo
 {
 
 // Data loader
-template<class T> class NEO_CORE_EXPORT DataLoader
+template<class T> class DataLoader
 {
 private:
 

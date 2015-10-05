@@ -18,7 +18,6 @@
 //========================================================================
 
 #include "../MainWindow/PostProcessor.h"
-
 #include "../Backend/EditorBackend.h"
 
 using namespace Neo;

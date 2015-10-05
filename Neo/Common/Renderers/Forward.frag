@@ -63,11 +63,13 @@ layout (location = 0) out vec4 FragColor;
 layout (location = 1) out vec4 Normal;
 layout (location = 2) out vec4 Position;
 layout (location = 3) out vec3 Data;
+layout (location = 4) out vec4 Depth;
 #else
 out vec4 FragColor;
 out vec4 Normal;
 out vec4 Position;
 out vec3 Data;
+out vec4 Depth;
 #endif
 
 float inverseSquareLaw(float distance, float strength)
@@ -505,5 +507,5 @@ void main(void)
         Position = vec4(position.xyz, Shininess);
         
     Data.rgb = Emit;
-
+	Depth = vec4(0.5, 1, 0, 1);
 }

@@ -21,17 +21,17 @@ set(CPPFILES
     widget_panel.cxx
 )
 
-add_executable(fluid ${CPPFILES})
-target_link_libraries(fluid fltk fltk_images fltk_forms)
+#add_executable(fluid ${CPPFILES})
+#target_link_libraries(fluid fltk fltk_images fltk_forms)
 
 # link in optional libraries
-if(USE_XFT)
-   target_link_libraries(fluid ${X11_Xft_LIB})
-endif(USE_XFT)
+#if(USE_XFT)
+#   target_link_libraries(fluid ${X11_Xft_LIB})
+#endif(USE_XFT)
 
-if(HAVE_XINERAMA)
-   target_link_libraries(fluid ${X11_Xinerama_LIB})
-endif(HAVE_XINERAMA)
+#if(HAVE_XINERAMA)
+#   target_link_libraries(fluid ${X11_Xinerama_LIB})
+#endif(HAVE_XINERAMA)
 
 #install(TARGETS fluid
 #    EXPORT FLTK-Targets

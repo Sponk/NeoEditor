@@ -25,7 +25,11 @@
 extern "C" {
 #endif
 
-int luaopen_lfs (lua_State *L);
+#ifndef _WIN32
+	int LUALIB_API luaopen_lfs(lua_State *L);
+#else
+	int __declspec(dllexport) luaopen_lfs(lua_State *L);
+#endif
 
 #ifdef __cplusplus
 }

@@ -1,6 +1,9 @@
 -- main.lua - The main file of the NeoEditor
 require("NeoLua")
 
+--dofile("settings.lua")
+--NeoLua.NeoEngine.getInstance():loadLevel(Settings.startLevel)
+
 -- io.stdout:setvbuf('no'); if os.getenv('DEBUG_MODE') then require 'debugger' ; require 'debugger.plugins.ffi'end
 -- require ('debugger')();
 

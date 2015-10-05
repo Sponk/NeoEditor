@@ -895,7 +895,11 @@ static const struct luaL_Reg fslib[] = {
         {NULL, NULL},
 };
 
-int luaopen_lfs (lua_State *L) {
+#ifndef _WIN32
+int LUALIB_API luaopen_lfs (lua_State *L) {
+#else
+int __declspec(dllexport) luaopen_lfs(lua_State *L) {
+#endif
         dir_create_meta (L);
         lock_create_meta (L);
         luaL_newlib (L, fslib);

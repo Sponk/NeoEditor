@@ -45,7 +45,7 @@ Widget::Widget(unsigned int x, unsigned int y, unsigned int width,
 	  m_width(width),
 	  m_height(height),
 	  m_label(label),
-	  m_callback((CALLBACK_FUNCTION) Widget::doNothing),
+	  m_callback((NEO_CALLBACK_FUNCTION) Widget::doNothing),
 	  m_visible(true),
 	  m_scale(Vector2(1, 1)),
 	  m_flip(Vector2(0, 180)),
@@ -62,7 +62,7 @@ Widget::Widget()
 	  m_width(30),
 	  m_height(30),
 	  m_label("Widget"),
-	  m_callback((CALLBACK_FUNCTION) Widget::doNothing),
+	  m_callback((NEO_CALLBACK_FUNCTION) Widget::doNothing),
 	  m_visible(true),
 	  m_scale(Vector2(1, 1)),
 	  m_flip(Vector2(0, 180)),
@@ -74,11 +74,11 @@ Widget::Widget()
 
 void Widget::doCallback()
 {
-#ifdef WIN32
-	((void (*)(Widget*, long int))m_callback)(this, m_userData);
-#else
+//#ifdef WIN32
+//	((void (*)(Widget*, long int))m_callback)(this, m_userData);
+//#else
 	m_callback(this, m_userData);
-#endif
+//#endif
 }
 
 bool Widget::isMouseOver()

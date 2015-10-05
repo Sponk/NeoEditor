@@ -309,6 +309,7 @@ void GL4Context::init()
 	glDepthFunc(GL_LEQUAL);
 
 	glClearDepth(1.0);
+	glDepthRange(0.0, 1.0);
 
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
@@ -589,6 +590,17 @@ void GL4Context::texImage(unsigned int level, unsigned int width, unsigned int h
 
 	if (type == VAR_FLOAT)
 		intFormat = returnFloatTexMode(mode);
+
+	if(mode == TEX_DEPTH)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, returnGLType(type), NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
+
+		// Allows for directly using the shadow mapping capabilties available in OpenGL
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LESS);
+		return;
+	}
 
     glTexImage2D(GL_TEXTURE_2D, level, intFormat, width, height, 0, format, returnGLType(type), pixels);
     if(level > 0)

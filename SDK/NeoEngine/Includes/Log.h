@@ -46,7 +46,7 @@ namespace Neo
 */
 
 // For exposure to Lua
-void infoLog(const char* s, const char* function, const char* filename, int line);
+void NEO_ENGINE_EXPORT infoLog(const char* s, const char* function, const char* filename, int line);
 
 #ifndef SWIG
 // Only give the filename and not the path
