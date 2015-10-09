@@ -1,9 +1,8 @@
 #version 330
 
 #extension GL_ARB_explicit_attrib_location : enable
-#extension GL_ARB_shader_subroutines : enable
-
-#define ARB_explicit_attrib_location
+#extension GL_ARB_shader_subroutine : enable
+#extension GL_ARB_bindless_texture : enable
 
 #define MAX_ENTITY_LIGHTS 256
 
@@ -18,10 +17,14 @@ struct LightInfo
     float ConstantAttenuation;
     float LinearAttenuation;
     float Radius;
+    
+    int ShadowTexture;
 
     float SpotExp;
     float SpotCos;
     vec3 SpotDir;
+    
+    mat4 ShadowMatrix;
 };
 
 uniform LightInfo lights[MAX_ENTITY_LIGHTS];
@@ -146,8 +149,9 @@ vec4 calculateAllCookLight(vec3 p, vec3 n, vec4 d, float s)
 {
   vec4 result;
   for(int i = 0; i < LightsCount; i++)
-    result = result + cookTorranceSpecular(lights[i], p, n, d, s);
-
+  {
+    result = result + cookTorranceSpecular(lights[i], p, n, d, s); // * textureProj(lights[i].ShadowTexture, );
+  }
   return result;
 }
 
@@ -399,7 +403,7 @@ void main(void)
 	vec4 data = texture2D(Textures[3], texCoord);
 	vec4 startColor = FragColor;
 	vec4 n = texture2D(Textures[1], texCoord);
-		
+
 	// data.r = 0;float transparency = FragColor.a;
 	if(FragColor.a == 1.0 && n.a == 0)
 	{

@@ -96,6 +96,37 @@ public:
 };
 
 /*
+ * Additional Light data
+ */
+class LightData : public Object3d::AdditionalData
+{
+public:
+	// Visible objects for shadow mapping
+	std::vector<OEntity*> visibleEntities;
+	Semaphore* visibilityLock;
+	
+	uint32_t depthTexture;
+	uint32_t fbo;
+
+	float resolution;
+	OCamera camera;
+	
+	LightData() :
+		depthTexture(0),
+		fbo(0),
+		resolution(0)
+	{
+		visibilityLock = ThreadFactory::getInstance()->getNewSemaphore();
+		visibilityLock->Init(1);
+	}
+
+	~LightData()
+	{
+		SAFE_DELETE(visibilityLock);
+	}
+};
+
+/*
  * Additional OEntity and OLight data
  */
 class EntityData : public Object3d::AdditionalData
@@ -281,7 +312,8 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 	int texturePasses = material->getTexturesPassNumber();
 
 	int fx = 0;
-	if (*vao == 0) {
+	if (*vao == 0)
+	{
 		prepareMaterialDisplay(mesh, display);
 		return;
 	}
@@ -290,18 +322,22 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 	render->bindFX(fx);
 	render->bindVAO(*vao);
 
-	if (texturePasses == 0) {
+	if (texturePasses == 0)
+	{
 		// Tell the shader that we do not have any textures
 		render->disableBlending();
 	}
-	else {
+	else
+	{
 		render->disableBlending();
 	}
 
-	for (int i = 0; i < texturePasses; i++) {
+	for (int i = 0; i < texturePasses; i++)
+	{
 		TexturePass *pass = material->getTexturePass(i);
 
-		if (!pass || !pass->getTexture()) {
+		if (!pass || !pass->getTexture()) 
+		{
 			continue;
 		}
 
@@ -348,7 +384,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 		render->enableBlending();
 		render->setBlendingMode(material->getBlendMode());
 		render->disableCullFace();
-		render->setDepthMask(true);
+		render->setDepthMask(false);
 		
 		render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
 	}
@@ -514,6 +550,7 @@ void StandardRenderer::drawGBuffer(Scene* scene, OCamera* camera)
 			if (mesh->getTexturesAnim())
 				animateTextures(mesh, mesh->getTexturesAnim(), entity->getCurrentFrame());
 
+			updateSkinning(entity->getMesh(), mesh->getArmature());
 			drawMesh(entity->getMesh(), camera, entity->getMaterial(), entity->hasWireframe());
 		}
 	}
@@ -573,6 +610,7 @@ void StandardRenderer::drawTransparents(Scene* scene, OCamera* camera)
 			if (mesh->getTexturesAnim())
 				animateTextures(mesh, mesh->getTexturesAnim(), entity->getCurrentFrame());
 			
+			updateSkinning(entity->getMesh(), mesh->getArmature());
 			drawMesh(entity->getMesh(), camera, entity->getMaterial(), entity->hasWireframe());
 		}
 	}
@@ -838,6 +876,32 @@ void StandardRenderer::destroy(void)
 	delete this;
 }
 
+void StandardRenderer::updateSkinning(Mesh* mesh, Armature* armature)
+{
+	unsigned int s;
+	unsigned int size = mesh->getSubMeshsNumber();
+	for(s = 0; s < size; s++)
+	{
+		SubMesh* subMesh = &mesh->getSubMeshs()[s];
+		Vector3* vertices = subMesh->getVertices();
+
+		if(!vertices)
+			continue;
+
+		SkinData* skinData = subMesh->getSkinData();
+		if(armature && skinData)
+		{
+			unsigned int verticesSize = subMesh->getVerticesSize();
+			Vector3* skinVertices = subMesh->getSkinVertices();
+
+			computeSkinning(armature, skinData, vertices, NULL, NULL, skinVertices, NULL, NULL);
+			subMesh->getBoundingBox()->initFromPoints(skinVertices, verticesSize);
+		}
+	}
+
+	mesh->updateBoundingBox();
+}
+
 void StandardRenderer::prepareMaterialDisplay(SubMesh* mesh, MaterialDisplay* display)
 {
 	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
@@ -919,6 +983,78 @@ void StandardRenderer::drawToTexture(Scene * scene, OCamera* camera, unsigned in
 {
 }
 
+void StandardRenderer::renderShadows(Scene* scene, OCamera* maincam)
+{
+	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+	
+	CameraData* camData = static_cast<CameraData*>(maincam->getAdditionalData());
+	if(!camData) return;
+	
+	unsigned int currentFrameBuffer = 0;
+	render->getCurrentFrameBuffer(&currentFrameBuffer);
+	
+	camData->lightLock->WaitAndLock();
+	
+	for(OLight* light : camData->visibleLights)
+	{
+		if (light->isCastingShadow())
+		{
+			LightData* ld = static_cast<LightData*> (light->getAdditionalData());
+			if (!ld)
+			{
+				MLOG_INFO ("Creating light data!");
+				ld = new LightData();
+				light->setAdditionalData(ld);
+			}
+			
+			if(ld->resolution != light->getShadowQuality())
+			{
+				if(ld->depthTexture)
+					render->deleteTexture(&ld->depthTexture);
+				
+				if(ld->fbo)
+					render->deleteFrameBuffer(&ld->fbo);
+				
+				ld->resolution = light->getShadowQuality();
+				
+				render->createFrameBuffer(&ld->fbo);
+				render->createTexture(&ld->depthTexture);
+				
+				render->bindTexture(ld->depthTexture);
+				render->texImage(0, ld->resolution, ld->resolution, VAR_FLOAT, TEX_DEPTH, NULL);
+				
+				render->bindFrameBuffer(ld->fbo);
+				render->attachFrameBufferTexture(ATTACH_DEPTH, ld->depthTexture);
+			}
+			
+			ld->camera.setClippingFar(light->getRadius());
+			
+			if(light->getSpotAngle() == 0)
+				ld->camera.enableOrtho(true);
+			else if(light->getSpotAngle() < 180)
+				ld->camera.enableOrtho(false);
+			else
+				return;
+			
+			*ld->camera.getMatrix() = *light->getMatrix();
+			ld->camera.setFov(light->getSpotAngle());
+			
+			drawScene(scene, &ld->camera);
+			render->bindFrameBuffer(0);
+		}
+		else if(light->getAdditionalData())
+		{
+			delete light->getAdditionalData();
+			light->setAdditionalData(NULL);
+
+			MLOG_INFO("Deleting light data!");
+		}
+	}
+	
+	render->bindFrameBuffer(currentFrameBuffer);
+	camData->lightLock->Unlock();
+}
+
 void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
 {
 	/// FIXME: MAKE IT SWITCHABLE!
@@ -965,7 +1101,9 @@ void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
 		initFramebuffers();
 		initQuadVAO(&m_quadVAO, &m_quadVBO, &m_quadTexCoordVBO, m_fx[1]);
 	}
-		
+
+	renderShadows(scene, camera);
+	
 	// render to texture
 	render->bindFrameBuffer(m_framebufferID);
 	render->setViewport(0, 0, screenWidth, screenHeight); // change viewport
@@ -1008,9 +1146,9 @@ void StandardRenderer::sendLights(unsigned int shader, OCamera* camera)
 	CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
 	if(!data) return;
 
-    data->lightLock->WaitAndLock();
+	data->lightLock->WaitAndLock();
 
-    int num = data->visibleLights.size();
+	int num = data->visibleLights.size();
 	render->sendUniformInt(shader, "LightsCount", &num);
 
 	int i = 0;
@@ -1087,6 +1225,24 @@ void StandardRenderer::sendLight(unsigned int fx, OLight* l, int num, Matrix4x4 
 	strcpy(ending, str);
 	strcat(ending, "LinearAttenuation");
 	render->sendUniformFloat(fx, ending, &attenuation);
+	
+	if(l->isCastingShadow())
+	{
+		strcpy(ending, str);
+		strcat(ending, "ShadowTexture");
+		
+		LightData* data = static_cast<LightData*>(l->getAdditionalData());
+		
+		int nil = 0;
+		if(data)
+			render->sendUniformInt(fx, ending, (int*) &data->depthTexture);
+		else
+			render->sendUniformInt(fx, ending, &nil);
+		
+		strcpy(ending, str);
+		strcat(ending, "ShadowMatrix");
+		render->sendUniformMatrix(fx, ending, l->getMatrix());
+	}
 }
 
 void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera, bool postFx)
@@ -1315,7 +1471,7 @@ void StandardRenderer::initVBO(SubMesh * subMesh)
 
 		Vector2 * texCoords = subMesh->getTexCoords();
 
-		if (mode == VBO_DYNAMIC)
+		if(mode == VBO_DYNAMIC)
 		{
 			vertices = subMesh->getSkinVertices();
 			normals = subMesh->getSkinNormals();

@@ -121,6 +121,7 @@ private:
 	void updateVisibility(Scene * scene, OCamera * camera);
 	
 	float getDistanceToCam(OCamera * camera, const Vector3 & pos);
+	void updateSkinning(Mesh* mesh, Armature* armature);
 	
 public:
 	
@@ -154,6 +155,7 @@ public:
 
 private:
 
+	void renderShadows(Scene* scene, OCamera* maincam);
 	void prepareSubmesh(SubMesh* mesh);
 	void prepareMaterialDisplay(SubMesh* mesh, MaterialDisplay* display);
 	
