@@ -285,6 +285,21 @@ bool readDirectory(const char * filename, vector<string> * files, bool hiddenFil
     return true;
 }
 
+void copyDirFiles(const char* src, const char* dest, const char* filter)
+{
+    vector<string> files;
+    readDirectory(src, &files);
+    for (int i = 0; i < files.size(); ++i)
+    {
+        if (strstr(files[i].c_str(), filter))
+        {
+            char filename[256];
+            getGlobalFilename(filename, dest, files[i].c_str());
+            copyFile(files[i].c_str(), filename);
+        }
+    }
+}
+
 namespace Neo
 {
 void M_registerFileOpenHook(FileOpenHook * hook)

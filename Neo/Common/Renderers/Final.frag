@@ -36,10 +36,6 @@ uniform int Width;
 uniform int Height;
 uniform int PostEffects;
 
-// 0 -> GBuffer
-// 1 -> Normals
-// 2 -> Depth
-// 3 -> Data
 uniform sampler2D Textures[5];
 in vec2 texCoord;
 

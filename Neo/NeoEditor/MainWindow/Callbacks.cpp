@@ -2226,21 +2226,6 @@ void edit_materials_callback(Fl_Button*, void*)
 	dlg->create_window(window.name_edit->value())->show();
 }
 
-static void copyDirFiles(const char* src, const char* dest, const char* filter)
-{
-	vector<string> files;
-	readDirectory(src, &files);
-	for (int i = 0; i < files.size(); ++i)
-	{
-		if (strstr(files[i].c_str(), filter))
-		{
-			char filename[256];
-			getGlobalFilename(filename, dest, files[i].c_str());
-			copyFile(files[i].c_str(), filename);
-		}
-	}
-}
-
 void update_player_callback(Fl_Menu_*, void*)
 {
 	char src[256];

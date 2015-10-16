@@ -438,6 +438,9 @@ void LuaScript::init(void)
 			  "return nil "
 			  "end");
 
+	// add ./assets to require module search path
+	runString("package.path = package.path .. \";./assets/?.lua\"");
+	
 	// register custom functions
 	map<string, int (*)(void)>::iterator
 		mit (m_functions.begin()),

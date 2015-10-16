@@ -84,3 +84,9 @@ void MWinContext::setWindowTitle(const char* title)
 {
 	NeoWindow::getInstance()->setTitle(title);
 }
+
+void MWinContext::setScreenSize(unsigned int width, unsigned int height)
+{
+	NeoWindow::getInstance()->resize(width, height);
+}
+

@@ -99,9 +99,9 @@ public:
 
 	// create
 	bool create(const char * title, unsigned int width, unsigned int height, int colorBits, bool fullscreen);
-    void resize(unsigned int width, unsigned int height);
-    void setViewport(unsigned int width, unsigned int height) {m_width = width; m_height = height; }
-    void setPosition(int x, int y) { m_position[0] = x; m_position[1] = y; }
+	void resize(unsigned int width, unsigned int height);
+	void setViewport(unsigned int width, unsigned int height) {m_width = width; m_height = height; }
+	void setPosition(int x, int y) { m_position[0] = x; m_position[1] = y; }
 
 	// events
 	inline void setPointerEvent(void (*pointerEvent)(MWinEvent * windowEvents)){ m_pointerEvent = pointerEvent; }

@@ -61,10 +61,10 @@ void Canvas::draw()
 		renderingContext->bindFrameBuffer(m_fbo);
 		renderingContext->disableDepthTest();
 		renderingContext->attachFrameBufferTexture(ATTACH_COLOR0,
-												   m_texture->getTextureId());
+								m_texture->getTextureId());
 
 		renderingContext->setViewport(0, 0, m_texture->getWidth(),
-									  m_texture->getHeight());
+							m_texture->getHeight());
 		renderingContext->setClearColor(m_clearColor);
 		renderingContext->clear(BUFFER_COLOR);
 	}
@@ -112,7 +112,6 @@ void Canvas::update()
 }
 
 void Canvas::addWidget(int w) { m_widgets.push_back(w); }
-
 void Canvas::clear() { m_widgets.clear(); }
 
 void Canvas::enableRenderToTexture(const char* tex)

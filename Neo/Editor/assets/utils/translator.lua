@@ -1,7 +1,7 @@
 --- translator.lua - This file contains basic primitives for handling and swapping
 -- multiple translations for easy usage
 
-local csv = dofile("csv.lua")
+local csv = require("utils.csv")
 
 local translator = {}
 translator.translations = {}
@@ -30,9 +30,8 @@ function translator.printTranslations()
 end
 
 function tr(str)
-   local str = translator.currentTranslation[str] or str
-   
-   return str:gsub("\\n", "\n")
+   local str = (translator.currentTranslation[str] or str):gsub("\\n", "\n")
+   return str
 end
 
 return translator

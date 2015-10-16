@@ -98,6 +98,15 @@ public:
 	 * @param title The new title that shall be used.
 	 */
 	virtual void setWindowTitle(const char* title) = 0;
+	
+	/**
+	 * @brief Changes the screen resolution or the window size depending
+	 * on if the window is fullscreen.
+	 * 
+	 * @param width The new width in pixels.
+	 * @param height The new height in pixels.
+	 */
+	virtual void setScreenSize(unsigned int width, unsigned int height) = 0;
 };
 }
 #endif

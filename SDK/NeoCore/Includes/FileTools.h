@@ -40,6 +40,7 @@ NEO_CORE_EXPORT bool removeDirectory(const char * filename);
 NEO_CORE_EXPORT bool isFileExist(const char * filename);
 NEO_CORE_EXPORT bool copyDirectory(const char * inFilename, const char * outFilename);
 NEO_CORE_EXPORT bool readDirectory(const char * filename, vector<string> * files, bool hiddenFiles = false, bool recursive = false);
+NEO_CORE_EXPORT void copyDirFiles(const char* src, const char* dest, const char* filter);
 
 namespace Neo
 {

@@ -5,9 +5,9 @@
 
 Editor = {}
 
-Shortcuts = dofile("shortcuts.lua")
+Shortcuts = require("editor.shortcuts")
 
-dofile("callbacks.lua")
+require("editor.callbacks")
 local lfs = require("lfs")
 
 --- Loads the complete UI into Neo2D and displays it.

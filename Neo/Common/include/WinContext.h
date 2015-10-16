@@ -38,6 +38,7 @@ public:
 	~MWinContext(void){}
 
 	// screen
+	void setScreenSize(unsigned int width, unsigned int height);
 	void getScreenSize(unsigned int * width, unsigned int * height);
 	Vector2 getScreenSize();
 

@@ -50,12 +50,12 @@ const char* m_colorOnlyVertShader =
 	"gl_Position = ProjModelViewMatrix * vec4(Vertex, 1.0);"
 	"}\n";
 
-const char* m_colorOnlyFragShader = "#version 130\n"
-									"uniform vec4 color;"
-									"void main(void)"
-									"{"
-									"gl_FragColor = color;"
-									"}\n";
+const char* m_colorOnlyFragShader = 	"#version 130\n"
+					"uniform vec4 color;"
+					"void main(void)"
+					"{"
+					"gl_FragColor = color;"
+					"}\n";
 
 const char* m_texturedVertShader =
 
@@ -138,7 +138,7 @@ void Render::drawColoredQuad(float x, float y, float w, float h, Vector4 color,
 	RenderingContext* render = engine->getRenderingContext();
 	
 	// Don't render anything if there is nothing to render
-	if (color.z == 0)
+	if (color.w == 0)
 		return;
 
 	if (m_colorOnlyFx == 0)
@@ -187,7 +187,7 @@ void Render::drawColoredQuad(float x, float y, float w, float h, Vector4 color,
 	ProjModelViewMatrix = ProjMatrix * ModelViewMatrix;
 
 	render->sendUniformMatrix(m_colorOnlyFx, "ProjModelViewMatrix",
-							  &ProjModelViewMatrix);
+							&ProjModelViewMatrix);
 
 	// Vertex
 	/*render->getAttribLocation(m_colorOnlyFx, "Vertex", &vertexAttrib);

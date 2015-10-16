@@ -3914,6 +3914,31 @@ static int _wrap_readDirectory(lua_State* L) {
 }
 
 
+static int _wrap_copyDirFiles(lua_State* L) {
+  int SWIG_arg = 0;
+  char *arg1 = (char *) 0 ;
+  char *arg2 = (char *) 0 ;
+  char *arg3 = (char *) 0 ;
+  
+  SWIG_check_num_args("copyDirFiles",3,3)
+  if(!SWIG_lua_isnilstring(L,1)) SWIG_fail_arg("copyDirFiles",1,"char const *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("copyDirFiles",2,"char const *");
+  if(!SWIG_lua_isnilstring(L,3)) SWIG_fail_arg("copyDirFiles",3,"char const *");
+  arg1 = (char *)lua_tostring(L, 1);
+  arg2 = (char *)lua_tostring(L, 2);
+  arg3 = (char *)lua_tostring(L, 3);
+  copyDirFiles((char const *)arg1,(char const *)arg2,(char const *)arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_M_registerFileOpenHook(lua_State* L) {
   int SWIG_arg = 0;
   FileOpenHook *arg1 = (FileOpenHook *) 0 ;
@@ -14034,6 +14059,37 @@ fail:
 }
 
 
+static int _wrap_SystemContext_setScreenSize(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::SystemContext *arg1 = (Neo::SystemContext *) 0 ;
+  unsigned int arg2 ;
+  unsigned int arg3 ;
+  
+  SWIG_check_num_args("Neo::SystemContext::setScreenSize",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::SystemContext::setScreenSize",1,"Neo::SystemContext *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::SystemContext::setScreenSize",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::SystemContext::setScreenSize",3,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__SystemContext,0))){
+    SWIG_fail_ptr("SystemContext_setScreenSize",1,SWIGTYPE_p_Neo__SystemContext);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  (arg1)->setScreenSize(arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_SystemContext(void *obj) {
 Neo::SystemContext *arg1 = (Neo::SystemContext *) obj;
 delete arg1;
@@ -14049,6 +14105,7 @@ static swig_lua_method swig_SystemContext_methods[]= {
     { "getWorkingDirectory", _wrap_SystemContext_getWorkingDirectory},
     { "getSystemTick", _wrap_SystemContext_getSystemTick},
     { "setWindowTitle", _wrap_SystemContext_setWindowTitle},
+    { "setScreenSize", _wrap_SystemContext_setScreenSize},
     {0,0}
 };
 static swig_lua_method swig_SystemContext_meta[] = {
@@ -65134,6 +65191,7 @@ static swig_lua_method swig_SwigModule_methods[]= {
     { "isFileExist", _wrap_isFileExist},
     { "copyDirectory", _wrap_copyDirectory},
     { "readDirectory", _wrap_readDirectory},
+    { "copyDirFiles", _wrap_copyDirFiles},
     { "M_registerFileOpenHook", _wrap_M_registerFileOpenHook},
     { "M_getFileOpenHook", _wrap_M_getFileOpenHook},
     { "M_fopen", _wrap_M_fopen},
