@@ -22,9 +22,19 @@ if homedir:find("/") ~= 1 then
     playerExec = playerExec .. ".exe"
 end
 
+local function appendProjectExtension(filename)
+    if filename:sub(1, -string.len(".mproj")) ~= ".mproj" then
+        return filename .. ".mproj"
+    end
+
+    return filename
+end
+
 function createProjectCallback()
     local fname = lcd.getSaveFilename(homedir, "mproj")
     if fname == nil then return end
+
+    fname = appendProjectExtension(fname)
 
     local projectPath, projectName, extension = string.match(fname, "(.-)([^\\/]-%.?([^%.\\/]*))$")
     data.projects[projectName] = fname
@@ -42,6 +52,17 @@ function createProjectCallback()
         NeoLua.copyDirFiles(".", projectPath, ".dll")
         NeoLua.copyFile("NeoPlayer.exe", projectPath .. seperator .. "NeoPlayer.exe")
     end
+
+    local f = assert(io.open(fname, "w"))
+
+    f:write([[
+        <Neo version="0.5">
+        <Project>
+            <renderer name="StandardRenderer"/>
+            <start file=""/>
+        </Project>
+        </Neo>
+    ]])
 
     data.updateList()
     data.saveRegistry()
