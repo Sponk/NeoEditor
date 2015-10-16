@@ -27,6 +27,10 @@ local openProjectButton = NeoLua.ThemedButton(300, 10, 290, 20, tr("Open Project
 openProjectButton:setScriptCallback("openProjectCallback")
 canvas:addWidget(neo2d:addWidget(openProjectButton))
 
+local updateProjectButton = NeoLua.ThemedButton(300, 35, 290, 20, tr("Update Project"))
+updateProjectButton:setScriptCallback("updateProjectCallback")
+canvas:addWidget(neo2d:addWidget(updateProjectButton))
+
 -- canvas:addWidget(neo2d:addWidget(NeoLua.Label(300, 40, 0, 0, tr("Name:"))))
 -- local projectNameEdit = NeoLua.ThemedInputField(300, 50, 290, 20, "")
 -- canvas:addWidget(neo2d:addWidget(projectNameEdit))

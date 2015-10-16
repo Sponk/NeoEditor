@@ -30,17 +30,7 @@ local function appendProjectExtension(filename)
     return filename
 end
 
-function createProjectCallback()
-    local fname = lcd.getSaveFilename(homedir, "mproj")
-    if fname == nil then return end
-
-    fname = appendProjectExtension(fname)
-
-    local projectPath, projectName, extension = string.match(fname, "(.-)([^\\/]-%.?([^%.\\/]*))$")
-    data.projects[projectName] = fname
-
-    NeoLua.copyDirectory("./assets", projectPath .. "/assets")
-
+function copyFiles(projectPath)
     -- FIXME: Don't throw Linux and OS X together!
     if operatingSystem == "UNIX" then
         NeoLua.copyDirFiles(".", projectPath, ".so")
@@ -52,6 +42,20 @@ function createProjectCallback()
         NeoLua.copyDirFiles(".", projectPath, ".dll")
         NeoLua.copyFile("NeoPlayer.exe", projectPath .. seperator .. "NeoPlayer.exe")
     end
+end
+
+function createProjectCallback()
+    local fname = lcd.getSaveFilename(homedir, "mproj")
+    if fname == nil then return end
+
+    fname = appendProjectExtension(fname)
+
+    local projectPath, projectName, extension = string.match(fname, "(.-)([^\\/]-%.?([^%.\\/]*))$")
+    data.projects[projectName] = fname
+
+    NeoLua.copyDirectory("./assets", projectPath .. "/assets")
+
+    copyFiles(projectPath)
 
     local f = assert(io.open(fname, "w"))
 
@@ -103,6 +107,15 @@ function openProjectCallback()
 
     -- UUUUUGLY!
     os.execute("cd " .. projectPath .. " && " .. projectPath .. seperator .. playerExec)
+end
+
+function updateProjectCallback()
+
+    local fname = data.list:getSelected()
+    if fname == nil then return end
+
+    local projectPath, projectName, extension = string.match(data.projects[fname], "(.-)([^\\/]-%.?([^%.\\/]*))$")
+    copyFiles(projectPath)
 end
 
 function data.saveRegistry()
