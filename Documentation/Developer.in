@@ -109,7 +109,7 @@ INPUT                  = @NEO_SOURCE_DIR@/SDK \
                          @NEO_SOURCE_DIR@/README.md
 
 INPUT_ENCODING         = UTF-8
-FILE_PATTERNS          = *.h *.md
+FILE_PATTERNS          = *.h *.md *.dox
 RECURSIVE              = YES
 EXCLUDE                =
 EXCLUDE_SYMLINKS       = NO
@@ -155,7 +155,6 @@ HTML_OUTPUT            = html
 HTML_FILE_EXTENSION    = .html
 HTML_HEADER            =
 HTML_FOOTER            =
-HTML_STYLESHEET        = 
 HTML_EXTRA_STYLESHEET  = @DOCUMENTATION_SOURCE_DIR@/style.css
 HTML_EXTRA_FILES       =
 HTML_COLORSTYLE_HUE    = 220
