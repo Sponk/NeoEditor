@@ -1,3 +1,10 @@
+--- The Project Manager
+-- The project manager is a small utility application that simplifies project creation and management.
+-- Its main features are delivering an easy to use list of all projects you created or imported and
+-- upgrading the Neo engine used in those projects.
+--
+-- Launch using "./NeoPlayer -e ProjectManager/main.lua" inside the editor installation directory.
+
 require("NeoLua")
 local Translator = require("utils.translator")
 
@@ -27,9 +34,13 @@ local openProjectButton = NeoLua.ThemedButton(300, 10, 290, 20, tr("Open Project
 openProjectButton:setScriptCallback("openProjectCallback")
 canvas:addWidget(neo2d:addWidget(openProjectButton))
 
-local updateProjectButton = NeoLua.ThemedButton(300, 35, 290, 20, tr("Update Project"))
+local updateProjectButton = NeoLua.ThemedButton(300, 35, 290, 20, tr("Update Engine"))
 updateProjectButton:setScriptCallback("updateProjectCallback")
 canvas:addWidget(neo2d:addWidget(updateProjectButton))
+
+local importProjectButton = NeoLua.ThemedButton(300, 60, 290, 20, tr("Import Project"))
+importProjectButton:setScriptCallback("importProjectCallback")
+canvas:addWidget(neo2d:addWidget(importProjectButton))
 
 -- canvas:addWidget(neo2d:addWidget(NeoLua.Label(300, 40, 0, 0, tr("Name:"))))
 -- local projectNameEdit = NeoLua.ThemedInputField(300, 50, 290, 20, "")

@@ -19,6 +19,6 @@ ENDIF()
 
 ## Update needed translations
 if(UNIX)
-  add_custom_target(grep-translations-lua-project-manager grep -o -r "\"tr(\\\".*\\\")\"" ./assets > translations.txt
+  add_custom_target(grep-translations-lua-project-manager grep -o -r "\"tr(\\\".*\\\")\"" ./ProjectManager > translations.txt
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 ENDIF()

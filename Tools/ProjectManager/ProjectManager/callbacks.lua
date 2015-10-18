@@ -5,15 +5,21 @@ ffi.cdef[[
 int chmod(const char *pathname, unsigned int mode);
 ]]
 
+--- Code for making a file executable on UNIX like systems
 local S_IRWXU = 508
 
+--- Internal data
 local data = { list = 0, projects = {} }
 local lcd = require("LuaCommonDlg")
 
+--- Home directory path
 local homedir = os.getenv("HOME") or os.getenv("HOMEPATH")
 local operatingSystem = "UNIX"
 local seperator = "/"
 local playerExec = "NeoPlayer"
+
+--- Registry directory
+local regdir = (os.getenv("HOME") or os.getenv("APPDATA")) .. seperator .. ".neo-projects"
 
 -- WINDOWS!
 if homedir:find("/") ~= 1 then
@@ -22,6 +28,9 @@ if homedir:find("/") ~= 1 then
     playerExec = playerExec .. ".exe"
 end
 
+--- Appends the project file extension to the given file name if it is not there yet.
+-- @param filename The file path to extend
+-- @return The extended file name
 local function appendProjectExtension(filename)
     if filename:sub(1, -string.len(".mproj")) ~= ".mproj" then
         return filename .. ".mproj"
@@ -30,6 +39,10 @@ local function appendProjectExtension(filename)
     return filename
 end
 
+--- Copies all files needed to create a proper project
+-- to the given project path.
+--
+-- @param projectPath The project to copy all files to.
 function copyFiles(projectPath)
     -- FIXME: Don't throw Linux and OS X together!
     if operatingSystem == "UNIX" then
@@ -44,6 +57,7 @@ function copyFiles(projectPath)
     end
 end
 
+--- Creates a new project and adds the project to the registry.
 function createProjectCallback()
     local fname = lcd.getSaveFilename(homedir, "mproj")
     if fname == nil then return end
@@ -72,6 +86,7 @@ function createProjectCallback()
     data.saveRegistry()
 end
 
+--- Removes a project from the registry.
 function removeProjectCallback()
     local fname = data.list:getSelected()
     if fname == nil then return end
@@ -82,6 +97,7 @@ function removeProjectCallback()
     data.saveRegistry()
 end
 
+--- Opens a project in the editor installed in the project directory.
 function openProjectCallback()
     local fname = data.list:getSelected()
 
@@ -109,6 +125,7 @@ function openProjectCallback()
     os.execute("cd " .. projectPath .. " && " .. projectPath .. seperator .. playerExec)
 end
 
+--- Updates the engine used by the project.
 function updateProjectCallback()
 
     local fname = data.list:getSelected()
@@ -118,6 +135,23 @@ function updateProjectCallback()
     copyFiles(projectPath)
 end
 
+--- Imports an existing project into the project registry.
+function importProjectCallback()
+    fname = lcd.getOpenFilename(homedir, "mproj")
+
+    if fname == nil then
+        return
+    end
+
+    local projectPath, projectName, extension = string.match(fname, "(.-)([^\\/]-%.?([^%.\\/]*))$")
+    data.list:getTreeModel():addChild(projectName)
+    data.projects[projectName] = fname
+
+    data.saveRegistry()
+    return
+end
+
+--- Saves the registry to the regdir.
 function data.saveRegistry()
     local confdir = (os.getenv("HOME") or os.getenv("APPDATA")) .. seperator .. ".neo-projects"
 
@@ -135,8 +169,9 @@ function data.saveRegistry()
     f:write("[0] = nil}")
 end
 
+--- Loads the registry.
 function data.loadRegistry()
-    local confdir = (os.getenv("HOME") or os.getenv("APPDATA")) .. seperator .. ".neo-projects" .. seperator .. "registry.lua"
+    local confdir = regdir .. seperator .. "registry.lua"
 
     if not NeoLua.isFileExist(confdir) then
         return
@@ -149,6 +184,8 @@ function data.loadRegistry()
     end
 end
 
+--- Updates the list model
+-- ATTENTION: Needs data.list to be set first!
 function data.updateList()
     -- Update list view
     local root = data.list:getTreeModel()

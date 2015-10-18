@@ -288,8 +288,7 @@ vec3 FxaaPixelShader(vec4 posPos, sampler2D tex, vec2 rcpFrame)
           max(FxaaFloat2(-FXAA_SPAN_MAX, -FXAA_SPAN_MAX), 
           dir * rcpDirMin)) * rcpFrame.xy;
 /*--------------------------------------------------------------------------*/
-    vec3 rgbA = (1.0/2.0) * (
-        FxaaTexLod0(tex, posPos.xy + dir * (1.0/3.0 - 0.5)).xyz +
+    vec3 rgbA = (1.0/2.0) * (FxaaTexLod0(tex, posPos.xy + dir * (1.0/3.0 - 0.5)).xyz +
         FxaaTexLod0(tex, posPos.xy + dir * (2.0/3.0 - 0.5)).xyz);
     vec3 rgbB = rgbA * (1.0/2.0) + (1.0/4.0) * (
         FxaaTexLod0(tex, posPos.xy + dir * (0.0/3.0 - 0.5)).xyz +
@@ -301,6 +300,7 @@ vec3 FxaaPixelShader(vec4 posPos, sampler2D tex, vec2 rcpFrame)
 
 #define FXAA_SUBPIX_SHIFT 0.5
 
+//#define TO_LIGHT(v) (v - vec4(0.5,0.5,0.5,0))
 /*vec4 bloom(vec4 diffuse, vec2 texcoord, sampler2D sampler, float amount, float strength)
 {
     if(strength == 0.0 || amount == 0.0)
@@ -310,7 +310,7 @@ vec3 FxaaPixelShader(vec4 posPos, sampler2D tex, vec2 rcpFrame)
 
 	diffuse.a = 1.0;
 
-    float color;
+    vec4 color;
 	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(0.01, 0.0) * amount));
 	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(-0.01, 0.0) * amount));
 	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(0.0, 0.01) * amount));
@@ -320,13 +320,28 @@ vec3 FxaaPixelShader(vec4 posPos, sampler2D tex, vec2 rcpFrame)
 	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(0.007, -0.007) * amount));
 	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(-0.007, 0.007) * amount));
 
-	return mix(diffuse, diffuse*(color / 8.0), amount);
+	color = (color / 8.0);
+	color.x = clamp(color.x, 0, 1);
+	color.y = clamp(color.y, 0, 1);
+	color.z = clamp(color.z, 0, 1);
+
+	return color;
 }*/
 
-vec4 bloom(vec4 diffuse, vec2 texcoord, sampler2D sampler, float strength, int samples)
+#define BLOOM_SAMPLES 4
+#define HALF_BLOOM_SAMPLES 4
+#define BLOOM_SHIFT 0.0018
+#define BLOOM_STRENGTH 0.015
+
+vec4 bloom(sampler2D sampler, vec2 texcoord, vec4 diffuse)
+{
+	return diffuse;
+}
+
+/*vec4 bloom(vec4 diffuse, vec2 texcoord, sampler2D sampler, float strength, int samples)
 {
  return diffuse;
-}
+}*/
 
 vec4 radialBlur(vec4 color, vec2 texcoord, sampler2D sampler, float sampleDist, float sampleStrength)
 {
@@ -371,7 +386,9 @@ void main(void)
 		FragColor = vec4(d,d,d,1);
 		
 		return;*/
-		
+
+		//FragColor.a = transparency;
+		//return;
 		
 		vec2 frame = vec2(vec2(1.0 / Width, 1.0/ Height));
 		//FragColor = fxaa(Textures[0], texCoord, frame);
@@ -381,8 +398,10 @@ void main(void)
 		//FragColor = radialBlur(FragColor, texCoord, Textures[0], 0.3, 5);
 		// FragColor = blur(FragColor, texCoord, Textures[0], 1, 0.5);
 		//FragColor = bloom(FragColor, texCoord, Textures[0], 0.01, 5);
-		//FragColor = bloom(FragColor, texCoord, Textures[0], 0.01, 5);
+		//FragColor += bloom(FragColor, texCoord, Textures[0], 0.01, 5);
 
+		FragColor.a = transparency;
+		FragColor = bloom(Textures[0], texCoord, FragColor);
 		FragColor = gammaCorrection(FragColor, 1.2);
 		//FragColor.a = transparency;
 
