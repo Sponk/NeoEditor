@@ -1,9 +1,23 @@
 /**
-@page project_creation Project Creation
+@page project_creation Creating a new Project
 
-@tableofcontents
+@todo What happens with the project name? How should it be determined?
 
-@subsection This is a heading!
+First you need to open the project manager from the system menu or with the command
+"./NeoPlayer -e ProjectManager/main.lua" from your shell within the Neo install directory.
 
-LALALALALALALAL
+Creating a new project is as easy as selecting the
+"Create Project" button on the bottom left of the window. This will open a file selection dialog that you use to create
+the project file the new project will use.
+
+@image html project-manager-tutorial-project.png
+
+The application will create all necessary files needed to launch the editor and start creating content in the directory
+of the project file so you can simply press "Open Project" and start creating levels and assets for your project.
+The project directory should now look somewhat like this:
+
+@image html project-manager-tutorial-directory.png
+
+On Windows there will be .dll files instead of .so files.
+
 */

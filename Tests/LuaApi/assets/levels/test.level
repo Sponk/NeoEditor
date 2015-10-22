@@ -22,9 +22,9 @@
 				radius="200.000000"
 				color="1.000000 1.000000 1.000000"
 				intensity="0.800000"
-				spotAngle="180.000000"
+				spotAngle="45.000000"
 				spotExponent="0.000000"
-				shadow="false" />
+				shadow="true" />
 		</Light>
 		<Light name="Light01">
 			<active value="true" />

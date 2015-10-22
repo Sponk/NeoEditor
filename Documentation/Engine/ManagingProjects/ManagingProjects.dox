@@ -1,8 +1,27 @@
 /**
 @page managing_projects Managing Projects
 
-PROJECTS
---------
+@image html project-manager-empty.png
 
-@subpage project_creation
+Using the Project Manager
+=========================
+Neo has a small utility to manage all projects you develop while providing options for easy
+project creation as well as allowing to upgrade the Neo Engine used by any listed project.
+
+The most basic functionality is managing a list of projects that were either created with the UI or imported into the
+project manager registry. This way it is easy to open the editor for each individual project while keeping an overview
+of all projects you worked on. If you finished a project you can remove the entry from the registry by pressing the
+"Remove Project" button on the bottom left. Keep in mind that this will not delete the actual files on your
+hard drive but rather the link in the project registry to it. Re-adding an old project is as easy as importing it
+back into the registry like you would with an external project.
+
+Topics
+------
+
+- @subpage project_creation
+
+@todo Support for publishing projects
+@todo Support for native C++ plugins
+@todo Support for NeoSharp
+
 */
