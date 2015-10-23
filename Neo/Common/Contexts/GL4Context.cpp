@@ -199,8 +199,8 @@ GL4Context::~GL4Context()
 {
 }
 
-//#define GL_DEBUG
-#undef GL_DEBUG
+#define GL_DEBUG
+//#undef GL_DEBUG
 #ifdef GL_DEBUG
 void openglCallbackFunction(GLenum source, GLenum type, GLuint id, GLenum
                             severity, GLsizei length, GLchar* message, void* userParam)

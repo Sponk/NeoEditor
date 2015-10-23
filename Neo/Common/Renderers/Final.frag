@@ -2,7 +2,7 @@
 
 #extension GL_ARB_explicit_attrib_location : enable
 #extension GL_ARB_shader_subroutine : enable
-#extension GL_ARB_bindless_texture : enable
+//#extension GL_ARB_bindless_texture : enable
 
 #define MAX_ENTITY_LIGHTS 256
 

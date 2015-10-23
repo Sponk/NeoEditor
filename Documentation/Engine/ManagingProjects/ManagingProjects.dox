@@ -1,12 +1,12 @@
 /**
 @page managing_projects Managing Projects
 
-@image html project-manager-empty.png
-
 Using the Project Manager
 =========================
 Neo has a small utility to manage all projects you develop while providing options for easy
 project creation as well as allowing to upgrade the Neo Engine used by any listed project.
+
+@image html project-manager-empty.png
 
 The most basic functionality is managing a list of projects that were either created with the UI or imported into the
 project manager registry. This way it is easy to open the editor for each individual project while keeping an overview
@@ -19,9 +19,10 @@ Topics
 ------
 
 - @subpage project_creation
+- @subpage project_structure
 
-@todo Support for publishing projects
-@todo Support for native C++ plugins
-@todo Support for NeoSharp
+@todo Support for publishing projects with a nice UI
+@todo Support for creating native C++ plugins
+@todo Support for managing NeoSharp
 
 */

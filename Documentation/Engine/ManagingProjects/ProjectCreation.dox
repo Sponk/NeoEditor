@@ -19,5 +19,6 @@ The project directory should now look somewhat like this:
 @image html project-manager-tutorial-directory.png
 
 On Windows there will be .dll files instead of .so files.
+To learn more, read @ref project_structure.
 
 */

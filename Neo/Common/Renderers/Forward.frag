@@ -1,12 +1,9 @@
 #version 330
 
 #extension GL_ARB_explicit_attrib_location : enable
-#extension GL_ARB_shader_subroutines : enable
+#extension GL_ARB_shader_subroutine : enable
 
-//#define ARB_shader_subroutines
-//#define ARB_explicit_attrib_location
-
-#ifdef GL_ARB_shader_subroutines
+#ifdef GL_ARB_shader_subroutine
 subroutine vec4 shadeModelType(vec3 position, vec3 normal);
 subroutine uniform shadeModelType shadeModel;
 #else
@@ -414,7 +411,7 @@ vec4 TextShader(vec3 position, vec3 n)
 }
 
 // Fallback selection
-#ifndef GL_ARB_shader_subroutines
+#ifndef GL_ARB_shader_subroutine
 vec4 shadeModel(vec3 position, vec3 n)
 {
     vec4 retval;
