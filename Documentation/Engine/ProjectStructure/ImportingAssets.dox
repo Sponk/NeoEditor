@@ -1,3 +1,104 @@
 /**
+@page project_importing_assets Importing Assets
+
+Importing assets into a Neo level is really easy. Just drop the file with a supported format into the assets directory
+and load it with the editor. All data conversion to the custom binary formats automatically happens when the game gets published
+with the command line tool, no further work is needed.
+
+While the data conversion happens behind the scenes it is important to only use formats that are compatible with the
+Neo Engine right now.
+
+## Compatible Formats
+### Meshes
+Neo supports a wide range of mesh formats that can be loaded without conversion of any sort.
+
+All conversion happens when the publishing application creates the game package which turns them into a custom binary format to save space
+in the final game. All external mesh formats are loaded using the Assimp library.
+
+#### Model Interchange Formats
+-    Collada ( .dae )
+-    Blender 3D ( .blend )
+-    3ds Max 3DS ( .3ds )
+-    3ds Max ASE ( .ase )
+-    Wavefront Object ( .obj )
+-    Industry Foundation Classes (IFC/Step) ( .ifc )
+-    XGL ( .xgl,.zgl )
+-    Stanford Polygon Library ( .ply )
+-    *AutoCAD DXF ( .dxf )
+-    LightWave ( .lwo )
+-    LightWave Scene ( .lws )
+-    Modo ( .lxo )
+-    Stereolithography ( .stl )
+-    DirectX X ( .x )
+-    AC3D ( .ac )
+-    Milkshape 3D ( .ms3d )
+-    * TrueSpace ( .cob,.scn )
+
+#### Motion Capture Formats
+
+-    Biovision BVH ( .bvh )
+-    * CharacterStudio Motion ( .csm )
+
+#### Graphics Engine Formats
+
+-    Ogre XML ( .xml )
+-    Irrlicht Mesh ( .irrmesh )
+-    * Irrlicht Scene ( .irr )
+
+#### Game file formats
+
+-    Quake I ( .mdl )
+-    Quake II ( .md2 )
+-    Quake III Mesh ( .md3 )
+-    Quake III Map/BSP ( .pk3 )
+-    * Return to Castle Wolfenstein ( .mdc )
+-    Doom 3 ( .md5* )
+-    *Valve Model ( .smd,.vta )
+-    *Starcraft II M3 ( .m3 )
+-    *Unreal ( .3d )
+
+#### Other file formats
+
+-    BlitzBasic 3D ( .b3d )
+-    Quick3D ( .q3d,.q3s )
+
+@link assimp_source http://assimp.sourceforge.net/main_features_formats.html @endlink
+
+### Textures
+The amount of supported image formats is not as big as the mesh formats but includes the most used formats.
+
+- PNG
+- JPEG
+- TGA
+
+All other formats like the GIMP XCF and Photoshops PSD format need to be converted beforehand due to the complexity
+of the internal formats.
+
+### Sounds & Music
+Since providing MP3 support would mean to pay for an expensive license it is only possible to use
+free formats like WAV and OGG.
+
+- WAV
+- OGG
+
+### Fonts
+
+Neo supports a wide range of font formats through Freetype.
+
+-    TrueType fonts (TTF) and TrueType collections (TTC)
+-    CFF fonts
+-    WOFF fonts
+-    OpenType fonts (OTF, both TrueType and CFF variants) and OpenType collections (OTC)
+-    Type 1 fonts (PFA and PFB)
+-    CID-keyed Type 1 fonts
+-    SFNT-based bitmap fonts, including color Emoji
+-    X11 PCF fonts
+-    Windows FNT fonts
+-    BDF fonts (including anti-aliased ones)
+-    PFR fonts
+-    Type 42 fonts (limited support)
+
+
+@link freetype_source http://freetype.org/freetype2/docs/index.html
 
 */

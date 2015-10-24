@@ -20,6 +20,7 @@ Topics
 
 - @subpage project_creation
 - @subpage project_structure
+- @subpage project_importing_assets
 
 @todo Support for publishing projects with a nice UI
 @todo Support for creating native C++ plugins
