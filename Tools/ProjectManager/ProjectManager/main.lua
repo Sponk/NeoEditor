@@ -8,6 +8,7 @@
 require("NeoLua")
 local Translator = require("utils.translator")
 
+require("utils.utils")
 require("utils.gui")
 local ProjectManager = require("ProjectManager.callbacks")
 
@@ -38,7 +39,11 @@ local updateProjectButton = NeoLua.ThemedButton(300, 35, 290, 20, tr("Update Eng
 updateProjectButton:setScriptCallback("updateProjectCallback")
 canvas:addWidget(neo2d:addWidget(updateProjectButton))
 
-local importProjectButton = NeoLua.ThemedButton(300, 60, 290, 20, tr("Import Project"))
+local updateEngineScriptsButton = NeoLua.ThemedButton(300, 60, 290, 20, tr("Update Engine Scripts"))
+updateEngineScriptsButton:setScriptCallback("updateEngineScriptsCallback")
+canvas:addWidget(neo2d:addWidget(updateEngineScriptsButton))
+
+local importProjectButton = NeoLua.ThemedButton(300, 85, 290, 20, tr("Import Project"))
 importProjectButton:setScriptCallback("importProjectCallback")
 canvas:addWidget(neo2d:addWidget(importProjectButton))
 

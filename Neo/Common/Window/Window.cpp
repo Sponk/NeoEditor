@@ -769,6 +769,8 @@ bool NeoWindow::create(const char * title, unsigned int width, unsigned int heig
 void NeoWindow::resize(unsigned int width, unsigned int height)
 {
     SDL_SetWindowSize(g_NeoWindow, width, height);
+	m_width = width;
+	m_height = height;
 }
 
 void NeoWindow::sleep(double time)

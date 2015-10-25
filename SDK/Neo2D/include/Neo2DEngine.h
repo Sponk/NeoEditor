@@ -79,6 +79,7 @@ class NEO2D_EXPORT Neo2DEngine
 private:
 	struct WidgetId
 	{
+		WidgetId() : w(NULL), id(0) {}
 		Widget* w;
 		int id;
 	};
@@ -292,6 +293,9 @@ public:
 
 	/**
 	 * @brief Deletes all widgets and canvases except the main canvas.
+	 *
+	 * This includes clearing all internal data managers.
+	 * @warning Needs to be called at least once before exiting the application or else it will crash in the destructor!
 	 */
 	void clear();
 	void scheduleClear() { m_clearScheduled = true; }

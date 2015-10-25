@@ -38,6 +38,7 @@ typedef Neo::ES2Context GL4Context;
 #include <BinMeshLoader.h>
 #include <AssimpMeshLoader.h>
 
+#include <Neo2DEngine.h>
 #include <NeoCore.h>
 #include <NeoEngine.h>
 #include <Window/Mouse.h>
@@ -206,7 +207,8 @@ void PlayerBackend::start(void)
 void PlayerBackend::clear(void)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
-	
+	Neo2D::Neo2DEngine* neo2d = Neo2D::Neo2DEngine::getInstance();
+
 	// level
 	m_level->clear();
 	if(m_renderer){
@@ -244,6 +246,8 @@ void PlayerBackend::clear(void)
 		engine->getTexturesAnimLoader()->clear();
 		engine->getMaterialsAnimLoader()->clear();
 	}
+
+	neo2d->clear();
 }
 
 void PlayerBackend::restart(void)
@@ -326,6 +330,9 @@ void PlayerBackend::logicLoop(void)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
 
+	// Update Neo2D before the rest so all input is still in the pipeline
+	Neo2D::Neo2DEngine::getInstance()->update();
+
 	// game
 	NeoGame * game = engine->getGame();
 	if(game)
@@ -361,4 +368,7 @@ void PlayerBackend::graphicLoop(void)
 	{
 		render->clear(BUFFER_COLOR);
 	}
+
+	// Draw GUI on top of everything
+	Neo2D::Neo2DEngine::getInstance()->draw();
 }

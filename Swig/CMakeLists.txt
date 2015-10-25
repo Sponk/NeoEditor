@@ -8,7 +8,7 @@ INCLUDE_DIRECTORIES(
   ${LUA_INCLUDE_DIR}
   ${MONO_INCLUDE_DIR}
   ${TINYXML_INCLUDE_DIR}
-  )
+)
 
 IF(${SWIG_FOUND})
   MESSAGE("-- Generating Lua bindings for Neo")
@@ -48,7 +48,11 @@ IF(${SWIG_FOUND})
 
   IF(${ENABLE_MONO})
 
-  	FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/Swig)
+	  MESSAGE("-- Generating Mono bindings for Neo")
+	  MESSAGE("-- Using MCS: " ${MCS_EXECUTABLE})
+	  MESSAGE("-- Using includes: " ${MONO_INCLUDE_DIR})
+
+	  FILE(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/Swig)
 
 	## Select library to import
 	IF(WIN32)
@@ -74,7 +78,7 @@ IF(${SWIG_FOUND})
 	FILE(GLOB_RECURSE SWIG_SOURCES ${CMAKE_BINARY_DIR}/Swig/*.cs)
     FILE(GLOB_RECURSE PLUGIN_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/NeoSharp/*.cpp)
 
-	ADD_CUSTOM_TARGET(build-neo-sharp ALL ${MCS_EXECUTABLE} -t:library -out:${NEO_BINARY_OUTPUT}/NeoSharp.dll ${SWIG_SOURCES})
+	ADD_CUSTOM_TARGET(build-neo-sharp ALL ${MCS_EXECUTABLE} -t:library -out:${NEO_BINARY_OUTPUT}/NeoSharp.dll ${CMAKE_BINARY_DIR}/Swig/*.cs)
 
 	IF(NOT ANDROID AND NOT EMSCRIPTEN)
       ADD_LIBRARY(Game SHARED ${PLUGIN_SOURCES} NeoSharp_wrap.cxx)

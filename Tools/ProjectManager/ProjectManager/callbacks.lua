@@ -32,7 +32,7 @@ end
 -- @param filename The file path to extend
 -- @return The extended file name
 local function appendProjectExtension(filename)
-    if filename:sub(1, -string.len(".mproj")) ~= ".mproj" then
+    if filename:find(".mproj") ~= filename:len() - string.len(".mproj") then
         return filename .. ".mproj"
     end
 
@@ -52,8 +52,9 @@ function copyFiles(projectPath)
         NeoLua.copyFile("NeoPlayer", projectPath .. seperator .. "NeoPlayer")
         ffi.C.chmod(projectPath .. seperator .. "NeoPlayer", S_IRWXU)
     else
-        NeoLua.copyDirFiles(".", projectPath, ".dll")
-        NeoLua.copyFile("NeoPlayer.exe", projectPath .. seperator .. "NeoPlayer.exe")
+        local winPath = projectPath:gsub("\\", "/")
+        NeoLua.copyDirFiles(".", winPath, ".dll")
+        NeoLua.copyFile("NeoPlayer.exe", winPath .. "/NeoPlayer.exe")
     end
 end
 
@@ -67,7 +68,8 @@ function createProjectCallback()
     local projectPath, projectName, extension = string.match(fname, "(.-)([^\\/]-%.?([^%.\\/]*))$")
     data.projects[projectName] = fname
 
-    NeoLua.copyDirectory("./assets", projectPath .. "/assets")
+    NeoLua.copyDirectory("./assets", projectPath:gsub("\\", "/") .. "/assets")
+    NeoLua.copyDirectory("./translations", projectPath:gsub("\\", "/") .. "/translations")
 
     copyFiles(projectPath)
 
@@ -84,6 +86,15 @@ function createProjectCallback()
 
     data.updateList()
     data.saveRegistry()
+end
+
+function updateEngineScriptsCallback()
+    local fname = data.list:getSelected()
+    if fname == nil then infoLog("Won't update engine scripts!") return end
+
+    local projectPath, projectName, extension = string.match(data.projects[fname], "(.-)([^\\/]-%.?([^%.\\/]*))$")
+    NeoLua.copyDirectory("./assets", projectPath:gsub("\\", "/") .. "/assets")
+    NeoLua.copyDirectory("./translations", projectPath:gsub("\\", "/") .. "/translations")
 end
 
 --- Removes a project from the registry.
@@ -163,7 +174,7 @@ function data.saveRegistry()
 
     f:write("return {")
     for k,v in pairs(data.projects) do
-        f:write("[\"" .. k .. "\"] = \"" .. v .. "\",\n")
+        f:write("[\"" .. k .. "\"] = \"" .. v:gsub("\\", "\\\\") .. "\",\n")
     end
     -- We need to ignore the last comma
     f:write("[0] = nil}")

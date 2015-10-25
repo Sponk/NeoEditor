@@ -65,16 +65,7 @@ Neo2DEngine::Neo2DEngine()
 	m_ids = 0;
 }
 
-Neo2DEngine::~Neo2DEngine()
-{
-	Canvas* c;
-	for (int i = 0; i < m_canvasVector.size(); i++)
-	{
-		c = m_canvasVector[i];
-		if (c && c != Canvas::getInstance())
-			delete c;
-	}
-}
+Neo2DEngine::~Neo2DEngine() {}
 
 std::vector<std::string> scriptCallbacks;
 
@@ -911,13 +902,16 @@ void Neo2DEngine::clear()
 	m_canvasVector.push_back(Canvas::getInstance());
 	Canvas::getInstance()->clear();
 
-	for (int i = 0; i < m_widgets.size(); i++)
+	for (auto widpair : m_widgets)
 	{
-		delete m_widgets[i].w;
+		SAFE_DELETE(widpair.second.w);
 	}
 
 	m_widgets.clear();
 	scriptCallbacks.clear();
+
+	m_fontManager.clear();
+	m_textureManager.clear();
 }
 
 static bool compareCanvasLayer(Canvas* a, Canvas* b)

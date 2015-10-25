@@ -351,12 +351,10 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 {
 	unsigned int i;
 	char globalPath[256];
-	
-	
+		
 	// clear mesh
 	mesh->clear();
-	
-	
+		
 	// textures
 	unsigned int nb_textures = 0;
 	for(i=0; i<scene->mNumMaterials; i++)
