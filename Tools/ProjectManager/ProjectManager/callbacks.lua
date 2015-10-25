@@ -32,7 +32,7 @@ end
 -- @param filename The file path to extend
 -- @return The extended file name
 local function appendProjectExtension(filename)
-    if filename:find(".mproj") ~= filename:len() - string.len(".mproj") then
+    if filename:find(".mproj") ~= filename:len() - string.len(".mproj") + 1 then
         return filename .. ".mproj"
     end
 
@@ -93,6 +93,7 @@ function updateEngineScriptsCallback()
     if fname == nil then infoLog("Won't update engine scripts!") return end
 
     local projectPath, projectName, extension = string.match(data.projects[fname], "(.-)([^\\/]-%.?([^%.\\/]*))$")
+
     NeoLua.copyDirectory("./assets", projectPath:gsub("\\", "/") .. "/assets")
     NeoLua.copyDirectory("./translations", projectPath:gsub("\\", "/") .. "/translations")
 end
@@ -104,7 +105,6 @@ function removeProjectCallback()
 
     data.projects[fname] = nil
     data.updateList()
-
     data.saveRegistry()
 end
 
