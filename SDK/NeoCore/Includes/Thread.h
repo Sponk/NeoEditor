@@ -1,5 +1,5 @@
 //========================================================================
-// Copyright (c) 2014 Yannick Pflanzer <scary-squid.de>
+// Copyright (c) 2014-2015 Yannick Pflanzer <neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -25,14 +25,15 @@
 #ifndef __THREAD_H
 #define __THREAD_H
 
+#include <functional>
+
 namespace Neo
 {
 /**
- * @brief The MThread class implements a multithreading mechanism
- * @bug Should this class be here, in MEngine or somewhere else?
+ * @brief This class defines the virtual interface for a thread.
  *
- * @see MSemaphore
- * @see MSleep
+ * The interface is fully virtual and needs to be implemented before it can be used.
+ * @see Semaphore
  */
 class NEO_CORE_EXPORT Thread
 {
@@ -42,7 +43,7 @@ public:
 	Thread() {}
 
     /**
-      * @brief The destructor calls MThread::Stop to clean up.
+      * @brief The destructor stops the thread if it can and cleans it up.
       */
 	~Thread() {}
 
@@ -61,48 +62,45 @@ public:
      * @param data Data that needs to be pushed to the thread function.
      * @return Returns \b true on success, \b false on failure.
      */
-    virtual bool Start(int (*thread_func)(void*), const char* name, void* data) = 0;
+    virtual bool Start(std::function<int (void*)> thread_func, const char* name, void* data) = 0;
 
     /**
      * @brief Stop Stops this thread.
      *
-     * This would force quit the thread on older versions of SDL. In this version (2.x) it
-     * only calls MThread::WaitForReturn and cleans up all private variables.
+     * Should stop the thread immediately but does not have to since it is considered unsafe to kill a thread.
      */
     virtual void Stop() = 0;
 
     /**
-     * @brief WaitForReturn Waits for thread_func from MThread::Start to return a value.
+     * @brief Waits for a return a value and blocks the running thread for that period of time.
      * @return The exit value of thread_func.
      */
     virtual int WaitForReturn() = 0;
 
     /**
-     * @brief IsRunning Returns if the thread is currently running.
+     * @brief Returns if the thread is currently running.
      * @return Is this thread running?
      */
     bool IsRunning() { return m_running; }
     void SetRunning(bool value) { m_running = value; }
 
     /**
-     * @brief GetId Gets the thread ID from SDL and returns it.
+     * @brief Returns the thread ID.
      * @return The thread ID.
      */
     virtual int GetId() = 0;
 
 	/**
-	 * @brief Creates a new thread object. Should be overwritten by child classes.
-	 * @return
+	 * @brief Creates a new thread object.
+	 * @return A new thread instance.
 	 */
 	virtual Thread* getNew() = 0;
 };
 
 /**
- * @brief The MSemaphore class implements a semaphore mechanism based on SDL for use with MThread.
- * @bug Should be in its own file!
+ * @brief This class implements the virtual interface for a semaphore mechanism.
  *
- * @see MSemaphoreWaitAndLock
- * @see MSemaphoreUnlock
+ * The interface is fully virtual and needs to be implemented before it can be used.
  */
 class NEO_CORE_EXPORT Semaphore
 {
@@ -118,15 +116,15 @@ public:
     virtual bool Init(int num) = 0;
 
 	/**
-	* @brief Locks the semaphore given as parameter and waits if it's already locked.
-	*
-	* @param sem The pointer to a MSemaphore which shall be locked/waited for.
-	* @return Returns \b true on success and \b false on failure.
-	*/
-	static bool WaitAndLock(Semaphore*);
-	static bool Unlock(Semaphore*);
-
+	 * @brief Locks the semaphore as soon as it can.
+	 * Puts the running thread into sleep until it can lock the semaphore.
+	 */
 	virtual bool WaitAndLock() = 0;
+
+	/**
+	 * @brief Unlocks the Semaphore immediately.
+	 * Causes a potential thread that called WaitAndLock to continue.
+	 */
 	virtual bool Unlock() = 0;
 
 	/**
@@ -140,6 +138,10 @@ public:
 /**
  * @brief The ThreadFactory class allows you to register any subclass of Thread and Semaphore to provide
  * the implementation of all newly created thread objects.
+ *
+ * Needs to be initialized at application start with proper Thread and Semaphore objects.
+ *
+ * \b Attention: Never use any subclass of Thread and Semaphore directly! Always use the ThreadFactory for that!
  */
 class NEO_CORE_EXPORT ThreadFactory
 {
@@ -156,25 +158,31 @@ public:
 
 	/**
 	 * @brief Sets the thread template object with the overwritten getNew method
+	 *
+	 * @note The ThreadFactory takes ownership of the given pointer and might delete it later.
+	 *
 	 * @param thr The template.
 	 */
 	void setTemplateThread(Thread* thr) { m_templateThread = thr; }
 
 	/**
 	 * @brief Sets the semaphore template object with the overwritten getNew method
+	 *
+	 * @note The ThreadFactory takes ownership of the given pointer and might delete it later.
+	 *
 	 * @param sem The template.
 	 */
 	void setTemplateSemaphore(Semaphore* sem) { m_templateSemaphore = sem; }
 
 	/**
 	 * @brief Creates a new thread.
-	 * @return The new thread.
+	 * @return The new thread or NULL if no template is registered.
 	 */
 	Thread* getNewThread() { if(m_templateThread) return m_templateThread->getNew(); else return NULL; }
 
 	/**
 	 * @brief Creates a new semaphore.
-	 * @return The new semaphore.
+	 * @return The new semaphore or NULL if no template is registered.
 	 */
 	Semaphore* getNewSemaphore() { if(m_templateSemaphore) return m_templateSemaphore->getNew(); else return NULL; }
 };

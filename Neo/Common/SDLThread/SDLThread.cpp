@@ -1,5 +1,5 @@
 //========================================================================
-// Copyright (c) 2014 Yannick Pflanzer <scary-squid.de>
+// Copyright (c) 2014-2015 Yannick Pflanzer <neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -40,7 +40,7 @@ SDLThread::~SDLThread()
 }
 
 // TODO: Save name!
-bool SDLThread::Start(int (*thread_func)(void*), const char* name, void* data)
+bool SDLThread::Start(std::function<int (void*)> thread_func, const char* name, void* data)
 {
     if(m_running)
     {
@@ -48,7 +48,7 @@ bool SDLThread::Start(int (*thread_func)(void*), const char* name, void* data)
         return false;
     }
 
-    m_sdlThread = SDL_CreateThread(thread_func, NULL, data);
+    m_sdlThread = SDL_CreateThread(*thread_func.target<SDL_ThreadFunction>(), NULL, data);
     if(!m_sdlThread)
     {
         fprintf(stderr, "ERROR: Could not start thread: %s\n", SDL_GetError());
@@ -94,7 +94,7 @@ int SDLThread::GetId()
 }
 
 ////////////////////////////////////////////////////////
-// Implementation of MSDLSemaphore
+// Implementation of SDLSemaphore
 ////////////////////////////////////////////////////////
 
 SDLSemaphore::SDLSemaphore() :
@@ -126,16 +126,6 @@ bool SDLSemaphore::Init(int num)
     }
 
     return true;
-}
-
-bool SDLSemaphore::WaitAndLock(SDLSemaphore* semaphore)
-{
-	return semaphore->WaitAndLock();
-}
-
-bool SDLSemaphore::Unlock(SDLSemaphore* semaphore)
-{
-	return semaphore->Unlock();
 }
 
 bool SDLSemaphore::WaitAndLock()

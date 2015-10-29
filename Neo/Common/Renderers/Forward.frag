@@ -3,7 +3,8 @@
 #extension GL_ARB_explicit_attrib_location : enable
 #extension GL_ARB_shader_subroutine : enable
 
-#ifdef GL_ARB_shader_subroutine
+#define MESA_WORKAROUND
+#if defined(GL_ARB_shader_subroutine) && !defined(MESA_WORKAROUND)
 subroutine vec4 shadeModelType(vec3 position, vec3 normal);
 subroutine uniform shadeModelType shadeModel;
 #else
@@ -411,7 +412,7 @@ vec4 TextShader(vec3 position, vec3 n)
 }
 
 // Fallback selection
-#ifndef GL_ARB_shader_subroutine
+#if !defined(GL_ARB_shader_subroutine) || defined(MESA_WORKAROUND)
 vec4 shadeModel(vec3 position, vec3 n)
 {
     vec4 retval;

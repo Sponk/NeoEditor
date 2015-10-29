@@ -89,9 +89,7 @@ m_emissionTimer(0),
 m_multithreading(false),
 m_looping(true),
 m_emitting(true)
-{
-    m_semaphore.Init(1);
-}
+{}
 
 ParticleSystemBehavior::ParticleSystemBehavior(ParticleSystemBehavior & behavior, Object3d * parentObject):
 Behavior(parentObject),
@@ -117,9 +115,7 @@ m_gravity(behavior.m_gravity),
 m_multithreading(behavior.m_multithreading),
 m_looping(behavior.m_looping),
 m_emitting(true)
-{
-    m_semaphore.Init(1);
-}
+{}
 
 ParticleSystemBehavior::~ParticleSystemBehavior(void)
 {
@@ -205,8 +201,15 @@ void ParticleSystemBehavior::update(void)
     NeoEngine * engine = NeoEngine::getInstance();
     Level * level = engine->getLevel();
 
-    if(m_multithreading && !m_thread.IsRunning())
-        m_thread.Start(&ParticleSystemBehavior::thread_main, "ParticleSystemThread", (void*) this);
+    if(!m_semaphore)
+    {
+        m_semaphore = ThreadFactory::getInstance()->getNewSemaphore();
+        m_semaphore->Init(1);
+    }
+    if(!m_thread) m_thread = ThreadFactory::getInstance()->getNewThread();
+
+    if(m_multithreading && !m_thread->IsRunning())
+        m_thread->Start(&ParticleSystemBehavior::thread_main, "ParticleSystemThread", (void*) this);
 
     if(!m_multithreading)
         updateParticles(getParentObject()->getTransformedPosition());
@@ -300,7 +303,7 @@ void ParticleSystemBehavior::draw()
     render->enableColorArray();
     render->setColorPointer(VAR_FLOAT, 4, m_particleColors);
 
-    SDLSemaphore::WaitAndLock(&m_semaphore);
+    m_semaphore->WaitAndLock();
 
     int vertexAttrib;
     render->getAttribLocation(m_fx, "Vertex", &vertexAttrib);
@@ -316,7 +319,7 @@ void ParticleSystemBehavior::draw()
     render->drawArray(PRIMITIVE_POINTS, 0, m_particles.size());
 
     render->disableScissorTest();
-    SDLSemaphore::Unlock(&m_semaphore);
+    m_semaphore->Unlock();
 
     render->setDepthMask(true);
 
@@ -466,13 +469,13 @@ int ParticleSystemBehavior::thread_main(void* particlesystem)
 
     while(self->m_multithreading && engine->isActive())
     {
-        SDLSemaphore::WaitAndLock(&self->m_semaphore);
+        self->m_semaphore->WaitAndLock();
         self->updateParticles(self->getParentObject()->getTransformedPosition());
-        SDLSemaphore::Unlock(&self->m_semaphore);
+        self->m_semaphore->Unlock();
         window->sleep(11);
     }
 
-    self->m_thread.SetRunning(false);
+    self->m_thread->SetRunning(false);
     //MLOG_INFO("Exiting thread.");
     return 1;
 }

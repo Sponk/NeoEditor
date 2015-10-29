@@ -90,8 +90,8 @@ private:
     unsigned int m_vertShad;
     unsigned int m_pixShad;
 
-    SDLThread m_thread;
-    SDLSemaphore m_semaphore;
+    Thread* m_thread;
+    Semaphore* m_semaphore;
 
     void updateParticles(Vector3 parentPosition);
     void updateArrays(bool updateColorData);
