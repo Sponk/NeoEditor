@@ -3,7 +3,7 @@
 #extension GL_ARB_explicit_attrib_location : enable
 #extension GL_ARB_shader_subroutine : enable
 
-#define MESA_WORKAROUND
+//#define MESA_WORKAROUND
 #if defined(GL_ARB_shader_subroutine) && !defined(MESA_WORKAROUND)
 subroutine vec4 shadeModelType(vec3 position, vec3 normal);
 subroutine uniform shadeModelType shadeModel;

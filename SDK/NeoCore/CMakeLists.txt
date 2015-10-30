@@ -24,8 +24,6 @@ ENDIF()
 
 TARGET_LINK_LIBRARIES(NeoCore)
 
-ADD_DEPENDENCIES(NeoCore neocore-swig)
-
 ## Install for Editor
 INSTALL(TARGETS NeoCore DESTINATION ${NEO_INSTALL_DIR})
 

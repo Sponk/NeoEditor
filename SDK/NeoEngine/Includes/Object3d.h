@@ -213,7 +213,7 @@ public:
 	 *
 	 * Vt = M * V
 	 *
-	 * @param The vector to transform.
+	 * @param vector The vector to transform.
 	 * @return The result.
 	 */
 	inline Vector3 getTransformedVector(const Vector3& vector) const

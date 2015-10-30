@@ -403,10 +403,10 @@ ENDIF()
 
 ## Build only for PC
 IF(NOT ANDROID AND NOT NO_TESTS)
-  ADD_SUBDIRECTORY(Tests/LuaApi)
+  #ADD_SUBDIRECTORY(Tests/LuaApi)
   ADD_SUBDIRECTORY(Tests/SDK)
-  ADD_SUBDIRECTORY(Tests/LuaSDK)
-  ADD_SUBDIRECTORY(Tests/Benchmark)
+  #ADD_SUBDIRECTORY(Tests/LuaSDK)
+  #ADD_SUBDIRECTORY(Tests/Benchmark)
 ELSE()
   MESSAGE("-- Will not build tests.")
 ENDIF()

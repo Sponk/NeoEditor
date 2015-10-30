@@ -2,7 +2,7 @@ INCLUDE(CopyFiles)
 copy_files("*" "${NEO_BINARY_OUTPUT}" "copy-project-manager")
 
 add_custom_target(project-manager-test "${NEO_BINARY_OUTPUT}/NeoPlayer" -e ProjectManager/main.lua WORKING_DIRECTORY ${NEO_BINARY_OUTPUT})
-add_dependencies(project-manager-test all NeoPlayer Neo2D NeoCore NeoEngine copy-project-manager copy-editor)
+add_dependencies(project-manager-test NeoPlayer Neo2D NeoCore NeoEngine copy-project-manager copy-editor)
 
 INSTALL(DIRECTORY ProjectManager DESTINATION ${NEO_INSTALL_DIR})
 FIND_PROGRAM(MONDOC_EXECUTABLE mondoc)

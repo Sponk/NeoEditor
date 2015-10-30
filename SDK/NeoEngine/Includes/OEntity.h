@@ -112,7 +112,7 @@ public:
 
 	/**
 	 * @brief Changes the physics shape ID that is given out by the physics context.
-	 * @param shapeID The new shape ID.
+	 * @param shapeId The new shape ID.
 	 */
 	inline void setShapeId(unsigned int shapeId){ m_shapeId = shapeId; }
 	
@@ -209,7 +209,7 @@ public:
 
 	/**
 	 * @brief Changes the linear damping coefficient used for calculations.
-	 * @param restitution The new value.
+	 * @param linearDamping The new value.
 	 */
 	inline void setLinearDamping(float linearDamping){ m_linearDamping = linearDamping; }
 	
@@ -221,7 +221,7 @@ public:
 
 	/**
 	 * @brief Changes the angular damping coefficient used for calculations.
-	 * @param restitution The new value.
+	 * @param angularDamping The new value.
 	 */
 	inline void setAngularDamping(float angularDamping){ m_angularDamping = angularDamping; }
 	
@@ -233,7 +233,7 @@ public:
 
 	/**
 	 * @brief Changes the angular factor coefficient used for calculations.
-	 * @param restitution The new value.
+	 * @param angularFactor The new value.
 	 */
 	inline void setAngularFactor(float angularFactor){ m_angularFactor = angularFactor; }
 	
@@ -245,7 +245,7 @@ public:
 
 	/**
 	 * @brief Changes the linear factor coefficient used for calculations.
-	 * @param restitution The new value.
+	 * @param linearFactor The new value.
 	 */
 	inline void setLinearFactor(const Vector3 & linearFactor){ m_linearFactor = linearFactor; }
 	

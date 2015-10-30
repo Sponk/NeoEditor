@@ -353,7 +353,7 @@ public:
 
 	/**
 	 * @brief Sets the material animation reference.
-	 * @param armatureAnimRef The new material animation reference.
+	 * @param materialsAnimRef The new material animation reference.
 	 *
 	 * @see MaterialsAnimRef
 	 */

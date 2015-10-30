@@ -173,7 +173,7 @@ public:
 
 	/**
 	 * @brief Enables or disables the GUI.
-	 * @param A boolean.
+	 * @param enabled A boolean.
 	 */
 	void setEnabled(bool enabled) { m_enabled = enabled; }
 
@@ -255,7 +255,7 @@ public:
 	/**
 	 * @brief Adds a widget to the internal list.
 	 *
-	 * @param The new widget.
+	 * @param w The new widget.
 	 * @return The handle of the widget.
 	 */
     DISOWN(Widget* w) int addWidget(Widget* w);

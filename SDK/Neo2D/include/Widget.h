@@ -114,6 +114,8 @@ private:
 	 * @brief Does nothing.
 	 *
 	 * Used to deliver the default callback to prevent crashes.
+	 *
+	 * @param w Some widget.
 	 * @param data Some data.
 	 */
 	static void doNothing(Widget* w, long data) {}

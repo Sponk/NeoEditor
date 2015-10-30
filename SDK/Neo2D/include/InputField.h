@@ -85,6 +85,7 @@ protected:
 	/**
 	 * @brief Calculates the full width of the given text object.
 	 * @param text The text object to operate on.
+	 * @param pos The index in the text string.
 	 * @return The full width in pixels
 	 */
 	Vector2 calculateCursorPos(OText* text, int pos = -1);

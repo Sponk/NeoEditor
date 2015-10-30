@@ -108,7 +108,7 @@ public:
 	 * This means you have to ensure the file exists before calling this method!
 	 *
 	 * @param filename The path to the file.
-	 * @param size The font size to load.
+	 * @param fontsize The font size to load.
 	 * @return The new FontRef object.
 	 */
 	FontRef * loadFont(const char * filename, unsigned int fontsize = 128);

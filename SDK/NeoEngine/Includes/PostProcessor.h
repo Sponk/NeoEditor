@@ -26,7 +26,7 @@
 namespace Neo
 {
 /**
- * @brief The MPostProcessor class contains functionality used to render
+ * @brief The PostProcessor class contains functionality used to render
  * the current scene to a texture to allow applying GLSL post effects when
  * rendering the final image to the screen.
  */

@@ -170,7 +170,7 @@ public:
      * @brief Removes the given object from this scene and deletes its memory.
      * @param object The object to be removed.
      *
-     * @fixme Should also remove all children!
+     * @note Should also remove all children in future!
      */
 	void deleteObject(Object3d * object);
 

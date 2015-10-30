@@ -1334,7 +1334,7 @@ void StandardRenderer::drawText(OText* textObj, OCamera* camera)
 
 	render->enableBlending();
 	render->setBlendingMode(BLENDING_ALPHA);
-	render->enableDepthTest();
+	//render->enableDepthTest();
 	//render->disableCullFace();
 
 	int uniform = 1;

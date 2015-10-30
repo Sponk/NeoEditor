@@ -1,9 +1,9 @@
 
 IF(NOT ANDROID AND NOT EMSCRIPTEN)
 	ADD_SUBDIRECTORY(assimp)
-	ADD_SUBDIRECTORY(fltk)
+	#ADD_SUBDIRECTORY(fltk)
 
-	ADD_SUBDIRECTORY(libzip)
+	#ADD_SUBDIRECTORY(libzip)
 
 	# We compile sdl2 differently on Android
 	# Only compile SDL2 if we found no "native" one

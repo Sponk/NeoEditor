@@ -71,6 +71,7 @@ void NeoGame::update(void)
 	if(! scene)
 		return;
 
+#ifndef DISABLE_3D
 	engine->getRenderer()->stopThreads();
 	// update behaviors
 	scene->updateObjectsBehaviors();
@@ -98,6 +99,7 @@ void NeoGame::update(void)
 			sceneLayer->updateObjectsMatrices();
 		}
 	}
+#endif
 
 	// Update subgames
 	for(int i = 0; i < m_subGames.size(); i++)
@@ -105,7 +107,9 @@ void NeoGame::update(void)
 		m_subGames[i]->update();
 	}
 
+#ifndef DISABLE_3D
 	engine->getRenderer()->startThreads();
+#endif
 
 	// flush input
 	engine->getInputContext()->flush();
@@ -125,7 +129,7 @@ void NeoGame::draw(void)
 	if(! scene)
 		return;
 
-
+#ifndef DISABLE_3D
 	// render to texture
 	{
 		unsigned int currentFrameBuffer = 0;
@@ -177,6 +181,9 @@ void NeoGame::draw(void)
 				render->bindFrameBuffer(currentFrameBuffer);
 			}
 		}
+#else
+		render->clear(BUFFER_COLOR | BUFFER_DEPTH);
+#endif
 
 		// Draw subgames
 		for(int i = 0; i < m_subGames.size(); i++)
@@ -184,11 +191,12 @@ void NeoGame::draw(void)
 			m_subGames[i]->draw();
 		}
 
+#ifndef DISABLE_3D
+
 		// recover viewport
 		if(recoverViewport)
 			render->setViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 	}
-
 
 	// depth test
 	render->enableDepthTest();
@@ -242,6 +250,7 @@ void NeoGame::draw(void)
 			sceneLayer->drawObjectsBehaviors();
 		}
 	}
+#endif
 }
 
 void NeoGame::onBeginScene(void)
@@ -274,7 +283,10 @@ void NeoGame::onBeginScene(void)
 void NeoGame::onEndScene(void)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
+
+#ifndef DISABLE_3D
 	engine->getPhysicsContext()->clear();
+#endif
 
 	// get level
 	Level * level = NeoEngine::getInstance()->getLevel();
@@ -288,7 +300,7 @@ void NeoGame::onEndScene(void)
 
 	// end scene
 	scene->end();
-    m_postProcessor.clear();
+    //m_postProcessor.clear();
 }
 
 void NeoGame::onBegin()

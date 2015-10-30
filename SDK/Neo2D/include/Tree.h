@@ -212,7 +212,7 @@ public:
 	 * Variant: The given root node walks down one level for every recursion
 	 * therefore the algorithm terminates.
 	 *
-	 * @param The root node to start at.
+	 * @param root The root node to start at.
 	 */
 	void clear(TreeNode<std::string>* root);
 
