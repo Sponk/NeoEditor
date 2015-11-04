@@ -125,6 +125,8 @@ public:
 	void draw(Vector2 offset);
 	void update();
 
+	void setFilter(TEX_FILTER_MODES mode);
+
 	/**
 	 * @brief Returns the textures dimensions that are used.
 	 * @return The dimensions of the texture in pixels.

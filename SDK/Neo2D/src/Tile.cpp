@@ -49,6 +49,7 @@ void TileSheet::loadImage(const char* path, unsigned int width,
 	Render* render = Render::getInstance();
 	Neo2DEngine* gui = Neo2DEngine::getInstance();
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
+	RenderingContext* context = NeoEngine::getInstance()->getRenderingContext();
 
 	if (path != NULL)
 	{
@@ -57,6 +58,10 @@ void TileSheet::loadImage(const char* path, unsigned int width,
 
 		Neo::TextureRef* tex = gui->loadTexture(buf);
 		m_image = tex->getTextureId();
+
+		context->bindTexture(m_image);
+		context->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
+		context->bindTexture(0);
 
 		m_tileWidth = width;
 		m_tileHeight = height;
@@ -85,8 +90,8 @@ Vector4 TileSheet::getTexCoords(unsigned int x, unsigned int y)
 	if (m_tileHeight == 0 || m_tileWidth == 0)
 		m_tileHeight = m_tileWidth = 0;
 
-	ret.z = (float)m_tileWidth / m_imageWidth;
-	ret.w = (float)m_tileHeight / m_imageHeight;
+	ret.z = (float) m_tileWidth / m_imageWidth;
+	ret.w = (float) m_tileHeight / m_imageHeight;
 
 	return ret;
 }

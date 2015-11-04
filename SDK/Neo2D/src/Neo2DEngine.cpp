@@ -857,8 +857,6 @@ void Neo2DEngine::draw()
 
 	NeoEngine::getInstance()->getSystemContext()->getScreenSize(&width,
 																&height);
-	Render::getInstance()->set2D(width, height);
-
 	if (m_enabled)
 	{
 		for (int i = 0; i < m_canvasVector.size(); i++)

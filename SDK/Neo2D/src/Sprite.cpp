@@ -101,3 +101,14 @@ void Sprite::loadTexture()
 	if (m_height == 0)
 		m_height = m_imageSize.y;
 }
+
+void Sprite::setFilter(TEX_FILTER_MODES mode)
+{
+	if(m_image)
+	{
+		RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+		render->bindTexture(m_image);
+		render->setTextureFilterMode(mode, mode);
+		render->bindTexture(0);
+	}
+}

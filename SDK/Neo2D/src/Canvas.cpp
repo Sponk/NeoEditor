@@ -48,6 +48,8 @@ void Canvas::draw()
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	system->getScreenSize(&m_width, &m_height);
 
+	Render::getInstance()->set2D(m_width, m_height, m_scale);
+
 	unsigned int currentFrameBuffer = 0;
 	renderingContext->getCurrentFrameBuffer(&currentFrameBuffer);
 
@@ -90,7 +92,7 @@ void Canvas::draw()
 	}
 
 	for(int i = 0; i < m_batches.size(); i++)
-		m_batches[i]->draw();
+		m_batches[i]->draw(m_cameraPosition);
 	
 	renderingContext->bindFrameBuffer(currentFrameBuffer);
 }
@@ -148,8 +150,9 @@ void Canvas::enableRenderToTexture(const char* tex)
 	}
 }
 
-void SpriteBatch::draw()
+void SpriteBatch::draw(Vector2 offset)
 {
-	for(int i = 0; i < m_sprites.size(); i++)
-		m_sprites[i]->draw(Vector2(0,0));
+	for(Widget* w : m_sprites)
+		if(w && w->isVisible())
+			w->draw(offset);
 }

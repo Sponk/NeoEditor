@@ -63,6 +63,9 @@ private:
 	unsigned int m_colorVao;
 	unsigned int m_textureVao;
 
+	unsigned int m_texcoordVbo;
+	unsigned int m_vertexVbo;
+
 	Vector2 m_resolution;
 
 	void init(unsigned int fx, unsigned int* vao);
@@ -162,7 +165,7 @@ public:
 	 * @param w The width of the viewport.
 	 * @param h The height of the viewport.
 	 */
-	void set2D(float w, float h);
+	void set2D(float w, float h, float scale = 1.0f);
 
 	/**
 	 * @brief Loads, compiles and links a GLSL shader.

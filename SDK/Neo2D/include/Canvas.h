@@ -95,7 +95,14 @@ class NEO2D_EXPORT SpriteBatch
 	std::vector<Widget*> m_sprites;
 public:
 	DISOWN(Widget* s) void addSprite(Widget* s) { m_sprites.push_back(s); }
-	void draw();
+	void draw(Vector2 offset = Vector2(0,0));
+
+	unsigned int getNumSprites() { return m_sprites.size(); }
+	void deleteSprite(unsigned int id)
+	{
+		SAFE_DELETE(m_sprites[id]);
+		m_sprites.erase(m_sprites.begin() + id);
+	}
 };
 	
 /**
@@ -120,6 +127,7 @@ private:
 	int m_layer;
 
 	Vector2 m_cameraPosition;
+	float m_scale;
 
 	std::vector<SpriteBatch*> m_batches;
 public:
@@ -134,7 +142,10 @@ public:
 	}
 
 	~Canvas() { clear(); }
-	Canvas() : m_layer(0), m_renderToTexture(false), m_fbo(0), m_texture(NULL), m_width(0), m_height(0) {}
+	Canvas() : m_layer(0), m_renderToTexture(false), m_fbo(0), m_texture(NULL), m_width(0), m_height(0), m_scale(1.0) {}
+
+	float getScale() { return m_scale; }
+	void setScale(float s) { m_scale = s; }
 
 	DISOWN(SpriteBatch* b) void addSpriteBatch(SpriteBatch* b) { m_batches.push_back(b); }
 	

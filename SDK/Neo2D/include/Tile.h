@@ -100,7 +100,7 @@ public:
 
 	const char* getStaticName() { return "Tile"; }
 
-	void setTileSheet(TileSheet* sheet) { m_parentSheet = sheet; }
+	DISOWN(TileSheet* sheet) void setTileSheet(TileSheet* sheet) { m_parentSheet = sheet; }
 	void setOffset(Vector2 vec)
 	{
 		m_tilex = vec.x;
