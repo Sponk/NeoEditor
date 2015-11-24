@@ -755,6 +755,9 @@ inline int Pow2(int x)
 
 void StandardRenderer::KillThreads()
 {
+	if(m_lightUpdateThread == NULL || m_visibilityThread == NULL)
+		return;
+
 	startThreads();
 
 	m_threadExit = true;
@@ -1697,12 +1700,18 @@ void StandardRenderer::clearQuadVAO(unsigned int* vao, unsigned int *vbo, unsign
 
 void StandardRenderer::stopThreads()
 {
+	if(m_lightUpdateSemaphore == NULL || m_visibilityUpdateSemaphore == NULL)
+		return;
+
 	m_lightUpdateSemaphore->WaitAndLock();
 	m_visibilityUpdateSemaphore->WaitAndLock();
 }
 
 void StandardRenderer::startThreads()
 {
+	if(m_lightUpdateSemaphore == NULL || m_visibilityUpdateSemaphore == NULL)
+		return;
+
 	m_lightUpdateSemaphore->Unlock();
 	m_visibilityUpdateSemaphore->Unlock();
 }

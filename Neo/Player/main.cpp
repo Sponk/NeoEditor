@@ -281,7 +281,7 @@ int main ( int argc, char **argv )
 			break;
 		}
 
-		if ( window->getFocus() )
+		if (window->getFocus())
 		{
 			int tick = system->getSystemTick();
 			update();
