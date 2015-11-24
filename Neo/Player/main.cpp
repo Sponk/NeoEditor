@@ -269,14 +269,13 @@ int main ( int argc, char **argv )
 	SystemContext* system = engine->getSystemContext();
 	unsigned int frameStart = 0;
 
-	bool isActive = true;
 	// on events
-	while ( isActive )
+	while (engine->isActive())
 	{
 		frameStart = system->getSystemTick();
 		window->onEvents();
 
-		if ( !isActive )
+		if (!engine->isActive())
 		{
 			game->end();
 			break;
@@ -297,8 +296,6 @@ int main ( int argc, char **argv )
 			window->sleep ( 100.0 );
 			continue;
 		}
-
-		isActive = engine->isActive();
 
 		// update postponed requests
 		NeoEngine::getInstance()->updateRequests();

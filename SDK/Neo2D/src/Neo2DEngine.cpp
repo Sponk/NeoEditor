@@ -891,7 +891,7 @@ void Neo2DEngine::clear()
 {
 	for (int i = 1; i < m_canvasVector.size(); i++)
 	{
-		delete m_canvasVector[i];
+		SAFE_DELETE(m_canvasVector[i]);
 	}
 
 	m_canvasVector.clear();

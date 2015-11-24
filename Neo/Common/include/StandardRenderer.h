@@ -95,6 +95,7 @@ public:
 
 	Semaphore* m_lightUpdateSemaphore;
 	Semaphore* m_visibilityUpdateSemaphore;
+	bool m_threadExit; /// Used to signal the threads to exit
 
 	Scene* m_currentScene;
 	int m_numVisibleLights;
@@ -164,6 +165,8 @@ private:
 	
 	static int visibility_thread_mainscene(void* data);
 	Thread* m_visibilityThread;
+
+	void KillThreads();
 };
 }
 #endif

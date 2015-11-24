@@ -672,6 +672,8 @@ void StandardRenderer::init()
 	initQuadVAO(&m_quadVAO, &m_quadVBO, &m_quadTexCoordVBO, m_fx[1]);
 	initTextVAO(&m_textVAO, &m_textVBO, &m_textTexCoordVBO, m_fx[0]);
 
+	m_threadExit = false;
+
 	// Start worker threads
 	if(m_lightUpdateThread == NULL)
 	{
@@ -749,6 +751,18 @@ inline int Pow2(int x)
 	x |= x >> 8;
 	x |= x >> 16;
 	return x+1;
+}
+
+void StandardRenderer::KillThreads()
+{
+	startThreads();
+
+	m_threadExit = true;
+
+	m_lightUpdateThread->WaitForReturn();
+	m_visibilityThread->WaitForReturn();
+
+	m_threadExit = false;
 }
 
 void StandardRenderer::clearFramebuffers()
@@ -873,6 +887,7 @@ void StandardRenderer::initFramebuffers(Vector2 res)
 
 void StandardRenderer::destroy(void)
 {
+	KillThreads();
 	delete this;
 }
 
@@ -1714,7 +1729,7 @@ int StandardRenderer::light_update_thread(void* data)
 
    while (!engine->getGame()->isRunning()) window->sleep(100);
 
-   while(engine->isActive())
+   while(engine->isActive() && !self->m_threadExit)
    {
 	   if (!engine->getGame()->isRunning())
 		   continue;
@@ -1762,6 +1777,7 @@ int StandardRenderer::light_update_thread(void* data)
 	   window->sleep(THREAD_SLEEP);
    }
 
+	MLOG_INFO("Light thread exiting.");
    return 0;
 }
 
@@ -1778,6 +1794,10 @@ bool zCompare(const OEntity* lhs, const OEntity* rhs)
 
 int StandardRenderer::visibility_thread_mainscene(void* data)
 {
+	StandardRenderer* self = (StandardRenderer*) data;
+	if(!self)
+		return 1;
+
 	NeoEngine* engine = NeoEngine::getInstance();
 	NeoWindow* window = NeoWindow::getInstance();
 
@@ -1797,7 +1817,7 @@ int StandardRenderer::visibility_thread_mainscene(void* data)
 		}
 	}*/
 
-	while (engine->isActive())
+	while (engine->isActive() && !self->m_threadExit)
 	{
 		if (!engine->getGame()->isRunning())
 			continue;
@@ -1870,6 +1890,7 @@ int StandardRenderer::visibility_thread_mainscene(void* data)
 
 	}
 
+	MLOG_INFO("Visibility thread exiting.");
 	return 0;
 }
 

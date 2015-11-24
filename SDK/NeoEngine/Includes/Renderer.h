@@ -52,6 +52,7 @@ public:
 
 	virtual void stopThreads() {}
 	virtual void startThreads() {}
+	virtual void KillThreads() {}
 };
 }
 #endif

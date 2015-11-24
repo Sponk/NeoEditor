@@ -110,8 +110,6 @@ m_renderer(NULL)
 
 PlayerBackend::~PlayerBackend(void)
 {
-	clear();
-
 	SAFE_DELETE(m_game);
 	SAFE_DELETE(m_level);
 
