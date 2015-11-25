@@ -67,5 +67,6 @@ class Sound;
 #include <DataManager.h>
 #include <DataLoader.h>
 #include <Thread.h>
+#include <Profiler.h>
 
 #endif

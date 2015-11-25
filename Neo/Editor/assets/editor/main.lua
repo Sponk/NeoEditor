@@ -82,14 +82,14 @@ end
 -- FIXME: Should take the translator as an argument!
 function Editor.loadTranslationList()
     -- Load list of translations
-    local iter, dir_obj = lfs.dir("./translations")
+    local iter, dir_obj = lfs.dir("./assets/editor/translations")
     local v = iter(dir_obj)
     local translationsList = ""
     while v ~= nil do
         -- Check if we actually found some csv formatted file
         if v:find(".csv") ~= nil then
             translationsList = translationsList .. v .. " "
-            Translator.addTranslation(v, "./translations/" .. v)
+            Translator.addTranslation(v, "./assets/editor/translations/" .. v)
         end
 
         v = iter(dir_obj)

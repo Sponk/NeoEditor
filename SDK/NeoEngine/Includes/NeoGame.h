@@ -59,6 +59,8 @@ private:
 
     std::vector<SubGame*> m_subGames;
 
+	Profiler m_profiler;
+
 public:
 
 	NeoGame(void);

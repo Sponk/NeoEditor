@@ -208,13 +208,13 @@ IF(UNIX AND NOT APPLE AND NOT ANDROID AND NOT EMSCRIPTEN)
   SET(ZLIB_LIBRARY "zlib")
 
   SET(NEO_BUILD_FLAGS "")
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${NEO_BUILD_FLAGS} -O3 -fPIC -DLINUX -pthread")
-  SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -D__Debug__ -pthread -Og")
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NEO_BUILD_FLAGS} -O3 -fPIC -DLINUX -pthread -std=c++11 -Wno-c++11-narrowing")
-  SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -D__Debug__ -pthread -std=c++11 -Og -Wno-c++11-narrowing")
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${NEO_BUILD_FLAGS} -O3 -fPIC -DLINUX -pthread -ftls-model=global-dynamic")
+  SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -D__Debug__ -pthread -Og -ftls-model=global-dynamic")
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NEO_BUILD_FLAGS} -O3 -fPIC -DLINUX -pthread -std=c++11 -Wno-c++11-narrowing -ftls-model=global-dynamic")
+  SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -D__Debug__ -pthread -std=c++11 -Og -Wno-c++11-narrowing -ftls-model=global-dynamic")
   SET(CMAKE_SHARED_LINKER_FLAGS "-ldl -Wl,--as-needed,--allow-multiple-definition,--build-id")
 
-  SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lm -ldl -Wl,--allow-multiple-definition,-rpath ." )
+  SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lm -ldl -Wl,--allow-multiple-definition,-rpath . -ftls-model=global-dynamic")
 
   SET(CPACK_PACKAGE_CONTACT Yannick Pflanzer <yannick.pflanzer@scary-squid.de>)
   SET(CPACK_GENERATOR "STGZ;TGZ;DEB;RPM;")
