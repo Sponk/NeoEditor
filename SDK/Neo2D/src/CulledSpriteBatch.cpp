@@ -33,27 +33,20 @@
  */
 #include "CulledSpriteBatch.h"
 #include <Neo2DEngine.h>
-/**
- * local function isColliding(x1, y1, w1, h1, x2, y2, w2, h2)
-  return x1 < x2+w2 and
-         x2 < x1+w1 and
-         y1 < y2+h2 and
-         y2 < y1+h1
-end
- */
+
 void Neo2D::CulledSpriteBatch::updateVisibility(Neo2D::Canvas* viewport)
 {
 	// Get main viewport if argument is not set.
 	viewport = (viewport == NULL) ? Neo2D::Neo2DEngine::getInstance()->getCanvas(0) : viewport;
-	Vector2 campos = viewport->getCameraOffset();
-	Vector2 size = viewport->getSize();
+	const Vector2 campos = -viewport->getCameraOffset();
+	const Vector2 size = viewport->getSize() / viewport->getScale();
 
-	Vector2 wpos;
-	Vector2 wsize;
-	for(Widget* w : this->m_sprites)
+	NEO_OMP(parallel for)
+	for(int i = 0; i < m_sprites.size(); i++)
 	{
-		wsize = w->getSize();
-		wpos = w->getPosition();
+		Widget* w = m_sprites[i];
+		Vector2 wpos = w->getPosition();
+		Vector2 wsize = w->getSize();
 
 		// Check collision with viewport
 		w->setVisible(wpos.x < campos.x + size.x

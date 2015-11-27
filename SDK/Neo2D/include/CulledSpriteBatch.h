@@ -44,6 +44,7 @@ class NEO2D_EXPORT CulledSpriteBatch : public SpriteBatch
 {
 public:
 	void updateVisibility(Canvas* viewport = NULL);
+	void update(Canvas* c) { updateVisibility(c); }
 };
 }
 #endif //NEO_CULLEDSPRITEBATCH_H

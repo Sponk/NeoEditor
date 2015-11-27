@@ -111,6 +111,11 @@ void Canvas::update()
 		else
 			m_widgets.erase(m_widgets.begin() + i);
 	}
+
+	NEO_OMP(parallel for)
+	for(int i = 0; i < m_batches.size(); i++)
+		m_batches[i]->update(this);
+
 }
 
 void Canvas::addWidget(int w) { m_widgets.push_back(w); }

@@ -309,6 +309,7 @@ public:
 	virtual bool isMouseOver();
 
 	bool isInvisible() { return m_invisible; }
+	void setInvisible(bool b) { m_invisible = b; }
 };
 }
 #endif

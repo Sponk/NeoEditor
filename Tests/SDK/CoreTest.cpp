@@ -83,3 +83,17 @@ TEST_F(TestCore, String_test)
 	EXPECT_TRUE(NULL != s.getSafeString());
 
 }
+
+TEST_F(TestCore, OMP_macro_test)
+{
+	char s[5];
+
+	NEO_OMP(parallel for)
+	for(int i = 0; i < 5; i++)
+		s[i] = i;
+
+	for(int i = 0; i < 5; i++)
+	{
+		ASSERT_EQ(i, s[i]);
+	}
+}

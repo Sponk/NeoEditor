@@ -41,6 +41,10 @@
 
 namespace Neo2D
 {
+
+// Forward delcaration of Canvas
+class Canvas;
+
 /**
  * @brief Implements a batch of sprites that can be used to circumvent the
  * GUI system when rendering 2D objects for better performance.
@@ -100,6 +104,8 @@ public:
 		SAFE_DELETE(m_sprites[id]);
 		m_sprites.erase(m_sprites.begin() + id);
 	}
+
+	virtual void update(Canvas* canvas) {};
 };
 }
 #endif //NEO_SPRITEBATCH_H

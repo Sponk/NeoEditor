@@ -56,3 +56,16 @@ TEST(CulledSpriteBatchTest, UpdateVisibility_is_visible_test)
 	csb.updateVisibility(&c);
 	ASSERT_FALSE(w.isVisible());
 }
+
+TEST(CulledSpriteBatchTest, UpdateVisibility_stress_test)
+{
+	CulledSpriteBatch csb;
+	Widget w[512];
+	Canvas c;
+
+	c.setSize(100, 100);
+	for(int i = 0; i < 512; i++)
+		csb.addSprite(&w[i]);
+
+	csb.updateVisibility(&c);
+}

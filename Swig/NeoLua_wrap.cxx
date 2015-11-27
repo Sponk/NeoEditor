@@ -56845,6 +56845,32 @@ fail:
 }
 
 
+static int _wrap_Widget_setInvisible(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Widget *arg1 = (Neo2D::Widget *) 0 ;
+  bool arg2 ;
+  
+  SWIG_check_num_args("Neo2D::Widget::setInvisible",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Widget::setInvisible",1,"Neo2D::Widget *");
+  if(!lua_isboolean(L,2)) SWIG_fail_arg("Neo2D::Widget::setInvisible",2,"bool");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Widget,0))){
+    SWIG_fail_ptr("Widget_setInvisible",1,SWIGTYPE_p_Neo2D__Widget);
+  }
+  
+  arg2 = (lua_toboolean(L, 2)!=0);
+  (arg1)->setInvisible(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_Widget(void *obj) {
 Neo2D::Widget *arg1 = (Neo2D::Widget *) obj;
 delete arg1;
@@ -56892,6 +56918,7 @@ static swig_lua_method swig_Widget_methods[]= {
     { "getStaticName", _wrap_Widget_getStaticName},
     { "isMouseOver", _wrap_Widget_isMouseOver},
     { "isInvisible", _wrap_Widget_isInvisible},
+    { "setInvisible", _wrap_Widget_setInvisible},
     {0,0}
 };
 static swig_lua_method swig_Widget_meta[] = {
@@ -57310,6 +57337,36 @@ fail:
 }
 
 
+static int _wrap_SpriteBatch_update(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::SpriteBatch *arg1 = (Neo2D::SpriteBatch *) 0 ;
+  Neo2D::Canvas *arg2 = (Neo2D::Canvas *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::SpriteBatch::update",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::SpriteBatch::update",1,"Neo2D::SpriteBatch *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo2D::SpriteBatch::update",2,"Neo2D::Canvas *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__SpriteBatch,0))){
+    SWIG_fail_ptr("SpriteBatch_update",1,SWIGTYPE_p_Neo2D__SpriteBatch);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo2D__Canvas,0))){
+    SWIG_fail_ptr("SpriteBatch_update",2,SWIGTYPE_p_Neo2D__Canvas);
+  }
+  
+  (arg1)->update(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_new_SpriteBatch(lua_State* L) {
   int SWIG_arg = 0;
   Neo2D::SpriteBatch *result = 0 ;
@@ -57347,6 +57404,7 @@ static swig_lua_method swig_SpriteBatch_methods[]= {
     { "draw", _wrap_SpriteBatch_draw},
     { "getNumSprites", _wrap_SpriteBatch_getNumSprites},
     { "deleteSprite", _wrap_SpriteBatch_deleteSprite},
+    { "update", _wrap_SpriteBatch_update},
     {0,0}
 };
 static swig_lua_method swig_SpriteBatch_meta[] = {
@@ -58105,6 +58163,36 @@ static int _wrap_CulledSpriteBatch_updateVisibility(lua_State* L) {
 }
 
 
+static int _wrap_CulledSpriteBatch_update(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::CulledSpriteBatch *arg1 = (Neo2D::CulledSpriteBatch *) 0 ;
+  Neo2D::Canvas *arg2 = (Neo2D::Canvas *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::CulledSpriteBatch::update",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::CulledSpriteBatch::update",1,"Neo2D::CulledSpriteBatch *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo2D::CulledSpriteBatch::update",2,"Neo2D::Canvas *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__CulledSpriteBatch,0))){
+    SWIG_fail_ptr("CulledSpriteBatch_update",1,SWIGTYPE_p_Neo2D__CulledSpriteBatch);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo2D__Canvas,0))){
+    SWIG_fail_ptr("CulledSpriteBatch_update",2,SWIGTYPE_p_Neo2D__Canvas);
+  }
+  
+  (arg1)->update(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_new_CulledSpriteBatch(lua_State* L) {
   int SWIG_arg = 0;
   Neo2D::CulledSpriteBatch *result = 0 ;
@@ -58139,6 +58227,7 @@ static swig_lua_attribute swig_CulledSpriteBatch_attributes[] = {
 };
 static swig_lua_method swig_CulledSpriteBatch_methods[]= {
     { "updateVisibility", _wrap_CulledSpriteBatch_updateVisibility},
+    { "update", _wrap_CulledSpriteBatch_update},
     {0,0}
 };
 static swig_lua_method swig_CulledSpriteBatch_meta[] = {
