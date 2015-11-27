@@ -1,15 +1,38 @@
 language: cpp
-before_install:
+sudo: false
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+
+    packages:
+      - cmake
+      - time
+      - g++-4.8
+      - gcc-4.8
+      - libx11-dev
+      - libogg-dev
+      - libxft-dev
+      - libpulse-dev
+      - rpm
+      - debhelper
+      - doxygen
+      - lua5.2
+      - libgtk-3-dev
+
+
+#before_install:
 # New GCC for c++11
-- if [ "$CXX" == "g++" ]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; fi
+#- if [ "$CXX" == "g++" ]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; fi
 
-- sudo apt-get update -qq
+# - sudo apt-get update -qq
 
-install:
-- if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
-- if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi		
+# install:
+# - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
+# - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
 
-- sudo apt-get install -y libx11-dev libogg-dev libxft-dev libpulse-dev rpm debhelper mingw-w64 gcc-mingw-w64-i686 gcc-mingw-w64-x86-64 g++-mingw-w64-i686 g++-mingw-w64-x86-64 g++-mingw-w64 binutils-mingw-w64-i686 binutils-mingw-w64-x86-64 nsis doxygen lua5.2 libgtk-3-dev
+# - sudo apt-get install -y libx11-dev libogg-dev libxft-dev libpulse-dev rpm debhelper mingw-w64 gcc-mingw-w64-i686 gcc-mingw-w64-x86-64 g++-mingw-w64-i686 g++-mingw-w64-x86-64 g++-mingw-w64 binutils-mingw-w64-i686 binutils-mingw-w64-x86-64 nsis doxygen lua5.2 libgtk-3-dev
 
 branches:
   only:
@@ -21,7 +44,7 @@ script:
 
   # - mkdir ../build-windows && cd ../build-windows && export DXSDK_DIR=~/ && cmake -DCMAKE_TOOLCHAIN_FILE=../NeoEditor/CMake/Toolchains/CrossWindowsMingw.cmake ../NeoEditor && make -j2 package 
 
-  - mkdir ../build && cd ../build && cmake ../NeoEditor -DNEO_VERSION_STRING="\"$VERSION\"" && sudo make -j2 package && sudo make sdk-test
+  - mkdir ../build && cd ../build && CC=gcc-4.8 CXX=g++-4.8 cmake ../NeoEditor -DNEO_VERSION_STRING="\"$VERSION\"" && sudo make -j2 package && sudo make sdk-test
  
   
 notifications:
