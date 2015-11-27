@@ -45,7 +45,7 @@ script:
 
   # - mkdir ../build-windows && cd ../build-windows && export DXSDK_DIR=~/ && cmake -DCMAKE_TOOLCHAIN_FILE=../NeoEditor/CMake/Toolchains/CrossWindowsMingw.cmake ../NeoEditor && make -j2 package 
 
-  - mkdir ../build && cd ../build && CC=gcc-4.8 CXX=g++-4.8 cmake ../NeoEditor -DNEO_VERSION_STRING="\"$VERSION\"" && fakeroot make -j2 package && make sdk-test
+  - mkdir ../build && cd ../build && CC=gcc-4.8 CXX=g++-4.8 cmake ../NeoEditor -DNEO_VERSION_STRING="\"$VERSION\"" && make -j2 package && make sdk-test
  
   
 notifications:
