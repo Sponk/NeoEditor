@@ -28,8 +28,7 @@
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
  *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
- *diesem
+ * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 #ifndef __CANVAS_H_
@@ -39,72 +38,13 @@
 #include <Sprite.h>
 #include <vector>
 #include <NeoEngine.h>
+#include <SpriteBatch.h>
 
 namespace Neo2D
 {
 
 using namespace Neo;
 
-/**
- * @brief Implements a batch of sprites that can be used to circumvent the
- * GUI system when rendering 2D objects for better performance.
- *
- * @par Creating a new SpriteBatch in C++
- * @code
- * Neo2DEngine* engine = Neo2DEngine::getInstance();
- *
- * // Fetch main canvas
- * Canvas* mainCanvas = engine->getCanvas(0);
- * 
- * // Calling Sprite(x, y, w, h, file, label) with w = 0 and h = 0
- * // so the resolution of the texture is used 
- * Sprite* sprite = new Sprite(100, 100, 0, 0, "assets/tex.png", "label");
- * SpriteBatch* batch = new SpriteBatch();
- *
- * // Add sprite do render pipeline
- * batch->addSprite(sprite);
- *
- * // Add to canvas
- * mainCanvas->addSpriteBatch(batch);
- *
- * @endcode
- *
- * @par Creating a new SpriteBatch in Lua
- * @code
- * require("NeoLua")
- * local engine = NeoLua.Neo2DEngine.getInstance()
- *
- * -- Fetch main canvas
- * local mainCanvas = gui:getCanvas(0);
- * 
- * -- Calling Sprite(x, y, w, h, file, label) with w = 0 and h = 0
- * -- so the resolution of the texture is used 
- * local sprite = NeoLua.Sprite(100, 100, 0, 0, "assets/tex.png", "label");
- * local batch = NeoLua.SpriteBatch()
- *
- * -- Add sprite do render pipeline
- * batch:addSprite(sprite);
- *
- * -- Add to canvas
- * mainCanvas:addSpriteBatch(batch);
- * @endcode
- * @author Yannick Pflanzer
- */
-class NEO2D_EXPORT SpriteBatch
-{
-	std::vector<Widget*> m_sprites;
-public:
-	DISOWN(Widget* s) void addSprite(Widget* s) { m_sprites.push_back(s); }
-	void draw(Vector2 offset = Vector2(0,0));
-
-	unsigned int getNumSprites() { return m_sprites.size(); }
-	void deleteSprite(unsigned int id)
-	{
-		SAFE_DELETE(m_sprites[id]);
-		m_sprites.erase(m_sprites.begin() + id);
-	}
-};
-	
 /**
  * @brief The Canvas class contains all widgets and renders them.
  *
@@ -259,6 +199,9 @@ public:
 	 * @return The current camera offset.
 	 */
 	Vector2 getCameraOffset() { return m_cameraPosition; }
+
+	Vector2 getSize() { return Vector2(m_width, m_height); }
+	Vector2 setSize(unsigned int w, unsigned int h) { m_width = w; m_height = h; }
 };
 }
 #endif

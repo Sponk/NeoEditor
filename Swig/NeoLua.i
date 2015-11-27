@@ -13,6 +13,8 @@
 #include <ThemedInputField.h>
 #include <Canvas.h>
 #include <Label.h>
+#include <SpriteBatch.h>
+#include <CulledSpriteBatch.h>
 
 #include <Container.h>
 #include <Window.h>
@@ -98,6 +100,8 @@
 %include <Neo2D.h>
 %include <Widget.h>
 %include <Canvas.h>
+%include <SpriteBatch.h>
+%include <CulledSpriteBatch.h>
 %include <Neo2DEngine.h>
 %include <Button.h>
 %include <CheckButton.h>

@@ -28,8 +28,7 @@
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
  *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
- *diesem
+ * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
@@ -45,6 +44,7 @@ void Canvas::draw()
 	Render* render = Render::getInstance();
 	RenderingContext* renderingContext =
 	NeoEngine::getInstance()->getRenderingContext();
+
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	system->getScreenSize(&m_width, &m_height);
 
@@ -82,7 +82,7 @@ void Canvas::draw()
 		w = gui->getWidget(m_widgets[i]);
 
 		// Only draw the widget if it exists & if it is visible
-		if (w != nullptr && w->isVisible())
+		if (w != nullptr && w->isVisible() && !w->isInvisible())
 		{
 			w->draw(m_cameraPosition);
 		}
@@ -148,11 +148,4 @@ void Canvas::enableRenderToTexture(const char* tex)
 
 		m_renderToTexture = true;
 	}
-}
-
-void SpriteBatch::draw(Vector2 offset)
-{
-	for(Widget* w : m_sprites)
-		if(w && w->isVisible())
-			w->draw(offset);
 }

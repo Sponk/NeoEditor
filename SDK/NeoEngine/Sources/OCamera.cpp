@@ -135,21 +135,21 @@ Matrix4x4 OCamera::setPerspectiveView(float fov, float ratio, float zNear, float
 	temp3 = top - bottom;
 	temp4 = zFar - zNear;
 	matrix.entries[0] = temp / temp2;
-	matrix.entries[1] = 0.0;
-	matrix.entries[2] = 0.0;
-	matrix.entries[3] = 0.0;
-	matrix.entries[4] = 0.0;
+	matrix.entries[1] = 0.0f;
+	matrix.entries[2] = 0.0f;
+	matrix.entries[3] = 0.0f;
+	matrix.entries[4] = 0.0f;
 	matrix.entries[5] = temp / temp3;
-	matrix.entries[6] = 0.0;
-	matrix.entries[7] = 0.0;
+	matrix.entries[6] = 0.0f;
+	matrix.entries[7] = 0.0f;
 	matrix.entries[8] = (right + left) / temp2;
 	matrix.entries[9] = (top + bottom) / temp3;
 	matrix.entries[10] = (-zFar - zNear) / temp4;
-	matrix.entries[11] = -1.0;
-	matrix.entries[12] = 0.0;
-	matrix.entries[13] = 0.0;
+	matrix.entries[11] = -1.0f;
+	matrix.entries[12] = 0.0f;
+	matrix.entries[13] = 0.0f;
 	matrix.entries[14] = (-temp * zFar) / temp4;
-	matrix.entries[15] = 0.0;
+	matrix.entries[15] = 0.0f;
 
 	return matrix;
 }
@@ -179,8 +179,8 @@ Matrix4x4 OCamera::setOrthoView(float left, float right, float bottom, float top
 void OCamera::enable(void)
 {
 	Vector2 viewport = NeoEngine::getInstance()->getSystemContext()->getScreenSize();
-	m_currentViewport[2] = viewport.x;
-	m_currentViewport[3] = viewport.y;
+	m_currentViewport[2] = static_cast<int>(viewport.x);
+	m_currentViewport[3] = static_cast<int>(viewport.y);
 
 	float ratio = (m_currentViewport[2] / (float) m_currentViewport[3]);
 

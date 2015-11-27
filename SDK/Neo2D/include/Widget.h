@@ -97,8 +97,11 @@ protected:
 	/// Some userdata that is given to the callback
 	long int m_userData;
 
-	/// Is the widget visible?
+	/// Is the widget visible? Used for culling. DON'T USE MANUALLY!
 	bool m_visible;
+
+	/// Is the widget invisible? Meant for overriding m_visible.
+	bool m_invisible;
 
 	/// The scale vector
 	Vector2 m_scale;
@@ -162,7 +165,7 @@ public:
 	/**
 	 * @brief Updates the widget and calls the callback if necessary.
 	 */
-	virtual void update() = 0;
+	virtual void update() {};
 
 	/**
 	 * @brief Sets the callback.
@@ -303,8 +306,9 @@ public:
 
 	// For runtime identification
 	const char* getStaticName() { return "Widget"; }
-
 	virtual bool isMouseOver();
+
+	bool isInvisible() { return m_invisible; }
 };
 }
 #endif

@@ -12,6 +12,8 @@
 #include <InputField.h>
 #include <ThemedInputField.h>
 #include <Canvas.h>
+#include <SpriteBatch.h>
+#include <CulledSpriteBatch.h>
 #include <Label.h>
 
 #include <Container.h>
@@ -41,7 +43,7 @@
 #define NEO_CORE_EXPORT
 
 %include <NeoCore.h>
-%include <Utils.h>
+/*%include <Utils.h>
 
 %include <Maths.h>
 %include <Vector2.h>
@@ -85,7 +87,9 @@
 
 %include <Behavior.h>
 %include <BehaviorCreator.h>
-%include <BehaviorManager.h>
+%include <BehaviorManager.h>*/
+
+%include <NeoEngine.h>
 
 #define NEO_CORE_EXPORT
 #define NEO2D_EXPORT
@@ -110,6 +114,8 @@
 %include <MenuBar.h>
 %include <List.h>
 %include <Tree.h>
+%include <SpriteBatch.h>
+%include <CulledSpriteBatch.h>
 
 %include <Slider.h>
 %include <ScrollPane.h>

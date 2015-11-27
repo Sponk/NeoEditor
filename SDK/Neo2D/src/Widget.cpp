@@ -47,6 +47,7 @@ Widget::Widget(unsigned int x, unsigned int y, unsigned int width,
 	  m_label(label),
 	  m_callback((NEO_CALLBACK_FUNCTION) Widget::doNothing),
 	  m_visible(true),
+	  m_invisible(false),
 	  m_scale(Vector2(1, 1)),
 	  m_flip(Vector2(0, 180)),
 	  m_fontSize(12.0),
@@ -64,6 +65,7 @@ Widget::Widget()
 	  m_label("Widget"),
 	  m_callback((NEO_CALLBACK_FUNCTION) Widget::doNothing),
 	  m_visible(true),
+	  m_invisible(false),
 	  m_scale(Vector2(1, 1)),
 	  m_flip(Vector2(0, 180)),
 	  m_fontSize(12.0),
@@ -99,3 +101,4 @@ bool Widget::isMouseOver()
 	return isVisible() && (x >= wx && x <= wx + m_width
 			&& y >= wy && y <= wy + m_height);
 }
+
