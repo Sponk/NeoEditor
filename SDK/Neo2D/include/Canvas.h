@@ -56,7 +56,7 @@ using namespace Neo;
 class NEO2D_EXPORT Canvas
 {
 private:
-	std::vector<int> m_widgets;
+	std::vector<unsigned int> m_widgets;
 	Vector4 m_clearColor;
 
 	unsigned int m_width, m_height;
@@ -201,7 +201,7 @@ public:
 	Vector2 getCameraOffset() { return m_cameraPosition; }
 
 	Vector2 getSize() { return Vector2(m_width, m_height); }
-	Vector2 setSize(unsigned int w, unsigned int h) { m_width = w; m_height = h; }
+	void setSize(unsigned int w, unsigned int h) { m_width = w; m_height = h; }
 };
 }
 #endif

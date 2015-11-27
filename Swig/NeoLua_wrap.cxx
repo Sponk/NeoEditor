@@ -57907,7 +57907,6 @@ static int _wrap_Canvas_setSize(lua_State* L) {
   Neo2D::Canvas *arg1 = (Neo2D::Canvas *) 0 ;
   unsigned int arg2 ;
   unsigned int arg3 ;
-  Neo::Vector2 result;
   
   SWIG_check_num_args("Neo2D::Canvas::setSize",3,3)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Canvas::setSize",1,"Neo2D::Canvas *");
@@ -57922,11 +57921,8 @@ static int _wrap_Canvas_setSize(lua_State* L) {
   arg2 = (unsigned int)lua_tonumber(L, 2);
   SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
   arg3 = (unsigned int)lua_tonumber(L, 3);
-  result = (arg1)->setSize(arg2,arg3);
-  {
-    Neo::Vector2 * resultptr = new Neo::Vector2((const Neo::Vector2 &) result);
-    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector2,1); SWIG_arg++;
-  }
+  (arg1)->setSize(arg2,arg3);
+  
   return SWIG_arg;
   
   if(0) SWIG_fail;

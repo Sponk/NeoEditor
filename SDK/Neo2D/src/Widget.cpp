@@ -92,11 +92,11 @@ bool Widget::isMouseOver()
 	unsigned int x = 0;
 	unsigned int y = 0;
 	Vector2 res = system->getScreenSize();
-	x = input->getAxis("MOUSE_X") * res.x;
-	y = input->getAxis("MOUSE_Y") * res.y;
+	x = static_cast<unsigned int>(input->getAxis("MOUSE_X") * res.x);
+	y = static_cast<unsigned int>(input->getAxis("MOUSE_Y") * res.y);
 
-	unsigned int wx = m_offset.x + m_x;
-	unsigned int wy = m_offset.y + m_y;
+	unsigned int wx = static_cast<unsigned int>(m_offset.x + m_x);
+	unsigned int wy = static_cast<unsigned int>(m_offset.y + m_y);
 
 	return isVisible() && (x >= wx && x <= wx + m_width
 			&& y >= wy && y <= wy + m_height);
