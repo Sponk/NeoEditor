@@ -47,7 +47,7 @@
 // Some OpenMP stuff
 #ifdef ENABLE_OPENMP
 #include <omp.h>
-#define NEO_OMP(p) _Pragma("omp p")
+#define NEO_OMP(x) _Pragma("omp x")
 #else
 #define NEO_OMP(p)
 #endif

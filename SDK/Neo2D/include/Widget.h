@@ -130,7 +130,7 @@ private:
 	}
 
 public:
-	Widget(unsigned int x, unsigned int y, unsigned int width,
+	Widget(float x, float y, unsigned int width,
 		   unsigned int height, const char* label);
 	Widget();
 

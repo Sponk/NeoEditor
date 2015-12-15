@@ -37,7 +37,7 @@
 
 using namespace Neo2D;
 
-Widget::Widget(unsigned int x, unsigned int y, unsigned int width,
+Widget::Widget(float x, float y, unsigned int width,
 			   unsigned int height, const char* label)
 	: m_x(x),
 	  m_y(y),

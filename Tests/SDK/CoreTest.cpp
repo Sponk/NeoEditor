@@ -88,7 +88,7 @@ TEST_F(TestCore, OMP_macro_test)
 {
 	char s[5];
 
-	NEO_OMP(parallel for)
+#pragma omp parallel for
 	for(int i = 0; i < 5; i++)
 		s[i] = i;
 

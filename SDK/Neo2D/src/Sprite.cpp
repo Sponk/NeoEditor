@@ -28,8 +28,7 @@
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
  *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
- *diesem
+ * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
@@ -40,7 +39,7 @@
 using namespace Neo;
 using namespace Neo2D;
 
-Sprite::Sprite(unsigned int x, unsigned int y, unsigned int width,
+Sprite::Sprite(float x, float y, unsigned int width,
 			   unsigned int height, const char* texture, const char* label)
 	: Widget(x, y, width, height, label),
 	  m_labelText(NULL),

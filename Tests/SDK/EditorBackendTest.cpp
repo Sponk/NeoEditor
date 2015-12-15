@@ -198,7 +198,7 @@ TEST_F(EditorBackendTest, DISABLED_DuplicateObjects_test)
 	resetEngine();
 }
 
-TEST_F(EditorBackendTest, Redo_test)
+TEST_F(EditorBackendTest, DISABLED_Redo_test)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
 	EditorBackend* backend = new EditorBackend();

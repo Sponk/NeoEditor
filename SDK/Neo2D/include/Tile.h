@@ -28,8 +28,7 @@
  * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
  * Siehe die GNU Lesser General Public License für weitere Details.
  *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit
- *diesem
+ * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
  * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
  */
 
@@ -88,7 +87,7 @@ protected:
 	unsigned int m_tilex, m_tiley;
 
 public:
-	Tile(unsigned int x, unsigned int y, unsigned int width,
+	Tile(float x, float y, unsigned int width,
 		 unsigned int height, const char* label, unsigned int tilex,
 		 unsigned int tiley)
 		: Widget(x, y, width, height, label),

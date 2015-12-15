@@ -119,7 +119,7 @@ public:
 	 * @param texture The path of the texture to use and display.
 	 * @param label The label to display.
 	 */
-	Sprite(unsigned int x, unsigned int y, unsigned int width,
+	Sprite(float x, float y, unsigned int width,
 		   unsigned int height, const char *texture, const char *label);
 
 	void draw(Vector2 offset);

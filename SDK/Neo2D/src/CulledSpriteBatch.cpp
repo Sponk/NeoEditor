@@ -41,7 +41,7 @@ void Neo2D::CulledSpriteBatch::updateVisibility(Neo2D::Canvas* viewport)
 	const Vector2 campos = -viewport->getCameraOffset();
 	const Vector2 size = viewport->getSize() / viewport->getScale();
 
-	NEO_OMP(parallel for)
+#pragma omp parallel for
 	for(int i = 0; i < m_sprites.size(); i++)
 	{
 		Widget* w = m_sprites[i];

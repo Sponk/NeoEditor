@@ -14,6 +14,7 @@
 #include <Canvas.h>
 #include <SpriteBatch.h>
 #include <CulledSpriteBatch.h>
+#include <AnimatedTile.h>
 #include <Label.h>
 
 #include <Container.h>
@@ -116,6 +117,7 @@
 %include <Tree.h>
 %include <SpriteBatch.h>
 %include <CulledSpriteBatch.h>
+%include <AnimatedTile.h>
 
 %include <Slider.h>
 %include <ScrollPane.h>

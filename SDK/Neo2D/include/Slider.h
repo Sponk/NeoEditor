@@ -77,7 +77,7 @@ class NEO2D_EXPORT Slider : public Widget
 	float m_my;
 
 public:
-	Slider(unsigned int x, unsigned int y, unsigned int width,
+	Slider(float x, float y, unsigned int width,
 		  unsigned int height, float min, float max, SLIDER_DIRECTION dir)
 		: Widget(x, y, width, height, ""),
 		  m_direction(dir),

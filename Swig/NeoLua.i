@@ -15,6 +15,7 @@
 #include <Label.h>
 #include <SpriteBatch.h>
 #include <CulledSpriteBatch.h>
+#include <AnimatedTile.h>
 
 #include <Container.h>
 #include <Window.h>
@@ -112,6 +113,7 @@
 
 %include <Sprite.h>
 %include <Tile.h>
+%include <AnimatedTile.h>
 %include <InputField.h>
 
 %include <ThemedButton.h>
