@@ -13,6 +13,7 @@
 #include <ThemedInputField.h>
 #include <Canvas.h>
 #include <SpriteBatch.h>
+#include <StaticTileBatch.h>
 #include <CulledSpriteBatch.h>
 #include <AnimatedTile.h>
 #include <Label.h>
@@ -116,6 +117,7 @@
 %include <List.h>
 %include <Tree.h>
 %include <SpriteBatch.h>
+%include <StaticTileBatch.h>
 %include <CulledSpriteBatch.h>
 %include <AnimatedTile.h>
 

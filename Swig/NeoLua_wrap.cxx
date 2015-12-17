@@ -1890,135 +1890,136 @@ SWIG_Lua_dostring(lua_State *L, const char* str) {
 #define SWIGTYPE_p_Neo2D__Neo2DEngine swig_types[24]
 #define SWIGTYPE_p_Neo2D__Sprite swig_types[25]
 #define SWIGTYPE_p_Neo2D__SpriteBatch swig_types[26]
-#define SWIGTYPE_p_Neo2D__Tile swig_types[27]
-#define SWIGTYPE_p_Neo2D__TileSheet swig_types[28]
-#define SWIGTYPE_p_Neo2D__Widget swig_types[29]
-#define SWIGTYPE_p_Neo__AnimRange swig_types[30]
-#define SWIGTYPE_p_Neo__Armature swig_types[31]
-#define SWIGTYPE_p_Neo__ArmatureAnim swig_types[32]
-#define SWIGTYPE_p_Neo__ArmatureAnimRef swig_types[33]
-#define SWIGTYPE_p_Neo__Behavior swig_types[34]
-#define SWIGTYPE_p_Neo__BehaviorCreator swig_types[35]
-#define SWIGTYPE_p_Neo__BehaviorManager swig_types[36]
-#define SWIGTYPE_p_Neo__Box3d swig_types[37]
-#define SWIGTYPE_p_Neo__Character swig_types[38]
-#define SWIGTYPE_p_Neo__Color swig_types[39]
-#define SWIGTYPE_p_Neo__DataLoaderT_Neo__ArmatureAnim_t swig_types[40]
-#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Font_t swig_types[41]
-#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Image_t swig_types[42]
-#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Level_t swig_types[43]
-#define SWIGTYPE_p_Neo__DataLoaderT_Neo__MaterialsAnim_t swig_types[44]
-#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Mesh_t swig_types[45]
-#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Sound_t swig_types[46]
-#define SWIGTYPE_p_Neo__DataLoaderT_Neo__TexturesAnim_t swig_types[47]
-#define SWIGTYPE_p_Neo__DataManager swig_types[48]
-#define SWIGTYPE_p_Neo__DataRef swig_types[49]
-#define SWIGTYPE_p_Neo__FRAME_BUFFER_ATTACHMENT swig_types[50]
-#define SWIGTYPE_p_Neo__FXManager swig_types[51]
-#define SWIGTYPE_p_Neo__FXRef swig_types[52]
-#define SWIGTYPE_p_Neo__Font swig_types[53]
-#define SWIGTYPE_p_Neo__FontRef swig_types[54]
-#define SWIGTYPE_p_Neo__Frustum swig_types[55]
-#define SWIGTYPE_p_Neo__Image swig_types[56]
-#define SWIGTYPE_p_Neo__InputContext swig_types[57]
-#define SWIGTYPE_p_Neo__Key swig_types[58]
-#define SWIGTYPE_p_Neo__Level swig_types[59]
-#define SWIGTYPE_p_Neo__Material swig_types[60]
-#define SWIGTYPE_p_Neo__MaterialAnim swig_types[61]
-#define SWIGTYPE_p_Neo__MaterialDisplay swig_types[62]
-#define SWIGTYPE_p_Neo__MaterialsAnim swig_types[63]
-#define SWIGTYPE_p_Neo__MaterialsAnimRef swig_types[64]
-#define SWIGTYPE_p_Neo__Matrix4x4 swig_types[65]
-#define SWIGTYPE_p_Neo__Mesh swig_types[66]
-#define SWIGTYPE_p_Neo__MeshRef swig_types[67]
-#define SWIGTYPE_p_Neo__Message swig_types[68]
-#define SWIGTYPE_p_Neo__Messenger swig_types[69]
-#define SWIGTYPE_p_Neo__MorphingData swig_types[70]
-#define SWIGTYPE_p_Neo__MorphingPoint swig_types[71]
-#define SWIGTYPE_p_Neo__MorphingPose swig_types[72]
-#define SWIGTYPE_p_Neo__NeoEngine swig_types[73]
-#define SWIGTYPE_p_Neo__NeoGame swig_types[74]
-#define SWIGTYPE_p_Neo__NeoVariable swig_types[75]
-#define SWIGTYPE_p_Neo__OBone swig_types[76]
-#define SWIGTYPE_p_Neo__OCamera swig_types[77]
-#define SWIGTYPE_p_Neo__OEntity swig_types[78]
-#define SWIGTYPE_p_Neo__OLight swig_types[79]
-#define SWIGTYPE_p_Neo__OSound swig_types[80]
-#define SWIGTYPE_p_Neo__OText swig_types[81]
-#define SWIGTYPE_p_Neo__Object3d swig_types[82]
-#define SWIGTYPE_p_Neo__Object3dAnim swig_types[83]
-#define SWIGTYPE_p_Neo__Object3d__AdditionalData swig_types[84]
-#define SWIGTYPE_p_Neo__PackageManager swig_types[85]
-#define SWIGTYPE_p_Neo__PhysicsConstraint swig_types[86]
-#define SWIGTYPE_p_Neo__PhysicsContext swig_types[87]
-#define SWIGTYPE_p_Neo__PhysicsProperties swig_types[88]
-#define SWIGTYPE_p_Neo__PostProcessor swig_types[89]
-#define SWIGTYPE_p_Neo__Profiler swig_types[90]
-#define SWIGTYPE_p_Neo__Profiler__FunctionProfile swig_types[91]
-#define SWIGTYPE_p_Neo__Quaternion swig_types[92]
-#define SWIGTYPE_p_Neo__Range swig_types[93]
-#define SWIGTYPE_p_Neo__Renderer swig_types[94]
-#define SWIGTYPE_p_Neo__RendererCreator swig_types[95]
-#define SWIGTYPE_p_Neo__RendererManager swig_types[96]
-#define SWIGTYPE_p_Neo__RenderingContext swig_types[97]
-#define SWIGTYPE_p_Neo__Scene swig_types[98]
-#define SWIGTYPE_p_Neo__Scene__AdditionalData swig_types[99]
-#define SWIGTYPE_p_Neo__ScriptContext swig_types[100]
-#define SWIGTYPE_p_Neo__ShaderRef swig_types[101]
-#define SWIGTYPE_p_Neo__SkinData swig_types[102]
-#define SWIGTYPE_p_Neo__SkinPoint swig_types[103]
-#define SWIGTYPE_p_Neo__Skybox swig_types[104]
-#define SWIGTYPE_p_Neo__Sound swig_types[105]
-#define SWIGTYPE_p_Neo__SoundContext swig_types[106]
-#define SWIGTYPE_p_Neo__SoundRef swig_types[107]
-#define SWIGTYPE_p_Neo__String swig_types[108]
-#define SWIGTYPE_p_Neo__SubGame swig_types[109]
-#define SWIGTYPE_p_Neo__SubMesh swig_types[110]
-#define SWIGTYPE_p_Neo__SystemContext swig_types[111]
-#define SWIGTYPE_p_Neo__Texture swig_types[112]
-#define SWIGTYPE_p_Neo__TextureAnim swig_types[113]
-#define SWIGTYPE_p_Neo__TexturePass swig_types[114]
-#define SWIGTYPE_p_Neo__TextureRef swig_types[115]
-#define SWIGTYPE_p_Neo__TexturesAnim swig_types[116]
-#define SWIGTYPE_p_Neo__TexturesAnimRef swig_types[117]
-#define SWIGTYPE_p_Neo__Vector2 swig_types[118]
-#define SWIGTYPE_p_Neo__Vector3 swig_types[119]
-#define SWIGTYPE_p_Neo__Vector4 swig_types[120]
-#define SWIGTYPE_p_Stringp swig_types[121]
-#define SWIGTYPE_p_Vector3p swig_types[122]
-#define SWIGTYPE_p___int64 swig_types[123]
-#define SWIGTYPE_p_char swig_types[124]
-#define SWIGTYPE_p_double swig_types[125]
-#define SWIGTYPE_p_doublep swig_types[126]
-#define SWIGTYPE_p_f_p_Neo__Object3d__p_Neo__Behavior swig_types[127]
-#define SWIGTYPE_p_f_void__int swig_types[128]
-#define SWIGTYPE_p_f_void__intp swig_types[129]
-#define SWIGTYPE_p_f_void__p_Neo__Renderer swig_types[130]
-#define SWIGTYPE_p_float swig_types[131]
-#define SWIGTYPE_p_floatp swig_types[132]
-#define SWIGTYPE_p_int swig_types[133]
-#define SWIGTYPE_p_intp swig_types[134]
-#define SWIGTYPE_p_long swig_types[135]
-#define SWIGTYPE_p_mapT_unsigned_int_Neo__Character_t swig_types[136]
-#define SWIGTYPE_p_mapT_unsigned_int_unsigned_int_t swig_types[137]
-#define SWIGTYPE_p_p_char swig_types[138]
-#define SWIGTYPE_p_p_unsigned_long swig_types[139]
-#define SWIGTYPE_p_short swig_types[140]
-#define SWIGTYPE_p_signed___int64 swig_types[141]
-#define SWIGTYPE_p_signed_char swig_types[142]
-#define SWIGTYPE_p_std__functionT_void_fWidget_p_longF_t swig_types[143]
-#define SWIGTYPE_p_std__string swig_types[144]
-#define SWIGTYPE_p_uintp swig_types[145]
-#define SWIGTYPE_p_unsigned___int64 swig_types[146]
-#define SWIGTYPE_p_unsigned_char swig_types[147]
-#define SWIGTYPE_p_unsigned_int swig_types[148]
-#define SWIGTYPE_p_unsigned_long swig_types[149]
-#define SWIGTYPE_p_unsigned_short swig_types[150]
-#define SWIGTYPE_p_vectorT_float_t swig_types[151]
-#define SWIGTYPE_p_vectorT_std__string_t swig_types[152]
-#define SWIGTYPE_p_void swig_types[153]
-static swig_type_info *swig_types[155];
-static swig_module_info swig_module = {swig_types, 154, 0, 0, 0, 0};
+#define SWIGTYPE_p_Neo2D__StaticTileBatch swig_types[27]
+#define SWIGTYPE_p_Neo2D__Tile swig_types[28]
+#define SWIGTYPE_p_Neo2D__TileSheet swig_types[29]
+#define SWIGTYPE_p_Neo2D__Widget swig_types[30]
+#define SWIGTYPE_p_Neo__AnimRange swig_types[31]
+#define SWIGTYPE_p_Neo__Armature swig_types[32]
+#define SWIGTYPE_p_Neo__ArmatureAnim swig_types[33]
+#define SWIGTYPE_p_Neo__ArmatureAnimRef swig_types[34]
+#define SWIGTYPE_p_Neo__Behavior swig_types[35]
+#define SWIGTYPE_p_Neo__BehaviorCreator swig_types[36]
+#define SWIGTYPE_p_Neo__BehaviorManager swig_types[37]
+#define SWIGTYPE_p_Neo__Box3d swig_types[38]
+#define SWIGTYPE_p_Neo__Character swig_types[39]
+#define SWIGTYPE_p_Neo__Color swig_types[40]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__ArmatureAnim_t swig_types[41]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Font_t swig_types[42]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Image_t swig_types[43]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Level_t swig_types[44]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__MaterialsAnim_t swig_types[45]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Mesh_t swig_types[46]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Sound_t swig_types[47]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__TexturesAnim_t swig_types[48]
+#define SWIGTYPE_p_Neo__DataManager swig_types[49]
+#define SWIGTYPE_p_Neo__DataRef swig_types[50]
+#define SWIGTYPE_p_Neo__FRAME_BUFFER_ATTACHMENT swig_types[51]
+#define SWIGTYPE_p_Neo__FXManager swig_types[52]
+#define SWIGTYPE_p_Neo__FXRef swig_types[53]
+#define SWIGTYPE_p_Neo__Font swig_types[54]
+#define SWIGTYPE_p_Neo__FontRef swig_types[55]
+#define SWIGTYPE_p_Neo__Frustum swig_types[56]
+#define SWIGTYPE_p_Neo__Image swig_types[57]
+#define SWIGTYPE_p_Neo__InputContext swig_types[58]
+#define SWIGTYPE_p_Neo__Key swig_types[59]
+#define SWIGTYPE_p_Neo__Level swig_types[60]
+#define SWIGTYPE_p_Neo__Material swig_types[61]
+#define SWIGTYPE_p_Neo__MaterialAnim swig_types[62]
+#define SWIGTYPE_p_Neo__MaterialDisplay swig_types[63]
+#define SWIGTYPE_p_Neo__MaterialsAnim swig_types[64]
+#define SWIGTYPE_p_Neo__MaterialsAnimRef swig_types[65]
+#define SWIGTYPE_p_Neo__Matrix4x4 swig_types[66]
+#define SWIGTYPE_p_Neo__Mesh swig_types[67]
+#define SWIGTYPE_p_Neo__MeshRef swig_types[68]
+#define SWIGTYPE_p_Neo__Message swig_types[69]
+#define SWIGTYPE_p_Neo__Messenger swig_types[70]
+#define SWIGTYPE_p_Neo__MorphingData swig_types[71]
+#define SWIGTYPE_p_Neo__MorphingPoint swig_types[72]
+#define SWIGTYPE_p_Neo__MorphingPose swig_types[73]
+#define SWIGTYPE_p_Neo__NeoEngine swig_types[74]
+#define SWIGTYPE_p_Neo__NeoGame swig_types[75]
+#define SWIGTYPE_p_Neo__NeoVariable swig_types[76]
+#define SWIGTYPE_p_Neo__OBone swig_types[77]
+#define SWIGTYPE_p_Neo__OCamera swig_types[78]
+#define SWIGTYPE_p_Neo__OEntity swig_types[79]
+#define SWIGTYPE_p_Neo__OLight swig_types[80]
+#define SWIGTYPE_p_Neo__OSound swig_types[81]
+#define SWIGTYPE_p_Neo__OText swig_types[82]
+#define SWIGTYPE_p_Neo__Object3d swig_types[83]
+#define SWIGTYPE_p_Neo__Object3dAnim swig_types[84]
+#define SWIGTYPE_p_Neo__Object3d__AdditionalData swig_types[85]
+#define SWIGTYPE_p_Neo__PackageManager swig_types[86]
+#define SWIGTYPE_p_Neo__PhysicsConstraint swig_types[87]
+#define SWIGTYPE_p_Neo__PhysicsContext swig_types[88]
+#define SWIGTYPE_p_Neo__PhysicsProperties swig_types[89]
+#define SWIGTYPE_p_Neo__PostProcessor swig_types[90]
+#define SWIGTYPE_p_Neo__Profiler swig_types[91]
+#define SWIGTYPE_p_Neo__Profiler__FunctionProfile swig_types[92]
+#define SWIGTYPE_p_Neo__Quaternion swig_types[93]
+#define SWIGTYPE_p_Neo__Range swig_types[94]
+#define SWIGTYPE_p_Neo__Renderer swig_types[95]
+#define SWIGTYPE_p_Neo__RendererCreator swig_types[96]
+#define SWIGTYPE_p_Neo__RendererManager swig_types[97]
+#define SWIGTYPE_p_Neo__RenderingContext swig_types[98]
+#define SWIGTYPE_p_Neo__Scene swig_types[99]
+#define SWIGTYPE_p_Neo__Scene__AdditionalData swig_types[100]
+#define SWIGTYPE_p_Neo__ScriptContext swig_types[101]
+#define SWIGTYPE_p_Neo__ShaderRef swig_types[102]
+#define SWIGTYPE_p_Neo__SkinData swig_types[103]
+#define SWIGTYPE_p_Neo__SkinPoint swig_types[104]
+#define SWIGTYPE_p_Neo__Skybox swig_types[105]
+#define SWIGTYPE_p_Neo__Sound swig_types[106]
+#define SWIGTYPE_p_Neo__SoundContext swig_types[107]
+#define SWIGTYPE_p_Neo__SoundRef swig_types[108]
+#define SWIGTYPE_p_Neo__String swig_types[109]
+#define SWIGTYPE_p_Neo__SubGame swig_types[110]
+#define SWIGTYPE_p_Neo__SubMesh swig_types[111]
+#define SWIGTYPE_p_Neo__SystemContext swig_types[112]
+#define SWIGTYPE_p_Neo__Texture swig_types[113]
+#define SWIGTYPE_p_Neo__TextureAnim swig_types[114]
+#define SWIGTYPE_p_Neo__TexturePass swig_types[115]
+#define SWIGTYPE_p_Neo__TextureRef swig_types[116]
+#define SWIGTYPE_p_Neo__TexturesAnim swig_types[117]
+#define SWIGTYPE_p_Neo__TexturesAnimRef swig_types[118]
+#define SWIGTYPE_p_Neo__Vector2 swig_types[119]
+#define SWIGTYPE_p_Neo__Vector3 swig_types[120]
+#define SWIGTYPE_p_Neo__Vector4 swig_types[121]
+#define SWIGTYPE_p_Stringp swig_types[122]
+#define SWIGTYPE_p_Vector3p swig_types[123]
+#define SWIGTYPE_p___int64 swig_types[124]
+#define SWIGTYPE_p_char swig_types[125]
+#define SWIGTYPE_p_double swig_types[126]
+#define SWIGTYPE_p_doublep swig_types[127]
+#define SWIGTYPE_p_f_p_Neo__Object3d__p_Neo__Behavior swig_types[128]
+#define SWIGTYPE_p_f_void__int swig_types[129]
+#define SWIGTYPE_p_f_void__intp swig_types[130]
+#define SWIGTYPE_p_f_void__p_Neo__Renderer swig_types[131]
+#define SWIGTYPE_p_float swig_types[132]
+#define SWIGTYPE_p_floatp swig_types[133]
+#define SWIGTYPE_p_int swig_types[134]
+#define SWIGTYPE_p_intp swig_types[135]
+#define SWIGTYPE_p_long swig_types[136]
+#define SWIGTYPE_p_mapT_unsigned_int_Neo__Character_t swig_types[137]
+#define SWIGTYPE_p_mapT_unsigned_int_unsigned_int_t swig_types[138]
+#define SWIGTYPE_p_p_char swig_types[139]
+#define SWIGTYPE_p_p_unsigned_long swig_types[140]
+#define SWIGTYPE_p_short swig_types[141]
+#define SWIGTYPE_p_signed___int64 swig_types[142]
+#define SWIGTYPE_p_signed_char swig_types[143]
+#define SWIGTYPE_p_std__functionT_void_fWidget_p_longF_t swig_types[144]
+#define SWIGTYPE_p_std__string swig_types[145]
+#define SWIGTYPE_p_uintp swig_types[146]
+#define SWIGTYPE_p_unsigned___int64 swig_types[147]
+#define SWIGTYPE_p_unsigned_char swig_types[148]
+#define SWIGTYPE_p_unsigned_int swig_types[149]
+#define SWIGTYPE_p_unsigned_long swig_types[150]
+#define SWIGTYPE_p_unsigned_short swig_types[151]
+#define SWIGTYPE_p_vectorT_float_t swig_types[152]
+#define SWIGTYPE_p_vectorT_std__string_t swig_types[153]
+#define SWIGTYPE_p_void swig_types[154]
+static swig_type_info *swig_types[156];
+static swig_module_info swig_module = {swig_types, 155, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2049,6 +2050,7 @@ typedef struct{} LANGUAGE_OBJ;
 #include <Canvas.h>
 #include <Label.h>
 #include <SpriteBatch.h>
+#include <StaticTileBatch.h>
 #include <CulledSpriteBatch.h>
 #include <AnimatedTile.h>
 
@@ -55333,6 +55335,603 @@ static swig_lua_class *swig_Neo2D_Canvas_bases[] = {0};
 static const char *swig_Neo2D_Canvas_base_names[] = {0};
 static swig_lua_class _wrap_class_Neo2D_Canvas = { "Canvas", &SWIGTYPE_p_Neo2D__Canvas,_wrap_new_Canvas, swig_delete_Canvas, swig_Neo2D_Canvas_methods, swig_Neo2D_Canvas_attributes, { "Canvas", swig_Neo2D_Canvas_cls_methods, swig_Neo2D_Canvas_cls_attributes, swig_Neo2D_Canvas_cls_constants }, swig_Neo2D_Canvas_bases, swig_Neo2D_Canvas_base_names };
 
+static int _wrap_new_TileSheet(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::TileSheet *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::TileSheet::TileSheet",0,0)
+  result = (Neo2D::TileSheet *)new Neo2D::TileSheet();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__TileSheet,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_TileSheet_loadImage(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
+  char *arg2 = (char *) 0 ;
+  unsigned int arg3 ;
+  unsigned int arg4 ;
+  unsigned int arg5 ;
+  
+  SWIG_check_num_args("Neo2D::TileSheet::loadImage",5,5)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::TileSheet::loadImage",1,"Neo2D::TileSheet *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo2D::TileSheet::loadImage",2,"char const *");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::TileSheet::loadImage",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::TileSheet::loadImage",4,"unsigned int");
+  if(!lua_isnumber(L,5)) SWIG_fail_arg("Neo2D::TileSheet::loadImage",5,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__TileSheet,0))){
+    SWIG_fail_ptr("TileSheet_loadImage",1,SWIGTYPE_p_Neo2D__TileSheet);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
+  arg4 = (unsigned int)lua_tonumber(L, 4);
+  SWIG_contract_assert((lua_tonumber(L,5)>=0),"number must not be negative")
+  arg5 = (unsigned int)lua_tonumber(L, 5);
+  (arg1)->loadImage((char const *)arg2,arg3,arg4,arg5);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_TileSheet_getTexCoords(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
+  unsigned int arg2 ;
+  unsigned int arg3 ;
+  Neo::Vector4 result;
+  
+  SWIG_check_num_args("Neo2D::TileSheet::getTexCoords",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::TileSheet::getTexCoords",1,"Neo2D::TileSheet *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::TileSheet::getTexCoords",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::TileSheet::getTexCoords",3,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__TileSheet,0))){
+    SWIG_fail_ptr("TileSheet_getTexCoords",1,SWIGTYPE_p_Neo2D__TileSheet);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  result = (arg1)->getTexCoords(arg2,arg3);
+  {
+    Neo::Vector4 * resultptr = new Neo::Vector4((const Neo::Vector4 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector4,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_TileSheet_getImage(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("Neo2D::TileSheet::getImage",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::TileSheet::getImage",1,"Neo2D::TileSheet *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__TileSheet,0))){
+    SWIG_fail_ptr("TileSheet_getImage",1,SWIGTYPE_p_Neo2D__TileSheet);
+  }
+  
+  result = (int)(arg1)->getImage();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_TileSheet_getTileDistance(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
+  unsigned int result;
+  
+  SWIG_check_num_args("Neo2D::TileSheet::getTileDistance",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::TileSheet::getTileDistance",1,"Neo2D::TileSheet const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__TileSheet,0))){
+    SWIG_fail_ptr("TileSheet_getTileDistance",1,SWIGTYPE_p_Neo2D__TileSheet);
+  }
+  
+  result = (unsigned int)((Neo2D::TileSheet const *)arg1)->getTileDistance();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_TileSheet_setTileDistance(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
+  unsigned int arg2 ;
+  
+  SWIG_check_num_args("Neo2D::TileSheet::setTileDistance",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::TileSheet::setTileDistance",1,"Neo2D::TileSheet *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::TileSheet::setTileDistance",2,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__TileSheet,0))){
+    SWIG_fail_ptr("TileSheet_setTileDistance",1,SWIGTYPE_p_Neo2D__TileSheet);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  (arg1)->setTileDistance(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_TileSheet_getTileHeight(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
+  unsigned int result;
+  
+  SWIG_check_num_args("Neo2D::TileSheet::getTileHeight",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::TileSheet::getTileHeight",1,"Neo2D::TileSheet const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__TileSheet,0))){
+    SWIG_fail_ptr("TileSheet_getTileHeight",1,SWIGTYPE_p_Neo2D__TileSheet);
+  }
+  
+  result = (unsigned int)((Neo2D::TileSheet const *)arg1)->getTileHeight();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_TileSheet_setTileHeight(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
+  unsigned int arg2 ;
+  
+  SWIG_check_num_args("Neo2D::TileSheet::setTileHeight",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::TileSheet::setTileHeight",1,"Neo2D::TileSheet *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::TileSheet::setTileHeight",2,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__TileSheet,0))){
+    SWIG_fail_ptr("TileSheet_setTileHeight",1,SWIGTYPE_p_Neo2D__TileSheet);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  (arg1)->setTileHeight(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_TileSheet_getTileWidth(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
+  unsigned int result;
+  
+  SWIG_check_num_args("Neo2D::TileSheet::getTileWidth",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::TileSheet::getTileWidth",1,"Neo2D::TileSheet const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__TileSheet,0))){
+    SWIG_fail_ptr("TileSheet_getTileWidth",1,SWIGTYPE_p_Neo2D__TileSheet);
+  }
+  
+  result = (unsigned int)((Neo2D::TileSheet const *)arg1)->getTileWidth();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_TileSheet_setTileWidth(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
+  unsigned int arg2 ;
+  
+  SWIG_check_num_args("Neo2D::TileSheet::setTileWidth",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::TileSheet::setTileWidth",1,"Neo2D::TileSheet *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::TileSheet::setTileWidth",2,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__TileSheet,0))){
+    SWIG_fail_ptr("TileSheet_setTileWidth",1,SWIGTYPE_p_Neo2D__TileSheet);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  (arg1)->setTileWidth(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_TileSheet(void *obj) {
+Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Neo2D_TileSheet_methods[] = {
+    {"loadImage", _wrap_TileSheet_loadImage}, 
+    {"getTexCoords", _wrap_TileSheet_getTexCoords}, 
+    {"getImage", _wrap_TileSheet_getImage}, 
+    {"getTileDistance", _wrap_TileSheet_getTileDistance}, 
+    {"setTileDistance", _wrap_TileSheet_setTileDistance}, 
+    {"getTileHeight", _wrap_TileSheet_getTileHeight}, 
+    {"setTileHeight", _wrap_TileSheet_setTileHeight}, 
+    {"getTileWidth", _wrap_TileSheet_getTileWidth}, 
+    {"setTileWidth", _wrap_TileSheet_setTileWidth}, 
+    {0,0}
+};
+static swig_lua_attribute swig_Neo2D_TileSheet_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_attribute swig_Neo2D_TileSheet_cls_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_Neo2D_TileSheet_cls_methods[] = {
+    {0,0}
+};
+static swig_lua_const_info swig_Neo2D_TileSheet_cls_constants[] = {
+    {0,0,0,0,0,0}
+};
+static swig_lua_class *swig_Neo2D_TileSheet_bases[] = {0};
+static const char *swig_Neo2D_TileSheet_base_names[] = {0};
+static swig_lua_class _wrap_class_Neo2D_TileSheet = { "TileSheet", &SWIGTYPE_p_Neo2D__TileSheet,_wrap_new_TileSheet, swig_delete_TileSheet, swig_Neo2D_TileSheet_methods, swig_Neo2D_TileSheet_attributes, { "TileSheet", swig_Neo2D_TileSheet_cls_methods, swig_Neo2D_TileSheet_cls_attributes, swig_Neo2D_TileSheet_cls_constants }, swig_Neo2D_TileSheet_bases, swig_Neo2D_TileSheet_base_names };
+
+static int _wrap_new_Tile(lua_State* L) {
+  int SWIG_arg = 0;
+  float arg1 ;
+  float arg2 ;
+  unsigned int arg3 ;
+  unsigned int arg4 ;
+  char *arg5 = (char *) 0 ;
+  unsigned int arg6 ;
+  unsigned int arg7 ;
+  Neo2D::Tile *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Tile::Tile",7,7)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Tile::Tile",1,"float");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Tile::Tile",2,"float");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Tile::Tile",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Tile::Tile",4,"unsigned int");
+  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo2D::Tile::Tile",5,"char const *");
+  if(!lua_isnumber(L,6)) SWIG_fail_arg("Neo2D::Tile::Tile",6,"unsigned int");
+  if(!lua_isnumber(L,7)) SWIG_fail_arg("Neo2D::Tile::Tile",7,"unsigned int");
+  arg1 = (float)lua_tonumber(L, 1);
+  arg2 = (float)lua_tonumber(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
+  arg4 = (unsigned int)lua_tonumber(L, 4);
+  arg5 = (char *)lua_tostring(L, 5);
+  SWIG_contract_assert((lua_tonumber(L,6)>=0),"number must not be negative")
+  arg6 = (unsigned int)lua_tonumber(L, 6);
+  SWIG_contract_assert((lua_tonumber(L,7)>=0),"number must not be negative")
+  arg7 = (unsigned int)lua_tonumber(L, 7);
+  result = (Neo2D::Tile *)new Neo2D::Tile(arg1,arg2,arg3,arg4,(char const *)arg5,arg6,arg7);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Tile,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Tile_getStaticName(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Tile::getStaticName",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Tile::getStaticName",1,"Neo2D::Tile *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Tile,0))){
+    SWIG_fail_ptr("Tile_getStaticName",1,SWIGTYPE_p_Neo2D__Tile);
+  }
+  
+  result = (char *)(arg1)->getStaticName();
+  lua_pushstring(L,(const char *)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Tile_setTileSheet(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
+  Neo2D::TileSheet *arg2 = (Neo2D::TileSheet *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Tile::setTileSheet",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Tile::setTileSheet",1,"Neo2D::Tile *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo2D::Tile::setTileSheet",2,"Neo2D::TileSheet *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Tile,0))){
+    SWIG_fail_ptr("Tile_setTileSheet",1,SWIGTYPE_p_Neo2D__Tile);
+  }
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo2D__TileSheet,SWIG_POINTER_DISOWN))){
+    SWIG_fail_ptr("Tile_setTileSheet",2,SWIGTYPE_p_Neo2D__TileSheet);
+  }
+  
+  (arg1)->setTileSheet(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Tile_setOffset(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
+  Neo::Vector2 arg2 ;
+  Neo::Vector2 *argp2 ;
+  
+  SWIG_check_num_args("Neo2D::Tile::setOffset",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Tile::setOffset",1,"Neo2D::Tile *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Tile::setOffset",2,"Neo::Vector2");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Tile,0))){
+    SWIG_fail_ptr("Tile_setOffset",1,SWIGTYPE_p_Neo2D__Tile);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("Tile_setOffset",2,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg2 = *argp2;
+  
+  (arg1)->setOffset(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Tile_draw(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
+  Neo::Vector2 arg2 ;
+  Neo::Vector2 *argp2 ;
+  
+  SWIG_check_num_args("Neo2D::Tile::draw",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Tile::draw",1,"Neo2D::Tile *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Tile::draw",2,"Neo::Vector2");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Tile,0))){
+    SWIG_fail_ptr("Tile_draw",1,SWIGTYPE_p_Neo2D__Tile);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("Tile_draw",2,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg2 = *argp2;
+  
+  (arg1)->draw(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Tile_update(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Tile::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Tile::update",1,"Neo2D::Tile *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Tile,0))){
+    SWIG_fail_ptr("Tile_update",1,SWIGTYPE_p_Neo2D__Tile);
+  }
+  
+  (arg1)->update();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_Tile(void *obj) {
+Neo2D::Tile *arg1 = (Neo2D::Tile *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Neo2D_Tile_methods[] = {
+    {"getStaticName", _wrap_Tile_getStaticName}, 
+    {"setTileSheet", _wrap_Tile_setTileSheet}, 
+    {"setOffset", _wrap_Tile_setOffset}, 
+    {"draw", _wrap_Tile_draw}, 
+    {"update", _wrap_Tile_update}, 
+    {0,0}
+};
+static swig_lua_attribute swig_Neo2D_Tile_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_attribute swig_Neo2D_Tile_cls_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_Neo2D_Tile_cls_methods[] = {
+    {0,0}
+};
+static swig_lua_const_info swig_Neo2D_Tile_cls_constants[] = {
+    {0,0,0,0,0,0}
+};
+static swig_lua_class *swig_Neo2D_Tile_bases[] = {0,0};
+static const char *swig_Neo2D_Tile_base_names[] = {"Neo2D::Widget *",0};
+static swig_lua_class _wrap_class_Neo2D_Tile = { "Tile", &SWIGTYPE_p_Neo2D__Tile,_wrap_new_Tile, swig_delete_Tile, swig_Neo2D_Tile_methods, swig_Neo2D_Tile_attributes, { "Tile", swig_Neo2D_Tile_cls_methods, swig_Neo2D_Tile_cls_attributes, swig_Neo2D_Tile_cls_constants }, swig_Neo2D_Tile_bases, swig_Neo2D_Tile_base_names };
+
+static int _wrap_new_StaticTileBatch(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
+  Neo2D::StaticTileBatch *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::StaticTileBatch::StaticTileBatch",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::StaticTileBatch::StaticTileBatch",1,"Neo2D::TileSheet *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__TileSheet,0))){
+    SWIG_fail_ptr("new_StaticTileBatch",1,SWIGTYPE_p_Neo2D__TileSheet);
+  }
+  
+  result = (Neo2D::StaticTileBatch *)new Neo2D::StaticTileBatch(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__StaticTileBatch,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_StaticTileBatch_addTile(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::StaticTileBatch *arg1 = (Neo2D::StaticTileBatch *) 0 ;
+  float arg2 ;
+  float arg3 ;
+  float arg4 ;
+  unsigned int arg5 ;
+  unsigned int arg6 ;
+  
+  SWIG_check_num_args("Neo2D::StaticTileBatch::addTile",6,6)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::StaticTileBatch::addTile",1,"Neo2D::StaticTileBatch *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::StaticTileBatch::addTile",2,"float");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::StaticTileBatch::addTile",3,"float");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::StaticTileBatch::addTile",4,"float");
+  if(!lua_isnumber(L,5)) SWIG_fail_arg("Neo2D::StaticTileBatch::addTile",5,"unsigned int");
+  if(!lua_isnumber(L,6)) SWIG_fail_arg("Neo2D::StaticTileBatch::addTile",6,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__StaticTileBatch,0))){
+    SWIG_fail_ptr("StaticTileBatch_addTile",1,SWIGTYPE_p_Neo2D__StaticTileBatch);
+  }
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  arg3 = (float)lua_tonumber(L, 3);
+  arg4 = (float)lua_tonumber(L, 4);
+  SWIG_contract_assert((lua_tonumber(L,5)>=0),"number must not be negative")
+  arg5 = (unsigned int)lua_tonumber(L, 5);
+  SWIG_contract_assert((lua_tonumber(L,6)>=0),"number must not be negative")
+  arg6 = (unsigned int)lua_tonumber(L, 6);
+  (arg1)->addTile(arg2,arg3,arg4,arg5,arg6);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_StaticTileBatch(void *obj) {
+Neo2D::StaticTileBatch *arg1 = (Neo2D::StaticTileBatch *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Neo2D_StaticTileBatch_methods[] = {
+    {"addTile", _wrap_StaticTileBatch_addTile}, 
+    {0,0}
+};
+static swig_lua_attribute swig_Neo2D_StaticTileBatch_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_attribute swig_Neo2D_StaticTileBatch_cls_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_Neo2D_StaticTileBatch_cls_methods[] = {
+    {0,0}
+};
+static swig_lua_const_info swig_Neo2D_StaticTileBatch_cls_constants[] = {
+    {0,0,0,0,0,0}
+};
+static swig_lua_class *swig_Neo2D_StaticTileBatch_bases[] = {0,0};
+static const char *swig_Neo2D_StaticTileBatch_base_names[] = {"Neo2D::SpriteBatch *",0};
+static swig_lua_class _wrap_class_Neo2D_StaticTileBatch = { "StaticTileBatch", &SWIGTYPE_p_Neo2D__StaticTileBatch,_wrap_new_StaticTileBatch, swig_delete_StaticTileBatch, swig_Neo2D_StaticTileBatch_methods, swig_Neo2D_StaticTileBatch_attributes, { "StaticTileBatch", swig_Neo2D_StaticTileBatch_cls_methods, swig_Neo2D_StaticTileBatch_cls_attributes, swig_Neo2D_StaticTileBatch_cls_constants }, swig_Neo2D_StaticTileBatch_bases, swig_Neo2D_StaticTileBatch_base_names };
+
 static int _wrap_CulledSpriteBatch_updateVisibility__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
   Neo2D::CulledSpriteBatch *arg1 = (Neo2D::CulledSpriteBatch *) 0 ;
@@ -58335,356 +58934,6 @@ static swig_lua_class *swig_Neo2D_Gui_Window_bases[] = {0,0};
 static const char *swig_Neo2D_Gui_Window_base_names[] = {"Neo2D::Gui::Container *",0};
 static swig_lua_class _wrap_class_Neo2D_Gui_Window = { "Window", &SWIGTYPE_p_Neo2D__Gui__Window,_wrap_new_Window, swig_delete_Window, swig_Neo2D_Gui_Window_methods, swig_Neo2D_Gui_Window_attributes, { "Window", swig_Neo2D_Gui_Window_cls_methods, swig_Neo2D_Gui_Window_cls_attributes, swig_Neo2D_Gui_Window_cls_constants }, swig_Neo2D_Gui_Window_bases, swig_Neo2D_Gui_Window_base_names };
 
-static int _wrap_new_TileSheet(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::TileSheet *result = 0 ;
-  
-  SWIG_check_num_args("Neo2D::TileSheet::TileSheet",0,0)
-  result = (Neo2D::TileSheet *)new Neo2D::TileSheet();
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__TileSheet,1); SWIG_arg++; 
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_TileSheet_loadImage(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
-  char *arg2 = (char *) 0 ;
-  unsigned int arg3 ;
-  unsigned int arg4 ;
-  unsigned int arg5 ;
-  
-  SWIG_check_num_args("Neo2D::TileSheet::loadImage",5,5)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::TileSheet::loadImage",1,"Neo2D::TileSheet *");
-  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo2D::TileSheet::loadImage",2,"char const *");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::TileSheet::loadImage",3,"unsigned int");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::TileSheet::loadImage",4,"unsigned int");
-  if(!lua_isnumber(L,5)) SWIG_fail_arg("Neo2D::TileSheet::loadImage",5,"unsigned int");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__TileSheet,0))){
-    SWIG_fail_ptr("TileSheet_loadImage",1,SWIGTYPE_p_Neo2D__TileSheet);
-  }
-  
-  arg2 = (char *)lua_tostring(L, 2);
-  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
-  arg3 = (unsigned int)lua_tonumber(L, 3);
-  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
-  arg4 = (unsigned int)lua_tonumber(L, 4);
-  SWIG_contract_assert((lua_tonumber(L,5)>=0),"number must not be negative")
-  arg5 = (unsigned int)lua_tonumber(L, 5);
-  (arg1)->loadImage((char const *)arg2,arg3,arg4,arg5);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_TileSheet_getTexCoords(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
-  unsigned int arg2 ;
-  unsigned int arg3 ;
-  Neo::Vector4 result;
-  
-  SWIG_check_num_args("Neo2D::TileSheet::getTexCoords",3,3)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::TileSheet::getTexCoords",1,"Neo2D::TileSheet *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::TileSheet::getTexCoords",2,"unsigned int");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::TileSheet::getTexCoords",3,"unsigned int");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__TileSheet,0))){
-    SWIG_fail_ptr("TileSheet_getTexCoords",1,SWIGTYPE_p_Neo2D__TileSheet);
-  }
-  
-  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
-  arg2 = (unsigned int)lua_tonumber(L, 2);
-  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
-  arg3 = (unsigned int)lua_tonumber(L, 3);
-  result = (arg1)->getTexCoords(arg2,arg3);
-  {
-    Neo::Vector4 * resultptr = new Neo::Vector4((const Neo::Vector4 &) result);
-    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector4,1); SWIG_arg++;
-  }
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_TileSheet_getImage(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) 0 ;
-  int result;
-  
-  SWIG_check_num_args("Neo2D::TileSheet::getImage",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::TileSheet::getImage",1,"Neo2D::TileSheet *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__TileSheet,0))){
-    SWIG_fail_ptr("TileSheet_getImage",1,SWIGTYPE_p_Neo2D__TileSheet);
-  }
-  
-  result = (int)(arg1)->getImage();
-  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static void swig_delete_TileSheet(void *obj) {
-Neo2D::TileSheet *arg1 = (Neo2D::TileSheet *) obj;
-delete arg1;
-}
-static swig_lua_method swig_Neo2D_TileSheet_methods[] = {
-    {"loadImage", _wrap_TileSheet_loadImage}, 
-    {"getTexCoords", _wrap_TileSheet_getTexCoords}, 
-    {"getImage", _wrap_TileSheet_getImage}, 
-    {0,0}
-};
-static swig_lua_attribute swig_Neo2D_TileSheet_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_attribute swig_Neo2D_TileSheet_cls_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_method swig_Neo2D_TileSheet_cls_methods[] = {
-    {0,0}
-};
-static swig_lua_const_info swig_Neo2D_TileSheet_cls_constants[] = {
-    {0,0,0,0,0,0}
-};
-static swig_lua_class *swig_Neo2D_TileSheet_bases[] = {0};
-static const char *swig_Neo2D_TileSheet_base_names[] = {0};
-static swig_lua_class _wrap_class_Neo2D_TileSheet = { "TileSheet", &SWIGTYPE_p_Neo2D__TileSheet,_wrap_new_TileSheet, swig_delete_TileSheet, swig_Neo2D_TileSheet_methods, swig_Neo2D_TileSheet_attributes, { "TileSheet", swig_Neo2D_TileSheet_cls_methods, swig_Neo2D_TileSheet_cls_attributes, swig_Neo2D_TileSheet_cls_constants }, swig_Neo2D_TileSheet_bases, swig_Neo2D_TileSheet_base_names };
-
-static int _wrap_new_Tile(lua_State* L) {
-  int SWIG_arg = 0;
-  float arg1 ;
-  float arg2 ;
-  unsigned int arg3 ;
-  unsigned int arg4 ;
-  char *arg5 = (char *) 0 ;
-  unsigned int arg6 ;
-  unsigned int arg7 ;
-  Neo2D::Tile *result = 0 ;
-  
-  SWIG_check_num_args("Neo2D::Tile::Tile",7,7)
-  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Tile::Tile",1,"float");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Tile::Tile",2,"float");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Tile::Tile",3,"unsigned int");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Tile::Tile",4,"unsigned int");
-  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo2D::Tile::Tile",5,"char const *");
-  if(!lua_isnumber(L,6)) SWIG_fail_arg("Neo2D::Tile::Tile",6,"unsigned int");
-  if(!lua_isnumber(L,7)) SWIG_fail_arg("Neo2D::Tile::Tile",7,"unsigned int");
-  arg1 = (float)lua_tonumber(L, 1);
-  arg2 = (float)lua_tonumber(L, 2);
-  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
-  arg3 = (unsigned int)lua_tonumber(L, 3);
-  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
-  arg4 = (unsigned int)lua_tonumber(L, 4);
-  arg5 = (char *)lua_tostring(L, 5);
-  SWIG_contract_assert((lua_tonumber(L,6)>=0),"number must not be negative")
-  arg6 = (unsigned int)lua_tonumber(L, 6);
-  SWIG_contract_assert((lua_tonumber(L,7)>=0),"number must not be negative")
-  arg7 = (unsigned int)lua_tonumber(L, 7);
-  result = (Neo2D::Tile *)new Neo2D::Tile(arg1,arg2,arg3,arg4,(char const *)arg5,arg6,arg7);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Tile,1); SWIG_arg++; 
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_Tile_getStaticName(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
-  char *result = 0 ;
-  
-  SWIG_check_num_args("Neo2D::Tile::getStaticName",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Tile::getStaticName",1,"Neo2D::Tile *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Tile,0))){
-    SWIG_fail_ptr("Tile_getStaticName",1,SWIGTYPE_p_Neo2D__Tile);
-  }
-  
-  result = (char *)(arg1)->getStaticName();
-  lua_pushstring(L,(const char *)result); SWIG_arg++;
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_Tile_setTileSheet(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
-  Neo2D::TileSheet *arg2 = (Neo2D::TileSheet *) 0 ;
-  
-  SWIG_check_num_args("Neo2D::Tile::setTileSheet",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Tile::setTileSheet",1,"Neo2D::Tile *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo2D::Tile::setTileSheet",2,"Neo2D::TileSheet *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Tile,0))){
-    SWIG_fail_ptr("Tile_setTileSheet",1,SWIGTYPE_p_Neo2D__Tile);
-  }
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo2D__TileSheet,SWIG_POINTER_DISOWN))){
-    SWIG_fail_ptr("Tile_setTileSheet",2,SWIGTYPE_p_Neo2D__TileSheet);
-  }
-  
-  (arg1)->setTileSheet(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_Tile_setOffset(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
-  Neo::Vector2 arg2 ;
-  Neo::Vector2 *argp2 ;
-  
-  SWIG_check_num_args("Neo2D::Tile::setOffset",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Tile::setOffset",1,"Neo2D::Tile *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Tile::setOffset",2,"Neo::Vector2");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Tile,0))){
-    SWIG_fail_ptr("Tile_setOffset",1,SWIGTYPE_p_Neo2D__Tile);
-  }
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
-    SWIG_fail_ptr("Tile_setOffset",2,SWIGTYPE_p_Neo__Vector2);
-  }
-  arg2 = *argp2;
-  
-  (arg1)->setOffset(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_Tile_draw(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
-  Neo::Vector2 arg2 ;
-  Neo::Vector2 *argp2 ;
-  
-  SWIG_check_num_args("Neo2D::Tile::draw",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Tile::draw",1,"Neo2D::Tile *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Tile::draw",2,"Neo::Vector2");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Tile,0))){
-    SWIG_fail_ptr("Tile_draw",1,SWIGTYPE_p_Neo2D__Tile);
-  }
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
-    SWIG_fail_ptr("Tile_draw",2,SWIGTYPE_p_Neo__Vector2);
-  }
-  arg2 = *argp2;
-  
-  (arg1)->draw(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_Tile_update(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Tile *arg1 = (Neo2D::Tile *) 0 ;
-  
-  SWIG_check_num_args("Neo2D::Tile::update",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Tile::update",1,"Neo2D::Tile *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Tile,0))){
-    SWIG_fail_ptr("Tile_update",1,SWIGTYPE_p_Neo2D__Tile);
-  }
-  
-  (arg1)->update();
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static void swig_delete_Tile(void *obj) {
-Neo2D::Tile *arg1 = (Neo2D::Tile *) obj;
-delete arg1;
-}
-static swig_lua_method swig_Neo2D_Tile_methods[] = {
-    {"getStaticName", _wrap_Tile_getStaticName}, 
-    {"setTileSheet", _wrap_Tile_setTileSheet}, 
-    {"setOffset", _wrap_Tile_setOffset}, 
-    {"draw", _wrap_Tile_draw}, 
-    {"update", _wrap_Tile_update}, 
-    {0,0}
-};
-static swig_lua_attribute swig_Neo2D_Tile_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_attribute swig_Neo2D_Tile_cls_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_method swig_Neo2D_Tile_cls_methods[] = {
-    {0,0}
-};
-static swig_lua_const_info swig_Neo2D_Tile_cls_constants[] = {
-    {0,0,0,0,0,0}
-};
-static swig_lua_class *swig_Neo2D_Tile_bases[] = {0,0};
-static const char *swig_Neo2D_Tile_base_names[] = {"Neo2D::Widget *",0};
-static swig_lua_class _wrap_class_Neo2D_Tile = { "Tile", &SWIGTYPE_p_Neo2D__Tile,_wrap_new_Tile, swig_delete_Tile, swig_Neo2D_Tile_methods, swig_Neo2D_Tile_attributes, { "Tile", swig_Neo2D_Tile_cls_methods, swig_Neo2D_Tile_cls_attributes, swig_Neo2D_Tile_cls_constants }, swig_Neo2D_Tile_bases, swig_Neo2D_Tile_base_names };
-
 static int _wrap_new_Animation__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
   unsigned int arg1 ;
@@ -59075,11 +59324,104 @@ fail:
 }
 
 
+static int _wrap_AnimatedTile_update(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::AnimatedTile *arg1 = (Neo2D::AnimatedTile *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::AnimatedTile::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::AnimatedTile::update",1,"Neo2D::AnimatedTile *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__AnimatedTile,0))){
+    SWIG_fail_ptr("AnimatedTile_update",1,SWIGTYPE_p_Neo2D__AnimatedTile);
+  }
+  
+  (arg1)->update();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_AnimatedTile_addAnimation(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::AnimatedTile *arg1 = (Neo2D::AnimatedTile *) 0 ;
+  unsigned int arg2 ;
+  unsigned int arg3 ;
+  unsigned int arg4 ;
+  unsigned int arg5 ;
+  Neo2D::Animation *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::AnimatedTile::addAnimation",5,5)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::AnimatedTile::addAnimation",1,"Neo2D::AnimatedTile *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::AnimatedTile::addAnimation",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::AnimatedTile::addAnimation",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::AnimatedTile::addAnimation",4,"unsigned int");
+  if(!lua_isnumber(L,5)) SWIG_fail_arg("Neo2D::AnimatedTile::addAnimation",5,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__AnimatedTile,0))){
+    SWIG_fail_ptr("AnimatedTile_addAnimation",1,SWIGTYPE_p_Neo2D__AnimatedTile);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
+  arg4 = (unsigned int)lua_tonumber(L, 4);
+  SWIG_contract_assert((lua_tonumber(L,5)>=0),"number must not be negative")
+  arg5 = (unsigned int)lua_tonumber(L, 5);
+  result = (Neo2D::Animation *)(arg1)->addAnimation(arg2,arg3,arg4,arg5);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Animation,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_AnimatedTile_setCurrentAnimation(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::AnimatedTile *arg1 = (Neo2D::AnimatedTile *) 0 ;
+  size_t arg2 ;
+  
+  SWIG_check_num_args("Neo2D::AnimatedTile::setCurrentAnimation",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::AnimatedTile::setCurrentAnimation",1,"Neo2D::AnimatedTile *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::AnimatedTile::setCurrentAnimation",2,"size_t");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__AnimatedTile,0))){
+    SWIG_fail_ptr("AnimatedTile_setCurrentAnimation",1,SWIGTYPE_p_Neo2D__AnimatedTile);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (size_t)lua_tonumber(L, 2);
+  (arg1)->setCurrentAnimation(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_AnimatedTile(void *obj) {
 Neo2D::AnimatedTile *arg1 = (Neo2D::AnimatedTile *) obj;
 delete arg1;
 }
 static swig_lua_method swig_Neo2D_AnimatedTile_methods[] = {
+    {"update", _wrap_AnimatedTile_update}, 
+    {"addAnimation", _wrap_AnimatedTile_addAnimation}, 
+    {"setCurrentAnimation", _wrap_AnimatedTile_setCurrentAnimation}, 
     {0,0}
 };
 static swig_lua_attribute swig_Neo2D_AnimatedTile_attributes[] = {
@@ -63294,6 +63636,9 @@ static void *_p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Gui__Button(void *x, int *SW
 static void *_p_Neo2D__Gui__ThemedInputFieldTo_p_Neo2D__Gui__InputField(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::Gui::InputField *)  ((Neo2D::Gui::ThemedInputField *) x));
 }
+static void *_p_Neo2D__StaticTileBatchTo_p_Neo2D__SpriteBatch(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Neo2D::SpriteBatch *)  ((Neo2D::StaticTileBatch *) x));
+}
 static void *_p_Neo2D__CulledSpriteBatchTo_p_Neo2D__SpriteBatch(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::SpriteBatch *)  ((Neo2D::CulledSpriteBatch *) x));
 }
@@ -63351,6 +63696,7 @@ static swig_type_info _swigt__p_Neo2D__Gui__WindowManager = {"_p_Neo2D__Gui__Win
 static swig_type_info _swigt__p_Neo2D__Neo2DEngine = {"_p_Neo2D__Neo2DEngine", "Neo2D::Neo2DEngine *", 0, 0, (void*)&_wrap_class_Neo2D_Neo2DEngine, 0};
 static swig_type_info _swigt__p_Neo2D__Sprite = {"_p_Neo2D__Sprite", "Neo2D::Sprite *", 0, 0, (void*)&_wrap_class_Neo2D_Sprite, 0};
 static swig_type_info _swigt__p_Neo2D__SpriteBatch = {"_p_Neo2D__SpriteBatch", "Neo2D::SpriteBatch *", 0, 0, (void*)&_wrap_class_Neo2D_SpriteBatch, 0};
+static swig_type_info _swigt__p_Neo2D__StaticTileBatch = {"_p_Neo2D__StaticTileBatch", "Neo2D::StaticTileBatch *", 0, 0, (void*)&_wrap_class_Neo2D_StaticTileBatch, 0};
 static swig_type_info _swigt__p_Neo2D__Tile = {"_p_Neo2D__Tile", "Neo2D::Tile *", 0, 0, (void*)&_wrap_class_Neo2D_Tile, 0};
 static swig_type_info _swigt__p_Neo2D__TileSheet = {"_p_Neo2D__TileSheet", "Neo2D::TileSheet *", 0, 0, (void*)&_wrap_class_Neo2D_TileSheet, 0};
 static swig_type_info _swigt__p_Neo2D__Widget = {"_p_Neo2D__Widget", "Neo2D::Widget *", 0, 0, (void*)&_wrap_class_Neo2D_Widget, 0};
@@ -63507,6 +63853,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Neo2D__Neo2DEngine,
   &_swigt__p_Neo2D__Sprite,
   &_swigt__p_Neo2D__SpriteBatch,
+  &_swigt__p_Neo2D__StaticTileBatch,
   &_swigt__p_Neo2D__Tile,
   &_swigt__p_Neo2D__TileSheet,
   &_swigt__p_Neo2D__Widget,
@@ -63662,7 +64009,8 @@ static swig_cast_info _swigc__p_Neo2D__Gui__Window[] = {  {&_swigt__p_Neo2D__Gui
 static swig_cast_info _swigc__p_Neo2D__Gui__WindowManager[] = {  {&_swigt__p_Neo2D__Gui__WindowManager, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Neo2DEngine[] = {  {&_swigt__p_Neo2D__Neo2DEngine, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Sprite[] = {  {&_swigt__p_Neo2D__Sprite, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo2D__SpriteBatch[] = {  {&_swigt__p_Neo2D__SpriteBatch, 0, 0, 0},  {&_swigt__p_Neo2D__CulledSpriteBatch, _p_Neo2D__CulledSpriteBatchTo_p_Neo2D__SpriteBatch, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__SpriteBatch[] = {  {&_swigt__p_Neo2D__SpriteBatch, 0, 0, 0},  {&_swigt__p_Neo2D__StaticTileBatch, _p_Neo2D__StaticTileBatchTo_p_Neo2D__SpriteBatch, 0, 0},  {&_swigt__p_Neo2D__CulledSpriteBatch, _p_Neo2D__CulledSpriteBatchTo_p_Neo2D__SpriteBatch, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__StaticTileBatch[] = {  {&_swigt__p_Neo2D__StaticTileBatch, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Tile[] = {  {&_swigt__p_Neo2D__Tile, 0, 0, 0},  {&_swigt__p_Neo2D__AnimatedTile, _p_Neo2D__AnimatedTileTo_p_Neo2D__Tile, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__TileSheet[] = {  {&_swigt__p_Neo2D__TileSheet, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Widget[] = {  {&_swigt__p_Neo2D__Gui__Window, _p_Neo2D__Gui__WindowTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__WindowManager, _p_Neo2D__Gui__WindowManagerTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ScrollBar, _p_Neo2D__Gui__ScrollBarTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ScrollPane, _p_Neo2D__Gui__ScrollPaneTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__CheckButton, _p_Neo2D__Gui__CheckButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Button, _p_Neo2D__Gui__ButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Label, _p_Neo2D__Gui__LabelTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Widget, 0, 0, 0},  {&_swigt__p_Neo2D__Tile, _p_Neo2D__TileTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ThemedButton, _p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__List, _p_Neo2D__Gui__ListTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Slider, _p_Neo2D__Gui__SliderTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Container, _p_Neo2D__Gui__ContainerTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ScaleLayout, _p_Neo2D__Gui__ScaleLayoutTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ThemedInputField, _p_Neo2D__Gui__ThemedInputFieldTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Sprite, _p_Neo2D__SpriteTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Menu, _p_Neo2D__Gui__MenuTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__InputField, _p_Neo2D__Gui__InputFieldTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__TreeView, _p_Neo2D__Gui__TreeViewTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__AnimatedTile, _p_Neo2D__AnimatedTileTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__MenuBar, _p_Neo2D__Gui__MenuBarTo_p_Neo2D__Widget, 0, 0},{0, 0, 0, 0}};
@@ -63819,6 +64167,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Neo2D__Neo2DEngine,
   _swigc__p_Neo2D__Sprite,
   _swigc__p_Neo2D__SpriteBatch,
+  _swigc__p_Neo2D__StaticTileBatch,
   _swigc__p_Neo2D__Tile,
   _swigc__p_Neo2D__TileSheet,
   _swigc__p_Neo2D__Widget,

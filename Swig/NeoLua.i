@@ -14,6 +14,7 @@
 #include <Canvas.h>
 #include <Label.h>
 #include <SpriteBatch.h>
+#include <StaticTileBatch.h>
 #include <CulledSpriteBatch.h>
 #include <AnimatedTile.h>
 
@@ -102,6 +103,7 @@
 %include <Widget.h>
 %include <Canvas.h>
 %include <SpriteBatch.h>
+%include <StaticTileBatch.h>
 %include <CulledSpriteBatch.h>
 %include <Neo2DEngine.h>
 %include <Button.h>
