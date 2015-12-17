@@ -68,6 +68,36 @@ public:
 				   unsigned int dist);
 	Vector4 getTexCoords(unsigned int x, unsigned int y);
 	int getImage() { return m_image; }
+
+	unsigned int getTileDistance() const
+	{
+		return m_tileDistance;
+	}
+
+	void setTileDistance(unsigned int m_tileDistance)
+	{
+		TileSheet::m_tileDistance = m_tileDistance;
+	}
+
+	unsigned int getTileHeight() const
+	{
+		return m_tileHeight;
+	}
+
+	void setTileHeight(unsigned int m_tileHeight)
+	{
+		TileSheet::m_tileHeight = m_tileHeight;
+	}
+
+	unsigned int getTileWidth() const
+	{
+		return m_tileWidth;
+	}
+
+	void setTileWidth(unsigned int m_tileWidth)
+	{
+		TileSheet::m_tileWidth = m_tileWidth;
+	}
 };
 
 /**
