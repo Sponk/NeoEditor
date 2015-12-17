@@ -42,7 +42,7 @@
 namespace Neo2D
 {
 
-// Forward delcaration of Canvas
+// Forward declaration of Canvas
 class Canvas;
 
 /**
@@ -101,6 +101,7 @@ public:
 	virtual unsigned int getNumSprites() { return m_sprites.size(); }
 	virtual void deleteSprite(unsigned int id)
 	{
+		if(id >= m_sprites.size()) return;
 		SAFE_DELETE(m_sprites[id]);
 		m_sprites.erase(m_sprites.begin() + id);
 	}
