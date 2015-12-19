@@ -50,6 +50,8 @@
 #define NEO_OMP(x) _Pragma("omp x")
 #else
 #define NEO_OMP(p)
+#define omp_get_max_threads 1
+#define omp_get_thread_num 0
 #endif
 
 namespace Neo

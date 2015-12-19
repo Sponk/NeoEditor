@@ -23956,7 +23956,58 @@ static swig_lua_class *swig_Neo_ScriptContext_bases[] = {0};
 static const char *swig_Neo_ScriptContext_base_names[] = {0};
 static swig_lua_class _wrap_class_Neo_ScriptContext = { "ScriptContext", &SWIGTYPE_p_Neo__ScriptContext,0, swig_delete_ScriptContext, swig_Neo_ScriptContext_methods, swig_Neo_ScriptContext_attributes, { "ScriptContext", swig_Neo_ScriptContext_cls_methods, swig_Neo_ScriptContext_cls_attributes, swig_Neo_ScriptContext_cls_constants }, swig_Neo_ScriptContext_bases, swig_Neo_ScriptContext_base_names };
 
-static int _wrap_new_Image(lua_State* L) {
+static int _wrap_new_Image__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Image *arg1 = 0 ;
+  bool arg2 ;
+  Neo::Image *result = 0 ;
+  
+  SWIG_check_num_args("Neo::Image::Image",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("Neo::Image::Image",1,"Neo::Image &");
+  if(!lua_isboolean(L,2)) SWIG_fail_arg("Neo::Image::Image",2,"bool");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Image,0))){
+    SWIG_fail_ptr("new_Image",1,SWIGTYPE_p_Neo__Image);
+  }
+  
+  arg2 = (lua_toboolean(L, 2)!=0);
+  result = (Neo::Image *)new Neo::Image(*arg1,arg2);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Image,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_new_Image__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Image *arg1 = 0 ;
+  Neo::Image *result = 0 ;
+  
+  SWIG_check_num_args("Neo::Image::Image",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("Neo::Image::Image",1,"Neo::Image &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Image,0))){
+    SWIG_fail_ptr("new_Image",1,SWIGTYPE_p_Neo__Image);
+  }
+  
+  result = (Neo::Image *)new Neo::Image(*arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__Image,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_new_Image__SWIG_2(lua_State* L) {
   int SWIG_arg = 0;
   Neo::Image *result = 0 ;
   
@@ -23970,6 +24021,59 @@ static int _wrap_new_Image(lua_State* L) {
 fail:
   lua_error(L);
   return SWIG_arg;
+}
+
+
+static int _wrap_new_Image(lua_State* L) {
+  int argc;
+  int argv[3]={
+    1,2,3
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 0) {
+    return _wrap_new_Image__SWIG_2(L);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      void *ptr;
+      if (lua_isuserdata(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Image, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      return _wrap_new_Image__SWIG_1(L);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      void *ptr;
+      if (lua_isuserdata(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Image, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = lua_isboolean(L,argv[1]);
+      }
+      if (_v) {
+        return _wrap_new_Image__SWIG_0(L);
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'new_Image'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::Image::Image(Neo::Image &,bool)\n"
+    "    Neo::Image::Image(Neo::Image &)\n"
+    "    Neo::Image::Image()\n");
+  lua_error(L);return 0;
 }
 
 
@@ -24094,6 +24198,148 @@ static int _wrap_Image_writePixel(lua_State* L) {
   arg3 = (unsigned int)lua_tonumber(L, 3);
   arg4=(void *)SWIG_MustGetPtr(L,4,0,0,4,"Image_writePixel");
   (arg1)->writePixel(arg2,arg3,arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Image_scale__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Image *arg1 = (Neo::Image *) 0 ;
+  unsigned int arg2 ;
+  unsigned int arg3 ;
+  
+  SWIG_check_num_args("Neo::Image::scale",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Image::scale",1,"Neo::Image *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Image::scale",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo::Image::scale",3,"unsigned int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Image,0))){
+    SWIG_fail_ptr("Image_scale",1,SWIGTYPE_p_Neo__Image);
+  }
+  
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  (arg1)->scale(arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Image_scale__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Image *arg1 = (Neo::Image *) 0 ;
+  float arg2 ;
+  
+  SWIG_check_num_args("Neo::Image::scale",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Image::scale",1,"Neo::Image *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Image::scale",2,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Image,0))){
+    SWIG_fail_ptr("Image_scale",1,SWIGTYPE_p_Neo__Image);
+  }
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  (arg1)->scale(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Image_scale(lua_State* L) {
+  int argc;
+  int argv[4]={
+    1,2,3,4
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 2) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Image, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = lua_isnumber(L,argv[1]);
+      }
+      if (_v) {
+        return _wrap_Image_scale__SWIG_1(L);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Image, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = lua_isnumber(L,argv[1]);
+      }
+      if (_v) {
+        {
+          _v = lua_isnumber(L,argv[2]);
+        }
+        if (_v) {
+          return _wrap_Image_scale__SWIG_0(L);
+        }
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'Image_scale'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::Image::scale(unsigned int,unsigned int)\n"
+    "    Neo::Image::scale(float)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_Image_rotate(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Image *arg1 = (Neo::Image *) 0 ;
+  int arg2 ;
+  
+  SWIG_check_num_args("Neo::Image::rotate",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Image::rotate",1,"Neo::Image *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo::Image::rotate",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Image,0))){
+    SWIG_fail_ptr("Image_rotate",1,SWIGTYPE_p_Neo__Image);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  (arg1)->rotate(arg2);
   
   return SWIG_arg;
   
@@ -24249,6 +24495,30 @@ fail:
 }
 
 
+static int _wrap_Image_getPixelSize(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Image *arg1 = (Neo::Image *) 0 ;
+  unsigned int result;
+  
+  SWIG_check_num_args("Neo::Image::getPixelSize",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::Image::getPixelSize",1,"Neo::Image *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Image,0))){
+    SWIG_fail_ptr("Image_getPixelSize",1,SWIGTYPE_p_Neo__Image);
+  }
+  
+  result = (unsigned int)(arg1)->getPixelSize();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_Image(void *obj) {
 Neo::Image *arg1 = (Neo::Image *) obj;
 delete arg1;
@@ -24258,12 +24528,15 @@ static swig_lua_method swig_Neo_Image_methods[] = {
     {"clear", _wrap_Image_clear}, 
     {"readPixel", _wrap_Image_readPixel}, 
     {"writePixel", _wrap_Image_writePixel}, 
+    {"scale", _wrap_Image_scale}, 
+    {"rotate", _wrap_Image_rotate}, 
     {"getData", _wrap_Image_getData}, 
     {"getDataType", _wrap_Image_getDataType}, 
     {"getComponents", _wrap_Image_getComponents}, 
     {"getWidth", _wrap_Image_getWidth}, 
     {"getHeight", _wrap_Image_getHeight}, 
     {"getSize", _wrap_Image_getSize}, 
+    {"getPixelSize", _wrap_Image_getPixelSize}, 
     {0,0}
 };
 static swig_lua_attribute swig_Neo_Image_attributes[] = {
@@ -55908,12 +56181,45 @@ fail:
 }
 
 
+static int _wrap_StaticTileBatch_draw(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::StaticTileBatch *arg1 = (Neo2D::StaticTileBatch *) 0 ;
+  Neo::Vector2 arg2 ;
+  Neo::Vector2 *argp2 ;
+  
+  SWIG_check_num_args("Neo2D::StaticTileBatch::draw",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::StaticTileBatch::draw",1,"Neo2D::StaticTileBatch *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::StaticTileBatch::draw",2,"Neo::Vector2");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__StaticTileBatch,0))){
+    SWIG_fail_ptr("StaticTileBatch_draw",1,SWIGTYPE_p_Neo2D__StaticTileBatch);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("StaticTileBatch_draw",2,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg2 = *argp2;
+  
+  (arg1)->draw(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_StaticTileBatch(void *obj) {
 Neo2D::StaticTileBatch *arg1 = (Neo2D::StaticTileBatch *) obj;
 delete arg1;
 }
 static swig_lua_method swig_Neo2D_StaticTileBatch_methods[] = {
     {"addTile", _wrap_StaticTileBatch_addTile}, 
+    {"draw", _wrap_StaticTileBatch_draw}, 
     {0,0}
 };
 static swig_lua_attribute swig_Neo2D_StaticTileBatch_attributes[] = {
@@ -63337,6 +63643,8 @@ static swig_lua_var_info swig_variables[] = {
 };
 
 static swig_lua_const_info swig_constants[] = {
+    {SWIG_LUA_CONSTTAB_INT("omp_get_max_threads", 1)},
+    {SWIG_LUA_CONSTTAB_INT("omp_get_thread_num", 0)},
     {SWIG_LUA_CONSTTAB_FLOAT("M_PI", 3.14159265358979323846)},
     {SWIG_LUA_CONSTTAB_FLOAT("DEG_TO_RAD", ((3.14159265358979323846*2)/360.0))},
     {SWIG_LUA_CONSTTAB_FLOAT("RAD_TO_DEG", (1.0/((3.14159265358979323846*2)/360.0)))},

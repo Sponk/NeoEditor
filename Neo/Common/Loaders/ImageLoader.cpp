@@ -33,7 +33,7 @@ using namespace std;
 namespace Neo
 {
 
-bool M_loadImage(const char * filename, Image* data)
+bool M_loadImage(const char* filename, Image* data)
 {
 	if (M_loadJpegImage(filename, data))
 		return true;
