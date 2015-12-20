@@ -170,7 +170,7 @@ public:
 	unsigned int getSize(void){ return m_size; }
 
 	/**
-	 * @return The total size of one pixel in the image in bytes.
+	 * @return The total size of one pixel component in the image in bytes.
 	 */
 	unsigned int getPixelSize(void) { return m_pixelSize; }
 };

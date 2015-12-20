@@ -24,6 +24,8 @@
 
 #include <gtest/gtest.h>
 #include <NeoCore.h>
+#include <NeoEngine.h>
+#include <PngSaver.h>
 
 using namespace std;
 using namespace Neo;
@@ -93,7 +95,7 @@ TEST(ImageTest, Clear_test)
 TEST(ImageTest, ScaleSmaller_test)
 {
 	Image image;
-	image.create(VAR_UBYTE, 10, 10, 4);
+	image.create(VAR_UBYTE, 100, 100, 3);
 	unsigned int pixel = 0;
 	for(int y = 0; y < image.getWidth(); y++)
 	{
@@ -110,20 +112,20 @@ TEST(ImageTest, ScaleSmaller_test)
 	image.scale(0.5);
 	//printImage(image);
 
-	ASSERT_EQ(5, image.getWidth());
-	ASSERT_EQ(5, image.getHeight());
+	ASSERT_EQ(50, image.getWidth());
+	ASSERT_EQ(50, image.getHeight());
 }
 
 TEST(ImageTest, ScaleBigger_test)
 {
 	Image image;
-	image.create(VAR_UBYTE, 10, 10, 4);
+	image.create(VAR_UBYTE, 50, 50, 3);
 	unsigned int pixel = 0;
 	for(int y = 0; y < image.getWidth(); y++)
 	{
 		for (int x = 0; x < image.getHeight(); x++)
 		{
-			pixel = x + y;
+			pixel = 100*(x + y);
 			image.writePixel(x, y, &pixel);
 		}
 	}
@@ -135,14 +137,14 @@ TEST(ImageTest, ScaleBigger_test)
 	//printImage(image);
 
 	// TODO: Check image!
-	ASSERT_EQ(20, image.getWidth());
-	ASSERT_EQ(20, image.getHeight());
+	ASSERT_EQ(100, image.getWidth());
+	ASSERT_EQ(100, image.getHeight());
 }
 
 TEST(ImageTest, ScaleHuge_test)
 {
 	Image image;
-	image.create(VAR_UBYTE, 1024, 1024, 4);
+	image.create(VAR_UBYTE, 1024, 1024, 3);
 	unsigned int pixel = 0;
 	for(int y = 0; y < image.getWidth(); y++)
 	{
@@ -188,7 +190,7 @@ TEST(ImageTest, Rotate360_test)
 TEST(ImageTest, Rotate90_test)
 {
 	Image image;
-	image.create(VAR_UBYTE, 4096, 4096, 4);
+	image.create(VAR_UBYTE, 1024, 1024, 4);
 	unsigned int pixel = 0;
 	for(int y = 0; y < image.getWidth(); y++)
 	{
@@ -203,5 +205,27 @@ TEST(ImageTest, Rotate90_test)
 	//printf("\n\n");
 
 	image.rotate(90);
+	//printImage(image);
+}
+
+TEST(ImageTest, Rotate180_test)
+{
+	Image image;
+	image.create(VAR_UBYTE, 1024, 1024, 3);
+	unsigned int pixel = 0;
+	for(int y = 0; y < image.getWidth(); y++)
+	{
+		for (int x = 0; x < image.getHeight(); x++)
+		{
+			pixel = x + y;
+			image.writePixel(x, y, &pixel);
+		}
+	}
+
+	//printImage(image);
+	//printf("\n\n");
+
+	image.rotate(180);
+
 	//printImage(image);
 }

@@ -32,6 +32,7 @@ typedef Neo::ES2Context GL4Context;
 #include <BulletContext.h>
 #include <WinContext.h>
 #include <ImageLoader.h>
+#include <ImageSaver.h>
 #include <SoundLoader.h>
 #include <FreetypeLoader.h>
 #include <BinFontLoader.h>
@@ -152,6 +153,8 @@ void PlayerBackend::start(void)
 
 		// loaders
 		engine->getImageLoader()->addLoader(M_loadImage); // image loader
+		engine->getImageLoader()->addSaver(M_saveImage);
+
 		engine->getSoundLoader()->addLoader(M_loadSound); // sound loader
 		engine->getLevelLoader()->addLoader(xmlLevelLoad); // level loader
 		engine->getLevelLoader()->addSaver(M_saveLevel); // level saver
