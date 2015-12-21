@@ -121,11 +121,11 @@ void Window::update()
 	}
 
 	// RESIZING
-	if (m_state == WINDOW_SELECTED_STATE
+	if (m_resizable && (m_state == WINDOW_SELECTED_STATE
 		&& input->onKeyDown("MOUSE_BUTTON_LEFT")
 		&& x >= m_x + m_width - TITLE_HEIGHT && x <= m_x + m_width
 		&& y >= m_y + m_height - TITLE_HEIGHT && y <= m_y + m_height
-		|| m_state == WINDOW_RESIZING_STATE
+		|| m_state == WINDOW_RESIZING_STATE)
 		&& (m_wm && m_wm->getSelectedWindow() == this))
 	{
 		m_width = m_width + dx;
