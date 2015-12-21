@@ -195,6 +195,8 @@ void Image::readPixel(unsigned int x, unsigned int y, void* color)
 
 void Image::scale(unsigned int width, unsigned int height)
 {
+	if(width == 0 || height == 0) return;
+
 	// Save all important things needed for scaling
 	Image oldImg(*this, true);
 
@@ -240,6 +242,8 @@ void Image::scale(float s)
 
 void Image::rotate(int angle)
 {
+	if(angle % 360 == 0) return;
+
 	Image oldImg(*this, true);
 
 	// Allocate one pixel buffer for each thread
