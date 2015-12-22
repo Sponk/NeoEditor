@@ -218,7 +218,7 @@ void Image::scale(unsigned int width, unsigned int height)
 	for(int y = 0; y < height; y++)
 	{
 		// Get the pixel assigned to this thread
-		void* pixel = pixArray + (omp_get_thread_num() * m_pixelSize);
+		void* pixel = static_cast<char*>(pixArray) + (omp_get_thread_num() * m_pixelSize);
 		unsigned int nx = 0;
 		unsigned int ny = 0;
 
@@ -279,7 +279,7 @@ void Image::rotate(int angle)
 	for(int y = 0; y < oldImg.getHeight(); y++)
 	{
 		// Get the pixel assigned to this thread
-		void* pixel = pixArray + (omp_get_thread_num() * m_pixelSize);
+		void* pixel = static_cast<char*>(pixArray) + (omp_get_thread_num() * m_pixelSize);
 		unsigned int nx = 0, ny = 0;
 		for (int x = 0; x < oldImg.getWidth(); x++)
 		{

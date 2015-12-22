@@ -56,11 +56,11 @@ public:
 	void draw(Vector2 offset);
 	void update();
 
+	Vector2 getSize() { return Vector2(m_width - SCROLL_BAR_WIDTH, m_height - SCROLL_BAR_WIDTH); }
+
  private:
 	Vector2 calculateValue() { return getPosition() - Vector2(floor(m_horizontal->getValue()), floor(m_vertical->getValue())); }
-
 	Vector2 calculateContentSize();
-	Vector2 getSize() { return Vector2(m_width - SCROLL_BAR_WIDTH, m_height - SCROLL_BAR_WIDTH); }
 };
 
 }

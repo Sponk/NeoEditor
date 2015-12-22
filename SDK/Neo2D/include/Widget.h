@@ -305,7 +305,7 @@ public:
 	Vector2 getFlip() { return m_flip; }
 
 	// For runtime identification
-	const char* getStaticName() { return "Widget"; }
+	virtual const char* getStaticName() { return "Widget"; }
 	virtual bool isMouseOver();
 
 	bool isInvisible() { return m_invisible; }

@@ -37,6 +37,8 @@ class NEO2D_EXPORT Container : public Widget
 			m_content.push_back(w);
 		}
 
+		std::vector<Widget*>& getContent() { return m_content; }
+
 		void draw();
 		void draw(Vector2 offset) { draw(); }
 		void update();

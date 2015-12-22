@@ -221,7 +221,7 @@ int main ( int argc, char **argv )
 		{
 			// look for an mproj in the current directory
 			std::vector<std::string> files;
-			readDirectory ( ".", &files );
+			readDirectory ( ".", files );
 
 			for ( int i = 0; i < files.size(); ++i )
 			{

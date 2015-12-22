@@ -208,7 +208,7 @@ class PublishEventMeshsPackage : public PublishEvent
 		char directory[256], localFilename[256];
 		getGlobalFilename(directory, system->getWorkingDirectory(), "assets");
 		vector<string> files;
-		readDirectory(directory, &files, 1, 1);
+		readDirectory(directory, files, 1, 1);
 
 		Level* currentLevel = engine->getLevel();
 		Level* tempLevel = new Level();
@@ -370,7 +370,7 @@ static void embedProject(const char * src, const char * dest, const char * game,
 static void copyDirFiles(const char * src, const char * dest, const char * filter)
 {
 	vector<string> files;
-	readDirectory(src, &files);
+	readDirectory(src, files);
 	for(int i = 0; i < files.size(); ++i)
 	{
 		if(strstr(files[i].c_str(), filter))

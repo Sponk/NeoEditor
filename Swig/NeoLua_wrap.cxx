@@ -1872,154 +1872,156 @@ SWIG_Lua_dostring(lua_State *L, const char* str) {
 #define SWIGTYPE_p_Neo2D__Gui__Button swig_types[6]
 #define SWIGTYPE_p_Neo2D__Gui__CheckButton swig_types[7]
 #define SWIGTYPE_p_Neo2D__Gui__Container swig_types[8]
-#define SWIGTYPE_p_Neo2D__Gui__InputField swig_types[9]
-#define SWIGTYPE_p_Neo2D__Gui__Label swig_types[10]
-#define SWIGTYPE_p_Neo2D__Gui__List swig_types[11]
-#define SWIGTYPE_p_Neo2D__Gui__Menu swig_types[12]
-#define SWIGTYPE_p_Neo2D__Gui__MenuBar swig_types[13]
-#define SWIGTYPE_p_Neo2D__Gui__ScaleLayout swig_types[14]
-#define SWIGTYPE_p_Neo2D__Gui__ScrollBar swig_types[15]
-#define SWIGTYPE_p_Neo2D__Gui__ScrollPane swig_types[16]
-#define SWIGTYPE_p_Neo2D__Gui__Slider swig_types[17]
-#define SWIGTYPE_p_Neo2D__Gui__ThemedButton swig_types[18]
-#define SWIGTYPE_p_Neo2D__Gui__ThemedInputField swig_types[19]
-#define SWIGTYPE_p_Neo2D__Gui__TreeNodeT_std__string_t swig_types[20]
-#define SWIGTYPE_p_Neo2D__Gui__TreeView swig_types[21]
-#define SWIGTYPE_p_Neo2D__Gui__Window swig_types[22]
-#define SWIGTYPE_p_Neo2D__Gui__WindowManager swig_types[23]
-#define SWIGTYPE_p_Neo2D__Neo2DEngine swig_types[24]
-#define SWIGTYPE_p_Neo2D__Sprite swig_types[25]
-#define SWIGTYPE_p_Neo2D__SpriteBatch swig_types[26]
-#define SWIGTYPE_p_Neo2D__StaticTileBatch swig_types[27]
-#define SWIGTYPE_p_Neo2D__Tile swig_types[28]
-#define SWIGTYPE_p_Neo2D__TileSheet swig_types[29]
-#define SWIGTYPE_p_Neo2D__Widget swig_types[30]
-#define SWIGTYPE_p_Neo__AnimRange swig_types[31]
-#define SWIGTYPE_p_Neo__Armature swig_types[32]
-#define SWIGTYPE_p_Neo__ArmatureAnim swig_types[33]
-#define SWIGTYPE_p_Neo__ArmatureAnimRef swig_types[34]
-#define SWIGTYPE_p_Neo__Behavior swig_types[35]
-#define SWIGTYPE_p_Neo__BehaviorCreator swig_types[36]
-#define SWIGTYPE_p_Neo__BehaviorManager swig_types[37]
-#define SWIGTYPE_p_Neo__Box3d swig_types[38]
-#define SWIGTYPE_p_Neo__Character swig_types[39]
-#define SWIGTYPE_p_Neo__Color swig_types[40]
-#define SWIGTYPE_p_Neo__DataLoaderT_Neo__ArmatureAnim_t swig_types[41]
-#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Font_t swig_types[42]
-#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Image_t swig_types[43]
-#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Level_t swig_types[44]
-#define SWIGTYPE_p_Neo__DataLoaderT_Neo__MaterialsAnim_t swig_types[45]
-#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Mesh_t swig_types[46]
-#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Sound_t swig_types[47]
-#define SWIGTYPE_p_Neo__DataLoaderT_Neo__TexturesAnim_t swig_types[48]
-#define SWIGTYPE_p_Neo__DataManager swig_types[49]
-#define SWIGTYPE_p_Neo__DataRef swig_types[50]
-#define SWIGTYPE_p_Neo__FRAME_BUFFER_ATTACHMENT swig_types[51]
-#define SWIGTYPE_p_Neo__FXManager swig_types[52]
-#define SWIGTYPE_p_Neo__FXRef swig_types[53]
-#define SWIGTYPE_p_Neo__Font swig_types[54]
-#define SWIGTYPE_p_Neo__FontRef swig_types[55]
-#define SWIGTYPE_p_Neo__Frustum swig_types[56]
-#define SWIGTYPE_p_Neo__Image swig_types[57]
-#define SWIGTYPE_p_Neo__InputContext swig_types[58]
-#define SWIGTYPE_p_Neo__Key swig_types[59]
-#define SWIGTYPE_p_Neo__Level swig_types[60]
-#define SWIGTYPE_p_Neo__Material swig_types[61]
-#define SWIGTYPE_p_Neo__MaterialAnim swig_types[62]
-#define SWIGTYPE_p_Neo__MaterialDisplay swig_types[63]
-#define SWIGTYPE_p_Neo__MaterialsAnim swig_types[64]
-#define SWIGTYPE_p_Neo__MaterialsAnimRef swig_types[65]
-#define SWIGTYPE_p_Neo__Matrix4x4 swig_types[66]
-#define SWIGTYPE_p_Neo__Mesh swig_types[67]
-#define SWIGTYPE_p_Neo__MeshRef swig_types[68]
-#define SWIGTYPE_p_Neo__Message swig_types[69]
-#define SWIGTYPE_p_Neo__Messenger swig_types[70]
-#define SWIGTYPE_p_Neo__MorphingData swig_types[71]
-#define SWIGTYPE_p_Neo__MorphingPoint swig_types[72]
-#define SWIGTYPE_p_Neo__MorphingPose swig_types[73]
-#define SWIGTYPE_p_Neo__NeoEngine swig_types[74]
-#define SWIGTYPE_p_Neo__NeoGame swig_types[75]
-#define SWIGTYPE_p_Neo__NeoVariable swig_types[76]
-#define SWIGTYPE_p_Neo__OBone swig_types[77]
-#define SWIGTYPE_p_Neo__OCamera swig_types[78]
-#define SWIGTYPE_p_Neo__OEntity swig_types[79]
-#define SWIGTYPE_p_Neo__OLight swig_types[80]
-#define SWIGTYPE_p_Neo__OSound swig_types[81]
-#define SWIGTYPE_p_Neo__OText swig_types[82]
-#define SWIGTYPE_p_Neo__Object3d swig_types[83]
-#define SWIGTYPE_p_Neo__Object3dAnim swig_types[84]
-#define SWIGTYPE_p_Neo__Object3d__AdditionalData swig_types[85]
-#define SWIGTYPE_p_Neo__PackageManager swig_types[86]
-#define SWIGTYPE_p_Neo__PhysicsConstraint swig_types[87]
-#define SWIGTYPE_p_Neo__PhysicsContext swig_types[88]
-#define SWIGTYPE_p_Neo__PhysicsProperties swig_types[89]
-#define SWIGTYPE_p_Neo__PostProcessor swig_types[90]
-#define SWIGTYPE_p_Neo__Profiler swig_types[91]
-#define SWIGTYPE_p_Neo__Profiler__FunctionProfile swig_types[92]
-#define SWIGTYPE_p_Neo__Quaternion swig_types[93]
-#define SWIGTYPE_p_Neo__Range swig_types[94]
-#define SWIGTYPE_p_Neo__Renderer swig_types[95]
-#define SWIGTYPE_p_Neo__RendererCreator swig_types[96]
-#define SWIGTYPE_p_Neo__RendererManager swig_types[97]
-#define SWIGTYPE_p_Neo__RenderingContext swig_types[98]
-#define SWIGTYPE_p_Neo__Scene swig_types[99]
-#define SWIGTYPE_p_Neo__Scene__AdditionalData swig_types[100]
-#define SWIGTYPE_p_Neo__ScriptContext swig_types[101]
-#define SWIGTYPE_p_Neo__ShaderRef swig_types[102]
-#define SWIGTYPE_p_Neo__SkinData swig_types[103]
-#define SWIGTYPE_p_Neo__SkinPoint swig_types[104]
-#define SWIGTYPE_p_Neo__Skybox swig_types[105]
-#define SWIGTYPE_p_Neo__Sound swig_types[106]
-#define SWIGTYPE_p_Neo__SoundContext swig_types[107]
-#define SWIGTYPE_p_Neo__SoundRef swig_types[108]
-#define SWIGTYPE_p_Neo__String swig_types[109]
-#define SWIGTYPE_p_Neo__SubGame swig_types[110]
-#define SWIGTYPE_p_Neo__SubMesh swig_types[111]
-#define SWIGTYPE_p_Neo__SystemContext swig_types[112]
-#define SWIGTYPE_p_Neo__Texture swig_types[113]
-#define SWIGTYPE_p_Neo__TextureAnim swig_types[114]
-#define SWIGTYPE_p_Neo__TexturePass swig_types[115]
-#define SWIGTYPE_p_Neo__TextureRef swig_types[116]
-#define SWIGTYPE_p_Neo__TexturesAnim swig_types[117]
-#define SWIGTYPE_p_Neo__TexturesAnimRef swig_types[118]
-#define SWIGTYPE_p_Neo__Vector2 swig_types[119]
-#define SWIGTYPE_p_Neo__Vector3 swig_types[120]
-#define SWIGTYPE_p_Neo__Vector4 swig_types[121]
-#define SWIGTYPE_p_Stringp swig_types[122]
-#define SWIGTYPE_p_Vector3p swig_types[123]
-#define SWIGTYPE_p___int64 swig_types[124]
-#define SWIGTYPE_p_char swig_types[125]
-#define SWIGTYPE_p_double swig_types[126]
-#define SWIGTYPE_p_doublep swig_types[127]
-#define SWIGTYPE_p_f_p_Neo__Object3d__p_Neo__Behavior swig_types[128]
-#define SWIGTYPE_p_f_void__int swig_types[129]
-#define SWIGTYPE_p_f_void__intp swig_types[130]
-#define SWIGTYPE_p_f_void__p_Neo__Renderer swig_types[131]
-#define SWIGTYPE_p_float swig_types[132]
-#define SWIGTYPE_p_floatp swig_types[133]
-#define SWIGTYPE_p_int swig_types[134]
-#define SWIGTYPE_p_intp swig_types[135]
-#define SWIGTYPE_p_long swig_types[136]
-#define SWIGTYPE_p_mapT_unsigned_int_Neo__Character_t swig_types[137]
-#define SWIGTYPE_p_mapT_unsigned_int_unsigned_int_t swig_types[138]
-#define SWIGTYPE_p_p_char swig_types[139]
-#define SWIGTYPE_p_p_unsigned_long swig_types[140]
-#define SWIGTYPE_p_short swig_types[141]
-#define SWIGTYPE_p_signed___int64 swig_types[142]
-#define SWIGTYPE_p_signed_char swig_types[143]
-#define SWIGTYPE_p_std__functionT_void_fWidget_p_longF_t swig_types[144]
-#define SWIGTYPE_p_std__string swig_types[145]
-#define SWIGTYPE_p_uintp swig_types[146]
-#define SWIGTYPE_p_unsigned___int64 swig_types[147]
-#define SWIGTYPE_p_unsigned_char swig_types[148]
-#define SWIGTYPE_p_unsigned_int swig_types[149]
-#define SWIGTYPE_p_unsigned_long swig_types[150]
-#define SWIGTYPE_p_unsigned_short swig_types[151]
-#define SWIGTYPE_p_vectorT_float_t swig_types[152]
-#define SWIGTYPE_p_vectorT_std__string_t swig_types[153]
-#define SWIGTYPE_p_void swig_types[154]
-static swig_type_info *swig_types[156];
-static swig_module_info swig_module = {swig_types, 155, 0, 0, 0, 0};
+#define SWIGTYPE_p_Neo2D__Gui__FileDialog swig_types[9]
+#define SWIGTYPE_p_Neo2D__Gui__InputField swig_types[10]
+#define SWIGTYPE_p_Neo2D__Gui__Label swig_types[11]
+#define SWIGTYPE_p_Neo2D__Gui__List swig_types[12]
+#define SWIGTYPE_p_Neo2D__Gui__Menu swig_types[13]
+#define SWIGTYPE_p_Neo2D__Gui__MenuBar swig_types[14]
+#define SWIGTYPE_p_Neo2D__Gui__ScaleLayout swig_types[15]
+#define SWIGTYPE_p_Neo2D__Gui__ScrollBar swig_types[16]
+#define SWIGTYPE_p_Neo2D__Gui__ScrollPane swig_types[17]
+#define SWIGTYPE_p_Neo2D__Gui__Slider swig_types[18]
+#define SWIGTYPE_p_Neo2D__Gui__ThemedButton swig_types[19]
+#define SWIGTYPE_p_Neo2D__Gui__ThemedInputField swig_types[20]
+#define SWIGTYPE_p_Neo2D__Gui__TreeNodeT_std__string_t swig_types[21]
+#define SWIGTYPE_p_Neo2D__Gui__TreeView swig_types[22]
+#define SWIGTYPE_p_Neo2D__Gui__Window swig_types[23]
+#define SWIGTYPE_p_Neo2D__Gui__WindowManager swig_types[24]
+#define SWIGTYPE_p_Neo2D__Neo2DEngine swig_types[25]
+#define SWIGTYPE_p_Neo2D__Sprite swig_types[26]
+#define SWIGTYPE_p_Neo2D__SpriteBatch swig_types[27]
+#define SWIGTYPE_p_Neo2D__StaticTileBatch swig_types[28]
+#define SWIGTYPE_p_Neo2D__Tile swig_types[29]
+#define SWIGTYPE_p_Neo2D__TileSheet swig_types[30]
+#define SWIGTYPE_p_Neo2D__Widget swig_types[31]
+#define SWIGTYPE_p_Neo__AnimRange swig_types[32]
+#define SWIGTYPE_p_Neo__Armature swig_types[33]
+#define SWIGTYPE_p_Neo__ArmatureAnim swig_types[34]
+#define SWIGTYPE_p_Neo__ArmatureAnimRef swig_types[35]
+#define SWIGTYPE_p_Neo__Behavior swig_types[36]
+#define SWIGTYPE_p_Neo__BehaviorCreator swig_types[37]
+#define SWIGTYPE_p_Neo__BehaviorManager swig_types[38]
+#define SWIGTYPE_p_Neo__Box3d swig_types[39]
+#define SWIGTYPE_p_Neo__Character swig_types[40]
+#define SWIGTYPE_p_Neo__Color swig_types[41]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__ArmatureAnim_t swig_types[42]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Font_t swig_types[43]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Image_t swig_types[44]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Level_t swig_types[45]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__MaterialsAnim_t swig_types[46]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Mesh_t swig_types[47]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__Sound_t swig_types[48]
+#define SWIGTYPE_p_Neo__DataLoaderT_Neo__TexturesAnim_t swig_types[49]
+#define SWIGTYPE_p_Neo__DataManager swig_types[50]
+#define SWIGTYPE_p_Neo__DataRef swig_types[51]
+#define SWIGTYPE_p_Neo__FRAME_BUFFER_ATTACHMENT swig_types[52]
+#define SWIGTYPE_p_Neo__FXManager swig_types[53]
+#define SWIGTYPE_p_Neo__FXRef swig_types[54]
+#define SWIGTYPE_p_Neo__Font swig_types[55]
+#define SWIGTYPE_p_Neo__FontRef swig_types[56]
+#define SWIGTYPE_p_Neo__Frustum swig_types[57]
+#define SWIGTYPE_p_Neo__Image swig_types[58]
+#define SWIGTYPE_p_Neo__InputContext swig_types[59]
+#define SWIGTYPE_p_Neo__Key swig_types[60]
+#define SWIGTYPE_p_Neo__Level swig_types[61]
+#define SWIGTYPE_p_Neo__Material swig_types[62]
+#define SWIGTYPE_p_Neo__MaterialAnim swig_types[63]
+#define SWIGTYPE_p_Neo__MaterialDisplay swig_types[64]
+#define SWIGTYPE_p_Neo__MaterialsAnim swig_types[65]
+#define SWIGTYPE_p_Neo__MaterialsAnimRef swig_types[66]
+#define SWIGTYPE_p_Neo__Matrix4x4 swig_types[67]
+#define SWIGTYPE_p_Neo__Mesh swig_types[68]
+#define SWIGTYPE_p_Neo__MeshRef swig_types[69]
+#define SWIGTYPE_p_Neo__Message swig_types[70]
+#define SWIGTYPE_p_Neo__Messenger swig_types[71]
+#define SWIGTYPE_p_Neo__MorphingData swig_types[72]
+#define SWIGTYPE_p_Neo__MorphingPoint swig_types[73]
+#define SWIGTYPE_p_Neo__MorphingPose swig_types[74]
+#define SWIGTYPE_p_Neo__NeoEngine swig_types[75]
+#define SWIGTYPE_p_Neo__NeoGame swig_types[76]
+#define SWIGTYPE_p_Neo__NeoVariable swig_types[77]
+#define SWIGTYPE_p_Neo__OBone swig_types[78]
+#define SWIGTYPE_p_Neo__OCamera swig_types[79]
+#define SWIGTYPE_p_Neo__OEntity swig_types[80]
+#define SWIGTYPE_p_Neo__OLight swig_types[81]
+#define SWIGTYPE_p_Neo__OSound swig_types[82]
+#define SWIGTYPE_p_Neo__OText swig_types[83]
+#define SWIGTYPE_p_Neo__Object3d swig_types[84]
+#define SWIGTYPE_p_Neo__Object3dAnim swig_types[85]
+#define SWIGTYPE_p_Neo__Object3d__AdditionalData swig_types[86]
+#define SWIGTYPE_p_Neo__PackageManager swig_types[87]
+#define SWIGTYPE_p_Neo__PhysicsConstraint swig_types[88]
+#define SWIGTYPE_p_Neo__PhysicsContext swig_types[89]
+#define SWIGTYPE_p_Neo__PhysicsProperties swig_types[90]
+#define SWIGTYPE_p_Neo__PostProcessor swig_types[91]
+#define SWIGTYPE_p_Neo__Profiler swig_types[92]
+#define SWIGTYPE_p_Neo__Profiler__FunctionProfile swig_types[93]
+#define SWIGTYPE_p_Neo__Quaternion swig_types[94]
+#define SWIGTYPE_p_Neo__Range swig_types[95]
+#define SWIGTYPE_p_Neo__Renderer swig_types[96]
+#define SWIGTYPE_p_Neo__RendererCreator swig_types[97]
+#define SWIGTYPE_p_Neo__RendererManager swig_types[98]
+#define SWIGTYPE_p_Neo__RenderingContext swig_types[99]
+#define SWIGTYPE_p_Neo__Scene swig_types[100]
+#define SWIGTYPE_p_Neo__Scene__AdditionalData swig_types[101]
+#define SWIGTYPE_p_Neo__ScriptContext swig_types[102]
+#define SWIGTYPE_p_Neo__ShaderRef swig_types[103]
+#define SWIGTYPE_p_Neo__SkinData swig_types[104]
+#define SWIGTYPE_p_Neo__SkinPoint swig_types[105]
+#define SWIGTYPE_p_Neo__Skybox swig_types[106]
+#define SWIGTYPE_p_Neo__Sound swig_types[107]
+#define SWIGTYPE_p_Neo__SoundContext swig_types[108]
+#define SWIGTYPE_p_Neo__SoundRef swig_types[109]
+#define SWIGTYPE_p_Neo__String swig_types[110]
+#define SWIGTYPE_p_Neo__SubGame swig_types[111]
+#define SWIGTYPE_p_Neo__SubMesh swig_types[112]
+#define SWIGTYPE_p_Neo__SystemContext swig_types[113]
+#define SWIGTYPE_p_Neo__Texture swig_types[114]
+#define SWIGTYPE_p_Neo__TextureAnim swig_types[115]
+#define SWIGTYPE_p_Neo__TexturePass swig_types[116]
+#define SWIGTYPE_p_Neo__TextureRef swig_types[117]
+#define SWIGTYPE_p_Neo__TexturesAnim swig_types[118]
+#define SWIGTYPE_p_Neo__TexturesAnimRef swig_types[119]
+#define SWIGTYPE_p_Neo__Vector2 swig_types[120]
+#define SWIGTYPE_p_Neo__Vector3 swig_types[121]
+#define SWIGTYPE_p_Neo__Vector4 swig_types[122]
+#define SWIGTYPE_p_Stringp swig_types[123]
+#define SWIGTYPE_p_Vector3p swig_types[124]
+#define SWIGTYPE_p___int64 swig_types[125]
+#define SWIGTYPE_p_char swig_types[126]
+#define SWIGTYPE_p_double swig_types[127]
+#define SWIGTYPE_p_doublep swig_types[128]
+#define SWIGTYPE_p_f_p_Neo__Object3d__p_Neo__Behavior swig_types[129]
+#define SWIGTYPE_p_f_void__int swig_types[130]
+#define SWIGTYPE_p_f_void__intp swig_types[131]
+#define SWIGTYPE_p_f_void__p_Neo__Renderer swig_types[132]
+#define SWIGTYPE_p_float swig_types[133]
+#define SWIGTYPE_p_floatp swig_types[134]
+#define SWIGTYPE_p_int swig_types[135]
+#define SWIGTYPE_p_intp swig_types[136]
+#define SWIGTYPE_p_long swig_types[137]
+#define SWIGTYPE_p_mapT_unsigned_int_Neo__Character_t swig_types[138]
+#define SWIGTYPE_p_mapT_unsigned_int_unsigned_int_t swig_types[139]
+#define SWIGTYPE_p_p_char swig_types[140]
+#define SWIGTYPE_p_p_unsigned_long swig_types[141]
+#define SWIGTYPE_p_short swig_types[142]
+#define SWIGTYPE_p_signed___int64 swig_types[143]
+#define SWIGTYPE_p_signed_char swig_types[144]
+#define SWIGTYPE_p_std__functionT_void_fWidget_p_longF_t swig_types[145]
+#define SWIGTYPE_p_std__string swig_types[146]
+#define SWIGTYPE_p_std__vectorT_Neo2D__Widget_p_t swig_types[147]
+#define SWIGTYPE_p_uintp swig_types[148]
+#define SWIGTYPE_p_unsigned___int64 swig_types[149]
+#define SWIGTYPE_p_unsigned_char swig_types[150]
+#define SWIGTYPE_p_unsigned_int swig_types[151]
+#define SWIGTYPE_p_unsigned_long swig_types[152]
+#define SWIGTYPE_p_unsigned_short swig_types[153]
+#define SWIGTYPE_p_vectorT_float_t swig_types[154]
+#define SWIGTYPE_p_vectorT_std__string_t swig_types[155]
+#define SWIGTYPE_p_void swig_types[156]
+static swig_type_info *swig_types[158];
+static swig_module_info swig_module = {swig_types, 157, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2056,6 +2058,8 @@ typedef struct{} LANGUAGE_OBJ;
 
 #include <Container.h>
 #include <Window.h>
+#include <FileDialog.h>
+
 #include <WindowManager.h>
 #include <List.h>
 #include <Tree.h>
@@ -2923,14 +2927,14 @@ fail:
 static int _wrap_readDirectory__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
   char *arg1 = (char *) 0 ;
-  vector< std::string > *arg2 = (vector< std::string > *) 0 ;
+  vector< std::string > *arg2 = 0 ;
   bool arg3 ;
   bool arg4 ;
   bool result;
   
   SWIG_check_num_args("readDirectory",4,4)
   if(!SWIG_lua_isnilstring(L,1)) SWIG_fail_arg("readDirectory",1,"char const *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("readDirectory",2,"vector< std::string > *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("readDirectory",2,"vector< std::string > &");
   if(!lua_isboolean(L,3)) SWIG_fail_arg("readDirectory",3,"bool");
   if(!lua_isboolean(L,4)) SWIG_fail_arg("readDirectory",4,"bool");
   arg1 = (char *)lua_tostring(L, 1);
@@ -2941,7 +2945,7 @@ static int _wrap_readDirectory__SWIG_0(lua_State* L) {
   
   arg3 = (lua_toboolean(L, 3)!=0);
   arg4 = (lua_toboolean(L, 4)!=0);
-  result = (bool)readDirectory((char const *)arg1,arg2,arg3,arg4);
+  result = (bool)readDirectory((char const *)arg1,*arg2,arg3,arg4);
   lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
   return SWIG_arg;
   
@@ -2956,13 +2960,13 @@ fail:
 static int _wrap_readDirectory__SWIG_1(lua_State* L) {
   int SWIG_arg = 0;
   char *arg1 = (char *) 0 ;
-  vector< std::string > *arg2 = (vector< std::string > *) 0 ;
+  vector< std::string > *arg2 = 0 ;
   bool arg3 ;
   bool result;
   
   SWIG_check_num_args("readDirectory",3,3)
   if(!SWIG_lua_isnilstring(L,1)) SWIG_fail_arg("readDirectory",1,"char const *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("readDirectory",2,"vector< std::string > *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("readDirectory",2,"vector< std::string > &");
   if(!lua_isboolean(L,3)) SWIG_fail_arg("readDirectory",3,"bool");
   arg1 = (char *)lua_tostring(L, 1);
   
@@ -2971,7 +2975,7 @@ static int _wrap_readDirectory__SWIG_1(lua_State* L) {
   }
   
   arg3 = (lua_toboolean(L, 3)!=0);
-  result = (bool)readDirectory((char const *)arg1,arg2,arg3);
+  result = (bool)readDirectory((char const *)arg1,*arg2,arg3);
   lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
   return SWIG_arg;
   
@@ -2986,19 +2990,19 @@ fail:
 static int _wrap_readDirectory__SWIG_2(lua_State* L) {
   int SWIG_arg = 0;
   char *arg1 = (char *) 0 ;
-  vector< std::string > *arg2 = (vector< std::string > *) 0 ;
+  vector< std::string > *arg2 = 0 ;
   bool result;
   
   SWIG_check_num_args("readDirectory",2,2)
   if(!SWIG_lua_isnilstring(L,1)) SWIG_fail_arg("readDirectory",1,"char const *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("readDirectory",2,"vector< std::string > *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("readDirectory",2,"vector< std::string > &");
   arg1 = (char *)lua_tostring(L, 1);
   
   if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_vectorT_std__string_t,0))){
     SWIG_fail_ptr("readDirectory",2,SWIGTYPE_p_vectorT_std__string_t);
   }
   
-  result = (bool)readDirectory((char const *)arg1,arg2);
+  result = (bool)readDirectory((char const *)arg1,*arg2);
   lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
   return SWIG_arg;
   
@@ -3025,7 +3029,7 @@ static int _wrap_readDirectory(lua_State* L) {
     if (_v) {
       {
         void *ptr;
-        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_vectorT_std__string_t, 0)) {
+        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_vectorT_std__string_t, 0)) {
           _v = 0;
         } else {
           _v = 1;
@@ -3044,7 +3048,7 @@ static int _wrap_readDirectory(lua_State* L) {
     if (_v) {
       {
         void *ptr;
-        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_vectorT_std__string_t, 0)) {
+        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_vectorT_std__string_t, 0)) {
           _v = 0;
         } else {
           _v = 1;
@@ -3068,7 +3072,7 @@ static int _wrap_readDirectory(lua_State* L) {
     if (_v) {
       {
         void *ptr;
-        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_vectorT_std__string_t, 0)) {
+        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_vectorT_std__string_t, 0)) {
           _v = 0;
         } else {
           _v = 1;
@@ -3092,9 +3096,9 @@ static int _wrap_readDirectory(lua_State* L) {
   
   SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'readDirectory'\n"
     "  Possible C/C++ prototypes are:\n"
-    "    readDirectory(char const *,vector< std::string > *,bool,bool)\n"
-    "    readDirectory(char const *,vector< std::string > *,bool)\n"
-    "    readDirectory(char const *,vector< std::string > *)\n");
+    "    readDirectory(char const *,vector< std::string > &,bool,bool)\n"
+    "    readDirectory(char const *,vector< std::string > &,bool)\n"
+    "    readDirectory(char const *,vector< std::string > &)\n");
   lua_error(L);return 0;
 }
 
@@ -58584,6 +58588,30 @@ fail:
 }
 
 
+static int _wrap_Container_getContent(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::Container *arg1 = (Neo2D::Gui::Container *) 0 ;
+  std::vector< Neo2D::Widget * > *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::Container::getContent",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Container::getContent",1,"Neo2D::Gui::Container *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Container,0))){
+    SWIG_fail_ptr("Container_getContent",1,SWIGTYPE_p_Neo2D__Gui__Container);
+  }
+  
+  result = (std::vector< Neo2D::Widget * > *) &(arg1)->getContent();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_std__vectorT_Neo2D__Widget_p_t,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_Container_draw__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
   Neo2D::Gui::Container *arg1 = (Neo2D::Gui::Container *) 0 ;
@@ -58722,6 +58750,7 @@ delete arg1;
 }
 static swig_lua_method swig_Neo2D_Gui_Container_methods[] = {
     {"addWidget", _wrap_Container_addWidget}, 
+    {"getContent", _wrap_Container_getContent}, 
     {"draw", _wrap_Container_draw}, 
     {"update", _wrap_Container_update}, 
     {0,0}
@@ -59212,6 +59241,56 @@ fail:
 }
 
 
+static int _wrap_Window_isResizable(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::Window *arg1 = (Neo2D::Gui::Window *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo2D::Gui::Window::isResizable",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Window::isResizable",1,"Neo2D::Gui::Window const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Window,0))){
+    SWIG_fail_ptr("Window_isResizable",1,SWIGTYPE_p_Neo2D__Gui__Window);
+  }
+  
+  result = (bool)((Neo2D::Gui::Window const *)arg1)->isResizable();
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Window_setResizable(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::Window *arg1 = (Neo2D::Gui::Window *) 0 ;
+  bool arg2 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::Window::setResizable",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Window::setResizable",1,"Neo2D::Gui::Window *");
+  if(!lua_isboolean(L,2)) SWIG_fail_arg("Neo2D::Gui::Window::setResizable",2,"bool");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Window,0))){
+    SWIG_fail_ptr("Window_setResizable",1,SWIGTYPE_p_Neo2D__Gui__Window);
+  }
+  
+  arg2 = (lua_toboolean(L, 2)!=0);
+  (arg1)->setResizable(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_Window(void *obj) {
 Neo2D::Gui::Window *arg1 = (Neo2D::Gui::Window *) obj;
 delete arg1;
@@ -59222,6 +59301,8 @@ static swig_lua_method swig_Neo2D_Gui_Window_methods[] = {
     {"draw", _wrap_Window_draw}, 
     {"update", _wrap_Window_update}, 
     {"isMouseOver", _wrap_Window_isMouseOver}, 
+    {"isResizable", _wrap_Window_isResizable}, 
+    {"setResizable", _wrap_Window_setResizable}, 
     {0,0}
 };
 static swig_lua_attribute swig_Neo2D_Gui_Window_attributes[] = {
@@ -59239,6 +59320,1508 @@ static swig_lua_const_info swig_Neo2D_Gui_Window_cls_constants[] = {
 static swig_lua_class *swig_Neo2D_Gui_Window_bases[] = {0,0};
 static const char *swig_Neo2D_Gui_Window_base_names[] = {"Neo2D::Gui::Container *",0};
 static swig_lua_class _wrap_class_Neo2D_Gui_Window = { "Window", &SWIGTYPE_p_Neo2D__Gui__Window,_wrap_new_Window, swig_delete_Window, swig_Neo2D_Gui_Window_methods, swig_Neo2D_Gui_Window_attributes, { "Window", swig_Neo2D_Gui_Window_cls_methods, swig_Neo2D_Gui_Window_cls_attributes, swig_Neo2D_Gui_Window_cls_constants }, swig_Neo2D_Gui_Window_bases, swig_Neo2D_Gui_Window_base_names };
+
+static int _wrap_new_ThemedButton(lua_State* L) {
+  int SWIG_arg = 0;
+  unsigned int arg1 ;
+  unsigned int arg2 ;
+  unsigned int arg3 ;
+  unsigned int arg4 ;
+  char *arg5 = (char *) 0 ;
+  Neo2D::Gui::ThemedButton *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::ThemedButton::ThemedButton",5,5)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::ThemedButton",1,"unsigned int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::ThemedButton",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::ThemedButton",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::ThemedButton",4,"unsigned int");
+  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::ThemedButton",5,"char const *");
+  SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
+  arg1 = (unsigned int)lua_tonumber(L, 1);
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
+  arg4 = (unsigned int)lua_tonumber(L, 4);
+  arg5 = (char *)lua_tostring(L, 5);
+  result = (Neo2D::Gui::ThemedButton *)new Neo2D::Gui::ThemedButton(arg1,arg2,arg3,arg4,(char const *)arg5);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__ThemedButton,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ThemedButton_draw(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::ThemedButton *arg1 = (Neo2D::Gui::ThemedButton *) 0 ;
+  Neo::Vector2 arg2 ;
+  Neo::Vector2 *argp2 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::ThemedButton::draw",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::draw",1,"Neo2D::Gui::ThemedButton *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::draw",2,"Neo::Vector2");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ThemedButton,0))){
+    SWIG_fail_ptr("ThemedButton_draw",1,SWIGTYPE_p_Neo2D__Gui__ThemedButton);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("ThemedButton_draw",2,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg2 = *argp2;
+  
+  (arg1)->draw(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ThemedButton_update(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::ThemedButton *arg1 = (Neo2D::Gui::ThemedButton *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::ThemedButton::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::update",1,"Neo2D::Gui::ThemedButton *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ThemedButton,0))){
+    SWIG_fail_ptr("ThemedButton_update",1,SWIGTYPE_p_Neo2D__Gui__ThemedButton);
+  }
+  
+  (arg1)->update();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_ThemedButton(void *obj) {
+Neo2D::Gui::ThemedButton *arg1 = (Neo2D::Gui::ThemedButton *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Neo2D_Gui_ThemedButton_methods[] = {
+    {"draw", _wrap_ThemedButton_draw}, 
+    {"update", _wrap_ThemedButton_update}, 
+    {0,0}
+};
+static swig_lua_attribute swig_Neo2D_Gui_ThemedButton_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_attribute swig_Neo2D_Gui_ThemedButton_cls_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_Neo2D_Gui_ThemedButton_cls_methods[] = {
+    {0,0}
+};
+static swig_lua_const_info swig_Neo2D_Gui_ThemedButton_cls_constants[] = {
+    {0,0,0,0,0,0}
+};
+static swig_lua_class *swig_Neo2D_Gui_ThemedButton_bases[] = {0,0};
+static const char *swig_Neo2D_Gui_ThemedButton_base_names[] = {"Neo2D::Gui::Button *",0};
+static swig_lua_class _wrap_class_Neo2D_Gui_ThemedButton = { "ThemedButton", &SWIGTYPE_p_Neo2D__Gui__ThemedButton,_wrap_new_ThemedButton, swig_delete_ThemedButton, swig_Neo2D_Gui_ThemedButton_methods, swig_Neo2D_Gui_ThemedButton_attributes, { "ThemedButton", swig_Neo2D_Gui_ThemedButton_cls_methods, swig_Neo2D_Gui_ThemedButton_cls_attributes, swig_Neo2D_Gui_ThemedButton_cls_constants }, swig_Neo2D_Gui_ThemedButton_bases, swig_Neo2D_Gui_ThemedButton_base_names };
+
+static int _wrap_new_InputField(lua_State* L) {
+  int SWIG_arg = 0;
+  unsigned int arg1 ;
+  unsigned int arg2 ;
+  unsigned int arg3 ;
+  unsigned int arg4 ;
+  char *arg5 = (char *) 0 ;
+  Neo2D::Gui::InputField *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::InputField::InputField",5,5)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::InputField",1,"unsigned int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::InputField::InputField",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::InputField::InputField",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::InputField::InputField",4,"unsigned int");
+  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo2D::Gui::InputField::InputField",5,"char const *");
+  SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
+  arg1 = (unsigned int)lua_tonumber(L, 1);
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
+  arg4 = (unsigned int)lua_tonumber(L, 4);
+  arg5 = (char *)lua_tostring(L, 5);
+  result = (Neo2D::Gui::InputField *)new Neo2D::Gui::InputField(arg1,arg2,arg3,arg4,(char const *)arg5);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__InputField,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputField_draw(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
+  Neo::Vector2 arg2 ;
+  Neo::Vector2 *argp2 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::InputField::draw",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::draw",1,"Neo2D::Gui::InputField *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::InputField::draw",2,"Neo::Vector2");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
+    SWIG_fail_ptr("InputField_draw",1,SWIGTYPE_p_Neo2D__Gui__InputField);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("InputField_draw",2,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg2 = *argp2;
+  
+  (arg1)->draw(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputField_update(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::InputField::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::update",1,"Neo2D::Gui::InputField *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
+    SWIG_fail_ptr("InputField_update",1,SWIGTYPE_p_Neo2D__Gui__InputField);
+  }
+  
+  (arg1)->update();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputField_setState(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
+  Neo2D::Gui::INPUT_STATE arg2 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::InputField::setState",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::setState",1,"Neo2D::Gui::InputField *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::InputField::setState",2,"Neo2D::Gui::INPUT_STATE");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
+    SWIG_fail_ptr("InputField_setState",1,SWIGTYPE_p_Neo2D__Gui__InputField);
+  }
+  
+  arg2 = (Neo2D::Gui::INPUT_STATE)(int)lua_tonumber(L, 2);
+  (arg1)->setState(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputField_getStaticName(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::InputField::getStaticName",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::getStaticName",1,"Neo2D::Gui::InputField *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
+    SWIG_fail_ptr("InputField_getStaticName",1,SWIGTYPE_p_Neo2D__Gui__InputField);
+  }
+  
+  result = (char *)(arg1)->getStaticName();
+  lua_pushstring(L,(const char *)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputField_setLabel(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
+  char *arg2 = (char *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::InputField::setLabel",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::setLabel",1,"Neo2D::Gui::InputField *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo2D::Gui::InputField::setLabel",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
+    SWIG_fail_ptr("InputField_setLabel",1,SWIGTYPE_p_Neo2D__Gui__InputField);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  (arg1)->setLabel((char const *)arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputField_getType(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
+  Neo2D::Gui::INPUT_TYPE result;
+  
+  SWIG_check_num_args("Neo2D::Gui::InputField::getType",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::getType",1,"Neo2D::Gui::InputField *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
+    SWIG_fail_ptr("InputField_getType",1,SWIGTYPE_p_Neo2D__Gui__InputField);
+  }
+  
+  result = (Neo2D::Gui::INPUT_TYPE)(arg1)->getType();
+  lua_pushnumber(L, (lua_Number)(int)(result)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputField_setType(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
+  Neo2D::Gui::INPUT_TYPE arg2 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::InputField::setType",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::setType",1,"Neo2D::Gui::InputField *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::InputField::setType",2,"Neo2D::Gui::INPUT_TYPE");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
+    SWIG_fail_ptr("InputField_setType",1,SWIGTYPE_p_Neo2D__Gui__InputField);
+  }
+  
+  arg2 = (Neo2D::Gui::INPUT_TYPE)(int)lua_tonumber(L, 2);
+  (arg1)->setType(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputField_isMultiline(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Neo2D::Gui::InputField::isMultiline",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::isMultiline",1,"Neo2D::Gui::InputField *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
+    SWIG_fail_ptr("InputField_isMultiline",1,SWIGTYPE_p_Neo2D__Gui__InputField);
+  }
+  
+  result = (bool)(arg1)->isMultiline();
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_InputField_setMultiline(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
+  bool arg2 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::InputField::setMultiline",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::setMultiline",1,"Neo2D::Gui::InputField *");
+  if(!lua_isboolean(L,2)) SWIG_fail_arg("Neo2D::Gui::InputField::setMultiline",2,"bool");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
+    SWIG_fail_ptr("InputField_setMultiline",1,SWIGTYPE_p_Neo2D__Gui__InputField);
+  }
+  
+  arg2 = (lua_toboolean(L, 2)!=0);
+  (arg1)->setMultiline(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_InputField(void *obj) {
+Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Neo2D_Gui_InputField_methods[] = {
+    {"draw", _wrap_InputField_draw}, 
+    {"update", _wrap_InputField_update}, 
+    {"setState", _wrap_InputField_setState}, 
+    {"getStaticName", _wrap_InputField_getStaticName}, 
+    {"setLabel", _wrap_InputField_setLabel}, 
+    {"getType", _wrap_InputField_getType}, 
+    {"setType", _wrap_InputField_setType}, 
+    {"isMultiline", _wrap_InputField_isMultiline}, 
+    {"setMultiline", _wrap_InputField_setMultiline}, 
+    {0,0}
+};
+static swig_lua_attribute swig_Neo2D_Gui_InputField_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_attribute swig_Neo2D_Gui_InputField_cls_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_Neo2D_Gui_InputField_cls_methods[] = {
+    {0,0}
+};
+static swig_lua_const_info swig_Neo2D_Gui_InputField_cls_constants[] = {
+    {0,0,0,0,0,0}
+};
+static swig_lua_class *swig_Neo2D_Gui_InputField_bases[] = {0,0};
+static const char *swig_Neo2D_Gui_InputField_base_names[] = {"Neo2D::Widget *",0};
+static swig_lua_class _wrap_class_Neo2D_Gui_InputField = { "InputField", &SWIGTYPE_p_Neo2D__Gui__InputField,_wrap_new_InputField, swig_delete_InputField, swig_Neo2D_Gui_InputField_methods, swig_Neo2D_Gui_InputField_attributes, { "InputField", swig_Neo2D_Gui_InputField_cls_methods, swig_Neo2D_Gui_InputField_cls_attributes, swig_Neo2D_Gui_InputField_cls_constants }, swig_Neo2D_Gui_InputField_bases, swig_Neo2D_Gui_InputField_base_names };
+
+static int _wrap_new_ThemedInputField(lua_State* L) {
+  int SWIG_arg = 0;
+  unsigned int arg1 ;
+  unsigned int arg2 ;
+  unsigned int arg3 ;
+  unsigned int arg4 ;
+  char *arg5 = (char *) 0 ;
+  Neo2D::Gui::ThemedInputField *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::ThemedInputField::ThemedInputField",5,5)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::ThemedInputField",1,"unsigned int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::ThemedInputField",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::ThemedInputField",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::ThemedInputField",4,"unsigned int");
+  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::ThemedInputField",5,"char const *");
+  SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
+  arg1 = (unsigned int)lua_tonumber(L, 1);
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
+  arg4 = (unsigned int)lua_tonumber(L, 4);
+  arg5 = (char *)lua_tostring(L, 5);
+  result = (Neo2D::Gui::ThemedInputField *)new Neo2D::Gui::ThemedInputField(arg1,arg2,arg3,arg4,(char const *)arg5);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__ThemedInputField,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ThemedInputField_draw(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::ThemedInputField *arg1 = (Neo2D::Gui::ThemedInputField *) 0 ;
+  Neo::Vector2 arg2 ;
+  Neo::Vector2 *argp2 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::ThemedInputField::draw",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::draw",1,"Neo2D::Gui::ThemedInputField *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::draw",2,"Neo::Vector2");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ThemedInputField,0))){
+    SWIG_fail_ptr("ThemedInputField_draw",1,SWIGTYPE_p_Neo2D__Gui__ThemedInputField);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("ThemedInputField_draw",2,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg2 = *argp2;
+  
+  (arg1)->draw(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_ThemedInputField(void *obj) {
+Neo2D::Gui::ThemedInputField *arg1 = (Neo2D::Gui::ThemedInputField *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Neo2D_Gui_ThemedInputField_methods[] = {
+    {"draw", _wrap_ThemedInputField_draw}, 
+    {0,0}
+};
+static swig_lua_attribute swig_Neo2D_Gui_ThemedInputField_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_attribute swig_Neo2D_Gui_ThemedInputField_cls_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_Neo2D_Gui_ThemedInputField_cls_methods[] = {
+    {0,0}
+};
+static swig_lua_const_info swig_Neo2D_Gui_ThemedInputField_cls_constants[] = {
+    {0,0,0,0,0,0}
+};
+static swig_lua_class *swig_Neo2D_Gui_ThemedInputField_bases[] = {0,0};
+static const char *swig_Neo2D_Gui_ThemedInputField_base_names[] = {"Neo2D::Gui::InputField *",0};
+static swig_lua_class _wrap_class_Neo2D_Gui_ThemedInputField = { "ThemedInputField", &SWIGTYPE_p_Neo2D__Gui__ThemedInputField,_wrap_new_ThemedInputField, swig_delete_ThemedInputField, swig_Neo2D_Gui_ThemedInputField_methods, swig_Neo2D_Gui_ThemedInputField_attributes, { "ThemedInputField", swig_Neo2D_Gui_ThemedInputField_cls_methods, swig_Neo2D_Gui_ThemedInputField_cls_attributes, swig_Neo2D_Gui_ThemedInputField_cls_constants }, swig_Neo2D_Gui_ThemedInputField_bases, swig_Neo2D_Gui_ThemedInputField_base_names };
+
+static int _wrap_new_Slider(lua_State* L) {
+  int SWIG_arg = 0;
+  float arg1 ;
+  float arg2 ;
+  unsigned int arg3 ;
+  unsigned int arg4 ;
+  float arg5 ;
+  float arg6 ;
+  Neo2D::Gui::SLIDER_DIRECTION arg7 ;
+  Neo2D::Gui::Slider *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::Slider::Slider",7,7)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::Slider::Slider",1,"float");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::Slider::Slider",2,"float");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::Slider::Slider",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::Slider::Slider",4,"unsigned int");
+  if(!lua_isnumber(L,5)) SWIG_fail_arg("Neo2D::Gui::Slider::Slider",5,"float");
+  if(!lua_isnumber(L,6)) SWIG_fail_arg("Neo2D::Gui::Slider::Slider",6,"float");
+  if(!lua_isnumber(L,7)) SWIG_fail_arg("Neo2D::Gui::Slider::Slider",7,"Neo2D::Gui::SLIDER_DIRECTION");
+  arg1 = (float)lua_tonumber(L, 1);
+  arg2 = (float)lua_tonumber(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
+  arg4 = (unsigned int)lua_tonumber(L, 4);
+  arg5 = (float)lua_tonumber(L, 5);
+  arg6 = (float)lua_tonumber(L, 6);
+  arg7 = (Neo2D::Gui::SLIDER_DIRECTION)(int)lua_tonumber(L, 7);
+  result = (Neo2D::Gui::Slider *)new Neo2D::Gui::Slider(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__Slider,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Slider_getRange(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::Slider *arg1 = (Neo2D::Gui::Slider *) 0 ;
+  Neo::Vector2 result;
+  
+  SWIG_check_num_args("Neo2D::Gui::Slider::getRange",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Slider::getRange",1,"Neo2D::Gui::Slider *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Slider,0))){
+    SWIG_fail_ptr("Slider_getRange",1,SWIGTYPE_p_Neo2D__Gui__Slider);
+  }
+  
+  result = (arg1)->getRange();
+  {
+    Neo::Vector2 * resultptr = new Neo::Vector2((const Neo::Vector2 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector2,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Slider_setRange(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::Slider *arg1 = (Neo2D::Gui::Slider *) 0 ;
+  Neo::Vector2 arg2 ;
+  Neo::Vector2 *argp2 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::Slider::setRange",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Slider::setRange",1,"Neo2D::Gui::Slider *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::Slider::setRange",2,"Neo::Vector2");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Slider,0))){
+    SWIG_fail_ptr("Slider_setRange",1,SWIGTYPE_p_Neo2D__Gui__Slider);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("Slider_setRange",2,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg2 = *argp2;
+  
+  (arg1)->setRange(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Slider_setValue(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::Slider *arg1 = (Neo2D::Gui::Slider *) 0 ;
+  float arg2 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::Slider::setValue",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Slider::setValue",1,"Neo2D::Gui::Slider *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::Slider::setValue",2,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Slider,0))){
+    SWIG_fail_ptr("Slider_setValue",1,SWIGTYPE_p_Neo2D__Gui__Slider);
+  }
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  (arg1)->setValue(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Slider_getValue(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::Slider *arg1 = (Neo2D::Gui::Slider *) 0 ;
+  float result;
+  
+  SWIG_check_num_args("Neo2D::Gui::Slider::getValue",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Slider::getValue",1,"Neo2D::Gui::Slider *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Slider,0))){
+    SWIG_fail_ptr("Slider_getValue",1,SWIGTYPE_p_Neo2D__Gui__Slider);
+  }
+  
+  result = (float)(arg1)->getValue();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Slider_draw(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::Slider *arg1 = (Neo2D::Gui::Slider *) 0 ;
+  Neo::Vector2 arg2 ;
+  Neo::Vector2 *argp2 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::Slider::draw",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Slider::draw",1,"Neo2D::Gui::Slider *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::Slider::draw",2,"Neo::Vector2");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Slider,0))){
+    SWIG_fail_ptr("Slider_draw",1,SWIGTYPE_p_Neo2D__Gui__Slider);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("Slider_draw",2,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg2 = *argp2;
+  
+  (arg1)->draw(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Slider_update(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::Slider *arg1 = (Neo2D::Gui::Slider *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::Slider::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Slider::update",1,"Neo2D::Gui::Slider *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Slider,0))){
+    SWIG_fail_ptr("Slider_update",1,SWIGTYPE_p_Neo2D__Gui__Slider);
+  }
+  
+  (arg1)->update();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_Slider(void *obj) {
+Neo2D::Gui::Slider *arg1 = (Neo2D::Gui::Slider *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Neo2D_Gui_Slider_methods[] = {
+    {"getRange", _wrap_Slider_getRange}, 
+    {"setRange", _wrap_Slider_setRange}, 
+    {"setValue", _wrap_Slider_setValue}, 
+    {"getValue", _wrap_Slider_getValue}, 
+    {"draw", _wrap_Slider_draw}, 
+    {"update", _wrap_Slider_update}, 
+    {0,0}
+};
+static swig_lua_attribute swig_Neo2D_Gui_Slider_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_attribute swig_Neo2D_Gui_Slider_cls_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_Neo2D_Gui_Slider_cls_methods[] = {
+    {0,0}
+};
+static swig_lua_const_info swig_Neo2D_Gui_Slider_cls_constants[] = {
+    {0,0,0,0,0,0}
+};
+static swig_lua_class *swig_Neo2D_Gui_Slider_bases[] = {0,0};
+static const char *swig_Neo2D_Gui_Slider_base_names[] = {"Neo2D::Widget *",0};
+static swig_lua_class _wrap_class_Neo2D_Gui_Slider = { "Slider", &SWIGTYPE_p_Neo2D__Gui__Slider,_wrap_new_Slider, swig_delete_Slider, swig_Neo2D_Gui_Slider_methods, swig_Neo2D_Gui_Slider_attributes, { "Slider", swig_Neo2D_Gui_Slider_cls_methods, swig_Neo2D_Gui_Slider_cls_attributes, swig_Neo2D_Gui_Slider_cls_constants }, swig_Neo2D_Gui_Slider_bases, swig_Neo2D_Gui_Slider_base_names };
+
+static int _wrap_new_ScrollBar(lua_State* L) {
+  int SWIG_arg = 0;
+  unsigned int arg1 ;
+  unsigned int arg2 ;
+  unsigned int arg3 ;
+  unsigned int arg4 ;
+  float arg5 ;
+  float arg6 ;
+  Neo2D::Gui::SLIDER_DIRECTION arg7 ;
+  Neo2D::Gui::ScrollBar *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::ScrollBar::ScrollBar",7,7)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::ScrollBar",1,"unsigned int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::ScrollBar",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::ScrollBar",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::ScrollBar",4,"unsigned int");
+  if(!lua_isnumber(L,5)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::ScrollBar",5,"float");
+  if(!lua_isnumber(L,6)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::ScrollBar",6,"float");
+  if(!lua_isnumber(L,7)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::ScrollBar",7,"Neo2D::Gui::SLIDER_DIRECTION");
+  SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
+  arg1 = (unsigned int)lua_tonumber(L, 1);
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
+  arg4 = (unsigned int)lua_tonumber(L, 4);
+  arg5 = (float)lua_tonumber(L, 5);
+  arg6 = (float)lua_tonumber(L, 6);
+  arg7 = (Neo2D::Gui::SLIDER_DIRECTION)(int)lua_tonumber(L, 7);
+  result = (Neo2D::Gui::ScrollBar *)new Neo2D::Gui::ScrollBar(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__ScrollBar,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ScrollBar_getRange(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::ScrollBar *arg1 = (Neo2D::Gui::ScrollBar *) 0 ;
+  Neo::Vector2 result;
+  
+  SWIG_check_num_args("Neo2D::Gui::ScrollBar::getRange",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::getRange",1,"Neo2D::Gui::ScrollBar *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollBar,0))){
+    SWIG_fail_ptr("ScrollBar_getRange",1,SWIGTYPE_p_Neo2D__Gui__ScrollBar);
+  }
+  
+  result = (arg1)->getRange();
+  {
+    Neo::Vector2 * resultptr = new Neo::Vector2((const Neo::Vector2 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector2,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ScrollBar_setRange(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::ScrollBar *arg1 = (Neo2D::Gui::ScrollBar *) 0 ;
+  Neo::Vector2 arg2 ;
+  Neo::Vector2 *argp2 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::ScrollBar::setRange",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::setRange",1,"Neo2D::Gui::ScrollBar *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::setRange",2,"Neo::Vector2");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollBar,0))){
+    SWIG_fail_ptr("ScrollBar_setRange",1,SWIGTYPE_p_Neo2D__Gui__ScrollBar);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("ScrollBar_setRange",2,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg2 = *argp2;
+  
+  (arg1)->setRange(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ScrollBar_setValue(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::ScrollBar *arg1 = (Neo2D::Gui::ScrollBar *) 0 ;
+  float arg2 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::ScrollBar::setValue",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::setValue",1,"Neo2D::Gui::ScrollBar *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::setValue",2,"float");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollBar,0))){
+    SWIG_fail_ptr("ScrollBar_setValue",1,SWIGTYPE_p_Neo2D__Gui__ScrollBar);
+  }
+  
+  arg2 = (float)lua_tonumber(L, 2);
+  (arg1)->setValue(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ScrollBar_getValue(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::ScrollBar *arg1 = (Neo2D::Gui::ScrollBar *) 0 ;
+  float result;
+  
+  SWIG_check_num_args("Neo2D::Gui::ScrollBar::getValue",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::getValue",1,"Neo2D::Gui::ScrollBar *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollBar,0))){
+    SWIG_fail_ptr("ScrollBar_getValue",1,SWIGTYPE_p_Neo2D__Gui__ScrollBar);
+  }
+  
+  result = (float)(arg1)->getValue();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ScrollBar_draw(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::ScrollBar *arg1 = (Neo2D::Gui::ScrollBar *) 0 ;
+  Neo::Vector2 arg2 ;
+  Neo::Vector2 *argp2 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::ScrollBar::draw",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::draw",1,"Neo2D::Gui::ScrollBar *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::draw",2,"Neo::Vector2");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollBar,0))){
+    SWIG_fail_ptr("ScrollBar_draw",1,SWIGTYPE_p_Neo2D__Gui__ScrollBar);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("ScrollBar_draw",2,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg2 = *argp2;
+  
+  (arg1)->draw(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ScrollBar_update(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::ScrollBar *arg1 = (Neo2D::Gui::ScrollBar *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::ScrollBar::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::update",1,"Neo2D::Gui::ScrollBar *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollBar,0))){
+    SWIG_fail_ptr("ScrollBar_update",1,SWIGTYPE_p_Neo2D__Gui__ScrollBar);
+  }
+  
+  (arg1)->update();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_ScrollBar(void *obj) {
+Neo2D::Gui::ScrollBar *arg1 = (Neo2D::Gui::ScrollBar *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Neo2D_Gui_ScrollBar_methods[] = {
+    {"getRange", _wrap_ScrollBar_getRange}, 
+    {"setRange", _wrap_ScrollBar_setRange}, 
+    {"setValue", _wrap_ScrollBar_setValue}, 
+    {"getValue", _wrap_ScrollBar_getValue}, 
+    {"draw", _wrap_ScrollBar_draw}, 
+    {"update", _wrap_ScrollBar_update}, 
+    {0,0}
+};
+static swig_lua_attribute swig_Neo2D_Gui_ScrollBar_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_attribute swig_Neo2D_Gui_ScrollBar_cls_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_Neo2D_Gui_ScrollBar_cls_methods[] = {
+    {0,0}
+};
+static swig_lua_const_info swig_Neo2D_Gui_ScrollBar_cls_constants[] = {
+    {0,0,0,0,0,0}
+};
+static swig_lua_class *swig_Neo2D_Gui_ScrollBar_bases[] = {0,0};
+static const char *swig_Neo2D_Gui_ScrollBar_base_names[] = {"Neo2D::Widget *",0};
+static swig_lua_class _wrap_class_Neo2D_Gui_ScrollBar = { "ScrollBar", &SWIGTYPE_p_Neo2D__Gui__ScrollBar,_wrap_new_ScrollBar, swig_delete_ScrollBar, swig_Neo2D_Gui_ScrollBar_methods, swig_Neo2D_Gui_ScrollBar_attributes, { "ScrollBar", swig_Neo2D_Gui_ScrollBar_cls_methods, swig_Neo2D_Gui_ScrollBar_cls_attributes, swig_Neo2D_Gui_ScrollBar_cls_constants }, swig_Neo2D_Gui_ScrollBar_bases, swig_Neo2D_Gui_ScrollBar_base_names };
+
+static int _wrap_new_ScrollPane(lua_State* L) {
+  int SWIG_arg = 0;
+  unsigned int arg1 ;
+  unsigned int arg2 ;
+  unsigned int arg3 ;
+  unsigned int arg4 ;
+  Neo2D::Gui::ScrollPane *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::ScrollPane::ScrollPane",4,4)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollPane::ScrollPane",1,"unsigned int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::ScrollPane::ScrollPane",2,"unsigned int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::ScrollPane::ScrollPane",3,"unsigned int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::ScrollPane::ScrollPane",4,"unsigned int");
+  SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
+  arg1 = (unsigned int)lua_tonumber(L, 1);
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
+  arg3 = (unsigned int)lua_tonumber(L, 3);
+  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
+  arg4 = (unsigned int)lua_tonumber(L, 4);
+  result = (Neo2D::Gui::ScrollPane *)new Neo2D::Gui::ScrollPane(arg1,arg2,arg3,arg4);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__ScrollPane,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ScrollPane_draw__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::ScrollPane *arg1 = (Neo2D::Gui::ScrollPane *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::ScrollPane::draw",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollPane::draw",1,"Neo2D::Gui::ScrollPane *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollPane,0))){
+    SWIG_fail_ptr("ScrollPane_draw",1,SWIGTYPE_p_Neo2D__Gui__ScrollPane);
+  }
+  
+  (arg1)->draw();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ScrollPane_draw__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::ScrollPane *arg1 = (Neo2D::Gui::ScrollPane *) 0 ;
+  Neo::Vector2 arg2 ;
+  Neo::Vector2 *argp2 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::ScrollPane::draw",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollPane::draw",1,"Neo2D::Gui::ScrollPane *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::ScrollPane::draw",2,"Neo::Vector2");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollPane,0))){
+    SWIG_fail_ptr("ScrollPane_draw",1,SWIGTYPE_p_Neo2D__Gui__ScrollPane);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
+    SWIG_fail_ptr("ScrollPane_draw",2,SWIGTYPE_p_Neo__Vector2);
+  }
+  arg2 = *argp2;
+  
+  (arg1)->draw(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ScrollPane_draw(lua_State* L) {
+  int argc;
+  int argv[3]={
+    1,2,3
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 1) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__ScrollPane, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      return _wrap_ScrollPane_draw__SWIG_0(L);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__ScrollPane, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Neo__Vector2, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        return _wrap_ScrollPane_draw__SWIG_1(L);
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'ScrollPane_draw'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo2D::Gui::ScrollPane::draw()\n"
+    "    Neo2D::Gui::ScrollPane::draw(Neo::Vector2)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_ScrollPane_update(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::ScrollPane *arg1 = (Neo2D::Gui::ScrollPane *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::ScrollPane::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollPane::update",1,"Neo2D::Gui::ScrollPane *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollPane,0))){
+    SWIG_fail_ptr("ScrollPane_update",1,SWIGTYPE_p_Neo2D__Gui__ScrollPane);
+  }
+  
+  (arg1)->update();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ScrollPane_getSize(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::ScrollPane *arg1 = (Neo2D::Gui::ScrollPane *) 0 ;
+  Neo::Vector2 result;
+  
+  SWIG_check_num_args("Neo2D::Gui::ScrollPane::getSize",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollPane::getSize",1,"Neo2D::Gui::ScrollPane *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollPane,0))){
+    SWIG_fail_ptr("ScrollPane_getSize",1,SWIGTYPE_p_Neo2D__Gui__ScrollPane);
+  }
+  
+  result = (arg1)->getSize();
+  {
+    Neo::Vector2 * resultptr = new Neo::Vector2((const Neo::Vector2 &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector2,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_ScrollPane(void *obj) {
+Neo2D::Gui::ScrollPane *arg1 = (Neo2D::Gui::ScrollPane *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Neo2D_Gui_ScrollPane_methods[] = {
+    {"draw", _wrap_ScrollPane_draw}, 
+    {"update", _wrap_ScrollPane_update}, 
+    {"getSize", _wrap_ScrollPane_getSize}, 
+    {0,0}
+};
+static swig_lua_attribute swig_Neo2D_Gui_ScrollPane_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_attribute swig_Neo2D_Gui_ScrollPane_cls_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_Neo2D_Gui_ScrollPane_cls_methods[] = {
+    {0,0}
+};
+static swig_lua_const_info swig_Neo2D_Gui_ScrollPane_cls_constants[] = {
+    {0,0,0,0,0,0}
+};
+static swig_lua_class *swig_Neo2D_Gui_ScrollPane_bases[] = {0,0};
+static const char *swig_Neo2D_Gui_ScrollPane_base_names[] = {"Neo2D::Gui::Container *",0};
+static swig_lua_class _wrap_class_Neo2D_Gui_ScrollPane = { "ScrollPane", &SWIGTYPE_p_Neo2D__Gui__ScrollPane,_wrap_new_ScrollPane, swig_delete_ScrollPane, swig_Neo2D_Gui_ScrollPane_methods, swig_Neo2D_Gui_ScrollPane_attributes, { "ScrollPane", swig_Neo2D_Gui_ScrollPane_cls_methods, swig_Neo2D_Gui_ScrollPane_cls_attributes, swig_Neo2D_Gui_ScrollPane_cls_constants }, swig_Neo2D_Gui_ScrollPane_bases, swig_Neo2D_Gui_ScrollPane_base_names };
+
+static int _wrap_new_FileDialog__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  unsigned int arg1 ;
+  unsigned int arg2 ;
+  char *arg3 = (char *) 0 ;
+  Neo2D::Gui::FILE_DIALOG_TYPE arg4 ;
+  char *arg5 = (char *) 0 ;
+  Neo2D::Gui::FileDialog *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::FileDialog::FileDialog",5,5)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::FileDialog::FileDialog",1,"unsigned int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::FileDialog::FileDialog",2,"unsigned int");
+  if(!SWIG_lua_isnilstring(L,3)) SWIG_fail_arg("Neo2D::Gui::FileDialog::FileDialog",3,"char const *");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::FileDialog::FileDialog",4,"Neo2D::Gui::FILE_DIALOG_TYPE");
+  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo2D::Gui::FileDialog::FileDialog",5,"char const *");
+  SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
+  arg1 = (unsigned int)lua_tonumber(L, 1);
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  arg3 = (char *)lua_tostring(L, 3);
+  arg4 = (Neo2D::Gui::FILE_DIALOG_TYPE)(int)lua_tonumber(L, 4);
+  arg5 = (char *)lua_tostring(L, 5);
+  result = (Neo2D::Gui::FileDialog *)new Neo2D::Gui::FileDialog(arg1,arg2,(char const *)arg3,arg4,(char const *)arg5);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__FileDialog,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_new_FileDialog__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  unsigned int arg1 ;
+  unsigned int arg2 ;
+  char *arg3 = (char *) 0 ;
+  Neo2D::Gui::FILE_DIALOG_TYPE arg4 ;
+  Neo2D::Gui::FileDialog *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::FileDialog::FileDialog",4,4)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::FileDialog::FileDialog",1,"unsigned int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::FileDialog::FileDialog",2,"unsigned int");
+  if(!SWIG_lua_isnilstring(L,3)) SWIG_fail_arg("Neo2D::Gui::FileDialog::FileDialog",3,"char const *");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::FileDialog::FileDialog",4,"Neo2D::Gui::FILE_DIALOG_TYPE");
+  SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
+  arg1 = (unsigned int)lua_tonumber(L, 1);
+  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
+  arg2 = (unsigned int)lua_tonumber(L, 2);
+  arg3 = (char *)lua_tostring(L, 3);
+  arg4 = (Neo2D::Gui::FILE_DIALOG_TYPE)(int)lua_tonumber(L, 4);
+  result = (Neo2D::Gui::FileDialog *)new Neo2D::Gui::FileDialog(arg1,arg2,(char const *)arg3,arg4);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__FileDialog,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_new_FileDialog(lua_State* L) {
+  int argc;
+  int argv[6]={
+    1,2,3,4,5,6
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 4) {
+    int _v;
+    {
+      _v = lua_isnumber(L,argv[0]);
+    }
+    if (_v) {
+      {
+        _v = lua_isnumber(L,argv[1]);
+      }
+      if (_v) {
+        {
+          _v = SWIG_lua_isnilstring(L,argv[2]);
+        }
+        if (_v) {
+          {
+            _v = lua_isnumber(L,argv[3]);
+          }
+          if (_v) {
+            return _wrap_new_FileDialog__SWIG_1(L);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 5) {
+    int _v;
+    {
+      _v = lua_isnumber(L,argv[0]);
+    }
+    if (_v) {
+      {
+        _v = lua_isnumber(L,argv[1]);
+      }
+      if (_v) {
+        {
+          _v = SWIG_lua_isnilstring(L,argv[2]);
+        }
+        if (_v) {
+          {
+            _v = lua_isnumber(L,argv[3]);
+          }
+          if (_v) {
+            {
+              _v = SWIG_lua_isnilstring(L,argv[4]);
+            }
+            if (_v) {
+              return _wrap_new_FileDialog__SWIG_0(L);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'new_FileDialog'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo2D::Gui::FileDialog::FileDialog(unsigned int,unsigned int,char const *,Neo2D::Gui::FILE_DIALOG_TYPE,char const *)\n"
+    "    Neo2D::Gui::FileDialog::FileDialog(unsigned int,unsigned int,char const *,Neo2D::Gui::FILE_DIALOG_TYPE)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_FileDialog_update(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::FileDialog *arg1 = (Neo2D::Gui::FileDialog *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::FileDialog::update",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::FileDialog::update",1,"Neo2D::Gui::FileDialog *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__FileDialog,0))){
+    SWIG_fail_ptr("FileDialog_update",1,SWIGTYPE_p_Neo2D__Gui__FileDialog);
+  }
+  
+  (arg1)->update();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_FileDialog_getSelectedFilename(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::FileDialog *arg1 = (Neo2D::Gui::FileDialog *) 0 ;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::FileDialog::getSelectedFilename",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::FileDialog::getSelectedFilename",1,"Neo2D::Gui::FileDialog *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__FileDialog,0))){
+    SWIG_fail_ptr("FileDialog_getSelectedFilename",1,SWIGTYPE_p_Neo2D__Gui__FileDialog);
+  }
+  
+  result = (char *)(arg1)->getSelectedFilename();
+  lua_pushstring(L,(const char *)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_FileDialog_readDirectory(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::FileDialog *arg1 = (Neo2D::Gui::FileDialog *) 0 ;
+  char *arg2 = (char *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::FileDialog::readDirectory",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::FileDialog::readDirectory",1,"Neo2D::Gui::FileDialog *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo2D::Gui::FileDialog::readDirectory",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__FileDialog,0))){
+    SWIG_fail_ptr("FileDialog_readDirectory",1,SWIGTYPE_p_Neo2D__Gui__FileDialog);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  (arg1)->readDirectory((char const *)arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_FileDialog_placeIcons(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::FileDialog *arg1 = (Neo2D::Gui::FileDialog *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::FileDialog::placeIcons",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::FileDialog::placeIcons",1,"Neo2D::Gui::FileDialog *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__FileDialog,0))){
+    SWIG_fail_ptr("FileDialog_placeIcons",1,SWIGTYPE_p_Neo2D__Gui__FileDialog);
+  }
+  
+  (arg1)->placeIcons();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_FileDialog_getFilter(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::FileDialog *arg1 = (Neo2D::Gui::FileDialog *) 0 ;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::FileDialog::getFilter",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::FileDialog::getFilter",1,"Neo2D::Gui::FileDialog *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__FileDialog,0))){
+    SWIG_fail_ptr("FileDialog_getFilter",1,SWIGTYPE_p_Neo2D__Gui__FileDialog);
+  }
+  
+  result = (char *)(arg1)->getFilter();
+  lua_pushstring(L,(const char *)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_FileDialog_setFilter(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::FileDialog *arg1 = (Neo2D::Gui::FileDialog *) 0 ;
+  char *arg2 = (char *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::FileDialog::setFilter",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::FileDialog::setFilter",1,"Neo2D::Gui::FileDialog *");
+  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo2D::Gui::FileDialog::setFilter",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__FileDialog,0))){
+    SWIG_fail_ptr("FileDialog_setFilter",1,SWIGTYPE_p_Neo2D__Gui__FileDialog);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  (arg1)->setFilter((char const *)arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_FileDialog(void *obj) {
+Neo2D::Gui::FileDialog *arg1 = (Neo2D::Gui::FileDialog *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Neo2D_Gui_FileDialog_methods[] = {
+    {"update", _wrap_FileDialog_update}, 
+    {"getSelectedFilename", _wrap_FileDialog_getSelectedFilename}, 
+    {"readDirectory", _wrap_FileDialog_readDirectory}, 
+    {"placeIcons", _wrap_FileDialog_placeIcons}, 
+    {"getFilter", _wrap_FileDialog_getFilter}, 
+    {"setFilter", _wrap_FileDialog_setFilter}, 
+    {0,0}
+};
+static swig_lua_attribute swig_Neo2D_Gui_FileDialog_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_attribute swig_Neo2D_Gui_FileDialog_cls_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_method swig_Neo2D_Gui_FileDialog_cls_methods[] = {
+    {0,0}
+};
+static swig_lua_const_info swig_Neo2D_Gui_FileDialog_cls_constants[] = {
+    {0,0,0,0,0,0}
+};
+static swig_lua_class *swig_Neo2D_Gui_FileDialog_bases[] = {0,0};
+static const char *swig_Neo2D_Gui_FileDialog_base_names[] = {"Neo2D::Gui::Window *",0};
+static swig_lua_class _wrap_class_Neo2D_Gui_FileDialog = { "FileDialog", &SWIGTYPE_p_Neo2D__Gui__FileDialog,_wrap_new_FileDialog, swig_delete_FileDialog, swig_Neo2D_Gui_FileDialog_methods, swig_Neo2D_Gui_FileDialog_attributes, { "FileDialog", swig_Neo2D_Gui_FileDialog_cls_methods, swig_Neo2D_Gui_FileDialog_cls_attributes, swig_Neo2D_Gui_FileDialog_cls_constants }, swig_Neo2D_Gui_FileDialog_bases, swig_Neo2D_Gui_FileDialog_base_names };
 
 static int _wrap_new_Animation__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
@@ -59745,513 +61328,6 @@ static swig_lua_const_info swig_Neo2D_AnimatedTile_cls_constants[] = {
 static swig_lua_class *swig_Neo2D_AnimatedTile_bases[] = {0,0};
 static const char *swig_Neo2D_AnimatedTile_base_names[] = {"Neo2D::Tile *",0};
 static swig_lua_class _wrap_class_Neo2D_AnimatedTile = { "AnimatedTile", &SWIGTYPE_p_Neo2D__AnimatedTile,_wrap_new_AnimatedTile, swig_delete_AnimatedTile, swig_Neo2D_AnimatedTile_methods, swig_Neo2D_AnimatedTile_attributes, { "AnimatedTile", swig_Neo2D_AnimatedTile_cls_methods, swig_Neo2D_AnimatedTile_cls_attributes, swig_Neo2D_AnimatedTile_cls_constants }, swig_Neo2D_AnimatedTile_bases, swig_Neo2D_AnimatedTile_base_names };
-
-static int _wrap_new_InputField(lua_State* L) {
-  int SWIG_arg = 0;
-  unsigned int arg1 ;
-  unsigned int arg2 ;
-  unsigned int arg3 ;
-  unsigned int arg4 ;
-  char *arg5 = (char *) 0 ;
-  Neo2D::Gui::InputField *result = 0 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::InputField::InputField",5,5)
-  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::InputField",1,"unsigned int");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::InputField::InputField",2,"unsigned int");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::InputField::InputField",3,"unsigned int");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::InputField::InputField",4,"unsigned int");
-  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo2D::Gui::InputField::InputField",5,"char const *");
-  SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
-  arg1 = (unsigned int)lua_tonumber(L, 1);
-  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
-  arg2 = (unsigned int)lua_tonumber(L, 2);
-  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
-  arg3 = (unsigned int)lua_tonumber(L, 3);
-  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
-  arg4 = (unsigned int)lua_tonumber(L, 4);
-  arg5 = (char *)lua_tostring(L, 5);
-  result = (Neo2D::Gui::InputField *)new Neo2D::Gui::InputField(arg1,arg2,arg3,arg4,(char const *)arg5);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__InputField,1); SWIG_arg++; 
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_InputField_draw(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
-  Neo::Vector2 arg2 ;
-  Neo::Vector2 *argp2 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::InputField::draw",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::draw",1,"Neo2D::Gui::InputField *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::InputField::draw",2,"Neo::Vector2");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
-    SWIG_fail_ptr("InputField_draw",1,SWIGTYPE_p_Neo2D__Gui__InputField);
-  }
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
-    SWIG_fail_ptr("InputField_draw",2,SWIGTYPE_p_Neo__Vector2);
-  }
-  arg2 = *argp2;
-  
-  (arg1)->draw(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_InputField_update(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::InputField::update",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::update",1,"Neo2D::Gui::InputField *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
-    SWIG_fail_ptr("InputField_update",1,SWIGTYPE_p_Neo2D__Gui__InputField);
-  }
-  
-  (arg1)->update();
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_InputField_setState(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
-  Neo2D::Gui::INPUT_STATE arg2 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::InputField::setState",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::setState",1,"Neo2D::Gui::InputField *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::InputField::setState",2,"Neo2D::Gui::INPUT_STATE");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
-    SWIG_fail_ptr("InputField_setState",1,SWIGTYPE_p_Neo2D__Gui__InputField);
-  }
-  
-  arg2 = (Neo2D::Gui::INPUT_STATE)(int)lua_tonumber(L, 2);
-  (arg1)->setState(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_InputField_getStaticName(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
-  char *result = 0 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::InputField::getStaticName",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::getStaticName",1,"Neo2D::Gui::InputField *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
-    SWIG_fail_ptr("InputField_getStaticName",1,SWIGTYPE_p_Neo2D__Gui__InputField);
-  }
-  
-  result = (char *)(arg1)->getStaticName();
-  lua_pushstring(L,(const char *)result); SWIG_arg++;
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_InputField_setLabel(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
-  char *arg2 = (char *) 0 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::InputField::setLabel",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::setLabel",1,"Neo2D::Gui::InputField *");
-  if(!SWIG_lua_isnilstring(L,2)) SWIG_fail_arg("Neo2D::Gui::InputField::setLabel",2,"char const *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
-    SWIG_fail_ptr("InputField_setLabel",1,SWIGTYPE_p_Neo2D__Gui__InputField);
-  }
-  
-  arg2 = (char *)lua_tostring(L, 2);
-  (arg1)->setLabel((char const *)arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_InputField_getType(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
-  Neo2D::Gui::INPUT_TYPE result;
-  
-  SWIG_check_num_args("Neo2D::Gui::InputField::getType",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::getType",1,"Neo2D::Gui::InputField *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
-    SWIG_fail_ptr("InputField_getType",1,SWIGTYPE_p_Neo2D__Gui__InputField);
-  }
-  
-  result = (Neo2D::Gui::INPUT_TYPE)(arg1)->getType();
-  lua_pushnumber(L, (lua_Number)(int)(result)); SWIG_arg++;
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_InputField_setType(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
-  Neo2D::Gui::INPUT_TYPE arg2 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::InputField::setType",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::setType",1,"Neo2D::Gui::InputField *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::InputField::setType",2,"Neo2D::Gui::INPUT_TYPE");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
-    SWIG_fail_ptr("InputField_setType",1,SWIGTYPE_p_Neo2D__Gui__InputField);
-  }
-  
-  arg2 = (Neo2D::Gui::INPUT_TYPE)(int)lua_tonumber(L, 2);
-  (arg1)->setType(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_InputField_isMultiline(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
-  bool result;
-  
-  SWIG_check_num_args("Neo2D::Gui::InputField::isMultiline",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::isMultiline",1,"Neo2D::Gui::InputField *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
-    SWIG_fail_ptr("InputField_isMultiline",1,SWIGTYPE_p_Neo2D__Gui__InputField);
-  }
-  
-  result = (bool)(arg1)->isMultiline();
-  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_InputField_setMultiline(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) 0 ;
-  bool arg2 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::InputField::setMultiline",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::InputField::setMultiline",1,"Neo2D::Gui::InputField *");
-  if(!lua_isboolean(L,2)) SWIG_fail_arg("Neo2D::Gui::InputField::setMultiline",2,"bool");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__InputField,0))){
-    SWIG_fail_ptr("InputField_setMultiline",1,SWIGTYPE_p_Neo2D__Gui__InputField);
-  }
-  
-  arg2 = (lua_toboolean(L, 2)!=0);
-  (arg1)->setMultiline(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static void swig_delete_InputField(void *obj) {
-Neo2D::Gui::InputField *arg1 = (Neo2D::Gui::InputField *) obj;
-delete arg1;
-}
-static swig_lua_method swig_Neo2D_Gui_InputField_methods[] = {
-    {"draw", _wrap_InputField_draw}, 
-    {"update", _wrap_InputField_update}, 
-    {"setState", _wrap_InputField_setState}, 
-    {"getStaticName", _wrap_InputField_getStaticName}, 
-    {"setLabel", _wrap_InputField_setLabel}, 
-    {"getType", _wrap_InputField_getType}, 
-    {"setType", _wrap_InputField_setType}, 
-    {"isMultiline", _wrap_InputField_isMultiline}, 
-    {"setMultiline", _wrap_InputField_setMultiline}, 
-    {0,0}
-};
-static swig_lua_attribute swig_Neo2D_Gui_InputField_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_attribute swig_Neo2D_Gui_InputField_cls_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_method swig_Neo2D_Gui_InputField_cls_methods[] = {
-    {0,0}
-};
-static swig_lua_const_info swig_Neo2D_Gui_InputField_cls_constants[] = {
-    {0,0,0,0,0,0}
-};
-static swig_lua_class *swig_Neo2D_Gui_InputField_bases[] = {0,0};
-static const char *swig_Neo2D_Gui_InputField_base_names[] = {"Neo2D::Widget *",0};
-static swig_lua_class _wrap_class_Neo2D_Gui_InputField = { "InputField", &SWIGTYPE_p_Neo2D__Gui__InputField,_wrap_new_InputField, swig_delete_InputField, swig_Neo2D_Gui_InputField_methods, swig_Neo2D_Gui_InputField_attributes, { "InputField", swig_Neo2D_Gui_InputField_cls_methods, swig_Neo2D_Gui_InputField_cls_attributes, swig_Neo2D_Gui_InputField_cls_constants }, swig_Neo2D_Gui_InputField_bases, swig_Neo2D_Gui_InputField_base_names };
-
-static int _wrap_new_ThemedButton(lua_State* L) {
-  int SWIG_arg = 0;
-  unsigned int arg1 ;
-  unsigned int arg2 ;
-  unsigned int arg3 ;
-  unsigned int arg4 ;
-  char *arg5 = (char *) 0 ;
-  Neo2D::Gui::ThemedButton *result = 0 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::ThemedButton::ThemedButton",5,5)
-  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::ThemedButton",1,"unsigned int");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::ThemedButton",2,"unsigned int");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::ThemedButton",3,"unsigned int");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::ThemedButton",4,"unsigned int");
-  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::ThemedButton",5,"char const *");
-  SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
-  arg1 = (unsigned int)lua_tonumber(L, 1);
-  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
-  arg2 = (unsigned int)lua_tonumber(L, 2);
-  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
-  arg3 = (unsigned int)lua_tonumber(L, 3);
-  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
-  arg4 = (unsigned int)lua_tonumber(L, 4);
-  arg5 = (char *)lua_tostring(L, 5);
-  result = (Neo2D::Gui::ThemedButton *)new Neo2D::Gui::ThemedButton(arg1,arg2,arg3,arg4,(char const *)arg5);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__ThemedButton,1); SWIG_arg++; 
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_ThemedButton_draw(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::ThemedButton *arg1 = (Neo2D::Gui::ThemedButton *) 0 ;
-  Neo::Vector2 arg2 ;
-  Neo::Vector2 *argp2 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::ThemedButton::draw",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::draw",1,"Neo2D::Gui::ThemedButton *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::draw",2,"Neo::Vector2");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ThemedButton,0))){
-    SWIG_fail_ptr("ThemedButton_draw",1,SWIGTYPE_p_Neo2D__Gui__ThemedButton);
-  }
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
-    SWIG_fail_ptr("ThemedButton_draw",2,SWIGTYPE_p_Neo__Vector2);
-  }
-  arg2 = *argp2;
-  
-  (arg1)->draw(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_ThemedButton_update(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::ThemedButton *arg1 = (Neo2D::Gui::ThemedButton *) 0 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::ThemedButton::update",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ThemedButton::update",1,"Neo2D::Gui::ThemedButton *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ThemedButton,0))){
-    SWIG_fail_ptr("ThemedButton_update",1,SWIGTYPE_p_Neo2D__Gui__ThemedButton);
-  }
-  
-  (arg1)->update();
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static void swig_delete_ThemedButton(void *obj) {
-Neo2D::Gui::ThemedButton *arg1 = (Neo2D::Gui::ThemedButton *) obj;
-delete arg1;
-}
-static swig_lua_method swig_Neo2D_Gui_ThemedButton_methods[] = {
-    {"draw", _wrap_ThemedButton_draw}, 
-    {"update", _wrap_ThemedButton_update}, 
-    {0,0}
-};
-static swig_lua_attribute swig_Neo2D_Gui_ThemedButton_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_attribute swig_Neo2D_Gui_ThemedButton_cls_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_method swig_Neo2D_Gui_ThemedButton_cls_methods[] = {
-    {0,0}
-};
-static swig_lua_const_info swig_Neo2D_Gui_ThemedButton_cls_constants[] = {
-    {0,0,0,0,0,0}
-};
-static swig_lua_class *swig_Neo2D_Gui_ThemedButton_bases[] = {0,0};
-static const char *swig_Neo2D_Gui_ThemedButton_base_names[] = {"Neo2D::Gui::Button *",0};
-static swig_lua_class _wrap_class_Neo2D_Gui_ThemedButton = { "ThemedButton", &SWIGTYPE_p_Neo2D__Gui__ThemedButton,_wrap_new_ThemedButton, swig_delete_ThemedButton, swig_Neo2D_Gui_ThemedButton_methods, swig_Neo2D_Gui_ThemedButton_attributes, { "ThemedButton", swig_Neo2D_Gui_ThemedButton_cls_methods, swig_Neo2D_Gui_ThemedButton_cls_attributes, swig_Neo2D_Gui_ThemedButton_cls_constants }, swig_Neo2D_Gui_ThemedButton_bases, swig_Neo2D_Gui_ThemedButton_base_names };
-
-static int _wrap_new_ThemedInputField(lua_State* L) {
-  int SWIG_arg = 0;
-  unsigned int arg1 ;
-  unsigned int arg2 ;
-  unsigned int arg3 ;
-  unsigned int arg4 ;
-  char *arg5 = (char *) 0 ;
-  Neo2D::Gui::ThemedInputField *result = 0 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::ThemedInputField::ThemedInputField",5,5)
-  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::ThemedInputField",1,"unsigned int");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::ThemedInputField",2,"unsigned int");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::ThemedInputField",3,"unsigned int");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::ThemedInputField",4,"unsigned int");
-  if(!SWIG_lua_isnilstring(L,5)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::ThemedInputField",5,"char const *");
-  SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
-  arg1 = (unsigned int)lua_tonumber(L, 1);
-  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
-  arg2 = (unsigned int)lua_tonumber(L, 2);
-  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
-  arg3 = (unsigned int)lua_tonumber(L, 3);
-  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
-  arg4 = (unsigned int)lua_tonumber(L, 4);
-  arg5 = (char *)lua_tostring(L, 5);
-  result = (Neo2D::Gui::ThemedInputField *)new Neo2D::Gui::ThemedInputField(arg1,arg2,arg3,arg4,(char const *)arg5);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__ThemedInputField,1); SWIG_arg++; 
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_ThemedInputField_draw(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::ThemedInputField *arg1 = (Neo2D::Gui::ThemedInputField *) 0 ;
-  Neo::Vector2 arg2 ;
-  Neo::Vector2 *argp2 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::ThemedInputField::draw",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::draw",1,"Neo2D::Gui::ThemedInputField *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::ThemedInputField::draw",2,"Neo::Vector2");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ThemedInputField,0))){
-    SWIG_fail_ptr("ThemedInputField_draw",1,SWIGTYPE_p_Neo2D__Gui__ThemedInputField);
-  }
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
-    SWIG_fail_ptr("ThemedInputField_draw",2,SWIGTYPE_p_Neo__Vector2);
-  }
-  arg2 = *argp2;
-  
-  (arg1)->draw(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static void swig_delete_ThemedInputField(void *obj) {
-Neo2D::Gui::ThemedInputField *arg1 = (Neo2D::Gui::ThemedInputField *) obj;
-delete arg1;
-}
-static swig_lua_method swig_Neo2D_Gui_ThemedInputField_methods[] = {
-    {"draw", _wrap_ThemedInputField_draw}, 
-    {0,0}
-};
-static swig_lua_attribute swig_Neo2D_Gui_ThemedInputField_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_attribute swig_Neo2D_Gui_ThemedInputField_cls_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_method swig_Neo2D_Gui_ThemedInputField_cls_methods[] = {
-    {0,0}
-};
-static swig_lua_const_info swig_Neo2D_Gui_ThemedInputField_cls_constants[] = {
-    {0,0,0,0,0,0}
-};
-static swig_lua_class *swig_Neo2D_Gui_ThemedInputField_bases[] = {0,0};
-static const char *swig_Neo2D_Gui_ThemedInputField_base_names[] = {"Neo2D::Gui::InputField *",0};
-static swig_lua_class _wrap_class_Neo2D_Gui_ThemedInputField = { "ThemedInputField", &SWIGTYPE_p_Neo2D__Gui__ThemedInputField,_wrap_new_ThemedInputField, swig_delete_ThemedInputField, swig_Neo2D_Gui_ThemedInputField_methods, swig_Neo2D_Gui_ThemedInputField_attributes, { "ThemedInputField", swig_Neo2D_Gui_ThemedInputField_cls_methods, swig_Neo2D_Gui_ThemedInputField_cls_attributes, swig_Neo2D_Gui_ThemedInputField_cls_constants }, swig_Neo2D_Gui_ThemedInputField_bases, swig_Neo2D_Gui_ThemedInputField_base_names };
 
 static int _wrap_new_Menu__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
@@ -61894,664 +62970,6 @@ static swig_lua_class *swig_Neo2D_Gui_TreeView_bases[] = {0,0};
 static const char *swig_Neo2D_Gui_TreeView_base_names[] = {"Neo2D::Widget *",0};
 static swig_lua_class _wrap_class_Neo2D_Gui_TreeView = { "TreeView", &SWIGTYPE_p_Neo2D__Gui__TreeView,_wrap_new_TreeView, swig_delete_TreeView, swig_Neo2D_Gui_TreeView_methods, swig_Neo2D_Gui_TreeView_attributes, { "TreeView", swig_Neo2D_Gui_TreeView_cls_methods, swig_Neo2D_Gui_TreeView_cls_attributes, swig_Neo2D_Gui_TreeView_cls_constants }, swig_Neo2D_Gui_TreeView_bases, swig_Neo2D_Gui_TreeView_base_names };
 
-static int _wrap_new_Slider(lua_State* L) {
-  int SWIG_arg = 0;
-  float arg1 ;
-  float arg2 ;
-  unsigned int arg3 ;
-  unsigned int arg4 ;
-  float arg5 ;
-  float arg6 ;
-  Neo2D::Gui::SLIDER_DIRECTION arg7 ;
-  Neo2D::Gui::Slider *result = 0 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::Slider::Slider",7,7)
-  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::Slider::Slider",1,"float");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::Slider::Slider",2,"float");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::Slider::Slider",3,"unsigned int");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::Slider::Slider",4,"unsigned int");
-  if(!lua_isnumber(L,5)) SWIG_fail_arg("Neo2D::Gui::Slider::Slider",5,"float");
-  if(!lua_isnumber(L,6)) SWIG_fail_arg("Neo2D::Gui::Slider::Slider",6,"float");
-  if(!lua_isnumber(L,7)) SWIG_fail_arg("Neo2D::Gui::Slider::Slider",7,"Neo2D::Gui::SLIDER_DIRECTION");
-  arg1 = (float)lua_tonumber(L, 1);
-  arg2 = (float)lua_tonumber(L, 2);
-  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
-  arg3 = (unsigned int)lua_tonumber(L, 3);
-  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
-  arg4 = (unsigned int)lua_tonumber(L, 4);
-  arg5 = (float)lua_tonumber(L, 5);
-  arg6 = (float)lua_tonumber(L, 6);
-  arg7 = (Neo2D::Gui::SLIDER_DIRECTION)(int)lua_tonumber(L, 7);
-  result = (Neo2D::Gui::Slider *)new Neo2D::Gui::Slider(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__Slider,1); SWIG_arg++; 
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_Slider_getRange(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::Slider *arg1 = (Neo2D::Gui::Slider *) 0 ;
-  Neo::Vector2 result;
-  
-  SWIG_check_num_args("Neo2D::Gui::Slider::getRange",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Slider::getRange",1,"Neo2D::Gui::Slider *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Slider,0))){
-    SWIG_fail_ptr("Slider_getRange",1,SWIGTYPE_p_Neo2D__Gui__Slider);
-  }
-  
-  result = (arg1)->getRange();
-  {
-    Neo::Vector2 * resultptr = new Neo::Vector2((const Neo::Vector2 &) result);
-    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector2,1); SWIG_arg++;
-  }
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_Slider_setRange(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::Slider *arg1 = (Neo2D::Gui::Slider *) 0 ;
-  Neo::Vector2 arg2 ;
-  Neo::Vector2 *argp2 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::Slider::setRange",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Slider::setRange",1,"Neo2D::Gui::Slider *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::Slider::setRange",2,"Neo::Vector2");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Slider,0))){
-    SWIG_fail_ptr("Slider_setRange",1,SWIGTYPE_p_Neo2D__Gui__Slider);
-  }
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
-    SWIG_fail_ptr("Slider_setRange",2,SWIGTYPE_p_Neo__Vector2);
-  }
-  arg2 = *argp2;
-  
-  (arg1)->setRange(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_Slider_setValue(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::Slider *arg1 = (Neo2D::Gui::Slider *) 0 ;
-  float arg2 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::Slider::setValue",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Slider::setValue",1,"Neo2D::Gui::Slider *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::Slider::setValue",2,"float");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Slider,0))){
-    SWIG_fail_ptr("Slider_setValue",1,SWIGTYPE_p_Neo2D__Gui__Slider);
-  }
-  
-  arg2 = (float)lua_tonumber(L, 2);
-  (arg1)->setValue(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_Slider_getValue(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::Slider *arg1 = (Neo2D::Gui::Slider *) 0 ;
-  float result;
-  
-  SWIG_check_num_args("Neo2D::Gui::Slider::getValue",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Slider::getValue",1,"Neo2D::Gui::Slider *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Slider,0))){
-    SWIG_fail_ptr("Slider_getValue",1,SWIGTYPE_p_Neo2D__Gui__Slider);
-  }
-  
-  result = (float)(arg1)->getValue();
-  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_Slider_draw(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::Slider *arg1 = (Neo2D::Gui::Slider *) 0 ;
-  Neo::Vector2 arg2 ;
-  Neo::Vector2 *argp2 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::Slider::draw",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Slider::draw",1,"Neo2D::Gui::Slider *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::Slider::draw",2,"Neo::Vector2");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Slider,0))){
-    SWIG_fail_ptr("Slider_draw",1,SWIGTYPE_p_Neo2D__Gui__Slider);
-  }
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
-    SWIG_fail_ptr("Slider_draw",2,SWIGTYPE_p_Neo__Vector2);
-  }
-  arg2 = *argp2;
-  
-  (arg1)->draw(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_Slider_update(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::Slider *arg1 = (Neo2D::Gui::Slider *) 0 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::Slider::update",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::Slider::update",1,"Neo2D::Gui::Slider *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__Slider,0))){
-    SWIG_fail_ptr("Slider_update",1,SWIGTYPE_p_Neo2D__Gui__Slider);
-  }
-  
-  (arg1)->update();
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static void swig_delete_Slider(void *obj) {
-Neo2D::Gui::Slider *arg1 = (Neo2D::Gui::Slider *) obj;
-delete arg1;
-}
-static swig_lua_method swig_Neo2D_Gui_Slider_methods[] = {
-    {"getRange", _wrap_Slider_getRange}, 
-    {"setRange", _wrap_Slider_setRange}, 
-    {"setValue", _wrap_Slider_setValue}, 
-    {"getValue", _wrap_Slider_getValue}, 
-    {"draw", _wrap_Slider_draw}, 
-    {"update", _wrap_Slider_update}, 
-    {0,0}
-};
-static swig_lua_attribute swig_Neo2D_Gui_Slider_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_attribute swig_Neo2D_Gui_Slider_cls_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_method swig_Neo2D_Gui_Slider_cls_methods[] = {
-    {0,0}
-};
-static swig_lua_const_info swig_Neo2D_Gui_Slider_cls_constants[] = {
-    {0,0,0,0,0,0}
-};
-static swig_lua_class *swig_Neo2D_Gui_Slider_bases[] = {0,0};
-static const char *swig_Neo2D_Gui_Slider_base_names[] = {"Neo2D::Widget *",0};
-static swig_lua_class _wrap_class_Neo2D_Gui_Slider = { "Slider", &SWIGTYPE_p_Neo2D__Gui__Slider,_wrap_new_Slider, swig_delete_Slider, swig_Neo2D_Gui_Slider_methods, swig_Neo2D_Gui_Slider_attributes, { "Slider", swig_Neo2D_Gui_Slider_cls_methods, swig_Neo2D_Gui_Slider_cls_attributes, swig_Neo2D_Gui_Slider_cls_constants }, swig_Neo2D_Gui_Slider_bases, swig_Neo2D_Gui_Slider_base_names };
-
-static int _wrap_new_ScrollBar(lua_State* L) {
-  int SWIG_arg = 0;
-  unsigned int arg1 ;
-  unsigned int arg2 ;
-  unsigned int arg3 ;
-  unsigned int arg4 ;
-  float arg5 ;
-  float arg6 ;
-  Neo2D::Gui::SLIDER_DIRECTION arg7 ;
-  Neo2D::Gui::ScrollBar *result = 0 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::ScrollBar::ScrollBar",7,7)
-  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::ScrollBar",1,"unsigned int");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::ScrollBar",2,"unsigned int");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::ScrollBar",3,"unsigned int");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::ScrollBar",4,"unsigned int");
-  if(!lua_isnumber(L,5)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::ScrollBar",5,"float");
-  if(!lua_isnumber(L,6)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::ScrollBar",6,"float");
-  if(!lua_isnumber(L,7)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::ScrollBar",7,"Neo2D::Gui::SLIDER_DIRECTION");
-  SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
-  arg1 = (unsigned int)lua_tonumber(L, 1);
-  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
-  arg2 = (unsigned int)lua_tonumber(L, 2);
-  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
-  arg3 = (unsigned int)lua_tonumber(L, 3);
-  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
-  arg4 = (unsigned int)lua_tonumber(L, 4);
-  arg5 = (float)lua_tonumber(L, 5);
-  arg6 = (float)lua_tonumber(L, 6);
-  arg7 = (Neo2D::Gui::SLIDER_DIRECTION)(int)lua_tonumber(L, 7);
-  result = (Neo2D::Gui::ScrollBar *)new Neo2D::Gui::ScrollBar(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__ScrollBar,1); SWIG_arg++; 
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_ScrollBar_getRange(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::ScrollBar *arg1 = (Neo2D::Gui::ScrollBar *) 0 ;
-  Neo::Vector2 result;
-  
-  SWIG_check_num_args("Neo2D::Gui::ScrollBar::getRange",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::getRange",1,"Neo2D::Gui::ScrollBar *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollBar,0))){
-    SWIG_fail_ptr("ScrollBar_getRange",1,SWIGTYPE_p_Neo2D__Gui__ScrollBar);
-  }
-  
-  result = (arg1)->getRange();
-  {
-    Neo::Vector2 * resultptr = new Neo::Vector2((const Neo::Vector2 &) result);
-    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Neo__Vector2,1); SWIG_arg++;
-  }
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_ScrollBar_setRange(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::ScrollBar *arg1 = (Neo2D::Gui::ScrollBar *) 0 ;
-  Neo::Vector2 arg2 ;
-  Neo::Vector2 *argp2 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::ScrollBar::setRange",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::setRange",1,"Neo2D::Gui::ScrollBar *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::setRange",2,"Neo::Vector2");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollBar,0))){
-    SWIG_fail_ptr("ScrollBar_setRange",1,SWIGTYPE_p_Neo2D__Gui__ScrollBar);
-  }
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
-    SWIG_fail_ptr("ScrollBar_setRange",2,SWIGTYPE_p_Neo__Vector2);
-  }
-  arg2 = *argp2;
-  
-  (arg1)->setRange(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_ScrollBar_setValue(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::ScrollBar *arg1 = (Neo2D::Gui::ScrollBar *) 0 ;
-  float arg2 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::ScrollBar::setValue",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::setValue",1,"Neo2D::Gui::ScrollBar *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::setValue",2,"float");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollBar,0))){
-    SWIG_fail_ptr("ScrollBar_setValue",1,SWIGTYPE_p_Neo2D__Gui__ScrollBar);
-  }
-  
-  arg2 = (float)lua_tonumber(L, 2);
-  (arg1)->setValue(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_ScrollBar_getValue(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::ScrollBar *arg1 = (Neo2D::Gui::ScrollBar *) 0 ;
-  float result;
-  
-  SWIG_check_num_args("Neo2D::Gui::ScrollBar::getValue",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::getValue",1,"Neo2D::Gui::ScrollBar *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollBar,0))){
-    SWIG_fail_ptr("ScrollBar_getValue",1,SWIGTYPE_p_Neo2D__Gui__ScrollBar);
-  }
-  
-  result = (float)(arg1)->getValue();
-  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_ScrollBar_draw(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::ScrollBar *arg1 = (Neo2D::Gui::ScrollBar *) 0 ;
-  Neo::Vector2 arg2 ;
-  Neo::Vector2 *argp2 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::ScrollBar::draw",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::draw",1,"Neo2D::Gui::ScrollBar *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::draw",2,"Neo::Vector2");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollBar,0))){
-    SWIG_fail_ptr("ScrollBar_draw",1,SWIGTYPE_p_Neo2D__Gui__ScrollBar);
-  }
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
-    SWIG_fail_ptr("ScrollBar_draw",2,SWIGTYPE_p_Neo__Vector2);
-  }
-  arg2 = *argp2;
-  
-  (arg1)->draw(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_ScrollBar_update(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::ScrollBar *arg1 = (Neo2D::Gui::ScrollBar *) 0 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::ScrollBar::update",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollBar::update",1,"Neo2D::Gui::ScrollBar *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollBar,0))){
-    SWIG_fail_ptr("ScrollBar_update",1,SWIGTYPE_p_Neo2D__Gui__ScrollBar);
-  }
-  
-  (arg1)->update();
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static void swig_delete_ScrollBar(void *obj) {
-Neo2D::Gui::ScrollBar *arg1 = (Neo2D::Gui::ScrollBar *) obj;
-delete arg1;
-}
-static swig_lua_method swig_Neo2D_Gui_ScrollBar_methods[] = {
-    {"getRange", _wrap_ScrollBar_getRange}, 
-    {"setRange", _wrap_ScrollBar_setRange}, 
-    {"setValue", _wrap_ScrollBar_setValue}, 
-    {"getValue", _wrap_ScrollBar_getValue}, 
-    {"draw", _wrap_ScrollBar_draw}, 
-    {"update", _wrap_ScrollBar_update}, 
-    {0,0}
-};
-static swig_lua_attribute swig_Neo2D_Gui_ScrollBar_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_attribute swig_Neo2D_Gui_ScrollBar_cls_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_method swig_Neo2D_Gui_ScrollBar_cls_methods[] = {
-    {0,0}
-};
-static swig_lua_const_info swig_Neo2D_Gui_ScrollBar_cls_constants[] = {
-    {0,0,0,0,0,0}
-};
-static swig_lua_class *swig_Neo2D_Gui_ScrollBar_bases[] = {0,0};
-static const char *swig_Neo2D_Gui_ScrollBar_base_names[] = {"Neo2D::Widget *",0};
-static swig_lua_class _wrap_class_Neo2D_Gui_ScrollBar = { "ScrollBar", &SWIGTYPE_p_Neo2D__Gui__ScrollBar,_wrap_new_ScrollBar, swig_delete_ScrollBar, swig_Neo2D_Gui_ScrollBar_methods, swig_Neo2D_Gui_ScrollBar_attributes, { "ScrollBar", swig_Neo2D_Gui_ScrollBar_cls_methods, swig_Neo2D_Gui_ScrollBar_cls_attributes, swig_Neo2D_Gui_ScrollBar_cls_constants }, swig_Neo2D_Gui_ScrollBar_bases, swig_Neo2D_Gui_ScrollBar_base_names };
-
-static int _wrap_new_ScrollPane(lua_State* L) {
-  int SWIG_arg = 0;
-  unsigned int arg1 ;
-  unsigned int arg2 ;
-  unsigned int arg3 ;
-  unsigned int arg4 ;
-  Neo2D::Gui::ScrollPane *result = 0 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::ScrollPane::ScrollPane",4,4)
-  if(!lua_isnumber(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollPane::ScrollPane",1,"unsigned int");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("Neo2D::Gui::ScrollPane::ScrollPane",2,"unsigned int");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("Neo2D::Gui::ScrollPane::ScrollPane",3,"unsigned int");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("Neo2D::Gui::ScrollPane::ScrollPane",4,"unsigned int");
-  SWIG_contract_assert((lua_tonumber(L,1)>=0),"number must not be negative")
-  arg1 = (unsigned int)lua_tonumber(L, 1);
-  SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
-  arg2 = (unsigned int)lua_tonumber(L, 2);
-  SWIG_contract_assert((lua_tonumber(L,3)>=0),"number must not be negative")
-  arg3 = (unsigned int)lua_tonumber(L, 3);
-  SWIG_contract_assert((lua_tonumber(L,4)>=0),"number must not be negative")
-  arg4 = (unsigned int)lua_tonumber(L, 4);
-  result = (Neo2D::Gui::ScrollPane *)new Neo2D::Gui::ScrollPane(arg1,arg2,arg3,arg4);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__ScrollPane,1); SWIG_arg++; 
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_ScrollPane_draw__SWIG_0(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::ScrollPane *arg1 = (Neo2D::Gui::ScrollPane *) 0 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::ScrollPane::draw",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollPane::draw",1,"Neo2D::Gui::ScrollPane *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollPane,0))){
-    SWIG_fail_ptr("ScrollPane_draw",1,SWIGTYPE_p_Neo2D__Gui__ScrollPane);
-  }
-  
-  (arg1)->draw();
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_ScrollPane_draw__SWIG_1(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::ScrollPane *arg1 = (Neo2D::Gui::ScrollPane *) 0 ;
-  Neo::Vector2 arg2 ;
-  Neo::Vector2 *argp2 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::ScrollPane::draw",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollPane::draw",1,"Neo2D::Gui::ScrollPane *");
-  if(!lua_isuserdata(L,2)) SWIG_fail_arg("Neo2D::Gui::ScrollPane::draw",2,"Neo::Vector2");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollPane,0))){
-    SWIG_fail_ptr("ScrollPane_draw",1,SWIGTYPE_p_Neo2D__Gui__ScrollPane);
-  }
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&argp2,SWIGTYPE_p_Neo__Vector2,0))){
-    SWIG_fail_ptr("ScrollPane_draw",2,SWIGTYPE_p_Neo__Vector2);
-  }
-  arg2 = *argp2;
-  
-  (arg1)->draw(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_ScrollPane_draw(lua_State* L) {
-  int argc;
-  int argv[3]={
-    1,2,3
-  };
-  
-  argc = lua_gettop(L);
-  if (argc == 1) {
-    int _v;
-    {
-      void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__ScrollPane, 0)) {
-        _v = 0;
-      } else {
-        _v = 1;
-      }
-    }
-    if (_v) {
-      return _wrap_ScrollPane_draw__SWIG_0(L);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    {
-      void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__ScrollPane, 0)) {
-        _v = 0;
-      } else {
-        _v = 1;
-      }
-    }
-    if (_v) {
-      {
-        void *ptr;
-        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Neo__Vector2, 0)) {
-          _v = 0;
-        } else {
-          _v = 1;
-        }
-      }
-      if (_v) {
-        return _wrap_ScrollPane_draw__SWIG_1(L);
-      }
-    }
-  }
-  
-  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'ScrollPane_draw'\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    Neo2D::Gui::ScrollPane::draw()\n"
-    "    Neo2D::Gui::ScrollPane::draw(Neo::Vector2)\n");
-  lua_error(L);return 0;
-}
-
-
-static int _wrap_ScrollPane_update(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::ScrollPane *arg1 = (Neo2D::Gui::ScrollPane *) 0 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::ScrollPane::update",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::ScrollPane::update",1,"Neo2D::Gui::ScrollPane *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__ScrollPane,0))){
-    SWIG_fail_ptr("ScrollPane_update",1,SWIGTYPE_p_Neo2D__Gui__ScrollPane);
-  }
-  
-  (arg1)->update();
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static void swig_delete_ScrollPane(void *obj) {
-Neo2D::Gui::ScrollPane *arg1 = (Neo2D::Gui::ScrollPane *) obj;
-delete arg1;
-}
-static swig_lua_method swig_Neo2D_Gui_ScrollPane_methods[] = {
-    {"draw", _wrap_ScrollPane_draw}, 
-    {"update", _wrap_ScrollPane_update}, 
-    {0,0}
-};
-static swig_lua_attribute swig_Neo2D_Gui_ScrollPane_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_attribute swig_Neo2D_Gui_ScrollPane_cls_attributes[] = {
-    {0,0,0}
-};
-static swig_lua_method swig_Neo2D_Gui_ScrollPane_cls_methods[] = {
-    {0,0}
-};
-static swig_lua_const_info swig_Neo2D_Gui_ScrollPane_cls_constants[] = {
-    {0,0,0,0,0,0}
-};
-static swig_lua_class *swig_Neo2D_Gui_ScrollPane_bases[] = {0,0};
-static const char *swig_Neo2D_Gui_ScrollPane_base_names[] = {"Neo2D::Gui::Container *",0};
-static swig_lua_class _wrap_class_Neo2D_Gui_ScrollPane = { "ScrollPane", &SWIGTYPE_p_Neo2D__Gui__ScrollPane,_wrap_new_ScrollPane, swig_delete_ScrollPane, swig_Neo2D_Gui_ScrollPane_methods, swig_Neo2D_Gui_ScrollPane_attributes, { "ScrollPane", swig_Neo2D_Gui_ScrollPane_cls_methods, swig_Neo2D_Gui_ScrollPane_cls_attributes, swig_Neo2D_Gui_ScrollPane_cls_constants }, swig_Neo2D_Gui_ScrollPane_bases, swig_Neo2D_Gui_ScrollPane_base_names };
-
 static int _wrap_new_ScaleLayout(lua_State* L) {
   int SWIG_arg = 0;
   unsigned int arg1 ;
@@ -63805,20 +64223,23 @@ static swig_lua_const_info swig_constants[] = {
     {SWIG_LUA_CONSTTAB_INT("WINDOW_GRABBED_STATE", Neo2D::Gui::WINDOW_GRABBED_STATE)},
     {SWIG_LUA_CONSTTAB_INT("WINDOW_SELECTED_STATE", Neo2D::Gui::WINDOW_SELECTED_STATE)},
     {SWIG_LUA_CONSTTAB_INT("WINDOW_RESIZING_STATE", Neo2D::Gui::WINDOW_RESIZING_STATE)},
+    {SWIG_LUA_CONSTTAB_INT("NUM_SPRITES", 9)},
     {SWIG_LUA_CONSTTAB_INT("INPUT_NORMAL_STATE", Neo2D::Gui::INPUT_NORMAL_STATE)},
     {SWIG_LUA_CONSTTAB_INT("INPUT_HOVER_STATE", Neo2D::Gui::INPUT_HOVER_STATE)},
     {SWIG_LUA_CONSTTAB_INT("INPUT_SELECTED_STATE", Neo2D::Gui::INPUT_SELECTED_STATE)},
     {SWIG_LUA_CONSTTAB_INT("NORMAL_INPUT", Neo2D::Gui::NORMAL_INPUT)},
     {SWIG_LUA_CONSTTAB_INT("DECIMAL_INPUT", Neo2D::Gui::DECIMAL_INPUT)},
     {SWIG_LUA_CONSTTAB_INT("INTEGER_INPUT", Neo2D::Gui::INTEGER_INPUT)},
-    {SWIG_LUA_CONSTTAB_INT("NUM_SPRITES", 9)},
-    {SWIG_LUA_CONSTTAB_INT("LINE_HEIGHT", 25)},
     {SWIG_LUA_CONSTTAB_INT("SLIDER_HORIZONTAL", Neo2D::Gui::SLIDER_HORIZONTAL)},
     {SWIG_LUA_CONSTTAB_INT("SLIDER_VERTICAL", Neo2D::Gui::SLIDER_VERTICAL)},
     {SWIG_LUA_CONSTTAB_INT("SLIDER_NORMAL", Neo2D::Gui::SLIDER_NORMAL)},
     {SWIG_LUA_CONSTTAB_INT("SLIDER_GRABBED", Neo2D::Gui::SLIDER_GRABBED)},
     {SWIG_LUA_CONSTTAB_INT("m_scrollWidth", 1)},
     {SWIG_LUA_CONSTTAB_INT("SCROLL_BAR_WIDTH", 10)},
+    {SWIG_LUA_CONSTTAB_INT("FILE_OPEN", Neo2D::Gui::FILE_OPEN)},
+    {SWIG_LUA_CONSTTAB_INT("FILE_SAVE", Neo2D::Gui::FILE_SAVE)},
+    {SWIG_LUA_CONSTTAB_INT("DIR_OPEN", Neo2D::Gui::DIR_OPEN)},
+    {SWIG_LUA_CONSTTAB_INT("LINE_HEIGHT", 25)},
     {0,0,0,0,0,0}
 };
 
@@ -63866,6 +64287,9 @@ static void *_p_Neo2D__Gui__MenuTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(
 static void *_p_Neo2D__Gui__ScrollBarTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::Widget *)  ((Neo2D::Gui::ScrollBar *) x));
 }
+static void *_p_Neo2D__Gui__ScrollPaneTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Neo2D::Widget *) (Neo2D::Gui::Container *) ((Neo2D::Gui::ScrollPane *) x));
+}
 static void *_p_Neo2D__Gui__CheckButtonTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::Widget *)  ((Neo2D::Gui::CheckButton *) x));
 }
@@ -63874,9 +64298,6 @@ static void *_p_Neo2D__Gui__WindowTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPAR
 }
 static void *_p_Neo2D__Gui__LabelTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::Widget *)  ((Neo2D::Gui::Label *) x));
-}
-static void *_p_Neo2D__Gui__ScrollPaneTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
-    return (void *)((Neo2D::Widget *) (Neo2D::Gui::Container *) ((Neo2D::Gui::ScrollPane *) x));
 }
 static void *_p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::Widget *) (Neo2D::Gui::Button *) ((Neo2D::Gui::ThemedButton *) x));
@@ -63905,6 +64326,9 @@ static void *_p_Neo2D__TileTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newme
 static void *_p_Neo2D__Gui__SliderTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::Widget *)  ((Neo2D::Gui::Slider *) x));
 }
+static void *_p_Neo2D__Gui__FileDialogTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Neo2D::Widget *) (Neo2D::Gui::Container *)(Neo2D::Gui::Window *) ((Neo2D::Gui::FileDialog *) x));
+}
 static void *_p_Neo2D__AnimatedTileTo_p_Neo2D__Widget(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::Widget *) (Neo2D::Tile *) ((Neo2D::AnimatedTile *) x));
 }
@@ -63926,6 +64350,9 @@ static void *_p_intpTo_p_int(void *x, int *SWIGUNUSEDPARM(newmemory)) {
 static void *_p_uintpTo_p_unsigned_int(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((unsigned int *)  ((uintp *) x));
 }
+static void *_p_Neo2D__Gui__FileDialogTo_p_Neo2D__Gui__Container(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Neo2D::Gui::Container *) (Neo2D::Gui::Window *) ((Neo2D::Gui::FileDialog *) x));
+}
 static void *_p_Neo2D__Gui__WindowTo_p_Neo2D__Gui__Container(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::Gui::Container *)  ((Neo2D::Gui::Window *) x));
 }
@@ -63943,6 +64370,9 @@ static void *_p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Gui__Button(void *x, int *SW
 }
 static void *_p_Neo2D__Gui__ThemedInputFieldTo_p_Neo2D__Gui__InputField(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::Gui::InputField *)  ((Neo2D::Gui::ThemedInputField *) x));
+}
+static void *_p_Neo2D__Gui__FileDialogTo_p_Neo2D__Gui__Window(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((Neo2D::Gui::Window *)  ((Neo2D::Gui::FileDialog *) x));
 }
 static void *_p_Neo2D__StaticTileBatchTo_p_Neo2D__SpriteBatch(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((Neo2D::SpriteBatch *)  ((Neo2D::StaticTileBatch *) x));
@@ -63986,6 +64416,7 @@ static swig_type_info _swigt__p_Neo2D__CulledSpriteBatch = {"_p_Neo2D__CulledSpr
 static swig_type_info _swigt__p_Neo2D__Gui__Button = {"_p_Neo2D__Gui__Button", "Neo2D::Gui::Button *", 0, 0, (void*)&_wrap_class_Neo2D_Gui_Button, 0};
 static swig_type_info _swigt__p_Neo2D__Gui__CheckButton = {"_p_Neo2D__Gui__CheckButton", "Neo2D::Gui::CheckButton *", 0, 0, (void*)&_wrap_class_Neo2D_Gui_CheckButton, 0};
 static swig_type_info _swigt__p_Neo2D__Gui__Container = {"_p_Neo2D__Gui__Container", "Neo2D::Gui::Container *", 0, 0, (void*)&_wrap_class_Neo2D_Gui_Container, 0};
+static swig_type_info _swigt__p_Neo2D__Gui__FileDialog = {"_p_Neo2D__Gui__FileDialog", "Neo2D::Gui::FileDialog *", 0, 0, (void*)&_wrap_class_Neo2D_Gui_FileDialog, 0};
 static swig_type_info _swigt__p_Neo2D__Gui__InputField = {"_p_Neo2D__Gui__InputField", "Neo2D::Gui::InputField *", 0, 0, (void*)&_wrap_class_Neo2D_Gui_InputField, 0};
 static swig_type_info _swigt__p_Neo2D__Gui__Label = {"_p_Neo2D__Gui__Label", "Neo2D::Gui::Label *", 0, 0, (void*)&_wrap_class_Neo2D_Gui_Label, 0};
 static swig_type_info _swigt__p_Neo2D__Gui__List = {"_p_Neo2D__Gui__List", "Neo2D::Gui::List *", 0, 0, (void*)&_wrap_class_Neo2D_Gui_List, 0};
@@ -64123,6 +64554,7 @@ static swig_type_info _swigt__p_signed___int64 = {"_p_signed___int64", "INT64 *|
 static swig_type_info _swigt__p_signed_char = {"_p_signed_char", "signed char *|INT8 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__functionT_void_fWidget_p_longF_t = {"_p_std__functionT_void_fWidget_p_longF_t", "std::function< void (Widget *,long) > *|Neo2D::NEO_CALLBACK_FUNCTION *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)&_wrap_class_std_string, 0};
+static swig_type_info _swigt__p_std__vectorT_Neo2D__Widget_p_t = {"_p_std__vectorT_Neo2D__Widget_p_t", "std::vector< Neo2D::Widget * > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_uintp = {"_p_uintp", "uintp *", 0, 0, (void*)&_wrap_class_uintp, 0};
 static swig_type_info _swigt__p_unsigned___int64 = {"_p_unsigned___int64", "UINT64 *|DWORD64 *|unsigned __int64 *|DWORDLONG *|ULONGLONG *|ULONG64 *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "FCHAR *|unsigned char *|UCHAR *|BYTE *|TBYTE *|UINT8 *|BOOLEAN *", 0, 0, (void*)0, 0};
@@ -64143,6 +64575,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Neo2D__Gui__Button,
   &_swigt__p_Neo2D__Gui__CheckButton,
   &_swigt__p_Neo2D__Gui__Container,
+  &_swigt__p_Neo2D__Gui__FileDialog,
   &_swigt__p_Neo2D__Gui__InputField,
   &_swigt__p_Neo2D__Gui__Label,
   &_swigt__p_Neo2D__Gui__List,
@@ -64280,6 +64713,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_signed_char,
   &_swigt__p_std__functionT_void_fWidget_p_longF_t,
   &_swigt__p_std__string,
+  &_swigt__p_std__vectorT_Neo2D__Widget_p_t,
   &_swigt__p_uintp,
   &_swigt__p_unsigned___int64,
   &_swigt__p_unsigned_char,
@@ -64299,7 +64733,8 @@ static swig_cast_info _swigc__p_Neo2D__Canvas[] = {  {&_swigt__p_Neo2D__Canvas, 
 static swig_cast_info _swigc__p_Neo2D__CulledSpriteBatch[] = {  {&_swigt__p_Neo2D__CulledSpriteBatch, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Gui__Button[] = {  {&_swigt__p_Neo2D__Gui__ThemedButton, _p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Gui__Button, 0, 0},  {&_swigt__p_Neo2D__Gui__Button, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Gui__CheckButton[] = {  {&_swigt__p_Neo2D__Gui__CheckButton, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo2D__Gui__Container[] = {  {&_swigt__p_Neo2D__Gui__Window, _p_Neo2D__Gui__WindowTo_p_Neo2D__Gui__Container, 0, 0},  {&_swigt__p_Neo2D__Gui__WindowManager, _p_Neo2D__Gui__WindowManagerTo_p_Neo2D__Gui__Container, 0, 0},  {&_swigt__p_Neo2D__Gui__ScaleLayout, _p_Neo2D__Gui__ScaleLayoutTo_p_Neo2D__Gui__Container, 0, 0},  {&_swigt__p_Neo2D__Gui__ScrollPane, _p_Neo2D__Gui__ScrollPaneTo_p_Neo2D__Gui__Container, 0, 0},  {&_swigt__p_Neo2D__Gui__Container, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Gui__Container[] = {  {&_swigt__p_Neo2D__Gui__FileDialog, _p_Neo2D__Gui__FileDialogTo_p_Neo2D__Gui__Container, 0, 0},  {&_swigt__p_Neo2D__Gui__Window, _p_Neo2D__Gui__WindowTo_p_Neo2D__Gui__Container, 0, 0},  {&_swigt__p_Neo2D__Gui__WindowManager, _p_Neo2D__Gui__WindowManagerTo_p_Neo2D__Gui__Container, 0, 0},  {&_swigt__p_Neo2D__Gui__ScaleLayout, _p_Neo2D__Gui__ScaleLayoutTo_p_Neo2D__Gui__Container, 0, 0},  {&_swigt__p_Neo2D__Gui__ScrollPane, _p_Neo2D__Gui__ScrollPaneTo_p_Neo2D__Gui__Container, 0, 0},  {&_swigt__p_Neo2D__Gui__Container, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Gui__FileDialog[] = {  {&_swigt__p_Neo2D__Gui__FileDialog, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Gui__InputField[] = {  {&_swigt__p_Neo2D__Gui__InputField, 0, 0, 0},  {&_swigt__p_Neo2D__Gui__ThemedInputField, _p_Neo2D__Gui__ThemedInputFieldTo_p_Neo2D__Gui__InputField, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Gui__Label[] = {  {&_swigt__p_Neo2D__Gui__Label, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Gui__List[] = {  {&_swigt__p_Neo2D__Gui__List, 0, 0, 0},{0, 0, 0, 0}};
@@ -64313,7 +64748,7 @@ static swig_cast_info _swigc__p_Neo2D__Gui__ThemedButton[] = {  {&_swigt__p_Neo2
 static swig_cast_info _swigc__p_Neo2D__Gui__ThemedInputField[] = {  {&_swigt__p_Neo2D__Gui__ThemedInputField, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Gui__TreeNodeT_std__string_t[] = {  {&_swigt__p_Neo2D__Gui__TreeNodeT_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Gui__TreeView[] = {  {&_swigt__p_Neo2D__Gui__TreeView, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo2D__Gui__Window[] = {  {&_swigt__p_Neo2D__Gui__Window, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Gui__Window[] = {  {&_swigt__p_Neo2D__Gui__FileDialog, _p_Neo2D__Gui__FileDialogTo_p_Neo2D__Gui__Window, 0, 0},  {&_swigt__p_Neo2D__Gui__Window, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Gui__WindowManager[] = {  {&_swigt__p_Neo2D__Gui__WindowManager, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Neo2DEngine[] = {  {&_swigt__p_Neo2D__Neo2DEngine, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Sprite[] = {  {&_swigt__p_Neo2D__Sprite, 0, 0, 0},{0, 0, 0, 0}};
@@ -64321,7 +64756,7 @@ static swig_cast_info _swigc__p_Neo2D__SpriteBatch[] = {  {&_swigt__p_Neo2D__Spr
 static swig_cast_info _swigc__p_Neo2D__StaticTileBatch[] = {  {&_swigt__p_Neo2D__StaticTileBatch, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__Tile[] = {  {&_swigt__p_Neo2D__Tile, 0, 0, 0},  {&_swigt__p_Neo2D__AnimatedTile, _p_Neo2D__AnimatedTileTo_p_Neo2D__Tile, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo2D__TileSheet[] = {  {&_swigt__p_Neo2D__TileSheet, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_Neo2D__Widget[] = {  {&_swigt__p_Neo2D__Gui__Window, _p_Neo2D__Gui__WindowTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__WindowManager, _p_Neo2D__Gui__WindowManagerTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ScrollBar, _p_Neo2D__Gui__ScrollBarTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ScrollPane, _p_Neo2D__Gui__ScrollPaneTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__CheckButton, _p_Neo2D__Gui__CheckButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Button, _p_Neo2D__Gui__ButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Label, _p_Neo2D__Gui__LabelTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Widget, 0, 0, 0},  {&_swigt__p_Neo2D__Tile, _p_Neo2D__TileTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ThemedButton, _p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__List, _p_Neo2D__Gui__ListTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Slider, _p_Neo2D__Gui__SliderTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Container, _p_Neo2D__Gui__ContainerTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ScaleLayout, _p_Neo2D__Gui__ScaleLayoutTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ThemedInputField, _p_Neo2D__Gui__ThemedInputFieldTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Sprite, _p_Neo2D__SpriteTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Menu, _p_Neo2D__Gui__MenuTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__InputField, _p_Neo2D__Gui__InputFieldTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__TreeView, _p_Neo2D__Gui__TreeViewTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__AnimatedTile, _p_Neo2D__AnimatedTileTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__MenuBar, _p_Neo2D__Gui__MenuBarTo_p_Neo2D__Widget, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Neo2D__Widget[] = {  {&_swigt__p_Neo2D__Gui__Window, _p_Neo2D__Gui__WindowTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__WindowManager, _p_Neo2D__Gui__WindowManagerTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ScrollBar, _p_Neo2D__Gui__ScrollBarTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ScrollPane, _p_Neo2D__Gui__ScrollPaneTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__CheckButton, _p_Neo2D__Gui__CheckButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Button, _p_Neo2D__Gui__ButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Label, _p_Neo2D__Gui__LabelTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Widget, 0, 0, 0},  {&_swigt__p_Neo2D__Tile, _p_Neo2D__TileTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ThemedButton, _p_Neo2D__Gui__ThemedButtonTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__List, _p_Neo2D__Gui__ListTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Slider, _p_Neo2D__Gui__SliderTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Container, _p_Neo2D__Gui__ContainerTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ScaleLayout, _p_Neo2D__Gui__ScaleLayoutTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__ThemedInputField, _p_Neo2D__Gui__ThemedInputFieldTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Sprite, _p_Neo2D__SpriteTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__Menu, _p_Neo2D__Gui__MenuTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__InputField, _p_Neo2D__Gui__InputFieldTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__TreeView, _p_Neo2D__Gui__TreeViewTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__FileDialog, _p_Neo2D__Gui__FileDialogTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__AnimatedTile, _p_Neo2D__AnimatedTileTo_p_Neo2D__Widget, 0, 0},  {&_swigt__p_Neo2D__Gui__MenuBar, _p_Neo2D__Gui__MenuBarTo_p_Neo2D__Widget, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__AnimRange[] = {  {&_swigt__p_Neo__AnimRange, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__Armature[] = {  {&_swigt__p_Neo__Armature, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Neo__ArmatureAnim[] = {  {&_swigt__p_Neo__ArmatureAnim, 0, 0, 0},{0, 0, 0, 0}};
@@ -64437,6 +64872,7 @@ static swig_cast_info _swigc__p_signed___int64[] = {  {&_swigt__p_signed___int64
 static swig_cast_info _swigc__p_signed_char[] = {  {&_swigt__p_signed_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__functionT_void_fWidget_p_longF_t[] = {  {&_swigt__p_std__functionT_void_fWidget_p_longF_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_Neo2D__Widget_p_t[] = {  {&_swigt__p_std__vectorT_Neo2D__Widget_p_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_uintp[] = {  {&_swigt__p_uintp, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned___int64[] = {  {&_swigt__p_unsigned___int64, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
@@ -64457,6 +64893,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Neo2D__Gui__Button,
   _swigc__p_Neo2D__Gui__CheckButton,
   _swigc__p_Neo2D__Gui__Container,
+  _swigc__p_Neo2D__Gui__FileDialog,
   _swigc__p_Neo2D__Gui__InputField,
   _swigc__p_Neo2D__Gui__Label,
   _swigc__p_Neo2D__Gui__List,
@@ -64594,6 +65031,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_signed_char,
   _swigc__p_std__functionT_void_fWidget_p_longF_t,
   _swigc__p_std__string,
+  _swigc__p_std__vectorT_Neo2D__Widget_p_t,
   _swigc__p_uintp,
   _swigc__p_unsigned___int64,
   _swigc__p_unsigned_char,

@@ -29,9 +29,26 @@ function Editor.loadUI()
     Editor.soundEditor = Editor.dlgTables.soundEditor.create()
     Editor.cameraEditor = Editor.dlgTables.cameraEditor.create()
 
+    Editor.saveFileDlg = NeoLua.FileDialog(350, 100, tr("Save File"), NeoLua.FILE_SAVE)
+    Editor.openFileDlg = NeoLua.FileDialog(350, 100, tr("Open File"), NeoLua.FILE_OPEN)
+    Editor.saveDirDlg = NeoLua.FileDialog(350, 100, tr("Open Directory"), NeoLua.DIR_OPEN)
+
+
+    Editor.saveFileDlg:setVisible(false)
+    Editor.openFileDlg:setVisible(false)
+    Editor.saveDirDlg:setVisible(false)
+
+    Gui.wm:addWindow(Editor.saveFileDlg)
+    Gui.wm:addWindow(Editor.openFileDlg)
+    Gui.wm:addWindow(Editor.saveDirDlg)
+
     Editor.toolbar = Editor.dlgTables.toolbar.create()
 
     Gui.wm:selectWindow(Editor.sceneDlg["window"].window)
+end
+
+function fileOpenCallback()
+    infoLog(Editor.fileDlg:getSelectedFilename())
 end
 
 --- Adds the given object and all child objects to the given tree node

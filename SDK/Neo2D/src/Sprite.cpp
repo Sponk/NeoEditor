@@ -61,6 +61,7 @@ void Sprite::draw(Vector2 offset)
 		m_labelText = render->createText(gui->getDefaultFont(),
 										 gui->getDefaultFontSize());
 		m_labelText->setAlign(TEXT_ALIGN_CENTER);
+		m_labelText->setColor(Vector4(0,0,0,1));
 	}
 
 	if (m_image == 0 && m_imagePath.length() > 0)
@@ -73,10 +74,21 @@ void Sprite::draw(Vector2 offset)
 
 	if (m_label.length() > 0)
 	{
-		m_labelText->setText(m_label.c_str());
+		std::string s = m_label;
+		if(s.length() > 10)
+		{
+			s.erase(10);
+			s.append("...");
+		}
+
+		m_labelText->setText(s.c_str());
 		render->drawText(m_labelText, m_x + 0.5 * (float) m_width + offset.x,
-						 m_y + m_height + offset.y);
+						 m_y + m_height + offset.y + m_labelText->getSize());
 	}
+
+	// Debug stuff!
+	//Vector2 sz = getSize();
+	//render->drawColoredQuad(m_x + offset.x, m_y + offset.y, sz.x, sz.y, Vector4(1,0,0,0.5));
 }
 
 void Sprite::loadTexture()

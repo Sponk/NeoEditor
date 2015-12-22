@@ -4740,7 +4740,7 @@ void EditorBackend::loadPluginsFrom(const char* src)
 	char dir[256];
 	getGlobalFilename(dir, src, "plugins");
 
-	readDirectory(dir, &files, false, false);
+	readDirectory(dir, files, false, false);
 	MLOG_INFO("Searching for plugins in " << dir);
 
 	std::string currentFile;

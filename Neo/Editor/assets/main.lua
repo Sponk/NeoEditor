@@ -18,7 +18,7 @@ local runTests = false
 local testUi = true
 
 if testUi then
-   -- NeoLua.engine:loadLevel(Settings.startLevel)
+   --NeoLua.engine:loadLevel(Settings.startLevel)
    -- dofile("editor/tests/generate-test-ui.lua")
 end
 

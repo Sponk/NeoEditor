@@ -242,7 +242,7 @@ bool copyDirectory(const char * inFilename, const char * outFilename)
     return true;
 }
 
-bool readDirectory(const char * filename, vector<string> * files, bool hiddenFiles, bool recursive)
+bool readDirectory(const char * filename, vector<string>& files, bool hiddenFiles, bool recursive)
 {
     DIR * pdir = opendir(filename);
     if(! pdir)
@@ -273,11 +273,11 @@ bool readDirectory(const char * filename, vector<string> * files, bool hiddenFil
             if(isDirectory(file))
                 readDirectory(file, files, hiddenFiles, recursive);
             else
-                files->push_back(file);
+                files.push_back(file);
         }
         else
         {
-            files->push_back(string(pent->d_name));
+            files.push_back(string(pent->d_name));
         }
     }
 
@@ -288,7 +288,7 @@ bool readDirectory(const char * filename, vector<string> * files, bool hiddenFil
 void copyDirFiles(const char* src, const char* dest, const char* filter)
 {
     vector<string> files;
-    readDirectory(src, &files);
+    readDirectory(src, files);
     for (int i = 0; i < files.size(); ++i)
     {
         if (strstr(files[i].c_str(), filter))

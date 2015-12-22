@@ -20,6 +20,8 @@
 
 #include <Container.h>
 #include <Window.h>
+#include <FileDialog.h>
+
 #include <WindowManager.h>
 #include <List.h>
 #include <Tree.h>
@@ -111,6 +113,8 @@
 
 %include <Container.h>
 %include <Window.h>
+%include <FileDialog.h>
+
 %include <WindowManager.h>
 
 %include <Sprite.h>

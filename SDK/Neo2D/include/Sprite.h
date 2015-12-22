@@ -131,7 +131,7 @@ public:
 	 * @brief Returns the textures dimensions that are used.
 	 * @return The dimensions of the texture in pixels.
 	 */
-	Vector2 getSize() { return m_imageSize; }
+	Vector2 getSize() { return m_imageSize + (m_label.empty() ? Vector2() : Vector2(0,m_labelText->getSize())); }
 };
 }
 #endif

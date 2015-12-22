@@ -1,5 +1,6 @@
 --- callbacks.lua - Contains all menu callbacks for the editor
-local LuaCommonDlg = require("LuaCommonDlg")
+local LuaCommonDlg = {} --require("LuaCommonDlg")
+-- dofile("dialogs/filedlg.lua")
 
 local function appendLevelExtension(filename)
 	if filename:sub(1, -string.len(".level")) ~= ".level" then
@@ -45,10 +46,11 @@ function saveAsCallback()
 	end
 end
 
-function openCallback()
-	local filename = LuaCommonDlg.getOpenFilename(NeoLua.system:getWorkingDirectory() .. "/assets", "level")
+function filedlg_openLevelCallback()
+	infoLog("Loading level: " .. Editor.openFileDlg:getSelectedFilename());
+	local filename = Editor.openFileDlg:getSelectedFilename()
 
-	if filename == nil then return end
+	if filename == nil or filename == "" then return end
 
 	if not NeoLua.engine:loadLevel(filename) then
 		infoLog("Could not load level " .. filename)
@@ -64,26 +66,54 @@ function openCallback()
 	Editor.requestReload = true
 end
 
+function openCallback()
+	Editor.openFileDlg:setScriptCallback("filedlg_openLevelCallback")
+	Editor.openFileDlg:setVisible(true)
+	Editor.openFileDlg:setFilter(".*\\.level")
+	Editor.openFileDlg:readDirectory(NeoLua.system:getWorkingDirectory() .. "/assets");
+end
+
 function addLightCallback()
 	Editor.addLight()
 end
 
-function addEntityCallback()
-	local filename = LuaCommonDlg.getOpenFilename(NeoLua.system:getWorkingDirectory() .. "/assets", "mesh,fbx,dae,obj,3ds")
-	if filename == nil then return end
+function filedlg_openMeshCallback()
+	local filename = Editor.openFileDlg:getSelectedFilename()
+	if filename == nil or filename == "" then return end
 	Editor.addEntity(filename)
 end
 
-function addSoundCallback()
-	local filename = LuaCommonDlg.getOpenFilename(NeoLua.system:getWorkingDirectory() .. "/assets", "wav,ogg")
-	if filename == nil then return end
+function filedlg_openSoundCallback()
+	local filename = Editor.openFileDlg:getSelectedFilename()
+	if filename == nil or filename == "" then return end
 	Editor.addSound(filename)
 end
 
-function addTextCallback()
-	local filename = LuaCommonDlg.getOpenFilename(NeoLua.system:getWorkingDirectory() .. "/assets", "ttf")
-	if filename == nil then return end
+function filedlg_openTextCallback()
+	local filename = Editor.openFileDlg:getSelectedFilename()
+	if filename == nil or filename == "" then return end
 	Editor.addText(filename)
+end
+
+function addEntityCallback()
+	Editor.openFileDlg:setScriptCallback("filedlg_openMeshCallback")
+	Editor.openFileDlg:setVisible(true)
+	Editor.openFileDlg:setFilter("(.*\\.mesh)|(.*\\.obj)|(.*\\.dae)|(.*\\.3ds)|(.*\\.fbx)")
+	Editor.openFileDlg:readDirectory(NeoLua.system:getWorkingDirectory() .. "/assets");
+end
+
+function addSoundCallback()
+	Editor.openFileDlg:setScriptCallback("filedlg_openSoundCallback")
+	Editor.openFileDlg:setVisible(true)
+	Editor.openFileDlg:setFilter("(.*\\.ogg)|(.*\\.wav)")
+	Editor.openFileDlg:readDirectory(NeoLua.system:getWorkingDirectory() .. "/assets");
+end
+
+function addTextCallback()
+	Editor.openFileDlg:setScriptCallback("filedlg_openTextCallback")
+	Editor.openFileDlg:setVisible(true)
+	Editor.openFileDlg:setFilter(".*\\.ttf")
+	Editor.openFileDlg:readDirectory(NeoLua.system:getWorkingDirectory() .. "/assets");
 end
 
 Shortcuts.addShortcut({"LCONTROL", "O"}, openCallback)

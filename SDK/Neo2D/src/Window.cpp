@@ -8,6 +8,7 @@ using namespace Neo2D;
 using namespace Neo2D::Gui;
 
 #define BORDER_WIDTH 3
+#define SHADOW_WIDTH 16
 
 Window::~Window()
 {
@@ -34,6 +35,10 @@ void Window::draw()
 	}
 
 	m_labelText->setText(m_label.c_str());
+
+	// Draw shadow
+	//render->drawColoredQuad(m_x - BORDER_WIDTH - SHADOW_WIDTH/2, m_y - TITLE_HEIGHT - SHADOW_WIDTH/2, m_width + BORDER_WIDTH + SHADOW_WIDTH,
+	//						m_height + TITLE_HEIGHT + BORDER_WIDTH + SHADOW_WIDTH, Vector4(0, 0, 0, 0.2), 0.0);
 
 	renderContext->enableScissorTest();
 	renderContext->setScissor(m_x, res.y - m_y, m_width, TITLE_HEIGHT);

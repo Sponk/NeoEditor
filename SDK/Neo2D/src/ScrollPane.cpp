@@ -33,7 +33,7 @@ void ScrollPane::draw(Vector2 offset)
 	
 	//render->set2D(m_width, m_height);
 	//renderContext->setViewport(offset.x, res.y - (offset.y + m_height), m_width, m_height);
-	renderContext->setScissor(offset.x, res.y - (offset.y + m_height), m_width-SCROLL_BAR_WIDTH, m_height);
+	renderContext->setScissor(offset.x, res.y - (offset.y + m_height), m_width - SCROLL_BAR_WIDTH, m_height);
 	renderContext->enableScissorTest();
 	
 	for(Widget* w : m_content)
@@ -103,5 +103,5 @@ Vector2 ScrollPane::calculateContentSize()
 			max.y = pos.y;		   
 	}
 
-	return max + Vector2(5,5); // Add a small margin so there is some border around the content
+	return max + Vector2(5,15); // Add a small margin so there is some border around the content
 }
