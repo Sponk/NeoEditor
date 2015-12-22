@@ -552,7 +552,8 @@ function Editor.selectObject()
         -- Check all entities
         for i = 0, numObjects - 1, 1 do
             local entity = scene:getEntityByIndex(i)
-            if entity ~= nil and Editor.castRay(entity, rayO, rayD) then
+            -- FIXME: Should wireframed objects be selectable in 3D?
+            if entity ~= nil and Editor.castRay(entity, rayO, rayD) and not entity:hasWireframe() then
 
                 table.insert(possibleSelection, entity)
                 --Editor.entityEditor.setShownObject(entity:getName())
