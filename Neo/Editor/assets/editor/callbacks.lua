@@ -2,48 +2,51 @@
 local LuaCommonDlg = {} --require("LuaCommonDlg")
 -- dofile("dialogs/filedlg.lua")
 
-local function appendLevelExtension(filename)
-	if filename:sub(1, -string.len(".level")) ~= ".level" then
-		return filename .. ".level"
+local function appendLevelExtension(filename, extension)
+	if filename:sub(1, -string.len(extension)) ~= extension then
+		return filename .. extension
 	end
 
 	return filename
 end
 
+function filedlg_saveLevelCallback()
+	infoLog("Saving level: " .. Editor.saveFileDlg:getSelectedFilename());
+	local filename = Editor.saveFileDlg:getSelectedFilename()
+
+	if filename == nil or filename == "" then return end
+
+	filename = appendLevelExtension(filename, ".level")
+
+	Editor.cleanUp()
+	NeoLua.engine:saveLevel(filename)
+
+	Editor.setupLevel()
+	Editor.loadMeshes()
+
+	NeoLua.system:setWindowTitle("Neo Scene Editor - " .. filename)
+	Editor.project.level = filename
+end
+
 function saveCallback()
-	local filename = Editor.project.level or LuaCommonDlg.getSaveFilename(NeoLua.system:getWorkingDirectory() .. "/assets", "level")
-
-	if filename ~= nil then
-
-		filename = appendLevelExtension(filename)
-
+	if Editor.project.level == nil then
+		saveAsCallback()
+	else
 		Editor.cleanUp()
-		NeoLua.engine:saveLevel(filename)
+		NeoLua.engine:saveLevel(Editor.project.level)
 
 		Editor.setupLevel()
 		Editor.loadMeshes()
 
-		NeoLua.system:setWindowTitle("Neo Scene Editor - " .. filename)
-		Editor.project.level = filename
+		NeoLua.system:setWindowTitle("Neo Scene Editor - " .. Editor.project.level)
 	end
 end
 
 function saveAsCallback()
-	local filename = LuaCommonDlg.getSaveFilename(NeoLua.system:getWorkingDirectory() .. "/assets", "level")
-
-	if filename ~= nil then
-
-		filename = appendLevelExtension(filename)
-
-		Editor.cleanUp()
-		NeoLua.engine:saveLevel(filename)
-
-		Editor.setupLevel()
-		Editor.loadMeshes()
-
-		NeoLua.system:setWindowTitle("Neo Scene Editor - " .. filename)
-		Editor.project.level = filename
-	end
+	Editor.saveFileDlg:setScriptCallback("filedlg_saveLevelCallback")
+	Editor.saveFileDlg:setVisible(true)
+	Editor.saveFileDlg:setFilter(".*\\.level")
+	Editor.saveFileDlg:readDirectory(NeoLua.system:getWorkingDirectory() .. "/assets");
 end
 
 function filedlg_openLevelCallback()
@@ -58,7 +61,6 @@ function filedlg_openLevelCallback()
 
 		NeoLua.system:setWindowTitle("Neo Scene Editor")
 		Editor.requestReload = true
-
 		return
 	end
 
