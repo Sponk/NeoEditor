@@ -523,6 +523,10 @@ function updateEntityConfig()
 	
 	phys:setLinearFactor(NeoLua.Vector3(dlg["lfxInput"]:getLabel(), 
 				dlg["lfyInput"]:getLabel(), dlg["lfzInput"]:getLabel()))
+
+    -- Apply changes
+    NeoLua.level:getCurrentScene():prepareCollisionShape(entityEditor.entity)
+    NeoLua.level:getCurrentScene():prepareCollisionObject(entityEditor.entity);
   end
   
 end

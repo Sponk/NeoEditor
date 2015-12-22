@@ -400,6 +400,15 @@ function Editor.castRayOnBox(obj, rayO, rayD)
     return NeoLua.isEdgeToBoxCollision(localRayO, localRayD, box.min, box.max)
 end
 
+function table.contains(table, element)
+    for k,v in pairs(table) do
+        if value == element then
+            return true
+        end
+    end
+    return false
+end
+
 --- Updates the current selection and translates/rotates/scales the selection
 -- using the transformation handles in the scene.
 function Editor.selectObject()
@@ -449,7 +458,18 @@ function Editor.selectObject()
         elseif Editor.translationMode == Editor.sceneMeshes.scale then
             Editor.currentSelection[1]:setScale(Editor.currentSelection[1]:getScale() + Editor.selectedArrow * dif * scale * 0.007)
         elseif Editor.translationMode == Editor.sceneMeshes.rotation then
-            Editor.currentSelection[1]:setEulerRotation(Editor.currentSelection[1]:getEulerRotation() + Editor.selectedArrow * dif * scale)
+
+            local origin = Editor.currentSelection[1]:getTransformedPosition()
+
+            p1 = (p1 - origin):getNormalized()
+            p2 = (p2 - origin):getNormalized()
+
+            local angle = Editor.selectedArrow.y * (math.atan2(p2.y, p2.x) - math.atan2(p1.y, p1.x))
+            angle = angle + Editor.selectedArrow.x * (math.atan2(p2.z, p2.y) - math.atan2(p1.z, p1.y))
+            angle = angle + Editor.selectedArrow.z * (math.atan2(p2.x, p2.z) - math.atan2(p1.x, p1.z))
+
+            angle = angle * NeoLua.RAD_TO_DEG * -1000
+            Editor.currentSelection[1]:setEulerRotation(Editor.currentSelection[1]:getEulerRotation() + Editor.selectedArrow * angle * scale)
         end
 
         Editor.currentSelection[1]:updateMatrix()
@@ -553,7 +573,8 @@ function Editor.selectObject()
         for i = 0, numObjects - 1, 1 do
             local entity = scene:getEntityByIndex(i)
             -- FIXME: Should wireframed objects be selectable in 3D?
-            if entity ~= nil and Editor.castRay(entity, rayO, rayD) and not entity:hasWireframe() then
+            if entity ~= nil and Editor.castRay(entity, rayO, rayD) and
+                    not table.contains(Editor.objectMeshes, entity) then
 
                 table.insert(possibleSelection, entity)
                 --Editor.entityEditor.setShownObject(entity:getName())
