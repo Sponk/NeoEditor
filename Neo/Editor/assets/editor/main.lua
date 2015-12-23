@@ -694,7 +694,7 @@ function Editor.select(obj)
 		-- Calculate lower width with trigonometry
 		-- tan(alpha) = width / radius <=> radius * tan(alpha) = width
 		
-		local width = radius * math.tan(obj:getSpotAngle())
+		local width = radius * math.tan(obj:getSpotAngle() * NeoLua.DEG_TO_RAD)
 		Editor.objectMeshes.cone:setScale(NeoLua.Vector3(width, width, radius))
 		Editor.objectMeshes.cone:setActive(true)
 		
