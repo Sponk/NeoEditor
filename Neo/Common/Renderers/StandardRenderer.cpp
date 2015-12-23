@@ -401,7 +401,11 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 	render->sendUniformMatrix(m_fx[0], "NormalMatrix", &normalMatrix);
 
 	// Set cull mode
-	render->setCullMode(display->getCullMode());
+	if(display->getCullMode() != CULL_NONE)
+		render->setCullMode(display->getCullMode());
+	else
+		render->disableCullFace();
+
 	render->enableDepthTest();
 
 	if(indices) // If the SubMesh has indices
@@ -1205,7 +1209,7 @@ void StandardRenderer::sendLight(unsigned int fx, OLight* l, int num, Matrix4x4 
 	strcat(ending, "Radius");
 	render->sendUniformFloat(fx, ending, &radius);
 
-	float spotAngle = cosf(l->getSpotAngle()*DEG_TO_RAD);
+	float spotAngle = cosf(l->getSpotAngle() * DEG_TO_RAD);
 	strcpy(ending, str);
 	strcat(ending, "SpotCos");
 	render->sendUniformFloat(fx, ending, &spotAngle);
