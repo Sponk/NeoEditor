@@ -3,11 +3,11 @@ Encoding=UTF-8
 Version=0.1
 Type=Application
 Terminal=false
-Exec=/usr/Neo/ProjectManager
+Exec=/usr/Neo/NeoPlayer -e ProjectManager/main.lua
 Path=/usr/Neo
 Name=Neo Project Manager
 GenericName=Neo Project Manager
-Categories=FLTK;Development
+Categories=Development
 Icon=/usr/share/icons/neo-icon.png
 StartupWMClass=NeoProjectManager
 

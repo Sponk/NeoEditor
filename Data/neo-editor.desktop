@@ -1,13 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
-Version=0.4
+Version=0.5
 Type=Application
 Terminal=false
-Exec=/usr/Neo/NeoEditor %f
+Exec=/usr/Neo/NeoPlayer %f
 Path=/usr/Neo
 Name=Neo Editor
 GenericName=Neo Scene Editor
-Categories=FLTK;Development
+Categories=Development
 Icon=/usr/share/icons/neo-icon.png
 Name[de_DE]=Neo Editor
 StartupWMClass=NeoEditor
