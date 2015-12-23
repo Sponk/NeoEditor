@@ -15,7 +15,7 @@
 		<Light name="Light">
 			<active value="true" />
 			<transform 
-				position="-16.995811 -24.968735 39.711044"
+				position="-16.995811 -26.908121 39.711044"
 				rotation="0.000000 -0.000000 0.000000"
 				scale="1.000000 1.000000 1.000000" />
 			<properties 
@@ -24,7 +24,10 @@
 				intensity="0.800000"
 				spotAngle="45.000000"
 				spotExponent="0.000000"
-				shadow="true" />
+				shadow="true"
+				shadowBias="1.000000"
+				shadowBlur="0.250000"
+				shadowQuality="512" />
 		</Light>
 		<Light name="Light01">
 			<active value="true" />
@@ -96,6 +99,20 @@
 				spotExponent="0.330000"
 				shadow="false" />
 		</Light>
+		<Light name="Light0">
+			<active value="true" />
+			<transform 
+				position="-16.784399 190.506393 66.429451"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="300.000000"
+				color="1.000000 1.000000 1.000000"
+				intensity="1.100000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
 		<Camera name="Camera0">
 			<active value="true" />
 			<transform 
@@ -106,7 +123,7 @@
 				clearColor="0.200000 0.300000 0.400000"
 				fogColor="1.000000 1.000000 1.000000"
 				ortho="false"
-				fov="70"
+				fov="70.000000"
 				clippingNear="1.000000"
 				clippingFar="1000.000000"
 				fog="false"
@@ -205,6 +222,19 @@
 				shadow="true"
 				occluder="false" />
 		</Entity>
+		<Entity name="Entity" file="../meshs/snow_pine_tree/snow_pine_tree.mesh">
+			<BoundingBox min="-0.475022 -0.475109 -0.000000" max="0.475174 0.475215 0.989631" />
+			<anim id="0" />
+			<active value="true" />
+			<transform 
+				position="10.029000 162.260086 -23.021469"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="100.000000 100.000000 100.000000" />
+			<properties 
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
 		<Text name="Text0" file="../default.ttf">
 			<active value="true" />
 			<transform 
@@ -219,6 +249,20 @@
 				<![CDATA[Text]]>
 			</textData>
 		</Text>
+		<Light name="Light1">
+			<active value="true" />
+			<transform 
+				position="45.316940 143.678802 64.521797"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties 
+				radius="200.000000"
+				color="1.000000 1.000000 1.000000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
 
 	</Scene>
 
