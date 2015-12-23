@@ -55,10 +55,7 @@ vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float r
   else
   	l = -light.SpotDir;
 
-  //if(length(l) > light.Radius) return vec4(0,0,0,0);
-  
-  //roughness = roughness; //1.0/roughness;//0.00001; //roughness;
-  // Guass constant
+  // Gauss constant
   float c = 1.0;
   
   vec3 s = normalize(l);
@@ -84,11 +81,6 @@ vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float r
   float numerator = (Fresnel * Geometric * Roughness);
   float denominator = nDotv * nDots;
   float rs = numerator / denominator;
-  
-  //float rs = ((Fresnel * Geometric * Roughness) / (3.14159265 * dot(v,n)));
-
-  //vec3 specular = max(0.0f, nDotv) * (Geometric * Roughness * Fresnel) / (nDotv * nDots) * light.Specular);
-  // vec3 retval = light.Intensity * max(0.0, nDots) * ((/*light.Specular */ Specular) * rs + (diffuse.rgb * light.Diffuse));
   vec3 retval = light.Intensity * (max(0.0, nDots) * ((diffuse.rgb * light.Diffuse) + (light.Diffuse*Specular) * rs));
       
   if(light.SpotCos > 0.0 && light.SpotCos < 1.0)
@@ -98,16 +90,15 @@ vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float r
 	if(spot > light.SpotCos)
 	{
 		spot = clamp(pow(spot, light.SpotExp), 0.0, 1.0);
-        	float attenuation = spot/(light.ConstantAttenuation + (dot(l,l) * light.QuadraticAttenuation));//*shadow;
+        float attenuation = spot/(light.ConstantAttenuation + (dot(l,l) * light.QuadraticAttenuation));//*shadow;
 
-		//retval = vec3(1.0,1.0,1.0);
-        	return vec4(attenuation*retval, 1.0);
-    	}
+		return vec4(attenuation*retval, 1.0);
+    }
    
     return vec4(0,0,0,0);
    }
    
-   float attenuation = 1.0/(light.ConstantAttenuation + (dot(l,l) * light.QuadraticAttenuation));//1.0/dot(l,l) * light.Radius; //(1.0 / dot(l,l));//)(light.ConstantAttenuation + (dot(l,l) * light.QuadraticAttenuation)));	
+   float attenuation = 1.0/(light.ConstantAttenuation + (dot(l,l) * light.QuadraticAttenuation));
    return vec4(attenuation*retval, 1.0);
 }
 
@@ -146,7 +137,7 @@ vec4 calculateAllCookLight(vec3 p, vec3 n, vec4 d, float s)
   vec4 result;
   for(int i = 0; i < LightsCount; i++)
   {
-    result = result + cookTorranceSpecular(lights[i], p, n, d, s); // * textureProj(lights[i].ShadowTexture, );
+    result = result + cookTorranceSpecular(lights[i], p, n, d, s);
   }
   return result;
 }
@@ -299,35 +290,6 @@ vec3 FxaaPixelShader(vec4 posPos, sampler2D tex, vec2 rcpFrame)
 }
 
 #define FXAA_SUBPIX_SHIFT 0.5
-
-//#define TO_LIGHT(v) (v - vec4(0.5,0.5,0.5,0))
-/*vec4 bloom(vec4 diffuse, vec2 texcoord, sampler2D sampler, float amount, float strength)
-{
-    if(strength == 0.0 || amount == 0.0)
-       return diffuse;
-
-        //strength *= float(textureSize(Texture[0], 1).x);
-
-	diffuse.a = 1.0;
-
-    vec4 color;
-	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(0.01, 0.0) * amount));
-	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(-0.01, 0.0) * amount));
-	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(0.0, 0.01) * amount));
-	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(0.0, -0.01) * amount));
-	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(0.007, 0.007) * amount));
-	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(-0.007, -0.007) * amount));
-	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(0.007, -0.007) * amount));
-	color += TO_LIGHT(texture2D(sampler, texcoord+vec2(-0.007, 0.007) * amount));
-
-	color = (color / 8.0);
-	color.x = clamp(color.x, 0, 1);
-	color.y = clamp(color.y, 0, 1);
-	color.z = clamp(color.z, 0, 1);
-
-	return color;
-}*/
-
 #define BLOOM_SAMPLES 4
 #define HALF_BLOOM_SAMPLES 4
 #define BLOOM_SHIFT 0.0018
@@ -337,11 +299,6 @@ vec4 bloom(sampler2D sampler, vec2 texcoord, vec4 diffuse)
 {
 	return diffuse;
 }
-
-/*vec4 bloom(vec4 diffuse, vec2 texcoord, sampler2D sampler, float strength, int samples)
-{
- return diffuse;
-}*/
 
 vec4 radialBlur(vec4 color, vec2 texcoord, sampler2D sampler, float sampleDist, float sampleStrength)
 {
@@ -380,38 +337,17 @@ void main(void)
 	float transparency = FragColor.a;
 	if(PostEffects == 1)
 	{
-		/*FragColor = texture2D(Textures[4], texCoord);
-		
-		float d = linearize_depth(FragColor.r, 1.0, 100);
-		FragColor = vec4(d,d,d,1);
-		
-		return;*/
-
-		//FragColor.a = transparency;
-		//return;
-		
 		vec2 frame = vec2(vec2(1.0 / Width, 1.0/ Height));
 		//FragColor = fxaa(Textures[0], texCoord, frame);
 
 		FragColor.rgb = FxaaPixelShader(vec4(texCoord.xy, texCoord.xy - frame * (0.5 + FXAA_SUBPIX_SHIFT)), Textures[0], frame);
 
-		//FragColor = radialBlur(FragColor, texCoord, Textures[0], 0.3, 5);
-		// FragColor = blur(FragColor, texCoord, Textures[0], 1, 0.5);
-		//FragColor = bloom(FragColor, texCoord, Textures[0], 0.01, 5);
-		//FragColor += bloom(FragColor, texCoord, Textures[0], 0.01, 5);
-
 		FragColor.a = transparency;
 		FragColor = bloom(Textures[0], texCoord, FragColor);
 		FragColor = gammaCorrection(FragColor, 1.2);
-		//FragColor.a = transparency;
-
-		/*if(FragColor.r > 1.0 || FragColor.g > 1.0 || FragColor.b > 1.0)
-		    FragColor = vec4(1,1,1,1);
-		else
-		    FragColor = vec4(0);*/
 		return;
 	}
-	
+
 	if(FragColor.a == 0.0)
 		discard;
 		
@@ -419,12 +355,10 @@ void main(void)
 	vec4 startColor = FragColor;
 	vec4 n = texture2D(Textures[1], texCoord);
 
-	// data.r = 0;float transparency = FragColor.a;
-	if(FragColor.a == 1.0 && n.a == 0)
+	if(FragColor.a > 0 && n.a == 0)
 	{
 		vec4 p = texture2D(Textures[2], texCoord);
 		FragColor = calculateAllCookLight(p.xyz, n.rgb, FragColor, p.a) + vec4(startColor.rgb * data.rgb, 0.0);
 		FragColor.a = transparency;
-		//FragColor.xyz += data.rgb;
 	}
 }

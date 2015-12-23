@@ -97,7 +97,6 @@ float cookTorranceSpecularPower(vec3 lightDirection, vec3 viewDirection, vec3 su
   float G = min(1.0, min(G1, G2));
 
   //Distribution term
-  //float D = beckmannDistribution(NdotH, roughness);
   float alpha = acos(NdotH);
   float D = 1.0 * exp(-((alpha * alpha) / (roughness * roughness)));
 
@@ -108,55 +107,17 @@ float cookTorranceSpecularPower(vec3 lightDirection, vec3 viewDirection, vec3 su
   return  G * F * D / max(3.14159265 * VdotN, 0.000001);
 }
 
-/*vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse)
-{
-  vec3 l = light.Position - p;
-
-  if(length(l) > light.Radius) return vec4(0,0,0,0);
-  
-  vec3 s = normalize(l);
-  vec3 v = normalize(-p);
-  vec3 h = normalize(v+s);
-
-  //vec3 retval = diffuse.rgb * cookTorranceSpecularPower(s, v, n, Shininess, 1.0);
-  //return vec4(retval, diffuse.a);
-
-  float nDoth = dot(n, h);
-  float nDotv = dot(n, v);
-  float vDoth = dot(v, h);
-  float nDots = dot(n, s);
-
-  float Geometric = min(1.0, min((2*nDoth*nDotv)/vDoth, (2*nDoth*nDots)/vDoth));
-
-  float alpha = acos(nDoth);
-  float Roughness = 1.0 * exp(-((alpha * alpha) / (Shininess * Shininess)));
-
-  float F0 = 1;
-  float Fresnel = F0 + pow(1 - vDoth, 5) * (1 - F0);
-
-  float rs = ((Fresnel * Geometric * Roughness) / (3.14159265 * dot(v,n))); //(nDotv*3.141);
-
-  float attenuation = (1.0 / (light.ConstantAttenuation + (dot(l,l) * light.QuadraticAttenuation)));
-
-  //vec3 specular = max(0.0f, nDotv) * (Geometric * Roughness * Fresnel) / (nDotv * nDots) * light.Specular);
-  vec3 retval = light.Intensity * max(0.0, nDots) * ((light.Specular * Specular) * rs + (diffuse.rgb * light.Diffuse));
-
-  return vec4(attenuation*retval, diffuse.a);
-}*/
-
 vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float roughness)
 {
-    vec3 l;
-    if(light.SpotCos < 1.0)
-    	l = light.Position - p;
-    else
-    	l = -light.SpotDir;
-  //if(length(l) > light.Radius) return vec4(0,0,0,0);
-  
-  roughness = roughness; //1.0/roughness;//0.00001; //roughness;
-  // Guass constant
+  vec3 l;
+  if(light.SpotCos < 1.0)
+  	l = light.Position - p;
+  else
+  	l = -light.SpotDir;
+
+  // Gauss constant
   float c = 1.0;
-  
+
   vec3 s = normalize(l);
   vec3 v = normalize(-p);
   vec3 h = normalize(v+s);
@@ -180,31 +141,25 @@ vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float r
   float numerator = (Fresnel * Geometric * Roughness);
   float denominator = nDotv * nDots;
   float rs = numerator / denominator;
-  
-  //float rs = ((Fresnel * Geometric * Roughness) / (3.14159265 * dot(v,n)));
-
-  //vec3 specular = max(0.0f, nDotv) * (Geometric * Roughness * Fresnel) / (nDotv * nDots) * light.Specular);
-  // vec3 retval = light.Intensity * max(0.0, nDots) * ((/*light.Specular */ Specular) * rs + (diffuse.rgb * light.Diffuse));
   vec3 retval = light.Intensity * (max(0.0, nDots) * ((diffuse.rgb * light.Diffuse) + (light.Diffuse*Specular) * rs));
-      
-  if(light.SpotCos > 0.0 /*&& light.SpotCos < 1.0*/)
+
+  if(light.SpotCos > 0.0 && light.SpotCos < 1.0)
   {
 	float spot = dot(-s, light.SpotDir);
 
 	if(spot > light.SpotCos)
 	{
 		spot = clamp(pow(spot, light.SpotExp), 0.0, 1.0);
-        	float attenuation = spot/(light.ConstantAttenuation + (dot(l,l) * light.QuadraticAttenuation));//*shadow;
+       	float attenuation = spot/(light.ConstantAttenuation + (dot(l,l) * light.QuadraticAttenuation));//*shadow;
 
-		//retval = vec3(1.0,1.0,1.0);
-        	return vec4(attenuation*retval, diffuse.a);
-    	}
-   
+       	return vec4(attenuation*retval, 1.0);
+    }
+
     return vec4(0,0,0,0);
    }
-   
-   float attenuation = 1.0/(light.ConstantAttenuation + (dot(l,l) * light.QuadraticAttenuation));//1.0/dot(l,l) * light.Radius; //(1.0 / dot(l,l));//)(light.ConstantAttenuation + (dot(l,l) * light.QuadraticAttenuation)));	
-   return vec4(attenuation*retval, diffuse.a);
+
+   float attenuation = 1.0/(light.ConstantAttenuation + (dot(l,l) * light.QuadraticAttenuation));//1.0/dot(l,l) * light.Radius; //(1.0 / dot(l,l));//)(light.ConstantAttenuation + (dot(l,l) * light.QuadraticAttenuation)));
+   return vec4(attenuation*retval, 1.0);
 }
 
 vec4 calculatePhongLight(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float shininess)
@@ -231,17 +186,13 @@ vec4 calculatePhongLight(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float sh
 
         float attenuation = (spot / (light.ConstantAttenuation + (lightDistance2 * light.QuadraticAttenuation)));//*shadow;
         return light.Intensity * (specFinal + diffuseFinal) * attenuation;
-
-        //vec3 S = normalize(E + L);
-        //float spec = pow(max(dot(S, N), 0.0), shininess) * attenuation;
-        //specular = Ks * light.Specular * spec;
     }
    
     return vec4(0,0,0,0);
    }
   
   float attenuation = (1.0 / (light.ConstantAttenuation + (lightDistance2 * light.QuadraticAttenuation)));
-  return light.Intensity * (specFinal + diffuseFinal) * attenuation; //(diffuse + spec);
+  return light.Intensity * (specFinal + diffuseFinal) * attenuation;
 }
 
 ///////////////////////////////////////////////////////////
@@ -279,9 +230,6 @@ subroutine(shadeModelType)
 vec4 cookModelDiffuse(vec3 position, vec3 n)
 {
 	vec4 color = texture2D(Textures[0], texCoord);
-	if(color.a < 0.5)
-		discard;
-		
 	return calculateAllCookLight(position, n, color, Shininess);
 }
 
@@ -289,9 +237,6 @@ subroutine(shadeModelType)
 vec4 cookModelDiffuseSpecular(vec3 position, vec3 n)
 {
 	vec4 color = texture2D(Textures[0], texCoord);
-	if(color.a < 0.5)
-		discard;
-		
 	return calculateAllCookLight(position, n, color, texture2D(Textures[3], texCoord).x);
 }
 
@@ -299,9 +244,6 @@ subroutine(shadeModelType)
 vec4 cookModelDiffuseNormal(vec3 position, vec3 n)
 {
 	vec4 color = texture2D(Textures[0], texCoord);
-	if(color.a < 0.5)
-		discard;
-		
 	vec3 bi = normalize(cross(n, tangent));
     vec3 tan = normalize(tangent.xyz);
 
@@ -315,9 +257,6 @@ subroutine(shadeModelType)
 vec4 cookModelDiffuseNormalSpecular(vec3 position, vec3 n)
 {
 	vec4 color = texture2D(Textures[0], texCoord);
-	if(color.a < 0.5)
-		discard;
-	
 	vec3 bi = normalize(cross(n, tangent));
     vec3 tan = normalize(tangent.xyz);
 
@@ -441,8 +380,6 @@ void main(void)
 {
 	int processFlag = 0;
 
-	if(Normal.a == 1) return;
-	
 	// When rendering text!
 	if(TextureMode == -1)
 	{
@@ -452,69 +389,41 @@ void main(void)
 			discard;
 
 		Normal.a = 1;
-		//FragColor.a = 1.0;
 		return;
 	}
-	
-    //Data.r = 0.0;
 
-    //FragColor = calculatePhongLight(lights[0], position, normal, texture2D(Textures[0], texCoord));
+    vec4 color;
+    if(TextureMode >= 1)
+    	color = texture2D(Textures[0], texCoord);
+    else
+    	color = vec4(Diffuse, 0);
+
 	if(Opacity == 1.0)
 	{
 		if(TextureMode > 0)
-			FragColor = texture2D(Textures[0], texCoord) + vec4(AmbientLight, 0.0);
+		{
+		 	 	if(color.a <= 0.85) discard;
+		}
 		else
-			FragColor = vec4(Diffuse, 1.0) + vec4(AmbientLight, 0.0);
+			color.a = 1.0;
 
-		if(FragColor.a < 1.0) discard;
+		FragColor = color;
 	}
 	else
 	{
-		//float d = gl_FragCoord.z; //texture2D(Textures[4], texCoord).r;
-		//d = linearize_depth(d, 0.01, 100000);
-		
-		//d = linearize_depth(d, 1.0, 100);
-		//FragColor = vec4(d,d,d,1);
-				
-		//float pdepth = gl_FragColor.z; //linearize_depth(gl_FragCoord.z, 0.01, 100000); //1.0/((gl_FragCoord.z + 1.0) * 0.5);
-		
-		//float depth = (gl_FragCoord.z - nearValue) / (farValue - nearValue)
-		
-		//if(texture2D(Textures[4], texCoord).r <= )
-		//	discard;
-		
-		//FragColor = vec4(pdepth, pdepth, pdepth, 1.0);
-		//FragColor = vec4(depth, depth, depth, 1.0);
-
-		//return;
-		
-		float trans = Opacity;
-		if(TextureMode > 0)
-		{
-			FragColor = texture2D(Textures[0], texCoord);
-			trans += FragColor.a;
-		}
-		else if(TextureMode == 0)
-			FragColor = vec4(Diffuse, Opacity);
-
-		FragColor = shadeModel(position, normal) + vec4(FragColor.rgb * Emit, 0.0);
-		FragColor.a = trans;
-		//FragColor.a = Opacity;
-		Normal.a = 0;
+		FragColor = shadeModel(position, normal) + vec4(color.rgb * Emit, 0.0);
+		FragColor.a = color.a + Opacity;
+		Normal.a = 1;
 		return;
 	}
-	
-    //FragColor = vec4(normal, 1.0);
-    //FragColor = vec4(normalize(position - lights[0].Position), 1.0);
 
-    if(TextureMode >= 2)
+	if(TextureMode >= 2)
     {
         vec3 bi = normalize(cross(normal, tangent));
         vec3 tang = normalize(tangent.xyz);
 
         vec3 bump = normalize(texture2D(Textures[2], texCoord).xyz * 2.0 - 1.0);
         Normal = vec4(normalize(tang*bump.x + bi*bump.y + normal*bump.z), processFlag);
-        //Normal = vec4(normalize(normal+(texture2D(Textures[2], texCoord).xyz * 3 - 1)), Shininess);
     }
     else
         Normal = vec4(normal, processFlag);
@@ -528,6 +437,4 @@ void main(void)
         Position = vec4(position.xyz, Shininess);
         
     Data.rgb = Emit;
-    //Depth.r = gl_FragCoord.z;
-    //Depth.a = 1.0;
 }
