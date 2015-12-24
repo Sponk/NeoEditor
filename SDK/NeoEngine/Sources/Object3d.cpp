@@ -88,7 +88,8 @@ Object3d::Object3d(const Object3d & object):
 	m_matrix(object.m_matrix),
 	m_isVisible(object.m_isVisible),
 	m_isActive(object.m_isActive),
-    m_needToUpdate(object.m_needToUpdate)
+    m_needToUpdate(object.m_needToUpdate),
+	m_additionalData(NULL)
 {
 	if(object.m_parent)
 		linkTo(object.m_parent);
