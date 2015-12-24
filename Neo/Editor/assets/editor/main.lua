@@ -656,11 +656,17 @@ function Editor.select(obj)
             arrows.z:setActive(false)
         end
 	
-	for k,v in pairs(Editor.objectMeshes) do
+	    for k,v in pairs(Editor.objectMeshes) do
             v:setActive(false)
         end
 
         Editor.currentSelection = {}
+
+        Editor.entityEditor.setShownObject(nil)
+        Editor.lightEditor.setShownObject(nil)
+        Editor.textEditor.setShownObject(nil)
+        Editor.soundEditor.setShownObject(nil)
+        Editor.cameraEditor.setShownObject(nil)
         return
     end
 
@@ -839,6 +845,12 @@ function Editor.setupLevel()
 
     NeoLua.level:setCurrentScene(currentScene)
     currentScene:setCurrentCamera(Editor.sceneCamera)
+
+    -- Set up matrix from before the cleanUp if it exists
+    if Editor.sceneCameraMatrix ~= nil then
+        Editor.sceneCamera:setPosition(Editor.sceneCameraMatrix:getTranslationPart())
+        Editor.sceneCamera:setEulerRotation(Editor.sceneCameraMatrix:getEulerAngles())
+    end
 end
 
 --- Reloads the editor UI
@@ -905,6 +917,9 @@ end
 --- Cleans up the editor data structures and removes the overlay editor scene
 -- with all objects in it.
 function Editor.cleanUp()
+
+    Editor.sceneCameraMatrix = NeoLua.Matrix4x4(Editor.sceneCamera:getMatrix())
+
     NeoLua.level:deleteScene(Editor.overlaySceneId - 1)
     NeoLua.level:getCurrentScene():deleteObject(Editor.sceneCamera)
 
@@ -980,6 +995,9 @@ function Editor.addText(path)
     Editor.select(entity)
 end
 
+--- Duplicates an object and all its children in the editor.
+-- @param object The object to duplicate.
+-- @return The new copy.
 function Editor.duplicate(object)
     local scene = NeoLua.level:getCurrentScene()
     local name = findName(object:getName(), true)
@@ -1030,6 +1048,9 @@ function Editor.duplicate(object)
     return newObject
 end
 
+--- Duplicates the current selection.
+-- If multiple objects are selected, all of them are duplicated
+-- and the new selection set to the duplicated objects.
 function Editor.duplicateSelection()
     local newSelection = {}
     for k,v in ipairs(Editor.currentSelection) do
@@ -1038,6 +1059,43 @@ function Editor.duplicateSelection()
 
     Editor.select(newSelection[1])
     Editor.currentSelection = newSelection
+end
+
+--- Deletes an object from the given scene.
+-- @param The name of the object to delete or the object itself.
+-- @param scene The scene to delete from.
+-- @todo Delete the attached billboard only! DON'T CLEAR THE WHOLE SCENE AND REBUILD IT!
+function Editor.deleteObject(object, scene)
+
+    -- Retrieve the right object when deleting by name
+    if type(object) == "string" then
+        object = scene:getObjectByName(object)
+    end
+
+    if object == nil then
+        return
+    end
+
+    Editor.cleanUp()
+
+    scene:deleteObject(object)
+
+    Editor.setupLevel()
+    Editor.loadMeshes()
+    Editor.updateSceneTree()
+end
+
+--- Deletes the current selection from the current scene
+function Editor.deleteSelection()
+
+    local selection = Editor.currentSelection
+    Editor.currentSelection = {}
+    Editor.select(nil)
+
+    local scene = NeoLua.level:getCurrentScene()
+    for k,v in ipairs(selection) do
+        Editor.deleteObject(v, scene)
+    end
 end
 
 Editor.mx = 0
