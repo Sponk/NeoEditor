@@ -931,7 +931,7 @@ end
 --- Adds a new light to the current scene and selects it.
 function Editor.addLight()
     local light = NeoLua.level:getCurrentScene():addNewLight()
-    light:setName(findName("Light", false))
+    light:setName(findName("Light", true))
     light:setPosition(Editor.getSelectionCenter())
 
     local entity = Editor.addObjectBillboard(light, "assets/editor/meshes/objects/light.dae")
@@ -945,7 +945,7 @@ end
 -- @param path The sound file to load.
 function Editor.addSound(path)
     local sound = NeoLua.level:getCurrentScene():addNewLight()
-    sound:setName(findName("Sound", false))
+    sound:setName(findName("Sound", true))
     sound:setPosition(Editor.getSelectionCenter())
 
     local entity = Editor.addObjectBillboard(light, "assets/editor/meshes/objects/sound.dae")
@@ -960,7 +960,7 @@ end
 function Editor.addEntity(path)
     local mesh = NeoLua.level:loadMesh(path)
     local entity = NeoLua.level:getCurrentScene():addNewEntity(mesh)
-    entity:setName(findName("Entity", false))
+    entity:setName(findName("Entity", true))
     entity:setPosition(Editor.getSelectionCenter())
 
     Editor.updateSceneTree()
@@ -972,12 +972,72 @@ end
 function Editor.addText(path)
     local font = NeoLua.level:loadFont(path, 36)
     local entity = NeoLua.level:getCurrentScene():addNewText(font)
-    entity:setName(findName("Text", false))
+    entity:setName(findName("Text", true))
     entity:setPosition(Editor.getSelectionCenter())
     entity:setText("Text")
 
     Editor.updateSceneTree()
     Editor.select(entity)
+end
+
+function Editor.duplicate(object)
+    local scene = NeoLua.level:getCurrentScene()
+    local name = findName(object:getName(), true)
+    local newObject
+
+    local type = object:getType()
+    if type == NeoLua.OBJECT3D_ENTITY then
+        newObject = scene:addNewEntity(object)
+        newObject:setName(name)
+    elseif type == NeoLua.OBJECT3D_LIGHT then
+        newObject = scene:addNewLight(object)
+        newObject:setName(name)
+
+        local entity = Editor.addObjectBillboard(newObject, "assets/editor/meshes/objects/light.dae")
+        table.insert(Editor.lightBillboards, entity)
+
+    elseif type == NeoLua.OBJECT3D_CAMERA then
+        newObject = scene:addNewCamera(object)
+        newObject:setName(name)
+
+        local entity = Editor.addObjectBillboard(newObject, "assets/editor/meshes/objects/camera.dae")
+        table.insert(Editor.cameraBillboards, entity)
+
+    elseif type == NeoLua.OBJECT3D_SOUND then
+        newObject = scene:addNewSound(object)
+        newObject:setName(name)
+
+        local entity = Editor.addObjectBillboard(newObject, "assets/editor/meshes/objects/sound.dae")
+        table.insert(Editor.soundBillboards, entity)
+
+    elseif type == NeoLua.OBJECT3D_TEXT then
+        newObject = scene:addNewText(object)
+        newObject:setName(name)
+    elseif type == NeoLua.OBJECT3D then
+        newObject = scene:addNewGroup(object)
+        newObject:setName(name)
+    end
+
+    -- Copy all children
+    for i = 1, object:getChildrenNumber(), 1 do
+        local childCopy = Editor.duplicate(object:getChild(i-1))
+
+        unlinkTwoObjects(childCopy:getParent(), childCopy)
+        childCopy:linkTo(newObject)
+    end
+
+    Editor.updateSceneTree()
+    return newObject
+end
+
+function Editor.duplicateSelection()
+    local newSelection = {}
+    for k,v in ipairs(Editor.currentSelection) do
+        table.insert(newSelection, Editor.duplicate(v))
+    end
+
+    Editor.select(newSelection[1])
+    Editor.currentSelection = newSelection
 end
 
 Editor.mx = 0

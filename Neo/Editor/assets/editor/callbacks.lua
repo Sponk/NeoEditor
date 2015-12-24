@@ -118,11 +118,18 @@ function addTextCallback()
 	Editor.openFileDlg:readDirectory(NeoLua.system:getWorkingDirectory() .. "/assets");
 end
 
+function duplicateCallback()
+	Editor.duplicateSelection()
+end
+
 Shortcuts.addShortcut({"LCONTROL", "O"}, openCallback)
 Shortcuts.addShortcut({"RCONTROL", "O"}, openCallback)
 
 Shortcuts.addShortcut({"LCONTROL", "S"}, saveCallback)
 Shortcuts.addShortcut({"RCONTROL", "S"}, saveCallback)
+
+Shortcuts.addShortcut({"LCONTROL", "D"}, duplicateCallback)
+Shortcuts.addShortcut({"RCONTROL", "D"}, duplicateCallback)
 
 local function enableHandles(h, e)
 	for k,v in pairs(h) do
