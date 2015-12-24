@@ -2,6 +2,7 @@
 #ifndef ANDROID
 
 #include <NeoEngine.h>
+#include <LuaScript.h>
 #include <signal.h>
 
 #ifdef _WIN32
@@ -229,6 +230,10 @@ void crash_handler(int sig)
 
 				MLOG_ERROR(complete_text << endl);
 
+				Neo::LuaScript* script = dynamic_cast<Neo::LuaScript*>(Neo::NeoEngine::getInstance()->getScriptContext());
+				if(script)
+					script->printStack();
+
 				//std::string path = getenv("HOME");
 				//path += "/.neoeditor/logfile.txt";
 
@@ -386,6 +391,10 @@ LONG WINAPI windows_exception_handler(EXCEPTION_POINTERS* ExceptionInfo)
 	complete_text.append(stack);
 
 	MLOG_ERROR(complete_text << endl);
+
+	Neo::LuaScript* script = dynamic_cast<Neo::LuaScript*>(Neo::NeoEngine::getInstance()->getScriptContext());
+	if(script)
+		script->printStack();
 
 	//std::string path = getenv("APPDATA");
 	//path += "\\neoeditor\\logfile.txt";
