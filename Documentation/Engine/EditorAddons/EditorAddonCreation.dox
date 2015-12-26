@@ -1,0 +1,34 @@
+/**
+@page editor_addon_creation_howto Editor Addon Creation
+
+Editor Addon Creation
+=====================
+
+Every addon has to follow a certain structure so the editor can work with it in certain ways.
+The bare minimun every addon has to provide is a table containing the name, a description and an author string.
+Additionally every addon can present certain callbacks so it can actually do something besides existing in memory.
+The basic skeleton might look like this:
+
+\code
+local addon = {
+	name = "Basic Addon",
+	description = "An empty addon which has absolutely no use!",
+	author = "Me"
+}
+
+function addon.onBegin()
+	infoLog("onBegin called!")
+end
+
+function addon.onEnd()
+	infoLog("onEnd called!")
+end
+
+return addon
+\endcode
+
+The functions onBegin and onEnd pretty much describe themselves: onBegin is called when the addon gets (re-)loaded and
+onEnd when the addon gets destroyed. The onBegin function can be used to set up some Neo2D dialog or some other
+callbacks like keyboard shortcuts and similar to provide additional functionality.
+
+*/
