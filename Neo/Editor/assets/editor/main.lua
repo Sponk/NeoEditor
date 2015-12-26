@@ -9,6 +9,7 @@ Shortcuts = require("editor.shortcuts")
 
 require("editor.callbacks")
 local lfs = require("lfs")
+local AddonSystem = require("editor.addons.addonsystem")
 
 --- Loads the complete UI into Neo2D and displays it.
 -- Needs Editor.setupTranslatedUI to be called first so the GUI description is loaded with the
@@ -769,6 +770,7 @@ end
 --- Quits the program
 function quitCallback()
     NeoLua.engine:setActive(false)
+    AddonSystem.endAll()
 end
 
 --- Updates the editor and calls the game specific update function
@@ -856,13 +858,15 @@ end
 --- Reloads the editor UI
 function Editor.reload()
     NeoLua.Neo2DEngine.getInstance():clear()
+    AddonSystem.endAll()
 
     --NeoLua.engine:loadLevel(filename)
     Editor.setupLevel()
-
     Editor.loadMeshes()
 
     Gui.setupWM()
+    AddonSystem.beginAll()
+
     Editor.loadUI()
     Editor.updateSceneTree()
 end
@@ -1129,4 +1133,8 @@ NeoLua.system:showCursor()
 Editor.project = { directory = NeoLua.system:getWorkingDirectory(), level = ""}
 infoLog("Loaded editor from project: " .. Editor.project.directory)
 
-infoLog(os.tmpname())
+-- TODO: Load addons from user directory!
+local status, err = pcall(AddonSystem.loadAddonsFrom, "./assets/editor/addons/scripts")
+if not status then
+    infoLog("Could not load addons: " .. err)
+end
