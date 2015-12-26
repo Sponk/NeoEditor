@@ -118,14 +118,22 @@ function addTextCallback()
 	Editor.openFileDlg:readDirectory(NeoLua.system:getWorkingDirectory() .. "/assets");
 end
 
+function duplicateCallback()
+	Editor.duplicateSelection()
+end
+
+function deleteCallback()
+	Editor.deleteSelection()
+end
+
 Shortcuts.addShortcut({"LCONTROL", "O"}, openCallback)
 Shortcuts.addShortcut({"RCONTROL", "O"}, openCallback)
 
 Shortcuts.addShortcut({"LCONTROL", "S"}, saveCallback)
 Shortcuts.addShortcut({"RCONTROL", "S"}, saveCallback)
 
-Shortcuts.addShortcut({"LCONTROL", "D"}, function() Editor.duplicateSelection() end)
-Shortcuts.addShortcut({"RCONTROL", "D"}, function() Editor.duplicateSelection() end)
+Shortcuts.addShortcut({"LCONTROL", "D"}, duplicateCallback)
+Shortcuts.addShortcut({"RCONTROL", "D"}, duplicateCallback)
 
 Shortcuts.addShortcut({"DELETE"}, function() Editor.deleteSelection() end)
 

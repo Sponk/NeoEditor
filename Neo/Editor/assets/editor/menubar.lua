@@ -17,8 +17,8 @@ local menubar = {
 			[2] = {
 				label = tr("Edit"),
 				content = {
-					[1] = { type = "Item", label = tr("Copy"), callback = "quitCallback" },
-					[2] = { type = "Item", label = tr("Paste"), callback = "openCallback" }
+					[1] = { type = "Item", label = tr("Duplicate"), callback = "duplicateCallback" },
+					[2] = { type = "Item", label = tr("Delete"), callback = "deleteCallback" }
 				}
 			},
 			[3] = {
