@@ -1,9 +1,6 @@
 /**
 @page editor_addons Editor Addons
 
-Editor Addons
-=============
-
 The Neo Editor has the ability to load and execute external self contained scripts to provide functionality
 that lies beyond the scope of basic 3D scene editing. Those scripts will be called "addons" in this context.
 The Neo Engine also has another way of extending the engine with native code which is called "plugin".

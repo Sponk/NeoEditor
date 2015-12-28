@@ -1,9 +1,6 @@
 /**
 @page editor_addon_system The Editor Addon System
 
-The Editor Addon System
-=======================
-
 The editor addon system executes all scripts in a restricted sandbox which prohibits the creation of global
 variables or changing anything that might harm the user, other addons or the main editor.
 

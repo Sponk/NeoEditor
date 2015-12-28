@@ -1,9 +1,6 @@
 /**
 @page editor_addon_creation_howto Editor Addon Creation
 
-Editor Addon Creation
-=====================
-
 Every addon has to follow a certain structure so the editor can work with it in certain ways.
 The bare minimun every addon has to provide is a table containing the name, a description and an author string.
 Additionally every addon can present certain callbacks so it can actually do something besides existing in memory.
@@ -30,5 +27,25 @@ return addon
 The functions onBegin and onEnd pretty much describe themselves: onBegin is called when the addon gets (re-)loaded and
 onEnd when the addon gets destroyed. The onBegin function can be used to set up some Neo2D dialog or some other
 callbacks like keyboard shortcuts and similar to provide additional functionality.
+
+Registering Keyboard Shortcuts
+------------------------------
+
+To register a keyboard shortcut is very easy and can be done with one call to the shortcut manager.
+A generic case could look like this:
+
+\code
+
+function addon.shortcut()
+	infoLog("Ctrl + K pressed!")
+end
+
+function addon.onBegin()
+	-- Register shortcut for Ctrl + K
+	Shortcuts.addShortcut({"LCONTROL", "K"}, addon.shortcut) -- Left control key
+    Shortcuts.addShortcut({"RCONTROL", "K"}, addon.shortcut) -- Right control key
+end
+
+\endcode
 
 */
