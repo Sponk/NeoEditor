@@ -36,6 +36,8 @@ end
 
 NeoLua.updateEasyAccess()
 --NeoLua.engine:getGame():pause(false)
+NeoLua.system:setWindowTitle("Neo Scene Editor - " .. Settings.startLevel)
+Editor.project.level = Settings.startLevel
 NeoLua.engine:loadLevel(Settings.startLevel)
 Editor.reload()
 
