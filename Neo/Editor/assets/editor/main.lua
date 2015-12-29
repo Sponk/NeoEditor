@@ -805,6 +805,7 @@ function update(dt)
     Shortcuts.update()
     Editor.toolbar.update()
     Editor.updateHandles()
+    Editor.placePanels()
 
     Editor.mx = mx
     Editor.my = my
@@ -1100,6 +1101,30 @@ function Editor.deleteSelection()
     for k,v in ipairs(selection) do
         Editor.deleteObject(v, scene)
     end
+end
+
+--- Places the window horizontally aligned to one side of the screen.
+-- @param win The window to place.
+-- @param mult The multiplier for the X position. 0 means left, 1 means right.
+local function placeWindowAtSide(win, mult)
+    local size = win:getSize()
+    local res = NeoLua.system:getScreenSize()
+
+    win:setSize(size.x, res.y-60)
+    win:setPosition(NeoLua.Vector2((res.x - size.x) * mult, 60))
+end
+
+--- Updates the position and size of the editor dialogs in a way
+-- so they form side panels.
+function Editor.placePanels()
+
+    placeWindowAtSide(Editor.entityEditor.dlg["window"].window, 1)
+    placeWindowAtSide(Editor.lightEditor.dlg["window"].window, 1)
+    placeWindowAtSide(Editor.textEditor.dlg["window"].window, 1)
+    placeWindowAtSide(Editor.soundEditor.dlg["window"].window, 1)
+    placeWindowAtSide(Editor.cameraEditor.dlg["window"].window, 1)
+
+    placeWindowAtSide(Editor.sceneDlg["window"].window, 0)
 end
 
 Editor.mx = 0
