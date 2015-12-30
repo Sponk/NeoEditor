@@ -2071,6 +2071,8 @@ typedef struct{} LANGUAGE_OBJ;
 #include <ScrollPane.h>
 #include <ScaleLayout.h>
 #include <CheckButton.h>
+
+#include "Object3dCasting.h"
 	
 	using namespace Neo;
 	using namespace Neo2D;
@@ -63050,6 +63052,466 @@ static swig_lua_class *swig_Neo2D_Gui_ScaleLayout_bases[] = {0,0};
 static const char *swig_Neo2D_Gui_ScaleLayout_base_names[] = {"Neo2D::Gui::Container *",0};
 static swig_lua_class _wrap_class_Neo2D_Gui_ScaleLayout = { "ScaleLayout", &SWIGTYPE_p_Neo2D__Gui__ScaleLayout,_wrap_new_ScaleLayout, swig_delete_ScaleLayout, swig_Neo2D_Gui_ScaleLayout_methods, swig_Neo2D_Gui_ScaleLayout_attributes, { "ScaleLayout", swig_Neo2D_Gui_ScaleLayout_cls_methods, swig_Neo2D_Gui_ScaleLayout_cls_attributes, swig_Neo2D_Gui_ScaleLayout_cls_constants }, swig_Neo2D_Gui_ScaleLayout_bases, swig_Neo2D_Gui_ScaleLayout_base_names };
 
+static int _wrap_castToLight__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Object3d *arg1 = (Neo::Object3d *) 0 ;
+  Neo::OLight *result = 0 ;
+  
+  SWIG_check_num_args("Neo::castToLight",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::castToLight",1,"Neo::Object3d *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Object3d,0))){
+    SWIG_fail_ptr("castToLight",1,SWIGTYPE_p_Neo__Object3d);
+  }
+  
+  result = (Neo::OLight *)Neo::castToLight(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__OLight,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_castToEntity__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Object3d *arg1 = (Neo::Object3d *) 0 ;
+  Neo::OEntity *result = 0 ;
+  
+  SWIG_check_num_args("Neo::castToEntity",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::castToEntity",1,"Neo::Object3d *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Object3d,0))){
+    SWIG_fail_ptr("castToEntity",1,SWIGTYPE_p_Neo__Object3d);
+  }
+  
+  result = (Neo::OEntity *)Neo::castToEntity(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__OEntity,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_castToText__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Object3d *arg1 = (Neo::Object3d *) 0 ;
+  Neo::OText *result = 0 ;
+  
+  SWIG_check_num_args("Neo::castToText",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::castToText",1,"Neo::Object3d *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Object3d,0))){
+    SWIG_fail_ptr("castToText",1,SWIGTYPE_p_Neo__Object3d);
+  }
+  
+  result = (Neo::OText *)Neo::castToText(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__OText,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_castToSound__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Object3d *arg1 = (Neo::Object3d *) 0 ;
+  Neo::OSound *result = 0 ;
+  
+  SWIG_check_num_args("Neo::castToSound",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::castToSound",1,"Neo::Object3d *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Object3d,0))){
+    SWIG_fail_ptr("castToSound",1,SWIGTYPE_p_Neo__Object3d);
+  }
+  
+  result = (Neo::OSound *)Neo::castToSound(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__OSound,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_castToCamera__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::Object3d *arg1 = (Neo::Object3d *) 0 ;
+  Neo::OCamera *result = 0 ;
+  
+  SWIG_check_num_args("Neo::castToCamera",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::castToCamera",1,"Neo::Object3d *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__Object3d,0))){
+    SWIG_fail_ptr("castToCamera",1,SWIGTYPE_p_Neo__Object3d);
+  }
+  
+  result = (Neo::OCamera *)Neo::castToCamera(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__OCamera,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_castToLight__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::OLight *arg1 = (Neo::OLight *) 0 ;
+  Neo::OLight *result = 0 ;
+  
+  SWIG_check_num_args("Neo::castToLight",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::castToLight",1,"Neo::OLight *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__OLight,0))){
+    SWIG_fail_ptr("castToLight",1,SWIGTYPE_p_Neo__OLight);
+  }
+  
+  result = (Neo::OLight *)Neo::castToLight(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__OLight,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_castToLight(lua_State* L) {
+  int argc;
+  int argv[2]={
+    1,2
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 1) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__OLight, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      return _wrap_castToLight__SWIG_1(L);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Object3d, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      return _wrap_castToLight__SWIG_0(L);
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'castToLight'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::castToLight(Neo::Object3d *)\n"
+    "    Neo::castToLight(Neo::OLight *)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_castToEntity__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::OEntity *arg1 = (Neo::OEntity *) 0 ;
+  Neo::OEntity *result = 0 ;
+  
+  SWIG_check_num_args("Neo::castToEntity",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::castToEntity",1,"Neo::OEntity *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__OEntity,0))){
+    SWIG_fail_ptr("castToEntity",1,SWIGTYPE_p_Neo__OEntity);
+  }
+  
+  result = (Neo::OEntity *)Neo::castToEntity(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__OEntity,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_castToEntity(lua_State* L) {
+  int argc;
+  int argv[2]={
+    1,2
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 1) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__OEntity, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      return _wrap_castToEntity__SWIG_1(L);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Object3d, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      return _wrap_castToEntity__SWIG_0(L);
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'castToEntity'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::castToEntity(Neo::Object3d *)\n"
+    "    Neo::castToEntity(Neo::OEntity *)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_castToText__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::OText *arg1 = (Neo::OText *) 0 ;
+  Neo::OText *result = 0 ;
+  
+  SWIG_check_num_args("Neo::castToText",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::castToText",1,"Neo::OText *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__OText,0))){
+    SWIG_fail_ptr("castToText",1,SWIGTYPE_p_Neo__OText);
+  }
+  
+  result = (Neo::OText *)Neo::castToText(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__OText,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_castToText(lua_State* L) {
+  int argc;
+  int argv[2]={
+    1,2
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 1) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__OText, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      return _wrap_castToText__SWIG_1(L);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Object3d, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      return _wrap_castToText__SWIG_0(L);
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'castToText'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::castToText(Neo::Object3d *)\n"
+    "    Neo::castToText(Neo::OText *)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_castToSound__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::OSound *arg1 = (Neo::OSound *) 0 ;
+  Neo::OSound *result = 0 ;
+  
+  SWIG_check_num_args("Neo::castToSound",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::castToSound",1,"Neo::OSound *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__OSound,0))){
+    SWIG_fail_ptr("castToSound",1,SWIGTYPE_p_Neo__OSound);
+  }
+  
+  result = (Neo::OSound *)Neo::castToSound(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__OSound,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_castToSound(lua_State* L) {
+  int argc;
+  int argv[2]={
+    1,2
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 1) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__OSound, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      return _wrap_castToSound__SWIG_1(L);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Object3d, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      return _wrap_castToSound__SWIG_0(L);
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'castToSound'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::castToSound(Neo::Object3d *)\n"
+    "    Neo::castToSound(Neo::OSound *)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_castToCamera__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo::OCamera *arg1 = (Neo::OCamera *) 0 ;
+  Neo::OCamera *result = 0 ;
+  
+  SWIG_check_num_args("Neo::castToCamera",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo::castToCamera",1,"Neo::OCamera *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo__OCamera,0))){
+    SWIG_fail_ptr("castToCamera",1,SWIGTYPE_p_Neo__OCamera);
+  }
+  
+  result = (Neo::OCamera *)Neo::castToCamera(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo__OCamera,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_castToCamera(lua_State* L) {
+  int argc;
+  int argv[2]={
+    1,2
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 1) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__OCamera, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      return _wrap_castToCamera__SWIG_1(L);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo__Object3d, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      return _wrap_castToCamera__SWIG_0(L);
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'castToCamera'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Neo::castToCamera(Neo::Object3d *)\n"
+    "    Neo::castToCamera(Neo::OCamera *)\n");
+  lua_error(L);return 0;
+}
+
+
 static int _wrap_new_intp(lua_State* L) {
   int SWIG_arg = 0;
   intp *result = 0 ;
@@ -64044,6 +64506,11 @@ static const struct luaL_Reg swig_commands[] = {
     { "NeoEngine_getInstance", _wrap_NeoEngine_getInstance},
     { "Canvas_getInstance", _wrap_Canvas_getInstance},
     { "Neo2DEngine_getInstance", _wrap_Neo2DEngine_getInstance},
+    { "castToLight",_wrap_castToLight},
+    { "castToEntity",_wrap_castToEntity},
+    { "castToText",_wrap_castToText},
+    { "castToSound",_wrap_castToSound},
+    { "castToCamera",_wrap_castToCamera},
     { "intp_frompointer", _wrap_intp_frompointer},
     { "uintp_frompointer", _wrap_uintp_frompointer},
     { "floatp_frompointer", _wrap_floatp_frompointer},

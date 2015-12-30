@@ -32,12 +32,15 @@
 #include <ScrollPane.h>
 #include <ScaleLayout.h>
 #include <CheckButton.h>
-	
-	using namespace Neo;
-	using namespace Neo2D;
-	using namespace Gui;
 
-	// #define Canvas Neo::Gui::Canvas
+#include "Object3dCasting.h"
+
+	
+using namespace Neo;
+using namespace Neo2D;
+using namespace Gui;
+
+// #define Canvas Neo::Gui::Canvas
 %}
 
 %include <windows.i>
@@ -126,3 +129,5 @@
 %include <Slider.h>
 %include <ScrollPane.h>
 %include <ScaleLayout.h>
+
+%include "Object3dCasting.h"

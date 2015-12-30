@@ -33,6 +33,8 @@
 #include <ScrollPane.h>
 #include <ScaleLayout.h>
 #include <CheckButton.h>
+
+#include "Object3dCasting.h"
 	
 	using namespace Neo;
 	using namespace Neo2D;
@@ -135,6 +137,8 @@
 %include <ScrollPane.h>
 
 %include <ScaleLayout.h>
+
+%include "Object3dCasting.h"
 
 //  Some pointer stuff
 %pointer_class(int, intp);
