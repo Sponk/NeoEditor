@@ -1000,6 +1000,26 @@ function Editor.addText(path)
     Editor.select(entity)
 end
 
+--- Unlinks an object from its parent and resets
+-- the object matrix.
+-- @param parent The parent object.
+-- @param child The child object.
+function Editor.unlinkTwoObjects(parent, child)
+    if not parent or not child then return end
+
+    child:unLink()
+    local matrix = child:getMatrix()
+
+    child:setPosition(matrix:getTranslationPart())
+    child:setEulerRotation(matrix:getEulerAngles())
+
+    local sx = matrix:getRotatedVector3(NeoLua.Vector3(1, 0, 0)):getLength()
+    local sy = matrix:getRotatedVector3(NeoLua.Vector3(0, 1, 0)):getLength()
+    local sz = matrix:getRotatedVector3(NeoLua.Vector3(0, 0, 1)):getLength()
+
+    child:setScale(NeoLua.Vector3(sx, sy, sz))
+end
+
 --- Duplicates an object and all its children in the editor.
 -- @param object The object to duplicate.
 -- @return The new copy.
@@ -1010,31 +1030,33 @@ function Editor.duplicate(object)
 
     local type = object:getType()
     if type == NeoLua.OBJECT3D_ENTITY then
-        newObject = scene:addNewEntity(object)
+
+        newObject = scene:addNewEntity(NeoLua.castToEntity(object))
         newObject:setName(name)
+
     elseif type == NeoLua.OBJECT3D_LIGHT then
-        newObject = scene:addNewLight(object)
+        newObject = scene:addNewLight(NeoLua.castToLight(object))
         newObject:setName(name)
 
         local entity = Editor.addObjectBillboard(newObject, "assets/editor/meshes/objects/light.dae")
         table.insert(Editor.lightBillboards, entity)
 
     elseif type == NeoLua.OBJECT3D_CAMERA then
-        newObject = scene:addNewCamera(object)
+        newObject = scene:addNewCamera(NeoLua.castToCamera(object))
         newObject:setName(name)
 
         local entity = Editor.addObjectBillboard(newObject, "assets/editor/meshes/objects/camera.dae")
         table.insert(Editor.cameraBillboards, entity)
 
     elseif type == NeoLua.OBJECT3D_SOUND then
-        newObject = scene:addNewSound(object)
+        newObject = scene:addNewSound(NeoLua.castToSound(object))
         newObject:setName(name)
 
         local entity = Editor.addObjectBillboard(newObject, "assets/editor/meshes/objects/sound.dae")
         table.insert(Editor.soundBillboards, entity)
 
     elseif type == NeoLua.OBJECT3D_TEXT then
-        newObject = scene:addNewText(object)
+        newObject = scene:addNewText(NeoLua.castToText(object))
         newObject:setName(name)
     elseif type == NeoLua.OBJECT3D then
         newObject = scene:addNewGroup(object)
@@ -1045,7 +1067,7 @@ function Editor.duplicate(object)
     for i = 1, object:getChildrenNumber(), 1 do
         local childCopy = Editor.duplicate(object:getChild(i-1))
 
-        unlinkTwoObjects(childCopy:getParent(), childCopy)
+        Editor.unlinkTwoObjects(childCopy:getParent(), childCopy)
         childCopy:linkTo(newObject)
     end
 
