@@ -17,7 +17,12 @@ function shortcuts.update()
 			end
 		end
 
-		if triggered and not handled[k] then v() end
+		if triggered and not handled[k] then
+			val, err = pcall(v)
+			if not val then
+				infoLog("Shortcut crashed: " .. err)
+			end
+		end
 
 		handled[k] = triggered
 	end
