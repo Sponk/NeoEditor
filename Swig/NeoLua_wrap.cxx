@@ -61901,7 +61901,7 @@ static int _wrap_List_getEntry(lua_State* L) {
   int SWIG_arg = 0;
   Neo2D::Gui::List *arg1 = (Neo2D::Gui::List *) 0 ;
   unsigned int arg2 ;
-  Neo2D::Gui::Button *result = 0 ;
+  char *result = 0 ;
   
   SWIG_check_num_args("Neo2D::Gui::List::getEntry",2,2)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::List::getEntry",1,"Neo2D::Gui::List *");
@@ -61913,8 +61913,8 @@ static int _wrap_List_getEntry(lua_State* L) {
   
   SWIG_contract_assert((lua_tonumber(L,2)>=0),"number must not be negative")
   arg2 = (unsigned int)lua_tonumber(L, 2);
-  result = (Neo2D::Gui::Button *)(arg1)->getEntry(arg2);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Neo2D__Gui__Button,0); SWIG_arg++; 
+  result = (char *)(arg1)->getEntry(arg2);
+  lua_pushstring(L,(const char *)result); SWIG_arg++;
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -61925,37 +61925,7 @@ fail:
 }
 
 
-static int _wrap_List_addEntry__SWIG_0(lua_State* L) {
-  int SWIG_arg = 0;
-  Neo2D::Gui::List *arg1 = (Neo2D::Gui::List *) 0 ;
-  Neo2D::Gui::Button *arg2 = (Neo2D::Gui::Button *) 0 ;
-  
-  SWIG_check_num_args("Neo2D::Gui::List::addEntry",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::List::addEntry",1,"Neo2D::Gui::List *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("Neo2D::Gui::List::addEntry",2,"Neo2D::Gui::Button *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__List,0))){
-    SWIG_fail_ptr("List_addEntry",1,SWIGTYPE_p_Neo2D__Gui__List);
-  }
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Neo2D__Gui__Button,0))){
-    SWIG_fail_ptr("List_addEntry",2,SWIGTYPE_p_Neo2D__Gui__Button);
-  }
-  
-  (arg1)->addEntry(arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_List_addEntry__SWIG_1(lua_State* L) {
+static int _wrap_List_addEntry(lua_State* L) {
   int SWIG_arg = 0;
   Neo2D::Gui::List *arg1 = (Neo2D::Gui::List *) 0 ;
   char *arg2 = (char *) 0 ;
@@ -61978,65 +61948,6 @@ static int _wrap_List_addEntry__SWIG_1(lua_State* L) {
 fail:
   lua_error(L);
   return SWIG_arg;
-}
-
-
-static int _wrap_List_addEntry(lua_State* L) {
-  int argc;
-  int argv[3]={
-    1,2,3
-  };
-  
-  argc = lua_gettop(L);
-  if (argc == 2) {
-    int _v;
-    {
-      void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__List, 0)) {
-        _v = 0;
-      } else {
-        _v = 1;
-      }
-    }
-    if (_v) {
-      {
-        void *ptr;
-        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__Button, 0)) {
-          _v = 0;
-        } else {
-          _v = 1;
-        }
-      }
-      if (_v) {
-        return _wrap_List_addEntry__SWIG_0(L);
-      }
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    {
-      void *ptr;
-      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_Neo2D__Gui__List, 0)) {
-        _v = 0;
-      } else {
-        _v = 1;
-      }
-    }
-    if (_v) {
-      {
-        _v = SWIG_lua_isnilstring(L,argv[1]);
-      }
-      if (_v) {
-        return _wrap_List_addEntry__SWIG_1(L);
-      }
-    }
-  }
-  
-  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'List_addEntry'\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    Neo2D::Gui::List::addEntry(Neo2D::Gui::Button *)\n"
-    "    Neo2D::Gui::List::addEntry(char const *)\n");
-  lua_error(L);return 0;
 }
 
 
@@ -62080,6 +61991,29 @@ static int _wrap_List_getSelectedEntry(lua_State* L) {
   
   result = (int)(arg1)->getSelectedEntry();
   lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_List_clear(lua_State* L) {
+  int SWIG_arg = 0;
+  Neo2D::Gui::List *arg1 = (Neo2D::Gui::List *) 0 ;
+  
+  SWIG_check_num_args("Neo2D::Gui::List::clear",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Neo2D::Gui::List::clear",1,"Neo2D::Gui::List *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Neo2D__Gui__List,0))){
+    SWIG_fail_ptr("List_clear",1,SWIGTYPE_p_Neo2D__Gui__List);
+  }
+  
+  (arg1)->clear();
+  
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -62155,6 +62089,7 @@ static swig_lua_method swig_Neo2D_Gui_List_methods[] = {
     {"addEntry", _wrap_List_addEntry}, 
     {"setSelectedEntry", _wrap_List_setSelectedEntry}, 
     {"getSelectedEntry", _wrap_List_getSelectedEntry}, 
+    {"clear", _wrap_List_clear}, 
     {"draw", _wrap_List_draw}, 
     {"update", _wrap_List_update}, 
     {0,0}
