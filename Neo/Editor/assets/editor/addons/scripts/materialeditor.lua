@@ -8,6 +8,19 @@ local addon = {
 
 local privateData = {}
 
+local function getTextureFromMaterial(material, passId)
+	if material == nil or passId < 0 or passId >= material:getTexturesPassNumber() then
+		infoLog("Could not find texture with ID " .. tostring(passId))
+		return nil
+	end
+
+	local texpass = material:getTexturePass(passId)
+	if texpass ~= nil then
+		return texpass:getTexture()
+	end
+	return nil
+end
+
 function showMaterial(id)
 
 	if id <= 0 or not privateData.entity or id > privateData.entity:getMaterialsNumber() then return end
@@ -15,6 +28,7 @@ function showMaterial(id)
 	local material = privateData.entity:getMaterial(id-1)
 	local dlg = privateData.dlg["window"]
 
+	privateData.materialID = id
 	privateData.material = material
 
 	dlg["opacity"]:setLabel(round(material:getOpacity(), 3))
@@ -37,7 +51,66 @@ function showMaterial(id)
 	dlg["emitR"]:setLabel(round(vector.x, 3))
 	dlg["emitG"]:setLabel(round(vector.y, 3))
 	dlg["emitB"]:setLabel(round(vector.z, 3))
+
+	local list = privateData.dlg["window"]["texturescroll"]["list"]
+	local numTextures = material:getTexturesPassNumber()
+
+	list:clear()
+
+	for i = 1, numTextures, 1 do
+		local texture = getTextureFromMaterial(material, i - 1)
+		local filename = texture:getTextureRef():getFilename()
+
+		local index = filename:match("^.*()/")
+
+		filename = filename:sub(index+1) or "<nofile>"
+		list:addEntry(filename)
+	end
 end
+
+function showTextureCallback()
+
+end
+
+function textureFileOpenCallback()
+	local id = privateData.dlg["window"]["texturescroll"]["list"]:getSelectedEntry()
+
+	if id == -1 then return end
+
+	local filename = Editor.openFileDlg:getSelectedFilename()
+	if filename == nil or filename == "" then return end
+
+	local texture = getTextureFromMaterial(privateData.material, id)
+	local ref = NeoLua.level:loadTexture(filename, true)
+
+	if ref then
+		texture:setTextureRef(ref)
+	end
+
+	showMaterial(privateData.materialID)
+end
+
+function changeTextureCallback()
+
+	if Editor.openFileDlg:isVisible() then return end
+
+	local id = privateData.dlg["window"]["texturescroll"]["list"]:getSelectedEntry()
+	if id == -1 then return end
+
+	local texref = getTextureFromMaterial(privateData.material, id):getTextureRef()
+	local filename = texref:getFilename()
+	local index = filename:match("^.*()/")
+	filename = filename:sub(1, index - 1)
+
+	infoLog("Selecting texture: " .. filename)
+	Editor.openFileDlg:setScriptCallback(AddonSystem.registerCallback(addon.name, textureFileOpenCallback))
+	Editor.openFileDlg:setVisible(true)
+	Editor.openFileDlg:setFilter("(.*)|(.*\\.png)|(.*\\.jpg)|(.*\\.tga)|(.*\\.jpeg)")
+	Editor.openFileDlg:readDirectory(filename)
+
+	Gui.wm:selectWindow(Editor.openFileDlg)
+end
+
 
 function updateDiffuse()
 	local dlg = privateData.dlg["window"]
@@ -97,7 +170,7 @@ function showMaterialCallback()
 end
 
 function genDlg()
-	local offset = 40
+	local offset = 45
 
 	return {
 	[1] = {
@@ -105,31 +178,47 @@ function genDlg()
 		type = "Window",
 		x = 500,
 		y = 500,
-		w = 500,
-		h = 300,
+		w = 460,
+		h = 280,
 		label = tr("Material Editor"),
 		content = {
-			{name = "button", type = "Button", x = 10, y = 270, w = 100, h = 20, label = tr("Close")},
+			{name = "button", type = "Button", x = 10, y = 250, w = 100, h = 20, label = tr("Close")},
 
-			{name = "entitynameLabel", type = "Label", x = 10, y = 10, w = 0, h = 20, label = tr("Entity Name:") },
-			{name = "nameLabel", type = "Label", x = 100, y = 10, w = 0, h = 20, label = "" },
+			{name = "entitynameLabel", type = "Label", x = 10, y = 10, w = 0, h = 0, label = tr("Entity Name:") },
+			{name = "nameLabel", type = "Label", x = 100, y = 10, w = 0, h = 0, label = "" },
 
 			{
-				name = "scrollpanel", type = "ScrollPane", x = 250, y = 10,
-				w = 200, h = 100,
+				name = "scrollpanel", type = "ScrollPane", x = 10, y = 25,
+				w = 210, h = 20,
 				content = {
 					{name = "tree", type = "Tree", x = 0, y = 0,
 						w = 200, h = 0, callback = AddonSystem.registerCallback(addon.name, showMaterialCallback)}
 				}
 			},
 
+			{
+				name = "texturescroll", type = "ScrollPane", x = 260, y = 25,
+				w = 180, h = 100,
+				content = {
+					{name = "list", type = "List", x = 0, y = 0,
+						w = 200, h = 0, callback = AddonSystem.registerCallback(addon.name, showTextureCallback)}
+				}
+			},
+
+			{
+				name = "changeTextureButton", type = "Button", x = 260, y = 135,
+				w = 180, h = 20,
+				label = tr("Change Texture"),
+				callback = AddonSystem.registerCallback(addon.name, changeTextureCallback)
+			},
+
 			{name = "opacityLabel", type = "Label", x = 10, y = offset + 10, w = 0, h = 20, label = tr("Opacity:")},
-			{name = "opacity", type = "InputField", x = 80, y = offset + 10, w = 50, h = 20, inputType = NeoLua.DECIMAL_INPUT, callback = AddonSystem.registerCallback(addon.name, updateOpacity)},
-			{name = "opacitySlider", type = "Slider", x = 145, y = offset + 15, w = 90, h = 1, range = {0,100}, callback = AddonSystem.registerCallback(addon.name, updateOpacitySlider)},
+			{name = "opacity", type = "InputField", x = 70, y = offset + 10, w = 50, h = 20, inputType = NeoLua.DECIMAL_INPUT, callback = AddonSystem.registerCallback(addon.name, updateOpacity)},
+			{name = "opacitySlider", type = "Slider", x = 130, y = offset + 15, w = 85, h = 1, range = {0,100}, callback = AddonSystem.registerCallback(addon.name, updateOpacitySlider)},
 
 			{name = "shininessLabel", type = "Label", x = 10, y = offset + 40, w = 0, h = 20, label = tr("Shininess:")},
-			{name = "shininess", type = "InputField", x = 80, y = offset + 40, w = 50, h = 20, inputType = NeoLua.DECIMAL_INPUT, callback = AddonSystem.registerCallback(addon.name, updateShininess)},
-			{name = "shininessSlider", type = "Slider", x = 145, y = offset + 45, w = 90, h = 1, range = {0,400}, callback = AddonSystem.registerCallback(addon.name, updateShininessSlider)},
+			{name = "shininess", type = "InputField", x = 70, y = offset + 40, w = 50, h = 20, inputType = NeoLua.DECIMAL_INPUT, callback = AddonSystem.registerCallback(addon.name, updateShininess)},
+			{name = "shininessSlider", type = "Slider", x = 130, y = offset + 45, w = 85, h = 1, range = {0,400}, callback = AddonSystem.registerCallback(addon.name, updateShininessSlider)},
 
 			{ name = "diffuseLabel", type = "Label", x = 10, y = offset + 80, w = 0, h = 0, label = tr("Diffuse:") },
 			{ name = "diffuseR", type = "InputField", x = 10, y = offset + 90, w = 60, h = 20, label = "", inputType = NeoLua.DECIMAL_INPUT,
