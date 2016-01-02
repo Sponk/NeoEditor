@@ -43,8 +43,12 @@ void ScrollPane::draw(Vector2 offset)
 	
 	renderContext->disableScissorTest();
 
-	m_horizontal->draw(Vector2());
-	m_vertical->draw(Vector2());
+	if(m_horizontal->isVisible())
+		m_horizontal->draw(Vector2());
+
+	if(m_vertical->isVisible())
+		m_vertical->draw(Vector2());
+
 	// renderContext->disableStencilTest();
 
 	//render->set2D(res.x, res.y);

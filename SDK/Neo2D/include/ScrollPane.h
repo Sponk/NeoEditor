@@ -35,6 +35,11 @@ class NEO2D_EXPORT ScrollPane : public Container
 		m_vertical->setPosition(Vector2(m_x + m_width - SCROLL_BAR_WIDTH, m_y));
 
 		Vector2 sz = calculateContentSize();
+
+		// Hide scrollbars if they are not necessary
+		m_horizontal->setVisible(sz.x > m_width);
+		m_vertical->setVisible(sz.y > m_height);
+
 		m_horizontal->setRange(Vector2(0, MAX(m_width - SCROLL_BAR_WIDTH, sz.x)));
 		m_vertical->setRange(Vector2(0, MAX(m_height - SCROLL_BAR_WIDTH, sz.y)));
 	}
