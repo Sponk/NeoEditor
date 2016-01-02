@@ -145,9 +145,10 @@ function Gui.loadWidget(v, p)
 	  
    elseif v.type == "List" then
 	  local list = NeoLua.List(v.x, v.y, v.w, v.h, v.label or "")
-	  p:addWidget(list)                  
-	  
-	  for k,l in ipairs(v.content) do
+	  p:addWidget(list)
+	  list:setScriptCallback(v.callback or "EmptyCallback")
+
+	  for k,l in ipairs(v.content or {}) do
 		 list:addEntry(l)
 	  end
 
