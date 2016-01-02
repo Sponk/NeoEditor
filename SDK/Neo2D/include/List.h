@@ -69,6 +69,8 @@ protected:
 		List* list;
 	};
 
+	void addEntry(Button* l);
+
 public:
 	List(unsigned int x, unsigned int y, unsigned int width,
 		  unsigned int height, const char* label)
@@ -77,12 +79,13 @@ public:
 	{}
 
 	void show() { m_visible = true; }
-	Button* getEntry(unsigned int idx) { return m_entries[idx]; }
-	void addEntry(Button* l);
+	const char* getEntry(unsigned int idx) { if(m_entries[idx]) return m_entries[idx]->getLabel(); return NULL; }
 	void addEntry(const char* label);
 
 	void setSelectedEntry(int idx) { m_selectedEntry = idx; }
 	int getSelectedEntry() { return m_selectedEntry; }
+
+	void clear() { for(Button* b : m_entries) SAFE_DELETE(b); m_entries.clear(); }
 
 	void draw(Vector2 offset);
 	void update();
