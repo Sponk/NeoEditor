@@ -917,6 +917,12 @@ function Editor.playGame(mainscript)
     --Editor.sceneMeshes.z:setActive(false)
 
     NeoLua.level:getCurrentScene():setCurrentCamera(Editor.gameCamera)
+
+    for k,v in ipairs(Editor.currentSelection) do
+        if v:getType() == NeoLua.OBJECT3D_ENTITY then
+            v:enableWireframe(false)
+        end
+    end
 end
 
 --- Cleans up the editor data structures and removes the overlay editor scene
