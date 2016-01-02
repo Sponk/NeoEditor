@@ -88,6 +88,7 @@ function textureFileOpenCallback()
 	end
 
 	showMaterial(privateData.materialID)
+	Gui.wm:selectWindow(privateData.dlg["window"].window)
 end
 
 function changeTextureCallback()
