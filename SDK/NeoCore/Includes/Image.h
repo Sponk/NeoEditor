@@ -125,14 +125,14 @@ public:
 
 	/**
 	 * @brief Scales the image by given percentage.
-	 * @param The percentage to scale with.
+	 * @param s The percentage to scale with.
 	 * @see scale(unsigned int width, unsigned int height)
 	 */
 	void scale(float s);
 
 	/**
 	 * @brief Scales the image by given percentage.
-	 * @param The percentage to scale with.
+	 * @param angle The percentage to scale with.
 	 * @see scale(unsigned int width, unsigned int height)
 	 */
 	void rotate(int angle);
