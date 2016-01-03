@@ -31,15 +31,19 @@ if Settings.editorEnabled then
    dofile("editor/main.lua")
 else
   -- Load the actual game if the editor is not running
+  NeoLua.engine:loadLevel(Settings.startLevel)
   dofile("game.lua")
 end
 
 NeoLua.updateEasyAccess()
 --NeoLua.engine:getGame():pause(false)
-NeoLua.system:setWindowTitle("Neo Scene Editor - " .. Settings.startLevel)
-Editor.project.level = Settings.startLevel
-NeoLua.engine:loadLevel(Settings.startLevel)
-Editor.reload()
+
+if Settings.editorEnabled then
+    NeoLua.system:setWindowTitle("Neo Scene Editor - " .. Settings.startLevel)
+    Editor.project.level = Settings.startLevel
+    NeoLua.engine:loadLevel(Settings.startLevel)
+    Editor.reload()
+end
 
 --NeoLua.engine:getGame():pause(true)
 
