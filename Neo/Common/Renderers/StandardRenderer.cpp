@@ -384,7 +384,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 		render->enableBlending();
 		render->setBlendingMode(material->getBlendMode());
 		render->disableCullFace();
-		render->setDepthMask(false);
+		//render->setDepthMask(false);
 		
 		render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
 	}
@@ -1287,9 +1287,6 @@ void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera, bool post
 	{
 		postEffects = 0;
 		render->bindTexture(m_gbufferTexID);
-		render->bindTexture(m_normalTexID, 1);
-		render->bindTexture(m_positionTexID, 2);
-		render->bindTexture(m_dataTexID, 3);
 
 		render->enableBlending();
 		render->setBlendingMode(BLENDING_ALPHA);
@@ -1300,7 +1297,17 @@ void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera, bool post
 	{
 		render->enableBlending();
 		render->bindTexture(m_finalTexID);
+
+		float val = camera->getClippingNear();
+		render->sendUniformFloat(m_fx[1], "Near", &val, 1);
+
+		val = camera->getClippingFar();
+		render->sendUniformFloat(m_fx[1], "Far", &val, 1);
 	}
+
+	render->bindTexture(m_normalTexID, 1);
+	render->bindTexture(m_positionTexID, 2);
+	render->bindTexture(m_dataTexID, 3);
 
 	render->sendUniformInt(m_fx[1], "PostEffects", &postEffects, 1);
 	render->bindTexture(m_depthTexID, 4);

@@ -35,6 +35,12 @@ uniform vec3 AmbientLight;
 uniform int Width;
 uniform int Height;
 uniform int PostEffects;
+uniform float Near;
+uniform float Far;
+
+uniform float dofFocus = 0.5;
+uniform float dofStrength = 1.5;
+uniform int dofAutofocus = 1;
 
 uniform sampler2D Textures[5];
 in vec2 texCoord;
@@ -156,24 +162,23 @@ vec4 gammaCorrection(vec4 diffuse, float gamma)
 	return pow(diffuse, vec4(1.0 / gamma));
 }
 
-vec4 blur(vec4 diffuse, vec2 texcoord, sampler2D sampler, float amount, float strength)
+vec4 blur(vec4 diffuse, vec2 texcoord, sampler2D sampler, float amount)
 {
-    if(strength == 0.0 || amount == 0.0)
+    if(amount == 0.0)
        return diffuse;
 
         //strength *= float(textureSize(Texture[0], 1).x);
 
-    vec4 color;
-	color += texture2D(sampler, texcoord+vec2(0.01, 0.0) * amount);
-	color += texture2D(sampler, texcoord+vec2(-0.01, 0.0) * amount);
-	color += texture2D(sampler, texcoord+vec2(0.0, 0.01) * amount);
-	color += texture2D(sampler, texcoord+vec2(0.0, -0.01) * amount);
-	color += texture2D(sampler, texcoord+vec2(0.007, 0.007) * amount);
-	color += texture2D(sampler, texcoord+vec2(-0.007, -0.007) * amount);
-	color += texture2D(sampler, texcoord+vec2(0.007, -0.007) * amount);
-	color += texture2D(sampler, texcoord+vec2(-0.007, 0.007) * amount);
+	diffuse += texture2D(sampler, texcoord+vec2(0.01, 0.0) * amount);
+	diffuse += texture2D(sampler, texcoord+vec2(-0.01, 0.0) * amount);
+	diffuse += texture2D(sampler, texcoord+vec2(0.0, 0.01) * amount);
+	diffuse += texture2D(sampler, texcoord+vec2(0.0, -0.01) * amount);
+	diffuse += texture2D(sampler, texcoord+vec2(0.007, 0.007) * amount);
+	diffuse += texture2D(sampler, texcoord+vec2(-0.007, -0.007) * amount);
+	diffuse += texture2D(sampler, texcoord+vec2(0.007, -0.007) * amount);
+	diffuse += texture2D(sampler, texcoord+vec2(-0.007, 0.007) * amount);
 
-	return mix(diffuse, color / vec4(8.0), amount);
+	return diffuse / vec4(8.0);
 }
 
 // Based on code found here: 
@@ -320,22 +325,83 @@ float linearize_depth(float z, float near, float far)
 	return (2.0 * near) / (far + near - z * (far - near));
 }
 
+// SSAO
+const int sample_count = 16;
+const vec2 filter_offset[] = vec2[](vec2(-0.94201624, -0.39906216),
+                                vec2(0.94558609, -0.76890725),
+                                vec2(-0.094184101, -0.92938870),
+                                vec2(0.34495938, 0.29387760),
+                                vec2(-0.91588581, 0.45771432),
+                                vec2(-0.81544232, -0.87912464),
+                                vec2(-0.38277543, 0.27676845),
+                                vec2(0.97484398, 0.75648379),
+                                vec2(0.44323325, -0.97511554),
+                                vec2(0.53742981, -0.47373420),
+                                vec2(-0.26496911, -0.41893023),
+                                vec2(0.79197514, 0.19090188),
+                                vec2(-0.24188840, 0.99706507),
+                                vec2(-0.81409955, 0.91437590),
+                                vec2(0.19984126, 0.78641367),
+                                vec2(0.14383161, -0.14100790));
+
+float ssao(vec2 texcoord, vec2 filterRadius, sampler2D depthTexture, sampler2D positionTexture, sampler2D normalTexture)
+{
+	const float distanceThreshold = 5.0;
+	const vec3 lumcoeff = vec3(0.299,0.587,0.114);
+
+	float occlusion = 0;
+	vec3 viewPos = texture2D(positionTexture, texcoord).xyz;
+	vec3 viewNormal = texture2D(normalTexture, texcoord).xyz;
+
+	for(int i = 0; i < sample_count; i++)
+    {
+        vec2 sampleTexCoord = texcoord + (filter_offset[i] * filterRadius);
+        vec3 samplePos = texture2D(positionTexture, sampleTexCoord).xyz;
+        vec3 sampleDir = normalize(samplePos - viewPos);
+
+        float NdotS = max(dot(viewNormal, sampleDir), 0);
+        float VPdistSP = distance(viewPos, samplePos);
+
+        float a = 1.0 - smoothstep(distanceThreshold, distanceThreshold * 2, VPdistSP);
+        float b = NdotS;
+
+        occlusion += (a * b);
+    }
+
+    float lum = dot(FragColor.rgb, lumcoeff);
+
+    return mix(1.0 - (occlusion / sample_count), 1.0, lum);
+}
+
 void main(void)
 {
 	FragColor = texture2D(Textures[0], texCoord);
 	float transparency = FragColor.a;
 	if(PostEffects == 1)
 	{
+		vec4 normal = texture2D(Textures[1], texCoord);
+
+		//FragColor.rgb = vec3(normal.a);
+		//return;
+
+		float depth = linearize_depth(texture2D(Textures[4], texCoord).r, Near, Far);
+		float depthCenter = linearize_depth(texture2D(Textures[4], vec2(0.5, 0.5)).r, Near, Far);
 		vec2 frame = vec2(1.0 / Width, 1.0/ Height);
 
-		//if(texCoord.x > 0.5)
-		//	FragColor.rgb = FxaaPixelShader(vec4(texCoord.xy, texCoord.xy - frame * (0.5 + FXAA_SUBPIX_SHIFT)), Textures[0], frame);
-		//else
 		FragColor.rgb = fxaa(Textures[0], texCoord, frame);
 
-		//FragColor.a = max(transparency, FragColor.a);
-		//FragColor = bloom(Textures[0], texCoord, FragColor);
-		FragColor = gammaCorrection(FragColor, 1.2);
+		//FragColor = mix(FragColor, blur(FragColor, texCoord, Textures[0], 0.5*dofStrength*(depth - ((dofAutofocus == 1) ? depthCenter : dofFocus))), dofStrength*0.5);
+
+		//FragColor.rgb = vec3(ssao(texCoord, frame * 10.0, Textures[4], Textures[2], Textures[1]));
+
+		if(normal.a == 0 && transparency == 1.0)
+		{
+			FragColor.rgb *= ssao(texCoord, frame * 10.0, Textures[4], Textures[2], Textures[1]);
+		}
+
+		if(transparency == 1.0)
+			FragColor = gammaCorrection(FragColor, 1.2);
+
 		return;
 	}
 

@@ -388,7 +388,7 @@ void main(void)
 		if(FragColor.a < 0.1)
 			discard;
 
-		Normal.a = 1;
+		FragColor.a = min(FragColor.a, 0.99);
 		return;
 	}
 
