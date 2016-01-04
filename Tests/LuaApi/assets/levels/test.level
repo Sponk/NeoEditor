@@ -130,6 +130,18 @@
 				fogDistance="0.000000"
 				skyboxTextures="assets/maps/skybox" />
 		</Camera>
+		<Entity name="Sponza" file="../meshs/sponza.mesh">
+        			<anim id="0" />
+        			<active value="true" />
+        			<transform
+        				position="0 0.000000 0.000000"
+        				rotation="-0.000000 0.000000 0.000000"
+        				scale="2.000000 2.000000 2.000000" />
+        			<properties
+        				invisible="false"
+        				shadow="true"
+        				occluder="false" />
+        </Entity>
 		<Entity name="Cube" file="../meshs/box.mesh">
 			<BoundingBox min="-5.677568 -5.677569 -5.677566" max="5.677569 5.677568 5.677566" />
 			<anim id="0" />

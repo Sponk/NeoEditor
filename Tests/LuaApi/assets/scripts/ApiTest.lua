@@ -22,9 +22,10 @@ local scene = engine:getLevel():getCurrentScene()
 local system = engine:getSystemContext()
 local input = engine:getInputContext()
 
-local cam = scene:getObjectByName("Light")
+local light = scene:getObjectByName("Light")
 local teapot = scene:getObjectByName("Teapot")
 local cube = scene:getObjectByName("Cube")
+local camera = scene:getCurrentCamera()
 
 function flipOrthoCallback()
 	local camera = scene:getCurrentCamera()
@@ -36,6 +37,15 @@ function setFovCallback()
 	camera:setFov(tonumber(settingsWindow.inputField:getLabel()))
 end
 
+local function clamp(val, min, max)
+        if val < min then return min elseif val > max then return max else return val end
+end
+
+centerCursor()
+
+local mx = input:getAxis("MOUSE_X")
+local my = input:getAxis("MOUSE_Y")
+
 function update(delta)
         cube:rotate(NeoLua.Vector3(0,0,1), 30*delta)
         cube:rotate(NeoLua.Vector3(1,0,0), 30*delta)
@@ -43,18 +53,50 @@ function update(delta)
         teapot:rotate(NeoLua.Vector3(0,0,1), 10*delta)
 
         if input:isKeyPressed("UP") then
-                cam:setPosition(cam:getPosition() + NeoLua.Vector3(0,0,1))
+                light:setPosition(light:getPosition() + NeoLua.Vector3(0,0,1))
         end
 
         if input:isKeyPressed("DOWN") then
-                cam:setPosition(cam:getPosition() + NeoLua.Vector3(0,0,-1))
+                light:setPosition(light:getPosition() + NeoLua.Vector3(0,0,-1))
         end
 
         if input:isKeyPressed("LEFT") then
-                cam:setPosition(cam:getPosition() + NeoLua.Vector3(-1,0,0))
+                light:setPosition(light:getPosition() + NeoLua.Vector3(-1,0,0))
         end
 
         if input:isKeyPressed("RIGHT") then
-                cam:setPosition(cam:getPosition() + NeoLua.Vector3(1,0,0))
+                light:setPosition(light:getPosition() + NeoLua.Vector3(1,0,0))
+        end
+
+        if input:isKeyPressed("W") then
+            camera:translate(NeoLua.Vector3(0,0,-10*delta), true)
+        elseif input:isKeyPressed("S") then
+            camera:translate(NeoLua.Vector3(0,0,10*delta), true)
+        end
+
+        if input:isKeyPressed("A") then
+            camera:translate(NeoLua.Vector3(-10*delta,0,0), true)
+        elseif input:isKeyPressed("D") then
+            camera:translate(NeoLua.Vector3(10*delta,0,0), true)
+        end
+
+        local dx = input:getAxis("MOUSE_X")
+        local dy = input:getAxis("MOUSE_Y")
+
+        camera:rotate(NeoLua.Vector3(-1, 0, 0), (dy-my)*100, false)
+        camera:rotate(NeoLua.Vector3(0, -1, 0), (dx-mx)*100, false)
+
+        --local rotation = camera:getEulerRotation()
+        --rotation.x = clamp(rotation.x, 0, 180)
+
+        --camera:setEulerRotation(rotation)
+
+        centerCursor()
+
+        mx = input:getAxis("MOUSE_X")
+        my = input:getAxis("MOUSE_Y")
+
+        if input:onKeyDown("ESCAPE") then
+                NeoLua.engine:setActive(false)
         end
 end
