@@ -26,6 +26,7 @@
 #include <NeoCore.h>
 #include <cstdio>
 #include <cstdlib>
+#include <algorithm>
 
 using namespace Neo;
 
@@ -261,8 +262,8 @@ void Image::rotate(int angle)
 						round(static_cast<float>(m_height) * cangle + static_cast<float>(m_width) * sangle));
 
 	// Calculate min and max values
-	unsigned int minvalX = min(0.0f, min(topRight.x, min(bottomLeft.x, bottomRight.x)));
-	unsigned int minvalY = min(0.0f, min(topRight.y, min(bottomLeft.y, bottomRight.y)));
+	unsigned int minvalX = std::min(0.0f, std::min(topRight.x, std::min(bottomLeft.x, bottomRight.x)));
+	unsigned int minvalY = std::min(0.0f, std::min(topRight.y, std::min(bottomLeft.y, bottomRight.y)));
 
 	unsigned int maxvalX = max(0.0f, max(topRight.x, max(bottomLeft.x, bottomRight.x)));
 	unsigned int maxvalY = max(0.0f, max(topRight.y, max(bottomLeft.y, bottomRight.y)));

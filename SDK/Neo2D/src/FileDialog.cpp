@@ -45,6 +45,10 @@
 
 #define DEFAULT_SIZE 64
 
+#ifndef S_ISDIR
+#define S_ISDIR(m)  ((m) & S_IFDIR) 
+#endif
+
 using namespace Neo2D;
 using namespace Gui;
 

@@ -238,7 +238,7 @@ public:
 	 */
 	inline void translate(const Vector3& vec, bool local = false)
 	{
-		m_position += (local ? (vec + getTransformedVector(vec)) : vec);
+		m_position += (local ? getRotatedVector(vec) : vec);
 		m_needToUpdate = true;
 	}
 
@@ -254,8 +254,7 @@ public:
 	 */
 	inline void rotate(const Vector3& axis, float angle, bool local = false)
 	{
-		addAxisAngleRotation((local) ? (getInverseRotatedVector(axis)) : axis,
-							 angle);
+		addAxisAngleRotation((local) ? (getInverseRotatedVector(axis)) : axis, angle);
 	}
 
 	/**

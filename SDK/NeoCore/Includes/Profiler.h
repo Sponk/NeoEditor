@@ -29,6 +29,11 @@
 #include <vector>
 #include <map>
 
+#ifdef _MSC_VER
+#include <intrin.h>
+#pragma intrinsic(__rdtsc)
+#endif
+
 namespace Neo
 {
 /**
@@ -79,14 +84,16 @@ public:
 	 */
 	unsigned long getTicks()
 	{
-#if defined(__amd64__) || defined(_M_AMD64)
+#if !defined(_MSC_VER) && (defined(__amd64__) || defined(_M_AMD64))
 		unsigned long tick;
 		asm volatile ( "rdtsc" : "=A"(tick) );
 		return tick;
-#elif defined(i386) || defined(_M_IX86)
+#elif !defined(_MSC_VER) && (defined(i386) || defined(_M_IX86))
 		unsigned long tick;
-		asm volatile ( "rdtsc" : "=A"(tick) );
+		asm volatile ("rdtsc" : "=A"(tick));
 		return tick;
+#elif defined(_MSC_VER)
+		return __rdtsc();
 #else
 		return 0;
 #endif
