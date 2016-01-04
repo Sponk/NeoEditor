@@ -823,7 +823,7 @@ void StandardRenderer::initFramebuffers(Vector2 res)
 	render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
 	render->setTextureUWrapMode(WRAP_CLAMP);
 	render->setTextureVWrapMode(WRAP_CLAMP);
-	render->texImage(0, res.x, res.y, VAR_FLOAT, TEX_RGBA, 0);
+	render->texImage(0, res.x, res.y, VAR_UBYTE, TEX_RGBA, 0);
 
 	// Depth texture
 	render->createTexture(&m_depthTexID);
@@ -855,7 +855,7 @@ void StandardRenderer::initFramebuffers(Vector2 res)
 	render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
 	render->setTextureUWrapMode(WRAP_CLAMP);
 	render->setTextureVWrapMode(WRAP_CLAMP);
-	render->texImage(0, res.x, res.y, VAR_FLOAT, TEX_RGBA, 0);
+	render->texImage(0, res.x, res.y, VAR_UBYTE, TEX_RGBA, 0);
 
 	render->bindFrameBuffer(m_framebufferID);
 
@@ -881,7 +881,7 @@ void StandardRenderer::initFramebuffers(Vector2 res)
 	render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
 	render->setTextureUWrapMode(WRAP_CLAMP);
 	render->setTextureVWrapMode(WRAP_CLAMP);
-	render->texImage(0, res.x, res.y, VAR_FLOAT, TEX_RGBA, 0);
+	render->texImage(0, res.x, res.y, VAR_UBYTE, TEX_RGBA, 0);
 
 	render->attachFrameBufferTexture(ATTACH_COLOR0, m_finalTexID);
 	render->attachFrameBufferTexture(ATTACH_DEPTH, m_depthTexID);
