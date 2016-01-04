@@ -400,13 +400,9 @@ void main(void)
 
 	if(Opacity == 1.0)
 	{
-		if(TextureMode > 0)
-		{
-		 	 	if(color.a <= 0.85) discard;
-		}
-		else
-			color.a = 1.0;
+	 	if(TextureMode > 0 && color.a <= 0.5) discard;
 
+		color.a = 1.0;
 		FragColor = color;
 	}
 	else
@@ -424,9 +420,20 @@ void main(void)
 
         vec3 bump = normalize(texture2D(Textures[2], texCoord).xyz * 2.0 - 1.0);
         Normal = vec4(normalize(tang*bump.x + bi*bump.y + normal*bump.z), processFlag);
+
+        /*if(TextureMode >= 3)
+        {
+            vec4 spec = texture2D(Textures[1], texCoord);
+            Position = vec4(position.xyz, (spec.r + spec.b + spec.g) / 3 * Shininess);
+        }
+        else
+            Position = vec4(position.xyz, Shininess);*/
     }
     else
+    {
         Normal = vec4(normal, processFlag);
+        //Position = vec4(position.xyz, Shininess);
+    }
 
     if(TextureMode >= 3)
     {
@@ -435,6 +442,6 @@ void main(void)
     }
     else
         Position = vec4(position.xyz, Shininess);
-        
+
     Data.rgb = Emit;
 }
