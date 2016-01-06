@@ -38,8 +38,8 @@ uniform int PostEffects;
 uniform float Near;
 uniform float Far;
 
-uniform float dofFocus = 0.5;
-uniform float dofStrength = 1.5;
+uniform float dofFocus = 0.2;
+uniform float dofStrength = 2.0;
 uniform int dofAutofocus = 1;
 
 uniform sampler2D Textures[5];
@@ -167,8 +167,6 @@ vec4 blur(vec4 diffuse, vec2 texcoord, sampler2D sampler, float amount)
     if(amount == 0.0)
        return diffuse;
 
-        //strength *= float(textureSize(Texture[0], 1).x);
-
 	diffuse += texture2D(sampler, texcoord+vec2(0.01, 0.0) * amount);
 	diffuse += texture2D(sampler, texcoord+vec2(-0.01, 0.0) * amount);
 	diffuse += texture2D(sampler, texcoord+vec2(0.0, 0.01) * amount);
@@ -238,9 +236,40 @@ vec3 fxaa(sampler2D textureSampler, vec2 vertTexcoord, vec2 texcoordOffset)
 #define BLOOM_SHIFT 0.0018
 #define BLOOM_STRENGTH 0.015
 
-vec4 bloom(sampler2D sampler, vec2 texcoord, vec4 diffuse)
+vec3 bloom(sampler2D sampler, vec2 texcoord, vec3 diffuse, vec2 frame, float strength, float minLum)
 {
-	return diffuse;
+	float avg = ((diffuse.r + diffuse.g + diffuse.b) / 3.0);
+    vec3 sum = vec3(0.0);
+
+    for (int i = -5; i <= 5; i++)
+    {
+    	for (int j = -5; j <= 5; j++)
+    	{
+    	    vec3 color = texture(sampler, (texcoord + frame * vec2(i, j))).rgb;
+
+            if((color.r + color.g + color.b) / 3.0 >= minLum)
+                sum += color * strength;//0.015;
+    	}
+    }
+
+    if (avg < 0.025)
+    {
+    	return diffuse + sum * 0.335;
+    }
+    else if (avg < 0.10)
+    {
+    	return diffuse + (sum * sum) * 0.5;
+    }
+    else if (avg < 0.88)
+    {
+    	return diffuse + ((sum * sum) * 0.333);
+    }
+    else if (avg >= 0.88)
+    {
+    	return diffuse + sum;
+    }
+
+   	return diffuse;
 }
 
 vec4 radialBlur(vec4 color, vec2 texcoord, sampler2D sampler, float sampleDist, float sampleStrength)
@@ -337,9 +366,12 @@ void main(void)
 		float depthCenter = linearize_depth(texture2D(Textures[4], vec2(0.5, 0.5)).r, Near, Far);
 		vec2 frame = vec2(1.0 / Width, 1.0/ Height);
 
-		FragColor.rgb = fxaa(Textures[0], texCoord, frame);
+        float dofAmount = dofStrength * (depth - ((dofAutofocus == 1) ? depthCenter : dofFocus));
 
-		//FragColor = mix(FragColor, blur(FragColor, texCoord, Textures[0], 0.5*dofStrength*(depth - ((dofAutofocus == 1) ? depthCenter : dofFocus))), dofStrength*0.5);
+		FragColor.rgb = fxaa(Textures[0], texCoord, frame);
+        FragColor.rgb = bloom(Textures[0], texCoord, FragColor.rgb, frame, 0.035, 1.0);
+
+		FragColor.rgb = mix(FragColor.rgb, blur(FragColor, texCoord, Textures[0], dofAmount).rgb, dofStrength*abs(dofAmount));
 
 		//FragColor.rgb = vec3(ssao(texCoord, frame * 10.0, Textures[4], Textures[2], Textures[1]));
 
