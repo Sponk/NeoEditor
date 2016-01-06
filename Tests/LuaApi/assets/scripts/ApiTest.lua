@@ -69,15 +69,21 @@ function update(delta)
         end
 
         if input:isKeyPressed("W") then
-            camera:translate(NeoLua.Vector3(0,0,-10*delta), true)
+            camera:translate(NeoLua.Vector3(0,0,-100*delta), true)
         elseif input:isKeyPressed("S") then
-            camera:translate(NeoLua.Vector3(0,0,10*delta), true)
+            camera:translate(NeoLua.Vector3(0,0,100*delta), true)
         end
 
         if input:isKeyPressed("A") then
-            camera:translate(NeoLua.Vector3(-10*delta,0,0), true)
+            camera:translate(NeoLua.Vector3(-100*delta,0,0), true)
         elseif input:isKeyPressed("D") then
-            camera:translate(NeoLua.Vector3(10*delta,0,0), true)
+            camera:translate(NeoLua.Vector3(100*delta,0,0), true)
+        end
+
+        if input:isKeyPressed("E") then
+                camera:rotate(NeoLua.Vector3(0, 0, -1), 100*delta, false)
+        elseif input:isKeyPressed("Q") then
+                camera:rotate(NeoLua.Vector3(0, 0, 1), 100*delta, false)
         end
 
         local dx = input:getAxis("MOUSE_X")
