@@ -32,10 +32,10 @@
 		<Light name="Light01">
 			<active value="true" />
 			<transform 
-				position="45.427383 -12.878654 1.563580"
-				rotation="0.000000 -15.324636 0.000000"
+				position="48.258244 -14.236198 5.103604"
+				rotation="0.000000 -15.324683 0.000000"
 				scale="1.000000 1.000000 1.000000" />
-			<properties 
+			<properties
 				radius="100.000000"
 				color="0.517094 0.757150 1.000000"
 				intensity="1.100000"
@@ -45,11 +45,11 @@
 		</Light>
 		<Light name="Light02">
 			<active value="true" />
-			<transform 
+			<transform
 				position="10.017162 -8.283119 13.911819"
-				rotation="0.000000 -15.324636 0.000000"
+				rotation="0.000000 -15.324683 0.000000"
 				scale="1.000000 1.000000 1.000000" />
-			<properties 
+			<properties
 				radius="34.000000"
 				color="0.069650 1.000000 0.000000"
 				intensity="1.300000"
@@ -59,11 +59,11 @@
 		</Light>
 		<Light name="Light03">
 			<active value="true" />
-			<transform 
+			<transform
 				position="1.412033 -1.781609 13.911819"
-				rotation="0.000000 -15.324636 0.000000"
+				rotation="0.000000 -15.324683 0.000000"
 				scale="1.000000 1.000000 1.000000" />
-			<properties 
+			<properties
 				radius="34.000000"
 				color="1.000000 0.288342 0.000000"
 				intensity="1.300000"
@@ -73,11 +73,11 @@
 		</Light>
 		<Light name="Light04">
 			<active value="true" />
-			<transform 
+			<transform
 				position="18.007702 -1.781609 13.911819"
-				rotation="0.000000 -15.324636 0.000000"
+				rotation="0.000000 -15.324683 0.000000"
 				scale="1.000000 1.000000 1.000000" />
-			<properties 
+			<properties
 				radius="34.000000"
 				color="1.000000 0.000000 0.710234"
 				intensity="1.300000"
@@ -87,11 +87,11 @@
 		</Light>
 		<Light name="Light05">
 			<active value="true" />
-			<transform 
+			<transform
 				position="11.006080 -15.735081 -3.131695"
-				rotation="90.000000 -15.324636 0.000000"
+				rotation="90.000000 -15.324629 -0.000002"
 				scale="1.000000 1.000000 1.000000" />
-			<properties 
+			<properties
 				radius="34.000000"
 				color="0.000000 0.782015 1.000000"
 				intensity="1.300000"
@@ -101,56 +101,71 @@
 		</Light>
 		<Light name="Light0">
 			<active value="true" />
-			<transform 
-				position="-16.784399 190.506393 66.429451"
+			<transform
+				position="-226.952988 14.754000 74.414993"
 				rotation="0.000000 -0.000000 0.000000"
 				scale="1.000000 1.000000 1.000000" />
-			<properties 
-				radius="300.000000"
-				color="1.000000 1.000000 1.000000"
-				intensity="1.100000"
+			<properties
+				radius="200.000000"
+				color="1.000000 0.300000 1.000000"
+				intensity="0.800000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light1">
+			<active value="true" />
+			<transform
+				position="-227.726990 -36.339996 57.375000"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties
+				radius="150.000000"
+				color="0.500000 0.600000 1.000000"
+				intensity="1.000000"
 				spotAngle="180.000000"
 				spotExponent="0.000000"
 				shadow="false" />
 		</Light>
 		<Camera name="Camera0">
 			<active value="true" />
-			<transform 
+			<transform
 				position="11.472992 -86.044128 31.492950"
-				rotation="76.067223 -0.000000 0.000000"
+				rotation="76.067200 -0.000000 0.000000"
 				scale="1.000000 1.000000 1.000000" />
-			<properties 
+			<properties
 				clearColor="0.200000 0.300000 0.400000"
 				fogColor="1.000000 1.000000 1.000000"
 				ortho="false"
 				fov="70.000000"
 				clippingNear="1.000000"
-				clippingFar="1000.000000"
+				clippingFar="5000.000000"
 				fog="false"
 				fogDistance="0.000000"
 				skyboxTextures="assets/maps/skybox" />
 		</Camera>
-		<Entity name="Sponza" file="../meshs/sponza.mesh">
-        			<anim id="0" />
-        			<active value="true" />
-        			<transform
-        				position="0 0.000000 0.000000"
-        				rotation="-0.000000 0.000000 0.000000"
-        				scale="2.000000 2.000000 2.000000" />
-        			<properties
-        				invisible="false"
-        				shadow="true"
-        				occluder="false" />
-        </Entity>
+		<Entity name="Sponza" file="../meshs/sponza/sponza.obj">
+			<BoundingBox min="-1920.945801 -1105.425781 -126.442490" max="1799.908081 1182.806885 1429.432983" />
+			<anim id="0" />
+			<active value="true" />
+			<transform
+				position="126.679070 -37.756260 -26.090818"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="0.500000 0.500000 0.500000" />
+			<properties
+				invisible="false"
+				shadow="true"
+				occluder="false" />
+		</Entity>
 		<Entity name="Cube" file="../meshs/box.mesh">
 			<BoundingBox min="-5.677568 -5.677569 -5.677566" max="5.677569 5.677568 5.677566" />
 			<anim id="0" />
 			<active value="true" />
-			<transform 
+			<transform
 				position="46.173641 0.000000 0.000000"
 				rotation="-0.000000 90.000000 0.000000"
 				scale="1.000000 1.000000 1.000000" />
-			<properties 
+			<properties
 				invisible="false"
 				shadow="true"
 				occluder="false" />
@@ -159,11 +174,11 @@
 			<BoundingBox min="-1.000000 -1.000001 -1.000000" max="1.000000 1.000000 1.000000" />
 			<anim id="0" />
 			<active value="true" />
-			<transform 
+			<transform
 				position="29.086611 -162.526031 0.000000"
 				rotation="0.000000 -0.000000 0.000000"
 				scale="8.005987 8.005987 8.005987" />
-			<properties 
+			<properties
 				invisible="false"
 				shadow="true"
 				occluder="false" />
@@ -172,12 +187,12 @@
 			<BoundingBox min="-1.000000 -1.000001 -1.000000" max="1.000000 1.000000 1.000000" />
 			<anim id="0" />
 			<active value="true" />
-			<transform 
+			<transform
 				parent="Light"
 				position="0.000000 0.000000 0.000000"
 				rotation="0.000000 -0.000000 0.000000"
 				scale="1.000000 1.000000 1.000000" />
-			<properties 
+			<properties
 				invisible="false"
 				shadow="true"
 				occluder="false" />
@@ -186,11 +201,11 @@
 			<BoundingBox min="-84.445297 -55.742798 -39.508904" max="98.276901 57.958904 48.265701" />
 			<anim id="0" />
 			<active value="true" />
-			<transform 
+			<transform
 				position="-29.093964 0.000000 0.000000"
 				rotation="0.000000 -0.000000 0.000000"
 				scale="0.246365 0.246365 0.246365" />
-			<properties 
+			<properties
 				invisible="false"
 				shadow="true"
 				occluder="false" />
@@ -199,11 +214,11 @@
 			<BoundingBox min="-6.221394 -3.875040 -4.479403" max="6.221394 3.875040 4.479403" />
 			<anim id="0" />
 			<active value="true" />
-			<transform 
+			<transform
 				position="10.029486 0.000000 0.000000"
 				rotation="0.000000 -0.000000 0.000000"
 				scale="2.666181 2.666181 2.666181" />
-			<properties 
+			<properties
 				invisible="false"
 				shadow="true"
 				occluder="false" />
@@ -212,11 +227,11 @@
 			<BoundingBox min="-84.445297 -55.742798 -39.508904" max="98.276901 57.958904 48.265701" />
 			<anim id="0" />
 			<active value="true" />
-			<transform 
+			<transform
 				position="10.029486 41.474052 22.664635"
 				rotation="0.000000 -0.000000 0.000000"
 				scale="0.267257 0.267257 0.267257" />
-			<properties 
+			<properties
 				invisible="false"
 				shadow="true"
 				occluder="false" />
@@ -225,11 +240,11 @@
 			<BoundingBox min="-6.221394 -3.875040 -4.479403" max="6.221394 3.875040 4.479403" />
 			<anim id="0" />
 			<active value="true" />
-			<transform 
+			<transform
 				position="12.024605 -2.016586 32.087105"
 				rotation="0.000000 -0.000000 0.000000"
 				scale="1.000000 1.000000 1.000000" />
-			<properties 
+			<properties
 				invisible="false"
 				shadow="true"
 				occluder="false" />
@@ -238,22 +253,22 @@
 			<BoundingBox min="-0.475022 -0.475109 -0.000000" max="0.475174 0.475215 0.989631" />
 			<anim id="0" />
 			<active value="true" />
-			<transform 
-				position="10.029000 162.260086 -23.021469"
+			<transform
+				position="-226.711609 -8.802671 -31.390312"
 				rotation="0.000000 -0.000000 0.000000"
 				scale="100.000000 100.000000 100.000000" />
-			<properties 
+			<properties
 				invisible="false"
 				shadow="true"
 				occluder="false" />
 		</Entity>
 		<Text name="Text0" file="../default.ttf">
 			<active value="true" />
-			<transform 
+			<transform
 				position="-4.468990 -22.549616 12.118637"
-				rotation="-90.000000 0.000000 0.000000"
+				rotation="-89.999977 0.000000 0.000000"
 				scale="1.000000 1.000000 1.000000" />
-			<properties 
+			<properties
 				size="16.000000"
 				align="Left"
 				color="1.000000 1.000000 1.000000 1.000000" />
@@ -261,15 +276,113 @@
 				<![CDATA[Text]]>
 			</textData>
 		</Text>
-		<Light name="Light1">
+		<Light name="Light2">
 			<active value="true" />
-			<transform 
-				position="45.316940 143.678802 64.521797"
+			<transform
+				position="-181.603989 71.598000 38.876999"
 				rotation="0.000000 -0.000000 0.000000"
 				scale="1.000000 1.000000 1.000000" />
-			<properties 
+			<properties
 				radius="200.000000"
-				color="1.000000 1.000000 1.000000"
+				color="1.000000 0.800000 0.500000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light3">
+			<active value="true" />
+			<transform
+				position="-181.603989 -106.955444 38.876999"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties
+				radius="200.000000"
+				color="1.000000 0.800000 0.500000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light4">
+			<active value="true" />
+			<transform
+				position="3.261732 -106.955444 38.876999"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties
+				radius="200.000000"
+				color="1.000000 0.800000 0.500000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light5">
+			<active value="true" />
+			<transform
+				position="181.003464 -106.955444 38.876999"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties
+				radius="200.000000"
+				color="1.000000 0.800000 0.500000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light6">
+			<active value="true" />
+			<transform
+				position="370.926758 -106.955444 38.876999"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties
+				radius="200.000000"
+				color="1.000000 0.800000 0.500000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light7">
+			<active value="true" />
+			<transform
+				position="370.926758 72.593002 38.876999"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties
+				radius="200.000000"
+				color="1.000000 0.800000 0.500000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light8">
+			<active value="true" />
+			<transform
+				position="190.510330 72.593002 38.876999"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties
+				radius="200.000000"
+				color="1.000000 0.800000 0.500000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light9">
+			<active value="true" />
+			<transform
+				position="1.038119 72.593002 38.876999"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties
+				radius="200.000000"
+				color="1.000000 0.800000 0.500000"
 				intensity="1.000000"
 				spotAngle="180.000000"
 				spotExponent="0.000000"
