@@ -403,7 +403,9 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 		   material->setOpacity(value);
 		
 		if(AI_SUCCESS == aiGetMaterialFloat(mtl, AI_MATKEY_SHININESS, &value))
-			 material->setShininess(value);
+		{
+			material->setShininess(value*0.25f); // Need to quarter values since Assimp multiplies with 4 for some reason.
+		}
 
 		// blend
 		{
