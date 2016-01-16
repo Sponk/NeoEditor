@@ -28,6 +28,8 @@
 #define _GL4_CONTEXT_H
 
 #include <NeoCore.h>
+#include <unordered_map>
+#include <string>
 
 #define MAX_MATRIX_STEPS 32
 
@@ -62,6 +64,18 @@ private:
         float m_fogMin, m_fogMax;
 		Vector3 m_fogColor;
 		float m_anisotropy;
+
+		std::unordered_map<unsigned int, std::unordered_map<std::string, int>> m_uniformLocationCache;
+
+		/**
+		 * @brief Retrieves the cached uniform location of a given uniform.
+		 *
+		 * Will get the location from OpenGL when the cached element does not exist yet.
+		 * @param fx The shader ID.
+		 * @param name The name.
+		 * @return The uniform location.
+		 */
+		int getUniformLocation(unsigned int fx, const char* name);
 
 public:
 
@@ -121,8 +135,8 @@ public:
         void deleteFX(unsigned int * fxId);
         void sendUniformInt(unsigned int fxId, const char * name, int * values, const int count = 1);
         void sendUniformFloat(unsigned int fxId, const char * name, float * values, const int count = 1);
-    void sendUniformVec2(unsigned int fxId, const char * name, float * values, const int count = 1);
-    void sendUniformVec3(unsigned int fxId, const char * name, float * values, const int count = 1);
+    	void sendUniformVec2(unsigned int fxId, const char * name, float * values, const int count = 1);
+    	void sendUniformVec3(unsigned int fxId, const char * name, float * values, const int count = 1);
         void sendUniformVec4(unsigned int fxId, const char * name, float * values, const int count = 1);
 		void sendUniformMatrix(unsigned int fxId, const char * name, Matrix4x4 * matrix, const int count = 1, const bool transpose = false);
         void getAttribLocation(unsigned int fxId, const char * name, int * location);

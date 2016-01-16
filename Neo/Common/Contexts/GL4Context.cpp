@@ -748,19 +748,19 @@ void GL4Context::deleteFX(unsigned int * fxId)
 
 void GL4Context::sendUniformInt(unsigned int fxId, const char * name, int * values, const int count)
 {
-    GLint uValue = glGetUniformLocation(fxId, name);
+    GLint uValue = getUniformLocation(fxId, name);
     if(uValue != -1) glUniform1iv(uValue, count, values);
 }
 
 void GL4Context::sendUniformFloat(unsigned int fxId, const char * name, float * values, const int count)
 {
-    GLint uValue = glGetUniformLocation(fxId, name);
+    GLint uValue = getUniformLocation(fxId, name);
     if(uValue != -1) glUniform1fv(uValue, count, values);
 }
 
 void GL4Context::sendUniformVec2(unsigned int fxId, const char * name, float * values, const int count)
 {
-    GLint uValue = glGetUniformLocation(fxId, name);
+    GLint uValue = getUniformLocation(fxId, name);
     if(uValue != -1) glUniform2fv(uValue, count, values);
 }
 
@@ -772,13 +772,13 @@ void GL4Context::sendUniformVec3(unsigned int fxId, const char * name, float * v
 
 void GL4Context::sendUniformVec4(unsigned int fxId, const char * name, float * values, const int count)
 {
-    GLint uValue = glGetUniformLocation(fxId, name);
+    GLint uValue = getUniformLocation(fxId, name);
     if(uValue != -1) glUniform4fv(uValue, count, values);
 }
 
 void GL4Context::sendUniformMatrix(unsigned int fxId, const char * name, Matrix4x4 * matrix, const int count, const bool transpose)
 {
-	GLint uValue = glGetUniformLocation(fxId, name);
+	GLint uValue = getUniformLocation(fxId, name);
 	if(uValue != -1) glUniformMatrix4fv(uValue, count, transpose, matrix->entries);
 }
 
@@ -1386,3 +1386,22 @@ void GL4Context::setPolygonMode(PRIMITIVE_TYPES t)
 	}
 }
 #endif
+
+int GL4Context::getUniformLocation(unsigned int fx, const char* name)
+{
+	// return glGetUniformLocation(fx, name);
+	auto shader = m_uniformLocationCache.find(fx);
+	if(shader == m_uniformLocationCache.end())
+	{
+		new_element:
+		GLint id = glGetUniformLocation(fx, name);
+		m_uniformLocationCache[fx][name] = id;
+		return id;
+	}
+
+	auto uniform = shader->second.find(name);
+	if(uniform == shader->second.end())
+		goto new_element;
+
+	return uniform->second;
+}
