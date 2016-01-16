@@ -332,13 +332,13 @@ end
 -- @param entity An OEntity object
 -- @param rayO The origin of the ray
 -- @param rayD The direction of the ray
--- @return {boolean, object3d}
+-- @return {boolean, vector3}
 function Editor.castRay(entity, rayO, rayD)
 
     if entity == nil then return unpack({ false, nil }) end;
 
     if entity:getType() ~= NeoLua.OBJECT3D_ENTITY then
-        return
+        return unpack({ false, nil })
     end
 
     entity:getMesh():updateBoundingBox()
@@ -355,6 +355,10 @@ function Editor.castRay(entity, rayO, rayD)
 
     local mesh = entity:getMesh()
     local sz = mesh:getSubMeshsNumber()
+    local ipoint = NeoLua.Vector3()
+
+    local getTriangleNormal = NeoLua.getTriangleNormal
+    local isEdgeTriangleIntersection = NeoLua.isEdgeTriangleIntersection
 
     for i = 0, sz - 1, 1 do
         local submesh = mesh:getSubMesh(i)
@@ -367,11 +371,8 @@ function Editor.castRay(entity, rayO, rayD)
             --print("v1: ", v1.x, v1.y, v1.z)
             --print("v2: ", v2.x, v2.y, v2.z)
             --print("v3: ", v3.x, v3.y, v3.z)
-
-            local ipoint = NeoLua.Vector3()
-
             -- bool isEdgeTriangleIntersection(const Vector3 & origin, const Vector3 & dest, const Vector3 & a, const Vector3 & b, const Vector3 & c, const Vector3 & normal, Vector3 * point)
-            local retval = NeoLua.isEdgeTriangleIntersection(localRayO, localRayD, v1, v2, v3, NeoLua.getTriangleNormal(v1, v2, v3), ipoint)
+            local retval = isEdgeTriangleIntersection(localRayO, localRayD, v1, v2, v3, getTriangleNormal(v1, v2, v3), ipoint)
 
             if retval then
                 --print("ipoint: ", ipoint.x, ipoint.y, ipoint.z)
@@ -390,7 +391,7 @@ end
 -- @param rayO The origin of the ray
 -- @param rayD The direction of the ray
 -- @param obj Any Object3d subclass that has a bounding box.
--- @return A boolean value.
+-- @return The position of the hit.
 function Editor.castRayOnBox(obj, rayO, rayD)
     local box = obj:getBoundingBox()
     local pos = obj:getTransformedPosition()
@@ -398,7 +399,12 @@ function Editor.castRayOnBox(obj, rayO, rayD)
 
     local localRayO = iMatrix * rayO
     local localRayD = iMatrix * rayD
-    return NeoLua.isEdgeToBoxCollision(localRayO, localRayD, box.min, box.max)
+
+    if NeoLua.isEdgeToBoxCollision(localRayO, localRayD, box.min, box.max) then
+        return pos
+    end
+
+    return nil
 end
 
 function table.contains(table, element)
@@ -573,11 +579,12 @@ function Editor.selectObject()
         -- Check all entities
         for i = 0, numObjects - 1, 1 do
             local entity = scene:getEntityByIndex(i)
+            local hit, point = Editor.castRay(entity, rayO, rayD)
             -- FIXME: Should wireframed objects be selectable in 3D?
-            if entity ~= nil and Editor.castRay(entity, rayO, rayD) and
+            if entity ~= nil and hit and
                     not table.contains(Editor.objectMeshes, entity) then
 
-                table.insert(possibleSelection, entity)
+                table.insert(possibleSelection, {entity = entity, point = point})
                 --Editor.entityEditor.setShownObject(entity:getName())
 
                 --return entity
@@ -589,45 +596,57 @@ function Editor.selectObject()
         -- Check all text objects
         for i = 0, numObjects - 1, 1 do
             local entity = scene:getTextByIndex(i)
-            if entity ~= nil and Editor.castRayOnBox(entity, rayO, rayD) then
-                table.insert(possibleSelection, entity)
+            local colliding, point = Editor.castRayOnBox(entity, rayO, rayD)
+
+            if entity ~= nil and colliding then
+                table.insert(possibleSelection, {entity = entity, point = point})
             end
         end
 
         -- Check all light objects
         for i,v in ipairs(Editor.lightBillboards) do
             local entity = scene:getLightByName(v:getName())
-            if entity ~= nil and Editor.castRayOnBox(v, rayO, rayD) then
-                table.insert(possibleSelection, entity)
+            local point = Editor.castRayOnBox(v, rayO, rayD)
+
+            if entity ~= nil and point ~= nil then
+                table.insert(possibleSelection, {entity = entity, point = point})
             end
         end
 
         -- Check all sound objects
         for i,v in ipairs(Editor.soundBillboards) do
             local entity = scene:getSoundByName(v:getName())
-            if entity ~= nil and Editor.castRayOnBox(v, rayO, rayD) then
-                table.insert(possibleSelection, entity)
+            local point = Editor.castRayOnBox(v, rayO, rayD)
+
+            if entity ~= nil and point ~= nil then
+                table.insert(possibleSelection, {entity = entity, point = point})
             end
         end
 
         -- Check all camera objects
         for i,v in ipairs(Editor.cameraBillboards) do
             local entity = scene:getCameraByName(v:getName())
-            if entity ~= nil and Editor.castRayOnBox(v, rayO, rayD) then
-                table.insert(possibleSelection, entity)
+            local point = Editor.castRayOnBox(v, rayO, rayD)
+
+            if entity ~= nil and point ~= nil then
+                table.insert(possibleSelection, {entity = entity, point = point})
             end
         end
 
         if #possibleSelection <= 0 then Editor.select(nil) return end
 
         local camPos = camera:getPosition()
+
         local selectedEntity = possibleSelection[1]
-        local lastDistance = (camPos - selectedEntity:getTransformedPosition()):getLength()
+        local lastDistance = (camPos - selectedEntity.point):getLength()
+        selectedEntity = selectedEntity.entity
+
         for k, v in ipairs(possibleSelection) do
-            local dst = (camPos - v:getTransformedPosition()):getLength()
+            -- infoLog(tostring(v) .. " " .. tostring(v.point))
+            local dst = (camPos - v.point):getLength()
             if dst < lastDistance then
                 lastDistance = dst
-                selectedEntity = v
+                selectedEntity = v.entity
             end
         end
 
