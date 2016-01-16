@@ -157,6 +157,79 @@ vec4 calculateAllPhongLight(vec3 p, vec3 n, vec4 d, float s)
   return result;
 }
 
+/***********************************************************************************************************************
+ *
+ * Post Effects
+ *
+ ***********************************************************************************************************************/
+
+// Values found here: http://www.geeks3d.com/20100628/3d-programming-ready-to-use-64-sample-poisson-disc/
+const vec2 poissonDisk[] = vec2[](
+vec2(-0.613392, 0.617481),
+vec2(0.170019, -0.040254),
+vec2(-0.299417, 0.791925),
+vec2(0.645680, 0.493210),
+vec2(-0.651784, 0.717887),
+vec2(0.421003, 0.027070),
+vec2(-0.817194, -0.271096),
+vec2(-0.705374, -0.668203),
+vec2(0.977050, -0.108615),
+vec2(0.063326, 0.142369),
+vec2(0.203528, 0.214331),
+vec2(-0.667531, 0.326090),
+vec2(-0.098422, -0.295755),
+vec2(-0.885922, 0.215369),
+vec2(0.566637, 0.605213),
+vec2(0.039766, -0.396100),
+vec2(0.751946, 0.453352),
+vec2(0.078707, -0.715323),
+vec2(-0.075838, -0.529344),
+vec2(0.724479, -0.580798),
+vec2(0.222999, -0.215125),
+vec2(-0.467574, -0.405438),
+vec2(-0.248268, -0.814753),
+vec2(0.354411, -0.887570),
+vec2(0.175817, 0.382366),
+vec2(0.487472, -0.063082),
+vec2(-0.084078, 0.898312),
+vec2(0.488876, -0.783441),
+vec2(0.470016, 0.217933),
+vec2(-0.696890, -0.549791),
+vec2(-0.149693, 0.605762),
+vec2(0.034211, 0.979980),
+vec2(0.503098, -0.308878),
+vec2(-0.016205, -0.872921),
+vec2(0.385784, -0.393902),
+vec2(-0.146886, -0.859249),
+vec2(0.643361, 0.164098),
+vec2(0.634388, -0.049471),
+vec2(-0.688894, 0.007843),
+vec2(0.464034, -0.188818),
+vec2(-0.440840, 0.137486),
+vec2(0.364483, 0.511704),
+vec2(0.034028, 0.325968),
+vec2(0.099094, -0.308023),
+vec2(0.693960, -0.366253),
+vec2(0.678884, -0.204688),
+vec2(0.001801, 0.780328),
+vec2(0.145177, -0.898984),
+vec2(0.062655, -0.611866),
+vec2(0.315226, -0.604297),
+vec2(-0.780145, 0.486251),
+vec2(-0.371868, 0.882138),
+vec2(0.200476, 0.494430),
+vec2(-0.494552, -0.711051),
+vec2(0.612476, 0.705252),
+vec2(-0.578845, -0.768792),
+vec2(-0.772454, -0.090976),
+vec2(0.504440, 0.372295),
+vec2(0.155736, 0.065157),
+vec2(0.391522, 0.849605),
+vec2(-0.620106, -0.328104),
+vec2(0.789239, -0.419965),
+vec2(-0.545396, 0.538133),
+vec2(-0.178564, -0.596057));
+
 vec4 gammaCorrection(vec4 diffuse, float gamma)
 {
 	return pow(diffuse, vec4(1.0 / gamma));
@@ -238,19 +311,49 @@ vec3 fxaa(sampler2D textureSampler, vec2 vertTexcoord, vec2 texcoordOffset)
 
 vec3 bloom(sampler2D sampler, vec2 texcoord, vec3 diffuse, vec2 frame, float strength, float minLum)
 {
+	const int kernel_radius = 8;
+	const int kernel_content = kernel_radius * kernel_radius;
 	float avg = ((diffuse.r + diffuse.g + diffuse.b) / 3.0);
     vec3 sum = vec3(0.0);
 
-    for (int i = -5; i <= 5; i++)
+	int poisson = 0;
+    /*for (int i = -kernel_radius; i <= kernel_radius; i++)
     {
-    	for (int j = -5; j <= 5; j++)
+    	for (int j = -kernel_radius; j <= kernel_radius; j++)
     	{
-    	    vec3 color = texture(sampler, (texcoord + frame * vec2(i, j))).rgb;
+    	    vec3 color = texture(sampler, (texcoord + poissonDisk[poisson++] * frame * vec2(i, j))).rgb;
 
-            if((color.r + color.g + color.b) / 3.0 >= minLum)
+            //if((color.r + color.g + color.b) / 3.0 >= minLum)
                 sum += color * strength;//0.015;
     	}
+    }*/
+
+	int y = -kernel_radius;
+	int x = -kernel_radius;
+	while(y < kernel_radius)
+    {
+   	    vec3 color = texture(sampler, (texcoord + poissonDisk[poisson] * frame * vec2(x, y))).rgb;
+
+        if((color.r + color.g + color.b) / 3.0 >= minLum)
+        	sum += color * strength;//0.015;
+
+		poisson++;
+		if((++x) >= kernel_radius)
+		{
+			x = -kernel_radius;
+			y++;
+		}
     }
+
+	/*vec2 multiplier = (frame * (0.5 * kernel_radius));
+    for(int i = 0; i < kernel_radius; i++)
+    {
+    	vec2 sampleTexCoord = texcoord + (poissonDisk[i] * multiplier);
+    	vec3 color = texture(sampler, sampleTexCoord).rgb;
+
+        if((color.r + color.g + color.b) / 3.0 >= minLum)
+        	sum += color;// * strength;//0.015;
+    }*/
 
     if (avg < 0.025)
     {
@@ -303,26 +406,9 @@ float linearize_depth(float z, float near, float far)
 }
 
 // SSAO
-const int sample_count = 16;
-const vec2 filter_offset[] = vec2[](vec2(-0.94201624, -0.39906216),
-                                vec2(0.94558609, -0.76890725),
-                                vec2(-0.094184101, -0.92938870),
-                                vec2(0.34495938, 0.29387760),
-                                vec2(-0.91588581, 0.45771432),
-                                vec2(-0.81544232, -0.87912464),
-                                vec2(-0.38277543, 0.27676845),
-                                vec2(0.97484398, 0.75648379),
-                                vec2(0.44323325, -0.97511554),
-                                vec2(0.53742981, -0.47373420),
-                                vec2(-0.26496911, -0.41893023),
-                                vec2(0.79197514, 0.19090188),
-                                vec2(-0.24188840, 0.99706507),
-                                vec2(-0.81409955, 0.91437590),
-                                vec2(0.19984126, 0.78641367),
-                                vec2(0.14383161, -0.14100790));
-
 float ssao(vec2 texcoord, vec2 filterRadius, sampler2D depthTexture, sampler2D positionTexture, sampler2D normalTexture)
 {
+	const int samples = 64;
 	const float distanceThreshold = 5.0;
 	const vec3 lumcoeff = vec3(0.299,0.587,0.114);
 
@@ -330,9 +416,9 @@ float ssao(vec2 texcoord, vec2 filterRadius, sampler2D depthTexture, sampler2D p
 	vec3 viewPos = texture2D(positionTexture, texcoord).xyz;
 	vec3 viewNormal = texture2D(normalTexture, texcoord).xyz;
 
-	for(int i = 0; i < sample_count; i++)
+	for(int i = 0; i < samples; i++)
     {
-        vec2 sampleTexCoord = texcoord + (filter_offset[i] * filterRadius);
+        vec2 sampleTexCoord = texcoord + (poissonDisk[i] * filterRadius);
         vec3 samplePos = texture2D(positionTexture, sampleTexCoord).xyz;
         vec3 sampleDir = normalize(samplePos - viewPos);
 
@@ -347,7 +433,7 @@ float ssao(vec2 texcoord, vec2 filterRadius, sampler2D depthTexture, sampler2D p
 
     float lum = dot(FragColor.rgb, lumcoeff);
 
-    return mix(1.0 - (occlusion / sample_count), 1.0, lum);
+    return mix(1.0 - (occlusion / samples), 1.0, lum);
 }
 
 void main(void)
@@ -359,19 +445,19 @@ void main(void)
 	{
 		vec4 normal = texture2D(Textures[1], texCoord);
 
-		//FragColor.rgb = vec3(normal.a);
-		//return;
-
 		float depth = linearize_depth(texture2D(Textures[4], texCoord).r, Near, Far);
 		float depthCenter = linearize_depth(texture2D(Textures[4], vec2(0.5, 0.5)).r, Near, Far);
 		vec2 frame = vec2(1.0 / Width, 1.0/ Height);
 
-        float dofAmount = dofStrength * (depth - ((dofAutofocus == 1) ? depthCenter : dofFocus));
+		//FragColor.rgb = vec3(ssao(texCoord, frame * 30.0, Textures[4], Textures[2], Textures[1]));
+		//return;
+
+        //float dofAmount = dofStrength * (depth - ((dofAutofocus == 1) ? depthCenter : dofFocus));
 
 		FragColor.rgb = fxaa(Textures[0], texCoord, frame);
-        FragColor.rgb = bloom(Textures[0], texCoord, FragColor.rgb, frame, 0.035, 1.0);
+        //FragColor.rgb = bloom(Textures[0], texCoord, FragColor.rgb, frame, 0.04, 1.0);
 
-		FragColor.rgb = mix(FragColor.rgb, blur(FragColor, texCoord, Textures[0], dofAmount).rgb, dofStrength*abs(dofAmount));
+		//FragColor.rgb = mix(FragColor.rgb, blur(FragColor, texCoord, Textures[0], dofAmount).rgb, dofStrength*abs(dofAmount));
 
 		//FragColor.rgb = vec3(ssao(texCoord, frame * 10.0, Textures[4], Textures[2], Textures[1]));
 
