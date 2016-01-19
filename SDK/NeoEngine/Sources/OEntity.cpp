@@ -24,6 +24,7 @@
 
 
 #include "../Includes/NeoEngine.h"
+#include <NeoCore.h>
 
 using namespace Neo;
 
@@ -363,4 +364,61 @@ void OEntity::update(void)
 			}
 		}
 	}
+}
+
+RayCastResult OEntity::castRay(Vector3 &rayO, Vector3 &rayD)
+{
+	RayCastResult result;
+
+	Mesh* mesh = getMesh();
+	mesh->updateBoundingBox();
+
+	Box3d* box = mesh->getBoundingBox();
+	Vector3 pos = getTransformedPosition();
+	Matrix4x4 iMatrix = getMatrix()->getInverse();
+
+	Vector3 localRayO = iMatrix * rayO;
+	Vector3 localRayD = iMatrix * rayD;
+
+	if(!isEdgeToBoxCollision(localRayO, localRayD, box->min, box->max))
+	{
+		result.hit = false;
+		return result;
+	}
+
+	SubMesh* submeshes = mesh->getSubMeshs();
+	for(int i = 0; i < mesh->getSubMeshsNumber(); i++)
+	{
+		Vector3* t1;
+		Vector3* t2;
+		Vector3* t3;
+		Vector3* vertices = submeshes[i].getVertices();
+
+		for(int j = 0; j < submeshes[i].getIndicesSize(); j += 3)
+		{
+			t1 = vertices + submeshes[i].getIndex(j);
+			t2 = vertices + submeshes[i].getIndex(j + 1);
+			t3 = vertices + submeshes[i].getIndex(j + 2);
+
+			vertices = (Vector3*) submeshes[i].getVertices();
+			result.hit = isEdgeTriangleIntersection(localRayO,
+													localRayD,
+
+													*t1,
+													*t2,
+													*t3,
+
+													getTriangleNormal(
+														*t1,
+														*t2,
+														*t3),
+
+													&result.point);
+
+			if(result.hit)
+				return result;
+		}
+	}
+
+	return result;
 }

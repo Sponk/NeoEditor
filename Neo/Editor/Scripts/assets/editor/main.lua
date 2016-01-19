@@ -4,7 +4,6 @@
 -- deleting it from memory and reloading it on the fly for playing the game in the editor.
 
 Editor = {}
-
 Shortcuts = require("editor.shortcuts")
 
 require("editor.callbacks")
@@ -341,7 +340,11 @@ function Editor.castRay(entity, rayO, rayD)
         return unpack({ false, nil })
     end
 
-    entity:getMesh():updateBoundingBox()
+    local result = entity:castRay(rayO, rayD)
+    return unpack({ result.hit, result.point })
+end
+
+--[[    entity:getMesh():updateBoundingBox()
     local box = entity:getMesh():getBoundingBox()
 
     local pos = entity:getTransformedPosition()
@@ -382,7 +385,7 @@ function Editor.castRay(entity, rayO, rayD)
     end
 
     return unpack({ false, nil })
-end
+end]]
 
 --- Casts a ray onto a bounding box only.
 -- Can be used with any object type that defines a "getBoundingBox()" method.
@@ -596,9 +599,9 @@ function Editor.selectObject()
         -- Check all text objects
         for i = 0, numObjects - 1, 1 do
             local entity = scene:getTextByIndex(i)
-            local colliding, point = Editor.castRayOnBox(entity, rayO, rayD)
+            local point = Editor.castRayOnBox(entity, rayO, rayD)
 
-            if entity ~= nil and colliding then
+            if entity ~= nil and point ~= nil then
                 table.insert(possibleSelection, {entity = entity, point = point})
             end
         end

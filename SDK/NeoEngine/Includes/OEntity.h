@@ -256,6 +256,12 @@ public:
 	inline Vector3 * getLinearFactor(void){ return &m_linearFactor; }
 };
 
+struct NEO_ENGINE_EXPORT RayCastResult
+{
+	bool hit;
+	Vector3 point;
+};
+
 /**
  * @brief Represents a 3D mesh in the scene.
  *
@@ -305,6 +311,8 @@ private:
 	unsigned int m_numMaterials;
 
 public:
+
+	RayCastResult castRay(Vector3& rayO, Vector3& rayD);
 
 	/**
 	 * @brief Retrieves the material with the given index.
