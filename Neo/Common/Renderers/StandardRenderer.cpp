@@ -657,6 +657,7 @@ void StandardRenderer::init()
 
 	vertShad->update();
 
+	unsigned int id = 0;
 	for(int i = 1; i < NUM_SHADERS; i++)
 	{
 		MLOG_INFO("Loading shader: " << defaultShaderFiles[i]);
@@ -670,6 +671,18 @@ void StandardRenderer::init()
 
 		m_shaders[i-1]->setImportant(true);
 		m_fx[i-1] = m_shaders[i-1]->getFXId();
+
+		// Clean up afterwards
+		// TODO: Clear the shader manager to free all remaining resources!
+		id = fragShad->getShaderId();
+		render->deleteShader(&id, m_fx[i-1]);
+		fragShad->setShaderId(0);
+	}
+
+	id = vertShad->getShaderId();
+	for(int i = 0; i < NUM_SHADERS; i++)
+	{
+		render->deleteShader(&id, m_fx[i]);
 	}
 
 	initFramebuffers();

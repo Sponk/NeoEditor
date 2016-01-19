@@ -122,7 +122,7 @@ public:
 	// shaders
 	void createVertexShader(unsigned int * shaderId);
 	void createPixelShader(unsigned int * shaderId);
-	void deleteShader(unsigned int * shaderId);
+	void deleteShader(unsigned int * shaderId, unsigned int program = 0);
     bool sendShaderSource(unsigned int shaderId, const char * source);
 
 	// FX

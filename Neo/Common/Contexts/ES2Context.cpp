@@ -542,7 +542,7 @@ void ES2Context::createPixelShader(unsigned int * shaderId){
     *shaderId = glCreateShader(GL_FRAGMENT_SHADER);
 }
 
-void ES2Context::deleteShader(unsigned int * shaderId){
+void ES2Context::deleteShader(unsigned int * shaderId, unsigned int program = 0) {
     glDeleteShader((*shaderId));
 }
 

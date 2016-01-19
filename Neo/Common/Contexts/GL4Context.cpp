@@ -688,8 +688,11 @@ void GL4Context::createPixelShader(unsigned int * shaderId)
     *shaderId = glCreateShader(GL_FRAGMENT_SHADER);
 }
 
-void GL4Context::deleteShader(unsigned int * shaderId)
+void GL4Context::deleteShader(unsigned int* shaderId, unsigned int program)
 {
+	if(program)
+		glDetachShader(*shaderId, program);
+
     glDeleteShader((*shaderId));
 }
 

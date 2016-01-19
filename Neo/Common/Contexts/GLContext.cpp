@@ -728,7 +728,7 @@ void GLContext::createPixelShader(unsigned int * shaderId){
 	*shaderId = (unsigned int)(unsigned long)glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
 }
 
-void GLContext::deleteShader(unsigned int * shaderId){
+void GLContext::deleteShader(unsigned int * shaderId, unsigned int program) {
 	glDeleteObjectARB((GLhandleARB)(*shaderId));
 }
 
