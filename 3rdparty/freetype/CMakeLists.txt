@@ -52,6 +52,9 @@
 
 cmake_minimum_required(VERSION 2.6)
 
+## NEO: Don't build shared libs!
+set(BUILD_SHARED_LIBS OFF)
+
 # CMAKE_TOOLCHAIN_FILE must be set before `project' is called, which
 # configures the base build environment and references the toolchain file
 if (APPLE)
@@ -216,38 +219,15 @@ endif ()
 
 # Installations
 # Note the trailing slash in the argument to the `DIRECTORY' directive
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
-  DESTINATION include/freetype2
-  PATTERN "internal" EXCLUDE
-)
-install(TARGETS freetype
-  RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib
-  FRAMEWORK DESTINATION Library/Frameworks
-)
-
-# Packaging
-# CPack version numbers for release tarball name.
-set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH}})
-if (NOT DEFINED CPACK_PACKAGE_DESCRIPTION_SUMMARY)
-  set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${CMAKE_PROJECT_NAME}")
-endif ()
-if (NOT DEFINED CPACK_SOURCE_PACKAGE_FILE_NAME)
-  set(CPACK_SOURCE_PACKAGE_FILE_NAME
-    "${CMAKE_PROJECT_NAME}-${PROJECT_VERSION}-r${PROJECT_REV}"
-    CACHE INTERNAL "tarball basename"
-  )
-endif ()
-set(CPACK_SOURCE_GENERATOR TGZ)
-set(CPACK_SOURCE_IGNORE_FILES
-  "/CVS/;/.svn/;.swp$;.#;/#;/build/;/serial/;/ser/;/parallel/;/par/;~;/preconfig.out;/autom4te.cache/;/.config")
-set(CPACK_GENERATOR TGZ)
-include(CPack)
-
-# add make dist target
-add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
+#install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
+#  DESTINATION include/freetype2
+#  PATTERN "internal" EXCLUDE
+#)
+#install(TARGETS freetype
+#  RUNTIME DESTINATION bin
+#  LIBRARY DESTINATION lib
+#  ARCHIVE DESTINATION lib
+#  FRAMEWORK DESTINATION Library/Frameworks
+#)
 
 # eof
