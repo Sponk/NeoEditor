@@ -247,8 +247,7 @@ void crash_handler(int sig)
 }
 #endif
 
-#ifdef _WIN32
-
+#if defined(_WIN32) && !defined(_WIN64)
 std::string win32_stacktrace(CONTEXT* context)
 {
 	SymInitialize(GetCurrentProcess(), 0, true);
@@ -297,7 +296,60 @@ std::string win32_stacktrace(CONTEXT* context)
 	SymCleanup(GetCurrentProcess());
 	return output;
 }
+#endif
 
+#if defined(_WIN32) && defined(_WIN64)
+std::string win32_stacktrace(CONTEXT* context)
+{
+	SymInitialize(GetCurrentProcess(), 0, true);
+	std::string output;
+
+	STACKFRAME frame = { 0 };
+
+	frame.AddrPC.Offset = context->Rip;
+	frame.AddrPC.Mode = AddrModeFlat;
+	frame.AddrStack.Offset = context->Rsp;
+	frame.AddrStack.Mode = AddrModeFlat;
+	frame.AddrFrame.Offset = context->Rbp;
+	frame.AddrFrame.Mode = AddrModeFlat;
+
+	char* symbolBuffer = new char[sizeof(IMAGEHLP_SYMBOL) + 255];
+	memset(symbolBuffer, 0, sizeof(IMAGEHLP_SYMBOL) + 255);
+
+	IMAGEHLP_SYMBOL* symbol = (IMAGEHLP_SYMBOL*)symbolBuffer;
+	symbol->SizeOfStruct = sizeof(IMAGEHLP_SYMBOL) + 255;
+	symbol->MaxNameLength = 254;
+
+	unsigned int displacement = 0;
+
+	char num[32];
+	while (StackWalk(IMAGE_FILE_MACHINE_I386, GetCurrentProcess(),
+		GetCurrentThread(), &frame, context, 0,
+		SymFunctionTableAccess, SymGetModuleBase, 0))
+	{
+		sprintf(num, "0x%x", frame.AddrPC.Offset);
+
+		if (SymGetSymFromAddr(GetCurrentProcess(), frame.AddrPC.Offset,
+			(DWORD64*) &displacement, symbol))
+		{
+			output += symbol->Name;
+			output += " [";
+			output += num;
+			output += "]\n";
+		}
+		else
+		{
+			output.append(string(num) + "\n");
+		}
+	}
+
+	delete symbolBuffer;
+	SymCleanup(GetCurrentProcess());
+	return output;
+}
+#endif
+
+#if defined(_WIN32)
 LONG WINAPI windows_exception_handler(EXCEPTION_POINTERS* ExceptionInfo)
 {
 	switch (ExceptionInfo->ExceptionRecord->ExceptionCode)
