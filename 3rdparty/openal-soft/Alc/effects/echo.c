@@ -85,8 +85,7 @@ static ALvoid ALechoState_update(ALechoState *state, ALCdevice *Device, const AL
 {
     ALfloat pandir[3] = { 0.0f, 0.0f, 0.0f };
     ALuint frequency = Device->Frequency;
-    ALfloat gain = Slot->Gain;
-    ALfloat lrpan;
+    ALfloat gain, lrpan;
 
     state->Tap[0].delay = fastf2u(Slot->EffectProps.Echo.Delay * frequency) + 1;
     state->Tap[1].delay = fastf2u(Slot->EffectProps.Echo.LRDelay * frequency);
@@ -96,9 +95,12 @@ static ALvoid ALechoState_update(ALechoState *state, ALCdevice *Device, const AL
 
     state->FeedGain = Slot->EffectProps.Echo.Feedback;
 
+    gain = minf(1.0f - Slot->EffectProps.Echo.Damping, 0.01f);
     ALfilterState_setParams(&state->Filter, ALfilterType_HighShelf,
-                            1.0f - Slot->EffectProps.Echo.Damping,
-                            LOWPASSFREQREF/frequency, 0.0f);
+                            gain, LOWPASSFREQREF/frequency,
+                            calc_rcpQ_from_slope(gain, 0.75f));
+
+    gain = Slot->Gain;
 
     /* First tap panning */
     pandir[0] = -lrpan;
@@ -121,8 +123,8 @@ static ALvoid ALechoState_process(ALechoState *state, ALuint SamplesToDo, const 
 
     for(base = 0;base < SamplesToDo;)
     {
-        ALfloat temps[64][2];
-        ALuint td = minu(SamplesToDo-base, 64);
+        ALfloat temps[128][2];
+        ALuint td = minu(128, SamplesToDo-base);
 
         for(i = 0;i < td;i++)
         {

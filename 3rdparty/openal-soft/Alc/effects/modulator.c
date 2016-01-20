@@ -53,7 +53,7 @@ typedef struct ALmodulatorState {
 
 static inline ALfloat Sin(ALuint index)
 {
-    return sinf(index*(F_2PI/WAVEFORM_FRACONE) - F_PI)*0.5f + 0.5f;
+    return sinf(index*(F_TAU/WAVEFORM_FRACONE) - F_PI)*0.5f + 0.5f;
 }
 
 static inline ALfloat Saw(ALuint index)
@@ -77,8 +77,8 @@ static void Process##func(ALmodulatorState *state, ALuint SamplesToDo,        \
                                                                               \
     for(base = 0;base < SamplesToDo;)                                         \
     {                                                                         \
-        ALfloat temps[64];                                                    \
-        ALuint td = minu(SamplesToDo-base, 64);                               \
+        ALfloat temps[256];                                                   \
+        ALuint td = minu(256, SamplesToDo-base);                              \
         ALuint i, k;                                                          \
                                                                               \
         for(i = 0;i < td;i++)                                                 \
@@ -139,7 +139,7 @@ static ALvoid ALmodulatorState_update(ALmodulatorState *state, ALCdevice *Device
     if(state->step == 0) state->step = 1;
 
     /* Custom filter coeffs, which match the old version instead of a low-shelf. */
-    cw = cosf(F_2PI * Slot->EffectProps.Modulator.HighPassCutoff / Device->Frequency);
+    cw = cosf(F_TAU * Slot->EffectProps.Modulator.HighPassCutoff / Device->Frequency);
     a = (2.0f-cw) - sqrtf(powf(2.0f-cw, 2.0f) - 1.0f);
 
     state->Filter.b[0] = a;

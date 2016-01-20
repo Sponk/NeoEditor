@@ -14,11 +14,6 @@ extern "C" {
 struct ALbuffer;
 struct ALsource;
 
-extern enum Resampler DefaultResampler;
-
-extern const ALsizei ResamplerPadding[ResamplerMax];
-extern const ALsizei ResamplerPrePadding[ResamplerMax];
-
 
 typedef struct ALbufferlistitem {
     struct ALbuffer *buffer;
@@ -40,6 +35,10 @@ typedef struct ALvoice {
 
     ALuint Offset; /* Number of output samples mixed since starting. */
 
+    alignas(16) ALfloat PrevSamples[MAX_INPUT_CHANNELS][MAX_PRE_SAMPLES];
+
+    BsincState SincState;
+
     DirectParams Direct;
     SendParams Send[MAX_SENDS];
 } ALvoice;
@@ -57,9 +56,9 @@ typedef struct ALsource {
     volatile ALfloat   RefDistance;
     volatile ALfloat   MaxDistance;
     volatile ALfloat   RollOffFactor;
-    volatile ALfloat   Position[3];
-    volatile ALfloat   Velocity[3];
-    volatile ALfloat   Direction[3];
+    aluVector Position;
+    aluVector Velocity;
+    aluVector Direction;
     volatile ALfloat   Orientation[2][3];
     volatile ALboolean HeadRelative;
     volatile ALboolean Looping;
@@ -76,8 +75,6 @@ typedef struct ALsource {
     volatile ALfloat DopplerFactor;
 
     volatile ALfloat Radius;
-
-    enum Resampler Resampler;
 
     /**
      * Last user-specified offset, and the offset type (bytes, samples, or

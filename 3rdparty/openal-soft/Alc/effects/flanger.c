@@ -134,7 +134,7 @@ static ALvoid ALflangerState_update(ALflangerState *state, ALCdevice *Device, co
                 state->lfo_scale = 4.0f / state->lfo_range;
                 break;
             case FWF_Sinusoid:
-                state->lfo_scale = F_2PI / state->lfo_range;
+                state->lfo_scale = F_TAU / state->lfo_range;
                 break;
         }
 
@@ -210,8 +210,8 @@ static ALvoid ALflangerState_process(ALflangerState *state, ALuint SamplesToDo, 
 
     for(base = 0;base < SamplesToDo;)
     {
-        ALfloat temps[64][2];
-        ALuint td = minu(SamplesToDo-base, 64);
+        ALfloat temps[128][2];
+        ALuint td = minu(128, SamplesToDo-base);
 
         switch(state->waveform)
         {

@@ -44,6 +44,15 @@ static const ALubyte SUBTYPE_FLOAT[] = {
     0x00, 0x38, 0x9b, 0x71
 };
 
+static const ALubyte SUBTYPE_BFORMAT_PCM[] = {
+    0x01, 0x00, 0x00, 0x00, 0x21, 0x07, 0xd3, 0x11, 0x86, 0x44, 0xc8, 0xc1,
+    0xca, 0x00, 0x00, 0x00
+};
+
+static const ALubyte SUBTYPE_BFORMAT_FLOAT[] = {
+    0x03, 0x00, 0x00, 0x00, 0x21, 0x07, 0xd3, 0x11, 0x86, 0x44, 0xc8, 0xc1,
+    0xca, 0x00, 0x00, 0x00
+};
 
 static void fwrite16le(ALushort val, FILE *f)
 {
@@ -201,7 +210,7 @@ static ALCenum ALCwaveBackend_open(ALCwaveBackend *self, const ALCchar *name)
     ALCdevice *device;
     const char *fname;
 
-    fname = GetConfigValue("wave", "file", "");
+    fname = GetConfigValue(NULL, "wave", "file", "");
     if(!fname[0]) return ALC_INVALID_VALUE;
 
     if(!name)
@@ -233,10 +242,14 @@ static ALCboolean ALCwaveBackend_reset(ALCwaveBackend *self)
 {
     ALCdevice *device = STATIC_CAST(ALCbackend, self)->mDevice;
     ALuint channels=0, bits=0, chanmask=0;
+    int isbformat = 0;
     size_t val;
 
     fseek(self->mFile, 0, SEEK_SET);
     clearerr(self->mFile);
+
+    if(GetConfigValueBool(NULL, "wave", "bformat", 0))
+        device->FmtChans = DevFmtBFormat3D;
 
     switch(device->FmtType)
     {
@@ -264,6 +277,10 @@ static ALCboolean ALCwaveBackend_reset(ALCwaveBackend *self)
         case DevFmtX51Rear: chanmask = 0x01 | 0x02 | 0x04 | 0x08 | 0x010 | 0x020; break;
         case DevFmtX61: chanmask = 0x01 | 0x02 | 0x04 | 0x08 | 0x100 | 0x200 | 0x400; break;
         case DevFmtX71: chanmask = 0x01 | 0x02 | 0x04 | 0x08 | 0x010 | 0x020 | 0x200 | 0x400; break;
+        case DevFmtBFormat3D:
+            isbformat = 1;
+            chanmask = 0;
+            break;
     }
     bits = BytesFromDevFmt(device->FmtType) * 8;
     channels = ChannelsFromDevFmt(device->FmtChans);
@@ -295,7 +312,8 @@ static ALCboolean ALCwaveBackend_reset(ALCwaveBackend *self)
     // 32-bit val, channel mask
     fwrite32le(chanmask, self->mFile);
     // 16 byte GUID, sub-type format
-    val = fwrite(((bits==32) ? SUBTYPE_FLOAT : SUBTYPE_PCM), 1, 16, self->mFile);
+    val = fwrite(((bits==32) ? (isbformat ? SUBTYPE_BFORMAT_FLOAT : SUBTYPE_FLOAT) :
+                               (isbformat ? SUBTYPE_BFORMAT_PCM : SUBTYPE_PCM)), 1, 16, self->mFile);
     (void)val;
 
     fprintf(self->mFile, "data");
@@ -394,7 +412,7 @@ static ALCboolean ALCwaveBackendFactory_init(ALCwaveBackendFactory* UNUSED(self)
 static ALCboolean ALCwaveBackendFactory_querySupport(ALCwaveBackendFactory* UNUSED(self), ALCbackend_Type type)
 {
     if(type == ALCbackend_Playback)
-        return !!ConfigValueExists("wave", "file");
+        return !!ConfigValueExists(NULL, "wave", "file");
     return ALC_FALSE;
 }
 
@@ -415,30 +433,10 @@ static ALCbackend* ALCwaveBackendFactory_createBackend(ALCwaveBackendFactory* UN
     if(type == ALCbackend_Playback)
     {
         ALCwaveBackend *backend;
-
-        backend = ALCwaveBackend_New(sizeof(*backend));
+        NEW_OBJ(backend, ALCwaveBackend)(device);
         if(!backend) return NULL;
-        memset(backend, 0, sizeof(*backend));
-
-        ALCwaveBackend_Construct(backend, device);
-
         return STATIC_CAST(ALCbackend, backend);
     }
 
     return NULL;
-}
-
-void alc_wave_probe(enum DevProbe type)
-{
-    if(!ConfigValueExists("wave", "file"))
-        return;
-
-    switch(type)
-    {
-        case ALL_DEVICE_PROBE:
-            AppendAllDevicesList(waveDevice);
-            break;
-        case CAPTURE_DEVICE_PROBE:
-            break;
-    }
 }
