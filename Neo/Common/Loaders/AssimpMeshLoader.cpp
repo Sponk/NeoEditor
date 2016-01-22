@@ -436,16 +436,16 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 			float blend;
 			aiTextureOp op;
 			aiTextureMapMode mapmode;
-			
 
 			if(AI_SUCCESS == mtl->GetTexture(aiTextureType_DIFFUSE, 0, &path, &mapping, &uvindex, &blend, &op, &mapmode))
 			{
 				material->allocTexturesPass(4);
 				
 				getGlobalFilename(globalPath, meshRep, path.C_Str());
-				TextureRef * texRef = level->loadTexture(globalPath, true);
-				Texture * texture = mesh->addNewTexture(texRef);
-				if(mapmode == aiTextureMapMode_Clamp){
+				TextureRef* texRef = level->loadTexture(globalPath, true);
+				Texture* texture = mesh->addNewTexture(texRef);
+				if(mapmode == aiTextureMapMode_Clamp)
+				{
 					texture->setUWrapMode(WRAP_CLAMP);
 					texture->setVWrapMode(WRAP_CLAMP);
 				}

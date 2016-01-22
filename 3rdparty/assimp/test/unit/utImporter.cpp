@@ -1,6 +1,24 @@
-
 #include "UnitTestPCH.h"
-#include "utImporter.h"
+
+#include "../../include/assimp/postprocess.h"
+#include "../../include/assimp/scene.h"
+#include <assimp/Importer.hpp>
+#include <BaseImporter.h>
+
+
+using namespace std;
+using namespace Assimp;
+
+class ImporterTest : public ::testing::Test
+{
+public:
+
+    virtual void SetUp() { pImp = new Importer(); }
+    virtual void TearDown() { delete pImp; }
+
+protected:
+    Importer* pImp;
+};
 
 #define InputData_BLOCK_SIZE 1310
 
@@ -49,170 +67,165 @@ static unsigned char InputData_abRawBlock[1310] = {
 0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,96,233,20,194,67,196,97,190,147,56,182,65,
 };
 
-
-
-CPPUNIT_TEST_SUITE_REGISTRATION (ImporterTest);
-
 #define AIUT_DEF_ERROR_TEXT "sorry, this is a test"
 
 
 static const aiImporterDesc desc = {
-	"UNIT TEST - IMPORTER",
-	"",
-	"",
-	"",
-	0,
-	0,
-	0,
-	0,
-	0,
-	"apple mac linux windows" 
+    "UNIT TEST - IMPORTER",
+    "",
+    "",
+    "",
+    0,
+    0,
+    0,
+    0,
+    0,
+    "apple mac linux windows"
 };
 
 
-
-bool TestPlugin :: CanRead( const std::string& pFile, 
-	IOSystem* pIOHandler, bool test) const
+class TestPlugin : public BaseImporter
 {
-	std::string::size_type pos = pFile.find_last_of('.');
-	// no file extension - can't read
-	if( pos == std::string::npos)
-		return false;
-	std::string extension = pFile.substr( pos);
+public:
 
-	// todo ... make case-insensitive
-	return (extension == ".apple" || extension == ".mac" ||
-		extension == ".linux" || extension == ".windows" );
+    virtual bool CanRead(
+        const std::string& pFile, IOSystem* /*pIOHandler*/, bool /*test*/) const
+    {
+        std::string::size_type pos = pFile.find_last_of('.');
+        // no file extension - can't read
+        if( pos == std::string::npos)
+            return false;
+        std::string extension = pFile.substr( pos);
+
+        // todo ... make case-insensitive
+        return (extension == ".apple" || extension == ".mac" ||
+            extension == ".linux" || extension == ".windows" );
+
+    }
+
+    virtual const aiImporterDesc* GetInfo () const
+    {
+        return & desc;
+    }
+
+    virtual void InternReadFile(
+        const std::string& /*pFile*/, aiScene* /*pScene*/, IOSystem* /*pIOHandler*/)
+    {
+        throw DeadlyImportError(AIUT_DEF_ERROR_TEXT);
+    }
+};
+
+// ------------------------------------------------------------------------------------------------
+TEST_F(ImporterTest, testMemoryRead)
+{
+    const aiScene* sc = pImp->ReadFileFromMemory(InputData_abRawBlock,InputData_BLOCK_SIZE,
+        aiProcessPreset_TargetRealtime_Quality,"3ds");
+
+    ASSERT_TRUE(sc != NULL);
+    EXPECT_EQ(aiString("<3DSRoot>"), sc->mRootNode->mName);
+    EXPECT_EQ(1U, sc->mNumMeshes);
+    EXPECT_EQ(24U, sc->mMeshes[0]->mNumVertices);
+    EXPECT_EQ(12U, sc->mMeshes[0]->mNumFaces);
 }
 
-const aiImporterDesc* TestPlugin :: GetInfo() const
+// ------------------------------------------------------------------------------------------------
+TEST_F(ImporterTest, testIntProperty)
 {
-	return & desc;
+    bool b = pImp->SetPropertyInteger("quakquak",1503);
+    EXPECT_FALSE(b);
+    EXPECT_EQ(1503, pImp->GetPropertyInteger("quakquak",0));
+    EXPECT_EQ(314159, pImp->GetPropertyInteger("not_there",314159));
+
+    b = pImp->SetPropertyInteger("quakquak",1504);
+    EXPECT_TRUE(b);
 }
 
-void TestPlugin :: InternReadFile( const std::string& pFile, 
-	aiScene* pScene, IOSystem* pIOHandler)
+// ------------------------------------------------------------------------------------------------
+TEST_F(ImporterTest, testFloatProperty)
 {
-	throw DeadlyImportError(AIUT_DEF_ERROR_TEXT);
+    bool b = pImp->SetPropertyFloat("quakquak",1503.f);
+    EXPECT_TRUE(!b);
+    EXPECT_EQ(1503.f, pImp->GetPropertyFloat("quakquak",0.f));
+    EXPECT_EQ(314159.f, pImp->GetPropertyFloat("not_there",314159.f));
 }
 
-
-void ImporterTest :: setUp (void)
+// ------------------------------------------------------------------------------------------------
+TEST_F(ImporterTest, testStringProperty)
 {
-	pImp = new Importer();
+    bool b = pImp->SetPropertyString("quakquak","test");
+    EXPECT_TRUE(!b);
+    EXPECT_EQ("test", pImp->GetPropertyString("quakquak","weghwekg"));
+    EXPECT_EQ("ILoveYou", pImp->GetPropertyString("not_there","ILoveYou"));
 }
 
-void ImporterTest :: tearDown (void)
+// ------------------------------------------------------------------------------------------------
+TEST_F(ImporterTest, testPluginInterface)
 {
-	delete pImp;
+    pImp->RegisterLoader(new TestPlugin());
+    EXPECT_TRUE(pImp->IsExtensionSupported(".apple"));
+    EXPECT_TRUE(pImp->IsExtensionSupported(".mac"));
+    EXPECT_TRUE(pImp->IsExtensionSupported("*.linux"));
+    EXPECT_TRUE(pImp->IsExtensionSupported("windows"));
+    EXPECT_TRUE(pImp->IsExtensionSupported(".x")); /* x and 3ds must be available in this Assimp build, of course! */
+    EXPECT_TRUE(pImp->IsExtensionSupported(".3ds"));
+    EXPECT_FALSE(pImp->IsExtensionSupported("."));
+
+    TestPlugin* p = (TestPlugin*) pImp->GetImporter(".windows");
+    ASSERT_TRUE(NULL != p);
+
+    try {
+        p->InternReadFile("",0,NULL);
+    }
+    catch ( const DeadlyImportError& dead)
+    {
+        EXPECT_TRUE(!strcmp(dead.what(),AIUT_DEF_ERROR_TEXT));
+
+        // unregister the plugin and delete it
+        pImp->UnregisterLoader(p);
+        delete p;
+
+        return;
+    }
+    EXPECT_TRUE(false); // control shouldn't reach this point
 }
 
-void ImporterTest :: testMemoryRead (void)
+// ------------------------------------------------------------------------------------------------
+TEST_F(ImporterTest, testExtensionCheck)
 {
-	const aiScene* sc = pImp->ReadFileFromMemory(InputData_abRawBlock,InputData_BLOCK_SIZE,
-		aiProcessPreset_TargetRealtime_Quality,"3ds");
+    std::string s;
+    pImp->GetExtensionList(s);
 
-	CPPUNIT_ASSERT(sc != NULL);
-	CPPUNIT_ASSERT(sc->mRootNode->mName == aiString("<3DSRoot>"));
-	CPPUNIT_ASSERT(sc->mNumMeshes == 1 && sc->mMeshes[0]->mNumVertices ==24 && sc->mMeshes[0]->mNumFaces ==12);
+    // TODO
 }
 
-void ImporterTest :: testIntProperty (void)
+// ------------------------------------------------------------------------------------------------
+TEST_F(ImporterTest, testMultipleReads)
 {
-	bool b;
-	pImp->SetPropertyInteger("quakquak",1503,&b);
-	CPPUNIT_ASSERT(!b);
-	CPPUNIT_ASSERT(1503 == pImp->GetPropertyInteger("quakquak",0));
-	CPPUNIT_ASSERT(314159 == pImp->GetPropertyInteger("not_there",314159));
+    // see http://sourceforge.net/projects/assimp/forums/forum/817654/topic/3591099
+    // Check whether reading and post-processing multiple times using
+    // the same objects is *generally* fine. This test doesn't target
+    // importers. Testing post-processing stability is the main point.
 
-	pImp->SetPropertyInteger("quakquak",1504,&b);
-	CPPUNIT_ASSERT(b);
-}
+    const unsigned int flags =
+        aiProcess_Triangulate |
+        aiProcess_JoinIdenticalVertices |
+        aiProcess_GenSmoothNormals |
+        aiProcess_ValidateDataStructure |
+        aiProcess_RemoveRedundantMaterials |
+        aiProcess_SortByPType |
+        aiProcess_FindDegenerates |
+        aiProcess_FindInvalidData |
+        aiProcess_GenUVCoords |
+        aiProcess_OptimizeMeshes |
+        aiProcess_OptimizeGraph;
 
-void ImporterTest :: testFloatProperty (void)
-{
-	bool b;
-	pImp->SetPropertyFloat("quakquak",1503.f,&b);
-	CPPUNIT_ASSERT(!b);
-	CPPUNIT_ASSERT(1503.f == pImp->GetPropertyFloat("quakquak",0.f));
-	CPPUNIT_ASSERT(314159.f == pImp->GetPropertyFloat("not_there",314159.f));
-}
+    EXPECT_TRUE(pImp->ReadFile(ASSIMP_TEST_MODELS_DIR "/X/test.x",flags));
+    //EXPECT_TRUE(pImp->ReadFile(ASSIMP_TEST_MODELS_DIR "/X/dwarf.x",flags)); # is in nonbsd
+    EXPECT_TRUE(pImp->ReadFile(ASSIMP_TEST_MODELS_DIR "/X/Testwuson.X",flags));
+    EXPECT_TRUE(pImp->ReadFile(ASSIMP_TEST_MODELS_DIR "/X/anim_test.x",flags));
+    //EXPECT_TRUE(pImp->ReadFile(ASSIMP_TEST_MODELS_DIR "/X/dwarf.x",flags)); # is in nonbsd
 
-void ImporterTest :: testStringProperty (void)
-{
-	bool b;
-	pImp->SetPropertyString("quakquak","test",&b);
-	CPPUNIT_ASSERT(!b);
-	CPPUNIT_ASSERT("test" == pImp->GetPropertyString("quakquak","weghwekg"));
-	CPPUNIT_ASSERT("ILoveYou" == pImp->GetPropertyString("not_there","ILoveYou"));
-}
-
-void ImporterTest :: testPluginInterface (void)
-{
-	
-	pImp->RegisterLoader(new TestPlugin());
-	CPPUNIT_ASSERT(pImp->IsExtensionSupported(".apple"));
-	CPPUNIT_ASSERT(pImp->IsExtensionSupported(".mac"));
-	CPPUNIT_ASSERT(pImp->IsExtensionSupported("*.linux"));
-	CPPUNIT_ASSERT(pImp->IsExtensionSupported("windows"));
-	CPPUNIT_ASSERT(pImp->IsExtensionSupported(".x")); /* x and 3ds must be available in this Assimp build, of course! */
-	CPPUNIT_ASSERT(pImp->IsExtensionSupported(".3ds"));
-	CPPUNIT_ASSERT(!pImp->IsExtensionSupported("."));
-
-	TestPlugin* p = (TestPlugin*) pImp->GetImporter(".windows");
-	CPPUNIT_ASSERT(NULL != p);
-
-	try {
-	p->InternReadFile("",0,NULL);
-	}
-	catch ( const DeadlyImportError& dead)
-	{
-		CPPUNIT_ASSERT(!strcmp(dead.what(),AIUT_DEF_ERROR_TEXT));
-
-		// unregister the plugin and delete it
-		pImp->UnregisterLoader(p);
-		delete p;
-
-		return;
-	}
-	CPPUNIT_ASSERT(false); // control shouldn't reach this point
-}
-
-void ImporterTest :: testExtensionCheck (void)
-{
-	std::string s;
-	pImp->GetExtensionList(s);
-
-	//  TODO
-}
-
-void  ImporterTest :: testMultipleReads (void)
-{
-	// see http://sourceforge.net/projects/assimp/forums/forum/817654/topic/3591099
-	// Check whether reading and post-processing multiple times using
-	// the same objects is *generally* fine. This test doesn't target 
-	// importers. Testing post-processing stability is the main point.
-
-	const unsigned int flags = 
-		aiProcess_Triangulate |
-		aiProcess_JoinIdenticalVertices |
-		aiProcess_GenSmoothNormals |
-		aiProcess_ValidateDataStructure |
-		aiProcess_RemoveRedundantMaterials |
-		aiProcess_SortByPType |
-		aiProcess_FindDegenerates |
-		aiProcess_FindInvalidData |
-		aiProcess_GenUVCoords |
-		aiProcess_OptimizeMeshes |
-		aiProcess_OptimizeGraph;
-
-	CPPUNIT_ASSERT(pImp->ReadFile("../../test/models/X/test.x",flags));
-	//CPPUNIT_ASSERT(pImp->ReadFile("../../test/models/X/dwarf.x",flags)); # is in nonbsd
-	CPPUNIT_ASSERT(pImp->ReadFile("../../test/models/X/Testwuson.x",flags));
-	CPPUNIT_ASSERT(pImp->ReadFile("../../test/models/X/anim_test.x",flags));
-	//CPPUNIT_ASSERT(pImp->ReadFile("../../test/models/X/dwarf.x",flags)); # is in nonbsd
-
-	CPPUNIT_ASSERT(pImp->ReadFile("../../test/models/X/anim_test.x",flags));
-	CPPUNIT_ASSERT(pImp->ReadFile("../../test/models/X/bcn_epileptic.x",flags));
-	//CPPUNIT_ASSERT(pImp->ReadFile("../../test/models/X/dwarf.x",flags)); # is in nonbsd
+    EXPECT_TRUE(pImp->ReadFile(ASSIMP_TEST_MODELS_DIR "/X/anim_test.x",flags));
+    EXPECT_TRUE(pImp->ReadFile(ASSIMP_TEST_MODELS_DIR "/X/BCN_Epileptic.X",flags));
+    //EXPECT_TRUE(pImp->ReadFile(ASSIMP_TEST_MODELS_DIR "/X/dwarf.x",flags)); # is in nonbsd
 }

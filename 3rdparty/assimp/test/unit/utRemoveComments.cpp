@@ -1,65 +1,56 @@
-
 #include "UnitTestPCH.h"
-#include "utRemoveComments.h"
+
+#include <RemoveComments.h>
 
 
-CPPUNIT_TEST_SUITE_REGISTRATION (RemoveCommentsTest);
+using namespace std;
+using namespace Assimp;
+
 
 // ------------------------------------------------------------------------------------------------
-void RemoveCommentsTest :: setUp (void)
+TEST(RemoveCommentsTest, testSingleLineComments)
 {
-	// nothing to do here
+    const char* szTest = "int i = 0; \n"
+        "if (4 == //)\n"
+        "\ttrue) { // do something here \n"
+        "\t// hello ... and bye //\n";
+
+    const size_t len( ::strlen( szTest ) + 1 );
+    char* szTest2 = new char[ len ];
+    ::strncpy( szTest2, szTest, len );
+
+    const char* szTestResult = "int i = 0; \n"
+        "if (4 ==    \n"
+        "\ttrue) {                      \n"
+        "\t                       \n";
+
+    CommentRemover::RemoveLineComments("//",szTest2,' ');
+    EXPECT_STREQ(szTestResult, szTest2);
+
+    delete[] szTest2;
 }
 
 // ------------------------------------------------------------------------------------------------
-void RemoveCommentsTest :: tearDown (void)
+TEST(RemoveCommentsTest, testMultiLineComments)
 {
-	// nothing to do here
-}
+    const char* szTest =
+        "/* comment to be removed */\n"
+        "valid text /* \n "
+        " comment across multiple lines */"
+        " / * Incomplete comment */ /* /* multiple comments */ */";
 
-// ------------------------------------------------------------------------------------------------
-void RemoveCommentsTest :: testSingleLineComments (void)
-{
-	const char* szTest = "int i = 0; \n"
-		"if (4 == //)\n"
-		"\ttrue) { // do something here \n"
-		"\t// hello ... and bye //\n";
+    const char* szTestResult =
+        "                           \n"
+        "valid text      "
+        "                                 "
+        " / * Incomplete comment */                            */";
 
-	
-	char* szTest2 = new char[::strlen(szTest)+1];
-	::strcpy(szTest2,szTest);
+    const size_t len( ::strlen( szTest ) + 1 );
+    char* szTest2 = new char[ len ];
+    ::strncpy( szTest2, szTest, len );
 
-	const char* szTestResult = "int i = 0; \n"
-		"if (4 ==    \n"
-		"\ttrue) {                      \n"
-		"\t                       \n";
+    CommentRemover::RemoveMultiLineComments("/*","*/",szTest2,' ');
+    EXPECT_STREQ(szTestResult, szTest2);
 
-	CommentRemover::RemoveLineComments("//",szTest2,' ');
-	CPPUNIT_ASSERT(0 == ::strcmp(szTest2,szTestResult));
-
-	delete[] szTest2;
-}
-
-// ------------------------------------------------------------------------------------------------
-void RemoveCommentsTest :: testMultiLineComments (void)
-{
-	char* szTest = 
-		"/* comment to be removed */\n"
-		"valid text /* \n "
-		" comment across multiple lines */"
-		" / * Incomplete comment */ /* /* multiple comments */ */";
-
-	const char* szTestResult = 
-		"                           \n"
-		"valid text      "
-		"                                 "
-		" / * Incomplete comment */                            */";
-
-	char* szTest2 = new char[::strlen(szTest)+1];
-	::strcpy(szTest2,szTest);
-
-	CommentRemover::RemoveMultiLineComments("/*","*/",szTest2,' ');
-	CPPUNIT_ASSERT(0 == ::strcmp(szTest2,szTestResult));
-
-	delete[] szTest2;
+    delete[] szTest2;
 }

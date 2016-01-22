@@ -3,7 +3,7 @@
 Open Asset Import Library (assimp)
 ---------------------------------------------------------------------------
 
-Copyright (c) 2006-2012, assimp team
+Copyright (c) 2006-2015, assimp team
 
 All rights reserved.
 
@@ -112,12 +112,12 @@ unsigned int CountAnimChannels(const aiScene* scene)
 
 // -----------------------------------------------------------------------------------
 unsigned int GetAvgFacePerMesh(const aiScene* scene) {
-	return static_cast<unsigned int>(CountFaces(scene)/scene->mNumMeshes);
+	return (scene->mNumMeshes != 0) ? static_cast<unsigned int>(CountFaces(scene)/scene->mNumMeshes) : 0;
 }
 
 // -----------------------------------------------------------------------------------
 unsigned int GetAvgVertsPerMesh(const aiScene* scene) {
-	return static_cast<unsigned int>(CountVertices(scene)/scene->mNumMeshes);
+	return (scene->mNumMeshes != 0) ? static_cast<unsigned int>(CountVertices(scene)/scene->mNumMeshes) : 0;
 }
 
 // -----------------------------------------------------------------------------------
@@ -191,7 +191,7 @@ void PrintHierarchy(const aiNode* root, unsigned int maxnest, unsigned int maxli
 	for(unsigned int i = 0; i < cnest; ++i) {
 		printf("-- ");
 	}
-	printf("\'%s\', meshes: %i\n",root->mName.data,root->mNumMeshes);
+	printf("\'%s\', meshes: %u\n",root->mName.data,root->mNumMeshes);
 	for (unsigned int i = 0; i < root->mNumChildren; ++i ) {
 		PrintHierarchy(root->mChildren[i],maxnest,maxline,cline,cnest+1);
 		if(i == root->mNumChildren-1) {
