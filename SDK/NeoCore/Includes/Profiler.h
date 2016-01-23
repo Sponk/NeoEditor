@@ -133,7 +133,7 @@ public:
 		return m_profiles[name];
 	}
 
-	const char* generateReport();
+	String generateReport();
 
 private:
 	std::map<std::string, FunctionProfile> m_profiles;

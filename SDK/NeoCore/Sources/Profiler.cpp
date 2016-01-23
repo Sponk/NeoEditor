@@ -30,7 +30,7 @@ Neo::Profiler::Profiler()
 
 }
 
-const char* Neo::Profiler::generateReport()
+Neo::String Neo::Profiler::generateReport()
 {
 	std::stringstream str;
 
@@ -42,5 +42,5 @@ const char* Neo::Profiler::generateReport()
 		str << f.first << " ==> calls: " << f.second.numberOfCalls << " cycles: " << f.second.averageTicks << std::endl;
 	}
 
-	return str.str().c_str();
+	return Neo::String(str.str().c_str());
 }

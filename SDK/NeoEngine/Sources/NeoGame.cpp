@@ -320,5 +320,5 @@ void NeoGame::onEnd(void)
 		m_subGames[i]->onEnd();
 	}
 
-	MLOG_INFO(m_profiler.generateReport());
+	MLOG_INFO(m_profiler.generateReport().getSafeString());
 }

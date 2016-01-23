@@ -133,6 +133,13 @@ Parameters parseParameters ( int argc, char** argv )
 // main
 int main ( int argc, char **argv )
 {
+#ifdef __MINGW_GCC_VERSION
+	AllocConsole();
+	freopen("CONIN$", "r",stdin);
+	freopen("CONOUT$","w",stdout);
+	freopen("CONOUT$","w",stderr);
+#endif
+
 #ifndef ANDROID
 	setlocale ( LC_NUMERIC, "C" );
 	registerDebugHandler();
@@ -266,6 +273,7 @@ int main ( int argc, char **argv )
 //    Messenger* messenger = Messenger::getInstance();
 //    messenger->addInbox("MainThread", 0);
 
+	Profiler profiler;
 	SystemContext* system = engine->getSystemContext();
 	unsigned int frameStart = 0;
 
@@ -284,8 +292,14 @@ int main ( int argc, char **argv )
 		if (window->getFocus())
 		{
 			int tick = system->getSystemTick();
+			
+			profiler.functionTimingStart("update");
 			update();
+			profiler.functionTimingEnd("update");
+
+			profiler.functionTimingStart("draw");
 			draw();
+			profiler.functionTimingEnd("draw");
 		}
 		else
 		{
@@ -305,5 +319,7 @@ int main ( int argc, char **argv )
 	}
 
 	backend->clear();
+	MLOG_INFO("Profiling result: " << endl << profiler.generateReport().getSafeString());
+
 	return 0;
 }

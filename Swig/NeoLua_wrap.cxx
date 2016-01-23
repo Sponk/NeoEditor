@@ -26677,7 +26677,7 @@ static int _wrap_Profiler_generateReport(lua_State* L) {
     SWIG_fail_ptr("Profiler_generateReport",1,SWIGTYPE_p_Neo__Profiler);
   }
   
-  result = (char *)(arg1)->generateReport();
+  result = (char *)(arg1)->generateReport().getSafeString();
   lua_pushstring(L,(const char *)result); SWIG_arg++;
   return SWIG_arg;
   
