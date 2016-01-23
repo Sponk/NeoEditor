@@ -1388,7 +1388,6 @@ void GL4Context::setPolygonMode(PRIMITIVE_TYPES t)
 		break;
 	}
 }
-#endif
 
 int GL4Context::getUniformLocation(unsigned int fx, const char* name)
 {
@@ -1408,3 +1407,5 @@ int GL4Context::getUniformLocation(unsigned int fx, const char* name)
 
 	return uniform->second;
 }
+
+#endif

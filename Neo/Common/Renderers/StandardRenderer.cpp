@@ -24,7 +24,9 @@
 
 #ifndef MOBILE_RENDERER
 
+#ifndef USE_GLES
 #include <glew.h>
+#endif
 
 #include <NeoEngine.h>
 #include <StandardRenderer.h>

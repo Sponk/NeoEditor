@@ -25,7 +25,8 @@
 #include <GL4Context.h>
 #else
 #include <ES2Context.h>
-typedef Neo::ES2Context GL4Context;
+//typedef Neo::ES2Context GL4Context;
+#define GL4Context ES2Context
 #endif
 
 #include <ALContext.h>

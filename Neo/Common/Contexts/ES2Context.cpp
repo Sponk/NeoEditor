@@ -1,3 +1,4 @@
+
 //========================================================================
 // Copyright (c) 2011 Anael Seghezzi <www.maratis3d.com>
 //
@@ -542,7 +543,11 @@ void ES2Context::createPixelShader(unsigned int * shaderId){
     *shaderId = glCreateShader(GL_FRAGMENT_SHADER);
 }
 
-void ES2Context::deleteShader(unsigned int * shaderId, unsigned int program = 0) {
+void ES2Context::deleteShader(unsigned int * shaderId, unsigned int program)
+{
+	if(program)
+		glDetachShader(*shaderId, program);
+
     glDeleteShader((*shaderId));
 }
 
