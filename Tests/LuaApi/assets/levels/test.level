@@ -33,7 +33,7 @@
 			<active value="true" />
 			<transform 
 				position="48.258244 -14.236198 5.103604"
-				rotation="0.000000 -15.324683 0.000000"
+				rotation="0.000000 -15.324689 0.000000"
 				scale="1.000000 1.000000 1.000000" />
 			<properties
 				radius="100.000000"
@@ -47,7 +47,7 @@
 			<active value="true" />
 			<transform
 				position="10.017162 -8.283119 13.911819"
-				rotation="0.000000 -15.324683 0.000000"
+				rotation="0.000000 -15.324689 0.000000"
 				scale="1.000000 1.000000 1.000000" />
 			<properties
 				radius="34.000000"
@@ -61,7 +61,7 @@
 			<active value="true" />
 			<transform
 				position="1.412033 -1.781609 13.911819"
-				rotation="0.000000 -15.324683 0.000000"
+				rotation="0.000000 -15.324689 0.000000"
 				scale="1.000000 1.000000 1.000000" />
 			<properties
 				radius="34.000000"
@@ -75,7 +75,7 @@
 			<active value="true" />
 			<transform
 				position="18.007702 -1.781609 13.911819"
-				rotation="0.000000 -15.324683 0.000000"
+				rotation="0.000000 -15.324689 0.000000"
 				scale="1.000000 1.000000 1.000000" />
 			<properties
 				radius="34.000000"
@@ -89,7 +89,7 @@
 			<active value="true" />
 			<transform
 				position="11.006080 -15.735081 -3.131695"
-				rotation="90.000000 -15.324629 -0.000002"
+				rotation="90.000000 -15.324629 -0.000003"
 				scale="1.000000 1.000000 1.000000" />
 			<properties
 				radius="34.000000"
@@ -127,6 +127,118 @@
 				spotExponent="0.000000"
 				shadow="false" />
 		</Light>
+		<Light name="Light2">
+			<active value="true" />
+			<transform
+				position="-181.603989 71.598000 38.876999"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties
+				radius="200.000000"
+				color="1.000000 0.800000 0.500000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light3">
+			<active value="true" />
+			<transform
+				position="-181.603989 -106.955444 38.876999"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties
+				radius="200.000000"
+				color="1.000000 0.800000 0.500000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light4">
+			<active value="true" />
+			<transform
+				position="3.261732 -106.955444 38.876999"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties
+				radius="200.000000"
+				color="1.000000 0.800000 0.500000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light5">
+			<active value="true" />
+			<transform
+				position="181.003464 -106.955444 38.876999"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties
+				radius="200.000000"
+				color="1.000000 0.800000 0.500000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light6">
+			<active value="true" />
+			<transform
+				position="370.926758 -106.955444 38.876999"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties
+				radius="200.000000"
+				color="1.000000 0.800000 0.500000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light7">
+			<active value="true" />
+			<transform
+				position="370.926758 72.593002 38.876999"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties
+				radius="200.000000"
+				color="1.000000 0.800000 0.500000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light8">
+			<active value="true" />
+			<transform
+				position="190.510330 72.593002 38.876999"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties
+				radius="200.000000"
+				color="1.000000 0.800000 0.500000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
+		<Light name="Light9">
+			<active value="true" />
+			<transform
+				position="1.038119 72.593002 38.876999"
+				rotation="0.000000 -0.000000 0.000000"
+				scale="1.000000 1.000000 1.000000" />
+			<properties
+				radius="200.000000"
+				color="1.000000 0.800000 0.500000"
+				intensity="1.000000"
+				spotAngle="180.000000"
+				spotExponent="0.000000"
+				shadow="false" />
+		</Light>
 		<Camera name="Camera0">
 			<active value="true" />
 			<transform
@@ -139,7 +251,7 @@
 				ortho="false"
 				fov="70.000000"
 				clippingNear="1.000000"
-				clippingFar="5000.000000"
+				clippingFar="2000.000000"
 				fog="false"
 				fogDistance="0.000000"
 				skyboxTextures="assets/maps/skybox" />
@@ -151,7 +263,7 @@
 			<transform
 				position="126.679070 -37.756260 -26.090818"
 				rotation="0.000000 -0.000000 0.000000"
-				scale="0.500000 0.500000 0.500000" />
+				scale="0.250000 0.250000 0.250000" />
 			<properties
 				invisible="false"
 				shadow="true"
@@ -276,118 +388,6 @@
 				<![CDATA[Text]]>
 			</textData>
 		</Text>
-		<Light name="Light2">
-			<active value="true" />
-			<transform
-				position="-181.603989 71.598000 38.876999"
-				rotation="0.000000 -0.000000 0.000000"
-				scale="1.000000 1.000000 1.000000" />
-			<properties
-				radius="200.000000"
-				color="1.000000 0.800000 0.500000"
-				intensity="1.000000"
-				spotAngle="180.000000"
-				spotExponent="0.000000"
-				shadow="false" />
-		</Light>
-		<Light name="Light3">
-			<active value="true" />
-			<transform
-				position="-181.603989 -106.955444 38.876999"
-				rotation="0.000000 -0.000000 0.000000"
-				scale="1.000000 1.000000 1.000000" />
-			<properties
-				radius="200.000000"
-				color="1.000000 0.800000 0.500000"
-				intensity="1.000000"
-				spotAngle="180.000000"
-				spotExponent="0.000000"
-				shadow="false" />
-		</Light>
-		<Light name="Light4">
-			<active value="true" />
-			<transform
-				position="3.261732 -106.955444 38.876999"
-				rotation="0.000000 -0.000000 0.000000"
-				scale="1.000000 1.000000 1.000000" />
-			<properties
-				radius="200.000000"
-				color="1.000000 0.800000 0.500000"
-				intensity="1.000000"
-				spotAngle="180.000000"
-				spotExponent="0.000000"
-				shadow="false" />
-		</Light>
-		<Light name="Light5">
-			<active value="true" />
-			<transform
-				position="181.003464 -106.955444 38.876999"
-				rotation="0.000000 -0.000000 0.000000"
-				scale="1.000000 1.000000 1.000000" />
-			<properties
-				radius="200.000000"
-				color="1.000000 0.800000 0.500000"
-				intensity="1.000000"
-				spotAngle="180.000000"
-				spotExponent="0.000000"
-				shadow="false" />
-		</Light>
-		<Light name="Light6">
-			<active value="true" />
-			<transform
-				position="370.926758 -106.955444 38.876999"
-				rotation="0.000000 -0.000000 0.000000"
-				scale="1.000000 1.000000 1.000000" />
-			<properties
-				radius="200.000000"
-				color="1.000000 0.800000 0.500000"
-				intensity="1.000000"
-				spotAngle="180.000000"
-				spotExponent="0.000000"
-				shadow="false" />
-		</Light>
-		<Light name="Light7">
-			<active value="true" />
-			<transform
-				position="370.926758 72.593002 38.876999"
-				rotation="0.000000 -0.000000 0.000000"
-				scale="1.000000 1.000000 1.000000" />
-			<properties
-				radius="200.000000"
-				color="1.000000 0.800000 0.500000"
-				intensity="1.000000"
-				spotAngle="180.000000"
-				spotExponent="0.000000"
-				shadow="false" />
-		</Light>
-		<Light name="Light8">
-			<active value="true" />
-			<transform
-				position="190.510330 72.593002 38.876999"
-				rotation="0.000000 -0.000000 0.000000"
-				scale="1.000000 1.000000 1.000000" />
-			<properties
-				radius="200.000000"
-				color="1.000000 0.800000 0.500000"
-				intensity="1.000000"
-				spotAngle="180.000000"
-				spotExponent="0.000000"
-				shadow="false" />
-		</Light>
-		<Light name="Light9">
-			<active value="true" />
-			<transform
-				position="1.038119 72.593002 38.876999"
-				rotation="0.000000 -0.000000 0.000000"
-				scale="1.000000 1.000000 1.000000" />
-			<properties
-				radius="200.000000"
-				color="1.000000 0.800000 0.500000"
-				intensity="1.000000"
-				spotAngle="180.000000"
-				spotExponent="0.000000"
-				shadow="false" />
-		</Light>
 
 	</Scene>
 
