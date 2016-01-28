@@ -435,9 +435,13 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 			unsigned int uvindex;
 			float blend;
 			aiTextureOp op;
-			aiTextureMapMode mapmode;
 
-			if(AI_SUCCESS == mtl->GetTexture(aiTextureType_DIFFUSE, 0, &path, &mapping, &uvindex, &blend, &op, &mapmode))
+			// FIXME: Bug in Assimp: They use 64bit integers to save the aiTextureMapMode
+			// but enums are always 32bit leading to a stack corruption!
+			//aiTextureMapMode mapmode;
+			long long mapmode = 0;
+
+			if(AI_SUCCESS == mtl->GetTexture(aiTextureType_DIFFUSE, 0, &path, &mapping, &uvindex, &blend, &op, (aiTextureMapMode*) &mapmode))
 			{
 				material->allocTexturesPass(4);
 				
@@ -453,7 +457,7 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 				material->addTexturePass(texture, TEX_COMBINE_MODULATE, uvindex);
 			}
 		
-			if(AI_SUCCESS == mtl->GetTexture(aiTextureType_SPECULAR, 0, &path, &mapping, &uvindex, &blend, &op, &mapmode))
+			if(AI_SUCCESS == mtl->GetTexture(aiTextureType_SPECULAR, 0, &path, &mapping, &uvindex, &blend, &op, (aiTextureMapMode*) &mapmode))
 			{
 				getGlobalFilename(globalPath, meshRep, path.C_Str());
 				TextureRef * texRef = level->loadTexture(globalPath, true);
@@ -469,7 +473,7 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 				material->addTexturePass(texture, TEX_COMBINE_MODULATE, uvindex);
 			}
 		
-			if(AI_SUCCESS == mtl->GetTexture(aiTextureType_NORMALS, 0, &path, &mapping, &uvindex, &blend, &op, &mapmode))
+			if(AI_SUCCESS == mtl->GetTexture(aiTextureType_NORMALS, 0, &path, &mapping, &uvindex, &blend, &op, (aiTextureMapMode*) &mapmode))
 			{
 				getGlobalFilename(globalPath, meshRep, path.C_Str());
 				TextureRef * texRef = level->loadTexture(globalPath, true);
@@ -485,7 +489,7 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 				material->addTexturePass(texture, TEX_COMBINE_MODULATE, uvindex);
 			}
 		
-			if(AI_SUCCESS == mtl->GetTexture(aiTextureType_EMISSIVE, 0, &path, &mapping, &uvindex, &blend, &op, &mapmode))
+			if(AI_SUCCESS == mtl->GetTexture(aiTextureType_EMISSIVE, 0, &path, &mapping, &uvindex, &blend, &op, (aiTextureMapMode*) &mapmode))
 			{
 				getGlobalFilename(globalPath, meshRep, path.C_Str());
 				TextureRef * texRef = level->loadTexture(globalPath, true);
