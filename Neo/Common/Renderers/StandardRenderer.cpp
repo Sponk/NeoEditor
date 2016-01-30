@@ -76,6 +76,8 @@ public:
 
 	Semaphore* lightLock;
 	std::vector<OLight*> visibleLights;
+    Image lightData;
+    unsigned int lightTexture;
 
 	CameraData()
 	{
@@ -88,6 +90,8 @@ public:
 		visibleLights.reserve(256);
 		visibleEntities.reserve(256);
 		visibleTransparentEntities.reserve(256);
+
+        lightTexture = 0;
 	}
 
 	~CameraData()
@@ -571,8 +575,6 @@ void StandardRenderer::drawTransparents(Scene* scene, OCamera* camera)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
 	RenderingContext* render = engine->getRenderingContext();
-
-	OEntity* entity;
 	Mesh* mesh;
 	
 	// Lock scene so we don't have a surprise
@@ -580,7 +582,7 @@ void StandardRenderer::drawTransparents(Scene* scene, OCamera* camera)
 
 	if(!data) return;
 
-	sendLights(m_fx[0], camera);
+    sendLights(m_fx[0], camera);
 	render->bindTexture(m_depthTexID, 4);
 	
 	data->visibilityLock->WaitAndLock();
@@ -1188,12 +1190,61 @@ void StandardRenderer::sendLights(unsigned int shader, OCamera* camera)
 	int num = data->visibleLights.size();
 	render->sendUniformInt(shader, "LightsCount", &num);
 
+    size_t size = getNextPowerOfTwo(data->visibleLights.size());
+    if(data->lightData.getWidth() < size
+            || data->lightData.getHeight() == 0)
+    {
+        // Texture format:
+        // x ... size => Light index
+        // tex[x][0] => position
+        // tex[x][1].xyz => spot cos, spot exp, intensity
+        // tex[x][2].xyz => radius
+        // tex[x][3].xyz => linear attenuation, quadratic attenuation, constant attenuation
+        // tex[x][4] => spot dir
+        // tex[x][5] => diffuse
+        data->lightData.create(VAR_FLOAT, size, 8, 3);
+    }
+
+    Vector3 vec;
 	int i = 0;
 	for (OLight* l : data->visibleLights)
 	{
-		sendLight(shader, l, i++, camMat);
+        float quadraticAtten = (8.0f / l->getRadius());
+        quadraticAtten = (quadraticAtten*quadraticAtten) * l->getIntensity();
+        float spotCos = cosf(l->getSpotAngle() * DEG_TO_RAD);
+
+        vec = camMat * l->getTransformedPosition();
+        data->lightData.writePixel(i, 0, &vec);
+
+        vec = Vector3(spotCos, l->getSpotExponent(), l->getIntensity());
+        data->lightData.writePixel(i, 1, &vec);
+
+        vec = Vector3(l->getRadius(), 0, 0);
+        data->lightData.writePixel(i, 2, &vec);
+
+        vec = Vector3(0, quadraticAtten, 1);
+        data->lightData.writePixel(i, 3, &vec);
+
+        vec = camMat.getRotatedVector3(l->getRotatedVector(Vector3(0,0,-1))).getNormalized();
+        data->lightData.writePixel(i, 4, &vec);
+
+        vec = l->getColor();
+        data->lightData.writePixel(i, 5, &vec);
+
+        i++;
+        //sendLight(shader, l, i++, camMat);
 	}
-	data->lightLock->Unlock();
+    data->lightLock->Unlock();
+
+    num = 7;
+
+    // FIXME: Do that in the constructor!
+    if(!data->lightTexture)
+        render->createTexture(&data->lightTexture);
+
+    render->bindTexture(data->lightTexture, 7);
+    render->sendTextureImage(&data->lightData, false, false, false);
+    render->sendUniformInt(shader, "LightData", &num);
 }
 
 void StandardRenderer::sendLight(unsigned int fx, OLight* l, int num, Matrix4x4 matrix)
@@ -1243,7 +1294,7 @@ void StandardRenderer::sendLight(unsigned int fx, OLight* l, int num, Matrix4x4 
 	// attenuation
 	//if (l->getSpotAngle() > 0.0f)
 	//{
-		quadraticAttenuation = (8.0f / l->getRadius());
+        quadraticAttenuation = (8.0f / l->getRadius());
 		quadraticAttenuation = (quadraticAttenuation*quadraticAttenuation)*l->getIntensity();
 	//}
 
@@ -1790,20 +1841,47 @@ int StandardRenderer::light_update_thread(void* data)
 			   camera->setAdditionalData(data);
 		   }
 
+           camera->enable();
 		   data->lightLock->WaitAndLock();
 		   data->visibleLights.clear();
 
 		   // Fill the light buffer with all visible lights
-		   int j = 0;
-		   for(int i = 0; i < scene->getLightsNumber() && i < MAX_ENTITY_LIGHTS; i++)
-		   {
-			   	// If light is visible
-			   	if ((light = scene->getLightByIndex(i)) != NULL && light->isActive() && (light->isVisible() || light->getSpotAngle() == 0))
-			   	{
-					data->visibleLights.push_back(light);
-					j++;
-				}
-		   }
+           {
+               int j = 0;
+
+               for(int i = 0; i < scene->getLightsNumber() /*&& i < MAX_ENTITY_LIGHTS*/; i++)
+               {
+                    // If light is visible
+                    if ((light = scene->getLightByIndex(i)) != NULL && light->isActive()
+                            && (light->isVisible() || light->getSpotAngle() == 0))
+                    {
+                        /*float quadraticAtten = (8.0f / light->getRadius());
+                        quadraticAtten = (quadraticAtten*quadraticAtten) * light->getIntensity();
+                        float spotCos = cosf(light->getSpotAngle() * DEG_TO_RAD);
+
+                        vec = (*camera->getCurrentViewMatrix()) * light->getTransformedPosition();
+                        data->lightData.writePixel(i, 0, &vec);
+
+                        vec = Vector3(spotCos, light->getSpotExponent(), light->getIntensity());
+                        data->lightData.writePixel(i, 1, &vec);
+
+                        vec = Vector3(light->getRadius(), 0, 0);
+                        data->lightData.writePixel(i, 2, &vec);
+
+                        vec = Vector3(0, quadraticAtten, 1);
+                        data->lightData.writePixel(i, 3, &vec);
+
+                        vec = camera->getCurrentViewMatrix()->getRotatedVector3(light->getRotatedVector(Vector3(0,0,-1))).getNormalized();
+                        data->lightData.writePixel(i, 4, &vec);
+
+                        vec = light->getColor();
+                        data->lightData.writePixel(i, 5, &vec);*/
+
+                        data->visibleLights.push_back(light);
+                        j++;
+                    }
+               }
+           }
 
 		   data->lightLock->Unlock();
 	   }

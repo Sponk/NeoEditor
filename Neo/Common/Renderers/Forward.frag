@@ -31,8 +31,9 @@ struct LightInfo
     vec3 SpotDir;
 };
 
-uniform LightInfo lights[MAX_ENTITY_LIGHTS];
+//uniform LightInfo lights[MAX_ENTITY_LIGHTS];
 uniform int LightsCount;
+uniform sampler2D LightData;
 
 uniform vec3 AmbientLight;
 
@@ -198,21 +199,87 @@ vec4 calculatePhongLight(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float sh
 ///////////////////////////////////////////////////////////
 // Light calculation techniques
 ///////////////////////////////////////////////////////////
-vec4 calculateAllPhongLight(vec3 p, vec3 n, vec4 d, float s)
+/*vec4 calculateAllPhongLight(vec3 p, vec3 n, vec4 d, float s)
 {
   vec4 result;
   for(int i = 0; i < LightsCount; i++)
     result = result + calculatePhongLight(lights[i], p, n, d, s);
 
   return result;
-}
+}*/
 
-vec4 calculateAllCookLight(vec3 p, vec3 n, vec4 d, float s)
+/*vec4 calculateAllCookLight(vec3 p, vec3 n, vec4 d, float s)
 {
   vec4 result;
   for(int i = 0; i < LightsCount; i++)
     result = result + cookTorranceSpecular(lights[i], p, n, d, s);
 
+  return result;
+}*/
+
+vec4 calculateAllCookLight(vec3 p, vec3 n, vec4 d, float s)
+{
+  vec4 result;
+
+  float id = 0.0;
+  LightInfo light;
+  vec3 data;
+
+  for(int i = 0; i < LightsCount; i++)
+  {
+    //light = lights[i];
+    light.Position = texelFetch(LightData, ivec2(i, 0), 0).rgb;
+
+    data = texelFetch(LightData, ivec2(i, 1), 0).xyz;
+    light.SpotCos = data.x;
+    light.SpotExp = data.y;
+    light.Intensity = data.z;
+
+    light.Radius = texelFetch(LightData, ivec2(i, 2), 0).x;
+
+    data = texelFetch(LightData, ivec2(i, 3), 0).xyz;
+    light.LinearAttenuation = data.x;
+    light.QuadraticAttenuation = data.y;
+    light.ConstantAttenuation = data.z;
+
+    light.SpotDir = texelFetch(LightData, ivec2(i, 4), 0).xyz;
+    light.Diffuse = texelFetch(LightData, ivec2(i, 5), 0).xyz;
+
+    result = result + cookTorranceSpecular(light, p, n, d, s);
+  }
+  return result;
+}
+
+vec4 calculateAllPhongLight(vec3 p, vec3 n, vec4 d, float s)
+{
+  vec4 result;
+
+  float id = 0.0;
+  LightInfo light;
+  vec3 data;
+
+  for(int i = 0; i < LightsCount; i++)
+  {
+    //light = lights[i];
+    light.Position = texelFetch(LightData, ivec2(i, 0), 0).rgb;
+
+    data = texelFetch(LightData, ivec2(i, 1), 0).xyz;
+    light.SpotCos = data.x;
+    light.SpotExp = data.y;
+    light.Intensity = data.z;
+
+    light.Radius = texelFetch(LightData, ivec2(i, 2), 0).x;
+
+    data = texelFetch(LightData, ivec2(i, 3), 0).xyz;
+    light.LinearAttenuation = data.x;
+    light.QuadraticAttenuation = data.y;
+    light.ConstantAttenuation = data.z;
+
+    light.SpotDir = texelFetch(LightData, ivec2(i, 4), 0).xyz;
+    light.Diffuse = texelFetch(LightData, ivec2(i, 5), 0).xyz;
+
+    result = result + calculatePhongLight(light, p, n, d, s);
+  }
   return result;
 }
 
@@ -384,9 +451,10 @@ void main(void)
 	if(TextureMode == -1)
 	{
 		FragColor = shadeModel(position, normal);
-
 		if(FragColor.a < 0.1)
-			discard;
+		{
+		    discard;
+		}
 
 		FragColor.a = min(FragColor.a, 0.99);
 		return;

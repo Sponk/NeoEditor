@@ -524,63 +524,55 @@ void GL4Context::deleteTexture(unsigned int * textureId)
 
 void GL4Context::sendTextureImage(Image * image, bool mipMap, bool filter, bool compress)
 {
-    // get properties
-    unsigned int bytePerPix = image->getComponents();
+	// get properties
+	unsigned int bytePerPix = image->getComponents();
 
-    unsigned int width  = image->getWidth();
-    unsigned int height = image->getHeight();
+	unsigned int width  = image->getWidth();
+	unsigned int height = image->getHeight();
 
-        int internalFormat = GL_RGB;
-        int format = GL_RGB;
+	int internalFormat;
+	int format = GL_RGB;
 
-    /*if(compress)
-     *     {
-     *     if(bytePerPix == 4)
-     *     {
-     *     format = GL_RGBA;
-     *     internalFormat = GL_COMPRESSED_RGBA_ARB;
-}
-else
-{
-internalFormat = GL_COMPRESSED_RGB_ARB;
-}
-}
-else*/
-    {
-        if(bytePerPix == 4)
-        {
-            format = GL_RGBA;
-            internalFormat = GL_RGBA;
-        }
-    }
+	if (bytePerPix == 3)
+	{
+		if (image->getDataType() == VAR_FLOAT)
+			internalFormat = GL_RGB32F;
+		else
+			internalFormat = GL_RGB;
+	}
+	else if(bytePerPix == 4)
+	{
+		format = GL_RGBA;
 
-        int glType = GL_TEXTURE_2D;
+		if (image->getDataType() == VAR_FLOAT)
+			internalFormat = GL_RGBA32F;
+		else
+			internalFormat = GL_RGBA;
+	}
 
-        //glEnable(glType);
+	if(filter)
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		if(mipMap)
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		else
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
+	else
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		if(mipMap)
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+		else
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	}
 
-        if(filter)
-        {
-                glTexParameteri(glType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                if(mipMap)
-                        glTexParameteri(glType, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-                else
-                        glTexParameteri(glType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        }
-        else
-        {
-                glTexParameteri(glType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                if(mipMap)
-                        glTexParameteri(glType, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-                else
-                        glTexParameteri(glType, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        }
-
-        glTexImage2D(glType, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, image->getData());
-        if(mipMap)
-        {
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy); // anisotropic filtering
-                glGenerateMipmap(glType);
-        }
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, returnGLType(image->getDataType()), image->getData());
+	if(mipMap)
+	{
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy); // anisotropic filtering
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
 }
 
 void GL4Context::texImage(unsigned int level, unsigned int width, unsigned int height, VAR_TYPES type, TEX_MODES mode, const void * pixels)

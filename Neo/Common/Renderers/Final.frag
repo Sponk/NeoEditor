@@ -27,8 +27,9 @@ struct LightInfo
     mat4 ShadowMatrix;
 };
 
-uniform LightInfo lights[MAX_ENTITY_LIGHTS];
+//uniform LightInfo lights[MAX_ENTITY_LIGHTS];
 uniform int LightsCount;
+uniform sampler2D LightData;
 
 uniform vec3 AmbientLight;
 
@@ -141,9 +142,32 @@ vec4 calculatePhongLight(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float sh
 vec4 calculateAllCookLight(vec3 p, vec3 n, vec4 d, float s)
 {
   vec4 result;
+
+  float id = 0.0;
+  LightInfo light;
+  vec3 data;
+
   for(int i = 0; i < LightsCount; i++)
   {
-    result = result + cookTorranceSpecular(lights[i], p, n, d, s);
+    //light = lights[i];
+    light.Position = texelFetch(LightData, ivec2(i, 0), 0).rgb;
+
+    data = texelFetch(LightData, ivec2(i, 1), 0).xyz;
+    light.SpotCos = data.x;
+    light.SpotExp = data.y;
+    light.Intensity = data.z;
+
+    light.Radius = texelFetch(LightData, ivec2(i, 2), 0).x;
+
+    data = texelFetch(LightData, ivec2(i, 3), 0).xyz;
+    light.LinearAttenuation = data.x;
+    light.QuadraticAttenuation = data.y;
+    light.ConstantAttenuation = data.z;
+
+    light.SpotDir = texelFetch(LightData, ivec2(i, 4), 0).xyz;
+    light.Diffuse = texelFetch(LightData, ivec2(i, 5), 0).xyz;
+
+    result = result + cookTorranceSpecular(light, p, n, d, s);
   }
   return result;
 }
@@ -151,9 +175,33 @@ vec4 calculateAllCookLight(vec3 p, vec3 n, vec4 d, float s)
 vec4 calculateAllPhongLight(vec3 p, vec3 n, vec4 d, float s)
 {
   vec4 result;
-  for(int i = 0; i < LightsCount; i++)
-    result = result + calculatePhongLight(lights[i], p, n, d, s);
 
+  float id = 0.0;
+  LightInfo light;
+  vec3 data;
+
+  for(int i = 0; i < LightsCount; i++)
+  {
+    //light = lights[i];
+    light.Position = texelFetch(LightData, ivec2(i, 0), 0).rgb;
+
+    data = texelFetch(LightData, ivec2(i, 1), 0).xyz;
+    light.SpotCos = data.x;
+    light.SpotExp = data.y;
+    light.Intensity = data.z;
+
+    light.Radius = texelFetch(LightData, ivec2(i, 2), 0).x;
+
+    data = texelFetch(LightData, ivec2(i, 3), 0).xyz;
+    light.LinearAttenuation = data.x;
+    light.QuadraticAttenuation = data.y;
+    light.ConstantAttenuation = data.z;
+
+    light.SpotDir = texelFetch(LightData, ivec2(i, 4), 0).xyz;
+    light.Diffuse = texelFetch(LightData, ivec2(i, 5), 0).xyz;
+
+    result = result + calculatePhongLight(light, p, n, d, s);
+  }
   return result;
 }
 
@@ -406,9 +454,10 @@ float linearize_depth(float z, float near, float far)
 }
 
 // SSAO
+#define SSAO_ITERATIONS 64
 float ssao(vec2 texcoord, vec2 filterRadius, sampler2D depthTexture, sampler2D positionTexture, sampler2D normalTexture)
 {
-	const int samples = 64;
+	const int samples = min(SSAO_ITERATIONS, 64);
 	const float distanceThreshold = 5.0;
 	const vec3 lumcoeff = vec3(0.299,0.587,0.114);
 
@@ -443,6 +492,9 @@ void main(void)
 
 	if(PostEffects == 1)
 	{
+		//FragColor = texture2D(LightData, texCoord);
+		//return;
+
 		vec4 normal = texture2D(Textures[1], texCoord);
 
 		float depth = linearize_depth(texture2D(Textures[4], texCoord).r, Near, Far);
@@ -452,10 +504,10 @@ void main(void)
 		//FragColor.rgb = vec3(ssao(texCoord, frame * 30.0, Textures[4], Textures[2], Textures[1]));
 		//return;
 
-        //float dofAmount = dofStrength * (depth - ((dofAutofocus == 1) ? depthCenter : dofFocus));
+		//float dofAmount = dofStrength * (depth - ((dofAutofocus == 1) ? depthCenter : dofFocus));
 
 		FragColor.rgb = fxaa(Textures[0], texCoord, frame);
-        //FragColor.rgb = bloom(Textures[0], texCoord, FragColor.rgb, frame, 0.04, 1.0);
+		//FragColor.rgb = bloom(Textures[0], texCoord, FragColor.rgb, frame, 0.04, 1.0);
 
 		//FragColor.rgb = mix(FragColor.rgb, blur(FragColor, texCoord, Textures[0], dofAmount).rgb, dofStrength*abs(dofAmount));
 
@@ -469,6 +521,12 @@ void main(void)
 		FragColor = transparency * gammaCorrection(FragColor, 1.2);
 		return;
 	}
+
+	//FragColor = texture2D(LightData, texCoord);
+
+	//FragColor = texelFetch(LightData, ivec2(texCoord.x * LightsCount, 0), 0);
+	//FragColor.a = 1;
+	//return;
 
 	if(FragColor.a == 0.0)
 		discard;
