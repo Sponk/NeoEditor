@@ -219,7 +219,7 @@ vec4 calculatePhongLight(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float sh
 
 vec4 calculateAllCookLight(vec3 p, vec3 n, vec4 d, float s)
 {
-  vec4 result;
+  vec4 result = vec4(0,0,0,0);
 
   float id = 0.0;
   LightInfo light;
@@ -252,7 +252,7 @@ vec4 calculateAllCookLight(vec3 p, vec3 n, vec4 d, float s)
 
 vec4 calculateAllPhongLight(vec3 p, vec3 n, vec4 d, float s)
 {
-  vec4 result;
+  vec4 result = vec4(0,0,0,0);
 
   float id = 0.0;
   LightInfo light;

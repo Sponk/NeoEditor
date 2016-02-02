@@ -63,7 +63,7 @@ vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float r
   	l = -light.SpotDir;
 
   // Gauss constant
-  float c = 1.0;
+  const float c = 1.0;
   
   vec3 s = normalize(l);
   vec3 v = normalize(-p);
@@ -89,7 +89,7 @@ vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float r
   float denominator = nDotv * nDots;
   float rs = numerator / denominator;
   vec3 retval = light.Intensity * (max(0.0, nDots) * ((diffuse.rgb * light.Diffuse) + (light.Diffuse*Specular) * rs));
-      
+
   if(light.SpotCos > 0.0 && light.SpotCos < 1.0)
   {
 	float spot = dot(-s, light.SpotDir);
@@ -141,7 +141,7 @@ vec4 calculatePhongLight(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float sh
 
 vec4 calculateAllCookLight(vec3 p, vec3 n, vec4 d, float s)
 {
-  vec4 result;
+  vec4 result = vec4(0,0,0,0);
 
   float id = 0.0;
   LightInfo light;
@@ -174,7 +174,7 @@ vec4 calculateAllCookLight(vec3 p, vec3 n, vec4 d, float s)
 
 vec4 calculateAllPhongLight(vec3 p, vec3 n, vec4 d, float s)
 {
-  vec4 result;
+  vec4 result = vec4(0,0,0,0);
 
   float id = 0.0;
   LightInfo light;
@@ -522,15 +522,22 @@ void main(void)
 		return;
 	}
 
-	//FragColor = texture2D(LightData, texCoord);
+	/*if(texCoord.y <= 0.5)
+		if(texCoord.x > 0.5)
+			FragColor = texture2D(Textures[1], texCoord);
+		else
+			FragColor = texture2D(Textures[3], texCoord);
 
-	//FragColor = texelFetch(LightData, ivec2(texCoord.x * LightsCount, 0), 0);
-	//FragColor.a = 1;
-	//return;
+	if(texCoord.y > 0.5)
+		if(texCoord.x > 0.5)
+			FragColor = texture2D(Textures[2], texCoord);
+
+	FragColor.a = 1;
+	return;*/
 
 	if(FragColor.a == 0.0)
 		discard;
-		
+
 	vec4 data = texture2D(Textures[3], texCoord);
 	vec4 startColor = FragColor;
 	vec4 n = texture2D(Textures[1], texCoord);
