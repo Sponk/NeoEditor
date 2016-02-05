@@ -319,6 +319,7 @@ int main ( int argc, char **argv )
 	}
 
 	backend->clear();
+	window->destroy();
 	MLOG_INFO("Profiling result: " << endl << profiler.generateReport().getSafeString());
 
 	return 0;

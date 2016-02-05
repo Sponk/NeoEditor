@@ -197,8 +197,6 @@ NeoWindow::NeoWindow(void) :
 
 NeoWindow::~NeoWindow(void)
 {
-	SDL_GL_DeleteContext(g_context);
-	SDL_DestroyWindow(g_NeoWindow);
 	SDL_Quit();
 }
 
@@ -877,3 +875,10 @@ void NeoWindow::setWorkingDirectory(const char * directory)
 	strcpy(m_workingDirectory, directory);
 }
 #endif
+
+void NeoWindow::destroy()
+{
+	SDL_GL_DeleteContext(g_context);
+	SDL_DestroyWindow(g_NeoWindow);
+	SDL_Quit();
+}

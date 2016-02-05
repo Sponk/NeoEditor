@@ -256,8 +256,11 @@ dep_option(DIRECTFB_SHARED     "Dynamically load directfb support" ON "VIDEO_DIR
 set_option(FUSIONSOUND         "Use FusionSound audio driver" OFF)
 dep_option(FUSIONSOUND_SHARED  "Dynamically load fusionsound audio support" ON "FUSIONSOUND" OFF)
 set_option(VIDEO_DUMMY         "Use dummy video driver" ON)
-set_option(VIDEO_OPENGL        "Include OpenGL support" ON)
-set_option(VIDEO_OPENGLES      "Include OpenGL ES support" ON)
+
+## Those are set on the top level CMakeLists.txt
+#set_option(VIDEO_OPENGL        "Include OpenGL support" ON)
+#set_option(VIDEO_OPENGLES      "Include OpenGL ES support" ON)
+
 set_option(PTHREADS            "Use POSIX threads for multi-threading" ${SDL_PTHREADS_ENABLED_BY_DEFAULT})
 dep_option(PTHREADS_SEM        "Use pthread semaphores" ON "PTHREADS" OFF)
 set_option(SDL_DLOPEN          "Use dlopen for shared object loading" ${SDL_DLOPEN_ENABLED_BY_DEFAULT})

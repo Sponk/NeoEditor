@@ -96,6 +96,7 @@ public:
 
 	// create
 	bool create(const char * title, unsigned int width, unsigned int height, int colorBits, bool fullscreen);
+	void destroy();
 	void resize(unsigned int width, unsigned int height);
 	void setViewport(unsigned int width, unsigned int height) {m_width = width; m_height = height; }
 	void setPosition(int x, int y) { m_position[0] = x; m_position[1] = y; }
