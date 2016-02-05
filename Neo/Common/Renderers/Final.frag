@@ -38,6 +38,8 @@ uniform int Height;
 uniform int PostEffects;
 uniform float Near;
 uniform float Far;
+uniform mat4 CameraViewMatrix;
+uniform float Time;
 
 uniform float dofFocus = 0.2;
 uniform float dofStrength = 2.0;

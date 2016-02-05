@@ -1387,6 +1387,10 @@ void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera, bool post
 
 		val = camera->getClippingFar();
 		render->sendUniformFloat(m_fx[1], "Far", &val, 1);
+
+		val = system->getSystemTick();
+		render->sendUniformMatrix(m_fx[1], "CameraViewMatrix", camera->getCurrentViewMatrix(), 1);
+		render->sendUniformFloat(m_fx[1], "Time", &val, 1);
 	}
 
 	render->bindTexture(m_normalTexID, 1);
