@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -23,19 +24,15 @@
 //========================================================================
 
 
-#if !defined(_M_GL_CONTEXT_H) && !defined(USE_GLES)
-#define _M_GL_CONTEXT_H
+#if !defined(__GL_CONTEXT_H) && !defined(USE_GLES)
+#define __GL_CONTEXT_H
 
+#include "config.h"
 #include <NeoCore.h>
 #define MAX_MRCLIGHTS 8
 namespace Neo
 {
-/**
- * The GLContext class implements the interface dictated by MRenderingContext on top of OpenGL.
- *
- * @see RenderingContext
- */
-class GLContext : public RenderingContext
+class NEO_COMMON_EXPORT GLContext : public RenderingContext
 {
 private:
 

@@ -23,19 +23,21 @@
 //========================================================================
 
 
-#ifndef _M_PROJECT_H
-#define _M_PROJECT_H
+#ifndef __PROJECT_H
+#define __PROJECT_H
+
+#include "config.h"
 
 namespace Neo
 {
 /*--------------------------------------------------------------------------------
  * These values will be overridden in MaratisPlayer during export
  *-------------------------------------------------------------------------------*/
-extern const char* s_embedded_game_name;
-extern const char* s_embedded_level_name;
-extern const char* s_embedded_renderer;
+extern NEO_COMMON_EXPORT const char* s_embedded_game_name;
+extern NEO_COMMON_EXPORT const char* s_embedded_level_name;
+extern NEO_COMMON_EXPORT const char* s_embedded_renderer;
 
-class Project
+class NEO_COMMON_EXPORT Project
 {
 public:
 

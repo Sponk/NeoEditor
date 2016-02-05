@@ -27,6 +27,7 @@
 #ifndef _GL4_CONTEXT_H
 #define _GL4_CONTEXT_H
 
+#include "config.h"
 #include <NeoCore.h>
 #include <unordered_map>
 #include <string>
@@ -35,12 +36,7 @@
 
 namespace Neo
 {
-/**
- * The GL4Context class implements an OpenGL4 compatible rendering context.
- *
- * @see RenderingContext
- */
-class GL4Context : public RenderingContext
+class NEO_COMMON_EXPORT GL4Context : public RenderingContext
 {
 private:
 

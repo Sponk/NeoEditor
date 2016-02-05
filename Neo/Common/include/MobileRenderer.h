@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -26,6 +27,7 @@
 #ifndef __MOBILE_RENDERER_H
 #define __MOBILE_RENDERER_H
 
+#include "config.h"
 
 #define MAX_ENTITY_LIGHTS 256
 #define MAX_SHADOW_LIGHTS 64
@@ -73,7 +75,7 @@ public:
 
 
 // Standard Renderer
-class MobileRenderer : public Renderer
+class NEO_COMMON_EXPORT MobileRenderer : public Renderer
 {
 public:
 

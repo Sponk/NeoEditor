@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -34,16 +35,12 @@
 	#include <AL/alc.h>
 #endif
 
+#include "config.h"
 #include <NeoCore.h>
 
 namespace Neo
 {
-/**
- * The ALContext class implements the interface dictated by MSoundContext on top of OpenAL.
- *
- * @see MSoundContext
- */
-class ALContext : public SoundContext
+class NEO_COMMON_EXPORT ALContext : public SoundContext
 {
 private:
 

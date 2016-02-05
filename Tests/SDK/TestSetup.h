@@ -26,7 +26,7 @@ public:
 		Neo::NeoGame* game = new Neo::NeoGame();
 		Neo::LuaScript* script = new Neo::LuaScript();
 		Neo::Level* level = new Neo::Level();
-		Neo::SystemContext* context = (Neo::SystemContext*) new Neo::MWinContext();
+		Neo::SystemContext* context = (Neo::SystemContext*) new Neo::WinContext();
 		Neo::PackageManager* pmanager = new Neo::PackageManagerNPK;
 		Neo::BulletContext* physcontext = new Neo::BulletContext();
 		Neo::RenderingContext* render = new Neo::DummyContext();

@@ -23,8 +23,10 @@
 //========================================================================
 
 
-#ifndef _M_PLUGIN_H
-#define _M_PLUGIN_H
+#ifndef __PLUGIN_H
+#define __PLUGIN_H
+
+#include "config.h"
 
 #ifdef WIN32
 #include <windows.h>
@@ -34,7 +36,7 @@
 
 namespace Neo
 {
-class Plugin
+class NEO_COMMON_EXPORT Plugin
 {
 public :
 

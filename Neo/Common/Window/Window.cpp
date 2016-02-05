@@ -851,6 +851,12 @@ int NeoWindow::removeGameController(int id)
 	return -1;
 }
 
+NeoWindow* NeoWindow::getInstance()
+{
+	static NeoWindow m_instance;
+	return &m_instance;
+}
+
 #ifdef ANDROID
 #include <unistd.h>
 

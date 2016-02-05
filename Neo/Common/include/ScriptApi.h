@@ -25,10 +25,12 @@
 #ifndef SCRIPT_API_H
 #define SCRIPT_API_H
 
+#include "config.h"
 #include <NeoEngine.h>
+
 namespace Neo
 {
-void bindLuaApi(ScriptContext* context);
+void NEO_COMMON_EXPORT bindLuaApi(ScriptContext* context);
 }
 
 #endif

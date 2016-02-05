@@ -23,22 +23,24 @@
 //========================================================================
 
 
-#ifndef _M_XML_COMMON_H
-#define _M_XML_COMMON_H
+#ifndef __XML_COMMON_H
+#define __XML_COMMON_H
+
+#include "config.h"
 
 namespace Neo
 {
-void openNode(File * file, const char * name, unsigned int tab, const char * sep = NULL);
-void closeNode(File * file, const char * name, unsigned int tab, const char * sep = NULL);
-void openAttributeNode(File * file, const char * name, unsigned int tab);
-void closeAttributeNode(File * file, const char * sep = NULL);
-void closeNodeAttributes(File * file, const char * sep = NULL);
-void writeBool(File * file, const char * name, bool variable, const char * sep = NULL);
-void writeString(File * file, const char * name, const char * string, const char * sep = NULL);
-void writeInt(File * file, const char * name, int variable, const char * sep = NULL);
-void writeFloat(File * file, const char * name, float variable, const char * sep = NULL);
-void writeFloatValues(File * file, const char * name, float * vector, unsigned int size, const char * sep = NULL);
-void writeFilename(File * file, const char * name, const char * filename, const char * workingDirectory = NULL, const char * sep = NULL);
-void writeVariable(File * file, NeoVariable * variable, const char * workingDirectory = NULL, const char * sep = NULL);
+void NEO_COMMON_EXPORT openNode(File * file, const char * name, unsigned int tab, const char * sep = NULL);
+void NEO_COMMON_EXPORT closeNode(File * file, const char * name, unsigned int tab, const char * sep = NULL);
+void NEO_COMMON_EXPORT openAttributeNode(File * file, const char * name, unsigned int tab);
+void NEO_COMMON_EXPORT closeAttributeNode(File * file, const char * sep = NULL);
+void NEO_COMMON_EXPORT closeNodeAttributes(File * file, const char * sep = NULL);
+void NEO_COMMON_EXPORT writeBool(File * file, const char * name, bool variable, const char * sep = NULL);
+void NEO_COMMON_EXPORT writeString(File * file, const char * name, const char * string, const char * sep = NULL);
+void NEO_COMMON_EXPORT writeInt(File * file, const char * name, int variable, const char * sep = NULL);
+void NEO_COMMON_EXPORT writeFloat(File * file, const char * name, float variable, const char * sep = NULL);
+void NEO_COMMON_EXPORT writeFloatValues(File * file, const char * name, float * vector, unsigned int size, const char * sep = NULL);
+void NEO_COMMON_EXPORT writeFilename(File * file, const char * name, const char * filename, const char * workingDirectory = NULL, const char * sep = NULL);
+void NEO_COMMON_EXPORT writeVariable(File * file, NeoVariable * variable, const char * workingDirectory = NULL, const char * sep = NULL);
 }
 #endif

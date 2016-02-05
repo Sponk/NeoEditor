@@ -24,3 +24,9 @@
 
 
 #include <Window/Keyboard.h>
+
+MKeyboard* MKeyboard::getInstance()
+{
+	static MKeyboard m_instance;
+	return &m_instance;
+};

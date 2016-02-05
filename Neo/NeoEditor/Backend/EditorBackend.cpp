@@ -223,7 +223,7 @@ m_inputMethod(NULL)
         m_physics = new BulletContext();
         m_script = new LuaScript();
         m_input = new Input();
-        m_system = new MWinContext();
+        m_system = new WinContext();
         m_level = new Level();
         m_game = new NeoGame();
         m_packageManager = new PackageManagerNPK();

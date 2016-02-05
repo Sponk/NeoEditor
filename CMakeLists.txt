@@ -101,7 +101,8 @@ ENDIF()
 
 ## Config for SDL2
 IF(USE_GLES)
-  set(VIDEO_OPENGLES ON)
+  MESSAGE("-- Using OpenGL ES instead of plain OpenGL")
+  SET(VIDEO_OPENGLES ON)
   set(VIDEO_OPENGL OFF)
 ELSE()
   set(VIDEO_OPENGLES OFF)

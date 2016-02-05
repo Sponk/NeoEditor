@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -26,17 +27,14 @@
 #ifndef __ES2_CONTEXT_H
 #define __ES2_CONTEXT_H
 
+#include "config.h"
 #include <NeoCore.h>
+
 #define MAX_MRCLIGHTS 8
 #define MAX_MATRIX_STEPS 32
 
 namespace Neo
 {
-/**
- * The ES2Context class implements the interface dictated by RenderingContext on top of OpenGL ES.
- *
- * @see RenderingContext
- */
 class ES2Context : public RenderingContext
 {
 private:

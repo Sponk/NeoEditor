@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2014 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -26,8 +27,9 @@
 #ifndef __MOUSE_H
 #define __MOUSE_H
 
+#include "config.h"
 
-class MMouse
+class NEO_COMMON_EXPORT MMouse
 {
 public:
 
@@ -54,7 +56,7 @@ private:
 public:
 
 	// instance
-	static MMouse * getInstance();
+	static MMouse* getInstance();
 
 	inline void refreshLastPosition(){ m_lastPosition[0] = m_position[0]; m_lastPosition[1] = m_position[1]; }
 

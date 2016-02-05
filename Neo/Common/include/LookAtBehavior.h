@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -23,12 +24,14 @@
 //========================================================================
 
 
-#ifndef _MB_LOOK_AT_H
-#define _MB_LOOK_AT_H
+#ifndef _B_LOOK_AT_H
+#define _B_LOOK_AT_H
+
+#include "config.h"
 
 namespace Neo
 {
-class LookAtBehavior : public Behavior
+class NEO_COMMON_EXPORT LookAtBehavior : public Behavior
 {
 public:
 

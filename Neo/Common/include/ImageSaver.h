@@ -1,5 +1,5 @@
 //========================================================================
-// Copyright (c) 2015 Yannick Pflanzer <www.neo-engine.de>
+// Copyright (c) 2015-2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -26,8 +26,10 @@
 #ifndef __IMAGE_SAVER_H
 #define __IMAGE_SAVER_H
 
+#include "config.h"
+
 namespace Neo
 {
-bool M_saveImage(const char* filename, const char* type, Image* image);
+bool NEO_COMMON_EXPORT M_saveImage(const char* filename, const char* type, Image* image);
 }
 #endif

@@ -26,16 +26,17 @@
 #ifndef __WIN_CONTEXT_H
 #define __WIN_CONTEXT_H
 
+#include "config.h"
 #include <NeoCore.h>
 
 namespace Neo
 {
-class MWinContext : public SystemContext
+class NEO_COMMON_EXPORT WinContext : public SystemContext
 {
 public:
 
 	// destructor
-	~MWinContext(void){}
+	~WinContext(void){}
 
 	// screen
 	void setScreenSize(unsigned int width, unsigned int height);

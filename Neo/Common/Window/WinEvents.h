@@ -27,6 +27,7 @@
 #ifndef __WIN_EVENTS_H
 #define __WIN_EVENTS_H
 
+#include "config.h"
 
 #define MKEY_SPACE		32
 
@@ -201,7 +202,7 @@ enum MWIN_EVENT_TYPE
 	MWIN_EVENT_MAX
 };
 
-struct MWinEvent
+struct NEO_COMMON_EXPORT MWinEvent
 {
 	MWIN_EVENT_TYPE type;
 	int data[4];

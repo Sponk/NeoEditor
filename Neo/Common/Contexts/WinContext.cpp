@@ -34,58 +34,58 @@
 using namespace Neo;
 
 // screen
-void MWinContext::getScreenSize(unsigned int * width, unsigned int * height)
+void WinContext::getScreenSize(unsigned int * width, unsigned int * height)
 {
 	NeoWindow * window = NeoWindow::getInstance();
 	*width = window->getWidth();
 	*height = window->getHeight();
 }
 
-Vector2 MWinContext::getScreenSize()
+Vector2 WinContext::getScreenSize()
 {
 	NeoWindow* window = NeoWindow::getInstance();
 	return Vector2(window->getWidth(), window->getHeight());
 }
 
 // cursor
-void MWinContext::setCursorPosition(int x, int y)
+void WinContext::setCursorPosition(int x, int y)
 {
 	NeoWindow * window = NeoWindow::getInstance();
     window->setCursorPos(x, y);
 }
 
-void MWinContext::hideCursor(void)
+void WinContext::hideCursor(void)
 {
 	NeoWindow * window = NeoWindow::getInstance();
 	window->hideCursor();
 }
 
-void MWinContext::showCursor(void)
+void WinContext::showCursor(void)
 {
 	NeoWindow * window = NeoWindow::getInstance();
 	window->showCursor();
 }
 
 // working directory
-const char * MWinContext::getWorkingDirectory(void)
+const char * WinContext::getWorkingDirectory(void)
 {
 	NeoWindow * window = NeoWindow::getInstance();
 	return window->getWorkingDirectory();
 }
 
 // system tick
-unsigned long MWinContext::getSystemTick(void)
+unsigned long WinContext::getSystemTick(void)
 {
 	NeoWindow * window = NeoWindow::getInstance();
 	return window->getSystemTick();
 }
 
-void MWinContext::setWindowTitle(const char* title)
+void WinContext::setWindowTitle(const char* title)
 {
 	NeoWindow::getInstance()->setTitle(title);
 }
 
-void MWinContext::setScreenSize(unsigned int width, unsigned int height)
+void WinContext::setScreenSize(unsigned int width, unsigned int height)
 {
 	NeoWindow::getInstance()->resize(width, height);
 }

@@ -4393,7 +4393,7 @@ int getSystemTick()
 	return 1;
 }
 
-int doFile()
+int NEO_COMMON_EXPORT doFile()
 {
 	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
 	if(! isFunctionOk(script, "doFile", 1))

@@ -1,6 +1,6 @@
 //========================================================================
 //  Copyright (c) 2013 Anael Seghezzi <www.maratis3d.com>
-//	Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
+//	Copyright (c) 2014-2016 Yannick Pflanzer <www.neo-engine.de>
 //
 //  This program is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public License
@@ -22,7 +22,9 @@
 #ifndef _ASSIMP_MESH_LOADER_H
 #define _ASSIMP_MESH_LOADER_H
 
-bool M_loadAssimpMesh(const char * filename, Neo::Mesh* mesh);
-bool M_importAssimpMeshes(const char * filename);
+#include "config.h"
+
+bool NEO_COMMON_EXPORT M_loadAssimpMesh(const char * filename, Neo::Mesh* mesh);
+bool NEO_COMMON_EXPORT M_importAssimpMeshes(const char * filename);
 
 #endif

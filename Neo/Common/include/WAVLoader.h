@@ -26,8 +26,10 @@
 #ifndef __WAVLOADER_H
 #define __WAVLOADER_H
 
+#include "config.h"
+
 namespace Neo
 {
-bool M_loadWAVSound(const char * filename, Neo::Sound* sound);
+bool NEO_COMMON_EXPORT M_loadWAVSound(const char * filename, Neo::Sound* sound);
 }
 #endif // MWAVLOADER_H

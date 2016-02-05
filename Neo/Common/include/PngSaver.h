@@ -26,8 +26,10 @@
 #ifndef __PNG_IMAGE_SAVER_H
 #define __PNG_IMAGE_SAVER_H
 
+#include "config.h"
+
 namespace Neo
 {
-bool M_savePngImage(const char* filename, const char* type, Image* image);
+bool NEO_COMMON_EXPORT M_savePngImage(const char* filename, const char* type, Image* image);
 }
 #endif

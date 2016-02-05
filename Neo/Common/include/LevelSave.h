@@ -1,6 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
-// Copyright (c) 2015 Yannick Pflanzer <www.neo-engine.de>
+// Copyright (c) 2015-2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -27,11 +27,12 @@
 #ifndef __LEVEL_SAVE_H
 #define __LEVEL_SAVE_H
 
+#include "config.h"
 #define LEVEL_VERSION_STRING "0.4"
 
 namespace Neo
 {
-bool xmlLevelSave(Level * level, const char * filename);
-bool M_saveLevel(const char* filename, const char* type, Level* level);
+bool NEO_COMMON_EXPORT xmlLevelSave(Level * level, const char * filename);
+bool NEO_COMMON_EXPORT M_saveLevel(const char* filename, const char* type, Level* level);
 }
 #endif

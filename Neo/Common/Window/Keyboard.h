@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -35,11 +36,7 @@ protected:
 public:
 
 	// instance
-	static MKeyboard * getInstance()
-	{
-		static MKeyboard m_instance;
-		return &m_instance;
-	};
+	static MKeyboard* getInstance();
 
 	inline void onKeyDown(const unsigned int id){ m_key[id] = true;  }
 	inline void onKeyUp(const unsigned int id){ m_key[id] = false; }

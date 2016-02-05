@@ -25,13 +25,14 @@
 #ifndef SDLTHREAD_H
 #define SDLTHREAD_H
 
+#include "config.h"
 #include <NeoCore.h>
 #include <SDL.h>
 
 namespace Neo
 {
 
-class SDLThread : public Thread
+class NEO_COMMON_EXPORT SDLThread : public Thread
 {
 private:
         SDL_Thread* m_sdlThread; ///< The SDL thread
@@ -51,7 +52,7 @@ public:
 	Thread* getNew() { return new SDLThread(); }
 };
 
-class SDLSemaphore : public Semaphore
+class NEO_COMMON_EXPORT SDLSemaphore : public Semaphore
 {
     SDL_semaphore* m_sdlSemaphore; ///< The SDL semaphore
 public:

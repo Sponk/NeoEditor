@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2012 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -26,11 +27,13 @@
 #ifndef __BIN_MESH_LOADER_H
 #define __BIN_MESH_LOADER_H
 
+#include "config.h"
+
 namespace Neo
 {
-bool M_loadBinMesh(const char * filename, Neo::Mesh* mesh);
-bool M_loadBinArmatureAnim(const char * filename, Neo::ArmatureAnim* anim);
-bool M_loadBinTexturesAnim(const char * filename, Neo::TexturesAnim* anim);
-bool M_loadBinMaterialsAnim(const char * filename, Neo::MaterialsAnim* anim);
+bool NEO_COMMON_EXPORT M_loadBinMesh(const char * filename, Neo::Mesh* mesh);
+bool NEO_COMMON_EXPORT M_loadBinArmatureAnim(const char * filename, Neo::ArmatureAnim* anim);
+bool NEO_COMMON_EXPORT M_loadBinTexturesAnim(const char * filename, Neo::TexturesAnim* anim);
+bool NEO_COMMON_EXPORT M_loadBinMaterialsAnim(const char * filename, Neo::MaterialsAnim* anim);
 }
 #endif

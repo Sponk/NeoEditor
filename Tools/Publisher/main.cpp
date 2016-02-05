@@ -174,7 +174,7 @@ void engineSetup()
 	NeoGame* game = new NeoGame();
 	LuaScript* script = new Neo::LuaScript();
 	Level* level = new Level();
-	SystemContext* context = (SystemContext*)new Neo::MWinContext();
+	SystemContext* context = (SystemContext*)new Neo::WinContext();
 	PackageManager* pmanager = new Neo::PackageManagerNPK;
 	BulletContext* physcontext = new Neo::BulletContext();
 	DummyContext* render = new DummyContext();

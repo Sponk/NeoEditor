@@ -22,7 +22,6 @@
 //
 //========================================================================
 
-
 #ifndef _DUMMY_CONTEXT_H
 #define _DUMMY_CONTEXT_H
 
@@ -34,8 +33,8 @@ class DummyContext : public RenderingContext
 {
 public:
 
-	DummyContext(void) {}
-	~DummyContext(void) {}
+	DummyContext() {}
+	~DummyContext() {}
 
 	void init() {}
 

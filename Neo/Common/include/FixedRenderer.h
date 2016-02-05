@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -23,13 +24,15 @@
 //========================================================================
 
 
-#ifndef _M_FIXED_RENDERER_H
-#define _M_FIXED_RENDERER_H
+#ifndef __FIXED_RENDERER_H
+#define __FIXED_RENDERER_H
+
+#include "config.h"
 
 namespace Neo
 {
 // Fixed Renderer
-class FixedRenderer : public Renderer
+class NEO_COMMON_EXPORT FixedRenderer : public Renderer
 {
 public:
 	

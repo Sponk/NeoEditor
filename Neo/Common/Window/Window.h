@@ -28,6 +28,7 @@
 #if !defined(_NEO_WINDOW_H)
 #define _NEO_WINDOW_H
 
+#include "config.h"
 #include <Window/WinEvents.h>
 #include <NeoCore.h>
 
@@ -38,7 +39,7 @@
 
 #include <vector>
 
-class NeoWindow
+class NEO_COMMON_EXPORT NeoWindow
 {
 private:
 #ifndef EMSCRIPTEN
@@ -89,11 +90,7 @@ public:
 	~NeoWindow(void);
 
 	// instance
-	static NeoWindow * getInstance(void)
-	{
-		static NeoWindow m_instance;
-		return &m_instance;
-	}
+	static NeoWindow* getInstance();
 
 public:
 

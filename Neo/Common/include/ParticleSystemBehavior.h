@@ -25,11 +25,12 @@
 #ifndef _PARTICLE_SYSTEM_BEHAVIOR_H
 #define _PARTICLE_SYSTEM_BEHAVIOR_H
 
+#include "config.h"
 #include <SDLThread.h>
 
 namespace Neo
 {
-class ParticleSystemBehavior : public Behavior
+class NEO_COMMON_EXPORT ParticleSystemBehavior : public Behavior
 {
 public:
 

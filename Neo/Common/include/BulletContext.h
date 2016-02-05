@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -26,13 +27,14 @@
 #ifndef _BULLET_CONTEXT_H
 #define _BULLET_CONTEXT_H
 
+#include "config.h"
 #include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 #include <NeoCore.h>
 
 namespace Neo
 {
-class BulletContext : public PhysicsContext
+class NEO_COMMON_EXPORT BulletContext : public PhysicsContext
 {
 private:
 

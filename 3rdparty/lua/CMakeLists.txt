@@ -303,9 +303,11 @@ set ( LJCORE_C
   ${LJLIB_C}
 )
 
-add_library ( liblua STATIC ${LJCORE_C} ${DEPS} )
+add_library ( liblua SHARED ${LJCORE_C} ${DEPS} )
 target_link_libraries ( liblua ${LIBS} )
 set_target_properties ( liblua PROPERTIES OUTPUT_NAME lua CLEAN_DIRECT_OUTPUT 1 )
+
+INSTALL(TARGETS liblua DESTINATION ${NEO_INSTALL_DIR})
 
 ## LuaJIT Executable
 ## add_executable ( lua src/luajit.c src/luajit.rc )

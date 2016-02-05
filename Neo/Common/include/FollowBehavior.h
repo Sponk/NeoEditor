@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -26,6 +27,8 @@
 #ifndef _FOLLOW_BEHAVIOR_H
 #define _FOLLOW_BEHAVIOR_H
 
+#include "config.h"
+
 namespace Neo
 {
 /**
@@ -36,7 +39,7 @@ namespace Neo
  * parent is a physically active object or translation based if it is not.
  * @see Neo::Behavior
  */
-class FollowBehavior : public Behavior
+class NEO_COMMON_EXPORT FollowBehavior : public Behavior
 {
 public:
 

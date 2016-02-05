@@ -25,9 +25,11 @@
 #ifndef __PACKAGE_MANAGER_NPK_H
 #define __PACKAGE_MANAGER_NPK_H
 
+#include "config.h"
+
 namespace Neo
 {
-class PackageFileOpenHook : public FileOpenHook
+class NEO_COMMON_EXPORT PackageFileOpenHook : public FileOpenHook
 {
 public:
 	File* open(const char* path, const char* mode);
@@ -38,7 +40,7 @@ public:
  * Package manager with NPK backend
  * <http://npk.googlecode.com/>
  *-------------------------------------------------------------------------------*/
-class PackageManagerNPK : public PackageManager
+class NEO_COMMON_EXPORT PackageManagerNPK : public PackageManager
 {
 private:
 	

@@ -26,6 +26,8 @@
 #ifndef __PNG_IMAGE_LOADER_H
 #define __PNG_IMAGE_LOADER_H
 
+#include "config.h"
+
 namespace Neo
 {
 /**
@@ -35,6 +37,6 @@ namespace Neo
  * @param data A pointer to allocated memory.
  * @return Returns <b>true</b> on success and <b>false</b> on failure.
  */
-bool M_loadPngImage(const char * filename, Image* image);
+bool NEO_COMMON_EXPORT M_loadPngImage(const char * filename, Image* image);
 }
 #endif

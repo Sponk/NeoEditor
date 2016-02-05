@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -23,11 +24,13 @@
 //========================================================================
 
 
-#ifndef _M_BIN_FONT_LOADER_H
-#define _M_BIN_FONT_LOADER_H
+#ifndef __BIN_FONT_LOADER_H
+#define __BIN_FONT_LOADER_H
+
+#include "config.h"
 
 namespace Neo
 {
-bool M_loadBinFont(const char * filename, Font* font);
+bool NEO_COMMON_EXPORT M_loadBinFont(const char * filename, Font* font);
 }
 #endif

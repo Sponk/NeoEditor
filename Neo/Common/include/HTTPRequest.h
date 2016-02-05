@@ -1,5 +1,5 @@
 //========================================================================
-// Copyright (c) 2014 Yannick Pflanzer
+// Copyright (c) 2014-2016 Yannick Pflanzer
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -25,6 +25,7 @@
 #ifndef NEO_HTTP_CONNECTION_H
 #define NEO_HTTP_CONNECTION_H
 
+#include "config.h"
 #include <NeoEngine.h>
 
 namespace Neo
@@ -33,7 +34,7 @@ namespace Neo
  * The HTTPRequest class allows to very easily send either POST requests
  * or GET requests to the server it was initialized with.
  */
-class HTTPRequest
+class NEO_COMMON_EXPORT HTTPRequest
 {
     int m_port;
     String m_host;

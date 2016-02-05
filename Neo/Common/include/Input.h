@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -26,11 +27,12 @@
 #ifndef __INPUT_H
 #define __INPUT_H
 
+#include "config.h"
 #include <NeoCore.h>
 
 namespace Neo
 {
-class Input : public InputContext
+class NEO_COMMON_EXPORT Input : public InputContext
 {
 public :
 

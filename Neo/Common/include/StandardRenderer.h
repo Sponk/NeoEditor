@@ -26,6 +26,8 @@
 #ifndef __STANDARD_RENDERER_H
 #define __STANDARD_RENDERER_H
 
+#include "config.h"
+
 #define NUM_SHADERS 4
 
 #define MAX_ENTITY_LIGHTS 256
@@ -36,35 +38,34 @@
 namespace Neo
 {
 // Standard Renderer
-class StandardRenderer : public Renderer
+class NEO_COMMON_EXPORT StandardRenderer : public Renderer
 {
+    FXRef* m_shaders[NUM_SHADERS];
+    unsigned int m_fx[NUM_SHADERS];
+
+    unsigned int m_framebufferID;
+    unsigned int m_finalFramebufferID;
+
+    unsigned int m_gbufferTexID;
+    unsigned int m_finalTexID;
+    unsigned int m_depthTexID;
+    unsigned int m_normalTexID;
+    unsigned int m_positionTexID;
+    unsigned int m_dataTexID;
+
+    unsigned int m_quadVAO;
+    unsigned int m_textVAO;
+
+    unsigned int m_quadVBO;
+    unsigned int m_quadTexCoordVBO;
+
+    unsigned int m_textTexCoordVBO;
+    unsigned int m_textVBO;
+
 public:
 	
 	StandardRenderer(void);
 	~StandardRenderer(void);
-	
-	//bool m_isInitialized;
-	FXRef* m_shaders[NUM_SHADERS];
-	unsigned int m_fx[NUM_SHADERS];
-
-	unsigned int m_framebufferID;
-	unsigned int m_finalFramebufferID;
-
-	unsigned int m_gbufferTexID;
-	unsigned int m_finalTexID;
-	unsigned int m_depthTexID;
-	unsigned int m_normalTexID;
-	unsigned int m_positionTexID;
-	unsigned int m_dataTexID;
-
-	unsigned int m_quadVAO;
-	unsigned int m_textVAO;
-
-	unsigned int m_quadVBO;
-	unsigned int m_quadTexCoordVBO;
-
-	unsigned int m_textTexCoordVBO;
-	unsigned int m_textVBO;
 
 	void initQuadVAO(unsigned int* vao, unsigned int *vbo, unsigned int *texcoordVbo, unsigned int fx);
 	void clearQuadVAO(unsigned int* vao, unsigned int *vbo, unsigned int *texcoordVbo);

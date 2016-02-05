@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -26,11 +27,13 @@
 #ifndef __MESH_LOAD_H
 #define __MESH_LOAD_H
 
+#include "config.h"
+
 namespace Neo
 {
-bool xmlArmatureAnimLoad(const char * filename, ArmatureAnim* armatureAnim);
-bool xmlTextureAnimLoad(const char * filename, TexturesAnim* texturesAnim);
-bool xmlMaterialAnimLoad(const char * filename, MaterialsAnim* materialsAnim);
-bool xmlMeshLoad(const char * filename, Mesh* mesh);
+bool NEO_COMMON_EXPORT xmlArmatureAnimLoad(const char * filename, ArmatureAnim* armatureAnim);
+bool NEO_COMMON_EXPORT xmlTextureAnimLoad(const char * filename, TexturesAnim* texturesAnim);
+bool NEO_COMMON_EXPORT xmlMaterialAnimLoad(const char * filename, MaterialsAnim* materialsAnim);
+bool NEO_COMMON_EXPORT xmlMeshLoad(const char * filename, Mesh* mesh);
 }
 #endif

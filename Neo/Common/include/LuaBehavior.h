@@ -1,5 +1,5 @@
 //========================================================================
-// Copyright (c) 2014 Yannick Pflanzer <www.scary-squid.de>
+// Copyright (c) 2014-2016 Yannick Pflanzer <www.scary-squid.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -23,9 +23,10 @@
 //========================================================================
 
 
-#ifndef _MB_LUA_H
-#define _MB_LUA_H
+#ifndef _B_LUA_H
+#define _B_LUA_H
 
+#include "config.h"
 #include <LuaScript.h>
 #include <NeoEngine.h>
 #include <vector>
@@ -33,7 +34,7 @@
 
 namespace Neo
 {
-class LuaBehavior : public Behavior
+class NEO_COMMON_EXPORT LuaBehavior : public Behavior
 {
 public:
 

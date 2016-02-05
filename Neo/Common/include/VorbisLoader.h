@@ -26,8 +26,10 @@
 #ifndef __VORBIS_LOADER_H
 #define __VORBIS_LOADER_H
 
+#include "config.h"
+
 namespace Neo
 {
-bool M_loadVorbisSound(const char * filename, Neo::Sound* sound);
+bool NEO_COMMON_EXPORT M_loadVorbisSound(const char * filename, Neo::Sound* sound);
 }
 #endif

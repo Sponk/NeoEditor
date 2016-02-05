@@ -97,7 +97,7 @@ function update(delta)
 
         --camera:setEulerRotation(rotation)
 
-        centerCursor()
+	centerCursor()
 
         mx = input:getAxis("MOUSE_X")
         my = input:getAxis("MOUSE_Y")

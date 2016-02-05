@@ -189,8 +189,6 @@ void InputField::update()
 	if (m_labelText == nullptr) return;
 
 #ifndef ANDROID
-	MKeyboard* kbd = MKeyboard::getInstance();
-
 	NeoEngine* engine = NeoEngine::getInstance();
 	SystemContext* system = engine->getSystemContext();
 	InputContext* input = engine->getInputContext();
