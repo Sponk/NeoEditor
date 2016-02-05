@@ -311,13 +311,13 @@ void GL4Context::init()
 	glClearDepth(1.0);
 	glDepthRange(0.0, 1.0);
 
-	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+	//glHint(GL_LINE_SMOOTH_HINT, GL_NONE);
+	//glHint(GL_POLYGON_SMOOTH_HINT, GL_NONE);
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	// line
-	glLineWidth(1.2f);
+	glLineWidth(1.25f);
 
 	// stencil
 	glClearStencil(0);

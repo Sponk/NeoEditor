@@ -422,13 +422,16 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 			switch(indicesType)
 			{
 				case VAR_USHORT:
-					render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (void*)(display->getBegin()*sizeof(short)));
+
+					if(opacity > 0.0)
+						render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (void*)(display->getBegin()*sizeof(short)));
+
 					if(wireframe)
 					{
 						render->disableBlending();
 						opacity = 1.0;
 						render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
-						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0.1,0.1,0.1));
+						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0,0,0));
 						render->enablePolygonOffset(-0.2, -1);
 
 						render->setPolygonMode(PRIMITIVE_LINES);
@@ -439,11 +442,13 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 					}
 					break;
 				case VAR_UINT:
-					render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (void*)(display->getBegin()*sizeof(int)));
+					if(opacity > 0.0)
+						render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (void*)(display->getBegin()*sizeof(int)));
+
 					if(wireframe)
 					{
 						render->disableBlending();
-						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0.1,0.1,0.1));
+						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0,0,0));
 						
 						opacity = 1.0;
 						render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
@@ -466,11 +471,13 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 			switch(indicesType)
 			{
 				case VAR_USHORT:
-					render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (unsigned short*)indices + display->getBegin());
+					if(opacity > 0.0)
+						render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (unsigned short*)indices + display->getBegin());
+
 					if(wireframe)
 					{
 						render->disableBlending();
-						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0.1,0.1,0.1));
+						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0,0,0));
 						
 						opacity = 1.0;
 						render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
@@ -485,11 +492,13 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 					}
 					break;
 			case VAR_UINT:
-					render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (unsigned int*) indices + display->getBegin());
+					if(opacity > 0.0)
+						render->drawElement(display->getPrimitiveType(), display->getSize(), indicesType, (unsigned int*) indices + display->getBegin());
+
 					if (wireframe)
 					{
 						render->disableBlending();
-						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0.1,0.1,0.1));
+						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0,0,0));
 						
 						opacity = 1.0;
 						render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
@@ -509,7 +518,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh, MaterialDisplay* display, OCam
 		}
 	}
 	else // If we have no indices
-		render->drawArray(display->getPrimitiveType(), display->getBegin(), display->getSize());
+		if(opacity > 0.0) render->drawArray(display->getPrimitiveType(), display->getBegin(), display->getSize());
 }
 
 void StandardRenderer::drawGBuffer(Scene* scene, OCamera* camera)
@@ -1151,8 +1160,13 @@ void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
 
 	clearColor.w = 0.0;
 	render->setClearColor(clearColor);
+
+	// This prevents the clear color from bleeding over multiple
+	// scene layers
+	render->setColorMask(false, false, false, true);
 	render->clear(BUFFER_COLOR | BUFFER_DEPTH);
-	
+	render->setColorMask(true, true, true, true);
+
 	// Send some common data
 	Vector3 ambientLight = scene->getAmbientLight();
 	render->sendUniformVec3(m_fx[1], "AmbientLight", ambientLight);
@@ -1357,7 +1371,11 @@ void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera, bool post
 		render->enableBlending();
 		render->setBlendingMode(BLENDING_ALPHA);
 
+		// This prevents the clear color from bleeding over multiple
+		// scene layers
+		render->setColorMask(false, false, false, true);
 		render->clear(BUFFER_COLOR);
+		render->setColorMask(true, true, true, true);
 	}
 	else
 	{
