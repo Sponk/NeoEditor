@@ -21,6 +21,7 @@ addons:
       - lua5.2
       - libgtk-3-dev
       - fakeroot
+      - swig
       # - wput
 
 #before_install:
