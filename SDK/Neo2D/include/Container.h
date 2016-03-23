@@ -1,49 +1,86 @@
 #ifndef __CONTAINER_H
 #define __CONTAINER_H
 
-#include <Neo2DEngine.h>
-#include <Widget.h>
+#include "Neo2D.h"
+#include "Widget.h"
+#include "FilterStrategy.h"
+#include "LayoutStrategy.h"
+
 #include <vector>
+#include <memory>
+#include <algorithm>
 
 namespace Neo2D
 {
 namespace Gui
 {
-using namespace Neo;
-
-/**
- * @brief A Container organizes multiple Widgets into one to provide
- * layout functionality.
- *
- * @author Yannick Pflanzer
- */
-class NEO2D_EXPORT Container : public Widget
+class NEO2D_EXPORT Container: public Widget
 {
-	protected:
-		std::vector<Widget*> m_content;
+private:
+	std::vector<shared_ptr<Widget>> m_children;
+	shared_ptr<LayoutStrategy> m_layout;
+	shared_ptr<FilterStrategy> m_filter;
 
-		public:
-		Container(unsigned int x, unsigned int y, unsigned int width,
-			unsigned int height, const char* label)
-			: Widget(x, y, width, height, label)
-			{
-			}
-				
-        ~Container();
+protected:
+	std::vector<shared_ptr<Widget>>& getChildren() { return m_children; }
 
-		DISOWN(Widget* w) void addWidget(Widget* w)
-		{
-			w->setParent(this);
-			m_content.push_back(w);
-		}
+public:
+	Container(int x, int y, unsigned int w, unsigned int h, shared_ptr<Object2D> parent)
+		: Widget(x, y, w, h, parent), m_layout(nullptr), m_filter(nullptr)
+	{ }
 
-		std::vector<Widget*>& getContent() { return m_content; }
+	size_t addWidget(shared_ptr<Widget> o)
+	{
+		m_children.push_back(o);
+		return m_children.size() - 1;
+	}
 
-		void draw();
-		void draw(Vector2 offset) { draw(); }
-		void update();
+	void removeWidget(shared_ptr<Widget> o)
+	{ m_children.erase(std::find(m_children.begin(), m_children.end(), o)); }
+
+	void removeWidget(size_t id)
+	{
+		if (id >= m_children.size()) return;
+		m_children.erase(m_children.begin() + id);
+	}
+
+	shared_ptr<Widget> getWidget(size_t id) { if(id >= m_children.size()) return nullptr; return m_children[id]; }
+	size_t getWidgetCount() { return m_children.size(); }
+
+	void clear()
+	{ m_children.clear(); }
+
+	void draw(const Neo::Vector2 &offset)
+	{
+		for (auto o : m_children)
+			o->draw(offset);
+	}
+
+	void update(float dt)
+	{
+		for (auto o : m_children)
+			o->update(dt);
+	}
+
+	void updateFilter() { if(m_filter != nullptr) m_filter->updateVisibility(m_children); }
+	void updateLayout() { if(m_layout != nullptr) m_layout->updateLayout(m_children); }
+
+	void setFilter(const shared_ptr<FilterStrategy> &m_filter)
+	{
+		Container::m_filter = shared_ptr<FilterStrategy>(m_filter);
+	}
+
+	void setLayout(const shared_ptr<LayoutStrategy> &m_layout)
+	{
+		Container::m_layout = shared_ptr<LayoutStrategy>(m_layout);
+	}
+
+	void handle(Event& e)
+	{
+		for(auto w : m_children)
+			w->handle(e);
+	}
 };
-
 }
 }
 

@@ -1,0 +1,383 @@
+@startuml
+
+title The Neo2D Object Oriented Design Diagram
+
+' Definition of all classes and namespaces'
+namespace Neo2D {
+class Canvas {
+	- m_widgets : std::vector<shared_ptr<Object2D>>
+	- m_priority : int
+	- m_size : Vector2
+
+	+ addObject2D(shared_ptr<Object2D>) : void
+	+ setPriority(int) : void
+	+ getPriority() : int
+}
+
+class Object2D {
+	  - m_position : Vector2
+	  - m_rotation : float
+	  - m_size : Vector2
+	  - m_parent : shared_ptr<Object2D>
+	  - m_visible : bool
+	  - m_active : bool
+	  --
+	  + Object2D(int x, int y, int w, int h, shared_ptr<Object2D> parent)
+	  + getPosition() : Vector2
+	  + setPosition(Vector2) : void
+	  + getRotation() : float
+	  + setPosition(float) : void
+	  + getSize() : Vector2
+	  + setSize(Vector2) : void
+	  + getParent() : Object2D*
+	  + translate(Vector2) : void
+	  + rotate(float) : void
+	  + isActive() : bool
+	  + setActive(bool) : void
+	  --
+	  + update() : void
+	  + draw() : void
+	  + {abstract} draw(Vector2) : void
+	  + {abstract} update(float) : void
+}
+
+class Render {
+	  - {static} m_instance : shared_ptr<Render>
+	  + {static} getInstance() : shared_ptr<Render>
+	  + {static} setInstance(shared_ptr<Render>) : void
+	  --
+	  + {abstract} drawColoredRect(Vector2&, Vector2&, Vector4&, float) : void
+	  + {abstract} drawTexturedRect(Vector2&, Vector2&, int, float) : void
+	  + {abstract} drawTexturedRect(Vector2&, Vector2&, int, float, Vector2&) : void
+	  + {abstract} drawTexturedRect(Vector2&, Vector2&, int, float, Vector2&, Vector2&) : void
+	  + {abstract} drawText(OText&, Vector2&, float) : void
+	  + {abstract} set2D(Vector2&, float) : void
+	  + {abstract} createText(OText&, const char*, float) : void
+
+}
+
+class Sprite {
+	  - m_texture : int
+	  - m_imageSize : Vector2
+	  - m_imagePath : String
+	  --
+	  # loadTexture(String&) : bool
+	  --
+	  + Sprite(int, int, int, int, shared_ptr<Object2D>, const char*)
+	  + draw(Vector2) : void
+}
+
+class Tile {
+	  - m_animation : Animation
+	  - m_tilesheet : shared_ptr<TileSheet>
+	  - m_tilex : uint
+	  - m_tiley : uint
+
+	  + Tile(int, int, int, int, shared_ptr<Object2D>, shared_ptr<TileSheet>)
+	  + setAnimation(Animation&) : void
+	  + getAnimation() : Animation&
+	  + setTileSheet(shared_ptr<TileSheet>) : void
+	  + draw(Vector2) : void
+	  + update(float) : void
+}
+
+class Animation {
+	  - m_startx : uint
+	  - m_starty : uint
+	  - m_length : uint
+	  - m_delay : uint
+	  - m_currx : uint
+	  - m_timer : uint
+
+	  + Animation(uint, uint, uint, uint)
+	  + getStart() : Vector2
+	  + getLength() : uint
+	  + getDelay() : uint
+	  + setDelay(uint) : void
+	  + getNext(float) : Vector2
+}
+
+class TileSheet {
+	  - m_texture : int
+	  - m_tileWidth : uint
+	  - m_tileHeight : uint
+	  - m_imageWidth : uint
+	  - m_imageHeight : uint
+	  - m_padding : uint
+	  - getTextureCoordinates(uint, uint) : Vector2
+
+	  + TileSheet()
+	  + loadImage(const char*, uint, uint, uint) : bool
+	  + getTexture() : int
+	  + getTilePadding() : int
+	  + getTileSize() : Vector2
+	  + drawTile(Vector2, Vector2, float, uint, uint) : void
+}
+
+namespace Gui {
+
+class Theme {
+
+}
+
+class Container {
+	  - m_layout : unique_ptr<LayoutStrategy>
+	  - m_filter : unique_ptr<FilterStrategy>
+	  - m_children : std::vector<shared_ptr<Widget>>
+
+	  + setLayout(unique_ptr<LayoutStrategy>) : void
+	  + setFilter(unique_ptr<FilterStrategy>) : void
+	  + addWidget(unique_ptr<Widget>) : size_t
+	  + removeWidget(size_t) : void
+	  + draw(Vector2)
+	  + update(float)
+}
+
+
+class LayoutStrategy {
+	  + {abstract} updateLayout(std::vector<shared_ptr<Widget>>&)
+}
+
+class FilterStrategy {
+	  + {abstract} addCallback(shared_ptr<Widget>)
+	  + {abstract} removeCallback(shared_ptr<Widget>)
+	  + {abstract} updateVisibility(Container&)
+}
+
+class Event {
+	  - m_function : std::function<void(Widget&, void*)>
+	  ---
+	  + Event(std::function<void(Widget&, void*)>)
+	  + {abstract} handle(Widget&) : void
+	  + {abstract} getName() : const char*
+	  + {abstract} getType() : EVENT_TYPE
+}
+
+class MouseOverEvent {
+	  + MouseOverEvent(std::function<void(Widget&, void*)>)
+	  + handle(Widget&) : void
+}
+
+class MouseClickEvent {
+	  + MouseClickEvent(std::function<void(Widget&, void*)>)
+	  + handle(Widget&) : void
+}
+
+class MouseLeaveEvent {
+	  + MouseLeaveEvent(std::function<void(Widget&, void*)>)
+	  + handle(Widget&) : void
+}
+
+class KeyPressEvent {
+	  + KeyPressEvent(std::function<void(Widget&, void*)>)
+	  + handle(Widget&) : void
+}
+
+class KeyReleaseEvent {
+	  + KeyReleaseEvent(std::function<void(Widget&, void*)>)
+	  + handle(Widget&) : void
+}
+
+class CharacterInputEvent {
+	  + CharacterInputEvent(std::function<void(Widget&, void*)>)
+	  + handle(Widget&) : void
+}
+
+enum EVENT_TYPE {
+	...
+}
+
+class Widget {
+	  - m_events : std::map<EVENT_TYPE, Event>
+	  - m_label : String
+
+	  + Widget(int, int, int, int, shared_ptr<Object2D>, const char*)
+	  + handleEvent(EVENT_TYPE t) : void
+	  + registerEvent(Event&) : void
+	  + removeEvent(Event&) : void
+	  + removeEvent(EVENT_TYPE) : void
+	  + update(float) : void
+}
+
+class Button {
+	  - m_labelText : OText
+
+	  + Button(int, int, uint, uint, shared_ptr<Object2D>, const char*)
+	  + draw(Vector2) : void
+}
+
+class InputField {
+	  - m_labelText : OText
+
+	  + InputField(int, int, uint, uint, shared_ptr<Object2D>, const char*)
+	  + draw(Vector2) : void
+}
+
+class ScrollBar {
+	  - m_size : float
+	  - m_value : float
+	  + ScrollBar(int, int, uint, uint, shared_ptr<Object2D>)
+	  + getValue() : float
+	  + update(float) : void
+}
+
+class ScrollPanel {
+	  - m_verticalBar : ScrollBar
+	  - m_horizontalBar : ScrollBar
+
+	  + ScrollPanel(int, int, uint, uint, shared_ptr<Object2D>)
+}
+
+class CheckButton {
+	  - m_button : Button
+	  - m_label : Label
+
+	  + draw(Vector2) : void
+}
+
+class Label {
+	  - m_labelText : OText
+
+	  + Label(int, int, uint, uint, shared_ptr<Object2D>, const char*)
+	  + draw(Vector2) : void
+}
+
+class List {
+	+ List(int, int, uint, uint, shared_ptr<Object2D>)
+	+ draw(Vector2) : void
+}
+
+class Menu {
+	  - m_content : List
+
+	  + Menu(int, int, uint, uint, shared_ptr<Object2D>)
+	  + draw(Vector2) : void
+}
+
+class MenuBar {
+	  - m_buttons : std::vector<Button>
+
+	  + MenuBar(shared_ptr<Object2D>)
+	  + draw(Vector2) : void
+}
+
+class Slider {
+	  - m_value : float
+	  - m_range : Vector2
+
+	  + update(float) : void
+	  + draw(Vector2) : void
+}
+
+class TreeNode {
+	  + m_children : std::vector<shared_ptr<TreeNode>>
+	  + String m_label
+}
+
+class TreePanel {
+	  - m_root : TreeNode
+
+	  + TreePanel(int, int, uint, uint, shared_ptr<Object2D>)
+	  + getRoot() : TreeNode&
+	  + clear() : void
+	  + update(float) : void
+	  + draw(Vector2) : void
+}
+
+class Window {
+	  - m_title : Label
+	  - m_closeButton : Button
+	  - m_maximizeButton : Button
+	  - m_minimizeButton : Button
+
+	  + draw(Vector2) : void
+	  + update(float) : void
+}
+
+class WindowManager {
+	  + draw(Vector2) : void
+	  + update(float) : void
+}
+
+class Icon {
+	  - m_sprite : Sprite
+	  + Icon(int, int, uint, uint, const char*)
+	  + draw(Vector2) : void
+}
+}
+}
+
+'Definitions of relationships'
+
+namespace Neo2D {
+
+Canvas o-- Object2D
+
+Tile -up-|> Object2D
+Sprite -up-|> Object2D
+
+Tile o-- "0..1" Animation
+Tile o-- "1" TileSheet
+
+Tile ..> Render
+Sprite ..> Render
+
+namespace Gui {
+
+Widget -up-|> Neo2D.Object2D
+Widget o- Event
+Widget o- EVENT_TYPE
+
+Button -up--|> Widget
+InputField -up--|> Widget
+Label -up--|> Widget
+
+Menu -up--|> Container
+MenuBar -up--|> Container
+MenuBar o-- Menu
+MenuBar o-- Button
+
+ScrollBar -up--|> Widget
+ScrollPanel -up--|> Container
+ScrollPanel o-- "2" ScrollBar
+
+Slider -up--|> Widget
+
+TreePanel -up--|> Widget
+TreePanel *-- TreeNode
+TreeNode o-- TreeNode
+
+Window -up--|> Container
+Window *-- Label
+Window *-- "3" Button
+
+WindowManager -up--|> Container
+WindowManager o-- Window
+
+Icon -up--|> Widget
+Icon *-- Neo2D.Sprite
+
+List -up--|> Container
+
+CheckButton -up--|> Widget
+CheckButton *-- Button
+CheckButton *-- Label
+
+Event o- EVENT_TYPE
+MouseOverEvent -up-|> Event
+MouseClickEvent -up-|> Event
+MouseLeaveEvent -up-|> Event
+KeyPressEvent -up-|> Event
+KeyReleaseEvent -up-|> Event
+CharacterInputEvent -up-|> Event
+
+Container -up-|> Widget
+
+Container o-- "1" LayoutStrategy
+Container o-- "1" FilterStrategy
+
+}
+}
+
+
+@enduml

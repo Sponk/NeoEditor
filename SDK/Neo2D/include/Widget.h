@@ -1,315 +1,74 @@
-/*
- * Copyright 2014 (C) Yannick Pflanzer <neo-engine.de>
- *
- * This file is part of Neo2D.
- *
- * Neo2D is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Neo2D is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Neo2D.  If not, see <http://www.gnu.org/licenses/>.
- *
- * Diese Datei ist Teil von Neo2D.
- *
- * Neo2D ist Freie Software: Sie können es unter den Bedingungen
- * der GNU Lesser General Public License, wie von der Free Software Foundation,
- * Version 3 der Lizenz oder (nach Ihrer Wahl) jeder späteren
- * veröffentlichten Version, weiterverbreiten und/oder modifizieren.
- *
- * Neo2D wird in der Hoffnung, dass es nützlich sein wird, aber
- * OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite
- * Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
- * Siehe die GNU Lesser General Public License für weitere Details.
- *
- * Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit diesem
- * Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
- */
+#ifndef __WIDGET_H
+#define __WIDGET_H
 
-#ifndef __WIDGET_H__
-#define __WIDGET_H__
-
-#include <NeoEngine.h>
-#include <Neo2D.h>
-#include <string>
+#include "Neo2D.h"
+#include "Object2D.h"
+#include "Event.h"
+#include <vector>
+#include <memory>
 #include <functional>
+#include <map>
 
 namespace Neo2D
 {
-
-using namespace Neo;
-	
-// Predefinition
-#ifndef SWIG
-class Widget;
-#endif
-
-//#if !defined(WIN32)
-	/**
-	 * A pointer to a callback.
-	 */
-	//typedef void (*CALLBACK_FUNCTION)(Widget*, long int);
-//#elif  !defined(SWIG)
-//#define CALLBACK_FUNCTION void *
-//#endif
-
-typedef std::function<void (Widget*, long int)> NEO_CALLBACK_FUNCTION;
-
-/**
- * @brief The Widget class contains all information that is common
- * to all GUI widgets.
- *
- * Every object that resembles a GUI widget has to derive from this class.
- *
- * @author Yannick Pflanzer
- */
-class NEO2D_EXPORT Widget
+namespace Gui
 {
-protected:
-	/// The 2D coordinates of the widget
-	float m_x, m_y;
 
-	/// The rotation of the widget
-	float m_rotation;
+class Widget : public Object2D
+{
+	//std::vector<shared_ptr<Event>> m_events;
 
-	/// The width and height of the widget
-	unsigned int m_width, m_height;
-
-	/// The label of the widget
-	std::string m_label;
-
-	/// The offset that was used for rendering in the last frame
-	Vector2 m_offset;
-
-#ifndef SWIG
-	/// The callback that should be called
-	NEO_CALLBACK_FUNCTION m_callback;
-#endif
-
-	String m_callbackScript;
-
-	/// Some userdata that is given to the callback
-	long int m_userData;
-
-	/// Is the widget visible? Used for culling. DON'T USE MANUALLY!
-	bool m_visible;
-
-	/// Is the widget invisible? Meant for overriding m_visible.
-	bool m_invisible;
-
-	/// The scale vector
-	Vector2 m_scale;
-
-	/// The flip vector
-	Vector2 m_flip;
-	float m_fontSize;
-
-	Widget* m_parent;
-	
-private:
-	/**
-	 * @brief Does nothing.
-	 *
-	 * Used to deliver the default callback to prevent crashes.
-	 *
-	 * @param w Some widget.
-	 * @param data Some data.
-	 */
-	static void doNothing(Widget* w, long data) {}
-
-	static void callScript(Widget* w, long data)
+	struct EventHandler
 	{
-		Neo::ScriptContext* script = Neo::NeoEngine::getInstance()->getScriptContext();
-		script->callFunction(w->m_callbackScript.getSafeString());
-	}
+		EventHandler() {}
+		EventHandler(shared_ptr<Event> e) : event(e), data(nullptr), callback(nullptr) {}
+		EventHandler(shared_ptr<Event> e, std::function<void(Widget&, const Event&, void*)> cb) : event(e), callback(cb), data(nullptr) {}
+		EventHandler(shared_ptr<Event> e, std::function<void(Widget&, const Event&, void*)> cb, void* d) : event(e), callback(cb), data(d) {}
+
+		shared_ptr<Event> event;
+		std::function<void(Widget&, const Event&, void*)> callback;
+		void* data;
+	};
+
+	std::map<unsigned int, EventHandler> m_events;
 
 public:
-	Widget(float x, float y, unsigned int width,
-		   unsigned int height, const char* label);
-	Widget();
+	Widget(int x, int y, unsigned int w, unsigned int h, shared_ptr<Object2D> parent)
+		: Object2D(x, y, w, h, parent)
+	{}
 
-	void setParent(Widget* w) { m_parent = w; }
-	Widget* getParent() { return m_parent; }
-	
-	float getFontSize() { return m_fontSize; }
-	void setFontSize(float s) { m_fontSize = s; }
-
-	void setOffset(Vector2 offset) { m_offset = offset; }
-	Vector2 getOffset() { return m_offset; }
-
-	void setSize(unsigned int w, unsigned int h) { m_width = w; m_height = h; }
-	Vector2 getSize() { return Vector2(m_width, m_height); }
-	
-	/**
-	 * @brief Draws the widget to the canvas it belongs to.
-	 * @see Canvas
-	 * @see draw(Vector2 offset)
-	 */
-	virtual void draw() { draw(Vector2(0, 0)); }
-
-	/**
-	 * @brief Draws the widget to the canvas it belongs to.
-	 * @param offset The offset to apply to the position.
-	 * Used for emulating a camera.
-	 *
-	 * @see Canvas
-	 */
-	virtual void draw(Vector2 offset) { m_offset = offset; }
-
-	/**
-	 * @brief Updates the widget and calls the callback if necessary.
-	 */
-	virtual void update() {};
-
-	/**
-	 * @brief Sets the callback.
-	 *
-	 * A callback is a function pointer of the type (*CALLBACK_FUNCTION)(long
-	 *int) and
-	 * points to a procedure of the form:
-	 *
-	 * /code
-	 * void someCallback(long int) {}
-	 * /endcode
-	 *
-	 * @param func The function pointer
-	 */
-#ifndef SWIG
-	void setCallback(NEO_CALLBACK_FUNCTION func) { m_callback = func; }
-#endif
-
-	void setScriptCallback(const char* name)
+	void draw(const Neo::Vector2&) {}
+	void update(float dt)
 	{
-		m_callbackScript = name;
-		m_callback = Widget::callScript;
+		if(!getParent())
+			for(auto e : m_events)
+				e.second.event->update(*this, dt);
 	}
 
-	/**
-	 * @brief Sets the callback and appends user data to it.
-	 *
-	 * The userdata will be the parameter of your custom callback procedure
-	 * when it gets called.
-	 *
-	 * @see Widget::setCallback
-	 *
-	 * @param func The function pointer
-	 * @param data The user data
-	 */
-#ifndef SWIG
-	void setCallback(NEO_CALLBACK_FUNCTION func, long int data)
+	virtual void handle(Event& e)
 	{
-		m_callback = func;
-		m_userData = data;
-	}
-#endif
-	/**
-	 * @brief Retrieves the user data that will be given to every callback call.
-	 * @return The user data.
-	 */
-	long int getUserData() { return m_userData; }
+		const auto iter = m_events.find(e.getType());
+		if(iter == m_events.end())
+			return;
 
-	/**
-	 * @brief Changes the user data that will be given to every callback call.
-	 * @param data The new user data.
-	 */
-	void setUserData(long int data) { m_userData = data; }
-
-	/**
-	 * @brief Gets the currently displayed label a C string.
-	 * @return The current label.
-	 */
-	const char* getLabel() { return m_label.c_str(); }
-
-	/**
-	 * @brief Changes the current label of the widget.
-	 * @param l The new label.
-	 */
-	void setLabel(const char* l) { m_label = l; }
-
-	/**
-	 * @brief Changes the widget position.
-	 * @param pos The new position.
-	 */
-	void setPosition(Vector2 pos)
-	{
-		m_x = pos.x;
-		m_y = pos.y;
+		iter->second.callback(*this, e, iter->second.data);
 	}
 
-	/**
-	 * @brief Retrieves the current position.
-	 * @return The current position.
-	 */
-	Vector2 getPosition() { return Vector2(m_x, m_y); }
-
-	/**
-	 * @brief Changes the widget rotation.
-	 * @param rot The new rotation.
-	 */
-	void setRotation(float rot) { m_rotation = rot; }
-
-	/**
-	 * @brief Retrieves the current rotation.
-	 * @return The current rotation.
-	 */
-	float getRotation() { return m_rotation; }
-
-	/**
-	 * @brief Translates the object.
-	 * @param vec The offset to apply.
-	 */
-	void translate(Vector2 vec)
+	void registerEvent(shared_ptr<Event> e)
 	{
-		m_x += vec.x;
-		m_y += vec.y;
+		registerEvent(e, nullptr, nullptr);
 	}
 
-	/**
-	 * @brief Rotates the object.
-	 * @param value The offset to apply.
-	 */
-	void rotate(float value) { m_rotation += value; }
+	void registerEvent(shared_ptr<Event> e, std::function<void(Widget&, const Event&, void*)> cb, void* d)
+	{
+		m_events[e->getType()] = EventHandler(e, cb, d);
 
-	/**
-	 * @brief Calls the callback with the user data as an argument.
-	 */
-	void doCallback();
-
-	/**
-	 * @brief Returns if the widget is turned visible.
-	 * @return The boolean value.
-	 */
-	bool isVisible() { return m_visible; }
-
-	/**
-	 * @brief Sets the visibility status
-	 * @param v The new status
-	 */
-	void setVisible(bool v) { m_visible = v; }
-	/**
-	 * @brief setScale Scale this Widget
-	 * @param scale The ammount you want to scale with
-	 */
-	void setScale(Vector2 scale) { m_scale = scale; }
-	Vector2 getScale() { return m_scale; }
-	/**
-	 * @brief setFlip Flip this Widget
-	 */
-	void setFlip(Vector2 flip) { m_flip = flip; }
-	Vector2 getFlip() { return m_flip; }
-
-	// For runtime identification
-	virtual const char* getStaticName() { return "Widget"; }
-	virtual bool isMouseOver();
-
-	bool isInvisible() { return m_invisible; }
-	void setInvisible(bool b) { m_invisible = b; }
+		if(getParent())
+			dynamic_cast<Widget*>(getParent().get())->registerEvent(e, cb, d);
+	}
 };
+
 }
-#endif
+}
+
+#endif //__WIDGET_H

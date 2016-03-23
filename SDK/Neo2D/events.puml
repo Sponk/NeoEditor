@@ -1,0 +1,9 @@
+@startuml
+
+Widget -> Parent: registerEvent
+Parent -> Canvas: registerEvent
+...
+Canvas -> Parent: update
+Parent-> Widget: handleEvent
+
+@enduml

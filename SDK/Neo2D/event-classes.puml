@@ -1,0 +1,27 @@
+@startuml
+
+enum EVENT_TYPE {
+	...
+}
+
+class Widget {
+	std::map<EVENT_TYPE, Event> m_events
+	handleEvent(EVENT_TYPE t)
+	registerEvent(Event&)
+	removeEvent(Event&)
+	removeEvent(EVENT_TYPE)
+}
+
+class Event {
+	std::function<void(Widget&, void*)> m_handler
+	---
+	const char* getName()
+	EVENT_TYPE getType()
+	void handle(Widget&, void*)
+}
+
+Widget "1" o- "*" Event
+Event o-- EVENT_TYPE
+Widget o-- EVENT_TYPE
+
+@enduml
