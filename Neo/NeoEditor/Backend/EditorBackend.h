@@ -77,7 +77,7 @@ private:
 	RenderingContext * m_render;
 	PhysicsContext * m_physics;
 	ScriptContext * m_script;
-	InputContext * m_input;
+	InputMapping * m_input;
 	SystemContext * m_system;
 	NeoGame * m_game;
 	Level * m_level;

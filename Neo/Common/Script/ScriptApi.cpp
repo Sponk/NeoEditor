@@ -2530,7 +2530,7 @@ int rayHit()
 int isKeyPressed()
 {
 	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	InputContext * input = NeoEngine::getInstance()->getInputContext();
+	InputMapping * input = NeoEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(script, "isKeyPressed", 1))
 		return 0;
@@ -2549,7 +2549,7 @@ int isKeyPressed()
 int onKeyDown()
 {
 	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	InputContext * input = NeoEngine::getInstance()->getInputContext();
+	InputMapping * input = NeoEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(script, "onKeyDown", 1))
 		return 0;
@@ -2568,7 +2568,7 @@ int onKeyDown()
 int onKeyUp()
 {
 	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	InputContext * input = NeoEngine::getInstance()->getInputContext();
+	InputMapping * input = NeoEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(script, "onKeyUp", 1))
 		return 0;
@@ -2587,7 +2587,7 @@ int onKeyUp()
 int getAxis()
 {
 	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	InputContext * input = NeoEngine::getInstance()->getInputContext();
+	InputMapping * input = NeoEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(script, "getAxis", 1))
 		return 0;
@@ -2606,7 +2606,7 @@ int getAxis()
 int getProperty()
 {
 	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	InputContext * input = NeoEngine::getInstance()->getInputContext();
+	InputMapping * input = NeoEngine::getInstance()->getInputContext();
 
 	if(! isFunctionOk(script, "getProperty", 1))
 		return 0;
@@ -2625,7 +2625,7 @@ int getProperty()
 int getTouchPosition()
 {
 	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	InputContext * input = NeoEngine::getInstance()->getInputContext();
+	InputMapping * input = NeoEngine::getInstance()->getInputContext();
 
 	if (!isFunctionOk(script, "getTouchPosition", 1))
 		return 0;
@@ -2639,7 +2639,7 @@ int getTouchPosition()
 int getLastTouchPosition()
 {
 	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	InputContext * input = NeoEngine::getInstance()->getInputContext();
+	InputMapping * input = NeoEngine::getInstance()->getInputContext();
 
 	if (!isFunctionOk(script, "getLastTouchPosition", 1))
 		return 0;
@@ -2653,7 +2653,7 @@ int getLastTouchPosition()
 int getTouchPhase()
 {
 	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
-	InputContext * input = NeoEngine::getInstance()->getInputContext();
+	InputMapping * input = NeoEngine::getInstance()->getInputContext();
 
 	if (!isFunctionOk(script, "getTouchPhase", 1))
 		return 0;
@@ -4085,7 +4085,7 @@ int centerCursor()
 {
 	NeoEngine * engine = NeoEngine::getInstance();
 	SystemContext * system = engine->getSystemContext();
-	InputContext * input = engine->getInputContext();
+	InputMapping * input = engine->getInputContext();
 
 	unsigned int width = 0;
 	unsigned int height = 0;

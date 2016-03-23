@@ -32,7 +32,7 @@
 
 namespace Neo
 {
-class NEO_COMMON_EXPORT Input : public InputContext
+class NEO_COMMON_EXPORT Input : public InputMapping
 {
 public :
 

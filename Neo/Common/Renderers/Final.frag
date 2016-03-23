@@ -483,8 +483,7 @@ float ssao(vec2 texcoord, vec2 filterRadius, sampler2D depthTexture, sampler2D p
     }
 
     float lum = dot(FragColor.rgb, lumcoeff);
-
-    return mix(1.0 - (occlusion / samples), 1.0, lum);
+    return mix(pow(1.0 - (occlusion / samples), 2), 1.0, lum);
 }
 
 void main(void)
@@ -514,6 +513,7 @@ void main(void)
 		//FragColor.rgb = mix(FragColor.rgb, blur(FragColor, texCoord, Textures[0], dofAmount).rgb, dofStrength*abs(dofAmount));
 
 		//FragColor.rgb = vec3(ssao(texCoord, frame * 10.0, Textures[4], Textures[2], Textures[1]));
+        //return;
 
 		if(normal.a == 0 && transparency == 1.0)
 		{
