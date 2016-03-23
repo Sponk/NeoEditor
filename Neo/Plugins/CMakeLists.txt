@@ -1,0 +1,7 @@
+add_subdirectory(LuaScripting)
+add_subdirectory(GL4Context)
+add_subdirectory(CommonBehaviors)
+add_subdirectory(AssetLoading)
+add_subdirectory(StandardRenderer)
+add_subdirectory(OpenALContext)
+add_subdirectory(SDLGame)
