@@ -43,4 +43,11 @@ manually. The directory should contain the following entries:
 - "main.lua" 		-> The entry script file
 - "settings.lua" 	-> Some settings to control the environment before your game launches
 
+@startuml{getServerUploadResponse.png} "getting the server response"
+
+	device -> server: test1
+	server --> device: test2
+
+@enduml
+
 */

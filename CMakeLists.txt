@@ -32,6 +32,11 @@ IF(NOT ${FORCE_LOCAL_SDL})
 	INCLUDE(FindSDL2)
 ENDIF()
 
+SET(PLANTUML_JAR ${CMAKE_BINARY_DIR}/plantuml.jar)
+IF(NOT EXISTS ${PLANTUML_JAR})
+    file(DOWNLOAD http://downloads.sourceforge.net/project/plantuml/plantuml.jar ${PLANTUML_JAR})
+ENDIF()
+
 ## Set version and info
 SET(NEO_MAJOR_VERSION 0)
 SET(NEO_MINOR_VERSION 5)
@@ -229,7 +234,7 @@ IF(UNIX AND NOT APPLE AND NOT ANDROID AND NOT EMSCRIPTEN)
   SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -D__Debug__ -pthread -Og -ftls-model=global-dynamic")
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NEO_BUILD_FLAGS} -O3 -fPIC -DLINUX -pthread -std=c++11 -Wno-c++11-narrowing -ftls-model=global-dynamic")
   SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -D__Debug__ -pthread -std=c++11 -Og -Wno-c++11-narrowing -ftls-model=global-dynamic")
-  SET(CMAKE_SHARED_LINKER_FLAGS "-ldl -Wl,--as-needed,--allow-multiple-definition,--build-id")
+  SET(CMAKE_SHARED_LINKER_FLAGS "-ldl -Wl,--as-needed,--allow-multiple-definition,--build-id,-rpath .")
 
   SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lm -ldl -Wl,--allow-multiple-definition,-rpath . -ftls-model=global-dynamic")
 
@@ -395,8 +400,8 @@ SET(GTEST_LIBRARIES gtest)
 SET(GTEST_INCLUDE_DIR ${NEO_SOURCE_DIR}/3rdparty/gtest/include)
 
 ## Set up SDK dependencies
-SET(NEO_CORE_INCLUDE_DIR ${NEO_SOURCE_DIR}/SDK/NeoCore/Includes)
-SET(NEO_ENGINE_INCLUDE_DIR ${NEO_SOURCE_DIR}/SDK/NeoEngine/Includes)
+SET(NEO_CORE_INCLUDE_DIR ${NEO_SOURCE_DIR}/SDK/NeoCore/include)
+SET(NEO_ENGINE_INCLUDE_DIR ${NEO_SOURCE_DIR}/SDK/NeoEngine/include)
 SET(NEO2D_INCLUDE_DIR ${NEO_SOURCE_DIR}/SDK/Neo2D/include)
 
 SET(NEO_CORE_LIBRARIES NeoCore)
@@ -413,12 +418,13 @@ SET(DOCUMENTATION_BINARY_DIR ${CMAKE_BINARY_DIR}/Documentation)
 SET(LUA_EXECUTABLE lua) #${NEO_BINARY_OUTPUT}/lua)
 
 ## Set up subdirectories...
+SET(CMAKE_SHARED_LIBRARY_PREFIX "")
 ADD_SUBDIRECTORY(3rdparty)
 ADD_SUBDIRECTORY(SDK)
 ADD_SUBDIRECTORY(Neo)
 ADD_SUBDIRECTORY(Data)
 
-ADD_SUBDIRECTORY(Swig)
+#ADD_SUBDIRECTORY(Swig)
 
 IF(NOT NO_DOCUMENTATION AND NOT ANDROID)
 	ADD_SUBDIRECTORY(Documentation)
@@ -427,7 +433,7 @@ ENDIF()
 ## Build only for PC
 IF(NOT ANDROID AND NOT NO_TESTS)
   ADD_SUBDIRECTORY(Tests/LuaApi)
-  ADD_SUBDIRECTORY(Tests/SDK)
+  #ADD_SUBDIRECTORY(Tests/SDK)
   #ADD_SUBDIRECTORY(Tests/LuaSDK)
   #ADD_SUBDIRECTORY(Tests/Benchmark)
 ELSE()
@@ -435,7 +441,7 @@ ELSE()
 ENDIF()
 
 IF(NOT ANDROID)
-  ADD_SUBDIRECTORY(Tools)
+  #ADD_SUBDIRECTORY(Tools)
 ENDIF()
 
 IF(ANDROID)
@@ -445,8 +451,8 @@ IF(ANDROID)
 ENDIF()
 
 ## Enable tests
-enable_testing()
-add_test(NeoTest ${NEO_BINARY_OUTPUT}/TestSDK)
+#enable_testing()
+#add_test(NeoTest ${NEO_BINARY_OUTPUT}/TestSDK)
 
 ## Install files
 INSTALL(FILES
