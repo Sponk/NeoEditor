@@ -8,10 +8,14 @@
 #endif
 
 #include <NeoEngine.h>
+#include "EditorGame.h"
+
+EditorGame g_editorGame;
 
 void StartPlugin()
 {
-
+	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+	engine->getGame()->registerSubGame(&g_editorGame);
 }
 
 void EndPlugin()

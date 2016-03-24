@@ -1,5 +1,5 @@
 
-add_library(NeoEditor SHARED Plugin.cpp)
+add_library(NeoEditor SHARED src/Plugin.cpp src/EditorGame.cpp src/EditorGame.h src/Tool.cpp src/Tool.h)
 
 include_directories(
 		${NEO_CORE_INCLUDE_DIR}

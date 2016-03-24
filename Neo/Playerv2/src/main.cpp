@@ -7,7 +7,7 @@ using namespace Neo;
 
 int main(int argc, char* argv[])
 {
-	Plugin scripting, gl4, behaviors, loaders, renderer, sound, sdl2;
+	Plugin scripting, gl4, behaviors, loaders, renderer, sound, sdl2, editor;
 
 	try
 	{
@@ -21,6 +21,8 @@ int main(int argc, char* argv[])
 		// Needs to be loaded _after_ SDL so the GL Context is set up already.
 		gl4.load("GL4Context");
 		renderer.load("StandardRenderer");
+
+		editor.load("NeoEditor");
 
 		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 		Neo::NeoGame* game = engine->getGame();
