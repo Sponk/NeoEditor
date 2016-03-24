@@ -39,9 +39,8 @@ FXManager::~FXManager(void)
 
 void FXManager::clear(void)
 {
-	unsigned int i;
 	unsigned int size = m_FXRefs.size();
-	for(i=0; i<size; i++)
+	for(int i = size - 1; i >= 0; i--)
 	{
 		if(!m_FXRefs[i]->isImportant())
 		{
