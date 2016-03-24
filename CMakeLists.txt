@@ -124,7 +124,7 @@ IF(WIN32)
 
   SET(DIRENT_INCLUDE_DIR ${NEO_SOURCE_DIR}/3rdparty/dirent/include)
 
-  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
     # using GCC
     # LuaJIT does not build with the current MinGW
     # OPTION(STANDARD_LUA TRUE)
@@ -138,7 +138,7 @@ IF(WIN32)
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--allow-multiple-definition -static -static-libstdc++ -static-libgcc")
     SET(CPACK_STRIP_FILES ON)
 
-  elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+  elseif (${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
     # using Visual Studio C++
     IF(SSE2_TRUE)
 		SET(SSE_FLAG /arch:SSE2)
