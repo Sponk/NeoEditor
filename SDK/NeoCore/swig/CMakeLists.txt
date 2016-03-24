@@ -71,15 +71,15 @@ IF(${SWIG_FOUND})
 	MESSAGE(SEND_ERROR "-- Generating script bindings for Neo failed with output:\n${SWIG_swiglib_error}")
   ENDIF(NOT ${SWIG_swiglib_result} EQUAL 0)
 
+  #IF(NOT ANDROID AND NOT EMSCRIPTEN)
+	  ## Build from cache, even if the files could not be updated
+	  ADD_LIBRARY(NeoCoreLua SHARED ${CMAKE_CURRENT_BINARY_DIR}/NeoCoreLua_wrap.cxx)
+	  TARGET_LINK_LIBRARIES(NeoCoreLua ${NEO_CORE_LIBRARIES} ${LUA_LIBRARIES})
+
+	  ## Install Lua API
+	  INSTALL(TARGETS NeoCoreLua DESTINATION ${NEO_INSTALL_DIR})
+  #ENDIF()
+
 ELSE()
   MESSAGE("-- Will NOT generate script bindings for NeoCore")
-ENDIF()
-
-IF(NOT ANDROID AND NOT EMSCRIPTEN)
-	## Build from cache, even if the files could not be updated
-	ADD_LIBRARY(NeoCoreLua SHARED ${CMAKE_CURRENT_BINARY_DIR}/NeoCoreLua_wrap.cxx)
-	TARGET_LINK_LIBRARIES(NeoCoreLua ${NEO_CORE_LIBRARIES} ${LUA_LIBRARIES})
-
-	## Install Lua API
-	INSTALL(TARGETS NeoCoreLua DESTINATION ${NEO_INSTALL_DIR})
 ENDIF()
