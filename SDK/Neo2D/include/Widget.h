@@ -14,7 +14,7 @@ namespace Neo2D
 namespace Gui
 {
 
-class Widget : public Object2D
+class NEO2D_EXPORT Widget : public Object2D
 {
 	//std::vector<shared_ptr<Event>> m_events;
 

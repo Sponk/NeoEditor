@@ -10,7 +10,7 @@ namespace Neo2D
 namespace Gui
 {
 class Container;
-class LayoutStrategy
+class NEO2D_EXPORT LayoutStrategy
 {
 public:
 	virtual void updateLayout(std::vector<shared_ptr<Widget>>& v) = 0;

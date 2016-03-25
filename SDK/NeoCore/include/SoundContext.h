@@ -107,7 +107,7 @@ public:
 	virtual void sendBufferSound(unsigned int bufferId, Sound * sound) {}
 	virtual void sendBufferData(unsigned int bufferId, SOUND_FORMAT format, void * data, unsigned int size, unsigned int freq) {}
 
-	virtual float getBufferDuration(unsigned int bufferId) {}
+	virtual float getBufferDuration(unsigned int bufferId) { return 0.0f; }
 
 	// source
 	virtual void createSource(unsigned int * sourceId, unsigned int bufferId) {}
@@ -126,20 +126,20 @@ public:
 	virtual void setSourceRolloff(unsigned int sourceId, float rolloff) {}
 	virtual void setSourceOffset(unsigned int sourceId, float offset) {}
 
-	virtual float getSourceOffset(unsigned int sourceId) {}
+	virtual float getSourceOffset(unsigned int sourceId) { return 0.0f;  }
 
 	virtual void playSource(unsigned int sourceId) {}
 	virtual void pauseSource(unsigned int sourceId) {}
 	virtual void stopSource(unsigned int sourceId) {}
-	virtual bool isSourcePaused(unsigned int sourceId) {}
-	virtual bool isSourcePlaying(unsigned int sourceId) {}
-	virtual float getSourceTimePos(unsigned int sourceId) {}
+	virtual bool isSourcePaused(unsigned int sourceId) { return false; }
+	virtual bool isSourcePlaying(unsigned int sourceId) { return false; }
+	virtual float getSourceTimePos(unsigned int sourceId) { return 0.0; }
 
 	virtual void queueSourceBuffer(unsigned int sourceId, unsigned int * buffers, unsigned int bufferSize) {}
 	virtual void unqueueSourceBuffer(unsigned int sourceId, unsigned int * buffers, unsigned int bufferSize) {}
 
-	virtual unsigned int getSourceBuffersQueued(unsigned int sourceId) {}
-	virtual unsigned int getSourceBuffersProcessed(unsigned int sourceId) {}
+	virtual unsigned int getSourceBuffersQueued(unsigned int sourceId) { return 0; }
+	virtual unsigned int getSourceBuffersProcessed(unsigned int sourceId) { return 0; }
 
 	// listener
 	virtual void updateListenerPosition(const Vector3 & position, const Vector3 & direction, const Vector3 & up) {}

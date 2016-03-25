@@ -11,7 +11,7 @@ namespace Gui
 {
 
 class Container;
-class FilterStrategy
+class NEO2D_EXPORT FilterStrategy
 {
 public:
 	virtual void updateVisibility(std::vector<shared_ptr<Widget>>& v) = 0;

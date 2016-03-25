@@ -96,20 +96,20 @@ public:
 	virtual ~ScriptContextDummy(void){}
 	virtual void init() {}
 
-	virtual bool runScript(const char * filename) {}
-	virtual bool startCallFunction(const char * name) {}
-	virtual bool endCallFunction(int numArgs = 0) {}
-	virtual void callFunction(const char * name) {}
+	virtual bool runScript(const char * filename) { return false; }
+	virtual bool startCallFunction(const char * name) { return false; }
+	virtual bool endCallFunction(int numArgs = 0) { return false; }
+	virtual void callFunction(const char * name) { }
 	virtual void addFunction(const char * name, int (*function)(void)) {}
-	virtual bool runString(const char* str) {}
-	virtual unsigned int getArgsNumber(void) {}
+	virtual bool runString(const char* str) { return true; }
+	virtual unsigned int getArgsNumber(void) { return 0; }
 	virtual void getIntArray(unsigned int arg, int * values, unsigned int valuesNumber) {}
 	virtual void getFloatArray(unsigned int arg, float * values, unsigned int valuesNumber) {}
-	virtual const char * getString(unsigned int arg) {}
-	virtual int getInteger(unsigned int arg) {}
-	virtual float getFloat(unsigned int arg) {}
-	virtual void * getPointer(unsigned int arg) {}
-	virtual bool getBoolean(unsigned int arg) {}
+	virtual const char * getString(unsigned int arg) { return ""; }
+	virtual int getInteger(unsigned int arg) { return 0; }
+	virtual float getFloat(unsigned int arg) { return 0.0f; }
+	virtual void * getPointer(unsigned int arg) { return NULL; }
+	virtual bool getBoolean(unsigned int arg) { return false; }
 
 	virtual void pushIntArray(const int * values, unsigned int valuesNumber) {}
 	virtual void pushFloatArray(const float * values, unsigned int valuesNumber) {}
@@ -120,8 +120,8 @@ public:
 	virtual void pushPointer(void * value) {}
 
 	// Type checking
-	virtual bool isNumber(unsigned int arg) {}
-	virtual bool isFunctionOk(const char* name, unsigned int args) {}
+	virtual bool isNumber(unsigned int arg) { return false; }
+	virtual bool isFunctionOk(const char* name, unsigned int args) { return true; }
 };
 }
 #endif

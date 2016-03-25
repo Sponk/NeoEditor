@@ -490,7 +490,7 @@ class NEO_CORE_EXPORT RenderingContextDummy : public RenderingContext
 public:
 
 	virtual ~RenderingContextDummy(void){}
-	virtual const char* getRendererVersion() {}
+	virtual const char* getRendererVersion() { return "DUMMY";  }
 
 	virtual void setOrthoView(float left, float right, float bottom, float top, float zNear, float zFar) {}
 	virtual void setPerspectiveView(float fov, float ratio, float zNear, float zFar) {}
@@ -532,7 +532,7 @@ public:
 	virtual void createVertexShader(unsigned int* shaderId) {}
 	virtual void createPixelShader(unsigned int* shaderId) {}
 	virtual void deleteShader(unsigned int* shaderId, unsigned int program = 0) {}
-	virtual bool sendShaderSource(unsigned int shaderId, const char * source) {}
+	virtual bool sendShaderSource(unsigned int shaderId, const char * source) { return true; }
 
 	virtual void bindFX(unsigned int fxId) {}
 	virtual void createFX(unsigned int * fxId, unsigned int vertexShaderId, unsigned int pixelShaderId) {}

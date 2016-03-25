@@ -163,7 +163,7 @@ public:
 	virtual void getObjectTransform(unsigned int objectId, Vector3 * position, Quaternion * rotation) {}
 
 	virtual void setObjectUserPointer(unsigned int objectId, void * userPointer) {}
-	virtual void * getObjectUserPointer(unsigned int objectId) {}
+	virtual void * getObjectUserPointer(unsigned int objectId) { return NULL; }
 
 	virtual void addCentralForce(unsigned int objectId, const Vector3 & force) {}
 	virtual void getCentralForce(unsigned int objectId, Vector3 * force) {}
@@ -171,9 +171,9 @@ public:
 	virtual void getTorque(unsigned int objectId, Vector3 * torque) {}
 	virtual void clearForces(unsigned int objectId) {}
 
-	virtual int isObjectInCollision(unsigned int objectId, unsigned int * collisionList = NULL, unsigned int size = 0) {}
-	virtual bool isObjectsCollision(unsigned int object1Id, unsigned int object2Id) {}
-	virtual bool isRayHit(const Vector3 & start, const Vector3 & end, unsigned int * objectId = NULL, Vector3 * point = NULL, Vector3 * normal = NULL) {}
+	virtual int isObjectInCollision(unsigned int objectId, unsigned int * collisionList = NULL, unsigned int size = 0) { return false; }
+	virtual bool isObjectsCollision(unsigned int object1Id, unsigned int object2Id) { return false; }
+	virtual bool isRayHit(const Vector3 & start, const Vector3 & end, unsigned int * objectId = NULL, Vector3 * point = NULL, Vector3 * normal = NULL) { return false; }
 
 	virtual void createMultiShape(unsigned int * shapeId) {}
 	virtual void createBoxShape(unsigned int * shapeId, const Vector3 & scale) {}

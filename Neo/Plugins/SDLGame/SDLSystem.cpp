@@ -1,8 +1,12 @@
 #include "SDLSystem.h"
-#include <unistd.h>
 #include <SDL.h>
 
+#ifndef _WIN32
+#include <unistd.h>
+#endif
+
 #if _WIN32
+#include <direct.h>
 #define getcwd _getcwd
 #endif // _WIN32
 

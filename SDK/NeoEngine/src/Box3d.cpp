@@ -27,17 +27,26 @@
 
 using namespace Neo;
 
+// For Windows...
+#ifdef min
+#undef min
+#endif
+
+#ifdef max
+#undef max
+#endif
+
 Box3d::Box3d(void)
 {}
 
-Box3d::Box3d(const Box3d & box):
-min(box.min),
-max(box.max)
+Box3d::Box3d(const Box3d & box) :
+	min(box.min),
+	max(box.max)
 {}
 
 Box3d::Box3d(const Vector3 & _min, const Vector3 & _max):
-min(_min),
-max(_max)
+	min(_min),
+	max(_max)
 {}
 
 bool Box3d::isInCollisionWith(const Box3d & box)

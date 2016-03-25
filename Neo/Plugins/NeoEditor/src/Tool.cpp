@@ -1,9 +1,17 @@
 #include "Tool.h"
-#include <unistd.h>
 #include <cstring>
 #include <sstream>
+#include <fcntl.h>
+#include <NeoEngine.h>
 
-ProcessPipe Tool::executeTool(const char* name, const char* input)
+#ifndef _WIN32
+#include <unistd.h>
+#else
+#include <windows.h>
+#endif
+
+#ifndef _WIN32
+Tool Tool::executeTool(const char* name, const char* input)
 {
 	int fdParentChild[2];
 	int fdChildParent[2];
@@ -33,24 +41,111 @@ ProcessPipe Tool::executeTool(const char* name, const char* input)
 		close(fdChildParent[1]);
 	}
 
-	ProcessPipe p;
-	p.in = fdChildParent[0];
-	p.out = fdParentChild[1];
+	Tool t;
+	t.in = fdChildParent[0];
+	t.out = fdParentChild[1];
 
 	if(input)
-		write(p.out, input, strlen(input));
+		write(t.out, input, strlen(input));
 
 	wait();
-	return p;
+	return t;
 }
+
+#else
+
+Tool Tool::executeTool(const char* name, const char* input)
+{
+	MLOG_INFO("Executing " << name);
+	Tool t;
+
+	SECURITY_ATTRIBUTES saAttr;
+	saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
+	saAttr.bInheritHandle = TRUE;
+	saAttr.lpSecurityDescriptor = NULL;
+
+	HANDLE stdoutWr = 0, stdinRd = 0;
+
+	// STDOUT
+	if (!CreatePipe(&t.in, &stdoutWr, &saAttr, 0))
+	{
+		MLOG_ERROR("Could not open pipe!");
+		return Tool();
+	}
+
+	if (!SetHandleInformation(t.in, HANDLE_FLAG_INHERIT, 0))
+	{
+		MLOG_ERROR("Could not set handle information!");
+		return Tool();
+	}
+
+	// STDIN
+	if (!CreatePipe(&stdinRd, &t.out, &saAttr, 0))
+	{
+		MLOG_ERROR("Could not open pipe!");
+		return Tool();
+	}
+
+	if (!SetHandleInformation(t.out, HANDLE_FLAG_INHERIT, 0))
+	{
+		MLOG_ERROR("Could not set handle information!");
+		return Tool();
+	}
+
+	PROCESS_INFORMATION piProcInfo;
+	STARTUPINFO siStartInfo;
+
+	ZeroMemory(&piProcInfo, sizeof(PROCESS_INFORMATION));
+	
+	ZeroMemory(&siStartInfo, sizeof(STARTUPINFO));
+	siStartInfo.cb = sizeof(STARTUPINFO);
+	siStartInfo.hStdOutput = stdoutWr;
+	siStartInfo.hStdInput = stdinRd;
+	siStartInfo.dwFlags |= STARTF_USESTDHANDLES;
+
+	BOOL success = CreateProcess(NULL, (LPSTR) name, NULL, NULL, TRUE, 0, NULL, NULL, &siStartInfo, &piProcInfo);
+
+	if (!success)
+	{
+		MLOG_ERROR("Could not start child!");
+		return Tool();
+	}
+
+	CloseHandle(piProcInfo.hProcess);
+	CloseHandle(piProcInfo.hThread);
+
+	CloseHandle(stdinRd);
+	CloseHandle(stdoutWr);
+
+	t.m_isrunning = true;
+	return t;
+}
+
+size_t Tool::write(char * buffer, size_t size)
+{
+	return size_t();
+}
+
+size_t Tool::read(char * buffer, size_t size)
+{
+	DWORD rbytes = 0;
+	BOOL success = false;
+	success = ReadFile(in, buffer, size, &rbytes, NULL);
+	return rbytes; // (success) ? rbytes : 0;
+}
+
+#endif
 
 std::string Tool::executeToolBlocking(const char* name, const char* input)
 {
 	std::stringstream ss;
-	ProcessPipe p = executeTool(name, input);
+	Tool t = Tool::executeTool(name, input);
+
+	if (!t.isRunning())
+		return std::string();
 
 	char* buffer = new char[256];
-	while(read(p.in, buffer, 255))
+	while (t.read(buffer, 255))
 	{
 		// Make sure the buffer is nul-terminated
 		buffer[255] = 0;
@@ -60,3 +155,4 @@ std::string Tool::executeToolBlocking(const char* name, const char* input)
 	delete[] buffer;
 	return ss.str();
 }
+

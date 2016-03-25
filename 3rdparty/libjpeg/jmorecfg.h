@@ -11,6 +11,10 @@
  * optimizations.  Most users will not need to touch this file.
  */
 
+/// FIXME: CUSTOM NEO STUFF
+#ifdef _WIN32
+#include <basetsd.h>
+#endif
 
 /*
  * Define BITS_IN_JSAMPLE as either

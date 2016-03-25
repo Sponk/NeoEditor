@@ -2,13 +2,14 @@
 #define __EVENT_H
 
 #include <functional>
+#include <Neo2D.h>
 
 namespace Neo2D
 {
 namespace Gui
 {
 class Widget;
-class Event
+class NEO2D_EXPORT Event
 {
 public:
 	virtual void update(Widget& w, float dt) = 0;

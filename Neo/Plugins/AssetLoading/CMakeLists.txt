@@ -33,6 +33,7 @@ include_directories(
 		${JPEG_INCLUDE_DIR}
 		${OGG_INCLUDE_DIR}
 		${TINYXML_INCLUDE_DIR}
+		${ZLIB_INCLUDE_DIR}
 )
 
 target_link_libraries( AssetLoading
@@ -46,4 +47,5 @@ target_link_libraries( AssetLoading
 		${JPEG_LIBRARIES}
 		${OGG_LIBRARIES}
 		${TINYXML_LIBRARIES}
+		${ZLIB_LIBRARIES}
 )

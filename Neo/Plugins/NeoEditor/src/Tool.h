@@ -3,14 +3,21 @@
 
 #include <string>
 
-struct ProcessPipe
-{
-	int in = -1;
-	int out = -1;
-};
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 class Tool
 {
+#ifdef _WIN32
+	HANDLE in;
+	HANDLE out;
+#else
+	int in = -1;
+	int out = -1;
+#endif
+
+	bool m_isrunning = false;
 public:
 
 	/**
@@ -22,10 +29,15 @@ public:
 	static std::string executeToolBlocking(const char* name, const char* input);
 	static std::string executeToolBlocking(const char* name)
 	{
-		return executeToolBlocking(name, NULL);
+		return Tool::executeToolBlocking(name, NULL);
 	}
 
-	static ProcessPipe executeTool(const char* name, const char* input);
+	static Tool executeTool(const char* name, const char* input);
+
+	size_t read(char* buffer, size_t size);
+	size_t write(char* buffer, size_t size);
+
+	bool isRunning() { return m_isrunning; }
 };
 
 
