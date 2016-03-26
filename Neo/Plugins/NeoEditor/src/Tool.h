@@ -35,7 +35,7 @@ public:
 	static Tool executeTool(const char* name, const char* input);
 
 	size_t read(char* buffer, size_t size);
-	size_t write(char* buffer, size_t size);
+	size_t write(const char* buffer, size_t size);
 
 	bool isRunning() { return m_isrunning; }
 };

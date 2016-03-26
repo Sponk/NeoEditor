@@ -21,7 +21,7 @@ Tool Tool::executeTool(const char* name, const char* input)
 
 	pid_t pid = fork();
 	if(pid == -1)
-		return ProcessPipe();
+		return Tool();
 
 	// Child
 	if(!pid)
@@ -46,10 +46,19 @@ Tool Tool::executeTool(const char* name, const char* input)
 	t.out = fdParentChild[1];
 
 	if(input)
-		write(t.out, input, strlen(input));
+		t.write(input, strlen(input));
 
-	wait();
 	return t;
+}
+
+size_t Tool::write(const char* buffer, size_t size)
+{
+	return ::write(out, buffer, size);
+}
+
+size_t Tool::read(char* buffer, size_t size)
+{
+	return ::read(in, buffer, size);
 }
 
 #else
@@ -121,7 +130,7 @@ Tool Tool::executeTool(const char* name, const char* input)
 	return t;
 }
 
-size_t Tool::write(char * buffer, size_t size)
+size_t Tool::write(const char * buffer, size_t size)
 {
 	return size_t();
 }
