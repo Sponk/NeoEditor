@@ -13,8 +13,8 @@ void EditorGame::draw()
 
 void EditorGame::onBegin()
 {
-	std::string str = Tool::executeToolBlocking("cmake.exe", NULL);
-	MLOG_INFO(str);
+	//std::string str = Tool::executeToolBlocking("cmake.exe", NULL);
+	//MLOG_INFO(str);
 }
 
 void EditorGame::onEnd()

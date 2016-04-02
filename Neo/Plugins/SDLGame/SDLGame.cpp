@@ -60,9 +60,9 @@ void SDLGame::onBegin()
 	engine->getRenderer()->initialize();
 	NeoGame::onBegin();
 
-	char scriptfile[512];
-	getGlobalFilename(scriptfile, engine->getSystemContext()->getWorkingDirectory(), "assets/levels/test.level");
-	engine->loadLevel(scriptfile);
+	//char scriptfile[512];
+	//getGlobalFilename(scriptfile, engine->getSystemContext()->getWorkingDirectory(), "assets/levels/test.level");
+	//engine->loadLevel(scriptfile);
 
 	//engine->getScriptContext()->runScript(scriptfile);
 }
