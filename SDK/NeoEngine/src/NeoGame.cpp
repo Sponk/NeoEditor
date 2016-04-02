@@ -105,9 +105,9 @@ void NeoGame::update(void)
 #endif
 
 	// Update subgames
-	for(int i = 0; i < m_subGames.size(); i++)
+	for(auto sg : m_subGames)
 	{
-		m_subGames[i]->update();
+		sg->update();
 	}
 
 #ifndef DISABLE_3D
@@ -188,12 +188,6 @@ void NeoGame::draw(void)
 		render->clear(BUFFER_COLOR | BUFFER_DEPTH);
 #endif
 
-		// Draw subgames
-		for(int i = 0; i < m_subGames.size(); i++)
-		{
-			m_subGames[i]->draw();
-		}
-
 #ifndef DISABLE_3D
 
 		// recover viewport
@@ -256,6 +250,9 @@ void NeoGame::draw(void)
 		}
 	}
 #endif
+
+	for(auto sg : m_subGames)
+		sg->draw();
 }
 
 void NeoGame::onBeginScene(void)
