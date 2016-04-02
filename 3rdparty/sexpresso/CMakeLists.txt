@@ -1,0 +1,4 @@
+FILE(GLOB_RECURSE HEADERS *.h)
+FILE(GLOB_RECURSE SOURCES sexpresso/*.c*)
+
+add_library(sexpresso STATIC ${SOURCES} ${HEADERS}) 
