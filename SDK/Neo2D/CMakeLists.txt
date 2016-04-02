@@ -15,11 +15,19 @@ SET(HEADERS
 	include/Neo2D.h
 	include/Object2D.h
 	include/Container.h
-	include/Widget.h include/LayoutStrategy.h include/FilterStrategy.h include/Event.h include/MouseEvents.h)
+	include/Widget.h
+	include/LayoutStrategy.h
+	include/FilterStrategy.h
+	include/Event.h
+	include/MouseEvents.h
+	include/Canvas.h)
 
 SET(SOURCES
 	src/Object2D.cpp
-	src/Widget.cpp src/Event.cpp)
+	src/Widget.cpp
+	src/Event.cpp
+	src/Neo2D.cpp
+	include/Canvas.cpp)
 
 IF(NOT ANDROID AND NOT EMSCRIPTEN)
 	ADD_LIBRARY(Neo2D SHARED ${SOURCES} ${HEADERS})
