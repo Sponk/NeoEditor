@@ -33,14 +33,8 @@ Neo::Profiler::Profiler()
 Neo::String Neo::Profiler::generateReport()
 {
 	std::stringstream str;
-
-	//str << "Function\t| Calls\t| Average Cycles" << std::endl;
 	for (auto f : m_profiles)
-	{
-		// str << f.first << "\t\t| " << f.second.numberOfCalls << "\t\t| " << f.second.averageTicks << std::endl;
-		//str << f.first << " got " << f.second.numberOfCalls << " calls with " << f.second.averageTicks << " cycles" << std::endl;
-		str << f.first << " ==> calls: " << f.second.numberOfCalls << " cycles: " << f.second.averageTicks << std::endl;
-	}
+		str << "(" << f.first << " (calls " << f.second.numberOfCalls << ") (delta " << f.second.averageTicks << "))" << std::endl;
 
 	return Neo::String(str.str().c_str());
 }

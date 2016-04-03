@@ -55,14 +55,14 @@ void NeoGame::update(void)
 	m_frameDelta = (float) (curtime - m_lastFrame) * 0.001; 
 	m_lastFrame = curtime;
 
-	m_profiler.functionTimingStart("ScriptUpdate");
+	PROFILE_BEGIN("ScriptUpdate");
 	// update script
 	if(scriptContext && scriptContext->startCallFunction("update"))
 	{
 		scriptContext->pushFloat(m_frameDelta);
 		scriptContext->endCallFunction(1);
 	}
-	m_profiler.functionTimingEnd("ScriptUpdate");
+	PROFILE_END("ScriptUpdate");
 
 	// get level
 	Level * level = NeoEngine::getInstance()->getLevel();
@@ -310,5 +310,5 @@ void NeoGame::onEnd(void)
 		m_subGames[i]->onEnd();
 	}
 
-	MLOG_INFO(m_profiler.generateReport().getSafeString());
+	MLOG_INFO(std::endl << m_profiler.generateReport().getSafeString());
 }

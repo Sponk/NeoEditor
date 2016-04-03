@@ -28,6 +28,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <chrono>
 
 #ifdef _MSC_VER
 #include <intrin.h>
@@ -84,6 +85,8 @@ public:
 	 */
 	unsigned long getTicks()
 	{
+		using namespace std::chrono;
+		/*
 #if !defined(_MSC_VER) && (defined(__amd64__) || defined(_M_AMD64))
 		unsigned long tick;
 		asm volatile ( "rdtsc" : "=A"(tick) );
@@ -96,7 +99,9 @@ public:
 		return __rdtsc();
 #else
 		return 0;
-#endif
+#endif*/
+
+		return duration_cast<nanoseconds>(high_resolution_clock::now().time_since_epoch()).count();
 	}
 
 	/**

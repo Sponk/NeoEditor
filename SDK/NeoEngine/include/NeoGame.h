@@ -27,6 +27,14 @@
 #ifndef _NEO_GAME_H
 #define _NEO_GAME_H
 
+#ifndef DISABLE_PROFILING
+#define PROFILE_BEGIN(name) { Neo::NeoEngine::getInstance()->getGame()->getProfiler().functionTimingStart(name); }
+#define PROFILE_END(name) { Neo::NeoEngine::getInstance()->getGame()->getProfiler().functionTimingEnd(name); }
+#else
+#define PROFILE_BEGIN
+#define PROFILE_END
+#endif
+
 namespace Neo
 {
 
@@ -64,6 +72,7 @@ public:
 
 public:
 
+	Profiler& getProfiler() { return m_profiler; }
 	inline float getFrameDelta() { return m_frameDelta; }
 
 	// is running
