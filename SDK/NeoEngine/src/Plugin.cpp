@@ -77,12 +77,18 @@ bool Plugin::loadLibrary(const char* filename)
 #elif !defined(EMSCRIPTEN)
 
 	m_library = dlopen(filename, RTLD_LAZY);
-	if(! m_library)
+	if(!m_library)
+	{
+		MLOG_ERROR("Could not load plugin library file: " << dlerror());
 		return false;
+	}
 
-	FunctionPtr function = (FunctionPtr)dlsym(m_library, "StartPlugin");
+	FunctionPtr function = (FunctionPtr) dlsym(m_library, "StartPlugin");
 	if(!function)
+	{
+		MLOG_ERROR(dlerror());
 		return false;
+	}
 
 	m_filename = filename;
     function();
