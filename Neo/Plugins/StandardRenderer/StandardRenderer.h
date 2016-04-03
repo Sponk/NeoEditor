@@ -28,11 +28,6 @@
 
 #define NUM_SHADERS 3
 
-#define MAX_ENTITY_LIGHTS 256
-#define MAX_SHADOW_LIGHTS 64
-#define MAX_OPAQUE 4096
-#define MAX_TRANSP 2048
-
 namespace Neo
 {
 // Standard Renderer
@@ -137,9 +132,6 @@ public:
 
 	void initialize();
 	void smallInit(unsigned int width, unsigned int height);
-
-	virtual void stopThreads();
-	virtual void startThreads();
 
 private:
 

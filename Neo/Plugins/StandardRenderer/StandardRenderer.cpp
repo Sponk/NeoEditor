@@ -66,21 +66,12 @@ public:
 	// FIXME: Check for sub meshes?
 	std::vector<OEntity*> visibleEntities;
 	std::vector<OEntity*> visibleTransparentEntities;
-	Semaphore* visibilityLock;
-
-	Semaphore* lightLock;
 	std::vector<OLight*> visibleLights;
 	Image lightData;
 	unsigned int lightTexture;
 
 	CameraData()
 	{
-		//visibilityLock = ThreadFactory::getInstance()->getNewSemaphore();
-		//visibilityLock->Init(1);
-
-		//lightLock = ThreadFactory::getInstance()->getNewSemaphore();
-		//lightLock->Init(1);
-
 		visibleLights.reserve(256);
 		visibleEntities.reserve(256);
 		visibleTransparentEntities.reserve(256);
@@ -90,8 +81,7 @@ public:
 
 	~CameraData()
 	{
-		SAFE_DELETE(lightLock);
-		SAFE_DELETE(visibilityLock);
+
 	}
 };
 
@@ -103,7 +93,6 @@ class LightData: public Object3d::AdditionalData
 public:
 	// Visible objects for shadow mapping
 	std::vector<OEntity*> visibleEntities;
-	Semaphore* visibilityLock;
 
 	uint32_t depthTexture;
 	uint32_t fbo;
@@ -116,14 +105,11 @@ public:
 		depthTexture(0),
 		fbo(0),
 		resolution(0)
-	{
-		visibilityLock = ThreadFactory::getInstance()->getNewSemaphore();
-		visibilityLock->Init(1);
-	}
+	{}
 
 	~LightData()
 	{
-		SAFE_DELETE(visibilityLock);
+
 	}
 };
 
@@ -549,8 +535,6 @@ void StandardRenderer::drawGBuffer(Scene* scene, OCamera* camera)
 	CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
 	if (!data) return;
 
-	//data->visibilityLock->WaitAndLock();
-
 	for (OEntity* entity : data->visibleEntities)
 	{
 		drawEntity(entity, camera);
@@ -558,7 +542,6 @@ void StandardRenderer::drawGBuffer(Scene* scene, OCamera* camera)
 
 	render->setMatrixMode(MATRIX_MODELVIEW);
 	render->loadIdentity();
-	//data->visibilityLock->Unlock();
 }
 
 void StandardRenderer::drawEntity(OEntity* entity, OCamera* camera)
@@ -614,8 +597,6 @@ void StandardRenderer::drawTransparents(Scene* scene, OCamera* camera)
 	sendLights(m_fx[0], camera);
 	render->bindTexture(m_depthTexID, 4);
 
-	//data->visibilityLock->WaitAndLock();
-
 	for (OEntity* entity : data->visibleTransparentEntities)
 	{
 		drawEntity(entity, camera);
@@ -629,8 +610,6 @@ void StandardRenderer::drawTransparents(Scene* scene, OCamera* camera)
 	{
 		drawText(scene->getTextByIndex(i), camera);
 	}
-
-	//data->visibilityLock->Unlock();
 }
 
 void StandardRenderer::initialize()
@@ -690,36 +669,6 @@ void StandardRenderer::initialize()
 	initFramebuffers();
 	initQuadVAO(&m_quadVAO, &m_quadVBO, &m_quadTexCoordVBO, m_fx[1]);
 	initTextVAO(&m_textVAO, &m_textVBO, &m_textTexCoordVBO, m_fx[0]);
-
-	//m_threadExit = false;
-
-	// Start worker threads
-	/*if (m_lightUpdateThread == NULL)
-	{
-		ThreadFactory* tmgr = ThreadFactory::getInstance();
-		m_lightUpdateThread = tmgr->getNewThread();
-
-		m_lightUpdateSemaphore = tmgr->getNewSemaphore();
-		m_visibilityUpdateSemaphore = tmgr->getNewSemaphore();
-
-		m_visibilityThread = tmgr->getNewThread();
-
-		if (m_lightUpdateThread == NULL || m_lightUpdateSemaphore == NULL || m_visibilityThread == NULL)
-		{
-			MLOG_INFO("Could not create update threads!");
-			SAFE_DELETE(m_lightUpdateThread);
-			SAFE_DELETE(m_lightUpdateSemaphore);
-			SAFE_DELETE(m_visibilityUpdateSemaphore);
-			SAFE_DELETE(m_visibilityThread);
-			return;
-		}
-
-		m_lightUpdateSemaphore->Init(1);
-		m_visibilityUpdateSemaphore->Init(1);
-
-		m_lightUpdateThread->Start(StandardRenderer::light_update_thread, "LightUpdate", this);
-		m_visibilityThread->Start(StandardRenderer::visibility_thread_mainscene, "VisUpdate", this);
-	}*/
 }
 
 void StandardRenderer::smallInit(unsigned int width, unsigned int height)
@@ -1031,8 +980,6 @@ void StandardRenderer::renderShadows(Scene* scene, OCamera* maincam)
 	unsigned int currentFrameBuffer = 0;
 	render->getCurrentFrameBuffer(&currentFrameBuffer);
 
-	camData->lightLock->WaitAndLock();
-
 	for (OLight* light : camData->visibleLights)
 	{
 		if (light->isCastingShadow())
@@ -1090,17 +1037,18 @@ void StandardRenderer::renderShadows(Scene* scene, OCamera* maincam)
 	}
 
 	render->bindFrameBuffer(currentFrameBuffer);
-	camData->lightLock->Unlock();
 }
 
 void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
 {
 	//drawToTexture(scene, camera, m_gbufferTexID);
-	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
-	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
+	NeoEngine* engine = NeoEngine::getInstance();
+	RenderingContext* render = engine->getRenderingContext();
+	SystemContext* system = engine->getSystemContext();
 
 	// Culling
 	{
+		Vector3 campos = camera->getTransformedPosition();
 		CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
 		if (!data) camera->setAdditionalData((data = new CameraData));
 
@@ -1113,7 +1061,9 @@ void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
 		data->visibleEntities.reserve(scene->getEntitiesNumber());
 		data->visibleTransparentEntities.reserve(scene->getEntitiesNumber());
 
-// #pragma omp parallel for
+		PROFILE_BEGIN("Culling")
+
+//#pragma omp parallel for
 		for (int i = 0; i < scene->getEntitiesNumber(); i++)
 		{
 			OEntity* e = scene->getEntityByIndex(i);
@@ -1123,17 +1073,27 @@ void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
 			{
 				if (e->hasTransparency())
 				{
-					data->visibleTransparentEntities.push_back(e);
+					Vector3 epos = e->getTransformedPosition();
+
+					int i = 0;
+					while((epos - campos).getLength()
+							< (epos - data->visibleTransparentEntities[i]->getTransformedPosition()).getLength()) ++i;
+
+//#pragma omp critical
+ 					{ data->visibleTransparentEntities.insert(data->visibleTransparentEntities.begin() + i, e); } //push_back(e);
 				}
 				else
 				{
-					data->visibleEntities.push_back(e);
+//#pragma omp critical
+					{ data->visibleEntities.push_back(e); }
 				}
 			}
 		}
 
+		PROFILE_END("Culling");
+
 		data->visibleLights.clear();
-		for (int i = 0, j = 0; i < scene->getLightsNumber() /*&& i < MAX_ENTITY_LIGHTS*/; i++)
+		for (int i = 0, j = 0; i < scene->getLightsNumber(); i++)
 		{
 			OLight* light;
 			// If light is visible
@@ -1210,8 +1170,6 @@ void StandardRenderer::sendLights(unsigned int shader, OCamera* camera)
 	CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
 	if (!data) return;
 
-	//data->lightLock->WaitAndLock();
-
 	int num = data->visibleLights.size();
 	render->sendUniformInt(shader, "LightsCount", &num);
 
@@ -1257,9 +1215,7 @@ void StandardRenderer::sendLights(unsigned int shader, OCamera* camera)
 		data->lightData.writePixel(i, 5, &vec);
 
 		i++;
-		//sendLight(shader, l, i++, camMat);
 	}
-	//data->lightLock->Unlock();
 
 	num = 7;
 
@@ -1804,128 +1760,6 @@ void StandardRenderer::clearQuadVAO(unsigned int* vao, unsigned int* vbo, unsign
 	render->deleteVBO(texcoordVbo);
 }
 
-void StandardRenderer::stopThreads()
-{
-	return;
-	if (m_lightUpdateSemaphore == NULL || m_visibilityUpdateSemaphore == NULL)
-		return;
-
-	m_lightUpdateSemaphore->WaitAndLock();
-	m_visibilityUpdateSemaphore->WaitAndLock();
-}
-
-void StandardRenderer::startThreads()
-{
-	if (m_lightUpdateSemaphore == NULL || m_visibilityUpdateSemaphore == NULL)
-		return;
-
-	m_lightUpdateSemaphore->Unlock();
-	m_visibilityUpdateSemaphore->Unlock();
-}
-
-////////////////////////////////////////////////////////////////////////////////
-//
-// UPDATE THREADS
-//
-////////////////////////////////////////////////////////////////////////////////
-
-#define THREAD_SLEEP 50
-
-int StandardRenderer::light_update_thread(void* data)
-{
-	StandardRenderer* self = (StandardRenderer*) data;
-	if (!self)
-		return 1;
-
-	NeoEngine* engine = NeoEngine::getInstance();
-
-	Scene* scene;
-	OLight* light;
-
-	while (!engine->getGame()->isRunning())	engine->getSystemContext()->sleep(THREAD_SLEEP);
-	while (engine->isActive() && !self->m_threadExit)
-	{
-		if (!engine->getGame()->isRunning())
-			continue;
-
-		StandardRenderer* render = (StandardRenderer*) engine->getRenderer();
-		render->m_lightUpdateSemaphore->WaitAndLock();
-		Level* level = engine->getLevel();
-
-		// Aquire lock
-		for (int i = 0; i < level->getScenesNumber(); i++)
-		{
-			scene = level->getSceneByIndex(i);
-			OCamera* camera;
-
-			if (!scene || !(camera = scene->getCurrentCamera()))
-				break;
-
-			CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
-
-			if (!data)
-			{
-				data = new CameraData();
-				camera->setAdditionalData(data);
-			}
-
-			camera->enable();
-			data->lightLock->WaitAndLock();
-			data->visibleLights.clear();
-
-			// Fill the light buffer with all visible lights
-			{
-				int j = 0;
-
-				for (int i = 0; i < scene->getLightsNumber() /*&& i < MAX_ENTITY_LIGHTS*/; i++)
-				{
-					// If light is visible
-					if ((light = scene->getLightByIndex(i)) != NULL && light->isActive()
-						&& (light->isVisible() || light->getSpotAngle() == 0))
-					{
-						/*float quadraticAtten = (8.0f / light->getRadius());
-						quadraticAtten = (quadraticAtten*quadraticAtten) * light->getIntensity();
-						float spotCos = cosf(light->getSpotAngle() * DEG_TO_RAD);
-
-						vec = (*camera->getCurrentViewMatrix()) * light->getTransformedPosition();
-						data->lightData.writePixel(i, 0, &vec);
-
-						vec = Vector3(spotCos, light->getSpotExponent(), light->getIntensity());
-						data->lightData.writePixel(i, 1, &vec);
-
-						vec = Vector3(light->getRadius(), 0, 0);
-						data->lightData.writePixel(i, 2, &vec);
-
-						vec = Vector3(0, quadraticAtten, 1);
-						data->lightData.writePixel(i, 3, &vec);
-
-						vec = camera->getCurrentViewMatrix()->getRotatedVector3(light->getRotatedVector(Vector3(0,0,-1))).getNormalized();
-						data->lightData.writePixel(i, 4, &vec);
-
-						vec = light->getColor();
-						data->lightData.writePixel(i, 5, &vec);*/
-
-						data->visibleLights.push_back(light);
-						j++;
-					}
-				}
-			}
-
-			data->lightLock->Unlock();
-		}
-
-		render->m_lightUpdateSemaphore->Unlock();
-		engine->getSystemContext()->sleep(THREAD_SLEEP);
-	}
-
-	MLOG_INFO("Light thread exiting.");
-	return 0;
-}
-
-/*
- * Scene update threads
- */
-
 /// UUUUGLY!
 Vector3 g_referenceCameraPos;
 
@@ -1933,101 +1767,4 @@ bool zCompare(const OEntity* lhs, const OEntity* rhs)
 {
 	return (lhs->getTransformedPosition() - g_referenceCameraPos).getLength()
 		> (rhs->getTransformedPosition() - g_referenceCameraPos).getLength();
-}
-
-int StandardRenderer::visibility_thread_mainscene(void* data)
-{
-	StandardRenderer* self = (StandardRenderer*) data;
-	if (!self)
-		return 1;
-
-	NeoEngine* engine = NeoEngine::getInstance();
-
-	// Wait for engine to start the game
-	while (!engine->getGame()->isRunning()) engine->getSystemContext()->sleep(THREAD_SLEEP);
-	// Initialize scenes with additional data
-	/*Level* level = engine->getLevel();
-	for (int i = 0; i < level->getScenesNumber(); i++)
-	{
-		Scene* s = level->getSceneByIndex(i);
-		s->setAdditionalData(new SceneData());
-
-		for (int j = 0; j < s->getCamerasNumber(); j++)
-		{
-			s->getCameraByIndex(j)->setAdditionalData(new CameraData());
-		}
-	}*/
-
-	while (engine->isActive() && !self->m_threadExit)
-	{
-		if (!engine->getGame()->isRunning())
-			continue;
-
-		self->m_visibilityUpdateSemaphore->WaitAndLock();
-
-		// Preparation
-		Level* level = engine->getLevel();
-		Scene* scene;
-		OCamera* camera;
-
-		for (int i = 0; i < level->getScenesNumber(); i++)
-		{
-			scene = level->getSceneByIndex(i);
-			if (!scene || !(camera = scene->getCurrentCamera()))
-			{
-				engine->getSystemContext()->sleep(THREAD_SLEEP);
-				continue;
-			}
-
-			CameraData* data = static_cast<CameraData*>(camera->getAdditionalData());
-
-			if (!data)
-			{
-				data = new CameraData();
-				camera->setAdditionalData(data);
-
-				//window->sleep(THREAD_SLEEP);
-				//continue;
-			}
-
-			camera->updateMatrix();
-			camera->enable();
-			camera->getFrustum()->makeVolume(camera);
-
-			// Culling!
-			data->visibilityLock->WaitAndLock();
-			data->visibleEntities.clear();
-			data->visibleTransparentEntities.clear();
-
-			size_t sz = scene->getEntitiesNumber();
-			for (int i = 0; i < sz; i++)
-			{
-				OEntity* e = scene->getEntityByIndex(i);
-
-				if (e->isActive())
-				{
-					e->updateVisibility(camera);
-					if (e->isVisible())
-					{
-						if (e->hasTransparency())
-							data->visibleTransparentEntities.push_back(e);
-						else
-							data->visibleEntities.push_back(e);
-					}
-				}
-			}
-
-			g_referenceCameraPos = camera->getTransformedPosition();
-			std::sort(data->visibleTransparentEntities.begin(), data->visibleTransparentEntities.end(), zCompare);
-
-			//while(1);
-			data->visibilityLock->Unlock();
-		}
-
-		self->m_visibilityUpdateSemaphore->Unlock();
-		engine->getSystemContext()->sleep(THREAD_SLEEP);
-	}
-
-	MLOG_INFO("Visibility thread exiting.");
-	return 0;
 }
