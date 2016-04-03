@@ -84,6 +84,7 @@ class ArmatureAnimRef;
 class TexturesAnimRef;
 class MaterialsAnimRef;
 class Messenger;
+class Mesh;
 }
 
 #include <NeoCore.h>

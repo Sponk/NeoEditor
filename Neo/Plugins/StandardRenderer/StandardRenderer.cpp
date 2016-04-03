@@ -241,8 +241,6 @@ StandardRenderer::StandardRenderer()
 
 	m_lightUpdateThread = NULL;
 	m_lightUpdateSemaphore = NULL;
-	m_currentScene = NULL;
-	m_numVisibleLights = 0;
 
 	m_texCoords[0] = Vector2(0, 1);
 	m_texCoords[1] = Vector2(0, 0);
@@ -555,43 +553,51 @@ void StandardRenderer::drawGBuffer(Scene* scene, OCamera* camera)
 
 	for (OEntity* entity : data->visibleEntities)
 	{
-		if (entity->isVisible() && entity->isActive() && !entity->isInvisible())
-		{
-			render->setMatrixMode(MATRIX_MODELVIEW);
-			render->loadIdentity();
-			render->multMatrix(entity->getMatrix());
-
-			mesh = entity->getMesh();
-
-			// Update Animation
-			if (mesh->getArmatureAnim())
-			{
-				animateArmature(
-					mesh->getArmature(),
-					mesh->getArmatureAnim(),
-					entity->getCurrentFrame()
-				);
-			}
-			else if (mesh->getArmature())
-			{
-				mesh->getArmature()->processBonesLinking();
-				mesh->getArmature()->updateBonesSkinMatrix();
-			}
-
-			if (mesh->getMaterialsAnim())
-				animateMaterials(mesh, mesh->getMaterialsAnim(), entity->getCurrentFrame());
-
-			if (mesh->getTexturesAnim())
-				animateTextures(mesh, mesh->getTexturesAnim(), entity->getCurrentFrame());
-
-			updateSkinning(entity->getMesh(), mesh->getArmature());
-			drawMesh(entity->getMesh(), camera, entity->getMaterial(), entity->hasWireframe());
-		}
+		drawEntity(entity, camera);
 	}
 
 	render->setMatrixMode(MATRIX_MODELVIEW);
 	render->loadIdentity();
 	//data->visibilityLock->Unlock();
+}
+
+void StandardRenderer::drawEntity(OEntity* entity, OCamera* camera)
+{
+	NeoEngine* engine = NeoEngine::getInstance();
+	RenderingContext* render = engine->getRenderingContext();
+
+	if (entity->isVisible() && entity->isActive() && !entity->isInvisible())
+	{
+		render->setMatrixMode(MATRIX_MODELVIEW);
+		render->loadIdentity();
+		render->multMatrix(entity->getMatrix());
+
+		Mesh* mesh = entity->getMesh();
+
+		// Update Animation
+		if (mesh->getArmatureAnim())
+		{
+			animateArmature(
+				mesh->getArmature(),
+				mesh->getArmatureAnim(),
+				entity->getCurrentFrame()
+			);
+		}
+		else if (mesh->getArmature())
+		{
+			mesh->getArmature()->processBonesLinking();
+			mesh->getArmature()->updateBonesSkinMatrix();
+		}
+
+		if (mesh->getMaterialsAnim())
+			animateMaterials(mesh, mesh->getMaterialsAnim(), entity->getCurrentFrame());
+
+		if (mesh->getTexturesAnim())
+			animateTextures(mesh, mesh->getTexturesAnim(), entity->getCurrentFrame());
+
+		updateSkinning(entity->getMesh(), mesh->getArmature());
+		drawMesh(entity->getMesh(), camera, entity->getMaterial(), entity->hasWireframe());
+	}
 }
 
 void StandardRenderer::drawTransparents(Scene* scene, OCamera* camera)
@@ -612,38 +618,7 @@ void StandardRenderer::drawTransparents(Scene* scene, OCamera* camera)
 
 	for (OEntity* entity : data->visibleTransparentEntities)
 	{
-		if (entity->isVisible() && entity->isActive() && !entity->isInvisible())
-		{
-			render->setMatrixMode(MATRIX_MODELVIEW);
-			render->loadIdentity();
-			render->multMatrix(entity->getMatrix());
-
-			mesh = entity->getMesh();
-
-			// Update Animation
-			if (mesh->getArmatureAnim())
-			{
-				animateArmature(
-					mesh->getArmature(),
-					mesh->getArmatureAnim(),
-					entity->getCurrentFrame()
-				);
-			}
-			else if (mesh->getArmature())
-			{
-				mesh->getArmature()->processBonesLinking();
-				mesh->getArmature()->updateBonesSkinMatrix();
-			}
-
-			if (mesh->getMaterialsAnim())
-				animateMaterials(mesh, mesh->getMaterialsAnim(), entity->getCurrentFrame());
-
-			if (mesh->getTexturesAnim())
-				animateTextures(mesh, mesh->getTexturesAnim(), entity->getCurrentFrame());
-
-			updateSkinning(entity->getMesh(), mesh->getArmature());
-			drawMesh(entity->getMesh(), camera, entity->getMaterial(), entity->hasWireframe());
-		}
+		drawEntity(entity, camera);
 	}
 
 	render->setMatrixMode(MATRIX_MODELVIEW);
@@ -1170,8 +1145,6 @@ void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
 			}
 		}
 	}
-
-	m_currentScene = scene;
 
 	unsigned int currentFrameBuffer = 0;
 	render->getCurrentFrameBuffer(&currentFrameBuffer);

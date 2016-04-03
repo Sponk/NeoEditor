@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -28,28 +29,60 @@
 
 namespace Neo
 {
-// class for creating renderer
+/**
+ * @brief Provides methods to execute higher level graphics operations.
+ *
+ * Higher level means that it does not operate on OpenGL/etc. API specifics but
+ * on Neo::Mesh, Neo::Scene etc. so the caller does not need any knowledge about
+ * the underlying framework.
+ */
 class NEO_ENGINE_EXPORT Renderer
 {
 public:
 
-	Renderer(void);
-	virtual ~Renderer(void);
+	Renderer();
+	virtual ~Renderer();
 
 public:
 
-	// destroy
-	virtual void destroy(void) = 0;
+	/**
+	 * @brief Destroys the renderer object and frees all resources
+	 * occupied by the object.
+	 */
+	virtual void destroy() = 0;
+
+	/**
+	 * @brief Initialized the renderer and all underlying frameworks.
+	 */
 	virtual void initialize() = 0;
 
-	// name
-	virtual const char * getName(void) = 0;
+	/**
+	 * @brief Retrieves the name of this renderer type.
+	 */
+	virtual const char* getName() = 0;
 
-	// draw
-	virtual void drawScene(Scene * scene, OCamera * camera) = 0;
-	
-	// extra
-	virtual void drawText(OText * text) = 0;
+	/**
+	 * @brief Draws a scene as seen from the perspective of the given camera.
+	 *
+	 * @param scene The scene to display.
+	 * @param camera The camera.
+	 */
+	virtual void drawScene(Scene* scene, OCamera* camera) = 0;
+
+	/**
+	 * @brief Draws a text object in 3D space.
+	 *
+	 * @param text The text to draw.
+	 */
+	virtual void drawText(OText* text) = 0;
+
+	/**
+	 * @brief Draws an entity on the screen as seen from the perspective of the given camera.
+	 *
+	 * @param mesh The entity to draw.
+	 * @param camera The camera.
+	 */
+	virtual void drawEntity(OEntity* entity, OCamera* camera) = 0;
 
 	virtual void stopThreads() {}
 	virtual void startThreads() {}

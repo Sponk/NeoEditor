@@ -89,15 +89,11 @@ public:
 
 	// All visible lights. Should be updated by a worker thread.
 	static int light_update_thread(void* data);
-	OLight* m_visibleLights[MAX_ENTITY_LIGHTS];
 	Thread* m_lightUpdateThread;
 
 	Semaphore* m_lightUpdateSemaphore;
 	Semaphore* m_visibilityUpdateSemaphore;
 	bool m_threadExit; /// Used to signal the threads to exit
-
-	Scene* m_currentScene;
-	int m_numVisibleLights;
 
 	// Cache texture coordinates for faster rendering
 	Vector2 m_texCoords[4];
@@ -107,15 +103,7 @@ public:
 	Vector2 m_resolution;
 
 private:
-	
-	// lists
-	int m_transpSortList[MAX_TRANSP];
-	int m_opaqueSortList[MAX_OPAQUE];
-	float m_transpSortZList[MAX_TRANSP];
-	float m_opaqueSortZList[MAX_OPAQUE];
-	
 	void drawDisplay(SubMesh * subMesh, MaterialDisplay * display, Vector3 * vertices, Vector3 * normals, Vector3 * tangents, Color * colors);
-	//void drawDisplayTriangles(MSubMesh * subMesh, MDisplay * display, MVector3 * vertices);
 	void drawOpaques(SubMesh * subMesh, Armature * armature);
 	void drawTransparents(SubMesh * subMesh, Armature * armature);
 	void updateVisibility(Scene * scene, OCamera * camera);
