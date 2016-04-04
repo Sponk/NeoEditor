@@ -1075,12 +1075,13 @@ void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
 				{
 					Vector3 epos = e->getTransformedPosition();
 
-					int i = 0;
-					while((epos - campos).getLength()
-							< (epos - data->visibleTransparentEntities[i]->getTransformedPosition()).getLength()) ++i;
+					auto i = data->visibleTransparentEntities.begin();
+					while(i != data->visibleTransparentEntities.end()
+							&& (epos - campos).getLength()
+							< (epos - (*i)->getTransformedPosition()).getLength()) ++i;
 
 //#pragma omp critical
- 					{ data->visibleTransparentEntities.insert(data->visibleTransparentEntities.begin() + i, e); } //push_back(e);
+ 					{ data->visibleTransparentEntities.insert(i, e); } //push_back(e);
 				}
 				else
 				{

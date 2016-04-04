@@ -74,6 +74,7 @@ auto Sexp::getChildByPath(std::string const& path) -> Sexp* {
 					if(i == paths.end() - 1 && child.value.str == *i) return &child;
 					else continue;
 				case SexpValueKind::SEXP:
+					if (i == paths.end()) return cur;
 					if(child.value.sexp.size() == 0) continue;
 					auto& fst = child.value.sexp[0];
 					switch(fst.kind) {
