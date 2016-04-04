@@ -206,7 +206,11 @@ static const char* subroutines[5] =
 	 "cookModelDiffuseNormalSpecular"};
 //static const char* subroutines[5] = { "phongModelColor", "phongModelDiffuse", "phongModelDiffuseSpecular", "phongModelDiffuseNormal", "phongModelDiffuseNormalSpecular" };
 
-StandardRenderer::StandardRenderer()
+StandardRenderer::StandardRenderer() :
+	m_colorOnlyFx(0), 
+	m_texturedFx(0), 
+	m_colorVao(0), 
+	m_textureVao(0)
 {
 	// Let's hope we have an GL context
 	for (int i = 0; i < NUM_SHADERS; i++)
@@ -1769,3 +1773,334 @@ bool zCompare(const OEntity* lhs, const OEntity* rhs)
 	return (lhs->getTransformedPosition() - g_referenceCameraPos).getLength()
 		> (rhs->getTransformedPosition() - g_referenceCameraPos).getLength();
 }
+
+
+
+/**********************************************************************************
+
+2D STUFF
+
+***********************************************************************************/
+
+static const char* colorOnlyVertShader =
+
+"#version 130\n"
+"attribute vec3 Vertex;"
+"uniform mat4 ProjModelViewMatrix;"
+"void main(void)"
+"{"
+"gl_Position = ProjModelViewMatrix * vec4(Vertex, 1.0);"
+"}\n";
+
+static const char* colorOnlyFragShader = "#version 130\n"
+"uniform vec4 color;"
+"void main(void)"
+"{"
+"gl_FragColor = color;"
+"}\n";
+
+static const char* texturedVertShader =
+
+"#version 130\n"
+"attribute vec3 Vertex;"
+"uniform mat4 ProjModelViewMatrix;"
+
+"varying vec2 texCoord;"
+"attribute vec2 TexCoord;"
+
+"void main(void)"
+"{"
+"gl_Position = ProjModelViewMatrix * vec4(Vertex, 1.0);"
+"texCoord = TexCoord;"
+"}\n";
+
+static const char* texturedFragShader =
+"#version 130\n"
+"uniform sampler2D Texture[5];"
+"varying vec2 texCoord;"
+
+"void main(void)"
+"{"
+"gl_FragColor = texture2D(Texture[0], texCoord);"
+"}\n";
+
+void StandardRenderer::init2DVao(unsigned int fx, unsigned int* vao)
+{
+	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+
+	Vector2 texCoords[4];
+	texCoords[0] = Vector2(0, 1);
+	texCoords[1] = Vector2(0, 0);
+	texCoords[2] = Vector2(1, 1);
+	texCoords[3] = Vector2(1, 0);
+
+	Vector2 vertices[4];
+	vertices[0] = Vector2(0, 0);
+	vertices[1] = Vector2(0, 1);
+	vertices[2] = Vector2(1, 0);
+	vertices[3] = Vector2(1, 1);
+
+	render->createVAO(vao);
+	render->bindVAO(*vao);
+
+	render->createVBO(&m_vertexVbo);
+	render->bindVBO(VBO_ARRAY, m_vertexVbo);
+	render->setVBO(VBO_ARRAY, vertices, 4 * sizeof(Vector2), VBO_STATIC);
+
+	render->createVBO(&m_texcoordVbo);
+	render->bindVBO(VBO_ARRAY, m_texcoordVbo);
+	render->setVBO(VBO_ARRAY, texCoords, 4 * sizeof(Vector2), VBO_DYNAMIC);
+
+	// Send Vertex data
+	int vertexAttrib;
+	int texcoordAttrib;
+
+	// Vertex
+	render->bindVBO(VBO_ARRAY, m_vertexVbo);
+	render->getAttribLocation(fx, "Vertex", &vertexAttrib);
+	render->enableAttribArray(vertexAttrib);
+	render->setAttribPointer(vertexAttrib, VAR_FLOAT, 2, NULL);
+
+	// TexCoord
+	render->bindVBO(VBO_ARRAY, m_texcoordVbo);
+	render->getAttribLocation(fx, "TexCoord", &texcoordAttrib);
+	render->enableAttribArray(texcoordAttrib);
+	render->setAttribPointer(texcoordAttrib, VAR_FLOAT, 2, NULL);
+
+	render->bindVAO(0);
+}
+
+void StandardRenderer::drawColoredQuad(const Vector2& position, const Vector2& size, const Vector4& color, float rotation)
+{
+	NeoEngine* engine = NeoEngine::getInstance();
+	RenderingContext* render = engine->getRenderingContext();
+
+	// Don't render anything if there is nothing to render
+	if (color.w == 0)
+		return;
+
+	if (m_colorOnlyFx == 0)
+	{
+		loadShader(colorOnlyVertShader, colorOnlyFragShader,
+			&m_colorOnlyFx);
+
+		init2DVao(m_colorOnlyFx, &m_colorVao);
+	}
+
+	int vertexAttrib;
+	// render->pushMatrix();
+
+	/*Vector2 m_vertices[4];
+	m_vertices[0] = Vector2(x, y);
+	m_vertices[1] = Vector2(x, y + h);
+	m_vertices[3] = Vector2(x + w, y + h);
+	m_vertices[2] = Vector2(x + w, y);*/
+
+	// Set up env
+	render->bindVAO(m_colorVao);
+	render->bindFX(m_colorOnlyFx);
+	
+	// projmodelview matrix
+	static Matrix4x4 ProjMatrix;
+	static Matrix4x4 ModelViewMatrix;
+	static Matrix4x4 ProjModelViewMatrix;
+
+	render->getProjectionMatrix(&ProjMatrix);
+	render->getModelViewMatrix(&ModelViewMatrix);
+
+	ModelViewMatrix.setScale(Vector3(size.x, size.y, 1));
+	ProjMatrix.translate(Vector3(position.x, position.y, 0));
+
+	Vector3 pivot = Vector3(position.x + 0.5 * size.x, position.y + 0.5 * size.y, 0);
+	ModelViewMatrix.translate(pivot);
+	ModelViewMatrix.rotate(Vector3(0, 0, 1), rotation);
+	ModelViewMatrix.translate(-pivot);
+
+	ProjModelViewMatrix = ProjMatrix * ModelViewMatrix;
+
+	render->sendUniformMatrix(m_colorOnlyFx, "ProjModelViewMatrix",
+		&ProjModelViewMatrix);
+
+	// Vertex
+	/*render->getAttribLocation(m_colorOnlyFx, "Vertex", &vertexAttrib);
+	render->setAttribPointer(vertexAttrib, VAR_FLOAT, 2, m_vertices);
+	render->enableAttribArray(vertexAttrib);*/
+
+	// Width
+	render->sendUniformFloat(m_colorOnlyFx, "Width", (float*) &size.x, 1);
+	// Height
+	render->sendUniformFloat(m_colorOnlyFx, "Height", (float*) &size.y, 1);
+
+	// Color
+	render->sendUniformVec4(m_colorOnlyFx, "color", color);
+
+	// draw
+	render->drawArray(PRIMITIVE_TRIANGLE_STRIP, 0, 4);
+
+	//render->disableAttribArray(vertexAttrib);
+	render->bindFX(0);
+	render->bindVAO(0);
+	// render->popMatrix();
+}
+
+void StandardRenderer::drawTexturedQuad(const Vector2& position, const Vector2& size, int texture, float rotation)
+{
+	drawTexturedQuad(position, size, texture, rotation, Vector2(1, 1),
+		Vector2(1, 1), Vector4(0.0, 0.0, 1.0, 1.0));
+}
+
+void StandardRenderer::drawTexturedQuad(const Vector2& position, const Vector2& size, int texture,
+	float rotation, const Vector2& scale)
+{
+	drawTexturedQuad(position, size, texture, rotation, scale, Vector2(1, 1),
+		Vector4(0.0, 0.0, 1.0, 1.0));
+}
+
+void StandardRenderer::drawTexturedQuad(const Vector2& position, const Vector2& size, int texture,
+	float rotation, const Vector2& scale, const Vector2& flip)
+{
+	drawTexturedQuad(position, size, texture, rotation, scale, flip,
+		Vector4(0.0, 0.0, 1.0, 1.0));
+}
+void StandardRenderer::drawTexturedQuad(const Vector2& position, const Vector2& size, int texture,
+	float rotation, const Vector2& scale, const Vector2& flip, const Vector4& texcoords)
+{
+	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+	if (m_texturedFx == 0)
+	{
+		loadShader(texturedVertShader, texturedFragShader, &m_texturedFx);
+		init2DVao(m_texturedFx, &m_textureVao);
+	}
+
+	Vector2 m_texcoords[4];
+	m_texcoords[0] = Vector2(texcoords.x, texcoords.y + texcoords.w); // (0, 1)
+	m_texcoords[1] = Vector2(texcoords.x, texcoords.y); // (0, 0)
+	m_texcoords[2] = Vector2(texcoords.x + texcoords.z, texcoords.y + texcoords.w);
+	m_texcoords[3] = Vector2(texcoords.x + texcoords.z, texcoords.y);
+
+	// Set up env
+	render->bindVAO(m_textureVao);
+	render->bindFX(m_texturedFx);
+	render->bindTexture(texture);
+
+	// projmodelview matrix
+	static Matrix4x4 ProjMatrix;
+	static Matrix4x4 ModelViewMatrix;
+	static Matrix4x4 ProjModelViewMatrix;
+	render->getProjectionMatrix(&ProjMatrix);
+	render->getModelViewMatrix(&ModelViewMatrix);
+
+	ModelViewMatrix.setScale(Vector3(size.x, size.y, 1));
+
+	Vector3 pivot = Vector3(position.x + 0.5 * size.x, position.y + 0.5 * size.y, 0.0);
+
+	ProjMatrix.translate(pivot);
+
+	ProjMatrix.rotate(Vector3(1, 0, 0), flip.x);
+	ProjMatrix.rotate(Vector3(0, 1, 0), flip.y);
+	ProjMatrix.rotate(Vector3(0, 0, 1), rotation);
+	ProjMatrix.translate(-pivot);
+
+	ProjMatrix.translate(Vector3(position.x, position.y, 0));
+	ModelViewMatrix.scale(Vector3(scale.x, scale.y, 0));
+
+	ProjModelViewMatrix = ProjMatrix * ModelViewMatrix;
+	render->sendUniformMatrix(m_texturedFx, "ProjModelViewMatrix",
+		&ProjModelViewMatrix);
+
+	// Texcoords
+	render->bindVBO(VBO_ARRAY, m_texcoordVbo);
+	render->setVBO(VBO_ARRAY, m_texcoords, 4 * sizeof(Vector2), VBO_DYNAMIC);
+
+	// Width
+	render->sendUniformFloat(m_texturedFx, "Width", (float*) &size.x, 1);
+	// Height
+	render->sendUniformFloat(m_texturedFx, "Height", (float*) &size.y, 1);
+
+	// draw
+	render->drawArray(PRIMITIVE_TRIANGLE_STRIP, 0, 4);
+
+	render->bindFX(0);
+	render->bindTexture(0);
+	render->bindVAO(0);
+}
+
+void StandardRenderer::set2D(const Vector2& size)
+{
+	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+	render->setViewport(0, 0, size.x, size.y);
+
+	// set ortho projection
+	render->setMatrixMode(MATRIX_PROJECTION);
+	render->loadIdentity();
+
+	render->setOrthoView(0.0f, size.x, size.y, 0.0f, 1.0f, -1.0f);
+
+	render->setMatrixMode(MATRIX_MODELVIEW);
+	render->loadIdentity();
+
+	render->enableBlending();
+	render->setBlendingMode(BLENDING_ALPHA);
+
+	render->disableDepthTest();
+	render->disableCullFace();
+}
+
+void StandardRenderer::loadShader(const char* vert, const char* frag, unsigned int* fx)
+{
+	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+
+	unsigned int vertShad, pixShad;
+	render->createVertexShader(&vertShad);
+	bool success = render->sendShaderSource(vertShad, vert);
+
+	render->createPixelShader(&pixShad);
+	success &= render->sendShaderSource(pixShad, frag);
+
+	if (!success)
+	{
+		*fx = 0;
+	}
+	else
+	{
+		render->createFX(fx, vertShad, pixShad);
+		render->deleteShader(&vertShad, *fx);
+		render->deleteShader(&pixShad, *fx);
+	}
+}
+
+void StandardRenderer::drawText2D(OText* text, float x, float y, float rotation)
+{
+	RenderingContext* renderContext =
+		NeoEngine::getInstance()->getRenderingContext();
+
+	text->setPosition(Vector3(x, y, 0));
+	text->setRotation(Quaternion(0, 0, rotation));
+	text->updateMatrix();
+
+	renderContext->pushMatrix();
+	renderContext->multMatrix(text->getMatrix());
+
+	renderContext->enableTexture();
+
+	drawText(text);
+	renderContext->disableTexture();
+	renderContext->popMatrix();
+}
+
+/*OText* StandardRenderer::create2DText(const char* font, float size)
+{
+	if (!font)
+		return NULL;
+
+	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
+
+	char file[256];
+	getGlobalFilename(file, system->getWorkingDirectory(), font);
+
+	OText* text;
+	text = new OText(NeoEngine::getInstance()->getLevel()->loadFont(file));
+	text->setSize(size);
+
+	return text;
+}*/

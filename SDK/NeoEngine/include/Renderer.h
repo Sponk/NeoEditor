@@ -84,6 +84,73 @@ public:
 	 */
 	virtual void drawEntity(OEntity* entity, OCamera* camera) = 0;
 
+	/**
+	 * @brief Draws a colored 2D quad to the screen.
+	 *
+	 * @param position The 2D coordinates of the top left vertex.
+	 * @param size The 2D width/height of the quad.
+	 * @param color The color to draw with.
+	 * @param rotation The angle to rotate around.
+	 */
+	virtual void drawColoredQuad(const Vector2& position, const Vector2& size, const Vector4& color,
+		float rotation) = 0;
+
+	/**
+	* @brief Draws a textured 2D quad to the screen.
+	*
+	* @param position The 2D coordinates of the top left vertex.
+	* @param size The 2D width/height of the quad.
+	* @param texture The texture to use.
+	* @param rotation The angle to rotate around.
+	* @param scale The scale of the texture.
+	* @param flip A vector indicating mirroring around several axis.
+	* @param texcoords The texture coordinates to use.
+	*/
+	virtual void drawTexturedQuad(const Vector2& position, const Vector2& size, int texture,
+		float rotation, const Vector2& scale, const Vector2& flip, const Vector4& texcoords) = 0;
+
+	/**
+	* @brief Draws a textured 2D quad to the screen.
+	*
+	* @param position The 2D coordinates of the top left vertex.
+	* @param size The 2D width/height of the quad.
+	* @param texture The texture to use.
+	* @param rotation The angle to rotate around.
+	* @param scale The scale of the texture.
+	* @param flip A vector indicating mirroring around several axis.
+	*/
+	virtual void drawTexturedQuad(const Vector2& position, const Vector2& size, int texture,
+		float rotation, const Vector2& scale, const Vector2& flip) = 0;
+
+	/**
+	* @brief Draws a textured 2D quad to the screen.
+	*
+	* @param position The 2D coordinates of the top left vertex.
+	* @param size The 2D width/height of the quad.
+	* @param texture The texture to use.
+	* @param rotation The angle to rotate around.
+	* @param scale The scale of the texture.
+	*/
+	virtual void drawTexturedQuad(const Vector2& position, const Vector2& size, int texture,
+		float rotation, const Vector2& scale) = 0;
+
+	/**
+	* @brief Draws a textured 2D quad to the screen.
+	*
+	* @param position The 2D coordinates of the top left vertex.
+	* @param size The 2D width/height of the quad.
+	* @param texture The texture to use.
+	* @param rotation The angle to rotate around.
+	*/
+	virtual void drawTexturedQuad(const Vector2& position, const Vector2& size, int texture, float rotation) = 0;
+
+	/**
+	* @brief Sets a 2D viewport with the given width and height.
+	*
+	* @param size The 2D vector containing the width and height.
+	*/
+	virtual void set2D(const Vector2& size) = 0;
+
 	virtual void stopThreads() {}
 	virtual void startThreads() {}
 	virtual void KillThreads() {}

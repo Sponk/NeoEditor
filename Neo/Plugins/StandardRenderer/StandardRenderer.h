@@ -36,7 +36,14 @@ class StandardRenderer : public Renderer
     FXRef* m_shaders[NUM_SHADERS];
     unsigned int m_fx[NUM_SHADERS];
 
-    unsigned int m_framebufferID;
+	unsigned int m_texturedFx;
+	unsigned int m_colorOnlyFx;
+	unsigned int m_textureVao;
+	unsigned int m_texcoordVbo;
+	unsigned int m_vertexVbo;
+	unsigned int m_colorVao;
+    
+	unsigned int m_framebufferID;
     unsigned int m_finalFramebufferID;
 
     unsigned int m_gbufferTexID;
@@ -105,6 +112,8 @@ private:
 	
 	float getDistanceToCam(OCamera * camera, const Vector3 & pos);
 	void updateSkinning(Mesh* mesh, Armature* armature);
+	void loadShader(const char* vert, const char* frag, unsigned int* fx);
+	void init2DVao(unsigned int fx, unsigned int* vao);
 	
 public:
 	
@@ -125,13 +134,30 @@ public:
 	// extra
 	void drawText(OText * textObj, OCamera* camera);
 	void drawText(OText * textObj) { drawText(textObj, NULL);  }
+	void drawText2D(OText* text, float x, float y, float rotation);
 
 	void drawEntity(OEntity* e, OCamera* camera);
+
 	void drawDisplay(OEntity* e, SubMesh* mesh, MaterialDisplay* display, OCamera* camera);
 	void drawSubmesh(OEntity* e, SubMesh* submesh, OCamera* camera);
 
 	void initialize();
 	void smallInit(unsigned int width, unsigned int height);
+	void set2D(const Vector2& size);
+		
+	void drawTexturedQuad(const Vector2& position, const Vector2& size, int texture,
+		float rotation, const Vector2& scale, const Vector2& flip, const Vector4& texcoords);
+
+	void drawTexturedQuad(const Vector2& position, const Vector2& size, int texture,
+		float rotation, const Vector2& scale, const Vector2& flip);
+
+	void drawTexturedQuad(const Vector2& position, const Vector2& size, int texture,
+		float rotation, const Vector2& scale);
+
+	void drawTexturedQuad(const Vector2& position, const Vector2& size, int texture, float rotation);
+	
+	void drawColoredQuad(const Vector2& position, const Vector2& size, const Vector4& color,
+		float rotation);
 
 private:
 
