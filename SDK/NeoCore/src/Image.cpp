@@ -24,7 +24,6 @@
 //========================================================================
 
 #include <NeoCore.h>
-#include <cstdio>
 #include <cstdlib>
 #include <algorithm>
 
@@ -294,4 +293,17 @@ void Image::rotate(int angle)
 	}
 
 	free(pixArray);
+}
+
+void Image::fill(const Vector2& pos, const Vector2& size, void* color)
+{
+	size_t width = pos.x + size.x;
+	size_t height = pos.y + size.y;
+
+#pragma omp parallel for
+	for (int i = pos.x; i < width; i++)
+	{
+		for (int j = pos.y; j < height; j++)
+			writePixel(i, j, color);
+	}
 }

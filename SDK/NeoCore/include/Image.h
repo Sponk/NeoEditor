@@ -138,6 +138,15 @@ public:
 	void rotate(int angle);
 
 	/**
+	 * @brief Fills a rectangle in the image frame buffer.
+	 *
+	 * @param	pos			 	The position.
+	 * @param	size		 	The size.
+	 * @param [in,out]	color	If non-null, the color to use.
+	 */
+	void fill(const Vector2& pos, const Vector2& size, void* color);
+
+	/**
 	 * @brief Retrieves the internal data pointer.
 	 * @return A void pointer to the internal pixel data.
 	 */
