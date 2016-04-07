@@ -18,6 +18,7 @@
 #include "BinFontLoader.h"
 #include "LevelLoad.h"
 #include "LevelSave.h"
+#include "FreetypeLoader.h"
 
 using namespace Neo;
 
@@ -43,6 +44,11 @@ void StartPlugin()
 
 	engine->getLevelLoader()->addLoader(xmlLevelLoad);
 	engine->getLevelLoader()->addSaver(M_saveLevel);
+
+	engine->getFontLoader()->addLoader(M_loadFont);
+	engine->getFontLoader()->addLoader(M_loadBinFont);
+
+	engine->getSoundLoader()->addLoader(M_loadSound);
 }
 
 void EndPlugin()
