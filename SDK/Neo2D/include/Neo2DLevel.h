@@ -27,7 +27,7 @@ namespace Neo2D
 
 		void clear() { m_level.clear(); }
 
-		Neo::OText* Neo2D::Neo2DLevel::createText(const char* font, float size);
+		Neo::OText* createText(const char* font, float size);
 		static Neo2DLevel* getInstance();
 	};
 }
