@@ -31,8 +31,10 @@ class NEO2D_EXPORT Widget : public Object2D
 	std::function<void(Widget&, void*)> m_callback;
 	void* m_data;
 
+	Neo::String m_label;
+
 public:
-	Widget(int x, int y, unsigned int w, unsigned int h, shared_ptr<Object2D> parent, shared_ptr<Theme> theme = nullptr);
+	Widget(int x, int y, unsigned int w, unsigned int h, const char* label, shared_ptr<Object2D> parent, shared_ptr<Theme> theme = nullptr);
 	virtual ~Widget() {}
 
 	void draw(const Neo::Vector2& offset)
@@ -59,6 +61,8 @@ public:
 
 	WIDGET_STATE getState() const { return m_state; }
 	void setCallback(std::function<void(Widget&, void*)> cb, void* data) { m_callback = cb; m_data = data; }
+
+	const char* getLabel() { return m_label.getSafeString(); }
 
 protected:
 	void setState(WIDGET_STATE s) { m_state = s; }

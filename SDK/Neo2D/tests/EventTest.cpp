@@ -20,7 +20,7 @@ public:
 TEST(EventTest, EventDetection)
 {
 	bool callbackCalled = false;
-	Neo2D::Gui::Widget widget(0,0,0,0,nullptr);
+	Neo2D::Gui::Widget widget(0,0,0,0,nullptr,nullptr);
 
 	shared_ptr<Neo2D::Gui::Event> event = make_shared<TestEvent>(widget, [](Neo2D::Gui::Widget& w, const Neo2D::Gui::Event&, void* f) { *((bool*)f) = true; }, &callbackCalled);
 	widget.registerEvent(event);
@@ -33,7 +33,7 @@ TEST(EventTest, ForwardEventDetection)
 {
 	int callbackCalled = 0;
 	Neo2D::Gui::Container c(0,0,0,0,nullptr);
-	shared_ptr<Neo2D::Gui::Widget> widget = make_shared<Neo2D::Gui::Widget>(0,0,0,0,nullptr);
+	shared_ptr<Neo2D::Gui::Widget> widget = make_shared<Neo2D::Gui::Widget>(0,0,0,0,nullptr,nullptr);
 
 	c.addWidget(widget);
 	shared_ptr<Neo2D::Gui::Event> event = make_shared<TestEvent>(*widget, [](Neo2D::Gui::Widget& w, const Neo2D::Gui::Event&, void* f) { *((bool*)f) = true; }, &callbackCalled);
@@ -55,7 +55,7 @@ TEST(EventTest, MouseOverTest_false)
 
 	mouse.moveCursor(Vector2(15, 15));
 
-	Neo2D::Gui::Widget widget(0, 0, 3, 3, nullptr);
+	Neo2D::Gui::Widget widget(0, 0, 3, 3, nullptr, nullptr);
 	shared_ptr<Neo2D::Gui::Event> event = make_shared<Neo2D::Gui::MouseOverEvent>(widget, [](Neo2D::Gui::Widget& w, const Neo2D::Gui::Event&, void* f) { (*((int*)f))++; }, &callbackCalled);
 
 	widget.registerEvent(event);
@@ -76,7 +76,7 @@ TEST(EventTest, MouseOverTest_true)
 
 	mouse.moveCursor(Vector2(15, 15));
 
-	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr);
+	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr, nullptr);
 	shared_ptr<Neo2D::Gui::Event> event = make_shared<Neo2D::Gui::MouseOverEvent>(widget, [](Neo2D::Gui::Widget& w, const Neo2D::Gui::Event&, void* f) { (*((int*)f))++; }, &callbackCalled);
 
 	widget.registerEvent(event);
@@ -96,7 +96,7 @@ TEST(EventTest, MouseLeaveTest_false)
 
 	mouse.moveCursor(Vector2(5, 5)); // Place cursor inside widget
 
-	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr);
+	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr, nullptr);
 	shared_ptr<Neo2D::Gui::Event> event = make_shared<Neo2D::Gui::MouseLeaveEvent>(widget, [](Neo2D::Gui::Widget& w, const Neo2D::Gui::Event&, void* f) { (*((int*)f))++; }, &callbackCalled);
 
 	widget.registerEvent(event);
@@ -114,7 +114,7 @@ TEST(EventTest, MouseLeaveTest_true)
 	Neo::Mouse& mouse = input.getMouse();
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 
-	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr);
+	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr, nullptr);
 	shared_ptr<Neo2D::Gui::Event> event = make_shared<Neo2D::Gui::MouseLeaveEvent>(widget, [](Neo2D::Gui::Widget& w, const Neo2D::Gui::Event&, void* f) { (*((int*)f))++; }, &callbackCalled);
 
 	widget.registerEvent(event);
@@ -136,7 +136,7 @@ TEST(EventTest, MouseLeftClickTest)
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 	Mouse& mouse = input.getMouse();
 
-	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr);
+	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr, nullptr);
 	shared_ptr<Neo2D::Gui::Event> event = make_shared<Neo2D::Gui::MouseLeftClickEvent>(widget, [](Neo2D::Gui::Widget& w, const Neo2D::Gui::Event&, void* f) { (*((int*)f))++; }, &callbackCalled);
 
 	widget.registerEvent(event);
@@ -161,7 +161,7 @@ TEST(EventTest, MouseMiddleClickTest)
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 	Mouse& mouse = input.getMouse();
 
-	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr);
+	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr, nullptr);
 	shared_ptr<Neo2D::Gui::Event> event = make_shared<Neo2D::Gui::MouseMiddleClickEvent>(widget, [](Neo2D::Gui::Widget& w, const Neo2D::Gui::Event&, void* f) { (*((int*)f))++; }, &callbackCalled);
 
 	widget.registerEvent(event);
@@ -186,7 +186,7 @@ TEST(EventTest, MouseRightClickTest)
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 	Neo::Mouse& mouse = input.getMouse();
 
-	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr);
+	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr, nullptr);
 	shared_ptr<Neo2D::Gui::Event> event = make_shared<Neo2D::Gui::MouseRightClickEvent>(widget, [](Neo2D::Gui::Widget& w, const Neo2D::Gui::Event&, void* f) { (*((int*)f))++; }, &callbackCalled);
 
 	widget.registerEvent(event);
@@ -211,7 +211,7 @@ TEST(EventTest, MouseLeftReleaseTest)
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 	Mouse& mouse = input.getMouse();
 
-	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr);
+	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr, nullptr);
 	shared_ptr<Neo2D::Gui::Event> event = make_shared<Neo2D::Gui::MouseLeftReleaseEvent>(widget, [](Neo2D::Gui::Widget& w, const Neo2D::Gui::Event&, void* f) { (*((int*)f))++; }, &callbackCalled);
 
 	widget.registerEvent(event);
@@ -236,7 +236,7 @@ TEST(EventTest, MouseMiddleReleaseTest)
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 	Mouse& mouse = input.getMouse();
 
-	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr);
+	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr, nullptr);
 	shared_ptr<Neo2D::Gui::Event> event = make_shared<Neo2D::Gui::MouseMiddleReleaseEvent>(widget, [](Neo2D::Gui::Widget& w, const Neo2D::Gui::Event&, void* f) { (*((int*)f))++; }, &callbackCalled);
 
 	widget.registerEvent(event);
@@ -261,7 +261,7 @@ TEST(EventTest, MouseRightReleaseTest)
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 	Mouse& mouse = input.getMouse();
 
-	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr);
+	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr, nullptr);
 	shared_ptr<Neo2D::Gui::Event> event = make_shared<Neo2D::Gui::MouseRightReleaseEvent>(widget, [](Neo2D::Gui::Widget& w, const Neo2D::Gui::Event&, void* f) { (*((int*)f))++; }, &callbackCalled);
 
 	widget.registerEvent(event);
@@ -285,7 +285,7 @@ TEST(EventTest, MouseMoveTest)
 	Neo::Mouse& mouse = input.getMouse();
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 
-	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr);
+	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr, nullptr);
 	shared_ptr<Neo2D::Gui::Event> event = make_shared<Neo2D::Gui::MouseMoveEvent>(widget, [](Neo2D::Gui::Widget &w, const Neo2D::Gui::Event &e, void *f)
 	{ *((Neo::Vector2 *) f) = dynamic_cast<const Neo2D::Gui::MouseMoveEvent&>(e).getDelta(); }, &callbackDelta);
 
@@ -307,8 +307,8 @@ TEST(EventTest, CanvasTest)
 	class TestWidget : public Neo2D::Gui::Widget
 	{
 	public:
-		TestWidget(int x, int y, unsigned int w, unsigned int h, shared_ptr<Object2D> parent)
-		: Widget(x, y, w, h, parent) {}
+		TestWidget(int x, int y, unsigned int w, unsigned int h, const char* label, shared_ptr<Object2D> parent)
+		: Widget(x, y, w, h, label, parent) {}
 
 		void update(float dt)
 		{
@@ -317,7 +317,7 @@ TEST(EventTest, CanvasTest)
 	};
 
 	Neo2D::Canvas canvas;
-	canvas.addObject2D(make_shared<TestWidget>(0,0,0,0, nullptr));
+	canvas.addObject2D(make_shared<TestWidget>(0,0,0,0, nullptr, nullptr));
 
 	canvas.update(0.0f);
 	ASSERT_EQ(1, called);

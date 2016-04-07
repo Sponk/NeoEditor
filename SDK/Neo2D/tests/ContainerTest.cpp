@@ -14,8 +14,8 @@ public:
 TEST(ContainerTest, FilterTest)
 {
 	shared_ptr<Neo2D::Gui::Container> c = make_shared<Neo2D::Gui::Container>(0,0,0,0,nullptr);
-	c->addWidget(make_shared<Neo2D::Gui::Widget>(0,0,5,5,c));
-	c->addWidget(make_shared<Neo2D::Gui::Widget>(1,0,5,5,c));
+	c->addWidget(make_shared<Neo2D::Gui::Widget>(0,0,5,5,"", c));
+	c->addWidget(make_shared<Neo2D::Gui::Widget>(1,0,5,5,"", c));
 	c->setFilter(make_shared<TestFilter>());
 
 	c->updateFilter();
@@ -37,8 +37,8 @@ public:
 TEST(ContainerTest, LayoutTest)
 {
 	shared_ptr<Neo2D::Gui::Container> c = make_shared<Neo2D::Gui::Container>(0,0,0,0,nullptr);
-	c->addWidget(make_shared<Neo2D::Gui::Widget>(0,0,5,5,c));
-	c->addWidget(make_shared<Neo2D::Gui::Widget>(1,0,5,5,c));
+	c->addWidget(make_shared<Neo2D::Gui::Widget>(0,0,5,5,"",c));
+	c->addWidget(make_shared<Neo2D::Gui::Widget>(1,0,5,5,"",c));
 
 	c->setLayout(make_shared<TestLayout>());
 	c->updateLayout();

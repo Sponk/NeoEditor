@@ -26,7 +26,7 @@ protected:
 
 public:
 	Container(int x, int y, unsigned int w, unsigned int h, shared_ptr<Object2D> parent)
-		: Widget(x, y, w, h, parent), m_layout(nullptr), m_filter(nullptr)
+		: Widget(x, y, w, h, nullptr, parent), m_layout(nullptr), m_filter(nullptr)
 	{ }
 
 	size_t addWidget(shared_ptr<Widget> o)
