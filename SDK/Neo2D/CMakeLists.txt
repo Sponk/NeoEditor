@@ -20,14 +20,18 @@ SET(HEADERS
 	include/FilterStrategy.h
 	include/Event.h
 	include/MouseEvents.h
-	include/Canvas.h)
+	include/Canvas.h
+	include/Button.h
+	include/Neo2DLevel.h)
 
 SET(SOURCES
 	src/Object2D.cpp
 	src/Widget.cpp
 	src/Event.cpp
 	src/Neo2D.cpp
-	include/Canvas.cpp)
+	src/Canvas.cpp
+	src/Button.cpp
+	src/Neo2DLevel.cpp)
 
 IF(NOT ANDROID AND NOT EMSCRIPTEN)
 	ADD_LIBRARY(Neo2D SHARED ${SOURCES} ${HEADERS})
