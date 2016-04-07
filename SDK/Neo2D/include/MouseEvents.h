@@ -18,85 +18,169 @@ enum MOUSE_EVENT_TYPES
 	MOUSE_LEFT_CLICK = 3,
 	MOUSE_MIDDLE_CLICK = 4,
 	MOUSE_RIGHT_CLICK = 5,
-	MOUSE_SCROLL = 6
+	MOUSE_SCROLL = 6,
+	MOUSE_LEFT_RELEASE = 7,
+	MOUSE_MIDDLE_RELEASE = 8,
+	MOUSE_RIGHT_RELEASE = 9
 };
 
 class NEO2D_EXPORT MouseOverEvent : public Event
 {
 	bool mouseOver = false;
 public:
-	virtual void update(Widget &w, float dt)
+	MouseOverEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d) 
+		: Event(p, cb, d) {}
+
+	virtual void update(float dt)
 	{
+		Neo::Mouse& mouse = Neo::NeoEngine::getInstance()->getInputContext()->getMouse();
+
 		if(!mouseOver)
 		{
-			Neo::Mouse& mouse = NeoEngine::getInstance()->getInputContext()->getMouse();
-			if((mouseOver = w.contains(mouse.getPosition())) == true)
-				handle(w);
+			if((mouseOver = getReceiver().contains(mouse.getPosition())) == true)
+				handle();
 		}
 		else
-			mouseOver = w.contains(getMousePosition());
+			mouseOver = getReceiver().contains(mouse.getPosition());
 	}
 
-	virtual unsigned int getType() { return 1; }
+	virtual unsigned int getType() const { return MOUSE_OVER; }
 };
 
 class NEO2D_EXPORT MouseLeaveEvent : public Event
 {
 	bool mouseOver = false;
 public:
-	virtual void update(Widget &w, float dt)
+	MouseLeaveEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
+		: Event(p, cb, d) {}
+
+	virtual void update(float dt)
 	{
-		Neo::Mouse& mouse = NeoEngine::getInstance()->getInputContext()->getMouse();
+		Neo::Mouse& mouse = Neo::NeoEngine::getInstance()->getInputContext()->getMouse();
 		if(mouseOver)
 		{
-			if((mouseOver = w.contains(mouse.getPosition())) == false)
-				handle(w);
+			if((mouseOver = getReceiver().contains(mouse.getPosition())) == false)
+				handle();
 		}
 		else
-			mouseOver = w.contains(mouse.getPosition());
+			mouseOver = getReceiver().contains(mouse.getPosition());
 	}
+
+	virtual unsigned int getType()  const { return MOUSE_LEAVE; }
 };
 
 class NEO2D_EXPORT MouseLeftClickEvent : public Event
 {
 public:
-	virtual void update(Widget &w, float dt)
+	MouseLeftClickEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d) 
+		: Event(p, cb, d) {}
+
+	virtual void update(float dt)
 	{
 		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 		Neo::InputContext* input = engine->getInputContext();
-		Neo::Mouse& mouse = NeoEngine::getInstance()->getInputContext()->getMouse();
+		Neo::Mouse& mouse = input->getMouse();
 
-		if(input->getMouse().onKeyDown(MOUSE_BUTTON_LEFT) && w.contains(mouse.getPosition()))
-			handle(w);
+		if(input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_LEFT) && getReceiver().contains(mouse.getPosition()))
+			handle();
 	}
+
+	virtual unsigned int getType()  const { return MOUSE_LEFT_CLICK; }
 };
 
 class NEO2D_EXPORT MouseMiddleClickEvent : public Event
 {
 public:
-	virtual void update(Widget &w, float dt)
+	MouseMiddleClickEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
+		: Event(p, cb, d) {}
+
+	virtual void update(float dt)
 	{
 		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 		Neo::InputContext* input = engine->getInputContext();
-		Neo::Mouse& mouse = NeoEngine::getInstance()->getInputContext()->getMouse();
+		Neo::Mouse& mouse = input->getMouse();
 
-		if(input->getMouse().onKeyDown(MOUSE_BUTTON_MIDDLE) && w.contains(mouse.getPosition()))
-			handle(w);
+		if(input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_MIDDLE) && getReceiver().contains(mouse.getPosition()))
+			handle();
 	}
+
+	virtual unsigned int getType()  const { return MOUSE_MIDDLE_CLICK; }
 };
 
 class NEO2D_EXPORT MouseRightClickEvent : public Event
 {
 public:
-	virtual void update(Widget &w, float dt)
+	MouseRightClickEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d) 
+		: Event(p, cb, d) {}
+
+	virtual void update(float dt)
 	{
 		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 		Neo::InputContext* input = engine->getInputContext();
-		Neo::Mouse& mouse = NeoEngine::getInstance()->getInputContext()->getMouse();
+		Neo::Mouse& mouse = input->getMouse();
 
-		if(input->getMouse().onKeyDown(MOUSE_BUTTON_RIGHT) && w.contains(mouse.getPosition()))
-			handle(w);
+		if(input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_RIGHT) && getReceiver().contains(mouse.getPosition()))
+			handle();
 	}
+
+	virtual unsigned int getType() const { return MOUSE_RIGHT_CLICK; }
+};
+
+class NEO2D_EXPORT MouseLeftReleaseEvent : public Event
+{
+public:
+	MouseLeftReleaseEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
+		: Event(p, cb, d) {}
+
+	virtual void update(float dt)
+	{
+		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+		Neo::InputContext* input = engine->getInputContext();
+		Neo::Mouse& mouse = input->getMouse();
+
+		if (input->getMouse().onKeyUp(Neo::MOUSE_BUTTON_LEFT) && getReceiver().contains(mouse.getPosition()))
+			handle();
+	}
+
+	virtual unsigned int getType() const { return MOUSE_LEFT_RELEASE; }
+};
+
+class NEO2D_EXPORT MouseMiddleReleaseEvent : public Event
+{
+public:
+	MouseMiddleReleaseEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
+		: Event(p, cb, d) {}
+
+	virtual void update(float dt)
+	{
+		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+		Neo::InputContext* input = engine->getInputContext();
+		Neo::Mouse& mouse = input->getMouse();
+
+		if (input->getMouse().onKeyUp(Neo::MOUSE_BUTTON_MIDDLE) && getReceiver().contains(mouse.getPosition()))
+			handle();
+	}
+
+	virtual unsigned int getType()  const { return MOUSE_MIDDLE_RELEASE; }
+};
+
+class NEO2D_EXPORT MouseRightReleaseEvent : public Event
+{
+public:
+	MouseRightReleaseEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
+		: Event(p, cb, d) {}
+
+	virtual void update(float dt)
+	{
+		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+		Neo::InputContext* input = engine->getInputContext();
+		Neo::Mouse& mouse = input->getMouse();
+
+		if (input->getMouse().onKeyUp(Neo::MOUSE_BUTTON_RIGHT) && getReceiver().contains(mouse.getPosition()))
+			handle();
+	}
+
+	virtual unsigned int getType()  const { return MOUSE_RIGHT_RELEASE; }
 };
 
 class NEO2D_EXPORT MouseMoveEvent : public Event
@@ -104,18 +188,21 @@ class NEO2D_EXPORT MouseMoveEvent : public Event
 	Neo::Vector2 delta;
 	Neo::Vector2 lastPosition = Neo::Vector2(0,0);
 public:
-	virtual void update(Widget &w, float dt)
+	MouseMoveEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
+		: Event(p, cb, d) {}
+
+	virtual void update(float dt)
 	{
 		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 		Neo::InputContext* input = engine->getInputContext();
-		Neo::Mouse& mouse = NeoEngine::getInstance()->getInputContext()->getMouse();
+		Neo::Mouse& mouse = input->getMouse();
 		Neo::Vector2 mpos = mouse.getPosition();
 
 		if(mpos != lastPosition)
 		{
 			delta = mpos - lastPosition;
 			lastPosition = mpos;
-			handle(w);
+			handle();
 		}
 	}
 
@@ -128,6 +215,8 @@ public:
 	{
 		return lastPosition;
 	}
+
+	virtual unsigned int getType() { return MOUSE_MOVED; }
 };
 
 }

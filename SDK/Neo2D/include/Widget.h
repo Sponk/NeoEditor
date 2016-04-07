@@ -4,68 +4,65 @@
 #include "Neo2D.h"
 #include "Object2D.h"
 #include "Event.h"
-#include <vector>
+#include "Theme.h"
 #include <memory>
-#include <functional>
-#include <map>
+
+#include <NeoEngine.h>
 
 namespace Neo2D
 {
 namespace Gui
 {
 
+enum WIDGET_STATE
+{
+	WIDGET_NORMAL,
+	WIDGET_HOVER,
+	WIDGET_SELECTED,
+	WIDGET_TRIGGERED
+};
+
 class NEO2D_EXPORT Widget : public Object2D
 {
-	//std::vector<shared_ptr<Event>> m_events;
+	std::vector<std::shared_ptr<Event>> m_events;
+	std::shared_ptr<Theme> m_theme;
+	WIDGET_STATE m_state;
 
-	struct EventHandler
-	{
-		EventHandler() {}
-		EventHandler(shared_ptr<Event> e) : event(e), data(nullptr), callback(nullptr) {}
-		EventHandler(shared_ptr<Event> e, std::function<void(Widget&, const Event&, void*)> cb) : event(e), callback(cb), data(nullptr) {}
-		EventHandler(shared_ptr<Event> e, std::function<void(Widget&, const Event&, void*)> cb, void* d) : event(e), callback(cb), data(d) {}
-
-		shared_ptr<Event> event;
-		std::function<void(Widget&, const Event&, void*)> callback;
-		void* data;
-	};
-
-	std::map<unsigned int, EventHandler> m_events;
+	std::function<void(Widget&, void*)> m_callback;
+	void* m_data;
 
 public:
-	Widget(int x, int y, unsigned int w, unsigned int h, shared_ptr<Object2D> parent)
-		: Object2D(x, y, w, h, parent)
-	{}
+	Widget(int x, int y, unsigned int w, unsigned int h, shared_ptr<Object2D> parent, shared_ptr<Theme> theme = nullptr);
+	virtual ~Widget() {}
 
-	void draw(const Neo::Vector2&) {}
+	void draw(const Neo::Vector2& offset)
+	{
+		if (m_theme != nullptr) m_theme->draw(this, offset);
+	}
+
 	void update(float dt)
 	{
 		if(!getParent())
 			for(auto e : m_events)
-				e.second.event->update(*this, dt);
+				e->update(dt);
 	}
 
-	virtual void handle(Event& e)
-	{
-		const auto iter = m_events.find(e.getType());
-		if(iter == m_events.end())
-			return;
-
-		iter->second.callback(*this, e, iter->second.data);
-	}
-
+	virtual void handle(const Event& e) {}
+	
 	void registerEvent(shared_ptr<Event> e)
 	{
-		registerEvent(e, nullptr, nullptr);
-	}
-
-	void registerEvent(shared_ptr<Event> e, std::function<void(Widget&, const Event&, void*)> cb, void* d)
-	{
-		m_events[e->getType()] = EventHandler(e, cb, d);
+		m_events.push_back(e);
 
 		if(getParent())
-			dynamic_cast<Widget*>(getParent().get())->registerEvent(e, cb, d);
+			dynamic_cast<Widget*>(getParent().get())->registerEvent(e);
 	}
+
+	WIDGET_STATE getState() const { return m_state; }
+	void setCallback(std::function<void(Widget&, void*)> cb, void* data) { m_callback = cb; m_data = data; }
+
+protected:
+	void setState(WIDGET_STATE s) { m_state = s; }
+	void doCallback() { if (m_callback) m_callback(*this, m_data); }
 };
 
 }

@@ -1,7 +1,9 @@
 #include <Event.h>
 #include <Widget.h>
+#include <NeoEngine.h>
 
-void Neo2D::Gui::Event::handle(Neo2D::Gui::Widget& w)
+void Neo2D::Gui::Event::handle()
 {
-	w.handle(*this);
+	if(m_callback != nullptr) m_callback(m_receiver, *this, m_data);
+	m_receiver.handle(*this);
 }
