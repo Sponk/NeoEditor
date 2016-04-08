@@ -1,6 +1,4 @@
 #include <Button.h>
-#include <Widget.h>
-#include <NeoEngine.h>
 #include <MouseEvents.h>
 #include <Neo2DLevel.h>
 
@@ -14,6 +12,8 @@ public:
 	ButtonTheme()
 	{
 		text = Neo2D::Neo2DLevel::getInstance()->createText("assets/default.ttf", 12);
+		text->setAlign(TEXT_ALIGN_CENTER);
+		text->setColor(Vector4(0,0,0,1));
 	}
 
 	virtual void draw(Neo2D::Gui::Widget* widget, const Neo::Vector2& offset)
@@ -21,25 +21,38 @@ public:
 		NeoEngine* engine = NeoEngine::getInstance();
 		Renderer* renderer = engine->getRenderer();
 
+		text->setText(widget->getLabel());
+
 		switch(widget->getState())
 		{
 		case Neo2D::Gui::WIDGET_HOVER:
-			renderer->drawColoredQuad(widget->getPosition(), widget->getSize(), Vector4(1, 0, 0, 1), 0);
-			break;
+			//renderer->drawColoredQuad(widget->getPosition(), widget->getSize(), Vector4(0.5, 0.5, 0.5, 1), 0);
+			//break;
 
 		case Neo2D::Gui::WIDGET_NORMAL:
-			renderer->drawColoredQuad(widget->getPosition(), widget->getSize(), Vector4(0, 0, 1, 1), 0);
+			renderer->drawColoredQuad(widget->getPosition(), widget->getSize(), Vector4(0.1, 0.1, 0.1, 1), 0);
+			renderer->drawColoredQuad(widget->getPosition(), widget->getSize() - Vector2(1,2), Vector4(1, 1, 1, 1), 0);
+			renderer->drawColoredQuad(widget->getPosition() + Vector2(1,1), widget->getSize() - Vector2(2,2), Vector4(0.3, 0.3, 0.3, 1), 0);
+			renderer->drawColoredQuad(widget->getPosition() + Vector2(1,1), widget->getSize() - Vector2(3,3), Vector4(0.8, 0.8, 0.8, 1), 0);
+
+			draw2DText(text, widget->getPosition().x  + 0.5f * widget->getSize().x,
+						   widget->getPosition().y + text->getSize() * 1.25, 0.0f);
+
 			break;
 
 		case Neo2D::Gui::WIDGET_SELECTED:
-			renderer->drawColoredQuad(widget->getPosition(), widget->getSize(), Vector4(1, 1, 0, 1), 0);
+			renderer->drawColoredQuad(widget->getPosition(), widget->getSize(), Vector4(0.0, 0.0, 0.0, 1), 0);
+			renderer->drawColoredQuad(widget->getPosition(), widget->getSize() - Vector2(1,1), Vector4(0.4, 0.4, 0.4, 1), 0);
+			renderer->drawColoredQuad(widget->getPosition() + Vector2(1,1), widget->getSize() - Vector2(2,2), Vector4(0.3, 0.3, 0.3, 1), 0);
+			renderer->drawColoredQuad(widget->getPosition() + Vector2(1,1), widget->getSize() - Vector2(3,3), Vector4(0.8, 0.8, 0.8, 1), 0);
+
+			draw2DText(text, widget->getPosition().x  + 0.51f * widget->getSize().x,
+					   widget->getPosition().y + text->getSize() * 1.25 + 0.1f * widget->getSize().y, 0.0f);
+
 			break;
 
 		default: break;
 		}
-
-		text->setText(widget->getLabel());
-		draw2DText(text, widget->getPosition().x, widget->getPosition().y + text->getSize() * 1.25, 0.0f);
 	}
 
 	void draw2DText(OText* text, float x, float y, float rotation)
