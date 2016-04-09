@@ -63,6 +63,7 @@ public:
 	void setCallback(std::function<void(Widget&, void*)> cb, void* data) { m_callback = cb; m_data = data; }
 
 	const char* getLabel() { return m_label.getSafeString(); }
+	void setLabel(const char* label) { m_label.set(label); }
 
 protected:
 	void setState(WIDGET_STATE s) { m_state = s; }

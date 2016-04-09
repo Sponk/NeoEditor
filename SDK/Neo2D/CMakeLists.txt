@@ -23,7 +23,8 @@ SET(HEADERS
 	include/Canvas.h
 	include/Button.h
 	include/Neo2DLevel.h
-	include/Label.h)
+	include/Label.h
+	include/CheckButton.h)
 
 SET(SOURCES
 	src/Object2D.cpp
@@ -33,7 +34,8 @@ SET(SOURCES
 	src/Canvas.cpp
 	src/Button.cpp
 	src/Neo2DLevel.cpp
-	src/Label.cpp)
+	src/Label.cpp
+	src/CheckButton.cpp)
 
 IF(NOT ANDROID AND NOT EMSCRIPTEN)
 	ADD_LIBRARY(Neo2D SHARED ${SOURCES} ${HEADERS})
@@ -44,7 +46,7 @@ ELSEIF(EMSCRIPTEN)
 ENDIF()
 
 IF(NOT NO_TESTS)
-	ADD_EXECUTABLE(Neo2DTest tests/main.cpp tests/Object2DTest.cpp tests/ContainerTest.cpp tests/EventTest.cpp tests/ButtonTest.cpp)
+	ADD_EXECUTABLE(Neo2DTest tests/main.cpp tests/Object2DTest.cpp tests/ContainerTest.cpp tests/EventTest.cpp tests/ButtonTest.cpp tests/CheckButtonTest.cpp)
 	TARGET_LINK_LIBRARIES(Neo2DTest Neo2D ${NEO_CORE_LIBRARIES} ${NEO_ENGINE_LIBRARIES} ${GTEST_LIBRARIES})
 ENDIF()
 
