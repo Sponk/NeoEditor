@@ -22,6 +22,7 @@ public:
 		Renderer* renderer = engine->getRenderer();
 
 		text->setText(widget->getLabel());
+		const Neo::Vector2 position = widget->getPosition() + offset;
 
 		switch(widget->getState())
 		{
@@ -30,24 +31,24 @@ public:
 			//break;
 
 		case Neo2D::Gui::WIDGET_NORMAL:
-			renderer->drawColoredQuad(widget->getPosition(), widget->getSize(), Vector4(0.1, 0.1, 0.1, 1), 0);
-			renderer->drawColoredQuad(widget->getPosition(), widget->getSize() - Vector2(1,2), Vector4(1, 1, 1, 1), 0);
-			renderer->drawColoredQuad(widget->getPosition() + Vector2(1,1), widget->getSize() - Vector2(2,2), Vector4(0.3, 0.3, 0.3, 1), 0);
-			renderer->drawColoredQuad(widget->getPosition() + Vector2(1,1), widget->getSize() - Vector2(3,3), Vector4(0.8, 0.8, 0.8, 1), 0);
+			renderer->drawColoredQuad(position, widget->getSize(), Vector4(0.1, 0.1, 0.1, 1), 0);
+			renderer->drawColoredQuad(position, widget->getSize() - Vector2(1,2), Vector4(1, 1, 1, 1), 0);
+			renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(2,2), Vector4(0.3, 0.3, 0.3, 1), 0);
+			renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(3,3), Vector4(0.8, 0.8, 0.8, 1), 0);
 
-			draw2DText(text, widget->getPosition().x  + 0.5f * widget->getSize().x,
-						   widget->getPosition().y + text->getSize() * 1.25, 0.0f);
+			draw2DText(text, position.x  + 0.5f * widget->getSize().x,
+					   position.y + text->getSize() * 1.25, 0.0f);
 
 			break;
 
 		case Neo2D::Gui::WIDGET_SELECTED:
-			renderer->drawColoredQuad(widget->getPosition(), widget->getSize(), Vector4(0.0, 0.0, 0.0, 1), 0);
-			renderer->drawColoredQuad(widget->getPosition(), widget->getSize() - Vector2(1,1), Vector4(0.4, 0.4, 0.4, 1), 0);
-			renderer->drawColoredQuad(widget->getPosition() + Vector2(1,1), widget->getSize() - Vector2(2,2), Vector4(0.3, 0.3, 0.3, 1), 0);
-			renderer->drawColoredQuad(widget->getPosition() + Vector2(1,1), widget->getSize() - Vector2(3,3), Vector4(0.8, 0.8, 0.8, 1), 0);
+			renderer->drawColoredQuad(position, widget->getSize(), Vector4(0.0, 0.0, 0.0, 1), 0);
+			renderer->drawColoredQuad(position, widget->getSize() - Vector2(1,1), Vector4(0.4, 0.4, 0.4, 1), 0);
+			renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(2,2), Vector4(0.3, 0.3, 0.3, 1), 0);
+			renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(3,3), Vector4(0.8, 0.8, 0.8, 1), 0);
 
-			draw2DText(text, widget->getPosition().x  + 0.51f * widget->getSize().x,
-					   widget->getPosition().y + text->getSize() * 1.25 + 0.1f * widget->getSize().y, 0.0f);
+			draw2DText(text, position.x  + 0.51f * widget->getSize().x,
+					   position.y + text->getSize() * 1.25 + 0.1f * widget->getSize().y, 0.0f);
 
 			break;
 

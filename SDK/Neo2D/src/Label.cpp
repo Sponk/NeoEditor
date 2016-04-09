@@ -17,11 +17,11 @@ public:
 	virtual void draw(Neo2D::Gui::Widget* widget, const Neo::Vector2& offset)
 	{
 		NeoEngine* engine = NeoEngine::getInstance();
-		Renderer* renderer = engine->getRenderer();
+		const Neo::Vector2 position = widget->getPosition() + offset;
 
 		text->setText(widget->getLabel());
-		draw2DText(text, widget->getPosition().x,
-				   widget->getPosition().y, 0.0f);
+		draw2DText(text, position.x,
+				   position.y + text->getSize() * 0.7, 0.0f);
 	}
 
 	void draw2DText(OText* text, float x, float y, float rotation)
