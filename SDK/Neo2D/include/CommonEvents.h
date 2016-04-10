@@ -298,7 +298,7 @@ public:
 
 		m_key = kbd.getCharacter();
 
-		if(!m_key)
+		if(m_key == EOF)
 			return;
 
 		// Reset last typed character

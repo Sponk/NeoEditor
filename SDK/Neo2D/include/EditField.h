@@ -21,16 +21,7 @@ public:
 			  unsigned int h,
 			  const char* label,
 			  const shared_ptr<Object2D>& parent,
-			  const shared_ptr<Theme>& theme)
-		: Widget(x, y, w, h, label, parent, theme),
-		  m_caret(0)
-	{
-		registerEvent(make_shared<MouseOverEvent>(*this, nullptr, nullptr));
-		registerEvent(make_shared<MouseLeaveEvent>(*this, nullptr, nullptr));
-		registerEvent(make_shared<MouseLeftClickEvent>(*this, nullptr, nullptr));
-		registerEvent(make_shared<CharacterInputEvent>(*this, nullptr, nullptr));
-		registerEvent(make_shared<KeyPressEvent>(*this, nullptr, nullptr));
-	}
+			  const shared_ptr<Theme>& theme = nullptr);
 
 	void setCaret(size_t i) { m_caret = i; }
 	size_t getCaret() const { return m_caret; }
