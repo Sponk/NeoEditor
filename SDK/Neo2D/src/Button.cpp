@@ -1,5 +1,5 @@
 #include <Button.h>
-#include <MouseEvents.h>
+#include <CommonEvents.h>
 #include <Neo2DLevel.h>
 
 using namespace Neo;

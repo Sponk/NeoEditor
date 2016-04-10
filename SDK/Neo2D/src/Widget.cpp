@@ -9,7 +9,7 @@ Widget::Widget(int x, int y, unsigned int w, unsigned int h,
 	Object2D(x, y, w, h, parent),
 	m_theme(theme),
 	m_state(WIDGET_NORMAL),
-	m_label(label)
+	m_label(label ? label : "")
 {
 	
 }

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <Container.h>
 #include <InputContext.h>
-#include <MouseEvents.h>
+#include <CommonEvents.h>
 #include <Canvas.h>
 
 using namespace Neo;
@@ -321,4 +321,65 @@ TEST(EventTest, CanvasTest)
 
 	canvas.update(0.0f);
 	ASSERT_EQ(1, called);
+}
+
+TEST(EventTest, KeyPressTest)
+{
+	unsigned int key;
+	InputContextDummy input;
+	Neo::Keyboard& kbd = input.getKeyboard();
+	Neo::NeoEngine::getInstance()->setInputContext(&input);
+
+	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr, nullptr);
+	shared_ptr<Neo2D::Gui::Event> event = make_shared<Neo2D::Gui::KeyPressEvent>(widget, [](Neo2D::Gui::Widget &w, const Neo2D::Gui::Event &e, void *f)
+	{ *((unsigned int*) f) = dynamic_cast<const Neo2D::Gui::KeyPressEvent&>(e).getKey(); }, &key);
+
+	widget.registerEvent(event);
+
+	kbd.keyDown(0);
+	widget.update(0);
+
+	ASSERT_EQ(0, key);
+	Neo::NeoEngine::getInstance()->setInputContext(nullptr);
+}
+
+TEST(EventTest, KeyReleaseTest)
+{
+	unsigned int key;
+	InputContextDummy input;
+	Neo::Keyboard& kbd = input.getKeyboard();
+	Neo::NeoEngine::getInstance()->setInputContext(&input);
+
+	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr, nullptr);
+	shared_ptr<Neo2D::Gui::Event> event = make_shared<Neo2D::Gui::KeyReleaseEvent>(widget, [](Neo2D::Gui::Widget &w, const Neo2D::Gui::Event &e, void *f)
+	{ *((unsigned int*) f) = dynamic_cast<const Neo2D::Gui::KeyReleaseEvent&>(e).getKey(); }, &key);
+
+	widget.registerEvent(event);
+
+	kbd.keyDown(0);
+	kbd.keyUp(0);
+	widget.update(0);
+
+	ASSERT_EQ(0, key);
+	Neo::NeoEngine::getInstance()->setInputContext(nullptr);
+}
+
+TEST(EventTest, CharacterInputTest)
+{
+	unsigned int key;
+	InputContextDummy input;
+	Neo::Keyboard& kbd = input.getKeyboard();
+	Neo::NeoEngine::getInstance()->setInputContext(&input);
+
+	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr, nullptr);
+	shared_ptr<Neo2D::Gui::Event> event = make_shared<Neo2D::Gui::CharacterInputEvent>(widget, [](Neo2D::Gui::Widget &w, const Neo2D::Gui::Event &e, void *f)
+	{ *((unsigned int*) f) = dynamic_cast<const Neo2D::Gui::CharacterInputEvent&>(e).getCharacter(); }, &key);
+
+	widget.registerEvent(event);
+
+	kbd.setCharacter('K');
+	widget.update(0);
+
+	ASSERT_EQ('K', key);
+	Neo::NeoEngine::getInstance()->setInputContext(nullptr);
 }

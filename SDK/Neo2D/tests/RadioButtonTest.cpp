@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <RadioButton.h>
-#include <MouseEvents.h>
+#include <CommonEvents.h>
 
 class RadioButtonTest : public Neo2D::Gui::RadioButton
 {

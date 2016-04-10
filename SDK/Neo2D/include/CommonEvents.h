@@ -11,7 +11,7 @@ namespace Neo2D
 namespace Gui
 {
 
-enum MOUSE_EVENT_TYPES
+enum COMMON_EVENT_TYPES
 {
 	MOUSE_OVER = 1,
 	MOUSE_LEAVE = 2,
@@ -22,7 +22,10 @@ enum MOUSE_EVENT_TYPES
 	MOUSE_LEFT_RELEASE = 7,
 	MOUSE_MIDDLE_RELEASE = 8,
 	MOUSE_RIGHT_RELEASE = 9,
-	MOUSE_MOVED = 10
+	MOUSE_MOVED = 10,
+	KEY_PRESSED = 11,
+	KEY_RELEASED = 12,
+	CHARACTER_INPUT = 13
 };
 
 class NEO2D_EXPORT MouseOverEvent : public Event
@@ -218,6 +221,93 @@ public:
 	}
 
 	virtual unsigned int getType() { return MOUSE_MOVED; }
+};
+
+class NEO2D_EXPORT KeyPressEvent: public Event
+{
+	unsigned int m_key;
+public:
+	KeyPressEvent(Widget& w, const function<void(Widget&, const Event &, void *)>& cb, void* d) :
+		Event(w, cb, d),
+		m_key(-1)
+	{}
+
+	virtual void update(float dt)
+	{
+		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+		Neo::InputContext* input = engine->getInputContext();
+		Neo::Keyboard& kbd = input->getKeyboard();
+
+		for(unsigned int i = 0; i < kbd.getKeys().size(); i++)
+		{
+			if(kbd.onKeyDown(i))
+			{
+				m_key = i;
+				handle();
+			}
+		}
+	}
+
+	unsigned int getKey() const { return m_key; }
+	virtual unsigned int getType() const { return KEY_PRESSED; }
+};
+
+class NEO2D_EXPORT KeyReleaseEvent: public Event
+{
+	unsigned int m_key;
+public:
+	KeyReleaseEvent(Widget& w, const function<void(Widget&, const Event &, void *)>& cb, void* d) :
+	Event(w, cb, d),
+	m_key(-1)
+	{}
+
+	virtual void update(float dt)
+	{
+		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+		Neo::InputContext* input = engine->getInputContext();
+		Neo::Keyboard& kbd = input->getKeyboard();
+
+		for(unsigned int i = 0; i < kbd.getKeys().size(); i++)
+		{
+			if(kbd.onKeyUp(i))
+			{
+				m_key = i;
+				handle();
+			}
+		}
+	}
+
+	unsigned int getKey() const { return m_key; }
+	virtual unsigned int getType() const { return KEY_RELEASED; }
+};
+
+class NEO2D_EXPORT CharacterInputEvent: public Event
+{
+	unsigned int m_key;
+public:
+	CharacterInputEvent(Widget& w, const function<void(Widget&, const Event &, void *)>& cb, void* d) :
+	Event(w, cb, d),
+	m_key(EOF)
+	{}
+
+	virtual void update(float dt)
+	{
+		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+		Neo::InputContext* input = engine->getInputContext();
+		Neo::Keyboard& kbd = input->getKeyboard();
+
+		m_key = kbd.getCharacter();
+
+		if(!m_key)
+			return;
+
+		// Reset last typed character
+		kbd.setCharacter(EOF);
+		handle();
+	}
+
+	unsigned int getCharacter() const { return m_key; }
+	virtual unsigned int getType() const { return CHARACTER_INPUT; }
 };
 
 }
