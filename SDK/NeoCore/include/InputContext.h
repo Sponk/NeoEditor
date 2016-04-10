@@ -208,9 +208,13 @@ public:
  */
 class NEO_CORE_EXPORT Keyboard : public InputDevice
 {
+	unsigned int m_character; // The last unicode character that was typed
 public:
 	// Reserve enough memory to hold all keys!
-	Keyboard() : InputDevice(KEY_DUMMY + 1) {}
+	Keyboard() : InputDevice(KEY_DUMMY + 1), m_character(EOF) {}
+
+	unsigned int getCharacter() const { return m_character; }
+	void setCharacter(unsigned int c) { m_character = c; }
 };
 
 class NEO_CORE_EXPORT Mouse : public AxisInputDevice

@@ -227,10 +227,9 @@ void SDLInputContext::handleInput()
 			}
 			case SDL_TEXTINPUT:
 			{
-				/*mevent.type = MWIN_EVENT_CHAR;
-				strncpy((char*) &mevent.data[0], event.text.text, 4);
-				//mevent.data[0] = *(unsigned int*) &(event.text.text);
-				sendEvents(&mevent);*/
+				unsigned int character;
+				strncpy((char*) &character, event.text.text, 4);
+				kbd.setCharacter(character);
 				break;
 			}
 
