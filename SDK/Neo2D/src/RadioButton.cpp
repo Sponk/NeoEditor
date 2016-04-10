@@ -21,5 +21,6 @@ Neo2D::Gui::RadioButton::RadioButton(int x,
 									  }
 
 									  self->setValue(newValue);
+									  self->doCallback();
 								  }, this);
 }

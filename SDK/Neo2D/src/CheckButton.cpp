@@ -12,6 +12,7 @@ Neo2D::Gui::CheckButton::CheckButton(int x, int y, unsigned int w, unsigned int 
 	{
 		CheckButton* self = reinterpret_cast<CheckButton*>(data);
 		self->setValue(!self->getValue());
+		self->doCallback();
 	}, this);
 }
 
