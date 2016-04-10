@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 #include <CheckButton.h>
-#include <NeoCore.h>
 
 using namespace Neo;
 using namespace Neo2D;
@@ -20,12 +19,12 @@ TEST(CheckButtonTest, ValueTest)
 
 	mouse.keyUp(MOUSE_BUTTON_LEFT);
 	btn.update(0.0);
-	ASSERT_EQ(true, btn.getValue());
+	ASSERT_TRUE(btn.getValue());
 
 	mouse.keyDown(MOUSE_BUTTON_LEFT);
 	btn.update(0.0f);
 
 	mouse.keyUp(MOUSE_BUTTON_LEFT);
 	btn.update(0.0);
-	ASSERT_EQ(false, btn.getValue());
+	ASSERT_FALSE(btn.getValue());
 }

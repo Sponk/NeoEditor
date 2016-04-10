@@ -14,7 +14,7 @@ namespace Neo2D
 {
 namespace Gui
 {
-class NEO2D_EXPORT Container: public Widget
+class NEO2D_EXPORT Container: public Widget, public std::enable_shared_from_this<Container>
 {
 private:
 	std::vector<shared_ptr<Widget>> m_children;
@@ -32,6 +32,7 @@ public:
 	size_t addWidget(shared_ptr<Widget> o)
 	{
 		m_children.push_back(o);
+		o->setParent(shared_from_this());
 		return m_children.size() - 1;
 	}
 
@@ -60,6 +61,8 @@ public:
 	{
 		for (auto o : m_children)
 			o->update(dt);
+
+		Widget::update(dt);
 	}
 
 	void updateFilter() { if(m_filter != nullptr) m_filter->updateVisibility(m_children); }

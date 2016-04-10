@@ -32,15 +32,15 @@ TEST(EventTest, EventDetection)
 TEST(EventTest, ForwardEventDetection)
 {
 	int callbackCalled = 0;
-	Neo2D::Gui::Container c(0,0,0,0,nullptr);
-	shared_ptr<Neo2D::Gui::Widget> widget = make_shared<Neo2D::Gui::Widget>(0,0,0,0,nullptr,nullptr);
+	auto c = make_shared<Neo2D::Gui::Container>(0,0,0,0,nullptr);
+	auto widget = make_shared<Neo2D::Gui::Widget>(0,0,0,0,nullptr,nullptr);
 
-	c.addWidget(widget);
-	shared_ptr<Neo2D::Gui::Event> event = make_shared<TestEvent>(*widget, [](Neo2D::Gui::Widget& w, const Neo2D::Gui::Event&, void* f) { *((bool*)f) = true; }, &callbackCalled);
+	c->addWidget(widget);
+	auto event = make_shared<TestEvent>(*widget, [](Neo2D::Gui::Widget& w, const Neo2D::Gui::Event&, void* f) { *((bool*)f) = true; }, &callbackCalled);
 
 	// Also checks how often the callback got called
 	widget->registerEvent(event);
-	c.update(0);
+	c->update(0);
 
 	ASSERT_EQ(1, callbackCalled);
 }

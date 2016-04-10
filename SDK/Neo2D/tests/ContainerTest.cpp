@@ -46,3 +46,12 @@ TEST(ContainerTest, LayoutTest)
 	ASSERT_FALSE(c->getWidget(0)->isActive());
 	ASSERT_FALSE(c->getWidget(1)->isActive());
 }
+
+TEST(ContainerTest, ParentingTest)
+{
+	auto c = make_shared<Neo2D::Gui::Container>(0,0,0,0,nullptr);
+	auto widget = make_shared<Neo2D::Gui::Widget>(0,0,0,0,nullptr, nullptr);
+
+	c->addWidget(widget);
+	EXPECT_EQ(c.get(), widget->getParent().lock().get());
+}

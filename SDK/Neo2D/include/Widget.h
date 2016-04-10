@@ -44,7 +44,7 @@ public:
 
 	void update(float dt)
 	{
-		if(!getParent())
+		if(!getParent().lock())
 			for(auto e : m_events)
 				e->update(dt);
 	}
@@ -55,8 +55,8 @@ public:
 	{
 		m_events.push_back(e);
 
-		if(getParent())
-			dynamic_cast<Widget*>(getParent().get())->registerEvent(e);
+		if(auto parent = getParent().lock())
+			dynamic_cast<Widget*>(parent.get())->registerEvent(e);
 	}
 
 	WIDGET_STATE getState() const { return m_state; }

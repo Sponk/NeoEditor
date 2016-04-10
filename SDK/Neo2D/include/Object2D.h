@@ -12,7 +12,7 @@ class NEO2D_EXPORT Object2D
 	Neo::Vector2 m_position;
 	float m_rotation;
 	Neo::Vector2 m_size;
-	shared_ptr<Object2D> m_parent;
+	weak_ptr<Object2D> m_parent;
 	bool m_invisible;
 	bool m_active;
 
@@ -27,7 +27,7 @@ public:
 		m_active(o.m_active)
 	{}
 
-	Object2D(int x, int y, unsigned int w, unsigned int h, const shared_ptr<Object2D> parent) :
+	Object2D(int x, int y, unsigned int w, unsigned int h, const shared_ptr<Object2D>& parent) :
 		m_position(x, y),
 		m_rotation(0),
 		m_size(w, h),
@@ -66,12 +66,12 @@ public:
 		Object2D::m_size = m_size;
 	}
 
-	const shared_ptr<Object2D> &getParent() const
+	const weak_ptr<Object2D>& getParent() const
 	{
 		return m_parent;
 	}
 
-	void setParent(const shared_ptr<Object2D> &m_parent)
+	void setParent(const weak_ptr<Object2D> &m_parent)
 	{
 		Object2D::m_parent = m_parent;
 	}
