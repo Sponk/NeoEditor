@@ -11,7 +11,6 @@ Neo2D::Gui::RadioButton::RadioButton(int x,
 	getButtonWidget().setCallback([](Widget& w, void* d)
 								  {
 									  RadioButton* self = reinterpret_cast<RadioButton*>(d);
-									  bool newValue = !self->getValue();
 
 									  // Set everything to false if the widget has a parent
 									  shared_ptr<RadioGroup> group;
@@ -20,7 +19,9 @@ Neo2D::Gui::RadioButton::RadioButton(int x,
 										  group->reset();
 									  }
 
-									  self->setValue(newValue);
+									  // Radio buttons remain set even if they are clicked
+									  // multiple times
+									  self->setValue(true);
 									  self->doCallback();
 								  }, this);
 }

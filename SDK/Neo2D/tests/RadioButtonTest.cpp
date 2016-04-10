@@ -39,3 +39,14 @@ TEST(RadioButtonTest, RadioGroupTest)
 	EXPECT_TRUE(btn1->getValue());
 	EXPECT_FALSE(btn0->getValue());
 }
+
+TEST(RadioButtonTest, ReselectTest)
+{
+	RadioButtonTest btn(0,0,0,0,nullptr,nullptr);
+	auto buttonWidget = btn.getButtonWidget();
+
+	buttonWidget.handle(Neo2D::Gui::MouseLeftReleaseEvent(btn, nullptr, nullptr));
+	buttonWidget.handle(Neo2D::Gui::MouseLeftReleaseEvent(btn, nullptr, nullptr));
+
+	EXPECT_TRUE(btn.getValue());
+}
