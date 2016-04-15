@@ -324,9 +324,9 @@ public:
 		Neo::Mouse& mouse = input->getMouse();
 
 		if((input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_LEFT)
-			|| input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_LEFT))
+			|| input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_RIGHT))
 			&& !getReceiver().contains(mouse.getPosition()))
-			handle();
+				handle();
 	}
 
 	virtual unsigned int getType()  const { return MOUSE_DESELECT; }

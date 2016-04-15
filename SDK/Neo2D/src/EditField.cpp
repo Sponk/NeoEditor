@@ -150,6 +150,7 @@ Neo2D::Gui::EditField::EditField(int x,
 	registerEvent(make_shared<MouseLeftClickEvent>(*this, nullptr, nullptr));
 	registerEvent(make_shared<CharacterInputEvent>(*this, nullptr, nullptr));
 	registerEvent(make_shared<KeyPressEvent>(*this, nullptr, nullptr));
+	registerEvent(make_shared<MouseDeselectEvent>(*this, nullptr, nullptr));
 }
 
 void Neo2D::Gui::EditField::handle(const Event& e)
@@ -252,7 +253,8 @@ void Neo2D::Gui::EditField::handle(const Event& e)
 			break;
 
 		case MOUSE_OVER:
-			setState(WIDGET_HOVER);
+			if(getState() != WIDGET_SELECTED)
+				setState(WIDGET_HOVER);
 			break;
 
 		case MOUSE_LEAVE:
@@ -262,6 +264,10 @@ void Neo2D::Gui::EditField::handle(const Event& e)
 
 		case MOUSE_LEFT_CLICK:
 			setState(WIDGET_SELECTED);
+			break;
+
+		case MOUSE_DESELECT:
+			setState(WIDGET_NORMAL);
 			break;
 	}
 }
