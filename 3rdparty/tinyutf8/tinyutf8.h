@@ -46,7 +46,7 @@ static const unsigned char utf8d[] = {
 
 inline unsigned int utf8_decode(unsigned int* state, unsigned int* codep, unsigned int byte)
 {
-	//if(byte > sizeof(utf8d)) return UTF8_REJECT;
+	if(byte > sizeof(utf8d)) return UTF8_REJECT;
 	unsigned int type = utf8d[byte];
 
 	*codep = (*state != UTF8_ACCEPT) ?
@@ -63,7 +63,7 @@ inline int utf8_len(unsigned char* s, unsigned int* count)
 	unsigned int state = 0;
 
 	for(*count = 0; *s; ++s)
-	if(! utf8_decode(&state, &codepoint, *s))
+	if(!utf8_decode(&state, &codepoint, *s))
 		*count += 1;
 
 	return state != UTF8_ACCEPT;
