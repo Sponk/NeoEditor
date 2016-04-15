@@ -25,7 +25,8 @@ enum COMMON_EVENT_TYPES
 	MOUSE_MOVED = 10,
 	KEY_PRESSED = 11,
 	KEY_RELEASED = 12,
-	CHARACTER_INPUT = 13
+	CHARACTER_INPUT = 13,
+	MOUSE_DESELECT = 14
 };
 
 class NEO2D_EXPORT MouseOverEvent : public Event
@@ -308,6 +309,27 @@ public:
 
 	unsigned int getCharacter() const { return m_key; }
 	virtual unsigned int getType() const { return CHARACTER_INPUT; }
+};
+
+class NEO2D_EXPORT MouseDeselectEvent : public Event
+{
+public:
+	MouseDeselectEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
+	: Event(p, cb, d) {}
+
+	virtual void update(float dt)
+	{
+		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+		Neo::InputContext* input = engine->getInputContext();
+		Neo::Mouse& mouse = input->getMouse();
+
+		if((input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_LEFT)
+			|| input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_LEFT))
+			&& !getReceiver().contains(mouse.getPosition()))
+			handle();
+	}
+
+	virtual unsigned int getType()  const { return MOUSE_DESELECT; }
 };
 
 }

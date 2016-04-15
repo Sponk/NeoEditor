@@ -383,3 +383,30 @@ TEST(EventTest, CharacterInputTest)
 	ASSERT_EQ('K', key);
 	Neo::NeoEngine::getInstance()->setInputContext(nullptr);
 }
+
+TEST(EventTest, MouseDeselectTest)
+{
+	int callbackCalled = 0;
+
+	InputContextDummy input;
+	Neo::NeoEngine::getInstance()->setInputContext(&input);
+	Mouse& mouse = input.getMouse();
+
+	Neo2D::Gui::Widget widget(0, 0, 15, 15, nullptr, nullptr);
+	shared_ptr<Neo2D::Gui::Event> event = make_shared<Neo2D::Gui::MouseDeselectEvent>(widget, [](Neo2D::Gui::Widget& w, const Neo2D::Gui::Event&, void* f) { (*((int*)f))++; }, &callbackCalled);
+
+	widget.registerEvent(event);
+
+	mouse.keyDown(MOUSE_BUTTON_LEFT); // Simulate click
+	mouse.moveCursor(Vector2(5, 5)); // Place cursor inside widget
+	widget.update(0);
+
+	EXPECT_EQ(0, callbackCalled);
+
+	mouse.moveCursor(Vector2(16, 16)); // Place cursor outside widget
+	widget.update(0);
+
+	EXPECT_EQ(1, callbackCalled);
+
+	Neo::NeoEngine::getInstance()->setInputContext(nullptr);
+}
