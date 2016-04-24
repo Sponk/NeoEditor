@@ -73,9 +73,9 @@ public:
 	}
 };
 
-Neo2D::Gui::Button::Button(int x, int y, unsigned int w, unsigned int h, 
-								const char* label, shared_ptr<Neo2D::Object2D> parent) :
-	Neo2D::Gui::Widget(x, y, w, h, label, parent, std::make_shared<ButtonTheme>())
+Neo2D::Gui::Button::Button(int x, int y, unsigned int w, unsigned int h,
+								const char* label, const shared_ptr<Neo2D::Object2D>& parent, const shared_ptr<Theme>& theme) :
+	Neo2D::Gui::Widget(x, y, w, h, label, parent, (theme == nullptr) ? std::make_shared<ButtonTheme>() : theme)
 {
 	registerEvent(std::make_shared<MouseLeftReleaseEvent>(*this, nullptr, this));
 	registerEvent(std::make_shared<MouseLeftClickEvent>(*this, nullptr, this));

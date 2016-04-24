@@ -11,7 +11,7 @@ namespace Gui
 class NEO2D_EXPORT Label : public Widget
 {
 public:
-	Label(int x, int y, unsigned int w, unsigned int h, const char* label, shared_ptr<Object2D> parent);
+	Label(int x, int y, unsigned int w, unsigned int h, const char* label, const shared_ptr<Object2D>& parent);
 };
 
 }

@@ -1,7 +1,7 @@
 #include <CheckButton.h>
 
 Neo2D::Gui::CheckButton::CheckButton(int x, int y, unsigned int w, unsigned int h,
-						   const char* label, shared_ptr<Neo2D::Object2D> parent) :
+						   const char* label, const shared_ptr<Neo2D::Object2D>& parent) :
 	Neo2D::Gui::Widget(x, y, w, h, label, parent, nullptr),
 	m_button(x, y, h, h, "", nullptr),
 	m_label(x + h, y, w - h, h, label, nullptr),

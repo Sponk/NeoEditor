@@ -28,7 +28,8 @@ SET(HEADERS
 	include/Label.h
 	include/CheckButton.h
 	include/RadioButton.h
-	include/EditField.h)
+	include/EditField.h
+	include/Menu.h)
 
 SET(SOURCES
 	src/Object2D.cpp
@@ -41,7 +42,8 @@ SET(SOURCES
 	src/Label.cpp
 	src/CheckButton.cpp
 	src/RadioButton.cpp
-	src/EditField.cpp)
+	src/EditField.cpp
+	src/Menu.cpp)
 
 IF(NOT ANDROID AND NOT EMSCRIPTEN)
 	ADD_LIBRARY(Neo2D SHARED ${SOURCES} ${HEADERS})
@@ -52,7 +54,7 @@ ELSEIF(EMSCRIPTEN)
 ENDIF()
 
 IF(NOT NO_TESTS)
-	ADD_EXECUTABLE(Neo2DTest tests/main.cpp tests/Object2DTest.cpp tests/ContainerTest.cpp tests/EventTest.cpp tests/ButtonTest.cpp tests/CheckButtonTest.cpp tests/RadioButtonTest.cpp tests/EditFieldTest.cpp)
+	ADD_EXECUTABLE(Neo2DTest tests/main.cpp tests/Object2DTest.cpp tests/ContainerTest.cpp tests/EventTest.cpp tests/ButtonTest.cpp tests/CheckButtonTest.cpp tests/RadioButtonTest.cpp tests/EditFieldTest.cpp tests/MenuTest.cpp)
 	TARGET_LINK_LIBRARIES(Neo2DTest Neo2D ${NEO_CORE_LIBRARIES} ${NEO_ENGINE_LIBRARIES} ${GTEST_LIBRARIES})
 ENDIF()
 

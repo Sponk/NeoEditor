@@ -22,7 +22,7 @@ protected:
 	Label& getLabelWidget() { return m_label; }
 
 public:
-	CheckButton(int x, int y, unsigned int w, unsigned int h, const char* label, shared_ptr<Object2D> parent);
+	CheckButton(int x, int y, unsigned int w, unsigned int h, const char* label, const shared_ptr<Object2D>& parent);
 	void draw(const Neo::Vector2& offset) override;
 	void update(float dt) override;
 

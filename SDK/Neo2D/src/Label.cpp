@@ -41,5 +41,5 @@ public:
 	}
 };
 
-Neo2D::Gui::Label::Label(int x, int y, unsigned int w, unsigned int h, const char* label, shared_ptr<Object2D> parent)
+Neo2D::Gui::Label::Label(int x, int y, unsigned int w, unsigned int h, const char* label, const shared_ptr<Object2D>& parent)
 	: Widget(x, y, w, h, label, parent, make_shared<LabelTheme>()) {}
