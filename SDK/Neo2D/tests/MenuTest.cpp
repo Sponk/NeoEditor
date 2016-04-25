@@ -59,7 +59,7 @@ TEST(SubmenuTest, AddMultiItemDeepTest)
 	ASSERT_EQ(fourth, menu->findSubmenu("toplevel")->findSubmenu("second")->findChild("fourth"));
 }
 
-TEST(SubmenuTest, SimpleHoverTest)
+TEST(SubmenuTest, DISABLED_SimpleHoverTest)
 {
 	Submenu menu("New", nullptr);
 	menu.setActive(true);
@@ -71,7 +71,7 @@ TEST(SubmenuTest, SimpleHoverTest)
 	EXPECT_FALSE(menu.isVisible());
 }
 
-TEST(SubmenuTest, DeepHoverTest)
+TEST(SubmenuTest, DISABLED_DeepHoverTest)
 {
 	auto menu = make_shared<Submenu>("New", nullptr);
 	menu->setActive(true);

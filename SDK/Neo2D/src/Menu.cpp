@@ -91,7 +91,8 @@ public:
 Submenu::Submenu(const char* label, const shared_ptr<Object2D>& parent, const shared_ptr<Theme>& theme)
 	: MenuItem(label, parent, (theme == nullptr) ? make_shared<SubmenuTheme>() : theme)
 {
-	registerEvent(std::make_shared<MouseDeselectEvent>(*this, nullptr, this));
+	//registerEvent(std::make_shared<MouseDeselectEvent>(*this, nullptr, this));
+	setSize(Vector2(200,20));
 }
 
 void Submenu::handle(const Event& e)
@@ -125,8 +126,11 @@ void Submenu::handle(const Event& e)
 		break;
 
 		case MOUSE_DESELECT:
-			setVisible(false);
-			for(auto m : m_children)
+
+			//setVisible(false);
+			//setActive(false);
+
+			/*for(auto m : m_children)
 			{
 				m->setActive(false);
 				m->setVisible(false);
@@ -134,7 +138,7 @@ void Submenu::handle(const Event& e)
 				shared_ptr<Submenu> sm;
 				if((sm = dynamic_pointer_cast<Submenu>(m)) != nullptr)
 					sm->hideChildren();
-			}
+			}*/
 			break;
 	}
 }
@@ -188,5 +192,27 @@ shared_ptr<MenuItem> Submenu::addItem(const std::string& name, std::function<voi
 void MenuItem::handle(const Event& e)
 {
 	Button::handle(e);
+
+	if(e.getType() == MOUSE_LEFT_RELEASE)
+		hideHierarchy();
 }
 
+class MenubarTheme : public Theme
+{
+public:
+	virtual void draw(Neo2D::Gui::Widget* widget, const Neo::Vector2& offset) override
+	{
+		NeoEngine* engine = NeoEngine::getInstance();
+		Renderer* renderer = engine->getRenderer();
+		const Neo::Vector2 position = widget->getPosition() + offset;
+
+		renderer->drawColoredQuad(position, widget->getSize(), Vector4(0.1, 0.1, 0.1, 1), 0);
+		renderer->drawColoredQuad(position, widget->getSize() - Vector2(1,2), Vector4(1, 1, 1, 1), 0);
+		renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(2,2), Vector4(0.3, 0.3, 0.3, 1), 0);
+		renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(3,3), Vector4(0.8, 0.8, 0.8, 1), 0);
+	}
+};
+
+Menubar::Menubar(int x, int y, unsigned int w, unsigned int h, const shared_ptr<Object2D>& parent, const shared_ptr<Theme>& theme)
+	: Widget(x, y, w, h, nullptr, parent, (theme == nullptr) ? make_shared<MenubarTheme>() : theme)
+{}
