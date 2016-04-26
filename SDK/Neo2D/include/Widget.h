@@ -43,13 +43,7 @@ public:
 		if (m_theme != nullptr) m_theme->draw(this, offset);
 	}
 
-	void update(float dt)
-	{
-		if(!getParent().lock())
-			for(auto e : m_events)
-				e->update(dt);
-	}
-
+	virtual void update(float dt);
 	virtual void handle(const Event& e) {}
 	
 	void registerEvent(shared_ptr<Event> e)

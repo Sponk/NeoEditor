@@ -88,7 +88,6 @@ public:
 			{
 				m->update(dt);
 			}
-
 			MenuItem::update(dt);
 		}
 	}
@@ -170,10 +169,10 @@ public:
 	virtual void update(float dt) override
 	{
 		Widget::update(dt);
-		for(auto menu : m_children)
-		{
-			menu.submenu->update(dt);
-		}
+		//for(auto menu : m_children)
+		//{
+			//menu.submenu->update(dt);
+		//}
 	}
 
 	virtual void draw(const Neo::Vector2& offset) override

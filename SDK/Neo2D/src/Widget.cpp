@@ -1,4 +1,5 @@
 #include "Widget.h"
+#include <unordered_map>
 
 using namespace Neo2D::Gui;
 
@@ -12,4 +13,20 @@ Widget::Widget(int x, int y, unsigned int w, unsigned int h,
 	m_label(label ? label : "")
 {
 	
+}
+
+void Widget::update(float dt)
+{
+	std::unordered_map<unsigned int, bool> handled;
+	if(getParent().expired())
+		for(auto iter = m_events.rbegin(); iter != m_events.rend(); iter++)
+		{
+			auto e = *iter;
+			if(!handled[e->getType()]
+				&& e->getReceiver().isActive())
+			{
+				e->update(dt);
+				handled[e->getType()] = e->handled();
+			}
+		}
 }

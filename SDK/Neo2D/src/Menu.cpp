@@ -97,11 +97,7 @@ Submenu::Submenu(const char* label, const shared_ptr<Object2D>& parent, const sh
 
 void Submenu::handle(const Event& e)
 {
-	if(!isActive())
-		return;
-
 	Button::handle(e);
-
 	switch(e.getType())
 	{
 		case MOUSE_OVER:
@@ -191,8 +187,10 @@ shared_ptr<MenuItem> Submenu::addItem(const std::string& name, std::function<voi
 
 void MenuItem::handle(const Event& e)
 {
-	Button::handle(e);
+	if(!isActive())
+		return;
 
+	Button::handle(e);
 	if(e.getType() == MOUSE_LEFT_RELEASE)
 		hideHierarchy();
 }

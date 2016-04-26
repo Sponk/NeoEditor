@@ -14,12 +14,14 @@ class NEO2D_EXPORT Event
 	Widget& m_receiver;
 	std::function<void(Widget&, const Event&, void*)> m_callback;
 	void* m_data;
+	bool m_handled;
 
 public:
 	Event(Widget& w, std::function<void(Widget&, const Event&, void*)> cb, void* d) 
 		: m_receiver(w),
 		m_callback(cb),
-		m_data(d) {}
+		m_data(d),
+		m_handled(false) {}
 
 	virtual ~Event() {}
 
@@ -27,6 +29,8 @@ public:
 	virtual void handle();
 	virtual unsigned int getType() const { return 0; }
 
+	void reject() { m_handled = false; }
+	bool handled() const { return m_handled; }
 	Widget& getReceiver() const { return m_receiver; }
 };
 

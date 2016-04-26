@@ -39,6 +39,7 @@ public:
 	virtual void update(float dt)
 	{
 		Neo::Mouse& mouse = Neo::NeoEngine::getInstance()->getInputContext()->getMouse();
+		reject();
 
 		if(!mouseOver)
 		{
@@ -61,6 +62,7 @@ public:
 
 	virtual void update(float dt)
 	{
+		reject();
 		Neo::Mouse& mouse = Neo::NeoEngine::getInstance()->getInputContext()->getMouse();
 		if(mouseOver)
 		{
@@ -88,6 +90,8 @@ public:
 
 		if(input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_LEFT) && getReceiver().contains(mouse.getPosition()))
 			handle();
+		else
+			reject();
 	}
 
 	virtual unsigned int getType()  const { return MOUSE_LEFT_CLICK; }
@@ -107,6 +111,8 @@ public:
 
 		if(input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_MIDDLE) && getReceiver().contains(mouse.getPosition()))
 			handle();
+		else
+			reject();
 	}
 
 	virtual unsigned int getType()  const { return MOUSE_MIDDLE_CLICK; }
@@ -126,6 +132,8 @@ public:
 
 		if(input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_RIGHT) && getReceiver().contains(mouse.getPosition()))
 			handle();
+		else
+			reject();
 	}
 
 	virtual unsigned int getType() const { return MOUSE_RIGHT_CLICK; }
@@ -145,6 +153,8 @@ public:
 
 		if (input->getMouse().onKeyUp(Neo::MOUSE_BUTTON_LEFT) && getReceiver().contains(mouse.getPosition()))
 			handle();
+		else
+			reject();
 	}
 
 	virtual unsigned int getType() const { return MOUSE_LEFT_RELEASE; }
@@ -164,6 +174,8 @@ public:
 
 		if (input->getMouse().onKeyUp(Neo::MOUSE_BUTTON_MIDDLE) && getReceiver().contains(mouse.getPosition()))
 			handle();
+		else
+			reject();
 	}
 
 	virtual unsigned int getType()  const { return MOUSE_MIDDLE_RELEASE; }
@@ -183,6 +195,8 @@ public:
 
 		if (input->getMouse().onKeyUp(Neo::MOUSE_BUTTON_RIGHT) && getReceiver().contains(mouse.getPosition()))
 			handle();
+		else
+			reject();
 	}
 
 	virtual unsigned int getType()  const { return MOUSE_RIGHT_RELEASE; }
@@ -209,6 +223,7 @@ public:
 			lastPosition = mpos;
 			handle();
 		}
+		else reject();
 	}
 
 	const Neo::Vector2 &getDelta() const
@@ -235,6 +250,8 @@ public:
 
 	virtual void update(float dt)
 	{
+		reject();
+
 		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 		Neo::InputContext* input = engine->getInputContext();
 		Neo::Keyboard& kbd = input->getKeyboard();
@@ -264,6 +281,8 @@ public:
 
 	virtual void update(float dt)
 	{
+		reject();
+
 		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 		Neo::InputContext* input = engine->getInputContext();
 		Neo::Keyboard& kbd = input->getKeyboard();
@@ -293,6 +312,8 @@ public:
 
 	virtual void update(float dt)
 	{
+		reject();
+
 		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 		Neo::InputContext* input = engine->getInputContext();
 		Neo::Keyboard& kbd = input->getKeyboard();
@@ -300,7 +321,10 @@ public:
 		m_key = kbd.getCharacter();
 
 		if(m_key == EOF)
+		{
+			reject();
 			return;
+		}
 
 		// Reset last typed character
 		kbd.setCharacter(EOF);
@@ -327,6 +351,7 @@ public:
 			|| input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_RIGHT))
 			&& !getReceiver().contains(mouse.getPosition()))
 				handle();
+		else reject();
 	}
 
 	virtual unsigned int getType()  const { return MOUSE_DESELECT; }

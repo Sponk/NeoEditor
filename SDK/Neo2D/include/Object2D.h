@@ -71,7 +71,7 @@ public:
 		return m_parent;
 	}
 
-	void setParent(const weak_ptr<Object2D> &m_parent)
+	void setParent(const weak_ptr<Object2D>& m_parent)
 	{
 		Object2D::m_parent = m_parent;
 	}
