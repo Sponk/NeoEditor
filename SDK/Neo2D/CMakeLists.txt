@@ -29,7 +29,9 @@ SET(HEADERS
 	include/CheckButton.h
 	include/RadioButton.h
 	include/EditField.h
-	include/Menu.h)
+	include/Menu.h
+	include/ImageButton.h
+	include/Sprite.h)
 
 SET(SOURCES
 	src/Object2D.cpp
@@ -43,7 +45,9 @@ SET(SOURCES
 	src/CheckButton.cpp
 	src/RadioButton.cpp
 	src/EditField.cpp
-	src/Menu.cpp)
+	src/Menu.cpp
+	src/ImageButton.cpp
+	src/Sprite.cpp)
 
 IF(NOT ANDROID AND NOT EMSCRIPTEN)
 	ADD_LIBRARY(Neo2D SHARED ${SOURCES} ${HEADERS})
