@@ -22,7 +22,7 @@ namespace Neo2D
 
 		Neo::TextureRef* loadTexture(const char* filename, const bool mipmap = true, const bool preload = true)
 		{
-			return loadTexture(filename, mipmap, preload);
+			return m_level.loadTexture(filename, mipmap, preload);
 		}
 
 		void clear() { m_level.clear(); }
