@@ -139,6 +139,15 @@ class NEO2D_EXPORT Menubar : public Widget, public enable_shared_from_this<Menub
 
 	std::vector<MenuButton> m_children;
 
+	virtual void hideChildren()
+	{
+		for(auto m : m_children)
+		{
+			m.submenu->setActive(false);
+			m.submenu->setVisible(false);
+		}
+	}
+
 public:
 	Menubar(int x, int y, unsigned int w, unsigned int h,
 			const shared_ptr<Object2D>& parent, const shared_ptr<Theme>& theme = nullptr);
@@ -153,10 +162,14 @@ public:
 		menu->setPosition(menubutton.button->getPosition() + Neo::Vector2(0, getSize().y));
 
 		menubutton.button->setCallback([] (Widget& w, void* data) {
-			Submenu* menu = reinterpret_cast<Submenu*>(data);
 
-			menu->setVisible(!menu->isVisible());
-			menu->setActive(menu->isVisible());
+			Submenu* menu = reinterpret_cast<Submenu*>(data);
+			bool menuvalue = !menu->isVisible();
+
+			static_pointer_cast<Menubar>(w.getParent().lock())->hideChildren();
+
+			menu->setVisible(menuvalue);
+			menu->setActive(menuvalue);
 
 			menu->deselectChildren();
 
