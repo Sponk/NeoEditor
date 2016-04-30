@@ -12,5 +12,5 @@ ImageButton::ImageButton(int x,
 						 const shared_ptr<Object2D>& parent,
 						 const shared_ptr<Theme>& theme)
 	: Button(x, y, w, h, nullptr, parent, theme),
-	  m_sprite(x+1,y+1,w-2,h-2,label, nullptr)
+	  m_sprite(x,y,w,h,label, nullptr)
 {}

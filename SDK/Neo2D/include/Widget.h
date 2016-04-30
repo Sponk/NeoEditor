@@ -65,6 +65,7 @@ protected:
 	void doCallback() { if (m_callback) m_callback(*this, m_data); }
 
 	const std::shared_ptr<Theme>& getTheme() const { return m_theme; }
+	void setTheme(const shared_ptr<Theme>& theme) { m_theme = theme; }
 };
 
 }

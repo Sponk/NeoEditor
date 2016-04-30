@@ -31,7 +31,8 @@ SET(HEADERS
 	include/EditField.h
 	include/Menu.h
 	include/ImageButton.h
-	include/Sprite.h)
+	include/Sprite.h
+	include/Toolbar.h)
 
 SET(SOURCES
 	src/Object2D.cpp
@@ -47,7 +48,8 @@ SET(SOURCES
 	src/EditField.cpp
 	src/Menu.cpp
 	src/ImageButton.cpp
-	src/Sprite.cpp)
+	src/Sprite.cpp
+	src/Toolbar.cpp)
 
 IF(NOT ANDROID AND NOT EMSCRIPTEN)
 	ADD_LIBRARY(Neo2D SHARED ${SOURCES} ${HEADERS})

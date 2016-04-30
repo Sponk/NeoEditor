@@ -51,7 +51,7 @@ public:
 	void clear()
 	{ m_children.clear(); }
 
-	void draw(const Neo::Vector2 &offset)
+	virtual void draw(const Neo::Vector2 &offset)
 	{
 		for (auto o : m_children)
 			o->draw(offset);
