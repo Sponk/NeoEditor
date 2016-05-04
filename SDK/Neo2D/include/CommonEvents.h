@@ -231,12 +231,17 @@ public:
 		return delta;
 	}
 
+	void setDelta(const Neo::Vector2& delta)
+	{
+		MouseMoveEvent::delta = delta;
+	}
+
 	const Neo::Vector2 &getLastPosition() const
 	{
 		return lastPosition;
 	}
 
-	virtual unsigned int getType() { return MOUSE_MOVED; }
+	virtual unsigned int getType() const override { return MOUSE_MOVED; }
 };
 
 class NEO2D_EXPORT KeyPressEvent: public Event
