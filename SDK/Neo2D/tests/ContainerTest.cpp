@@ -56,12 +56,24 @@ TEST(ContainerTest, ParentingTest)
 	EXPECT_EQ(c.get(), widget->getParent().lock().get());
 }
 
-TEST(ContainerTest, ContentSizeTest)
+TEST(ContainerTest, ContentSizeNegativePosTest)
 {
 	auto c = make_shared<Neo2D::Gui::Container>(0,0,0,0,nullptr);
 	c->addWidget(make_shared<Neo2D::Gui::Widget>(-10,-10,20,20,nullptr,nullptr));
 	c->addWidget(make_shared<Neo2D::Gui::Widget>(90,0,10,10,nullptr,nullptr));
 
-	EXPECT_EQ(110, c->calculateContentSize().x);
-	EXPECT_EQ(20, c->calculateContentSize().y);
+	EXPECT_EQ(100, c->calculateContentSize().x);
+	EXPECT_EQ(10, c->calculateContentSize().y);
+}
+
+TEST(ContainerTest, ContentSizePosTest)
+{
+	auto c = make_shared<Neo2D::Gui::Container>(2,2,0,0,nullptr);
+	c->addWidget(make_shared<Neo2D::Gui::Widget>(10,10,0,0,nullptr,nullptr));
+
+	c->addWidget(make_shared<Neo2D::Gui::Widget>(20,50,0,0,nullptr,nullptr));
+
+
+	EXPECT_EQ(18, c->calculateContentSize().x);
+	EXPECT_EQ(48, c->calculateContentSize().y);
 }
