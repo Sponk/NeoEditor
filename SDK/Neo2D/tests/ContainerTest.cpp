@@ -55,3 +55,13 @@ TEST(ContainerTest, ParentingTest)
 	c->addWidget(widget);
 	EXPECT_EQ(c.get(), widget->getParent().lock().get());
 }
+
+TEST(ContainerTest, ContentSizeTest)
+{
+	auto c = make_shared<Neo2D::Gui::Container>(0,0,0,0,nullptr);
+	c->addWidget(make_shared<Neo2D::Gui::Widget>(-10,-10,20,20,nullptr,nullptr));
+	c->addWidget(make_shared<Neo2D::Gui::Widget>(90,0,10,10,nullptr,nullptr));
+
+	EXPECT_EQ(110, c->calculateContentSize().x);
+	EXPECT_EQ(20, c->calculateContentSize().y);
+}

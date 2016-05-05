@@ -48,6 +48,8 @@ public:
 	shared_ptr<Widget> getWidget(size_t id) { if(id >= m_children.size()) return nullptr; return m_children[id]; }
 	size_t getWidgetCount() { return m_children.size(); }
 
+	Neo::Vector2 calculateContentSize(const Neo::Vector2& offset = Neo::Vector2()) const;
+
 	void clear()
 	{ m_children.clear(); }
 
@@ -57,7 +59,7 @@ public:
 			o->draw(offset);
 	}
 
-	void update(float dt)
+	virtual void update(float dt)
 	{
 		for (auto o : m_children)
 			o->update(dt);

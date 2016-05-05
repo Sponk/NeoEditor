@@ -47,6 +47,7 @@ public:
 			  unsigned int w,
 			  unsigned int h,
 			  const shared_ptr<Object2D>& parent,
+			  const SCROLLBAR_DIRECTION direction = SCROLLBAR_HORIZONTAL,
 			  const shared_ptr<Theme>& knobtheme = nullptr,
 			  const shared_ptr<Theme>& background = nullptr);
 
@@ -86,6 +87,12 @@ public:
 		{
 			knob.setSize(Neo::Vector2(getSize().x, calculateKnobsize()));
 		}
+	}
+
+	void updateKnobPosition()
+	{
+		knob.setPosition(getPosition());
+		setValue(0);
 	}
 
 	SCROLLBAR_DIRECTION getDirection() const

@@ -21,6 +21,7 @@ public:
 		renderer->drawColoredQuad(position, widget->getSize() - Vector2(1,2), Vector4(1, 1, 1, 1), 0);
 		renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(2,2), Vector4(0.3, 0.3, 0.3, 1), 0);
 		renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(3,3), Vector4(0.8, 0.8, 0.8, 1), 0);
+		//renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(3,3), Vector4(1, 0, 0, 1), 0);
 	}
 };
 
@@ -70,11 +71,12 @@ public:
 
 Neo2D::Gui::Scrollbar::Scrollbar(int x, int y, unsigned int w, unsigned int h,
 				 const shared_ptr<Object2D>& parent,
+				 const SCROLLBAR_DIRECTION direction,
 				 const shared_ptr<Theme>& knobtheme,
 				 const shared_ptr<Theme>& background)
 	: Widget(x, y, w, h, nullptr, parent, (background == nullptr) ? make_shared<BackgroundTheme>() : background),
 	  range(0, 100),
-	  direction(SCROLLBAR_HORIZONTAL),
+	  direction(direction),
 	  value(0.0),
 	  knob(x,y,w,h,*this, (knobtheme == nullptr) ? make_shared<KnobTheme>() : knobtheme)
 {
@@ -98,12 +100,12 @@ void Neo2D::Gui::Scrollbar::handle(const Neo2D::Gui::Event & e)
 
 			if(getDirection() == SCROLLBAR_HORIZONTAL)
 			{
-				setValue(MAX(0, MIN(getRange().y - length, (getRange().y / length) * delta.x + getValue())));
+				value = (MAX(0, MIN(getRange().y - length, (getRange().y / length) * delta.x + getValue())));
 				knob.setPosition(Neo::Vector2(getPosition().x + (getValue() / getRange().y) * getSize().x, knob.getPosition().y));
 			}
 			else
 			{
-				setValue(MAX(0, MIN(getRange().y - length, (getRange().y / length) * delta.y + getValue())));
+				value = (MAX(0, MIN(getRange().y - length, (getRange().y / length) * delta.y + getValue())));
 				knob.setPosition(Neo::Vector2(knob.getPosition().x, getPosition().y + (getValue() / getRange().y) * getSize().y));
 			}
 		}
