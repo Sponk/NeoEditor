@@ -17,8 +17,8 @@ Neo2D::Gui::ScrollPanel::ScrollPanel(int x,
 
 void Neo2D::Gui::ScrollPanel::updateScrollbarPlacement()
 {
-	verticalScroll.setSize(Neo::Vector2(10, getSize().y));
-	horizontalScroll.setSize(Neo::Vector2(getSize().x, 10));
+	verticalScroll.setSize(Neo::Vector2(15, getSize().y));
+	horizontalScroll.setSize(Neo::Vector2(getSize().x, 15));
 
 	Neo::Vector2 content = calculateContentSize(lastOffset);
 	verticalScroll.setRange(Neo::Vector2(0, content.y));

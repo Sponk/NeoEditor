@@ -356,7 +356,9 @@ public:
 			|| input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_RIGHT))
 			&& !getReceiver().contains(mouse.getPosition()))
 				handle();
-		else reject();
+
+		// Everything should get this event
+		reject();
 	}
 
 	virtual unsigned int getType()  const { return MOUSE_DESELECT; }

@@ -31,5 +31,7 @@ void Neo2D::Gui::CheckButton::draw(const Neo::Vector2& offset)
 
 void Neo2D::Gui::CheckButton::update(float dt)
 {
+	m_button.setPosition(getPosition());
+	m_label.setPosition(Neo::Vector2(getPosition().x + getSize().y, getPosition().y));
 	m_button.update(dt);
 }

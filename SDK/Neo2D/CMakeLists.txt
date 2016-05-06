@@ -34,7 +34,8 @@ SET(HEADERS
 	include/Sprite.h
 	include/Toolbar.h
 	include/Scrollbar.h
-	include/ScrollPanel.h)
+	include/ScrollPanel.h
+	include/TreeView.h)
 
 SET(SOURCES
 	src/Object2D.cpp
@@ -53,7 +54,9 @@ SET(SOURCES
 	src/Sprite.cpp
 	src/Toolbar.cpp
 	src/Scrollbar.cpp
-	src/ScrollPanel.cpp src/Container.cpp)
+	src/ScrollPanel.cpp
+	src/Container.cpp
+	src/TreeView.cpp)
 
 IF(NOT ANDROID AND NOT EMSCRIPTEN)
 	ADD_LIBRARY(Neo2D SHARED ${SOURCES} ${HEADERS})

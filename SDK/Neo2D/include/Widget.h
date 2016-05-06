@@ -63,6 +63,7 @@ public:
 protected:
 	void setState(WIDGET_STATE s) { m_state = s; }
 	void doCallback() { if (m_callback) m_callback(*this, m_data); }
+	std::function<void(Widget&, void*)> getCallback() const { return m_callback; }
 
 	const std::shared_ptr<Theme>& getTheme() const { return m_theme; }
 	void setTheme(const shared_ptr<Theme>& theme) { m_theme = theme; }
