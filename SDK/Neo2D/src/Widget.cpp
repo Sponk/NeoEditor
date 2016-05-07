@@ -1,5 +1,6 @@
 #include "Widget.h"
 #include <unordered_map>
+#include <algorithm>
 
 using namespace Neo2D::Gui;
 
@@ -29,4 +30,17 @@ void Widget::update(float dt)
 				handled[e->getType()] = e->handled();
 			}
 		}
+}
+
+void Widget::unregisterEvent(Widget& w)
+{
+	auto parent = dynamic_pointer_cast<Widget>(getParent().lock());
+	if(parent)
+	{
+		parent->unregisterEvent(w);
+		return;
+	}
+
+	for(int i = m_events.size() - 1; i >= 0; i--)
+		if(&m_events[i]->getReceiver() == &w) m_events.erase(m_events.begin() + i);
 }

@@ -36,7 +36,10 @@ class NEO2D_EXPORT Widget : public Object2D
 public:
 	Widget(int x, int y, unsigned int w, unsigned int h, const char* label,
 		   const shared_ptr<Object2D>& parent, const shared_ptr<Theme>& theme = nullptr);
-	virtual ~Widget() {}
+	virtual ~Widget()
+	{
+		unregisterEvent(*this);
+	}
 
 	virtual void draw(const Neo::Vector2& offset)
 	{
@@ -53,6 +56,8 @@ public:
 		if(auto parent = getParent().lock())
 			dynamic_cast<Widget*>(parent.get())->registerEvent(e);
 	}
+
+	void unregisterEvent(Widget& w);
 
 	WIDGET_STATE getState() const { return m_state; }
 	void setCallback(std::function<void(Widget&, void*)> cb, void* data) { m_callback = cb; m_data = data; }

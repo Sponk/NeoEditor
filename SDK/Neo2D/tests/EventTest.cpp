@@ -45,6 +45,22 @@ TEST(EventTest, ForwardEventDetection)
 	ASSERT_EQ(1, callbackCalled);
 }
 
+TEST(EventTest, UnregisterEventTest)
+{
+	int callbackCalled = 0;
+	auto c = make_shared<Neo2D::Gui::Container>(0,0,0,0,nullptr);
+	auto widget = make_shared<Neo2D::Gui::Widget>(0,0,0,0,nullptr,nullptr);
+
+	c->addWidget(widget);
+	auto event = make_shared<TestEvent>(*widget, [](Neo2D::Gui::Widget& w, const Neo2D::Gui::Event&, void* f) { *((bool*)f) = true; }, &callbackCalled);
+
+	widget->registerEvent(event);
+	widget->unregisterEvent(*widget);
+
+	c->update(0);
+	EXPECT_EQ(0, callbackCalled);
+}
+
 TEST(EventTest, MouseOverTest_false)
 {
 	int callbackCalled = 0;
