@@ -126,7 +126,7 @@ public:
 	shared_ptr<MenuItem> addItem(const std::string& name, std::function<void(Widget&, void*)> cb);
 };
 
-class NEO2D_EXPORT Menubar : public Widget, public enable_shared_from_this<Menubar>
+class NEO2D_EXPORT Menubar : public Widget, public std::enable_shared_from_this<Menubar>
 {
 	// FIXME: Don't hardcode!!
 	const unsigned int BTN_WIDTH = 70;
@@ -176,6 +176,8 @@ public:
 		}, menu.get());
 
 		menu->setVisible(false);
+		menu->setParent(weak_ptr<Neo2D::Object2D>());
+
 		m_children.push_back(menubutton);
 	}
 
