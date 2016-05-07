@@ -101,7 +101,9 @@ Neo2D::Gui::TreeView::TreeView(int x,
 void TreeView::update(float dt)
 {
 	Widget::update(dt);
-	m_rootNode->update(dt);
+
+	if(m_rootNode)
+		m_rootNode->update(dt);
 }
 
 void TreeView::draw(const Neo::Vector2& offset)
@@ -113,6 +115,7 @@ void TreeView::draw(const Neo::Vector2& offset)
 	{
 		m_rootNode->setOpen(true);
 		drawTree(*m_rootNode, level, offset);
+		setSize(Neo::Vector2(getSize().x, level.y * LINE_HEIGHT));
 	}
 }
 
