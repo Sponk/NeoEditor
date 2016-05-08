@@ -69,7 +69,7 @@ public:
 			for(auto m : m_children)
 			{
 				m->setPosition(getPosition() + offset + Neo::Vector2(getParent().expired() ? 0 : getSize().x, line));
-				m->setSize(getSize()); // FIXME: Don't hardcode this!
+				m->setSize(getSize());
 				line += getSize().y + 1;
 
 				m->draw(Neo::Vector2());
@@ -101,10 +101,6 @@ public:
 	{
 		for(auto m : m_children)
 		{
-			/*auto sm = dynamic_pointer_cast<Submenu>(m);
-			if(sm)
-				sm->hideChildren();*/
-
 			m->setActive(false);
 			m->setVisible(false);
 		}
@@ -184,10 +180,6 @@ public:
 	virtual void update(float dt) override
 	{
 		Widget::update(dt);
-		//for(auto menu : m_children)
-		//{
-			//menu.submenu->update(dt);
-		//}
 	}
 
 	virtual void draw(const Neo::Vector2& offset) override
@@ -198,10 +190,6 @@ public:
 
 		for(auto menu : m_children)
 		{
-			//menu.button->setPosition(Neo::Vector2(x, getPosition().y));
-			//menu.button->setSize(Neo::Vector2(100, getSize().y));
-			//menu.submenu->setPosition(Neo::Vector2(x, getPosition().y + getSize().y));
-
 			menu.button->draw(offset);
 			if(menu.submenu->isActive())
 				menu.submenu->draw(offset);

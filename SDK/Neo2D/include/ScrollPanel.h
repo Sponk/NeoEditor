@@ -10,6 +10,9 @@ namespace Neo2D
 namespace Gui
 {
 
+/**
+ * @brief Implements a panel with two ScrollBar's.
+ */
 class NEO2D_EXPORT ScrollPanel : public Container
 {
 	Scrollbar verticalScroll, horizontalScroll;

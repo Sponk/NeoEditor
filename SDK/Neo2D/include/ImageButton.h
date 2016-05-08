@@ -9,6 +9,10 @@ namespace Neo2D
 namespace Gui
 {
 
+/**
+ * @brief Implements a traditional push button with an icon instead of text.
+ * @see Button
+ */
 class ImageButton : public Button
 {
 	Sprite m_sprite;

@@ -9,7 +9,11 @@ namespace Neo2D
 {
 namespace Gui
 {
-
+/**
+ * @brief Implements a check button that represents a binary state.
+ *
+ * The button also displays a text label on the right side of the actual button.
+ */
 class NEO2D_EXPORT CheckButton : public Widget
 {
 	Button m_button;
@@ -26,7 +30,16 @@ public:
 	void draw(const Neo::Vector2& offset) override;
 	void update(float dt) override;
 
+	/**
+	 * @brief Changes the current boolean state.
+	 * @param b A boolean value.
+	 */
 	void setValue(const bool b) { m_value = b; }
+
+	/**
+	 * @brief Retrieves the current boolean state.
+	 * @return A boolean value.
+	 */
 	bool getValue() const { return m_value; }
 };
 

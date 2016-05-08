@@ -11,24 +11,44 @@ namespace Neo2D
 namespace Gui
 {
 
+/**
+ * @brief The most common types for GUI events.
+ */
 enum COMMON_EVENT_TYPES
 {
+	/// The mouse entered the widget.
 	MOUSE_OVER = 1,
+	/// The mouse left the widget.
 	MOUSE_LEAVE = 2,
+	/// The left mouse button was pressed.
 	MOUSE_LEFT_CLICK = 3,
+	/// The middle mouse button was pressed.
 	MOUSE_MIDDLE_CLICK = 4,
+	/// The right mouse button was pressed.
 	MOUSE_RIGHT_CLICK = 5,
+	/// The mouse scroll wheel was moved.
 	MOUSE_SCROLL = 6,
+	/// The left mouse button was released.
 	MOUSE_LEFT_RELEASE = 7,
+	/// The middle mouse button was released.
 	MOUSE_MIDDLE_RELEASE = 8,
+	/// The right mouse button was released.
 	MOUSE_RIGHT_RELEASE = 9,
+	/// The mouse moved.
 	MOUSE_MOVED = 10,
+	/// A key was pressed.
 	KEY_PRESSED = 11,
+	/// A key was released.
 	KEY_RELEASED = 12,
+	/// A UTF8 character was entered.
 	CHARACTER_INPUT = 13,
+	/// The mouse was used to deselect the widget.
 	MOUSE_DESELECT = 14
 };
 
+/**
+ * @brief Gets triggered each time the mouse cursor enters the parent widget area.
+ */
 class NEO2D_EXPORT MouseOverEvent : public Event
 {
 	bool mouseOver = false;
@@ -53,6 +73,9 @@ public:
 	virtual unsigned int getType() const { return MOUSE_OVER; }
 };
 
+/**
+ * @brief Gets triggered each time the mouse cursor leaves the parent widget area.
+ */
 class NEO2D_EXPORT MouseLeaveEvent : public Event
 {
 	bool mouseOver = false;
@@ -76,6 +99,9 @@ public:
 	virtual unsigned int getType()  const { return MOUSE_LEAVE; }
 };
 
+/**
+ * @brief Gets triggered each time the mouse left clicks on the parent widget area.
+ */
 class NEO2D_EXPORT MouseLeftClickEvent : public Event
 {
 public:
@@ -97,6 +123,9 @@ public:
 	virtual unsigned int getType()  const { return MOUSE_LEFT_CLICK; }
 };
 
+/**
+ * @brief Gets triggered each time the mouse middle clicks on the parent widget area.
+ */
 class NEO2D_EXPORT MouseMiddleClickEvent : public Event
 {
 public:
@@ -118,6 +147,9 @@ public:
 	virtual unsigned int getType()  const { return MOUSE_MIDDLE_CLICK; }
 };
 
+/**
+ * @brief Gets triggered each time the mouse right clicks on the parent widget area.
+ */
 class NEO2D_EXPORT MouseRightClickEvent : public Event
 {
 public:
@@ -139,6 +171,9 @@ public:
 	virtual unsigned int getType() const { return MOUSE_RIGHT_CLICK; }
 };
 
+/**
+ * @brief Gets triggered each time the left mouse button gets release while being on the parent widget area.
+ */
 class NEO2D_EXPORT MouseLeftReleaseEvent : public Event
 {
 public:
@@ -160,6 +195,9 @@ public:
 	virtual unsigned int getType() const { return MOUSE_LEFT_RELEASE; }
 };
 
+/**
+ * @brief Gets triggered each time the middle mouse button gets release while being on the parent widget area.
+ */
 class NEO2D_EXPORT MouseMiddleReleaseEvent : public Event
 {
 public:
@@ -181,6 +219,9 @@ public:
 	virtual unsigned int getType()  const { return MOUSE_MIDDLE_RELEASE; }
 };
 
+/**
+ * @brief Gets triggered each time the right mouse button gets release while being on the parent widget area.
+ */
 class NEO2D_EXPORT MouseRightReleaseEvent : public Event
 {
 public:
@@ -202,6 +243,9 @@ public:
 	virtual unsigned int getType()  const { return MOUSE_RIGHT_RELEASE; }
 };
 
+/**
+ * @brief Gets triggered each time the mouse moved.
+ */
 class NEO2D_EXPORT MouseMoveEvent : public Event
 {
 	Neo::Vector2 delta;
@@ -226,16 +270,28 @@ public:
 		else reject();
 	}
 
+	/**
+	 * @brief Retrieves the 2D movement delta.
+	 * @return The movement vector.
+	 */
 	const Neo::Vector2 &getDelta() const
 	{
 		return delta;
 	}
 
+	/**
+	 * @brief Sets the 2D movement delta.
+	 * @param delta The new delta.
+	 */
 	void setDelta(const Neo::Vector2& delta)
 	{
 		MouseMoveEvent::delta = delta;
 	}
 
+	/**
+	 * @brief Retrieves the last known position of the cursor.
+	 * @return The 2D position.
+	 */
 	const Neo::Vector2 &getLastPosition() const
 	{
 		return lastPosition;
@@ -244,6 +300,9 @@ public:
 	virtual unsigned int getType() const override { return MOUSE_MOVED; }
 };
 
+/**
+ * @brief Gets triggered each time a key gets pressed.
+ */
 class NEO2D_EXPORT KeyPressEvent: public Event
 {
 	unsigned int m_key;
@@ -271,10 +330,18 @@ public:
 		}
 	}
 
+	/**
+	 * @brief Retrieves the key ID.
+	 * @return The key ID.
+	 */
 	unsigned int getKey() const { return m_key; }
 	virtual unsigned int getType() const { return KEY_PRESSED; }
 };
 
+
+/**
+ * @brief Gets triggered each time a key gets released.
+ */
 class NEO2D_EXPORT KeyReleaseEvent: public Event
 {
 	unsigned int m_key;
@@ -302,10 +369,18 @@ public:
 		}
 	}
 
+	/**
+	 * @brief Retrieves the key ID.
+	 * @return The key ID.
+	 */
 	unsigned int getKey() const { return m_key; }
 	virtual unsigned int getType() const { return KEY_RELEASED; }
 };
 
+
+/**
+ * @brief Gets triggered each time an UTF8 character is entered.
+ */
 class NEO2D_EXPORT CharacterInputEvent: public Event
 {
 	unsigned int m_key;
@@ -336,10 +411,17 @@ public:
 		handle();
 	}
 
+	/**
+	 * @brief Retrieves the character.
+	 * @return The UTF-8 character.
+	 */
 	unsigned int getCharacter() const { return m_key; }
 	virtual unsigned int getType() const { return CHARACTER_INPUT; }
 };
 
+/**
+ * @brief Gets triggered each time a mouse click happens outside the parent widget area.
+ */
 class NEO2D_EXPORT MouseDeselectEvent : public Event
 {
 public:

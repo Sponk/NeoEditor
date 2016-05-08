@@ -7,7 +7,10 @@ namespace Neo2D
 {
 namespace Gui
 {
-	
+
+/**
+ * @brief Implements a traditional push button.
+ */
 class NEO2D_EXPORT Button : public Widget
 {
 public:

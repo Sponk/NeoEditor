@@ -8,6 +8,9 @@ namespace Neo2D
 namespace Gui
 {
 
+/**
+ * @brief Implements a toolbar which can contain ImageButton's.
+ */
 class NEO2D_EXPORT Toolbar : public Container
 {
 

@@ -12,10 +12,32 @@ namespace Neo2D
 namespace Gui
 {
 
+/**
+ * @brief Implements a few static methods that can be used to translate strings.
+ *
+ * It reads in CSV files which contain key value pairs and translates between them while
+ * preserving strings which do not appear in the translation files.
+ * Easy access is provided by the "tr" macro which accesses the translate method so translating a string
+ * becomes an easy call to 'tr("somestring")' rather than the long way.
+ */
 class NEO2D_EXPORT Translator
 {
 public:
+	/**
+	 * @brief Translates a given string into another one.
+	 * @param s The string to translate.
+	 * @return The translated string or the input value if no translation exists.
+	 */
 	static const char* translate(const char* s);
+
+	/**
+	 * @brief Loads a CSV formatted translation file.
+	 *
+	 * The file has to contain rows with two string values each.
+	 * The values have to be seperated by the tab character ('\t').
+	 *
+	 * @param path The file to load.
+	 */
 	static void loadTranslation(const char* path);
 };
 

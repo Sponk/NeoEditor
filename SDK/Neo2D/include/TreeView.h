@@ -10,10 +10,16 @@ namespace Neo2D
 namespace Gui
 {
 
+/**
+ * @brief Implements a tree which displays hierarchical structures.
+ */
 class NEO2D_EXPORT TreeView : public Widget, public enable_shared_from_this<TreeView>
 {
 public:
 
+	/**
+	 * @brief Implements a node in a tree.
+	 */
 	class TreeNode : public Widget, public std::enable_shared_from_this<TreeNode>
 	{
 		friend Neo2D::Gui::TreeView;
@@ -33,8 +39,17 @@ public:
 
 		virtual void handle(const Event& e);
 
+		/**
+		 * @brief Retrieves the list of children.
+		 * @return The list of children.
+		 */
 		const std::vector<shared_ptr<TreeNode>>& getChildren() { return m_children; }
 
+		/**
+		 * @brief Adds a new child to the internal list of children.
+		 * @param label The label to assign.
+		 * @return The new TreeNode.
+		 */
 		shared_ptr<TreeNode> addChild(const char* label)
 		{
 			m_children.push_back(make_shared<TreeNode>(0, 0, 0, 0, label, shared_from_this(), getTheme()));
@@ -42,6 +57,9 @@ public:
 			return m_children.back();
 		}
 
+		/**
+		 * @brief Clears the sub-tree i.e. children.
+		 */
 		void clear() { m_children.clear(); }
 		virtual void update(float dt) override
 		{
@@ -64,7 +82,16 @@ public:
 				m_button.draw(offset);
 		}
 
+		/**
+		 * @brief Check if the node is considered open.
+		 * @return A boolean value.
+		 */
 		bool isOpen() const { return m_open; }
+
+		/**
+		 * @brief Changes the open state.
+		 * @param b A boolean value.
+		 */
 		void setOpen(bool b) { m_open = b; }
 	};
 
@@ -73,6 +100,13 @@ private:
 	TreeNode* m_selected;
 	shared_ptr<Theme> m_itemTheme;
 
+	/**
+	 * @brief Draws a tree starting from the given root.
+	 *
+	 * @param root The current node whos tree to draw.
+	 * @param level The current "offset" in the tree.
+	 * @param offset The offset to apply at the end to the position.
+	 */
 	void drawTree(TreeNode& root, Neo::Vector2& level, const Neo::Vector2& offset);
 
 public:
@@ -84,6 +118,10 @@ public:
 			 const shared_ptr<Theme>& itemtheme = nullptr,
 			 const shared_ptr<Theme>& background = nullptr);
 
+	/**
+	 * @brief Retrieves the root node.
+	 * @return The root node.
+	 */
 	shared_ptr<TreeNode> getRoot()
 	{
 		if (m_rootNode == nullptr)

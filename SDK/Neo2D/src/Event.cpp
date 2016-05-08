@@ -1,6 +1,5 @@
 #include <Event.h>
 #include <Widget.h>
-#include <NeoEngine.h>
 
 void Neo2D::Gui::Event::handle()
 {

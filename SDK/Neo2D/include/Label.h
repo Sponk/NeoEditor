@@ -8,6 +8,9 @@ namespace Neo2D
 namespace Gui
 {
 
+/**
+ * @brief Implements a 2D text label.
+ */
 class NEO2D_EXPORT Label : public Widget
 {
 public:
