@@ -112,7 +112,7 @@ void Submenu::handle(const Event& e)
 			for (auto m : m_children)
 			{
 				m->setActive(true);
-				//m->setVisible(true);
+				m->setVisible(true);
 
 				shared_ptr<Submenu> sm;
 				if ((sm = dynamic_pointer_cast<Submenu>(m)) != nullptr)
@@ -187,12 +187,11 @@ shared_ptr<MenuItem> Submenu::addItem(const std::string& name, std::function<voi
 
 void MenuItem::handle(const Event& e)
 {
-	if(!isActive())
-		return;
-
 	Button::handle(e);
 	if(e.getType() == MOUSE_LEFT_RELEASE)
+	{
 		hideHierarchy();
+	}
 }
 
 class MenubarTheme : public Theme
@@ -214,3 +213,22 @@ public:
 Menubar::Menubar(int x, int y, unsigned int w, unsigned int h, const shared_ptr<Object2D>& parent, const shared_ptr<Theme>& theme)
 	: Widget(x, y, w, h, nullptr, parent, (theme == nullptr) ? make_shared<MenubarTheme>() : theme)
 {}
+
+void MenuItem::hideHierarchy()
+{
+	setVisible(false);
+	setActive(false);
+
+	if(!getParent().expired())
+	{
+		shared_ptr<Object2D> parent = getParent().lock();
+		if(parent != nullptr)
+		{
+			auto menu = static_pointer_cast<MenuItem>(parent);
+			menu->hideHierarchy();
+
+			if(auto sm = dynamic_pointer_cast<Submenu>(menu))
+				sm->hideChildren();
+		}
+	}
+}

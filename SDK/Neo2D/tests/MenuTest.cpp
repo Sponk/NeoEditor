@@ -59,6 +59,27 @@ TEST(SubmenuTest, AddMultiItemDeepTest)
 	ASSERT_EQ(fourth, menu->findSubmenu("toplevel")->findSubmenu("second")->findChild("fourth"));
 }
 
+TEST(SubmenuTest, TriggerTest)
+{
+	auto menu = make_shared<Submenu>("New", nullptr);
+	menu->setActive(true);
+
+	auto third = menu->addItem("/toplevel/second/third", nullptr);
+	auto fourth = menu->addItem("/toplevel/second/fourth", nullptr);
+
+	third->setActive(true);
+	fourth->setActive(true);
+
+	int callbackCounter = 0;
+	fourth->setCallback([](Widget& w, void* data) { (*((int*) data))++; }, &callbackCounter);
+
+	fourth->handle(MouseLeftReleaseEvent(*fourth, nullptr, nullptr));
+	EXPECT_EQ(1, callbackCounter);
+
+	EXPECT_FALSE(third->isActive());
+	EXPECT_FALSE(fourth->isActive());
+}
+
 TEST(SubmenuTest, DISABLED_SimpleHoverTest)
 {
 	Submenu menu("New", nullptr);

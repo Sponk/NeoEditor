@@ -26,22 +26,7 @@ public:
 
 	bool isVisible() const { return m_visible; }
 	virtual void setVisible(bool b) { m_visible = b; }
-
-	void hideHierarchy()
-	{
-		setVisible(false);
-		setActive(false);
-
-		if(!getParent().expired())
-		{
-			shared_ptr<Object2D> parent = getParent().lock();
-			if(parent != nullptr)
-			{
-				auto menu = static_pointer_cast<MenuItem>(parent);
-				menu->hideHierarchy();
-			}
-		}
-	}
+	void hideHierarchy();
 };
 
 class NEO2D_EXPORT Submenu : public MenuItem, public std::enable_shared_from_this<Submenu>
@@ -115,6 +100,7 @@ public:
 			{
 				sm->hideChildren();
 				sm->setVisible(false);
+				sm->setActive(false);
 			}
 		}
 	}
@@ -171,6 +157,7 @@ public:
 
 		}, menu.get());
 
+		menu->setActive(false);
 		menu->setVisible(false);
 		menu->setParent(weak_ptr<Neo2D::Object2D>());
 
