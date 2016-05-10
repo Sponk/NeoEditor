@@ -308,7 +308,7 @@ vec3 fxaa(sampler2D textureSampler, vec2 vertTexcoord, vec2 texcoordOffset)
 {
 	// The parameters are hardcoded for now, but could be
 	// made into uniforms to control fromt he program.
-	const float FXAA_SPAN_MAX = 8.0;
+	const float FXAA_SPAN_MAX = 3.0;
 	const float FXAA_REDUCE_MUL = 1.0/8.0;//1.0/8.0;
 	const float FXAA_REDUCE_MIN = 1.0/128.0;//(1.0/128.0);
 
