@@ -32,6 +32,12 @@ public:
 		return Tool::executeToolBlocking(name, NULL);
 	}
 
+	static std::string executeToolNonBlocking(const char* name, const char* input);
+	static std::string executeToolNonBlocking(const char* name)
+	{
+		return Tool::executeToolNonBlocking(name, NULL);
+	}
+
 	static Tool executeTool(const char* name, const char* input);
 
 	size_t read(char* buffer, size_t size);

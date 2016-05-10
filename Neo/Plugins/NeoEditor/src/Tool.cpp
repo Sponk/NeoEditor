@@ -3,9 +3,11 @@
 #include <sstream>
 #include <fcntl.h>
 #include <NeoEngine.h>
+#include <thread>
 
 #ifndef _WIN32
 #include <unistd.h>
+#include <atomic>
 #else
 #include <windows.h>
 #endif
@@ -44,10 +46,12 @@ Tool Tool::executeTool(const char* name, const char* input)
 	Tool t;
 	t.in = fdChildParent[0];
 	t.out = fdParentChild[1];
+	t.m_isrunning = true;
 
 	if(input)
 		t.write(input, strlen(input));
 
+	close(t.out);
 	return t;
 }
 
@@ -153,6 +157,7 @@ std::string Tool::executeToolBlocking(const char* name, const char* input)
 	if (!t.isRunning())
 		return std::string();
 
+
 	char* buffer = new char[256];
 	while (t.read(buffer, 255))
 	{
@@ -162,6 +167,40 @@ std::string Tool::executeToolBlocking(const char* name, const char* input)
 	}
 
 	delete[] buffer;
+	return ss.str();
+}
+
+
+std::string Tool::executeToolNonBlocking(const char* name, const char* input)
+{
+	std::stringstream ss;
+	Tool t = Tool::executeTool(name, input);
+
+	if (!t.isRunning())
+		return std::string();
+
+	std::atomic<bool> done(false);
+	std::thread inthrd([&ss, &t, &done] () {
+						   char* buffer = new char[256];
+						   while (t.read(buffer, 255))
+						   {
+							   // Make sure the buffer is nul-terminated
+							   buffer[255] = 0;
+							   ss << buffer;
+						   }
+
+							delete[] buffer;
+							done = true;
+	});
+
+	Neo::NeoGame* game = Neo::NeoEngine::getInstance()->getGame();
+	while(!done)
+	{
+		game->update();
+		game->draw();
+	}
+
+	inthrd.join();
 	return ss.str();
 }
 
