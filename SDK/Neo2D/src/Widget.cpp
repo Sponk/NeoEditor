@@ -18,6 +18,9 @@ Widget::Widget(int x, int y, unsigned int w, unsigned int h,
 
 void Widget::update(float dt)
 {
+	if(!isActive())
+		return;
+
 	std::unordered_map<unsigned int, bool> handled;
 	if(getParent().expired())
 		for(auto iter = m_events.rbegin(); iter != m_events.rend(); iter++)

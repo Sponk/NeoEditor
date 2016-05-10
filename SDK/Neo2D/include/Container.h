@@ -121,7 +121,7 @@ public:
 	/**
 	 * @brief Applies the registered layout.
 	 */
-	void updateLayout() { if(m_layout != nullptr) m_layout->updateLayout(m_children); }
+	void updateLayout() { if(m_layout != nullptr) m_layout->updateLayout(*this, m_children); }
 
 	/**
 	 * @brief Registers a new filter.
