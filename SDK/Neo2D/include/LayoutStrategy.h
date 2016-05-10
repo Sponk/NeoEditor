@@ -24,8 +24,9 @@ public:
 	 * changes their position and size with a layout specific method.
 	 *
 	 * @param v The vector with widgets.
+	 * @param w The parent widget.
 	 */
-	virtual void updateLayout(std::vector<shared_ptr<Widget>>& v) = 0;
+	virtual void updateLayout(const Widget& w, std::vector<shared_ptr<Widget>>& v) = 0;
 };
 
 }
