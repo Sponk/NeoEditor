@@ -125,22 +125,22 @@ void EditorGame::onEnd()
 	Neo2D::Neo2DLevel::getInstance()->clear();
 }
 
-void EditorGame::updateEntityTreeChildren(TreeView::TreeNode* node, Object3d* object)
-{
-	for(int i = 0; i < object->getChildrenNumber(); i++)
-	{
-		updateEntityTreeChildren(node->addChild(object->getChild(i)->getName()).get(), object->getChild(i));
-	}
-}
-
 void EditorGame::updateEntityTree()
 {
 	NeoEngine* engine = NeoEngine::getInstance();
 	auto scene = engine->getLevel()->getCurrentScene();
 
+	std::function<void(TreeView::TreeNode*, Object3d*)> updateChildren = [&updateChildren](TreeView::TreeNode* node, Object3d* object)
+	{
+		for(int i = 0; i < object->getChildrenNumber(); i++)
+		{
+			updateChildren(node->addChild(object->getChild(i)->getName()).get(), object->getChild(i));
+		}
+	};
+
 	m_entityTree->getRoot()->clear();
 	for(int i = 0; i < scene->getObjectsNumber(); i++)
 	{
-		updateEntityTreeChildren(m_entityTree->getRoot()->addChild(scene->getObjectByIndex(i)->getName()).get(), scene->getObjectByIndex(i));
+		updateChildren(m_entityTree->getRoot()->addChild(scene->getObjectByIndex(i)->getName()).get(), scene->getObjectByIndex(i));
 	}
 }

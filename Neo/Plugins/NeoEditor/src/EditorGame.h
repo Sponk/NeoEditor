@@ -32,7 +32,6 @@ public:
 	void updateEntityTree();
 
 private:
-	void updateEntityTreeChildren(Neo2D::Gui::TreeView::TreeNode* node, Neo::Object3d* object);
 };
 
 #endif //NEO_EDITORGAME_H
