@@ -95,7 +95,7 @@ Neo2D::Gui::TreeView::TreeView(int x,
 							   const shared_ptr<Theme>& itemtheme,
 							   const shared_ptr<Theme>& background)
 	: Widget(x, y, w, h, nullptr, parent, (background == nullptr) ? make_shared<TreeBackgroundTheme>() : background),
-	  m_itemTheme(itemtheme), m_rootNode(nullptr)
+	  m_itemTheme(itemtheme), m_rootNode(nullptr), m_selected(nullptr)
 { }
 
 void TreeView::update(float dt)
@@ -180,5 +180,29 @@ void TreeView::TreeNode::handle(const Event& e)
 		case MOUSE_DESELECT:
 			setState(WIDGET_NORMAL);
 			break;
+	}
+}
+
+shared_ptr<TreeView::TreeNode> TreeView::findNode(const char* name)
+{
+	if(!m_rootNode)
+		return nullptr;
+
+	return m_rootNode->findNode(name);
+}
+
+void TreeView::setSelected(const char* label)
+{
+	m_selected = findNode(label).get();
+
+	// Ensure the selection is visible
+	if (m_selected)
+	{
+		auto parent = dynamic_pointer_cast<TreeNode>(m_selected->getParent().lock());
+		while(parent)
+		{
+			parent->setOpen(true);
+			parent = dynamic_pointer_cast<TreeNode>(parent->getParent().lock());
+		}
 	}
 }

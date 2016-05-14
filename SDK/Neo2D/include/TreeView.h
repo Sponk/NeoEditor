@@ -93,6 +93,18 @@ public:
 		 * @param b A boolean value.
 		 */
 		void setOpen(bool b) { m_open = b; }
+
+		shared_ptr<TreeNode> findNode(const char* name)
+		{
+			if(!strcmp(getLabel(), name))
+				return shared_from_this();
+
+			for(auto c : m_children)
+				if(auto retval = c->findNode(name))
+					return retval;
+
+			return nullptr;
+		}
 	};
 
 private:
@@ -134,6 +146,17 @@ public:
 		}
 		return m_rootNode;
 	}
+
+	const char* getSelected() const
+	{
+		if(m_selected)
+			return m_selected->getLabel();
+
+		return nullptr;
+	}
+
+	void setSelected(const char* label);
+	shared_ptr<TreeNode> findNode(const char* name);
 
 	virtual void update(float dt);
 	virtual void draw(const Neo::Vector2& offset);
