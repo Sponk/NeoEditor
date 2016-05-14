@@ -255,7 +255,7 @@ void SDLInputContext::handleInput()
 					}
 					case SDL_BUTTON_RIGHT:
 					{
-						mouse.keyDown(MOUSE_BUTTON_MIDDLE);
+						mouse.keyDown(MOUSE_BUTTON_RIGHT);
 						break;
 					}
 					case SDL_BUTTON_X1:
@@ -288,7 +288,7 @@ void SDLInputContext::handleInput()
 					}
 					case SDL_BUTTON_RIGHT:
 					{
-						mouse.keyUp(MOUSE_BUTTON_MIDDLE);
+						mouse.keyUp(MOUSE_BUTTON_RIGHT);
 						break;
 					}
 					case SDL_BUTTON_X1:
@@ -485,4 +485,6 @@ void SDLInputContext::handleInput()
 				break;
 		}
 	}
+
+	mouse.flushDirection();
 }
