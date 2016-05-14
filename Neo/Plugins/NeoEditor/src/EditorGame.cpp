@@ -27,9 +27,18 @@ void EditorGame::update()
 		updated = true;
 	}
 
+	float delta = engine->getGame()->getFrameDelta();
+
 	PROFILE_BEGIN("GuiUpdate");
 	m_canvas.update(engine->getGame()->getFrameDelta());
 	PROFILE_END("GuiUpdate");
+
+	Vector2 const size = engine->getSystemContext()->getScreenSize();
+
+	m_sceneView->update(delta);
+
+	m_sceneView->setPosition(Vector2(m_leftPanel->getSize().x, m_toolbar->getPosition().y - m_toolbar->getSize().y));
+	m_sceneView->setSize(Vector2(size.x - m_leftPanel->getSize().x, size.y));
 }
 
 void EditorGame::draw()
@@ -41,9 +50,6 @@ void EditorGame::draw()
 
 void EditorGame::onBegin()
 {
-	//std::string str = Tool::executeToolBlocking("cmake.exe", NULL);
-	//MLOG_INFO(str);
-
 	// TODO: Load config!
 	auto rootpane = make_shared<Container>(0, 0, 0, 0, nullptr);
 	m_canvas.addObject2D(rootpane);
@@ -89,6 +95,8 @@ void EditorGame::onBegin()
 		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 		engine->getLevel()->clear();
 		engine->getLevelLoader()->loadData(filename.c_str(), engine->getLevel());
+
+		engine->getLevel()->getCurrentScene();
 		updated = false;
 	});
 
@@ -115,9 +123,14 @@ void EditorGame::onBegin()
 	m_leftPanel->addWidget(leftscroll);
 	m_leftPanel->setEdge(LEFT_EDGE);
 
+	m_sceneView = make_shared<SceneView>(0,0,0,0, rootpane);
+	rootpane->addWidget(m_sceneView);
+
 	rootpane->addWidget(m_leftPanel);
 	rootpane->addWidget(m_toolbar);
 	rootpane->addWidget(m_menubar);
+
+	NeoEngine::getInstance()->getGame()->setDrawMainScene(false);
 }
 
 void EditorGame::onEnd()

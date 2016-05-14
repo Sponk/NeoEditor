@@ -9,6 +9,7 @@
 #include <Toolbar.h>
 #include "NativeToolset.h"
 #include "Sidepanel.h"
+#include "SceneView.h"
 
 class EditorGame : public Neo::SubGame
 {
@@ -18,11 +19,14 @@ class EditorGame : public Neo::SubGame
 	shared_ptr<Neo2D::Gui::TreeView> m_entityTree;
 
 	shared_ptr<Sidepanel> m_leftPanel;
-
 	shared_ptr<NativeToolset> m_toolset;
 
+	shared_ptr<SceneView> m_sceneView;
+
 public:
-	EditorGame(const shared_ptr<NativeToolset>& tools) : m_toolset(tools) {}
+	EditorGame(const shared_ptr<NativeToolset>& tools) :
+		m_toolset(tools)
+	{}
 
 	virtual void update();
 	virtual void draw();
