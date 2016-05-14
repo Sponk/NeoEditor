@@ -43,6 +43,9 @@ TEST(NeoCoreTest, MouseDeviceTest)
 	Mouse mouse;
 	mouse.moveCursor(Vector2(5.0, 5.0));
 
+	// Commit frame
+	mouse.flushDirection();
+
 	ASSERT_EQ(mouse.getDirection(), Vector2(5.0, 5.0));
 }
 

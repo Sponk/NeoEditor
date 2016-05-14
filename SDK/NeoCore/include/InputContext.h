@@ -169,7 +169,7 @@ public:
 	bool onKeyDown(unsigned int key) { return m_keys[key] == KEY_ON_DOWN; }
 	bool onKeyUp(unsigned int key) { return m_keys[key] == KEY_ON_UP; }
 
-	void flush()
+	virtual void flush()
 	{
 		for(int i = 0; i < m_keys.size(); i++)
 			if(m_keys[i] > KEY_DOWN)
@@ -221,6 +221,7 @@ class NEO_CORE_EXPORT Mouse : public AxisInputDevice
 {
 private:
 	Vector2 m_position;
+	Vector2 m_oldPosition;
 	Vector2 m_direction;
 	float m_scrollValue;
 
@@ -228,6 +229,7 @@ public:
 	Mouse() :
 		m_position(0, 0),
 		m_direction(0, 0),
+		m_oldPosition(0, 0),
 		m_scrollValue(0),
 		AxisInputDevice(2, 3) {}
 
@@ -238,13 +240,18 @@ public:
 
 	void moveCursor(const Vector2& position)
 	{
-		m_direction = position - m_position;
+		//m_direction = position - m_position;
 		m_position = position;
 	}
 
 	const Vector2& getDirection() const
 	{
 		return m_direction;
+	}
+
+	void setDirection(const Vector2& v)
+	{
+		m_direction = v;
 	}
 
 	float getScrollValue() const
@@ -255,6 +262,17 @@ public:
 	void setScrollValue(float scrollValue)
 	{
 		m_scrollValue = scrollValue;
+	}
+
+	virtual void flush() override
+	{
+		InputDevice::flush();
+	}
+
+	void flushDirection()
+	{
+		m_direction = m_position - m_oldPosition;
+		m_oldPosition = m_position;
 	}
 };
 
