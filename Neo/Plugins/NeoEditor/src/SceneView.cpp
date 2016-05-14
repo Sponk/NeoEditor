@@ -1,5 +1,6 @@
 #include "SceneView.h"
 #include <CommonEvents.h>
+#include <algorithm>
 
 using namespace Neo;
 
@@ -51,13 +52,84 @@ void SceneView::draw(const Neo::Vector2& offset)
 	render->disableScissorTest();
 }
 
+void SceneView::clearSelection()
+{
+	std::for_each(m_selection.begin(), m_selection.end(),
+				  [](Object3d* object) {
+					  if(object->getType() == OBJECT3D_ENTITY)
+						  static_cast<OEntity*>(object)->enableWireframe(false);
+				  });
+
+	m_selection.clear();
+}
+
+void SceneView::addSelectedObject(Neo::Object3d* object)
+{
+	m_selection.push_back(object);
+
+	if(object->getType() == OBJECT3D_ENTITY)
+		static_cast<OEntity*>(object)->enableWireframe(true);
+}
+
 void SceneView::handle(const Neo2D::Gui::Event& e)
 {
 	switch(e.getType())
 	{
 		case Neo2D::Gui::MOUSE_RIGHT_CLICK:
-		case Neo2D::Gui::MOUSE_LEFT_CLICK:
 			setState(Neo2D::Gui::WIDGET_SELECTED);
+			break;
+
+		case Neo2D::Gui::MOUSE_LEFT_CLICK:
+		{
+			setState(Neo2D::Gui::WIDGET_SELECTED);
+
+			NeoEngine* engine = NeoEngine::getInstance();
+			Scene* scene = engine->getLevel()->getCurrentScene();
+
+			InputContext* input = engine->getInputContext();
+			Vector2 screen = engine->getSystemContext()->getScreenSize();
+			Vector2 mousepos = input->getMouse().getPosition();
+
+			mousepos.y = screen.y - mousepos.y;
+			Vector3 cameraAxis = m_camera.getRotatedVector(Vector3(0, 0, -1)).getNormalized();
+
+			if(!input->isKeyDown(Neo::KEY_LSHIFT))
+				clearSelection();
+
+			Vector3 origin = m_camera.getTransformedPosition();
+			Vector3 direction = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 1));
+
+			if(m_camera.isOrtho())
+			{
+				Vector3 point;
+				isRayPlaneIntersection(direction, -cameraAxis, origin + (cameraAxis * m_camera.getClippingNear()), cameraAxis, &point);
+				origin = point;
+			}
+
+			direction = origin + ((direction - origin).getNormalized() * (m_camera.getClippingFar() - m_camera.getClippingNear()));
+
+			OEntity* selected = nullptr;
+			float selectedDistance = 0.0f;
+			for(size_t i = 0; i < scene->getEntitiesNumber(); i++)
+			{
+				auto result = scene->getEntityByIndex(i)->castRay(origin, direction);
+				if(result.hit)
+				{
+					if(float newlength = (origin - result.hit).getLength() > selectedDistance
+						|| selected == nullptr)
+					{
+						selected = scene->getEntityByIndex(i);
+						selectedDistance = newlength;
+					}
+				}
+			}
+
+			if(selected)
+			{
+				addSelectedObject(selected);
+				doCallback();
+			}
+		}
 			break;
 
 		case Neo2D::Gui::MOUSE_DESELECT:

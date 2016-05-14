@@ -130,6 +130,28 @@ void EditorGame::onBegin()
 	rootpane->addWidget(m_toolbar);
 	rootpane->addWidget(m_menubar);
 
+	m_entityTree->setCallback([this](Widget& w, void*) {
+		auto tree = static_cast<TreeView&>(w);
+		const char* selected = tree.getSelected();
+		NeoEngine* engine = NeoEngine::getInstance();
+
+		if(!selected) return;
+		Object3d* obj = engine->getLevel()->getCurrentScene()->getObjectByName(selected);
+
+		if(obj)
+		{
+			if(!engine->getInputContext()->isKeyDown(KEY_LSHIFT))
+				m_sceneView->clearSelection();
+
+			m_sceneView->addSelectedObject(obj);
+		}
+
+	}, nullptr);
+
+	m_sceneView->setCallback([this](Widget& w, void*) {
+						m_entityTree->setSelected(m_sceneView->getSelection().back()->getName());
+					}, nullptr);
+
 	NeoEngine::getInstance()->getGame()->setDrawMainScene(false);
 }
 
