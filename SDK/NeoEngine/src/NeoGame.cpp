@@ -32,7 +32,8 @@ static unsigned int s_renderBufferId = 0;
 NeoGame::NeoGame(void):
 m_isRunning(false),
 m_frameDelta(0),
-m_lastFrame(0)
+m_lastFrame(0),
+m_drawMainScene(true)
 {}
 
 NeoGame::~NeoGame(void)
@@ -131,6 +132,12 @@ void NeoGame::draw(void)
 	Scene* scene = level->getCurrentScene();
 	if(!scene)
 		return;
+
+	if(!m_drawMainScene)
+	{
+		render->clear(BUFFER_COLOR | BUFFER_DEPTH);
+		goto skip_draw_mainscene; /// EVIL!
+	}
 
 #ifndef DISABLE_3D
 	// render to texture
@@ -251,6 +258,7 @@ void NeoGame::draw(void)
 	}
 #endif
 
+skip_draw_mainscene:
 	for(auto sg : m_subGames)
 		sg->draw();
 }

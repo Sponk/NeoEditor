@@ -61,6 +61,7 @@ private:
 	long int m_lastFrame;
 	float m_frameDelta;
 	bool m_isRunning;
+	bool m_drawMainScene;
     std::vector<SubGame*> m_subGames;
 
 	Profiler m_profiler;
@@ -71,6 +72,16 @@ public:
 	virtual ~NeoGame(void);
 
 public:
+
+	bool isDrawingMainScene() const
+	{
+		return m_drawMainScene;
+	}
+
+	void setDrawMainScene(bool b)
+	{
+		m_drawMainScene = b;
+	}
 
 	Profiler& getProfiler() { return m_profiler; }
 	inline float getFrameDelta() { return m_frameDelta; }
