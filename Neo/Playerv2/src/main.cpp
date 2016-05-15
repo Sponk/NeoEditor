@@ -1,5 +1,4 @@
 #include <NeoEngine.h>
-#include <Plugin.h>
 #include <sexpresso.hpp>
 #include <memory>
 
