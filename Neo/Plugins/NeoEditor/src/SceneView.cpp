@@ -10,7 +10,7 @@ SceneView::SceneView(int x,
 					 unsigned int h,
 					 const shared_ptr<Neo2D::Object2D>& parent)
 	: Widget(x, y, w, h, nullptr, parent, nullptr),
-	  m_currentHandles(m_rotation)
+	  m_currentHandles(m_translation)
 {
 	resetCamera();
 
@@ -76,27 +76,6 @@ void SceneView::addSelectedObject(Neo::Object3d* object)
 
 	m_currentHandles.setPosition(getSelectionCenter());
 	m_currentHandles.enable(true);
-}
-
-static Vector3 calculateTranslationAxis(const OCamera& m_camera, const Vector3& position, const Vector3& axis, const Vector3& origin,
-										const Vector3& direction)
-{
-	InputContext* input = NeoEngine::getInstance()->getInputContext();
-	Vector2 mousedelta = input->getMouse().getPosition() - input->getMouse().getDirection();
-	Vector3 direction2 =
-		m_camera.getUnProjectedPoint(Vector3(mousedelta.x, mousedelta.y, 1));
-
-	Vector3 up = m_camera.getRotatedVector(Vector3(1, 1, 1));
-	Vector3 normal = getTriangleNormal(Vector3(0, 0, 0), axis, up);
-
-	Vector3 p1, p2;
-	isRayPlaneIntersection(origin, direction, position, normal, &p1);
-	isRayPlaneIntersection(origin, direction2, position, normal, &p2);
-
-	Vector3 dir = p1 - p2;
-	Vector3 normdir = dir.getNormalized();
-	MLOG_INFO("LENGTH: " << dir.getLength() << " dir: " << normdir.x << " " << normdir.y << " " << normdir.z);
-	return normdir; //Vector3(dir.getNormalized() * dir.getLength());
 }
 
 void SceneView::handle(const Neo2D::Gui::Event& e)
@@ -298,7 +277,7 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 							Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
 							Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
 
-							Vector3 vec = (p1 - p2) * distance * Vector3(1, 0, 0);
+							Vector3 vec = (p1 - p2) * distance * Vector3(0, 1, 0);
 
 							for(auto e : m_selection)
 								e->translate(vec);
