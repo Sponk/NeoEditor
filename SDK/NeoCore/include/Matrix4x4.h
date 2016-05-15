@@ -188,6 +188,28 @@ public:
 	{
 		vec = getInversetranslatedVector3(vec);
 	}
+
+	void lookAt(const Vector3& eye, const Vector3& origin, const Vector3& up)
+	{
+		Vector3 f = (origin - eye).getNormalized();
+		Vector3 s = (up.crossProduct(f)).getNormalized();
+		Vector3 u(f.crossProduct(s));
+
+		loadIdentity();
+
+		(*this)(0, 0) = s.x;
+		(*this)(1, 0) = s.y;
+		(*this)(2, 0) = s.z;
+		(*this)(0, 1) = u.x;
+		(*this)(1, 1) = u.y;
+		(*this)(2, 1) = u.z;
+		(*this)(0, 2) = f.x;
+		(*this)(1, 2) = f.y;
+		(*this)(2, 2) = f.z;
+		(*this)(3, 0) = -(s.dotProduct(eye));
+		(*this)(3, 1) = -(u.dotProduct(eye));
+		(*this)(3, 2) = -(f.dotProduct(eye));
+	}
 };
 }
 #endif
