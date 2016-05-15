@@ -127,6 +127,24 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 				}
 			}
 
+			for(size_t i = 0; i < scene->getTextsNumber(); i++)
+			{
+				auto text = scene->getTextByIndex(i);
+	
+				auto box = text->getBoundingBox();
+				auto inverse = text->getMatrix()->getInverse();
+
+				if(isEdgeToBoxCollision(inverse * origin, inverse * direction, box->min, box->max))
+				{
+					if(float newlength = (origin - text->getTransformedPosition()).getLength() > selectedDistance
+						|| selected == nullptr)
+					{
+						selected = text;
+						selectedDistance = newlength;
+					}
+				}
+			}
+			
 			// Search in overlay scene
 			for(size_t i = 0; i < m_overlayScene->getEntitiesNumber(); i++)
 			{
