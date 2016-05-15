@@ -19,7 +19,7 @@
 				 (global-ede-mode 1)
 
 				 ;;(semantic-load-enable-excessive-code-helpers)
-				 
+
 				 (global-semantic-idle-scheduler-mode)
 				 (global-semantic-idle-completions-mode)
 				 (global-semantic-decoration-mode)
@@ -30,9 +30,13 @@
 				 (setq project-directory (file-name-directory
 										  (let ((d (dir-locals-find-file ".")))
 											(if (stringp d) d (car d)))))
-				 
-				 (setq project-file (concat  project-directory "CMakeLists.txt"))
 
+				 
+				 (setq cmake-ide-build-dir (concat project-directory "build"))
+				 (setq cmake-compile-command "make -j8")
+				 (setq project-file (concat  project-directory "CMakeLists.txt"))
+				 (neotree)
+				 
 				 (message project-file)
 				 
 				 (ede-cpp-root-project "Neo"
