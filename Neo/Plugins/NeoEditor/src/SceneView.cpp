@@ -13,13 +13,11 @@ SceneView::SceneView(int x,
 {
 	resetCamera();
 
-	//registerEvent(make_shared<Neo2D::Gui::MouseMoveEvent>(*this, nullptr, nullptr));
 	registerEvent(make_shared<Neo2D::Gui::MouseDeselectEvent>(*this, nullptr, nullptr));
 	registerEvent(make_shared<Neo2D::Gui::MouseLeftClickEvent>(*this, nullptr, nullptr));
 	registerEvent(make_shared<Neo2D::Gui::MouseRightClickEvent>(*this, nullptr, nullptr));
 
-	//registerEvent(make_shared<Neo2D::Gui::MouseRightReleaseEvent>(*this, nullptr, nullptr));
-	//registerEvent(make_shared<Neo2D::Gui::MouseLeftReleaseEvent>(*this, nullptr, nullptr));
+	updateOverlayScene();
 }
 
 void SceneView::resetCamera()
@@ -49,6 +47,9 @@ void SceneView::draw(const Neo::Vector2& offset)
 
 	scene->draw(&m_camera);
 	scene->drawObjectsBehaviors();
+
+	m_overlayScene->draw(&m_camera);
+
 	render->disableScissorTest();
 }
 
@@ -108,8 +109,10 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 
 			direction = origin + ((direction - origin).getNormalized() * (m_camera.getClippingFar() - m_camera.getClippingNear()));
 
-			OEntity* selected = nullptr;
+			Object3d* selected = nullptr;
 			float selectedDistance = 0.0f;
+
+			// Search in main scene
 			for(size_t i = 0; i < scene->getEntitiesNumber(); i++)
 			{
 				auto result = scene->getEntityByIndex(i)->castRay(origin, direction);
@@ -119,6 +122,21 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 						|| selected == nullptr)
 					{
 						selected = scene->getEntityByIndex(i);
+						selectedDistance = newlength;
+					}
+				}
+			}
+
+			// Search in overlay scene
+			for(size_t i = 0; i < m_overlayScene->getEntitiesNumber(); i++)
+			{
+				auto result = m_overlayScene->getEntityByIndex(i)->castRay(origin, direction);
+				if(result.hit)
+				{
+					if(float newlength = (origin - result.hit).getLength() > selectedDistance
+						|| selected == nullptr)
+					{
+						selected = m_overlayScene->getEntityByIndex(i)->getParent();
 						selectedDistance = newlength;
 					}
 				}
@@ -174,4 +192,58 @@ void SceneView::update(float dt)
 	}
 
 	m_camera.updateMatrix();
+	m_overlayScene->update();
+
+	for(size_t i = 0; i < m_overlayScene->getObjectsNumber(); i++)
+	{
+		auto object = m_overlayScene->getObjectByIndex(i);
+		Vector3 position = object->getPosition();
+
+		object->getMatrix()->lookAt(object->getTransformedPosition(), m_camera.getTransformedPosition(), Vector3(0,0,1));
+		Vector3 rotation = object->getMatrix()->getEulerAngles();
+
+		object->setEulerRotation(rotation);
+		object->setPosition(position);
+		object->updateMatrix();
+	}
+}
+
+void SceneView::updateOverlayScene()
+{
+	m_overlayScene = make_shared<Scene>();
+
+	auto engine = NeoEngine::getInstance();
+	auto level = engine->getLevel();
+	auto scene = level->getCurrentScene();
+
+	if(!scene)
+		return;
+
+	for(size_t i = 0; i < scene->getObjectsNumber(); i++)
+	{
+		Object3d* object = scene->getObjectByIndex(i);
+		switch(object->getType())
+		{
+			case OBJECT3D_CAMERA:
+			{
+				auto entity = m_overlayScene->addNewEntity(level->loadMesh("data/objects/camera.dae"));
+				entity->linkTo(object);
+			}
+				break;
+
+			case OBJECT3D_LIGHT:
+			{
+				auto entity = m_overlayScene->addNewEntity(level->loadMesh("data/objects/light.dae"));
+				entity->linkTo(object);
+			}
+				break;
+
+			case OBJECT3D_SOUND:
+			{
+				auto entity = m_overlayScene->addNewEntity(level->loadMesh("data/objects/sound.dae"));
+				entity->linkTo(object);
+			}
+				break;
+		}
+	}
 }

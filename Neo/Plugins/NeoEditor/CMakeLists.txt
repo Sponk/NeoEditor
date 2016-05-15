@@ -16,3 +16,6 @@ target_link_libraries(NeoEditor
 
 ## Uncomment to enable experimental Qt tools
 add_subdirectory(runtime)
+
+install(DIRECTORY data DESTINATION ${NEO_INSTALL_DIR})
+copy_files("*" "${NEO_BINARY_OUTPUT}" "copy-editor-data")

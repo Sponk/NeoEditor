@@ -178,4 +178,6 @@ void EditorGame::updateEntityTree()
 	{
 		updateChildren(m_entityTree->getRoot()->addChild(scene->getObjectByIndex(i)->getName()).get(), scene->getObjectByIndex(i));
 	}
+
+	m_sceneView->updateOverlayScene();
 }

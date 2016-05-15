@@ -6,6 +6,7 @@
 
 class SceneView : public Neo2D::Gui::Widget
 {
+	shared_ptr<Neo::Scene> m_overlayScene;
 	Neo::OCamera m_camera;
 	std::vector<Neo::Object3d*> m_selection;
 
@@ -24,6 +25,8 @@ public:
 	std::vector<Neo::Object3d*>& getSelection() { return m_selection; }
 	void clearSelection();
 	void addSelectedObject(Neo::Object3d* object);
+
+	void updateOverlayScene();
 };
 
 #endif //NEO_SCENEVIEW_H
