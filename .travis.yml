@@ -5,7 +5,7 @@ addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
-      - ubuntu-sdk-team
+      # - ubuntu-sdk-team
 
     packages:
       - cmake
@@ -27,8 +27,8 @@ addons:
       - qtdeclarative5-dev
       - libqt5webkit5-dev
       - libsqlite3-dev
-      - qt5-default
-      - qttools5-dev-tools
+      # - qt5-default
+      # - qttools5-dev-tools
       # - wput
 
 install:
