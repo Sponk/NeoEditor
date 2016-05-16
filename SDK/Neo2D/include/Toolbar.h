@@ -22,6 +22,18 @@ public:
 		getTheme()->draw(this, offset);
 		Container::draw(offset);
 	}
+
+	virtual void update(float dt) override
+	{
+		Neo::Vector2 size(getSize().y, getSize().y);
+		float px = getPosition().x;
+		for(auto c : getChildren())
+		{
+			c->setSize(size);
+			c->setPosition(Neo::Vector2(px, getPosition().y));
+			px += size.x;			
+		}
+	}
 };
 
 }
