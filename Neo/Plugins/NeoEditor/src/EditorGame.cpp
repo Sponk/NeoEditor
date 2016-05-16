@@ -1,6 +1,7 @@
 #include "EditorGame.h"
 #include "Tool.h"
 #include <Neo2DLevel.h>
+#include <ImageButton.h>
 #include <Translator.h>
 #include <cstdlib>
 #include <thread>
@@ -53,7 +54,7 @@ void EditorGame::onBegin()
 	// TODO: Load config!
 	auto rootpane = make_shared<Container>(0, 0, 0, 0, nullptr);
 	m_canvas.addObject2D(rootpane);
-
+	
 	m_menubar = make_shared<Menubar>(0, 0, 6000, 25, rootpane);
 	auto filemenu = make_shared<Submenu>(tr("File"), m_menubar);
 
@@ -93,10 +94,13 @@ void EditorGame::onBegin()
 		up.join();*/
 
 		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+
+		m_sceneView->clearSelection();
 		engine->getLevel()->clear();
 		engine->getLevelLoader()->loadData(filename.c_str(), engine->getLevel());
 
 		engine->getLevel()->getCurrentScene();
+		m_sceneView->updateOverlayScene();
 		updated = false;
 	});
 
@@ -110,8 +114,21 @@ void EditorGame::onBegin()
 	m_menubar->addMenu(filemenu);
 
 	// Toolbar
-	m_toolbar = make_shared<Toolbar>(0, m_menubar->getSize().y, 6000, 25, rootpane);
+	m_toolbar = make_shared<Toolbar>(0, m_menubar->getSize().y, 6000, 32, rootpane);
 
+	auto toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/translate.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(TRANSLATION); MLOG_INFO("TRANSLATION"); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/scale.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(SCALE);  MLOG_INFO("SCALE");}, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/rotate.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(ROTATION);  MLOG_INFO("ROTATION");}, nullptr);
+	m_toolbar->addWidget(toolbutton);
+	
+	
 	// Sidepanels
 	m_leftPanel = make_shared<Sidepanel>(0, m_menubar->getSize().y + m_toolbar->getSize().y, 250, 500, rootpane);
 	m_leftPanel->setLayout(make_shared<ScaleLayout>());
@@ -152,7 +169,9 @@ void EditorGame::onBegin()
 						m_entityTree->setSelected(m_sceneView->getSelection().back()->getName());
 					}, nullptr);
 
-	NeoEngine::getInstance()->getGame()->setDrawMainScene(false);
+	NeoEngine* engine = NeoEngine::getInstance();
+	engine->getSystemContext()->setWindowTitle(tr("Neo Scene Editor"));
+	engine->getGame()->setDrawMainScene(false);
 }
 
 void EditorGame::onEnd()

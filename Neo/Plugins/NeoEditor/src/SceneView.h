@@ -4,6 +4,13 @@
 #include <Widget.h>
 #include <vector>
 
+enum HANDLE_MODE
+{
+	TRANSLATION,
+	SCALE,
+	ROTATION
+};
+
 class SceneView : public Neo2D::Gui::Widget
 {
 	shared_ptr<Neo::Scene> m_handlesScene;
@@ -50,8 +57,9 @@ class SceneView : public Neo2D::Gui::Widget
 		}
 	};
 
-	Handles& m_currentHandles;
+	Handles* m_currentHandles;
 	Handles m_rotation, m_translation, m_scale;	
+	HANDLE_MODE m_mode;
 	
 public:
 	SceneView(int x,
@@ -71,6 +79,7 @@ public:
 	Neo::Vector3 getSelectionCenter();
 	
 	void updateOverlayScene();
+	void setHandleMode(HANDLE_MODE mode);
 };
 
 #endif //NEO_SCENEVIEW_H

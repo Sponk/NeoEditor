@@ -10,7 +10,7 @@ SceneView::SceneView(int x,
 					 unsigned int h,
 					 const shared_ptr<Neo2D::Object2D>& parent)
 	: Widget(x, y, w, h, nullptr, parent, nullptr),
-	  m_currentHandles(m_translation)
+	  m_currentHandles(&m_translation)
 {
 	resetCamera();
 
@@ -22,11 +22,38 @@ SceneView::SceneView(int x,
 	updateOverlayScene();
 }
 
+void SceneView::setHandleMode(HANDLE_MODE mode)
+{
+	m_mode = mode;
+	m_currentHandles->enable(false);
+	switch (mode)
+	{
+		case TRANSLATION:
+			m_currentHandles = &m_translation;
+			break;
+
+		case SCALE:
+			m_currentHandles = &m_scale;
+			break;
+
+		case ROTATION:
+			m_currentHandles = &m_rotation;
+			break;
+	}
+
+	if (m_selection.size() > 0)
+	{
+		m_currentHandles->enable(true);
+		m_currentHandles->setPosition(getSelectionCenter());
+	}
+}
+
 void SceneView::resetCamera()
 {
 	m_camera.setPosition(Vector3(0,0,0));
 	m_camera.setEulerRotation(Vector3(90,0,0));
 	m_camera.setClippingFar(100000);
+	m_camera.setFov(75);
 	m_camera.updateMatrix();
 }
 
@@ -52,8 +79,10 @@ void SceneView::draw(const Neo::Vector2& offset)
 
 	m_overlayScene->draw(&m_camera);
 	m_handlesScene->draw(&m_camera);
-	
+
+	render->disableDepthTest();
 	render->disableScissorTest();
+	engine->getRenderer()->set2D(size);
 }
 
 void SceneView::clearSelection()
@@ -74,8 +103,8 @@ void SceneView::addSelectedObject(Neo::Object3d* object)
 	if(object->getType() == OBJECT3D_ENTITY)
 		static_cast<OEntity*>(object)->enableWireframe(true);
 
-	m_currentHandles.setPosition(getSelectionCenter());
-	m_currentHandles.enable(true);
+	m_currentHandles->setPosition(getSelectionCenter());
+	m_currentHandles->enable(true);
 }
 
 void SceneView::handle(const Neo2D::Gui::Event& e)
@@ -92,7 +121,7 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 			setState(Neo2D::Gui::WIDGET_SELECTED);
 
 			if(e.getType() == Neo2D::Gui::MOUSE_LEFT_CLICK)
-				m_currentHandles.grabbed = nullptr;
+				m_currentHandles->grabbed = nullptr;
 			
 			NeoEngine* engine = NeoEngine::getInstance();
 			Scene* scene = engine->getLevel()->getCurrentScene();
@@ -116,10 +145,10 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 
 			direction = origin + ((direction - origin).getNormalized() * (m_camera.getClippingFar() - m_camera.getClippingNear()));
 
-			Object3d* selected = m_currentHandles.grabbed;
+			Object3d* selected = m_currentHandles->grabbed;
 			float selectedDistance = 0.0f;
 
-			if(m_currentHandles.grabbed == nullptr)
+			if(m_currentHandles->grabbed == nullptr)
 			{
 				// Search in main scene
 				for(size_t i = 0; i < scene->getEntitiesNumber(); i++)
@@ -198,13 +227,13 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 				if(input->getMouse().isKeyDown(MOUSE_BUTTON_LEFT))
 				{
 					const float rotationSpeed = 2.0;
-					if(selected == m_currentHandles.x)
+					if(selected == m_currentHandles->x)
 					{
 						//local p1 = camera:getUnProjectedPoint(NeoLua.Vector3(mx, my, 0.3))
 						//local p2 = camera:getUnProjectedPoint(NeoLua.Vector3(Editor.mx * res.x, (1 - Editor.my) * res.y, 0.3))
 						//local dif = (p1 - p2) * 100
 
-						if(&m_currentHandles == &m_translation)
+						if(m_mode == TRANSLATION)
 						{
 							Vector2 mousedir = input->getMouse().getDirection();
 							mousedir.y *= -1;
@@ -220,10 +249,10 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 							for(auto e : m_selection)
 								e->translate(vec);
 
-							m_currentHandles.setPosition(getSelectionCenter());
-							m_currentHandles.grabbed = m_currentHandles.x;
+							m_currentHandles->setPosition(getSelectionCenter());
+							m_currentHandles->grabbed = m_currentHandles->x;
 						}
-						else if(&m_currentHandles == &m_scale)
+						else if(m_mode == SCALE)
 						{
 							Vector2 mousedir = input->getMouse().getDirection();
 							mousedir.y *= -1;
@@ -237,12 +266,12 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 							Vector3 vec = (p1 - p2) * distance * Vector3(1, 0, 0) * 0.007;
 
 							for(auto e : m_selection)
-								e->setScale(e->getScale() - vec);
+								e->setScale(e->getScale() + e->getRotatedVector(vec));
 
-							m_currentHandles.setPosition(getSelectionCenter());
-							m_currentHandles.grabbed = m_currentHandles.x;
+							m_currentHandles->setPosition(getSelectionCenter());
+							m_currentHandles->grabbed = m_currentHandles->x;
 						}
-						else if(&m_currentHandles == &m_rotation)
+						else if(m_mode == ROTATION)
 						{
 							Vector2 mousedir = input->getMouse().getDirection();
 							mousedir.y *= -1;
@@ -260,13 +289,13 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 							for(auto e : m_selection)
 								e->setEulerRotation(e->getEulerRotation() - vec);
 
-							m_currentHandles.setPosition(getSelectionCenter());
-							m_currentHandles.grabbed = m_currentHandles.x;
+							m_currentHandles->setPosition(getSelectionCenter());
+							m_currentHandles->grabbed = m_currentHandles->x;
 						}
 					}
-					else if(selected == m_currentHandles.y)
+					else if(selected == m_currentHandles->y)
 					{					
-						if(&m_currentHandles == &m_translation)
+						if(m_mode == TRANSLATION)
 						{
 							Vector2 mousedir = input->getMouse().getDirection();
 							mousedir.y *= -1;
@@ -282,10 +311,10 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 							for(auto e : m_selection)
 								e->translate(vec);
 
-							m_currentHandles.setPosition(getSelectionCenter());
-							m_currentHandles.grabbed = m_currentHandles.y;
+							m_currentHandles->setPosition(getSelectionCenter());
+							m_currentHandles->grabbed = m_currentHandles->y;
 						}
-						else if(&m_currentHandles == &m_scale)
+						else if(m_mode == SCALE)
 						{
 							Vector2 mousedir = input->getMouse().getDirection();
 							mousedir.y *= -1;
@@ -296,15 +325,14 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 							Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
 							Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
 
-							Vector3 vec = (p1 - p2) * distance * Vector3(0, 1, 0) * -0.007;
-
+							Vector3 vec = (p1 - p2) * distance * Vector3(0, 1, 0) * -0.007;						
 							for(auto e : m_selection)
-								e->setScale(e->getScale() + vec);
+								e->setScale(e->getScale() + e->getRotatedVector(vec));
 
-							m_currentHandles.setPosition(getSelectionCenter());
-							m_currentHandles.grabbed = m_currentHandles.y;
+							m_currentHandles->setPosition(getSelectionCenter());
+							m_currentHandles->grabbed = m_currentHandles->y;
 						}
-						else if(&m_currentHandles == &m_rotation)
+						else if(m_mode == ROTATION)
 						{
 							Vector2 mousedir = input->getMouse().getDirection();
 							mousedir.y *= -1;
@@ -322,13 +350,13 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 							for(auto e : m_selection)
 								e->setEulerRotation(e->getEulerRotation() - vec);
 
-							m_currentHandles.setPosition(getSelectionCenter());
-							m_currentHandles.grabbed = m_currentHandles.y;
+							m_currentHandles->setPosition(getSelectionCenter());
+							m_currentHandles->grabbed = m_currentHandles->y;
 						}
 					}
-					else if(selected == m_currentHandles.z)
+					else if(selected == m_currentHandles->z)
 					{					
-						if(&m_currentHandles == &m_translation)
+						if(m_mode == TRANSLATION)
 						{
 							Vector2 mousedir = input->getMouse().getDirection();
 							mousedir.y *= -1;
@@ -344,10 +372,10 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 							for(auto e : m_selection)
 								e->translate(vec);
 
-							m_currentHandles.setPosition(getSelectionCenter());
-							m_currentHandles.grabbed = m_currentHandles.z;
+							m_currentHandles->setPosition(getSelectionCenter());
+							m_currentHandles->grabbed = m_currentHandles->z;
 						}
-						else if(&m_currentHandles == &m_scale)
+						else if(m_mode == SCALE)
 						{
 							Vector2 mousedir = input->getMouse().getDirection();
 							mousedir.y *= -1;
@@ -361,12 +389,12 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 							Vector3 vec = (p1 - p2) * distance * Vector3(0, 0, 1) * 0.015;
 
 							for(auto e : m_selection)
-								e->setScale(e->getScale() + vec);
+								e->setScale(e->getScale() + e->getRotatedVector(vec));
 
-							m_currentHandles.setPosition(getSelectionCenter());
-							m_currentHandles.grabbed = m_currentHandles.z;
+							m_currentHandles->setPosition(getSelectionCenter());
+							m_currentHandles->grabbed = m_currentHandles->z;
 						}
-						else if(&m_currentHandles == &m_rotation)
+						else if(m_mode == ROTATION)
 						{
 							Vector2 mousedir = input->getMouse().getDirection();
 							mousedir.y *= -1;
@@ -384,8 +412,8 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 							for(auto e : m_selection)
 								e->setEulerRotation(e->getEulerRotation() + vec);
 
-							m_currentHandles.setPosition(getSelectionCenter());
-							m_currentHandles.grabbed = m_currentHandles.z;
+							m_currentHandles->setPosition(getSelectionCenter());
+							m_currentHandles->grabbed = m_currentHandles->z;
 						}
 					}
 					else if(e.getType() == Neo2D::Gui::MOUSE_LEFT_CLICK)
@@ -398,8 +426,8 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 					}
 				}
 			}
-			else
-				m_currentHandles.enable(false);
+			else if(e.getType() == Neo2D::Gui::MOUSE_LEFT_CLICK)
+				m_currentHandles->enable(false);
 		}
 			break;
 
@@ -411,6 +439,9 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 
 void SceneView::update(float dt)
 {
+	Vector3 scale = (m_camera.getPosition() - m_currentHandles->x->getTransformedPosition()).getLength() * 0.0075;
+	m_currentHandles->setScale(scale);
+	
 	if(getState() != Neo2D::Gui::WIDGET_SELECTED)
 		return;
 
@@ -460,10 +491,6 @@ void SceneView::update(float dt)
 		object->setPosition(position);
 		object->updateMatrix();
 	}
-
-	Vector3 scale = (m_camera.getPosition() - m_currentHandles.x->getTransformedPosition()).getLength() * 0.0075;
-
-	m_currentHandles.setScale(scale);
 }
 
 void SceneView::updateOverlayScene()
@@ -521,6 +548,8 @@ void SceneView::updateOverlayScene()
 		m_translation.enable(false);
 		m_scale.enable(false);
 		m_rotation.enable(false);
+
+		setHandleMode(TRANSLATION);
 	}
 
 	// Load billboards
