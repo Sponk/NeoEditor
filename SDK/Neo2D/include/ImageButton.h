@@ -28,6 +28,8 @@ public:
 	virtual void draw(const Neo::Vector2& offset) override
 	{
 		Widget::draw(offset);
+
+		m_sprite.setPosition(getPosition());
 		m_sprite.draw(offset);
 	}
 };
