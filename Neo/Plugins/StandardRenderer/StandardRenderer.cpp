@@ -370,8 +370,6 @@ void StandardRenderer::drawDisplay(SubMesh* mesh,
 		render->setBlendingMode(material->getBlendMode());
 		render->disableCullFace();
 		render->setDepthMask(false);
-
-		render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
 	}
 	else
 	{
@@ -382,6 +380,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh,
 
 	float shininess = material->getShininess();
 	render->sendUniformFloat(m_fx[0], "Shininess", &shininess);
+	render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
 
 	// Set up normal matrix
 	render->sendUniformMatrix(m_fx[0], "NormalMatrix", &normalMatrix);
@@ -1084,13 +1083,11 @@ void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
 							&& (epos - campos).getLength()
 							< (epos - (*i)->getTransformedPosition()).getLength()) ++i;
 
-//#pragma omp critical
- 					{ data->visibleTransparentEntities.insert(i, e); } //push_back(e);
+					data->visibleTransparentEntities.push_back(e);
 				}
 				else
 				{
-//#pragma omp critical
-					{ data->visibleEntities.push_back(e); }
+					data->visibleEntities.push_back(e);
 				}
 			}
 		}
@@ -1138,9 +1135,9 @@ void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
 
 	// This prevents the clear color from bleeding over multiple
 	// scene layers
-	//render->setColorMask(false, false, false, true);
+	render->setColorMask(false, false, false, true);
 	render->clear(BUFFER_COLOR | BUFFER_DEPTH);
-	//render->setColorMask(true, true, true, true);
+	render->setColorMask(true, true, true, true);
 
 	// Send some common data
 	Vector3 ambientLight = scene->getAmbientLight();
@@ -1345,9 +1342,9 @@ void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera, bool post
 
 		// This prevents the clear color from bleeding over multiple
 		// scene layers
-		// render->setColorMask(false, false, false, true);
+		render->setColorMask(false, false, false, true);
 		render->clear(BUFFER_COLOR);
-		// render->setColorMask(true, true, true, true);
+		render->setColorMask(true, true, true, true);
 	}
 	else
 	{

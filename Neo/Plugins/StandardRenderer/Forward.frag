@@ -465,7 +465,7 @@ void main(void)
     else
     	color = vec4(Diffuse, 0);
 
-	if(Opacity == 1.0)
+        if(Opacity >= 1.0 )
 	{
 	 	if(TextureMode > 0 && color.a <= 0.5) discard;
 
@@ -473,10 +473,10 @@ void main(void)
 		FragColor = color;
 	}
 	else
-	{
+        {
 		FragColor = shadeModel(position, normal) + vec4(color.rgb * Emit, 0.0);
 		FragColor.a = color.a + Opacity;
-		Normal.a = 1;
+                Normal.a = 1;
 		return;
 	}
 

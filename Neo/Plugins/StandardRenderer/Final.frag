@@ -521,7 +521,7 @@ void main(void)
 			FragColor.rgb *= ssao(texCoord, frame * 10.0, Textures[4], Textures[2], Textures[1]);
 		}
 
-		FragColor = transparency * gammaCorrection(FragColor, 1.2);
+                FragColor = transparency * gammaCorrection(FragColor, 1.2);
 		return;
 	}
 
@@ -548,6 +548,6 @@ void main(void)
 	{
 		vec4 p = texture2D(Textures[2], texCoord);
 		FragColor = calculateAllCookLight(p.xyz, n.rgb, FragColor, p.a) + vec4(startColor.rgb * data.rgb, 0.0);
-		FragColor.a = transparency;
+                FragColor.a = transparency;
 	}
 }
