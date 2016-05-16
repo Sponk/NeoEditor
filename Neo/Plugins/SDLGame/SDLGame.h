@@ -16,6 +16,8 @@ public:
 
 	void update();
 	void draw();
+
+	SDL_Window* getSDLWindow() const { return m_window; }
 };
 
 #endif
