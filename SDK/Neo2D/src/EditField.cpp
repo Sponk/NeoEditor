@@ -257,6 +257,10 @@ bool Neo2D::Gui::EditField::handle(const Event& e)
 						m_caret += size;
 				}
 					break;
+
+				case Neo::KEY_RETURN:
+					doCallback();
+					break;
 			}
 			setLabel(str.c_str());
 
