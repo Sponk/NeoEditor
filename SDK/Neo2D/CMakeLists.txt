@@ -38,7 +38,8 @@ SET(HEADERS
 	include/TreeView.h
 	include/Translator.h
 	include/csv.h
-	include/HorizontalLayout.h)
+	include/HorizontalLayout.h
+	include/VerticalLayout.h)
 
 SET(SOURCES
 	src/Object2D.cpp
@@ -61,7 +62,8 @@ SET(SOURCES
 	src/Container.cpp
 	src/TreeView.cpp
 	src/Translator.cpp
-	src/HorizontalLayout.cpp)
+	src/HorizontalLayout.cpp
+	src/VerticalLayout.cpp)
 
 IF(NOT ANDROID AND NOT EMSCRIPTEN)
 	ADD_LIBRARY(Neo2D SHARED ${SOURCES} ${HEADERS})
@@ -72,7 +74,7 @@ ELSEIF(EMSCRIPTEN)
 ENDIF()
 
 IF(NOT NO_TESTS)
-	ADD_EXECUTABLE(Neo2DTest tests/main.cpp tests/Object2DTest.cpp tests/ContainerTest.cpp tests/EventTest.cpp tests/ButtonTest.cpp tests/CheckButtonTest.cpp tests/RadioButtonTest.cpp tests/EditFieldTest.cpp tests/MenuTest.cpp tests/ScrollbarTest.cpp tests/TreeViewTest.cpp)
+	ADD_EXECUTABLE(Neo2DTest tests/main.cpp tests/Object2DTest.cpp tests/ContainerTest.cpp tests/EventTest.cpp tests/ButtonTest.cpp tests/CheckButtonTest.cpp tests/RadioButtonTest.cpp tests/EditFieldTest.cpp tests/MenuTest.cpp tests/ScrollbarTest.cpp tests/TreeViewTest.cpp tests/VerticalLayoutTest.cpp)
 	TARGET_LINK_LIBRARIES(Neo2DTest Neo2D ${NEO_CORE_LIBRARIES} ${NEO_ENGINE_LIBRARIES} ${GTEST_LIBRARIES})
 ENDIF()
 

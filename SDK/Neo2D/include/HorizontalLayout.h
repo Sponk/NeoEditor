@@ -12,7 +12,7 @@ namespace Gui
 class NEO2D_EXPORT HorizontalLayout : public LayoutStrategy
 {
 public:
-	virtual void updateLayout(const Widget& w, std::vector<shared_ptr<Widget>>& v);
+	virtual void updateLayout(const Widget& w, std::vector<shared_ptr<Widget>>& v, const Neo::Vector2& offset);
 };
 	
 }

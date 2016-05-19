@@ -95,9 +95,9 @@ Submenu::Submenu(const char* label, const shared_ptr<Object2D>& parent, const sh
 	setSize(Vector2(200,20));
 }
 
-void Submenu::handle(const Event& e)
+bool Submenu::handle(const Event& e)
 {
-	Button::handle(e);
+	bool handled = Button::handle(e);
 	switch(e.getType())
 	{
 		case MOUSE_OVER:
@@ -119,7 +119,7 @@ void Submenu::handle(const Event& e)
 					sm->hideChildren();
 			}
 		}
-		break;
+		return true;
 
 		case MOUSE_DESELECT:
 
@@ -137,6 +137,8 @@ void Submenu::handle(const Event& e)
 			}*/
 			break;
 	}
+
+	return handled;
 }
 
 std::shared_ptr<MenuItem> Submenu::findChild(const std::string& name) const
@@ -185,13 +187,15 @@ shared_ptr<MenuItem> Submenu::addItem(const std::string& name, std::function<voi
 	return item;
 }
 
-void MenuItem::handle(const Event& e)
+bool MenuItem::handle(const Event& e)
 {
-	Button::handle(e);
+	bool handled = Button::handle(e);
 	if(e.getType() == MOUSE_LEFT_RELEASE)
 	{
 		hideHierarchy();
+		return true;
 	}
+	return handled;
 }
 
 class MenubarTheme : public Theme

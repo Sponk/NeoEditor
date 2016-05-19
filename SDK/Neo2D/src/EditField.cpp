@@ -39,7 +39,7 @@ public:
 		Box3d* box = text->getBoundingBox();
 
 		text->setText(widget->getLabel());
-		Vector2 cursorPos = calculateCursorPos(text, edit->getCaret()) + offset + edit->getPosition();
+		Vector2 cursorPos = calculateCursorPos(text, edit->getCaret()); // + offset + edit->getPosition();
 		float textOffset = cursorPos.x;
 
 		// Calculate overflow offset
@@ -50,10 +50,20 @@ public:
 		{
 			case Neo2D::Gui::WIDGET_HOVER:
 			case Neo2D::Gui::WIDGET_NORMAL:
-				renderer->drawColoredQuad(position, widget->getSize(), Vector4(0.1, 0.1, 0.1, 1), 0);
+				/*renderer->drawColoredQuad(position - Vector2(1,1), widget->getSize(), Vector4(0.1, 0.1, 0.1, 1), 0);
 				renderer->drawColoredQuad(position, widget->getSize() - Vector2(1,2), Vector4(1, 1, 1, 1), 0);
 				renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(2,2), Vector4(0.3, 0.3, 0.3, 1), 0);
-				renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(3,3), Vector4(1, 1, 1, 1), 0);
+				renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(3,3), Vector4(1, 1, 1, 1), 0);*/
+
+				renderer->drawColoredQuad(position, widget->getSize(), Vector4(0.0, 0.0, 0.0, 1), 0);
+				renderer->drawColoredQuad(position, widget->getSize() - Vector2(1, 1), Vector4(0.8, 0.8, 0.8, 1), 0);
+				renderer->drawColoredQuad(position + Vector2(1, 1),  widget->getSize() - Vector2(2, 2),
+										  Vector4(0.3, 0.3, 0.3, 1),
+										  0);
+				renderer->drawColoredQuad(position + Vector2(1, 1),
+										  widget->getSize() - Vector2(3, 3),
+										  Vector4(1, 1, 1, 1),
+										  0);
 				break;
 
 			case Neo2D::Gui::WIDGET_SELECTED:
@@ -68,7 +78,8 @@ public:
 										  Vector4(1, 1, 1, 1),
 										  0);
 
-				renderer->drawColoredQuad(Vector2(cursorPos.x - textOffset + 3, cursorPos.y + 0.25 * text->getSize()),
+				Vector2 pos = cursorPos + offset + edit->getPosition();
+				renderer->drawColoredQuad(Vector2(pos.x - textOffset + 3, pos.y + 0.25 * text->getSize()),
 										  Vector2(2.0, 0.75*text->getSize()),
 										  text->getColor() + Vector4(0.1,0.1,0.1,0.0), 0.0f);
 
@@ -153,7 +164,7 @@ Neo2D::Gui::EditField::EditField(int x,
 	registerEvent(make_shared<MouseDeselectEvent>(*this, nullptr, nullptr));
 }
 
-void Neo2D::Gui::EditField::handle(const Event& e)
+bool Neo2D::Gui::EditField::handle(const Event& e)
 {
 	switch(e.getType())
 	{
@@ -174,7 +185,7 @@ void Neo2D::Gui::EditField::handle(const Event& e)
 			m_caret += strlen((const char*) &character);
 			setLabel(str.c_str());
 		}
-			break;
+		return true;
 
 		case KEY_PRESSED:
 		{
@@ -250,24 +261,26 @@ void Neo2D::Gui::EditField::handle(const Event& e)
 			setLabel(str.c_str());
 
 		}
-			break;
+		return true;
 
 		case MOUSE_OVER:
 			if(getState() != WIDGET_SELECTED)
 				setState(WIDGET_HOVER);
-			break;
+			return true;
 
 		case MOUSE_LEAVE:
 			if(getState() == WIDGET_HOVER)
 				setState(WIDGET_NORMAL);
-			break;
+			return true;
 
 		case MOUSE_LEFT_CLICK:
 			setState(WIDGET_SELECTED);
-			break;
+			return true;
 
 		case MOUSE_DESELECT:
 			setState(WIDGET_NORMAL);
-			break;
+			return true;
 	}
+
+	return false;
 }

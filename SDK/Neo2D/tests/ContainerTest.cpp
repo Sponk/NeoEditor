@@ -27,7 +27,7 @@ TEST(ContainerTest, FilterTest)
 class TestLayout : public Neo2D::Gui::LayoutStrategy
 {
 public:
-	void updateLayout(const Neo2D::Gui::Widget& wdg, std::vector<shared_ptr<Neo2D::Gui::Widget>>& v)
+	void updateLayout(const Neo2D::Gui::Widget& wdg, std::vector<shared_ptr<Neo2D::Gui::Widget>>& v, const Neo::Vector2& offset)
 	{
 		for(auto w : v)
 			w->setActive(false);

@@ -168,19 +168,21 @@ TreeView::TreeNode::TreeNode(int x,
 	}, nullptr);
 }
 
-void TreeView::TreeNode::handle(const Event& e)
+bool TreeView::TreeNode::handle(const Event& e)
 {
 	switch(e.getType())
 	{
 		case MOUSE_LEFT_CLICK:
 			setState(WIDGET_SELECTED);
 			doCallback();
-			break;
+			return true;
 
 		case MOUSE_DESELECT:
 			setState(WIDGET_NORMAL);
-			break;
+			return true;
 	}
+
+	return false;
 }
 
 shared_ptr<TreeView::TreeNode> TreeView::findNode(const char* name)

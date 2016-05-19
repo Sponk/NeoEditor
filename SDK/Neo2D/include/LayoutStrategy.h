@@ -26,7 +26,7 @@ public:
 	 * @param v The vector with widgets.
 	 * @param w The parent widget.
 	 */
-	virtual void updateLayout(const Widget& w, std::vector<shared_ptr<Widget>>& v) = 0;
+	virtual void updateLayout(const Widget& w, std::vector<shared_ptr<Widget>>& v, const Neo::Vector2& offset) = 0;
 };
 
 }

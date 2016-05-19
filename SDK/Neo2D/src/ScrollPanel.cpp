@@ -50,11 +50,15 @@ void Neo2D::Gui::ScrollPanel::draw(const Neo::Vector2& offset)
 
 	Neo::Vector2 screen = engine->getSystemContext()->getScreenSize();
 	Neo::Vector2 scissor = offset + getPosition();
-	render->enableScissorTest();
-	render->setScissor(scissor.x, screen.y - (scissor.y + getSize().y), getSize().x, getSize().y);
+	for(auto c : getChildren())
+	{
+		// Ensure the scissor is set correctly.
+		// Prevents issues with nesting scroll panels and other widgets that change the scissor
+		render->enableScissorTest();
+		render->setScissor(scissor.x, screen.y - (scissor.y + getSize().y), getSize().x, getSize().y);
 
-	Container::draw(offset);
-
+		c->draw(offset);
+	}
 	render->disableScissorTest();
 
 	horizontalScroll.draw(offset);
@@ -63,7 +67,9 @@ void Neo2D::Gui::ScrollPanel::draw(const Neo::Vector2& offset)
 
 void Neo2D::Gui::ScrollPanel::update(float dt)
 {
+	updateFilter();
 	Widget::update(dt);
+
 	updateScrollbarPlacement();
 
 	horizontalScroll.update(dt);
@@ -79,4 +85,5 @@ void Neo2D::Gui::ScrollPanel::update(float dt)
 	}
 
 	lastOffset = offset;
+	updateLayout(-lastOffset);
 }

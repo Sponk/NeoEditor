@@ -83,25 +83,27 @@ Neo2D::Gui::Button::Button(int x, int y, unsigned int w, unsigned int h,
 	registerEvent(std::make_shared<MouseLeaveEvent>(*this, nullptr, this));
 }
 
-void Neo2D::Gui::Button::handle(const Neo2D::Gui::Event& event)
+bool Neo2D::Gui::Button::handle(const Neo2D::Gui::Event& event)
 {
 	switch(event.getType())
 	{
 	case MOUSE_OVER:
 		setState(WIDGET_HOVER);
-		break;
+		return true;
 
 	case MOUSE_LEAVE:
 		setState(WIDGET_NORMAL);
-		break;
+		return true;
 
 	case MOUSE_LEFT_CLICK:
 		setState(WIDGET_SELECTED);
-		break;
+		return true;
 
 	case MOUSE_LEFT_RELEASE:
 		setState(WIDGET_HOVER);
 		doCallback();
-		break;
+		return true;
 	}
+
+	return false;
 }

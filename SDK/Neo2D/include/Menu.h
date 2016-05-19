@@ -22,7 +22,7 @@ public:
 		setActive(false);
 	}
 
-	virtual void handle(const Event& event) override;
+	virtual bool handle(const Event& event) override;
 
 	bool isVisible() const { return m_visible; }
 	virtual void setVisible(bool b) { m_visible = b; }
@@ -45,7 +45,7 @@ public:
 		return dynamic_pointer_cast<Submenu>(findChild(name));
 	}
 
-	virtual void handle(const Event& e) override;
+	virtual bool handle(const Event& e) override;
 	virtual void draw(const Neo::Vector2& offset) override
 	{
 		if(isVisible())

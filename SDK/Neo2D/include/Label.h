@@ -13,8 +13,12 @@ namespace Gui
  */
 class NEO2D_EXPORT Label : public Widget
 {
+	Neo::Vector4 m_color;
 public:
 	Label(int x, int y, unsigned int w, unsigned int h, const char* label, const shared_ptr<Object2D>& parent);
+
+	const Neo::Vector4& getColor() const { return m_color; }
+	void setColor(const Neo::Vector4& c) { m_color = c; }
 };
 
 }

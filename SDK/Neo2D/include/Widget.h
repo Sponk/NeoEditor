@@ -75,8 +75,9 @@ public:
 	 *
 	 * This method is called by the Event instance when the event is triggered.
 	 * @param e The event that got triggered.
+	 * @return A boolean value that indicates whether the event was handled or not.
 	 */
-	virtual void handle(const Event& e) {}
+	virtual bool handle(const Event& e) { return true; }
 
 	/**
 	 * @brief Registers an Event.

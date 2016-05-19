@@ -86,14 +86,14 @@ Neo2D::Gui::Scrollbar::Scrollbar(int x, int y, unsigned int w, unsigned int h,
 	registerEvent(make_shared<GeneralMouseLeftReleaseEvent>(knob, nullptr, nullptr));
 }
 
-void Neo2D::Gui::Scrollbar::handle(const Neo2D::Gui::Event & e)
+bool Neo2D::Gui::Scrollbar::handle(const Neo2D::Gui::Event & e)
 {
 	switch(e.getType())
 	{
 		case MOUSE_MOVED:
 		{
 			if (getState() != WIDGET_SELECTED)
-				return;
+				return false;
 
 			auto delta = static_cast<const MouseMoveEvent&>(e).getDelta();
 			float length = (direction == SCROLLBAR_HORIZONTAL) ? getSize().x : getSize().y;
@@ -109,14 +109,16 @@ void Neo2D::Gui::Scrollbar::handle(const Neo2D::Gui::Event & e)
 				knob.setPosition(Neo::Vector2(knob.getPosition().x, getPosition().y + (getValue() / getRange().y) * getSize().y));
 			}
 		}
-			break;
+		return true;
 
 		case MOUSE_LEFT_CLICK:
 			setState(WIDGET_SELECTED);
-			break;
+			return true;
 
 		case MOUSE_LEFT_RELEASE:
 			setState(WIDGET_NORMAL);
-			break;
+			return true;
 	}
+
+	return false;
 }

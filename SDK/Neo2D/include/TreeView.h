@@ -37,7 +37,7 @@ public:
 				 const shared_ptr<Object2D>& parent,
 				 const shared_ptr<Theme>& theme);
 
-		virtual void handle(const Event& e);
+		virtual bool handle(const Event& e) override;
 
 		/**
 		 * @brief Retrieves the list of children.

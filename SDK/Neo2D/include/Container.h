@@ -107,8 +107,10 @@ public:
 
 	virtual void update(float dt)
 	{
+		updateFilter();
 		for (auto o : m_children)
 			o->update(dt);
+		updateLayout();
 
 		Widget::update(dt);
 	}
@@ -121,7 +123,8 @@ public:
 	/**
 	 * @brief Applies the registered layout.
 	 */
-	void updateLayout() { if(m_layout != nullptr) m_layout->updateLayout(*this, m_children); }
+	void updateLayout(const Neo::Vector2& offset) { if(m_layout != nullptr) m_layout->updateLayout(*this, m_children, offset); }
+	void updateLayout() { updateLayout(Neo::Vector2()); }
 
 	/**
 	 * @brief Registers a new filter.
@@ -141,10 +144,15 @@ public:
 		Container::m_layout = shared_ptr<LayoutStrategy>(m_layout);
 	}
 
-	virtual void handle(Event& e)
+	const shared_ptr<LayoutStrategy>& getLayout() const { return m_layout; }
+
+	virtual bool handle(Event& e)
 	{
+		bool handled = false;
 		for(auto w : m_children)
-			w->handle(e);
+			handled |= w->handle(e);
+
+		return handled;
 	}
 };
 }

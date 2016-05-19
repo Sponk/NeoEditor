@@ -32,7 +32,7 @@ public:
 	virtual void draw(const Neo::Vector2& offset);
 	virtual void update(float dt);
 
-	virtual void handle(const Event& e) override
+	virtual bool handle(const Event& e) override
 	{
 		switch(e.getType())
 		{
@@ -40,14 +40,16 @@ public:
 				setState(WIDGET_HOVER);
 				for(auto c : getChildren())
 					c->setActive(true);
-				break;
+				return true;
 
 			case MOUSE_LEAVE:
 				setState(WIDGET_NORMAL);
 				for(auto c : getChildren())
 					c->setActive(false);
-				break;
+				return true;
 		}
+
+		return false;
 	}
 };
 

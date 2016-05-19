@@ -44,9 +44,9 @@ protected:
 			: Widget(x, y, w, h, nullptr, nullptr, theme), scrollbar(s)
 		{ }
 
-		virtual void handle(const Event& e) override
+		virtual bool handle(const Event& e) override
 		{
-			scrollbar.handle(e);
+			return scrollbar.handle(e);
 		}
 	} knob;
 
@@ -165,7 +165,7 @@ public:
 		setRange(getRange());
 	}
 	
-	virtual void handle(const Neo2D::Gui::Event & e) override;
+	virtual bool handle(const Neo2D::Gui::Event & e) override;
 	virtual void draw(const Neo::Vector2& offset) override
 	{
 		Widget::draw(offset);

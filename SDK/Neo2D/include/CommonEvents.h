@@ -406,9 +406,11 @@ public:
 			return;
 		}
 
-		// Reset last typed character
-		kbd.setCharacter(EOF);
 		handle();
+
+		// Reset last typed character
+		if(handled())
+			kbd.setCharacter(EOF);
 	}
 
 	/**
