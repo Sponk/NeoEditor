@@ -10,6 +10,7 @@
 #include <Container.h>
 #include <Label.h>
 #include <EditField.h>
+#include <CheckButton.h>
 #include "VectorEdit.h"
 #include "NativeToolset.h"
 #include "Sidepanel.h"
@@ -40,6 +41,8 @@ class EditorGame : public Neo::SubGame
 	shared_ptr<Vector3Edit> m_positionEdit;
 	shared_ptr<Vector3Edit> m_rotationEdit;
 	shared_ptr<Vector3Edit> m_scaleEdit;
+
+	shared_ptr<Neo2D::Gui::CheckButton> m_entityInvisibleButton;
 	
 public:
 	EditorGame(const shared_ptr<NativeToolset>& tools) :

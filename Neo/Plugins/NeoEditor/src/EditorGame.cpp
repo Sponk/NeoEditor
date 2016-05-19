@@ -43,7 +43,7 @@ void EditorGame::update()
 	Vector2 const size = engine->getSystemContext()->getScreenSize();
 
 	m_sceneView->setPosition(Vector2(m_leftPanel->getSize().x, m_toolbar->getPosition().y - m_toolbar->getSize().y));
-	m_sceneView->setSize(Vector2(size.x - m_leftPanel->getSize().x - m_rightPanel->getSize().x, size.y));
+	m_sceneView->setSize(Vector2(size.x - m_leftPanel->getSize().x - m_rightPanel->getSize().x - 15, size.y));
 
 	// Update title
 	//char title[64];
@@ -167,19 +167,24 @@ void EditorGame::onBegin()
 			// Object editing UIs
 			m_transformUi = make_shared<Container>(rightscroll->getPosition().x,
 												   rightscroll->getPosition().y,
-												   width, 0, rightscroll);
-			rightscroll->addWidget(m_transformUi);
+												   width, 200, rightscroll);
 
+			m_entityUi = make_shared<Container>(rightscroll->getPosition().x,
+												   rightscroll->getPosition().y,
+												   width, 200, rightscroll);
+
+			rightscroll->addWidget(m_transformUi);
+			rightscroll->addWidget(m_entityUi);
+			
 			auto scrollLayout = make_shared<VerticalLayout>();
 			rightscroll->setLayout(scrollLayout);
 			scrollLayout->enableResize(false);
 			scrollLayout->setPadding(5);
 
 			m_rightPanel->addWidget(rightscroll);
-			rightscroll->addWidget(m_transformUi);
-
 			m_transformUi->setLayout(scrollLayout);
-
+			m_entityUi->setLayout(scrollLayout);
+			
 			auto label = make_shared<Label>(0,0,0,10,tr("Name:"), m_transformUi);
 			label->setColor(Vector4(0,0,0,1));
 			m_transformUi->addWidget(label);
@@ -224,6 +229,19 @@ void EditorGame::onBegin()
 					
 					m_sceneView->getSelection().back()->setScale(m_scaleEdit->getVector());
 				}, nullptr);
+
+			m_entityInvisibleButton = make_shared<CheckButton>(0,0,100,20, tr("Invisible"), m_entityUi);
+			m_entityUi->addWidget(m_entityInvisibleButton);
+		
+			m_entityInvisibleButton->setCallback([this](Widget& w, void* d) {
+				if(!m_sceneView->getSelection().size())
+						return;
+					
+				static_cast<OEntity*>(m_sceneView->getSelection().back())->setInvisible(m_entityInvisibleButton->getValue());   	
+				}, nullptr);
+
+			m_entityUi->setActive(false);
+			m_entityUi->setInvisible(true);
 	}
 
 	// Left panel
@@ -266,6 +284,7 @@ void EditorGame::onBegin()
 				m_sceneView->clearSelection();
 
 			m_sceneView->addSelectedObject(obj);
+			updateSelectedObject(obj);
 		}
 
 	}, nullptr);
@@ -315,4 +334,28 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 	m_positionEdit->setVector(object->getPosition());
 	m_rotationEdit->setVector(object->getEulerRotation());
 	m_scaleEdit->setVector(object->getScale());
+
+	m_entityUi->setActive(false);
+	m_entityUi->setInvisible(true);
+	
+	switch(object->getType())
+	{
+	case OBJECT3D_ENTITY: {
+		m_entityUi->setActive(true);
+		m_entityUi->setInvisible(false);
+
+		OEntity* entity = static_cast<OEntity*>(object);
+		m_entityInvisibleButton->setValue(entity->isInvisible());
+	}
+	break;
+
+	case OBJECT3D_LIGHT:
+		break;
+
+	case OBJECT3D_SOUND:
+		break;
+
+	case OBJECT3D_TEXT:
+		break;
+	}
 }
