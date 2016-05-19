@@ -3,8 +3,8 @@
 Neo2D::Gui::CheckButton::CheckButton(int x, int y, unsigned int w, unsigned int h,
 						   const char* label, const shared_ptr<Neo2D::Object2D>& parent) :
 	Neo2D::Gui::Widget(x, y, w, h, label, parent, nullptr),
-	m_button(x, y, h, h, "", nullptr),
-	m_label(x + h, y, w - h, h, label, nullptr),
+	m_button(x, y, h, h, "", parent),
+	m_label(x + h, y, w - h, h, label, parent),
 	m_value(false)
 {
 	m_label.setColor(Neo::Vector4(0,0,0,1));
