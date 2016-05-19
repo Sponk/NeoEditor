@@ -7,6 +7,7 @@ Neo2D::Gui::CheckButton::CheckButton(int x, int y, unsigned int w, unsigned int 
 	m_label(x + h, y, w - h, h, label, nullptr),
 	m_value(false)
 {
+	m_label.setColor(Neo::Vector4(0,0,0,1));
 	m_button.setCallback(
 	[](Widget& widget, void* data)
 	{
