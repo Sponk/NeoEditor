@@ -57,7 +57,7 @@ void EditorGame::update()
 													
 	m_diagnosticsLabel->setLabel(ss.str().c_str());
 
-	if(m_sceneView->getSelection().size())
+	if(m_sceneView->getSelection().size() && m_sceneView->getState() == Neo2D::Gui::WIDGET_SELECTED)
 		updateSelectedObject(m_sceneView->getSelection().back());
 }
 
@@ -199,6 +199,31 @@ void EditorGame::onBegin()
 			label->setColor(Vector4(0,0,0,1));
 			m_transformUi->addWidget(label);
 			m_transformUi->addWidget(m_scaleEdit = make_shared<Vector3Edit>(0,0,width,20,nullptr,m_transformUi));
+
+			m_nameEdit->setCallback([this](Widget& w, void* data) {
+					MLOG_INFO("Editing name!");
+				}, nullptr);
+
+			m_positionEdit->setCallback([this](Widget& w, void* data) {
+					if(!m_sceneView->getSelection().size())
+						return;
+					
+					m_sceneView->getSelection().back()->setPosition(m_positionEdit->getVector());
+				}, nullptr);
+			
+			m_rotationEdit->setCallback([this](Widget& w, void* data) {
+					if(!m_sceneView->getSelection().size())
+						return;
+					
+					m_sceneView->getSelection().back()->setEulerRotation(m_rotationEdit->getVector());
+				}, nullptr);
+			
+			m_scaleEdit->setCallback([this](Widget& w, void* data) {
+					if(!m_sceneView->getSelection().size())
+						return;
+					
+					m_sceneView->getSelection().back()->setScale(m_scaleEdit->getVector());
+				}, nullptr);
 	}
 
 	// Left panel
@@ -285,6 +310,8 @@ void EditorGame::updateEntityTree()
 void EditorGame::updateSelectedObject(Neo::Object3d* object)
 {	
 	m_nameEdit->setLabel(object->getName());
+	m_nameEdit->setCaret(0);
+	
 	m_positionEdit->setVector(object->getPosition());
 	m_rotationEdit->setVector(object->getEulerRotation());
 	m_scaleEdit->setVector(object->getScale());

@@ -444,6 +444,7 @@ void SceneView::update(float dt)
 {
 	Vector3 scale = (m_camera.getPosition() - getSelectionCenter()).getLength() * 0.0075;
 	m_currentHandles->setScale(scale);
+	m_currentHandles->setPosition(getSelectionCenter());
 	
 	if(getState() != Neo2D::Gui::WIDGET_SELECTED)
 		return;

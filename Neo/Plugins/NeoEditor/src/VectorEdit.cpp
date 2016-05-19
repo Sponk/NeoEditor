@@ -1,5 +1,26 @@
 #include "VectorEdit.h"
 
+Vector3Edit::Vector3Edit(int x,
+						 int y,
+						 unsigned int w,
+						 unsigned int h,
+						 const char* label,
+						 const shared_ptr<Neo2D::Object2D>& parent,
+						 const shared_ptr<Neo2D::Gui::Theme>& theme) :
+	m_x(make_shared<Neo2D::Gui::EditField>(0,0,0,0, nullptr, parent, theme)),
+	m_y(make_shared<Neo2D::Gui::EditField>(0,0,0,0, nullptr, parent, theme)),
+	m_z(make_shared<Neo2D::Gui::EditField>(0,0,0,0, nullptr, parent, theme)),
+	Neo2D::Gui::Widget(x, y, w, h, label, parent)
+{
+	m_cb = [this](Neo2D::Gui::Widget&, void*) {
+		doCallback();
+	};
+	
+	m_x->setCallback(m_cb, nullptr);
+	m_y->setCallback(m_cb, nullptr);
+	m_z->setCallback(m_cb, nullptr);
+}
+
 void Vector3Edit::update(float dt)
 {
 	float sx = getSize().x / 3;
@@ -38,6 +59,10 @@ void Vector3Edit::setVector(const Neo::Vector3& v)
 	
 	snprintf(buf, sizeof(buf), "%f", v.z);
 	m_z->setLabel(buf);
+
+	m_x->setCaret(0);
+	m_y->setCaret(0);
+	m_z->setCaret(0);
 }
 
 Neo::Vector3 Vector3Edit::getVector() const
