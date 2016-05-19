@@ -14,10 +14,13 @@ enum WINDOW_EDGE
 class ScaleLayout : public Neo2D::Gui::LayoutStrategy
 {
 public:
-	virtual void updateLayout(const Neo2D::Gui::Widget& wdg, std::vector<shared_ptr<Neo2D::Gui::Widget>>& v) override
+	virtual void updateLayout(const Neo2D::Gui::Widget& wdg, std::vector<shared_ptr<Neo2D::Gui::Widget>>& v, const Neo::Vector2& offset) override
 	{
 		for(auto w : v)
+		{
+			w->setPosition(wdg.getPosition());
 			w->setSize(wdg.getSize());
+		}
 	}
 };
 

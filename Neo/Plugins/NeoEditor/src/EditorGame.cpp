@@ -1,11 +1,17 @@
 #include "EditorGame.h"
 #include "Tool.h"
+#include "VectorEdit.h"
 #include <Neo2DLevel.h>
 #include <ImageButton.h>
 #include <Translator.h>
+#include <VerticalLayout.h>
 #include <cstdlib>
 #include <thread>
 #include <atomic>
+#include <Container.h>
+#include <Label.h>
+#include <EditField.h>
+#include <sstream>
 
 using namespace Neo;
 using namespace Neo2D;
@@ -36,10 +42,23 @@ void EditorGame::update()
 
 	Vector2 const size = engine->getSystemContext()->getScreenSize();
 
-	m_sceneView->update(delta);
-
 	m_sceneView->setPosition(Vector2(m_leftPanel->getSize().x, m_toolbar->getPosition().y - m_toolbar->getSize().y));
-	m_sceneView->setSize(Vector2(size.x - m_leftPanel->getSize().x, size.y));
+	m_sceneView->setSize(Vector2(size.x - m_leftPanel->getSize().x - m_rightPanel->getSize().x, size.y));
+
+	// Update title
+	//char title[64];
+	//snprintf(title, sizeof(title), "%s (%d FPS)", tr("Neo Scene Editor"), static_cast<int>(floor(1/delta)));
+	//engine->getSystemContext()->setWindowTitle(title);
+
+	// Update diagnostics
+	std::stringstream ss;
+	ss << "Frames Per Second: " << static_cast<int>(floor(1/delta)) << std::endl;
+	ss << "Latency: " << delta * 1000.0 << " ms" << std::endl; 
+													
+	m_diagnosticsLabel->setLabel(ss.str().c_str());
+
+	if(m_sceneView->getSelection().size())
+		updateSelectedObject(m_sceneView->getSelection().back());
 }
 
 void EditorGame::draw()
@@ -117,23 +136,80 @@ void EditorGame::onBegin()
 	m_toolbar = make_shared<Toolbar>(0, m_menubar->getSize().y, 6000, 32, rootpane);
 
 	auto toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/translate.png", m_toolbar);
-	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(TRANSLATION); MLOG_INFO("TRANSLATION"); }, nullptr);
+	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(TRANSLATION); }, nullptr);
 	m_toolbar->addWidget(toolbutton);
 
 	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/scale.png", m_toolbar);
-	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(SCALE);  MLOG_INFO("SCALE");}, nullptr);
+	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(SCALE); }, nullptr);
 	m_toolbar->addWidget(toolbutton);
 
 	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/rotate.png", m_toolbar);
-	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(ROTATION);  MLOG_INFO("ROTATION");}, nullptr);
+	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(ROTATION); }, nullptr);
 	m_toolbar->addWidget(toolbutton);
 	
-	
-	// Sidepanels
+	// Build right panel
+	{
+			// Right panel
+			m_rightPanel = make_shared<Sidepanel>(0, m_menubar->getSize().y +
+														 m_toolbar->getSize().y,
+												  250, 500, rootpane);
+			m_rightPanel->setEdge(RIGHT_EDGE);
+			m_rightPanel->setLayout(make_shared<ScaleLayout>());
+			m_rightPanel->registerEvent(make_shared<MouseLeftClickEvent>(
+				*m_rightPanel, nullptr, nullptr)); // Catch click on panel
+
+			auto rightscroll =
+				make_shared<ScrollPanel>(0, 0, 0, 0, m_rightPanel);
+			m_rightPanel->addWidget(rightscroll);
+
+			float width = m_rightPanel->getSize().x - 20;
+
+			// Object editing UIs
+			m_transformUi = make_shared<Container>(rightscroll->getPosition().x,
+												   rightscroll->getPosition().y,
+												   width, 0, rightscroll);
+			rightscroll->addWidget(m_transformUi);
+
+			auto scrollLayout = make_shared<VerticalLayout>();
+			rightscroll->setLayout(scrollLayout);
+			scrollLayout->enableResize(false);
+			scrollLayout->setPadding(5);
+
+			m_rightPanel->addWidget(rightscroll);
+			rightscroll->addWidget(m_transformUi);
+
+			m_transformUi->setLayout(scrollLayout);
+
+			auto label = make_shared<Label>(0,0,0,10,tr("Name:"), m_transformUi);
+			label->setColor(Vector4(0,0,0,1));
+			m_transformUi->addWidget(label);
+			m_transformUi->addWidget(m_nameEdit = make_shared<EditField>(0,0,width,20,nullptr,m_transformUi));
+
+			label = make_shared<Label>(0,0,0,10,tr("Position:"), m_transformUi);
+			label->setColor(Vector4(0,0,0,1));
+			m_transformUi->addWidget(label);
+			m_transformUi->addWidget(m_positionEdit = make_shared<Vector3Edit>(0,0,width,20,nullptr,m_transformUi));
+
+			label = make_shared<Label>(0,0,0,10,tr("Rotation:"), m_transformUi);
+			label->setColor(Vector4(0,0,0,1));
+			m_transformUi->addWidget(label);
+			m_transformUi->addWidget(m_rotationEdit = make_shared<Vector3Edit>(0,0,width,20,nullptr,m_transformUi));
+
+			label = make_shared<Label>(0,0,0,10,tr("Scale:"), m_transformUi);
+			label->setColor(Vector4(0,0,0,1));
+			m_transformUi->addWidget(label);
+			m_transformUi->addWidget(m_scaleEdit = make_shared<Vector3Edit>(0,0,width,20,nullptr,m_transformUi));
+	}
+
+	// Left panel
 	m_leftPanel = make_shared<Sidepanel>(0, m_menubar->getSize().y + m_toolbar->getSize().y, 250, 500, rootpane);
+	m_leftPanel->update(0);
 	m_leftPanel->setLayout(make_shared<ScaleLayout>());
 
 	auto leftscroll = make_shared<ScrollPanel>(0, m_menubar->getSize().y + m_toolbar->getSize().y, 250, 500, m_leftPanel);
+	leftscroll->setLayout(make_shared<VerticalLayout>());
+	m_leftPanel->addWidget(leftscroll);
+		
 	m_entityTree = make_shared<TreeView>(0, m_leftPanel->getPosition().y, 250, 0, leftscroll);
 
 	leftscroll->addWidget(m_entityTree);
@@ -143,7 +219,11 @@ void EditorGame::onBegin()
 	m_sceneView = make_shared<SceneView>(0,0,0,0, rootpane);
 	rootpane->addWidget(m_sceneView);
 
+	m_diagnosticsLabel = make_shared<Label>(m_leftPanel->getSize().x + 20, 10 + m_toolbar->getPosition().y + m_toolbar->getSize().y, 0, 0, "DIAGNOSTICS", rootpane);
+	rootpane->addWidget(m_diagnosticsLabel);
+	
 	rootpane->addWidget(m_leftPanel);
+	rootpane->addWidget(m_rightPanel);
 	rootpane->addWidget(m_toolbar);
 	rootpane->addWidget(m_menubar);
 
@@ -167,8 +247,9 @@ void EditorGame::onBegin()
 
 	m_sceneView->setCallback([this](Widget& w, void*) {
 						m_entityTree->setSelected(m_sceneView->getSelection().back()->getName());
+						updateSelectedObject(m_sceneView->getSelection().back());
 					}, nullptr);
-
+		
 	NeoEngine* engine = NeoEngine::getInstance();
 	engine->getSystemContext()->setWindowTitle(tr("Neo Scene Editor"));
 	engine->getGame()->setDrawMainScene(false);
@@ -199,4 +280,12 @@ void EditorGame::updateEntityTree()
 	}
 
 	m_sceneView->updateOverlayScene();
+}
+
+void EditorGame::updateSelectedObject(Neo::Object3d* object)
+{	
+	m_nameEdit->setLabel(object->getName());
+	m_positionEdit->setVector(object->getPosition());
+	m_rotationEdit->setVector(object->getEulerRotation());
+	m_scaleEdit->setVector(object->getScale());
 }

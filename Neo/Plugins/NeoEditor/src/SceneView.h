@@ -68,7 +68,7 @@ public:
 			  unsigned int h,
 			  const shared_ptr<Neo2D::Object2D>& parent);
 
-	virtual void handle(const Neo2D::Gui::Event& e);
+	virtual bool handle(const Neo2D::Gui::Event& e) override;
 	virtual void draw(const Neo::Vector2& offset);
 	virtual void update(float dt);
 	void resetCamera();

@@ -1,4 +1,4 @@
-add_library(NeoEditor SHARED src/Plugin.cpp src/EditorGame.cpp src/EditorGame.h src/Tool.cpp src/Tool.h src/Sidepanel.cpp src/Sidepanel.h src/NativeToolset.cpp src/NativeToolset.h src/ExternalQtToolset.cpp src/ExternalQtToolset.h src/SceneView.cpp src/SceneView.h)
+add_library(NeoEditor SHARED src/Plugin.cpp src/EditorGame.cpp src/EditorGame.h src/Tool.cpp src/Tool.h src/Sidepanel.cpp src/Sidepanel.h src/NativeToolset.cpp src/NativeToolset.h src/ExternalQtToolset.cpp src/ExternalQtToolset.h src/SceneView.cpp src/SceneView.h src/VectorEdit.h src/VectorEdit.cpp)
 
 include_directories(
 		${NEO_CORE_INCLUDE_DIR}

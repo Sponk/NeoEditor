@@ -107,21 +107,22 @@ void SceneView::addSelectedObject(Neo::Object3d* object)
 	m_currentHandles->enable(true);
 }
 
-void SceneView::handle(const Neo2D::Gui::Event& e)
+bool SceneView::handle(const Neo2D::Gui::Event& e)
 {
 	switch(e.getType())
 	{
 		case Neo2D::Gui::MOUSE_RIGHT_CLICK:
 			setState(Neo2D::Gui::WIDGET_SELECTED);
-			break;
+			return true;
 
 		case Neo2D::Gui::MOUSE_MOVED:	
 		case Neo2D::Gui::MOUSE_LEFT_CLICK:
 		{
-			setState(Neo2D::Gui::WIDGET_SELECTED);
-
 			if(e.getType() == Neo2D::Gui::MOUSE_LEFT_CLICK)
+			{
+				setState(Neo2D::Gui::WIDGET_SELECTED);
 				m_currentHandles->grabbed = nullptr;
+			}
 			
 			NeoEngine* engine = NeoEngine::getInstance();
 			Scene* scene = engine->getLevel()->getCurrentScene();
@@ -429,17 +430,19 @@ void SceneView::handle(const Neo2D::Gui::Event& e)
 			else if(e.getType() == Neo2D::Gui::MOUSE_LEFT_CLICK)
 				m_currentHandles->enable(false);
 		}
-			break;
+			return true;
 
 		case Neo2D::Gui::MOUSE_DESELECT:
 			setState(Neo2D::Gui::WIDGET_NORMAL);
-			break;
+			return true;
 	}
+
+	return false;
 }
 
 void SceneView::update(float dt)
 {
-	Vector3 scale = (m_camera.getPosition() - m_currentHandles->x->getTransformedPosition()).getLength() * 0.0075;
+	Vector3 scale = (m_camera.getPosition() - getSelectionCenter()).getLength() * 0.0075;
 	m_currentHandles->setScale(scale);
 	
 	if(getState() != Neo2D::Gui::WIDGET_SELECTED)
@@ -495,6 +498,7 @@ void SceneView::update(float dt)
 
 void SceneView::updateOverlayScene()
 {
+	MLOG_INFO("Updating overlay scene");
 	m_overlayScene = make_shared<Scene>();
 	m_handlesScene = make_shared<Scene>();
 	

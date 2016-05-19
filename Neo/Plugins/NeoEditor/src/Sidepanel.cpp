@@ -10,6 +10,7 @@ void Sidepanel::update(float dt)
 			break;
 
 		case RIGHT_EDGE:
+			setPosition(Neo::Vector2(screen.x - getSize().x - 15, getPosition().y));
 			setSize(Neo::Vector2(getSize().x, screen.y - getPosition().y));
 			break;
 
