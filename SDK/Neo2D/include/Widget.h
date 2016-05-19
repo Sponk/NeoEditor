@@ -65,7 +65,7 @@ public:
 
 	virtual void draw(const Neo::Vector2& offset)
 	{
-		if (m_theme != nullptr) m_theme->draw(this, offset);
+		if (m_theme != nullptr && !isInvisible()) m_theme->draw(this, offset);
 	}
 
 	virtual void update(float dt);

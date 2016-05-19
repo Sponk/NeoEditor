@@ -101,6 +101,9 @@ public:
 
 	virtual void draw(const Neo::Vector2 &offset)
 	{
+		if(isInvisible())
+			return;
+		
 		for (auto o : m_children)
 			o->draw(offset);
 	}
