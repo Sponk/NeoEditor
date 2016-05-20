@@ -75,67 +75,29 @@ void EditorGame::onBegin()
 	m_canvas.addObject2D(rootpane);
 	
 	m_menubar = make_shared<Menubar>(0, 0, 6000, 25, rootpane);
-	auto filemenu = make_shared<Submenu>(tr("File"), m_menubar);
-
-	filemenu->addItem(tr("New Level"), nullptr);
-	filemenu->addItem(tr("Open Project"), [this](Widget&, void*) {
-		std::string filename = m_toolset->fileOpenDialog("Open Project", HOMEDIR, "Projects (*.neo)");
-		MLOG_INFO("FILENAME: " << filename);
-	});
-
-	filemenu->addItem(tr("Open Level"), [this](Widget&, void*) {
-		std::string filename = m_toolset->fileOpenDialog("Open Level", HOMEDIR, "Levels (*.level)");
-
-		/*std::atomic<bool> done(false);
-		std::thread up([filename, this, &done]()
-					{
-						Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
-						Level* level = new Level;
-						//engine->getLevel()->clear();
-						engine->getLevelLoader()->loadData(filename.c_str(), level);
-
-						// Secure old level and put in the new one
-						Level* oldlevel = engine->getLevel();
-						engine->setLevel(level);
-
-						SAFE_DELETE(oldlevel);
-						updated = false;
-						done = true;
-					});
-
-		Neo::NeoGame* game = Neo::NeoEngine::getInstance()->getGame();
-		while(!done)
-		{
-			game->update();
-			game->draw();
-		}
-
-		up.join();*/
-
-		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
-
-		m_sceneView->clearSelection();
-		engine->getLevel()->clear();
-		engine->getLevelLoader()->loadData(filename.c_str(), engine->getLevel());
-
-		engine->getLevel()->getCurrentScene();
-		m_sceneView->updateOverlayScene();
-		updated = false;
-	});
-
-	filemenu->addItem(tr("Save"), nullptr);
-	filemenu->addItem(tr("Save as..."), [this](Widget&, void*) {
-		std::string filename = m_toolset->fileSaveDialog("Save Level as...", HOMEDIR, "Images (*.jpg *.png *.tiff)");
-		MLOG_INFO("FILENAME: " << filename);
-	});
-
-	filemenu->addItem(tr("Quit"), [] (Widget&, void*) { NeoEngine::getInstance()->setActive(false); });
-	m_menubar->addMenu(filemenu);
-
 	// Toolbar
 	m_toolbar = make_shared<Toolbar>(0, m_menubar->getSize().y, 6000, 32, rootpane);
 
-	auto toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/translate.png", m_toolbar);
+	
+	auto toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/document-open.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { openLevel(); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+	
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/document-save.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { saveLevel(); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/edit-undo.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/edit-redo.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+	
+	
+	
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/translate.png", m_toolbar);
 	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(TRANSLATION); }, nullptr);
 	m_toolbar->addWidget(toolbutton);
 
@@ -146,6 +108,61 @@ void EditorGame::onBegin()
 	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/rotate.png", m_toolbar);
 	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(ROTATION); }, nullptr);
 	m_toolbar->addWidget(toolbutton);
+
+	auto filemenu = make_shared<Submenu>(tr("File"), m_menubar);
+
+	filemenu->addItem(tr("New Level"), [this](Widget&, void*) {
+			
+		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+		std::string path =  m_toolset->fileSaveDialog(tr("Save Level"), HOMEDIR, "Levels (*.level)");
+
+		if(path.empty())
+			return;
+
+		m_currentLevelFile = path;
+		m_sceneView->clearSelection();
+		engine->getLevel()->clear();
+
+		Level empty;
+		auto mainscene = empty.addNewScene();
+		mainscene->setName("Scene-1");
+			
+		engine->getLevelLoader()->saveData(m_currentLevelFile.c_str(), "level", &empty);
+		engine->getLevelLoader()->loadData(m_currentLevelFile.c_str(), engine->getLevel());
+		
+		engine->getLevel()->getCurrentScene();
+		m_sceneView->updateOverlayScene();
+			
+		updated = false;
+		updateWindowTitle();
+	});
+	
+	filemenu->addItem(tr("Open Project"), [this](Widget&, void*) {
+		std::string filename = m_toolset->fileOpenDialog("Open Project", HOMEDIR, "Projects (*.neo)");
+	});
+
+	filemenu->addItem(tr("Open Level"), [this](Widget&, void*) {
+			openLevel();
+	});
+
+	filemenu->addItem(tr("Save"), [this](Widget&, void*) {
+			saveLevel();
+	});
+
+	filemenu->addItem(tr("Save as..."), [this](Widget&, void*) {
+			std::string curfile = m_currentLevelFile;
+			m_currentLevelFile.clear();
+
+			saveLevel();
+
+			// If no level was chosen, reset to old value
+			if(m_currentLevelFile.empty())
+				m_currentLevelFile = curfile;
+	});
+
+	filemenu->addItem(tr("Quit"), [] (Widget&, void*) { NeoEngine::getInstance()->setActive(false); });
+	m_menubar->addMenu(filemenu);
+
 	
 	// Build right panel
 	{
@@ -358,4 +375,77 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 	case OBJECT3D_TEXT:
 		break;
 	}
+}
+
+void EditorGame::openLevel()
+{
+		std::string filename = m_toolset->fileOpenDialog("Open Level", HOMEDIR, "Levels (*.level)");
+		if(filename.empty())
+			return;
+		
+		/*std::atomic<bool> done(false);
+		std::thread up([filename, this, &done]()
+					{
+						Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+						Level* level = new Level;
+						//engine->getLevel()->clear();
+						engine->getLevelLoader()->loadData(filename.c_str(), level);
+
+						// Secure old level and put in the new one
+						Level* oldlevel = engine->getLevel();
+						engine->setLevel(level);
+
+						SAFE_DELETE(oldlevel);
+						updated = false;
+						done = true;
+					});
+
+		Neo::NeoGame* game = Neo::NeoEngine::getInstance()->getGame();
+		while(!done)
+		{
+			game->update();
+			game->draw();
+		}
+
+		up.join();*/
+
+		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+
+		m_sceneView->clearSelection();
+		engine->getLevel()->clear();
+		engine->getLevelLoader()->loadData(filename.c_str(), engine->getLevel());
+
+		engine->getLevel()->getCurrentScene();
+		m_sceneView->updateOverlayScene();
+		updated = false;
+
+		m_currentLevelFile = filename;
+		updateWindowTitle();
+}
+
+void EditorGame::saveLevel()
+{	
+	if(m_currentLevelFile.empty())
+		m_currentLevelFile = m_toolset->fileSaveDialog("Save Level", HOMEDIR, "Levels (*.level)");
+
+	if(m_currentLevelFile.empty())
+		return;
+
+	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+	engine->getLevelLoader()->saveData(m_currentLevelFile.c_str(), "level", engine->getLevel());
+	updateWindowTitle();
+}
+
+void EditorGame::saveLevel(const char* path)
+{
+	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+	engine->getLevelLoader()->saveData(path, "level", engine->getLevel());
+}
+
+void EditorGame::updateWindowTitle()
+{
+	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+	std::stringstream ss;
+	ss << tr("Neo Scene Editor") << " - " << m_currentLevelFile;
+	engine->getSystemContext()->setWindowTitle(ss.str().c_str());
 }

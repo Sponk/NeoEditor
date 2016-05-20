@@ -1,6 +1,7 @@
 #ifndef NEO_EDITORGAME_H
 #define NEO_EDITORGAME_H
 
+#include <string>
 #include <NeoEngine.h>
 #include <Canvas.h>
 #include <Menu.h>
@@ -43,6 +44,7 @@ class EditorGame : public Neo::SubGame
 	shared_ptr<Vector3Edit> m_scaleEdit;
 
 	shared_ptr<Neo2D::Gui::CheckButton> m_entityInvisibleButton;
+	std::string m_currentLevelFile;
 	
 public:
 	EditorGame(const shared_ptr<NativeToolset>& tools) :
@@ -56,6 +58,11 @@ public:
 
 	void updateEntityTree();
 	void updateSelectedObject(Neo::Object3d* object);
+	void updateWindowTitle();
+	
+	void openLevel();
+	void saveLevel();
+	void saveLevel(const char* path);
 	
 private:
 };
