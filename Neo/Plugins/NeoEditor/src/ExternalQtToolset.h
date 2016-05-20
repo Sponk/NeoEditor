@@ -12,6 +12,9 @@ public:
 								   const char* filetypes,
 								   bool save,
 								   bool directories);
+
+
+	virtual void messagebox(const char* title, const char* message);
 };
 
 #endif //NEO_QTTOOLSET_H

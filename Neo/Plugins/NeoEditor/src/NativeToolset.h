@@ -21,6 +21,8 @@ public:
 	{
 		return this->fileDialog(message, start, "", false, true);
 	}
+	
+	virtual void messagebox(const char* title, const char* message) = 0;
 };
 
 #endif //NEO_NATIVETOOLSET_H

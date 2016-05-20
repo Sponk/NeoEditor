@@ -18,3 +18,12 @@ std::string ExternalQtToolset::fileDialog(const char* message,
 	auto result = sexpresso::parse(Tool::executeToolNonBlocking("filedialog", ss.str().c_str()));
 	return result.getChildByPath("filename")->arguments().begin()->value.str;
 }
+
+
+void ExternalQtToolset::messagebox(const char* title, const char* message)
+{
+	std::stringstream ss;
+	ss << "(title \"" << title << "\")(\"" << message << "\")";
+
+	Tool::executeToolBlocking("messagebox", ss.str().c_str());
+}
