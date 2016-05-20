@@ -15,6 +15,7 @@ namespace Gui
  */
 class ImageButton : public Button
 {
+	Neo::Vector2 m_padding;
 	Sprite m_sprite;
 public:
 	ImageButton(int x,
@@ -28,8 +29,8 @@ public:
 	virtual void draw(const Neo::Vector2& offset) override
 	{
 		Widget::draw(offset);
-
-		m_sprite.setPosition(getPosition());
+		
+		m_sprite.setPosition(getPosition() + m_padding);
 		m_sprite.draw(offset);
 	}
 };

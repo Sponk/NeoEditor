@@ -4,6 +4,8 @@ using namespace Neo2D;
 using namespace Gui;
 using namespace Neo;
 
+#define PADDING 0.05
+
 ImageButton::ImageButton(int x,
 						 int y,
 						 unsigned int w,
@@ -12,5 +14,7 @@ ImageButton::ImageButton(int x,
 						 const shared_ptr<Object2D>& parent,
 						 const shared_ptr<Theme>& theme)
 	: Button(x, y, w, h, nullptr, parent, theme),
-	  m_sprite(x,y,w,h,label, nullptr)
+	  // Leave some edge space
+	  m_padding(PADDING*w, PADDING*h),
+	  m_sprite(x+m_padding.x,y+m_padding.y,w-m_padding.x*2.0f,h-m_padding.y*2.0f,label, nullptr)
 {}
