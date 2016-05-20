@@ -1,5 +1,6 @@
 #include "ExternalQtToolset.h"
 #include "Tool.h"
+#include <NeoEngine.h>
 
 #define SEXPRESSO_OPT_OUT_PIKESTYLE
 #include <sexpresso.hpp>
@@ -23,7 +24,6 @@ std::string ExternalQtToolset::fileDialog(const char* message,
 void ExternalQtToolset::messagebox(const char* title, const char* message)
 {
 	std::stringstream ss;
-	ss << "(title \"" << title << "\")(\"" << message << "\")";
-
-	Tool::executeToolBlocking("messagebox", ss.str().c_str());
+	ss << "(title \"" << title << "\")(text \"" << message << "\")";
+	Tool::executeToolNonBlocking("messagebox", ss.str().c_str());
 }
