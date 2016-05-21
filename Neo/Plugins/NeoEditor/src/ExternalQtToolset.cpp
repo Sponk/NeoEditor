@@ -27,3 +27,8 @@ void ExternalQtToolset::messagebox(const char* title, const char* message)
 	ss << "(title \"" << title << "\")(text \"" << message << "\")";
 	Tool::executeToolNonBlocking("messagebox", ss.str().c_str());
 }
+
+void ExternalQtToolset::aboutDialog()
+{
+	messagebox("About", "This is the Neo Scene Editor experience v0.5.1a. This program is distributed under the terms and conditions of the GNU LGPL.");
+}

@@ -37,7 +37,7 @@ void EditorGame::update()
 	float delta = engine->getGame()->getFrameDelta();
 
 	PROFILE_BEGIN("GuiUpdate");
-	m_canvas.update(engine->getGame()->getFrameDelta());
+	m_canvas.update(delta);
 	PROFILE_END("GuiUpdate");
 
 	Vector2 const size = engine->getSystemContext()->getScreenSize();
@@ -88,11 +88,26 @@ void EditorGame::onBegin()
 	m_toolbar->addWidget(toolbutton);
 
 	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/edit-undo.png", m_toolbar);
-	toolbutton->setCallback([this](Widget&, void*) { }, nullptr);
+	toolbutton->setCallback(
+		[this](Widget&, void*) {
+			m_sceneView->clearSelection();
+			m_undo.undo();
+			//m_sceneView->updateOverlayScene();
+			updated = false;
+		},
+		nullptr);
 	m_toolbar->addWidget(toolbutton);
 
-	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/edit-redo.png", m_toolbar);
-	toolbutton->setCallback([this](Widget&, void*) { }, nullptr);
+	toolbutton = make_shared<ImageButton>(0, 0, 32, 32, "data/icons/edit-redo.png", m_toolbar);
+	toolbutton->setCallback(
+		[this](Widget&, void*) {
+			m_sceneView->clearSelection();
+			m_undo.redo();
+			//m_sceneView->updateOverlayScene();
+			updated = false;
+		},
+		nullptr);
+	
 	m_toolbar->addWidget(toolbutton);
 	
 	
@@ -110,7 +125,9 @@ void EditorGame::onBegin()
 	m_toolbar->addWidget(toolbutton);
 
 	auto filemenu = make_shared<Submenu>(tr("File"), m_menubar);
-
+	auto editmenu = make_shared<Submenu>(tr("Edit"), m_menubar);
+	auto helpmenu = make_shared<Submenu>(tr("Help"), m_menubar);
+	
 	filemenu->addItem(tr("New Level"), [this](Widget&, void*) {
 			
 		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
@@ -161,8 +178,13 @@ void EditorGame::onBegin()
 	});
 
 	filemenu->addItem(tr("Quit"), [] (Widget&, void*) { NeoEngine::getInstance()->setActive(false); });
-	m_menubar->addMenu(filemenu);
 
+	helpmenu->addItem(tr("About"), [this](Widget&, void*) { m_toolset->aboutDialog(); });
+	
+	m_menubar->addMenu(filemenu);
+	m_menubar->addMenu(editmenu);
+	m_menubar->addMenu(helpmenu);
+	
 	
 	// Build right panel
 	{
@@ -229,21 +251,24 @@ void EditorGame::onBegin()
 			m_positionEdit->setCallback([this](Widget& w, void* data) {
 					if(!m_sceneView->getSelection().size())
 						return;
-					
+
+					m_undo.save();
 					m_sceneView->getSelection().back()->setPosition(m_positionEdit->getVector());
 				}, nullptr);
 			
 			m_rotationEdit->setCallback([this](Widget& w, void* data) {
 					if(!m_sceneView->getSelection().size())
 						return;
-					
+
+					m_undo.save();
 					m_sceneView->getSelection().back()->setEulerRotation(m_rotationEdit->getVector());
 				}, nullptr);
 			
 			m_scaleEdit->setCallback([this](Widget& w, void* data) {
 					if(!m_sceneView->getSelection().size())
 						return;
-					
+
+					m_undo.save();
 					m_sceneView->getSelection().back()->setScale(m_scaleEdit->getVector());
 				}, nullptr);
 
@@ -253,9 +278,10 @@ void EditorGame::onBegin()
 			m_entityInvisibleButton->setCallback([this](Widget& w, void* d) {
 				if(!m_sceneView->getSelection().size())
 						return;
-					
-				static_cast<OEntity*>(m_sceneView->getSelection().back())->setInvisible(m_entityInvisibleButton->getValue());   	
-				}, nullptr);
+
+				m_undo.save();
+				static_cast<OEntity*>(m_sceneView->getSelection().back())->setInvisible(m_entityInvisibleButton->getValue());
+			}, nullptr);
 
 			m_entityUi->setActive(false);
 			m_entityUi->setInvisible(true);
@@ -276,7 +302,7 @@ void EditorGame::onBegin()
 	m_leftPanel->addWidget(leftscroll);
 	m_leftPanel->setEdge(LEFT_EDGE);
 
-	m_sceneView = make_shared<SceneView>(0,0,0,0, rootpane);
+	m_sceneView = make_shared<SceneView>(m_undo, 0,0,0,0, rootpane);
 	rootpane->addWidget(m_sceneView);
 
 	m_diagnosticsLabel = make_shared<Label>(m_leftPanel->getSize().x + 20, 10 + m_toolbar->getPosition().y + m_toolbar->getSize().y, 0, 0, "DIAGNOSTICS", rootpane);
@@ -415,9 +441,11 @@ void EditorGame::openLevel()
 		engine->getLevel()->clear();
 		engine->getLevelLoader()->loadData(filename.c_str(), engine->getLevel());
 
-		engine->getLevel()->getCurrentScene();
 		m_sceneView->updateOverlayScene();
 		updated = false;
+
+		m_undo.clear();
+		m_undo.save();
 
 		m_currentLevelFile = filename;
 		updateWindowTitle();

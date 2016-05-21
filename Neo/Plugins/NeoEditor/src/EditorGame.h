@@ -16,6 +16,7 @@
 #include "NativeToolset.h"
 #include "Sidepanel.h"
 #include "SceneView.h"
+#include "UndoQueue.h"
 
 class EditorGame : public Neo::SubGame
 {
@@ -45,6 +46,8 @@ class EditorGame : public Neo::SubGame
 
 	shared_ptr<Neo2D::Gui::CheckButton> m_entityInvisibleButton;
 	std::string m_currentLevelFile;
+
+	UndoQueue m_undo;
 	
 public:
 	EditorGame(const shared_ptr<NativeToolset>& tools) :

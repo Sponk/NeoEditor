@@ -3,6 +3,7 @@
 
 #include <Widget.h>
 #include <vector>
+#include "UndoQueue.h"
 
 enum HANDLE_MODE
 {
@@ -60,9 +61,11 @@ class SceneView : public Neo2D::Gui::Widget
 	Handles* m_currentHandles;
 	Handles m_rotation, m_translation, m_scale;	
 	HANDLE_MODE m_mode;
+	UndoQueue& m_undo;
 	
 public:
-	SceneView(int x,
+	SceneView(UndoQueue& undo,
+			  int x,
 			  int y,
 			  unsigned int w,
 			  unsigned int h,

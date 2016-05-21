@@ -66,13 +66,13 @@ void NeoGame::update(void)
 	PROFILE_END("ScriptUpdate");
 
 	// get level
-	Level * level = NeoEngine::getInstance()->getLevel();
-	if(! level)
+	Level* level = NeoEngine::getInstance()->getLevel();
+	if(!level)
 		return;
 
 	// get current scene
-	Scene * scene = level->getCurrentScene();
-	if(! scene)
+	Scene* scene = level->getCurrentScene();
+	if(!scene)
 		return;
 
 #ifndef DISABLE_3D

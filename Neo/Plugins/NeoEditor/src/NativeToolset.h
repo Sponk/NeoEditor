@@ -23,6 +23,7 @@ public:
 	}
 	
 	virtual void messagebox(const char* title, const char* message) = 0;
+	virtual void aboutDialog() = 0;
 };
 
 #endif //NEO_NATIVETOOLSET_H

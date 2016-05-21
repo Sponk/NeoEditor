@@ -4,13 +4,15 @@
 
 using namespace Neo;
 
-SceneView::SceneView(int x,
+SceneView::SceneView(UndoQueue& undo,
+					 int x,
 					 int y,
 					 unsigned int w,
 					 unsigned int h,
 					 const shared_ptr<Neo2D::Object2D>& parent)
 	: Widget(x, y, w, h, nullptr, parent, nullptr),
-	  m_currentHandles(&m_translation)
+	  m_currentHandles(&m_translation),
+	  m_undo(undo)
 {
 	resetCamera();
 
@@ -18,6 +20,7 @@ SceneView::SceneView(int x,
 	registerEvent(make_shared<Neo2D::Gui::MouseLeftClickEvent>(*this, nullptr, nullptr));
 	registerEvent(make_shared<Neo2D::Gui::MouseRightClickEvent>(*this, nullptr, nullptr));
 	registerEvent(make_shared<Neo2D::Gui::MouseMoveEvent>(*this, nullptr, nullptr));
+	registerEvent(make_shared<Neo2D::Gui::MouseLeftReleaseEvent>(*this, nullptr, nullptr));
 
 	updateOverlayScene();
 }
@@ -113,6 +116,12 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 	{
 		case Neo2D::Gui::MOUSE_RIGHT_CLICK:
 			setState(Neo2D::Gui::WIDGET_SELECTED);
+			return true;
+
+		case Neo2D::Gui::MOUSE_LEFT_RELEASE:
+			if(m_currentHandles->grabbed)
+				m_undo.save();
+
 			return true;
 
 		case Neo2D::Gui::MOUSE_MOVED:	

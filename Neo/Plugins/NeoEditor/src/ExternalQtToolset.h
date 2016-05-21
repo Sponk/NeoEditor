@@ -15,6 +15,7 @@ public:
 
 
 	virtual void messagebox(const char* title, const char* message);
+	virtual void aboutDialog();
 };
 
 #endif //NEO_QTTOOLSET_H

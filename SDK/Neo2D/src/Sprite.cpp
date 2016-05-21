@@ -4,7 +4,7 @@
 using namespace Neo2D;
 
 Sprite::Sprite(int x, int y, unsigned int w, unsigned int h, const char* image, const shared_ptr<Object2D>& parent)
-	: Object2D(x, y, w, h, parent), m_imagePath(image), m_image(0), m_flip(0,0)
+	: Object2D(x, y, w, h, parent), m_imagePath(image), m_image(0), m_flip(0,180)
 {
 	setRotation(180);
 	loadTexture();

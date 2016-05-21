@@ -507,7 +507,7 @@ void readBehaviors(TiXmlElement * node, Object3d * object)
 
 bool xmlLevelLoad(const char * filename, Level* level)
 {
-	return M_loadLevel(filename, level);
+	return M_loadLevel(filename, level, false);
 }
 
 bool M_loadLevel(const char * filename, Level* level, const bool clearData)
