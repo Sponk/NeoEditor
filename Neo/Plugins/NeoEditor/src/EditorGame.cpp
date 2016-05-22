@@ -24,6 +24,97 @@ using namespace Gui;
 #define HOMEDIR getenv("HOME")
 #endif
 
+#define MAKE_LABEL(str, ui)                                        \
+	{                                                              \
+		auto label = make_shared<Label>(0, 0, 0, 10, tr(str), ui); \
+		label->setColor(Vector4(0, 0, 0, 1));                      \
+		ui->addWidget(label);                                      \
+	}
+
+#define MAKE_FLOAT_EDIT_FIELD(str, width, edit, ui, type, setter)               \
+	{                                                                     \
+		MAKE_LABEL(str, ui);                                              \
+		ui->addWidget(                                                    \
+			edit = make_shared<EditField>(0, 0, width, 20, nullptr, ui)); \
+		edit->setCallback(                                                \
+			[this](Widget& w, void* d) {                                  \
+				if (!m_sceneView->getSelection().size())                  \
+					return;                                               \
+                                                                          \
+				m_undo.save();                                            \
+				static_cast<type*>(m_sceneView->getSelection().back())    \
+					->setter(std::stod(edit->getLabel()));                \
+			},                                                            \
+			nullptr);                                                     \
+	}
+
+#define MAKE_STRING_EDIT_FIELD(str, width, edit, ui, type, setter)               \
+	{                                                                     \
+		MAKE_LABEL(str, ui);                                              \
+		ui->addWidget(                                                    \
+			edit = make_shared<EditField>(0, 0, width, 20, nullptr, ui)); \
+		edit->setCallback(                                                \
+			[this](Widget& w, void* d) {                                  \
+				if (!m_sceneView->getSelection().size())                  \
+					return;                                               \
+                                                                          \
+				m_undo.save();                                            \
+				static_cast<type*>(m_sceneView->getSelection().back())    \
+					->setter(edit->getLabel());							\
+			},                                                            \
+			nullptr);                                                     \
+	}
+
+#define MAKE_3D_EDIT_FIELD(str, width, edit, ui, type, setter)               \
+	{                                                                     \
+		MAKE_LABEL(str, ui);                                              \
+		ui->addWidget(                                                    \
+			edit = make_shared<Vector3Edit>(0, 0, width, 20, nullptr, ui)); \
+		edit->setCallback(                                                \
+			[this](Widget& w, void* d) {                                  \
+				if (!m_sceneView->getSelection().size())                  \
+					return;                                               \
+                                                                          \
+				m_undo.save();                                            \
+				static_cast<type*>(m_sceneView->getSelection().back())    \
+					->setter(edit->getVector());				\
+			},                                                            \
+			nullptr);                                                     \
+	}
+
+#define MAKE_4D_EDIT_FIELD(str, width, edit, ui, type, setter)               \
+	{                                                                     \
+		MAKE_LABEL(str, ui);                                              \
+		ui->addWidget(                                                    \
+			edit = make_shared<Vector4Edit>(0, 0, width, 20, nullptr, ui)); \
+		edit->setCallback(                                                \
+			[this](Widget& w, void* d) {                                  \
+				if (!m_sceneView->getSelection().size())                  \
+					return;                                               \
+                                                                          \
+				m_undo.save();                                            \
+				static_cast<type*>(m_sceneView->getSelection().back())    \
+					->setter(edit->getVector());				\
+			},                                                            \
+			nullptr);                                                     \
+	}
+
+#define MAKE_CHECK_BUTTON(str, edit, ui, type, setter)                    \
+	{ \
+			ui->addWidget(                                                \
+			edit = make_shared<CheckButton>(0, 0, 100, 20, tr(str), ui)); \
+		edit->setCallback(                                                \
+			[this](Widget& w, void* d) {                                  \
+				if (!m_sceneView->getSelection().size())                  \
+					return;                                               \
+                                                                          \
+				m_undo.save();                                            \
+				static_cast<type*>(m_sceneView->getSelection().back())    \
+					->setter(edit->getValue());                           \
+			},                                                            \
+			nullptr);                                                     \
+	}
+
 bool updated = false;
 void EditorGame::update()
 {
@@ -109,9 +200,7 @@ void EditorGame::onBegin()
 		nullptr);
 	
 	m_toolbar->addWidget(toolbutton);
-	
-	
-	
+		
 	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/translate.png", m_toolbar);
 	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(TRANSLATION); }, nullptr);
 	m_toolbar->addWidget(toolbutton);
@@ -184,8 +273,7 @@ void EditorGame::onBegin()
 	m_menubar->addMenu(filemenu);
 	m_menubar->addMenu(editmenu);
 	m_menubar->addMenu(helpmenu);
-	
-	
+		
 	// Build right panel
 	{
 			// Right panel
@@ -206,14 +294,34 @@ void EditorGame::onBegin()
 			// Object editing UIs
 			m_transformUi = make_shared<Container>(rightscroll->getPosition().x,
 												   rightscroll->getPosition().y,
-												   width, 200, rightscroll);
+												   width, 160, rightscroll);
 
 			m_entityUi = make_shared<Container>(rightscroll->getPosition().x,
 												   rightscroll->getPosition().y,
 												   width, 200, rightscroll);
 
+			m_lightUi = make_shared<Container>(rightscroll->getPosition().x,
+												   rightscroll->getPosition().y,
+												   width, 200, rightscroll);
+			
+			m_cameraUi = make_shared<Container>(rightscroll->getPosition().x,
+												   rightscroll->getPosition().y,
+												   width, 200, rightscroll);
+
+			m_soundUi = make_shared<Container>(rightscroll->getPosition().x,
+												   rightscroll->getPosition().y,
+												   width, 200, rightscroll);
+
+			m_textUi = make_shared<Container>(rightscroll->getPosition().x,
+												   rightscroll->getPosition().y,
+												   width, 200, rightscroll);
+			
 			rightscroll->addWidget(m_transformUi);
 			rightscroll->addWidget(m_entityUi);
+			rightscroll->addWidget(m_lightUi);
+			rightscroll->addWidget(m_cameraUi);
+			rightscroll->addWidget(m_soundUi);
+			rightscroll->addWidget(m_textUi);
 			
 			auto scrollLayout = make_shared<VerticalLayout>();
 			rightscroll->setLayout(scrollLayout);
@@ -223,6 +331,10 @@ void EditorGame::onBegin()
 			m_rightPanel->addWidget(rightscroll);
 			m_transformUi->setLayout(scrollLayout);
 			m_entityUi->setLayout(scrollLayout);
+			m_lightUi->setLayout(scrollLayout);
+			m_cameraUi->setLayout(scrollLayout);
+			m_soundUi->setLayout(scrollLayout);
+			m_textUi->setLayout(scrollLayout);
 			
 			auto label = make_shared<Label>(0,0,0,10,tr("Name:"), m_transformUi);
 			label->setColor(Vector4(0,0,0,1));
@@ -245,8 +357,28 @@ void EditorGame::onBegin()
 			m_transformUi->addWidget(m_scaleEdit = make_shared<Vector3Edit>(0,0,width,20,nullptr,m_transformUi));
 
 			m_nameEdit->setCallback([this](Widget& w, void* data) {
-					MLOG_INFO("Editing name!");
-				}, nullptr);
+
+				if(!m_sceneView->getSelection().size())
+					return;
+
+				const char* name = m_nameEdit->getLabel();
+				if(strlen(name) == 0)
+				{
+					m_toolset->messagebox(tr("Error"), tr("Please enter a name that is not empty!"));
+					return;
+				}
+
+				if(NeoEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(name))
+				{
+					m_toolset->messagebox(tr("Error"), tr("An object with that name already exists. Please choose another one."));
+					return;
+				}
+
+				m_sceneView->getSelection().back()->setName(name);
+				m_entityTree->findNode(m_entityTree->getSelected())->setLabel(name);
+				m_undo.save();
+
+			}, nullptr);
 
 			m_positionEdit->setCallback([this](Widget& w, void* data) {
 					if(!m_sceneView->getSelection().size())
@@ -272,19 +404,57 @@ void EditorGame::onBegin()
 					m_sceneView->getSelection().back()->setScale(m_scaleEdit->getVector());
 				}, nullptr);
 
-			m_entityInvisibleButton = make_shared<CheckButton>(0,0,100,20, tr("Invisible"), m_entityUi);
-			m_entityUi->addWidget(m_entityInvisibleButton);
-		
-			m_entityInvisibleButton->setCallback([this](Widget& w, void* d) {
-				if(!m_sceneView->getSelection().size())
-						return;
-
-				m_undo.save();
-				static_cast<OEntity*>(m_sceneView->getSelection().back())->setInvisible(m_entityInvisibleButton->getValue());
-			}, nullptr);
-
+			MAKE_CHECK_BUTTON("Invisible", m_entityInvisibleButton, m_entityUi, OEntity, setInvisible);
+			
+			// Hide UI initially
 			m_entityUi->setActive(false);
 			m_entityUi->setInvisible(true);
+
+			m_lightUi->setActive(false);
+			m_lightUi->setInvisible(true);
+
+			m_cameraUi->setActive(false);
+			m_cameraUi->setInvisible(true);
+
+			m_soundUi->setActive(false);
+			m_soundUi->setInvisible(true);
+
+			m_textUi->setActive(false);
+			m_textUi->setInvisible(true);
+
+			// Light UI
+			MAKE_3D_EDIT_FIELD("Color:", width, m_lightColorEdit, m_lightUi, OLight, setColor);
+			MAKE_FLOAT_EDIT_FIELD("Intensity:", width, m_lightIntensityEdit, m_lightUi, OLight, setIntensity);
+			MAKE_FLOAT_EDIT_FIELD("Radius:", width, m_lightRadiusEdit, m_lightUi, OLight, setRadius);
+			MAKE_FLOAT_EDIT_FIELD("Spot Angle:", width, m_lightSpotAngleEdit, m_lightUi, OLight, setSpotAngle);
+			MAKE_FLOAT_EDIT_FIELD("Spot Exponent:", width, m_lightSpotExponentEdit, m_lightUi, OLight, setSpotExponent);
+			MAKE_CHECK_BUTTON("Cast Shadows", m_lightCastShadowButton, m_lightUi, OLight, castShadow);
+			MAKE_FLOAT_EDIT_FIELD("Shadow Quality:", width, m_lightShadowQualityEdit, m_lightUi, OLight, setShadowQuality);
+			MAKE_FLOAT_EDIT_FIELD("Shadow Bias:", width, m_lightShadowBiasEdit, m_lightUi, OLight, setShadowBias);
+			MAKE_FLOAT_EDIT_FIELD("Shadow Blur:", width, m_lightShadowBlurEdit, m_lightUi, OLight, setShadowBlur);
+
+			// Camera UI
+			MAKE_FLOAT_EDIT_FIELD("Near Plane:", width, m_cameraNearPlaneEdit, m_cameraUi, OCamera, setClippingNear);
+			MAKE_FLOAT_EDIT_FIELD("Far Plane:", width, m_cameraFarPlaneEdit, m_cameraUi, OCamera, setClippingFar);
+			MAKE_FLOAT_EDIT_FIELD("Field of View:", width, m_cameraFovEdit, m_cameraUi, OCamera, setFov);
+			MAKE_CHECK_BUTTON("Ortho", m_cameraOrthoButton, m_cameraUi, OCamera, enableOrtho);
+			MAKE_CHECK_BUTTON("Fog", m_cameraFogButton, m_cameraUi, OCamera, enableFog);
+			MAKE_FLOAT_EDIT_FIELD("Fog Distance:", width, m_cameraFogDistanceEdit, m_cameraUi, OCamera, setFogDistance);
+			MAKE_3D_EDIT_FIELD("Fog Color:", width, m_cameraFogColorEdit, m_cameraUi, OCamera, setFogColor);
+			MAKE_3D_EDIT_FIELD("Clear Color:", width, m_cameraClearColorEdit, m_cameraUi, OCamera, setClearColor);
+
+			// Sound UI
+			MAKE_FLOAT_EDIT_FIELD("Gain:", width, m_soundGainEdit, m_soundUi, OSound, setGain);
+			MAKE_FLOAT_EDIT_FIELD("Pitch:", width, m_soundPitchEdit, m_soundUi, OSound, setPitch);
+			MAKE_FLOAT_EDIT_FIELD("Radius:", width, m_soundRadiusEdit, m_soundUi, OSound, setRadius);
+			MAKE_FLOAT_EDIT_FIELD("Rolloff:", width, m_soundRolloffEdit, m_soundUi, OSound, setRolloff);
+			MAKE_CHECK_BUTTON("Looping", m_soundLoopingButton, m_cameraUi, OSound, setLooping);
+			MAKE_CHECK_BUTTON("Relative", m_soundRelativeButton, m_cameraUi, OSound, setRelative);			
+
+			// Text UI
+			MAKE_STRING_EDIT_FIELD("Text:", width, m_textTextEdit, m_textUi, OText, setText);
+			MAKE_FLOAT_EDIT_FIELD("Size:", width, m_textSizeEdit, m_textUi, OText, setSize);
+			MAKE_4D_EDIT_FIELD("Color:", width, m_textColorEdit, m_textUi, OText, setColor);
 	}
 
 	// Left panel
@@ -380,6 +550,18 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 
 	m_entityUi->setActive(false);
 	m_entityUi->setInvisible(true);
+
+	m_lightUi->setActive(false);
+	m_lightUi->setInvisible(true);
+
+	m_cameraUi->setActive(false);
+	m_cameraUi->setInvisible(true);
+
+	m_soundUi->setActive(false);
+	m_soundUi->setInvisible(true);
+	
+	m_textUi->setActive(false);
+	m_textUi->setInvisible(true);
 	
 	switch(object->getType())
 	{
@@ -392,14 +574,64 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 	}
 	break;
 
-	case OBJECT3D_LIGHT:
-		break;
+	case OBJECT3D_LIGHT: {
+		m_lightUi->setActive(true);
+		m_lightUi->setInvisible(false);
 
-	case OBJECT3D_SOUND:
-		break;
+		OLight* light = static_cast<OLight*>(object);
+		m_lightColorEdit->setVector(light->getColor());
+		m_lightIntensityEdit->setLabel(std::to_string(light->getIntensity()).c_str());
+		m_lightRadiusEdit->setLabel(std::to_string(light->getRadius()).c_str());
+		m_lightSpotAngleEdit->setLabel(std::to_string(light->getSpotAngle()).c_str());
+		m_lightSpotExponentEdit->setLabel(std::to_string(light->getSpotExponent()).c_str());
+		m_lightShadowQualityEdit->setLabel(std::to_string(light->getShadowQuality()).c_str());
+		m_lightShadowBiasEdit->setLabel(std::to_string(light->getShadowBias()).c_str());
+		m_lightShadowBlurEdit->setLabel(std::to_string(light->getShadowBlur()).c_str());
+		m_lightCastShadowButton->setValue(light->isCastingShadow());
+	}
+	break;
 
-	case OBJECT3D_TEXT:
-		break;
+	case OBJECT3D_CAMERA: {
+		m_cameraUi->setActive(true);
+		m_cameraUi->setInvisible(false);
+
+		OCamera* cam = static_cast<OCamera*>(object);
+		m_cameraFarPlaneEdit->setLabel(std::to_string(cam->getClippingFar()).c_str());
+		m_cameraNearPlaneEdit->setLabel(std::to_string(cam->getClippingNear()).c_str());
+		m_cameraFovEdit->setLabel(std::to_string(cam->getFov()).c_str());
+		m_cameraFogButton->setValue(cam->hasFog());
+		m_cameraOrthoButton->setValue(cam->isOrtho());
+		m_cameraClearColorEdit->setVector(cam->getClearColor());
+		m_cameraFogColorEdit->setVector(cam->getFogColor());
+		m_cameraFogDistanceEdit->setLabel(std::to_string(cam->getFogDistance()).c_str());
+		
+	}
+	break;
+	
+	case OBJECT3D_SOUND: {
+		m_soundUi->setActive(true);
+		m_soundUi->setInvisible(false);
+
+		OSound* sound = static_cast<OSound*>(object);
+		m_soundGainEdit->setLabel(std::to_string(sound->getGain()).c_str());
+		m_soundPitchEdit->setLabel(std::to_string(sound->getPitch()).c_str());
+		m_soundRolloffEdit->setLabel(std::to_string(sound->getRolloff()).c_str());
+		m_soundRadiusEdit->setLabel(std::to_string(sound->getRadius()).c_str());
+		m_soundLoopingButton->setValue(sound->isLooping());
+		m_soundRelativeButton->setValue(sound->isRelative());
+	}
+	break;
+
+	case OBJECT3D_TEXT: {
+		m_textUi->setActive(true);
+		m_textUi->setInvisible(false);
+
+		OText* text = static_cast<OText*>(object);
+		m_textTextEdit->setLabel(text->getText());
+		m_textColorEdit->setVector(text->getColor());
+		m_textSizeEdit->setLabel(std::to_string(text->getSize()).c_str());
+	}
+	break;
 	}
 }
 

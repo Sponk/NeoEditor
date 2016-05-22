@@ -6,6 +6,9 @@ void Neo2D::Gui::VerticalLayout::updateLayout(const Widget& w, std::vector<share
 	float py = w.getPosition().y + m_padding;
 	for(auto c : v)
 	{
+		if(c->isInvisible())
+			continue;
+
 		if(m_resize)
 			c->setSize(Neo::Vector2(sx, sy));
 

@@ -34,16 +34,48 @@ class EditorGame : public Neo::SubGame
 	shared_ptr<Neo2D::Gui::Label> m_diagnosticsLabel;
 	shared_ptr<Neo2D::Gui::Container> m_transformUi;
 	shared_ptr<Neo2D::Gui::Container> m_entityUi;
+	shared_ptr<Neo2D::Gui::Container> m_cameraUi;
 	shared_ptr<Neo2D::Gui::Container> m_lightUi;
 	shared_ptr<Neo2D::Gui::Container> m_soundUi;
 	shared_ptr<Neo2D::Gui::Container> m_textUi;
 
-	
 	shared_ptr<Neo2D::Gui::EditField> m_nameEdit;
 	shared_ptr<Vector3Edit> m_positionEdit;
 	shared_ptr<Vector3Edit> m_rotationEdit;
 	shared_ptr<Vector3Edit> m_scaleEdit;
 
+	shared_ptr<Vector3Edit> m_lightColorEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_lightIntensityEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_lightRadiusEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_lightSpotAngleEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_lightSpotExponentEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_lightShadowBiasEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_lightShadowBlurEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_lightShadowQualityEdit;
+	shared_ptr<Neo2D::Gui::CheckButton> m_lightCastShadowButton;
+
+	
+	shared_ptr<Neo2D::Gui::EditField> m_cameraFarPlaneEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_cameraNearPlaneEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_cameraFogDistanceEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_cameraFovEdit;
+	shared_ptr<Vector3Edit> m_cameraFogColorEdit;
+	shared_ptr<Vector3Edit> m_cameraClearColorEdit;
+	shared_ptr<Neo2D::Gui::CheckButton> m_cameraFogButton;
+	shared_ptr<Neo2D::Gui::CheckButton> m_cameraOrthoButton;
+
+	
+	shared_ptr<Neo2D::Gui::EditField> m_soundGainEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_soundPitchEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_soundRadiusEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_soundRolloffEdit;
+	shared_ptr<Neo2D::Gui::CheckButton> m_soundLoopingButton;
+	shared_ptr<Neo2D::Gui::CheckButton> m_soundRelativeButton;
+
+	shared_ptr<Neo2D::Gui::EditField> m_textTextEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_textSizeEdit;
+	shared_ptr<Vector4Edit> m_textColorEdit;
+		
 	shared_ptr<Neo2D::Gui::CheckButton> m_entityInvisibleButton;
 	std::string m_currentLevelFile;
 

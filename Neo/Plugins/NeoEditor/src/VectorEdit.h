@@ -22,4 +22,23 @@ public:
 	Neo::Vector3 getVector() const;
 };
 
+class Vector4Edit : public Neo2D::Gui::Widget
+{
+	std::function<void(Neo2D::Gui::Widget& w, void* d)> m_cb;
+	shared_ptr<Neo2D::Gui::EditField> m_x, m_y, m_z, m_w;
+public:
+	Vector4Edit(int x,
+				int y,
+				unsigned int w,
+				unsigned int h,
+				const char* label,
+				const shared_ptr<Neo2D::Object2D>& parent,
+				const shared_ptr<Neo2D::Gui::Theme>& theme = nullptr);
+	
+	virtual void update(float dt) override;
+	virtual void draw(const Neo::Vector2& offset) override;
+	void setVector(const Neo::Vector4& v);
+	Neo::Vector4 getVector() const;
+};
+
 #endif
