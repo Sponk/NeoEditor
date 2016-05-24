@@ -5,6 +5,7 @@ include_directories(
 		${NEO_ENGINE_INCLUDE_DIR}
 		${NEO2D_INCLUDE_DIR}
 		${SEXPRESSO_INCLUDE_DIR}
+		${GTEST_INCLUDE_DIR}
 )
 
 target_link_libraries(NeoEditor
