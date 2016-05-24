@@ -6,6 +6,7 @@ include_directories(
 		${NEO2D_INCLUDE_DIR}
 		${SEXPRESSO_INCLUDE_DIR}
 		${CMAKE_CURRENT_SOURCE_DIR}/libproject
+		${GTEST_INCLUDE_DIR}
 )
 
 target_link_libraries(NeoEditor
