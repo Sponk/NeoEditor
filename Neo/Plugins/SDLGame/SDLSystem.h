@@ -6,7 +6,6 @@
 class SDLSystem : public Neo::SystemContextDummy
 {
 public:
-	virtual const char* getWorkingDirectory(void);
 	virtual unsigned long getSystemTick(void);
 	virtual void setWindowTitle(const char* title);
 	virtual void sleep(long int millis);

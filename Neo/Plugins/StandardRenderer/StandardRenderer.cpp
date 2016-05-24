@@ -791,7 +791,7 @@ void StandardRenderer::initFramebuffers(Vector2 res)
 	render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
 	render->setTextureUWrapMode(WRAP_CLAMP);
 	render->setTextureVWrapMode(WRAP_CLAMP);
-	render->texImage(0, res.x, res.y, VAR_FLOAT, TEX_RGBA, 0);
+	render->texImage(0, res.x, res.y, VAR_UBYTE, TEX_RGBA, 0);
 
 	// Depth texture
 	render->createTexture(&m_depthTexID);
@@ -799,7 +799,7 @@ void StandardRenderer::initFramebuffers(Vector2 res)
 	render->setTextureFilterMode(TEX_FILTER_NEAREST, TEX_FILTER_NEAREST);
 	render->setTextureUWrapMode(WRAP_CLAMP);
 	render->setTextureVWrapMode(WRAP_CLAMP);
-	render->texImage(0, res.x, res.y, VAR_FLOAT, TEX_DEPTH, 0);
+	render->texImage(0, res.x, res.y, VAR_UBYTE, TEX_DEPTH, 0);
 
 	// Position texture
 	render->createTexture(&m_positionTexID);

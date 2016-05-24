@@ -39,8 +39,11 @@ namespace Neo
  */
 class NEO_CORE_EXPORT SystemContext
 {
+	String m_workingDirectory;
 public:
 
+	SystemContext() : m_workingDirectory("./") {}
+	
 	// destructor
 	virtual ~SystemContext(void){}
 
@@ -85,8 +88,16 @@ public:
 	 * @brief Returns the working directory as a C string.
 	 * @return The working directory path.
 	 */
-	virtual const char * getWorkingDirectory(void) = 0;
-
+	virtual const char * getWorkingDirectory(void)
+	{
+		return m_workingDirectory.getSafeString();
+	}
+	
+	virtual void setWorkingDirectory(const char* path)
+	{
+		m_workingDirectory.set(path);
+	}
+	
 	/**
 	 * @brief Returns the current system time in millis.
 	 * @return The current system tick.
@@ -117,7 +128,6 @@ public:
 	virtual void getScreenSize(unsigned int* width, unsigned int* height) { *width = m_screensize.x; *height = m_screensize.y; }
 	virtual Vector2 getScreenSize() { return m_screensize; }
 
-	virtual const char* getWorkingDirectory(void) { return "./"; }
 	virtual unsigned long getSystemTick(void) { return 0; }
 	virtual void setWindowTitle(const char* title) {}
 

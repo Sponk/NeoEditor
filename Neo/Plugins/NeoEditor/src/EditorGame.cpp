@@ -11,6 +11,7 @@
 #include <Container.h>
 #include <Label.h>
 #include <EditField.h>
+#include <Project.h>
 #include <sstream>
 
 using namespace Neo;
@@ -113,6 +114,13 @@ using namespace Gui;
 					->setter(edit->getValue());                           \
 			},                                                            \
 			nullptr);                                                     \
+	}
+
+#define MAKE_BUTTON(str, width, ui, callback)                    \
+	{ \
+			auto btn = make_shared<Button>(0, 0, width, 20, tr(str), ui); \
+			ui->addWidget(btn); \
+			btn->setCallback(callback, nullptr);                                                     \
 	}
 
 bool updated = false;
@@ -220,7 +228,7 @@ void EditorGame::onBegin()
 	filemenu->addItem(tr("New Level"), [this](Widget&, void*) {
 			
 		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
-		std::string path =  m_toolset->fileSaveDialog(tr("Save Level"), HOMEDIR, "Levels (*.level)");
+		std::string path =  m_toolset->fileSaveDialog(tr("Save Level"), engine->getSystemContext()->getWorkingDirectory(), "Levels (*.level)");
 
 		if(path.empty())
 			return;
@@ -245,6 +253,10 @@ void EditorGame::onBegin()
 	
 	filemenu->addItem(tr("Open Project"), [this](Widget&, void*) {
 		std::string filename = m_toolset->fileOpenDialog("Open Project", HOMEDIR, "Projects (*.neo)");
+		if(filename.empty())
+			return;
+
+		loadProject(filename.c_str());
 	});
 
 	filemenu->addItem(tr("Open Level"), [this](Widget&, void*) {
@@ -404,8 +416,6 @@ void EditorGame::onBegin()
 					m_sceneView->getSelection().back()->setScale(m_scaleEdit->getVector());
 				}, nullptr);
 
-			MAKE_CHECK_BUTTON("Invisible", m_entityInvisibleButton, m_entityUi, OEntity, setInvisible);
-			
 			// Hide UI initially
 			m_entityUi->setActive(false);
 			m_entityUi->setInvisible(true);
@@ -421,6 +431,17 @@ void EditorGame::onBegin()
 
 			m_textUi->setActive(false);
 			m_textUi->setInvisible(true);
+
+
+			// Entity UI
+			MAKE_CHECK_BUTTON("Invisible", m_entityInvisibleButton, m_entityUi, OEntity, setInvisible);
+			MAKE_BUTTON("Edit Physics Properties", width, m_entityUi, [](Widget& w, void* d) {
+				MLOG_INFO("PHYSICS!!!");
+			});
+
+			MAKE_BUTTON("Edit Material Properties", width, m_entityUi, [](Widget& w, void* d) {
+				MLOG_INFO("Materials!");
+			});
 
 			// Light UI
 			MAKE_3D_EDIT_FIELD("Color:", width, m_lightColorEdit, m_lightUi, OLight, setColor);
@@ -637,9 +658,16 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 
 void EditorGame::openLevel()
 {
-		std::string filename = m_toolset->fileOpenDialog("Open Level", HOMEDIR, "Levels (*.level)");
+		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+		std::string filename = m_toolset->fileOpenDialog("Open Level", engine->getSystemContext()->getWorkingDirectory(), "Levels (*.level)");
 		if(filename.empty())
 			return;
+
+		openLevel(filename.c_str());
+}
+
+void EditorGame::openLevel(const char* path)
+{
 		
 		/*std::atomic<bool> done(false);
 		std::thread up([filename, this, &done]()
@@ -671,7 +699,7 @@ void EditorGame::openLevel()
 
 		m_sceneView->clearSelection();
 		engine->getLevel()->clear();
-		engine->getLevelLoader()->loadData(filename.c_str(), engine->getLevel());
+		engine->getLevelLoader()->loadData(path, engine->getLevel());
 
 		m_sceneView->updateOverlayScene();
 		updated = false;
@@ -679,19 +707,19 @@ void EditorGame::openLevel()
 		m_undo.clear();
 		m_undo.save();
 
-		m_currentLevelFile = filename;
+		m_currentLevelFile = path;
 		updateWindowTitle();
 }
 
 void EditorGame::saveLevel()
-{	
+{
+	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 	if(m_currentLevelFile.empty())
-		m_currentLevelFile = m_toolset->fileSaveDialog("Save Level", HOMEDIR, "Levels (*.level)");
+		m_currentLevelFile = m_toolset->fileSaveDialog("Save Level", engine->getSystemContext()->getWorkingDirectory(), "Levels (*.level)");
 
 	if(m_currentLevelFile.empty())
 		return;
 
-	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 	engine->getLevelLoader()->saveData(m_currentLevelFile.c_str(), "level", engine->getLevel());
 	updateWindowTitle();
 }
@@ -708,4 +736,32 @@ void EditorGame::updateWindowTitle()
 	std::stringstream ss;
 	ss << tr("Neo Scene Editor") << " - " << m_currentLevelFile;
 	engine->getSystemContext()->setWindowTitle(ss.str().c_str());
+}
+
+// TODO: Should be visible to the player as well
+// Move it to NeoEngine or NeoGame?
+void EditorGame::loadProject(const char* path)
+{
+	MLOG_INFO("Loading project file: " << path);
+
+	
+	if(!m_project.load(path))
+	{
+		m_toolset->messagebox(tr("Error"), tr("Could not open project! Make sure the file exists and can be read from."));
+		return;
+	}
+	
+	m_currentProjectFile = path;
+
+	char dir[256];
+    getRepertory(dir, path);
+	NeoEngine::getInstance()->getSystemContext()->setWorkingDirectory(dir);
+
+	std::string absolutePath(dir);
+	openLevel((absolutePath + m_project.getLevel()).c_str());
+}
+
+void EditorGame::saveProject(const char* path)
+{
+	m_project.save(path);
 }

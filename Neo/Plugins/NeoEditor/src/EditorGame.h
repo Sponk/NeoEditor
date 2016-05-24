@@ -12,11 +12,14 @@
 #include <Label.h>
 #include <EditField.h>
 #include <CheckButton.h>
+#include <Project.h>
 #include "VectorEdit.h"
 #include "NativeToolset.h"
 #include "Sidepanel.h"
 #include "SceneView.h"
 #include "UndoQueue.h"
+
+#include <sexpresso.hpp>
 
 class EditorGame : public Neo::SubGame
 {
@@ -78,7 +81,9 @@ class EditorGame : public Neo::SubGame
 		
 	shared_ptr<Neo2D::Gui::CheckButton> m_entityInvisibleButton;
 	std::string m_currentLevelFile;
-
+	std::string m_currentProjectFile;
+	Project m_project;
+	
 	UndoQueue m_undo;
 	
 public:
@@ -96,8 +101,11 @@ public:
 	void updateWindowTitle();
 	
 	void openLevel();
+	void openLevel(const char* path);
 	void saveLevel();
 	void saveLevel(const char* path);
+	void loadProject(const char* path);
+	void saveProject(const char* path);
 	
 private:
 };

@@ -5,6 +5,7 @@ include_directories(
 		${NEO_ENGINE_INCLUDE_DIR}
 		${NEO2D_INCLUDE_DIR}
 		${SEXPRESSO_INCLUDE_DIR}
+		${CMAKE_CURRENT_SOURCE_DIR}/libproject
 )
 
 target_link_libraries(NeoEditor
@@ -12,6 +13,7 @@ target_link_libraries(NeoEditor
 		${NEO_ENGINE_LIBRARIES}
 		${NEO2D_LIBRARIES}
 		${SEXPRESSO_LIBRARIES}
+		libproject
 )
 
 
@@ -20,7 +22,7 @@ IF(NOT NO_TESTS)
 	TARGET_LINK_LIBRARIES(NeoEditorTest ${NEO_CORE_LIBRARIES} ${NEO_ENGINE_LIBRARIES} ${GTEST_LIBRARIES})
 ENDIF()
 
-## Uncomment to enable experimental Qt tools
+add_subdirectory(libproject)
 add_subdirectory(runtime)
 
 install(DIRECTORY data DESTINATION ${NEO_INSTALL_DIR})

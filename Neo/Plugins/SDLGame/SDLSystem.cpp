@@ -36,12 +36,12 @@ void SDLSystem::sleep(long int millis)
 	SDL_Delay(millis);
 }
 
-const char* SDLSystem::getWorkingDirectory()
+/*const char* SDLSystem::getWorkingDirectory()
 {
 	static char currentDirectory[256];
 	getcwd(currentDirectory, 256);
 	return currentDirectory;
-}
+	}*/
 
 /*void NeoWindow::setCurrentDirectory(const char * directory)
 {
