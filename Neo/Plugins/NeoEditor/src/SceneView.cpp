@@ -509,18 +509,25 @@ void SceneView::update(float dt)
 void SceneView::updateOverlayScene()
 {
 	MLOG_INFO("Updating overlay scene");
-	m_overlayScene = make_shared<Scene>();
-	m_handlesScene = make_shared<Scene>();
+
+	if(!m_overlayScene)
+		m_overlayScene = make_shared<Scene>();
 	
 	auto engine = NeoEngine::getInstance();
 	auto level = engine->getLevel();
-	auto scene = level->getCurrentScene();
-		
+	auto scene = level->getCurrentScene();	
+	
 	if(!scene)
 		return;
 
+	for(size_t i = 0; i < m_overlayScene->getObjectsNumber(); i++)
+		m_overlayScene->deleteObject(m_overlayScene->getObjectByIndex(i));
+
 	// Load handles
-	{
+	if(!m_handlesScene)
+	{		
+		m_handlesScene = make_shared<Scene>();
+		
 		// The arrows!
 		MeshRef* meshref = level->loadMesh("data/arrow.obj");
 		m_translation.x = m_handlesScene->addNewEntity(meshref);

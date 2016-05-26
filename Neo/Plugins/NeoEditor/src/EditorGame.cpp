@@ -123,6 +123,19 @@ using namespace Gui;
 			btn->setCallback(callback, nullptr);                                                     \
 	}
 
+std::string findName(const char* name, Scene* scene)
+{
+	std::string base(name);
+	base.erase(base.find_last_not_of("0123456789") + 1);
+
+	std::string retval;
+	retval.reserve(base.size() + 3);
+	
+	size_t i = 0;
+	while(scene->getObjectByName((retval = base + to_string(i)).c_str())) i++;	
+	return retval;
+}
+
 bool updated = false;
 void EditorGame::update()
 {
@@ -141,7 +154,7 @@ void EditorGame::update()
 
 	Vector2 const size = engine->getSystemContext()->getScreenSize();
 
-	m_sceneView->setPosition(Vector2(m_leftPanel->getSize().x, m_toolbar->getPosition().y - m_toolbar->getSize().y));
+	m_sceneView->setPosition(Vector2(m_leftPanel->getSize().x, m_toolbar->getPosition().y - 2*m_toolbar->getSize().y));
 	m_sceneView->setSize(Vector2(size.x - m_leftPanel->getSize().x - m_rightPanel->getSize().x - 15, size.y));
 
 	// Update title
@@ -164,6 +177,7 @@ void EditorGame::draw()
 {
 	PROFILE_BEGIN("GuiDraw");
 	m_canvas.draw();
+	// m_sceneView->draw(Vector2());
 	PROFILE_END("GuiDraw");
 }
 
@@ -280,22 +294,105 @@ void EditorGame::onBegin()
 
 	filemenu->addItem(tr("Quit"), [] (Widget&, void*) { NeoEngine::getInstance()->setActive(false); });
 
+	
+	editmenu->setParent(m_menubar);
+	editmenu->addItem("/Create/Light", [this](Widget&, void*) {
+			OLight* light = NeoEngine::getInstance()->getLevel()->getCurrentScene()->addNewLight();
+
+			if (m_sceneView->getSelection().size())
+				light->setName(findName(m_sceneView->getSelection().back()->getName(),
+										NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());	
+			else
+				light->setName(findName("Light", NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
+
+			m_sceneView->updateOverlayScene();
+			updated = false;
+	});
+
+	editmenu->addItem("/Create/Entity", [this](Widget&, void*) {
+			std::string file = m_toolset->fileOpenDialog(
+				tr("Open Mesh File"),
+				NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(),
+				"Mesh Files (.obj .3ds .fbx .dae .ase .ifc .ply .dxf .lwo .lws "
+				".lxo .stl .x .ac .ms3d .cob .irrmesh .irr .md1 .md2 .md3 .pk3 "
+				".mdc .md5 .smd .ogex .3d .b3d .q3d)");
+
+			if(file.empty())
+				return;
+			
+			Level* level = NeoEngine::getInstance()->getLevel();
+			OEntity* entity = level->getCurrentScene()->addNewEntity(level->loadMesh(file.c_str()));
+
+			if (m_sceneView->getSelection().size())
+				entity->setName(findName(m_sceneView->getSelection().back()->getName(),
+										NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());	
+			else
+				entity->setName(findName("Entity", NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
+			
+			m_sceneView->updateOverlayScene();
+			updated = false;
+	});
+
+	editmenu->addItem("/Create/Text", [this](Widget&, void*) {
+			std::string file = m_toolset->fileOpenDialog(
+				tr("Open Font File"),
+				NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(),
+				"Font Files (.ttf)");
+
+			if(file.empty())
+				return;
+			
+			Level* level = NeoEngine::getInstance()->getLevel();
+			OText* text = level->getCurrentScene()->addNewText(level->loadFont(file.c_str()));
+
+			if (m_sceneView->getSelection().size())
+				text->setName(findName(m_sceneView->getSelection().back()->getName(),
+										NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());	
+			else
+				text->setName(findName("Text", NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
+			
+			m_sceneView->updateOverlayScene();
+			updated = false;
+	});
+	
+	editmenu->addItem("/Create/Sound", [this](Widget&, void*) {
+			std::string file = m_toolset->fileOpenDialog(
+				tr("Open Sound File"),
+				NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(),
+				"Sound Files (.ogg .wav)");
+	
+			if(file.empty())
+				return;
+			
+			Level* level = NeoEngine::getInstance()->getLevel();
+			OSound* sound = level->getCurrentScene()->addNewSound(level->loadSound(file.c_str()));
+
+			if (m_sceneView->getSelection().size())
+				sound->setName(findName(m_sceneView->getSelection().back()->getName(),
+										NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());	
+			else
+				sound->setName(findName("Sound", NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
+			
+			m_sceneView->updateOverlayScene();
+			updated = false;
+	});
+	
+	editmenu->setParent(weak_ptr<Object2D>());
+	
 	helpmenu->addItem(tr("About"), [this](Widget&, void*) { m_toolset->aboutDialog(); });
 	
 	m_menubar->addMenu(filemenu);
 	m_menubar->addMenu(editmenu);
 	m_menubar->addMenu(helpmenu);
-		
+	
 	// Build right panel
 	{
 			// Right panel
 			m_rightPanel = make_shared<Sidepanel>(0, m_menubar->getSize().y +
-														 m_toolbar->getSize().y,
+												  m_toolbar->getSize().y,
 												  250, 500, rootpane);
 			m_rightPanel->setEdge(RIGHT_EDGE);
 			m_rightPanel->setLayout(make_shared<ScaleLayout>());
-			m_rightPanel->registerEvent(make_shared<MouseLeftClickEvent>(
-				*m_rightPanel, nullptr, nullptr)); // Catch click on panel
 
 			auto rightscroll =
 				make_shared<ScrollPanel>(0, 0, 0, 0, m_rightPanel);
@@ -544,9 +641,12 @@ void EditorGame::updateEntityTree()
 	auto scene = engine->getLevel()->getCurrentScene();
 
 	std::function<void(TreeView::TreeNode*, Object3d*)> updateChildren = [&updateChildren](TreeView::TreeNode* node, Object3d* object)
-	{
+	{		
 		for(int i = 0; i < object->getChildrenNumber(); i++)
-		{
+		{			
+			if(strlen(object->getChild(i)->getName()) == 0)
+				continue;
+
 			updateChildren(node->addChild(object->getChild(i)->getName()).get(), object->getChild(i));
 		}
 	};

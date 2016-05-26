@@ -166,6 +166,9 @@ public:
 
 	virtual void update(float dt) override
 	{
+		for(auto c : m_children)
+			c.submenu->update(dt);
+		
 		Widget::update(dt);
 	}
 
