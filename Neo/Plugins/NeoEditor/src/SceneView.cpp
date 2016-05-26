@@ -64,13 +64,13 @@ void SceneView::draw(const Neo::Vector2& offset)
 {
 	NeoEngine* engine = NeoEngine::getInstance();
 	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
-
-	Vector2 size = engine->getSystemContext()->getScreenSize();
+	
+	const Vector2 size = engine->getSystemContext()->getScreenSize();
 	render->setViewport(0, 0, size.x, size.y);
 	render->setClearColor(m_camera.getClearColor());
 	render->clear(BUFFER_COLOR | BUFFER_DEPTH);
 	render->enableScissorTest();
-	render->setScissor(getPosition().x, getPosition().y, getSize().x, getSize().y);
+	render->setScissor(getPosition().x, size.y - (getPosition().y + getSize().y), getSize().x, getSize().y);
 
 	m_camera.enable();
 	m_camera.updateListener();
