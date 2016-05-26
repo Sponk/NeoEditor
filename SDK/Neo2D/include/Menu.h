@@ -32,13 +32,17 @@ public:
 class NEO2D_EXPORT Submenu : public MenuItem, public std::enable_shared_from_this<Submenu>
 {
 	std::vector<std::shared_ptr<MenuItem>> m_children;
-
+	bool m_drawSelf;
+	
 protected:
 	void addItem(const std::shared_ptr<MenuItem>& i) { m_children.push_back(i); }
 
 public:
 	Submenu(const char* label, const shared_ptr<Object2D>& parent, const shared_ptr<Theme>& theme = nullptr);
 
+	bool isDrawingItself() const { return m_drawSelf; }
+	void enableDrawingSelf(bool b) { m_drawSelf = b; }
+	
 	std::shared_ptr<MenuItem> findChild(const std::string&) const;
 	std::shared_ptr<Submenu> findSubmenu(const std::string& name) const
 	{
@@ -53,7 +57,7 @@ public:
 			size_t line = 0;
 			for(auto m : m_children)
 			{
-				m->setPosition(getPosition() + offset + Neo::Vector2(getParent().expired() ? 0 : getSize().x, line));
+				m->setPosition(getPosition() + offset + Neo::Vector2(!isDrawingItself() ? 0 : getSize().x, line));
 				m->setSize(getSize());
 				line += getSize().y + 1;
 
@@ -61,7 +65,7 @@ public:
 			}
 		}
 
-		if(!getParent().expired())
+		if(isDrawingItself())
 			MenuItem::draw(offset);
 	}
 
@@ -159,7 +163,7 @@ public:
 
 		menu->setActive(false);
 		menu->setVisible(false);
-		menu->setParent(weak_ptr<Neo2D::Object2D>());
+		menu->enableDrawingSelf(false);
 
 		m_children.push_back(menubutton);
 	}

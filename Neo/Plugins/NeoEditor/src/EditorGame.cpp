@@ -187,6 +187,9 @@ void EditorGame::onBegin()
 	auto rootpane = make_shared<Container>(0, 0, 0, 0, nullptr);
 	m_canvas.addObject2D(rootpane);
 	
+	m_sceneView = make_shared<SceneView>(m_undo, 0,0,0,0, rootpane);
+	rootpane->addWidget(m_sceneView);
+
 	m_menubar = make_shared<Menubar>(0, 0, 6000, 25, rootpane);
 	// Toolbar
 	m_toolbar = make_shared<Toolbar>(0, m_menubar->getSize().y, 6000, 32, rootpane);
@@ -238,7 +241,7 @@ void EditorGame::onBegin()
 	auto filemenu = make_shared<Submenu>(tr("File"), m_menubar);
 	auto editmenu = make_shared<Submenu>(tr("Edit"), m_menubar);
 	auto helpmenu = make_shared<Submenu>(tr("Help"), m_menubar);
-	
+
 	filemenu->addItem(tr("New Level"), [this](Widget&, void*) {
 			
 		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
@@ -293,10 +296,7 @@ void EditorGame::onBegin()
 	});
 
 	filemenu->addItem(tr("Quit"), [] (Widget&, void*) { NeoEngine::getInstance()->setActive(false); });
-
-	
-	editmenu->setParent(m_menubar);
-	editmenu->addItem("/Create/Light", [this](Widget&, void*) {
+   	editmenu->addItem("/Create/Light", [this](Widget&, void*) {
 			OLight* light = NeoEngine::getInstance()->getLevel()->getCurrentScene()->addNewLight();
 
 			if (m_sceneView->getSelection().size())
@@ -399,8 +399,6 @@ void EditorGame::onBegin()
 			updateSelectedObject(sound);
 			updated = false;
 	});
-	
-	editmenu->setParent(weak_ptr<Object2D>());
 	
 	helpmenu->addItem(tr("About"), [this](Widget&, void*) { m_toolset->aboutDialog(); });
 	
@@ -612,9 +610,6 @@ void EditorGame::onBegin()
 	leftscroll->addWidget(m_entityTree);
 	m_leftPanel->addWidget(leftscroll);
 	m_leftPanel->setEdge(LEFT_EDGE);
-
-	m_sceneView = make_shared<SceneView>(m_undo, 0,0,0,0, rootpane);
-	rootpane->addWidget(m_sceneView);
 
 	m_diagnosticsLabel = make_shared<Label>(m_leftPanel->getSize().x + 20, 10 + m_toolbar->getPosition().y + m_toolbar->getSize().y, 0, 0, "DIAGNOSTICS", rootpane);
 	rootpane->addWidget(m_diagnosticsLabel);

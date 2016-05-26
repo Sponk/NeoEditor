@@ -27,4 +27,4 @@ add_subdirectory(libproject)
 add_subdirectory(runtime)
 
 install(DIRECTORY data DESTINATION ${NEO_INSTALL_DIR})
-copy_files("*" "${NEO_BINARY_OUTPUT}" "copy-editor-data")
+copy_files("data/*" "${NEO_BINARY_OUTPUT}" "copy-editor-data")

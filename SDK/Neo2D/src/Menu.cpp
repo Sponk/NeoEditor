@@ -89,7 +89,8 @@ public:
 };
 
 Submenu::Submenu(const char* label, const shared_ptr<Object2D>& parent, const shared_ptr<Theme>& theme)
-	: MenuItem(label, parent, (theme == nullptr) ? make_shared<SubmenuTheme>() : theme)
+	: MenuItem(label, parent, (theme == nullptr) ? make_shared<SubmenuTheme>() : theme),
+	  m_drawSelf(true)
 {
 	//registerEvent(std::make_shared<MouseDeselectEvent>(*this, nullptr, this));
 	setSize(Vector2(200,20));
@@ -97,15 +98,18 @@ Submenu::Submenu(const char* label, const shared_ptr<Object2D>& parent, const sh
 
 bool Submenu::handle(const Event& e)
 {
+	if(!isActive())
+		return false;
+
 	bool handled = Button::handle(e);
 	switch(e.getType())
 	{
 		case MOUSE_OVER:
 		{
-			shared_ptr<Object2D> parent = getParent().lock();
+			shared_ptr<Submenu> parent = dynamic_pointer_cast<Submenu>(getParent().lock());
 			if(parent != nullptr)
 			{
-				static_pointer_cast<Submenu>(parent)->deselectChildren();
+				parent->deselectChildren();
 			}
 
 			setVisible(true);
@@ -189,6 +193,9 @@ shared_ptr<MenuItem> Submenu::addItem(const std::string& name, std::function<voi
 
 bool MenuItem::handle(const Event& e)
 {
+	if(!isActive())
+		return false;
+
 	bool handled = Button::handle(e);
 	if(e.getType() == MOUSE_LEFT_RELEASE)
 	{
@@ -225,13 +232,12 @@ void MenuItem::hideHierarchy()
 
 	if(!getParent().expired())
 	{
-		shared_ptr<Object2D> parent = getParent().lock();
+		shared_ptr<MenuItem> parent = dynamic_pointer_cast<MenuItem>(getParent().lock());
 		if(parent != nullptr)
 		{
-			auto menu = static_pointer_cast<MenuItem>(parent);
-			menu->hideHierarchy();
+			parent->hideHierarchy();
 
-			if(auto sm = dynamic_pointer_cast<Submenu>(menu))
+			if(auto sm = dynamic_pointer_cast<Submenu>(parent))
 				sm->hideChildren();
 		}
 	}
