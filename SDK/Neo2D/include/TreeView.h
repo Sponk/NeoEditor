@@ -20,7 +20,7 @@ public:
 	/**
 	 * @brief Implements a node in a tree.
 	 */
-	class TreeNode : public Widget, public std::enable_shared_from_this<TreeNode>
+	class NEO2D_EXPORT TreeNode : public Widget, public std::enable_shared_from_this<TreeNode>
 	{
 		friend Neo2D::Gui::TreeView;
 		std::vector<shared_ptr<TreeNode>> m_children;

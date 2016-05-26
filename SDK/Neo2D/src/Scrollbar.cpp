@@ -90,7 +90,7 @@ bool Neo2D::Gui::Scrollbar::handle(const Neo2D::Gui::Event & e)
 {
 	switch(e.getType())
 	{
-		case MOUSE_MOVED:
+		case MOUSE_MOVE:
 		{
 			if (getState() != WIDGET_SELECTED)
 				return false;

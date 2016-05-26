@@ -4,10 +4,10 @@
 #include <fcntl.h>
 #include <NeoEngine.h>
 #include <thread>
+#include <atomic>
 
 #ifndef _WIN32
 #include <unistd.h>
-#include <atomic>
 #else
 #include <windows.h>
 #endif

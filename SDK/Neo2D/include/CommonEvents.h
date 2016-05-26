@@ -35,7 +35,7 @@ enum COMMON_EVENT_TYPES
 	/// The right mouse button was released.
 	MOUSE_RIGHT_RELEASE = 9,
 	/// The mouse moved.
-	MOUSE_MOVED = 10,
+	MOUSE_MOVE = 10,
 	/// A key was pressed.
 	KEY_PRESSED = 11,
 	/// A key was released.
@@ -297,7 +297,7 @@ public:
 		return lastPosition;
 	}
 
-	virtual unsigned int getType() const override { return MOUSE_MOVED; }
+	virtual unsigned int getType() const override { return MOUSE_MOVE; }
 };
 
 /**

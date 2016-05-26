@@ -14,7 +14,7 @@ namespace Gui
 /**
  * @brief Implements a one line input field with UTF-8 support.
  */
-class EditField : public Widget
+class NEO2D_EXPORT EditField : public Widget
 {
 	size_t m_caret;
 public:

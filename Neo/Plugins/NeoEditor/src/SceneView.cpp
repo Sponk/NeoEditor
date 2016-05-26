@@ -124,7 +124,7 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 
 			return true;
 
-		case Neo2D::Gui::MOUSE_MOVED:	
+		case Neo2D::Gui::MOUSE_MOVE:	
 		case Neo2D::Gui::MOUSE_LEFT_CLICK:
 		{
 			if(e.getType() == Neo2D::Gui::MOUSE_LEFT_CLICK)

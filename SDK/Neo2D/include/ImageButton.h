@@ -13,7 +13,7 @@ namespace Gui
  * @brief Implements a traditional push button with an icon instead of text.
  * @see Button
  */
-class ImageButton : public Button
+class NEO2D_EXPORT ImageButton : public Button
 {
 	Neo::Vector2 m_padding;
 	Sprite m_sprite;
