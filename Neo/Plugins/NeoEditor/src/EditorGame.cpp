@@ -154,7 +154,7 @@ void EditorGame::update()
 
 	Vector2 const size = engine->getSystemContext()->getScreenSize();
 
-	m_sceneView->setPosition(Vector2(m_leftPanel->getSize().x, m_toolbar->getPosition().y - 2*m_toolbar->getSize().y));
+	m_sceneView->setPosition(Vector2(m_leftPanel->getSize().x, m_toolbar->getPosition().y + m_toolbar->getSize().y));
 	m_sceneView->setSize(Vector2(size.x - m_leftPanel->getSize().x - m_rightPanel->getSize().x - 15, size.y));
 
 	// Update title
@@ -305,7 +305,12 @@ void EditorGame::onBegin()
 			else
 				light->setName(findName("Light", NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
 
+			light->setPosition(m_sceneView->getSelectionCenter());
+			
 			m_sceneView->updateOverlayScene();
+			m_sceneView->clearSelection();
+			m_sceneView->addSelectedObject(light);
+			updateSelectedObject(light);
 			updated = false;
 	});
 
@@ -313,9 +318,9 @@ void EditorGame::onBegin()
 			std::string file = m_toolset->fileOpenDialog(
 				tr("Open Mesh File"),
 				NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(),
-				"Mesh Files (.obj .3ds .fbx .dae .ase .ifc .ply .dxf .lwo .lws "
-				".lxo .stl .x .ac .ms3d .cob .irrmesh .irr .md1 .md2 .md3 .pk3 "
-				".mdc .md5 .smd .ogex .3d .b3d .q3d)");
+				"Mesh Files (*.obj *.3ds *.fbx *.dae *.ase *.ifc *.ply *.dxf *.lwo *.lws "
+				"*.lxo *.stl *.x *.ac *.ms3d *.cob *.irrmesh *.irr *.md1 *.md2 *.md3 *.pk3 "
+				"*.mdc *.md5 *.smd *.ogex *.3d *.b3d *.q3d)");
 
 			if(file.empty())
 				return;
@@ -328,8 +333,14 @@ void EditorGame::onBegin()
 										NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());	
 			else
 				entity->setName(findName("Entity", NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
+
+			
+			entity->setPosition(m_sceneView->getSelectionCenter());
 			
 			m_sceneView->updateOverlayScene();
+			m_sceneView->clearSelection();
+			m_sceneView->addSelectedObject(entity);
+			updateSelectedObject(entity);
 			updated = false;
 	});
 
@@ -337,7 +348,7 @@ void EditorGame::onBegin()
 			std::string file = m_toolset->fileOpenDialog(
 				tr("Open Font File"),
 				NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(),
-				"Font Files (.ttf)");
+				"Font Files (*.ttf)");
 
 			if(file.empty())
 				return;
@@ -350,8 +361,14 @@ void EditorGame::onBegin()
 										NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());	
 			else
 				text->setName(findName("Text", NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
+
+			
+			text->setPosition(m_sceneView->getSelectionCenter());
 			
 			m_sceneView->updateOverlayScene();
+			m_sceneView->clearSelection();
+			m_sceneView->addSelectedObject(text);
+			updateSelectedObject(text);			
 			updated = false;
 	});
 	
@@ -359,7 +376,7 @@ void EditorGame::onBegin()
 			std::string file = m_toolset->fileOpenDialog(
 				tr("Open Sound File"),
 				NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(),
-				"Sound Files (.ogg .wav)");
+				"Sound Files (*.ogg *.wav)");
 	
 			if(file.empty())
 				return;
@@ -372,8 +389,14 @@ void EditorGame::onBegin()
 										NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());	
 			else
 				sound->setName(findName("Sound", NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
+
+			
+			sound->setPosition(m_sceneView->getSelectionCenter());
 			
 			m_sceneView->updateOverlayScene();
+			m_sceneView->clearSelection();
+			m_sceneView->addSelectedObject(sound);
+			updateSelectedObject(sound);
 			updated = false;
 	});
 	
