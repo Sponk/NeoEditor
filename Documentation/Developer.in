@@ -106,7 +106,8 @@ WARN_LOGFILE           =
 
 INPUT                  = @NEO_SOURCE_DIR@/SDK \
                          @NEO_SOURCE_DIR@/Documentation \
-                         @NEO_SOURCE_DIR@/README.md
+                         @NEO_SOURCE_DIR@/README.md \
+						 @NEO_SOURCE_DIR@/Neo/Plugins
 
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h *.md *.dox
