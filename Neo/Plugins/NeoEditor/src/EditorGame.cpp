@@ -120,7 +120,7 @@ using namespace Gui;
 	{ \
 			auto btn = make_shared<Button>(0, 0, width, 20, tr(str), ui); \
 			ui->addWidget(btn); \
-			btn->setCallback(callback, nullptr);                                                     \
+			btn->setCallback(callback, nullptr);                          \
 	}
 
 std::string findName(const char* name, Scene* scene)
@@ -140,13 +140,13 @@ bool updated = false;
 void EditorGame::update()
 {
 	NeoEngine* engine = NeoEngine::getInstance();
+	float delta = engine->getGame()->getFrameDelta();
+
 	if(!updated)
 	{
 		updateEntityTree();
 		updated = true;
 	}
-
-	float delta = engine->getGame()->getFrameDelta();
 
 	PROFILE_BEGIN("GuiUpdate");
 	m_canvas.update(delta);
@@ -191,52 +191,6 @@ void EditorGame::onBegin()
 	rootpane->addWidget(m_sceneView);
 
 	m_menubar = make_shared<Menubar>(0, 0, 6000, 25, rootpane);
-	// Toolbar
-	m_toolbar = make_shared<Toolbar>(0, m_menubar->getSize().y, 6000, 32, rootpane);
-
-	
-	auto toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/document-open.png", m_toolbar);
-	toolbutton->setCallback([this](Widget&, void*) { openLevel(); }, nullptr);
-	m_toolbar->addWidget(toolbutton);
-	
-	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/document-save.png", m_toolbar);
-	toolbutton->setCallback([this](Widget&, void*) { saveLevel(); }, nullptr);
-	m_toolbar->addWidget(toolbutton);
-
-	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/edit-undo.png", m_toolbar);
-	toolbutton->setCallback(
-		[this](Widget&, void*) {
-			m_sceneView->clearSelection();
-			m_undo.undo();
-			//m_sceneView->updateOverlayScene();
-			updated = false;
-		},
-		nullptr);
-	m_toolbar->addWidget(toolbutton);
-
-	toolbutton = make_shared<ImageButton>(0, 0, 32, 32, "data/icons/edit-redo.png", m_toolbar);
-	toolbutton->setCallback(
-		[this](Widget&, void*) {
-			m_sceneView->clearSelection();
-			m_undo.redo();
-			//m_sceneView->updateOverlayScene();
-			updated = false;
-		},
-		nullptr);
-	
-	m_toolbar->addWidget(toolbutton);
-		
-	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/translate.png", m_toolbar);
-	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(TRANSLATION); }, nullptr);
-	m_toolbar->addWidget(toolbutton);
-
-	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/scale.png", m_toolbar);
-	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(SCALE); }, nullptr);
-	m_toolbar->addWidget(toolbutton);
-
-	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/rotate.png", m_toolbar);
-	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(ROTATION); }, nullptr);
-	m_toolbar->addWidget(toolbutton);
 
 	auto filemenu = make_shared<Submenu>(tr("File"), m_menubar);
 	auto editmenu = make_shared<Submenu>(tr("Edit"), m_menubar);
@@ -295,7 +249,7 @@ void EditorGame::onBegin()
 				m_currentLevelFile = curfile;
 	});
 
-	filemenu->addItem(tr("Quit"), [] (Widget&, void*) { NeoEngine::getInstance()->setActive(false); });
+	filemenu->addItem(tr("Quit"), [this] (Widget&, void*) { NeoEngine::getInstance()->setActive(false); });
    	editmenu->addItem("/Create/Light", [this](Widget&, void*) {
 			OLight* light = NeoEngine::getInstance()->getLevel()->getCurrentScene()->addNewLight();
 
@@ -401,11 +355,60 @@ void EditorGame::onBegin()
 	});
 	
 	helpmenu->addItem(tr("About"), [this](Widget&, void*) { m_toolset->aboutDialog(); });
-	
+
 	m_menubar->addMenu(filemenu);
 	m_menubar->addMenu(editmenu);
 	m_menubar->addMenu(helpmenu);
-	
+
+	// Toolbar
+	m_toolbar = make_shared<Toolbar>(0, m_menubar->getSize().y, 6000, 32, rootpane);
+
+	auto toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/document-open.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { openLevel(); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/document-save.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { saveLevel(); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/edit-undo.png", m_toolbar);
+	toolbutton->setCallback(
+		[this](Widget&, void*) {
+			m_sceneView->clearSelection();
+
+			m_undo.undo();
+
+			m_sceneView->updateOverlayScene();
+			updateEntityTree();
+		},
+		nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0, 0, 32, 32, "data/icons/edit-redo.png", m_toolbar);
+	toolbutton->setCallback(
+		[this](Widget&, void*) {
+			m_sceneView->clearSelection();
+
+			m_undo.redo();
+			m_sceneView->updateOverlayScene();
+			updateEntityTree();
+		},
+		nullptr);
+
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/translate.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(TRANSLATION); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/scale.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(SCALE); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/rotate.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(ROTATION); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
 	// Build right panel
 	{
 			// Right panel
@@ -550,16 +553,15 @@ void EditorGame::onBegin()
 			m_textUi->setActive(false);
 			m_textUi->setInvisible(true);
 
-
 			// Entity UI
 			MAKE_CHECK_BUTTON("Invisible", m_entityInvisibleButton, m_entityUi, OEntity, setInvisible);
-			MAKE_BUTTON("Edit Physics Properties", width, m_entityUi, [](Widget& w, void* d) {
+			/*MAKE_BUTTON("Edit Physics Properties", width, m_entityUi, [](Widget& w, void* d) {
 				MLOG_INFO("PHYSICS!!!");
 			});
 
 			MAKE_BUTTON("Edit Material Properties", width, m_entityUi, [](Widget& w, void* d) {
 				MLOG_INFO("Materials!");
-			});
+			});*/
 
 			// Light UI
 			MAKE_3D_EDIT_FIELD("Color:", width, m_lightColorEdit, m_lightUi, OLight, setColor);
@@ -650,6 +652,7 @@ void EditorGame::onBegin()
 
 void EditorGame::onEnd()
 {
+	m_sceneView->clear();
 	Neo2D::Neo2DLevel::getInstance()->clear();
 }
 
@@ -816,10 +819,11 @@ void EditorGame::openLevel(const char* path)
 		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 
 		m_sceneView->clearSelection();
+		m_sceneView->clearOverlayScene();
+
 		engine->getLevel()->clear();
 		engine->getLevelLoader()->loadData(path, engine->getLevel());
 
-		m_sceneView->updateOverlayScene();
 		updated = false;
 
 		m_undo.clear();
@@ -860,9 +864,7 @@ void EditorGame::updateWindowTitle()
 // Move it to NeoEngine or NeoGame?
 void EditorGame::loadProject(const char* path)
 {
-	MLOG_INFO("Loading project file: " << path);
-
-	
+	MLOG_INFO("Loading project file: " << path);	
 	if(!m_project.load(path))
 	{
 		m_toolset->messagebox(tr("Error"), tr("Could not open project! Make sure the file exists and can be read from."));

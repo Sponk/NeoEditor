@@ -14,8 +14,9 @@ enum HANDLE_MODE
 
 class SceneView : public Neo2D::Gui::Widget
 {
-	shared_ptr<Neo::Scene> m_handlesScene;
-	shared_ptr<Neo::Scene> m_overlayScene;
+	Neo::Level m_level;
+	Neo::Scene* m_handlesScene;
+	Neo::Scene* m_overlayScene;
 	Neo::OCamera m_camera;
 	std::vector<Neo::Object3d*> m_selection;
 	
@@ -71,6 +72,7 @@ public:
 			  unsigned int h,
 			  const shared_ptr<Neo2D::Object2D>& parent);
 
+	virtual void init() override;
 	virtual bool handle(const Neo2D::Gui::Event& e) override;
 	virtual void draw(const Neo::Vector2& offset);
 	virtual void update(float dt);
@@ -81,6 +83,8 @@ public:
 	void addSelectedObject(Neo::Object3d* object);
 	Neo::Vector3 getSelectionCenter();
 	
+	void clear() { m_level.clear(); m_overlayScene = nullptr; m_handlesScene = nullptr; }
+	void clearOverlayScene();
 	void updateOverlayScene();
 	void setHandleMode(HANDLE_MODE mode);
 };

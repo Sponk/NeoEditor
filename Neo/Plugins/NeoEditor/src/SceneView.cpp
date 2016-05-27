@@ -14,14 +14,70 @@ SceneView::SceneView(UndoQueue& undo,
 	  m_currentHandles(&m_translation),
 	  m_undo(undo)
 {
+	m_overlayScene = m_level.addNewScene();
+	m_handlesScene = m_level.addNewScene();
+}
+
+void SceneView::init()
+{
 	resetCamera();
 
-	registerEvent(make_shared<Neo2D::Gui::MouseDeselectEvent>(*this, nullptr, nullptr));
-	registerEvent(make_shared<Neo2D::Gui::MouseLeftClickEvent>(*this, nullptr, nullptr));
-	registerEvent(make_shared<Neo2D::Gui::MouseRightClickEvent>(*this, nullptr, nullptr));
-	registerEvent(make_shared<Neo2D::Gui::MouseMoveEvent>(*this, nullptr, nullptr));
-	registerEvent(make_shared<Neo2D::Gui::MouseLeftReleaseEvent>(*this, nullptr, nullptr));
+	registerEvent(make_shared<Neo2D::Gui::MouseDeselectEvent>(shared_from_this(), nullptr, nullptr));
+	registerEvent(make_shared<Neo2D::Gui::MouseLeftClickEvent>(shared_from_this(), nullptr, nullptr));
+	registerEvent(make_shared<Neo2D::Gui::MouseRightClickEvent>(shared_from_this(), nullptr, nullptr));
+	registerEvent(make_shared<Neo2D::Gui::MouseMoveEvent>(shared_from_this(), nullptr, nullptr));
+	registerEvent(make_shared<Neo2D::Gui::MouseLeftReleaseEvent>(shared_from_this(), nullptr, nullptr));
 
+	NeoEngine* engine = NeoEngine::getInstance();
+	Level* level = engine->getLevel();
+	engine->setLevel(&m_level);
+
+	{
+		// The arrows!
+		MeshRef* meshref = m_level.loadMesh("data/arrow.obj");
+		m_translation.x = m_handlesScene->addNewEntity(meshref);
+		m_translation.y = m_handlesScene->addNewEntity(meshref);
+		m_translation.z = m_handlesScene->addNewEntity(meshref);
+
+		m_translation.x->getMaterial(0)->setEmit(Vector3(1, 0, 0));
+		m_translation.y->getMaterial(0)->setEmit(Vector3(0, 1, 0));
+		m_translation.z->getMaterial(0)->setEmit(Vector3(0, 0, 1));
+
+		m_translation.x->rotate(Vector3(0, 1, 0), 90);
+		m_translation.y->rotate(Vector3(1, 0, 0), 90);
+
+		// The scalers!
+		meshref = m_level.loadMesh("data/scale-arrow.obj");
+		m_scale.x = m_handlesScene->addNewEntity(meshref);
+		m_scale.y = m_handlesScene->addNewEntity(meshref);
+		m_scale.z = m_handlesScene->addNewEntity(meshref);
+
+		m_scale.x->getMaterial(0)->setEmit(Vector3(1, 0, 0));
+		m_scale.y->getMaterial(0)->setEmit(Vector3(0, 1, 0));
+		m_scale.z->getMaterial(0)->setEmit(Vector3(0, 0, 1));
+
+		m_scale.x->rotate(Vector3(0, 1, 0), 90);
+		m_scale.y->rotate(Vector3(1, 0, 0), 90);
+
+		meshref = m_level.loadMesh("data/rotation-arrow.obj");
+		m_rotation.x = m_handlesScene->addNewEntity(meshref);
+		m_rotation.y = m_handlesScene->addNewEntity(meshref);
+		m_rotation.z = m_handlesScene->addNewEntity(meshref);
+
+		m_rotation.x->getMaterial(0)->setEmit(Vector3(1, 0, 0));
+		m_rotation.y->getMaterial(0)->setEmit(Vector3(0, 1, 0));
+		m_rotation.z->getMaterial(0)->setEmit(Vector3(0, 0, 1));
+
+		m_rotation.x->rotate(Vector3(0, 1, 0), 90);
+		m_rotation.y->rotate(Vector3(1, 0, 0), 90);
+
+		m_translation.enable(false);
+		m_scale.enable(false);
+		m_rotation.enable(false);
+
+		setHandleMode(TRANSLATION);
+	}
+	engine->setLevel(level);
 	updateOverlayScene();
 }
 
@@ -58,6 +114,7 @@ void SceneView::resetCamera()
 	m_camera.setClippingFar(100000);
 	m_camera.setFov(75);
 	m_camera.updateMatrix();
+	m_camera.setClearColor(Vector4(0.223529411764706,0.223529411764706,0.223529411764706,1));
 }
 
 void SceneView::draw(const Neo::Vector2& offset)
@@ -101,6 +158,9 @@ void SceneView::clearSelection()
 
 void SceneView::addSelectedObject(Neo::Object3d* object)
 {
+	if(!object)
+		return;
+
 	m_selection.push_back(object);
 
 	if(object->getType() == OBJECT3D_ENTITY)
@@ -451,6 +511,7 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 
 void SceneView::update(float dt)
 {
+	Neo2D::Gui::Widget::update(dt);
 	Vector3 scale = (m_camera.getPosition() - getSelectionCenter()).getLength() * 0.0075;
 	m_currentHandles->setScale(scale);
 	m_currentHandles->setPosition(getSelectionCenter());
@@ -509,9 +570,6 @@ void SceneView::update(float dt)
 void SceneView::updateOverlayScene()
 {
 	MLOG_INFO("Updating overlay scene");
-
-	if(!m_overlayScene)
-		m_overlayScene = make_shared<Scene>();
 	
 	auto engine = NeoEngine::getInstance();
 	auto level = engine->getLevel();
@@ -520,59 +578,9 @@ void SceneView::updateOverlayScene()
 	if(!scene)
 		return;
 
-	for(size_t i = 0; i < m_overlayScene->getObjectsNumber(); i++)
-		m_overlayScene->deleteObject(m_overlayScene->getObjectByIndex(i));
+	clearOverlayScene();
 
-	// Load handles
-	if(!m_handlesScene)
-	{		
-		m_handlesScene = make_shared<Scene>();
-		
-		// The arrows!
-		MeshRef* meshref = level->loadMesh("data/arrow.obj");
-		m_translation.x = m_handlesScene->addNewEntity(meshref);
-		m_translation.y = m_handlesScene->addNewEntity(meshref);
-		m_translation.z = m_handlesScene->addNewEntity(meshref);
-
-		m_translation.x->getMaterial(0)->setEmit(Vector3(1, 0, 0));
-		m_translation.y->getMaterial(0)->setEmit(Vector3(0, 1, 0));
-		m_translation.z->getMaterial(0)->setEmit(Vector3(0, 0, 1));
-
-		m_translation.x->rotate(Vector3(0, 1, 0), 90);
-		m_translation.y->rotate(Vector3(1, 0, 0), 90);
-
-		// The scalers!
-		meshref = level->loadMesh("data/scale-arrow.obj");
-		m_scale.x = m_handlesScene->addNewEntity(meshref);
-		m_scale.y = m_handlesScene->addNewEntity(meshref);
-		m_scale.z = m_handlesScene->addNewEntity(meshref);
-
-		m_scale.x->getMaterial(0)->setEmit(Vector3(1, 0, 0));
-		m_scale.y->getMaterial(0)->setEmit(Vector3(0, 1, 0));
-		m_scale.z->getMaterial(0)->setEmit(Vector3(0, 0, 1));
-
-		m_scale.x->rotate(Vector3(0, 1, 0), 90);
-		m_scale.y->rotate(Vector3(1, 0, 0), 90);
-
-		meshref = level->loadMesh("data/rotation-arrow.obj");
-		m_rotation.x = m_handlesScene->addNewEntity(meshref);
-		m_rotation.y = m_handlesScene->addNewEntity(meshref);
-		m_rotation.z = m_handlesScene->addNewEntity(meshref);
-
-		m_rotation.x->getMaterial(0)->setEmit(Vector3(1, 0, 0));
-		m_rotation.y->getMaterial(0)->setEmit(Vector3(0, 1, 0));
-		m_rotation.z->getMaterial(0)->setEmit(Vector3(0, 0, 1));
-
-		m_rotation.x->rotate(Vector3(0, 1, 0), 90);
-		m_rotation.y->rotate(Vector3(1, 0, 0), 90);
-
-		m_translation.enable(false);
-		m_scale.enable(false);
-		m_rotation.enable(false);
-
-		setHandleMode(TRANSLATION);
-	}
-
+	engine->setLevel(&m_level);
 	// Load billboards
 	for (size_t i = 0; i < scene->getObjectsNumber(); i++)
 	{
@@ -581,26 +589,27 @@ void SceneView::updateOverlayScene()
 		{
 			case OBJECT3D_CAMERA:
 			{
-				auto entity = m_overlayScene->addNewEntity(level->loadMesh("data/objects/camera.dae"));
-				entity->linkTo(object);
+				auto entity = m_overlayScene->addNewEntity(m_level.loadMesh("data/objects/camera.dae"));
+				entity->setParent(object);
 			}
 				break;
 
 			case OBJECT3D_LIGHT:
 			{
-				auto entity = m_overlayScene->addNewEntity(level->loadMesh("data/objects/light.dae"));
-				entity->linkTo(object);
+				auto entity = m_overlayScene->addNewEntity(m_level.loadMesh("data/objects/light.dae"));
+				entity->setParent(object);
 			}
 				break;
 
 			case OBJECT3D_SOUND:
 			{
-				auto entity = m_overlayScene->addNewEntity(level->loadMesh("data/objects/sound.dae"));
-				entity->linkTo(object);
+				auto entity = m_overlayScene->addNewEntity(m_level.loadMesh("data/objects/sound.dae"));
+				entity->setParent(object);
 			}
 				break;
 		}
 	}
+	engine->setLevel(level);
 }
 
 Vector3 SceneView::getSelectionCenter()
@@ -612,4 +621,14 @@ Vector3 SceneView::getSelectionCenter()
 	}
 
 	return center / m_selection.size();
+}
+
+void SceneView::clearOverlayScene()
+{
+	for(size_t i = 0; i < m_overlayScene->getObjectsNumber(); i++)
+	{
+		auto object = m_overlayScene->getObjectByIndex(i);
+		object->setParent(nullptr);
+		m_overlayScene->deleteObject(object);
+	}
 }

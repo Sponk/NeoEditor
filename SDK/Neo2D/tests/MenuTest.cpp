@@ -132,7 +132,7 @@ TEST(SubmenuTest, DISABLED_DeepHoverTest)
 	EXPECT_NE(WIDGET_SELECTED, menu->getState());
 }
 
-TEST(MenubarTest, TriggerTest)
+TEST(MenubarTest, DISABLED_TriggerTest)
 {
 	Neo::InputContextDummy input;
 	Neo::Mouse& mouse = input.getMouse();
