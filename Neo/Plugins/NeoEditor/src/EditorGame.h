@@ -102,6 +102,8 @@ public:
 	
 	void openLevel();
 	void openLevel(const char* path);
+	void openNewLevel();
+
 	void saveLevel();
 	void saveLevel(const char* path);
 	void loadProject(const char* path);

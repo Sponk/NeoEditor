@@ -193,7 +193,11 @@ void EditorGame::onBegin()
 	m_menubar = make_shared<Menubar>(0, 0, 6000, 25, rootpane);
 	m_toolbar = make_shared<Toolbar>(0, m_menubar->getSize().y, 6000, 32, rootpane);
 
-	auto toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/document-open.png", m_toolbar);
+	auto toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/document-new.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { openNewLevel(); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/document-open.png", m_toolbar);
 	toolbutton->setCallback([this](Widget&, void*) { openLevel(); }, nullptr);
 	m_toolbar->addWidget(toolbutton);
 
@@ -256,29 +260,7 @@ void EditorGame::onBegin()
 	auto helpmenu = make_shared<Submenu>(tr("Help"), m_menubar);
 
 	filemenu->addItem(tr("New Level"), [this](Widget&, void*) {
-			
-		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
-		std::string path =  m_toolset->fileSaveDialog(tr("Save Level"), engine->getSystemContext()->getWorkingDirectory(), "Levels (*.level)");
-
-		if(path.empty())
-			return;
-
-		m_currentLevelFile = path;
-		m_sceneView->clearSelection();
-		engine->getLevel()->clear();
-
-		Level empty;
-		auto mainscene = empty.addNewScene();
-		mainscene->setName("Scene-1");
-			
-		engine->getLevelLoader()->saveData(m_currentLevelFile.c_str(), "level", &empty);
-		engine->getLevelLoader()->loadData(m_currentLevelFile.c_str(), engine->getLevel());
-		
-		engine->getLevel()->getCurrentScene();
-		m_sceneView->updateOverlayScene();
-			
-		updated = false;
-		updateWindowTitle();
+		openNewLevel();
 	});
 	
 	filemenu->addItem(tr("Open Project"), [this](Widget&, void*) {
@@ -945,4 +927,32 @@ void EditorGame::addText()
 	m_sceneView->addSelectedObject(text);
 	updateSelectedObject(text);
 	updated = false;
+}
+
+void EditorGame::openNewLevel()
+{
+	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+	std::string path =  m_toolset->fileSaveDialog(tr("Save Level"), engine->getSystemContext()->getWorkingDirectory(), "Levels (*.level)");
+
+	if(path.empty())
+		return;
+
+	m_currentLevelFile = path;
+	m_sceneView->clearSelection();
+	m_sceneView->clearOverlayScene();
+
+	engine->getLevel()->clear();
+
+	Level empty;
+	auto mainscene = empty.addNewScene();
+	mainscene->setName("Scene-1");
+
+	engine->getLevelLoader()->saveData(m_currentLevelFile.c_str(), "level", &empty);
+	engine->getLevelLoader()->loadData(m_currentLevelFile.c_str(), engine->getLevel());
+
+	engine->getLevel()->getCurrentScene();
+	m_sceneView->updateOverlayScene();
+
+	updated = false;
+	updateWindowTitle();
 }
