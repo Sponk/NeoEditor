@@ -255,6 +255,14 @@ void EditorGame::onBegin()
 	toolbutton->setCallback([this](Widget&, void*) { addSound(); }, nullptr);
 	m_toolbar->addWidget(toolbutton);
 
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/font-x-generic.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { addText(); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/applications-graphics.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { addEntity(); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
 	auto filemenu = make_shared<Submenu>(tr("File"), m_menubar);
 	auto editmenu = make_shared<Submenu>(tr("Edit"), m_menubar);
 	auto helpmenu = make_shared<Submenu>(tr("Help"), m_menubar);
