@@ -1,5 +1,5 @@
 
-add_executable(NeoPlayer2 src/main.cpp)
+add_executable(NeoPlayer2 src/main.cpp src/Debug.cpp)
 
 include_directories(
 	${NEO_CORE_INCLUDE_DIR}

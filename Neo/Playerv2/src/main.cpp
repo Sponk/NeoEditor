@@ -5,9 +5,12 @@
 using namespace Neo;
 
 #define FRAME_CAP 16 // 16ms for each frame.
+void registerDebugHandler();
 
 int main(int argc, char* argv[])
 {
+	registerDebugHandler();
+
 	std::string err;
 	char* config = readTextFile("assets/plugins.cfg");
 
