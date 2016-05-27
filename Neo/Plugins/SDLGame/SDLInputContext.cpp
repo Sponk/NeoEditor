@@ -201,8 +201,7 @@ void SDLInputContext::handleInput()
 	Keyboard& kbd = getKeyboard();
 	Mouse& mouse = getMouse();
 
-	kbd.flush();
-	mouse.flush();
+	flush();
 
 	while (SDL_PollEvent(&event))
 	{

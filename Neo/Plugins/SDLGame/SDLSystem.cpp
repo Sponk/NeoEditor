@@ -11,6 +11,14 @@
 #define getcwd _getcwd
 #endif // _WIN32
 
+SDLSystem::SDLSystem()
+{
+	static char currentDirectory[256];
+	getcwd(currentDirectory, 256);
+
+	setWorkingDirectory(currentDirectory);
+}
+
 unsigned long SDLSystem::getSystemTick(void)
 {
 	return SDL_GetTicks();
