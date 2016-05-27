@@ -414,7 +414,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh,
 						opacity = 1.0;
 						render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
 						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0, 0, 0));
-						render->enablePolygonOffset(-0.2, -1);
+						render->enablePolygonOffset(-0.5, -1);
 
 						render->setPolygonMode(PRIMITIVE_LINES);
 						render->drawElement(display->getPrimitiveType(),
@@ -441,7 +441,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh,
 						opacity = 1.0;
 						render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
 
-						render->enablePolygonOffset(-0.2, -1);
+						render->enablePolygonOffset(-0.5, -1);
 
 						render->setPolygonMode(PRIMITIVE_LINES);
 						render->drawElement(display->getPrimitiveType(),
@@ -476,7 +476,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh,
 						opacity = 1.0;
 						render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
 
-						render->enablePolygonOffset(-0.2, -1);
+						render->enablePolygonOffset(-0.5, -1);
 
 						render->setPolygonMode(PRIMITIVE_LINES);
 						render->drawElement(display->getPrimitiveType(),
@@ -503,7 +503,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh,
 						opacity = 1.0;
 						render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
 
-						render->enablePolygonOffset(-0.2, -1);
+						render->enablePolygonOffset(-0.5, -1);
 
 						render->setPolygonMode(PRIMITIVE_LINES);
 						render->drawElement(display->getPrimitiveType(),
