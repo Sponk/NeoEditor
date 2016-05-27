@@ -30,3 +30,12 @@ TEST(TreeViewTest, SetSelectedTest)
 	EXPECT_TRUE(view->findNode("child")->isOpen());
 	EXPECT_TRUE(view->findNode("in")->isOpen());
 }
+
+TEST(TreeViewTest, ClearTest)
+{
+	auto view = make_shared<TreeView>(0,0,0,0,nullptr);
+	auto selected = view->getRoot()->addChild("some")->addChild("child")->addChild("in")->addChild("here");
+
+	view->getRoot()->clear();
+	view->update(0);
+}

@@ -48,7 +48,7 @@ public:
 class GeneralMouseLeftReleaseEvent : public Neo2D::Gui::Event
 {
 public:
-	GeneralMouseLeftReleaseEvent(Neo2D::Gui::Widget& w,
+	GeneralMouseLeftReleaseEvent(std::weak_ptr<Neo2D::Gui::Widget> w,
 								 const function<void(Neo2D::Gui::Widget&, const Neo2D::Gui::Event&, void*)>& cb,
 								 void* d)
 		: Event(w, cb, d)
@@ -78,7 +78,7 @@ Neo2D::Gui::Scrollbar::Scrollbar(int x, int y, unsigned int w, unsigned int h,
 	  range(0, 100),
 	  direction(direction),
 	  value(0.0),
-	  knob(x,y,w,h,*this, (knobtheme == nullptr) ? make_shared<KnobTheme>() : knobtheme)
+	  knob(make_shared<Knob>(x,y,w,h,*this, (knobtheme == nullptr) ? make_shared<KnobTheme>() : knobtheme))
 {
 	registerEvent(make_shared<MouseLeftClickEvent>(knob, nullptr, nullptr));
 	registerEvent(make_shared<MouseLeaveEvent>(knob, nullptr, nullptr));
@@ -101,12 +101,12 @@ bool Neo2D::Gui::Scrollbar::handle(const Neo2D::Gui::Event & e)
 			if(getDirection() == SCROLLBAR_HORIZONTAL)
 			{
 				value = (MAX(0, MIN(getRange().y - length, (getRange().y / length) * delta.x + getValue())));
-				knob.setPosition(Neo::Vector2(getPosition().x + (getValue() / getRange().y) * getSize().x, knob.getPosition().y));
+				knob->setPosition(Neo::Vector2(getPosition().x + (getValue() / getRange().y) * getSize().x, knob->getPosition().y));
 			}
 			else
 			{
 				value = (MAX(0, MIN(getRange().y - length, (getRange().y / length) * delta.y + getValue())));
-				knob.setPosition(Neo::Vector2(knob.getPosition().x, getPosition().y + (getValue() / getRange().y) * getSize().y));
+				knob->setPosition(Neo::Vector2(knob->getPosition().x, getPosition().y + (getValue() / getRange().y) * getSize().y));
 			}
 		}
 		return true;

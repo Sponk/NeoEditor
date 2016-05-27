@@ -8,7 +8,7 @@ Neo2D::Gui::RadioButton::RadioButton(int x,
 									 const shared_ptr<Neo2D::Object2D>& parent)
 	: CheckButton(x, y, w, h, label, parent)
 {
-	getButtonWidget().setCallback([](Widget& w, void* d)
+	getButtonWidget()->setCallback([](Widget& w, void* d)
 								  {
 									  RadioButton* self = reinterpret_cast<RadioButton*>(d);
 

@@ -31,6 +31,7 @@ public:
 		{
 			c->setSize(size);
 			c->setPosition(Neo::Vector2(px, getPosition().y));
+			c->update(dt);
 			px += size.x;			
 		}
 	}

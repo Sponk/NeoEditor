@@ -11,13 +11,16 @@ Widget::Widget(int x, int y, unsigned int w, unsigned int h,
 	Object2D(x, y, w, h, parent),
 	m_theme(theme),
 	m_state(WIDGET_NORMAL),
-	m_label(label ? label : "")
+	m_label(label ? label : ""),
+	m_initialized(false)
 {
 	
 }
 
 void Widget::update(float dt)
 {
+	doInit();
+
 	if(!isActive())
 		return;
 
@@ -26,8 +29,8 @@ void Widget::update(float dt)
 		for(auto iter = m_events.rbegin(); iter != m_events.rend(); iter++)
 		{
 			auto e = *iter;
-			if(!handled[e->getType()]
-				&& e->getReceiver().isActive())
+			if(e && e->getReceiver() && !handled[e->getType()]
+				&& e->getReceiver()->isActive())
 			{
 				e->update(dt);
 				handled[e->getType()] = e->handled();
@@ -45,5 +48,5 @@ void Widget::unregisterEvent(Widget& w)
 	}
 
 	for(int i = m_events.size() - 1; i >= 0; i--)
-		if(&m_events[i]->getReceiver() == &w) m_events.erase(m_events.begin() + i);
+		if(m_events[i]->getReceiver().get() == &w) m_events.erase(m_events.begin() + i);
 }

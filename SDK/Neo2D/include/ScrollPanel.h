@@ -29,6 +29,7 @@ public:
 				const shared_ptr<Theme>& knobtheme = nullptr,
 				const shared_ptr<Theme>& background = nullptr);
 
+	virtual void init() override;
 	virtual void draw(const Neo::Vector2& offset);
 	virtual void update(float dt);
 

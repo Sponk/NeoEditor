@@ -18,18 +18,18 @@ public:
 
 TEST(EditFieldTest, SelectFieldTest)
 {
-	Neo2D::Gui::EditField edit(0,0,0,0,nullptr,nullptr,nullptr);
-	edit.handle(Neo2D::Gui::MouseLeftClickEvent(edit, nullptr, nullptr));
+	auto edit = make_shared<Neo2D::Gui::EditField>(0,0,0,0,nullptr,nullptr,nullptr);
+	edit->handle(Neo2D::Gui::MouseLeftClickEvent(edit, nullptr, nullptr));
 
-	EXPECT_EQ(Neo2D::Gui::WIDGET_SELECTED, edit.getState());
+	EXPECT_EQ(Neo2D::Gui::WIDGET_SELECTED, edit->getState());
 }
 
 TEST(EditFieldTest, HoverFieldTest)
 {
-	Neo2D::Gui::EditField edit(0,0,0,0,nullptr,nullptr,nullptr);
-	edit.handle(Neo2D::Gui::MouseOverEvent(edit, nullptr, nullptr));
+	auto edit = make_shared<Neo2D::Gui::EditField>(0,0,0,0,nullptr,nullptr,nullptr);
+	edit->handle(Neo2D::Gui::MouseOverEvent(edit, nullptr, nullptr));
 
-	EXPECT_EQ(Neo2D::Gui::WIDGET_HOVER, edit.getState());
+	EXPECT_EQ(Neo2D::Gui::WIDGET_HOVER, edit->getState());
 }
 
 TEST(EditFieldTest, EnterCharacterTest)
@@ -38,11 +38,11 @@ TEST(EditFieldTest, EnterCharacterTest)
 	Neo::Keyboard& kbd = input.getKeyboard();
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 
-	EditTester edit(0,0,0,0,nullptr,nullptr,nullptr);
+	auto edit = make_shared<EditTester>(0,0,0,0,nullptr,nullptr,nullptr);
 	Neo2D::Gui::CharacterInputEvent event(edit, nullptr, nullptr);
 
 	// Select widget
-	edit.setState(Neo2D::Gui::WIDGET_SELECTED);
+	edit->setState(Neo2D::Gui::WIDGET_SELECTED);
 
 	kbd.setCharacter('K');
 	event.update(0.0f);
@@ -50,8 +50,8 @@ TEST(EditFieldTest, EnterCharacterTest)
 	kbd.setCharacter('L');
 	event.update(0.0f);
 
-	EXPECT_EQ(2, edit.getCaret());
-	EXPECT_STREQ("KL", edit.getLabel());
+	EXPECT_EQ(2, edit->getCaret());
+	EXPECT_STREQ("KL", edit->getLabel());
 }
 
 TEST(EditFieldTest, EnterCharacterMiddleTest)
@@ -60,11 +60,11 @@ TEST(EditFieldTest, EnterCharacterMiddleTest)
 	Neo::Keyboard& kbd = input.getKeyboard();
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 
-	EditTester edit(0,0,0,0,"HELLO",nullptr,nullptr);
+	auto edit = make_shared<EditTester>(0,0,0,0,"HELLO",nullptr,nullptr);
 	Neo2D::Gui::CharacterInputEvent event(edit, nullptr, nullptr);
 
-	edit.setState(Neo2D::Gui::WIDGET_SELECTED);
-	edit.setCaret(2);
+	edit->setState(Neo2D::Gui::WIDGET_SELECTED);
+	edit->setCaret(2);
 
 	kbd.setCharacter('K');
 	event.update(0.0f);
@@ -72,8 +72,8 @@ TEST(EditFieldTest, EnterCharacterMiddleTest)
 	kbd.setCharacter('L');
 	event.update(0.0f);
 
-	EXPECT_EQ(4, edit.getCaret());
-	EXPECT_STREQ("HEKLLLO", edit.getLabel());
+	EXPECT_EQ(4, edit->getCaret());
+	EXPECT_STREQ("HEKLLLO", edit->getLabel());
 }
 
 TEST(EditFieldTest, BackspaceCharacterEndTest)
@@ -82,18 +82,18 @@ TEST(EditFieldTest, BackspaceCharacterEndTest)
 	Neo::Keyboard& kbd = input.getKeyboard();
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 
-	EditTester edit(0,0,0,0,"Hello World",nullptr,nullptr);
+	auto edit = make_shared<EditTester>(0,0,0,0,"Hello World",nullptr,nullptr);
 	Neo2D::Gui::KeyPressEvent event(edit, nullptr, nullptr);
 
 	// Ensure initial caret position
-	edit.setCaret(strlen(edit.getLabel()));
-	edit.setState(Neo2D::Gui::WIDGET_SELECTED);
+	edit->setCaret(strlen(edit->getLabel()));
+	edit->setState(Neo2D::Gui::WIDGET_SELECTED);
 
 	kbd.keyDown(Neo::KEY_BACKSPACE);
 	event.update(0.0f);
 
-	EXPECT_EQ(strlen(edit.getLabel()), edit.getCaret());
-	EXPECT_STREQ("Hello Worl", edit.getLabel());
+	EXPECT_EQ(strlen(edit->getLabel()), edit->getCaret());
+	EXPECT_STREQ("Hello Worl", edit->getLabel());
 }
 
 TEST(EditFieldTest, BackspaceCharacterMiddleTest)
@@ -102,18 +102,18 @@ TEST(EditFieldTest, BackspaceCharacterMiddleTest)
 	Neo::Keyboard& kbd = input.getKeyboard();
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 
-	EditTester edit(0,0,0,0,"Hello World",nullptr,nullptr);
+	auto edit = make_shared<EditTester>(0,0,0,0,"Hello World",nullptr,nullptr);
 	Neo2D::Gui::KeyPressEvent event(edit, nullptr, nullptr);
 
 	// Ensure initial caret position
-	edit.setCaret(3);
-	edit.setState(Neo2D::Gui::WIDGET_SELECTED);
+	edit->setCaret(3);
+	edit->setState(Neo2D::Gui::WIDGET_SELECTED);
 
 	kbd.keyDown(Neo::KEY_BACKSPACE);
 	event.update(0.0f);
 
-	EXPECT_EQ(2, edit.getCaret());
-	EXPECT_STREQ("Helo World", edit.getLabel());
+	EXPECT_EQ(2, edit->getCaret());
+	EXPECT_STREQ("Helo World", edit->getLabel());
 }
 
 TEST(EditFieldTest, BackspaceCharacterSecondPositionTest)
@@ -122,18 +122,18 @@ TEST(EditFieldTest, BackspaceCharacterSecondPositionTest)
 	Neo::Keyboard& kbd = input.getKeyboard();
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 
-	EditTester edit(0,0,0,0,"Hello World",nullptr,nullptr);
+	auto edit = make_shared<EditTester>(0,0,0,0,"Hello World",nullptr,nullptr);
 	Neo2D::Gui::KeyPressEvent event(edit, nullptr, nullptr);
 
 	// Ensure initial caret position
-	edit.setCaret(1);
-	edit.setState(Neo2D::Gui::WIDGET_SELECTED);
+	edit->setCaret(1);
+	edit->setState(Neo2D::Gui::WIDGET_SELECTED);
 
 	kbd.keyDown(Neo::KEY_BACKSPACE);
 	event.update(0.0f);
 
-	EXPECT_EQ(0, edit.getCaret());
-	EXPECT_STREQ("ello World", edit.getLabel());
+	EXPECT_EQ(0, edit->getCaret());
+	EXPECT_STREQ("ello World", edit->getLabel());
 }
 
 TEST(EditFieldTest, BackspaceCharacterFirstPosition)
@@ -142,18 +142,18 @@ TEST(EditFieldTest, BackspaceCharacterFirstPosition)
 	Neo::Keyboard& kbd = input.getKeyboard();
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 
-	EditTester edit(0,0,0,0,"Hello World",nullptr,nullptr);
+	auto edit = make_shared<EditTester>(0,0,0,0,"Hello World",nullptr,nullptr);
 	Neo2D::Gui::KeyPressEvent event(edit, nullptr, nullptr);
 
 	// Ensure initial caret position
-	edit.setCaret(0);
-	edit.setState(Neo2D::Gui::WIDGET_SELECTED);
+	edit->setCaret(0);
+	edit->setState(Neo2D::Gui::WIDGET_SELECTED);
 
 	kbd.keyDown(Neo::KEY_BACKSPACE);
 	event.update(0.0f);
 
-	EXPECT_EQ(0, edit.getCaret());
-	EXPECT_STREQ("Hello World", edit.getLabel());
+	EXPECT_EQ(0, edit->getCaret());
+	EXPECT_STREQ("Hello World", edit->getLabel());
 }
 
 TEST(EditFieldTest, DeleteCharacterEndTest)
@@ -162,18 +162,18 @@ TEST(EditFieldTest, DeleteCharacterEndTest)
 	Neo::Keyboard& kbd = input.getKeyboard();
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 
-	EditTester edit(0,0,0,0,"Hello World",nullptr,nullptr);
+	auto edit = make_shared<EditTester>(0,0,0,0,"Hello World",nullptr,nullptr);
 	Neo2D::Gui::KeyPressEvent event(edit, nullptr, nullptr);
 
 	// Ensure initial caret position
-	edit.setCaret(strlen(edit.getLabel()));
-	edit.setState(Neo2D::Gui::WIDGET_SELECTED);
+	edit->setCaret(strlen(edit->getLabel()));
+	edit->setState(Neo2D::Gui::WIDGET_SELECTED);
 
 	kbd.keyDown(Neo::KEY_DELETE);
 	event.update(0.0f);
 
-	EXPECT_EQ(strlen(edit.getLabel()), edit.getCaret());
-	EXPECT_STREQ("Hello World", edit.getLabel());
+	EXPECT_EQ(strlen(edit->getLabel()), edit->getCaret());
+	EXPECT_STREQ("Hello World", edit->getLabel());
 }
 
 TEST(EditFieldTest, DeleteCharacterMiddleTest)
@@ -182,18 +182,18 @@ TEST(EditFieldTest, DeleteCharacterMiddleTest)
 	Neo::Keyboard& kbd = input.getKeyboard();
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 
-	EditTester edit(0,0,0,0,"Hello World",nullptr,nullptr);
+	auto edit = make_shared<EditTester>(0,0,0,0,"Hello World",nullptr,nullptr);
 	Neo2D::Gui::KeyPressEvent event(edit, nullptr, nullptr);
 
 	// Ensure initial caret position
-	edit.setCaret(2);
-	edit.setState(Neo2D::Gui::WIDGET_SELECTED);
+	edit->setCaret(2);
+	edit->setState(Neo2D::Gui::WIDGET_SELECTED);
 
 	kbd.keyDown(Neo::KEY_DELETE);
 	event.update(0.0f);
 
-	EXPECT_EQ(2, edit.getCaret());
-	EXPECT_STREQ("Helo World", edit.getLabel());
+	EXPECT_EQ(2, edit->getCaret());
+	EXPECT_STREQ("Helo World", edit->getLabel());
 }
 
 TEST(EditFieldTest, MoveCaretLeftTest)
@@ -202,19 +202,19 @@ TEST(EditFieldTest, MoveCaretLeftTest)
 	Neo::Keyboard& kbd = input.getKeyboard();
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 
-	EditTester edit(0,0,0,0,"Hello World",nullptr,nullptr);
+	auto edit = make_shared<EditTester>(0,0,0,0,"Hello World",nullptr,nullptr);
 	Neo2D::Gui::KeyPressEvent event(edit, nullptr, nullptr);
 
 	// Ensure initial caret position
-	edit.setCaret(2);
-	edit.setState(Neo2D::Gui::WIDGET_SELECTED);
+	edit->setCaret(2);
+	edit->setState(Neo2D::Gui::WIDGET_SELECTED);
 
 	kbd.keyDown(Neo::KEY_LEFT_ARROW);
 	event.update(0.0f);
 	event.update(0.0f);
 	event.update(0.0f);
 
-	EXPECT_EQ(0, edit.getCaret());
+	EXPECT_EQ(0, edit->getCaret());
 }
 
 TEST(EditFieldTest, MoveCaretRightTest)
@@ -223,19 +223,19 @@ TEST(EditFieldTest, MoveCaretRightTest)
 	Neo::Keyboard& kbd = input.getKeyboard();
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 
-	EditTester edit(0,0,0,0,"Hello World",nullptr,nullptr);
+	auto edit = make_shared<EditTester>(0,0,0,0,"Hello World",nullptr,nullptr);
 	Neo2D::Gui::KeyPressEvent event(edit, nullptr, nullptr);
 
 	// Ensure initial caret position
-	edit.setCaret(9);
-	edit.setState(Neo2D::Gui::WIDGET_SELECTED);
+	edit->setCaret(9);
+	edit->setState(Neo2D::Gui::WIDGET_SELECTED);
 
 	kbd.keyDown(Neo::KEY_RIGHT_ARROW);
 	event.update(0.0f);
 	event.update(0.0f);
 	event.update(0.0f);
 
-	EXPECT_EQ(11, edit.getCaret());
+	EXPECT_EQ(11, edit->getCaret());
 }
 
 TEST(EditFieldTest, MoveCaretRightUnicodeTest)
@@ -244,19 +244,19 @@ TEST(EditFieldTest, MoveCaretRightUnicodeTest)
 	Neo::Keyboard& kbd = input.getKeyboard();
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 
-	EditTester edit(0,0,0,0,u8"äöü",nullptr,nullptr);
+	auto edit = make_shared<EditTester>(0,0,0,0,u8"äöü",nullptr,nullptr);
 	Neo2D::Gui::KeyPressEvent event(edit, nullptr, nullptr);
 
 	// Ensure initial caret position
-	edit.setCaret(0);
-	edit.setState(Neo2D::Gui::WIDGET_SELECTED);
+	edit->setCaret(0);
+	edit->setState(Neo2D::Gui::WIDGET_SELECTED);
 
 	kbd.keyDown(Neo::KEY_RIGHT_ARROW);
 	event.update(0.0f);
 	event.update(0.0f);
 	event.update(0.0f);
 
-	EXPECT_EQ(6, edit.getCaret());
+	EXPECT_EQ(6, edit->getCaret());
 }
 
 TEST(EditFieldTest, MoveCaretLeftUnicodeTest)
@@ -265,19 +265,19 @@ TEST(EditFieldTest, MoveCaretLeftUnicodeTest)
 	Neo::Keyboard& kbd = input.getKeyboard();
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 
-	EditTester edit(0,0,0,0,u8"aääöü",nullptr,nullptr);
+	auto edit = make_shared<EditTester>(0,0,0,0,u8"aääöü",nullptr,nullptr);
 	Neo2D::Gui::KeyPressEvent event(edit, nullptr, nullptr);
 
 	// Ensure initial caret position
-	edit.setCaret(3);
-	edit.setState(Neo2D::Gui::WIDGET_SELECTED);
+	edit->setCaret(3);
+	edit->setState(Neo2D::Gui::WIDGET_SELECTED);
 
 	kbd.keyDown(Neo::KEY_LEFT_ARROW);
 	event.update(0.0f);
 	event.update(0.0f);
 	event.update(0.0f);
 
-	EXPECT_EQ(0, edit.getCaret());
+	EXPECT_EQ(0, edit->getCaret());
 }
 
 TEST(EditFieldTest, BackspaceCharacterMiddleUnicodeTest)
@@ -286,18 +286,18 @@ TEST(EditFieldTest, BackspaceCharacterMiddleUnicodeTest)
 	Neo::Keyboard& kbd = input.getKeyboard();
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 
-	EditTester edit(0,0,0,0,u8"äöü",nullptr,nullptr);
+	auto edit = make_shared<EditTester>(0,0,0,0,u8"äöü",nullptr,nullptr);
 	Neo2D::Gui::KeyPressEvent event(edit, nullptr, nullptr);
 
 	// Ensure initial caret position
-	edit.setCaret(4);
-	edit.setState(Neo2D::Gui::WIDGET_SELECTED);
+	edit->setCaret(4);
+	edit->setState(Neo2D::Gui::WIDGET_SELECTED);
 
 	kbd.keyDown(Neo::KEY_BACKSPACE);
 	event.update(0.0f);
 
-	EXPECT_EQ(2, edit.getCaret());
-	EXPECT_STREQ(u8"äü", edit.getLabel());
+	EXPECT_EQ(2, edit->getCaret());
+	EXPECT_STREQ(u8"äü", edit->getLabel());
 }
 
 TEST(EditFieldTest, BackspaceCharacterEndUnicodeTest)
@@ -306,18 +306,18 @@ TEST(EditFieldTest, BackspaceCharacterEndUnicodeTest)
 	Neo::Keyboard& kbd = input.getKeyboard();
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 
-	EditTester edit(0,0,0,0,u8"aöü",nullptr,nullptr);
+	auto edit = make_shared<EditTester>(0,0,0,0,u8"aöü",nullptr,nullptr);
 	Neo2D::Gui::KeyPressEvent event(edit, nullptr, nullptr);
 
 	// Ensure initial caret position
-	edit.setCaret(5);
-	edit.setState(Neo2D::Gui::WIDGET_SELECTED);
+	edit->setCaret(5);
+	edit->setState(Neo2D::Gui::WIDGET_SELECTED);
 
 	kbd.keyDown(Neo::KEY_BACKSPACE);
 	event.update(0.0f);
 
-	EXPECT_EQ(3, edit.getCaret());
-	EXPECT_STREQ(u8"aö", edit.getLabel());
+	EXPECT_EQ(3, edit->getCaret());
+	EXPECT_STREQ(u8"aö", edit->getLabel());
 }
 
 TEST(EditFieldTest, BackspaceCharacterStartUnicodeTest)
@@ -326,19 +326,19 @@ TEST(EditFieldTest, BackspaceCharacterStartUnicodeTest)
 	Neo::Keyboard& kbd = input.getKeyboard();
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 
-	EditTester edit(0,0,0,0,u8"äöü",nullptr,nullptr);
+	auto edit = make_shared<EditTester>(0,0,0,0,u8"äöü",nullptr,nullptr);
 	Neo2D::Gui::KeyPressEvent event(edit, nullptr, nullptr);
 
 	// Ensure initial caret position
-	edit.setCaret(2);
-	edit.setState(Neo2D::Gui::WIDGET_SELECTED);
+	edit->setCaret(2);
+	edit->setState(Neo2D::Gui::WIDGET_SELECTED);
 
 	kbd.keyDown(Neo::KEY_BACKSPACE);
 	event.update(0.0f);
 	event.update(0.0f);
 
-	EXPECT_EQ(0, edit.getCaret());
-	EXPECT_STREQ(u8"öü", edit.getLabel());
+	EXPECT_EQ(0, edit->getCaret());
+	EXPECT_STREQ(u8"öü", edit->getLabel());
 }
 
 TEST(EditFieldTest, DeleteCharacterMiddleUnicodeTest)
@@ -347,16 +347,16 @@ TEST(EditFieldTest, DeleteCharacterMiddleUnicodeTest)
 	Neo::Keyboard& kbd = input.getKeyboard();
 	Neo::NeoEngine::getInstance()->setInputContext(&input);
 
-	EditTester edit(0,0,0,0,u8"äöü",nullptr,nullptr);
+	auto edit = make_shared<EditTester>(0,0,0,0,u8"äöü",nullptr,nullptr);
 	Neo2D::Gui::KeyPressEvent event(edit, nullptr, nullptr);
 
 	// Ensure initial caret position
-	edit.setCaret(2);
-	edit.setState(Neo2D::Gui::WIDGET_SELECTED);
+	edit->setCaret(2);
+	edit->setState(Neo2D::Gui::WIDGET_SELECTED);
 
 	kbd.keyDown(Neo::KEY_DELETE);
 	event.update(0.0f);
 
-	EXPECT_EQ(2, edit.getCaret());
-	EXPECT_STREQ(u8"äü", edit.getLabel());
+	EXPECT_EQ(2, edit->getCaret());
+	EXPECT_STREQ(u8"äü", edit->getLabel());
 }

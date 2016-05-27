@@ -30,23 +30,23 @@ TEST(RadioButtonTest, RadioGroupTest)
 	group->addWidget(btn1);
 
 	// Send a click to the button
-	buttonWidget0.handle(Neo2D::Gui::MouseLeftReleaseEvent(*btn0.get(), nullptr, nullptr));
+	buttonWidget0->handle(Neo2D::Gui::MouseLeftReleaseEvent(btn0, nullptr, nullptr));
 	EXPECT_TRUE(btn0->getValue());
 	EXPECT_FALSE(btn1->getValue());
 
 	// Send another click to the other button
-	buttonWidget1.handle(Neo2D::Gui::MouseLeftReleaseEvent(*btn1.get(), nullptr, nullptr));
+	buttonWidget1->handle(Neo2D::Gui::MouseLeftReleaseEvent(btn1, nullptr, nullptr));
 	EXPECT_TRUE(btn1->getValue());
 	EXPECT_FALSE(btn0->getValue());
 }
 
 TEST(RadioButtonTest, ReselectTest)
 {
-	RadioButtonTest btn(0,0,0,0,nullptr,nullptr);
-	auto buttonWidget = btn.getButtonWidget();
+	auto btn = make_shared<RadioButtonTest>(0,0,0,0,nullptr,nullptr);
+	auto buttonWidget = btn->getButtonWidget();
 
-	buttonWidget.handle(Neo2D::Gui::MouseLeftReleaseEvent(btn, nullptr, nullptr));
-	buttonWidget.handle(Neo2D::Gui::MouseLeftReleaseEvent(btn, nullptr, nullptr));
+	buttonWidget->handle(Neo2D::Gui::MouseLeftReleaseEvent(btn, nullptr, nullptr));
+	buttonWidget->handle(Neo2D::Gui::MouseLeftReleaseEvent(btn, nullptr, nullptr));
 
-	EXPECT_TRUE(btn.getValue());
+	EXPECT_TRUE(btn->getValue());
 }

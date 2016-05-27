@@ -155,13 +155,16 @@ Neo2D::Gui::EditField::EditField(int x,
 								 const shared_ptr<Theme>& theme)
 	: Widget(x, y, w, h, label, parent, (theme == nullptr) ? make_shared<EditFieldTheme>() : theme),
 	  m_caret(0)
+{}
+
+void Neo2D::Gui::EditField::init()
 {
-	registerEvent(make_shared<MouseOverEvent>(*this, nullptr, nullptr));
-	registerEvent(make_shared<MouseLeaveEvent>(*this, nullptr, nullptr));
-	registerEvent(make_shared<MouseLeftClickEvent>(*this, nullptr, nullptr));
-	registerEvent(make_shared<CharacterInputEvent>(*this, nullptr, nullptr));
-	registerEvent(make_shared<KeyPressEvent>(*this, nullptr, nullptr));
-	registerEvent(make_shared<MouseDeselectEvent>(*this, nullptr, nullptr));
+	registerEvent(make_shared<MouseOverEvent>(shared_from_this(), nullptr, nullptr));
+	registerEvent(make_shared<MouseLeaveEvent>(shared_from_this(), nullptr, nullptr));
+	registerEvent(make_shared<MouseLeftClickEvent>(shared_from_this(), nullptr, nullptr));
+	registerEvent(make_shared<CharacterInputEvent>(shared_from_this(), nullptr, nullptr));
+	registerEvent(make_shared<KeyPressEvent>(shared_from_this(), nullptr, nullptr));
+	registerEvent(make_shared<MouseDeselectEvent>(shared_from_this(), nullptr, nullptr));
 }
 
 bool Neo2D::Gui::EditField::handle(const Event& e)

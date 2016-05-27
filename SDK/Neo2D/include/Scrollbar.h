@@ -48,9 +48,10 @@ protected:
 		{
 			return scrollbar.handle(e);
 		}
-	} knob;
+	};
 
-	Knob& getKnob() { return knob; }
+	shared_ptr<Knob> knob;
+	Knob& getKnob() { return *knob; }
 public:
 	Scrollbar(int x,
 			  int y,
@@ -123,11 +124,11 @@ public:
 
 		if(getDirection() == SCROLLBAR_HORIZONTAL)
 		{
-			knob.setSize(Neo::Vector2(calculateKnobsize(), getSize().y));
+			knob->setSize(Neo::Vector2(calculateKnobsize(), getSize().y));
 		}
 		else
 		{
-			knob.setSize(Neo::Vector2(getSize().x, calculateKnobsize()));
+			knob->setSize(Neo::Vector2(getSize().x, calculateKnobsize()));
 		}
 	}
 
@@ -138,7 +139,7 @@ public:
 	 */
 	void updateKnobPosition()
 	{
-		knob.setPosition(getPosition());
+		knob->setPosition(getPosition());
 		setValue(0);
 	}
 
@@ -169,7 +170,7 @@ public:
 	virtual void draw(const Neo::Vector2& offset) override
 	{
 		Widget::draw(offset);
-		knob.draw(offset);
+		knob->draw(offset);
 	}
 };
 

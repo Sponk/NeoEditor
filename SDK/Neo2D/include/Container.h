@@ -7,7 +7,6 @@
 #include "LayoutStrategy.h"
 
 #include <vector>
-#include <memory>
 #include <algorithm>
 
 namespace Neo2D
@@ -25,7 +24,7 @@ namespace Gui
  * Container always have to be created using make_shared since each children gets a weak_ptr to its parent
  * during creation.
  */
-class NEO2D_EXPORT Container: public Widget, public std::enable_shared_from_this<Container>
+class NEO2D_EXPORT Container: public Widget
 {
 private:
 	std::vector<shared_ptr<Widget>> m_children;

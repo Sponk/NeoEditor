@@ -98,9 +98,6 @@ Submenu::Submenu(const char* label, const shared_ptr<Object2D>& parent, const sh
 
 bool Submenu::handle(const Event& e)
 {
-	if(!isActive())
-		return false;
-
 	bool handled = Button::handle(e);
 	switch(e.getType())
 	{
@@ -113,6 +110,7 @@ bool Submenu::handle(const Event& e)
 			}
 
 			setVisible(true);
+			setActive(true);
 			for (auto m : m_children)
 			{
 				m->setActive(true);
@@ -145,7 +143,7 @@ bool Submenu::handle(const Event& e)
 	return handled;
 }
 
-std::shared_ptr<MenuItem> Submenu::findChild(const std::string& name) const
+shared_ptr<MenuItem> Submenu::findChild(const std::string& name) const
 {
 	for(auto m : m_children)
 		if(name == m->getLabel())
@@ -165,8 +163,7 @@ shared_ptr<MenuItem> Submenu::addItem(const std::string& name, std::function<voi
 		if(!line.empty()) path.push_back(line);
 
 	// Current always points to the parent
-	shared_ptr<Submenu> currentShared = shared_from_this();
-
+	shared_ptr<Submenu> currentShared = static_pointer_cast<Submenu>(shared_from_this());
 	for(int i = 0; i < path.size() - 1; i++)
 	{
 		const std::string& name = path[i];
@@ -193,16 +190,12 @@ shared_ptr<MenuItem> Submenu::addItem(const std::string& name, std::function<voi
 
 bool MenuItem::handle(const Event& e)
 {
-	if(!isActive())
-		return false;
-
-	bool handled = Button::handle(e);
+	Button::handle(e);
 	if(e.getType() == MOUSE_LEFT_RELEASE)
 	{
 		hideHierarchy();
-		return true;
 	}
-	return handled;
+	return true;
 }
 
 class MenubarTheme : public Theme

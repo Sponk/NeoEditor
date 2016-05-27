@@ -2,7 +2,6 @@
 #define __FILTERSTRATEGY_H
 
 #include <vector>
-#include <memory>
 #include "Widget.h"
 
 namespace Neo2D

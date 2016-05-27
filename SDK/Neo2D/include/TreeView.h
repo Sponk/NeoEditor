@@ -13,20 +13,20 @@ namespace Gui
 /**
  * @brief Implements a tree which displays hierarchical structures.
  */
-class NEO2D_EXPORT TreeView : public Widget, public enable_shared_from_this<TreeView>
+class NEO2D_EXPORT TreeView : public Widget
 {
 public:
 
 	/**
 	 * @brief Implements a node in a tree.
 	 */
-	class NEO2D_EXPORT TreeNode : public Widget, public std::enable_shared_from_this<TreeNode>
+	class NEO2D_EXPORT TreeNode : public Widget
 	{
 		friend Neo2D::Gui::TreeView;
 		std::vector<shared_ptr<TreeNode>> m_children;
 		bool m_open;
 
-		Button m_button;
+		shared_ptr<Button> m_button;
 
 	public:
 		TreeNode(int x,
@@ -37,6 +37,7 @@ public:
 				 const shared_ptr<Object2D>& parent,
 				 const shared_ptr<Theme>& theme);
 
+		virtual void init() override;
 		virtual bool handle(const Event& e) override;
 
 		/**
@@ -65,8 +66,8 @@ public:
 		{
 			if(m_children.size())
 			{
-				m_button.setPosition(getPosition());
-				m_button.update(dt);
+				m_button->setPosition(getPosition());
+				m_button->update(dt);
 			}
 
 			Widget::update(dt);
@@ -79,7 +80,7 @@ public:
 			Widget::draw(offset);
 
 			if(m_children.size())
-				m_button.draw(offset);
+				m_button->draw(offset);
 		}
 
 		/**
@@ -97,7 +98,7 @@ public:
 		shared_ptr<TreeNode> findNode(const char* name)
 		{
 			if(!strcmp(getLabel(), name))
-				return shared_from_this();
+				return static_pointer_cast<TreeNode>(shared_from_this());
 
 			for(auto c : m_children)
 				if(auto retval = c->findNode(name))

@@ -3,7 +3,6 @@
 
 #include <Neo2D.h>
 #include <Object2D.h>
-#include <memory>
 #include <vector>
 
 namespace Neo2D
@@ -15,7 +14,7 @@ namespace Neo2D
  */
 class NEO2D_EXPORT Canvas
 {
-	std::vector<std::shared_ptr<Object2D>> m_objects;
+	std::vector<shared_ptr<Object2D>> m_objects;
 	uint32_t m_priority;
 	Neo::Vector2 m_size;
 
@@ -25,7 +24,7 @@ public:
 	 * @brief Adds a new Object2D to the internal object list.
 	 * @param obj The new Object2D.
 	 */
-	void addObject2D(std::shared_ptr<Object2D> obj) { m_objects.push_back(obj); }
+	void addObject2D(shared_ptr<Object2D> obj) { m_objects.push_back(obj); }
 
 	/**
 	 * @brief Changes the rendering priority.

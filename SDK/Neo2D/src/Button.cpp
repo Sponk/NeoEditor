@@ -76,11 +76,14 @@ public:
 Neo2D::Gui::Button::Button(int x, int y, unsigned int w, unsigned int h,
 								const char* label, const shared_ptr<Neo2D::Object2D>& parent, const shared_ptr<Theme>& theme) :
 	Neo2D::Gui::Widget(x, y, w, h, label, parent, (theme == nullptr) ? std::make_shared<ButtonTheme>() : theme)
+{}
+
+void Neo2D::Gui::Button::init()
 {
-	registerEvent(std::make_shared<MouseLeftReleaseEvent>(*this, nullptr, this));
-	registerEvent(std::make_shared<MouseLeftClickEvent>(*this, nullptr, this));
-	registerEvent(std::make_shared<MouseOverEvent>(*this, nullptr, this));
-	registerEvent(std::make_shared<MouseLeaveEvent>(*this, nullptr, this));
+	registerEvent(std::make_shared<MouseLeftReleaseEvent>(shared_from_this(), nullptr, nullptr));
+	registerEvent(std::make_shared<MouseLeftClickEvent>(shared_from_this(), nullptr, nullptr));
+	registerEvent(std::make_shared<MouseOverEvent>(shared_from_this(), nullptr, nullptr));
+	registerEvent(std::make_shared<MouseLeaveEvent>(shared_from_this(), nullptr, nullptr));
 }
 
 bool Neo2D::Gui::Button::handle(const Neo2D::Gui::Event& event)

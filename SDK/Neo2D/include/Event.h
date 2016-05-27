@@ -3,12 +3,16 @@
 
 #include <functional>
 #include <Neo2D.h>
+#include <memory>
 
 namespace Neo2D
 {
 namespace Gui
 {
 class Widget;
+
+using std::weak_ptr;
+using std::shared_ptr;
 
 /**
  * @brief Implements a general event.
@@ -21,7 +25,7 @@ class Widget;
  */
 class NEO2D_EXPORT Event
 {
-	Widget& m_receiver;
+	weak_ptr<Widget>m_receiver;
 	std::function<void(Widget&, const Event&, void*)> m_callback;
 	void* m_data;
 	bool m_handled;
@@ -34,7 +38,7 @@ public:
 	 * @param cb The callback to call when triggered.
 	 * @param d The data to pass to the callback when triggered.
 	 */
-	Event(Widget& w, std::function<void(Widget&, const Event&, void*)> cb, void* d) 
+	Event(weak_ptr<Widget> w, std::function<void(Widget&, const Event&, void*)> cb, void* d)
 		: m_receiver(w),
 		m_callback(cb),
 		m_data(d),
@@ -78,7 +82,7 @@ public:
 	 * @brief Retrieves the receiving widget.
 	 * @return The widget reference.
 	 */
-	Widget& getReceiver() const { return m_receiver; }
+	shared_ptr<Widget> getReceiver() const { return m_receiver.lock(); }
 };
 
 }

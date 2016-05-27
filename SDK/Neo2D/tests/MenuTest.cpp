@@ -73,7 +73,7 @@ TEST(SubmenuTest, TriggerTest)
 	int callbackCounter = 0;
 	fourth->setCallback([](Widget& w, void* data) { (*((int*) data))++; }, &callbackCounter);
 
-	fourth->handle(MouseLeftReleaseEvent(*fourth, nullptr, nullptr));
+	fourth->handle(MouseLeftReleaseEvent(fourth, nullptr, nullptr));
 	EXPECT_EQ(1, callbackCounter);
 
 	EXPECT_FALSE(third->isActive());
@@ -82,14 +82,14 @@ TEST(SubmenuTest, TriggerTest)
 
 TEST(SubmenuTest, DISABLED_SimpleHoverTest)
 {
-	Submenu menu("New", nullptr);
-	menu.setActive(true);
+	auto menu = make_shared<Submenu>("New", nullptr);
+	menu->setActive(true);
 
-	menu.handle(MouseOverEvent(menu, nullptr, nullptr));
-	EXPECT_TRUE(menu.isVisible());
+	menu->handle(MouseOverEvent(menu, nullptr, nullptr));
+	EXPECT_TRUE(menu->isVisible());
 
-	menu.handle(MouseDeselectEvent(menu, nullptr, nullptr));
-	EXPECT_FALSE(menu.isVisible());
+	menu->handle(MouseDeselectEvent(menu, nullptr, nullptr));
+	EXPECT_FALSE(menu->isVisible());
 }
 
 TEST(SubmenuTest, DISABLED_DeepHoverTest)
@@ -108,26 +108,74 @@ TEST(SubmenuTest, DISABLED_DeepHoverTest)
 	ASSERT_NE(nullptr, p1->getParent().lock().get());
 	ASSERT_NE(nullptr, p2->getParent().lock().get());
 
-	menu->handle(MouseOverEvent(*menu, nullptr, nullptr));
+	menu->handle(MouseOverEvent(menu, nullptr, nullptr));
 	EXPECT_TRUE(menu->isVisible());
 	EXPECT_FALSE(p1->isVisible());
 	EXPECT_FALSE(p2->isVisible());
 	EXPECT_EQ(WIDGET_HOVER, menu->getState());
 
 	// Select p1
-	p1->handle(MouseOverEvent(*p1, nullptr, nullptr));
+	p1->handle(MouseOverEvent(p1, nullptr, nullptr));
 	EXPECT_FALSE(p1c1->isVisible());
 	EXPECT_FALSE(p1c2->isVisible());
 	EXPECT_FALSE(p2c1->isVisible());
 	EXPECT_EQ(WIDGET_HOVER, p1->getState());
 
 	// Select p2
-	p2->handle(MouseOverEvent(*p2, nullptr, nullptr));
+	p2->handle(MouseOverEvent(p2, nullptr, nullptr));
 	EXPECT_FALSE(p1c1->isVisible());
 	EXPECT_FALSE(p1c2->isVisible());
 	EXPECT_FALSE(p2c1->isVisible());
 
-	menu->handle(MouseDeselectEvent(*menu, nullptr, nullptr));
+	menu->handle(MouseDeselectEvent(menu, nullptr, nullptr));
 	EXPECT_FALSE(menu->isVisible());
 	EXPECT_NE(WIDGET_SELECTED, menu->getState());
+}
+
+TEST(MenubarTest, TriggerTest)
+{
+	Neo::InputContextDummy input;
+	Neo::Mouse& mouse = input.getMouse();
+	Neo::NeoEngine::getInstance()->setInputContext(&input);
+
+	int counter = 0;
+	auto menubar = make_shared<Menubar>(0,0,100,10,nullptr);
+	auto filemenu = make_shared<Submenu>("LALA", menubar);
+	menubar->addMenu(filemenu);
+
+	auto testmenu = filemenu->addItem("Test", [&counter](Widget& w, void* d) { counter++; });
+
+	EXPECT_FALSE(filemenu->isActive());
+
+	mouse.moveCursor(Neo::Vector2(10,5));
+	menubar->update(0);
+
+	mouse.keyDown(Neo::MOUSE_BUTTON_LEFT);
+	menubar->update(0);
+	mouse.flush();
+
+	mouse.keyUp(Neo::MOUSE_BUTTON_LEFT);
+	menubar->update(0);
+
+	EXPECT_TRUE(filemenu->isActive());
+	EXPECT_FALSE(testmenu->isActive());
+
+	mouse.moveCursor(Neo::Vector2(10,20));
+	menubar->update(0);
+	menubar->update(0);
+
+	EXPECT_TRUE(testmenu->isActive());
+	EXPECT_EQ(WIDGET_HOVER, testmenu->getState());
+
+	mouse.keyDown(Neo::MOUSE_BUTTON_LEFT);
+	menubar->update(0);
+
+	mouse.keyUp(Neo::MOUSE_BUTTON_LEFT);
+	mouse.flush();
+
+	menubar->update(0);
+
+	EXPECT_EQ(1, counter);
+	EXPECT_FALSE(filemenu->isActive());
+	EXPECT_FALSE(testmenu->isActive());
 }

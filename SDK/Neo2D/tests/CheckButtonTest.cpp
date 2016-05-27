@@ -11,20 +11,20 @@ TEST(CheckButtonTest, ValueTest)
 	Mouse& mouse = input.getMouse();
 	NeoEngine::getInstance()->setInputContext(&input);
 
-	CheckButton btn(15, 15, 10, 10, nullptr, nullptr);
+	auto btn = make_shared<CheckButton>(15, 15, 10, 10, nullptr, nullptr);
 
 	mouse.moveCursor(Vector2(15, 15));
 	mouse.keyDown(MOUSE_BUTTON_LEFT);
-	btn.update(0.0f);
+	btn->update(0.0f);
 
 	mouse.keyUp(MOUSE_BUTTON_LEFT);
-	btn.update(0.0);
-	ASSERT_TRUE(btn.getValue());
+	btn->update(0.0);
+	ASSERT_TRUE(btn->getValue());
 
 	mouse.keyDown(MOUSE_BUTTON_LEFT);
-	btn.update(0.0f);
+	btn->update(0.0f);
 
 	mouse.keyUp(MOUSE_BUTTON_LEFT);
-	btn.update(0.0);
-	ASSERT_FALSE(btn.getValue());
+	btn->update(0.0);
+	ASSERT_FALSE(btn->getValue());
 }

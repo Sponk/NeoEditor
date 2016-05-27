@@ -53,7 +53,7 @@ class NEO2D_EXPORT MouseOverEvent : public Event
 {
 	bool mouseOver = false;
 public:
-	MouseOverEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d) 
+	MouseOverEvent(std::weak_ptr<Neo2D::Gui::Widget> p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
 		: Event(p, cb, d) {}
 
 	virtual void update(float dt)
@@ -63,11 +63,11 @@ public:
 
 		if(!mouseOver)
 		{
-			if((mouseOver = getReceiver().contains(mouse.getPosition())) == true)
+			if((mouseOver = getReceiver()->contains(mouse.getPosition())) == true)
 				handle();
 		}
 		else
-			mouseOver = getReceiver().contains(mouse.getPosition());
+			mouseOver = getReceiver()->contains(mouse.getPosition());
 	}
 
 	virtual unsigned int getType() const { return MOUSE_OVER; }
@@ -80,7 +80,7 @@ class NEO2D_EXPORT MouseLeaveEvent : public Event
 {
 	bool mouseOver = false;
 public:
-	MouseLeaveEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
+	MouseLeaveEvent(std::weak_ptr<Neo2D::Gui::Widget> p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
 		: Event(p, cb, d) {}
 
 	virtual void update(float dt)
@@ -89,11 +89,11 @@ public:
 		Neo::Mouse& mouse = Neo::NeoEngine::getInstance()->getInputContext()->getMouse();
 		if(mouseOver)
 		{
-			if((mouseOver = getReceiver().contains(mouse.getPosition())) == false)
+			if((mouseOver = getReceiver()->contains(mouse.getPosition())) == false)
 				handle();
 		}
 		else
-			mouseOver = getReceiver().contains(mouse.getPosition());
+			mouseOver = getReceiver()->contains(mouse.getPosition());
 	}
 
 	virtual unsigned int getType()  const { return MOUSE_LEAVE; }
@@ -105,7 +105,7 @@ public:
 class NEO2D_EXPORT MouseLeftClickEvent : public Event
 {
 public:
-	MouseLeftClickEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d) 
+	MouseLeftClickEvent(std::weak_ptr<Neo2D::Gui::Widget> p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
 		: Event(p, cb, d) {}
 
 	virtual void update(float dt)
@@ -114,7 +114,7 @@ public:
 		Neo::InputContext* input = engine->getInputContext();
 		Neo::Mouse& mouse = input->getMouse();
 
-		if(input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_LEFT) && getReceiver().contains(mouse.getPosition()))
+		if(input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_LEFT) && getReceiver()->contains(mouse.getPosition()))
 			handle();
 		else
 			reject();
@@ -129,7 +129,7 @@ public:
 class NEO2D_EXPORT MouseMiddleClickEvent : public Event
 {
 public:
-	MouseMiddleClickEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
+	MouseMiddleClickEvent(std::weak_ptr<Neo2D::Gui::Widget> p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
 		: Event(p, cb, d) {}
 
 	virtual void update(float dt)
@@ -138,7 +138,7 @@ public:
 		Neo::InputContext* input = engine->getInputContext();
 		Neo::Mouse& mouse = input->getMouse();
 
-		if(input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_MIDDLE) && getReceiver().contains(mouse.getPosition()))
+		if(input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_MIDDLE) && getReceiver()->contains(mouse.getPosition()))
 			handle();
 		else
 			reject();
@@ -153,7 +153,7 @@ public:
 class NEO2D_EXPORT MouseRightClickEvent : public Event
 {
 public:
-	MouseRightClickEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d) 
+	MouseRightClickEvent(std::weak_ptr<Neo2D::Gui::Widget> p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
 		: Event(p, cb, d) {}
 
 	virtual void update(float dt)
@@ -162,7 +162,7 @@ public:
 		Neo::InputContext* input = engine->getInputContext();
 		Neo::Mouse& mouse = input->getMouse();
 
-		if(input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_RIGHT) && getReceiver().contains(mouse.getPosition()))
+		if(input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_RIGHT) && getReceiver()->contains(mouse.getPosition()))
 			handle();
 		else
 			reject();
@@ -177,7 +177,7 @@ public:
 class NEO2D_EXPORT MouseLeftReleaseEvent : public Event
 {
 public:
-	MouseLeftReleaseEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
+	MouseLeftReleaseEvent(std::weak_ptr<Neo2D::Gui::Widget> p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
 		: Event(p, cb, d) {}
 
 	virtual void update(float dt)
@@ -186,7 +186,7 @@ public:
 		Neo::InputContext* input = engine->getInputContext();
 		Neo::Mouse& mouse = input->getMouse();
 
-		if (input->getMouse().onKeyUp(Neo::MOUSE_BUTTON_LEFT) && getReceiver().contains(mouse.getPosition()))
+		if (input->getMouse().onKeyUp(Neo::MOUSE_BUTTON_LEFT) && getReceiver()->contains(mouse.getPosition()))
 			handle();
 		else
 			reject();
@@ -201,7 +201,7 @@ public:
 class NEO2D_EXPORT MouseMiddleReleaseEvent : public Event
 {
 public:
-	MouseMiddleReleaseEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
+	MouseMiddleReleaseEvent(std::weak_ptr<Neo2D::Gui::Widget> p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
 		: Event(p, cb, d) {}
 
 	virtual void update(float dt)
@@ -210,7 +210,7 @@ public:
 		Neo::InputContext* input = engine->getInputContext();
 		Neo::Mouse& mouse = input->getMouse();
 
-		if (input->getMouse().onKeyUp(Neo::MOUSE_BUTTON_MIDDLE) && getReceiver().contains(mouse.getPosition()))
+		if (input->getMouse().onKeyUp(Neo::MOUSE_BUTTON_MIDDLE) && getReceiver()->contains(mouse.getPosition()))
 			handle();
 		else
 			reject();
@@ -225,7 +225,7 @@ public:
 class NEO2D_EXPORT MouseRightReleaseEvent : public Event
 {
 public:
-	MouseRightReleaseEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
+	MouseRightReleaseEvent(std::weak_ptr<Neo2D::Gui::Widget> p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
 		: Event(p, cb, d) {}
 
 	virtual void update(float dt)
@@ -234,7 +234,7 @@ public:
 		Neo::InputContext* input = engine->getInputContext();
 		Neo::Mouse& mouse = input->getMouse();
 
-		if (input->getMouse().onKeyUp(Neo::MOUSE_BUTTON_RIGHT) && getReceiver().contains(mouse.getPosition()))
+		if (input->getMouse().onKeyUp(Neo::MOUSE_BUTTON_RIGHT) && getReceiver()->contains(mouse.getPosition()))
 			handle();
 		else
 			reject();
@@ -251,7 +251,7 @@ class NEO2D_EXPORT MouseMoveEvent : public Event
 	Neo::Vector2 delta;
 	Neo::Vector2 lastPosition = Neo::Vector2(0,0);
 public:
-	MouseMoveEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
+	MouseMoveEvent(std::weak_ptr<Neo2D::Gui::Widget> p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
 		: Event(p, cb, d) {}
 
 	virtual void update(float dt)
@@ -307,7 +307,7 @@ class NEO2D_EXPORT KeyPressEvent: public Event
 {
 	unsigned int m_key;
 public:
-	KeyPressEvent(Widget& w, const function<void(Widget&, const Event &, void *)>& cb, void* d) :
+	KeyPressEvent(std::weak_ptr<Neo2D::Gui::Widget> w, const function<void(Widget&, const Event &, void *)>& cb, void* d) :
 		Event(w, cb, d),
 		m_key(-1)
 	{}
@@ -346,7 +346,7 @@ class NEO2D_EXPORT KeyReleaseEvent: public Event
 {
 	unsigned int m_key;
 public:
-	KeyReleaseEvent(Widget& w, const function<void(Widget&, const Event &, void *)>& cb, void* d) :
+	KeyReleaseEvent(std::weak_ptr<Neo2D::Gui::Widget> w, const function<void(Widget&, const Event &, void *)>& cb, void* d) :
 	Event(w, cb, d),
 	m_key(-1)
 	{}
@@ -385,7 +385,7 @@ class NEO2D_EXPORT CharacterInputEvent: public Event
 {
 	unsigned int m_key;
 public:
-	CharacterInputEvent(Widget& w, const function<void(Widget&, const Event &, void *)>& cb, void* d) :
+	CharacterInputEvent(std::weak_ptr<Neo2D::Gui::Widget> w, const function<void(Widget&, const Event &, void *)>& cb, void* d) :
 	Event(w, cb, d),
 	m_key(EOF)
 	{}
@@ -427,7 +427,7 @@ public:
 class NEO2D_EXPORT MouseDeselectEvent : public Event
 {
 public:
-	MouseDeselectEvent(Neo2D::Gui::Widget& p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
+	MouseDeselectEvent(std::weak_ptr<Neo2D::Gui::Widget> p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
 	: Event(p, cb, d) {}
 
 	virtual void update(float dt)
@@ -438,7 +438,7 @@ public:
 
 		if((input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_LEFT)
 			|| input->getMouse().onKeyDown(Neo::MOUSE_BUTTON_RIGHT))
-			&& !getReceiver().contains(mouse.getPosition()))
+			&& !getReceiver()->contains(mouse.getPosition()))
 				handle();
 
 		// Everything should get this event

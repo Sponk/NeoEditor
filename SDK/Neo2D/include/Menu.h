@@ -29,13 +29,13 @@ public:
 	void hideHierarchy();
 };
 
-class NEO2D_EXPORT Submenu : public MenuItem, public std::enable_shared_from_this<Submenu>
+class NEO2D_EXPORT Submenu : public MenuItem
 {
 	std::vector<std::shared_ptr<MenuItem>> m_children;
 	bool m_drawSelf;
 	
 protected:
-	void addItem(const std::shared_ptr<MenuItem>& i) { m_children.push_back(i); }
+	void addItem(const std::shared_ptr<MenuItem>& i) { i->doInit(); m_children.push_back(i); }
 
 public:
 	Submenu(const char* label, const shared_ptr<Object2D>& parent, const shared_ptr<Theme>& theme = nullptr);
@@ -54,13 +54,8 @@ public:
 	{
 		if(isVisible())
 		{
-			size_t line = 0;
 			for(auto m : m_children)
 			{
-				m->setPosition(getPosition() + offset + Neo::Vector2(!isDrawingItself() ? 0 : getSize().x, line));
-				m->setSize(getSize());
-				line += getSize().y + 1;
-
 				m->draw(Neo::Vector2());
 			}
 		}
@@ -71,14 +66,20 @@ public:
 
 	virtual void update(float dt) override
 	{
-		if(isActive())
+		//if(isActive())
+		//{
+		size_t line = 0;
+		MenuItem::update(dt);
+
+		for(auto m : m_children)
 		{
-      		for(auto m : m_children)
-			{
-				m->update(dt);
-			}
-			MenuItem::update(dt);
+			m->setPosition(getPosition() + Neo::Vector2(!isDrawingItself() ? 0 : getSize().x, line));
+			m->setSize(getSize());
+			line += getSize().y + 1;
+
+			m->update(dt);
 		}
+		//}
 	}
 
 	virtual void setVisible(bool b) override
@@ -112,7 +113,7 @@ public:
 	shared_ptr<MenuItem> addItem(const std::string& name, std::function<void(Widget&, void*)> cb);
 };
 
-class NEO2D_EXPORT Menubar : public Widget, public std::enable_shared_from_this<Menubar>
+class NEO2D_EXPORT Menubar : public Widget
 {
 	// FIXME: Don't hardcode!!
 	const unsigned int BTN_WIDTH = 70;
@@ -164,6 +165,9 @@ public:
 		menu->setActive(false);
 		menu->setVisible(false);
 		menu->enableDrawingSelf(false);
+
+		menubutton.submenu->doInit();
+		menubutton.button->doInit();
 
 		m_children.push_back(menubutton);
 	}

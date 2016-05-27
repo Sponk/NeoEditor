@@ -39,6 +39,7 @@ public:
 	size_t getCaret() const { return m_caret; }
 
 	virtual bool handle(const Event& e) override;
+	virtual void init() override;
 };
 
 }

@@ -157,15 +157,18 @@ TreeView::TreeNode::TreeNode(int x,
 							 const shared_ptr<Object2D>& parent,
 							 const shared_ptr<Theme>& theme)
 	: Widget(x, y, w, h, label, parent, (theme == nullptr) ? make_shared<TreeItemTheme>() : theme),
-	  m_button(x,y,LINE_HEIGHT, LINE_HEIGHT, "+", parent), m_open(false)
+	  m_button(make_shared<Button>(x,y,LINE_HEIGHT, LINE_HEIGHT, "+", parent)), m_open(false)
 {
-	registerEvent(make_shared<MouseLeftClickEvent>(*this, nullptr, nullptr));
-	registerEvent(make_shared<MouseDeselectEvent>(*this, nullptr, nullptr));
-
-	m_button.setCallback([this](Widget& w, void* d) {
+	m_button->setCallback([this](Widget& w, void* d) {
 		setOpen(!isOpen());
 		w.setLabel((isOpen() ? "-" : "+"));
 	}, nullptr);
+}
+
+void TreeView::TreeNode::init()
+{
+	registerEvent(make_shared<MouseLeftClickEvent>(shared_from_this(), nullptr, nullptr));
+	registerEvent(make_shared<MouseDeselectEvent>(shared_from_this(), nullptr, nullptr));
 }
 
 bool TreeView::TreeNode::handle(const Event& e)

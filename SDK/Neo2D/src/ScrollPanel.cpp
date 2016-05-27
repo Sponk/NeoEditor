@@ -10,9 +10,12 @@ Neo2D::Gui::ScrollPanel::ScrollPanel(int x,
 	: Container(x, y, w, h, parent),
 	  verticalScroll(x,y,w,h,nullptr,SCROLLBAR_VERTICAL,knobtheme),
 	  horizontalScroll(x,y,w,h,nullptr,SCROLLBAR_HORIZONTAL,background)
+{}
+
+void Neo2D::Gui::ScrollPanel::init()
 {
-	registerEvent(make_shared<MouseOverEvent>(*this, nullptr, nullptr));
-	registerEvent(make_shared<MouseLeaveEvent>(*this, nullptr, nullptr));
+	registerEvent(make_shared<MouseOverEvent>(shared_from_this(), nullptr, nullptr));
+	registerEvent(make_shared<MouseLeaveEvent>(shared_from_this(), nullptr, nullptr));
 }
 
 void Neo2D::Gui::ScrollPanel::updateScrollbarPlacement()

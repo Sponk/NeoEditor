@@ -36,10 +36,10 @@ TEST(ScrollbarTest, DragTestHorizontal)
 	auto sb = make_shared<Scrollbar>(0,0,100,100, nullptr, SCROLLBAR_HORIZONTAL, nullptr);
 	sb->setRange(Neo::Vector2(0, 200));
 
-	MouseMoveEvent movement(*sb, nullptr, nullptr);
+	MouseMoveEvent movement(sb, nullptr, nullptr);
 	movement.setDelta(Neo::Vector2(100, 10));
 
-	sb->handle(MouseLeftClickEvent(*sb, nullptr, nullptr));
+	sb->handle(MouseLeftClickEvent(sb, nullptr, nullptr));
 	sb->handle(movement);
 
 	EXPECT_EQ(100, sb->getValue());
@@ -50,10 +50,10 @@ TEST(ScrollbarTest, DragTestVertical)
 	auto sb = make_shared<Scrollbar>(0,0,100,100, nullptr, SCROLLBAR_VERTICAL, nullptr);
 	sb->setRange(Neo::Vector2(0, 200));
 
-	MouseMoveEvent movement(*sb, nullptr, nullptr);
+	MouseMoveEvent movement(sb, nullptr, nullptr);
 	movement.setDelta(Neo::Vector2(100, 10));
 
-	sb->handle(MouseLeftClickEvent(*sb, nullptr, nullptr));
+	sb->handle(MouseLeftClickEvent(sb, nullptr, nullptr));
 	sb->handle(movement);
 
 	EXPECT_EQ(20, sb->getValue());
@@ -65,12 +65,12 @@ TEST(ScrollbarTest, DISABLED_DeselectTest)
 	sb->setRange(Neo::Vector2(0, 200));
 	sb->setDirection(SCROLLBAR_VERTICAL);
 
-	MouseMoveEvent movement(*sb, nullptr, nullptr);
+	MouseMoveEvent movement(sb, nullptr, nullptr);
 	movement.setDelta(Neo::Vector2(100, 10));
 
-	sb->handle(MouseLeftClickEvent(*sb, nullptr, nullptr));
+	sb->handle(MouseLeftClickEvent(sb, nullptr, nullptr));
 	sb->handle(movement);
-	sb->handle(MouseLeaveEvent(*sb, nullptr, nullptr));
+	sb->handle(MouseLeaveEvent(sb, nullptr, nullptr));
 
 	EXPECT_EQ(WIDGET_NORMAL, sb->getState());
 }

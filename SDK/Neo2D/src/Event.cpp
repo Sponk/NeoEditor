@@ -3,6 +3,9 @@
 
 void Neo2D::Gui::Event::handle()
 {
-	if(m_callback != nullptr) m_callback(m_receiver, *this, m_data);
-	m_handled = m_receiver.handle(*this);
+	if(m_receiver.expired())
+		return;
+
+	if(m_callback != nullptr) m_callback(*m_receiver.lock(), *this, m_data);
+	m_handled = m_receiver.lock()->handle(*this);
 }

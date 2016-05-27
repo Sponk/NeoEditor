@@ -5,7 +5,6 @@
 #include "Object2D.h"
 #include "Event.h"
 #include "Theme.h"
-#include <memory>
 
 #include <NeoEngine.h>
 
@@ -40,16 +39,20 @@ enum WIDGET_STATE
  *
  * @see Container
  */
-class NEO2D_EXPORT Widget : public Object2D
+class NEO2D_EXPORT Widget : public Object2D, public enable_shared_from_this<Widget>
 {
-	std::vector<std::shared_ptr<Event>> m_events;
-	std::shared_ptr<Theme> m_theme;
+	std::vector<shared_ptr<Event>> m_events;
+	shared_ptr<Theme> m_theme;
 	WIDGET_STATE m_state;
 
 	std::function<void(Widget&, void*)> m_callback;
 	void* m_data;
 
 	Neo::String m_label;
+	bool m_initialized;
+
+protected:
+	bool isInitialized() const { return m_initialized; }
 
 public:
 	Widget(int x, int y, unsigned int w, unsigned int h, const char* label,
@@ -68,7 +71,13 @@ public:
 		if (m_theme != nullptr && !isInvisible()) m_theme->draw(this, offset);
 	}
 
+	/**
+	 * @brief Initializes the widget and registers all events.
+	 */
+	virtual void init() {}
 	virtual void update(float dt);
+
+	virtual void doInit() { if(!m_initialized) { init(); m_initialized = true; } }
 
 	/**
 	 * @brief Handles all registered events.
@@ -154,7 +163,7 @@ protected:
 	 * @brief Retrieves the currently used theme.
 	 * @return The theme that is being used.
 	 */
-	const std::shared_ptr<Theme>& getTheme() const { return m_theme; }
+	const shared_ptr<Theme>& getTheme() const { return m_theme; }
 
 	/**
 	 * @brief Changes the theme that is being used.
