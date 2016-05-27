@@ -191,6 +191,65 @@ void EditorGame::onBegin()
 	rootpane->addWidget(m_sceneView);
 
 	m_menubar = make_shared<Menubar>(0, 0, 6000, 25, rootpane);
+	m_toolbar = make_shared<Toolbar>(0, m_menubar->getSize().y, 6000, 32, rootpane);
+
+	auto toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/document-open.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { openLevel(); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/document-save.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { saveLevel(); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/edit-undo.png", m_toolbar);
+	toolbutton->setCallback(
+		[this](Widget&, void*) {
+			m_sceneView->clearSelection();
+
+			m_undo.undo();
+
+			m_sceneView->updateOverlayScene();
+			updateEntityTree();
+		},
+		nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0, 0, 32, 32, "data/icons/edit-redo.png", m_toolbar);
+	toolbutton->setCallback(
+		[this](Widget&, void*) {
+			m_sceneView->clearSelection();
+
+			m_undo.redo();
+			m_sceneView->updateOverlayScene();
+			updateEntityTree();
+		},
+		nullptr);
+
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/translate.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(TRANSLATION); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/scale.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(SCALE); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/rotate.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(ROTATION); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/objects/camera.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { addCamera(); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/objects/light.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { addLight(); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/objects/sound.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { addSound(); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
 
 	auto filemenu = make_shared<Submenu>(tr("File"), m_menubar);
 	auto editmenu = make_shared<Submenu>(tr("Edit"), m_menubar);
@@ -251,163 +310,30 @@ void EditorGame::onBegin()
 
 	filemenu->addItem(tr("Quit"), [this] (Widget&, void*) { NeoEngine::getInstance()->setActive(false); });
    	editmenu->addItem("/Create/Light", [this](Widget&, void*) {
-			OLight* light = NeoEngine::getInstance()->getLevel()->getCurrentScene()->addNewLight();
-
-			if (m_sceneView->getSelection().size())
-				light->setName(findName(m_sceneView->getSelection().back()->getName(),
-										NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());	
-			else
-				light->setName(findName("Light", NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
-
-			light->setPosition(m_sceneView->getSelectionCenter());
-			
-			m_sceneView->updateOverlayScene();
-			m_sceneView->clearSelection();
-			m_sceneView->addSelectedObject(light);
-			updateSelectedObject(light);
-			updated = false;
+			addLight();
 	});
 
 	editmenu->addItem("/Create/Entity", [this](Widget&, void*) {
-			std::string file = m_toolset->fileOpenDialog(
-				tr("Open Mesh File"),
-				NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(),
-				"Mesh Files (*.obj *.3ds *.fbx *.dae *.ase *.ifc *.ply *.dxf *.lwo *.lws "
-				"*.lxo *.stl *.x *.ac *.ms3d *.cob *.irrmesh *.irr *.md1 *.md2 *.md3 *.pk3 "
-				"*.mdc *.md5 *.smd *.ogex *.3d *.b3d *.q3d)");
-
-			if(file.empty())
-				return;
-			
-			Level* level = NeoEngine::getInstance()->getLevel();
-			OEntity* entity = level->getCurrentScene()->addNewEntity(level->loadMesh(file.c_str()));
-
-			if (m_sceneView->getSelection().size())
-				entity->setName(findName(m_sceneView->getSelection().back()->getName(),
-										NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());	
-			else
-				entity->setName(findName("Entity", NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
-
-			
-			entity->setPosition(m_sceneView->getSelectionCenter());
-			
-			m_sceneView->updateOverlayScene();
-			m_sceneView->clearSelection();
-			m_sceneView->addSelectedObject(entity);
-			updateSelectedObject(entity);
-			updated = false;
+			addEntity();
 	});
 
 	editmenu->addItem("/Create/Text", [this](Widget&, void*) {
-			std::string file = m_toolset->fileOpenDialog(
-				tr("Open Font File"),
-				NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(),
-				"Font Files (*.ttf)");
-
-			if(file.empty())
-				return;
-			
-			Level* level = NeoEngine::getInstance()->getLevel();
-			OText* text = level->getCurrentScene()->addNewText(level->loadFont(file.c_str()));
-
-			if (m_sceneView->getSelection().size())
-				text->setName(findName(m_sceneView->getSelection().back()->getName(),
-										NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());	
-			else
-				text->setName(findName("Text", NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
-
-			
-			text->setPosition(m_sceneView->getSelectionCenter());
-			
-			m_sceneView->updateOverlayScene();
-			m_sceneView->clearSelection();
-			m_sceneView->addSelectedObject(text);
-			updateSelectedObject(text);			
-			updated = false;
+			addText();
 	});
 	
 	editmenu->addItem("/Create/Sound", [this](Widget&, void*) {
-			std::string file = m_toolset->fileOpenDialog(
-				tr("Open Sound File"),
-				NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(),
-				"Sound Files (*.ogg *.wav)");
-	
-			if(file.empty())
-				return;
-			
-			Level* level = NeoEngine::getInstance()->getLevel();
-			OSound* sound = level->getCurrentScene()->addNewSound(level->loadSound(file.c_str()));
-
-			if (m_sceneView->getSelection().size())
-				sound->setName(findName(m_sceneView->getSelection().back()->getName(),
-										NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());	
-			else
-				sound->setName(findName("Sound", NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
-
-			
-			sound->setPosition(m_sceneView->getSelectionCenter());
-			
-			m_sceneView->updateOverlayScene();
-			m_sceneView->clearSelection();
-			m_sceneView->addSelectedObject(sound);
-			updateSelectedObject(sound);
-			updated = false;
+			addSound();
 	});
-	
+
+	editmenu->addItem("/Create/Camera", [this](Widget&, void*) {
+		addCamera();
+	});
+
 	helpmenu->addItem(tr("About"), [this](Widget&, void*) { m_toolset->aboutDialog(); });
 
 	m_menubar->addMenu(filemenu);
 	m_menubar->addMenu(editmenu);
 	m_menubar->addMenu(helpmenu);
-
-	// Toolbar
-	m_toolbar = make_shared<Toolbar>(0, m_menubar->getSize().y, 6000, 32, rootpane);
-
-	auto toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/document-open.png", m_toolbar);
-	toolbutton->setCallback([this](Widget&, void*) { openLevel(); }, nullptr);
-	m_toolbar->addWidget(toolbutton);
-
-	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/document-save.png", m_toolbar);
-	toolbutton->setCallback([this](Widget&, void*) { saveLevel(); }, nullptr);
-	m_toolbar->addWidget(toolbutton);
-
-	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/edit-undo.png", m_toolbar);
-	toolbutton->setCallback(
-		[this](Widget&, void*) {
-			m_sceneView->clearSelection();
-
-			m_undo.undo();
-
-			m_sceneView->updateOverlayScene();
-			updateEntityTree();
-		},
-		nullptr);
-	m_toolbar->addWidget(toolbutton);
-
-	toolbutton = make_shared<ImageButton>(0, 0, 32, 32, "data/icons/edit-redo.png", m_toolbar);
-	toolbutton->setCallback(
-		[this](Widget&, void*) {
-			m_sceneView->clearSelection();
-
-			m_undo.redo();
-			m_sceneView->updateOverlayScene();
-			updateEntityTree();
-		},
-		nullptr);
-
-	m_toolbar->addWidget(toolbutton);
-
-	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/translate.png", m_toolbar);
-	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(TRANSLATION); }, nullptr);
-	m_toolbar->addWidget(toolbutton);
-
-	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/scale.png", m_toolbar);
-	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(SCALE); }, nullptr);
-	m_toolbar->addWidget(toolbutton);
-
-	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/rotate.png", m_toolbar);
-	toolbutton->setCallback([this](Widget&, void*) { m_sceneView->setHandleMode(ROTATION); }, nullptr);
-	m_toolbar->addWidget(toolbutton);
 
 	// Build right panel
 	{
@@ -589,8 +515,16 @@ void EditorGame::onBegin()
 			MAKE_FLOAT_EDIT_FIELD("Pitch:", width, m_soundPitchEdit, m_soundUi, OSound, setPitch);
 			MAKE_FLOAT_EDIT_FIELD("Radius:", width, m_soundRadiusEdit, m_soundUi, OSound, setRadius);
 			MAKE_FLOAT_EDIT_FIELD("Rolloff:", width, m_soundRolloffEdit, m_soundUi, OSound, setRolloff);
-			MAKE_CHECK_BUTTON("Looping", m_soundLoopingButton, m_cameraUi, OSound, setLooping);
-			MAKE_CHECK_BUTTON("Relative", m_soundRelativeButton, m_cameraUi, OSound, setRelative);			
+			MAKE_CHECK_BUTTON("Looping", m_soundLoopingButton, m_soundUi, OSound, setLooping);
+			MAKE_CHECK_BUTTON("Relative", m_soundRelativeButton, m_soundUi, OSound, setRelative);
+			MAKE_BUTTON("Play/Stop", width, m_soundUi, [this](Widget& w, void*) {
+				if(!m_sceneView->getSelection().size())
+					return;
+
+				OSound* snd = static_cast<OSound*>(m_sceneView->getSelection().back());
+				if(snd->isPlaying()) snd->stop();
+				else snd->play();
+			});
 
 			// Text UI
 			MAKE_STRING_EDIT_FIELD("Text:", width, m_textTextEdit, m_textUi, OText, setText);
@@ -884,4 +818,131 @@ void EditorGame::loadProject(const char* path)
 void EditorGame::saveProject(const char* path)
 {
 	m_project.save(path);
+}
+
+void EditorGame::addLight()
+{
+	OLight* light = NeoEngine::getInstance()->getLevel()->getCurrentScene()->addNewLight();
+
+	if (m_sceneView->getSelection().size())
+		light->setName(findName(m_sceneView->getSelection().back()->getName(),
+								NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
+	else
+		light->setName(findName("Light", NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
+
+	light->setPosition(m_sceneView->getSelectionCenter());
+
+	m_sceneView->updateOverlayScene();
+	m_sceneView->clearSelection();
+	m_sceneView->addSelectedObject(light);
+	updateSelectedObject(light);
+	updated = false;
+}
+
+void EditorGame::addCamera()
+{
+	OCamera* camera = NeoEngine::getInstance()->getLevel()->getCurrentScene()->addNewCamera();
+
+	if (m_sceneView->getSelection().size())
+		camera->setName(findName(m_sceneView->getSelection().back()->getName(),
+								NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
+	else
+		camera->setName(findName("Camera", NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
+
+	camera->setPosition(m_sceneView->getSelectionCenter());
+
+	m_sceneView->updateOverlayScene();
+	m_sceneView->clearSelection();
+	m_sceneView->addSelectedObject(camera);
+	updateSelectedObject(camera);
+	updated = false;
+}
+
+void EditorGame::addSound()
+{
+	std::string file = m_toolset->fileOpenDialog(
+		tr("Open Sound File"),
+		NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(),
+		"Sound Files (*.ogg *.wav)");
+
+	if(file.empty())
+		return;
+
+	Level* level = NeoEngine::getInstance()->getLevel();
+	OSound* sound = level->getCurrentScene()->addNewSound(level->loadSound(file.c_str()));
+
+	if (m_sceneView->getSelection().size())
+		sound->setName(findName(m_sceneView->getSelection().back()->getName(),
+								NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
+	else
+		sound->setName(findName("Sound", NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
+
+
+	sound->setPosition(m_sceneView->getSelectionCenter());
+
+	m_sceneView->updateOverlayScene();
+	m_sceneView->clearSelection();
+	m_sceneView->addSelectedObject(sound);
+	updateSelectedObject(sound);
+	updated = false;
+}
+
+void EditorGame::addEntity()
+{
+	std::string file = m_toolset->fileOpenDialog(
+		tr("Open Mesh File"),
+		NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(),
+		"Mesh Files (*.obj *.3ds *.fbx *.dae *.ase *.ifc *.ply *.dxf *.lwo *.lws "
+			"*.lxo *.stl *.x *.ac *.ms3d *.cob *.irrmesh *.irr *.md1 *.md2 *.md3 *.pk3 "
+			"*.mdc *.md5 *.smd *.ogex *.3d *.b3d *.q3d)");
+
+	if(file.empty())
+		return;
+
+	Level* level = NeoEngine::getInstance()->getLevel();
+	OEntity* entity = level->getCurrentScene()->addNewEntity(level->loadMesh(file.c_str()));
+
+	if (m_sceneView->getSelection().size())
+		entity->setName(findName(m_sceneView->getSelection().back()->getName(),
+								 NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
+	else
+		entity->setName(findName("Entity", NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
+
+
+	entity->setPosition(m_sceneView->getSelectionCenter());
+
+	m_sceneView->updateOverlayScene();
+	m_sceneView->clearSelection();
+	m_sceneView->addSelectedObject(entity);
+	updateSelectedObject(entity);
+	updated = false;
+}
+
+void EditorGame::addText()
+{
+	std::string file = m_toolset->fileOpenDialog(
+		tr("Open Font File"),
+		NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(),
+		"Font Files (*.ttf)");
+
+	if(file.empty())
+		return;
+
+	Level* level = NeoEngine::getInstance()->getLevel();
+	OText* text = level->getCurrentScene()->addNewText(level->loadFont(file.c_str()));
+
+	if (m_sceneView->getSelection().size())
+		text->setName(findName(m_sceneView->getSelection().back()->getName(),
+							   NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
+	else
+		text->setName(findName("Text", NeoEngine::getInstance()->getLevel()->getCurrentScene()).c_str());
+
+
+	text->setPosition(m_sceneView->getSelectionCenter());
+
+	m_sceneView->updateOverlayScene();
+	m_sceneView->clearSelection();
+	m_sceneView->addSelectedObject(text);
+	updateSelectedObject(text);
+	updated = false;
 }

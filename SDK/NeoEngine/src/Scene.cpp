@@ -32,7 +32,8 @@ m_dataMode(M_DATA_STATIC),
 m_currentFrame(0),
 m_currentCamera(0),
 m_gravity(0, 0, -0.981f),
-m_additionalData(NULL)
+m_additionalData(NULL),
+m_ids(0)
 {}
 
 Scene::~Scene()

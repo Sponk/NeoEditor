@@ -106,7 +106,13 @@ public:
 	void saveLevel(const char* path);
 	void loadProject(const char* path);
 	void saveProject(const char* path);
-	
+
+	void addLight();
+	void addCamera();
+	void addSound();
+	void addEntity();
+	void addText();
+
 private:
 };
 
