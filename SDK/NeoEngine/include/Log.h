@@ -64,6 +64,21 @@ void NEO_ENGINE_EXPORT infoLog(const char* s, const char* function, const char* 
 )
 #endif
 
+std::ostream & operator<<(std::ostream & o, const Neo::Vector2& v)
+{
+	return o << "(" << v.x << ", " << v.y << ")";
+}
+
+std::ostream & operator<<(std::ostream & o, const Neo::Vector3& v)
+{
+	return o << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+}
+
+std::ostream & operator<<(std::ostream & o, const Neo::Vector4& v)
+{
+	return o << "(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")";
+}
+
 // for the moment let s just simply log if the message has a severity lower than the env variable
 #define MLOG(severity, USERMESSAGE) { Neo::Log::m_stringstream.str(std::string("")); Neo::Log::m_stringstream<<USERMESSAGE; Neo::Log::m_string=Neo::Log::m_stringstream.str(); Neo::Log::log(severity, __FUNCTION__, __SFILENAME__, __LINE__); }
 
