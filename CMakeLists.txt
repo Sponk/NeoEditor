@@ -11,7 +11,7 @@ SET(CMAKE_MODULE_PATH
 
 ## Options
 option(USE_QT_RUNTIME OFF)
-option(USE_GNUSTEP_RUNTIME ON)
+option(USE_GNUSTEP_RUNTIME OFF)
 
 ## Disallow in-source builds
 INCLUDE(OutOfSourceBuild)
@@ -39,6 +39,19 @@ ENDIF()
 SET(PLANTUML_JAR ${CMAKE_BINARY_DIR}/plantuml.jar)
 IF(NOT EXISTS ${PLANTUML_JAR})
     file(DOWNLOAD http://downloads.sourceforge.net/project/plantuml/plantuml.jar ${PLANTUML_JAR})
+ENDIF()
+
+## Install needed tools in Windows
+IF(WIN32)
+	set(SWIG_EXECUTABLE ${CMAKE_BINARY_DIR}/swigwin-3.0.8/swig.exe)
+	IF(NOT SWIG_FOUND AND NOT EXISTS ${SWIG_EXECUTABLE})
+		set(SWIG_PACKAGE ${CMAKE_BINARY_DIR}/swig.zip)
+	    file(DOWNLOAD http://downloads.sourceforge.net/project/swig/swigwin/swigwin-3.0.8/swigwin-3.0.8.zip ${SWIG_PACKAGE} SHOW_PROGRESS)
+				
+		execute_process(COMMAND
+			${CMAKE_COMMAND} -E tar "xf" ${SWIG_PACKAGE} --format=zip)
+	ENDIF()
+	set(SWIG_FOUND TRUE)
 ENDIF()
 
 ## Set version and info

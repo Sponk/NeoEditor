@@ -14,16 +14,16 @@ int main(int argc, char* argv[])
 	std::string err;
 	char* config = readTextFile("assets/plugins.cfg");
 
+	if(!config)
+	{
+		MLOG_WARNING("Could not open plugin config!");
+		return 1;
+	}
+
 	std::string confstr = config;
 	free(config);
 
 	sexpresso::Sexp tree;
-
-	if(!config)
-	{
-		MLOG_ERROR("Could not open config file!");
-		return 1;
-	}
 
 	tree = sexpresso::parse(confstr, err);
 	sexpresso::Sexp* pluginlist = tree.getChildByPath("project/plugins");

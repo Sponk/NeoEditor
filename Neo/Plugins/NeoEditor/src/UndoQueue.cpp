@@ -3,6 +3,10 @@
 #include <sstream>
 #include <cstdlib>
 
+#undef max
+#undef min
+#include <algorithm>
+
 using namespace Neo;
 
 UndoQueue::UndoQueue()
