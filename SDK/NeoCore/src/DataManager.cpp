@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -75,4 +76,17 @@ void DataManager::addRef(DataRef * ref)
 	}
 
 	m_refs.push_back(ref);
+}
+
+void DataManager::update()
+{
+	struct stat s;
+	for(auto ref : m_refs)
+	{
+		if(stat(ref->getFilename(), &s) == 0 && s.st_mtime > ref->getTime())
+		{
+			ref->update();
+			ref->setTime(static_cast<long>(s.st_mtime));
+		}
+	}
 }

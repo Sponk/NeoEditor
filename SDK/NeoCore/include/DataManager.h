@@ -90,6 +90,14 @@ public:
 	void addRef(DataRef * ref);
 	inline DataRef * getRef(unsigned int id){ return m_refs[id]; }
 	inline unsigned int getRefsNumber(void){ return m_refs.size(); }
+
+	/**
+	 * @brief Updates all references by re-loading them from disk.
+	 *
+	 * If the file belonging to a DataRef was changed on disk since it was loaded
+	 * or last updated it will be reloaded and the time stamp updated.
+	 */
+	void update();
 };
 }
 #endif

@@ -124,6 +124,8 @@ enum INPUT_KEYS
 	KEY_MENU = 180,
 	KEY_RSUPER = 181,
 	KEY_LSUPER = 182,
+
+	WINDOW_SELECT = 254, // FIXME: Should this be a _key_?
 	KEY_DUMMY = 255
 };
 

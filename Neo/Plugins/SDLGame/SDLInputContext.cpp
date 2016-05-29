@@ -470,10 +470,10 @@ void SDLInputContext::handleInput()
 						sendEvents(&mevent);*/
 						break;
 					case SDL_WINDOWEVENT_FOCUS_GAINED:
-						//m_focus = true;
+						engine->getInputContext()->getKeyboard().keyDown(WINDOW_SELECT);
 						break;
 					case SDL_WINDOWEVENT_FOCUS_LOST:
-						//m_focus = false;
+						engine->getInputContext()->getKeyboard().keyUp(WINDOW_SELECT);
 						break;
 				}
 				break;

@@ -588,6 +588,18 @@ void EditorGame::onBegin()
 		m_sceneView->setHandleMode(ROTATION);
 	}, nullptr));
 
+	m_keyboardShortcuts->addShortcut(Shortcut({WINDOW_SELECT}, [this](void*){
+		Level* level = NeoEngine::getInstance()->getLevel();
+		level->getTextureManager()->update();
+		level->getShaderManager()->update();
+		level->getSoundManager()->update();
+		level->getMeshManager()->update();
+		level->getArmatureAnimManager()->update();
+		level->getTexturesAnimManager()->update();
+		level->getMaterialsAnimManager()->update();
+		MLOG_INFO("UPDATE");
+	}, nullptr));
+
 	NeoEngine* engine = NeoEngine::getInstance();
 	engine->getSystemContext()->setWindowTitle(tr("Neo Scene Editor"));
 	engine->getGame()->setDrawMainScene(false);
