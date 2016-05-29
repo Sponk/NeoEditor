@@ -148,6 +148,10 @@ void EditorGame::update()
 		updated = true;
 	}
 
+	// Sleep if window is not selected
+	if(!engine->getInputContext()->isKeyDown(WINDOW_SELECT))
+		engine->getSystemContext()->sleep(500);
+
 	PROFILE_BEGIN("GuiUpdate");
 	m_canvas.update(delta);
 	PROFILE_END("GuiUpdate");
@@ -597,7 +601,6 @@ void EditorGame::onBegin()
 		level->getArmatureAnimManager()->update();
 		level->getTexturesAnimManager()->update();
 		level->getMaterialsAnimManager()->update();
-		MLOG_INFO("UPDATE");
 	}, nullptr));
 
 	NeoEngine* engine = NeoEngine::getInstance();
