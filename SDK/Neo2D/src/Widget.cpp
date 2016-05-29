@@ -26,7 +26,7 @@ void Widget::update(float dt)
 
 	std::unordered_map<unsigned int, bool> handled;
 	if(getParent().expired())
-		for(auto iter = m_events.rbegin(); iter != m_events.rend(); iter++)
+		for(auto iter = m_events.begin(); iter != m_events.end(); iter++)
 		{
 			auto e = *iter;
 			if(e && e->getReceiver() && !handled[e->getType()]
