@@ -323,6 +323,10 @@ void EditorGame::onBegin()
 		addCamera();
 	});
 
+	editmenu->addItem("Duplicate Selection", [this](Widget&, void*) {
+		duplicateSelection();
+	});
+
 	editmenu->addItem("Delete Selection", [this](Widget&, void*) {
 		deleteSelection();
 	});
@@ -598,6 +602,10 @@ void EditorGame::onBegin()
 
 	m_keyboardShortcuts->addShortcut(Shortcut({KEY_DELETE}, [this](void*){
 		deleteSelection();
+	}, nullptr));
+
+	m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_D}, [this](void*){
+		duplicateSelection();
 	}, nullptr));
 
 	m_keyboardShortcuts->addShortcut(Shortcut({WINDOW_SELECT}, [this](void*){
@@ -1019,4 +1027,49 @@ void EditorGame::deleteSelection()
 	updated = false;
 
 	m_undo.save();
+}
+
+void EditorGame::duplicateSelection()
+{
+	std::function<Object3d*(Object3d*, Scene*)> duplicateObject = [](Object3d* object, Scene* scene) {
+		Object3d* clone;
+		switch(object->getType())
+		{
+			case OBJECT3D_LIGHT:
+				clone = scene->addNewLight(static_cast<const OLight&>(*object));
+				break;
+
+			case OBJECT3D_SOUND:
+				clone = scene->addNewSound(static_cast<const OSound&>(*object));
+				break;
+
+			case OBJECT3D_CAMERA:
+				clone = scene->addNewCamera(static_cast<const OCamera&>(*object));
+				break;
+
+			case OBJECT3D_TEXT:
+				clone = scene->addNewText(static_cast<const OText&>(*object));
+				break;
+
+			case OBJECT3D_ENTITY:
+				clone = scene->addNewEntity(static_cast<const OEntity&>(*object));
+				break;
+		}
+
+		clone->setName(findName(object->getName(), scene).c_str());
+		return clone;
+	};
+
+	Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
+	std::vector<Object3d*> newSelection;
+
+	for(auto object : m_sceneView->getSelection())
+		newSelection.push_back(duplicateObject(object, scene));
+
+	m_sceneView->clearSelection();
+	m_sceneView->getSelection() = std::move(newSelection);
+	m_undo.save();
+
+	updated = false;
+	m_sceneView->updateOverlayScene();
 }

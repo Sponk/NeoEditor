@@ -119,6 +119,7 @@ public:
 	void addText();
 
 	void deleteSelection();
+	void duplicateSelection();
 
 private:
 };
