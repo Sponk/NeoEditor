@@ -25,15 +25,16 @@ public:
 		keys(keys)
 	{}
 
-	void update(unsigned int key, bool value);
+	bool update(unsigned int key, bool value);
 };
 
 class NEO2D_EXPORT KeyboardShortcuts : public Widget
 {
 	std::vector<Shortcut> shortcuts;
 public:
-	KeyboardShortcuts();
+	KeyboardShortcuts(const shared_ptr<Widget>& parent = nullptr);
 	virtual bool handle(const Event& e) override;
+	virtual void init() override;
 
 	void addShortcut(const Shortcut& s)
 	{

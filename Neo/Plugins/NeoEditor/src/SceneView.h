@@ -87,6 +87,8 @@ public:
 	void clearOverlayScene();
 	void updateOverlayScene();
 	void setHandleMode(HANDLE_MODE mode);
+
+	using Neo2D::Gui::Widget::setState;
 };
 
 #endif //NEO_SCENEVIEW_H

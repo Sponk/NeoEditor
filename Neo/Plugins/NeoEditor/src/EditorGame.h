@@ -20,6 +20,7 @@
 #include "UndoQueue.h"
 
 #include <sexpresso.hpp>
+#include <KeyboardShortcuts.h>
 
 class EditorGame : public Neo::SubGame
 {
@@ -83,7 +84,9 @@ class EditorGame : public Neo::SubGame
 	std::string m_currentLevelFile;
 	std::string m_currentProjectFile;
 	Project m_project;
-	
+
+	shared_ptr<Neo2D::Gui::KeyboardShortcuts> m_keyboardShortcuts;
+
 	UndoQueue m_undo;
 	
 public:

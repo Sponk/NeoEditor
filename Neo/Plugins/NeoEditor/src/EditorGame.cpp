@@ -186,7 +186,7 @@ void EditorGame::onBegin()
 	// TODO: Load config!
 	auto rootpane = make_shared<Container>(0, 0, 0, 0, nullptr);
 	m_canvas.addObject2D(rootpane);
-	
+
 	m_sceneView = make_shared<SceneView>(m_undo, 0,0,0,0, rootpane);
 	rootpane->addWidget(m_sceneView);
 
@@ -568,7 +568,26 @@ void EditorGame::onBegin()
 						m_entityTree->setSelected(m_sceneView->getSelection().back()->getName());
 						updateSelectedObject(m_sceneView->getSelection().back());
 					}, nullptr);
-		
+
+	m_keyboardShortcuts = make_shared<KeyboardShortcuts>(rootpane);
+	rootpane->addWidget(m_keyboardShortcuts);
+
+	m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_S}, [this](void*){
+		saveLevel();
+	}, nullptr));
+
+	m_keyboardShortcuts->addShortcut(Shortcut({KEY_1}, [this](void*){
+		m_sceneView->setHandleMode(TRANSLATION);
+	}, nullptr));
+
+	m_keyboardShortcuts->addShortcut(Shortcut({KEY_2}, [this](void*){
+		m_sceneView->setHandleMode(SCALE);
+	}, nullptr));
+
+	m_keyboardShortcuts->addShortcut(Shortcut({KEY_3}, [this](void*){
+		m_sceneView->setHandleMode(ROTATION);
+	}, nullptr));
+
 	NeoEngine* engine = NeoEngine::getInstance();
 	engine->getSystemContext()->setWindowTitle(tr("Neo Scene Editor"));
 	engine->getGame()->setDrawMainScene(false);
