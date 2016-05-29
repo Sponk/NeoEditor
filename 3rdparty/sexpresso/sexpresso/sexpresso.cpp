@@ -100,7 +100,7 @@ static auto stringValToString(std::string const& s) -> std::string {
 	else return ('"' + s + '"');
 }
 
-static auto toStringImpl(Sexp const& sexp, std::ostringstream& ostream) -> void {
+static auto toStringImpl(Sexp const& sexp, std::stringstream& ostream) -> void {
 	switch(sexp.kind) {
 		case SexpValueKind::STRING:
 			ostream << stringValToString(sexp.value.str);
@@ -127,7 +127,7 @@ static auto toStringImpl(Sexp const& sexp, std::ostringstream& ostream) -> void 
 }
 
 auto Sexp::toString() const -> std::string {
-	auto ostream = std::ostringstream{};
+	auto ostream = std::stringstream{};
 	// outer sexp does not get surrounded by ()
 	switch(this->kind) {
 		case SexpValueKind::STRING:
