@@ -335,6 +335,7 @@ public:
 	 * @return The key ID.
 	 */
 	unsigned int getKey() const { return m_key; }
+	void setKey(unsigned int k) { m_key = k; }
 	virtual unsigned int getType() const { return KEY_PRESSED; }
 };
 
