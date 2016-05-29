@@ -19,4 +19,8 @@ elseif(APPLE OR USE_GNUSTEP_RUNTIME)
 	target_link_libraries(messagebox ${SEXPRESSO_LIBRARIES} objc gnustep-base gnustep-gui)
 
 elseif(WIN32)
+	add_executable(messagebox win32_main.cpp)
+
+	include_directories(${SEXPRESSO_INCLUDE_DIR})
+	target_link_libraries(messagebox ${SEXPRESSO_LIBRARIES})
 endif()

@@ -69,51 +69,73 @@ size_t Tool::read(char* buffer, size_t size)
 
 Tool Tool::executeTool(const char* name, const char* input)
 {
-	MLOG_INFO("Executing " << name);
 	Tool t;
+
+	/*char buf[256];
+	GetCurrentDirectory(sizeof(buf), buf);
+	std::string exename(buf);
+	exename += "\\";
+	exename += name;
+	exename += ".exe";*/
+	MLOG_INFO("Executing " << name);
 
 	SECURITY_ATTRIBUTES saAttr;
 	saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
 	saAttr.bInheritHandle = TRUE;
 	saAttr.lpSecurityDescriptor = NULL;
 
+	HANDLE g_hChildStd_IN_Rd = NULL;
+	HANDLE g_hChildStd_IN_Wr = NULL;
+	HANDLE g_hChildStd_OUT_Rd = NULL;
+	HANDLE g_hChildStd_OUT_Wr = NULL;
+
 	HANDLE stdoutWr = 0, stdinRd = 0;
 
-	// STDOUT
-	if (!CreatePipe(&t.in, &stdoutWr, &saAttr, 0))
+	t.write(input, strlen(input));
+
+	// Create a pipe for the child process's STDOUT.
+
+	if (! CreatePipe(&g_hChildStd_OUT_Rd, &g_hChildStd_OUT_Wr, &saAttr, 0))
 	{
-		MLOG_ERROR("Could not open pipe!");
+		MLOG_ERROR("Could not create pipe!");
 		return Tool();
 	}
 
-	if (!SetHandleInformation(t.in, HANDLE_FLAG_INHERIT, 0))
+// Ensure the read handle to the pipe for STDOUT is not inherited.
+
+	if ( ! SetHandleInformation(g_hChildStd_OUT_Rd, HANDLE_FLAG_INHERIT, 0) )
 	{
-		MLOG_ERROR("Could not set handle information!");
+		MLOG_ERROR("Could not create pipe!");
 		return Tool();
 	}
 
-	// STDIN
-	if (!CreatePipe(&stdinRd, &t.out, &saAttr, 0))
+// Create a pipe for the child process's STDIN.
+
+	if (! CreatePipe(&g_hChildStd_IN_Rd, &g_hChildStd_IN_Wr, &saAttr, 0))
 	{
-		MLOG_ERROR("Could not open pipe!");
+		MLOG_ERROR("Could not create pipe!");
 		return Tool();
 	}
 
-	if (!SetHandleInformation(t.out, HANDLE_FLAG_INHERIT, 0))
+// Ensure the write handle to the pipe for STDIN is not inherited.
+
+	if ( ! SetHandleInformation(g_hChildStd_IN_Wr, HANDLE_FLAG_INHERIT, 0) )
 	{
-		MLOG_ERROR("Could not set handle information!");
+		MLOG_ERROR("Could not create pipe!");
 		return Tool();
 	}
+
+	t.out = g_hChildStd_IN_Wr;
+	t.in = g_hChildStd_OUT_Rd;
 
 	PROCESS_INFORMATION piProcInfo;
 	STARTUPINFO siStartInfo;
 
 	ZeroMemory(&piProcInfo, sizeof(PROCESS_INFORMATION));
-	
 	ZeroMemory(&siStartInfo, sizeof(STARTUPINFO));
 	siStartInfo.cb = sizeof(STARTUPINFO);
-	siStartInfo.hStdOutput = stdoutWr;
-	siStartInfo.hStdInput = stdinRd;
+	siStartInfo.hStdOutput = g_hChildStd_OUT_Wr;
+	siStartInfo.hStdInput = g_hChildStd_IN_Rd;
 	siStartInfo.dwFlags |= STARTF_USESTDHANDLES;
 
 	BOOL success = CreateProcess(NULL, (LPSTR) name, NULL, NULL, TRUE, 0, NULL, NULL, &siStartInfo, &piProcInfo);
@@ -124,11 +146,14 @@ Tool Tool::executeTool(const char* name, const char* input)
 		return Tool();
 	}
 
+	if(input)
+		t.write(input, strlen(input));
+
 	CloseHandle(piProcInfo.hProcess);
 	CloseHandle(piProcInfo.hThread);
 
-	CloseHandle(stdinRd);
-	CloseHandle(stdoutWr);
+	CloseHandle(g_hChildStd_OUT_Wr);
+	CloseHandle(g_hChildStd_IN_Rd);
 
 	t.m_isrunning = true;
 	return t;
@@ -136,14 +161,15 @@ Tool Tool::executeTool(const char* name, const char* input)
 
 size_t Tool::write(const char * buffer, size_t size)
 {
-	return size_t();
+	DWORD rbytes = 0;
+	WriteFile(out, buffer, size, &rbytes, NULL);
+	return rbytes; // (success) ? rbytes : 0;
 }
 
 size_t Tool::read(char * buffer, size_t size)
 {
 	DWORD rbytes = 0;
-	BOOL success = false;
-	success = ReadFile(in, buffer, size, &rbytes, NULL);
+	ReadFile(in, buffer, size, &rbytes, NULL);
 	return rbytes; // (success) ? rbytes : 0;
 }
 
@@ -157,6 +183,9 @@ std::string Tool::executeToolBlocking(const char* name, const char* input)
 	if (!t.isRunning())
 		return std::string();
 
+#ifdef WIN32
+	CloseHandle(t.out);
+#endif
 
 	char* buffer = new char[256];
 	while (t.read(buffer, 255))
@@ -178,6 +207,10 @@ std::string Tool::executeToolNonBlocking(const char* name, const char* input)
 
 	if (!t.isRunning())
 		return std::string();
+
+#ifdef WIN32
+	CloseHandle(t.out);
+#endif
 
 	std::atomic<bool> done(false);
 	std::thread inthrd([&ss, &t, &done] () {

@@ -427,7 +427,7 @@ LONG WINAPI windows_exception_handler(EXCEPTION_POINTERS* ExceptionInfo)
 
 	char signum[3];
 	snprintf(signum, 3, "%d", ExceptionInfo->ExceptionRecord->ExceptionCode);
-	std::string complete_text = "Catched signal " + string(signum) + "\n";
+	std::string complete_text = "Caught signal " + string(signum) + "\n";
 
 	complete_text += "\nSystem data:\n";
 

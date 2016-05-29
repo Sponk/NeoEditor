@@ -20,7 +20,7 @@ enum SCROLLBAR_DIRECTION
 /**
  * @brief Implements a basic scroll bar.
  */
-class NEO2D_EXPORT Scrollbar : public Widget, public std::enable_shared_from_this<Scrollbar>
+class NEO2D_EXPORT Scrollbar : public Widget
 {
 	float value;
 	Neo::Vector2 range;

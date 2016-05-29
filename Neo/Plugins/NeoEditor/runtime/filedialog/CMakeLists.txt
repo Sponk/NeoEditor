@@ -17,6 +17,10 @@ elseif(APPLE OR USE_GNUSTEP_RUNTIME)
 	include_directories(${SEXPRESSO_INCLUDE_DIR})
 	target_link_libraries(filedialog ${SEXPRESSO_LIBRARIES} objc gnustep-base gnustep-gui)
 elseif(WIN32)
+	add_executable(filedialog win32_main.cpp)
+
+	include_directories(${SEXPRESSO_INCLUDE_DIR})
+	target_link_libraries(filedialog ${SEXPRESSO_LIBRARIES})
 endif()
 
 
