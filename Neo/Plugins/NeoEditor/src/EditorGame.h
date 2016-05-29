@@ -118,6 +118,8 @@ public:
 	void addEntity();
 	void addText();
 
+	void deleteSelection();
+
 private:
 };
 

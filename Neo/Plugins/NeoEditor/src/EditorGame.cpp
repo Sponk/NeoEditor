@@ -323,6 +323,10 @@ void EditorGame::onBegin()
 		addCamera();
 	});
 
+	editmenu->addItem("Delete Selection", [this](Widget&, void*) {
+		deleteSelection();
+	});
+
 	helpmenu->addItem(tr("About"), [this](Widget&, void*) { m_toolset->aboutDialog(); });
 
 	m_menubar->addMenu(filemenu);
@@ -590,6 +594,10 @@ void EditorGame::onBegin()
 
 	m_keyboardShortcuts->addShortcut(Shortcut({KEY_3}, [this](void*){
 		m_sceneView->setHandleMode(ROTATION);
+	}, nullptr));
+
+	m_keyboardShortcuts->addShortcut(Shortcut({KEY_DELETE}, [this](void*){
+		deleteSelection();
 	}, nullptr));
 
 	m_keyboardShortcuts->addShortcut(Shortcut({WINDOW_SELECT}, [this](void*){
@@ -997,4 +1005,18 @@ void EditorGame::openNewLevel()
 
 	updated = false;
 	updateWindowTitle();
+}
+
+void EditorGame::deleteSelection()
+{
+	auto scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
+
+	for(auto v : m_sceneView->getSelection())
+		scene->deleteObject(v);
+
+	m_sceneView->getSelection().clear();
+	m_sceneView->updateOverlayScene();
+	updated = false;
+
+	m_undo.save();
 }
