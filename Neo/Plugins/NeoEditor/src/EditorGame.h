@@ -121,6 +121,9 @@ public:
 	void deleteSelection();
 	void duplicateSelection();
 
+	void undo();
+	void redo();
+
 private:
 };
 

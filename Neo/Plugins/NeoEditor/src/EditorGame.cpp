@@ -212,12 +212,7 @@ void EditorGame::onBegin()
 	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/edit-undo.png", m_toolbar);
 	toolbutton->setCallback(
 		[this](Widget&, void*) {
-			m_sceneView->clearSelection();
-
-			m_undo.undo();
-
-			m_sceneView->updateOverlayScene();
-			updateEntityTree();
+			undo();
 		},
 		nullptr);
 	m_toolbar->addWidget(toolbutton);
@@ -225,11 +220,7 @@ void EditorGame::onBegin()
 	toolbutton = make_shared<ImageButton>(0, 0, 32, 32, "data/icons/edit-redo.png", m_toolbar);
 	toolbutton->setCallback(
 		[this](Widget&, void*) {
-			m_sceneView->clearSelection();
-
-			m_undo.redo();
-			m_sceneView->updateOverlayScene();
-			updateEntityTree();
+			redo();
 		},
 		nullptr);
 
@@ -321,6 +312,14 @@ void EditorGame::onBegin()
 
 	editmenu->addItem("/Create/Camera", [this](Widget&, void*) {
 		addCamera();
+	});
+
+	editmenu->addItem("Undo", [this](Widget&, void*) {
+		undo();
+	});
+
+	editmenu->addItem("Redo", [this](Widget&, void*) {
+		redo();
 	});
 
 	editmenu->addItem("Duplicate Selection", [this](Widget&, void*) {
@@ -606,6 +605,14 @@ void EditorGame::onBegin()
 
 	m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_D}, [this](void*){
 		duplicateSelection();
+	}, nullptr));
+
+	m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_Z}, [this](void*){
+		undo();
+	}, nullptr));
+
+	m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_LSHIFT, KEY_Z}, [this](void*){
+		redo();
 	}, nullptr));
 
 	m_keyboardShortcuts->addShortcut(Shortcut({WINDOW_SELECT}, [this](void*){
@@ -1072,4 +1079,20 @@ void EditorGame::duplicateSelection()
 
 	updated = false;
 	m_sceneView->updateOverlayScene();
+}
+
+void EditorGame::undo()
+{
+	m_sceneView->clearSelection();
+	m_undo.undo();
+	m_sceneView->updateOverlayScene();
+	updateEntityTree();
+}
+
+void EditorGame::redo()
+{
+	m_sceneView->clearSelection();
+	m_undo.redo();
+	m_sceneView->updateOverlayScene();
+	updateEntityTree();
 }
