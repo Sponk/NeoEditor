@@ -18,6 +18,7 @@
 #include "Sidepanel.h"
 #include "SceneView.h"
 #include "UndoQueue.h"
+#include "ColorEdit.h"
 
 #include <sexpresso.hpp>
 #include <KeyboardShortcuts.h>
@@ -48,6 +49,7 @@ class EditorGame : public Neo::SubGame
 	shared_ptr<Vector3Edit> m_rotationEdit;
 	shared_ptr<Vector3Edit> m_scaleEdit;
 
+	shared_ptr<ColorEdit> m_lightColorButton;
 	shared_ptr<Vector3Edit> m_lightColorEdit;
 	shared_ptr<Neo2D::Gui::EditField> m_lightIntensityEdit;
 	shared_ptr<Neo2D::Gui::EditField> m_lightRadiusEdit;

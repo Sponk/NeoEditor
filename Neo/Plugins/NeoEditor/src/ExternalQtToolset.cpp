@@ -32,3 +32,20 @@ void ExternalQtToolset::aboutDialog()
 {
 	messagebox("About", "This is the Neo Scene Editor experience v0.5.1a. This program is distributed under the terms and conditions of the GNU LGPL.");
 }
+
+Neo::Vector4 ExternalQtToolset::colorDialog(const Neo::Vector4& start)
+{
+	std::stringstream ss;
+	ss << "(color " << start.x << " " << start.y << " " << start.z << " " << start.w << ")";
+
+	auto result = sexpresso::parse(Tool::executeToolNonBlocking("colorpicker", ss.str().c_str()));
+	auto comp = result.getChildByPath("color")->arguments().begin();
+
+	Neo::Vector4 retval;
+	retval.x = stof(comp->value.str);
+	retval.y = stof((++comp)->value.str);
+	retval.z = stof((++comp)->value.str);
+	retval.w = stof((++comp)->value.str);
+
+	return retval;
+}

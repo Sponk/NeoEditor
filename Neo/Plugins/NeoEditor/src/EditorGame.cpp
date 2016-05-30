@@ -123,6 +123,23 @@ using namespace Gui;
 			btn->setCallback(callback, nullptr);                          \
 	}
 
+#define MAKE_COLOR3_BUTTON(str, width, edit, ui, type, setter)                    \
+	{ \
+			ui->addWidget(                                                \
+			edit = make_shared<ColorEdit>(0, 0, width, 20, tr(str), ui, m_toolset)); \
+		edit->setCallback(                                                \
+			[this](Widget& w, void* d) {                                  \
+				if (!m_sceneView->getSelection().size())                  \
+					return;                                               \
+																		  \
+				m_undo.save();                                            \
+				static_cast<type*>(m_sceneView->getSelection().back())    \
+					->setter(Vector3(edit->getColor()));                           \
+			},                                                            \
+			nullptr);                                                     \
+	}
+
+
 std::string findName(const char* name, Scene* scene)
 {
 	std::string base(name);
@@ -491,6 +508,9 @@ void EditorGame::onBegin()
 			});*/
 
 			// Light UI
+
+			MAKE_COLOR3_BUTTON("", width, m_lightColorButton, m_lightUi, OLight, setColor);
+
 			MAKE_3D_EDIT_FIELD("Color:", width, m_lightColorEdit, m_lightUi, OLight, setColor);
 			MAKE_FLOAT_EDIT_FIELD("Intensity:", width, m_lightIntensityEdit, m_lightUi, OLight, setIntensity);
 			MAKE_FLOAT_EDIT_FIELD("Radius:", width, m_lightRadiusEdit, m_lightUi, OLight, setRadius);
@@ -702,6 +722,7 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 		m_lightUi->setInvisible(false);
 
 		OLight* light = static_cast<OLight*>(object);
+		m_lightColorButton->setColor(light->getColor());
 		m_lightColorEdit->setVector(light->getColor());
 		m_lightIntensityEdit->setLabel(std::to_string(light->getIntensity()).c_str());
 		m_lightRadiusEdit->setLabel(std::to_string(light->getRadius()).c_str());

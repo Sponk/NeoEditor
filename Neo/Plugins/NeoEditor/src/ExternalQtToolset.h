@@ -16,6 +16,7 @@ public:
 
 	virtual void messagebox(const char* title, const char* message);
 	virtual void aboutDialog();
+	virtual Neo::Vector4 colorDialog(const Neo::Vector4& start);
 };
 
 #endif //NEO_QTTOOLSET_H
