@@ -266,7 +266,7 @@ public:
 		m_scrollValue = scrollValue;
 	}
 
-	virtual void flush() override
+	virtual void flush()
 	{
 		InputDevice::flush();
 	}
