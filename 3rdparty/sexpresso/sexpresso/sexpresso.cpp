@@ -127,7 +127,7 @@ static auto toStringImpl(Sexp const& sexp, std::stringstream& ostream) -> void {
 }
 
 auto Sexp::toString() const -> std::string {
-	auto ostream = std::stringstream{};
+	std::stringstream ostream;
 	// outer sexp does not get surrounded by ()
 	switch(this->kind) {
 		case SexpValueKind::STRING:
