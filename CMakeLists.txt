@@ -32,6 +32,11 @@ ENDIF()
 FIND_PACKAGE(SWIG)
 FIND_PACKAGE(Mono)
 
+set(Java_FOUND FALSE)
+find_package(JNI)
+find_package(Java)
+include(UseJava)
+
 IF(NOT ${FORCE_LOCAL_SDL})
 	INCLUDE(FindSDL2)
 ENDIF()

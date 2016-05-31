@@ -1,14 +1,6 @@
 
 SET(CMAKE_SHARED_LIBRARY_PREFIX "")
 
-find_package(JNI)
-find_package(Java)
-include(UseJava)
-
-if(${Java_FOUND} STREQUAL "")
-set(Java_FOUND FALSE)
-endif()
-
 INCLUDE_DIRECTORIES(
   ${NEO_CORE_INCLUDE_DIR}
   ${NEO_ENGINE_INCLUDE_DIR}
