@@ -18,13 +18,15 @@ target_link_libraries(NeoEditor
 )
 
 
-IF(NOT NO_TESTS)
-	ADD_EXECUTABLE(NeoEditorTest tests/main.cpp tests/UndoQueueTest.cpp src/UndoQueue.cpp)
-	TARGET_LINK_LIBRARIES(NeoEditorTest ${NEO_CORE_LIBRARIES} ${NEO_ENGINE_LIBRARIES} ${GTEST_LIBRARIES})
-ENDIF()
+if(NOT NO_TESTS)
+	add_executable(NeoEditorTest tests/main.cpp tests/UndoQueueTest.cpp src/UndoQueue.cpp)
+	target_link_libraries(NeoEditorTest ${NEO_CORE_LIBRARIES} ${NEO_ENGINE_LIBRARIES} ${GTEST_LIBRARIES})
+endif()
 
 add_subdirectory(libproject)
 add_subdirectory(runtime)
 
+install(TARGETS NeoEditor DESTINATION ${NEO_INSTALL_DIR})
 install(DIRECTORY data DESTINATION ${NEO_INSTALL_DIR})
+install(FILES plugins.cfg default.ttf DESTINATION ${NEO_INSTALL_DIR}/assets)
 copy_files("data/*" "${NEO_BINARY_OUTPUT}" "copy-editor-data")

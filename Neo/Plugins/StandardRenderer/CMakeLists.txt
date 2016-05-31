@@ -19,4 +19,8 @@ add_definitions(-DSHADER_PATH="assets/shaders" -DGL_DEBUG)
 copy_files("*.vert" "${NEO_BINARY_OUTPUT}/assets/shaders" "copy-vert-shaders")
 copy_files("*.frag" "${NEO_BINARY_OUTPUT}/assets/shaders" "copy-frag-shaders")
 
-install(FILES ${VERT_SHADERS} ${FRAG_SHADERS} DESTINATION ${NEO_INSTALL_DIR}/assets/shaders/Renderers)
+file(GLOB VERT_SHADERS *.vert)
+file(GLOB FRAG_SHADERS *.frag)
+
+install(TARGETS StandardRenderer DESTINATION ${NEO_INSTALL_DIR})
+install(FILES ${VERT_SHADERS} ${FRAG_SHADERS} DESTINATION ${NEO_INSTALL_DIR}/assets/shaders)

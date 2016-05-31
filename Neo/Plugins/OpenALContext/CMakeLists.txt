@@ -12,3 +12,5 @@ target_link_libraries(OpenALContext
 		${NEO_ENGINE_LIBRARIES}
 		${OPENAL_LIBRARIES}
 )
+
+install(TARGETS OpenALContext DESTINATION ${NEO_INSTALL_DIR})

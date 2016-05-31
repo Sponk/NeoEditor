@@ -24,3 +24,5 @@ elseif(WIN32)
 	include_directories(${SEXPRESSO_INCLUDE_DIR})
 	target_link_libraries(colorpicker ${SEXPRESSO_LIBRARIES})
 endif()
+
+install(TARGETS colorpicker DESTINATION ${NEO_INSTALL_DIR})

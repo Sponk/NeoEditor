@@ -12,3 +12,5 @@ target_link_libraries(SDLGame
 		${NEO_ENGINE_LIBRARIES}
 		${SDL_LIBRARIES}
 )
+
+install(TARGETS SDLGame DESTINATION ${NEO_INSTALL_DIR})

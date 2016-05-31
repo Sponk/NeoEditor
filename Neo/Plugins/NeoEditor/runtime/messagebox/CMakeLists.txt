@@ -24,3 +24,5 @@ elseif(WIN32)
 	include_directories(${SEXPRESSO_INCLUDE_DIR})
 	target_link_libraries(messagebox ${SEXPRESSO_LIBRARIES})
 endif()
+
+install(TARGETS messagebox DESTINATION ${NEO_INSTALL_DIR})

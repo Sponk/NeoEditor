@@ -17,3 +17,5 @@ target_link_libraries( NeoPlayer2
 	${SEXPRESSO_LIBRARIES}
 	${NEO_IMAGEHELP}
 )
+
+install(TARGETS NeoPlayer2 DESTINATION ${NEO_INSTALL_DIR})

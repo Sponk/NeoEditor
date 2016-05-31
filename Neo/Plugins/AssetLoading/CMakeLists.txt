@@ -49,3 +49,5 @@ target_link_libraries( AssetLoading
 		${TINYXML_LIBRARIES}
 		${ZLIB_LIBRARIES}
 )
+
+install(TARGETS AssetLoading DESTINATION ${NEO_INSTALL_DIR})

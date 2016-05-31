@@ -13,3 +13,5 @@ target_link_libraries(GL4Context
 		${OPENGL_LIBRARIES}
 		${GLEW_LIBRARIES}
 )
+
+install(TARGETS GL4Context DESTINATION ${NEO_INSTALL_DIR})

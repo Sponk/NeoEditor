@@ -14,3 +14,5 @@ target_link_libraries(CommonBehaviors
 		${NEO_CORE_LIBRARIES}
 		${NEO_ENGINE_LIBRARIES}
 )
+
+install(TARGETS CommonBehaviors DESTINATION ${NEO_INSTALL_DIR})

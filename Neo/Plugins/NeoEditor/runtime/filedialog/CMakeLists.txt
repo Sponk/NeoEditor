@@ -23,4 +23,7 @@ elseif(WIN32)
 	target_link_libraries(filedialog ${SEXPRESSO_LIBRARIES})
 endif()
 
+install(TARGETS filedialog DESTINATION ${NEO_INSTALL_DIR})
+
+
 

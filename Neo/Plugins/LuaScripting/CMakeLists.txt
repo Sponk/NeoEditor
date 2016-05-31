@@ -12,3 +12,5 @@ target_link_libraries( LuaScripting
 		${NEO_ENGINE_LIBRARIES}
 		${LUA_LIBRARIES}
 )
+
+install(TARGETS LuaScripting DESTINATION ${NEO_INSTALL_DIR})

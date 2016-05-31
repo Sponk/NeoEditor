@@ -50,13 +50,24 @@ ENDIF()
 IF(WIN32)
 	set(SWIG_EXECUTABLE ${CMAKE_BINARY_DIR}/swigwin-3.0.8/swig.exe)
 	IF(NOT SWIG_FOUND AND NOT EXISTS ${SWIG_EXECUTABLE})
-		set(SWIG_PACKAGE ${CMAKE_BINARY_DIR}/swig.zip)
-	    file(DOWNLOAD http://downloads.sourceforge.net/project/swig/swigwin/swigwin-3.0.8/swigwin-3.0.8.zip ${SWIG_PACKAGE} SHOW_PROGRESS)
-				
-		execute_process(COMMAND
-			${CMAKE_COMMAND} -E tar "xf" ${SWIG_PACKAGE} --format=zip)
-	ENDIF()
-	set(SWIG_FOUND TRUE)
+      set(SWIG_PACKAGE ${CMAKE_BINARY_DIR}/swig.zip)
+      file(DOWNLOAD http://downloads.sourceforge.net/project/swig/swigwin/swigwin-3.0.8/swigwin-3.0.8.zip ${SWIG_PACKAGE} SHOW_PROGRESS)
+
+      execute_process(COMMAND
+              ${CMAKE_COMMAND} -E tar "xf" ${SWIG_PACKAGE} --format=zip)
+    ENDIF()
+
+    set(DOXYGEN_EXECUTABLE ${CMAKE_BINARY_DIR}/doxygen.exe)
+    IF(NOT DOXYGEN_FOUND AND NOT EXISTS ${DOXYGEN_EXECUTABLE})
+      set(DOXYGEN_PACKAGE ${CMAKE_BINARY_DIR}/doxygen.zip)
+      file(DOWNLOAD ftp://ftp.stack.nl/pub/users/dimitri/doxygen-1.8.11.windows.bin.zip ${DOXYGEN_PACKAGE} SHOW_PROGRESS)
+
+      execute_process(COMMAND
+              ${CMAKE_COMMAND} -E tar "xf" ${DOXYGEN_PACKAGE} --format=zip)
+    ENDIF()
+
+    set(SWIG_FOUND TRUE)
+    set(DOXYGEN_FOUND TRUE)
 ENDIF()
 
 ## Set version and info
@@ -101,10 +112,10 @@ ENDIF()
 
 SET(CPACK_PACKAGE_VENDOR "${NEO_VENDOR}")
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Neo game engine and editor.")
-SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
-SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
-SET(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
-SET(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/Data/neo-icon.png")
+SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README.md")
+SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
+SET(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
+SET(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/Data/neo-icon.png")
 SET(CPACK_PACKAGE_VERSION_MAJOR "${NEO_MAJOR_VERSION}")
 SET(CPACK_PACKAGE_VERSION_MINOR "${NEO_MINOR_VERSION}")
 SET(CPACK_PACKAGE_VERSION_PATCH "${NEO_PATCH_VERSION}")
@@ -190,10 +201,15 @@ IF(WIN32)
   SET(ZLIB_LIBRARY "zlib")
   SET(NEO_BUILD_FLAGS "")
 
+  ## NSIS does not like png's
   SET(CPACK_PACKAGE_ICON "")
-  SET(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\NeoEditor.lnk' '\$INSTDIR\\\\Neo\\\\NeoEditor.exe'
-								CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\ProjectManager.lnk' '\$INSTDIR\\\\Neo\\\\ProjectManager.exe'
-								CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\NeoStore.lnk' '\$INSTDIR\\\\Neo\\\\NeoStore.exe'")
+  SET(CPACK_NSIS_MENU_LINKS "Neo/NeoPlayer2.exe" "Neo Editor"
+          "Neo/docs/SDK/html/index.html" "Neo Documentation")
+  SET( CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+
+  #SET(CPACK_NSIS_CREATE_ICONS "CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\NeoEditor.lnk' '\$INSTDIR\\\\Neo\\\\NeoPlayer2.exe'
+#								CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\ProjectManager.lnk' '\$INSTDIR\\\\Neo\\\\ProjectManager.exe'
+#								CreateShortCut '\$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\NeoStore.lnk' '\$INSTDIR\\\\Neo\\\\NeoStore.exe'")
 
   SET(CPACK_GENERATOR "NSIS;ZIP")
 ENDIF(WIN32)
@@ -345,9 +361,6 @@ IF(EMSCRIPTEN)
   SET(DISABLE_PIC_EXECUTABLES ON)
 ENDIF()
 
-# Include cpack after all system specifics
-INCLUDE(CPack)
-
 ## Set up 3rd party dependencies
 SET(ASSIMP_INCLUDE_DIR ${NEO_SOURCE_DIR}/3rdparty/assimp/include)
 SET(BULLET_INCLUDE_DIR ${NEO_SOURCE_DIR}/3rdparty/bullet)
@@ -484,3 +497,10 @@ INSTALL(FILES
   LICENSE
   README.md
   DESTINATION ${NEO_INSTALL_DIR})
+
+set(CPACK_COMPONENTS_ALL documentation sdk)
+set(CPACK_COMPONENT_DOCUMENTATION_DISPLAY_NAME "SDK Documentation")
+set(CPACK_COMPONENT_SDK_DISPLAY_NAME "C++ SDK")
+
+# Include cpack after all system specifics
+INCLUDE(CPack)

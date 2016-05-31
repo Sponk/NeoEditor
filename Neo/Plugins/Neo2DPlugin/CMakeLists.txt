@@ -19,3 +19,5 @@ target_link_libraries(Neo2DPlugin
 		${NEO2D_LIBRARIES}
 		${LUA_LIBRARIES}
 )
+
+install(TARGETS Neo2DPlugin DESTINATION ${NEO_INSTALL_DIR})
