@@ -26,11 +26,12 @@ addons:
       - libgtk-3-dev
       - fakeroot
       - swig
-      # - qtbase5-dev
-      # - qtdeclarative5-dev
+      - qt5-qmake
+      - qtbase5-dev
+      - qtdeclarative5-dev
       # - libqt5webkit5-dev
       # - libsqlite3-dev
-      # - qt5-default
+      - qt5-default
       # - qttools5-dev-tools
       # - wput
 
