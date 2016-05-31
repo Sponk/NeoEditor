@@ -1,0 +1,12 @@
+stages:
+  - build
+  - test
+
+before_script: 
+  - "git checkout development && git fetch --tags && export VERSION=$(git describe --tags --always) && echo Building version: $VERSION"
+
+build_job:
+  stage: build
+  script:
+  - mkdir ./build && cd ./build && cmake ../ -DNEO_VERSION_STRING="\"$VERSION\"" && make -j2 package
+
