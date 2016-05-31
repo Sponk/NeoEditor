@@ -3,7 +3,7 @@ stages:
   - test
 
 before_script: 
-  - "git checkout development && git fetch --tags && export VERSION=$(git describe --tags --always) && echo Building version: $VERSION"
+  - "export VERSION=$(git describe --tags --always) && echo Building version: $VERSION"
 
 build_job:
   stage: build
