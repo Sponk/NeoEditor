@@ -5,6 +5,10 @@ find_package(JNI)
 find_package(Java)
 include(UseJava)
 
+if(${Java_FOUND} STREQUAL "")
+set(Java_FOUND FALSE)
+endif()
+
 INCLUDE_DIRECTORIES(
   ${NEO_CORE_INCLUDE_DIR}
   ${NEO_ENGINE_INCLUDE_DIR}
@@ -61,6 +65,9 @@ IF(${SWIG_FOUND})
 
 	  FILE(GLOB JAVA_SOURCES ${JAVA_OUTPUT}/*.java)
 	  ADD_JAR(NeoCoreJava ${JAVA_SOURCES})
+
+	  add_dependencies(NeoCoreJava neo-core-java-swig)
+	  add_dependencies(libNeoCoreJava neo-core-java-swig)
 
 	  INSTALL(TARGETS libNeoCoreJava DESTINATION ${NEO_INSTALL_DIR})
 	  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/NeoCoreJava.jar DESTINATION ${NEO_INSTALL_DIR})
