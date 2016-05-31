@@ -1,17 +1,20 @@
 language: cpp
-sudo: false
+# sudo: false
+
+sudo: required
+dist: trusty
 
 addons:
   apt:
     sources:
-      - ubuntu-toolchain-r-test
+      # - ubuntu-toolchain-r-test
       # - ubuntu-sdk-team
 
     packages:
       - cmake
       - time
-      - g++-5
-      - gcc-5
+      #- g++-5
+      #- gcc-5
       - libx11-dev
       - libogg-dev
       - libxft-dev
@@ -31,8 +34,8 @@ addons:
       # - qttools5-dev-tools
       # - wput
 
-install:
-    - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
+#install:
+#    - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
 
 branches:
   only:
