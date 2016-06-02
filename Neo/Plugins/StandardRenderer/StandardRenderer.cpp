@@ -378,7 +378,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh,
 		render->disableBlending();
 	}
 
-	float shininess = material->getShininess();
+	float shininess = sqrt(2.0f/(1.25f*material->getShininess()));
 	render->sendUniformFloat(m_fx[0], "Shininess", &shininess);
 	render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
 
