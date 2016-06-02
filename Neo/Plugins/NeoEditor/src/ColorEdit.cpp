@@ -34,5 +34,5 @@ void ColorEdit::draw(const Neo::Vector2& offset)
 	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 	Neo::Renderer* render = engine->getRenderer();
 
-	render->drawColoredQuad(getPosition(), getSize(), m_color, 0);
+	render->drawColoredQuad(getPosition() + Neo::Vector2(3,3), getSize() - Neo::Vector2(6,6), m_color, 0);
 }
