@@ -65,7 +65,9 @@ class EditorGame : public Neo::SubGame
 	shared_ptr<Neo2D::Gui::EditField> m_cameraNearPlaneEdit;
 	shared_ptr<Neo2D::Gui::EditField> m_cameraFogDistanceEdit;
 	shared_ptr<Neo2D::Gui::EditField> m_cameraFovEdit;
+	shared_ptr<ColorEdit> m_cameraFogColorButton;
 	shared_ptr<Vector3Edit> m_cameraFogColorEdit;
+	shared_ptr<ColorEdit> m_cameraClearColorButton;
 	shared_ptr<Vector3Edit> m_cameraClearColorEdit;
 	shared_ptr<Neo2D::Gui::CheckButton> m_cameraFogButton;
 	shared_ptr<Neo2D::Gui::CheckButton> m_cameraOrthoButton;
@@ -80,6 +82,7 @@ class EditorGame : public Neo::SubGame
 
 	shared_ptr<Neo2D::Gui::EditField> m_textTextEdit;
 	shared_ptr<Neo2D::Gui::EditField> m_textSizeEdit;
+	shared_ptr<ColorEdit> m_textColorButton;
 	shared_ptr<Vector4Edit> m_textColorEdit;
 		
 	shared_ptr<Neo2D::Gui::CheckButton> m_entityInvisibleButton;

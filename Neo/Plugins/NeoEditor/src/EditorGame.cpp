@@ -516,7 +516,6 @@ void EditorGame::onBegin()
 			// Light UI
 
 			MAKE_COLOR3_BUTTON("", width, m_lightColorButton, m_lightUi, OLight, setColor);
-
 			MAKE_3D_EDIT_FIELD("Color:", width, m_lightColorEdit, m_lightUi, OLight, setColor);
 			MAKE_FLOAT_EDIT_FIELD("Intensity:", width, m_lightIntensityEdit, m_lightUi, OLight, setIntensity);
 			MAKE_FLOAT_EDIT_FIELD("Radius:", width, m_lightRadiusEdit, m_lightUi, OLight, setRadius);
@@ -535,7 +534,9 @@ void EditorGame::onBegin()
 			MAKE_CHECK_BUTTON("Ortho", m_cameraOrthoButton, m_cameraUi, OCamera, enableOrtho);
 			MAKE_CHECK_BUTTON("Fog", m_cameraFogButton, m_cameraUi, OCamera, enableFog);
 			MAKE_FLOAT_EDIT_FIELD("Fog Distance:", width, m_cameraFogDistanceEdit, m_cameraUi, OCamera, setFogDistance);
+			MAKE_COLOR3_BUTTON("", width, m_cameraFogColorButton, m_cameraUi, OCamera, setFogColor);
 			MAKE_3D_EDIT_FIELD("Fog Color:", width, m_cameraFogColorEdit, m_cameraUi, OCamera, setFogColor);
+			MAKE_COLOR3_BUTTON("", width, m_cameraClearColorButton, m_cameraUi, OCamera, setClearColor);
 			MAKE_3D_EDIT_FIELD("Clear Color:", width, m_cameraClearColorEdit, m_cameraUi, OCamera, setClearColor);
 			m_cameraUi->updateLayout();
 
@@ -559,6 +560,7 @@ void EditorGame::onBegin()
 			// Text UI
 			MAKE_STRING_EDIT_FIELD("Text:", width, m_textTextEdit, m_textUi, OText, setText);
 			MAKE_FLOAT_EDIT_FIELD("Size:", width, m_textSizeEdit, m_textUi, OText, setSize);
+			MAKE_COLOR3_BUTTON("", width, m_textColorButton, m_textUi, OText, setColor);
 			MAKE_4D_EDIT_FIELD("Color:", width, m_textColorEdit, m_textUi, OText, setColor);
 			m_textUi->updateLayout();
 	}
@@ -756,9 +758,11 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 		m_cameraFogButton->setValue(cam->hasFog());
 		m_cameraOrthoButton->setValue(cam->isOrtho());
 		m_cameraClearColorEdit->setVector(cam->getClearColor());
+		m_cameraFogColorButton->setColor(cam->getFogColor());
 		m_cameraFogColorEdit->setVector(cam->getFogColor());
 		m_cameraFogDistanceEdit->setLabel(std::to_string(cam->getFogDistance()).c_str());
-		
+		m_cameraClearColorEdit->setVector(cam->getClearColor());
+		m_cameraClearColorButton->setColor(cam->getClearColor());
 	}
 	break;
 	
@@ -783,6 +787,7 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 		OText* text = static_cast<OText*>(object);
 		m_textTextEdit->setLabel(text->getText());
 		m_textColorEdit->setVector(text->getColor());
+		m_textColorButton->setColor(text->getColor());
 		m_textSizeEdit->setLabel(std::to_string(text->getSize()).c_str());
 	}
 	break;
