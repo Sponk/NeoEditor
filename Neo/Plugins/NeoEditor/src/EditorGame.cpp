@@ -79,6 +79,7 @@ using namespace Gui;
 				m_undo.save();                                            \
 				static_cast<type*>(m_sceneView->getSelection().back())    \
 					->setter(edit->getVector());				\
+				updateSelectedObject(m_sceneView->getSelection().back()); \
 			},                                                            \
 			nullptr);                                                     \
 	}
@@ -96,6 +97,7 @@ using namespace Gui;
 				m_undo.save();                                            \
 				static_cast<type*>(m_sceneView->getSelection().back())    \
 					->setter(edit->getVector());				\
+				updateSelectedObject(m_sceneView->getSelection().back()); \
 			},                                                            \
 			nullptr);                                                     \
 	}
@@ -135,6 +137,8 @@ using namespace Gui;
 				m_undo.save();                                            \
 				static_cast<type*>(m_sceneView->getSelection().back())    \
 					->setter(Vector3(edit->getColor()));                           \
+\
+				updateSelectedObject(m_sceneView->getSelection().back()); \
 			},                                                            \
 			nullptr);                                                     \
 	}
@@ -481,6 +485,8 @@ void EditorGame::onBegin()
 					m_sceneView->getSelection().back()->setScale(m_scaleEdit->getVector());
 				}, nullptr);
 
+			rightscroll->updateLayout();
+
 			// Hide UI initially
 			m_entityUi->setActive(false);
 			m_entityUi->setInvisible(true);
@@ -520,6 +526,7 @@ void EditorGame::onBegin()
 			MAKE_FLOAT_EDIT_FIELD("Shadow Quality:", width, m_lightShadowQualityEdit, m_lightUi, OLight, setShadowQuality);
 			MAKE_FLOAT_EDIT_FIELD("Shadow Bias:", width, m_lightShadowBiasEdit, m_lightUi, OLight, setShadowBias);
 			MAKE_FLOAT_EDIT_FIELD("Shadow Blur:", width, m_lightShadowBlurEdit, m_lightUi, OLight, setShadowBlur);
+			m_lightUi->updateLayout();
 
 			// Camera UI
 			MAKE_FLOAT_EDIT_FIELD("Near Plane:", width, m_cameraNearPlaneEdit, m_cameraUi, OCamera, setClippingNear);
@@ -530,6 +537,7 @@ void EditorGame::onBegin()
 			MAKE_FLOAT_EDIT_FIELD("Fog Distance:", width, m_cameraFogDistanceEdit, m_cameraUi, OCamera, setFogDistance);
 			MAKE_3D_EDIT_FIELD("Fog Color:", width, m_cameraFogColorEdit, m_cameraUi, OCamera, setFogColor);
 			MAKE_3D_EDIT_FIELD("Clear Color:", width, m_cameraClearColorEdit, m_cameraUi, OCamera, setClearColor);
+			m_cameraUi->updateLayout();
 
 			// Sound UI
 			MAKE_FLOAT_EDIT_FIELD("Gain:", width, m_soundGainEdit, m_soundUi, OSound, setGain);
@@ -546,11 +554,13 @@ void EditorGame::onBegin()
 				if(snd->isPlaying()) snd->stop();
 				else snd->play();
 			});
+			m_soundUi->updateLayout();
 
 			// Text UI
 			MAKE_STRING_EDIT_FIELD("Text:", width, m_textTextEdit, m_textUi, OText, setText);
 			MAKE_FLOAT_EDIT_FIELD("Size:", width, m_textSizeEdit, m_textUi, OText, setSize);
 			MAKE_4D_EDIT_FIELD("Color:", width, m_textColorEdit, m_textUi, OText, setColor);
+			m_textUi->updateLayout();
 	}
 
 	// Left panel
