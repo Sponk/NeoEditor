@@ -3,7 +3,7 @@
 
 #include "NativeToolset.h"
 
-class ExternalQtToolset : public NativeToolset
+class ExternalToolset: public NativeToolset
 {
 public:
 

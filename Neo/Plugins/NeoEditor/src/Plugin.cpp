@@ -9,9 +9,9 @@
 
 #include <NeoEngine.h>
 #include "EditorGame.h"
-#include "ExternalQtToolset.h"
+#include "ExternalToolset.h"
 
-EditorGame g_editorGame(make_shared<ExternalQtToolset>());
+EditorGame g_editorGame(make_shared<ExternalToolset>());
 
 void StartPlugin()
 {

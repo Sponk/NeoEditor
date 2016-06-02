@@ -1,4 +1,4 @@
-#include "ExternalQtToolset.h"
+#include "ExternalToolset.h"
 #include "Tool.h"
 #include <NeoEngine.h>
 
@@ -6,7 +6,7 @@
 #include <sexpresso.hpp>
 #include <sstream>
 
-std::string ExternalQtToolset::fileDialog(const char* message,
+std::string ExternalToolset::fileDialog(const char* message,
 										  const char* start,
 										  const char* filetypes,
 										  bool save,
@@ -21,19 +21,19 @@ std::string ExternalQtToolset::fileDialog(const char* message,
 }
 
 
-void ExternalQtToolset::messagebox(const char* title, const char* message)
+void ExternalToolset::messagebox(const char* title, const char* message)
 {
 	std::stringstream ss;
 	ss << "(title \"" << title << "\")(text \"" << message << "\")";
 	Tool::executeToolNonBlocking("messagebox", ss.str().c_str());
 }
 
-void ExternalQtToolset::aboutDialog()
+void ExternalToolset::aboutDialog()
 {
 	messagebox("About", "This is the Neo Scene Editor experience v0.5.1a. This program is distributed under the terms and conditions of the GNU LGPL.");
 }
 
-Neo::Vector4 ExternalQtToolset::colorDialog(const Neo::Vector4& start)
+Neo::Vector4 ExternalToolset::colorDialog(const Neo::Vector4& start)
 {
 	std::stringstream ss;
 	ss << "(color " << start.x << " " << start.y << " " << start.z << " " << start.w << ")";
