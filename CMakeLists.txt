@@ -488,8 +488,14 @@ IF(ANDROID)
 ENDIF()
 
 ## Enable tests
-#enable_testing()
-#add_test(NeoTest ${NEO_BINARY_OUTPUT}/TestSDK)
+IF(NOT NO_TESTS)
+  enable_testing()
+  add_test(NAME Neo2D_test COMMAND Neo2DTest)
+  add_test(NAME NeoEngine_test COMMAND NeoEngineTest)
+  add_test(NAME NeoCore_test COMMAND NeoCoreTest)
+  add_test(NAME AssetLoading_test COMMAND AssetLoadingTest)
+  add_test(NAME NeoEditor_test COMMAND NeoEditorTest)
+ENDIF()
 
 ## Install files
 INSTALL(FILES

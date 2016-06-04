@@ -8,5 +8,5 @@ before_script:
 build_job:
   stage: build
   script:
-  - mkdir ./build && cd ./build && cmake ../ -DNEO_VERSION_STRING="\"$VERSION\"" && make -j2 package
+  - mkdir ./build && cd ./build && cmake ../ -DNEO_VERSION_STRING="\"$VERSION\"" && make -j2 test && make -j2 package
 
