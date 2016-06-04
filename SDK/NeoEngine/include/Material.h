@@ -147,6 +147,14 @@ private:
 	TexturePass **m_texturesPass;
 
 public:
+
+	/**
+	 * @brief Resets the texture pass counter.
+	 *
+	 * @warning This can produce memory leaks when used in the wrong context!
+	 */
+	void resetTexturesPassNumber() { m_texturesPassNumber = 0; }
+
 	/**
 	 * @brief Sets the type of the material.
 	 * @param type The type value.

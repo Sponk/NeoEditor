@@ -1,10 +1,9 @@
 #include "ExternalToolset.h"
 #include "Tool.h"
-#include <NeoEngine.h>
+#include <Translator.h>
 
 #define SEXPRESSO_OPT_OUT_PIKESTYLE
 #include <sexpresso.hpp>
-#include <sstream>
 
 std::string ExternalToolset::fileDialog(const char* message,
 										  const char* start,
@@ -30,7 +29,7 @@ void ExternalToolset::messagebox(const char* title, const char* message)
 
 void ExternalToolset::aboutDialog()
 {
-	messagebox("About", "This is the Neo Scene Editor experience v0.5.1a. This program is distributed under the terms and conditions of the GNU LGPL.");
+	messagebox(tr("About"), tr("This is the Neo Scene Editor experience v0.5.1a. This program is distributed under the terms and conditions of the GNU LGPL."));
 }
 
 Neo::Vector4 ExternalToolset::colorDialog(const Neo::Vector4& start)

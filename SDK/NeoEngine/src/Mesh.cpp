@@ -335,7 +335,7 @@ bool SubMesh::hasTransparency(void)
 }
 
 
-// MMesh
+// Mesh
 Mesh::Mesh(void):
 
 m_animsRangesNumber(0),

@@ -15,6 +15,9 @@ add_library(AssetLoading SHARED
     LevelLoad.cpp
     MeshLoad.cpp
 
+	LispLevelLoad.cpp
+	LispLevelSave.cpp
+
     LevelSave.cpp
     MeshSave.cpp
     ImageSaver.cpp
@@ -34,9 +37,10 @@ include_directories(
 		${OGG_INCLUDE_DIR}
 		${TINYXML_INCLUDE_DIR}
 		${ZLIB_INCLUDE_DIR}
+		${SEXPRESSO_INCLUDE_DIR}
 )
 
-target_link_libraries( AssetLoading
+target_link_libraries(AssetLoading
 		${NEO_CORE_LIBRARIES}
 		${NEO_ENGINE_LIBRARIES}
 
@@ -48,6 +52,12 @@ target_link_libraries( AssetLoading
 		${OGG_LIBRARIES}
 		${TINYXML_LIBRARIES}
 		${ZLIB_LIBRARIES}
+		${SEXPRESSO_LIBRARIES}
 )
+
+if(NOT NO_TESTS)
+	add_executable(AssetLoadingTest tests/main.cpp LispLevelLoad.cpp LispLevelSave.cpp tests/LispLevelTest.cpp)
+	target_link_libraries(AssetLoadingTest ${SEXPRESSO_LIBRARIES} ${NEO_CORE_LIBRARIES} ${NEO_ENGINE_LIBRARIES} ${GTEST_LIBRARIES})
+endif()
 
 install(TARGETS AssetLoading DESTINATION ${NEO_INSTALL_DIR})

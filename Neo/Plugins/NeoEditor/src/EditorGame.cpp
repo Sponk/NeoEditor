@@ -797,7 +797,7 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 void EditorGame::openLevel()
 {
 		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
-		std::string filename = m_toolset->fileOpenDialog("Open Level", engine->getSystemContext()->getWorkingDirectory(), "Levels (*.level)");
+		std::string filename = m_toolset->fileOpenDialog("Open Level", engine->getSystemContext()->getWorkingDirectory(), "Levels (*.level, *.llvl)");
 		if(filename.empty())
 			return;
 
@@ -854,12 +854,12 @@ void EditorGame::saveLevel()
 {
 	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 	if(m_currentLevelFile.empty())
-		m_currentLevelFile = m_toolset->fileSaveDialog("Save Level", engine->getSystemContext()->getWorkingDirectory(), "Levels (*.level)");
+		m_currentLevelFile = m_toolset->fileSaveDialog("Save Level", engine->getSystemContext()->getWorkingDirectory(), "Levels (*.llvl)");
 
 	if(m_currentLevelFile.empty())
 		return;
 
-	engine->getLevelLoader()->saveData(m_currentLevelFile.c_str(), "level", engine->getLevel());
+	engine->getLevelLoader()->saveData(m_currentLevelFile.c_str(), "llvl", engine->getLevel());
 	updateWindowTitle();
 }
 

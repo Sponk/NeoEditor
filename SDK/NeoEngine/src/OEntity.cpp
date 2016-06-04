@@ -137,6 +137,21 @@ OEntity::OEntity(const OEntity& entity)
 	setMeshRef(entity.m_meshRef);
 	if (entity.m_physicsProperties)
 		m_physicsProperties = new PhysicsProperties(*entity.m_physicsProperties);
+
+	for(int i = 0; i < getMaterialsNumber() && i < entity.m_numMaterials; i++)
+	{
+		Material* material = getMaterial(i);
+		Material* originalMaterial = &entity.m_materials[i];
+
+		material->setEmit(originalMaterial->getEmit());
+		material->setSpecular(originalMaterial->getSpecular());
+		material->setShininess(originalMaterial->getShininess());
+		material->setBlendMode(originalMaterial->getBlendMode());
+		material->setDiffuse(originalMaterial->getDiffuse());
+		material->setOpacity(originalMaterial->getOpacity());
+		material->setCustomValue(originalMaterial->getCustomValue());
+		material->setCustomColor(originalMaterial->getCustomColor());
+	}
 }
 
 OEntity::~OEntity(void)
