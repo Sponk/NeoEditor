@@ -38,6 +38,7 @@ include_directories(
 		${TINYXML_INCLUDE_DIR}
 		${ZLIB_INCLUDE_DIR}
 		${SEXPRESSO_INCLUDE_DIR}
+		${GTEST_INCLUDE_DIR}
 )
 
 target_link_libraries(AssetLoading
