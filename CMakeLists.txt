@@ -495,6 +495,7 @@ IF(NOT NO_TESTS)
   add_test(NAME NeoCore_test COMMAND NeoCoreTest)
   add_test(NAME AssetLoading_test COMMAND AssetLoadingTest)
   add_test(NAME NeoEditor_test COMMAND NeoEditorTest)
+  add_test(NAME ProjectManager_test COMMAND ProjectManagerTest)
 ENDIF()
 
 ## Install files
@@ -507,6 +508,7 @@ INSTALL(FILES
 set(CPACK_COMPONENTS_ALL documentation sdk)
 set(CPACK_COMPONENT_DOCUMENTATION_DISPLAY_NAME "SDK Documentation")
 set(CPACK_COMPONENT_SDK_DISPLAY_NAME "C++ SDK")
+set(CPACK_COMPONENT_PROJECT_MANAGER_DISPLAY_NAME "Project Manager")
 
 # Include cpack after all system specifics
 INCLUDE(CPack)

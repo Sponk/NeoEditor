@@ -1033,7 +1033,7 @@ void EditorGame::addText()
 void EditorGame::openNewLevel()
 {
 	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
-	std::string path =  m_toolset->fileSaveDialog(tr("Save Level"), engine->getSystemContext()->getWorkingDirectory(), "Levels (*.level)");
+	std::string path =  m_toolset->fileSaveDialog(tr("Save Level"), engine->getSystemContext()->getWorkingDirectory(), "Levels (*.llvl)");
 
 	if(path.empty())
 		return;
@@ -1048,7 +1048,7 @@ void EditorGame::openNewLevel()
 	auto mainscene = empty.addNewScene();
 	mainscene->setName("Scene-1");
 
-	engine->getLevelLoader()->saveData(m_currentLevelFile.c_str(), "level", &empty);
+	engine->getLevelLoader()->saveData(m_currentLevelFile.c_str(), "llvl", &empty);
 	engine->getLevelLoader()->loadData(m_currentLevelFile.c_str(), engine->getLevel());
 
 	engine->getLevel()->getCurrentScene();

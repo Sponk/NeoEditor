@@ -5,7 +5,7 @@ include_directories(
 		${NEO_ENGINE_INCLUDE_DIR}
 		${NEO2D_INCLUDE_DIR}
 		${SEXPRESSO_INCLUDE_DIR}
-		${CMAKE_CURRENT_SOURCE_DIR}/libproject
+		../../libproject
 		${GTEST_INCLUDE_DIR}
 )
 
@@ -23,7 +23,6 @@ if(NOT NO_TESTS)
 	target_link_libraries(NeoEditorTest ${NEO_CORE_LIBRARIES} ${NEO_ENGINE_LIBRARIES} ${GTEST_LIBRARIES})
 endif()
 
-add_subdirectory(libproject)
 add_subdirectory(runtime)
 
 install(TARGETS NeoEditor DESTINATION ${NEO_INSTALL_DIR})
