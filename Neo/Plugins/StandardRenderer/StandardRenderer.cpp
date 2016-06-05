@@ -412,6 +412,9 @@ void StandardRenderer::drawDisplay(SubMesh* mesh,
 					{
 						render->disableBlending();
 						opacity = 1.0;
+
+						texturePasses = 0;
+						render->sendUniformInt(m_fx[0], "TextureMode", &texturePasses);
 						render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
 						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0, 0, 0));
 						render->enablePolygonOffset(-0.5, -1);
@@ -440,6 +443,8 @@ void StandardRenderer::drawDisplay(SubMesh* mesh,
 
 						opacity = 1.0;
 						render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
+						texturePasses = 0;
+						render->sendUniformInt(m_fx[0], "TextureMode", &texturePasses);
 
 						render->enablePolygonOffset(-0.5, -1);
 
@@ -475,6 +480,8 @@ void StandardRenderer::drawDisplay(SubMesh* mesh,
 
 						opacity = 1.0;
 						render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
+						texturePasses = 0;
+						render->sendUniformInt(m_fx[0], "TextureMode", &texturePasses);
 
 						render->enablePolygonOffset(-0.5, -1);
 
@@ -502,6 +509,8 @@ void StandardRenderer::drawDisplay(SubMesh* mesh,
 
 						opacity = 1.0;
 						render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
+						texturePasses = 0;
+						render->sendUniformInt(m_fx[0], "TextureMode", &texturePasses);
 
 						render->enablePolygonOffset(-0.5, -1);
 
