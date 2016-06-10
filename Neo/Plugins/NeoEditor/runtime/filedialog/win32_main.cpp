@@ -9,10 +9,11 @@ using namespace std;
 std::string& convertQtFilterToWin32(std::string& str)
 {
 	// First, remove ";;" stuff from Qt
-	str.erase(std::remove(str.begin(), str.end(), 'a'), str.end());
+    str.erase(std::remove(str.begin(), str.end(), ';'), str.end());
 
 	// Replace bracket with '\0' just how windows likes it
-	std::replace(str.begin(), str.end(), '(', '#'); // replace all '(' with '#'
+    std::replace(str.begin(), str.end(), ',', ';'); // replace all ',' with ';'
+    std::replace(str.begin(), str.end(), '(', '#'); // replace all '(' with '#'
 	std::replace(str.begin(), str.end(), ')', '#'); // replace all ')' with '#'
 	std::replace(str.begin(), str.end(), '#', '\0'); // replace all '#' with '\n'
 
@@ -36,7 +37,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 	lpofn.lpstrTitle = config.getChildByPath("message")->arguments().begin()->value.str.c_str();
 	lpofn.lpstrFilter = convertQtFilterToWin32(config.getChildByPath("filetypes")->arguments().begin()->value.str).c_str();
 	lpofn.lpstrInitialDir = config.getChildByPath("startdir")->arguments().begin()->value.str.c_str();
-	lpofn.nFilterIndex = 0;
+    lpofn.nFilterIndex = 1;
 	lpofn.lpstrFile = szFile;
 	lpofn.lpstrFile[0] = 0;
 	lpofn.nMaxFile = sizeof(szFile);

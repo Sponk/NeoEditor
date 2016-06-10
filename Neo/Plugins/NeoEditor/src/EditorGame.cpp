@@ -201,8 +201,8 @@ void EditorGame::update()
 void EditorGame::draw()
 {
 	PROFILE_BEGIN("GuiDraw");
-	m_canvas.draw();
-	// m_sceneView->draw(Vector2());
+    m_canvas.draw();
+    // m_sceneView->draw(Vector2());
 	PROFILE_END("GuiDraw");
 }
 
@@ -809,7 +809,7 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 void EditorGame::openLevel()
 {
 		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
-		std::string filename = m_toolset->fileOpenDialog("Open Level", engine->getSystemContext()->getWorkingDirectory(), "Levels (*.level, *.llvl)");
+        std::string filename = m_toolset->fileOpenDialog("Open Level", engine->getSystemContext()->getWorkingDirectory(), "Levels (*.level, *.llvl)");
 		if(filename.empty())
 			return;
 
@@ -866,7 +866,7 @@ void EditorGame::saveLevel()
 {
 	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 	if(m_currentLevelFile.empty())
-		m_currentLevelFile = m_toolset->fileSaveDialog("Save Level", engine->getSystemContext()->getWorkingDirectory(), "Levels (*.llvl)");
+        m_currentLevelFile = m_toolset->fileSaveDialog("Save Level", engine->getSystemContext()->getWorkingDirectory(), "Lisp Levels (*.llvl)");
 
 	if(m_currentLevelFile.empty())
 		return;
@@ -958,7 +958,7 @@ void EditorGame::addSound()
 	std::string file = m_toolset->fileOpenDialog(
 		tr("Open Sound File"),
 		NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(),
-		"Sound Files (*.ogg *.wav)");
+        "All Sounds (*.ogg, *.wav);;OGG Sound Files (*.ogg);;WAV Sound Files (*.wav)");
 
 	if(file.empty())
 		return;
@@ -987,9 +987,9 @@ void EditorGame::addEntity()
 	std::string file = m_toolset->fileOpenDialog(
 		tr("Open Mesh File"),
 		NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory(),
-		"Mesh Files (*.obj *.3ds *.fbx *.dae *.ase *.ifc *.ply *.dxf *.lwo *.lws "
-			"*.lxo *.stl *.x *.ac *.ms3d *.cob *.irrmesh *.irr *.md1 *.md2 *.md3 *.pk3 "
-			"*.mdc *.md5 *.smd *.ogex *.3d *.b3d *.q3d)");
+        "Mesh Files (*.obj, *.3ds, *.fbx, *.dae, *.ase, *.ifc, *.ply, *.dxf, *.lwo, *.lws, "
+            "*.lxo, *.stl, *.x, *.ac, *.ms3d, *.cob, *.irrmesh, *.irr, *.md1, *.md2, *.md3, *.pk3, "
+            "*.mdc, *.md5, *.smd, *.ogex, *.3d, *.b3d, *.q3d, *.mesh)");
 
 	if(file.empty())
 		return;
@@ -1045,7 +1045,7 @@ void EditorGame::addText()
 void EditorGame::openNewLevel()
 {
 	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
-	std::string path =  m_toolset->fileSaveDialog(tr("Save Level"), engine->getSystemContext()->getWorkingDirectory(), "Levels (*.llvl)");
+    std::string path =  m_toolset->fileSaveDialog(tr("Save Level"), engine->getSystemContext()->getWorkingDirectory(), "Lisp Levels (*.llvl)");
 
 	if(path.empty())
 		return;
