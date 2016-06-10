@@ -32,7 +32,7 @@ using namespace Gui;
 		ui->addWidget(label);                                      \
 	}
 
-#define MAKE_FLOAT_EDIT_FIELD(str, width, edit, ui, type, setter)               \
+#define MAKE_FLOAT_EDIT_FIELD(str, width, edit, ui, type, setter)         \
 	{                                                                     \
 		MAKE_LABEL(str, ui);                                              \
 		ui->addWidget(                                                    \
@@ -49,7 +49,7 @@ using namespace Gui;
 			nullptr);                                                     \
 	}
 
-#define MAKE_STRING_EDIT_FIELD(str, width, edit, ui, type, setter)               \
+#define MAKE_STRING_EDIT_FIELD(str, width, edit, ui, type, setter)        \
 	{                                                                     \
 		MAKE_LABEL(str, ui);                                              \
 		ui->addWidget(                                                    \
@@ -61,50 +61,50 @@ using namespace Gui;
                                                                           \
 				m_undo.save();                                            \
 				static_cast<type*>(m_sceneView->getSelection().back())    \
-					->setter(edit->getLabel());							\
+					->setter(edit->getLabel());                           \
 			},                                                            \
 			nullptr);                                                     \
 	}
 
-#define MAKE_3D_EDIT_FIELD(str, width, edit, ui, type, setter)               \
-	{                                                                     \
-		MAKE_LABEL(str, ui);                                              \
-		ui->addWidget(                                                    \
+#define MAKE_3D_EDIT_FIELD(str, width, edit, ui, type, setter)              \
+	{                                                                       \
+		MAKE_LABEL(str, ui);                                                \
+		ui->addWidget(                                                      \
 			edit = make_shared<Vector3Edit>(0, 0, width, 20, nullptr, ui)); \
-		edit->setCallback(                                                \
-			[this](Widget& w, void* d) {                                  \
-				if (!m_sceneView->getSelection().size())                  \
-					return;                                               \
-                                                                          \
-				m_undo.save();                                            \
-				static_cast<type*>(m_sceneView->getSelection().back())    \
-					->setter(edit->getVector());				\
-				updateSelectedObject(m_sceneView->getSelection().back()); \
-			},                                                            \
-			nullptr);                                                     \
+		edit->setCallback(                                                  \
+			[this](Widget& w, void* d) {                                    \
+				if (!m_sceneView->getSelection().size())                    \
+					return;                                                 \
+                                                                            \
+				m_undo.save();                                              \
+				static_cast<type*>(m_sceneView->getSelection().back())      \
+					->setter(edit->getVector());                            \
+				updateSelectedObject(m_sceneView->getSelection().back());   \
+			},                                                              \
+			nullptr);                                                       \
 	}
 
-#define MAKE_4D_EDIT_FIELD(str, width, edit, ui, type, setter)               \
-	{                                                                     \
-		MAKE_LABEL(str, ui);                                              \
-		ui->addWidget(                                                    \
+#define MAKE_4D_EDIT_FIELD(str, width, edit, ui, type, setter)              \
+	{                                                                       \
+		MAKE_LABEL(str, ui);                                                \
+		ui->addWidget(                                                      \
 			edit = make_shared<Vector4Edit>(0, 0, width, 20, nullptr, ui)); \
-		edit->setCallback(                                                \
-			[this](Widget& w, void* d) {                                  \
-				if (!m_sceneView->getSelection().size())                  \
-					return;                                               \
-                                                                          \
-				m_undo.save();                                            \
-				static_cast<type*>(m_sceneView->getSelection().back())    \
-					->setter(edit->getVector());				\
-				updateSelectedObject(m_sceneView->getSelection().back()); \
-			},                                                            \
-			nullptr);                                                     \
+		edit->setCallback(                                                  \
+			[this](Widget& w, void* d) {                                    \
+				if (!m_sceneView->getSelection().size())                    \
+					return;                                                 \
+                                                                            \
+				m_undo.save();                                              \
+				static_cast<type*>(m_sceneView->getSelection().back())      \
+					->setter(edit->getVector());                            \
+				updateSelectedObject(m_sceneView->getSelection().back());   \
+			},                                                              \
+			nullptr);                                                       \
 	}
 
 #define MAKE_CHECK_BUTTON(str, edit, ui, type, setter)                    \
-	{ \
-			ui->addWidget(                                                \
+	{                                                                     \
+		ui->addWidget(                                                    \
 			edit = make_shared<CheckButton>(0, 0, 100, 20, tr(str), ui)); \
 		edit->setCallback(                                                \
 			[this](Widget& w, void* d) {                                  \
@@ -118,31 +118,30 @@ using namespace Gui;
 			nullptr);                                                     \
 	}
 
-#define MAKE_BUTTON(str, width, ui, callback)                    \
-	{ \
-			auto btn = make_shared<Button>(0, 0, width, 20, tr(str), ui); \
-			ui->addWidget(btn); \
-			btn->setCallback(callback, nullptr);                          \
+#define MAKE_BUTTON(str, width, ui, callback)                         \
+	{                                                                 \
+		auto btn = make_shared<Button>(0, 0, width, 20, tr(str), ui); \
+		ui->addWidget(btn);                                           \
+		btn->setCallback(callback, nullptr);                          \
 	}
 
-#define MAKE_COLOR3_BUTTON(str, width, edit, ui, type, setter)                    \
-	{ \
-			ui->addWidget(                                                \
-			edit = make_shared<ColorEdit>(0, 0, width, 20, tr(str), ui, m_toolset)); \
-		edit->setCallback(                                                \
-			[this](Widget& w, void* d) {                                  \
-				if (!m_sceneView->getSelection().size())                  \
-					return;                                               \
-																		  \
-				m_undo.save();                                            \
-				static_cast<type*>(m_sceneView->getSelection().back())    \
-					->setter(Vector3(edit->getColor()));                           \
-\
-				updateSelectedObject(m_sceneView->getSelection().back()); \
-			},                                                            \
-			nullptr);                                                     \
+#define MAKE_COLOR3_BUTTON(str, width, edit, ui, type, setter)                \
+	{                                                                         \
+		ui->addWidget(edit = make_shared<ColorEdit>(0, 0, width, 20, tr(str), \
+													ui, m_toolset));          \
+		edit->setCallback(                                                    \
+			[this](Widget& w, void* d) {                                      \
+				if (!m_sceneView->getSelection().size())                      \
+					return;                                                   \
+                                                                              \
+				m_undo.save();                                                \
+				static_cast<type*>(m_sceneView->getSelection().back())        \
+					->setter(Vector3(edit->getColor()));                      \
+                                                                              \
+				updateSelectedObject(m_sceneView->getSelection().back());     \
+			},                                                                \
+			nullptr);                                                         \
 	}
-
 
 std::string findName(const char* name, Scene* scene)
 {
