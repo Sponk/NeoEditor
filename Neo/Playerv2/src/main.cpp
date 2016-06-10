@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 
 	tree = sexpresso::parse(confstr, err);
 	sexpresso::Sexp* pluginlist = tree.getChildByPath("project/plugins");
-	sexpresso::Sexp* startlevel = tree.getChildByPath("project/level");
+    //sexpresso::Sexp* startlevel = tree.getChildByPath("project/level");
 
 	try
 	{
@@ -49,11 +49,16 @@ int main(int argc, char* argv[])
 		if(!game)
 			engine->setGame(game = new NeoGame);
 
+        system = engine->getSystemContext();
+        system->setArgc(argc);
+        system->setArgv(&argv);
+
 		game->begin();
 
-		char scriptfile[512];
-		getGlobalFilename(scriptfile, engine->getSystemContext()->getWorkingDirectory(), startlevel->value.sexp[1].toString().c_str());
-		engine->loadLevel(scriptfile);
+        //char scriptfile[512];
+        //getGlobalFilename(scriptfile, engine->getSystemContext()->getWorkingDirectory(), startlevel->value.sexp[1].toString().c_str());
+        //engine->loadLevel(scriptfile);
+        engine->loadLevel("");
 
 		while (engine->isActive())
 		{

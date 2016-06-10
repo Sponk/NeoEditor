@@ -98,7 +98,7 @@ vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse, float r
 
 	if(spot > light.SpotCos)
 	{
-		spot = clamp(pow(spot, light.SpotExp), 0.0, 1.0);
+                spot = clamp(pow(spot - light.SpotCos, light.SpotExp), 0.0, 1.0);
         float attenuation = spot/(light.ConstantAttenuation + (dot(l,l) * light.QuadraticAttenuation));//*shadow;
 
 		return vec4(attenuation*retval, 1.0);

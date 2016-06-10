@@ -659,8 +659,20 @@ void EditorGame::onBegin()
 	}, nullptr));
 
 	NeoEngine* engine = NeoEngine::getInstance();
-	engine->getSystemContext()->setWindowTitle(tr("Neo Scene Editor"));
+    SystemContext* system = engine->getSystemContext();
+
+    system->setWindowTitle(tr("Neo Scene Editor"));
 	engine->getGame()->setDrawMainScene(false);
+
+    char** argv = system->getArgv();
+    for(int i = 0; i < system->getArgc(); i++)
+    {
+        if(!strcmp(argv[i], "-p") && i < system->getArgc() - 1)
+        {
+            loadProject(argv[i+1]);
+            break;
+        }
+    }
 }
 
 void EditorGame::onEnd()

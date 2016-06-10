@@ -163,14 +163,15 @@ void writeEntity(File* f, OEntity* e, int tabs)
 
 	// Textures
 	{
-		writeIntegerVar(f, "texture-count", e->getMesh()->getTexturesNumber(), tabs);
-		writeTabs(f, tabs);
-		M_fprintf(f, "(textures\n");
+        writeIntegerVar(f, "texture-count", e->getTexturesNumber(), tabs);
+        writeTabs(f, tabs);
+        size_t texCount = 0;
+        M_fprintf(f, "(textures\n");
 		tabs++;
 
-		for(int j = 0; j < e->getMesh()->getTexturesNumber(); j++)
+        for(int j = 0; j < e->getTexturesNumber(); j++)
 		{
-			Texture* t = e->getMesh()->getTexture(j);
+            Texture* t = e->getTexture(j);
 
 			writeTabs(f, tabs);
 			M_fprintf(f, "(texture\n");
@@ -189,7 +190,8 @@ void writeEntity(File* f, OEntity* e, int tabs)
 			M_fprintf(f, ")\n");
 		}
 
-		tabs--;
+        tabs--;
+
 		writeTabs(f, tabs);
 		M_fprintf(f, ")\n");
 	}

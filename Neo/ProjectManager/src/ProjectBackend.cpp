@@ -3,11 +3,11 @@
 #include <sexpresso.hpp>
 #include <NeoCore.h>
 
-void ProjectBackend::createProject(const char* name, const char* path, const char* templ)
+bool ProjectBackend::createProject(const char* name, const char* path, const char* templ)
 {
 	auto iterator = m_templates.find(templ);
 	if(iterator == m_templates.end())
-		return;
+        return false;
 
 	Project ptempl = iterator->second;
 	char src[256]; // FIXME: Make dynamic!
@@ -19,7 +19,9 @@ void ProjectBackend::createProject(const char* name, const char* path, const cha
 	Project newProject(name, "", "0.0", "Me", ptempl.getLevel().c_str(),
 					   ptempl.getAssetDirectory().c_str(), ptempl.getNeoVersion().c_str());
 
-	newProject.save((fullpath + "/" + name + ".nproj").c_str());
+    bool result = newProject.save((fullpath + "/" + name + ".nproj").c_str());
+    m_projects.push_back(newProject);
+    return result;
 }
 
 void ProjectBackend::removeProject(size_t id, bool deleteFiles)

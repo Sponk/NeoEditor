@@ -1,5 +1,7 @@
 #include <QtWidgets/QFileDialog>
 #include <QtCore/QProcess>
+#include <QMessageBox>
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "NewProjectWizard.h"
@@ -44,9 +46,15 @@ void MainWindow::createProject()
 
 	if(wizard.accepted())
 	{
-		m_backend.createProject(wizard.getProjectName().toStdString().c_str(),
-								wizard.getProjectPath().toStdString().c_str(),
-								wizard.getProjectTemplate().toStdString().c_str());
+        bool result = m_backend.createProject(wizard.getProjectName().toStdString().c_str(),
+                                              wizard.getProjectPath().toStdString().c_str(),
+                                              wizard.getProjectTemplate().toStdString().c_str());
+
+        if(!result)
+        {
+            QMessageBox::information(this, tr("Error"), tr("Could not create project!"));
+            return;
+        }
 
 		ui->listWidget->addItem(m_backend.getProjects().back().getName().c_str());
 		m_backend.saveConfig(m_configFile.toStdString().c_str());

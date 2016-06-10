@@ -87,7 +87,20 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWizardPage" name="wizardPage2"/>
+  <widget class="QWizardPage" name="wizardPage2">
+   <layout class="QFormLayout" name="formLayout_2">
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Description:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QPlainTextEdit" name="descriptionEdit"/>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <resources/>
  <connections>

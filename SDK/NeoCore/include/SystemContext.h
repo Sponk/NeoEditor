@@ -39,6 +39,9 @@ namespace Neo
  */
 class NEO_CORE_EXPORT SystemContext
 {
+    int m_argc;
+    char*** m_argv;
+
 	String m_workingDirectory;
 public:
 
@@ -46,6 +49,12 @@ public:
 	
 	// destructor
 	virtual ~SystemContext(void){}
+
+    void setArgc(int argc) { m_argc = argc; }
+    void setArgv(char*** argv) { m_argv = argv; }
+
+    int getArgc() const { return m_argc; }
+    char** getArgv() const { return *m_argv; }
 
 	/**
 	 * @brief Fetches the current screen resolution or window size in pixels.

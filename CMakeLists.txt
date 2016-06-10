@@ -10,7 +10,7 @@ SET(CMAKE_MODULE_PATH
 )
 
 ## Options
-option(USE_QT_RUNTIME OFF)
+option(USE_QT_RUNTIME ON)
 option(USE_GNUSTEP_RUNTIME OFF)
 
 ## Disallow in-source builds
@@ -32,10 +32,12 @@ ENDIF()
 FIND_PACKAGE(SWIG)
 FIND_PACKAGE(Mono)
 
-set(Java_FOUND FALSE)
-find_package(JNI)
-find_package(Java)
-include(UseJava)
+if(USE_JAVA)
+    set(Java_FOUND FALSE)
+    find_package(JNI)
+    find_package(Java)
+    include(UseJava)
+endif()
 
 IF(NOT ${FORCE_LOCAL_SDL})
 	INCLUDE(FindSDL2)
@@ -204,6 +206,7 @@ IF(WIN32)
   ## NSIS does not like png's
   SET(CPACK_PACKAGE_ICON "")
   SET(CPACK_NSIS_MENU_LINKS "Neo/NeoPlayer2.exe" "Neo Editor"
+          "Neo/ProjectManager.exe" "Neo Project Manager"
           "Neo/docs/SDK/html/index.html" "Neo Documentation")
   SET( CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
 
@@ -505,10 +508,10 @@ INSTALL(FILES
   README.md
   DESTINATION ${NEO_INSTALL_DIR})
 
-set(CPACK_COMPONENTS_ALL documentation sdk)
+#set(CPACK_COMPONENTS_ALL documentation sdk projectmanager)
 set(CPACK_COMPONENT_DOCUMENTATION_DISPLAY_NAME "SDK Documentation")
 set(CPACK_COMPONENT_SDK_DISPLAY_NAME "C++ SDK")
-set(CPACK_COMPONENT_PROJECT_MANAGER_DISPLAY_NAME "Project Manager")
+set(CPACK_COMPONENT_PROJECTMANAGER_DISPLAY_NAME "Project Manager")
 
 # Include cpack after all system specifics
 INCLUDE(CPack)

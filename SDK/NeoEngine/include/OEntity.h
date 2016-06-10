@@ -300,6 +300,9 @@ private:
 	Material* m_materials;
 	unsigned int m_numMaterials;
 
+    Texture** m_textures;
+    unsigned int m_numTextures;
+
 public:
 
 	// constructor / destructor
@@ -310,6 +313,9 @@ public:
 	OEntity(const OEntity &entity);
 
 	RayCastResult castRay(Vector3& rayO, Vector3& rayD);
+
+    Texture* getTexture(size_t idx = 0) const { return m_textures[idx]; }
+    size_t getTexturesNumber() const { return m_numTextures; }
 
 	/**
 	 * @brief Retrieves the material with the given index.

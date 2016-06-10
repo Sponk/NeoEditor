@@ -19,7 +19,7 @@ public:
 	ProjectBackend(const std::string& config);
 	ProjectBackend() {}
 
-	void createProject(const char* name, const char* path, const char* templ);
+    bool createProject(const char* name, const char* path, const char* templ);
 	void removeProject(size_t id, bool deleteFiles = false);
 	size_t importProject(const char* path);
 	std::string importTemplate(const char* path);

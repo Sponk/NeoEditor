@@ -126,6 +126,17 @@ Vector3 GET_VECTOR4_VALUE(sexpresso::Sexp& node, const char* name)
 				   stof(wval.value.str));
 }
 
+static char g_rep[256];
+std::string getGlobalFile(const std::string& name)
+{
+    if(name.empty())
+        return "(null)";
+
+    char filename[256];
+    getGlobalFilename(filename, g_rep, name.c_str());
+    return std::string(filename);
+}
+
 bool loadLispLevel(const char* filename, Level* level)
 {
 	char* levelfile = readTextFile(filename);
@@ -152,6 +163,7 @@ bool loadLispLevel(const char* filename, Level* level)
 		return false;
 	}
 
+    getRepertory(g_rep, filename);
 	std::vector<Link> parentChildLinks;
 
 	// Load scenes
@@ -197,7 +209,7 @@ bool loadLispLevel(const char* filename, Level* level)
 				}
 				else if(type == "Entity")
 				{
-					OEntity* entity = s->addNewEntity(level->loadMesh(GET_VALUE(o, "mesh").c_str()));
+                    OEntity* entity = s->addNewEntity(level->loadMesh(getGlobalFile(GET_VALUE(o, "mesh")).c_str()));
 					object = entity;
 
 					Mesh* mesh = entity->getMesh();
@@ -211,7 +223,7 @@ bool loadLispLevel(const char* filename, Level* level)
 						entity->getMesh()->allocTextures(GET_INT_VALUE(o, "texture-count"));
 						for(auto t : tn->arguments())
 						{
-							TextureRef* texref = level->loadTexture(GET_VALUE(t, "texture-file").c_str());
+                            TextureRef* texref = level->loadTexture(getGlobalFile(GET_VALUE(t, "texture-file")).c_str());
 							Texture* tex = new Texture(texref);
 
 							tex->setGenMode(static_cast<TEX_GEN_MODES>(GET_INT_VALUE(t, "gen-mode")));
@@ -255,9 +267,14 @@ bool loadLispLevel(const char* filename, Level* level)
 								auto p = t.getChildByPath("texture-passes");
 								if(p)
 								{
+                                    size_t numTextures = textureList.size();
 									for(auto pass : p->arguments())
 									{
-										mat->addTexturePass(textureList[GET_INT_VALUE(pass, "texture-id")],
+                                        size_t passid = GET_INT_VALUE(pass, "texture-id");
+                                        if(passid >= numTextures)
+                                            continue;
+
+                                        mat->addTexturePass(textureList[passid],
 															static_cast<TEX_COMBINE_MODES>(GET_INT_VALUE(pass,
 																										 "combine-mode")),
 															GET_INT_VALUE(pass, "map-channel"));
@@ -284,7 +301,7 @@ bool loadLispLevel(const char* filename, Level* level)
 				}
 				else if(type == "Text")
 				{
-					auto text = s->addNewText(level->loadFont(GET_VALUE(o, "font").c_str()));
+                    auto text = s->addNewText(level->loadFont(getGlobalFile(GET_VALUE(o, "font")).c_str()));
 					object = text;
 
 					text->setText(GET_VALUE(o, "text").c_str());
@@ -294,7 +311,7 @@ bool loadLispLevel(const char* filename, Level* level)
 				}
 				else if(type == "Sound")
 				{
-					auto sound = s->addNewSound(level->loadSound(GET_VALUE(o, "sound").c_str()));
+                    auto sound = s->addNewSound(level->loadSound(getGlobalFile(GET_VALUE(o, "sound")).c_str()));
 					object = sound;
 
 					sound->setPitch(GET_FLOAT_VALUE(o, "pitch"));

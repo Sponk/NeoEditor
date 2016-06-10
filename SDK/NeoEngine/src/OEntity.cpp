@@ -115,7 +115,8 @@ OEntity::OEntity(MeshRef* meshRef)
 	m_hasShadow(true),
 	m_isOccluder(false),
 	m_wireframe(false),
-	m_materials(NULL)
+    m_materials(NULL),
+    m_textures(NULL)
 {
 	setMeshRef(meshRef);
 }
@@ -132,7 +133,8 @@ OEntity::OEntity(const OEntity& entity)
 	m_hasShadow(entity.m_hasShadow),
 	m_isOccluder(entity.m_isOccluder),
 	m_wireframe(entity.m_wireframe),
-	m_materials(NULL)
+    m_materials(NULL),
+    m_textures(NULL)
 {
 	setMeshRef(entity.m_meshRef);
 	if (entity.m_physicsProperties)
@@ -272,7 +274,16 @@ void OEntity::setMeshRef(MeshRef* meshRef)
 			for (int i = 0; i < m_numMaterials; i++)
 			{
 				m_materials[i] = *mesh->getMaterial(i);
-			}
+			}            
+
+            SAFE_DELETE_ARRAY(m_textures);
+            m_numTextures = mesh->getTexturesNumber();
+            m_textures = new Texture*[m_numTextures];
+
+            for(int i = 0; i < m_numTextures; i++)
+            {
+                m_textures[i] = mesh->getTexture(i);
+            }
 
 			for (int i = 0; i < mesh->getSubMeshsNumber(); i++)
 			{

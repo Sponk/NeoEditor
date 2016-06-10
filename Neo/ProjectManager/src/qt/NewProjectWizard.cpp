@@ -20,6 +20,7 @@ void NewProjectWizard::accept()
 	m_projectName = ui->projectNameEdit->text();
 	m_projectPath = ui->projectFileEdit->text();
 	m_projectTemplate = ui->templateCombo->currentText();
+    m_description = ui->descriptionEdit->toPlainText();
 	m_accepted = true;
 	close();
 }

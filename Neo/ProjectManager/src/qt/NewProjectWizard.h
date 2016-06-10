@@ -24,11 +24,12 @@ public:
 	QString getProjectName() const { return m_projectName; }
 	QString getProjectPath() const { return m_projectPath; }
 	QString getProjectTemplate() const { return m_projectTemplate; }
+    QString getDescription() const { return m_description; }
 	bool accepted() const { return m_accepted; }
 	void setTemplates(std::map<std::string, Project>& templates);
 
 private:
-	QString m_projectName, m_projectPath, m_projectTemplate;
+    QString m_projectName, m_projectPath, m_projectTemplate, m_description;
 	bool m_accepted;
 
 public slots:

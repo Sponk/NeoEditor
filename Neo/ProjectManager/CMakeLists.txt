@@ -22,4 +22,21 @@ if(NOT NO_TESTS)
         target_link_libraries(ProjectManagerTest libproject ${SEXPRESSO_LIBRARIES} ${NEO_CORE_LIBRARIES} ${NEO_ENGINE_LIBRARIES} ${GTEST_LIBRARIES})
 endif()
 
-install(TARGETS ProjectManager DESTINATION ${NEO_INSTALL_DIR} COMPONENT project_manager)
+install(TARGETS ProjectManager DESTINATION ${NEO_INSTALL_DIR} COMPONENT projectmanager)
+
+if(WIN32)
+    get_filename_component(QT_BINARY_DIR ${QT_QMAKE_EXECUTABLE} DIRECTORY)
+    install(FILES
+        ${QT_BINARY_DIR}/Qt5Core.dll
+        ${QT_BINARY_DIR}/Qt5Gui.dll
+        ${QT_BINARY_DIR}/Qt5Widgets.dll
+        DESTINATION ${NEO_INSTALL_DIR} COMPONENT projectmanager)
+
+    if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+        install(FILES
+            ${QT_BINARY_DIR}/libgcc_s_dw2-1.dll
+            ${QT_BINARY_DIR}/libstdc++-6.dll
+            ${QT_BINARY_DIR}/libwinpthread-1.dll
+            DESTINATION ${NEO_INSTALL_DIR} COMPONENT projectmanager)
+    endif()
+endif()

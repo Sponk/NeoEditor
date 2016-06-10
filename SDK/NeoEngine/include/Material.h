@@ -1,6 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
-// Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
+// Copyright (c) 2014-2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -136,6 +136,7 @@ private:
 	// properties
 	float m_opacity;
 	float m_shininess;
+	float m_roughness;
 	float m_customValue;
 	Vector3 m_diffuse;
 	Vector3 m_specular;
@@ -209,7 +210,20 @@ public:
 	 *	 
 	 * @param shininess The shininess value.
 	 */
-	inline void setShininess(float shininess) { m_shininess = shininess; }
+	inline void setShininess(float shininess)
+	{
+		m_shininess = shininess;
+		m_roughness = (1 - shininess/1024.0f); //sqrt(2.0f/(shininess + 2));
+		m_roughness *= m_roughness;
+	}
+
+	inline void setRoughness(float roughness)
+	{
+		m_shininess = 2.0f/(roughness*roughness) - 2;
+		m_roughness = roughness;
+	}
+
+	float getRoughness() const { return m_roughness; }
 
 	/**
 	 * @brief Sets the custom value.
