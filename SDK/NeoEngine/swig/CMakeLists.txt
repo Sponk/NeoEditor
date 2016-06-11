@@ -42,6 +42,10 @@ IF(${SWIG_FOUND})
 	  add_dependencies(build-neo-sharp-engine NeoSharpEngine-csharp-swig)
 	  add_dependencies(NeoSharpNativeEngine build-neo-sharp-engine)
 
+	  ## FIXME: Put at one point!
+	  install(TARGETS NeoSharpNativeEngine DESTINATION ${NEO_INSTALL_DIR}/templates/NeoSharpTemplate)
+	  install(FILES ${NEO_BINARY_OUTPUT}/NeoSharpEngine.dll DESTINATION ${NEO_INSTALL_DIR}/templates/NeoSharpTemplate/MonoGame)
+
   endif(${CSHARP_FOUND})
 
   EXECUTE_PROCESS(

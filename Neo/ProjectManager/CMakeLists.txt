@@ -40,3 +40,5 @@ if(WIN32)
             DESTINATION ${NEO_INSTALL_DIR} COMPONENT projectmanager)
     endif()
 endif()
+
+add_subdirectory(templates)
