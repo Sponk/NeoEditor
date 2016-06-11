@@ -14,10 +14,38 @@ set(JAVA_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/java)
 file(REMOVE ${JAVA_OUTPUT})
 file(MAKE_DIRECTORY ${JAVA_OUTPUT})
 
+include(Swig)
+
 IF(${SWIG_FOUND})
   MESSAGE("-- Generating script bindings for NeoCore")
 
   SET(CMAKE_SHARED_LIBRARY_PREFIX "")
+
+  if(${CSHARP_FOUND})
+	  if(WIN32)
+		  set(DLLIMPORT -dllimport NeoSharpNativeCore.dll)
+	  else()
+		  set(DLLIMPORT -dllimport NeoSharpNativeCore.so)
+	  endif()
+
+	  set(SWIG_ARGS -I${NEO_CORE_INCLUDE_DIR} ${DLLIMPORT})
+	  add_swig_module(NeoSharpCore csharp NeoSharpCore.i "${SWIG_ARGS}")
+	  add_custom_target(build-neo-sharp-core ALL ${CSHARP_COMPILER} -t:library -out:${NEO_BINARY_OUTPUT}/NeoSharpCore.dll ${NeoSharpCore_OUTDIR}/*.cs)
+
+	  add_library(NeoSharpNativeCore SHARED ${NeoSharpCore_SOURCES})
+
+	  include_directories(${NEO_CORE_INCLUDE_DIR} ${NEO_ENGINE_INCLUDE_DIR} ${MONO_INCLUDE_DIRS})
+
+	  target_link_libraries(NeoSharpNativeCore
+			  ${NEO_CORE_LIBRARIES}
+			  ${NEO_ENGINE_LIBRARIES}
+			  ${MONO_LIBRARIES}
+			  )
+
+	  add_dependencies(NeoSharpNativeCore build-neo-sharp-core)
+	  add_dependencies(build-neo-sharp-core NeoSharpCore-csharp-swig)
+
+  endif(${CSHARP_FOUND})
 
   ## Generate NeoCore plugin
   EXECUTE_PROCESS(

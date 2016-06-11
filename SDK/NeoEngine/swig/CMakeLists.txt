@@ -19,6 +19,31 @@ IF(${SWIG_FOUND})
 
   SET(CMAKE_SHARED_LIBRARY_PREFIX "")
 
+  if(${CSHARP_FOUND})
+	  if(WIN32)
+		  set(DLLIMPORT -dllimport NeoSharpNativeEngine.dll)
+	  else()
+		  set(DLLIMPORT -dllimport NeoSharpNativeEngine.so)
+	  endif()
+
+	  set(SWIG_ARGS -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR} ${DLLIMPORT})
+	  add_swig_module(NeoSharpEngine csharp NeoSharpEngine.i "${SWIG_ARGS}")
+	  add_custom_target(build-neo-sharp-engine ALL ${CSHARP_COMPILER} -t:library -out:${NEO_BINARY_OUTPUT}/NeoSharpEngine.dll ${NeoSharpEngine_OUTDIR}/*.cs)
+
+	  add_library(NeoSharpNativeEngine SHARED ${NeoSharpEngine_SOURCES})
+	  include_directories(${NEO_CORE_INCLUDE_DIR} ${NEO_ENGINE_INCLUDE_DIR} ${MONO_INCLUDE_DIRS})
+
+	  target_link_libraries(NeoSharpNativeEngine
+			  ${NEO_CORE_LIBRARIES}
+			  ${NEO_ENGINE_LIBRARIES}
+			  ${MONO_LIBRARIES}
+			  )
+
+	  add_dependencies(build-neo-sharp-engine NeoSharpEngine-csharp-swig)
+	  add_dependencies(NeoSharpNativeEngine build-neo-sharp-engine)
+
+  endif(${CSHARP_FOUND})
+
   EXECUTE_PROCESS(
 	COMMAND ${SWIG_EXECUTABLE} -lua -c++ -includeall -ignoremissing -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR} -o ${CMAKE_CURRENT_BINARY_DIR}/NeoEngineLua_wrap.cxx
 		  ${CMAKE_CURRENT_SOURCE_DIR}/NeoEngineLua.i

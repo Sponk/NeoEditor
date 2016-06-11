@@ -30,7 +30,6 @@ ENDIF()
 
 ## SWIG for script bindings
 FIND_PACKAGE(SWIG)
-FIND_PACKAGE(Mono)
 
 if(USE_JAVA)
     set(Java_FOUND FALSE)
@@ -71,6 +70,11 @@ IF(WIN32)
     set(SWIG_FOUND TRUE)
     set(DOXYGEN_FOUND TRUE)
 ENDIF()
+
+find_package(CSharp)
+find_package(Mono)
+include(UseCSharp)
+include(UseMono)
 
 ## Set version and info
 SET(NEO_MAJOR_VERSION 0)

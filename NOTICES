@@ -1,0 +1,8 @@
+
+Used
+- FindCSharp.cmake
+- UseCSharp.cmake
+- FindMono.cmake
+- UseMono.cmake
+from the SimpleITK project: https://github.com/SimpleITK/SimpleITK,
+licensed under the Apache license.
