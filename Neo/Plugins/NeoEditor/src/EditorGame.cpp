@@ -49,6 +49,28 @@ using namespace Gui;
 			nullptr);                                                     \
 	}
 
+#define MAKE_FLOAT_PHYSICS_EDIT_FIELD(str, width, edit, ui, setter)           \
+	{                                                                         \
+		MAKE_LABEL(str, ui);                                                  \
+		ui->addWidget(                                                        \
+			edit = make_shared<EditField>(0, 0, width, 20, nullptr, ui));     \
+		edit->setCallback(                                                    \
+			[this](Widget& w, void* d) {                                      \
+				if (!m_sceneView->getSelection().size())                      \
+					return;                                                   \
+                                                                              \
+				m_undo.save();                                                \
+				auto entity = static_cast<OEntity*>(m_sceneView->getSelection().back()); \
+				auto phys = entity->getPhysicsProperties();                             \
+				if (!phys)                                                    \
+					return;                                                   \
+                                                                              \
+				phys->setter(std::stod(edit->getLabel()));                    \
+				NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionObject(entity); \
+			},                                                                \
+			nullptr);                                                         \
+	}
+
 #define MAKE_STRING_EDIT_FIELD(str, width, edit, ui, type, setter)        \
 	{                                                                     \
 		MAKE_LABEL(str, ui);                                              \
@@ -62,6 +84,32 @@ using namespace Gui;
 				m_undo.save();                                            \
 				static_cast<type*>(m_sceneView->getSelection().back())    \
 					->setter(edit->getLabel());                           \
+			},                                                            \
+			nullptr);                                                     \
+	}
+
+#define MAKE_CONSTRAINT_STRING_EDIT_FIELD(str, width, edit, ui, setter)        \
+	{                                                                     \
+		MAKE_LABEL(str, ui);                                              \
+		ui->addWidget(                                                    \
+			edit = make_shared<EditField>(0, 0, width, 20, nullptr, ui)); \
+		edit->setCallback(                                                \
+			[this](Widget& w, void* d) {                                  \
+				if (!m_sceneView->getSelection().size())                  \
+					return;                                               \
+                                                                          \
+				m_undo.save();                                            \
+				auto phys =                                                   \
+					static_cast<OEntity*>(m_sceneView->getSelection().back()) \
+						->getPhysicsProperties();                             \
+				if (!phys)                                                    \
+					return;                                                   \
+                                                                              \
+				auto con = phys->getConstraint(); \
+				if(!con) \
+					return; \
+\
+				con->setter.set(edit->getLabel());                              \
 			},                                                            \
 			nullptr);                                                     \
 	}
@@ -82,6 +130,58 @@ using namespace Gui;
 				updateSelectedObject(m_sceneView->getSelection().back());   \
 			},                                                              \
 			nullptr);                                                       \
+	}
+
+#define MAKE_3D_PHYSICS_EDIT_FIELD(str, width, edit, ui, setter)        \
+	{                                                                         \
+		MAKE_LABEL(str, ui);                                                  \
+		ui->addWidget(                                                        \
+			edit = make_shared<Vector3Edit>(0, 0, width, 20, nullptr, ui));   \
+		edit->setCallback(                                                    \
+			[this](Widget& w, void* d) {                                      \
+				if (!m_sceneView->getSelection().size())                      \
+					return;                                                   \
+                                                                              \
+				m_undo.save();                                                \
+                                                                              \
+				auto phys =                                                   \
+					static_cast<OEntity*>(m_sceneView->getSelection().back()) \
+						->getPhysicsProperties();                             \
+				if (!phys)                                                    \
+					return;                                                   \
+                                                                              \
+				phys->setter(edit->getVector());                              \
+				updateSelectedObject(m_sceneView->getSelection().back());     \
+			},                                                                \
+			nullptr);                                                         \
+	}
+
+#define MAKE_3D_CONSTRAINT_EDIT_FIELD(str, width, edit, ui, setter)        \
+	{                                                                         \
+		MAKE_LABEL(str, ui);                                                  \
+		ui->addWidget(                                                        \
+			edit = make_shared<Vector3Edit>(0, 0, width, 20, nullptr, ui));   \
+		edit->setCallback(                                                    \
+			[this](Widget& w, void* d) {                                      \
+				if (!m_sceneView->getSelection().size())                      \
+					return;                                                   \
+                                                                              \
+				m_undo.save();                                                \
+                                                                              \
+				auto phys =                                                   \
+					static_cast<OEntity*>(m_sceneView->getSelection().back()) \
+						->getPhysicsProperties();                             \
+				if (!phys)                                                    \
+					return;                                                   \
+                                                                              \
+				auto con = phys->getConstraint(); \
+				if(!con) \
+					return; \
+\
+				con->setter = edit->getVector();                              \
+				updateSelectedObject(m_sceneView->getSelection().back());     \
+			},                                                                \
+			nullptr);                                                         \
 	}
 
 #define MAKE_4D_EDIT_FIELD(str, width, edit, ui, type, setter)              \
@@ -117,6 +217,7 @@ using namespace Gui;
 			},                                                            \
 			nullptr);                                                     \
 	}
+
 
 #define MAKE_BUTTON(str, width, ui, callback)                         \
 	{                                                                 \
@@ -180,7 +281,7 @@ void EditorGame::update()
 
 	m_sceneView->setPosition(Vector2(m_leftPanel->getSize().x, m_toolbar->getPosition().y + m_toolbar->getSize().y));
 	m_sceneView->setSize(Vector2(size.x - m_leftPanel->getSize().x - m_rightPanel->getSize().x - 15, size.y));
-
+	
 	// Update title
 	//char title[64];
 	//snprintf(title, sizeof(title), "%s (%d FPS)", tr("Neo Scene Editor"), static_cast<int>(floor(1/delta)));
@@ -380,6 +481,14 @@ void EditorGame::onBegin()
 												   rightscroll->getPosition().y,
 												   width, 200, rightscroll);
 
+			m_physicsUi = make_shared<Container>(rightscroll->getPosition().x,
+												 rightscroll->getPosition().y,
+												 width, 300, rightscroll);
+
+			m_constraintUi = make_shared<Container>(rightscroll->getPosition().x,
+													rightscroll->getPosition().y,
+													width, 300, rightscroll);
+
 			m_lightUi = make_shared<Container>(rightscroll->getPosition().x,
 												   rightscroll->getPosition().y,
 												   width, 200, rightscroll);
@@ -402,7 +511,7 @@ void EditorGame::onBegin()
 			rightscroll->addWidget(m_cameraUi);
 			rightscroll->addWidget(m_soundUi);
 			rightscroll->addWidget(m_textUi);
-			
+
 			auto scrollLayout = make_shared<VerticalLayout>();
 			rightscroll->setLayout(scrollLayout);
 			scrollLayout->enableResize(false);
@@ -415,6 +524,8 @@ void EditorGame::onBegin()
 			m_cameraUi->setLayout(scrollLayout);
 			m_soundUi->setLayout(scrollLayout);
 			m_textUi->setLayout(scrollLayout);
+			m_physicsUi->setLayout(scrollLayout);
+			m_constraintUi->setLayout(scrollLayout);
 			
 			auto label = make_shared<Label>(0,0,0,10,tr("Name:"), m_transformUi);
 			label->setColor(Vector4(0,0,0,1));
@@ -504,13 +615,229 @@ void EditorGame::onBegin()
 
 			// Entity UI
 			MAKE_CHECK_BUTTON("Invisible", m_entityInvisibleButton, m_entityUi, OEntity, setInvisible);
-			/*MAKE_BUTTON("Edit Physics Properties", width, m_entityUi, [](Widget& w, void* d) {
-				MLOG_INFO("PHYSICS!!!");
-			});
 
-			MAKE_BUTTON("Edit Material Properties", width, m_entityUi, [](Widget& w, void* d) {
-				MLOG_INFO("Materials!");
-			});*/
+			// Physics stuff
+			{
+				m_entityUi->addWidget(m_entityPhysicsButton = make_shared<CheckButton>(0, 0, 100, 20, tr("Physics"), m_entityUi));
+				m_entityPhysicsButton->setCallback(
+					[this](Widget&, void*) {
+						if (!m_sceneView->getSelection().size())
+							return;
+
+						m_undo.save();
+						if (m_entityPhysicsButton->getValue())
+							static_cast<OEntity*>(
+								m_sceneView->getSelection().back())
+								->enablePhysics();
+						else
+							static_cast<OEntity*>(
+								m_sceneView->getSelection().back())
+								->deletePhysicsProperties();
+
+						updateSelectedObject(m_sceneView->getSelection().back());
+						MLOG_INFO("Enabled/Disabled physics properties");
+					},
+					nullptr);
+
+				m_physicsUi->addWidget(m_entityGhostButton = make_shared<CheckButton>(0, 0, 100, 20, tr("Ghost"), m_physicsUi));
+				m_entityGhostButton->setCallback(
+					[this](Widget&, void*) {
+						if (!m_sceneView->getSelection().size())
+							return;
+
+						auto phys = static_cast<OEntity*>(m_sceneView->getSelection().back())->getPhysicsProperties();
+						if(!phys)
+							return;
+
+						m_undo.save();
+						phys->setGhost(m_entityGhostButton->getValue());
+					},
+					nullptr);
+
+				m_entityUi->addWidget(m_physicsUi);
+
+				MAKE_FLOAT_PHYSICS_EDIT_FIELD("Mass", width, m_entityMassEdit, m_physicsUi, setMass);
+				MAKE_FLOAT_PHYSICS_EDIT_FIELD("Friction", width, m_entityFrictionEdit, m_physicsUi, setFriction);
+				MAKE_FLOAT_PHYSICS_EDIT_FIELD("Restitution", width, m_entityRestitutionEdit, m_physicsUi, setRestitution);
+				MAKE_FLOAT_PHYSICS_EDIT_FIELD("Linear Damping", width, m_entityLinearDampingEdit, m_physicsUi, setLinearDamping);
+				MAKE_FLOAT_PHYSICS_EDIT_FIELD("Angular Damping", width, m_entityAngularDampingEdit, m_physicsUi, setAngularDamping);
+				MAKE_FLOAT_PHYSICS_EDIT_FIELD("Angular Factor", width, m_entityAngularFactorEdit, m_physicsUi, setAngularFactor);
+				MAKE_3D_PHYSICS_EDIT_FIELD("Linear Factor", width, m_entityLinearFactorEdit, m_physicsUi, setLinearFactor);
+
+				m_entityShapeMenu = make_shared<Submenu>("", m_physicsUi);
+				m_entityShapeMenu->setSize(Vector2(width, 25));
+				m_entityShapeMenu->enableDrawingSelf(false);
+
+				/*MAKE_BUTTON("Collision Shape", width, m_physicsUi, [this](Widget& w, void*) {
+					bool val = !m_entityShapeMenu->isActive();
+					m_entityShapeMenu->setActive(val);
+					m_entityShapeMenu->setVisible(val);
+
+					//m_entityShapeMenu->setPosition(w.getPosition() + Vector2(0, w.getSize().y));
+				});*/
+
+				m_entityMenuButton = make_shared<Button>(0, 0, width, 20, "", m_physicsUi);
+				m_physicsUi->addWidget(m_entityMenuButton);
+
+				m_entityMenuButton->setCallback([this](Widget& w, void*) {
+					bool val = !m_entityShapeMenu->isActive();
+					m_entityShapeMenu->setActive(val);
+					m_entityShapeMenu->setVisible(val);
+				}, nullptr);
+
+				m_physicsUi->addWidget(m_entityShapeMenu);
+				m_entityShapeMenu->addItem(tr("Box"), [this](Widget&, void*){
+					if (!m_sceneView->getSelection().size())
+						return;
+
+					auto entity = static_cast<OEntity*>(m_sceneView->getSelection().back());
+					auto phys = entity->getPhysicsProperties();
+					if(!phys)
+						return;
+
+					m_undo.save();
+					phys->setCollisionShape(COLLISION_SHAPE_BOX);
+					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionShape(entity);
+
+					updateSelectedObject(m_sceneView->getSelection().back());
+				});
+
+				m_entityShapeMenu->addItem(tr("Cone"), [this](Widget&, void*){
+					if (!m_sceneView->getSelection().size())
+						return;
+
+					auto entity = static_cast<OEntity*>(m_sceneView->getSelection().back());
+					auto phys = entity->getPhysicsProperties();
+					if(!phys)
+						return;
+
+					m_undo.save();
+					phys->setCollisionShape(COLLISION_SHAPE_CONE);
+					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionShape(entity);
+
+					updateSelectedObject(m_sceneView->getSelection().back());
+				});
+
+				m_entityShapeMenu->addItem(tr("Capsule"), [this](Widget&, void*){
+					if (!m_sceneView->getSelection().size())
+						return;
+
+					auto entity = static_cast<OEntity*>(m_sceneView->getSelection().back());
+					auto phys = entity->getPhysicsProperties();
+					if(!phys)
+						return;
+
+					m_undo.save();
+					phys->setCollisionShape(COLLISION_SHAPE_CAPSULE);
+					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionShape(entity);
+
+					updateSelectedObject(m_sceneView->getSelection().back());
+				});
+
+				m_entityShapeMenu->addItem(tr("Cylinder"), [this](Widget&, void*){
+					if (!m_sceneView->getSelection().size())
+						return;
+
+					auto entity = static_cast<OEntity*>(m_sceneView->getSelection().back());
+					auto phys = entity->getPhysicsProperties();
+					if(!phys)
+						return;
+
+					m_undo.save();
+					phys->setCollisionShape(COLLISION_SHAPE_CYLINDER);
+					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionShape(entity);
+
+					updateSelectedObject(m_sceneView->getSelection().back());
+				});
+
+				m_entityShapeMenu->addItem(tr("Convex Hull"), [this](Widget&, void*){
+					if (!m_sceneView->getSelection().size())
+						return;
+
+					auto entity = static_cast<OEntity*>(m_sceneView->getSelection().back());
+					auto phys = entity->getPhysicsProperties();
+					if(!phys)
+						return;
+
+					m_undo.save();
+					phys->setCollisionShape(COLLISION_SHAPE_CONVEX_HULL);
+					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionShape(entity);
+
+					updateSelectedObject(m_sceneView->getSelection().back());
+				});
+
+				m_entityShapeMenu->addItem(tr("Triangle Mesh"), [this](Widget&, void*){
+					if (!m_sceneView->getSelection().size())
+						return;
+
+					auto entity = static_cast<OEntity*>(m_sceneView->getSelection().back());
+					auto phys = entity->getPhysicsProperties();
+					if(!phys)
+						return;
+
+					m_undo.save();
+					phys->setCollisionShape(COLLISION_SHAPE_TRIANGLE_MESH);
+					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionShape(entity);
+
+					updateSelectedObject(m_sceneView->getSelection().back());
+				});
+
+				// Constraint
+				m_physicsUi->addWidget(m_entityConstraintButton = make_shared<CheckButton>(0, 0, 100, 20, tr("Constraint"), m_physicsUi));
+				m_entityConstraintButton->setCallback(
+					[this](Widget&, void*) {
+						if (!m_sceneView->getSelection().size())
+							return;
+
+						m_undo.save();
+						auto phys = static_cast<OEntity*>(
+							m_sceneView->getSelection().back())->getPhysicsProperties();
+
+						if(!phys)
+							return;
+
+						if (m_entityConstraintButton->getValue())
+							phys->createConstraint();
+						else
+							phys->deleteConstraint();
+
+						updateSelectedObject(m_sceneView->getSelection().back());
+						MLOG_INFO("Enabled/Disabled constraint properties");
+					},
+					nullptr);
+
+				MAKE_CONSTRAINT_STRING_EDIT_FIELD("Parent Name:", width, m_entityConstraintParentNameEdit, m_constraintUi, parentName);
+				m_constraintUi->addWidget(m_entityDisableParentCollision = make_shared<CheckButton>(0, 0, 100, 20, tr("Parent Collision"), m_constraintUi));
+				m_entityDisableParentCollision->setCallback(
+					[this](Widget&, void*) {
+						if (!m_sceneView->getSelection().size())
+							return;
+
+						m_undo.save();
+						auto phys = static_cast<OEntity*>(
+							m_sceneView->getSelection().back())->getPhysicsProperties();
+
+						if(!phys)
+							return;
+
+						if(auto con = phys->getConstraint())
+							con->disableParentCollision = !m_entityDisableParentCollision->getValue();
+
+						updateSelectedObject(m_sceneView->getSelection().back());
+					},
+					nullptr);
+
+				MAKE_3D_CONSTRAINT_EDIT_FIELD("Pivot:", width, m_entityPivotEdit, m_constraintUi, pivot);
+				MAKE_3D_CONSTRAINT_EDIT_FIELD("Lower Linear Limit:", width, m_entityLowerLinearLimitEdit, m_constraintUi, lowerLinearLimit);
+				MAKE_3D_CONSTRAINT_EDIT_FIELD("Upper Linear Limit:", width, m_entityUpperLinearLimitEdit, m_constraintUi, upperLinearLimit);
+				MAKE_3D_CONSTRAINT_EDIT_FIELD("Lower Angular Limit:", width, m_entityLowerAngularLimitEdit, m_constraintUi, lowerAngularLimit);
+				MAKE_3D_CONSTRAINT_EDIT_FIELD("Upper Angular Limit:", width, m_entityUpperAngularLimitEdit, m_constraintUi, upperAngularLimit);
+				m_physicsUi->addWidget(m_constraintUi);
+
+				/*MAKE_BUTTON("Edit Material Properties", width, m_entityUi, [](Widget& w, void* d) {
+				  MLOG_INFO("Materials!");
+				  });*/
+			}
 
 			// Light UI
 
@@ -737,6 +1064,76 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 
 		OEntity* entity = static_cast<OEntity*>(object);
 		m_entityInvisibleButton->setValue(entity->isInvisible());
+
+		PhysicsProperties* phys = entity->getPhysicsProperties();
+		if(phys)
+		{
+			m_entityPhysicsButton->setValue(true);
+			m_entityGhostButton->setValue(phys->isGhost());
+			m_entityMassEdit->setLabel(std::to_string(phys->getMass()).c_str());
+			m_entityFrictionEdit->setLabel(std::to_string(phys->getFriction()).c_str());
+			m_entityRestitutionEdit->setLabel(std::to_string(phys->getRestitution()).c_str());
+			m_entityLinearDampingEdit->setLabel(std::to_string(phys->getLinearDamping()).c_str());
+			m_entityAngularDampingEdit->setLabel(std::to_string(phys->getAngularDamping()).c_str());
+			m_entityAngularFactorEdit->setLabel(std::to_string(phys->getAngularFactor()).c_str());
+			m_entityLinearFactorEdit->setVector(*phys->getLinearFactor());
+
+			m_physicsUi->setInvisible(false);
+			m_physicsUi->setActive(true);
+
+			switch(phys->getCollisionShape())
+			{
+				case COLLISION_SHAPE_BOX:
+					m_entityMenuButton->setLabel(tr("Box"));
+					break;
+				case COLLISION_SHAPE_SPHERE:
+					m_entityMenuButton->setLabel(tr("Sphere"));
+					break;
+				case COLLISION_SHAPE_CONE:
+					m_entityMenuButton->setLabel(tr("Cone"));
+					break;
+				case COLLISION_SHAPE_CAPSULE:
+					m_entityMenuButton->setLabel(tr("Capsule"));
+					break;
+				case COLLISION_SHAPE_CYLINDER:
+					m_entityMenuButton->setLabel(tr("Cylinder"));
+					break;
+				case COLLISION_SHAPE_CONVEX_HULL:
+					m_entityMenuButton->setLabel(tr("Convex Hull"));
+					break;
+				case COLLISION_SHAPE_TRIANGLE_MESH:
+					m_entityMenuButton->setLabel(tr("Triangle Mesh"));
+					break;
+			}
+
+			auto con = phys->getConstraint();
+			if(con)
+			{
+				m_entityConstraintButton->setValue(true);
+				m_constraintUi->setInvisible(false);
+				m_constraintUi->setActive(true);
+
+				m_entityConstraintParentNameEdit->setLabel(con->parentName.getSafeString());
+				m_entityPivotEdit->setVector(con->pivot);
+				m_entityLowerLinearLimitEdit->setVector(con->lowerLinearLimit);
+				m_entityLowerAngularLimitEdit->setVector(con->lowerAngularLimit);
+				m_entityUpperLinearLimitEdit->setVector(con->upperLinearLimit);
+				m_entityUpperAngularLimitEdit->setVector(con->upperAngularLimit);
+				m_entityDisableParentCollision->setValue(!con->disableParentCollision);
+			}
+			else
+			{
+				m_entityConstraintButton->setValue(false);
+				m_constraintUi->setInvisible(true);
+				m_constraintUi->setActive(false);
+			}
+		}
+		else
+		{
+			m_entityPhysicsButton->setValue(false);
+			m_physicsUi->setInvisible(true);
+			m_physicsUi->setActive(false);
+		}
 	}
 	break;
 

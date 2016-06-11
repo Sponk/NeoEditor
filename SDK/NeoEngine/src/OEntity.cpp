@@ -116,7 +116,9 @@ OEntity::OEntity(MeshRef* meshRef)
 	m_isOccluder(false),
 	m_wireframe(false),
     m_materials(NULL),
-    m_textures(NULL)
+    m_textures(NULL),
+	m_numMaterials(0),
+	m_numTextures(0)
 {
 	setMeshRef(meshRef);
 }

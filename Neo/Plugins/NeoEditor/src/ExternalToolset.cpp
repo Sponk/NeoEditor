@@ -16,7 +16,12 @@ std::string ExternalToolset::fileDialog(const char* message,
 	ss << "(save " << save << ")(directories " << directories << ")";
 
 	auto result = sexpresso::parse(Tool::executeToolNonBlocking("filedialog", ss.str().c_str()));
-	return result.getChildByPath("filename")->arguments().begin()->value.str;
+	auto filename = result.getChildByPath("filename");
+
+	if(filename)
+		return filename->arguments().begin()->value.str;
+
+	return "";
 }
 
 

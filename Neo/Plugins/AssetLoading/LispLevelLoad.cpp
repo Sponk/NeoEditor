@@ -215,9 +215,40 @@ bool loadLispLevel(const char* filename, Level* level)
 					Mesh* mesh = entity->getMesh();
 					entity->enableShadow(GET_INT_VALUE(o, "has-shadow"));
 
+					// Load physics
+					auto tn = o.getChildByPath("physics-properties");
+					if(tn)
+					{
+						PhysicsProperties* phys = entity->createPhysicsProperties();
+						phys->setMass(GET_FLOAT_VALUE(*tn, "mass"));
+						phys->setFriction(GET_FLOAT_VALUE(*tn, "friction"));
+						phys->setRestitution(GET_FLOAT_VALUE(*tn, "restitution"));
+						phys->setLinearDamping(GET_FLOAT_VALUE(*tn, "linear-damping"));
+						phys->setAngularFactor(GET_FLOAT_VALUE(*tn, "angular-factor"));
+						phys->setAngularDamping(GET_FLOAT_VALUE(*tn, "angular-damping"));
+						phys->setCollisionShape(static_cast<COLLISION_SHAPE_TYPE>(GET_INT_VALUE(*tn, "collision-shape")));
+						phys->setGhost(GET_INT_VALUE(*tn, "is-ghost"));
+						phys->setLinearFactor(GET_VECTOR3_VALUE(*tn, "linear-factor"));
+
+						// Load Constraint
+						tn = tn->getChildByPath("physics-constraint");
+						if(tn)
+						{
+							PhysicsConstraint* con = phys->createConstraint();
+							con->upperAngularLimit = GET_VECTOR3_VALUE(*tn, "upper-angular-limit");
+							con->lowerAngularLimit = GET_VECTOR3_VALUE(*tn, "lower-angular-limit");
+							con->upperLinearLimit = GET_VECTOR3_VALUE(*tn, "upper-linear-limit");
+							con->lowerLinearLimit = GET_VECTOR3_VALUE(*tn, "lower-linear-limit");
+							con->pivot = GET_VECTOR3_VALUE(*tn, "pivot");
+							con->disableParentCollision = GET_INT_VALUE(*tn, "disable-parent-collision");
+							con->parentName.set(GET_VALUE(*tn, "parent-name").c_str());
+
+						}
+					}
+
 					std::vector<Texture*> textureList;
 					// Load textures
-					auto tn = o.getChildByPath("textures");
+					tn = o.getChildByPath("textures");
 					if(tn)
 					{
 						entity->getMesh()->allocTextures(GET_INT_VALUE(o, "texture-count"));
@@ -342,6 +373,8 @@ bool loadLispLevel(const char* filename, Level* level)
 				{
 					parentChildLinks.push_back(Link(object, parent));
 				}
+
+				s->preparePhysics();
 			}
 
 			// Link parent-child relationships

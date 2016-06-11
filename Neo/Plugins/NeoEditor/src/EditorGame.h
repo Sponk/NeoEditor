@@ -39,6 +39,9 @@ class EditorGame : public Neo::SubGame
 	shared_ptr<Neo2D::Gui::Label> m_diagnosticsLabel;
 	shared_ptr<Neo2D::Gui::Container> m_transformUi;
 	shared_ptr<Neo2D::Gui::Container> m_entityUi;
+	shared_ptr<Neo2D::Gui::Container> m_physicsUi;
+	shared_ptr<Neo2D::Gui::Container> m_constraintUi;
+
 	shared_ptr<Neo2D::Gui::Container> m_cameraUi;
 	shared_ptr<Neo2D::Gui::Container> m_lightUi;
 	shared_ptr<Neo2D::Gui::Container> m_soundUi;
@@ -72,7 +75,6 @@ class EditorGame : public Neo::SubGame
 	shared_ptr<Neo2D::Gui::CheckButton> m_cameraFogButton;
 	shared_ptr<Neo2D::Gui::CheckButton> m_cameraOrthoButton;
 
-	
 	shared_ptr<Neo2D::Gui::EditField> m_soundGainEdit;
 	shared_ptr<Neo2D::Gui::EditField> m_soundPitchEdit;
 	shared_ptr<Neo2D::Gui::EditField> m_soundRadiusEdit;
@@ -86,6 +88,28 @@ class EditorGame : public Neo::SubGame
 	shared_ptr<Vector4Edit> m_textColorEdit;
 		
 	shared_ptr<Neo2D::Gui::CheckButton> m_entityInvisibleButton;
+	shared_ptr<Neo2D::Gui::EditField> m_entityMassEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_entityFrictionEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_entityRestitutionEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_entityLinearDampingEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_entityAngularDampingEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_entityAngularFactorEdit;
+	shared_ptr<Vector3Edit> m_entityLinearFactorEdit;
+	shared_ptr<Neo2D::Gui::Submenu> m_entityShapeMenu;
+	shared_ptr<Neo2D::Gui::Button> m_entityMenuButton;
+
+	shared_ptr<Neo2D::Gui::CheckButton> m_entityConstraintButton;
+	shared_ptr<Vector3Edit> m_entityPivotEdit;
+	shared_ptr<Vector3Edit> m_entityLowerLinearLimitEdit;
+	shared_ptr<Vector3Edit> m_entityUpperLinearLimitEdit;
+	shared_ptr<Vector3Edit> m_entityLowerAngularLimitEdit;
+	shared_ptr<Vector3Edit> m_entityUpperAngularLimitEdit;
+	shared_ptr<Neo2D::Gui::CheckButton> m_entityDisableParentCollision;
+	shared_ptr<Neo2D::Gui::EditField> m_entityConstraintParentNameEdit;
+
+	shared_ptr<Neo2D::Gui::CheckButton> m_entityPhysicsButton;
+	shared_ptr<Neo2D::Gui::CheckButton> m_entityGhostButton;
+
 	std::string m_currentLevelFile;
 	std::string m_currentProjectFile;
 	Project m_project;

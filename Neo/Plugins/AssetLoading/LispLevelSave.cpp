@@ -154,12 +154,62 @@ void writeSound(File* f, OSound* t, int tabs)
 	writeIntegerVar(f, "is-relative", t->isRelative(), tabs);
 }
 
+void writePhysicsProperties(File* f, PhysicsProperties* p, int tabs)
+{
+	if(!p)
+		return;
+
+	writeTabs(f, tabs);
+	M_fprintf(f, "(physics-properties\n");
+
+	tabs++;
+	writeIntegerVar(f, "is-ghost", p->isGhost(), tabs);
+	writeFloatVar(f, "mass", p->getMass(), tabs);
+	writeFloatVar(f, "friction", p->getFriction(), tabs);
+	writeFloatVar(f, "restitution", p->getRestitution(), tabs);
+	writeFloatVar(f, "linear-damping", p->getLinearDamping(), tabs);
+	writeFloatVar(f, "angular-damping", p->getAngularDamping(), tabs);
+	writeFloatVar(f, "angular-factor", p->getAngularFactor(), tabs);
+	writeVector3(f, "linear-factor", *p->getLinearFactor(), tabs);
+	writeIntegerVar(f, "collision-shape", p->getCollisionShape(), tabs);
+
+	auto constraints = p->getConstraint();
+	if(constraints)
+	{
+		writeTabs(f, tabs);
+		M_fprintf(f, "(physics-constraint\n");
+		tabs++;
+
+		writeStringVar(f, "parent-name", constraints->parentName.getSafeString(), tabs);
+		writeVector3(f, "pivot", constraints->pivot, tabs);
+		writeVector3(f, "lower-linear-limit", constraints->lowerLinearLimit, tabs);
+		writeVector3(f, "lower-angular-limit", constraints->lowerAngularLimit, tabs);
+		writeVector3(f, "upper-linear-limit", constraints->upperLinearLimit, tabs);
+		writeVector3(f, "upper-angular-limit", constraints->upperAngularLimit, tabs);
+		writeIntegerVar(f, "disable-parent-collision", constraints->disableParentCollision, tabs);
+
+		tabs--;
+		writeTabs(f, tabs);
+		M_fprintf(f, ")\n");
+	}
+
+	tabs--;
+
+	writeTabs(f, tabs);
+	M_fprintf(f, ")\n");
+
+	// TODO: Write constraints
+}
+
 void writeEntity(File* f, OEntity* e, int tabs)
 {
 	writeStringVar(f, "type", "Entity", tabs);
 	writeIntegerVar(f, "invisible", e->isInvisible(), tabs);
 	writeStringVar(f, "mesh", getLocalFile(e->getMeshRef()->getFilename()).c_str(), tabs);
 	writeIntegerVar(f, "has-shadow", e->hasShadow(), tabs);
+
+	// Physics
+	writePhysicsProperties(f, e->getPhysicsProperties(), tabs);
 
 	// Textures
 	{

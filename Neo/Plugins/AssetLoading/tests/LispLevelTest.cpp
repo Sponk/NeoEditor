@@ -295,3 +295,78 @@ TEST(LispLevelTest, LinkTest)
 		EXPECT_EQ(parent, child->getParent());
 	}
 }
+
+TEST(LispLevelTest, PhysicsPropertiesTest)
+{
+	char curdir[256];
+	char filename[256];
+	getcwd(curdir, sizeof(curdir));
+	getGlobalFilename(filename, curdir, "test.llvl");
+
+	Mesh mesh;
+
+	// Create and save level
+	{
+		Level level;
+		auto scene = level.addNewScene();
+
+		scene->setName("scene-1");
+		auto entity = scene->addNewEntity(MeshRef::getNew(&mesh, ""));
+
+		entity->setName("entity");
+		auto phys = entity->createPhysicsProperties();
+		phys->setCollisionShape(COLLISION_SHAPE_CONVEX_HULL);
+		phys->setMass(15.0);
+		phys->setFriction(15.0);
+		phys->setGhost(true);
+		phys->setRestitution(15.0);
+		phys->setLinearDamping(15.0);
+		phys->setAngularDamping(15.0);
+		phys->setAngularFactor(15.0);
+		phys->setLinearFactor(Vector3(1,2,3));
+
+		auto con = phys->createConstraint();
+		con->disableParentCollision = true;
+		con->upperAngularLimit = Vector3(1,2,3);
+		con->upperLinearLimit = Vector3(1,2,3);
+		con->lowerAngularLimit = Vector3(1,2,3);
+		con->lowerLinearLimit = Vector3(1,2,3);
+		con->pivot = Vector3(1,2,3);
+		con->parentName.set("parent");
+
+		saveLispLevel(filename, "llvl", &level);
+	}
+
+	// Load level and check results
+	{
+		Level loadedlevel;
+		ASSERT_TRUE(loadLispLevel(filename, &loadedlevel));
+
+		auto scene = loadedlevel.getSceneByIndex(0);
+		auto entity = scene->getEntityByName("entity");
+
+		ASSERT_NE(nullptr, entity);
+		ASSERT_NE(nullptr, entity->getPhysicsProperties());
+
+		auto phys = entity->getPhysicsProperties();
+		EXPECT_EQ(15, phys->getMass());
+		EXPECT_EQ(15, phys->getRestitution());
+		EXPECT_EQ(15, phys->getAngularDamping());
+		EXPECT_EQ(15, phys->getLinearDamping());
+		EXPECT_EQ(15, phys->getAngularFactor());
+		EXPECT_EQ(15, phys->getFriction());
+
+		EXPECT_EQ(COLLISION_SHAPE_CONVEX_HULL, phys->getCollisionShape());
+		EXPECT_EQ(Vector3(1,2,3), *phys->getLinearFactor());
+
+		auto con = phys->getConstraint();
+		ASSERT_NE(nullptr, con);
+		EXPECT_STREQ("parent", con->parentName.getSafeString());
+		EXPECT_TRUE(con->disableParentCollision);
+		EXPECT_EQ(Vector3(1,2,3), con->upperAngularLimit);
+		EXPECT_EQ(Vector3(1,2,3), con->upperLinearLimit);
+		EXPECT_EQ(Vector3(1,2,3), con->lowerAngularLimit);
+		EXPECT_EQ(Vector3(1,2,3), con->lowerAngularLimit);
+		EXPECT_EQ(Vector3(1,2,3), con->pivot);
+	}
+}

@@ -51,6 +51,9 @@ enum COLLISION_SHAPE_TYPE
 	COLLISION_SHAPE_TRIANGLE_MESH
 };
 
+/**
+ * @fixme Move all public interface into privates!
+ */
 struct NEO_ENGINE_EXPORT PhysicsConstraint
 {
 	PhysicsConstraint(void);
@@ -66,6 +69,76 @@ struct NEO_ENGINE_EXPORT PhysicsConstraint
 	Vector3 lowerAngularLimit;
 	Vector3 upperAngularLimit;
 	bool disableParentCollision;
+
+	const char* getParentName()
+	{
+		return parentName.getSafeString();
+	}
+
+	void setParentName(const char* parentName)
+	{
+		PhysicsConstraint::parentName = parentName;
+	}
+
+	const Vector3& getPivot() const
+	{
+		return pivot;
+	}
+
+	void setPivot(const Vector3& pivot)
+	{
+		PhysicsConstraint::pivot = pivot;
+	}
+
+	const Vector3& getLowerLinearLimit() const
+	{
+		return lowerLinearLimit;
+	}
+
+	void setLowerLinearLimit(const Vector3& lowerLinearLimit)
+	{
+		PhysicsConstraint::lowerLinearLimit = lowerLinearLimit;
+	}
+
+	const Vector3& getUpperLinearLimit() const
+	{
+		return upperLinearLimit;
+	}
+
+	void setUpperLinearLimit(const Vector3& upperLinearLimit)
+	{
+		PhysicsConstraint::upperLinearLimit = upperLinearLimit;
+	}
+
+	const Vector3& getLowerAngularLimit() const
+	{
+		return lowerAngularLimit;
+	}
+
+	void setLowerAngularLimit(const Vector3& lowerAngularLimit)
+	{
+		PhysicsConstraint::lowerAngularLimit = lowerAngularLimit;
+	}
+
+	const Vector3& getUpperAngularLimit() const
+	{
+		return upperAngularLimit;
+	}
+
+	void setUpperAngularLimit(const Vector3& upperAngularLimit)
+	{
+		PhysicsConstraint::upperAngularLimit = upperAngularLimit;
+	}
+
+	bool isDisableParentCollision() const
+	{
+		return disableParentCollision;
+	}
+
+	void setDisableParentCollision(bool disableParentCollision)
+	{
+		PhysicsConstraint::disableParentCollision = disableParentCollision;
+	}
 };
 
 /**
