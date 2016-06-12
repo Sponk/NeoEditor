@@ -118,6 +118,7 @@ bool NeoEngine::loadLevel(const char * filename)
 		m_level->clear();
 		m_level->clearScenes();
 		m_level->addNewScene()->setName("Scene-0");
+        m_level->getCurrentScene()->preparePhysics();
 
 		return false;
 	}
