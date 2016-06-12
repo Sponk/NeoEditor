@@ -13,6 +13,39 @@
 
 static LuaScript g_scriptContext;
 
+class LuaSubgame : public Neo::SubGame
+{
+public:
+    void onBegin()
+    {
+        g_scriptContext.runScript("assets/main.lua");
+    }
+
+    void update()
+    {
+        PROFILE_BEGIN("ScriptUpdate");
+        // update script
+        if(g_scriptContext.startCallFunction("update"))
+        {
+            g_scriptContext.pushFloat(Neo::NeoEngine::getInstance()->getGame()->getFrameDelta());
+            g_scriptContext.endCallFunction(1);
+        }
+        PROFILE_END("ScriptUpdate");
+    }
+
+    void draw()
+    {
+        PROFILE_BEGIN("ScriptDraw");
+        g_scriptContext.callFunction("draw");
+        PROFILE_END("ScriptDraw");
+    }
+
+    void onEnd()
+    {
+        g_scriptContext.callFunction("onEnd");
+    }
+} g_luaSubgame;
+
 void StartPlugin()
 {
 	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
@@ -20,6 +53,8 @@ void StartPlugin()
 
 	engine->setScriptContext(&g_scriptContext);
 	manager->addBehavior(Neo::LuaBehavior::getStaticName(), OBJECT3D, Neo::LuaBehavior::getNew);
+
+    engine->getGame()->registerSubGame(&g_luaSubgame);
 
 	// Output some info about the middleware used
 #ifndef LUAJIT_VERSION
