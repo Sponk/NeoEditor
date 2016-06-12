@@ -515,13 +515,15 @@ void SceneView::update(float dt)
 	Vector3 scale = (m_camera.getPosition() - getSelectionCenter()).getLength() * 0.0075;
 	m_currentHandles->setScale(scale);
 	m_currentHandles->setPosition(getSelectionCenter());
-	
-	if(getState() != Neo2D::Gui::WIDGET_SELECTED)
+
+    NeoEngine* engine = NeoEngine::getInstance();
+    auto input = engine->getInputContext();
+
+    if(getState() != Neo2D::Gui::WIDGET_SELECTED
+            || input->isKeyDown(KEY_LCONTROL)) // So Ctrl + * shortcuts don't move the camera
 		return;
 
-	NeoEngine* engine = NeoEngine::getInstance();
 	float speed = 60.0f * dt;
-	auto input = engine->getInputContext();
 	if (input->isKeyDown(KEY_W))
 		m_camera.translate(Vector3(0, 0, -speed), true);
 	else if (input->isKeyDown(KEY_S))
