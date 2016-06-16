@@ -118,7 +118,7 @@ void SceneView::resetCamera()
 }
 
 void SceneView::draw(const Neo::Vector2& offset)
-{
+{	
 	NeoEngine* engine = NeoEngine::getInstance();
 	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
 	

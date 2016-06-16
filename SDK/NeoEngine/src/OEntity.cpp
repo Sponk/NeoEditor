@@ -433,20 +433,12 @@ RayCastResult OEntity::castRay(Vector3& rayO, Vector3& rayD)
 			t2 = vertices + submeshes[i].getIndex(j + 1);
 			t3 = vertices + submeshes[i].getIndex(j + 2);
 
-			vertices = (Vector3*) submeshes[i].getVertices();
-			result.hit = isEdgeTriangleIntersection(localRayO,
-													localRayD,
-
-													*t1,
-													*t2,
-													*t3,
-
-													getTriangleNormal(
-														*t1,
-														*t2,
-														*t3),
-
-													&result.point);
+			vertices = (Vector3*)submeshes[i].getVertices();
+			result.hit =
+				isEdgeTriangleIntersection(localRayO, localRayD,
+										   *t1, *t2, *t3,
+										   getTriangleNormal(*t1, *t2, *t3),
+										   &result.point);
 
 			if (result.hit)
 				return result;

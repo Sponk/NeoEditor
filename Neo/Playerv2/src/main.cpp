@@ -1,4 +1,5 @@
 #include <NeoEngine.h>
+#include <Player.h>
 #include <sexpresso.hpp>
 #include <memory>
 
@@ -9,6 +10,7 @@ void registerDebugHandler();
 
 int main(int argc, char* argv[])
 {
+	Player player(FRAME_CAP);
 	registerDebugHandler();
 
 	std::string err;
@@ -31,15 +33,12 @@ int main(int argc, char* argv[])
 
 	try
 	{
-		std::vector<std::shared_ptr<Plugin>> plugins;
 		for(auto&& s : pluginlist->arguments())
 		{
 			if(s.isNil() || s.isSexp())
 				continue;
 
-			std::shared_ptr<Plugin> p = std::make_shared<Plugin>();
-			p->load(s.toString().c_str());
-			plugins.push_back(p);
+			player.loadPlugin(s.toString().c_str());
 		}
 
 		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
@@ -53,7 +52,10 @@ int main(int argc, char* argv[])
         system->setArgc(argc);
         system->setArgv(&argv);
 
-		game->begin();
+		player.begin();
+		player.execute();
+		player.end();
+/*		game->begin();
 
         //char scriptfile[512];
         //getGlobalFilename(scriptfile, engine->getSystemContext()->getWorkingDirectory(), startlevel->value.sexp[1].toString().c_str());
@@ -70,7 +72,7 @@ int main(int argc, char* argv[])
 
 			system->sleep(FRAME_CAP - (system->getSystemTick() - time));
 		}
-		game->end();
+		game->end();*/
 	}
 	catch(std::exception& e)
 	{

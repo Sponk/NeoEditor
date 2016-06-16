@@ -2,6 +2,7 @@
 #define __PROJECT_H
 
 #include <string>
+#include <vector>
 
 class Project
 {
@@ -14,6 +15,7 @@ class Project
 	std::string m_assets;
 	std::string m_description;
 
+	std::vector<std::string> m_plugins;
 public:
 
 	Project() {}
@@ -38,6 +40,7 @@ public:
 	const std::string& getFilePath() const { return m_filepath; }
 	const std::string& getAssetDirectory() const { return m_assets; }
 	const std::string& getDescription() const { return m_description; }
+	const std::vector<std::string>& getPlugins() const { return m_plugins; }
 };
 
 #endif

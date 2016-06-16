@@ -131,7 +131,8 @@ public:
 	void updateEntityTree();
 	void updateSelectedObject(Neo::Object3d* object);
 	void updateWindowTitle();
-	
+
+	void runGame();
 	void openLevel();
 	void openLevel(const char* path);
 	void openNewLevel();

@@ -12,6 +12,7 @@
 #include <Label.h>
 #include <EditField.h>
 #include <Project.h>
+#include <Player.h>
 #include <sstream>
 
 using namespace Neo;
@@ -49,26 +50,30 @@ using namespace Gui;
 			nullptr);                                                     \
 	}
 
-#define MAKE_FLOAT_PHYSICS_EDIT_FIELD(str, width, edit, ui, setter)           \
-	{                                                                         \
-		MAKE_LABEL(str, ui);                                                  \
-		ui->addWidget(                                                        \
-			edit = make_shared<EditField>(0, 0, width, 20, nullptr, ui));     \
-		edit->setCallback(                                                    \
-			[this](Widget& w, void* d) {                                      \
-				if (!m_sceneView->getSelection().size())                      \
-					return;                                                   \
-                                                                              \
-				m_undo.save();                                                \
-				auto entity = static_cast<OEntity*>(m_sceneView->getSelection().back()); \
-				auto phys = entity->getPhysicsProperties();                             \
-				if (!phys)                                                    \
-					return;                                                   \
-                                                                              \
-				phys->setter(std::stod(edit->getLabel()));                    \
-				NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionObject(entity); \
-			},                                                                \
-			nullptr);                                                         \
+#define MAKE_FLOAT_PHYSICS_EDIT_FIELD(str, width, edit, ui, setter)            \
+	{                                                                          \
+		MAKE_LABEL(str, ui);                                                   \
+		ui->addWidget(                                                         \
+			edit = make_shared<EditField>(0, 0, width, 20, nullptr, ui));      \
+		edit->setCallback(                                                     \
+			[this](Widget& w, void* d) {                                       \
+				if (!m_sceneView->getSelection().size())                       \
+					return;                                                    \
+                                                                               \
+				m_undo.save();                                                 \
+				auto entity =                                                  \
+					static_cast<OEntity*>(m_sceneView->getSelection().back()); \
+				auto phys = entity->getPhysicsProperties();                    \
+				if (!phys)                                                     \
+					return;                                                    \
+                                                                               \
+				phys->setter(std::stod(edit->getLabel()));                     \
+				NeoEngine::getInstance()                                       \
+					->getLevel()                                               \
+					->getCurrentScene()                                        \
+					->prepareCollisionObject(entity);                          \
+			},                                                                 \
+			nullptr);                                                          \
 	}
 
 #define MAKE_STRING_EDIT_FIELD(str, width, edit, ui, type, setter)        \
@@ -88,30 +93,30 @@ using namespace Gui;
 			nullptr);                                                     \
 	}
 
-#define MAKE_CONSTRAINT_STRING_EDIT_FIELD(str, width, edit, ui, setter)        \
-	{                                                                     \
-		MAKE_LABEL(str, ui);                                              \
-		ui->addWidget(                                                    \
-			edit = make_shared<EditField>(0, 0, width, 20, nullptr, ui)); \
-		edit->setCallback(                                                \
-			[this](Widget& w, void* d) {                                  \
-				if (!m_sceneView->getSelection().size())                  \
-					return;                                               \
-                                                                          \
-				m_undo.save();                                            \
+#define MAKE_CONSTRAINT_STRING_EDIT_FIELD(str, width, edit, ui, setter)       \
+	{                                                                         \
+		MAKE_LABEL(str, ui);                                                  \
+		ui->addWidget(                                                        \
+			edit = make_shared<EditField>(0, 0, width, 20, nullptr, ui));     \
+		edit->setCallback(                                                    \
+			[this](Widget& w, void* d) {                                      \
+				if (!m_sceneView->getSelection().size())                      \
+					return;                                                   \
+                                                                              \
+				m_undo.save();                                                \
 				auto phys =                                                   \
 					static_cast<OEntity*>(m_sceneView->getSelection().back()) \
 						->getPhysicsProperties();                             \
 				if (!phys)                                                    \
 					return;                                                   \
                                                                               \
-				auto con = phys->getConstraint(); \
-				if(!con) \
-					return; \
-\
-				con->setter.set(edit->getLabel());                              \
-			},                                                            \
-			nullptr);                                                     \
+				auto con = phys->getConstraint();                             \
+				if (!con)                                                     \
+					return;                                                   \
+                                                                              \
+				con->setter.set(edit->getLabel());                            \
+			},                                                                \
+			nullptr);                                                         \
 	}
 
 #define MAKE_3D_EDIT_FIELD(str, width, edit, ui, type, setter)              \
@@ -132,7 +137,7 @@ using namespace Gui;
 			nullptr);                                                       \
 	}
 
-#define MAKE_3D_PHYSICS_EDIT_FIELD(str, width, edit, ui, setter)        \
+#define MAKE_3D_PHYSICS_EDIT_FIELD(str, width, edit, ui, setter)              \
 	{                                                                         \
 		MAKE_LABEL(str, ui);                                                  \
 		ui->addWidget(                                                        \
@@ -156,7 +161,7 @@ using namespace Gui;
 			nullptr);                                                         \
 	}
 
-#define MAKE_3D_CONSTRAINT_EDIT_FIELD(str, width, edit, ui, setter)        \
+#define MAKE_3D_CONSTRAINT_EDIT_FIELD(str, width, edit, ui, setter)           \
 	{                                                                         \
 		MAKE_LABEL(str, ui);                                                  \
 		ui->addWidget(                                                        \
@@ -174,10 +179,10 @@ using namespace Gui;
 				if (!phys)                                                    \
 					return;                                                   \
                                                                               \
-				auto con = phys->getConstraint(); \
-				if(!con) \
-					return; \
-\
+				auto con = phys->getConstraint();                             \
+				if (!con)                                                     \
+					return;                                                   \
+                                                                              \
 				con->setter = edit->getVector();                              \
 				updateSelectedObject(m_sceneView->getSelection().back());     \
 			},                                                                \
@@ -217,7 +222,6 @@ using namespace Gui;
 			},                                                            \
 			nullptr);                                                     \
 	}
-
 
 #define MAKE_BUTTON(str, width, ui, callback)                         \
 	{                                                                 \
@@ -302,7 +306,6 @@ void EditorGame::draw()
 {
 	PROFILE_BEGIN("GuiDraw");
     m_canvas.draw();
-    // m_sceneView->draw(Vector2());
 	PROFILE_END("GuiDraw");
 }
 
@@ -378,7 +381,11 @@ void EditorGame::onBegin()
 	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/applications-graphics.png", m_toolbar);
 	toolbutton->setCallback([this](Widget&, void*) { addEntity(); }, nullptr);
 	m_toolbar->addWidget(toolbutton);
-
+	
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/media-playback-start.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) { runGame(); }, nullptr);
+	m_toolbar->addWidget(toolbutton);
+	
 	auto filemenu = make_shared<Submenu>(tr("File"), m_menubar);
 	auto editmenu = make_shared<Submenu>(tr("Edit"), m_menubar);
 	auto helpmenu = make_shared<Submenu>(tr("Help"), m_menubar);
@@ -1539,4 +1546,30 @@ void EditorGame::redo()
 	m_undo.redo();
 	m_sceneView->updateOverlayScene();
 	updateEntityTree();
+}
+
+void EditorGame::runGame()
+{
+	// Save current state
+	m_undo.save();
+
+	NeoEngine* engine = NeoEngine::getInstance();
+	Neo::Player player(16);
+
+	//	for(auto p : m_project.getPlugins())
+	//		player.loadPlugin(p.c_str());
+
+	m_sceneView->setInvisible(true);
+	m_sceneView->setActive(false);
+	m_sceneView->clearSelection();
+	
+	engine->getGame()->setDrawMainScene(true);
+	player.execute(KEY_F1);
+	engine->getGame()->setDrawMainScene(false);
+	
+	m_sceneView->setInvisible(false);
+	m_sceneView->setActive(true);
+
+	// Restore original state
+	undo();	
 }
