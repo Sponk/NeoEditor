@@ -55,7 +55,8 @@ public:
 	void draw()
 	{
 		for(auto o : m_objects)
-			o->draw();
+			if(!o->isInvisible())
+				o->draw();
 	}
 };
 }

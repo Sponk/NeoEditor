@@ -104,7 +104,8 @@ public:
 			return;
 		
 		for (auto o : m_children)
-			o->draw(offset);
+			if(!o->isInvisible())
+				o->draw(offset);
 	}
 
 	virtual void update(float dt)
