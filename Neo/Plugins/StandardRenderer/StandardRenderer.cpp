@@ -417,7 +417,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh,
 						render->sendUniformInt(m_fx[0], "TextureMode", &texturePasses);
 						render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
 						render->sendUniformVec3(m_fx[0], "Diffuse", Vector3(0, 0, 0));
-						render->enablePolygonOffset(-0.5, -1);
+						render->enablePolygonOffset(-0.25, -1);
 
 						render->setPolygonMode(PRIMITIVE_LINES);
 						render->drawElement(display->getPrimitiveType(),
@@ -446,7 +446,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh,
 						texturePasses = 0;
 						render->sendUniformInt(m_fx[0], "TextureMode", &texturePasses);
 
-						render->enablePolygonOffset(-0.5, -1);
+						render->enablePolygonOffset(-0.25, -1);
 
 						render->setPolygonMode(PRIMITIVE_LINES);
 						render->drawElement(display->getPrimitiveType(),
@@ -483,7 +483,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh,
 						texturePasses = 0;
 						render->sendUniformInt(m_fx[0], "TextureMode", &texturePasses);
 
-						render->enablePolygonOffset(-0.5, -1);
+						render->enablePolygonOffset(-0.25, -1);
 
 						render->setPolygonMode(PRIMITIVE_LINES);
 						render->drawElement(display->getPrimitiveType(),
@@ -512,7 +512,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh,
 						texturePasses = 0;
 						render->sendUniformInt(m_fx[0], "TextureMode", &texturePasses);
 
-						render->enablePolygonOffset(-0.5, -1);
+						render->enablePolygonOffset(-0.25, -1);
 
 						render->setPolygonMode(PRIMITIVE_LINES);
 						render->drawElement(display->getPrimitiveType(),
