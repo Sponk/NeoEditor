@@ -42,9 +42,14 @@ Neo::Vector4 ExternalToolset::colorDialog(const Neo::Vector4& start)
 	std::stringstream ss;
 	ss << "(color " << start.x << " " << start.y << " " << start.z << " " << start.w << ")";
 
-	auto result = sexpresso::parse(Tool::executeToolNonBlocking("colorpicker", ss.str().c_str()));
-	auto comp = result.getChildByPath("color")->arguments().begin();
+	std::string str = Tool::executeToolNonBlocking("colorpicker", ss.str().c_str());
+	auto result = sexpresso::parse(str);
+	auto c = result.getChildByPath("color");
 
+	if(!c)
+		return start;
+	
+	auto comp = c->arguments().begin();
 	Neo::Vector4 retval;
 	retval.x = stof(comp->value.str);
 	retval.y = stof((++comp)->value.str);

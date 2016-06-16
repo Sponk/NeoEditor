@@ -188,6 +188,8 @@ std::string Tool::executeToolBlocking(const char* name, const char* input)
 #endif
 
 	char* buffer = new char[256];
+	memset(buffer, 0, 256);
+
 	while (t.read(buffer, 255))
 	{
 		// Make sure the buffer is nul-terminated
@@ -215,6 +217,8 @@ std::string Tool::executeToolNonBlocking(const char* name, const char* input)
 	std::atomic<bool> done(false);
 	std::thread inthrd([&ss, &t, &done] () {
 						   char* buffer = new char[256];
+						   memset(buffer, 0, 256);
+						   
 						   while (t.read(buffer, 255))
 						   {
 							   // Make sure the buffer is nul-terminated
