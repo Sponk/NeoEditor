@@ -878,7 +878,7 @@ void Scene::drawObjectsBehaviors(void)
 	for(i=0; i<oSize; i++)
 	{
 		Object3d * object = getObjectByIndex(i);
-		if(! object->isActive())
+		if(!object->isActive())
 			continue;
 
 		object->drawBehaviors();

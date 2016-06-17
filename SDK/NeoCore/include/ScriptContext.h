@@ -88,6 +88,11 @@ public :
 	virtual bool isFunctionOk(const char* name, unsigned int args) = 0;
 
 	bool isRunning() { return m_isRunning; }
+
+	/**
+	 * @brief If the script is marked as running, mark it as not running.
+	 */
+	bool stopRunning() { if(m_isRunning) m_isRunning = false; }
 };
 
 class NEO_CORE_EXPORT ScriptContextDummy : public ScriptContext

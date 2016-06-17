@@ -6,6 +6,9 @@
 -- dofile("Benchmark.lua")
 -- dofile("NativeSDKTest.lua")
 
+require("NeoEngineLua")
+NeoLua = NeoEngineLua
+
 function buttonCallback()
         print("CREATING MENU")
 	menu:show()
@@ -27,6 +30,8 @@ local teapot = scene:getObjectByName("Teapot")
 local cube = scene:getObjectByName("Cube")
 local camera = scene:getCurrentCamera()
 
+function centerCursor() end
+
 function flipOrthoCallback()
 	local camera = scene:getCurrentCamera()
 	camera:enableOrtho(not camera:isOrtho())
@@ -43,8 +48,8 @@ end
 
 centerCursor()
 
-local mx = input:getAxis("MOUSE_X")
-local my = input:getAxis("MOUSE_Y")
+local mx = 0 -- input:getAxis("MOUSE_X")
+local my = 0 -- input:getAxis("MOUSE_Y")
 
 function update(delta)
         cube:rotate(NeoLua.Vector3(0,0,1), 30*delta)
@@ -52,42 +57,42 @@ function update(delta)
         
         teapot:rotate(NeoLua.Vector3(0,0,1), 10*delta)
 
-        if input:isKeyPressed("UP") then
+        if input:isKeyDown(NeoLua.KEY_UP_ARROW) then
                 light:setPosition(light:getPosition() + NeoLua.Vector3(0,0,1))
         end
 
-        if input:isKeyPressed("DOWN") then
+        if input:isKeyDown(NeoLua.KEY_DOWN_ARROW) then
                 light:setPosition(light:getPosition() + NeoLua.Vector3(0,0,-1))
         end
 
-        if input:isKeyPressed("LEFT") then
+        if input:isKeyDown(NeoLua.KEY_LEFT_ARROW) then
                 light:setPosition(light:getPosition() + NeoLua.Vector3(-1,0,0))
         end
 
-        if input:isKeyPressed("RIGHT") then
+        if input:isKeyDown(NeoLua.KEY_RIGHT_ARROW) then
                 light:setPosition(light:getPosition() + NeoLua.Vector3(1,0,0))
         end
 
-        if input:isKeyPressed("W") then
+        if input:isKeyDown(NeoLua.KEY_W) then
             camera:translate(NeoLua.Vector3(0,0,-100*delta), true)
-        elseif input:isKeyPressed("S") then
+        elseif input:isKeyDown(NeoLua.KEY_S) then
             camera:translate(NeoLua.Vector3(0,0,100*delta), true)
         end
 
-        if input:isKeyPressed("A") then
+        if input:isKeyDown(NeoLua.KEY_A) then
             camera:translate(NeoLua.Vector3(-100*delta,0,0), true)
-        elseif input:isKeyPressed("D") then
+        elseif input:isKeyDown(NeoLua.KEY_D) then
             camera:translate(NeoLua.Vector3(100*delta,0,0), true)
         end
 
-        if input:isKeyPressed("E") then
+        if input:isKeyDown(NeoLua.KEY_E) then
                 camera:rotate(NeoLua.Vector3(0, 0, -1), 100*delta, false)
-        elseif input:isKeyPressed("Q") then
+        elseif input:isKeyDown(NeoLua.KEY_Q) then
                 camera:rotate(NeoLua.Vector3(0, 0, 1), 100*delta, false)
         end
 
-        local dx = input:getAxis("MOUSE_X")
-        local dy = input:getAxis("MOUSE_Y")
+        local dx = 0 -- input:getAxis("MOUSE_X")
+        local dy = 0 --input:getAxis("MOUSE_Y")
 
         camera:rotate(NeoLua.Vector3(-1, 0, 0), (dy-my)*100, false)
         camera:rotate(NeoLua.Vector3(0, -1, 0), (dx-mx)*100, false)
@@ -97,12 +102,16 @@ function update(delta)
 
         --camera:setEulerRotation(rotation)
 
-	centerCursor()
+		centerCursor()
 
-        mx = input:getAxis("MOUSE_X")
-        my = input:getAxis("MOUSE_Y")
+        mx = 0 -- input:getAxis("MOUSE_X")
+        my = 0 -- input:getAxis("MOUSE_Y")
 
-        if input:onKeyDown("ESCAPE") then
+        if input:onKeyDown(NeoLua.KEY_ESCAPE) then
                 NeoLua.engine:setActive(false)
         end
+end
+
+function draw()
+
 end

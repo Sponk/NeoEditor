@@ -40,8 +40,6 @@ protected:
 	void clear();
 
 	static int function(lua_State * L);
-
-	bool m_isRunning;
 	lua_State * m_state;
 
 	map<string, int (*)(void)> m_functions;

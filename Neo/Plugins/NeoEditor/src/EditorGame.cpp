@@ -1562,14 +1562,19 @@ void EditorGame::runGame()
 	m_sceneView->setInvisible(true);
 	m_sceneView->setActive(false);
 	m_sceneView->clearSelection();
+
+	ScriptContext* script = engine->getScriptContext();
+	script->runScript(engine->getLevel()->getCurrentScene()->getScriptFilename());
 	
 	engine->getGame()->setDrawMainScene(true);
 	player.execute(KEY_F1);
 	engine->getGame()->setDrawMainScene(false);
-	
+
 	m_sceneView->setInvisible(false);
 	m_sceneView->setActive(true);
 
 	// Restore original state
-	undo();	
+	undo();
+	engine->setActive(true);
+	script->stopRunning();
 }

@@ -48,7 +48,6 @@ NeoGame::~NeoGame(void)
 void NeoGame::update(void)
 { 
 	NeoEngine* engine = NeoEngine::getInstance();
-	ScriptContext* scriptContext = engine->getScriptContext();
 
 	engine->getInputContext()->handleInput();
 
