@@ -305,7 +305,7 @@ void EditorGame::update()
 void EditorGame::draw()
 {
 	PROFILE_BEGIN("GuiDraw");
-    m_canvas.draw();
+	m_canvas.draw();
 	PROFILE_END("GuiDraw");
 }
 

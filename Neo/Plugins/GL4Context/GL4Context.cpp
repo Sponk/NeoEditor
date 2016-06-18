@@ -190,7 +190,7 @@ static GLenum returnAttachType(FRAME_BUFFER_ATTACHMENT type)
 
 GL4Context::GL4Context() :
 m_currentFrameBuffer(0),
-m_gl_version(NULL),
+m_gl_version(),
 m_currentMatrix(&m_modelViewMatrix)
 {
 }

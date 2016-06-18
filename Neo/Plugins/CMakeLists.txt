@@ -10,3 +10,8 @@ add_subdirectory(Neo2DPlugin)
 add_subdirectory(BulletPhysics)
 add_subdirectory(NPK)
 add_subdirectory(NeoSharp)
+
+if(USE_GLES)
+    add_subdirectory(MobileRenderer)
+    add_subdirectory(GLES2Context)
+endif()
