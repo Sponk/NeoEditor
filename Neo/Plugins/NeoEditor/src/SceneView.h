@@ -19,7 +19,10 @@ class SceneView : public Neo2D::Gui::Widget
 	Neo::Scene* m_overlayScene;
 	Neo::OCamera m_camera;
 	std::vector<Neo::Object3d*> m_selection;
-	
+
+	/// Transform objects either relative to their own transformation or relative to the selection.
+	bool m_objectLocalTransformation;
+		
 	struct Handles
 	{
 		Neo::OEntity* x, *y, *z;
@@ -63,7 +66,11 @@ class SceneView : public Neo2D::Gui::Widget
 	Handles m_rotation, m_translation, m_scale;	
 	HANDLE_MODE m_mode;
 	UndoQueue& m_undo;
-	
+
+	void rotationHandle(Neo::OEntity* handleEntity, const Neo::Vector3& axis, const Neo::Vector3& mousepos);
+	void scaleHandle(Neo::OEntity* handleEntity, const Neo::Vector3& axis, const Neo::Vector3& mousepos);
+	void translationHandle(Neo::OEntity* handleEntity, const Neo::Vector3& axis, const Neo::Vector3& mousepos);
+
 public:
 	SceneView(UndoQueue& undo,
 			  int x,
@@ -88,6 +95,9 @@ public:
 	void updateOverlayScene();
 	void setHandleMode(HANDLE_MODE mode);
 
+	void setObjectLocal(bool v) { m_objectLocalTransformation = v; }
+	bool isObjectLocal() const { return m_objectLocalTransformation; }
+	
 	using Neo2D::Gui::Widget::setState;
 };
 

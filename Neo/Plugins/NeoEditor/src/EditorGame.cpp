@@ -458,6 +458,14 @@ void EditorGame::onBegin()
 		deleteSelection();
 	});
 
+	editmenu->addItem("Selection Local Transformation", [this](Widget&, void*) {
+			m_sceneView->setObjectLocal(false);
+	});
+
+	editmenu->addItem("Object Local Transformation", [this](Widget&, void*) {
+			m_sceneView->setObjectLocal(true);
+	});
+	
 	helpmenu->addItem(tr("About"), [this](Widget&, void*) { m_toolset->aboutDialog(); });
 
 	m_menubar->addMenu(filemenu);

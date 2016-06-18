@@ -12,7 +12,8 @@ SceneView::SceneView(UndoQueue& undo,
 					 const shared_ptr<Neo2D::Object2D>& parent)
 	: Widget(x, y, w, h, nullptr, parent, nullptr),
 	  m_currentHandles(&m_translation),
-	  m_undo(undo)
+	  m_undo(undo),
+	  m_objectLocalTransformation(false)
 {
 	m_overlayScene = m_level.addNewScene();
 	m_handlesScene = m_level.addNewScene();
@@ -44,7 +45,7 @@ void SceneView::init()
 		m_translation.z->getMaterial(0)->setEmit(Vector3(0, 0, 1));
 
 		m_translation.x->rotate(Vector3(0, 1, 0), 90);
-		m_translation.y->rotate(Vector3(1, 0, 0), 90);
+		m_translation.y->rotate(Vector3(1, 0, 0), -90);
 
 		// The scalers!
 		meshref = m_level.loadMesh("data/scale-arrow.obj");
@@ -57,7 +58,7 @@ void SceneView::init()
 		m_scale.z->getMaterial(0)->setEmit(Vector3(0, 0, 1));
 
 		m_scale.x->rotate(Vector3(0, 1, 0), 90);
-		m_scale.y->rotate(Vector3(1, 0, 0), 90);
+		m_scale.y->rotate(Vector3(1, 0, 0), -90);
 
 		meshref = m_level.loadMesh("data/rotation-arrow.obj");
 		m_rotation.x = m_handlesScene->addNewEntity(meshref);
@@ -69,7 +70,7 @@ void SceneView::init()
 		m_rotation.z->getMaterial(0)->setEmit(Vector3(0, 0, 1));
 
 		m_rotation.x->rotate(Vector3(0, 1, 0), 90);
-		m_rotation.y->rotate(Vector3(1, 0, 0), 90);
+		m_rotation.y->rotate(Vector3(1, 0, 0), -90);
 
 		m_translation.enable(false);
 		m_scale.enable(false);
@@ -168,6 +169,109 @@ void SceneView::addSelectedObject(Neo::Object3d* object)
 
 	m_currentHandles->setPosition(getSelectionCenter());
 	m_currentHandles->enable(true);
+}
+
+void SceneView::rotationHandle(OEntity* handleEntity, const Vector3& axis, const Vector3& mousepos)
+{	
+	const float rotationSpeed = 2;
+	InputContext* input = NeoEngine::getInstance()->getInputContext();
+	Vector2 mousedir = input->getMouse().getDirection();
+	mousedir.y *= -1;
+
+	Vector2 oldpos = mousepos - mousedir;
+
+	float distance = (m_camera.getPosition() - getSelectionCenter()).getLength();
+	Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
+	Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
+
+	if(isObjectLocal())
+	{
+		Vector3 vec = (p1 - p2) * distance * axis * rotationSpeed;
+		for(auto e : m_selection)
+			e->setEulerRotation(e->getEulerRotation() + vec);
+	}
+	else
+	{
+		Vector3 selectionCenter = getSelectionCenter();
+		Vector3 movement = p1 - p2;
+		Vector3 movementAxis = movement * axis;
+		float movementLength = movement.getLength();
+		for(auto e : m_selection)
+		{
+			// Update the rotation
+			Matrix4x4 matrix;
+			Vector3 inverseCenter = e->getInversePosition(selectionCenter);
+			Quaternion rotation = e->getRotation();
+			matrix.setRotationAxis(rotation.getAngle(), rotation.getAxis());
+			matrix.invert();
+
+			Vector3 newAxis = matrix * movementAxis;
+			e->addAxisAngleRotation(newAxis, movementLength * distance * rotationSpeed);
+			e->updateMatrix();
+
+			// Update the translation
+			Vector3 transformedCenter = e->getTransformedVector(inverseCenter);
+			e->setPosition(e->getPosition() + (selectionCenter - transformedCenter));
+			e->updateMatrix();
+		}
+	}
+	
+	m_currentHandles->setPosition(getSelectionCenter());
+	m_currentHandles->grabbed = handleEntity;
+}
+
+void SceneView::scaleHandle(OEntity* handleEntity, const Vector3& axis, const Vector3& mousepos)
+{
+	InputContext* input = NeoEngine::getInstance()->getInputContext();
+	Vector2 mousedir = input->getMouse().getDirection();
+	mousedir.y *= -1;
+
+	Vector2 oldpos = mousepos - mousedir;
+
+	float distance = (m_camera.getPosition() - getSelectionCenter()).getLength();
+	Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
+	Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
+
+	float factor = distance * 0.01;
+
+	Vector3 vec = (p1 - p2) * axis * factor;
+
+	for(auto e : m_selection)
+	{
+		Vector3 newScale = e->getTransformedScale();
+		Matrix4x4 scaleMatrix;
+		scaleMatrix.setScale(Vector3(1.0f / newScale.x, 1.0f / newScale.y, 1.0f / newScale.z));
+
+        Matrix4x4 matrix = (*e->getMatrix()) * scaleMatrix;
+		Vector3 transformedVec = matrix.getRotatedVector3(vec);
+
+		newScale = e->getScale() + transformedVec * axis * factor;
+		e->setScale(Vector3(fabs(newScale.x), fabs(newScale.y), fabs(newScale.z)));
+	}
+	
+	m_currentHandles->setPosition(getSelectionCenter());
+	m_currentHandles->grabbed = handleEntity;
+}
+
+void SceneView::translationHandle(OEntity* handleEntity, const Vector3& axis, const Vector3& mousepos)
+{
+	InputContext* input = NeoEngine::getInstance()->getInputContext();
+	Vector2 mousedir = input->getMouse().getDirection();
+	mousedir.y *= -1;
+
+	Vector2 oldpos = mousepos - mousedir;
+
+	float distance = (m_camera.getPosition() - getSelectionCenter()).getLength();
+	Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
+	Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
+
+	Vector3 vec = (p1 - p2) * distance * axis;
+
+	for(auto e : m_selection)
+		e->translate(vec);
+
+	m_currentHandles->setPosition(getSelectionCenter());
+	m_currentHandles->grabbed = handleEntity;				
 }
 
 bool SceneView::handle(const Neo2D::Gui::Event& e)
@@ -296,195 +400,39 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 				// Handle handles
 				if(input->getMouse().isKeyDown(MOUSE_BUTTON_LEFT))
 				{
-					const float rotationSpeed = 2.0;
 					if(selected == m_currentHandles->x)
 					{
-						//local p1 = camera:getUnProjectedPoint(NeoLua.Vector3(mx, my, 0.3))
-						//local p2 = camera:getUnProjectedPoint(NeoLua.Vector3(Editor.mx * res.x, (1 - Editor.my) * res.y, 0.3))
-						//local dif = (p1 - p2) * 100
-
 						if(m_mode == TRANSLATION)
-						{
-							Vector2 mousedir = input->getMouse().getDirection();
-							mousedir.y *= -1;
-
-							Vector2 oldpos = mousepos - mousedir;
-
-							float distance = (m_camera.getPosition() - getSelectionCenter()).getLength();
-							Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
-							Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
-
-							Vector3 vec = (p1 - p2) * distance * Vector3(1, 0, 0);
-
-							for(auto e : m_selection)
-								e->translate(vec);
-
-							m_currentHandles->setPosition(getSelectionCenter());
-							m_currentHandles->grabbed = m_currentHandles->x;
-						}
+							translationHandle(m_currentHandles->x, Vector3(1,0,0), mousepos);
+						
 						else if(m_mode == SCALE)
-						{
-							Vector2 mousedir = input->getMouse().getDirection();
-							mousedir.y *= -1;
-
-							Vector2 oldpos = mousepos - mousedir;
-
-							float distance = (m_camera.getPosition() - getSelectionCenter()).getLength();
-							Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
-							Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
-
-							Vector3 vec = (p1 - p2) * distance * Vector3(1, 0, 0) * 0.007;
-
-							for(auto e : m_selection)
-								e->setScale(e->getScale() + e->getRotatedVector(vec));
-
-							m_currentHandles->setPosition(getSelectionCenter());
-							m_currentHandles->grabbed = m_currentHandles->x;
-						}
+							scaleHandle(m_currentHandles->x, Vector3(1,0,0), mousepos);
+						
 						else if(m_mode == ROTATION)
-						{
-							Vector2 mousedir = input->getMouse().getDirection();
-							mousedir.y *= -1;
-
-							Vector2 oldpos = mousepos - mousedir;
-
-							float distance = (m_camera.getPosition() - getSelectionCenter()).getLength();
-							Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
-							Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
-
-							Vector3 vec = (p1 - p2) * distance * Vector3(0, 0, 1);
-							vec.x = vec.z * rotationSpeed;
-							vec.z = 0;
-
-							for(auto e : m_selection)
-								e->setEulerRotation(e->getEulerRotation() - vec);
-
-							m_currentHandles->setPosition(getSelectionCenter());
-							m_currentHandles->grabbed = m_currentHandles->x;
-						}
+							rotationHandle(m_currentHandles->x, Vector3(1,0,0), mousepos);
 					}
 					else if(selected == m_currentHandles->y)
 					{					
 						if(m_mode == TRANSLATION)
-						{
-							Vector2 mousedir = input->getMouse().getDirection();
-							mousedir.y *= -1;
-
-							Vector2 oldpos = mousepos - mousedir;
-
-							float distance = (m_camera.getPosition() - getSelectionCenter()).getLength();
-							Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
-							Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
-
-							Vector3 vec = (p1 - p2) * distance * Vector3(0, 1, 0);
-
-							for(auto e : m_selection)
-								e->translate(vec);
-
-							m_currentHandles->setPosition(getSelectionCenter());
-							m_currentHandles->grabbed = m_currentHandles->y;
-						}
+							translationHandle(m_currentHandles->y, Vector3(0,1,0), mousepos);
+						
 						else if(m_mode == SCALE)
-						{
-							Vector2 mousedir = input->getMouse().getDirection();
-							mousedir.y *= -1;
-
-							Vector2 oldpos = mousepos - mousedir;
-
-							float distance = (m_camera.getPosition() - getSelectionCenter()).getLength();
-							Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
-							Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
-
-							Vector3 vec = (p1 - p2) * distance * Vector3(0, 1, 0) * -0.007;						
-							for(auto e : m_selection)
-								e->setScale(e->getScale() + e->getRotatedVector(vec));
-
-							m_currentHandles->setPosition(getSelectionCenter());
-							m_currentHandles->grabbed = m_currentHandles->y;
-						}
+							scaleHandle(m_currentHandles->y, Vector3(0,1,0), mousepos);
+						
 						else if(m_mode == ROTATION)
-						{
-							Vector2 mousedir = input->getMouse().getDirection();
-							mousedir.y *= -1;
-
-							Vector2 oldpos = mousepos - mousedir;
-
-							float distance = (m_camera.getPosition() - getSelectionCenter()).getLength();
-							Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
-							Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
-
-							Vector3 vec = (p1 - p2) * distance * Vector3(0, 0, 1);
-							vec.y = vec.z * rotationSpeed;
-							vec.z = 0;
-
-							for(auto e : m_selection)
-								e->setEulerRotation(e->getEulerRotation() - vec);
-
-							m_currentHandles->setPosition(getSelectionCenter());
-							m_currentHandles->grabbed = m_currentHandles->y;
-						}
+							rotationHandle(m_currentHandles->y, Vector3(0,1,0), mousepos);
+						
 					}
 					else if(selected == m_currentHandles->z)
 					{					
 						if(m_mode == TRANSLATION)
-						{
-							Vector2 mousedir = input->getMouse().getDirection();
-							mousedir.y *= -1;
+							translationHandle(m_currentHandles->z, Vector3(0,0,1), mousepos);
 
-							Vector2 oldpos = mousepos - mousedir;
-
-							float distance = (m_camera.getPosition() - getSelectionCenter()).getLength();
-							Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
-							Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
-
-							Vector3 vec = (p1 - p2) * distance * Vector3(0, 0, 1);
-
-							for(auto e : m_selection)
-								e->translate(vec);
-
-							m_currentHandles->setPosition(getSelectionCenter());
-							m_currentHandles->grabbed = m_currentHandles->z;
-						}
 						else if(m_mode == SCALE)
-						{
-							Vector2 mousedir = input->getMouse().getDirection();
-							mousedir.y *= -1;
+							scaleHandle(m_currentHandles->z, Vector3(0,0,1), mousepos);
 
-							Vector2 oldpos = mousepos - mousedir;
-
-							float distance = (m_camera.getPosition() - getSelectionCenter()).getLength();
-							Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
-							Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
-
-							Vector3 vec = (p1 - p2) * distance * Vector3(0, 0, 1) * 0.015;
-
-							for(auto e : m_selection)
-								e->setScale(e->getScale() + e->getRotatedVector(vec));
-
-							m_currentHandles->setPosition(getSelectionCenter());
-							m_currentHandles->grabbed = m_currentHandles->z;
-						}
 						else if(m_mode == ROTATION)
-						{
-							Vector2 mousedir = input->getMouse().getDirection();
-							mousedir.y *= -1;
-
-							Vector2 oldpos = mousepos - mousedir;
-
-							float distance = (m_camera.getPosition() - getSelectionCenter()).getLength();
-							Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
-							Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
-
-							Vector3 vec = (p1 - p2) * distance * Vector3(1, 0, 0);
-							vec.z = vec.x * rotationSpeed;
-							vec.x = 0;
-
-							for(auto e : m_selection)
-								e->setEulerRotation(e->getEulerRotation() + vec);
-
-							m_currentHandles->setPosition(getSelectionCenter());
-							m_currentHandles->grabbed = m_currentHandles->z;
-						}
+							rotationHandle(m_currentHandles->z, Vector3(0,0,1), mousepos);
 					}
 					else if(e.getType() == Neo2D::Gui::MOUSE_LEFT_CLICK)
 					{	
