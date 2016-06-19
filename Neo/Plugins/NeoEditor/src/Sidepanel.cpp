@@ -23,6 +23,6 @@ void Sidepanel::update(float dt)
 			break;
 	}
 
-	Neo2D::Gui::Container::update(dt);
 	updateLayout();
+	Neo2D::Gui::Container::update(dt);
 }

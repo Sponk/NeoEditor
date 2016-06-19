@@ -602,24 +602,6 @@ void EditorGame::onBegin()
 					m_sceneView->getSelection().back()->setScale(m_scaleEdit->getVector());
 				}, nullptr);
 
-			rightscroll->updateLayout();
-
-			// Hide UI initially
-			m_entityUi->setActive(false);
-			m_entityUi->setInvisible(true);
-
-			m_lightUi->setActive(false);
-			m_lightUi->setInvisible(true);
-
-			m_cameraUi->setActive(false);
-			m_cameraUi->setInvisible(true);
-
-			m_soundUi->setActive(false);
-			m_soundUi->setInvisible(true);
-
-			m_textUi->setActive(false);
-			m_textUi->setInvisible(true);
-
 			// Entity UI
 			MAKE_CHECK_BUTTON("Invisible", m_entityInvisibleButton, m_entityUi, OEntity, setInvisible);
 
@@ -896,6 +878,25 @@ void EditorGame::onBegin()
 			MAKE_COLOR3_BUTTON("", width, m_textColorButton, m_textUi, OText, setColor);
 			MAKE_4D_EDIT_FIELD("Color:", width, m_textColorEdit, m_textUi, OText, setColor);
 			m_textUi->updateLayout();
+
+			// Set layout
+			m_rightPanel->update(0);
+
+			// Hide UI initially
+			m_entityUi->setActive(false);
+			m_entityUi->setInvisible(true);
+
+			m_lightUi->setActive(false);
+			m_lightUi->setInvisible(true);
+
+			m_cameraUi->setActive(false);
+			m_cameraUi->setInvisible(true);
+
+			m_soundUi->setActive(false);
+			m_soundUi->setInvisible(true);
+
+			m_textUi->setActive(false);
+			m_textUi->setInvisible(true);
 	}
 
 	// Left panel
@@ -1006,6 +1007,9 @@ void EditorGame::onBegin()
             break;
         }
     }
+
+	// Load overlay assets
+	m_sceneView->updateOverlayScene();
 }
 
 void EditorGame::onEnd()
