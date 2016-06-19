@@ -445,7 +445,10 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 				}
 			}
 			else if(e.getType() == Neo2D::Gui::MOUSE_LEFT_CLICK)
+			{
+				clearSelection();
 				m_currentHandles->enable(false);
+			}
 		}
 			return true;
 
@@ -530,7 +533,10 @@ void SceneView::updateOverlayScene()
 
 	clearOverlayScene();
 
-	engine->setLevel(&m_level);
+	auto cameraEntity = m_level.loadMesh("data/objects/camera.dae");
+	auto lightEntity = m_level.loadMesh("data/objects/light.dae");
+	auto soundEntity = m_level.loadMesh("data/objects/sound.dae");
+
 	// Load billboards
 	for (size_t i = 0; i < scene->getObjectsNumber(); i++)
 	{
@@ -539,21 +545,21 @@ void SceneView::updateOverlayScene()
 		{
 			case OBJECT3D_CAMERA:
 			{
-				auto entity = m_overlayScene->addNewEntity(m_level.loadMesh("data/objects/camera.dae"));
+				auto entity = m_overlayScene->addNewEntity(cameraEntity);
 				entity->setParent(object);
 			}
 				break;
 
 			case OBJECT3D_LIGHT:
 			{
-				auto entity = m_overlayScene->addNewEntity(m_level.loadMesh("data/objects/light.dae"));
+				auto entity = m_overlayScene->addNewEntity(lightEntity);
 				entity->setParent(object);
 			}
 				break;
 
 			case OBJECT3D_SOUND:
 			{
-				auto entity = m_overlayScene->addNewEntity(m_level.loadMesh("data/objects/sound.dae"));
+				auto entity = m_overlayScene->addNewEntity(soundEntity);
 				entity->setParent(object);
 			}
 				break;
