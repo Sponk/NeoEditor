@@ -533,6 +533,8 @@ void SceneView::updateOverlayScene()
 
 	clearOverlayScene();
 
+	engine->setLevel(&m_level);
+
 	auto cameraEntity = m_level.loadMesh("data/objects/camera.dae");
 	auto lightEntity = m_level.loadMesh("data/objects/light.dae");
 	auto soundEntity = m_level.loadMesh("data/objects/sound.dae");
