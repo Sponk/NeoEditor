@@ -1030,6 +1030,10 @@ void EditorGame::onBegin()
 		saveLevel();
 	}, nullptr));
 
+	m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_O}, [this](void*){
+		openLevel();
+	}, nullptr));
+
 	m_keyboardShortcuts->addShortcut(Shortcut({KEY_1}, [this](void*){
 		m_sceneView->setHandleMode(TRANSLATION);
 	}, nullptr));
