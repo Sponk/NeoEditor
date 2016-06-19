@@ -16,6 +16,7 @@ void Neo2D::Gui::ScrollPanel::init()
 {
 	registerEvent(make_shared<MouseOverEvent>(shared_from_this(), nullptr, nullptr));
 	registerEvent(make_shared<MouseLeaveEvent>(shared_from_this(), nullptr, nullptr));
+	registerEvent(make_shared<MouseMiddleMoveEvent>(shared_from_this(), nullptr, nullptr));
 }
 
 void Neo2D::Gui::ScrollPanel::updateScrollbarPlacement()

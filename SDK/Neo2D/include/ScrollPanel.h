@@ -48,6 +48,16 @@ public:
 				for(auto c : getChildren())
 					c->setActive(false);
 				return true;
+
+			case MOUSE_SCROLL:
+				if(getState() == WIDGET_HOVER)
+				{
+					verticalScroll.setValue(verticalScroll.getValue()
+												- 20 * static_cast<const MouseMiddleMoveEvent&>(e).getDelta());
+
+					verticalScroll.updateKnobValue();
+				}
+				break;
 		}
 
 		return false;

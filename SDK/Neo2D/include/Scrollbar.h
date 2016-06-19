@@ -143,6 +143,18 @@ public:
 		setValue(0);
 	}
 
+	void updateKnobValue()
+	{
+		if(getDirection() == SCROLLBAR_HORIZONTAL)
+		{
+			knob->setPosition(Neo::Vector2(getPosition().x + (getValue() / getRange().y) * getSize().x, knob->getPosition().y));
+		}
+		else
+		{
+			knob->setPosition(Neo::Vector2(knob->getPosition().x, getPosition().y + (getValue() / getRange().y) * getSize().y));
+		}
+	}
+
 	/**
 	 * @brief Retrieves the scroll bar direction.
 	 * @return The direction of the scroll bar.
