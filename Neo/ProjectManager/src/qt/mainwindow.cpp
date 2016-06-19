@@ -24,6 +24,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	// Default templates
 	QString defaultTemplate = QDir::currentPath() + QDir::separator() + "templates" + QDir::separator();
 	//m_backend.importTemplate((defaultTemplate + "cpp" + QDir::separator() + "cpp.nproj").toStdString().c_str());
+
+	m_backend.importTemplate((defaultTemplate + QDir::separator() + "LuaTemplate"
+		+ QDir::separator() + "LuaTemplate.nproj").toStdString().c_str());
+
 	m_backend.importTemplate((defaultTemplate + QDir::separator() + "NeoSharpTemplate"
 		+ QDir::separator() + "NeoSharpTemplate.nproj").toStdString().c_str());
 
