@@ -1349,6 +1349,8 @@ void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera, bool post
 		render->enableBlending();
 		render->setBlendingMode(BLENDING_ALPHA);
 
+		render->sendUniformVec3(m_fx[1], "AmbientLight", scene->getAmbientLight() * 0.1);
+
 		// This prevents the clear color from bleeding over multiple
 		// scene layers
 		render->setColorMask(false, false, false, true);

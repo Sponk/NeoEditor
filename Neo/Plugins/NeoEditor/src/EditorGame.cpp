@@ -85,6 +85,21 @@ using namespace Gui;
 			nullptr);                                                     \
 	}
 
+#define MAKE_SCENE_STRING_EDIT_FIELD(str, width, edit, ui, setter)        \
+	{                                                                     \
+		MAKE_LABEL(str, ui);                                              \
+		ui->addWidget(                                                    \
+			edit = make_shared<EditField>(0, 0, width, 20, nullptr, ui)); \
+		edit->setCallback(                                                \
+			[this](Widget& w, void* d) {                                  \
+				                                                          \
+				m_undo.save();                                            \
+				NeoEngine::getInstance()->getLevel()->getCurrentScene()   \
+					->setter(edit->getLabel());                           \
+			},                                                            \
+			nullptr);                                                     \
+	}
+
 #define MAKE_CONSTRAINT_STRING_EDIT_FIELD(str, width, edit, ui, setter)       \
 	{                                                                         \
 		MAKE_LABEL(str, ui);                                                  \
@@ -125,6 +140,23 @@ using namespace Gui;
 				static_cast<type*>(m_sceneView->getSelection().back())      \
 					->setter(edit->getVector());                            \
 				updateSelectedObject(m_sceneView->getSelection().back());   \
+			},                                                              \
+			nullptr);                                                       \
+	}
+
+#define MAKE_3D_SCENE_EDIT_FIELD(str, width, edit, ui, setter)              \
+	{                                                                       \
+		MAKE_LABEL(str, ui);                                                \
+		ui->addWidget(                                                      \
+			edit = make_shared<Vector3Edit>(0, 0, width, 20, nullptr, ui)); \
+		edit->setCallback(                                                  \
+			[this](Widget& w, void* d) {                                    \
+				if (!m_sceneView->getSelection().size())                    \
+					return;                                                 \
+                                                                            \
+				m_undo.save();                                            	\
+				NeoEngine::getInstance()->getLevel()->getCurrentScene()   	\
+					->setter(edit->getVector());                           	\
 			},                                                              \
 			nullptr);                                                       \
 	}
@@ -240,6 +272,22 @@ using namespace Gui;
 			nullptr);                                                         \
 	}
 
+#define MAKE_SCENE_COLOR3_BUTTON(str, width, edit, ui, setter)                \
+	{                                                                         \
+		ui->addWidget(edit = make_shared<ColorEdit>(0, 0, width, 20, tr(str), \
+													ui, m_toolset));          \
+		edit->setCallback(                                                    \
+			[this](Widget& w, void* d) {                                      \
+																			  \
+				m_undo.save();                                                \
+				NeoEngine::getInstance()->getLevel()->getCurrentScene()	      \
+					->setter(Vector3(edit->getColor()));                      \
+                                                                              \
+			},                                                                \
+			nullptr);                                                         \
+	}
+
+
 std::string findName(const char* name, Scene* scene)
 {
 	std::string base(name);
@@ -290,8 +338,12 @@ void EditorGame::update()
 													
 	m_diagnosticsLabel->setLabel(ss.str().c_str());
 
+	// Update object UI
 	if(m_sceneView->getSelection().size() && m_sceneView->getState() == Neo2D::Gui::WIDGET_SELECTED)
 		updateSelectedObject(m_sceneView->getSelection().back());
+
+	// Set values of current scene
+	updateSceneUi();
 }
 
 void EditorGame::draw()
@@ -511,7 +563,12 @@ void EditorGame::onBegin()
 			m_textUi = make_shared<Container>(rightscroll->getPosition().x,
 												   rightscroll->getPosition().y,
 												   width, 200, rightscroll);
-			
+
+			m_sceneUi = make_shared<Container>(rightscroll->getPosition().x,
+											  rightscroll->getPosition().y,
+											  width, 160, rightscroll);
+
+			rightscroll->addWidget(m_sceneUi);
 			rightscroll->addWidget(m_transformUi);
 			rightscroll->addWidget(m_entityUi);
 			rightscroll->addWidget(m_lightUi);
@@ -533,6 +590,7 @@ void EditorGame::onBegin()
 			m_textUi->setLayout(scrollLayout);
 			m_physicsUi->setLayout(scrollLayout);
 			m_constraintUi->setLayout(scrollLayout);
+			m_sceneUi->setLayout(scrollLayout);
 			
 			auto label = make_shared<Label>(0,0,0,10,tr("Name:"), m_transformUi);
 			label->setColor(Vector4(0,0,0,1));
@@ -879,6 +937,14 @@ void EditorGame::onBegin()
 			MAKE_4D_EDIT_FIELD("Color:", width, m_textColorEdit, m_textUi, OText, setColor);
 			m_textUi->updateLayout();
 
+			// Scene UI
+			MAKE_SCENE_STRING_EDIT_FIELD("Name:", width, m_sceneNameEdit, m_sceneUi, setName);
+			MAKE_SCENE_STRING_EDIT_FIELD("Script File:", width, m_sceneScriptFileEdit, m_sceneUi, setScriptFilename);
+			MAKE_3D_SCENE_EDIT_FIELD("Gravity:", width, m_sceneGravityEdit, m_sceneUi, setGravity);
+
+			MAKE_LABEL("Ambient Light:", m_sceneUi);
+			MAKE_SCENE_COLOR3_BUTTON("", width, m_sceneAmbientLightEdit, m_sceneUi, setAmbientLight);
+
 			// Set layout
 			m_rightPanel->update(0);
 
@@ -897,6 +963,10 @@ void EditorGame::onBegin()
 
 			m_textUi->setActive(false);
 			m_textUi->setInvisible(true);
+
+			// Show scene UI when everything else is hidden
+			m_sceneUi->setActive(true);
+			m_sceneUi->setInvisible(false);
 	}
 
 	// Left panel
@@ -1007,9 +1077,6 @@ void EditorGame::onBegin()
             break;
         }
     }
-
-	// Load overlay assets
-	m_sceneView->updateOverlayScene();
 }
 
 void EditorGame::onEnd()
@@ -1273,6 +1340,7 @@ void EditorGame::openLevel(const char* path)
 
 		m_currentLevelFile = path;
 		updateWindowTitle();
+		updateSceneUi();
 }
 
 void EditorGame::saveLevel()
@@ -1587,4 +1655,13 @@ void EditorGame::runGame()
 	undo();
 	engine->setActive(true);
 	script->stopRunning();
+}
+
+void EditorGame::updateSceneUi()
+{
+	Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
+	m_sceneNameEdit->setLabel(scene->getName());
+	m_sceneScriptFileEdit->setLabel(scene->getScriptFilename());
+	m_sceneGravityEdit->setVector(scene->getGravity());
+	m_sceneAmbientLightEdit->setColor(scene->getAmbientLight());
 }

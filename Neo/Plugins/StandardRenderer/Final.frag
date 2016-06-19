@@ -563,7 +563,7 @@ void main(void)
 	{
 		vec4 p = texture2D(Textures[2], texCoord);
 		FragColor = calculateAllCookLight(p.xyz, n.rgb, FragColor, p.a) +
-					vec4(startColor.rgb * data.rgb, 0.0);
+					vec4(startColor.rgb * data.rgb, 0.0) + vec4(AmbientLight, 1.0);
 		FragColor.a = transparency;
 	}
 }

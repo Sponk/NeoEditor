@@ -41,6 +41,7 @@ class EditorGame : public Neo::SubGame
 	shared_ptr<Neo2D::Gui::Container> m_entityUi;
 	shared_ptr<Neo2D::Gui::Container> m_physicsUi;
 	shared_ptr<Neo2D::Gui::Container> m_constraintUi;
+	shared_ptr<Neo2D::Gui::Container> m_sceneUi;
 
 	shared_ptr<Neo2D::Gui::Container> m_cameraUi;
 	shared_ptr<Neo2D::Gui::Container> m_lightUi;
@@ -110,6 +111,12 @@ class EditorGame : public Neo::SubGame
 	shared_ptr<Neo2D::Gui::CheckButton> m_entityPhysicsButton;
 	shared_ptr<Neo2D::Gui::CheckButton> m_entityGhostButton;
 
+	shared_ptr<Neo2D::Gui::EditField> m_sceneNameEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_sceneScriptFileEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_sceneMainCameraEdit;
+	shared_ptr<Vector3Edit> m_sceneGravityEdit;
+	shared_ptr<ColorEdit> m_sceneAmbientLightEdit;
+
 	std::string m_currentLevelFile;
 	std::string m_currentProjectFile;
 	Project m_project;
@@ -128,6 +135,7 @@ public:
 	virtual void onBegin();
 	virtual void onEnd();
 
+	void updateSceneUi();
 	void updateEntityTree();
 	void updateSelectedObject(Neo::Object3d* object);
 	void updateWindowTitle();
