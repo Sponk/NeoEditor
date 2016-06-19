@@ -449,6 +449,56 @@ public:
 	virtual unsigned int getType()  const { return MOUSE_DESELECT; }
 };
 
+/**
+ * @brief Gets triggered each time the mouse wheel is moved.
+ */
+class NEO2D_EXPORT MouseMiddleMoveEvent : public Event
+{
+	float delta;
+	float value;
+public:
+	MouseMiddleMoveEvent(std::weak_ptr<Neo2D::Gui::Widget> p, std::function<void(Widget&, const Event&, void*)> cb, void* d)
+	: Event(p, cb, d) {}
+
+	virtual void update(float dt)
+	{
+		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+		Neo::InputContext* input = engine->getInputContext();
+		Neo::Mouse& mouse = input->getMouse();
+		float curval = mouse.getScrollValue();
+
+		if(curval != value)
+		{
+			delta = curval - value;
+			value = curval;
+			handle();
+		}
+		else reject();
+	}
+
+	float getValue() const
+	{
+		return value;
+	}
+
+	void setValue(float value)
+	{
+		MouseMiddleMoveEvent::value = value;
+	}
+
+	float getDelta() const
+	{
+		return delta;
+	}
+
+	void setDelta(float delta)
+	{
+		MouseMiddleMoveEvent::delta = delta;
+	}
+
+	virtual unsigned int getType() const override { return MOUSE_SCROLL; }
+};
+
 }
 }
 
