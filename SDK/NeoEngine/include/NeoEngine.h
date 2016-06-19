@@ -210,7 +210,8 @@ public:
 
 	// instance
 	static NeoEngine* getInstance(void);
-
+	static void setInstance(NeoEngine* engine);
+	
 	// active
 	inline void setActive(bool active)
 	{ m_isActive = active; }

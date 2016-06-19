@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -27,6 +28,10 @@
 
 using namespace Neo;
 
+// Provide a default NeoEngine
+static NeoEngine g_defaultInstance;
+static NeoEngine* g_instance = &g_defaultInstance;
+
 NeoEngine::NeoEngine(void):
 m_isActive(true),
 m_level(NULL),
@@ -47,10 +52,14 @@ NeoEngine::~NeoEngine(void)
 	SAFE_FREE(m_requestedLevelToLoad);
 }
 
-NeoEngine * NeoEngine::getInstance(void)
+void NeoEngine::setInstance(NeoEngine* engine)
 {
-	static NeoEngine m_instance;
-	return &m_instance;
+	g_instance = engine;
+}
+
+NeoEngine* NeoEngine::getInstance()
+{
+	return g_instance;
 }
 
 void NeoEngine::setRenderingContext(RenderingContext * renderingContext)

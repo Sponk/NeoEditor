@@ -1,10 +1,6 @@
 
 IF(NOT ANDROID AND NOT EMSCRIPTEN)
 	ADD_SUBDIRECTORY(assimp)
-	#ADD_SUBDIRECTORY(fltk)
-
-	#ADD_SUBDIRECTORY(libzip)
-
 	# We compile sdl2 differently on Android
 	# Only compile SDL2 if we found no "native" one
 	IF(NOT ${SDL2_FOUND})
@@ -13,8 +9,6 @@ IF(NOT ANDROID AND NOT EMSCRIPTEN)
 
 	# Android has native zlib
 	ADD_SUBDIRECTORY(zlib)
-	ADD_SUBDIRECTORY(shinyprofiler/Shiny)
-
 	ADD_SUBDIRECTORY(gtest)
 ENDIF()
 
