@@ -448,6 +448,7 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 			{
 				clearSelection();
 				m_currentHandles->enable(false);
+				doCallback();
 			}
 		}
 			return true;

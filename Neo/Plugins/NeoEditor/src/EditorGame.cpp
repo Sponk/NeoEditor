@@ -938,7 +938,7 @@ void EditorGame::onBegin()
 			m_textUi->updateLayout();
 
 			// Scene UI
-			MAKE_SCENE_STRING_EDIT_FIELD("Name:", width, m_sceneNameEdit, m_sceneUi, setName);
+			MAKE_SCENE_STRING_EDIT_FIELD("Scene Name:", width, m_sceneNameEdit, m_sceneUi, setName);
 			MAKE_SCENE_STRING_EDIT_FIELD("Script File:", width, m_sceneScriptFileEdit, m_sceneUi, setScriptFilename);
 			MAKE_3D_SCENE_EDIT_FIELD("Gravity:", width, m_sceneGravityEdit, m_sceneUi, setGravity);
 
@@ -949,6 +949,9 @@ void EditorGame::onBegin()
 			m_rightPanel->update(0);
 
 			// Hide UI initially
+			m_transformUi->setActive(false);
+			m_transformUi->setInvisible(true);
+
 			m_entityUi->setActive(false);
 			m_entityUi->setInvisible(true);
 
@@ -1012,8 +1015,12 @@ void EditorGame::onBegin()
 	}, nullptr);
 
 	m_sceneView->setCallback([this](Widget& w, void*) {
-						m_entityTree->setSelected(m_sceneView->getSelection().back()->getName());
-						updateSelectedObject(m_sceneView->getSelection().back());
+						if(m_sceneView->getSelection().size())
+						{
+							m_entityTree->setSelected(m_sceneView->getSelection().back()->getName());
+							updateSelectedObject(m_sceneView->getSelection().back());
+						}
+						else updateSelectedObject(nullptr);
 					}, nullptr);
 
 	m_keyboardShortcuts = make_shared<KeyboardShortcuts>(rootpane);
@@ -1117,14 +1124,7 @@ void EditorGame::updateEntityTree()
 }
 
 void EditorGame::updateSelectedObject(Neo::Object3d* object)
-{	
-	m_nameEdit->setLabel(object->getName());
-	m_nameEdit->setCaret(0);
-	
-	m_positionEdit->setVector(object->getPosition());
-	m_rotationEdit->setVector(object->getEulerRotation());
-	m_scaleEdit->setVector(object->getScale());
-
+{
 	m_entityUi->setActive(false);
 	m_entityUi->setInvisible(true);
 
@@ -1139,12 +1139,28 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 	
 	m_textUi->setActive(false);
 	m_textUi->setInvisible(true);
-	
+
+	m_transformUi->setActive(false);
+	m_transformUi->setInvisible(true);
+
+	if(!object)
+		return;
+
+	m_nameEdit->setLabel(object->getName());
+	m_nameEdit->setCaret(0);
+
+	m_positionEdit->setVector(object->getPosition());
+	m_rotationEdit->setVector(object->getEulerRotation());
+	m_scaleEdit->setVector(object->getScale());
+
 	switch(object->getType())
 	{
 	case OBJECT3D_ENTITY: {
 		m_entityUi->setActive(true);
 		m_entityUi->setInvisible(false);
+
+		m_transformUi->setActive(true);
+		m_transformUi->setInvisible(false);
 
 		OEntity* entity = static_cast<OEntity*>(object);
 		m_entityInvisibleButton->setValue(entity->isInvisible());
@@ -1225,6 +1241,9 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 		m_lightUi->setActive(true);
 		m_lightUi->setInvisible(false);
 
+		m_transformUi->setActive(true);
+		m_transformUi->setInvisible(false);
+
 		OLight* light = static_cast<OLight*>(object);
 		m_lightColorButton->setColor(light->getColor());
 		m_lightColorEdit->setVector(light->getColor());
@@ -1242,6 +1261,9 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 	case OBJECT3D_CAMERA: {
 		m_cameraUi->setActive(true);
 		m_cameraUi->setInvisible(false);
+
+		m_transformUi->setActive(true);
+		m_transformUi->setInvisible(false);
 
 		OCamera* cam = static_cast<OCamera*>(object);
 		m_cameraFarPlaneEdit->setLabel(std::to_string(cam->getClippingFar()).c_str());
@@ -1262,6 +1284,9 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 		m_soundUi->setActive(true);
 		m_soundUi->setInvisible(false);
 
+		m_transformUi->setActive(true);
+		m_transformUi->setInvisible(false);
+
 		OSound* sound = static_cast<OSound*>(object);
 		m_soundGainEdit->setLabel(std::to_string(sound->getGain()).c_str());
 		m_soundPitchEdit->setLabel(std::to_string(sound->getPitch()).c_str());
@@ -1275,6 +1300,9 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 	case OBJECT3D_TEXT: {
 		m_textUi->setActive(true);
 		m_textUi->setInvisible(false);
+
+		m_transformUi->setActive(true);
+		m_transformUi->setInvisible(false);
 
 		OText* text = static_cast<OText*>(object);
 		m_textTextEdit->setLabel(text->getText());
