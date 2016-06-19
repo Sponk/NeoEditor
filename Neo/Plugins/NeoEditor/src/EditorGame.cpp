@@ -1,19 +1,11 @@
 #include "EditorGame.h"
-#include "Tool.h"
-#include "VectorEdit.h"
 #include <Neo2DLevel.h>
 #include <ImageButton.h>
 #include <Translator.h>
 #include <VerticalLayout.h>
-#include <cstdlib>
 #include <thread>
 #include <atomic>
-#include <Container.h>
-#include <Label.h>
-#include <EditField.h>
-#include <Project.h>
 #include <Player.h>
-#include <sstream>
 
 using namespace Neo;
 using namespace Neo2D;
@@ -1026,6 +1018,11 @@ void EditorGame::updateEntityTree()
 {
 	NeoEngine* engine = NeoEngine::getInstance();
 	auto scene = engine->getLevel()->getCurrentScene();
+	auto system = engine->getSystemContext();
+
+	// Make sure the editor finds all fonts when a project is loaded
+	std::string backupPath = system->getWorkingDirectory();
+	system->setWorkingDirectory("./");
 
 	std::function<void(TreeView::TreeNode*, Object3d*)> updateChildren = [&updateChildren](TreeView::TreeNode* node, Object3d* object)
 	{		
@@ -1045,6 +1042,7 @@ void EditorGame::updateEntityTree()
 	}
 
 	m_sceneView->updateOverlayScene();
+	system->setWorkingDirectory(backupPath.c_str());
 }
 
 void EditorGame::updateSelectedObject(Neo::Object3d* object)
