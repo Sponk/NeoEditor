@@ -439,7 +439,7 @@ void EditorGame::onBegin()
 	});
 	
 	filemenu->addItem(tr("Open Project"), [this](Widget&, void*) {
-		std::string filename = m_toolset->fileOpenDialog("Open Project", HOMEDIR, "Projects (*.neo)");
+		std::string filename = m_toolset->fileOpenDialog("Open Project", HOMEDIR, "Projects (*.nproj)");
 		if(filename.empty())
 			return;
 
@@ -1384,6 +1384,14 @@ void EditorGame::saveLevel()
 	if(m_currentLevelFile.empty())
 		return;
 
+	if(!m_currentProjectFile.empty())
+	{
+		char local[256];
+		getLocalFilename(local, engine->getSystemContext()->getWorkingDirectory(), m_currentLevelFile.c_str());
+		m_project.setLevel(local);
+		m_project.save(m_currentProjectFile.c_str());
+	}
+	
 	engine->getLevelLoader()->saveData(m_currentLevelFile.c_str(), "llvl", engine->getLevel());
 	updateWindowTitle();
 }
@@ -1419,8 +1427,11 @@ void EditorGame::loadProject(const char* path)
     getRepertory(dir, path);
 	NeoEngine::getInstance()->getSystemContext()->setWorkingDirectory(dir);
 
-	std::string absolutePath(dir);
-	openLevel((absolutePath + m_project.getLevel()).c_str());
+	if(!m_project.getLevel().empty())
+	{
+		std::string absolutePath(dir);
+		openLevel((absolutePath + m_project.getLevel()).c_str());
+	}
 }
 
 void EditorGame::saveProject(const char* path)

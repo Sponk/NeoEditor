@@ -56,7 +56,10 @@ public:
 	const std::string& getName() const { return m_name; }
 	const std::string& getVersion() const { return m_version; }
 	const std::string& getAuthor() const { return m_author; }
+
 	const std::string& getLevel() const { return m_startLevel; }
+	void setLevel(const std::string& level) { m_startLevel = level; }
+	
 	const std::string& getNeoVersion() const { return m_neoVersion; }
 	const std::string& getFilePath() const { return m_filepath; }
 	const std::string& getAssetDirectory() const { return m_assets; }
