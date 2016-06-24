@@ -1,0 +1,25 @@
+/**
+
+Message Box
+-----------
+
+@page messagebox_dialog Message Box Dialog
+
+This tool is used to display a simple message box with a custom message and title.
+
+The parameters are passed via stdin and look like this:
+
+	(title <string>)
+	(text <string>)
+
+### Explanation
+	
+The program displays a platform dependent dialog window with an OK option, the given title and given message.
+No output data will be produced.
+
+Field    | Meaning
+---------|-----------------------------------
+title    | The title string to use
+text     | The main text message to display.
+
+*/

@@ -4,6 +4,11 @@
 #include <string>
 #include <vector>
 
+/**
+ * @brief Represents an abstract game project.
+ *
+ * This class encapsules all data needed to load, save and process a game project.
+ */
 class Project
 {
 	std::string m_name;
@@ -30,8 +35,24 @@ public:
 		m_description(description)
 	{}
 
+	/**
+	 * @brief Saves the project to a file.
+	 *
+	 * This will not save the level or any loaded assets.
+	 * @param path The project file to save.
+	 * @return A boolean value representing success.
+	 */
 	bool save(const char* path);
+
+	/**
+	 * @brief Loads the project from a file.
+	 *
+	 * This will not load the level or any assets.
+	 * @param path The project file to load.
+	 * @return A boolean value representing success.
+	 */
 	bool load(const char* path);
+	
 	const std::string& getName() const { return m_name; }
 	const std::string& getVersion() const { return m_version; }
 	const std::string& getAuthor() const { return m_author; }

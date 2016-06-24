@@ -1,0 +1,21 @@
+/**
+@page color_picker_dialog Color Picker Dialog
+
+Displays a dialog to select a color. Input of arguments happens through stdin like this:
+
+	(color <float> <float> <float> <float>)
+	
+### Explanation
+
+The color field expects four float values representing the RGBA color components in a range of
+[0, 1].
+
+### Return Value
+
+When the program exits it will write the selected file to its stdout. The exact format looks like this:
+
+	(color <float> <float> <float> <float>)
+	
+Where the semantics are exactly the same as for the input. If the dialog was cancelled the input color will be
+used.
+*/

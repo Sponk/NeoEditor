@@ -1,0 +1,37 @@
+/**
+File Dialog
+-----------
+
+@page file_dialog File Dialog
+
+Displays a file open/save dialog and returns the selected file path.
+The input arguments are passed via stdin and have the following structure:
+
+	(directories <boolean>)
+	(save <boolean>)
+	(filetypes <string>)
+	(message <string>)
+	(startdir <string>)
+
+### Explanation
+
+Field       | Meaning
+------------|---------------------------------------------------
+directories | Defines if only directories should be selectable
+save        | Defines if the selected file does not exist yet.
+filetypes   | A filter string to select only certain file types.
+message     | A custom message.
+startdir    | The start directory where the search begins.
+
+The ´filetypes´ filter expects strings that be like this:
+
+	Images (*.png, *.xpm, *.jpg);;Text files (*.txt);;XML files (*.xml)
+	
+### Return Value
+
+When the program exits it will write the selected file to its stdout. The exact format looks like this:
+
+	(filename <string>)
+	
+Where the string is either the full path or an empty string if nothing was selected or the dialog cancelled.
+*/

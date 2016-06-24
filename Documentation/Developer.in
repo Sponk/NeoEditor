@@ -107,16 +107,24 @@ WARN_LOGFILE           =
 INPUT                  = @NEO_SOURCE_DIR@/SDK \
                          @NEO_SOURCE_DIR@/Documentation \
                          @NEO_SOURCE_DIR@/README.md \
-						 @NEO_SOURCE_DIR@/Neo/Plugins
+						 @NEO_SOURCE_DIR@/Neo
 
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h *.md *.dox
 RECURSIVE              = YES
 EXCLUDE                =
 EXCLUDE_SYMLINKS       = NO
-EXCLUDE_PATTERNS       = .git
+EXCLUDE_PATTERNS       = .git \
+						 qt
+
 EXCLUDE_SYMBOLS        = io \
- 						 utf8
+ 						 utf8 \
+ 						 detail \
+ 						 *owner_less* \
+ 						 enable_shared_from_this \
+ 						 weak_ptr \
+ 						 shared_ptr \
+						 INI
 EXAMPLE_PATH           =
 EXAMPLE_PATTERNS       =
 EXAMPLE_RECURSIVE      = NO

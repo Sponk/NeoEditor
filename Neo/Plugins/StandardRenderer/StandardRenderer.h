@@ -1,5 +1,5 @@
 //========================================================================
-// Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -30,7 +30,23 @@
 
 namespace Neo
 {
-// Standard Renderer
+/**
+ * @brief The Deferred Rendering Pipeline
+ *
+ * This class implements a deferred shading algorithm with support for a virtually infinite amount of
+ * lights visible at a time. The actual numbers are of course limited by actual hardware.
+ * All shading code is loaded from an external shader file to be fully accessible for
+ * customisation so implementing custom shading algorithms and post processing effects is quite easy.
+ *
+ * Rendering happens in several steps:
+ * 1. Render all opaque objects (writes to the G-Buffer, position buffer, normal buffer and data buffer)
+ * 2. Render the lit image using the data rendered before
+ * 3. Render all transparent objects from back to front to the lit image buffer
+ * 4. Render the final image using the buffer that contains the complete lit 
+ *    image to the screen while using a post effect filter.
+ *
+ * @todo Shadow mapping
+ */
 class StandardRenderer : public Renderer
 {
     FXRef* m_shaders[NUM_SHADERS];
