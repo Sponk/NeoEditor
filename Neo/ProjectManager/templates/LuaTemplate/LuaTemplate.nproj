@@ -1,9 +1,10 @@
 (project 
-	(name "NeoSharp Project Template")
+	(name "Lua Project Template")
 	(author "Yannick Pflanzer")
 	(version "0.1")
 	(neo-version "0.5")
 	(start-level "")
 	(assets "assets")
-	(description "A basic project containing the build system for a C# based game.")
+	(description "A basic project containing the build system for a Lua based game.")
+	(plugins)
 )

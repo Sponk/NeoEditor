@@ -41,4 +41,5 @@ if(WIN32)
     endif()
 endif()
 
+copy_files("templates/*" "${NEO_BINARY_OUTPUT}/" "copy-templates")
 add_subdirectory(templates)

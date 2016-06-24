@@ -6,4 +6,5 @@
 	(start-level "")
 	(assets "assets")
 	(description "A basic project containing the build system for a C# based game.")
+	(plugins)
 )
