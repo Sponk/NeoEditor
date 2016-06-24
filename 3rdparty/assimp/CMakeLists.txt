@@ -91,12 +91,12 @@ INCLUDE (PrecompiledHeader)
 #ENDIF ( CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR )
 
 # Cache these to allow the user to override them manually.
-SET( ASSIMP_LIB_INSTALL_DIR "Neo" CACHE PATH
-  "Path the built library files are installed to." )
-SET( ASSIMP_INCLUDE_INSTALL_DIR "Neo" CACHE PATH
-  "Path the header files are installed to." )
-SET( ASSIMP_BIN_INSTALL_DIR "Neo" CACHE PATH
-  "Path the tool executables are installed to." )
+SET( ASSIMP_LIB_INSTALL_DIR "Neo") # CACHE PATH
+  # "Path the built library files are installed to." )
+SET( ASSIMP_INCLUDE_INSTALL_DIR "Neo")# CACHE PATH
+  # "Path the header files are installed to." )
+SET( ASSIMP_BIN_INSTALL_DIR "Neo")# CACHE PATH
+  # "Path the tool executables are installed to." )
 
 #IF (CMAKE_BUILD_TYPE STREQUAL "Release")
 #  SET(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Debug Postfix for lib, samples and tools")
