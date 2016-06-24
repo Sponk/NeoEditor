@@ -343,7 +343,7 @@ void EditorGame::update()
 		updateSelectedObject(m_sceneView->getSelection().back());
 
 	// Set values of current scene
-	updateSceneUi();
+	// updateSceneUi();
 }
 
 void EditorGame::draw()
