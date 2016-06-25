@@ -68,7 +68,8 @@ class StandardRenderer : public Renderer
     unsigned int m_normalTexID;
     unsigned int m_positionTexID;
     unsigned int m_dataTexID;
-
+	unsigned int m_randomTexID;
+	
     unsigned int m_quadVAO;
     unsigned int m_textVAO;
 
@@ -105,6 +106,8 @@ public:
 	void set2D(unsigned int w, unsigned int h);
 	void drawQuad(int fx);
 
+	void setShadingAlgorithm(const char* str);
+	
 	// All visible lights. Should be updated by a worker thread.
 	static int light_update_thread(void* data);
 	Thread* m_lightUpdateThread;

@@ -6,6 +6,10 @@
 
 #define MAX_ENTITY_LIGHTS 256
 
+// #define shadingAlgorithm phongShading
+#define shadingAlgorithm cookTorranceShading
+const float epsilon = 1e-5; //1e-6; // Very small value
+
 struct LightInfo
 {
 	vec3 Position;
@@ -45,7 +49,7 @@ uniform float dofFocus = 0.2;
 uniform float dofStrength = 2.0;
 uniform int dofAutofocus = 1;
 
-uniform sampler2D Textures[5];
+uniform sampler2D Textures[6];
 in vec2 texCoord;
 
 vec3 Specular = vec3(1, 1, 1);
@@ -72,6 +76,23 @@ vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse,
 	vec3 v = normalize(-p);
 	vec3 h = normalize(v + s);
 
+	float attenuation = (1.0 / (light.ConstantAttenuation +
+								(dot(l, l) * light.QuadraticAttenuation)));
+
+	if (light.SpotCos > 0.0 && light.SpotCos < 1.0)
+	{
+		float spot = dot(-s, light.SpotDir);
+
+		if (spot > light.SpotCos)
+		{
+			spot = clamp(pow(spot - light.SpotCos, light.SpotExp), 0.0, 1.0);
+			attenuation *= spot;
+		}
+		else
+			return vec4(0, 0, 0, 0);
+	}
+
+	
 	float nDoth = dot(n, h);
 	float nDotv = dot(n, v);
 	float vDoth = dot(v, h);
@@ -95,26 +116,7 @@ vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse,
 	vec3 retval =
 		light.Intensity * (max(0.0, nDots) * ((diffuse.rgb * light.Diffuse) +
 											  (light.Diffuse * Specular) * rs));
-
-	if (light.SpotCos > 0.0 && light.SpotCos < 1.0)
-	{
-		float spot = dot(-s, light.SpotDir);
-
-		if (spot > light.SpotCos)
-		{
-			spot = clamp(pow(spot - light.SpotCos, light.SpotExp), 0.0, 1.0);
-			float attenuation =
-				spot / (light.ConstantAttenuation +
-						(dot(l, l) * light.QuadraticAttenuation)); //*shadow;
-
-			return vec4(attenuation * retval, 1.0);
-		}
-
-		return vec4(0, 0, 0, 0);
-	}
-
-	float attenuation = 1.0 / (light.ConstantAttenuation +
-							   (dot(l, l) * light.QuadraticAttenuation));
+	
 	return vec4(attenuation * retval, 1.0);
 }
 
@@ -125,9 +127,31 @@ vec4 calculatePhongLight(LightInfo light, vec3 p, vec3 n, vec4 diffuse,
 	vec3 s = normalize(l);
 	vec3 v = normalize(-p);
 	vec3 h = normalize(v + s);
+
+	float attenuation = (1.0 / (light.ConstantAttenuation +
+								(dot(l, l) * light.QuadraticAttenuation)));
+
+	if (light.SpotCos > 0.0 && light.SpotCos < 1.0)
+	{
+		float spot = dot(-s, light.SpotDir);
+
+		if (spot > light.SpotCos)
+		{
+			spot = clamp(pow(spot - light.SpotCos, light.SpotExp), 0.0, 1.0);
+			attenuation *= spot;
+		}
+		else
+			return vec4(0, 0, 0, 0);
+	}
+	
+	return attenuation * vec4(light.Intensity * (light.Diffuse * diffuse.rgb * max(dot(s, n), 0.0) + light.Diffuse * Specular * pow(max(dot(h, n), 0.0), shininess)), 1.0);
+
+/*vec3 l = light.Position - p;
+	vec3 s = normalize(l);
+	vec3 v = normalize(-p);
+	vec3 h = normalize(v + s);
 	float ldsqr = dot(l, l);
 
-	shininess *= 2.0;
 	vec3 returnColor =
 		light.Intensity *
 		(AmbientLight + light.Diffuse * diffuse.rgb * max(dot(s, n), 0.0) +
@@ -152,10 +176,10 @@ vec4 calculatePhongLight(LightInfo light, vec3 p, vec3 n, vec4 diffuse,
 
 	float attenuation = (1.0 / (light.ConstantAttenuation +
 								(ldsqr * light.QuadraticAttenuation)));
-	return vec4(returnColor * attenuation, 1.0);
+								return vec4(returnColor * attenuation, 1.0);*/
 }
 
-vec4 calculateAllCookLight(vec3 p, vec3 n, vec4 d, float s)
+vec4 cookTorranceShading(vec3 p, vec3 n, vec4 d, float s)
 {
 	vec4 result = vec4(0, 0, 0, 0);
 
@@ -163,18 +187,23 @@ vec4 calculateAllCookLight(vec3 p, vec3 n, vec4 d, float s)
 	LightInfo light;
 	vec3 data;
 
+	// Convert shininess to roughness
+	s = sqrt(2.0f/(1.25f*s));
+	
 	for (int i = 0; i < LightsCount; i++)
 	{
-		// light = lights[i];
-		light.Position = texelFetch(LightData, ivec2(i, 0), 0).rgb;
+	    light.Position = texelFetch(LightData, ivec2(i, 0), 0).rgb;
+		light.Radius = texelFetch(LightData, ivec2(i, 2), 0).x;
 
 		data = texelFetch(LightData, ivec2(i, 1), 0).xyz;
+			
+		if(data.x < 1.0f && distance(light.Position, p) > light.Radius)
+			continue;
+
 		light.SpotCos = data.x;
 		light.SpotExp = data.y;
 		light.Intensity = data.z;
-
-		light.Radius = texelFetch(LightData, ivec2(i, 2), 0).x;
-
+		
 		data = texelFetch(LightData, ivec2(i, 3), 0).xyz;
 		light.LinearAttenuation = data.x;
 		light.QuadraticAttenuation = data.y;
@@ -188,7 +217,7 @@ vec4 calculateAllCookLight(vec3 p, vec3 n, vec4 d, float s)
 	return result;
 }
 
-vec4 calculateAllPhongLight(vec3 p, vec3 n, vec4 d, float s)
+vec4 phongShading(vec3 p, vec3 n, vec4 d, float s)
 {
 	vec4 result = vec4(0, 0, 0, 0);
 
@@ -196,18 +225,23 @@ vec4 calculateAllPhongLight(vec3 p, vec3 n, vec4 d, float s)
 	LightInfo light;
 	vec3 data;
 
+	//s *= 4.0f;
+	s = s * 2.0f + epsilon; // Ensure that we never do x^0 since that would produce white spots
+	
 	for (int i = 0; i < LightsCount; i++)
 	{
-		// light = lights[i];
-		light.Position = texelFetch(LightData, ivec2(i, 0), 0).rgb;
+	    light.Position = texelFetch(LightData, ivec2(i, 0), 0).rgb;
+		light.Radius = texelFetch(LightData, ivec2(i, 2), 0).x;
 
 		data = texelFetch(LightData, ivec2(i, 1), 0).xyz;
+			
+		if(data.x < 1.0f && distance(light.Position, p) > light.Radius)
+			continue;
+
 		light.SpotCos = data.x;
 		light.SpotExp = data.y;
 		light.Intensity = data.z;
-
-		light.Radius = texelFetch(LightData, ivec2(i, 2), 0).x;
-
+		
 		data = texelFetch(LightData, ivec2(i, 3), 0).xyz;
 		light.LinearAttenuation = data.x;
 		light.QuadraticAttenuation = data.y;
@@ -460,8 +494,13 @@ float linearize_depth(float z, float near, float far)
 	return (2.0 * near) / (far + near - z * (far - near));
 }
 
+float rand(vec2 co)
+{
+	return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
 // SSAO
-#define SSAO_ITERATIONS 32
+#define SSAO_ITERATIONS 12
 float ssao(vec2 texcoord, vec2 filterRadius, sampler2D depthTexture,
 		   sampler2D positionTexture, sampler2D normalTexture)
 {
@@ -472,25 +511,25 @@ float ssao(vec2 texcoord, vec2 filterRadius, sampler2D depthTexture,
 	float occlusion = 0;
 	vec3 viewPos = texture2D(positionTexture, texcoord).xyz;
 	vec3 viewNormal = texture2D(normalTexture, texcoord).xyz;
-
+	vec2 multiplier = filterRadius * max((16.0f/viewPos.z), 1.0f);
+	
 	for (int i = 0; i < samples; i++)
 	{
-		vec2 sampleTexCoord = texcoord + (poissonDisk[i] * filterRadius);
+		vec2 sampleTexCoord = texcoord + (poissonDisk[i] * multiplier);
 		vec3 samplePos = texture2D(positionTexture, sampleTexCoord).xyz;
 		vec3 sampleDir = normalize(samplePos - viewPos);
 
 		float NdotS = max(dot(viewNormal, sampleDir), 0);
-		float VPdistSP = distance(viewPos, samplePos);
+		float VPdistSP = distance(viewPos, samplePos); 
 
-		float a = 1.0 - smoothstep(distanceThreshold, distanceThreshold * 2,
-								   VPdistSP);
-		float b = NdotS;
+		float a = 1.0 - smoothstep(distanceThreshold, distanceThreshold * 2, VPdistSP);
+		//float b = NdotS;
 
-		occlusion += (a * b);
+		occlusion = (a * NdotS) + occlusion; 
 	}
 
 	float lum = dot(FragColor.rgb, lumcoeff);
-	return mix(pow(1.0 - (occlusion / samples), 2.0), 1.0, lum);
+	return mix(/*pow(*/1.0 - (occlusion / samples)/*, 2.0)*/, 1.0, lum);
 }
 
 void main(void)
@@ -498,7 +537,7 @@ void main(void)
 	FragColor = texture2D(Textures[0], texCoord);
 	float transparency = FragColor.a;
 	// FragColor.a = 1.0;
-
+	
 	if (PostEffects == 1)
 	{
 		// FragColor = texture2D(LightData, texCoord);
@@ -526,9 +565,9 @@ void main(void)
 		// FragColor.rgb = mix(FragColor.rgb, blur(FragColor, texCoord,
 		// Textures[0], dofAmount).rgb, dofStrength*abs(dofAmount));
 
-		// FragColor.rgb = vec3(ssao(texCoord, frame * 13.0, Textures[4],
-		// Textures[2], Textures[1]));
-		// return;
+		//FragColor.rgb = vec3(ssao(texCoord, frame * 13.0, Textures[4],
+		//						   Textures[2], Textures[1]));
+		//return;
 
 		if (normal.a == 0 && transparency == 1.0)
 		{
@@ -562,7 +601,7 @@ void main(void)
 	if (FragColor.a > 0 && n.a == 0)
 	{
 		vec4 p = texture2D(Textures[2], texCoord);
-		FragColor = calculateAllCookLight(p.xyz, n.rgb, FragColor, p.a) +
+		FragColor = shadingAlgorithm(p.xyz, n.rgb, FragColor, p.a) +
 					vec4(startColor.rgb * data.rgb, 0.0) + vec4(AmbientLight, 1.0);
 		FragColor.a = transparency;
 	}

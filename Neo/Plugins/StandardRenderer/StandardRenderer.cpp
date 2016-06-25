@@ -206,6 +206,8 @@ static const char* subroutines[5] =
 	 "cookModelDiffuseNormalSpecular"};
 //static const char* subroutines[5] = { "phongModelColor", "phongModelDiffuse", "phongModelDiffuseSpecular", "phongModelDiffuseNormal", "phongModelDiffuseNormalSpecular" };
 
+static const char* shadingAlgorithms[] = {"cookTorranceShading", "phongShading"};
+
 StandardRenderer::StandardRenderer() :
 	m_colorOnlyFx(0), 
 	m_texturedFx(0), 
@@ -243,6 +245,12 @@ StandardRenderer::StandardRenderer() :
 StandardRenderer::~StandardRenderer()
 {
 
+}
+
+void StandardRenderer::setShadingAlgorithm(const char* str)
+{
+	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+	render->selectSubroutine(m_fx[1], M_SHADER_PIXEL, str);
 }
 
 void StandardRenderer::drawMesh(Mesh* mesh, OCamera* camera, Material* materials, bool wireframe)
@@ -378,7 +386,7 @@ void StandardRenderer::drawDisplay(SubMesh* mesh,
 		render->disableBlending();
 	}
 
-	float shininess = sqrt(2.0f/(1.25f*material->getShininess()));
+	float shininess = material->getShininess(); // sqrt(2.0f/(1.25f*material->getShininess()));
 	render->sendUniformFloat(m_fx[0], "Shininess", &shininess);
 	render->sendUniformFloat(m_fx[0], "Opacity", &opacity);
 
@@ -681,6 +689,25 @@ void StandardRenderer::initialize()
 	initFramebuffers();
 	initQuadVAO(&m_quadVAO, &m_quadVBO, &m_quadTexCoordVBO, m_fx[1]);
 	initTextVAO(&m_textVAO, &m_textVBO, &m_textTexCoordVBO, m_fx[0]);
+
+	// Generate some random data
+	Image random;
+	random.create(VAR_UBYTE, 128, 128, 4);
+	
+	unsigned char* p = static_cast<unsigned char*>(random.getData());
+	for(unsigned int i = 0; i < random.getSize(); i++)
+	{
+		(*p) = static_cast<unsigned char>(rand() % 256);
+	    p++;
+	}
+
+	m_randomTexID = 0;
+	render->createTexture(&m_randomTexID);
+	render->bindTexture(m_randomTexID);
+	render->setTextureFilterMode(TEX_FILTER_LINEAR_MIPMAP_LINEAR, TEX_FILTER_LINEAR);
+	render->setTextureUWrapMode(WRAP_REPEAT);
+	render->setTextureVWrapMode(WRAP_REPEAT);
+	render->sendTextureImage(&random, 1, 1, 0);
 }
 
 void StandardRenderer::smallInit(unsigned int width, unsigned int height)
@@ -1203,7 +1230,7 @@ void StandardRenderer::sendLights(unsigned int shader, OCamera* camera)
 	int i = 0;
 	for (OLight* l : data->visibleLights)
 	{
-		float quadraticAtten = (8.0f / l->getRadius());
+		float quadraticAtten = (12.0f / l->getRadius());
 		quadraticAtten = (quadraticAtten * quadraticAtten) * l->getIntensity();
 		float spotCos = cosf(l->getSpotAngle() * DEG_TO_RAD);
 
@@ -1224,7 +1251,7 @@ void StandardRenderer::sendLights(unsigned int shader, OCamera* camera)
 
 		vec = l->getColor();
 		data->lightData.writePixel(i, 5, &vec);
-
+		
 		i++;
 	}
 
@@ -1379,9 +1406,10 @@ void StandardRenderer::renderFinalImage(Scene* scene, OCamera* camera, bool post
 
 	render->sendUniformInt(m_fx[1], "PostEffects", &postEffects, 1);
 	render->bindTexture(m_depthTexID, 4);
-
-	int texIds[5] = {0, 1, 2, 3, 4};
-	render->sendUniformInt(m_fx[1], "Textures", texIds, 5);
+	render->bindTexture(m_randomTexID, 5);
+	
+	int texIds[6] = {0, 1, 2, 3, 4, 5};
+	render->sendUniformInt(m_fx[1], "Textures", texIds, 6);
 
 	// Set cull mode
 	render->setCullMode(CULL_BACK);
