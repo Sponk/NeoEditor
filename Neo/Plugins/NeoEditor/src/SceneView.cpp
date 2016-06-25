@@ -13,7 +13,8 @@ SceneView::SceneView(UndoQueue& undo,
 	: Widget(x, y, w, h, nullptr, parent, nullptr),
 	  m_currentHandles(&m_translation),
 	  m_undo(undo),
-	  m_objectLocalTransformation(false)
+	  m_objectLocalTransformation(false),
+	  m_gridSize(0)
 {
 	m_overlayScene = m_level.addNewScene();
 	m_handlesScene = m_level.addNewScene();
@@ -259,19 +260,31 @@ void SceneView::translationHandle(OEntity* handleEntity, const Vector3& axis, co
 	Vector2 mousedir = input->getMouse().getDirection();
 	mousedir.y *= -1;
 
+	// Grab handles
+	m_currentHandles->grabbed = handleEntity;
+	
 	Vector2 oldpos = mousepos - mousedir;
 
-	float distance = (m_camera.getPosition() - getSelectionCenter()).getLength();
+	Vector3 selectionCenter = getSelectionCenter();
+	float distance = (m_camera.getPosition() - selectionCenter).getLength();
 	Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
 	Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
-
 	Vector3 vec = (p1 - p2) * distance * axis;
 
-	for(auto e : m_selection)
-		e->translate(vec);
+	// Apply snap to grid
+	if(m_gridSize != 0 && mousedir.getLength() < 10)
+	{
+		return;
+	}
+	else if(m_gridSize != 0)
+	{
+		vec = vec.getNormalized() * m_gridSize;
+	}
 
+	for(auto e : m_selection)
+		e->translate(vec);	
+	
 	m_currentHandles->setPosition(getSelectionCenter());
-	m_currentHandles->grabbed = handleEntity;				
 }
 
 bool SceneView::handle(const Neo2D::Gui::Event& e)

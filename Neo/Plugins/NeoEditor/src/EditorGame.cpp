@@ -502,13 +502,31 @@ void EditorGame::onBegin()
 		deleteSelection();
 	});
 
-	editmenu->addItem("Selection Local Transformation", [this](Widget&, void*) {
-			m_sceneView->setObjectLocal(false);
+	editmenu->addItem("Object Local Transformation", [this](Widget& w, void*) {
+			m_sceneView->setObjectLocal(!m_sceneView->isObjectLocal());
+
+			if(m_sceneView->isObjectLocal())
+				w.setLabel(tr("Selection Local Transformation"));
+			else
+				w.setLabel(tr("Object Local Transformation"));
 	});
 
-	editmenu->addItem("Object Local Transformation", [this](Widget&, void*) {
+	editmenu->addItem("Enable Snap to Grid", [this](Widget& w, void*) {
+			if(m_sceneView->getGridSize())
+			{
+				m_sceneView->setGridSize(0);
+				w.setLabel(tr("Enable Snap to Grid"));
+			}
+			else
+			{
+				m_sceneView->setGridSize(10);
+				w.setLabel(tr("Disable Snap to Grid"));
+			}
+		});
+	
+	/*editmenu->addItem("Object Local Transformation", [this](Widget&, void*) {
 			m_sceneView->setObjectLocal(true);
-	});
+			});*/
 	
 	helpmenu->addItem(tr("About"), [this](Widget&, void*) { m_toolset->aboutDialog(); });
 

@@ -22,7 +22,10 @@ class SceneView : public Neo2D::Gui::Widget
 
 	/// Transform objects either relative to their own transformation or relative to the selection.
 	bool m_objectLocalTransformation;
-		
+	
+	/// Grid size for snap to grid
+	unsigned int m_gridSize;
+	
 	struct Handles
 	{
 		Neo::OEntity* x, *y, *z;
@@ -97,6 +100,9 @@ public:
 
 	void setObjectLocal(bool v) { m_objectLocalTransformation = v; }
 	bool isObjectLocal() const { return m_objectLocalTransformation; }
+
+	void setGridSize(unsigned int sz) { m_gridSize = sz; }
+	unsigned int getGridSize() const { return m_gridSize; }
 	
 	using Neo2D::Gui::Widget::setState;
 };
