@@ -1230,7 +1230,7 @@ void StandardRenderer::sendLights(unsigned int shader, OCamera* camera)
 	int i = 0;
 	for (OLight* l : data->visibleLights)
 	{
-		float quadraticAtten = (12.0f / l->getRadius());
+		float quadraticAtten = (8.0f / l->getRadius());
 		quadraticAtten = (quadraticAtten * quadraticAtten) * l->getIntensity();
 		float spotCos = cosf(l->getSpotAngle() * DEG_TO_RAD);
 
@@ -1243,7 +1243,7 @@ void StandardRenderer::sendLights(unsigned int shader, OCamera* camera)
 		vec = Vector3(l->getRadius(), 0, 0);
 		data->lightData.writePixel(i, 2, &vec);
 
-		vec = Vector3(0, quadraticAtten, 1);
+		vec = Vector3(0, quadraticAtten, 1.0f);
 		data->lightData.writePixel(i, 3, &vec);
 
 		vec = camMat.getRotatedVector3(l->getRotatedVector(Vector3(0, 0, -1))).getNormalized();

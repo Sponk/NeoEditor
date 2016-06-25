@@ -77,6 +77,7 @@ vec4 cookTorranceSpecular(LightInfo light, vec3 p, vec3 n, vec4 diffuse,
 	vec3 h = normalize(v + s);
 
 	float attenuation = (1.0 / (light.ConstantAttenuation +
+								light.LinearAttenuation * length(l) +
 								(dot(l, l) * light.QuadraticAttenuation)));
 
 	if (light.SpotCos > 0.0 && light.SpotCos < 1.0)
@@ -145,38 +146,6 @@ vec4 calculatePhongLight(LightInfo light, vec3 p, vec3 n, vec4 diffuse,
 	}
 	
 	return attenuation * vec4(light.Intensity * (light.Diffuse * diffuse.rgb * max(dot(s, n), 0.0) + light.Diffuse * Specular * pow(max(dot(h, n), 0.0), shininess)), 1.0);
-
-/*vec3 l = light.Position - p;
-	vec3 s = normalize(l);
-	vec3 v = normalize(-p);
-	vec3 h = normalize(v + s);
-	float ldsqr = dot(l, l);
-
-	vec3 returnColor =
-		light.Intensity *
-		(AmbientLight + light.Diffuse * diffuse.rgb * max(dot(s, n), 0.0) +
-		 Specular * pow(max(dot(h, n), 0.0), shininess));
-
-	if (light.SpotCos > 0.0 && light.SpotCos < 1.0)
-	{
-		float spot = dot(-s, light.SpotDir);
-
-		if (spot > light.SpotCos)
-		{
-			spot = clamp(pow(spot, light.SpotExp), 0.0, 1.0);
-
-			float attenuation =
-				(spot / (light.ConstantAttenuation +
-						 (ldsqr * light.QuadraticAttenuation))); //*shadow;
-			return vec4(returnColor * attenuation, 1.0);
-		}
-
-		return vec4(0, 0, 0, 0);
-	}
-
-	float attenuation = (1.0 / (light.ConstantAttenuation +
-								(ldsqr * light.QuadraticAttenuation)));
-								return vec4(returnColor * attenuation, 1.0);*/
 }
 
 vec4 cookTorranceShading(vec3 p, vec3 n, vec4 d, float s)
@@ -196,8 +165,10 @@ vec4 cookTorranceShading(vec3 p, vec3 n, vec4 d, float s)
 		light.Radius = texelFetch(LightData, ivec2(i, 2), 0).x;
 
 		data = texelFetch(LightData, ivec2(i, 1), 0).xyz;
-			
-		if(data.x < 1.0f && distance(light.Position, p) > light.Radius)
+
+		// The radius is actually a little bigger than the actual value
+		// due to the falloff value
+		if(data.x < 1.0f && distance(light.Position, p) > light.Radius * 1.5f)
 			continue;
 
 		light.SpotCos = data.x;
@@ -234,10 +205,12 @@ vec4 phongShading(vec3 p, vec3 n, vec4 d, float s)
 		light.Radius = texelFetch(LightData, ivec2(i, 2), 0).x;
 
 		data = texelFetch(LightData, ivec2(i, 1), 0).xyz;
-			
-		if(data.x < 1.0f && distance(light.Position, p) > light.Radius)
+		
+		// The radius is actually a little bigger than the actual value
+		// due to the falloff value
+		if(data.x < 1.0f && distance(light.Position, p) > light.Radius * 1.5f)
 			continue;
-
+		
 		light.SpotCos = data.x;
 		light.SpotExp = data.y;
 		light.Intensity = data.z;
