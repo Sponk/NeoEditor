@@ -432,6 +432,7 @@ void EditorGame::onBegin()
 	
 	auto filemenu = make_shared<Submenu>(tr("File"), m_menubar);
 	auto editmenu = make_shared<Submenu>(tr("Edit"), m_menubar);
+	auto scenemenu = make_shared<Submenu>(tr("Scene"), m_menubar);
 	auto helpmenu = make_shared<Submenu>(tr("Help"), m_menubar);
 
 	filemenu->addItem(tr("New Level"), [this](Widget&, void*) {
@@ -466,23 +467,41 @@ void EditorGame::onBegin()
 	});
 
 	filemenu->addItem(tr("Quit"), [this] (Widget&, void*) { NeoEngine::getInstance()->setActive(false); });
-   	editmenu->addItem("/Create/Light", [this](Widget&, void*) {
+
+	scenemenu->addItem(tr("Add Scene"), [this](Widget&, void*) {
+			Level* level = NeoEngine::getInstance()->getLevel();
+			Scene* s = level->addNewScene();
+			
+			std::string name("Scene-");
+			name += std::to_string(level->getScenesNumber());
+			
+			s->setName(name.c_str());
+			level->setCurrentScene(s);
+			
+			updateSceneUi();
+
+			m_sceneView->clearSelection();
+			m_sceneView->updateOverlayScene();
+			updated = false;
+	});
+	
+   	scenemenu->addItem("/Create/Light", [this](Widget&, void*) {
 			addLight();
 	});
 
-	editmenu->addItem("/Create/Entity", [this](Widget&, void*) {
+	scenemenu->addItem("/Create/Entity", [this](Widget&, void*) {
 			addEntity();
 	});
 
-	editmenu->addItem("/Create/Text", [this](Widget&, void*) {
+	scenemenu->addItem("/Create/Text", [this](Widget&, void*) {
 			addText();
 	});
 	
-	editmenu->addItem("/Create/Sound", [this](Widget&, void*) {
+	scenemenu->addItem("/Create/Sound", [this](Widget&, void*) {
 			addSound();
 	});
 
-	editmenu->addItem("/Create/Camera", [this](Widget&, void*) {
+	scenemenu->addItem("/Create/Camera", [this](Widget&, void*) {
 		addCamera();
 	});
 
@@ -532,6 +551,7 @@ void EditorGame::onBegin()
 
 	m_menubar->addMenu(filemenu);
 	m_menubar->addMenu(editmenu);
+	m_menubar->addMenu(scenemenu);
 	m_menubar->addMenu(helpmenu);
 
 	// Build right panel
