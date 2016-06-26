@@ -58,3 +58,23 @@ Neo::Vector4 ExternalToolset::colorDialog(const Neo::Vector4& start)
 
 	return retval;
 }
+
+std::string ExternalToolset::listSelection(const std::string& title, const std::vector<std::string>& entries)
+{
+	std::stringstream ss;
+	ss << "(title \"" << title << "\")";
+
+	ss << "(entries";
+	for(auto e : entries)
+		ss << " \"" << e << "\"";
+	ss << ")";
+
+	std::string str = Tool::executeToolNonBlocking("listselector", ss.str().c_str());
+	auto result = sexpresso::parse(str);
+	auto s = result.getChildByPath("result");
+
+	if(!s)
+		return "";
+
+	return s->arguments().begin()->value.str;
+}

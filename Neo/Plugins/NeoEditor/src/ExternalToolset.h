@@ -17,6 +17,7 @@ public:
 	virtual void messagebox(const char* title, const char* message);
 	virtual void aboutDialog();
 	virtual Neo::Vector4 colorDialog(const Neo::Vector4& start);
+	virtual std::string listSelection(const std::string& title, const std::vector<std::string>& entries);
 };
 
 #endif //NEO_QTTOOLSET_H

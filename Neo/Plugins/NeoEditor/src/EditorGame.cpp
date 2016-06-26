@@ -484,7 +484,25 @@ void EditorGame::onBegin()
 			m_sceneView->updateOverlayScene();
 			updated = false;
 	});
-	
+
+	scenemenu->addItem(tr("Change Scene"), [this](Widget&, void*) {
+			Level* level = NeoEngine::getInstance()->getLevel();
+			std::vector<std::string> scenes;
+			for(int i = 0; i < level->getScenesNumber(); i++)
+				scenes.push_back(level->getSceneByIndex(i)->getName());
+			
+			std::string newSceneName = m_toolset->listSelection(tr("Choose a scene"), scenes);
+			if(newSceneName.empty())
+				return;
+
+			level->setCurrentScene(level->getSceneByName(newSceneName.c_str()));
+			updateSceneUi();
+
+			m_sceneView->clearSelection();
+			m_sceneView->updateOverlayScene();
+			updated = false;
+	});
+		
    	scenemenu->addItem("/Create/Light", [this](Widget&, void*) {
 			addLight();
 	});

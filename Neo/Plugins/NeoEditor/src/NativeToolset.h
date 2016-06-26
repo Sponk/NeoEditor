@@ -1,6 +1,7 @@
 #ifndef NEO_NATIVETOOLSET_H
 #define NEO_NATIVETOOLSET_H
 
+#include <vector>
 #include <string>
 #include <NeoEngine.h>
 
@@ -25,6 +26,8 @@ public:
 	
 	virtual void messagebox(const char* title, const char* message) = 0;
 	virtual void aboutDialog() = 0;
+
+	virtual std::string listSelection(const std::string& title, const std::vector<std::string>& entries) = 0;
 
 	virtual Neo::Vector4 colorDialog(const Neo::Vector4& start) = 0;
 };
