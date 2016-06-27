@@ -334,7 +334,7 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 
 			Object3d* selected = m_currentHandles->grabbed;
 			float selectedDistance = 0.0f;
-
+			
 			if(m_currentHandles->grabbed == nullptr)
 			{
 				// Search in main scene
@@ -343,7 +343,8 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 					auto result = scene->getEntityByIndex(i)->castRay(origin, direction);
 					if(result.hit)
 					{
-						if(float newlength = (origin - result.hit).getLength() > selectedDistance
+						float newlength = (origin - result.point).getLength();
+						if(newlength < selectedDistance
 						   || selected == nullptr)
 						{
 							selected = scene->getEntityByIndex(i);
@@ -361,7 +362,7 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 
 					if(isEdgeToBoxCollision(inverse * origin, inverse * direction, box->min, box->max))
 					{
-						if(float newlength = (origin - text->getTransformedPosition()).getLength() > selectedDistance
+						if(float newlength = (origin - text->getTransformedPosition()).getLength() < selectedDistance
 						   || selected == nullptr)
 						{
 							selected = text;
@@ -380,7 +381,8 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 					auto result = m_overlayScene->getEntityByIndex(i)->castRay(origin, direction);
 					if(result.hit)
 					{
-						if(float newlength = (origin - result.hit).getLength() > selectedDistance
+						float newlength = (origin - result.point).getLength();
+						if(newlength < selectedDistance
 						   || selected == nullptr)
 						{
 							selected = m_overlayScene->getEntityByIndex(i)->getParent();
@@ -398,7 +400,8 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 					auto result = m_handlesScene->getEntityByIndex(i)->castRay(origin, direction);
 					if(result.hit)
 					{
-						if(float newlength = (origin - result.hit).getLength() > selectedDistance
+						float newlength = (origin - result.point).getLength();
+						if(newlength < selectedDistance
 						   || selected == nullptr)
 						{
 							selected = m_handlesScene->getEntityByIndex(i);
