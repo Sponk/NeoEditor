@@ -9,7 +9,8 @@ Neo2D::Gui::ScrollPanel::ScrollPanel(int x,
 									 const shared_ptr<Theme>& background)
 	: Container(x, y, w, h, parent),
 	  verticalScroll(x,y,w,h,nullptr,SCROLLBAR_VERTICAL,knobtheme),
-	  horizontalScroll(x,y,w,h,nullptr,SCROLLBAR_HORIZONTAL,background)
+	  horizontalScroll(x,y,w,h,nullptr,SCROLLBAR_HORIZONTAL,background),
+	  m_localPosition(false)
 {}
 
 void Neo2D::Gui::ScrollPanel::init()
@@ -79,15 +80,16 @@ void Neo2D::Gui::ScrollPanel::update(float dt)
 	horizontalScroll.update(dt);
 	verticalScroll.update(dt);
 
+	Neo::Vector2 relativePos = (m_localPosition ? getPosition() : Neo::Vector2());
 	Neo::Vector2 offset = Neo::Vector2(horizontalScroll.getValue(), verticalScroll.getValue());
-	lastOffset -= offset;
-
+	lastOffset -= (offset - relativePos);
+	
 	for(auto c : getChildren())
 	{
 		c->update(dt);
 		c->setPosition(c->getPosition() + lastOffset);
 	}
 
-	lastOffset = offset;
-	updateLayout(-lastOffset);
+	lastOffset = offset - relativePos;
+	updateLayout(-lastOffset - relativePos);
 }

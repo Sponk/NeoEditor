@@ -324,7 +324,8 @@ void EditorGame::update()
 	Vector2 const size = engine->getSystemContext()->getScreenSize();
 
 	m_sceneView->setPosition(Vector2(m_leftPanel->getSize().x, m_toolbar->getPosition().y + m_toolbar->getSize().y));
-	m_sceneView->setSize(Vector2(size.x - m_leftPanel->getSize().x - m_rightPanel->getSize().x - 15, size.y));
+	m_sceneView->setSize(Vector2(size.x - m_leftPanel->getSize().x - m_rightPanel->getSize().x - 15,
+								 size.y - (m_bottomPanel->isActive() ? m_bottomPanel->getSize().y * 1.25 : 0))); // The 1.25 value seems quite arbitrary.
 	
 	// Update title
 	//char title[64];
@@ -432,9 +433,10 @@ void EditorGame::onBegin()
 	
 	auto filemenu = make_shared<Submenu>(tr("File"), m_menubar);
 	auto editmenu = make_shared<Submenu>(tr("Edit"), m_menubar);
+	auto viewmenu = make_shared<Submenu>(tr("View"), m_menubar);
 	auto scenemenu = make_shared<Submenu>(tr("Scene"), m_menubar);
 	auto helpmenu = make_shared<Submenu>(tr("Help"), m_menubar);
-
+		
 	filemenu->addItem(tr("New Level"), [this](Widget&, void*) {
 		openNewLevel();
 	});
@@ -564,11 +566,18 @@ void EditorGame::onBegin()
 	/*editmenu->addItem("Object Local Transformation", [this](Widget&, void*) {
 			m_sceneView->setObjectLocal(true);
 			});*/
+
+	viewmenu->addItem(tr("Hide Console"), [this](Widget&, void*) {
+			bool newval = m_bottomPanel->isActive();
+			m_bottomPanel->setActive(!newval);
+			m_bottomPanel->setInvisible(newval);
+		});
 	
 	helpmenu->addItem(tr("About"), [this](Widget&, void*) { m_toolset->aboutDialog(); });
 
 	m_menubar->addMenu(filemenu);
 	m_menubar->addMenu(editmenu);
+	m_menubar->addMenu(viewmenu);
 	m_menubar->addMenu(scenemenu);
 	m_menubar->addMenu(helpmenu);
 
@@ -1042,10 +1051,26 @@ void EditorGame::onBegin()
 	leftscroll->addWidget(m_entityTree);
 	m_leftPanel->addWidget(leftscroll);
 	m_leftPanel->setEdge(LEFT_EDGE);
+	
+	// Build bottom panel
+	{
+		// Bottom panel
+		m_bottomPanel = make_shared<Sidepanel>(m_leftPanel->getSize().x + 15, 0,
+											   0, 200, rootpane);
 
+		m_bottomPanel->setEdge(BOTTOM_EDGE);
+		m_bottomPanel->setLayout(make_shared<ScaleLayout>());
+		m_bottomPanel->setSizeOffset(Vector2(-m_rightPanel->getSize().x, 0));
+		
+		m_console = make_shared<Console>(0,0,0,0, m_bottomPanel);
+
+		m_bottomPanel->addWidget(m_console);
+	}
+		
 	m_diagnosticsLabel = make_shared<Label>(m_leftPanel->getSize().x + 20, 10 + m_toolbar->getPosition().y + m_toolbar->getSize().y, 0, 0, "DIAGNOSTICS", rootpane);
 	rootpane->addWidget(m_diagnosticsLabel);
-	
+
+	rootpane->addWidget(m_bottomPanel);
 	rootpane->addWidget(m_leftPanel);
 	rootpane->addWidget(m_rightPanel);
 	rootpane->addWidget(m_toolbar);

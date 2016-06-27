@@ -48,7 +48,7 @@ class NEO2D_EXPORT Widget : public Object2D, public enable_shared_from_this<Widg
 	std::function<void(Widget&, void*)> m_callback;
 	void* m_data;
 
-	Neo::String m_label;
+	std::string m_label;
 	bool m_initialized;
 
 protected:
@@ -132,13 +132,13 @@ public:
 	 * @brief Retrieves the label of the Widget.
 	 * @return The label.
 	 */
-	const char* getLabel() { return m_label.getSafeString(); }
+	const char* getLabel() { return m_label.c_str(); }
 
 	/**
 	 * @brief Changes the label.
 	 * @param label The new label to use.
 	 */
-	void setLabel(const char* label) { m_label.set(label); }
+	void setLabel(const char* label) { m_label = label; }
 
 protected:
 

@@ -26,6 +26,7 @@ public:
 
 class Sidepanel : public Neo2D::Gui::Container
 {
+	Neo::Vector2 sizeOffset; 
 	WINDOW_EDGE edge;
 public:
 	Sidepanel(int x, int y, unsigned int w, unsigned int h, const shared_ptr<Neo2D::Object2D>& parent)
@@ -43,6 +44,8 @@ public:
 	{
 		Sidepanel::edge = edge;
 	}
+
+	void setSizeOffset(const Neo::Vector2& offset) { sizeOffset = offset; }
 };
 
 

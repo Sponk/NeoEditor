@@ -263,7 +263,7 @@ bool Neo2D::Gui::EditField::handle(const Event& e)
 
 				case Neo::KEY_RETURN:
 					doCallback();
-					break;
+					return true;
 			}
 			setLabel(str.c_str());
 

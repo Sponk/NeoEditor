@@ -19,7 +19,9 @@ public:
 		NeoEngine* engine = NeoEngine::getInstance();
 		const Neo::Vector2 position = widget->getPosition() + offset;
 
-		text->setColor(static_cast<Neo2D::Gui::Label*>(widget)->getColor());
+		Neo2D::Gui::Label* label = static_cast<Neo2D::Gui::Label*>(widget);
+		text->setAlign(label->getAlignment());
+		text->setColor(label->getColor());
 		text->setText(widget->getLabel());
 		draw2DText(text, position.x,
 				   position.y + text->getSize() * 0.7, 0.0f);
@@ -43,4 +45,4 @@ public:
 };
 
 Neo2D::Gui::Label::Label(int x, int y, unsigned int w, unsigned int h, const char* label, const shared_ptr<Object2D>& parent)
-	: Widget(x, y, w, h, label, parent, make_shared<LabelTheme>()), m_color(1,1,1,1) {}
+	: Widget(x, y, w, h, label, parent, make_shared<LabelTheme>()), m_color(1,1,1,1), m_alignment(Neo::TEXT_ALIGN_LEFT) {}

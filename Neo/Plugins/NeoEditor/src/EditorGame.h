@@ -19,6 +19,7 @@
 #include "SceneView.h"
 #include "UndoQueue.h"
 #include "ColorEdit.h"
+#include "Console.h"
 
 #include <sexpresso.hpp>
 #include <KeyboardShortcuts.h>
@@ -32,6 +33,7 @@ class EditorGame : public Neo::SubGame
 
 	shared_ptr<Sidepanel> m_leftPanel;
 	shared_ptr<Sidepanel> m_rightPanel;
+	shared_ptr<Sidepanel> m_bottomPanel;
 	shared_ptr<NativeToolset> m_toolset;
 
 	shared_ptr<SceneView> m_sceneView;
@@ -117,6 +119,8 @@ class EditorGame : public Neo::SubGame
 	shared_ptr<Vector3Edit> m_sceneGravityEdit;
 	shared_ptr<ColorEdit> m_sceneAmbientLightEdit;
 
+	shared_ptr<Console> m_console;
+	
 	std::string m_currentLevelFile;
 	std::string m_currentProjectFile;
 	Project m_project;
