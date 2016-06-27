@@ -26,18 +26,37 @@
 #ifndef __SCRIPT_CONTEXT_H
 #define __SCRIPT_CONTEXT_H
 
+#include <memory>
+
 namespace Neo
 {
+
+class NEO_CORE_EXPORT ScriptLogger
+{
+ public:
+	virtual void print(const char* str)
+	{
+		printf("%s", str);
+	}
+};
+	
 /// Class used to manage script functions virtually.
 class NEO_CORE_EXPORT ScriptContext
 {
 protected:
 	bool m_isRunning;
+	shared_ptr<ScriptLogger> m_logger;
+	
 public :
 
+	ScriptContext() : m_logger(make_shared<ScriptLogger>()) {}
+	
 	/// Destructor.
 	virtual ~ScriptContext(void){}
 
+	void setScriptLogger(const shared_ptr<ScriptLogger>& log) { m_logger = log; }
+	const shared_ptr<ScriptLogger>& getScriptLogger() const { return m_logger; }
+	
 	virtual void init() = 0;
 
 	/// Run script.
@@ -45,7 +64,7 @@ public :
     virtual bool runScript(const char * filename) = 0;
 
     /// Start call function. All arguments to the function have to be pushed
-    /// between MScriptContext::startCallFunction and MScriptContext::endCallFunction
+    /// between ScriptContext::startCallFunction and ScriptContext::endCallFunction
 	/// \param name		Function name
 	virtual bool startCallFunction(const char * name) = 0;
 	

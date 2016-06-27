@@ -1,6 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
-// Copyright (c) 2014-2015 Yannick Pflanzer <www.neo-engine.de>
+// Copyright (c) 2014-2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -402,12 +402,23 @@ int getAttribute(lua_State* L)
 	return 1;
 }
 
+static int log()
+{
+	ScriptContext* script = NeoEngine::getInstance()->getScriptContext();
+	if(!script->isFunctionOk("log", 1))
+		return 0;
+
+	script->getScriptLogger()->print(script->getString(0));
+	return 1;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Init
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-LuaScript::LuaScript(void):
-m_state(NULL)
+LuaScript::LuaScript(void) :
+	ScriptContext(),
+	m_state(NULL)
 {
 
 }
@@ -469,6 +480,17 @@ void LuaScript::init(void)
 
 	addFunction("dofile", doFile);
 
+	// Hook log up to print
+	runString("function print(...) "
+			  "arg={...} "
+			  "for i,v in ipairs(arg) do "
+			  "log(tostring(v) .. \"\\t\") "
+			  "end "
+			  "log(\"\\n\") "
+			  "end");
+
+	addFunction("log", log);
+
 	// register custom functions
 	map<string, int (*)(void)>::iterator
 		mit (m_functions.begin()),
@@ -526,7 +548,10 @@ bool LuaScript::runScript(const char * filename)
 	char * text = readTextFile(filename);
 	if(! text)
 	{
-        MLOG_ERROR("Script: Unable to read file " << filename);
+		// MLOG_ERROR("Script: Unable to read file " << filename);
+		m_logger->print("Script: Unable to read file ");
+		m_logger->print(filename);
+		
 		m_isRunning = false;
         return false;
 	}
@@ -536,7 +561,11 @@ bool LuaScript::runScript(const char * filename)
 	// do string
 	if(luaL_dostring(m_state, text) != 0)
 	{
-        MLOG_ERROR("Lua Script: \n" << lua_tostring(m_state, -1) << "\n");
+        // MLOG_ERROR("Lua Script: \n" << lua_tostring(m_state, -1) << "\n");
+		m_logger->print("Lua Script: \n");
+		m_logger->print(lua_tostring(m_state, -1));
+		m_logger->print("\n");
+		
 		m_isRunning = false;
 		SAFE_FREE(text);
 
@@ -560,7 +589,10 @@ bool LuaScript::startCallFunction(const char* name)
 		{
 			lua_pop(m_state, 1);
 			m_isRunning = false;			
-			MLOG_ERROR("Lua function '" << name << "' not found!");
+			m_logger->print("Lua function '");
+			m_logger->print(name);
+			m_logger->print("' not found!");
+			
 			return false;
 		}
 		return true;
@@ -574,7 +606,11 @@ bool LuaScript::endCallFunction(int numArgs)
 
 	if(lua_pcall(m_state, numArgs, 0, 0) != 0)
 	{
-        MLOG_ERROR("Lua Script: \n" << lua_tostring(m_state, -1) << "\n");
+        // MLOG_ERROR("Lua Script: \n" << lua_tostring(m_state, -1) << "\n");
+		m_logger->print("Lua Script: \n");
+		m_logger->print(lua_tostring(m_state, -1));
+		m_logger->print("\n");
+		
 		m_isRunning = false;
 		printStack();
 		return false;
@@ -741,7 +777,8 @@ void LuaScript::printStack()
 	else
 		stacktrace << "\t<empty>" << std::endl;
 
-	MLOG_ERROR(stacktrace.str());
+	m_logger->print(stacktrace.str().c_str());
+	//MLOG_ERROR(stacktrace.str());
 }
 
 bool LuaScript::runString(const char* str)
@@ -752,7 +789,11 @@ bool LuaScript::runString(const char* str)
 	// do string
 	if(luaL_dostring(m_state, str) != 0)
 	{
-		MLOG_ERROR("Lua Script: \n" << lua_tostring(m_state, -1) << "\n");
+		// MLOG_ERROR("Lua Script: \n" << lua_tostring(m_state, -1) << "\n");
+		m_logger->print("Lua Script: \n");
+		m_logger->print(lua_tostring(m_state, -1));
+		m_logger->print("\n");
+		
 		printStack();
 		m_isRunning = false;
 		return false;
@@ -765,7 +806,13 @@ bool LuaScript::isFunctionOk(const char* function, unsigned int argc)
 {
 	if(getArgsNumber() < argc)
 	{
-		MLOG_ERROR("'" << function << "' needs at least " << argc << " parameters!");
+		// MLOG_ERROR("'" << function << "' needs at least " << argc << " parameters!");
+		m_logger->print("'");
+		m_logger->print(function);
+		m_logger->print("' needs at least ");
+		m_logger->print(std::to_string(argc).c_str());
+		m_logger->print(" parameters!");
+		
 		return false;
 	}
 
