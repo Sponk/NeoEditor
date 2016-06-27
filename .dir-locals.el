@@ -21,7 +21,8 @@
 
 				 
 				 (setq cmake-ide-build-dir (concat project-directory "build"))
-				 (setq cmake-compile-command "make -j8")			 
+				 (setq cmake-compile-command "make -j8")
+				 (setenv "MAKEFLAGS" "-j5")
 				 (setq-default indent-tabs-mode t)))))) 
 
 
