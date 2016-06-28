@@ -15,7 +15,6 @@ namespace Gui
  */
 class NEO2D_EXPORT ScrollPanel : public Container
 {
-	bool m_localPosition;
 	Scrollbar verticalScroll, horizontalScroll;
 	Neo::Vector2 lastOffset;
 
@@ -29,9 +28,6 @@ public:
 				const shared_ptr<Object2D>& parent,
 				const shared_ptr<Theme>& knobtheme = nullptr,
 				const shared_ptr<Theme>& background = nullptr);
-
-	bool isLocalPosition() const { return m_localPosition; }
-	void enableLocalPosition(bool b) { m_localPosition = b; }
 	
 	virtual void init() override;
 	virtual void draw(const Neo::Vector2& offset);

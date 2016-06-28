@@ -344,7 +344,7 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 					if(result.hit)
 					{
 						float newlength = (origin - result.point).getLength();
-						if(newlength < selectedDistance
+						if(newlength <= selectedDistance
 						   || selected == nullptr)
 						{
 							selected = scene->getEntityByIndex(i);
@@ -382,7 +382,7 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 					if(result.hit)
 					{
 						float newlength = (origin - result.point).getLength();
-						if(newlength < selectedDistance
+						if(newlength <= selectedDistance
 						   || selected == nullptr)
 						{
 							selected = m_overlayScene->getEntityByIndex(i)->getParent();
@@ -400,13 +400,7 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 					auto result = m_handlesScene->getEntityByIndex(i)->castRay(origin, direction);
 					if(result.hit)
 					{
-						float newlength = (origin - result.point).getLength();
-						if(newlength < selectedDistance
-						   || selected == nullptr)
-						{
-							selected = m_handlesScene->getEntityByIndex(i);
-							selectedDistance = newlength;
-						}
+						selected = m_handlesScene->getEntityByIndex(i);
 					}
 				}
 			}

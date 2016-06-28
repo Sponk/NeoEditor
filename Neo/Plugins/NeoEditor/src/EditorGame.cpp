@@ -567,10 +567,12 @@ void EditorGame::onBegin()
 			m_sceneView->setObjectLocal(true);
 			});*/
 
-	viewmenu->addItem(tr("Hide Console"), [this](Widget&, void*) {
+	viewmenu->addItem(tr("Hide Console"), [this](Widget& w, void*) {
 			bool newval = m_bottomPanel->isActive();
 			m_bottomPanel->setActive(!newval);
 			m_bottomPanel->setInvisible(newval);
+
+			w.setLabel((newval ? tr("Show Console") : tr("Hide Console")));
 		});
 	
 	helpmenu->addItem(tr("About"), [this](Widget&, void*) { m_toolset->aboutDialog(); });
