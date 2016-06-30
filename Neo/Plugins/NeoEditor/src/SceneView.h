@@ -15,11 +15,15 @@ enum HANDLE_MODE
 class SceneView : public Neo2D::Gui::Widget
 {
 	Neo::Level m_level;
+	Neo::Scene* m_representationScene;
 	Neo::Scene* m_handlesScene;
 	Neo::Scene* m_overlayScene;
 	Neo::OCamera m_camera;
 	std::vector<Neo::Object3d*> m_selection;
 
+	Neo::OEntity* m_directionalLightObject;
+	Neo::OEntity* m_spotLightObject;
+	
 	/// Transform objects either relative to their own transformation or relative to the selection.
 	bool m_objectLocalTransformation;
 	
