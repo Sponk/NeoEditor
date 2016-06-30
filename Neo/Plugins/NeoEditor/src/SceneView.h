@@ -23,6 +23,7 @@ class SceneView : public Neo2D::Gui::Widget
 
 	Neo::OEntity* m_directionalLightObject;
 	Neo::OEntity* m_spotLightObject;
+	Neo::OEntity* m_cameraObject;
 	
 	/// Transform objects either relative to their own transformation or relative to the selection.
 	bool m_objectLocalTransformation;

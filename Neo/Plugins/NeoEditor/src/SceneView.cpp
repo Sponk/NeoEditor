@@ -95,6 +95,17 @@ void SceneView::init()
 			m_directionalLightObject->setName("Directional");
 			m_directionalLightObject->enableWireframe(true);
 			m_directionalLightObject->setInvisible(true);
+
+			meshref = m_level.loadMesh("data/camera.obj");
+			m_cameraObject = m_representationScene->addNewEntity(meshref);
+			m_cameraObject->setName("Camera");
+			m_cameraObject->enableWireframe(true);
+			m_cameraObject->setInvisible(true);
+
+			/*m_spotLightObject->getMaterial(0)->setEmit(Vector3(1, 0, 0));
+		    m_cameraObject->getMaterial(0)->setEmit(Vector3(1, 0, 0));
+			m_directionalLightObject->getMaterial(0)->setEmit(Vector3(1, 0, 0));*/
+					
 		}
 	
 	}
@@ -501,51 +512,71 @@ void SceneView::update(float dt)
 	m_currentHandles->setScale(scale);
 	m_currentHandles->setPosition(getSelectionCenter());
 
-	if (m_selection.size())
-		switch (m_selection.back()->getType())
-		{
-			case OBJECT3D_LIGHT:
-			{
-				OLight* light = static_cast<OLight*>(m_selection.back());
 
-				
-				if(light->getSpotAngle() == 0)
-				{
-					m_directionalLightObject->setInvisible(false);
-					m_directionalLightObject->setPosition(light->getTransformedPosition());
-				    m_directionalLightObject->setEulerRotation(
-						light->getTransformedRotation());
-
-					m_directionalLightObject->updateMatrix();
-					
-					m_spotLightObject->setInvisible(true);
-				}
-				else if (light->getSpotAngle() < 180)
-				{
-					m_spotLightObject->setInvisible(false);
-					m_spotLightObject->setPosition(light->getTransformedPosition());
-					
-					float scale = std::max(0.1f, light->getRadius() * static_cast<float>(sin(light->getSpotAngle() * DEG_TO_RAD)));
-
-					m_spotLightObject->setScale(Vector3(scale, scale, light->getRadius()));
-					m_spotLightObject->setEulerRotation(
-						light->getTransformedRotation());
-
-					m_spotLightObject->updateMatrix();
-					m_directionalLightObject->setInvisible(true);
-				}
-			}
-
-			break;
-
-			default:
-				m_spotLightObject->setInvisible(true);
-				m_directionalLightObject->setInvisible(true);
-		}
-	else
+	// Object representation visibility handling
 	{
+		m_cameraObject->setInvisible(true);
 		m_spotLightObject->setInvisible(true);
 		m_directionalLightObject->setInvisible(true);
+		if (m_selection.size())
+			switch (m_selection.back()->getType())
+			{
+				case OBJECT3D_CAMERA:
+				{
+					Object3d* o = m_selection.back();
+
+					m_cameraObject->setInvisible(false);
+					m_cameraObject->setPosition(o->getTransformedPosition());
+					m_cameraObject->setEulerRotation(
+						o->getTransformedRotation());
+
+					m_cameraObject->updateMatrix();
+				}
+				break;
+
+				case OBJECT3D_LIGHT:
+				{
+					OLight* light = static_cast<OLight*>(m_selection.back());
+
+					if (light->getSpotAngle() == 0)
+					{
+						m_directionalLightObject->setInvisible(false);
+						m_directionalLightObject->setPosition(
+							light->getTransformedPosition());
+						m_directionalLightObject->setEulerRotation(
+							light->getTransformedRotation());
+
+						m_directionalLightObject->updateMatrix();
+						m_spotLightObject->setInvisible(true);
+					}
+					else if (light->getSpotAngle() < 180)
+					{
+						m_spotLightObject->setInvisible(false);
+						m_spotLightObject->setPosition(
+							light->getTransformedPosition());
+
+						float scale = std::max(
+							0.1f, light->getRadius() *
+									  static_cast<float>(sin(
+										  light->getSpotAngle() * DEG_TO_RAD)));
+
+						m_spotLightObject->setScale(
+							Vector3(scale, scale, light->getRadius()));
+						m_spotLightObject->setEulerRotation(
+							light->getTransformedRotation());
+
+						m_spotLightObject->updateMatrix();
+						m_directionalLightObject->setInvisible(true);
+					}
+				}
+
+				break;
+
+				default:
+					m_spotLightObject->setInvisible(true);
+					m_directionalLightObject->setInvisible(true);
+					m_cameraObject->setInvisible(true);
+			}
 	}
 
 	NeoEngine* engine = NeoEngine::getInstance();
