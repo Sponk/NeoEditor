@@ -1736,6 +1736,9 @@ void EditorGame::duplicateSelection()
 
 void EditorGame::undo()
 {
+	if(m_disableUndo)
+		return;
+	
 	m_sceneView->clearSelection();
 	m_undo.undo();
 	m_sceneView->updateOverlayScene();
@@ -1743,7 +1746,10 @@ void EditorGame::undo()
 }
 
 void EditorGame::redo()
-{
+{	
+	if(m_disableUndo)
+		return;
+	
 	m_sceneView->clearSelection();
 	m_undo.redo();
 	m_sceneView->updateOverlayScene();
@@ -1754,6 +1760,9 @@ void EditorGame::runGame()
 {
 	// Save current state
 	m_undo.save();
+
+	// Disable undo/redo queue so it doesn't corrupt
+	m_disableUndo = true;
 
 	NeoEngine* engine = NeoEngine::getInstance();
 	Neo::Player player(16);
@@ -1774,7 +1783,10 @@ void EditorGame::runGame()
 
 	m_sceneView->setInvisible(false);
 	m_sceneView->setActive(true);
-
+	
+	// Disable undo/redo queue so it doesn't corrupt
+	m_disableUndo = true;
+	
 	// Restore original state
 	undo();
 	engine->setActive(true);

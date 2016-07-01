@@ -127,11 +127,14 @@ class EditorGame : public Neo::SubGame
 
 	shared_ptr<Neo2D::Gui::KeyboardShortcuts> m_keyboardShortcuts;
 
+	/// Flag that allows to disable the undo/redo queue
+	bool m_disableUndo;
 	UndoQueue m_undo;
 	
 public:
 	EditorGame(const shared_ptr<NativeToolset>& tools) :
-		m_toolset(tools)
+		m_toolset(tools),
+		m_disableUndo(false)
 	{}
 
 	virtual void update();
