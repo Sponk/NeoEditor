@@ -33,7 +33,8 @@ m_currentFrame(0),
 m_currentCamera(0),
 m_gravity(0, 0, -0.981f),
 m_additionalData(NULL),
-m_ids(0)
+m_ids(0),
+m_physicsSimulation(true)
 {}
 
 Scene::~Scene()
@@ -793,7 +794,7 @@ void Scene::end(void)
 void Scene::updatePhysics(void)
 {
 	PhysicsContext * physics = NeoEngine::getInstance()->getPhysicsContext();
-	if(! physics)
+	if(! physics || !hasPhysicsSimulation())
 		return;
 
 	unsigned int i;

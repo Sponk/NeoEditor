@@ -541,7 +541,7 @@ void EditorGame::onBegin()
 		deleteSelection();
 	});
 
-	editmenu->addItem("Object Local Transformation", [this](Widget& w, void*) {
+	editmenu->addItem(tr("Object Local Transformation"), [this](Widget& w, void*) {
 			m_sceneView->setObjectLocal(!m_sceneView->isObjectLocal());
 
 			if(m_sceneView->isObjectLocal())
@@ -550,7 +550,7 @@ void EditorGame::onBegin()
 				w.setLabel(tr("Object Local Transformation"));
 	});
 
-	editmenu->addItem("Enable Snap to Grid", [this](Widget& w, void*) {
+	editmenu->addItem(tr("Enable Snap to Grid"), [this](Widget& w, void*) {
 			if(m_sceneView->getGridSize())
 			{
 				m_sceneView->setGridSize(0);
@@ -563,7 +563,7 @@ void EditorGame::onBegin()
 			}
 		});
 
-	editmenu->addItem("Enable Snap to Ground", [this](Widget& w, void*) {
+	editmenu->addItem(tr("Enable Snap to Ground"), [this](Widget& w, void*) {
 			if(m_sceneView->isSnapToGround())
 			{
 				m_sceneView->enableSnapToGround(false);
@@ -576,11 +576,10 @@ void EditorGame::onBegin()
 			}
 		});
 
-	
-	
-	/*editmenu->addItem("Object Local Transformation", [this](Widget&, void*) {
-			m_sceneView->setObjectLocal(true);
-			});*/
+	editmenu->addItem(tr("Toggle Physics Simulation"), [](Widget& w, void*) {
+		auto scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
+		scene->enablePhysicsSimulation(!scene->hasPhysicsSimulation());
+	});
 
 	viewmenu->addItem(tr("Hide Console"), [this](Widget& w, void*) {
 			bool newval = m_bottomPanel->isActive();
@@ -1471,6 +1470,12 @@ void EditorGame::openLevel(const char* path)
 		m_currentLevelFile = path;
 		updateWindowTitle();
 		updateSceneUi();
+
+		// Disable physics simulation by default
+		for(int i = 0; i < engine->getLevel()->getScenesNumber(); i++)
+		{
+			engine->getLevel()->getSceneByIndex(i)->enablePhysicsSimulation(false);
+		}
 }
 
 void EditorGame::saveLevel()
@@ -1782,6 +1787,12 @@ void EditorGame::runGame()
 	m_sceneView->setActive(false);
 	m_sceneView->clearSelection();
 
+	// Make sure physics is enabled
+	for(int i = 0; i < engine->getLevel()->getScenesNumber(); i++)
+	{
+		engine->getLevel()->getSceneByIndex(i)->enablePhysicsSimulation(true);
+	}
+
 	ScriptContext* script = engine->getScriptContext();
 	script->runScript(engine->getLevel()->getCurrentScene()->getScriptFilename());
 	
@@ -1796,6 +1807,12 @@ void EditorGame::runGame()
 	undo();
 	engine->setActive(true);
 	script->stopRunning();
+
+	// Disable physics simulation
+	for(int i = 0; i < engine->getLevel()->getScenesNumber(); i++)
+	{
+		engine->getLevel()->getSceneByIndex(i)->enablePhysicsSimulation(false);
+	}
 }
 
 void EditorGame::updateSceneUi()
