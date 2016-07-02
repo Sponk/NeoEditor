@@ -399,7 +399,7 @@ void OEntity::update(void)
 	}
 }
 
-RayCastResult OEntity::castRay(Vector3& rayO, Vector3& rayD)
+RayCastResult OEntity::castRay(const Vector3& rayO, const Vector3& rayD)
 {
 	RayCastResult result;
 
@@ -407,7 +407,6 @@ RayCastResult OEntity::castRay(Vector3& rayO, Vector3& rayD)
 	mesh->updateBoundingBox();
 
 	Box3d* box = mesh->getBoundingBox();
-	Vector3 pos = getTransformedPosition();
 	Matrix4x4 iMatrix = getMatrix()->getInverse();
 
 	Vector3 localRayO = iMatrix * rayO;
@@ -415,6 +414,7 @@ RayCastResult OEntity::castRay(Vector3& rayO, Vector3& rayD)
 
 	if (!isEdgeToBoxCollision(localRayO, localRayD, box->min, box->max))
 	{
+		
 		result.hit = false;
 		return result;
 	}
@@ -427,19 +427,21 @@ RayCastResult OEntity::castRay(Vector3& rayO, Vector3& rayD)
 		Vector3* t3;
 		Vector3* vertices = submeshes[i].getVertices();
 
+		/// FIXME: Only checks for the first hit and not the nearest hit!
 		for (int j = 0; j < submeshes[i].getIndicesSize(); j += 3)
 		{
 			t1 = vertices + submeshes[i].getIndex(j);
 			t2 = vertices + submeshes[i].getIndex(j + 1);
 			t3 = vertices + submeshes[i].getIndex(j + 2);
 
-			vertices = (Vector3*)submeshes[i].getVertices();
+			vertices = (Vector3*) submeshes[i].getVertices();
 			result.hit =
 				isEdgeTriangleIntersection(localRayO, localRayD,
 										   *t1, *t2, *t3,
 										   getTriangleNormal(*t1, *t2, *t3),
 										   &result.point);
 
+			result.point = *getMatrix() * result.point;
 			if (result.hit)
 				return result;
 		}

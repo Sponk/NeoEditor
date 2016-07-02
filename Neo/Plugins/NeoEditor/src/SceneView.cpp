@@ -1,6 +1,7 @@
 #include "SceneView.h"
 #include <CommonEvents.h>
 #include <algorithm>
+#include <limits>
 
 using namespace Neo;
 
@@ -14,10 +15,12 @@ SceneView::SceneView(UndoQueue& undo,
 	  m_currentHandles(&m_translation),
 	  m_undo(undo),
 	  m_objectLocalTransformation(false),
-	  m_gridSize(0)
+	  m_gridSize(0),
+	  m_snapToGround(false)
 {
 	m_overlayScene = m_level.addNewScene();
 	m_handlesScene = m_level.addNewScene();
+	m_representationScene = m_level.addNewScene();
 }
 
 void SceneView::init()
@@ -33,7 +36,7 @@ void SceneView::init()
 	NeoEngine* engine = NeoEngine::getInstance();
 	Level* level = engine->getLevel();
 	engine->setLevel(&m_level);
-
+	
 	{
 		// The arrows!
 		MeshRef* meshref = m_level.loadMesh("data/arrow.obj");
@@ -78,6 +81,34 @@ void SceneView::init()
 		m_rotation.enable(false);
 
 		setHandleMode(TRANSLATION);
+
+		
+		// Light/Camera representations
+		{
+			meshref = m_level.loadMesh("data/cone2.obj");
+			m_spotLightObject = m_representationScene->addNewEntity(meshref);
+			m_spotLightObject->setName("Cone");
+			m_spotLightObject->enableWireframe(true);
+			m_spotLightObject->setInvisible(true);
+
+			meshref = m_level.loadMesh("data/directional-light.obj");
+			m_directionalLightObject = m_representationScene->addNewEntity(meshref);
+			m_directionalLightObject->setName("Directional");
+			m_directionalLightObject->enableWireframe(true);
+			m_directionalLightObject->setInvisible(true);
+
+			meshref = m_level.loadMesh("data/camera.obj");
+			m_cameraObject = m_representationScene->addNewEntity(meshref);
+			m_cameraObject->setName("Camera");
+			m_cameraObject->enableWireframe(true);
+			m_cameraObject->setInvisible(true);
+
+			/*m_spotLightObject->getMaterial(0)->setEmit(Vector3(1, 0, 0));
+		    m_cameraObject->getMaterial(0)->setEmit(Vector3(1, 0, 0));
+			m_directionalLightObject->getMaterial(0)->setEmit(Vector3(1, 0, 0));*/
+					
+		}
+	
 	}
 	engine->setLevel(level);
 	updateOverlayScene();
@@ -141,7 +172,8 @@ void SceneView::draw(const Neo::Vector2& offset)
 
 	m_overlayScene->draw(&m_camera);
 	m_handlesScene->draw(&m_camera);
-
+	m_representationScene->draw(&m_camera);
+	
 	render->disableDepthTest();
 	render->disableScissorTest();
 	engine->getRenderer()->set2D(size);
@@ -174,7 +206,7 @@ void SceneView::addSelectedObject(Neo::Object3d* object)
 
 void SceneView::rotationHandle(OEntity* handleEntity, const Vector3& axis, const Vector3& mousepos)
 {	
-	const float rotationSpeed = 2;
+	const float rotationSpeed = 3;
 	InputContext* input = NeoEngine::getInstance()->getInputContext();
 	Vector2 mousedir = input->getMouse().getDirection();
 	mousedir.y *= -1;
@@ -282,8 +314,53 @@ void SceneView::translationHandle(OEntity* handleEntity, const Vector3& axis, co
 	}
 
 	for(auto e : m_selection)
-		e->translate(vec);	
-	
+	{
+		e->translate(vec);
+
+		// Snap to geometry
+		if (m_snapToGround)
+		{
+			Vector3 curpoint;
+			float selectedDistance = 0;
+			Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
+			Vector3 direction = Vector3(0,0,-1000);
+			e->setActive(false);
+			Vector3 origin = e->getTransformedPosition() + Vector3(0,0,10);
+
+			for (size_t i = 0; i < scene->getEntitiesNumber(); i++)
+			{
+				auto target = scene->getEntityByIndex(i);
+
+				if(target->isActive())
+				{
+					auto result = target->castRay(origin, direction);
+					if (result.hit)
+					{
+						float newlength =
+							(origin - result.point).getLength();
+
+						if (selectedDistance == 0.0f
+							|| newlength <= selectedDistance)
+						{
+							curpoint = result.point;
+							selectedDistance = newlength;
+						}
+					}
+				}
+			}
+
+			e->setActive(true);
+
+			if (selectedDistance > 0.0f)
+			{
+				Vector3 point = e->getPosition();
+				point.z = curpoint.z;
+				e->setPosition(point);
+			}
+			e->updateMatrix();
+		}
+	}
+
 	m_currentHandles->setPosition(getSelectionCenter());
 }
 
@@ -478,7 +555,74 @@ void SceneView::update(float dt)
 	m_currentHandles->setScale(scale);
 	m_currentHandles->setPosition(getSelectionCenter());
 
-    NeoEngine* engine = NeoEngine::getInstance();
+
+	// Object representation visibility handling
+	{
+		m_cameraObject->setInvisible(true);
+		m_spotLightObject->setInvisible(true);
+		m_directionalLightObject->setInvisible(true);
+		if (m_selection.size())
+			switch (m_selection.back()->getType())
+			{
+				case OBJECT3D_CAMERA:
+				{
+					Object3d* o = m_selection.back();
+
+					m_cameraObject->setInvisible(false);
+					m_cameraObject->setPosition(o->getTransformedPosition());
+					m_cameraObject->setEulerRotation(
+						o->getTransformedRotation());
+
+					m_cameraObject->updateMatrix();
+				}
+				break;
+
+				case OBJECT3D_LIGHT:
+				{
+					OLight* light = static_cast<OLight*>(m_selection.back());
+
+					if (light->getSpotAngle() == 0)
+					{
+						m_directionalLightObject->setInvisible(false);
+						m_directionalLightObject->setPosition(
+							light->getTransformedPosition());
+						m_directionalLightObject->setEulerRotation(
+							light->getTransformedRotation());
+
+						m_directionalLightObject->updateMatrix();
+						m_spotLightObject->setInvisible(true);
+					}
+					else if (light->getSpotAngle() < 180)
+					{
+						m_spotLightObject->setInvisible(false);
+						m_spotLightObject->setPosition(
+							light->getTransformedPosition());
+
+						float scale = std::max(
+							0.1f, light->getRadius() *
+									  static_cast<float>(sin(
+										  light->getSpotAngle() * DEG_TO_RAD)));
+
+						m_spotLightObject->setScale(
+							Vector3(scale, scale, light->getRadius()));
+						m_spotLightObject->setEulerRotation(
+							light->getTransformedRotation());
+
+						m_spotLightObject->updateMatrix();
+						m_directionalLightObject->setInvisible(true);
+					}
+				}
+
+				break;
+
+				default:
+					m_spotLightObject->setInvisible(true);
+					m_directionalLightObject->setInvisible(true);
+					m_cameraObject->setInvisible(true);
+			}
+	}
+
+	NeoEngine* engine = NeoEngine::getInstance();
     auto input = engine->getInputContext();
 
     if(getState() != Neo2D::Gui::WIDGET_SELECTED
@@ -516,6 +660,7 @@ void SceneView::update(float dt)
 	m_camera.updateMatrix();
 	m_overlayScene->update();
 	m_handlesScene->update();
+	m_representationScene->update();
 	
 	for(size_t i = 0; i < m_overlayScene->getObjectsNumber(); i++)
 	{

@@ -385,7 +385,7 @@ public:
 	// copy constructor
 	OEntity(const OEntity &entity);
 
-	RayCastResult castRay(Vector3& rayO, Vector3& rayD);
+	RayCastResult castRay(const Vector3& rayO, const Vector3& rayD);
 
     Texture* getTexture(size_t idx = 0) const { return m_textures[idx]; }
     size_t getTexturesNumber() const { return m_numTextures; }
