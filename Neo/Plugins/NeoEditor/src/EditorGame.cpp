@@ -435,6 +435,7 @@ void EditorGame::onBegin()
 	auto editmenu = make_shared<Submenu>(tr("Edit"), m_menubar);
 	auto viewmenu = make_shared<Submenu>(tr("View"), m_menubar);
 	auto scenemenu = make_shared<Submenu>(tr("Scene"), m_menubar);
+	auto objectmenu = make_shared<Submenu>(tr("Object"), m_menubar);
 	auto helpmenu = make_shared<Submenu>(tr("Help"), m_menubar);
 		
 	filemenu->addItem(tr("New Level"), [this](Widget&, void*) {
@@ -572,6 +573,27 @@ void EditorGame::onBegin()
 			m_bottomPanel->setActive(!newval);
 			m_bottomPanel->setInvisible(newval);
 		});
+
+	objectmenu->addItem(tr("Add Behavior"), [this](Widget&, void*) {
+			if(!m_sceneView->getSelection().size())
+				return;
+
+			Object3d* object = m_sceneView->getSelection().back();
+			auto behaviorManager = NeoEngine::getInstance()->getBehaviorManager();
+						
+			std::vector<std::string> behaviors;
+			for(int i = 0; i < behaviorManager->getBehaviorsNumber(); i++)
+				behaviors.push_back(behaviorManager->getBehaviorByIndex(i)->getName());
+			
+			std::string behaviorName = m_toolset->listSelection(tr("Choose a behavior"), behaviors);
+			if(behaviorName.empty())
+				return;
+
+			object->addBehavior(behaviorManager->getBehaviorByName(behaviorName.c_str())->getNewBehavior(object));			
+
+			m_behaviorUi->displayObject(nullptr);
+			updateSelectedObject(object);
+		});
 	
 	helpmenu->addItem(tr("About"), [this](Widget&, void*) { m_toolset->aboutDialog(); });
 
@@ -579,6 +601,7 @@ void EditorGame::onBegin()
 	m_menubar->addMenu(editmenu);
 	m_menubar->addMenu(viewmenu);
 	m_menubar->addMenu(scenemenu);
+	m_menubar->addMenu(objectmenu);
 	m_menubar->addMenu(helpmenu);
 
 	// Build right panel
@@ -633,6 +656,10 @@ void EditorGame::onBegin()
 											  rightscroll->getPosition().y,
 											  width, 160, rightscroll);
 
+			m_behaviorUi = make_shared<BehaviorContainer>(rightscroll->getPosition().x,
+														  rightscroll->getPosition().y,
+														  width, 200, rightscroll);
+			
 			rightscroll->addWidget(m_sceneUi);
 			rightscroll->addWidget(m_transformUi);
 			rightscroll->addWidget(m_entityUi);
@@ -640,7 +667,8 @@ void EditorGame::onBegin()
 			rightscroll->addWidget(m_cameraUi);
 			rightscroll->addWidget(m_soundUi);
 			rightscroll->addWidget(m_textUi);
-
+			rightscroll->addWidget(m_behaviorUi);
+			
 			auto scrollLayout = make_shared<VerticalLayout>();
 			rightscroll->setLayout(scrollLayout);
 			scrollLayout->enableResize(false);
@@ -656,6 +684,7 @@ void EditorGame::onBegin()
 			m_physicsUi->setLayout(scrollLayout);
 			m_constraintUi->setLayout(scrollLayout);
 			m_sceneUi->setLayout(scrollLayout);
+			m_behaviorUi->setLayout(scrollLayout);
 			
 			auto label = make_shared<Label>(0,0,0,10,tr("Name:"), m_transformUi);
 			label->setColor(Vector4(0,0,0,1));
@@ -1032,6 +1061,9 @@ void EditorGame::onBegin()
 			m_textUi->setActive(false);
 			m_textUi->setInvisible(true);
 
+			m_behaviorUi->setActive(false);
+			m_behaviorUi->setInvisible(true);
+			
 			// Show scene UI when everything else is hidden
 			m_sceneUi->setActive(true);
 			m_sceneUi->setInvisible(false);
@@ -1212,22 +1244,30 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 {
 	m_entityUi->setActive(false);
 	m_entityUi->setInvisible(true);
-
+	m_entityUi->setSize(m_entityUi->calculateContentSize());
+	
 	m_lightUi->setActive(false);
 	m_lightUi->setInvisible(true);
+	m_lightUi->setSize(m_lightUi->calculateContentSize());
 
 	m_cameraUi->setActive(false);
 	m_cameraUi->setInvisible(true);
-
+	m_cameraUi->setSize(m_cameraUi->calculateContentSize());
+	
 	m_soundUi->setActive(false);
 	m_soundUi->setInvisible(true);
+	m_soundUi->setSize(m_soundUi->calculateContentSize());
 	
 	m_textUi->setActive(false);
 	m_textUi->setInvisible(true);
-
+	m_textUi->setSize(m_textUi->calculateContentSize());
+	
 	m_transformUi->setActive(false);
 	m_transformUi->setInvisible(true);
 
+	m_behaviorUi->setActive(false);
+	m_behaviorUi->setInvisible(true);
+	
 	if(!object)
 		return;
 
@@ -1238,6 +1278,10 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 	m_rotationEdit->setVector(object->getEulerRotation());
 	m_scaleEdit->setVector(object->getScale());
 
+	m_behaviorUi->setActive(true);
+	m_behaviorUi->setInvisible(false);
+	m_behaviorUi->displayObject(object);
+	
 	switch(object->getType())
 	{
 	case OBJECT3D_ENTITY: {

@@ -28,4 +28,4 @@ public:
 	void write(const char* str);
 };
 
-#endif //NEO_SCENEVIEW_H
+#endif //NEO_CONSOLE_H

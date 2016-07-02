@@ -146,11 +146,14 @@ public:
 
 	/**
 	 * @brief Checks if the object is currently active.
+	 *
+	 * Only returns true if the object and its parent are active.
+	 *
 	 * @return A boolean value.
 	 */
 	bool isActive() const
 	{
-		return m_active;
+		return (m_active && (m_parent.expired() || m_parent.lock()->isActive()));
 	}
 
 	/**

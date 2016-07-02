@@ -1,5 +1,6 @@
 #include "Console.h"
 #include "Sidepanel.h"
+#include <VerticalLayout.h>
 
 using namespace Neo;
 using namespace Neo2D;
@@ -38,12 +39,11 @@ void Console::init()
 	
 	commandOutput = make_shared<Label>(0,0,0,0,"", scrollPanel);
 	commandOutput->setColor(Vector4(0,0,0,1));
-	//commandOutput->setPosition(getPosition());
 
-	// Automatically relocate content
-	scrollPanel->enableLocalPosition(true);
+	auto layout = make_shared<VerticalLayout>();
+	scrollPanel->setLayout(layout);
+	layout->enableResize(false);
 	
-	//scrollPanel->setLayout(make_shared<ScaleLayout>());
 	scrollPanel->addWidget(commandOutput);	
 	scrollPanel->init();
 
@@ -86,6 +86,8 @@ void Console::write(const char* str)
 	out += str;
 	commandOutput->setLabel(out.c_str());
 
-	size_t lines = std::count(out.begin(), out.end(), '\n') + 1;
-	commandOutput->setSize(Vector2(getSize().x, std::max(scrollPanel->getSize().y, static_cast<float>(lines * 12))));
+	size_t lines = std::count(out.begin(), out.end(), '\n');
+
+	// FIXME: Use actual font size!
+	commandOutput->setSize(Vector2(getSize().x, static_cast<float>(lines * 12)));
 }

@@ -20,6 +20,7 @@
 #include "UndoQueue.h"
 #include "ColorEdit.h"
 #include "Console.h"
+#include "BehaviorContainer.h"
 
 #include <sexpresso.hpp>
 #include <KeyboardShortcuts.h>
@@ -120,6 +121,7 @@ class EditorGame : public Neo::SubGame
 	shared_ptr<ColorEdit> m_sceneAmbientLightEdit;
 
 	shared_ptr<Console> m_console;
+	shared_ptr<BehaviorContainer> m_behaviorUi;
 	
 	std::string m_currentLevelFile;
 	std::string m_currentProjectFile;

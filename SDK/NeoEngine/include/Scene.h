@@ -94,10 +94,15 @@ private:
     // Ambient light
     Vector3 m_ambientLight;
 
+	bool m_physicsSimulation;
+
 public:
 
 	AdditionalData* getAdditionalData() { return m_additionalData; }
 	void setAdditionalData(AdditionalData* d) { m_additionalData = d; }
+
+	bool hasPhysicsSimulation() const { return m_physicsSimulation; }
+	void enablePhysicsSimulation(bool v) { m_physicsSimulation = v; }
 
 	// name
     /**

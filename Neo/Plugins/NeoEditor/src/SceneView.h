@@ -27,6 +27,9 @@ class SceneView : public Neo2D::Gui::Widget
 	
 	/// Transform objects either relative to their own transformation or relative to the selection.
 	bool m_objectLocalTransformation;
+
+	/// Snaps the selected object to the ground
+	bool m_snapToGround;
 	
 	/// Grid size for snap to grid
 	unsigned int m_gridSize;
@@ -78,7 +81,7 @@ class SceneView : public Neo2D::Gui::Widget
 	void rotationHandle(Neo::OEntity* handleEntity, const Neo::Vector3& axis, const Neo::Vector3& mousepos);
 	void scaleHandle(Neo::OEntity* handleEntity, const Neo::Vector3& axis, const Neo::Vector3& mousepos);
 	void translationHandle(Neo::OEntity* handleEntity, const Neo::Vector3& axis, const Neo::Vector3& mousepos);
-
+	
 public:
 	SceneView(UndoQueue& undo,
 			  int x,
@@ -93,6 +96,9 @@ public:
 	virtual void update(float dt);
 	void resetCamera();
 
+	bool isSnapToGround() const { return m_snapToGround; }
+	void enableSnapToGround(bool value) { m_snapToGround = value; }
+	
 	std::vector<Neo::Object3d*>& getSelection() { return m_selection; }
 	void clearSelection();
 	void addSelectedObject(Neo::Object3d* object);

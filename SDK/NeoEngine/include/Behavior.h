@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -122,22 +123,22 @@ public:
      * Example:
      * \code
      *
-     *  MVariable DataBehavior::getVariable(unsigned int id)
+     *  NeoVariable DataBehavior::getVariable(unsigned int id)
      *  {
      *      switch(id)
      *       {
      *       default:
-     *           return MVariable("NULL", NULL, M_VARIABLE_NULL);
+     *           return NeoVariable("NULL", NULL, M_VARIABLE_NULL);
      *       case 0:
-     *           return MVariable("data", &m_data, M_VARIABLE_STRING);
+     *           return NeoVariable("data", &m_data, M_VARIABLE_STRING);
      *       }
      *   }
      *
      * \endcode
      *
-     * @see MVariable
+     * @see NeoVariable
      *
-     * @param id The ID of the variable. All values are smaller than the one returned by MBehavior::getVariablesNumber
+     * @param id The ID of the variable. All values are smaller than the one returned by Behavior::getVariablesNumber
      * @return The variable.
      */
 	virtual NeoVariable getVariable(unsigned int id) = 0;

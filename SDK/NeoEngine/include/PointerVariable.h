@@ -1,5 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
+// Copyright (c) 2016 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -88,19 +89,22 @@ public:
     /** @brief getType
      * @return The variable type. Is element of enumaration \b M_VARIABLE_TYPE
      */
-	inline M_VARIABLE_TYPE getType(void){ return m_type; }
+	inline M_VARIABLE_TYPE getType(void) const { return m_type; }
 
     /** @brief getName
      * @return The pointer to the name.
      */
-    inline const char * getName(void){ return m_name; }
+    inline const char * getName(void) const { return m_name; }
 
     /**
      * @brief getPointer
      * @return Returns the pointer with the data. This pointer complies to the type given by MVariable::getType
      */
-    inline void * getPointer(void){ return m_pointer; }
+    inline void * getPointer(void) const { return m_pointer; }
 };
+
+template<typename T>
+T* variable_cast(const NeoVariable& v) { return static_cast<T*>(v.getPointer()); }
 }
 
 #endif

@@ -15,7 +15,8 @@ SceneView::SceneView(UndoQueue& undo,
 	  m_currentHandles(&m_translation),
 	  m_undo(undo),
 	  m_objectLocalTransformation(false),
-	  m_gridSize(0)
+	  m_gridSize(0),
+	  m_snapToGround(false)
 {
 	m_overlayScene = m_level.addNewScene();
 	m_handlesScene = m_level.addNewScene();
@@ -313,8 +314,53 @@ void SceneView::translationHandle(OEntity* handleEntity, const Vector3& axis, co
 	}
 
 	for(auto e : m_selection)
-		e->translate(vec);	
-	
+	{
+		e->translate(vec);
+
+		// Snap to geometry
+		if (m_snapToGround)
+		{
+			Vector3 curpoint;
+			float selectedDistance = 0;
+			Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
+			Vector3 direction = Vector3(0,0,-1000);
+			e->setActive(false);
+			Vector3 origin = e->getTransformedPosition() + Vector3(0,0,10);
+
+			for (size_t i = 0; i < scene->getEntitiesNumber(); i++)
+			{
+				auto target = scene->getEntityByIndex(i);
+
+				if(target->isActive())
+				{
+					auto result = target->castRay(origin, direction);
+					if (result.hit)
+					{
+						float newlength =
+							(origin - result.point).getLength();
+
+						if (selectedDistance == 0.0f
+							|| newlength <= selectedDistance)
+						{
+							curpoint = result.point;
+							selectedDistance = newlength;
+						}
+					}
+				}
+			}
+
+			e->setActive(true);
+
+			if (selectedDistance > 0.0f)
+			{
+				Vector3 point = e->getPosition();
+				point.z = curpoint.z;
+				e->setPosition(point);
+			}
+			e->updateMatrix();
+		}
+	}
+
 	m_currentHandles->setPosition(getSelectionCenter());
 }
 
@@ -365,7 +411,7 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 
 			Object3d* selected = m_currentHandles->grabbed;
 			float selectedDistance = 0.0f;
-
+			
 			if(m_currentHandles->grabbed == nullptr)
 			{
 				// Search in main scene
@@ -374,7 +420,8 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 					auto result = scene->getEntityByIndex(i)->castRay(origin, direction);
 					if(result.hit)
 					{
-						if(float newlength = (origin - result.hit).getLength() > selectedDistance
+						float newlength = (origin - result.point).getLength();
+						if(newlength <= selectedDistance
 						   || selected == nullptr)
 						{
 							selected = scene->getEntityByIndex(i);
@@ -392,7 +439,7 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 
 					if(isEdgeToBoxCollision(inverse * origin, inverse * direction, box->min, box->max))
 					{
-						if(float newlength = (origin - text->getTransformedPosition()).getLength() > selectedDistance
+						if(float newlength = (origin - text->getTransformedPosition()).getLength() < selectedDistance
 						   || selected == nullptr)
 						{
 							selected = text;
@@ -411,7 +458,8 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 					auto result = m_overlayScene->getEntityByIndex(i)->castRay(origin, direction);
 					if(result.hit)
 					{
-						if(float newlength = (origin - result.hit).getLength() > selectedDistance
+						float newlength = (origin - result.point).getLength();
+						if(newlength <= selectedDistance
 						   || selected == nullptr)
 						{
 							selected = m_overlayScene->getEntityByIndex(i)->getParent();
@@ -429,12 +477,7 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 					auto result = m_handlesScene->getEntityByIndex(i)->castRay(origin, direction);
 					if(result.hit)
 					{
-						if(float newlength = (origin - result.hit).getLength() > selectedDistance
-						   || selected == nullptr)
-						{
-							selected = m_handlesScene->getEntityByIndex(i);
-							selectedDistance = newlength;
-						}
+						selected = m_handlesScene->getEntityByIndex(i);
 					}
 				}
 			}
