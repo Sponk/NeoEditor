@@ -22,19 +22,21 @@ static NeoVariable findVariable(Behavior* b, const char* name)
 
 void BehaviorContainer::displayObject(Object3d* o)
 {
+	if(o == nullptr)
+	{
+		m_container->clear();
+		m_numBehaviors = 0;
+		m_currentObject = nullptr;
+		return;
+	}
+
 	// Only update if it changed
 	if(o == m_currentObject
 	   && o->getBehaviorsNumber() == m_numBehaviors)
 		return;
-	
-	clear();
-	if(!o)
-	{
-		m_numBehaviors = 0;
-		m_currentObject = nullptr;
-		return;
-	}	
-	
+
+	m_container->clear();
+
 	static auto stringSetter = [this](Widget& w, void* d) {
 		static_cast<Neo::String*>(d)->set(w.getLabel());
 	};
@@ -54,14 +56,14 @@ void BehaviorContainer::displayObject(Object3d* o)
 	static auto boolSetter = [this](Widget& w, void* d) {
 		*static_cast<bool*>(d) = static_cast<CheckButton&>(w).getValue();
 	};
-	
+
 	for(int i = 0; i < o->getBehaviorsNumber(); i++)
 	{		
 		Behavior* b = o->getBehavior(i);
 
-		auto label = make_shared<Label>(0, 0, getSize().x, 10, b->getName(), shared_from_this());
+		auto label = make_shared<Label>(0, 0, getSize().x, 10, b->getName(), m_container);
 		label->setColor(Vector4(0,0,0,1));
-		addWidget(label);
+		m_container->addWidget(label);
 		
 		for(int j = 0; j < b->getVariablesNumber(); j++)
 		{
@@ -69,9 +71,9 @@ void BehaviorContainer::displayObject(Object3d* o)
 
 			if(var.getType() != M_VARIABLE_BOOL)
 			{
-				label = make_shared<Label>(0, 0, getSize().x, 10, var.getName(), shared_from_this());
+				label = make_shared<Label>(0, 0, getSize().x, 10, var.getName(), m_container);
 				label->setColor(Vector4(0,0,0.5,1));
-				addWidget(label);
+				m_container->addWidget(label);
 			}
 			
 			switch(var.getType())
@@ -79,52 +81,51 @@ void BehaviorContainer::displayObject(Object3d* o)
 			case M_VARIABLE_STRING:
 				{
 					auto edit = make_shared<EditField>(0, 0, getSize().x, 20,
-													   variable_cast<Neo::String>(var)->getSafeString(), shared_from_this());
+													   variable_cast<Neo::String>(var)->getSafeString(), m_container);
 					edit->setCallback(stringSetter, var.getPointer());
-					
-					addWidget(edit);
+					m_container->addWidget(edit);
 				}
 				break;
 
 				case M_VARIABLE_FLOAT:
 				{
 					auto edit = make_shared<EditField>(0, 0, getSize().x, 20,
-													   std::to_string(*variable_cast<float>(var)).c_str(), shared_from_this());
+													   std::to_string(*variable_cast<float>(var)).c_str(), m_container);
 					edit->setCallback(floatSetter, var.getPointer());
-										
-					addWidget(edit);
+
+					m_container->addWidget(edit);
 				}
 				break;
 
 				case M_VARIABLE_VEC4:
 				{
-					auto edit = make_shared<Vector4Edit>(0, 0, getSize().x, 20, "", shared_from_this());
+					auto edit = make_shared<Vector4Edit>(0, 0, getSize().x, 20, "", m_container);
 					edit->setCallback(vec4Setter, var.getPointer());
 					edit->setVector(*variable_cast<Vector4>(var));
-					
-					addWidget(edit);
+
+					m_container->addWidget(edit);
 				}
 				break;
 
 				case M_VARIABLE_VEC3:
 				{
 					auto edit = make_shared<Vector3Edit>(0, 0, getSize().x, 20, "",
-														 shared_from_this());
+														 m_container);
 					edit->setCallback(vec3Setter, var.getPointer());
 					edit->setVector(*variable_cast<Vector3>(var));
 
-					addWidget(edit);
+					m_container->addWidget(edit);
 				}
 				break;
 
 				case M_VARIABLE_BOOL:
 				{
 					auto edit = make_shared<CheckButton>(0, 0, getSize().x, 20, var.getName(),
-														 shared_from_this());
+														 m_container);
 					edit->setCallback(boolSetter, var.getPointer());
 					edit->setValue(*variable_cast<bool>(var));
-					
-					addWidget(edit);	
+
+					m_container->addWidget(edit);
 				}
 				break;
 
@@ -140,7 +141,7 @@ void BehaviorContainer::displayObject(Object3d* o)
 		}
 	}
 
-	updateLayout();
+	m_container->updateLayout();
 	m_currentObject = o;
 	m_numBehaviors = o->getBehaviorsNumber();
 }
