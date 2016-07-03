@@ -153,7 +153,10 @@ public:
 	 */
 	bool isActive() const
 	{
-		return (m_active && (m_parent.expired() || m_parent.lock()->isActive()));
+		if(m_parent.expired())
+			return m_active;
+
+		return (m_active && m_parent.lock()->isActive());
 	}
 
 	/**
