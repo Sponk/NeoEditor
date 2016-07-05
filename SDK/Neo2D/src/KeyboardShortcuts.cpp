@@ -17,11 +17,11 @@ bool Neo2D::Gui::KeyboardShortcuts::handle(const Neo2D::Gui::Event& e)
 	{
 		case Neo2D::Gui::KEY_PRESSED:
 		{
-			bool triggered = false;
 			auto key = static_cast<const Neo2D::Gui::KeyPressEvent&>(e).getKey();
 			for(int i = 0; i < shortcuts.size(); i++)
 			{
-				if(shortcuts[i].update(key, true)) return true;
+				// FIXME: True event priorities!
+				if(shortcuts[i].update(key, true)) return false;
 			}
 			return false;
 		}

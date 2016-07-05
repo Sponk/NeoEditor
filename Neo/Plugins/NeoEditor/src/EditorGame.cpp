@@ -1139,7 +1139,8 @@ void EditorGame::onBegin()
 	m_keyboardShortcuts = make_shared<KeyboardShortcuts>(rootpane);
 	rootpane->addWidget(m_keyboardShortcuts);
 
-	m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_S}, [this](void*){
+	// TODO: Event priorities
+	/*m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_S}, [this](void*){
 		saveLevel();
 	}, nullptr));
 
@@ -1173,7 +1174,7 @@ void EditorGame::onBegin()
 
 	m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_LSHIFT, KEY_Z}, [this](void*){
 		redo();
-	}, nullptr));
+	}, nullptr));*/
 
 	m_keyboardShortcuts->addShortcut(Shortcut({WINDOW_SELECT}, [this](void*){
 		Level* level = NeoEngine::getInstance()->getLevel();
@@ -1245,7 +1246,7 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 	m_entityUi->activateChildren(false);
 	m_entityUi->setInvisible(true);
 	m_entityUi->setSize(m_entityUi->calculateContentSize());
-	
+
 	m_lightUi->activateChildren(false);
 	m_lightUi->setInvisible(true);
 	m_lightUi->setSize(m_lightUi->calculateContentSize());
@@ -1267,6 +1268,7 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 
 	m_behaviorUi->activateChildren(false);
 	m_behaviorUi->setInvisible(true);
+	m_behaviorUi->setSize(Vector2(m_behaviorUi->getSize().x, m_behaviorUi->calculateContentSize().y));
 
 	if(!object)
 		return;
@@ -1281,7 +1283,7 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 	m_behaviorUi->activateChildren(true);
 	m_behaviorUi->setInvisible(false);
 	m_behaviorUi->displayObject(object);
-	
+
 	switch(object->getType())
 	{
 	case OBJECT3D_ENTITY: {
@@ -1309,6 +1311,7 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 
 			m_physicsUi->setInvisible(false);
 			m_physicsUi->activateChildren(true);
+			m_physicsUi->setSize(m_physicsUi->calculateContentSize());
 
 			switch(phys->getCollisionShape())
 			{
@@ -1341,6 +1344,7 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 				m_entityConstraintButton->setValue(true);
 				m_constraintUi->setInvisible(false);
 				m_constraintUi->activateChildren(true);
+				m_constraintUi->setSize(m_constraintUi->calculateContentSize());
 
 				m_entityConstraintParentNameEdit->setLabel(con->parentName.getSafeString());
 				m_entityPivotEdit->setVector(con->pivot);
