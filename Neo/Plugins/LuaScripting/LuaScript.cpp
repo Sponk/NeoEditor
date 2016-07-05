@@ -418,7 +418,7 @@ static int log()
 
 LuaScript::LuaScript(void) :
 	ScriptContext(),
-	m_state(NULL)
+    m_state(NULL)
 {
 
 }

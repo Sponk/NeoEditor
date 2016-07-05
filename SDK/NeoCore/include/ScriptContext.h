@@ -49,7 +49,7 @@ protected:
 	
 public :
 
-	ScriptContext() : m_logger(make_shared<ScriptLogger>()) {}
+    ScriptContext() : m_isRunning(false), m_logger(make_shared<ScriptLogger>()) {}
 	
 	/// Destructor.
 	virtual ~ScriptContext(void){}
