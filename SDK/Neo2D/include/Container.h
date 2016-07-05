@@ -110,13 +110,9 @@ public:
 
 	virtual void update(float dt)
 	{
-		if(!isActive())
-			return;
-
 		updateFilter();
 		for (auto o : m_children)
-			if(o->isActive())
-				o->update(dt);
+			o->update(dt);
 
 		updateLayout();
 		Widget::update(dt);
@@ -124,8 +120,8 @@ public:
 
 	void activateChildren(bool v)
 	{
-		for (auto o : m_children)
-			o->setActive(v);
+		//for (auto o : m_children)
+		//	o->setActive(v);
 
 		setActive(v);
 	}

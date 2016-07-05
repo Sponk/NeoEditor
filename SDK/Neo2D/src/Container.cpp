@@ -3,9 +3,11 @@
 Neo::Vector2 Neo2D::Gui::Container::calculateContentSize(const Neo::Vector2& offset) const
 {
 	Neo::Vector2 maxpos;
-
 	for(auto c : m_children)
 	{
+		if(c->isInvisible())
+			continue;
+
 		Neo::Vector2 pos = c->getPosition() + offset;
 		const Neo::Vector2 sz = c->getSize();
 
