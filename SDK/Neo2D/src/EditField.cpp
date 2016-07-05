@@ -235,6 +235,7 @@ bool Neo2D::Gui::EditField::handle(const Event& e)
 
 		case KEY_PRESSED:
 		{
+			bool handled = false;
 			auto keypress = static_cast<const KeyPressEvent&>(e);
 			std::string str(getLabel());
 
@@ -259,6 +260,7 @@ bool Neo2D::Gui::EditField::handle(const Event& e)
 						str.erase(i, endDelete);
 						m_caret -= size;
 					}
+					handled = true;
 				}
 					break;
 
@@ -274,6 +276,7 @@ bool Neo2D::Gui::EditField::handle(const Event& e)
 						auto endDelete = i + size;
 						str.erase(i, endDelete);
 					}
+					handled = true;
 				}
 					break;
 
@@ -288,6 +291,8 @@ bool Neo2D::Gui::EditField::handle(const Event& e)
 					unsigned int size = characterSize(codepoint);
 					if (m_caret >= size)
 						m_caret -= size;
+
+					handled = true;
 				}
 					break;
 
@@ -301,6 +306,8 @@ bool Neo2D::Gui::EditField::handle(const Event& e)
 
 					if (m_caret <= str.length() - size)
 						m_caret += size;
+
+					handled = true;
 				}
 					break;
 
@@ -309,8 +316,8 @@ bool Neo2D::Gui::EditField::handle(const Event& e)
 					return true;
 			}
 			setLabel(str.c_str());
+			return handled;
 		}
-		return true;
 
 		case MOUSE_OVER:
 			if(getState() != WIDGET_SELECTED)
