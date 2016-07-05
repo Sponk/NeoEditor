@@ -146,6 +146,49 @@ public:
 	}
 };
 
+/**
+ * @brief Gets triggered each time a key gets pressed and repeats with the keyboard delay.
+ */
+class KeyRepeatEvent: public Event
+{
+	unsigned int m_key;
+public:
+	KeyRepeatEvent(std::weak_ptr<Neo2D::Gui::Widget> w, const function<void(Widget&, const Event &, void *)>& cb, void* d) :
+		Event(w, cb, d),
+		m_key(-1)
+	{}
+
+	virtual void update(float dt)
+	{
+		reject();
+
+		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+		Neo::InputContext* input = engine->getInputContext();
+		Neo::Keyboard& kbd = input->getKeyboard();
+
+		for(unsigned int i = 0; i < kbd.getKeys().size(); i++)
+		{
+			// Only detect real keys
+			if(kbd.onKeyDown(i))
+			{
+				m_key = i;
+				handle();
+
+				if(handled())
+					kbd.keyUp(i);
+			}
+		}
+	}
+
+	/**
+	 * @brief Retrieves the key ID.
+	 * @return The key ID.
+	 */
+	unsigned int getKey() const { return m_key; }
+	void setKey(unsigned int k) { m_key = k; }
+	virtual unsigned int getType() const { return KEY_PRESSED; }
+};
+
 Neo2D::Gui::EditField::EditField(int x,
 								 int y,
 								 unsigned int w,
@@ -163,7 +206,7 @@ void Neo2D::Gui::EditField::init()
 	registerEvent(make_shared<MouseLeaveEvent>(shared_from_this(), nullptr, nullptr));
 	registerEvent(make_shared<MouseLeftClickEvent>(shared_from_this(), nullptr, nullptr));
 	registerEvent(make_shared<CharacterInputEvent>(shared_from_this(), nullptr, nullptr));
-	registerEvent(make_shared<KeyPressEvent>(shared_from_this(), nullptr, nullptr));
+	registerEvent(make_shared<KeyRepeatEvent>(shared_from_this(), nullptr, nullptr));
 	registerEvent(make_shared<MouseDeselectEvent>(shared_from_this(), nullptr, nullptr));
 }
 
@@ -174,7 +217,7 @@ bool Neo2D::Gui::EditField::handle(const Event& e)
 		case CHARACTER_INPUT: {
 
 			if(getState() != WIDGET_SELECTED)
-				break;
+				return false;
 
 			auto keypress = static_cast<const CharacterInputEvent&>(e);
 			std::string str(getLabel());
@@ -196,7 +239,7 @@ bool Neo2D::Gui::EditField::handle(const Event& e)
 			std::string str(getLabel());
 
 			if(getState() != WIDGET_SELECTED)
-				break;
+				return false;
 
 			switch (keypress.getKey())
 			{
@@ -266,7 +309,6 @@ bool Neo2D::Gui::EditField::handle(const Event& e)
 					return true;
 			}
 			setLabel(str.c_str());
-
 		}
 		return true;
 
