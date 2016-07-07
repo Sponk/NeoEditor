@@ -12,6 +12,7 @@ SET(CMAKE_MODULE_PATH
 ## Options
 option(USE_QT_RUNTIME ON)
 option(USE_GNUSTEP_RUNTIME OFF)
+option(USE_GCOV OFF) ## Only active with the GCC compiler
 
 ## Disallow in-source builds
 INCLUDE(OutOfSourceBuild)
@@ -173,6 +174,11 @@ IF(WIN32)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NEO_BUILD_FLAGS} -O2 -DWIN32 -I\"$ENV{DXSDK_DIR}/Include\" -std=c++11 -D_USE_MATH_DEFINES")
     SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D__Debug__ -I\"$ENV{DXSDK_DIR}/Include\" -std=c++11 -D_USE_MATH_DEFINES")
 
+	IF(${USE_GCOV})
+	  SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 --coverage")
+	  SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0 --coverage")
+	ENDIF()
+	
     SET(CMAKE_SHARED_LINKER_FLAGS "-lcomctl32 -lkernel32 -Wl,--subsystem,windows,--as-needed,--allow-multiple-definition -static -static-libstdc++ -static-libgcc -std=c++11")
     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--allow-multiple-definition -static -static-libstdc++ -static-libgcc")
     SET(CPACK_STRIP_FILES ON)
@@ -281,7 +287,18 @@ IF(UNIX AND NOT APPLE AND NOT ANDROID AND NOT EMSCRIPTEN)
   SET(CMAKE_SHARED_LINKER_FLAGS "-ldl -Wl,--as-needed,--allow-multiple-definition,--build-id,-rpath .")
 
   SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lm -ldl -Wl,--allow-multiple-definition,-rpath . -ftls-model=global-dynamic")
+  
+  IF(${USE_GCOV})
+	SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 --coverage")
+	SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0 --coverage")
 
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 --coverage")
+	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0 --coverage")
+
+	SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+	SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+  ENDIF()
+  
   SET(CPACK_PACKAGE_CONTACT Yannick Pflanzer <yannick.pflanzer@scary-squid.de>)
   SET(CPACK_GENERATOR "STGZ;TGZ;DEB;RPM;")
   SET(CPACK_STRIP_FILES ON)
@@ -503,6 +520,37 @@ IF(NOT NO_TESTS)
   add_test(NAME AssetLoading_test COMMAND AssetLoadingTest)
   add_test(NAME NeoEditor_test COMMAND NeoEditorTest)
   add_test(NAME ProjectManager_test COMMAND ProjectManagerTest)
+
+  
+  IF(USE_GCOV)
+	## Generate HTML report
+	ADD_CUSTOM_TARGET(coverage
+	  COMMAND
+	  lcov --directory ./SDK/ --directory ./Neo/Plugins --zerocounters -q
+
+	  &&
+	  ${NEO_BINARY_OUTPUT}/Neo2DTest &&
+	  ${NEO_BINARY_OUTPUT}/NeoCoreTest &&
+	  ${NEO_BINARY_OUTPUT}/NeoEngineTest &&
+	  ${NEO_BINARY_OUTPUT}/AssetLoadingTest &&
+	  ${NEO_BINARY_OUTPUT}/NeoEditorTest &&
+	  ${NEO_BINARY_OUTPUT}/ProjectManagerTest
+	  
+	  &&
+	  lcov --directory ./SDK --directory ./Neo/Plugins -c -o coverage.info
+	  
+	  &&
+	  lcov --remove coverage.info *sexpresso* *usr* *tinyutf8* *utfcpp* *3rdparty* *tests* *gtest* -o coverage.info
+	  
+	  &&
+	  rm -rf ${CMAKE_BINARY_DIR}/TestCoverage
+
+	  &&
+	  genhtml --prefix ${CMAKE_SOURCE_DIR} -o ${DOCUMENTATION_BINARY_DIR}/Developer/html/TestCoverage -t "Neo Test Coverage" --num-spaces 4 coverage.info
+
+	  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+	  )
+  ENDIF()  
 ENDIF()
 
 ## Install files
