@@ -10,6 +10,8 @@ using namespace Neo2D;
 using namespace Gui;
 using namespace Neo;
 
+// Can't test rendering
+// LCOV_EXCL_START
 class SubmenuTheme : public Neo2D::Gui::Theme
 {
 	OText* text;
@@ -87,6 +89,9 @@ public:
 		renderContext->popMatrix();
 	}
 };
+
+// Can't test rendering
+// LCOV_EXCL_STOP
 
 Submenu::Submenu(const char* label, const shared_ptr<Object2D>& parent, const shared_ptr<Theme>& theme)
 	: MenuItem(label, parent, (theme == nullptr) ? make_shared<SubmenuTheme>() : theme),

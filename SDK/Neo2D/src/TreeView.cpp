@@ -8,6 +8,8 @@ using namespace Neo;
 
 #define LINE_HEIGHT 20
 
+// Can't test rendering
+// LCOV_EXCL_START
 class TreeItemTheme : public Neo2D::Gui::Theme
 {
 	OText* text;
@@ -85,7 +87,7 @@ public:
 		renderer->drawColoredQuad(widget->getPosition() + offset, widget->getSize(), Vector4(0.8, 0.8, 0.8, 1), 0);
 	}
 };
-
+// LCOV_EXCL_STOP
 
 Neo2D::Gui::TreeView::TreeView(int x,
 							   int y,

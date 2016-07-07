@@ -4,6 +4,8 @@
 
 using namespace Neo;
 
+// Can't test rendering
+// LCOV_EXCL_START
 class KnobTheme : public Neo2D::Gui::Theme
 {
 public:
@@ -44,6 +46,7 @@ public:
 		renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(3,3), Vector4(0.9, 0.9, 0.9, 1), 0);
 	}
 };
+// LCOV_EXCL_STOP
 
 class GeneralMouseLeftReleaseEvent : public Neo2D::Gui::Event
 {

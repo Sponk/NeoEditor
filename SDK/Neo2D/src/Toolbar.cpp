@@ -4,6 +4,8 @@ using namespace Neo2D;
 using namespace Gui;
 using namespace Neo;
 
+// Can't test rendering
+// LCOV_EXCL_START
 class ToolbarTheme : public Neo2D::Gui::Theme
 {
 public:
@@ -23,6 +25,8 @@ public:
 		renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(3,3), Vector4(0.8, 0.8, 0.8, 1), 0);
 	}
 };
+// Can't test rendering
+// LCOV_EXCL_STOP
 
 Toolbar::Toolbar(int x, int y, unsigned int w, unsigned int h, const shared_ptr<Object2D>& parent, const shared_ptr<Theme>& theme)
 	: Container(x, y, w, h, parent)

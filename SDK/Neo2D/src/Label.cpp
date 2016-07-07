@@ -4,6 +4,8 @@
 
 using namespace Neo;
 
+// Can't test rendering
+// LCOV_EXCL_START
 class LabelTheme : public Neo2D::Gui::Theme
 {
 	OText* text;
@@ -43,6 +45,8 @@ public:
 		renderContext->popMatrix();
 	}
 };
+// Can't test rendering
+// LCOV_EXCL_STOP
 
 Neo2D::Gui::Label::Label(int x, int y, unsigned int w, unsigned int h, const char* label, const shared_ptr<Object2D>& parent)
 	: Widget(x, y, w, h, label, parent, make_shared<LabelTheme>()), m_color(1,1,1,1), m_alignment(Neo::TEXT_ALIGN_LEFT) {}

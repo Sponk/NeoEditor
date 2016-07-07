@@ -4,6 +4,8 @@
 
 using namespace Neo;
 
+// Can't test rendering
+// LCOV_EXCL_START
 class ButtonTheme : public Neo2D::Gui::Theme
 {
 	OText* text;
@@ -72,6 +74,7 @@ public:
 		renderContext->popMatrix();
 	}
 };
+// LCOV_EXCL_STOP
 
 Neo2D::Gui::Button::Button(int x, int y, unsigned int w, unsigned int h,
 								const char* label, const shared_ptr<Neo2D::Object2D>& parent, const shared_ptr<Theme>& theme) :

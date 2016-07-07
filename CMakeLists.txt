@@ -526,7 +526,7 @@ IF(NOT NO_TESTS)
 	## Generate HTML report
 	ADD_CUSTOM_TARGET(coverage
 	  COMMAND
-	  lcov --directory ./SDK/ --directory ./Neo/Plugins --zerocounters -q
+	  lcov --directory ./SDK/ --rc lcov_branch_coverage=1 --directory ./Neo/Plugins --zerocounters -q
 
 	  &&
 	  ${NEO_BINARY_OUTPUT}/Neo2DTest &&
@@ -537,16 +537,16 @@ IF(NOT NO_TESTS)
 	  ${NEO_BINARY_OUTPUT}/ProjectManagerTest
 	  
 	  &&
-	  lcov --directory ./SDK --directory ./Neo/Plugins -c -o coverage.info
+	  lcov --directory --rc lcov_branch_coverage=1 ./SDK --directory ./Neo/Plugins -c -o coverage.info
 	  
 	  &&
-	  lcov --remove coverage.info *sexpresso* *usr* *tinyutf8* *utfcpp* *3rdparty* *tests* *gtest* -o coverage.info
+	  lcov --rc lcov_branch_coverage=1 --remove coverage.info *sexpresso* *usr* *tinyutf8* *utfcpp* *3rdparty* *tests* *gtest* -o coverage.info
 	  
 	  &&
 	  rm -rf ${CMAKE_BINARY_DIR}/TestCoverage
 
 	  &&
-	  genhtml --prefix ${CMAKE_SOURCE_DIR} -o ${DOCUMENTATION_BINARY_DIR}/Developer/html/TestCoverage -t "Neo Test Coverage" --num-spaces 4 coverage.info
+	  genhtml --branch-coverage --prefix ${CMAKE_SOURCE_DIR} -o ${DOCUMENTATION_BINARY_DIR}/Developer/html/TestCoverage -t "Neo Test Coverage" --num-spaces 4 coverage.info
 
 	  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 	  )

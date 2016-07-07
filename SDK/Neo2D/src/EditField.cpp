@@ -18,6 +18,9 @@ static unsigned int characterSize(unsigned int c)
 		return 4;
 }
 
+
+// Can't test rendering
+// LCOV_EXCL_START
 class EditFieldTheme : public Neo2D::Gui::Theme
 {
 	OText* text;
@@ -145,6 +148,7 @@ public:
 		renderContext->popMatrix();
 	}
 };
+// LCOV_EXCL_STOP
 
 /**
  * @brief Gets triggered each time a key gets pressed and repeats with the keyboard delay.
