@@ -25,6 +25,9 @@
 #ifndef __INPUT_CONTEXT
 #define __INPUT_CONTEXT
 
+#include <memory>
+#include <vector>
+
 namespace Neo
 {
 
@@ -284,9 +287,14 @@ private:
 	Keyboard m_keyboard; /// Contains the overall state of the keyboard
 	Mouse m_mouse;
 
+protected:
+	std::vector<std::shared_ptr<Neo::AxisInputDevice>> m_controllers;
+
 public:
 	Keyboard& getKeyboard() { return m_keyboard; }
 	Mouse& getMouse() { return m_mouse; }
+
+	const shared_ptr<Neo::AxisInputDevice>& getController(size_t id) const { return m_controllers[id]; }
 
 	virtual void handleInput() = 0;
 	bool isKeyDown(INPUT_KEYS key) { return m_keyboard.isKeyDown(key); }

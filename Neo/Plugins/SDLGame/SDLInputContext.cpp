@@ -1,6 +1,7 @@
 #include "SDLInputContext.h"
 #include <NeoEngine.h>
 #include <SDL.h>
+#include <algorithm>
 
 using namespace Neo;
 
@@ -310,22 +311,39 @@ void SDLInputContext::handleInput()
 				break;
 			}
 
-				// Joystick
-			/*case SDL_JOYDEVICEADDED:
+			case SDL_CONTROLLERDEVICEADDED:
 			{
-				mevent.type = MWIN_EVENT_JOYSTICK_ADDED;
-				mevent.data[0] = addJoystick(event.jdevice.which);
-				sendEvents(&mevent);
+				MLOG_INFO("Controller " << event.cdevice.which << " connected");
+				addGameController(event.cdevice.which);
 				break;
 			}
-			case SDL_JOYDEVICEREMOVED:
+			case SDL_CONTROLLERDEVICEREMOVED:
 			{
-				mevent.type = MWIN_EVENT_JOYSTICK_REMOVED;
-				mevent.data[0] = removeJoystick(event.jdevice.which);
-				sendEvents(&mevent);
+				MLOG_INFO("Controller " << event.cdevice.which << " disconnected");
+				removeGameController(event.cdevice.which);
 				break;
 			}
-			case SDL_JOYAXISMOTION:
+			case SDL_CONTROLLERAXISMOTION:
+			{
+				auto controller = m_devices[event.caxis.which];
+				controller->setAxis(event.caxis.axis,
+									static_cast<float>(event.caxis.value)
+										/ static_cast<float>(std::numeric_limits<int16_t>().max()));
+				break;
+			}
+			case SDL_CONTROLLERBUTTONDOWN:
+			{
+				auto controller = m_devices[event.cbutton.which];
+				controller->keyDown(event.cbutton.button);
+				break;
+			}
+			case SDL_CONTROLLERBUTTONUP:
+			{
+				auto controller = m_devices[event.cbutton.which];
+				controller->keyUp(event.cbutton.button);
+				break;
+			}
+			/*case SDL_JOYAXISMOTION:
 			{
 				mevent.type = MWIN_EVENT_JOYSTICK_MOVE;
 				mevent.data[0] = event.jaxis.which;
@@ -369,22 +387,6 @@ void SDLInputContext::handleInput()
 				sendEvents(&mevent);
 				break;
 			}
-
-				// Controller
-			case SDL_CONTROLLERDEVICEADDED:
-			{
-				mevent.type = MWIN_EVENT_CONTROLLER_ADDED;
-				mevent.data[0] = addGameController(event.cdevice.which);
-				sendEvents(&mevent);
-				break;
-			}
-			case SDL_CONTROLLERDEVICEREMOVED:
-			{
-				mevent.type = MWIN_EVENT_CONTROLLER_REMOVED;
-				mevent.data[0] = removeGameController(event.cdevice.which);
-				sendEvents(&mevent);
-				break;
-			}
 			case SDL_CONTROLLERDEVICEREMAPPED:
 			{
 				mevent.type = MWIN_EVENT_CONTROLLER_REMAPPED;
@@ -392,33 +394,7 @@ void SDLInputContext::handleInput()
 				sendEvents(&mevent);
 				break;
 			}
-			case SDL_CONTROLLERAXISMOTION:
-			{
-				mevent.type = MWIN_EVENT_CONTROLLER_MOVE;
-				mevent.data[0] = event.caxis.which;
-				mevent.data[1] = event.caxis.axis;
-				mevent.data[2] = event.caxis.value;
-				sendEvents(&mevent);
-				break;
-			}
-			case SDL_CONTROLLERBUTTONDOWN:
-			{
-				mevent.type = MWIN_EVENT_CONTROLLER_BUTTON_DOWN;
-				mevent.data[0] = event.cbutton.which;
-				mevent.data[1] = event.cbutton.button;
-				sendEvents(&mevent);
-				break;
-			}
-			case SDL_CONTROLLERBUTTONUP:
-			{
-				mevent.type = MWIN_EVENT_CONTROLLER_BUTTON_UP;
-				mevent.data[0] = event.cbutton.which;
-				mevent.data[1] = event.cbutton.button;
-				sendEvents(&mevent);
-				break;
-			}
-
-				// Touch
+			// Touch
 			case SDL_FINGERDOWN:
 			{
 				mevent.type = MWIN_EVENT_FINGER_DOWN;
@@ -486,4 +462,40 @@ void SDLInputContext::handleInput()
 	}
 
 	mouse.flushDirection();
+}
+
+int SDLInputContext::addGameController(int index)
+{
+	auto device = SDL_GameControllerOpen(index);
+	if (!device)
+	{
+		MLOG_ERROR("SDL Error : " << SDL_GetError());
+		return -1;
+	}
+
+	auto joy = SDL_GameControllerGetJoystick(device);
+	auto id = SDL_JoystickInstanceID(joy);
+	auto controller = make_shared<SDLController>(SDL_JoystickNumAxes(joy), SDL_JoystickNumButtons(joy), id, device);
+
+	m_controllers.push_back(controller);
+	m_devices[id] = controller;
+
+	return id;
+}
+
+int SDLInputContext::removeGameController(int id)
+{
+	for (int i = 0; i < m_controllers.size(); ++i)
+	{
+		auto controller = static_pointer_cast<SDLController>(m_controllers[i]);
+		if(controller->id == id && SDL_GameControllerGetAttached(controller->device))
+		{
+			SDL_GameControllerClose(controller->device);
+
+			m_devices.erase(controller->id);
+			m_controllers.erase(m_controllers.begin() + i);
+			return id;
+		}
+	}
+	return -1;
 }

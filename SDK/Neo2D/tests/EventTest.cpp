@@ -45,6 +45,43 @@ TEST(EventTest, ForwardEventDetection)
 	ASSERT_EQ(1, callbackCalled);
 }
 
+TEST(EventTest, ForwardEventDetection_inactive)
+{
+	int callbackCalled = 0;
+	auto c = make_shared<Neo2D::Gui::Container>(0,0,0,0,nullptr);
+	auto widget = make_shared<Neo2D::Gui::Widget>(0,0,0,0,nullptr,nullptr);
+
+	c->setActive(false);
+	c->addWidget(widget);
+	auto event = make_shared<TestEvent>(widget, [](Neo2D::Gui::Widget& w, const Neo2D::Gui::Event&, void* f) { *((bool*)f) = true; }, &callbackCalled);
+
+	// Also checks how often the callback got called
+	widget->registerEvent(event);
+	c->update(0);
+
+	ASSERT_EQ(0, callbackCalled);
+}
+
+TEST(EventTest, ForwardEventDetection_multi_inactive)
+{
+	int callbackCalled = 0;
+	auto c1 = make_shared<Neo2D::Gui::Container>(0,0,0,0,nullptr);
+	auto c2 = make_shared<Neo2D::Gui::Container>(0,0,0,0,nullptr);
+
+	auto widget = make_shared<Neo2D::Gui::Widget>(0,0,0,0,nullptr,nullptr);
+
+	c1->addWidget(c2);
+	c2->setActive(false);
+	c2->addWidget(widget);
+	auto event = make_shared<TestEvent>(widget, [](Neo2D::Gui::Widget& w, const Neo2D::Gui::Event&, void* f) { *((bool*)f) = true; }, &callbackCalled);
+
+	// Also checks how often the callback got called
+	widget->registerEvent(event);
+	c1->update(0);
+
+	ASSERT_EQ(0, callbackCalled);
+}
+
 TEST(EventTest, UnregisterEventTest)
 {
 	int callbackCalled = 0;

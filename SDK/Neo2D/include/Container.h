@@ -113,9 +113,17 @@ public:
 		updateFilter();
 		for (auto o : m_children)
 			o->update(dt);
-		updateLayout();
 
+		updateLayout();
 		Widget::update(dt);
+	}
+
+	void activateChildren(bool v)
+	{
+		//for (auto o : m_children)
+		//	o->setActive(v);
+
+		setActive(v);
 	}
 
 	/**

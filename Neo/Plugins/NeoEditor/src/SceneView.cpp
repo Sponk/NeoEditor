@@ -555,7 +555,6 @@ void SceneView::update(float dt)
 	m_currentHandles->setScale(scale);
 	m_currentHandles->setPosition(getSelectionCenter());
 
-
 	// Object representation visibility handling
 	{
 		m_cameraObject->setInvisible(true);
@@ -678,8 +677,6 @@ void SceneView::update(float dt)
 
 void SceneView::updateOverlayScene()
 {
-	MLOG_INFO("Updating overlay scene");
-	
 	auto engine = NeoEngine::getInstance();
 	auto level = engine->getLevel();
 	auto scene = level->getCurrentScene();	

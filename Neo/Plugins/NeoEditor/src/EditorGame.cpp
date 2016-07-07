@@ -659,7 +659,7 @@ void EditorGame::onBegin()
 			m_behaviorUi = make_shared<BehaviorContainer>(rightscroll->getPosition().x,
 														  rightscroll->getPosition().y,
 														  width, 200, rightscroll);
-			
+
 			rightscroll->addWidget(m_sceneUi);
 			rightscroll->addWidget(m_transformUi);
 			rightscroll->addWidget(m_entityUi);
@@ -1043,25 +1043,25 @@ void EditorGame::onBegin()
 			m_rightPanel->update(0);
 
 			// Hide UI initially
-			m_transformUi->setActive(false);
+			m_transformUi->activateChildren(false);
 			m_transformUi->setInvisible(true);
 
-			m_entityUi->setActive(false);
+			m_entityUi->activateChildren(false);
 			m_entityUi->setInvisible(true);
 
-			m_lightUi->setActive(false);
+			m_lightUi->activateChildren(false);
 			m_lightUi->setInvisible(true);
 
-			m_cameraUi->setActive(false);
+			m_cameraUi->activateChildren(false);
 			m_cameraUi->setInvisible(true);
 
-			m_soundUi->setActive(false);
+			m_soundUi->activateChildren(false);
 			m_soundUi->setInvisible(true);
 
-			m_textUi->setActive(false);
+			m_textUi->activateChildren(false);
 			m_textUi->setInvisible(true);
 
-			m_behaviorUi->setActive(false);
+			m_behaviorUi->activateChildren(false);
 			m_behaviorUi->setInvisible(true);
 			
 			// Show scene UI when everything else is hidden
@@ -1139,7 +1139,8 @@ void EditorGame::onBegin()
 	m_keyboardShortcuts = make_shared<KeyboardShortcuts>(rootpane);
 	rootpane->addWidget(m_keyboardShortcuts);
 
-	m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_S}, [this](void*){
+	// TODO: Event priorities
+	/*m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_S}, [this](void*){
 		saveLevel();
 	}, nullptr));
 
@@ -1173,7 +1174,7 @@ void EditorGame::onBegin()
 
 	m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_LSHIFT, KEY_Z}, [this](void*){
 		redo();
-	}, nullptr));
+	}, nullptr));*/
 
 	m_keyboardShortcuts->addShortcut(Shortcut({WINDOW_SELECT}, [this](void*){
 		Level* level = NeoEngine::getInstance()->getLevel();
@@ -1242,32 +1243,33 @@ void EditorGame::updateEntityTree()
 
 void EditorGame::updateSelectedObject(Neo::Object3d* object)
 {
-	m_entityUi->setActive(false);
+	m_entityUi->activateChildren(false);
 	m_entityUi->setInvisible(true);
 	m_entityUi->setSize(m_entityUi->calculateContentSize());
-	
-	m_lightUi->setActive(false);
+
+	m_lightUi->activateChildren(false);
 	m_lightUi->setInvisible(true);
 	m_lightUi->setSize(m_lightUi->calculateContentSize());
 
-	m_cameraUi->setActive(false);
+	m_cameraUi->activateChildren(false);
 	m_cameraUi->setInvisible(true);
 	m_cameraUi->setSize(m_cameraUi->calculateContentSize());
 	
-	m_soundUi->setActive(false);
+	m_soundUi->activateChildren(false);
 	m_soundUi->setInvisible(true);
 	m_soundUi->setSize(m_soundUi->calculateContentSize());
 	
-	m_textUi->setActive(false);
+	m_textUi->activateChildren(false);
 	m_textUi->setInvisible(true);
 	m_textUi->setSize(m_textUi->calculateContentSize());
 	
-	m_transformUi->setActive(false);
+	m_transformUi->activateChildren(false);
 	m_transformUi->setInvisible(true);
 
-	m_behaviorUi->setActive(false);
+	m_behaviorUi->activateChildren(false);
 	m_behaviorUi->setInvisible(true);
-	
+	m_behaviorUi->setSize(Vector2(m_behaviorUi->getSize().x, m_behaviorUi->calculateContentSize().y));
+
 	if(!object)
 		return;
 
@@ -1278,17 +1280,17 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 	m_rotationEdit->setVector(object->getEulerRotation());
 	m_scaleEdit->setVector(object->getScale());
 
-	m_behaviorUi->setActive(true);
+	m_behaviorUi->activateChildren(true);
 	m_behaviorUi->setInvisible(false);
 	m_behaviorUi->displayObject(object);
-	
+
 	switch(object->getType())
 	{
 	case OBJECT3D_ENTITY: {
-		m_entityUi->setActive(true);
+		m_entityUi->activateChildren(true);
 		m_entityUi->setInvisible(false);
 
-		m_transformUi->setActive(true);
+		m_transformUi->activateChildren(true);
 		m_transformUi->setInvisible(false);
 
 		OEntity* entity = static_cast<OEntity*>(object);
@@ -1308,7 +1310,8 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 			m_entityLinearFactorEdit->setVector(*phys->getLinearFactor());
 
 			m_physicsUi->setInvisible(false);
-			m_physicsUi->setActive(true);
+			m_physicsUi->activateChildren(true);
+			m_physicsUi->setSize(m_physicsUi->calculateContentSize());
 
 			switch(phys->getCollisionShape())
 			{
@@ -1340,7 +1343,8 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 			{
 				m_entityConstraintButton->setValue(true);
 				m_constraintUi->setInvisible(false);
-				m_constraintUi->setActive(true);
+				m_constraintUi->activateChildren(true);
+				m_constraintUi->setSize(m_constraintUi->calculateContentSize());
 
 				m_entityConstraintParentNameEdit->setLabel(con->parentName.getSafeString());
 				m_entityPivotEdit->setVector(con->pivot);
@@ -1354,23 +1358,23 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 			{
 				m_entityConstraintButton->setValue(false);
 				m_constraintUi->setInvisible(true);
-				m_constraintUi->setActive(false);
+				m_constraintUi->activateChildren(false);
 			}
 		}
 		else
 		{
 			m_entityPhysicsButton->setValue(false);
 			m_physicsUi->setInvisible(true);
-			m_physicsUi->setActive(false);
+			m_physicsUi->activateChildren(false);
 		}
 	}
 	break;
 
 	case OBJECT3D_LIGHT: {
-		m_lightUi->setActive(true);
+		m_lightUi->activateChildren(true);
 		m_lightUi->setInvisible(false);
 
-		m_transformUi->setActive(true);
+		m_transformUi->activateChildren(true);
 		m_transformUi->setInvisible(false);
 
 		OLight* light = static_cast<OLight*>(object);
@@ -1388,10 +1392,10 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 	break;
 
 	case OBJECT3D_CAMERA: {
-		m_cameraUi->setActive(true);
+		m_cameraUi->activateChildren(true);
 		m_cameraUi->setInvisible(false);
 
-		m_transformUi->setActive(true);
+		m_transformUi->activateChildren(true);
 		m_transformUi->setInvisible(false);
 
 		OCamera* cam = static_cast<OCamera*>(object);
@@ -1410,10 +1414,10 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 	break;
 	
 	case OBJECT3D_SOUND: {
-		m_soundUi->setActive(true);
+		m_soundUi->activateChildren(true);
 		m_soundUi->setInvisible(false);
 
-		m_transformUi->setActive(true);
+		m_transformUi->activateChildren(true);
 		m_transformUi->setInvisible(false);
 
 		OSound* sound = static_cast<OSound*>(object);
@@ -1427,10 +1431,10 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 	break;
 
 	case OBJECT3D_TEXT: {
-		m_textUi->setActive(true);
+		m_textUi->activateChildren(true);
 		m_textUi->setInvisible(false);
 
-		m_transformUi->setActive(true);
+		m_transformUi->activateChildren(true);
 		m_transformUi->setInvisible(false);
 
 		OText* text = static_cast<OText*>(object);
