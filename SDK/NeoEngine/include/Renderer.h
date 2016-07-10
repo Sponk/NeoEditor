@@ -155,5 +155,60 @@ public:
 	virtual void startThreads() {}
 	virtual void KillThreads() {}
 };
+
+class RendererDummy : public Renderer
+{
+public:
+	virtual void destroy() override	{}
+	virtual void initialize() override {}
+	virtual const char* getName() override { return "DUMMY"; }
+	virtual void drawScene(Scene* scene, OCamera* camera) override {}
+	virtual void drawText(OText* text) override {}
+	virtual void drawEntity(OEntity* entity, OCamera* camera) override {}
+	virtual void drawColoredQuad(const Vector2& position,
+								 const Vector2& size,
+								 const Vector4& color,
+								 float rotation) override {}
+
+	virtual void drawTexturedQuad(const Vector2& position,
+								  const Vector2& size,
+								  int texture,
+								  float rotation,
+								  const Vector2& scale,
+								  const Vector2& flip,
+								  const Vector4& texcoords) override {}
+
+	virtual void drawTexturedQuad(const Vector2& position,
+								  const Vector2& size,
+								  int texture,
+								  float rotation,
+								  const Vector2& scale,
+								  const Vector2& flip) override {}
+
+	virtual void drawTexturedQuad(const Vector2& position,
+								  const Vector2& size,
+								  int texture,
+								  float rotation,
+								  const Vector2& scale) override {}
+
+	virtual void drawTexturedQuad(const Vector2& position, const Vector2& size, int texture, float rotation) override {}
+
+	virtual void set2D(const Vector2& size) override {}
+	virtual void stopThreads() override
+	{
+		Renderer::stopThreads();
+	}
+
+	virtual void startThreads() override
+	{
+		Renderer::startThreads();
+	}
+
+	virtual void KillThreads() override
+	{
+		Renderer::KillThreads();
+	}
+};
+
 }
 #endif

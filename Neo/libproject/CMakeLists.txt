@@ -9,3 +9,8 @@ include_directories(
 target_link_libraries(libproject
 		${SEXPRESSO_LIBRARIES}
 )
+
+if(NOT NO_TESTS)
+	add_executable(ProjectTest tests/main.cpp tests/ProjectTest.cpp)
+	target_link_libraries(ProjectTest libproject ${SEXPRESSO_LIBRARIES} ${NEO_CORE_LIBRARIES} ${GTEST_LIBRARIES})
+endif()

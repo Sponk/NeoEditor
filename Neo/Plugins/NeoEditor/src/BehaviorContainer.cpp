@@ -3,7 +3,7 @@
 #include <EditField.h>
 #include <CheckButton.h>
 #include <Translator.h>
-#include "VectorEdit.cpp"
+#include "VectorEdit.h"
 
 using namespace Neo;
 using namespace Neo2D;

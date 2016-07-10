@@ -24,10 +24,10 @@ bool ProjectBackend::createProject(const char* name, const char* path, const cha
     return result;
 }
 
-void ProjectBackend::removeProject(size_t id, bool deleteFiles)
+bool ProjectBackend::removeProject(size_t id, bool deleteFiles)
 {
 	if(id >= m_projects.size())
-		return;
+		return false;
 
 	const Project& p = m_projects[id];
 	if(deleteFiles)
@@ -37,6 +37,7 @@ void ProjectBackend::removeProject(size_t id, bool deleteFiles)
 	}
 
 	m_projects.erase(m_projects.begin() + id);
+	return true;
 }
 
 size_t ProjectBackend::importProject(const char* path)
@@ -58,11 +59,11 @@ std::string ProjectBackend::importTemplate(const char* path)
 	return p.getName();
 }
 
-void ProjectBackend::saveConfig(const char* path)
+bool ProjectBackend::saveConfig(const char* path)
 {
 	std::ofstream out(path);
 	if(!out)
-		return;
+		return false;
 
 	out << "(templates " << std::endl;
 
@@ -77,13 +78,14 @@ void ProjectBackend::saveConfig(const char* path)
 		out << "\t\"" << v.getFilePath() << "\"" << std::endl;
 	out << ")" << std::endl;
 	out.close();
+	return true;
 }
 
-void ProjectBackend::loadConfig(const char* path)
+bool ProjectBackend::loadConfig(const char* path)
 {
 	char* content = readTextFile(path);
 	if(!content)
-		return;
+		return false;
 
 	auto root = sexpresso::parse(content);
 	SAFE_DELETE(content);
@@ -92,7 +94,7 @@ void ProjectBackend::loadConfig(const char* path)
 	{
 		auto templates = root.getChildByPath("templates");
 		if (!templates)
-			return;
+			return false;
 
 		for (auto t : templates->arguments())
 			importTemplate(t.value.str.c_str());
@@ -102,11 +104,13 @@ void ProjectBackend::loadConfig(const char* path)
 	{
 		auto projects = root.getChildByPath("projects");
 		if (!projects)
-			return;
+			return false;
 
 		for (auto t : projects->arguments())
 			importProject(t.value.str.c_str());
 	}
+
+	return true;
 }
 
 ProjectBackend::ProjectBackend(const std::string& config)

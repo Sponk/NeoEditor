@@ -103,7 +103,6 @@ Neo2D::Gui::TreeView::TreeView(int x,
 void TreeView::update(float dt)
 {
 	Widget::update(dt);
-
 	if(m_rootNode)
 		m_rootNode->update(dt);
 }

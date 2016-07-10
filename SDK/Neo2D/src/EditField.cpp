@@ -6,19 +6,6 @@ using namespace Neo2D;
 using namespace Gui;
 using namespace Neo;
 
-static unsigned int characterSize(unsigned int c)
-{
-	if (c <= 0x7F)
-		return 1;
-	else if (c <= 0x7FF)
-		return 2;
-	else if (c <= 0xFFFF)
-		return 3;
-	else if (c <= 0x10FFFF)
-		return 4;
-}
-
-
 // Can't test rendering
 // LCOV_EXCL_START
 class EditFieldTheme : public Neo2D::Gui::Theme
@@ -126,7 +113,7 @@ public:
 				length.x = 0;
 				length.y++;
 			}
-			i += characterSize(character);
+			i += EditField::characterSize(character);
 		}
 
 		return length * text->getSize();
@@ -212,6 +199,20 @@ void Neo2D::Gui::EditField::init()
 	registerEvent(make_shared<CharacterInputEvent>(shared_from_this(), nullptr, nullptr));
 	registerEvent(make_shared<KeyRepeatEvent>(shared_from_this(), nullptr, nullptr));
 	registerEvent(make_shared<MouseDeselectEvent>(shared_from_this(), nullptr, nullptr));
+}
+
+unsigned int Neo2D::Gui::EditField::characterSize(unsigned int c)
+{
+	if (c <= 0x7F)
+		return 1;
+	else if (c <= 0x7FF)
+		return 2;
+	else if (c <= 0xFFFF)
+		return 3;
+	else if (c <= 0x10FFFF)
+		return 4;
+
+	return 0;
 }
 
 bool Neo2D::Gui::EditField::handle(const Event& e)

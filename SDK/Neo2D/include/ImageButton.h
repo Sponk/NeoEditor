@@ -15,6 +15,7 @@ namespace Gui
  */
 class NEO2D_EXPORT ImageButton : public Button
 {
+private:
 	Neo::Vector2 m_padding;
 	Sprite m_sprite;
 public:
@@ -32,6 +33,16 @@ public:
 		
 		m_sprite.setPosition(getPosition() + m_padding);
 		m_sprite.draw(offset);
+	}
+
+	const Neo::Vector2& getPadding() const
+	{
+		return m_padding;
+	}
+
+	void setPadding(const Neo::Vector2& padding)
+	{
+		m_padding = padding;
 	}
 };
 

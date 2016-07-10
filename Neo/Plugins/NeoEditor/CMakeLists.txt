@@ -1,37 +1,55 @@
 
-if(SWIG_FOUND)
-  add_swig_module(NeoEditor lua NeoEditor.i "")
-endif()
+set(SOURCES
+	src/Plugin.cpp
+	src/EditorGame.cpp
+	src/Tool.cpp
+	src/Sidepanel.cpp
+	src/NativeToolset.cpp
+	src/ExternalToolset.cpp
+	src/SceneView.cpp
+	src/BehaviorContainer.cpp
+	src/VectorEdit.cpp
+	src/UndoQueue.cpp
+	src/ColorEdit.cpp
+	src/Console.cpp
+)
 
-add_library(NeoEditor SHARED
-  ${NeoEditor_SOURCES}
-  src/LuaInterface.h
-  src/Plugin.cpp
-  src/EditorGame.cpp
-  src/EditorGame.h
-  src/Tool.cpp
-  src/Tool.h
-  src/Sidepanel.cpp
-  src/Sidepanel.h
-  src/NativeToolset.cpp
-  src/NativeToolset.h
-  src/ExternalToolset.cpp
-  src/ExternalToolset.h
-  src/SceneView.cpp
-  src/SceneView.h
-  src/VectorEdit.h
-  src/VectorEdit.cpp
-  src/UndoQueue.cpp
-  src/UndoQueue.h
-  src/ColorEdit.h
-  src/ColorEdit.cpp
-  src/Console.h
-  src/Console.cpp
-  src/BehaviorContainer.h
-  src/BehaviorContainer.cpp)
+set(INCLUDES
+	src/LuaInterface.h
+	src/EditorGame.h
+	src/Tool.h
+	src/Sidepanel.h
+	src/ExternalToolset.h
+	src/NativeToolset.h
+	src/SceneView.h
+	src/VectorEdit.h
+	src/Console.h
+	src/UndoQueue.h
+	src/ColorEdit.h
+	src/BehaviorContainer.h
+)
 
 if(SWIG_FOUND)
-  add_dependencies(NeoEditor NeoEditor-lua-swig)
+	set_source_files_properties(NeoEditor.i PROPERTIES CPLUSPLUS ON)
+	#SET_SOURCE_FILES_PROPERTIES(NeoEditor.i PROPERTIES SWIG_FLAGS -c++ -includeall -ignoremissing)
+
+	swig_add_module(NeoEditor lua NeoEditor.i ${SOURCES} ${INCLUDES})
+			target_link_libraries(NeoEditor
+			${NEO_CORE_LIBRARIES}
+			${NEO_ENGINE_LIBRARIES}
+			${NEO2D_LIBRARIES}
+			${SEXPRESSO_LIBRARIES}
+			libproject
+			${LUA_LIBRARIES})
+else()
+	add_library(NeoEditor SHARED ${SOURCES} ${INCLUDES})
+	target_link_libraries(NeoEditor
+			${NEO_CORE_LIBRARIES}
+			${NEO_ENGINE_LIBRARIES}
+			${NEO2D_LIBRARIES}
+			${SEXPRESSO_LIBRARIES}
+			libproject
+	)
 endif()
 
 include_directories(
@@ -44,16 +62,6 @@ include_directories(
 		${CMAKE_CURRENT_SOURCE_DIR}/src
 		${LUA_INCLUDE_DIR}
 )
-
-target_link_libraries(NeoEditor
-		${NEO_CORE_LIBRARIES}
-		${NEO_ENGINE_LIBRARIES}
-		${NEO2D_LIBRARIES}
-		${SEXPRESSO_LIBRARIES}
-		libproject
-		${LUA_LIBRARIES}
-)
-
 
 if(NOT NO_TESTS)
 	add_executable(NeoEditorTest tests/main.cpp tests/UndoQueueTest.cpp src/UndoQueue.cpp)

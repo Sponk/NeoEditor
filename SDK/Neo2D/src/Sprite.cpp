@@ -10,11 +10,14 @@ Sprite::Sprite(int x, int y, unsigned int w, unsigned int h, const char* image, 
 	loadTexture();
 }
 
+// Can't test rendering
+// LCOV_EXCL_START
 void Sprite::draw(const Neo::Vector2& offset)
 {
 	Neo::Renderer* render = Neo::NeoEngine::getInstance()->getRenderer();
 	render->drawTexturedQuad(getPosition() + offset, getSize(), m_image, getRotation(), Neo::Vector2(1,1), getFlip());
 }
+// LCOV_EXCL_STOP
 
 void Sprite::loadTexture()
 {

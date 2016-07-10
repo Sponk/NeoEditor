@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "../src/ProjectBackend.h"
 #include <NeoCore.h>
+#include <fstream>
 
 TEST(ProjectBackendTest, ImportTemplateTest)
 {
@@ -114,4 +115,79 @@ TEST(ProjectBackendTest, SaveLoadConfigTest)
 		EXPECT_EQ(1, b.getProjects().size());
 		EXPECT_EQ(1, b.getTemplates().size());
 	}
+}
+
+TEST(ProjectBackendTest, RemoveNonExistingTest)
+{
+	ProjectBackend b("./");
+	EXPECT_FALSE(b.removeProject(123, true));
+}
+
+TEST(ProjectBackendTest, CreateProjectNonExitingTemplateTest)
+{
+	ProjectBackend b("./");
+	EXPECT_FALSE(b.createProject("Test", "test_project", "NonExistingTemplate"));
+}
+
+TEST(ProjectBackendTest, ImportNonExistingTest)
+{
+	ProjectBackend b("./");
+	EXPECT_EQ(-1, b.importProject("NonExistingProject"));
+}
+
+TEST(ProjectBackendTest, LoadNonExistingConfig)
+{
+	ProjectBackend b("./");
+	EXPECT_FALSE(b.loadConfig("NonExistingConfig"));
+}
+
+TEST(ProjectBackendTest, LoadCorruptedConfig_no_root)
+{
+	// Create test data
+	{
+		ofstream out("broken_config.txt");
+		ASSERT_FALSE(!out);
+		out.close();
+	}
+
+	ProjectBackend b("./");
+	EXPECT_FALSE(b.loadConfig("broken_config.txt"));
+}
+
+TEST(ProjectBackendTest, LoadCorruptedConfig_no_templates)
+{
+	// Create test data
+	{
+		ofstream out("broken_config.txt");
+		ASSERT_FALSE(!out);
+
+		out << "(projects \"test\")";
+
+		out.close();
+	}
+
+	ProjectBackend b("./");
+	EXPECT_FALSE(b.loadConfig("broken_config.txt"));
+}
+
+TEST(ProjectBackendTest, LoadCorruptedConfig_no_projects)
+{
+	// Create test data
+	{
+		ofstream out("broken_config.txt");
+		ASSERT_FALSE(!out);
+
+		out << "(templates \"test\")";
+
+		out.close();
+	}
+
+	ProjectBackend b("./");
+	EXPECT_FALSE(b.loadConfig("broken_config.txt"));
+}
+
+TEST(ProjectBackendTest, SaveConfig_invalid_file)
+{
+	ProjectBackend b("./");
+	EXPECT_FALSE(b.saveConfig("NonExistingDirectory/broken.txt"));
 }

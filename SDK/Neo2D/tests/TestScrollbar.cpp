@@ -1,17 +1,22 @@
 #include <gtest/gtest.h>
 #include <Scrollbar.h>
 #include <CommonEvents.h>
+#include "InputContextFixture.h"
 
 using namespace Neo;
 using namespace Neo2D;
 using namespace Gui;
 
-class ScrollbarTest : public Scrollbar
+
+class ScrollbarTest: public InputContextFixture
+{};
+
+class TestScrollbar : public Scrollbar
 {
 public:
 
 	using Scrollbar::getKnob;
-	ScrollbarTest(int x,
+	TestScrollbar(int x,
 				  int y,
 				  unsigned int w,
 				  unsigned int h,
@@ -22,7 +27,7 @@ public:
 	{ }
 };
 
-TEST(ScrollbarTest, ValueTest)
+TEST_F(ScrollbarTest, ValueTest)
 {
 	auto sb = make_shared<Scrollbar>(0,0,100,100, nullptr, SCROLLBAR_HORIZONTAL, nullptr);
 
@@ -31,7 +36,7 @@ TEST(ScrollbarTest, ValueTest)
 	EXPECT_EQ(100, sb->getValue());
 }
 
-TEST(ScrollbarTest, DragTestHorizontal)
+TEST_F(ScrollbarTest, DragTestHorizontal)
 {
 	auto sb = make_shared<Scrollbar>(0,0,100,100, nullptr, SCROLLBAR_HORIZONTAL, nullptr);
 	sb->setRange(Neo::Vector2(0, 200));
@@ -45,7 +50,7 @@ TEST(ScrollbarTest, DragTestHorizontal)
 	EXPECT_EQ(100, sb->getValue());
 }
 
-TEST(ScrollbarTest, DragTestVertical)
+TEST_F(ScrollbarTest, DragTestVertical)
 {
 	auto sb = make_shared<Scrollbar>(0,0,100,100, nullptr, SCROLLBAR_VERTICAL, nullptr);
 	sb->setRange(Neo::Vector2(0, 200));
@@ -59,7 +64,7 @@ TEST(ScrollbarTest, DragTestVertical)
 	EXPECT_EQ(20, sb->getValue());
 }
 
-TEST(ScrollbarTest, DISABLED_DeselectTest)
+TEST_F(ScrollbarTest, DISABLED_DeselectTest)
 {
 	auto sb = make_shared<Scrollbar>(0,0,100,100, nullptr, SCROLLBAR_VERTICAL, nullptr);
 	sb->setRange(Neo::Vector2(0, 200));
@@ -75,16 +80,45 @@ TEST(ScrollbarTest, DISABLED_DeselectTest)
 	EXPECT_EQ(WIDGET_NORMAL, sb->getState());
 }
 
-TEST(ScrollbarTest, KnobSizeSmallerTest)
+TEST_F(ScrollbarTest, KnobSizeSmallerTest)
 {
-	auto sb = make_shared<ScrollbarTest>(0,0,100,100,nullptr,nullptr);
+	auto sb = make_shared<TestScrollbar>(0,0,100,100,nullptr,nullptr);
 	sb->setRange(Neo::Vector2(0, 200));
 	EXPECT_EQ(50, sb->calculateKnobsize());
 }
 
-TEST(ScrollbarTest, KnobSizeBiggerTest)
+TEST_F(ScrollbarTest, KnobSizeBiggerTest)
 {
-	auto sb = make_shared<ScrollbarTest>(0,0,100,100,nullptr,nullptr);
+	auto sb = make_shared<TestScrollbar>(0,0,100,100,nullptr,nullptr);
 	sb->setRange(Neo::Vector2(0, 50));
 	EXPECT_EQ(100, sb->calculateKnobsize());
+}
+
+TEST_F(ScrollbarTest, MoveNotSelected)
+{
+	auto sb = make_shared<TestScrollbar>(0,0,100,100, nullptr, nullptr);
+	m_mouse.moveCursor(Vector2(10,10));
+	m_mouse.flushDirection();
+	sb->update(0);
+
+	EXPECT_EQ(0, sb->getValue());
+}
+
+TEST_F(ScrollbarTest, SelectMoveDeselect)
+{
+	auto sb = make_shared<TestScrollbar>(0,0,100,100, nullptr, nullptr);
+	sb->setRange(Neo::Vector2(0, 200));
+	sb->setDirection(SCROLLBAR_VERTICAL);
+
+	m_mouse.keyDown(MOUSE_BUTTON_LEFT);
+	sb->update(0);
+	EXPECT_EQ(WIDGET_SELECTED, sb->getState());
+
+	m_mouse.moveCursor(Vector2(5,5));
+	sb->update(0);
+	EXPECT_EQ(10, sb->getValue());
+
+	m_mouse.keyUp(MOUSE_BUTTON_LEFT);
+	sb->update(0);
+	EXPECT_EQ(WIDGET_NORMAL, sb->getState());
 }

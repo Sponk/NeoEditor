@@ -17,6 +17,7 @@ Neo2D::Gui::CheckButton::CheckButton(int x, int y, unsigned int w, unsigned int 
 	}, this);
 }
 
+// LCOV_EXCL_START
 void Neo2D::Gui::CheckButton::draw(const Neo::Vector2& offset)
 {
 	if(getValue())
@@ -29,6 +30,7 @@ void Neo2D::Gui::CheckButton::draw(const Neo::Vector2& offset)
 	m_label->setLabel(getLabel());
 	m_label->draw(offset + Neo::Vector2(3, getSize().y * 0.25));
 }
+// LCOV_EXCL_STOP
 
 void Neo2D::Gui::CheckButton::update(float dt)
 {

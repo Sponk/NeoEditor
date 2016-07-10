@@ -54,7 +54,7 @@ public:
 	 *
 	 * @param dt The frame delta time.
 	 */
-	virtual void update(float dt) = 0;
+	virtual void update(float dt) { reject(); }
 
 	/**
 	 * @brief Notifies the parent widget about an event and calls the callback.

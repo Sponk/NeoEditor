@@ -20,12 +20,12 @@ public:
 	ProjectBackend() {}
 
     bool createProject(const char* name, const char* path, const char* templ);
-	void removeProject(size_t id, bool deleteFiles = false);
+	bool removeProject(size_t id, bool deleteFiles = false);
 	size_t importProject(const char* path);
 	std::string importTemplate(const char* path);
 
-	void saveConfig(const char* path);
-	void loadConfig(const char* path);
+	bool saveConfig(const char* path);
+	bool loadConfig(const char* path);
 
 	std::vector<Project>& getProjects()
 	{

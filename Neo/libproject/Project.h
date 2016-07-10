@@ -52,7 +52,9 @@ public:
 	 * @return A boolean value representing success.
 	 */
 	bool load(const char* path);
-	
+
+	// Won't test getters and setters.
+	// LCOV_EXCL_START
 	const std::string& getName() const { return m_name; }
 	const std::string& getVersion() const { return m_version; }
 	const std::string& getAuthor() const { return m_author; }
@@ -64,7 +66,8 @@ public:
 	const std::string& getFilePath() const { return m_filepath; }
 	const std::string& getAssetDirectory() const { return m_assets; }
 	const std::string& getDescription() const { return m_description; }
-	const std::vector<std::string>& getPlugins() const { return m_plugins; }
+	std::vector<std::string>& getPlugins() { return m_plugins; }
+	// LCOV_EXCL_STOP
 };
 
 #endif

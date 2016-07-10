@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <Button.h>
+#include <ImageButton.h>
 #include <NeoCore.h>
 
 using namespace Neo;
@@ -41,4 +42,10 @@ TEST(ButtonTest, CallbackTest)
 	btn->update(0.0);
 
 	ASSERT_EQ(1, callbackCounter);
+}
+
+TEST(ImageButtonTest, Padding)
+{
+	ImageButton btn(0,0,10,10,"", nullptr);
+	EXPECT_EQ(Vector2(0.5,0.5), btn.getPadding());
 }

@@ -30,7 +30,10 @@ IF("${FORCE_LOCAL_SDL}" STREQUAL "")
 ENDIF()
 
 ## SWIG for script bindings
-FIND_PACKAGE(SWIG)
+FIND_PACKAGE(SWIG REQUIRED)
+
+INCLUDE(${SWIG_USE_FILE})
+SET(CMAKE_SWIG_FLAGS "")
 
 if(USE_JAVA)
     set(Java_FOUND FALSE)
@@ -280,14 +283,16 @@ IF(UNIX AND NOT APPLE AND NOT ANDROID AND NOT EMSCRIPTEN)
   SET(ZLIB_LIBRARY "zlib")
 
   SET(NEO_BUILD_FLAGS "")
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${NEO_BUILD_FLAGS} -O3 -fPIC -DLINUX -pthread -ftls-model=global-dynamic")
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${NEO_BUILD_FLAGS} -fPIC -DLINUX -pthread -ftls-model=global-dynamic")
   SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -D__Debug__ -pthread -Og -ftls-model=global-dynamic")
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NEO_BUILD_FLAGS} -O3 -fPIC -DLINUX -pthread -std=c++11 -Wno-c++11-narrowing -ftls-model=global-dynamic")
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NEO_BUILD_FLAGS} -fPIC -DLINUX -pthread -std=c++11 -Wno-c++11-narrowing -ftls-model=global-dynamic")
   SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -D__Debug__ -pthread -std=c++11 -Og -Wno-c++11-narrowing -ftls-model=global-dynamic")
   SET(CMAKE_SHARED_LINKER_FLAGS "-ldl -Wl,--as-needed,--allow-multiple-definition,--build-id,-rpath .")
-
   SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -lm -ldl -Wl,--allow-multiple-definition,-rpath . -ftls-model=global-dynamic")
-  
+
+  SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
+  SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3")
+
   IF(${USE_GCOV})
 	SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 --coverage")
 	SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0 --coverage")
@@ -523,10 +528,12 @@ IF(NOT NO_TESTS)
 
   
   IF(USE_GCOV)
+    set(CMAKE_BUILD_TYPE "Debug")
+
 	## Generate HTML report
 	ADD_CUSTOM_TARGET(coverage
 	  COMMAND
-	  lcov --directory ./SDK/ --rc lcov_branch_coverage=1 --directory ./Neo/Plugins --zerocounters -q
+	  lcov --directory ./SDK/ --directory ./Neo --zerocounters -q
 
 	  &&
 	  ${NEO_BINARY_OUTPUT}/Neo2DTest &&
@@ -534,19 +541,20 @@ IF(NOT NO_TESTS)
 	  ${NEO_BINARY_OUTPUT}/NeoEngineTest &&
 	  ${NEO_BINARY_OUTPUT}/AssetLoadingTest &&
 	  ${NEO_BINARY_OUTPUT}/NeoEditorTest &&
-	  ${NEO_BINARY_OUTPUT}/ProjectManagerTest
+	  ${NEO_BINARY_OUTPUT}/ProjectManagerTest &&
+      ${NEO_BINARY_OUTPUT}/ProjectTest
 	  
 	  &&
-	  lcov --directory --rc lcov_branch_coverage=1 ./SDK --directory ./Neo/Plugins -c -o coverage.info
+	  lcov --directory --rc lcov_branch_coverage=1 ./SDK --directory ./Neo -c -o coverage.info
 	  
 	  &&
-	  lcov --rc lcov_branch_coverage=1 --remove coverage.info *sexpresso* *usr* *tinyutf8* *utfcpp* *3rdparty* *tests* *gtest* -o coverage.info
+	  lcov --rc lcov_branch_coverage=1 --remove coverage.info *csv.h* *sexpresso* *usr* *tinyutf8* *utfcpp* *3rdparty* *tests* *gtest* -o coverage.info
 	  
 	  &&
 	  rm -rf ${CMAKE_BINARY_DIR}/TestCoverage
 
 	  &&
-	  genhtml --branch-coverage --prefix ${CMAKE_SOURCE_DIR} -o ${DOCUMENTATION_BINARY_DIR}/Developer/html/TestCoverage -t "Neo Test Coverage" --num-spaces 4 coverage.info
+	  genhtml --highlight --legend --branch-coverage --prefix ${CMAKE_SOURCE_DIR} -o ${DOCUMENTATION_BINARY_DIR}/Developer/html/TestCoverage -t "Neo Test Coverage" --num-spaces 4 coverage.info
 
 	  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 	  )

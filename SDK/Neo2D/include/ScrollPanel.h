@@ -15,6 +15,7 @@ namespace Gui
  */
 class NEO2D_EXPORT ScrollPanel : public Container
 {
+protected:
 	Scrollbar verticalScroll, horizontalScroll;
 	Neo::Vector2 lastOffset;
 

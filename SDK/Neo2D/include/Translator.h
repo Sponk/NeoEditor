@@ -22,6 +22,8 @@ namespace Gui
  */
 class NEO2D_EXPORT Translator
 {
+	static std::unordered_map<std::string, std::string> m_strings;
+
 public:
 	/**
 	 * @brief Translates a given string into another one.
@@ -37,8 +39,14 @@ public:
 	 * The values have to be seperated by the tab character ('\t').
 	 *
 	 * @param path The file to load.
+	 * @return Success.
 	 */
-	static void loadTranslation(const char* path);
+	static bool loadTranslation(const char* path);
+
+	static void clear()
+	{
+		m_strings.clear();
+	}
 };
 
 }

@@ -288,7 +288,9 @@ private:
 	Mouse m_mouse;
 
 protected:
+#ifndef SWIG
 	std::vector<std::shared_ptr<Neo::AxisInputDevice>> m_controllers;
+#endif
 
 public:
 	Keyboard& getKeyboard() { return m_keyboard; }

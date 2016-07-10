@@ -6,7 +6,8 @@
 using namespace Neo2D;
 using namespace Gui;
 
-static std::unordered_map<std::string, std::string> m_strings;
+std::unordered_map<std::string, std::string> Translator::m_strings;
+
 const char* Translator::translate(const char* s)
 {
 	auto iter = m_strings.find(s);
@@ -16,15 +17,23 @@ const char* Translator::translate(const char* s)
 	return iter->second.c_str();
 }
 
-void Translator::loadTranslation(const char* path)
+bool Translator::loadTranslation(const char* path)
 {
-	io::CSVReader<2, io::trim_chars<>, io::no_quote_escape<'\t'>> in(path);
-	//in.read_header(io::ignore_missing_column, "key", "translation");
-
-	std::string key, value;
-	while(in.read_row(key, value))
+	try
 	{
-		m_strings[key] = value;
-		value.clear();
+		io::CSVReader<2, io::trim_chars<>, io::no_quote_escape<'\t'>> in(path);
+
+		std::string key, value;
+		while(in.read_row(key, value))
+		{
+			m_strings[key] = value;
+			value.clear();
+		}
 	}
+	catch(std::exception& e)
+	{
+		return false;
+	}
+
+	return true;
 }

@@ -44,6 +44,7 @@ void Neo2D::Gui::ScrollPanel::updateScrollbarPlacement()
 	}
 }
 
+// LCOV_EXCL_START
 void Neo2D::Gui::ScrollPanel::draw(const Neo::Vector2& offset)
 {
 	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
@@ -68,6 +69,7 @@ void Neo2D::Gui::ScrollPanel::draw(const Neo::Vector2& offset)
 	horizontalScroll.draw(offset);
 	verticalScroll.draw(offset);
 }
+// LCOV_EXCL_STOP
 
 void Neo2D::Gui::ScrollPanel::update(float dt)
 {
