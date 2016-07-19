@@ -24,6 +24,7 @@
 #include <Toolbar.h>
 #include <Translator.h>
 #include <TreeView.h>
+#include <SwigCasts.h>
 
 using namespace Neo2D;
 using namespace Gui;
@@ -44,6 +45,21 @@ using namespace Gui;
 		return make_shared<type>(x,y,w,h,label,parent);
 	}
 };
+
+/*%typemap(in) shared_ptr<Neo2D::Object2D>* {
+
+  if(SWIG_ConvertPtr(L, $input, (void **) &$1, $1_descriptor, 0) == -1)
+  {
+     type* temp;
+     if (SWIG_ConvertPtr(L, $input, (void **) &temp, $descriptor(type*), 0) == -1)
+     {
+     	std::cerr << "Error: Could not cast " << $1_descriptor << " to shared_ptr<Object2D>!" << std::endl;
+        return 0;
+     }
+     $1 = (type*) temp;
+  }
+}*/
+
 %enddef
 
 // Define skeleton for shared_ptr
@@ -74,6 +90,8 @@ MAKE_SHARED_WIDGET(Neo2D::Gui::EditField)
 MAKE_SHARED_WIDGET(Neo2D::Gui::ImageButton)
 MAKE_SHARED_WIDGET(Neo2D::Gui::Label)
 MAKE_SHARED_WIDGET(Neo2D::Sprite)
+
+%include "SwigCasts.h"
 
 %extend Neo2D::Object2D {
 	%newobject makeShared;
