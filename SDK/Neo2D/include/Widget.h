@@ -45,6 +45,8 @@ class NEO2D_EXPORT Widget : public Object2D, public enable_shared_from_this<Widg
 	shared_ptr<Theme> m_theme;
 	WIDGET_STATE m_state;
 
+	// A string to reference a script function name
+	std::string m_scriptCallback;
 	std::function<void(Widget&, void*)> m_callback;
 	void* m_data;
 
@@ -140,6 +142,9 @@ public:
 	 */
 	void setLabel(const char* label) { m_label = label; }
 
+	void setScriptCallback(const char* str) { m_scriptCallback = str; }
+	const char* getScriptCallback() { return m_scriptCallback.c_str(); }
+
 protected:
 
 	/**
@@ -147,7 +152,7 @@ protected:
 	 * @param s The new state.
 	 */
 	void setState(WIDGET_STATE s) { m_state = s; }
-
+public:
 	/**
 	 * @brief Executes the callback if one is set.
 	 */

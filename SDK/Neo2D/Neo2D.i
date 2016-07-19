@@ -30,6 +30,7 @@ using namespace Gui;
 
 %}
 
+%include <std_vector.i>
 #define NEO2D_EXPORT
 
 // Expects the argument to disown like "Type* name"
@@ -42,7 +43,7 @@ using namespace Gui;
 											const shared_ptr<Object2D>& parent) {
 		return make_shared<type>(x,y,w,h,label,parent);
 	}
-}
+};
 %enddef
 
 // Define skeleton for shared_ptr
@@ -56,7 +57,6 @@ class shared_ptr
     void reset();
     T* get() const;
 };
-
 
 %template(SharedObject2D) shared_ptr<Neo2D::Object2D>;
 %template(SharedWidget) shared_ptr<Neo2D::Gui::Widget>;
@@ -86,10 +86,50 @@ MAKE_SHARED_WIDGET(Neo2D::Sprite)
 %extend Neo2D::Gui::Container {
 	%newobject makeShared;
 	static shared_ptr<Neo2D::Gui::Container> makeShared(int x, int y, unsigned int w, unsigned int h,
-											const shared_ptr<Object2D>& parent) {
+											const shared_ptr<Object2D>& parent)
+	{
 		return make_shared<Neo2D::Gui::Container>(x,y,w,h,parent);
 	}
-}
+};
+
+%ignore Neo2D::Gui::Widget::setCallback(std::function<Neo2D::Gui::Widget&, void*>);
+
+#ifdef SWIGLUA
+%header %{
+lua_State* g_GlobalLuaState = 0;
+%}
+
+%init %{
+g_GlobalLuaState = L;
+%}
+
+%extend Neo2D::Gui::Widget {
+	void Neo2D::Gui::Widget::setCallback(const char* luaFunction)
+	{
+		lua_State* L = g_GlobalLuaState;
+
+		$self->setScriptCallback(luaFunction);
+		$self->setCallback([$self] (Neo2D::Gui::Widget& w, void* state) {
+
+			lua_State* L = (lua_State*) state;
+			lua_getglobal(L, w.getScriptCallback());
+
+            if(!lua_isfunction(L, -1))
+            {
+            	lua_pop(L, 1);
+            	std::cerr << "Error: Could not execute callback " << w.getScriptCallback() << " because it does not exist!" << std::endl;
+            	return;
+            }
+
+			if(lua_pcall(L, 0, 0, 0) != 0)
+            {
+            	std::cerr << lua_tostring(L, -1) << std::endl;
+            	return;
+            }
+		}, L);
+	}
+};
+#endif
 
 %include "include/Neo2D.h"
 %include "include/Object2D.h"
@@ -116,5 +156,4 @@ MAKE_SHARED_WIDGET(Neo2D::Sprite)
 %include "include/Translator.h"
 %include "include/TreeView.h"
 %include "include/Container.h"
-
 %include "include/Canvas.h"
