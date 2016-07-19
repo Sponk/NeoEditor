@@ -152,7 +152,7 @@ protected:
 	 * @param s The new state.
 	 */
 	void setState(WIDGET_STATE s) { m_state = s; }
-public:
+
 	/**
 	 * @brief Executes the callback if one is set.
 	 */
