@@ -563,10 +563,19 @@ void EditorGame::onBegin()
 				w.setLabel(tr("Disable Snap to Grid"));
 			}
 		});
-	
-	/*editmenu->addItem("Object Local Transformation", [this](Widget&, void*) {
-			m_sceneView->setObjectLocal(true);
-			});*/
+
+	editmenu->addItem("Enable Snap to Ground", [this](Widget& w, void*) {
+		if(m_sceneView->isSnapToGround())
+		{
+			m_sceneView->enableSnapToGround(false);
+			w.setLabel(tr("Enable Snap to Ground"));
+		}
+		else
+		{
+			m_sceneView->enableSnapToGround(true);
+			w.setLabel(tr("Disable Snap to Ground"));
+		}
+	});
 
 	viewmenu->addItem(tr("Hide Console"), [this](Widget&, void*) {
 			bool newval = m_bottomPanel->isActive();
