@@ -583,6 +583,21 @@ void EditorGame::onBegin()
 			m_bottomPanel->setInvisible(newval);
 		});
 
+	viewmenu->addItem(tr("Ortho View"), [this](Widget& w, void*) {
+		auto cam = m_sceneView->getCamera();
+		if(cam->isOrtho())
+		{
+			w.setLabel(tr("Ortho View"));
+			cam->enableOrtho(false);
+		}
+		else
+		{
+			w.setLabel(tr("Perspective View"));
+			cam->enableOrtho(true);
+			cam->setEulerRotation(Vector3(0,0,0));
+		}
+	});
+
 	objectmenu->addItem(tr("Add Behavior"), [this](Widget&, void*) {
 			if(!m_sceneView->getSelection().size())
 				return;

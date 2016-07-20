@@ -95,6 +95,7 @@ public:
 	virtual void draw(const Neo::Vector2& offset);
 	virtual void update(float dt);
 	void resetCamera();
+	Neo::OCamera* getCamera() { return &m_camera; }
 
 	bool isSnapToGround() const { return m_snapToGround; }
 	void enableSnapToGround(bool value) { m_snapToGround = value; }

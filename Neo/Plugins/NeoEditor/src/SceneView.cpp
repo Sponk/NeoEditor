@@ -213,7 +213,7 @@ void SceneView::rotationHandle(OEntity* handleEntity, const Vector3& axis, const
 
 	Vector2 oldpos = mousepos - mousedir;
 
-	float distance = (m_camera.getPosition() - getSelectionCenter()).getLength();
+	float distance = m_camera.isOrtho() ? 1.0f : (m_camera.getPosition() - getSelectionCenter()).getLength();
 	Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
 	Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
 
@@ -261,7 +261,7 @@ void SceneView::scaleHandle(OEntity* handleEntity, const Vector3& axis, const Ve
 
 	Vector2 oldpos = mousepos - mousedir;
 
-	float distance = (m_camera.getPosition() - getSelectionCenter()).getLength();
+	float distance = m_camera.isOrtho() ? 1.0f : (m_camera.getPosition() - getSelectionCenter()).getLength();
 	Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
 	Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
 
@@ -294,11 +294,11 @@ void SceneView::translationHandle(OEntity* handleEntity, const Vector3& axis, co
 
 	// Grab handles
 	m_currentHandles->grabbed = handleEntity;
-	
 	Vector2 oldpos = mousepos - mousedir;
 
 	Vector3 selectionCenter = getSelectionCenter();
-	float distance = (m_camera.getPosition() - selectionCenter).getLength();
+
+	float distance = m_camera.isOrtho() ? 1.0f : (m_camera.getPosition() - selectionCenter).getLength();
 	Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
 	Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
 	Vector3 vec = (p1 - p2) * distance * axis;
@@ -551,7 +551,10 @@ bool SceneView::handle(const Neo2D::Gui::Event& e)
 void SceneView::update(float dt)
 {
 	Neo2D::Gui::Widget::update(dt);
-	Vector3 scale = (m_camera.getPosition() - getSelectionCenter()).getLength() * 0.0075;
+	Vector3 scale = m_camera.isOrtho() ?
+					Vector3(1,1,1) * 0.75
+				   : (m_camera.getPosition() - getSelectionCenter()).getLength() * 0.0075;
+
 	m_currentHandles->setScale(scale);
 	m_currentHandles->setPosition(getSelectionCenter());
 
