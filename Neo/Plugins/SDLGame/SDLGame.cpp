@@ -64,18 +64,8 @@ void SDLGame::onBegin()
 
 	NeoEngine* engine = NeoEngine::getInstance();
 	engine->setLevel(new Level);
-	//engine->getLevel()->addNewScene();
-	//getGlobalFilename(scriptfile, engine->getSystemContext()->getWorkingDirectory(), "assets/game.lua");
-
 	engine->getSystemContext()->setScreenSize(width, height);
-	engine->getRenderer()->initialize();
 	NeoGame::onBegin();
-
-	//char scriptfile[512];
-	//getGlobalFilename(scriptfile, engine->getSystemContext()->getWorkingDirectory(), "assets/levels/test.level");
-	//engine->loadLevel(scriptfile);
-
-	//engine->getScriptContext()->runScript(scriptfile);
 }
 
 void SDLGame::onEnd()
