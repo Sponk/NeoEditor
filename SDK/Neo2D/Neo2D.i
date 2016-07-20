@@ -33,6 +33,7 @@ using namespace Gui;
 
 %include <std_vector.i>
 #define NEO2D_EXPORT
+#define override // For older versions of SWIG
 
 // Expects the argument to disown like "Type* name"
 #define DISOWN(a) %apply SWIGTYPE* DISOWN {a};
