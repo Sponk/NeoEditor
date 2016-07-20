@@ -49,7 +49,7 @@ IF(${SWIG_FOUND})
   endif(${CSHARP_FOUND})
 
   EXECUTE_PROCESS(
-	COMMAND ${SWIG_EXECUTABLE} -lua -c++ -includeall -ignoremissing -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR} -o ${CMAKE_CURRENT_BINARY_DIR}/NeoEngineLua_wrap.cxx
+	COMMAND ${SWIG_EXECUTABLE} -lua -c++ -Doverride -includeall -ignoremissing -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR} -o ${CMAKE_CURRENT_BINARY_DIR}/NeoEngineLua_wrap.cxx
 		  ${CMAKE_CURRENT_SOURCE_DIR}/NeoEngineLua.i
 	
 	OUTPUT_VARIABLE SWIG_swiglib_output
