@@ -26,7 +26,7 @@ IF(${SWIG_FOUND})
 		  set(DLLIMPORT -dllimport NeoSharpNativeEngine.so)
 	  endif()
 
-	  set(SWIG_ARGS -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR} ${DLLIMPORT})
+	  set(SWIG_ARGS -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR} ${DLLIMPORT} -Doverride)
 	  add_swig_module(NeoSharpEngine csharp NeoSharpEngine.i "${SWIG_ARGS}")
 	  add_custom_target(build-neo-sharp-engine ALL ${CSHARP_COMPILER} -t:library -out:${NEO_BINARY_OUTPUT}/NeoSharpEngine.dll ${NeoSharpEngine_OUTDIR}/*.cs)
 
@@ -58,13 +58,13 @@ IF(${SWIG_FOUND})
 	)
 
   ADD_CUSTOM_TARGET(neo-engine-lua-swig ALL
-    COMMAND ${SWIG_EXECUTABLE} -lua -includeall -ignoremissing -c++ -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR} -o ${CMAKE_CURRENT_BINARY_DIR}/NeoEngineLua_wrap.cxx
+    COMMAND ${SWIG_EXECUTABLE} -lua -includeall -Doverride -ignoremissing -c++ -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR} -o ${CMAKE_CURRENT_BINARY_DIR}/NeoEngineLua_wrap.cxx
 		  ${CMAKE_CURRENT_SOURCE_DIR}/NeoEngineLua.i
 	)
 
   IF(${Java_FOUND} AND ${JNI_FOUND})
 	  EXECUTE_PROCESS(
-			  COMMAND ${SWIG_EXECUTABLE} -java -c++ -includeall -ignoremissing -outdir ${JAVA_OUTPUT} -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR}
+			  COMMAND ${SWIG_EXECUTABLE} -Doverride -java -c++ -includeall -ignoremissing -outdir ${JAVA_OUTPUT} -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR}
 			  -o ${CMAKE_CURRENT_BINARY_DIR}/NeoEngineJava_wrap.cxx -package NeoEngine -DSWIG_JAVA
 			  ${CMAKE_CURRENT_SOURCE_DIR}/NeoEngineJava.i
 			  OUTPUT_VARIABLE SWIG_swiglib_output
@@ -73,7 +73,7 @@ IF(${SWIG_FOUND})
 	  )
 
 	  ADD_CUSTOM_TARGET(neo-engine-java-swig ALL
-			  COMMAND ${SWIG_EXECUTABLE} -java -includeall -ignoremissing -c++ -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR} -outdir ${JAVA_OUTPUT}
+			  COMMAND ${SWIG_EXECUTABLE} -java -Doverride -includeall -ignoremissing -c++ -I${NEO_CORE_INCLUDE_DIR} -I${NEO_ENGINE_INCLUDE_DIR} -outdir ${JAVA_OUTPUT}
 			  -o ${CMAKE_CURRENT_BINARY_DIR}/NeoEngineJava_wrap.cxx -package NeoEngine -DSWIG_JAVA
 			  ${CMAKE_CURRENT_SOURCE_DIR}/NeoEngineJava.i
 			  )
