@@ -2,6 +2,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_library(libproject STATIC Project.cpp Project.h)
 
 include_directories(
+		${GTEST_INCLUDE_DIR}
 		${SEXPRESSO_INCLUDE_DIR}
 		${NEO_CORE_INCLUDE_DIR}
 )

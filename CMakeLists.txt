@@ -525,7 +525,7 @@ IF(NOT NO_TESTS)
   add_test(NAME AssetLoading_test COMMAND AssetLoadingTest)
   add_test(NAME NeoEditor_test COMMAND NeoEditorTest)
   add_test(NAME ProjectManager_test COMMAND ProjectManagerTest)
-
+  add_test(NAME Project_test COMMAND ProjectTest)
   
   IF(USE_GCOV)
     set(CMAKE_BUILD_TYPE "Debug")
@@ -542,7 +542,7 @@ IF(NOT NO_TESTS)
 	  ${NEO_BINARY_OUTPUT}/AssetLoadingTest &&
 	  ${NEO_BINARY_OUTPUT}/NeoEditorTest &&
 	  ${NEO_BINARY_OUTPUT}/ProjectManagerTest &&
-      ${NEO_BINARY_OUTPUT}/ProjectTest
+	  ${NEO_BINARY_OUTPUT}/ProjectTest
 	  
 	  &&
 	  lcov --directory --rc lcov_branch_coverage=1 ./SDK --directory ./Neo -c -o coverage.info
