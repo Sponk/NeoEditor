@@ -20,7 +20,7 @@ public:
 	SubmenuTheme()
 	{
 		text = Neo2D::Neo2DLevel::getInstance()->createText("assets/default.ttf", 12);
-		text->setAlign(TEXT_ALIGN_CENTER);
+		text->setAlign(TEXT_ALIGN_LEFT);
 	}
 
 	virtual void draw(Neo2D::Gui::Widget* widget, const Neo::Vector2& offset)
@@ -40,7 +40,7 @@ public:
 				renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(3,3), Vector4(0.0, 0.0, 0.8, 1), 0);
 
 				text->setColor(Vector4(1.0,1.0,1.0,1.0));
-				draw2DText(text, position.x  + 0.5f * widget->getSize().x,
+				draw2DText(text, position.x  + 0.1f * widget->getSize().x,
 						   position.y + text->getSize() * 1.25, 0.0f);
 
 				break;
@@ -52,7 +52,7 @@ public:
 				renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(3,3), Vector4(0.8, 0.8, 0.8, 1), 0);
 
 				text->setColor(Vector4(0.0,0.0,0.0,1.0));
-				draw2DText(text, position.x  + 0.5f * widget->getSize().x,
+				draw2DText(text, position.x  + 0.1f * widget->getSize().x,
 						   position.y + text->getSize() * 1.25, 0.0f);
 
 				break;
@@ -64,7 +64,7 @@ public:
 				renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(3,3), Vector4(0.0, 0.0, 0.8, 1), 0);
 
 				text->setColor(Vector4(1.0,1.0,1.0,1.0));
-				draw2DText(text, position.x  + 0.51f * widget->getSize().x,
+				draw2DText(text, position.x  + 0.12f * widget->getSize().x,
 						   position.y + text->getSize() * 1.25 + 0.1f * widget->getSize().y, 0.0f);
 
 				break;
