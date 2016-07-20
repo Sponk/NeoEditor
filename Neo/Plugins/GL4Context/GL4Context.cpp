@@ -313,7 +313,7 @@ void GL4Context::init()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	// line
-	glLineWidth(1.25f);
+	glLineWidth(1.0f);
 
 	// stencil
 	glClearStencil(0);
@@ -592,17 +592,18 @@ void GL4Context::texImage(unsigned int level, unsigned int width, unsigned int h
 		return;
 	}
 
+	if(level > 0)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy); // anisotropic filtering
+
     glTexImage2D(GL_TEXTURE_2D, level, intFormat, width, height, 0, format, returnGLType(type), pixels);
-    if(level > 0)
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy); // anisotropic filtering
 }
 
 void GL4Context::texSubImage(unsigned int level, int xoffset, int yoffset, unsigned int width, unsigned int height, VAR_TYPES type, TEX_MODES mode, const void * pixels)
 {
     GLenum format = returnTexMode(mode);
-    glTexSubImage2D(GL_TEXTURE_2D, level, xoffset, yoffset, width, height, format, returnGLType(type), pixels);
-    if(level > 0)
+	if(level > 0)
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy); // anisotropic filtering
+	glTexSubImage2D(GL_TEXTURE_2D, level, xoffset, yoffset, width, height, format, returnGLType(type), pixels);
 }
 
 void GL4Context::generateMipMap(void)
