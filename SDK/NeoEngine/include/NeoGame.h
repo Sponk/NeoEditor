@@ -95,6 +95,13 @@ public:
 
 	// events
 	virtual void update(void);
+
+	/**
+	 * @brief Draws the game.
+	 *
+	 * Keep in mind that this method needs to be called between startFrame and endFrame
+	 * for the frame to show up correctly.
+	 */
 	virtual void draw(void);
 
 	/**
@@ -107,8 +114,8 @@ public:
 	 */
 	virtual void onEnd(void);
 
-	virtual void onBeginLevel(void) { }
-	virtual void onEndLevel(void){}
+	virtual void onBeginLevel(void) {}
+	virtual void onEndLevel(void) {}
 
 	virtual void onBeginScene(void);
 	virtual void onEndScene(void);
@@ -124,6 +131,18 @@ public:
 		if(g)
 			m_subGames.push_back(g);
 	}
+
+	/**
+	 * @brief Prepares the graphics system for the next frame.
+	 */
+	virtual void startFrame() {}
+
+	/**
+	 * @brief Finalizes the current frame and shows the result on the screen.
+	 *
+	 * Swaps buffers on systems with double buffering.
+	 */
+	virtual void endFrame() {}
 };
 }
 #endif

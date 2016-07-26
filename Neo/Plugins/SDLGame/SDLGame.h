@@ -18,6 +18,9 @@ public:
 	void draw();
 
 	SDL_Window* getSDLWindow() const { return m_window; }
+
+	virtual void startFrame() override {}
+	virtual void endFrame() override { SDL_GL_SwapWindow(m_window); }
 };
 
 #endif

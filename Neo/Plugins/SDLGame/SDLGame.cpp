@@ -87,5 +87,5 @@ void SDLGame::draw()
 	//SDL_GL_MakeCurrent(m_window, m_context);
 	NeoEngine::getInstance()->getRenderingContext()->clear(BUFFER_COLOR);
 	NeoGame::draw();
-	SDL_GL_SwapWindow(m_window);
+	// SDL_GL_SwapWindow(m_window);
 }
