@@ -29,12 +29,6 @@ IF("${FORCE_LOCAL_SDL}" STREQUAL "")
   SET(SDL2_FOUND FALSE)
 ENDIF()
 
-## SWIG for script bindings
-FIND_PACKAGE(SWIG REQUIRED)
-
-INCLUDE(${SWIG_USE_FILE})
-SET(CMAKE_SWIG_FLAGS "")
-
 if(USE_JAVA)
     set(Java_FOUND FALSE)
     find_package(JNI)
@@ -74,6 +68,11 @@ IF(WIN32)
     set(SWIG_FOUND TRUE)
     set(DOXYGEN_FOUND TRUE)
 ENDIF()
+
+## SWIG for script bindings
+set(CMAKE_SWIG_FLAGS "")
+find_package(SWIG REQUIRED)
+include(${SWIG_USE_FILE})
 
 find_package(CSharp)
 find_package(Mono)
