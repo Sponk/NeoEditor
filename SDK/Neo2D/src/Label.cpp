@@ -4,49 +4,69 @@
 
 using namespace Neo;
 
-// Can't test rendering
-// LCOV_EXCL_START
-class LabelTheme : public Neo2D::Gui::Theme
+Neo2D::Gui::Label::Label(int x, int y, unsigned int w, unsigned int h, const char* label, const shared_ptr<Object2D>& parent) :
+	Widget(x, y, w, h, label, parent, nullptr),
+	m_color(1,1,1,1),
+	m_alignment(Neo::TEXT_ALIGN_LEFT),
+	m_font("assets/default.ttf"),
+	m_text(nullptr),
+	m_fontsize(12)
+{}
+
+static void draw2DText(OText* text, float x, float y, float rotation)
 {
-	OText* text;
-public:
+	RenderingContext* renderContext =
+		NeoEngine::getInstance()->getRenderingContext();
 
-	LabelTheme()
-	{
-		text = Neo2D::Neo2DLevel::getInstance()->createText("assets/default.ttf", 12);
-	}
+	text->setPosition(Vector3(floor(x), floor(y), 0));
+	text->setRotation(Quaternion(0, 0, rotation));
+	text->updateMatrix();
 
-	virtual void draw(Neo2D::Gui::Widget* widget, const Neo::Vector2& offset)
-	{
-		NeoEngine* engine = NeoEngine::getInstance();
-		const Neo::Vector2 position = widget->getPosition() + offset;
+	renderContext->pushMatrix();
+	renderContext->multMatrix(text->getMatrix());
 
-		Neo2D::Gui::Label* label = static_cast<Neo2D::Gui::Label*>(widget);
-		text->setAlign(label->getAlignment());
-		text->setColor(label->getColor());
-		text->setText(widget->getLabel());
-		draw2DText(text, position.x,
-				   position.y + text->getSize() * 0.7, 0.0f);
-	}
+	NeoEngine::getInstance()->getRenderer()->drawText(text);
+	renderContext->popMatrix();
+}
 
-	void draw2DText(OText* text, float x, float y, float rotation)
-	{
-		RenderingContext* renderContext =
-			NeoEngine::getInstance()->getRenderingContext();
+void Neo2D::Gui::Label::draw(const Neo::Vector2& offset)
+{
+	const Neo::Vector2 position = getPosition() + offset;
 
-		text->setPosition(Vector3(floor(x), floor(y), 0));
-		text->setRotation(Quaternion(0, 0, rotation));
-		text->updateMatrix();
+	if(!m_text)
+		initText();
 
-		renderContext->pushMatrix();
-		renderContext->multMatrix(text->getMatrix());
+	m_text->setAlign(getAlignment());
+	m_text->setColor(getColor());
+	m_text->setText(getLabel());
 
-		NeoEngine::getInstance()->getRenderer()->drawText(text);
-		renderContext->popMatrix();
-	}
-};
-// Can't test rendering
-// LCOV_EXCL_STOP
+	draw2DText(m_text, position.x,
+			   position.y + m_text->getSize() * 0.7, 0.0f);
+}
 
-Neo2D::Gui::Label::Label(int x, int y, unsigned int w, unsigned int h, const char* label, const shared_ptr<Object2D>& parent)
-	: Widget(x, y, w, h, label, parent, make_shared<LabelTheme>()), m_color(1,1,1,1), m_alignment(Neo::TEXT_ALIGN_LEFT) {}
+void Neo2D::Gui::Label::initText()
+{
+	m_text = Neo2D::Neo2DLevel::getInstance()->createText(getFont(), getFontsize());
+}
+
+void Neo2D::Gui::Label::setFontsize(unsigned int fontsize)
+{
+	if(m_fontsize == fontsize)
+		return;
+
+	SAFE_DELETE(m_text);
+	m_fontsize = fontsize;
+
+	initText();
+}
+
+void Neo2D::Gui::Label::setFont(const char* font)
+{
+	if(m_font == font)
+		return;
+
+	SAFE_DELETE(m_text);
+	m_font = font;
+
+	initText();
+}
