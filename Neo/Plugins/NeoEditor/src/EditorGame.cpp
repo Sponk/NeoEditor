@@ -1856,8 +1856,8 @@ void EditorGame::runGame()
 	m_sceneView->setInvisible(false);
 	m_sceneView->setActive(true);
 	
-	// Disable undo/redo queue so it doesn't corrupt
-	m_disableUndo = true;
+	// Re-enable undo/redo queue again
+	m_disableUndo = false;
 	
 	// Restore original state
 	undo();
