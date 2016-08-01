@@ -36,7 +36,10 @@ private:
 	shared_ptr<FilterStrategy> m_filter;
 
 protected:
+
+#ifndef SWIG
 	std::vector<shared_ptr<Widget>>& getChildren() { return m_children; }
+#endif
 
 public:
 	Container(int x, int y, unsigned int w, unsigned int h, const shared_ptr<Object2D>& parent)
