@@ -31,7 +31,10 @@ public:
 
 class NEO2D_EXPORT Submenu : public MenuItem
 {
+#ifndef SWIG
 	std::vector<std::shared_ptr<MenuItem>> m_children;
+#endif
+
 	bool m_drawSelf;
 	
 protected:
