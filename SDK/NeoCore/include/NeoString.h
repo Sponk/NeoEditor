@@ -29,10 +29,6 @@
 namespace Neo
 {
 
-#ifdef SWIG_JAVA
-%rename String NeoString;
-#endif
-
 /**
  * @brief Implements a framework for string manipulation that
  * operates directly on C strings.
