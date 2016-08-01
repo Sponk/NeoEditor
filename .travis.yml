@@ -33,6 +33,7 @@ addons:
       # - libsqlite3-dev
       - qt5-default
       - libegl1-mesa-dev
+      - libsdl2-dev
       # - qttools5-dev-tools
       # - wput
 
