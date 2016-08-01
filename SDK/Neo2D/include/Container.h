@@ -27,7 +27,11 @@ namespace Gui
 class NEO2D_EXPORT Container: public Widget
 {
 private:
+
+#ifndef SWIG
 	std::vector<shared_ptr<Widget>> m_children;
+#endif
+
 	shared_ptr<LayoutStrategy> m_layout;
 	shared_ptr<FilterStrategy> m_filter;
 

@@ -14,7 +14,10 @@ namespace Neo2D
  */
 class NEO2D_EXPORT Canvas
 {
+#ifndef SWIG
 	std::vector<shared_ptr<Object2D>> m_objects;
+#endif
+
 	uint32_t m_priority;
 	Neo::Vector2 m_size;
 
