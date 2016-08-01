@@ -31,10 +31,6 @@ using namespace Gui;
 
 %}
 
-#if SWIG_VERSION < 0x03
-%ignore updateLayout;
-#endif
-
 %include <std_vector.i>
 #define NEO2D_EXPORT
 #define override // For older versions of SWIG
@@ -162,10 +158,16 @@ g_GlobalLuaState = L;
 %include "include/Container.h"
 %include "include/EditField.h"
 %include "include/Event.h"
+
+#if SWIG_VERSION >= 0x03
+
 %include "include/LayoutStrategy.h"
 %include "include/FilterStrategy.h"
 %include "include/HorizontalLayout.h"
 %include "include/VerticalLayout.h"
+
+#endif
+
 %include "include/ImageButton.h"
 %include "include/KeyboardShortcuts.h"
 %include "include/Label.h"
