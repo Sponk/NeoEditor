@@ -38,7 +38,11 @@ namespace Neo
 class NEO_ENGINE_EXPORT Player
 {
 	unsigned int m_frameCap;
+
+#ifndef SWIG
 	std::vector<std::shared_ptr<Plugin>> m_plugins;
+#endif
+
 	NeoEngine* m_engine;
 
  public:
