@@ -32,6 +32,7 @@ addons:
       # - libqt5webkit5-dev
       # - libsqlite3-dev
       - qt5-default
+      - libegl1-mesa-dev
       # - qttools5-dev-tools
       # - wput
 
