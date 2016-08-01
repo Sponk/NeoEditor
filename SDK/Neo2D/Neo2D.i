@@ -31,6 +31,10 @@ using namespace Gui;
 
 %}
 
+#if SWIG_VERSION < 0x03
+%ignore updateLayout;
+#endif
+
 %include <std_vector.i>
 #define NEO2D_EXPORT
 #define override // For older versions of SWIG
