@@ -159,7 +159,7 @@ g_GlobalLuaState = L;
 %include "include/EditField.h"
 %include "include/Event.h"
 
-#if SWIG_VERSION >= 0x03
+#if SWIG_VERSION >= 0x030000
 
 %include "include/LayoutStrategy.h"
 %include "include/FilterStrategy.h"
