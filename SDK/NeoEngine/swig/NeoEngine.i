@@ -15,6 +15,7 @@ using namespace Neo;
 %ignore Neo::Profiler::FunctionProfile;
 %ignore Neo::Object3d::AdditionalData;
 %ignore Neo::Scene::AdditionalData;
+%ignore updateLayout;
 
 %include <NeoCore.h>
 %include <Color.h>
