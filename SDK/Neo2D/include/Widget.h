@@ -41,7 +41,10 @@ enum WIDGET_STATE
  */
 class NEO2D_EXPORT Widget : public Object2D, public enable_shared_from_this<Widget>
 {
+#ifndef SWIG
 	std::vector<shared_ptr<Event>> m_events;
+#endif
+
 	shared_ptr<Theme> m_theme;
 	WIDGET_STATE m_state;
 
