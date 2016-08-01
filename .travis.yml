@@ -35,7 +35,7 @@ addons:
       - libegl1-mesa-dev
       - libsdl2-dev
       # - qttools5-dev-tools
-      # - wput
+      - wput
 
 #install:
 #    - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
@@ -66,13 +66,12 @@ after_success:
   - curl --ftp-create-dirs -T *.rpm -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
   - curl --ftp-create-dirs -T *.sh -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
 
- # - curl --ftp-create-dirs -T Documentation/LuaDoc -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
-  - find Documentation/Developer/ -exec curl --ftp-create-dirs -T {} -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/Documentation \;
+ # - find Documentation/Developer/ -exec curl --ftp-create-dirs -T {} -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/Documentation \;
 
- # - wput Documentation/Developer ftp://$USER@scary-squid.de:$PASSWORD@scary-squid.de/Documentation
- 
+
+ # - curl --ftp-create-dirs -T Documentation/LuaDoc -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
+ - wput Documentation/Developer ftp://$USER@scary-squid.de:$PASSWORD@scary-squid.de/Documentation
  # - cd ../build-windows
-  
  # - curl --ftp-create-dirs -T *.exe -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
  # - curl --ftp-create-dirs -T *.zip -u $USER@scary-squid.de:$PASSWORD ftp://scary-squid.de/
 
