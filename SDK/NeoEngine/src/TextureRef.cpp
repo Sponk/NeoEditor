@@ -49,7 +49,7 @@ TextureRef * TextureRef::getNew(unsigned int textureId, const char * filename, b
 
 void TextureRef::clear(void)
 {
-	NeoEngine::getInstance()->getRenderingContext()->deleteTexture(&m_textureId);
+	NeoEngine::getInstance()->getRenderer()->destroyTexture(m_textureId);
 }
 
 void TextureRef::destroy(void)
@@ -60,20 +60,18 @@ void TextureRef::destroy(void)
 void TextureRef::update(void)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
-	RenderingContext * render = engine->getRenderingContext();
+	Renderer* renderer = engine->getRenderer();
 
 	Image image;
 	if(engine->getImageLoader()->loadData(getFilename(), &image))
 	{
-		if(m_textureId == 0)
-			render->createTexture(&m_textureId);
-
 		m_components = image.getComponents();
 		m_width = image.getWidth();
 		m_height = image.getHeight();
-				
-		// send texture image
-		render->bindTexture(m_textureId);
-		render->sendTextureImage(&image, isMipmapEnabled(), 1, 0);
+
+		if(m_textureId == 0)
+			m_textureId = renderer->createTexture();
+
+		renderer->sendTexture(m_textureId, &image, isMipmapEnabled(), 1, 0);
 	}
 }

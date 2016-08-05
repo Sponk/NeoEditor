@@ -151,6 +151,31 @@ public:
 	*/
 	virtual void set2D(const Vector2& size) = 0;
 
+	/**
+	 * @brief Sends texture data to the graphics hardware.
+	 *
+	 * @param id The texture ID.
+	 * @param image The image data to send.
+	 * @param mipMap Indicates if mip-maps should be created.
+	 * @param filter Indicates if the image should be filtered.
+	 * @param compress Indicates if the image is compressed.
+	 * @return The texture ID that can be used to reference the image later.
+	 */
+	virtual void sendTexture(unsigned int id, Image* image, bool mipMap, bool filter, bool compress) = 0;
+
+	/**
+	 * @brief Registers a texture image with the graphics engine.
+	 * @param tex The texture to register.
+	 * @return The texture ID used for referencing the texture in future.
+	 */
+	virtual unsigned int createTexture() = 0;
+
+	/**
+	 * @brief Un-registers a texture image from the graphics engine.
+	 * @param id The texture to remove.
+	 */
+	virtual void destroyTexture(unsigned int id) = 0;
+
 	virtual void stopThreads() {}
 	virtual void startThreads() {}
 	virtual void KillThreads() {}
@@ -208,6 +233,10 @@ public:
 	{
 		Renderer::KillThreads();
 	}
+
+	virtual unsigned int createTexture() override {}
+	virtual void sendTexture(unsigned int id, Image* image, bool mipMap, bool filter, bool compress) override {}
+	virtual void destroyTexture(unsigned int id) override {}
 };
 
 }

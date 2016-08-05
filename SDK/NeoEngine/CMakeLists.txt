@@ -40,7 +40,7 @@ else()
 endif()
 
 IF(NOT NO_TESTS)
-    ADD_EXECUTABLE(NeoEngineTest tests/main.cpp)
+    ADD_EXECUTABLE(NeoEngineTest tests/main.cpp tests/ConfigurationRegistryTest.cpp)
 
     ## Travis does not like TARGET_INCLUDE_DIRECTORIES
     INCLUDE_DIRECTORIES(${GTEST_INCLUDE_DIR})

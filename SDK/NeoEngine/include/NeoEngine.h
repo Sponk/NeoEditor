@@ -109,12 +109,12 @@ class Mesh;
 #include "BehaviorCreator.h"
 #include "BehaviorManager.h"
 
+#include "Box3d.h"
+#include "Frustum.h"
+
 #include "Renderer.h"
 #include "RendererCreator.h"
 #include "RendererManager.h"
-
-#include "Box3d.h"
-#include "Frustum.h"
 
 #include "Font.h"
 #include "Texture.h"
@@ -147,6 +147,8 @@ class Mesh;
 #include "Messenger.h"
 #include "Plugin.h"
 
+#include "ConfigurationRegistry.h"
+
 namespace Neo
 {
 class NEO_ENGINE_EXPORT NeoEngine
@@ -154,6 +156,8 @@ class NEO_ENGINE_EXPORT NeoEngine
 private:
 	// active
 	bool m_isActive;
+
+	ConfigurationRegistry m_configurationRegistry;
 
 	// Default dummies for headless mode
 	SoundContextDummy m_soundContextDummy;
@@ -211,7 +215,9 @@ public:
 	// instance
 	static NeoEngine* getInstance(void);
 	static void setInstance(NeoEngine* engine);
-	
+
+	ConfigurationRegistry& getConfigurationRegistry() { return m_configurationRegistry; }
+
 	// active
 	inline void setActive(bool active)
 	{ m_isActive = active; }
