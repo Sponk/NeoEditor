@@ -175,6 +175,9 @@ public:
 	 * @param id The texture to remove.
 	 */
 	virtual void destroyTexture(unsigned int id) = 0;
+	virtual void clearScreen(const Vector3& color) = 0;
+
+	virtual void drawText2D(Neo::OText* text, float x, float y, float rotation) = 0;
 
 	virtual void stopThreads() {}
 	virtual void startThreads() {}
@@ -218,6 +221,8 @@ public:
 
 	virtual void drawTexturedQuad(const Vector2& position, const Vector2& size, int texture, float rotation) override {}
 
+	virtual void drawText2D(Neo::OText* text, float x, float y, float rotation) override {};
+
 	virtual void set2D(const Vector2& size) override {}
 	virtual void stopThreads() override
 	{
@@ -237,6 +242,7 @@ public:
 	virtual unsigned int createTexture() override {}
 	virtual void sendTexture(unsigned int id, Image* image, bool mipMap, bool filter, bool compress) override {}
 	virtual void destroyTexture(unsigned int id) override {}
+	virtual void clearScreen(const Vector3& color) override {}
 };
 
 }

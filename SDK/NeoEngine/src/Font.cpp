@@ -44,8 +44,7 @@ m_textureHeight(0)
 
 Font::~Font(void)
 {
-	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
-	render->deleteTexture(&m_textureId);
+	NeoEngine::getInstance()->getRenderer()->destroyTexture(m_textureId);
 }
 
 Font * Font::getNew(void)

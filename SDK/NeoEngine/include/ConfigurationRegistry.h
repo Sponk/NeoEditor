@@ -38,12 +38,13 @@ class ConfigurationRegistry
 	struct Variable
 	{
 		std::string str;
-		std::function<void(std::string&)> callback;
+		std::function<void(std::string&)> callback = nullptr;
 	};
 
 	std::unordered_map<std::string, Variable> m_registry;
 public:
 	std::string& registerVariable(const std::string& name, std::function<void(std::string&)> cb = nullptr);
+	void removeVariable(const std::string& name);
 	void setVariable(const std::string& name, const std::string& value);
 	bool exists(const std::string& name) { return m_registry.end() != m_registry.find(name); }
 };

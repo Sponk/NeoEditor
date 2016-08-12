@@ -10,7 +10,13 @@ class SDLGame : public Neo::NeoGame
 	SDL_GLContext m_context;
 	SDL_Renderer* m_renderer;
 
+	std::string* m_glVersion;
+	std::string* m_multisample;
+
 public:
+	SDLGame();
+	~SDLGame();
+
 	void onBegin();
 	void onEnd();
 

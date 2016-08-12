@@ -234,7 +234,10 @@ std::string Tool::executeToolNonBlocking(const char* name, const char* input)
 	while(!done)
 	{
 		game->update();
+
+		game->startFrame();
 		game->draw();
+		game->endFrame();
 	}
 
 	inthrd.join();

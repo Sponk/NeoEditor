@@ -2,6 +2,34 @@
 
 using namespace Neo;
 
+SDLGame::SDLGame()
+{
+	ConfigurationRegistry& reg = NeoEngine::getInstance()->getConfigurationRegistry();
+	reg.registerVariable("g_fullscreen", [this](std::string& str) {
+		int value = std::stoi(str);
+
+		switch(value)
+		{
+			case 1: value = SDL_WINDOW_FULLSCREEN; break;
+			case 2: value = SDL_WINDOW_FULLSCREEN_DESKTOP; break;
+			default: value = 0;
+		}
+
+		SDL_SetWindowFullscreen(this->m_window, value);
+	});
+
+	m_glVersion = &reg.registerVariable("sdl_glVersion");
+	m_multisample = &reg.registerVariable("sdl_multisample");
+
+	*m_multisample = "0";
+}
+
+SDLGame::~SDLGame()
+{
+	ConfigurationRegistry& reg = Neo::NeoEngine::getInstance()->getConfigurationRegistry();
+	reg.removeVariable("g_fullscreen");
+}
+
 void SDLGame::onBegin()
 {
 	SDL_version compiled;
@@ -23,9 +51,6 @@ void SDLGame::onBegin()
 
 	Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
 
-	if (/*m_fullscreen*/ false)
-		flags = flags | SDL_WINDOW_FULLSCREEN;
-
 	unsigned int width = 1024, height = 768;
 	const char* title = "SDL Game";
 	m_window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags);
@@ -36,22 +61,29 @@ void SDLGame::onBegin()
 		return;
 	}
 
-	//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-	//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 8);
 
-	/// FIXME: General configuration interface? Maybe in NeoEngine?
-	const char* glversion = getenv("NEO_GL");
-	if(glversion && !strcmp(glversion, "compat"))
+	//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, std::stoi(*m_multisample));
+
+	ConfigurationRegistry& reg = NeoEngine::getInstance()->getConfigurationRegistry();
+	if(m_glVersion->empty())
+	{
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	}
+	else if(*m_glVersion == "compatibility")
 	{
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
 	}
-	else
+	else if(*m_glVersion == "gles")
 	{
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 	}
 
 	m_context = SDL_GL_CreateContext(m_window);

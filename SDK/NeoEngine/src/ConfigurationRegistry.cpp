@@ -9,6 +9,11 @@ std::string& ConfigurationRegistry::registerVariable(const std::string& name, st
 	return v.str;
 }
 
+void ConfigurationRegistry::removeVariable(const std::string& name)
+{
+	m_registry.erase(name);
+}
+
 void ConfigurationRegistry::setVariable(const std::string& name, const std::string& value)
 {
 	auto i = m_registry.find(name);

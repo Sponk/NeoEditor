@@ -80,7 +80,7 @@ class StandardRenderer : public Renderer
     unsigned int m_textVBO;
 
 public:
-	
+
 	StandardRenderer(void);
 	~StandardRenderer(void);
 
@@ -178,6 +178,9 @@ public:
 	void drawColoredQuad(const Vector2& position, const Vector2& size, const Vector4& color,
 		float rotation);
 
+	virtual void sendTexture(unsigned int id, Image* image, bool mipMap, bool filter, bool compress) override;
+	virtual unsigned int createTexture() override;
+	virtual void destroyTexture(unsigned int id) override;
 private:
 
 	void renderShadows(Scene* scene, OCamera* maincam);
@@ -191,6 +194,9 @@ private:
 	Thread* m_visibilityThread;
 
 	void KillThreads();
+
+public:
+	virtual void clearScreen(const Vector3& color) override;
 };
 }
 #endif

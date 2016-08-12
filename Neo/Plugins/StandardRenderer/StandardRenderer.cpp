@@ -1998,6 +1998,7 @@ void StandardRenderer::drawTexturedQuad(const Vector2& position, const Vector2& 
 	drawTexturedQuad(position, size, texture, rotation, scale, flip,
 		Vector4(0.0, 0.0, 1.0, 1.0));
 }
+
 void StandardRenderer::drawTexturedQuad(const Vector2& position, const Vector2& size, int texture,
 	float rotation, const Vector2& scale, const Vector2& flip, const Vector4& texcoords)
 {
@@ -2122,6 +2123,34 @@ void StandardRenderer::drawText2D(OText* text, float x, float y, float rotation)
 	drawText(text);
 	renderContext->disableTexture();
 	renderContext->popMatrix();
+}
+
+void StandardRenderer::sendTexture(unsigned int id, Image* image, bool mipMap, bool filter, bool compress)
+{
+	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+	render->bindTexture(id);
+
+	render->sendTextureImage(image, mipMap, filter, compress);
+	render->bindTexture(0);
+}
+
+unsigned int StandardRenderer::createTexture()
+{
+	unsigned int id;
+	NeoEngine::getInstance()->getRenderingContext()->createTexture(&id);
+	return id;
+}
+
+void StandardRenderer::destroyTexture(unsigned int id)
+{
+	NeoEngine::getInstance()->getRenderingContext()->deleteTexture(&id);
+}
+
+void StandardRenderer::clearScreen(const Vector3& color)
+{
+	auto render = NeoEngine::getInstance()->getRenderingContext();
+	render->setClearColor(color);
+	render->clear(BUFFER_COLOR | BUFFER_DEPTH);
 }
 
 /*OText* StandardRenderer::create2DText(const char* font, float size)

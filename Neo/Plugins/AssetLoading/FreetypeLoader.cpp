@@ -226,22 +226,25 @@ bool M_loadFont(const char * filename, Font* font)
 
 	// send texture
 	NeoEngine * engine = NeoEngine::getInstance();
-	RenderingContext * render = engine->getRenderingContext();
-	
+	// RenderingContext * render = engine->getRenderingContext();
+	Renderer* renderer = NeoEngine::getInstance()->getRenderer();
+
 	// gen texture id
 	unsigned int textureId = font->getTextureId();
 	if(textureId == 0)
 	{
-		render->createTexture(&textureId);
+		//render->createTexture(&textureId);
+		textureId = renderer->createTexture();
 		font->setTextureId(textureId);
 	}
 	
 	// send texture image
-	render->bindTexture(textureId);
+	/*render->bindTexture(textureId);
     render->setTextureUWrapMode(WRAP_CLAMP);
     render->setTextureVWrapMode(WRAP_CLAMP);
     render->setTextureFilterMode(TEX_FILTER_LINEAR, TEX_FILTER_LINEAR);
-	render->sendTextureImage(&image, 0, 1, 0);
+	render->sendTextureImage(&image, 0, 1, 0);*/
+	renderer->sendTexture(textureId, &image, 0, 1, 0);
 
 	// finish
 	FT_Done_FreeType(library);

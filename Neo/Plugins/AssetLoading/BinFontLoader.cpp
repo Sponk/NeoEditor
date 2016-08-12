@@ -82,21 +82,25 @@ bool M_loadBinFont(const char * filename, Font* data)
 		}
 		
 		NeoEngine * engine = NeoEngine().getInstance();
-		RenderingContext * render = engine->getRenderingContext();
-		
+		// RenderingContext * render = engine->getRenderingContext();
+		Renderer* renderer = NeoEngine::getInstance()->getRenderer();
+
 		// gen texture id
 		unsigned int textureId = font->getTextureId();
 		if(textureId == 0)
 		{
-			render->createTexture(&textureId);
+			//render->createTexture(&textureId);
+			textureId = renderer->createTexture();
 			font->setTextureId(textureId);
 		}
-		
+
 		// send texture image
-		render->bindTexture(textureId);
-        render->setTextureUWrapMode(WRAP_CLAMP);
-        render->setTextureVWrapMode(WRAP_CLAMP);
-		render->sendTextureImage(&image, 0, 1, 0);
+		/*render->bindTexture(textureId);
+		render->setTextureUWrapMode(WRAP_CLAMP);
+		render->setTextureVWrapMode(WRAP_CLAMP);
+		render->setTextureFilterMode(TEX_FILTER_LINEAR, TEX_FILTER_LINEAR);
+		render->sendTextureImage(&image, 0, 1, 0);*/
+		renderer->sendTexture(textureId, &image, 0, 1, 0);
 	}
 	
 	// read characters infos
