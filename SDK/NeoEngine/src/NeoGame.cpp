@@ -117,7 +117,7 @@ void NeoGame::draw(void)
 
 	// get level
 	Level* level = NeoEngine::getInstance()->getLevel();
-	if(!level)
+	if(!level || !renderer)
 		return;
 
 	// get current scene
@@ -127,9 +127,19 @@ void NeoGame::draw(void)
 
 	if(!m_drawMainScene)
 	{
-		renderer->clearScreen(level->getCurrentScene()->getCurrentCamera()->getClearColor());
+		OCamera* cam = level->getCurrentScene()->getCurrentCamera();
+
+		if(cam)
+			renderer->clearScreen(cam->getClearColor());
+		else
+			renderer->clearScreen(Vector3(0.22,0.22,0.22));
+
 		render->clear(BUFFER_COLOR | BUFFER_DEPTH);
-		goto skip_draw_mainscene; /// EVIL!
+
+		for(auto sg : m_subGames)
+			sg->draw();
+
+		return;
 	}
 
 #ifndef DISABLE_3D
@@ -252,7 +262,6 @@ void NeoGame::draw(void)
 	}
 #endif
 
-skip_draw_mainscene:
 	for(auto sg : m_subGames)
 		sg->draw();
 }
