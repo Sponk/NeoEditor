@@ -13,6 +13,5 @@ add_subdirectory(NeoSharp)
 add_subdirectory(GL2Context)
 
 if(USE_GLES)
-    add_subdirectory(MobileRenderer)
-    add_subdirectory(GLES2Context)
+    add_subdirectory(GLESRenderer)
 endif()

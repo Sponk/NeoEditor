@@ -38,8 +38,8 @@ public:
 			renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(2,2), Vector4(0.3, 0.3, 0.3, 1), 0);
 			renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(3,3), Vector4(0.8, 0.8, 0.8, 1), 0);
 
-			draw2DText(text, position.x  + 0.5f * widget->getSize().x,
-					   position.y + text->getSize() * 1.25, 0.0f);
+			renderer->drawText2D(text, position.x  + 0.5f * widget->getSize().x,
+					 				position.y + text->getSize() * 1.25, 0.0f);
 
 			break;
 
@@ -49,29 +49,13 @@ public:
 			renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(2,2), Vector4(0.3, 0.3, 0.3, 1), 0);
 			renderer->drawColoredQuad(position + Vector2(1,1), widget->getSize() - Vector2(3,3), Vector4(0.8, 0.8, 0.8, 1), 0);
 
-			draw2DText(text, position.x  + 0.51f * widget->getSize().x,
-					   position.y + text->getSize() * 1.25 + 0.1f * widget->getSize().y, 0.0f);
+			renderer->drawText2D(text, position.x  + 0.51f * widget->getSize().x,
+								 position.y + text->getSize() * 1.25 + 0.1f * widget->getSize().y, 0.0f);
 
 			break;
 
 		default: break;
 		}
-	}
-
-	void draw2DText(OText* text, float x, float y, float rotation)
-	{
-		RenderingContext* renderContext =
-			NeoEngine::getInstance()->getRenderingContext();
-
-		text->setPosition(Vector3(floor(x), floor(y), 0));
-		text->setRotation(Quaternion(0, 0, rotation));
-		text->updateMatrix();
-
-		renderContext->pushMatrix();
-		renderContext->multMatrix(text->getMatrix());
-
-		NeoEngine::getInstance()->getRenderer()->drawText(text);
-		renderContext->popMatrix();
 	}
 };
 // LCOV_EXCL_STOP

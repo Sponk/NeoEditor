@@ -109,9 +109,11 @@ void NeoGame::update(void)
 	engine->getInputContext()->flush();
 }
 
+/// TODO: Rewrite rendering code so it doesn't use Neo::RenderingContext!
 void NeoGame::draw(void)
 {
 	RenderingContext * render = NeoEngine::getInstance()->getRenderingContext();
+	Renderer* renderer = NeoEngine::getInstance()->getRenderer();
 
 	// get level
 	Level* level = NeoEngine::getInstance()->getLevel();
@@ -125,6 +127,7 @@ void NeoGame::draw(void)
 
 	if(!m_drawMainScene)
 	{
+		renderer->clearScreen(level->getCurrentScene()->getCurrentCamera()->getClearColor());
 		render->clear(BUFFER_COLOR | BUFFER_DEPTH);
 		goto skip_draw_mainscene; /// EVIL!
 	}
@@ -172,6 +175,7 @@ void NeoGame::draw(void)
 				render->setViewport(0, 0, width, height);
 				render->setClearColor(camera->getClearColor());
 				render->clear(BUFFER_COLOR | BUFFER_DEPTH);
+				renderer->clearScreen(level->getCurrentScene()->getCurrentCamera()->getClearColor());
 
 				// draw the scene
 				camera->enable();

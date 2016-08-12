@@ -13,22 +13,6 @@ Neo2D::Gui::Label::Label(int x, int y, unsigned int w, unsigned int h, const cha
 	m_fontsize(12)
 {}
 
-static void draw2DText(OText* text, float x, float y, float rotation)
-{
-	RenderingContext* renderContext =
-		NeoEngine::getInstance()->getRenderingContext();
-
-	text->setPosition(Vector3(floor(x), floor(y), 0));
-	text->setRotation(Quaternion(0, 0, rotation));
-	text->updateMatrix();
-
-	renderContext->pushMatrix();
-	renderContext->multMatrix(text->getMatrix());
-
-	NeoEngine::getInstance()->getRenderer()->drawText(text);
-	renderContext->popMatrix();
-}
-
 void Neo2D::Gui::Label::draw(const Neo::Vector2& offset)
 {
 	const Neo::Vector2 position = getPosition() + offset;
@@ -40,8 +24,8 @@ void Neo2D::Gui::Label::draw(const Neo::Vector2& offset)
 	m_text->setColor(getColor());
 	m_text->setText(getLabel());
 
-	draw2DText(m_text, position.x,
-			   position.y + m_text->getSize() * 0.7, 0.0f);
+	NeoEngine::getInstance()->getRenderer()->drawText2D(m_text, position.x,
+			  												position.y + m_text->getSize() * 0.7, 0.0f);
 }
 
 void Neo2D::Gui::Label::initText()

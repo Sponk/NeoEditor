@@ -34,7 +34,9 @@ void ExternalToolset::messagebox(const char* title, const char* message)
 
 void ExternalToolset::aboutDialog()
 {
-	messagebox(tr("About"), tr("This is the Neo Scene Editor experience v0.5.1a. This program is distributed under the terms and conditions of the GNU LGPL."));
+	messagebox(tr("About"),
+			   (std::string(tr("This is the Neo Scene Editor experience v0.5.1a. This program is distributed under the terms and conditions of the GNU LGPL."))
+				   + "\n\nRenderer: " + Neo::NeoEngine::getInstance()->getRenderer()->getName()).c_str());
 }
 
 Neo::Vector4 ExternalToolset::colorDialog(const Neo::Vector4& start)

@@ -86,9 +86,9 @@ public:
 		renderContext->enableScissorTest();
 		renderContext->setScissor(position.x, screen.y - (position.y + edit->getSize().y), edit->getSize().x, edit->getSize().y);
 
-		draw2DText(text, position.x - textOffset,
-						 position.y + 0.5 * edit->getSize().y,
-						 0.0f);
+		renderer->drawText2D(text, position.x - textOffset,
+							 position.y + 0.5 * edit->getSize().y,
+							 0.0f);
 
 		renderContext->disableScissorTest();
 	}
@@ -117,22 +117,6 @@ public:
 		}
 
 		return length * text->getSize();
-	}
-
-	void draw2DText(OText* text, float x, float y, float rotation)
-	{
-		RenderingContext* renderContext =
-			NeoEngine::getInstance()->getRenderingContext();
-
-		text->setPosition(Vector3(floor(x), floor(y), 0));
-		text->setRotation(Quaternion(0, 0, rotation));
-		text->updateMatrix();
-
-		renderContext->pushMatrix();
-		renderContext->multMatrix(text->getMatrix());
-
-		NeoEngine::getInstance()->getRenderer()->drawText(text);
-		renderContext->popMatrix();
 	}
 };
 // LCOV_EXCL_STOP

@@ -35,8 +35,8 @@ public:
 				renderer->drawColoredQuad(position, widget->getSize(), Vector4(0.8, 0.8, 0.8, 1), 0);
 
 				text->setColor(Vector4(0.0,0.0,0.0,1.0));
-				draw2DText(text, position.x  + LINE_HEIGHT + 3,
-						   position.y + text->getSize() * 1.25, 0.0f);
+				renderer->drawText2D(text, position.x + LINE_HEIGHT + 3,
+									 position.y + text->getSize() * 1.25, 0.0f);
 
 				break;
 
@@ -44,29 +44,13 @@ public:
 				renderer->drawColoredQuad(position, widget->getSize(), Vector4(0.0, 0.0, 0.8, 1), 0);
 
 				text->setColor(Vector4(1.0,1.0,1.0,1.0));
-				draw2DText(text, position.x  + LINE_HEIGHT + 3,
-						   position.y + text->getSize() * 1.25, 0.0f);
+				renderer->drawText2D(text, position.x + LINE_HEIGHT + 3,
+									 position.y + text->getSize() * 1.25, 0.0f);
 
 				break;
 
 			default: break;
 		}
-	}
-
-	void draw2DText(OText* text, float x, float y, float rotation)
-	{
-		RenderingContext* renderContext =
-			NeoEngine::getInstance()->getRenderingContext();
-
-		text->setPosition(Vector3(floor(x), floor(y), 0));
-		text->setRotation(Quaternion(0, 0, rotation));
-		text->updateMatrix();
-
-		renderContext->pushMatrix();
-		renderContext->multMatrix(text->getMatrix());
-
-		NeoEngine::getInstance()->getRenderer()->drawText(text);
-		renderContext->popMatrix();
 	}
 };
 
