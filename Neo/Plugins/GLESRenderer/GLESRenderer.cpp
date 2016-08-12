@@ -282,7 +282,7 @@ static void setOrthoView(Matrix4x4& matrix, float left, float right, float botto
 }
 
 void GLESRenderer::initialize()
-{ NeoEngine::getInstance()->loadLevel("assets/levels/test.level");
+{
 	MLOG_INFO("********************************************************************************");
 	MLOG_INFO("Renderer:\t\t\t" << glGetString(GL_VERSION) << "\t");
 	MLOG_INFO("Vendor:\t\t\t" << glGetString(GL_VENDOR) << "\t");
