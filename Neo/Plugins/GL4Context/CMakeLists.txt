@@ -1,3 +1,4 @@
+find_package(OpenGL REQUIRED)
 
 add_library(GL4Context SHARED Plugin.cpp GL4Context.cpp)
 

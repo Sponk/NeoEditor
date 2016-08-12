@@ -17,6 +17,8 @@ void StartPlugin()
 	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 	engine->getRendererManager()->addRenderer(Neo::GLESRenderer::getStaticName(), Neo::GLESRenderer::getNew);
 	engine->setRenderer(&g_renderer);
+
+	engine->getConfigurationRegistry().setVariable("g_rendererType", "gles");
 }
 
 void EndPlugin()

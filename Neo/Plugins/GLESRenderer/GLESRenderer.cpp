@@ -29,7 +29,6 @@
 
 #include <NeoEngine.h>
 #include "GLESRenderer.h"
-#include "MeshData.h"
 #include <string>
 #include <algorithm>
 #include <tinyutf8.h>

@@ -18,8 +18,8 @@ SDLGame::SDLGame()
 		SDL_SetWindowFullscreen(this->m_window, value);
 	});
 
-	m_glVersion = &reg.registerVariable("sdl_glVersion");
-	m_multisample = &reg.registerVariable("sdl_multisample");
+	m_glVersion = &reg.registerVariable("g_rendererType");
+	m_multisample = &reg.registerVariable("g_multisample");
 
 	*m_multisample = "0";
 }
