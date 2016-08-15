@@ -15,9 +15,10 @@ static PackageManagerNPK g_packageManager;
 void StartPlugin()
 {
 	Neo::NeoEngine::getInstance()->setPackageManager(&g_packageManager);
+	g_packageManager.init();
 }
 
 void EndPlugin()
 {
-
+	g_packageManager.cleanup();
 }
