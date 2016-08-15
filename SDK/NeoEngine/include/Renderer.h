@@ -239,7 +239,7 @@ public:
 		Renderer::KillThreads();
 	}
 
-	virtual unsigned int createTexture() override {}
+	virtual unsigned int createTexture() override { return 1; }
 	virtual void sendTexture(unsigned int id, Image* image, bool mipMap, bool filter, bool compress) override {}
 	virtual void destroyTexture(unsigned int id) override {}
 	virtual void clearScreen(const Vector3& color) override {}

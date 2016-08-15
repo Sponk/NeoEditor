@@ -12,15 +12,18 @@ bool checkExistingLoader(const char* filename, Neo::Image* image)
 
 class SpriteTest: public ::testing::Test
 {
+	Neo::Level level;
 protected:
 	virtual void SetUp()
 	{
+		Neo::NeoEngine::getInstance()->setLevel(&level);
 		Neo::NeoEngine::getInstance()->getImageLoader()->addLoader(checkExistingLoader);
 	}
 
 	virtual void TearDown()
 	{
 		Neo::NeoEngine::getInstance()->getImageLoader()->clear();
+		Neo::NeoEngine::getInstance()->setLevel(nullptr);
 	}
 };
 

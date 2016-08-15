@@ -166,6 +166,7 @@ private:
 	ScriptContextDummy m_scriptContextDummy;
 	InputContextDummy m_inputContextDummy;
 	SystemContextDummy m_systemContextDummy;
+	RendererDummy m_rendererDummy;
 
 	// contexts
 	SoundContext* m_soundContext;

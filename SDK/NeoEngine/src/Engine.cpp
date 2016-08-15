@@ -36,13 +36,13 @@ NeoEngine::NeoEngine(void):
 m_isActive(true),
 m_level(NULL),
 m_game(NULL),
-m_renderer(NULL),
 m_soundContext(&m_soundContextDummy),
 m_renderingContext(&m_renderingContextDummy),
 m_physicsContext(&m_physicsContextDummy),
 m_scriptContext(&m_scriptContextDummy),
 m_inputContext(&m_inputContextDummy),
 m_systemContext(&m_systemContextDummy),
+m_renderer(&m_rendererDummy),
 m_packageManager(NULL),
 m_requestedLevelToLoad(NULL)
 {}
