@@ -9,6 +9,7 @@ class SDLInputContext : public Neo::InputContext
 {
 	Neo::INPUT_KEYS translateEvent(SDL_Keycode key);
 
+#ifndef EMSCRIPTEN
 	int addGameController(int sdlId);
 	int removeGameController(int index);
 
@@ -53,6 +54,7 @@ class SDLInputContext : public Neo::InputContext
 	};
 
 	std::map<SDL_JoystickID, shared_ptr<Neo::AxisInputDevice>> m_devices;
+#endif
 
 public:
 	virtual void handleInput();

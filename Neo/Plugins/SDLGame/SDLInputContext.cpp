@@ -311,6 +311,7 @@ void SDLInputContext::handleInput()
 				break;
 			}
 
+#ifndef EMSCRIPTEN
 			case SDL_CONTROLLERDEVICEADDED:
 			{
 				MLOG_INFO("Controller " << event.cdevice.which << " connected");
@@ -425,6 +426,7 @@ void SDLInputContext::handleInput()
 				sendEvents(&mevent);
 				break;
 			}*/
+#endif
 
 			case SDL_WINDOWEVENT:
 			{
@@ -464,6 +466,7 @@ void SDLInputContext::handleInput()
 	mouse.flushDirection();
 }
 
+#ifndef EMSCRIPTEN
 int SDLInputContext::addGameController(int index)
 {
 	auto device = SDL_GameControllerOpen(index);
@@ -499,3 +502,4 @@ int SDLInputContext::removeGameController(int id)
 	}
 	return -1;
 }
+#endif

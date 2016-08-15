@@ -11,7 +11,4 @@ add_subdirectory(BulletPhysics)
 add_subdirectory(NPK)
 add_subdirectory(NeoSharp)
 add_subdirectory(GL2Context)
-
-if(USE_GLES)
-    add_subdirectory(GLESRenderer)
-endif()
+add_subdirectory(GLESRenderer)

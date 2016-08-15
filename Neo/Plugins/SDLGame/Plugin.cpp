@@ -10,7 +10,11 @@
 #include <NeoEngine.h>
 #include "SDLGame.h"
 #include "SDLInputContext.h"
+
+#ifndef EMSCRIPTEN
 #include "SDLThread.h"
+#endif
+
 #include "SDLSystem.h"
 
 static SDLGame g_sdlGame;
@@ -24,8 +28,10 @@ void StartPlugin()
 	engine->setInputContext(&g_sdlInputContext);
 	engine->setSystemContext(&g_sdlSystemContext);
 
+#ifndef EMSCRIPTEN
 	Neo::ThreadFactory::getInstance()->setTemplateSemaphore(new SDLSemaphore);
 	Neo::ThreadFactory::getInstance()->setTemplateThread(new SDLThread);
+#endif
 }
 
 void EndPlugin()
