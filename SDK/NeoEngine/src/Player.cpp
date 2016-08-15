@@ -61,14 +61,18 @@ void Player::execute(INPUT_KEYS quitKey)
 	{
 		unsigned long int time = system->getSystemTick();
 		
-		game->update();
-
-		game->startFrame();
-		game->draw();
-		game->endFrame();
+		executeFrame();
 		
 		system->sleep(m_frameCap - (system->getSystemTick() - time));
 		m_engine->setActive(m_engine->isActive() && (quitKey == KEY_DUMMY || !input->isKeyDown(quitKey)));
 	}
 }
 
+void Player::executeFrame()
+{
+	NeoGame* game = m_engine->getGame();
+	game->update();
+	game->startFrame();
+	game->draw();
+	game->endFrame();
+}

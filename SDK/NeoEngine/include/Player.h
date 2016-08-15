@@ -77,6 +77,11 @@ class NEO_ENGINE_EXPORT Player
 	void execute(INPUT_KEYS quitKey = KEY_DUMMY);
 
 	/**
+	 * @brief Executes exactly one frame, i.e. one update and draw.
+	 */
+	void executeFrame();
+	
+	/**
 	 * @brief Ends the game.
 	 */
 	void end();
