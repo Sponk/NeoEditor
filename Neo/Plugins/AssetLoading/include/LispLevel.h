@@ -24,7 +24,7 @@
 
 
 #ifndef __LISP_LEVEL_SAVE_H
-#define __LSIP_LEVEL_SAVE_H
+#define __LISP_LEVEL_SAVE_H
 
 #include "config.h"
 
