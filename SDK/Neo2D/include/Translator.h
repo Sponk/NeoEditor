@@ -22,8 +22,7 @@ namespace Gui
  */
 class NEO2D_EXPORT Translator
 {
-	static std::unordered_map<std::string, std::string> m_strings;
-
+	static std::unordered_map<std::string, std::string>& getStrings();
 public:
 	/**
 	 * @brief Translates a given string into another one.
@@ -45,7 +44,7 @@ public:
 
 	static void clear()
 	{
-		m_strings.clear();
+		getStrings().clear();
 	}
 };
 

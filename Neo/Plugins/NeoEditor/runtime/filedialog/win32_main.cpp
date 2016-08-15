@@ -3,6 +3,8 @@
 #include <sstream>
 #include <string>
 #include <algorithm>
+
+#define SEXPRESSO_OPT_OUT_PIKESTYLE
 #include <sexpresso.hpp>
 
 using namespace std;

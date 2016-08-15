@@ -57,7 +57,7 @@ void Console::init()
 
 bool Console::handle(const Neo2D::Gui::Event& e)
 {
-	
+	return false;
 }
 
 void Console::update(float dt)

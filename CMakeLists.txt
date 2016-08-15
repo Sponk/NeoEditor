@@ -13,6 +13,14 @@ SET(CMAKE_MODULE_PATH
 option(USE_QT_RUNTIME ON)
 option(USE_GNUSTEP_RUNTIME OFF)
 option(USE_GCOV OFF) ## Only active with the GCC compiler
+option(NO_GLES OFF)
+
+if(WIN32) ## Windows options
+
+set(NO_GLES TRUE) ## Windows has no native GLES 2 support.
+set(USE_GNUSTEP_RUNTIME FALSE)
+
+endif(WIN32)
 
 ## Disallow in-source builds
 INCLUDE(OutOfSourceBuild)

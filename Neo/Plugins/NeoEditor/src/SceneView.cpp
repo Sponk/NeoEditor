@@ -3,6 +3,10 @@
 #include <algorithm>
 #include <limits>
 
+#ifdef max // Defined by the Windows SDK
+#undef max
+#endif
+
 using namespace Neo;
 
 SceneView::SceneView(UndoQueue& undo,
@@ -599,7 +603,7 @@ void SceneView::update(float dt)
 						m_spotLightObject->setInvisible(false);
 						m_spotLightObject->setPosition(
 							light->getTransformedPosition());
-
+						
 						float scale = std::max(
 							0.1f, light->getRadius() *
 									  static_cast<float>(sin(

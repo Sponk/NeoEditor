@@ -2,6 +2,11 @@
 #include <NeoEngine.h>
 #include <SDL.h>
 #include <algorithm>
+#include <limits>
+
+#ifdef max // Defined by the Windows SDK
+#undef max
+#endif
 
 using namespace Neo;
 

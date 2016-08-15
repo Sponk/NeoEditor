@@ -111,7 +111,7 @@ public :
 	/**
 	 * @brief If the script is marked as running, mark it as not running.
 	 */
-	bool stopRunning() { if(m_isRunning) m_isRunning = false; }
+	bool stopRunning() { if (m_isRunning) m_isRunning = false; return m_isRunning; }
 };
 
 class NEO_CORE_EXPORT ScriptContextDummy : public ScriptContext

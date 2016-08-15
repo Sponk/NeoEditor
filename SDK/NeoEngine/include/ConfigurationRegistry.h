@@ -33,7 +33,7 @@ namespace Neo
  * Every variable registered might be provided with an "on change" callback to prevent
  * polling. If polling is desired the pointer returned by the register function can be used.
  */
-class ConfigurationRegistry
+class NEO_ENGINE_EXPORT ConfigurationRegistry
 {
 	struct Variable
 	{
