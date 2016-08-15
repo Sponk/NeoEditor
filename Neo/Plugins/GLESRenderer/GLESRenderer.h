@@ -39,8 +39,14 @@ class GLESRenderer : public Renderer
 	unsigned int m_mvpMatrixUniform, m_normalMatrixUniform, m_textureModeUniform;
 	unsigned int m_opacityUniform, m_diffuseUniform, m_lightsCountUniform;
 	unsigned int m_modelViewMatrixUniform, m_specularUniform, m_shininessUniform;
-	unsigned int m_emitUniform;
-
+	unsigned int m_emitUniform, m_ambientLightUniform;
+	
+	// Color quad uniforms
+	unsigned int m_colorMvpMatrixUniform, m_colorColorUniform;
+	
+	// Textured quad uniforms
+	unsigned int m_textureMvpMatrixUniform, m_textureTextureUniform;
+	
 	unsigned int m_vertexVbo, m_texcoordVbo;
 
 	OLight* m_activeLights[8];

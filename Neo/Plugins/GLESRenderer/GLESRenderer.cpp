@@ -129,10 +129,10 @@ static const char* colorOnlyVertShader =
 
 static const char* colorOnlyFragShader = "#version 100\n"
 	"precision mediump float;\n"
-	"uniform vec4 color;"
+	"uniform vec4 Color;"
 	"void main(void)"
 	"{"
-	"gl_FragColor = color;"
+	"gl_FragColor = Color;"
 	"}\n";
 
 static const char* texturedVertShader =
@@ -367,7 +367,14 @@ void GLESRenderer::initialize()
 	m_specularUniform = glGetUniformLocation(m_objectShader, "Specular");
 	m_shininessUniform = glGetUniformLocation(m_objectShader, "Shininess");
 	m_emitUniform = glGetUniformLocation(m_objectShader, "Emit");
+	m_ambientLightUniform = glGetUniformLocation(m_objectShader, "AmbientLight");
 
+	m_colorMvpMatrixUniform = glGetUniformLocation(m_colorShader, "ProjModelViewMatrix");
+	m_colorColorUniform = glGetUniformLocation(m_colorShader, "Color");
+
+	m_textureMvpMatrixUniform = glGetUniformLocation(m_texturedShader, "ProjModelViewMatrix");
+	m_textureTextureUniform = glGetUniformLocation(m_texturedShader, "Texture");
+	
 	char str[20];
 	for(int i = 0; i < 5; i++) // Always identity map textures to their texture units
 	{
@@ -577,6 +584,12 @@ void GLESRenderer::drawScene(Scene* scene, OCamera* camera)
 
 	m_matrix.loadIdentity();
 	camera->enable();
+
+	glUseProgram(m_objectShader);
+	glUniform3f(m_ambientLightUniform,
+				scene->getAmbientLight().x*0.25,
+				scene->getAmbientLight().y*0.25,
+				scene->getAmbientLight().z*0.25); // The color is too bright most of the time
 
 	// Prepare objects
 	PROFILE_BEGIN("ScenePreparation")
@@ -1163,8 +1176,8 @@ void GLESRenderer::drawTexturedQuad(const Vector2& position, const Vector2& size
 	ModelViewMatrix = m_matrix * ModelViewMatrix;
 
 	glUseProgram(m_texturedShader);
-	glUniformMatrix4fv(0, 1, false, ModelViewMatrix.entries);
-	glUniform1i(1, 0);
+	glUniformMatrix4fv(m_textureMvpMatrixUniform, 1, false, ModelViewMatrix.entries);
+	glUniform1i(m_textureTextureUniform, 0);
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -1190,8 +1203,8 @@ void GLESRenderer::drawColoredQuad(const Vector2& position, const Vector2& size,
 	ModelViewMatrix = m_matrix * ModelViewMatrix;
 
 	glUseProgram(m_colorShader);
-	glUniformMatrix4fv(0, 1, false, ModelViewMatrix.entries);
-	glUniform4f(1, color.x, color.y, color.z, color.w);
+	glUniformMatrix4fv(m_colorMvpMatrixUniform, 1, false, ModelViewMatrix.entries);
+	glUniform4f(m_colorColorUniform, color.x, color.y, color.z, color.w);
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexVbo);
 
@@ -1352,11 +1365,11 @@ unsigned int GLESRenderer::createShader(const char* vertexSource, const char* fr
 
 	glLinkProgram(program);
 
-	glDetachShader(program, vert);
+	/*glDetachShader(program, vert);
 	glDetachShader(program, frag);
 
 	glDeleteShader(vert);
-	glDeleteShader(frag);
+	glDeleteShader(frag);*/
 
 	if(!reportProgramError(program))
 	{

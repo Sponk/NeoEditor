@@ -362,34 +362,6 @@ IF(ANDROID)
   SET(LIBTYPE STATIC)
 ENDIF()
 
-IF(EMSCRIPTEN)
-  FIND_PACKAGE(OpenGLES REQUIRED)
-  FIND_PACKAGE(OpenGLES2 REQUIRED)
-
-  SET(USE_GLES TRUE)
-  SET(FREETYPE_LIBRARY "freetype")
-  SET(OPENAL_LIBRARY "openal")
-  SET(ZLIB_LIBRARY "zlib")
-
-  SET(NEO_BUILD_FLAGS "")
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${NEO_BUILD_FLAGS} -O3 -fPIC -DLINUX")
-  SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -D__Debug__")
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${NEO_BUILD_FLAGS} -O3 -fPIC -DLINUX")
-  SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -D__Debug__")
-  SET(CMAKE_SHARED_LINKER_FLAGS "-ldl -Wl,--as-needed,--allow-multiple-definition,--build-id")
-
-  SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} --preload-file project" )
-
-  SET(SDL_VIDEO TRUE)
-  add_definitions(-Wno-warn-absolute-paths -s FULL_ES2=1)
-  ADD_DEFINITIONS("-DUSE_GLES")
-
-  SET(SDL_VIDEO_DRIVER_EMSCRIPTEN TRUE)
-
-  # Don't use -fPIC for executables
-  SET(DISABLE_PIC_EXECUTABLES ON)
-ENDIF()
-
 ## Set up 3rd party dependencies
 SET(ASSIMP_INCLUDE_DIR ${NEO_SOURCE_DIR}/3rdparty/assimp/include)
 SET(BULLET_INCLUDE_DIR ${NEO_SOURCE_DIR}/3rdparty/bullet)
@@ -482,10 +454,32 @@ SET(LUA_EXECUTABLE lua) #${NEO_BINARY_OUTPUT}/lua)
 
 ## Set up subdirectories...
 SET(CMAKE_SHARED_LIBRARY_PREFIX "")
+
+IF(NOT EMSCRIPTEN)
 ADD_SUBDIRECTORY(3rdparty)
 ADD_SUBDIRECTORY(SDK)
 ADD_SUBDIRECTORY(Neo)
 ADD_SUBDIRECTORY(Data)
+ELSE()
+add_subdirectory(Emscripten)
+add_subdirectory(3rdparty/assimp)
+add_subdirectory(3rdparty/sexpresso)
+add_subdirectory(3rdparty/tinyxml)
+add_subdirectory(3rdparty/libjpeg)
+add_subdirectory(3rdparty/npk)
+
+set(LUA_ANSI TRUE)
+set(LUA_USE_POSIX FALSE)
+set(LUA_USE_DLOPEN FALSE)
+set(LUA_MKSTEMP FALSE)
+set(LUA_USE_ULONGJMP FALSE)
+set(LUA_USE_ISATTY FALSE)
+set(LUA_USE_RELATIVE_LOADLIB FALSE)
+
+add_definitions(-Dgetpid=rand)
+add_subdirectory(3rdparty/lua-standard)
+
+ENDIF()
 
 #ADD_SUBDIRECTORY(Swig)
 
@@ -494,7 +488,7 @@ IF(NOT NO_DOCUMENTATION AND NOT ANDROID)
 ENDIF()
 
 ## Build only for PC
-IF(NOT ANDROID AND NOT NO_TESTS)
+IF(NOT ANDROID AND NOT NO_TESTS AND NOT EMSCRIPTEN)
   ADD_SUBDIRECTORY(Tests/LuaApi)
   #ADD_SUBDIRECTORY(Tests/SDK)
   #ADD_SUBDIRECTORY(Tests/LuaSDK)
@@ -514,7 +508,7 @@ IF(ANDROID)
 ENDIF()
 
 ## Enable tests
-IF(NOT NO_TESTS)
+IF(NOT NO_TESTS AND NOT EMSCRIPTEN)
   enable_testing()
   add_test(NAME Neo2D_test COMMAND Neo2DTest)
   add_test(NAME NeoEngine_test COMMAND NeoEngineTest)

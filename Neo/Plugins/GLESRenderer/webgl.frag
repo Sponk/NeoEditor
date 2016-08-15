@@ -123,8 +123,11 @@ void main()
 	}
 
 	vec4 accum = vec4(0,0,0,0);
-   	for(int i = 0; i < 4; i++)
+   	for(int i = 0; i < 8; i++)
    	{
+   		if(i >= LightsCount)
+   			continue;
+   			
    		accum = accum + calculatePhongLight(Lights[i], position.xyz,
 							norm, gl_FragColor, 2.0*shininess);
    	}
