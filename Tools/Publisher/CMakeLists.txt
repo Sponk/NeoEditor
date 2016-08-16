@@ -10,6 +10,7 @@ include_directories(
         ${NPK_INCLUDE_DIR}
         ${SEXPRESSO_INCLUDE_DIR}
         ${LIBPROJECT_INCLUDE_DIR}
+        ${GTEST_INCLUDE_DIR}
 )
 
 target_link_libraries(neo-publisher
