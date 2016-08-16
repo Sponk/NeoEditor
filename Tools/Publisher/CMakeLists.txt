@@ -1,66 +1,31 @@
-## Find source and headers
-FILE(GLOB_RECURSE HEADERS *.h)
-FILE(GLOB_RECURSE SOURCES *.c*)
 
-IF(CMAKE_HAS_SORT)
-  LIST(SORT HEADERS)
-  LIST(SORT SOURCES)
-ENDIF(CMAKE_HAS_SORT)
+set(SOURCES src/Publisher.cpp src/Publisher.h src/NPKPublisher.cpp src/NPKPublisher.h)
 
-## Build
-INCLUDE_DIRECTORIES(
-  ${NEO_COMMON_INCLUDE_DIR}
-  ${NEO_CORE_INCLUDE_DIR}
-  ${NEO_ENGINE_INCLUDE_DIR}
-  ${NEOGUI_INCLUDE_DIR}
+add_executable(neo-publisher src/main.cpp ${SOURCES})
 
-  ## 3rdparty include directories
-  ${ASSIMP_INCLUDE_DIR}
-  ${BULLET_INCLUDE_DIR}
-  ${FREETYPE_INCLUDE_DIR}
-  ${GLEW_INCLUDE_DIR}
-  ${JPEG_INCLUDE_DIR}
-  ${PNG_INCLUDE_DIR}
-  ${LUA_INCLUDE_DIR}
-  ${NPK_INCLUDE_DIR}
-  ${SDL_INCLUDE_DIR}
-  ${OPENAL_INCLUDE_DIR}
-  ${TINYXML_INCLUDE_DIR}
-  ${ZLIB_INCLUDE_DIR}
+include_directories(
+        ${NEO_CORE_INCLUDE_DIR}
+        ${NEO_ENGINE_INCLUDE_DIR}
+
+        ${NPK_INCLUDE_DIR}
+        ${SEXPRESSO_INCLUDE_DIR}
+        ${LIBPROJECT_INCLUDE_DIR}
 )
 
-add_definitions(-DM_PACKAGE_WRITABLE)
-# SET(CMAKE_INSTALL_RPATH "./")
-ADD_EXECUTABLE(neo-publish ${SOURCES} ${HEADERS})
-
-TARGET_LINK_LIBRARIES(neo-publish
-  ${NEO_COMMON_LIBRARIES}
-  ${NEO_CORE_LIBRARIES}
-  ${NEO_ENGINE_LIBRARIES}
-  ${NEOGUI_LIBRARIES}
-
-  ## 3rdparty libraries
-  ${ASSIMP_LIBRARIES}
-  ${BULLET_LIBRARIES}
-  ${FREETYPE_LIBRARIES}
-  ${GLEW_LIBRARIES}
-  ${JPEG_LIBRARIES}
-  ${PNG_LIBRARIES}
-  ${VORBIS_LIBRARIES}
-  ${OGG_LIBRARIES}
-  ${LUA_LIBRARIES}
-  ${NPK_LIBRARIES}
-  ${SDL_LIBRARIES}
-  ${TINYXML_LIBRARIES}
-  ${OPENAL_LIBRARIES}
-  ${ZLIB_LIBRARIES}
-
-  ## System libraries
-  ${OPENGL_LIBRARIES}
-  ${PLATFORM_LIBRARIES}
+target_link_libraries(neo-publisher
+        ${NPK_LIBRARIES}
+        ${SEXPRESSO_LIBRARIES}
+        ${NEO_CORE_LIBRARIES}
+        ${NEO_ENGINE_LIBRARIES}
+        ${LIBPROJECT_LIBRARIES}
 )
 
-add_custom_target(neo-publish-test ${NEO_BINARY_OUTPUT}/neo-publish -i ${NEO_BINARY_OUTPUT}/LuaApiTest.mproj WORKING_DIRECTORY ${NEO_BINARY_OUTPUT})
-add_dependencies(neo-publish-test neo-publish)
+if(NOT NO_TESTS)
+    add_executable(PublisherTest ${SOURCES} tests/main.cpp tests/NPKTest.cpp)
+    target_link_libraries(PublisherTest ${LIBPROJECT_LIBRARIES} ${SEXPRESSO_LIBRARIES}
+            ${NEO_CORE_LIBRARIES} ${GTEST_LIBRARIES} ${NEO_ENGINE_LIBRARIES})
 
-INSTALL(TARGETS neo-publish DESTINATION ${NEO_INSTALL_DIR})
+    add_dependencies(PublisherTest NPKPlugin)
+endif()
+
+install(TARGETS neo-publisher DESTINATION ${NEO_INSTALL_DIR})

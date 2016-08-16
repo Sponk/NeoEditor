@@ -14,11 +14,12 @@ option(USE_QT_RUNTIME ON)
 option(USE_GNUSTEP_RUNTIME OFF)
 option(USE_GCOV OFF) ## Only active with the GCC compiler
 option(NO_GLES OFF)
+option(NO_TOOLS OFF)
 
 if(WIN32) ## Windows options
 
-set(NO_GLES TRUE) ## Windows has no native GLES 2 support.
-set(USE_GNUSTEP_RUNTIME FALSE)
+  set(NO_GLES TRUE) ## Windows has no native GLES 2 support.
+  set(USE_GNUSTEP_RUNTIME FALSE)
 
 endif(WIN32)
 
@@ -442,6 +443,9 @@ SET(GTEST_INCLUDE_DIR ${NEO_SOURCE_DIR}/3rdparty/gtest/include)
 SET(SEXPRESSO_LIBRARIES sexpresso)
 SET(SEXPRESSO_INCLUDE_DIR ${NEO_SOURCE_DIR}/3rdparty/sexpresso/sexpresso)
 
+SET(LIBPROJECT_LIBRARIES libproject)
+SET(LIBPROJECT_INCLUDE_DIR ${NEO_SOURCE_DIR}/Neo/libproject/)
+
 ## Set up SDK dependencies
 SET(NEO_CORE_INCLUDE_DIR ${NEO_SOURCE_DIR}/SDK/NeoCore/include)
 SET(NEO_ENGINE_INCLUDE_DIR ${NEO_SOURCE_DIR}/SDK/NeoEngine/include)
@@ -468,6 +472,7 @@ ADD_SUBDIRECTORY(3rdparty)
 ADD_SUBDIRECTORY(SDK)
 ADD_SUBDIRECTORY(Neo)
 ADD_SUBDIRECTORY(Data)
+ADD_SUBDIRECTORY(Tools)
 ELSE()
 add_subdirectory(Emscripten)
 add_subdirectory(3rdparty/assimp)
