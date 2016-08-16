@@ -61,8 +61,9 @@ class NEO_ENGINE_EXPORT Player
 
 	/**
 	 * @brief Starts the game.
+	 * @param level The level to load.
 	 */
-	void begin();
+	void begin(const char* level = "");
 
 	/**
 	 * @brief Executes a game loop which renders and updates the game.

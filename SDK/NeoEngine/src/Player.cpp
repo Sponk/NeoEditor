@@ -24,6 +24,7 @@
 
 #include <NeoEngine.h>
 #include <Player.h>
+#include <algorithm>
 
 using namespace Neo;
 
@@ -36,13 +37,11 @@ bool Player::loadPlugin(const char* name)
 	return true;
 }
 
-void Player::begin()
+void Player::begin(const char* level)
 {
 	NeoGame* game = m_engine->getGame();
 	game->begin();	
-
-	if(m_engine->getLevel()->getScenesNumber() == 0)
-		m_engine->loadLevel("");
+	m_engine->loadLevel(level);
 }
 
 void Player::end()
@@ -53,7 +52,6 @@ void Player::end()
 
 void Player::execute(INPUT_KEYS quitKey)
 {
-	NeoGame* game = m_engine->getGame();
 	SystemContext* system = m_engine->getSystemContext();
 	InputContext* input = m_engine->getInputContext();
 

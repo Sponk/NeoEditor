@@ -2,6 +2,13 @@
 #include <Player.h>
 #include <sexpresso.hpp>
 #include <memory>
+#include <Project.h>
+
+#ifdef WIN32
+#include <direct.h>
+#else
+#include <unistd.h>
+#endif
 
 using namespace Neo;
 
@@ -13,66 +20,76 @@ int main(int argc, char* argv[])
 	Player player(FRAME_CAP);
 	registerDebugHandler();
 
-	std::string err;
-	char* config = readTextFile("assets/plugins.cfg");
+	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+	Project project;
 
-	if(!config)
+	if(isFileExist("assets.npk"))
 	{
-		MLOG_WARNING("Could not open plugin config!");
-		return 1;
+		Plugin npk;
+		npk.load("NPKPlugin");
+
+		engine->getPackageManager()->loadPackage("assets.npk");
+		MLOG_INFO("Found assets.npk!");
+
+		if (!project.load("project.nproj"))
+		{
+			MLOG_ERROR("Could not load project!");
+			return 1;
+		}
+	}
+	else
+	{
+		MLOG_INFO("Didn't find assets.npk, loading the first project found!");
+		vector<string> files;
+		readDirectory("./", files, false, false);
+
+		bool loaded = false;
+		for(auto s : files)
+			if(s.find(".nproj") != -1)
+			{
+				project.load(s.c_str());
+				loaded = true;
+				break;
+			}
+
+		if(!loaded)
+		{
+			MLOG_ERROR("No project was found!");
+			return 1;
+		}
 	}
 
-	std::string confstr = config;
-	free(config);
-
-	sexpresso::Sexp tree;
-
-	tree = sexpresso::parse(confstr, err);
-	sexpresso::Sexp* pluginlist = tree.getChildByPath("project/plugins");
-    //sexpresso::Sexp* startlevel = tree.getChildByPath("project/level");
+	MLOG_INFO("Loaded project: " << project.getName());
 
 	try
 	{
-		for(auto&& s : pluginlist->arguments())
+		for(auto s : project.getPlugins())
 		{
-			if(s.isNil() || s.isSexp())
-				continue;
-
-			player.loadPlugin(s.toString().c_str());
+			player.loadPlugin(s.c_str());
 		}
 
-		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
-		Neo::NeoGame* game = engine->getGame();
-		Neo::SystemContext* system;
+		{
+			// We have to re-load the package because plugins might have changed
+			// the loader layout
+			engine->getPackageManager()->loadPackage("assets.npk");
 
+			Neo::SystemContext* system = engine->getSystemContext();
+			char repertory[256];
+			getcwd(repertory, sizeof(repertory));
+			MLOG_INFO("Working directory: " << repertory);
+			system->setWorkingDirectory(repertory);
+
+			system->setArgc(argc);
+			system->setArgv(&argv);
+		}
+
+		Neo::NeoGame* game = engine->getGame();
 		if(!game)
 			engine->setGame(game = new NeoGame);
 
-        system = engine->getSystemContext();
-        system->setArgc(argc);
-        system->setArgv(&argv);
-
-		player.begin();
+		player.begin(project.getLevel().c_str());
 		player.execute();
 		player.end();
-/*		game->begin();
-
-        //char scriptfile[512];
-        //getGlobalFilename(scriptfile, engine->getSystemContext()->getWorkingDirectory(), startlevel->value.sexp[1].toString().c_str());
-        //engine->loadLevel(scriptfile);
-        engine->loadLevel("");
-
-		while (engine->isActive())
-		{
-			system = engine->getSystemContext();
-			unsigned long int time = system->getSystemTick();
-
-			game->update();
-			game->draw();
-
-			system->sleep(FRAME_CAP - (system->getSystemTick() - time));
-		}
-		game->end();*/
 	}
 	catch(std::exception& e)
 	{

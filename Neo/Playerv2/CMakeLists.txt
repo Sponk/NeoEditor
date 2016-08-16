@@ -9,6 +9,7 @@ include_directories(
 	${NEO_CORE_INCLUDE_DIR}
 	${NEO_ENGINE_INCLUDE_DIR}
 	${SEXPRESSO_INCLUDE_DIR}
+	${LIBPROJECT_INCLUDE_DIR}
 )
 
 target_link_libraries( NeoPlayer2
@@ -16,6 +17,7 @@ target_link_libraries( NeoPlayer2
 	${NEO_ENGINE_LIBRARIES}
 	${SEXPRESSO_LIBRARIES}
 	${NEO_IMAGEHELP}
+	${LIBPROJECT_LIBRARIES}
 )
 
 install(TARGETS NeoPlayer2 DESTINATION ${NEO_INSTALL_DIR})

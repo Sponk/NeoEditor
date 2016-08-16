@@ -13,4 +13,5 @@ target_link_libraries(NPKPlugin
 		${NPK_LIBRARIES}
 )
 
+add_definitions(-DM_PACKAGE_WRITABLE)
 install(TARGETS NPKPlugin DESTINATION ${NEO_INSTALL_DIR})

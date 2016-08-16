@@ -1,0 +1,22 @@
+(project
+	(name "Editor")
+	(author "me")
+	(version "0.1")
+	(neo-version "0.5")
+	(start-level "assets/levels/test.level")
+	(assets "assets")
+	(description "")
+	(plugins
+		"SDLGame"
+    	"LuaScripting"
+    	"CommonBehaviors"
+    	"AssetLoading"
+    	"OpenALContext"
+    	;; GL4Context
+    	;; StandardRenderer
+    	"GLESRenderer"
+    	"BulletPhysics"
+    	"NPKPlugin"
+    	"NeoEditor"
+	)
+)

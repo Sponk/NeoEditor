@@ -72,5 +72,7 @@ add_subdirectory(runtime)
 
 install(TARGETS NeoEditor DESTINATION ${NEO_INSTALL_DIR})
 install(DIRECTORY data DESTINATION ${NEO_INSTALL_DIR})
-install(FILES plugins.cfg default.ttf DESTINATION ${NEO_INSTALL_DIR}/assets)
+install(FILES default.ttf DESTINATION ${NEO_INSTALL_DIR}/assets)
+install(FILES editor.nproj DESTINATION ${NEO_INSTALL_DIR})
+
 copy_files("data/*" "${NEO_BINARY_OUTPUT}" "copy-editor-data")

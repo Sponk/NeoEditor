@@ -324,6 +324,7 @@ PackageEnt PackageManagerNPK::addFileToPackage(const char* filename, Package pac
 	if(filename && package && entityName)
 	{
 		npk_package_add_file(((PackageNPK*)package)->package, filename, entityName, &entity);
+		npk_entity_add_flag(entity, NPK_ENTITY_COMPRESS_ZLIB);
 	}
 
 	return entity;
