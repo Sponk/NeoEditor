@@ -34,10 +34,10 @@ void parseOpt(Settings& s, int argc, char* argv[])
 
 #ifndef WIN32 // Default values
 	s.outputDirectory = "./published";
-	s.player = "NeoPlayer";
+	s.player = "./NeoPlayer2";
 #else
 	s.outputDirectory = ".\\published";
-	s.player = "NeoPlayer.exe";
+	s.player = ".\\NeoPlayer2.exe";
 #endif
 
 	string arg;

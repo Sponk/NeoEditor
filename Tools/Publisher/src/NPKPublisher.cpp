@@ -43,61 +43,124 @@ bool Publish::NPKPublisher::publish(const char* projectFile,
 		return false;
 	}
 
-	std::string packagefile = output;
-	packagefile += SEPARATOR;
-	packagefile += "assets.npk";
-
-	if(!isFileExist(output) && !createDirectory(output, true))
+	// Packaging!
 	{
-		perror("Could not create output directory");
-		return false;
+		std::string packagefile = output;
+		packagefile += SEPARATOR;
+		packagefile += "assets.npk";
+
+		if (!isFileExist(output) && !createDirectory(output, true))
+		{
+			perror("Could not create output directory");
+			return false;
+		}
+
+		cout << "Opening package... ";
+		Package package = pkm->openPackage(packagefile.c_str());
+
+		if (package)
+			cout << "Done." << endl;
+		else
+		{
+			cout << "Could not open package!" << endl;
+			return false;
+		}
+
+		const char* pwd = engine->getSystemContext()->getWorkingDirectory();
+
+		packageDir(project.getAssetDirectory().c_str(), pwd, pkm, package, verbose);
+		pkm->addFileToPackage(projectFile, package, "project.nproj");
+
+		cout << "Saving package... ";
+		pkm->closePackage(package);
+		cout << "Done." << endl;
 	}
 
-	Package package = pkm->openPackage(packagefile.c_str());
-	const char* pwd = engine->getSystemContext()->getWorkingDirectory();
-
-	packageDir(project.getAssetDirectory().c_str(), pwd, pkm, package, verbose);
-	pkm->addFileToPackage(projectFile, package, "project.nproj");
-
 	bool success = true;
+	char execdir[256];
+	getRepertory(execdir, executable);
+
+	string execstr = execdir;
+
+	string outpath = output;
+	outpath += "/";
+
+	cout << "Copying additional files... ";
+	{
+		char path[256];
+
+		for (auto str : project.getAdditionalFiles())
+		{
+			if (verbose)
+				cout << "Copying " << (execstr + str) << " to " << (outpath + str) << endl;
+
+			string outfile = (outpath + str);
+			getRepertory(path, outfile.c_str());
+
+			createDirectory(path, true);
+			success &= copyFile((execstr + str).c_str(), outfile.c_str());
+		}
+	}
+	cout << "Done." << endl;
 
 #ifdef WIN32
 
-#elif LINUX
-	packagefile = output;
-	packagefile += SEPARATOR;
+	cout << "Copying runtime components... ";
+	success &= copyFiles(execdir, outpath.c_str(), "dll", verbose);
 
 	{
-		string strexec = (packagefile + project.getName());
+		string strexec = (outpath + project.getName() + ".exe");
+		success &= copyFile(executable, strexec.c_str());
+	}
+	cout << "Done." << endl;
+		
+	/*for (auto str : project.getPlugins())
+	{
+		if (verbose)
+			cout << "Copying " << (execstr + str + ".dll") << " to " << (packagefile + str + ".dll") << endl;
+
+		success &= copyFile((execstr + str + ".dll").c_str(), (packagefile + str + ".dll").c_str());
+	}*/
+		
+	/*success &= copyFile((execstr + "NeoEngine.dll").c_str(), (packagefile + "NeoEngine.dll").c_str());
+	success &= copyFile((execstr + "NeoCore.dll").c_str(), (packagefile + "NeoCore.dll").c_str());
+	success &= copyFile((execstr + "Neo2D.dll").c_str(), (packagefile + "Neo2D.dll").c_str());
+	success &= copyFile((execstr + "NeoEngineLua.dll").c_str(), (packagefile + "NeoEngineLua.dll").c_str());
+	success &= copyFile((execstr + "Neo2DLua.dll").c_str(), (packagefile + "Neo2DLua.dll").c_str());*/
+
+#elif LINUX
+
+	cout << "Copying runtime components... ";
+	success &= copyFiles(execdir, outpath.c_str(), "so", verbose);
+
+	{
+		string strexec = (outpath + project.getName());
 		success &= copyFile(executable, strexec.c_str());
 
 		// Make executable!
 		chmod(strexec.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
 	}
 
-	char execdir[256];
-	getRepertory(execdir, executable);
+	cout << "Done." << endl;
 
-	string execstr = execdir;
-	for(auto str : project.getPlugins())
+	/*for(auto str : project.getPlugins())
 	{
 		if(verbose)
-			cout << "Copying " << (execstr + str + ".so") << " to " << (packagefile + str + ".so") << endl;
+			cout << "Copying " << (execstr + str + ".so") << " to " << (outpath + str + ".so") << endl;
 
-		success &= copyFile((execstr + str + ".so").c_str(), (packagefile + str + ".so").c_str());
+		success &= copyFile((execstr + str + ".so").c_str(), (outpath + str + ".so").c_str());
 	}
 
-	success &= copyFile((execstr + "NeoEngine.so").c_str(), (packagefile + "NeoEngine.so").c_str());
-	success &= copyFile((execstr + "NeoCore.so").c_str(), (packagefile + "NeoCore.so").c_str());
-	success &= copyFile((execstr + "Neo2D.so").c_str(), (packagefile + "Neo2D.so").c_str());
-	success &= copyFile((execstr + "NeoEngineLua.so").c_str(), (packagefile + "NeoEngineLua.so").c_str());
-	success &= copyFile((execstr + "Neo2DLua.so").c_str(), (packagefile + "Neo2DLua.so").c_str());
+	success &= copyFile((execstr + "NeoEngine.so").c_str(), (outpath + "NeoEngine.so").c_str());
+	success &= copyFile((execstr + "NeoCore.so").c_str(), (outpath + "NeoCore.so").c_str());
+	success &= copyFile((execstr + "Neo2D.so").c_str(), (outpath + "Neo2D.so").c_str());
+	success &= copyFile((execstr + "NeoEngineLua.so").c_str(), (outpath + "NeoEngineLua.so").c_str());
+	success &= copyFile((execstr + "Neo2DLua.so").c_str(), (outpath + "Neo2DLua.so").c_str());*/
 
 #elif APPLE
 
 #endif
 
-	pkm->closePackage(package);
 	return success;
 }
 
@@ -116,4 +179,30 @@ bool Publish::NPKPublisher::packageDir(const char* dir, const char* pwd, Neo::Pa
 
 		pkm->addFileToPackage(f.c_str(), pkg, localFilename);
 	}
+
+	return true;
+}
+
+bool Publish::NPKPublisher::copyFiles(const char* src, const char* dest, const char* type, bool verbose)
+{
+	vector<string> files;
+	readDirectory(src, files, true, false);
+
+	bool success = true;
+	char localFilename[256];
+	int typelen = strlen(type);
+	string destination = dest;
+
+	for (auto f : files)
+	{
+		if (typelen && f.find(type) == -1)
+			continue;
+				
+		if (verbose)
+			cout << "Copying " << f << " to " << destination + f << endl;
+
+		success &= copyFile(f.c_str(), (destination + f).c_str());
+	}
+
+	return success;
 }

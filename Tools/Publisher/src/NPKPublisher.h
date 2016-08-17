@@ -10,6 +10,7 @@ namespace Publish
 class NPKPublisher : public Publisher
 {
 	bool packageDir(const char* dir, const char* pwd, Neo::PackageManager* pkm, Neo::Package pkg, bool verbose = false);
+	bool copyFiles(const char* src, const char* dest, const char* type = "", bool verbose = false);
 public:
 
 	virtual const char* getName() override

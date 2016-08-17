@@ -21,6 +21,7 @@ class Project
 	std::string m_description;
 
 	std::vector<std::string> m_plugins;
+	std::vector<std::string> m_additionalFiles;
 public:
 
 	Project() {}
@@ -67,6 +68,7 @@ public:
 	const std::string& getAssetDirectory() const { return m_assets; }
 	const std::string& getDescription() const { return m_description; }
 	std::vector<std::string>& getPlugins() { return m_plugins; }
+	std::vector<std::string>& getAdditionalFiles() { return m_additionalFiles; }
 	// LCOV_EXCL_STOP
 };
 

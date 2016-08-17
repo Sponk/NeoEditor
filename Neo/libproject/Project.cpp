@@ -20,7 +20,8 @@ bool Project::load(const char* path)
 	auto assetdir = project.getChildByPath("project/assets");
 	auto description = project.getChildByPath("project/description");
 	auto plugins = project.getChildByPath("project/plugins");
-	
+	auto additionalFiles = project.getChildByPath("project/additional-files");
+
 	if(!startlevel || !name || !author || !version || !neoversion || !assetdir || !description || !plugins)
 		return false;
 
@@ -35,6 +36,12 @@ bool Project::load(const char* path)
 	for(auto p : plugins->arguments())
 	  m_plugins.push_back(p.value.str);
 	
+	if(additionalFiles)
+	{
+		for (auto p : additionalFiles->arguments())
+			m_additionalFiles.push_back(p.value.str);
+	}
+
 	m_filepath = path;
 	return true;
 }
@@ -58,6 +65,11 @@ bool Project::save(const char* path)
 	  out << "\t\"" << p << "\"\n";
 	out << "\t)" << std::endl;
 	
+	out << "\t(additional-files " << std::endl;
+	for (auto p : m_additionalFiles)
+		out << "\t\"" << p << "\"\n";
+	out << "\t)" << std::endl;
+
 	out << ")" << std::endl;
 
 	m_filepath = path;
