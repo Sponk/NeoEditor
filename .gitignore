@@ -23,3 +23,5 @@ build
 .idea
 nbproject
 Tools/External/*
+Arch/*
+_build
