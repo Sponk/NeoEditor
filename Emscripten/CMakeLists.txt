@@ -20,6 +20,12 @@ list(REMOVE_ITEM LUA_SCRIPTING_SRC ${CMAKE_SOURCE_DIR}/Neo/Plugins/LuaScripting/
 file(GLOB NPK_SRC ${CMAKE_SOURCE_DIR}/Neo/Plugins/NPK/*.cpp)
 list(REMOVE_ITEM NPK_SRC ${CMAKE_SOURCE_DIR}/Neo/Plugins/NPK/Plugin.cpp)
 
+set(LIBPROJECT_SRC ${CMAKE_SOURCE_DIR}/Neo/libproject/Project.cpp)
+
+## TODO: Make option!
+file(GLOB EDITOR_SRC ${CMAKE_SOURCE_DIR}/Neo/Plugins/NeoEditor/src/*.cpp)
+list(REMOVE_ITEM EDITOR_SRC ${CMAKE_SOURCE_DIR}/Neo/Plugins/NeoEditor/src/Plugin.cpp)
+
 add_executable(NeoWeb
   WebPackage.cpp
   LoadPlugins.cpp
@@ -33,6 +39,8 @@ add_executable(NeoWeb
   ${ASSET_LOADING_SRC}
   ${LUA_SCRIPTING_SRC}
   ${NPK_SRC}
+  ${LIBPROJECT_SRC}
+  ${EDITOR_SRC}
 )
 
 include_directories(
@@ -49,6 +57,7 @@ include_directories(
 	${NPK_INCLUDE_DIR}
 	../Neo/Plugins/NPK
 	../Neo/Plugins/AssetLoading/include
+	${LIBPROJECT_INCLUDE_DIR}
 )
 
 target_link_libraries(NeoWeb ${ASSIMP_LIBRARIES} ${SEXPRESSO_LIBRARIES} ${TINYXML_LIBRARIES} ${JPEG_LIBRARIES} ${LUA_LIBRARIES} ${NPK_LIBRARIES})
@@ -62,3 +71,5 @@ set_target_properties(NeoWeb PROPERTIES LINK_FLAGS
 			"-s ASSERTIONS=1 -s USE_SDL=2 -s FULL_ES2=1 \
              -s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_VORBIS=1 -s USE_FREETYPE=1 \
 			--preload-file ${CMAKE_CURRENT_BINARY_DIR}/assets/shaders/gles.vert --preload-file ${CMAKE_CURRENT_BINARY_DIR}/assets/shaders/gles.frag")
+
+install(TARGETS NeoWeb DESTINATION ${CMAKE_INSTALL_PREFIX})

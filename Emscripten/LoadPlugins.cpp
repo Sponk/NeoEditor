@@ -3,8 +3,7 @@
 #include <stdio.h>
 #include <emscripten.h>
 #include <setjmp.h>
-
-#include "WebPackage.h"
+#include <Project.h>
 
 #undef StartPlugin
 #undef EndPlugin
@@ -40,6 +39,13 @@
 #define EndPlugin EndPlugin_NPK
 
 #include "../Neo/Plugins/NPK/Plugin.cpp"
+
+#undef StartPlugin
+#undef EndPlugin
+#define StartPlugin StartPlugin_Editor
+#define EndPlugin EndPlugin_Editor
+
+#include "../Neo/Plugins/NeoEditor/src/Plugin.cpp"
 
 #undef StartPlugin
 #undef EndPlugin 
@@ -92,6 +98,7 @@ int main(int argc, char* argv[])
 	StartPlugin_AssetLoading();
 	StartPlugin_LuaScripting();
 	StartPlugin_NPK();
+	StartPlugin_Editor();
 
 /*	WebPackage package;
 	engine->setPackageManager(&package);
@@ -116,9 +123,19 @@ int main(int argc, char* argv[])
 
 							  NeoEngine* engine = NeoEngine::getInstance();
 							  engine->getPackageManager()->loadPackage("assets.npk");
-							  engine->getGame()->begin();
 
-							  engine->getScriptContext()->runScript("main.lua");
+							  Project project;
+							  if (!project.load("project.nproj"))
+							  {
+								  MLOG_ERROR("Could not load project!");
+								  return exit(-1);
+							  }
+
+							  MLOG_INFO("Loaded project: " << project.getName());
+
+							  engine->getGame()->begin();
+							  engine->loadLevel(project.getLevel().c_str());
+							  //engine->getScriptContext()->runScript("main.lua");
 						  },
 
 						  [](const char* s){
