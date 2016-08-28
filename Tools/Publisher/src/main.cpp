@@ -73,7 +73,6 @@ void parseOpt(Settings& s, int argc, char* argv[])
 		else if (arg == "-v")
 		{
 			s.verbose = true;
-			return;
 		}
 
 		else if (arg == "-h")

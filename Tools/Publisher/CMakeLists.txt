@@ -1,5 +1,8 @@
 
-set(SOURCES src/Publisher.cpp src/Publisher.h src/NPKPublisher.cpp src/NPKPublisher.h)
+set(SOURCES src/Publisher.cpp src/Publisher.h src/NPKPublisher.cpp 
+			src/NPKPublisher.h src/NPKLinuxPublisher.cpp src/NPKLinuxPublisher.h
+			src/NPKWindowsPublisher.cpp src/NPKWindowsPublisher.h
+			src/NPKWebPublisher.cpp src/NPKWebPublisher.h)
 
 add_executable(neo-publisher src/main.cpp ${SOURCES})
 

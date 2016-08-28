@@ -27,9 +27,7 @@ file(GLOB EDITOR_SRC ${CMAKE_SOURCE_DIR}/Neo/Plugins/NeoEditor/src/*.cpp)
 list(REMOVE_ITEM EDITOR_SRC ${CMAKE_SOURCE_DIR}/Neo/Plugins/NeoEditor/src/Plugin.cpp)
 
 add_executable(NeoWeb
-  WebPackage.cpp
   LoadPlugins.cpp
-  WebPackage.cpp
   
   ${NEO_ENGINE_SRC}
   ${NEO_CORE_SRC}
