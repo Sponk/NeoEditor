@@ -362,7 +362,10 @@ void GLESRenderer::initialize()
 	m_textureModeUniform = glGetUniformLocation(m_objectShader, "TextureMode");
 	m_diffuseUniform = glGetUniformLocation(m_objectShader, "Diffuse");
 	m_opacityUniform = glGetUniformLocation(m_objectShader, "Opacity");
-	m_lightsCountUniform = glGetUniformLocation(m_objectShader, "LightsCount");
+
+	m_lightsCountUniform = glGetUniformLocation(m_objectShader, "PixelLightsCount");
+	m_vertexLightsCountUniform = glGetUniformLocation(m_objectShader, "VertexLightsCount");
+
 	m_modelViewMatrixUniform = glGetUniformLocation(m_objectShader, "ViewMatrix");
 	m_specularUniform = glGetUniformLocation(m_objectShader, "Specular");
 	m_shininessUniform = glGetUniformLocation(m_objectShader, "Shininess");
@@ -466,7 +469,8 @@ int GLESRenderer::findLights(Neo::Scene* scene, Neo::OEntity* entity, Neo::SubMe
 	minScale = MIN(minScale, scale.z);
 	minScale = 1.0f / minScale;
 
-	for(int i = 0; i < scene->getLightsNumber(); i++)
+	OLight* allLights[PER_PIXEL_LIGHTS + PER_VERTEX_LIGHTS];
+	for(int i = 0; i < std::min(scene->getLightsNumber(), PER_PIXEL_LIGHTS + PER_VERTEX_LIGHTS); i++)
 	{
 		OLight* light = scene->getLightByIndex(i);
 
@@ -491,21 +495,34 @@ int GLESRenderer::findLights(Neo::Scene* scene, Neo::OEntity* entity, Neo::SubMe
 		if(!box->isInCollisionWith(lightBox))
 			continue;
 
-		m_activeLights[num++] = light;
+		allLights[num++] = light;
 	}
 
-	if(num < 8)
-		m_activeLights[num] = nullptr;
+	if(num < PER_PIXEL_LIGHTS + PER_VERTEX_LIGHTS)
+		allLights[num] = nullptr;
+
+	std::sort(allLights, &allLights[0] + num, [entity](OLight* l1, OLight* l2) {
+		return (l1->getSpotAngle() < 180) && ((l1->getIntensity() / (l1->getTransformedPosition() - entity->getTransformedPosition()).getLength())
+			> (l2->getIntensity() / (l2->getTransformedPosition() - entity->getTransformedPosition()).getLength()));
+	});
+
+	m_numPixelLights = 0;
+	for(int i = 0; i < PER_PIXEL_LIGHTS && i < num; i++, m_numPixelLights++)
+		m_activePixelLights[i] = allLights[i];
+
+	m_numVertexLights = 0;
+	for(int i = PER_PIXEL_LIGHTS; i < PER_VERTEX_LIGHTS + PER_PIXEL_LIGHTS && i < num; i++, m_numVertexLights++)
+		m_activeVertexLights[i - PER_PIXEL_LIGHTS] = allLights[i];
 
 	return num;
 }
 
-void GLESRenderer::sendLight(unsigned int fx, OLight* l, int num, const Matrix4x4& matrix)
+void GLESRenderer::sendLight(unsigned int fx, const char* prefix, OLight* l, int num, const Matrix4x4& matrix)
 {
 	char str[255];
 	char ending[255];
 
-	sprintf(str, "Lights[%d].", num);
+	sprintf(str, "%sLights[%d].", prefix, num);
 
 	strcpy(ending, str);
 	strcat(ending, "Position");
@@ -813,11 +830,17 @@ void GLESRenderer::drawEntity(OEntity* e, Scene* scene, OCamera* camera)
 		glUniformMatrix4fv(m_normalMatrixUniform, 1, true, MV.getInverse().entries);
 
 		{
-			int i = 0;
-			for (OLight** light = m_activeLights; *light != nullptr && i < 8; light++, i++)
-				sendLight(m_objectShader, *light, i, camera->getCurrentViewMatrix()->entries);
+			for(int i = 0; i < m_numPixelLights; i++)
+				sendLight(m_objectShader, "Pixel", m_activePixelLights[i], i, camera->getCurrentViewMatrix()->entries);
 
-			glUniform1i(m_lightsCountUniform, i);
+			for(int i = 0; i < m_numVertexLights; i++)
+				sendLight(m_objectShader, "Vertex", m_activeVertexLights[i], i, camera->getCurrentViewMatrix()->entries);
+
+			//for (OLight** light = m_activePixelLights; *light != nullptr && i < 8; light++, i++)
+			//	sendLight(m_objectShader, *light, i, camera->getCurrentViewMatrix()->entries);
+
+			glUniform1i(m_lightsCountUniform, m_numPixelLights);
+			glUniform1i(m_vertexLightsCountUniform, m_numVertexLights);
 		}
 
 		for (int j = 0; j < subMeshes[i].getDisplaysNumber(); j++)
@@ -881,7 +904,9 @@ void GLESRenderer::drawEntity(OEntity* e, Scene* scene, OCamera* camera)
 				glCullFace(neo2gles(display->getCullMode()));
 			}
 
-			if(subMeshes[i].getIndices())
+			drawSubmeshDisplay(&subMeshes[i], display, display->getPrimitiveType());
+
+			/*if(subMeshes[i].getIndices())
 			{
 				if(*subMeshes[i].getVBOid2() > 0)
 				{
@@ -925,7 +950,7 @@ void GLESRenderer::drawEntity(OEntity* e, Scene* scene, OCamera* camera)
 			else
 			{
 				glDrawArrays(neo2gles(display->getPrimitiveType()), display->getBegin(), display->getSize());
-			}
+			}*/
 		}
 	}
 
@@ -934,6 +959,55 @@ void GLESRenderer::drawEntity(OEntity* e, Scene* scene, OCamera* camera)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	mesh->updateBoundingBox();
+}
+
+void GLESRenderer::drawSubmeshDisplay(SubMesh* submesh, MaterialDisplay* display, PRIMITIVE_TYPES primtype)
+{
+	if(submesh->getIndices())
+	{
+		if(*submesh->getVBOid2() > 0)
+		{
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *submesh->getVBOid2());
+
+			switch(submesh->getIndicesType())
+			{
+				case VAR_USHORT:
+					glDrawElements(neo2gles(primtype),
+								   display->getSize(),
+								   GL_UNSIGNED_SHORT,
+								   (void*)(display->getBegin()*sizeof(short)));
+					break;
+				case VAR_UINT:
+					glDrawElements(neo2gles(primtype),
+								   display->getSize(),
+								   GL_UNSIGNED_INT,
+								   (void*)(display->getBegin()*sizeof(int)));
+					break;
+			}
+		}
+		else
+		{
+			switch(submesh->getIndicesType())
+			{
+				case VAR_USHORT:
+					glDrawElements(neo2gles(primtype),
+								   display->getSize(),
+								   GL_UNSIGNED_SHORT,
+								   static_cast<unsigned short*>(submesh->getIndices()) + display->getBegin());
+					break;
+				case VAR_UINT:
+					glDrawElements(neo2gles(primtype),
+								   display->getSize(),
+								   GL_UNSIGNED_INT,
+								   static_cast<unsigned int*>(submesh->getIndices()) + display->getBegin());
+					break;
+			}
+		}
+	}
+	else
+	{
+		glDrawArrays(neo2gles(primtype), display->getBegin(), display->getSize());
+	}
 }
 
 void GLESRenderer::prepareMaterialDisplay(unsigned int fx, SubMesh* mesh, MaterialDisplay* display)
@@ -1385,15 +1459,20 @@ unsigned int GLESRenderer::loadShader(const char* vertPath, const char* fragPath
 	// FIXME: Preprocessor!
 	char* vert, *frag;
 
-	if(!(vert = readTextFile(vertPath)))
+	const char* pwd = NeoEngine::getInstance()->getSystemContext()->getWorkingDirectory();
+	char fullpath[256];
+	getGlobalFilename(fullpath, pwd, vertPath);
+
+	if(!(vert = readTextFile(fullpath)))
 	{
-		MLOG_ERROR("Vertex shader " << vertPath << " could not be loaded!");
+		MLOG_ERROR("Vertex shader " << fullpath << " could not be loaded!");
 		return 0;
 	}
 
-	if(!(frag = readTextFile(fragPath)))
+	getGlobalFilename(fullpath, pwd, fragPath);
+	if(!(frag = readTextFile(fullpath)))
 	{
-		MLOG_ERROR("Fragment shader " << fragPath << " could not be loaded!");
+		MLOG_ERROR("Fragment shader " << fullpath << " could not be loaded!");
 		return 0;
 	}
 

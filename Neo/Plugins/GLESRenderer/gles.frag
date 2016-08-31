@@ -32,12 +32,12 @@ uniform vec3 Specular;
 uniform float Shininess;
 uniform float Opacity;
 
-uniform LightInfo Lights[8];
-uniform int LightsCount;
+uniform LightInfo PixelLights[4];
+uniform int PixelLightsCount;
+
 uniform vec3 AmbientLight;
 
-vec4 calculatePhongLight(LightInfo light, vec3 p, vec3 n, vec4 diffuse,
-						 float shininess)
+vec4 calculatePhongLight(LightInfo light, vec3 p, vec3 n, float shininess)
 {
 	vec3 l = light.Position - p;
 	vec3 s = normalize(l);
@@ -60,7 +60,7 @@ vec4 calculatePhongLight(LightInfo light, vec3 p, vec3 n, vec4 diffuse,
 			return vec4(0, 0, 0, 0);
 	}
 
-	return attenuation * vec4(light.Intensity * (light.Diffuse * diffuse.rgb * max(dot(s, n), 0.0) + light.Diffuse * Specular * pow(max(dot(h, n), 0.0), shininess)), 1.0);
+	return attenuation * vec4(light.Intensity * (light.Diffuse * max(dot(s, n), 0.0) + light.Diffuse * Specular * pow(max(dot(h, n), 0.0), shininess)), 1.0);
 }
 
 void main()
@@ -123,11 +123,36 @@ void main()
 	}
 
 	vec4 accum = vec4(0,0,0,0);
-   	for(int i = 0; i < 4; i++)
+	if(PixelLightsCount >= 1)
+	{
+		accum = accum + calculatePhongLight(PixelLights[0], position.xyz,
+    							norm, 2.0*shininess);
+
+    	if(PixelLightsCount >= 2)
+        {
+        	accum = accum + calculatePhongLight(PixelLights[1], position.xyz,
+                      							norm, 2.0*shininess);
+
+            if(PixelLightsCount >= 3)
+            {
+            	accum = accum + calculatePhongLight(PixelLights[2], position.xyz,
+                            							norm,  2.0*shininess);
+
+                if(PixelLightsCount >= 4)
+                {
+                   	accum = accum + calculatePhongLight(PixelLights[3], position.xyz,
+                                  							norm,  2.0*shininess);
+                }
+
+            }
+        }
+	}
+
+   	/*for(int i = 0; i < 4; i++)
    	{
    		accum = accum + calculatePhongLight(Lights[i], position.xyz,
 							norm, gl_FragColor, 2.0*shininess);
-   	}
+   	}*/
 
-   	gl_FragColor.rgb = AmbientLight + gl_FragColor.rgb * Emit + accum.rgb;
+   	gl_FragColor.rgb = AmbientLight + gl_FragColor.rgb * Emit + gl_FragColor.rgb * (color + accum.rgb);
 }

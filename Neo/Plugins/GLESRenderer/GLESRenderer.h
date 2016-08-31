@@ -37,7 +37,7 @@ class GLESRenderer : public Renderer
 	unsigned int m_textShader;
 
 	unsigned int m_mvpMatrixUniform, m_normalMatrixUniform, m_textureModeUniform;
-	unsigned int m_opacityUniform, m_diffuseUniform, m_lightsCountUniform;
+	unsigned int m_opacityUniform, m_diffuseUniform, m_lightsCountUniform, m_vertexLightsCountUniform;
 	unsigned int m_modelViewMatrixUniform, m_specularUniform, m_shininessUniform;
 	unsigned int m_emitUniform, m_ambientLightUniform;
 	
@@ -49,7 +49,13 @@ class GLESRenderer : public Renderer
 	
 	unsigned int m_vertexVbo, m_texcoordVbo;
 
-	OLight* m_activeLights[8];
+	static const unsigned int PER_PIXEL_LIGHTS = 4;
+	static const unsigned int PER_VERTEX_LIGHTS = 4;
+
+	OLight* m_activePixelLights[PER_PIXEL_LIGHTS];
+	OLight* m_activeVertexLights[PER_VERTEX_LIGHTS];
+	int m_numPixelLights;
+	int m_numVertexLights;
 
 	Matrix4x4 m_matrix;
 
@@ -58,7 +64,15 @@ class GLESRenderer : public Renderer
 	void prepareMaterialDisplay(unsigned int fx, Neo::SubMesh* mesh, Neo::MaterialDisplay* display);
 	void initVBO(Neo::SubMesh* subMesh);
 	int findLights(Neo::Scene* scene, Neo::OEntity* entity, Neo::SubMesh* submesh);
-	void sendLight(unsigned int fx, OLight* l, int num, const Matrix4x4& matrix);
+	void sendLight(unsigned int fx, const char* prefix, OLight* l, int num, const Matrix4x4& matrix);
+
+	/**
+	 * @brief Draws a completely prepared mesh with the given material display.
+	 * @param submesh The submesh to draw
+	 * @param display The material display to use
+	 * @param primitives Used to override the primitive type dictated by the display. (For wireframes)
+	 */
+	void drawSubmeshDisplay(SubMesh* submesh, MaterialDisplay* display, PRIMITIVE_TYPES primitives);
 
 public:
 
