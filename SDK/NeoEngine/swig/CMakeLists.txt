@@ -109,7 +109,6 @@ IF (${SWIG_FOUND})
     swig_link_libraries(NeoEngineLua ${NEO_ENGINE_LIBRARIES} ${NEO_CORE_LIBRARIES} ${LUA_LIBRARIES})
     target_include_directories(NeoEngineLua PUBLIC ${LUA_INCLUDE_DIR} ${NEO_CORE_INCLUDE_DIR} ${NEO_ENGINE_INCLUDE_DIR})
 
-
     #IF(NOT ANDROID AND NOT EMSCRIPTEN)
     ## Build from cache, even if the files could not be updated
     #ADD_LIBRARY(NeoEngineLua SHARED ${CMAKE_CURRENT_BINARY_DIR}/NeoEngineLua_wrap.cxx)

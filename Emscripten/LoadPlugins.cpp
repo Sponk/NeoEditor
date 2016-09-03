@@ -42,10 +42,24 @@
 
 #undef StartPlugin
 #undef EndPlugin
+#define StartPlugin StartPlugin_Bullet
+#define EndPlugin EndPlugin_Bullet
+
+#include "../Neo/Plugins/BulletPhysics/Plugin.cpp"
+
+#undef StartPlugin
+#undef EndPlugin
+#define StartPlugin StartPlugin_OpenAL
+#define EndPlugin EndPlugin_OpenAL
+
+#include "../Neo/Plugins/OpenALContext/Plugin.cpp"
+
+/*#undef StartPlugin
+#undef EndPlugin
 #define StartPlugin StartPlugin_Editor
 #define EndPlugin EndPlugin_Editor
 
-#include "../Neo/Plugins/NeoEditor/src/Plugin.cpp"
+#include "../Neo/Plugins/NeoEditor/src/Plugin.cpp"*/
 
 #undef StartPlugin
 #undef EndPlugin 
@@ -98,7 +112,9 @@ int main(int argc, char* argv[])
 	StartPlugin_AssetLoading();
 	StartPlugin_LuaScripting();
 	StartPlugin_NPK();
-	StartPlugin_Editor();
+	StartPlugin_Bullet();
+	StartPlugin_OpenAL();
+	// StartPlugin_Editor();
 
 /*	WebPackage package;
 	engine->setPackageManager(&package);
@@ -135,7 +151,7 @@ int main(int argc, char* argv[])
 
 							  engine->getGame()->begin();
 							  engine->loadLevel(project.getLevel().c_str());
-							  //engine->getScriptContext()->runScript("main.lua");
+							  // engine->getScriptContext()->runString("print(tostring(Neo2DLua.Widget))");
 						  },
 
 						  [](const char* s){

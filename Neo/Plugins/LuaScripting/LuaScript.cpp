@@ -428,6 +428,11 @@ LuaScript::~LuaScript(void)
 	clear();
 }
 
+#ifdef EMSCRIPTEN
+extern "C" int luaopen_NeoEngineLua(lua_State* L);
+extern "C" int luaopen_Neo2DLua(lua_State* L);
+#endif
+
 void LuaScript::init(void)
 {
 	NeoEngine * engine = NeoEngine::getInstance();
@@ -490,6 +495,13 @@ void LuaScript::init(void)
 			  "end");
 
 	addFunction("log", log);
+
+	// Automatically load NeoEngineLua when running on the web
+#ifdef EMSCRIPTEN
+	MLOG_INFO("Automatically loading statically linked NeoEngineLua and Neo2DLua modules");
+	luaopen_NeoEngineLua(m_state);
+	luaopen_Neo2DLua(m_state);
+#endif
 
 	// register custom functions
 	map<string, int (*)(void)>::iterator
