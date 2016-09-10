@@ -239,6 +239,8 @@ StandardRenderer::StandardRenderer() :
 	m_texCoords[3] = Vector2(1, 0);
 	m_texCoords[2] = Vector2(1, 1);
 
+	m_visibleObjects = NeoEngine::getInstance()->getConfigurationRegistry().registerVariable("g_visible_objects_count");
+
 	//init();
 }
 
@@ -1129,6 +1131,10 @@ void StandardRenderer::drawScene(Scene* scene, OCamera* camera)
 		}
 
 		PROFILE_END("Culling");
+
+		*m_visibleObjects = std::to_string(data->visibleEntities.size()
+											   + data->visibleTransparentEntities.size()
+											   + std::stoi(*m_visibleObjects));
 
 		data->visibleLights.clear();
 		for (int i = 0, j = 0; i < scene->getLightsNumber(); i++)
@@ -2111,7 +2117,7 @@ void StandardRenderer::drawText2D(OText* text, float x, float y, float rotation)
 	RenderingContext* renderContext =
 		NeoEngine::getInstance()->getRenderingContext();
 
-	text->setPosition(Vector3(x, y, 0));
+	text->setPosition(Vector3(floor(x), floor(y), 0));
 	text->setRotation(Quaternion(0, 0, rotation));
 	text->updateMatrix();
 

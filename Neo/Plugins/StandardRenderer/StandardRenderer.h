@@ -123,6 +123,8 @@ public:
 	Vector2 m_vertices[4];
 	Vector2 m_resolution;
 
+	std::string* m_visibleObjects;
+
 private:
 	void drawDisplay(SubMesh * subMesh, MaterialDisplay * display, Vector3 * vertices, Vector3 * normals, Vector3 * tangents, Color * colors);
 	void drawOpaques(SubMesh * subMesh, Armature * armature);
