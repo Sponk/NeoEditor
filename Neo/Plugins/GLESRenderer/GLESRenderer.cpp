@@ -314,6 +314,8 @@ void GLESRenderer::initialize()
 
 	MLOG_INFO("********************************************************************************");
 
+	m_numVisible = NeoEngine::getInstance()->getConfigurationRegistry().registerVariable("g_visible_objects_count");
+
 	// Build quad VAO
 	{
 		Vector2 texCoords[4];
@@ -600,7 +602,9 @@ void GLESRenderer::drawScene(Scene* scene, OCamera* camera)
 	if(scene->getEntitiesNumber() == 0 && scene->getTextsNumber() == 0) return;
 
 	m_matrix.loadIdentity();
+
 	camera->enable();
+	camera->getFrustum()->makeVolume(camera);
 
 	glUseProgram(m_objectShader);
 	glUniform3f(m_ambientLightUniform,
@@ -609,18 +613,23 @@ void GLESRenderer::drawScene(Scene* scene, OCamera* camera)
 				scene->getAmbientLight().z*0.25); // The color is too bright most of the time
 
 	// Prepare objects
-	PROFILE_BEGIN("ScenePreparation")
+	PROFILE_BEGIN("SceneDraw")
 //#pragma omp parallel for shared(camera) shared(scene)
+	int numVisible = 0;
 	for(int i = 0; i < scene->getEntitiesNumber(); i++)
 	{
 		OEntity* e = scene->getEntityByIndex(i);
 
 		prepareEntity(e, camera);
-
-		if(!e->isVisible() && e->isActive())
+		if(e->isVisible())
+		{
 			drawEntity(e, scene, camera);
+			numVisible++;
+		}
 	}
-	PROFILE_END("ScenePreparation")
+	PROFILE_END("SceneDraw")
+
+	*m_numVisible = std::to_string(numVisible + std::stoi(*m_numVisible));
 
 	for(int i = 0; i < scene->getTextsNumber(); i++)
 	{
@@ -905,6 +914,15 @@ void GLESRenderer::drawEntity(OEntity* e, Scene* scene, OCamera* camera)
 			}
 
 			drawSubmeshDisplay(&subMeshes[i], display, display->getPrimitiveType());
+
+			if(e->hasWireframe())
+			{
+				glUniform3f(m_diffuseUniform, 0, 0, 0);
+				glUniform1i(m_textureModeUniform, 0);
+				glUniform1f(m_opacityUniform, 1.0);
+
+				drawSubmeshDisplay(&subMeshes[i], display, PRIMITIVE_LINES);
+			}
 
 			/*if(subMeshes[i].getIndices())
 			{

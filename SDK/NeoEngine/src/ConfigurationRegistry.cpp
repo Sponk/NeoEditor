@@ -2,11 +2,11 @@
 
 using namespace Neo;
 
-std::string& ConfigurationRegistry::registerVariable(const std::string& name, std::function<void(std::string&)> cb)
+std::string* ConfigurationRegistry::registerVariable(const std::string& name, std::function<void(std::string&)> cb)
 {
 	Variable& v = m_registry[name];
 	v.callback = cb;
-	return v.str;
+	return &v.str;
 }
 
 void ConfigurationRegistry::removeVariable(const std::string& name)

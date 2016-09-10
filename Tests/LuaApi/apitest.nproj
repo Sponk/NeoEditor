@@ -12,9 +12,9 @@
     	"CommonBehaviors"
     	"AssetLoading"
     	"OpenALContext"
-    	;; GL4Context
-    	;; StandardRenderer
-    	"GLESRenderer"
+    	"GL4Context"
+    	"StandardRenderer"
+    	;; "GLESRenderer"
     	"BulletPhysics"
     	"NPKPlugin"
     	"NeoEditor"

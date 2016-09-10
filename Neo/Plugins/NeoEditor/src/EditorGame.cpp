@@ -335,8 +335,8 @@ void EditorGame::update()
 	// Update diagnostics
 	std::stringstream ss;
 	ss << "Frames Per Second: " << static_cast<int>(floor(1/delta)) << std::endl;
-	ss << "Latency: " << delta * 1000.0 << " ms" << std::endl; 
-													
+	ss << "Latency: " << delta * 1000.0 << " ms" << std::endl;
+	ss << "Visible Objects: " << *m_visibleObjectsCount << std::endl;
 	m_diagnosticsLabel->setLabel(ss.str().c_str());
 
 	// Update object UI
@@ -356,6 +356,8 @@ void EditorGame::draw()
 
 void EditorGame::onBegin()
 {
+	m_visibleObjectsCount = NeoEngine::getInstance()->getConfigurationRegistry().getVariable("g_visible_objects_count");
+
 	// TODO: Load config!
 	auto rootpane = make_shared<Container>(0, 0, 0, 0, nullptr);
 	m_canvas.addObject2D(rootpane);

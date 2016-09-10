@@ -31,6 +31,7 @@ namespace Neo
 
 class GLESRenderer : public Renderer
 {
+	std::string* m_numVisible;
 	unsigned int m_colorShader;
 	unsigned int m_texturedShader;
 	unsigned int m_objectShader;

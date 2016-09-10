@@ -132,6 +132,8 @@ class EditorGame : public Neo::SubGame
 	/// Flag that allows to disable the undo/redo queue
 	bool m_disableUndo;
 	UndoQueue m_undo;
+
+	std::string* m_visibleObjectsCount;
 	
 public:
 	EditorGame(const shared_ptr<NativeToolset>& tools) :

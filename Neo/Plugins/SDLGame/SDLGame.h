@@ -12,6 +12,7 @@ class SDLGame : public Neo::NeoGame
 
 	std::string* m_glVersion;
 	std::string* m_multisample;
+	std::string* m_visibleObjectsCount;
 
 public:
 	SDLGame();
@@ -25,7 +26,7 @@ public:
 
 	SDL_Window* getSDLWindow() const { return m_window; }
 
-	virtual void startFrame() override {}
+	virtual void startFrame() override { *m_visibleObjectsCount = "0"; }
 	virtual void endFrame() override { SDL_GL_SwapWindow(m_window); }
 };
 

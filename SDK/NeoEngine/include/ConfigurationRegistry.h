@@ -43,9 +43,10 @@ class NEO_ENGINE_EXPORT ConfigurationRegistry
 
 	std::unordered_map<std::string, Variable> m_registry;
 public:
-	std::string& registerVariable(const std::string& name, std::function<void(std::string&)> cb = nullptr);
+	std::string* registerVariable(const std::string& name, std::function<void(std::string&)> cb = nullptr);
 	void removeVariable(const std::string& name);
 	void setVariable(const std::string& name, const std::string& value);
+	std::string* getVariable(const std::string& name) { return &m_registry[name].str; }
 	bool exists(const std::string& name) { return m_registry.end() != m_registry.find(name); }
 };
 }
