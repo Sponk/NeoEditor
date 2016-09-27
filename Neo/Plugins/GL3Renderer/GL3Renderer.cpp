@@ -44,6 +44,10 @@
 #include <atomic>
 #include <stdlib.h>
 
+#ifdef min
+#undef min
+#endif
+
 #ifndef SHADER_PATH
 #define SHADER_PATH "./"
 #endif

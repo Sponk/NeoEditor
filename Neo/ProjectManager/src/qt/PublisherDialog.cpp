@@ -4,6 +4,14 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
+#ifdef WIN32
+#define PUBLISHER_EXEC ".\\neo-publisher.exe"
+#define PLAYER_EXEC ".\\NeoPlayer2.exe"
+#else
+#define PUBLISHER_EXEC "./neo-publisher"
+#define PLAYER_EXEC "./NeoPlayer2"
+#endif
+
 PublisherDialog::PublisherDialog(Project& project, QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::PublisherDialog),
@@ -13,13 +21,13 @@ PublisherDialog::PublisherDialog(Project& project, QWidget *parent) :
 	
 	// Find all generators
 	QProcess process;
-	process.start("./neo-publisher -hg");
+	process.start(PUBLISHER_EXEC " -hg");
 	process.waitForFinished(-1); // FIXME: Wait forever or timeout?
 	
-	QString stdout = process.readAllStandardOutput();
-	stdout.remove('\t');
+	QString out = process.readAllStandardOutput();
+	out.remove('\t');
 	
-	QStringList lines = stdout.split("\n");
+	QStringList lines = out.split("\n");
 	lines.removeFirst();
 	lines.removeLast();
 	
@@ -35,10 +43,10 @@ void PublisherDialog::publish()
 {
 	QProcess process;
 	process.setReadChannel(QProcess::StandardOutput);
-	process.start("./neo-publisher", QStringList()  << "-i" << project.getFilePath().c_str()
+	process.start(PUBLISHER_EXEC, QStringList()  << "-i" << project.getFilePath().c_str()
 							<< "-o" << ui->outputEdit->text()
 							<< "-g" << ui->generatorsComboBox->currentText()
-							<< "-p" << "./NeoPlayer2" << "-v");
+							<< "-p" << PLAYER_EXEC << "-v");
 	
 	ui->commandTextEdit->clear();
 	process.waitForStarted();
