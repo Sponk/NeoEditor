@@ -10,6 +10,7 @@ add_subdirectory(Neo2DPlugin)
 add_subdirectory(BulletPhysics)
 add_subdirectory(NPK)
 add_subdirectory(NeoSharp)
+add_subdirectory(GL3Renderer)
 
 if(NOT NO_GLES)
 	add_subdirectory(GL2Context)
