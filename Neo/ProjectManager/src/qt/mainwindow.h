@@ -25,6 +25,7 @@ public slots:
 	void createProject();
 	void importProject();
 	void openSelectedProject();
+	void publishSelectedProject();
 	void removeProject();
 	void importTemplate();
 	void removeTemplate();

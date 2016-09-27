@@ -5,6 +5,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "NewProjectWizard.h"
+#include "PublisherDialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -92,6 +93,19 @@ void MainWindow::openSelectedProject()
 #else
 	QProcess::startDetached(QApplication::applicationDirPath() + QDir::separator() + "NeoPlayer2.exe", QStringList() << "-p" << file.c_str());
 #endif
+}
+
+void MainWindow::publishSelectedProject()
+{
+	int selected = ui->listWidget->currentIndex().row();
+	if(selected == -1)
+		return;
+	
+	auto& project = m_backend.getProjects()[selected];
+	PublisherDialog dlg(project);
+
+	dlg.setWindowTitle(project.getName().c_str());
+	dlg.exec();
 }
 
 void MainWindow::removeProject()

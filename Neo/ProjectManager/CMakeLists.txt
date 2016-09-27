@@ -13,7 +13,12 @@ add_executable(ProjectManager
         src/qt/mainwindow.ui
         src/qt/NewProjectWizard.ui
         src/qt/NewProjectWizard.cpp
-        src/qt/NewProjectWizard.h src/ProjectBackend.cpp src/ProjectBackend.h)
+        src/qt/NewProjectWizard.h
+        src/qt/PublisherDialog.ui
+        src/qt/PublisherDialog.cpp
+        src/qt/PublisherDialog.h
+        src/ProjectBackend.cpp 
+        src/ProjectBackend.h)
 
 include_directories(${SEXPRESSO_INCLUDE_DIR} ${GTEST_INCLUDE_DIR} ${NEO_CORE_INCLUDE_DIR})
 target_link_libraries(ProjectManager Qt5::Core Qt5::Widgets Qt5::Gui ${SEXPRESSO_LIBRARIES} libproject ${NEO_CORE_LIBRARIES})

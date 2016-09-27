@@ -69,6 +69,13 @@
              </widget>
             </item>
             <item>
+             <widget class="QPushButton" name="pushButton_7">
+              <property name="text">
+               <string>Publish Project</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <spacer name="horizontalSpacer">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -191,7 +198,7 @@
      <x>0</x>
      <y>0</y>
      <width>704</width>
-     <height>30</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
@@ -311,6 +318,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_7</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>publishSelectedProject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>531</x>
+     <y>118</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>501</x>
+     <y>28</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>createProject()</slot>
@@ -320,5 +343,6 @@
   <slot>importTemplate()</slot>
   <slot>removeTemplate()</slot>
   <slot>updateTemplateData(QString)</slot>
+  <slot>publishSelectedProject()</slot>
  </slots>
 </ui>
