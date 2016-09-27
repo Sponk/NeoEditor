@@ -142,7 +142,7 @@ bool loadLispLevel(const char* filename, Level* level)
 	char* levelfile = readTextFile(filename);
 	if(!levelfile)
 	{
-		MLOG_ERROR("Could not load level file: " << filename);
+		MLOG_ERROR("Could not load level file '" << filename << "' : File not found!");
 		return false;
 	}
 

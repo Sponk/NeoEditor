@@ -157,7 +157,7 @@ void SceneView::resetCamera()
 void SceneView::draw(const Neo::Vector2& offset)
 {	
 	NeoEngine* engine = NeoEngine::getInstance();
-	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext();
+	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext(); // FIXME: Move all of these to Renderer!
 	
 	const Vector2 size = engine->getSystemContext()->getScreenSize();
 	render->setViewport(0, 0, size.x, size.y);
@@ -308,7 +308,7 @@ void SceneView::translationHandle(OEntity* handleEntity, const Vector3& axis, co
 	Vector3 vec = (p1 - p2) * distance * axis;
 
 	// Apply snap to grid
-	if(m_gridSize != 0 && mousedir.getLength() < 10)
+	if(m_gridSize != 0 && mousedir.getLength() < 2.5) // Changes the amount the mouse has to move before it registers
 	{
 		return;
 	}

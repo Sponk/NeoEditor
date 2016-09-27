@@ -106,7 +106,8 @@ void SDLGame::onBegin()
 #endif
 
 	NeoEngine* engine = NeoEngine::getInstance();
-	engine->setLevel(new Level);
+
+	// engine->setLevel(new Level);
 	engine->getSystemContext()->setScreenSize(width, height);
 	NeoGame::onBegin();
 }
@@ -128,7 +129,12 @@ void SDLGame::update()
 void SDLGame::draw()
 {
 	//SDL_GL_MakeCurrent(m_window, m_context);
-	NeoEngine::getInstance()->getRenderingContext()->clear(BUFFER_COLOR);
+	NeoEngine* engine = NeoEngine::getInstance();
+	Renderer* render = engine->getRenderer();
+
+	OCamera* camera = engine->getLevel()->getCurrentScene()->getCurrentCamera();
+	render->clearScreen((camera) ? camera->getClearColor() : OCamera().getClearColor());
+
 	NeoGame::draw();
 	// SDL_GL_SwapWindow(m_window);
 }

@@ -349,6 +349,11 @@ void EditorGame::update()
 
 void EditorGame::draw()
 {
+	NeoEngine* engine = NeoEngine::getInstance();
+	Renderer* render = engine->getRenderer();
+
+	render->set2D(engine->getSystemContext()->getScreenSize());
+	
 	PROFILE_BEGIN("GuiDraw");
 	m_canvas.draw();
 	PROFILE_END("GuiDraw");
@@ -356,7 +361,13 @@ void EditorGame::draw()
 
 void EditorGame::onBegin()
 {
-	m_visibleObjectsCount = NeoEngine::getInstance()->getConfigurationRegistry().getVariable("g_visible_objects_count");
+	NeoEngine* engine = NeoEngine::getInstance();
+
+	static Level level;
+	if(engine->getLevel() == nullptr)
+		engine->setLevel(&level);
+
+	m_visibleObjectsCount = engine->getConfigurationRegistry().getVariable("g_visible_objects_count");
 
 	// TODO: Load config!
 	auto rootpane = make_shared<Container>(0, 0, 0, 0, nullptr);
@@ -1213,7 +1224,6 @@ void EditorGame::onBegin()
 		level->getMaterialsAnimManager()->update();
 	}, nullptr));
 
-	NeoEngine* engine = NeoEngine::getInstance();
     SystemContext* system = engine->getSystemContext();
 
     system->setWindowTitle(tr("Neo Scene Editor"));
@@ -1228,6 +1238,9 @@ void EditorGame::onBegin()
             break;
         }
     }
+
+	if(level.getScenesNumber() == 0)
+		engine->loadLevel("");
 }
 
 void EditorGame::onEnd()
@@ -1561,7 +1574,7 @@ void EditorGame::updateWindowTitle()
 {
 	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 	std::stringstream ss;
-	ss << tr("Neo Scene Editor") << " - " << m_currentLevelFile;
+	ss << tr("Neo Scene Editor") << " - " << ((m_currentLevelFile.empty()) ? tr("New Level") : m_currentLevelFile);
 	engine->getSystemContext()->setWindowTitle(ss.str().c_str());
 }
 
@@ -1580,13 +1593,18 @@ void EditorGame::loadProject(const char* path)
 
 	char dir[256];
     getRepertory(dir, path);
-	NeoEngine::getInstance()->getSystemContext()->setWorkingDirectory(dir);
+
+	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
+	system->setWorkingDirectory(dir);
 
 	if(!m_project.getLevel().empty())
 	{
 		std::string absolutePath(dir);
 		openLevel((absolutePath + m_project.getLevel()).c_str());
 	}
+	else
+		updateWindowTitle();
+
 }
 
 void EditorGame::saveProject(const char* path)
@@ -1871,7 +1889,7 @@ void EditorGame::updateSceneUi()
 {
 	Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
 	m_sceneNameEdit->setLabel(scene->getName());
-	m_sceneScriptFileEdit->setLabel(scene->getScriptFilename());
+	m_sceneScriptFileEdit->setLabel((scene->getScriptFilename()) ? scene->getScriptFilename() : "");
 	m_sceneGravityEdit->setVector(scene->getGravity());
 	m_sceneAmbientLightEdit->setColor(scene->getAmbientLight());
 }

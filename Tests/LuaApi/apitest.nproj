@@ -8,16 +8,16 @@
 	(description "")
 	(plugins
 		"SDLGame"
-    	"LuaScripting"
-    	"CommonBehaviors"
-    	"AssetLoading"
-    	"OpenALContext"
-    	"GL4Context"
-    	"StandardRenderer"
-    	;; "GLESRenderer"
-    	"BulletPhysics"
-    	"NPKPlugin"
-    	"NeoEditor"
+		"LuaScripting"
+		"CommonBehaviors"
+		"AssetLoading"
+		"OpenALContext"
+		;;"GL4Context"
+		;;"StandardRenderer"
+		"GL3Renderer"
+		"BulletPhysics"
+		"NPKPlugin"
+		"NeoEditor"
 	)
 	(additional-files "assets/default.ttf")
 )

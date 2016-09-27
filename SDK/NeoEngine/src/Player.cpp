@@ -40,8 +40,13 @@ bool Player::loadPlugin(const char* name)
 void Player::begin(const char* level)
 {
 	NeoGame* game = m_engine->getGame();
-	game->begin();	
-	m_engine->loadLevel(level);
+	game->begin();
+
+	if (m_engine->getLevel() == NULL)
+	{
+		m_engine->setLevel(new Level);
+		m_engine->loadLevel((level == NULL) ? "" : level);
+	}
 }
 
 void Player::end()

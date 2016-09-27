@@ -121,7 +121,7 @@ bool NeoEngine::loadLevel(const char * filename)
 	getGlobalFilename(globalFilename, m_systemContext->getWorkingDirectory(), filename);
 
 	// Check if there is a level under the given name
-	if(!isFileExist(globalFilename))
+	if(strlen(filename) == 0 || !isFileExist(globalFilename))
 	{
 		MLOG_ERROR("Could not load level '" << filename << "', loading an empty level instead.");
 		m_level->clear();
