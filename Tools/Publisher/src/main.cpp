@@ -148,7 +148,7 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	return !publisher->publish(settings.inputProject.c_str(), settings.player.c_str(),
+	return publisher->publish(settings.inputProject.c_str(), settings.player.c_str(),
 							   settings.outputDirectory.c_str(), settings.verbose, settings.startLevel.c_str(),
 							   [](int p){
 								   cout << "Progress: " << p << "%" << endl;
