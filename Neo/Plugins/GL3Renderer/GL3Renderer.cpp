@@ -427,7 +427,7 @@ void GL3Renderer::initialize()
 
 void GL3Renderer::destroy()
 {
-
+	NeoEngine::getInstance()->getConfigurationRegistry().removeVariable("g_render_debug_mode");
 }
 
 static void updateSkinning(Mesh* mesh, Armature* armature)
