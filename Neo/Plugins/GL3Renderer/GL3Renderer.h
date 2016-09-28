@@ -31,6 +31,8 @@ namespace Neo
 
 class GL3Renderer : public Renderer
 {
+	enum { DEBUG_NONE, DEBUG_WIREFRAME, DEBUG_FILL } m_debugMode;
+
 	std::string* m_numVisible;
 	unsigned int m_colorShader;
 	unsigned int m_texturedShader;

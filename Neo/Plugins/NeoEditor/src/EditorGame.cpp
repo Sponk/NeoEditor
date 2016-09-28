@@ -443,7 +443,43 @@ void EditorGame::onBegin()
 	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/media-playback-start.png", m_toolbar);
 	toolbutton->setCallback([this](Widget&, void*) { runGame(); }, nullptr);
 	m_toolbar->addWidget(toolbutton);
-	
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/go-previous.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) {
+		auto cam = m_sceneView->getCamera();
+		cam->setEulerRotation(Vector3(0,0,0));
+		cam->rotate(Vector3(1,0,0), 90);
+		cam->rotate(Vector3(0,1,0), 90);
+		cam->updateMatrix();
+	}, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/go-up.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) {
+		auto cam = m_sceneView->getCamera();
+		cam->setEulerRotation(Vector3(-180,0,0));
+		cam->updateMatrix();
+	}, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/go-down.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) {
+		auto cam = m_sceneView->getCamera();
+		cam->setEulerRotation(Vector3(0,0,0));
+		cam->updateMatrix();
+	}, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
+	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/go-next.png", m_toolbar);
+	toolbutton->setCallback([this](Widget&, void*) {
+		auto cam = m_sceneView->getCamera();
+		cam->setEulerRotation(Vector3(0,0,0));
+		cam->rotate(Vector3(1,0,0), 90);
+		cam->rotate(Vector3(0,1,0), -90);
+		cam->updateMatrix();		cam->updateMatrix();
+	}, nullptr);
+	m_toolbar->addWidget(toolbutton);
+
 	auto filemenu = make_shared<Submenu>(tr("File"), m_menubar);
 	auto editmenu = make_shared<Submenu>(tr("Edit"), m_menubar);
 	auto viewmenu = make_shared<Submenu>(tr("View"), m_menubar);
@@ -610,6 +646,18 @@ void EditorGame::onBegin()
 			cam->setEulerRotation(Vector3(0,0,0));
 		}
 	});
+
+	viewmenu->addItem(tr("Wireframe Debug View"), [this](Widget&, void*) {
+			NeoEngine::getInstance()->getConfigurationRegistry().setVariable("g_render_debug_mode", "wireframe");
+		});
+
+	viewmenu->addItem(tr("Wireframe + Filled Debug View"), [this](Widget&, void*) {
+			NeoEngine::getInstance()->getConfigurationRegistry().setVariable("g_render_debug_mode", "fill");
+		});
+
+	viewmenu->addItem(tr("Filled View"), [this](Widget&, void*) {
+			NeoEngine::getInstance()->getConfigurationRegistry().setVariable("g_render_debug_mode", "none");
+		});
 
 	objectmenu->addItem(tr("Add Behavior"), [this](Widget&, void*) {
 			if(!m_sceneView->getSelection().size())
@@ -1177,7 +1225,7 @@ void EditorGame::onBegin()
 	rootpane->addWidget(m_keyboardShortcuts);
 
 	// TODO: Event priorities
-	/*m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_S}, [this](void*){
+	m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_S}, [this](void*){
 		saveLevel();
 	}, nullptr));
 
@@ -1185,19 +1233,19 @@ void EditorGame::onBegin()
 		openLevel();
 	}, nullptr));
 
-	m_keyboardShortcuts->addShortcut(Shortcut({KEY_1}, [this](void*){
+	m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_1}, [this](void*){
 		m_sceneView->setHandleMode(TRANSLATION);
 	}, nullptr));
 
-	m_keyboardShortcuts->addShortcut(Shortcut({KEY_2}, [this](void*){
+	m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_2}, [this](void*){
 		m_sceneView->setHandleMode(SCALE);
 	}, nullptr));
 
-	m_keyboardShortcuts->addShortcut(Shortcut({KEY_3}, [this](void*){
+	m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_3}, [this](void*){
 		m_sceneView->setHandleMode(ROTATION);
 	}, nullptr));
 
-	m_keyboardShortcuts->addShortcut(Shortcut({KEY_DELETE}, [this](void*){
+	m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_DELETE}, [this](void*){
 		deleteSelection();
 	}, nullptr));
 
@@ -1211,7 +1259,7 @@ void EditorGame::onBegin()
 
 	m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_LSHIFT, KEY_Z}, [this](void*){
 		redo();
-	}, nullptr));*/
+	}, nullptr));
 
 	m_keyboardShortcuts->addShortcut(Shortcut({WINDOW_SELECT}, [this](void*){
 		Level* level = NeoEngine::getInstance()->getLevel();

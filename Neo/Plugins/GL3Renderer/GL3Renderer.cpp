@@ -296,14 +296,26 @@ static void setOrthoView(Matrix4x4& matrix, float left, float right, float botto
 
 void GL3Renderer::initialize()
 {
+	m_debugMode = DEBUG_NONE;
+
+	NeoEngine* engine = NeoEngine::getInstance();
+	engine->getConfigurationRegistry().registerVariable("g_render_debug_mode", [this](const std::string& str) {
+		if(str == "none")
+			m_debugMode = DEBUG_NONE;
+		else if(str == "wireframe")
+			m_debugMode = DEBUG_WIREFRAME;
+		else if(str == "fill")
+			m_debugMode = DEBUG_FILL;
+	});
+
 	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
 	{
-		MLOG_ERROR("Can't initialize GLEW: " << glewGetErrorString(err));
+		MLOG_ERROR("Can't initialize GLEW: " << glewGetErrorString(err) << " (GLEW " << glewGetString(GLEW_VERSION) << ")");
 		return;
 	}
-	
+
 	MLOG_INFO("********************************************************************************");
 	MLOG_INFO("Renderer:\t\t\t" << glGetString(GL_VERSION) << "\t");
 	MLOG_INFO("Vendor:\t\t\t" << glGetString(GL_VENDOR) << "\t");
@@ -934,17 +946,32 @@ void GL3Renderer::drawEntity(OEntity* e, Scene* scene, OCamera* camera)
 				glCullFace(neo2gles(display->getCullMode()));
 			}
 
-			drawSubmeshDisplay(&subMeshes[i], display, display->getPrimitiveType());
+#ifdef GL_DEBUG
+			if(m_debugMode == DEBUG_FILL || m_debugMode == DEBUG_NONE)
+#endif
+				drawSubmeshDisplay(&subMeshes[i], display, display->getPrimitiveType());
 
-			if(e->hasWireframe())
+			if(e->hasWireframe()
+
+#ifdef GL_DEBUG
+				|| m_debugMode == DEBUG_FILL || m_debugMode == DEBUG_WIREFRAME)
+#else
+				)
+#endif
 			{
 				glUniform3f(m_diffuseUniform, 0, 0, 0);
 				glUniform1i(m_textureModeUniform, 0);
 				glUniform1f(m_opacityUniform, 1.0);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+				glEnable(GL_POLYGON_OFFSET_LINE);
+				glPolygonOffset(-1.0f, -0.1f);
+
 				drawSubmeshDisplay(&subMeshes[i], display, display->getPrimitiveType());
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+				glPolygonOffset(0.0f, 0.0f);
+				glDisable(GL_POLYGON_OFFSET_LINE);
 			}
 		}
 	}

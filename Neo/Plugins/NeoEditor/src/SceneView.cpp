@@ -269,8 +269,7 @@ void SceneView::scaleHandle(OEntity* handleEntity, const Vector3& axis, const Ve
 	Vector3 p1 = m_camera.getUnProjectedPoint(Vector3(mousepos.x, mousepos.y, 0));
 	Vector3 p2 = m_camera.getUnProjectedPoint(Vector3(oldpos.x, oldpos.y, 0));
 
-	float factor = distance * 0.01;
-
+	float factor = distance * 0.02;
 	Vector3 vec = (p1 - p2) * axis * factor;
 
 	for(auto e : m_selection)
@@ -282,7 +281,7 @@ void SceneView::scaleHandle(OEntity* handleEntity, const Vector3& axis, const Ve
         Matrix4x4 matrix = (*e->getMatrix()) * scaleMatrix;
 		Vector3 transformedVec = matrix.getRotatedVector3(vec);
 
-		newScale = e->getScale() + transformedVec * axis * factor;
+		newScale = e->getScale() + e->getScale() * transformedVec;
 		e->setScale(Vector3(fabs(newScale.x), fabs(newScale.y), fabs(newScale.z)));
 	}
 	
@@ -636,10 +635,21 @@ void SceneView::update(float dt)
 		return;
 
 	float speed = 60.0f * dt;
-	if (input->isKeyDown(KEY_W))
-		m_camera.translate(Vector3(0, 0, -speed), true);
-	else if (input->isKeyDown(KEY_S))
-		m_camera.translate(Vector3(0, 0, speed), true);
+
+	if(!m_camera.isOrtho())
+	{
+		if (input->isKeyDown(KEY_W))
+			m_camera.translate(Vector3(0, 0, -speed), true);
+		else if (input->isKeyDown(KEY_S))
+			m_camera.translate(Vector3(0, 0, speed), true);
+	}
+	else
+	{
+		if (input->isKeyDown(KEY_W))
+			m_camera.setFov(std::max(m_camera.getFov() - speed, 0.0f));
+		else if (input->isKeyDown(KEY_S))
+			m_camera.setFov(m_camera.getFov() + speed);
+	}
 
 	if (input->isKeyDown(KEY_A))
 		m_camera.translate(Vector3(-speed, 0, 0), true);
