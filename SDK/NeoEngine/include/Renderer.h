@@ -179,6 +179,11 @@ public:
 
 	virtual void drawText2D(Neo::OText* text, float x, float y, float rotation) = 0;
 
+	virtual void enableScissors(unsigned int x, unsigned int y, unsigned int w, unsigned int h) = 0;
+	virtual void disableScissors() = 0;
+	
+	virtual void enableDepthTest(bool value) = 0;
+	
 	virtual void stopThreads() {}
 	virtual void startThreads() {}
 	virtual void KillThreads() {}
@@ -243,6 +248,11 @@ public:
 	virtual void sendTexture(unsigned int id, Image* image, bool mipMap, bool filter, bool compress) override {}
 	virtual void destroyTexture(unsigned int id) override {}
 	virtual void clearScreen(const Vector3& color) override {}
+	
+	virtual void enableScissors(unsigned int x, unsigned int y, unsigned int w, unsigned int h) {}
+	virtual void disableScissors() {}
+	
+	virtual void enableDepthTest(bool value) {}
 };
 
 }

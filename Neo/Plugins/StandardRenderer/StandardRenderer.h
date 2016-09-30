@@ -183,6 +183,12 @@ public:
 	virtual void sendTexture(unsigned int id, Image* image, bool mipMap, bool filter, bool compress) override;
 	virtual unsigned int createTexture() override;
 	virtual void destroyTexture(unsigned int id) override;
+	
+	virtual void enableScissors(unsigned int x, unsigned int y, unsigned int w, unsigned int h);
+	virtual void disableScissors();
+	
+	virtual void enableDepthTest(bool value);
+	
 private:
 
 	void renderShadows(Scene* scene, OCamera* maincam);

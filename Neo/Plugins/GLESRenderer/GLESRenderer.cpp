@@ -1501,3 +1501,19 @@ unsigned int GLESRenderer::loadShader(const char* vertPath, const char* fragPath
 
 	return p;
 }
+
+void GLESRenderer::enableScissors(unsigned int x, unsigned int y, unsigned int w, unsigned int h)
+{
+	glEnable(GL_SCISSOR_TEST);
+	glScissor(x, y, w, h);
+}
+
+void GLESRenderer::disableScissors()
+{
+	glDisable(GL_SCISSOR_TEST);
+}
+
+void GLESRenderer::enableDepthTest(bool value)
+{
+	value ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+}

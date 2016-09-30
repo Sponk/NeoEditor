@@ -79,18 +79,14 @@ public:
 			default: break;
 		}
 
-		// FIXME: SHOULD NOT BE NECESSARY TO USE A RenderingContext!
-		RenderingContext* renderContext = engine->getRenderingContext();
 		Vector2 screen = engine->getSystemContext()->getScreenSize();
-
-		renderContext->enableScissorTest();
-		renderContext->setScissor(position.x, screen.y - (position.y + edit->getSize().y), edit->getSize().x, edit->getSize().y);
+		renderer->enableScissors(position.x, screen.y - (position.y + edit->getSize().y), edit->getSize().x, edit->getSize().y);
 
 		renderer->drawText2D(text, position.x - textOffset,
 							 position.y + 0.5 * edit->getSize().y,
 							 0.0f);
 
-		renderContext->disableScissorTest();
+		renderer->disableScissors();
 	}
 
 	Vector2 calculateCursorPos(OText* text, int pos) const

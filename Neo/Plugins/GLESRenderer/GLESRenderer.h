@@ -116,6 +116,11 @@ public:
 
 	unsigned int loadShader(const char* vertPath, const char* fragPath);
 	virtual void clearScreen(const Vector3& color) override;
+	
+	virtual void enableScissors(unsigned int x, unsigned int y, unsigned int w, unsigned int h);
+	virtual void disableScissors();
+	
+	virtual void enableDepthTest(bool value);
 };
 }
 #endif

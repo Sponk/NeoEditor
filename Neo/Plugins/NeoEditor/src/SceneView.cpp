@@ -157,14 +157,12 @@ void SceneView::resetCamera()
 void SceneView::draw(const Neo::Vector2& offset)
 {	
 	NeoEngine* engine = NeoEngine::getInstance();
-	RenderingContext* render = NeoEngine::getInstance()->getRenderingContext(); // FIXME: Move all of these to Renderer!
+	Renderer* render = NeoEngine::getInstance()->getRenderer();
 	
 	const Vector2 size = engine->getSystemContext()->getScreenSize();
-	render->setViewport(0, 0, size.x, size.y);
-	render->setClearColor(m_camera.getClearColor());
-	render->clear(BUFFER_COLOR | BUFFER_DEPTH);
-	render->enableScissorTest();
-	render->setScissor(getPosition().x, size.y - (getPosition().y + getSize().y), getSize().x, getSize().y);
+	// render->setViewport(0, 0, size.x, size.y);
+	render->clearScreen(m_camera.getClearColor());
+	render->enableScissors(getPosition().x, size.y - (getPosition().y + getSize().y), getSize().x, getSize().y);
 
 	m_camera.enable();
 	m_camera.updateListener();
@@ -178,8 +176,8 @@ void SceneView::draw(const Neo::Vector2& offset)
 	m_handlesScene->draw(&m_camera);
 	m_representationScene->draw(&m_camera);
 	
-	render->disableDepthTest();
-	render->disableScissorTest();
+	render->enableDepthTest(false);
+	render->disableScissors();
 	engine->getRenderer()->set2D(size);
 }
 

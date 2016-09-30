@@ -2159,6 +2159,25 @@ void StandardRenderer::clearScreen(const Vector3& color)
 	render->clear(BUFFER_COLOR | BUFFER_DEPTH);
 }
 
+void StandardRenderer::enableScissors(unsigned int x, unsigned int y, unsigned int w, unsigned int h)
+{
+	auto render = NeoEngine::getInstance()->getRenderingContext();
+	render->enableScissorTest();
+	render->setScissor(x, y, w, h);
+}
+
+void StandardRenderer::disableScissors()
+{
+	auto render = NeoEngine::getInstance()->getRenderingContext();
+	render->disableScissorTest();
+}
+
+void StandardRenderer::enableDepthTest(bool value)
+{
+	auto render = NeoEngine::getInstance()->getRenderingContext();
+	(value) ? render->enableDepthTest() : render->disableDepthTest();
+}
+
 /*OText* StandardRenderer::create2DText(const char* font, float size)
 {
 	if (!font)
