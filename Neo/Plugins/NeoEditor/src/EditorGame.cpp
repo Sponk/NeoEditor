@@ -441,8 +441,13 @@ void EditorGame::onBegin()
 	m_toolbar->addWidget(toolbutton);
 	
 	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/media-playback-start.png", m_toolbar);
-	toolbutton->setCallback([this](Widget&, void*) { runGame(); }, nullptr);
+	toolbutton->setCallback([this](Widget& w, void*) { 
+			runGame();
+		}
+		, nullptr);
+	
 	m_toolbar->addWidget(toolbutton);
+	m_playButton = toolbutton;
 
 	toolbutton = make_shared<ImageButton>(0,0,32,32, "data/icons/go-previous.png", m_toolbar);
 	toolbutton->setCallback([this](Widget&, void*) {
@@ -1260,6 +1265,10 @@ void EditorGame::onBegin()
 	m_keyboardShortcuts->addShortcut(Shortcut({KEY_LCONTROL, KEY_LSHIFT, KEY_Z}, [this](void*){
 		redo();
 	}, nullptr));
+	
+	m_keyboardShortcuts->addShortcut(Shortcut({KEY_F5}, [this](void*){
+		runGame();
+	}, nullptr));
 
 	m_keyboardShortcuts->addShortcut(Shortcut({WINDOW_SELECT}, [this](void*){
 		Level* level = NeoEngine::getInstance()->getLevel();
@@ -1898,13 +1907,19 @@ void EditorGame::redo()
 
 void EditorGame::runGame()
 {
+	NeoEngine* engine = NeoEngine::getInstance();
+	if(m_isRunningGame)
+	{
+		engine->setActive(false);
+		return;
+	}
+
 	// Save current state
 	m_undo.save();
 
 	// Disable undo/redo queue so it doesn't corrupt
 	m_disableUndo = true;
 
-	NeoEngine* engine = NeoEngine::getInstance();
 	Neo::Player player(16);
 
 	//	for(auto p : m_project.getPlugins())
@@ -1917,9 +1932,15 @@ void EditorGame::runGame()
 	ScriptContext* script = engine->getScriptContext();
 	script->runScript(engine->getLevel()->getCurrentScene()->getScriptFilename());
 	
+	m_playButton.lock()->loadImage("data/icons/media-playback-pause.png");
+	m_isRunningGame = true;
+	
 	engine->getGame()->setDrawMainScene(true);
-	player.execute(KEY_F1);
+	player.execute(KEY_ESCAPE);
 	engine->getGame()->setDrawMainScene(false);
+
+	m_isRunningGame = false;
+	m_playButton.lock()->loadImage("data/icons/media-playback-start.png");
 
 	m_sceneView->setInvisible(false);
 	m_sceneView->setActive(true);

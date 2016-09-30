@@ -44,6 +44,15 @@ public:
 	{
 		m_padding = padding;
 	}
+	
+	/**
+	 * @brief Loads a new image from the given path and displays it.
+	 * 
+	 * Overwrites the current image and might cause disk access.
+	 * 
+	 * @param path The new image to use.
+	 */
+	void loadImage(const char* path);
 };
 
 }

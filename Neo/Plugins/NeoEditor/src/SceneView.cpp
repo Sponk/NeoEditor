@@ -108,7 +108,7 @@ void SceneView::init()
 			m_cameraObject->setInvisible(true);
 
 			/*m_spotLightObject->getMaterial(0)->setEmit(Vector3(1, 0, 0));
-		    m_cameraObject->getMaterial(0)->setEmit(Vector3(1, 0, 0));
+			m_cameraObject->getMaterial(0)->setEmit(Vector3(1, 0, 0));
 			m_directionalLightObject->getMaterial(0)->setEmit(Vector3(1, 0, 0));*/
 					
 		}

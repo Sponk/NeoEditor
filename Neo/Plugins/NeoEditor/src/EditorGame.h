@@ -12,6 +12,7 @@
 #include <Label.h>
 #include <EditField.h>
 #include <CheckButton.h>
+#include <ImageButton.h>
 #include <Project.h>
 #include "VectorEdit.h"
 #include "NativeToolset.h"
@@ -135,10 +136,14 @@ class EditorGame : public Neo::SubGame
 
 	std::string* m_visibleObjectsCount;
 	
+	bool m_isRunningGame;
+	weak_ptr<Neo2D::Gui::ImageButton> m_playButton;
+	
 public:
 	EditorGame(const shared_ptr<NativeToolset>& tools) :
 		m_toolset(tools),
-		m_disableUndo(false)
+		m_disableUndo(false),
+		m_isRunningGame(false)
 	{}
 
 	virtual void update();
