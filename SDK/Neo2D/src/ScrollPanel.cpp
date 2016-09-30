@@ -48,23 +48,18 @@ void Neo2D::Gui::ScrollPanel::updateScrollbarPlacement()
 void Neo2D::Gui::ScrollPanel::draw(const Neo::Vector2& offset)
 {
 	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
-	Neo::Renderer* renderer = engine->getRenderer();
-	Neo::RenderingContext* render = engine->getRenderingContext();
+	Neo::Renderer* render = engine->getRenderer();
 
-	renderer->drawColoredQuad(getPosition(), getSize(), Neo::Vector4(1,1,1,1), 0.0f);
+	render->drawColoredQuad(getPosition(), getSize(), Neo::Vector4(1,1,1,1), 0.0f);
 
 	Neo::Vector2 screen = engine->getSystemContext()->getScreenSize();
 	Neo::Vector2 scissor = offset + getPosition();
 	for(auto c : getChildren())
 	{
-		// Ensure the scissor is set correctly.
-		// Prevents issues with nesting scroll panels and other widgets that change the scissor
-		render->enableScissorTest();
-		render->setScissor(scissor.x, screen.y - (scissor.y + getSize().y), getSize().x, getSize().y);
-
+		render->enableScissors(scissor.x, screen.y - (scissor.y + getSize().y), getSize().x, getSize().y);
 		c->draw(offset);
 	}
-	render->disableScissorTest();
+	render->disableScissors();
 
 	horizontalScroll.draw(offset);
 	verticalScroll.draw(offset);

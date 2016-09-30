@@ -82,6 +82,8 @@ class SceneView : public Neo2D::Gui::Widget
 	void scaleHandle(Neo::OEntity* handleEntity, const Neo::Vector3& axis, const Neo::Vector3& mousepos);
 	void translationHandle(Neo::OEntity* handleEntity, const Neo::Vector3& axis, const Neo::Vector3& mousepos);
 	
+	bool m_showEditorScenes;
+	
 public:
 	SceneView(UndoQueue& undo,
 			  int x,
@@ -115,6 +117,8 @@ public:
 
 	void setGridSize(unsigned int sz) { m_gridSize = sz; }
 	unsigned int getGridSize() const { return m_gridSize; }
+	
+	void showEditorScenes(bool b) { m_showEditorScenes = b; }
 	
 	using Neo2D::Gui::Widget::setState;
 };

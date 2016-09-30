@@ -78,8 +78,8 @@ public:
 
 	// properties
 	inline void enableFog(const bool fog){ m_fog = fog; }
-    inline Vector3 getFogColor() { return m_fogColor; }
-    inline void setFogColor(Vector3 color) { m_fogColor = color; }
+	inline Vector3 getFogColor() { return m_fogColor; }
+	inline void setFogColor(Vector3 color) { m_fogColor = color; }
 	inline void enableOrtho(const bool ortho){ m_ortho = ortho; }
 	inline void setFov(const float fov){ m_fov = fov; }
 	inline void setFogDistance(const float fogDistance){ m_fogDistance = fogDistance; }
@@ -118,15 +118,15 @@ public:
 	inline TextureRef * getRenderColorTexture(void){ return m_renderColorTexture; }
 	inline TextureRef * getRenderDepthTexture(void){ return m_renderDepthTexture; }
 
-    inline void drawSkybox() { enable(); m_skybox.drawSkybox(getTransformedPosition(), getTransformedRotation()); }
-    inline void loadSkybox(const char* path) { m_skybox.loadSkyboxTextures(path); }
-    inline Skybox * getSkybox() { return &m_skybox; }
+	inline void drawSkybox() { enable(); m_skybox.drawSkybox(getTransformedPosition(), getTransformedRotation()); }
+	inline void loadSkybox(const char* path) { m_skybox.loadSkyboxTextures(path); }
+	inline Skybox * getSkybox() { return &m_skybox; }
 
 	// listener
 	void updateListener(void);
 
 	// enable
-	void enable(void);
+	void enable(const Vector2& viewport = Vector2(0, 0));
 	Matrix4x4 setPerspectiveView(float fov, float ratio, float zNear, float zFar);
 	Matrix4x4 setOrthoView(float left, float right, float bottom, float top, float zNear, float zFar);
 };

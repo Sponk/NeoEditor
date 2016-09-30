@@ -176,12 +176,20 @@ Matrix4x4 OCamera::setOrthoView(float left, float right, float bottom, float top
 	return matrix;
 }
 
-void OCamera::enable(void)
+void OCamera::enable(const Vector2& viewport)
 {
-	Vector2 viewport = NeoEngine::getInstance()->getSystemContext()->getScreenSize();
-	m_currentViewport[2] = static_cast<int>(viewport.x);
-	m_currentViewport[3] = static_cast<int>(viewport.y);
-
+	if(viewport == Vector2(0,0))
+	{
+		Vector2 vp = NeoEngine::getInstance()->getSystemContext()->getScreenSize();
+		m_currentViewport[2] = static_cast<int>(vp.x);
+		m_currentViewport[3] = static_cast<int>(vp.y);
+	}
+	else
+	{
+		m_currentViewport[2] = static_cast<int>(viewport.x);
+		m_currentViewport[3] = static_cast<int>(viewport.y);
+	}
+	
 	float ratio = (m_currentViewport[2] / (float) m_currentViewport[3]);
 
 	Vector3 scale = getTransformedScale();

@@ -184,6 +184,8 @@ public:
 	
 	virtual void enableDepthTest(bool value) = 0;
 	
+	virtual void setViewport(unsigned int x, unsigned int y, unsigned int w, unsigned int h) = 0;
+	
 	virtual void stopThreads() {}
 	virtual void startThreads() {}
 	virtual void KillThreads() {}
@@ -253,6 +255,8 @@ public:
 	virtual void disableScissors() {}
 	
 	virtual void enableDepthTest(bool value) {}
+	
+	virtual void setViewport(unsigned int x, unsigned int y, unsigned int w, unsigned int h) {}
 };
 
 }

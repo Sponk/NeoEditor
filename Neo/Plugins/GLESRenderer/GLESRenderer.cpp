@@ -1517,3 +1517,10 @@ void GLESRenderer::enableDepthTest(bool value)
 {
 	value ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
 }
+
+
+void GLESRenderer::setViewport(unsigned int x, unsigned int y, unsigned int w, unsigned int h)
+{
+	glViewport(x, y, w, h);
+}
+

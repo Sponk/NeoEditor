@@ -323,9 +323,9 @@ void EditorGame::update()
 
 	Vector2 const size = engine->getSystemContext()->getScreenSize();
 
-	m_sceneView->setPosition(Vector2(m_leftPanel->getSize().x, m_toolbar->getPosition().y + m_toolbar->getSize().y));
-	m_sceneView->setSize(Vector2(size.x - m_leftPanel->getSize().x - m_rightPanel->getSize().x - 15,
-								 size.y - (m_bottomPanel->isActive() ? m_bottomPanel->getSize().y * 1.25 : 0))); // The 1.25 value seems quite arbitrary.
+	m_sceneView->setPosition(Vector2(m_leftPanel->getSize().x + 15, m_toolbar->getPosition().y + m_toolbar->getSize().y));
+	m_sceneView->setSize(Vector2(	size.x - m_leftPanel->getSize().x - m_rightPanel->getSize().x - 30,
+					size.y - 25.0f - (m_bottomPanel->isActive() ? m_bottomPanel->getSize().y : 0) - m_toolbar->getSize().y));
 	
 	// Update title
 	//char title[64];
@@ -353,6 +353,7 @@ void EditorGame::draw()
 	Renderer* render = engine->getRenderer();
 
 	render->set2D(engine->getSystemContext()->getScreenSize());
+	render->enableDepthTest(false);
 	
 	PROFILE_BEGIN("GuiDraw");
 	m_canvas.draw();
@@ -525,6 +526,26 @@ void EditorGame::onBegin()
 
 	filemenu->addItem(tr("Quit"), [this] (Widget&, void*) { NeoEngine::getInstance()->setActive(false); });
 
+   	scenemenu->addItem("/Create/Light", [this](Widget&, void*) {
+			addLight();
+	});
+
+	scenemenu->addItem("/Create/Entity", [this](Widget&, void*) {
+			addEntity();
+	});
+
+	scenemenu->addItem("/Create/Text", [this](Widget&, void*) {
+			addText();
+	});
+	
+	scenemenu->addItem("/Create/Sound", [this](Widget&, void*) {
+			addSound();
+	});
+
+	scenemenu->addItem("/Create/Camera", [this](Widget&, void*) {
+		addCamera();
+	});
+
 	scenemenu->addItem(tr("Add Scene"), [this](Widget&, void*) {
 			Level* level = NeoEngine::getInstance()->getLevel();
 			Scene* s = level->addNewScene();
@@ -559,27 +580,7 @@ void EditorGame::onBegin()
 			m_sceneView->updateOverlayScene();
 			updated = false;
 	});
-		
-   	scenemenu->addItem("/Create/Light", [this](Widget&, void*) {
-			addLight();
-	});
-
-	scenemenu->addItem("/Create/Entity", [this](Widget&, void*) {
-			addEntity();
-	});
-
-	scenemenu->addItem("/Create/Text", [this](Widget&, void*) {
-			addText();
-	});
 	
-	scenemenu->addItem("/Create/Sound", [this](Widget&, void*) {
-			addSound();
-	});
-
-	scenemenu->addItem("/Create/Camera", [this](Widget&, void*) {
-		addCamera();
-	});
-
 	editmenu->addItem("Undo", [this](Widget&, void*) {
 		undo();
 	});
@@ -618,7 +619,7 @@ void EditorGame::onBegin()
 			}
 		});
 
-	editmenu->addItem("Enable Snap to Ground", [this](Widget& w, void*) {
+	editmenu->addItem(tr("Enable Snap to Ground"), [this](Widget& w, void*) {
 		if(m_sceneView->isSnapToGround())
 		{
 			m_sceneView->enableSnapToGround(false);
@@ -1925,8 +1926,8 @@ void EditorGame::runGame()
 	//	for(auto p : m_project.getPlugins())
 	//		player.loadPlugin(p.c_str());
 
-	m_sceneView->setInvisible(true);
-	m_sceneView->setActive(false);
+	//m_sceneView->setInvisible(true);
+	//m_sceneView->setActive(false);
 	m_sceneView->clearSelection();
 
 	ScriptContext* script = engine->getScriptContext();
@@ -1934,16 +1935,18 @@ void EditorGame::runGame()
 	
 	m_playButton.lock()->loadImage("data/icons/media-playback-pause.png");
 	m_isRunningGame = true;
+	m_sceneView->showEditorScenes(false);
 	
-	engine->getGame()->setDrawMainScene(true);
+	//engine->getGame()->setDrawMainScene(true);
 	player.execute(KEY_ESCAPE);
-	engine->getGame()->setDrawMainScene(false);
+	//engine->getGame()->setDrawMainScene(false);
 
 	m_isRunningGame = false;
+	m_sceneView->showEditorScenes(true);
 	m_playButton.lock()->loadImage("data/icons/media-playback-start.png");
 
-	m_sceneView->setInvisible(false);
-	m_sceneView->setActive(true);
+	//m_sceneView->setInvisible(false);
+	//m_sceneView->setActive(true);
 	
 	// Re-enable undo/redo queue again
 	m_disableUndo = false;

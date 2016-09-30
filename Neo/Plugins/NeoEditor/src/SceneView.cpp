@@ -20,7 +20,8 @@ SceneView::SceneView(UndoQueue& undo,
 	  m_undo(undo),
 	  m_objectLocalTransformation(false),
 	  m_gridSize(0),
-	  m_snapToGround(false)
+	  m_snapToGround(false),
+	  m_showEditorScenes(true)
 {
 	m_overlayScene = m_level.addNewScene();
 	m_handlesScene = m_level.addNewScene();
@@ -155,30 +156,53 @@ void SceneView::resetCamera()
 }
 
 void SceneView::draw(const Neo::Vector2& offset)
-{	
+{
 	NeoEngine* engine = NeoEngine::getInstance();
 	Renderer* render = NeoEngine::getInstance()->getRenderer();
 	
 	const Vector2 size = engine->getSystemContext()->getScreenSize();
-	// render->setViewport(0, 0, size.x, size.y);
-	render->clearScreen(m_camera.getClearColor());
-	render->enableScissors(getPosition().x, size.y - (getPosition().y + getSize().y), getSize().x, getSize().y);
-
+	
+	//render->enableDepthTest(true);
+	
 	m_camera.enable();
 	m_camera.updateListener();
 
 	auto scene = engine->getLevel()->getCurrentScene();
 
-	scene->draw(&m_camera);
-	scene->drawObjectsBehaviors();
+	if(m_showEditorScenes)
+	{
+		render->setViewport(0, 0, size.x, size.y);
 
-	m_overlayScene->draw(&m_camera);
-	m_handlesScene->draw(&m_camera);
-	m_representationScene->draw(&m_camera);
+		render->clearScreen(m_camera.getClearColor());
+		scene->draw(&m_camera);
+		scene->drawObjectsBehaviors();
+
+		m_overlayScene->draw(&m_camera);
+		m_handlesScene->draw(&m_camera);
+		m_representationScene->draw(&m_camera);
+	}
+	else
+	{
+		OCamera* camera = scene->getCurrentCamera();
+		render->enableScissors(getPosition().x, size.y - (getPosition().y + getSize().y), getSize().x, getSize().y);
+		render->setViewport(getPosition().x, size.y - (getPosition().y + getSize().y), getSize().x, getSize().y);
 	
-	render->enableDepthTest(false);
+		if(camera)
+		{
+			render->clearScreen(camera->getClearColor());
+			scene->draw(camera);
+			scene->drawObjectsBehaviors();
+		}
+		else
+		{
+			render->clearScreen(OCamera().getClearColor());
+		}
+	}
+	
+	//render->enableDepthTest(false);
 	render->disableScissors();
-	engine->getRenderer()->set2D(size);
+	render->setViewport(0, 0, size.x, size.y);
+	render->set2D(size);
 }
 
 void SceneView::clearSelection()
@@ -194,7 +218,7 @@ void SceneView::clearSelection()
 
 void SceneView::addSelectedObject(Neo::Object3d* object)
 {
-	if(!object)
+	if(!object || !m_showEditorScenes)
 		return;
 
 	m_selection.push_back(object);

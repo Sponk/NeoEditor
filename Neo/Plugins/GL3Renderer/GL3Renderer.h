@@ -61,6 +61,8 @@ class GL3Renderer : public Renderer
 	int m_numVertexLights;
 
 	Matrix4x4 m_matrix;
+	
+	Vector4 m_viewport;
 
 	unsigned int createShader(const char* vertexSource, const char* fragmentSource);
 
@@ -123,6 +125,8 @@ public:
 	virtual void disableScissors();
 	
 	virtual void enableDepthTest(bool value);
+	virtual void setViewport(unsigned int x, unsigned int y, unsigned int w, unsigned int h);
+
 };
 }
 #endif

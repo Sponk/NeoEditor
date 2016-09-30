@@ -2178,6 +2178,13 @@ void StandardRenderer::enableDepthTest(bool value)
 	(value) ? render->enableDepthTest() : render->disableDepthTest();
 }
 
+void StandardRenderer::setViewport(unsigned int x, unsigned int y, unsigned int w, unsigned int h)
+{
+	auto render = NeoEngine::getInstance()->getRenderingContext();
+	render->setViewport(x, y, w, h);
+}
+
+
 /*OText* StandardRenderer::create2DText(const char* font, float size)
 {
 	if (!font)

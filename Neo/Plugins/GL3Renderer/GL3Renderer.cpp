@@ -627,7 +627,7 @@ void GL3Renderer::sendLight(unsigned int fx, const char* prefix, OLight* l, int 
 void GL3Renderer::drawScene(Scene* scene, OCamera* camera)
 {
 	Vector2 size = NeoEngine::getInstance()->getSystemContext()->getScreenSize();
-	glViewport(0, 0, size.x, size.y);
+	//glViewport(0, 0, size.x, size.y);
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
@@ -636,7 +636,7 @@ void GL3Renderer::drawScene(Scene* scene, OCamera* camera)
 
 	m_matrix.loadIdentity();
 
-	camera->enable();
+	camera->enable(Vector2(m_viewport.z, m_viewport.w));
 	camera->getFrustum()->makeVolume(camera);
 
 	glUseProgram(m_objectShader);
@@ -1529,3 +1529,10 @@ void GL3Renderer::enableDepthTest(bool value)
 {
 	value ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
 }
+
+void GL3Renderer::setViewport(unsigned int x, unsigned int y, unsigned int w, unsigned int h)
+{
+	glViewport(x, y, w, h);
+	m_viewport = Vector4(x, y, w, h);
+}
+
