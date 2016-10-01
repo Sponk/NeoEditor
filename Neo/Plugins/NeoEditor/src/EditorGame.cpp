@@ -644,6 +644,7 @@ void EditorGame::onBegin()
 		{
 			w.setLabel(tr("Ortho View"));
 			cam->enableOrtho(false);
+			cam->setFov(75);
 		}
 		else
 		{

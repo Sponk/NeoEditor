@@ -218,7 +218,9 @@ void SceneView::clearSelection()
 
 void SceneView::addSelectedObject(Neo::Object3d* object)
 {
-	if(!object || !m_showEditorScenes)
+	if(!object 
+		|| !m_showEditorScenes 
+		|| std::find(m_selection.begin(), m_selection.end(), object) != m_selection.end())
 		return;
 
 	m_selection.push_back(object);
@@ -650,9 +652,9 @@ void SceneView::update(float dt)
 	}
 
 	NeoEngine* engine = NeoEngine::getInstance();
-    auto input = engine->getInputContext();
+	auto input = engine->getInputContext();
 
-    if(getState() != Neo2D::Gui::WIDGET_SELECTED
+	if(getState() != Neo2D::Gui::WIDGET_SELECTED
             || input->isKeyDown(KEY_LCONTROL)) // So Ctrl + * shortcuts don't move the camera
 		return;
 
