@@ -48,6 +48,9 @@ public:
 	void setVariable(const std::string& name, const std::string& value);
 	std::string* getVariable(const std::string& name) { return &m_registry[name].str; }
 	bool exists(const std::string& name) { return m_registry.end() != m_registry.find(name); }
+		
+	bool load(const std::string& path);
+	bool save(const std::string& path);
 };
 }
 
