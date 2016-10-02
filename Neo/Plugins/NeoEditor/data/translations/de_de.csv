@@ -1,0 +1,108 @@
+Delete	Löschen
+Neo Scene Editor	Neo Scene Editor
+File	Datei
+Edit	Bearbeiten
+View	Ansicht
+Scene	Szene
+Object	Objekt
+Help	Hilfe
+New Level	Neues Level
+Open Project	Projekt Öffnen
+Open Level	Level Öffnen
+Save	Speichern
+Save as...	Speichern unter
+Quit	Beenden
+/Create/Light	/Neues Objekt/Licht
+/Create/Entity	/Neues Objekt/Entität
+/Create/Text	/Neues Objekt/Text
+/Create/Sound	/Neues Objekt/Klang
+/Create/Camera	/Neues Objekt/Kamera
+Add Scene	Szene hinzufügen
+Change Scene	Szene wechseln
+Choose a scene	Szene wählen
+Undo	Rückgängig
+Redo	Wiederholen
+Duplicate Selection	Auswahl Duplizieren
+Delete Selection	Auswahl Löschen
+Object Local Transformation	Objekt Lokale Transformation
+Selection Local Transformation	Auswahl Lokale Transformation
+Enable Snap to Grid	Am Raster ausrichten
+Disable Snap to Grid	Nicht am Raster ausrichten
+Enable Snap to Ground	Am Boden ausrichten
+Disable Snap to Ground	Nicht am Boden ausrichten
+Hide Console	Konsole verstecken
+Ortho View	Orthographische Ansicht
+Perspective View	Perspektivische Ansicht
+Wireframe Debug View	Gitter Ansicht
+Wireframe + Filled Debug View	Gitter + Texturierte Ansicht
+Filled View	Texturierte Ansicht
+Add Behavior	Verhaltensweise hinzufügen
+Choose a behavior	Verhaltensweise auswählen
+About	Über
+Name:	Name:
+Position:	Position:
+Rotation:	Rotation:
+Scale:	Skalierung:
+Error	Fehler
+Please enter a name that is not empty!	Geben Sie bitte einen Namen ein!
+An object with that name already exists. Please choose another one.	Es existiert bereits ein Objekt mit diesem Namen. Wählen Sie bitte einen anderen.
+Physics	Physik
+Ghost	Geist
+Box	Box
+Cone	Kegel
+Capsule	Kapsel
+Cylinder	Zylinder
+Convex Hull	Konvexe Hülle
+Triangle Mesh	Dreiecksnetz
+Constraint	Beschränkung
+Parent Collision	Elternkollision
+Sphere	Kugel
+Could not open project! Make sure the file exists and can be read from.	Konnte das Projekt nicht öffnen. Stellen Sie sicher die Datei existiert und kann gelesen werden.
+Open Sound File	Klangdatei öffnen
+Open Mesh File	Meshdatei öffnen
+Open Font File	Schriftdatei öffnen
+Save Level	Level speichern
+This is the Neo Scene Editor experience v0.5.1a. This program is distributed under the terms and conditions of the GNU LGPL.	Dies ist der Neo Scene Editor.
+Invisible	Unsichtbar
+Mass	Masse
+Friction	Reibung
+Restitution	Wiederstand
+Linear Damping	Lineare Dämpfung
+Angular Damping	Angulare Dämpfung
+Angular Factor	Angularer Faktor
+Linear Factor	Linearer Faktor
+Parent Name:	Eltern Name:
+Pivot:	Pivot:
+Lower Linear Limit:	Unteres Lineares Limit:
+Upper Linear Limit:	Oberes Lineares Limit:
+Lower Angular Limit:	Unteres Angulares Limit:
+Upper Angular Limit:	Oberes Angulares Limit:
+Color:	Farbe:
+Intensity:	Intensität:
+Radius:	Radius:
+Spot Angle:	Scheinwerfer Winkel:
+Spot Exponent:	Scheinwerfer Exponent:
+Cast Shadows	Schatten werfen
+Shadow Quality:	Schattenqualität:
+Shadow Bias:	Schatten Verzerrung:
+Shadow Blur:	Schatten Verwischung:
+Near Plane:	Nahe Ebene:
+Far Plane:	Ferne Ebene:
+Field of View:	Gesichtsfeld:
+Ortho	Orthographisch
+Fog	Nebel
+Fog Distance:	Nebel Entfernung:
+Fog Color:	Nebelfarbe:
+Clear Color:	Leerfarbe:
+Gain:	Lautstärke:
+Pitch:	Höhe:
+Rolloff:	Dämpfung:
+Looping	Wiederholend
+Relative	Relativ
+Play/Stop	Start/Stopp
+Text:	Text:
+Size:	Größe:
+Scene Name:	Szenen Name:
+Script File:	Skriptdatei:
+Gravity:	Gravitation:
+Ambient Light:	Ambiente Beleuchtung:
