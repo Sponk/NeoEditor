@@ -64,8 +64,12 @@ include_directories(
 )
 
 if(NOT NO_TESTS)
-	add_executable(NeoEditorTest tests/main.cpp tests/UndoQueueTest.cpp src/UndoQueue.cpp)
-	target_link_libraries(NeoEditorTest ${NEO_CORE_LIBRARIES} ${NEO_ENGINE_LIBRARIES} ${GTEST_LIBRARIES})
+	add_executable(NeoEditorTest 
+			tests/main.cpp
+			tests/UndoQueueTest.cpp
+			src/UndoQueue.cpp)
+	
+	target_link_libraries(NeoEditorTest ${NEO_CORE_LIBRARIES} ${NEO_ENGINE_LIBRARIES} ${GTEST_LIBRARIES} ${SEXPRESSO_LIBRARIES})
 endif()
 
 add_subdirectory(runtime)

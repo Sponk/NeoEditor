@@ -20,7 +20,7 @@ using namespace Gui;
 
 #define MAKE_LABEL(str, ui)                                        \
 	{                                                              \
-		auto label = make_shared<Label>(0, 0, 0, 10, tr(str), ui); \
+		auto label = make_shared<Label>(0, 0, 0, 10, str, ui); \
 		label->setColor(Vector4(0, 0, 0, 1));                      \
 		ui->addWidget(label);                                      \
 	}
@@ -234,7 +234,7 @@ using namespace Gui;
 #define MAKE_CHECK_BUTTON(str, edit, ui, type, setter)                    \
 	{                                                                     \
 		ui->addWidget(                                                    \
-			edit = make_shared<CheckButton>(0, 0, 100, 20, tr(str), ui)); \
+			edit = make_shared<CheckButton>(0, 0, 100, 20, str, ui)); \
 		edit->setCallback(                                                \
 			[this](Widget& w, void* d) {                                  \
 				if (!m_sceneView->getSelection().size())                  \
@@ -249,14 +249,14 @@ using namespace Gui;
 
 #define MAKE_BUTTON(str, width, ui, callback)                         \
 	{                                                                 \
-		auto btn = make_shared<Button>(0, 0, width, 20, tr(str), ui); \
+		auto btn = make_shared<Button>(0, 0, width, 20, str, ui); \
 		ui->addWidget(btn);                                           \
 		btn->setCallback(callback, nullptr);                          \
 	}
 
 #define MAKE_COLOR3_BUTTON(str, width, edit, ui, type, setter)                \
 	{                                                                         \
-		ui->addWidget(edit = make_shared<ColorEdit>(0, 0, width, 20, tr(str), \
+		ui->addWidget(edit = make_shared<ColorEdit>(0, 0, width, 20, str, \
 													ui, m_toolset));          \
 		edit->setCallback(                                                    \
 			[this](Widget& w, void* d) {                                      \
@@ -274,7 +274,7 @@ using namespace Gui;
 
 #define MAKE_SCENE_COLOR3_BUTTON(str, width, edit, ui, setter)                \
 	{                                                                         \
-		ui->addWidget(edit = make_shared<ColorEdit>(0, 0, width, 20, tr(str), \
+		ui->addWidget(edit = make_shared<ColorEdit>(0, 0, width, 20, str, \
 													ui, m_toolset));          \
 		edit->setCallback(                                                    \
 			[this](Widget& w, void* d) {                                      \
@@ -368,8 +368,32 @@ void EditorGame::onBegin()
 	if(engine->getLevel() == nullptr)
 		engine->setLevel(&level);
 
-	m_visibleObjectsCount = engine->getConfigurationRegistry().getVariable("g_visible_objects_count");
+	ConfigurationRegistry& registry = engine->getConfigurationRegistry();
+	
+#ifdef WIN32
+	{
+		std::string path = getenv("APPDATA");
+		registry.load(path + "\\neo-editor.cfg");
+	}
+#else
+	{
+		std::string path = getenv("HOME");
+		registry.load(path + "/.neo-editor.cfg");
+	}
+#endif
+	
+	m_visibleObjectsCount = registry.getVariable("g_visible_objects_count");
 
+	// Apply some of the settings
+	{
+		std::string* value;
+		if((value = registry.getVariable("g_editor_language")) != nullptr)
+		{
+			if(!Translator::loadTranslation("data/translations/" + *value + ".csv"))
+				MLOG_WARNING("Could not load translation '" << *value << "'");
+		}
+	}
+	
 	// TODO: Load config!
 	auto rootpane = make_shared<Container>(0, 0, 0, 0, nullptr);
 	m_canvas.addObject2D(rootpane);
@@ -498,7 +522,7 @@ void EditorGame::onBegin()
 	});
 	
 	filemenu->addItem(tr("Open Project"), [this](Widget&, void*) {
-		std::string filename = m_toolset->fileOpenDialog("Open Project", HOMEDIR, "Projects (*.nproj)");
+		std::string filename = m_toolset->fileOpenDialog(tr("Open Project"), HOMEDIR, "Projects (*.nproj)");
 		if(filename.empty())
 			return;
 
@@ -526,23 +550,23 @@ void EditorGame::onBegin()
 
 	filemenu->addItem(tr("Quit"), [this] (Widget&, void*) { NeoEngine::getInstance()->setActive(false); });
 
-   	scenemenu->addItem("/Create/Light", [this](Widget&, void*) {
+   	scenemenu->addItem(tr("/Create/Light"), [this](Widget&, void*) {
 			addLight();
 	});
 
-	scenemenu->addItem("/Create/Entity", [this](Widget&, void*) {
+	scenemenu->addItem(tr("/Create/Entity"), [this](Widget&, void*) {
 			addEntity();
 	});
 
-	scenemenu->addItem("/Create/Text", [this](Widget&, void*) {
+	scenemenu->addItem(tr("/Create/Text"), [this](Widget&, void*) {
 			addText();
 	});
 	
-	scenemenu->addItem("/Create/Sound", [this](Widget&, void*) {
+	scenemenu->addItem(tr("/Create/Sound"), [this](Widget&, void*) {
 			addSound();
 	});
 
-	scenemenu->addItem("/Create/Camera", [this](Widget&, void*) {
+	scenemenu->addItem(tr("/Create/Camera"), [this](Widget&, void*) {
 		addCamera();
 	});
 
@@ -581,23 +605,23 @@ void EditorGame::onBegin()
 			updated = false;
 	});
 	
-	editmenu->addItem("Undo", [this](Widget&, void*) {
+	editmenu->addItem(tr("Undo"), [this](Widget&, void*) {
 		undo();
 	});
 
-	editmenu->addItem("Redo", [this](Widget&, void*) {
+	editmenu->addItem(tr("Redo"), [this](Widget&, void*) {
 		redo();
 	});
 
-	editmenu->addItem("Duplicate Selection", [this](Widget&, void*) {
+	editmenu->addItem(tr("Duplicate Selection"), [this](Widget&, void*) {
 		duplicateSelection();
 	});
 
-	editmenu->addItem("Delete Selection", [this](Widget&, void*) {
+	editmenu->addItem(tr("Delete Selection"), [this](Widget&, void*) {
 		deleteSelection();
 	});
 
-	editmenu->addItem("Object Local Transformation", [this](Widget& w, void*) {
+	editmenu->addItem(tr("Object Local Transformation"), [this](Widget& w, void*) {
 			m_sceneView->setObjectLocal(!m_sceneView->isObjectLocal());
 
 			if(m_sceneView->isObjectLocal())
@@ -606,7 +630,7 @@ void EditorGame::onBegin()
 				w.setLabel(tr("Object Local Transformation"));
 	});
 
-	editmenu->addItem("Enable Snap to Grid", [this](Widget& w, void*) {
+	editmenu->addItem(tr("Enable Snap to Grid"), [this](Widget& w, void*) {
 			if(m_sceneView->getGridSize())
 			{
 				m_sceneView->setGridSize(0);
@@ -847,7 +871,7 @@ void EditorGame::onBegin()
 				}, nullptr);
 
 			// Entity UI
-			MAKE_CHECK_BUTTON("Invisible", m_entityInvisibleButton, m_entityUi, OEntity, setInvisible);
+			MAKE_CHECK_BUTTON(tr("Invisible"), m_entityInvisibleButton, m_entityUi, OEntity, setInvisible);
 
 			// Physics stuff
 			{
@@ -889,13 +913,13 @@ void EditorGame::onBegin()
 
 				m_entityUi->addWidget(m_physicsUi);
 
-				MAKE_FLOAT_PHYSICS_EDIT_FIELD("Mass", width, m_entityMassEdit, m_physicsUi, setMass);
-				MAKE_FLOAT_PHYSICS_EDIT_FIELD("Friction", width, m_entityFrictionEdit, m_physicsUi, setFriction);
-				MAKE_FLOAT_PHYSICS_EDIT_FIELD("Restitution", width, m_entityRestitutionEdit, m_physicsUi, setRestitution);
-				MAKE_FLOAT_PHYSICS_EDIT_FIELD("Linear Damping", width, m_entityLinearDampingEdit, m_physicsUi, setLinearDamping);
-				MAKE_FLOAT_PHYSICS_EDIT_FIELD("Angular Damping", width, m_entityAngularDampingEdit, m_physicsUi, setAngularDamping);
-				MAKE_FLOAT_PHYSICS_EDIT_FIELD("Angular Factor", width, m_entityAngularFactorEdit, m_physicsUi, setAngularFactor);
-				MAKE_3D_PHYSICS_EDIT_FIELD("Linear Factor", width, m_entityLinearFactorEdit, m_physicsUi, setLinearFactor);
+				MAKE_FLOAT_PHYSICS_EDIT_FIELD(tr("Mass"), width, m_entityMassEdit, m_physicsUi, setMass);
+				MAKE_FLOAT_PHYSICS_EDIT_FIELD(tr("Friction"), width, m_entityFrictionEdit, m_physicsUi, setFriction);
+				MAKE_FLOAT_PHYSICS_EDIT_FIELD(tr("Restitution"), width, m_entityRestitutionEdit, m_physicsUi, setRestitution);
+				MAKE_FLOAT_PHYSICS_EDIT_FIELD(tr("Linear Damping"), width, m_entityLinearDampingEdit, m_physicsUi, setLinearDamping);
+				MAKE_FLOAT_PHYSICS_EDIT_FIELD(tr("Angular Damping"), width, m_entityAngularDampingEdit, m_physicsUi, setAngularDamping);
+				MAKE_FLOAT_PHYSICS_EDIT_FIELD(tr("Angular Factor"), width, m_entityAngularFactorEdit, m_physicsUi, setAngularFactor);
+				MAKE_3D_PHYSICS_EDIT_FIELD(tr("Linear Factor"), width, m_entityLinearFactorEdit, m_physicsUi, setLinearFactor);
 
 				m_entityShapeMenu = make_shared<Submenu>("", m_physicsUi);
 				m_entityShapeMenu->setSize(Vector2(width, 25));
@@ -1039,7 +1063,7 @@ void EditorGame::onBegin()
 					},
 					nullptr);
 
-				MAKE_CONSTRAINT_STRING_EDIT_FIELD("Parent Name:", width, m_entityConstraintParentNameEdit, m_constraintUi, parentName);
+				MAKE_CONSTRAINT_STRING_EDIT_FIELD(tr("Parent Name:"), width, m_entityConstraintParentNameEdit, m_constraintUi, parentName);
 				m_constraintUi->addWidget(m_entityDisableParentCollision = make_shared<CheckButton>(0, 0, 100, 20, tr("Parent Collision"), m_constraintUi));
 				m_entityDisableParentCollision->setCallback(
 					[this](Widget&, void*) {
@@ -1060,11 +1084,11 @@ void EditorGame::onBegin()
 					},
 					nullptr);
 
-				MAKE_3D_CONSTRAINT_EDIT_FIELD("Pivot:", width, m_entityPivotEdit, m_constraintUi, pivot);
-				MAKE_3D_CONSTRAINT_EDIT_FIELD("Lower Linear Limit:", width, m_entityLowerLinearLimitEdit, m_constraintUi, lowerLinearLimit);
-				MAKE_3D_CONSTRAINT_EDIT_FIELD("Upper Linear Limit:", width, m_entityUpperLinearLimitEdit, m_constraintUi, upperLinearLimit);
-				MAKE_3D_CONSTRAINT_EDIT_FIELD("Lower Angular Limit:", width, m_entityLowerAngularLimitEdit, m_constraintUi, lowerAngularLimit);
-				MAKE_3D_CONSTRAINT_EDIT_FIELD("Upper Angular Limit:", width, m_entityUpperAngularLimitEdit, m_constraintUi, upperAngularLimit);
+				MAKE_3D_CONSTRAINT_EDIT_FIELD(tr("Pivot:"), width, m_entityPivotEdit, m_constraintUi, pivot);
+				MAKE_3D_CONSTRAINT_EDIT_FIELD(tr("Lower Linear Limit:"), width, m_entityLowerLinearLimitEdit, m_constraintUi, lowerLinearLimit);
+				MAKE_3D_CONSTRAINT_EDIT_FIELD(tr("Upper Linear Limit:"), width, m_entityUpperLinearLimitEdit, m_constraintUi, upperLinearLimit);
+				MAKE_3D_CONSTRAINT_EDIT_FIELD(tr("Lower Angular Limit:"), width, m_entityLowerAngularLimitEdit, m_constraintUi, lowerAngularLimit);
+				MAKE_3D_CONSTRAINT_EDIT_FIELD(tr("Upper Angular Limit:"), width, m_entityUpperAngularLimitEdit, m_constraintUi, upperAngularLimit);
 				m_physicsUi->addWidget(m_constraintUi);
 
 				/*MAKE_BUTTON("Edit Material Properties", width, m_entityUi, [](Widget& w, void* d) {
@@ -1075,38 +1099,38 @@ void EditorGame::onBegin()
 			// Light UI
 
 			MAKE_COLOR3_BUTTON("", width, m_lightColorButton, m_lightUi, OLight, setColor);
-			MAKE_3D_EDIT_FIELD("Color:", width, m_lightColorEdit, m_lightUi, OLight, setColor);
-			MAKE_FLOAT_EDIT_FIELD("Intensity:", width, m_lightIntensityEdit, m_lightUi, OLight, setIntensity);
-			MAKE_FLOAT_EDIT_FIELD("Radius:", width, m_lightRadiusEdit, m_lightUi, OLight, setRadius);
-			MAKE_FLOAT_EDIT_FIELD("Spot Angle:", width, m_lightSpotAngleEdit, m_lightUi, OLight, setSpotAngle);
-			MAKE_FLOAT_EDIT_FIELD("Spot Exponent:", width, m_lightSpotExponentEdit, m_lightUi, OLight, setSpotExponent);
-			MAKE_CHECK_BUTTON("Cast Shadows", m_lightCastShadowButton, m_lightUi, OLight, castShadow);
-			MAKE_FLOAT_EDIT_FIELD("Shadow Quality:", width, m_lightShadowQualityEdit, m_lightUi, OLight, setShadowQuality);
-			MAKE_FLOAT_EDIT_FIELD("Shadow Bias:", width, m_lightShadowBiasEdit, m_lightUi, OLight, setShadowBias);
-			MAKE_FLOAT_EDIT_FIELD("Shadow Blur:", width, m_lightShadowBlurEdit, m_lightUi, OLight, setShadowBlur);
+			MAKE_3D_EDIT_FIELD(tr("Color:"), width, m_lightColorEdit, m_lightUi, OLight, setColor);
+			MAKE_FLOAT_EDIT_FIELD(tr("Intensity:"), width, m_lightIntensityEdit, m_lightUi, OLight, setIntensity);
+			MAKE_FLOAT_EDIT_FIELD(tr("Radius:"), width, m_lightRadiusEdit, m_lightUi, OLight, setRadius);
+			MAKE_FLOAT_EDIT_FIELD(tr("Spot Angle:"), width, m_lightSpotAngleEdit, m_lightUi, OLight, setSpotAngle);
+			MAKE_FLOAT_EDIT_FIELD(tr("Spot Exponent:"), width, m_lightSpotExponentEdit, m_lightUi, OLight, setSpotExponent);
+			MAKE_CHECK_BUTTON(tr("Cast Shadows"), m_lightCastShadowButton, m_lightUi, OLight, castShadow);
+			MAKE_FLOAT_EDIT_FIELD(tr("Shadow Quality:"), width, m_lightShadowQualityEdit, m_lightUi, OLight, setShadowQuality);
+			MAKE_FLOAT_EDIT_FIELD(tr("Shadow Bias:"), width, m_lightShadowBiasEdit, m_lightUi, OLight, setShadowBias);
+			MAKE_FLOAT_EDIT_FIELD(tr("Shadow Blur:"), width, m_lightShadowBlurEdit, m_lightUi, OLight, setShadowBlur);
 			m_lightUi->updateLayout();
 
 			// Camera UI
-			MAKE_FLOAT_EDIT_FIELD("Near Plane:", width, m_cameraNearPlaneEdit, m_cameraUi, OCamera, setClippingNear);
-			MAKE_FLOAT_EDIT_FIELD("Far Plane:", width, m_cameraFarPlaneEdit, m_cameraUi, OCamera, setClippingFar);
-			MAKE_FLOAT_EDIT_FIELD("Field of View:", width, m_cameraFovEdit, m_cameraUi, OCamera, setFov);
-			MAKE_CHECK_BUTTON("Ortho", m_cameraOrthoButton, m_cameraUi, OCamera, enableOrtho);
-			MAKE_CHECK_BUTTON("Fog", m_cameraFogButton, m_cameraUi, OCamera, enableFog);
-			MAKE_FLOAT_EDIT_FIELD("Fog Distance:", width, m_cameraFogDistanceEdit, m_cameraUi, OCamera, setFogDistance);
+			MAKE_FLOAT_EDIT_FIELD(tr("Near Plane:"), width, m_cameraNearPlaneEdit, m_cameraUi, OCamera, setClippingNear);
+			MAKE_FLOAT_EDIT_FIELD(tr("Far Plane:"), width, m_cameraFarPlaneEdit, m_cameraUi, OCamera, setClippingFar);
+			MAKE_FLOAT_EDIT_FIELD(tr("Field of View:"), width, m_cameraFovEdit, m_cameraUi, OCamera, setFov);
+			MAKE_CHECK_BUTTON(tr("Ortho"), m_cameraOrthoButton, m_cameraUi, OCamera, enableOrtho);
+			MAKE_CHECK_BUTTON(tr("Fog"), m_cameraFogButton, m_cameraUi, OCamera, enableFog);
+			MAKE_FLOAT_EDIT_FIELD(tr("Fog Distance:"), width, m_cameraFogDistanceEdit, m_cameraUi, OCamera, setFogDistance);
 			MAKE_COLOR3_BUTTON("", width, m_cameraFogColorButton, m_cameraUi, OCamera, setFogColor);
-			MAKE_3D_EDIT_FIELD("Fog Color:", width, m_cameraFogColorEdit, m_cameraUi, OCamera, setFogColor);
+			MAKE_3D_EDIT_FIELD(tr("Fog Color:"), width, m_cameraFogColorEdit, m_cameraUi, OCamera, setFogColor);
 			MAKE_COLOR3_BUTTON("", width, m_cameraClearColorButton, m_cameraUi, OCamera, setClearColor);
-			MAKE_3D_EDIT_FIELD("Clear Color:", width, m_cameraClearColorEdit, m_cameraUi, OCamera, setClearColor);
+			MAKE_3D_EDIT_FIELD(tr("Clear Color:"), width, m_cameraClearColorEdit, m_cameraUi, OCamera, setClearColor);
 			m_cameraUi->updateLayout();
 
 			// Sound UI
-			MAKE_FLOAT_EDIT_FIELD("Gain:", width, m_soundGainEdit, m_soundUi, OSound, setGain);
-			MAKE_FLOAT_EDIT_FIELD("Pitch:", width, m_soundPitchEdit, m_soundUi, OSound, setPitch);
-			MAKE_FLOAT_EDIT_FIELD("Radius:", width, m_soundRadiusEdit, m_soundUi, OSound, setRadius);
-			MAKE_FLOAT_EDIT_FIELD("Rolloff:", width, m_soundRolloffEdit, m_soundUi, OSound, setRolloff);
-			MAKE_CHECK_BUTTON("Looping", m_soundLoopingButton, m_soundUi, OSound, setLooping);
-			MAKE_CHECK_BUTTON("Relative", m_soundRelativeButton, m_soundUi, OSound, setRelative);
-			MAKE_BUTTON("Play/Stop", width, m_soundUi, [this](Widget& w, void*) {
+			MAKE_FLOAT_EDIT_FIELD(tr("Gain:"), width, m_soundGainEdit, m_soundUi, OSound, setGain);
+			MAKE_FLOAT_EDIT_FIELD(tr("Pitch:"), width, m_soundPitchEdit, m_soundUi, OSound, setPitch);
+			MAKE_FLOAT_EDIT_FIELD(tr("Radius:"), width, m_soundRadiusEdit, m_soundUi, OSound, setRadius);
+			MAKE_FLOAT_EDIT_FIELD(tr("Rolloff:"), width, m_soundRolloffEdit, m_soundUi, OSound, setRolloff);
+			MAKE_CHECK_BUTTON(tr("Looping"), m_soundLoopingButton, m_soundUi, OSound, setLooping);
+			MAKE_CHECK_BUTTON(tr("Relative"), m_soundRelativeButton, m_soundUi, OSound, setRelative);
+			MAKE_BUTTON(tr("Play/Stop"), width, m_soundUi, [this](Widget& w, void*) {
 				if(!m_sceneView->getSelection().size())
 					return;
 
@@ -1117,18 +1141,18 @@ void EditorGame::onBegin()
 			m_soundUi->updateLayout();
 
 			// Text UI
-			MAKE_STRING_EDIT_FIELD("Text:", width, m_textTextEdit, m_textUi, OText, setText);
-			MAKE_FLOAT_EDIT_FIELD("Size:", width, m_textSizeEdit, m_textUi, OText, setSize);
+			MAKE_STRING_EDIT_FIELD(tr("Text:"), width, m_textTextEdit, m_textUi, OText, setText);
+			MAKE_FLOAT_EDIT_FIELD(tr("Size:"), width, m_textSizeEdit, m_textUi, OText, setSize);
 			MAKE_COLOR3_BUTTON("", width, m_textColorButton, m_textUi, OText, setColor);
-			MAKE_4D_EDIT_FIELD("Color:", width, m_textColorEdit, m_textUi, OText, setColor);
+			MAKE_4D_EDIT_FIELD(tr("Color:"), width, m_textColorEdit, m_textUi, OText, setColor);
 			m_textUi->updateLayout();
 
 			// Scene UI
-			MAKE_SCENE_STRING_EDIT_FIELD("Scene Name:", width, m_sceneNameEdit, m_sceneUi, setName);
-			MAKE_SCENE_STRING_EDIT_FIELD("Script File:", width, m_sceneScriptFileEdit, m_sceneUi, setScriptFilename);
-			MAKE_3D_SCENE_EDIT_FIELD("Gravity:", width, m_sceneGravityEdit, m_sceneUi, setGravity);
+			MAKE_SCENE_STRING_EDIT_FIELD(tr("Scene Name:"), width, m_sceneNameEdit, m_sceneUi, setName);
+			MAKE_SCENE_STRING_EDIT_FIELD(tr("Script File:"), width, m_sceneScriptFileEdit, m_sceneUi, setScriptFilename);
+			MAKE_3D_SCENE_EDIT_FIELD(tr("Gravity:"), width, m_sceneGravityEdit, m_sceneUi, setGravity);
 
-			MAKE_LABEL("Ambient Light:", m_sceneUi);
+			MAKE_LABEL(tr("Ambient Light:"), m_sceneUi);
 			MAKE_SCENE_COLOR3_BUTTON("", width, m_sceneAmbientLightEdit, m_sceneUi, setAmbientLight);
 
 			// Set layout
@@ -1283,20 +1307,20 @@ void EditorGame::onBegin()
 		level->getMaterialsAnimManager()->update();
 	}, nullptr));
 
-    SystemContext* system = engine->getSystemContext();
+	SystemContext* system = engine->getSystemContext();
 
-    system->setWindowTitle(tr("Neo Scene Editor"));
+	system->setWindowTitle(tr("Neo Scene Editor"));
 	engine->getGame()->setDrawMainScene(false);
 
-    char** argv = system->getArgv();
-    for(int i = 0; i < system->getArgc(); i++)
-    {
-        if(!strcmp(argv[i], "-p") && i < system->getArgc() - 1)
-        {
-            loadProject(argv[i+1]);
-            break;
-        }
-    }
+	char** argv = system->getArgv();
+	for(int i = 0; i < system->getArgc(); i++)
+	{
+		if(!strcmp(argv[i], "-p") && i < system->getArgc() - 1)
+		{
+		loadProject(argv[i+1]);
+		break;
+		}
+	}
 
 	if(level.getScenesNumber() == 0)
 		engine->loadLevel("");
@@ -1306,6 +1330,18 @@ void EditorGame::onEnd()
 {
 	m_sceneView->clear();
 	Neo2D::Neo2DLevel::getInstance()->clear();
+	
+#ifdef WIN32
+	{
+		std::string path = getenv("APPDATA");
+		NeoEngine::getInstance()->getConfigurationRegistry().save(path + "\\neo-editor.cfg");
+	}
+#else
+	{
+		std::string path = getenv("HOME");
+		NeoEngine::getInstance()->getConfigurationRegistry().save(path + "/.neo-editor.cfg");
+	}
+#endif
 }
 
 void EditorGame::updateEntityTree()
@@ -1548,7 +1584,7 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 void EditorGame::openLevel()
 {
 		Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
-        std::string filename = m_toolset->fileOpenDialog("Open Level", engine->getSystemContext()->getWorkingDirectory(), "Levels (*.level, *.llvl)");
+		std::string filename = m_toolset->fileOpenDialog(tr("Open Level"), engine->getSystemContext()->getWorkingDirectory(), "Levels (*.level, *.llvl)");
 		if(filename.empty())
 			return;
 
@@ -1606,7 +1642,7 @@ void EditorGame::saveLevel()
 {
 	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 	if(m_currentLevelFile.empty())
-        m_currentLevelFile = m_toolset->fileSaveDialog("Save Level", engine->getSystemContext()->getWorkingDirectory(), "Lisp Levels (*.llvl)");
+        m_currentLevelFile = m_toolset->fileSaveDialog(tr("Save Level"), engine->getSystemContext()->getWorkingDirectory(), "Lisp Levels (*.llvl)");
 
 	if(m_currentLevelFile.empty())
 		return;
