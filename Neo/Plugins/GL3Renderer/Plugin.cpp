@@ -23,5 +23,5 @@ void StartPlugin()
 
 void EndPlugin()
 {
-
+	g_renderer.destroy();
 }

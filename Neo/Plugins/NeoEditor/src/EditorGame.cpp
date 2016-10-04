@@ -1317,8 +1317,8 @@ void EditorGame::onBegin()
 	{
 		if(!strcmp(argv[i], "-p") && i < system->getArgc() - 1)
 		{
-		loadProject(argv[i+1]);
-		break;
+			loadProject(argv[i+1]);
+			break;
 		}
 	}
 
