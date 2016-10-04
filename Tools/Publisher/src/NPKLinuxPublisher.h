@@ -13,7 +13,7 @@ public:
 
 	virtual const char* getName() override
 	{
-		return "LinuxNPK";
+		return "Linux NPK";
 	}
 
 	virtual bool publish(const char* projectFile,

@@ -10,16 +10,16 @@ static Publish::NPKWebPublisher publisher;
 static Publish::PublisherRegistry reg(publisher);
 
 bool Publish::NPKWebPublisher::publish(const char* projectFile,
-										const char* executable,
-										const char* output,
-										bool verbose,
-										const char* levelOverride,
-										std::function<void(int)> progressCallback)
+					const char* executable,
+					const char* output,
+					bool verbose,
+					const char* levelOverride,
+					std::function<void(int)> progressCallback)
 {
 	bool success = true;
 	char execdir[256];
 	getRepertory(execdir, executable);
-cout << "Execdir " << execdir << endl;
+
 	string execstr = execdir;
 	string outpath = output;
 	outpath += "/";

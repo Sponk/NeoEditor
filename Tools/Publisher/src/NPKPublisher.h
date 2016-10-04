@@ -28,11 +28,11 @@ public:
 	}
 
 	virtual bool publish(const char* projectFile,
-						 const char* executable,
-						 const char* output,
-						 bool verbose = false,
-						 const char* levelOverride = nullptr,
-						 std::function<void(int)> progressCallback = nullptr) override;
+				 const char* executable,
+				 const char* output,
+				 bool verbose = false,
+				 const char* levelOverride = nullptr,
+				 std::function<void(int)> progressCallback = nullptr) override;
 };
 
 }

@@ -20,11 +20,11 @@ Publish::NPKWindowsPublisher::NPKWindowsPublisher()
 }
 
 bool Publish::NPKWindowsPublisher::publish(const char* projectFile,
-											const char* executable,
-											const char* output,
-											bool verbose,
-											const char* levelOverride,
-											std::function<void(int)> progressCallback)
+						const char* executable,
+						const char* output,
+						bool verbose,
+						const char* levelOverride,
+						std::function<void(int)> progressCallback)
 {
 	bool success = true;
 	char execdir[256];

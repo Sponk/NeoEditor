@@ -19,15 +19,15 @@ public:
 
 	virtual const char* getName() override
 	{
-		return "WebNPK";
+		return "Web NPK";
 	}
 
 	virtual bool publish(const char* projectFile,
-						 const char* executable,
-						 const char* output,
-						 bool verbose = false,
-						 const char* levelOverride = nullptr,
-						 std::function<void(int)> progressCallback = nullptr) override;
+				const char* executable,
+				const char* output,
+				bool verbose = false,
+				const char* levelOverride = nullptr,
+				std::function<void(int)> progressCallback = nullptr) override;
 };
 
 }

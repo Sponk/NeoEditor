@@ -13,7 +13,7 @@ class PublisherDialog : public QDialog
 	Q_OBJECT
 	Project& project;
 public:
-	explicit PublisherDialog(Project& project, QWidget *parent = 0);
+	PublisherDialog(Project& project, QWidget* parent = 0);
 	~PublisherDialog();
 
 public slots:
