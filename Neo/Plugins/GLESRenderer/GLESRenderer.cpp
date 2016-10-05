@@ -629,8 +629,10 @@ void GLESRenderer::drawScene(Scene* scene, OCamera* camera)
 	}
 	PROFILE_END("SceneDraw")
 
+#ifndef __EMSCRIPTEN__
 	*m_numVisible = std::to_string(numVisible + std::stoi(*m_numVisible));
-
+#endif
+	
 	for(int i = 0; i < scene->getTextsNumber(); i++)
 	{
 		drawText(scene->getTextByIndex(i), camera);
@@ -836,7 +838,7 @@ void GLESRenderer::drawEntity(OEntity* e, Scene* scene, OCamera* camera)
 
 		glUniformMatrix4fv(m_mvpMatrixUniform, 1, false, MVP.entries);
 		glUniformMatrix4fv(m_modelViewMatrixUniform, 1, false, MV.entries);
-		glUniformMatrix4fv(m_normalMatrixUniform, 1, true, MV.getInverse().entries);
+		glUniformMatrix4fv(m_normalMatrixUniform, 1, false, MV.getInverse().getTranspose().entries);
 
 		{
 			for(int i = 0; i < m_numPixelLights; i++)
@@ -923,52 +925,6 @@ void GLESRenderer::drawEntity(OEntity* e, Scene* scene, OCamera* camera)
 
 				drawSubmeshDisplay(&subMeshes[i], display, PRIMITIVE_LINES);
 			}
-
-			/*if(subMeshes[i].getIndices())
-			{
-				if(*subMeshes[i].getVBOid2() > 0)
-				{
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *subMeshes[i].getVBOid2());
-
-					switch(subMeshes[i].getIndicesType())
-					{
-						case VAR_USHORT:
-							glDrawElements(neo2gles(display->getPrimitiveType()),
-										   display->getSize(),
-										   GL_UNSIGNED_SHORT,
-										   (void*)(display->getBegin()*sizeof(short)));
-							break;
-						case VAR_UINT:
-							glDrawElements(neo2gles(display->getPrimitiveType()),
-										   display->getSize(),
-										   GL_UNSIGNED_INT,
-										   (void*)(display->getBegin()*sizeof(int)));
-							break;
-					}
-				}
-				else
-				{
-					switch(subMeshes[i].getIndicesType())
-					{
-						case VAR_USHORT:
-							glDrawElements(neo2gles(display->getPrimitiveType()),
-										   display->getSize(),
-										   GL_UNSIGNED_SHORT,
-										   static_cast<unsigned short*>(subMeshes[i].getIndices()) + display->getBegin());
-							break;
-						case VAR_UINT:
-							glDrawElements(neo2gles(display->getPrimitiveType()),
-										   display->getSize(),
-										   GL_UNSIGNED_INT,
-										   static_cast<unsigned int*>(subMeshes[i].getIndices()) + display->getBegin());
-							break;
-					}
-				}
-			}
-			else
-			{
-				glDrawArrays(neo2gles(display->getPrimitiveType()), display->getBegin(), display->getSize());
-			}*/
 		}
 	}
 
@@ -1041,13 +997,13 @@ void GLESRenderer::prepareMaterialDisplay(unsigned int fx, SubMesh* mesh, Materi
 	if (*vbo1 > 0)
 		glBindBuffer(GL_ARRAY_BUFFER, *vbo1);
 
-	if (indices) // If the SubMesh has indices
+	/*if (indices) // If the SubMesh has indices
 	{
 		if (*vbo2 > 0) // If the indices are stored in the VBO
 		{
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *vbo2);
 		}
-	}
+	}*/
 
 	// Set up vertex attribute
 	int attrib;
@@ -1064,7 +1020,7 @@ void GLESRenderer::prepareMaterialDisplay(unsigned int fx, SubMesh* mesh, Materi
 
 	// Set up normal attribute
 	attrib = glGetAttribLocation(fx, "Normal");
-	if (attrib != -1)
+	if (attrib != -1 && mesh->getNormalsSize())
 	{
 		glEnableVertexAttribArray(attrib);
 		glVertexAttribPointer(attrib, 3, GL_FLOAT, false, 0, (void*) offset);
@@ -1074,7 +1030,7 @@ void GLESRenderer::prepareMaterialDisplay(unsigned int fx, SubMesh* mesh, Materi
 
 	// Set up tangent attribute
 	attrib = glGetAttribLocation(fx, "Tangent");
-	if (attrib != -1)
+	if (attrib != -1 && mesh->getTangentsSize())
 	{
 		glEnableVertexAttribArray(attrib);
 		glVertexAttribPointer(attrib, 3, GL_FLOAT, false, 0, (void*) offset);
@@ -1084,7 +1040,7 @@ void GLESRenderer::prepareMaterialDisplay(unsigned int fx, SubMesh* mesh, Materi
 
 	// Set up color attribute
 	attrib = glGetAttribLocation(fx, "Color");
-	if (attrib != -1)
+	if (attrib != -1 && mesh->getColorsSize())
 	{
 		glEnableVertexAttribArray(attrib);
 		glVertexAttribPointer(attrib, 3, GL_FLOAT, false, 0, (void*) offset);
@@ -1099,7 +1055,7 @@ void GLESRenderer::prepareMaterialDisplay(unsigned int fx, SubMesh* mesh, Materi
 			* (mesh->getVerticesSize() + mesh->getNormalsSize() + mesh->getTangentsSize() + display->getBegin());
 
 		attrib = glGetAttribLocation(fx, "TexCoord");
-		if (attrib != -1)
+		if (attrib != -1 && mesh->getTexCoordsSize())
 		{
 			glEnableVertexAttribArray(attrib);
 			glVertexAttribPointer(attrib, 2, GL_FLOAT, false, 0, (void*) offset);
