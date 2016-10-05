@@ -9,7 +9,7 @@ using namespace Neo;
 static Publish::NPKPublisher publisher;
 static Publish::PublisherRegistry reg(publisher);
 
-bool Publish::NPKPublisher::createPackage(const char* src, const char* dest, const char* project, bool verbose)
+bool Publish::NPKPublisher::createPackage(const char* src, const char* dest, const char* project, const char* pwd, bool verbose)
 {
 	Plugin npkPlugin;
 	npkPlugin.load("NPKPlugin");
@@ -36,7 +36,7 @@ bool Publish::NPKPublisher::createPackage(const char* src, const char* dest, con
 			return false;
 		}
 
-		const char* pwd = engine->getSystemContext()->getWorkingDirectory();
+		// const char* pwd = engine->getSystemContext()->getWorkingDirectory();
 
 		packageDir(src, pwd, pkm, package, verbose);
 		pkm->addFileToPackage(project, package, "project.nproj");
@@ -61,6 +61,9 @@ bool Publish::NPKPublisher::publish(const char* projectFile,
 	char execdir[256];
 	getRepertory(execdir, executable);
 
+	char projectdir[256];
+	getRepertory(projectdir, projectFile);
+	
 	string execstr = execdir;
 	string outpath = output;
 	outpath += "/";
@@ -84,7 +87,7 @@ bool Publish::NPKPublisher::publish(const char* projectFile,
 			return false;
 		}
 
-		success &= createPackage(project.getAssetDirectory().c_str(), packagefile.c_str(), projectFile, verbose);
+		success &= createPackage(project.getAssetDirectory().c_str(), packagefile.c_str(), projectFile, projectdir, verbose);
 	}
 	
 	return success;

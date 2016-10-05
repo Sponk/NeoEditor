@@ -18,7 +18,7 @@ class NPKPublisher : public Publisher
 protected:
 	bool packageDir(const char* dir, const char* pwd, Neo::PackageManager* pkm, Neo::Package pkg, bool verbose = false);
 	bool copyFiles(const char* src, const char* dest, const char* type = "", bool verbose = false);
-	bool createPackage(const char* src, const char* dest, const char* project, bool verbose = false);
+	bool createPackage(const char* src, const char* dest, const char* project, const char* pwd, bool verbose = false);
 	
 public:
 

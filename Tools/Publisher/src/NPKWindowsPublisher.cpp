@@ -30,6 +30,9 @@ bool Publish::NPKWindowsPublisher::publish(const char* projectFile,
 	char execdir[256];
 	getRepertory(execdir, executable);
 
+	char projectdir[256];
+	getRepertory(projectdir, projectFile);
+	
 	string execstr = execdir;
 	string outpath = output;
 	outpath += "/";
@@ -53,7 +56,7 @@ bool Publish::NPKWindowsPublisher::publish(const char* projectFile,
 			return false;
 		}
 
-		success &= createPackage(project.getAssetDirectory().c_str(), packagefile.c_str(), projectFile, verbose);
+		success &= createPackage((projectdir + project.getAssetDirectory()).c_str(), packagefile.c_str(), projectFile, projectdir, verbose);
 	}
 	
 	// Runtime

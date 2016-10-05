@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cstdio>
 #include "Publisher.h"
 
 #ifndef VERSION_STRING
@@ -148,10 +149,22 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	return publisher->publish(settings.inputProject.c_str(), settings.player.c_str(),
+	if(settings.verbose)
+	{
+		cout << "Publishing with following settings:" << endl;
+		cout << "Input: " << settings.inputProject << endl;
+		cout << "Output: " << settings.outputDirectory << endl;
+		cout << "Player: " << settings.player << endl;
+		cout << endl;
+	}
+	
+	bool success = publisher->publish(settings.inputProject.c_str(), settings.player.c_str(),
 							   settings.outputDirectory.c_str(), settings.verbose, settings.startLevel.c_str(),
 							   [](int p){
 								   cout << "Progress: " << p << "%" << endl;
 							   });
+	
+	fflush(stdout);
+	return !success;
 }
 
