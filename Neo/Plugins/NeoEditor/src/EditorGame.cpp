@@ -14,8 +14,15 @@ using namespace Gui;
 // FIXME: Hack!
 #ifdef WIN32
 #define HOMEDIR getenv("USERPROFILE")
+
+#include <direct.h> // _getcwd
+#define getcwd _getcwd
+
 #else
 #define HOMEDIR getenv("HOME")
+
+#include <unistd.h> // getcwd
+
 #endif
 
 #define MAKE_LABEL(str, ui)                                        \
@@ -356,7 +363,9 @@ void EditorGame::draw()
 	render->enableDepthTest(false);
 	
 	PROFILE_BEGIN("GuiDraw");
+	setEditorPaths();
 	m_canvas.draw();
+	setProjectPaths();
 	PROFILE_END("GuiDraw");
 }
 
@@ -1687,7 +1696,7 @@ void EditorGame::loadProject(const char* path)
 	m_currentProjectFile = path;
 
 	char dir[256];
-    getRepertory(dir, path);
+	getRepertory(dir, path);
 
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	system->setWorkingDirectory(dir);
@@ -1837,7 +1846,7 @@ void EditorGame::addText()
 void EditorGame::openNewLevel()
 {
 	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
-    std::string path =  m_toolset->fileSaveDialog(tr("Save Level"), engine->getSystemContext()->getWorkingDirectory(), "Lisp Levels (*.llvl)");
+	std::string path =  m_toolset->fileSaveDialog(tr("Save Level"), engine->getSystemContext()->getWorkingDirectory(), "Lisp Levels (*.llvl)");
 
 	if(path.empty())
 		return;
@@ -1970,7 +1979,10 @@ void EditorGame::runGame()
 	ScriptContext* script = engine->getScriptContext();
 	script->runScript(engine->getLevel()->getCurrentScene()->getScriptFilename());
 	
+	setEditorPaths(); // Ensure that the file path is relative to the editor
 	m_playButton.lock()->loadImage("data/icons/media-playback-pause.png");
+	setProjectPaths();
+	
 	m_isRunningGame = true;
 	m_sceneView->showEditorScenes(false);
 	
@@ -1980,8 +1992,11 @@ void EditorGame::runGame()
 
 	m_isRunningGame = false;
 	m_sceneView->showEditorScenes(true);
+	
+	setEditorPaths();
 	m_playButton.lock()->loadImage("data/icons/media-playback-start.png");
-
+	setProjectPaths();
+	
 	//m_sceneView->setInvisible(false);
 	//m_sceneView->setActive(true);
 	
@@ -2002,3 +2017,27 @@ void EditorGame::updateSceneUi()
 	m_sceneGravityEdit->setVector(scene->getGravity());
 	m_sceneAmbientLightEdit->setColor(scene->getAmbientLight());
 }
+
+
+void EditorGame::setEditorPaths()
+{
+	char dir[256];
+	if(getcwd(dir, sizeof(dir)) == NULL)
+	{
+		MLOG_WARNING("Could not set editor path!");
+		return;
+	}
+	
+	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
+	system->setWorkingDirectory(dir);
+}
+
+void EditorGame::setProjectPaths()
+{
+	char dir[256];
+	getRepertory(dir, m_project.getFilePath().c_str());
+
+	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
+	system->setWorkingDirectory(dir);
+}
+

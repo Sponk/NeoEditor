@@ -177,6 +177,9 @@ public:
 
 	void undo();
 	void redo();
+	
+	void setEditorPaths();
+	void setProjectPaths();
 
 private:
 };
