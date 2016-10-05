@@ -693,8 +693,7 @@ void SceneView::update(float dt)
 	if (input->getMouse().isKeyDown(MOUSE_BUTTON_RIGHT))
 	{
 		Vector2 direction = input->getMouse().getDirection();
-		m_camera.rotate(Vector3(1, 0, 0), -direction.y * dt * 10);
-		m_camera.rotate(Vector3(0, 1, 0), -direction.x * dt * 10);
+		m_camera.setEulerRotation(m_camera.getEulerRotation() + Vector3(-direction.y * dt * 10, 0, -direction.x * dt * 10));
 	}
 
 	m_camera.updateMatrix();
