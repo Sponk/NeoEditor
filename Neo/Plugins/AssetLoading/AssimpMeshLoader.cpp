@@ -24,6 +24,7 @@
 
 #include "AssimpMeshLoader.h"
 #include <assimp/cimport.h>
+#include <assimp/cfileio.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
@@ -709,9 +710,77 @@ void readAssimpMesh(const char * filename, const aiScene * scene, const aiNode *
 }
 
 
+#define GET_FILE(ai) ((File*) (ai->UserData))
+static const int aiSeekTable[] = { SEEK_SET, SEEK_CUR, SEEK_END };
+
+size_t aiRead(aiFile* file, char* data, size_t sz, size_t count)
+{
+	return M_fread(data, sz, count, GET_FILE(file));
+}
+
+aiReturn aiSeek(aiFile* file, size_t offset, aiOrigin origin)
+{
+	return (aiReturn) M_fseek(GET_FILE(file), offset, aiSeekTable[origin]);
+}
+
+size_t aiTell(aiFile* f)
+{
+	return M_ftell(GET_FILE(f));
+}
+
+size_t aiSize(aiFile* f)
+{
+	size_t original = M_ftell(GET_FILE(f));
+	M_fseek(GET_FILE(f), 0, SEEK_END);
+	
+	size_t sz = M_ftell(GET_FILE(f));
+	M_fseek(GET_FILE(f), original, SEEK_SET);
+	
+	return sz;
+}
+
+size_t aiWrite(aiFile* file, const char* data, size_t sz, size_t count)
+{
+	return M_fwrite(data, sz, count, GET_FILE(file));
+}
+
+void aiClose(aiFileIO* io, aiFile* file)
+{
+	M_fclose(GET_FILE(file));
+	delete file;
+}
+
+void aiFlush(aiFile* file)
+{
+	
+}
+
+aiFile* aiOpen(aiFileIO* io, const char* path, const char* mode)
+{
+	File* f = M_fopen(path, mode);
+	if(!f)
+		return NULL;
+	
+	aiFile* file = new aiFile;
+	file->UserData = (aiUserData) f;
+	file->FlushProc = aiFlush;
+	file->ReadProc = aiRead;
+	file->SeekProc = aiSeek;
+	file->TellProc = aiTell;
+	file->WriteProc = aiWrite;
+	file->FileSizeProc = aiSize;
+	
+	return file;
+}
+
 bool M_loadAssimpMesh(const char * filename, Mesh* mesh)
 {
-	const aiScene * scene = aiImportFile(filename, 0);
+	// Set up custom file IO
+	aiFileIO iostruct;
+	iostruct.OpenProc = aiOpen;
+	iostruct.CloseProc = aiClose;
+	
+	const aiScene * scene = aiImportFileEx(filename, 0, &iostruct);
 	
 	if(! scene)
 		return false;
@@ -760,10 +829,14 @@ bool M_loadAssimpMesh(const char * filename, Mesh* mesh)
 	return true;
 }
 
-
 bool M_importAssimpMeshes(const char * filename)
 {
-	const aiScene * scene = aiImportFile(filename, 0);
+	// Set up custom file IO
+	aiFileIO iostruct;
+	iostruct.OpenProc = aiOpen;
+	iostruct.CloseProc = aiClose;
+	
+	const aiScene * scene = aiImportFileEx(filename, 0, &iostruct);
 	
 	if(! scene)
 		return false;
