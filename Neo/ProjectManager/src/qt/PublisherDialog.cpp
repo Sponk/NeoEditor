@@ -6,10 +6,8 @@
 
 #ifdef WIN32
 #define PUBLISHER_EXEC ".\\neo-publisher.exe"
-#define PLAYER_EXEC ".\\NeoPlayer2.exe"
 #else
 #define PUBLISHER_EXEC "./neo-publisher"
-#define PLAYER_EXEC "./NeoPlayer2"
 #endif
 
 #ifndef WIN32
@@ -23,9 +21,9 @@ static const std::pair<std::string, std::string> configs[] = {
 #else
 
 static const std::pair<std::string, std::string> configs[] = {
-	{"Windows NPK", ".\\NeoPlayer2.exe"},
-	{"Linux NPK", ".\\Arch\\Linux\\NeoPlayer2"},
-	{"Web NPK", ".\\Arch\\Web\\NeoWeb.html"},
+	{"Windows NPK", "./NeoPlayer2.exe"},
+	{"Linux NPK", "./Arch/Linux/NeoPlayer2"},
+	{"Web NPK", "./Arch/Web/NeoWeb.html"},
 	{"NPK", ""}
 };
 #endif
@@ -56,18 +54,20 @@ void PublisherDialog::publish()
 	process.setReadChannel(QProcess::StandardOutput);
 	process.start(PUBLISHER_EXEC, QStringList()  << "-i" << project.getFilePath().c_str()
 							<< "-o" << ui->outputEdit->text()
-							<< "-g \"" << ui->generatorsComboBox->currentText() << "\""
-							<< "-p \"" <<  configs[idx].second.c_str() << "\" -v");
+							<< "-g" << ui->generatorsComboBox->currentText()
+							<< "-p" <<  configs[idx].second.c_str() << "-v");
 	
 	ui->commandTextEdit->clear();
 	process.waitForStarted();
 	while(process.state() != QProcess::NotRunning)
 	{
 		process.waitForReadyRead();
-		ui->commandTextEdit->appendPlainText(process.readLine());
+		ui->commandTextEdit->appendPlainText(process.readAll());
 		
 		QApplication::processEvents();
 	}
+	
+	ui->commandTextEdit->appendPlainText(process.readAll());
 	
 	if(process.exitCode() != 0)
 	{

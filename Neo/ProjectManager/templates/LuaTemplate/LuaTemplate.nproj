@@ -6,5 +6,13 @@
 	(start-level "")
 	(assets "assets")
 	(description "A basic project containing the build system for a Lua based game.")
-	(plugins)
+	(plugins
+		"SDLGame"
+		"LuaScripting"
+		"CommonBehaviors"
+		"AssetLoading"
+		"OpenALContext"
+		"GL3Renderer"
+		"BulletPhysics"
+	)
 )
