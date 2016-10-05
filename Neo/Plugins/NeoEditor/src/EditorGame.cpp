@@ -392,7 +392,8 @@ void EditorGame::onBegin()
 #endif
 	
 	m_visibleObjectsCount = registry.getVariable("g_visible_objects_count");
-
+	m_editorPath = engine->getSystemContext()->getWorkingDirectory();
+	
 	// Apply some of the settings
 	{
 		std::string* value;
@@ -1700,6 +1701,8 @@ void EditorGame::loadProject(const char* path)
 
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	system->setWorkingDirectory(dir);
+	
+	m_projectPath = dir;
 
 	if(!m_project.getLevel().empty())
 	{
@@ -2015,23 +2018,13 @@ void EditorGame::updateSceneUi()
 
 void EditorGame::setEditorPaths()
 {
-	char dir[256];
-	if(getcwd(dir, sizeof(dir)) == NULL)
-	{
-		MLOG_WARNING("Could not set editor path!");
-		return;
-	}
-	
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
-	system->setWorkingDirectory(dir);
+	system->setWorkingDirectory(m_editorPath.c_str());
 }
 
 void EditorGame::setProjectPaths()
 {
-	char dir[256];
-	getRepertory(dir, m_project.getFilePath().c_str());
-
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
-	system->setWorkingDirectory(dir);
+	system->setWorkingDirectory(m_projectPath.c_str());
 }
 

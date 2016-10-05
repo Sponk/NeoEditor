@@ -139,6 +139,9 @@ class EditorGame : public Neo::SubGame
 	bool m_isRunningGame;
 	weak_ptr<Neo2D::Gui::ImageButton> m_playButton;
 	
+	std::string m_editorPath;
+	std::string m_projectPath;
+	
 public:
 	EditorGame(const shared_ptr<NativeToolset>& tools) :
 		m_toolset(tools),
