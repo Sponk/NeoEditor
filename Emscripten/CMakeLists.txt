@@ -72,11 +72,11 @@ include(CopyFiles)
 file(COPY "../Neo/Plugins/GLESRenderer/gles.vert" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/assets/shaders")
 file(COPY "../Neo/Plugins/GLESRenderer/gles.frag" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/assets/shaders")
 
-add_definitions(-s ASSERTIONS=1 -std=c++11 -s USE_BULLET=1 -s USE_SDL=2 -s FULL_ES2=1 -s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_VORBIS=1 -s USE_FREETYPE=1 -DSHADER_PATH="assets/shaders")
+add_definitions(-D_setjmp=setjmp -D_longjmp=longjmp -s ASSERTIONS=1 -std=c++11 -s USE_BULLET=1 -s USE_SDL=2 -s FULL_ES2=1 -s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_VORBIS=1 -s USE_FREETYPE=1 -DSHADER_PATH="assets/shaders")
 set_target_properties(NeoWeb PROPERTIES LINK_FLAGS
 			"-s ASSERTIONS=1 -s USE_SDL=2 -s FULL_ES2=1 \
-             -s USE_BULLET=1 -s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_VORBIS=1 -s USE_FREETYPE=1 \
-			--preload-file ${CMAKE_CURRENT_BINARY_DIR}/assets/shaders/gles.vert --preload-file ${CMAKE_CURRENT_BINARY_DIR}/assets/shaders/gles.frag")
+			-s USE_BULLET=1 -s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_VORBIS=1 -s USE_FREETYPE=1") # \
+			# --preload-file ${CMAKE_CURRENT_BINARY_DIR}/assets/shaders/gles.vert --preload-file ${CMAKE_CURRENT_BINARY_DIR}/assets/shaders/gles.frag")
 
 install(TARGETS NeoWeb DESTINATION ${CMAKE_INSTALL_PREFIX})
 
