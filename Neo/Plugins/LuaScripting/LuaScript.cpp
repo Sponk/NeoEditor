@@ -451,7 +451,7 @@ void LuaScript::init(void)
 	luaL_openlibs(m_state);
 
 	//registerVec3(m_state);
-
+#ifndef __EMSCRIPTEN__
 	runString("table.insert(package.loaders, "
 						"function(s) "
 						       "s = s:gsub(\".\", \"/\") "
@@ -479,6 +479,11 @@ void LuaScript::init(void)
 			  "print(err) "
 			  "return nil "
 			  "end");
+#else
+	runString("function require(str) "
+			  "return nil "
+			  "end");
+#endif
 
 	// add ./assets to require module search path
 	runString("package.path = package.path .. \";./assets/?.lua\"");
@@ -497,7 +502,7 @@ void LuaScript::init(void)
 	addFunction("log", log);
 
 	// Automatically load NeoEngineLua when running on the web
-#ifdef EMSCRIPTEN
+#ifdef __EMSCRIPTEN__
 	MLOG_INFO("Automatically loading statically linked NeoEngineLua and Neo2DLua modules");
 	luaopen_NeoEngineLua(m_state);
 	luaopen_Neo2DLua(m_state);
