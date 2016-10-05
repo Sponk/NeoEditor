@@ -116,6 +116,8 @@ extern "C" void _longjmp(jmp_buf env, int value)
 
 int main(int argc, char* argv[])
 {
+	EM_ASM(ENV.PWD = location.href);
+	
 	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 	Neo::NeoGame* game = engine->getGame();
 	Neo::SystemContext* system;
@@ -128,15 +130,6 @@ int main(int argc, char* argv[])
 	StartPlugin_Bullet();
 	StartPlugin_OpenAL();
 	// StartPlugin_Editor();
-
-/*	WebPackage package;
-	engine->setPackageManager(&package);
-
-	package.init();
-	package.loadPackage("http://127.0.0.1:8000/");*/
-	
-	/*if(!game)
-	  engine->setGame(game = new NeoGame);*/
 	
 	system = engine->getSystemContext();
 	system->setArgc(argc);
@@ -145,7 +138,10 @@ int main(int argc, char* argv[])
 	system->setWorkingDirectory("/");
 	engine->getConfigurationRegistry().setVariable("g_rendererType", "gles");
 		
-	std::string fullpath = "http://127.0.0.1:8000/assets.npk";
+	std::string fullpath = getenv("PWD");
+	fullpath.erase(fullpath.find_last_of("/"));
+	fullpath += "/assets.npk";
+	
 	emscripten_async_wget(fullpath.c_str(), "assets.npk",
 						  [](const char* s){
 							  MLOG_INFO("Done downloading " << s);
