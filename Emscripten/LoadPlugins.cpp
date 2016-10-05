@@ -78,7 +78,20 @@ void loop()
 	//renderer->clearScreen(Vector3(1,0,0));
 	
 
-	player.executeFrame();
+	//player.executeFrame();
+	
+	try
+	{
+		player.executeFrame();
+	}
+	catch(const std::exception& e)
+	{
+		MLOG_ERROR(e.what());
+	}
+	catch(...)
+	{
+		MLOG_ERROR("Unknown exception!");  
+	}
 	
 	/*NeoGame* game = NeoEngine::getInstance()->getGame();
 	game->update();
@@ -98,7 +111,7 @@ void loop()
 
 extern "C" void _longjmp(jmp_buf env, int value)
 {
-	
+	MLOG_INFO("Longjmp!");
 }*/
 
 int main(int argc, char* argv[])
@@ -149,8 +162,20 @@ int main(int argc, char* argv[])
 
 							  MLOG_INFO("Loaded project: " << project.getName());
 
-							  engine->getGame()->begin();
-							  engine->loadLevel(project.getLevel().c_str());
+							  try
+							  {
+								player.begin(project.getLevel().c_str());
+							  }
+							  catch(const std::exception& e)
+							  {
+								MLOG_ERROR(e.what());
+							  }
+							  catch(...)
+							  {
+								MLOG_ERROR("Unknown exception!");  
+							  }
+							  //engine->getGame()->begin();
+							  //engine->loadLevel(project.getLevel().c_str());
 							  // engine->getScriptContext()->runString("print(tostring(Neo2DLua.Widget))");
 						  },
 

@@ -16,7 +16,6 @@
 		;;"StandardRenderer"
 		"GL3Renderer"
 		"BulletPhysics"
-		"NPKPlugin"
 		"NeoEditor"
 	)
 	(additional-files "assets/default.ttf")

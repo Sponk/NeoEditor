@@ -14,7 +14,6 @@
 		"OpenALContext"
 		"GL3Renderer"
 		"BulletPhysics"
-		"NPKPlugin"
 		"NeoEditor"
 	)
 )

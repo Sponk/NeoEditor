@@ -46,6 +46,7 @@ void Player::begin(const char* level)
 	{
 		m_engine->setLevel(new Level);
 		m_engine->loadLevel((level == NULL) ? "" : level);
+		m_engine->getScriptContext()->runScript(m_engine->getLevel()->getCurrentScene()->getScriptFilename());
 	}
 }
 

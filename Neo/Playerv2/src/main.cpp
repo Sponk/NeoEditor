@@ -23,11 +23,11 @@ int main(int argc, char* argv[])
 	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 	Project project;
 
+	Plugin npk;
+	npk.load("NPKPlugin");
+	
 	if(isFileExist("assets.npk"))
 	{
-		Plugin npk;
-		npk.load("NPKPlugin");
-
 		engine->getPackageManager()->loadPackage("assets.npk");
 		MLOG_INFO("Found assets.npk!");
 
@@ -69,10 +69,6 @@ int main(int argc, char* argv[])
 		}
 
 		{
-			// We have to re-load the package because plugins might have changed
-			// the loader layout
-			engine->getPackageManager()->loadPackage("assets.npk");
-
 			Neo::SystemContext* system = engine->getSystemContext();
 			char repertory[256];
 			getcwd(repertory, sizeof(repertory));
