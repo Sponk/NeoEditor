@@ -5,6 +5,8 @@ using namespace Neo;
 SDLGame::SDLGame()
 {
 	ConfigurationRegistry& reg = NeoEngine::getInstance()->getConfigurationRegistry();
+	
+#ifndef __EMSCRIPTEN__
 	reg.registerVariable("g_fullscreen", [this](std::string& str) {
 		int value = std::stoi(str);
 
@@ -16,8 +18,9 @@ SDLGame::SDLGame()
 		}
 
 		SDL_SetWindowFullscreen(this->m_window, value);
-	});
-
+		});
+#endif
+	
 	m_glVersion = reg.registerVariable("g_rendererType");
 	m_multisample = reg.registerVariable("g_multisample");
 	m_visibleObjectsCount = reg.registerVariable("g_visible_objects_count");
