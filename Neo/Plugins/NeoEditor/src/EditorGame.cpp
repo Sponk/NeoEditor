@@ -1968,16 +1968,15 @@ void EditorGame::runGame()
 	m_disableUndo = true;
 
 	Neo::Player player(16);
-
-	//	for(auto p : m_project.getPlugins())
-	//		player.loadPlugin(p.c_str());
-
-	//m_sceneView->setInvisible(true);
-	//m_sceneView->setActive(false);
 	m_sceneView->clearSelection();
 
 	ScriptContext* script = engine->getScriptContext();
-	script->runScript(engine->getLevel()->getCurrentScene()->getScriptFilename());
+	
+	char scriptFile[256]; // Get global file path
+	getGlobalFilename(scriptFile, engine->getSystemContext()->getWorkingDirectory(), 
+				engine->getLevel()->getCurrentScene()->getScriptFilename());
+	
+	script->runScript(scriptFile);
 	
 	setEditorPaths(); // Ensure that the file path is relative to the editor
 	m_playButton.lock()->loadImage("data/icons/media-playback-pause.png");
@@ -1986,20 +1985,15 @@ void EditorGame::runGame()
 	m_isRunningGame = true;
 	m_sceneView->showEditorScenes(false);
 	
-	//engine->getGame()->setDrawMainScene(true);
 	player.execute(KEY_ESCAPE);
-	//engine->getGame()->setDrawMainScene(false);
-
+	
 	m_isRunningGame = false;
 	m_sceneView->showEditorScenes(true);
 	
 	setEditorPaths();
 	m_playButton.lock()->loadImage("data/icons/media-playback-start.png");
 	setProjectPaths();
-	
-	//m_sceneView->setInvisible(false);
-	//m_sceneView->setActive(true);
-	
+		
 	// Re-enable undo/redo queue again
 	m_disableUndo = false;
 	
