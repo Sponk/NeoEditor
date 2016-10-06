@@ -1426,8 +1426,11 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 
 	m_behaviorUi->activateChildren(true);
 	m_behaviorUi->setInvisible(false);
+	
+	setEditorPaths(); // Ensure that font loading works
 	m_behaviorUi->displayObject(object);
-
+	setProjectPaths();
+	
 	switch(object->getType())
 	{
 	case OBJECT3D_ENTITY: {
