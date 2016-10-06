@@ -90,8 +90,10 @@ bool Neo2D::Gui::Button::handle(const Neo2D::Gui::Event& event)
 		return true;
 
 	case MOUSE_LEFT_RELEASE:
+		if(getState() == WIDGET_SELECTED)
+			doCallback();
+
 		setState(WIDGET_HOVER);
-		doCallback();
 		return true;
 	}
 

@@ -37,6 +37,7 @@ using namespace Gui;
 		MAKE_LABEL(str, ui);                                              \
 		ui->addWidget(                                                    \
 			edit = make_shared<EditField>(0, 0, width, 20, nullptr, ui)); \
+		edit->setDebugString(str); \
 		edit->setCallback(                                                \
 			[this](Widget& w, void* d) {                                  \
 				if (!m_sceneView->getSelection().size())                  \
@@ -54,6 +55,7 @@ using namespace Gui;
 		MAKE_LABEL(str, ui);                                                   \
 		ui->addWidget(                                                         \
 			edit = make_shared<EditField>(0, 0, width, 20, nullptr, ui));      \
+		edit->setDebugString(str); \
 		edit->setCallback(                                                     \
 			[this](Widget& w, void* d) {                                       \
 				if (!m_sceneView->getSelection().size())                       \
@@ -80,6 +82,7 @@ using namespace Gui;
 		MAKE_LABEL(str, ui);                                              \
 		ui->addWidget(                                                    \
 			edit = make_shared<EditField>(0, 0, width, 20, nullptr, ui)); \
+		edit->setDebugString(str); \
 		edit->setCallback(                                                \
 			[this](Widget& w, void* d) {                                  \
 				if (!m_sceneView->getSelection().size())                  \
@@ -112,6 +115,7 @@ using namespace Gui;
 		MAKE_LABEL(str, ui);                                                  \
 		ui->addWidget(                                                        \
 			edit = make_shared<EditField>(0, 0, width, 20, nullptr, ui));     \
+		edit->setDebugString(str); \
 		edit->setCallback(                                                    \
 			[this](Widget& w, void* d) {                                      \
 				if (!m_sceneView->getSelection().size())                      \
@@ -138,6 +142,7 @@ using namespace Gui;
 		MAKE_LABEL(str, ui);                                                \
 		ui->addWidget(                                                      \
 			edit = make_shared<Vector3Edit>(0, 0, width, 20, nullptr, ui)); \
+		edit->setDebugString(str); \
 		edit->setCallback(                                                  \
 			[this](Widget& w, void* d) {                                    \
 				if (!m_sceneView->getSelection().size())                    \
@@ -156,6 +161,7 @@ using namespace Gui;
 		MAKE_LABEL(str, ui);                                                \
 		ui->addWidget(                                                      \
 			edit = make_shared<Vector3Edit>(0, 0, width, 20, nullptr, ui)); \
+		edit->setDebugString(str); \
 		edit->setCallback(                                                  \
 			[this](Widget& w, void* d) {                                    \
 				if (!m_sceneView->getSelection().size())                    \
@@ -173,6 +179,7 @@ using namespace Gui;
 		MAKE_LABEL(str, ui);                                                  \
 		ui->addWidget(                                                        \
 			edit = make_shared<Vector3Edit>(0, 0, width, 20, nullptr, ui));   \
+		edit->setDebugString(str); \
 		edit->setCallback(                                                    \
 			[this](Widget& w, void* d) {                                      \
 				if (!m_sceneView->getSelection().size())                      \
@@ -197,6 +204,7 @@ using namespace Gui;
 		MAKE_LABEL(str, ui);                                                  \
 		ui->addWidget(                                                        \
 			edit = make_shared<Vector3Edit>(0, 0, width, 20, nullptr, ui));   \
+		edit->setDebugString(str); \
 		edit->setCallback(                                                    \
 			[this](Widget& w, void* d) {                                      \
 				if (!m_sceneView->getSelection().size())                      \
@@ -225,6 +233,7 @@ using namespace Gui;
 		MAKE_LABEL(str, ui);                                                \
 		ui->addWidget(                                                      \
 			edit = make_shared<Vector4Edit>(0, 0, width, 20, nullptr, ui)); \
+		edit->setDebugString(str); \
 		edit->setCallback(                                                  \
 			[this](Widget& w, void* d) {                                    \
 				if (!m_sceneView->getSelection().size())                    \
@@ -242,6 +251,7 @@ using namespace Gui;
 	{                                                                     \
 		ui->addWidget(                                                    \
 			edit = make_shared<CheckButton>(0, 0, 100, 20, str, ui)); \
+		edit->setDebugString(str); \
 		edit->setCallback(                                                \
 			[this](Widget& w, void* d) {                                  \
 				if (!m_sceneView->getSelection().size())                  \
@@ -265,6 +275,7 @@ using namespace Gui;
 	{                                                                         \
 		ui->addWidget(edit = make_shared<ColorEdit>(0, 0, width, 20, str, \
 													ui, m_toolset));          \
+		edit->setDebugString(str); \
 		edit->setCallback(                                                    \
 			[this](Widget& w, void* d) {                                      \
 				if (!m_sceneView->getSelection().size())                      \
@@ -283,6 +294,7 @@ using namespace Gui;
 	{                                                                         \
 		ui->addWidget(edit = make_shared<ColorEdit>(0, 0, width, 20, str, \
 													ui, m_toolset));          \
+		edit->setDebugString(str); \
 		edit->setCallback(                                                    \
 			[this](Widget& w, void* d) {                                      \
 																			  \

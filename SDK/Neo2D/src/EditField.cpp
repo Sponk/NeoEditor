@@ -316,7 +316,6 @@ bool Neo2D::Gui::EditField::handle(const Event& e)
 
 		case MOUSE_LEFT_CLICK:
 			setState(WIDGET_SELECTED);
-
 			// Reset last typed character so we don't pick anything up that already happened
 			NeoEngine::getInstance()->getInputContext()->getKeyboard().setCharacter(EOF);
 			return true;

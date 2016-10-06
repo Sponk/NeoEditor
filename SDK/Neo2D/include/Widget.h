@@ -53,6 +53,7 @@ class NEO2D_EXPORT Widget : public Object2D, public enable_shared_from_this<Widg
 	std::function<void(Widget&, void*)> m_callback;
 	void* m_data;
 
+	std::string m_debugString;
 	std::string m_label;
 	bool m_initialized;
 
@@ -63,6 +64,9 @@ public:
 	Widget(int x, int y, unsigned int w, unsigned int h, const char* label,
 		   const shared_ptr<Object2D>& parent, const shared_ptr<Theme>& theme = nullptr);
 
+	void setDebugString(const char* str) { m_debugString = str; }
+	const char* getDebugString() { return m_debugString.c_str(); }
+	
 	/**
 	 * @brief Cleans up by unregistering all events registered by the destroyed instance.
 	 */

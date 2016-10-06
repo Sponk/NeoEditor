@@ -119,7 +119,8 @@ public:
 	{
 		updateFilter();
 		for (auto o : m_children)
-			o->update(dt);
+			if(o->isActive())
+				o->update(dt);
 
 		updateLayout();
 		Widget::update(dt);
@@ -127,8 +128,8 @@ public:
 
 	void activateChildren(bool v)
 	{
-		//for (auto o : m_children)
-		//	o->setActive(v);
+		for (auto o : m_children)
+			o->setActive(v);
 
 		setActive(v);
 	}
@@ -168,7 +169,8 @@ public:
 	{
 		bool handled = false;
 		for(auto w : m_children)
-			handled |= w->handle(e);
+			if(w->isActive())
+				handled |= w->handle(e);
 
 		return handled;
 	}
