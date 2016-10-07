@@ -4,6 +4,50 @@
 
 using namespace Neo;
 
+class TestBehavior : public Behavior
+{
+	String m_string;
+public:
+	TestBehavior() : Behavior(NULL) {}
+
+	virtual const char* getName(void) override
+	{
+		return "TestBehavior";
+	}
+
+	virtual unsigned int getVariablesNumber(void) override
+	{
+		return 1;
+	}
+
+	virtual NeoVariable getVariable(unsigned int id) override
+	{
+		switch(id)
+		{
+			case 0: return NeoVariable("String", &m_string, M_VARIABLE_STRING);
+		}
+
+		return NeoVariable();
+	}
+
+	virtual void destroy(void) override
+	{
+
+	}
+
+	virtual Behavior* getCopy(Object3d* parentObject) override
+	{
+		return nullptr;
+	}
+
+	virtual void update(void) override
+	{
+
+	}
+
+	static Behavior* getNew(Object3d*) { return new TestBehavior; }
+};
+
 TEST(LispLevelTest, SaveTest)
 {
 	Level level;
@@ -30,9 +74,12 @@ TEST(LispLevelTest, SaveTest)
 	mat->allocTexturesPass(1);
 	mat->addTexturePass(tex, TEX_COMBINE_ADD, 0);
 
-	scene->addNewEntity(meshRef);
+	auto entity = scene->addNewEntity(meshRef);
 	scene->addNewText(FontRef::getNew(NULL, NULL))->setName("Text0");
 	scene->addNewSound(SoundRef::getNew(0, NULL))->setName("Sound0");
+
+	TestBehavior behavior;
+	entity->addBehavior(&behavior);
 
 	char curdir[256];
 	char filename[256];
@@ -45,6 +92,7 @@ TEST(LispLevelTest, SaveTest)
 TEST(LispLevelTest, LoadTest)
 {
 	Level level;
+	NeoEngine::getInstance()->getBehaviorManager()->addBehavior("TestBehavior", 0, TestBehavior::getNew);
 
 	char curdir[256];
 	char filename[256];

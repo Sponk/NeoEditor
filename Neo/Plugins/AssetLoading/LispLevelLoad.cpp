@@ -209,7 +209,7 @@ bool loadLispLevel(const char* filename, Level* level)
 				}
 				else if(type == "Entity")
 				{
-                    OEntity* entity = s->addNewEntity(level->loadMesh(getGlobalFile(GET_VALUE(o, "mesh")).c_str()));
+					OEntity* entity = s->addNewEntity(level->loadMesh(getGlobalFile(GET_VALUE(o, "mesh")).c_str()));
 					object = entity;
 
 					Mesh* mesh = entity->getMesh();
@@ -245,7 +245,7 @@ bool loadLispLevel(const char* filename, Level* level)
 
 						}
 					}
-
+#if 0
 					std::vector<Texture*> textureList;
 					// Load textures
 					tn = o.getChildByPath("textures");
@@ -254,7 +254,7 @@ bool loadLispLevel(const char* filename, Level* level)
 						entity->getMesh()->allocTextures(GET_INT_VALUE(o, "texture-count"));
 						for(auto t : tn->arguments())
 						{
-                            TextureRef* texref = level->loadTexture(getGlobalFile(GET_VALUE(t, "texture-file")).c_str());
+							TextureRef* texref = level->loadTexture(getGlobalFile(GET_VALUE(t, "texture-file")).c_str());
 							Texture* tex = new Texture(texref);
 
 							tex->setGenMode(static_cast<TEX_GEN_MODES>(GET_INT_VALUE(t, "gen-mode")));
@@ -269,6 +269,7 @@ bool loadLispLevel(const char* filename, Level* level)
 					}
 
 					// Load Materials
+
 					tn = o.getChildByPath("materials");
 					if(tn)
 					{
@@ -298,23 +299,24 @@ bool loadLispLevel(const char* filename, Level* level)
 								auto p = t.getChildByPath("texture-passes");
 								if(p)
 								{
-                                    size_t numTextures = textureList.size();
+									size_t numTextures = textureList.size();
 									for(auto pass : p->arguments())
 									{
-                                        size_t passid = GET_INT_VALUE(pass, "texture-id");
-                                        if(passid >= numTextures)
-                                            continue;
+										size_t passid = GET_INT_VALUE(pass, "texture-id");
+										if(passid >= numTextures)
+										continue;
 
-                                        mat->addTexturePass(textureList[passid],
-															static_cast<TEX_COMBINE_MODES>(GET_INT_VALUE(pass,
-																										 "combine-mode")),
-															GET_INT_VALUE(pass, "map-channel"));
+										mat->addTexturePass(textureList[passid],
+													static_cast<TEX_COMBINE_MODES>(GET_INT_VALUE(pass,
+													"combine-mode")),
+													GET_INT_VALUE(pass, "map-channel"));
 
 									}
 								}
 							}
 						}
 					}
+#endif
 				}
 				else if(type == "Camera")
 				{
@@ -332,7 +334,7 @@ bool loadLispLevel(const char* filename, Level* level)
 				}
 				else if(type == "Text")
 				{
-                    auto text = s->addNewText(level->loadFont(getGlobalFile(GET_VALUE(o, "font")).c_str()));
+					auto text = s->addNewText(level->loadFont(getGlobalFile(GET_VALUE(o, "font")).c_str()));
 					object = text;
 
 					text->setText(GET_VALUE(o, "text").c_str());
@@ -342,7 +344,7 @@ bool loadLispLevel(const char* filename, Level* level)
 				}
 				else if(type == "Sound")
 				{
-                    auto sound = s->addNewSound(level->loadSound(getGlobalFile(GET_VALUE(o, "sound")).c_str()));
+					auto sound = s->addNewSound(level->loadSound(getGlobalFile(GET_VALUE(o, "sound")).c_str()));
 					object = sound;
 
 					sound->setPitch(GET_FLOAT_VALUE(o, "pitch"));
@@ -359,6 +361,76 @@ bool loadLispLevel(const char* filename, Level* level)
 
 				if(!object) continue;
 				object->setName(GET_VALUE(o, "name").c_str());
+
+				// Read behavior
+				{
+					auto behaviors = o.getChildByPath("behaviors");
+					BehaviorManager* bm = NeoEngine::getInstance()->getBehaviorManager();
+
+					if(behaviors)
+					{
+						for(auto& tn : behaviors->arguments())
+						{
+							const std::string name = GET_VALUE(tn, "name");
+							BehaviorCreator* bc = bm->getBehaviorByName(name.c_str());
+							if(!bc)
+							{
+								MLOG_WARNING("Could not find behavior " << name);
+								continue;
+							}
+
+							Behavior* b;
+							object->addBehavior(b = bc->getNewBehavior(object));
+
+							auto vn = tn.getChildByPath("variables");
+							size_t id = 0;
+							for(auto& v : vn->arguments())
+							{
+								const auto& variable = b->getVariable(id);
+
+								if(GET_VALUE(v, "name") != variable.getName())
+								{
+									MLOG_WARNING("Could not load behavior variable: " << variable.getName());
+									continue;
+								}
+
+								switch(variable.getType())
+								{
+									case M_VARIABLE_STRING:
+										variable_cast<Neo::String>(variable)->set(GET_VALUE(v, "value").c_str());
+										break;
+
+									case M_VARIABLE_FLOAT:
+										*variable_cast<float>(variable) = GET_FLOAT_VALUE(v, "value");
+										break;
+
+									case M_VARIABLE_UINT:
+									case M_VARIABLE_INT:
+										*variable_cast<int>(variable) = GET_INT_VALUE(v, "value");
+										break;
+
+									case M_VARIABLE_VEC2:
+										*variable_cast<Vector2>(variable) = GET_VECTOR2_VALUE(v, "value");
+										break;
+
+									case M_VARIABLE_VEC3:
+										*variable_cast<Vector3>(variable) = GET_VECTOR3_VALUE(v, "value");
+										break;
+
+									case M_VARIABLE_VEC4:
+										*variable_cast<Vector4>(variable) = GET_VECTOR4_VALUE(v, "value");
+										break;
+
+									case M_VARIABLE_BOOL:
+										*variable_cast<bool>(variable) = GET_INT_VALUE(v, "value");
+										break;
+								}
+
+								id++;
+							}
+						}
+					}
+				}
 
 				auto tn = o.getChildByPath("transform");
 				if(!tn)

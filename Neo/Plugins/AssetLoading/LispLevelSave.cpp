@@ -201,6 +201,97 @@ void writePhysicsProperties(File* f, PhysicsProperties* p, int tabs)
 	// TODO: Write constraints
 }
 
+void writeBehavior(File* f, Behavior* b, int tabs)
+{
+	writeTabs(f, tabs);
+	M_fprintf(f, "(behavior\n");
+	
+	tabs++;
+	
+	writeStringVar(f, "name", b->getName(), tabs);
+	writeIntegerVar(f, "variable-count", b->getVariablesNumber(), tabs);
+	
+	{
+		
+		writeTabs(f, tabs);
+		M_fprintf(f, "(variables\n");
+
+		tabs++;
+		
+		for(int i = 0; i < b->getVariablesNumber(); i++)
+		{
+			writeTabs(f, tabs);
+			M_fprintf(f, "(variable\n");
+		
+			tabs++;
+			
+			const auto& var = b->getVariable(i);
+			writeStringVar(f, "name", var.getName(), tabs);
+			
+			switch(var.getType())
+			{
+				case M_VARIABLE_STRING:
+					writeStringVar(f, "value", variable_cast<Neo::String>(var)->getSafeString(), tabs);
+					break;
+					
+				case M_VARIABLE_FLOAT:
+					writeFloatVar(f, "value", *variable_cast<float>(var), tabs);
+					break;
+					
+				case M_VARIABLE_UINT:
+				case M_VARIABLE_INT:
+					writeIntegerVar(f, "value", *variable_cast<int>(var), tabs);
+					break;
+					
+				case M_VARIABLE_VEC2:
+					writeVector2(f, "value", *variable_cast<Neo::Vector2>(var), tabs);
+					break;
+					
+				case M_VARIABLE_VEC3:
+					writeVector3(f, "value", *variable_cast<Neo::Vector3>(var), tabs);
+					break;
+					
+				case M_VARIABLE_VEC4:
+					writeVector4(f, "value", *variable_cast<Neo::Vector4>(var), tabs);
+					break;
+					
+				case M_VARIABLE_BOOL:
+					writeIntegerVar(f, "value", *variable_cast<bool>(var), tabs);
+					break;
+			}
+			
+			tabs--;
+			
+			writeTabs(f, tabs);
+			M_fprintf(f, ")\n");
+		}
+		
+		tabs--;
+
+		writeTabs(f, tabs);
+		M_fprintf(f, ")\n");
+	}
+	
+	tabs--;
+	
+	writeTabs(f, tabs);
+	M_fprintf(f, ")\n");
+}
+
+void writeBehaviors(File* f, Object3d* e, int tabs)
+{
+	writeTabs(f, tabs);
+	M_fprintf(f, "(behaviors\n");
+	tabs++;
+	
+	for(int i = 0; i < e->getBehaviorsNumber(); i++)
+		writeBehavior(f, e->getBehavior(i), tabs);
+	
+	tabs--;
+	writeTabs(f, tabs);
+	M_fprintf(f, ")\n");
+}
+
 void writeEntity(File* f, OEntity* e, int tabs)
 {
 	writeStringVar(f, "type", "Entity", tabs);
@@ -212,17 +303,23 @@ void writeEntity(File* f, OEntity* e, int tabs)
 	writePhysicsProperties(f, e->getPhysicsProperties(), tabs);
 
 	// Textures
+#if 0
 	{
-        writeIntegerVar(f, "texture-count", e->getTexturesNumber(), tabs);
-        writeTabs(f, tabs);
-        size_t texCount = 0;
-        M_fprintf(f, "(textures\n");
+		writeIntegerVar(f, "texture-count", e->getTexturesNumber(), tabs);
+		writeTabs(f, tabs);
+		M_fprintf(f, "(textures\n");
 		tabs++;
 
-        for(int j = 0; j < e->getTexturesNumber(); j++)
+		for(int j = 0; j < e->getTexturesNumber(); j++)
 		{
-            Texture* t = e->getTexture(j);
+			Texture* t = e->getTexture(j);
 
+			if(!t)
+			{
+				MLOG_WARNING("Registered texture is NULL!");
+				continue;
+			}
+			
 			writeTabs(f, tabs);
 			M_fprintf(f, "(texture\n");
 			tabs++;
@@ -233,14 +330,16 @@ void writeEntity(File* f, OEntity* e, int tabs)
 			writeVector2(f, "tex-translate", t->getTexTranslate(), tabs);
 			writeFloatVar(f, "tex-rotate", t->getTexRotate(), tabs);
 			writeVector2(f, "tex-scale", t->getTexScale(), tabs);
-			writeStringVar(f, "texture-file", getLocalFile(t->getTextureRef()->getFilename()).c_str(), tabs);
+
+			std::string filename = getLocalFile(t->getTextureRef()->getFilename());
+			//writeStringVar(f, "texture-file", filename.c_str(), tabs);
 
 			tabs--;
 			writeTabs(f, tabs);
 			M_fprintf(f, ")\n");
 		}
 
-        tabs--;
+		tabs--;
 
 		writeTabs(f, tabs);
 		M_fprintf(f, ")\n");
@@ -306,6 +405,7 @@ void writeEntity(File* f, OEntity* e, int tabs)
 	tabs--;
 	writeTabs(f, tabs);
 	M_fprintf(f, ")\n");
+#endif
 }
 
 void writeObject(File* f, Object3d* o, int tabs)
@@ -320,7 +420,8 @@ void writeObject(File* f, Object3d* o, int tabs)
 		writeStringVar(f, "parent", o->getParent()->getName(), tabs);
 
 	writeTransform(f, o, tabs);
-
+	writeBehaviors(f, o, tabs);
+	
 	switch(o->getType())
 	{
 		case OBJECT3D_ENTITY:
@@ -349,7 +450,6 @@ void writeObject(File* f, Object3d* o, int tabs)
 	}
 
 	tabs--;
-
 	writeTabs(f, tabs);
 	M_fprintf(f, ")\n");
 }
