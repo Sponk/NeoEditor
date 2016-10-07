@@ -1424,7 +1424,7 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 
 	m_behaviorUi->activateChildren(false);
 	m_behaviorUi->setInvisible(true);
-	m_behaviorUi->setSize(Vector2(m_behaviorUi->getSize().x, m_behaviorUi->calculateContentSize().y));
+	m_behaviorUi->setSize(Vector2(m_rightPanel->getSize().x - 15.0f, m_behaviorUi->calculateContentSize().y));
 
 	if(!object)
 		return;
