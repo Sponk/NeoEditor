@@ -163,9 +163,11 @@ bool loadLispLevel(const char* filename, Level* level)
 		return false;
 	}
 
-    getRepertory(g_rep, filename);
+	getRepertory(g_rep, filename);
 	std::vector<Link> parentChildLinks;
 
+	level->clearScenes();
+	
 	// Load scenes
 	{
 		auto sceneNode = levelNode->getChildByPath("scenes");
