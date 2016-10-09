@@ -69,10 +69,6 @@ using namespace Gui;
 					return;                                                    \
                                                                                \
 				phys->setter(std::stod(edit->getLabel()));                     \
-				NeoEngine::getInstance()                                       \
-					->getLevel()                                               \
-					->getCurrentScene()                                        \
-					->prepareCollisionObject(entity);                          \
 			},                                                                 \
 			nullptr);                                                          \
 	}
@@ -907,7 +903,7 @@ void EditorGame::onBegin()
 						if (m_entityPhysicsButton->getValue())
 							static_cast<OEntity*>(
 								m_sceneView->getSelection().back())
-								->enablePhysics();
+								->createPhysicsProperties();
 						else
 							static_cast<OEntity*>(
 								m_sceneView->getSelection().back())
@@ -976,7 +972,16 @@ void EditorGame::onBegin()
 
 					m_undo.save();
 					phys->setCollisionShape(COLLISION_SHAPE_BOX);
-					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionShape(entity);
+					
+					/*Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
+					PhysicsContext* physics = NeoEngine::getInstance()->getPhysicsContext();
+					
+					// Remove current shape from the world
+					unsigned int shapeid = phys->getShapeId();
+					physics->deleteShape(&shapeid);
+					
+					// Add the new one
+					scene->prepareCollisionShape(entity);*/
 
 					updateSelectedObject(m_sceneView->getSelection().back());
 				});
@@ -992,7 +997,6 @@ void EditorGame::onBegin()
 
 					m_undo.save();
 					phys->setCollisionShape(COLLISION_SHAPE_CONE);
-					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionShape(entity);
 
 					updateSelectedObject(m_sceneView->getSelection().back());
 				});
@@ -1008,7 +1012,6 @@ void EditorGame::onBegin()
 
 					m_undo.save();
 					phys->setCollisionShape(COLLISION_SHAPE_CAPSULE);
-					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionShape(entity);
 
 					updateSelectedObject(m_sceneView->getSelection().back());
 				});
@@ -1024,7 +1027,6 @@ void EditorGame::onBegin()
 
 					m_undo.save();
 					phys->setCollisionShape(COLLISION_SHAPE_CYLINDER);
-					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionShape(entity);
 
 					updateSelectedObject(m_sceneView->getSelection().back());
 				});
@@ -1040,7 +1042,6 @@ void EditorGame::onBegin()
 
 					m_undo.save();
 					phys->setCollisionShape(COLLISION_SHAPE_CONVEX_HULL);
-					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionShape(entity);
 
 					updateSelectedObject(m_sceneView->getSelection().back());
 				});
@@ -1056,7 +1057,6 @@ void EditorGame::onBegin()
 
 					m_undo.save();
 					phys->setCollisionShape(COLLISION_SHAPE_TRIANGLE_MESH);
-					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionShape(entity);
 
 					updateSelectedObject(m_sceneView->getSelection().back());
 				});
@@ -1658,6 +1658,9 @@ void EditorGame::openLevel(const char* path)
 		m_undo.clear();
 		m_undo.save();
 
+		Scene* scene = engine->getLevel()->getCurrentScene();
+		scene->enablePhysicsSimulation(false);
+		
 		m_currentLevelFile = path;
 		updateWindowTitle();
 		updateSceneUi();
@@ -1956,6 +1959,10 @@ void EditorGame::undo()
 	m_sceneView->clearSelection();
 	m_undo.undo();
 	m_sceneView->updateOverlayScene();
+	
+	Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
+	scene->enablePhysicsSimulation(false);
+	
 	updateEntityTree();
 }
 
@@ -1967,6 +1974,10 @@ void EditorGame::redo()
 	m_sceneView->clearSelection();
 	m_undo.redo();
 	m_sceneView->updateOverlayScene();
+
+	Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
+	scene->enablePhysicsSimulation(false);
+	
 	updateEntityTree();
 }
 
@@ -2003,6 +2014,10 @@ void EditorGame::runGame()
 	m_isRunningGame = true;
 	m_sceneView->showEditorScenes(false);
 	
+	Scene* scene = engine->getLevel()->getCurrentScene();
+	scene->preparePhysics();
+	scene->enablePhysicsSimulation(true);	
+	
 	player.execute(KEY_ESCAPE);
 	
 	m_isRunningGame = false;
@@ -2017,6 +2032,11 @@ void EditorGame::runGame()
 	
 	// Restore original state
 	undo();
+	
+	// Turn off physics
+	scene = engine->getLevel()->getCurrentScene();
+	scene->enablePhysicsSimulation(false);
+	
 	engine->setActive(true);
 	script->stopRunning();
 }
@@ -2042,4 +2062,5 @@ void EditorGame::setProjectPaths()
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	system->setWorkingDirectory(m_projectPath.c_str());
 }
+
 
