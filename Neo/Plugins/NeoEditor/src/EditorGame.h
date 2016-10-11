@@ -53,6 +53,8 @@ class EditorGame : public Neo::SubGame
 	shared_ptr<Neo2D::Gui::Container> m_textUi;
 
 	shared_ptr<Neo2D::Gui::EditField> m_nameEdit;
+	shared_ptr<Neo2D::Gui::EditField> m_parentEdit;
+
 	shared_ptr<Vector3Edit> m_positionEdit;
 	shared_ptr<Vector3Edit> m_rotationEdit;
 	shared_ptr<Vector3Edit> m_scaleEdit;

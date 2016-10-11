@@ -756,7 +756,7 @@ void EditorGame::onBegin()
 			// Object editing UIs
 			m_transformUi = make_shared<Container>(rightscroll->getPosition().x,
 												   rightscroll->getPosition().y,
-												   width, 160, rightscroll);
+												   width, 200, rightscroll);
 
 			m_entityUi = make_shared<Container>(rightscroll->getPosition().x,
 												   rightscroll->getPosition().y,
@@ -825,6 +825,11 @@ void EditorGame::onBegin()
 			m_transformUi->addWidget(label);
 			m_transformUi->addWidget(m_nameEdit = make_shared<EditField>(0,0,width,20,nullptr,m_transformUi));
 
+			label = make_shared<Label>(0,0,0,10,tr("Parent:"), m_transformUi);
+			label->setColor(Vector4(0,0,0,1));
+			m_transformUi->addWidget(label);
+			m_transformUi->addWidget(m_parentEdit = make_shared<EditField>(0,0,width,20,nullptr,m_transformUi));
+			
 			label = make_shared<Label>(0,0,0,10,tr("Position:"), m_transformUi);
 			label->setColor(Vector4(0,0,0,1));
 			m_transformUi->addWidget(label);
@@ -862,6 +867,34 @@ void EditorGame::onBegin()
 				m_entityTree->findNode(m_entityTree->getSelected())->setLabel(name);
 				m_undo.save();
 
+			}, nullptr);
+			
+			m_parentEdit->setCallback([this](Widget& w, void* data) {
+
+				if(!m_sceneView->getSelection().size())
+					return;
+
+				const char* name = m_parentEdit->getLabel();
+				if(strlen(name) == 0) // If no name was entered, unlink
+				{
+					m_sceneView->getSelection().back()->unLink();
+					m_undo.save();
+				
+					updateEntityTree();
+					return;
+				}
+
+				Object3d* parent;
+				if((parent = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(name)) == nullptr)
+				{
+					m_toolset->messagebox(tr("Error"), tr("Object not found!"));
+					return;
+				}
+
+				m_sceneView->getSelection().back()->linkTo(parent);
+				m_undo.save();
+				
+				updateEntityTree();
 			}, nullptr);
 
 			m_positionEdit->setCallback([this](Widget& w, void* data) {
