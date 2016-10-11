@@ -232,7 +232,6 @@ bool createShape(OEntity * entity, PhysicsProperties * phyProps, unsigned int * 
 
 	// get bounding box
 	Box3d * box = entity->getBoundingBox();
-
 	Vector3 scale = entity->getTransformedScale();
 
 	// swith shapes

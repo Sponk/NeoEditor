@@ -325,6 +325,14 @@ public:
 	 * @return The current value.
 	 */
 	inline Vector3 * getLinearFactor(void){ return &m_linearFactor; }
+	
+	/**
+	 * @brief Notifies the physics engine of all values that are set here.
+	 * 
+	 * It does not update the collision shape type, it only sets all values properly.
+	 * This method requires the physics object to be already created.
+	 */
+	void updateProperties();
 };
 
 struct NEO_ENGINE_EXPORT RayCastResult
@@ -387,8 +395,8 @@ public:
 
 	RayCastResult castRay(const Vector3& rayO, const Vector3& rayD);
 
-    Texture* getTexture(size_t idx = 0) const { return m_textures[idx]; }
-    size_t getTexturesNumber() const { return m_numTextures; }
+	Texture* getTexture(size_t idx = 0) const { return m_textures[idx]; }
+	size_t getTexturesNumber() const { return m_numTextures; }
 
 	/**
 	 * @brief Retrieves the material with the given index.

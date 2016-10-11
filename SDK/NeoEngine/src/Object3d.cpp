@@ -55,7 +55,7 @@ void Object3d::clearObject3d(void)
 
     // All MVariables have to have their content on the heap! No static variables allowed!
 	for (AttributeIterator it = m_attributes.begin(); it != m_attributes.end(); ++it)
-    {
+	{
 		NeoVariable variable = it->second;
 
 		if(variable.getPointer() == NULL)
