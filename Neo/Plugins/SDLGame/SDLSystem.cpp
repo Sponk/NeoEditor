@@ -44,6 +44,23 @@ void SDLSystem::sleep(long int millis)
 	SDL_Delay(millis);
 }
 
+void SDLSystem::setCursorPosition(int x, int y)
+{
+	// We assume that the registered game has to be a SDLGame here
+	SDLGame* game = static_cast<SDLGame*>(Neo::NeoEngine::getInstance()->getGame());
+	SDL_WarpMouseInWindow(game->getSDLWindow(), x, y);
+}
+
+void SDLSystem::hideCursor()
+{
+	SDL_ShowCursor(0);
+}
+
+void SDLSystem::showCursor()
+{
+	SDL_ShowCursor(1);
+}
+
 /*const char* SDLSystem::getWorkingDirectory()
 {
 	static char currentDirectory[256];
