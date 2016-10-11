@@ -1467,6 +1467,13 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 
 	m_nameEdit->setLabel(object->getName());
 	m_nameEdit->setCaret(0);
+	
+	if(object->hasParent())
+		m_parentEdit->setLabel(object->getParent()->getName());
+	else
+		m_parentEdit->setLabel("");
+	
+	m_parentEdit->setCaret(0);
 
 	m_positionEdit->setVector(object->getPosition());
 	m_rotationEdit->setVector(object->getEulerRotation());
