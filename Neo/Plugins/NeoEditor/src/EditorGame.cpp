@@ -1423,7 +1423,10 @@ void EditorGame::updateEntityTree()
 	m_entityTree->getRoot()->clear();
 	for(int i = 0; i < scene->getObjectsNumber(); i++)
 	{
-		updateChildren(m_entityTree->getRoot()->addChild(scene->getObjectByIndex(i)->getName()).get(), scene->getObjectByIndex(i));
+		Object3d* object = scene->getObjectByIndex(i);
+		
+		if(!object->hasParent()) // Only work on top-level entities at this stage
+			updateChildren(m_entityTree->getRoot()->addChild(object->getName()).get(), object);
 	}
 
 	m_sceneView->updateOverlayScene();
