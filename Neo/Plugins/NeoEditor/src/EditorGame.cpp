@@ -2037,6 +2037,10 @@ void EditorGame::runGame()
 	scene = engine->getLevel()->getCurrentScene();
 	scene->enablePhysicsSimulation(false);
 	
+	// Rest input handling
+	engine->getInputContext()->setMouseRelative(false);
+	engine->getSystemContext()->showCursor();
+	
 	engine->setActive(true);
 	script->stopRunning();
 }

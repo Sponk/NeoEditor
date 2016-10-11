@@ -232,11 +232,12 @@ private:
 
 public:
 	Mouse() :
+		AxisInputDevice(2, 3),
 		m_position(0, 0),
-		m_direction(0, 0),
 		m_oldPosition(0, 0),
-		m_scrollValue(0),
-		AxisInputDevice(2, 3) {}
+		m_direction(0, 0),
+		m_scrollValue(0)
+	{}
 
 	const Vector2& getPosition() const
 	{
@@ -286,6 +287,7 @@ class NEO_CORE_EXPORT InputContext
 private:
 	Keyboard m_keyboard; /// Contains the overall state of the keyboard
 	Mouse m_mouse;
+	bool m_mouseRelative;
 
 protected:
 #ifndef SWIG
@@ -298,7 +300,11 @@ public:
 
 	const shared_ptr<Neo::AxisInputDevice>& getController(size_t id) const { return m_controllers[id]; }
 
+	virtual void setMouseRelative(bool value) { m_mouseRelative = value; }
+	bool isMouseRelative() { return m_mouseRelative; }
+	
 	virtual void handleInput() = 0;
+	
 	bool isKeyDown(INPUT_KEYS key) { return m_keyboard.isKeyDown(key); }
 	bool onKeyDown(INPUT_KEYS key) { return m_keyboard.onKeyDown(key); }
 	bool onKeyUp(INPUT_KEYS key) { return m_keyboard.onKeyUp(key); }
