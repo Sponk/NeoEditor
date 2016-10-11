@@ -16,6 +16,10 @@ using namespace Neo;
 %ignore Neo::Object3d::AdditionalData;
 %ignore Neo::Scene::AdditionalData;
 
+%include <Vector2.h>
+%include <Vector3.h>
+%include <Vector4.h>
+ 
 %include <NeoCore.h>
 %include <Color.h>
 %include <DataLoader.h>
@@ -36,9 +40,6 @@ using namespace Neo;
 %include <StringTools.h>
 %include <SystemContext.h>
 %include <Utils.h>
-%include <Vector2.h>
-%include <Vector3.h>
-%include <Vector4.h>
 
 %include <NeoEngine.h>
 
