@@ -967,3 +967,18 @@ void Scene::setCurrentCamera(OCamera* c)
 		i++;
 	}
 }
+
+void Scene::clear()
+{
+	for(int i = 0; i < getObjectsNumber(); i++)
+	{
+		delete getObjectByIndex(i);
+	}
+	
+	m_objects.clear();
+	m_lights.clear();
+	m_texts.clear();
+	m_cameras.clear();
+	m_entities.clear();
+	m_sounds.clear();
+}
