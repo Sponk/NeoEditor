@@ -36,7 +36,7 @@ TEST(ProjectBackendTest, CreateProjectTest)
 
 	b.createProject("My Project", "created_project", "Test Project Template");
 
-	EXPECT_TRUE(isFileExist("created_project/assets"));
+	EXPECT_TRUE(isDirectory("created_project/assets"));
 	EXPECT_TRUE(isFileExist("created_project/My Project.nproj"));
 
 	Project p;

@@ -35,6 +35,8 @@ TEST(ButtonTest, CallbackTest)
 	btn->setCallback([](Widget& w, void* data) { (*((int*) data))++; }, &callbackCounter);
 
 	mouse.moveCursor(Vector2(15, 15));
+	btn->update(0.0f);
+
 	mouse.keyDown(MOUSE_BUTTON_LEFT);
 	btn->update(0.0f);
 

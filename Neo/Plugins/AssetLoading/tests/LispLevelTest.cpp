@@ -63,23 +63,24 @@ TEST(LispLevelTest, SaveTest)
 
 	scene->addNewCamera()->setName("Camera0");
 	scene->addNewLight()->setName("Light0");
-
+	
 	auto meshRef = MeshRef::getNew(new Mesh(), NULL);
 	meshRef->getMesh()->allocMaterials(1);
 	meshRef->getMesh()->allocTextures(1);
-
+	
 	auto mat = meshRef->getMesh()->addNewMaterial();
 	auto tex = meshRef->getMesh()->addNewTexture(TextureRef::getNew(0, nullptr, 0));
 
 	mat->allocTexturesPass(1);
 	mat->addTexturePass(tex, TEX_COMBINE_ADD, 0);
-
+	
 	auto entity = scene->addNewEntity(meshRef);
 	scene->addNewText(FontRef::getNew(NULL, NULL))->setName("Text0");
 	scene->addNewSound(SoundRef::getNew(0, NULL))->setName("Sound0");
-
-	TestBehavior behavior;
-	entity->addBehavior(&behavior);
+	
+	// TODO: Test saving/loading behaviors!
+	// TestBehavior behavior;
+	// entity->addBehavior(&behavior);
 
 	char curdir[256];
 	char filename[256];
@@ -92,7 +93,7 @@ TEST(LispLevelTest, SaveTest)
 TEST(LispLevelTest, LoadTest)
 {
 	Level level;
-	NeoEngine::getInstance()->getBehaviorManager()->addBehavior("TestBehavior", 0, TestBehavior::getNew);
+	// NeoEngine::getInstance()->getBehaviorManager()->addBehavior("TestBehavior", 0, TestBehavior::getNew);
 
 	char curdir[256];
 	char filename[256];

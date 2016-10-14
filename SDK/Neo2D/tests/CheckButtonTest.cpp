@@ -14,6 +14,8 @@ TEST(CheckButtonTest, ValueTest)
 	auto btn = make_shared<CheckButton>(15, 15, 10, 10, nullptr, nullptr);
 
 	mouse.moveCursor(Vector2(15, 15));
+	btn->update(0.0f);
+
 	mouse.keyDown(MOUSE_BUTTON_LEFT);
 	btn->update(0.0f);
 

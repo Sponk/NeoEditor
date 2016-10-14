@@ -81,7 +81,7 @@ bool Publish::NPKPublisher::publish(const char* projectFile,
 		packagefile += SEPARATOR;
 		packagefile += "assets.npk";
 
-		if (!isFileExist(output) && !createDirectory(output, true))
+		if (!isDirectory(output) && !createDirectory(output, true))
 		{
 			perror("Could not create output directory");
 			return false;
