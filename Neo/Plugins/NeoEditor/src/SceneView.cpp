@@ -776,10 +776,5 @@ Vector3 SceneView::getSelectionCenter()
 
 void SceneView::clearOverlayScene()
 {
-	for(size_t i = 0; i < m_overlayScene->getObjectsNumber(); i++)
-	{
-		auto object = m_overlayScene->getObjectByIndex(i);
-		object->setParent(nullptr);
-		m_overlayScene->deleteObject(object);
-	}
+	m_overlayScene->clear();
 }

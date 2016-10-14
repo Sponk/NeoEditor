@@ -91,6 +91,18 @@ PhysicsProperties::~PhysicsProperties(void)
 	deleteConstraint();
 }
 
+
+void PhysicsProperties::updateProperties()
+{
+	PhysicsContext* physics = NeoEngine::getInstance()->getPhysicsContext();
+	physics->setObjectMass(m_collisionObjectId, m_mass);
+	physics->setObjectRestitution(m_collisionObjectId, m_restitution);
+	physics->setObjectFriction(m_collisionObjectId, m_friction);
+	physics->setObjectDamping(m_collisionObjectId, m_linearDamping, m_angularDamping);
+	physics->setObjectAngularFactor(m_collisionObjectId, m_angularFactor);
+	physics->setObjectLinearFactor(m_collisionObjectId, m_linearFactor);
+}
+
 void PhysicsProperties::deleteConstraint(void)
 {
 	SAFE_DELETE(m_constraint);

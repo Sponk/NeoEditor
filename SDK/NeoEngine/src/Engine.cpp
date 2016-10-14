@@ -127,7 +127,7 @@ bool NeoEngine::loadLevel(const char * filename)
 		m_level->clear();
 		m_level->clearScenes();
 		m_level->addNewScene()->setName("Scene-0");
-        m_level->getCurrentScene()->preparePhysics();
+		m_level->getCurrentScene()->preparePhysics();
 
 		return false;
 	}
@@ -143,7 +143,7 @@ bool NeoEngine::loadLevel(const char * filename)
 		}
 	}
 
-    if(m_levelLoader.loadData(globalFilename, m_level))
+	if(m_levelLoader.loadData(globalFilename, m_level))
 	{
 		if(m_game)
 		{

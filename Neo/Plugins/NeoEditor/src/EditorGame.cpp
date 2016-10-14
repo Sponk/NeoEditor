@@ -69,10 +69,6 @@ using namespace Gui;
 					return;                                                    \
                                                                                \
 				phys->setter(std::stod(edit->getLabel()));                     \
-				NeoEngine::getInstance()                                       \
-					->getLevel()                                               \
-					->getCurrentScene()                                        \
-					->prepareCollisionObject(entity);                          \
 			},                                                                 \
 			nullptr);                                                          \
 	}
@@ -760,7 +756,7 @@ void EditorGame::onBegin()
 			// Object editing UIs
 			m_transformUi = make_shared<Container>(rightscroll->getPosition().x,
 												   rightscroll->getPosition().y,
-												   width, 160, rightscroll);
+												   width, 200, rightscroll);
 
 			m_entityUi = make_shared<Container>(rightscroll->getPosition().x,
 												   rightscroll->getPosition().y,
@@ -829,6 +825,11 @@ void EditorGame::onBegin()
 			m_transformUi->addWidget(label);
 			m_transformUi->addWidget(m_nameEdit = make_shared<EditField>(0,0,width,20,nullptr,m_transformUi));
 
+			label = make_shared<Label>(0,0,0,10,tr("Parent:"), m_transformUi);
+			label->setColor(Vector4(0,0,0,1));
+			m_transformUi->addWidget(label);
+			m_transformUi->addWidget(m_parentEdit = make_shared<EditField>(0,0,width,20,nullptr,m_transformUi));
+			
 			label = make_shared<Label>(0,0,0,10,tr("Position:"), m_transformUi);
 			label->setColor(Vector4(0,0,0,1));
 			m_transformUi->addWidget(label);
@@ -866,6 +867,34 @@ void EditorGame::onBegin()
 				m_entityTree->findNode(m_entityTree->getSelected())->setLabel(name);
 				m_undo.save();
 
+			}, nullptr);
+			
+			m_parentEdit->setCallback([this](Widget& w, void* data) {
+
+				if(!m_sceneView->getSelection().size())
+					return;
+
+				const char* name = m_parentEdit->getLabel();
+				if(strlen(name) == 0) // If no name was entered, unlink
+				{
+					m_sceneView->getSelection().back()->unLink();
+					m_undo.save();
+				
+					updateEntityTree();
+					return;
+				}
+
+				Object3d* parent;
+				if((parent = NeoEngine::getInstance()->getLevel()->getCurrentScene()->getObjectByName(name)) == nullptr)
+				{
+					m_toolset->messagebox(tr("Error"), tr("Object not found!"));
+					return;
+				}
+
+				m_sceneView->getSelection().back()->linkTo(parent);
+				m_undo.save();
+				
+				updateEntityTree();
 			}, nullptr);
 
 			m_positionEdit->setCallback([this](Widget& w, void* data) {
@@ -907,7 +936,7 @@ void EditorGame::onBegin()
 						if (m_entityPhysicsButton->getValue())
 							static_cast<OEntity*>(
 								m_sceneView->getSelection().back())
-								->enablePhysics();
+								->createPhysicsProperties();
 						else
 							static_cast<OEntity*>(
 								m_sceneView->getSelection().back())
@@ -976,7 +1005,16 @@ void EditorGame::onBegin()
 
 					m_undo.save();
 					phys->setCollisionShape(COLLISION_SHAPE_BOX);
-					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionShape(entity);
+					
+					/*Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
+					PhysicsContext* physics = NeoEngine::getInstance()->getPhysicsContext();
+					
+					// Remove current shape from the world
+					unsigned int shapeid = phys->getShapeId();
+					physics->deleteShape(&shapeid);
+					
+					// Add the new one
+					scene->prepareCollisionShape(entity);*/
 
 					updateSelectedObject(m_sceneView->getSelection().back());
 				});
@@ -992,7 +1030,6 @@ void EditorGame::onBegin()
 
 					m_undo.save();
 					phys->setCollisionShape(COLLISION_SHAPE_CONE);
-					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionShape(entity);
 
 					updateSelectedObject(m_sceneView->getSelection().back());
 				});
@@ -1008,7 +1045,6 @@ void EditorGame::onBegin()
 
 					m_undo.save();
 					phys->setCollisionShape(COLLISION_SHAPE_CAPSULE);
-					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionShape(entity);
 
 					updateSelectedObject(m_sceneView->getSelection().back());
 				});
@@ -1024,7 +1060,6 @@ void EditorGame::onBegin()
 
 					m_undo.save();
 					phys->setCollisionShape(COLLISION_SHAPE_CYLINDER);
-					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionShape(entity);
 
 					updateSelectedObject(m_sceneView->getSelection().back());
 				});
@@ -1040,7 +1075,6 @@ void EditorGame::onBegin()
 
 					m_undo.save();
 					phys->setCollisionShape(COLLISION_SHAPE_CONVEX_HULL);
-					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionShape(entity);
 
 					updateSelectedObject(m_sceneView->getSelection().back());
 				});
@@ -1056,7 +1090,6 @@ void EditorGame::onBegin()
 
 					m_undo.save();
 					phys->setCollisionShape(COLLISION_SHAPE_TRIANGLE_MESH);
-					NeoEngine::getInstance()->getLevel()->getCurrentScene()->prepareCollisionShape(entity);
 
 					updateSelectedObject(m_sceneView->getSelection().back());
 				});
@@ -1390,7 +1423,10 @@ void EditorGame::updateEntityTree()
 	m_entityTree->getRoot()->clear();
 	for(int i = 0; i < scene->getObjectsNumber(); i++)
 	{
-		updateChildren(m_entityTree->getRoot()->addChild(scene->getObjectByIndex(i)->getName()).get(), scene->getObjectByIndex(i));
+		Object3d* object = scene->getObjectByIndex(i);
+		
+		if(!object->hasParent()) // Only work on top-level entities at this stage
+			updateChildren(m_entityTree->getRoot()->addChild(object->getName()).get(), object);
 	}
 
 	m_sceneView->updateOverlayScene();
@@ -1431,6 +1467,13 @@ void EditorGame::updateSelectedObject(Neo::Object3d* object)
 
 	m_nameEdit->setLabel(object->getName());
 	m_nameEdit->setCaret(0);
+	
+	if(object->hasParent())
+		m_parentEdit->setLabel(object->getParent()->getName());
+	else
+		m_parentEdit->setLabel("");
+	
+	m_parentEdit->setCaret(0);
 
 	m_positionEdit->setVector(object->getPosition());
 	m_rotationEdit->setVector(object->getEulerRotation());
@@ -1658,6 +1701,9 @@ void EditorGame::openLevel(const char* path)
 		m_undo.clear();
 		m_undo.save();
 
+		Scene* scene = engine->getLevel()->getCurrentScene();
+		scene->enablePhysicsSimulation(false);
+		
 		m_currentLevelFile = path;
 		updateWindowTitle();
 		updateSceneUi();
@@ -1956,6 +2002,10 @@ void EditorGame::undo()
 	m_sceneView->clearSelection();
 	m_undo.undo();
 	m_sceneView->updateOverlayScene();
+	
+	Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
+	scene->enablePhysicsSimulation(false);
+	
 	updateEntityTree();
 }
 
@@ -1967,6 +2017,10 @@ void EditorGame::redo()
 	m_sceneView->clearSelection();
 	m_undo.redo();
 	m_sceneView->updateOverlayScene();
+
+	Scene* scene = NeoEngine::getInstance()->getLevel()->getCurrentScene();
+	scene->enablePhysicsSimulation(false);
+	
 	updateEntityTree();
 }
 
@@ -2003,6 +2057,10 @@ void EditorGame::runGame()
 	m_isRunningGame = true;
 	m_sceneView->showEditorScenes(false);
 	
+	Scene* scene = engine->getLevel()->getCurrentScene();
+	scene->preparePhysics();
+	scene->enablePhysicsSimulation(true);	
+	
 	player.execute(KEY_ESCAPE);
 	
 	m_isRunningGame = false;
@@ -2017,6 +2075,15 @@ void EditorGame::runGame()
 	
 	// Restore original state
 	undo();
+	
+	// Turn off physics
+	scene = engine->getLevel()->getCurrentScene();
+	scene->enablePhysicsSimulation(false);
+	
+	// Rest input handling
+	engine->getInputContext()->setMouseRelative(false);
+	engine->getSystemContext()->showCursor();
+	
 	engine->setActive(true);
 	script->stopRunning();
 }
@@ -2042,4 +2109,5 @@ void EditorGame::setProjectPaths()
 	SystemContext* system = NeoEngine::getInstance()->getSystemContext();
 	system->setWorkingDirectory(m_projectPath.c_str());
 }
+
 

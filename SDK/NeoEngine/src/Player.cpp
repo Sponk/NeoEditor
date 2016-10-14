@@ -53,7 +53,9 @@ void Player::begin(const char* level)
 void Player::end()
 {
 	NeoGame* game = m_engine->getGame();
-	game->end();	
+	game->end();
+	
+	m_engine->getLevel()->clear();
 }
 
 void Player::execute(INPUT_KEYS quitKey)

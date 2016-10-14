@@ -208,6 +208,10 @@ void SDLInputContext::handleInput()
 	Mouse& mouse = getMouse();
 
 	flush();
+	
+	// If the mouse is locked we need to ensure that the direction is reset when no movement happened.
+	if(isMouseRelative())
+		mouse.setDirection(Vector2(0,0));
 
 	while (SDL_PollEvent(&event))
 	{
@@ -241,6 +245,12 @@ void SDLInputContext::handleInput()
 			case SDL_MOUSEMOTION:
 			{
 				mouse.moveCursor(Vector2(event.motion.x, event.motion.y));
+				
+				if(isMouseRelative())
+				{
+					mouse.setDirection(Vector2(event.motion.xrel, event.motion.yrel));
+				}
+				
 				break;
 			}
 
@@ -468,7 +478,8 @@ void SDLInputContext::handleInput()
 		}
 	}
 
-	mouse.flushDirection();
+	if(!isMouseRelative()) // Only calculate direction from position when it is needed
+		mouse.flushDirection();
 }
 
 #ifndef EMSCRIPTEN
@@ -508,3 +519,10 @@ int SDLInputContext::removeGameController(int id)
 	return -1;
 }
 #endif
+
+void SDLInputContext::setMouseRelative(bool value)
+{
+	// TODO: Error checking
+	SDL_SetRelativeMouseMode((value) ? SDL_TRUE : SDL_FALSE);
+	InputContext::setMouseRelative(value);
+}

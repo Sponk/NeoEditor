@@ -58,6 +58,7 @@ class SDLInputContext : public Neo::InputContext
 
 public:
 	virtual void handleInput();
+	virtual void setMouseRelative(bool value);
 };
 
 #endif //NEO_SDLINPUTCONTEXT_H

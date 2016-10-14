@@ -122,48 +122,48 @@ public:
      */
 	inline const char * getName(void){ return m_name.getSafeString(); }
 
-    inline Vector3 getAmbientLight() { return m_ambientLight; }
-    inline void setAmbientLight(Vector3 light) { m_ambientLight = light; }
+	inline Vector3 getAmbientLight() { return m_ambientLight; }
+	inline void setAmbientLight(Vector3 light) { m_ambientLight = light; }
 
 	// data mode
 	inline void setDataMode(M_DATA_MODES dataMode){ m_dataMode = dataMode; }
 	inline M_DATA_MODES getDataMode(void){ return m_dataMode; }
 
 	// script
-    /**
-     * @brief Sets the scenes script that will be executed.
-     *
-     * Sets the path to a script. Those script can contain game logics.
-     *
-     * @param scriptFilename
-     */
+	/**
+	* @brief Sets the scenes script that will be executed.
+	*
+	* Sets the path to a script. Those script can contain game logics.
+	*
+	* @param scriptFilename
+	*/
 	void setScriptFilename(const char * scriptFilename);
 
-    /**
-     * @brief Returns the filename of the script that is currently attached to this scene.
-     * @return The path to the script.
-     */
+	/**
+	* @brief Returns the filename of the script that is currently attached to this scene.
+	* @return The path to the script.
+	*/
 	inline const char * getScriptFilename(void){ return m_scriptFilename.getData(); }
 
 	// gravity
-    /**
-     * @brief Sets the gravitational pull in this scene to the given value.
-     *
-     * This new gravity is stored in a MVector3.
-     *
-     * Example:
-     * \code
-     * scene.setGravity(MVector3(0.0f, 0.0f, -9.81f));
-     * \endcode
-     *
-     * @param gravity
-     */
+	/**
+	* @brief Sets the gravitational pull in this scene to the given value.
+	*
+	* This new gravity is stored in a MVector3.
+	*
+	* Example:
+	* \code
+	* scene.setGravity(MVector3(0.0f, 0.0f, -9.81f));
+	* \endcode
+	*
+	* @param gravity
+	*/
 	inline void setGravity(const Vector3 & gravity){ m_gravity = gravity; }
 
-    /**
-     * @brief Returns the current gravity in a MVector3
-     * @return The gravity vector.
-     */
+	/**
+	* @brief Returns the current gravity in a MVector3
+	* @return The gravity vector.
+	*/
 	inline Vector3 getGravity(void) const { return m_gravity; }
 
 	// sounds
@@ -171,48 +171,48 @@ public:
 	void stopAllSounds(void);
 
 	// delete object
-    /**
-     * @brief Removes the given object from this scene and deletes its memory.
-     * @param object The object to be removed.
-     *
-     * @note Should also remove all children in future!
-     */
+	/**
+	* @brief Removes the given object from this scene and deletes its memory.
+	* @param object The object to be removed.
+	*
+	* @note Should also remove all children in future!
+	*/
 	void deleteObject(Object3d * object);
 
 	// add objects
-    /**
-     * @brief Creates a new camera, adds it to the scene and returns it.
-     *
-     * @see OCamera
-     *
-     * @return The new camera.
-     */
+	/**
+	* @brief Creates a new camera, adds it to the scene and returns it.
+	*
+	* @see OCamera
+	*
+	* @return The new camera.
+	*/
 	OCamera * addNewCamera(void);
 
-    /**
-     * @brief Copies the camera and adds the new instance to the scene.
-     * @param camera The camera to copy.
-     * @return The new copy of the camera.
-     */
+	/**
+	* @brief Copies the camera and adds the new instance to the scene.
+	* @param camera The camera to copy.
+	* @return The new copy of the camera.
+	*/
 	OCamera * addNewCamera(const OCamera & camera);
 
-    /**
-     * @brief Creates a new light source and adds it to the scene.
-     *
-     * @see MOLight
-     *
-     * @return The new light source.
-     */
+	/**
+	* @brief Creates a new light source and adds it to the scene.
+	*
+	* @see MOLight
+	*
+	* @return The new light source.
+	*/
 	OLight * addNewLight(void);
 
-    Object3d * addNewGroup(void);
-    Object3d * addNewGroup(const Object3d & object);
+	Object3d * addNewGroup(void);
+	Object3d * addNewGroup(const Object3d & object);
 
-    /**
-     * @brief Copies the light and adds the new instance to the scene.
-     * @param light The light to copy from.
-     * @return The new copy.
-     */
+	/**
+	* @brief Copies the light and adds the new instance to the scene.
+	* @param light The light to copy from.
+	* @return The new copy.
+	*/
 	OLight * addNewLight(const OLight & light);
 	OEntity * addNewEntity(MeshRef * meshRef);
 	OEntity * addNewEntity(const OEntity & entity);
@@ -222,40 +222,40 @@ public:
 	OText * addNewText(const OText & text);
 
 	// get objects number
-    /**
-     * @brief Returns the number of objects in the scene.
-     * @return Number of objects
-     */
+	/**
+	* @brief Returns the number of objects in the scene.
+	* @return Number of objects
+	*/
 	inline unsigned int getObjectsNumber(void){ return m_objects.size(); }
 
-    /**
-     * @brief Returns the number of cameras in the scene.
-     * @return Number of cameras
-     */
+	/**
+	* @brief Returns the number of cameras in the scene.
+	* @return Number of cameras
+	*/
 	inline unsigned int getCamerasNumber(void){ return m_cameras.size(); }
 
-    /**
-     * @brief Returns the number of lights in the scene.
-     * @return Number of lights
-     */
+	/**
+	* @brief Returns the number of lights in the scene.
+	* @return Number of lights
+	*/
 	inline unsigned int getLightsNumber(void){ return m_lights.size(); }
 
-    /**
-     * @brief Returns the number of entities in the scene.
-     * @return Number of entities
-     */
+	/**
+	* @brief Returns the number of entities in the scene.
+	* @return Number of entities
+	*/
 	inline unsigned int getEntitiesNumber(void){ return m_entities.size(); }
 
-    /**
-     * @brief Returns the number of sounds in the scene.
-     * @return Number of sounds
-     */
+	/**
+	* @brief Returns the number of sounds in the scene.
+	* @return Number of sounds
+	*/
 	inline unsigned int getSoundsNumber(void){ return m_sounds.size(); }
 
-    /**
-     * @brief Returns the number of text objects in the scene.
-     * @return Number of text objects
-     */
+	/**
+	* @brief Returns the number of text objects in the scene.
+	* @return Number of text objects
+	*/
 	inline unsigned int getTextsNumber(void){ return m_texts.size(); }
 
 	// current camera
@@ -264,28 +264,28 @@ public:
 
 	void setCurrentCamera(OCamera* c);
 
-    /**
-     * @brief Returns the currently active camera from this scene.
-     *
-     * @see OCamera
-     *
-     * @return The current camera.
-     */
-    OCamera * getCurrentCamera(void);
+	/**
+	* @brief Returns the currently active camera from this scene.
+	*
+	* @see OCamera
+	*
+	* @return The current camera.
+	*/
+	OCamera * getCurrentCamera(void);
 
 	// current frame
 	inline void setCurrentFrame(int currentFrame){ m_currentFrame = currentFrame; }
 	inline int getCurrentFrame(void){ return m_currentFrame; }
 
 	// get objects
-    /**
-     * @brief Returns the object with the given name or NULL if it is not found.
-     *
-     * @see MObject3d
-     *
-     * @param name The objects name.
-     * @return The object or NULL.
-     */
+	/**
+	* @brief Returns the object with the given name or NULL if it is not found.
+	*
+	* @see MObject3d
+	*
+	* @param name The objects name.
+	* @return The object or NULL.
+	*/
 	Object3d * getObjectByName(const char * name);
 
 	/**
@@ -298,71 +298,71 @@ public:
 	 */
 	Object3d * getObjectByHandle(unsigned long handle) { return m_handles[handle]; }
 
-    /**
-     * @brief Returns the light with the given name or NULL if it is not found.
-     *
-     * @see MOLight
-     *
-     * @param name The lights name.
-     * @return The light or NULL.
-     */
+	/**
+	* @brief Returns the light with the given name or NULL if it is not found.
+	*
+	* @see MOLight
+	*
+	* @param name The lights name.
+	* @return The light or NULL.
+	*/
 	OLight * getLightByName(const char * name);
 
-    /**
-     * @brief Returns the camera with the given name or NULL if it is not found.
-     *
-     * @see OCamera
-     *
-     * @param name The cameras name.
-     * @return The camera or NULL.
-     */
+	/**
+	* @brief Returns the camera with the given name or NULL if it is not found.
+	*
+	* @see OCamera
+	*
+	* @param name The cameras name.
+	* @return The camera or NULL.
+	*/
 	OCamera * getCameraByName(const char * name);
 
-    /**
-     * @brief Returns the entity with the given name or NULL if it is not found.
-     *
-     * @see MOEntity
-     *
-     * @param name The entities name.
-     * @return The entity or NULL.
-     */
+	/**
+	* @brief Returns the entity with the given name or NULL if it is not found.
+	*
+	* @see OEntity
+	*
+	* @param name The entities name.
+	* @return The entity or NULL.
+	*/
 	OEntity * getEntityByName(const char * name);
 
-    /**
-     * @brief Returns the sound with the given name or NULL if it is not found.
-     *
-     * @see MOSound
-     *
-     * @param name The sounds name.
-     * @return The sound or NULL.
-     */
+	/**
+	* @brief Returns the sound with the given name or NULL if it is not found.
+	*
+	* @see OSound
+	*
+	* @param name The sounds name.
+	* @return The sound or NULL.
+	*/
 	OSound * getSoundByName(const char * name);
 
-    /**
-     * @brief Returns the text object with the given name or NULL if it is not found.
-     *
-     * @see MOText
-     *
-     * @param name The objects name.
-     * @return The object or NULL.
-     */
+	/**
+	* @brief Returns the text object with the given name or NULL if it is not found.
+	*
+	* @see OText
+	*
+	* @param name The objects name.
+	* @return The object or NULL.
+	*/
 	OText * getTextByName(const char * name);
 
-    /**
-     * @brief Searches the object with the given name and copies the ID.
-     *
-     * The ID will be copied to the location where the pointer id points to.
-     *
-     * Example:
-     * \code
-     * unsigned int id;
-     * scene->getObjectIndex("object", &id);
-     * \endcode
-     *
-     * @param name The name of the object.
-     * @param id Pointer to an unsigned int to retrieve the data.
-     * @return Returns \b true if the object exists and \b false if it doesn't.
-     */
+	/**
+	* @brief Searches the object with the given name and copies the ID.
+	*
+	* The ID will be copied to the location where the pointer id points to.
+	*
+	* Example:
+	* \code
+	* unsigned int id;
+	* scene->getObjectIndex("object", &id);
+	* \endcode
+	*
+	* @param name The name of the object.
+	* @param id Pointer to an unsigned int to retrieve the data.
+	* @return Returns \b true if the object exists and \b false if it doesn't.
+	*/
 	bool getObjectIndex(const char * name, unsigned int * id);
 
 	inline Object3d * getObjectByIndex(unsigned int index){ return m_objects[index]; }
@@ -384,39 +384,44 @@ public:
 	void updatePhysics(void);
 
 	// update
-    /**
-     * @brief Updates the scene and all objects in it.
-     */
+	/**
+	* @brief Updates the scene and all objects in it.
+	*/
 	void update(void);
 
 	// behaviors
-    /**
-     * @brief Updates all behaviors of objects in this scene.
-     * @see Behavior
-     */
+	/**
+	* @brief Updates all behaviors of objects in this scene.
+	* @see Behavior
+	*/
 	void updateObjectsBehaviors(void);
 
-    /**
-     * @brief Call draw for all behaviors in this scene.
-     * @see Behavior
-     */
+	/**
+	* @brief Call draw for all behaviors in this scene.
+	* @see Behavior
+	*/
 	void drawObjectsBehaviors(void);
 	
 	// update objects
 	void updateObjectsMatrices(void);
 
 	// draw
-    /**
-     * @brief Renders the scene to the screen.
-     *
-     * This method takes the camera and renders everything from this point of view to the screen/buffer.
-     * This is done by using a subclass of RenderingContext to render.
-     *
-     * @see RenderingContext
-     *
-     * @param camera The camera to use.
-     */
+	/**
+	* @brief Renders the scene to the screen.
+	*
+	* This method takes the camera and renders everything from this point of view to the screen/buffer.
+	* This is done by using a subclass of RenderingContext to render.
+	*
+	* @see RenderingContext
+	*
+	* @param camera The camera to use.
+	*/
 	void draw(OCamera * camera);
+	
+	/**
+	 * @brief Removes all objects from the scene and free's their memory.
+	 */
+	void clear();
 };
 }
 
