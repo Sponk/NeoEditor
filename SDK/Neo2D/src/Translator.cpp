@@ -6,7 +6,7 @@
 using namespace Neo2D;
 using namespace Gui;
 
-std::unordered_map<std::string, std::string> Translator::m_strings;
+NEO2D_EXPORT std::unordered_map<std::string, std::string> Translator::m_strings;
 
 const char* Translator::translate(const char* s)
 {

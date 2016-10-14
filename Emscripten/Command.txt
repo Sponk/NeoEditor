@@ -1,1 +1,6 @@
-emconfigure cmake ../ -DEMSCRIPTEN=TRUE -DCMAKE_TOOLCHAIN_FILE=/usr/lib/emscripten/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_BUILD_TYPE=Release -DSTANDARD_LUA=TRUE
+
+## Linux
+emconfigure cmake ../NeoEditor -DEMSCRIPTEN=TRUE -DCMAKE_TOOLCHAIN_FILE=/usr/lib/emscripten/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_BUILD_TYPE=Release -DSTANDARD_LUA=TRUE
+
+## Windows
+emcmake cmake ../NeoEditor -DEMSCRIPTEN=TRUE -DCMAKE_BUILD_TYPE=Release -DSTANDARD_LUA=TRUE -DINSTALL_WINDOWS_TOOLS=TRUE -G "MinGW Makefiles" -DCMAKE_MAKE_PROGRAM="C:\mingw64\bin\mingw32-make.exe"
