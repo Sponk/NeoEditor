@@ -73,6 +73,8 @@ TEST(SubmenuTest, TriggerTest)
 	int callbackCounter = 0;
 	fourth->setCallback([](Widget& w, void* data) { (*((int*) data))++; }, &callbackCounter);
 
+	fourth->handle(Neo2D::Gui::MouseOverEvent(fourth, nullptr, nullptr));
+	fourth->handle(Neo2D::Gui::MouseLeftClickEvent(fourth, nullptr, nullptr));
 	fourth->handle(MouseLeftReleaseEvent(fourth, nullptr, nullptr));
 	EXPECT_EQ(1, callbackCounter);
 

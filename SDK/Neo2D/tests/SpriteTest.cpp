@@ -29,7 +29,7 @@ protected:
 
 TEST_F(SpriteTest, Load)
 {
-	Sprite s(0,0,0,0, "doesntmatter", nullptr);
+	Sprite s(0,0,0,0, "/doesntmatter", nullptr);
 	EXPECT_NE(0, s.getSize().x);
 	EXPECT_NE(0, s.getSize().y);
 }
