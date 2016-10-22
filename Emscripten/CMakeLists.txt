@@ -28,6 +28,9 @@ list(REMOVE_ITEM BULLET_SRC ${CMAKE_SOURCE_DIR}/Neo/Plugins/BulletPhysics/Plugin
 file(GLOB OPENAL_SRC ${CMAKE_SOURCE_DIR}/Neo/Plugins/OpenALContext/*.cpp)
 list(REMOVE_ITEM OPENAL_SRC ${CMAKE_SOURCE_DIR}/Neo/Plugins/OpenALContext/Plugin.cpp)
 
+file(GLOB BEHAVIORS_SRC ${CMAKE_SOURCE_DIR}/Neo/Plugins/CommonBehaviors/*.cpp)
+list(REMOVE_ITEM BEHAVIORS_SRC ${CMAKE_SOURCE_DIR}/Neo/Plugins/CommonBehaviors/Plugin.cpp)
+
 ## TODO: Make option!
 file(GLOB EDITOR_SRC ${CMAKE_SOURCE_DIR}/Neo/Plugins/NeoEditor/src/*.cpp)
 list(REMOVE_ITEM EDITOR_SRC ${CMAKE_SOURCE_DIR}/Neo/Plugins/NeoEditor/src/Plugin.cpp)
@@ -47,6 +50,7 @@ add_executable(NeoWeb
   ${BULLET_SRC}
   ${OPENAL_SRC}
   ${EDITOR_SRC}
+  ${BEHAVIORS_SRC}
 )
 
 include_directories(
@@ -64,6 +68,7 @@ include_directories(
 	../Neo/Plugins/NPK
 	../Neo/Plugins/AssetLoading/include
 	${LIBPROJECT_INCLUDE_DIR}
+	${BEHAVIORS_SRC}
 )
 
 target_link_libraries(NeoWeb Neo2DLua NeoEngineLua ${ASSIMP_LIBRARIES} ${SEXPRESSO_LIBRARIES} ${TINYXML_LIBRARIES} ${JPEG_LIBRARIES} ${LUA_LIBRARIES} ${NPK_LIBRARIES})
@@ -72,9 +77,9 @@ include(CopyFiles)
 file(COPY "../Neo/Plugins/GLESRenderer/gles.vert" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/assets/shaders")
 file(COPY "../Neo/Plugins/GLESRenderer/gles.frag" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/assets/shaders")
 
-add_definitions(-D_setjmp=setjmp -D_longjmp=longjmp -s ASSERTIONS=1 -std=c++11 -s USE_BULLET=1 -s USE_SDL=2 -s FULL_ES2=1 -s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_VORBIS=1 -s USE_FREETYPE=1 -DSHADER_PATH="assets/shaders")
+add_definitions(-D_setjmp=setjmp -D_longjmp=longjmp -s ASSERTIONS=1 -std=c++11 -s USE_BULLET=1 -s USE_SDL=2 -s FULL_ES2=1 -s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_VORBIS=1 -s USE_FREETYPE=1 -DSHADER_PATH="assets/shaders" -s ALLOW_MEMORY_GROWTH=1)
 set_target_properties(NeoWeb PROPERTIES LINK_FLAGS
-			"-s ASSERTIONS=1 -s USE_SDL=2 -s FULL_ES2=1 \
+			"-D_setjmp=setjmp -D_longjmp=longjmp -s ALLOW_MEMORY_GROWTH=1 -s ASSERTIONS=1 -s USE_SDL=2 -s FULL_ES2=1 \
 			-s USE_BULLET=1 -s USE_ZLIB=1 -s USE_LIBPNG=1 -s USE_VORBIS=1 -s USE_FREETYPE=1") # \
 			# --preload-file ${CMAKE_CURRENT_BINARY_DIR}/assets/shaders/gles.vert --preload-file ${CMAKE_CURRENT_BINARY_DIR}/assets/shaders/gles.frag")
 

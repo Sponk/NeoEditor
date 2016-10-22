@@ -54,6 +54,13 @@
 
 #include "../Neo/Plugins/OpenALContext/Plugin.cpp"
 
+#undef StartPlugin
+#undef EndPlugin
+#define StartPlugin StartPlugin_CommonBehaviors
+#define EndPlugin EndPlugin_CommonBehaviors
+
+#include "../Neo/Plugins/CommonBehaviors/Plugin.cpp"
+
 /*#undef StartPlugin
 #undef EndPlugin
 #define StartPlugin StartPlugin_Editor
@@ -129,6 +136,7 @@ int main(int argc, char* argv[])
 	StartPlugin_NPK();
 	StartPlugin_Bullet();
 	StartPlugin_OpenAL();
+	StartPlugin_CommonBehaviors();
 	// StartPlugin_Editor();
 	
 	system = engine->getSystemContext();
