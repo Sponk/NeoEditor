@@ -49,7 +49,7 @@ void UndoQueue::load(int id)
 	std::stringstream ss;
 	ss << m_tempdir << "/" << "neo_autosave_" << id << ".llvl";
 	
-	// MLOG_INFO("Loading quicksave from " << ss.str());
+	// MLOG_DEBUG("Loading quicksave from " << ss.str());
 	
 	engine->getLevelLoader()->loadData(ss.str().c_str(), engine->getLevel());
 	engine->getLevel()->getCurrentScene()->updateObjectsMatrices();
@@ -61,7 +61,7 @@ void UndoQueue::save()
 	std::stringstream ss;
 	ss << m_tempdir << "/" << "neo_autosave_" << doAction() << ".llvl";
 
-	// MLOG_INFO("Saving quicksave to " << ss.str());
+	// MLOG_DEBUG("Saving quicksave to " << ss.str());
 	engine->getLevelLoader()->saveData(ss.str().c_str(), "llvl", engine->getLevel());
 }
 

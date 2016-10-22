@@ -66,7 +66,10 @@ using namespace Gui;
 					static_cast<OEntity*>(m_sceneView->getSelection().back()); \
 				auto phys = entity->getPhysicsProperties();                    \
 				if (!phys)                                                     \
+				{															   \
+					MLOG_DEBUG("!phys should not be possible!");			   \
 					return;                                                    \
+				}															   \
                                                                                \
 				phys->setter(std::stod(edit->getLabel()));                     \
 			},                                                                 \
@@ -943,7 +946,7 @@ void EditorGame::onBegin()
 								->deletePhysicsProperties();
 
 						updateSelectedObject(m_sceneView->getSelection().back());
-						MLOG_INFO("Enabled/Disabled physics properties");
+						MLOG_DEBUG("Enabled/Disabled physics properties");
 					},
 					nullptr);
 
@@ -2059,7 +2062,7 @@ void EditorGame::runGame()
 	
 	Scene* scene = engine->getLevel()->getCurrentScene();
 	scene->preparePhysics();
-	scene->enablePhysicsSimulation(true);	
+	scene->enablePhysicsSimulation(true);
 	
 	player.execute(KEY_ESCAPE);
 	
@@ -2074,6 +2077,7 @@ void EditorGame::runGame()
 	m_disableUndo = false;
 	
 	// Restore original state
+	m_undo.doAction(); // Simulate a further step so undoing loads the right quicksave
 	undo();
 	
 	// Turn off physics
