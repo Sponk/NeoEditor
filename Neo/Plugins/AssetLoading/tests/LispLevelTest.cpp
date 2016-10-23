@@ -306,8 +306,10 @@ TEST(LispLevelTest, EntityTest)
 		mat->allocTexturesPass(1);
 		mat->addTexturePass(tex, TEX_COMBINE_ADD, 0);
 
-		scene->addNewEntity(meshRef)->setName("Entity0");
-
+		auto entity = scene->addNewEntity(meshRef);
+		entity->setName("Entity0");
+		entity->setInvisible(true);
+		
 		saveLispLevel(filename, "llvl", &level);
 	}
 
@@ -320,14 +322,15 @@ TEST(LispLevelTest, EntityTest)
 		auto entity = scene->getEntityByName("Entity0");
 
 		ASSERT_NE(nullptr, entity);
+		EXPECT_TRUE(entity->isInvisible());
 
 		// TODO: More exact testing
 		auto mesh = entity->getMesh();
 
 		// All materials and textures are locally loaded into the entity
 		// instead of the global mesh.
-		EXPECT_EQ(0, mesh->getTexturesNumber());
-		EXPECT_EQ(0, mesh->getMaterialsNumber());
+		//EXPECT_EQ(0, mesh->getTexturesNumber());
+		//EXPECT_EQ(0, mesh->getMaterialsNumber());
 	}
 }
 

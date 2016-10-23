@@ -214,9 +214,11 @@ bool loadLispLevel(const char* filename, Level* level)
 					OEntity* entity = s->addNewEntity(level->loadMesh(getGlobalFile(GET_VALUE(o, "mesh")).c_str()));
 					object = entity;
 
+					entity->setInvisible(GET_INT_VALUE(o, "invisible"));
+					
 					Mesh* mesh = entity->getMesh();
 					entity->enableShadow(GET_INT_VALUE(o, "has-shadow"));
-
+					
 					// Load physics
 					auto tn = o.getChildByPath("physics-properties");
 					if(tn)
