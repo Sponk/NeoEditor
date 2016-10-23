@@ -24,6 +24,7 @@ public:
 	 *
 	 * @param v The vector with widgets.
 	 * @param w The parent widget.
+	 * @param offset A 2D offset vector that is added to each position. Should be the offset given to the parent.
 	 */
 	virtual void updateLayout(const Widget& w, std::vector<shared_ptr<Widget>>& v, const Neo::Vector2& offset) = 0;
 };

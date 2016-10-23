@@ -79,7 +79,7 @@ public:
 	/**
 	 * @brief Draws an entity on the screen as seen from the perspective of the given camera.
 	 *
-	 * @param mesh The entity to draw.
+	 * @param entity The entity to draw.
 	 * @param camera The camera.
 	 */
 	virtual void drawEntity(OEntity* entity, OCamera* camera) = 0;
@@ -159,13 +159,11 @@ public:
 	 * @param mipMap Indicates if mip-maps should be created.
 	 * @param filter Indicates if the image should be filtered.
 	 * @param compress Indicates if the image is compressed.
-	 * @return The texture ID that can be used to reference the image later.
 	 */
 	virtual void sendTexture(unsigned int id, Image* image, bool mipMap, bool filter, bool compress) = 0;
 
 	/**
 	 * @brief Registers a texture image with the graphics engine.
-	 * @param tex The texture to register.
 	 * @return The texture ID used for referencing the texture in future.
 	 */
 	virtual unsigned int createTexture() = 0;

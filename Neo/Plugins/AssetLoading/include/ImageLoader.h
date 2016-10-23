@@ -38,7 +38,7 @@ namespace Neo
  * format to load. Returns false if all image loader fail.
  *
  * @param filename The path to the image to load.
- * @param data A pointer to allocated memory.
+ * @param image A pointer to allocated memory of sizeof(Image) bytes.
  * @return Returns the success value.
  */
 bool EXPORT M_loadImage(const char * filename, Image* image);

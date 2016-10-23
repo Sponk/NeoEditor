@@ -35,7 +35,7 @@ public:
 	 * @brief Loads a CSV formatted translation file.
 	 *
 	 * The file has to contain rows with two string values each.
-	 * The values have to be seperated by the tab character ('\t').
+	 * The values have to be seperated by the tab character ('\\t').
 	 *
 	 * @param path The file to load.
 	 * @return Success.

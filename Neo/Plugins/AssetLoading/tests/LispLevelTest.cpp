@@ -75,6 +75,19 @@ TEST(LispLevelTest, SaveTest)
 	mat->addTexturePass(tex, TEX_COMBINE_ADD, 0);
 	
 	auto entity = scene->addNewEntity(meshRef);
+	entity->setName("Entity");
+
+	PhysicsProperties* phys = entity->createPhysicsProperties();
+	phys->setAngularDamping(123);
+	phys->setAngularFactor(123);
+	phys->setCollisionShape(COLLISION_SHAPE_CYLINDER);
+	phys->setFriction(123);
+	phys->setGhost(true);
+	phys->setLinearFactor(Vector3(123,123,123));
+	phys->setLinearDamping(123);
+	phys->setMass(123);
+	phys->setRestitution(123);
+
 	scene->addNewText(FontRef::getNew(NULL, NULL))->setName("Text0");
 	scene->addNewSound(SoundRef::getNew(0, NULL))->setName("Sound0");
 	
@@ -87,7 +100,7 @@ TEST(LispLevelTest, SaveTest)
 
 	getcwd(curdir, sizeof(curdir));
 	getGlobalFilename(filename, curdir, "test.llvl");
-	saveLispLevel(filename, "llvl", &level);
+	EXPECT_TRUE(saveLispLevel(filename, "llvl", &level));
 }
 
 TEST(LispLevelTest, LoadTest)
@@ -128,6 +141,19 @@ TEST(LispLevelTest, LoadTest)
 	ASSERT_NE(nullptr, text);
 	EXPECT_EQ(0, text->getAlign());
 	EXPECT_EQ(16, text->getSize());
+
+	auto entity = scene->getEntityByName("Entity");
+
+	PhysicsProperties* phys = entity->getPhysicsProperties();
+	EXPECT_EQ(123, phys->getAngularDamping());
+	EXPECT_EQ(123, phys->getFriction());
+	EXPECT_EQ(123, phys->getAngularFactor());
+	EXPECT_EQ(123, phys->getLinearDamping());
+	EXPECT_EQ(123, phys->getMass());
+	EXPECT_EQ(123, phys->getRestitution());
+	EXPECT_EQ(COLLISION_SHAPE_CYLINDER, phys->getCollisionShape());
+	EXPECT_TRUE(phys->isGhost());
+	EXPECT_EQ(Vector3(123,123,123), *phys->getLinearFactor());
 }
 
 TEST(LispLevelTest, LightTest)

@@ -17,6 +17,15 @@ void registerDebugHandler();
 
 int main(int argc, char* argv[])
 {
+	// Set log level from environment
+	{
+		char* loglevel = getenv("NEO_LOG_LEVEL");
+		if(loglevel != nullptr)
+		{
+			Log::setLogLevel(std::stoi(loglevel));
+		}
+	}
+
 	Player player(FRAME_CAP);
 	registerDebugHandler();
 

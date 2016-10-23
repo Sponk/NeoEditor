@@ -32,7 +32,7 @@ namespace Neo
  * @brief Loads a TGA image file and stores the pixel data in the given pointer.
  *
  * @param filename The path to the image to load.
- * @param data A pointer to allocated memory.
+ * @param image A pointer to allocated memory of sizeof(Image) bytes.
  * @return Returns <b>true</b> on success and <b>false</b> on failure.
  */
 bool M_loadTgaImage(const char * filename, Image* image);

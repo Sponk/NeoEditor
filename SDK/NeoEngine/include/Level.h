@@ -122,6 +122,7 @@ public:
 	 * This means you have to ensure the file exists before calling this method!
 	 *
 	 * @param filename The file to load from.
+	 * @param preload Allows to preload the file.
 	 * @return The new MeshRef
 	 */
 	MeshRef * loadMesh(const char * filename, const bool preload = true);
@@ -139,6 +140,7 @@ public:
 	 *
 	 * @param filename The file to load from.
 	 * @param mipmap Indicates if a mip map should be generated for this texture.
+	 * @param preload Allows to preload the file.
 	 * @return The new TextureRef
 	 */
 	TextureRef * loadTexture(const char * filename, const bool mipmap = true, const bool preload = true);
@@ -152,6 +154,7 @@ public:
 	 * This means you have to ensure the file exists before calling this method!
 	 *
 	 * @param filename The file to load from.
+	 * @param preload Allows to preload the file.
 	 * @return The new SoundRef
 	 */
 	SoundRef * loadSound(const char * filename, const bool preload = true);

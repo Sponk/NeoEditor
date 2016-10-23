@@ -102,6 +102,7 @@ private:
 	
 public:
 	
+	static void setLogLevel(int level) { m_desired_loglevel = level; }
 	static stringstream m_stringstream;
 	static string m_string;
 	static void log(int severity, const char * func, const char * fil, const int & line_no);

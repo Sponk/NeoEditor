@@ -23,7 +23,6 @@ fi
 cp BinaryOutput/NeoWeb.html ../$ARCH_INSTALL/Web
 cp BinaryOutput/NeoWeb.js ../$ARCH_INSTALL/Web
 cp BinaryOutput/NeoWeb.html.mem ../$ARCH_INSTALL/Web
-cp BinaryOutput/NeoWeb.data ../$ARCH_INSTALL/Web
 cd ..
 
 ## Crosscompiling with MinGW

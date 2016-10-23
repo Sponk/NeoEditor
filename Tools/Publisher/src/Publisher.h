@@ -25,6 +25,10 @@ public:
 	/**
 	 * @brief Publishes the given project file.
 	 * @param projectFile The path to a Neo project file.
+	 * @param executable The executable file of the player.
+	 * @param output The output directory.
+	 * @param verbose Make the process more verbose.
+	 * @param levelOverride Can choose a start level overriding the default behavior mandated by the project file.
 	 * @param progressCallback (optional) A callback that is being called to update the current progress.
 	 * @return Returns if the operation was successful.
 	 */

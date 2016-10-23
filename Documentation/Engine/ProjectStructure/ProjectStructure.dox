@@ -8,17 +8,18 @@ it is not mandatory. It is in fact very easy to do something completely differen
 directory tree exists to help the publishing program to determine the final package to distribute as well as
 to organize all files your project needs.
 
-@image html project-manager-tutorial-directory.png
-
-
 Necessary Files
 ---------------
 Each project has a certain set of files that need to exist for it to work. The simplest project just has
-one ".mproj" file, the "NeoPlayer" executable and some ".so/.dll" files. This project basically does nothing at all.
-For it to become useful it must either have access to Lua scripts or a native C++ plugin. The game loads a "Game.so/dll"
-file if it is found and loads it as a plugin. The main script that is loaded is the "assets/main.lua" file in the assets
-directory. This is only the default location for that script. It is possible to customize this by using command line
-parameters for NeoPlayer so the script does not have to be in there.
+one ".nproj" file. This project basically does nothing at all.
+For it to become useful it must either have access to Lua scripts or a native C++ plugin.
+The publishing tool uses the "assets" directory as its source so all files required to run the game
+need to be in there. The very basic project looks like this:
+
+- "Project"
+	- "Project.nproj"
+	- "assets"
+		- "level.llvl"
 
 The Asset Directory
 -------------------
@@ -29,19 +30,9 @@ by the publisher by default (this includes all subdirectories). The management o
 completely up to you. Some good folders to use might be a "meshes", "textures", "shaders", "sounds" and "scripts" directory.
 Those are not required but might be handy.
 
-@image html default-assets-directory.png
-
-#### Default Lua Environment
-The project manager however does not create a basic project structure. It also copies over some default assets
-and scripts to make it easier to jump right into game development without having to spend time to set up various scripts
-manually. The directory should contain the following entries:
-
-- "editor"			-> Contains the 3D scene editor scripts needed to create and edit levels
-- "utils" 			-> Some Lua utility scripts that are used by the editor
-- "default.ttf" 	-> The default font to be used by Neo2D
-- "default-theme" 	-> The default UI theme used by Neo2D
-- "main.lua" 		-> The entry script file
-- "settings.lua" 	-> Some settings to control the environment before your game launches
+Some parts of the Neo GUI system require a font to be installed in the "assets" directory, namely a "default.ttf" file.
+This is the default behavior and might be overridden by a GUI theme.
+*/
 
 @startuml{getServerUploadResponse.png} "getting the server response"
 

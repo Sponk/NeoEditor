@@ -165,8 +165,6 @@ void SceneView::draw(const Neo::Vector2& offset)
 	//render->enableDepthTest(true);
 	
 	m_camera.enable();
-	m_camera.updateListener();
-
 	auto scene = engine->getLevel()->getCurrentScene();
 
 	if(m_showEditorScenes)
@@ -180,6 +178,8 @@ void SceneView::draw(const Neo::Vector2& offset)
 		m_overlayScene->draw(&m_camera);
 		m_handlesScene->draw(&m_camera);
 		m_representationScene->draw(&m_camera);
+		
+		m_camera.updateListener();
 	}
 	else
 	{
@@ -192,6 +192,8 @@ void SceneView::draw(const Neo::Vector2& offset)
 			render->clearScreen(camera->getClearColor());
 			scene->draw(camera);
 			scene->drawObjectsBehaviors();
+			
+			camera->updateListener();
 		}
 		else
 		{

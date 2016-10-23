@@ -254,7 +254,7 @@ public:
 	 * @brief Sets the emit color.
 	 *
 	 * The color is given as RGB between 0.0f and 1.0f.
-	 * @param emit The color.
+	 * @param emitval The color.
 	 */
 	inline void setEmit(const Vector3& emitval) { m_emit = emitval; }
 
