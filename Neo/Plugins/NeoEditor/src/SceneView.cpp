@@ -177,6 +177,7 @@ void SceneView::draw(const Neo::Vector2& offset)
 
 		m_overlayScene->draw(&m_camera);
 		m_handlesScene->draw(&m_camera);
+		
 		m_representationScene->draw(&m_camera);
 		
 		m_camera.updateListener();
@@ -201,7 +202,7 @@ void SceneView::draw(const Neo::Vector2& offset)
 		}
 	}
 	
-	//render->enableDepthTest(false);
+	render->enableDepthTest(false);
 	render->disableScissors();
 	render->setViewport(0, 0, size.x, size.y);
 	render->set2D(size);
