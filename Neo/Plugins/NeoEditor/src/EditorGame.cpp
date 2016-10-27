@@ -1388,6 +1388,8 @@ void EditorGame::onEnd()
 {
 	m_sceneView->clear();
 	Neo2D::Neo2DLevel::getInstance()->clear();
+
+	m_undo.clear();
 	
 #ifdef WIN32
 	{

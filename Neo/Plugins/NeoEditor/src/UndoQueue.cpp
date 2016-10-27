@@ -11,13 +11,21 @@ using namespace Neo;
 
 UndoQueue::UndoQueue()
 	: m_index(0),
-	  m_undo(0)
+	  m_undo(0),
+	  m_maxIndex(0)
 {
+	m_tempdir = tmpnam(NULL);
 	#ifndef WIN32
-	m_tempdir = "/tmp";
+	//m_tempdir = "/tmp";
+	//(m_tempdir += "/") += tmpnam(NULL);
 	#else
-	m_tempdir = getenv("TEMP");
+	//m_tempdir = getenv("TEMP");
+	//(m_tempdir += "\\") += tmpnam(NULL);
 	#endif
+
+	MLOG_DEBUG("Saving autosaves in directory: " << m_tempdir);
+	if(!createDirectory(m_tempdir.c_str()))
+		MLOG_WARNING("Could not create autosave directory!");
 }
 
 int UndoQueue::getUndoIndex()
@@ -63,9 +71,19 @@ void UndoQueue::save()
 
 	// MLOG_DEBUG("Saving quicksave to " << ss.str());
 	engine->getLevelLoader()->saveData(ss.str().c_str(), "llvl", engine->getLevel());
+	m_maxIndex = std::max(m_maxIndex, m_index); // FIXME: Use return value of doAction to prevent accessing state directly!
 }
 
 int UndoQueue::doAction()
 {
 	return (m_index = ++m_undo);
+}
+
+void UndoQueue::clear()
+{
+	m_index = 0;
+	m_undo = 0;
+
+	// Delete remaining files
+    removeDirectory(m_tempdir.c_str());
 }

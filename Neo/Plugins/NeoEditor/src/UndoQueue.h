@@ -7,6 +7,7 @@ class UndoQueue
 {
 	int m_index;
 	int m_undo;
+	int m_maxIndex; /// Used to determine the number of files to delete for cleanup
 
 	std::string m_tempdir;
 	
@@ -22,8 +23,7 @@ public:
 	void undo();
 	void redo();
 
-	void clear() { m_index = 0; m_undo = 0; }
-	
+	void clear();	
 	void save();
 };
 

@@ -19,11 +19,12 @@
 										  (let ((d (dir-locals-find-file ".")))
 											(if (stringp d) d (car d)))))
 
-				 
+
 				 (setq cmake-ide-build-dir (concat project-directory "build"))
+				 (setq cmake-ide-project-dir project-directory)
 				 (setq cmake-compile-command "make -j8")
 				 (setenv "MAKEFLAGS" "-j5")
-				 (setq-default indent-tabs-mode t)))))) 
+				 (setq-default indent-tabs-mode t))))))
 
 
  
