@@ -360,7 +360,7 @@ void EditorGame::update()
 	// Update object UI
 	if(m_sceneView->getSelection().size() && m_sceneView->getState() == Neo2D::Gui::WIDGET_SELECTED)
 		updateSelectedObject(m_sceneView->getSelection().back());
-
+	
 	// Set values of current scene
 	// updateSceneUi();
 }

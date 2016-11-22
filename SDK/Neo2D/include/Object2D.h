@@ -67,7 +67,7 @@ public:
 	 * @brief Changes the 2D position of the object.
 	 * @param m_position The new position.
 	 */
-	void setPosition(const Neo::Vector2 &m_position)
+	virtual void setPosition(const Neo::Vector2 &m_position)
 	{
 		Object2D::m_position = m_position;
 	}
@@ -103,7 +103,7 @@ public:
 	 * @brief Changes the size of the object.
 	 * @param m_size The new size as a 2D vector.
 	 */
-	void setSize(const Neo::Vector2 &m_size)
+	virtual void setSize(const Neo::Vector2 &m_size)
 	{
 		Object2D::m_size = m_size;
 	}

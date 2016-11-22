@@ -10,7 +10,7 @@ Vector3Edit::Vector3Edit(int x,
 	m_x(make_shared<Neo2D::Gui::EditField>(0,0,0,0, nullptr, parent, theme)),
 	m_y(make_shared<Neo2D::Gui::EditField>(0,0,0,0, nullptr, parent, theme)),
 	m_z(make_shared<Neo2D::Gui::EditField>(0,0,0,0, nullptr, parent, theme)),
-	Neo2D::Gui::Widget(x, y, w, h, label, parent)
+	VectorEdit(x, y, w, h, label, parent)
 {
 	m_cb = [this](Neo2D::Gui::Widget&, void*) {
 		doCallback();
@@ -21,7 +21,7 @@ Vector3Edit::Vector3Edit(int x,
 	m_z->setCallback(m_cb, nullptr);
 }
 
-void Vector3Edit::update(float dt)
+void Vector3Edit::updateContent()
 {
 	float sx = getSize().x / 3;
 	m_x->setSize(Neo::Vector2(sx, getSize().y));
@@ -33,7 +33,10 @@ void Vector3Edit::update(float dt)
 	// FIXME: Configurable spacing!
 	m_y->setPosition(getPosition() + Neo::Vector2(sx + 3, 0));
 	m_z->setPosition(getPosition() + Neo::Vector2(sx*2 + 6, 0));
+}
 
+void Vector3Edit::update(float dt)
+{
 	m_x->update(dt);
 	m_y->update(dt);
 	m_z->update(dt);
@@ -87,7 +90,7 @@ Vector4Edit::Vector4Edit(int x,
 	m_y(make_shared<Neo2D::Gui::EditField>(0,0,0,0, nullptr, parent, theme)),
 	m_z(make_shared<Neo2D::Gui::EditField>(0,0,0,0, nullptr, parent, theme)),
 	m_w(make_shared<Neo2D::Gui::EditField>(0,0,0,0, nullptr, parent, theme)),
-	Neo2D::Gui::Widget(x, y, w, h, label, parent)
+	VectorEdit(x, y, w, h, label, parent)
 {
 	m_cb = [this](Neo2D::Gui::Widget&, void*) {
 		doCallback();
@@ -99,7 +102,7 @@ Vector4Edit::Vector4Edit(int x,
 	m_w->setCallback(m_cb, nullptr);
 }
 
-void Vector4Edit::update(float dt)
+void Vector4Edit::updateContent()
 {
 	float sx = getSize().x / 4;
 	m_x->setSize(Neo::Vector2(sx, getSize().y));
@@ -112,8 +115,11 @@ void Vector4Edit::update(float dt)
 	// FIXME: Configurable spacing!
 	m_y->setPosition(getPosition() + Neo::Vector2(sx + 3, 0));
 	m_z->setPosition(getPosition() + Neo::Vector2(sx*2 + 6, 0));
-	m_w->setPosition(getPosition() + Neo::Vector2(sx*3 + 9, 0));
+	m_w->setPosition(getPosition() + Neo::Vector2(sx*3 + 9, 0));	
+}
 
+void Vector4Edit::update(float dt)
+{
 	m_x->update(dt);
 	m_y->update(dt);
 	m_z->update(dt);

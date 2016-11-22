@@ -20,9 +20,6 @@ ColorEdit::ColorEdit(int x,
 
 void ColorEdit::update(float dt)
 {
-	m_button->setPosition(getPosition());
-	m_button->setSize(getSize());
-
 	m_button->update(dt);
 	Neo2D::Gui::Widget::update(dt);
 }
