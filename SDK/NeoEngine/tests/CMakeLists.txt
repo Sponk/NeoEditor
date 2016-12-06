@@ -2,7 +2,7 @@
 ADD_DEFINITIONS(-UNEO_ENGINE_DLL)
 
 IF(NOT NO_TESTS)
-    ADD_EXECUTABLE(NeoEngineTest tests/main.cpp tests/ConfigurationRegistryTest.cpp)
+    ADD_EXECUTABLE(NeoEngineTest main.cpp ConfigurationRegistryTest.cpp)
 
     INCLUDE_DIRECTORIES(${GTEST_INCLUDE_DIR})
     TARGET_LINK_LIBRARIES(NeoEngineTest ${GTEST_LIBRARIES} ${NEO_CORE_LIBRARIES} ${NEO_ENGINE_LIBRARIES} ${SEXPRESSO_LIBRARIES})
