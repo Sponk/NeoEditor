@@ -1,0 +1,77 @@
+#!/bin/sh -e
+
+OUTPATH=$PWD/Neo
+
+SCRIPT="$(readlink --canonicalize-existing "$0")"
+SCRIPTPATH="$(dirname "$SCRIPT")"
+
+echo Building Linux version
+
+mkdir -p build_linux
+cd build_linux
+
+## Build using the native Linux compiler
+## This build includes documentation and tools but excludes tests
+cmake ../$1 -DCMAKE_BUILD_TYPE=Release \
+	  -DCMAKE_INSTALL_PREFIX=$OUTPATH/../ \
+	  -DNO_TESTS=TRUE >> log.txt 2>&1
+
+make -j8 install >> log.txt 2>&1
+cd ..
+
+echo Building Win32 version
+
+mkdir -p build_win32
+cd build_win32
+
+## Build using the MXE crosscompiler
+## Requires the MXE bin directory to be in PATH!
+## This build will only build the player and the libraries needed
+## to publish a game.
+i686-w64-mingw32.shared.unix.dwarf-cmake ../$1 -DCMAKE_BUILD_TYPE=Release \
+	  -DCMAKE_INSTALL_PREFIX=$OUTPATH/Arch/Win32 \
+	  -DSTANDARD_LUA=TRUE \
+	  -DNO_TESTS=TRUE \
+	  -DNO_DOCUMENTATION=TRUE \
+	  -DNO_TOOLS=TRUE >> log.txt 2>&1
+
+make -j8 install >> log.txt 2>&1
+
+cd ..
+
+mkdir -p build_emscripten
+cd build_emscripten
+
+## Building NeoWeb
+## Only builds modules required to publish a game to the web
+
+echo Building NeoWeb version
+
+# emconfigure cmake ../$1 -DNO_DOCUMENTATION=TRUE -DEMSCRIPTEN=TRUE -DCMAKE_TOOLCHAIN_FILE=/usr/lib/emscripten/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_BUILD_TYPE=Release -DSTANDARD_LUA=TRUE
+
+emcmake cmake ../$1 -DNO_DOCUMENTATION=TRUE \
+		-DEMSCRIPTEN=TRUE \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DSTANDARD_LUA=TRUE >> log.txt 2>&1
+
+make -j8 >> log.txt 2>&1
+
+WEB_INSTALL=$OUTPATH/Arch/Web
+mkdir -p $WEB_INSTALL
+
+cp BinaryOutput/NeoWeb.html $WEB_INSTALL
+cp BinaryOutput/NeoWeb.js $WEB_INSTALL
+cp BinaryOutput/NeoWeb.html.mem $WEB_INSTALL
+cd ..
+
+echo Building packages with CMakeLists.txt from $SCRIPTPATH
+cmake $SCRIPTPATH \
+	  -DMAJOR_VERSION=0 \
+	  -DMINOR_VERSION=6 \
+	  -DPATCH_VERSION=0 \
+	  -DPACKAGE_ROOT=$OUTPATH >> log.txt 2>&1
+
+make package >> log.txt 2>&1
+
+echo Finished.
+
