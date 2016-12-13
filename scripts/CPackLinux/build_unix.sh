@@ -11,10 +11,9 @@ mkdir -p build_linux
 cd build_linux
 
 ## Build using the native Linux compiler
-## This build includes documentation and tools but excludes tests
+## This build includes documentation, tools and tests
 cmake ../$1 -DCMAKE_BUILD_TYPE=Release \
-	  -DCMAKE_INSTALL_PREFIX=$OUTPATH/../ \
-	  -DNO_TESTS=TRUE # &>> log.txt
+	  -DCMAKE_INSTALL_PREFIX=$OUTPATH/../ # &>> log.txt
 
 make -j8 install # &>> log.txt
 cd ..
