@@ -4,7 +4,6 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-#find_package(Qt5Widgets REQUIRED)
 find_package(Qt5 REQUIRED COMPONENTS Core Widgets Gui)
 add_executable(ProjectManager
         src/qt/main.cpp
@@ -32,23 +31,15 @@ install(TARGETS ProjectManager DESTINATION ${NEO_INSTALL_DIR} COMPONENT projectm
 
 if(WIN32)
 
-    if(NOT "${QT_QMAKE_EXECUTABLE}" STREQUAL "")
+  get_target_property(QtCore_location Qt5::Core LOCATION)
+  get_target_property(QtGui_location Qt5::Gui LOCATION)
+  get_target_property(QtWidgets_location Qt5::Widgets LOCATION)
 
-        get_filename_component(QT_BINARY_DIR ${QT_QMAKE_EXECUTABLE} DIRECTORY)
-        install(FILES
-            ${QT_BINARY_DIR}/Qt5Core.dll
-            ${QT_BINARY_DIR}/Qt5Gui.dll
-            ${QT_BINARY_DIR}/Qt5Widgets.dll
-            DESTINATION ${NEO_INSTALL_DIR} COMPONENT projectmanager)
-    endif()
-
-    if (${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
-        install(FILES
-            ${QT_BINARY_DIR}/libgcc_s_dw2-1.dll
-            ${QT_BINARY_DIR}/libstdc++-6.dll
-            ${QT_BINARY_DIR}/libwinpthread-1.dll
-            DESTINATION ${NEO_INSTALL_DIR} COMPONENT projectmanager)
-    endif()
+  install(FILES
+    ${QtCore_location}
+    ${QtGui_location}
+    ${QtWidgets_location}
+    DESTINATION ${NEO_INSTALL_DIR} COMPONENT engine)
 endif()
 
 copy_files("templates/*" "${NEO_BINARY_OUTPUT}/" "copy-templates")
