@@ -14,9 +14,9 @@ cd build_linux
 ## This build includes documentation and tools but excludes tests
 cmake ../$1 -DCMAKE_BUILD_TYPE=Release \
 	  -DCMAKE_INSTALL_PREFIX=$OUTPATH/../ \
-	  -DNO_TESTS=TRUE &>> log.txt
+	  -DNO_TESTS=TRUE # &>> log.txt
 
-make -j8 install &>> log.txt
+make -j8 install # &>> log.txt
 cd ..
 
 echo Building Win32 version
@@ -33,9 +33,9 @@ i686-w64-mingw32.shared.unix.dwarf-cmake ../$1 -DCMAKE_BUILD_TYPE=Release \
 	  -DSTANDARD_LUA=TRUE \
 	  -DNO_TESTS=TRUE \
 	  -DNO_DOCUMENTATION=TRUE \
-	  -DNO_TOOLS=TRUE &>> log.txt
+	  -DNO_TOOLS=TRUE # &>> log.txt
 
-make -j8 install &>> log.txt
+make -j8 install # &>> log.txt
 
 cd ..
 
@@ -50,9 +50,9 @@ echo Building NeoWeb version
 emcmake cmake ../$1 -DNO_DOCUMENTATION=TRUE \
 		-DEMSCRIPTEN=TRUE \
 		-DCMAKE_BUILD_TYPE=Release \
-		-DSTANDARD_LUA=TRUE &>> log.txt
+		-DSTANDARD_LUA=TRUE # &>> log.txt
 
-make -j8 &>> log.txt
+make -j8 # &>> log.txt
 
 WEB_INSTALL=$OUTPATH/Arch/Web
 mkdir -p $WEB_INSTALL
@@ -67,9 +67,9 @@ cmake $SCRIPTPATH \
 	  -DMAJOR_VERSION=0 \
 	  -DMINOR_VERSION=6 \
 	  -DPATCH_VERSION=0 \
-	  -DPACKAGE_ROOT=$OUTPATH &>> log.txt
+	  -DPACKAGE_ROOT=$OUTPATH # &>> log.txt
 
-make package &>> log.txt
+make package # &>> log.txt
 
 echo "Finished."
 
