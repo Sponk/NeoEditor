@@ -68,7 +68,10 @@ cmake $SCRIPTPATH \
 	  -DPATCH_VERSION=0 \
 	  -DPACKAGE_ROOT=$OUTPATH # &>> log.txt
 
-fakeroot make package # &>> log.txt
+cpack -G DEB # package # &>> log.txt
+fakeroot cpack -G TGZ
+cpack -G RPM
+fakeroot cpack -G STGZ
 
 echo "Finished."
 
