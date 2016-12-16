@@ -61,6 +61,12 @@ cp BinaryOutput/NeoWeb.js $WEB_INSTALL
 cp BinaryOutput/NeoWeb.html.mem $WEB_INSTALL
 cd ..
 
+## Workaround for add_swig_module ignoring the library prefix
+if [ -f Neo/libNeoEditor.so ]; then
+    echo "Fixing libNeoEditor.so issue"
+	ln Neo/libNeoEditor.so Neo/NeoEditor.so
+fi
+
 echo Building packages with CMakeLists.txt from $SCRIPTPATH
 cmake $SCRIPTPATH \
 	  -DMAJOR_VERSION=0 \
