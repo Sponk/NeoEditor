@@ -68,7 +68,7 @@ cmake $SCRIPTPATH \
 	  -DPATCH_VERSION=0 \
 	  -DPACKAGE_ROOT=$OUTPATH # &>> log.txt
 
-make package # &>> log.txt
+fakeroot make package # &>> log.txt
 
 echo "Finished."
 
