@@ -27,7 +27,9 @@ set(INCLUDES
 	src/UndoQueue.h
 	src/ColorEdit.h
 	src/BehaviorContainer.h
-)
+	)
+
+set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
 if(SWIG_FOUND)
 	set_source_files_properties(NeoEditor.i PROPERTIES CPLUSPLUS ON)
