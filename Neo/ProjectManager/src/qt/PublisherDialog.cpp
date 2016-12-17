@@ -13,7 +13,7 @@
 #ifndef WIN32
 static const std::pair<std::string, std::string> configs[] = {
 	{"Linux NPK", "./NeoPlayer2"},
-	{"Windows NPK", "./Arch/Win32/NeoPlayer2.exe"},
+	{"Windows NPK", "./Arch/Win32/Neo/NeoPlayer2.exe"},
 	{"Web NPK", "./Arch/Web/NeoWeb.html"},
 	{"NPK", ""}
 };
@@ -22,7 +22,7 @@ static const std::pair<std::string, std::string> configs[] = {
 
 static const std::pair<std::string, std::string> configs[] = {
 	{"Windows NPK", "./NeoPlayer2.exe"},
-	{"Linux NPK", "./Arch/Linux/NeoPlayer2"},
+	{"Linux NPK", "./Arch/Linux/Neo/NeoPlayer2"},
 	{"Web NPK", "./Arch/Web/NeoWeb.html"},
 	{"NPK", ""}
 };
