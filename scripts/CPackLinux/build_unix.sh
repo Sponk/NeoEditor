@@ -62,7 +62,7 @@ cp BinaryOutput/NeoWeb.html.mem $WEB_INSTALL
 cd ..
 
 ## Workaround for add_swig_module ignoring the library prefix
-if [ -f Neo/libNeoEditor.so ]; then
+if [ -f Neo/libNeoEditor.so ] && [ ! -f Neo/NeoEditor.so ]; then
     echo "Fixing libNeoEditor.so issue"
 	ln Neo/libNeoEditor.so Neo/NeoEditor.so
 fi
