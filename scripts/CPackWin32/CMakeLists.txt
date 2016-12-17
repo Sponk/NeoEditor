@@ -49,6 +49,26 @@ install(DIRECTORY ${PACKAGE_ROOT}/Arch/Web
   DESTINATION ./Neo/Arch
   COMPONENT web_support)
 
+message( STATUS "    Installing system-libraries: MinGW DLLs.")
+get_filename_component(MINGW_PATH ${CMAKE_CXX_COMPILER} PATH)
+set(MINGW_PATH ${MINGW_PATH}/../i686-w64-mingw32.shared.unix.dwarf/bin/)
+set(INSTALL_SYSTEM_RUNTIME_LIBS
+  ${MINGW_PATH}/libwinpthread-1.dll
+  ${MINGW_PATH}/libgcc_s_sjlj-1.dll
+  ${MINGW_PATH}/libstdc++-6.dll
+  ${MINGW_PATH}/libharfbuzz-0.dll
+  ${MINGW_PATH}/libpng16-16.dll
+  ${MINGW_PATH}/zlib1.dll
+  ${MINGW_PATH}/libglib-2.0-0.dll
+  ${MINGW_PATH}/libpcre16-0.dll
+  ${MINGW_PATH}/libpcre-1.dll
+  ${MINGW_PATH}/libfreetype-6.dll
+  ${MINGW_PATH}/libbz2.dll
+  ${MINGW_PATH}/libintl-8.dll
+  ${MINGW_PATH}/libiconv-2.dll)
+
+install(PROGRAMS ${INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION ./Neo COMPONENT engine)
+
 set(CPACK_COMPONENT_ENGINE_DISPLAY_NAME "Core Engine")
 set(CPACK_COMPONENT_LINUX_SUPPORT_DISPLAY_NAME "Linux Support")
 set(CPACK_COMPONENT_WEB_SUPPORT_DISPLAY_NAME "Web Support")
