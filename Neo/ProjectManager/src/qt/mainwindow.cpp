@@ -1,6 +1,8 @@
 #include <QtWidgets/QFileDialog>
 #include <QtCore/QProcess>
 #include <QMessageBox>
+#include <QDesktopServices>
+#include <QUrl>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -93,6 +95,23 @@ void MainWindow::openSelectedProject()
 #else
 	QProcess::startDetached(QApplication::applicationDirPath() + QDir::separator() + "NeoPlayer2.exe", QStringList() << "-p" << file.c_str());
 #endif
+}
+
+void MainWindow::openSelectedProjectDirectory()
+{
+	int selected = ui->listWidget->currentIndex().row();
+
+	if(selected == -1)
+		return;
+
+	std::string file = m_backend.getProjects()[selected].getFilePath();
+
+	int idx = file.find_last_of(QDir::separator().cell());
+
+	if(idx != std::string::npos)
+		file.erase(idx);
+	
+	QDesktopServices::openUrl(QUrl::fromLocalFile(file.c_str()));
 }
 
 void MainWindow::publishSelectedProject()

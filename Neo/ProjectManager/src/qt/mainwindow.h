@@ -30,6 +30,7 @@ public slots:
 	void importTemplate();
 	void removeTemplate();
 	void updateTemplateData(QString name);
+	void openSelectedProjectDirectory();
 };
 
 #endif // MAINWINDOW_H

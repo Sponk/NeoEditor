@@ -69,6 +69,13 @@
              </widget>
             </item>
             <item>
+             <widget class="QPushButton" name="pushButton_8">
+              <property name="text">
+               <string>Open Project Directory</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QPushButton" name="pushButton_7">
               <property name="text">
                <string>Publish Project</string>
@@ -198,7 +205,7 @@
      <x>0</x>
      <y>0</y>
      <width>704</width>
-     <height>25</height>
+     <height>30</height>
     </rect>
    </property>
   </widget>
@@ -325,12 +332,28 @@
    <slot>publishSelectedProject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>531</x>
-     <y>118</y>
+     <x>685</x>
+     <y>193</y>
     </hint>
     <hint type="destinationlabel">
      <x>501</x>
      <y>28</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_8</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>openSelectedProjectDirectory()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>420</x>
+     <y>137</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>338</x>
+     <y>31</y>
     </hint>
    </hints>
   </connection>
@@ -344,5 +367,6 @@
   <slot>removeTemplate()</slot>
   <slot>updateTemplateData(QString)</slot>
   <slot>publishSelectedProject()</slot>
+  <slot>openSelectedProjectDirectory()</slot>
  </slots>
 </ui>
