@@ -2065,7 +2065,19 @@ void EditorGame::runGame()
 	Scene* scene = engine->getLevel()->getCurrentScene();
 	scene->preparePhysics();
 	scene->enablePhysicsSimulation(true);
-	
+
+	// Load the plugin in $BINARY_DIR/Game.so of the project
+	Plugin plugin;
+	if(!m_project.getBinaryDirectory().empty())
+	{
+		char pluginFile[256];
+		getGlobalFilename(pluginFile,
+						  engine->getSystemContext()->getWorkingDirectory(),
+						  (m_project.getBinaryDirectory() + "/Game").c_str());
+
+		plugin.load(pluginFile);
+	}
+
 	player.execute(KEY_ESCAPE);
 	
 	m_isRunningGame = false;
