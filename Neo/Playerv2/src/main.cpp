@@ -92,6 +92,17 @@ int main(int argc, char* argv[])
 		if(!game)
 			engine->setGame(game = new NeoGame);
 
+		// Load user game plugin if it exists
+		Plugin gamePlugin;
+#ifdef WIN32
+		if(isFileExist("Game.dll"))
+#else
+		if(isFileExist("Game.so"))
+#endif
+		{
+			gamePlugin.load("Game");
+		}
+			
 		player.begin(project.getLevel().c_str());
 		player.execute();
 		player.end();
