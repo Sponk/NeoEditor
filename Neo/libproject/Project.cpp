@@ -21,7 +21,8 @@ bool Project::load(const char* path)
 	auto description = project.getChildByPath("project/description");
 	auto plugins = project.getChildByPath("project/plugins");
 	auto additionalFiles = project.getChildByPath("project/additional-files");
-
+	auto binaryDir = project.getChildByPath("project/binary-dir"); // binary-directory is optional!
+	
 	if(!startlevel || !name || !author || !version || !neoversion || !assetdir || !description || !plugins)
 		return false;
 
@@ -33,6 +34,9 @@ bool Project::load(const char* path)
 	m_assets = assetdir->arguments().begin()->value.str;
 	m_description = description->arguments().begin()->value.str;
 
+	if(binaryDir)
+		m_binaryDir = binaryDir->arguments().begin()->value.str;
+	
 	for(auto p : plugins->arguments())
 	  m_plugins.push_back(p.value.str);
 	
@@ -59,7 +63,8 @@ bool Project::save(const char* path)
 	out << "\t(start-level \"" << m_startLevel << "\")" << std::endl;
 	out << "\t(assets \"" << m_assets << "\")" << std::endl;
 	out << "\t(description \"" << m_description << "\")" << std::endl;
-	
+	out << "\t(binary-dir \"" << m_binaryDir << "\")" << std::endl;
+		
 	out << "\t(plugins " << std::endl;
 	for(auto p : m_plugins)
 	  out << "\t\"" << p << "\"\n";

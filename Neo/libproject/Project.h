@@ -19,21 +19,23 @@ class Project
 	std::string m_filepath;
 	std::string m_assets;
 	std::string m_description;
-
+	std::string m_binaryDir; /// The directory which contains the Game.so/dll file
+	
 	std::vector<std::string> m_plugins;
 	std::vector<std::string> m_additionalFiles;
 public:
 
 	Project() {}
 	Project(const char* name, const char* description, const char* version, const char* author,
-			const char* start, const char* assets, const char* neoversion) :
+			const char* start, const char* assets, const char* neoversion, const char* bindir = "") :
 		m_name(name),
 		m_version(version),
 		m_author(author),
 		m_startLevel(start),
 		m_neoVersion(neoversion),
 		m_assets(assets),
-		m_description(description)
+		m_description(description),
+		m_binaryDir(bindir)
 	{}
 
 	/**
@@ -67,6 +69,7 @@ public:
 	const std::string& getFilePath() const { return m_filepath; }
 	const std::string& getAssetDirectory() const { return m_assets; }
 	const std::string& getDescription() const { return m_description; }
+	const std::string& getBinaryDirectory() const { return m_binaryDir; }
 	std::vector<std::string>& getPlugins() { return m_plugins; }
 	std::vector<std::string>& getAdditionalFiles() { return m_additionalFiles; }
 	// LCOV_EXCL_STOP

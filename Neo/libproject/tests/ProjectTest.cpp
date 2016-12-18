@@ -168,7 +168,7 @@ TEST(ProjectTest, SaveLoadTest)
 {
 	// Create testdata
 	{
-		Project p("Name", "Description", "Version", "Author", "Start", "Assets", "NeoVersion");
+		Project p("Name", "Description", "Version", "Author", "Start", "Assets", "NeoVersion", "BinaryDir");
 
 		p.getPlugins().push_back("SomePlugin");
 		p.getPlugins().push_back("SomeOtherPlugin");
@@ -191,5 +191,6 @@ TEST(ProjectTest, SaveLoadTest)
 		ASSERT_EQ(2, p.getPlugins().size());
 		EXPECT_EQ("SomePlugin", p.getPlugins()[0]);
 		EXPECT_EQ("SomeOtherPlugin", p.getPlugins()[1]);
+		EXPECT_EQ("BinaryDir", p.getBinaryDirectory());
 	}
 }
