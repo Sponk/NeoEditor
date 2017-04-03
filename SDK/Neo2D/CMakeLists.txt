@@ -39,7 +39,8 @@ SET(HEADERS
 	include/csv.h
 	include/HorizontalLayout.h
 	include/VerticalLayout.h
-	include/KeyboardShortcuts.h)
+	include/KeyboardShortcuts.h
+	include/Theme.h)
 
 SET(SOURCES
 	src/Object2D.cpp
