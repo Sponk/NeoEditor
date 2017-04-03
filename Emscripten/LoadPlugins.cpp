@@ -61,12 +61,14 @@
 
 #include "../Neo/Plugins/CommonBehaviors/Plugin.cpp"
 
-/*#undef StartPlugin
-#undef EndPlugin
-#define StartPlugin StartPlugin_Editor
-#define EndPlugin EndPlugin_Editor
+#ifdef EMSCRIPTEN_EDITOR
+	#undef StartPlugin
+	#undef EndPlugin
+	#define StartPlugin StartPlugin_Editor
+	#define EndPlugin EndPlugin_Editor
 
-#include "../Neo/Plugins/NeoEditor/src/Plugin.cpp"*/
+	#include "../Neo/Plugins/NeoEditor/src/Plugin.cpp"
+#endif
 
 #undef StartPlugin
 #undef EndPlugin 
@@ -137,8 +139,11 @@ int main(int argc, char* argv[])
 	StartPlugin_Bullet();
 	StartPlugin_OpenAL();
 	StartPlugin_CommonBehaviors();
-	// StartPlugin_Editor();
-	
+
+#ifdef EMSCRIPTEN_EDITOR
+	StartPlugin_Editor();
+#endif
+
 	system = engine->getSystemContext();
 	system->setArgc(argc);
 	system->setArgv(&argv);
