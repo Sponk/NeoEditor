@@ -15,6 +15,7 @@ class UndoQueue
 	
 public:
 	UndoQueue();
+	~UndoQueue();
 	
 	int getUndoIndex();
 	int getRedoIndex();

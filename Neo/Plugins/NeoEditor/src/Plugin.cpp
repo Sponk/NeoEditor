@@ -17,9 +17,16 @@ void StartPlugin()
 {
 	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
 	engine->getGame()->registerSubGame(&g_editorGame);
+
+	// Set flag to show the editor is running
+	engine->getConfigurationRegistry().registerVariable("g_editor");
 }
 
 void EndPlugin()
 {
+	Neo::NeoEngine* engine = Neo::NeoEngine::getInstance();
+	engine->getGame()->removeSubGame(&g_editorGame);
 
+	// Remove flag to show the editor is not running anymore
+	engine->getConfigurationRegistry().removeVariable("g_editor");
 }

@@ -28,6 +28,12 @@ UndoQueue::UndoQueue()
 		MLOG_WARNING("Could not create autosave directory!");
 }
 
+UndoQueue::~UndoQueue()
+{
+	// Delete remaining files
+	removeDirectory(m_tempdir.c_str());
+}
+
 int UndoQueue::getUndoIndex()
 {
 	return m_undo = std::max(1, m_undo - 1);
@@ -83,7 +89,4 @@ void UndoQueue::clear()
 {
 	m_index = 0;
 	m_undo = 0;
-
-	// Delete remaining files
-    removeDirectory(m_tempdir.c_str());
 }
