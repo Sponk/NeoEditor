@@ -1,6 +1,6 @@
 //========================================================================
 // Copyright (c) 2003-2011 Anael Seghezzi <www.maratis3d.com>
-// Copyright (c) 20014-2015 Yannick Pflanzer <www.neo-engine.de>
+// Copyright (c) 20014-2017 Yannick Pflanzer <www.neo-engine.de>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -35,6 +35,8 @@
 #define PROFILE_END
 #endif
 
+#include <list>
+
 namespace Neo
 {
 
@@ -62,7 +64,9 @@ private:
 	float m_frameDelta;
 	bool m_isRunning;
 	bool m_drawMainScene;
-    std::vector<SubGame*> m_subGames;
+
+	/// Use std::list so iterators remain valid after registering/unregistering subgames.
+    std::list<SubGame*> m_subGames;
 
 	Profiler m_profiler;
 
@@ -124,12 +128,27 @@ public:
 	 * @brief Adds a SubGame to the list of registered games.
 	 *
 	 * This can be used to catch onBegin, update, draw and onEnd events without
-	 * replacing the real NeoGame.
+	 * replacing the real NeoGame. Returns the index of the newly registered subgame.
+	 * It will return the ID of the last registered game if the given object is NULL.
+	 * If no game was registered it will return -1 in the case of NULL.
+	 *
+	 * @return The ID of the last added subgame or -1
 	 */
-	void registerSubGame(SubGame* g)
+	size_t registerSubGame(SubGame* g)
 	{
 		if(g)
 			m_subGames.push_back(g);
+
+		return m_subGames.size() - 1;
+	}
+
+	/**
+	 * @brief Removes a SubGame from the registered games.
+	 * @param g The SubGame to remove.
+	 */
+	void removeSubGame(SubGame* const g)
+	{
+		m_subGames.remove(g);
 	}
 
 	/**

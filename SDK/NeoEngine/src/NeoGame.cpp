@@ -308,18 +308,14 @@ void NeoGame::onEndScene(void)
 void NeoGame::onBegin()
 {
 	NeoEngine::getInstance()->getRenderer()->initialize();
-	for(int i = 0; i < m_subGames.size(); i++)
-	{
-		m_subGames[i]->onBegin();
-	}
+	for(auto g : m_subGames)
+		g->onBegin();
 }
 
 void NeoGame::onEnd(void)
 {
-	for(int i = 0; i < m_subGames.size(); i++)
-	{
-		m_subGames[i]->onEnd();
-	}
+	for(auto g : m_subGames)
+		g->onEnd();
 
 	MLOG_INFO(std::endl << m_profiler.generateReport().getSafeString());
 }
