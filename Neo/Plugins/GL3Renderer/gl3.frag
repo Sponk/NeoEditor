@@ -37,6 +37,11 @@ uniform int PixelLightsCount;
 
 uniform vec3 AmbientLight;
 
+float rand(vec2 seed)
+{
+	return fract(sin(dot(seed.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
 vec4 calculatePhongLight(LightInfo light, vec3 p, vec3 n, float shininess)
 {
 	vec3 l = light.Position - p;
@@ -154,5 +159,5 @@ void main()
 							norm, gl_FragColor, 2.0*shininess);
    	}*/
 
-   	gl_FragColor.rgb = AmbientLight + gl_FragColor.rgb * Emit + gl_FragColor.rgb * (color + accum.rgb);
+   	gl_FragColor.rgb = AmbientLight + gl_FragColor.rgb * Emit + gl_FragColor.rgb * (color + accum.rgb) + vec3(rand(position.xy) * 0.006);
 }
